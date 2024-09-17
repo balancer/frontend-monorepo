@@ -1,0 +1,56 @@
+name: Checks
+
+on:
+  - pull_request
+
+env:
+  NEXT_PUBLIC_BALANCER_API_URL: https://api-v3.balancer.fi/graphql
+  NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
+  NEXT_PRIVATE_INFURA_KEY: ${{ secrets.NEXT_PRIVATE_INFURA_KEY }}
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Run build
+        env:
+          NODE_OPTIONS: '--max_old_space_size=4096'
+        run: pnpm run build
+
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Run lint
+        run: pnpm lint
+      - name: Run prettier
+        run: pnpm prettier
+      - name: Run stylelint
+        run: pnpm stylelint
+
+  Unit-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Run typecheck
+        run: pnpm typecheck
+      - name: Run unit tests
+        run: pnpm test:unit
+
+  Integration-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Set up foundry (includes anvil)
+        uses: foundry-rs/foundry-toolchain@v1
+      - name: Run integration tests
+        run: pnpm test:integration

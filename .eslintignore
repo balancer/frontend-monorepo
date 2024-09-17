@@ -1,0 +1,4 @@
+node_modules/
+.next/
+**/generated/*.ts
+theme.ts

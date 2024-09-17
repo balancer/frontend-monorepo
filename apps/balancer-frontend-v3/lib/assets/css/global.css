@@ -1,0 +1,170 @@
+@import url('./marketing.css');
+
+:root {
+  --ease-out-cubic: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+:focus,
+:focus-visible,
+*[data-focus] {
+  box-shadow: none !important;
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-color: transparent !important;
+  border-color: inherit !important;
+}
+
+html,
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* overscroll-behavior: none; */
+  overflow-x: hidden;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 1s var(--ease-out-cubic), transform 1s var(--ease-out-cubic);
+  transform-origin: top center;
+}
+
+.hidden {
+  opacity: var(--start-opacity);
+  transform: translateY(5px) scale(var(--start-scale));
+}
+
+.balanced {
+  text-wrap: balance;
+}
+
+.picture {
+  height: 100%;
+  display: flex;
+  border-radius: '9999px';
+}
+
+.picture img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  flex-grow: 1;
+}
+
+.fade-in-opacity {
+  --start-opacity: 1;
+}
+
+.fade-in-scale {
+  --start-scale: 0.98;
+}
+
+@media only screen and (width >= 30em) {
+  .fade-in-opacity {
+    --start-opacity: 0;
+  }
+
+  .fade-in-scale {
+    --start-scale: 0.98;
+  }
+}
+
+/* AppZi styles */
+div[id^='bkln'] {
+  background-color: rgb(0 0 0 / 90%) !important;
+}
+
+/* Success screen ripple animation */
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: ripple 4s ease-in-out 3 both;
+  will-change: transform, opacity;
+}
+
+.ripple-1 {
+  background-color: rgb(255 255 255 / 15%);
+  animation-delay: 0s;
+}
+
+.ripple-2 {
+  background-color: rgb(255 255 255 / 10%);
+  animation-delay: 1s;
+}
+
+.ripple-3 {
+  background-color: rgb(255 255 255 / 5%);
+  animation-delay: 2s;
+}
+
+/* Featured pools animation */
+
+@keyframes rotate-path {
+  0% {
+    transform: rotate(0deg) translate(0) scale(0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: rotate(360deg) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+.path1,
+.path2,
+.path3 {
+  transform-origin: center;
+  animation: rotate-path 1s var(--ease-out-cubic) both 0.15s;
+  filter: drop-shadow(var(--chakra-shadows-2xl));
+}
+
+.path2 {
+  animation-delay: 0.15s;
+}
+
+.path3 {
+  animation-delay: 0.3s;
+}
+
+.featured-pool-svg {
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 20%));
+}
+
+.chakra-ui-dark .featured-pool-svg {
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 40%));
+}
+
+.anchor::before {
+  content: '';
+  display: block;
+  height: 75px;
+  margin-top: -75px;
+  visibility: hidden;
+}
