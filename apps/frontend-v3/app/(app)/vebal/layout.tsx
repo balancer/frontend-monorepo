@@ -4,10 +4,7 @@ import { TokenBalancesProvider } from '@/lib/modules/tokens/TokenBalancesProvide
 import { useTokens } from '@/lib/modules/tokens/TokensProvider'
 import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
 import mainnetNetworkConfig from '@/lib/config/networks/mainnet'
-
-type PropsWithChildren = {
-  children: React.ReactNode
-}
+import { PropsWithChildren } from 'react'
 
 export default function VebalLayout({ children }: PropsWithChildren) {
   const { getTokensByChain } = useTokens()
