@@ -4,7 +4,9 @@ _This project uses `pnpm`, if you haven't already installed it you can find the 
 https://pnpm.io/installation_
 
 The monorepo uses [pnpm workspaces](https://pnpm.io/workspaces) along with Turborepo to manage build orchestration,
-to learn more about Turborepo please see the [docs](https://turbo.build/repo/docs).
+to learn more about Turborepo please see the
+[docs](https://turbo.build/repo/docs).
+
 ****
 ## What's inside?
 
