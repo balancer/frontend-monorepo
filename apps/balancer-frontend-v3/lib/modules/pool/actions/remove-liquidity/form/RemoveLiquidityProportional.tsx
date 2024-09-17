@@ -32,24 +32,24 @@ export function RemoveLiquidityProportional({ tokens, poolType }: Props) {
   return (
     <>
       <Card variant="subSection">
-        <VStack align="start" spacing="md">
-          <Text fontSize="sm" fontWeight="bold">
+        <VStack spacing="md" align="start">
+          <Text fontWeight="bold" fontSize="sm">
             You&apos;re expected to get (if no slippage)
           </Text>
           {tokens.map(
             token =>
               token && (
                 <TokenRow
-                  address={token.address as Address}
                   chain={token.chain}
-                  isLoading={isLoading}
                   key={token.address}
+                  address={token.address as Address}
+                  value={amountOutForToken(token.address as Address)}
                   toggleTokenSelect={
                     shouldShowNativeWrappedSelector(token, poolType)
                       ? () => tokenSelectDisclosure.onOpen()
                       : undefined
                   }
-                  value={amountOutForToken(token.address as Address)}
+                  isLoading={isLoading}
                 />
               )
           )}
@@ -59,10 +59,10 @@ export function RemoveLiquidityProportional({ tokens, poolType }: Props) {
         <NativeAssetSelectModal
           chain={validTokens[0].chain}
           isOpen={tokenSelectDisclosure.isOpen}
-          nativeAssets={nativeAssets}
-          onClose={tokenSelectDisclosure.onClose}
           onOpen={tokenSelectDisclosure.onOpen}
+          onClose={tokenSelectDisclosure.onClose}
           onTokenSelect={handleTokenSelect}
+          nativeAssets={nativeAssets}
         />
       )}
     </>

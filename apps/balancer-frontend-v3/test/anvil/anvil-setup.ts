@@ -85,15 +85,17 @@ export function getTestRpcSetup(networkName: NetworksWithFork) {
 }
 
 export function getForkUrl(network: NetworkSetup, verbose = false): string {
-  const privateInfuraKey = process.env['NEXT_PRIVATE_INFURA_KEY']
-  if (privateInfuraKey) {
+  const privateAlchemyKey = process.env['NEXT_PRIVATE_ALCHEMY_KEY']
+  if (privateAlchemyKey) {
     if (network.networkName === 'Ethereum') {
-      return `https://mainnet.infura.io/v3/${privateInfuraKey}`
+      return `https://eth-mainnet.g.alchemy.com/v2/${privateAlchemyKey}`
     }
     if (network.networkName === 'Polygon') {
-      return `https://polygon-mainnet.infura.io/v3/${privateInfuraKey}`
+      return `https://polygon-mainnet.g.alchemy.com/v2/${privateAlchemyKey}`
     }
-    if (network.networkName === 'Sepolia') return `https://sepolia.infura.io/v3/${privateInfuraKey}`
+    if (network.networkName === 'Sepolia') {
+      return `https://eth-sepolia.g.alchemy.com/v2/${privateAlchemyKey}`
+    }
   }
 
   if (!network.fallBackRpc) {

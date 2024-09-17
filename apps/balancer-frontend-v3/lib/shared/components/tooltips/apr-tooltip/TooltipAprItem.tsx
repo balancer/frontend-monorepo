@@ -46,24 +46,24 @@ export function TooltipAprItem({
   const tootltipTextDecorationColor = colorMode === 'light' ? 'font.secondaryAlpha50' : 'gray.500'
 
   return (
-    <Box background={boxBackground} bg={bg} fontSize="sm" {...props}>
+    <Box fontSize="sm" background={boxBackground} bg={bg} {...props}>
       <HStack justifyContent="space-between">
         <Text
+          fontWeight={fontWeight}
+          fontSize="sm"
+          color={fontColor}
+          variant={textVariant}
           background={textBackground}
           backgroundClip={textBackgroundClip}
-          color={fontColor}
-          fontSize="sm"
-          fontWeight={fontWeight}
-          variant={textVariant}
         >
           {title}
         </Text>
-        <Tooltip fontSize="sm" label={tooltipText}>
+        <Tooltip label={tooltipText} fontSize="sm">
           <Text
-            color={fontColor}
-            fontSize="sm"
             fontWeight={fontWeight}
+            fontSize="sm"
             opacity={aprOpacity}
+            color={fontColor}
             variant={textVariant}
             {...(tooltipText ? tooltipTextDecorationStyles : {})}
             textDecorationColor={tootltipTextDecorationColor}

@@ -10,12 +10,12 @@ interface Props extends CardProps {
 
 export function ClaimNetworkPoolsLayout({ backLink, children, title, ...rest }: Props) {
   return (
-    <Stack alignItems="center" maxW="lg" mx="auto" w="full">
-      <Stack gap={8} w="full">
+    <Stack alignItems="center" w="full" maxW="lg" mx="auto">
+      <Stack w="full" gap={8}>
         <Link href={backLink}>
           <HStack>
-            <IconButton aria-label="" icon={<ArrowLeft />} variant="ghost" />
-            <Heading size="lg" variant="special">
+            <IconButton variant="ghost" icon={<ArrowLeft />} aria-label="" />
+            <Heading variant="special" size="lg">
               {title}
             </Heading>
           </HStack>

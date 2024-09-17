@@ -8,44 +8,44 @@ import { ArrowUpRight } from 'react-feather'
 export function HookathonPromoBanner() {
   return (
     <Box
+      position="relative"
+      height="140px"
       background={`url('/images/promos/hookathon/hookathon-bg.jpg') no-repeat left center`}
       backgroundSize="cover"
-      boxShadow="lg"
-      height="140px"
+      width="full"
       maxW="100%"
-      overflow="hidden"
-      position="relative"
       rounded="lg"
+      overflow="hidden"
       sx={{
         width: '100% !important',
         maxWidth: '100% !important',
       }}
-      width="full"
+      boxShadow="lg"
     >
-      <Center className="copy" h="100%" zIndex="1">
+      <Center h="100%" className="copy" zIndex="1">
         <Flex
-          alignItems="center"
-          borderRadius="xl"
-          direction={{ base: 'column', sm: 'row' }}
           gap={{ base: 'ms', lg: 'md' }}
+          direction={{ base: 'column', sm: 'row' }}
           justifyContent="center"
+          alignItems="center"
           zIndex="1"
+          borderRadius="xl"
         >
           <Flex
+            gap={{ base: 'sm', lg: 'md' }}
             alignItems="center"
             direction={{ base: 'row', sm: 'row' }}
-            gap={{ base: 'sm', lg: 'md' }}
           >
-            <Box h="auto" position="relative" top="-2px" w={{ base: '260px', lg: '324px' }}>
+            <Box w={{ base: '260px', lg: '324px' }} h="auto" position="relative" top="-2px">
               <Picture
+                imgName="hookathon-logo"
                 altText="Balancer Hookathon"
                 defaultImgType="svg"
+                imgSvg={true}
                 directory="/images/promos/hookathon/"
-                imgName="hookathon-logo"
-                imgSvg
               />
             </Box>
-            <Box display={{ base: 'none', md: 'block' }} px="xs">
+            <Box px="xs" display={{ base: 'none', md: 'block' }}>
               <Heading
                 color="font.dark"
                 fontSize={{ base: '3xl', lg: '4xl' }}
@@ -57,25 +57,25 @@ export function HookathonPromoBanner() {
             </Box>
           </Flex>
           <Button
-            _hover={{ bg: '#000', color: '#fff' }}
+            size="lg"
             as={NextLink}
+            href="https://medium.com/balancer-protocol/balancer-v3-hookathon-bd3b8015de55"
+            flex="1"
+            rounded="full"
+            py="sm"
+            w="max-content"
+            h={{ base: '32px', sm: '40px', lg: '48px' }}
             bg="font.dark"
             color="font.light"
             cursor="hand"
-            flex="1"
-            h={{ base: '32px', sm: '40px', lg: '48px' }}
-            href="https://medium.com/balancer-protocol/balancer-v3-hookathon-bd3b8015de55"
-            py="sm"
-            rounded="full"
+            _hover={{ bg: '#000', color: '#fff' }}
             shadow="2xl"
-            size="lg"
-            w="max-content"
           >
             Learn more
             <Box
-              _groupHover={{ transform: ' translateX(1.5px)' }}
               pl="xs"
               transition="all 0.2s var(--ease-out-cubic)"
+              _groupHover={{ transform: ' translateX(1.5px)' }}
             >
               <ArrowUpRight size={14} style={{ display: 'inline' }} />
             </Box>

@@ -70,23 +70,23 @@ export function TransactionStepButton({ step }: Props) {
     <VStack width="full">
       {transactionState === TransactionState.Error && <TransactionError step={step} />}
       {!isTransactButtonVisible && <ConnectWallet width="full" />}
-      {shouldChangeNetwork && isTransactButtonVisible ? (
+      {shouldChangeNetwork && isTransactButtonVisible && (
         <NetworkSwitchButton {...networkSwitchButtonProps} />
-      ) : null}
-      {!shouldChangeNetwork && isTransactButtonVisible ? (
+      )}
+      {!shouldChangeNetwork && isTransactButtonVisible && (
         <Button
-          isDisabled={isButtonDisabled}
-          isLoading={isButtonLoading}
-          loadingText={getButtonLabel()}
-          onClick={handleOnClick}
+          width="full"
+          w="full"
           size="lg"
           variant="primary"
-          w="full"
-          width="full"
+          isDisabled={isButtonDisabled}
+          isLoading={isButtonLoading}
+          onClick={handleOnClick}
+          loadingText={getButtonLabel()}
         >
           {getButtonLabel()}
         </Button>
-      ) : null}
+      )}
     </VStack>
   )
 }

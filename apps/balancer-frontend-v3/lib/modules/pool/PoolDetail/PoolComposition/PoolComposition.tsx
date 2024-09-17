@@ -28,7 +28,7 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
 
   return (
     <VStack spacing="md" width="full">
-      <HStack justifyContent="space-between" width="full">
+      <HStack width="full" justifyContent="space-between">
         <VStack alignItems="flex-start">
           <Heading fontWeight="bold" size={{ base: 'h5', md: 'h6' }}>
             Total liquidity
@@ -49,18 +49,18 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
         {displayTokens.map(poolToken => {
           return (
             <TokenRow
+              chain={chain}
+              key={`my-liquidity-token-${poolToken.address}`}
+              address={poolToken.address as Address}
+              value={poolToken.balance}
               actualWeight={calcWeightForBalance(
                 poolToken.address,
                 poolToken.balance,
                 totalLiquidity,
                 chain
               )}
-              address={poolToken.address as Address}
-              chain={chain}
-              key={`my-liquidity-token-${poolToken.address}`}
               pool={pool}
               targetWeight={poolToken.weight || undefined}
-              value={poolToken.balance}
             />
           )
         })}
@@ -77,21 +77,19 @@ export function PoolComposition() {
   const displayTokens = getPoolDisplayTokens(pool)
   const totalLiquidity = calcTotalUsdValue(displayTokens, chain)
 
-  function CardContentBlock() {
-    return (
-      <CardContent chain={chain} displayTokens={displayTokens} totalLiquidity={totalLiquidity} />
-    )
-  }
+  const CardContentBlock = () => (
+    <CardContent totalLiquidity={totalLiquidity} displayTokens={displayTokens} chain={chain} />
+  )
 
   return (
     <Card>
       <Stack
+        spacing="md"
+        minH="400px"
         direction={{ base: 'column', md: 'row' }}
         justifyContent="stretch"
-        minH="400px"
-        spacing="md"
       >
-        <VStack align="flex-start" spacing="md" w="full">
+        <VStack w="full" spacing="md" align="flex-start">
           <Heading fontWeight="bold" size={{ base: 'h4', md: 'h5' }}>
             Pool composition
           </Heading>
@@ -102,8 +100,8 @@ export function PoolComposition() {
               <CardContentBlock />
             </Card>
           )}
-          {isMobile ? <Divider /> : null}
-          <Text color="grayText" fontSize="sm" mt="auto" pb="sm">
+          {isMobile && <Divider />}
+          <Text color="grayText" mt="auto" fontSize="sm" pb="sm">
             From {fNum('integer', pool.dynamicData.holdersCount)} Liquidity Providers
           </Text>
         </VStack>
@@ -111,13 +109,13 @@ export function PoolComposition() {
           cardProps={{ position: 'relative', overflow: 'hidden', height: ['300px', '400px'] }}
           contentProps={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
-          <PoolZenGarden poolType={pool.type} sizePx={isMobile ? '300px' : '400px'} />
+          <PoolZenGarden sizePx={isMobile ? '300px' : '400px'} poolType={pool.type} />
           {isLoading ? (
-            <Skeleton h="full" w="full" />
+            <Skeleton w="full" h="full" />
           ) : (
             <PoolWeightChart
-              chain={chain}
               displayTokens={displayTokens}
+              chain={chain}
               totalLiquidity={totalLiquidity}
             />
           )}

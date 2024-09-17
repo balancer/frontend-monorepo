@@ -48,10 +48,10 @@ export function MultiSelect<Value = string>({
   const hasSelectedOptions = selectedOptions.length > 0
 
   return (
-    <Popover placement="bottom-start" preventOverflow variant="multiSelect">
+    <Popover variant="multiSelect" preventOverflow placement="bottom-start">
       <PopoverTrigger>
-        <Button h="auto" py="sm" ref={ref} variant="tertiary" w="full" {...buttonProps}>
-          <HStack justify="space-between" w="full">
+        <Button ref={ref} variant="tertiary" w="full" h="auto" py="sm" {...buttonProps}>
+          <HStack w="full" justify="space-between">
             {hasSelectedOptions ? (
               <HStack spacing="xs" wrap="wrap">
                 {selectedOptions.map(option =>
@@ -71,7 +71,7 @@ export function MultiSelect<Value = string>({
       </PopoverTrigger>
       <PopoverContent w={contentWidth}>
         <PopoverBody>
-          <VStack align="start" spacing="sm" w="full">
+          <VStack align="start" w="full" spacing="sm">
             {!!toggleAll && (
               <>
                 <Radio isChecked={!hasSelectedOptions} onChange={toggleAll}>
@@ -80,11 +80,11 @@ export function MultiSelect<Value = string>({
                 <Divider />
               </>
             )}
-            <VStack align="start" spacing="xs" w="full">
+            <VStack align="start" w="full" spacing="xs">
               {options.map(option => (
                 <Checkbox
-                  isChecked={isChecked(option.value)}
                   key={`checkbox-${String(option.value)}`}
+                  isChecked={isChecked(option.value)}
                   onChange={e => toggleOption(e.target.checked, option.value)}
                 >
                   {option.label}

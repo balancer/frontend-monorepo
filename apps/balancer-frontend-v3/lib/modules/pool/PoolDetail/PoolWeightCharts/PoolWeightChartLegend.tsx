@@ -10,18 +10,18 @@ export default function PoolWeightChartLegend({
   colors?: PoolWeightChartColorDef[]
 }) {
   return (
-    <HStack mt="4" spacing="4" zIndex={2}>
+    <HStack spacing="4" zIndex={2} mt="4">
       {displayTokens.map((token, i) => {
         return (
           <Box
-            background="none"
-            fontSize="1rem"
             fontWeight="normal"
+            fontSize="1rem"
+            background="none"
             key={`token-weight-chart-legend-${token.symbol}`}
           >
             <HStack spacing="1">
-              <Box bg={colors[i].from} height="8px" rounded="full" width="8px" />
-              <Text color="font.secondary" fontSize="sm" whiteSpace="nowrap">
+              <Box width="8px" height="8px" bg={colors[i].from} rounded="full" />
+              <Text whiteSpace="nowrap" color="font.secondary" fontSize="sm">
                 {token.symbol}
               </Text>
             </HStack>

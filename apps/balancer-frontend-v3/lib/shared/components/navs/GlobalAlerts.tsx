@@ -11,11 +11,11 @@ export function GlobalAlerts() {
   if (!lastAlert) return null
   return (
     <BalAlert
-      content={<BalAlertContent {...lastAlert} />}
-      isNavAlert
-      isSoftWarning
-      onClose={() => removeAlert(lastAlert.id)}
       status={lastAlert.status}
+      content={<BalAlertContent {...lastAlert}></BalAlertContent>}
+      isNavAlert
+      isSoftWarning={true}
+      onClose={() => removeAlert(lastAlert.id)}
     />
   )
 }

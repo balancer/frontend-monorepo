@@ -9,8 +9,8 @@ import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 
 const AnimateOpacity: FC<PropsWithChildren<object>> = ({ children }) => (
   <motion.div
-    animate={{ opacity: 1 }}
     initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
     transition={{ duration: 0.5, delay: 0.2 }}
   >
     {children}
@@ -39,39 +39,39 @@ export function PoolActivityChart() {
 
   return (
     <Box position="relative">
-      {isLoading ? <Skeleton h="100%" position="absolute" w="100%" /> : null}
-      {chartOption ? (
+      {isLoading && <Skeleton w="100%" h="100%" position="absolute" />}
+      {chartOption && (
         <Box>
           <motion.div
-            animate={{ height: chartHeight, opacity: isExpanded ? [0, 1] : 1 }}
             initial={{ height: 90 }}
+            animate={{ height: chartHeight, opacity: isExpanded ? [0, 1] : 1 }}
             transition={{ duration: 0.2, ease: easeOut }}
           >
             <ReactECharts
-              onEvents={{}}
-              option={chartOption}
-              ref={eChartsRef}
               style={{ height: `${chartHeight}px` }}
+              option={chartOption}
+              onEvents={{}}
+              ref={eChartsRef}
             />
           </motion.div>
         </Box>
-      ) : null}
-      {isExpanded ? (
+      )}
+      {isExpanded && (
         <AnimateOpacity>
-          <Divider mb="4" pt="2" />
+          <Divider pt="2" mb="4" />
         </AnimateOpacity>
-      ) : null}
-      {!isLoading && isExpanded ? (
+      )}
+      {!isLoading && isExpanded && (
         <AnimateOpacity>
-          <HStack px={['1', '2']} spacing="4">
+          <HStack spacing="4" px={['1', '2']}>
             {legendTabs.map((tab, index) => (
-              <HStack alignItems="center" gap="2" key={index}>
+              <HStack alignItems="center" key={index} gap="2">
                 <Box
+                  height="2"
+                  width="2"
                   backgroundImage={tab.color}
                   borderRadius="50%"
                   display="inline-block"
-                  height="2"
-                  width="2"
                 />
                 <Text color="font.secondary" fontSize="sm">
                   {tab.label}
@@ -80,7 +80,7 @@ export function PoolActivityChart() {
             ))}
           </HStack>
         </AnimateOpacity>
-      ) : null}
+      )}
     </Box>
   )
 }

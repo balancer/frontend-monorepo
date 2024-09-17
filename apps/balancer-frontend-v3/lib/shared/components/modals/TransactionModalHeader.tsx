@@ -24,8 +24,8 @@ export function TransactionModalHeader({
 
   return (
     <ModalHeader>
-      <HStack justify="space-between" pr="lg" w="full">
-        <AnimatePresence initial={false} mode="wait">
+      <HStack justify="space-between" w="full" pr="lg">
+        <AnimatePresence mode="wait" initial={false}>
           {!txHash || isReceiptLoading ? (
             <>
               <span>{label}</span>
@@ -34,11 +34,11 @@ export function TransactionModalHeader({
           ) : (
             <HStack spacing="md">
               <motion.div
-                animate={{ opacity: [0, 0.7, 1], scale: [0, 1.2, 1] }}
                 initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: [0, 0.7, 1], scale: [0, 1.2, 1] }}
                 transition={{ duration: 1, times: [0, 0.7, 1], ease: 'easeInOut' }}
               >
-                <Center bg="green.500" color="white" fontWeight="bold" h={10} rounded="full" w={10}>
+                <Center w={10} h={10} rounded="full" bg="green.500" color="white" fontWeight="bold">
                   <Check size={18} strokeWidth={4} />
                 </Center>
               </motion.div>
@@ -53,7 +53,7 @@ export function TransactionModalHeader({
                     <Text color="grayText" fontSize="sm">
                       View details on explorer
                     </Text>
-                    <Link color="grayText" href={getBlockExplorerTxUrl(txHash)} target="_blank">
+                    <Link href={getBlockExplorerTxUrl(txHash)} target="_blank" color="grayText">
                       <ArrowUpRight size={16} />
                     </Link>
                   </HStack>

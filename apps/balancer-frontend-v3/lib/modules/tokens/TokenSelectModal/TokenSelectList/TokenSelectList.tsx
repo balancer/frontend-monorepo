@@ -30,7 +30,7 @@ function OtherTokens() {
   return (
     <Box bg="background.level1">
       <Divider />
-      <HStack pt="sm" px="md">
+      <HStack px="md" pt="sm">
         <Box color="font.secondary">
           <CoinsIcon size={20} />
         </Box>
@@ -51,9 +51,9 @@ interface InYourWalletProps {
 
 function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: InYourWalletProps) {
   return (
-    <Box mr="0" pb="0">
+    <Box pb="0" mr="0">
       <Divider />
-      <Box bg="background.level1" px="md" py="sm">
+      <Box py="sm" px="md" bg="background.level1">
         <HStack zIndex="1">
           <Box color="font.secondary">
             <WalletIcon size={20} />
@@ -63,28 +63,28 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
           </Text>
           {!isConnected && (
             <Button
-              _hover={{ color: 'font.linkHover' }}
-              color="font.link"
-              height="24px !important"
               ml="auto"
-              onClick={openConnectModal}
-              padding="0"
               size="sm"
               variant="link"
+              color="font.link"
+              height="24px !important"
+              padding="0"
+              _hover={{ color: 'font.linkHover' }}
+              onClick={openConnectModal}
             >
               Connect wallet
             </Button>
           )}
-          {isConnected && hasNoTokensInWallet ? (
+          {isConnected && hasNoTokensInWallet && (
             <Box ml="auto">
-              <Text color="red.500" fontSize="sm" fontWeight="bold">
+              <Text fontSize="sm" fontWeight="bold" color="red.500">
                 No tokens on this network
               </Text>
             </Box>
-          ) : null}
+          )}
         </HStack>
       </Box>
-      {isConnected && !hasNoTokensInWallet ? <Divider /> : null}
+      {isConnected && !hasNoTokensInWallet && <Divider />}
     </Box>
   )
 }
@@ -125,10 +125,10 @@ export function TokenSelectList({
 
   const groups = [
     <InYourWallet
-      hasNoTokensInWallet={!tokensWithBalance.length}
-      isConnected={isConnected}
       key="in-your-wallet"
+      isConnected={isConnected}
       openConnectModal={openConnectModal}
+      hasNoTokensInWallet={!tokensWithBalance.length}
     />,
     <OtherTokens key="other-tokens" />,
   ]
@@ -164,7 +164,7 @@ export function TokenSelectList({
     <Box height={listHeight} {...rest}>
       {tokensToShow.length === 0 ? (
         <Box p="lg">
-          <Text color="font.error" fontWeight="bold" mb="xxs">
+          <Text mb="xxs" fontWeight="bold" color="font.error">
             No tokens found
           </Text>
           <Text color="font.secondary" fontSize="sm">
@@ -176,28 +176,28 @@ export function TokenSelectList({
         </Box>
       ) : (
         <GroupedVirtuoso
+          ref={ref}
+          groupCounts={groupCounts}
+          style={{ height: listHeight }}
           groupContent={index => {
             return groups[index]
           }}
-          groupCounts={groupCounts}
           itemContent={index => {
             const token = tokensToShow[index]
             const userBalance = isConnected ? balanceFor(token) : undefined
 
             return (
               <TokenSelectListRow
-                active={index === activeIndex}
-                isBalancesLoading={isBalancesLoading || isLoadingTokenPrices}
-                isCurrentToken={isCurrentToken(token)}
                 key={keyFor(token, index)}
+                active={index === activeIndex}
                 onClick={() => !isCurrentToken(token) && onTokenSelect(token)}
+                isCurrentToken={isCurrentToken(token)}
                 token={token}
                 userBalance={userBalance}
+                isBalancesLoading={isBalancesLoading || isLoadingTokenPrices}
               />
             )
           }}
-          ref={ref}
-          style={{ height: listHeight }}
         />
       )}
     </Box>

@@ -21,35 +21,31 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
   const { shouldChangeNetwork, NetworkSwitchButton, networkSwitchButtonProps } =
     useChainSwitch(chainId)
 
-  function SignRelayerButton() {
-    return (
-      <VStack width="full">
-        {error ? (
-          <Alert rounded="md" status="error">
-            {error}
-          </Alert>
-        ) : null}
-        {!isConnected && <ConnectWallet isLoading={isLoading} width="full" />}
-        {shouldChangeNetwork && isConnected ? (
-          <NetworkSwitchButton {...networkSwitchButtonProps} />
-        ) : null}
-        {!shouldChangeNetwork && isConnected ? (
-          <Button
-            isDisabled={isDisabled}
-            isLoading={isLoading}
-            loadingText={buttonLabel}
-            onClick={signRelayer}
-            size="lg"
-            variant="primary"
-            w="full"
-            width="full"
-          >
-            {buttonLabel}
-          </Button>
-        ) : null}
-      </VStack>
-    )
-  }
+  const SignRelayerButton = () => (
+    <VStack width="full">
+      {error && (
+        <Alert rounded="md" status="error">
+          {error}
+        </Alert>
+      )}
+      {!isConnected && <ConnectWallet width="full" isLoading={isLoading} />}
+      {shouldChangeNetwork && isConnected && <NetworkSwitchButton {...networkSwitchButtonProps} />}
+      {!shouldChangeNetwork && isConnected && (
+        <Button
+          width="full"
+          w="full"
+          size="lg"
+          variant="primary"
+          isDisabled={isDisabled}
+          isLoading={isLoading}
+          onClick={signRelayer}
+          loadingText={buttonLabel}
+        >
+          {buttonLabel}
+        </Button>
+      )}
+    </VStack>
+  )
 
   const isComplete = () => signRelayerState === SignRelayerState.Completed
 

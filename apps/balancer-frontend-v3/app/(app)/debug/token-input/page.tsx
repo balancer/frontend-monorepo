@@ -28,20 +28,20 @@ export default function TokenInputPage() {
     <TokenInputsValidationProvider>
       <PriceImpactProvider>
         <TokenBalancesProvider extTokens={tokens}>
-          <VStack align="start" p="md" width="sm">
+          <VStack width="sm" align="start" p="md">
             <Heading>Token Input</Heading>
             <Text>Current value: {currentValue}</Text>
             <ConnectWallet />
-            <Card p="md" shadow="2xl" variant="level3">
+            <Card p="md" variant="level3" shadow="2xl">
               <VStack spacing="md" w="full">
                 <TokenInput
                   address={token?.address}
                   chain={token?.chain}
+                  value={currentValue}
                   onChange={e => setCurrentValue(e.currentTarget.value)}
                   toggleTokenSelect={() => {
                     tokenSelectDisclosure.onOpen()
                   }}
-                  value={currentValue}
                 />
                 <Button variant="primary" w="full">
                   Submit
@@ -50,12 +50,12 @@ export default function TokenInputPage() {
             </Card>
 
             <TokenSelectModal
+              tokens={tokens}
               chain={GqlChain.Mainnet}
               isOpen={tokenSelectDisclosure.isOpen}
-              onClose={tokenSelectDisclosure.onClose}
               onOpen={tokenSelectDisclosure.onOpen}
+              onClose={tokenSelectDisclosure.onClose}
               onTokenSelect={handleTokenSelect}
-              tokens={tokens}
             />
           </VStack>
         </TokenBalancesProvider>

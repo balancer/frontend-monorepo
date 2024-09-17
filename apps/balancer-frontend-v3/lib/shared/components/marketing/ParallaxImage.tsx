@@ -30,7 +30,7 @@ export const ParallaxImage: React.FC<ParallaxImageProps> = ({
   const scale = useTransform(scrollYProgress, [0, 1], [scaleStart, scaleEnd])
 
   return (
-    <Box h="100%" overflow={overflow} position="relative">
+    <Box overflow={overflow} position="relative" h="100%">
       <div ref={ref}>
         <Box as={motion.div} style={{ y, scale, transformOrigin }}>
           {children}

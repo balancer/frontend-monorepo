@@ -7,6 +7,7 @@ import { formatUnits } from 'viem'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
 import { SdkBuildSwapInputs, SdkSimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
 import { getRpcUrl } from '../../web3/transports'
+import { bn } from '@/lib/shared/utils/numbers'
 
 export class DefaultSwapHandler implements SwapHandler {
   name = 'DefaultSwapHandler'
@@ -56,6 +57,8 @@ export class DefaultSwapHandler implements SwapHandler {
       returnAmount,
       swap,
       queryOutput,
+      effectivePrice: bn(variables.swapAmount).div(returnAmount).toString(),
+      effectivePriceReversed: bn(returnAmount).div(variables.swapAmount).toString(),
     }
   }
 

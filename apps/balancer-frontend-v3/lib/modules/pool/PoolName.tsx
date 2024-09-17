@@ -18,13 +18,13 @@ export function PoolName({ pool, MemoizedMainAprTooltip, isCarousel, ...rest }: 
   const displayTokens = pool.displayTokens
 
   return (
-    <HStack alignItems="center" gap="xxs" justify="start" px="sm" wrap="wrap">
+    <HStack alignItems="center" justify="start" wrap="wrap" gap="xxs" px="sm">
       {displayTokens.map((token, idx) => {
         return (
-          <HStack alignItems="center" gap="xxs" justify="center" key={token.address}>
+          <HStack key={token.address} alignItems="center" justify="center" gap="xxs">
             <Text as="span" fontWeight="bold" {...rest} fontSize="sm" lineHeight="1">
               {token.nestedTokens ? token.name : token.symbol}
-              {token.weight ? ` ${fNum('weight', token.weight || '')}` : null}
+              {token.weight && ` ${fNum('weight', token.weight || '')}`}
             </Text>
             <Text {...rest} lineHeight="1">
               {idx <= displayTokens.length - 2 && '/'}
@@ -32,22 +32,22 @@ export function PoolName({ pool, MemoizedMainAprTooltip, isCarousel, ...rest }: 
           </HStack>
         )
       })}
-      {isFeaturedPool(pool) && MemoizedMainAprTooltip ? (
+      {isFeaturedPool(pool) && MemoizedMainAprTooltip && (
         <Box
-          _hover={{ transform: 'scale(1.1)' }}
+          width="0"
           transform="scale(0.9)"
           transition="transform 0.2s var(--ease-out-cubic)"
-          width="0"
+          _hover={{ transform: 'scale(1.1)' }}
         >
           <MemoizedMainAprTooltip
-            aprItems={pool.dynamicData.aprItems}
-            id={`featured-${isCarousel ? 'mobile' : 'desktop'}`}
-            onlySparkles
-            pool={pool}
             poolId={pool.id}
+            aprItems={pool.dynamicData.aprItems}
+            pool={pool}
+            onlySparkles
+            id={`featured-${isCarousel ? 'mobile' : 'desktop'}`}
           />
         </Box>
-      ) : null}
+      )}
     </HStack>
   )
 }

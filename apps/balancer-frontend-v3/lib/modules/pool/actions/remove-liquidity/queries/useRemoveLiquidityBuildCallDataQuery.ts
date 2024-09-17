@@ -40,7 +40,7 @@ export function useRemoveLiquidityBuildCallDataQuery({
 }) {
   const { userAddress, isConnected } = useUserAccount()
   const { slippage } = useUserSettings()
-  const { pool } = usePool()
+  const { pool, chainId } = usePool()
   const { relayerApprovalSignature } = useRelayerSignature()
   const debouncedHumanBptIn = useDebounce(humanBptIn, defaultDebounceMs)[0]
 
@@ -75,10 +75,10 @@ export function useRemoveLiquidityBuildCallDataQuery({
     queryFn,
     enabled: enabled && isConnected && !!simulationQuery.data,
     gcTime: 0,
-    meta: sentryMetaForRemoveLiquidityHandler(
-      'Error in remove liquidity buildCallData query',
-      params
-    ),
+    meta: sentryMetaForRemoveLiquidityHandler('Error in remove liquidity buildCallData query', {
+      ...params,
+      chainId,
+    }),
     ...onlyExplicitRefetch,
   })
 }

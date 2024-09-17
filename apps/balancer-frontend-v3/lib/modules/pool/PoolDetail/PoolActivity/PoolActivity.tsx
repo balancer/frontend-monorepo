@@ -67,12 +67,12 @@ function Content() {
   return (
     <Card role="group">
       <Stack
-        alignItems="start"
+        w="full"
         direction={{ base: 'column', md: 'row' }}
         justify="space-between"
-        justifyContent="space-between"
-        w="full"
         width="full"
+        justifyContent="space-between"
+        alignItems="start"
       >
         <VStack alignItems="flex-start" gap="0.5">
           <Box
@@ -83,38 +83,37 @@ function Content() {
               Pool activity
             </Heading>
           </Box>
-          {isChartView ? (
-            isLoading ? (
+          {isChartView &&
+            (isLoading ? (
               <Skeleton height="20px" w="100px" />
             ) : (
-              <Text fontSize="sm" fontWeight="medium" variant="secondary">
+              <Text fontWeight="medium" variant="secondary" fontSize="sm">
                 {transactionsLabel}
               </Text>
-            )
-          ) : null}
+            ))}
         </VStack>
         <HStack>
           <ButtonGroup
             currentOption={activeTab}
-            groupId="pool-activity"
+            options={tabsList}
             onChange={option => {
               setActiveTab(option)
             }}
-            options={tabsList}
             size="xxs"
+            groupId="pool-activity"
           />
           <PoolActivityViewType />
-          <Box borderRadius="full" h="34px" shadow={isChartView ? '2xl' : 'none'} w="34px">
+          <Box shadow={isChartView ? '2xl' : 'none'} h="34px" w="34px" borderRadius="full">
             <IconButton
               aria-label={isExpanded ? 'Minimize chart' : 'Expand chart'}
-              borderRadius="full"
-              h="34px"
               icon={isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
               onClick={() => setIsExpanded(!isExpanded)}
               size="sm"
-              transition="transform 0.2s var(--ease-out-cubic)"
               variant="outline"
+              borderRadius="full"
+              h="34px"
               w="34px"
+              transition="transform 0.2s var(--ease-out-cubic)"
               {...(isChartView && !isExpanded && groupHoverProps)}
               isDisabled={!isChartView}
             />
@@ -122,8 +121,8 @@ function Content() {
         </HStack>
       </Stack>
       <Box mt="4">
-        {isChartView ? <PoolActivityChart /> : null}
-        {isListView ? <PoolActivityTable /> : null}
+        {isChartView && <PoolActivityChart />}
+        {isListView && <PoolActivityTable />}
       </Box>
     </Card>
   )

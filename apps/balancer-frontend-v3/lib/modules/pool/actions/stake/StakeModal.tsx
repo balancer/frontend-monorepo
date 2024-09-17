@@ -41,35 +41,33 @@ export function StakeModal({
 
   return (
     <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
       isOpen={isOpen}
       onClose={onClose}
+      initialFocusRef={initialFocusRef}
+      finalFocusRef={finalFocusRef}
+      isCentered
       preserveScrollBarGap
       {...rest}
     >
       <SuccessOverlay startAnimation={!!stakeTxHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop ? (
-          <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
-        ) : null}
-        <TransactionModalHeader chain={pool.chain} label="Stake LP tokens" txHash={stakeTxHash} />
+        {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
+        <TransactionModalHeader label="Stake LP tokens" txHash={stakeTxHash} chain={pool.chain} />
         <ModalCloseButton />
         <ModalBody>
           <AnimateHeightChange spacing="sm">
-            {isMobile ? (
+            {isMobile && (
               <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
-            ) : null}
+            )}
             <StakePreview />
           </AnimateHeightChange>
         </ModalBody>
         <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
           isSuccess={!!stakeTxHash}
-          returnAction={redirectToPoolPage}
+          currentStep={transactionSteps.currentStep}
           returnLabel="Return to pool"
+          returnAction={redirectToPoolPage}
         />
       </ModalContent>
     </Modal>

@@ -43,7 +43,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const [quoteAmountsOut, setQuoteAmountsOut] = useState<TokenAmount[]>([])
   const [quotePriceImpact, setQuotePriceImpact] = useState<number>()
 
-  const { pool, bptPrice, isLoading } = usePool()
+  const { pool, chainId, bptPrice, isLoading } = usePool()
   const { getToken, usdValueForToken, getNativeAssetToken, getWrappedNativeAssetToken } =
     useTokens()
   const { isConnected } = useUserAccount()
@@ -118,6 +118,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const simulationQuery = useRemoveLiquiditySimulationQuery({
     handler,
     poolId: pool.id,
+    chainId,
     humanBptIn,
     tokenOut: wethIsEth && wNativeAsset ? (wNativeAsset.address as Address) : singleTokenOutAddress,
     enabled: !urlTxHash,
@@ -126,6 +127,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const priceImpactQuery = useRemoveLiquidityPriceImpactQuery({
     handler,
     poolId: pool.id,
+    chainId,
     humanBptIn,
     tokenOut: wethIsEth && wNativeAsset ? (wNativeAsset.address as Address) : singleTokenOutAddress,
     enabled: !urlTxHash,

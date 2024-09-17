@@ -35,14 +35,14 @@ export function AddTokenToWalletButton({
   return (
     <Tooltip label={label}>
       <IconButton
-        aria-label={label}
-        h="6"
-        icon={<PlusSquareIcon />}
-        isRound
-        onClick={addToWallet}
         size="xs"
-        variant="ghost"
+        isRound
         w="6"
+        h="6"
+        variant="ghost"
+        aria-label={label}
+        icon={<PlusSquareIcon />}
+        onClick={addToWallet}
         {...rest}
       />
     </Tooltip>

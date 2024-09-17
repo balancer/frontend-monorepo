@@ -1,7 +1,7 @@
 import { Badge, HStack } from '@chakra-ui/react'
 import React from 'react'
 import { Pool, usePool } from '../../PoolProvider'
-import { isBoosted, isStable, isGyro, isWeighted } from '../../pool.helpers'
+import { isBoosted, isStable, isGyro, isWeighted, isFx } from '../../pool.helpers'
 
 function getPoolBadges(pool: Pool) {
   const badges = []
@@ -12,6 +12,7 @@ function getPoolBadges(pool: Pool) {
   if (isStable(pool.type)) badges.push('Stable')
   if (isGyro(pool.type)) badges.push('Gyro')
   if (isWeighted(pool.type)) badges.push('Weighted')
+  if (isFx(pool.type)) badges.push('FX')
 
   return badges
 }

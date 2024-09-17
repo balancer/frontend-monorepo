@@ -48,15 +48,15 @@ function NavLinks({ ...props }: BoxProps) {
   const { appLinks, linkColorFor } = useNav()
 
   return (
-    <HStack fontWeight="medium" spacing="lg" {...props}>
+    <HStack spacing="lg" fontWeight="medium" {...props}>
       {appLinks.map(link => (
-        <Box as={motion.div} key={link.href} variants={fadeIn}>
+        <Box key={link.href} as={motion.div} variants={fadeIn}>
           <Link
             as={NextLink}
-            color={linkColorFor(link.href)}
             href={link.href}
-            prefetch
+            prefetch={true}
             variant="nav"
+            color={linkColorFor(link.href)}
           >
             {link.label}
           </Link>
@@ -65,13 +65,19 @@ function NavLinks({ ...props }: BoxProps) {
       <Box as={motion.div} variants={fadeIn}>
         <VeBalLink />
       </Box>
-      {isDev || isStaging ? (
+      {(isDev || isStaging) && (
         <Box as={motion.div} variants={fadeIn}>
-          <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
+          <Link
+            as={NextLink}
+            variant="nav"
+            href="/debug"
+            prefetch={true}
+            color={linkColorFor('/debug')}
+          >
             Debug
           </Link>
         </Box>
-      ) : null}
+      )}
     </HStack>
   )
 }
@@ -79,7 +85,7 @@ function NavLinks({ ...props }: BoxProps) {
 function NavLogo() {
   return (
     <Box as={motion.div} variants={fadeIn}>
-      <Link as={NextLink} href="/" prefetch variant="nav">
+      <Link as={NextLink} variant="nav" href="/" prefetch={true}>
         <Box>
           <Box display={{ base: 'block', md: 'none' }}>
             <BalancerLogo width="26px" />
@@ -106,7 +112,7 @@ function NavActions() {
         },
         {
           el: (
-            <Button as={NextLink} href="/pools" prefetch px={7} size="md" variant="primary">
+            <Button size="md" px={7} as={NextLink} href="/pools" prefetch={true} variant="primary">
               Launch app
             </Button>
           ),
@@ -154,7 +160,7 @@ function NavActions() {
   return (
     <>
       {actions.map(({ el, display }, i) => (
-        <Box as={motion.div} display={display} key={i} variants={fadeIn}>
+        <Box key={i} as={motion.div} variants={fadeIn} display={display}>
           {el}
         </Box>
       ))}
@@ -189,6 +195,20 @@ export function Navbar({ leftSlot, rightSlot, disableBlur, ...rest }: Props & Bo
 
   return (
     <Box
+      as={motion.div}
+      w="full"
+      pos="fixed"
+      zIndex={100}
+      top="0"
+      transition="all 0.3s ease-in-out"
+      style={{
+        backdropFilter: disableBlur ? 'none' : backdropFilter,
+        top: disableBlur ? 0 : top,
+        opacity: disableBlur ? 1 : opacity,
+      }}
+      onScroll={e => console.log('Navbar scroll:', e)}
+      boxShadow={showShadow ? 'lg' : 'none'}
+      borderColor="border.base"
       _before={{
         content: '""',
         position: 'absolute',
@@ -200,30 +220,16 @@ export function Navbar({ leftSlot, rightSlot, disableBlur, ...rest }: Props & Bo
         opacity: 0.5,
         zIndex: -1,
       }}
-      as={motion.div}
-      borderColor="border.base"
-      boxShadow={showShadow ? 'lg' : 'none'}
-      onScroll={e => console.log('Navbar scroll:', e)}
-      pos="fixed"
-      style={{
-        backdropFilter: disableBlur ? 'none' : backdropFilter,
-        top: disableBlur ? 0 : top,
-        opacity: disableBlur ? 1 : opacity,
-      }}
-      top="0"
-      transition="all 0.3s ease-in-out"
-      w="full"
-      zIndex={100}
       {...rest}
     >
-      <HStack as="nav" justify="space-between" padding={{ base: 'sm', md: 'md' }}>
+      <HStack padding={{ base: 'sm', md: 'md' }} justify="space-between" as="nav">
         <HStack
-          animate="show"
-          as={motion.div}
-          initial="hidden"
-          onClick={e => e.stopPropagation()}
           spacing="lg"
+          onClick={e => e.stopPropagation()}
+          as={motion.div}
           variants={staggeredFadeIn}
+          initial="hidden"
+          animate="show"
         >
           {leftSlot || (
             <>
@@ -233,12 +239,12 @@ export function Navbar({ leftSlot, rightSlot, disableBlur, ...rest }: Props & Bo
           )}
         </HStack>
         <HStack
-          animate="show"
-          as={motion.div}
-          initial="hidden"
-          onClick={e => e.stopPropagation()}
           order={{ md: '2' }}
+          onClick={e => e.stopPropagation()}
+          as={motion.div}
           variants={staggeredFadeIn}
+          initial="hidden"
+          animate="show"
         >
           {rightSlot || <NavActions />}
         </HStack>

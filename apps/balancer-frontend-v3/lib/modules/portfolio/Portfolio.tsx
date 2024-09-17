@@ -7,7 +7,7 @@ import { TransactionStateProvider } from '../transactions/transaction-steps/Tran
 
 export default function Portfolio() {
   return (
-    <Stack gap={20} width="full">
+    <Stack width="full" gap={20}>
       <PortfolioSummary />
       <TransactionStateProvider>
         <ClaimNetworkPools />

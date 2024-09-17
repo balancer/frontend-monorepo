@@ -122,6 +122,8 @@ export function usePoolListQueryState() {
         return 'Gyro CLP'
       case GqlPoolType.CowAmm:
         return 'CoW AMM'
+      case GqlPoolType.Fx:
+        return 'FX'
       default:
         return poolType.toLowerCase()
     }

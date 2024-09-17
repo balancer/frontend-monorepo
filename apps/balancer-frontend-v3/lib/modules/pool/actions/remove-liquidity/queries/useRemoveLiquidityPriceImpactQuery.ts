@@ -10,10 +10,12 @@ import { RemoveLiquidityParams, removeLiquidityKeys } from './remove-liquidity-k
 import { HumanAmount } from '@balancer/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { sentryMetaForRemoveLiquidityHandler } from '@/lib/shared/utils/query-errors'
+import { useBlockNumber } from 'wagmi'
 
 type Params = {
   handler: RemoveLiquidityHandler
   poolId: string
+  chainId: number
   humanBptIn: HumanAmount
   tokenOut: Address
   enabled?: boolean
@@ -22,12 +24,14 @@ type Params = {
 export function useRemoveLiquidityPriceImpactQuery({
   handler,
   poolId,
+  chainId,
   humanBptIn,
   tokenOut,
   enabled = true,
 }: Params) {
   const { userAddress, isConnected } = useUserAccount()
   const { slippage } = useUserSettings()
+  const { data: blockNumber } = useBlockNumber({ chainId })
   const debouncedBptIn = useDebounce(humanBptIn, defaultDebounceMs)[0]
 
   const params: RemoveLiquidityParams = {
@@ -52,10 +56,11 @@ export function useRemoveLiquidityPriceImpactQuery({
     queryFn,
     enabled: enabled && isConnected && Number(debouncedBptIn) > 0,
     gcTime: 0,
-    meta: sentryMetaForRemoveLiquidityHandler(
-      'Error in remove liquidity price impact query',
-      params
-    ),
+    meta: sentryMetaForRemoveLiquidityHandler('Error in remove liquidity price impact query', {
+      ...params,
+      chainId,
+      blockNumber,
+    }),
     ...onlyExplicitRefetch,
   })
 }

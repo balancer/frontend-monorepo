@@ -24,12 +24,12 @@ export function MigrateStakeForm() {
   const { isDisabled, disabledReason, isLoading } = useMigrateStake()
 
   return (
-    <Box h="full" maxW="lg" mx="auto" w="full">
+    <Box h="full" w="full" maxW="lg" mx="auto">
       <Card>
         <CardHeader isTruncated>
           Migrate to new staking gauge{' '}
           <Tooltip label={migrateStakeTooltipLabel}>
-            <InfoOutlineIcon color="grayText" fontSize="sm" />
+            <InfoOutlineIcon fontSize="sm" color="grayText" />
           </Tooltip>
         </CardHeader>
 
@@ -39,13 +39,13 @@ export function MigrateStakeForm() {
         <CardFooter>
           <Tooltip label={isDisabled ? disabledReason : ''}>
             <Button
+              ref={nextBtn}
+              variant="secondary"
+              w="full"
+              size="lg"
               isDisabled={isDisabled}
               isLoading={isLoading}
               onClick={() => !isDisabled && onOpen()}
-              ref={nextBtn}
-              size="lg"
-              variant="secondary"
-              w="full"
             >
               Next
             </Button>
@@ -55,8 +55,8 @@ export function MigrateStakeForm() {
       <MigrateStakeModal
         finalFocusRef={nextBtn}
         isOpen={isOpen}
-        onClose={onClose}
         onOpen={onOpen}
+        onClose={onClose}
       />
     </Box>
   )

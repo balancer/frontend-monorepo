@@ -50,15 +50,15 @@ function EnsOrAddress({ userAddress, chain }: { userAddress: `0x${string}`; chai
   })
 
   return (
-    <Link href={getBlockExplorerAddressUrl(userAddress, chain)} target="_blank">
+    <Link target="_blank" href={getBlockExplorerAddressUrl(userAddress, chain)}>
       <HStack>
         <Image
-          alt={name || userAddress}
-          backgroundColor="background.level4"
-          borderRadius="100%"
-          height="24px"
           src={ensAvatar || fallbackSVG.toDataUriSync()}
+          alt={name || userAddress}
           width="24px"
+          height="24px"
+          borderRadius="100%"
+          backgroundColor="background.level4"
         />
         <HStack gap="0.5">
           <Text>{name || abbreviateAddress(userAddress)}</Text>
@@ -88,18 +88,18 @@ function TransactionDetails({
           <React.Fragment key={index}>
             <Badge
               {...badgeProps}
+              display="flex"
               alignItems="center"
               bg="background.level3"
               borderRadius="full"
-              display="flex"
               textTransform="none"
             >
               <HStack gap={['xs', 'sm']}>
                 <TokenIcon
-                  address={token.token?.address}
-                  alt={token.token?.symbol || ''}
                   chain={token.token?.chain}
+                  address={token.token?.address}
                   size={24}
+                  alt={token.token?.symbol || ''}
                 />
                 <Text>{fNum('token', token.amount)}</Text>
               </HStack>
@@ -124,29 +124,29 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
   return (
     <FadeInOnView>
       <Box
+        key={keyValue}
+        transition="all 0.2s ease-in-out"
         _hover={{
           bg: 'background.level0',
         }}
-        key={keyValue}
-        px={{ base: '0', sm: 'md' }}
         rounded="md"
-        transition="all 0.2s ease-in-out"
+        px={{ base: '0', sm: 'md' }}
         w="full"
       >
-        <Grid {...rest} pr="4" py={{ base: 'ms', md: 'md' }}>
+        <Grid {...rest} py={{ base: 'ms', md: 'md' }} pr="4">
           <GridItem>
-            <EnsOrAddress chain={chain} userAddress={poolEvent.userAddress as `0x${string}`} />
+            <EnsOrAddress userAddress={poolEvent.userAddress as `0x${string}`} chain={chain} />
           </GridItem>
           <GridItem>
             <HStack>
               <Box
+                height="2"
+                width="2"
                 backgroundImage={
                   theme.semanticTokens.colors.chart.pool.scatter[poolEvent.action].label
                 }
                 borderRadius="50%"
                 display="inline-block"
-                height="2"
-                width="2"
               />
               <Text casing="capitalize">{poolEvent.action}</Text>
             </HStack>
@@ -154,16 +154,16 @@ export function PoolActivityTableRow({ event, keyValue, ...rest }: Props) {
           <GridItem>
             <TransactionDetails
               action={poolEvent.action}
-              px="sm"
-              py="2"
               tokens={poolEvent.tokens}
+              py="2"
+              px="sm"
             />
           </GridItem>
           <GridItem textAlign="right">
             <Text>{toCurrency(poolEvent.usdValue)}</Text>
           </GridItem>
           <GridItem>
-            <Link href={getBlockExplorerTxUrl(poolEvent.tx, chain)} target="_blank">
+            <Link target="_blank" href={getBlockExplorerTxUrl(poolEvent.tx, chain)}>
               <HStack gap="0.5" justifyContent="flex-end">
                 <Text>
                   {formatDistanceToNow(new Date(secondsToMilliseconds(event[0])), {

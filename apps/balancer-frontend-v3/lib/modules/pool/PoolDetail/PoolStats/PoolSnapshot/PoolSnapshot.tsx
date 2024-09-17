@@ -58,27 +58,27 @@ export function PoolSnapshot({ ...props }: CardProps) {
         cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
         contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
       >
-        <Box bottom={0} left={0} overflow="hidden" position="absolute" right={0} top={0}>
-          <ZenGarden sizePx="280px" subdued variant="circle" />
+        <Box top={0} bottom={0} left={0} right={0} position="absolute" overflow="hidden">
+          <ZenGarden variant="circle" sizePx="280px" subdued />
         </Box>
         <VStack
-          align="flex-start"
-          h="full"
-          justify="flex-start"
+          spacing="xl"
           m="auto"
+          align="flex-start"
+          w="full"
+          justify="flex-start"
           mb="8"
           p={{ base: 'sm', md: 'md' }}
-          role="group"
-          spacing="xl"
-          w="full"
           zIndex={1}
+          h="full"
+          role="group"
         >
           <ButtonGroup
-            currentOption={activeTab}
-            groupId="pool-stats"
-            onChange={handleTabChanged}
-            options={TABS}
             size="xxs"
+            currentOption={activeTab}
+            options={TABS}
+            onChange={handleTabChanged}
+            groupId="pool-stats"
           />
           {activeTab.value === 'poolStats' && <PoolSnapshotValues />}
           {activeTab.value === 'myStats' && <UserSnapshotValues />}

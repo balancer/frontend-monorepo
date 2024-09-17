@@ -33,11 +33,11 @@ export function ReceiptBptOut({
 
   return (
     <BptRow
-      bptAmount={actualBptOut}
-      isLoading={isLoading}
       label="You got"
-      pool={pool}
       rightLabel={diffLabel()}
+      bptAmount={actualBptOut}
+      pool={pool}
+      isLoading={isLoading}
     />
   )
 }
@@ -56,5 +56,5 @@ export function QuoteBptOut({ label, isLoading = false }: { label?: string; isLo
     ? 'You will get'
     : 'You will get (if no slippage)'
 
-  return <BptRow bptAmount={bptOutUnits} isLoading={isLoading} label={_label} pool={pool} />
+  return <BptRow label={_label} bptAmount={bptOutUnits} pool={pool} isLoading={isLoading} />
 }

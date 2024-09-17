@@ -12,14 +12,14 @@ export function CowHeader() {
           base: '/images/partners/cow/banner-mobile.svg',
           md: '/images/partners/cow/banner-desktop.svg',
         }}
-        backgroundPosition={{ base: 'bottom', md: 'bottom' }}
-        backgroundRepeat="no-repeat"
         backgroundSize="cover"
-        bg="#194D05"
+        backgroundRepeat="no-repeat"
+        backgroundPosition={{ base: 'bottom', md: 'bottom' }}
         rounded="xl"
+        bg="#194D05"
       >
         <Center>
-          <VStack maxW="xl" p="xl" spacing="lg" textAlign="center">
+          <VStack p="xl" maxW="xl" textAlign="center" spacing="lg">
             <Heading
               color="#BCEC79"
               sx={{
@@ -32,26 +32,26 @@ export function CowHeader() {
               CoW AMM protects LPs from LVR so they can provide liquidity with less risk and more
               return.{' '}
               <Link
-                _hover={{ color: '#fff' }}
-                color="#BCEC79"
                 href="https://cow.fi/cow-amm"
-                isExternal
-                position="relative"
-                role="group"
                 textDecoration="underline"
+                isExternal
+                color="#BCEC79"
+                _hover={{ color: '#fff' }}
+                role="group"
+                position="relative"
               >
                 Learn more
                 <Box
-                  _groupHover={{ transform: 'translateX(1.5px)' }}
                   display="inline"
                   position="absolute"
                   transition="transform 0.2s var(--ease-out-cubic)"
+                  _groupHover={{ transform: 'translateX(1.5px)' }}
                 >
                   <ArrowUpRight size={14} style={{ display: 'inline' }} />
                 </Box>
               </Link>
             </Text>
-            <Image alt="cow-logo" h="30px" src="/images/partners/cow/cow-amm-logo.svg" />
+            <Image src="/images/partners/cow/cow-amm-logo.svg" alt="cow-logo" h="30px" />
           </VStack>
         </Center>
       </Card>

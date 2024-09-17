@@ -24,14 +24,14 @@ export function NetworkIcon({ chain, size = 12, ...rest }: { chain: GqlChain } &
 
   return (
     <Circle bg="background.level2" size={size} {...rest}>
-      {networkConfig ? (
+      {networkConfig && (
         <Image
-          alt={networkConfig.shortName}
-          height={imageSize}
           src={networkConfig.iconPath}
           width={imageSize}
+          height={imageSize}
+          alt={networkConfig.shortName}
         />
-      ) : null}
+      )}
     </Circle>
   )
 }

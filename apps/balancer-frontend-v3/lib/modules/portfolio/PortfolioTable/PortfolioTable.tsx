@@ -148,20 +148,15 @@ export function PortfolioTable() {
         </HStack>
         {isConnected ? (
           <Card
-            alignItems="flex-start"
-            left={{ base: '-4px', sm: '0' }}
             p={{ base: '0', sm: '0' }}
-            position="relative"
             w={{ base: '100vw', lg: 'full' }}
+            alignItems="flex-start"
+            position="relative"
+            left={{ base: '-4px', sm: '0' }}
           >
             <PaginatedTable
-              alignItems="flex-start"
               items={sortedPools}
-              left={{ base: '-4px', sm: '0' }}
               loading={isLoadingPortfolio}
-              noItemsFoundLabel="No pools found"
-              paginationProps={null}
-              position="relative"
               renderTableHeader={() => (
                 <PortfolioTableHeader
                   currentSortingObj={currentSortingObj}
@@ -180,27 +175,32 @@ export function PortfolioTable() {
                 )
               }}
               showPagination={false}
+              paginationProps={null}
               w={{ base: '100vw', lg: 'full' }}
+              alignItems="flex-start"
+              position="relative"
+              left={{ base: '-4px', sm: '0' }}
+              noItemsFoundLabel="No pools found"
             />
           </Card>
         ) : (
-          <Center border="1px dashed" borderColor="border.base" h="400px" rounded="lg">
-            <ConnectWallet size="lg" variant="primary" />
+          <Center h="400px" border="1px dashed" borderColor="border.base" rounded="lg">
+            <ConnectWallet variant="primary" size="lg" />
           </Center>
         )}
-        {hasTinyBalances ? (
+        {hasTinyBalances && (
           <Checkbox
+            size="lg"
             isChecked={shouldFilterTinyBalances}
             onChange={() => {
               setShouldFilterTinyBalances(!shouldFilterTinyBalances)
             }}
-            size="lg"
           >
-            <Text fontSize="md" variant="secondary">
+            <Text variant="secondary" fontSize="md">
               Hide pools under $0.01
             </Text>
           </Checkbox>
-        ) : null}
+        )}
       </Stack>
     </FadeInOnView>
   )

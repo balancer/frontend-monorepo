@@ -23,29 +23,29 @@ export function IncentiveBadge({ special = false, label, value, children }: Prop
     <Accordion allowToggle variant="incentives">
       <AccordionItem border="none">
         <AccordionButton>
-          <HStack justifyContent="space-between" width="full" zIndex="2">
+          <HStack width="full" zIndex="2" justifyContent="space-between">
             <HStack spacing="4" width="full">
               <Flex
-                alignItems="center"
-                background="background.level3"
-                borderColor="border.base"
-                borderWidth={1}
-                height="60px"
                 justifyContent="center"
+                alignItems="center"
                 rounded="md"
-                shadow="sm"
+                background="background.level3"
                 width="70px"
+                height="60px"
+                borderWidth={1}
+                borderColor="border.base"
+                shadow="sm"
               >
-                {special ? <Icon as={StarsIcon} boxSize="32px" /> : null}
+                {special && <Icon as={StarsIcon} boxSize="32px" />}
                 {!special && (
-                  <Icon as={StarsIcon} boxSize="28px" color="font.secondary" variant="solid" />
+                  <Icon color="font.secondary" as={StarsIcon} variant="solid" boxSize="28px" />
                 )}
               </Flex>
               <HStack
-                alignItems="flex-start"
-                fontWeight="medium"
-                justifyContent="space-between"
                 spacing="2"
+                fontWeight="medium"
+                alignItems="flex-start"
+                justifyContent="space-between"
                 width="full"
               >
                 <Text fontSize="1.15rem" fontWeight="semibold" variant="primary">
@@ -53,9 +53,9 @@ export function IncentiveBadge({ special = false, label, value, children }: Prop
                 </Text>
                 <HStack>
                   <Text
+                    variant={special ? 'specialSecondary' : 'primary'}
                     fontSize="1.15rem"
                     fontWeight="semibold"
-                    variant={special ? 'specialSecondary' : 'primary'}
                   >
                     {value}
                   </Text>

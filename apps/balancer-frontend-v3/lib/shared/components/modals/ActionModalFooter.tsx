@@ -19,23 +19,23 @@ export function SuccessActions({
       <Divider />
       <HStack justify="space-between" w="full">
         <Button
-          leftIcon={<CornerDownLeft size="14" />}
-          onClick={returnAction}
-          size="xs"
           variant="ghost"
+          leftIcon={<CornerDownLeft size="14" />}
+          size="xs"
+          onClick={returnAction}
         >
           {returnLabel}
         </Button>
-        <Button leftIcon={<ThumbsUp size="14" />} onClick={openNpsModal} size="xs" variant="ghost">
+        <Button variant="ghost" leftIcon={<ThumbsUp size="14" />} size="xs" onClick={openNpsModal}>
           Give feedback
         </Button>
         <Button
           as={Link}
           href="https://discord.balancer.fi"
-          leftIcon={<MessageSquare size="14" />}
-          size="xs"
           target="_blank"
           variant="ghost"
+          leftIcon={<MessageSquare size="14" />}
+          size="xs"
         >
           Ask questions
         </Button>
@@ -54,26 +54,26 @@ type Props = {
 export function ActionModalFooter({ isSuccess, currentStep, returnLabel, returnAction }: Props) {
   return (
     <ModalFooter>
-      <AnimatePresence initial={false} mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         {isSuccess ? (
           <motion.div
+            key="footer"
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            initial={{ opacity: 0, scale: 0.95 }}
-            key="footer"
-            style={{ width: '100%' }}
             transition={{ duration: 0.3 }}
+            style={{ width: '100%' }}
           >
-            <SuccessActions returnAction={returnAction} returnLabel={returnLabel} />
+            <SuccessActions returnLabel={returnLabel} returnAction={returnAction} />
           </motion.div>
         ) : (
           <motion.div
+            key="action"
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            initial={{ opacity: 0, scale: 0.95 }}
-            key="action"
-            style={{ width: '100%' }}
             transition={{ duration: 0.3 }}
+            style={{ width: '100%' }}
           >
             <VStack w="full">
               {/* Keep currentStep?. optional chaining cause some edge cases require it */}

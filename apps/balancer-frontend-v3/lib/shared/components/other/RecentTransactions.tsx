@@ -34,11 +34,11 @@ function TransactionIcon({ status }: { status: TransactionStatus }) {
     case 'confirming':
       return (
         <CircularProgress
-          color="orange.300"
-          isIndeterminate
-          size="5"
-          trackColor="border.base"
           value={100}
+          isIndeterminate
+          trackColor="border.base"
+          size="5"
+          color="orange.300"
         />
       )
     case 'confirmed':
@@ -82,10 +82,10 @@ function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
       : transaction.init
 
   return (
-    <HStack align="start" key={transaction.hash} py="sm" w="full">
+    <HStack key={transaction.hash} py="sm" align="start" w="full">
       <TransactionIcon status={transaction.status} />
-      <VStack align="start" spacing="none" w="full">
-        <Tooltip fontSize="sm" label={label}>
+      <VStack align="start" w="full" spacing="none">
+        <Tooltip label={label} fontSize="sm">
           <Text isTruncated maxW="85%">
             {transaction.init}
           </Text>
@@ -97,7 +97,7 @@ function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
               addSuffix: true,
             })}
           </Text>
-          <Link color="grayText" href={getBlockExplorerTxUrl(transaction.hash)} target="_blank">
+          <Link href={getBlockExplorerTxUrl(transaction.hash)} target="_blank" color="grayText">
             <ArrowUpRight size={16} />
           </Link>
         </HStack>
@@ -110,7 +110,7 @@ function Transactions({ transactions }: { transactions: Record<string, TrackedTr
   const orderedRecentTransactions = orderBy(Object.values(transactions), 'timestamp', 'desc')
 
   return (
-    <VStack align="start" maxH="250px" overflowY="auto" p="md" spacing="none">
+    <VStack align="start" spacing="none" p="md" maxH="250px" overflowY="auto">
       {orderedRecentTransactions.map(transaction => (
         <TransactionRow key={transaction.hash} transaction={transaction} />
       ))}
@@ -129,17 +129,17 @@ export default function RecentTransactions() {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button p="0" variant="tertiary">
+        <Button variant="tertiary" p="0">
           {confirmingTxCount > 0 ? (
             <CircularProgress
-              color="font.warning"
-              isIndeterminate
-              size="7"
-              thickness="8"
-              trackColor="border.base"
               value={100}
+              isIndeterminate
+              trackColor="border.base"
+              thickness="8"
+              size="7"
+              color="font.warning"
             >
-              <CircularProgressLabel color="font.warning" fontSize="sm" fontWeight="bold">
+              <CircularProgressLabel fontSize="sm" fontWeight="bold" color="font.warning">
                 {confirmingTxCount}
               </CircularProgressLabel>
             </CircularProgress>

@@ -53,7 +53,7 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
       {level !== 0 && (
         <>
           <VStack alignItems="flex-start" gap="0">
-            <Text color="grayText" fontSize="sm">
+            <Text fontSize="sm" color="grayText">
               Review summary:
             </Text>
             <Text fontSize="sm">
@@ -61,7 +61,7 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
             </Text>
           </VStack>
           <VStack alignItems="flex-start" gap="0">
-            <Text color="grayText" fontSize="sm">
+            <Text fontSize="sm" color="grayText">
               Warnings:
             </Text>
             {warnings.length > 0 ? (
@@ -78,7 +78,7 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
             )}
           </VStack>
           <VStack alignItems="flex-start" gap="0">
-            <Text color="grayText" fontSize="sm">
+            <Text fontSize="sm" color="grayText">
               Upgradeable components:
             </Text>
             {data.upgradeableComponents && data.upgradeableComponents.length > 0 ? (
@@ -88,24 +88,24 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
             )}
           </VStack>
           <VStack alignItems="flex-start" gap="0">
-            <Text color="grayText" fontSize="sm">
+            <Text fontSize="sm" color="grayText">
               Rate provider factory:
             </Text>
             <Text fontSize="sm">{data.factory ?? 'None'}</Text>
           </VStack>
-          {data.reviewFile ? (
+          {data.reviewFile && (
             <Link
               href={`https://github.com/balancer/code-review/blob/main/rate-providers/${data.reviewFile}`}
               target="_blank"
             >
               <HStack gap="xxs">
-                <Text color="font.link" fontSize="sm">
+                <Text fontSize="sm" color="font.link">
                   View review details
                 </Text>
-                <Icon as={ArrowUpRight} color="font.link" size={12} />
+                <Icon as={ArrowUpRight} size={12} color="font.link" />
               </HStack>
             </Link>
-          ) : null}
+          )}
         </>
       )}
     </>
@@ -121,11 +121,13 @@ export function RateProviderInfoPopOver({
   const body = data ? (
     <PopoverInfoBody data={data} level={level} />
   ) : (
-    <Text fontSize="sm">
-      Rate provider data is missing.
-      <br />
-      Proceed with caution.
-    </Text>
+    <>
+      <Text fontSize="sm">
+        Rate provider data is missing.
+        <br />
+        Proceed with caution.
+      </Text>
+    </>
   )
 
   return (
@@ -134,17 +136,17 @@ export function RateProviderInfoPopOver({
       <PopoverContent w="auto">
         <PopoverArrow bg="background.level2" />
         <PopoverBody>
-          <VStack alignItems="flex-start" spacing="ms" w="full">
+          <VStack w="full" alignItems="flex-start" spacing="ms">
             <HStack w="full">
-              <Heading fontSize="1.125rem" variant="h4">
+              <Heading variant="h4" fontSize="1.125rem">
                 {token.symbol} rate provider
               </Heading>
               <TokenIcon
-                address={token.address}
-                alt={token.address}
                 chain={token.chain}
-                ml="auto"
+                address={token.address}
                 size={24}
+                alt={token.address}
+                ml="auto"
               />
             </HStack>
             {body}

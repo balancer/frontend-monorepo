@@ -13,39 +13,39 @@ export default function PoolMetaBadges() {
   const { pool, chain } = usePool()
 
   return (
-    <Flex alignItems="center" gap={{ base: 'xs', sm: 'sm' }} wrap="wrap">
+    <Flex gap={{ base: 'xs', sm: 'sm' }} alignItems="center" wrap="wrap">
       <Badge
+        py="2.5"
+        px="2.5"
+        rounded="full"
         background="background.level2"
         border="1px solid"
         borderColor="border.base"
-        px="2.5"
-        py="2.5"
-        rounded="full"
         shadow="sm"
         title={getChainShortName(chain)}
       >
         <Image
-          alt={`Chain icon for ${chain.toLowerCase()}`}
-          height={20}
           src={`/images/chains/${chain}.svg`}
+          alt={`Chain icon for ${chain.toLowerCase()}`}
           width={20}
+          height={20}
         />
       </Badge>
-      <PoolListTokenPills pool={pool} px="sm" py="2" />
+      <PoolListTokenPills pool={pool} py="2" px="sm" />
       {!shouldHideSwapFee(pool.type) && (
         <Tooltip label="Swap fee">
           <Badge
-            alignItems="center"
+            fontWeight="normal"
+            py="xs"
+            px="sm"
             background="background.level2"
             border="1px solid"
             borderColor="border.base"
-            display="flex"
-            fontWeight="normal"
-            h={{ base: '28px' }}
-            px="sm"
-            py="xs"
-            rounded="full"
             shadow="sm"
+            rounded="full"
+            display="flex"
+            alignItems="center"
+            h={{ base: '28px' }}
           >
             <HStack color="font.primary">
               <Repeat size={12} />

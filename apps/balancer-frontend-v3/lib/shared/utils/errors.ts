@@ -14,6 +14,8 @@
  *      })
  *    }
  */
+import { TransactionConfig } from '@/lib/modules/web3/contracts/contract.types'
+import { buildTenderlyUrl } from '@/lib/modules/web3/useTenderly'
 import { captureException } from '@sentry/nextjs'
 import { ScopeContext } from '@sentry/types/types/scope'
 
@@ -83,4 +85,65 @@ class ErrorWithShortMessage extends Error {
 
     Object.setPrototypeOf(this, ErrorWithShortMessage.prototype)
   }
+}
+
+type QueryMeta = {
+  context?: {
+    extra?: {
+      params?: { chainId?: number; blockNumber?: bigint }
+    }
+  }
+}
+
+/*
+  When present, it parses the build call data from the error message and builds a tenderly simulation url.
+*/
+export function getTenderlyUrlFromErrorMessage(
+  error: Error,
+  queryMeta?: QueryMeta
+): string | undefined {
+  const queryParams = queryMeta?.context?.extra?.params
+  const chainId = queryParams?.chainId
+  if (!chainId) return
+
+  const txConfig = parseRequestError(error, chainId)
+  if (!txConfig) return
+
+  return buildTenderlyUrl({ txConfig, blockNumber: queryParams?.blockNumber })
+}
+
+/*
+  When present, parses viem's exception message to extract the transaction config (build call data)
+*/
+function parseRequestError(error: Error, chainId: number): TransactionConfig | undefined {
+  if (!error.message.startsWith('RPC Request failed')) return
+  const requestBodyRegex = /Request body: ({.*})/
+
+  const match = error?.stack?.match(requestBodyRegex)
+
+  if (match && match[1]) {
+    const jsonString = match[1]
+
+    try {
+      const parsedBody = JSON.parse(jsonString)
+      const rawCall = parsedBody?.params?.[0]
+      if (rawCall) {
+        const txConfig: TransactionConfig = {
+          data: rawCall.data,
+          to: rawCall.to,
+          account: rawCall.from,
+          chainId,
+        }
+        if (!txConfig.account) {
+          txConfig.account = '0x0000000000000000000000000000000000000000' // Unknown account in tenderly
+        }
+        return txConfig
+      }
+    } catch (error) {
+      // Ignore errors when parsing
+      return
+    }
+  }
+
+  return
 }

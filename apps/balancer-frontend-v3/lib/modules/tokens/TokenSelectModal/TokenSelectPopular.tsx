@@ -43,19 +43,19 @@ export function TokenSelectPopular({
       {tokens?.map(token => (
         <WrapItem key={token.address}>
           <Tag
-            _hover={isCurrentToken(token) ? {} : { bg: 'background.level4', shadow: 'none' }}
-            cursor={isCurrentToken(token) ? 'not-allowed' : 'pointer'}
             key={token.address}
             onClick={() => !isCurrentToken(token) && onTokenSelect(token)}
-            opacity={isCurrentToken(token) ? 0.5 : 1}
-            pl="xs"
-            role="group"
-            shadow="sm"
             size="lg"
+            pl="xs"
+            cursor={isCurrentToken(token) ? 'not-allowed' : 'pointer'}
+            shadow="sm"
+            role="group"
             transition="all 0.2s var(--ease-out-cubic)"
+            opacity={isCurrentToken(token) ? 0.5 : 1}
+            _hover={isCurrentToken(token) ? {} : { bg: 'background.level4', shadow: 'none' }}
           >
             <HStack>
-              <TokenIcon address={token.address} alt={token.symbol} chain={chain} size={20} />
+              <TokenIcon address={token.address} chain={chain} size={20} alt={token.symbol} />
               <Text fontSize="sm">{token.symbol}</Text>
             </HStack>
           </Tag>

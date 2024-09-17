@@ -80,52 +80,52 @@ function CardContent() {
       spacing={{ base: 'xl', lg: 'md' }}
       w="full"
     >
-      <VStack align="start" color="font.primary" spacing="lg" width={{ base: 'auto', md: '70%' }}>
+      <VStack color="font.primary" align="start" spacing="lg" width={{ base: 'auto', md: '70%' }}>
         <BalancerLogoType width="120px" />
         <VStack align="start" spacing="sm">
-          <Text fontSize="4xl" fontWeight="500" letterSpacing="-0.4px" variant="secondary">
+          <Text variant="secondary" fontSize="4xl" fontWeight="500" letterSpacing="-0.4px">
             AMMs made easy
           </Text>
-          <Text sx={{ textWrap: 'balance' }} variant="secondary">
+          <Text variant="secondary" sx={{ textWrap: 'balance' }}>
             Balancer is a battle-tested toolkit for true AMM experimentation and innovation.
           </Text>
         </VStack>
       </VStack>
       <Stack
-        align="start"
         direction={{ base: 'column', lg: 'row' }}
-        justify="space-between"
-        spacing={{ base: 'lg', lg: 'md' }}
         w="full"
+        justify="space-between"
+        align="start"
+        spacing={{ base: 'lg', lg: 'md' }}
       >
         {linkSections.map(section => (
-          <VStack align="start" key={section.title} spacing={{ base: 'sm', lg: 'ms' }}>
-            <Text color="font.secondary" fontSize={{ base: 'xs', md: 'xs' }} variant="eyebrow">
+          <VStack key={section.title} align="start" spacing={{ base: 'sm', lg: 'ms' }}>
+            <Text variant="eyebrow" fontSize={{ base: 'xs', md: 'xs' }} color="font.secondary">
               {section.title}
             </Text>
             <VStack align="start" spacing={{ base: 'xs', lg: 'sm' }}>
               {section.links.map(link => (
                 <Link
                   as={NextLink}
-                  flex="auto"
-                  flexBasis="row"
-                  href={link.href}
-                  key={link.href}
                   variant="nav"
+                  key={link.href}
+                  href={link.href}
+                  flexBasis="row"
+                  flex="auto"
                 >
                   <HStack gap="xxs">
                     <Box
-                      fontSize={{ base: 'sm', md: 'md' }}
                       fontWeight="medium"
                       letterSpacing="-0.25px"
+                      fontSize={{ base: 'sm', md: 'md' }}
                     >
                       {link.label}
                     </Box>
-                    {link.isExternal ? (
+                    {link.isExternal && (
                       <Box color="grayText">
                         <ArrowUpRight size={12} />
                       </Box>
-                    ) : null}
+                    )}
                   </HStack>
                 </Link>
               ))}
@@ -144,17 +144,17 @@ function SocialLinks() {
     <HStack spacing="ms" w={{ base: 'full', lg: 'auto' }}>
       {getSocialLinks(24).map(({ href, icon }) => (
         <IconButton
-          aria-label="Social icon"
           as={Link}
-          bg="background.level2"
-          h="44px"
-          href={href}
-          isExternal
-          isRound
           key={href}
-          rounded="full"
+          href={href}
+          aria-label="Social icon"
           variant="tertiary"
+          isRound
+          rounded="full"
+          isExternal
           w="44px"
+          h="44px"
+          bg="background.level2"
         >
           {icon}
         </IconButton>
@@ -174,19 +174,19 @@ function LegalLinks() {
 
   return (
     <HStack
-      justify={{ base: 'start', lg: 'end' }}
-      p={{ base: 'sm', lg: '0' }}
-      spacing={{ base: 'sm', lg: 'md' }}
       w="full"
+      justify={{ base: 'start', lg: 'end' }}
+      spacing={{ base: 'sm', lg: 'md' }}
       wrap="wrap"
+      p={{ base: 'sm', lg: '0' }}
     >
       {legalLinks.map(link => (
         <Link
-          as={NextLink}
           color="font.secondary"
           fontSize={{ base: 'xs', md: 'sm' }}
-          href={link.href}
           key={link.href}
+          href={link.href}
+          as={NextLink}
         >
           {link.label}
         </Link>
@@ -199,19 +199,19 @@ export function Footer() {
   return (
     <Box as="footer" background="background.level0" shadow="innerLg">
       <DefaultPageContainer py="xl">
-        <VStack align="start" pt="md" spacing="lg">
+        <VStack align="start" spacing="lg" pt="md">
           <CardContent />
           <Divider />
           <Stack
             align="start"
-            alignItems={{ base: 'none', lg: 'center' }}
-            animate="show"
-            as={motion.div}
             direction={{ base: 'column', lg: 'row' }}
-            gap="md"
-            initial="hidden"
             justify="space-between"
+            alignItems={{ base: 'none', lg: 'center' }}
+            gap="md"
+            as={motion.div}
             variants={staggeredFadeIn}
+            initial="hidden"
+            animate="show"
             w="full"
           >
             <SocialLinks />

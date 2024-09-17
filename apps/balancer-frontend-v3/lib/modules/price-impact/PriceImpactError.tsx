@@ -12,6 +12,9 @@ export function PriceImpactError({
   if (!isUnhandledAddPriceImpactError(priceImpactQuery.error)) return null
 
   return (
-    <GenericError customErrorName="Error calculating price impact" error={priceImpactQuery.error} />
+    <GenericError
+      customErrorName={'Error calculating price impact'}
+      error={priceImpactQuery.error}
+    />
   )
 }

@@ -21,18 +21,18 @@ export default function TokenSelectPage() {
     <TokenBalancesProvider extTokens={getTokensByChain(1)}>
       <h1>TokenSelectPage</h1>
       <Text>Selected token: {selectedToken?.symbol}</Text>
-      <Button onClick={tokenSelectDisclosure.onOpen} ref={tokenSelectBtn}>
+      <Button ref={tokenSelectBtn} onClick={tokenSelectDisclosure.onOpen}>
         Open modal
       </Button>
       <TokenSelectModal
+        tokens={getTokensByChain(1)}
         chain={GqlChain.Mainnet}
+        pinNativeAsset
         finalFocusRef={tokenSelectBtn}
         isOpen={tokenSelectDisclosure.isOpen}
-        onClose={tokenSelectDisclosure.onClose}
         onOpen={tokenSelectDisclosure.onOpen}
+        onClose={tokenSelectDisclosure.onClose}
         onTokenSelect={handleTokenSelect}
-        pinNativeAsset
-        tokens={getTokensByChain(1)}
       />
     </TokenBalancesProvider>
   )

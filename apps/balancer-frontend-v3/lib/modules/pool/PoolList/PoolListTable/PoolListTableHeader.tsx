@@ -26,7 +26,7 @@ export function PoolListTableHeader({ ...rest }) {
   }
 
   return (
-    <Grid {...rest} borderBottom="1px solid" borderColor="border.base" p={['sm', 'md']} w="full">
+    <Grid {...rest} p={['sm', 'md']} w="full" borderBottom="1px solid" borderColor="border.base">
       <GridItem>
         <VStack align="start" w="full">
           <Icon as={Globe} boxSize="5" color="font.primary" />
@@ -41,12 +41,12 @@ export function PoolListTableHeader({ ...rest }) {
         </Text>
       </GridItem>
       {orderBy.map((orderByItem, index) => (
-        <GridItem justifySelf="end" key={index}>
+        <GridItem key={index} justifySelf="end">
           <SortableHeader
-            isSorted={sortingObj.id === orderByItem}
             label={orderByHash[orderByItem]}
-            onSort={() => handleSort(orderByItem)}
+            isSorted={sortingObj.id === orderByItem}
             sorting={sortingObj.desc ? 'desc' : 'asc'}
+            onSort={() => handleSort(orderByItem)}
           />
         </GridItem>
       ))}

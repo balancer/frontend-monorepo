@@ -12,27 +12,27 @@ export function HomeHero() {
   const [bgColor] = useToken('colors', ['background.level1'])
 
   return (
-    <Box bg="background.level0" className="hero">
-      <Flex className="hero-container" direction="column" justify="center" position="relative">
+    <Box className="hero" bg="background.level0">
+      <Flex direction="column" justify="center" className="hero-container" position="relative">
         <Box position="relative">
           <Box
             className="home-hero-bg"
-            height="100%"
-            left="50%"
-            mx="auto"
             position="absolute"
-            top="50%"
-            transform="translate(-50%, -50%)"
             width="100vw"
+            height="100%"
+            mx="auto"
+            top="50%"
+            left="50%"
+            transform="translate(-50%, -50%)"
           >
-            <svg className="ying ying-path" viewBox="0 0 32 18" xmlns="http://www.w3.org/2000/svg">
+            <svg className="ying ying-path" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 18">
               <path d="M 0 0 H 32 C 24 0 16 0 16 9 C 16 18 8 18 0 18 V 0" fill={bgColor} />
             </svg>
 
             <svg
               className="ying ying-path-wide"
-              viewBox="0 0 32 18"
               xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 32 18"
             >
               <path d="M 0 0 H 32 c -10 0 -16 0 -16 7 C 16 14 10 14 0 14 V 0" fill={bgColor} />
             </svg>
@@ -47,19 +47,19 @@ export function HomeHero() {
           </Box>
         </Box>
         <Flex
-          alignItems={{ base: 'null', md: 'center' }}
           direction={{ base: 'column', md: 'row' }}
+          alignItems={{ base: 'null', md: 'center' }}
           height="100%"
         >
           <Flex
-            alignItems={{ base: 'start', md: 'center' }}
-            background={{ base: 'background.level1', md: 'transparent' }}
             direction="column"
+            w="full"
             height="100%"
             justifyContent="center"
+            alignItems={{ base: 'start', md: 'center' }}
             px={['ms', 'md']}
             py={['lg', 'lg']}
-            w="full"
+            background={{ base: 'background.level1', md: 'transparent' }}
           >
             <FadeInOnView>
               <Box py={{ base: 'xl', md: '2xl' }}>
@@ -69,11 +69,11 @@ export function HomeHero() {
                   </Text>
                 </Box>
                 <Heading
+                  position="relative"
+                  pb="lg"
                   fontWeight="normal"
                   left={{ base: '-5px', md: '-16px' }}
                   letterSpacing="-5px"
-                  pb="lg"
-                  position="relative"
                   sx={{
                     fontSize: 'clamp(100px, 18vw, 200px)',
                   }}
@@ -82,10 +82,10 @@ export function HomeHero() {
                 </Heading>
                 <Text pb="sm">Passive yield-bearing pools for Liquidity Providers</Text>
                 <Box>
-                  <Text pb="lg" variant="secondary">
+                  <Text variant="secondary" pb="lg">
                     Join <span>240,000+</span> Liquidity Providers
                   </Text>
-                  <Button as={NextLink} href="/pools" prefetch size="lg" variant="primary">
+                  <Button size="lg" as={NextLink} href="/pools" prefetch={true} variant="primary">
                     Explore pools
                   </Button>
                 </Box>
@@ -94,24 +94,24 @@ export function HomeHero() {
           </Flex>
 
           <Flex
-            alignItems={{ base: 'start', md: 'center' }}
-            bg="background.level0"
             direction="column"
-            height="100%"
-            justifyContent="center"
+            bg="background.level0"
+            w="full"
             px={['ms', 'md']}
             py={['lg', 'lg']}
-            w="full"
+            height="100%"
+            justifyContent="center"
+            alignItems={{ base: 'start', md: 'center' }}
           >
             <FadeInOnView>
-              <Box mt={{ base: '0', md: '100px', lg: '150px' }} py={{ base: 'xl', md: '2xl' }}>
+              <Box py={{ base: 'xl', md: '2xl' }} mt={{ base: '0', md: '100px', lg: '150px' }}>
                 <Box h="24px">
                   <Link href="/build/v3">
                     <Flex>
                       <Text background="font.special" backgroundClip="text" variant="eyebrow">
                         Balancer protocol: v3 Soon&nbsp;
                       </Text>
-                      <Text display="none" opacity="0" variant="eyebrow" visibility="hidden">
+                      <Text variant="eyebrow" display="none" opacity="0" visibility="hidden">
                         Learn more
                       </Text>
                     </Flex>
@@ -119,11 +119,11 @@ export function HomeHero() {
                 </Box>
 
                 <Heading
-                  fontWeight="normal"
-                  left={{ base: '-5px', md: '-16px' }}
-                  letterSpacing="-5px"
-                  pb="lg"
                   position="relative"
+                  left={{ base: '-5px', md: '-16px' }}
+                  pb="lg"
+                  fontWeight="normal"
+                  letterSpacing="-5px"
                   sx={{
                     fontSize: 'clamp(100px, 18vw, 200px)',
                   }}
@@ -132,7 +132,7 @@ export function HomeHero() {
                 </Heading>
                 <Text pb="sm">The trusted toolkit for true AMM experimentation</Text>
                 <Box>
-                  <Text pb="lg" variant="secondary">
+                  <Text variant="secondary" pb="lg">
                     Join <span>100+</span> protocol builders
                   </Text>
                   <button
@@ -142,26 +142,26 @@ export function HomeHero() {
                   >
                     Start building
                   </button>
-                  <div className="disclosure" id="disclose" popover="auto">
+                  <div popover="auto" id="disclose" className="disclosure">
                     <FadeInOnView>
                       <Box>
                         <header>
                           <Flex
-                            alignItems="center"
-                            background="background.button.secondary"
-                            height="48px"
-                            justifyContent="space-between"
                             position="relative"
+                            justifyContent="space-between"
+                            background="background.button.secondary"
                             px="md"
+                            alignItems="center"
+                            height="48px"
                           >
                             <Text
-                              color="font.dark"
-                              fontSize="lg"
                               fontWeight="bold"
+                              fontSize="lg"
                               m="0"
-                              overflow="hidden"
                               p="0"
+                              overflow="hidden"
                               whiteSpace="nowrap"
+                              color="font.dark"
                             >
                               Start building
                             </Text>
@@ -176,113 +176,113 @@ export function HomeHero() {
                         <Box className="content">
                           <div className="actions">
                             <VStack alignItems="flex-start" gap="0">
-                              <Box display="block" px="md" py="sm" role="group" w="full">
+                              <Box role="group" px="md" py="sm" w="full" display="block">
                                 <Link
+                                  as={NextLink}
+                                  href="/build/v3"
+                                  prefetch={true}
                                   _groupHover={{
                                     textDecoration: 'none',
                                   }}
-                                  as={NextLink}
-                                  href="/build/v3"
-                                  prefetch
                                 >
                                   <Text
+                                    fontWeight="bold"
+                                    whiteSpace="nowrap"
+                                    overflow="hidden"
+                                    transition="all 0.2s ease-out 0.1s"
                                     _groupHover={{
                                       color: 'font.maxContrast',
                                     }}
-                                    fontWeight="bold"
-                                    overflow="hidden"
-                                    transition="all 0.2s ease-out 0.1s"
-                                    whiteSpace="nowrap"
                                   >
                                     Balancer v3
                                   </Text>
                                   <Text
-                                    _groupHover={{ color: 'font.maxContrast' }}
                                     fontSize="sm"
-                                    overflow="hidden"
-                                    transition="all 0.2s ease-out 0.1s"
                                     variant="secondary"
                                     whiteSpace="nowrap"
+                                    overflow="hidden"
+                                    transition="all 0.2s ease-out 0.1s"
+                                    _groupHover={{ color: 'font.maxContrast' }}
                                   >
                                     Learn about the key benefits
                                   </Text>
                                 </Link>
                               </Box>
 
-                              <Box display="block" px="md" py="sm" role="group" w="full">
+                              <Box role="group" px="md" py="sm" w="full" display="block">
                                 <Link
+                                  href="https://docs-v3.balancer.fi/"
                                   _groupHover={{
                                     textDecoration: 'none',
                                   }}
-                                  href="https://docs-v3.balancer.fi/"
                                 >
                                   <Flex alignItems="center" gap="xxs">
                                     <Text
-                                      _groupHover={{ color: 'font.maxContrast' }}
                                       fontWeight="bold"
+                                      whiteSpace="nowrap"
                                       overflow="hidden"
                                       transition="all 0.2s ease-out 0.1s"
-                                      whiteSpace="nowrap"
+                                      _groupHover={{ color: 'font.maxContrast' }}
                                     >
                                       v3 Docs
                                     </Text>
                                     <ArrowUpRight display="inline" size={12} />
                                   </Flex>
                                   <Text
-                                    _groupHover={{ color: 'font.maxContrast' }}
                                     fontSize="sm"
-                                    overflow="hidden"
-                                    transition="all 0.2s ease-out 0.1s"
                                     variant="secondary"
                                     whiteSpace="nowrap"
+                                    overflow="hidden"
+                                    transition="all 0.2s ease-out 0.1s"
+                                    _groupHover={{ color: 'font.maxContrast' }}
                                   >
                                     Go deep down the rabbithole
                                   </Text>
                                 </Link>
                               </Box>
-                              <Box display="block" px="md" py="sm" role="group" w="full">
+                              <Box role="group" px="md" py="sm" w="full" display="block">
                                 <Link
+                                  href="https://github.com/balancer/scaffold-balancer-v3"
                                   _groupHover={{
                                     textDecoration: 'none',
                                   }}
-                                  href="https://github.com/balancer/scaffold-balancer-v3"
                                 >
                                   <Flex alignItems="center" gap="xxs">
                                     <Text
-                                      _groupHover={{ color: 'font.maxContrast' }}
                                       fontWeight="bold"
+                                      whiteSpace="nowrap"
                                       overflow="hidden"
                                       transition="all 0.2s ease-out 0.1s"
-                                      whiteSpace="nowrap"
+                                      _groupHover={{ color: 'font.maxContrast' }}
                                     >
                                       Scaffold Balancer v3
                                     </Text>
                                     <ArrowUpRight display="inline" size={12} />
                                   </Flex>
                                   <Text
-                                    _groupHover={{ color: 'font.maxContrast' }}
                                     fontSize="sm"
-                                    overflow="hidden"
-                                    transition="all 0.2s ease-out 0.1s"
                                     variant="secondary"
                                     whiteSpace="nowrap"
+                                    overflow="hidden"
+                                    transition="all 0.2s ease-out 0.1s"
+                                    _groupHover={{ color: 'font.maxContrast' }}
                                   >
                                     Prototyping tool for Balancer v3
                                   </Text>
                                 </Link>
                               </Box>
-                              <Box display="block" px="md" py="sm" role="group" w="full">
+                              <Box role="group" px="md" py="sm" w="full" display="block">
                                 <Link
+                                  href="https://docs.balancer.fi/"
                                   _groupHover={{
                                     textDecoration: 'none',
                                   }}
-                                  href="https://docs.balancer.fi/"
                                 >
                                   <Flex alignItems="center" gap="xxs">
                                     <Text
-                                      _groupHover={{ color: 'font.maxContrast' }}
                                       fontWeight="bold"
                                       transition="all 0.2s ease-out 0.1s"
+                                      _groupHover={{ color: 'font.maxContrast' }}
                                     >
                                       v2 Docs
                                     </Text>
@@ -290,41 +290,41 @@ export function HomeHero() {
                                   </Flex>
 
                                   <Text
-                                    _groupHover={{ color: 'font.maxContrast' }}
                                     fontSize="sm"
-                                    overflow="hidden"
-                                    transition="all 0.2s ease-out 0.1s"
                                     variant="secondary"
+                                    transition="all 0.2s ease-out 0.1s"
+                                    _groupHover={{ color: 'font.maxContrast' }}
                                     whiteSpace="nowrap"
+                                    overflow="hidden"
                                   >
                                     Build on battle-tested smart contracts
                                   </Text>
                                 </Link>
                               </Box>
-                              <Box display="block" px="md" py="sm" role="group" w="full">
+                              <Box role="group" px="md" py="sm" w="full" display="block">
                                 <Link
+                                  href="https://grants.balancer.community/"
                                   _groupHover={{
                                     textDecoration: 'none',
                                   }}
-                                  href="https://grants.balancer.community/"
                                 >
                                   <Flex alignItems="center" gap="xxs">
                                     <Text
-                                      _groupHover={{ color: 'font.maxContrast' }}
                                       fontWeight="bold"
                                       transition="all 0.2s ease-out 0.1s"
+                                      _groupHover={{ color: 'font.maxContrast' }}
                                     >
                                       Get a Grant
                                     </Text>
                                     <ArrowUpRight display="inline" size={12} />
                                   </Flex>
                                   <Text
-                                    _groupHover={{ color: 'font.maxContrast' }}
                                     fontSize="sm"
-                                    overflow="hidden"
-                                    transition="all 0.2s ease-out 0.1s"
                                     variant="secondary"
                                     whiteSpace="nowrap"
+                                    overflow="hidden"
+                                    transition="all 0.2s ease-out 0.1s"
+                                    _groupHover={{ color: 'font.maxContrast' }}
                                   >
                                     Help to get you set up
                                   </Text>

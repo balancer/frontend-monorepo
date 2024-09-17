@@ -30,14 +30,14 @@ function NavLinks({ onClick }: { onClick?: () => void }) {
     <VStack align="start" w="full">
       {appLinks.map(link => (
         <Link
-          as={NextLink}
-          color={linkColorFor(link.href)}
-          fontSize="xl"
-          href={link.href}
           key={link.href}
-          onClick={onClick}
-          prefetch
+          as={NextLink}
+          href={link.href}
+          prefetch={true}
           variant="nav"
+          color={linkColorFor(link.href)}
+          onClick={onClick}
+          fontSize="xl"
         >
           {link.label}
         </Link>
@@ -52,18 +52,18 @@ function EcosystemLinks() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="grayText" mb="sm" size="xs">
+      <Text color="grayText" size="xs" mb="sm">
         Ecosystem
       </Text>
       {ecosystemLinks.map(link => (
         <Link
-          alignItems="center"
-          display="flex"
-          gap="xs"
-          href={link.href}
-          isExternal
           key={link.href}
+          href={link.href}
           variant="nav"
+          isExternal
+          display="flex"
+          alignItems="center"
+          gap="xs"
         >
           {link.label}
           <Box color="grayText">
@@ -81,7 +81,7 @@ function SocialLinks() {
   return (
     <HStack justify="space-between" w="full">
       {getSocialLinks().map(({ href, icon }) => (
-        <Button as={Link} href={href} isExternal key={href} variant="tertiary">
+        <Button as={Link} key={href} href={href} variant="tertiary" isExternal>
           {icon}
         </Button>
       ))}
@@ -101,15 +101,15 @@ export function MobileNav() {
 
   return (
     <>
-      <Button onClick={onOpen} ref={btnRef} variant="tertiary">
+      <Button ref={btnRef} variant="tertiary" onClick={onOpen}>
         <Menu size={18} />
       </Button>
-      <Drawer finalFocusRef={btnRef} isOpen={isOpen} onClose={onClose} placement="right">
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <BalancerLogoType onClick={hommRedirect} width="106px" />
+            <BalancerLogoType width="106px" onClick={hommRedirect} />
           </DrawerHeader>
 
           <DrawerBody>

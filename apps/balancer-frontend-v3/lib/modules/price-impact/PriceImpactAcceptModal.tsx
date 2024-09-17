@@ -50,27 +50,27 @@ export function PriceImpactAcceptModal({
   const debouncedChangeHandler = useDebounce(changeHandler, defaultDebounceMs)
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap {...rest}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered preserveScrollBarGap {...rest}>
       <ModalOverlay bg="blackAlpha.900" />
       <ModalContent>
         <ModalHeader color="font.primary">Are you sure?</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <VStack align="start" spacing="md" w="full">
+          <VStack w="full" align="start" spacing="md">
             <Text>
               You are at risk of losing money due to the high price impact. To acknowledge and
               accept this risk, type the following to proceed:
             </Text>
             <Code>{INPUT_TEXT}</Code>
-            <Input onChange={debouncedChangeHandler} placeholder={INPUT_TEXT} />
+            <Input placeholder={INPUT_TEXT} onChange={debouncedChangeHandler} />
           </VStack>
         </ModalBody>
         <ModalFooter>
           <Button
+            w="full"
+            variant="primary"
             isDisabled={inputText !== INPUT_TEXT}
             onClick={handleClick}
-            variant="primary"
-            w="full"
           >
             I accept the risk
           </Button>

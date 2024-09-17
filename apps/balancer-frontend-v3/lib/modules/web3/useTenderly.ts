@@ -5,24 +5,30 @@ import { TransactionConfig } from './contracts/contract.types'
   Used in sentry metadata to be able to simulate tx from Sentry issues in Tenderly
 */
 export function useTenderly({ chainId }: { chainId: number }) {
-  const { data: _blockNumber } = useBlockNumber({ chainId })
-  const { data: _gasPrice } = useGasPrice({ chainId })
+  const { data: blockNumber } = useBlockNumber({ chainId })
+  const { data: gasPrice } = useGasPrice({ chainId })
 
-  function buildTenderlyUrl(txConfig?: TransactionConfig) {
-    if (!txConfig) return
-    const { chainId: buildCallChainId, account, to, data, value } = txConfig
-    if (chainId !== buildCallChainId) {
-      throw new Error(
-        `Chain Id mismatch (${buildCallChainId} VS ${chainId}) when building Tenderly simulation URL`
-      )
-    }
+  const _buildTenderlyUrl = (txConfig?: TransactionConfig) =>
+    buildTenderlyUrl({ txConfig, blockNumber, gasPrice })
 
-    const txValue = value ? value.toString() : '0'
-    const blockNumber = _blockNumber ? _blockNumber.toString() : '0'
-    const gasPrice = _gasPrice ? _gasPrice.toString() : '0'
+  return { blockNumber, gasPrice, buildTenderlyUrl: _buildTenderlyUrl }
+}
 
-    return `https://dashboard.tenderly.co/balancer/v2/simulator/new?rawFunctionInput=${data}&block=${blockNumber}&blockIndex=0&from=${account}&gas=8000000&gasPrice=${gasPrice}&value=${txValue}&contractAddress=${to}&network=${chainId}`
-  }
+export function buildTenderlyUrl({
+  txConfig,
+  blockNumber,
+  gasPrice,
+}: {
+  txConfig?: TransactionConfig
+  blockNumber?: bigint
+  gasPrice?: bigint
+}): string | undefined {
+  if (!txConfig) return
+  const { chainId, account, to, data, value } = txConfig
 
-  return { buildTenderlyUrl }
+  const txValue = value ? value.toString() : '0'
+  const blockNumberString = blockNumber ? blockNumber.toString() : '0'
+  const gasPriceString = gasPrice ? gasPrice.toString() : '0'
+
+  return `https://dashboard.tenderly.co/balancer/v2/simulator/new?rawFunctionInput=${data}&block=${blockNumberString}&blockIndex=0&from=${account}&gas=8000000&gasPrice=${gasPriceString}&value=${txValue}&contractAddress=${to}&network=${chainId}`
 }

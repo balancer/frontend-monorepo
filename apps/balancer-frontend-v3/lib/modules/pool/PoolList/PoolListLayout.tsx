@@ -24,32 +24,32 @@ export function PoolListLayout() {
   }
 
   return (
-    <VStack align="start" minHeight="1000px" spacing="md" w="full">
+    <VStack align="start" spacing="md" w="full" minHeight="1000px">
       <Stack
-        alignItems={isFilterVisible ? 'flex-end' : 'flex-start'}
         direction={{ base: 'column', md: 'row' }}
-        justify="space-between"
         w="full"
+        justify="space-between"
+        alignItems={isFilterVisible ? 'flex-end' : 'flex-start'}
       >
-        <VStack align="start" flex={1} pb={{ base: 'sm', md: '0' }} w="full">
+        <VStack align="start" w="full" pb={{ base: 'sm', md: '0' }} flex={1}>
           <HStack w="full">
             <Box position="relative" top="0">
               <Box
-                animate={isFilterVisible ? 'visible' : 'hidden'}
                 as={motion.div}
-                left="0"
-                minW={{ base: 'auto', md: '270px' }}
                 position={{ base: 'relative', md: 'absolute' }}
                 top="0"
+                left="0"
                 transition="all 0.15s var(--ease-out-cubic)"
-                variants={variants}
+                minW={{ base: 'auto', md: '270px' }}
                 willChange="transform"
+                variants={variants}
+                animate={isFilterVisible ? 'visible' : 'hidden'}
               >
                 <HStack w="full">
                   <Heading as="h2" size="lg" variant="special">
                     Liquidity pools
                   </Heading>
-                  <Heading mt="1" size="md" variant="secondary">
+                  <Heading size="md" variant="secondary" mt="1">
                     ({fNum('integer', count || 0)})
                   </Heading>
                 </HStack>
@@ -60,15 +60,15 @@ export function PoolListLayout() {
         </VStack>
 
         <Stack
-          align={{ base: 'end', sm: 'center' }}
           direction="row"
           w={{ base: 'full', md: 'auto' }}
+          align={{ base: 'end', sm: 'center' }}
         >
           <PoolListFilters />
         </Stack>
       </Stack>
       <ErrorBoundary FallbackComponent={BoundaryError}>
-        <PoolListTable count={count || 0} loading={loading} pools={pools} />
+        <PoolListTable pools={pools} count={count || 0} loading={loading} />
       </ErrorBoundary>
     </VStack>
   )

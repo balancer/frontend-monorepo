@@ -6,7 +6,7 @@ type Params = {
   }
 }
 
-const ALCHEMY_KEY = process.env.PRIVATE_ALCHEMY_KEY || ''
+const ALCHEMY_KEY = process.env.NEXT_PRIVATE_ALCHEMY_KEY || ''
 
 const chainToRpcMap: Record<GqlChain, string | undefined> = {
   [GqlChain.Mainnet]: `https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`,
@@ -35,7 +35,7 @@ function getRpcUrl(chain: string) {
 
 export async function POST(request: Request, { params: { chain } }: Params) {
   if (!ALCHEMY_KEY) {
-    return new Response(JSON.stringify({ error: 'PRIVATE_ALCHEMY_KEY is missing' }), {
+    return new Response(JSON.stringify({ error: 'NEXT_PRIVATE_ALCHEMY_KEY is missing' }), {
       status: 500,
     })
   }

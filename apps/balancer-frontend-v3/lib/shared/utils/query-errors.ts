@@ -28,13 +28,15 @@ export type SentryMetadata = {
   context?: Partial<ScopeContext>
 }
 
-export function sentryMetaForAddLiquidityHandler(errorMessage: string, params: AddLiquidityParams) {
+type AddMetaParams = AddLiquidityParams & { chainId: number; blockNumber?: bigint }
+export function sentryMetaForAddLiquidityHandler(errorMessage: string, params: AddMetaParams) {
   return createAddHandlerMetadata('HandlerQueryError', errorMessage, params)
 }
 
+type RemoveMetaParams = RemoveLiquidityParams & { chainId: number; blockNumber?: bigint }
 export function sentryMetaForRemoveLiquidityHandler(
   errorMessage: string,
-  params: RemoveLiquidityParams
+  params: RemoveMetaParams
 ) {
   return createRemoveHandlerMetadata('HandlerQueryError', errorMessage, params)
 }
@@ -45,10 +47,12 @@ export type SwapBuildCallExtras = {
   slippage: string
   wethIsEth: boolean
 }
-export function sentryMetaForSwapHandler(
-  errorMessage: string,
-  params: SimulateSwapParams | SwapBuildCallExtras
-) {
+
+export type SwapMetaParams = (SimulateSwapParams | SwapBuildCallExtras) & {
+  chainId: number
+  blockNumber?: bigint
+}
+export function sentryMetaForSwapHandler(errorMessage: string, params: SwapMetaParams) {
   return createSwapHandlerMetadata('HandlerQueryError', errorMessage, params)
 }
 
@@ -131,7 +135,7 @@ function createAddHandlerMetadata(
 function createRemoveHandlerMetadata(
   errorName: string,
   errorMessage: string,
-  params: RemoveLiquidityParams
+  params: RemoveMetaParams
 ) {
   const extra: Extras = {
     handler: params.handler.constructor.name,
@@ -146,7 +150,7 @@ function createRemoveHandlerMetadata(
 function createSwapHandlerMetadata(
   errorName: string,
   errorMessage: string,
-  params: SimulateSwapParams | SwapBuildCallExtras
+  params: SwapMetaParams
 ) {
   const { handler, ...rest } = params
   const extra: Extras = {
@@ -213,6 +217,7 @@ export function captureSentryError(
   e: unknown,
   { context, errorMessage, errorName }: SentryMetadata
 ) {
+  console.log('Context en captureSentryError', context)
   const causeError = ensureError(e)
   if (isUserRejectedError(causeError)) return
 
@@ -340,4 +345,9 @@ function sentryStackFramesToString(sentryStack?: SentryStack): string {
       .map(frame => frame.filename || '')
       .join()
   )
+}
+
+export function getTenderlyUrl(sentryExtras?: Extras) {
+  if (!sentryExtras) return
+  return sentryExtras.tenderlyUrl as string | undefined
 }

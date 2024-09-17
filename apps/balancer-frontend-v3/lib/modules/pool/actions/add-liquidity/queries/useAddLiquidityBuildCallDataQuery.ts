@@ -11,6 +11,7 @@ import { AddLiquidityHandler } from '../handlers/AddLiquidity.handler'
 import { AddLiquiditySimulationQueryResult } from './useAddLiquiditySimulationQuery'
 import { useDebounce } from 'use-debounce'
 import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
+import { useBlockNumber } from 'wagmi'
 
 export type AddLiquidityBuildQueryResponse = ReturnType<typeof useAddLiquidityBuildCallDataQuery>
 
@@ -31,7 +32,8 @@ export function useAddLiquidityBuildCallDataQuery({
 }) {
   const { userAddress, isConnected } = useUserAccount()
   const { slippage } = useUserSettings()
-  const { pool } = usePool()
+  const { pool, chainId } = usePool()
+  const { data: blockNumber } = useBlockNumber({ chainId })
   const { relayerApprovalSignature } = useRelayerSignature()
   const debouncedHumanAmountsIn = useDebounce(humanAmountsIn, defaultDebounceMs)[0]
 
@@ -64,7 +66,11 @@ export function useAddLiquidityBuildCallDataQuery({
     queryFn,
     enabled: enabled && isConnected && !!simulationQuery.data,
     gcTime: 0,
-    meta: sentryMetaForAddLiquidityHandler('Error in add liquidity buildCallData query', params),
+    meta: sentryMetaForAddLiquidityHandler('Error in add liquidity buildCallData query', {
+      ...params,
+      chainId,
+      blockNumber,
+    }),
     ...onlyExplicitRefetch,
   })
 }

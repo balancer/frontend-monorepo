@@ -149,40 +149,43 @@ function AddLiquidityMainForm() {
   }, [addLiquidityTxHash])
 
   return (
-    <Box maxW="lg" mx="auto" pb="2xl" w="full">
+    <Box w="full" maxW="lg" mx="auto" pb="2xl">
       <Card>
         <CardHeader>
-          <HStack justify="space-between" w="full">
+          <HStack w="full" justify="space-between">
             <span>Add liquidity</span>
             <TransactionSettings size="sm" />
           </HStack>
         </CardHeader>
-        <VStack align="start" spacing="md" w="full">
+        <VStack spacing="md" align="start" w="full">
           {hasNoLiquidity(pool) && (
-            <BalAlert content="You cannot add because the pool has no liquidity" status="warning" />
+            <BalAlert status="warning" content="You cannot add because the pool has no liquidity" />
           )}
           <SafeAppAlert />
           {!nestedAddLiquidityEnabled ? (
             <TokenInputsWithAddable
-              requiresProportionalInput={requiresProportionalInput(pool.type)}
               tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}
+              requiresProportionalInput={requiresProportionalInput(pool.type)}
               totalUSDValue={totalUSDValue}
             />
           ) : (
             <TokenInputs tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()} />
           )}
-          <VStack align="start" spacing="sm" w="full">
+          <VStack spacing="sm" align="start" w="full">
             {!simulationQuery.isError && (
               <PriceImpactAccordion
+                isDisabled={!priceImpactQuery.data}
+                cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
+                setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                 accordionButtonComponent={
                   <HStack>
-                    <Text color="font.secondary" fontSize="sm" variant="secondary">
+                    <Text variant="secondary" fontSize="sm" color="font.secondary">
                       Price impact:{' '}
                     </Text>
                     {isFetching ? (
-                      <Skeleton h="16px" w="40px" />
+                      <Skeleton w="40px" h="16px" />
                     ) : (
-                      <Text color={priceImpactColor} fontSize="sm" variant="secondary">
+                      <Text variant="secondary" fontSize="sm" color={priceImpactColor}>
                         {priceImpactLabel}
                       </Text>
                     )}
@@ -190,26 +193,23 @@ function AddLiquidityMainForm() {
                 }
                 accordionPanelComponent={
                   <PoolActionsPriceImpactDetails
+                    totalUSDValue={totalUSDValue}
                     bptAmount={simulationQuery.data?.bptOut.amount}
                     isAddLiquidity
                     isLoading={isFetching}
-                    totalUSDValue={totalUSDValue}
                   />
                 }
-                cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
-                isDisabled={!priceImpactQuery.data}
-                setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
               />
             )}
           </VStack>
-          <Grid gap="sm" templateColumns="1fr 1fr" w="full">
+          <Grid w="full" templateColumns="1fr 1fr" gap="sm">
             <GridItem>
-              <Card minHeight="full" p={['sm', 'ms']} variant="subSection" w="full">
+              <Card minHeight="full" variant="subSection" w="full" p={['sm', 'ms']}>
                 <VStack align="start" gap="sm">
-                  <Text fontSize="sm" fontWeight="500" lineHeight="16px">
+                  <Text fontSize="sm" lineHeight="16px" fontWeight="500">
                     Total
                   </Text>
-                  <Text fontSize="md" fontWeight="700" lineHeight="16px">
+                  <Text fontSize="md" lineHeight="16px" fontWeight="700">
                     {totalUSDValue !== '0'
                       ? toCurrency(totalUSDValue, { abbreviated: false })
                       : '-'}
@@ -220,55 +220,55 @@ function AddLiquidityMainForm() {
             <GridItem>
               <AddLiquidityAprTooltip
                 aprItems={pool.dynamicData.aprItems}
-                pool={pool}
                 totalUsdValue={totalUSDValue}
                 weeklyYield={weeklyYield}
+                pool={pool}
               />
             </GridItem>
           </Grid>
-          {showAcceptPoolRisks ? <AddLiquidityFormCheckbox /> : null}
-          {!simulationQuery.isError && priceImpactQuery.isError ? (
+          {showAcceptPoolRisks && <AddLiquidityFormCheckbox />}
+          {!simulationQuery.isError && priceImpactQuery.isError && (
             <PriceImpactError priceImpactQuery={priceImpactQuery} />
-          ) : null}
-          {simulationQuery.isError ? (
+          )}
+          {simulationQuery.isError && (
             <GenericError
-              customErrorName="Error in query simulation"
+              customErrorName={'Error in query simulation'}
               error={simulationQuery.error}
-            />
-          ) : null}
+            ></GenericError>
+          )}
           {isConnected ? (
             <Tooltip label={isDisabled ? disabledReason : ''}>
               <Button
+                ref={nextBtn}
+                variant="secondary"
+                w="full"
+                size="lg"
                 isDisabled={isDisabled}
                 isLoading={isLoading}
                 onClick={() => !isDisabled && onModalOpen()}
-                ref={nextBtn}
-                size="lg"
-                variant="secondary"
-                w="full"
               >
                 Next
               </Button>
             </Tooltip>
           ) : (
-            <ConnectWallet size="lg" variant="primary" w="full" />
+            <ConnectWallet variant="primary" w="full" size="lg" />
           )}
         </VStack>
       </Card>
       <AddLiquidityModal
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}
-        onClose={previewModalDisclosure.onClose}
         onOpen={previewModalDisclosure.onOpen}
+        onClose={previewModalDisclosure.onClose}
       />
-      {validTokens.length > 0 && (
+      {!!validTokens.length && (
         <NativeAssetSelectModal
           chain={validTokens[0].chain}
           isOpen={tokenSelectDisclosure.isOpen}
-          nativeAssets={nativeAssets}
-          onClose={tokenSelectDisclosure.onClose}
           onOpen={tokenSelectDisclosure.onOpen}
+          onClose={tokenSelectDisclosure.onClose}
           onTokenSelect={handleTokenSelect}
+          nativeAssets={nativeAssets}
         />
       )}
     </Box>

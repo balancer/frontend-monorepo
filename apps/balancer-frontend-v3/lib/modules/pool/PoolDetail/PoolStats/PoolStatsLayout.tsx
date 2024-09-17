@@ -6,7 +6,7 @@ import { PoolSnapshot } from './PoolSnapshot/PoolSnapshot'
 
 export function PoolStatsLayout() {
   return (
-    <Stack direction={{ base: 'column', md: 'row' }} justifyContent="stretch" spacing="md" w="full">
+    <Stack w="full" spacing="md" direction={{ base: 'column', md: 'row' }} justifyContent="stretch">
       <PoolSnapshot w={{ base: 'full', md: 'md' }} />
       <PoolCharts />
     </Stack>

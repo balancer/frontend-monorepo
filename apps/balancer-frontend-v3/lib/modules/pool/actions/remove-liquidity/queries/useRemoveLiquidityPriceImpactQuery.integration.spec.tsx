@@ -19,6 +19,7 @@ async function testQuery(humanBptIn: HumanAmount) {
   )
   const { result } = testHook(() =>
     useRemoveLiquidityPriceImpactQuery({
+      chainId: 1,
       handler,
       poolId: poolMock.id,
       humanBptIn,

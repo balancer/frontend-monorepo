@@ -61,10 +61,10 @@ export function RemoveLiquidityTimeout() {
 
   return (
     !shouldFreezeQuote && (
-      <HStack fontSize="sm" fontWeight="normal" spacing="xs">
+      <HStack spacing="xs" fontSize="sm" fontWeight="normal">
         <Text color="grayText">Quote refresh in</Text>
         <HStack spacing="none">
-          <NumberText color="grayText" fontWeight="bold" textAlign="right">
+          <NumberText color="grayText" textAlign="right" fontWeight="bold">
             {secondsToRefetch}
           </NumberText>
           <Text color="grayText" fontWeight="bold">

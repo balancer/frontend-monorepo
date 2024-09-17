@@ -10,8 +10,8 @@ export function AnimateHeightChange({ children, ...rest }: PropsWithChildren & S
 
   return (
     <motion.div animate={{ height: height || 'auto ' }}>
-      <AnimatePresence initial={false} mode="wait">
-        <VStack align="start" ref={ref} spacing="sm" {...rest}>
+      <AnimatePresence mode="wait" initial={false}>
+        <VStack ref={ref} spacing="sm" align="start" {...rest}>
           {children}
         </VStack>
       </AnimatePresence>

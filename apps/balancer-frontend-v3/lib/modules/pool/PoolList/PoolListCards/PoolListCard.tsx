@@ -23,12 +23,12 @@ interface Props {
 
 function StatCard({ label, value }: { label: ReactNode; value: ReactNode }) {
   return (
-    <Card h="full" p="sm" variant="gradient">
-      <VStack alignItems="flex-start" gap="0" w="full">
+    <Card h="full" variant="gradient" p="sm">
+      <VStack alignItems="flex-start" w="full" gap="0">
         {isValidElement(label) ? (
           label
         ) : (
-          <Text fontSize="sm" fontWeight="medium" variant="secondary">
+          <Text fontWeight="medium" variant="secondary" fontSize="sm">
             {label}
           </Text>
         )}
@@ -48,24 +48,24 @@ export function PoolListCard({ pool }: Props) {
   return (
     <FadeInOnView animateOnce={false}>
       <Card
+        variant="gradient"
         cursor="pointer"
         onClick={event => poolClickHandler(event, pool, router)}
         onMouseEnter={event => poolMouseEnterHandler(event, pool, router)}
         p="md"
-        variant="gradient"
       >
         <VStack alignItems="flex-start" h="full">
           <HStack alignItems="flex-start">
             <NetworkIcon chain={pool.chain} />
             <VStack alignItems="flex-start" gap="0" w="full">
-              <Text fontSize="sm" fontWeight="medium" variant="secondary">
+              <Text fontWeight="medium" variant="secondary" fontSize="sm">
                 {getPoolTypeLabel(pool.type)}
               </Text>
-              <PoolName fontWeight="bold" h="12" noOfLines={2} pool={pool} />
+              <PoolName pool={pool} fontWeight="bold" noOfLines={2} h="12" />
             </VStack>
           </HStack>
-          <TokenIconStack chain={pool.chain} pb="lg" tokens={pool.displayTokens} />
-          <Grid gap="sm" h="full" templateColumns="1fr 1fr" templateRows="1fr 1fr" w="full">
+          <TokenIconStack tokens={pool.displayTokens} chain={pool.chain} pb="lg" />
+          <Grid w="full" h="full" templateColumns="1fr 1fr" templateRows="1fr 1fr" gap="sm">
             <GridItem>
               <StatCard label="TVL" value={toCurrency(pool.dynamicData.totalLiquidity)} />
             </GridItem>
@@ -86,20 +86,20 @@ export function PoolListCard({ pool }: Props) {
               <StatCard
                 label={
                   <HStack>
-                    <Text fontSize="sm" fontWeight="medium" variant="secondary">
+                    <Text fontWeight="medium" variant="secondary" fontSize="sm">
                       APR
                     </Text>
                     <MemoizedMainAprTooltip
                       aprItems={pool.dynamicData.aprItems}
-                      onlySparkles
-                      pool={pool}
                       poolId={pool.id}
                       textProps={{ fontSize: '1rem', fontWeight: 'bold' }}
+                      onlySparkles
+                      pool={pool}
                     />
                   </HStack>
                 }
                 value={
-                  <Text fontSize="sm" fontWeight="bold">
+                  <Text fontWeight="bold" fontSize="sm">
                     {getTotalAprLabel(pool.dynamicData.aprItems)}
                   </Text>
                 }

@@ -42,12 +42,12 @@ export function PoolActionsPriceImpactDetails({
     : currentShareOfPool.minus(changedShareOfPool)
 
   return (
-    <VStack align="start" fontSize="sm" spacing="sm" w="full">
+    <VStack spacing="sm" align="start" w="full" fontSize="sm">
       <HStack justify="space-between" w="full">
         <Text color="grayText">Price impact</Text>
         <HStack>
           {isLoading ? (
-            <Skeleton h="16px" w="40px" />
+            <Skeleton w="40px" h="16px" />
           ) : priceImpactLevel === 'unknown' ? (
             <Text>Unknown</Text>
           ) : (
@@ -56,11 +56,11 @@ export function PoolActionsPriceImpactDetails({
             </NumberText>
           )}
           <Tooltip
-            fontSize="sm"
             label="In general, adding or removing liquidity in proportional amounts to the token weights
                 of the pool incur low price impact. Adding custom token amounts (non-proportionally)
                 causes the internal prices of the pool to change, as if you were swapping tokens, which 
                 incurs a higher price impact."
+            fontSize="sm"
           >
             {priceImpactLevel === 'low' ? (
               <InfoIcon />
@@ -76,17 +76,17 @@ export function PoolActionsPriceImpactDetails({
         <Text color="grayText">Max slippage</Text>
         <HStack>
           {isLoading ? (
-            <Skeleton h="16px" w="40px" />
+            <Skeleton w="40px" h="16px" />
           ) : (
             <NumberText color="grayText">
               {toCurrency(maxSlippageUsd, { abbreviated: false })} ({fNum('slippage', slippage)})
             </NumberText>
           )}
           <Tooltip
-            fontSize="sm"
             label="Slippage occurs when market conditions change between the time your order is
                 submitted and the time it gets executed on-chain. Slippage tolerance is the
                 maximum change in price you are willing to accept."
+            fontSize="sm"
           >
             <InfoIcon />
           </Tooltip>
@@ -97,7 +97,7 @@ export function PoolActionsPriceImpactDetails({
         <HStack>
           <HStack gap="0.5">
             {isLoading ? (
-              <Skeleton h="16px" w="40px" />
+              <Skeleton w="40px" h="16px" />
             ) : (
               <>
                 <NumberText color="grayText">{fNum('sharePercent', currentShareOfPool)}</NumberText>
@@ -107,8 +107,8 @@ export function PoolActionsPriceImpactDetails({
             )}
           </HStack>
           <Tooltip
-            fontSize="sm"
             label="The percentage of the pool that you will own after this transaction."
+            fontSize="sm"
           >
             <InfoIcon />
           </Tooltip>

@@ -126,32 +126,32 @@ export function PartnerRedirectModal({ partner, redirectUrl, isOpen, onClose }: 
   const info = partnerInfo[partner]
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>About {info.shortName}</ModalHeader>
         <ModalCloseButton />
         <ModalBody color="grayText">
-          {info.imageName ? (
-            <Box borderRadius="lg" mb={4} overflow="hidden" shadow="md" w="full">
+          {info.imageName && (
+            <Box mb={4} shadow="md" borderRadius="lg" w="full" overflow="hidden">
               <Picture
+                imgName={info.imageName}
                 altText={info.shortName}
+                width="400"
+                height="156"
                 defaultImgType="jpg"
                 directory="/images/partners/headers/"
-                height="156"
-                imgAvif
-                imgJpg
-                imgName={info.imageName}
-                width="400"
+                imgAvif={true}
+                imgJpg={true}
               />
             </Box>
-          ) : null}
-          <VStack align="start" spacing="md" w="full">
-            <VStack align="start" spacing="none" w="full">
-              <Text fontSize="md" fontWeight="bold">
+          )}
+          <VStack align="start" w="full" spacing="md">
+            <VStack align="start" w="full" spacing="none">
+              <Text fontWeight="bold" fontSize="md">
                 {info.category}
               </Text>
-              <Link color="font.secondary" fontSize="sm" href={info.url} isExternal>
+              <Link fontSize="sm" color="font.secondary" href={info.url} isExternal>
                 {info.url}
               </Link>
             </VStack>

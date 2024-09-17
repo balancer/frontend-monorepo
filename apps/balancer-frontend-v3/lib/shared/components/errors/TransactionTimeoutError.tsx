@@ -15,9 +15,7 @@ export function TransactionTimeoutError({ transactionHash, chain, ...rest }: Pro
         {`An unexpected timeout occurred while waiting for your transaction to confirm. It's
             possible that it was successful. To ensure you don't accidentally repeat the
             transaction, please check its status using the link below:`}
-        {transactionHash ? (
-          <BlockExplorerLink chain={chain} transactionHash={transactionHash} />
-        ) : null}
+        {transactionHash && <BlockExplorerLink chain={chain} transactionHash={transactionHash} />}
       </Text>
     </ErrorAlert>
   )

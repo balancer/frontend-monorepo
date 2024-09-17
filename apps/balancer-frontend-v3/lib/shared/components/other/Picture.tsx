@@ -54,85 +54,85 @@ export const Picture: React.FC<PictureProps> = ({
 
   return (
     <picture className="picture">
-      {imgSvgPortraitDark ? (
+      {imgSvgPortraitDark && (
         <source
+          srcSet={`${imagePath}-portrait-dark.svg`}
+          type="image/svg+xml"
           media={`(orientation: portrait) and ${
             colorMode === 'dark' ? '(prefers-color-scheme: dark)' : 'none'
           }`}
-          srcSet={`${imagePath}-portrait-dark.svg`}
-          type="image/svg+xml"
         />
-      ) : null}
-      {imgSvgPortrait ? (
+      )}
+      {imgSvgPortrait && (
         <source
-          media="(orientation: portrait)"
           srcSet={`${imagePath}-portrait.svg`}
           type="image/svg+xml"
+          media="(orientation: portrait)"
         />
-      ) : null}
-      {imgSvgDark ? (
+      )}
+      {imgSvgDark && (
         <source
-          media={colorMode === 'dark' ? '(prefers-color-scheme: dark)' : 'none'}
           srcSet={`${imagePath}.svg`}
           type="image/svg+xml"
+          media={colorMode === 'dark' ? '(prefers-color-scheme: dark)' : 'none'}
         />
-      ) : null}
-      {imgSvg ? <source srcSet={`${imagePath}.svg`} type="image/svg+xml" /> : null}
+      )}
+      {imgSvg && <source srcSet={`${imagePath}.svg`} type="image/svg+xml" />}
 
-      {imgAvifDark ? (
+      {imgAvifDark && (
         <source
-          media={colorMode === 'dark' ? 'all' : 'none'}
           srcSet={`${imagePath}-dark.avif`}
           type="image/avif"
-        />
-      ) : null}
-      {imgAvifPortraitDark ? (
-        <source
           media={colorMode === 'dark' ? 'all' : 'none'}
+        />
+      )}
+      {imgAvifPortraitDark && (
+        <source
           srcSet={`${imagePath}-portrait-dark.avif`}
           type="image/avif"
+          media={colorMode === 'dark' ? 'all' : 'none'}
         />
-      ) : null}
-      {imgAvifPortrait ? (
+      )}
+      {imgAvifPortrait && (
         <source
-          media="(orientation: portrait)"
           srcSet={`${imagePath}-portrait.avif`}
           type="image/avif"
+          media="(orientation: portrait)"
         />
-      ) : null}
-      {imgAvifLarge ? (
-        <source media="(min-width: 75em)" srcSet={`${imagePath}-large.avif`} type="image/avif" />
-      ) : null}
-      {imgAvifMedium ? (
-        <source media="(min-width: 40em)" srcSet={`${imagePath}-medium.avif`} type="image/avif" />
-      ) : null}
-      {imgAvif ? <source srcSet={`${imagePath}.avif`} type="image/avif" /> : null}
-      {imgWebp ? <source srcSet={`${imagePath}.webp`} type="image/webp" /> : null}
-      {imgPng ? <source srcSet={`${imagePath}.png`} type="image/png" /> : null}
-      {imgPngDark ? (
+      )}
+      {imgAvifLarge && (
+        <source srcSet={`${imagePath}-large.avif`} type="image/avif" media="(min-width: 75em)" />
+      )}
+      {imgAvifMedium && (
+        <source srcSet={`${imagePath}-medium.avif`} type="image/avif" media="(min-width: 40em)" />
+      )}
+      {imgAvif && <source srcSet={`${imagePath}.avif`} type="image/avif" />}
+      {imgWebp && <source srcSet={`${imagePath}.webp`} type="image/webp" />}
+      {imgPng && <source srcSet={`${imagePath}.png`} type="image/png" />}
+      {imgPngDark && (
         <source
-          media={colorMode === 'dark' ? 'all' : 'none'}
           srcSet={`${imagePath}-dark.png`}
           type="image/png"
-        />
-      ) : null}
-
-      {imgJpgDark ? (
-        <source
           media={colorMode === 'dark' ? 'all' : 'none'}
+        />
+      )}
+
+      {imgJpgDark && (
+        <source
           srcSet={`${imagePath}-dark.jpg`}
           type="image/jpg"
+          media={colorMode === 'dark' ? 'all' : 'none'}
         />
-      ) : null}
-      {imgJpg ? <source srcSet={`${imagePath}.jpg`} type="image/jpg" /> : null}
+      )}
+      {imgJpg && <source srcSet={`${imagePath}.jpg`} type="image/jpg" />}
       <img
+        src={`${imagePath}.${defaultImgType}`}
         alt={altText}
+        loading="lazy"
         decoding="async"
         height={height || '100%'}
-        loading="lazy"
-        src={`${imagePath}.${defaultImgType}`}
-        style={{ objectFit: 'cover' }}
         width={width}
+        style={{ objectFit: 'cover' }}
       />
     </picture>
   )

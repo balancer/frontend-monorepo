@@ -60,36 +60,36 @@ export function AddLiquidityModal({
 
   return (
     <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
       isOpen={isOpen}
       onClose={onClose}
+      initialFocusRef={initialFocusRef}
+      finalFocusRef={finalFocusRef}
+      isCentered
       preserveScrollBarGap
       {...rest}
     >
       <SuccessOverlay startAnimation={!!addLiquidityTxHash && hasQuoteContext} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
-        {isDesktop && hasQuoteContext ? (
+        {isDesktop && hasQuoteContext && (
           <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
-        ) : null}
+        )}
         <TransactionModalHeader
-          chain={pool.chain}
-          isReceiptLoading={receiptProps.isLoading}
           label="Add liquidity"
           timeout={<AddLiquidityTimeout />}
           txHash={addLiquidityTxHash}
+          chain={pool.chain}
+          isReceiptLoading={receiptProps.isLoading}
         />
         <ModalCloseButton />
         <ModalBody>
           <AddLiquiditySummary {...receiptProps} />
         </ModalBody>
         <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
           isSuccess={!!addLiquidityTxHash && !receiptProps.isLoading}
-          returnAction={redirectToPoolPage}
+          currentStep={transactionSteps.currentStep}
           returnLabel="Return to pool"
+          returnAction={redirectToPoolPage}
         />
       </ModalContent>
     </Modal>

@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import { usePool } from '../../../PoolProvider'
 import { sentryMetaForAddLiquidityHandler } from '@/lib/shared/utils/query-errors'
 import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
+import { useBlockNumber } from 'wagmi'
 
 type Params = {
   handler: AddLiquidityHandler
@@ -19,10 +20,11 @@ type Params = {
 }
 
 export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabled }: Params) {
-  const { pool } = usePool()
+  const { pool, chainId } = usePool()
   const { userAddress, isConnected } = useUserAccount()
   const { slippage } = useUserSettings()
   const debouncedHumanAmountsIn = useDebounce(humanAmountsIn, defaultDebounceMs)[0]
+  const { data: blockNumber } = useBlockNumber({ chainId })
 
   const params: AddLiquidityParams = {
     handler,
@@ -42,7 +44,11 @@ export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabl
     queryFn,
     enabled: enabled && isConnected && !areEmptyAmounts(debouncedHumanAmountsIn),
     gcTime: 0,
-    meta: sentryMetaForAddLiquidityHandler('Error in add liquidity priceImpact query', params),
+    meta: sentryMetaForAddLiquidityHandler('Error in add liquidity priceImpact query', {
+      ...params,
+      chainId,
+      blockNumber,
+    }),
     ...onlyExplicitRefetch,
   })
 }

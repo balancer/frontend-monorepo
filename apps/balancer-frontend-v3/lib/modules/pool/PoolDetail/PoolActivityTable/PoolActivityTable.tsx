@@ -33,25 +33,25 @@ export function PoolActivityTable() {
 
   return (
     <>
-      <Box className="hide-scrollbar" overflowX="auto" w="full">
+      <Box overflowX="auto" w="full" className="hide-scrollbar">
         <Box minWidth="800px">
           <PaginatedTable
-            alignItems="flex-start"
             items={sortedPoolEvents}
             loading={isLoading}
-            noItemsFoundLabel="No pool events found"
-            paginationProps={paginationProps}
-            position="relative"
             renderTableHeader={() => <PoolActivityTableHeader {...rowProps} />}
             renderTableRow={(item: PoolActivityEl, index) => {
-              return <PoolActivityTableRow event={item} keyValue={index} {...rowProps} />
+              return <PoolActivityTableRow keyValue={index} event={item} {...rowProps} />
             }}
             showPagination={false}
+            paginationProps={paginationProps}
             w="full"
+            alignItems="flex-start"
+            position="relative"
+            noItemsFoundLabel="No pool events found"
           />
         </Box>
       </Box>
-      {showPagination ? <Pagination {...paginationProps} /> : null}
+      {showPagination && <Pagination {...paginationProps} />}
     </>
   )
 }

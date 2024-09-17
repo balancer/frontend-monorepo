@@ -42,8 +42,8 @@ export default function NetworkClaim() {
 
   return (
     <TransactionStateProvider>
-      <ClaimNetworkPoolsLayout backLink="/portfolio" title="Portfolio">
-        <HStack justifyContent="space-between" pb="1">
+      <ClaimNetworkPoolsLayout backLink={'/portfolio'} title="Portfolio">
+        <HStack pb="1" justifyContent="space-between">
           <HStack spacing="xs">
             <NetworkIcon chain={gqlChain} size={12} />
             <Stack spacing="none">
@@ -51,10 +51,10 @@ export default function NetworkClaim() {
             </Stack>
           </HStack>
           <Heading size="md" variant="special">
-            {claimableFiatBalance ? toCurrency(claimableFiatBalance) : null}
+            {claimableFiatBalance && toCurrency(claimableFiatBalance)}
           </Heading>
         </HStack>
-        <Stack gap="md" py="4">
+        <Stack py="4" gap="md">
           {isLoadingRewards ? (
             <Skeleton height="126px" />
           ) : pools && pools.length > 0 ? (
@@ -64,56 +64,55 @@ export default function NetworkClaim() {
                   <Card key={pool.id} variant="subSection">
                     <VStack align="start">
                       <HStack w="full">
-                        <PoolName fontSize="lg" fontWeight="bold" pool={pool} />
-                        <Text fontWeight="bold" ml="auto" variant="special">
+                        <PoolName pool={pool} fontWeight="bold" fontSize="lg" />
+                        <Text fontWeight="bold" variant="special" ml="auto">
                           {toCurrency(
                             poolRewardsMap[pool.id]?.totalFiatClaimBalance?.toNumber() || 0
                           )}
                         </Text>
                       </HStack>
                       <HStack w="full">
-                        <TokenIconStack chain={pool.chain} size={36} tokens={pool.displayTokens} />
-                        {hasMultipleClaims ? (
+                        <TokenIconStack tokens={pool.displayTokens} chain={pool.chain} size={36} />
+                        {hasMultipleClaims && (
                           <Button
-                            minW="60px"
-                            ml="auto"
                             onClick={() => {
                               setModalPools([pool])
                             }}
-                            size="sm"
                             variant="secondary"
+                            size="sm"
+                            ml="auto"
+                            minW="60px"
                           >
                             Claim
                           </Button>
-                        ) : null}
+                        )}
                       </HStack>
                     </VStack>
                   </Card>
                 )
             )
           ) : (
-            <Text p="10" textAlign="center" variant="secondary">
+            <Text p="10" variant="secondary" textAlign="center">
               You have no liquidity incentives to claim
             </Text>
           )}
         </Stack>
-        {pools && pools.length > 0 ? (
+        {pools && pools.length > 0 && (
           <Button
-            isDisabled={isClaimAllDisabled}
             onClick={() => {
               setModalPools(pools)
             }}
-            size="lg"
-            variant="secondary"
             width="100%"
+            variant="secondary"
+            size="lg"
+            isDisabled={isClaimAllDisabled}
           >
             {`Claim${hasMultipleClaims ? ' all' : ''}`}
           </Button>
-        ) : null}
+        )}
         {modalPools.length > 0 && (
           <ClaimProvider pools={modalPools}>
             <ClaimModal
-              chain={gqlChain}
               isOpen={modalPools.length > 0}
               onClose={(isSuccess: boolean) => {
                 if (isSuccess) {
@@ -122,6 +121,7 @@ export default function NetworkClaim() {
 
                 setModalPools([])
               }}
+              chain={gqlChain}
             />
           </ClaimProvider>
         )}

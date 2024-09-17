@@ -36,12 +36,12 @@ export default function GlobalError({
       <body>
         <NextError statusCode={500} title={title} />
         <div style={{ marginTop: '16px' }}>
-          {href ? (
+          {href && (
             <a href={window.location.href}>
               <button>Reload Page</button>
             </a>
-          ) : null}
-          {showResetButton ? <button onClick={() => reset?.()}>Try Reset (dev)</button> : null}
+          )}
+          {showResetButton && <button onClick={() => reset?.()}>Try Reset (dev)</button>}
         </div>
       </body>
     </html>

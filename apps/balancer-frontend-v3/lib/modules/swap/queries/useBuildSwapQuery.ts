@@ -8,7 +8,9 @@ import { SimulateSwapResponse, SwapState } from '../swap.types'
 import { swapQueryKeys } from './swapQueryKeys'
 import { SwapSimulationQueryResult } from './useSimulateSwapQuery'
 import { useRelayerSignature } from '../../relayer/RelayerSignatureProvider'
-import { SwapBuildCallExtras, sentryMetaForSwapHandler } from '@/lib/shared/utils/query-errors'
+import { SwapMetaParams, sentryMetaForSwapHandler } from '@/lib/shared/utils/query-errors'
+import { getChainId } from '@/lib/config/app.config'
+import { useBlockNumber } from 'wagmi'
 
 export type BuildSwapQueryResponse = ReturnType<typeof useBuildSwapQuery>
 
@@ -34,6 +36,8 @@ export function useBuildSwapQuery({
   const { relayerApprovalSignature } = useRelayerSignature()
 
   const { selectedChain, tokenIn, tokenOut, swapType } = swapState
+  const chainId = getChainId(selectedChain)
+  const { data: blockNumber } = useBlockNumber({ chainId })
 
   const queryKey = swapQueryKeys.build({
     selectedChain,
@@ -67,11 +71,13 @@ export function useBuildSwapQuery({
     enabled: enabled && isConnected && !!simulationQuery.data,
     gcTime: 0,
     meta: sentryMetaForSwapHandler('Error in swap buildCallData query', {
+      chainId,
+      blockNumber,
       handler,
       swapState,
       slippage,
       wethIsEth,
-    } as SwapBuildCallExtras),
+    } as SwapMetaParams),
     ...onlyExplicitRefetch,
   })
 }

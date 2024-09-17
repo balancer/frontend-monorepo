@@ -58,36 +58,36 @@ export function SwapPreviewModal({
 
   return (
     <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
       isOpen={isOpen}
       onClose={onClose}
+      initialFocusRef={initialFocusRef}
+      finalFocusRef={finalFocusRef}
+      isCentered
       preserveScrollBarGap
       {...rest}
     >
       <SuccessOverlay startAnimation={!!swapTxHash && hasQuoteContext} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
-        {isDesktop && hasQuoteContext ? (
-          <DesktopStepTracker chain={selectedChain} transactionSteps={transactionSteps} />
-        ) : null}
+        {isDesktop && hasQuoteContext && (
+          <DesktopStepTracker transactionSteps={transactionSteps} chain={selectedChain} />
+        )}
         <TransactionModalHeader
-          chain={selectedChain}
-          isReceiptLoading={swapReceipt.isLoading}
           label={`Review ${capitalize(swapAction)}`}
           timeout={<SwapTimeout />}
           txHash={swapTxHash}
+          chain={selectedChain}
+          isReceiptLoading={swapReceipt.isLoading}
         />
         <ModalCloseButton />
         <ModalBody>
           <SwapSummary {...swapReceipt} />
         </ModalBody>
         <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
           isSuccess={!!swapTxHash && !swapReceipt.isLoading}
-          returnAction={onClose}
+          currentStep={transactionSteps.currentStep}
           returnLabel="Swap again"
+          returnAction={onClose}
         />
       </ModalContent>
     </Modal>

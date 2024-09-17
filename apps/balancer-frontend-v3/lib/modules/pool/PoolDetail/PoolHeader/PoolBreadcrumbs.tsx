@@ -12,17 +12,17 @@ export function PoolBreadcrumbs() {
   return (
     <Breadcrumb
       color="grayText"
+      spacing="sm"
       fontSize="sm"
       separator={
         <Box color="border.base">
           <ChevronRight size={16} />
         </Box>
       }
-      spacing="sm"
     >
       <BreadcrumbItem>
         <BreadcrumbLink href="/">
-          <Button color="grayText" size="xs" variant="link">
+          <Button variant="link" size="xs" color="grayText">
             <Home size={16} />
           </Button>
         </BreadcrumbLink>

@@ -27,33 +27,33 @@ export default function ButtonGroup({
 }: Props) {
   return (
     <LayoutGroup id={groupId}>
-      <HStack background="level0" p="1" rounded="md" shadow="innerXl" spacing="1">
+      <HStack rounded="md" p="1" spacing="1" background="level0" shadow="innerXl">
         {options.map(option => {
           const isActive = currentOption?.value === option.value
           return (
             <Button
+              onClick={() => onChange(option)}
+              key={`button-group-option-${option.value}`}
+              variant={isActive ? 'buttonGroupActive' : 'buttonGroupInactive'}
               bg="transparent"
               id={`button-group-${option.value}`}
+              size={size}
+              width={width}
               isDisabled={option.disabled}
-              key={`button-group-option-${option.value}`}
-              onClick={() => onChange(option)}
               position="relative"
               role="group"
-              size={size}
-              variant={isActive ? 'buttonGroupActive' : 'buttonGroupInactive'}
-              width={width}
             >
-              {isActive ? (
+              {isActive && (
                 <Box
                   as={motion.div}
+                  layoutId={`active-${groupId}`}
                   bg="background.button.secondary"
                   borderRadius="4px"
-                  inset="0"
-                  layoutId={`active-${groupId}`}
-                  position="absolute"
                   shadow="md"
-                />
-              ) : null}
+                  position="absolute"
+                  inset="0"
+                ></Box>
+              )}
               <Box position="relative" zIndex="8">
                 {option.label}
               </Box>

@@ -50,6 +50,7 @@ export function NativeAssetSelectList({ tokens, onTokenSelect, ...rest }: Props 
         </Center>
       ) : (
         <Virtuoso
+          style={{ height: '150px' }}
           data={tokens}
           itemContent={index => {
             const token = tokens[index]
@@ -57,16 +58,15 @@ export function NativeAssetSelectList({ tokens, onTokenSelect, ...rest }: Props 
 
             return (
               <TokenSelectListRow
-                active={index === activeIndex}
-                isBalancesLoading={isBalancesLoading}
                 key={keyFor(token, index)}
+                active={index === activeIndex}
                 onClick={() => onTokenSelect(token)}
                 token={token}
                 userBalance={userBalance}
+                isBalancesLoading={isBalancesLoading}
               />
             )
           }}
-          style={{ height: '150px' }}
         />
       )}
     </Box>

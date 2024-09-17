@@ -65,7 +65,7 @@ export function VebalInfo() {
     <Stack spacing="lg">
       {vebalData.map(({ title, value }) => (
         <Stack key={title} spacing="2">
-          <Text fontSize="lg" fontWeight={700}>
+          <Text fontWeight={700} fontSize="lg">
             {title}
           </Text>
           <Text>{value}</Text>

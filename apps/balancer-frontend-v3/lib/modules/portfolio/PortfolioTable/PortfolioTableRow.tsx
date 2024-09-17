@@ -47,31 +47,31 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
   return (
     <FadeInOnView>
       <Box
+        key={keyValue}
+        transition="all 0.2s ease-in-out"
         _hover={{
           bg: 'background.base',
         }}
-        key={keyValue}
-        px={{ base: 'ms', sm: '0' }}
         rounded="md"
-        transition="all 0.2s ease-in-out"
+        px={{ base: 'ms', sm: '0' }}
         w="full"
       >
-        <Link href={getPoolPath(pool)} prefetch>
+        <Link href={getPoolPath(pool)} prefetch={true}>
           <Grid {...rest} py={{ base: 'ms', md: 'md' }}>
             <GridItem>
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
               <PoolListTokenPills
-                h={['32px', '36px']}
-                iconSize={20}
-                p={['xxs', 'sm']}
                 pool={pool}
+                h={['32px', '36px']}
+                p={['xxs', 'sm']}
                 pr={[1.5, 'ms']}
+                iconSize={20}
               />
             </GridItem>
             <GridItem>
-              <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
+              <Text textAlign="left" fontWeight="medium" textTransform="capitalize">
                 {getPoolTypeLabel(pool.type)}
               </Text>
             </GridItem>
@@ -84,15 +84,15 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
             {/* TO-DO vebal boost */}
             <GridItem px="sm">
               <Text
-                fontWeight="medium"
-                textAlign="right"
                 title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
+                textAlign="right"
+                fontWeight="medium"
               >
                 {vebalBoostValue ? `${Number(vebalBoostValue).toFixed(2)}x` : '-'}
               </Text>
             </GridItem>
             <GridItem px="sm">
-              <Text fontWeight="medium" textAlign="right">
+              <Text textAlign="right" fontWeight="medium">
                 {toCurrency(pool.poolPositionUsd, { abbreviated: false })}
               </Text>
             </GridItem>
@@ -106,10 +106,10 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
               ) : (
                 <MemoizedMainAprTooltip
                   aprItems={pool.dynamicData.aprItems}
-                  pool={pool}
                   poolId={pool.id}
                   textProps={{ fontWeight: 'medium' }}
                   vebalBoost={vebalBoostValue}
+                  pool={pool}
                 />
               )}
             </GridItem>
@@ -136,8 +136,8 @@ function StakingIcons({ pool }: { pool: ExpandedPoolInfo }) {
 
   return (
     <>
-      {showAuraIcon ? <ProtocolIcon protocol={Protocol.Aura} /> : null}
-      {showBalIcon ? <ProtocolIcon protocol={Protocol.Balancer} /> : null}
+      {showAuraIcon && <ProtocolIcon protocol={Protocol.Aura} />}
+      {showBalIcon && <ProtocolIcon protocol={Protocol.Balancer} />}
     </>
   )
 }

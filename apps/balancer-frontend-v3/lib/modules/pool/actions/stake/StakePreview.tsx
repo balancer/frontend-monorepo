@@ -14,9 +14,6 @@ export function StakePreview() {
     <VStack spacing="sm" w="full">
       <Card variant="subSection">
         <TokenRow
-          address={pool.address as Address}
-          chain={pool.chain}
-          isBpt
           label={
             <HStack color="grayText">
               <WalletIcon />
@@ -25,12 +22,15 @@ export function StakePreview() {
               </Text>
             </HStack>
           }
-          pool={pool}
+          address={pool.address as Address}
           value={quoteAmountIn}
+          chain={pool.chain}
+          pool={pool}
+          isBpt
         />
       </Card>
 
-      <StakeAprTooltip pool={pool} totalUsdValue={quoteAmountInUsd} />
+      <StakeAprTooltip totalUsdValue={quoteAmountInUsd} pool={pool} />
     </VStack>
   )
 }

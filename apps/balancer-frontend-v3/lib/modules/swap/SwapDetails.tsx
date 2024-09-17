@@ -19,7 +19,7 @@ export function OrderRoute() {
 
   const queryData = simulationQuery.data as SdkSimulateSwapResponse
   const orderRouteVersion = queryData ? queryData.protocolVersion : 2
-  const hopCount = queryData.routes[0]?.hops?.length ?? 0
+  const hopCount = queryData?.routes[0]?.hops?.length ?? 0
 
   return (
     <HStack justify="space-between" w="full">
@@ -28,7 +28,7 @@ export function OrderRoute() {
         <Text color="grayText">
           BV{orderRouteVersion}: {hopCount} {pluralize('hop', hopCount)}
         </Text>
-        <Tooltip fontSize="sm" label="Balancer vault version and number of hops">
+        <Tooltip label="Balancer vault version and number of hops" fontSize="sm">
           <InfoIcon />
         </Tooltip>
       </HStack>
@@ -79,7 +79,7 @@ export function SwapDetails() {
         You can change your slippage tolerance in your settings.`
 
   return (
-    <VStack align="start" fontSize="sm" spacing="sm" w="full">
+    <VStack spacing="sm" align="start" w="full" fontSize="sm">
       <HStack justify="space-between" w="full">
         <Text color={priceImpactColor}>Price impact</Text>
         <HStack>
@@ -92,8 +92,8 @@ export function SwapDetails() {
           )}
           <Tooltip
             // eslint-disable-next-line max-len
-            fontSize="sm"
             label="This is the negative price impact of the swap based on the current market prices of the token in vs token out."
+            fontSize="sm"
           >
             {priceImpactLevel === 'low' ? (
               <InfoIcon />
@@ -111,7 +111,7 @@ export function SwapDetails() {
           <NumberText color="grayText">
             -{toCurrency(maxSlippageUsd, { abbreviated: false })} (-{fNum('slippage', _slippage)})
           </NumberText>
-          <Tooltip fontSize="sm" label={slippageLabel}>
+          <Tooltip label={slippageLabel} fontSize="sm">
             <InfoIcon />
           </Tooltip>
         </HStack>
@@ -122,13 +122,13 @@ export function SwapDetails() {
           <NumberText color="grayText">
             {fNum('token', limitValue, { abbreviated: false })} {limitToken?.symbol}
           </NumberText>
-          <Tooltip fontSize="sm" label={limitTooltip}>
+          <Tooltip label={limitTooltip} fontSize="sm">
             <InfoIcon />
           </Tooltip>
         </HStack>
       </HStack>
 
-      {isDefaultSwap ? <OrderRoute /> : null}
+      {isDefaultSwap && <OrderRoute />}
     </VStack>
   )
 }

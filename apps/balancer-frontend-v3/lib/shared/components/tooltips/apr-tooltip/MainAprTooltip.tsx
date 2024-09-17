@@ -33,7 +33,7 @@ interface Props
   id?: string
 }
 
-export function SparklesIcon({
+export const SparklesIcon = ({
   isOpen,
   pool,
   id,
@@ -41,7 +41,7 @@ export function SparklesIcon({
   isOpen: boolean
   pool: Pool | PoolListItem | FeaturedPool
   id?: string
-}) {
+}) => {
   const theme = useTheme()
   const { corePoolId } = getProjectConfig()
   const hoverColor = isLBP(pool.type) ? 'inherit' : 'font.highlight'
@@ -63,7 +63,7 @@ export function SparklesIcon({
   }
 
   return (
-    <Box h="auto" minW="16px" w="16px">
+    <Box w="16px" h="auto" minW="16px">
       <Center w="16px">
         {isLBP(pool.type) ? (
           <Icon as={Info} boxSize={4} color={isOpen ? hoverColor : 'gray.400'} />
@@ -105,15 +105,15 @@ function MainAprTooltip({
   return (
     <BaseAprTooltip
       {...props}
-      customPopoverContent={customPopoverContent}
       maxVeBalText="Max veBAL APR"
       totalBaseText={hasVeBalBoost => `Total ${hasVeBalBoost ? 'base' : ''} APR`}
       totalBaseVeBalText="Total base APR"
+      customPopoverContent={customPopoverContent}
       vebalBoost={vebalBoost}
     >
       {({ isOpen }) => (
         <HStack align="center" alignItems="center">
-          <Button _focus={{ outline: 'none' }} h={height} px="0" variant="unstyled">
+          <Button variant="unstyled" _focus={{ outline: 'none' }} px="0" h={height}>
             <HStack
               _hover={{ color: hoverColor }}
               color={isOpen ? hoverColor : 'font.primary'}
@@ -121,18 +121,18 @@ function MainAprTooltip({
             >
               {!onlySparkles && (
                 <Text
-                  color={isOpen ? hoverColor : 'font.primary'}
-                  noOfLines={2}
                   textAlign="left"
+                  color={isOpen ? hoverColor : 'font.primary'}
                   textDecoration={isLBP(pool.type) ? 'line-through' : 'none'}
                   whiteSpace="pre-wrap"
+                  noOfLines={2}
                   {...textProps}
                 >
                   {apr || aprToShow}
                   {aprLabel ? ' APR' : ''}
                 </Text>
               )}
-              <SparklesIcon id={id} isOpen={isOpen} pool={pool} />
+              <SparklesIcon isOpen={isOpen} pool={pool} id={id} />
             </HStack>
           </Button>
         </HStack>

@@ -8,6 +8,8 @@ import { swapQueryKeys } from './swapQueryKeys'
 import { SimulateSwapInputs, SimulateSwapResponse } from '../swap.types'
 import { sentryMetaForSwapHandler } from '@/lib/shared/utils/query-errors'
 import { isZero } from '@/lib/shared/utils/numbers'
+import { getChainId } from '@/lib/config/app.config'
+import { useBlockNumber } from 'wagmi'
 
 export type SwapSimulationQueryResult = ReturnType<typeof useSimulateSwapQuery>
 
@@ -32,6 +34,9 @@ export function useSimulateSwapQuery({
     chain,
   }
 
+  const chainId = getChainId(chain)
+  const { data: blockNumber } = useBlockNumber({ chainId })
+
   const queryKey = swapQueryKeys.simulation(inputs)
 
   const queryFn = async () => handler.simulate(inputs)
@@ -42,6 +47,8 @@ export function useSimulateSwapQuery({
     enabled: enabled && !isZero(debouncedSwapAmount),
     gcTime: 0,
     meta: sentryMetaForSwapHandler('Error in swap simulation query', {
+      chainId: getChainId(chain),
+      blockNumber,
       handler,
       swapInputs: inputs,
       enabled,

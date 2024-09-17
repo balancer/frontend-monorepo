@@ -19,6 +19,7 @@ async function testQuery(humanBptIn: HumanAmount) {
   const emptyTokenOut = '' as Address // We don't use it but it is required to simplify TS checks
   const { result } = testHook(() =>
     useRemoveLiquiditySimulationQuery({
+      chainId: 1,
       handler,
       poolId,
       humanBptIn,

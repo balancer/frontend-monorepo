@@ -1,8 +1,14 @@
 'use client'
 
 import { isDev } from '@/lib/config/app.config'
-import { captureError } from '@/lib/shared/utils/errors'
-import { SentryMetadata, captureSentryError, shouldIgnore } from '@/lib/shared/utils/query-errors'
+import { captureError, getTenderlyUrlFromErrorMessage } from '@/lib/shared/utils/errors'
+import {
+  SentryMetadata,
+  captureSentryError,
+  getTenderlyUrl,
+  shouldIgnore,
+} from '@/lib/shared/utils/query-errors'
+import { ScopeContext } from '@sentry/types'
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ReactNode } from 'react'
@@ -11,14 +17,20 @@ export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     // Global handler for every react-query error
     onError: (error, query) => {
+      const queryMeta = query?.meta
       if (shouldIgnore(error.message, error.stack)) return
-      console.log('Sentry capturing query error: ', {
-        meta: query?.meta,
+      console.log('Sentry capturing query error', {
+        meta: queryMeta,
         error,
         queryKey: query.queryKey,
       })
 
-      if (query?.meta) return captureSentryError(error, query?.meta as SentryMetadata)
+      const sentryContext = query?.meta?.context as ScopeContext
+      if (sentryContext?.extra && !getTenderlyUrl(sentryContext.extra)) {
+        sentryContext.extra.tenderlyUrl = getTenderlyUrlFromErrorMessage(error, queryMeta)
+      }
+
+      if (queryMeta) return captureSentryError(error, queryMeta as SentryMetadata)
 
       // Unexpected error in query (as expected errors should have query.meta)
       captureError(error, { extra: { queryKey: query.queryKey } })
@@ -47,7 +59,7 @@ export function ReactQueryClientProvider({ children }: { children: ReactNode | R
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {isDev && shouldShowReactQueryDevtools ? <ReactQueryDevtools initialIsOpen={false} /> : null}
+      {isDev && shouldShowReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   )
 }

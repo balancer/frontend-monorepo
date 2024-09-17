@@ -9,7 +9,7 @@ export function PoolAttributes() {
   return (
     <Card>
       <VStack alignItems="flex-start" spacing={{ base: 'sm', md: 'md' }} width="full">
-        <Heading fontSize="1.25rem" variant="h4">
+        <Heading variant="h4" fontSize="1.25rem">
           Pool attributes
         </Heading>
         <Divider />
@@ -18,17 +18,17 @@ export function PoolAttributes() {
             return (
               attribute && (
                 <Stack
-                  direction={{ base: 'column', md: 'row' }}
-                  key={`pool-attribute-${attribute.title}`}
-                  spacing={{ base: 'xxs', md: 'xl' }}
                   width="full"
+                  spacing={{ base: 'xxs', md: 'xl' }}
+                  key={`pool-attribute-${attribute.title}`}
+                  direction={{ base: 'column', md: 'row' }}
                 >
                   <Box minWidth="160px">
                     <Text variant={{ base: 'primary', md: 'secondary' }}>{attribute.title}:</Text>
                   </Box>
                   <Text
-                    mb={{ base: 'sm', md: '0' }}
                     variant={{ base: 'secondary', md: 'secondary' }}
+                    mb={{ base: 'sm', md: '0' }}
                   >
                     {attribute.value}
                   </Text>

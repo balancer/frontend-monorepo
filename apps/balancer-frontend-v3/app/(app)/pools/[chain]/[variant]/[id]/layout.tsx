@@ -73,7 +73,7 @@ export default async function PoolLayout({ params: { id, chain, variant }, child
 
   return (
     <Suspense fallback={<PoolDetailSkeleton />}>
-      <PoolProvider chain={_chain} data={data} id={id} variant={variant}>
+      <PoolProvider id={id} chain={_chain} variant={variant} data={data}>
         {children}
       </PoolProvider>
     </Suspense>

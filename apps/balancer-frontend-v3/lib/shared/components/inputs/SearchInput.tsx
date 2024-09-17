@@ -34,6 +34,14 @@ export function SearchInput({
     <InputGroup size="md">
       <Input
         {...register(SEARCH)}
+        id={SEARCH}
+        autoComplete="off"
+        placeholder={placeholder}
+        onChange={debouncedChangeHandler}
+        bg="input.bgDefault"
+        border="1px solid"
+        borderColor="input.borderDefault"
+        _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
         _focus={{
           bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
@@ -44,39 +52,31 @@ export function SearchInput({
           shadow: 'input.innerFocus',
           color: 'input.fontFocus',
         }}
-        _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
-        autoComplete="off"
-        bg="input.bgDefault"
-        border="1px solid"
-        borderColor="input.borderDefault"
-        id={SEARCH}
-        onChange={debouncedChangeHandler}
         onKeyDown={event => {
           if (event.key === 'Enter') {
             event.preventDefault()
           }
         }}
-        placeholder={placeholder}
         {...rest}
       />
       <InputRightElement>
         <IconButton
+          variant="ghost"
+          size="sm"
+          color="font.secondary"
+          opacity="0.5"
+          aria-label={ariaLabel}
+          icon={search ? <X size="20" /> : <Search size="20" />}
           _hover={{
             opacity: '1',
             background: 'background.level1',
             color: 'font.maxContrast',
           }}
-          aria-label={ariaLabel}
-          color="font.secondary"
-          icon={search ? <X size="20" /> : <Search size="20" />}
-          isLoading={isLoading ? getFieldState(SEARCH).isTouched : undefined}
           onClick={() => {
             setSearch('')
             setValue(SEARCH, '')
           }}
-          opacity="0.5"
-          size="sm"
-          variant="ghost"
+          isLoading={isLoading && getFieldState(SEARCH).isTouched}
         />
       </InputRightElement>
     </InputGroup>

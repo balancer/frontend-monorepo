@@ -23,7 +23,7 @@ export function BlockedAddressModal() {
   }, [isBlocked])
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Address blocked</ModalHeader>

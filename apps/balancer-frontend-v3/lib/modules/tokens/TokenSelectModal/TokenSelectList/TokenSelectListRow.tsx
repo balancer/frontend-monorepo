@@ -54,51 +54,51 @@ export function TokenSelectListRow({
 
   return (
     <Box {...boxStyles} {...rest} role="group">
-      <HStack height="full" justify="space-between" maxW="full" spacing="md">
-        <HStack height="full" maxW="full" spacing="ms">
+      <HStack height="full" spacing="md" justify="space-between" maxW="full">
+        <HStack height="full" spacing="ms" maxW="full">
           <Box
-            _groupHover={isCurrentToken ? {} : { transform: 'scale(1.075)' }}
             transition="all 0.2s var(--ease-out-cubic)"
+            _groupHover={isCurrentToken ? {} : { transform: 'scale(1.075)' }}
           >
-            <TokenIcon address={token.address} alt={token.symbol} chain={token.chain} />
+            <TokenIcon address={token.address} chain={token.chain} alt={token.symbol} />
           </Box>
-          <VStack align="start" height="full" justify="center" maxW="full" spacing="none">
+          <VStack height="full" align="start" justify="center" spacing="none" maxW="full">
             <HStack spacing="xxs">
               <Text color={active ? 'font.link' : 'font.primary'} fontWeight="bold">
                 {token.symbol}
               </Text>
               <Box onClick={e => e.stopPropagation()}>
-                <TokenInfoPopover chain={token.chain} tokenAddress={token.address} />
+                <TokenInfoPopover tokenAddress={token.address} chain={token.chain} />
               </Box>
             </HStack>
             <Text
-              color="grayText"
+              title={token.name}
               fontSize="sm"
+              whiteSpace="normal"
+              color="grayText"
               fontWeight="medium"
               lineHeight="1"
-              maxW="80"
               pr="lg"
-              title={token.name}
-              whiteSpace="normal"
+              maxW="80"
             >
               {token.name}
             </Text>
           </VStack>
         </HStack>
-        {isConnected && tokenBalance !== '0' ? (
+        {isConnected && tokenBalance !== '0' && (
           <VStack align="end" justify="center" spacing="none">
             <Text
+              title={userBalance?.amount.toString()}
               color={active ? 'font.link' : 'font.primary'}
               fontWeight="bold"
-              title={userBalance?.amount.toString()}
             >
               {tokenBalance}
             </Text>
-            <Text color="grayText" fontSize="sm" fontWeight="medium">
+            <Text fontSize="sm" color="grayText" fontWeight="medium">
               {fiatValue}
             </Text>
           </VStack>
-        ) : null}
+        )}
       </HStack>
     </Box>
   )

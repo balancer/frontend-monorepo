@@ -69,8 +69,8 @@ export function PriceImpactAccordion({
 
   return (
     <Box w="full">
-      <Accordion allowToggle variant="button" w="full">
-        <AccordionItem isDisabled={isDisabled} shadow={isDisabled ? 'none' : undefined} w="full">
+      <Accordion w="full" variant="button" allowToggle>
+        <AccordionItem w="full" isDisabled={isDisabled} shadow={isDisabled ? 'none' : undefined}>
           <h2>
             <AccordionButton>
               <Box as="span" flex="1" textAlign="left">
@@ -88,11 +88,11 @@ export function PriceImpactAccordion({
           <AccordionPanel py="md">{accordionPanelComponent}</AccordionPanel>
         </AccordionItem>
       </Accordion>
-      {priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact ? (
+      {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
         <>
-          <VStack align="start" mt="md" spacing="md" w="full">
+          <VStack align="start" w="full" spacing="md" mt="md">
             <Alert status="error">
-              <PriceImpactIcon mt="1" priceImpactLevel={priceImpactLevel} size={24} />
+              <PriceImpactIcon priceImpactLevel={priceImpactLevel} size={24} mt="1" />
               <Box ml="md">
                 <AlertTitle>
                   {isUnknownPriceImpact
@@ -112,7 +112,7 @@ export function PriceImpactAccordion({
             </Alert>
             <Card variant="subSection">
               <CardBody>
-                <Text fontWeight="bold" mb="sm">
+                <Text mb="sm" fontWeight="bold">
                   Price impact acknowledgement
                 </Text>
                 {isUnknownPriceImpact ? (
@@ -124,19 +124,19 @@ export function PriceImpactAccordion({
                 ) : (
                   <Text color="grayText" fontSize="sm">
                     I accept the high price impact of{' '}
-                    {priceImpact ? fNum('priceImpact', priceImpact) : null}. I understand that this
-                    may result in losses, since the size of my swap is likely to move the market
-                    price unfavorably based on the current depth of the market.
+                    {priceImpact && fNum('priceImpact', priceImpact)}. I understand that this may
+                    result in losses, since the size of my swap is likely to move the market price
+                    unfavorably based on the current depth of the market.
                   </Text>
                 )}
               </CardBody>
               <CardFooter pt="md">
                 {!acceptPriceImpactRisk ? (
-                  <Button onClick={handleClick} variant="secondary" w="full">
+                  <Button w="full" variant="secondary" onClick={handleClick}>
                     I accept {isUnknownPriceImpact ? 'unknown' : 'high'} price impact
                   </Button>
                 ) : (
-                  <Button isDisabled variant="secondary" w="full">
+                  <Button w="full" variant="secondary" isDisabled>
                     {isUnknownPriceImpact ? 'Unknown' : 'High'} price impact accepted
                   </Button>
                 )}
@@ -145,12 +145,12 @@ export function PriceImpactAccordion({
           </VStack>
           <PriceImpactAcceptModal
             isOpen={acceptHighImpactDisclosure.isOpen}
-            onClose={acceptHighImpactDisclosure.onClose}
             onOpen={acceptHighImpactDisclosure.onOpen}
+            onClose={acceptHighImpactDisclosure.onClose}
             setAcceptHighPriceImpact={setAcceptPriceImpactRisk}
           />
         </>
-      ) : null}
+      )}
     </Box>
   )
 }

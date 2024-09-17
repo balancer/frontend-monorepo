@@ -40,10 +40,10 @@ export function NativeAssetSelectModal({
 
   return (
     <Modal
-      finalFocusRef={finalFocusRef}
-      isCentered
       isOpen={isOpen}
       onClose={onClose}
+      finalFocusRef={finalFocusRef}
+      isCentered
       preserveScrollBarGap
       {...rest}
     >
@@ -52,9 +52,9 @@ export function NativeAssetSelectModal({
         <ModalHeader color="font.primary">Select a token</ModalHeader>
         <ModalCloseButton />
         <ModalBody p={0}>
-          <VStack align="start" spacing="md" w="full">
+          <VStack w="full" align="start" spacing="md">
             <Box px="md" w="full">
-              <NativeAssetSelectList onTokenSelect={closeOnSelect} tokens={nativeAssets} />
+              <NativeAssetSelectList tokens={nativeAssets} onTokenSelect={closeOnSelect} />
             </Box>
           </VStack>
         </ModalBody>

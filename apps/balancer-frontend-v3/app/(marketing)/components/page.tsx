@@ -44,9 +44,9 @@ import Section from '@/lib/shared/components/layout/Section'
 
 export default function Components() {
   return (
-    <Box maxW="maxContent" mt="xl" mx="auto" p="mx">
+    <Box p="mx" maxW="maxContent" mx="auto" mt="xl">
       <Box as="section" mb="24">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" variant="gradient-dusk" size="h1-hero">
           Components
         </Heading>
         <Heading as="h2" size="h4">
@@ -84,8 +84,8 @@ export default function Components() {
         </UnorderedList>
       </Box>
 
-      <Section fontWeight="bold" id="colors">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+      <Section id="colors" fontWeight="bold">
+        <Heading as="h1" variant="gradient-dusk" size="h1-hero">
           Colors
         </Heading>
 
@@ -93,129 +93,129 @@ export default function Components() {
           <Heading size="h4">Primary</Heading>
           <Stack direction="row">
             <Center
+              bg="blue.50"
               _hover={{
                 bg: darken('blue.50', 10),
               }}
-              bg="blue.50"
-              color="black"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'black'}
             >
               50
             </Center>
 
             <Center
+              bg="blue.100"
               _hover={{
                 bg: darken('blue.100', 10),
               }}
-              bg="blue.100"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               100
             </Center>
 
             <Center
+              bg="blue.200"
               _hover={{
                 bg: darken('blue.200', 10),
               }}
-              bg="blue.200"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               200
             </Center>
 
             <Center
+              bg="blue.300"
               _hover={{
                 bg: darken('blue.300', 10),
               }}
-              bg="blue.300"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               300
             </Center>
 
             <Center
+              bg="blue.400"
               _hover={{
                 bg: darken('blue.400', 10),
               }}
-              bg="blue.400"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               400
             </Center>
 
             <Center
+              bg="blue.500"
               _hover={{
                 bg: darken('blue.500', 10),
               }}
-              bg="blue.500"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               500
             </Center>
 
             <Center
+              bg="blue.600"
               _hover={{
                 bg: darken('blue.600', 10),
               }}
-              bg="blue.600"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               600
             </Center>
 
             <Center
+              bg="blue.700"
               _hover={{
                 bg: darken('blue.700', 10),
               }}
-              bg="blue.700"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               700
             </Center>
             <Center
+              bg="blue.800"
               _hover={{
                 bg: darken('blue.800', 10),
               }}
-              bg="blue.800"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               800
             </Center>
             <Center
+              bg="blue.900"
               _hover={{
                 bg: darken('blue.900', 10),
               }}
-              bg="blue.900"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               900
             </Center>
@@ -226,129 +226,129 @@ export default function Components() {
           <Heading size="h4">Gray</Heading>
           <Stack direction="row">
             <Center
+              bg="gray.50"
               _hover={{
                 bg: darken('gray.50', 10),
               }}
-              bg="gray.50"
-              color="black"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'black'}
             >
               50
             </Center>
 
             <Center
+              bg="gray.100"
               _hover={{
                 bg: darken('gray.100', 10),
               }}
-              bg="gray.100"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               100
             </Center>
 
             <Center
+              bg="gray.200"
               _hover={{
                 bg: darken('gray.200', 10),
               }}
-              bg="gray.200"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               200
             </Center>
 
             <Center
+              bg="gray.300"
               _hover={{
                 bg: darken('gray.300', 10),
               }}
-              bg="gray.300"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               300
             </Center>
 
             <Center
+              bg="gray.400"
               _hover={{
                 bg: darken('gray.400', 10),
               }}
-              bg="gray.400"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               400
             </Center>
 
             <Center
+              bg="gray.500"
               _hover={{
                 bg: darken('gray.500', 10),
               }}
-              bg="gray.500"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               500
             </Center>
 
             <Center
+              bg="gray.600"
               _hover={{
                 bg: darken('gray.600', 10),
               }}
-              bg="gray.600"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               600
             </Center>
 
             <Center
+              bg="gray.700"
               _hover={{
                 bg: darken('gray.700', 10),
               }}
-              bg="gray.700"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               700
             </Center>
             <Center
+              bg="gray.800"
               _hover={{
                 bg: darken('gray.800', 10),
               }}
-              bg="gray.800"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               800
             </Center>
             <Center
+              bg="gray.900"
               _hover={{
                 bg: darken('gray.900', 10),
               }}
-              bg="gray.900"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               900
             </Center>
@@ -358,34 +358,34 @@ export default function Components() {
         <Section variant="subsection">
           <Heading size="h4">Brown</Heading>
           <Stack direction="row">
-            <Center bg="brown.50" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="brown.50" w="100%" h="16" fontSize="xs" color={'black'}>
               50
             </Center>
-            <Center bg="brown.100" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="brown.100" w="100%" h="16" fontSize="xs" color={'black'}>
               100
             </Center>
-            <Center bg="brown.200" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="brown.200" w="100%" h="16" fontSize="xs" color={'black'}>
               200
             </Center>
-            <Center bg="brown.300" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="brown.300" w="100%" h="16" fontSize="xs" color={'black'}>
               300
             </Center>
-            <Center bg="brown.400" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="brown.400" w="100%" h="16" fontSize="xs" color={'black'}>
               400
             </Center>
-            <Center bg="brown.500" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="brown.500" w="100%" h="16" fontSize="xs" color={'white'}>
               500
             </Center>
-            <Center bg="brown.600" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="brown.600" w="100%" h="16" fontSize="xs" color={'white'}>
               600
             </Center>
-            <Center bg="brown.700" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="brown.700" w="100%" h="16" fontSize="xs" color={'white'}>
               700
             </Center>
-            <Center bg="brown.800" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="brown.800" w="100%" h="16" fontSize="xs" color={'white'}>
               800
             </Center>
-            <Center bg="brown.900" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="brown.900" w="100%" h="16" fontSize="xs" color={'white'}>
               900
             </Center>
           </Stack>
@@ -395,129 +395,129 @@ export default function Components() {
           <Heading size="h4">Orange</Heading>
           <Stack direction="row">
             <Center
+              bg="orange.50"
               _hover={{
                 bg: darken('orange.50', 10),
               }}
-              bg="orange.50"
-              color="black"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'black'}
             >
               50
             </Center>
 
             <Center
+              bg="orange.100"
               _hover={{
                 bg: darken('orange.100', 10),
               }}
-              bg="orange.100"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               100
             </Center>
 
             <Center
+              bg="orange.200"
               _hover={{
                 bg: darken('orange.200', 10),
               }}
-              bg="orange.200"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               200
             </Center>
 
             <Center
+              bg="orange.300"
               _hover={{
                 bg: darken('orange.300', 10),
               }}
-              bg="orange.300"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               300
             </Center>
 
             <Center
+              bg="orange.400"
               _hover={{
                 bg: darken('orange.400', 10),
               }}
-              bg="orange.400"
-              color="font.dark"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.dark'}
             >
               400
             </Center>
 
             <Center
+              bg="orange.500"
               _hover={{
                 bg: darken('orange.500', 10),
               }}
-              bg="orange.500"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               500
             </Center>
 
             <Center
+              bg="orange.600"
               _hover={{
                 bg: darken('orange.600', 10),
               }}
-              bg="orange.600"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               600
             </Center>
 
             <Center
+              bg="orange.700"
               _hover={{
                 bg: darken('orange.700', 10),
               }}
-              bg="orange.700"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               700
             </Center>
             <Center
+              bg="orange.800"
               _hover={{
                 bg: darken('orange.800', 10),
               }}
-              bg="orange.800"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               800
             </Center>
             <Center
+              bg="orange.900"
               _hover={{
                 bg: darken('orange.900', 10),
               }}
-              bg="orange.900"
-              color="font.light"
-              fontSize="xs"
-              h="16"
               w="100%"
+              h="16"
+              fontSize="xs"
+              color={'font.light'}
             >
               900
             </Center>
@@ -527,34 +527,34 @@ export default function Components() {
         <Section variant="subsection">
           <Heading size="h4">Red</Heading>
           <Stack direction="row">
-            <Center bg="red.50" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="red.50" w="100%" h="16" fontSize="xs" color={'black'}>
               50
             </Center>
-            <Center bg="red.100" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="red.100" w="100%" h="16" fontSize="xs" color={'black'}>
               100
             </Center>
-            <Center bg="red.200" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="red.200" w="100%" h="16" fontSize="xs" color={'black'}>
               200
             </Center>
-            <Center bg="red.300" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="red.300" w="100%" h="16" fontSize="xs" color={'black'}>
               300
             </Center>
-            <Center bg="red.400" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="red.400" w="100%" h="16" fontSize="xs" color={'black'}>
               400
             </Center>
-            <Center bg="red.500" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="red.500" w="100%" h="16" fontSize="xs" color={'white'}>
               500
             </Center>
-            <Center bg="red.600" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="red.600" w="100%" h="16" fontSize="xs" color={'white'}>
               600
             </Center>
-            <Center bg="red.700" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="red.700" w="100%" h="16" fontSize="xs" color={'white'}>
               700
             </Center>
-            <Center bg="red.800" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="red.800" w="100%" h="16" fontSize="xs" color={'white'}>
               800
             </Center>
-            <Center bg="red.900" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="red.900" w="100%" h="16" fontSize="xs" color={'white'}>
               900
             </Center>
           </Stack>
@@ -562,34 +562,34 @@ export default function Components() {
         <Section variant="subsection">
           <Heading size="h4">Purple</Heading>
           <Stack direction="row">
-            <Center bg="purple.50" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="purple.50" w="100%" h="16" fontSize="xs" color={'black'}>
               50
             </Center>
-            <Center bg="purple.100" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="purple.100" w="100%" h="16" fontSize="xs" color={'black'}>
               100
             </Center>
-            <Center bg="purple.200" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="purple.200" w="100%" h="16" fontSize="xs" color={'black'}>
               200
             </Center>
-            <Center bg="purple.300" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="purple.300" w="100%" h="16" fontSize="xs" color={'black'}>
               300
             </Center>
-            <Center bg="purple.400" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="purple.400" w="100%" h="16" fontSize="xs" color={'black'}>
               400
             </Center>
-            <Center bg="purple.500" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="purple.500" w="100%" h="16" fontSize="xs" color={'white'}>
               500
             </Center>
-            <Center bg="purple.600" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="purple.600" w="100%" h="16" fontSize="xs" color={'white'}>
               600
             </Center>
-            <Center bg="purple.700" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="purple.700" w="100%" h="16" fontSize="xs" color={'white'}>
               700
             </Center>
-            <Center bg="purple.800" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="purple.800" w="100%" h="16" fontSize="xs" color={'white'}>
               800
             </Center>
-            <Center bg="purple.900" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="purple.900" w="100%" h="16" fontSize="xs" color={'white'}>
               900
             </Center>
           </Stack>
@@ -597,34 +597,34 @@ export default function Components() {
         <Section variant="subsection">
           <Heading size="h4">Green</Heading>
           <Stack direction="row">
-            <Center bg="green.50" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="green.50" w="100%" h="16" fontSize="xs" color={'black'}>
               50
             </Center>
-            <Center bg="green.100" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="green.100" w="100%" h="16" fontSize="xs" color={'black'}>
               100
             </Center>
-            <Center bg="green.200" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="green.200" w="100%" h="16" fontSize="xs" color={'black'}>
               200
             </Center>
-            <Center bg="green.300" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="green.300" w="100%" h="16" fontSize="xs" color={'black'}>
               300
             </Center>
-            <Center bg="green.400" color="black" fontSize="xs" h="16" w="100%">
+            <Center bg="green.400" w="100%" h="16" fontSize="xs" color={'black'}>
               400
             </Center>
-            <Center bg="green.500" color="white" fontSize="xs" h="16" shadow="xl" w="100%">
+            <Center bg="green.500" shadow="xl" w="100%" h="16" fontSize="xs" color={'white'}>
               500
             </Center>
-            <Center bg="green.600" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="green.600" w="100%" h="16" fontSize="xs" color={'white'}>
               600
             </Center>
-            <Center bg="green.700" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="green.700" w="100%" h="16" fontSize="xs" color={'white'}>
               700
             </Center>
-            <Center bg="green.800" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="green.800" w="100%" h="16" fontSize="xs" color={'white'}>
               800
             </Center>
-            <Center bg="green.900" color="white" fontSize="xs" h="16" w="100%">
+            <Center bg="green.900" w="100%" h="16" fontSize="xs" color={'white'}>
               900
             </Center>
           </Stack>
@@ -632,13 +632,13 @@ export default function Components() {
         <Section variant="subsection">
           <Heading size="h3">Gradients</Heading>
 
-          <Stack direction="column" mb="8" spacing="8">
-            <Center bg="background.special" h="16" w="100%">
+          <Stack direction="column" spacing="8" mb="8">
+            <Center bg="background.special" w="100%" h="16">
               Background special
             </Center>
           </Stack>
-          <Stack direction="column" mb="8" spacing="8">
-            <Center bg="background.specialSecondary" h="16" w="100%">
+          <Stack direction="column" spacing="8" mb="8">
+            <Center bg="background.specialSecondary" w="100%" h="16">
               Background special secondary
             </Center>
           </Stack>
@@ -646,13 +646,13 @@ export default function Components() {
       </Section>
 
       <Section id="typography">
-        <Heading as="h1" size="h1-hero" variant="special">
+        <Heading as="h1" variant="special" size="h1-hero">
           Typography
         </Heading>
 
         <Box mb="8">
           <Text variant="eyebrow">H1 Hero</Text>
-          <Heading as="h1" size="h1" variant="specialSecondary ">
+          <Heading as="h1" variant="specialSecondary " size="h1">
             Hero heading 1
           </Heading>
         </Box>
@@ -666,14 +666,14 @@ export default function Components() {
 
         <Box mb="8">
           <Text variant="eyebrow">H2</Text>
-          <Heading as="h2" size="h2" variant="h2">
+          <Heading variant="h2" as="h2" size="h2">
             Heading 2
           </Heading>
         </Box>
 
         <Box mb="8">
           <Text variant="eyebrow">H3</Text>
-          <Heading as="h3" size="h3" variant="h3">
+          <Heading variant="h3" as="h3" size="h3">
             Heading 3
           </Heading>
         </Box>
@@ -687,14 +687,14 @@ export default function Components() {
 
         <Box mb="8">
           <Text variant="eyebrow">H5</Text>
-          <Heading as="h5" size="h5" variant="h5">
+          <Heading variant="h5" as="h5" size="h5">
             Heading 5
           </Heading>
         </Box>
 
         <Box mb="8">
           <Text variant="eyebrow">H6</Text>
-          <Heading as="h6" size="h6" variant="h6">
+          <Heading variant="h6" as="h6" size="h6">
             Heading 6
           </Heading>
         </Box>
@@ -709,7 +709,7 @@ export default function Components() {
         </Box>
         <Box mb="8">
           <Text variant="eyebrow">Text secondary</Text>
-          <Text maxW="container.md" variant="secondary">
+          <Text variant="secondary" maxW="container.md">
             Body text lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora quidem ipsa
             magnam dignissimos impedit odit tempore, necessitatibus provident cupiditate. Explicabo
             iusto incidunt illum molestiae, dolores quam odit cupiditate id quibusdam!
@@ -717,13 +717,13 @@ export default function Components() {
         </Box>
         <Box mb="8">
           <Text variant="eyebrow">Text error</Text>
-          <Text maxW="container.md" variant="secondary">
+          <Text variant="secondary" maxW="container.md">
             Body text lorem ipsum dolor sit amet consectetur adipisicing elit.
           </Text>
         </Box>
         <Box mb="8">
           <Text variant="eyebrow">Text special</Text>
-          <Text maxW="container.md" variant="special">
+          <Text variant="special" maxW="container.md">
             Body text lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora quidem ipsa
             magnam dignissimos impedit odit tempore, necessitatibus provident cupiditate. Explicabo
             iusto incidunt illum molestiae, dolores quam odit cupiditate id quibusdam!
@@ -731,7 +731,7 @@ export default function Components() {
         </Box>
         <Box mb="8">
           <Text variant="eyebrow">Text special secondary</Text>
-          <Text maxW="container.md" variant="specialSecondary">
+          <Text variant="specialSecondary" maxW="container.md">
             Body text lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora quidem ipsa
             magnam dignissimos impedit odit tempore, necessitatibus provident cupiditate. Explicabo
             iusto incidunt illum molestiae, dolores quam odit cupiditate id quibusdam!
@@ -739,7 +739,7 @@ export default function Components() {
         </Box>
         <Box mb="8">
           <Text variant="eyebrow">Unordered list items</Text>
-          <Tag colorScheme="red" my="2">
+          <Tag my="2" colorScheme="red">
             To do
           </Tag>
           <UnorderedList>
@@ -763,7 +763,7 @@ export default function Components() {
         <Box mb="8">
           <Text variant="eyebrow">Link</Text>
           <Box>
-            <Link backgroundClip="text" bg="font.link" href="/cookies-policy">
+            <Link bg="font.link" backgroundClip="text" href="/cookies-policy">
               Cookies policy
             </Link>
           </Box>
@@ -781,14 +781,14 @@ export default function Components() {
       </Section>
 
       <Section id="buttons">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" variant="gradient-dusk" size="h1-hero">
           Buttons
         </Heading>
         <Section variant="subsection">
-          <Heading as="h2" size="h4">
+          <Heading size="h4" as="h2">
             Button sizes
           </Heading>
-          <Flex align="center" gap="4" wrap="wrap">
+          <Flex gap="4" align={'center'} wrap="wrap">
             <Button size="xs">xs button</Button>
             <Button size="sm">sm button</Button>
             <Button size="md">md button (default)</Button>
@@ -796,10 +796,10 @@ export default function Components() {
           </Flex>
         </Section>
         <Section variant="subsection">
-          <Heading as="h2" size="h4">
+          <Heading size="h4" as="h2">
             Button variants
           </Heading>
-          <Flex align="center" gap="4" wrap="wrap">
+          <Flex gap="4" align={'center'} wrap="wrap">
             <Button variant="solid">Solid button (default)</Button>
             <Button variant="outline">Outline button</Button>
             <Button variant="ghost">Ghost button</Button>
@@ -807,17 +807,17 @@ export default function Components() {
           </Flex>
         </Section>
         <Section variant="subsection">
-          <Heading as="h2" size="h4">
+          <Heading size="h4" as="h2">
             Custom{' '}
           </Heading>
-          <Flex align="center" gap="3" wrap="wrap">
-            <Button minW="160px" variant="primary">
+          <Flex gap="3" align={'center'} wrap="wrap">
+            <Button variant="primary" minW="160px">
               Primary
             </Button>
-            <Button minW="160px" variant="secondary">
+            <Button variant="secondary" minW="160px">
               Secondary
             </Button>
-            <Button minW="160px" variant="tertiary">
+            <Button variant="tertiary" minW="160px">
               Tertiary
             </Button>
           </Flex>
@@ -825,50 +825,50 @@ export default function Components() {
       </Section>
 
       <Section id="radius">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" variant="gradient-dusk" size="h1-hero">
           Border Radius
         </Heading>
         <Stack direction="row" flexWrap="wrap" mb="8">
-          <Center bg="background.level3" borderRadius="none" h="20" shadow="xl" w="20">
+          <Center h="20" w="20" borderRadius="none" bg="background.level3" shadow="xl">
             none
           </Center>
-          <Center bg="background.level3" borderRadius="sm" h="20" shadow="xl" w="20">
+          <Center h="20" w="20" borderRadius="sm" bg="background.level3" shadow="xl">
             <Box>
               <Center>sm</Center>
               <Center fontSize="xs">2px</Center>
             </Box>
           </Center>
-          <Center bg="background.level3" borderRadius="base" h="20" shadow="xl" w="20">
+          <Center h="20" w="20" borderRadius="base" bg="background.level3" shadow="xl">
             <Box>
               <Center>base</Center>
               <Center fontSize="xs">4px</Center>
             </Box>
           </Center>
-          <Center bg="background.level3" borderRadius="lg" h="20" shadow="xl" w="20">
+          <Center h="20" w="20" borderRadius="lg" bg="background.level3" shadow="xl">
             <Box>
               <Center>lg</Center>
               <Center fontSize="xs">8px</Center>
             </Box>
           </Center>
-          <Center bg="background.level3" borderRadius="xl" h="20" shadow="xl" w="20">
+          <Center h="20" w="20" borderRadius="xl" bg="background.level3" shadow="xl">
             <Box>
               <Center>xl</Center>
               <Center fontSize="xs">12px</Center>
             </Box>
           </Center>
-          <Center bg="background.level3" borderRadius="2xl" h="20" shadow="xl" w="20">
+          <Center h="20" w="20" borderRadius="2xl" bg="background.level3" shadow="xl">
             <Box>
               <Center>2xl</Center>
               <Center fontSize="xs">16px</Center>
             </Box>
           </Center>
-          <Center bg="background.level3" borderRadius="3xl" h="20" shadow="xl" w="20">
+          <Center h="20" w="20" borderRadius="3xl" bg="background.level3" shadow="xl">
             <Box>
               <Center>3xl</Center>
               <Center fontSize="xs">20px</Center>
             </Box>
           </Center>
-          <Center bg="background.level3" borderRadius="full" h="20" shadow="xl" w="20">
+          <Center h="20" w="20" borderRadius="full" bg="background.level3" shadow="xl">
             <Box>
               <Center>full</Center>
               <Center fontSize="xs">9999px</Center>
@@ -878,7 +878,7 @@ export default function Components() {
       </Section>
 
       <Section id="elevation">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" variant="gradient-dusk" size="h1-hero">
           Elevation
         </Heading>
         <Text mb="4">8 level elevation system</Text>
@@ -929,16 +929,16 @@ export default function Components() {
       </Section>
 
       <Section id="shadows">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" variant="gradient-dusk" size="h1-hero">
           Shadows
         </Heading>
         <Stack direction="row" flexWrap="wrap" mb="8">
-          <Card shadow="xs" variant="level5">
+          <Card variant="level5" shadow="xs">
             <CardBody>
               <Text>xs</Text>
             </CardBody>
           </Card>
-          <Card shadow="sm" variant="level5">
+          <Card variant="level5" shadow="sm">
             <CardBody>
               <Text>sm</Text>
             </CardBody>
@@ -1009,7 +1009,7 @@ export default function Components() {
       </Section>
 
       <Section id="alerts">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" variant="gradient-dusk" size="h1-hero">
           Alerts
         </Heading>
         <Section variant="subsection">
@@ -1045,13 +1045,13 @@ export default function Components() {
       </Section>
 
       <Section id="cards">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" variant="gradient-dusk" size="h1-hero">
           Cards
         </Heading>
         <Card maxW="md">
           <CardHeader>
             <Flex>
-              <Flex alignItems="center" flex="1" flexWrap="wrap" gap="4">
+              <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
                 <Avatar name="Avatar name" src="https://placehold.co/80" />
 
                 <Box>
@@ -1068,11 +1068,11 @@ export default function Components() {
               incidunt illum molestiae, dolores quam odit cupiditate id quibusdam!
             </Text>
           </CardBody>
-          <Image alt="Chakra UI" objectFit="cover" src="https://placehold.co/400x200" />
+          <Image objectFit="cover" src="https://placehold.co/400x200" alt="Chakra UI" />
 
           <CardFooter
-            flexWrap="wrap"
             justify="space-between"
+            flexWrap="wrap"
             sx={{
               '& > button': {
                 minW: '136px',
@@ -1093,12 +1093,12 @@ export default function Components() {
       </Section>
 
       <Section id="forms" maxW="375px">
-        <Heading as="h1" size="h1-hero" variant="gradient-dusk">
+        <Heading as="h1" variant="gradient-dusk" size="h1-hero">
           Form fields
         </Heading>
 
         <Box mb="8">
-          <Heading as="h3" size="h3" variant="gradient-dusk">
+          <Heading as="h3" variant="gradient-dusk" size="h3">
             Custom input fields
           </Heading>
           <Text>
@@ -1114,6 +1114,12 @@ export default function Components() {
                 <FormLabel>Input label</FormLabel>
                 <InputGroup>
                   <Input
+                    type="text"
+                    placeholder="Placeholder"
+                    bg="input.bgDefault"
+                    border="1px solid"
+                    borderColor="input.borderDefault"
+                    _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
                     _focus={{
                       bg: 'input.bgFocus',
                       borderColor: 'input.borderFocus',
@@ -1124,19 +1130,13 @@ export default function Components() {
                       shadow: 'input.innerFocus',
                       color: 'input.fontFocus',
                     }}
-                    _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
-                    bg="input.bgDefault"
-                    border="1px solid"
-                    borderColor="input.borderDefault"
-                    placeholder="Placeholder"
-                    type="text"
                   />
                   <InputRightElement>
                     {/* <IoCloseCircle color="input.clearIcon" />  */}
                     {/* This doesn't work, but color="yellow" does work... */}
                   </InputRightElement>
                 </InputGroup>
-                <FormHelperText color="input.fontHint" fontWeight="medium">
+                <FormHelperText fontWeight="medium" color="input.fontHint">
                   Hint text that is displayed on focus of the input
                 </FormHelperText>
               </FormControl>
@@ -1146,20 +1146,20 @@ export default function Components() {
             <FormControl isInvalid>
               <FormLabel>Input label</FormLabel>
               <Input
+                placeholder="Placeholder"
+                type="text"
+                defaultValue="500.00"
+                border="1px solid"
+                borderColor="yellow" // Not working
+                shadow="input.innerError" // Not working
+                errorBorderColor="red.400" // This works but I'd like to set it to 'inner.borderError' to also get the dark mode style
+                _hover={{ bg: 'input.bgHover' }}
                 _focusVisible={{
                   shadow: 'input.innerError', // Working
                   bg: 'input.bgFocus',
                 }}
-                _hover={{ bg: 'input.bgHover' }}
-                border="1px solid"
-                borderColor="yellow" // Not working
-                defaultValue="500.00"
-                errorBorderColor="red.400" // This works but I'd like to set it to 'inner.borderError' to also get the dark mode style
-                placeholder="Placeholder"
-                shadow="input.innerError" // Not working
-                type="text"
               />
-              <FormErrorMessage color="input.fontHintError" fontWeight="medium">
+              <FormErrorMessage fontWeight="medium" color="input.fontHintError">
                 Exceeds wallet balance
               </FormErrorMessage>
             </FormControl>
@@ -1169,6 +1169,14 @@ export default function Components() {
               <FormControl isDisabled>
                 <FormLabel>Disabled input label</FormLabel>
                 <Input
+                  type="email"
+                  isDisabled
+                  placeholder="Placeholder"
+                  bg="input.bgDefault"
+                  border="1px solid"
+                  // boxShadow="input.innerBase"
+                  borderColor="input.borderDefault"
+                  _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
                   _focus={{
                     bg: 'input.bgFocus',
                     borderColor: 'input.borderFocus',
@@ -1178,14 +1186,6 @@ export default function Components() {
                     borderColor: 'input.borderFocus',
                     shadow: 'input.innerFocus',
                   }}
-                  _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
-                  bg="input.bgDefault"
-                  isDisabled
-                  placeholder="Placeholder"
-                  type="email"
-                  border="1px solid"
-                  // boxShadow="input.innerBase"
-                  borderColor="input.borderDefault"
                 />
               </FormControl>
             </Box>
@@ -1193,28 +1193,28 @@ export default function Components() {
         </Section>
 
         <Box mb="8">
-          <Heading as="h3" size="h3" variant="gradient-dusk">
+          <Heading as="h3" variant="gradient-dusk" size="h3">
             Theme inputs
           </Heading>
           <Text>This is how it comes out of the theme.</Text>
         </Box>
 
         <Box mb="8">
-          <Text mb="4" variant="eyebrow">
+          <Text variant="eyebrow" mb="4">
             Input
           </Text>
           <Input placeholder="Placeholder text" />
         </Box>
 
         <Box mb="8">
-          <Text mb="4" variant="eyebrow">
+          <Text variant="eyebrow" mb="4">
             Disabled input
           </Text>
           <Input isDisabled placeholder="Placeholder text" />
         </Box>
 
         <Box mb="8">
-          <Text mb="4" variant="eyebrow">
+          <Text variant="eyebrow" mb="4">
             Select
           </Text>
           <Select placeholder="Select option">
@@ -1225,7 +1225,7 @@ export default function Components() {
         </Box>
 
         <Box mb="8">
-          <Text mb="4" variant="eyebrow">
+          <Text variant="eyebrow" mb="4">
             Checkbox
           </Text>
           <Stack>
@@ -1235,12 +1235,12 @@ export default function Components() {
         </Box>
 
         <Box mb="8">
-          <Text mb="4" variant="eyebrow">
+          <Text variant="eyebrow" mb="4">
             Radios
           </Text>
           <RadioGroup defaultValue="1">
             <Stack>
-              <Radio isDisabled value="1">
+              <Radio value="1" isDisabled>
                 Checked
               </Radio>
               <Radio value="2">Unchecked</Radio>
@@ -1250,7 +1250,7 @@ export default function Components() {
         </Box>
 
         <Box mb="8">
-          <Text mb="4" variant="eyebrow">
+          <Text variant="eyebrow" mb="4">
             Slider
           </Text>
           <Slider aria-label="slider-ex-1" defaultValue={30}>

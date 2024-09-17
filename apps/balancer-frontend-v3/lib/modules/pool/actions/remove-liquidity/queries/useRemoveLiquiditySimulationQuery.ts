@@ -18,6 +18,7 @@ export type RemoveLiquiditySimulationQueryResult = ReturnType<
 type Params = {
   handler: RemoveLiquidityHandler
   poolId: string
+  chainId: number
   humanBptIn: HumanAmount
   tokenOut: Address
   enabled?: boolean
@@ -26,6 +27,7 @@ type Params = {
 export function useRemoveLiquiditySimulationQuery({
   handler,
   poolId,
+  chainId,
   humanBptIn,
   tokenOut,
   enabled = true,
@@ -55,7 +57,10 @@ export function useRemoveLiquiditySimulationQuery({
     queryFn,
     enabled: enabled && isConnected && Number(debouncedHumanBptIn) > 0,
     gcTime: 0,
-    meta: sentryMetaForRemoveLiquidityHandler('Error in remove liquidity simulation query', params),
+    meta: sentryMetaForRemoveLiquidityHandler('Error in remove liquidity simulation query', {
+      ...params,
+      chainId,
+    }),
     ...onlyExplicitRefetch,
   })
   return result

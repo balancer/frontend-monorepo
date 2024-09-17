@@ -28,7 +28,7 @@ export function VeBalLink({ triggerEl, ...props }: VebalRedirectModalProps) {
 
   return (
     <>
-      <Link color="font.primary" onClick={onOpen} variant="nav" {...props}>
+      <Link onClick={onOpen} variant="nav" color="font.primary" {...props}>
         {triggerEl || 'veBAL'}
       </Link>
 
@@ -39,7 +39,7 @@ export function VeBalLink({ triggerEl, ...props }: VebalRedirectModalProps) {
 
 export function VebalRedirectModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>veBAL redirect</ModalHeader>

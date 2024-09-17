@@ -50,11 +50,11 @@ export function PoolListSortType() {
   return (
     <Box w="48">
       <Select<SortOption, false, GroupBase<SortOption>>
-        chakraStyles={chakraStyles}
         instanceId="pool-list-sort"
-        onChange={handleChange}
-        options={options}
         value={_value}
+        options={options}
+        onChange={handleChange}
+        chakraStyles={chakraStyles}
       />
     </Box>
   )

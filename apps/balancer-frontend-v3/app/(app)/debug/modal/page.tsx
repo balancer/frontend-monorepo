@@ -31,34 +31,34 @@ export default function ModalPage() {
     <>
       <Button onClick={onOpen}>Open Modal</Button>
 
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <SuccessOverlay startAnimation={!!txHash} />
         <ModalContent>
-          <TransactionModalHeader chain={GqlChain.Mainnet} label="Add liquidity" txHash={txHash} />
+          <TransactionModalHeader label="Add liquidity" txHash={txHash} chain={GqlChain.Mainnet} />
           <ModalCloseButton />
           <motion.div animate={{ height: height || 'auto ' }}>
             <AnimatePresence initial={false}>
               <ModalBody ref={ref}>
-                <AnimatePresence initial={false} mode="wait">
+                <AnimatePresence mode="wait" initial={false}>
                   {txHash ? (
                     <motion.div
+                      key="receipt"
+                      initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      key="receipt"
                       transition={{ duration: 0.3 }}
                     >
-                      <Box bg="red" h="100px" w="full" />
+                      <Box h="100px" w="full" bg="red" />
                     </motion.div>
                   ) : (
                     <motion.div
+                      key="preview"
+                      initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      key="preview"
                       transition={{ duration: 0.3 }}
                     >
-                      <Box bg="blue" h="200px" w="full" />
+                      <Box h="200px" w="full" bg="blue" />
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -67,30 +67,30 @@ export default function ModalPage() {
           </motion.div>
 
           <ModalFooter>
-            <AnimatePresence initial={false} mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
               {txHash ? (
                 <motion.div
+                  key="footer"
+                  initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  key="footer"
-                  style={{ width: '100%' }}
                   transition={{ duration: 0.3 }}
+                  style={{ width: '100%' }}
                 >
-                  <Button onClick={toggleSuccess} size="lg" w="full">
+                  <Button onClick={toggleSuccess} w="full" size="lg">
                     Toggle
                   </Button>
                 </motion.div>
               ) : (
                 <motion.div
+                  key="action"
+                  initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  key="action"
-                  style={{ width: '100%' }}
                   transition={{ duration: 0.3 }}
+                  style={{ width: '100%' }}
                 >
-                  <Button onClick={toggleSuccess} size="lg" w="full">
+                  <Button onClick={toggleSuccess} w="full" size="lg">
                     Toggle
                   </Button>
                 </motion.div>

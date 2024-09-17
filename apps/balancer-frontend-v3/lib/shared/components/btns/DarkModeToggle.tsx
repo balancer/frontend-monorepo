@@ -38,14 +38,14 @@ export default function DarkModeToggle() {
 
   if (!mounted) {
     return (
-      <Button isDisabled p="0" variant="tertiary">
+      <Button variant="tertiary" p="0" isDisabled>
         <Moon size={18} />
       </Button>
     )
   }
 
   return (
-    <Button onClick={toggleColorMode} p="0" variant="tertiary">
+    <Button onClick={toggleColorMode} variant="tertiary" p="0">
       <AnimatePresence initial={false}>
         {theme === 'light' ? (
           <motion.i {...animationSun}>

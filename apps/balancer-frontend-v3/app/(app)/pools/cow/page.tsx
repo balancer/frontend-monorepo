@@ -25,7 +25,7 @@ export default function PoolsPage() {
         borderColor="border.base"
         shadow="innerBase"
       >
-        <DefaultPageContainer pb={['xl', '2xl']} pt={['xl', '40px']}>
+        <DefaultPageContainer pt={['xl', '40px']} pb={['xl', '2xl']}>
           <FadeInOnView animateOnce={false}>
             <Box>
               <CowHeader />
@@ -34,9 +34,9 @@ export default function PoolsPage() {
         </DefaultPageContainer>
       </Box>
 
-      <DefaultPageContainer noVerticalPadding pb={['xl', '2xl']} pt={['lg', '54px']}>
+      <DefaultPageContainer pt={['lg', '54px']} pb={['xl', '2xl']} noVerticalPadding>
         <FadeInOnView animateOnce={false}>
-          <Suspense fallback={<Skeleton h="500px" w="full" />}>
+          <Suspense fallback={<Skeleton w="full" h="500px" />}>
             <PoolList fixedPoolTypes={[GqlPoolType.CowAmm]} />
           </Suspense>
         </FadeInOnView>

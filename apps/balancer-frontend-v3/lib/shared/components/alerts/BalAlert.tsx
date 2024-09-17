@@ -23,33 +23,33 @@ export function BalAlert({
   onClose,
 }: BalAlertProps) {
   return (
-    <Alert rounded={isNavAlert ? 'none' : 'default'} status={status}>
+    <Alert status={status} rounded={isNavAlert ? 'none' : 'default'}>
       {ssr ? <AlertIcon /> : <AlertIcon as={getAlertIcon(status)} />}
 
       <AlertTitle
-        color="black"
-        display="flex"
-        flexDirection="column"
         gap={1}
+        display="flex"
         w="full"
+        color="black"
         wordBreak="break-word"
+        flexDirection="column"
       >
         {content}
       </AlertTitle>
-      {learnMoreLink ? <BalAlertButtonLink href={learnMoreLink}>More</BalAlertButtonLink> : null}
-      {isSoftWarning ? (
+      {learnMoreLink && <BalAlertButtonLink href={learnMoreLink}>More</BalAlertButtonLink>}
+      {isSoftWarning && (
         <CloseButton
+          onClick={onClose}
+          variant="softWarning"
+          color="font.dark"
+          ml="auto"
+          size="sm"
+          aria-label="Close"
           _hover={{
             transform: 'scale(1.2)',
           }}
-          aria-label="Close"
-          color="font.dark"
-          ml="auto"
-          onClick={onClose}
-          size="sm"
-          variant="softWarning"
         />
-      ) : null}
+      )}
     </Alert>
   )
 }

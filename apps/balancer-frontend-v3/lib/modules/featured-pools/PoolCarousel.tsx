@@ -40,47 +40,47 @@ export function PoolCarousel({ featuredPools, getGraphic, ...rest }: Props & Box
   return (
     <Box {...swipeHandlers} {...rest} zIndex={9999}>
       <Card
-        alignItems="center"
-        display="flex"
-        justifyContent="center"
-        paddingTop="26px !important"
-        pos="relative"
-        position="relative"
         w="full"
+        pos="relative"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        position="relative"
+        paddingTop="26px !important"
         zIndex={9999}
       >
         <Box position="absolute" top="0">
-          <Text color="font.secondary" fontSize="10px" px="4" py="1.5" variant="eyebrow">
+          <Text color="font.secondary" variant="eyebrow" px="4" py="1.5" fontSize="10px">
             Featured pools
           </Text>
         </Box>
-        <Box cursor="pointer" h="full" left="0" onClick={prev} pos="absolute" top="0" w="8" />
-        <Box cursor="pointer" h="full" onClick={next} pos="absolute" right="0" top="0" w="8" />
+        <Box pos="absolute" w="8" h="full" top="0" left="0" cursor="pointer" onClick={prev} />
+        <Box pos="absolute" w="8" h="full" top="0" right="0" cursor="pointer" onClick={next} />
         <FeaturePoolCard
-          bgSize="300px"
-          carouselDirection={direction}
-          carouselIndex={currentIndex}
-          chain={currentPool.chain}
-          featuredReason={featuredPools[currentIndex].description}
-          graphic={getGraphic(currentIndex)}
-          isCarousel
-          isSmall
           key={`pool-carousel-card-${currentIndex}`}
           pool={currentPool}
+          chain={currentPool.chain}
+          bgSize="300px"
+          isCarousel
+          isSmall
+          carouselIndex={currentIndex}
+          carouselDirection={direction}
+          featuredReason={featuredPools[currentIndex].description}
+          graphic={getGraphic(currentIndex)}
         />
       </Card>
-      <Center mt="md" w="full">
+      <Center w="full" mt="md">
         {featuredPools.map((featured, index) => (
           <Box
+            key={featured.pool.id}
+            w="3"
+            h="3"
             bg={index === currentIndex ? 'font.highlight' : 'border.base'}
             borderRadius="full"
             cursor="pointer"
-            h="3"
-            key={featured.pool.id}
-            mx="xs"
             onClick={() => pick(index)}
+            mx="xs"
             transition="all 0.2s ease-out"
-            w="3"
           />
         ))}
       </Center>

@@ -30,8 +30,8 @@ export default function Page() {
       <BalAlert content={<TitleWithButton title="Success alert" />} status="success" />
       <BalAlert
         content="Warning alert with close button (soft warning)"
-        isSoftWarning
         status="warning"
+        isSoftWarning
       />
       <BalAlert
         content="Error alert with learn more button link"
@@ -41,15 +41,18 @@ export default function Page() {
       <BalAlert
         content={
           <BalAlertContent
+            title="Info alert"
             description="With description in the next line (forceColumnMode)"
             forceColumnMode
-            title="Info alert"
-          />
+          ></BalAlertContent>
         }
         status="info"
       />
 
-      <GenericError error={new TestError(exceptionName, exceptionMessage)} maxWidth="500" />
+      <GenericError
+        error={new TestError(exceptionName, exceptionMessage)}
+        maxWidth="500"
+      ></GenericError>
 
       <Button
         onClick={() =>
@@ -70,8 +73,8 @@ export default function Page() {
 function TitleWithButton({ title }: { title: string }) {
   return (
     <BalAlertContent
-      description="Optional description"
       title={title}
+      description="Optional description"
       tooltipLabel="Optional tooltip"
     >
       <BalAlertButton onClick={() => console.log('Clicked')}>Click me</BalAlertButton>

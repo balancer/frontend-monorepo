@@ -84,57 +84,57 @@ export function TokenInputsWithAddable({
 
   return (
     <VStack spacing="md" w="full">
-      {requiresProportionalInput && !hasNoLiquidity(pool) ? (
-        <BalAlert content="This pool requires liquidity to be added proportionally" status="info" />
-      ) : null}
-      {isConnected ? (
-        <Card p={['sm', 'ms']} variant="subSection" w="full">
+      {requiresProportionalInput && !hasNoLiquidity(pool) && (
+        <BalAlert status="info" content="This pool requires liquidity to be added proportionally" />
+      )}
+      {isConnected && (
+        <Card variant="subSection" w="full" p={['sm', 'ms']}>
           <HStack w="full">
             <Box as="span" color="grayText">
               <WalletIcon size={18} />
             </Box>
             <HStack spacing="xs">
               {!requiresProportionalInput && canMaximizeForProportionalInput ? (
-                <Text color="grayText" fontSize="sm">
+                <Text fontSize="sm" color="grayText">
                   <Box
                     as="span"
                     color="font.highlight"
-                    cursor="pointer"
                     onClick={handleWantsProportional}
+                    cursor="pointer"
                   >
                     {`${wantsProportional ? 'Proportional ' : 'Total '}`}
                   </Box>
                   addable pool tokens
                 </Text>
               ) : (
-                <Text color="grayText" fontSize="sm">
+                <Text fontSize="sm" color="grayText">
                   Addable pool tokens
                 </Text>
               )}
             </HStack>
             <Spacer />
-            {canMaximize ? (
+            {canMaximize && (
               <>
-                <Text color="grayText" fontSize="sm">
+                <Text fontSize="sm" color="grayText">
                   {toCurrency(maximizedUsdValue, { abbreviated: false })}
                 </Text>
-                {isMaximized ? (
-                  <Text color="grayText" cursor="not-allowed" fontSize="sm" opacity="0.5">
+                {isMaximized && (
+                  <Text fontSize="sm" color="grayText" cursor="not-allowed" opacity="0.5">
                     Maxed
                   </Text>
-                ) : null}
+                )}
                 {!isMaximized && (
                   <Text
-                    color="font.highlight"
-                    cursor="pointer"
                     fontSize="sm"
+                    color="font.highlight"
                     onClick={() => handleMaximizeUserAmounts()}
+                    cursor="pointer"
                   >
                     Max
                   </Text>
                 )}
               </>
-            ) : null}
+            )}
             {!canMaximize && (
               <Tooltip
                 label={
@@ -144,7 +144,7 @@ export function TokenInputsWithAddable({
                 }
               >
                 <HStack>
-                  <Text color="red.400" fontSize="sm">
+                  <Text fontSize="sm" color="red.400">
                     {toCurrency('0', { abbreviated: false })}
                   </Text>
                   <Box color="red.400">
@@ -155,11 +155,11 @@ export function TokenInputsWithAddable({
             )}
           </HStack>
         </Card>
-      ) : null}
+      )}
       <TokenInputs
-        customSetAmountIn={setAmountIn}
         tokenSelectDisclosureOpen={tokenSelectDisclosureOpen}
-      />
+        customSetAmountIn={setAmountIn}
+      ></TokenInputs>
     </VStack>
   )
 }

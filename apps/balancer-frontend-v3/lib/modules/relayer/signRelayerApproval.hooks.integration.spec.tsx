@@ -10,13 +10,11 @@ import { useSignRelayerApproval } from './signRelayerApproval.hooks'
 import { useRelayerSignature } from './RelayerSignatureProvider'
 import { connectWithDefaultUser } from '../../../test/utils/wagmi/wagmi-connections'
 
-function Providers({ children }: PropsWithChildren) {
-  return (
-    <DefaultPoolTestProvider>
-      <DefaultAddLiquidityTestProvider>{children}</DefaultAddLiquidityTestProvider>
-    </DefaultPoolTestProvider>
-  )
-}
+const Providers = ({ children }: PropsWithChildren) => (
+  <DefaultPoolTestProvider>
+    <DefaultAddLiquidityTestProvider>{children}</DefaultAddLiquidityTestProvider>
+  </DefaultPoolTestProvider>
+)
 
 test('Signs relayer approval and saves signature in the addLiquidity provider state', async () => {
   await connectWithDefaultUser()

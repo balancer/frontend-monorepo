@@ -19,11 +19,11 @@ export function ReceiptTokenOutRow({
   const expectedTokenOut = simulationQuery?.data?.returnAmount as HumanAmount
   return (
     <SwapTokenRow
-      chain={chain}
       label="You got"
       rightLabel={slippageDiffLabel(actualReceivedTokenAmount, expectedTokenOut)}
-      tokenAddress={tokenAddress}
+      chain={chain}
       tokenAmount={actualReceivedTokenAmount}
+      tokenAddress={tokenAddress}
     />
   )
 }
@@ -44,17 +44,17 @@ export function SwapTokenRow({
   return (
     <VStack align="start" spacing="md">
       <HStack justify="space-between" w="full">
-        <Text color="font.primary" variant="primaryGradient">
+        <Text color="font.primary" variant={'primaryGradient'}>
           {label}
         </Text>
-        {rightLabel ? <Text color="font.primary">{rightLabel}</Text> : null}
+        {rightLabel && <Text color="font.primary">{rightLabel}</Text>}
       </HStack>
 
       <TokenRow
-        abbreviated={false}
+        value={tokenAmount}
         address={tokenAddress as Address}
         chain={chain}
-        value={tokenAmount}
+        abbreviated={false}
       />
     </VStack>
   )

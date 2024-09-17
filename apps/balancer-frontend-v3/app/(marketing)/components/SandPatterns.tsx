@@ -43,24 +43,24 @@ const SandPatterns: React.FC<SandPatternsProps> = ({ children, ...rest }) => {
   }, [controls, shouldReduceMotion])
 
   return (
-    <Box height="100vh" position="relative" width="100%">
+    <Box position="relative" width="100%" height="100vh">
       {circles.map((_, index) => (
         <motion.div
-          animate={controls}
-          custom={index}
-          initial={{ width: 0, height: 0, borderRadius: 50 }}
           key={index}
           style={circleStyle}
+          initial={{ width: 0, height: 0, borderRadius: 50 }}
+          animate={controls}
+          custom={index}
         />
       ))}
       <Flex
-        alignItems="center"
-        bottom="0"
-        justifyContent="center"
-        left="0"
         position="absolute"
-        right="0"
         top="0"
+        left="0"
+        right="0"
+        bottom="0"
+        alignItems="center"
+        justifyContent="center"
         zIndex={1}
         {...rest}
       >

@@ -58,7 +58,10 @@ describe('Captures sentry error', () => {
     }
 
     const error = new Error('test cause error')
-    const meta = sentryMetaForRemoveLiquidityHandler('Test error message', params)
+    const meta = sentryMetaForRemoveLiquidityHandler('Test error message', {
+      ...params,
+      chainId: 1,
+    })
     captureSentryError(error, meta)
 
     const report = await getSentryReport()
@@ -70,6 +73,7 @@ describe('Captures sentry error', () => {
       {
         "handler": "RecoveryRemoveLiquidityHandler",
         "params": {
+          "chainId": 1,
           "handler": {
             "helpers": "[LiquidityActionHelpers]",
           },
@@ -97,7 +101,7 @@ describe('Captures sentry error', () => {
     }
 
     const error = new Error('test cause error')
-    const meta = sentryMetaForAddLiquidityHandler('Test error message', params)
+    const meta = sentryMetaForAddLiquidityHandler('Test error message', { ...params, chainId: 1 })
     captureSentryError(error, meta)
 
     const report = await getSentryReport()
@@ -109,6 +113,7 @@ describe('Captures sentry error', () => {
       {
         "handler": "UnbalancedAddLiquidityHandler",
         "params": {
+          "chainId": 1,
           "handler": {
             "helpers": "[LiquidityActionHelpers]",
           },

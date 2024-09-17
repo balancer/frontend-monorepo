@@ -67,16 +67,16 @@ export default function Cookies() {
                 You are free to fork it on Github and modify it as you wish.
               </p>
               <p>This website uses the following 3rd party services:</p>
-              <VStack align="start" spacing="xl" w="full">
+              <VStack w="full" align="start" spacing="xl">
                 {services.map(service => (
-                  <HStack align="start" key={service.name} spacing="md">
+                  <HStack key={service.name} align="start" spacing="md">
                     <Image
+                      src={service.iconUrl}
                       alt={service.name}
                       borderRadius="full"
                       boxSize="50px"
-                      src={service.iconUrl}
                     />
-                    <VStack align="start" lineHeight={1} spacing="xs" w="full">
+                    <VStack w="full" align="start" lineHeight={1} spacing="xs">
                       <Text as="span" fontSize="xl" fontWeight="bold">
                         {service.name}
                       </Text>

@@ -37,22 +37,22 @@ export function PoolListTable({ pools, count, loading }: Props) {
 
   return (
     <Card
-      alignItems="flex-start"
-      left={{ base: '-4px', sm: '0' }}
       p={{ base: '0', sm: '0' }}
-      position="relative"
       w={{ base: '100vw', lg: 'full' }}
+      alignItems="flex-start"
+      position="relative"
+      left={{ base: '-4px', sm: '0' }}
     >
       <PaginatedTable
         items={pools}
         loading={loading}
-        noItemsFoundLabel="No pools found"
-        paginationProps={paginationProps}
         renderTableHeader={() => <PoolListTableHeader {...rowProps} />}
         renderTableRow={(item: PoolListItem, index) => {
           return <PoolListTableRow keyValue={index} pool={item} {...rowProps} />
         }}
         showPagination={showPagination}
+        paginationProps={paginationProps}
+        noItemsFoundLabel="No pools found"
       />
     </Card>
   )

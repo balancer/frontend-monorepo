@@ -11,7 +11,7 @@ type Props = { transactionHash?: Address; chain: GqlChain }
 export function BlockExplorerLink({ chain, transactionHash }: Props) {
   if (!transactionHash) return null
   return (
-    <Link href={getBlockExplorerTxUrl(transactionHash, chain)} target="_blank">
+    <Link target="_blank" href={getBlockExplorerTxUrl(transactionHash, chain)}>
       <HStack color="grayText">
         <Text fontSize="sm" variant="secondary">
           View on {getBlockExplorerName(chain)}

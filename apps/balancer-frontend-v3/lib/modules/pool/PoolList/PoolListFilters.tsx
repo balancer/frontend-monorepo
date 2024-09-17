@@ -87,8 +87,8 @@ function UserPoolFilter() {
 
   return (
     <Checkbox
-      isChecked={checked}
       mb="xxs"
+      isChecked={checked}
       onChange={e => toggleUserAddress(e.target.checked, connectedUserAddress as string)}
     >
       <Text fontSize="sm">My positions</Text>
@@ -108,9 +108,9 @@ function PoolCategoryFilters() {
   }, [poolCategories])
 
   return (
-    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+    <Box as={motion.div} initial="hidden" animate="show" exit="exit" variants={staggeredFadeInUp}>
       {poolCategoryFilters.map(category => (
-        <Box as={motion.div} key={category} variants={staggeredFadeInUp}>
+        <Box key={category} as={motion.div} variants={staggeredFadeInUp}>
           <Checkbox
             isChecked={!!poolCategories.find(selected => selected === category)}
             onChange={e => togglePoolCategory(e.target.checked, category as PoolCategoryType)}
@@ -134,9 +134,9 @@ function PoolTypeFilters() {
   }, [poolTypes])
 
   return (
-    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+    <Box as={motion.div} initial="hidden" animate="show" exit="exit" variants={staggeredFadeInUp}>
       {poolTypeFilters.map(poolType => (
-        <Box as={motion.div} key={poolType} variants={staggeredFadeInUp}>
+        <Box key={poolType} as={motion.div} variants={staggeredFadeInUp}>
           <Checkbox
             isChecked={!!poolTypes.find(selected => selected === poolType)}
             onChange={e => togglePoolType(e.target.checked, poolType as PoolFilterType)}
@@ -162,7 +162,7 @@ function PoolNetworkFilters() {
     label: getChainShortName(network),
     value: network,
     selectedLabel: (
-      <Image alt={network} height="20" src={`/images/chains/${network}.svg`} width="20" />
+      <Image src={`/images/chains/${network}.svg`} alt={network} width="20" height="20" />
     ),
   }))
 
@@ -172,11 +172,11 @@ function PoolNetworkFilters() {
 
   return (
     <MultiSelect<GqlChain>
-      isChecked={isCheckedNetwork}
-      label="All networks"
       options={networkOptions}
-      toggleAll={() => setNetworks(null)}
+      isChecked={isCheckedNetwork}
       toggleOption={toggleNetwork}
+      toggleAll={() => setNetworks(null)}
+      label="All networks"
     />
   )
 }
@@ -204,7 +204,7 @@ function PoolMinTvlFilter() {
   return (
     <VStack w="full">
       <HStack w="full">
-        <Heading as="h3" mb="xs" mt="sm" size="sm">
+        <Heading as="h3" size="sm" mt="sm" mb="xs">
           Minimum TVL
         </Heading>
         <Text fontSize="sm" ml="auto">
@@ -213,12 +213,12 @@ function PoolMinTvlFilter() {
       </HStack>
       <Slider
         aria-label="slider-min-tvl"
-        max={SLIDER_MAX_VALUE}
-        min={0}
-        ml="sm"
         onChange={val => setSliderValue(val)}
-        step={SLIDER_STEP_SIZE}
         value={sliderValue}
+        min={0}
+        max={SLIDER_MAX_VALUE}
+        step={SLIDER_STEP_SIZE}
+        ml="sm"
       >
         <SliderTrack>
           <SliderFilledTrack />
@@ -258,10 +258,10 @@ export function FilterTags() {
       <AnimatePresence>
         {poolTypes.map(poolType => (
           <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 0 }}
-            initial={{ opacity: 0, y: 40 }}
             key={poolType}
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            exit={{ opacity: 0, y: 0 }}
             transition={{
               enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
               exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
@@ -281,10 +281,10 @@ export function FilterTags() {
       <AnimatePresence>
         {networks.map(network => (
           <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 0 }}
-            initial={{ opacity: 0, y: 40 }}
             key={network}
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            exit={{ opacity: 0, y: 0 }}
             transition={{
               enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
               exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
@@ -304,10 +304,10 @@ export function FilterTags() {
       {minTvl > 0 && (
         <AnimatePresence>
           <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 0 }}
-            initial={{ opacity: 0, y: 40 }}
             key="minTvl"
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            exit={{ opacity: 0, y: 0 }}
             transition={{
               enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
               exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
@@ -327,10 +327,10 @@ export function FilterTags() {
       <AnimatePresence>
         {poolCategories.map(poolCategory => (
           <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 0 }}
-            initial={{ opacity: 0, y: 40 }}
             key={poolCategory}
+            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            exit={{ opacity: 0, y: 0 }}
             transition={{
               enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
               exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
@@ -363,13 +363,13 @@ const FilterButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
       {totalFilterCount > 0 && (
         <Badge
           bg="font.highlight"
-          borderRadius="full"
           color={textColor}
+          borderRadius="full"
           p="0"
           position="absolute"
           right="-9px"
-          shadow="lg"
           top="-9px"
+          shadow="lg"
         >
           <Center h="5" w="5">
             {totalFilterCount}
@@ -388,47 +388,47 @@ export function PoolListFilters() {
 
   return (
     <VStack w="full">
-      <HStack gap="0" justify="end" spacing="none" w="full">
+      <HStack w="full" spacing="none" justify="end" gap="0">
         <PoolListSearch />
         <Popover
           isOpen={isPopoverOpen}
-          onClose={() => setIsPopoverOpen(false)}
           onOpen={() => setIsPopoverOpen(true)}
+          onClose={() => setIsPopoverOpen(false)}
           placement="bottom-end"
         >
           <PopoverTrigger>
             <FilterButton ml="ms" />
           </PopoverTrigger>
-          <Box shadow="2xl" zIndex="popover">
+          <Box zIndex="popover" shadow="2xl">
             <PopoverContent>
               <PopoverArrow bg="background.level3" />
               <PopoverCloseButton top="sm" />
               <PopoverBody p="md">
                 <AnimatePresence>
-                  {isPopoverOpen ? (
+                  {isPopoverOpen && (
                     <VStack
                       align="start"
-                      animate="show"
-                      as={motion.div}
-                      exit="exit"
-                      initial="hidden"
                       spacing="xxs"
+                      as={motion.div}
+                      initial="hidden"
+                      animate="show"
+                      exit="exit"
                       variants={staggeredFadeInUp}
                     >
-                      <Box as={motion.div} lineHeight="0" p="0" variants={staggeredFadeInUp}>
-                        <Flex alignItems="center" gap="ms" justifyContent="space-between" w="full">
+                      <Box lineHeight="0" p="0" as={motion.div} variants={staggeredFadeInUp}>
+                        <Flex gap="ms" alignItems="center" w="full" justifyContent="space-between">
                           <Text
+                            variant="eyebrow"
                             background="font.special"
                             backgroundClip="text"
-                            display="inline"
                             fontSize="xs"
+                            display="inline"
                             lineHeight="1"
-                            variant="eyebrow"
                           >
                             Filters
                           </Text>
 
-                          <Button onClick={resetFilters} size="xs" variant="link">
+                          <Button size="xs" variant="link" onClick={resetFilters}>
                             {totalFilterCount === 0 ? (
                               <VisuallyHidden>Reset all</VisuallyHidden>
                             ) : (
@@ -438,40 +438,40 @@ export function PoolListFilters() {
                         </Flex>
                       </Box>
 
-                      {isConnected ? (
+                      {isConnected && (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
-                          <Heading as="h3" my="sm" size="sm">
+                          <Heading as="h3" size="sm" my="sm">
                             My liquidity
                           </Heading>
                           <UserPoolFilter />
                         </Box>
-                      ) : null}
+                      )}
                       <Box as={motion.div} variants={staggeredFadeInUp} w="full">
-                        <Heading as="h3" my="sm" size="sm">
+                        <Heading as="h3" size="sm" my="sm">
                           Networks
                         </Heading>
                         <PoolNetworkFilters />
                       </Box>
                       {!isFixedPoolType && (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
-                          <Heading as="h3" my="sm" size="sm">
+                          <Heading as="h3" size="sm" my="sm">
                             Pool types
                           </Heading>
                           <PoolTypeFilters />
                         </Box>
                       )}
                       <Box as={motion.div} variants={staggeredFadeInUp}>
-                        <Heading as="h3" my="sm" size="sm">
+                        <Heading as="h3" size="sm" my="sm">
                           Pool categories
                         </Heading>
                         <PoolCategoryFilters />
                       </Box>
 
-                      <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
+                      <Box mb="xs" as={motion.div} variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />
                       </Box>
                     </VStack>
-                  ) : null}
+                  )}
                 </AnimatePresence>
               </PopoverBody>
             </PopoverContent>

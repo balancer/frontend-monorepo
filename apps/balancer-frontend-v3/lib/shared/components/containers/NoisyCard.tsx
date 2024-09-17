@@ -45,38 +45,38 @@ export function NoisyCard({
     <Box
       as={motion.div}
       backgroundImage={`url('/images/background-noise.png')`}
+      width="full"
+      rounded="sm"
       borderWidth={0}
       onMouseMove={handleMouseMove}
       position="relative"
-      rounded="sm"
-      width="full"
       {...cardProps}
       role="group"
     >
       <MotionBox
-        _groupHover={{ opacity: 1 }}
-        borderRadius="xl"
-        inset="-1px"
-        opacity="0"
         position="absolute"
+        inset="-1px"
+        borderRadius="xl"
+        opacity="0"
+        zIndex="0"
+        transition="opacity 300ms"
         style={{
           background: gradient,
         }}
-        transition="opacity 300ms"
-        zIndex="0"
+        _groupHover={{ opacity: 1 }}
       />
       <Box
-        content=""
-        height="full"
         position="absolute"
-        shadow="innerXl"
         width="full"
+        height="full"
+        content=""
+        shadow="innerXl"
         {...shadowContainerProps}
       />
       <Box
-        backgroundColor="background.level0WithOpacity"
-        height="full"
         width="full"
+        height="full"
+        backgroundColor="background.level0WithOpacity"
         {...contentProps}
       >
         {children}

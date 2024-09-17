@@ -13,22 +13,21 @@ export function Steps({ transactionSteps }: Props) {
 
   return (
     <VStack align="start" spacing="xs">
-      {steps
-        ? steps.map((step, index) => (
-            <div key={step.id + index}>
-              <Step
-                colorMode={colorMode}
-                currentIndex={currentStepIndex}
-                index={index}
-                isLastStep={isLastStep(index)}
-                step={step}
-              />
-              {!isLastStep(index) && (
-                <Box background="border.base" h="4" ml="3" mt="1" rounded="full" w="1" />
-              )}
-            </div>
-          ))
-        : null}
+      {steps &&
+        steps.map((step, index) => (
+          <div key={step.id + index}>
+            <Step
+              currentIndex={currentStepIndex}
+              index={index}
+              step={step}
+              colorMode={colorMode}
+              isLastStep={isLastStep(index)}
+            />
+            {!isLastStep(index) && (
+              <Box h="4" w="1" rounded="full" background="border.base" ml="3" mt="1" />
+            )}
+          </div>
+        ))}
     </VStack>
   )
 }

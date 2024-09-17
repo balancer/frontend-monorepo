@@ -34,11 +34,11 @@ export function PoolActivityViewType() {
 
   return (
     <ButtonGroup
-      currentOption={currentOption}
-      groupId="pool-chart-view"
-      onChange={changeListView}
-      options={options}
       size="xxs"
+      currentOption={currentOption}
+      options={options}
+      onChange={changeListView}
+      groupId="pool-chart-view"
     />
   )
 }

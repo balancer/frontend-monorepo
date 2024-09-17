@@ -59,40 +59,40 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
     }))
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered preserveScrollBarGap>
       <SuccessOverlay startAnimation={!!claimTxHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop ? (
-          <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
-        ) : null}
+        {isDesktop && (
+          <DesktopStepTracker transactionSteps={transactionSteps} chain={GqlChain.Mainnet} />
+        )}
         <TransactionModalHeader
-          chain={GqlChain.Mainnet}
           label="Claim protocol revenue share"
           txHash={claimTxHash}
+          chain={GqlChain.Mainnet}
         />
         <ModalCloseButton />
         <ModalBody>
           <AnimateHeightChange spacing="sm" w="full">
-            {isMobile ? (
-              <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
-            ) : null}
+            {isMobile && (
+              <MobileStepTracker transactionSteps={transactionSteps} chain={GqlChain.Mainnet} />
+            )}
 
             <Card variant="modalSubSection">
               <TokenRowGroup
-                amounts={rewards}
-                chain={GqlChain.Mainnet}
                 label={claimTxHash ? 'You got' : "You'll get"}
+                amounts={rewards}
                 totalUSDValue={rewardsBalanceSnapshot.toString()}
+                chain={GqlChain.Mainnet}
               />
             </Card>
           </AnimateHeightChange>
         </ModalBody>
         <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
           isSuccess={!!claimTxHash}
-          returnAction={onClose}
+          currentStep={transactionSteps.currentStep}
           returnLabel="Return to portfolio"
+          returnAction={onClose}
         />
       </ModalContent>
     </Modal>

@@ -18,42 +18,42 @@ function ProtocolStatItem({ title, value, imgName, isLoading }: ProtocolStatsSec
   }
 
   return (
-    <ParallaxImage overflow="none" scaleStart="95" transformOrigin="top" yEnd="-2%" yStart="0%">
+    <ParallaxImage yStart="0%" yEnd="-2%" transformOrigin="top" overflow="none" scaleStart="95">
       <Box position="relative" rounded="full">
         <Center>
-          <Box className="enso" rounded="full">
+          <Box rounded="full" className="enso">
             <Picture
+              imgName={imgName}
               altText="Liquidity pools"
               defaultImgType="png"
-              imgName={imgName}
-              imgPng
-              imgPngDark
+              imgPngDark={true}
+              imgPng={true}
             />
           </Box>
 
           <Box
-            left="50%"
-            position="absolute"
-            px="ms"
             textAlign="center"
+            position="absolute"
             top="46%"
+            left="50%"
             transform="translate(-50%,-50%)"
-            width="full"
             zIndex="10"
+            width="full"
+            px="ms"
           >
             <Box pb="xxs">
-              <Text color="font.dark" fontSize={{ base: 'sm', md: 'md' }}>
+              <Text fontSize={{ base: 'sm', md: 'md' }} color="font.dark">
                 {title}
               </Text>
             </Box>
-            <Box left="50%" position="absolute" transform="translateX(-50%)">
+            <Box position="absolute" left="50%" transform="translateX(-50%)">
               {isLoading ? (
                 <Skeleton height="8" w="16" />
               ) : (
-                <Text color="font.dark" fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold">
+                <Text fontSize={{ base: 'xl', md: '2xl' }} fontWeight="bold" color="font.dark">
                   <AnimatedNumber
-                    formatValue={formatValue}
                     value={parseFloat(value.replace(/[^0-9.-]+/g, ''))}
+                    formatValue={formatValue}
                   />
                 </Text>
               )}
@@ -102,16 +102,16 @@ export function ProtocolStatsSection() {
   return (
     <SimpleGrid
       columns={{ base: 2, md: 4 }}
-      maxW={{ base: '500px', md: '100%' }}
       spacing={{ base: 6, md: 8 }}
+      maxW={{ base: '500px', md: '100%' }}
     >
       {stats.map((stat, index) => (
         <ProtocolStatItem
-          imgName={stat.imgName}
-          isLoading={statQuery.loading}
           key={index}
           title={stat.title}
           value={stat.value.toString()}
+          imgName={stat.imgName}
+          isLoading={statQuery.loading}
         />
       ))}
     </SimpleGrid>

@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import { usePool } from '../../../PoolProvider'
 import { sentryMetaForAddLiquidityHandler } from '@/lib/shared/utils/query-errors'
 import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
+import { useBlockNumber } from 'wagmi'
 
 export type AddLiquiditySimulationQueryResult = ReturnType<typeof useAddLiquiditySimulationQuery>
 
@@ -22,7 +23,8 @@ type Params = {
 
 export function useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enabled }: Params) {
   const { userAddress } = useUserAccount()
-  const { pool } = usePool()
+  const { pool, chainId } = usePool()
+  const { data: blockNumber } = useBlockNumber({ chainId })
   const { slippage } = useUserSettings()
   const debouncedHumanAmountsIn = useDebounce(humanAmountsIn, defaultDebounceMs)[0]
 
@@ -44,7 +46,11 @@ export function useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enable
     queryFn,
     enabled: enabled && !areEmptyAmounts(debouncedHumanAmountsIn),
     gcTime: 0,
-    meta: sentryMetaForAddLiquidityHandler('Error in add liquidity simulation query', params),
+    meta: sentryMetaForAddLiquidityHandler('Error in add liquidity simulation query', {
+      ...params,
+      chainId,
+      blockNumber,
+    }),
     ...onlyExplicitRefetch,
   })
 }

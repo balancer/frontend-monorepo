@@ -36,40 +36,40 @@ function PoolCategoryBadge({ category }: { category: PoolCategory }) {
     <Popover trigger="hover">
       <PopoverTrigger>
         <HStack>
-          {categoryIconSrc ? (
+          {categoryIconSrc && (
             <Badge
+              display="flex"
               alignItems="center"
               bg="background.level2"
-              borderColor="border.base"
               borderRadius="full"
               borderWidth={1}
-              display="flex"
-              p="xs"
+              borderColor="border.base"
               shadow="sm"
               textTransform="none"
+              p="xs"
               zIndex={2}
             >
-              <Image alt={category.name} h={6} src={categoryIconSrc} w={6} />
+              <Image src={categoryIconSrc} alt={category.name} w={6} h={6} />
             </Badge>
-          ) : null}
+          )}
           <Badge
+            display="flex"
             alignItems="center"
             bg="background.level2"
-            borderColor="border.base"
             borderRadius="full"
             borderWidth={1}
-            display="flex"
-            minH="34px"
-            ml={categoryIconSrc ? -9 : 0}
-            p="xs"
-            pl={categoryIconSrc ? 8 : undefined}
+            borderColor="border.base"
             shadow="sm"
             textTransform="none"
+            p="xs"
+            pl={categoryIconSrc ? 8 : undefined}
+            ml={categoryIconSrc ? -9 : 0}
+            minH="34px"
           >
             {category.iconUrl ? (
-              <Image alt={category.name} h={6} rounded="full" src={category.iconUrl} w={6} />
+              <Image src={category.iconUrl} alt={category.name} w={6} h={6} rounded="full" />
             ) : (
-              <Text fontSize="xs" fontWeight="bold" px="sm" textTransform="uppercase">
+              <Text fontWeight="bold" fontSize="xs" textTransform="uppercase" px="sm">
                 {category.name}
               </Text>
             )}
@@ -81,31 +81,31 @@ function PoolCategoryBadge({ category }: { category: PoolCategory }) {
         <PopoverArrow bg="background.level3" />
         <PopoverCloseButton />
         <PopoverBody>
-          <VStack align="start" spacing="md">
-            <VStack align="start" spacing="xs">
+          <VStack spacing="md" align="start">
+            <VStack spacing="xs" align="start">
               <Text fontSize="lg" fontWeight="bold">
                 {category.name}
               </Text>
-              {category.url ? (
+              {category.url && (
                 <Link color="grayText" fontSize="sm" href={category.url} isExternal>
                   {category.url}
                 </Link>
-              ) : null}
+              )}
             </VStack>
             <Text>{category.description}</Text>
-            {category.url ? (
+            {category.url && (
               <Button
                 as={NextLink}
                 href={category.url}
-                rel="noreferrer"
-                size="sm"
-                target="_blank"
                 variant="secondary"
                 w="full"
+                size="sm"
+                target="_blank"
+                rel="noreferrer"
               >
                 Learn more
               </Button>
-            ) : null}
+            )}
           </VStack>
         </PopoverBody>
       </PopoverContent>
@@ -122,7 +122,7 @@ export function PoolCategories() {
   return (
     <HStack>
       {poolCategories.map(category => (
-        <PoolCategoryBadge category={category} key={category.id} />
+        <PoolCategoryBadge key={category.id} category={category} />
       ))}
     </HStack>
   )

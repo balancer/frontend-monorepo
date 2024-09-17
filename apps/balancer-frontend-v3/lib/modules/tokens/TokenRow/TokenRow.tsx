@@ -48,31 +48,31 @@ function TokenInfo({
   return (
     <HStack spacing="sm">
       {!isBpt && (
-        <TokenIcon address={address} alt={token?.symbol || address} chain={chain} size={40} />
+        <TokenIcon chain={chain} address={address} size={40} alt={token?.symbol || address} />
       )}
-      <VStack alignItems="flex-start" spacing="none">
+      <VStack spacing="none" alignItems="flex-start">
         <HStack spacing="none">
           <Heading
+            fontWeight="bold"
             as="h6"
             fontSize="md"
-            fontWeight="bold"
             variant={disabled ? 'secondary' : 'primary'}
           >
             {tokenSymbol}
           </Heading>
-          {showInfoPopover ? (
-            <TokenInfoPopover chain={chain} isBpt={isBpt} tokenAddress={address} />
-          ) : null}
+          {showInfoPopover && (
+            <TokenInfoPopover tokenAddress={address} chain={chain} isBpt={isBpt} />
+          )}
         </HStack>
-        <Text fontSize="0.85rem" fontWeight="medium" variant="secondary">
+        <Text fontWeight="medium" variant="secondary" fontSize="0.85rem">
           {tokenName}
         </Text>
       </VStack>
-      {showSelect ? (
+      {showSelect && (
         <Box ml="sm">
           <ChevronDown size={16} />
         </Box>
-      ) : null}
+      )}
     </HStack>
   )
 }
@@ -139,11 +139,11 @@ export default function TokenRow({
   }, [value])
 
   return (
-    <VStack align="start" spacing="md" w="full">
+    <VStack align="start" w="full" spacing="md">
       {label && typeof label === 'string' ? <Text color="grayText">{label}</Text> : label}
-      <HStack justifyContent="space-between" width="full">
+      <HStack width="full" justifyContent="space-between">
         {toggleTokenSelect ? (
-          <Button cursor="pointer" onClick={toggleTokenSelect} p="2" size="xl" variant="tertiary">
+          <Button variant="tertiary" onClick={toggleTokenSelect} cursor="pointer" size="xl" p="2">
             <TokenInfo {...props} showInfoPopover={false} showSelect />
           </Button>
         ) : (
@@ -151,18 +151,18 @@ export default function TokenRow({
         )}
 
         <HStack align="start" spacing="none">
-          <VStack alignItems="flex-end" spacing="xs" textAlign="right">
+          <VStack spacing="xs" alignItems="flex-end" textAlign="right">
             {isLoading ? (
               <>
-                <Skeleton h="4" w="10" />
-                <Skeleton h="4" w="10" />
+                <Skeleton w="10" h="4" />
+                <Skeleton w="10" h="4" />
               </>
             ) : (
               <>
-                <Heading as="h6" fontSize="md" fontWeight="bold" title={value.toString()}>
+                <Heading fontWeight="bold" as="h6" fontSize="md" title={value.toString()}>
                   {isZero(amount) && showZeroAmountAsDash ? '-' : amount ? amount : '0'}
                 </Heading>
-                <Text fontSize="sm" fontWeight="medium" variant="secondary">
+                <Text fontWeight="medium" variant="secondary" fontSize="sm">
                   {showZeroAmountAsDash && usdValue && isZero(usdValue)
                     ? '-'
                     : toCurrency(usdValue ?? '0', { abbreviated })}
@@ -170,21 +170,21 @@ export default function TokenRow({
               </>
             )}
           </VStack>
-          {actualWeight ? (
-            <VStack alignItems="flex-end" spacing="xs" w="24">
+          {actualWeight && (
+            <VStack spacing="xs" alignItems="flex-end" w="24">
               {isLoading ? (
                 <>
-                  <Skeleton h="4" w="10" />
-                  <Skeleton h="4" w="10" />
+                  <Skeleton w="10" h="4" />
+                  <Skeleton w="10" h="4" />
                 </>
               ) : (
                 <>
-                  <Heading as="h6" fontSize="lg" fontWeight="bold">
+                  <Heading fontWeight="bold" as="h6" fontSize="lg">
                     {fNum('weight', actualWeight, { abbreviated: false })}
                   </Heading>
-                  {targetWeight ? (
-                    <HStack align="start" spacing="xs">
-                      <Text fontSize="sm" fontWeight="medium" variant="secondary">
+                  {targetWeight && (
+                    <HStack spacing="xs" align="start">
+                      <Text fontWeight="medium" variant="secondary" fontSize="sm">
                         {fNum('weight', targetWeight)}
                       </Text>
                       <Tooltip label="Target weight">
@@ -193,11 +193,11 @@ export default function TokenRow({
                         </Box>
                       </Tooltip>
                     </HStack>
-                  ) : null}
+                  )}
                 </>
               )}
             </VStack>
-          ) : null}
+          )}
         </HStack>
       </HStack>
     </VStack>
