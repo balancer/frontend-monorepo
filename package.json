@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "build:dev": "turbo build:dev",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
@@ -18,5 +19,14 @@
   "packageManager": "pnpm@8.15.6",
   "engines": {
     "node": ">=18"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "@types/react": "^18.0.0",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+      }
+    }
   }
 }

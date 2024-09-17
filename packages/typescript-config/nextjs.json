@@ -3,6 +3,8 @@
   "display": "Next.js",
   "extends": "./base.json",
   "compilerOptions": {
+    "declaration": false,
+    "declarationMap": false,
     "plugins": [{ "name": "next" }],
     "module": "es2022",
     "moduleResolution": "node",

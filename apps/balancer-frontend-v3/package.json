@@ -7,10 +7,8 @@
   "scripts": {
     "dev": "concurrently \"pnpm gen:graphql:dev --watch\" \"next dev\"",
     "dev-bal": "PROTOCOL=bal pnpm dev",
-    "dev-beets": "PROTOCOL=beets pnpm dev",
     "build": "PROTOCOL=bal pnpm gen:graphql:prod && next build",
     "build:dev": "PROTOCOL=bal pnpm gen:graphql:dev && next build",
-    "build-beets": "PROTOCOL=beets pnpm gen:graphql:prod && next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix && pnpm run prettier:fix",
@@ -138,15 +136,6 @@
     "typescript": "5.4.5",
     "vitest": "1.4.0",
     "vitest-mock-extended": "^1.3.1"
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "@types/react": "^18.0.0",
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0"
-      }
-    }
   },
   "engineStrict": true,
   "engines": {
