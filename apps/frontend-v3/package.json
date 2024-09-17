@@ -1,8 +1,7 @@
 {
-  "name": "@balancer/frontend-v3",
+  "name": "frontend-v3",
   "version": "0.1.0",
   "license": "MIT",
-  "repository": "balancer/frontend-v3",
   "private": true,
   "scripts": {
     "dev": "concurrently \"pnpm gen:graphql:dev --watch\" \"next dev\"",
