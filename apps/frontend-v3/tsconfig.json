@@ -21,7 +21,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "apps/balancer-frontend-v3/types/global-ts.d.ts"
+    "types/global-ts.d.ts"
   ],
   "exclude": [
     "node_modules",

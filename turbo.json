@@ -2,6 +2,10 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
@@ -21,9 +25,11 @@
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
-    "dev": {
-      "cache": false,
-      "persistent": true
+    "test:unit": {
+      "dependsOn": ["^test:unit"]
+    },
+    "test:integration": {
+      "dependsOn": ["^test:integration"]
     }
   }
 }
