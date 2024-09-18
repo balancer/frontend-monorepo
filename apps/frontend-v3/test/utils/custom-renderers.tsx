@@ -28,16 +28,15 @@ import { apolloTestClient } from './apollo-test-client'
 import { AppRouterContextProviderMock } from './app-router-context-provider-mock'
 import { testQueryClient } from './react-query'
 
-export type WrapperProps = { children: ReactNode }
-export type Wrapper = ({ children }: WrapperProps) => ReactNode
+export type Wrapper = ({ children }: PropsWithChildren) => ReactNode
 
-export const EmptyWrapper = ({ children }: WrapperProps) => <>{children}</>
+export const EmptyWrapper = ({ children }: PropsWithChildren) => <>{children}</>
 
 export function testHook<TResult, TProps>(
   hook: (props: TProps) => TResult,
   options?: RenderHookOptions<TProps> | undefined
 ) {
-  function MixedProviders({ children }: WrapperProps) {
+  function MixedProviders({ children }: PropsWithChildren) {
     const LocalProviders = options?.wrapper || EmptyWrapper
 
     return (
@@ -49,7 +48,7 @@ export function testHook<TResult, TProps>(
 
   const result = renderHook<TResult, TProps>(hook, {
     ...options,
-    wrapper: MixedProviders,
+    wrapper: MixedProviders as React.ComponentType<{ children: React.ReactNode }>,
   })
 
   return {
@@ -58,7 +57,7 @@ export function testHook<TResult, TProps>(
   }
 }
 
-function GlobalProviders({ children }: WrapperProps) {
+function GlobalProviders({ children }: PropsWithChildren) {
   const defaultRouterOptions = {}
 
   return (

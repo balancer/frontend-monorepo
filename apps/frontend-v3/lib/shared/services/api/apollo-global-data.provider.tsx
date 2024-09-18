@@ -19,10 +19,11 @@ import { getFxRates } from '../../utils/currencies'
 import { getPoolCategories } from '@/lib/modules/pool/categories/getPoolCategories'
 import { PoolCategoriesProvider } from '@/lib/modules/pool/categories/PoolCategoriesProvider'
 import { mins } from '../../utils/time'
+import { PropsWithChildren } from 'react'
 
 export const revalidate = 60
 
-export async function ApolloGlobalDataProvider({ children }: React.PropsWithChildren) {
+export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) {
   const client = getApolloServerClient()
 
   const tokensQueryVariables = {

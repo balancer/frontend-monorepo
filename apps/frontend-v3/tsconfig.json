@@ -8,15 +8,9 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     },
-    "types": [
-      "vitest/globals",
-      "global.d.ts",
-      "next-env.d.ts"
-    ],
+    "types": ["vitest/globals"]
   },
   "include": [
     "global.d.ts",
