@@ -1,18 +1,20 @@
 name: Checks
 
 on:
-  - pull_request
+  pull_request:
+    types: [opened, synchronize]
 
 env:
   NEXT_PUBLIC_BALANCER_API_URL: https://api-v3.balancer.fi/graphql
   NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
   NEXT_PRIVATE_INFURA_KEY: ${{ secrets.NEXT_PRIVATE_ALCHEMY_KEY }}
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
 jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run build
@@ -23,7 +25,6 @@ jobs:
   Lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run lint
@@ -36,7 +37,6 @@ jobs:
   Unit-Test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run typecheck
@@ -47,7 +47,6 @@ jobs:
   Integration-Test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)

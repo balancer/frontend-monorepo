@@ -3,19 +3,32 @@ description: 'Sets up the repository'
 runs:
   using: 'composite'
   steps:
+    - uses: actions/checkout@v4
+
+    - name: Cache turbo build setup
+      uses: actions/cache@v4
+      with: 
+        path: .turbo
+        key: ${{ runner.os }}-turbo-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-
+
     - name: Set up pnpm
       uses: pnpm/action-setup@v4
       with:
         version: latest
         node-version: 18
+
     - name: Install Node.js
       uses: actions/setup-node@v4
       with:
         cache: pnpm
         node-version: 18
+
     - name: Install dependencies
       shell: bash
       run: pnpm i --frozen-lockfile
+
     - name: Generate api typings
       shell: bash
       run: pnpm gen:graphql:prod
