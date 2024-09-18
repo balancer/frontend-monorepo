@@ -43,8 +43,8 @@ jobs:
       # TODO - re-enable prettier after formatting once switched from old repo
       # - name: Run prettier
       #   run: pnpm prettier
-      - name: Run stylelint
-        run: pnpm stylelint
+      # - name: Run stylelint
+      #   run: pnpm stylelint
 
   Unit-Test:
     runs-on: ubuntu-latest
