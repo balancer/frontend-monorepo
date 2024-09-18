@@ -1,11 +1,8 @@
 import { PortfolioProvider } from '@/lib/modules/portfolio/PortfolioProvider'
 import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
+import { PropsWithChildren } from 'react'
 
-type Props = {
-  children: React.ReactNode
-}
-
-export default async function PortfolioLayout({ children }: Props) {
+export default async function PortfolioLayout({ children }: PropsWithChildren) {
   return (
     <DefaultPageContainer minH="100vh">
       <PortfolioProvider>{children}</PortfolioProvider>

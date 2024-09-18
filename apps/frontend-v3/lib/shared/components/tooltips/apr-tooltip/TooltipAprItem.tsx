@@ -1,6 +1,7 @@
 import { useThemeColorMode } from '@/lib/shared/services/chakra/useThemeColorMode'
 import { BoxProps, TextProps, Box, HStack, Text, Tooltip } from '@chakra-ui/react'
 import BigNumber from 'bignumber.js'
+import { ReactNode } from 'react'
 
 const tooltipTextDecorationStyles: TextProps = {
   textDecoration: 'underline',
@@ -22,7 +23,7 @@ interface PopoverAprItemProps extends BoxProps {
   textBackgroundClip?: string
   tooltipText?: string
   textVariant?: string
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 export function TooltipAprItem({

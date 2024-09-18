@@ -1,12 +1,8 @@
-import React from 'react'
-import { Box, Flex, FlexProps } from '@chakra-ui/react'
+import React, { PropsWithChildren } from 'react'
+import { Box, Flex } from '@chakra-ui/react'
 import { motion, MotionStyle, useAnimation, useReducedMotion } from 'framer-motion'
 
-interface SandPatternsProps extends FlexProps {
-  children: React.ReactNode
-}
-
-const SandPatterns: React.FC<SandPatternsProps> = ({ children, ...rest }) => {
+const SandPatterns: React.FC<PropsWithChildren> = ({ children, ...rest }) => {
   const circles = Array.from({ length: 10 }, (_, i) => i + 1)
   const controls = useAnimation()
   const shouldReduceMotion = useReducedMotion()

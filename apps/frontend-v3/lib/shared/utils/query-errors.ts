@@ -217,7 +217,6 @@ export function captureSentryError(
   e: unknown,
   { context, errorMessage, errorName }: SentryMetadata
 ) {
-  console.log('Context en captureSentryError', context)
   const causeError = ensureError(e)
   if (isUserRejectedError(causeError)) return
 
@@ -347,7 +346,7 @@ function sentryStackFramesToString(sentryStack?: SentryStack): string {
   )
 }
 
-export function getTenderlyUrl(sentryExtras?: Extras) {
-  if (!sentryExtras) return
-  return sentryExtras.tenderlyUrl as string | undefined
+export function getTenderlyUrl(sentryMetadata?: SentryMetadata) {
+  if (!sentryMetadata) return
+  return sentryMetadata?.context?.extra?.tenderlyUrl as string | undefined
 }

@@ -3,11 +3,11 @@ import { useShouldSignRelayerApproval } from '@/lib/modules/relayer/signRelayerA
 import { useApproveRelayerStep } from '@/lib/modules/relayer/useApproveRelayerStep'
 import { useRelayerMode } from '@/lib/modules/relayer/useRelayerMode'
 import { useTokenApprovalSteps } from '@/lib/modules/tokens/approvals/useTokenApprovalSteps'
-import { useContractAddress } from '@/lib/modules/web3/contracts/useContractAddress'
 import { useMemo } from 'react'
 import { usePool } from '../../PoolProvider'
 import { LiquidityActionHelpers } from '../LiquidityActionHelpers'
 import { AddLiquidityStepParams, useAddLiquidityStep } from './useAddLiquidityStep'
+import { getVaultConfig } from '../../pool.helpers'
 import { useSignRelayerStep } from '@/lib/modules/transactions/transaction-steps/useSignRelayerStep'
 import { Address } from 'viem'
 import { isCowAmmPool } from '../../pool.helpers'
@@ -21,10 +21,11 @@ export function useAddLiquiditySteps({
   humanAmountsIn,
   simulationQuery,
 }: AddLiquidityStepsParams) {
-  const vaultAddress = useContractAddress('balancer.vaultV2')
   const { pool, chainId, chain } = usePool()
+  const { vaultAddress } = getVaultConfig(pool)
   const relayerMode = useRelayerMode(pool)
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
+
   const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } =
     useApproveRelayerStep(chainId)
   const signRelayerStep = useSignRelayerStep(chain)

@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { useQuery } from '@apollo/client'
 import { GetProtocolStatsDocument } from '../services/api/generated/graphql'
 import { supportedNetworks } from '@/lib/modules/web3/ChainConfig'
 

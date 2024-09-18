@@ -17,20 +17,20 @@ export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     // Global handler for every react-query error
     onError: (error, query) => {
-      const queryMeta = query?.meta
+      const sentryMeta = query?.meta as SentryMetadata
       if (shouldIgnore(error.message, error.stack)) return
       console.log('Sentry capturing query error', {
-        meta: queryMeta,
+        meta: sentryMeta,
         error,
         queryKey: query.queryKey,
       })
 
-      const sentryContext = query?.meta?.context as ScopeContext
-      if (sentryContext?.extra && !getTenderlyUrl(sentryContext.extra)) {
-        sentryContext.extra.tenderlyUrl = getTenderlyUrlFromErrorMessage(error, queryMeta)
+      const sentryContext = sentryMeta?.context as ScopeContext
+      if (sentryContext?.extra && !getTenderlyUrl(sentryMeta)) {
+        sentryContext.extra.tenderlyUrl = getTenderlyUrlFromErrorMessage(error, sentryMeta)
       }
 
-      if (queryMeta) return captureSentryError(error, queryMeta as SentryMetadata)
+      if (sentryMeta) return captureSentryError(error, sentryMeta as SentryMetadata)
 
       // Unexpected error in query (as expected errors should have query.meta)
       captureError(error, { extra: { queryKey: query.queryKey } })
@@ -39,6 +39,7 @@ export const queryClient = new QueryClient({
   mutationCache: new MutationCache({
     // Global handler for every react-query mutation error (i.e. useSendTransaction)
     onError: (error, variables, _context, mutation) => {
+      const mutationMeta = mutation?.meta as SentryMetadata
       if (shouldIgnore(error.message, error.stack)) return
       console.log('Sentry capturing mutation error: ', {
         meta: mutation?.meta,
@@ -46,7 +47,7 @@ export const queryClient = new QueryClient({
         variables,
       })
 
-      if (mutation?.meta) return captureSentryError(error, mutation?.meta as SentryMetadata)
+      if (mutationMeta) return captureSentryError(error, mutationMeta)
 
       // Unexpected error in mutation (as expected errors should have query.meta)
       captureError(error, { extra: { variables: variables } })

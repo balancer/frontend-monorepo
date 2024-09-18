@@ -1,10 +1,10 @@
 import { Card, CardProps, HStack, Heading, IconButton, Stack } from '@chakra-ui/react'
 import Link from 'next/link'
+import { PropsWithChildren } from 'react'
 import { ArrowLeft } from 'react-feather'
 
-interface Props extends CardProps {
+interface Props extends CardProps, PropsWithChildren {
   backLink: string
-  children: React.ReactNode
   title: string
 }
 

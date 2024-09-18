@@ -14,13 +14,13 @@ import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } fr
 import { VeBalLink } from '@/lib/modules/vebal/VebalRedirectModal'
 import { MobileNav } from './MobileNav'
 import { useNav } from './useNav'
-import { useEffect, useMemo, useState } from 'react'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 
 type Props = {
-  leftSlot?: React.ReactNode
-  rightSlot?: React.ReactNode
+  leftSlot?: ReactNode
+  rightSlot?: ReactNode
   disableBlur?: boolean
 }
 

@@ -5,7 +5,7 @@ import * as echarts from 'echarts/core'
 import { format, differenceInDays } from 'date-fns'
 import BigNumber from 'bignumber.js'
 import { lockSnapshots } from './test-locks'
-import { useVebalLockInfo } from '../useVebalLockInfo'
+import { useVebalLockInfo } from '../../vebal/useVebalLockInfo'
 import { bn } from '@/lib/shared/utils/numbers'
 
 type ChartValueAcc = (readonly [string, number])[]

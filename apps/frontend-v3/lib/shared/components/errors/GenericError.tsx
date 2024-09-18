@@ -30,7 +30,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
   }
   const errorMessage = error?.shortMessage || error.message
 
-  if (errorMessage === 'RPC Request failed.') {
+  if (errorMessage === 'RPC Request failed.' || errorMessage === 'An unknown RPC error occurred.') {
     return (
       <ErrorAlert title={errorMessage} {...rest}>
         <Text variant="secondary" color="black">

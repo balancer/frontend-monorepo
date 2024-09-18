@@ -2,7 +2,7 @@ import { useBlockExplorer } from '@/lib/shared/hooks/useBlockExplorer'
 import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
 import { Center, HStack, ModalHeader, VStack, Text, Link } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import React from 'react'
+import { ReactNode } from 'react'
 import { ArrowUpRight, Check } from 'react-feather'
 import { Hash } from 'viem'
 
@@ -17,7 +17,7 @@ export function TransactionModalHeader({
   label: string
   txHash?: Hash
   chain: GqlChain
-  timeout?: React.ReactNode
+  timeout?: ReactNode
   isReceiptLoading?: boolean
 }) {
   const { getBlockExplorerTxUrl } = useBlockExplorer(chain)

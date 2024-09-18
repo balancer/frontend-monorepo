@@ -2,7 +2,7 @@
 
 import { GetPoolsDocument } from '@/lib/shared/services/api/generated/graphql'
 import { useQuery as useApolloQuery } from '@apollo/experimental-nextjs-app-support/ssr'
-import { createContext, useCallback, useMemo } from 'react'
+import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useProtocolRewards } from './PortfolioClaim/useProtocolRewards'
 import { ClaimableReward, useClaimableBalances } from './PortfolioClaim/useClaimableBalances'
 import { BalTokenReward, useBalTokenRewards } from './PortfolioClaim/useBalRewards'
@@ -252,11 +252,7 @@ function _usePortfolio() {
 
 export const PortfolioContext = createContext<UsePortfolio | null>(null)
 
-interface PortfolioProviderProps {
-  children: React.ReactNode
-}
-
-export function PortfolioProvider({ children }: PortfolioProviderProps) {
+export function PortfolioProvider({ children }: PropsWithChildren) {
   const hook = _usePortfolio()
   return <PortfolioContext.Provider value={hook}>{children}</PortfolioContext.Provider>
 }

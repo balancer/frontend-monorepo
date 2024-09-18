@@ -8,7 +8,7 @@ import {
   GqlChain,
 } from '@/lib/shared/services/api/generated/graphql'
 import { createContext, PropsWithChildren, useRef } from 'react'
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { useQuery } from '@apollo/client'
 import { FetchPoolProps } from './pool.types'
 import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { calcBptPriceFor, usePoolHelpers } from './pool.helpers'
@@ -16,6 +16,8 @@ import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 import { usePoolEnrichWithOnChainData } from '@/lib/modules/pool/queries/usePoolEnrichWithOnChainData'
 import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances'
 import { useInvalidVariantRedirect } from './pool.hooks'
+import { getPoolDisplayTokens } from './pool.utils'
+import { useTokens } from '../tokens/TokensProvider'
 
 export type UsePoolResponse = ReturnType<typeof _usePool> & {
   chain: GqlChain
@@ -40,6 +42,7 @@ export function _usePool({
     variables: queryVariables,
   })
 
+  const { calcTotalUsdValue } = useTokens()
   const {
     pool: poolWithOnChainData,
     refetch: refetchOnchainData,
@@ -59,6 +62,8 @@ export function _usePool({
 
   const bptPrice = calcBptPriceFor(pool)
 
+  const tvl = calcTotalUsdValue(getPoolDisplayTokens(pool), pool.chain)
+
   async function refetch() {
     return Promise.all([refetchOnchainData(), refetchOnchainUserBalances()])
   }
@@ -68,6 +73,7 @@ export function _usePool({
   return {
     pool,
     bptPrice,
+    tvl,
     isLoading,
     isLoadingOnchainData,
     isLoadingOnchainUserBalances,

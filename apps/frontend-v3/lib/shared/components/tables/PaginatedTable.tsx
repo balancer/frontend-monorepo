@@ -1,12 +1,12 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import { Box, BoxProps, Center, Text, Spinner, VStack, Skeleton } from '@chakra-ui/react'
 import { Pagination } from '@/lib/shared/components/pagination/Pagination'
 
 interface Props<T> extends BoxProps {
   items: T[]
   loading: boolean
-  renderTableHeader: () => React.ReactNode
-  renderTableRow: (item: T, index: number) => React.ReactNode
+  renderTableHeader: () => ReactNode
+  renderTableRow: (item: T, index: number) => ReactNode
   showPagination: boolean
   paginationProps: any // TODO: type this
   noItemsFoundLabel: string

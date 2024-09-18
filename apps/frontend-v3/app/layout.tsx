@@ -10,6 +10,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import '@/lib/assets/css/global.css'
 import { Fathom } from '@/lib/shared/services/fathom/Fathom'
 import { GlobalAlerts } from '@/lib/shared/components/navs/GlobalAlerts'
+import { PropsWithChildren } from 'react'
 
 const { projectName } = getProjectConfig()
 
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
   ],
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

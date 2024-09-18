@@ -12,7 +12,11 @@ import {
 import { Address, parseEther } from 'viem'
 import { BPT_DECIMALS } from '../../../pool.constants'
 import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers, isEmptyHumanAmount } from '../../LiquidityActionHelpers'
+import {
+  LiquidityActionHelpers,
+  formatBuildCallParams,
+  isEmptyHumanAmount,
+} from '../../LiquidityActionHelpers'
 import {
   SdkBuildRemoveLiquidityInput,
   SdkQueryRemoveLiquidityOutput,
@@ -72,13 +76,19 @@ export class SingleTokenRemoveLiquidityHandler implements RemoveLiquidityHandler
   }: SdkBuildRemoveLiquidityInput): Promise<TransactionConfig> {
     const removeLiquidity = new RemoveLiquidity()
 
-    const { callData, to, value } = removeLiquidity.buildCall({
+    const baseBuildCallParams = {
       ...queryOutput.sdkQueryOutput,
       slippage: Slippage.fromPercentage(`${Number(slippagePercent)}`),
-      sender: account,
-      recipient: account,
       wethIsEth,
-    })
+    }
+
+    const buildCallParams = formatBuildCallParams(
+      baseBuildCallParams,
+      this.helpers.isV3Pool(),
+      account
+    )
+
+    const { callData, to, value } = removeLiquidity.buildCall(buildCallParams)
 
     return {
       account,

@@ -23,6 +23,7 @@ import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
 import { bn, fNum } from '@/lib/shared/utils/numbers'
 import { isVebalPool } from '@/lib/modules/pool/pool.helpers'
+import { ReactNode } from 'react'
 
 interface Props {
   aprItems: GqlPoolAprItem[]
@@ -35,11 +36,11 @@ interface Props {
   totalBaseVeBalText: string
   totalVeBalTitle?: string
   maxVeBalText: string
-  customPopoverContent?: React.ReactNode
+  customPopoverContent?: ReactNode
   shouldDisplayBaseTooltip?: boolean
   shouldDisplayMaxVeBalTooltip?: boolean
   usePortal?: boolean
-  children?: React.ReactNode | (({ isOpen }: { isOpen: boolean }) => React.ReactNode)
+  children?: ReactNode | (({ isOpen }: { isOpen: boolean }) => ReactNode)
 }
 
 const balRewardGradient =

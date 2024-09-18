@@ -11,9 +11,13 @@ import {
   Slippage,
 } from '@balancer/sdk'
 import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
-import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
+import {
+  LiquidityActionHelpers,
+  formatBuildCallParams,
+  areEmptyAmounts,
+} from '../../LiquidityActionHelpers'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
+import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 
 /**
  * UnbalancedAddLiquidityHandler is a handler that implements the
@@ -64,13 +68,19 @@ export class UnbalancedAddLiquidityHandler implements AddLiquidityHandler {
   }: SdkBuildAddLiquidityInput): Promise<TransactionConfig> {
     const addLiquidity = new AddLiquidity()
 
-    const { callData, to, value } = addLiquidity.buildCall({
+    const baseBuildCallParams = {
       ...queryOutput.sdkQueryOutput,
       slippage: Slippage.fromPercentage(`${Number(slippagePercent)}`),
-      sender: account,
-      recipient: account,
       wethIsEth: this.helpers.isNativeAssetIn(humanAmountsIn),
-    })
+    }
+
+    const buildCallParams = formatBuildCallParams(
+      baseBuildCallParams,
+      this.helpers.isV3Pool(),
+      account
+    )
+
+    const { callData, to, value } = addLiquidity.buildCall(buildCallParams)
 
     return {
       account,

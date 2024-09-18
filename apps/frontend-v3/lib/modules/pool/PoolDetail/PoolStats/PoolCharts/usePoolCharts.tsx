@@ -243,7 +243,7 @@ export function usePoolSnapshots(
 }
 
 export function usePoolCharts() {
-  const { pool } = usePool()
+  const { pool, tvl } = usePool()
   const isCowPool = isCowAmmPool(pool.type)
 
   const { id: poolId, variant } = useParams()
@@ -280,7 +280,7 @@ export function usePoolCharts() {
     let val = 0
 
     if (activeTab.value === PoolChartTab.TVL) {
-      val = Number(data?.snapshots[data?.snapshots.length - 1]?.totalLiquidity)
+      val = Number(tvl)
     }
 
     if (activeTab.value === PoolChartTab.FEES) {
@@ -302,7 +302,7 @@ export function usePoolCharts() {
     }
 
     return toCurrency(val, { abbreviated: false })
-  }, [data?.snapshots, activeTab, toCurrency])
+  }, [data?.snapshots, activeTab, toCurrency, tvl])
 
   const chartData = useMemo(() => {
     const snapshots = data?.snapshots

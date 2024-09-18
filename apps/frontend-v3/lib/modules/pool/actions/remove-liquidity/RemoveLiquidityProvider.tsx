@@ -7,7 +7,7 @@ import { LABELS } from '@/lib/shared/labels'
 import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@/lib/shared/utils/functions/isDisabledWithReason'
-import { bn, safeSum } from '@/lib/shared/utils/numbers'
+import { bn, isZero, safeSum } from '@/lib/shared/utils/numbers'
 import { HumanAmount, TokenAmount, isSameAddress } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
@@ -112,6 +112,9 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
 
   const singleTokenOutAddress = singleTokenAddress || firstTokenAddress
 
+  const tokenOut =
+    wethIsEth && wNativeAsset ? (wNativeAsset.address as Address) : singleTokenOutAddress
+
   /**
    * Queries
    */
@@ -120,8 +123,8 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     poolId: pool.id,
     chainId,
     humanBptIn,
-    tokenOut: wethIsEth && wNativeAsset ? (wNativeAsset.address as Address) : singleTokenOutAddress,
-    enabled: !urlTxHash,
+    tokenOut,
+    enabled: !urlTxHash && !!tokenOut,
   })
 
   const priceImpactQuery = useRemoveLiquidityPriceImpactQuery({
@@ -129,8 +132,8 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     poolId: pool.id,
     chainId,
     humanBptIn,
-    tokenOut: wethIsEth && wNativeAsset ? (wNativeAsset.address as Address) : singleTokenOutAddress,
-    enabled: !urlTxHash,
+    tokenOut,
+    enabled: !urlTxHash && !!tokenOut,
   })
 
   /**
@@ -212,10 +215,12 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   )
 
   const totalUSDValue: string = safeSum(Object.values(usdAmountOutMap))
+  const totalAmountsOut: string = safeSum(quoteAmountsOut.map(a => a.amount))
 
   const { isDisabled, disabledReason } = isDisabledWithReason(
     [!isConnected, LABELS.walletNotConnected],
     [Number(humanBptIn) === 0, 'You must specify a valid bpt in'],
+    [isZero(totalAmountsOut), 'Amount to remove cannot be zero'],
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [simulationQuery.isLoading, 'Fetching quote...'],
     [simulationQuery.isError, 'Error fetching quote'],
