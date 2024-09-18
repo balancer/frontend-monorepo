@@ -6,7 +6,7 @@ import {
   GetPoolEventsQuery,
 } from '@/lib/shared/services/api/generated/graphql'
 import { FetchPolicy } from '@apollo/client'
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { useQuery } from '@apollo/client'
 
 type PoolEventList = GetPoolEventsQuery['poolEvents']
 export type PoolEventItem = PoolEventList[0]

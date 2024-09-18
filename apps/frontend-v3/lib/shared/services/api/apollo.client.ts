@@ -1,10 +1,10 @@
 import { config } from '@/lib/config/app.config'
 import { ApolloLink, HttpLink } from '@apollo/client'
 import {
-  NextSSRApolloClient,
-  NextSSRInMemoryCache,
+  ApolloClient,
+  InMemoryCache,
   SSRMultipartLink,
-} from '@apollo/experimental-nextjs-app-support/ssr'
+} from '@apollo/experimental-nextjs-app-support'
 
 /*const userMiddleware = new ApolloLink((operation, forward) => {
   // add the user address to the headers
@@ -25,7 +25,7 @@ export function createApolloClient() {
   //const keyArgs = ['where', ['poolIdIn']]
   const httpLink = new HttpLink({ uri: config.apiUrl })
 
-  return new NextSSRApolloClient({
+  return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link:
       typeof window === 'undefined'
@@ -36,7 +36,7 @@ export function createApolloClient() {
             httpLink,
           ])
         : httpLink,
-    cache: new NextSSRInMemoryCache({
+    cache: new InMemoryCache({
       typePolicies: {
         GqlToken: {
           keyFields: ['address', 'chainId'],

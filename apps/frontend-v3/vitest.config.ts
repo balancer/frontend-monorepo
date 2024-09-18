@@ -24,5 +24,17 @@ export default defineConfig({
     setupFiles: ['test/vitest/setup-vitest.tsx', 'test/vitest/setup-msw.ts'],
     // disable if parsing CSS is slow
     css: true,
+    server: {
+      deps: {
+        /*
+        Some dependencies like next-usequerystate ship code in ESM format.
+        We need this inline option to ensure that they are correctly transformed.
+        More info:
+        https://vitest.dev/config/#server-deps-inline
+        https://github.com/vitest-dev/vitest/issues/4745
+        */
+        inline: ['next-usequerystate'],
+      },
+    },
   },
 })

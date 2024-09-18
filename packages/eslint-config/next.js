@@ -54,13 +54,14 @@ module.exports = {
             group: ['wagmi/dist'],
             message: 'Invalid import: remove dist from import path',
           },
-          {
-            group: ['@apollo/client'],
-            importNames: ['useQuery'],
-            message:
-              // eslint-disable-next-line max-len
-              'Import useQuery from @apollo/experimental-nextjs-app-support/ssr to avoid u.inFlightLinkObservables errors',
-          },
+          // TODO: delete once we confirm that  u.inFlightLinkObservables error does not happen when importing from @apollo/client after migrating to its latest version
+          // {
+          //   group: ['@apollo/client'],
+          //   importNames: ['useQuery'],
+          //   message:
+          //     // eslint-disable-next-line max-len
+          //     'Import useQuery from @apollo/experimental-nextjs-app-support/ssr to avoid u.inFlightLinkObservables errors',
+          // },
           {
             group: ['act'],
             importNames: ['react-dom/test-utils'],
