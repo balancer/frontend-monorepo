@@ -57,7 +57,7 @@ Next, you can link your Turborepo to your Remote Cache by running the following 
 npx turbo link
 ```
 
-## Useful Links
+## Useful Turborepo links
 
 Learn more about the power of Turborepo:
 
@@ -67,9 +67,3 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
 - [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
 - [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
-
-
-## Notes
-- Install `turbo` command globally: `pnpm install turbo --global`
-- Instal Turborepo vscode extension - https://turbo.build/repo/docs/getting-started/editor-integration#turborepo-lsp
--  
