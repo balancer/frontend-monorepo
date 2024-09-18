@@ -2,7 +2,7 @@ import { testHook } from '@/test/utils/custom-renderers'
 import { usePoolListQueryState } from './usePoolListQueryState'
 
 function updateUrlQueryString(queryString: `?${string}`) {
-  window.location.href = 'http://app.balancer.fi/' + queryString
+  window.location.href = 'http://balancer.fi/' + queryString
 }
 
 describe('Pool list state query', () => {
