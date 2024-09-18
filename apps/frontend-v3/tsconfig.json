@@ -1,6 +1,7 @@
 {
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
+    "module": "esnext",
     "plugins": [
       {
         "name": "next"
@@ -12,16 +13,17 @@
       ]
     },
     "types": [
-      "vitest/globals"
+      "vitest/globals",
+      "global.d.ts",
+      "next-env.d.ts"
     ],
-    "module": "esnext"
   },
   "include": [
+    "global.d.ts",
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
     ".next/types/**/*.ts",
-    "types/global-ts.d.ts"
+    "**/*.ts",
+    "**/*.tsx"
   ],
   "exclude": [
     "node_modules",

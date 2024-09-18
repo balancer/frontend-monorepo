@@ -12,9 +12,12 @@ declare module 'viem' {
 declare module 'react' {
   interface HTMLAttributes<T> extends React.HTMLAttributes<T> {
     popover?: 'auto' | 'manual' | boolean
+    popovertarget?: string
+    popovertargetaction?: string
   }
 
   interface ButtonHTMLAttributes<T> extends React.HTMLAttributes<T> {
+    popover?: 'auto' | 'manual' | boolean
     popovertarget?: string
     popovertargetaction?: string
   }
