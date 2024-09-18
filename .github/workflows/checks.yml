@@ -35,6 +35,7 @@ jobs:
   Lint:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run lint
@@ -47,6 +48,7 @@ jobs:
   Unit-Test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run typecheck
@@ -57,6 +59,7 @@ jobs:
   Integration-Test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
