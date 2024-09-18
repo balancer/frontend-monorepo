@@ -3,16 +3,6 @@ description: 'Sets up the repository'
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v4
-
-    - name: Cache turbo build setup
-      uses: actions/cache@v4
-      with: 
-        path: .turbo
-        key: ${{ runner.os }}-turbo-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-turbo-
-
     - name: Set up pnpm
       uses: pnpm/action-setup@v4
       with:
