@@ -13,7 +13,8 @@
     "prettier": "prettier --check '**/*.*(md|json|yaml|ts|js|tsx)' --loglevel warn",
     "prettier:fix": "pnpm run prettier --write",
     "stylelint": "stylelint '**/*.css'",
-    "stylelint:fix": "pnpm run stylelint -- --fix"
+    "stylelint:fix": "pnpm run stylelint -- --fix",
+    "graphql:gen:prod": "turbo graphql:gen:prod"
   },
   "devDependencies": {
     "prettier": "^3.2.5",

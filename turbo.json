@@ -30,6 +30,10 @@
     },
     "test:integration": {
       "dependsOn": ["^test:integration"]
+    },
+    "graphql:gen:prod": {
+      "dependsOn": ["^graphql:gen:prod"],
+      "inputs": [".env*"]
     }
   }
 }
