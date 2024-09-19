@@ -23,7 +23,7 @@
       "dependsOn": ["^lint:fix"]
     },
     "typecheck": {
-      "dependsOn": ["build", "^typecheck"]
+      "dependsOn": ["graphql:gen", "^typecheck"]
     },
     "test:unit": {
       "dependsOn": ["build", "^test:unit"]
