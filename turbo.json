@@ -31,8 +31,8 @@
     "test:integration": {
       "dependsOn": ["build", "^test:integration"]
     },
-    "graphql:gen:prod": {
-      "dependsOn": ["^graphql:gen:prod"],
+    "graphql:gen": {
+      "dependsOn": ["^graphql:gen"],
       "inputs": [".env*"]
     }
   }

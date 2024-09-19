@@ -1,5 +1,5 @@
 {
-  "name": "mono",
+  "name": "@balancer/frontend-monorepo",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -14,7 +14,7 @@
     "prettier:fix": "pnpm run prettier --write",
     "stylelint": "stylelint '**/*.css'",
     "stylelint:fix": "pnpm run stylelint -- --fix",
-    "graphql:gen:prod": "turbo graphql:gen:prod"
+    "graphql:gen": "turbo graphql:gen"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
