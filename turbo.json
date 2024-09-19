@@ -26,10 +26,10 @@
       "dependsOn": ["graphql:gen", "^typecheck"]
     },
     "test:unit": {
-      "dependsOn": ["build", "^test:unit"]
+      "dependsOn": ["graphql:gen", "^test:unit"]
     },
     "test:integration": {
-      "dependsOn": ["build", "^test:integration"]
+      "dependsOn": ["graphql:gen", "^test:integration"]
     },
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],

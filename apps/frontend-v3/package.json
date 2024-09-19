@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
     "prepare": "husky",
     "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config",
     "gen:theme-typings": "chakra-cli tokens ./lib/shared/services/chakra/themes/bal/bal.theme.ts",
