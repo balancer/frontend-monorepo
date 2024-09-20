@@ -12,7 +12,7 @@ import {
   parseAsString,
   parseAsStringEnum,
   parseAsFloat,
-} from 'next-usequerystate/parsers'
+} from 'nuqs'
 import { Hex } from 'viem'
 
 export type PoolId = Hex

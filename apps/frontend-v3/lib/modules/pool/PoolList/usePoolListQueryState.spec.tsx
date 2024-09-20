@@ -2,12 +2,13 @@ import { testHook } from '@/test/utils/custom-renderers'
 import { usePoolListQueryState } from './usePoolListQueryState'
 
 function updateUrlQueryString(queryString: `?${string}`) {
-  window.location.href = 'http://balancer.fi/' + queryString
+  window.location.href = 'https://balancer.fi/pools' + queryString
 }
 
 describe('Pool list state query', () => {
   it('calculates pagination based on first and ', () => {
     updateUrlQueryString('?first=50&skip=150')
+    console.log(window.location.href)
     const { result } = testHook(() => usePoolListQueryState())
 
     expect(result.current.pagination).toMatchInlineSnapshot(`
