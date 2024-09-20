@@ -14,7 +14,7 @@
     "build:dev": {
       "dependsOn": ["^build:dev"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", ]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -33,7 +33,8 @@
     },
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
-      "inputs": [".env*"]
+      "inputs": [".env*"],
+      "outputs": ["src/generated/**"]
     }
   }
 }
