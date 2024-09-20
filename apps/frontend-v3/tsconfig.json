@@ -2,6 +2,7 @@
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
     "module": "esnext",
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
