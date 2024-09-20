@@ -8,7 +8,7 @@ import {
 } from '@/lib/shared/services/api/generated/graphql'
 import { uniq } from 'lodash'
 import { getProjectConfig } from '@/lib/config/getProjectConfig'
-import { useQueryState } from 'next-usequerystate'
+import { useQueryState } from 'nuqs'
 import {
   POOL_CATEGORY_MAP,
   POOL_TYPE_MAP,
