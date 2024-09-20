@@ -34,7 +34,7 @@
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
       "inputs": [".env*"],
-      "outputs": ["src/generated/**"]
+      "outputs": ["lib/shared/services/api/generated/**"]
     }
   }
 }
