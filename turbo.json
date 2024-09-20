@@ -33,7 +33,8 @@
     },
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
-      "inputs": [".env*"]
+      "inputs": [".env*"],
+      "outputs": ["src/generated/**"]
     }
   }
 }
