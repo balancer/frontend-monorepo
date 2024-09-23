@@ -36,6 +36,11 @@ Then create a local environment variable file for the `frontend-v3` app.
 cp apps/frontend-v3/.env.template apps/frontend-v3/.env.local
 ```
 
+Install modules
+```
+pnpm install
+```
+
 Then spin up the dev environment with:
 ```
 pnpm dev
