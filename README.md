@@ -7,8 +7,6 @@ _The monorepo uses [pnpm workspaces](https://pnpm.io/workspaces) along with Turb
 to learn more about Turborepo please see the
 [docs](https://turbo.build/repo/docs)._
 
----
-
 ## What's inside?
 
 This monorepo includes the following packages/apps:
@@ -21,7 +19,7 @@ This monorepo includes the following packages/apps:
 - [packages/eslint-config](https://github.com/balancer/frontend-monorepo/tree/main/packages/eslint-config): eslint configurations.
 - [packages/typescript-config](https://github.com/balancer/frontend-monorepo/tree/main/packages/typescript-config): Typescript config's used throughout the monorepo.
 
----
+
 ## Getting started
 
 To set up a local environment for development, first clone the repo and navigate
@@ -72,8 +70,6 @@ add the --filter option to your install command, e.g.:
 pnpm add some-pkg --filter=frontend-v3
 ```
 This filter should match the `name` attribute in the app or package package.json.
-
----
 
 ## Turborepo
 
