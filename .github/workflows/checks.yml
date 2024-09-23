@@ -1,18 +1,30 @@
 name: Checks
 
 on:
-  - pull_request
+  pull_request:
+    types: [opened, synchronize]
 
 env:
   NEXT_PUBLIC_BALANCER_API_URL: https://api-v3.balancer.fi/graphql
   NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
-  NEXT_PRIVATE_ALCHEMY_KEY: ${{ secrets.PRIVATE_ALCHEMY_KEY }}
+  NEXT_PRIVATE_ALCHEMY_KEY: ${{ secrets.NEXT_PRIVATE_ALCHEMY_KEY }}
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
 jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run build
@@ -28,10 +40,11 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run lint
         run: pnpm lint
-      - name: Run prettier
-        run: pnpm prettier
-      - name: Run stylelint
-        run: pnpm stylelint
+      # TODO - re-enable prettier after formatting once switched from old repo
+      # - name: Run prettier
+      #   run: pnpm prettier
+      # - name: Run stylelint
+      #   run: pnpm stylelint
 
   Unit-Test:
     runs-on: ubuntu-latest

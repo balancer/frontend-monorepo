@@ -1,0 +1,40 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "build:dev": {
+      "dependsOn": ["^build:dev"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "lint:fix": {
+      "dependsOn": ["^lint:fix"]
+    },
+    "typecheck": {
+      "dependsOn": ["graphql:gen", "^typecheck"]
+    },
+    "test:unit": {
+      "dependsOn": ["graphql:gen", "^test:unit"]
+    },
+    "test:integration": {
+      "dependsOn": ["graphql:gen", "^test:integration"]
+    },
+    "graphql:gen": {
+      "dependsOn": ["^graphql:gen"],
+      "inputs": [".env*"],
+      "outputs": ["lib/shared/services/api/generated/**"]
+    }
+  }
+}
