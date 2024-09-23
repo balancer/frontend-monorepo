@@ -3,40 +3,66 @@
 _This project uses `pnpm`, if you haven't already installed it you can find the documentation here:
 https://pnpm.io/installation_
 
-The monorepo uses [pnpm workspaces](https://pnpm.io/workspaces) along with Turborepo to manage build orchestration,
+_The monorepo uses [pnpm workspaces](https://pnpm.io/workspaces) along with Turborepo to manage build orchestration,
 to learn more about Turborepo please see the
-[docs](https://turbo.build/repo/docs).
+[docs](https://turbo.build/repo/docs)._
 
-****
+---
+
 ## What's inside?
 
 This monorepo includes the following packages/apps:
 
 ### Apps
-- `
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- [apps/frontend-v3](https://github.com/balancer/frontend-monorepo/tree/main/apps/frontend-v3): The official web app for the Balancer protocol, hosted at [https://balancer.fi](https://balancer.fi).
+
+
+### Packages
+- [packages/eslint-config](https://github.com/balancer/frontend-monorepo/tree/main/packages/eslint-config): eslint configurations.
+- [packages/typescript-config](https://github.com/balancer/frontend-monorepo/tree/main/packages/typescript-config): Typescript config's used throughout the monorepo.
+
+---
+## Getting started
+
+To set up a local environment for development, first clone the repo and navigate
+to it in your console:
+
+```
+git clone https://github.com/balancer/frontend-monorepo.git && cd frontend-monorepo
+```
+
+Then create a local environment variable file for the `frontend-v3` app.
+```
+cp apps/frontend-v3/.env.template apps/frontend-v3/.env.local
+```
+
+Then spin up the dev environment with:
+```
+pnpm dev
+```
+
+The `frontend-v3` app should be live at [http://localhost:3000](http://localhost:3000)
 
 ### Build
 
 To build all apps and packages, run the following command:
 
 ```
-cd my-turborepo
 pnpm build
 ```
 
-### Develop
+### Testing
 
-To develop all apps and packages, run the following command:
+To test all apps and packages, run:
+```
+pnpm test:unit
+// or
+pnpm test:integration
+```
 
-```
-cd my-turborepo
-pnpm dev
-```
+---
+
+## Turborepo
 
 ### Remote Caching
 
@@ -45,7 +71,6 @@ Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo
 By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
 ```
-cd my-turborepo
 npx turbo login
 ```
 
@@ -57,7 +82,7 @@ Next, you can link your Turborepo to your Remote Cache by running the following 
 npx turbo link
 ```
 
-## Useful Turborepo links
+### Useful links
 
 Learn more about the power of Turborepo:
 
