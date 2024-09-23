@@ -65,6 +65,14 @@ pnpm test:unit
 pnpm test:integration
 ```
 
+### Install a package
+If you want to install a new npm package in a sub application like `frontend-v3`
+add the --filter option to your install command, e.g.:
+```
+pnpm add some-pkg --filter=frontend-v3
+```
+This filter should match the `name` attribute in the app or package package.json.
+
 ---
 
 ## Turborepo
