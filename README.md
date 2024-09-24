@@ -9,7 +9,7 @@ to learn more about Turborepo please see the
 
 ## What's inside?
 
-This monorepo includes the following packages/apps:
+This monorepo includes the following apps & packages:
 
 ### Apps
 - [apps/frontend-v3](https://github.com/balancer/frontend-monorepo/tree/main/apps/frontend-v3): The official web app for the Balancer protocol, hosted at [https://balancer.fi](https://balancer.fi).
