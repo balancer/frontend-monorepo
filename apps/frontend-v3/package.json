@@ -1,25 +1,25 @@
 {
   "name": "frontend-v3",
   "version": "0.1.0",
-  "license": "MIT",
   "private": true,
+  "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"pnpm graphql:gen --watch\" \"next dev\"",
     "build": "PROTOCOL=bal pnpm graphql:gen && next build",
-    "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "typecheck": "tsc --project tsconfig.json --noEmit",
-    "prepare": "husky",
-    "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config",
+    "dev": "concurrently \"pnpm graphql:gen --watch\" \"next dev\"",
     "gen:theme-typings": "chakra-cli tokens ./lib/shared/services/chakra/themes/bal/bal.theme.ts",
     "gen:wagmi": "pnpm wagmi generate",
+    "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config",
+    "postinstall": "npm run gen:theme-typings",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "prepare": "cd ../.. && husky apps/frontend-v3/.husky",
+    "start": "next start",
     "test": "pnpm test:unit & pnpm run test:integration",
+    "test:integration": "vitest -c ./vitest.config.integration.ts",
     "test:unit": "vitest",
     "test:unit:coverage": "vitest --coverage",
     "test:unit:silent:coverage": "SILENT_TESTS=true vitest --coverage",
-    "test:integration": "vitest -c ./vitest.config.integration.ts",
-    "postinstall": "npm run gen:theme-typings"
+    "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
@@ -116,8 +116,6 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "happy-dom": "^12.10.3",
-    "husky": "^9.1.2",
-    "lint-staged": "^13.2.3",
     "lokijs": "^1.5.12",
     "msw": "2.0.10",
     "prettier": "^2.8.8",
@@ -126,8 +124,8 @@
     "vitest": "^2.1.1",
     "vitest-mock-extended": "^2.0.2"
   },
-  "engineStrict": true,
   "engines": {
     "node": ">=18.x"
-  }
+  },
+  "engineStrict": true
 }

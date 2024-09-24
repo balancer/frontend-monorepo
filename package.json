@@ -5,25 +5,27 @@
     "build": "turbo build",
     "build:dev": "turbo build:dev",
     "dev": "turbo dev",
+    "graphql:gen": "turbo graphql:gen",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
-    "test:unit": "turbo test:unit",
-    "test:integration": "turbo test:integration",
-    "typecheck": "turbo typecheck",
     "prettier": "prettier --check '**/*.*(md|json|yaml|ts|js|tsx)' --log-level warn",
     "prettier:fix": "pnpm run prettier --write",
     "stylelint": "stylelint '**/*.css'",
     "stylelint:fix": "pnpm run stylelint -- --fix",
-    "graphql:gen": "turbo graphql:gen"
+    "test:integration": "turbo test:integration",
+    "test:unit": "turbo test:unit",
+    "typecheck": "turbo typecheck"
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
+    "husky": "^9.1.2",
+    "lint-staged": "^13.2.3",
     "prettier": "^3.2.5",
     "stylelint": "^15.9.0",
     "stylelint-config-standard": "^33.0.0",
     "stylelint-prettier": "^3.0.0",
-    "turbo": "^2.1.2", 
-    "typescript": "^5.4.5",
-    "concurrently": "^8.2.2"
+    "turbo": "^2.1.2",
+    "typescript": "^5.4.5"
   },
   "packageManager": "pnpm@9.0.6",
   "engines": {
