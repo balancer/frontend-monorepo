@@ -1,4 +1,4 @@
-import { TokenInput } from '@/lib/modules/tokens/TokenInput/TokenInput'
+import { TokenInput } from 'lib/modules/tokens/TokenInput/TokenInput'
 import { HumanAmount, isSameAddress } from '@balancer/sdk'
 import { Address } from 'viem'
 import { useAddLiquidity } from '../AddLiquidityProvider'

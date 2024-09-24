@@ -3,7 +3,7 @@ import {
   GqlChain,
   GqlPoolNestingType,
   GqlPoolType,
-} from '@/lib/shared/services/api/generated/graphql'
+} from 'lib/shared/services/api/generated/graphql'
 import { Pool } from '../PoolProvider'
 
 export const notAllowedPoolMock: Pool = {

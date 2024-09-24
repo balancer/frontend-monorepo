@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
-import { testHook } from '@/test/utils/custom-renderers'
+import { testHook } from 'test/utils/custom-renderers'
 import { useBuildUnstakeCallData } from './useBuildUnstakeCallData'
-import { GaugeService } from '@/lib/shared/services/staking/gauge.service'
-import { BatchRelayerService } from '@/lib/shared/services/batch-relayer/batch-relayer.service'
-import mainnetNetworkConfig from '@/lib/config/networks/mainnet'
-import { gaugeActionsService } from '@/lib/shared/services/batch-relayer/extensions/gauge-actions.service'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
+import { GaugeService } from 'lib/shared/services/staking/gauge.service'
+import { BatchRelayerService } from 'lib/shared/services/batch-relayer/batch-relayer.service'
+import mainnetNetworkConfig from 'lib/config/networks/mainnet'
+import { gaugeActionsService } from 'lib/shared/services/batch-relayer/extensions/gauge-actions.service'
+import { defaultTestUserAccount } from 'test/anvil/anvil-setup'
 import { Address } from 'viem'
-import { aGqlPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
+import { aGqlPoolElementMock } from 'test/msw/builders/gqlPoolElement.builders'
 
 function testBuildUnstakeCallData(amount: bigint, userAddress: Address = defaultTestUserAccount) {
   const batchRelayerService = new BatchRelayerService(

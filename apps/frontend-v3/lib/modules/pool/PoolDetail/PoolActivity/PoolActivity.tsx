@@ -10,7 +10,7 @@ import {
   IconButton,
 } from '@chakra-ui/react'
 import { Maximize2, Minimize2 } from 'react-feather'
-import ButtonGroup from '@/lib/shared/components/btns/button-group/ButtonGroup'
+import ButtonGroup from 'lib/shared/components/btns/button-group/ButtonGroup'
 import { PoolActivityProvider, usePoolActivity } from './usePoolActivity'
 import { PoolActivityChart } from '../PoolActivityChart/PoolActivityChart'
 import { PoolActivityTable } from '../PoolActivityTable/PoolActivityTable'

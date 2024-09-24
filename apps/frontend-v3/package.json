@@ -129,5 +129,8 @@
   "engineStrict": true,
   "engines": {
     "node": ">=18.x"
+  },
+  "imports": {
+    "#*": "./*"
   }
 }

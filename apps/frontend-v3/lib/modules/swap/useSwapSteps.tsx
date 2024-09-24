@@ -7,7 +7,7 @@ import { OSwapAction } from './swap.types'
 import { SwapStepParams, useSwapStep } from './useSwapStep'
 import { useRelayerMode } from '../relayer/useRelayerMode'
 import { useShouldSignRelayerApproval } from '../relayer/signRelayerApproval.hooks'
-import { getChainId } from '@/lib/config/app.config'
+import { getChainId } from 'lib/config/app.config'
 import { useApproveRelayerStep } from '../relayer/useApproveRelayerStep'
 import { useSignRelayerStep } from '../transactions/transaction-steps/useSignRelayerStep'
 

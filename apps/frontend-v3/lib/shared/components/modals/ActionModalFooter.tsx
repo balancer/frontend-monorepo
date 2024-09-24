@@ -1,4 +1,4 @@
-import { useAppzi } from '@/lib/shared/hooks/useAppzi'
+import { useAppzi } from 'lib/shared/hooks/useAppzi'
 import { Button, Divider, HStack, ModalFooter, VStack } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'

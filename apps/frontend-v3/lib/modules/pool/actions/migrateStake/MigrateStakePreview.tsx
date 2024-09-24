@@ -1,11 +1,11 @@
-import TokenRow from '@/lib/modules/tokens/TokenRow/TokenRow'
+import TokenRow from 'lib/modules/tokens/TokenRow/TokenRow'
 import { Card, VStack } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useMigrateStake as useMigrateStake } from './MigrateStakeProvider'
-import StakeAprTooltip from '@/lib/shared/components/tooltips/apr-tooltip/StakeAprTooltip'
+import StakeAprTooltip from 'lib/shared/components/tooltips/apr-tooltip/StakeAprTooltip'
 import { useUnstake } from '../unstake/UnstakeProvider'
-import { TokenRowGroup } from '@/lib/modules/tokens/TokenRow/TokenRowGroup'
+import { TokenRowGroup } from 'lib/modules/tokens/TokenRow/TokenRowGroup'
 
 export function MigrateStakePreview() {
   const { pool } = usePool()

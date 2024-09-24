@@ -22,11 +22,11 @@ import {
   TrackedTransaction,
   TransactionStatus,
   useRecentTransactions,
-} from '@/lib/modules/transactions/RecentTransactionsProvider'
+} from 'lib/modules/transactions/RecentTransactionsProvider'
 import { isEmpty, orderBy } from 'lodash'
 import { useBlockExplorer } from '../../hooks/useBlockExplorer'
 import { Activity, ArrowUpRight, Check, Clock, X, XOctagon } from 'react-feather'
-import { getChainShortName } from '@/lib/config/app.config'
+import { getChainShortName } from 'lib/config/app.config'
 import { formatDistanceToNow } from 'date-fns'
 
 function TransactionIcon({ status }: { status: TransactionStatus }) {

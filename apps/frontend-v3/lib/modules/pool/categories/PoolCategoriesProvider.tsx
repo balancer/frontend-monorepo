@@ -1,6 +1,6 @@
 'use client'
 
-import { useMandatoryContext } from '@/lib/shared/utils/contexts'
+import { useMandatoryContext } from 'lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
 import { Pool } from '../PoolProvider'
 import { PoolCategory } from './getPoolCategories'

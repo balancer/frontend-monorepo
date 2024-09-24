@@ -6,7 +6,7 @@ import { useMulticall } from '../web3/contracts/useMulticall'
 
 import { AbiMap } from '../web3/contracts/AbiMap'
 import { Hex } from 'viem'
-import { getChainId, getGqlChain } from '@/lib/config/app.config'
+import { getChainId, getGqlChain } from 'lib/config/app.config'
 
 type GaugeDataByPool = Record<string, { totalSupply: string; userBalance: string; gauge: GaugeArg }>
 

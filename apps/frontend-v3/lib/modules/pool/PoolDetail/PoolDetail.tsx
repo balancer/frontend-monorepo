@@ -16,9 +16,9 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import PoolUserEvents from './PoolUserEvents'
 import { hasTotalBalance } from '../user-balance.helpers'
 import { usePoolEvents } from '../usePoolEvents'
-import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
-import { CowFooter } from '@/app/(app)/pools/cow/CowFooter'
-import { CowPoolBanner } from '@/app/(app)/pools/cow/CowPoolBanner'
+import { DefaultPageContainer } from 'lib/shared/components/containers/DefaultPageContainer'
+import { CowFooter } from 'app/(app)/pools/cow/CowFooter'
+import { CowPoolBanner } from 'app/(app)/pools/cow/CowPoolBanner'
 import { PoolActivity } from './PoolActivity/PoolActivity'
 
 export function PoolDetail() {

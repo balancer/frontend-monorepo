@@ -1,6 +1,6 @@
-import { useNetworkConfig } from '@/lib/config/useNetworkConfig'
-import { balancerMinterAbi } from '@/lib/modules/web3/contracts/abi/generated'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { useNetworkConfig } from 'lib/config/useNetworkConfig'
+import { balancerMinterAbi } from 'lib/modules/web3/contracts/abi/generated'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
 import { useReadContract } from 'wagmi'
 
 export function useHasMinterApproval() {

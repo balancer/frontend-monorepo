@@ -2,7 +2,7 @@
 
 import NextLink from 'next/link'
 import { Stack, Divider, Text, Box, VStack, HStack, Link, IconButton } from '@chakra-ui/react'
-import { staggeredFadeIn } from '@/lib/shared/utils/animations'
+import { staggeredFadeIn } from 'lib/shared/utils/animations'
 import { motion } from 'framer-motion'
 import { DefaultPageContainer } from '../containers/DefaultPageContainer'
 import { BalancerLogoType } from '../imgs/BalancerLogoType'

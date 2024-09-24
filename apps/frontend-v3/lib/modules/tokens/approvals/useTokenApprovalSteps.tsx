@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { getChainId, getNativeAssetAddress } from '@/lib/config/app.config'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
-import { isSameAddress } from '@/lib/shared/utils/addresses'
-import { sentryMetaForWagmiSimulation } from '@/lib/shared/utils/query-errors'
+import { getChainId, getNativeAssetAddress } from 'lib/config/app.config'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
+import { isSameAddress } from 'lib/shared/utils/addresses'
+import { sentryMetaForWagmiSimulation } from 'lib/shared/utils/query-errors'
 import { useMemo } from 'react'
 import { Address } from 'viem'
 import { ManagedErc20TransactionButton } from '../../transactions/transaction-steps/TransactionButton'

@@ -18,8 +18,8 @@ import {
   CardFooter,
   CardBody,
 } from '@chakra-ui/react'
-import { usePriceImpact } from '@/lib/modules/price-impact/PriceImpactProvider'
-import { fNum } from '@/lib/shared/utils/numbers'
+import { usePriceImpact } from 'lib/modules/price-impact/PriceImpactProvider'
+import { fNum } from 'lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
 

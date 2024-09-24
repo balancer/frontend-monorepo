@@ -1,15 +1,15 @@
-import { PoolList } from '@/lib/modules/pool/PoolList/PoolList'
-import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
-import FadeInOnView from '@/lib/shared/components/containers/FadeInOnView'
+import { PoolList } from 'lib/modules/pool/PoolList/PoolList'
+import { DefaultPageContainer } from 'lib/shared/components/containers/DefaultPageContainer'
+import FadeInOnView from 'lib/shared/components/containers/FadeInOnView'
 
 import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
 
-// import { getApolloServerClient } from '@/lib/shared/services/api/apollo-server.client'
-// import { getProjectConfig } from '@/lib/config/getProjectConfig'
-// import { GetFeaturedPoolsDocument } from '@/lib/shared/services/api/generated/graphql'
-// import { FeaturedPools } from '@/lib/modules/featured-pools/FeaturedPools'
-import { CowGalxeQuestPromoBanner } from '@/lib/shared/components/promos/CowGalxeQuestPromoBanner'
+// import { getApolloServerClient } from 'lib/shared/services/api/apollo-server.client'
+// import { getProjectConfig } from 'lib/config/getProjectConfig'
+// import { GetFeaturedPoolsDocument } from 'lib/shared/services/api/generated/graphql'
+// import { FeaturedPools } from 'lib/modules/featured-pools/FeaturedPools'
+import { CowGalxeQuestPromoBanner } from 'lib/shared/components/promos/CowGalxeQuestPromoBanner'
 
 export default async function PoolsPage() {
   // Featured pools set up

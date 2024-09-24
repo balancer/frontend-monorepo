@@ -16,8 +16,8 @@ import {
   Code,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useDebounce } from '@/lib/shared/hooks/useDebounce'
-import { defaultDebounceMs } from '@/lib/shared/utils/queries'
+import { useDebounce } from 'lib/shared/hooks/useDebounce'
+import { defaultDebounceMs } from 'lib/shared/utils/queries'
 
 type Props = {
   isOpen: boolean

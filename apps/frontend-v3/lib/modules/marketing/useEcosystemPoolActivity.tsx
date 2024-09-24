@@ -4,23 +4,23 @@
 import * as echarts from 'echarts/core'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { format } from 'date-fns'
-import { GqlChain, GqlPoolEventType, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolEventType, GqlToken } from 'lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
-import { abbreviateAddress } from '@/lib/shared/utils/addresses'
-import { useTokens } from '@/lib/modules/tokens/TokensProvider'
+import { abbreviateAddress } from 'lib/shared/utils/addresses'
+import { useTokens } from 'lib/modules/tokens/TokensProvider'
 
 import {
   getBlockExplorerAddressUrl,
   getBlockExplorerTxUrl,
-} from '@/lib/shared/hooks/useBlockExplorer'
-import { useBreakpoints } from '@/lib/shared/hooks/useBreakpoints'
-import { useCurrency } from '@/lib/shared/hooks/useCurrency'
-import { NumberFormatter } from '@/lib/shared/utils/numbers'
+} from 'lib/shared/hooks/useBlockExplorer'
+import { useBreakpoints } from 'lib/shared/hooks/useBreakpoints'
+import { useCurrency } from 'lib/shared/hooks/useCurrency'
+import { NumberFormatter } from 'lib/shared/utils/numbers'
 import { usePoolEvents } from '../pool/usePoolEvents'
 import { supportedNetworks } from '../web3/ChainConfig'
-import { getChainShortName } from '@/lib/config/app.config'
+import { getChainShortName } from 'lib/config/app.config'
 
 type ChartInfoTokens = {
   token?: GqlToken

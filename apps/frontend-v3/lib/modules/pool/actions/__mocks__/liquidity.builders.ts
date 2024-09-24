@@ -1,4 +1,4 @@
-import { balAddress } from '@/lib/debug-helpers'
+import { balAddress } from 'lib/debug-helpers'
 import { TokenAmount, Token, HumanAmount } from '@balancer/sdk'
 import { Address, parseUnits } from 'viem'
 import { mock } from 'vitest-mock-extended'

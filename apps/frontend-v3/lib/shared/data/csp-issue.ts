@@ -1,5 +1,5 @@
-import { PoolId } from '@/lib/modules/pool/pool.types'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { PoolId } from 'lib/modules/pool/pool.types'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 
 export const NO_RECOVERY_EXIT_POOL_IDS: Record<GqlChain.Mainnet, PoolId[]> = {
   [GqlChain.Mainnet]: [

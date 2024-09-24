@@ -1,8 +1,8 @@
 'use client'
 
-import { GqlChain, GqlPoolTokenDetail } from '@/lib/shared/services/api/generated/graphql'
-import { NoisyCard } from '@/lib/shared/components/containers/NoisyCard'
-import { useThemeColorMode } from '@/lib/shared/services/chakra/useThemeColorMode'
+import { GqlChain, GqlPoolTokenDetail } from 'lib/shared/services/api/generated/graphql'
+import { NoisyCard } from 'lib/shared/components/containers/NoisyCard'
+import { useThemeColorMode } from 'lib/shared/services/chakra/useThemeColorMode'
 import { Box, VStack, useTheme } from '@chakra-ui/react'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { motion } from 'framer-motion'
@@ -11,8 +11,8 @@ import PoolWeightChartLegend from './PoolWeightChartLegend'
 import Image from 'next/image'
 import ReactECharts from 'echarts-for-react'
 import * as echarts from 'echarts/core'
-import { useTokens } from '@/lib/modules/tokens/TokensProvider'
-import { fNum } from '@/lib/shared/utils/numbers'
+import { useTokens } from 'lib/modules/tokens/TokensProvider'
+import { fNum } from 'lib/shared/utils/numbers'
 
 export interface PoolWeightChartProps {
   displayTokens: GqlPoolTokenDetail[]

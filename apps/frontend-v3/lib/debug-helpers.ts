@@ -1,5 +1,5 @@
-import mainnetNetworkConfig from '@/lib/config/networks/mainnet'
-import sepoliaNetworkConfig from '@/lib/config/networks/sepolia'
+import mainnetNetworkConfig from 'lib/config/networks/mainnet'
+import sepoliaNetworkConfig from 'lib/config/networks/sepolia'
 import { Address } from 'viem'
 
 /*

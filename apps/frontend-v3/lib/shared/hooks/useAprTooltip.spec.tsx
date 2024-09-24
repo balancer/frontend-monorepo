@@ -1,4 +1,4 @@
-import { testHook } from '@/test/utils/custom-renderers'
+import { testHook } from 'test/utils/custom-renderers'
 import { bn, fNum } from '../utils/numbers'
 import { useAprTooltip } from './useAprTooltip'
 import { aprTooltipDataMock } from './_mocks_/aprTooltipDataMock'

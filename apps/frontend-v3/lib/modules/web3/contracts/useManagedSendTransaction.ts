@@ -1,24 +1,24 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
-import { ManagedResult, TransactionLabels } from '@/lib/modules/transactions/transaction-steps/lib'
+import { ManagedResult, TransactionLabels } from 'lib/modules/transactions/transaction-steps/lib'
 import { useEffect } from 'react'
 import { useEstimateGas, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi'
 import { TransactionConfig, TransactionExecution, TransactionSimulation } from './contract.types'
 import { useOnTransactionConfirmation } from './useOnTransactionConfirmation'
 import { useOnTransactionSubmission } from './useOnTransactionSubmission'
-import { getGqlChain } from '@/lib/config/app.config'
+import { getGqlChain } from 'lib/config/app.config'
 import { useChainSwitch } from '../useChainSwitch'
 import {
   captureWagmiExecutionError,
   sentryMetaForWagmiExecution,
-} from '@/lib/shared/utils/query-errors'
-import { useNetworkConfig } from '@/lib/config/useNetworkConfig'
+} from 'lib/shared/utils/query-errors'
+import { useNetworkConfig } from 'lib/config/useNetworkConfig'
 import { useRecentTransactions } from '../../transactions/RecentTransactionsProvider'
 import { mainnet } from 'viem/chains'
 import { useTxHash } from '../safe.hooks'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
-import { onlyExplicitRefetch } from '@/lib/shared/utils/queries'
+import { onlyExplicitRefetch } from 'lib/shared/utils/queries'
 
 export type ManagedSendTransactionInput = {
   labels: TransactionLabels

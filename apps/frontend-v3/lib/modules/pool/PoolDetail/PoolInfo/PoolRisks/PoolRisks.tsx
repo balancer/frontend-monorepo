@@ -12,7 +12,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
-import { GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolElement } from 'lib/shared/services/api/generated/graphql'
 import { getPoolRisks, risksTitle } from './usePoolRisks'
 
 interface RisksListProps {

@@ -2,13 +2,13 @@
 
 import { BoxProps, Card, Box, Text, HStack } from '@chakra-ui/react'
 import { FeaturePoolCard } from './FeaturePoolCard'
-import { GetFeaturedPoolsQuery } from '@/lib/shared/services/api/generated/graphql'
+import { GetFeaturedPoolsQuery } from 'lib/shared/services/api/generated/graphql'
 import { PoolCarousel } from './PoolCarousel'
 import {
   FeaturedPool1SVG,
   FeaturedPool2SVG,
   FeaturedPool3SVG,
-} from '@/lib/shared/components/imgs/FeaturedPoolSvgs'
+} from 'lib/shared/components/imgs/FeaturedPoolSvgs'
 
 export const commonNoisyCardProps: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {

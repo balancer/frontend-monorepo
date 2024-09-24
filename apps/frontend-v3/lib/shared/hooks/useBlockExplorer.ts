@@ -1,5 +1,5 @@
-import { getNetworkConfig } from '@/lib/config/app.config'
-import { useNetworkConfig } from '@/lib/config/useNetworkConfig'
+import { getNetworkConfig } from 'lib/config/app.config'
+import { useNetworkConfig } from 'lib/config/useNetworkConfig'
 import { GqlChain } from '../services/api/generated/graphql'
 
 export function getBlockExplorerName(chain?: GqlChain) {

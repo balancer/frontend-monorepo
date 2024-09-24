@@ -20,10 +20,10 @@ import {
   usePoolCharts,
   PoolChartPeriod,
 } from './usePoolCharts'
-import ButtonGroup from '@/lib/shared/components/btns/button-group/ButtonGroup'
+import ButtonGroup from 'lib/shared/components/btns/button-group/ButtonGroup'
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
-import { getSelectStyles } from '@/lib/shared/services/chakra/custom/chakra-react-select'
-import { NoisyCard } from '@/lib/shared/components/containers/NoisyCard'
+import { getSelectStyles } from 'lib/shared/services/chakra/custom/chakra-react-select'
+import { NoisyCard } from 'lib/shared/components/containers/NoisyCard'
 
 type PeriodOption = PoolChartPeriod & OptionBase
 

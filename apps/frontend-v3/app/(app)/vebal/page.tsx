@@ -1,6 +1,6 @@
 'use client'
 
-import { VebalInfo } from '@/lib/modules/vebal/VebalInfo'
+import { VebalInfo } from 'lib/modules/vebal/VebalInfo'
 import { Stack } from '@chakra-ui/react'
 
 export default function VebalPage() {

@@ -2,7 +2,7 @@ import {
   GetSorSwapsQuery,
   GqlChain,
   GqlSorSwapType,
-} from '@/lib/shared/services/api/generated/graphql'
+} from 'lib/shared/services/api/generated/graphql'
 import {
   AuraBalSwapQueryOutput,
   ExactInQueryOutput,

@@ -1,5 +1,5 @@
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
-import { testHook } from '@/test/utils/custom-renderers'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
+import { testHook } from 'test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { Address } from 'viem'
 import {

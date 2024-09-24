@@ -1,12 +1,12 @@
 import { useVebalLockInfo } from './useVebalLockInfo'
-import { bn, fNum } from '@/lib/shared/utils/numbers'
+import { bn, fNum } from 'lib/shared/utils/numbers'
 import { differenceInDays, format } from 'date-fns'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { Stack, Text } from '@chakra-ui/react'
 import { VeBALLocksChart } from './vebal-chart/VebalLocksChart'
 import { useVebalUserData } from './useVebalUserData'
 import { useTokenBalances } from '../tokens/TokenBalancesProvider'
-import mainnetNetworkConfig from '@/lib/config/networks/mainnet'
+import mainnetNetworkConfig from 'lib/config/networks/mainnet'
 
 export function VebalInfo() {
   const lockInfo = useVebalLockInfo()

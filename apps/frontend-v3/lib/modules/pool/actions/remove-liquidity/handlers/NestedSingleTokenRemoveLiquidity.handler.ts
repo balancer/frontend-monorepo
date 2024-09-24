@@ -1,4 +1,4 @@
-import { TransactionConfig } from '@/lib/modules/web3/contracts/contract.types'
+import { TransactionConfig } from 'lib/modules/web3/contracts/contract.types'
 import {
   HumanAmount,
   RemoveLiquidityNested,
@@ -17,7 +17,7 @@ import {
   QueryRemoveLiquidityOutput,
 } from '../remove-liquidity.types'
 import { RemoveLiquidityHandler } from './RemoveLiquidity.handler'
-import { getRpcUrl } from '@/lib/modules/web3/transports'
+import { getRpcUrl } from 'lib/modules/web3/transports'
 
 export interface NestedSingleTokenQueryRemoveLiquidityOutput extends QueryRemoveLiquidityOutput {
   sdkQueryOutput: RemoveLiquidityNestedQueryOutput

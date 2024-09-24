@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
-import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
+import { aWjAuraWethPoolElementMock } from 'test/msw/builders/gqlPoolElement.builders'
 import {
   DefaultRemoveLiquidityTestProvider,
   buildDefaultPoolTestProvider,
-} from '@/test/utils/custom-renderers'
+} from 'test/utils/custom-renderers'
 import { PropsWithChildren } from 'react'
 import { RemoveLiquidityProvider } from './RemoveLiquidityProvider'
 

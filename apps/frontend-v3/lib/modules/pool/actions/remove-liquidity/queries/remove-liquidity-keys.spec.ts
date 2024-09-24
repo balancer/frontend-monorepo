@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
-import { poolId } from '@/lib/debug-helpers'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
+import { poolId } from 'lib/debug-helpers'
+import { defaultTestUserAccount } from 'test/anvil/anvil-setup'
 import { removeLiquidityKeys } from './remove-liquidity-keys'
 import { ProportionalRemoveLiquidityHandler } from '../handlers/ProportionalRemoveLiquidity.handler'
-import { aBalWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
+import { aBalWethPoolElementMock } from 'test/msw/builders/gqlPoolElement.builders'
 
 const handler = new ProportionalRemoveLiquidityHandler(aBalWethPoolElementMock())
 

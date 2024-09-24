@@ -3,10 +3,10 @@
 import { ChakraProvider, ThemeTypings } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { useParams, usePathname } from 'next/navigation'
-import { PoolVariant, PartnerVariant } from '@/lib/modules/pool/pool.types'
+import { PoolVariant, PartnerVariant } from 'lib/modules/pool/pool.types'
 import { theme as balTheme } from './themes/bal/bal.theme'
 import { theme as cowTheme } from './themes/cow/cow.theme'
-import { getProjectConfig } from '@/lib/config/getProjectConfig'
+import { getProjectConfig } from 'lib/config/getProjectConfig'
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const { variant } = useParams<{ variant?: PoolVariant }>()

@@ -1,10 +1,10 @@
 import { useReadContract } from 'wagmi'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { FeeDistributorStaticAbi } from '../../web3/contracts/abi/FeeDistributorStaticAbi'
-import networkConfigs from '@/lib/config/networks'
+import networkConfigs from 'lib/config/networks'
 import { formatUnits } from 'viem'
 import { useTokens } from '../../tokens/TokensProvider'
-import { bn } from '@/lib/shared/utils/numbers'
+import { bn } from 'lib/shared/utils/numbers'
 import { BPT_DECIMALS } from '../../pool/pool.constants'
 
 export const claimableVeBalRewardsTokens: string[] = [

@@ -1,10 +1,10 @@
-import { bn, safeSum } from '@/lib/shared/utils/numbers'
+import { bn, safeSum } from 'lib/shared/utils/numbers'
 import { Pool } from './PoolProvider'
 import { PoolListItem } from './pool.types'
 import { parseUnits } from 'viem'
 import { BPT_DECIMALS } from './pool.constants'
 import { HumanAmount } from '@balancer/sdk'
-import { GqlPoolStakingType } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolStakingType } from 'lib/shared/services/api/generated/graphql'
 import { hasNonPreferentialStakedBalance, hasPreferentialGauge } from './actions/stake.helpers'
 
 export function calcTotalStakedBalance(pool: Pool | PoolListItem): HumanAmount {

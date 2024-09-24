@@ -3,7 +3,7 @@
 import { Card, HStack, IconButton } from '@chakra-ui/react'
 import Image from 'next/image'
 import { usePool } from '../PoolProvider'
-import { getNetworkConfig } from '@/lib/config/app.config'
+import { getNetworkConfig } from 'lib/config/app.config'
 import { CloseIcon } from '@chakra-ui/icons'
 import { getPoolPath } from '../pool.utils'
 import Link from 'next/link'

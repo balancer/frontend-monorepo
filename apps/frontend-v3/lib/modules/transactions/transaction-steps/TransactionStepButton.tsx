@@ -1,15 +1,15 @@
 'use client'
 
-import { ConnectWallet } from '@/lib/modules/web3/ConnectWallet'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { ConnectWallet } from 'lib/modules/web3/ConnectWallet'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
 import { Button, VStack } from '@chakra-ui/react'
 import { ManagedResult, TransactionLabels, TransactionState, getTransactionState } from './lib'
-import { useChainSwitch } from '@/lib/modules/web3/useChainSwitch'
-import { GenericError } from '@/lib/shared/components/errors/GenericError'
-import { getGqlChain } from '@/lib/config/app.config'
-import { TransactionTimeoutError } from '@/lib/shared/components/errors/TransactionTimeoutError'
+import { useChainSwitch } from 'lib/modules/web3/useChainSwitch'
+import { GenericError } from 'lib/shared/components/errors/GenericError'
+import { getGqlChain } from 'lib/config/app.config'
+import { TransactionTimeoutError } from 'lib/shared/components/errors/TransactionTimeoutError'
 import { useState } from 'react'
-import { ensureError } from '@/lib/shared/utils/errors'
+import { ensureError } from 'lib/shared/utils/errors'
 
 interface Props {
   step: { labels: TransactionLabels } & ManagedResult

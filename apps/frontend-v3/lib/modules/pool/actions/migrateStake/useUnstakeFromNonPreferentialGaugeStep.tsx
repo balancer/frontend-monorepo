@@ -1,14 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { getNetworkConfig } from '@/lib/config/app.config'
-import { ManagedTransactionButton } from '@/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@/lib/modules/transactions/transaction-steps/TransactionStateProvider'
-import {
-  TransactionLabels,
-  TransactionStep,
-} from '@/lib/modules/transactions/transaction-steps/lib'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
-import { ManagedTransactionInput } from '@/lib/modules/web3/contracts/useManagedTransaction'
-import { sentryMetaForWagmiSimulation } from '@/lib/shared/utils/query-errors'
+import { getNetworkConfig } from 'lib/config/app.config'
+import { ManagedTransactionButton } from 'lib/modules/transactions/transaction-steps/TransactionButton'
+import { useTransactionState } from 'lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { TransactionLabels, TransactionStep } from 'lib/modules/transactions/transaction-steps/lib'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
+import { ManagedTransactionInput } from 'lib/modules/web3/contracts/useManagedTransaction'
+import { sentryMetaForWagmiSimulation } from 'lib/shared/utils/query-errors'
 import { useCallback, useMemo } from 'react'
 import { parseUnits } from 'viem'
 import { Pool } from '../../PoolProvider'

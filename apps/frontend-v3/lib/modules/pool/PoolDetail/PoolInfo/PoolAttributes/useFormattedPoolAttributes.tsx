@@ -3,12 +3,12 @@
 import { useMemo } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { format } from 'date-fns'
-import { DELEGATE_OWNER } from '@/lib/config/app.config'
+import { DELEGATE_OWNER } from 'lib/config/app.config'
 import { zeroAddress } from 'viem'
-import { abbreviateAddress } from '@/lib/shared/utils/addresses'
-import { fNum } from '@/lib/shared/utils/numbers'
+import { abbreviateAddress } from 'lib/shared/utils/addresses'
+import { fNum } from 'lib/shared/utils/numbers'
 import { bptUsdValue, isCowAmmPool, isStable } from '../../../pool.helpers'
-import { useCurrency } from '@/lib/shared/hooks/useCurrency'
+import { useCurrency } from 'lib/shared/hooks/useCurrency'
 import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
 
 export function useFormattedPoolAttributes() {

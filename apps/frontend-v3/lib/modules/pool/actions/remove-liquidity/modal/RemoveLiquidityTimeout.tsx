@@ -3,8 +3,8 @@ import { HStack, Text } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useCountdown } from 'usehooks-ts'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
-import { useShouldFreezeQuote } from '@/lib/modules/transactions/transaction-steps/useShouldFreezeQuote'
-import { NumberText } from '@/lib/shared/components/typography/NumberText'
+import { useShouldFreezeQuote } from 'lib/modules/transactions/transaction-steps/useShouldFreezeQuote'
+import { NumberText } from 'lib/shared/components/typography/NumberText'
 import { removeLiquidityStepId } from '../useRemoveLiquidityStep'
 
 function useRemoveLiquidityTimeout() {

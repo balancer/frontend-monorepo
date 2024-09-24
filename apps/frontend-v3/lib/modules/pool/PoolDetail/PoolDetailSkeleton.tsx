@@ -1,4 +1,4 @@
-import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
+import { DefaultPageContainer } from 'lib/shared/components/containers/DefaultPageContainer'
 import { HStack, Skeleton, VStack } from '@chakra-ui/react'
 
 export function PoolDetailSkeleton() {

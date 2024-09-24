@@ -1,13 +1,13 @@
 'use client'
 
-import { isDev } from '@/lib/config/app.config'
-import { captureError, getTenderlyUrlFromErrorMessage } from '@/lib/shared/utils/errors'
+import { isDev } from 'lib/config/app.config'
+import { captureError, getTenderlyUrlFromErrorMessage } from 'lib/shared/utils/errors'
 import {
   SentryMetadata,
   captureSentryError,
   getTenderlyUrl,
   shouldIgnore,
-} from '@/lib/shared/utils/query-errors'
+} from 'lib/shared/utils/query-errors'
 import { ScopeContext } from '@sentry/types'
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'

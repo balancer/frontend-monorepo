@@ -1,11 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ManagedSendTransactionButton } from '@/lib/modules/transactions/transaction-steps/TransactionButton'
-import {
-  TransactionLabels,
-  TransactionStep,
-} from '@/lib/modules/transactions/transaction-steps/lib'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
-import { sentryMetaForWagmiSimulation } from '@/lib/shared/utils/query-errors'
+import { ManagedSendTransactionButton } from 'lib/modules/transactions/transaction-steps/TransactionButton'
+import { TransactionLabels, TransactionStep } from 'lib/modules/transactions/transaction-steps/lib'
+import { GqlToken } from 'lib/shared/services/api/generated/graphql'
+import { sentryMetaForWagmiSimulation } from 'lib/shared/utils/query-errors'
 import { VStack } from '@chakra-ui/react'
 import { capitalize } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
@@ -16,7 +13,7 @@ import { SwapAction } from './swap.types'
 import { useTokenBalances } from '../tokens/TokenBalancesProvider'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { useTenderly } from '../web3/useTenderly'
-import { getChainId } from '@/lib/config/app.config'
+import { getChainId } from 'lib/config/app.config'
 
 export const swapStepId = 'swap'
 

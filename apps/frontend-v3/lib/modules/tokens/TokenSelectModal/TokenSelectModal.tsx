@@ -13,10 +13,10 @@ import {
 } from '@chakra-ui/react'
 import { RefObject, useState } from 'react'
 import { TokenSelectList } from './TokenSelectList/TokenSelectList'
-import { GqlChain, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from 'lib/shared/services/api/generated/graphql'
 import { TokenSelectPopular } from './TokenSelectPopular'
-import { SearchInput } from '@/lib/shared/components/inputs/SearchInput'
-import { getChainShortName } from '@/lib/config/app.config'
+import { SearchInput } from 'lib/shared/components/inputs/SearchInput'
+import { getChainShortName } from 'lib/config/app.config'
 import { Address } from 'viem'
 
 type Props = {

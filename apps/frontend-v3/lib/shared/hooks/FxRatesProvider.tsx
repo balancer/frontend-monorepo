@@ -1,6 +1,6 @@
 'use client'
 
-import { useMandatoryContext } from '@/lib/shared/utils/contexts'
+import { useMandatoryContext } from 'lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
 import { FxRates, SupportedCurrency } from '../utils/currencies'
 

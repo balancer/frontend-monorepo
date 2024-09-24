@@ -1,6 +1,6 @@
-import { getChainId } from '@/lib/config/app.config'
-import networkConfigs from '@/lib/config/networks'
-import { bn } from '@/lib/shared/utils/numbers'
+import { getChainId } from 'lib/config/app.config'
+import networkConfigs from 'lib/config/networks'
+import { bn } from 'lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { Address, formatUnits } from 'viem'
@@ -14,7 +14,7 @@ import { ClaimablePool } from '../../pool/actions/claim/ClaimProvider'
 import { balancerV2GaugeV5Abi } from '../../web3/contracts/abi/generated'
 import { WriteContractParameters } from 'wagmi/actions'
 import { compact } from 'lodash'
-import { onlyExplicitRefetch } from '@/lib/shared/utils/queries'
+import { onlyExplicitRefetch } from 'lib/shared/utils/queries'
 
 export interface BalTokenReward {
   balance: bigint

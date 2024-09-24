@@ -1,4 +1,4 @@
-import { wETHAddress, wjAuraAddress } from '@/lib/debug-helpers'
+import { wETHAddress, wjAuraAddress } from 'lib/debug-helpers'
 import {
   GetTokenPricesQuery,
   GetTokensQuery,
@@ -8,12 +8,8 @@ import {
   GqlPoolTokenDetail,
   GqlPoolTokenExpanded,
   GqlTokenPrice,
-} from '@/lib/shared/services/api/generated/graphql'
-import {
-  FakeTokenSymbol,
-  allFakeGqlTokens,
-  fakeTokenBySymbol,
-} from '@/test/data/all-gql-tokens.fake'
+} from 'lib/shared/services/api/generated/graphql'
+import { FakeTokenSymbol, allFakeGqlTokens, fakeTokenBySymbol } from 'test/data/all-gql-tokens.fake'
 import { mock } from 'vitest-mock-extended'
 import { TokenAllowances } from '../../web3/useTokenAllowances'
 import { TokenAmount, TokenBase } from '../token.types'
@@ -21,7 +17,7 @@ import { MswTokenList } from './token.test.types'
 import { emptyAddress } from '../../web3/contracts/wagmi-helpers'
 import { MinimalToken } from '@balancer/sdk'
 import { Address } from 'viem'
-import { MAX_BIGINT } from '@/lib/shared/utils/numbers'
+import { MAX_BIGINT } from 'lib/shared/utils/numbers'
 
 export const defaultTokenMock = aTokenMock({ symbol: 'TEST-TOKEN' })
 export const defaultTokenListMock: MswTokenList = allFakeGqlTokens

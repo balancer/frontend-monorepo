@@ -1,7 +1,7 @@
 'use client'
 
-import { useCurrency } from '@/lib/shared/hooks/useCurrency'
-import { blockInvalidNumberInput } from '@/lib/shared/utils/numbers'
+import { useCurrency } from 'lib/shared/hooks/useCurrency'
+import { blockInvalidNumberInput } from 'lib/shared/utils/numbers'
 import {
   Box,
   BoxProps,

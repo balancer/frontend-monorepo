@@ -1,10 +1,10 @@
-import { SupportedChainId } from '@/lib/config/config.types'
-import { TransactionConfig } from '@/lib/modules/web3/contracts/contract.types'
-import { emptyAddress } from '@/lib/modules/web3/contracts/wagmi-helpers'
+import { SupportedChainId } from 'lib/config/config.types'
+import { TransactionConfig } from 'lib/modules/web3/contracts/contract.types'
+import { emptyAddress } from 'lib/modules/web3/contracts/wagmi-helpers'
 import { Token, TokenAmount } from '@balancer/sdk'
 import { BuildAddLiquidityInput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithAddress } from 'lib/modules/tokens/token.types'
 
 /**
  * TwammAddLiquidityHandler is a handler that implements the

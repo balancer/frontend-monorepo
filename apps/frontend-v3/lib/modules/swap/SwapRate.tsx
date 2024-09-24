@@ -1,9 +1,9 @@
 import { Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useSwap } from './SwapProvider'
-import { useCurrency } from '@/lib/shared/hooks/useCurrency'
+import { useCurrency } from 'lib/shared/hooks/useCurrency'
 import { useTokens } from '../tokens/TokensProvider'
-import { fNum } from '@/lib/shared/utils/numbers'
+import { fNum } from 'lib/shared/utils/numbers'
 
 export function SwapRate() {
   const [priceDirection, setPriceDirection] = useState<'givenIn' | 'givenOut'>('givenIn')

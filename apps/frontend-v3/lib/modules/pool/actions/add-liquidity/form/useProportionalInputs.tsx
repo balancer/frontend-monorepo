@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useTokenBalances } from '@/lib/modules/tokens/TokenBalancesProvider'
-import { useTokens } from '@/lib/modules/tokens/TokensProvider'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
-import { isSameAddress } from '@/lib/shared/utils/addresses'
-import { bn } from '@/lib/shared/utils/numbers'
+import { useTokenBalances } from 'lib/modules/tokens/TokenBalancesProvider'
+import { useTokens } from 'lib/modules/tokens/TokensProvider'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
+import { isSameAddress } from 'lib/shared/utils/addresses'
+import { bn } from 'lib/shared/utils/numbers'
 import { Address, HumanAmount, InputAmount, calculateProportionalAmounts } from '@balancer/sdk'
 import { useMemo, useState } from 'react'
 import { formatUnits } from 'viem'
@@ -16,9 +16,9 @@ import {
   isEmptyHumanAmount,
 } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-import { useTotalUsdValue } from '@/lib/modules/tokens/useTotalUsdValue'
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
-import { swapWrappedWithNative } from '@/lib/modules/tokens/token.helpers'
+import { useTotalUsdValue } from 'lib/modules/tokens/useTotalUsdValue'
+import { HumanTokenAmountWithAddress } from 'lib/modules/tokens/token.types'
+import { swapWrappedWithNative } from 'lib/modules/tokens/token.helpers'
 
 type OptimalToken = {
   tokenAddress: Address

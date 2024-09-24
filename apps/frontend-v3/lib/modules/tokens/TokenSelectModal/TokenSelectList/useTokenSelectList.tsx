@@ -1,6 +1,6 @@
-import { GqlChain, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from 'lib/shared/services/api/generated/graphql'
 import { useTokens } from '../../TokensProvider'
-import { isSameAddress } from '@/lib/shared/utils/addresses'
+import { isSameAddress } from 'lib/shared/utils/addresses'
 import { orderBy } from 'lodash'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { exclNativeAssetFilter, nativeAssetFilter } from '../../token.helpers'

@@ -1,14 +1,11 @@
 import { useMemo, useCallback } from 'react'
 import { useTokenApprovalSteps } from '../../tokens/approvals/useTokenApprovalSteps'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import mainnetNetworkConfig from '@/lib/config/networks/mainnet'
+import mainnetNetworkConfig from 'lib/config/networks/mainnet'
 import { RawAmount } from '../../tokens/approvals/approval-rules'
-import { ManagedTransactionButton } from '@/lib/modules/transactions/transaction-steps/TransactionButton'
-import {
-  TransactionLabels,
-  TransactionStep,
-} from '@/lib/modules/transactions/transaction-steps/lib'
-import { sentryMetaForWagmiSimulation } from '@/lib/shared/utils/query-errors'
+import { ManagedTransactionButton } from 'lib/modules/transactions/transaction-steps/TransactionButton'
+import { TransactionLabels, TransactionStep } from 'lib/modules/transactions/transaction-steps/lib'
+import { sentryMetaForWagmiSimulation } from 'lib/shared/utils/query-errors'
 import { parseUnits } from 'viem'
 import { ManagedTransactionInput } from '../../web3/contracts/useManagedTransaction'
 import {

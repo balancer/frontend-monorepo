@@ -4,7 +4,7 @@ import { connectorsForWallets } from '@rainbow-me/rainbowkit'
 
 import { createConfig } from 'wagmi'
 
-import { getProjectConfig } from '@/lib/config/getProjectConfig'
+import { getProjectConfig } from 'lib/config/getProjectConfig'
 import {
   coinbaseWallet,
   rabbyWallet,

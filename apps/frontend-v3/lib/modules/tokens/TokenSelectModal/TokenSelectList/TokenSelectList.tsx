@@ -2,19 +2,19 @@
 
 import { Box, BoxProps, Button, HStack, Text, Divider } from '@chakra-ui/react'
 import { TokenSelectListRow } from './TokenSelectListRow'
-import { GqlChain, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from 'lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '../../TokenBalancesProvider'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
 import { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useTokenSelectList } from './useTokenSelectList'
 import { GroupedVirtuoso, GroupedVirtuosoHandle } from 'react-virtuoso'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { CoinsIcon } from '@/lib/shared/components/icons/CoinsIcon'
-import { WalletIcon } from '@/lib/shared/components/icons/WalletIcon'
+import { CoinsIcon } from 'lib/shared/components/icons/CoinsIcon'
+import { WalletIcon } from 'lib/shared/components/icons/WalletIcon'
 import { useTokens } from '../../TokensProvider'
 import { Address } from 'viem'
-import { isSameAddress } from '@/lib/shared/utils/addresses'
+import { isSameAddress } from 'lib/shared/utils/addresses'
 
 type Props = {
   chain: GqlChain

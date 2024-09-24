@@ -1,6 +1,6 @@
 import { Address } from 'viem'
 import { GqlChain } from '../shared/services/api/generated/graphql'
-import { chains } from '@/lib/modules/web3/ChainConfig'
+import { chains } from 'lib/modules/web3/ChainConfig'
 import { PoolIssue } from '../modules/pool/alerts/pool-issues/PoolIssue.type'
 import { SupportedWrapHandler } from '../modules/swap/swap.types'
 import { PartnerVariant } from '../modules/pool/pool.types'

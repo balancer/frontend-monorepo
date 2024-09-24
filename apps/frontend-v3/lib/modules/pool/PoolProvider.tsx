@@ -6,14 +6,14 @@ import {
   GetPoolDocument,
   GetPoolQuery,
   GqlChain,
-} from '@/lib/shared/services/api/generated/graphql'
+} from 'lib/shared/services/api/generated/graphql'
 import { createContext, PropsWithChildren, useRef } from 'react'
 import { useQuery } from '@apollo/client'
 import { FetchPoolProps } from './pool.types'
-import { useMandatoryContext } from '@/lib/shared/utils/contexts'
+import { useMandatoryContext } from 'lib/shared/utils/contexts'
 import { calcBptPriceFor, usePoolHelpers } from './pool.helpers'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
-import { usePoolEnrichWithOnChainData } from '@/lib/modules/pool/queries/usePoolEnrichWithOnChainData'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
+import { usePoolEnrichWithOnChainData } from 'lib/modules/pool/queries/usePoolEnrichWithOnChainData'
 import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances'
 import { useInvalidVariantRedirect } from './pool.hooks'
 import { getPoolDisplayTokens } from './pool.utils'

@@ -1,6 +1,6 @@
 import { AddLiquidityNestedQueryOutput, AddLiquidityQueryOutput, TokenAmount } from '@balancer/sdk'
 import { Address } from 'viem'
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithAddress } from 'lib/modules/tokens/token.types'
 
 /*
   Base interface that every handler must implement.

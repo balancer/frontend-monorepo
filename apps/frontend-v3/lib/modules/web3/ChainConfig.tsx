@@ -16,10 +16,10 @@ import {
   sepolia,
 } from 'wagmi/chains'
 
-import { getProjectConfig } from '@/lib/config/getProjectConfig'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { getProjectConfig } from 'lib/config/getProjectConfig'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 import { keyBy } from 'lodash'
-import { getBaseUrl } from '@/lib/shared/utils/urls'
+import { getBaseUrl } from 'lib/shared/utils/urls'
 
 /* If a request with the default rpc fails, it will fall back to the next one in the list.
   https://viem.sh/docs/clients/transports/fallback#fallback-transport

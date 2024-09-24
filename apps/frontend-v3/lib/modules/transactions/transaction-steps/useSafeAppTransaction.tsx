@@ -1,5 +1,5 @@
-import { getGqlChain } from '@/lib/config/app.config'
-import { getViemClient } from '@/lib/shared/services/viem/viem.client'
+import { getGqlChain } from 'lib/config/app.config'
+import { getViemClient } from 'lib/shared/services/viem/viem.client'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { Hex, parseAbiItem } from 'viem'

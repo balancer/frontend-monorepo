@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useTransactionSteps } from '@/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
-import { LABELS } from '@/lib/shared/labels'
-import { useMandatoryContext } from '@/lib/shared/utils/contexts'
-import { isDisabledWithReason } from '@/lib/shared/utils/functions/isDisabledWithReason'
-import { isZero } from '@/lib/shared/utils/numbers'
+import { useTransactionSteps } from 'lib/modules/transactions/transaction-steps/useTransactionSteps'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
+import { LABELS } from 'lib/shared/labels'
+import { useMandatoryContext } from 'lib/shared/utils/contexts'
+import { isDisabledWithReason } from 'lib/shared/utils/functions/isDisabledWithReason'
+import { isZero } from 'lib/shared/utils/numbers'
 import { createContext, PropsWithChildren } from 'react'
 import { usePool } from '../../PoolProvider'
 import { useUnstake } from '../unstake/UnstakeProvider'

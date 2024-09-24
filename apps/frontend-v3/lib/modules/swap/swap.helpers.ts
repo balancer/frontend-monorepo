@@ -1,12 +1,12 @@
 import { Address } from 'viem'
 import { OSwapAction, SwapAction } from './swap.types'
-import { GqlChain, GqlSorSwapType } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlSorSwapType } from 'lib/shared/services/api/generated/graphql'
 import {
   getNativeAssetAddress,
   getNetworkConfig,
   getWrappedNativeAssetAddress,
-} from '@/lib/config/app.config'
-import { isSameAddress } from '@/lib/shared/utils/addresses'
+} from 'lib/config/app.config'
+import { isSameAddress } from 'lib/shared/utils/addresses'
 import { isMainnet } from '../chains/chain.utils'
 
 export function swapActionPastTense(action: SwapAction): string {

@@ -1,7 +1,7 @@
-import { SupportedChainId } from '@/lib/config/config.types'
-import { usdtAddress, wETHAddress, wjAuraAddress } from '@/lib/debug-helpers'
-import { MAX_BIGINT } from '@/lib/shared/utils/numbers'
-import { testRawAmount } from '@/test/utils/numbers'
+import { SupportedChainId } from 'lib/config/config.types'
+import { usdtAddress, wETHAddress, wjAuraAddress } from 'lib/debug-helpers'
+import { MAX_BIGINT } from 'lib/shared/utils/numbers'
+import { testRawAmount } from 'test/utils/numbers'
 import { RawAmount, getRequiredTokenApprovals } from './approval-rules'
 
 const chainId: SupportedChainId = 1

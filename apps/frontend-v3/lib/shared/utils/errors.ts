@@ -14,8 +14,8 @@
  *      })
  *    }
  */
-import { TransactionConfig } from '@/lib/modules/web3/contracts/contract.types'
-import { buildTenderlyUrl } from '@/lib/modules/web3/useTenderly'
+import { TransactionConfig } from 'lib/modules/web3/contracts/contract.types'
+import { buildTenderlyUrl } from 'lib/modules/web3/useTenderly'
 import { captureException } from '@sentry/nextjs'
 import { ScopeContext } from '@sentry/types/types/scope'
 

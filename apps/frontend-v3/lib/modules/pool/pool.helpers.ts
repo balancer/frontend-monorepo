@@ -1,5 +1,5 @@
-import { getChainId, getNetworkConfig } from '@/lib/config/app.config'
-import { getBlockExplorerAddressUrl } from '@/lib/shared/hooks/useBlockExplorer'
+import { getChainId, getNetworkConfig } from 'lib/config/app.config'
+import { getBlockExplorerAddressUrl } from 'lib/shared/hooks/useBlockExplorer'
 import {
   GetPoolQuery,
   GqlChain,
@@ -9,9 +9,9 @@ import {
   GqlPoolStakingOtherGauge,
   GqlPoolTokenDetail,
   GqlPoolType,
-} from '@/lib/shared/services/api/generated/graphql'
-import { isSameAddress } from '@/lib/shared/utils/addresses'
-import { Numberish, bn } from '@/lib/shared/utils/numbers'
+} from 'lib/shared/services/api/generated/graphql'
+import { isSameAddress } from 'lib/shared/utils/addresses'
+import { Numberish, bn } from 'lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { isEmpty, isNil } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
@@ -20,7 +20,7 @@ import { isNotMainnet } from '../chains/chain.utils'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { PoolIssue } from './alerts/pool-issues/PoolIssue.type'
 import { getUserTotalBalanceInt } from './user-balance.helpers'
-import { dateToUnixTimestamp } from '@/lib/shared/utils/time'
+import { dateToUnixTimestamp } from 'lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { balancerV3VaultAbi } from '../web3/contracts/abi/balancerV3Abi'
 

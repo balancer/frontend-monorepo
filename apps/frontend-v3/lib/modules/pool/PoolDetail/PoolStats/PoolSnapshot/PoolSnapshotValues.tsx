@@ -2,15 +2,15 @@
 
 import React, { memo, useMemo } from 'react'
 import { HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlToken } from 'lib/shared/services/api/generated/graphql'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
-import { useCurrency } from '@/lib/shared/hooks/useCurrency'
-import { SECONDS_IN_DAY } from '@/test/utils/numbers'
+import { useCurrency } from 'lib/shared/hooks/useCurrency'
+import { SECONDS_IN_DAY } from 'test/utils/numbers'
 import { sumBy } from 'lodash'
 import { useTokens } from '../../../../tokens/TokensProvider'
 import { usePool } from '../../../PoolProvider'
-import { bn } from '@/lib/shared/utils/numbers'
-import MainAprTooltip from '@/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import { bn } from 'lib/shared/utils/numbers'
+import MainAprTooltip from 'lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { isCowAmmPool } from '../../../pool.helpers'
 
 type PoolStatsValues = {

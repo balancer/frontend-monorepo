@@ -1,15 +1,15 @@
 'use client'
 
-import { useUserSettings } from '@/lib/modules/user/settings/UserSettingsProvider'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
-import { defaultDebounceMs, onlyExplicitRefetch } from '@/lib/shared/utils/queries'
+import { useUserSettings } from 'lib/modules/user/settings/UserSettingsProvider'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
+import { defaultDebounceMs, onlyExplicitRefetch } from 'lib/shared/utils/queries'
 import { useDebounce } from 'use-debounce'
 import { Address } from 'viem'
 import { RemoveLiquidityHandler } from '../handlers/RemoveLiquidity.handler'
 import { RemoveLiquidityParams, removeLiquidityKeys } from './remove-liquidity-keys'
 import { HumanAmount } from '@balancer/sdk'
 import { useQuery } from '@tanstack/react-query'
-import { sentryMetaForRemoveLiquidityHandler } from '@/lib/shared/utils/query-errors'
+import { sentryMetaForRemoveLiquidityHandler } from 'lib/shared/utils/query-errors'
 import { useBlockNumber } from 'wagmi'
 
 type Params = {

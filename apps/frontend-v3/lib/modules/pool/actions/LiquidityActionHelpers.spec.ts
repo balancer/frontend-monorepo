@@ -1,4 +1,4 @@
-import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
+import { aWjAuraWethPoolElementMock } from 'test/msw/builders/gqlPoolElement.builders'
 import {
   LiquidityActionHelpers,
   areEmptyAmounts,
@@ -16,7 +16,7 @@ import {
   usdtAddress,
   wjAuraAddress,
   ethAddress,
-} from '@/lib/debug-helpers'
+} from 'lib/debug-helpers'
 import { recoveryPoolMock } from '../__mocks__/recoveryPoolMock'
 import { Pool } from '../PoolProvider'
 import { mock } from 'vitest-mock-extended'

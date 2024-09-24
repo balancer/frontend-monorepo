@@ -1,9 +1,9 @@
-import { useProtocolStats } from '@/lib/shared/hooks/useProtocolStats'
+import { useProtocolStats } from 'lib/shared/hooks/useProtocolStats'
 import { Center, Box, Text, SimpleGrid, Skeleton } from '@chakra-ui/react'
 import { useMemo } from 'react'
-import { AnimatedNumber } from '@/lib/shared/components/marketing/AnimatedNumber'
-import { Picture } from '@/lib/shared/components/other/Picture'
-import { ParallaxImage } from '@/lib/shared/components/marketing/ParallaxImage'
+import { AnimatedNumber } from 'lib/shared/components/marketing/AnimatedNumber'
+import { Picture } from 'lib/shared/components/other/Picture'
+import { ParallaxImage } from 'lib/shared/components/marketing/ParallaxImage'
 
 type ProtocolStatsSectionProps = {
   title: string

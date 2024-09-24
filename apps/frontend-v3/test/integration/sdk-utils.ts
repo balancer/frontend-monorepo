@@ -1,5 +1,5 @@
-import { GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
-import { isSameAddress } from '@/lib/shared/utils/addresses'
+import { GqlPoolElement } from 'lib/shared/services/api/generated/graphql'
+import { isSameAddress } from 'lib/shared/utils/addresses'
 import {
   VAULT,
   ChainId,

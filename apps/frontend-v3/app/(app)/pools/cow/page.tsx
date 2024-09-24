@@ -1,11 +1,11 @@
-import { PoolList } from '@/lib/modules/pool/PoolList/PoolList'
-import FadeInOnView from '@/lib/shared/components/containers/FadeInOnView'
-import { GqlPoolType } from '@/lib/shared/services/api/generated/graphql'
+import { PoolList } from 'lib/modules/pool/PoolList/PoolList'
+import FadeInOnView from 'lib/shared/components/containers/FadeInOnView'
+import { GqlPoolType } from 'lib/shared/services/api/generated/graphql'
 import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { CowFooter } from './CowFooter'
-import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
+import { DefaultPageContainer } from 'lib/shared/components/containers/DefaultPageContainer'
 import { CowHeader } from './CowHeader'
 
 export const metadata: Metadata = {

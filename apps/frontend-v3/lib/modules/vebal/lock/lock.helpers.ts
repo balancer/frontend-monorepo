@@ -1,4 +1,4 @@
-import { toUtcTime } from '@/lib/shared/utils/time'
+import { toUtcTime } from 'lib/shared/utils/time'
 import { RawAmount } from '../../tokens/approvals/approval-rules'
 
 export enum LockActionType {

@@ -1,17 +1,17 @@
 'use client'
 
-import { isNotSupported, shouldBlockAddLiquidity } from '@/lib/modules/pool/pool.helpers'
-import { usePool } from '@/lib/modules/pool/PoolProvider'
-import { RelayerSignatureProvider } from '@/lib/modules/relayer/RelayerSignatureProvider'
-import { TokenInputsValidationProvider } from '@/lib/modules/tokens/TokenInputsValidationProvider'
-import { PriceImpactProvider } from '@/lib/modules/price-impact/PriceImpactProvider'
+import { isNotSupported, shouldBlockAddLiquidity } from 'lib/modules/pool/pool.helpers'
+import { usePool } from 'lib/modules/pool/PoolProvider'
+import { RelayerSignatureProvider } from 'lib/modules/relayer/RelayerSignatureProvider'
+import { TokenInputsValidationProvider } from 'lib/modules/tokens/TokenInputsValidationProvider'
+import { PriceImpactProvider } from 'lib/modules/price-impact/PriceImpactProvider'
 import { Alert } from '@chakra-ui/react'
-import { TransactionStateProvider } from '@/lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { TransactionStateProvider } from 'lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { PropsWithChildren } from 'react'
 import { isHash } from 'viem'
-import { usePoolRedirect } from '@/lib/modules/pool/pool.hooks'
-import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
-import { AddLiquidityProvider } from '@/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
+import { usePoolRedirect } from 'lib/modules/pool/pool.hooks'
+import { DefaultPageContainer } from 'lib/shared/components/containers/DefaultPageContainer'
+import { AddLiquidityProvider } from 'lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
 
 type Props = PropsWithChildren<{
   params: { txHash?: string[] }

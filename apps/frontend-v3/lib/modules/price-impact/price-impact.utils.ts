@@ -1,4 +1,4 @@
-import { bn } from '@/lib/shared/utils/numbers'
+import { bn } from 'lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 
 /*

@@ -1,15 +1,15 @@
 'use client'
 
-import { useTransactionSteps } from '@/lib/modules/transactions/transaction-steps/useTransactionSteps'
+import { useTransactionSteps } from 'lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { PoolListItem } from '../../pool.types'
 import { useClaimAllRewardsSteps } from './useClaimAllRewardsSteps'
 import { useClaimsData } from './useClaimsData'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
 import { useDisclosure } from '@chakra-ui/hooks'
-import { isDisabledWithReason } from '@/lib/shared/utils/functions/isDisabledWithReason'
-import { LABELS } from '@/lib/shared/labels'
+import { isDisabledWithReason } from 'lib/shared/utils/functions/isDisabledWithReason'
+import { LABELS } from 'lib/shared/labels'
 import { createContext, PropsWithChildren } from 'react'
-import { useMandatoryContext } from '@/lib/shared/utils/contexts'
+import { useMandatoryContext } from 'lib/shared/utils/contexts'
 import { Pool } from '../../PoolProvider'
 
 export type ClaimablePool = Pool | PoolListItem

@@ -12,8 +12,8 @@ import {
 } from '@chakra-ui/react'
 import { RisksList } from '../../../PoolDetail/PoolInfo/PoolRisks/PoolRisks'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-import { useTokenBalances } from '@/lib/modules/tokens/TokenBalancesProvider'
-import { InfoIcon } from '@/lib/shared/components/icons/InfoIcon'
+import { useTokenBalances } from 'lib/modules/tokens/TokenBalancesProvider'
+import { InfoIcon } from 'lib/shared/components/icons/InfoIcon'
 
 export function AddLiquidityFormCheckbox() {
   const { tokens, acceptPoolRisks, setAcceptPoolRisks } = useAddLiquidity()

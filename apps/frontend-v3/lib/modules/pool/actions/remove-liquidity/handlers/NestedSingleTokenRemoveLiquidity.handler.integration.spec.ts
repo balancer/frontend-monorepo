@@ -1,11 +1,11 @@
-import networkConfig from '@/lib/config/networks/mainnet'
-import { daiAddress } from '@/lib/debug-helpers'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
+import networkConfig from 'lib/config/networks/mainnet'
+import { daiAddress } from 'lib/debug-helpers'
+import { defaultTestUserAccount } from 'test/anvil/anvil-setup'
 import { nestedPoolMock } from '../../../__mocks__/nestedPoolMock'
 import { Pool } from '../../../PoolProvider'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
-import { mainnetTestPublicClient } from '@/test/utils/wagmi/wagmi-test-clients'
+import { mainnetTestPublicClient } from 'test/utils/wagmi/wagmi-test-clients'
 import { NestedSingleTokenRemoveLiquidityHandler } from './NestedSingleTokenRemoveLiquidity.handler'
 
 function selectNestedSingleTokenHandler(pool: Pool): NestedSingleTokenRemoveLiquidityHandler {

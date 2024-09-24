@@ -1,6 +1,6 @@
 import { Circle, SquareProps } from '@chakra-ui/react'
 import { GqlChain } from '../../services/api/generated/graphql'
-import { getNetworkConfig } from '@/lib/config/app.config'
+import { getNetworkConfig } from 'lib/config/app.config'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 

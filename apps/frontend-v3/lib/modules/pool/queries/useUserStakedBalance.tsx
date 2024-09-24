@@ -1,9 +1,6 @@
-import { getChainId } from '@/lib/config/app.config'
-import {
-  GqlPoolStakingType,
-  GqlUserStakedBalance,
-} from '@/lib/shared/services/api/generated/graphql'
-import { bn } from '@/lib/shared/utils/numbers'
+import { getChainId } from 'lib/config/app.config'
+import { GqlPoolStakingType, GqlUserStakedBalance } from 'lib/shared/services/api/generated/graphql'
+import { bn } from 'lib/shared/utils/numbers'
 import { compact, groupBy } from 'lodash'
 import { Address, formatUnits } from 'viem'
 import { useReadContracts } from 'wagmi'

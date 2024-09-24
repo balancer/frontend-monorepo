@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { TokenBalancesProvider, useTokenBalances } from '@/lib/modules/tokens/TokenBalancesProvider'
+import { TokenBalancesProvider, useTokenBalances } from 'lib/modules/tokens/TokenBalancesProvider'
 import {
   Box,
   Button,
@@ -20,8 +20,8 @@ import { useEffect, useRef } from 'react'
 import { Address } from 'viem'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-import { bn, fNum } from '@/lib/shared/utils/numbers'
-import { TransactionSettings } from '@/lib/modules/user/settings/TransactionSettings'
+import { bn, fNum } from 'lib/shared/utils/numbers'
+import { TransactionSettings } from 'lib/modules/user/settings/TransactionSettings'
 import { TokenInputs } from './TokenInputs'
 import { TokenInputsWithAddable } from './TokenInputsWithAddable'
 import { usePool } from '../../../PoolProvider'
@@ -30,24 +30,24 @@ import {
   requiresProportionalInput,
   supportsNestedActions,
 } from '../../LiquidityActionHelpers'
-import { PriceImpactAccordion } from '@/lib/modules/price-impact/PriceImpactAccordion'
+import { PriceImpactAccordion } from 'lib/modules/price-impact/PriceImpactAccordion'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
-import { usePriceImpact } from '@/lib/modules/price-impact/PriceImpactProvider'
-import { useCurrency } from '@/lib/shared/hooks/useCurrency'
+import { usePriceImpact } from 'lib/modules/price-impact/PriceImpactProvider'
+import { useCurrency } from 'lib/shared/hooks/useCurrency'
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
-import { isNativeOrWrappedNative, isNativeAsset } from '@/lib/modules/tokens/token.helpers'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
-import { NativeAssetSelectModal } from '@/lib/modules/tokens/NativeAssetSelectModal'
-import { useTokenInputsValidation } from '@/lib/modules/tokens/TokenInputsValidationProvider'
-import { GenericError } from '@/lib/shared/components/errors/GenericError'
+import { isNativeOrWrappedNative, isNativeAsset } from 'lib/modules/tokens/token.helpers'
+import { GqlToken } from 'lib/shared/services/api/generated/graphql'
+import { NativeAssetSelectModal } from 'lib/modules/tokens/NativeAssetSelectModal'
+import { useTokenInputsValidation } from 'lib/modules/tokens/TokenInputsValidationProvider'
+import { GenericError } from 'lib/shared/components/errors/GenericError'
 import { PriceImpactError } from '../../../../price-impact/PriceImpactError'
-import AddLiquidityAprTooltip from '@/lib/shared/components/tooltips/apr-tooltip/AddLiquidityAprTooltip'
+import AddLiquidityAprTooltip from 'lib/shared/components/tooltips/apr-tooltip/AddLiquidityAprTooltip'
 import { calcPotentialYieldFor } from '../../../pool.utils'
-import { cannotCalculatePriceImpactError } from '@/lib/modules/price-impact/price-impact.utils'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
-import { ConnectWallet } from '@/lib/modules/web3/ConnectWallet'
-import { BalAlert } from '@/lib/shared/components/alerts/BalAlert'
-import { SafeAppAlert } from '@/lib/shared/components/alerts/SafeAppAlert'
+import { cannotCalculatePriceImpactError } from 'lib/modules/price-impact/price-impact.utils'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
+import { ConnectWallet } from 'lib/modules/web3/ConnectWallet'
+import { BalAlert } from 'lib/shared/components/alerts/BalAlert'
+import { SafeAppAlert } from 'lib/shared/components/alerts/SafeAppAlert'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {

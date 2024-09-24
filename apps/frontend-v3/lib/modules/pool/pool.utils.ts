@@ -7,7 +7,7 @@ import {
   GqlPoolAprItem,
   GqlPoolTokenDisplay,
   GqlPoolAprItemType,
-} from '@/lib/shared/services/api/generated/graphql'
+} from 'lib/shared/services/api/generated/graphql'
 import { invert } from 'lodash'
 import {
   BaseVariant,
@@ -17,14 +17,14 @@ import {
   PoolListItem,
   PoolVariant,
 } from './pool.types'
-import { Numberish, bn, fNum } from '@/lib/shared/utils/numbers'
+import { Numberish, bn, fNum } from 'lib/shared/utils/numbers'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { TokenAmountHumanReadable } from '../tokens/token.types'
 import { formatUnits, parseUnits } from 'viem'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { Pool } from './PoolProvider'
 import BigNumber from 'bignumber.js'
-import { TOTAL_APR_TYPES } from '@/lib/shared/hooks/useAprTooltip'
+import { TOTAL_APR_TYPES } from 'lib/shared/hooks/useAprTooltip'
 
 // URL slug for each chain
 export enum ChainSlug {

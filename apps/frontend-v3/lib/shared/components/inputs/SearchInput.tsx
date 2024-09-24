@@ -1,7 +1,7 @@
 import { InputGroup, Input, InputRightElement, IconButton, InputProps } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
-import { useDebounce } from '@/lib/shared/hooks/useDebounce'
-import { defaultDebounceMs } from '@/lib/shared/utils/queries'
+import { useDebounce } from 'lib/shared/hooks/useDebounce'
+import { defaultDebounceMs } from 'lib/shared/utils/queries'
 import { Search, X } from 'react-feather'
 
 interface SearchInputProps {

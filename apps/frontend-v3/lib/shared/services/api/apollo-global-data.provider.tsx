@@ -7,17 +7,17 @@
  * prior to the useQuery call, ensuring the data is already present on the first
  * client render pass.
  */
-import { getApolloServerClient } from '@/lib/shared/services/api/apollo-server.client'
+import { getApolloServerClient } from 'lib/shared/services/api/apollo-server.client'
 import {
   GetTokenPricesDocument,
   GetTokensDocument,
-} from '@/lib/shared/services/api/generated/graphql'
-import { getProjectConfig } from '@/lib/config/getProjectConfig'
-import { TokensProvider } from '@/lib/modules/tokens/TokensProvider'
+} from 'lib/shared/services/api/generated/graphql'
+import { getProjectConfig } from 'lib/config/getProjectConfig'
+import { TokensProvider } from 'lib/modules/tokens/TokensProvider'
 import { FiatFxRatesProvider } from '../../hooks/FxRatesProvider'
 import { getFxRates } from '../../utils/currencies'
-import { getPoolCategories } from '@/lib/modules/pool/categories/getPoolCategories'
-import { PoolCategoriesProvider } from '@/lib/modules/pool/categories/PoolCategoriesProvider'
+import { getPoolCategories } from 'lib/modules/pool/categories/getPoolCategories'
+import { PoolCategoriesProvider } from 'lib/modules/pool/categories/PoolCategoriesProvider'
 import { mins } from '../../utils/time'
 import { PropsWithChildren } from 'react'
 

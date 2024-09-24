@@ -19,7 +19,7 @@ import {
   Switch,
 } from '@chakra-ui/react'
 import { useUserSettings } from './UserSettingsProvider'
-import { blockInvalidNumberInput } from '@/lib/shared/utils/numbers'
+import { blockInvalidNumberInput } from 'lib/shared/utils/numbers'
 import { Percent, Settings } from 'react-feather'
 import { CurrencySelect } from './CurrencySelect'
 

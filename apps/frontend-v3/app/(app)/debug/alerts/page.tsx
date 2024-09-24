@@ -1,10 +1,10 @@
 'use client'
 
-import { BalAlert } from '@/lib/shared/components/alerts/BalAlert'
-import { BalAlertButton } from '@/lib/shared/components/alerts/BalAlertButton'
-import { BalAlertContent } from '@/lib/shared/components/alerts/BalAlertContent'
-import { useGlobalAlerts } from '@/lib/shared/components/alerts/GlobalAlertsProvider'
-import { GenericError } from '@/lib/shared/components/errors/GenericError'
+import { BalAlert } from 'lib/shared/components/alerts/BalAlert'
+import { BalAlertButton } from 'lib/shared/components/alerts/BalAlertButton'
+import { BalAlertContent } from 'lib/shared/components/alerts/BalAlertContent'
+import { useGlobalAlerts } from 'lib/shared/components/alerts/GlobalAlertsProvider'
+import { GenericError } from 'lib/shared/components/errors/GenericError'
 import { Button, VStack } from '@chakra-ui/react'
 
 const exceptionName = 'Error fetching swap'

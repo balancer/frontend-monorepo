@@ -6,10 +6,10 @@ import { balancerV3VaultAbi } from '../../web3/contracts/abi/balancerV3Abi'
 import { weightedPoolV3Abi } from '../../web3/contracts/abi/weightedPoolV3Abi'
 import { Pool } from '../PoolProvider'
 import { BPT_DECIMALS } from '../pool.constants'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
-import { bn, safeSum } from '@/lib/shared/utils/numbers'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
+import { bn, safeSum } from 'lib/shared/utils/numbers'
 import { getVaultConfig, isCowAmmPool, isV1Pool, isV2Pool, isV3Pool } from '../pool.helpers'
-import { getChainId } from '@/lib/config/app.config'
+import { getChainId } from 'lib/config/app.config'
 import {
   balancerV2ComposableStablePoolV5Abi,
   balancerV2VaultAbi,

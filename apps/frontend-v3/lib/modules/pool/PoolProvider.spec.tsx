@@ -1,10 +1,10 @@
-import { GetPoolQuery, GqlChain } from '@/lib/shared/services/api/generated/graphql'
-import { defaultPoolMock, defaultPoolResponseMock } from '@/test/msw/handlers/Pool.handlers'
-import { testHook } from '@/test/utils/custom-renderers'
+import { GetPoolQuery, GqlChain } from 'lib/shared/services/api/generated/graphql'
+import { defaultPoolMock, defaultPoolResponseMock } from 'test/msw/handlers/Pool.handlers'
+import { testHook } from 'test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { BaseVariant } from './pool.types'
 import { _usePool } from './PoolProvider'
-import { defaultTestGaugeAddress } from '@/test/msw/builders/gqlStaking.builders'
+import { defaultTestGaugeAddress } from 'test/msw/builders/gqlStaking.builders'
 
 async function testUsePool({
   initialData = defaultPoolResponseMock,

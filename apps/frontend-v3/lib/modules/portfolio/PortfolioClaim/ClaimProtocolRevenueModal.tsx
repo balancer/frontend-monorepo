@@ -1,25 +1,25 @@
 'use client'
 
 import { Modal, ModalBody, ModalCloseButton, ModalContent, Card } from '@chakra-ui/react'
-import { UsePortfolio, usePortfolio } from '@/lib/modules/portfolio/PortfolioProvider'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { UsePortfolio, usePortfolio } from 'lib/modules/portfolio/PortfolioProvider'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
-import { useBreakpoints } from '@/lib/shared/hooks/useBreakpoints'
+import { useBreakpoints } from 'lib/shared/hooks/useBreakpoints'
 import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { MobileStepTracker } from '../../transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useTransactionSteps } from '../../transactions/transaction-steps/useTransactionSteps'
-import { bn } from '@/lib/shared/utils/numbers'
+import { bn } from 'lib/shared/utils/numbers'
 // eslint-disable-next-line max-len
 import { getStylesForModalContentWithStepTracker } from '../../transactions/transaction-steps/step-tracker/step-tracker.utils'
-import { TransactionModalHeader } from '@/lib/shared/components/modals/TransactionModalHeader'
+import { TransactionModalHeader } from 'lib/shared/components/modals/TransactionModalHeader'
 import { TokenRowGroup } from '../../tokens/TokenRow/TokenRowGroup'
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
-import { ActionModalFooter } from '@/lib/shared/components/modals/ActionModalFooter'
-import { SuccessOverlay } from '@/lib/shared/components/modals/SuccessOverlay'
+import { ActionModalFooter } from 'lib/shared/components/modals/ActionModalFooter'
+import { SuccessOverlay } from 'lib/shared/components/modals/SuccessOverlay'
 import { useClaimVeBalRewardsStep } from '../../pool/actions/claim/useClaimVeBalRewardsStep'
 import { useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
-import { AnimateHeightChange } from '@/lib/shared/components/animations/AnimateHeightChange'
+import { AnimateHeightChange } from 'lib/shared/components/animations/AnimateHeightChange'
 
 type Props = {
   isOpen: boolean

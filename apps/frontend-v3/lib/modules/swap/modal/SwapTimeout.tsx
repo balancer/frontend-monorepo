@@ -3,7 +3,7 @@ import { HStack, Text } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useCountdown } from 'usehooks-ts'
 import { useSwap } from '../SwapProvider'
-import { NumberText } from '@/lib/shared/components/typography/NumberText'
+import { NumberText } from 'lib/shared/components/typography/NumberText'
 import { useShouldFreezeQuote } from '../../transactions/transaction-steps/useShouldFreezeQuote'
 import { swapStepId } from '../useSwapStep'
 

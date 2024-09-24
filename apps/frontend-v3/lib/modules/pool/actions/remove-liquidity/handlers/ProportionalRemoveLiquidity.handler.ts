@@ -1,4 +1,4 @@
-import { TransactionConfig } from '@/lib/modules/web3/contracts/contract.types'
+import { TransactionConfig } from 'lib/modules/web3/contracts/contract.types'
 import {
   HumanAmount,
   InputAmount,
@@ -17,7 +17,7 @@ import {
   SdkQueryRemoveLiquidityOutput,
 } from '../remove-liquidity.types'
 import { RemoveLiquidityHandler } from './RemoveLiquidity.handler'
-import { getRpcUrl } from '@/lib/modules/web3/transports'
+import { getRpcUrl } from 'lib/modules/web3/transports'
 
 export class ProportionalRemoveLiquidityHandler implements RemoveLiquidityHandler {
   helpers: LiquidityActionHelpers

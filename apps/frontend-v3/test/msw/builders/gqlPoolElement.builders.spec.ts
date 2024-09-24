@@ -1,6 +1,6 @@
 import { aNested50Weth503Pool } from './gqlPoolElement.builders'
 import { NestedPoolState, mapPoolToNestedPoolState } from '@balancer/sdk'
-import { daiAddress, usdcAddress, usdtAddress, wETHAddress } from '@/lib/debug-helpers'
+import { daiAddress, usdcAddress, usdtAddress, wETHAddress } from 'lib/debug-helpers'
 
 // Unskip when SDK is migrated to new API schema
 test.skip('aNested50Weth503Pool builds a proper nested pool mock', () => {

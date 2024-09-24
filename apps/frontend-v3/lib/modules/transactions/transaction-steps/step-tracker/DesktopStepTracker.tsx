@@ -2,8 +2,8 @@
 
 import { Card, Box, Divider, HStack, Heading, VStack } from '@chakra-ui/react'
 import { Steps } from './Steps'
-import { GasPriceCard } from '@/lib/shared/hooks/useGasPrice'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GasPriceCard } from 'lib/shared/hooks/useGasPrice'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 import { TransactionStepsResponse } from '../useTransactionSteps'
 
 type Props = {

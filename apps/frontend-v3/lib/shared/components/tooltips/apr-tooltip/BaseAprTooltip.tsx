@@ -1,4 +1,4 @@
-import { GqlPoolAprItem } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolAprItem } from 'lib/shared/services/api/generated/graphql'
 import {
   PlacementWithLogical,
   Popover,
@@ -8,7 +8,7 @@ import {
   Stack,
   Portal,
 } from '@chakra-ui/react'
-import { useThemeColorMode } from '@/lib/shared/services/chakra/useThemeColorMode'
+import { useThemeColorMode } from 'lib/shared/services/chakra/useThemeColorMode'
 import {
   swapFeesTooltipText,
   useAprTooltip,
@@ -18,11 +18,11 @@ import {
   votingIncentivesTooltipText,
   merklIncentivesTooltipText,
   surplusIncentivesTooltipText,
-} from '@/lib/shared/hooks/useAprTooltip'
+} from 'lib/shared/hooks/useAprTooltip'
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
-import { bn, fNum } from '@/lib/shared/utils/numbers'
-import { isVebalPool } from '@/lib/modules/pool/pool.helpers'
+import { bn, fNum } from 'lib/shared/utils/numbers'
+import { isVebalPool } from 'lib/modules/pool/pool.helpers'
 import { ReactNode } from 'react'
 
 interface Props {

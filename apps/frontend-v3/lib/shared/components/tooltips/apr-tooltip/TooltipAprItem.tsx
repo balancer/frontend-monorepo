@@ -1,4 +1,4 @@
-import { useThemeColorMode } from '@/lib/shared/services/chakra/useThemeColorMode'
+import { useThemeColorMode } from 'lib/shared/services/chakra/useThemeColorMode'
 import { BoxProps, TextProps, Box, HStack, Text, Tooltip } from '@chakra-ui/react'
 import BigNumber from 'bignumber.js'
 import { ReactNode } from 'react'

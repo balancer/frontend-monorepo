@@ -3,11 +3,11 @@
 import { Badge, Flex, HStack, Text, Tooltip } from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
 import Image from 'next/image'
-import { fNum } from '@/lib/shared/utils/numbers'
+import { fNum } from 'lib/shared/utils/numbers'
 import { Repeat } from 'react-feather'
 import { PoolListTokenPills } from '../../PoolList/PoolListTokenPills'
 import { shouldHideSwapFee } from '../../pool.utils'
-import { getChainShortName } from '@/lib/config/app.config'
+import { getChainShortName } from 'lib/config/app.config'
 
 export default function PoolMetaBadges() {
   const { pool, chain } = usePool()

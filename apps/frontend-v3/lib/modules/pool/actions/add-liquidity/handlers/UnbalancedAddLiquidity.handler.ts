@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
-import { TransactionConfig } from '@/lib/modules/web3/contracts/contract.types'
-import { getRpcUrl } from '@/lib/modules/web3/transports'
+import { HumanTokenAmountWithAddress } from 'lib/modules/tokens/token.types'
+import { TransactionConfig } from 'lib/modules/web3/contracts/contract.types'
+import { getRpcUrl } from 'lib/modules/web3/transports'
 import {
   AddLiquidity,
   AddLiquidityKind,

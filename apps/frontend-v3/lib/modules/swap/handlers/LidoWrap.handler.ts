@@ -1,4 +1,4 @@
-import { getChainId } from '@/lib/config/app.config'
+import { getChainId } from 'lib/config/app.config'
 import { SwapHandler } from './Swap.handler'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
 import {
@@ -11,9 +11,9 @@ import {
 import { getWrapConfig, getWrapType } from '../wrap.helpers'
 import { Address, encodeFunctionData, formatUnits } from 'viem'
 import { Hex } from 'viem'
-import { bn } from '@/lib/shared/utils/numbers'
-import { getViemClient } from '@/lib/shared/services/viem/viem.client'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { bn } from 'lib/shared/utils/numbers'
+import { getViemClient } from 'lib/shared/services/viem/viem.client'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 
 const lidoRateProviderMap: Partial<Record<GqlChain, Address>> = {
   [GqlChain.Mainnet]: '0x72d07d7dca67b8a406ad1ec34ce969c90bfee768',

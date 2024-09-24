@@ -1,15 +1,15 @@
 import { Box, Grid, GridItem, GridProps, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 import { getPoolPath, getPoolTypeLabel } from '../../pool.utils'
-import MainAprTooltip from '@/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import MainAprTooltip from 'lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { memo } from 'react'
-import { NetworkIcon } from '@/lib/shared/components/icons/NetworkIcon'
-import { useCurrency } from '@/lib/shared/hooks/useCurrency'
+import { NetworkIcon } from 'lib/shared/components/icons/NetworkIcon'
+import { useCurrency } from 'lib/shared/hooks/useCurrency'
 import { usePoolListQueryState } from '../usePoolListQueryState'
 import { PoolListItem } from '../../pool.types'
 import { PoolListTokenPills } from '../PoolListTokenPills'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
-import FadeInOnView from '@/lib/shared/components/containers/FadeInOnView'
+import FadeInOnView from 'lib/shared/components/containers/FadeInOnView'
 
 interface Props extends GridProps {
   pool: PoolListItem

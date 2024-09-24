@@ -16,7 +16,7 @@ import {
   ButtonProps,
 } from '@chakra-ui/react'
 import { useUserSettings } from './UserSettingsProvider'
-import { fNum } from '@/lib/shared/utils/numbers'
+import { fNum } from 'lib/shared/utils/numbers'
 import { Settings } from 'react-feather'
 import { CurrencySelect } from './CurrencySelect'
 import { SlippageInput } from './UserSettings'

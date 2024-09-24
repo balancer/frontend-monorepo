@@ -3,11 +3,11 @@
 import { Box, BoxProps, HStack, VStack, Text } from '@chakra-ui/react'
 import { TokenIcon } from '../../TokenIcon'
 import { TokenAmount } from '../../token.types'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { GqlToken } from 'lib/shared/services/api/generated/graphql'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
 import { useTokens } from '../../TokensProvider'
-import { useCurrency } from '@/lib/shared/hooks/useCurrency'
-import { fNum } from '@/lib/shared/utils/numbers'
+import { useCurrency } from 'lib/shared/hooks/useCurrency'
+import { fNum } from 'lib/shared/utils/numbers'
 import { TokenInfoPopover } from '../../TokenInfoPopover'
 
 type Props = {

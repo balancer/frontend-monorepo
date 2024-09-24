@@ -1,4 +1,4 @@
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 
 type Params = {
   params: {

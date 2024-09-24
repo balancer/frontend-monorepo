@@ -1,5 +1,5 @@
-import { ProjectConfigBeets } from '@/lib/config/projects/beets'
-import { ProjectConfigBalancer } from '@/lib/config/projects/balancer'
+import { ProjectConfigBeets } from 'lib/config/projects/beets'
+import { ProjectConfigBalancer } from 'lib/config/projects/balancer'
 
 export const allProjects = {
   [ProjectConfigBalancer.projectId]: { ...ProjectConfigBalancer },

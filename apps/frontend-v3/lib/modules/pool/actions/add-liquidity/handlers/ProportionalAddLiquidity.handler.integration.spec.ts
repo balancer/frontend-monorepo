@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
-import networkConfig from '@/lib/config/networks/mainnet'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
-import { polygonTestPublicClient } from '@/test/utils/wagmi/wagmi-test-clients'
+import networkConfig from 'lib/config/networks/mainnet'
+import { defaultTestUserAccount } from 'test/anvil/anvil-setup'
+import { polygonTestPublicClient } from 'test/utils/wagmi/wagmi-test-clients'
 import { gyroPoolMock } from '../../../__mocks__/gyroPoolMock'
 import { Pool } from '../../../PoolProvider'
 import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithAddress } from 'lib/modules/tokens/token.types'
 
 function selectProportionalHandler(pool: Pool) {
   return selectAddLiquidityHandler(pool) as ProportionalAddLiquidityHandler

@@ -1,6 +1,6 @@
 'use client'
 
-import { abbreviateAddress } from '@/lib/shared/utils/addresses'
+import { abbreviateAddress } from 'lib/shared/utils/addresses'
 import {
   Box,
   Card,
@@ -19,15 +19,15 @@ import {
 import { usePool } from '../../PoolProvider'
 import { ArrowUpRight } from 'react-feather'
 import { useMemo } from 'react'
-import { GqlPriceRateProviderData, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPriceRateProviderData, GqlToken } from 'lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
-import { useTokens } from '@/lib/modules/tokens/TokensProvider'
-import { TokenIcon } from '@/lib/modules/tokens/TokenIcon'
+import { useTokens } from 'lib/modules/tokens/TokensProvider'
+import { TokenIcon } from 'lib/modules/tokens/TokenIcon'
 import { AlertTriangle, XCircle } from 'react-feather'
 import Image from 'next/image'
 import { RateProviderInfoPopOver } from './RateProviderInfo'
-import { getBlockExplorerAddressUrl } from '@/lib/shared/hooks/useBlockExplorer'
-import { getRateProviderWarnings } from '@/lib/modules/pool/pool.helpers'
+import { getBlockExplorerAddressUrl } from 'lib/shared/hooks/useBlockExplorer'
+import { getRateProviderWarnings } from 'lib/modules/pool/pool.helpers'
 
 type RateProvider = {
   tokenAddress: Address

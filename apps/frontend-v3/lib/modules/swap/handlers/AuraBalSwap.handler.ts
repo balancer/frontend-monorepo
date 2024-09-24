@@ -1,6 +1,6 @@
-import { getChainId, getWrappedNativeAssetAddress } from '@/lib/config/app.config'
+import { getChainId, getWrappedNativeAssetAddress } from 'lib/config/app.config'
 import { SwapHandler } from './Swap.handler'
-import { GqlSorSwapType, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapType, GqlToken } from 'lib/shared/services/api/generated/graphql'
 import { AuraBalSwap, HumanAmount, Slippage, SwapKind, Token, TokenAmount } from '@balancer/sdk'
 import { formatUnits } from 'viem'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
@@ -10,8 +10,8 @@ import {
   SimulateSwapInputs,
 } from '../swap.types'
 import { getRpcUrl } from '../../web3/transports'
-import { isNativeAsset, isSameAddress } from '@/lib/shared/utils/addresses'
-import { bn } from '@/lib/shared/utils/numbers'
+import { isNativeAsset, isSameAddress } from 'lib/shared/utils/addresses'
+import { bn } from 'lib/shared/utils/numbers'
 
 export class AuraBalSwapHandler implements SwapHandler {
   name = 'AuraBalSwapHandler'

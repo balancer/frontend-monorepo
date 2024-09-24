@@ -1,4 +1,4 @@
-import { GenericError } from '@/lib/shared/components/errors/GenericError'
+import { GenericError } from 'lib/shared/components/errors/GenericError'
 import { isUnhandledAddPriceImpactError } from './price-impact.utils'
 import { UseQueryResult } from '@tanstack/react-query'
 

@@ -1,5 +1,5 @@
-import TokenRow from '@/lib/modules/tokens/TokenRow/TokenRow'
-import { TokenRowGroup } from '@/lib/modules/tokens/TokenRow/TokenRowGroup'
+import TokenRow from 'lib/modules/tokens/TokenRow/TokenRow'
+import { TokenRowGroup } from 'lib/modules/tokens/TokenRow/TokenRowGroup'
 import { VStack, Card } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'

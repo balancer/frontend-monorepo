@@ -1,12 +1,12 @@
-import { PaginatedTable } from '@/lib/shared/components/tables/PaginatedTable'
+import { PaginatedTable } from 'lib/shared/components/tables/PaginatedTable'
 import { usePortfolio } from '../PortfolioProvider'
 import { PortfolioTableHeader } from './PortfolioTableHeader'
 import { PortfolioTableRow } from './PortfolioTableRow'
 import { Card, Center, Checkbox, HStack, Heading, Stack, Text } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
-import { GqlPoolOrderBy } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolOrderBy } from 'lib/shared/services/api/generated/graphql'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
-import FadeInOnView from '@/lib/shared/components/containers/FadeInOnView'
+import FadeInOnView from 'lib/shared/components/containers/FadeInOnView'
 import {
   getUserTotalBalanceUsd,
   hasAuraStakedBalance,

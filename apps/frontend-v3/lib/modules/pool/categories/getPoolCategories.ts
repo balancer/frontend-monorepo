@@ -1,4 +1,4 @@
-import { mins } from '@/lib/shared/utils/time'
+import { mins } from 'lib/shared/utils/time'
 
 const POOL_CATEGORIES_URL =
   'https://raw.githubusercontent.com/balancer/metadata/main/pools/categories/index.json'

@@ -1,9 +1,9 @@
-import { useApproveMinterStep } from '@/lib/modules/staking/gauge/useMinterApprovalStep'
-import { TransactionStep } from '@/lib/modules/transactions/transaction-steps/lib'
+import { useApproveMinterStep } from 'lib/modules/staking/gauge/useMinterApprovalStep'
+import { TransactionStep } from 'lib/modules/transactions/transaction-steps/lib'
 import { useMemo } from 'react'
 import { ClaimAllRewardsStepParams, useClaimAllRewardsStep } from './useClaimAllRewardsStep'
-import { useApproveRelayerStep } from '@/lib/modules/relayer/useApproveRelayerStep'
-import { getChainId } from '@/lib/config/app.config'
+import { useApproveRelayerStep } from 'lib/modules/relayer/useApproveRelayerStep'
+import { getChainId } from 'lib/config/app.config'
 
 export function useClaimAllRewardsSteps(params: ClaimAllRewardsStepParams) {
   const pool = params.pools[0]

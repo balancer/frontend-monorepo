@@ -1,4 +1,4 @@
-import { TransactionConfig } from '@/lib/modules/web3/contracts/contract.types'
+import { TransactionConfig } from 'lib/modules/web3/contracts/contract.types'
 import {
   AddLiquidityNested,
   AddLiquidityNestedInput,
@@ -10,8 +10,8 @@ import { Pool } from '../../../PoolProvider'
 import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
 import { NestedBuildAddLiquidityInput, NestedQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
-import { getRpcUrl } from '@/lib/modules/web3/transports'
+import { HumanTokenAmountWithAddress } from 'lib/modules/tokens/token.types'
+import { getRpcUrl } from 'lib/modules/web3/transports'
 
 /**
  * NestedAddLiquidityHandler is a handler that implements the

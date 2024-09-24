@@ -1,9 +1,9 @@
-import { testHook } from '@/test/utils/custom-renderers'
+import { testHook } from 'test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 
-import { getGqlChain } from '@/lib/config/app.config'
-import { maticAddress } from '@/lib/debug-helpers'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { getGqlChain } from 'lib/config/app.config'
+import { maticAddress } from 'lib/debug-helpers'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 import { Address, Hash } from 'viem'
 import { polygon } from 'viem/chains'
 import { useAddLiquidityReceipt, useRemoveLiquidityReceipt, useSwapReceipt } from './receipt.hooks'

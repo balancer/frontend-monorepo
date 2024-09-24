@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useMandatoryContext } from '@/lib/shared/utils/contexts'
+import { useMandatoryContext } from 'lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { PoolVariant } from '../../pool.types'
 import { usePool } from '../../PoolProvider'
-import { GqlPoolEventType } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolEventType } from 'lib/shared/services/api/generated/graphql'
 import { usePoolEvents } from '../../usePoolEvents'
 import { slugToChainMap, ChainSlug } from '../../pool.utils'
-import { useTokens } from '@/lib/modules/tokens/TokensProvider'
+import { useTokens } from 'lib/modules/tokens/TokensProvider'
 import { differenceInCalendarDays } from 'date-fns'
-import { fNum } from '@/lib/shared/utils/numbers'
-import { ButtonGroupOption } from '@/lib/shared/components/btns/button-group/ButtonGroup'
+import { fNum } from 'lib/shared/utils/numbers'
+import { ButtonGroupOption } from 'lib/shared/components/btns/button-group/ButtonGroup'
 import {
   PoolActivity,
   PoolActivityEl,
@@ -21,9 +21,9 @@ import {
   getPoolActivityTabsList,
   Sorting,
 } from './poolActivity.types'
-import { PaginationState } from '@/lib/shared/components/pagination/pagination.types'
+import { PaginationState } from 'lib/shared/components/pagination/pagination.types'
 import { usePoolActivityViewType } from '../PoolActivityViewType/usePoolActivityViewType'
-import { sortAlphabetically } from '@/lib/shared/utils/sorting'
+import { sortAlphabetically } from 'lib/shared/utils/sorting'
 
 export type PoolActivityResponse = ReturnType<typeof _usePoolActivity>
 export const PoolActivityContext = createContext<PoolActivityResponse | null>(null)

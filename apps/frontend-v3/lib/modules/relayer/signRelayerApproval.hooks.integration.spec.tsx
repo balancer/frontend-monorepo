@@ -2,7 +2,7 @@ import {
   DefaultAddLiquidityTestProvider,
   DefaultPoolTestProvider,
   testHook,
-} from '@/test/utils/custom-renderers'
+} from 'test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { PropsWithChildren } from 'react'
 import { act } from 'react-dom/test-utils'

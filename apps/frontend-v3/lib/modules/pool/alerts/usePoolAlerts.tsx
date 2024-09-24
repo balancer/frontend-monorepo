@@ -1,7 +1,7 @@
-import { getNetworkConfig } from '@/lib/config/app.config'
-import { BalAlertButton } from '@/lib/shared/components/alerts/BalAlertButton'
-import { BalAlertContent } from '@/lib/shared/components/alerts/BalAlertContent'
-import { GqlPoolTokenDetail } from '@/lib/shared/services/api/generated/graphql'
+import { getNetworkConfig } from 'lib/config/app.config'
+import { BalAlertButton } from 'lib/shared/components/alerts/BalAlertButton'
+import { BalAlertContent } from 'lib/shared/components/alerts/BalAlertContent'
+import { GqlPoolTokenDetail } from 'lib/shared/services/api/generated/graphql'
 import { isNil } from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -12,7 +12,7 @@ import { hasReviewedRateProvider } from '../pool.helpers'
 import { shouldMigrateStake } from '../user-balance.helpers'
 import { VulnerabilityDataMap } from './pool-issues/PoolIssue.labels'
 import { PoolIssue } from './pool-issues/PoolIssue.type'
-import { BalAlertProps } from '@/lib/shared/components/alerts/BalAlert'
+import { BalAlertProps } from 'lib/shared/components/alerts/BalAlert'
 
 export type PoolAlert = {
   identifier: string

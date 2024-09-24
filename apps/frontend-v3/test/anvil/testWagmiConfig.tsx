@@ -1,4 +1,4 @@
-import { NetworksWithFork, getTestRpcSetup, testAccounts } from '@/test/anvil/anvil-setup'
+import { NetworksWithFork, getTestRpcSetup, testAccounts } from 'test/anvil/anvil-setup'
 import { Address, Chain, http } from 'viem'
 import { mainnet, polygon, sepolia } from 'viem/chains'
 import { createConfig } from 'wagmi'

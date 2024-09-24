@@ -1,21 +1,21 @@
 'use client'
 
-import { DesktopStepTracker } from '@/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
+import { DesktopStepTracker } from 'lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
 // eslint-disable-next-line max-len
-import { getStylesForModalContentWithStepTracker } from '@/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
-import { useBreakpoints } from '@/lib/shared/hooks/useBreakpoints'
-import { SuccessOverlay } from '@/lib/shared/components/modals/SuccessOverlay'
+import { getStylesForModalContentWithStepTracker } from 'lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
+import { useBreakpoints } from 'lib/shared/hooks/useBreakpoints'
+import { SuccessOverlay } from 'lib/shared/components/modals/SuccessOverlay'
 import { useStake } from './StakeProvider'
 import { usePool } from '../../PoolProvider'
 import { StakePreview } from './StakePreview'
-import { MobileStepTracker } from '@/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
-import { ActionModalFooter } from '@/lib/shared/components/modals/ActionModalFooter'
-import { TransactionModalHeader } from '@/lib/shared/components/modals/TransactionModalHeader'
+import { MobileStepTracker } from 'lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
+import { ActionModalFooter } from 'lib/shared/components/modals/ActionModalFooter'
+import { TransactionModalHeader } from 'lib/shared/components/modals/TransactionModalHeader'
 import { usePoolRedirect } from '../../pool.hooks'
 import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
-import { AnimateHeightChange } from '@/lib/shared/components/modals/AnimatedModalBody'
+import { AnimateHeightChange } from 'lib/shared/components/modals/AnimatedModalBody'
 
 type Props = {
   isOpen: boolean

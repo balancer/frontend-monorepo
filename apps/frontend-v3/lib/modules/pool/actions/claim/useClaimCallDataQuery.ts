@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Address, Hex } from 'viem'
-import { GaugeService } from '@/lib/shared/services/staking/gauge.service'
+import { GaugeService } from 'lib/shared/services/staking/gauge.service'
 import { useMemo } from 'react'
 
 export function useClaimCallDataQuery({

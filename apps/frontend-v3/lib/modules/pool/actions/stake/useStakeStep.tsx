@@ -1,15 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ManagedTransactionButton } from '@/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@/lib/modules/transactions/transaction-steps/TransactionStateProvider'
-import {
-  TransactionLabels,
-  TransactionStep,
-} from '@/lib/modules/transactions/transaction-steps/lib'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
-import { sentryMetaForWagmiSimulation } from '@/lib/shared/utils/query-errors'
+import { ManagedTransactionButton } from 'lib/modules/transactions/transaction-steps/TransactionButton'
+import { useTransactionState } from 'lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { TransactionLabels, TransactionStep } from 'lib/modules/transactions/transaction-steps/lib'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
+import { sentryMetaForWagmiSimulation } from 'lib/shared/utils/query-errors'
 import { useCallback, useMemo, useState } from 'react'
 import { Pool, usePool } from '../../PoolProvider'
-import { ManagedTransactionInput } from '@/lib/modules/web3/contracts/useManagedTransaction'
+import { ManagedTransactionInput } from 'lib/modules/web3/contracts/useManagedTransaction'
 
 const stakeStepId = 'stake'
 

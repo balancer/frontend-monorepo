@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
-import { bn, fNum } from '@/lib/shared/utils/numbers'
+import { bn, fNum } from 'lib/shared/utils/numbers'
 import StarsIcon from '../../icons/StarsIcon'
 
 interface Props {

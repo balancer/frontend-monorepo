@@ -1,5 +1,5 @@
-import { testAccountIndex } from '@/test/anvil/anvil-setup'
-import { addTestUserAddress, testWagmiConfig } from '@/test/anvil/testWagmiConfig'
+import { testAccountIndex } from 'test/anvil/anvil-setup'
+import { addTestUserAddress, testWagmiConfig } from 'test/anvil/testWagmiConfig'
 import { act } from '@testing-library/react'
 import { Address } from 'viem'
 import { Connector } from 'wagmi'

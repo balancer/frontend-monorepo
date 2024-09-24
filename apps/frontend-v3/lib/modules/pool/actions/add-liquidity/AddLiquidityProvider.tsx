@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useTokens } from '@/lib/modules/tokens/TokensProvider'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
-import { useMandatoryContext } from '@/lib/shared/utils/contexts'
+import { useTokens } from 'lib/modules/tokens/TokensProvider'
+import { GqlToken } from 'lib/shared/services/api/generated/graphql'
+import { useMandatoryContext } from 'lib/shared/utils/contexts'
 import { HumanAmount } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { Address, Hash } from 'viem'
@@ -19,18 +19,18 @@ import {
   requiresProportionalInput,
   supportsNestedActions,
 } from '../LiquidityActionHelpers'
-import { isDisabledWithReason } from '@/lib/shared/utils/functions/isDisabledWithReason'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
-import { LABELS } from '@/lib/shared/labels'
+import { isDisabledWithReason } from 'lib/shared/utils/functions/isDisabledWithReason'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
+import { LABELS } from 'lib/shared/labels'
 import { selectAddLiquidityHandler } from './handlers/selectAddLiquidityHandler'
-import { useTokenInputsValidation } from '@/lib/modules/tokens/TokenInputsValidationProvider'
+import { useTokenInputsValidation } from 'lib/modules/tokens/TokenInputsValidationProvider'
 import { useAddLiquiditySteps } from './useAddLiquiditySteps'
-import { useTransactionSteps } from '@/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { useTotalUsdValue } from '@/lib/modules/tokens/useTotalUsdValue'
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
-import { isUnhandledAddPriceImpactError } from '@/lib/modules/price-impact/price-impact.utils'
+import { useTransactionSteps } from 'lib/modules/transactions/transaction-steps/useTransactionSteps'
+import { useTotalUsdValue } from 'lib/modules/tokens/useTotalUsdValue'
+import { HumanTokenAmountWithAddress } from 'lib/modules/tokens/token.types'
+import { isUnhandledAddPriceImpactError } from 'lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { getLeafTokens } from '@/lib/modules/tokens/token.helpers'
+import { getLeafTokens } from 'lib/modules/tokens/token.helpers'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)

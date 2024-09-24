@@ -1,11 +1,11 @@
 import { Card, HStack, VStack, Text, Grid, GridItem } from '@chakra-ui/react'
 import { PoolListItem } from '../../pool.types'
-import MainAprTooltip from '@/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import MainAprTooltip from 'lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { ReactNode, isValidElement, memo } from 'react'
-import { NetworkIcon } from '@/lib/shared/components/icons/NetworkIcon'
-import { useCurrency } from '@/lib/shared/hooks/useCurrency'
+import { NetworkIcon } from 'lib/shared/components/icons/NetworkIcon'
+import { useCurrency } from 'lib/shared/hooks/useCurrency'
 import { usePoolListQueryState } from '../usePoolListQueryState'
-import { TokenIconStack } from '@/lib/modules/tokens/TokenIconStack'
+import { TokenIconStack } from 'lib/modules/tokens/TokenIconStack'
 import {
   getPoolTypeLabel,
   getTotalAprLabel,
@@ -14,7 +14,7 @@ import {
 } from '../../pool.utils'
 import { useRouter } from 'next/navigation'
 import { PoolName } from '../../PoolName'
-import FadeInOnView from '@/lib/shared/components/containers/FadeInOnView'
+import FadeInOnView from 'lib/shared/components/containers/FadeInOnView'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 
 interface Props {

@@ -1,6 +1,6 @@
 'use client'
 
-import FadeInOnView from '@/lib/shared/components/containers/FadeInOnView'
+import FadeInOnView from 'lib/shared/components/containers/FadeInOnView'
 import { Box, Text, Card, Center, Heading, Link, VStack, Image } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 

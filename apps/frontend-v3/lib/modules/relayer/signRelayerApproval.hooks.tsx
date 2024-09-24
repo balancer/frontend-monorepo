@@ -1,4 +1,4 @@
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
 import { useToast } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useWalletClient } from 'wagmi'
@@ -6,8 +6,8 @@ import { signRelayerApproval } from './signRelayerApproval'
 import { useHasApprovedRelayer } from './useHasApprovedRelayer'
 import { RelayerMode } from './useRelayerMode'
 import { SignRelayerState, useRelayerSignature } from './RelayerSignatureProvider'
-import { SupportedChainId } from '@/lib/config/config.types'
-import { Toast } from '@/lib/shared/components/toasts/Toast'
+import { SupportedChainId } from 'lib/config/config.types'
+import { Toast } from 'lib/shared/components/toasts/Toast'
 
 export function useShouldSignRelayerApproval(chainId: SupportedChainId, relayerMode: RelayerMode) {
   const { hasApprovedRelayer } = useHasApprovedRelayer(chainId)

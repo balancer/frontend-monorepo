@@ -1,7 +1,7 @@
 import { FormControl, Box } from '@chakra-ui/react'
 import { usePoolListQueryState } from './usePoolListQueryState'
 import { usePoolList } from './PoolListProvider'
-import { SearchInput } from '@/lib/shared/components/inputs/SearchInput'
+import { SearchInput } from 'lib/shared/components/inputs/SearchInput'
 
 export function PoolListSearch() {
   const { searchText, setSearch } = usePoolListQueryState()

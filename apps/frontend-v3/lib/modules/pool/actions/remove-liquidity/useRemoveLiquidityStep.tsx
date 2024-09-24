@@ -1,18 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ManagedSendTransactionButton } from '@/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@/lib/modules/transactions/transaction-steps/TransactionStateProvider'
-import {
-  TransactionLabels,
-  TransactionStep,
-} from '@/lib/modules/transactions/transaction-steps/lib'
-import { sentryMetaForWagmiSimulation } from '@/lib/shared/utils/query-errors'
+import { ManagedSendTransactionButton } from 'lib/modules/transactions/transaction-steps/TransactionButton'
+import { useTransactionState } from 'lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { TransactionLabels, TransactionStep } from 'lib/modules/transactions/transaction-steps/lib'
+import { sentryMetaForWagmiSimulation } from 'lib/shared/utils/query-errors'
 import { useEffect, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
 import {
   RemoveLiquidityBuildQueryParams,
   useRemoveLiquidityBuildCallDataQuery,
 } from './queries/useRemoveLiquidityBuildCallDataQuery'
-import { useTenderly } from '@/lib/modules/web3/useTenderly'
+import { useTenderly } from 'lib/modules/web3/useTenderly'
 
 export const removeLiquidityStepId = 'remove-liquidity'
 

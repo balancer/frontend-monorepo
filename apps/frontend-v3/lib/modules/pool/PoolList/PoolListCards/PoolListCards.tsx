@@ -2,11 +2,11 @@
 
 import { Box, Center, Grid, Skeleton, Text } from '@chakra-ui/react'
 import { PoolListCard } from './PoolListCard'
-import { Pagination } from '@/lib/shared/components/pagination/Pagination'
+import { Pagination } from 'lib/shared/components/pagination/Pagination'
 import { usePoolListQueryState } from '../usePoolListQueryState'
-import { getPaginationProps } from '@/lib/shared/components/pagination/getPaginationProps'
+import { getPaginationProps } from 'lib/shared/components/pagination/getPaginationProps'
 import { PoolListItem } from '../../pool.types'
-import { useIsMounted } from '@/lib/shared/hooks/useIsMounted'
+import { useIsMounted } from 'lib/shared/hooks/useIsMounted'
 
 interface Props {
   pools: PoolListItem[]

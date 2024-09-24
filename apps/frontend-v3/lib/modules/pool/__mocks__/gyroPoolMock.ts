@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolElement } from 'lib/shared/services/api/generated/graphql'
 
 export const gyroPoolMock: GqlPoolElement = {
   id: '0xdac42eeb17758daa38caf9a3540c808247527ae3000200000000000000000a2b',

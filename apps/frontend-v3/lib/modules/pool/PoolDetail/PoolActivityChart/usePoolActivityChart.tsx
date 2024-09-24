@@ -5,19 +5,19 @@ import * as echarts from 'echarts/core'
 import { useRef } from 'react'
 import { useParams } from 'next/navigation'
 import { secondsToMilliseconds, differenceInDays, format } from 'date-fns'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ChainSlug, slugToChainMap } from '../../pool.utils'
 import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
-import { abbreviateAddress } from '@/lib/shared/utils/addresses'
+import { abbreviateAddress } from 'lib/shared/utils/addresses'
 import {
   getBlockExplorerAddressUrl,
   getBlockExplorerTxUrl,
-} from '@/lib/shared/hooks/useBlockExplorer'
-import { useBreakpoints } from '@/lib/shared/hooks/useBreakpoints'
-import { useCurrency } from '@/lib/shared/hooks/useCurrency'
-import { NumberFormatter } from '@/lib/shared/utils/numbers'
+} from 'lib/shared/hooks/useBlockExplorer'
+import { useBreakpoints } from 'lib/shared/hooks/useBreakpoints'
+import { useCurrency } from 'lib/shared/hooks/useCurrency'
+import { NumberFormatter } from 'lib/shared/utils/numbers'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 import {
   PoolActivityMetaData,

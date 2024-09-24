@@ -1,16 +1,16 @@
 'use client'
 
-import { GetPoolsDocument } from '@/lib/shared/services/api/generated/graphql'
+import { GetPoolsDocument } from 'lib/shared/services/api/generated/graphql'
 import { useQuery as useApolloQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useProtocolRewards } from './PortfolioClaim/useProtocolRewards'
 import { ClaimableReward, useClaimableBalances } from './PortfolioClaim/useClaimableBalances'
 import { BalTokenReward, useBalTokenRewards } from './PortfolioClaim/useBalRewards'
-import { bn } from '@/lib/shared/utils/numbers'
+import { bn } from 'lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
-import { useMandatoryContext } from '@/lib/shared/utils/contexts'
+import { useMandatoryContext } from 'lib/shared/utils/contexts'
 import { useUserAccount } from '../web3/UserAccountProvider'
-import { getProjectConfig } from '@/lib/config/getProjectConfig'
+import { getProjectConfig } from 'lib/config/getProjectConfig'
 import { useOnchainUserPoolBalances } from '../pool/queries/useOnchainUserPoolBalances'
 import { Pool } from '../pool/PoolProvider'
 import { useRecentTransactions } from '../transactions/RecentTransactionsProvider'
@@ -21,7 +21,7 @@ import {
   getUserTotalBalance,
   getUserTotalBalanceUsd,
 } from '../pool/user-balance.helpers'
-import { getTimestamp } from '@/lib/shared/utils/time'
+import { getTimestamp } from 'lib/shared/utils/time'
 
 export interface ClaimableBalanceResult {
   status: 'success' | 'error'

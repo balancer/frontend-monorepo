@@ -1,5 +1,5 @@
-import { getChainId } from '@/lib/config/app.config'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { getChainId } from 'lib/config/app.config'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 
 export function isMainnet(chain: GqlChain | number): boolean {
   return chain === GqlChain.Mainnet || chain === getChainId(GqlChain.Mainnet)

@@ -1,6 +1,6 @@
 'use client'
 
-import { useMandatoryContext } from '@/lib/shared/utils/contexts'
+import { useMandatoryContext } from 'lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useState } from 'react'
 import { BalAlertProps } from './BalAlert'
 

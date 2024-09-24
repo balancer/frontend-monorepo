@@ -1,4 +1,4 @@
-import { GaugeService } from '@/lib/shared/services/staking/gauge.service'
+import { GaugeService } from 'lib/shared/services/staking/gauge.service'
 import { Address, Hex } from 'viem'
 
 type Params = {

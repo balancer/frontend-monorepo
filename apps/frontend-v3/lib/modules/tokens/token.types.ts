@@ -1,4 +1,4 @@
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlToken } from 'lib/shared/services/api/generated/graphql'
 import { Address, HumanAmount } from '@balancer/sdk'
 
 export type TokenBase = Pick<GqlToken, 'address' | 'name' | 'symbol' | 'decimals' | 'chainId'>

@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { TokenBalancesProvider } from '@/lib/modules/tokens/TokenBalancesProvider'
-import ButtonGroup, {
-  ButtonGroupOption,
-} from '@/lib/shared/components/btns/button-group/ButtonGroup'
-import { InputWithSlider } from '@/lib/shared/components/inputs/InputWithSlider/InputWithSlider'
-import { fNum } from '@/lib/shared/utils/numbers'
+import { TokenBalancesProvider } from 'lib/modules/tokens/TokenBalancesProvider'
+import ButtonGroup, { ButtonGroupOption } from 'lib/shared/components/btns/button-group/ButtonGroup'
+import { InputWithSlider } from 'lib/shared/components/inputs/InputWithSlider/InputWithSlider'
+import { fNum } from 'lib/shared/utils/numbers'
 import {
   Box,
   Button,
@@ -25,15 +23,15 @@ import { RemoveLiquidityProportional } from './RemoveLiquidityProportional'
 import { RemoveLiquiditySingleToken } from './RemoveLiquiditySingleToken'
 import { usePool } from '../../../PoolProvider'
 import { usePoolRedirect } from '../../../pool.hooks'
-import { TransactionSettings } from '@/lib/modules/user/settings/TransactionSettings'
+import { TransactionSettings } from 'lib/modules/user/settings/TransactionSettings'
 import { requiresProportionalInput } from '../../LiquidityActionHelpers'
-import { PriceImpactAccordion } from '@/lib/modules/price-impact/PriceImpactAccordion'
+import { PriceImpactAccordion } from 'lib/modules/price-impact/PriceImpactAccordion'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
-import { usePriceImpact } from '@/lib/modules/price-impact/PriceImpactProvider'
+import { usePriceImpact } from 'lib/modules/price-impact/PriceImpactProvider'
 import { parseUnits } from 'viem'
-import { SimulationError } from '@/lib/shared/components/errors/SimulationError'
-import { InfoIcon } from '@/lib/shared/components/icons/InfoIcon'
-import { SafeAppAlert } from '@/lib/shared/components/alerts/SafeAppAlert'
+import { SimulationError } from 'lib/shared/components/errors/SimulationError'
+import { InfoIcon } from 'lib/shared/components/icons/InfoIcon'
+import { SafeAppAlert } from 'lib/shared/components/alerts/SafeAppAlert'
 
 const TABS: ButtonGroupOption[] = [
   {

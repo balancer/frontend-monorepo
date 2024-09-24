@@ -1,6 +1,6 @@
 import { Box, BoxProps, useColorModeValue } from '@chakra-ui/react'
 import { GqlPoolType } from '../../services/api/generated/graphql'
-import { isClp, isStable, isWeighted, isCowAmmPool } from '@/lib/modules/pool/pool.helpers'
+import { isClp, isStable, isWeighted, isCowAmmPool } from 'lib/modules/pool/pool.helpers'
 import { CowSandPattern } from '../imgs/CowSandPattern'
 
 type ZenGardenVariant = 'diamond' | 'circle' | 'square' | 'pill'

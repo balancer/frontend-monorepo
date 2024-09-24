@@ -1,9 +1,9 @@
 'use client'
 
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
-import { GqlPoolTokenDetail } from '@/lib/shared/services/api/generated/graphql'
-import { NoisyCard } from '@/lib/shared/components/containers/NoisyCard'
-import { useThemeColorMode } from '@/lib/shared/services/chakra/useThemeColorMode'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
+import { GqlPoolTokenDetail } from 'lib/shared/services/api/generated/graphql'
+import { NoisyCard } from 'lib/shared/components/containers/NoisyCard'
+import { useThemeColorMode } from 'lib/shared/services/chakra/useThemeColorMode'
 import { Box, VStack, useTheme } from '@chakra-ui/react'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { motion } from 'framer-motion'

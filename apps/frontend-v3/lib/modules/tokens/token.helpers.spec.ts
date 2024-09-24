@@ -1,7 +1,7 @@
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 import { isWrappedNativeAsset, swapNativeWithWrapped, swapWrappedWithNative } from './token.helpers'
 import { HumanTokenAmountWithAddress } from './token.types'
-import { ethAddress, wETHAddress } from '@/lib/debug-helpers'
+import { ethAddress, wETHAddress } from 'lib/debug-helpers'
 import { InputAmount } from '@balancer/sdk'
 
 test('isWrappedNativeAsset', () => {

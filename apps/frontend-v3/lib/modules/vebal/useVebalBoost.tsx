@@ -1,11 +1,11 @@
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from 'lib/shared/services/api/generated/graphql'
 import { useMemo } from 'react'
-import { bn } from '@/lib/shared/utils/numbers'
+import { bn } from 'lib/shared/utils/numbers'
 import { isUndefined } from 'lodash'
 import { useGaugesSupplyAndBalance } from './useGaugesSupplyAndBalance'
 import { useGaugeTotalSupplyAndUserBalance } from './useGaugeTotalSupplyAndUserBalance'
 import { useVebalLockInfo } from './useVebalLockInfo'
-import { getChainId } from '@/lib/config/app.config'
+import { getChainId } from 'lib/config/app.config'
 import { Pool } from '../pool/PoolProvider'
 
 export type VeBalLockInfo = {

@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expect, test } from 'vitest'
 
-import { getSdkTestUtils } from '@/test/integration/sdk-utils'
-import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
-import { testHook } from '@/test/utils/custom-renderers'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
+import { getSdkTestUtils } from 'test/integration/sdk-utils'
+import { aWjAuraWethPoolElementMock } from 'test/msw/builders/gqlPoolElement.builders'
+import { testHook } from 'test/utils/custom-renderers'
+import { defaultTestUserAccount } from 'test/anvil/anvil-setup'
 import { ChainId, HumanAmount } from '@balancer/sdk'
 import { act, waitFor } from '@testing-library/react'
 import { UnbalancedAddLiquidityHandler } from '../../pool/actions/add-liquidity/handlers/UnbalancedAddLiquidity.handler'
 import { selectAddLiquidityHandler } from '../../pool/actions/add-liquidity/handlers/selectAddLiquidityHandler'
 import { connectWithDefaultUser } from '../../../../test/utils/wagmi/wagmi-connections'
 import { Address } from 'viem'
-import { mainnetTestPublicClient } from '@/test/utils/wagmi/wagmi-test-clients'
+import { mainnetTestPublicClient } from 'test/utils/wagmi/wagmi-test-clients'
 import { useManagedSendTransaction } from './useManagedSendTransaction'
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 

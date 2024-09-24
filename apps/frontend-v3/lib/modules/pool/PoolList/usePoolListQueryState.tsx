@@ -5,9 +5,9 @@ import {
   GqlPoolType,
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
-} from '@/lib/shared/services/api/generated/graphql'
+} from 'lib/shared/services/api/generated/graphql'
 import { uniq } from 'lodash'
-import { getProjectConfig } from '@/lib/config/getProjectConfig'
+import { getProjectConfig } from 'lib/config/getProjectConfig'
 import { useQueryState } from 'nuqs'
 import {
   POOL_CATEGORY_MAP,
@@ -17,7 +17,7 @@ import {
   poolListQueryStateParsers,
   SortingState,
 } from '../pool.types'
-import { PaginationState } from '@/lib/shared/components/pagination/pagination.types'
+import { PaginationState } from 'lib/shared/components/pagination/pagination.types'
 
 export function usePoolListQueryState() {
   const [first, setFirst] = useQueryState('first', poolListQueryStateParsers.first)

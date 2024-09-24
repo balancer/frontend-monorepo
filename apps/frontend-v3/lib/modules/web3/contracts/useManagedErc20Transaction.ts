@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
-import { getGqlChain } from '@/lib/config/app.config'
-import { SupportedChainId } from '@/lib/config/config.types'
-import { useNetworkConfig } from '@/lib/config/useNetworkConfig'
-import { ManagedResult, TransactionLabels } from '@/lib/modules/transactions/transaction-steps/lib'
-import { isSameAddress } from '@/lib/shared/utils/addresses'
-import { captureWagmiExecutionError } from '@/lib/shared/utils/query-errors'
+import { getGqlChain } from 'lib/config/app.config'
+import { SupportedChainId } from 'lib/config/config.types'
+import { useNetworkConfig } from 'lib/config/useNetworkConfig'
+import { ManagedResult, TransactionLabels } from 'lib/modules/transactions/transaction-steps/lib'
+import { isSameAddress } from 'lib/shared/utils/addresses'
+import { captureWagmiExecutionError } from 'lib/shared/utils/query-errors'
 import { useEffect, useState } from 'react'
 import { Address, ContractFunctionArgs, ContractFunctionName, erc20Abi } from 'viem'
 import { useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
@@ -17,7 +17,7 @@ import { TransactionExecution, TransactionSimulation, WriteAbiMutability } from 
 import { useOnTransactionConfirmation } from './useOnTransactionConfirmation'
 import { useOnTransactionSubmission } from './useOnTransactionSubmission'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
-import { onlyExplicitRefetch } from '@/lib/shared/utils/queries'
+import { onlyExplicitRefetch } from 'lib/shared/utils/queries'
 
 type Erc20Abi = typeof erc20Abi
 

@@ -1,9 +1,9 @@
-import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
+import { aWjAuraWethPoolElementMock } from 'test/msw/builders/gqlPoolElement.builders'
 import {
   GqlPoolStakingType,
   GqlPoolUserBalance,
   GqlUserStakedBalance,
-} from '@/lib/shared/services/api/generated/graphql'
+} from 'lib/shared/services/api/generated/graphql'
 import {
   calcNonOnChainFetchedStakedBalance,
   calcTotalStakedBalanceInt,

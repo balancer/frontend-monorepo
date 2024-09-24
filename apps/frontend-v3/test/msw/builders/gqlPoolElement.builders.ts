@@ -1,15 +1,9 @@
-import {
-  balAddress,
-  bpt3PoolAddress,
-  poolId,
-  wETHAddress,
-  wjAuraAddress,
-} from '@/lib/debug-helpers'
+import { balAddress, bpt3PoolAddress, poolId, wETHAddress, wjAuraAddress } from 'lib/debug-helpers'
 import {
   aTokenExpandedMock,
   someGqlTokenMocks,
   someTokenExpandedMock,
-} from '@/lib/modules/tokens/__mocks__/token.builders'
+} from 'lib/modules/tokens/__mocks__/token.builders'
 import {
   GqlChain,
   GqlPoolElement,
@@ -18,7 +12,7 @@ import {
   GqlPoolTokenExpanded,
   GqlPoolType,
   GqlPoolWeighted,
-} from '@/lib/shared/services/api/generated/graphql'
+} from 'lib/shared/services/api/generated/graphql'
 import { DeepPartial } from '@apollo/client/utilities'
 import { mock } from 'vitest-mock-extended'
 import { aGqlStakingMock } from './gqlStaking.builders'

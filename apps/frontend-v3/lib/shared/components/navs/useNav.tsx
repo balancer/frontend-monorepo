@@ -5,7 +5,7 @@ import { MediumIcon } from '../icons/social/MediumIcon'
 import { YoutubeIcon } from '../icons/social/YoutubeIcon'
 import { GithubIcon } from '../icons/social/GithubIcon'
 import { useParams } from 'next/navigation'
-import { isDev, isStaging } from '@/lib/config/app.config'
+import { isDev, isStaging } from 'lib/config/app.config'
 
 export function useNav() {
   const pathname = usePathname()

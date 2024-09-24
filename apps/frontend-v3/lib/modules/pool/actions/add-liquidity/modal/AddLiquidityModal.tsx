@@ -1,23 +1,23 @@
 'use client'
 
-import { DesktopStepTracker } from '@/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
+import { DesktopStepTracker } from 'lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 // eslint-disable-next-line max-len
-import { getStylesForModalContentWithStepTracker } from '@/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
-import { useBreakpoints } from '@/lib/shared/hooks/useBreakpoints'
+import { getStylesForModalContentWithStepTracker } from 'lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
+import { useBreakpoints } from 'lib/shared/hooks/useBreakpoints'
 import { AddLiquidityTimeout } from './AddLiquidityTimeout'
 import { ActionModalFooter } from '../../../../../shared/components/modals/ActionModalFooter'
-import { SuccessOverlay } from '@/lib/shared/components/modals/SuccessOverlay'
+import { SuccessOverlay } from 'lib/shared/components/modals/SuccessOverlay'
 import { usePoolRedirect } from '../../../pool.hooks'
-import { TransactionModalHeader } from '@/lib/shared/components/modals/TransactionModalHeader'
+import { TransactionModalHeader } from 'lib/shared/components/modals/TransactionModalHeader'
 import { useResetStepIndexOnOpen } from '../../useResetStepIndexOnOpen'
-import { useOnUserAccountChanged } from '@/lib/modules/web3/useOnUserAccountChanged'
+import { useOnUserAccountChanged } from 'lib/modules/web3/useOnUserAccountChanged'
 import { AddLiquiditySummary } from './AddLiquiditySummary'
-import { useAddLiquidityReceipt } from '@/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { useAddLiquidityReceipt } from 'lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
+import { useUserAccount } from 'lib/modules/web3/UserAccountProvider'
 
 type Props = {
   isOpen: boolean

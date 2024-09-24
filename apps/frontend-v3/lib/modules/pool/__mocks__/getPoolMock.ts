@@ -8,8 +8,8 @@ import {
   GqlChain,
   GetPoolQuery,
   GqlPoolElement,
-} from '@/lib/shared/services/api/generated/graphql'
-import { nested50WETH_50_3poolId } from '@/lib/debug-helpers'
+} from 'lib/shared/services/api/generated/graphql'
+import { nested50WETH_50_3poolId } from 'lib/debug-helpers'
 import { Address } from 'viem'
 
 function astToQueryString(ast: any): string {
