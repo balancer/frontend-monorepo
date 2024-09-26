@@ -35,7 +35,6 @@ module.exports = {
   ],
   overrides: [{ files: ['*.js?(x)', '*.ts?(x)'] }],
   rules: {
-    'comma-dangle': ['error', 'always-multiline'],
     'prettier/prettier': 'warn',
     curly: ['error', 'multi-line'],
     'no-console': ['off'],
