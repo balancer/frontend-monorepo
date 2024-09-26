@@ -1,3 +1,3 @@
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 
 export const UNSUPPORTED_CHAINS = [GqlChain.Fantom, GqlChain.Optimism]

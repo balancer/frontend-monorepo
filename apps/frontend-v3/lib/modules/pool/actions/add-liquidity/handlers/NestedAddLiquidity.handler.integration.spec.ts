@@ -8,7 +8,7 @@ import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
 import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 import { getPoolMock } from '../../../__mocks__/getPoolMock'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 
 function selectNestedHandler(pool: Pool) {
   return selectAddLiquidityHandler(pool) as NestedAddLiquidityHandler

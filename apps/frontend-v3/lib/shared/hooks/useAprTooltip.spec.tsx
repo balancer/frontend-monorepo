@@ -3,7 +3,7 @@ import { bn, fNum } from '../utils/numbers'
 import { useAprTooltip } from './useAprTooltip'
 import { aprTooltipDataMock } from './_mocks_/aprTooltipDataMock'
 import BigNumber from 'bignumber.js'
-import { GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
+import { GqlPoolAprItem, GqlPoolAprItemType } from '@repo/api/graphql'
 
 const defaultNumberFormatter = (value: string) => bn(bn(value).toFixed(4, BigNumber.ROUND_HALF_UP))
 

@@ -18,7 +18,7 @@ import {
   GqlPoolTokenExpanded,
   GqlPoolType,
   GqlPoolWeighted,
-} from '@/lib/shared/services/api/generated/graphql'
+} from '@repo/api/graphql'
 import { DeepPartial } from '@apollo/client/utilities'
 import { mock } from 'vitest-mock-extended'
 import { aGqlStakingMock } from './gqlStaking.builders'

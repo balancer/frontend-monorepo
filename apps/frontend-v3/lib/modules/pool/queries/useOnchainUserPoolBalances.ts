@@ -1,8 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  GqlPoolUserBalance,
-  GqlUserStakedBalance,
-} from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolUserBalance, GqlUserStakedBalance } from '@repo/api/graphql'
 import { isSameAddress } from '@/lib/shared/utils/addresses'
 import { bn, safeSum } from '@/lib/shared/utils/numbers'
 import { captureNonFatalError } from '@/lib/shared/utils/query-errors'

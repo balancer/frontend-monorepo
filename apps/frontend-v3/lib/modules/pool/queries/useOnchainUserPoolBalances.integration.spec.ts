@@ -9,7 +9,7 @@ import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
 import { ChainId } from '@balancer/sdk'
 import { waitFor } from '@testing-library/react'
 import { useOnchainUserPoolBalances } from './useOnchainUserPoolBalances'
-import { GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolElement } from '@repo/api/graphql'
 import { connectWithDefaultUser } from '@/test/utils/wagmi/wagmi-connections'
 
 async function testUseChainPoolBalances(pool: GqlPoolElement) {

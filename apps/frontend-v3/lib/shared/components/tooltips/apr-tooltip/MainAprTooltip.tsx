@@ -17,7 +17,7 @@ import { PoolListItem } from '@/lib/modules/pool/pool.types'
 import { FeaturedPool, Pool } from '@/lib/modules/pool/PoolProvider'
 import { isLBP } from '@/lib/modules/pool/pool.helpers'
 import { getProjectConfig } from '@/lib/config/getProjectConfig'
-import { GqlPoolAprItemType } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolAprItemType } from '@repo/api/graphql'
 
 interface Props
   extends Omit<

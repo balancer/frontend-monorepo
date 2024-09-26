@@ -2,7 +2,7 @@ import { useTokens } from '@/lib/modules/tokens/TokensProvider'
 import { isSameAddress } from '@/lib/shared/utils/addresses'
 import { safeSum } from '@/lib/shared/utils/numbers'
 import { useCallback } from 'react'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlToken } from '@repo/api/graphql'
 import { HumanTokenAmountWithAddress } from './token.types'
 
 export function useTotalUsdValue(tokens: GqlToken[]) {

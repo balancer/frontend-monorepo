@@ -1,7 +1,7 @@
 'use client'
 
 import TokenRow from '@/lib/modules/tokens/TokenRow/TokenRow'
-import { GqlChain, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from '@repo/api/graphql'
 import { Box, HStack, Radio, RadioGroup, Text, VStack } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'

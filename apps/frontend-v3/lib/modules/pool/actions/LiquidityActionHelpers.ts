@@ -1,7 +1,7 @@
 import { getChainId, getNativeAsset, getNetworkConfig } from '@/lib/config/app.config'
 import { TokenAmountToApprove } from '@/lib/modules/tokens/approvals/approval-rules'
 import { nullAddress } from '@/lib/modules/web3/contracts/wagmi-helpers'
-import { GqlChain, GqlPoolType, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType, GqlToken } from '@repo/api/graphql'
 import { isSameAddress } from '@/lib/shared/utils/addresses'
 import { SentryError } from '@/lib/shared/utils/errors'
 import { bn, isZero } from '@/lib/shared/utils/numbers'

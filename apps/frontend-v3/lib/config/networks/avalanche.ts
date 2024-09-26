@@ -1,4 +1,4 @@
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@/lib/shared/utils/objects'
 import { PoolIssue } from '@/lib/modules/pool/alerts/pool-issues/PoolIssue.type'

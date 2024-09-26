@@ -1,4 +1,4 @@
-import { GqlChain, GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolElement } from '@repo/api/graphql'
 import { isMetaStable, isStable, isWeighted, isGyro } from '../../../pool.helpers'
 import { zeroAddress } from 'viem'
 

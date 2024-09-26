@@ -83,7 +83,6 @@ export function ConnectWallet({ ...rest }: ButtonProps) {
               <CustomAvatar
                 ensImage={account.ensAvatar}
                 address={account.address}
-                alt="Avatar"
                 size={6}
                 rounded="full"
                 mr={{ base: '0', sm: 'sm' }}

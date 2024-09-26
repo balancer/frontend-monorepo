@@ -3,7 +3,7 @@
 import { getChainShortName } from '@/lib/config/app.config'
 import { getProjectConfig } from '@/lib/config/getProjectConfig'
 import { NetworkIcon } from '@/lib/shared/components/icons/NetworkIcon'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { getSelectStyles } from '@/lib/shared/services/chakra/custom/chakra-react-select'
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { Select, OptionBase, GroupBase, SingleValue, chakraComponents } from 'chakra-react-select'

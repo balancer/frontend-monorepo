@@ -1,6 +1,6 @@
 import { balAddress, wETHAddress } from '@/lib/debug-helpers'
 import { aTokenPriceMock } from '@/lib/modules/tokens/__mocks__/token.builders'
-import { GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolElement } from '@repo/api/graphql'
 import { aBalWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
 import { aUserPoolBalance } from '@/test/msw/builders/gqlUserBalance.builders'
 import { mockTokenPricesList } from '@/test/msw/handlers/Tokens.handlers'

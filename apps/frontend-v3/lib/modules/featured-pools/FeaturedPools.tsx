@@ -2,7 +2,7 @@
 
 import { BoxProps, Card, Box, Text, HStack } from '@chakra-ui/react'
 import { FeaturePoolCard } from './FeaturePoolCard'
-import { GetFeaturedPoolsQuery } from '@/lib/shared/services/api/generated/graphql'
+import { GetFeaturedPoolsQuery } from '@repo/api/graphql'
 import { PoolCarousel } from './PoolCarousel'
 import {
   FeaturedPool1SVG,

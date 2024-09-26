@@ -1,7 +1,7 @@
 import { NetworkIcon } from '@/lib/shared/components/icons/NetworkIcon'
 import { Button, Card, Flex, HStack, Heading, IconButton, Stack } from '@chakra-ui/react'
 import { chainToSlugMap } from '../../../pool/pool.utils'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { useCurrency } from '@/lib/shared/hooks/useCurrency'
 import { useBreakpoints } from '@/lib/shared/hooks/useBreakpoints'
 import { ChevronRight } from 'react-feather'

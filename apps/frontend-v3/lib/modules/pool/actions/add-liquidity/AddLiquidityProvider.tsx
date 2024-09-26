@@ -2,7 +2,7 @@
 'use client'
 
 import { useTokens } from '@/lib/modules/tokens/TokensProvider'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlToken } from '@repo/api/graphql'
 import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { HumanAmount } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'

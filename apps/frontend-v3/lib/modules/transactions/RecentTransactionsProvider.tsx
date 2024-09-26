@@ -3,7 +3,7 @@
 import { getChainId } from '@/lib/config/app.config'
 import { Toast } from '@/lib/shared/components/toasts/Toast'
 import { getBlockExplorerTxUrl } from '@/lib/shared/hooks/useBlockExplorer'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { ensureError } from '@/lib/shared/utils/errors'
 import { captureFatalError } from '@/lib/shared/utils/query-errors'

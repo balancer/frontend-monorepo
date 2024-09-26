@@ -1,6 +1,6 @@
 import { PoolList } from '@/lib/modules/pool/PoolList/PoolList'
 import FadeInOnView from '@/lib/shared/components/containers/FadeInOnView'
-import { GqlPoolType } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolType } from '@repo/api/graphql'
 import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
 import { Metadata } from 'next'

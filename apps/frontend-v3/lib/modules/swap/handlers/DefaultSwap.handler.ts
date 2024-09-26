@@ -1,6 +1,6 @@
 import { getChainId } from '@/lib/config/app.config'
 import { SwapHandler } from './Swap.handler'
-import { GetSorSwapsDocument, GqlSorSwapType } from '@/lib/shared/services/api/generated/graphql'
+import { GetSorSwapsDocument, GqlSorSwapType } from '@repo/api/graphql'
 import { ApolloClient } from '@apollo/client'
 import { Path, Slippage, Swap, SwapKind, TokenAmount } from '@balancer/sdk'
 import { formatUnits } from 'viem'

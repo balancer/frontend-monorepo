@@ -7,7 +7,7 @@ import { Suspense } from 'react'
 
 // import { getApolloServerClient } from '@/lib/shared/services/api/apollo-server.client'
 // import { getProjectConfig } from '@/lib/config/getProjectConfig'
-// import { GetFeaturedPoolsDocument } from '@/lib/shared/services/api/generated/graphql'
+// import { GetFeaturedPoolsDocument } from '@repo/api/graphql'
 // import { FeaturedPools } from '@/lib/modules/featured-pools/FeaturedPools'
 import { CowGalxeQuestPromoBanner } from '@/lib/shared/components/promos/CowGalxeQuestPromoBanner'
 

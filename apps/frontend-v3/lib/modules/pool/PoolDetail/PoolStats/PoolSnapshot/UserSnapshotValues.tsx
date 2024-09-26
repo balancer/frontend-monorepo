@@ -3,7 +3,7 @@
 import React, { memo, useMemo } from 'react'
 import { Button, HStack, Heading, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlToken } from '@repo/api/graphql'
 import { useCurrency } from '@/lib/shared/hooks/useCurrency'
 import { SECONDS_IN_DAY } from '@/test/utils/numbers'
 import { sumBy, isEmpty } from 'lodash'

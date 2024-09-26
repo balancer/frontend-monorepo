@@ -17,7 +17,7 @@ import {
 } from 'wagmi/chains'
 
 import { getProjectConfig } from '@/lib/config/getProjectConfig'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { keyBy } from 'lodash'
 import { getBaseUrl } from '@/lib/shared/utils/urls'
 

@@ -21,7 +21,7 @@ import { ActionModalFooter } from '@/lib/shared/components/modals/ActionModalFoo
 import { SuccessOverlay } from '@/lib/shared/components/modals/SuccessOverlay'
 import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 import { useEffect, useMemo, useState } from 'react'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
 import { useRouter } from 'next/navigation'
 import { AnimateHeightChange } from '@/lib/shared/components/modals/AnimatedModalBody'

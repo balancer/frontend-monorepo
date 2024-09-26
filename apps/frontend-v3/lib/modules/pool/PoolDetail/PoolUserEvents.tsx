@@ -14,7 +14,7 @@ import {
 import { usePool } from '../PoolProvider'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useCurrency } from '@/lib/shared/hooks/useCurrency'
-import { GetPoolEventsQuery, GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GetPoolEventsQuery, GqlChain } from '@repo/api/graphql'
 import { TokenIcon } from '@/lib/modules/tokens/TokenIcon'
 import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
 import { useBlockExplorer } from '@/lib/shared/hooks/useBlockExplorer'

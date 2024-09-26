@@ -1,6 +1,6 @@
 'use client'
 
-import { GqlChain, GqlPoolTokenDetail } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolTokenDetail } from '@repo/api/graphql'
 import { NoisyCard } from '@/lib/shared/components/containers/NoisyCard'
 import { useThemeColorMode } from '@/lib/shared/services/chakra/useThemeColorMode'
 import { Box, VStack, useTheme } from '@chakra-ui/react'

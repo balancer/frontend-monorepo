@@ -1,5 +1,5 @@
 import { Badge, BadgeProps, HStack, Text, Wrap } from '@chakra-ui/react'
-import { GqlChain, GqlPoolTokenDisplay } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolTokenDisplay } from '@repo/api/graphql'
 import { PoolListItem } from '../pool.types'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@/lib/shared/utils/numbers'

@@ -1,16 +1,16 @@
-const { resolve } = require("node:path");
+const { resolve } = require('node:path')
 
-const project = resolve(process.cwd(), "tsconfig.json");
+const project = resolve(process.cwd(), 'tsconfig.json')
 
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   extends: [
-    "eslint:recommended",
+    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
-    require.resolve("@vercel/style-guide/eslint/next"),
-    require.resolve("@vercel/style-guide/eslint/react"),
-    "turbo",
+    require.resolve('@vercel/style-guide/eslint/next'),
+    require.resolve('@vercel/style-guide/eslint/react'),
+    'turbo',
   ],
   globals: {
     React: true,
@@ -20,9 +20,9 @@ module.exports = {
     node: true,
     browser: true,
   },
-  plugins: ['@typescript-eslint', 'prettier', "only-warn"],
+  plugins: ['@typescript-eslint', 'prettier', 'only-warn'],
   settings: {
-    "import/resolver": {
+    'import/resolver': {
       typescript: {
         project,
       },
@@ -30,11 +30,12 @@ module.exports = {
   },
   ignorePatterns: [
     // Ignore dotfiles
-    ".*.js",
-    "node_modules/",
+    '.*.js',
+    'node_modules/',
   ],
-  overrides: [{ files: ["*.js?(x)", "*.ts?(x)"] }],
+  overrides: [{ files: ['*.js?(x)', '*.ts?(x)'] }],
   rules: {
+    'comma-dangle': ['error', 'always-multiline'],
     'prettier/prettier': 'warn',
     curly: ['error', 'multi-line'],
     'no-console': ['off'],
@@ -70,4 +71,4 @@ module.exports = {
       },
     ],
   },
-};
+}

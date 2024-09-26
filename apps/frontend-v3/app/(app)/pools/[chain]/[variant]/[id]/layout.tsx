@@ -4,7 +4,7 @@ import { ChainSlug, getPoolTypeLabel, slugToChainMap } from '@/lib/modules/pool/
 import { PropsWithChildren, Suspense } from 'react'
 import { PoolDetailSkeleton } from '@/lib/modules/pool/PoolDetail/PoolDetailSkeleton'
 import { getApolloServerClient } from '@/lib/shared/services/api/apollo-server.client'
-import { GetPoolDocument } from '@/lib/shared/services/api/generated/graphql'
+import { GetPoolDocument } from '@repo/api/graphql'
 import { Metadata } from 'next'
 import { PoolProvider } from '@/lib/modules/pool/PoolProvider'
 import { getProjectConfig } from '@/lib/config/getProjectConfig'

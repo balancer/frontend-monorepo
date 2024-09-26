@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import { GqlChain, GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolElement } from '@repo/api/graphql'
 
 // TODO: remove linear (nested) pools
 export const recoveryPoolMock: GqlPoolElement = {

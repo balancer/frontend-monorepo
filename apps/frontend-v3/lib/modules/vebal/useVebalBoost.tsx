@@ -1,4 +1,4 @@
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { useMemo } from 'react'
 import { bn } from '@/lib/shared/utils/numbers'
 import { isUndefined } from 'lodash'

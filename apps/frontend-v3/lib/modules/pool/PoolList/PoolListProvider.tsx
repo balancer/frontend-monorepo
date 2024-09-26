@@ -2,7 +2,7 @@
 'use client'
 
 import { createContext, PropsWithChildren, useEffect } from 'react'
-import { GetPoolsDocument, GqlPoolType } from '@/lib/shared/services/api/generated/graphql'
+import { GetPoolsDocument, GqlPoolType } from '@repo/api/graphql'
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@/lib/shared/utils/contexts'

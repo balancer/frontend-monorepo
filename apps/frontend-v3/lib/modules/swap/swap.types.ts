@@ -1,8 +1,4 @@
-import {
-  GetSorSwapsQuery,
-  GqlChain,
-  GqlSorSwapType,
-} from '@/lib/shared/services/api/generated/graphql'
+import { GetSorSwapsQuery, GqlChain, GqlSorSwapType } from '@repo/api/graphql'
 import {
   AuraBalSwapQueryOutput,
   ExactInQueryOutput,

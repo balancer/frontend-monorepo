@@ -8,10 +8,7 @@
  * client render pass.
  */
 import { getApolloServerClient } from '@/lib/shared/services/api/apollo-server.client'
-import {
-  GetTokenPricesDocument,
-  GetTokensDocument,
-} from '@/lib/shared/services/api/generated/graphql'
+import { GetTokenPricesDocument, GetTokensDocument } from '@repo/api/graphql'
 import { getProjectConfig } from '@/lib/config/getProjectConfig'
 import { TokensProvider } from '@/lib/modules/tokens/TokensProvider'
 import { FiatFxRatesProvider } from '../../hooks/FxRatesProvider'

@@ -1,7 +1,7 @@
 import { VStack, HStack, Text } from '@chakra-ui/react'
 import { Address } from 'viem'
 import TokenRow from './TokenRow'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { HumanAmount } from '@balancer/sdk'
 import { useSwap } from '../../swap/SwapProvider'
 import { slippageDiffLabel } from '@/lib/shared/utils/slippage'

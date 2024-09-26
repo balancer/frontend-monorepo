@@ -1,4 +1,4 @@
-import { GqlPoolAprItem } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolAprItem } from '@repo/api/graphql'
 import {
   PlacementWithLogical,
   Popover,

@@ -8,7 +8,7 @@ import {
   GqlChain,
   GetPoolQuery,
   GqlPoolElement,
-} from '@/lib/shared/services/api/generated/graphql'
+} from '@repo/api/graphql'
 import { nested50WETH_50_3poolId } from '@/lib/debug-helpers'
 import { Address } from 'viem'
 

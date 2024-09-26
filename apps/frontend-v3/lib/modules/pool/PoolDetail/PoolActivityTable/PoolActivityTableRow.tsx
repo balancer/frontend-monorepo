@@ -28,7 +28,7 @@ import { PoolActivityEl, PoolActivityTokens } from '../PoolActivity/poolActivity
 import { TokenIcon } from '@/lib/modules/tokens/TokenIcon'
 import { fNum } from '@/lib/shared/utils/numbers'
 import React from 'react'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { usePool } from '../../PoolProvider'
 
 interface Props extends GridProps {

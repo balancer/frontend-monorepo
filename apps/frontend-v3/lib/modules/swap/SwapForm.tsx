@@ -1,7 +1,7 @@
 'use client'
 
 import { TokenInput } from '@/lib/modules/tokens/TokenInput/TokenInput'
-import { GqlChain, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from '@repo/api/graphql'
 import { HumanAmount } from '@balancer/sdk'
 import {
   Card,

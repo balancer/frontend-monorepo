@@ -1,5 +1,5 @@
 import { useBlockExplorer } from '@/lib/shared/hooks/useBlockExplorer'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { Center, HStack, ModalHeader, VStack, Text, Link } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode } from 'react'

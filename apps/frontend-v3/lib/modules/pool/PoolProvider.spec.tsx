@@ -1,4 +1,4 @@
-import { GetPoolQuery, GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GetPoolQuery, GqlChain } from '@repo/api/graphql'
 import { defaultPoolMock, defaultPoolResponseMock } from '@/test/msw/handlers/Pool.handlers'
 import { testHook } from '@/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'

@@ -52,7 +52,7 @@ import { staggeredFadeInUp } from '@/lib/shared/utils/animations'
 import { getChainShortName } from '@/lib/config/app.config'
 import { usePoolList } from './PoolListProvider'
 import { MultiSelect } from '@/lib/shared/components/inputs/MultiSelect'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import Image from 'next/image'
 
 const SLIDER_MAX_VALUE = 10000000

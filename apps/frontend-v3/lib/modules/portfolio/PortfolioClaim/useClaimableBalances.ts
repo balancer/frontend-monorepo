@@ -9,7 +9,7 @@ import { AbiMap } from '../../web3/contracts/AbiMap'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { BPT_DECIMALS } from '../../pool/pool.constants'
 import { ClaimablePool } from '../../pool/actions/claim/ClaimProvider'
-import { GqlChain, GqlPoolStakingGaugeReward } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolStakingGaugeReward } from '@repo/api/graphql'
 import { groupBy, uniqBy } from 'lodash'
 import { onlyExplicitRefetch } from '@/lib/shared/utils/queries'
 

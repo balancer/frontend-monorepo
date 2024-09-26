@@ -8,7 +8,7 @@ import {
   GqlPoolTokenDetail,
   GqlPoolTokenExpanded,
   GqlTokenPrice,
-} from '@/lib/shared/services/api/generated/graphql'
+} from '@repo/api/graphql'
 import {
   FakeTokenSymbol,
   allFakeGqlTokens,

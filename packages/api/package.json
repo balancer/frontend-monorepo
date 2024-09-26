@@ -1,0 +1,24 @@
+{
+  "name": "@repo/api",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "graphql": "^16.7.1",
+    "graphql-request": "^6.1.0",
+    "graphql-tag": "^2.12.6"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@graphql-codegen/schema-ast": "^4.0.0",
+    "@graphql-codegen/typescript-document-nodes": "^4.0.1",
+    "@graphql-typed-document-node/core": "^3.2.0",
+    "@types/node": "20.3.2"
+  },
+  "exports": {
+    "./graphql": "./lib/generated/graphql.ts"
+  },
+  "scripts": {
+    "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config --config codegen.ts"
+  }
+}

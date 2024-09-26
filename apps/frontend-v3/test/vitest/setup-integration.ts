@@ -1,7 +1,7 @@
 import { connectWithDefaultUser, disconnectDefaultUser } from '../utils/wagmi/wagmi-connections'
 import * as transportsModule from '../../lib/modules/web3/transports'
 import { NetworksWithFork, getTestRpcSetup } from '../anvil/anvil-setup'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { createPublicClient, http } from 'viem'
 import { mainnetTest, polygonTest } from '../anvil/testWagmiConfig'
 import { chainsByKey } from '@/lib/modules/web3/ChainConfig'

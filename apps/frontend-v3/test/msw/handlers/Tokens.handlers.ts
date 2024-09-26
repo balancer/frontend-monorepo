@@ -3,11 +3,7 @@ import {
   defaultTokenListMock,
   defaultTokenPriceListMock,
 } from '@/lib/modules/tokens/__mocks__/token.builders'
-import {
-  GetTokenPricesDocument,
-  GetTokenPricesQuery,
-  GetTokensDocument,
-} from '@/lib/shared/services/api/generated/graphql'
+import { GetTokenPricesDocument, GetTokenPricesQuery, GetTokensDocument } from '@repo/api/graphql'
 import { graphql } from 'msw'
 import { getQueryName, mockGQL } from '../utils'
 import { GQLResponse } from './msw-helpers'

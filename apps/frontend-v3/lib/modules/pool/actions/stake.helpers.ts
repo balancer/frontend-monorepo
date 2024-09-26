@@ -3,10 +3,7 @@ import { Pool } from '../PoolProvider'
 import { Address } from 'viem'
 import { HumanAmount } from '@balancer/sdk'
 import { isClaimableGauge } from '../pool.helpers'
-import {
-  GqlPoolStakingType,
-  GqlUserStakedBalance,
-} from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolStakingType, GqlUserStakedBalance } from '@repo/api/graphql'
 import { getStakedBalance } from '../user-balance.helpers'
 
 // eslint-disable-next-line max-len

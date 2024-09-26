@@ -3,11 +3,7 @@
 import { Box, Button, HStack, Heading, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
-import {
-  GqlChain,
-  GqlPoolTokenDisplay,
-  GqlToken,
-} from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolTokenDisplay, GqlToken } from '@repo/api/graphql'
 import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@/lib/shared/hooks/useCurrency'

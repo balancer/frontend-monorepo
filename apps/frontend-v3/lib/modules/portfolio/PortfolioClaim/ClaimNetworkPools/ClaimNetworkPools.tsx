@@ -3,7 +3,7 @@
 import { Heading, Stack, Skeleton, SimpleGrid, Center, Text } from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { chainToSlugMap } from '../../../pool/pool.utils'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 import { useState } from 'react'

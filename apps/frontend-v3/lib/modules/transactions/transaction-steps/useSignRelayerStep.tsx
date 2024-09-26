@@ -9,7 +9,7 @@ import { SignRelayerState } from '../../relayer/RelayerSignatureProvider'
 import { useMemo } from 'react'
 import { useChainSwitch } from '../../web3/useChainSwitch'
 import { getChainId } from '@/lib/config/app.config'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 
 export const signRelayerStepTitle = 'Sign relayer'
 

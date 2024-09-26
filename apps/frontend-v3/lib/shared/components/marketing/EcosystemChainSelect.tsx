@@ -9,7 +9,7 @@ import { ChevronDown } from 'react-feather'
 import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@/lib/shared/utils/animations'
 
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { supportedNetworks } from '@/lib/modules/web3/ChainConfig'
 import { gradientMap } from '@/lib/modules/marketing/useEcosystemPoolActivity'
 

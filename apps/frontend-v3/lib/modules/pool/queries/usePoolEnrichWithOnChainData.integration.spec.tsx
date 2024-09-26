@@ -1,4 +1,4 @@
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
 import { testHook } from '@/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'

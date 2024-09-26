@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
-import {
-  GetFeaturedPoolsQuery,
-  GetPoolDocument,
-  GetPoolQuery,
-  GqlChain,
-} from '@/lib/shared/services/api/generated/graphql'
+import { GetFeaturedPoolsQuery, GetPoolDocument, GetPoolQuery, GqlChain } from '@repo/api/graphql'
 import { createContext, PropsWithChildren, useRef } from 'react'
 import { useQuery } from '@apollo/client'
 import { FetchPoolProps } from './pool.types'

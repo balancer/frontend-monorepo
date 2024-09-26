@@ -3,7 +3,7 @@
 import { Box, BoxProps, HStack, VStack, Text } from '@chakra-ui/react'
 import { TokenIcon } from '../../TokenIcon'
 import { TokenAmount } from '../../token.types'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlToken } from '@repo/api/graphql'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '../../TokensProvider'
 import { useCurrency } from '@/lib/shared/hooks/useCurrency'

@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  GqlChain,
-  GqlPoolType,
-  GqlPoolOrderBy,
-  GqlPoolOrderDirection,
-} from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType, GqlPoolOrderBy, GqlPoolOrderDirection } from '@repo/api/graphql'
 import { uniq } from 'lodash'
 import { getProjectConfig } from '@/lib/config/getProjectConfig'
 import { useQueryState } from 'nuqs'

@@ -2,7 +2,7 @@
 
 import React, { memo, useMemo } from 'react'
 import { HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlToken } from '@repo/api/graphql'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { useCurrency } from '@/lib/shared/hooks/useCurrency'
 import { SECONDS_IN_DAY } from '@/test/utils/numbers'

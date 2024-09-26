@@ -4,7 +4,7 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@/lib/modules/transactions/transaction-steps/lib'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlToken } from '@repo/api/graphql'
 import { sentryMetaForWagmiSimulation } from '@/lib/shared/utils/query-errors'
 import { VStack } from '@chakra-ui/react'
 import { capitalize } from 'lodash'

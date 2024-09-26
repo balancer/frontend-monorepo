@@ -1,5 +1,5 @@
 import { Address } from 'viem'
-import { GqlChain } from '../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { chains } from '@/lib/modules/web3/ChainConfig'
 import { PoolIssue } from '../modules/pool/alerts/pool-issues/PoolIssue.type'
 import { SupportedWrapHandler } from '../modules/swap/swap.types'

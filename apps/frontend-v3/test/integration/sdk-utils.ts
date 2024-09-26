@@ -1,4 +1,4 @@
-import { GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolElement } from '@repo/api/graphql'
 import { isSameAddress } from '@/lib/shared/utils/addresses'
 import {
   VAULT,

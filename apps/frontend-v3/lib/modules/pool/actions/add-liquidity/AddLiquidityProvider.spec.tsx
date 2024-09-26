@@ -1,5 +1,5 @@
 import { balAddress, daiAddress, usdcAddress, usdtAddress, wETHAddress } from '@/lib/debug-helpers'
-import { GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolElement } from '@repo/api/graphql'
 import { aBalWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
 import {
   DefaultAddLiquidityTestProvider,

@@ -1,4 +1,4 @@
-import { GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
+import { GqlPoolAprItem, GqlPoolAprItemType } from '@repo/api/graphql'
 import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'
 import BigNumber from 'bignumber.js'

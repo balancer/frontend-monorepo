@@ -1,4 +1,4 @@
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { Box } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'

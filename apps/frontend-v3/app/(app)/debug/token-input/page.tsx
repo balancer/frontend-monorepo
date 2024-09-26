@@ -3,7 +3,7 @@
 import { useTokens } from '@/lib/modules/tokens/TokensProvider'
 import { TokenInput } from '@/lib/modules/tokens/TokenInput/TokenInput'
 import { Button, Card, Heading, Text, VStack, useDisclosure } from '@chakra-ui/react'
-import { GqlChain, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from '@repo/api/graphql'
 import { useState } from 'react'
 import { TokenSelectModal } from '@/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { TokenBalancesProvider } from '@/lib/modules/tokens/TokenBalancesProvider'

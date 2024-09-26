@@ -2,7 +2,7 @@
 
 import { Modal, ModalBody, ModalCloseButton, ModalContent, Card } from '@chakra-ui/react'
 import { UsePortfolio, usePortfolio } from '@/lib/modules/portfolio/PortfolioProvider'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { Address } from 'viem'
 import { useBreakpoints } from '@/lib/shared/hooks/useBreakpoints'
 import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tracker/DesktopStepTracker'

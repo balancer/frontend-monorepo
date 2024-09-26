@@ -7,7 +7,7 @@ import {
   GqlPoolAprItem,
   GqlPoolTokenDisplay,
   GqlPoolAprItemType,
-} from '@/lib/shared/services/api/generated/graphql'
+} from '@repo/api/graphql'
 import { invert } from 'lodash'
 import {
   BaseVariant,

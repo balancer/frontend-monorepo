@@ -6,7 +6,7 @@ import { TokenBalancesProvider } from '@/lib/modules/tokens/TokenBalancesProvide
 import { TokenInputsValidationProvider } from '@/lib/modules/tokens/TokenInputsValidationProvider'
 import { useTokens } from '@/lib/modules/tokens/TokensProvider'
 import { TransactionStateProvider } from '@/lib/modules/transactions/transaction-steps/TransactionStateProvider'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { PropsWithChildren } from 'react'
 import { PriceImpactProvider } from '@/lib/modules/price-impact/PriceImpactProvider'
 import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'

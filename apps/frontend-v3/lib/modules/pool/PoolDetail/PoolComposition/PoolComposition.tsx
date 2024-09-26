@@ -4,7 +4,7 @@ import { Card, Divider, HStack, Heading, Skeleton, Stack, Text, VStack } from '@
 import React from 'react'
 import { usePool } from '../../PoolProvider'
 import { Address } from 'viem'
-import { GqlChain, GqlPoolTokenDetail } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolTokenDetail } from '@repo/api/graphql'
 import { useCurrency } from '@/lib/shared/hooks/useCurrency'
 import { fNum } from '@/lib/shared/utils/numbers'
 import { NoisyCard } from '@/lib/shared/components/containers/NoisyCard'

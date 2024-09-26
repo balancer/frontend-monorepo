@@ -1,6 +1,6 @@
 import { ProjectConfig } from '@/lib/config/config.types'
 import { PartnerVariant } from '@/lib/modules/pool/pool.types'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 import { isProd } from '@/lib/config/app.config'
 
 export const ProjectConfigBalancer: ProjectConfig = {

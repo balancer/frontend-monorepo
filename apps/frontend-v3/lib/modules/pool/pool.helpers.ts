@@ -9,7 +9,7 @@ import {
   GqlPoolStakingOtherGauge,
   GqlPoolTokenDetail,
   GqlPoolType,
-} from '@/lib/shared/services/api/generated/graphql'
+} from '@repo/api/graphql'
 import { isSameAddress } from '@/lib/shared/utils/addresses'
 import { Numberish, bn } from '@/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'

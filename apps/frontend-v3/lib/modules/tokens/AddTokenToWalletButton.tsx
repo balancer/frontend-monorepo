@@ -4,7 +4,7 @@ import { PlusSquareIcon } from '@chakra-ui/icons'
 import { IconButton, IconButtonProps, Tooltip } from '@chakra-ui/react'
 import { useWalletClient } from 'wagmi'
 import { useTokens } from './TokensProvider'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 
 export function AddTokenToWalletButton({
   tokenAddress,

@@ -19,7 +19,7 @@ import {
 import { usePool } from '../../PoolProvider'
 import { ArrowUpRight } from 'react-feather'
 import { useMemo } from 'react'
-import { GqlPriceRateProviderData, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPriceRateProviderData, GqlToken } from '@repo/api/graphql'
 import { Address, zeroAddress } from 'viem'
 import { useTokens } from '@/lib/modules/tokens/TokensProvider'
 import { TokenIcon } from '@/lib/modules/tokens/TokenIcon'

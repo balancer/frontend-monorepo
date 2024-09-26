@@ -1,4 +1,4 @@
-import { GqlChain, GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolElement } from '@repo/api/graphql'
 import { userStakedInNonPreferentialGauge } from '@/test/anvil/anvil-setup'
 import { testHook } from '@/test/utils/custom-renderers'
 import { connectWith, disconnectWith } from '@/test/utils/wagmi/wagmi-connections'

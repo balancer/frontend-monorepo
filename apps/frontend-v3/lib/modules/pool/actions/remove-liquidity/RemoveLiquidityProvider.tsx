@@ -4,7 +4,7 @@
 import { useTokens } from '@/lib/modules/tokens/TokensProvider'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@/lib/shared/labels'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlToken } from '@repo/api/graphql'
 import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@/lib/shared/utils/functions/isDisabledWithReason'
 import { bn, isZero, safeSum } from '@/lib/shared/utils/numbers'

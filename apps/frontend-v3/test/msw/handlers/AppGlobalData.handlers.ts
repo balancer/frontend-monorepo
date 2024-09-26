@@ -1,4 +1,4 @@
-import { GetAppGlobalPollingDataDocument } from '@/lib/shared/services/api/generated/graphql'
+import { GetAppGlobalPollingDataDocument } from '@repo/api/graphql'
 import { getQueryName, mockGQL } from '../utils'
 import { graphql } from 'msw'
 import { anAppGlobalData } from '@/lib/modules/tokens/__mocks__/AppGlobalData.builders'

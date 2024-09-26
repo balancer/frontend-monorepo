@@ -2,13 +2,13 @@ import { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
   generates: {
-    ['./lib/shared/services/api/generated/schema.graphql']: {
+    ['./lib/generated/schema.graphql']: {
       schema: process.env.NEXT_PUBLIC_BALANCER_API_URL,
       plugins: ['schema-ast'],
     },
-    [`./lib/shared/services/api/generated/`]: {
+    [`./lib/generated/`]: {
       schema: process.env.NEXT_PUBLIC_BALANCER_API_URL,
-      documents: ['./lib/shared/services/api/**/*.graphql'],
+      documents: ['./lib/**/*.graphql'],
       preset: 'client',
       config: {
         nonOptionalTypename: true,

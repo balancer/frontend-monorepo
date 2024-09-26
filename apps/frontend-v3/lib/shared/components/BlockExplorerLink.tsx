@@ -4,7 +4,7 @@ import { HStack, Link, Text } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { getBlockExplorerTxUrl, getBlockExplorerName } from '../hooks/useBlockExplorer'
 import { Address } from 'viem'
-import { GqlChain } from '../services/api/generated/graphql'
+import { GqlChain } from '@repo/api/graphql'
 
 type Props = { transactionHash?: Address; chain: GqlChain }
 

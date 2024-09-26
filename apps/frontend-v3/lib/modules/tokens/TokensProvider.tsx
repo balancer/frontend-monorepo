@@ -10,7 +10,7 @@ import {
   GqlChain,
   GqlPoolTokenDetail,
   GqlToken,
-} from '@/lib/shared/services/api/generated/graphql'
+} from '@repo/api/graphql'
 import { isSameAddress } from '@/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { bn, Numberish } from '@/lib/shared/utils/numbers'

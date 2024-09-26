@@ -1,7 +1,7 @@
 import { getNetworkConfig } from '@/lib/config/app.config'
 import { BalAlertButton } from '@/lib/shared/components/alerts/BalAlertButton'
 import { BalAlertContent } from '@/lib/shared/components/alerts/BalAlertContent'
-import { GqlPoolTokenDetail } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolTokenDetail } from '@repo/api/graphql'
 import { isNil } from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'

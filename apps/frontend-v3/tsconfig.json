@@ -2,6 +2,7 @@
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
     "module": "esnext",
+    "moduleResolution": "Bundler",
     "baseUrl": ".",
     "plugins": [
       {
@@ -13,15 +14,6 @@
     },
     "types": ["vitest/globals"]
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "global.d.ts",
-    "next-env.d.ts",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    ".next"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "global.d.ts", "next-env.d.ts", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", ".next"]
 }

@@ -6,7 +6,7 @@ import { PropsWithChildren, createContext, useCallback, useMemo, useState } from
 import { useParams } from 'next/navigation'
 import { PoolVariant } from '../../pool.types'
 import { usePool } from '../../PoolProvider'
-import { GqlPoolEventType } from '@/lib/shared/services/api/generated/graphql'
+import { GqlPoolEventType } from '@repo/api/graphql'
 import { usePoolEvents } from '../../usePoolEvents'
 import { slugToChainMap, ChainSlug } from '../../pool.utils'
 import { useTokens } from '@/lib/modules/tokens/TokensProvider'
