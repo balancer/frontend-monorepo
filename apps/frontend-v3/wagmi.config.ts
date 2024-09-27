@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv } from '@wagmi/cli'
 import { etherscan } from '@wagmi/cli/plugins'
-import mainnetNetworkConfig from './lib/config/networks/mainnet'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 
 import { erc20Abi } from 'viem'
 

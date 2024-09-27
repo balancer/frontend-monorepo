@@ -1,4 +1,4 @@
-import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
+import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { Button, Heading, VStack, Text } from '@chakra-ui/react'
 import { headers } from 'next/headers'
 import Link from 'next/link'

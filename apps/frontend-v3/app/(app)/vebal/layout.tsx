@@ -1,9 +1,9 @@
 'use client'
 
-import { TokenBalancesProvider } from '@/lib/modules/tokens/TokenBalancesProvider'
-import { useTokens } from '@/lib/modules/tokens/TokensProvider'
-import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
-import mainnetNetworkConfig from '@/lib/config/networks/mainnet'
+import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { PropsWithChildren } from 'react'
 
 export default function VebalLayout({ children }: PropsWithChildren) {

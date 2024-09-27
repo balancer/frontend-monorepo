@@ -1,4 +1,4 @@
-import { PathParams } from '@/lib/modules/swap/SwapProvider'
+import { PathParams } from '@repo/lib/modules/swap/SwapProvider'
 import { isHash } from 'viem'
 
 export function getSwapPathParams(slug?: string[]): PathParams {

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { getProjectConfig } from '@/lib/config/getProjectConfig'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { Box } from '@chakra-ui/react'
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
