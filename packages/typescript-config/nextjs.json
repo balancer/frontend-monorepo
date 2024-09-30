@@ -12,6 +12,12 @@
     "jsx": "preserve",
     "noEmit": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "../lib/global.d.ts", "next-env.d.ts", ".next/types/**/*.ts"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "../lib/global.d.ts",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ],
   "exclude": ["node_modules", ".next"]
 }

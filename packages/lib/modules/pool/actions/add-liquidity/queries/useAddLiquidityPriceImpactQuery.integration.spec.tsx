@@ -14,7 +14,7 @@ async function testQuery(humanAmountsIn: HumanTokenAmountWithAddress[]) {
     () => useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabled: true }),
     {
       wrapper: DefaultPoolTestProvider,
-    }
+    },
   )
   return result
 }

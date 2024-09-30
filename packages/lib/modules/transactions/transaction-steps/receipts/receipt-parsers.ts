@@ -31,7 +31,7 @@ export function parseAddLiquidityReceipt({
 
   const sentErc20Tokens: HumanTokenAmountWithAddress[] = getOutgoingLogs(
     receiptLogs,
-    userAddress
+    userAddress,
   ).map(log => {
     const tokenDecimals = getToken(log.address, chain)?.decimals
     return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
@@ -64,7 +64,7 @@ export function parseRemoveLiquidityReceipt({
 
   const receivedErc20Tokens: HumanTokenAmountWithAddress[] = getIncomingLogs(
     receiptLogs,
-    userAddress
+    userAddress,
   ).map(log => {
     const tokenDecimals = getToken(log.address, chain)?.decimals
     return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
@@ -107,8 +107,8 @@ export function parseSwapReceipt({
     bn(sentTokenValue).gt(0) && sentTokenAddress
       ? _toHumanAmountWithAddress(sentTokenAddress, outgoingData?.args?.value, sentToken?.decimals)
       : bn(nativeAssetSent).gt(0)
-      ? _toHumanAmountWithAddress(getNativeAssetAddress(chain), nativeAssetSent, 18)
-      : { tokenAddress: emptyAddress, humanAmount: '0' as HumanAmount }
+        ? _toHumanAmountWithAddress(getNativeAssetAddress(chain), nativeAssetSent, 18)
+        : { tokenAddress: emptyAddress, humanAmount: '0' as HumanAmount }
 
   /**
    * GET RECEIVED AMOUNT
@@ -125,8 +125,8 @@ export function parseSwapReceipt({
     bn(receivedTokenValue).gt(0) && receivedTokenAddress
       ? _toHumanAmountWithAddress(receivedTokenAddress, receivedTokenValue, receivedToken?.decimals)
       : bn(nativeAssetReceived).gt(0)
-      ? _toHumanAmountWithAddress(getNativeAssetAddress(chain), nativeAssetReceived, 18)
-      : { tokenAddress: emptyAddress, humanAmount: '0' as HumanAmount }
+        ? _toHumanAmountWithAddress(getNativeAssetAddress(chain), nativeAssetReceived, 18)
+        : { tokenAddress: emptyAddress, humanAmount: '0' as HumanAmount }
 
   return {
     sentToken: sentHumanAmountWithAddress,

@@ -68,7 +68,7 @@ function selectSwapHandler(
   chain: GqlChain,
   swapType: GqlSorSwapType,
   apolloClient: ApolloClient<object>,
-  tokens: GqlToken[]
+  tokens: GqlToken[],
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -98,7 +98,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
       swapType: GqlSorSwapType.ExactIn,
       selectedChain: GqlChain.Mainnet,
     },
-    'swapState'
+    'swapState',
   )
 
   const swapState = useReactiveVar(swapStateVar)
@@ -125,9 +125,9 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
         swapState.selectedChain,
         swapState.swapType,
         client,
-        tokens
+        tokens,
       ),
-    [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain]
+    [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain],
   )
 
   const isTokenInSet = swapState.tokenIn.address !== emptyAddress
@@ -234,7 +234,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
 
   function setTokenInAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {}
+    { userTriggered = true }: { userTriggered?: boolean } = {},
   ) {
     const state = swapStateVar()
     const newState = {
@@ -261,7 +261,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
 
   function setTokenOutAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {}
+    { userTriggered = true }: { userTriggered?: boolean } = {},
   ) {
     const state = swapStateVar()
     const newState = {
@@ -381,7 +381,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
       const wrapType = getWrapType(
         swapState.tokenIn.address,
         swapState.tokenOut.address,
-        swapState.selectedChain
+        swapState.selectedChain,
       )
       return wrapType ? wrapType : OSwapAction.SWAP
     }
@@ -534,7 +534,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [hasValidationErrors, 'Invalid input'],
     [simulationQuery.isError, 'Error fetching swap'],
-    [simulationQuery.isLoading, 'Fetching swap...']
+    [simulationQuery.isLoading, 'Fetching swap...'],
   )
 
   return {

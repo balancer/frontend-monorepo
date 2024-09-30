@@ -73,7 +73,7 @@ export function useClaimAllRewardsStep({
       claimData,
       stakingType,
       allRewardGauges,
-    }
+    },
   )
 
   const props: ManagedTransactionInput = {
@@ -106,7 +106,7 @@ export function useClaimAllRewardsStep({
       renderAction: () => <ManagedTransactionButton id={claimAllRewardsStepId} {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction, claimData, isLoading]
+    [transaction, claimData, isLoading],
   )
   return { step, isLoading }
 }

@@ -28,7 +28,7 @@ export const TokensContext = createContext<UseTokensResult | null>(null)
 export function _useTokens(
   initTokenData: GetTokensQuery,
   initTokenPricesData: GetTokenPricesQuery,
-  variables: GetTokensQueryVariables
+  variables: GetTokensQueryVariables,
 ) {
   const skipQuery = useSkipInitialQuery(variables)
 
@@ -47,7 +47,7 @@ export function _useTokens(
       nextFetchPolicy: 'cache-and-network',
       pollInterval: mins(3).toMs(),
       notifyOnNetworkStatusChange: true,
-    }
+    },
   )
 
   const tokens = tokensData?.tokens || initTokenData.tokens
@@ -75,29 +75,29 @@ export function _useTokens(
       const chainKey = typeof chain === 'number' ? 'chainId' : 'chain'
       return tokens.filter(token => token[chainKey] === chain)
     },
-    [tokens]
+    [tokens],
   )
 
   const getPricesForChain = useCallback(
     (chain: GqlChain): GetTokenPricesQuery['tokenPrices'] => {
       return prices.filter(price => price.chain === chain)
     },
-    [prices]
+    [prices],
   )
 
   function getTokensByTokenAddress(
     tokenAddresses: Address[],
-    chain: GqlChain
+    chain: GqlChain,
   ): Dictionary<GqlToken> {
     return zipObject(
       tokenAddresses,
-      tokenAddresses.map(t => getToken(t, chain) as GqlToken)
+      tokenAddresses.map(t => getToken(t, chain) as GqlToken),
     )
   }
 
   function priceForToken(token: GqlToken): number {
     const price = getPricesForChain(token.chain).find(price =>
-      isSameAddress(price.address, token.address)
+      isSameAddress(price.address, token.address),
     )
     if (!price) return 0
 
@@ -122,13 +122,13 @@ export function _useTokens(
       tokenAddress: Address | string,
       tokenBalance: string,
       totalLiquidity: string,
-      chain: GqlChain
+      chain: GqlChain,
     ): string => {
       const tokenPrice = priceFor(tokenAddress, chain)
 
       return bn(tokenPrice).times(tokenBalance).div(totalLiquidity).toString()
     },
-    []
+    [],
   )
 
   const calcTotalUsdValue = useCallback((displayTokens: GqlPoolTokenDetail[], chain: GqlChain) => {

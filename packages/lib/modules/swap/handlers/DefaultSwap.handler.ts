@@ -31,7 +31,7 @@ export class DefaultSwapHandler implements SwapHandler {
           ...path,
           inputAmountRaw: BigInt(path.inputAmountRaw),
           outputAmountRaw: BigInt(path.outputAmountRaw),
-        } as Path)
+        }) as Path,
     )
 
     const swap = new Swap({

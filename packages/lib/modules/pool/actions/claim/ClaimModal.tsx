@@ -56,7 +56,7 @@ export function ClaimModal({
           tokenAddress: (reward?.tokenAddress || '') as Address,
         }))
         .filter(Boolean) as HumanTokenAmountWithAddress[],
-    [allClaimableRewards]
+    [allClaimableRewards],
   )
 
   useEffect(() => {

@@ -59,7 +59,7 @@ export class ProportionalRemoveLiquidityHandler implements RemoveLiquidityHandle
     const buildCallParams = formatBuildCallParams(
       baseBuildCallParams,
       this.helpers.isV3Pool(),
-      account
+      account,
     )
 
     const { callData, to, value } = removeLiquidity.buildCall(buildCallParams)

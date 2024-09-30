@@ -50,7 +50,7 @@ export function useProportionalInputs() {
     return balances.filter(balance =>
       wethIsEth
         ? wNativeAsset && balance.address !== wNativeAsset.address
-        : nativeAsset && balance.address !== nativeAsset.address
+        : nativeAsset && balance.address !== nativeAsset.address,
     )
   }, [wethIsEth, isBalancesLoading])
 
@@ -63,7 +63,7 @@ export function useProportionalInputs() {
         }
 
         return { tokenAddress, humanAmount: '' }
-      })
+      }),
     )
   }
 

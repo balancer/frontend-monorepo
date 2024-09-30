@@ -36,24 +36,24 @@ export function _useUserSettings({
 
   const [_currency, setCurrency] = useLocalStorage<SupportedCurrency>(
     LS_KEYS.UserSettings.Currency,
-    initCurrency
+    initCurrency,
   )
   const currency = isMounted ? _currency : initCurrency
 
   const [_slippage, setSlippage] = useLocalStorage<string>(
     LS_KEYS.UserSettings.Slippage,
-    initSlippage
+    initSlippage,
   )
 
   const [_enableSignatures, setEnableSignatures] = useLocalStorage<YesNo>(
     LS_KEYS.UserSettings.EnableSignatures,
-    initEnableSignatures
+    initEnableSignatures,
   )
   const enableSignatures = isMounted ? _enableSignatures : initEnableSignatures
 
   const [_allowSounds, setAllowSounds] = useLocalStorage<YesNo>(
     LS_KEYS.UserSettings.AllowSounds,
-    initAllowSounds
+    initAllowSounds,
   )
   const allowSounds = isMounted ? _allowSounds : initAllowSounds
 
@@ -63,7 +63,7 @@ export function _useUserSettings({
 
   const [_acceptedPolicies, setAcceptedPolicies] = useLocalStorage<string[]>(
     LS_KEYS.UserSettings.AcceptedPolicies,
-    initAcceptedPolicies
+    initAcceptedPolicies,
   )
   const acceptedPolicies = isMounted ? _acceptedPolicies : initAcceptedPolicies
 

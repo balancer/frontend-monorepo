@@ -24,7 +24,7 @@ export function useMaximumInputs() {
     return balances.filter(balance =>
       wethIsEth
         ? wNativeAsset && balance.address !== wNativeAsset.address
-        : nativeAsset && balance.address !== nativeAsset.address
+        : nativeAsset && balance.address !== nativeAsset.address,
     )
   }, [wethIsEth, isBalancesLoading])
 

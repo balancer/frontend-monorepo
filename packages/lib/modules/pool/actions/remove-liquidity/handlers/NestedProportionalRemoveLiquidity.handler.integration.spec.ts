@@ -13,7 +13,7 @@ import { connectWithDefaultUser } from '@/test/utils/wagmi/wagmi-connections'
 function selectNestedProportionalHandler(pool: Pool): NestedProportionalRemoveLiquidityHandler {
   return selectRemoveLiquidityHandler(
     pool,
-    RemoveLiquidityType.Proportional
+    RemoveLiquidityType.Proportional,
   ) as NestedProportionalRemoveLiquidityHandler
 }
 

@@ -116,8 +116,8 @@ function BaseAprTooltip({
   const totalBaseTitle = isVebal
     ? totalBaseVeBalText
     : typeof totalBaseText === 'function'
-    ? totalBaseText(hasVeBalBoost)
-    : totalBaseText
+      ? totalBaseText(hasVeBalBoost)
+      : totalBaseText
 
   const popoverContent = customPopoverContent || (
     <PopoverContent
@@ -272,7 +272,7 @@ function BaseAprTooltip({
               tooltipText={
                 shouldDisplayMaxVeBalTooltip
                   ? `${defaultDisplayValueFormatter(
-                      defaultNumberFormatter(maxVeBal.toString())
+                      defaultNumberFormatter(maxVeBal.toString()),
                     )} APR`
                   : ''
               }

@@ -64,7 +64,7 @@ export function useFilterTagsVisible() {
 
   useEffect(() => {
     setIsVisible(
-      networks.length > 0 || poolTypes.length > 0 || minTvl > 0 || poolCategories.length > 0
+      networks.length > 0 || poolTypes.length > 0 || minTvl > 0 || poolCategories.length > 0,
     )
   }, [networks, poolTypes, minTvl, poolCategories])
 

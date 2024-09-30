@@ -78,6 +78,6 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
         />
       ),
     }),
-    [transaction, simulationQuery.data, buildCallDataQuery.data]
+    [transaction, simulationQuery.data, buildCallDataQuery.data],
   )
 }

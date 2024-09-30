@@ -53,8 +53,8 @@ export function QuoteBptOut({ label, isLoading = false }: { label?: string; isLo
   const _label = label
     ? label
     : proportionalRequired
-    ? 'You will get'
-    : 'You will get (if no slippage)'
+      ? 'You will get'
+      : 'You will get (if no slippage)'
 
   return <BptRow label={_label} bptAmount={bptOutUnits} pool={pool} isLoading={isLoading} />
 }

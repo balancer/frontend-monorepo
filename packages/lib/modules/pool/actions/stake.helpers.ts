@@ -52,7 +52,7 @@ export function getCanStake(pool: Pool): boolean {
 }
 
 export function findFirstNonPreferentialStakedWithBalance(
-  pool: Pool
+  pool: Pool,
 ): GqlUserStakedBalance | undefined {
   const found = filterNonPreferentialStakingWithBalance(pool)
   if (found.length === 0) return undefined
@@ -79,7 +79,7 @@ export function findFirstNonPreferentialStaking(pool: Pool): StakingData {
   const nonPreferentialGaugeAddress = nonPreferentialStaking.stakingId as Address
 
   const nonPreferentialGauge = pool.staking?.gauge?.otherGauges?.find(
-    otherGauge => otherGauge.id === nonPreferentialGaugeAddress
+    otherGauge => otherGauge.id === nonPreferentialGaugeAddress,
   )
 
   if (!nonPreferentialGauge) throw new Error('Non preferential gauge not found in other gauges')
@@ -107,7 +107,7 @@ function filterNonPreferentialStakingWithBalance(pool: Pool): GqlUserStakedBalan
     stakedBalance =>
       stakedBalance.stakingType === GqlPoolStakingType.Gauge &&
       stakedBalance.stakingId !== pool.staking?.gauge?.id &&
-      bn(stakedBalance.balance).gt(0)
+      bn(stakedBalance.balance).gt(0),
   )
   return found
 }

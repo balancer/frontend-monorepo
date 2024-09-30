@@ -110,7 +110,7 @@ export function TokenSelectList({
     tokens,
     excludeNativeAsset,
     pinNativeAsset,
-    searchTerm
+    searchTerm,
   )
   const { openConnectModal } = useConnectModal()
 

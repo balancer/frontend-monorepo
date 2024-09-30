@@ -66,7 +66,7 @@ export function _useTokenBalances(initTokens?: GqlToken[], extTokens?: GqlToken[
         functionName: 'balanceOf',
         args: [(userAddress || '') as Address],
       })),
-    }
+    },
   )
 
   async function refetchBalances() {
@@ -98,7 +98,7 @@ export function _useTokenBalances(initTokens?: GqlToken[], extTokens?: GqlToken[
       amount: nativeBalanceQuery.data.value,
       formatted: formatUnits(
         nativeBalanceQuery.data.value,
-        networkConfig.tokens.nativeAsset.decimals
+        networkConfig.tokens.nativeAsset.decimals,
       ),
       decimals: networkConfig.tokens.nativeAsset.decimals,
     })

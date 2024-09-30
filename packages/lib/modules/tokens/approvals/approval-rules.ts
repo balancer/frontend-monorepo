@@ -46,7 +46,7 @@ export function getRequiredTokenApprovals({
   })
 
   tokenAmountsToApprove = tokenAmountsToApprove.filter(
-    ({ tokenAddress }) => !isNativeAsset(chainId, tokenAddress)
+    ({ tokenAddress }) => !isNativeAsset(chainId, tokenAddress),
   )
 
   /**
@@ -75,7 +75,7 @@ export function getRequiredTokenApprovals({
 function isDoubleApprovalRequired(
   chainId: GqlChain | SupportedChainId,
   tokenAddress: Address,
-  allowanceFor: (tokenAddress: Address) => bigint
+  allowanceFor: (tokenAddress: Address) => bigint,
 ): boolean {
   return !!(requiresDoubleApproval(chainId, tokenAddress) && allowanceFor(tokenAddress) > 0n)
 }

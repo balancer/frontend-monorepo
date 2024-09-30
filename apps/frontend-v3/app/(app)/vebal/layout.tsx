@@ -12,7 +12,7 @@ export default function VebalLayout({ children }: PropsWithChildren) {
   const tokens = getTokensByChain(1)
 
   const vebalBptToken = tokens.find(
-    t => t.address === mainnetNetworkConfig.tokens.addresses.veBalBpt
+    t => t.address === mainnetNetworkConfig.tokens.addresses.veBalBpt,
   )
 
   if (!vebalBptToken) throw new Error('vebalBptToken not found')

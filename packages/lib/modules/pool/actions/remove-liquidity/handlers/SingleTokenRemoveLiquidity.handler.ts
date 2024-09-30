@@ -62,7 +62,7 @@ export class SingleTokenRemoveLiquidityHandler implements RemoveLiquidityHandler
 
     const priceImpactABA: PriceImpactAmount = await PriceImpact.removeLiquidity(
       removeLiquidityInput,
-      this.helpers.poolState
+      this.helpers.poolState,
     )
 
     return priceImpactABA.decimal
@@ -85,7 +85,7 @@ export class SingleTokenRemoveLiquidityHandler implements RemoveLiquidityHandler
     const buildCallParams = formatBuildCallParams(
       baseBuildCallParams,
       this.helpers.isV3Pool(),
-      account
+      account,
     )
 
     const { callData, to, value } = removeLiquidity.buildCall(buildCallParams)
@@ -104,7 +104,7 @@ export class SingleTokenRemoveLiquidityHandler implements RemoveLiquidityHandler
    */
   private constructSdkInput(
     humanBptIn: HumanAmount,
-    tokenOut: Address
+    tokenOut: Address,
   ): RemoveLiquiditySingleTokenExactInInput {
     const bptInInputAmount: InputAmount = {
       rawAmount: parseEther(humanBptIn),

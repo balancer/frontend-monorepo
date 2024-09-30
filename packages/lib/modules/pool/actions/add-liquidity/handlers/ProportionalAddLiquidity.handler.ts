@@ -32,7 +32,7 @@ export class ProportionalAddLiquidityHandler implements AddLiquidityHandler {
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
   ): Promise<SdkQueryAddLiquidityOutput> {
     const referenceAmount = this.helpers.toSdkInputAmounts(humanAmountsIn)[0]
 

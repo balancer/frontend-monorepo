@@ -19,7 +19,7 @@ export function _useRelayerSignature() {
   const [relayerApprovalSignature, setRelayerApprovalSignature] = useState<Address | undefined>()
 
   const [signRelayerState, setSignRelayerState] = useState<SignRelayerState>(
-    SignRelayerState.Preparing
+    SignRelayerState.Preparing,
   )
 
   return {

@@ -11,7 +11,7 @@ import { TransactionStep } from '../../../transactions/transaction-steps/lib'
 export function useMigrateStakeSteps(
   pool: Pool,
   migratedAmount: HumanAmount,
-  refetchPoolBalances: () => void
+  refetchPoolBalances: () => void,
 ) {
   const [hasClaimStep, setHasClaimStep] = useState(false)
   const { nonPreferentialGaugeAddress, nonPreferentialStakedBalance, isClaimable } =

@@ -12,7 +12,7 @@ type SdkClient = SignRelayerApprovalParams[2]
 export async function signRelayerApproval(
   userAddress: Address,
   chainId: SupportedChainId,
-  client?: GetWalletClientReturnType
+  client?: GetWalletClientReturnType,
 ): Promise<Address | undefined> {
   if (!client) return undefined
 

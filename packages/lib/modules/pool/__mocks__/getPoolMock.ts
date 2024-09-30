@@ -19,7 +19,7 @@ function astToQueryString(ast: any): string {
 export async function getPoolMock(
   poolId: Address = nested50WETH_50_3poolId,
   chain: GqlChain = GqlChain.Mainnet,
-  userAddress?: Address
+  userAddress?: Address,
 ): Promise<GqlPoolElement> {
   const queryString = astToQueryString(visit(GetPoolDocument, {}))
 

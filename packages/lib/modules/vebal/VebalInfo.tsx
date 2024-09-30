@@ -19,7 +19,7 @@ export function VebalInfo() {
     : format(lockInfo.mainnetLockedInfo.lockedEndDate, 'yyyy-MM-dd')
 
   const percentOfAllSupply = bn(data?.veBalGetUser.balance || 0).div(
-    lockInfo.mainnetLockedInfo.totalSupply || 0
+    lockInfo.mainnetLockedInfo.totalSupply || 0,
   )
 
   const { balanceFor } = useTokenBalances()

@@ -23,7 +23,7 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
 
   function currentValueFor(tokenAddress: Address) {
     const amountIn = humanAmountsIn.find(amountIn =>
-      isSameAddress(amountIn.tokenAddress, tokenAddress)
+      isSameAddress(amountIn.tokenAddress, tokenAddress),
     )
     return amountIn ? amountIn.humanAmount : ''
   }
@@ -31,7 +31,7 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
   function weightFor(tokenAddress: string) {
     return (
       pool.poolTokens.find(token =>
-        isSameAddress(token.address as Address, tokenAddress as Address)
+        isSameAddress(token.address as Address, tokenAddress as Address),
       )?.weight ?? undefined
     )
   }

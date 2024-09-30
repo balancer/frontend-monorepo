@@ -33,7 +33,7 @@ export default function NetworkClaim() {
   const claimableFiatBalance = totalFiatClaimableBalanceByChain[gqlChain]
 
   const isClaimAllDisabled = pools?.every(pool =>
-    poolRewardsMap[pool.id]?.totalFiatClaimBalance?.isEqualTo(0)
+    poolRewardsMap[pool.id]?.totalFiatClaimBalance?.isEqualTo(0),
   )
 
   const [modalPools, setModalPools] = useState<Pool[]>([])
@@ -67,7 +67,7 @@ export default function NetworkClaim() {
                         <PoolName pool={pool} fontWeight="bold" fontSize="lg" />
                         <Text fontWeight="bold" variant="special" ml="auto">
                           {toCurrency(
-                            poolRewardsMap[pool.id]?.totalFiatClaimBalance?.toNumber() || 0
+                            poolRewardsMap[pool.id]?.totalFiatClaimBalance?.toNumber() || 0,
                           )}
                         </Text>
                       </HStack>
@@ -89,7 +89,7 @@ export default function NetworkClaim() {
                       </HStack>
                     </VStack>
                   </Card>
-                )
+                ),
             )
           ) : (
             <Text p="10" variant="secondary" textAlign="center">

@@ -12,7 +12,7 @@ const poolMock = aBalWethPoolElementMock() // 80BAL-20WETH
 function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityHandler {
   return selectRemoveLiquidityHandler(
     pool,
-    RemoveLiquidityType.SingleToken
+    RemoveLiquidityType.SingleToken,
   ) as SingleTokenRemoveLiquidityHandler
 }
 

@@ -17,7 +17,7 @@ export function SwapRate() {
   const effectivePriceReversed = fNum(
     'token',
     simulationQuery.data?.effectivePriceReversed || '0',
-    { abbreviated: false }
+    { abbreviated: false },
   )
 
   const tokenInUsdValue = usdValueForToken(tokenInInfo, 1)
@@ -27,11 +27,11 @@ export function SwapRate() {
     priceDirection === 'givenIn'
       ? `1 ${tokenInInfo?.symbol} = ${effectivePriceReversed} ${tokenOutInfo?.symbol} (${toCurrency(
           tokenInUsdValue,
-          { abbreviated: false }
+          { abbreviated: false },
         )})`
       : `1 ${tokenOutInfo?.symbol} = ${effectivePrice} ${tokenInInfo?.symbol} (${toCurrency(
           tokenOutUsdValue,
-          { abbreviated: false }
+          { abbreviated: false },
         )})`
 
   const togglePriceDirection = (e: React.MouseEvent<HTMLElement>) => {

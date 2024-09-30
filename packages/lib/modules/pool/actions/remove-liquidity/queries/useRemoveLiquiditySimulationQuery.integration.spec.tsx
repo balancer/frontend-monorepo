@@ -14,7 +14,7 @@ import { connectWithDefaultUser } from '@/test/utils/wagmi/wagmi-connections'
 async function testQuery(humanBptIn: HumanAmount) {
   const handler = selectRemoveLiquidityHandler(
     aWjAuraWethPoolElementMock(),
-    RemoveLiquidityType.Proportional
+    RemoveLiquidityType.Proportional,
   )
   const emptyTokenOut = '' as Address // We don't use it but it is required to simplify TS checks
   const { result } = testHook(() =>
@@ -25,7 +25,7 @@ async function testQuery(humanBptIn: HumanAmount) {
       humanBptIn,
       tokenOut: emptyTokenOut,
       enabled: true,
-    })
+    }),
   )
   return result
 }

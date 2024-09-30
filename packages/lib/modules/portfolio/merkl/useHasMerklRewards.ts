@@ -29,7 +29,7 @@ export function useHasMerklRewards(poolsWithOnchainUserBalances: Pool[]) {
         return Object.values(campaign).some(entry => {
           return Number(entry?.unclaimed) > 0
         })
-      })
+      }),
     )
   }
 

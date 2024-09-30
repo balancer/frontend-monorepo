@@ -91,7 +91,7 @@ function handleNonFatalError(event: Sentry.ErrorEvent): Sentry.ErrorEvent | null
 
 function handleFatalError(
   event: Sentry.ErrorEvent,
-  criticalFlowPath: string
+  criticalFlowPath: string,
 ): Sentry.ErrorEvent | null {
   event.level = 'fatal'
 

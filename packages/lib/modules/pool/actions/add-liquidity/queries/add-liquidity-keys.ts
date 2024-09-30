@@ -27,13 +27,13 @@ function liquidityParams({
   humanAmountsIn,
 }: AddLiquidityParams) {
   return `${getHandlerClassName(
-    handler
+    handler,
   )}:${userAddress}:${poolId}:${slippage}:${stringifyHumanAmountsIn(poolType, humanAmountsIn)}`
 }
 
 export function stringifyHumanAmountsIn(
   poolType: GqlPoolType,
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithAddress[],
 ): string {
   if (humanAmountsIn.length === 0) return ''
   if (requiresProportionalInput(poolType)) {

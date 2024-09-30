@@ -11,7 +11,7 @@ export function useTokenSelectList(
   tokens: GqlToken[],
   excludeNativeAsset: boolean,
   pinNativeAsset: boolean,
-  searchTerm?: string
+  searchTerm?: string,
 ) {
   const { usdValueForToken } = useTokens()
   const { balanceFor } = useTokenBalances()
@@ -51,7 +51,7 @@ export function useTokenSelectList(
           return userBalance ? Number(usdValueForToken(token, userBalance?.formatted || 0)) : 0
         },
       ],
-      ['desc', 'desc']
+      ['desc', 'desc'],
     )
 
     if (pinNativeAsset) {

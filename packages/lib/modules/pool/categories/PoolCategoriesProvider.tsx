@@ -14,7 +14,7 @@ export function _usePoolCategories(categories: PoolCategory[] | undefined) {
   function getPoolCategories(pool: Pool): PoolCategory[] {
     if (!categories) return []
     return categories.filter(category =>
-      pool.tags?.map(tag => tag?.toLowerCase()).includes(category.id)
+      pool.tags?.map(tag => tag?.toLowerCase()).includes(category.id),
     )
   }
 

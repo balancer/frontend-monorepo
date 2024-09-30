@@ -27,7 +27,7 @@ function liquidityParams({
   wethIsEth,
 }: RemoveLiquidityParams) {
   return `${getHandlerClassName(
-    handler
+    handler,
   )}:${userAddress}:${poolId}:${slippage}:${humanBptIn}:${tokenOut}:${wethIsEth}`
 }
 export const removeLiquidityKeys = {

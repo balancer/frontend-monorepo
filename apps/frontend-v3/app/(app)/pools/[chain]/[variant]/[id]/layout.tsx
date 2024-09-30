@@ -51,7 +51,7 @@ export async function generateMetadata({
   return {
     title: `Liquidity Pool (${variant}): ${pool.name}`,
     description: `${pool.symbol} is a ${projectName} ${variant} ${getPoolTypeLabel(
-      pool.type
+      pool.type,
     )} liquidity pool which contains ${poolTokenString}.`,
   }
 }
