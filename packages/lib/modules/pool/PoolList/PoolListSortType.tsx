@@ -6,8 +6,8 @@ import { orderByHash, SortingState } from '../pool.types'
 import { usePoolOrderByState } from './usePoolOrderByState'
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { ReactNode, useMemo } from 'react'
-import { getSelectStyles } from '../../shared/services/chakra/custom/chakra-react-select'
-import { useIsMounted } from '../../shared/hooks/useIsMounted'
+import { useIsMounted } from 'usehooks-ts'
+import { getSelectStyles } from '../../../shared/services/chakra/custom/chakra-react-select'
 
 interface SortOption extends OptionBase {
   label: ReactNode
@@ -34,7 +34,7 @@ export function PoolListSortType() {
           },
         ])
         .flat(),
-    [orderBy],
+    [orderBy]
   )
 
   function handleChange(newOption: SingleValue<SortOption>) {
@@ -42,7 +42,7 @@ export function PoolListSortType() {
   }
 
   const _value = options.find(
-    option => option.value[0].id === sorting[0].id && option.value[0].desc === sorting[0].desc,
+    option => option.value[0].id === sorting[0].id && option.value[0].desc === sorting[0].desc
   )
 
   if (!isMounted) return null

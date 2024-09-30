@@ -1,6 +1,4 @@
-/* eslint-disable max-len */
-
-import { GqlPoolElement } from '../../shared/services/api/generated/graphql'
+import { GqlPoolElement } from '../../../shared/services/api/generated/graphql'
 
 export const nestedPoolMock: GqlPoolElement = {
   id: '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0',

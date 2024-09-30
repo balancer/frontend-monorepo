@@ -1,9 +1,9 @@
-import { GetPoolsDocument } from '@/lib/shared/services/api/generated/graphql'
 import { getQueryName, mockGQL } from '../utils'
 import { graphql } from 'msw'
 import { aGqlPoolMinimalMock } from '../builders/gqlPoolMinimal.builders'
-import { PoolList } from '@/lib/modules/pool/pool.types'
 import { GQLResponse } from './msw-helpers'
+import { PoolList } from '../../../modules/pool/pool.types'
+import { GetPoolsDocument } from '../../../shared/services/api/generated/graphql'
 
 export const defaultPoolListItemMock = aGqlPoolMinimalMock()
 export const defaultPoolListMock: PoolList = [defaultPoolListItemMock]

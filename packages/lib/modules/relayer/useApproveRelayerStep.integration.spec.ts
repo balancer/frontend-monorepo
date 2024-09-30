@@ -1,8 +1,8 @@
-import { testHook } from '@/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
-import { connectWithDefaultUser } from '@/test/utils/wagmi/wagmi-connections'
 import { useApproveRelayerStep } from './useApproveRelayerStep'
 import { TransactionStateProvider } from '../transactions/transaction-steps/TransactionStateProvider'
+import { testHook } from '../../test/utils/custom-renderers'
+import { connectWithDefaultUser } from '../../test/utils/wagmi/wagmi-connections'
 
 test('Runs relayer approval transaction and queries that it was approved', async () => {
   await connectWithDefaultUser()

@@ -1,16 +1,16 @@
-import networkConfig from '../../config/networks/mainnet'
-import { balAddress, wETHAddress } from '../../debug-helpers'
-import {
-  aBalWethPoolElementMock,
-  aPhantomStablePoolMock,
-} from '@/test/msw/builders/gqlPoolElement.builders'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
 import { Pool } from '../../../PoolProvider'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 import { ProportionalRemoveLiquidityHandler } from './ProportionalRemoveLiquidity.handler'
-import { emptyAddress } from '../../modules/web3/contracts/wagmi-helpers'
-import { connectWithDefaultUser } from '@/test/utils/wagmi/wagmi-connections'
+import networkConfig from '../../../../../config/networks/arbitrum'
+import { balAddress, wETHAddress } from '../../../../../debug-helpers'
+import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
+import {
+  aBalWethPoolElementMock,
+  aPhantomStablePoolMock,
+} from '../../../../../test/msw/builders/gqlPoolElement.builders'
+import { connectWithDefaultUser } from '../../../../../test/utils/wagmi/wagmi-connections'
+import { emptyAddress } from '../../../../web3/contracts/wagmi-helpers'
 
 const poolMock = aBalWethPoolElementMock() // 80BAL-20WETH
 

@@ -1,10 +1,10 @@
 import { GetPoolQuery, GqlChain } from '../../shared/services/api/generated/graphql'
-import { defaultPoolMock, defaultPoolResponseMock } from '@/test/msw/handlers/Pool.handlers'
-import { testHook } from '@/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { BaseVariant } from './pool.types'
 import { _usePool } from './PoolProvider'
-import { defaultTestGaugeAddress } from '@/test/msw/builders/gqlStaking.builders'
+import { defaultTestGaugeAddress } from '../../test/msw/builders/gqlStaking.builders'
+import { defaultPoolResponseMock, defaultPoolMock } from '../../test/msw/handlers/Pool.handlers'
+import { testHook } from '../../test/utils/custom-renderers'
 
 async function testUsePool({
   initialData = defaultPoolResponseMock,
@@ -35,7 +35,7 @@ describe('Gql pool helpers', () => {
     const result = await testUsePool()
 
     expect(result.current.poolExplorerLink).toBe(
-      'https://etherscan.io/address/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56',
+      'https://etherscan.io/address/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56'
     )
   })
 
@@ -43,7 +43,7 @@ describe('Gql pool helpers', () => {
     const result = await testUsePool()
 
     expect(result.current.gaugeExplorerLink).toBe(
-      `https://etherscan.io/address/0x2d42910d826e5500579d121596e98a6eb33c0a1b`,
+      `https://etherscan.io/address/0x2d42910d826e5500579d121596e98a6eb33c0a1b`
     )
   })
 

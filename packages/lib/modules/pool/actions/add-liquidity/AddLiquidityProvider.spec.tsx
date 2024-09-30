@@ -1,14 +1,20 @@
-import { balAddress, daiAddress, usdcAddress, usdtAddress, wETHAddress } from '../../debug-helpers'
-import { GqlPoolElement } from '../../shared/services/api/generated/graphql'
-import { aBalWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
-import {
-  DefaultAddLiquidityTestProvider,
-  buildDefaultPoolTestProvider,
-  testHook,
-} from '@/test/utils/custom-renderers'
 import { PropsWithChildren } from 'react'
 import { _useAddLiquidity } from './AddLiquidityProvider'
 import { nestedPoolMock } from '../../__mocks__/nestedPoolMock'
+import {
+  balAddress,
+  wETHAddress,
+  daiAddress,
+  usdtAddress,
+  usdcAddress,
+} from '../../../../debug-helpers'
+import { GqlPoolElement } from '../../../../shared/services/api/generated/graphql'
+import { aBalWethPoolElementMock } from '../../../../test/msw/builders/gqlPoolElement.builders'
+import {
+  buildDefaultPoolTestProvider,
+  DefaultAddLiquidityTestProvider,
+  testHook,
+} from '../../../../test/utils/custom-renderers'
 
 async function testUseAddLiquidity(pool: GqlPoolElement = aBalWethPoolElementMock()) {
   const PoolProvider = buildDefaultPoolTestProvider(pool)

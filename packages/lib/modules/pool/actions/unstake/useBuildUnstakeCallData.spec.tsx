@@ -1,13 +1,13 @@
 /* eslint-disable max-len */
-import { testHook } from '@/test/utils/custom-renderers'
+import { BatchRelayerService } from '../../../../shared/services/batch-relayer/batch-relayer.service'
+import { gaugeActionsService } from '../../../../shared/services/batch-relayer/extensions/gauge-actions.service'
+import { GaugeService } from '../../../../shared/services/staking/gauge.service'
+import { defaultTestUserAccount } from '../../../../test/anvil/anvil-setup'
+import { aGqlPoolElementMock } from '../../../../test/msw/builders/gqlPoolElement.builders'
+import { testHook } from '../../../../test/utils/custom-renderers'
 import { useBuildUnstakeCallData } from './useBuildUnstakeCallData'
-import { GaugeService } from '../../shared/services/staking/gauge.service'
-import { BatchRelayerService } from '../../shared/services/batch-relayer/batch-relayer.service'
-import mainnetNetworkConfig from '../../config/networks/mainnet'
-import { gaugeActionsService } from '../../shared/services/batch-relayer/extensions/gauge-actions.service'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
 import { Address } from 'viem'
-import { aGqlPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
+import mainnetNetworkConfig from '../../../../config/networks/mainnet'
 
 function testBuildUnstakeCallData(amount: bigint, userAddress: Address = defaultTestUserAccount) {
   const batchRelayerService = new BatchRelayerService(

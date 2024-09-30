@@ -1,15 +1,14 @@
 'use client'
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, HStack, Text, VStack, useTheme } from '@chakra-ui/react'
 import { useMemo, useRef } from 'react'
 import ReactECharts from 'echarts-for-react'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { motion } from 'framer-motion'
 import { ChartSizeValues } from './PoolWeightChart'
-import { useThemeColorMode } from '../../shared/services/chakra/useThemeColorMode'
-import { NoisyCard } from '../../shared/components/containers/NoisyCard'
 import { Pool } from '../../PoolProvider'
 import { calcTotalStakedBalanceUsd, getUserWalletBalanceUsd } from '../../user-balance.helpers'
+import { NoisyCard } from '../../../../shared/components/containers/NoisyCard'
+import { useThemeColorMode } from '../../../../shared/services/chakra/useThemeColorMode'
 
 const smallSize: ChartSizeValues = {
   chartHeight: '125px',

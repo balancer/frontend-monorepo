@@ -1,10 +1,10 @@
-import { daiAddress, maticAddress } from '../../debug-helpers'
-import { alternativeTestUserAccount, defaultTestUserAccount } from '@/test/anvil/anvil-setup'
-import { testHook } from '@/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { erc20Abi } from 'viem'
 import { ChainContractConfig, useMulticall } from './useMulticall'
 import { mainnet, polygon } from 'viem/chains'
+import { daiAddress, maticAddress } from '../../../debug-helpers'
+import { defaultTestUserAccount, alternativeTestUserAccount } from '../../../test/anvil/anvil-setup'
+import { testHook } from '../../../test/utils/custom-renderers'
 
 describe('Performs multicall in multiple chains', () => {
   const mainnetRequest: ChainContractConfig = {

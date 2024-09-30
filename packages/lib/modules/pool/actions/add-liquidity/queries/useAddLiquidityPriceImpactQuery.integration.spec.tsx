@@ -1,12 +1,11 @@
-import { wETHAddress, wjAuraAddress } from '../../debug-helpers'
-import { DefaultPoolTestProvider, testHook } from '@/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
-
-import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
 import { selectAddLiquidityHandler } from '../handlers/selectAddLiquidityHandler'
 import { useAddLiquidityPriceImpactQuery } from './useAddLiquidityPriceImpactQuery'
-import { connectWithDefaultUser } from '@/test/utils/wagmi/wagmi-connections'
-import { HumanTokenAmountWithAddress } from '../../modules/tokens/token.types'
+import { wETHAddress, wjAuraAddress } from '../../../../../debug-helpers'
+import { aWjAuraWethPoolElementMock } from '../../../../../test/msw/builders/gqlPoolElement.builders'
+import { testHook, DefaultPoolTestProvider } from '../../../../../test/utils/custom-renderers'
+import { connectWithDefaultUser } from '../../../../../test/utils/wagmi/wagmi-connections'
+import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'
 
 async function testQuery(humanAmountsIn: HumanTokenAmountWithAddress[]) {
   const handler = selectAddLiquidityHandler(aWjAuraWethPoolElementMock())

@@ -1,10 +1,10 @@
-import { TransactionLabels } from '../../modules/transactions/transaction-steps/lib'
-import { testHook } from '@/test/utils/custom-renderers'
-import { connectWithDefaultUser } from '@/test/utils/wagmi/wagmi-connections'
 import { waitFor } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import { Address, parseUnits } from 'viem'
 import { useManagedErc20Transaction } from './useManagedErc20Transaction'
+import { testHook } from '../../../test/utils/custom-renderers'
+import { connectWithDefaultUser } from '../../../test/utils/wagmi/wagmi-connections'
+import { TransactionLabels } from '../../transactions/transaction-steps/lib'
 
 await connectWithDefaultUser()
 
@@ -23,7 +23,7 @@ test('token approval transaction (wETH)', async () => {
       enabled: true,
       simulationMeta: {},
       labels: {} as TransactionLabels,
-    }),
+    })
   )
 
   await waitFor(() => expect(result.current.simulation.isSuccess).toBeTruthy())

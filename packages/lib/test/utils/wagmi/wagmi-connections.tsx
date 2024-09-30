@@ -1,5 +1,5 @@
-import { testAccountIndex } from '@/test/anvil/anvil-setup'
-import { addTestUserAddress, testWagmiConfig } from '@/test/anvil/testWagmiConfig'
+import { testAccountIndex } from '../../anvil/anvil-setup'
+import { addTestUserAddress, testWagmiConfig } from '../../anvil/testWagmiConfig'
 import { act } from '@testing-library/react'
 import { Address } from 'viem'
 import { Connector } from 'wagmi'
@@ -47,14 +47,14 @@ async function connectWithTestConnector(connector: Connector) {
       if (e.message.startsWith('Connector already connected')) return
       // Log connection errors without making the test fail
       console.error(e.message)
-    }),
+    })
   )
 }
 
 async function disconnectFromTestConnector(connector: Connector) {
   await act(() =>
     disconnect(testWagmiConfig, { connector }).catch(
-      e => console.error(e.message), // Log connection errors without making the test fail
-    ),
+      e => console.error(e.message) // Log connection errors without making the test fail
+    )
   )
 }

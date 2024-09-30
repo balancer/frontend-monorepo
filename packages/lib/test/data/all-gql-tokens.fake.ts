@@ -1,4 +1,4 @@
-import { GqlChain, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlToken, GqlChain } from '../../shared/services/api/generated/graphql'
 
 export const fakeTokenSymbols = [
   'ETH',
@@ -205,7 +205,7 @@ export function fakeTokenBySymbol(symbol: FakeTokenSymbol) {
   if (!token) {
     console.log(
       'Available fake tokens: ',
-      allFakeGqlTokens.map(token => token.symbol),
+      allFakeGqlTokens.map(token => token.symbol)
     )
     throw new Error(`Invalid symbol for fake token: ${symbol}`)
   }

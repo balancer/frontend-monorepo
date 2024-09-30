@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
-import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
-import {
-  DefaultAddLiquidityTestProvider,
-  buildDefaultPoolTestProvider,
-} from '@/test/utils/custom-renderers'
 import { PropsWithChildren } from 'react'
+import { aWjAuraWethPoolElementMock } from '../../../../test/msw/builders/gqlPoolElement.builders'
+import {
+  buildDefaultPoolTestProvider,
+  DefaultAddLiquidityTestProvider,
+} from '../../../../test/utils/custom-renderers'
 
 const PoolProvider = buildDefaultPoolTestProvider(aWjAuraWethPoolElementMock())
 

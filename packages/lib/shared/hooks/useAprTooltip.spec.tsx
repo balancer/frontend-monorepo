@@ -1,15 +1,15 @@
-import { testHook } from '@/test/utils/custom-renderers'
 import { bn, fNum } from '../utils/numbers'
 import { useAprTooltip } from './useAprTooltip'
 import { aprTooltipDataMock } from './_mocks_/aprTooltipDataMock'
 import BigNumber from 'bignumber.js'
 import { GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
+import { testHook } from '../../test/utils/custom-renderers'
 
 const defaultNumberFormatter = (value: string) => bn(bn(value).toFixed(4, BigNumber.ROUND_HALF_UP))
 
 function testUseAprTooltip({ aprItems }: { aprItems: GqlPoolAprItem[] }) {
   const { result } = testHook(() =>
-    useAprTooltip({ aprItems, numberFormatter: defaultNumberFormatter }),
+    useAprTooltip({ aprItems, numberFormatter: defaultNumberFormatter })
   )
   return result
 }

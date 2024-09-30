@@ -1,16 +1,15 @@
 import fetch from 'cross-fetch'
-
 import { visit } from 'graphql/language/visitor'
 import { print } from 'graphql'
+import { Address } from 'viem'
+import { nested50WETH_50_3poolId } from '../../../debug-helpers'
 import {
+  GqlChain,
+  GqlPoolElement,
   GetPoolDocument,
   GetPoolQueryVariables,
-  GqlChain,
   GetPoolQuery,
-  GqlPoolElement,
-} from '../../shared/services/api/generated/graphql'
-import { nested50WETH_50_3poolId } from '../../debug-helpers'
-import { Address } from 'viem'
+} from '../../../shared/services/api/generated/graphql'
 
 function astToQueryString(ast: any): string {
   return print(ast)
@@ -19,7 +18,7 @@ function astToQueryString(ast: any): string {
 export async function getPoolMock(
   poolId: Address = nested50WETH_50_3poolId,
   chain: GqlChain = GqlChain.Mainnet,
-  userAddress?: Address,
+  userAddress?: Address
 ): Promise<GqlPoolElement> {
   const queryString = astToQueryString(visit(GetPoolDocument, {}))
 

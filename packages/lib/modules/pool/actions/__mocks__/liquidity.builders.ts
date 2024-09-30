@@ -1,7 +1,7 @@
-import { balAddress } from '../../debug-helpers'
 import { TokenAmount, Token, HumanAmount } from '@balancer/sdk'
 import { Address, parseUnits } from 'viem'
 import { mock } from 'vitest-mock-extended'
+import { balAddress } from '../../../../debug-helpers'
 
 export function aTokenAmountMock(tokenAddress: Address, amount: HumanAmount): TokenAmount {
   const defaultTokenAmount: TokenAmount = mock<TokenAmount>({

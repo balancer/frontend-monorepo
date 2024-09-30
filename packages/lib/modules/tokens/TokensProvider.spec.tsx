@@ -1,5 +1,4 @@
 import { GqlChain } from '../../shared/services/api/generated/graphql'
-import { testHook } from '@/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { Address } from 'viem'
 import {
@@ -9,6 +8,7 @@ import {
   defaultTokenListMock,
 } from './__mocks__/token.builders'
 import { _useTokens } from './TokensProvider'
+import { testHook } from '../../test/utils/custom-renderers'
 
 const initTokensData = defaultGetTokensQueryMock
 const initTokenPricesData = defaultGetTokenPricesQueryMock

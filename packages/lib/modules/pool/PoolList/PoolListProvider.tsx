@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { createContext, PropsWithChildren, useEffect } from 'react'
@@ -25,7 +24,7 @@ export function _usePoolList({ fixedPoolTypes }: { fixedPoolTypes?: GqlPoolType[
     GetPoolsDocument,
     {
       variables,
-    },
+    }
   )
 
   const pools = loading && previousData ? previousData.pools : data?.pools || []

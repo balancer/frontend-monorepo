@@ -1,4 +1,3 @@
-import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
 import {
   LiquidityActionHelpers,
   areEmptyAmounts,
@@ -7,6 +6,10 @@ import {
   supportsNestedActions,
 } from './LiquidityActionHelpers'
 import { nestedPoolMock } from '../__mocks__/nestedPoolMock'
+import { recoveryPoolMock } from '../__mocks__/recoveryPoolMock'
+import { Pool } from '../PoolProvider'
+import { mock } from 'vitest-mock-extended'
+import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 import {
   bpt3PoolAddress,
   wETHAddress,
@@ -16,11 +19,8 @@ import {
   usdtAddress,
   wjAuraAddress,
   ethAddress,
-} from '../../debug-helpers'
-import { recoveryPoolMock } from '../__mocks__/recoveryPoolMock'
-import { Pool } from '../PoolProvider'
-import { mock } from 'vitest-mock-extended'
-import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
+} from '../../../debug-helpers'
+import { aWjAuraWethPoolElementMock } from '../../../test/msw/builders/gqlPoolElement.builders'
 
 describe('areEmptyAmounts', () => {
   test('when all humanAmounts are empty, zero or zero with decimals', () => {

@@ -1,4 +1,4 @@
-import { mswServer } from '@/test/msw/server'
+import { mswServer } from '../msw/server'
 
 // MSW SETUP that we only use for unit tests (not for integration tests)
 // Establish API mocking before all tests.

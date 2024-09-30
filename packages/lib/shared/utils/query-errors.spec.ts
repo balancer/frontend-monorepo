@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import {
   sentryMetaForAddLiquidityHandler,
   sentryMetaForRemoveLiquidityHandler,
@@ -7,20 +6,18 @@ import {
   shouldIgnoreException,
 } from './query-errors'
 import { Exception as SentryException } from '@sentry/nextjs'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
 import * as Sentry from '@sentry/nextjs'
 import { waitFor } from '@testing-library/react'
 import sentryTestkit from 'sentry-testkit'
 import { recoveryPoolMock } from '../../modules/pool/__mocks__/recoveryPoolMock'
-// eslint-disable-next-line max-len
 import { Extras } from '@sentry/types'
-// eslint-disable-next-line max-len
 import { RecoveryRemoveLiquidityHandler } from '../../modules/pool/actions/remove-liquidity/handlers/RecoveryRemoveLiquidity.handler'
 import { UnbalancedAddLiquidityHandler } from '../../modules/pool/actions/add-liquidity/handlers/UnbalancedAddLiquidity.handler'
 import { aWjAuraWethPoolElementMock } from '../../test/msw/builders/gqlPoolElement.builders'
 import { AddLiquidityParams } from '../../modules/pool/actions/add-liquidity/queries/add-liquidity-keys'
 import { wETHAddress, wjAuraAddress } from '../../debug-helpers'
 import { RemoveLiquidityParams } from '../../modules/pool/actions/remove-liquidity/queries/remove-liquidity-keys'
+import { defaultTestUserAccount } from '../../test/anvil/anvil-setup'
 
 const { testkit, sentryTransport } = sentryTestkit()
 const test_DSN = 'https://testDns@sentry.io/000001'
@@ -154,7 +151,7 @@ describe('Captures sentry error', () => {
 describe('shouldIgnoreError', () => {
   it('Ignores errors', () => {
     expect(
-      shouldIgnoreException(createSentryException('e.getAccounts is not a function')),
+      shouldIgnoreException(createSentryException('e.getAccounts is not a function'))
     ).toBeTruthy()
     expect(shouldIgnoreException(createSentryException('foo bar baz'))).toBeFalsy()
   })

@@ -1,5 +1,5 @@
-import { gyro2CLP_USDC_DAI, recoveryModePoolId } from '../../debug-helpers'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { gyro2CLP_USDC_DAI, recoveryModePoolId } from '../../../debug-helpers'
+import { GqlChain } from '../../../shared/services/api/generated/graphql'
 import { getPoolMock } from './getPoolMock'
 
 /**

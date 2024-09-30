@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
-import networkConfig from '../../config/networks/mainnet'
-import { balAddress, wETHAddress, wjAuraAddress } from '../../debug-helpers'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
-import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
+import { wETHAddress, wjAuraAddress, balAddress } from '../../../../../debug-helpers'
+import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
+import { aWjAuraWethPoolElementMock } from '../../../../../test/msw/builders/gqlPoolElement.builders'
+import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'
+import networkConfig from '../../../../../config/networks/arbitrum'
 import { UnbalancedAddLiquidityHandler } from './UnbalancedAddLiquidity.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
-import { HumanTokenAmountWithAddress } from '../../modules/tokens/token.types'
 
 function selectUnbalancedHandler() {
   return selectAddLiquidityHandler(aWjAuraWethPoolElementMock()) as UnbalancedAddLiquidityHandler

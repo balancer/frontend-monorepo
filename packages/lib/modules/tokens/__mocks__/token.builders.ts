@@ -1,19 +1,3 @@
-import { wETHAddress, wjAuraAddress } from '../../debug-helpers'
-import {
-  GetTokenPricesQuery,
-  GetTokensQuery,
-  GetTokensQueryVariables,
-  GqlChain,
-  GqlPoolToken,
-  GqlPoolTokenDetail,
-  GqlPoolTokenExpanded,
-  GqlTokenPrice,
-} from '../../shared/services/api/generated/graphql'
-import {
-  FakeTokenSymbol,
-  allFakeGqlTokens,
-  fakeTokenBySymbol,
-} from '@/test/data/all-gql-tokens.fake'
 import { mock } from 'vitest-mock-extended'
 import { TokenAllowances } from '../../web3/useTokenAllowances'
 import { TokenAmount, TokenBase } from '../token.types'
@@ -21,7 +5,23 @@ import { MswTokenList } from './token.test.types'
 import { emptyAddress } from '../../web3/contracts/wagmi-helpers'
 import { MinimalToken } from '@balancer/sdk'
 import { Address } from 'viem'
-import { MAX_BIGINT } from '../../shared/utils/numbers'
+import { wETHAddress, wjAuraAddress } from '../../../debug-helpers'
+import {
+  GetTokensQuery,
+  GetTokensQueryVariables,
+  GetTokenPricesQuery,
+  GqlPoolToken,
+  GqlPoolTokenDetail,
+  GqlPoolTokenExpanded,
+  GqlTokenPrice,
+  GqlChain,
+} from '../../../shared/services/api/generated/graphql'
+import { MAX_BIGINT } from '../../../shared/utils/numbers'
+import {
+  allFakeGqlTokens,
+  fakeTokenBySymbol,
+  FakeTokenSymbol,
+} from '../../../test/data/all-gql-tokens.fake'
 
 export const defaultTokenMock = aTokenMock({ symbol: 'TEST-TOKEN' })
 export const defaultTokenListMock: MswTokenList = allFakeGqlTokens
@@ -29,7 +29,7 @@ export const defaultTokenListMock: MswTokenList = allFakeGqlTokens
 export const defaultTokenPriceMock = aTokenPriceMock()
 
 export const defaultTokenPriceListMock = allFakeGqlTokens.map(token =>
-  aTokenPriceMock({ address: token.address, chain: token.chain }),
+  aTokenPriceMock({ address: token.address, chain: token.chain })
 )
 
 export const defaultGetTokensQueryMock: GetTokensQuery = {

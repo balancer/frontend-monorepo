@@ -1,13 +1,13 @@
-import {
-  GqlBalancePoolAprItem,
-  GqlChain,
-  GqlPoolApr,
-  GqlPoolAprValue,
-  GqlPoolMinimal,
-  GqlPoolType,
-} from '@/lib/shared/services/api/generated/graphql'
 import { DeepPartial } from '@apollo/client/utilities'
 import { mock, mockDeep } from 'vitest-mock-extended'
+import {
+  GqlPoolMinimal,
+  GqlChain,
+  GqlPoolType,
+  GqlPoolApr,
+  GqlPoolAprValue,
+  GqlBalancePoolAprItem,
+} from '../../../shared/services/api/generated/graphql'
 
 export function aGqlPoolMinimalMock(...options: Partial<GqlPoolMinimal>[]): GqlPoolMinimal {
   const defaultPool = mock<GqlPoolMinimal>()

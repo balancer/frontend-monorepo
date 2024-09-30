@@ -1,14 +1,13 @@
-/* eslint-disable max-len */
-import networkConfig from '../../config/networks/mainnet'
-import { daiAddress, usdcAddress, usdtAddress, wETHAddress } from '../../debug-helpers'
-import { mainnetTestPublicClient } from '@/test/utils/wagmi/wagmi-test-clients'
 import { Pool } from '../../../PoolProvider'
 import { NestedAddLiquidityHandler } from './NestedAddLiquidity.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
-import { HumanTokenAmountWithAddress } from '../../modules/tokens/token.types'
 import { getPoolMock } from '../../../__mocks__/getPoolMock'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import networkConfig from '../../../../../config/networks/arbitrum'
+import { daiAddress, wETHAddress, usdcAddress, usdtAddress } from '../../../../../debug-helpers'
+import { GqlChain } from '../../../../../shared/services/api/generated/graphql'
+import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
+import { mainnetTestPublicClient } from '../../../../../test/utils/wagmi/wagmi-test-clients'
+import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'
 
 function selectNestedHandler(pool: Pool) {
   return selectAddLiquidityHandler(pool) as NestedAddLiquidityHandler

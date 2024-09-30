@@ -1,12 +1,12 @@
 import { balAddress, wETHAddress } from '../../debug-helpers'
-import { fakeTokenBySymbol } from '@/test/data/all-gql-tokens.fake'
-import { testHook } from '@/test/utils/custom-renderers'
 import { act } from '@testing-library/react'
 import { useTotalUsdValue } from './useTotalUsdValue'
-import { mockTokenPricesList } from '@/test/msw/handlers/Tokens.handlers'
 import { aTokenPriceMock } from '../../modules/tokens/__mocks__/token.builders'
 import { HumanTokenAmountWithAddress } from './token.types'
 import { actSleep } from '../../shared/utils/sleep'
+import { fakeTokenBySymbol } from '../../test/data/all-gql-tokens.fake'
+import { mockTokenPricesList } from '../../test/msw/handlers/Tokens.handlers'
+import { testHook } from '../../test/utils/custom-renderers'
 
 const balPrice = 2
 const wethPrice = 3

@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
-import { testHook } from '@/test/utils/custom-renderers'
 import { notAllowedPoolMock } from '../__mocks__/notAllowedPoolMock'
 import { usePoolAlerts } from './usePoolAlerts'
 import { recoveryPoolMock } from '../__mocks__/recoveryPoolMock'
+import { testHook } from '../../../test/utils/custom-renderers'
 
 describe('Creates pool alerts for', () => {
   test('a pool with 2 not allowed tokens', () => {

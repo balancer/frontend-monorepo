@@ -1,14 +1,7 @@
 import { useMemo, useCallback } from 'react'
 import { useTokenApprovalSteps } from '../../tokens/approvals/useTokenApprovalSteps'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import mainnetNetworkConfig from '../../config/networks/mainnet'
 import { RawAmount } from '../../tokens/approvals/approval-rules'
-import { ManagedTransactionButton } from '../../modules/transactions/transaction-steps/TransactionButton'
-import {
-  TransactionLabels,
-  TransactionStep,
-} from '../../modules/transactions/transaction-steps/lib'
-import { sentryMetaForWagmiSimulation } from '../../shared/utils/query-errors'
 import { parseUnits } from 'viem'
 import { ManagedTransactionInput } from '../../web3/contracts/useManagedTransaction'
 import {
@@ -21,6 +14,10 @@ import {
   parseDate,
   getLockContractFunctionName,
 } from './lock.helpers'
+import { sentryMetaForWagmiSimulation } from '../../../shared/utils/query-errors'
+import { TransactionLabels, TransactionStep } from '../../transactions/transaction-steps/lib'
+import { ManagedTransactionButton } from '../../transactions/transaction-steps/TransactionButton'
+import mainnetNetworkConfig from '../../../config/networks/mainnet'
 
 type UseCreateLockArgs = {
   lockAmount: RawAmount
@@ -48,7 +45,7 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionType }: UseCre
       confirmed: getConfirmedLabel(lockActionType, lockAmount, lockEndDate),
       tooltip: getTooltip(lockActionType),
     }),
-    [lockActionType, lockAmount, lockEndDate],
+    [lockActionType, lockAmount, lockEndDate]
   )
 
   const txSimulationMeta = sentryMetaForWagmiSimulation(
@@ -58,7 +55,7 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionType }: UseCre
       lockAmount: lockAmount.rawAmount.toString(),
       lockEndDate,
       lockActionType,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = useMemo(() => {
@@ -104,7 +101,7 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionType }: UseCre
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={lockActionType.toString()} {...props} />,
     }),
-    [labels, onSuccess, props, lockActionType],
+    [labels, onSuccess, props, lockActionType]
   )
 
   const steps = [lockStep, ...tokenApprovalSteps]

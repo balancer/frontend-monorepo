@@ -1,9 +1,9 @@
 import {
-  GqlChain,
   GqlPoolStaking,
-  GqlPoolStakingGaugeStatus,
+  GqlChain,
   GqlPoolStakingType,
-} from '@/lib/shared/services/api/generated/graphql'
+  GqlPoolStakingGaugeStatus,
+} from '../../../shared/services/api/generated/graphql'
 
 export const defaultTestGaugeAddress = '0x2d42910d826e5500579d121596e98a6eb33c0a1b'
 

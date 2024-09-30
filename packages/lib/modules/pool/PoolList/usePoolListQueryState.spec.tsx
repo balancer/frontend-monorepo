@@ -1,4 +1,4 @@
-import { testHook } from '@/test/utils/custom-renderers'
+import { testHook } from '../../../test/utils/custom-renderers'
 import { usePoolListQueryState } from './usePoolListQueryState'
 
 function updateUrlQueryString(queryString: `?${string}`) {

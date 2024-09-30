@@ -1,10 +1,10 @@
-import { GqlChain, GqlPoolElement } from '../../shared/services/api/generated/graphql'
-import { userStakedInNonPreferentialGauge } from '@/test/anvil/anvil-setup'
-import { testHook } from '@/test/utils/custom-renderers'
-import { connectWith, disconnectWith } from '@/test/utils/wagmi/wagmi-connections'
 import { waitFor } from '@testing-library/react'
 import { getPoolMock } from '../__mocks__/getPoolMock'
 import { useUserStakedBalance } from './useUserStakedBalance'
+import { GqlPoolElement, GqlChain } from '../../../shared/services/api/generated/graphql'
+import { userStakedInNonPreferentialGauge } from '../../../test/anvil/anvil-setup'
+import { testHook } from '../../../test/utils/custom-renderers'
+import { connectWith, disconnectWith } from '../../../test/utils/wagmi/wagmi-connections'
 
 async function testUseChainPoolBalances(pool: GqlPoolElement) {
   const { result } = testHook(() => {

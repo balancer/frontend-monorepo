@@ -1,4 +1,4 @@
-import { testWagmiConfig } from '@/test/anvil/testWagmiConfig'
+import { testWagmiConfig } from '../../anvil/testWagmiConfig'
 import { publicActions, testActions, walletActions } from 'viem'
 import { mainnet, polygon, sepolia } from 'viem/chains'
 

@@ -1,23 +1,5 @@
 'use client'
 
-import { AddLiquidityProvider } from '@/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
-import { RemoveLiquidityProvider } from '@/lib/modules/pool/actions/remove-liquidity/RemoveLiquidityProvider'
-import { BaseVariant } from '@/lib/modules/pool/pool.types'
-import { PoolProvider } from '@/lib/modules/pool/PoolProvider'
-import { RelayerSignatureProvider } from '@/lib/modules/relayer/RelayerSignatureProvider'
-import {
-  defaultGetTokenPricesQueryMock,
-  defaultGetTokensQueryMock,
-  defaultGetTokensQueryVariablesMock,
-} from '@/lib/modules/tokens/__mocks__/token.builders'
-import { TokenInputsValidationProvider } from '@/lib/modules/tokens/TokenInputsValidationProvider'
-import { TokensProvider } from '@/lib/modules/tokens/TokensProvider'
-import { RecentTransactionsProvider } from '@/lib/modules/transactions/RecentTransactionsProvider'
-import { TransactionStateProvider } from '@/lib/modules/transactions/transaction-steps/TransactionStateProvider'
-import { UserSettingsProvider } from '@/lib/modules/user/settings/UserSettingsProvider'
-import { UserAccountProvider } from '@/lib/modules/web3/UserAccountProvider'
-import { GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
-import { testWagmiConfig } from '@/test/anvil/testWagmiConfig'
 import { ApolloProvider } from '@apollo/client'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { RenderHookOptions, renderHook, waitFor } from '@testing-library/react'
@@ -27,6 +9,24 @@ import { aGqlPoolElementMock } from '../msw/builders/gqlPoolElement.builders'
 import { apolloTestClient } from './apollo-test-client'
 import { AppRouterContextProviderMock } from './app-router-context-provider-mock'
 import { testQueryClient } from './react-query'
+import { AddLiquidityProvider } from '../../modules/pool/actions/add-liquidity/AddLiquidityProvider'
+import { RemoveLiquidityProvider } from '../../modules/pool/actions/remove-liquidity/RemoveLiquidityProvider'
+import { BaseVariant } from '../../modules/pool/pool.types'
+import { PoolProvider } from '../../modules/pool/PoolProvider'
+import { RelayerSignatureProvider } from '../../modules/relayer/RelayerSignatureProvider'
+import {
+  defaultGetTokenPricesQueryMock,
+  defaultGetTokensQueryMock,
+  defaultGetTokensQueryVariablesMock,
+} from '../../modules/tokens/__mocks__/token.builders'
+import { TokenInputsValidationProvider } from '../../modules/tokens/TokenInputsValidationProvider'
+import { TokensProvider } from '../../modules/tokens/TokensProvider'
+import { RecentTransactionsProvider } from '../../modules/transactions/RecentTransactionsProvider'
+import { TransactionStateProvider } from '../../modules/transactions/transaction-steps/TransactionStateProvider'
+import { UserSettingsProvider } from '../../modules/user/settings/UserSettingsProvider'
+import { UserAccountProvider } from '../../modules/web3/UserAccountProvider'
+import { GqlPoolElement } from '../../shared/services/api/generated/graphql'
+import { testWagmiConfig } from '../anvil/testWagmiConfig'
 
 export type Wrapper = ({ children }: PropsWithChildren) => ReactNode
 
@@ -36,7 +36,7 @@ export function EmptyWrapper({ children }: PropsWithChildren) {
 
 export function testHook<TResult, TProps>(
   hook: (props: TProps) => TResult,
-  options?: RenderHookOptions<TProps> | undefined,
+  options?: RenderHookOptions<TProps> | undefined
 ) {
   function MixedProviders({ children }: PropsWithChildren) {
     const LocalProviders = options?.wrapper || EmptyWrapper

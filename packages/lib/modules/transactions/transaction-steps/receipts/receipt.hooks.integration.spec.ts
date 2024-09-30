@@ -1,12 +1,11 @@
-import { testHook } from '@/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
-
-import { getGqlChain } from '../../config/app.config'
-import { maticAddress } from '../../debug-helpers'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
 import { Address, Hash } from 'viem'
 import { polygon } from 'viem/chains'
 import { useAddLiquidityReceipt, useRemoveLiquidityReceipt, useSwapReceipt } from './receipt.hooks'
+import { getGqlChain } from '../../../../config/app.config'
+import { maticAddress } from '../../../../debug-helpers'
+import { GqlChain } from '../../../../shared/services/api/generated/graphql'
+import { testHook } from '../../../../test/utils/custom-renderers'
 
 async function testAddReceipt(userAddress: Address, txHash: Hash, chainId = 1) {
   const { result } = testHook(() => {

@@ -1,29 +1,29 @@
-import {
-  balAddress,
-  bpt3PoolAddress,
-  poolId,
-  wETHAddress,
-  wjAuraAddress,
-} from '@/lib/debug-helpers'
-import {
-  aTokenExpandedMock,
-  someGqlTokenMocks,
-  someTokenExpandedMock,
-} from '@/lib/modules/tokens/__mocks__/token.builders'
-import {
-  GqlChain,
-  GqlPoolElement,
-  GqlPoolNestingType,
-  GqlPoolTokenDetail,
-  GqlPoolTokenExpanded,
-  GqlPoolType,
-  GqlPoolWeighted,
-} from '@/lib/shared/services/api/generated/graphql'
 import { DeepPartial } from '@apollo/client/utilities'
 import { mock } from 'vitest-mock-extended'
 import { aGqlStakingMock } from './gqlStaking.builders'
 import { getPoolAddress } from '@balancer/sdk'
 import { Address, Hex } from 'viem'
+import {
+  wjAuraAddress,
+  wETHAddress,
+  poolId,
+  balAddress,
+  bpt3PoolAddress,
+} from '../../../debug-helpers'
+import {
+  someGqlTokenMocks,
+  someTokenExpandedMock,
+  aTokenExpandedMock,
+} from '../../../modules/tokens/__mocks__/token.builders'
+import {
+  GqlPoolElement,
+  GqlPoolTokenDetail,
+  GqlPoolWeighted,
+  GqlPoolNestingType,
+  GqlChain,
+  GqlPoolType,
+  GqlPoolTokenExpanded,
+} from '../../../shared/services/api/generated/graphql'
 
 export function aBalWethPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlPoolElement {
   const poolId = '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014' // 80BAL-20WETH

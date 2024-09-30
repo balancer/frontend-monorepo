@@ -1,4 +1,4 @@
-import { GetPoolsDocument, GetTokensDocument } from '@/lib/shared/services/api/generated/graphql'
+import { GetTokensDocument, GetPoolsDocument } from '../../shared/services/api/generated/graphql'
 import { getQueryName } from './utils'
 
 describe('getQueryName', () => {

@@ -1,15 +1,14 @@
-import { poolId } from '../../debug-helpers'
-import { testHook } from '@/test/utils/custom-renderers'
-import { waitFor } from '@testing-library/react'
-
-import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
 import { HumanAmount, TokenAmount } from '@balancer/sdk'
+import { waitFor } from '@testing-library/react'
+import { Address } from 'viem'
 import { toHumanAmount } from '../../LiquidityActionHelpers'
 import { selectRemoveLiquidityHandler } from '../handlers/selectRemoveLiquidityHandler'
 import { RemoveLiquidityType } from '../remove-liquidity.types'
 import { useRemoveLiquiditySimulationQuery } from './useRemoveLiquiditySimulationQuery'
-import { Address } from 'viem'
-import { connectWithDefaultUser } from '@/test/utils/wagmi/wagmi-connections'
+import { poolId } from '../../../../../debug-helpers'
+import { aWjAuraWethPoolElementMock } from '../../../../../test/msw/builders/gqlPoolElement.builders'
+import { testHook } from '../../../../../test/utils/custom-renderers'
+import { connectWithDefaultUser } from '../../../../../test/utils/wagmi/wagmi-connections'
 
 async function testQuery(humanBptIn: HumanAmount) {
   const handler = selectRemoveLiquidityHandler(

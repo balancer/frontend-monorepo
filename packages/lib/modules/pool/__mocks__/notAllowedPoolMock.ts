@@ -1,9 +1,8 @@
-/* eslint-disable max-len */
 import {
+  GqlPoolType,
   GqlChain,
   GqlPoolNestingType,
-  GqlPoolType,
-} from '../../shared/services/api/generated/graphql'
+} from '../../../shared/services/api/generated/graphql'
 import { Pool } from '../PoolProvider'
 
 export const notAllowedPoolMock: Pool = {

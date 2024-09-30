@@ -1,14 +1,14 @@
-import {
-  DefaultAddLiquidityTestProvider,
-  DefaultPoolTestProvider,
-  testHook,
-} from '@/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { PropsWithChildren } from 'react'
 import { act } from 'react-dom/test-utils'
 import { useSignRelayerApproval } from './signRelayerApproval.hooks'
 import { useRelayerSignature } from './RelayerSignatureProvider'
-import { connectWithDefaultUser } from '@/test/utils/wagmi/wagmi-connections'
+import {
+  DefaultPoolTestProvider,
+  DefaultAddLiquidityTestProvider,
+  testHook,
+} from '../../test/utils/custom-renderers'
+import { connectWithDefaultUser } from '../../test/utils/wagmi/wagmi-connections'
 
 const Providers = ({ children }: PropsWithChildren) => (
   <DefaultPoolTestProvider>

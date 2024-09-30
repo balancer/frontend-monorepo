@@ -1,8 +1,7 @@
-import { testHook } from '@/test/utils/custom-renderers'
 import { useCurrency } from './useCurrency'
-
 import { PropsWithChildren } from 'react'
 import { FxRatesContext } from './FxRatesProvider'
+import { testHook } from '../../test/utils/custom-renderers'
 
 export function MockFiatFxRatesProvider({ children }: PropsWithChildren) {
   const hook = {

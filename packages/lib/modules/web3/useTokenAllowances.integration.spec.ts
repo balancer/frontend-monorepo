@@ -1,9 +1,9 @@
 import { vaultV2Address, wETHAddress, wjAuraAddress } from '../../debug-helpers'
-import { testHook } from '@/test/utils/custom-renderers'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
 import { act, waitFor } from '@testing-library/react'
 import { Address } from 'viem'
 import { useTokenAllowances } from './useTokenAllowances'
+import { defaultTestUserAccount } from '../../test/anvil/anvil-setup'
+import { testHook } from '../../test/utils/custom-renderers'
 
 function testTokenAllowances(tokenAddresses: Address[]) {
   const { result } = testHook(() =>
@@ -12,7 +12,7 @@ function testTokenAllowances(tokenAddresses: Address[]) {
       userAddress: defaultTestUserAccount,
       spenderAddress: vaultV2Address,
       tokenAddresses,
-    }),
+    })
   )
   return result
 }
@@ -27,7 +27,7 @@ test('fetches token allowances', async () => {
     expect.objectContaining({
       [wjAuraAddress]: expect.any(BigInt),
       [wETHAddress]: expect.any(BigInt),
-    }),
+    })
   )
 })
 

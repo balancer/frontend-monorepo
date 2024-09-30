@@ -1,7 +1,7 @@
-import { GqlChain } from '../../shared/services/api/generated/graphql'
 import { Box } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { GqlChain } from '../../../../shared/services/api/generated/graphql'
 
 type Props = {
   chain: GqlChain

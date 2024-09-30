@@ -1,14 +1,14 @@
-import networkConfig from '../../config/networks/mainnet'
-import { wETHAddress } from '../../debug-helpers'
-import { emptyAddress } from '../../modules/web3/contracts/wagmi-helpers'
-import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
+import networkConfig from '../../../../../config/networks/arbitrum'
+import { wETHAddress } from '../../../../../debug-helpers'
+import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
+import { connectWithDefaultUser } from '../../../../../test/utils/wagmi/wagmi-connections'
+import { mainnetTestPublicClient } from '../../../../../test/utils/wagmi/wagmi-test-clients'
+import { emptyAddress } from '../../../../web3/contracts/wagmi-helpers'
 import { nestedPoolMock } from '../../../__mocks__/nestedPoolMock'
 import { Pool } from '../../../PoolProvider'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { NestedProportionalRemoveLiquidityHandler } from './NestedProportionalRemoveLiquidity.handler'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
-import { mainnetTestPublicClient } from '@/test/utils/wagmi/wagmi-test-clients'
-import { connectWithDefaultUser } from '@/test/utils/wagmi/wagmi-connections'
 
 function selectNestedProportionalHandler(pool: Pool): NestedProportionalRemoveLiquidityHandler {
   return selectRemoveLiquidityHandler(
