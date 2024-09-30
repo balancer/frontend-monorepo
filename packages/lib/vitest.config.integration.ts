@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { InlineConfig } from 'vitest'
+import { InlineConfig } from 'vitest/node'
 import vitestUnitConfig from './vitest.config'
 
 function setupFilesWithoutMswSetup() {
