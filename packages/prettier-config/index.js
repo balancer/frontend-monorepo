@@ -1,7 +1,7 @@
 module.exports = {
   singleQuote: true,
-  arrowParens: "avoid",
+  arrowParens: 'avoid',
   semi: false,
-  proseWrap: "always",
+  proseWrap: 'always',
   printWidth: 100,
 }
