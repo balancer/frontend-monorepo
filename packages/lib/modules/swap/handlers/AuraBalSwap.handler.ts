@@ -1,8 +1,14 @@
-import { getChainId, getWrappedNativeAssetAddress } from '../../config/app.config'
 import { SwapHandler } from './Swap.handler'
-import { GqlSorSwapType, GqlToken } from '../../shared/services/api/generated/graphql'
-import { AuraBalSwap, HumanAmount, Slippage, SwapKind, Token, TokenAmount } from '@balancer/sdk'
-import { formatUnits } from 'viem'
+import {
+  AuraBalSwap,
+  HumanAmount,
+  isSameAddress,
+  Slippage,
+  SwapKind,
+  Token,
+  TokenAmount,
+} from '@balancer/sdk'
+import { Address, formatUnits } from 'viem'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
 import {
   AuraBalBuildSwapInputs,
@@ -10,8 +16,10 @@ import {
   SimulateSwapInputs,
 } from '../swap.types'
 import { getRpcUrl } from '../../web3/transports'
-import { isNativeAsset, isSameAddress } from '../../shared/utils/addresses'
-import { bn } from '../../shared/utils/numbers'
+import { getChainId, getWrappedNativeAssetAddress } from '../../../config/app.config'
+import { GqlToken, GqlSorSwapType } from '../../../shared/services/api/generated/graphql'
+import { isNativeAsset } from '../../tokens/token.helpers'
+import { bn } from '../../../shared/utils/numbers'
 
 export class AuraBalSwapHandler implements SwapHandler {
   name = 'AuraBalSwapHandler'
@@ -22,15 +30,19 @@ export class AuraBalSwapHandler implements SwapHandler {
     const { chain, swapType } = variables
     const rpcUrl = getRpcUrl(getChainId(chain))
 
-    const tokenInAddress = isNativeAsset(chain, variables.tokenIn)
+    const tokenInAddress = isNativeAsset(variables.tokenIn, chain)
       ? getWrappedNativeAssetAddress(chain)
       : variables.tokenIn
-    const tokenOutAddress = isNativeAsset(chain, variables.tokenOut)
+    const tokenOutAddress = isNativeAsset(variables.tokenOut, chain)
       ? getWrappedNativeAssetAddress(chain)
       : variables.tokenOut
 
-    const _tokenIn = this.tokens.find(token => isSameAddress(token.address, tokenInAddress))
-    const _tokenOut = this.tokens.find(token => isSameAddress(token.address, tokenOutAddress))
+    const _tokenIn = this.tokens.find(token =>
+      isSameAddress(token.address as Address, tokenInAddress)
+    )
+    const _tokenOut = this.tokens.find(token =>
+      isSameAddress(token.address as Address, tokenOutAddress)
+    )
 
     if (!_tokenIn || !_tokenOut) {
       throw new Error('Token not found')

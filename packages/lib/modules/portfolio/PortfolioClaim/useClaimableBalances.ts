@@ -1,5 +1,3 @@
-import { getChainId } from '../../config/app.config'
-import { bn } from '../../shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { Address, formatUnits } from 'viem'
@@ -9,9 +7,11 @@ import { AbiMap } from '../../web3/contracts/AbiMap'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { BPT_DECIMALS } from '../../pool/pool.constants'
 import { ClaimablePool } from '../../pool/actions/claim/ClaimProvider'
-import { GqlChain, GqlPoolStakingGaugeReward } from '../../shared/services/api/generated/graphql'
 import { groupBy, uniqBy } from 'lodash'
-import { onlyExplicitRefetch } from '../../shared/utils/queries'
+import { GqlChain, GqlPoolStakingGaugeReward } from '../../../shared/services/api/generated/graphql'
+import { onlyExplicitRefetch } from '../../../shared/utils/queries'
+import { getChainId } from '../../../config/app.config'
+import { bn } from '../../../shared/utils/numbers'
 
 interface ClaimableRewardRef {
   tokenAddress: Address

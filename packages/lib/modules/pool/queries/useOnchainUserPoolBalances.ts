@@ -1,12 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  GqlPoolUserBalance,
-  GqlUserStakedBalance,
-} from '../../shared/services/api/generated/graphql'
-import { isSameAddress } from '../../shared/utils/addresses'
-import { bn, safeSum } from '../../shared/utils/numbers'
-import { captureNonFatalError } from '../../shared/utils/query-errors'
-import { HumanAmount } from '@balancer/sdk'
+import { Address, HumanAmount, isSameAddress } from '@balancer/sdk'
 import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 import { ReadContractsErrorType } from 'wagmi/actions'
@@ -15,6 +8,12 @@ import { calcBptPriceFor } from '../pool.helpers'
 import { calcNonOnChainFetchedStakedBalance } from '../user-balance.helpers'
 import { StakedBalancesByPoolId, useUserStakedBalance } from './useUserStakedBalance'
 import { UnstakedBalanceByPoolId, useUserUnstakedBalance } from './useUserUnstakedBalance'
+import {
+  GqlPoolUserBalance,
+  GqlUserStakedBalance,
+} from '../../../shared/services/api/generated/graphql'
+import { bn, safeSum } from '../../../shared/utils/numbers'
+import { captureNonFatalError } from '../../../shared/utils/query-errors'
 
 type Pool = OriginalPool & {
   nonGaugeStakedBalance?: BigNumber
@@ -170,7 +169,7 @@ function overrideStakedBalances(
   onChainStakedBalances.forEach(onchainStakedBalance => {
     // Index of the onchain gauge in the api staked balances
     const index = apiStakedBalances.findIndex(apiBalance =>
-      isSameAddress(apiBalance.stakingId, onchainStakedBalance.stakingId)
+      isSameAddress(apiBalance.stakingId as Address, onchainStakedBalance.stakingId as Address)
     )
     if (index === -1) {
       apiStakedBalances.push(onchainStakedBalance)

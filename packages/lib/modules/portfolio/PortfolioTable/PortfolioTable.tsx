@@ -1,12 +1,9 @@
-import { PaginatedTable } from '../../shared/components/tables/PaginatedTable'
 import { usePortfolio } from '../PortfolioProvider'
 import { PortfolioTableHeader } from './PortfolioTableHeader'
 import { PortfolioTableRow } from './PortfolioTableRow'
 import { Card, Center, Checkbox, HStack, Heading, Stack, Text } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
-import { GqlPoolOrderBy } from '../../shared/services/api/generated/graphql'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
-import FadeInOnView from '../../shared/components/containers/FadeInOnView'
 import {
   getUserTotalBalanceUsd,
   hasAuraStakedBalance,
@@ -18,6 +15,9 @@ import { ExpandedPoolInfo, ExpandedPoolType, useExpandedPools } from './useExpan
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
+import FadeInOnView from '../../../shared/components/containers/FadeInOnView'
+import { PaginatedTable } from '../../../shared/components/tables/PaginatedTable'
+import { GqlPoolOrderBy } from '../../../shared/services/api/generated/graphql'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {

@@ -1,8 +1,7 @@
 import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
-
 import { Globe } from 'react-feather'
-import { SortableHeader } from '../../shared/components/tables/SortableHeader'
 import { PortfolioTableSortingId, PortfolioSortingData, portfolioOrderBy } from './PortfolioTable'
+import { SortableHeader } from '../../../shared/components/tables/SortableHeader'
 
 const setIsDesc = (id: PortfolioTableSortingId, currentSortingObj: PortfolioSortingData) =>
   currentSortingObj.id === id ? !currentSortingObj.desc : true

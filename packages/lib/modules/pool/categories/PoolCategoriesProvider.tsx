@@ -1,9 +1,9 @@
 'use client'
 
-import { useMandatoryContext } from '../../shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
 import { Pool } from '../PoolProvider'
 import { PoolCategory } from './getPoolCategories'
+import { useMandatoryContext } from '../../../shared/utils/contexts'
 
 export type UsePoolCategoriesResult = ReturnType<typeof _usePoolCategories>
 export const PoolCategoriesContext = createContext<UsePoolCategoriesResult | null>(null)

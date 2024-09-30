@@ -12,8 +12,8 @@ import {
 } from '@chakra-ui/react'
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
-import { bn, fNum } from '../../../shared/utils/numbers'
 import StarsIcon from '../../icons/StarsIcon'
+import { bn, fNum } from '../../../utils/numbers'
 
 interface Props {
   auraApr: number

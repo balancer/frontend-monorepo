@@ -1,7 +1,5 @@
 'use client'
 
-import { useCurrency } from '../../../shared/hooks/useCurrency'
-import { blockInvalidNumberInput } from '../../../shared/utils/numbers'
 import {
   Box,
   BoxProps,
@@ -17,6 +15,8 @@ import {
   forwardRef,
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useCurrency } from '../../../hooks/useCurrency'
+import { blockInvalidNumberInput } from '../../../utils/numbers'
 
 type Props = {
   value?: string

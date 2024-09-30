@@ -1,5 +1,5 @@
-import { getChainId } from '../../config/app.config'
-import { bn } from '../../shared/utils/numbers'
+import { getChainId } from '../../../config/app.config'
+import { bn } from '../../../shared/utils/numbers'
 import { compact, keyBy } from 'lodash'
 import { Address, formatUnits } from 'viem'
 import { useReadContracts } from 'wagmi'

@@ -3,14 +3,13 @@
 
 import { bn } from '../../../../../shared/utils/numbers'
 import {
-  Address,
   HumanAmount,
   InputAmount,
   calculateProportionalAmounts,
   isSameAddress,
 } from '@balancer/sdk'
 import { useMemo, useState } from 'react'
-import { formatUnits } from 'viem'
+import { Address, formatUnits } from 'viem'
 import { usePool } from '../../../PoolProvider'
 import {
   LiquidityActionHelpers,

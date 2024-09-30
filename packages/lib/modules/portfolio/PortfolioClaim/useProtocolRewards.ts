@@ -1,11 +1,11 @@
 import { useReadContract } from 'wagmi'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { FeeDistributorStaticAbi } from '../../web3/contracts/abi/FeeDistributorStaticAbi'
-import networkConfigs from '../../config/networks'
 import { formatUnits } from 'viem'
 import { useTokens } from '../../tokens/TokensProvider'
-import { bn } from '../../shared/utils/numbers'
 import { BPT_DECIMALS } from '../../pool/pool.constants'
+import networkConfigs from '../../../config/networks'
+import { bn } from '../../../shared/utils/numbers'
 
 export const claimableVeBalRewardsTokens: string[] = [
   '0x7B50775383d3D6f0215A8F290f2C9e2eEBBEceb2', // bb-a-USD v1

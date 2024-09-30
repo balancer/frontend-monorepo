@@ -1,4 +1,3 @@
-import { getChainId, getNetworkConfig } from '../../config/app.config'
 import { SwapHandler } from './Swap.handler'
 import { ApolloClient } from '@apollo/client'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
@@ -11,6 +10,7 @@ import {
 import { getWrapType } from '../wrap.helpers'
 import { encodeFunctionData } from 'viem'
 import { Hex } from 'viem'
+import { getChainId, getNetworkConfig } from '../../../config/app.config'
 
 export class NativeWrapHandler implements SwapHandler {
   name = 'NativeWrapHandler'

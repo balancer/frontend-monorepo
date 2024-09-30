@@ -1,9 +1,9 @@
-import TokenRow from '../../modules/tokens/TokenRow/TokenRow'
-import { TokenRowGroup } from '../../modules/tokens/TokenRow/TokenRowGroup'
 import { VStack, Card } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useUnstake } from './UnstakeProvider'
+import TokenRow from '../../../tokens/TokenRow/TokenRow'
+import { TokenRowGroup } from '../../../tokens/TokenRow/TokenRowGroup'
 
 export function UnstakePreview() {
   const { pool } = usePool()

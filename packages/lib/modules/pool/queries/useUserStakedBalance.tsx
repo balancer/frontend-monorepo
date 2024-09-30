@@ -1,9 +1,5 @@
-import { getChainId } from '../../config/app.config'
-import {
-  GqlPoolStakingType,
-  GqlUserStakedBalance,
-} from '../../shared/services/api/generated/graphql'
-import { bn } from '../../shared/utils/numbers'
+import { getChainId } from '../../../config/app.config'
+import { bn } from '../../../shared/utils/numbers'
 import { compact, groupBy } from 'lodash'
 import { Address, formatUnits } from 'viem'
 import { useReadContracts } from 'wagmi'
@@ -13,6 +9,10 @@ import { Pool } from '../PoolProvider'
 import { BPT_DECIMALS } from '../pool.constants'
 import { calcBptPrice } from '../pool.helpers'
 import { useMemo } from 'react'
+import {
+  GqlPoolStakingType,
+  GqlUserStakedBalance,
+} from '../../../shared/services/api/generated/graphql'
 
 export type StakedBalancesByPoolId = ReturnType<
   typeof useUserStakedBalance

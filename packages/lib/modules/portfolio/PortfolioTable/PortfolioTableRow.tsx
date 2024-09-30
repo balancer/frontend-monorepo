@@ -1,17 +1,17 @@
 import { Box, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import MainAprTooltip from '../../shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { memo } from 'react'
-import { NetworkIcon } from '../../shared/components/icons/NetworkIcon'
-import { useCurrency } from '../../shared/hooks/useCurrency'
 import { getPoolPath, getPoolTypeLabel } from '../../pool/pool.utils'
 import { PoolListTokenPills } from '../../pool/PoolList/PoolListTokenPills'
-import { ProtocolIcon } from '../../shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
 import { getCanStake } from '../../pool/actions/stake.helpers'
-import AuraAprTooltip from '../../shared/components/tooltips/apr-tooltip/AuraAprTooltip'
-import FadeInOnView from '../../shared/components/containers/FadeInOnView'
+import FadeInOnView from '../../../shared/components/containers/FadeInOnView'
+import { NetworkIcon } from '../../../shared/components/icons/NetworkIcon'
+import { ProtocolIcon } from '../../../shared/components/icons/ProtocolIcon'
+import AuraAprTooltip from '../../../shared/components/tooltips/apr-tooltip/AuraAprTooltip'
+import MainAprTooltip from '../../../shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import { useCurrency } from '../../../shared/hooks/useCurrency'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo

@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import { Address } from 'viem'
 import { useRecentTransactions } from '../../transactions/RecentTransactionsProvider'
-import { TransactionLabels } from '../../modules/transactions/transaction-steps/lib'
-import { AnalyticsEvent, trackEvent } from '../../shared/services/fathom/Fathom'
+import { trackEvent } from 'fathom-client'
+import { AnalyticsEvent } from '../../../shared/services/fathom/Fathom'
+import { TransactionLabels } from '../../transactions/transaction-steps/lib'
 
 type updateTrackedTransactionRequest = {
   labels: TransactionLabels

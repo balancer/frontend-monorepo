@@ -1,5 +1,5 @@
-import { GaugeService } from '../../shared/services/staking/gauge.service'
 import { Address, Hex } from 'viem'
+import { GaugeService } from '../../../../shared/services/staking/gauge.service'
 
 type Params = {
   amount: bigint

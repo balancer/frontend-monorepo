@@ -1,13 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { HumanTokenAmountWithAddress } from '../../modules/tokens/token.types'
-import { useTransactionSteps } from '../../modules/transactions/transaction-steps/useTransactionSteps'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { LABELS } from '../../shared/labels'
-import { useMandatoryContext } from '../../shared/utils/contexts'
-import { isDisabledWithReason } from '../../shared/utils/functions/isDisabledWithReason'
-import { bn, isZero } from '../../shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import { PoolListItem } from '../../pool.types'
@@ -15,6 +8,13 @@ import { usePool } from '../../PoolProvider'
 import { useClaimsData } from '../claim/useClaimsData'
 import { useClaimAndUnstakeSteps } from './useClaimAndUnstakeSteps'
 import { getUnstakeQuote } from '../stake.helpers'
+import { LABELS } from '../../../../shared/labels'
+import { useMandatoryContext } from '../../../../shared/utils/contexts'
+import { isDisabledWithReason } from '../../../../shared/utils/functions/isDisabledWithReason'
+import { bn, isZero } from '../../../../shared/utils/numbers'
+import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
+import { useTransactionSteps } from '../../../transactions/transaction-steps/useTransactionSteps'
+import { useUserAccount } from '../../../web3/UserAccountProvider'
 
 export type UseUnstakeResponse = ReturnType<typeof _useUnstake>
 export const UnstakeContext = createContext<UseUnstakeResponse | null>(null)

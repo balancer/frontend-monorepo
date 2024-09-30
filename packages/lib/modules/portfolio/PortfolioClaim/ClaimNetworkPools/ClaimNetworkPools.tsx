@@ -3,16 +3,16 @@
 import { Heading, Stack, Skeleton, SimpleGrid, Center, Text } from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
 import { chainToSlugMap } from '../../../pool/pool.utils'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
 import { useState } from 'react'
 import ClaimProtocolRevenueModal from '../ClaimProtocolRevenueModal'
 import { useRouter } from 'next/navigation'
-import FadeInOnView from '../../shared/components/containers/FadeInOnView'
 import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
 import { MerklAlert } from '../../merkl/MerklAlert'
 import { motion, easeOut } from 'framer-motion'
+import FadeInOnView from '../../../../shared/components/containers/FadeInOnView'
+import { GqlChain } from '../../../../shared/services/api/generated/graphql'
+import { useUserAccount } from '../../../web3/UserAccountProvider'
 
 export function ClaimNetworkPools() {
   const {

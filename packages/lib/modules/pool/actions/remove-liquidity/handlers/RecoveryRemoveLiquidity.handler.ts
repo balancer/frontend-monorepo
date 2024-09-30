@@ -1,5 +1,4 @@
 import {
-  Address,
   HumanAmount,
   InputAmount,
   RemoveLiquidity,
@@ -13,7 +12,7 @@ import {
   SdkBuildRemoveLiquidityInput,
   SdkQueryRemoveLiquidityOutput,
 } from '../remove-liquidity.types'
-import { parseEther } from 'viem'
+import { Address, parseEther } from 'viem'
 import { BPT_DECIMALS } from '../../../pool.constants'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { TransactionConfig } from '../../../../web3/contracts/contract.types'

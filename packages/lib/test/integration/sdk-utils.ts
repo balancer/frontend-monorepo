@@ -1,5 +1,3 @@
-import { GqlPoolElement } from '@/lib/shared/services/api/generated/graphql'
-import { isSameAddress } from '@/lib/shared/utils/addresses'
 import {
   VAULT,
   ChainId,
@@ -8,6 +6,7 @@ import {
   Token,
   ZERO_ADDRESS,
   replaceWrapped,
+  isSameAddress,
 } from '@balancer/sdk'
 import {
   Address,
@@ -32,6 +31,7 @@ import { aWjAuraWethPoolElementMock } from '../msw/builders/gqlPoolElement.build
 import { defaultTestUserAccount } from '../anvil/anvil-setup'
 import { mainnet } from 'viem/chains'
 import { mainnetTestPublicClient } from '../utils/wagmi/wagmi-test-clients'
+import { GqlPoolElement } from '../../shared/services/api/generated/graphql'
 
 /*
   Given chain, user account and pool
@@ -312,7 +312,7 @@ export async function getSdkTestUtils({
 
   function toEvmTokenBalance(humanBalance: HumanAmount, tokenAddress: Address): bigint {
     // when token is BPT token we set the pool balance
-    if (isSameAddress(tokenAddress, pool.address)) return parseUnits(humanBalance, 18)
+    if (isSameAddress(tokenAddress, pool.address as Address)) return parseUnits(humanBalance, 18)
 
     const foundToken = getPoolTokens().find(t => isSameAddress(tokenAddress, t.address))
     if (!foundToken) throw new Error(`Token with address: ${tokenAddress} not found`)

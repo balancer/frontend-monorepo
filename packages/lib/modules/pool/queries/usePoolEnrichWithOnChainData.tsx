@@ -6,16 +6,16 @@ import { balancerV3VaultAbi } from '../../web3/contracts/abi/balancerV3Abi'
 import { weightedPoolV3Abi } from '../../web3/contracts/abi/weightedPoolV3Abi'
 import { Pool } from '../PoolProvider'
 import { BPT_DECIMALS } from '../pool.constants'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
-import { bn, safeSum } from '../../shared/utils/numbers'
 import { getVaultConfig, isCowAmmPool, isV1Pool, isV2Pool, isV3Pool } from '../pool.helpers'
-import { getChainId } from '../../config/app.config'
 import {
   balancerV2ComposableStablePoolV5Abi,
   balancerV2VaultAbi,
 } from '../../web3/contracts/abi/generated'
 import { isComposableStablePool } from '../pool.utils'
 import { cowAmmPoolAbi } from '../../web3/contracts/abi/cowAmmAbi'
+import { GqlChain } from '../../../shared/services/api/generated/graphql'
+import { bn, safeSum } from '../../../shared/utils/numbers'
+import { getChainId } from '../../../config/app.config'
 
 export function usePoolEnrichWithOnChainData(pool: Pool) {
   const { priceFor } = useTokens()

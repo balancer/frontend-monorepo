@@ -1,12 +1,12 @@
 import { Card, HStack, Text, VStack } from '@chakra-ui/react'
 import BaseAprTooltip from './BaseAprTooltip'
-import { useCurrency } from '../../../shared/hooks/useCurrency'
 import { useCallback } from 'react'
-import { bn } from '../../../shared/utils/numbers'
 import BigNumber from 'bignumber.js'
-import { Pool } from '../../../modules/pool/PoolProvider'
-import { calcPotentialYieldFor } from '../../../modules/pool/pool.utils'
 import { SparklesIcon } from './MainAprTooltip'
+import { calcPotentialYieldFor } from '../../../../modules/pool/pool.utils'
+import { useCurrency } from '../../../hooks/useCurrency'
+import { bn } from '../../../utils/numbers'
+import { Pool } from '../../../../modules/pool/PoolProvider'
 
 interface Props {
   totalUsdValue: string

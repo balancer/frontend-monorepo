@@ -1,10 +1,9 @@
-import { useApproveRelayerStep } from '../../modules/relayer/useApproveRelayerStep'
-import { getChainId } from '../../config/app.config'
-import { TransactionStep } from '../../modules/transactions/transaction-steps/lib'
+import { getChainId } from '../../../../config/app.config'
+import { useApproveRelayerStep } from '../../../relayer/useApproveRelayerStep'
+import { useApproveMinterStep } from '../../../staking/gauge/useMinterApprovalStep'
+import { TransactionStep } from '../../../transactions/transaction-steps/lib'
 import { UnstakeParams, useClaimAndUnstakeStep } from './useClaimAndUnstakeStep'
-
 import { useMemo } from 'react'
-import { useApproveMinterStep } from '../../modules/staking/gauge/useMinterApprovalStep'
 
 export function useClaimAndUnstakeSteps(unstakeParams: UnstakeParams): {
   isLoading: boolean

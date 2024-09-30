@@ -11,13 +11,13 @@ import {
 } from '@chakra-ui/react'
 import BaseAprTooltip, { BaseAprTooltipProps } from './BaseAprTooltip'
 import { Info } from 'react-feather'
-import { getTotalAprLabel } from '../../../modules/pool/pool.utils'
 import StarsIcon from '../../icons/StarsIcon'
-import { PoolListItem } from '../../../modules/pool/pool.types'
-import { FeaturedPool, Pool } from '../../../modules/pool/PoolProvider'
-import { isLBP } from '../../../modules/pool/pool.helpers'
-import { getProjectConfig } from '../../../config/getProjectConfig'
-import { GqlPoolAprItemType } from '../../../shared/services/api/generated/graphql'
+import { getProjectConfig } from '../../../../config/getProjectConfig'
+import { isLBP } from '../../../../modules/pool/pool.helpers'
+import { PoolListItem } from '../../../../modules/pool/pool.types'
+import { getTotalAprLabel } from '../../../../modules/pool/pool.utils'
+import { FeaturedPool, Pool } from '../../../../modules/pool/PoolProvider'
+import { GqlPoolAprItemType } from '../../../services/api/generated/graphql'
 
 interface Props
   extends Omit<

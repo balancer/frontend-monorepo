@@ -1,24 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  TransactionLabels,
-  TransactionStep,
-} from '../../modules/transactions/transaction-steps/lib'
 import { Address, parseUnits } from 'viem'
 import { BPT_DECIMALS } from '../../pool.constants'
 import { Pool } from '../../PoolProvider'
-import { selectStakingService } from '../../modules/staking/selectStakingService'
 import { useBuildUnstakeCallData } from './useBuildUnstakeCallData'
-import { getNetworkConfig } from '../../config/app.config'
-import { ManagedTransactionInput } from '../../modules/web3/contracts/useManagedTransaction'
-import { useBalTokenRewards } from '../../modules/portfolio/PortfolioClaim/useBalRewards'
-import { useClaimableBalances } from '../../modules/portfolio/PortfolioClaim/useClaimableBalances'
-import { sentryMetaForWagmiSimulation } from '../../shared/utils/query-errors'
 import { useCallback, useMemo } from 'react'
-import { ManagedTransactionButton } from '../../modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '../../modules/transactions/transaction-steps/TransactionStateProvider'
-import { useHasApprovedRelayer } from '../../modules/relayer/useHasApprovedRelayer'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
 import { HumanAmount } from '@balancer/sdk'
+import { getNetworkConfig } from '../../../../config/app.config'
+import { sentryMetaForWagmiSimulation } from '../../../../shared/utils/query-errors'
+import { useBalTokenRewards } from '../../../portfolio/PortfolioClaim/useBalRewards'
+import { useClaimableBalances } from '../../../portfolio/PortfolioClaim/useClaimableBalances'
+import { useHasApprovedRelayer } from '../../../relayer/useHasApprovedRelayer'
+import { selectStakingService } from '../../../staking/selectStakingService'
+import { TransactionStep, TransactionLabels } from '../../../transactions/transaction-steps/lib'
+import { ManagedTransactionButton } from '../../../transactions/transaction-steps/TransactionButton'
+import { useTransactionState } from '../../../transactions/transaction-steps/TransactionStateProvider'
+import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
+import { useUserAccount } from '../../../web3/UserAccountProvider'
 
 const claimAndUnstakeStepId = 'claim-and-unstake'
 

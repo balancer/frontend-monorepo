@@ -1,7 +1,7 @@
-import { useThemeColorMode } from '../../../shared/services/chakra/useThemeColorMode'
 import { BoxProps, TextProps, Box, HStack, Text, Tooltip } from '@chakra-ui/react'
 import BigNumber from 'bignumber.js'
 import { ReactNode } from 'react'
+import { useThemeColorMode } from '../../../services/chakra/useThemeColorMode'
 
 const tooltipTextDecorationStyles: TextProps = {
   textDecoration: 'underline',
