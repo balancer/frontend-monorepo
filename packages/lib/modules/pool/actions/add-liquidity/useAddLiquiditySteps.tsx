@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useShouldSignRelayerApproval } from '../../modules/relayer/signRelayerApproval.hooks'
-import { useApproveRelayerStep } from '../../modules/relayer/useApproveRelayerStep'
-import { useRelayerMode } from '../../modules/relayer/useRelayerMode'
-import { useTokenApprovalSteps } from '../../modules/tokens/approvals/useTokenApprovalSteps'
 import { useMemo } from 'react'
 import { usePool } from '../../PoolProvider'
 import { LiquidityActionHelpers } from '../LiquidityActionHelpers'
 import { AddLiquidityStepParams, useAddLiquidityStep } from './useAddLiquidityStep'
 import { getVaultConfig } from '../../pool.helpers'
-import { useSignRelayerStep } from '../../modules/transactions/transaction-steps/useSignRelayerStep'
 import { Address } from 'viem'
 import { isCowAmmPool } from '../../pool.helpers'
+import { useShouldSignRelayerApproval } from '../../../relayer/signRelayerApproval.hooks'
+import { useApproveRelayerStep } from '../../../relayer/useApproveRelayerStep'
+import { useRelayerMode } from '../../../relayer/useRelayerMode'
+import { useTokenApprovalSteps } from '../../../tokens/approvals/useTokenApprovalSteps'
+import { useSignRelayerStep } from '../../../transactions/transaction-steps/useSignRelayerStep'
 
 type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers

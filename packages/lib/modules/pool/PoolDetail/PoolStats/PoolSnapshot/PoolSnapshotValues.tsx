@@ -5,13 +5,13 @@ import { HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { GqlToken } from '../../../../../shared/services/api/generated/graphql'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { useCurrency } from '../../../../../shared/hooks/useCurrency'
-import { SECONDS_IN_DAY } from '@/test/utils/numbers'
 import { sumBy } from 'lodash'
 import { useTokens } from '../../../../tokens/TokensProvider'
 import { usePool } from '../../../PoolProvider'
 import { bn } from '../../../../../shared/utils/numbers'
 import MainAprTooltip from '../../../../../shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { isCowAmmPool } from '../../../pool.helpers'
+import { SECONDS_IN_DAY } from '../../../../../test/utils/numbers'
 
 type PoolStatsValues = {
   totalLiquidity: string

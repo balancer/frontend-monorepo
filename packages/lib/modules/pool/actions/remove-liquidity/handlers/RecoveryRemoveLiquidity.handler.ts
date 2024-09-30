@@ -13,11 +13,11 @@ import {
   SdkBuildRemoveLiquidityInput,
   SdkQueryRemoveLiquidityOutput,
 } from '../remove-liquidity.types'
-import { TransactionConfig } from '../../modules/web3/contracts/contract.types'
 import { parseEther } from 'viem'
 import { BPT_DECIMALS } from '../../../pool.constants'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
-import { getRpcUrl } from '../../modules/web3/transports'
+import { TransactionConfig } from '../../../../web3/contracts/contract.types'
+import { getRpcUrl } from '../../../../web3/transports'
 
 /*
  A recovery exit is just a Proportional one but with Recovery kind

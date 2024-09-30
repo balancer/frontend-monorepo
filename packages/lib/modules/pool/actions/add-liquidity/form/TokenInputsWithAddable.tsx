@@ -1,7 +1,4 @@
 /* eslint-disable max-len */
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { WalletIcon } from '../../shared/components/icons/WalletIcon'
-import { useCurrency } from '../../shared/hooks/useCurrency'
 import { Card, HStack, Spacer, VStack, Text, Box, Tooltip } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { XOctagon } from 'react-feather'
@@ -9,9 +6,12 @@ import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputs } from './TokenInputs'
 import { useProportionalInputs } from './useProportionalInputs'
 import { useMaximumInputs } from './useMaximumInputs'
-import { BalAlert } from '../../shared/components/alerts/BalAlert'
 import { hasNoLiquidity } from '../../LiquidityActionHelpers'
 import { usePool } from '../../../PoolProvider'
+import { BalAlert } from '../../../../../shared/components/alerts/BalAlert'
+import { WalletIcon } from '../../../../../shared/components/icons/WalletIcon'
+import { useCurrency } from '../../../../../shared/hooks/useCurrency'
+import { useUserAccount } from '../../../../web3/UserAccountProvider'
 
 type Props = {
   tokenSelectDisclosureOpen: () => void

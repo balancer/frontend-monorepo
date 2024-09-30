@@ -1,4 +1,4 @@
-import { TransactionConfig } from '../../modules/web3/contracts/contract.types'
+import { TransactionConfig } from '../../../../web3/contracts/contract.types'
 import {
   BuildRemoveLiquidityInput,
   QueryRemoveLiquidityInput,

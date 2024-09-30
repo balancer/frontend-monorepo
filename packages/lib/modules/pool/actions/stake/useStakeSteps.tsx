@@ -1,11 +1,11 @@
 import { Address, parseUnits } from 'viem'
 import { Pool } from '../../PoolProvider'
-import { useTokenApprovalSteps } from '../../modules/tokens/approvals/useTokenApprovalSteps'
-import { RawAmount } from '../../modules/tokens/approvals/approval-rules'
 import { BPT_DECIMALS } from '../../pool.constants'
 import { useMemo } from 'react'
 import { useStakeStep } from './useStakeStep'
 import { getUserWalletBalance } from '../../user-balance.helpers'
+import { RawAmount } from '../../../tokens/approvals/approval-rules'
+import { useTokenApprovalSteps } from '../../../tokens/approvals/useTokenApprovalSteps'
 
 export function useStakeSteps(pool: Pool, stakeAmount = getUserWalletBalance(pool)) {
   const rawAmount = parseUnits(stakeAmount || '0', BPT_DECIMALS)

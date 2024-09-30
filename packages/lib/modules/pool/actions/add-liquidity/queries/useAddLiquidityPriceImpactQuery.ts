@@ -1,17 +1,17 @@
 'use client'
 
-import { useUserSettings } from '../../modules/user/settings/UserSettingsProvider'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { defaultDebounceMs, onlyExplicitRefetch } from '../../shared/utils/queries'
 import { useDebounce } from 'use-debounce'
 import { areEmptyAmounts } from '../../LiquidityActionHelpers'
 import { AddLiquidityHandler } from '../handlers/AddLiquidity.handler'
 import { AddLiquidityParams, addLiquidityKeys } from './add-liquidity-keys'
 import { useQuery } from '@tanstack/react-query'
 import { usePool } from '../../../PoolProvider'
-import { sentryMetaForAddLiquidityHandler } from '../../shared/utils/query-errors'
-import { HumanTokenAmountWithAddress } from '../../modules/tokens/token.types'
 import { useBlockNumber } from 'wagmi'
+import { defaultDebounceMs, onlyExplicitRefetch } from '../../../../../shared/utils/queries'
+import { sentryMetaForAddLiquidityHandler } from '../../../../../shared/utils/query-errors'
+import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'
+import { useUserSettings } from '../../../../user/settings/UserSettingsProvider'
+import { useUserAccount } from '../../../../web3/UserAccountProvider'
 
 type Params = {
   handler: AddLiquidityHandler

@@ -1,10 +1,3 @@
-import { getChainId, getNativeAsset, getNetworkConfig } from '../../config/app.config'
-import { TokenAmountToApprove } from '../../modules/tokens/approvals/approval-rules'
-import { nullAddress } from '../../modules/web3/contracts/wagmi-helpers'
-import { GqlChain, GqlPoolType, GqlToken } from '../../shared/services/api/generated/graphql'
-import { isSameAddress } from '../../shared/utils/addresses'
-import { SentryError } from '../../shared/utils/errors'
-import { bn, isZero } from '../../shared/utils/numbers'
 import {
   HumanAmount,
   InputAmount,
@@ -16,6 +9,7 @@ import {
   mapPoolType,
   PoolStateWithBalances,
   Token,
+  isSameAddress,
 } from '@balancer/sdk'
 import { Hex, formatUnits, parseUnits, Address } from 'viem'
 import {
@@ -34,6 +28,12 @@ import {
 } from '../../tokens/token.helpers'
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 import BigNumber from 'bignumber.js'
+import { getChainId, getNetworkConfig, getNativeAsset } from '../../../config/app.config'
+import { GqlPoolType, GqlChain, GqlToken } from '../../../shared/services/api/generated/graphql'
+import { SentryError } from '../../../shared/utils/errors'
+import { bn, isZero } from '../../../shared/utils/numbers'
+import { TokenAmountToApprove } from '../../tokens/approvals/approval-rules'
+import { nullAddress } from '../../web3/contracts/wagmi-helpers'
 
 // Null object used to avoid conditional checks during hook loading state
 const NullPool: Pool = {
@@ -101,7 +101,9 @@ export class LiquidityActionHelpers {
             decimals,
           }
         }
-        const token = this.pool.allTokens.find(token => isSameAddress(token.address, tokenAddress))
+        const token = this.pool.allTokens.find(token =>
+          isSameAddress(token.address as Address, tokenAddress)
+        )
         if (!token) {
           throw new Error(
             `Provided token address ${tokenAddress} not found in pool tokens [${Object.keys(

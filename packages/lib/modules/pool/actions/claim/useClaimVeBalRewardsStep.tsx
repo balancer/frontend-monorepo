@@ -1,16 +1,13 @@
-import networkConfig from '../../config/networks/mainnet'
-import { claimableVeBalRewardsTokens } from '../../modules/portfolio/PortfolioClaim/useProtocolRewards'
-import { ManagedTransactionButton } from '../../modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '../../modules/transactions/transaction-steps/TransactionStateProvider'
-import {
-  TransactionLabels,
-  TransactionStep,
-} from '../../modules/transactions/transaction-steps/lib'
-import { ManagedTransactionInput } from '../../modules/web3/contracts/useManagedTransaction'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { sentryMetaForWagmiSimulation } from '../../shared/utils/query-errors'
+import networkConfig from '../../../../config/networks/mainnet'
 import { useMemo } from 'react'
 import { Address } from 'viem'
+import { sentryMetaForWagmiSimulation } from '../../../../shared/utils/query-errors'
+import { claimableVeBalRewardsTokens } from '../../../portfolio/PortfolioClaim/useProtocolRewards'
+import { TransactionLabels, TransactionStep } from '../../../transactions/transaction-steps/lib'
+import { ManagedTransactionButton } from '../../../transactions/transaction-steps/TransactionButton'
+import { useTransactionState } from '../../../transactions/transaction-steps/TransactionStateProvider'
+import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
+import { useUserAccount } from '../../../web3/UserAccountProvider'
 
 const labels: TransactionLabels = {
   init: 'Claim',

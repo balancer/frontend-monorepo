@@ -1,15 +1,15 @@
 'use client'
 
-import { useUserSettings } from '../../modules/user/settings/UserSettingsProvider'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { defaultDebounceMs, onlyExplicitRefetch } from '../../shared/utils/queries'
 import { HumanAmount } from '@balancer/sdk'
 import { useDebounce } from 'use-debounce'
 import { useQuery } from '@tanstack/react-query'
 import { RemoveLiquidityHandler } from '../handlers/RemoveLiquidity.handler'
 import { RemoveLiquidityParams, removeLiquidityKeys } from './remove-liquidity-keys'
-import { sentryMetaForRemoveLiquidityHandler } from '../../shared/utils/query-errors'
 import { Address } from 'viem'
+import { defaultDebounceMs, onlyExplicitRefetch } from '../../../../../shared/utils/queries'
+import { sentryMetaForRemoveLiquidityHandler } from '../../../../../shared/utils/query-errors'
+import { useUserSettings } from '../../../../user/settings/UserSettingsProvider'
+import { useUserAccount } from '../../../../web3/UserAccountProvider'
 
 export type RemoveLiquiditySimulationQueryResult = ReturnType<
   typeof useRemoveLiquiditySimulationQuery

@@ -1,11 +1,11 @@
 'use client'
 
-import TokenRow from '../../modules/tokens/TokenRow/TokenRow'
-import { GqlChain, GqlToken } from '../../shared/services/api/generated/graphql'
 import { Box, HStack, Radio, RadioGroup, Text, VStack } from '@chakra-ui/react'
 import { Address } from 'viem'
+import { GqlToken, GqlChain } from '../../../../../shared/services/api/generated/graphql'
+import { isNativeAsset } from '../../../../tokens/token.helpers'
+import TokenRow from '../../../../tokens/TokenRow/TokenRow'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
-import { isNativeAsset } from '../../modules/tokens/token.helpers'
 
 interface RemoveLiquiditySingleTokenProps {
   tokens: (GqlToken | undefined)[]

@@ -1,4 +1,3 @@
-import { TransactionStep } from '../../modules/transactions/transaction-steps/lib'
 import { Pool } from '../../PoolProvider'
 import { useEffect, useMemo, useState } from 'react'
 import { useUnstakeFromNonPreferentialGaugeStep } from './useUnstakeFromNonPreferentialGaugeStep'
@@ -7,6 +6,7 @@ import { HumanAmount } from '@balancer/sdk'
 import { findFirstNonPreferentialStaking } from '../stake.helpers'
 import { useClaimAndUnstakeSteps } from '../unstake/useClaimAndUnstakeSteps'
 import { Address } from 'viem'
+import { TransactionStep } from '../../../transactions/transaction-steps/lib'
 
 export function useMigrateStakeSteps(
   pool: Pool,

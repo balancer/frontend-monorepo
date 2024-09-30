@@ -1,21 +1,20 @@
 'use client'
 
-import { DesktopStepTracker } from '../../modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
 import { RefObject, useRef } from 'react'
-// eslint-disable-next-line max-len
-import { getStylesForModalContentWithStepTracker } from '../../modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
-import { useBreakpoints } from '../../shared/hooks/useBreakpoints'
-import { SuccessOverlay } from '../../shared/components/modals/SuccessOverlay'
 import { usePool } from '../../PoolProvider'
-import { MobileStepTracker } from '../../modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useMigrateStake } from './MigrateStakeProvider'
 import { MigrateStakePreview } from './MigrateStakePreview'
-import { TransactionModalHeader } from '../../shared/components/modals/TransactionModalHeader'
-import { ActionModalFooter } from '../../shared/components/modals/ActionModalFooter'
 import { usePoolRedirect } from '../../pool.hooks'
 import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
-import { AnimateHeightChange } from '../../shared/components/modals/AnimatedModalBody'
+import { ActionModalFooter } from '../../../../shared/components/modals/ActionModalFooter'
+import { AnimateHeightChange } from '../../../../shared/components/modals/AnimatedModalBody'
+import { SuccessOverlay } from '../../../../shared/components/modals/SuccessOverlay'
+import { TransactionModalHeader } from '../../../../shared/components/modals/TransactionModalHeader'
+import { useBreakpoints } from '../../../../shared/hooks/useBreakpoints'
+import { DesktopStepTracker } from '../../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
+import { MobileStepTracker } from '../../../transactions/transaction-steps/step-tracker/MobileStepTracker'
+import { getStylesForModalContentWithStepTracker } from '../../../transactions/transaction-steps/step-tracker/step-tracker.utils'
 
 type Props = {
   isOpen: boolean

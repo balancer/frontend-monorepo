@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useTransactionSteps } from '../../modules/transactions/transaction-steps/useTransactionSteps'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { LABELS } from '../../shared/labels'
-import { useMandatoryContext } from '../../shared/utils/contexts'
-import { isDisabledWithReason } from '../../shared/utils/functions/isDisabledWithReason'
-import { isZero } from '../../shared/utils/numbers'
 import { createContext, PropsWithChildren } from 'react'
 import { usePool } from '../../PoolProvider'
 import { useUnstake } from '../unstake/UnstakeProvider'
 import { useMigrateStakeSteps } from './useMigrateStakeSteps'
+import { LABELS } from '../../../../shared/labels'
+import { useMandatoryContext } from '../../../../shared/utils/contexts'
+import { isDisabledWithReason } from '../../../../shared/utils/functions/isDisabledWithReason'
+import { isZero } from '../../../../shared/utils/numbers'
+import { useTransactionSteps } from '../../../transactions/transaction-steps/useTransactionSteps'
+import { useUserAccount } from '../../../web3/UserAccountProvider'
 
 export type UseMigrateStakeResponse = ReturnType<typeof _useMigrateStake>
 export const MigrateStakeContext = createContext<UseMigrateStakeResponse | null>(null)

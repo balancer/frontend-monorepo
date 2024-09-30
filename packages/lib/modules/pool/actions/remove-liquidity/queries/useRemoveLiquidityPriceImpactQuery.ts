@@ -1,16 +1,16 @@
 'use client'
 
-import { useUserSettings } from '../../modules/user/settings/UserSettingsProvider'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { defaultDebounceMs, onlyExplicitRefetch } from '../../shared/utils/queries'
 import { useDebounce } from 'use-debounce'
 import { Address } from 'viem'
 import { RemoveLiquidityHandler } from '../handlers/RemoveLiquidity.handler'
 import { RemoveLiquidityParams, removeLiquidityKeys } from './remove-liquidity-keys'
 import { HumanAmount } from '@balancer/sdk'
 import { useQuery } from '@tanstack/react-query'
-import { sentryMetaForRemoveLiquidityHandler } from '../../shared/utils/query-errors'
 import { useBlockNumber } from 'wagmi'
+import { defaultDebounceMs, onlyExplicitRefetch } from '../../../../../shared/utils/queries'
+import { sentryMetaForRemoveLiquidityHandler } from '../../../../../shared/utils/query-errors'
+import { useUserSettings } from '../../../../user/settings/UserSettingsProvider'
+import { useUserAccount } from '../../../../web3/UserAccountProvider'
 
 type Params = {
   handler: RemoveLiquidityHandler

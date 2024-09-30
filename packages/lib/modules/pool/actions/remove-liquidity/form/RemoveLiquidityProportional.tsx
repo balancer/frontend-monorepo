@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import TokenRow from '../../modules/tokens/TokenRow/TokenRow'
-import { GqlPoolType, GqlToken } from '../../shared/services/api/generated/graphql'
 import { Card, Text, VStack, useDisclosure } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
-import { isNativeAsset, isNativeOrWrappedNative } from '../../modules/tokens/token.helpers'
-import { NativeAssetSelectModal } from '../../modules/tokens/NativeAssetSelectModal'
 import { shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
+import { GqlToken, GqlPoolType } from '../../../../../shared/services/api/generated/graphql'
+import { NativeAssetSelectModal } from '../../../../tokens/NativeAssetSelectModal'
+import { isNativeOrWrappedNative, isNativeAsset } from '../../../../tokens/token.helpers'
+import TokenRow from '../../../../tokens/TokenRow/TokenRow'
 
 type Props = { tokens: (GqlToken | undefined)[]; poolType: GqlPoolType }
 export function RemoveLiquidityProportional({ tokens, poolType }: Props) {

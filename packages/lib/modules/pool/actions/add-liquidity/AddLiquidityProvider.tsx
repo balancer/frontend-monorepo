@@ -1,9 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useTokens } from '../../modules/tokens/TokensProvider'
-import { GqlToken } from '../../shared/services/api/generated/graphql'
-import { useMandatoryContext } from '../../shared/utils/contexts'
 import { HumanAmount } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { Address, Hash } from 'viem'
@@ -19,18 +16,21 @@ import {
   requiresProportionalInput,
   supportsNestedActions,
 } from '../LiquidityActionHelpers'
-import { isDisabledWithReason } from '../../shared/utils/functions/isDisabledWithReason'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { LABELS } from '../../shared/labels'
 import { selectAddLiquidityHandler } from './handlers/selectAddLiquidityHandler'
-import { useTokenInputsValidation } from '../../modules/tokens/TokenInputsValidationProvider'
 import { useAddLiquiditySteps } from './useAddLiquiditySteps'
-import { useTransactionSteps } from '../../modules/transactions/transaction-steps/useTransactionSteps'
-import { useTotalUsdValue } from '../../modules/tokens/useTotalUsdValue'
-import { HumanTokenAmountWithAddress } from '../../modules/tokens/token.types'
-import { isUnhandledAddPriceImpactError } from '../../modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { getLeafTokens } from '../../modules/tokens/token.helpers'
+import { LABELS } from '../../../../shared/labels'
+import { GqlToken } from '../../../../shared/services/api/generated/graphql'
+import { useMandatoryContext } from '../../../../shared/utils/contexts'
+import { isDisabledWithReason } from '../../../../shared/utils/functions/isDisabledWithReason'
+import { isUnhandledAddPriceImpactError } from '../../../price-impact/price-impact.utils'
+import { getLeafTokens } from '../../../tokens/token.helpers'
+import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
+import { useTokenInputsValidation } from '../../../tokens/TokenInputsValidationProvider'
+import { useTokens } from '../../../tokens/TokensProvider'
+import { useTotalUsdValue } from '../../../tokens/useTotalUsdValue'
+import { useTransactionSteps } from '../../../transactions/transaction-steps/useTransactionSteps'
+import { useUserAccount } from '../../../web3/UserAccountProvider'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)

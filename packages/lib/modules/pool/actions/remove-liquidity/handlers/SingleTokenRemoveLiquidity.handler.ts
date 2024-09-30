@@ -1,4 +1,3 @@
-import { TransactionConfig } from '../../modules/web3/contracts/contract.types'
 import {
   HumanAmount,
   InputAmount,
@@ -23,8 +22,9 @@ import {
   QueryRemoveLiquidityInput,
 } from '../remove-liquidity.types'
 import { RemoveLiquidityHandler } from './RemoveLiquidity.handler'
-import { SentryError } from '../../shared/utils/errors'
-import { getRpcUrl } from '../../modules/web3/transports'
+import { SentryError } from '../../../../../shared/utils/errors'
+import { TransactionConfig } from '../../../../web3/contracts/contract.types'
+import { getRpcUrl } from '../../../../web3/transports'
 
 export class SingleTokenRemoveLiquidityHandler implements RemoveLiquidityHandler {
   helpers: LiquidityActionHelpers

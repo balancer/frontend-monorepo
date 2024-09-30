@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { HumanTokenAmountWithAddress } from '../../modules/tokens/token.types'
-import { TransactionConfig } from '../../modules/web3/contracts/contract.types'
-import { getRpcUrl } from '../../modules/web3/transports'
 import {
   AddLiquidity,
   AddLiquidityKind,
@@ -18,6 +15,9 @@ import {
 } from '../../LiquidityActionHelpers'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
+import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'
+import { TransactionConfig } from '../../../../web3/contracts/contract.types'
+import { getRpcUrl } from '../../../../web3/transports'
 
 /**
  * UnbalancedAddLiquidityHandler is a handler that implements the

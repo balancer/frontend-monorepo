@@ -2,9 +2,9 @@ import { formatUnits } from 'viem'
 import { BPT_DECIMALS } from '../../../pool.constants'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-import { bn, fNum } from '../../shared/utils/numbers'
-import { BptRow } from '../../modules/tokens/TokenRow/BptRow'
 import { requiresProportionalInput } from '../../LiquidityActionHelpers'
+import { bn, fNum } from '../../../../../shared/utils/numbers'
+import { BptRow } from '../../../../tokens/TokenRow/BptRow'
 
 export function ReceiptBptOut({
   actualBptOut,

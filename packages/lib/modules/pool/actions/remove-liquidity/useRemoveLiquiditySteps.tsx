@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useShouldSignRelayerApproval } from '../../modules/relayer/signRelayerApproval.hooks'
-import { useApproveRelayerStep } from '../../modules/relayer/useApproveRelayerStep'
-import { useRelayerMode } from '../../modules/relayer/useRelayerMode'
-import { TransactionStep } from '../../modules/transactions/transaction-steps/lib'
 import { useMemo } from 'react'
 import { usePool } from '../../PoolProvider'
 import { shouldUseRecoveryRemoveLiquidity } from '../LiquidityActionHelpers'
 import { RemoveLiquidityStepParams, useRemoveLiquidityStep } from './useRemoveLiquidityStep'
-import { useSignRelayerStep } from '../../modules/transactions/transaction-steps/useSignRelayerStep'
+import { useShouldSignRelayerApproval } from '../../../relayer/signRelayerApproval.hooks'
+import { useApproveRelayerStep } from '../../../relayer/useApproveRelayerStep'
+import { useRelayerMode } from '../../../relayer/useRelayerMode'
+import { TransactionStep } from '../../../transactions/transaction-steps/lib'
+import { useSignRelayerStep } from '../../../transactions/transaction-steps/useSignRelayerStep'
 
 export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): TransactionStep[] {
   const { chainId, pool, chain } = usePool()

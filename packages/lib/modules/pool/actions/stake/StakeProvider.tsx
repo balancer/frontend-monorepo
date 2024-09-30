@@ -1,19 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useTransactionSteps } from '../../modules/transactions/transaction-steps/useTransactionSteps'
-import { useTokenAllowances } from '../../modules/web3/useTokenAllowances'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { LABELS } from '../../shared/labels'
-import { isDisabledWithReason } from '../../shared/utils/functions/isDisabledWithReason'
 import { createContext, PropsWithChildren, useEffect, useState } from 'react'
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useStakeSteps } from './useStakeSteps'
-import { useMandatoryContext } from '../../shared/utils/contexts'
-import { bn } from '../../shared/utils/numbers'
+import { bn } from '../../../../shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { getUserWalletBalance, getUserWalletBalanceUsd } from '../../user-balance.helpers'
+import { LABELS } from '../../../../shared/labels'
+import { useMandatoryContext } from '../../../../shared/utils/contexts'
+import { isDisabledWithReason } from '../../../../shared/utils/functions/isDisabledWithReason'
+import { useTransactionSteps } from '../../../transactions/transaction-steps/useTransactionSteps'
+import { useUserAccount } from '../../../web3/UserAccountProvider'
+import { useTokenAllowances } from '../../../web3/useTokenAllowances'
 
 export type UseStakeResponse = ReturnType<typeof _useStake>
 export const StakeContext = createContext<UseStakeResponse | null>(null)

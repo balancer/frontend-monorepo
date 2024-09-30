@@ -1,4 +1,3 @@
-import { TransactionConfig } from '../../modules/web3/contracts/contract.types'
 import {
   AddLiquidity,
   AddLiquidityKind,
@@ -11,8 +10,9 @@ import { Pool } from '../../../PoolProvider'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
-import { HumanTokenAmountWithAddress } from '../../modules/tokens/token.types'
-import { getRpcUrl } from '../../modules/web3/transports'
+import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'
+import { TransactionConfig } from '../../../../web3/contracts/contract.types'
+import { getRpcUrl } from '../../../../web3/transports'
 
 /**
  * ProportionalAddLiquidityHandler is a handler that implements the

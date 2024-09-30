@@ -1,10 +1,10 @@
-import { TokenInput } from '../../modules/tokens/TokenInput/TokenInput'
 import { HumanAmount, isSameAddress } from '@balancer/sdk'
 import { Address } from 'viem'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { hasNoLiquidity, shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
+import { TokenInput } from '../../../../tokens/TokenInput/TokenInput'
 
 type Props = {
   tokenSelectDisclosureOpen: () => void

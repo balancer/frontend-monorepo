@@ -1,17 +1,17 @@
 'use client'
 
-import StarsIcon from '../../shared/components/icons/StarsIcon'
 import { Button, Card, Flex, HStack, Icon, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getAuraPoolLink, getPoolActionPath, getTotalAprLabel } from '../../../pool.utils'
 import { usePool } from '../../../PoolProvider'
-import { fNum } from '../../shared/utils/numbers'
-import { getChainId } from '../../config/app.config'
+import StarsIcon from '../../../../../shared/components/icons/StarsIcon'
 import {
   PartnerRedirectModal,
   RedirectPartner,
-} from '../../shared/components/modals/PartnerRedirectModal'
+} from '../../../../../shared/components/modals/PartnerRedirectModal'
+import { fNum } from '../../../../../shared/utils/numbers'
+import { getChainId } from '../../../../../config/app.config'
 
 export function StakingOptions() {
   const { chain, pool } = usePool()

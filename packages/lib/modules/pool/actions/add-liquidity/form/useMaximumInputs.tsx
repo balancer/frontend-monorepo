@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useTokenBalances } from '../../modules/tokens/TokenBalancesProvider'
-import { useTokens } from '../../modules/tokens/TokensProvider'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { bn } from '../../shared/utils/numbers'
 import { Address, HumanAmount } from '@balancer/sdk'
 import { useMemo, useState } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-import { useTotalUsdValue } from '../../modules/tokens/useTotalUsdValue'
+import { bn } from '../../../../../shared/utils/numbers'
+import { useTokenBalances } from '../../../../tokens/TokenBalancesProvider'
+import { useTokens } from '../../../../tokens/TokensProvider'
+import { useTotalUsdValue } from '../../../../tokens/useTotalUsdValue'
+import { useUserAccount } from '../../../../web3/UserAccountProvider'
 
 export function useMaximumInputs() {
   const { isConnected } = useUserAccount()

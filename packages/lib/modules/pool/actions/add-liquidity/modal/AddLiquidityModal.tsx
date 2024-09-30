@@ -1,23 +1,22 @@
 'use client'
 
-import { DesktopStepTracker } from '../../modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-// eslint-disable-next-line max-len
-import { getStylesForModalContentWithStepTracker } from '../../modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
-import { useBreakpoints } from '../../shared/hooks/useBreakpoints'
 import { AddLiquidityTimeout } from './AddLiquidityTimeout'
 import { ActionModalFooter } from '../../../../../shared/components/modals/ActionModalFooter'
-import { SuccessOverlay } from '../../shared/components/modals/SuccessOverlay'
 import { usePoolRedirect } from '../../../pool.hooks'
-import { TransactionModalHeader } from '../../shared/components/modals/TransactionModalHeader'
 import { useResetStepIndexOnOpen } from '../../useResetStepIndexOnOpen'
-import { useOnUserAccountChanged } from '../../modules/web3/useOnUserAccountChanged'
 import { AddLiquiditySummary } from './AddLiquiditySummary'
-import { useAddLiquidityReceipt } from '../../modules/transactions/transaction-steps/receipts/receipt.hooks'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
+import { SuccessOverlay } from '../../../../../shared/components/modals/SuccessOverlay'
+import { TransactionModalHeader } from '../../../../../shared/components/modals/TransactionModalHeader'
+import { useBreakpoints } from '../../../../../shared/hooks/useBreakpoints'
+import { useAddLiquidityReceipt } from '../../../../transactions/transaction-steps/receipts/receipt.hooks'
+import { DesktopStepTracker } from '../../../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
+import { getStylesForModalContentWithStepTracker } from '../../../../transactions/transaction-steps/step-tracker/step-tracker.utils'
+import { useOnUserAccountChanged } from '../../../../web3/useOnUserAccountChanged'
+import { useUserAccount } from '../../../../web3/UserAccountProvider'
 
 type Props = {
   isOpen: boolean

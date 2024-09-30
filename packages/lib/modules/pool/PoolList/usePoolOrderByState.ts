@@ -1,7 +1,7 @@
 'use client'
 
 /* eslint-disable react-hooks/exhaustive-deps */
-import { GqlPoolOrderBy } from '../../shared/services/api/generated/graphql'
+import { GqlPoolOrderBy } from '../../../shared/services/api/generated/graphql'
 import { useState, useEffect } from 'react'
 import { usePoolListQueryState } from './usePoolListQueryState'
 

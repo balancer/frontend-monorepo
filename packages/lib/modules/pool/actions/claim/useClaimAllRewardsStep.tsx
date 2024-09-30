@@ -1,22 +1,19 @@
-import { getChainId } from '../../config/app.config'
-import networkConfigs from '../../config/networks'
-import { selectStakingService } from '../../modules/staking/selectStakingService'
-import { ManagedTransactionButton } from '../../modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '../../modules/transactions/transaction-steps/TransactionStateProvider'
-import {
-  TransactionLabels,
-  TransactionStep,
-} from '../../modules/transactions/transaction-steps/lib'
-import { GqlChain, GqlPoolStakingType } from '../../shared/services/api/generated/graphql'
-import { sentryMetaForWagmiSimulation } from '../../shared/utils/query-errors'
+import { getChainId } from '../../../../config/app.config'
 import { useMemo, useState } from 'react'
 import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
 import { useClaimCallDataQuery } from './useClaimCallDataQuery'
-import { BalTokenRewardsResult } from '../../modules/portfolio/PortfolioClaim/useBalRewards'
-import { ClaimableBalancesResult } from '../../modules/portfolio/PortfolioClaim/useClaimableBalances'
 import { ClaimablePool } from './ClaimProvider'
 import { Address } from 'viem'
+import networkConfigs from '../../../../config/networks'
+import { GqlChain, GqlPoolStakingType } from '../../../../shared/services/api/generated/graphql'
+import { sentryMetaForWagmiSimulation } from '../../../../shared/utils/query-errors'
+import { BalTokenRewardsResult } from '../../../portfolio/PortfolioClaim/useBalRewards'
+import { ClaimableBalancesResult } from '../../../portfolio/PortfolioClaim/useClaimableBalances'
+import { selectStakingService } from '../../../staking/selectStakingService'
+import { TransactionLabels, TransactionStep } from '../../../transactions/transaction-steps/lib'
+import { ManagedTransactionButton } from '../../../transactions/transaction-steps/TransactionButton'
+import { useTransactionState } from '../../../transactions/transaction-steps/TransactionStateProvider'
 
 const claimAllRewardsStepId = 'claim-all-rewards'
 

@@ -1,19 +1,19 @@
 'use client'
 
-import { useUserSettings } from '../../modules/user/settings/UserSettingsProvider'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
 import { useQuery } from '@tanstack/react-query'
 import { RemoveLiquidityParams, removeLiquidityKeys } from './remove-liquidity-keys'
 import { ensureLastQueryResponse } from '../../LiquidityActionHelpers'
-import { defaultDebounceMs, onlyExplicitRefetch } from '../../shared/utils/queries'
 import { usePool } from '../../../PoolProvider'
-import { useRelayerSignature } from '../../modules/relayer/RelayerSignatureProvider'
-import { sentryMetaForRemoveLiquidityHandler } from '../../shared/utils/query-errors'
 import { HumanAmount } from '@balancer/sdk'
 import { RemoveLiquidityHandler } from '../handlers/RemoveLiquidity.handler'
 import { Address } from 'viem/accounts'
 import { RemoveLiquiditySimulationQueryResult } from './useRemoveLiquiditySimulationQuery'
 import { useDebounce } from 'use-debounce'
+import { defaultDebounceMs, onlyExplicitRefetch } from '../../../../../shared/utils/queries'
+import { sentryMetaForRemoveLiquidityHandler } from '../../../../../shared/utils/query-errors'
+import { useRelayerSignature } from '../../../../relayer/RelayerSignatureProvider'
+import { useUserSettings } from '../../../../user/settings/UserSettingsProvider'
+import { useUserAccount } from '../../../../web3/UserAccountProvider'
 
 export type RemoveLiquidityBuildQueryResponse = ReturnType<
   typeof useRemoveLiquidityBuildCallDataQuery

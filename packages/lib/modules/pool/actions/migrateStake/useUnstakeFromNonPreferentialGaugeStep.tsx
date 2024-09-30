@@ -1,19 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { getNetworkConfig } from '../../config/app.config'
-import { ManagedTransactionButton } from '../../modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '../../modules/transactions/transaction-steps/TransactionStateProvider'
-import {
-  TransactionLabels,
-  TransactionStep,
-} from '../../modules/transactions/transaction-steps/lib'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { ManagedTransactionInput } from '../../modules/web3/contracts/useManagedTransaction'
-import { sentryMetaForWagmiSimulation } from '../../shared/utils/query-errors'
 import { useCallback, useMemo } from 'react'
 import { parseUnits } from 'viem'
 import { Pool } from '../../PoolProvider'
 import { BPT_DECIMALS } from '../../pool.constants'
 import { findFirstNonPreferentialStaking } from '../stake.helpers'
+import { getNetworkConfig } from '../../../../config/app.config'
+import { sentryMetaForWagmiSimulation } from '../../../../shared/utils/query-errors'
+import { ManagedTransactionButton } from '../../../transactions/transaction-steps/TransactionButton'
+import { useTransactionState } from '../../../transactions/transaction-steps/TransactionStateProvider'
+import { TransactionLabels, TransactionStep } from '../../../transactions/transaction-steps/lib'
+import { useUserAccount } from '../../../web3/UserAccountProvider'
+import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
 
 const unstakeStepId = 'unstake-non-preferential-gauge'
 /*

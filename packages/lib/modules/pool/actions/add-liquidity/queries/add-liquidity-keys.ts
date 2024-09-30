@@ -1,7 +1,7 @@
-import { GqlPoolType } from '../../shared/services/api/generated/graphql'
+import { GqlPoolType } from '../../../../../shared/services/api/generated/graphql'
+import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'
 import { requiresProportionalInput } from '../../LiquidityActionHelpers'
 import { AddLiquidityHandler } from '../handlers/AddLiquidity.handler'
-import { HumanTokenAmountWithAddress } from '../../modules/tokens/token.types'
 
 const addLiquidity = 'add-liquidity'
 

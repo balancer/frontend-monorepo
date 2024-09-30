@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useBalTokenRewards } from '../../modules/portfolio/PortfolioClaim/useBalRewards'
-import { useClaimableBalances } from '../../modules/portfolio/PortfolioClaim/useClaimableBalances'
-import { safeSum } from '../../shared/utils/numbers'
 import { useMemo } from 'react'
 import { ClaimablePool } from './ClaimProvider'
+import { safeSum } from '../../../../shared/utils/numbers'
+import { useBalTokenRewards } from '../../../portfolio/PortfolioClaim/useBalRewards'
+import { useClaimableBalances } from '../../../portfolio/PortfolioClaim/useClaimableBalances'
 
 export function useClaimsData(pools: ClaimablePool[]) {
   const claimableBalancesQuery = useClaimableBalances(pools)

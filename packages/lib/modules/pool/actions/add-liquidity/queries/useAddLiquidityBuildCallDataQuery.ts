@@ -1,17 +1,17 @@
-import { useUserSettings } from '../../modules/user/settings/UserSettingsProvider'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
-import { defaultDebounceMs, onlyExplicitRefetch } from '../../shared/utils/queries'
 import { useQuery } from '@tanstack/react-query'
 import { usePool } from '../../../PoolProvider'
 import { ensureLastQueryResponse } from '../../LiquidityActionHelpers'
 import { AddLiquidityParams, addLiquidityKeys } from './add-liquidity-keys'
-import { useRelayerSignature } from '../../modules/relayer/RelayerSignatureProvider'
-import { sentryMetaForAddLiquidityHandler } from '../../shared/utils/query-errors'
 import { AddLiquidityHandler } from '../handlers/AddLiquidity.handler'
 import { AddLiquiditySimulationQueryResult } from './useAddLiquiditySimulationQuery'
 import { useDebounce } from 'use-debounce'
-import { HumanTokenAmountWithAddress } from '../../modules/tokens/token.types'
 import { useBlockNumber } from 'wagmi'
+import { defaultDebounceMs, onlyExplicitRefetch } from '../../../../../shared/utils/queries'
+import { sentryMetaForAddLiquidityHandler } from '../../../../../shared/utils/query-errors'
+import { useRelayerSignature } from '../../../../relayer/RelayerSignatureProvider'
+import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'
+import { useUserSettings } from '../../../../user/settings/UserSettingsProvider'
+import { useUserAccount } from '../../../../web3/UserAccountProvider'
 
 export type AddLiquidityBuildQueryResponse = ReturnType<typeof useAddLiquidityBuildCallDataQuery>
 

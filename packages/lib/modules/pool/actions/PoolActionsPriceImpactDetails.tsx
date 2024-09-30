@@ -1,14 +1,14 @@
-import { NumberText } from '../../shared/components/typography/NumberText'
-import { fNum, bn } from '../../shared/utils/numbers'
 import { HStack, VStack, Text, Tooltip, Icon, Box, Skeleton } from '@chakra-ui/react'
-import { usePriceImpact } from '../../modules/price-impact/PriceImpactProvider'
-import { useUserSettings } from '../../modules/user/settings/UserSettingsProvider'
-import { useCurrency } from '../../shared/hooks/useCurrency'
 import { usePool } from '../PoolProvider'
 import { ArrowRight } from 'react-feather'
 import { calcShareOfPool, calcUserShareOfPool } from '../pool.helpers'
 import { isNumber } from 'lodash'
-import { InfoIcon } from '../../shared/components/icons/InfoIcon'
+import { InfoIcon } from '@chakra-ui/icons'
+import { NumberText } from '../../../shared/components/typography/NumberText'
+import { useCurrency } from '../../../shared/hooks/useCurrency'
+import { bn, fNum } from '../../../shared/utils/numbers'
+import { usePriceImpact } from '../../price-impact/PriceImpactProvider'
+import { useUserSettings } from '../../user/settings/UserSettingsProvider'
 
 interface PoolActionsPriceImpactDetailsProps {
   bptAmount: bigint | undefined

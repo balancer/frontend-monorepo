@@ -1,12 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { TokenBalancesProvider } from '../../modules/tokens/TokenBalancesProvider'
-import ButtonGroup, {
-  ButtonGroupOption,
-} from '../../shared/components/btns/button-group/ButtonGroup'
-import { InputWithSlider } from '../../shared/components/inputs/InputWithSlider/InputWithSlider'
-import { fNum } from '../../shared/utils/numbers'
 import {
   Box,
   Button,
@@ -25,15 +19,21 @@ import { RemoveLiquidityProportional } from './RemoveLiquidityProportional'
 import { RemoveLiquiditySingleToken } from './RemoveLiquiditySingleToken'
 import { usePool } from '../../../PoolProvider'
 import { usePoolRedirect } from '../../../pool.hooks'
-import { TransactionSettings } from '../../modules/user/settings/TransactionSettings'
 import { requiresProportionalInput } from '../../LiquidityActionHelpers'
-import { PriceImpactAccordion } from '../../modules/price-impact/PriceImpactAccordion'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
-import { usePriceImpact } from '../../modules/price-impact/PriceImpactProvider'
 import { parseUnits } from 'viem'
-import { SimulationError } from '../../shared/components/errors/SimulationError'
-import { InfoIcon } from '../../shared/components/icons/InfoIcon'
-import { SafeAppAlert } from '../../shared/components/alerts/SafeAppAlert'
+import { InfoIcon } from '@chakra-ui/icons'
+import { SafeAppAlert } from '../../../../../shared/components/alerts/SafeAppAlert'
+import ButtonGroup, {
+  ButtonGroupOption,
+} from '../../../../../shared/components/btns/button-group/ButtonGroup'
+import { SimulationError } from '../../../../../shared/components/errors/SimulationError'
+import { InputWithSlider } from '../../../../../shared/components/inputs/InputWithSlider/InputWithSlider'
+import { fNum } from '../../../../../shared/utils/numbers'
+import { PriceImpactAccordion } from '../../../../price-impact/PriceImpactAccordion'
+import { usePriceImpact } from '../../../../price-impact/PriceImpactProvider'
+import { TokenBalancesProvider } from '../../../../tokens/TokenBalancesProvider'
+import { TransactionSettings } from '../../../../user/settings/TransactionSettings'
 
 const TABS: ButtonGroupOption[] = [
   {

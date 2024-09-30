@@ -5,7 +5,6 @@ import { Button, HStack, Heading, Skeleton, Text, Tooltip, VStack } from '@chakr
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { GqlToken } from '../../../../../shared/services/api/generated/graphql'
 import { useCurrency } from '../../../../../shared/hooks/useCurrency'
-import { SECONDS_IN_DAY } from '@/test/utils/numbers'
 import { sumBy, isEmpty } from 'lodash'
 import { useTokens } from '../../../../tokens/TokensProvider'
 import { useVebalBoost } from '../../../../vebal/useVebalBoost'
@@ -16,6 +15,7 @@ import { bn } from '../../../../../shared/utils/numbers'
 import { ClaimModal } from '../../../actions/claim/ClaimModal'
 import MainAprTooltip from '../../../../../shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { calcTotalStakedBalanceUsd } from '../../../user-balance.helpers'
+import { SECONDS_IN_DAY } from '../../../../../test/utils/numbers'
 
 export type PoolMyStatsValues = {
   myLiquidity: number
