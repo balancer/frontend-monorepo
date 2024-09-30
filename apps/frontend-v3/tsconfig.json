@@ -9,5 +9,13 @@
       }
     ],
     "types": ["vitest/globals"]
-  }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "../../packages/lib/global.d.ts",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules", ".next"]
 }

@@ -1,9 +1,9 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "extends": "@repo/typescript-config/react-library.json",
   "compilerOptions": {
     "module": "esnext",
     "types": ["vitest/globals"]
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "global.d.ts"],
   "exclude": ["node_modules"]
 }
