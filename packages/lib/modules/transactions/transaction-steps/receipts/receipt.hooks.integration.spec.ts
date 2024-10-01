@@ -53,7 +53,7 @@ test('queries add liquidity transaction', async () => {
 
   expect(result.current.sentTokens).toEqual([
     {
-      tokenAddress: '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f',
+      tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F',
       humanAmount: '12',
     },
     {
@@ -98,7 +98,7 @@ test('queries remove liquidity transaction', async () => {
   expect(result.current.receivedTokens).toEqual([
     {
       humanAmount: '16597.845312687911573359',
-      tokenAddress: '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f',
+      tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F',
     },
     {
       humanAmount: '4.553531492712836774',
