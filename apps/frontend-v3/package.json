@@ -11,7 +11,8 @@
     "lint:fix": "next lint --fix",
     "prepare": "cd ../.. && husky apps/frontend-v3/.husky",
     "start": "next start",
-    "typecheck": "tsc --project tsconfig.json --noEmit"
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "test:unit": "vitest"
   },
   "dependencies": {
     "@chakra-ui/hooks": "^2.2.1",
