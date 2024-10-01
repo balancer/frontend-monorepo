@@ -4,7 +4,7 @@ import {
   GqlPoolEventType,
   GqlPoolEventsDataRange,
   GetPoolEventsQuery,
-} from '../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { FetchPolicy } from '@apollo/client'
 import { useQuery } from '@apollo/client'
 
@@ -23,7 +23,7 @@ type PoolEventsProps = {
 
 export function usePoolEvents(
   { poolIdIn, chainIn, first, skip, range, typeIn, userAddress }: PoolEventsProps,
-  opts: { skip?: boolean; fetchPolicy?: FetchPolicy } = {},
+  opts: { skip?: boolean; fetchPolicy?: FetchPolicy } = {}
 ) {
   const poolIds = (poolIdIn || []).map(id => id.toLowerCase())
 

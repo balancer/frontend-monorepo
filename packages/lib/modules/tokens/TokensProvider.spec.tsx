@@ -1,4 +1,4 @@
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { waitFor } from '@testing-library/react'
 import { Address } from 'viem'
 import {

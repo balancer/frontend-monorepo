@@ -1,6 +1,6 @@
 import { Box, VStack } from '@chakra-ui/react'
 import { Step } from './Step'
-import { useThemeColorMode } from '../../../../shared/services/chakra/useThemeColorMode'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { TransactionStepsResponse } from '../useTransactionSteps'
 
 type Props = {

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useAddLiquidity } from '../../../modules/pool/actions/add-liquidity/AddLiquidityProvider'
+import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
 import {
   Accordion,
   AccordionButton,
@@ -12,8 +12,8 @@ import {
 } from '@chakra-ui/react'
 import { useCurrency } from '../../hooks/useCurrency'
 import { bn, fNum } from '../../utils/numbers'
-import { usePool } from '../../../modules/pool/PoolProvider'
-import { calcUserShareOfPool, isCowAmmPool } from '../../../modules/pool/pool.helpers'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { calcUserShareOfPool, isCowAmmPool } from '@repo/lib/modules/pool/pool.helpers'
 
 export function TransactionDetailsAccordion() {
   const { totalUSDValue, priceImpactQuery } = useAddLiquidity()

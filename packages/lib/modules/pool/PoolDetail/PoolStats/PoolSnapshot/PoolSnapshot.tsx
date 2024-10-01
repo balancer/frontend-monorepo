@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from 'react'
 import { Box, BoxProps, Card, CardProps, VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
-import { NoisyCard } from '../../../../../shared/components/containers/NoisyCard'
-import { ZenGarden } from '../../../../../shared/components/zen/ZenGarden'
+import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import ButtonGroup, {
   ButtonGroupOption,
-} from '../../../../../shared/components/btns/button-group/ButtonGroup'
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { UserSnapshotValues } from './UserSnapshotValues'
 import { PoolSnapshotValues } from './PoolSnapshotValues'
 import { hasTotalBalance } from '../../../user-balance.helpers'

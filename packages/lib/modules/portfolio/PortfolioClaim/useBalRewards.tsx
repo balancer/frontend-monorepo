@@ -11,10 +11,10 @@ import { ClaimablePool } from '../../pool/actions/claim/ClaimProvider'
 import { balancerV2GaugeV5Abi } from '../../web3/contracts/abi/generated'
 import { WriteContractParameters } from 'wagmi/actions'
 import { compact } from 'lodash'
-import networkConfigs from '../../../config/networks'
-import { onlyExplicitRefetch } from '../../../shared/utils/queries'
-import { getChainId } from '../../../config/app.config'
-import { bn } from '../../../shared/utils/numbers'
+import networkConfigs from '@repo/lib/config/networks'
+import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
+import { getChainId } from '@repo/lib/config/app.config'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export interface BalTokenReward {
   balance: bigint
@@ -40,7 +40,7 @@ export function useBalTokenRewards(pools: ClaimablePool[]) {
   const gaugeAddresses = Object.keys(poolByGaugeMap)
 
   function claimableTokensCall(
-    gaugeAddress: Address | string,
+    gaugeAddress: Address | string
   ): WriteContractParameters<typeof balancerV2GaugeV5Abi, 'claimable_tokens'> | undefined {
     const pool = poolByGaugeMap[gaugeAddress]
 

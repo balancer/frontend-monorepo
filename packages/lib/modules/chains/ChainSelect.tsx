@@ -1,16 +1,16 @@
 'use client'
 
-import { getChainShortName } from '../../config/app.config'
-import { getProjectConfig } from '../../config/getProjectConfig'
-import { NetworkIcon } from '../../shared/components/icons/NetworkIcon'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
-import { getSelectStyles } from '../../shared/services/chakra/custom/chakra-react-select'
+import { getChainShortName } from '@repo/lib/config/app.config'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { Select, OptionBase, GroupBase, SingleValue, chakraComponents } from 'chakra-react-select'
 import { ReactNode, useEffect, useState } from 'react'
 import { ChevronDown, Globe } from 'react-feather'
 import { motion } from 'framer-motion'
-import { pulseOnceWithDelay } from '../../shared/utils/animations'
+import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
 
 interface ChainOption extends OptionBase {
   label: ReactNode

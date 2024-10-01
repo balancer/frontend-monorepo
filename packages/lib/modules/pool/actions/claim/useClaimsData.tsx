@@ -3,7 +3,7 @@
 
 import { useMemo } from 'react'
 import { ClaimablePool } from './ClaimProvider'
-import { safeSum } from '../../../../shared/utils/numbers'
+import { safeSum } from '@repo/lib/shared/utils/numbers'
 import { useBalTokenRewards } from '../../../portfolio/PortfolioClaim/useBalRewards'
 import { useClaimableBalances } from '../../../portfolio/PortfolioClaim/useClaimableBalances'
 
@@ -15,12 +15,12 @@ export function useClaimsData(pools: ClaimablePool[]) {
 
   const allClaimableRewards = useMemo(
     () => [...balRewards, ...nonBalRewards],
-    [balRewards, nonBalRewards],
+    [balRewards, nonBalRewards]
   )
 
   const totalClaimableUsd = useMemo(
     () => safeSum(allClaimableRewards.map(reward => reward.fiatBalance)),
-    [allClaimableRewards],
+    [allClaimableRewards]
   )
 
   const hasNoRewards = !nonBalRewards.length && !balRewards.length

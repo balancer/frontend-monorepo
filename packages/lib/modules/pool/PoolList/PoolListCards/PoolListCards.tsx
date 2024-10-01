@@ -5,8 +5,8 @@ import { PoolListCard } from './PoolListCard'
 import { usePoolListQueryState } from '../usePoolListQueryState'
 import { PoolListItem } from '../../pool.types'
 import { useIsMounted } from 'usehooks-ts'
-import { getPaginationProps } from '../../../../shared/components/pagination/getPaginationProps'
-import { Pagination } from '../../../../shared/components/pagination/Pagination'
+import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
+import { Pagination } from '@repo/lib/shared/components/pagination/Pagination'
 
 interface Props {
   pools: PoolListItem[]

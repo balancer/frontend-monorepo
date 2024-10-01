@@ -5,7 +5,7 @@ import { Address, HumanAmount } from '@balancer/sdk'
 import { useMemo, useState } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-import { bn } from '../../../../../shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { useTokenBalances } from '../../../../tokens/TokenBalancesProvider'
 import { useTokens } from '../../../../tokens/TokensProvider'
 import { useTotalUsdValue } from '../../../../tokens/useTotalUsdValue'
@@ -24,7 +24,7 @@ export function useMaximumInputs() {
     return balances.filter(balance =>
       wethIsEth
         ? wNativeAsset && balance.address !== wNativeAsset.address
-        : nativeAsset && balance.address !== nativeAsset.address,
+        : nativeAsset && balance.address !== nativeAsset.address
     )
   }, [wethIsEth, isBalancesLoading])
 

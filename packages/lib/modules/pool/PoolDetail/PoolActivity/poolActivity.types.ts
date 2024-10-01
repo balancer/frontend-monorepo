@@ -1,4 +1,4 @@
-import { GqlPoolType, GqlToken } from '../../../../shared/services/api/generated/graphql'
+import { GqlPoolType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { BaseVariant, PoolVariant } from '../../pool.types'
 
 export type PoolActivityTokens = {

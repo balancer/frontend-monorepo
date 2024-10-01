@@ -13,12 +13,12 @@ import { HumanAmount } from '@balancer/sdk'
 import { useEffect, useMemo, useState } from 'react'
 import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
 import { useRouter } from 'next/navigation'
-import { ActionModalFooter } from '../../../../shared/components/modals/ActionModalFooter'
-import { AnimateHeightChange } from '../../../../shared/components/modals/AnimatedModalBody'
-import { SuccessOverlay } from '../../../../shared/components/modals/SuccessOverlay'
-import { TransactionModalHeader } from '../../../../shared/components/modals/TransactionModalHeader'
-import { useBreakpoints } from '../../../../shared/hooks/useBreakpoints'
-import { GqlChain } from '../../../../shared/services/api/generated/graphql'
+import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
+import { AnimateHeightChange } from '@repo/lib/shared/components/modals/AnimatedModalBody'
+import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
+import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
 import { TokenRowGroup } from '../../../tokens/TokenRow/TokenRowGroup'
 import { DesktopStepTracker } from '../../../transactions/transaction-steps/step-tracker/DesktopStepTracker'
@@ -56,7 +56,7 @@ export function ClaimModal({
           tokenAddress: (reward?.tokenAddress || '') as Address,
         }))
         .filter(Boolean) as HumanTokenAmountWithAddress[],
-    [allClaimableRewards],
+    [allClaimableRewards]
   )
 
   useEffect(() => {

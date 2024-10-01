@@ -1,8 +1,8 @@
 import { getQueryName, mockGQL } from '../utils'
 import { graphql } from 'msw'
 import { GQLResponse } from './msw-helpers'
-import { anAppGlobalData } from '../../../modules/tokens/__mocks__/AppGlobalData.builders'
-import { GetAppGlobalPollingDataDocument } from '../../../shared/services/api/generated/graphql'
+import { anAppGlobalData } from '@repo/lib/modules/tokens/__mocks__/AppGlobalData.builders'
+import { GetAppGlobalPollingDataDocument } from '@repo/lib/shared/services/api/generated/graphql'
 
 export const defaultAppGlobalDataMock = anAppGlobalData()
 

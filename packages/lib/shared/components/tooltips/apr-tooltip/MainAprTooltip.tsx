@@ -12,11 +12,11 @@ import {
 import BaseAprTooltip, { BaseAprTooltipProps } from './BaseAprTooltip'
 import { Info } from 'react-feather'
 import StarsIcon from '../../icons/StarsIcon'
-import { getProjectConfig } from '../../../../config/getProjectConfig'
-import { isLBP } from '../../../../modules/pool/pool.helpers'
-import { PoolListItem } from '../../../../modules/pool/pool.types'
-import { getTotalAprLabel } from '../../../../modules/pool/pool.utils'
-import { FeaturedPool, Pool } from '../../../../modules/pool/PoolProvider'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { isLBP } from '@repo/lib/modules/pool/pool.helpers'
+import { PoolListItem } from '@repo/lib/modules/pool/pool.types'
+import { getTotalAprLabel } from '@repo/lib/modules/pool/pool.utils'
+import { FeaturedPool, Pool } from '@repo/lib/modules/pool/PoolProvider'
 import { GqlPoolAprItemType } from '../../../services/api/generated/graphql'
 
 interface Props

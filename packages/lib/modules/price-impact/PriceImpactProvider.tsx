@@ -1,6 +1,6 @@
 import { AlertTriangle, XOctagon } from 'react-feather'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
-import { useMandatoryContext } from '../../shared/utils/contexts'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { Box, BoxProps } from '@chakra-ui/react'
 
 type PriceImpactLevel = 'low' | 'medium' | 'high' | 'max' | 'unknown'

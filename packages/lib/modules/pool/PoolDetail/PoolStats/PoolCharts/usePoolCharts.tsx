@@ -6,14 +6,14 @@ import {
   GqlPoolType,
   GqlPoolSnapshotDataRange,
   GqlChain,
-} from '../../../../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { usePool } from '../../../PoolProvider'
 import { PoolVariant, BaseVariant } from '../../../pool.types'
-import { NumberFormatter } from '../../../../../shared/utils/numbers'
-import { useCurrency } from '../../../../../shared/hooks/useCurrency'
+import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTheme as useNextTheme } from 'next-themes'
 import { isCowAmmPool } from '../../../pool.helpers'
 
@@ -74,7 +74,7 @@ const dataRangeToDaysMap: { [key in GqlPoolSnapshotDataRange]?: number } = {
 const getDefaultPoolChartOptions = (
   currencyFormatter: NumberFormatter,
   nextTheme: ColorMode = 'dark',
-  theme: any, // TODO: type this
+  theme: any // TODO: type this
 ) => {
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
@@ -230,7 +230,7 @@ export function getPoolTabsList({
 export function usePoolSnapshots(
   poolId: string,
   chainId: GqlChain,
-  range: GqlPoolSnapshotDataRange = GqlPoolSnapshotDataRange.ThirtyDays,
+  range: GqlPoolSnapshotDataRange = GqlPoolSnapshotDataRange.ThirtyDays
 ) {
   return useQuery(GetPoolSnapshotsDocument, {
     variables: {
@@ -269,7 +269,7 @@ export function usePoolCharts() {
   const { data, loading: isLoadingSnapshots } = usePoolSnapshots(
     poolId as string,
     pool.chain,
-    activePeriod.value,
+    activePeriod.value
   )
 
   const isLoading = isLoadingSnapshots
@@ -359,8 +359,8 @@ export function usePoolCharts() {
       activePeriod.value in dataRangeToDaysMap
         ? dataRangeToDaysMap[activePeriod.value]
         : daysSinceMinDataDate > MIN_DISPLAY_PERIOD_DAYS
-          ? daysSinceMinDataDate
-          : MIN_DISPLAY_PERIOD_DAYS
+        ? daysSinceMinDataDate
+        : MIN_DISPLAY_PERIOD_DAYS
 
     if (iterateTo === undefined) {
       throw new Error("DataRangeToDaysMap doesn't have a value for the selected period")
@@ -524,7 +524,7 @@ export function usePoolCharts() {
       setChartValue(Number(chartHoverValue))
       setChartDate(format(new Date(Number(chartHoverDate) * 1000), 'dd MMM yyyy'))
     },
-    [chartData],
+    [chartData]
   )
 
   const handleMouseLeave = useCallback(() => {

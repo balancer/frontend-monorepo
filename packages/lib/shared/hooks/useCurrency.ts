@@ -1,6 +1,6 @@
 'use client'
 
-import { useUserSettings } from '../../modules/user/settings/UserSettingsProvider'
+import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { useFxRates } from './FxRatesProvider'
 import { symbolForCurrency } from '../utils/currencies'
 import { Numberish, bn, fNum } from '../utils/numbers'
@@ -31,7 +31,7 @@ export function useCurrency() {
   // Converts a USD value to the user's currency and formats in fiat style.
   function toCurrency(
     usdVal: Numberish,
-    { withSymbol = true, abbreviated = true }: CurrencyOpts = {},
+    { withSymbol = true, abbreviated = true }: CurrencyOpts = {}
   ): string {
     const symbol = hasFxRates ? symbolForCurrency(currency) : '$'
     const convertedAmount = toUserCurrency(usdVal)

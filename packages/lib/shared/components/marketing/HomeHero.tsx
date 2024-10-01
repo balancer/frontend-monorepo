@@ -1,10 +1,10 @@
 'use client'
 import { Button, Heading, Text, VStack, Flex, Box, useToken } from '@chakra-ui/react'
-import FadeInOnView from '../../../shared/components/containers/FadeInOnView'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
-import { HomeCaseStudies } from '../../../shared/components/marketing/HomeCaseStudies'
+import { HomeCaseStudies } from '@repo/lib/shared/components/marketing/HomeCaseStudies'
 
 export function HomeHero() {
   const [bgColor] = useToken('colors', ['background.level1'])

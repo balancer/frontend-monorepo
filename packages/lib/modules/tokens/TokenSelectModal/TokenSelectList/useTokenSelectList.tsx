@@ -1,6 +1,6 @@
-import { GqlChain, GqlToken } from '../../../../shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../../TokensProvider'
-import { isSameAddress } from '../../../../shared/utils/addresses'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { orderBy } from 'lodash'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { exclNativeAssetFilter, nativeAssetFilter } from '../../token.helpers'
@@ -11,7 +11,7 @@ export function useTokenSelectList(
   tokens: GqlToken[],
   excludeNativeAsset: boolean,
   pinNativeAsset: boolean,
-  searchTerm?: string,
+  searchTerm?: string
 ) {
   const { usdValueForToken } = useTokens()
   const { balanceFor } = useTokenBalances()
@@ -51,7 +51,7 @@ export function useTokenSelectList(
           return userBalance ? Number(usdValueForToken(token, userBalance?.formatted || 0)) : 0
         },
       ],
-      ['desc', 'desc'],
+      ['desc', 'desc']
     )
 
     if (pinNativeAsset) {

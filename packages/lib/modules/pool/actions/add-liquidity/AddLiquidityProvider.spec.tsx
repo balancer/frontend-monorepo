@@ -8,7 +8,7 @@ import {
   usdtAddress,
   usdcAddress,
 } from '../../../../debug-helpers'
-import { GqlPoolElement } from '../../../../shared/services/api/generated/graphql'
+import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { aBalWethPoolElementMock } from '../../../../test/msw/builders/gqlPoolElement.builders'
 import {
   buildDefaultPoolTestProvider,

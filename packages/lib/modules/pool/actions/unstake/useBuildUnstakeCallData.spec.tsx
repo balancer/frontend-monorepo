@@ -1,18 +1,18 @@
 /* eslint-disable max-len */
-import { BatchRelayerService } from '../../../../shared/services/batch-relayer/batch-relayer.service'
-import { gaugeActionsService } from '../../../../shared/services/batch-relayer/extensions/gauge-actions.service'
-import { GaugeService } from '../../../../shared/services/staking/gauge.service'
+import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/batch-relayer.service'
+import { gaugeActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/gauge-actions.service'
+import { GaugeService } from '@repo/lib/shared/services/staking/gauge.service'
 import { defaultTestUserAccount } from '../../../../test/anvil/anvil-setup'
 import { aGqlPoolElementMock } from '../../../../test/msw/builders/gqlPoolElement.builders'
 import { testHook } from '../../../../test/utils/custom-renderers'
 import { useBuildUnstakeCallData } from './useBuildUnstakeCallData'
 import { Address } from 'viem'
-import mainnetNetworkConfig from '../../../../config/networks/mainnet'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 
 function testBuildUnstakeCallData(amount: bigint, userAddress: Address = defaultTestUserAccount) {
   const batchRelayerService = new BatchRelayerService(
     mainnetNetworkConfig.contracts.balancer.relayerV6,
-    gaugeActionsService,
+    gaugeActionsService
   )
   const gaugeService = new GaugeService(batchRelayerService)
   const gauges = [aGqlPoolElementMock().staking?.id || ''] as Address[]
@@ -24,7 +24,7 @@ function testBuildUnstakeCallData(amount: bigint, userAddress: Address = default
       hasUnclaimedBalRewards: false,
       hasUnclaimedNonBalRewards: false,
       userAddress,
-    }),
+    })
   )
   return result
 }

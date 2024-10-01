@@ -4,8 +4,8 @@ import { FeeDistributorStaticAbi } from '../../web3/contracts/abi/FeeDistributor
 import { formatUnits } from 'viem'
 import { useTokens } from '../../tokens/TokensProvider'
 import { BPT_DECIMALS } from '../../pool/pool.constants'
-import networkConfigs from '../../../config/networks'
-import { bn } from '../../../shared/utils/numbers'
+import networkConfigs from '@repo/lib/config/networks'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export const claimableVeBalRewardsTokens: string[] = [
   '0x7B50775383d3D6f0215A8F290f2C9e2eEBBEceb2', // bb-a-USD v1

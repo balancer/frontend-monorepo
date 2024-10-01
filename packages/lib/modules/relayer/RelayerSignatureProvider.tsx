@@ -1,6 +1,6 @@
 'use client'
 
-import { useMandatoryContext } from '../../shared/utils/contexts'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useState } from 'react'
 
 import { Address } from 'viem'
@@ -19,7 +19,7 @@ export function _useRelayerSignature() {
   const [relayerApprovalSignature, setRelayerApprovalSignature] = useState<Address | undefined>()
 
   const [signRelayerState, setSignRelayerState] = useState<SignRelayerState>(
-    SignRelayerState.Preparing,
+    SignRelayerState.Preparing
   )
 
   return {

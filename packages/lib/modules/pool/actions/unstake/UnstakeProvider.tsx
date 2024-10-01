@@ -8,10 +8,10 @@ import { usePool } from '../../PoolProvider'
 import { useClaimsData } from '../claim/useClaimsData'
 import { useClaimAndUnstakeSteps } from './useClaimAndUnstakeSteps'
 import { getUnstakeQuote } from '../stake.helpers'
-import { LABELS } from '../../../../shared/labels'
-import { useMandatoryContext } from '../../../../shared/utils/contexts'
-import { isDisabledWithReason } from '../../../../shared/utils/functions/isDisabledWithReason'
-import { bn, isZero } from '../../../../shared/utils/numbers'
+import { LABELS } from '@repo/lib/shared/labels'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
+import { bn, isZero } from '@repo/lib/shared/utils/numbers'
 import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
 import { useTransactionSteps } from '../../../transactions/transaction-steps/useTransactionSteps'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
@@ -41,7 +41,7 @@ export function _useUnstake() {
         tokenAddress: reward.tokenAddress,
         humanAmount: reward.humanBalance as HumanAmount,
       })),
-    [allClaimableRewards],
+    [allClaimableRewards]
   )
 
   const { gaugeAddress, amountOut } = getUnstakeQuote(pool)
@@ -61,7 +61,7 @@ export function _useUnstake() {
 
   const { isDisabled, disabledReason } = isDisabledWithReason(
     [!isConnected, LABELS.walletNotConnected],
-    [isZero(amountOut) && !hasRewardAmounts, "There's no staked amount to be unstaked"],
+    [isZero(amountOut) && !hasRewardAmounts, "There's no staked amount to be unstaked"]
   )
 
   /**

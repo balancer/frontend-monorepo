@@ -2,7 +2,7 @@ import {
   GqlChain,
   GqlPoolTokenDisplay,
   GqlToken,
-} from '../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { Box, HStack, StackProps } from '@chakra-ui/react'
 import { TokenIcon } from './TokenIcon'
 

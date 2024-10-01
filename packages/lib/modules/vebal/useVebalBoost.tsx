@@ -1,11 +1,11 @@
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMemo } from 'react'
-import { bn } from '../../shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { isUndefined } from 'lodash'
 import { useGaugesSupplyAndBalance } from './useGaugesSupplyAndBalance'
 import { useGaugeTotalSupplyAndUserBalance } from './useGaugeTotalSupplyAndUserBalance'
 import { useVebalLockInfo } from './useVebalLockInfo'
-import { getChainId } from '../../config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { Pool } from '../pool/PoolProvider'
 
 export type VeBalLockInfo = {
@@ -47,7 +47,7 @@ function calcUserBoost({
           .times(_userVeBALBalance)
           .div(_veBALTotalSupply)
           .times(_gaugeTotalSupply)
-          .div(_userGaugeBalance),
+          .div(_userGaugeBalance)
       )
     : bn(1)
 
@@ -122,7 +122,7 @@ export function useVebalBoost(pools: Pool[]) {
 
         return acc
       },
-      {} as Record<string, string>,
+      {} as Record<string, string>
     )
   }, [gaugeDataByPoolMap, veBalTotalSupplyL2, userVeBALBalances, mainnetLockedInfo])
 

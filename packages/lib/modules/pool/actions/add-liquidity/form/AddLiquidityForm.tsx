@@ -31,13 +31,13 @@ import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetai
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
 import { PriceImpactError } from '../../../../price-impact/PriceImpactError'
 import { calcPotentialYieldFor } from '../../../pool.utils'
-import { BalAlert } from '../../../../../shared/components/alerts/BalAlert'
-import { SafeAppAlert } from '../../../../../shared/components/alerts/SafeAppAlert'
-import { GenericError } from '../../../../../shared/components/errors/GenericError'
-import AddLiquidityAprTooltip from '../../../../../shared/components/tooltips/apr-tooltip/AddLiquidityAprTooltip'
-import { useCurrency } from '../../../../../shared/hooks/useCurrency'
-import { GqlToken } from '../../../../../shared/services/api/generated/graphql'
-import { bn, fNum } from '../../../../../shared/utils/numbers'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
+import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
+import AddLiquidityAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AddLiquidityAprTooltip'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { cannotCalculatePriceImpactError } from '../../../../price-impact/price-impact.utils'
 import { PriceImpactAccordion } from '../../../../price-impact/PriceImpactAccordion'
 import { usePriceImpact } from '../../../../price-impact/PriceImpactProvider'
@@ -110,7 +110,7 @@ function AddLiquidityMainForm() {
   }
 
   const nativeAssets = validTokens.filter(token =>
-    isNativeOrWrappedNative(token.address as Address, token.chain),
+    isNativeOrWrappedNative(token.address as Address, token.chain)
   )
 
   // if native asset balance is higher set that asset as the 'default'

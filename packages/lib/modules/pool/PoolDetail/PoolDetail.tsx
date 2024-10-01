@@ -16,9 +16,9 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import PoolUserEvents from './PoolUserEvents'
 import { hasTotalBalance } from '../user-balance.helpers'
 import { usePoolEvents } from '../usePoolEvents'
-import { DefaultPageContainer } from '../../../shared/components/containers/DefaultPageContainer'
-import { CowFooter } from '../../../shared/components/footer/CowFooter'
-import { CowPoolBanner } from '../../../shared/components/banner/CowPoolBanner'
+import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { CowFooter } from '@repo/lib/shared/components/footer/CowFooter'
+import { CowPoolBanner } from '@repo/lib/shared/components/banner/CowPoolBanner'
 import { PoolActivity } from './PoolActivity/PoolActivity'
 
 export function PoolDetail() {
@@ -40,7 +40,7 @@ export function PoolDetail() {
     },
     {
       skip: !isConnected,
-    },
+    }
   )
 
   useEffect(() => {

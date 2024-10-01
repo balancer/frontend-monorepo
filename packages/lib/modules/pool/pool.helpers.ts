@@ -1,5 +1,5 @@
-import { getChainId, getNetworkConfig } from '../../config/app.config'
-import { getBlockExplorerAddressUrl } from '../../shared/hooks/useBlockExplorer'
+import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import {
   GetPoolQuery,
   GqlChain,
@@ -9,9 +9,9 @@ import {
   GqlPoolStakingOtherGauge,
   GqlPoolTokenDetail,
   GqlPoolType,
-} from '../../shared/services/api/generated/graphql'
-import { isSameAddress } from '../../shared/utils/addresses'
-import { Numberish, bn } from '../../shared/utils/numbers'
+} from '@repo/lib/shared/services/api/generated/graphql'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { isEmpty, isNil } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
@@ -20,7 +20,7 @@ import { isNotMainnet } from '../chains/chain.utils'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { PoolIssue } from './alerts/pool-issues/PoolIssue.type'
 import { getUserTotalBalanceInt } from './user-balance.helpers'
-import { dateToUnixTimestamp } from '../../shared/utils/time'
+import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { balancerV3VaultAbi } from '../web3/contracts/abi/balancerV3Abi'
 
@@ -177,7 +177,7 @@ type Pool = GetPoolQuery['pool']
 export function usePoolHelpers(pool: Pool, chain: GqlChain) {
   const gaugeExplorerLink = getBlockExplorerAddressUrl(
     pool?.staking?.gauge?.gaugeAddress as Address,
-    chain,
+    chain
   )
   const poolExplorerLink = getBlockExplorerAddressUrl(pool.address as Address, chain)
 
@@ -215,7 +215,7 @@ export function isNotSupported(pool: Pool) {
  */
 export function isClaimableGauge(
   gauge: GqlPoolStakingGauge | GqlPoolStakingOtherGauge,
-  chain: GqlChain | number,
+  chain: GqlChain | number
 ): boolean {
   return !(gauge.version === 1 && isNotMainnet(chain))
 }

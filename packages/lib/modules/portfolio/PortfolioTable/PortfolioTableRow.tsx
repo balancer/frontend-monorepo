@@ -6,12 +6,12 @@ import { PoolListTokenPills } from '../../pool/PoolList/PoolListTokenPills'
 import { Protocol } from '../../protocols/useProtocols'
 import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
 import { getCanStake } from '../../pool/actions/stake.helpers'
-import FadeInOnView from '../../../shared/components/containers/FadeInOnView'
-import { NetworkIcon } from '../../../shared/components/icons/NetworkIcon'
-import { ProtocolIcon } from '../../../shared/components/icons/ProtocolIcon'
-import AuraAprTooltip from '../../../shared/components/tooltips/apr-tooltip/AuraAprTooltip'
-import MainAprTooltip from '../../../shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { useCurrency } from '../../../shared/hooks/useCurrency'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
+import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
+import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
+import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo

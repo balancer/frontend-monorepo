@@ -1,8 +1,8 @@
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
-import { convertHexToLowerCase } from '../../shared/utils/objects'
-import { PoolIssue } from '../../modules/pool/alerts/pool-issues/PoolIssue.type'
-import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
+import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
+import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
+import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 
 const networkConfig: NetworkConfig = {
   chainId: 43114,

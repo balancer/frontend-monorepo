@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { createAvatar } from '@dicebear/core'
 import { identicon } from '@dicebear/collection'
 import { Address } from 'viem'

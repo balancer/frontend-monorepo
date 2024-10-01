@@ -21,7 +21,7 @@ import { BalancerLogoType } from '../imgs/BalancerLogoType'
 import { useNav } from './useNav'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
-import { VeBalLink } from '../../../modules/vebal/VebalRedirectModal'
+import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
 
 function NavLinks({ onClick }: { onClick?: () => void }) {
   const { appLinks, linkColorFor } = useNav()

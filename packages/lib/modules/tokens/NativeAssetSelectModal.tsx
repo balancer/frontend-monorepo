@@ -12,7 +12,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { RefObject } from 'react'
-import { GqlChain, GqlToken } from '../../shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { NativeAssetSelectList } from './NativeAssetSelectList'
 
 type Props = {

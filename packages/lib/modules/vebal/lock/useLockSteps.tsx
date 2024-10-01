@@ -14,10 +14,10 @@ import {
   parseDate,
   getLockContractFunctionName,
 } from './lock.helpers'
-import { sentryMetaForWagmiSimulation } from '../../../shared/utils/query-errors'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { TransactionLabels, TransactionStep } from '../../transactions/transaction-steps/lib'
 import { ManagedTransactionButton } from '../../transactions/transaction-steps/TransactionButton'
-import mainnetNetworkConfig from '../../../config/networks/mainnet'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 
 type UseCreateLockArgs = {
   lockAmount: RawAmount

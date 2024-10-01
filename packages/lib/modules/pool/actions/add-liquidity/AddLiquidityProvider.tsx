@@ -17,12 +17,9 @@ import {
   supportsNestedActions,
 } from '../LiquidityActionHelpers'
 import { selectAddLiquidityHandler } from './handlers/selectAddLiquidityHandler'
-import { useAddLiquiditySteps } from './useAddLiquiditySteps'
-import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { LABELS } from '../../../../shared/labels'
-import { GqlToken } from '../../../../shared/services/api/generated/graphql'
-import { useMandatoryContext } from '../../../../shared/utils/contexts'
-import { isDisabledWithReason } from '../../../../shared/utils/functions/isDisabledWithReason'
+import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { isUnhandledAddPriceImpactError } from '../../../price-impact/price-impact.utils'
 import { getLeafTokens } from '../../../tokens/token.helpers'
 import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
@@ -31,6 +28,9 @@ import { useTokens } from '../../../tokens/TokensProvider'
 import { useTotalUsdValue } from '../../../tokens/useTotalUsdValue'
 import { useTransactionSteps } from '../../../transactions/transaction-steps/useTransactionSteps'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
+import { LABELS } from '@repo/lib/shared/labels'
+import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
+import { useAddLiquiditySteps } from './useAddLiquiditySteps'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -65,7 +65,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
         ({
           tokenAddress: token.address,
           humanAmount: '',
-        }) as HumanTokenAmountWithAddress,
+        } as HumanTokenAmountWithAddress)
     )
     setHumanAmountsIn(amountsIn)
   }

@@ -1,4 +1,4 @@
-import { GqlPoolElement, GqlChain } from '../../../shared/services/api/generated/graphql'
+import { GqlPoolElement, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 // TODO: remove linear (nested) pools
 export const recoveryPoolMock: GqlPoolElement = {

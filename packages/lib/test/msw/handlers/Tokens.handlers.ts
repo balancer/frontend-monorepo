@@ -5,12 +5,12 @@ import {
   defaultTokenListMock,
   defaultGetTokenPricesQueryMock,
   defaultTokenPriceListMock,
-} from '../../../modules/tokens/__mocks__/token.builders'
+} from '@repo/lib/modules/tokens/__mocks__/token.builders'
 import {
   GetTokensDocument,
   GetTokenPricesDocument,
   GetTokenPricesQuery,
-} from '../../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 
 export function buildTokenListMswHandler(tokenList = defaultTokenListMock) {
   return graphql.query(getQueryName(GetTokensDocument), () => {

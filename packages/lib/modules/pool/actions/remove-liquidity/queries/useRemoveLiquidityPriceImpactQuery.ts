@@ -7,8 +7,8 @@ import { RemoveLiquidityParams, removeLiquidityKeys } from './remove-liquidity-k
 import { HumanAmount } from '@balancer/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { useBlockNumber } from 'wagmi'
-import { defaultDebounceMs, onlyExplicitRefetch } from '../../../../../shared/utils/queries'
-import { sentryMetaForRemoveLiquidityHandler } from '../../../../../shared/utils/query-errors'
+import { defaultDebounceMs, onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
+import { sentryMetaForRemoveLiquidityHandler } from '@repo/lib/shared/utils/query-errors'
 import { useUserSettings } from '../../../../user/settings/UserSettingsProvider'
 import { useUserAccount } from '../../../../web3/UserAccountProvider'
 

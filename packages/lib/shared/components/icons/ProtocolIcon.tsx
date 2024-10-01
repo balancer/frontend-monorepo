@@ -1,4 +1,4 @@
-import { Protocol, protocolIconPaths } from '../../../modules/protocols/useProtocols'
+import { Protocol, protocolIconPaths } from '@repo/lib/modules/protocols/useProtocols'
 import Image, { ImageProps } from 'next/image'
 
 type Props = Omit<ImageProps, 'src' | 'alt'> & {

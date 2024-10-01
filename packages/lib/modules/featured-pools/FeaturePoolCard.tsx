@@ -1,17 +1,17 @@
 'use client'
 
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { FeaturedPool, Pool } from '../pool/PoolProvider'
 import { useRouter } from 'next/navigation'
 import { VStack, Text, Box, HStack, Image } from '@chakra-ui/react'
 import { poolClickHandler, poolMouseEnterHandler, getPoolTypeLabel } from '../pool/pool.utils'
 import { PoolName } from '../pool/PoolName'
-import { NoisyCard } from '../../shared/components/containers/NoisyCard'
-import { PoolZenGarden } from '../../shared/components/zen/ZenGarden'
+import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { motion } from 'framer-motion'
-import MainAprTooltip from '../../shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { memo, ReactNode } from 'react'
-import FadeInOnView from '../../shared/components/containers/FadeInOnView'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 interface Props {
   pool: FeaturedPool

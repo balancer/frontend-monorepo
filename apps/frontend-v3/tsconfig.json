@@ -3,6 +3,10 @@
   "compilerOptions": {
     "module": "esnext",
     "baseUrl": ".",
+    "paths": {
+      "@/*": ["*"],
+      "@repo/*": ["../../packages/*"]
+    },
     "plugins": [
       {
         "name": "next"

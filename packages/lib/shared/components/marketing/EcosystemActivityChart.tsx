@@ -13,18 +13,18 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import ButtonGroup from '../../../shared/components/btns/button-group/ButtonGroup'
+import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { FC, PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
 
 import { EcosystemChainSelect } from './EcosystemChainSelect'
-import { getChainShortName } from '../../../config/app.config'
-import { supportedNetworks } from '../../../modules/web3/ChainConfig'
+import { getChainShortName } from '@repo/lib/config/app.config'
+import { supportedNetworks } from '@repo/lib/modules/web3/ChainConfig'
 import {
   PoolActivityChartTypeTab,
   gradientMap,
   useEcosystemPoolActivityChart,
-} from '../../../modules/marketing/useEcosystemPoolActivity'
+} from '@repo/lib/modules/marketing/useEcosystemPoolActivity'
 
 const AnimateOpacity: FC<PropsWithChildren<object>> = ({ children }) => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>

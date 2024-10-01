@@ -15,9 +15,9 @@ import { ExpandedPoolInfo, ExpandedPoolType, useExpandedPools } from './useExpan
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
-import FadeInOnView from '../../../shared/components/containers/FadeInOnView'
-import { PaginatedTable } from '../../../shared/components/tables/PaginatedTable'
-import { GqlPoolOrderBy } from '../../../shared/services/api/generated/graphql'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
+import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useUserAccount } from './UserAccountProvider'
 import { Address } from 'viem'
-import { useIsMounted } from '../../shared/hooks/useIsMounted'
+import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { emptyAddress } from './contracts/wagmi-helpers'
 
 export function useOnUserAccountChanged(callback: () => void) {

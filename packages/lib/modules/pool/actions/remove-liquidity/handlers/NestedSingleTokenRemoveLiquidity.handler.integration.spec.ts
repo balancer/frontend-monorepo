@@ -3,7 +3,7 @@ import { Pool } from '../../../PoolProvider'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 import { NestedSingleTokenRemoveLiquidityHandler } from './NestedSingleTokenRemoveLiquidity.handler'
-import networkConfig from '../../../../../config/networks/mainnet'
+import networkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress } from '../../../../../debug-helpers'
 import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
 import { mainnetTestPublicClient } from '../../../../../test/utils/wagmi/wagmi-test-clients'
@@ -11,7 +11,7 @@ import { mainnetTestPublicClient } from '../../../../../test/utils/wagmi/wagmi-t
 function selectNestedSingleTokenHandler(pool: Pool): NestedSingleTokenRemoveLiquidityHandler {
   return selectRemoveLiquidityHandler(
     pool,
-    RemoveLiquidityType.SingleToken,
+    RemoveLiquidityType.SingleToken
   ) as NestedSingleTokenRemoveLiquidityHandler
 }
 

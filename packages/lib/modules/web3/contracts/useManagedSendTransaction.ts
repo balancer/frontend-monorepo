@@ -7,18 +7,18 @@ import { useEstimateGas, useSendTransaction, useWaitForTransactionReceipt } from
 import { TransactionConfig, TransactionExecution, TransactionSimulation } from './contract.types'
 import { useOnTransactionConfirmation } from './useOnTransactionConfirmation'
 import { useOnTransactionSubmission } from './useOnTransactionSubmission'
-import { getGqlChain } from '../../../config/app.config'
+import { getGqlChain } from '@repo/lib/config/app.config'
 import { useChainSwitch } from '../useChainSwitch'
 import {
   captureWagmiExecutionError,
   sentryMetaForWagmiExecution,
-} from '../../../shared/utils/query-errors'
-import { useNetworkConfig } from '../../../config/useNetworkConfig'
+} from '@repo/lib/shared/utils/query-errors'
+import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useRecentTransactions } from '../../transactions/RecentTransactionsProvider'
 import { mainnet } from 'viem/chains'
 import { useTxHash } from '../safe.hooks'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
-import { onlyExplicitRefetch } from '../../../shared/utils/queries'
+import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 
 export type ManagedSendTransactionInput = {
   labels: TransactionLabels

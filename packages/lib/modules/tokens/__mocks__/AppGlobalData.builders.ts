@@ -1,4 +1,4 @@
-import { GetAppGlobalPollingDataQuery } from '../../../shared/services/api/generated/graphql'
+import { GetAppGlobalPollingDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { fakeTokenBySymbol } from '../../../test/data/all-gql-tokens.fake'
 import { aGqlTokenPriceMock } from '../../../test/msw/builders/gqlTokenPrice.builders'
 

@@ -22,11 +22,11 @@ import {
   TrackedTransaction,
   TransactionStatus,
   useRecentTransactions,
-} from '../../../modules/transactions/RecentTransactionsProvider'
+} from '@repo/lib/modules/transactions/RecentTransactionsProvider'
 import { isEmpty, orderBy } from 'lodash'
 import { useBlockExplorer } from '../../hooks/useBlockExplorer'
 import { Activity, ArrowUpRight, Check, Clock, X, XOctagon } from 'react-feather'
-import { getChainShortName } from '../../../config/app.config'
+import { getChainShortName } from '@repo/lib/config/app.config'
 import { formatDistanceToNow } from 'date-fns'
 
 function TransactionIcon({ status }: { status: TransactionStatus }) {
@@ -123,7 +123,7 @@ export default function RecentTransactions() {
   const hasTransactions = !isEmpty(transactions)
 
   const confirmingTxCount = Object.values(transactions).filter(
-    tx => tx.status === 'confirming',
+    tx => tx.status === 'confirming'
   ).length
 
   return (

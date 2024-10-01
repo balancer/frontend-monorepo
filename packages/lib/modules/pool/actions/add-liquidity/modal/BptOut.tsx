@@ -3,7 +3,7 @@ import { BPT_DECIMALS } from '../../../pool.constants'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { requiresProportionalInput } from '../../LiquidityActionHelpers'
-import { bn, fNum } from '../../../../../shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { BptRow } from '../../../../tokens/TokenRow/BptRow'
 
 export function ReceiptBptOut({
@@ -53,8 +53,8 @@ export function QuoteBptOut({ label, isLoading = false }: { label?: string; isLo
   const _label = label
     ? label
     : proportionalRequired
-      ? 'You will get'
-      : 'You will get (if no slippage)'
+    ? 'You will get'
+    : 'You will get (if no slippage)'
 
   return <BptRow label={_label} bptAmount={bptOutUnits} pool={pool} isLoading={isLoading} />
 }

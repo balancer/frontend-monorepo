@@ -3,10 +3,10 @@
 import { PoolActivityView, usePoolActivityViewType } from './usePoolActivityViewType'
 import ButtonGroup, {
   ButtonGroupOption,
-} from '../../../../shared/components/btns/button-group/ButtonGroup'
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useEffect, useState } from 'react'
-import { ChartBubbleIcon } from '../../../../shared/components/icons/ChartBubbleIcon'
-import { TableIcon } from '../../../../shared/components/icons/TableIcon'
+import { ChartBubbleIcon } from '@repo/lib/shared/components/icons/ChartBubbleIcon'
+import { TableIcon } from '@repo/lib/shared/components/icons/TableIcon'
 
 const options: ButtonGroupOption[] = [
   {

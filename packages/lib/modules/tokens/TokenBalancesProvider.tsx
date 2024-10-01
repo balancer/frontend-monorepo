@@ -5,12 +5,16 @@ import { useBalance, useReadContracts } from 'wagmi'
 import { erc20Abi } from 'viem'
 import { TokenAmount, TokenBase } from './token.types'
 import { Address, formatUnits } from 'viem'
-import { isLoadingQueries, isRefetchingQueries, refetchQueries } from '../../shared/utils/queries'
-import { isSameAddress } from '../../shared/utils/addresses'
+import {
+  isLoadingQueries,
+  isRefetchingQueries,
+  refetchQueries,
+} from '@repo/lib/shared/utils/queries'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { PropsWithChildren, createContext, useState } from 'react'
-import { useMandatoryContext } from '../../shared/utils/contexts'
-import { getNetworkConfig } from '../../config/app.config'
-import { GqlToken } from '../../shared/services/api/generated/graphql'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { exclNativeAssetFilter, nativeAssetFilter } from './token.helpers'
 
 const BALANCE_CACHE_TIME_MS = 30_000
@@ -66,7 +70,7 @@ export function _useTokenBalances(initTokens?: GqlToken[], extTokens?: GqlToken[
         functionName: 'balanceOf',
         args: [(userAddress || '') as Address],
       })),
-    },
+    }
   )
 
   async function refetchBalances() {
@@ -98,7 +102,7 @@ export function _useTokenBalances(initTokens?: GqlToken[], extTokens?: GqlToken[
       amount: nativeBalanceQuery.data.value,
       formatted: formatUnits(
         nativeBalanceQuery.data.value,
-        networkConfig.tokens.nativeAsset.decimals,
+        networkConfig.tokens.nativeAsset.decimals
       ),
       decimals: networkConfig.tokens.nativeAsset.decimals,
     })

@@ -3,7 +3,7 @@
 import TokenRow from '../../tokens/TokenRow/TokenRow'
 import ButtonGroup, {
   ButtonGroupOption,
-} from '../../../shared/components/btns/button-group/ButtonGroup'
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import {
   Divider,
   Button,
@@ -21,7 +21,7 @@ import React, { useMemo, useState, useLayoutEffect } from 'react'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCurrency } from '../../../shared/hooks/useCurrency'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { keyBy } from 'lodash'
 import {
   getAuraPoolLink,
@@ -29,7 +29,7 @@ import {
   getXavePoolLink,
 } from '../pool.utils'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { bn, fNum } from '../../../shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import {
   getUserTotalBalanceInt,
   getUserWalletBalanceInt,
@@ -45,14 +45,14 @@ import { isVebalPool, shouldBlockAddLiquidity, calcUserShareOfPool, isFx } from 
 
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
-import { GqlPoolStakingType } from '../../../shared/services/api/generated/graphql'
+import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ArrowUpRight } from 'react-feather'
-import { getChainId } from '../../../config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { VeBalLink } from '../../vebal/VebalRedirectModal'
 import {
   PartnerRedirectModal,
   RedirectPartner,
-} from '../../../shared/components/modals/PartnerRedirectModal'
+} from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -159,9 +159,9 @@ export default function PoolMyLiquidity() {
       getProportionalExitAmountsFromScaledBptIn(
         getBptBalanceForTab(),
         poolTokens,
-        pool.dynamicData.totalShares,
+        pool.dynamicData.totalShares
       ),
-      'address',
+      'address'
     )
   }
 

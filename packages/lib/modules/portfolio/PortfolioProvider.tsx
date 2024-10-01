@@ -1,16 +1,16 @@
 'use client'
 
-import { GetPoolsDocument } from '../../shared/services/api/generated/graphql'
+import { GetPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery as useApolloQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useProtocolRewards } from './PortfolioClaim/useProtocolRewards'
 import { ClaimableReward, useClaimableBalances } from './PortfolioClaim/useClaimableBalances'
 import { BalTokenReward, useBalTokenRewards } from './PortfolioClaim/useBalRewards'
-import { bn } from '../../shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
-import { useMandatoryContext } from '../../shared/utils/contexts'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../web3/UserAccountProvider'
-import { getProjectConfig } from '../../config/getProjectConfig'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { useOnchainUserPoolBalances } from '../pool/queries/useOnchainUserPoolBalances'
 import { Pool } from '../pool/PoolProvider'
 import { useRecentTransactions } from '../transactions/RecentTransactionsProvider'
@@ -21,7 +21,7 @@ import {
   getUserTotalBalance,
   getUserTotalBalanceUsd,
 } from '../pool/user-balance.helpers'
-import { getTimestamp } from '../../shared/utils/time'
+import { getTimestamp } from '@repo/lib/shared/utils/time'
 
 export interface ClaimableBalanceResult {
   status: 'success' | 'error'
@@ -47,7 +47,7 @@ function _usePortfolio() {
 
   // filter in recent transactions that took place in the last 5 minutes
   const transactionsWithPoolIds = Object.values(transactions).filter(
-    tx => isAfter(tx.timestamp, fiveMinutesAgo) && tx.poolId,
+    tx => isAfter(tx.timestamp, fiveMinutesAgo) && tx.poolId
   )
 
   const idIn = uniq(compact(transactionsWithPoolIds.map(tx => tx.poolId)))
@@ -65,7 +65,7 @@ function _usePortfolio() {
       fetchPolicy: 'no-cache',
       notifyOnNetworkStatusChange: true,
       skip: !isConnected || !userAddress,
-    },
+    }
   )
 
   // fetch pools with an id in recent transactions
@@ -83,7 +83,7 @@ function _usePortfolio() {
 
   const poolsData = uniqBy(
     [...(poolsUserAddressData?.pools || []), ...(poolsIdData?.pools || [])],
-    'id',
+    'id'
   )
 
   const { data: poolsWithOnchainUserBalances, isLoading: isLoadingOnchainUserBalances } =
@@ -125,7 +125,7 @@ function _usePortfolio() {
     return {
       pools:
         poolsWithOnchainUserBalances.filter(
-          pool => pool.userBalance && pool.userBalance.totalBalance !== '0',
+          pool => pool.userBalance && pool.userBalance.totalBalance !== '0'
         ) || [],
       stakedPools,
       unstakedPools,
@@ -135,7 +135,7 @@ function _usePortfolio() {
 
   // Bal token rewards
   const { balRewardsData, refetchBalRewards, isLoadingBalRewards } = useBalTokenRewards(
-    portfolioData.stakedPools || [],
+    portfolioData.stakedPools || []
   )
 
   // Protocol rewards
@@ -167,7 +167,7 @@ function _usePortfolio() {
       if (claimableReward) {
         acc[pool.id].claimableRewards = claimableReward
         claimableReward.forEach(
-          r => (totalFiatClaimableBalance = totalFiatClaimableBalance.plus(r.fiatBalance)),
+          r => (totalFiatClaimableBalance = totalFiatClaimableBalance.plus(r.fiatBalance))
         )
       }
 
@@ -211,7 +211,7 @@ function _usePortfolio() {
 
         return acc
       },
-      {},
+      {}
     )
   }, [poolsByChainMap, poolRewardsMap])
 

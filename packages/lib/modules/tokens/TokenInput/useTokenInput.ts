@@ -1,5 +1,5 @@
-import { GqlToken } from '../../../shared/services/api/generated/graphql'
-import { Numberish, bn } from '../../../shared/utils/numbers'
+import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
 import { ChangeEvent } from 'react'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInputsValidation } from '../TokenInputsValidationProvider'

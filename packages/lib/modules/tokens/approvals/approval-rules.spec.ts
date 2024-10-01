@@ -1,6 +1,6 @@
-import { SupportedChainId } from '../../../config/config.types'
+import { SupportedChainId } from '@repo/lib/config/config.types'
 import { wETHAddress, wjAuraAddress, usdtAddress } from '../../../debug-helpers'
-import { MAX_BIGINT } from '../../../shared/utils/numbers'
+import { MAX_BIGINT } from '@repo/lib/shared/utils/numbers'
 import { testRawAmount } from '../../../test/utils/numbers'
 import { RawAmount, getRequiredTokenApprovals } from './approval-rules'
 

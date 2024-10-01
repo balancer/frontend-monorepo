@@ -1,14 +1,14 @@
 'use client'
 
-import { defaultDebounceMs, onlyExplicitRefetch } from '../../../shared/utils/queries'
+import { defaultDebounceMs, onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import { useDebounce } from 'use-debounce'
 import { useQuery } from '@tanstack/react-query'
 import { SwapHandler } from '../handlers/Swap.handler'
 import { swapQueryKeys } from './swapQueryKeys'
 import { SimulateSwapInputs, SimulateSwapResponse } from '../swap.types'
-import { sentryMetaForSwapHandler } from '../../../shared/utils/query-errors'
-import { isZero } from '../../../shared/utils/numbers'
-import { getChainId } from '../../../config/app.config'
+import { sentryMetaForSwapHandler } from '@repo/lib/shared/utils/query-errors'
+import { isZero } from '@repo/lib/shared/utils/numbers'
+import { getChainId } from '@repo/lib/config/app.config'
 import { useBlockNumber } from 'wagmi'
 
 export type SwapSimulationQueryResult = ReturnType<typeof useSimulateSwapQuery>

@@ -1,7 +1,7 @@
-import networkConfig from '../../../../config/networks/mainnet'
+import networkConfig from '@repo/lib/config/networks/mainnet'
 import { useMemo } from 'react'
 import { Address } from 'viem'
-import { sentryMetaForWagmiSimulation } from '../../../../shared/utils/query-errors'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { claimableVeBalRewardsTokens } from '../../../portfolio/PortfolioClaim/useProtocolRewards'
 import { TransactionLabels, TransactionStep } from '../../../transactions/transaction-steps/lib'
 import { ManagedTransactionButton } from '../../../transactions/transaction-steps/TransactionButton'
@@ -33,7 +33,7 @@ export function useClaimVeBalRewardsStep({
     {
       userAddress,
       feeDistributor: networkConfig.contracts.feeDistributor,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -61,6 +61,6 @@ export function useClaimVeBalRewardsStep({
       renderAction: () => <ManagedTransactionButton id={claimVeBalRewardsStepId} {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction, userAddress],
+    [transaction, userAddress]
   )
 }

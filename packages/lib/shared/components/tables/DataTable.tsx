@@ -20,9 +20,9 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { SortingIcon } from '../../../shared/components/icons/SortingIcon'
-import { Pagination } from '../../../shared/components/pagination/Pagination'
-import { getPoolPath } from '../../../modules/pool/pool.utils'
+import { SortingIcon } from '@repo/lib/shared/components/icons/SortingIcon'
+import { Pagination } from '@repo/lib/shared/components/pagination/Pagination'
+import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import Link from 'next/link'
 
 export type DataTableProps<Data extends object> = {
@@ -64,12 +64,12 @@ export function DataTable<Data extends object>({
       setPagination(
         (typeof updaterOrValue === 'function'
           ? updaterOrValue(pagination)
-          : pagination) as PaginationState,
+          : pagination) as PaginationState
       )
     },
     onSortingChange: updaterOrValue => {
       setSorting(
-        (typeof updaterOrValue === 'function' ? updaterOrValue(sorting) : sorting) as SortingState,
+        (typeof updaterOrValue === 'function' ? updaterOrValue(sorting) : sorting) as SortingState
       )
     },
     manualSorting: true,

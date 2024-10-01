@@ -2,9 +2,9 @@ import { connectWithDefaultUser, disconnectDefaultUser } from '../utils/wagmi/wa
 import { NetworksWithFork, getTestRpcSetup } from '../anvil/anvil-setup'
 import { createPublicClient, http } from 'viem'
 import { mainnetTest, polygonTest } from '../anvil/testWagmiConfig'
-import { chainsByKey } from '../../modules/web3/ChainConfig'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
-import * as transportsModule from '../../modules/web3/transports'
+import { chainsByKey } from '@repo/lib/modules/web3/ChainConfig'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import * as transportsModule from '@repo/lib/modules/web3/transports'
 
 /*
   Specific setup for integration tests (that it is not needed in unit tests)
@@ -23,7 +23,7 @@ afterAll(async () => {
   Mocks getDefaultRpcUrl to return the test rpcUrl ('http://127.0.0.1:port/poolId')
   Keeps the rest of the module unmocked
 */
-vi.mock('../../modules/web3/transports', async importOriginal => {
+vi.mock('@repo/lib/modules/web3/transports', async importOriginal => {
   const originalModule = await importOriginal<typeof transportsModule>()
   return {
     ...originalModule,
@@ -38,7 +38,7 @@ vi.mock('../../modules/web3/transports', async importOriginal => {
   Mocks getViemClient to use the test chain definitions,
   which use test rpcUrls ('http://127.0.0.1:port/poolId')
 */
-vi.mock('../../shared/services/viem/viem.client', () => {
+vi.mock('@repo/lib/shared/services/viem/viem.client', () => {
   return {
     getViemClient: (chain: GqlChain) => {
       return createPublicClient({

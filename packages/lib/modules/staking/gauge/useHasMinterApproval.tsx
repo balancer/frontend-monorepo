@@ -1,5 +1,5 @@
 import { useReadContract } from 'wagmi'
-import { useNetworkConfig } from '../../../config/useNetworkConfig'
+import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { balancerMinterAbi } from '../../web3/contracts/abi/generated'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 

@@ -10,12 +10,12 @@ import { isUserRejectedError } from './error-filters'
 import {
   AddLiquidityParams,
   stringifyHumanAmountsIn,
-} from '../../modules/pool/actions/add-liquidity/queries/add-liquidity-keys'
-import { RemoveLiquidityParams } from '../../modules/pool/actions/remove-liquidity/queries/remove-liquidity-keys'
-import { SimulateSwapParams } from '../../modules/swap/queries/useSimulateSwapQuery'
-import { isProd } from '../../config/app.config'
-import { SwapState } from '../../modules/swap/swap.types'
-import { SwapHandler } from '../../modules/swap/handlers/Swap.handler'
+} from '@repo/lib/modules/pool/actions/add-liquidity/queries/add-liquidity-keys'
+import { RemoveLiquidityParams } from '@repo/lib/modules/pool/actions/remove-liquidity/queries/remove-liquidity-keys'
+import { SimulateSwapParams } from '@repo/lib/modules/swap/queries/useSimulateSwapQuery'
+import { isProd } from '@repo/lib/config/app.config'
+import { SwapState } from '@repo/lib/modules/swap/swap.types'
+import { SwapHandler } from '@repo/lib/modules/swap/handlers/Swap.handler'
 
 /**
  * Metadata to be added to the captured Sentry error
@@ -36,7 +36,7 @@ export function sentryMetaForAddLiquidityHandler(errorMessage: string, params: A
 type RemoveMetaParams = RemoveLiquidityParams & { chainId: number; blockNumber?: bigint }
 export function sentryMetaForRemoveLiquidityHandler(
   errorMessage: string,
-  params: RemoveMetaParams,
+  params: RemoveMetaParams
 ) {
   return createRemoveHandlerMetadata('HandlerQueryError', errorMessage, params)
 }
@@ -81,7 +81,7 @@ export function captureFatalError(
   error: unknown,
   errorName: string,
   errorMessage: string,
-  extra: Extras,
+  extra: Extras
 ) {
   captureSentryError(error, createFatalMetadata(errorName, errorMessage, extra))
 }
@@ -117,7 +117,7 @@ export function createFatalErrorMetadata(errorName: string, errorMessage: string
 function createAddHandlerMetadata(
   errorName: string,
   errorMessage: string,
-  params: AddLiquidityParams,
+  params: AddLiquidityParams
 ) {
   const extra: Extras = {
     handler: params.handler.constructor.name,
@@ -135,7 +135,7 @@ function createAddHandlerMetadata(
 function createRemoveHandlerMetadata(
   errorName: string,
   errorMessage: string,
-  params: RemoveMetaParams,
+  params: RemoveMetaParams
 ) {
   const extra: Extras = {
     handler: params.handler.constructor.name,
@@ -150,7 +150,7 @@ function createRemoveHandlerMetadata(
 function createSwapHandlerMetadata(
   errorName: string,
   errorMessage: string,
-  params: SwapMetaParams,
+  params: SwapMetaParams
 ) {
   const { handler, ...rest } = params
   const extra: Extras = {
@@ -163,7 +163,7 @@ function createSwapHandlerMetadata(
 function createFatalMetadata(
   errorName: string,
   errorMessage: string,
-  extra: Extras,
+  extra: Extras
 ): SentryMetadata {
   const context: Partial<ScopeContext> = {
     extra,
@@ -179,7 +179,7 @@ function createFatalMetadata(
 function createNonFatalMetadata(
   errorName: string,
   errorMessage = '',
-  extra: Extras = {},
+  extra: Extras = {}
 ): SentryMetadata {
   const context: Partial<ScopeContext> = {
     extra,
@@ -195,7 +195,7 @@ function createNonFatalMetadata(
 export function createErrorMetadata(
   errorName: string,
   errorMessage: string,
-  extra: Extras,
+  extra: Extras
 ): SentryMetadata {
   const context: Partial<ScopeContext> = {
     extra,
@@ -215,7 +215,7 @@ export function createErrorMetadata(
  */
 export function captureSentryError(
   e: unknown,
-  { context, errorMessage, errorName }: SentryMetadata,
+  { context, errorMessage, errorName }: SentryMetadata
 ) {
   const causeError = ensureError(e)
   if (isUserRejectedError(causeError)) return

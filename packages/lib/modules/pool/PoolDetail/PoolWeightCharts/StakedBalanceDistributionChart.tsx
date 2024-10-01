@@ -7,8 +7,8 @@ import { motion } from 'framer-motion'
 import { ChartSizeValues } from './PoolWeightChart'
 import { Pool } from '../../PoolProvider'
 import { calcTotalStakedBalanceUsd, getUserWalletBalanceUsd } from '../../user-balance.helpers'
-import { NoisyCard } from '../../../../shared/components/containers/NoisyCard'
-import { useThemeColorMode } from '../../../../shared/services/chakra/useThemeColorMode'
+import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
 const smallSize: ChartSizeValues = {
   chartHeight: '125px',

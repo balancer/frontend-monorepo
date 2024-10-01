@@ -1,4 +1,4 @@
-import { fNum } from '../../shared/utils/numbers'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 import { PoolListItem } from './pool.types'
 import { HStack, Text, TextProps, Box } from '@chakra-ui/react'
 import { FeaturedPool, Pool } from './PoolProvider'

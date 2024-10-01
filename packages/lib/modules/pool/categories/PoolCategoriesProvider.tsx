@@ -3,7 +3,7 @@
 import { createContext, PropsWithChildren } from 'react'
 import { Pool } from '../PoolProvider'
 import { PoolCategory } from './getPoolCategories'
-import { useMandatoryContext } from '../../../shared/utils/contexts'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 
 export type UsePoolCategoriesResult = ReturnType<typeof _usePoolCategories>
 export const PoolCategoriesContext = createContext<UsePoolCategoriesResult | null>(null)
@@ -14,7 +14,7 @@ export function _usePoolCategories(categories: PoolCategory[] | undefined) {
   function getPoolCategories(pool: Pool): PoolCategory[] {
     if (!categories) return []
     return categories.filter(category =>
-      pool.tags?.map(tag => tag?.toLowerCase()).includes(category.id),
+      pool.tags?.map(tag => tag?.toLowerCase()).includes(category.id)
     )
   }
 

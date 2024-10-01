@@ -1,5 +1,5 @@
 import { DeepPartial } from '@apollo/client/utilities'
-import { GqlTokenPrice } from '../../../shared/services/api/generated/graphql'
+import { GqlTokenPrice } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function aGqlTokenPriceMock(...options: Partial<GqlTokenPrice>[]): GqlTokenPrice {
   const defaultTokenPrice: DeepPartial<GqlTokenPrice> = {

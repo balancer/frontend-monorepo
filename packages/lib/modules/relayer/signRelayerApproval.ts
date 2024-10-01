@@ -1,6 +1,6 @@
-import { getNetworkConfig } from '../../config/app.config'
-import { SupportedChainId } from '../../config/config.types'
-import { ensureError } from '../../shared/utils/errors'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { SupportedChainId } from '@repo/lib/config/config.types'
+import { ensureError } from '@repo/lib/shared/utils/errors'
 import { Relayer } from '@balancer/sdk'
 import { Address, publicActions, walletActions } from 'viem'
 import { GetWalletClientReturnType } from 'wagmi/actions'
@@ -12,7 +12,7 @@ type SdkClient = SignRelayerApprovalParams[2]
 export async function signRelayerApproval(
   userAddress: Address,
   chainId: SupportedChainId,
-  client?: GetWalletClientReturnType,
+  client?: GetWalletClientReturnType
 ): Promise<Address | undefined> {
   if (!client) return undefined
 

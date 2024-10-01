@@ -1,6 +1,6 @@
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { PoolWeightChartColorDef } from './PoolWeightChart'
-import { GqlPoolTokenDetail } from '../../../../shared/services/api/generated/graphql'
+import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 
 export default function PoolWeightChartLegend({
   displayTokens,

@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { NumberText } from '../../shared/components/typography/NumberText'
-import { useCurrency } from '../../shared/hooks/useCurrency'
-import { bn, fNum } from '../../shared/utils/numbers'
+import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { HStack, VStack, Text, Tooltip, Box } from '@chakra-ui/react'
 import { useSwap } from './SwapProvider'
-import { GqlSorSwapType } from '../../shared/services/api/generated/graphql'
+import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
-import { usePriceImpact } from '../../modules/price-impact/PriceImpactProvider'
+import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { SdkSimulateSwapResponse } from './swap.types'
 import { DefaultSwapHandler } from './handlers/DefaultSwap.handler'
 import { useTokens } from '../tokens/TokensProvider'
 import { NativeWrapHandler } from './handlers/NativeWrap.handler'
-import { InfoIcon } from '../../shared/components/icons/InfoIcon'
+import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import pluralize from 'pluralize'
 
 export function OrderRoute() {

@@ -16,20 +16,20 @@ import {
   forwardRef,
   useTheme,
 } from '@chakra-ui/react'
-import { GqlChain, GqlToken } from '../../../shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../TokensProvider'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInput } from './useTokenInput'
-import { useCurrency } from '../../../shared/hooks/useCurrency'
-import { blockInvalidNumberInput, bn, fNum } from '../../../shared/utils/numbers'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { blockInvalidNumberInput, bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenIcon } from '../TokenIcon'
 import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
 import { ChevronDown } from 'react-feather'
-import { WalletIcon } from '../../../shared/components/icons/WalletIcon'
+import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { usePriceImpact } from '../../price-impact/PriceImpactProvider'
 import { useEffect, useState } from 'react'
-import { useIsMounted } from '../../../shared/hooks/useIsMounted'
-import { isNativeAsset } from '../../../shared/utils/addresses'
+import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
+import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 
 type TokenInputSelectorProps = {
   token: GqlToken | undefined
@@ -201,7 +201,7 @@ export const TokenInput = forwardRef(
       disableBalanceValidation = false,
       ...inputProps
     }: InputProps & Props,
-    ref,
+    ref
   ) => {
     const { isBalancesLoading } = useTokenBalances()
 
@@ -297,5 +297,5 @@ export const TokenInput = forwardRef(
         </VStack>
       </Box>
     )
-  },
+  }
 )

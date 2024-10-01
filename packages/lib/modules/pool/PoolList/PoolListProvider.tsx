@@ -1,10 +1,10 @@
 'use client'
 
 import { createContext, PropsWithChildren, useEffect } from 'react'
-import { GetPoolsDocument, GqlPoolType } from '../../../shared/services/api/generated/graphql'
+import { GetPoolsDocument, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 import { usePoolListQueryState } from './usePoolListQueryState'
-import { useMandatoryContext } from '../../../shared/utils/contexts'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
 

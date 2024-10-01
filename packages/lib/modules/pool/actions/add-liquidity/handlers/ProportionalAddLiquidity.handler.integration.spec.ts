@@ -1,4 +1,4 @@
-import networkConfig from '../../../../../config/networks/arbitrum'
+import networkConfig from '@repo/lib/config/networks/arbitrum'
 import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
 import { polygonTestPublicClient } from '../../../../../test/utils/wagmi/wagmi-test-clients'
 import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'

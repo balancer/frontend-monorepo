@@ -1,6 +1,6 @@
 'use client'
 
-import { abbreviateAddress } from '../../../../shared/utils/addresses'
+import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import {
   Box,
   Card,
@@ -19,17 +19,14 @@ import {
 import { usePool } from '../../PoolProvider'
 import { ArrowUpRight } from 'react-feather'
 import { useMemo } from 'react'
-import {
-  GqlPriceRateProviderData,
-  GqlToken,
-} from '../../../../shared/services/api/generated/graphql'
+import { GqlPriceRateProviderData, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { useTokens } from '../../../tokens/TokensProvider'
 import { TokenIcon } from '../../../tokens/TokenIcon'
 import { AlertTriangle, XCircle } from 'react-feather'
 import Image from 'next/image'
 import { RateProviderInfoPopOver } from './RateProviderInfo'
-import { getBlockExplorerAddressUrl } from '../../../../shared/hooks/useBlockExplorer'
+import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { getRateProviderWarnings } from '../../../pool/pool.helpers'
 
 type RateProvider = {
@@ -108,7 +105,7 @@ export function PoolContracts({ ...props }: CardProps) {
         priceRateProviderData: token.priceRateProviderData,
       }))
       .filter(
-        item => item.rateProviderAddress && item.rateProviderAddress !== zeroAddress,
+        item => item.rateProviderAddress && item.rateProviderAddress !== zeroAddress
       ) as RateProvider[]
   }, [pool])
 

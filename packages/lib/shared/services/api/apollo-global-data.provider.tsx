@@ -9,12 +9,12 @@
  */
 import { getApolloServerClient } from './apollo-server.client'
 import { GetTokenPricesDocument, GetTokensDocument } from './generated/graphql'
-import { getProjectConfig } from '../../../config/getProjectConfig'
-import { TokensProvider } from '../../../modules/tokens/TokensProvider'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { TokensProvider } from '@repo/lib/modules/tokens/TokensProvider'
 import { FiatFxRatesProvider } from '../../hooks/FxRatesProvider'
 import { getFxRates } from '../../utils/currencies'
-import { getPoolCategories } from '../../../modules/pool/categories/getPoolCategories'
-import { PoolCategoriesProvider } from '../../../modules/pool/categories/PoolCategoriesProvider'
+import { getPoolCategories } from '@repo/lib/modules/pool/categories/getPoolCategories'
+import { PoolCategoriesProvider } from '@repo/lib/modules/pool/categories/PoolCategoriesProvider'
 import { mins } from '../../utils/time'
 import { PropsWithChildren } from 'react'
 

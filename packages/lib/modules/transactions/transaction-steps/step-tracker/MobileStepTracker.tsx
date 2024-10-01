@@ -12,9 +12,9 @@ import {
 
 import { StepIndicator } from './Step'
 import { Steps } from './Steps'
-import { GasPriceCard } from '../../../../shared/hooks/useGasPrice'
-import { GqlChain } from '../../../../shared/services/api/generated/graphql'
-import { useThemeColorMode } from '../../../../shared/services/chakra/useThemeColorMode'
+import { GasPriceCard } from '@repo/lib/shared/hooks/useGasPrice'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { TransactionStepsResponse } from '../useTransactionSteps'
 
 type Props = {

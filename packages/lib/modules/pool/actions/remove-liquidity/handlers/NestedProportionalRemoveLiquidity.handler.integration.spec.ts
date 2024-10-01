@@ -1,4 +1,4 @@
-import networkConfig from '../../../../../config/networks/mainnet'
+import networkConfig from '@repo/lib/config/networks/mainnet'
 import { wETHAddress } from '../../../../../debug-helpers'
 import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
 import { connectWithDefaultUser } from '../../../../../test/utils/wagmi/wagmi-connections'
@@ -13,7 +13,7 @@ import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 function selectNestedProportionalHandler(pool: Pool): NestedProportionalRemoveLiquidityHandler {
   return selectRemoveLiquidityHandler(
     pool,
-    RemoveLiquidityType.Proportional,
+    RemoveLiquidityType.Proportional
   ) as NestedProportionalRemoveLiquidityHandler
 }
 

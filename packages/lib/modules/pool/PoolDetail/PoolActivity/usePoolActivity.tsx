@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useMandatoryContext } from '../../../../shared/utils/contexts'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { PoolVariant } from '../../pool.types'
 import { usePool } from '../../PoolProvider'
-import { GqlPoolEventType } from '../../../../shared/services/api/generated/graphql'
+import { GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePoolEvents } from '../../usePoolEvents'
 import { slugToChainMap, ChainSlug } from '../../pool.utils'
 import { useTokens } from '../../../tokens/TokensProvider'
 import { differenceInCalendarDays } from 'date-fns'
-import { fNum } from '../../../../shared/utils/numbers'
-import { ButtonGroupOption } from '../../../../shared/components/btns/button-group/ButtonGroup'
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import {
   PoolActivity,
   PoolActivityEl,
@@ -21,9 +21,9 @@ import {
   getPoolActivityTabsList,
   Sorting,
 } from './poolActivity.types'
-import { PaginationState } from '../../../../shared/components/pagination/pagination.types'
+import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { usePoolActivityViewType } from '../PoolActivityViewType/usePoolActivityViewType'
-import { sortAlphabetically } from '../../../../shared/utils/sorting'
+import { sortAlphabetically } from '@repo/lib/shared/utils/sorting'
 
 export type PoolActivityResponse = ReturnType<typeof _usePoolActivity>
 export const PoolActivityContext = createContext<PoolActivityResponse | null>(null)
@@ -145,7 +145,7 @@ function _usePoolActivity() {
 
         return acc
       },
-      { adds: [], removes: [], swaps: [] },
+      { adds: [], removes: [], swaps: [] }
     )
 
     return data
@@ -157,7 +157,7 @@ function _usePoolActivity() {
       pageIndex: skip / first,
       pageSize: first,
     }),
-    [skip, first],
+    [skip, first]
   )
 
   function setPagination(newPagination: PaginationState) {
@@ -190,7 +190,7 @@ function _usePoolActivity() {
         return order === Sorting.asc ? compareValue : -compareValue
       })
     },
-    [],
+    []
   )
 
   const poolEvents = useMemo(() => {
@@ -208,7 +208,7 @@ function _usePoolActivity() {
       ? sortedEvents.slice(0, sortedEvents.length)
       : sortedEvents.slice(
           pagination.pageIndex * pagination.pageSize,
-          pagination.pageSize * (pagination.pageIndex + 1),
+          pagination.pageSize * (pagination.pageIndex + 1)
         )
   }, [poolEvents, pagination, sorting, sortingBy, sortPoolEvents, isChartView])
 

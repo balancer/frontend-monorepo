@@ -1,14 +1,14 @@
 'use client'
 
-import { PaginatedTable } from '../../../../shared/components/tables/PaginatedTable'
+import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
 import { PoolActivityTableHeader } from './PoolActivityTableHeader'
 import { PoolActivityTableRow } from './PoolActivityTableRow'
-import { getPaginationProps } from '../../../../shared/components/pagination/getPaginationProps'
+import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { Box, Skeleton } from '@chakra-ui/react'
-import { useIsMounted } from '../../../../shared/hooks/useIsMounted'
+import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 import { PoolActivityEl } from '../PoolActivity/poolActivity.types'
-import { Pagination } from '../../../../shared/components/pagination/Pagination'
+import { Pagination } from '@repo/lib/shared/components/pagination/Pagination'
 
 export function PoolActivityTable() {
   const isMounted = useIsMounted()

@@ -2,7 +2,7 @@
 
 import { Box, HStack, Radio, RadioGroup, Text, VStack } from '@chakra-ui/react'
 import { Address } from 'viem'
-import { GqlToken, GqlChain } from '../../../../../shared/services/api/generated/graphql'
+import { GqlToken, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isNativeAsset } from '../../../../tokens/token.helpers'
 import TokenRow from '../../../../tokens/TokenRow/TokenRow'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
@@ -64,7 +64,7 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
                       isLoading={isLoading}
                     />
                   </HStack>
-                ),
+                )
             )}
           </VStack>
         </RadioGroup>

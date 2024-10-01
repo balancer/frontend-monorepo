@@ -8,10 +8,13 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { BPT_DECIMALS } from '../../pool/pool.constants'
 import { ClaimablePool } from '../../pool/actions/claim/ClaimProvider'
 import { groupBy, uniqBy } from 'lodash'
-import { GqlChain, GqlPoolStakingGaugeReward } from '../../../shared/services/api/generated/graphql'
-import { onlyExplicitRefetch } from '../../../shared/utils/queries'
-import { getChainId } from '../../../config/app.config'
-import { bn } from '../../../shared/utils/numbers'
+import {
+  GqlChain,
+  GqlPoolStakingGaugeReward,
+} from '@repo/lib/shared/services/api/generated/graphql'
+import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
+import { getChainId } from '@repo/lib/config/app.config'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 interface ClaimableRewardRef {
   tokenAddress: Address
@@ -50,7 +53,7 @@ export function useClaimableBalances(pools: ClaimablePool[]) {
         const gaugeRewardTokens = pool.staking?.gauge?.rewards || []
 
         const otherRewardTokenRefs = otherGauges.flatMap(gauge =>
-          getClaimableRewardRefs(gauge.rewards, pool),
+          getClaimableRewardRefs(gauge.rewards, pool)
         )
 
         const allRewardTokenRefs = [
@@ -60,7 +63,7 @@ export function useClaimableBalances(pools: ClaimablePool[]) {
 
         return uniqBy(allRewardTokenRefs, reward => `${reward.gaugeAddress}.${reward.tokenAddress}`)
       }),
-    [pools],
+    [pools]
   )
 
   // Get claimable rewards for each reward token

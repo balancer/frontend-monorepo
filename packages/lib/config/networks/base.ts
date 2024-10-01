@@ -1,6 +1,6 @@
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
-import { convertHexToLowerCase } from '../../shared/utils/objects'
+import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 
 const networkConfig: NetworkConfig = {
   chainId: 8453,

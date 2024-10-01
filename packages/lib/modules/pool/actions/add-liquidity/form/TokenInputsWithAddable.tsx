@@ -8,9 +8,9 @@ import { useProportionalInputs } from './useProportionalInputs'
 import { useMaximumInputs } from './useMaximumInputs'
 import { hasNoLiquidity } from '../../LiquidityActionHelpers'
 import { usePool } from '../../../PoolProvider'
-import { BalAlert } from '../../../../../shared/components/alerts/BalAlert'
-import { WalletIcon } from '../../../../../shared/components/icons/WalletIcon'
-import { useCurrency } from '../../../../../shared/hooks/useCurrency'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useUserAccount } from '../../../../web3/UserAccountProvider'
 
 type Props = {

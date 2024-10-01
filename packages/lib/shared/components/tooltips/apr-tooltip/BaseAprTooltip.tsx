@@ -10,7 +10,7 @@ import {
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
 import { ReactNode } from 'react'
-import { isVebalPool } from '../../../../modules/pool/pool.helpers'
+import { isVebalPool } from '@repo/lib/modules/pool/pool.helpers'
 import {
   useAprTooltip,
   swapFeesTooltipText,
@@ -116,8 +116,8 @@ function BaseAprTooltip({
   const totalBaseTitle = isVebal
     ? totalBaseVeBalText
     : typeof totalBaseText === 'function'
-      ? totalBaseText(hasVeBalBoost)
-      : totalBaseText
+    ? totalBaseText(hasVeBalBoost)
+    : totalBaseText
 
   const popoverContent = customPopoverContent || (
     <PopoverContent
@@ -272,7 +272,7 @@ function BaseAprTooltip({
               tooltipText={
                 shouldDisplayMaxVeBalTooltip
                   ? `${defaultDisplayValueFormatter(
-                      defaultNumberFormatter(maxVeBal.toString()),
+                      defaultNumberFormatter(maxVeBal.toString())
                     )} APR`
                   : ''
               }

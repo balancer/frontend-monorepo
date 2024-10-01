@@ -2,7 +2,7 @@
 
 import { createContext, PropsWithChildren, useState } from 'react'
 import { ManagedResult } from './lib'
-import { useMandatoryContext } from '../../../shared/utils/contexts'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { TransactionResult } from '../../web3/contracts/contract.types'
 
 export function _useTransactionState() {

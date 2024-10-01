@@ -1,8 +1,8 @@
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
 import { zeroAddress } from 'viem'
-import { convertHexToLowerCase } from '../../shared/utils/objects'
-import { emptyAddress } from '../../modules/web3/contracts/wagmi-helpers'
+import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
+import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
 
 const networkConfig: NetworkConfig = {
   chainId: 250,

@@ -1,4 +1,4 @@
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import arbitrum from './arbitrum'
 import avalanche from './avalanche'
 import gnosis from './gnosis'

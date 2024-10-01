@@ -6,7 +6,7 @@ import {
   useAddLiquidityBuildCallDataQuery,
 } from './queries/useAddLiquidityBuildCallDataQuery'
 import { usePool } from '../../PoolProvider'
-import { sentryMetaForWagmiSimulation } from '../../../../shared/utils/query-errors'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { TransactionStep, TransactionLabels } from '../../../transactions/transaction-steps/lib'
 import { ManagedSendTransactionButton } from '../../../transactions/transaction-steps/TransactionButton'
 import { useTransactionState } from '../../../transactions/transaction-steps/TransactionStateProvider'
@@ -78,6 +78,6 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
         />
       ),
     }),
-    [transaction, simulationQuery.data, buildCallDataQuery.data],
+    [transaction, simulationQuery.data, buildCallDataQuery.data]
   )
 }

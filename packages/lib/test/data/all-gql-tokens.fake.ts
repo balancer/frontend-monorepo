@@ -1,4 +1,4 @@
-import { GqlToken, GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlToken, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export const fakeTokenSymbols = [
   'ETH',

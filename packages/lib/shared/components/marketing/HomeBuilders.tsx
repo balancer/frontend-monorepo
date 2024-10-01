@@ -1,10 +1,8 @@
 import { Card, Grid, Heading, Text, Flex, Box } from '@chakra-ui/react'
-import Section from '../../../shared/components/layout/Section'
-import FadeInOnView from '../../../shared/components/containers/FadeInOnView'
-
-import { ParallaxImage } from '../../../shared/components/marketing/ParallaxImage'
-
-import { Picture } from '../../../shared/components/other/Picture'
+import Section from '@repo/lib/shared/components/layout/Section'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { ParallaxImage } from '@repo/lib/shared/components/marketing/ParallaxImage'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function HomeBuilders() {
   return (

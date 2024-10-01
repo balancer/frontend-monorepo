@@ -1,4 +1,4 @@
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isWrappedNativeAsset, swapNativeWithWrapped, swapWrappedWithNative } from './token.helpers'
 import { HumanTokenAmountWithAddress } from './token.types'
 import { ethAddress, wETHAddress } from '../../debug-helpers'

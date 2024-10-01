@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { getNetworkConfig } from '../../../config/app.config'
-import { GqlChain, GqlToken } from '../../../shared/services/api/generated/graphql'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { HStack, Tag, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTokens } from '../TokensProvider'
 import { useMemo } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { nativeAssetFilter } from '../token.helpers'
 import { Address } from 'viem'
-import { isSameAddress } from '../../../shared/utils/addresses'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type Props = {
   chain: GqlChain

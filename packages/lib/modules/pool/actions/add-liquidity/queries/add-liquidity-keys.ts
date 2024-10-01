@@ -1,4 +1,4 @@
-import { GqlPoolType } from '../../../../../shared/services/api/generated/graphql'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'
 import { requiresProportionalInput } from '../../LiquidityActionHelpers'
 import { AddLiquidityHandler } from '../handlers/AddLiquidity.handler'
@@ -27,13 +27,13 @@ function liquidityParams({
   humanAmountsIn,
 }: AddLiquidityParams) {
   return `${getHandlerClassName(
-    handler,
+    handler
   )}:${userAddress}:${poolId}:${slippage}:${stringifyHumanAmountsIn(poolType, humanAmountsIn)}`
 }
 
 export function stringifyHumanAmountsIn(
   poolType: GqlPoolType,
-  humanAmountsIn: HumanTokenAmountWithAddress[],
+  humanAmountsIn: HumanTokenAmountWithAddress[]
 ): string {
   if (humanAmountsIn.length === 0) return ''
   if (requiresProportionalInput(poolType)) {

@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { getChainId, getNativeAssetAddress } from '../../../config/app.config'
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
-import { isSameAddress } from '../../../shared/utils/addresses'
-import { sentryMetaForWagmiSimulation } from '../../../shared/utils/query-errors'
+import { getChainId, getNativeAssetAddress } from '@repo/lib/config/app.config'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useMemo } from 'react'
 import { Address } from 'viem'
 import { ManagedErc20TransactionButton } from '../../transactions/transaction-steps/TransactionButton'
@@ -39,12 +39,12 @@ export function useTokenApprovalSteps({
 
   const _approvalAmounts = useMemo(
     () => approvalAmounts.filter(amount => !isSameAddress(amount.address, nativeAssetAddress)),
-    [approvalAmounts],
+    [approvalAmounts]
   )
 
   const approvalTokenAddresses = useMemo(
     () => _approvalAmounts.map(amount => amount.address),
-    [_approvalAmounts],
+    [_approvalAmounts]
   )
 
   const tokenAllowances = useTokenAllowances({
@@ -84,7 +84,7 @@ export function useTokenApprovalSteps({
         enabled: !!spenderAddress && !tokenAllowances.isAllowancesLoading,
         simulationMeta: sentryMetaForWagmiSimulation(
           'Error in wagmi tx simulation: Approving token',
-          tokenAmountToApprove,
+          tokenAmountToApprove
         ),
       }
 

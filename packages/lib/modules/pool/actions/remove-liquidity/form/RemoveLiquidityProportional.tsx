@@ -5,7 +5,7 @@ import { Card, Text, VStack, useDisclosure } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
-import { GqlToken, GqlPoolType } from '../../../../../shared/services/api/generated/graphql'
+import { GqlToken, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { NativeAssetSelectModal } from '../../../../tokens/NativeAssetSelectModal'
 import { isNativeOrWrappedNative, isNativeAsset } from '../../../../tokens/token.helpers'
 import TokenRow from '../../../../tokens/TokenRow/TokenRow'
@@ -18,7 +18,7 @@ export function RemoveLiquidityProportional({ tokens, poolType }: Props) {
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
 
   const nativeAssets = validTokens.filter(token =>
-    isNativeOrWrappedNative(token.address as Address, token.chain),
+    isNativeOrWrappedNative(token.address as Address, token.chain)
   )
 
   function handleTokenSelect(token: GqlToken) {
@@ -51,7 +51,7 @@ export function RemoveLiquidityProportional({ tokens, poolType }: Props) {
                   }
                   isLoading={isLoading}
                 />
-              ),
+              )
           )}
         </VStack>
       </Card>

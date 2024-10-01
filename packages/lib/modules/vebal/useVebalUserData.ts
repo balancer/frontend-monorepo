@@ -1,4 +1,4 @@
-import { GetVeBalUserDocument, GqlChain } from '../../shared/services/api/generated/graphql'
+import { GetVeBalUserDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
 

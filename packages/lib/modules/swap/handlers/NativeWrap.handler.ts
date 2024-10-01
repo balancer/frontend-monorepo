@@ -10,7 +10,7 @@ import {
 import { getWrapType } from '../wrap.helpers'
 import { encodeFunctionData } from 'viem'
 import { Hex } from 'viem'
-import { getChainId, getNetworkConfig } from '../../../config/app.config'
+import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 
 export class NativeWrapHandler implements SwapHandler {
   name = 'NativeWrapHandler'

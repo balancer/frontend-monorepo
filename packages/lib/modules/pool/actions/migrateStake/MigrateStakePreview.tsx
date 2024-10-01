@@ -3,7 +3,7 @@ import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useMigrateStake as useMigrateStake } from './MigrateStakeProvider'
 import { useUnstake } from '../unstake/UnstakeProvider'
-import StakeAprTooltip from '../../../../shared/components/tooltips/apr-tooltip/StakeAprTooltip'
+import StakeAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/StakeAprTooltip'
 import TokenRow from '../../../tokens/TokenRow/TokenRow'
 import { TokenRowGroup } from '../../../tokens/TokenRow/TokenRowGroup'
 

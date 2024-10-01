@@ -10,8 +10,8 @@ import { useRouter } from 'next/navigation'
 import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
 import { MerklAlert } from '../../merkl/MerklAlert'
 import { motion, easeOut } from 'framer-motion'
-import FadeInOnView from '../../../../shared/components/containers/FadeInOnView'
-import { GqlChain } from '../../../../shared/services/api/generated/graphql'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
 
 export function ClaimNetworkPools() {
@@ -80,7 +80,7 @@ export function ClaimNetworkPools() {
                         onClick={() => router.push(`/portfolio/${chainToSlugMap[pools[0].chain]}`)}
                       />
                     </motion.div>
-                  ),
+                  )
               )}
 
               {hasProtocolRewards && (

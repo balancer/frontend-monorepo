@@ -1,7 +1,7 @@
-import { getNetworkConfig } from '../../config/app.config'
-import { SupportedChainId } from '../../config/config.types'
-import { balancerV2VaultAbi } from '../../modules/web3/contracts/abi/generated'
-import { useUserAccount } from '../../modules/web3/UserAccountProvider'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { SupportedChainId } from '@repo/lib/config/config.types'
+import { balancerV2VaultAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from 'wagmi'
 import { useChainSwitch } from '../web3/useChainSwitch'
 

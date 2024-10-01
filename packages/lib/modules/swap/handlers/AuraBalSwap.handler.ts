@@ -16,10 +16,10 @@ import {
   SimulateSwapInputs,
 } from '../swap.types'
 import { getRpcUrl } from '../../web3/transports'
-import { getChainId, getWrappedNativeAssetAddress } from '../../../config/app.config'
-import { GqlToken, GqlSorSwapType } from '../../../shared/services/api/generated/graphql'
+import { getChainId, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
+import { GqlToken, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isNativeAsset } from '../../tokens/token.helpers'
-import { bn } from '../../../shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export class AuraBalSwapHandler implements SwapHandler {
   name = 'AuraBalSwapHandler'
@@ -38,10 +38,10 @@ export class AuraBalSwapHandler implements SwapHandler {
       : variables.tokenOut
 
     const _tokenIn = this.tokens.find(token =>
-      isSameAddress(token.address as Address, tokenInAddress),
+      isSameAddress(token.address as Address, tokenInAddress)
     )
     const _tokenOut = this.tokens.find(token =>
-      isSameAddress(token.address as Address, tokenOutAddress),
+      isSameAddress(token.address as Address, tokenOutAddress)
     )
 
     if (!_tokenIn || !_tokenOut) {
@@ -53,7 +53,7 @@ export class AuraBalSwapHandler implements SwapHandler {
     const swapAmountToken = swapType === GqlSorSwapType.ExactIn ? tokenIn : tokenOut
     const swapAmount = TokenAmount.fromHumanAmount(
       swapAmountToken,
-      variables.swapAmount as HumanAmount,
+      variables.swapAmount as HumanAmount
     )
     const kind = this.swapTypeToKind(swapType)
 
@@ -79,7 +79,7 @@ export class AuraBalSwapHandler implements SwapHandler {
     // Format return amount to human readable
     const returnAmount = formatUnits(
       queryOutput.expectedAmountOut.amount,
-      queryOutput.expectedAmountOut.token.decimals,
+      queryOutput.expectedAmountOut.token.decimals
     )
 
     return {

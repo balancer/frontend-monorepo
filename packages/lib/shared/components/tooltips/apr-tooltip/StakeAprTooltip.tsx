@@ -3,10 +3,10 @@ import BaseAprTooltip from './BaseAprTooltip'
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { SparklesIcon } from './MainAprTooltip'
-import { calcPotentialYieldFor } from '../../../../modules/pool/pool.utils'
+import { calcPotentialYieldFor } from '@repo/lib/modules/pool/pool.utils'
 import { useCurrency } from '../../../hooks/useCurrency'
 import { bn } from '../../../utils/numbers'
-import { Pool } from '../../../../modules/pool/PoolProvider'
+import { Pool } from '@repo/lib/modules/pool/PoolProvider'
 
 interface Props {
   totalUsdValue: string
@@ -20,12 +20,12 @@ function StakeAprTooltip({ pool, totalUsdValue }: Props) {
 
   const numberFormatter = useCallback(
     (value: string) => bn(value).times(totalUsdValue).dividedBy(52),
-    [totalUsdValue],
+    [totalUsdValue]
   )
 
   const displayValueFormatter = useCallback(
     (value: BigNumber) => toCurrency(value.toString(), { abbreviated: false }),
-    [toCurrency],
+    [toCurrency]
   )
 
   return (

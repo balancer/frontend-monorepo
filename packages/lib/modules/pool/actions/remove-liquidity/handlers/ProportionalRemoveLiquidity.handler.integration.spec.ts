@@ -2,7 +2,7 @@ import { Pool } from '../../../PoolProvider'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 import { ProportionalRemoveLiquidityHandler } from './ProportionalRemoveLiquidity.handler'
-import networkConfig from '../../../../../config/networks/arbitrum'
+import networkConfig from '@repo/lib/config/networks/arbitrum'
 import { balAddress, wETHAddress } from '../../../../../debug-helpers'
 import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
 import {
@@ -17,7 +17,7 @@ const poolMock = aBalWethPoolElementMock() // 80BAL-20WETH
 function selectProportionalHandler(pool: Pool): ProportionalRemoveLiquidityHandler {
   return selectRemoveLiquidityHandler(
     pool,
-    RemoveLiquidityType.Proportional,
+    RemoveLiquidityType.Proportional
   ) as ProportionalRemoveLiquidityHandler
 }
 

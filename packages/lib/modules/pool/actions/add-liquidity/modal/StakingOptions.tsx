@@ -5,13 +5,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getAuraPoolLink, getPoolActionPath, getTotalAprLabel } from '../../../pool.utils'
 import { usePool } from '../../../PoolProvider'
-import StarsIcon from '../../../../../shared/components/icons/StarsIcon'
+import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
 import {
   PartnerRedirectModal,
   RedirectPartner,
-} from '../../../../../shared/components/modals/PartnerRedirectModal'
-import { fNum } from '../../../../../shared/utils/numbers'
-import { getChainId } from '../../../../../config/app.config'
+} from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import { getChainId } from '@repo/lib/config/app.config'
 
 export function StakingOptions() {
   const { chain, pool } = usePool()

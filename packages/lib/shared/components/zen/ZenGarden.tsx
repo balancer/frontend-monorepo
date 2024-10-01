@@ -1,6 +1,6 @@
 import { Box, BoxProps, useColorModeValue } from '@chakra-ui/react'
 import { GqlPoolType } from '../../services/api/generated/graphql'
-import { isClp, isStable, isWeighted, isCowAmmPool } from '../../../modules/pool/pool.helpers'
+import { isClp, isStable, isWeighted, isCowAmmPool } from '@repo/lib/modules/pool/pool.helpers'
 import { CowSandPattern } from '../imgs/CowSandPattern'
 
 type ZenGardenVariant = 'diamond' | 'circle' | 'square' | 'pill'
@@ -24,13 +24,13 @@ const commonProps = (subdued = false) =>
     borderWidth: 1,
     transformOrigin: '50% 0',
     borderColor: subdued ? 'border.subduedZen' : 'border.zen',
-  }) as BoxProps
+  } as BoxProps)
 
 function getZenGardenProps(
   variant: ZenGardenVariant,
   widthPx: string,
   heightPx: string,
-  subdued = false,
+  subdued = false
 ) {
   switch (variant) {
     case 'circle':

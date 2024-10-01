@@ -1,12 +1,12 @@
 import { Address } from 'viem'
 import { OSwapAction, SwapAction } from './swap.types'
-import { GqlChain, GqlSorSwapType } from '../../shared/services/api/generated/graphql'
+import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   getNativeAssetAddress,
   getNetworkConfig,
   getWrappedNativeAssetAddress,
-} from '../../config/app.config'
-import { isSameAddress } from '../../shared/utils/addresses'
+} from '@repo/lib/config/app.config'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isMainnet } from '../chains/chain.utils'
 
 export function swapActionPastTense(action: SwapAction): string {
@@ -47,7 +47,7 @@ export function isAuraBalSwap(
   tokenIn: Address,
   tokenOut: Address,
   chain: GqlChain,
-  swapType: GqlSorSwapType,
+  swapType: GqlSorSwapType
 ) {
   const auraBAL = getAuraBalAddress(chain)
   if (!auraBAL) return false
@@ -60,7 +60,7 @@ export function isAuraBalSwap(
 
   const tokenInOrOutIsAuraBal = isSameAddress(tokenIn, auraBAL) || isSameAddress(tokenOut, auraBAL)
   const tokenInOrOutIsRelevantToken = relevantTokens.some(
-    token => isSameAddress(tokenIn, token) || isSameAddress(tokenOut, token),
+    token => isSameAddress(tokenIn, token) || isSameAddress(tokenOut, token)
   )
   const isExactInSwap = swapType === GqlSorSwapType.ExactIn
 

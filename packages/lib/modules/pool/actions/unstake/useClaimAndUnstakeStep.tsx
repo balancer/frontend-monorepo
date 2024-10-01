@@ -5,8 +5,8 @@ import { Pool } from '../../PoolProvider'
 import { useBuildUnstakeCallData } from './useBuildUnstakeCallData'
 import { useCallback, useMemo } from 'react'
 import { HumanAmount } from '@balancer/sdk'
-import { getNetworkConfig } from '../../../../config/app.config'
-import { sentryMetaForWagmiSimulation } from '../../../../shared/utils/query-errors'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useBalTokenRewards } from '../../../portfolio/PortfolioClaim/useBalRewards'
 import { useClaimableBalances } from '../../../portfolio/PortfolioClaim/useClaimableBalances'
 import { useHasApprovedRelayer } from '../../../relayer/useHasApprovedRelayer'
@@ -74,7 +74,7 @@ export function useClaimAndUnstakeStep({
       poolId: pool.id,
       chainId,
       unstakeArgs: data,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -105,7 +105,7 @@ export function useClaimAndUnstakeStep({
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={claimAndUnstakeStepId} {...props} />,
     }),
-    [transaction, data, props],
+    [transaction, data, props]
   )
 
   return {

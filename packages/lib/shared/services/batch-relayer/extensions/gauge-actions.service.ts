@@ -1,5 +1,5 @@
 import { encodeFunctionData, Hex } from 'viem'
-import { balancerV2BatchRelayerLibraryAbi } from '../../../../modules/web3/contracts/abi/generated'
+import { balancerV2BatchRelayerLibraryAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import {
   EncodeGaugeClaimRewardsInput,
   EncodeGaugeDepositInput,

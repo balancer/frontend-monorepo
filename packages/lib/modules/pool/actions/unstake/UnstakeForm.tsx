@@ -6,7 +6,7 @@ import { useUnstake } from './UnstakeProvider'
 import { UnstakePreview } from './UnstakePreview'
 import { UnstakeModal } from './UnstakeModal'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { SafeAppAlert } from '../../../../shared/components/alerts/SafeAppAlert'
+import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 
 export function UnstakeForm() {
   const nextBtn = useRef(null)

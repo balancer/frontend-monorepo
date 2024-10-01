@@ -5,12 +5,12 @@
 import { useAccount, useDisconnect } from 'wagmi'
 import { emptyAddress } from './contracts/wagmi-helpers'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
-import { useMandatoryContext } from '../../shared/utils/contexts'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { Address, isAddress } from 'viem'
 import { setTag, setUser } from '@sentry/nextjs'
-import { config, isProd } from '../../config/app.config'
-import { captureError, ensureError } from '../../shared/utils/errors'
-import { useIsMounted } from '../../shared/hooks/useIsMounted'
+import { config, isProd } from '@repo/lib/config/app.config'
+import { captureError, ensureError } from '@repo/lib/shared/utils/errors'
+import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useSafeAppConnectionGuard } from './useSafeAppConnectionGuard'
 
 async function isAuthorizedAddress(address: Address): Promise<boolean> {

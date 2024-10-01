@@ -4,7 +4,7 @@ import { ContractFunctionParameters } from 'viem'
 import { multicall } from 'wagmi/actions'
 import { useCallback } from 'react'
 import { useConfig } from 'wagmi'
-import { SupportedChainId } from '../../../config/config.types'
+import { SupportedChainId } from '@repo/lib/config/config.types'
 
 export type ChainContractConfig = ContractFunctionParameters & {
   chainId: SupportedChainId
@@ -56,7 +56,7 @@ export function useMulticall(multicallRequests: ChainContractConfig[], options: 
       multicallResults.map((result, i) => {
         return { ...result, chainId: suppliedChains[i] }
       }),
-      'chainId',
+      'chainId'
     ),
     isLoading: multicallResults.some(result => result.isLoading),
     refetchAll,

@@ -2,7 +2,7 @@ import { waitFor } from '@testing-library/react'
 import { Pool } from '../PoolProvider'
 import { getPoolMock } from '../__mocks__/getPoolMock'
 import { usePoolEnrichWithOnChainData } from './usePoolEnrichWithOnChainData'
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '../../../test/anvil/anvil-setup'
 import { testHook } from '../../../test/utils/custom-renderers'
 

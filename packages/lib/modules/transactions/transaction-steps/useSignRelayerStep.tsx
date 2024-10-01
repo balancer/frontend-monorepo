@@ -8,8 +8,8 @@ import { TransactionStep } from './lib'
 import { SignRelayerState } from '../../relayer/RelayerSignatureProvider'
 import { useMemo } from 'react'
 import { useChainSwitch } from '../../web3/useChainSwitch'
-import { getChainId } from '../../../config/app.config'
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
+import { getChainId } from '@repo/lib/config/app.config'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export const signRelayerStepTitle = 'Sign relayer'
 
@@ -62,6 +62,6 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
       renderAction: () => <SignRelayerButton />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signRelayerState, isLoading, isConnected],
+    [signRelayerState, isLoading, isConnected]
   )
 }

@@ -1,4 +1,4 @@
-import { GetPoolQuery, GqlChain } from '../../shared/services/api/generated/graphql'
+import { GetPoolQuery, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { waitFor } from '@testing-library/react'
 import { BaseVariant } from './pool.types'
 import { _usePool } from './PoolProvider'

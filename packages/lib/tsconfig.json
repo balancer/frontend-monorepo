@@ -2,7 +2,11 @@
   "extends": "@repo/typescript-config/react-library.json",
   "compilerOptions": {
     "module": "esnext",
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "baseUrl": ".",
+    "paths": {
+      "@repo/lib/*": ["*"]
+    }
   },
   "include": ["**/*.ts", "**/*.tsx", "global.d.ts"],
   "exclude": ["node_modules"]

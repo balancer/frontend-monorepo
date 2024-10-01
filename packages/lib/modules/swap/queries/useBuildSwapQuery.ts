@@ -1,6 +1,6 @@
 import { useUserSettings } from '../../user/settings/UserSettingsProvider'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { onlyExplicitRefetch } from '../../../shared/utils/queries'
+import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import { useQuery } from '@tanstack/react-query'
 import { ensureLastQueryResponse } from '../../pool/actions/LiquidityActionHelpers'
 import { SwapHandler } from '../handlers/Swap.handler'
@@ -8,8 +8,8 @@ import { SimulateSwapResponse, SwapState } from '../swap.types'
 import { swapQueryKeys } from './swapQueryKeys'
 import { SwapSimulationQueryResult } from './useSimulateSwapQuery'
 import { useRelayerSignature } from '../../relayer/RelayerSignatureProvider'
-import { SwapMetaParams, sentryMetaForSwapHandler } from '../../../shared/utils/query-errors'
-import { getChainId } from '../../../config/app.config'
+import { SwapMetaParams, sentryMetaForSwapHandler } from '@repo/lib/shared/utils/query-errors'
+import { getChainId } from '@repo/lib/config/app.config'
 import { useBlockNumber } from 'wagmi'
 
 export type BuildSwapQueryResponse = ReturnType<typeof useBuildSwapQuery>

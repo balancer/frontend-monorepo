@@ -1,10 +1,10 @@
 import { Button, Card, Flex, HStack, Heading, IconButton, Stack } from '@chakra-ui/react'
 import { chainToSlugMap } from '../../../pool/pool.utils'
 import { ChevronRight } from 'react-feather'
-import { NetworkIcon } from '../../../../shared/components/icons/NetworkIcon'
-import { useBreakpoints } from '../../../../shared/hooks/useBreakpoints'
-import { useCurrency } from '../../../../shared/hooks/useCurrency'
-import { GqlChain } from '../../../../shared/services/api/generated/graphql'
+import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 type Props = {
   chain: GqlChain

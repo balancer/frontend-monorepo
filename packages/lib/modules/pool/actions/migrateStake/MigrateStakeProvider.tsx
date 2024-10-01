@@ -5,10 +5,10 @@ import { createContext, PropsWithChildren } from 'react'
 import { usePool } from '../../PoolProvider'
 import { useUnstake } from '../unstake/UnstakeProvider'
 import { useMigrateStakeSteps } from './useMigrateStakeSteps'
-import { LABELS } from '../../../../shared/labels'
-import { useMandatoryContext } from '../../../../shared/utils/contexts'
-import { isDisabledWithReason } from '../../../../shared/utils/functions/isDisabledWithReason'
-import { isZero } from '../../../../shared/utils/numbers'
+import { LABELS } from '@repo/lib/shared/labels'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
+import { isZero } from '@repo/lib/shared/utils/numbers'
 import { useTransactionSteps } from '../../../transactions/transaction-steps/useTransactionSteps'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
 
@@ -24,7 +24,7 @@ export function _useMigrateStake() {
   const { steps, isLoading, isClaimable } = useMigrateStakeSteps(
     pool,
     migratedAmount,
-    refetchPoolBalances,
+    refetchPoolBalances
   )
   const transactionSteps = useTransactionSteps(steps, isLoading)
 
@@ -32,7 +32,7 @@ export function _useMigrateStake() {
 
   const { isDisabled, disabledReason } = isDisabledWithReason(
     [!isConnected, LABELS.walletNotConnected],
-    [isZero(migratedAmount), "There's no staked amount to be migrated"],
+    [isZero(migratedAmount), "There's no staked amount to be migrated"]
   )
 
   return {

@@ -1,6 +1,6 @@
-import { getChainId } from '../../../../config/app.config'
-import { useTokens } from '../../../../modules/tokens/TokensProvider'
-import { GqlChain } from '../../../../shared/services/api/generated/graphql'
+import { getChainId } from '@repo/lib/config/app.config'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, Hex } from 'viem'
 import { useTransaction, useWaitForTransactionReceipt } from 'wagmi'
 import {

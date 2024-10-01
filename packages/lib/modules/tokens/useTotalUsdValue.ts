@@ -1,8 +1,8 @@
-import { useTokens } from '../../modules/tokens/TokensProvider'
-import { isSameAddress } from '../../shared/utils/addresses'
-import { safeSum } from '../../shared/utils/numbers'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { safeSum } from '@repo/lib/shared/utils/numbers'
 import { useCallback } from 'react'
-import { GqlToken } from '../../shared/services/api/generated/graphql'
+import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { HumanTokenAmountWithAddress } from './token.types'
 
 export function useTotalUsdValue(tokens: GqlToken[]) {
@@ -16,7 +16,7 @@ export function useTotalUsdValue(tokens: GqlToken[]) {
 
         return usdValueForToken(token, amountIn.humanAmount)
       }),
-    [usdValueForToken, tokens],
+    [usdValueForToken, tokens]
   )
 
   function usdValueFor(humanAmountsIn: HumanTokenAmountWithAddress[]) {

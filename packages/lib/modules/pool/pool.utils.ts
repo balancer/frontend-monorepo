@@ -7,7 +7,7 @@ import {
   GqlPoolAprItem,
   GqlPoolTokenDisplay,
   GqlPoolAprItemType,
-} from '../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { invert } from 'lodash'
 import {
   BaseVariant,
@@ -17,14 +17,14 @@ import {
   PoolListItem,
   PoolVariant,
 } from './pool.types'
-import { Numberish, bn, fNum } from '../../shared/utils/numbers'
+import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { TokenAmountHumanReadable } from '../tokens/token.types'
 import { formatUnits, parseUnits } from 'viem'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { Pool } from './PoolProvider'
 import BigNumber from 'bignumber.js'
-import { TOTAL_APR_TYPES } from '../../shared/hooks/useAprTooltip'
+import { TOTAL_APR_TYPES } from '@repo/lib/shared/hooks/useAprTooltip'
 
 // URL slug for each chain
 export enum ChainSlug {
@@ -107,7 +107,7 @@ export function getPoolActionPath({
  */
 export function getTotalApr(
   aprItems: GqlPoolAprItem[],
-  vebalBoost?: string,
+  vebalBoost?: string
 ): [BigNumber, BigNumber] {
   let minTotal = bn(0)
   let maxTotal = bn(0)
@@ -182,7 +182,7 @@ export function getPoolTypeLabel(type: GqlPoolType): string {
 export const poolClickHandler = (
   event: React.MouseEvent<HTMLElement>,
   pool: Pool | PoolListItem,
-  router: AppRouterInstance,
+  router: AppRouterInstance
 ) => {
   const poolPath = getPoolPath(pool)
 
@@ -198,7 +198,7 @@ export const poolClickHandler = (
 export const poolMouseEnterHandler = (
   event: React.MouseEvent<HTMLElement>,
   pool: Pool | PoolListItem,
-  router: AppRouterInstance,
+  router: AppRouterInstance
 ) => {
   const poolPath = getPoolPath(pool)
   router.prefetch(poolPath)
@@ -214,7 +214,7 @@ export function isComposableStablePool(pool: GetPoolQuery['pool'] | GqlPoolCompo
 export function getProportionalExitAmountsForBptIn(
   bptInHumanReadable: string,
   poolTokens: GqlPoolTokenDetail[],
-  poolTotalShares: string,
+  poolTotalShares: string
 ): TokenAmountHumanReadable[] {
   const bptInAmountScaled = parseUnits(bptInHumanReadable, 18)
   return getProportionalExitAmountsFromScaledBptIn(bptInAmountScaled, poolTokens, poolTotalShares)
@@ -223,7 +223,7 @@ export function getProportionalExitAmountsForBptIn(
 export function getProportionalExitAmountsFromScaledBptIn(
   bptIn: bigint,
   poolTokens: { balance: string; decimals: number; address: string }[],
-  poolTotalShares: string,
+  poolTotalShares: string
 ): TokenAmountHumanReadable[] {
   const bptTotalSupply = parseUnits(poolTotalShares, 18)
 
@@ -281,7 +281,7 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
 export function getPoolDisplayTokens(pool: Pool) {
   return pool.poolTokens.filter(token =>
     pool.displayTokens.find(
-      (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address,
-    ),
+      (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address
+    )
   ) as GqlPoolTokenDetail[]
 }

@@ -3,7 +3,7 @@ import { wETHAddress, wjAuraAddress, balAddress } from '../../../../../debug-hel
 import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
 import { aWjAuraWethPoolElementMock } from '../../../../../test/msw/builders/gqlPoolElement.builders'
 import { HumanTokenAmountWithAddress } from '../../../../tokens/token.types'
-import networkConfig from '../../../../../config/networks/arbitrum'
+import networkConfig from '@repo/lib/config/networks/arbitrum'
 import { UnbalancedAddLiquidityHandler } from './UnbalancedAddLiquidity.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 

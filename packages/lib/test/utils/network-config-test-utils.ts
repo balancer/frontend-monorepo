@@ -1,4 +1,4 @@
-import networkConfig from '../../config/networks/mainnet'
+import networkConfig from '@repo/lib/config/networks/mainnet'
 
 export function getNetworkTestUtils() {
   return { getEthAddress: getETHAddress }

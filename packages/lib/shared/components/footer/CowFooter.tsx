@@ -1,9 +1,9 @@
 'use client'
 
-import { getVariantConfig } from '../../../modules/pool/pool.hooks'
-import { PartnerVariant } from '../../../modules/pool/pool.types'
-import FadeInOnView from '../../../shared/components/containers/FadeInOnView'
-import { Picture } from '../../../shared/components/other/Picture'
+import { getVariantConfig } from '@repo/lib/modules/pool/pool.hooks'
+import { PartnerVariant } from '@repo/lib/modules/pool/pool.types'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { Box, Button, Center, Text, VStack } from '@chakra-ui/react'
 import Link from 'next/link'
 

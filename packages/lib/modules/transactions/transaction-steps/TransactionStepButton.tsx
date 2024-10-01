@@ -5,11 +5,11 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { Button, VStack } from '@chakra-ui/react'
 import { ManagedResult, TransactionLabels, TransactionState, getTransactionState } from './lib'
 import { useChainSwitch } from '../../web3/useChainSwitch'
-import { GenericError } from '../../../shared/components/errors/GenericError'
-import { getGqlChain } from '../../../config/app.config'
-import { TransactionTimeoutError } from '../../../shared/components/errors/TransactionTimeoutError'
+import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
+import { getGqlChain } from '@repo/lib/config/app.config'
+import { TransactionTimeoutError } from '@repo/lib/shared/components/errors/TransactionTimeoutError'
 import { useState } from 'react'
-import { ensureError } from '../../../shared/utils/errors'
+import { ensureError } from '@repo/lib/shared/utils/errors'
 
 interface Props {
   step: { labels: TransactionLabels } & ManagedResult

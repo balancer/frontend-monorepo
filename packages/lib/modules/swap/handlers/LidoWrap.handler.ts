@@ -10,10 +10,10 @@ import {
 import { getWrapConfig, getWrapType } from '../wrap.helpers'
 import { Address, encodeFunctionData, formatUnits } from 'viem'
 import { Hex } from 'viem'
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
-import { getViemClient } from '../../../shared/services/viem/viem.client'
-import { getChainId } from '../../../config/app.config'
-import { bn } from '../../../shared/utils/numbers'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { getViemClient } from '@repo/lib/shared/services/viem/viem.client'
+import { getChainId } from '@repo/lib/config/app.config'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 const lidoRateProviderMap: Partial<Record<GqlChain, Address>> = {
   [GqlChain.Mainnet]: '0x72d07d7dca67b8a406ad1ec34ce969c90bfee768',

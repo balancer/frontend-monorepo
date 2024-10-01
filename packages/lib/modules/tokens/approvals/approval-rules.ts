@@ -1,9 +1,9 @@
-import { SupportedChainId } from '../../../config/config.types'
-import { isNativeAsset } from '../../../shared/utils/addresses'
+import { SupportedChainId } from '@repo/lib/config/config.types'
+import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
-import { MAX_BIGINT } from '../../../shared/utils/numbers'
+import { MAX_BIGINT } from '@repo/lib/shared/utils/numbers'
 import { InputAmount } from '@balancer/sdk'
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { requiresDoubleApproval } from '../token.helpers'
 
 export type TokenAmountToApprove = {
@@ -46,7 +46,7 @@ export function getRequiredTokenApprovals({
   })
 
   tokenAmountsToApprove = tokenAmountsToApprove.filter(
-    ({ tokenAddress }) => !isNativeAsset(chainId, tokenAddress),
+    ({ tokenAddress }) => !isNativeAsset(chainId, tokenAddress)
   )
 
   /**
@@ -75,7 +75,7 @@ export function getRequiredTokenApprovals({
 function isDoubleApprovalRequired(
   chainId: GqlChain | SupportedChainId,
   tokenAddress: Address,
-  allowanceFor: (tokenAddress: Address) => bigint,
+  allowanceFor: (tokenAddress: Address) => bigint
 ): boolean {
   return !!(requiresDoubleApproval(chainId, tokenAddress) && allowanceFor(tokenAddress) > 0n)
 }

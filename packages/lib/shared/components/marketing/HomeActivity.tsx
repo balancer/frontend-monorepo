@@ -1,8 +1,8 @@
 import { Button, Center, Heading, Text, Flex, Box } from '@chakra-ui/react'
-import Section from '../../../shared/components/layout/Section'
-import FadeInOnView from '../../../shared/components/containers/FadeInOnView'
-import { EcosystemActivityChart } from '../../../shared/components/marketing/EcosystemActivityChart'
-import { ProtocolStatsSection } from '../../../modules/marketing/ProtocolStatsSection'
+import Section from '@repo/lib/shared/components/layout/Section'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { EcosystemActivityChart } from '@repo/lib/shared/components/marketing/EcosystemActivityChart'
+import { ProtocolStatsSection } from '@repo/lib/modules/marketing/ProtocolStatsSection'
 import NextLink from 'next/link'
 
 export function HomeActivity() {

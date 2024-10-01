@@ -1,4 +1,4 @@
-import { getChainId } from '../../../../config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { useApproveRelayerStep } from '../../../relayer/useApproveRelayerStep'
 import { useApproveMinterStep } from '../../../staking/gauge/useMinterApprovalStep'
 import { TransactionStep } from '../../../transactions/transaction-steps/lib'
@@ -15,7 +15,7 @@ export function useClaimAndUnstakeSteps(unstakeParams: UnstakeParams): {
   const { step: relayerApprovalStep, isLoading: isLoadingRelayerApprovalStep } =
     useApproveRelayerStep(chainId)
   const { step: minterApprovalStep, isLoading: isLoadingMinterApprovalStep } = useApproveMinterStep(
-    pool.chain,
+    pool.chain
   )
 
   const {

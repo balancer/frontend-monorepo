@@ -1,10 +1,10 @@
 import { VStack, HStack, Text } from '@chakra-ui/react'
 import { Address } from 'viem'
 import TokenRow from './TokenRow'
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { HumanAmount } from '@balancer/sdk'
 import { useSwap } from '../../swap/SwapProvider'
-import { slippageDiffLabel } from '../../../shared/utils/slippage'
+import { slippageDiffLabel } from '@repo/lib/shared/utils/slippage'
 
 export function ReceiptTokenOutRow({
   chain,

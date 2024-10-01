@@ -2,7 +2,7 @@
 import { Address } from 'viem'
 import { TransactionBundle } from './contract.types'
 import { polygon } from 'viem/chains'
-import { secs } from '../../../shared/utils/time'
+import { secs } from '@repo/lib/shared/utils/time'
 
 export function getHashFromTransaction(transactionBundle?: TransactionBundle): Address | undefined {
   if (!transactionBundle) return

@@ -1,7 +1,7 @@
 import { ChainId } from '@balancer/sdk'
 import { waitFor } from '@testing-library/react'
 import { useOnchainUserPoolBalances } from './useOnchainUserPoolBalances'
-import { GqlPoolElement } from '../../../shared/services/api/generated/graphql'
+import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '../../../test/anvil/anvil-setup'
 import { getSdkTestUtils } from '../../../test/integration/sdk-utils'
 import {

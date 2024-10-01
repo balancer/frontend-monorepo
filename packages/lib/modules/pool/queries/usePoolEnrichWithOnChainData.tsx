@@ -13,9 +13,9 @@ import {
 } from '../../web3/contracts/abi/generated'
 import { isComposableStablePool } from '../pool.utils'
 import { cowAmmPoolAbi } from '../../web3/contracts/abi/cowAmmAbi'
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
-import { bn, safeSum } from '../../../shared/utils/numbers'
-import { getChainId } from '../../../config/app.config'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { bn, safeSum } from '@repo/lib/shared/utils/numbers'
+import { getChainId } from '@repo/lib/config/app.config'
 
 export function usePoolEnrichWithOnChainData(pool: Pool) {
   const { priceFor } = useTokens()
@@ -162,7 +162,7 @@ function enrichPool({ isLoading, pool, priceFor, poolTokenBalances, totalSupply 
   const clone = cloneDeep(pool)
 
   const filteredTokens = clone.poolTokens.filter(token =>
-    pool.displayTokens.find(displayToken => token.address === displayToken.address),
+    pool.displayTokens.find(displayToken => token.address === displayToken.address)
   )
 
   clone.poolTokens.forEach((token, index) => {
@@ -176,8 +176,8 @@ function enrichPool({ isLoading, pool, priceFor, poolTokenBalances, totalSupply 
 
   clone.dynamicData.totalLiquidity = safeSum(
     filteredTokens.map(
-      token => (priceFor(token.address, pool.chain) || 0) * parseFloat(token.balance),
-    ),
+      token => (priceFor(token.address, pool.chain) || 0) * parseFloat(token.balance)
+    )
   )
 
   clone.dynamicData.totalShares = formatUnits(totalSupply || 0n, BPT_DECIMALS)

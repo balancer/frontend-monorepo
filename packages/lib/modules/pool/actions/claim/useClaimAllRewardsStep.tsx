@@ -1,13 +1,13 @@
-import { getChainId } from '../../../../config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { useMemo, useState } from 'react'
 import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
 import { useClaimCallDataQuery } from './useClaimCallDataQuery'
 import { ClaimablePool } from './ClaimProvider'
 import { Address } from 'viem'
-import networkConfigs from '../../../../config/networks'
-import { GqlChain, GqlPoolStakingType } from '../../../../shared/services/api/generated/graphql'
-import { sentryMetaForWagmiSimulation } from '../../../../shared/utils/query-errors'
+import networkConfigs from '@repo/lib/config/networks'
+import { GqlChain, GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { BalTokenRewardsResult } from '../../../portfolio/PortfolioClaim/useBalRewards'
 import { ClaimableBalancesResult } from '../../../portfolio/PortfolioClaim/useClaimableBalances'
 import { selectStakingService } from '../../../staking/selectStakingService'
@@ -73,7 +73,7 @@ export function useClaimAllRewardsStep({
       claimData,
       stakingType,
       allRewardGauges,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -106,7 +106,7 @@ export function useClaimAllRewardsStep({
       renderAction: () => <ManagedTransactionButton id={claimAllRewardsStepId} {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction, claimData, isLoading],
+    [transaction, claimData, isLoading]
   )
   return { step, isLoading }
 }

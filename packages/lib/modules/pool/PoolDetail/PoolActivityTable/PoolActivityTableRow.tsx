@@ -11,24 +11,24 @@ import {
   Badge,
   BadgeProps,
 } from '@chakra-ui/react'
-import { useCurrency } from '../../../../shared/hooks/useCurrency'
-import FadeInOnView from '../../../../shared/components/containers/FadeInOnView'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
-import { abbreviateAddress } from '../../../../shared/utils/addresses'
+import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useEnsAvatar, useEnsName } from 'wagmi'
-import { getChainId } from '../../../../config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { createAvatar } from '@dicebear/core'
 import { identicon } from '@dicebear/collection'
 import { ArrowUpRight } from 'react-feather'
 import {
   getBlockExplorerAddressUrl,
   getBlockExplorerTxUrl,
-} from '../../../../shared/hooks/useBlockExplorer'
+} from '@repo/lib/shared/hooks/useBlockExplorer'
 import { PoolActivityEl, PoolActivityTokens } from '../PoolActivity/poolActivity.types'
 import { TokenIcon } from '../../../tokens/TokenIcon'
-import { fNum } from '../../../../shared/utils/numbers'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 import React from 'react'
-import { GqlChain } from '../../../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePool } from '../../PoolProvider'
 
 interface Props extends GridProps {

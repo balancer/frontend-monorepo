@@ -1,12 +1,12 @@
 'use client'
 
-import { useMandatoryContext } from '../../../shared/utils/contexts'
-import { SupportedCurrency } from '../../../shared/utils/currencies'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { SupportedCurrency } from '@repo/lib/shared/utils/currencies'
 import { PropsWithChildren, createContext } from 'react'
-import { bn } from '../../../shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '../../local-storage/local-storage.constants'
-import { useIsMounted } from '../../../shared/hooks/useIsMounted'
+import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 
 export type YesNo = 'yes' | 'no'
 
@@ -36,24 +36,24 @@ export function _useUserSettings({
 
   const [_currency, setCurrency] = useLocalStorage<SupportedCurrency>(
     LS_KEYS.UserSettings.Currency,
-    initCurrency,
+    initCurrency
   )
   const currency = isMounted ? _currency : initCurrency
 
   const [_slippage, setSlippage] = useLocalStorage<string>(
     LS_KEYS.UserSettings.Slippage,
-    initSlippage,
+    initSlippage
   )
 
   const [_enableSignatures, setEnableSignatures] = useLocalStorage<YesNo>(
     LS_KEYS.UserSettings.EnableSignatures,
-    initEnableSignatures,
+    initEnableSignatures
   )
   const enableSignatures = isMounted ? _enableSignatures : initEnableSignatures
 
   const [_allowSounds, setAllowSounds] = useLocalStorage<YesNo>(
     LS_KEYS.UserSettings.AllowSounds,
-    initAllowSounds,
+    initAllowSounds
   )
   const allowSounds = isMounted ? _allowSounds : initAllowSounds
 
@@ -63,7 +63,7 @@ export function _useUserSettings({
 
   const [_acceptedPolicies, setAcceptedPolicies] = useLocalStorage<string[]>(
     LS_KEYS.UserSettings.AcceptedPolicies,
-    initAcceptedPolicies,
+    initAcceptedPolicies
   )
   const acceptedPolicies = isMounted ? _acceptedPolicies : initAcceptedPolicies
 

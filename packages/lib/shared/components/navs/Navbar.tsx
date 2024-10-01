@@ -3,20 +3,20 @@
 import NextLink from 'next/link'
 import DarkModeToggle from '../btns/DarkModeToggle'
 import { Box, HStack, BoxProps, Link, Button } from '@chakra-ui/react'
-import { ConnectWallet } from '../../../modules/web3/ConnectWallet'
+import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { BalancerLogo } from '../imgs/BalancerLogo'
 import { BalancerLogoType } from '../imgs/BalancerLogoType'
-import { UserSettings } from '../../../modules/user/settings/UserSettings'
+import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
 import RecentTransactions from '../other/RecentTransactions'
-import { isDev, isStaging } from '../../../config/app.config'
-import { staggeredFadeIn, fadeIn } from '../../../shared/utils/animations'
+import { isDev, isStaging } from '@repo/lib/config/app.config'
+import { staggeredFadeIn, fadeIn } from '@repo/lib/shared/utils/animations'
 import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'framer-motion'
-import { VeBalLink } from '../../../modules/vebal/VebalRedirectModal'
+import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
 import { MobileNav } from './MobileNav'
 import { useNav } from './useNav'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { useUserAccount } from '../../../modules/web3/UserAccountProvider'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 type Props = {
   leftSlot?: ReactNode
@@ -185,7 +185,7 @@ export function Navbar({ leftSlot, rightSlot, disableBlur, ...rest }: Props & Bo
   const scrollYBoundedProgressDelayed = useTransform(
     scrollYBoundedProgress,
     [0, 0.75, 1],
-    [0, 0, 1],
+    [0, 0, 1]
   )
 
   const blurEffect = useTransform(scrollYBoundedProgressDelayed, [0, 1], [10, 0])

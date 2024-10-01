@@ -2,8 +2,8 @@ import { VStack, Card, HStack, Text } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useStake } from './StakeProvider'
-import { WalletIcon } from '../../../../shared/components/icons/WalletIcon'
-import StakeAprTooltip from '../../../../shared/components/tooltips/apr-tooltip/StakeAprTooltip'
+import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
+import StakeAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/StakeAprTooltip'
 import TokenRow from '../../../tokens/TokenRow/TokenRow'
 
 export function StakePreview() {

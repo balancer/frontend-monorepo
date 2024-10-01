@@ -1,4 +1,4 @@
-import { useContractAddress } from '../../modules/web3/contracts/useContractAddress'
+import { useContractAddress } from '@repo/lib/modules/web3/contracts/useContractAddress'
 
 export type VaultVersion = 2 | 3
 

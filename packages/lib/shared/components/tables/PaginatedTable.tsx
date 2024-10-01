@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { Box, BoxProps, Center, Text, Spinner, VStack, Skeleton } from '@chakra-ui/react'
-import { Pagination } from '../../../shared/components/pagination/Pagination'
+import { Pagination } from '@repo/lib/shared/components/pagination/Pagination'
 
 interface Props<T> extends BoxProps {
   items: T[]

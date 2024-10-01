@@ -1,9 +1,9 @@
 import { useHasMinterApproval } from './useHasMinterApproval'
 import { useMemo } from 'react'
 import { ManagedTransactionButton } from '../../transactions/transaction-steps/TransactionButton'
-import { getNetworkConfig } from '../../../config/app.config'
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
-import { sentryMetaForWagmiSimulation } from '../../../shared/utils/query-errors'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { TransactionStep, TransactionLabels } from '../../transactions/transaction-steps/lib'
 import { ManagedTransactionInput } from '../../web3/contracts/useManagedTransaction'
 import { useUserAccount } from '../../web3/UserAccountProvider'
@@ -31,7 +31,7 @@ export function useApproveMinterStep(chain: GqlChain): {
     'Error in wagmi tx simulation (Minter approval transaction)',
     {
       minter: contracts.balancer.minter,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -55,7 +55,7 @@ export function useApproveMinterStep(chain: GqlChain): {
       onSuccess: () => refetch(),
     }),
     /* eslint-disable react-hooks/exhaustive-deps */
-    [hasMinterApproval, isConnected, isLoading],
+    [hasMinterApproval, isConnected, isLoading]
   )
 
   return {

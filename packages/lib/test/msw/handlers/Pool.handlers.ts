@@ -2,7 +2,7 @@ import { graphql } from 'msw'
 import { getQueryName, mockGQL } from '../utils'
 import { aGqlPoolElementMock } from '../builders/gqlPoolElement.builders'
 import { GQLResponse } from './msw-helpers'
-import { GetPoolQuery, GetPoolDocument } from '../../../shared/services/api/generated/graphql'
+import { GetPoolQuery, GetPoolDocument } from '@repo/lib/shared/services/api/generated/graphql'
 
 export const defaultPoolMock = aGqlPoolElementMock()
 export const defaultPoolResponseMock: GetPoolQuery = {

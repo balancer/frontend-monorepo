@@ -4,13 +4,13 @@ import { Card, Divider, HStack, Heading, Skeleton, Stack, Text, VStack } from '@
 import React from 'react'
 import { usePool } from '../../PoolProvider'
 import { Address } from 'viem'
-import { GqlChain, GqlPoolTokenDetail } from '../../../../shared/services/api/generated/graphql'
-import { useCurrency } from '../../../../shared/hooks/useCurrency'
-import { fNum } from '../../../../shared/utils/numbers'
-import { NoisyCard } from '../../../../shared/components/containers/NoisyCard'
-import { PoolZenGarden } from '../../../../shared/components/zen/ZenGarden'
+import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { PoolWeightChart } from '../PoolWeightCharts/PoolWeightChart'
-import { useBreakpoints } from '../../../../shared/hooks/useBreakpoints'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import TokenRow from '../../../tokens/TokenRow/TokenRow'
 import { useTokens } from '../../../tokens/TokensProvider'
 import { getPoolDisplayTokens } from '../../pool.utils'
@@ -57,7 +57,7 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
                 poolToken.address,
                 poolToken.balance,
                 totalLiquidity,
-                chain,
+                chain
               )}
               pool={pool}
               targetWeight={poolToken.weight || undefined}

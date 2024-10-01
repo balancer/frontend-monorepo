@@ -1,5 +1,5 @@
-import { GqlChain, GqlToken } from '../../../shared/services/api/generated/graphql'
-import { useCurrency } from '../../../shared/hooks/useCurrency'
+import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { VStack, HStack, Skeleton, Text } from '@chakra-ui/react'
 import TokenRow from './TokenRow'
 import { useTotalUsdValue } from '../useTotalUsdValue'

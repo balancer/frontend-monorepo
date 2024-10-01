@@ -6,7 +6,7 @@ import { PoolActionsNav } from './PoolActionsNav'
 import { usePool } from '../PoolProvider'
 import { usePoolRedirect } from '../pool.hooks'
 import { PoolName } from '../PoolName'
-import { Navbar } from '../../../shared/components/navs/Navbar'
+import { Navbar } from '@repo/lib/shared/components/navs/Navbar'
 
 type Props = PropsWithChildren
 

@@ -1,5 +1,5 @@
-import { getBlockExplorerName, useBlockExplorer } from '../../shared/hooks/useBlockExplorer'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { getBlockExplorerName, useBlockExplorer } from '@repo/lib/shared/hooks/useBlockExplorer'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   HStack,
   IconButton,
@@ -13,11 +13,11 @@ import {
 } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { CopyTokenAddressButton } from './CopyTokenAddressButton'
-import { abbreviateAddress } from '../../shared/utils/addresses'
-import { CoingeckoIcon } from '../../shared/components/icons/CoingeckoIcon'
+import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
+import { CoingeckoIcon } from '@repo/lib/shared/components/icons/CoingeckoIcon'
 import { AddTokenToWalletButton } from './AddTokenToWalletButton'
 import { ExternalLink } from 'react-feather'
-import { InfoIcon } from '../../shared/components/icons/InfoIcon'
+import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { useTokens } from './TokensProvider'
 
 type Props = {

@@ -1,4 +1,4 @@
-import { config } from '../../../config/app.config'
+import { config } from '@repo/lib/config/app.config'
 import { ApolloLink, HttpLink } from '@apollo/client'
 import {
   ApolloClient,

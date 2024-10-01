@@ -1,11 +1,11 @@
 'use client'
 import { Heading, Text, Box, SimpleGrid } from '@chakra-ui/react'
-import Section from '../../../shared/components/layout/Section'
-import FadeInOnView from '../../../shared/components/containers/FadeInOnView'
+import Section from '@repo/lib/shared/components/layout/Section'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
-import { ParallaxImage } from '../../../shared/components/marketing/ParallaxImage'
+import { ParallaxImage } from '@repo/lib/shared/components/marketing/ParallaxImage'
 
-import { Picture } from '../../../shared/components/other/Picture'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function HomeProtocols() {
   return (

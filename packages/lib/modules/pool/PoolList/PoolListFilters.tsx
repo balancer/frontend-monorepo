@@ -32,7 +32,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
-import { getProjectConfig } from '../../../config/getProjectConfig'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { usePoolListQueryState } from './usePoolListQueryState'
 import {
   PoolFilterType,
@@ -43,16 +43,16 @@ import {
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useEffect, useState } from 'react'
 import { Filter } from 'react-feather'
-import { useBreakpoints } from '../../../shared/hooks/useBreakpoints'
-import { useCurrency } from '../../../shared/hooks/useCurrency'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useDebouncedCallback } from 'use-debounce'
-import { defaultDebounceMs } from '../../../shared/utils/queries'
+import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
 import { motion, AnimatePresence } from 'framer-motion'
-import { staggeredFadeInUp } from '../../../shared/utils/animations'
-import { getChainShortName } from '../../../config/app.config'
+import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
+import { getChainShortName } from '@repo/lib/config/app.config'
 import { usePoolList } from './PoolListProvider'
-import { MultiSelect } from '../../../shared/components/inputs/MultiSelect'
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
+import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import Image from 'next/image'
 
 const SLIDER_MAX_VALUE = 10000000
@@ -64,7 +64,7 @@ export function useFilterTagsVisible() {
 
   useEffect(() => {
     setIsVisible(
-      networks.length > 0 || poolTypes.length > 0 || minTvl > 0 || poolCategories.length > 0,
+      networks.length > 0 || poolTypes.length > 0 || minTvl > 0 || poolCategories.length > 0
     )
   }, [networks, poolTypes, minTvl, poolCategories])
 

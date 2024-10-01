@@ -7,17 +7,17 @@ import {
   GqlChain,
   GqlPoolTokenDisplay,
   GqlToken,
-} from '../../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
-import { useCurrency } from '../../../shared/hooks/useCurrency'
-import { Numberish, fNum, isZero } from '../../../shared/utils/numbers'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { Numberish, fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool/PoolProvider'
 import { bptUsdValue } from '../../pool/pool.helpers'
 import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
-import { BullseyeIcon } from '../../../shared/components/icons/BullseyeIcon'
-import { isSameAddress } from '../../../shared/utils/addresses'
+import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type DataProps = {
   address: Address

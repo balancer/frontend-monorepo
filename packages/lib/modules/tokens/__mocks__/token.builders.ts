@@ -15,8 +15,8 @@ import {
   GqlPoolTokenExpanded,
   GqlTokenPrice,
   GqlChain,
-} from '../../../shared/services/api/generated/graphql'
-import { MAX_BIGINT } from '../../../shared/utils/numbers'
+} from '@repo/lib/shared/services/api/generated/graphql'
+import { MAX_BIGINT } from '@repo/lib/shared/utils/numbers'
 import {
   allFakeGqlTokens,
   fakeTokenBySymbol,

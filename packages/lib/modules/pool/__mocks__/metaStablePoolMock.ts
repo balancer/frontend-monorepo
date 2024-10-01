@@ -2,7 +2,7 @@ import {
   GqlPoolElement,
   GqlPoolType,
   GqlChain,
-} from '../../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 
 export const metaStablePoolMock: GqlPoolElement = {
   id: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080',

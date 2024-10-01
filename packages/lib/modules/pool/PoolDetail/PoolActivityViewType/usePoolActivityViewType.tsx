@@ -1,4 +1,4 @@
-import { useMandatoryContext } from '../../../../shared/utils/contexts'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren, useMemo, useState } from 'react'
 
 export enum PoolActivityView {

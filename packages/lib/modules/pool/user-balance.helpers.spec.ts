@@ -2,7 +2,7 @@ import {
   GqlPoolStakingType,
   GqlPoolUserBalance,
   GqlUserStakedBalance,
-} from '../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { aWjAuraWethPoolElementMock } from '../../test/msw/builders/gqlPoolElement.builders'
 import {
   calcNonOnChainFetchedStakedBalance,

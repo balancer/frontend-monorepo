@@ -1,6 +1,6 @@
 'use client'
 
-import { Picture } from '../../../shared/components/other/Picture'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'

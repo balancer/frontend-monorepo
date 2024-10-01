@@ -2,9 +2,9 @@ import { zipObject } from 'lodash'
 import { Address, ReadContractParameters, erc20Abi } from 'viem'
 import { useReadContracts } from 'wagmi'
 import { Erc20Abi } from './contracts/contract.types'
-import { SupportedChainId } from '../../config/config.types'
+import { SupportedChainId } from '@repo/lib/config/config.types'
 import { useCallback, useMemo } from 'react'
-import { onlyExplicitRefetch } from '../../shared/utils/queries'
+import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 
 export type TokenAllowances = Record<Address, bigint>
 
@@ -33,7 +33,7 @@ export function useTokenAllowances({
         abi: erc20Abi,
         functionName: 'allowance',
         args: [userAddress, spenderAddress],
-      }) satisfies AllowanceContracts,
+      } satisfies AllowanceContracts)
   )
 
   const { data, isLoading, isRefetching, refetch } = useReadContracts({
@@ -44,7 +44,7 @@ export function useTokenAllowances({
 
   const allowancesByTokenAddress = useMemo(
     () => (data ? zipObject(tokenAddresses, data) : {}),
-    [data, tokenAddresses],
+    [data, tokenAddresses]
   )
 
   const allowanceFor = useCallback(
@@ -52,7 +52,7 @@ export function useTokenAllowances({
       // We don't need isSameAddress cause we use the same tokensAddresses source
       return allowancesByTokenAddress[tokenAddress] ?? 0n
     },
-    [allowancesByTokenAddress],
+    [allowancesByTokenAddress]
   )
 
   return {

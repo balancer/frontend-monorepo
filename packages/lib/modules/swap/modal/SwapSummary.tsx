@@ -1,4 +1,4 @@
-import { useBreakpoints } from '../../../shared/hooks/useBreakpoints'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { Card, HStack, Text } from '@chakra-ui/react'
 import { SwapTokenRow } from '../../tokens/TokenRow/SwapTokenRow'
 import { MobileStepTracker } from '../../transactions/transaction-steps/step-tracker/MobileStepTracker'
@@ -7,11 +7,11 @@ import { SwapRate } from '../SwapRate'
 import { useSwap } from '../SwapProvider'
 import { SwapReceiptResult } from '../../transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { BalAlert } from '../../../shared/components/alerts/BalAlert'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { HumanAmount } from '@balancer/sdk'
-import { slippageDiffLabel } from '../../../shared/utils/slippage'
-import { AnimateHeightChange } from '../../../shared/components/modals/AnimatedModalBody'
-import { CardPopAnim } from '../../../shared/components/animations/CardPopAnim'
+import { slippageDiffLabel } from '@repo/lib/shared/utils/slippage'
+import { AnimateHeightChange } from '@repo/lib/shared/components/modals/AnimatedModalBody'
+import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 
 export function SwapSummary({
   isLoading: isLoadingReceipt,

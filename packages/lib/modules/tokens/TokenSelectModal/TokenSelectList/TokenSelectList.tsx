@@ -2,19 +2,19 @@
 
 import { Box, BoxProps, Button, HStack, Text, Divider } from '@chakra-ui/react'
 import { TokenSelectListRow } from './TokenSelectListRow'
-import { GqlChain, GqlToken } from '../../../../shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '../../TokenBalancesProvider'
-import { useUserAccount } from '../../../../modules/web3/UserAccountProvider'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useTokenSelectList } from './useTokenSelectList'
 import { GroupedVirtuoso, GroupedVirtuosoHandle } from 'react-virtuoso'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { CoinsIcon } from '../../../../shared/components/icons/CoinsIcon'
-import { WalletIcon } from '../../../../shared/components/icons/WalletIcon'
+import { CoinsIcon } from '@repo/lib/shared/components/icons/CoinsIcon'
+import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { useTokens } from '../../TokensProvider'
 import { Address } from 'viem'
-import { isSameAddress } from '../../../../shared/utils/addresses'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type Props = {
   chain: GqlChain
@@ -110,7 +110,7 @@ export function TokenSelectList({
     tokens,
     excludeNativeAsset,
     pinNativeAsset,
-    searchTerm,
+    searchTerm
   )
   const { openConnectModal } = useConnectModal()
 

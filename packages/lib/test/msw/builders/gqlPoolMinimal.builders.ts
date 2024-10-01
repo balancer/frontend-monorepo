@@ -7,7 +7,7 @@ import {
   GqlPoolApr,
   GqlPoolAprValue,
   GqlBalancePoolAprItem,
-} from '../../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 
 export function aGqlPoolMinimalMock(...options: Partial<GqlPoolMinimal>[]): GqlPoolMinimal {
   const defaultPool = mock<GqlPoolMinimal>()

@@ -6,7 +6,7 @@ import { usePool } from '../PoolProvider'
 import { CloseIcon } from '@chakra-ui/icons'
 import { getPoolPath } from '../pool.utils'
 import Link from 'next/link'
-import { getNetworkConfig } from '../../../config/app.config'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 export function PoolActionsNav() {
   const { pool } = usePool()

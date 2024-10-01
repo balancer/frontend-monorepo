@@ -3,8 +3,8 @@
 
 import { useSwitchChain } from 'wagmi'
 import { Button } from '@chakra-ui/react'
-import { getChainShortName } from '../../config/app.config'
-import { SupportedChainId } from '../../config/config.types'
+import { getChainShortName } from '@repo/lib/config/app.config'
+import { SupportedChainId } from '@repo/lib/config/config.types'
 import { useUserAccount } from './UserAccountProvider'
 
 export function useChainSwitch(chainId: SupportedChainId) {

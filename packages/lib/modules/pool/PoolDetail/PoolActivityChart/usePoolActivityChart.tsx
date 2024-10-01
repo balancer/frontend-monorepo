@@ -5,19 +5,19 @@ import * as echarts from 'echarts/core'
 import { useRef } from 'react'
 import { useParams } from 'next/navigation'
 import { secondsToMilliseconds, differenceInDays, format } from 'date-fns'
-import { GqlChain } from '../../../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ChainSlug, slugToChainMap } from '../../pool.utils'
 import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
-import { abbreviateAddress } from '../../../../shared/utils/addresses'
+import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import {
   getBlockExplorerAddressUrl,
   getBlockExplorerTxUrl,
-} from '../../../../shared/hooks/useBlockExplorer'
-import { useBreakpoints } from '../../../../shared/hooks/useBreakpoints'
-import { useCurrency } from '../../../../shared/hooks/useCurrency'
-import { NumberFormatter } from '../../../../shared/utils/numbers'
+} from '@repo/lib/shared/hooks/useBlockExplorer'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 import {
   PoolActivityMetaData,
@@ -37,7 +37,7 @@ const getDefaultPoolActivityChartOptions = (
   maxDate: number,
   maxYAxisValue: number,
   sortedPoolEvents: PoolActivityEl[],
-  isLoading: boolean,
+  isLoading: boolean
 ): echarts.EChartsCoreOption => {
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
@@ -69,7 +69,7 @@ const getDefaultPoolActivityChartOptions = (
               differenceInDays(secondsToMilliseconds(maxDate), secondsToMilliseconds(minDate)) < 1
                 ? ' HH:mm'
                 : ''
-            }`,
+            }`
           ),
         color: theme.semanticTokens.colors.font.primary[colorMode],
         opacity: 0.5,
@@ -147,8 +147,8 @@ const getDefaultPoolActivityChartOptions = (
             <div style="font-size: 14px; font-weight: 700; color: ${
               toolTipTheme.text
             }; display:flex;justify-content:start;gap:4px;letter-spacing:-0.25px;${
-              toolTipTheme.heading
-            };">
+          toolTipTheme.heading
+        };">
               <span>${data.seriesName}</span>
               <span>${currencyFormatter(metaData.usdValue)}</span>
             </div>
@@ -158,8 +158,8 @@ const getDefaultPoolActivityChartOptions = (
                   <div style="color: ${
                     toolTipTheme.text
                   }; display:flex;justify-content:start;align-items:center;gap:6px; margin-bottom:${
-                    index === tokens.length - 1 ? `4px` : `-20px`
-                  }">
+                  index === tokens.length - 1 ? `4px` : `-20px`
+                }">
                     <img src="${
                       token.token?.logoURI
                     }" style="width: 16px; height: 16px; border-radius: 50%; margin-right;letter-spacing:-0.1px" />
@@ -187,7 +187,7 @@ const getDefaultPoolActivityChartOptions = (
             };">
                 <a style="display:flex;align-items:center;" href=${addressLink} target="_blank">
                   <span style="font-size: 0.75rem; margin-right:4px;">By: ${abbreviateAddress(
-                    userAddress,
+                    userAddress
                   )}</span>
                   ${arrow}
                 </a>
@@ -274,7 +274,7 @@ export function usePoolActivityChart() {
       maxDate,
       maxYAxisValue,
       sortedPoolEvents,
-      isLoading,
+      isLoading
     ),
     eChartsRef,
     chartHeight,

@@ -1,7 +1,7 @@
 'use client'
 
-import { GqlToken } from '../../shared/services/api/generated/graphql'
-import { useMandatoryContext } from '../../shared/utils/contexts'
+import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useState } from 'react'
 import { Address } from 'viem'
 

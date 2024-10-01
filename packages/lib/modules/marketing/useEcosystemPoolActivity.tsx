@@ -4,23 +4,27 @@
 import * as echarts from 'echarts/core'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { format } from 'date-fns'
-import { GqlChain, GqlPoolEventType, GqlToken } from '../../shared/services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlPoolEventType,
+  GqlToken,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
-import { abbreviateAddress } from '../../shared/utils/addresses'
-import { useTokens } from '../../modules/tokens/TokensProvider'
+import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 import {
   getBlockExplorerAddressUrl,
   getBlockExplorerTxUrl,
-} from '../../shared/hooks/useBlockExplorer'
-import { useBreakpoints } from '../../shared/hooks/useBreakpoints'
-import { useCurrency } from '../../shared/hooks/useCurrency'
-import { NumberFormatter } from '../../shared/utils/numbers'
+} from '@repo/lib/shared/hooks/useBlockExplorer'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { usePoolEvents } from '../pool/usePoolEvents'
 import { supportedNetworks } from '../web3/ChainConfig'
-import { getChainShortName } from '../../config/app.config'
+import { getChainShortName } from '@repo/lib/config/app.config'
 
 type ChartInfoTokens = {
   token?: GqlToken
@@ -113,7 +117,7 @@ const getDefaultPoolActivityChartOptions = (
   theme: any, // TODO: type this
   currencyFormatter: NumberFormatter,
   isMobile = false,
-  is2xl = false,
+  is2xl = false
   // chain: GqlChain
 ): echarts.EChartsCoreOption => {
   const toolTipTheme = {
@@ -201,8 +205,8 @@ const getDefaultPoolActivityChartOptions = (
           metaData.type === GqlPoolEventType.Add
             ? 'Add'
             : metaData.type === GqlPoolEventType.Remove
-              ? 'Remove'
-              : 'Swap'
+            ? 'Remove'
+            : 'Swap'
 
         const arrow = `<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" fill="none"><path stroke="#718096" stroke-linecap="round" stroke-linejoin="round" d="M2 1h6v6M1 8l7-7"/></svg>`
 
@@ -224,8 +228,8 @@ const getDefaultPoolActivityChartOptions = (
                   <div style="color: ${
                     toolTipTheme.text
                   }; display:flex;justify-content:start;align-items:center;gap:6px; margin-bottom:${
-                    index === tokens.length - 1 ? `4px` : `-20px`
-                  }">
+                  index === tokens.length - 1 ? `4px` : `-20px`
+                }">
                     <img src="${
                       token.token?.logoURI
                     }" style="width: 16px; height: 16px; border-radius: 50%; margin-right;letter-spacing:-0.1px" />
@@ -253,7 +257,7 @@ const getDefaultPoolActivityChartOptions = (
             };">
                 <a style="display:flex;align-items:center;" href=${addressLink} target="_blank">
                   <span style="font-size: 0.75rem; margin-right:4px;">By: ${abbreviateAddress(
-                    userAddress,
+                    userAddress
                   )}</span>
                   ${arrow}
                 </a>
@@ -381,7 +385,7 @@ export function useEcosystemPoolActivityChart() {
     if (!response) return { total: 0, elapsedMinutes: 0 }
 
     const elapsedMinutes = Math.floor(
-      (Date.now() / 1000 - response.poolEvents[response.poolEvents.length - 1].timestamp) / 60,
+      (Date.now() / 1000 - response.poolEvents[response.poolEvents.length - 1].timestamp) / 60
     )
 
     const total = Object.keys(chartData).reduce((acc, chain) => {
@@ -434,7 +438,7 @@ export function useEcosystemPoolActivityChart() {
       theme,
       toCurrency,
       isMobile,
-      is2xl,
+      is2xl
     ),
     eChartsRef,
     chartData,

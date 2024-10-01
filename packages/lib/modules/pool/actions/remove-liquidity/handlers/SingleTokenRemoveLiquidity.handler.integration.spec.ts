@@ -1,4 +1,4 @@
-import networkConfig from '../../../../../config/networks/arbitrum'
+import networkConfig from '@repo/lib/config/networks/arbitrum'
 import { balAddress, wETHAddress } from '../../../../../debug-helpers'
 import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
 import { aBalWethPoolElementMock } from '../../../../../test/msw/builders/gqlPoolElement.builders'
@@ -12,7 +12,7 @@ const poolMock = aBalWethPoolElementMock() // 80BAL-20WETH
 function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityHandler {
   return selectRemoveLiquidityHandler(
     pool,
-    RemoveLiquidityType.SingleToken,
+    RemoveLiquidityType.SingleToken
   ) as SingleTokenRemoveLiquidityHandler
 }
 

@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { Address } from 'viem'
 import { useRecentTransactions } from '../../transactions/RecentTransactionsProvider'
 import { TransactionLabels } from '../../transactions/transaction-steps/lib'
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
-import { AnalyticsEvent, trackEvent } from '../../../shared/services/fathom/Fathom'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
 type NewTrackedTransactionRequest = {
   labels: TransactionLabels

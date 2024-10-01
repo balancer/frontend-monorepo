@@ -5,9 +5,12 @@ import { formatUnits } from 'viem'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
 import { SdkBuildSwapInputs, SdkSimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
 import { getRpcUrl } from '../../web3/transports'
-import { GetSorSwapsDocument, GqlSorSwapType } from '../../../shared/services/api/generated/graphql'
-import { getChainId } from '../../../config/app.config'
-import { bn } from '../../../shared/utils/numbers'
+import {
+  GetSorSwapsDocument,
+  GqlSorSwapType,
+} from '@repo/lib/shared/services/api/generated/graphql'
+import { getChainId } from '@repo/lib/config/app.config'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export class DefaultSwapHandler implements SwapHandler {
   name = 'DefaultSwapHandler'
@@ -31,7 +34,7 @@ export class DefaultSwapHandler implements SwapHandler {
           ...path,
           inputAmountRaw: BigInt(path.inputAmountRaw),
           outputAmountRaw: BigInt(path.outputAmountRaw),
-        }) as Path,
+        } as Path)
     )
 
     const swap = new Swap({

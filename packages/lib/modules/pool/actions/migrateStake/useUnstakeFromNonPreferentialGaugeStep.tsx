@@ -4,8 +4,8 @@ import { parseUnits } from 'viem'
 import { Pool } from '../../PoolProvider'
 import { BPT_DECIMALS } from '../../pool.constants'
 import { findFirstNonPreferentialStaking } from '../stake.helpers'
-import { getNetworkConfig } from '../../../../config/app.config'
-import { sentryMetaForWagmiSimulation } from '../../../../shared/utils/query-errors'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { ManagedTransactionButton } from '../../../transactions/transaction-steps/TransactionButton'
 import { useTransactionState } from '../../../transactions/transaction-steps/TransactionStateProvider'
 import { TransactionLabels, TransactionStep } from '../../../transactions/transaction-steps/lib'
@@ -20,7 +20,7 @@ const unstakeStepId = 'unstake-non-preferential-gauge'
 */
 export function useUnstakeFromNonPreferentialGaugeStep(
   pool: Pool,
-  refetchPoolBalances: () => void,
+  refetchPoolBalances: () => void
 ) {
   const { userAddress } = useUserAccount()
   const { getTransaction } = useTransactionState()
@@ -46,7 +46,7 @@ export function useUnstakeFromNonPreferentialGaugeStep(
       poolId: pool.id,
       chainId,
       amount,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -77,7 +77,7 @@ export function useUnstakeFromNonPreferentialGaugeStep(
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={unstakeStepId} {...props} />,
     }),
-    [transaction, amount, props],
+    [transaction, amount, props]
   )
 
   return {

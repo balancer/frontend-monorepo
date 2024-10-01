@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
-import { getGqlChain } from '../../../config/app.config'
-import { SupportedChainId } from '../../../config/config.types'
-import { useNetworkConfig } from '../../../config/useNetworkConfig'
+import { getGqlChain } from '@repo/lib/config/app.config'
+import { SupportedChainId } from '@repo/lib/config/config.types'
+import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { ManagedResult, TransactionLabels } from '../../transactions/transaction-steps/lib'
 import { Abi, Address, ContractFunctionArgs, ContractFunctionName } from 'viem'
 import { useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
@@ -12,10 +12,10 @@ import { AbiMap } from './AbiMap'
 import { TransactionExecution, TransactionSimulation, WriteAbiMutability } from './contract.types'
 import { useOnTransactionConfirmation } from './useOnTransactionConfirmation'
 import { useOnTransactionSubmission } from './useOnTransactionSubmission'
-import { captureWagmiExecutionError } from '../../../shared/utils/query-errors'
+import { captureWagmiExecutionError } from '@repo/lib/shared/utils/query-errors'
 import { useTxHash } from '../safe.hooks'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
-import { onlyExplicitRefetch } from '../../../shared/utils/queries'
+import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 
 type IAbiMap = typeof AbiMap
 type AbiMapKey = keyof typeof AbiMap

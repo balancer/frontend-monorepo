@@ -6,7 +6,7 @@ import {
   useWriteContract,
 } from 'wagmi'
 import { Abi, Address, erc20Abi } from 'viem'
-import { SupportedChainId } from '../../../config/config.types'
+import { SupportedChainId } from '@repo/lib/config/config.types'
 
 export type TransactionSimulation = (
   | ReturnType<typeof useSimulateContract>

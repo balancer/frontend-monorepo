@@ -14,7 +14,7 @@ import {
   someGqlTokenMocks,
   someTokenExpandedMock,
   aTokenExpandedMock,
-} from '../../../modules/tokens/__mocks__/token.builders'
+} from '@repo/lib/modules/tokens/__mocks__/token.builders'
 import {
   GqlPoolElement,
   GqlPoolTokenDetail,
@@ -23,7 +23,7 @@ import {
   GqlChain,
   GqlPoolType,
   GqlPoolTokenExpanded,
-} from '../../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 
 export function aBalWethPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlPoolElement {
   const poolId = '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014' // 80BAL-20WETH

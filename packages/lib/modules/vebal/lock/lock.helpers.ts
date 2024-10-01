@@ -1,4 +1,4 @@
-import { toUtcTime } from '../../../shared/utils/time'
+import { toUtcTime } from '@repo/lib/shared/utils/time'
 import { RawAmount } from '../../tokens/approvals/approval-rules'
 
 export enum LockActionType {
@@ -77,7 +77,7 @@ export function getConfirmingLabel(lockActionType: LockActionType) {
 export function getConfirmedLabel(
   lockActionType: LockActionType,
   lockAmount: RawAmount,
-  lockEndDate: string,
+  lockEndDate: string
 ) {
   switch (lockActionType) {
     case LockActionType.CreateLock:

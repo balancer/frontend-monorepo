@@ -11,10 +11,10 @@ import {
 import { useRouter } from 'next/navigation'
 import { PoolName } from '../../PoolName'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
-import FadeInOnView from '../../../../shared/components/containers/FadeInOnView'
-import { NetworkIcon } from '../../../../shared/components/icons/NetworkIcon'
-import MainAprTooltip from '../../../../shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { useCurrency } from '../../../../shared/hooks/useCurrency'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
+import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { TokenIconStack } from '../../../tokens/TokenIconStack'
 
 interface Props {

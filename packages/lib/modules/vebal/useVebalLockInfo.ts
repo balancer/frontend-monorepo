@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { useMulticall } from '../web3/contracts/useMulticall'
-import mainnetNetworkConfig from '../../config/networks/mainnet'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { Hex, formatUnits } from 'viem'
-import { bn } from '../../shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { AbiMap } from '../web3/contracts/AbiMap'
 import { mainnet } from 'viem/chains'
-import { toJsTimestamp } from '../../shared/utils/time'
+import { toJsTimestamp } from '@repo/lib/shared/utils/time'
 
 interface MulticallLockInfoResponse {
   locked: {

@@ -5,7 +5,7 @@ import {
   RemoveLiquidityBuildQueryParams,
   useRemoveLiquidityBuildCallDataQuery,
 } from './queries/useRemoveLiquidityBuildCallDataQuery'
-import { sentryMetaForWagmiSimulation } from '../../../../shared/utils/query-errors'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { TransactionStep, TransactionLabels } from '../../../transactions/transaction-steps/lib'
 import { ManagedSendTransactionButton } from '../../../transactions/transaction-steps/TransactionButton'
 import { useTransactionState } from '../../../transactions/transaction-steps/TransactionStateProvider'
@@ -44,7 +44,7 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       simulationQueryData: simulationQuery.data,
       buildCallQueryData: buildCallDataQuery.data,
       tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
-    },
+    }
   )
 
   const transaction = getTransaction(removeLiquidityStepId)
@@ -76,6 +76,6 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       onDeactivated: () => setIsStepActivated(false),
       onSuccess: () => refetchPoolUserBalances(),
     }),
-    [transaction, simulationQuery.data, buildCallDataQuery.data],
+    [transaction, simulationQuery.data, buildCallDataQuery.data]
   )
 }

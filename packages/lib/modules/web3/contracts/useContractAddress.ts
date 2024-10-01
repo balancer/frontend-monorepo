@@ -1,8 +1,8 @@
 'use client'
 
 import { get } from 'lodash'
-import { NetworkConfig } from '../../../config/config.types'
-import { useNetworkConfig } from '../../../config/useNetworkConfig'
+import { NetworkConfig } from '@repo/lib/config/config.types'
+import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { Address } from 'viem'
 
 type Paths<T, D extends string = '.'> = {

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { ClaimAllRewardsStepParams, useClaimAllRewardsStep } from './useClaimAllRewardsStep'
-import { getChainId } from '../../../../config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { useApproveRelayerStep } from '../../../relayer/useApproveRelayerStep'
 import { useApproveMinterStep } from '../../../staking/gauge/useMinterApprovalStep'
 import { TransactionStep } from '../../../transactions/transaction-steps/lib'

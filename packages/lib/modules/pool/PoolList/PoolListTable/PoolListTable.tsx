@@ -1,13 +1,13 @@
 'use client'
 
 import { usePoolListQueryState } from '../usePoolListQueryState'
-import { PaginatedTable } from '../../../../shared/components/tables/PaginatedTable'
+import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
 import { PoolListTableHeader } from './PoolListTableHeader'
 import { PoolListTableRow } from './PoolListTableRow'
-import { getPaginationProps } from '../../../../shared/components/pagination/getPaginationProps'
+import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { PoolListItem } from '../../pool.types'
 import { Card, Skeleton } from '@chakra-ui/react'
-import { useIsMounted } from '../../../../shared/hooks/useIsMounted'
+import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 
 interface Props {
   pools: PoolListItem[]

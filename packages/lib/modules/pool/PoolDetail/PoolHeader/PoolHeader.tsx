@@ -3,13 +3,13 @@ import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 import { usePool } from '../../PoolProvider'
 import { isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
-import { AnalyticsEvent, trackEvent } from '../../../../shared/services/fathom/Fathom'
+import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 import { PoolCategories } from '../../categories/PoolCategories'
 import { PoolBreadcrumbs } from './PoolBreadcrumbs'
 import {
   PartnerRedirectModal,
   RedirectPartner,
-} from '../../../../shared/components/modals/PartnerRedirectModal'
+} from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { useState } from 'react'
 import { getXavePoolLink } from '../../pool.utils'
 

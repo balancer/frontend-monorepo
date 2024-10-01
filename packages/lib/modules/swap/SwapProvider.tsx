@@ -1,18 +1,18 @@
 'use client'
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { getNetworkConfig } from '../../config/app.config'
-import { GqlChain, GqlSorSwapType, GqlToken } from '../../shared/services/api/generated/graphql'
-import { useMandatoryContext } from '../../shared/utils/contexts'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { GqlChain, GqlSorSwapType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ApolloClient, useApolloClient, useReactiveVar } from '@apollo/client'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { Address, Hash, isAddress, parseUnits } from 'viem'
 import { emptyAddress } from '../web3/contracts/wagmi-helpers'
 import { useUserAccount } from '../web3/UserAccountProvider'
-import { LABELS } from '../../shared/labels'
-import { isDisabledWithReason } from '../../shared/utils/functions/isDisabledWithReason'
+import { LABELS } from '@repo/lib/shared/labels'
+import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { DefaultSwapHandler } from './handlers/DefaultSwap.handler'
-import { bn } from '../../shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { useSimulateSwapQuery } from './queries/useSimulateSwapQuery'
 import { useTokens } from '../tokens/TokensProvider'
 import { useDisclosure } from '@chakra-ui/react'
@@ -25,8 +25,8 @@ import {
   SwapState,
 } from './swap.types'
 import { SwapHandler } from './handlers/Swap.handler'
-import { isSameAddress, selectByAddress } from '../../shared/utils/addresses'
-import { useVault } from '../../shared/hooks/useVault'
+import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
+import { useVault } from '@repo/lib/shared/hooks/useVault'
 import { NativeWrapHandler } from './handlers/NativeWrap.handler'
 import {
   getWrapHandlerClass,
@@ -37,13 +37,13 @@ import {
   isWrapOrUnwrap,
 } from './wrap.helpers'
 import { useTokenInputsValidation } from '../tokens/TokenInputsValidationProvider'
-import { useMakeVarPersisted } from '../../shared/hooks/useMakeVarPersisted'
+import { useMakeVarPersisted } from '@repo/lib/shared/hooks/useMakeVarPersisted'
 import { HumanAmount } from '@balancer/sdk'
 import { ChainSlug, chainToSlugMap, slugToChainMap } from '../pool/pool.utils'
 import { invert } from 'lodash'
 import { useTransactionSteps } from '../transactions/transaction-steps/useTransactionSteps'
 import { useTokenBalances } from '../tokens/TokenBalancesProvider'
-import { useNetworkConfig } from '../../config/useNetworkConfig'
+import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { usePriceImpact } from '../price-impact/PriceImpactProvider'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
 import { isAuraBalSwap } from './swap.helpers'
@@ -68,7 +68,7 @@ function selectSwapHandler(
   chain: GqlChain,
   swapType: GqlSorSwapType,
   apolloClient: ApolloClient<object>,
-  tokens: GqlToken[],
+  tokens: GqlToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -98,7 +98,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
       swapType: GqlSorSwapType.ExactIn,
       selectedChain: GqlChain.Mainnet,
     },
-    'swapState',
+    'swapState'
   )
 
   const swapState = useReactiveVar(swapStateVar)
@@ -125,9 +125,9 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
         swapState.selectedChain,
         swapState.swapType,
         client,
-        tokens,
+        tokens
       ),
-    [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain],
+    [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain]
   )
 
   const isTokenInSet = swapState.tokenIn.address !== emptyAddress
@@ -234,7 +234,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
 
   function setTokenInAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {},
+    { userTriggered = true }: { userTriggered?: boolean } = {}
   ) {
     const state = swapStateVar()
     const newState = {
@@ -261,7 +261,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
 
   function setTokenOutAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {},
+    { userTriggered = true }: { userTriggered?: boolean } = {}
   ) {
     const state = swapStateVar()
     const newState = {
@@ -381,7 +381,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
       const wrapType = getWrapType(
         swapState.tokenIn.address,
         swapState.tokenOut.address,
-        swapState.selectedChain,
+        swapState.selectedChain
       )
       return wrapType ? wrapType : OSwapAction.SWAP
     }
@@ -534,7 +534,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [hasValidationErrors, 'Invalid input'],
     [simulationQuery.isError, 'Error fetching swap'],
-    [simulationQuery.isLoading, 'Fetching swap...'],
+    [simulationQuery.isLoading, 'Fetching swap...']
   )
 
   return {

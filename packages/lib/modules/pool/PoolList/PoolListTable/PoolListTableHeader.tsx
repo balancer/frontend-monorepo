@@ -2,11 +2,11 @@
 
 import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
 import { usePoolListQueryState } from '../usePoolListQueryState'
-import { GqlPoolOrderBy } from '../../../../shared/services/api/generated/graphql'
+import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolsColumnSort, orderByHash } from '../../pool.types'
 import { usePoolOrderByState } from '../usePoolOrderByState'
 import { Globe } from 'react-feather'
-import { SortableHeader } from '../../../../shared/components/tables/SortableHeader'
+import { SortableHeader } from '@repo/lib/shared/components/tables/SortableHeader'
 
 const setIsDesc = (id: GqlPoolOrderBy, currentSortingObj: PoolsColumnSort) =>
   currentSortingObj.id === id ? !currentSortingObj.desc : true

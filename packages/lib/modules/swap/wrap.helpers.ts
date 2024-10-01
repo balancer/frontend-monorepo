@@ -1,8 +1,8 @@
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { isNativeAsset, isWrappedNativeAsset } from '../tokens/token.helpers'
-import { getNetworkConfig } from '../../config/app.config'
-import { isSameAddress, sameAddresses } from '../../shared/utils/addresses'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { isSameAddress, sameAddresses } from '@repo/lib/shared/utils/addresses'
 import { LidoWrapHandler } from './handlers/LidoWrap.handler'
 import { SwapHandler } from './handlers/Swap.handler'
 import { OWrapType, SupportedWrapHandler, WrapType } from './swap.types'
@@ -18,7 +18,7 @@ export function isSupportedWrap(tokenIn: Address, tokenOut: Address, chain: GqlC
   const networkConfig = getNetworkConfig(chain)
   const supportedWrappers = networkConfig.tokens.supportedWrappers || []
   return supportedWrappers.some(wrapper =>
-    sameAddresses([wrapper.baseToken, wrapper.wrappedToken], [tokenIn, tokenOut]),
+    sameAddresses([wrapper.baseToken, wrapper.wrappedToken], [tokenIn, tokenOut])
   )
 }
 
@@ -32,7 +32,7 @@ export function getWrapConfig(tokenIn: Address, tokenOut: Address, chain: GqlCha
   if (!isSupportedWrap(tokenIn, tokenOut, chain)) throw new Error('Unsupported wrap')
 
   const wrapper = supportedWrappers.find(wrapper =>
-    sameAddresses([wrapper.baseToken, wrapper.wrappedToken], [tokenIn, tokenOut]),
+    sameAddresses([wrapper.baseToken, wrapper.wrappedToken], [tokenIn, tokenOut])
   )
 
   if (!wrapper) throw new Error('Wrapper not found')
@@ -43,7 +43,7 @@ export function getWrapConfig(tokenIn: Address, tokenOut: Address, chain: GqlCha
 export function getWrapHandlerClass(
   tokenIn: Address,
   tokenOut: Address,
-  chain: GqlChain,
+  chain: GqlChain
 ): new () => SwapHandler {
   const wrapper = getWrapConfig(tokenIn, tokenOut, chain)
 

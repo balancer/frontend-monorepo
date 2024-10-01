@@ -2,14 +2,14 @@
 
 import React, { memo, useMemo } from 'react'
 import { HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
-import { GqlToken } from '../../../../../shared/services/api/generated/graphql'
+import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
-import { useCurrency } from '../../../../../shared/hooks/useCurrency'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { sumBy } from 'lodash'
 import { useTokens } from '../../../../tokens/TokensProvider'
 import { usePool } from '../../../PoolProvider'
-import { bn } from '../../../../../shared/utils/numbers'
-import MainAprTooltip from '../../../../../shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { isCowAmmPool } from '../../../pool.helpers'
 import { SECONDS_IN_DAY } from '../../../../../test/utils/numbers'
 
@@ -42,7 +42,7 @@ export function PoolSnapshotValues() {
 
   const weeklyRewards = sumBy(
     currentRewardsPerWeek,
-    reward => priceFor(reward.tokenAddress, chain) * reward.rewardPerWeek,
+    reward => priceFor(reward.tokenAddress, chain) * reward.rewardPerWeek
   )
 
   const poolStatsValues: PoolStatsValues | undefined = useMemo(() => {

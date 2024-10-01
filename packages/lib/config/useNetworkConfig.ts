@@ -1,7 +1,7 @@
 import { getNetworkConfig } from './app.config'
 import { setTag } from '@sentry/nextjs'
 import { useEffect } from 'react'
-import { useUserAccount } from '../modules/web3/UserAccountProvider'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 export function useNetworkConfig() {
   const { chain } = useUserAccount()

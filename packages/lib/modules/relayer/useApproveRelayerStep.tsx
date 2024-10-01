@@ -1,11 +1,11 @@
-import { SupportedChainId } from '../../config/config.types'
+import { SupportedChainId } from '@repo/lib/config/config.types'
 import { TransactionLabels, TransactionStep } from '../transactions/transaction-steps/lib'
 import { ManagedTransactionButton } from '../transactions/transaction-steps/TransactionButton'
 import { ManagedTransactionInput } from '../web3/contracts/useManagedTransaction'
 import { useUserAccount } from '../web3/UserAccountProvider'
-import { getNetworkConfig } from '../../config/app.config'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useHasApprovedRelayer } from './useHasApprovedRelayer'
-import { sentryMetaForWagmiSimulation } from '../../shared/utils/query-errors'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useMemo } from 'react'
 
 const approveRelayerStepId = 'approve-relayer'
@@ -38,7 +38,7 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
       userAddress,
       relayerAddress,
       chainId,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -62,7 +62,7 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
       onSuccess: () => refetch(),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hasApprovedRelayer, isConnected, isLoading],
+    [hasApprovedRelayer, isConnected, isLoading]
   )
 
   return {

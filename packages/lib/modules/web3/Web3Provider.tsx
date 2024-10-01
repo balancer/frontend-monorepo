@@ -4,7 +4,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 import { RainbowKitProvider, Theme, darkTheme, lightTheme } from '@rainbow-me/rainbowkit'
 import { WagmiProvider } from 'wagmi'
 import { ReactQueryClientProvider } from '../../react-query.provider'
-import { useThemeColorMode } from '../../shared/services/chakra/useThemeColorMode'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { useTheme } from '@chakra-ui/react'
 import { merge } from 'lodash'
 import { UserSettingsProvider } from '../user/settings/UserSettingsProvider'
@@ -14,7 +14,7 @@ import { CustomAvatar } from './CustomAvatar'
 import { UserAccountProvider } from './UserAccountProvider'
 import { PropsWithChildren } from 'react'
 import { WagmiConfig } from './WagmiConfig'
-import { useIsMounted } from '../../shared/hooks/useIsMounted'
+import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 
 export function Web3Provider({
   children,

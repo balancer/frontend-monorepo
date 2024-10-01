@@ -1,17 +1,17 @@
 'use client'
 
-import { getChainShortName } from '../../../config/app.config'
-import { getSelectStyles } from '../../../shared/services/chakra/custom/chakra-react-select'
+import { getChainShortName } from '@repo/lib/config/app.config'
+import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { Select, OptionBase, GroupBase, SingleValue, chakraComponents } from 'chakra-react-select'
 import { ReactNode, useEffect, useState } from 'react'
 import { ChevronDown } from 'react-feather'
 import { motion } from 'framer-motion'
-import { pulseOnceWithDelay } from '../../../shared/utils/animations'
+import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
 
-import { GqlChain } from '../../../shared/services/api/generated/graphql'
-import { supportedNetworks } from '../../../modules/web3/ChainConfig'
-import { gradientMap } from '../../../modules/marketing/useEcosystemPoolActivity'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { supportedNetworks } from '@repo/lib/modules/web3/ChainConfig'
+import { gradientMap } from '@repo/lib/modules/marketing/useEcosystemPoolActivity'
 
 interface ChainOption extends OptionBase {
   label: ReactNode

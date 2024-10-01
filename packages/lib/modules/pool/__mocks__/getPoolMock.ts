@@ -9,7 +9,7 @@ import {
   GetPoolDocument,
   GetPoolQueryVariables,
   GetPoolQuery,
-} from '../../../shared/services/api/generated/graphql'
+} from '@repo/lib/shared/services/api/generated/graphql'
 
 function astToQueryString(ast: any): string {
   return print(ast)

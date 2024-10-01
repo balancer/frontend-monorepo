@@ -1,10 +1,10 @@
 import { useMulticall } from '../web3/contracts/useMulticall'
 import { AbiMap } from '../web3/contracts/AbiMap'
 import { useUserAccount } from '../web3/UserAccountProvider'
-import networkConfigs from '../../config/networks'
-import { GqlChain } from '../../shared/services/api/generated/graphql'
+import networkConfigs from '@repo/lib/config/networks'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { GaugeArg } from './useVebalBoost'
-import { getChainId } from '../../config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 
 export function useGaugeTotalSupplyAndUserBalance(gauges: GaugeArg[]) {
   const { userAddress } = useUserAccount()

@@ -3,7 +3,7 @@
 import { load, trackPageview } from 'fathom-client'
 import { useEffect, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { isProd } from '../../../config/app.config'
+import { isProd } from '@repo/lib/config/app.config'
 
 export enum AnalyticsEvent {
   ClickAddLiquidity = 'click: Add liquidity',

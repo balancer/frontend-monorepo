@@ -21,7 +21,7 @@ import {
 import { useUserSettings } from './UserSettingsProvider'
 import { Percent, Settings } from 'react-feather'
 import { CurrencySelect } from './CurrencySelect'
-import { blockInvalidNumberInput } from '../../../shared/utils/numbers'
+import { blockInvalidNumberInput } from '@repo/lib/shared/utils/numbers'
 
 export function SlippageInput() {
   const { slippage, setSlippage } = useUserSettings()

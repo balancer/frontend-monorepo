@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useCountdown } from 'usehooks-ts'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { removeLiquidityStepId } from '../useRemoveLiquidityStep'
-import { NumberText } from '../../../../../shared/components/typography/NumberText'
+import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
 import { useShouldFreezeQuote } from '../../../../transactions/transaction-steps/useShouldFreezeQuote'
 
 function useRemoveLiquidityTimeout() {

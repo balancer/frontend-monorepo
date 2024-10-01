@@ -1,9 +1,9 @@
-import { useAppzi } from '../../../shared/hooks/useAppzi'
+import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 import { Button, Divider, HStack, ModalFooter, VStack } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { CornerDownLeft, MessageSquare, ThumbsUp } from 'react-feather'
-import { TransactionStep } from '../../../modules/transactions/transaction-steps/lib'
+import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 
 export function SuccessActions({
   returnLabel,

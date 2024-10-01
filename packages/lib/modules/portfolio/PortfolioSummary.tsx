@@ -1,11 +1,11 @@
 import { BoxProps, Card, Heading, Icon, Skeleton } from '@chakra-ui/react'
 import { usePortfolio } from './PortfolioProvider'
-import { useCurrency } from '../../shared/hooks/useCurrency'
-import StarsIcon from '../../shared/components/icons/StarsIcon'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
 import { BarChart } from 'react-feather'
-import { NoisyCard } from '../../shared/components/containers/NoisyCard'
-import { ZenGarden } from '../../shared/components/zen/ZenGarden'
-import FadeInOnView from '../../shared/components/containers/FadeInOnView'
+import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 const commonNoisyCardProps: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
