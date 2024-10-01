@@ -1,4 +1,4 @@
-import networkConfig from '../../../../../config/networks/arbitrum'
+import networkConfig from '../../../../../config/networks/mainnet'
 import { wETHAddress } from '../../../../../debug-helpers'
 import { defaultTestUserAccount } from '../../../../../test/anvil/anvil-setup'
 import { connectWithDefaultUser } from '../../../../../test/utils/wagmi/wagmi-connections'
