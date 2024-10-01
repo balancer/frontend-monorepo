@@ -57,7 +57,7 @@ test('queries add liquidity transaction', async () => {
       humanAmount: '12',
     },
     {
-      tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      tokenAddress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
       humanAmount: '0.04',
     },
   ])
@@ -102,7 +102,7 @@ test('queries remove liquidity transaction', async () => {
     },
     {
       humanAmount: '4.553531492712836774',
-      tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      tokenAddress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     },
   ])
 
@@ -112,7 +112,7 @@ test('queries remove liquidity transaction', async () => {
 describe('queries swap transaction', () => {
   const maticAddress = '0x0000000000000000000000000000000000001010'
   const wMaticAddress = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
-  const daiAddress = '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063'
+  const daiAddress = '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
 
   test('when the native asset is not included (from DAI to WMATIC)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
