@@ -1,0 +1,26 @@
+{
+  "extends": "@repo/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["*"],
+      "@repo/*": ["../../packages/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "types": ["vitest/globals"]
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "../../packages/lib/global.d.ts",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "../../packages/lib/shared/components/site/providers.tsx"
+  ],
+  "exclude": ["node_modules", ".next"]
+}
