@@ -1,8 +1,6 @@
 /* eslint-disable max-len */
 import { Metadata } from 'next'
-import { Navbar } from '@repo/lib/shared/components/navs/Navbar'
 import { Footer } from '@repo/lib/shared/components/footer/Footer'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
 import NextTopLoader from 'nextjs-toploader'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -11,11 +9,10 @@ import { Fathom } from '@repo/lib/shared/services/fathom/Fathom'
 import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
 import { PropsWithChildren } from 'react'
 import { Providers } from '@repo/lib/shared/components/site/providers'
-
-const { projectName } = getProjectConfig()
+import { NavBarContainer } from '@repo/beets/components/navs/NavBarContainer'
 
 export const metadata: Metadata = {
-  title: `${projectName} DeFi Liquidity Pools`,
+  title: 'Beets DeFi Liquidity Pools',
   description: `Explore DeFi liquidity pools and swap tokens. Provide liquidity to accumulate yield from swap fees while retaining your token exposure as prices move.`,
   icons: [
     { rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' },
@@ -37,9 +34,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script async src="https://w.appzi.io/w.js?token=8TY8k" />
-      </head>
       <body
         className={satoshiFont.className}
         suppressHydrationWarning
@@ -49,7 +43,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <NextTopLoader showSpinner={false} color="#7f6ae8" />
         <Providers>
           <GlobalAlerts />
-          <Navbar />
+          <NavBarContainer />
           {children}
           <Footer />
           <SpeedInsights />
