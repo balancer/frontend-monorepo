@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import { Metadata } from 'next'
-import { Providers } from './providers'
 import { Navbar } from '@repo/lib/shared/components/navs/Navbar'
 import { Footer } from '@repo/lib/shared/components/footer/Footer'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
@@ -11,6 +10,7 @@ import '@repo/lib/assets/css/global.css'
 import { Fathom } from '@repo/lib/shared/services/fathom/Fathom'
 import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
 import { PropsWithChildren } from 'react'
+import { Providers } from '@repo/lib/shared/components/site/providers'
 
 const { projectName } = getProjectConfig()
 
