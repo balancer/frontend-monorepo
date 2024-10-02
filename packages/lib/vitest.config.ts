@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, '.'),
+      '@repo/lib': resolve(__dirname, '.'),
     },
   },
   envPrefix: ['VITE', 'NEXT'],
