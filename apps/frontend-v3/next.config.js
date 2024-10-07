@@ -21,7 +21,7 @@ const nextConfig = {
       },
     ],
   },
-  transpilePackages: ['@repo/lib', '@repo/balancer'],
+  transpilePackages: ['@repo/lib'],
 
   // Safe App setup
   headers: manifestHeaders,

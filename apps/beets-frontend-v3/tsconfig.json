@@ -19,8 +19,7 @@
     "**/*.tsx",
     "../../packages/lib/global.d.ts",
     "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "../../packages/lib/shared/components/site/providers.tsx"
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules", ".next"]
 }

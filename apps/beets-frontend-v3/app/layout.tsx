@@ -8,8 +8,8 @@ import { Fathom } from '@repo/lib/shared/services/fathom/Fathom'
 import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
 import { PropsWithChildren } from 'react'
 import { Providers } from '@repo/lib/shared/components/site/providers'
-import { NavBarContainer } from '@repo/beets/components/navs/NavBarContainer'
-import { FooterContainer } from '@repo/beets/components/footer/FooterContainer'
+import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
+import { FooterContainer } from '@/lib/components/footer/FooterContainer'
 
 export const metadata: Metadata = {
   title: 'Beets DeFi Liquidity Pools',
