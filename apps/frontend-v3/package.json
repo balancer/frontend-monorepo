@@ -7,7 +7,6 @@
     "build": "pnpm --filter @repo/lib graphql:gen && next build",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev\"",
     "gen:wagmi": "pnpm wagmi generate",
-    "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "prepare": "cd ../.. && husky apps/frontend-v3/.husky",
