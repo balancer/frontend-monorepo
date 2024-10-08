@@ -1,5 +1,5 @@
-import { captureError, ensureError } from '@/lib/shared/utils/errors'
-import { hours } from '@/lib/shared/utils/time'
+import { captureError, ensureError } from '@repo/lib/shared/utils/errors'
+import { hours } from '@repo/lib/shared/utils/time'
 import { NextResponse } from 'next/server'
 
 type Params = {

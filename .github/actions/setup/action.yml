@@ -21,4 +21,4 @@ runs:
 
     - name: Generate api typings
       shell: bash
-      run: pnpm graphql:gen
+      run: pnpm --filter @repo/lib graphql:gen

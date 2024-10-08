@@ -1,4 +1,5 @@
 import { getSwapPathParams } from './getSwapPathParams'
+import { describe, expect, it } from 'vitest'
 
 describe('Parses swap params from the url slug when', () => {
   it('slug is undefined', () => {

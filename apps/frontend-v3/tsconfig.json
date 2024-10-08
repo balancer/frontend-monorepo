@@ -9,19 +9,17 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@repo/*": ["../../packages/*"]
     },
     "types": ["vitest/globals"]
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "global.d.ts",
+    "../../packages/lib/global.d.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    ".next"
-  ]
+  "exclude": ["node_modules", ".next"]
 }
