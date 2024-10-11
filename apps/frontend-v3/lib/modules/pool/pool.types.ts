@@ -8,11 +8,11 @@ import {
 } from '@/lib/shared/services/api/generated/graphql'
 import {
   parseAsArrayOf,
+  parseAsFloat,
   parseAsInteger,
   parseAsString,
   parseAsStringEnum,
-  parseAsFloat,
-} from 'next-usequerystate/parsers'
+} from 'nuqs'
 import { Hex } from 'viem'
 
 export type PoolId = Hex
