@@ -1,6 +1,6 @@
+import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@/lib/modules/web3/contracts/contract.types'
 import { BuildAddLiquidityInput, QueryAddLiquidityOutput } from '../add-liquidity.types'
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 
 /**
  * AddLiquidityHandler is an interface that defines the methods that must be implemented by a handler.

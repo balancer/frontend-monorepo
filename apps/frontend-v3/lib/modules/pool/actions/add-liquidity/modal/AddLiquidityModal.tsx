@@ -18,6 +18,7 @@ import { useOnUserAccountChanged } from '@/lib/modules/web3/useOnUserAccountChan
 import { AddLiquiditySummary } from './AddLiquiditySummary'
 import { useAddLiquidityReceipt } from '@/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { useTokens } from '@/lib/modules/tokens/TokensProvider'
 
 type Props = {
   isOpen: boolean
@@ -34,11 +35,18 @@ export function AddLiquidityModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
-  const { transactionSteps, addLiquidityTxHash, hasQuoteContext, setInitialHumanAmountsIn } =
-    useAddLiquidity()
+  const {
+    transactionSteps,
+    addLiquidityTxHash,
+    hasQuoteContext,
+    urlTxHash,
+    setInitialHumanAmountsIn,
+  } = useAddLiquidity()
   const { pool, chain } = usePool()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const { userAddress } = useUserAccount()
+  const { stopTokenPricePolling } = useTokens()
+
   const receiptProps = useAddLiquidityReceipt({
     chain,
     txHash: addLiquidityTxHash,
@@ -46,6 +54,14 @@ export function AddLiquidityModal({
   })
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
+
+  useEffect(() => {
+    if (isOpen) {
+      // stop polling for token prices when modal is opened to prevent unwanted re-renders
+      stopTokenPricePolling()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen])
 
   useEffect(() => {
     if (addLiquidityTxHash && !window.location.pathname.includes(addLiquidityTxHash)) {
@@ -90,6 +106,7 @@ export function AddLiquidityModal({
           currentStep={transactionSteps.currentStep}
           returnLabel="Return to pool"
           returnAction={redirectToPoolPage}
+          urlTxHash={urlTxHash}
         />
       </ModalContent>
     </Modal>

@@ -21,17 +21,17 @@ const networkConfig: NetworkConfig = {
       wNativeAsset: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
     },
     nativeAsset: {
-      name: 'Matic',
+      name: 'Pol',
       address: '0x0000000000000000000000000000000000001010',
-      symbol: 'MATIC',
+      symbol: 'POL',
       decimals: 18,
     },
     defaultSwapTokens: {
       tokenIn: '0x0000000000000000000000000000000000001010',
     },
     popularTokens: {
-      '0x0000000000000000000000000000000000001010': 'MATIC',
-      '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270': 'WMATIC',
+      '0x0000000000000000000000000000000000001010': 'POL',
+      '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270': 'WPOL',
       '0xfa68fb4628dff1028cfec22b4162fccd0d45efb6': 'MaticX',
       '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619': 'WETH',
       '0x9a71012b13ca4d3d0cdc72a177df3ef03b0e76a3': 'BAL',
@@ -92,6 +92,8 @@ const networkConfig: NetworkConfig = {
       ],
     },
   }),
+  layerZeroChainId: 109,
+  supportsVeBalSync: true,
 }
 
 export default networkConfig

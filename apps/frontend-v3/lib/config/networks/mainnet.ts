@@ -5,7 +5,7 @@ import { NetworkConfig } from '../config.types'
 import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
 import { SupportedWrapHandler } from '@/lib/modules/swap/swap.types'
 
-const networkConfig = {
+const networkConfig: NetworkConfig = {
   chainId: 1,
   name: 'Ethereum Mainnet',
   shortName: 'Ethereum',
@@ -80,6 +80,7 @@ const networkConfig = {
     feeDistributor: '0xD3cf852898b21fc233251427c2DC93d3d604F3BB',
     veDelegationProxy: '0x6f5a2eE11E7a772AeB5114A20d0D7c0ff61EB8A0',
     veBAL: '0xC128a9954e6c874eA3d62ce62B468bA073093F25',
+    omniVotingEscrow: '0x96484f2aBF5e58b15176dbF1A799627B53F13B6d',
   },
 
   pools: convertHexToLowerCase({

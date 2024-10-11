@@ -2,5 +2,9 @@ import { DefaultPageContainer } from '@/lib/shared/components/containers/Default
 import { PropsWithChildren } from 'react'
 
 export default function DebugLayout({ children }: PropsWithChildren) {
-  return <DefaultPageContainer>{children}</DefaultPageContainer>
+  return (
+    <DefaultPageContainer width="90%" maxW="90%">
+      {children}
+    </DefaultPageContainer>
+  )
 }

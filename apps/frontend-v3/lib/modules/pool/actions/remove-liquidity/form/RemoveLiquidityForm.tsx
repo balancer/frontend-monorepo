@@ -15,7 +15,9 @@ import {
   HStack,
   Skeleton,
   Text,
-  Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
   VStack,
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
@@ -34,6 +36,9 @@ import { parseUnits } from 'viem'
 import { SimulationError } from '@/lib/shared/components/errors/SimulationError'
 import { InfoIcon } from '@/lib/shared/components/icons/InfoIcon'
 import { SafeAppAlert } from '@/lib/shared/components/alerts/SafeAppAlert'
+import { useTokens } from '@/lib/modules/tokens/TokensProvider'
+import { TooltipWithTouch } from '@/lib/shared/components/tooltips/TooltipWithTouch'
+import { useUserSettings } from '@/lib/modules/user/settings/UserSettingsProvider'
 
 const TABS: ButtonGroupOption[] = [
   {
@@ -60,6 +65,8 @@ export function RemoveLiquidityForm() {
     simulationQuery,
     quoteBptIn,
     removeLiquidityTxHash,
+    isSingleTokenBalanceMoreThat25Percent,
+    isSingleToken,
     setProportionalType,
     setSingleTokenType,
     setHumanBptInPercent,
@@ -70,6 +77,8 @@ export function RemoveLiquidityForm() {
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const nextBtn = useRef(null)
   const [activeTab, setActiveTab] = useState(TABS[0])
+  const { startTokenPricePolling } = useTokens()
+  const { slippage } = useUserSettings()
 
   useEffect(() => {
     setPriceImpact(priceImpactQuery.data)
@@ -91,6 +100,9 @@ export function RemoveLiquidityForm() {
   }
 
   const onModalClose = () => {
+    // restart polling for token prices when modal is closed again
+    startTokenPricePolling()
+
     if (transactionSteps.lastTransactionConfirmingOrConfirmed) {
       // If the transaction is confirming or confirmed, it's very likely that
       // they no longer have a pool balance. To be safe, always redirect to the
@@ -107,6 +119,8 @@ export function RemoveLiquidityForm() {
     }
   }, [removeLiquidityTxHash])
 
+  const isWarning = isSingleToken && isSingleTokenBalanceMoreThat25Percent
+
   return (
     <TokenBalancesProvider extTokens={validTokens}>
       <Box h="full" w="full" maxW="lg" mx="auto" pb="2xl">
@@ -119,7 +133,7 @@ export function RemoveLiquidityForm() {
           </CardHeader>
           <VStack spacing="md" align="start">
             <SafeAppAlert />
-            {!requiresProportionalInput(pool.type) && (
+            {!requiresProportionalInput(pool) && (
               <HStack>
                 <ButtonGroup
                   currentOption={activeTab}
@@ -128,22 +142,44 @@ export function RemoveLiquidityForm() {
                   size="xxs"
                   groupId="remove"
                 />
-                <Tooltip label="Remove liquidity type" fontSize="sm">
-                  <InfoIcon />
-                </Tooltip>
+                <Popover trigger="hover">
+                  <PopoverTrigger>
+                    <Box
+                      opacity="0.5"
+                      transition="opacity 0.2s var(--ease-out-cubic)"
+                      _hover={{ opacity: 1 }}
+                    >
+                      <InfoIcon />
+                    </Box>
+                  </PopoverTrigger>
+                  <PopoverContent p="sm" w="auto" maxW="300px">
+                    <Text fontSize="sm" variant="secondary">
+                      Proportional liquidity removal does not impact the prices of tokens on exit,
+                      which maximizes your returns. Alternatively, Single-token removal may be more
+                      convenient in certain situations but may reduce the value returned to you due
+                      to price impact.
+                    </Text>
+                  </PopoverContent>
+                </Popover>
               </HStack>
             )}
-            <VStack w="full" spacing="md">
+            <VStack w="full" spacing="md" align="start">
               <InputWithSlider
                 value={totalUSDValue}
                 onPercentChanged={setHumanBptInPercent}
                 isNumberInputDisabled
+                isWarning={isWarning}
               >
                 <Text fontSize="sm">Amount</Text>
                 <Text fontSize="sm" variant="secondary">
                   {fNum('percentage', humanBptInPercent / 100)}
                 </Text>
               </InputWithSlider>
+              {isWarning && (
+                <Text fontSize="xs" color="font.warning">
+                  You can only remove up to 25% of a single asset from the pool in one transaction
+                </Text>
+              )}
               {activeTab === TABS[0] && (
                 <RemoveLiquidityProportional tokens={tokens} poolType={pool.type} />
               )}
@@ -173,6 +209,7 @@ export function RemoveLiquidityForm() {
                     <PoolActionsPriceImpactDetails
                       totalUSDValue={totalUSDValue}
                       bptAmount={BigInt(parseUnits(quoteBptIn, 18))}
+                      slippage={slippage}
                       isLoading={isFetching}
                     />
                   }
@@ -181,19 +218,19 @@ export function RemoveLiquidityForm() {
               )}
             </VStack>
             <SimulationError simulationQuery={simulationQuery} />
-            <Tooltip label={isDisabled ? disabledReason : ''}>
+            <TooltipWithTouch label={isDisabled ? disabledReason : ''}>
               <Button
                 ref={nextBtn}
                 variant="secondary"
                 w="full"
                 size="lg"
-                isDisabled={isDisabled}
+                isDisabled={isDisabled || isWarning}
                 isLoading={simulationQuery.isLoading || priceImpactQuery.isLoading}
                 onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
               >
                 Next
               </Button>
-            </Tooltip>
+            </TooltipWithTouch>
           </VStack>
         </Card>
         <RemoveLiquidityModal

@@ -49,9 +49,24 @@ type Props = {
   currentStep: TransactionStep
   returnLabel: string
   returnAction: () => void
+  urlTxHash?: string
 }
 
-export function ActionModalFooter({ isSuccess, currentStep, returnLabel, returnAction }: Props) {
+export function ActionModalFooter({
+  isSuccess,
+  currentStep,
+  returnLabel,
+  returnAction,
+  urlTxHash,
+}: Props) {
+  // Avoid animations when displaying a historic receipt
+  if (urlTxHash) {
+    return (
+      <ModalFooter>
+        <SuccessActions returnLabel={returnLabel} returnAction={returnAction} />
+      </ModalFooter>
+    )
+  }
   return (
     <ModalFooter>
       <AnimatePresence mode="wait" initial={false}>

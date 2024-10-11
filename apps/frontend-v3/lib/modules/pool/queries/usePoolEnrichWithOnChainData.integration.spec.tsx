@@ -11,9 +11,9 @@ function testPoolEnrichWithOnChainData(pool: Pool) {
   return result
 }
 
-// TODO: un-skip when pool 0x7cf221fa36584f59a4f7fd7b946b8571c78e3692 is available in production api
+// TODO: un-skip when pool 0xec1b5ca86c83c7a85392063399e7d2170d502e00 is available in production api
 test.skip('enriches V3 pool with on-chain data', async () => {
-  const poolId = '0x7cf221fa36584f59a4f7fd7b946b8571c78e3692' // V3 Balancer 50 BAL 50 WETH (sepolia experimental)
+  const poolId = '0xec1b5ca86c83c7a85392063399e7d2170d502e00' // V3 Balancer 50 BAL 50 WETH (sepolia)
   const pool = await getPoolMock(poolId, GqlChain.Sepolia, defaultTestUserAccount)
 
   // delete values to ensure that onchain data is used
@@ -45,12 +45,10 @@ test('enriches V2 pool with on-chain data', async () => {
   expect(Number(result.current.pool.dynamicData.totalShares)).toBeGreaterThan(0)
 })
 
-// TODO: un-skip when pool 0x232a18645c4e33dd64e6925e03da0f0dd77ad003 is available in production api
-test.skip('enriches V1 Cow AMM pool with on-chain data', async () => {
-  // const poolId = '0x232a18645c4e33dd64e6925e03da0f0dd77ad003' // V1 test Cow AMM pool
-  const sepoliaPoolId = '0xd1bdc51decb61ee0c98e47fe17217c58be525180' // V1 test Cow AMM pool
+test('enriches V1 Cow AMM pool with on-chain data', async () => {
+  const cowPoolId = '0xf706c50513446d709f08d3e5126cd74fb6bfda19'
 
-  const pool = await getPoolMock(sepoliaPoolId, GqlChain.Sepolia)
+  const pool = await getPoolMock(cowPoolId, GqlChain.Mainnet)
 
   // delete values to ensure that onchain data is used
   pool.dynamicData.totalLiquidity = '0'

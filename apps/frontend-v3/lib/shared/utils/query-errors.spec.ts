@@ -16,7 +16,7 @@ import { recoveryPoolMock } from '../../modules/pool/__mocks__/recoveryPoolMock'
 import { Extras } from '@sentry/types'
 // eslint-disable-next-line max-len
 import { RecoveryRemoveLiquidityHandler } from '../../modules/pool/actions/remove-liquidity/handlers/RecoveryRemoveLiquidity.handler'
-import { UnbalancedAddLiquidityHandler } from '@/lib/modules/pool/actions/add-liquidity/handlers/UnbalancedAddLiquidity.handler'
+import { UnbalancedAddLiquidityV2Handler } from '@/lib/modules/pool/actions/add-liquidity/handlers/UnbalancedAddLiquidityV2.handler'
 import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
 import { AddLiquidityParams } from '@/lib/modules/pool/actions/add-liquidity/queries/add-liquidity-keys'
 import { wETHAddress, wjAuraAddress } from '@/lib/debug-helpers'
@@ -89,11 +89,10 @@ describe('Captures sentry error', () => {
   test('for add liquidity handler query error', async function () {
     const pool = aWjAuraWethPoolElementMock()
     const params: AddLiquidityParams = {
-      handler: new UnbalancedAddLiquidityHandler(pool),
+      handler: new UnbalancedAddLiquidityV2Handler(pool),
       userAddress: defaultTestUserAccount,
       slippage: '0.1',
-      poolId: pool.id,
-      poolType: pool.type,
+      pool,
       humanAmountsIn: [
         { humanAmount: '3', tokenAddress: wjAuraAddress },
         { humanAmount: '0.01', tokenAddress: wETHAddress },
@@ -111,7 +110,7 @@ describe('Captures sentry error', () => {
     expect(report.error?.message).toBe('test cause error')
     expect(report.extra).toMatchInlineSnapshot(`
       {
-        "handler": "UnbalancedAddLiquidityHandler",
+        "handler": "UnbalancedAddLiquidityV2Handler",
         "params": {
           "chainId": 1,
           "handler": {

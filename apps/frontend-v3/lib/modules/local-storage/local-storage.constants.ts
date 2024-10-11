@@ -9,4 +9,8 @@ export const LS_KEYS = {
     AcceptedPolicies: 'userSettings.AcceptedPolicies',
     AllowSounds: 'userSettings.AllowSounds',
   },
+  CrossChainSync: {
+    TempSyncingNetworks: 'сrossChainSync.tempSyncingNetworks',
+    SyncTxHashes: 'сrossChainSync.syncTxHashes',
+  },
 }

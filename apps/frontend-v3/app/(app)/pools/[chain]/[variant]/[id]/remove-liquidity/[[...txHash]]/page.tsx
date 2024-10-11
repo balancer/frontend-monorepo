@@ -8,6 +8,7 @@ import { TransactionStateProvider } from '@/lib/modules/transactions/transaction
 import { PriceImpactProvider } from '@/lib/modules/price-impact/PriceImpactProvider'
 import { isHash } from 'viem'
 import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
+import { PermitSignatureProvider } from '@/lib/modules/tokens/approvals/permit2/PermitSignatureProvider'
 
 type Props = {
   params: { txHash?: string[] }
@@ -21,13 +22,15 @@ export default function RemoveLiquidityPage({ params: { txHash } }: Props) {
     <DefaultPageContainer>
       <TransactionStateProvider>
         <RelayerSignatureProvider>
-          <RemoveLiquidityProvider urlTxHash={urlTxHash}>
-            <PoolActionsLayout>
-              <PriceImpactProvider>
-                <RemoveLiquidityForm />
-              </PriceImpactProvider>
-            </PoolActionsLayout>
-          </RemoveLiquidityProvider>
+          <PermitSignatureProvider>
+            <RemoveLiquidityProvider urlTxHash={urlTxHash}>
+              <PoolActionsLayout>
+                <PriceImpactProvider>
+                  <RemoveLiquidityForm />
+                </PriceImpactProvider>
+              </PoolActionsLayout>
+            </RemoveLiquidityProvider>
+          </PermitSignatureProvider>
         </RelayerSignatureProvider>
       </TransactionStateProvider>
     </DefaultPageContainer>

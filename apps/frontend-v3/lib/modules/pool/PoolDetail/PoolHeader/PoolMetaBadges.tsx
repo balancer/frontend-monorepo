@@ -1,6 +1,14 @@
 'use client'
 
-import { Badge, Flex, HStack, Text, Tooltip } from '@chakra-ui/react'
+import {
+  Badge,
+  Flex,
+  HStack,
+  Text,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
 import Image from 'next/image'
 import { fNum } from '@/lib/shared/utils/numbers'
@@ -33,26 +41,34 @@ export default function PoolMetaBadges() {
       </Badge>
       <PoolListTokenPills pool={pool} py="2" px="sm" />
       {!shouldHideSwapFee(pool.type) && (
-        <Tooltip label="Swap fee">
-          <Badge
-            fontWeight="normal"
-            py="xs"
-            px="sm"
-            background="background.level2"
-            border="1px solid"
-            borderColor="border.base"
-            shadow="sm"
-            rounded="full"
-            display="flex"
-            alignItems="center"
-            h={{ base: '28px' }}
-          >
-            <HStack color="font.primary">
-              <Repeat size={12} />
-              <Text fontSize="sm">{fNum('feePercent', pool.dynamicData.swapFee)}</Text>
-            </HStack>
-          </Badge>
-        </Tooltip>
+        <Popover trigger="hover">
+          <PopoverTrigger>
+            <Badge
+              fontWeight="normal"
+              py="xs"
+              px="sm"
+              background="background.level2"
+              border="1px solid"
+              borderColor="border.base"
+              shadow="sm"
+              rounded="full"
+              display="flex"
+              alignItems="center"
+              h={{ base: '28px' }}
+            >
+              <HStack color="font.primary">
+                <Repeat size={12} />
+                <Text fontSize="xs">{fNum('feePercent', pool.dynamicData.swapFee)}</Text>
+              </HStack>
+            </Badge>
+          </PopoverTrigger>
+          <PopoverContent p="sm" w="auto" maxW="300px">
+            <Text fontSize="sm" variant="secondary">
+              The swap fee rate earned by Liquidity Providers anytime a swap is routed through this
+              pool. These fees automatically accumulate into each LP&rsquo;s position.
+            </Text>
+          </PopoverContent>
+        </Popover>
       )}
     </Flex>
   )

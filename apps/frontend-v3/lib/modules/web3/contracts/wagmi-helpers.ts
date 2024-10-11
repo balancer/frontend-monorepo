@@ -1,8 +1,6 @@
 // Helpers for wagmi transactions
 import { Address } from 'viem'
 import { TransactionBundle } from './contract.types'
-import { polygon } from 'viem/chains'
-import { secs } from '@/lib/shared/utils/time'
 
 export function getHashFromTransaction(transactionBundle?: TransactionBundle): Address | undefined {
   if (!transactionBundle) return
@@ -23,11 +21,12 @@ export function isValidUserAddress(userAddress?: Address) {
   Returns timeout to be used in useWaitForTransactionReceipt options
   By default all react queries retry 3 times
   More info: https://tanstack.com/query/v5/docs/framework/react/guides/query-retries
- */
+*/
+/* eslint-disable @typescript-eslint/no-unused-vars */
 export function getWaitForReceiptTimeout(chainId: number) {
-  // In polygon there will be 3 retries of 25 seconds until we throw the timeout error
-  if (chainId === polygon.id) return secs(25).toMs()
-
-  // In other chains there will be 3 retries of 15 seconds until we throw the timeout error
-  return secs(15).toMs()
+  /* Using an specific timeout was throwing a timeout error after confirmation
+     Wagmi bug: https://github.com/wevm/viem/discussions/1351
+     Using undefined seems to be more reliable
+  */
+  return undefined
 }

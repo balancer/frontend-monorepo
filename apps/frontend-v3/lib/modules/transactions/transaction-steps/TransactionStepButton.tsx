@@ -33,7 +33,11 @@ export function TransactionStepButton({ step }: Props) {
   const hasSimulationError = simulation.isError
   const isIdle = isConnected && simulation.isStale && !simulation.data
   const isButtonDisabled =
-    transactionState === TransactionState.Loading || hasSimulationError || isIdle || isComplete
+    transactionState === TransactionState.Loading ||
+    hasSimulationError ||
+    isIdle ||
+    isComplete ||
+    !executeAsync // no executeAsync is undefined while the txConfig is being built
 
   async function handleOnClick() {
     setExecutionError(undefined)

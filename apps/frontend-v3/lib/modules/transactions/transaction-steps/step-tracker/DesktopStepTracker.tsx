@@ -13,7 +13,7 @@ type Props = {
 
 export function DesktopStepTracker({ chain, transactionSteps }: Props) {
   return (
-    <Card padding={0} width="200px" right="-224px" position="absolute">
+    <Card padding={0} width="250px" right="-274px" position="absolute">
       <VStack alignItems="flex-start" w="full">
         <HStack p="sm" pb="0" justify="space-between" w="full">
           <Heading fontWeight="bold" size="h6">

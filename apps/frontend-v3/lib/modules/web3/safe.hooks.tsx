@@ -1,6 +1,6 @@
 import { useBlockNumber } from 'wagmi'
 import { useUserAccount } from './UserAccountProvider'
-import { useSafeAppLogs } from '../transactions/transaction-steps/useSafeAppTransaction'
+import { useSafeAppLogs } from '../transactions/transaction-steps/useSafeAppLogs'
 import { Hex } from 'viem'
 
 // Returns true if the user is connected with a Safe Account
@@ -28,6 +28,7 @@ export function useTxHash({ chainId, wagmiTxHash }: Props) {
   const isSafeApp = useIsSafeApp()
 
   const { safeTxHash } = useSafeAppLogs({
+    enabled: isSafeApp,
     hash: wagmiTxHash,
     chainId,
     blockNumber: blockNumber,

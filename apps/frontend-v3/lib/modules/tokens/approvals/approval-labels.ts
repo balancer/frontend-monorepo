@@ -2,6 +2,7 @@ import { BuildTransactionLabels } from '../../web3/contracts/transactionLabels'
 
 export type ApprovalAction =
   | 'AddLiquidity'
+  | 'RemoveLiquidity'
   | 'Locking'
   | 'Staking'
   | 'Swapping'
@@ -12,15 +13,17 @@ export type TokenApprovalLabelArgs = {
   actionType: ApprovalAction
   symbol: string
   requiredRawAmount: bigint
+  isPermit2?: boolean
 }
 
 export const buildTokenApprovalLabels: BuildTransactionLabels = ({
   actionType,
   symbol,
+  isPermit2 = false,
 }: TokenApprovalLabelArgs) => {
   return {
-    init: initApprovalLabelFor(actionType, symbol),
-    title: `Approve ${symbol}`,
+    init: initApprovalLabelFor(actionType, symbol, isPermit2),
+    title: titleFor(actionType, symbol, isPermit2),
     description: descriptionFor(actionType, symbol),
     confirming: actionType === 'Unapprove' ? `Unapproving ${symbol}...` : `Approving ${symbol}...`,
     confirmed: `${symbol} ${actionType === 'Unapprove' ? 'unapproved' : 'approved!'}`,
@@ -29,7 +32,10 @@ export const buildTokenApprovalLabels: BuildTransactionLabels = ({
   }
 }
 
-function initApprovalLabelFor(actionType: ApprovalAction, symbol: string) {
+function initApprovalLabelFor(actionType: ApprovalAction, symbol: string, isPermit2: boolean) {
+  if (isPermit2 && actionType === 'AddLiquidity') {
+    return `${symbol}: Approve Permit`
+  }
   switch (actionType) {
     case 'Locking':
       return `Approve LP token to lock`
@@ -43,11 +49,19 @@ function initApprovalLabelFor(actionType: ApprovalAction, symbol: string) {
       return `Approve ${symbol} to unwrap`
     case 'AddLiquidity':
       return `Approve ${symbol} to add`
+    case 'RemoveLiquidity':
+      return `Approve ${symbol} to remove`
     default:
       return `Approve ${symbol}`
   }
 }
 
+function titleFor(actionType: ApprovalAction, symbol: string, isPermit2: boolean) {
+  if (actionType === 'RemoveLiquidity') {
+    return `Approve ${symbol}`
+  }
+  return isPermit2 ? `${symbol}: Approve Permit` : `Approve ${symbol}`
+}
 function descriptionFor(actionType: ApprovalAction, symbol: string) {
   switch (actionType) {
     case 'Locking':

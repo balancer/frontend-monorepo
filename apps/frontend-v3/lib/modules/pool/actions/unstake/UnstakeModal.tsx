@@ -15,7 +15,7 @@ import { TransactionModalHeader } from '@/lib/shared/components/modals/Transacti
 import { ActionModalFooter } from '@/lib/shared/components/modals/ActionModalFooter'
 import { usePoolRedirect } from '../../pool.hooks'
 import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
-import { AnimateHeightChange } from '@/lib/shared/components/modals/AnimatedModalBody'
+import { AnimateHeightChange } from '@/lib/shared/components/animations/AnimateHeightChange'
 
 type Props = {
   isOpen: boolean

@@ -1,19 +1,20 @@
 'use client'
 
+import { useRelayerSignature } from '@/lib/modules/relayer/RelayerSignatureProvider'
+import { usePermitSignature } from '@/lib/modules/tokens/approvals/permit2/PermitSignatureProvider'
 import { useUserSettings } from '@/lib/modules/user/settings/UserSettingsProvider'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
-import { useQuery } from '@tanstack/react-query'
-import { RemoveLiquidityParams, removeLiquidityKeys } from './remove-liquidity-keys'
-import { ensureLastQueryResponse } from '../../LiquidityActionHelpers'
 import { defaultDebounceMs, onlyExplicitRefetch } from '@/lib/shared/utils/queries'
-import { usePool } from '../../../PoolProvider'
-import { useRelayerSignature } from '@/lib/modules/relayer/RelayerSignatureProvider'
 import { sentryMetaForRemoveLiquidityHandler } from '@/lib/shared/utils/query-errors'
 import { HumanAmount } from '@balancer/sdk'
-import { RemoveLiquidityHandler } from '../handlers/RemoveLiquidity.handler'
-import { Address } from 'viem/accounts'
-import { RemoveLiquiditySimulationQueryResult } from './useRemoveLiquiditySimulationQuery'
+import { useQuery } from '@tanstack/react-query'
 import { useDebounce } from 'use-debounce'
+import { Address } from 'viem/accounts'
+import { usePool } from '../../../PoolProvider'
+import { ensureLastQueryResponse } from '../../LiquidityActionHelpers'
+import { RemoveLiquidityHandler } from '../handlers/RemoveLiquidity.handler'
+import { RemoveLiquidityParams, removeLiquidityKeys } from './remove-liquidity-keys'
+import { RemoveLiquiditySimulationQueryResult } from './useRemoveLiquiditySimulationQuery'
 
 export type RemoveLiquidityBuildQueryResponse = ReturnType<
   typeof useRemoveLiquidityBuildCallDataQuery
@@ -42,6 +43,7 @@ export function useRemoveLiquidityBuildCallDataQuery({
   const { slippage } = useUserSettings()
   const { pool, chainId } = usePool()
   const { relayerApprovalSignature } = useRelayerSignature()
+  const { permitSignature } = usePermitSignature()
   const debouncedHumanBptIn = useDebounce(humanBptIn, defaultDebounceMs)[0]
 
   const params: RemoveLiquidityParams = {
@@ -64,6 +66,7 @@ export function useRemoveLiquidityBuildCallDataQuery({
       queryOutput,
       relayerApprovalSignature,
       wethIsEth,
+      permit: permitSignature,
     })
 
     console.log('Call data built:', res)

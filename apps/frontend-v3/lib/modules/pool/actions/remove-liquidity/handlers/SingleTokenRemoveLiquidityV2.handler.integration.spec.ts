@@ -1,19 +1,17 @@
 import networkConfig from '@/lib/config/networks/mainnet'
 import { balAddress, wETHAddress } from '@/lib/debug-helpers'
-import { aBalWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
 import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
+import { aBalWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
 import { Pool } from '../../../PoolProvider'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
-import { SingleTokenRemoveLiquidityHandler } from './SingleTokenRemoveLiquidity.handler'
+import { SingleTokenRemoveLiquidityV2Handler } from './SingleTokenRemoveLiquidityV2.handler'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 
-const poolMock = aBalWethPoolElementMock() // 80BAL-20WETH
-
-function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityHandler {
+function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityV2Handler {
   return selectRemoveLiquidityHandler(
     pool,
     RemoveLiquidityType.SingleToken
-  ) as SingleTokenRemoveLiquidityHandler
+  ) as SingleTokenRemoveLiquidityV2Handler
 }
 
 const defaultQueryInput: QueryRemoveLiquidityInput = {
@@ -23,9 +21,11 @@ const defaultQueryInput: QueryRemoveLiquidityInput = {
 
 const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0.2' }
 
-describe('When removing unbalanced liquidity for a weighted pool', () => {
+describe('When removing unbalanced liquidity for a weighted V2 pool', () => {
+  const v2poolMock = aBalWethPoolElementMock() // 80BAL-20WETH
+
   test('queries amounts out', async () => {
-    const handler = selectSingleTokenHandler(poolMock)
+    const handler = selectSingleTokenHandler(v2poolMock)
 
     const result = await handler.simulate(defaultQueryInput)
 
@@ -39,7 +39,7 @@ describe('When removing unbalanced liquidity for a weighted pool', () => {
   })
 
   test('builds Tx Config', async () => {
-    const handler = selectSingleTokenHandler(poolMock)
+    const handler = selectSingleTokenHandler(v2poolMock)
 
     const inputs: QueryRemoveLiquidityInput = {
       humanBptIn: '1',

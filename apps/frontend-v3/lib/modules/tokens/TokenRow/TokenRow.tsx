@@ -1,6 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
-import { Box, Button, HStack, Heading, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  HStack,
+  Heading,
+  Skeleton,
+  Text,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  VStack,
+} from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
 import {
@@ -179,21 +190,57 @@ export default function TokenRow({
                 </>
               ) : (
                 <>
-                  <Heading fontWeight="bold" as="h6" fontSize="lg">
+                  <Heading fontWeight="bold" as="h6" fontSize="md">
                     {fNum('weight', actualWeight, { abbreviated: false })}
                   </Heading>
-                  {targetWeight && (
-                    <HStack spacing="xs" align="start">
-                      <Text fontWeight="medium" variant="secondary" fontSize="sm">
-                        {fNum('weight', targetWeight)}
-                      </Text>
-                      <Tooltip label="Target weight">
-                        <Box>
-                          <BullseyeIcon />
-                        </Box>
-                      </Tooltip>
-                    </HStack>
-                  )}
+                  <HStack spacing="xs" align="center">
+                    {targetWeight ? (
+                      <>
+                        <Text fontWeight="medium" variant="secondary" fontSize="sm">
+                          {fNum('weight', targetWeight)}
+                        </Text>
+                        <Popover trigger="hover">
+                          <PopoverTrigger>
+                            <Box
+                              opacity="0.5"
+                              transition="opacity 0.2s var(--ease-out-cubic)"
+                              _hover={{ opacity: 1 }}
+                            >
+                              <BullseyeIcon />
+                            </Box>
+                          </PopoverTrigger>
+                          <PopoverContent p="sm" w="auto" maxW="300px">
+                            <Text fontSize="sm" variant="secondary">
+                              The target weight percentage set for this token in the context of a
+                              Weighted Pool.
+                            </Text>
+                          </PopoverContent>
+                        </Popover>
+                      </>
+                    ) : (
+                      <>
+                        <Text fontWeight="medium" variant="secondary" fontSize="sm">
+                          N/A
+                        </Text>
+                        <Popover trigger="hover">
+                          <PopoverTrigger>
+                            <Box
+                              opacity="0.5"
+                              transition="opacity 0.2s var(--ease-out-cubic)"
+                              _hover={{ opacity: 1 }}
+                            >
+                              <BullseyeIcon />
+                            </Box>
+                          </PopoverTrigger>
+                          <PopoverContent p="sm">
+                            <Text fontSize="sm" variant="secondary">
+                              Target weights are only applicable to tokens within Weighted Pools.
+                            </Text>
+                          </PopoverContent>
+                        </Popover>
+                      </>
+                    )}
+                  </HStack>
                 </>
               )}
             </VStack>

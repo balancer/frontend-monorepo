@@ -6,7 +6,11 @@ import {
   Exception as SentryException,
 } from '@sentry/types'
 import { SentryError, ensureError } from './errors'
-import { isUserRejectedError } from './error-filters'
+import {
+  isNotEnoughGasErrorMessage,
+  isPausedErrorMessage,
+  isUserRejectedError,
+} from './error-filters'
 import {
   AddLiquidityParams,
   stringifyHumanAmountsIn,
@@ -119,11 +123,14 @@ function createAddHandlerMetadata(
   errorMessage: string,
   params: AddLiquidityParams
 ) {
+  const { pool, ...restParams } = params
   const extra: Extras = {
     handler: params.handler.constructor.name,
     params: {
-      ...params,
-      humanAmountsIn: stringifyHumanAmountsIn(params.poolType, params.humanAmountsIn),
+      ...restParams,
+      poolId: pool.id,
+      poolType: pool.type,
+      humanAmountsIn: stringifyHumanAmountsIn(pool, params.humanAmountsIn),
     },
   }
   return createFatalMetadata(errorName, errorMessage, extra)
@@ -245,6 +252,8 @@ export function shouldIgnoreException(sentryException: SentryException) {
 export function shouldIgnore(message: string, stackTrace = ''): boolean {
   if (isUserRejectedError(new Error(message))) return true
 
+  if (isNotEnoughGasErrorMessage(message)) return true
+
   /*
     Thrown from useWalletClient() when loading a pool page from scratch.
     It looks like is is caused by the useWalletClient call in AddTokenToWalletButton but it does not affect it's behavior.
@@ -309,6 +318,18 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
   }
 
   /*
+    Extension related error which does not crash.
+    Examples: https://balancer-labs.sentry.io/issues/5622743248/
+  */
+  if (
+    message ===
+      "Cannot destructure property 'address' of '(intermediate value)' as it is undefined." &&
+    stackTrace.includes('extensionPageScript.js')
+  ) {
+    return true
+  }
+
+  /*
     Waller Connect bug
     More info: https://github.com/WalletConnect/walletconnect-monorepo/issues/4318
   */
@@ -331,6 +352,8 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
   if (message.startsWith('The source') && message.includes('has not been authorized yet')) {
     return true
   }
+
+  if (isPausedErrorMessage(message)) return true
 
   return false
 }

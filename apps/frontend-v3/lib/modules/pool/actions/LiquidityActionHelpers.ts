@@ -11,21 +11,14 @@ import {
   MinimalToken,
   NestedPoolState,
   PoolState,
+  PoolStateWithBalances,
+  Token,
   TokenAmount,
   mapPoolToNestedPoolState,
   mapPoolType,
-  PoolStateWithBalances,
-  Token,
 } from '@balancer/sdk'
-import { Hex, formatUnits, parseUnits, Address } from 'viem'
-import {
-  isAffectedByCspIssue,
-  isComposableStableV1,
-  isCowAmmPool,
-  isGyro,
-  isV3Pool,
-} from '../pool.helpers'
-import { Pool } from '../PoolProvider'
+import BigNumber from 'bignumber.js'
+import { Address, Hex, formatUnits, parseUnits } from 'viem'
 import {
   isNativeAsset,
   isNativeOrWrappedNative,
@@ -33,7 +26,15 @@ import {
   swapNativeWithWrapped,
 } from '../../tokens/token.helpers'
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
-import BigNumber from 'bignumber.js'
+import { Pool } from '../PoolProvider'
+import {
+  isAffectedByCspIssue,
+  isComposableStableV1,
+  isCowAmmPool,
+  isGyro,
+  isUnbalancedLiquidityDisabled,
+  isV3Pool,
+} from '../pool.helpers'
 
 // Null object used to avoid conditional checks during hook loading state
 const NullPool: Pool = {
@@ -75,10 +76,12 @@ export class LiquidityActionHelpers {
   }
 
   public getAmountsToApprove(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
+    isPermit2 = false
   ): TokenAmountToApprove[] {
     return this.toInputAmounts(humanAmountsIn).map(({ address, rawAmount }) => {
       return {
+        isPermit2,
         tokenAddress: address,
         requiredRawAmount: rawAmount,
         requestedRawAmount: rawAmount, //This amount will be probably replaced by MAX_BIGINT depending on the approval rules
@@ -193,8 +196,9 @@ export function shouldUseRecoveryRemoveLiquidity(pool: Pool): boolean {
   return false
 }
 
-export function requiresProportionalInput(poolType: GqlPoolType): boolean {
-  return isGyro(poolType) || isCowAmmPool(poolType)
+export function requiresProportionalInput(pool: Pool): boolean {
+  if (isV3Pool(pool) && isUnbalancedLiquidityDisabled(pool)) return true
+  return isGyro(pool.type) || isCowAmmPool(pool.type)
 }
 
 type ProtocolVersion = PoolState['protocolVersion']
@@ -311,10 +315,7 @@ export function hasNoLiquidity(pool: Pool): boolean {
 }
 
 // When the pool has version < v3, it adds extra buildCall params (sender and recipient) that must be present only in V1/V2
-export function formatBuildCallParams<T>(buildCallParams: T, isV3Pool: boolean, account: Address) {
-  // sender must be undefined for v3 pools
-  if (isV3Pool) return buildCallParams
-
+export function formatBuildCallParams<T>(buildCallParams: T, account: Address) {
   // sender and recipient must be defined only for v1 and v2 pools
   return { ...buildCallParams, sender: account, recipient: account }
 }

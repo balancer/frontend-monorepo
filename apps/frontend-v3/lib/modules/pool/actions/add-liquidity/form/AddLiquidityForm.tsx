@@ -21,7 +21,10 @@ import { Address } from 'viem'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { bn, fNum } from '@/lib/shared/utils/numbers'
-import { TransactionSettings } from '@/lib/modules/user/settings/TransactionSettings'
+import {
+  ProportionalTransactionSettings,
+  TransactionSettings,
+} from '@/lib/modules/user/settings/TransactionSettings'
 import { TokenInputs } from './TokenInputs'
 import { TokenInputsWithAddable } from './TokenInputsWithAddable'
 import { usePool } from '../../../PoolProvider'
@@ -48,13 +51,14 @@ import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@/lib/modules/web3/ConnectWallet'
 import { BalAlert } from '@/lib/shared/components/alerts/BalAlert'
 import { SafeAppAlert } from '@/lib/shared/components/alerts/SafeAppAlert'
+import { useTokens } from '@/lib/modules/tokens/TokensProvider'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
-  const { validTokens } = useAddLiquidity()
+  const { validTokens, proportionalSlippage } = useAddLiquidity()
 
   return (
-    <TokenBalancesProvider extTokens={validTokens}>
+    <TokenBalancesProvider extTokens={validTokens} bufferPercentage={proportionalSlippage}>
       <AddLiquidityMainForm />
     </TokenBalancesProvider>
   )
@@ -77,6 +81,9 @@ function AddLiquidityMainForm() {
     nativeAsset,
     wNativeAsset,
     previewModalDisclosure,
+    proportionalSlippage,
+    slippage,
+    setProportionalSlippage,
   } = useAddLiquidity()
 
   const nextBtn = useRef(null)
@@ -87,6 +94,7 @@ function AddLiquidityMainForm() {
   const { setValidationError } = useTokenInputsValidation()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
+  const { startTokenPricePolling } = useTokens()
 
   useEffect(() => {
     setPriceImpact(priceImpactQuery.data)
@@ -103,7 +111,7 @@ function AddLiquidityMainForm() {
 
   const onModalOpen = async () => {
     previewModalDisclosure.onOpen()
-    if (requiresProportionalInput(pool.type)) {
+    if (requiresProportionalInput(pool)) {
       // Edge-case refetch to avoid mismatches in proportional bptOut calculations
       await refetchQuote()
     }
@@ -142,6 +150,13 @@ function AddLiquidityMainForm() {
     })
   }
 
+  function onModalClose() {
+    // restart polling for token prices when modal is closed again
+    startTokenPricePolling()
+
+    previewModalDisclosure.onClose()
+  }
+
   useEffect(() => {
     if (addLiquidityTxHash) {
       previewModalDisclosure.onOpen()
@@ -154,7 +169,15 @@ function AddLiquidityMainForm() {
         <CardHeader>
           <HStack w="full" justify="space-between">
             <span>Add liquidity</span>
-            <TransactionSettings size="sm" />
+            {requiresProportionalInput(pool) ? (
+              <ProportionalTransactionSettings
+                slippage={proportionalSlippage}
+                setSlippage={setProportionalSlippage}
+                size="sm"
+              />
+            ) : (
+              <TransactionSettings size="sm" />
+            )}
           </HStack>
         </CardHeader>
         <VStack spacing="md" align="start" w="full">
@@ -165,7 +188,7 @@ function AddLiquidityMainForm() {
           {!nestedAddLiquidityEnabled ? (
             <TokenInputsWithAddable
               tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}
-              requiresProportionalInput={requiresProportionalInput(pool.type)}
+              requiresProportionalInput={requiresProportionalInput(pool)}
               totalUSDValue={totalUSDValue}
             />
           ) : (
@@ -195,6 +218,7 @@ function AddLiquidityMainForm() {
                   <PoolActionsPriceImpactDetails
                     totalUSDValue={totalUSDValue}
                     bptAmount={simulationQuery.data?.bptOut.amount}
+                    slippage={slippage}
                     isAddLiquidity
                     isLoading={isFetching}
                   />
@@ -259,7 +283,7 @@ function AddLiquidityMainForm() {
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}
         onOpen={previewModalDisclosure.onOpen}
-        onClose={previewModalDisclosure.onClose}
+        onClose={onModalClose}
       />
       {!!validTokens.length && (
         <NativeAssetSelectModal

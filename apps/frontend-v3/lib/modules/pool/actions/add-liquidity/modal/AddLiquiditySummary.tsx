@@ -15,9 +15,10 @@ import { BalAlert } from '@/lib/shared/components/alerts/BalAlert'
 import { StakingOptions } from './StakingOptions'
 import { isVebalPool } from '../../../pool.helpers'
 import { VebalRedirectModal } from '@/lib/modules/vebal/VebalRedirectModal'
-import { AnimateHeightChange } from '@/lib/shared/components/modals/AnimatedModalBody'
+
 import { CardPopAnim } from '@/lib/shared/components/animations/CardPopAnim'
 import { useMemo } from 'react'
+import { AnimateHeightChange } from '@/lib/shared/components/animations/AnimateHeightChange'
 
 export function AddLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -34,6 +35,7 @@ export function AddLiquiditySummary({
     tokens,
     addLiquidityTxHash,
     addLiquidityTxSuccess,
+    slippage,
   } = useAddLiquidity()
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
@@ -123,7 +125,9 @@ export function AddLiquiditySummary({
               <PoolActionsPriceImpactDetails
                 totalUSDValue={totalUSDValue}
                 bptAmount={simulationQuery.data?.bptOut.amount}
+                slippage={slippage}
                 isAddLiquidity
+                isSummary
               />
             </VStack>
           </Card>

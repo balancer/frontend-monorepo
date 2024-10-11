@@ -10,6 +10,7 @@ export type TokenAmountToApprove = {
   tokenAddress: Address
   requiredRawAmount: bigint // actual amount that the transaction requires
   requestedRawAmount: bigint // amount that we are going to request (normally MAX_BIGINT)
+  isPermit2: boolean // whether the approval is for Permit2 or standard token approval
 }
 
 // This is a subtype of InputAmount as we only need rawAmount and address
@@ -19,6 +20,7 @@ type TokenApprovalParams = {
   chainId: GqlChain | SupportedChainId | null
   rawAmounts: RawAmount[]
   allowanceFor: (tokenAddress: Address) => bigint
+  isPermit2?: boolean
   approveMaxBigInt?: boolean
   skipAllowanceCheck?: boolean
 }
@@ -30,6 +32,7 @@ export function getRequiredTokenApprovals({
   chainId,
   rawAmounts,
   allowanceFor,
+  isPermit2 = false,
   approveMaxBigInt = true,
   skipAllowanceCheck = false,
 }: TokenApprovalParams): TokenAmountToApprove[] {
@@ -42,6 +45,7 @@ export function getRequiredTokenApprovals({
       requiredRawAmount: rawAmount,
       // The transaction only requires requiredRawAmount but we will normally request MAX_BIGINT
       requestedRawAmount: approveMaxBigInt ? MAX_BIGINT : rawAmount,
+      isPermit2,
     }
   })
 
@@ -59,6 +63,7 @@ export function getRequiredTokenApprovals({
         requiredRawAmount: 0n,
         requestedRawAmount: 0n,
         tokenAddress: t.tokenAddress,
+        isPermit2,
       }
       // Prepend approval for ZERO amount
       return [zeroTokenAmountToApprove, t]

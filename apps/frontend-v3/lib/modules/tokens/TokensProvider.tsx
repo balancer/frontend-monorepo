@@ -14,7 +14,7 @@ import {
 import { isSameAddress } from '@/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { bn, Numberish } from '@/lib/shared/utils/numbers'
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { useQuery } from '@apollo/client'
 import { Dictionary, zipObject } from 'lodash'
 import { createContext, PropsWithChildren, useCallback } from 'react'
 import { Address } from 'viem'
@@ -25,30 +25,35 @@ import { mins } from '@/lib/shared/utils/time'
 export type UseTokensResult = ReturnType<typeof _useTokens>
 export const TokensContext = createContext<UseTokensResult | null>(null)
 
+export type GetTokenFn = (address: string, chain: GqlChain) => GqlToken | undefined
+
 export function _useTokens(
   initTokenData: GetTokensQuery,
   initTokenPricesData: GetTokenPricesQuery,
   variables: GetTokensQueryVariables
 ) {
   const skipQuery = useSkipInitialQuery(variables)
+  const pollInterval = mins(3).toMs()
 
   // skip initial fetch on mount so that initialData is used
   const { data: tokensData } = useQuery(GetTokensDocument, {
     variables,
     skip: skipQuery,
   })
-  const { data: tokenPricesData, loading: isLoadingTokenPrices } = useQuery(
-    GetTokenPricesDocument,
-    {
-      variables,
-      // The server provides us with an initial data set, but we immediately reload the potentially
-      // stale data to ensure the prices we show are up to date. Every 3 mins, we requery token prices
-      initialFetchPolicy: 'no-cache',
-      nextFetchPolicy: 'cache-and-network',
-      pollInterval: mins(3).toMs(),
-      notifyOnNetworkStatusChange: true,
-    }
-  )
+  const {
+    data: tokenPricesData,
+    loading: isLoadingTokenPrices,
+    startPolling,
+    stopPolling,
+  } = useQuery(GetTokenPricesDocument, {
+    variables,
+    // The server provides us with an initial data set, but we immediately reload the potentially
+    // stale data to ensure the prices we show are up to date. Every 3 mins, we requery token prices
+    initialFetchPolicy: 'no-cache',
+    nextFetchPolicy: 'cache-and-network',
+    pollInterval,
+    notifyOnNetworkStatusChange: true,
+  })
 
   const tokens = tokensData?.tokens || initTokenData.tokens
   const prices = tokenPricesData?.tokenPrices || initTokenPricesData.tokenPrices
@@ -153,6 +158,8 @@ export function _useTokens(
     usdValueForToken,
     calcWeightForBalance,
     calcTotalUsdValue,
+    startTokenPricePolling: () => startPolling(pollInterval),
+    stopTokenPricePolling: stopPolling,
   }
 }
 

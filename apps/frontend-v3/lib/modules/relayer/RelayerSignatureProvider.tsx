@@ -4,13 +4,7 @@ import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useState } from 'react'
 
 import { Address } from 'viem'
-
-export enum SignRelayerState {
-  Ready = 'init',
-  Confirming = 'confirming',
-  Preparing = 'preparing',
-  Completed = 'completed',
-}
+import { SignatureState } from '../web3/signatures/signature.helpers'
 
 export type UseRelayerSignatureResponse = ReturnType<typeof _useRelayerSignature>
 export const RelayerSignatureContext = createContext<UseRelayerSignatureResponse | null>(null)
@@ -18,9 +12,7 @@ export const RelayerSignatureContext = createContext<UseRelayerSignatureResponse
 export function _useRelayerSignature() {
   const [relayerApprovalSignature, setRelayerApprovalSignature] = useState<Address | undefined>()
 
-  const [signRelayerState, setSignRelayerState] = useState<SignRelayerState>(
-    SignRelayerState.Preparing
-  )
+  const [signRelayerState, setSignRelayerState] = useState<SignatureState>(SignatureState.Preparing)
 
   return {
     relayerApprovalSignature,

@@ -24,7 +24,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
 import { useResetStepIndexOnOpen } from '../useResetStepIndexOnOpen'
 import { useRouter } from 'next/navigation'
-import { AnimateHeightChange } from '@/lib/shared/components/modals/AnimatedModalBody'
+import { AnimateHeightChange } from '@/lib/shared/components/animations/AnimateHeightChange'
 
 type Props = {
   isOpen: boolean

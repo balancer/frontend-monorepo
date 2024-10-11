@@ -50,9 +50,8 @@ export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
     port: ANVIL_PORTS.Ethereum,
     // From time to time this block gets outdated having this kind of error in integration tests:
     // ContractFunctionExecutionError: The contract function "queryJoin" returned no data ("0x").
-    // forkBlockNumber: 19769489n,
-    // forkBlockNumber: 20061849n,
-    forkBlockNumber: 20474895n,
+    // forkBlockNumber: 20474895n,
+    forkBlockNumber: 20777062n,
   },
   Polygon: {
     networkName: 'Polygon',
@@ -66,7 +65,7 @@ export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
     fallBackRpc: 'https://gateway.tenderly.co/public/sepolia',
     port: ANVIL_PORTS.Sepolia,
     // For now we will use the last block until v3 deployments are final
-    // forkBlockNumber: ,
+    // forkBlockNumber: 6679621n,
   },
 }
 
@@ -84,17 +83,27 @@ export function getTestRpcSetup(networkName: NetworksWithFork) {
   return { port, rpcUrl }
 }
 
-export function getForkUrl(network: NetworkSetup, verbose = false): string {
-  const privateAlchemyKey = process.env['NEXT_PRIVATE_ALCHEMY_KEY']
-  if (privateAlchemyKey) {
+/*
+ *  We currently use Drpc for all integration tests (Ethereum, Polygon and Sepolia networks)
+ *  In case you want to use a different RPC, you can set something like this (i.e. ALCHEMY)
+ *     const privateAlchemyKey = process.env['NEXT_PRIVATE_ALCHEMY_KEY']
+ *     return `https://polygon-mainnet.g.alchemy.com/v2/${privateAlchemyKey}`
+ */
+export function getForkUrl(networkName: NetworksWithFork, verbose = false): string {
+  const network = ANVIL_NETWORKS[networkName]
+  const privateKey = process.env['NEXT_PRIVATE_DRPC_KEY']
+  const dRpcUrl = (chainName: string) =>
+    `https://lb.drpc.org/ogrpc?network=${chainName}&dkey=${privateKey}`
+
+  if (privateKey) {
     if (network.networkName === 'Ethereum') {
-      return `https://eth-mainnet.g.alchemy.com/v2/${privateAlchemyKey}`
+      return dRpcUrl('ethereum')
     }
     if (network.networkName === 'Polygon') {
-      return `https://polygon-mainnet.g.alchemy.com/v2/${privateAlchemyKey}`
+      return dRpcUrl('polygon')
     }
     if (network.networkName === 'Sepolia') {
-      return `https://eth-sepolia.g.alchemy.com/v2/${privateAlchemyKey}`
+      return dRpcUrl('sepolia')
     }
   }
 

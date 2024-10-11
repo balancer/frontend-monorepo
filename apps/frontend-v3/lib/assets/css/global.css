@@ -61,6 +61,21 @@ body {
   flex-grow: 1;
 }
 
+.chakra-ui-light {
+  --tooltip-text-decoration-color: var(--chakra-colors-gray-300);
+}
+
+.chakra-ui-dark {
+  --tooltip-text-decoration-color: var(--chakra-colors-gray-500);
+}
+
+.tooltip-dashed-underline {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--tooltip-text-decoration-color);
+}
+
 .fade-in-opacity {
   --start-opacity: 1;
 }

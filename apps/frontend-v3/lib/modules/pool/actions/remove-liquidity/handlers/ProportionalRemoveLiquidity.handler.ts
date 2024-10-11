@@ -1,47 +1,11 @@
 import { TransactionConfig } from '@/lib/modules/web3/contracts/contract.types'
-import {
-  HumanAmount,
-  InputAmount,
-  RemoveLiquidity,
-  RemoveLiquidityKind,
-  RemoveLiquidityProportionalInput,
-  Slippage,
-} from '@balancer/sdk'
-import { Address, parseEther } from 'viem'
-import { BPT_DECIMALS } from '../../../pool.constants'
-import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers, formatBuildCallParams } from '../../LiquidityActionHelpers'
-import {
-  QueryRemoveLiquidityInput,
-  SdkBuildRemoveLiquidityInput,
-  SdkQueryRemoveLiquidityOutput,
-} from '../remove-liquidity.types'
-import { RemoveLiquidityHandler } from './RemoveLiquidity.handler'
-import { getRpcUrl } from '@/lib/modules/web3/transports'
+import { RemoveLiquidity, Slippage } from '@balancer/sdk'
+import { formatBuildCallParams } from '../../LiquidityActionHelpers'
+import { SdkBuildRemoveLiquidityInput } from '../remove-liquidity.types'
+import { BaseProportionalRemoveLiquidityHandler } from './BaseProportionalRemoveLiquidity.handler'
 
-export class ProportionalRemoveLiquidityHandler implements RemoveLiquidityHandler {
-  helpers: LiquidityActionHelpers
-
-  constructor(pool: Pool) {
-    this.helpers = new LiquidityActionHelpers(pool)
-  }
-
-  public async simulate({
-    humanBptIn: bptIn,
-  }: QueryRemoveLiquidityInput): Promise<SdkQueryRemoveLiquidityOutput> {
-    const removeLiquidity = new RemoveLiquidity()
-    const removeLiquidityInput = this.constructSdkInput(bptIn)
-
-    const sdkQueryOutput = await removeLiquidity.query(removeLiquidityInput, this.helpers.poolState)
-
-    return { amountsOut: sdkQueryOutput.amountsOut.filter(a => a.amount > 0n), sdkQueryOutput }
-  }
-
-  public async getPriceImpact(): Promise<number> {
-    // proportional remove liquidity does not have price impact
-    return 0
-  }
-
+// Used by V2 and CowAMM (V1) pools
+export class ProportionalRemoveLiquidityHandler extends BaseProportionalRemoveLiquidityHandler {
   public async buildCallData({
     account,
     slippagePercent,
@@ -56,11 +20,7 @@ export class ProportionalRemoveLiquidityHandler implements RemoveLiquidityHandle
       wethIsEth,
     }
 
-    const buildCallParams = formatBuildCallParams(
-      baseBuildCallParams,
-      this.helpers.isV3Pool(),
-      account
-    )
+    const buildCallParams = formatBuildCallParams(baseBuildCallParams, account)
 
     const { callData, to, value } = removeLiquidity.buildCall(buildCallParams)
 
@@ -70,24 +30,6 @@ export class ProportionalRemoveLiquidityHandler implements RemoveLiquidityHandle
       data: callData,
       to,
       value,
-    }
-  }
-
-  /**
-   * PRIVATE METHODS
-   */
-  protected constructSdkInput(humanBptIn: HumanAmount): RemoveLiquidityProportionalInput {
-    const bptIn: InputAmount = {
-      rawAmount: parseEther(humanBptIn),
-      decimals: BPT_DECIMALS,
-      address: this.helpers.pool.address as Address,
-    }
-
-    return {
-      chainId: this.helpers.chainId,
-      rpcUrl: getRpcUrl(this.helpers.chainId),
-      bptIn,
-      kind: RemoveLiquidityKind.Proportional,
     }
   }
 }

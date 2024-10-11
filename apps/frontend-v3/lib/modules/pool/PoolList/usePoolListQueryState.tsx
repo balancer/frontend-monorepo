@@ -8,7 +8,7 @@ import {
 } from '@/lib/shared/services/api/generated/graphql'
 import { uniq } from 'lodash'
 import { getProjectConfig } from '@/lib/config/getProjectConfig'
-import { useQueryState } from 'nuqs'
+import { useQueryState } from 'next-usequerystate'
 import {
   POOL_CATEGORY_MAP,
   POOL_TYPE_MAP,
@@ -135,10 +135,6 @@ export function usePoolListQueryState() {
         return 'Incentivized'
       case 'POINTS':
         return 'Points'
-      case 'SUPERFEST':
-        return 'Superfest'
-      case 'ARBITRUM_GRANTS':
-        return 'Arbitrum Grants'
       default:
         return (poolCategory as string).toLowerCase().replace('_', ' ')
     }

@@ -7,7 +7,7 @@ import {
   PopoverContent,
   Text,
   TextProps,
-  useTheme,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import BaseAprTooltip, { BaseAprTooltipProps } from './BaseAprTooltip'
 import { Info } from 'react-feather'
@@ -18,6 +18,7 @@ import { FeaturedPool, Pool } from '@/lib/modules/pool/PoolProvider'
 import { isLBP } from '@/lib/modules/pool/pool.helpers'
 import { getProjectConfig } from '@/lib/config/getProjectConfig'
 import { GqlPoolAprItemType } from '@/lib/shared/services/api/generated/graphql'
+import StarIcon from '../../icons/StarIcon'
 
 interface Props
   extends Omit<
@@ -42,24 +43,56 @@ export const SparklesIcon = ({
   pool: Pool | PoolListItem | FeaturedPool
   id?: string
 }) => {
-  const theme = useTheme()
   const { corePoolId } = getProjectConfig()
   const hoverColor = isLBP(pool.type) ? 'inherit' : 'font.highlight'
 
   const hasRewardApr =
-    pool.dynamicData.aprItems.filter(item => item.type !== GqlPoolAprItemType.SwapFee).length > 0
+    pool.dynamicData.aprItems.filter(item =>
+      [GqlPoolAprItemType.Staking, GqlPoolAprItemType.VebalEmissions].includes(item.type)
+    ).length > 0
 
-  let gradFromColor = theme.colors.sparkles.default.from
-  let gradToColor = theme.colors.sparkles.default.to
+  const hasOnlySwapApr =
+    pool.dynamicData.aprItems.filter(item => item.type === GqlPoolAprItemType.SwapFee).length ===
+    pool.dynamicData.aprItems.length
+
+  const defaultGradFrom = useColorModeValue(
+    '#91A1B6', // light from
+    '#A0AEC0' // dark from
+  )
+  const defaultGradTo = useColorModeValue(
+    '#BCCCE1', // light to
+    '#E9EEF5' // dark to
+  )
+
+  const corePoolGradFrom = useColorModeValue(
+    '#BFA672', // light from
+    '#AE8C56' // dark from
+  )
+  const corePoolGradTo = useColorModeValue(
+    '#D9C47F', // light to
+    '#F4EAD2' // dark to
+  )
+
+  const rewardsGradFrom = useColorModeValue(
+    '#F49A55', // light from
+    '#F49175' // dark from
+  )
+  const rewardsGradTo = useColorModeValue(
+    '#FCD45B', // light to
+    '#FFCC33' // dark to
+  )
+
+  let gradFromColor = defaultGradFrom
+  let gradToColor = defaultGradTo
 
   if (pool.id === corePoolId) {
-    gradFromColor = theme.colors.sparkles.corePool.from
-    gradToColor = theme.colors.sparkles.corePool.to
+    gradFromColor = corePoolGradFrom
+    gradToColor = corePoolGradTo
   }
 
   if (hasRewardApr) {
-    gradFromColor = theme.colors.sparkles.rewards.from
-    gradToColor = theme.colors.sparkles.rewards.to
+    gradFromColor = rewardsGradFrom
+    gradToColor = rewardsGradTo
   }
 
   return (
@@ -67,6 +100,14 @@ export const SparklesIcon = ({
       <Center w="16px">
         {isLBP(pool.type) ? (
           <Icon as={Info} boxSize={4} color={isOpen ? hoverColor : 'gray.400'} />
+        ) : hasOnlySwapApr ? (
+          <Icon
+            as={StarIcon}
+            boxSize={4}
+            gradFrom={isOpen ? 'green' : defaultGradFrom}
+            gradTo={isOpen ? 'green' : defaultGradTo}
+            id={id || ''}
+          />
         ) : (
           <Icon
             as={StarsIcon}
@@ -118,6 +159,7 @@ function MainAprTooltip({
               _hover={{ color: hoverColor }}
               color={isOpen ? hoverColor : 'font.primary'}
               opacity={isLBP(pool.type) ? 0.5 : 1}
+              gap="xs"
             >
               {!onlySparkles && (
                 <Text

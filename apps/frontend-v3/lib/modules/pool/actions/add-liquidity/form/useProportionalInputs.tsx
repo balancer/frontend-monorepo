@@ -17,7 +17,7 @@ import {
 } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { useTotalUsdValue } from '@/lib/modules/tokens/useTotalUsdValue'
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
+import { HumanTokenAmountWithAddress, TokenAmount } from '@/lib/modules/tokens/token.types'
 import { swapWrappedWithNative } from '@/lib/modules/tokens/token.helpers'
 
 type OptimalToken = {
@@ -42,13 +42,16 @@ export function useProportionalInputs() {
   const [isMaximized, setIsMaximized] = useState(false)
   const { isLoadingTokenPrices } = useTokens()
 
+  // Depending on if the user is using WETH or ETH, we need to filter out the
+  // native asset or wrapped native asset.
+  const nativeAssetFilter = (balance: TokenAmount) =>
+    wethIsEth
+      ? wNativeAsset && balance.address !== wNativeAsset.address
+      : nativeAsset && balance.address !== nativeAsset.address
+
   const filteredBalances = useMemo(() => {
-    return balances.filter(balance =>
-      wethIsEth
-        ? wNativeAsset && balance.address !== wNativeAsset.address
-        : nativeAsset && balance.address !== nativeAsset.address
-    )
-  }, [wethIsEth, isBalancesLoading])
+    return balances.filter(nativeAssetFilter)
+  }, [wethIsEth, isBalancesLoading, balances])
 
   function clearAmountsIn(changedAmount?: HumanTokenAmountWithAddress) {
     setHumanAmountsIn(

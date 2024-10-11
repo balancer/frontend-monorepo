@@ -2,7 +2,6 @@
 'use client'
 
 import { useTokens } from '@/lib/modules/tokens/TokensProvider'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { HumanAmount } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
@@ -17,7 +16,6 @@ import {
   injectNativeAsset,
   replaceWrappedWithNativeAsset,
   requiresProportionalInput,
-  supportsNestedActions,
 } from '../LiquidityActionHelpers'
 import { isDisabledWithReason } from '@/lib/shared/utils/functions/isDisabledWithReason'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
@@ -30,7 +28,8 @@ import { useTotalUsdValue } from '@/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { getLeafTokens } from '@/lib/modules/tokens/token.helpers'
+import { getPoolTokens } from '../../pool.helpers'
+import { useUserSettings } from '@/lib/modules/user/settings/UserSettingsProvider'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -41,12 +40,14 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
   const [totalUSDValue, setTotalUSDValue] = useState('0')
+  const [proportionalSlippage, setProportionalSlippage] = useState<string>('0')
 
   const { pool, refetch: refetchPool, isLoading } = usePool()
   const { getToken, getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } =
     useTokens()
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
+  const { slippage: userSlippage } = useUserSettings()
 
   const handler = useMemo(() => selectAddLiquidityHandler(pool), [pool.id, isLoading])
 
@@ -58,9 +59,12 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const chain = pool.chain
   const nativeAsset = getNativeAssetToken(chain)
   const wNativeAsset = getWrappedNativeAssetToken(chain)
+  const isForcedProportionalAdd = requiresProportionalInput(pool)
+  const slippage = isForcedProportionalAdd ? proportionalSlippage : userSlippage
+  const tokens = getPoolTokens(pool, getToken)
 
   function setInitialHumanAmountsIn() {
-    const amountsIn = getPoolTokens().map(
+    const amountsIn = tokens.map(
       token =>
         ({
           tokenAddress: token.address,
@@ -80,18 +84,6 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
       },
     ])
   }
-
-  function getPoolTokens() {
-    if (supportsNestedActions(pool)) {
-      return getLeafTokens(pool.poolTokens)
-    }
-
-    return pool.poolTokens
-  }
-
-  const tokens = getPoolTokens()
-    .map(token => getToken(token.address, chain))
-    .filter((token): token is GqlToken => !!token)
 
   const tokensWithNativeAsset = replaceWrappedWithNativeAsset(tokens, nativeAsset)
 
@@ -127,6 +119,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     handler,
     humanAmountsIn,
     simulationQuery,
+    slippage,
   })
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
 
@@ -138,7 +131,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const hasQuoteContext = !!simulationQuery.data
 
   async function refetchQuote() {
-    if (requiresProportionalInput(pool.type)) {
+    if (isForcedProportionalAdd) {
       /*
       This is the only edge-case where the SDK needs pool onchain data from the frontend
       (calculateProportionalAmounts uses pool.dynamicData.totalShares in its parameters)
@@ -198,6 +191,10 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     addLiquidityTxHash,
     hasQuoteContext,
     addLiquidityTxSuccess,
+    slippage,
+    proportionalSlippage,
+    isForcedProportionalAdd,
+    setProportionalSlippage,
     refetchQuote,
     setHumanAmountIn,
     setHumanAmountsIn,

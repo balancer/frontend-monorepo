@@ -9,6 +9,7 @@ import {
   GqlPoolStakingOtherGauge,
   GqlPoolTokenDetail,
   GqlPoolType,
+  GqlToken,
 } from '@/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@/lib/shared/utils/addresses'
 import { Numberish, bn } from '@/lib/shared/utils/numbers'
@@ -22,7 +23,10 @@ import { PoolIssue } from './alerts/pool-issues/PoolIssue.type'
 import { getUserTotalBalanceInt } from './user-balance.helpers'
 import { dateToUnixTimestamp } from '@/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
-import { balancerV3VaultAbi } from '../web3/contracts/abi/balancerV3Abi'
+import { balancerV3VaultAbi } from '../web3/contracts/abi/balancerV3VaultAbi'
+import { supportsNestedActions } from './actions/LiquidityActionHelpers'
+import { getLeafTokens } from '../tokens/token.helpers'
+import { GetTokenFn } from '../tokens/TokensProvider'
 
 /**
  * METHODS
@@ -259,8 +263,10 @@ export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
 export function shouldBlockAddLiquidity(pool: Pool) {
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
-  // If pool is an LBP, we should block adding liquidity
-  if (isLBP(pool.type)) return true
+  // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
+  if (isLBP(pool.type) || pool.dynamicData.isPaused || pool.dynamicData.isInRecoveryMode) {
+    return true
+  }
 
   return poolTokens.some(token => {
     // if token is not allowed - we should block adding liquidity
@@ -316,6 +322,32 @@ export function isV3Pool(pool: Pool): boolean {
   return pool.protocolVersion === 3
 }
 
+export function requiresPermit2Approval(pool: Pool): boolean {
+  return isV3Pool(pool)
+}
+
+export function isUnbalancedLiquidityDisabled(pool: Pool): boolean {
+  return !!pool.liquidityManagement?.disableUnbalancedLiquidity
+}
+
 export function getRateProviderWarnings(warnings: string[]) {
   return warnings.filter(warning => !isEmpty(warning))
+}
+
+export function getPoolTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
+  type PoolToken = Pool['poolTokens'][0]
+  function toGqlTokens(tokens: PoolToken[]): GqlToken[] {
+    return tokens
+      .filter(token => !isSameAddress(token.address, pool.address)) // Exclude the BPT pool token itself
+      .map(token => getToken(token.address, pool.chain))
+      .filter((token): token is GqlToken => token !== undefined)
+  }
+
+  // TODO add exception for composable pools where we can allow adding
+  // liquidity with nested tokens
+  if (supportsNestedActions(pool)) {
+    return toGqlTokens(getLeafTokens(pool.poolTokens))
+  }
+
+  return toGqlTokens(pool.poolTokens)
 }

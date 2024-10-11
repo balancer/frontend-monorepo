@@ -12,7 +12,7 @@ import {
   parseAsString,
   parseAsStringEnum,
   parseAsFloat,
-} from 'nuqs'
+} from 'next-usequerystate/parsers'
 import { Hex } from 'viem'
 
 export type PoolId = Hex
@@ -82,13 +82,7 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
   [GqlPoolType.Fx]: [GqlPoolType.Fx],
 }
 
-export const poolCategoryFilters = [
-  'INCENTIVIZED',
-  'VE8020',
-  'POINTS',
-  'SUPERFEST',
-  'ARBITRUM_GRANTS',
-] as const
+export const poolCategoryFilters = ['INCENTIVIZED', 'VE8020', 'POINTS'] as const
 export type PoolCategoryType = (typeof poolCategoryFilters)[number]
 export const POOL_CATEGORY_MAP: { [key in PoolCategoryType]: string[] } = {
   INCENTIVIZED: ['INCENTIVIZED'],
@@ -100,9 +94,7 @@ export const POOL_CATEGORY_MAP: { [key in PoolCategoryType]: string[] } = {
     'POINTS_SWELL',
     'POINTS_MODE',
   ],
-  SUPERFEST: ['SUPERFEST'],
   VE8020: ['VE8020'],
-  ARBITRUM_GRANTS: ['ARBITRUM_GRANTS'],
 }
 
 export type SortingState = PoolsColumnSort[]

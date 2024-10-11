@@ -4,7 +4,6 @@
 import { useTokens } from '@/lib/modules/tokens/TokensProvider'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@/lib/shared/labels'
-import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@/lib/shared/utils/functions/isDisabledWithReason'
 import { bn, isZero, safeSum } from '@/lib/shared/utils/numbers'
@@ -15,15 +14,15 @@ import { selectRemoveLiquidityHandler } from './handlers/selectRemoveLiquidityHa
 import { useRemoveLiquidityPriceImpactQuery } from './queries/useRemoveLiquidityPriceImpactQuery'
 import { RemoveLiquidityType } from './remove-liquidity.types'
 import { Address, Hash } from 'viem'
-import { emptyTokenAmounts, supportsNestedActions, toHumanAmount } from '../LiquidityActionHelpers'
-import { useDisclosure } from '@chakra-ui/hooks'
-import { isCowAmmPool } from '../../pool.helpers'
-import { getLeafTokens, isWrappedNativeAsset } from '@/lib/modules/tokens/token.helpers'
+import { emptyTokenAmounts, toHumanAmount } from '../LiquidityActionHelpers'
+import { getPoolTokens, isCowAmmPool } from '../../pool.helpers'
+import { isWrappedNativeAsset } from '@/lib/modules/tokens/token.helpers'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
 import { useRemoveLiquiditySteps } from './useRemoveLiquiditySteps'
 import { useTransactionSteps } from '@/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 import { getUserWalletBalance } from '../../user-balance.helpers'
+import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof _useRemoveLiquidity>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
@@ -47,17 +46,18 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const { getToken, usdValueForToken, getNativeAssetToken, getWrappedNativeAssetToken } =
     useTokens()
   const { isConnected } = useUserAccount()
-  const previewModalDisclosure = useDisclosure()
 
   const maxHumanBptIn: HumanAmount = getUserWalletBalance(pool)
   const humanBptIn: HumanAmount = bn(maxHumanBptIn)
     .times(humanBptInPercent / 100)
     .toFixed() as HumanAmount
 
+  const tokens = getPoolTokens(pool, getToken)
+
   const chain = pool.chain
   const nativeAsset = getNativeAssetToken(chain)
   const wNativeAsset = getWrappedNativeAssetToken(chain)
-  const includesWrappedNativeAsset: boolean = getPoolTokens().some(token =>
+  const includesWrappedNativeAsset: boolean = tokens.some(token =>
     isWrappedNativeAsset(token.address as Address, chain)
   )
 
@@ -72,16 +72,6 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const setSingleTokenType = () => setRemovalType(RemoveLiquidityType.SingleToken)
   const isSingleToken = removalType === RemoveLiquidityType.SingleToken
   const isProportional = removalType === RemoveLiquidityType.Proportional
-
-  function getPoolTokens() {
-    // TODO add exception for composable pools where we can allow adding
-    // liquidity with nested tokens
-    if (supportsNestedActions(pool)) return getLeafTokens(pool.poolTokens)
-
-    return pool.poolTokens
-  }
-
-  const tokens = getPoolTokens().map(token => getToken(token.address, pool.chain))
 
   function tokensToShow() {
     // Cow AMM pools don't support wethIsEth
@@ -105,8 +95,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     return tokens
   }
 
-  let validTokens = tokens.filter((token): token is GqlToken => !!token)
-  validTokens = nativeAsset ? [nativeAsset, ...validTokens] : validTokens
+  const validTokens = nativeAsset ? [nativeAsset, ...tokens] : tokens
 
   const firstTokenAddress = tokens?.[0]?.address as Address
 
@@ -115,16 +104,29 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const tokenOut =
     wethIsEth && wNativeAsset ? (wNativeAsset.address as Address) : singleTokenOutAddress
 
+  const isSingleTokenBalanceMoreThat25Percent = useMemo(() => {
+    if (!pool.userBalance || !isSingleToken) {
+      return false
+    }
+
+    return bn(pool.userBalance.walletBalance)
+      .times(bn(humanBptInPercent).div(100))
+      .gt(bn(pool.dynamicData.totalShares).times(0.25))
+  }, [singleTokenOutAddress, humanBptInPercent, isSingleToken])
+
   /**
    * Queries
    */
+
+  const enabled = !urlTxHash && !!tokenOut && !isSingleTokenBalanceMoreThat25Percent
+
   const simulationQuery = useRemoveLiquiditySimulationQuery({
     handler,
     poolId: pool.id,
     chainId,
     humanBptIn,
     tokenOut,
-    enabled: !urlTxHash && !!tokenOut,
+    enabled,
   })
 
   const priceImpactQuery = useRemoveLiquidityPriceImpactQuery({
@@ -133,7 +135,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     chainId,
     humanBptIn,
     tokenOut,
-    enabled: !urlTxHash && !!tokenOut,
+    enabled,
   })
 
   /**
@@ -214,7 +216,13 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     })
   )
 
-  const totalUSDValue: string = safeSum(Object.values(usdAmountOutMap))
+  // while the single token balance is more than 25% of the pool, we use the wallet balance usd for the view
+  const totalUSDValue = isSingleTokenBalanceMoreThat25Percent
+    ? bn(pool.userBalance?.walletBalanceUsd || '0')
+        .times(bn(humanBptInPercent).div(100))
+        .toString()
+    : safeSum(Object.values(usdAmountOutMap))
+
   const totalAmountsOut: string = safeSum(quoteAmountsOut.map(a => a.amount))
 
   const { isDisabled, disabledReason } = isDisabledWithReason(
@@ -244,6 +252,8 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     transactionSteps.lastTransactionState,
   ])
 
+  const previewModalDisclosure = useModalWithPoolRedirect(pool, removeLiquidityTxHash)
+
   return {
     transactionSteps,
     tokens: tokensToShow(),
@@ -264,10 +274,12 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     previewModalDisclosure,
     handler,
     wethIsEth,
+    urlTxHash,
     removeLiquidityTxHash,
     hasQuoteContext,
     amountsOut,
     removeLiquidityTxSuccess,
+    isSingleTokenBalanceMoreThat25Percent,
     setRemovalType,
     setHumanBptInPercent,
     setProportionalType,

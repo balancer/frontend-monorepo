@@ -1,4 +1,9 @@
-import { AddLiquidityNestedQueryOutput, AddLiquidityQueryOutput, TokenAmount } from '@balancer/sdk'
+import {
+  AddLiquidityNestedQueryOutput,
+  AddLiquidityQueryOutput,
+  Permit2,
+  TokenAmount,
+} from '@balancer/sdk'
 import { Address } from 'viem'
 import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 
@@ -17,6 +22,7 @@ export interface BuildAddLiquidityInput {
   slippagePercent: string
   queryOutput: QueryAddLiquidityOutput
   relayerApprovalSignature?: Address //only used by Nested Add Liquidity in signRelayer mode
+  permit2?: Permit2 //only used by v3 add liquidity
 }
 
 /*

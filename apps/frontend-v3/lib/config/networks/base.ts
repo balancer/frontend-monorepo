@@ -49,6 +49,8 @@ const networkConfig: NetworkConfig = {
     veDelegationProxy: '0xD87F44Df0159DC78029AB9CA7D7e57E7249F5ACD',
   },
   pools: convertHexToLowerCase({ issues: {} }),
+  layerZeroChainId: 184,
+  supportsVeBalSync: true,
 }
 
 export default networkConfig

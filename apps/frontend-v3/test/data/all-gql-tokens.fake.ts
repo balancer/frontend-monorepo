@@ -146,8 +146,8 @@ export const allFakeGqlTokens: GqlToken[] = [
   {
     __typename: 'GqlToken',
     address: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-    name: 'WMATIC',
-    symbol: 'WMATIC',
+    name: 'WPOL',
+    symbol: 'WPOL',
     decimals: 18,
     chainId: 137,
     chain: GqlChain.Polygon,

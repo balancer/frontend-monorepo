@@ -1,4 +1,4 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { Step } from './Step'
 import { useThemeColorMode } from '@/lib/shared/services/chakra/useThemeColorMode'
 import { TransactionStepsResponse } from '../useTransactionSteps'
@@ -12,7 +12,7 @@ export function Steps({ transactionSteps }: Props) {
   const colorMode = useThemeColorMode()
 
   return (
-    <VStack align="start" spacing="xs">
+    <VStack align="start" spacing="ms">
       {steps &&
         steps.map((step, index) => (
           <div key={step.id + index}>
@@ -23,9 +23,6 @@ export function Steps({ transactionSteps }: Props) {
               colorMode={colorMode}
               isLastStep={isLastStep(index)}
             />
-            {!isLastStep(index) && (
-              <Box h="4" w="1" rounded="full" background="border.base" ml="3" mt="1" />
-            )}
           </div>
         ))}
     </VStack>

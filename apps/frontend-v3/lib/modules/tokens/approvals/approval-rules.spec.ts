@@ -52,11 +52,13 @@ describe('getRequiredTokenApprovals', () => {
       })
     ).toEqual([
       {
+        isPermit2: false,
         tokenAddress: wETHAddress,
         requiredRawAmount: 10000000000000000000n,
         requestedRawAmount: MAX_BIGINT,
       },
       {
+        isPermit2: false,
         tokenAddress: wjAuraAddress,
         requiredRawAmount: 20000000000000000000n,
         requestedRawAmount: MAX_BIGINT,
@@ -87,11 +89,13 @@ describe('getRequiredTokenApprovals', () => {
         requiredRawAmount: 0n,
         requestedRawAmount: 0n,
         tokenAddress: usdtAddress,
+        isPermit2: false,
       },
       {
         tokenAddress: usdtAddress,
         requiredRawAmount: 10000000000000000000n,
         requestedRawAmount: MAX_BIGINT,
+        isPermit2: false,
       },
     ])
   })
@@ -116,6 +120,7 @@ describe('getRequiredTokenApprovals', () => {
       })
     ).toEqual([
       {
+        isPermit2: false,
         requiredRawAmount: 10000000000000000000n,
         requestedRawAmount: MAX_BIGINT,
         tokenAddress: usdtAddress,

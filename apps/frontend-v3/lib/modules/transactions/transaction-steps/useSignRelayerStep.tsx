@@ -5,11 +5,11 @@ import { ConnectWallet } from '@/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 import { Alert, Button, VStack } from '@chakra-ui/react'
 import { TransactionStep } from './lib'
-import { SignRelayerState } from '../../relayer/RelayerSignatureProvider'
 import { useMemo } from 'react'
 import { useChainSwitch } from '../../web3/useChainSwitch'
 import { getChainId } from '@/lib/config/app.config'
 import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { SignatureState } from '../../web3/signatures/signature.helpers'
 
 export const signRelayerStepTitle = 'Sign relayer'
 
@@ -47,12 +47,13 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
     </VStack>
   )
 
-  const isComplete = () => signRelayerState === SignRelayerState.Completed
+  const isComplete = () => signRelayerState === SignatureState.Completed
 
   return useMemo(
     () => ({
       id: 'sign-relayer',
       stepType: 'signBatchRelayer',
+      details: { gasless: true },
       labels: {
         title: 'Sign relayer',
         init: 'Sign relayer',

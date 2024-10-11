@@ -12,6 +12,7 @@ import { useMandatoryContext } from '@/lib/shared/utils/contexts'
 import { getNetworkConfig } from '@/lib/config/app.config'
 import { GqlToken } from '@/lib/shared/services/api/generated/graphql'
 import { exclNativeAssetFilter, nativeAssetFilter } from './token.helpers'
+import { HumanAmount, Slippage } from '@balancer/sdk'
 
 const BALANCE_CACHE_TIME_MS = 30_000
 
@@ -19,10 +20,18 @@ export type UseTokenBalancesResponse = ReturnType<typeof _useTokenBalances>
 export const TokenBalancesContext = createContext<UseTokenBalancesResponse | null>(null)
 
 /**
- * If initTokens are provided the tokens state will be managed internally.
- * If extTokens are provided the tokens state will be managed externally.
+ * @param initTokens If initTokens are provided the tokens state will be managed internally.
+ * @param extTokens If extTokens are provided the tokens state will be managed externally.
+ * @param bufferPercentage An amount used to reduce the balances of the user's tokens. This is
+ * primarily used for forced proportional adds where we need to "reserve"
+ * an amount of the user's tokens to ensure the add is successful. In this
+ * case the buffer is set to the slippage percentage set by the user.
  */
-export function _useTokenBalances(initTokens?: GqlToken[], extTokens?: GqlToken[]) {
+export function _useTokenBalances(
+  initTokens?: GqlToken[],
+  extTokens?: GqlToken[],
+  bufferPercentage: HumanAmount | string = '0'
+) {
   if (!initTokens && !extTokens) throw new Error('initTokens or tokens must be provided')
   if (initTokens && extTokens) throw new Error('initTokens and tokens cannot be provided together')
 
@@ -79,7 +88,10 @@ export function _useTokenBalances(initTokens?: GqlToken[], extTokens?: GqlToken[
     .map((balance, index) => {
       const token = tokensExclNativeAsset[index]
       if (!token) return
-      const amount = balance.status === 'success' ? (balance.result as bigint) : 0n
+
+      let amount = balance.status === 'success' ? (balance.result as bigint) : 0n
+      const slippage = Slippage.fromPercentage(bufferPercentage as HumanAmount)
+      amount = slippage.applyTo(amount, -1)
 
       return {
         chainId,
@@ -129,10 +141,16 @@ export function _useTokenBalances(initTokens?: GqlToken[], extTokens?: GqlToken[
 type ProviderProps = PropsWithChildren<{
   initTokens?: GqlToken[]
   extTokens?: GqlToken[]
+  bufferPercentage?: HumanAmount | string
 }>
 
-export function TokenBalancesProvider({ initTokens, extTokens, children }: ProviderProps) {
-  const hook = _useTokenBalances(initTokens, extTokens)
+export function TokenBalancesProvider({
+  initTokens,
+  extTokens,
+  bufferPercentage,
+  children,
+}: ProviderProps) {
+  const hook = _useTokenBalances(initTokens, extTokens, bufferPercentage)
   return <TokenBalancesContext.Provider value={hook}>{children}</TokenBalancesContext.Provider>
 }
 

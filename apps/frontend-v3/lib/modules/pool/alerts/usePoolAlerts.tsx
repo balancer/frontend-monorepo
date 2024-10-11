@@ -128,12 +128,42 @@ export function usePoolAlerts(pool: Pool) {
     return alerts
   }
 
+  const getPoolAlerts = (pool: Pool): PoolAlert[] => {
+    const alerts: PoolAlert[] = []
+
+    if (pool.dynamicData.isPaused && pool.dynamicData.isInRecoveryMode) {
+      alerts.push({
+        identifier: 'poolIsPausedAndInRecoveryMode',
+        content: 'This pool is paused and in recovery mode',
+        status: 'warning',
+        isSoftWarning: false,
+      })
+    } else if (pool.dynamicData.isPaused) {
+      alerts.push({
+        identifier: 'poolIsPaused',
+        content: 'This pool is paused',
+        status: 'warning',
+        isSoftWarning: false,
+      })
+    } else if (pool.dynamicData.isInRecoveryMode) {
+      alerts.push({
+        identifier: 'poolIsInRecoveryMode',
+        content: 'This pool is in recovery mode',
+        status: 'warning',
+        isSoftWarning: false,
+      })
+    }
+
+    return alerts
+  }
+
   useEffect(() => {
     const networkPoolAlerts = getNetworkPoolAlerts(pool)
     const tokenPoolAlerts = getTokenPoolAlerts(pool)
     const userAlerts = getUserAlerts(pool)
+    const poolAlerts = getPoolAlerts(pool)
 
-    setPoolAlerts([...networkPoolAlerts, ...tokenPoolAlerts, ...userAlerts])
+    setPoolAlerts([...networkPoolAlerts, ...tokenPoolAlerts, ...userAlerts, ...poolAlerts])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool])
 

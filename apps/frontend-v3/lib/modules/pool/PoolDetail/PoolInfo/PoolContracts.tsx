@@ -14,6 +14,9 @@ import {
   Divider,
   Text,
   Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
   VStack,
 } from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
@@ -136,15 +139,22 @@ export function PoolContracts({ ...props }: CardProps) {
         {rateProviders.length > 0 && (
           <Grid templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} gap="sm" w="full">
             <GridItem>
-              <Tooltip
-                // eslint-disable-next-line max-len
-                label="Rate Providers are contracts that provide an exchange rate between two assets. This can come from any on-chain source, including oracles or from other calculations. This introduces risks around the rate provider being able to supply accurate and timely exchange rates."
-                fontSize="sm"
-              >
-                <Text minW="120px" variant="secondary">
-                  Rate provider(s):
-                </Text>
-              </Tooltip>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <Text minW="120px" variant="secondary" className="tooltip-dashed-underline">
+                    {rateProviders.length === 1 ? 'Rate provider:' : 'Rate providers:'}
+                  </Text>
+                </PopoverTrigger>
+
+                <PopoverContent p="sm" w="auto" maxW="300px">
+                  <Text fontSize="sm" variant="secondary">
+                    Rate Providers are contracts that provide an exchange rate between two assets.
+                    This can come from any on-chain source, including oracles or from other
+                    calculations. This introduces risks around the rate provider being able to
+                    supply accurate and timely exchange rates.
+                  </Text>
+                </PopoverContent>
+              </Popover>
             </GridItem>
             <GridItem>
               <VStack alignItems="flex-start">

@@ -9,7 +9,7 @@ import { Suspense } from 'react'
 // import { getProjectConfig } from '@/lib/config/getProjectConfig'
 // import { GetFeaturedPoolsDocument } from '@/lib/shared/services/api/generated/graphql'
 // import { FeaturedPools } from '@/lib/modules/featured-pools/FeaturedPools'
-import { CowGalxeQuestPromoBanner } from '@/lib/shared/components/promos/CowGalxeQuestPromoBanner'
+import { CowPromoBanner } from '@/lib/shared/components/promos/CowPromoBanner'
 
 export default async function PoolsPage() {
   // Featured pools set up
@@ -33,7 +33,7 @@ export default async function PoolsPage() {
         <DefaultPageContainer pt={['xl', '40px']} pb={['xl', '2xl']}>
           <FadeInOnView animateOnce={false}>
             <Box>
-              <CowGalxeQuestPromoBanner />
+              <CowPromoBanner />
             </Box>
           </FadeInOnView>
           {/* <FadeInOnView animateOnce={false}>

@@ -48,7 +48,7 @@ export function QuoteBptOut({ label, isLoading = false }: { label?: string; isLo
   const bptOutUnits = bptOut ? formatUnits(bptOut.amount, BPT_DECIMALS) : '0'
   const { pool } = usePool()
 
-  const proportionalRequired = requiresProportionalInput(pool.type)
+  const proportionalRequired = requiresProportionalInput(pool)
 
   const _label = label
     ? label

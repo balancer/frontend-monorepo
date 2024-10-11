@@ -47,6 +47,8 @@ const networkConfig: NetworkConfig = {
       [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Fraxtal],
     },
   }),
+  layerZeroChainId: 255,
+  supportsVeBalSync: true,
 }
 
 export default networkConfig

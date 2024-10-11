@@ -10,6 +10,7 @@ import { useMemo, useState } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { useTotalUsdValue } from '@/lib/modules/tokens/useTotalUsdValue'
+import { TokenAmount } from '@/lib/modules/tokens/token.types'
 
 export function useMaximumInputs() {
   const { isConnected } = useUserAccount()
@@ -20,12 +21,16 @@ export function useMaximumInputs() {
   const { isLoadingTokenPrices } = useTokens()
   const [isMaximized, setIsMaximized] = useState(false)
 
+  // Depending on if the user is using WETH or ETH, we need to filter out the
+  // native asset or wrapped native asset.
+  const nativeAssetFilter = (balance: TokenAmount) => {
+    return wethIsEth
+      ? balance.address !== wNativeAsset?.address
+      : balance.address !== nativeAsset?.address
+  }
+
   const filteredBalances = useMemo(() => {
-    return balances.filter(balance =>
-      wethIsEth
-        ? wNativeAsset && balance.address !== wNativeAsset.address
-        : nativeAsset && balance.address !== nativeAsset.address
-    )
+    return balances.filter(nativeAssetFilter)
   }, [wethIsEth, isBalancesLoading])
 
   function handleMaximizeUserAmounts() {

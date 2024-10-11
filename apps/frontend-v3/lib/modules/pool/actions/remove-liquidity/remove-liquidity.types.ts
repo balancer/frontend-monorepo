@@ -1,5 +1,6 @@
 import {
   HumanAmount,
+  Permit,
   RemoveLiquidityQueryOutput,
   RemoveLiquidityKind as SdkRemoveLiquidityKind,
   TokenAmount,
@@ -32,6 +33,7 @@ export type BuildRemoveLiquidityInput = {
   queryOutput: QueryRemoveLiquidityOutput
   relayerApprovalSignature?: Address //only used by Nested Remove Liquidity in signRelayer mode
   wethIsEth?: boolean // only used by single token removal type
+  permit?: Permit //only used by v3 remove liquidity
 }
 
 /*

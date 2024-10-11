@@ -1,4 +1,3 @@
-import { useUserSettings } from '@/lib/modules/user/settings/UserSettingsProvider'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 import { defaultDebounceMs, onlyExplicitRefetch } from '@/lib/shared/utils/queries'
 import { useQuery } from '@tanstack/react-query'
@@ -12,6 +11,8 @@ import { AddLiquiditySimulationQueryResult } from './useAddLiquiditySimulationQu
 import { useDebounce } from 'use-debounce'
 import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 import { useBlockNumber } from 'wagmi'
+import { usePermit2Signature } from '@/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
+import { isV3Pool } from '../../../pool.helpers'
 
 export type AddLiquidityBuildQueryResponse = ReturnType<typeof useAddLiquidityBuildCallDataQuery>
 
@@ -19,6 +20,7 @@ export type AddLiquidityBuildQueryParams = {
   handler: AddLiquidityHandler
   humanAmountsIn: HumanTokenAmountWithAddress[]
   simulationQuery: AddLiquiditySimulationQueryResult
+  slippage: string
 }
 
 // Uses the SDK to build a transaction config to be used by wagmi's useManagedSendTransaction
@@ -26,24 +28,27 @@ export function useAddLiquidityBuildCallDataQuery({
   handler,
   humanAmountsIn,
   simulationQuery,
+  slippage,
   enabled,
 }: AddLiquidityBuildQueryParams & {
   enabled: boolean
 }) {
   const { userAddress, isConnected } = useUserAccount()
-  const { slippage } = useUserSettings()
   const { pool, chainId } = usePool()
   const { data: blockNumber } = useBlockNumber({ chainId })
   const { relayerApprovalSignature } = useRelayerSignature()
+  const { permit2Signature: permit2 } = usePermit2Signature()
   const debouncedHumanAmountsIn = useDebounce(humanAmountsIn, defaultDebounceMs)[0]
+
+  const hasPermit2 = isV3Pool(pool) && !!permit2
 
   const params: AddLiquidityParams = {
     handler,
     userAddress,
     slippage,
-    poolId: pool.id,
-    poolType: pool.type,
+    pool,
     humanAmountsIn: debouncedHumanAmountsIn,
+    hasPermit2,
   }
 
   const queryKey = addLiquidityKeys.buildCallData(params)
@@ -56,8 +61,10 @@ export function useAddLiquidityBuildCallDataQuery({
       slippagePercent: slippage,
       queryOutput,
       relayerApprovalSignature, // only present in Add Nested Liquidity with sign relayer mode
+      permit2, // only present in V3 pools
     })
     console.log('Call data built:', response)
+    if (permit2) console.log('permit2 for call data:', permit2)
     return response
   }
 

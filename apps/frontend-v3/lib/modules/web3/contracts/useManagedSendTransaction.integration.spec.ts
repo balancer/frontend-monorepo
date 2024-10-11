@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars*/
+/* eslint-disable max-len */
 import { describe, expect, test } from 'vitest'
 
 import { getSdkTestUtils } from '@/test/integration/sdk-utils'
@@ -7,7 +8,7 @@ import { testHook } from '@/test/utils/custom-renderers'
 import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
 import { ChainId, HumanAmount } from '@balancer/sdk'
 import { act, waitFor } from '@testing-library/react'
-import { UnbalancedAddLiquidityHandler } from '../../pool/actions/add-liquidity/handlers/UnbalancedAddLiquidity.handler'
+import { UnbalancedAddLiquidityV2Handler } from '../../pool/actions/add-liquidity/handlers/UnbalancedAddLiquidityV2.handler'
 import { selectAddLiquidityHandler } from '../../pool/actions/add-liquidity/handlers/selectAddLiquidityHandler'
 import { connectWithDefaultUser } from '../../../../test/utils/wagmi/wagmi-connections'
 import { Address } from 'viem'
@@ -25,7 +26,7 @@ const utils = await getSdkTestUtils({
   pool: aWjAuraWethPoolElementMock(), // Balancer Weighted wjAura and WETH,
 })
 
-const { getPoolTokens, getPoolTokenBalances } = utils
+const { getPoolTokens } = utils
 
 const poolTokens = getPoolTokens()
 
@@ -36,7 +37,7 @@ describe('weighted add flow', () => {
 
     const handler = selectAddLiquidityHandler(
       aWjAuraWethPoolElementMock()
-    ) as UnbalancedAddLiquidityHandler
+    ) as UnbalancedAddLiquidityV2Handler
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = poolTokens.map(t => ({
       humanAmount: '0.1',

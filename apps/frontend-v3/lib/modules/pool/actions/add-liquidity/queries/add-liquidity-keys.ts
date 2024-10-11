@@ -1,7 +1,7 @@
-import { GqlPoolType } from '@/lib/shared/services/api/generated/graphql'
+import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
+import { Pool } from '../../../PoolProvider'
 import { requiresProportionalInput } from '../../LiquidityActionHelpers'
 import { AddLiquidityHandler } from '../handlers/AddLiquidity.handler'
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 
 const addLiquidity = 'add-liquidity'
 
@@ -12,31 +12,33 @@ function getHandlerClassName(instance: AddLiquidityHandler): string {
 export type AddLiquidityParams = {
   handler: AddLiquidityHandler
   userAddress: string
-  poolId: string
-  poolType: GqlPoolType
+  pool: Pool
   slippage: string
   humanAmountsIn: HumanTokenAmountWithAddress[]
+  hasPermit2?: boolean
 }
 
 function liquidityParams({
   handler,
   userAddress,
-  poolId,
-  poolType,
+  pool,
   slippage,
   humanAmountsIn,
+  hasPermit2,
 }: AddLiquidityParams) {
-  return `${getHandlerClassName(
-    handler
-  )}:${userAddress}:${poolId}:${slippage}:${stringifyHumanAmountsIn(poolType, humanAmountsIn)}`
+  return `${getHandlerClassName(handler)}:${userAddress}:${
+    pool.id
+  }:${slippage}:${stringifyHumanAmountsIn(pool, humanAmountsIn)}${
+    hasPermit2 ? 'permit2' : 'no-permit2'
+  }`
 }
 
 export function stringifyHumanAmountsIn(
-  poolType: GqlPoolType,
+  pool: Pool,
   humanAmountsIn: HumanTokenAmountWithAddress[]
 ): string {
   if (humanAmountsIn.length === 0) return ''
-  if (requiresProportionalInput(poolType)) {
+  if (requiresProportionalInput(pool)) {
     /*
     This is an edge-case where we only use the first human amount in the array to avoid triggering queries when the other human amounts change automatically
     (as they are automatically calculated and entered in the proportional add liquidity flow).

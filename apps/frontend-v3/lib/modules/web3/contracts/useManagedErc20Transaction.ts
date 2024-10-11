@@ -68,7 +68,10 @@ export function useManagedErc20Transaction({
 
   const writeQuery = useWriteContract()
 
-  const { txHash, isSafeTxLoading } = useTxHash({ chainId, wagmiTxHash: writeQuery.data })
+  const { txHash, isSafeTxLoading } = useTxHash({
+    chainId,
+    wagmiTxHash: writeQuery.data,
+  })
 
   const transactionStatusQuery = useWaitForTransactionReceipt({
     chainId,
@@ -110,6 +113,7 @@ export function useManagedErc20Transaction({
       setWriteArgs(args)
     }
     if (!simulateQuery.data) return
+
     try {
       await writeQuery.writeContractAsync(simulateQuery.data.request)
     } catch (e: unknown) {

@@ -21,7 +21,7 @@ type Params = {
 
 export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabled }: Params) {
   const { pool, chainId } = usePool()
-  const { userAddress, isConnected } = useUserAccount()
+  const { userAddress } = useUserAccount()
   const { slippage } = useUserSettings()
   const debouncedHumanAmountsIn = useDebounce(humanAmountsIn, defaultDebounceMs)[0]
   const { data: blockNumber } = useBlockNumber({ chainId })
@@ -30,8 +30,7 @@ export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabl
     handler,
     userAddress,
     slippage,
-    poolId: pool.id,
-    poolType: pool.type,
+    pool,
     humanAmountsIn: debouncedHumanAmountsIn,
   }
 
@@ -42,7 +41,7 @@ export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabl
   return useQuery({
     queryKey,
     queryFn,
-    enabled: enabled && isConnected && !areEmptyAmounts(debouncedHumanAmountsIn),
+    enabled: enabled && !areEmptyAmounts(debouncedHumanAmountsIn),
     gcTime: 0,
     meta: sentryMetaForAddLiquidityHandler('Error in add liquidity priceImpact query', {
       ...params,

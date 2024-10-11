@@ -31,8 +31,8 @@ export function useNav() {
   // To-do: Remove this when veBAL is live
   if (isDev || isStaging) {
     appLinks.push({
-      href: '/vebal',
-      label: 'veBAL (wip)',
+      href: '/vebal/manage',
+      label: 'veBAL (manage)',
     })
   }
 

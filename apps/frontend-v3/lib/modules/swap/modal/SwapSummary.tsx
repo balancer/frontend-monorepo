@@ -10,7 +10,7 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { BalAlert } from '@/lib/shared/components/alerts/BalAlert'
 import { HumanAmount } from '@balancer/sdk'
 import { slippageDiffLabel } from '@/lib/shared/utils/slippage'
-import { AnimateHeightChange } from '@/lib/shared/components/modals/AnimatedModalBody'
+import { AnimateHeightChange } from '@/lib/shared/components/animations/AnimateHeightChange'
 import { CardPopAnim } from '@/lib/shared/components/animations/CardPopAnim'
 
 export function SwapSummary({

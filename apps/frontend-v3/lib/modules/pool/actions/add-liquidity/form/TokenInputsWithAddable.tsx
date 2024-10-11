@@ -159,7 +159,7 @@ export function TokenInputsWithAddable({
       <TokenInputs
         tokenSelectDisclosureOpen={tokenSelectDisclosureOpen}
         customSetAmountIn={setAmountIn}
-      ></TokenInputs>
+      />
     </VStack>
   )
 }

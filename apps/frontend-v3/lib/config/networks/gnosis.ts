@@ -60,6 +60,8 @@ const networkConfig: NetworkConfig = {
     issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Gnosis] },
     allowNestedActions: ['0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053'],
   }),
+  layerZeroChainId: 145,
+  supportsVeBalSync: true,
 }
 
 export default networkConfig

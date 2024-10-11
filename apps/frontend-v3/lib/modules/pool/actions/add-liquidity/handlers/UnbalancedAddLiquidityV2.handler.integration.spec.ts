@@ -1,17 +1,17 @@
 /* eslint-disable max-len */
 import networkConfig from '@/lib/config/networks/mainnet'
 import { balAddress, wETHAddress, wjAuraAddress } from '@/lib/debug-helpers'
+import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 import { defaultTestUserAccount } from '@/test/anvil/anvil-setup'
 import { aWjAuraWethPoolElementMock } from '@/test/msw/builders/gqlPoolElement.builders'
-import { UnbalancedAddLiquidityHandler } from './UnbalancedAddLiquidity.handler'
+import { UnbalancedAddLiquidityV2Handler } from './UnbalancedAddLiquidityV2.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
-import { HumanTokenAmountWithAddress } from '@/lib/modules/tokens/token.types'
 
 function selectUnbalancedHandler() {
-  return selectAddLiquidityHandler(aWjAuraWethPoolElementMock()) as UnbalancedAddLiquidityHandler
+  return selectAddLiquidityHandler(aWjAuraWethPoolElementMock()) as UnbalancedAddLiquidityV2Handler
 }
 
-describe('When adding unbalanced liquidity for a weighted  pool', () => {
+describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
   test('calculates price impact', async () => {
     const handler = selectUnbalancedHandler()
 

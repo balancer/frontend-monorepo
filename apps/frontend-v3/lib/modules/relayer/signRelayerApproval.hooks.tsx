@@ -1,13 +1,18 @@
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 import { useToast } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { useWalletClient } from 'wagmi'
 import { signRelayerApproval } from './signRelayerApproval'
 import { useHasApprovedRelayer } from './useHasApprovedRelayer'
 import { RelayerMode } from './useRelayerMode'
-import { SignRelayerState, useRelayerSignature } from './RelayerSignatureProvider'
+import { useRelayerSignature } from './RelayerSignatureProvider'
 import { SupportedChainId } from '@/lib/config/config.types'
 import { Toast } from '@/lib/shared/components/toasts/Toast'
+import { useSdkWalletClient } from '../web3/useSdkViemClient'
+import {
+  SignatureState,
+  isSignatureDisabled,
+  isSignatureLoading,
+} from '../web3/signatures/signature.helpers'
 
 export function useShouldSignRelayerApproval(chainId: SupportedChainId, relayerMode: RelayerMode) {
   const { hasApprovedRelayer } = useHasApprovedRelayer(chainId)
@@ -23,25 +28,25 @@ export function useSignRelayerApproval(chainId: SupportedChainId) {
 
   const [error, setError] = useState<string | undefined>()
 
-  const { data: walletClient } = useWalletClient()
+  const sdkClient = useSdkWalletClient()
 
   useEffect(() => {
-    if (walletClient === undefined) {
-      setSignRelayerState(SignRelayerState.Preparing)
+    if (sdkClient === undefined) {
+      setSignRelayerState(SignatureState.Preparing)
     } else {
-      setSignRelayerState(SignRelayerState.Ready)
+      setSignRelayerState(SignatureState.Ready)
     }
-  }, [setSignRelayerState, walletClient])
+  }, [setSignRelayerState, sdkClient])
 
   async function signRelayer() {
-    setSignRelayerState(SignRelayerState.Confirming)
+    setSignRelayerState(SignatureState.Confirming)
     setError(undefined)
 
     try {
-      const signature = await signRelayerApproval(userAddress, chainId, walletClient)
+      const signature = await signRelayerApproval(userAddress, chainId, sdkClient)
 
       if (signature) {
-        setSignRelayerState(SignRelayerState.Completed)
+        setSignRelayerState(SignatureState.Completed)
         toast({
           title: 'Relayer approval signed!',
           description: '',
@@ -51,15 +56,14 @@ export function useSignRelayerApproval(chainId: SupportedChainId) {
           render: ({ ...rest }) => <Toast {...rest} />,
         })
       } else {
-        setSignRelayerState(SignRelayerState.Ready)
+        setSignRelayerState(SignatureState.Ready)
       }
 
       setRelayerApprovalSignature(signature)
     } catch (error) {
-      // TODO: refactor when we define a global error handling UX pattern
       console.error(error)
       setError('Error in relayer signature call')
-      setSignRelayerState(SignRelayerState.Ready)
+      setSignRelayerState(SignatureState.Ready)
     }
   }
 
@@ -67,30 +71,16 @@ export function useSignRelayerApproval(chainId: SupportedChainId) {
     signRelayer,
     signRelayerState,
     buttonLabel: getButtonLabel(signRelayerState),
-    isLoading: isLoading(signRelayerState),
-    isDisabled: isDisabled(signRelayerState),
+    isLoading: isSignatureLoading(signRelayerState),
+    isDisabled: isSignatureDisabled(signRelayerState),
     error,
   }
 }
 
-function isDisabled(signRelayerState: SignRelayerState) {
-  return (
-    signRelayerState === SignRelayerState.Confirming ||
-    signRelayerState === SignRelayerState.Completed
-  )
-}
-
-function isLoading(signRelayerState: SignRelayerState) {
-  return (
-    signRelayerState === SignRelayerState.Confirming ||
-    signRelayerState === SignRelayerState.Preparing
-  )
-}
-
-function getButtonLabel(signRelayerState: SignRelayerState) {
-  if (signRelayerState === SignRelayerState.Ready) return 'Sign relayer'
-  if (signRelayerState === SignRelayerState.Confirming) return 'Confirm relayer signature in wallet'
-  if (signRelayerState === SignRelayerState.Preparing) return 'Preparing'
-  if (signRelayerState === SignRelayerState.Completed) return 'Relayer Signed'
+function getButtonLabel(signRelayerState: SignatureState) {
+  if (signRelayerState === SignatureState.Ready) return 'Sign relayer'
+  if (signRelayerState === SignatureState.Confirming) return 'Confirm relayer signature in wallet'
+  if (signRelayerState === SignatureState.Preparing) return 'Preparing'
+  if (signRelayerState === SignatureState.Completed) return 'Relayer Signed'
   return ''
 }

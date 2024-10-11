@@ -1,7 +1,16 @@
 'use client'
 
 import { InfoOutlineIcon } from '@chakra-ui/icons'
-import { Box, HStack, Flex, Tooltip, Text } from '@chakra-ui/react'
+import {
+  Box,
+  HStack,
+  Flex,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Portal,
+  Text,
+} from '@chakra-ui/react'
 import { PropsWithChildren, ReactNode } from 'react'
 
 type AlertContentProps = {
@@ -34,10 +43,25 @@ export function BalAlertContent({
               </Text>
             )}
             {tooltipLabel && (
-              <Box position="relative" top="-1.5px" pr="xs">
-                <Tooltip label={tooltipLabel}>
-                  <InfoOutlineIcon fontSize="sm" color="font.dark" />
-                </Tooltip>
+              <Box position="relative" top="-1.5px" px="xxs">
+                <Popover trigger="hover">
+                  <PopoverTrigger>
+                    <Box
+                      opacity="0.8"
+                      transition="opacity 0.2s var(--ease-out-cubic)"
+                      _hover={{ opacity: 1 }}
+                    >
+                      <InfoOutlineIcon fontSize="sm" color="font.dark" />
+                    </Box>
+                  </PopoverTrigger>
+                  <Portal>
+                    <PopoverContent p="sm" w="auto" maxW="300px">
+                      <Text fontSize="sm" variant="secondary">
+                        {tooltipLabel}
+                      </Text>
+                    </PopoverContent>
+                  </Portal>
+                </Popover>
               </Box>
             )}
           </HStack>

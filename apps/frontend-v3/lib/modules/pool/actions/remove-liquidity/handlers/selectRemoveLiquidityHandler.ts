@@ -1,4 +1,5 @@
 import { Pool } from '../../../PoolProvider'
+import { isV3Pool } from '../../../pool.helpers'
 import {
   shouldUseRecoveryRemoveLiquidity,
   supportsNestedActions,
@@ -7,9 +8,11 @@ import { RemoveLiquidityType } from '../remove-liquidity.types'
 import { NestedProportionalRemoveLiquidityHandler } from './NestedProportionalRemoveLiquidity.handler'
 import { NestedSingleTokenRemoveLiquidityHandler } from './NestedSingleTokenRemoveLiquidity.handler'
 import { ProportionalRemoveLiquidityHandler } from './ProportionalRemoveLiquidity.handler'
+import { ProportionalRemoveLiquidityV3Handler } from './ProportionalRemoveLiquidityV3.handler'
 import { RecoveryRemoveLiquidityHandler } from './RecoveryRemoveLiquidity.handler'
 import { RemoveLiquidityHandler } from './RemoveLiquidity.handler'
-import { SingleTokenRemoveLiquidityHandler } from './SingleTokenRemoveLiquidity.handler'
+import { SingleTokenRemoveLiquidityV2Handler } from './SingleTokenRemoveLiquidityV2.handler'
+import { SingleTokenRemoveLiquidityV3Handler } from './SingleTokenRemoveLiquidityV3.handler'
 
 export function selectRemoveLiquidityHandler(
   pool: Pool,
@@ -33,12 +36,14 @@ export function selectRemoveLiquidityHandler(
     return new NestedSingleTokenRemoveLiquidityHandler(pool)
   }
 
-  if (kind === RemoveLiquidityType.Proportional) {
-    return new ProportionalRemoveLiquidityHandler(pool)
+  if (kind === RemoveLiquidityType.SingleToken) {
+    if (isV3Pool(pool)) return new SingleTokenRemoveLiquidityV3Handler(pool)
+    // V2 pools
+    return new SingleTokenRemoveLiquidityV2Handler(pool)
   }
 
-  if (kind === RemoveLiquidityType.SingleToken) {
-    return new SingleTokenRemoveLiquidityHandler(pool)
+  if (isV3Pool(pool)) {
+    return new ProportionalRemoveLiquidityV3Handler(pool)
   }
 
   // Default type

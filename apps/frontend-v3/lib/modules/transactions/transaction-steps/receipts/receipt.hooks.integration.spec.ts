@@ -2,7 +2,7 @@ import { testHook } from '@/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 
 import { getGqlChain } from '@/lib/config/app.config'
-import { maticAddress } from '@/lib/debug-helpers'
+import { polAddress } from '@/lib/debug-helpers'
 import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
 import { Address, Hash } from 'viem'
 import { polygon } from 'viem/chains'
@@ -54,11 +54,11 @@ test('queries add liquidity transaction', async () => {
 
   expect(result.current.sentTokens).toEqual([
     {
-      tokenAddress: '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f',
+      tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F',
       humanAmount: '12',
     },
     {
-      tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      tokenAddress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
       humanAmount: '0.04',
     },
   ])
@@ -78,7 +78,7 @@ test('queries add liquidity with native token', async () => {
 
   expect(result.current.sentTokens).toEqual([
     {
-      tokenAddress: maticAddress,
+      tokenAddress: polAddress,
       humanAmount: '1',
     },
   ])
@@ -99,11 +99,11 @@ test('queries remove liquidity transaction', async () => {
   expect(result.current.receivedTokens).toEqual([
     {
       humanAmount: '16597.845312687911573359',
-      tokenAddress: '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f',
+      tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F',
     },
     {
       humanAmount: '4.553531492712836774',
-      tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      tokenAddress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     },
   ])
 
@@ -111,11 +111,11 @@ test('queries remove liquidity transaction', async () => {
 })
 
 describe('queries swap transaction', () => {
-  const maticAddress = '0x0000000000000000000000000000000000001010'
-  const wMaticAddress = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
-  const daiAddress = '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063'
+  const polAddress = '0x0000000000000000000000000000000000001010'
+  const wPolAddress = '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'
+  const daiAddress = '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
 
-  test('when the native asset is not included (from DAI to WMATIC)', async () => {
+  test('when the native asset is not included (from DAI to WPOL)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
     // https://polygonscan.com/tx/0x11380dcffb24c512da18f032d9f7354d154cfda6bbab0633df182fcd202c4244
     const txHash = '0x11380dcffb24c512da18f032d9f7354d154cfda6bbab0633df182fcd202c4244'
@@ -131,11 +131,11 @@ describe('queries swap transaction', () => {
 
     expect(result.current.receivedToken).toEqual({
       humanAmount: '1.419839650912753603',
-      tokenAddress: wMaticAddress,
+      tokenAddress: wPolAddress,
     })
   })
 
-  test('when the native asset is the token in (from MATIC to DAI)', async () => {
+  test('when the native asset is the token in (from POL to DAI)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
     // https://polygonscan.com/tx/0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c
     const txHash = '0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c'
@@ -146,7 +146,7 @@ describe('queries swap transaction', () => {
 
     expect(result.current.sentToken).toEqual({
       humanAmount: '1',
-      tokenAddress: maticAddress,
+      tokenAddress: polAddress,
     })
 
     expect(result.current.receivedToken).toEqual({
@@ -155,7 +155,7 @@ describe('queries swap transaction', () => {
     })
   })
 
-  test('when the native asset is the token out (from DAI to MATIC)', async () => {
+  test('when the native asset is the token out (from DAI to POL)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
     // https://polygonscan.com/tx/0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288
     const txHash = '0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288'
@@ -171,7 +171,7 @@ describe('queries swap transaction', () => {
 
     expect(result.current.receivedToken).toEqual({
       humanAmount: '0.241277224191485579',
-      tokenAddress: maticAddress,
+      tokenAddress: polAddress,
     })
   })
 })

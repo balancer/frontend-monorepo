@@ -39,5 +39,11 @@ export async function getPoolMock(
     .then(response => response.json())
     .then(result => result.data)) as GetPoolQuery
 
+  if (!getPoolQuery.pool) {
+    throw new Error(
+      `Pool not found in api ${process.env.NEXT_PUBLIC_BALANCER_API_URL} network ${chain} poolId ${poolId}`
+    )
+  }
+
   return getPoolQuery.pool as GqlPoolElement
 }

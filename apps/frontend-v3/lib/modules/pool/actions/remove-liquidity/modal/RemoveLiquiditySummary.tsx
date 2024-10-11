@@ -8,12 +8,13 @@ import { parseUnits } from 'viem'
 import { BptRow } from '@/lib/modules/tokens/TokenRow/BptRow'
 import { TokenRowGroup } from '@/lib/modules/tokens/TokenRow/TokenRowGroup'
 import { bn } from '@/lib/shared/utils/numbers'
-import { AnimateHeightChange } from '@/lib/shared/components/modals/AnimatedModalBody'
+import { AnimateHeightChange } from '@/lib/shared/components/animations/AnimateHeightChange'
 import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
 import { RemoveLiquidityReceiptResult } from '@/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { BalAlert } from '@/lib/shared/components/alerts/BalAlert'
 import { useTokens } from '@/lib/modules/tokens/TokensProvider'
 import { CardPopAnim } from '@/lib/shared/components/animations/CardPopAnim'
+import { useUserSettings } from '@/lib/modules/user/settings/UserSettingsProvider'
 
 export function RemoveLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -34,6 +35,7 @@ export function RemoveLiquiditySummary({
   const { getTokensByChain } = useTokens()
   const { pool } = usePool()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
+  const { slippage } = useUserSettings()
 
   const _amountsOut = amountsOut.filter(amount => bn(amount.humanAmount).gt(0))
 
@@ -87,6 +89,7 @@ export function RemoveLiquiditySummary({
             <VStack align="start" spacing="sm">
               <PoolActionsPriceImpactDetails
                 totalUSDValue={totalUSDValue}
+                slippage={slippage}
                 bptAmount={BigInt(parseUnits(quoteBptIn, 18))}
               />
             </VStack>

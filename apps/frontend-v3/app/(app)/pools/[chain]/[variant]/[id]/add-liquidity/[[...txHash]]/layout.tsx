@@ -12,6 +12,7 @@ import { isHash } from 'viem'
 import { usePoolRedirect } from '@/lib/modules/pool/pool.hooks'
 import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
 import { AddLiquidityProvider } from '@/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
+import { Permit2SignatureProvider } from '@/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 
 type Props = PropsWithChildren<{
   params: { txHash?: string[] }
@@ -40,11 +41,13 @@ export default function AddLiquidityLayout({ params: { txHash }, children }: Pro
     <DefaultPageContainer>
       <TransactionStateProvider>
         <RelayerSignatureProvider>
-          <TokenInputsValidationProvider>
-            <AddLiquidityProvider urlTxHash={urlTxHash}>
-              <PriceImpactProvider>{children}</PriceImpactProvider>
-            </AddLiquidityProvider>
-          </TokenInputsValidationProvider>
+          <Permit2SignatureProvider>
+            <TokenInputsValidationProvider>
+              <AddLiquidityProvider urlTxHash={urlTxHash}>
+                <PriceImpactProvider>{children}</PriceImpactProvider>
+              </AddLiquidityProvider>
+            </TokenInputsValidationProvider>
+          </Permit2SignatureProvider>
         </RelayerSignatureProvider>
       </TransactionStateProvider>
     </DefaultPageContainer>

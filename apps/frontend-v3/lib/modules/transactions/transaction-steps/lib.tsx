@@ -40,7 +40,10 @@ export type StepType =
   | 'unstake'
   | 'claim'
   | 'swap'
+  | 'crossChainSync'
   | LockActionType
+  | 'signPermit'
+  | 'signPermit2'
 
 export type TxActionId =
   | 'SignBatchRelayer'
@@ -67,9 +70,17 @@ type Executable = {
   setTxConfig?: any
 }
 
+// Defines extra details to be nested in the step tracker
+export type StepDetails = {
+  gasless: boolean
+  // Token symbols of the tokens inside a batch approval (i.e. permit2)
+  batchApprovalTokens?: string[]
+}
+
 export type TransactionStep = {
   id: string
   stepType: StepType
+  details?: StepDetails
   labels: TransactionLabels
   isComplete: () => boolean
   renderAction: () => ReactNode

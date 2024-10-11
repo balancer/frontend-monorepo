@@ -50,6 +50,12 @@ describe('Creates pool alerts for', () => {
           "learnMoreLink": "https://forum.balancer.fi/t/vulnerability-found-in-some-pools/5102/1",
           "status": "error",
         },
+        {
+          "content": "This pool is in recovery mode",
+          "identifier": "poolIsInRecoveryMode",
+          "isSoftWarning": false,
+          "status": "warning",
+        },
       ]
     `)
   })

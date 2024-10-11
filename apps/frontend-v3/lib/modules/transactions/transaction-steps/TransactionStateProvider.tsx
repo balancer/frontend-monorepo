@@ -19,6 +19,8 @@ export function _useTransactionState() {
       v = resetTransaction(v)
     }
 
+    // Avoid updating transaction if it's already successful (avoids unnecessary re-renders and side-effects)
+    if (getTransaction(k)?.result.status === 'success') return
     setTransactionMap(new Map(transactionMap.set(k, v)))
   }
 

@@ -1,13 +1,15 @@
-import { useThemeColorMode } from '@/lib/shared/services/chakra/useThemeColorMode'
-import { BoxProps, TextProps, Box, HStack, Text, Tooltip } from '@chakra-ui/react'
+import {
+  BoxProps,
+  Box,
+  HStack,
+  Text,
+  Portal,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@chakra-ui/react'
 import BigNumber from 'bignumber.js'
 import { ReactNode } from 'react'
-
-const tooltipTextDecorationStyles: TextProps = {
-  textDecoration: 'underline',
-  textDecorationStyle: 'dashed',
-  textUnderlineOffset: '4px',
-}
 
 interface PopoverAprItemProps extends BoxProps {
   fontWeight?: number
@@ -42,10 +44,6 @@ export function TooltipAprItem({
   tooltipText,
   ...props
 }: PopoverAprItemProps) {
-  const colorMode = useThemeColorMode()
-
-  const tootltipTextDecorationColor = colorMode === 'light' ? 'font.secondaryAlpha50' : 'gray.500'
-
   return (
     <Box fontSize="sm" background={boxBackground} bg={bg} {...props}>
       <HStack justifyContent="space-between">
@@ -59,19 +57,39 @@ export function TooltipAprItem({
         >
           {title}
         </Text>
-        <Tooltip label={tooltipText} fontSize="sm">
+        {tooltipText ? (
+          <Popover trigger="hover">
+            <PopoverTrigger>
+              <Text
+                fontWeight={fontWeight}
+                fontSize="sm"
+                opacity={aprOpacity}
+                color={fontColor}
+                variant={textVariant}
+                className="tooltip-dashed-underline"
+              >
+                {displayValueFormatter(apr)}
+              </Text>
+            </PopoverTrigger>
+            <Portal>
+              <PopoverContent p="sm" w="auto" maxW="300px">
+                <Text fontSize="sm" variant="secondary">
+                  {tooltipText}
+                </Text>
+              </PopoverContent>
+            </Portal>
+          </Popover>
+        ) : (
           <Text
             fontWeight={fontWeight}
             fontSize="sm"
             opacity={aprOpacity}
             color={fontColor}
             variant={textVariant}
-            {...(tooltipText ? tooltipTextDecorationStyles : {})}
-            textDecorationColor={tootltipTextDecorationColor}
           >
             {displayValueFormatter(apr)}
           </Text>
-        </Tooltip>
+        )}
       </HStack>
       {children}
     </Box>

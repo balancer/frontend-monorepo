@@ -34,6 +34,7 @@
     "@dicebear/core": "^7.0.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@rainbow-me/rainbowkit": "^2.1.6",
     "@sentry/nextjs": "^8.13.0",
@@ -74,8 +75,8 @@
     "use-debounce": "^10.0.0",
     "use-sound": "^4.0.1",
     "usehooks-ts": "^3.1.0",
-    "viem": "^2.21.6",
-    "wagmi": "^2.12.11"
+    "viem": "^2.21.18",
+    "wagmi": "^2.12.16"
   },
   "devDependencies": {
     "@apollo/experimental-nextjs-app-support": "^0.11.3",

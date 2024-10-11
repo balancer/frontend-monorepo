@@ -101,6 +101,10 @@ export function getTimestampSecondsFromNow(secs: number): number {
   return Math.ceil(Date.now() / 1000) + secs
 }
 
+export function getNowTimestampInSecs(): number {
+  return Math.floor(Date.now() / 1000)
+}
+
 export function getTimestampInMinsFromNow(mins: number) {
   const nowInSecs = Date.now() / 1000
   const secondsToAdd = mins * 60
@@ -120,4 +124,8 @@ export function getTimestamp() {
   return {
     minsAgo: (minutes: number) => sub(millisecondsToSeconds(new Date().getTime()), { minutes }),
   }
+}
+
+export function get24HoursFromNowInSecs() {
+  return getTimestampInMinsFromNow(24 * 60)
 }

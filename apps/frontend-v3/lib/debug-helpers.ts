@@ -15,7 +15,7 @@ export const usdcAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as const
 export const usdtAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7' as const
 
 export const ethAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' as const
-export const maticAddress = '0x0000000000000000000000000000000000001010' as const
+export const polAddress = '0x0000000000000000000000000000000000001010' as const
 
 export const vEth = '0x4bc3263eb5bb2ef7ad9ab6fb68be80e43b43801f' as const
 
@@ -36,7 +36,7 @@ export const vaultV3Address = sepoliaNetworkConfig.contracts.balancer.vaultV3 as
 
 export const poolId = '0x68e3266c9c8bbd44ad9dca5afbfe629022aee9fe000200000000000000000512' as const // Balancer Weighted wjAura and WETH
 
-export const sepoliaRouter = '0x1c58cc548a23956469c7C528Bb3a846c842dfaF9'
+export const sepoliaRouter = '0xB12FcB422aAe6720f882E22C340964a7723f2387'
 
 /*
   Used to pretty print objects when debugging

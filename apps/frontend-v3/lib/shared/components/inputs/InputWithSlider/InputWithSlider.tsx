@@ -15,14 +15,17 @@ import {
   SliderTrack,
   VStack,
   forwardRef,
+  useTheme as useChakraTheme,
 } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useTheme as useNextTheme } from 'next-themes'
 
 type Props = {
   value?: string
   boxProps?: BoxProps
   onPercentChanged: (percent: number) => void
   isNumberInputDisabled?: boolean
+  isWarning?: boolean
 }
 
 export const InputWithSlider = forwardRef(
@@ -33,12 +36,15 @@ export const InputWithSlider = forwardRef(
       onPercentChanged,
       children,
       isNumberInputDisabled,
+      isWarning,
       ...numberInputProps
     }: NumberInputProps & Props,
     ref
   ) => {
     const [sliderPercent, setSliderPercent] = useState<number>(100)
     const { toCurrency } = useCurrency()
+    const theme = useChakraTheme()
+    const { theme: nextTheme } = useNextTheme()
 
     function handleSliderChange(percent: number) {
       setSliderPercent(percent)
@@ -56,6 +62,13 @@ export const InputWithSlider = forwardRef(
       // setSliderPercent(newPercent)
     }
 
+    const boxShadowColor =
+      nextTheme === 'dark'
+        ? theme.semanticTokens.colors.font.warning._dark
+        : theme.semanticTokens.colors.font.warning.default
+
+    const boxShadow = isWarning ? `0 0 0 1px ${boxShadowColor}` : undefined
+
     return (
       <VStack w="full" spacing="xs">
         {children && (
@@ -72,6 +85,7 @@ export const InputWithSlider = forwardRef(
           border="white"
           w="full"
           ref={ref}
+          boxShadow={boxShadow}
           {...boxProps}
         >
           <HStack align="start" spacing="md">

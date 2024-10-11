@@ -6,7 +6,7 @@ import { createAvatar } from '@dicebear/core'
 import { identicon } from '@dicebear/collection'
 import { Address } from 'viem'
 import { useTokens } from './TokensProvider'
-import { Image, ImageProps } from '@chakra-ui/react'
+import { Image, ImageProps, Text, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react'
 
 type Props = {
   address?: Address | string
@@ -64,16 +64,26 @@ export function TokenIcon({
   const iconSrc = useMemo(() => getIconSrc(), [logoURI, token])
 
   return (
-    <Image
-      src={hasError || !iconSrc ? fallbackSVG.toDataUriSync() : iconSrc}
-      alt={alt}
-      width={`${size}px`}
-      height={`${size}px`}
-      borderRadius="100%"
-      border={border}
-      backgroundColor="background.level4"
-      onError={() => !hasError && setHasError(true)}
-      {...rest}
-    />
+    <Popover trigger="hover">
+      <PopoverTrigger>
+        <Image
+          src={hasError || !iconSrc ? fallbackSVG.toDataUriSync() : iconSrc}
+          alt={alt}
+          width={`${size}px`}
+          height={`${size}px`}
+          borderRadius="100%"
+          border={border}
+          backgroundColor="background.level4"
+          onError={() => !hasError && setHasError(true)}
+          {...rest}
+        />
+      </PopoverTrigger>
+
+      <PopoverContent p="sm" w="auto" maxW="300px">
+        <Text fontSize="sm" variant="secondary">
+          {alt}
+        </Text>
+      </PopoverContent>
+    </Popover>
   )
 }
