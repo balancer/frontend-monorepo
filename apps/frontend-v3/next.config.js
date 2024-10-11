@@ -21,7 +21,7 @@ const nextConfig = {
       },
     ],
   },
-  pageExtensions: ['tsx', `${process.env.PROTOCOL}.tsx`, 'ts'],
+  transpilePackages: ['@repo/lib'],
 
   // Safe App setup
   headers: manifestHeaders,

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Center } from '@chakra-ui/react'
-import { SentryError, ensureError } from '@/lib/shared/utils/errors'
+import { SentryError, ensureError } from '@repo/lib/shared/utils/errors'
 
 export default function Page() {
   function throwError() {

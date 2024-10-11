@@ -1,4 +1,4 @@
-import { getProjectConfig } from '@/lib/config/getProjectConfig'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 

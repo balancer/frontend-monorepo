@@ -1,16 +1,16 @@
 'use client'
 
-import { useTokens } from '@/lib/modules/tokens/TokensProvider'
-import { TokenInput } from '@/lib/modules/tokens/TokenInput/TokenInput'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { Button, Card, Heading, Text, VStack, useDisclosure } from '@chakra-ui/react'
-import { GqlChain, GqlToken } from '@/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { useState } from 'react'
-import { TokenSelectModal } from '@/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
-import { TokenBalancesProvider } from '@/lib/modules/tokens/TokenBalancesProvider'
-import { ConnectWallet } from '@/lib/modules/web3/ConnectWallet'
-import { daiAddress } from '@/lib/debug-helpers'
-import { TokenInputsValidationProvider } from '@/lib/modules/tokens/TokenInputsValidationProvider'
-import { PriceImpactProvider } from '@/lib/modules/price-impact/PriceImpactProvider'
+import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
+import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
+import { daiAddress } from '@repo/lib/debug-helpers'
+import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
+import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 
 export default function TokenInputPage() {
   const [currentValue, setCurrentValue] = useState('')

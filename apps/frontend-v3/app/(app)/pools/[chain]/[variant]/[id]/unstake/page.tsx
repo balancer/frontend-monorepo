@@ -1,10 +1,10 @@
 'use client'
 
-import { PoolActionsLayout } from '@/lib/modules/pool/actions/PoolActionsLayout'
-import { UnstakeForm } from '@/lib/modules/pool/actions/unstake/UnstakeForm'
-import { UnstakeProvider } from '@/lib/modules/pool/actions/unstake/UnstakeProvider'
-import { TransactionStateProvider } from '@/lib/modules/transactions/transaction-steps/TransactionStateProvider'
-import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
+import { PoolActionsLayout } from '@repo/lib/modules/pool/actions/PoolActionsLayout'
+import { UnstakeForm } from '@repo/lib/modules/pool/actions/unstake/UnstakeForm'
+import { UnstakeProvider } from '@repo/lib/modules/pool/actions/unstake/UnstakeProvider'
+import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 
 export default function UnstakePage() {
   return (

@@ -1,13 +1,13 @@
 'use client'
 
-import { buildTokenApprovalLabels } from '@/lib/modules/tokens/approvals/approval-labels'
-import { TransactionStepButton } from '@/lib/modules/transactions/transaction-steps/TransactionStepButton'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { buildTokenApprovalLabels } from '@repo/lib/modules/tokens/approvals/approval-labels'
+import { TransactionStepButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import {
   ManagedErc20TransactionInput,
   useManagedErc20Transaction,
-} from '@/lib/modules/web3/contracts/useManagedErc20Transaction'
-import { sentryMetaForWagmiSimulation } from '@/lib/shared/utils/query-errors'
+} from '@repo/lib/modules/web3/contracts/useManagedErc20Transaction'
+import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { Center, Input, Text, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Address } from 'viem'

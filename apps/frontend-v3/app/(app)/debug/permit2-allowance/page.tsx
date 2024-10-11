@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 'use client'
 
-import { getGqlChain, getNetworkConfig } from '@/lib/config/app.config'
-import { BPT_DECIMALS } from '@/lib/modules/pool/pool.constants'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
+import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { permit2Abi } from '@balancer/sdk'
 import { Center, Input, Text, VStack } from '@chakra-ui/react'
 import { useState } from 'react'

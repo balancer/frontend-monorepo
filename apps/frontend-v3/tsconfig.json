@@ -9,7 +9,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@repo/*": ["../../packages/*"]
     },
     "types": ["vitest/globals"]
   },
@@ -18,10 +19,10 @@
     "**/*.tsx",
     "global.d.ts",
     "next-env.d.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../../packages/lib/global.d.ts",
+    "../../packages/lib/shared/components/navs/CowFooter.tsx",
+    "../../packages/lib/shared/app/react-query.provider.tsx"
   ],
-  "exclude": [
-    "node_modules",
-    ".next"
-  ]
+  "exclude": ["node_modules", ".next"]
 }

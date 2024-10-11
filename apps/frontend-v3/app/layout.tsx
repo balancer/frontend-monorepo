@@ -1,15 +1,15 @@
 /* eslint-disable max-len */
 import { Metadata } from 'next'
 import { Providers } from './providers'
-import { Navbar } from '@/lib/shared/components/navs/Navbar'
-import { Footer } from '@/lib/shared/components/navs/Footer'
-import { getProjectConfig } from '@/lib/config/getProjectConfig'
-import { satoshiFont } from '@/lib/assets/fonts/satoshi/satoshi'
+import { Navbar } from '@repo/lib/shared/components/navs/Navbar'
+import { Footer } from '@repo/lib/shared/components/navs/Footer'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
 import NextTopLoader from 'nextjs-toploader'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import '@/lib/assets/css/global.css'
-import { Fathom } from '@/lib/shared/services/fathom/Fathom'
-import { GlobalAlerts } from '@/lib/shared/components/navs/GlobalAlerts'
+import '@repo/lib/assets/css/global.css'
+import { Fathom } from '@repo/lib/shared/services/fathom/Fathom'
+import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
 import { PropsWithChildren } from 'react'
 
 const { projectName } = getProjectConfig()
