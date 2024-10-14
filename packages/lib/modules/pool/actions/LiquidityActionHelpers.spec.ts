@@ -25,7 +25,7 @@ import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 describe('areEmptyAmounts', () => {
   test('when all humanAmounts are empty, zero or zero with decimals', () => {
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { tokenAddress: '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f', humanAmount: '' },
+      { tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F', humanAmount: '' },
       { tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', humanAmount: '0' },
       { tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756bb3', humanAmount: '0.00' },
     ]

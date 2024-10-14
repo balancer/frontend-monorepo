@@ -7,7 +7,7 @@ import { Address } from 'viem'
 */
 export const balAddress = '0xba100000625a3754423978a60c9317c58a424e3d' as const
 export const wETHAddress = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' as const
-export const wjAuraAddress = '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f' as const
+export const wjAuraAddress = '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F' as const
 
 export const bpt3PoolAddress = '0x79c58f70905f734641735bc61e45c19dd9ad60bc' as const
 export const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f' as const
