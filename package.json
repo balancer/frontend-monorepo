@@ -12,7 +12,7 @@
     "prettier:fix": "pnpm run prettier --write",
     "stylelint": "stylelint '**/*.css'",
     "stylelint:fix": "pnpm run stylelint -- --fix",
-    "test:integration": "turbo test:integration --",
+    "test:integration": "turbo test:integration --log-order=stream --",
     "test:unit": "turbo test:unit --",
     "typecheck": "turbo typecheck"
   },
