@@ -13,7 +13,7 @@
     "stylelint": "stylelint '**/*.css'",
     "stylelint:fix": "pnpm run stylelint -- --fix",
     "test:integration": "turbo test:integration --log-order=stream --",
-    "test:unit": "turbo test:unit --",
+    "test:unit": "turbo test:unit --log-order=stream --",
     "typecheck": "turbo typecheck"
   },
   "devDependencies": {
