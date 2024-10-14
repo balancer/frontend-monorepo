@@ -23,7 +23,7 @@ afterAll(async () => {
   Mocks getDefaultRpcUrl to return the test rpcUrl ('http://127.0.0.1:port/poolId')
   Keeps the rest of the module unmocked
 */
-vi.mock('../../lib/modules/web3/transports', async importOriginal => {
+vi.mock('@repo/lib/modules/web3/transports', async importOriginal => {
   const originalModule = await importOriginal<typeof transportsModule>()
   return {
     ...originalModule,
@@ -38,7 +38,7 @@ vi.mock('../../lib/modules/web3/transports', async importOriginal => {
   Mocks getViemClient to use the test chain definitions,
   which use test rpcUrls ('http://127.0.0.1:port/poolId')
 */
-vi.mock('../../lib/shared/services/viem/viem.client', () => {
+vi.mock('@repo/lib/shared/services/viem/viem.client', () => {
   return {
     getViemClient: (chain: GqlChain) => {
       return createPublicClient({
