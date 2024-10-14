@@ -69,4 +69,4 @@ jobs:
         # with:
         #   cache: false # Disable cache after foundry-toolchain upgrade
       - name: Run integration tests
-        run: pnpm test:integration --output-logs=new-only
+        run: pnpm test:integration
