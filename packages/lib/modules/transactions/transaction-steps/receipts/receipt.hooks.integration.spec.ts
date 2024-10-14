@@ -134,7 +134,7 @@ describe('queries swap transaction', () => {
     })
   })
 
-  test('when the native asset is the token in (from MATIC to DAI)', async () => {
+  test('when the native asset is the token in (from POL to DAI)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
     // https://polygonscan.com/tx/0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c
     const txHash = '0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c'
@@ -154,7 +154,7 @@ describe('queries swap transaction', () => {
     })
   })
 
-  test('when the native asset is the token out (from DAI to MATIC)', async () => {
+  test('when the native asset is the token out (from DAI to POL)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
     // https://polygonscan.com/tx/0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288
     const txHash = '0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288'

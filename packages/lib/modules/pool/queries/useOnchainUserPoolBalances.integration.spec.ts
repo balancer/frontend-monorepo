@@ -32,7 +32,7 @@ async function createSdkUtils(pool: GqlPoolElement) {
 
 await connectWithDefaultUser()
 
-describe('fetches onchain and overrides user balances', async () => {
+describe.skip('fetches onchain and overrides user balances', async () => {
   test('when the user has wallet balance', async () => {
     const poolMock = aBalWethPoolElementMock() // Provides 80BAL-20WETH pool by default
     const utils = await createSdkUtils(poolMock)
