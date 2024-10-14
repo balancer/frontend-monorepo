@@ -66,7 +66,7 @@ jobs:
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
         uses: foundry-rs/foundry-toolchain@v1
-        with:
-          cache: false # Disable cache after foundry-toolchain upgrade
+        # with:
+        #   cache: false # Disable cache after foundry-toolchain upgrade
       - name: Run integration tests
         run: pnpm test:integration
