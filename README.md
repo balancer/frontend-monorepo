@@ -16,6 +16,8 @@ This monorepo includes the following apps & packages:
 
 
 ### Packages
+- [packages/lib](https://github.com/balancer/frontend-monorepo/tree/main/packages/lib):
+  Shared logic for all frontend-v3 apps.
 - [packages/eslint-config](https://github.com/balancer/frontend-monorepo/tree/main/packages/eslint-config): eslint configurations.
 - [packages/typescript-config](https://github.com/balancer/frontend-monorepo/tree/main/packages/typescript-config): Typescript config's used throughout the monorepo.
 
@@ -32,6 +34,7 @@ git clone https://github.com/balancer/frontend-monorepo.git && cd frontend-monor
 Then create a local environment variable file for the `frontend-v3` app.
 ```
 cp apps/frontend-v3/.env.template apps/frontend-v3/.env.local
+cp packages/lib/.env.template packages/lib/.env.local
 ```
 
 Install modules
