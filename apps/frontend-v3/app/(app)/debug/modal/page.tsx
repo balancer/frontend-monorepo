@@ -1,8 +1,8 @@
 'use client'
 
-import { SuccessOverlay } from '@/lib/shared/components/modals/SuccessOverlay'
-import { TransactionModalHeader } from '@/lib/shared/components/modals/TransactionModalHeader'
-import { GqlChain } from '@/lib/shared/services/api/generated/graphql'
+import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
+import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useDisclosure } from '@chakra-ui/hooks'
 import {
   Button,

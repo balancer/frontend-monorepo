@@ -1,5 +1,5 @@
 'use client'
 
-import { PageErrorBoundary } from '@/lib/shared/components/errors/ErrorBoundary'
+import { PageErrorBoundary } from '@repo/lib/shared/components/errors/ErrorBoundary'
 
 export default PageErrorBoundary

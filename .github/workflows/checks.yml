@@ -7,7 +7,8 @@ on:
 env:
   NEXT_PUBLIC_BALANCER_API_URL: https://api-v3.balancer.fi/graphql
   NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
-  NEXT_PRIVATE_ALCHEMY_KEY: ${{ secrets.NEXT_PRIVATE_ALCHEMY_KEY }}
+  NEXT_PRIVATE_ALCHEMY_KEY: ${{ secrets.PRIVATE_ALCHEMY_KEY }}
+  NEXT_PRIVATE_DRPC_KEY: ${{ secrets.PRIVATE_DRPC_KEY }}
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
@@ -65,5 +66,7 @@ jobs:
         uses: ./.github/actions/setup
       - name: Set up foundry (includes anvil)
         uses: foundry-rs/foundry-toolchain@v1
+        # with:
+        #   cache: false # Disable cache after foundry-toolchain upgrade
       - name: Run integration tests
         run: pnpm test:integration

@@ -1,6 +1,6 @@
 'use client'
 
-import Portfolio from '@/lib/modules/portfolio/Portfolio'
+import Portfolio from '@repo/lib/modules/portfolio/Portfolio'
 
 export default function PortfolioPage() {
   return <Portfolio />

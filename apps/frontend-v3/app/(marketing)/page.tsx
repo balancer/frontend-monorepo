@@ -2,11 +2,11 @@
 
 import { ReactLenis } from '@studio-freight/react-lenis'
 import { Box } from '@chakra-ui/react'
-import { AnimatedSVG } from '@/lib/shared/components/marketing/AnimatedSVG'
-import { HomeHero } from '@/lib/shared/components/marketing/HomeHero'
-import { HomeBuilders } from '@/lib/shared/components/marketing/HomeBuilders'
-import { HomeProtocols } from '@/lib/shared/components/marketing/HomeProtocols'
-import { HomeActivity } from '@/lib/shared/components/marketing/HomeActivity'
+import { AnimatedSVG } from '@repo/lib/shared/components/marketing/AnimatedSVG'
+import { HomeHero } from '@repo/lib/shared/components/marketing/HomeHero'
+import { HomeBuilders } from '@repo/lib/shared/components/marketing/HomeBuilders'
+import { HomeProtocols } from '@repo/lib/shared/components/marketing/HomeProtocols'
+import { HomeActivity } from '@repo/lib/shared/components/marketing/HomeActivity'
 
 export default function Home() {
   return (

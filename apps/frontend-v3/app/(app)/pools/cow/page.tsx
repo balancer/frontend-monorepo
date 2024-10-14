@@ -1,12 +1,12 @@
-import { PoolList } from '@/lib/modules/pool/PoolList/PoolList'
-import FadeInOnView from '@/lib/shared/components/containers/FadeInOnView'
-import { GqlPoolType } from '@/lib/shared/services/api/generated/graphql'
+import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
 import { Metadata } from 'next'
-import { CowFooter } from './CowFooter'
-import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
-import { CowHeader } from './CowHeader'
+import { CowFooter } from '../../../../../../packages/lib/shared/components/navs/CowFooter'
+import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { CowHeader } from '@repo/lib/shared/components/navs/CowHeader'
 
 export const metadata: Metadata = {
   title: `CoW AMM DeFi Liquidity Pools`,

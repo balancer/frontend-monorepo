@@ -3,7 +3,7 @@
 import * as Sentry from '@sentry/nextjs'
 import { default as NextError } from 'next/error'
 import { useEffect } from 'react'
-import { isDev, isStaging } from '@/lib/config/app.config'
+import { isDev, isStaging } from '@repo/lib/config/app.config'
 
 /**
  * Global Next.js ErrorBoundary (!) Next components are not available

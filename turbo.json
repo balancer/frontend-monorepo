@@ -29,12 +29,13 @@
       "dependsOn": ["graphql:gen", "^test:unit"]
     },
     "test:integration": {
-      "dependsOn": ["graphql:gen", "^test:integration"]
+      "dependsOn": ["graphql:gen", "^test:integration"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
       "inputs": [".env*"],
-      "outputs": ["lib/shared/services/api/generated/**"]
+      "outputs": ["shared/services/api/generated/**"]
     }
   }
 }

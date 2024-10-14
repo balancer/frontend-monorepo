@@ -1,13 +1,13 @@
 'use client'
 
-import { TokenBalancesProvider } from '@/lib/modules/tokens/TokenBalancesProvider'
-import { useTokens } from '@/lib/modules/tokens/TokensProvider'
-import { DefaultPageContainer } from '@/lib/shared/components/containers/DefaultPageContainer'
-import mainnetNetworkConfig from '@/lib/config/networks/mainnet'
+import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 
-import { TransactionStateProvider } from '@/lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { PropsWithChildren } from 'react'
-import { CrossChainSyncProvider } from '@/lib/modules/vebal/cross-chain/CrossChainSyncProvider'
+import { CrossChainSyncProvider } from '@repo/lib/modules/vebal/cross-chain/CrossChainSyncProvider'
 
 export default function VebalLayout({ children }: PropsWithChildren) {
   const { getTokensByChain } = useTokens()

@@ -1,13 +1,13 @@
 'use client'
 
-import { getNetworkConfig } from '@/lib/config/app.config'
-import { TransactionStepButton } from '@/lib/modules/transactions/transaction-steps/TransactionStepButton'
-import { TransactionLabels } from '@/lib/modules/transactions/transaction-steps/lib'
-import { useUserAccount } from '@/lib/modules/web3/UserAccountProvider'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { TransactionStepButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
+import { TransactionLabels } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import {
   ManagedTransactionInput,
   useManagedTransaction,
-} from '@/lib/modules/web3/contracts/useManagedTransaction'
+} from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { Center, VStack } from '@chakra-ui/react'
 
 export default function Page() {

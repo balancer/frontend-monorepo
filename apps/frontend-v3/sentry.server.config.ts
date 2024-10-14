@@ -4,7 +4,7 @@
 
 import * as Sentry from '@sentry/nextjs'
 import { sentryDSN } from './sentry.config'
-import { isProd } from './lib/config/app.config'
+import { isProd } from '@repo/lib/config/app.config'
 
 Sentry.init({
   enabled: isProd,

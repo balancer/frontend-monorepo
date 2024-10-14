@@ -2,7 +2,7 @@
 import { HStack, Heading, VStack } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
-import FadeInOnView from '@/lib/shared/components/containers/FadeInOnView'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 export default function DebugPools() {
   return (

@@ -2,7 +2,7 @@
 
 import { Container, HStack, VStack, Image, Text } from '@chakra-ui/react'
 import { Prose } from '@nikolovlazar/chakra-ui-prose'
-import FadeInOnView from '@/lib/shared/components/containers/FadeInOnView'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 export default function Cookies() {
   const services = [

@@ -40,7 +40,7 @@ import {
 } from '@chakra-ui/react'
 
 import { darken } from '@chakra-ui/theme-tools'
-import Section from '@/lib/shared/components/layout/Section'
+import Section from '@repo/lib/shared/components/layout/Section'
 
 export default function Components() {
   return (
