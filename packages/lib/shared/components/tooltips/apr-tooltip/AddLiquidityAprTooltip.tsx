@@ -10,7 +10,7 @@ import { SparklesIcon } from './MainAprTooltip'
 interface Props
   extends Omit<
     BaseAprTooltipProps,
-    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText' | 'poolId'
+    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText' | 'poolId' | 'poolType'
   > {
   totalUsdValue: string
   weeklyYield: string

@@ -23,7 +23,7 @@ import StarIcon from '../../icons/StarIcon'
 interface Props
   extends Omit<
     BaseAprTooltipProps,
-    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText'
+    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText' | 'poolType'
   > {
   textProps?: TextProps
   onlySparkles?: boolean
