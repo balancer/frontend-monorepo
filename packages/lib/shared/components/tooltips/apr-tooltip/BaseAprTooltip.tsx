@@ -185,15 +185,13 @@ function BaseAprTooltip({
           tooltipText={merklIncentivesTooltipText}
         />
       )}
-      {hasSurplusIncentives && (
-        <TooltipAprItem
-          {...basePopoverAprItemProps}
-          displayValueFormatter={usedDisplayValueFormatter}
-          title="Prevented LVR"
-          apr={surplusIncentivesAprDisplayed}
-          tooltipText={surplusIncentivesTooltipText}
-        />
-      )}
+      <TooltipAprItem
+        {...basePopoverAprItemProps}
+        displayValueFormatter={usedDisplayValueFormatter}
+        title="Prevented LVR"
+        apr={hasSurplusIncentives ? surplusIncentivesAprDisplayed : bn(0)}
+        tooltipText={surplusIncentivesTooltipText}
+      />
       <Divider />
       <TooltipAprItem
         {...basePopoverAprItemProps}
