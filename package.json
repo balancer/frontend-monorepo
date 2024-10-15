@@ -2,9 +2,10 @@
   "name": "@balancer/frontend-monorepo",
   "private": true,
   "scripts": {
-    "build": "turbo build --filter frontend-v3",
-    "build:dev": "turbo build:dev --filter frontend-v3",
-    "dev": "turbo dev --filter frontend-v3",
+    "build": "turbo build",
+    "build:dev": "turbo build:dev",
+    "dev:bal": "turbo dev --filter frontend-v3",
+    "dev:beets": "turbo dev --filter beets-frontend-v3",
     "graphql:gen": "turbo graphql:gen",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
