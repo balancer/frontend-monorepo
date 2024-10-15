@@ -2,8 +2,8 @@
 const sentryOptions = {
   // Suppresses source map uploading logs during build
   silent: true,
-  org: 'balancer-labs',
-  project: 'frontend-v3',
+  org: 'skloon',
+  project: 'frontend',
 
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
@@ -30,14 +30,7 @@ const sentryOptions = {
   automaticVercelMonitors: true,
 }
 
-const isProd = process.env.NEXT_PUBLIC_APP_ENV === 'prod'
-const productionSentryDSN =
-  'https://53df88eafd8f9a546b0e926b65553379@o574636.ingest.sentry.io/4506382607712256'
-const developmentSentryDSN =
-  'https://28291a3b50d248e06f917aa5a98b8fea@o574636.ingest.us.sentry.io/4506944362053632'
-const sentryDSN = isProd ? productionSentryDSN : developmentSentryDSN
-
 module.exports = {
   sentryOptions,
-  sentryDSN,
+  sentryDSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
 }
