@@ -10,10 +10,10 @@ export default function DebugPools() {
       <HStack align="start" mx="auto" spacing="24px" width="80%">
         <VStack align="start" margin="lg" padding="lg">
           <Heading size="md">Debug V3 pools</Heading>
-          <Link as={NextLink} href="/pools/sepolia/v3/0xec1b5ca86c83c7a85392063399e7d2170d502e00">
+          <Link as={NextLink} href="/pools/sepolia/v3/0xd71958aed5e2e835a648ff832a181f7bdabbaf13">
             Sepolia WEIGHTED (Balancer 50 BAL 50 WETH)
           </Link>
-          <Link as={NextLink} href="/pools/sepolia/v3/0x8fc07bcf9b88ace84c7523248dc4a85f638c9536">
+          <Link as={NextLink} href="/pools/sepolia/v3/0x79f53b05828e09ec04f1a028a341cab09591523a">
             Sepolia WEIGHTED with Proportional joins (Balancer 50 BAL 50 WETH -ExitFee Hook)
           </Link>
           <Link as={NextLink} href="/pools/sepolia/v3/0x3ddd1e7adc6a3c1a6cbcf2dc74c6f71b9b347713">
