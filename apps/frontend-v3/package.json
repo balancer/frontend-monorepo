@@ -9,7 +9,6 @@
     "gen:wagmi": "pnpm wagmi generate",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "prepare": "cd ../.. && husky apps/frontend-v3/.husky",
     "start": "next start",
     "test": "pnpm test:unit",
     "test:unit": "vitest",

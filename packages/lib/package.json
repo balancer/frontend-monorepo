@@ -8,7 +8,6 @@
     "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config -c ./shared/services/api/codegen.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "cd ../.. && husky apps/frontend-v3/.husky",
     "test": "pnpm test:unit & pnpm run test:integration",
     "test:integration": "vitest -c ./vitest.config.integration.ts",
     "test:unit": "vitest",
