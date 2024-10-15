@@ -151,6 +151,7 @@ function MainAprTooltip({
       totalBaseVeBalText="Total base APR"
       customPopoverContent={customPopoverContent}
       vebalBoost={vebalBoost}
+      poolType={pool.type}
     >
       {({ isOpen }) => (
         <HStack align="center" alignItems="center">

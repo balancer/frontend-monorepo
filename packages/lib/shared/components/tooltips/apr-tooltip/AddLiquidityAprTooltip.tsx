@@ -56,6 +56,7 @@ function AddLiquidityAprTooltip({ weeklyYield, totalUsdValue, pool, ...props }: 
       shouldDisplayBaseTooltip
       shouldDisplayMaxVeBalTooltip
       usePortal={false}
+      poolType={pool.type}
     >
       <HStack align="center" alignItems="center">
         <Card cursor="pointer" variant="subSection" w="full" p={['sm', 'ms']}>
