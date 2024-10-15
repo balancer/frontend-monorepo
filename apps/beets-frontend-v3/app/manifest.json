@@ -1,10 +1,10 @@
 {
-  "short_name": "Balancer",
-  "name": "Balancer",
-  "description": "Balancer is a battle-tested toolkit for true AMM experimentation and innovation.",
+  "short_name": "Beets",
+  "name": "Beets",
+  "description": "Beets is a battle-tested toolkit for true AMM experimentation and innovation.",
   "icons": [
     {
-      "src": "/images/icons/balancer.svg",
+      "src": "/images/icons/beets.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     },
