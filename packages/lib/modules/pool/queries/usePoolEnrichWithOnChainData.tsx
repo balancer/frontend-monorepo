@@ -3,7 +3,6 @@ import { Address, formatUnits } from 'viem'
 import { useReadContracts } from 'wagmi'
 import { useTokens } from '../../tokens/TokensProvider'
 import { balancerV3ExtensionVaultAbi } from '../../web3/contracts/abi/balancerV3ExtensionVaultAbi'
-import { weightedPoolV3Abi } from '../../web3/contracts/abi/weightedPoolV3Abi'
 import { Pool } from '../PoolProvider'
 import { BPT_DECIMALS } from '../pool.constants'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -16,6 +15,7 @@ import {
 } from '../../web3/contracts/abi/generated'
 import { isComposableStablePool } from '../pool.utils'
 import { cowAmmPoolAbi } from '../../web3/contracts/abi/cowAmmAbi'
+import { weightedPoolAbi_V3 } from '@balancer/sdk'
 
 export function usePoolEnrichWithOnChainData(pool: Pool) {
   const { priceFor } = useTokens()
@@ -60,7 +60,7 @@ function useV3PoolOnchainData(pool: Pool) {
       },
       {
         chainId,
-        abi: weightedPoolV3Abi,
+        abi: weightedPoolAbi_V3,
         address: pool.address as Address,
         functionName: 'totalSupply',
         args: [],
