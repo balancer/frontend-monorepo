@@ -26,9 +26,6 @@ coverage
 out/
 dist
 
-.vscode
-.idea
-
 # debug
 npm-debug.log*
 yarn-debug.log*
