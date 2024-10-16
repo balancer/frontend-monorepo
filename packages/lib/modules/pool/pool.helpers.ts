@@ -23,10 +23,10 @@ import { PoolIssue } from './alerts/pool-issues/PoolIssue.type'
 import { getUserTotalBalanceInt } from './user-balance.helpers'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
-import { balancerV3VaultAbi } from '../web3/contracts/abi/balancerV3VaultAbi'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getLeafTokens } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
+import { vaultV3Abi } from '@balancer/sdk'
 
 /**
  * METHODS
@@ -270,7 +270,7 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
   return poolTokens.some(token => {
     // if token is not allowed - we should block adding liquidity
-    if (!token.isAllowed) return true
+    if (!token.isAllowed && !isCowAmmPool(pool.type)) return true
 
     // if rateProvider is null - we consider it as zero address and not block adding liquidity
     if (isNil(token.priceRateProvider) || token.priceRateProvider === zeroAddress) return false
@@ -305,7 +305,7 @@ export function getVaultConfig(pool: Pool) {
         networkConfig.contracts.balancer.vaultV3!
       : networkConfig.contracts.balancer.vaultV2
 
-  const balancerVaultAbi = pool.protocolVersion === 3 ? balancerV3VaultAbi : balancerV2VaultAbi
+  const balancerVaultAbi = pool.protocolVersion === 3 ? vaultV3Abi : balancerV2VaultAbi
 
   return { vaultAddress, balancerVaultAbi }
 }
