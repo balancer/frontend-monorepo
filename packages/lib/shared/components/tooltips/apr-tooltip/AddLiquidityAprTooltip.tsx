@@ -10,7 +10,7 @@ import { SparklesIcon } from './MainAprTooltip'
 interface Props
   extends Omit<
     BaseAprTooltipProps,
-    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText' | 'poolId'
+    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText' | 'poolId' | 'poolType'
   > {
   totalUsdValue: string
   weeklyYield: string
@@ -56,6 +56,7 @@ function AddLiquidityAprTooltip({ weeklyYield, totalUsdValue, pool, ...props }: 
       shouldDisplayBaseTooltip
       shouldDisplayMaxVeBalTooltip
       usePortal={false}
+      poolType={pool.type}
     >
       <HStack align="center" alignItems="center">
         <Card cursor="pointer" variant="subSection" w="full" p={['sm', 'ms']}>

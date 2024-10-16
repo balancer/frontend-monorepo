@@ -23,7 +23,7 @@ import StarIcon from '../../icons/StarIcon'
 interface Props
   extends Omit<
     BaseAprTooltipProps,
-    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText'
+    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText' | 'poolType'
   > {
   textProps?: TextProps
   onlySparkles?: boolean
@@ -151,6 +151,7 @@ function MainAprTooltip({
       totalBaseVeBalText="Total base APR"
       customPopoverContent={customPopoverContent}
       vebalBoost={vebalBoost}
+      poolType={pool.type}
     >
       {({ isOpen }) => (
         <HStack align="center" alignItems="center">
