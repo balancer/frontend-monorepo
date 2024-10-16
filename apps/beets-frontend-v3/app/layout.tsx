@@ -1,7 +1,5 @@
 /* eslint-disable max-len */
 import { Metadata } from 'next'
-import { Providers } from './providers'
-import { Navbar } from '@repo/lib/shared/components/navs/Navbar'
 import { Footer } from '@repo/lib/shared/components/navs/Footer'
 import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
 import NextTopLoader from 'nextjs-toploader'
@@ -9,6 +7,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import '@repo/lib/assets/css/global.css'
 import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
 import { PropsWithChildren } from 'react'
+import { Providers } from '@repo/lib/shared/components/site/providers'
+import { NavBarContainer } from '@repo/beets/components/navs/NavBarContainer'
 
 export const metadata: Metadata = {
   title: 'Beets DeFi Liquidity Pools',
@@ -41,7 +41,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <NextTopLoader showSpinner={false} color="#7f6ae8" />
         <Providers>
           <GlobalAlerts />
-          <Navbar />
+          <NavBarContainer />
           {children}
           <Footer />
           <SpeedInsights />

@@ -4,21 +4,21 @@ import NextLink from 'next/link'
 import DarkModeToggle from '../btns/DarkModeToggle'
 import { Box, HStack, BoxProps, Link, Button } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
-import { BalancerLogo } from '../imgs/BalancerLogo'
-import { BalancerLogoType } from '../imgs/BalancerLogoType'
 import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
 import RecentTransactions from '../other/RecentTransactions'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
 import { staggeredFadeIn, fadeIn } from '@repo/lib/shared/utils/animations'
 import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'framer-motion'
 import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
-import { MobileNav } from './MobileNav'
-import { useNav } from './useNav'
+import { AppLink, useNav } from './useNav'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 type Props = {
+  mobileNav?: ReactNode
+  navLogo?: ReactNode
+  appLinks?: AppLink[]
   leftSlot?: ReactNode
   rightSlot?: ReactNode
   disableBlur?: boolean
@@ -44,8 +44,8 @@ function useBoundedScroll(threshold: number) {
   return { scrollYBounded, scrollYBoundedProgress }
 }
 
-function NavLinks({ ...props }: BoxProps) {
-  const { appLinks, linkColorFor } = useNav()
+function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
+  const { linkColorFor } = useNav()
 
   return (
     <HStack spacing="lg" fontWeight="medium" {...props}>
@@ -82,24 +82,7 @@ function NavLinks({ ...props }: BoxProps) {
   )
 }
 
-function NavLogo() {
-  return (
-    <Box as={motion.div} variants={fadeIn}>
-      <Link as={NextLink} variant="nav" href="/" prefetch={true}>
-        <Box>
-          <Box display={{ base: 'block', md: 'none' }}>
-            <BalancerLogo width="26px" />
-          </Box>
-          <Box display={{ base: 'none', md: 'block' }}>
-            <BalancerLogoType width="106px" />
-          </Box>
-        </Box>
-      </Link>
-    </Box>
-  )
-}
-
-function NavActions() {
+function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
   const pathname = usePathname()
   const { isConnected } = useUserAccount()
 
@@ -119,7 +102,7 @@ function NavActions() {
           display: { base: 'block', lg: 'block' },
         },
         {
-          el: <MobileNav />,
+          el: mobileNav,
           display: { base: 'block', lg: 'none' },
         },
       ]
@@ -139,7 +122,7 @@ function NavActions() {
         display: { base: 'block', lg: 'block' },
       },
       {
-        el: <MobileNav />,
+        el: mobileNav,
         display: { base: 'block', lg: 'none' },
       },
     ]
@@ -168,7 +151,15 @@ function NavActions() {
   )
 }
 
-export function Navbar({ leftSlot, rightSlot, disableBlur, ...rest }: Props & BoxProps) {
+export function NavBar({
+  leftSlot,
+  rightSlot,
+  disableBlur,
+  appLinks,
+  navLogo,
+  mobileNav,
+  ...rest
+}: Props & BoxProps) {
   const [showShadow, setShowShadow] = useState(false)
 
   useEffect(() => {
@@ -206,7 +197,7 @@ export function Navbar({ leftSlot, rightSlot, disableBlur, ...rest }: Props & Bo
         top: disableBlur ? 0 : top,
         opacity: disableBlur ? 1 : opacity,
       }}
-      onScroll={e => console.log('Navbar scroll:', e)}
+      onScroll={e => console.log('NavBar scroll:', e)}
       boxShadow={showShadow ? 'lg' : 'none'}
       borderColor="border.base"
       _before={{
@@ -233,8 +224,8 @@ export function Navbar({ leftSlot, rightSlot, disableBlur, ...rest }: Props & Bo
         >
           {leftSlot || (
             <>
-              <NavLogo />
-              <NavLinks display={{ base: 'none', lg: 'flex' }} />
+              {navLogo}
+              {appLinks && <NavLinks appLinks={appLinks} display={{ base: 'none', lg: 'flex' }} />}
             </>
           )}
         </HStack>
@@ -246,7 +237,7 @@ export function Navbar({ leftSlot, rightSlot, disableBlur, ...rest }: Props & Bo
           initial="hidden"
           animate="show"
         >
-          {rightSlot || <NavActions />}
+          {rightSlot || <NavActions mobileNav={mobileNav} />}
         </HStack>
       </HStack>
     </Box>

@@ -18,13 +18,28 @@ import {
 import { useRef } from 'react'
 import { ArrowUpRight, Menu } from 'react-feather'
 import { BalancerLogoType } from '../imgs/BalancerLogoType'
-import { useNav } from './useNav'
+import { AppLink, useNav } from './useNav'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
 
-function NavLinks({ onClick }: { onClick?: () => void }) {
-  const { appLinks, linkColorFor } = useNav()
+type NavLinkProps = {
+  appLinks: AppLink[]
+  onClick?: () => void
+}
+
+type EcosystemLinkProps = {
+  ecosystemLinks: AppLink[]
+}
+
+type SocialLinkProps = {
+  socialLinks: AppLink[]
+}
+
+type MobileNavProps = NavLinkProps & EcosystemLinkProps & SocialLinkProps
+
+function NavLinks({ appLinks, onClick }: NavLinkProps) {
+  const { linkColorFor } = useNav()
 
   return (
     <VStack align="start" w="full">
@@ -47,9 +62,7 @@ function NavLinks({ onClick }: { onClick?: () => void }) {
   )
 }
 
-function EcosystemLinks() {
-  const { ecosystemLinks } = useNav()
-
+function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
   return (
     <VStack align="start" w="full">
       <Text color="grayText" size="xs" mb="sm">
@@ -75,12 +88,10 @@ function EcosystemLinks() {
   )
 }
 
-function SocialLinks() {
-  const { getSocialLinks } = useNav()
-
+function SocialLinks({ socialLinks }: SocialLinkProps) {
   return (
     <HStack justify="space-between" w="full">
-      {getSocialLinks().map(({ href, icon }) => (
+      {socialLinks.map(({ href, icon }) => (
         <Button as={Link} key={href} href={href} variant="tertiary" isExternal>
           {icon}
         </Button>
@@ -89,7 +100,7 @@ function SocialLinks() {
   )
 }
 
-export function MobileNav() {
+export function MobileNav({ appLinks, ecosystemLinks, socialLinks }: MobileNavProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef(null)
   const router = useRouter()
@@ -111,15 +122,13 @@ export function MobileNav() {
           <DrawerHeader>
             <BalancerLogoType width="106px" onClick={hommRedirect} />
           </DrawerHeader>
-
           <DrawerBody>
-            <NavLinks onClick={onClose} />
+            <NavLinks onClick={onClose} appLinks={appLinks} />
             <Divider my={4} />
-            <EcosystemLinks />
+            <EcosystemLinks ecosystemLinks={ecosystemLinks} />
           </DrawerBody>
-
           <DrawerFooter>
-            <SocialLinks />
+            <SocialLinks socialLinks={socialLinks} />
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
