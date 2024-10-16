@@ -38,105 +38,33 @@ importers:
 
   apps/beets-frontend-v3:
     dependencies:
-      '@apollo/client':
-        specifier: ^3.11.8
-        version: 3.11.8(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.9.0))(graphql@16.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@balancer/sdk':
-        specifier: ^0.27.0
-        version: 0.27.0(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
-      '@chakra-ui/anatomy':
-        specifier: ^2.2.2
-        version: 2.2.2
       '@chakra-ui/hooks':
         specifier: ^2.2.1
         version: 2.2.1(react@18.2.0)
-      '@chakra-ui/icons':
-        specifier: ^2.1.1
-        version: 2.1.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0)
-      '@chakra-ui/next-js':
-        specifier: ^2.2.0
-        version: 2.2.0(@chakra-ui/react@2.8.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       '@chakra-ui/react':
         specifier: ^2.8.2
         version: 2.8.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@chakra-ui/theme-tools':
         specifier: ^2.1.2
         version: 2.1.2(@chakra-ui/styled-system@2.9.2)
-      '@dicebear/collection':
-        specifier: ^7.0.1
-        version: 7.1.3(@dicebear/core@7.1.3)
-      '@dicebear/core':
-        specifier: ^7.0.1
-        version: 7.1.3
-      '@emotion/react':
-        specifier: ^11.11.1
-        version: 11.13.3(@types/react@18.2.34)(react@18.2.0)
-      '@emotion/styled':
-        specifier: ^11.11.0
-        version: 11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0)
-      '@layerzerolabs/scan-client':
-        specifier: ^0.0.8
-        version: 0.0.8(axios@1.7.7)
       '@nikolovlazar/chakra-ui-prose':
         specifier: ^1.2.1
         version: 1.2.1(@chakra-ui/react@2.8.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0)
-      '@rainbow-me/rainbowkit':
-        specifier: ^2.1.6
-        version: 2.1.6(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@3.29.4)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))
       '@repo/lib':
         specifier: workspace:*
         version: link:../../packages/lib
       '@sentry/nextjs':
         specifier: ^8.13.0
-        version: 8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(webpack@5.94.0(esbuild@0.19.12))
+        version: 8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(webpack@5.94.0(esbuild@0.19.12))
       '@studio-freight/react-lenis':
         specifier: ^0.0.47
         version: 0.0.47(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@tanstack/react-query':
-        specifier: ^5.56.2
-        version: 5.56.2(react@18.2.0)
-      '@tanstack/react-query-devtools':
-        specifier: ^5.56.0
-        version: 5.56.2(@tanstack/react-query@5.56.2(react@18.2.0))(react@18.2.0)
-      '@tanstack/react-table':
-        specifier: ^8.9.3
-        version: 8.20.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@vercel/speed-insights':
         specifier: ^1.0.1
         version: 1.0.12(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
-      bignumber.js:
-        specifier: ^9.1.2
-        version: 9.1.2
-      chakra-react-select:
-        specifier: ^4.7.6
-        version: 4.9.2(@chakra-ui/form-control@2.2.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/icon@3.2.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/layout@2.3.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/media-query@3.3.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/menu@2.2.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/spinner@2.1.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      date-fns:
-        specifier: ^2.30.0
-        version: 2.30.0
-      deepmerge:
-        specifier: ^4.3.1
-        version: 4.3.1
-      echarts:
-        specifier: ^5.4.3
-        version: 5.5.1
-      echarts-for-react:
-        specifier: ^3.0.2
-        version: 3.0.2(echarts@5.5.1)(react@18.2.0)
-      fathom-client:
-        specifier: ^3.7.0
-        version: 3.7.2
       framer-motion:
         specifier: ^10.13.0
         version: 10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      graphql:
-        specifier: ^16.7.1
-        version: 16.9.0
-      graphql-request:
-        specifier: ^6.1.0
-        version: 6.1.0(graphql@16.9.0)
-      graphql-tag:
-        specifier: ^2.12.6
-        version: 2.12.6(graphql@16.9.0)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -149,57 +77,15 @@ importers:
       nextjs-toploader:
         specifier: ^1.6.4
         version: 1.6.12(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      numeral:
-        specifier: ^2.0.6
-        version: 2.0.6
-      nuqs:
-        specifier: ^1.19.1
-        version: 1.19.1(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
-      pluralize:
-        specifier: ^8.0.0
-        version: 8.0.0
       react:
         specifier: 18.2.0
         version: 18.2.0
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
-      react-error-boundary:
-        specifier: ^4.0.13
-        version: 4.0.13(react@18.2.0)
-      react-feather:
-        specifier: ^2.0.10
-        version: 2.0.10(react@18.2.0)
-      react-hook-form:
-        specifier: ^7.47.0
-        version: 7.53.0(react@18.2.0)
-      react-hotkeys-hook:
-        specifier: ^4.4.1
-        version: 4.5.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      react-swipeable:
-        specifier: ^7.0.1
-        version: 7.0.1(react@18.2.0)
-      react-syntax-highlighter:
-        specifier: ^15.5.0
-        version: 15.5.0(react@18.2.0)
       react-use-measure:
         specifier: ^2.1.1
         version: 2.1.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      react-virtuoso:
-        specifier: ^4.7.1
-        version: 4.10.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      tinycolor2:
-        specifier: ^1.6.0
-        version: 1.6.0
-      use-debounce:
-        specifier: ^10.0.0
-        version: 10.0.3(react@18.2.0)
-      use-sound:
-        specifier: ^4.0.1
-        version: 4.0.3(react@18.2.0)
-      usehooks-ts:
-        specifier: ^3.1.0
-        version: 3.1.0(react@18.2.0)
       viem:
         specifier: ^2.21.18
         version: 2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -207,33 +93,12 @@ importers:
         specifier: ^2.12.16
         version: 2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@3.29.4)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
     devDependencies:
-      '@apollo/experimental-nextjs-app-support':
-        specifier: ^0.11.3
-        version: 0.11.3(@apollo/client@3.11.8(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.9.0))(graphql@16.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
       '@chakra-ui/cli':
         specifier: ^2.4.1
         version: 2.4.1
       '@chakra-ui/styled-system':
         specifier: ^2.9.2
         version: 2.9.2
-      '@graphql-codegen/cli':
-        specifier: ^5.0.0
-        version: 5.0.2(@parcel/watcher@2.4.1)(@types/node@20.3.2)(bufferutil@4.0.8)(graphql@16.9.0)(typescript@5.4.5)(utf-8-validate@5.0.10)
-      '@graphql-codegen/client-preset':
-        specifier: ^4.1.0
-        version: 4.3.3(graphql@16.9.0)
-      '@graphql-codegen/schema-ast':
-        specifier: ^4.0.0
-        version: 4.1.0(graphql@16.9.0)
-      '@graphql-codegen/typescript-document-nodes':
-        specifier: ^4.0.1
-        version: 4.0.9(graphql@16.9.0)
-      '@graphql-codegen/typescript-msw':
-        specifier: ^1.1.6
-        version: 1.1.6(graphql@16.9.0)
-      '@graphql-typed-document-node/core':
-        specifier: ^3.2.0
-        version: 3.2.0(graphql@16.9.0)
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
@@ -243,15 +108,6 @@ importers:
       '@sentry/types':
         specifier: ^7.89.0
         version: 7.119.0
-      '@testing-library/jest-dom':
-        specifier: ^6.1.5
-        version: 6.5.0
-      '@testing-library/react':
-        specifier: ^15.0.5
-        version: 15.0.7(@types/react@18.2.34)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@types/echarts':
-        specifier: ^4.9.19
-        version: 4.9.22
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
@@ -261,39 +117,18 @@ importers:
       '@types/node':
         specifier: 20.3.2
         version: 20.3.2
-      '@types/numeral':
-        specifier: ^2.0.2
-        version: 2.0.5
-      '@types/pluralize':
-        specifier: ^0.0.33
-        version: 0.0.33
       '@types/react':
         specifier: 18.2.34
         version: 18.2.34
       '@types/react-dom':
         specifier: 18.2.6
         version: 18.2.6
-      '@types/react-syntax-highlighter':
-        specifier: ^15.5.13
-        version: 15.5.13
-      '@types/tinycolor2':
-        specifier: ^1.4.6
-        version: 1.4.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.60.1
         version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint@8.43.0)(typescript@5.4.5)
       '@typescript-eslint/parser':
         specifier: ^5.60.1
         version: 5.62.0(eslint@8.43.0)(typescript@5.4.5)
-      '@viem/anvil':
-        specifier: ^0.0.10
-        version: 0.0.10(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@vitejs/plugin-react':
-        specifier: ^4.2.1
-        version: 4.3.1(vite@5.4.5(@types/node@20.3.2)(terser@5.32.0))
-      '@vitest/coverage-v8':
-        specifier: ^1.3.0
-        version: 1.6.0(vitest@2.1.1(@types/node@20.3.2)(happy-dom@12.10.3)(msw@2.0.10(typescript@5.4.5))(terser@5.32.0))
       '@wagmi/cli':
         specifier: ^2.1.15
         version: 2.1.15(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)
@@ -324,9 +159,6 @@ importers:
       lokijs:
         specifier: ^1.5.12
         version: 1.5.12
-      msw:
-        specifier: 2.0.10
-        version: 2.0.10(typescript@5.4.5)
       prettier:
         specifier: ^2.8.8
         version: 2.8.8
@@ -336,14 +168,165 @@ importers:
       typescript:
         specifier: 5.4.5
         version: 5.4.5
-      vitest:
-        specifier: ^2.1.1
-        version: 2.1.1(@types/node@20.3.2)(happy-dom@12.10.3)(msw@2.0.10(typescript@5.4.5))(terser@5.32.0)
-      vitest-mock-extended:
-        specifier: ^2.0.2
-        version: 2.0.2(typescript@5.4.5)(vitest@2.1.1(@types/node@20.3.2)(happy-dom@12.10.3)(msw@2.0.10(typescript@5.4.5))(terser@5.32.0))
 
   apps/frontend-v3:
+    dependencies:
+      '@chakra-ui/hooks':
+        specifier: ^2.2.1
+        version: 2.2.1(react@18.2.0)
+      '@chakra-ui/react':
+        specifier: ^2.8.2
+        version: 2.8.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@chakra-ui/theme-tools':
+        specifier: ^2.1.2
+        version: 2.1.2(@chakra-ui/styled-system@2.9.2)
+      '@nikolovlazar/chakra-ui-prose':
+        specifier: ^1.2.1
+        version: 1.2.1(@chakra-ui/react@2.8.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0)
+      '@repo/lib':
+        specifier: workspace:*
+        version: link:../../packages/lib
+      '@sentry/nextjs':
+        specifier: ^8.13.0
+        version: 8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(webpack@5.94.0)
+      '@studio-freight/react-lenis':
+        specifier: ^0.0.47
+        version: 0.0.47(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@vercel/speed-insights':
+        specifier: ^1.0.1
+        version: 1.0.12(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
+      framer-motion:
+        specifier: ^10.13.0
+        version: 10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      next:
+        specifier: 14.2.0
+        version: 14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      next-themes:
+        specifier: ^0.3.0
+        version: 0.3.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      nextjs-toploader:
+        specifier: ^1.6.4
+        version: 1.6.12(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: 18.2.0
+        version: 18.2.0(react@18.2.0)
+      react-use-measure:
+        specifier: ^2.1.1
+        version: 2.1.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      viem:
+        specifier: ^2.21.18
+        version: 2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
+      wagmi:
+        specifier: ^2.12.16
+        version: 2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
+    devDependencies:
+      '@chakra-ui/cli':
+        specifier: ^2.4.1
+        version: 2.4.1
+      '@chakra-ui/styled-system':
+        specifier: ^2.9.2
+        version: 2.9.2
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+      '@sentry/types':
+        specifier: ^7.89.0
+        version: 7.119.0
+      '@types/js-cookie':
+        specifier: ^3.0.6
+        version: 3.0.6
+      '@types/lodash':
+        specifier: ^4.14.195
+        version: 4.17.7
+      '@types/node':
+        specifier: 20.3.2
+        version: 20.3.2
+      '@types/react':
+        specifier: 18.2.34
+        version: 18.2.34
+      '@types/react-dom':
+        specifier: 18.2.6
+        version: 18.2.6
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^5.60.1
+        version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint@8.43.0)(typescript@5.4.5)
+      '@typescript-eslint/parser':
+        specifier: ^5.60.1
+        version: 5.62.0(eslint@8.43.0)(typescript@5.4.5)
+      '@wagmi/cli':
+        specifier: ^2.1.15
+        version: 2.1.15(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)
+      autoprefixer:
+        specifier: ^10.4.14
+        version: 10.4.20(postcss@8.4.47)
+      concurrently:
+        specifier: ^8.2.2
+        version: 8.2.2
+      cross-fetch:
+        specifier: ^4.0.0
+        version: 4.0.0
+      eslint:
+        specifier: 8.43.0
+        version: 8.43.0
+      eslint-config-next:
+        specifier: 14.0.1
+        version: 14.0.1(eslint@8.43.0)(typescript@5.4.5)
+      eslint-config-prettier:
+        specifier: ^8.8.0
+        version: 8.10.0(eslint@8.43.0)
+      eslint-plugin-prettier:
+        specifier: ^4.2.1
+        version: 4.2.1(eslint-config-prettier@8.10.0(eslint@8.43.0))(eslint@8.43.0)(prettier@2.8.8)
+      happy-dom:
+        specifier: ^12.10.3
+        version: 12.10.3
+      lokijs:
+        specifier: ^1.5.12
+        version: 1.5.12
+      prettier:
+        specifier: ^2.8.8
+        version: 2.8.8
+      sentry-testkit:
+        specifier: ^5.0.9
+        version: 5.0.9
+      typescript:
+        specifier: 5.4.5
+        version: 5.4.5
+
+  packages/eslint-config:
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.1.0
+        version: 7.1.0(@typescript-eslint/parser@7.1.0(eslint@8.57.0)(typescript@5.3.3))(eslint@8.57.0)(typescript@5.3.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.1.0
+        version: 7.1.0(eslint@8.57.0)(typescript@5.3.3)
+      '@vercel/style-guide':
+        specifier: ^5.2.0
+        version: 5.2.0(@next/eslint-plugin-next@14.2.6)(eslint@8.57.0)(prettier@3.2.5)(typescript@5.3.3)
+      eslint-config-prettier:
+        specifier: ^9.1.0
+        version: 9.1.0(eslint@8.57.0)
+      eslint-config-turbo:
+        specifier: ^2.0.0
+        version: 2.0.0(eslint@8.57.0)
+      eslint-plugin-only-warn:
+        specifier: ^1.1.0
+        version: 1.1.0
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  packages/lib:
     dependencies:
       '@apollo/client':
         specifier: ^3.11.8
@@ -390,9 +373,6 @@ importers:
       '@rainbow-me/rainbowkit':
         specifier: ^2.1.6
         version: 2.1.6(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))
-      '@repo/lib':
-        specifier: workspace:*
-        version: link:../../packages/lib
       '@sentry/nextjs':
         specifier: ^8.13.0
         version: 8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(webpack@5.94.0)
@@ -416,7 +396,7 @@ importers:
         version: 9.1.2
       chakra-react-select:
         specifier: ^4.7.6
-        version: 4.9.2(@chakra-ui/form-control@2.2.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/icon@3.2.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/layout@2.3.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/media-query@3.3.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/menu@2.2.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/spinner@2.1.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 4.9.2(banuz2q4qni4rswxudypxspam4)
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
@@ -513,334 +493,6 @@ importers:
       wagmi:
         specifier: ^2.12.16
         version: 2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
-    devDependencies:
-      '@apollo/experimental-nextjs-app-support':
-        specifier: ^0.11.3
-        version: 0.11.3(@apollo/client@3.11.8(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.9.0))(graphql@16.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
-      '@chakra-ui/cli':
-        specifier: ^2.4.1
-        version: 2.4.1
-      '@chakra-ui/styled-system':
-        specifier: ^2.9.2
-        version: 2.9.2
-      '@graphql-codegen/cli':
-        specifier: ^5.0.0
-        version: 5.0.2(@parcel/watcher@2.4.1)(@types/node@20.3.2)(bufferutil@4.0.8)(graphql@16.9.0)(typescript@5.4.5)(utf-8-validate@5.0.10)
-      '@graphql-codegen/client-preset':
-        specifier: ^4.1.0
-        version: 4.3.3(graphql@16.9.0)
-      '@graphql-codegen/schema-ast':
-        specifier: ^4.0.0
-        version: 4.1.0(graphql@16.9.0)
-      '@graphql-codegen/typescript-document-nodes':
-        specifier: ^4.0.1
-        version: 4.0.9(graphql@16.9.0)
-      '@graphql-codegen/typescript-msw':
-        specifier: ^1.1.6
-        version: 1.1.6(graphql@16.9.0)
-      '@graphql-typed-document-node/core':
-        specifier: ^3.2.0
-        version: 3.2.0(graphql@16.9.0)
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/eslint-config
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
-      '@sentry/types':
-        specifier: ^7.89.0
-        version: 7.119.0
-      '@testing-library/jest-dom':
-        specifier: ^6.1.5
-        version: 6.5.0
-      '@testing-library/react':
-        specifier: ^15.0.5
-        version: 15.0.7(@types/react@18.2.34)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@types/echarts':
-        specifier: ^4.9.19
-        version: 4.9.22
-      '@types/js-cookie':
-        specifier: ^3.0.6
-        version: 3.0.6
-      '@types/lodash':
-        specifier: ^4.14.195
-        version: 4.17.7
-      '@types/node':
-        specifier: 20.3.2
-        version: 20.3.2
-      '@types/numeral':
-        specifier: ^2.0.2
-        version: 2.0.5
-      '@types/pluralize':
-        specifier: ^0.0.33
-        version: 0.0.33
-      '@types/react':
-        specifier: 18.2.34
-        version: 18.2.34
-      '@types/react-dom':
-        specifier: 18.2.6
-        version: 18.2.6
-      '@types/react-syntax-highlighter':
-        specifier: ^15.5.13
-        version: 15.5.13
-      '@types/tinycolor2':
-        specifier: ^1.4.6
-        version: 1.4.6
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^5.60.1
-        version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint@8.43.0)(typescript@5.4.5)
-      '@typescript-eslint/parser':
-        specifier: ^5.60.1
-        version: 5.62.0(eslint@8.43.0)(typescript@5.4.5)
-      '@viem/anvil':
-        specifier: ^0.0.10
-        version: 0.0.10(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@vitejs/plugin-react':
-        specifier: ^4.2.1
-        version: 4.3.1(vite@5.4.5(@types/node@20.3.2)(terser@5.32.0))
-      '@vitest/coverage-v8':
-        specifier: ^1.3.0
-        version: 1.6.0(vitest@2.1.1(@types/node@20.3.2)(happy-dom@12.10.3)(msw@2.0.10(typescript@5.4.5))(terser@5.32.0))
-      '@wagmi/cli':
-        specifier: ^2.1.15
-        version: 2.1.15(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)
-      autoprefixer:
-        specifier: ^10.4.14
-        version: 10.4.20(postcss@8.4.47)
-      concurrently:
-        specifier: ^8.2.2
-        version: 8.2.2
-      cross-fetch:
-        specifier: ^4.0.0
-        version: 4.0.0
-      eslint:
-        specifier: 8.43.0
-        version: 8.43.0
-      eslint-config-next:
-        specifier: 14.0.1
-        version: 14.0.1(eslint@8.43.0)(typescript@5.4.5)
-      eslint-config-prettier:
-        specifier: ^8.8.0
-        version: 8.10.0(eslint@8.43.0)
-      eslint-plugin-prettier:
-        specifier: ^4.2.1
-        version: 4.2.1(eslint-config-prettier@8.10.0(eslint@8.43.0))(eslint@8.43.0)(prettier@2.8.8)
-      happy-dom:
-        specifier: ^12.10.3
-        version: 12.10.3
-      lokijs:
-        specifier: ^1.5.12
-        version: 1.5.12
-      msw:
-        specifier: 2.0.10
-        version: 2.0.10(typescript@5.4.5)
-      prettier:
-        specifier: ^2.8.8
-        version: 2.8.8
-      sentry-testkit:
-        specifier: ^5.0.9
-        version: 5.0.9
-      typescript:
-        specifier: 5.4.5
-        version: 5.4.5
-      vitest:
-        specifier: ^2.1.1
-        version: 2.1.1(@types/node@20.3.2)(happy-dom@12.10.3)(msw@2.0.10(typescript@5.4.5))(terser@5.32.0)
-      vitest-mock-extended:
-        specifier: ^2.0.2
-        version: 2.0.2(typescript@5.4.5)(vitest@2.1.1(@types/node@20.3.2)(happy-dom@12.10.3)(msw@2.0.10(typescript@5.4.5))(terser@5.32.0))
-
-  packages/eslint-config:
-    devDependencies:
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^7.1.0
-        version: 7.1.0(@typescript-eslint/parser@7.1.0(eslint@8.57.0)(typescript@5.3.3))(eslint@8.57.0)(typescript@5.3.3)
-      '@typescript-eslint/parser':
-        specifier: ^7.1.0
-        version: 7.1.0(eslint@8.57.0)(typescript@5.3.3)
-      '@vercel/style-guide':
-        specifier: ^5.2.0
-        version: 5.2.0(@next/eslint-plugin-next@14.2.6)(eslint@8.57.0)(prettier@3.2.5)(typescript@5.3.3)
-      eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.0(eslint@8.57.0)
-      eslint-config-turbo:
-        specifier: ^2.0.0
-        version: 2.0.0(eslint@8.57.0)
-      eslint-plugin-only-warn:
-        specifier: ^1.1.0
-        version: 1.1.0
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
-
-  packages/lib:
-    dependencies:
-      '@apollo/client':
-        specifier: ^3.11.8
-        version: 3.11.8(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.9.0))(graphql@16.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@balancer/sdk':
-        specifier: ^0.28.1
-        version: 0.28.1(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
-      '@chakra-ui/anatomy':
-        specifier: ^2.2.2
-        version: 2.2.2
-      '@chakra-ui/hooks':
-        specifier: ^2.2.1
-        version: 2.2.1(react@18.2.0)
-      '@chakra-ui/icons':
-        specifier: ^2.1.1
-        version: 2.1.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0)
-      '@chakra-ui/next-js':
-        specifier: ^2.2.0
-        version: 2.2.0(@chakra-ui/react@2.8.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
-      '@chakra-ui/react':
-        specifier: ^2.8.2
-        version: 2.8.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@chakra-ui/theme-tools':
-        specifier: ^2.1.2
-        version: 2.1.2(@chakra-ui/styled-system@2.9.2)
-      '@dicebear/collection':
-        specifier: ^7.0.1
-        version: 7.1.3(@dicebear/core@7.1.3)
-      '@dicebear/core':
-        specifier: ^7.0.1
-        version: 7.1.3
-      '@emotion/react':
-        specifier: ^11.11.1
-        version: 11.13.3(@types/react@18.2.34)(react@18.2.0)
-      '@emotion/styled':
-        specifier: ^11.11.0
-        version: 11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0)
-      '@layerzerolabs/scan-client':
-        specifier: ^0.0.8
-        version: 0.0.8(axios@1.7.7)
-      '@nikolovlazar/chakra-ui-prose':
-        specifier: ^1.2.1
-        version: 1.2.1(@chakra-ui/react@2.8.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0)
-      '@rainbow-me/rainbowkit':
-        specifier: ^2.1.6
-        version: 2.1.6(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@3.29.4)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))
-      '@sentry/nextjs':
-        specifier: ^8.13.0
-        version: 8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(webpack@5.94.0(esbuild@0.19.12))
-      '@studio-freight/react-lenis':
-        specifier: ^0.0.47
-        version: 0.0.47(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@tanstack/react-query':
-        specifier: ^5.56.2
-        version: 5.56.2(react@18.2.0)
-      '@tanstack/react-query-devtools':
-        specifier: ^5.56.0
-        version: 5.56.2(@tanstack/react-query@5.56.2(react@18.2.0))(react@18.2.0)
-      '@tanstack/react-table':
-        specifier: ^8.9.3
-        version: 8.20.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@vercel/speed-insights':
-        specifier: ^1.0.1
-        version: 1.0.12(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
-      bignumber.js:
-        specifier: ^9.1.2
-        version: 9.1.2
-      chakra-react-select:
-        specifier: ^4.7.6
-        version: 4.9.2(@chakra-ui/form-control@2.2.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/icon@3.2.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/layout@2.3.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/media-query@3.3.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/menu@2.2.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/spinner@2.1.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      date-fns:
-        specifier: ^2.30.0
-        version: 2.30.0
-      deepmerge:
-        specifier: ^4.3.1
-        version: 4.3.1
-      echarts:
-        specifier: ^5.4.3
-        version: 5.5.1
-      echarts-for-react:
-        specifier: ^3.0.2
-        version: 3.0.2(echarts@5.5.1)(react@18.2.0)
-      fathom-client:
-        specifier: ^3.7.0
-        version: 3.7.2
-      framer-motion:
-        specifier: ^10.13.0
-        version: 10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      graphql:
-        specifier: ^16.7.1
-        version: 16.9.0
-      graphql-request:
-        specifier: ^6.1.0
-        version: 6.1.0(graphql@16.9.0)
-      graphql-tag:
-        specifier: ^2.12.6
-        version: 2.12.6(graphql@16.9.0)
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
-      next:
-        specifier: 14.2.0
-        version: 14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      next-themes:
-        specifier: ^0.3.0
-        version: 0.3.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      nextjs-toploader:
-        specifier: ^1.6.4
-        version: 1.6.12(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      numeral:
-        specifier: ^2.0.6
-        version: 2.0.6
-      nuqs:
-        specifier: ^1.19.1
-        version: 1.19.1(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
-      pluralize:
-        specifier: ^8.0.0
-        version: 8.0.0
-      react:
-        specifier: 18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
-      react-error-boundary:
-        specifier: ^4.0.13
-        version: 4.0.13(react@18.2.0)
-      react-feather:
-        specifier: ^2.0.10
-        version: 2.0.10(react@18.2.0)
-      react-hook-form:
-        specifier: ^7.47.0
-        version: 7.53.0(react@18.2.0)
-      react-hotkeys-hook:
-        specifier: ^4.4.1
-        version: 4.5.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      react-swipeable:
-        specifier: ^7.0.1
-        version: 7.0.1(react@18.2.0)
-      react-syntax-highlighter:
-        specifier: ^15.5.0
-        version: 15.5.0(react@18.2.0)
-      react-use-measure:
-        specifier: ^2.1.1
-        version: 2.1.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      react-virtuoso:
-        specifier: ^4.7.1
-        version: 4.10.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      tinycolor2:
-        specifier: ^1.6.0
-        version: 1.6.0
-      use-debounce:
-        specifier: ^10.0.0
-        version: 10.0.3(react@18.2.0)
-      use-sound:
-        specifier: ^4.0.1
-        version: 4.0.3(react@18.2.0)
-      usehooks-ts:
-        specifier: ^3.1.0
-        version: 3.1.0(react@18.2.0)
-      viem:
-        specifier: ^2.21.18
-        version: 2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
-      wagmi:
-        specifier: ^2.12.16
-        version: 2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@3.29.4)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
     devDependencies:
       '@apollo/experimental-nextjs-app-support':
         specifier: ^0.11.3
@@ -6437,7 +6089,6 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -13546,6 +13197,42 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@metamask/sdk@0.28.4(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(utf-8-validate@5.0.10)':
+    dependencies:
+      '@metamask/onboarding': 1.0.1
+      '@metamask/providers': 16.1.0
+      '@metamask/sdk-communication-layer': 0.28.2(cross-fetch@4.0.0)(eciesjs@0.3.20)(eventemitter2@6.4.9)(readable-stream@3.6.2)(socket.io-client@4.7.5(bufferutil@4.0.8)(utf-8-validate@5.0.10))
+      '@metamask/sdk-install-modal-web': 0.28.1(i18next@23.11.5)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)
+      '@types/dom-screen-wake-lock': 1.0.3
+      '@types/uuid': 10.0.0
+      bowser: 2.11.0
+      cross-fetch: 4.0.0
+      debug: 4.3.7
+      eciesjs: 0.3.20
+      eth-rpc-errors: 4.0.3
+      eventemitter2: 6.4.9
+      i18next: 23.11.5
+      i18next-browser-languagedetector: 7.1.0
+      obj-multiplex: 1.0.0
+      pump: 3.0.2
+      qrcode-terminal-nooctal: 0.12.1
+      react-native-webview: 11.26.1(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)
+      readable-stream: 3.6.2
+      rollup-plugin-visualizer: 5.12.0(rollup@4.21.3)
+      socket.io-client: 4.7.5(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      util: 0.12.5
+      uuid: 8.3.2
+    optionalDependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - react-native
+      - rollup
+      - supports-color
+      - utf-8-validate
+
   '@metamask/superstruct@3.1.0': {}
 
   '@metamask/utils@5.0.2':
@@ -14071,7 +13758,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@rainbow-me/rainbowkit@2.1.6(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@3.29.4)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))':
+  '@rainbow-me/rainbowkit@2.1.6(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))':
     dependencies:
       '@tanstack/react-query': 5.56.2(react@18.2.0)
       '@vanilla-extract/css': 1.15.5(babel-plugin-macros@3.1.0)
@@ -14084,7 +13771,7 @@ snapshots:
       react-remove-scroll: 2.6.0(@types/react@18.2.34)(react@18.2.0)
       ua-parser-js: 1.0.39
       viem: 2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
-      wagmi: 2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@3.29.4)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
+      wagmi: 2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
     transitivePeerDependencies:
       - '@types/react'
       - babel-plugin-macros
@@ -14569,7 +14256,36 @@ snapshots:
       '@sentry/types': 8.30.0
       '@sentry/utils': 8.30.0
 
-  '@sentry/nextjs@8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(webpack@5.94.0(esbuild@0.19.12))':
+  '@sentry/nextjs@8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(webpack@5.94.0)':
+    dependencies:
+      '@opentelemetry/instrumentation-http': 0.53.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.27.0
+      '@rollup/plugin-commonjs': 26.0.1(rollup@3.29.4)
+      '@sentry/core': 8.30.0
+      '@sentry/node': 8.30.0
+      '@sentry/opentelemetry': 8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.27.0)
+      '@sentry/react': 8.30.0(react@18.2.0)
+      '@sentry/types': 8.30.0
+      '@sentry/utils': 8.30.0
+      '@sentry/vercel-edge': 8.30.0
+      '@sentry/webpack-plugin': 2.22.3(webpack@5.94.0)
+      chalk: 3.0.0
+      next: 14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      resolve: 1.22.8
+      rollup: 3.29.4
+      stacktrace-parser: 0.1.10
+    optionalDependencies:
+      webpack: 5.94.0
+    transitivePeerDependencies:
+      - '@opentelemetry/api'
+      - '@opentelemetry/core'
+      - '@opentelemetry/instrumentation'
+      - '@opentelemetry/sdk-trace-base'
+      - encoding
+      - react
+      - supports-color
+
+  '@sentry/nextjs@8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(webpack@5.94.0(esbuild@0.19.12))':
     dependencies:
       '@opentelemetry/instrumentation-http': 0.53.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.27.0
@@ -14675,6 +14391,16 @@ snapshots:
       unplugin: 1.0.1
       uuid: 9.0.1
       webpack: 5.94.0(esbuild@0.19.12)
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
+  '@sentry/webpack-plugin@2.22.3(webpack@5.94.0)':
+    dependencies:
+      '@sentry/bundler-plugin-core': 2.22.3
+      unplugin: 1.0.1
+      uuid: 9.0.1
+      webpack: 5.94.0
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -15352,7 +15078,7 @@ snapshots:
       '@typescript-eslint/eslint-plugin': 6.17.0(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint@8.57.0)(typescript@5.3.3)
       '@typescript-eslint/parser': 6.17.0(eslint@8.57.0)(typescript@5.3.3)
       eslint-config-prettier: 9.1.0(eslint@8.57.0)
-      eslint-import-resolver-alias: 1.1.2(eslint-plugin-import@2.29.0(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0))
+      eslint-import-resolver-alias: 1.1.2(eslint-plugin-import@2.29.0)
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-plugin-import@2.29.0)(eslint@8.57.0)
       eslint-plugin-eslint-comments: 3.2.0(eslint@8.57.0)
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@7.1.0(eslint@8.57.0)(typescript@5.3.3))(eslint@8.57.0)
@@ -15490,6 +15216,45 @@ snapshots:
     dependencies:
       '@coinbase/wallet-sdk': 4.0.4
       '@metamask/sdk': 0.28.4(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@3.29.4)(utf-8-validate@5.0.10)
+      '@safe-global/safe-apps-provider': 0.18.3(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@safe-global/safe-apps-sdk': 9.1.0(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@wagmi/core': 2.13.8(@tanstack/query-core@5.56.2)(@types/react@18.2.34)(react@18.2.0)(typescript@5.4.5)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@walletconnect/ethereum-provider': 2.17.0(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10)
+      '@walletconnect/modal': 2.7.0(@types/react@18.2.34)(react@18.2.0)
+      cbw-sdk: '@coinbase/wallet-sdk@3.9.3'
+      viem: 2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
+    optionalDependencies:
+      typescript: 5.4.5
+    transitivePeerDependencies:
+      - '@azure/app-configuration'
+      - '@azure/cosmos'
+      - '@azure/data-tables'
+      - '@azure/identity'
+      - '@azure/keyvault-secrets'
+      - '@azure/storage-blob'
+      - '@capacitor/preferences'
+      - '@netlify/blobs'
+      - '@planetscale/database'
+      - '@react-native-async-storage/async-storage'
+      - '@types/react'
+      - '@upstash/redis'
+      - '@vercel/kv'
+      - bufferutil
+      - encoding
+      - ioredis
+      - react
+      - react-dom
+      - react-native
+      - rollup
+      - supports-color
+      - uWebSockets.js
+      - utf-8-validate
+      - zod
+
+  '@wagmi/connectors@5.1.15(@types/react@18.2.34)(@wagmi/core@2.13.8(@tanstack/query-core@5.56.2)(@types/react@18.2.34)(react@18.2.0)(typescript@5.4.5)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)))(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)':
+    dependencies:
+      '@coinbase/wallet-sdk': 4.0.4
+      '@metamask/sdk': 0.28.4(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(utf-8-validate@5.0.10)
       '@safe-global/safe-apps-provider': 0.18.3(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@safe-global/safe-apps-sdk': 9.1.0(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@wagmi/core': 2.13.8(@tanstack/query-core@5.56.2)(@types/react@18.2.34)(react@18.2.0)(typescript@5.4.5)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))
@@ -16478,8 +16243,8 @@ snapshots:
       loupe: 3.1.1
       pathval: 2.0.0
 
-  ? chakra-react-select@4.9.2(@chakra-ui/form-control@2.2.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/icon@3.2.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/layout@2.3.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/media-query@3.3.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/menu@2.2.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(framer-motion@10.18.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/spinner@2.1.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0))(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-  : dependencies:
+  chakra-react-select@4.9.2(banuz2q4qni4rswxudypxspam4):
+    dependencies:
       '@chakra-ui/form-control': 2.2.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0)
       '@chakra-ui/icon': 3.2.0(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0)
       '@chakra-ui/layout': 2.3.1(@chakra-ui/system@2.6.2(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.2.34)(react@18.2.0))(@types/react@18.2.34)(react@18.2.0))(react@18.2.0))(react@18.2.0)
@@ -17344,7 +17109,7 @@ snapshots:
       eslint: 8.57.0
       eslint-plugin-turbo: 2.0.0(eslint@8.57.0)
 
-  eslint-import-resolver-alias@1.1.2(eslint-plugin-import@2.29.0(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)):
+  eslint-import-resolver-alias@1.1.2(eslint-plugin-import@2.29.0):
     dependencies:
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@7.1.0(eslint@8.57.0)(typescript@5.3.3))(eslint@8.57.0)
 
@@ -17361,7 +17126,7 @@ snapshots:
       debug: 4.3.7
       enhanced-resolve: 5.15.0
       eslint: 8.43.0
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0)(eslint@8.43.0))(eslint@8.43.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0)
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.2
@@ -17378,7 +17143,7 @@ snapshots:
       debug: 4.3.7
       enhanced-resolve: 5.15.0
       eslint: 8.57.0
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-plugin-import@2.29.0)(eslint@8.57.0))(eslint@8.57.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@7.1.0(eslint@8.57.0)(typescript@5.3.3))(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.2
@@ -17390,7 +17155,7 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0)(eslint@8.43.0))(eslint@8.43.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -17401,7 +17166,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-plugin-import@2.29.0)(eslint@8.57.0))(eslint@8.57.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -17412,13 +17177,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-plugin-import@2.29.0)(eslint@8.57.0))(eslint@8.57.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@7.1.0(eslint@8.57.0)(typescript@5.3.3))(eslint-import-resolver-node@0.3.9)(eslint@8.57.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
-      '@typescript-eslint/parser': 6.17.0(eslint@8.57.0)(typescript@5.3.3)
+      '@typescript-eslint/parser': 7.1.0(eslint@8.57.0)(typescript@5.3.3)
       eslint: 8.57.0
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-plugin-import@2.29.0)(eslint@8.57.0)
+      eslint-import-resolver-node: 0.3.9
     transitivePeerDependencies:
       - supports-color
 
@@ -17438,7 +17203,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.43.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0)(eslint@8.43.0))(eslint@8.43.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0)
       hasown: 2.0.0
       is-core-module: 2.13.1
       is-glob: 4.0.3
@@ -17465,7 +17230,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.17.0(eslint@8.57.0)(typescript@5.3.3))(eslint-plugin-import@2.29.0)(eslint@8.57.0))(eslint@8.57.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@7.1.0(eslint@8.57.0)(typescript@5.3.3))(eslint-import-resolver-node@0.3.9)(eslint@8.57.0)
       hasown: 2.0.0
       is-core-module: 2.13.1
       is-glob: 4.0.3
@@ -20664,6 +20429,15 @@ snapshots:
     optionalDependencies:
       rollup: 3.29.4
 
+  rollup-plugin-visualizer@5.12.0(rollup@4.21.3):
+    dependencies:
+      open: 8.4.2
+      picomatch: 2.3.1
+      source-map: 0.7.4
+      yargs: 17.7.2
+    optionalDependencies:
+      rollup: 4.21.3
+
   rollup@3.29.4:
     optionalDependencies:
       fsevents: 2.3.3
@@ -21235,6 +21009,15 @@ snapshots:
     optionalDependencies:
       esbuild: 0.19.12
 
+  terser-webpack-plugin@5.3.10(webpack@5.94.0):
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.25
+      jest-worker: 27.5.1
+      schema-utils: 3.3.0
+      serialize-javascript: 6.0.2
+      terser: 5.32.0
+      webpack: 5.94.0
+
   terser@5.32.0:
     dependencies:
       '@jridgewell/source-map': 0.3.6
@@ -21746,6 +21529,43 @@ snapshots:
       - utf-8-validate
       - zod
 
+  wagmi@2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8):
+    dependencies:
+      '@tanstack/react-query': 5.56.2(react@18.2.0)
+      '@wagmi/connectors': 5.1.15(@types/react@18.2.34)(@wagmi/core@2.13.8(@tanstack/query-core@5.56.2)(@types/react@18.2.34)(react@18.2.0)(typescript@5.4.5)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)))(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
+      '@wagmi/core': 2.13.8(@tanstack/query-core@5.56.2)(@types/react@18.2.34)(react@18.2.0)(typescript@5.4.5)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
+      viem: 2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
+    optionalDependencies:
+      typescript: 5.4.5
+    transitivePeerDependencies:
+      - '@azure/app-configuration'
+      - '@azure/cosmos'
+      - '@azure/data-tables'
+      - '@azure/identity'
+      - '@azure/keyvault-secrets'
+      - '@azure/storage-blob'
+      - '@capacitor/preferences'
+      - '@netlify/blobs'
+      - '@planetscale/database'
+      - '@react-native-async-storage/async-storage'
+      - '@tanstack/query-core'
+      - '@types/react'
+      - '@upstash/redis'
+      - '@vercel/kv'
+      - bufferutil
+      - encoding
+      - immer
+      - ioredis
+      - react-dom
+      - react-native
+      - rollup
+      - supports-color
+      - uWebSockets.js
+      - utf-8-validate
+      - zod
+
   walker@1.0.8:
     dependencies:
       makeerror: 1.0.12
@@ -21783,6 +21603,36 @@ snapshots:
   webpack-sources@3.2.3: {}
 
   webpack-virtual-modules@0.5.0: {}
+
+  webpack@5.94.0:
+    dependencies:
+      '@types/estree': 1.0.5
+      '@webassemblyjs/ast': 1.12.1
+      '@webassemblyjs/wasm-edit': 1.12.1
+      '@webassemblyjs/wasm-parser': 1.12.1
+      acorn: 8.12.1
+      acorn-import-attributes: 1.9.5(acorn@8.12.1)
+      browserslist: 4.23.3
+      chrome-trace-event: 1.0.4
+      enhanced-resolve: 5.17.1
+      es-module-lexer: 1.5.4
+      eslint-scope: 5.1.1
+      events: 3.3.0
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.11
+      json-parse-even-better-errors: 2.3.1
+      loader-runner: 4.3.0
+      mime-types: 2.1.35
+      neo-async: 2.6.2
+      schema-utils: 3.3.0
+      tapable: 2.2.1
+      terser-webpack-plugin: 5.3.10(webpack@5.94.0)
+      watchpack: 2.4.2
+      webpack-sources: 3.2.3
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
 
   webpack@5.94.0(esbuild@0.19.12):
     dependencies:

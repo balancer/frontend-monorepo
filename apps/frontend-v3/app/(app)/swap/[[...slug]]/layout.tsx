@@ -10,7 +10,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PropsWithChildren } from 'react'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { getSwapPathParams } from './getSwapPathParams'
+import { getSwapPathParams } from '@repo/lib/modules/swap/getSwapPathParams'
 import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSignatureProvider'
 
 type Props = PropsWithChildren<{
