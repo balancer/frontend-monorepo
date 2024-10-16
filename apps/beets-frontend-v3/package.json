@@ -18,7 +18,6 @@
     "@chakra-ui/theme-tools": "^2.1.2",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@repo/lib": "workspace:*",
-    "@repo/beets": "workspace:*",
     "@sentry/nextjs": "^8.13.0",
     "@studio-freight/react-lenis": "^0.0.47",
     "@vercel/speed-insights": "^1.0.1",

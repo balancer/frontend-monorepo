@@ -8,8 +8,8 @@ import { Fathom } from '@repo/lib/shared/services/fathom/Fathom'
 import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
 import { PropsWithChildren } from 'react'
 import { Providers } from '@repo/lib/shared/components/site/providers'
-import { NavBarContainer } from '@repo/balancer/components/navs/NavBarContainer'
-import { FooterContainer } from '@repo/balancer/components/footer/FooterContainer'
+import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
+import { FooterContainer } from '@/lib/components/footer/FooterContainer'
 
 export const metadata: Metadata = {
   title: 'Balancer DeFi Liquidity Pools',

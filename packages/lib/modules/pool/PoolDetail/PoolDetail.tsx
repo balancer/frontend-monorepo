@@ -18,7 +18,7 @@ import { hasTotalBalance } from '../user-balance.helpers'
 import { usePoolEvents } from '../usePoolEvents'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { CowFooter } from '@repo/lib/shared/components/navs/CowFooter'
-import { CowPoolBanner } from '@repo/lib/shared/components/navs/CowPoolBanner'
+import { CowPoolBanner } from '@repo/lib/shared/components/banner/CowPoolBanner'
 import { PoolActivity } from './PoolActivity/PoolActivity'
 
 export function PoolDetail() {
