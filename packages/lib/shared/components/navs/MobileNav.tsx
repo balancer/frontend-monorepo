@@ -17,7 +17,6 @@ import {
 } from '@chakra-ui/react'
 import { useRef } from 'react'
 import { ArrowUpRight, Menu } from 'react-feather'
-import { BalancerLogoType } from '../imgs/BalancerLogoType'
 import { AppLink, useNav } from './useNav'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -36,7 +35,9 @@ type SocialLinkProps = {
   socialLinks: AppLink[]
 }
 
-type MobileNavProps = NavLinkProps & EcosystemLinkProps & SocialLinkProps
+type MobileNavProps = NavLinkProps &
+  EcosystemLinkProps &
+  SocialLinkProps & { LogoType: React.FC<any> }
 
 function NavLinks({ appLinks, onClick }: NavLinkProps) {
   const { linkColorFor } = useNav()
@@ -100,12 +101,12 @@ function SocialLinks({ socialLinks }: SocialLinkProps) {
   )
 }
 
-export function MobileNav({ appLinks, ecosystemLinks, socialLinks }: MobileNavProps) {
+export function MobileNav({ appLinks, ecosystemLinks, socialLinks, LogoType }: MobileNavProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef(null)
   const router = useRouter()
 
-  function hommRedirect() {
+  function homeRedirect() {
     onClose()
     router.push('/')
   }
@@ -120,7 +121,7 @@ export function MobileNav({ appLinks, ecosystemLinks, socialLinks }: MobileNavPr
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <BalancerLogoType width="106px" onClick={hommRedirect} />
+            <LogoType width="106px" onClick={homeRedirect} />
           </DrawerHeader>
           <DrawerBody>
             <NavLinks onClick={onClose} appLinks={appLinks} />

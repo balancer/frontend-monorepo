@@ -1,7 +1,6 @@
 import { XIcon } from '@repo/lib/shared/components/icons/social/XIcon'
 import { DiscordIcon } from '@repo/lib/shared/components/icons/social/DiscordIcon'
 import { MediumIcon } from '@repo/lib/shared/components/icons/social/MediumIcon'
-import { YoutubeIcon } from '@repo/lib/shared/components/icons/social/YoutubeIcon'
 import { GithubIcon } from '@repo/lib/shared/components/icons/social/GithubIcon'
 import { AppLink } from '@repo/lib/shared/components/navs/useNav'
 

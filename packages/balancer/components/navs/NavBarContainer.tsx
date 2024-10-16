@@ -5,7 +5,7 @@ import { NavBar } from '@repo/lib/shared/components/navs/NavBar'
 import { NavLogo } from './NavLogo'
 import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
-
+import { BalancerLogoType } from '../imgs/BalancerLogoType'
 export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
   const { defaultAppLinks } = useNav()
@@ -19,6 +19,7 @@ export function NavBarContainer() {
           appLinks={allAppLinks}
           ecosystemLinks={ecosystemLinks}
           socialLinks={getSocialLinks()}
+          LogoType={BalancerLogoType}
         />
       }
     />
