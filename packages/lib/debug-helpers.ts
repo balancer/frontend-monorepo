@@ -36,7 +36,7 @@ export const vaultV3Address = sepoliaNetworkConfig.contracts.balancer.vaultV3 as
 
 export const poolId = '0x68e3266c9c8bbd44ad9dca5afbfe629022aee9fe000200000000000000000512' as const // Balancer Weighted wjAura and WETH
 
-export const sepoliaRouter = '0xB12FcB422aAe6720f882E22C340964a7723f2387'
+export const sepoliaRouter = '0x77eDc69766409C599F06Ef0B551a0990CBfe13A7'
 
 /*
   Used to pretty print objects when debugging

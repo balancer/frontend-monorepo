@@ -1,0 +1,16 @@
+{
+  "short_name": "BeethovenX",
+  "name": "BeethovenX",
+  "description": "BeethovenX is a battle-tested toolkit for true AMM experimentation and innovation.",
+  "icons": [
+    {
+      "src": "/beets.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": "/pools",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

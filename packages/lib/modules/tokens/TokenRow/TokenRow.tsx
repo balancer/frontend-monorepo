@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import {
   Box,
@@ -53,7 +52,7 @@ function TokenInfo({
   showInfoPopover = true,
   isBpt = false,
 }: DataProps) {
-  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || pool?.symbol || displayToken?.symbol
+  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || displayToken?.symbol
   const tokenName = isBpt ? pool?.name : token?.name || displayToken?.name
 
   return (

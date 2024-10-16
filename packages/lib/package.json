@@ -8,7 +8,6 @@
     "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config -c ./shared/services/api/codegen.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "cd ../.. && husky apps/frontend-v3/.husky",
     "test": "pnpm test:unit & pnpm run test:integration",
     "test:integration": "vitest -c ./vitest.config.integration.ts",
     "test:unit": "vitest",
@@ -18,7 +17,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
-    "@balancer/sdk": "^0.27.0",
+    "@balancer/sdk": "^0.28.1",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "^2.2.1",

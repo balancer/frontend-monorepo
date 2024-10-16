@@ -116,7 +116,6 @@ export function useAprTooltip({
 
   // Surplus incentives
   const surplusIncentives = filterByType(aprItems, GqlPoolAprItemType.Surplus)
-  const hasSurplusIncentives = surplusIncentives.length > 0
   const surplusIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(surplusIncentives)
 
   // Bal Reward
@@ -177,7 +176,6 @@ export function useAprTooltip({
     merklIncentivesAprDisplayed,
     hasMerklIncentives,
     surplusIncentivesAprDisplayed,
-    hasSurplusIncentives,
     votingAprDisplayed,
     lockingAprDisplayed,
     isVotingPresent,

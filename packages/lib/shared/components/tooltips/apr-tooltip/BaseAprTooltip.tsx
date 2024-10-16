@@ -1,4 +1,4 @@
-import { GqlPoolAprItem } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolAprItem, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   PlacementWithLogical,
   Popover,
@@ -22,7 +22,7 @@ import {
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { isVebalPool } from '@repo/lib/modules/pool/pool.helpers'
+import { isCowAmmPool, isVebalPool } from '@repo/lib/modules/pool/pool.helpers'
 import { ReactNode } from 'react'
 
 interface Props {
@@ -31,6 +31,7 @@ interface Props {
   displayValueFormatter?: (value: BigNumber) => string
   placement?: PlacementWithLogical
   poolId: string
+  poolType: GqlPoolType
   vebalBoost?: string
   totalBaseText: string | ((hasVeBalBoost?: boolean) => string)
   totalBaseVeBalText: string
@@ -73,6 +74,7 @@ function BaseAprTooltip({
   shouldDisplayBaseTooltip,
   shouldDisplayMaxVeBalTooltip,
   children,
+  poolType,
   usePortal = true,
 }: Props) {
   const colorMode = useThemeColorMode()
@@ -87,7 +89,6 @@ function BaseAprTooltip({
     stakingIncentivesAprDisplayed,
     merklIncentivesAprDisplayed,
     hasMerklIncentives,
-    hasSurplusIncentives,
     surplusIncentivesAprDisplayed,
     swapFeesDisplayed,
     isSwapFeePresent,
@@ -185,7 +186,7 @@ function BaseAprTooltip({
           tooltipText={merklIncentivesTooltipText}
         />
       )}
-      {hasSurplusIncentives && (
+      {isCowAmmPool(poolType) && (
         <TooltipAprItem
           {...basePopoverAprItemProps}
           displayValueFormatter={usedDisplayValueFormatter}

@@ -174,6 +174,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
   })
 
   function handleSimulationResponse({ returnAmount, swapType }: SimulateSwapResponse) {
+    const swapState = swapStateVar()
     swapStateVar({
       ...swapState,
       swapType,
@@ -192,6 +193,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
   }
 
   function setTokenIn(tokenAddress: Address) {
+    const swapState = swapStateVar()
     const isSameAsTokenOut = isSameAddress(tokenAddress, swapState.tokenOut.address)
 
     swapStateVar({
@@ -207,6 +209,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
   }
 
   function setTokenOut(tokenAddress: Address) {
+    const swapState = swapStateVar()
     const isSameAsTokenIn = isSameAddress(tokenAddress, swapState.tokenIn.address)
 
     swapStateVar({
@@ -222,6 +225,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
   }
 
   function switchTokens() {
+    const swapState = swapStateVar()
     swapStateVar({
       ...swapState,
       tokenIn: swapState.tokenOut,
@@ -288,6 +292,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
   }
 
   function getDefaultTokenState(chain: GqlChain) {
+    const swapState = swapStateVar()
     const {
       tokens: { defaultSwapTokens },
     } = getNetworkConfig(chain)

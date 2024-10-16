@@ -43,6 +43,7 @@ function StakeAprTooltip({ pool, totalUsdValue }: Props) {
       shouldDisplayBaseTooltip
       shouldDisplayMaxVeBalTooltip
       usePortal={false}
+      poolType={pool.type}
     >
       <Card cursor="pointer" variant="subSection" w="full">
         <VStack align="start" w="full" spacing="sm">
