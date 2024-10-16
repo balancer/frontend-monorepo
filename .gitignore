@@ -26,6 +26,8 @@ coverage
 out/
 dist
 
+.vscode
+.idea
 
 # Debug
 npm-debug.log*
