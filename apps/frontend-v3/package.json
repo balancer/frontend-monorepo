@@ -85,6 +85,7 @@
     "@graphql-codegen/typescript-msw": "^1.1.6",
     "@graphql-typed-document-node/core": "^3.2.0",
     "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@sentry/types": "^7.89.0",
     "@testing-library/jest-dom": "^6.1.5",
