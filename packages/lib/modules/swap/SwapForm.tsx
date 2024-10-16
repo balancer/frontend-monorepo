@@ -38,8 +38,14 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { ConnectWallet } from '../web3/ConnectWallet'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '../tokens/TokensProvider'
+import { useIsPoolSwap } from './useIsPoolSwap'
+import { CompactTokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectList/CompactTokenSelectModal'
+import { PoolSwapCard } from './PoolSwapCard'
 
-export function SwapForm() {
+type Props = {
+  redirectToPoolPage?: () => void // Only used for pool swaps
+}
+export function SwapForm({ redirectToPoolPage }: Props) {
   const {
     tokenIn,
     tokenOut,
@@ -72,6 +78,7 @@ export function SwapForm() {
   const isMounted = useIsMounted()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
+  const isPoolSwap = useIsPoolSwap()
 
   const isLoadingSwaps = simulationQuery.isLoading
   const isLoading = isLoadingSwaps || !isMounted
@@ -107,8 +114,9 @@ export function SwapForm() {
 
     if (swapTxHash) {
       resetSwapAmounts()
-      replaceUrlPath()
       transactionSteps.resetTransactionSteps()
+      if (isPoolSwap) return redirectToPoolPage?.()
+      replaceUrlPath()
     }
   }
 
@@ -124,7 +132,7 @@ export function SwapForm() {
       >
         <Card rounded="xl">
           <CardHeader as={HStack} w="full" justify="space-between" zIndex={11}>
-            <span>{capitalize(swapAction)}</span>
+            <span>{isPoolSwap ? 'Single pool swap' : capitalize(swapAction)}</span>
             <HStack>
               <Tooltip label={copiedDeepLink ? 'Copied!' : 'Copy swap link'}>
                 <Button variant="tertiary" size="sm" color="grayText" onClick={copyDeepLink}>
@@ -137,14 +145,17 @@ export function SwapForm() {
           </CardHeader>
           <CardBody as={VStack} align="start">
             <VStack spacing="md" w="full">
+              {isPoolSwap && <PoolSwapCard />}
               <SafeAppAlert />
-              <ChainSelect
-                value={selectedChain}
-                onChange={newValue => {
-                  setSelectedChain(newValue as GqlChain)
-                  setTokenInAmount('')
-                }}
-              />
+              {!isPoolSwap && (
+                <ChainSelect
+                  value={selectedChain}
+                  onChange={newValue => {
+                    setSelectedChain(newValue as GqlChain)
+                    setTokenInAmount('')
+                  }}
+                />
+              )}
               <VStack w="full">
                 <TokenInput
                   ref={finalRefTokenIn}
@@ -235,16 +246,29 @@ export function SwapForm() {
           </CardFooter>
         </Card>
       </Center>
-      <TokenSelectModal
-        finalFocusRef={tokenSelectKey === 'tokenIn' ? finalRefTokenIn : finalRefTokenOut}
-        chain={selectedChain}
-        tokens={tokens}
-        currentToken={tokenSelectKey === 'tokenIn' ? tokenIn.address : tokenOut.address}
-        isOpen={tokenSelectDisclosure.isOpen}
-        onOpen={tokenSelectDisclosure.onOpen}
-        onClose={tokenSelectDisclosure.onClose}
-        onTokenSelect={handleTokenSelect}
-      />
+      {isPoolSwap ? (
+        <CompactTokenSelectModal
+          finalFocusRef={tokenSelectKey === 'tokenIn' ? finalRefTokenIn : finalRefTokenOut}
+          chain={selectedChain}
+          tokens={tokens}
+          isOpen={tokenSelectDisclosure.isOpen}
+          onOpen={tokenSelectDisclosure.onOpen}
+          onClose={tokenSelectDisclosure.onClose}
+          onTokenSelect={handleTokenSelect}
+        />
+      ) : (
+        <TokenSelectModal
+          finalFocusRef={tokenSelectKey === 'tokenIn' ? finalRefTokenIn : finalRefTokenOut}
+          chain={selectedChain}
+          tokens={tokens}
+          currentToken={tokenSelectKey === 'tokenIn' ? tokenIn.address : tokenOut.address}
+          isOpen={tokenSelectDisclosure.isOpen}
+          onOpen={tokenSelectDisclosure.onOpen}
+          onClose={tokenSelectDisclosure.onClose}
+          onTokenSelect={handleTokenSelect}
+        />
+      )}
+
       <SwapPreviewModal
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}

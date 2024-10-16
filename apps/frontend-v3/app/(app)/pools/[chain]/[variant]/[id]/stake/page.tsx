@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { PoolActionsLayout } from '@repo/lib/modules/pool/actions/PoolActionsLayout'

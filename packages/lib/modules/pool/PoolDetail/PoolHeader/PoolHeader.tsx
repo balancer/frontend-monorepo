@@ -1,4 +1,4 @@
-import { Stack, Button, VStack, useDisclosure } from '@chakra-ui/react'
+import { Stack, Button, VStack, useDisclosure, HStack } from '@chakra-ui/react'
 import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 
@@ -13,6 +13,7 @@ import {
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { useState } from 'react'
 import { getXavePoolLink } from '../../pool.utils'
+import { PoolAdvancedOptions } from './PoolAdvancedOptions'
 
 export function PoolHeader() {
   const pathname = usePathname()
@@ -55,14 +56,18 @@ export function PoolHeader() {
         <PoolMetaBadges />
         <Stack spacing="md" direction={{ base: 'column', md: 'row' }}>
           <PoolCategories />
-          <Button
-            onClick={handleClick}
-            variant="primary"
-            size="lg"
-            isDisabled={isAddLiquidityBlocked}
-          >
-            Add liquidity
-          </Button>
+          <HStack spacing="sm">
+
+            <Button
+              onClick={handleClick}
+              variant="primary"
+              size="lg"
+              isDisabled={isAddLiquidityBlocked}
+            >
+              Add liquidity
+            </Button>
+            <PoolAdvancedOptions />
+          </HStack>
           <PartnerRedirectModal
             partner={redirectPartner}
             redirectUrl={redirectPartnerUrl}

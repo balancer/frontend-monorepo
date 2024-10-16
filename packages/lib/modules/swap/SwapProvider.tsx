@@ -48,6 +48,7 @@ import { usePriceImpact } from '../price-impact/PriceImpactProvider'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
 import { isAuraBalSwap } from './swap.helpers'
 import { AuraBalSwapHandler } from './handlers/AuraBalSwap.handler'
+import { useIsPoolSwap } from './useIsPoolSwap'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -60,6 +61,8 @@ export type PathParams = {
   amountOut?: string
   // When urlTxHash is present the rest of the params above are not used
   urlTxHash?: Hash
+  // Only used by pool swap
+  poolTokens?: GqlToken[]
 }
 
 function selectSwapHandler(
@@ -83,6 +86,7 @@ function selectSwapHandler(
 }
 
 export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
+  const isPoolSwap = useIsPoolSwap()
   const swapStateVar = useMakeVarPersisted<SwapState>(
     {
       tokenIn: {
@@ -335,6 +339,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
   }
 
   function replaceUrlPath() {
+    if (isPoolSwap) return // Avoid redirection when the swap is within a pool page
     const { selectedChain, tokenIn, tokenOut, swapType } = swapState
     const { popularTokens } = networkConfig.tokens
     const chainSlug = chainToSlugMap[selectedChain]
@@ -467,6 +472,10 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
     setInitialTokenOut(tokenOut)
     setInitialAmounts(amountIn, amountOut)
 
+    if (isPoolSwap) {
+      setTokens(pathParams.poolTokens!)
+    }
+
     if (!swapState.tokenIn.address && !swapState.tokenOut.address) setDefaultTokens()
   }, [])
 
@@ -509,6 +518,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
 
   // Update selecteable tokens when the chain changes
   useEffect(() => {
+    if (isPoolSwap) return
     setTokens(getTokensByChain(swapState.selectedChain))
   }, [swapState.selectedChain])
 
