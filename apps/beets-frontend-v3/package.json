@@ -10,10 +10,6 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "start": "next start",
-    "test": "pnpm test:unit",
-    "test:unit": "vitest",
-    "test:unit:coverage": "vitest --coverage",
-    "test:unit:silent:coverage": "SILENT_TESTS=true vitest --coverage",
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
