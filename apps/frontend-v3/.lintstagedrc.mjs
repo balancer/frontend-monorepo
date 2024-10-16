@@ -1,4 +1,5 @@
 // https://nextjs.org/docs/pages/building-your-application/configuring/eslint#lint-staged
+import baseConfig from '../../.lintstagedrc.cjs'
 
 const path = require('path')
 
@@ -7,8 +8,7 @@ const buildEslintCommand = filenames =>
     .map(f => path.relative(process.cwd(), f))
     .join(' --file ')}`
 
-module.exports = {
+export default {
+  ...baseConfig,
   '*.{js,jsx,ts,tsx}': [buildEslintCommand, 'bash -c "pnpm run typecheck"'],
-  '*.{md,json,yaml,ts,tsx}': 'prettier --write',
-  '*.css': 'stylelint --fix',
 }
