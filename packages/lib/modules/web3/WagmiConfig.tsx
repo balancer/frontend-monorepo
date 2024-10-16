@@ -1,9 +1,7 @@
 'use client'
 
 import { connectorsForWallets } from '@rainbow-me/rainbowkit'
-
-import { createConfig } from 'wagmi'
-
+import { Config, createConfig } from 'wagmi'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import {
   coinbaseWallet,
@@ -40,7 +38,7 @@ const connectors = connectorsForWallets(
 )
 
 export type WagmiConfig = ReturnType<typeof createConfig>
-export const wagmiConfig = createConfig({
+export const wagmiConfig: Config = createConfig({
   chains,
   transports,
   connectors,
