@@ -89,7 +89,6 @@ function BaseAprTooltip({
     stakingIncentivesAprDisplayed,
     merklIncentivesAprDisplayed,
     hasMerklIncentives,
-    hasSurplusIncentives,
     surplusIncentivesAprDisplayed,
     swapFeesDisplayed,
     isSwapFeePresent,
@@ -192,7 +191,7 @@ function BaseAprTooltip({
           {...basePopoverAprItemProps}
           displayValueFormatter={usedDisplayValueFormatter}
           title="Prevented LVR"
-          apr={hasSurplusIncentives ? surplusIncentivesAprDisplayed : bn(0)}
+          apr={surplusIncentivesAprDisplayed}
           tooltipText={surplusIncentivesTooltipText}
         />
       )}
