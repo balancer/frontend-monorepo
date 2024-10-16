@@ -11,8 +11,7 @@
     "paths": {
       "@/*": ["./*"],
       "@repo/*": ["../../packages/*"]
-    },
-    "types": ["vitest/globals"]
+    }
   },
   "include": [
     "**/*.ts",
