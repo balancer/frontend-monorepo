@@ -472,10 +472,6 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
     setInitialTokenOut(tokenOut)
     setInitialAmounts(amountIn, amountOut)
 
-    if (isPoolSwap) {
-      setTokens(pathParams.poolTokens!)
-    }
-
     if (!swapState.tokenIn.address && !swapState.tokenOut.address) setDefaultTokens()
   }, [])
 
