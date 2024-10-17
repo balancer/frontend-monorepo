@@ -57,12 +57,12 @@ export function PoolHeader() {
         <Stack spacing="md" direction={{ base: 'column', md: 'row' }}>
           <PoolCategories />
           <HStack spacing="sm">
-
             <Button
               onClick={handleClick}
               variant="primary"
               size="lg"
               isDisabled={isAddLiquidityBlocked}
+              w="full"
             >
               Add liquidity
             </Button>
