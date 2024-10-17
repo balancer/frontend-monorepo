@@ -146,7 +146,7 @@ function MainAprTooltip({
   return (
     <BaseAprTooltip
       {...props}
-      maxVeBalText="Max veBAL APR"
+      maxVeBalText="Total max veBAL APR"
       totalBaseText={hasVeBalBoost => `Total ${hasVeBalBoost ? 'base' : ''} APR`}
       totalBaseVeBalText="Total base APR"
       customPopoverContent={customPopoverContent}
