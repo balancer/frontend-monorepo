@@ -7,7 +7,7 @@ export function useGaugeWorkingBalanceQuery(
   chainId: number,
   contractAddress: Address,
   gauge: string,
-  userAddress: string
+  userAddress: string,
 ) {
   const { isConnected } = useUserAccount()
 

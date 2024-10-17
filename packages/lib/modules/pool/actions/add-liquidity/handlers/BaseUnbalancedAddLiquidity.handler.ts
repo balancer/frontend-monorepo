@@ -25,7 +25,7 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
   ): Promise<SdkQueryAddLiquidityOutput> {
     const addLiquidity = new AddLiquidity()
     const addLiquidityInput = this.constructSdkInput(humanAmountsIn)
@@ -45,7 +45,7 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
 
     const priceImpactABA: PriceImpactAmount = await PriceImpact.addLiquidityUnbalanced(
       addLiquidityInput,
-      this.helpers.poolState
+      this.helpers.poolState,
     )
 
     return priceImpactABA.decimal
@@ -57,7 +57,7 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
    * PRIVATE METHODS
    */
   protected constructSdkInput(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
   ): AddLiquidityUnbalancedInput {
     const amountsIn = this.helpers.toSdkInputAmounts(humanAmountsIn)
 

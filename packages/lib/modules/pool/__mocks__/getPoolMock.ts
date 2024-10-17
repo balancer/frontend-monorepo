@@ -19,7 +19,7 @@ function astToQueryString(ast: any): string {
 export async function getPoolMock(
   poolId: Address = nested50WETH_50_3poolId,
   chain: GqlChain = GqlChain.Mainnet,
-  userAddress?: Address
+  userAddress?: Address,
 ): Promise<GqlPoolElement> {
   const queryString = astToQueryString(visit(GetPoolDocument, {}))
 
@@ -41,7 +41,7 @@ export async function getPoolMock(
 
   if (!getPoolQuery.pool) {
     throw new Error(
-      `Pool not found in api ${process.env.NEXT_PUBLIC_BALANCER_API_URL} network ${chain} poolId ${poolId}`
+      `Pool not found in api ${process.env.NEXT_PUBLIC_BALANCER_API_URL} network ${chain} poolId ${poolId}`,
     )
   }
 

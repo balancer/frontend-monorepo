@@ -45,7 +45,7 @@ export function useMockedTxHash() {
       }
 
       const transactionHash = prompt(
-        `Provide existing transaction hash to skip transaction? e.g. ${getRandomTransactionHash()}`
+        `Provide existing transaction hash to skip transaction? e.g. ${getRandomTransactionHash()}`,
       )
 
       if (transactionHash) {

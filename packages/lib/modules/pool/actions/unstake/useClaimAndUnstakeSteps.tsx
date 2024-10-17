@@ -16,7 +16,7 @@ export function useClaimAndUnstakeSteps(unstakeParams: UnstakeParams): {
   const { step: relayerApprovalStep, isLoading: isLoadingRelayerApprovalStep } =
     useApproveRelayerStep(chainId)
   const { step: minterApprovalStep, isLoading: isLoadingMinterApprovalStep } = useApproveMinterStep(
-    pool.chain
+    pool.chain,
   )
 
   const {

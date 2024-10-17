@@ -36,7 +36,7 @@ const connectors = connectorsForWallets(
       ],
     },
   ],
-  { appName, projectId }
+  { appName, projectId },
 )
 
 export type WagmiConfig = ReturnType<typeof createConfig>

@@ -6,7 +6,7 @@ import networks from './networks'
 if (!process.env.NEXT_PUBLIC_BALANCER_API_URL) {
   throw new Error(
     `NEXT_PUBLIC_BALANCER_API_URL is missing in your .env vars.
-    Please follow the instructions to create .env.local from README.md`
+    Please follow the instructions to create .env.local from README.md`,
   )
 }
 

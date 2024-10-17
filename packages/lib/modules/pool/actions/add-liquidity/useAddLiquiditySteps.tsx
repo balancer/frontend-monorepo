@@ -34,7 +34,7 @@ export function useAddLiquiditySteps({
 
   const inputAmounts = useMemo(
     () => helpers.toInputAmounts(humanAmountsIn),
-    [humanAmountsIn, helpers]
+    [humanAmountsIn, helpers],
   )
 
   const isPermit2 = requiresPermit2Approval(pool)

@@ -53,7 +53,7 @@ export function useClaimableBalances(pools: ClaimablePool[]) {
         const gaugeRewardTokens = pool.staking?.gauge?.rewards || []
 
         const otherRewardTokenRefs = otherGauges.flatMap(gauge =>
-          getClaimableRewardRefs(gauge.rewards, pool)
+          getClaimableRewardRefs(gauge.rewards, pool),
         )
 
         const allRewardTokenRefs = [
@@ -63,7 +63,7 @@ export function useClaimableBalances(pools: ClaimablePool[]) {
 
         return uniqBy(allRewardTokenRefs, reward => `${reward.gaugeAddress}.${reward.tokenAddress}`)
       }),
-    [pools]
+    [pools],
   )
 
   // Get claimable rewards for each reward token

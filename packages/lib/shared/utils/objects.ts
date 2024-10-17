@@ -21,7 +21,7 @@ export function convertHexToLowerCase<T>(config: T): T {
         newConfig[lowercaseKey] = value.toLowerCase()
       } else if (Array.isArray(value)) {
         newConfig[lowercaseKey] = value.map(item =>
-          typeof item === 'string' && isHex(item) ? item.toLowerCase() : item
+          typeof item === 'string' && isHex(item) ? item.toLowerCase() : item,
         )
       } else if (typeof value === 'object') {
         newConfig[lowercaseKey] = convertHexToLowerCase(value)

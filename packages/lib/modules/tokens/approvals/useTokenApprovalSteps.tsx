@@ -41,12 +41,12 @@ export function useTokenApprovalSteps({
 
   const _approvalAmounts = useMemo(
     () => approvalAmounts.filter(amount => !isSameAddress(amount.address, nativeAssetAddress)),
-    [approvalAmounts]
+    [approvalAmounts],
   )
 
   const approvalTokenAddresses = useMemo(
     () => _approvalAmounts.map(amount => amount.address),
-    [_approvalAmounts]
+    [_approvalAmounts],
   )
 
   const tokenAllowances = useTokenAllowances({
@@ -98,7 +98,7 @@ export function useTokenApprovalSteps({
         enabled: !!spenderAddress && !tokenAllowances.isAllowancesLoading,
         simulationMeta: sentryMetaForWagmiSimulation(
           'Error in wagmi tx simulation: Approving token',
-          tokenAmountToApprove
+          tokenAmountToApprove,
         ),
       }
 

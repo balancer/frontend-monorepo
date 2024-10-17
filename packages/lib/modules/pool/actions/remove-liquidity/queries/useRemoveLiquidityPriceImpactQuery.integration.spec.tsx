@@ -15,7 +15,7 @@ const poolMock = aWjAuraWethPoolElementMock()
 async function testQuery(humanBptIn: HumanAmount) {
   const handler = selectRemoveLiquidityHandler(
     aWjAuraWethPoolElementMock(),
-    RemoveLiquidityType.Proportional
+    RemoveLiquidityType.Proportional,
   )
   const { result } = testHook(() =>
     useRemoveLiquidityPriceImpactQuery({
@@ -25,7 +25,7 @@ async function testQuery(humanBptIn: HumanAmount) {
       humanBptIn,
       tokenOut: emptyTokenOut,
       enabled: true,
-    })
+    }),
   )
   return result
 }

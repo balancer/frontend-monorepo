@@ -29,7 +29,7 @@ export class UnbalancedAddLiquidityV2Handler extends BaseUnbalancedAddLiquidityH
         slippagePercent: slippagePercent,
         pool: this.helpers.pool,
       }),
-      account
+      account,
     )
 
     const { callData, to, value } = addLiquidity.buildCall(buildCallParams)

@@ -121,7 +121,7 @@ function AddLiquidityMainForm() {
   }
 
   const nativeAssets = validTokens.filter(token =>
-    isNativeOrWrappedNative(token.address as Address, token.chain)
+    isNativeOrWrappedNative(token.address as Address, token.chain),
   )
 
   // if native asset balance is higher set that asset as the 'default'

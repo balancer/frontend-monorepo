@@ -29,7 +29,7 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
       confirmed: `LP tokens deposited in ${pool.staking?.type}!`,
       tooltip: 'Stake LP tokens in a pool to earn rewards',
     }),
-    [pool.staking]
+    [pool.staking],
   )
 
   const txSimulationMeta = sentryMetaForWagmiSimulation(
@@ -39,7 +39,7 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
       userAddress,
       staking: pool.staking,
       rawDepositAmount,
-    }
+    },
   )
 
   const transaction = getTransaction(stakeStepId)
@@ -55,7 +55,7 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
       args: [rawDepositAmount || 0n],
       txSimulationMeta,
     }),
-    [chainId, isStakeEnabled, labels, pool.staking, rawDepositAmount, txSimulationMeta]
+    [chainId, isStakeEnabled, labels, pool.staking, rawDepositAmount, txSimulationMeta],
   )
 
   const onSuccess = useCallback(() => {
@@ -73,7 +73,7 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={stakeStepId} {...props} />,
     }),
-    [labels, onSuccess, transaction?.result.isSuccess, props]
+    [labels, onSuccess, transaction?.result.isSuccess, props],
   )
 
   return step

@@ -104,7 +104,7 @@ export function useSignPermit2({
     signPermit2State,
     buttonLabel: getButtonLabel(
       signPermit2State,
-      getTokenSymbolsForPermit2({ getToken, queryOutput, wethIsEth })
+      getTokenSymbolsForPermit2({ getToken, queryOutput, wethIsEth }),
     ),
     isLoading: isSignatureLoading(signPermit2State) || !queryOutput,
     isDisabled: isSignatureDisabled(signPermit2State),

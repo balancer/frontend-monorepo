@@ -201,7 +201,7 @@ export const TokenInput = forwardRef(
       disableBalanceValidation = false,
       ...inputProps
     }: InputProps & Props,
-    ref
+    ref,
   ) => {
     const { isBalancesLoading } = useTokenBalances()
 
@@ -297,5 +297,5 @@ export const TokenInput = forwardRef(
         </VStack>
       </Box>
     )
-  }
+  },
 )

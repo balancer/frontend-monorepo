@@ -10,7 +10,7 @@ import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityV3Handler {
   return selectRemoveLiquidityHandler(
     pool,
-    RemoveLiquidityType.SingleToken
+    RemoveLiquidityType.SingleToken,
   ) as SingleTokenRemoveLiquidityV3Handler
 }
 

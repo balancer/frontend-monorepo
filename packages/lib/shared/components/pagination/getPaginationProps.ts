@@ -4,7 +4,7 @@ export function getPaginationProps(
   totalRowCount: number,
   pagination: PaginationState,
   setPagination: (pagination: PaginationState) => void,
-  changeSize = true
+  changeSize = true,
 ) {
   const totalPageCount =
     totalRowCount % pagination.pageSize === 0

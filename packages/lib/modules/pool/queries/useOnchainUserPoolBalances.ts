@@ -70,7 +70,7 @@ export function useOnchainUserPoolBalances(pools: Pool[] = []) {
 function captureStakedMulticallError(stakedPoolBalancesError: ReadContractsErrorType) {
   console.log(
     'Error in stake pool balances multicall in useOnchainUserPoolBalances',
-    stakedPoolBalancesError
+    stakedPoolBalancesError,
   )
   captureNonFatalError({
     error: stakedPoolBalancesError,
@@ -82,7 +82,7 @@ function captureStakedMulticallError(stakedPoolBalancesError: ReadContractsError
 function captureUnstakedMulticallError(unstakedPoolBalancesError: ReadContractsErrorType) {
   console.log(
     'Error in  unstake pool balances multicall in useOnchainUserPoolBalances',
-    unstakedPoolBalancesError
+    unstakedPoolBalancesError,
   )
   captureNonFatalError({
     error: unstakedPoolBalancesError,
@@ -104,7 +104,7 @@ function captureUnstakedMulticallError(unstakedPoolBalancesError: ReadContractsE
 function overwriteOnchainPoolBalanceData(
   pools: Pool[],
   ocUnstakedBalances: UnstakedBalanceByPoolId,
-  stakedBalancesByPoolId: StakedBalancesByPoolId
+  stakedBalancesByPoolId: StakedBalancesByPoolId,
 ) {
   return pools.map(pool => {
     if (!Object.keys(ocUnstakedBalances).length || !Object.keys(stakedBalancesByPoolId).length) {
@@ -129,7 +129,7 @@ function overwriteOnchainPoolBalanceData(
       return pool
     }
     const onchainTotalStakedBalance = safeSum(
-      onchainStakedBalances.map(stakedBalance => bn(stakedBalance.balance))
+      onchainStakedBalances.map(stakedBalance => bn(stakedBalance.balance)),
     )
 
     // Total balances
@@ -162,7 +162,7 @@ function overwriteOnchainPoolBalanceData(
  */
 function overrideStakedBalances(
   pool: Pool,
-  onChainStakedBalances: GqlUserStakedBalance[]
+  onChainStakedBalances: GqlUserStakedBalance[],
 ): GqlUserStakedBalance[] {
   if (!pool.userBalance) return onChainStakedBalances
   const apiStakedBalances = [...pool.userBalance.stakedBalances]
@@ -170,7 +170,7 @@ function overrideStakedBalances(
   onChainStakedBalances.forEach(onchainStakedBalance => {
     // Index of the onchain gauge in the api staked balances
     const index = apiStakedBalances.findIndex(apiBalance =>
-      isSameAddress(apiBalance.stakingId, onchainStakedBalance.stakingId)
+      isSameAddress(apiBalance.stakingId, onchainStakedBalance.stakingId),
     )
     if (index === -1) {
       apiStakedBalances.push(onchainStakedBalance)

@@ -64,7 +64,7 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
                       isLoading={isLoading}
                     />
                   </HStack>
-                )
+                ),
             )}
           </VStack>
         </RadioGroup>

@@ -15,12 +15,12 @@ export function useClaimsData(pools: ClaimablePool[]) {
 
   const allClaimableRewards = useMemo(
     () => [...balRewards, ...nonBalRewards],
-    [balRewards, nonBalRewards]
+    [balRewards, nonBalRewards],
   )
 
   const totalClaimableUsd = useMemo(
     () => safeSum(allClaimableRewards.map(reward => reward.fiatBalance)),
-    [allClaimableRewards]
+    [allClaimableRewards],
   )
 
   const hasNoRewards = !nonBalRewards.length && !balRewards.length

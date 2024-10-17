@@ -66,7 +66,7 @@ export function useUserStakedBalance(pools: Pool[] = []) {
           poolId: pool.id,
           ...stakedBalance,
         }
-      })
+      }),
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stakedPoolBalances, contracts, poolByStaking, userAddress, isFetching])
@@ -111,18 +111,21 @@ function poolContracts(poolByStaking: Record<Address, Pool>, userAddress: Addres
         args: [userAddress],
         chainId: getChainId(pool.chain),
       } as const
-    })
+    }),
   )
 }
 
 function createPoolByStakingRecord(pools: Pool[]): Record<Address, Pool> {
-  return pools.reduce((acc, pool) => {
-    const stakingAddresses = getStakingAddresses(pool)
-    stakingAddresses.forEach(stakingAddress => {
-      acc[stakingAddress] = pool
-    })
-    return acc
-  }, {} as Record<Address, Pool>)
+  return pools.reduce(
+    (acc, pool) => {
+      const stakingAddresses = getStakingAddresses(pool)
+      stakingAddresses.forEach(stakingAddress => {
+        acc[stakingAddress] = pool
+      })
+      return acc
+    },
+    {} as Record<Address, Pool>,
+  )
 }
 
 function getStakingAddresses(pool: Pool): Address[] {

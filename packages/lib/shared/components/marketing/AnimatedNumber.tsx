@@ -16,7 +16,7 @@ export function AnimatedNumber({ value, formatValue }: AnimatedNumberProps) {
 
   const spring = useSpring(0, { mass: 0.8, stiffness: 75, damping: 15 })
   const display = useTransform(spring, current =>
-    formatValue ? formatValue(Math.round(current)) : Math.round(current).toLocaleString()
+    formatValue ? formatValue(Math.round(current)) : Math.round(current).toLocaleString(),
   )
 
   useEffect(() => {

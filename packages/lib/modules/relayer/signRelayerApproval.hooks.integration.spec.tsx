@@ -28,7 +28,7 @@ test('Signs relayer approval and saves signature in the addLiquidity provider st
     },
     {
       wrapper: Providers,
-    }
+    },
   )
 
   await waitFor(() => expect(result.current.isLoading).toBeFalsy())

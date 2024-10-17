@@ -56,7 +56,7 @@ export function useMulticall(multicallRequests: ChainContractConfig[], options: 
       multicallResults.map((result, i) => {
         return { ...result, chainId: suppliedChains[i] }
       }),
-      'chainId'
+      'chainId',
     ),
     isLoading: multicallResults.some(result => result.isLoading),
     refetchAll,

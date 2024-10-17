@@ -11,7 +11,7 @@ import { Address } from 'viem'
 export function useMigrateStakeSteps(
   pool: Pool,
   migratedAmount: HumanAmount,
-  refetchPoolBalances: () => void
+  refetchPoolBalances: () => void,
 ) {
   const [hasClaimStep, setHasClaimStep] = useState(false)
   const { nonPreferentialGaugeAddress, nonPreferentialStakedBalance, isClaimable } =

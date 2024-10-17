@@ -10,14 +10,14 @@ export function isSameAddress(address1: string, address2: string): boolean {
 
 export function isNativeAsset(
   chainId: GqlChain | SupportedChainId,
-  tokenAddress: Address | string
+  tokenAddress: Address | string,
 ) {
   return isSameAddress(getNativeAssetAddress(chainId), tokenAddress)
 }
 
 export function isWrappedNativeAsset(
   chainId: GqlChain | SupportedChainId,
-  tokenAddress: Address | string
+  tokenAddress: Address | string,
 ) {
   return isSameAddress(getWrappedNativeAssetAddress(chainId), tokenAddress)
 }
@@ -36,7 +36,7 @@ export function indexOfAddress(addresses: string[], address: string): number {
 
 function containsAll(addresses1: string[], addresses2: string[]) {
   return addresses2.every(address2 =>
-    addresses1.map(address1 => address1.toLowerCase()).includes(address2.toLowerCase())
+    addresses1.map(address1 => address1.toLowerCase()).includes(address2.toLowerCase()),
   )
 }
 

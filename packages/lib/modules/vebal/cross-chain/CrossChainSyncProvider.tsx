@@ -67,11 +67,11 @@ export const _useCrossChainSync = () => {
 
   const [tempSyncingNetworks, setTempSyncingNetworks] = useLocalStorage(
     LS_KEYS.CrossChainSync.TempSyncingNetworks,
-    initialTempSyncingNetworks
+    initialTempSyncingNetworks,
   )
   const [syncTxHashes, _setSyncTxHashes] = useLocalStorage(
     LS_KEYS.CrossChainSync.SyncTxHashes,
-    initialSyncTxHashes
+    initialSyncTxHashes,
   )
   const { syncLayerZeroTxLinks } = useLayerZeroTxLinks(syncTxHashes)
 
@@ -85,7 +85,7 @@ export const _useCrossChainSync = () => {
         acc[item.dstChainId] = item
         return acc
       },
-      {}
+      {},
     )
   }, [allNetworksUnsynced, omniEscrowResponse])
 
@@ -95,7 +95,7 @@ export const _useCrossChainSync = () => {
 
   const crossChainNetworksResponses = useCrossChainNetworks(
     veBalSyncSupportedNetworks,
-    omniEscrowLocksMap
+    omniEscrowLocksMap,
   )
   const crossChainNetworks = keyBy(crossChainNetworksResponses, 'chainId')
 
@@ -110,7 +110,7 @@ export const _useCrossChainSync = () => {
         })
         return acc
       },
-      {}
+      {},
     )
   }, [mainnetEscrowLock, omniEscrowLocksMap])
 
@@ -119,15 +119,15 @@ export const _useCrossChainSync = () => {
 
     return {
       synced: networksWithValidSyncState.filter(
-        network => networksSyncState[network] === NetworkSyncState.Synced
+        network => networksSyncState[network] === NetworkSyncState.Synced,
       ),
       unsynced: networksWithValidSyncState.filter(
-        network => networksSyncState[network] === NetworkSyncState.Unsynced
+        network => networksSyncState[network] === NetworkSyncState.Unsynced,
       ),
       syncing: networksWithValidSyncState.filter(
         network =>
           networksSyncState[network] === NetworkSyncState.Syncing ||
-          tempSyncingNetworks[userAddress]?.networks.includes(network)
+          tempSyncingNetworks[userAddress]?.networks.includes(network),
       ),
     }
   }, [networksSyncState, tempSyncingNetworks, userAddress])
@@ -182,7 +182,7 @@ export const _useCrossChainSync = () => {
 
     if (omniEscrowLocksMap) {
       const promises = networksBySyncState.syncing.map(networkId =>
-        crossChainNetworks[networkId].refetch()
+        crossChainNetworks[networkId].refetch(),
       )
       await Promise.all(promises)
     }
@@ -219,7 +219,7 @@ export const _useCrossChainSync = () => {
 
     setTempSyncingNetworks(prev => {
       const updatedNetworks = prev[userAddress].networks.filter(
-        network => !networksBySyncState.synced.includes(network)
+        network => !networksBySyncState.synced.includes(network),
       )
       return { ...prev, [userAddress]: { ...prev[userAddress], networks: updatedNetworks } }
     })
@@ -228,7 +228,7 @@ export const _useCrossChainSync = () => {
   useEffect(() => {
     if (networksBySyncState.synced.length > 0) {
       const hasSyncingMismatch = networksBySyncState.syncing.some(network =>
-        networksBySyncState.synced.includes(network)
+        networksBySyncState.synced.includes(network),
       )
       if (hasSyncingMismatch) {
         clearTempSyncingNetworksFromSynced()

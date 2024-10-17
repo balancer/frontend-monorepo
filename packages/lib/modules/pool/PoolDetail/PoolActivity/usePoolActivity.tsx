@@ -145,7 +145,7 @@ function _usePoolActivity() {
 
         return acc
       },
-      { adds: [], removes: [], swaps: [] }
+      { adds: [], removes: [], swaps: [] },
     )
 
     return data
@@ -157,7 +157,7 @@ function _usePoolActivity() {
       pageIndex: skip / first,
       pageSize: first,
     }),
-    [skip, first]
+    [skip, first],
   )
 
   function setPagination(newPagination: PaginationState) {
@@ -190,7 +190,7 @@ function _usePoolActivity() {
         return order === Sorting.asc ? compareValue : -compareValue
       })
     },
-    []
+    [],
   )
 
   const poolEvents = useMemo(() => {
@@ -208,7 +208,7 @@ function _usePoolActivity() {
       ? sortedEvents.slice(0, sortedEvents.length)
       : sortedEvents.slice(
           pagination.pageIndex * pagination.pageSize,
-          pagination.pageSize * (pagination.pageIndex + 1)
+          pagination.pageSize * (pagination.pageIndex + 1),
         )
   }, [poolEvents, pagination, sorting, sortingBy, sortPoolEvents, isChartView])
 

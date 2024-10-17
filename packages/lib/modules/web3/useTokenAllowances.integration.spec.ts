@@ -12,7 +12,7 @@ function testTokenAllowances(tokenAddresses: Address[]) {
       userAddress: defaultTestUserAccount,
       spenderAddress: vaultV2Address,
       tokenAddresses,
-    })
+    }),
   )
   return result
 }
@@ -27,7 +27,7 @@ test('fetches token allowances', async () => {
     expect.objectContaining({
       [wjAuraAddress]: expect.any(BigInt),
       [wETHAddress]: expect.any(BigInt),
-    })
+    }),
   )
 })
 

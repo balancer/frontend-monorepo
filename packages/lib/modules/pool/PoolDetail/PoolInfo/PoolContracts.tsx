@@ -108,7 +108,7 @@ export function PoolContracts({ ...props }: CardProps) {
         priceRateProviderData: token.priceRateProviderData,
       }))
       .filter(
-        item => item.rateProviderAddress && item.rateProviderAddress !== zeroAddress
+        item => item.rateProviderAddress && item.rateProviderAddress !== zeroAddress,
       ) as RateProvider[]
   }, [pool])
 

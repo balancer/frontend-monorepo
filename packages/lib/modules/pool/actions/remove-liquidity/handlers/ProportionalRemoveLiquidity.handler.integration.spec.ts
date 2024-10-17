@@ -19,7 +19,7 @@ const poolMock = aBalWethPoolElementMock() // 80BAL-20WETH
 function selectProportionalHandler(pool: Pool): ProportionalRemoveLiquidityHandler {
   return selectRemoveLiquidityHandler(
     pool,
-    RemoveLiquidityType.Proportional
+    RemoveLiquidityType.Proportional,
   ) as ProportionalRemoveLiquidityHandler
 }
 

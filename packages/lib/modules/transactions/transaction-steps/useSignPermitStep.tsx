@@ -23,7 +23,7 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
     ...params,
   })
   const { shouldChangeNetwork, NetworkSwitchButton, networkSwitchButtonProps } = useChainSwitch(
-    getChainId(params.pool.chain)
+    getChainId(params.pool.chain),
   )
 
   const SignPermitButton = () => (
@@ -70,6 +70,6 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
       renderAction: () => <SignPermitButton />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signPermitState, isLoading, isConnected]
+    [signPermitState, isLoading, isConnected],
   )
 }

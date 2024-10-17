@@ -54,7 +54,7 @@ function ChainSyncButton({
       layerZeroChainId,
       stepId,
       chainId,
-    }
+    },
   )
 
   // FIX: actual labels
@@ -142,6 +142,6 @@ export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): 
             renderAction,
           }
         }),
-    [networks, getTransaction, userAddress, contracts.omniVotingEscrow]
+    [networks, getTransaction, userAddress, contracts.omniVotingEscrow],
   )
 }

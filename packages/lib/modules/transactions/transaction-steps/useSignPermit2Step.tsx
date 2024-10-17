@@ -51,7 +51,7 @@ export function useSignPermit2Step(params: AddLiquidityPermit2Params): Transacti
     error,
   } = useSignPermit2({ ...params, nonces })
   const { shouldChangeNetwork, NetworkSwitchButton, networkSwitchButtonProps } = useChainSwitch(
-    getChainId(params.pool.chain)
+    getChainId(params.pool.chain),
   )
 
   const isLoading =
@@ -106,7 +106,7 @@ export function useSignPermit2Step(params: AddLiquidityPermit2Params): Transacti
       renderAction: () => <SignPermitButton />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signPermit2State, isLoading, isConnected, isValidPermit2]
+    [signPermit2State, isLoading, isConnected, isValidPermit2],
   )
 }
 

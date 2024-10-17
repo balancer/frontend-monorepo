@@ -57,7 +57,7 @@ export abstract class BaseSingleTokenRemoveLiquidityHandler implements RemoveLiq
 
     const priceImpactABA: PriceImpactAmount = await PriceImpact.removeLiquidity(
       removeLiquidityInput,
-      this.helpers.poolState
+      this.helpers.poolState,
     )
 
     return priceImpactABA.decimal
@@ -70,7 +70,7 @@ export abstract class BaseSingleTokenRemoveLiquidityHandler implements RemoveLiq
    */
   private constructSdkInput(
     humanBptIn: HumanAmount,
-    tokenOut: Address
+    tokenOut: Address,
   ): RemoveLiquiditySingleTokenExactInInput {
     const bptInInputAmount: InputAmount = {
       rawAmount: parseEther(humanBptIn),

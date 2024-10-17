@@ -57,7 +57,7 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
                 poolToken.address,
                 poolToken.balance,
                 totalLiquidity,
-                chain
+                chain,
               )}
               pool={pool}
               targetWeight={poolToken.weight || undefined}

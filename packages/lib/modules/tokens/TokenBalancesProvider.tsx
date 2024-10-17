@@ -34,7 +34,7 @@ export const TokenBalancesContext = createContext<UseTokenBalancesResponse | nul
 export function _useTokenBalances(
   initTokens?: GqlToken[],
   extTokens?: GqlToken[],
-  bufferPercentage: HumanAmount | string = '0'
+  bufferPercentage: HumanAmount | string = '0',
 ) {
   if (!initTokens && !extTokens) throw new Error('initTokens or tokens must be provided')
   if (initTokens && extTokens) throw new Error('initTokens and tokens cannot be provided together')
@@ -79,7 +79,7 @@ export function _useTokenBalances(
         functionName: 'balanceOf',
         args: [(userAddress || '') as Address],
       })),
-    }
+    },
   )
 
   async function refetchBalances() {
@@ -114,7 +114,7 @@ export function _useTokenBalances(
       amount: nativeBalanceQuery.data.value,
       formatted: formatUnits(
         nativeBalanceQuery.data.value,
-        networkConfig.tokens.nativeAsset.decimals
+        networkConfig.tokens.nativeAsset.decimals,
       ),
       decimals: networkConfig.tokens.nativeAsset.decimals,
     })

@@ -35,7 +35,7 @@ function liquidityParams({
 
 export function stringifyHumanAmountsIn(
   pool: Pool,
-  humanAmountsIn: HumanTokenAmountWithAddress[]
+  humanAmountsIn: HumanTokenAmountWithAddress[],
 ): string {
   if (humanAmountsIn.length === 0) return ''
   if (requiresProportionalInput(pool)) {

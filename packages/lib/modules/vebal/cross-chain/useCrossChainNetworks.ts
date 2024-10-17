@@ -65,7 +65,7 @@ export function getNetworkSyncState({
 
 function formatVotingEscrowData(
   votingEscrowResponses: UseQueryResult<VotingEscrowLockResponse, Error>[],
-  chainIds: GqlChain[]
+  chainIds: GqlChain[],
 ) {
   return votingEscrowResponses.map(
     ({ data: votingEscrowResponse, refetch, isError, isLoading: isInitialLoading }, index) => {
@@ -84,7 +84,7 @@ function formatVotingEscrowData(
         isLoading: isInitialLoading,
         isError,
       }
-    }
+    },
   )
 }
 
@@ -106,7 +106,7 @@ export function calculateVeBAlBalance(votingEscrowLocks: VotingEscrowLock | null
 
 export function useCrossChainNetworks(
   chainIds: GqlChain[],
-  omniEscrowMap: Record<number, OmniEscrowLock> | null
+  omniEscrowMap: Record<number, OmniEscrowLock> | null,
 ) {
   const { userAddress } = useUserAccount()
 

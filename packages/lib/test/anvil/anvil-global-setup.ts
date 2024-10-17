@@ -22,7 +22,7 @@ export async function setup() {
           forkBlockNumber: ANVIL_NETWORKS[chain.name].forkBlockNumber,
           noMining: false,
         },
-      })
+      }),
     )
   }
   const results = await Promise.all(promises)

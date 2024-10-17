@@ -161,7 +161,7 @@ function enrichPool({ isLoading, pool, priceFor, poolTokenBalances, totalSupply 
   const clone = cloneDeep(pool)
 
   const filteredTokens = clone.poolTokens.filter(token =>
-    pool.displayTokens.find(displayToken => token.address === displayToken.address)
+    pool.displayTokens.find(displayToken => token.address === displayToken.address),
   )
 
   clone.poolTokens.forEach((token, index) => {
@@ -175,8 +175,8 @@ function enrichPool({ isLoading, pool, priceFor, poolTokenBalances, totalSupply 
 
   clone.dynamicData.totalLiquidity = safeSum(
     filteredTokens.map(
-      token => (priceFor(token.address, pool.chain) || 0) * parseFloat(token.balance)
-    )
+      token => (priceFor(token.address, pool.chain) || 0) * parseFloat(token.balance),
+    ),
   )
 
   clone.dynamicData.totalShares = formatUnits(totalSupply || 0n, BPT_DECIMALS)

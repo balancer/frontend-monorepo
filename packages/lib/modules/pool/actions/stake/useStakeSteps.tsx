@@ -28,7 +28,7 @@ export function useStakeSteps(pool: Pool, stakeAmount = getUserWalletBalance(poo
 
   const steps = useMemo(
     () => [...tokenApprovalSteps, stakingStep],
-    [tokenApprovalSteps, stakingStep]
+    [tokenApprovalSteps, stakingStep],
   )
 
   return {

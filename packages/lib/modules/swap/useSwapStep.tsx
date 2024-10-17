@@ -99,6 +99,6 @@ export function useSwapStep({
         </VStack>
       ),
     }),
-    [transaction, simulationQuery.data, buildSwapQuery.data]
+    [transaction, simulationQuery.data, buildSwapQuery.data],
   )
 }

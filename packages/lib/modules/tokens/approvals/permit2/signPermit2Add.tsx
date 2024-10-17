@@ -88,6 +88,6 @@ function maximizePositiveAmounts(amountsIn: TokenAmount[]): TokenAmount[] {
       ({
         ...item,
         amount: item.amount > 0n ? MaxAllowance : item.amount,
-      } as TokenAmount)
+      }) as TokenAmount,
   )
 }

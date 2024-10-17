@@ -42,7 +42,7 @@ export function PoolSnapshotValues() {
 
   const weeklyRewards = sumBy(
     currentRewardsPerWeek,
-    reward => priceFor(reward.tokenAddress, chain) * reward.rewardPerWeek
+    reward => priceFor(reward.tokenAddress, chain) * reward.rewardPerWeek,
   )
 
   const poolStatsValues: PoolStatsValues | undefined = useMemo(() => {

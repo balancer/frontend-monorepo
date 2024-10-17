@@ -9,7 +9,7 @@ const defaultNumberFormatter = (value: string) => bn(bn(value).toFixed(4, BigNum
 
 function testUseAprTooltip({ aprItems }: { aprItems: GqlPoolAprItem[] }) {
   const { result } = testHook(() =>
-    useAprTooltip({ aprItems, numberFormatter: defaultNumberFormatter })
+    useAprTooltip({ aprItems, numberFormatter: defaultNumberFormatter }),
   )
   return result
 }

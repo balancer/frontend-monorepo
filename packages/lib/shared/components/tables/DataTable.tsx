@@ -64,12 +64,12 @@ export function DataTable<Data extends object>({
       setPagination(
         (typeof updaterOrValue === 'function'
           ? updaterOrValue(pagination)
-          : pagination) as PaginationState
+          : pagination) as PaginationState,
       )
     },
     onSortingChange: updaterOrValue => {
       setSorting(
-        (typeof updaterOrValue === 'function' ? updaterOrValue(sorting) : sorting) as SortingState
+        (typeof updaterOrValue === 'function' ? updaterOrValue(sorting) : sorting) as SortingState,
       )
     },
     manualSorting: true,

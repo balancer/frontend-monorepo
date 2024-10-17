@@ -7,7 +7,7 @@ import { Address } from 'viem'
 export async function signRelayerApproval(
   userAddress: Address,
   chainId: SupportedChainId,
-  client?: PublicWalletClient
+  client?: PublicWalletClient,
 ): Promise<Address | undefined> {
   if (!client) return undefined
 
