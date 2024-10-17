@@ -1,7 +1,4 @@
-type LinkSection = {
-  title: string
-  links: { href: string; label: string; isExternal?: boolean }[]
-}
+import { LinkSection } from '@repo/lib/shared/components/navs/footer.types'
 
 export function useFooterData() {
   const linkSections: LinkSection[] = [
