@@ -1,5 +1,3 @@
 .next/
 pnpm-lock.yaml
-packages/prettier-config/
-packages/eslint-config/
-packages/typescript-config/
+

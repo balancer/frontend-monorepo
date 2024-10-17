@@ -2,6 +2,3 @@ node_modules/
 .next/
 **/generated/*.ts
 theme.ts
-packages/prettier-config/
-packages/eslint-config/
-packages/typescript-config/
