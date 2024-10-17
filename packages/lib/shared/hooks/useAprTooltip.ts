@@ -19,12 +19,9 @@ prevents this loss (also called LVR), thereby increasing LP returns.`
 export const extraBalTooltipText = `veBAL holders can get an extra boost of up to 2.5x on their staking yield.
 The more veBAL held, the higher the boost.`
 
-export const lockingIncentivesTooltipText = `Special incentives for liquidity providers who lock
-their Balancer ve8020 pool tokens.`
+export const lockingIncentivesTooltipText = `The protocol revenue share for Liquidity Providers with 1-year locked Balancer ve8020 tokens.`
 
-export const votingIncentivesTooltipText = `To get voting incentives from Hidden Hand,
-you must hold veBAL and have active votes for vote-incentivized pools in the weekly gauge vote.
-The APR listed is the average. Your incentives will be based on your veBAL voting weight vs other voters.`
+export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL holders who participate in weekly gauge voting by third parties on platforms like Hidden Hand. Your incentives are determined by your veBAL voting power compared to other voters. The listed APR represents an average rather than a guaranteed return for active participants.`
 
 const stakingBalTooltipText = `The base APR all stakers in this pool get (determined by weekly gauge voting).
 In addition, veBAL holders can get an extra boost of up to 2.5x.`
@@ -156,6 +153,7 @@ export function useAprTooltip({
 
   const subitemPopoverAprItemProps = {
     pt: 2,
+    pl: 'sm',
     backgroundColor: 'background.level1',
     fontWeight: 500,
     fontColor: colorMode == 'light' ? 'gray.600' : 'gray.400',
