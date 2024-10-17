@@ -38,15 +38,18 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { ConnectWallet } from '../web3/ConnectWallet'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '../tokens/TokensProvider'
-import { useIsPoolSwap } from './useIsPoolSwap'
+import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
 import { CompactTokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectList/CompactTokenSelectModal'
 import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type Props = {
+  isPoolSwap?: boolean
   redirectToPoolPage?: () => void // Only used for pool swaps
 }
-export function SwapForm({ redirectToPoolPage }: Props) {
+export function SwapForm({ redirectToPoolPage, isPoolSwap = false }: Props) {
+  const isPoolSwapUrl = useIsPoolSwapUrl()
+
   const {
     tokenIn,
     tokenOut,
@@ -79,7 +82,6 @@ export function SwapForm({ redirectToPoolPage }: Props) {
   const isMounted = useIsMounted()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
-  const isPoolSwap = useIsPoolSwap()
 
   const isLoadingSwaps = simulationQuery.isLoading
   const isLoading = isLoadingSwaps || !isMounted
@@ -132,7 +134,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     if (swapTxHash) {
       resetSwapAmounts()
       transactionSteps.resetTransactionSteps()
-      if (isPoolSwap) return redirectToPoolPage?.()
+      if (isPoolSwapUrl) return redirectToPoolPage?.()
       replaceUrlPath()
     }
   }

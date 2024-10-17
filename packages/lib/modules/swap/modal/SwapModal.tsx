@@ -20,7 +20,7 @@ import { SwapSummary } from './SwapSummary'
 import { useSwapReceipt } from '../../transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../../tokens/TokensProvider'
-import { useIsPoolSwap } from '../useIsPoolSwap'
+import { useIsPoolSwapUrl } from '../useIsPoolSwapUrl'
 
 type Props = {
   isOpen: boolean
@@ -35,7 +35,7 @@ export function SwapPreviewModal({
   finalFocusRef,
   ...rest
 }: Props & Omit<ModalProps, 'children'>) {
-  const isPoolSwap = useIsPoolSwap()
+  const isPoolSwapUrl = useIsPoolSwapUrl()
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { userAddress } = useUserAccount()
@@ -61,7 +61,7 @@ export function SwapPreviewModal({
 
   useEffect(() => {
     if (!isWrap && swapTxHash && !window.location.pathname.includes(swapTxHash)) {
-      const url = isPoolSwap
+      const url = isPoolSwapUrl
         ? `${window.location.pathname}/${swapTxHash}`
         : `/swap/${chainToSlugMap[selectedChain]}/${swapTxHash}`
       window.history.pushState({}, '', url)
@@ -107,7 +107,7 @@ export function SwapPreviewModal({
         <ActionModalFooter
           isSuccess={!!swapTxHash && !swapReceipt.isLoading}
           currentStep={transactionSteps.currentStep}
-          returnLabel={isPoolSwap ? 'Return to pool' : 'Swap again'}
+          returnLabel={isPoolSwapUrl ? 'Return to pool' : 'Swap again'}
           returnAction={onClose}
           urlTxHash={urlTxHash}
         />

@@ -4,6 +4,7 @@ import { PropsWithChildren } from 'react'
 import { getSwapPathParams } from '@repo/lib/modules/swap/getSwapPathParams'
 import SwapLayout from '../../../../../../packages/lib/modules/swap/SwapLayout'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { SwapProps } from '@repo/lib/modules/swap/SwapProvider'
 
 type Props = PropsWithChildren<{
   params: { slug?: string[] }
@@ -11,10 +12,14 @@ type Props = PropsWithChildren<{
 
 export default function Layout({ params: { slug }, children }: Props) {
   const pathParams = getSwapPathParams(slug)
+  const swapProps: SwapProps = {
+    pathParams,
+    isPoolSwap: true,
+  }
 
   return (
     <DefaultPageContainer minH="100vh">
-      <SwapLayout pathParams={pathParams}> {children} </SwapLayout>
+      <SwapLayout props={swapProps}> {children} </SwapLayout>
     </DefaultPageContainer>
   )
 }
