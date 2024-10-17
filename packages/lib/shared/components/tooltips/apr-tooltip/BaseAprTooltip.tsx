@@ -46,10 +46,10 @@ interface Props {
 
 const balRewardGradient =
   // eslint-disable-next-line max-len
-  'linear-gradient(90deg, rgba(179, 174, 245, 0.1) 0%, rgba(215, 203, 231, 0.1) 25%, rgba(229, 200, 200, 0.1) 50%, rgba(234, 168, 121, 0.1) 100%)'
+  'linear-gradient(90deg, rgba(179, 174, 245, 0.5) 0%, rgba(215, 203, 231, 0.5) 25%, rgba(229, 200, 200, 0.5) 50%, rgba(234, 168, 121, 0.5) 100%)'
 
 const basePopoverAprItemProps = {
-  pl: 2,
+  pl: 4,
   pr: 2,
   pb: 3,
   backgroundColor: 'background.level1',
@@ -200,7 +200,8 @@ function BaseAprTooltip({
         {...basePopoverAprItemProps}
         displayValueFormatter={usedDisplayValueFormatter}
         pt={3}
-        backgroundColor="background.level4"
+        pl={2}
+        backgroundColor="background.level3"
         fontColor="font.maxContrast"
         tooltipText={
           shouldDisplayBaseTooltip
@@ -218,7 +219,7 @@ function BaseAprTooltip({
               pt={3}
               {...basePopoverAprItemProps}
               displayValueFormatter={usedDisplayValueFormatter}
-              title="Max locking incentives"
+              title="Protocol revenue share (max)"
               tooltipText={lockingIncentivesTooltipText}
               apr={lockingAprDisplayed}
               aprOpacity={isLockingAprPresent ? 1 : 0.5}
@@ -226,7 +227,7 @@ function BaseAprTooltip({
             <TooltipAprItem
               {...basePopoverAprItemProps}
               displayValueFormatter={usedDisplayValueFormatter}
-              title="Average voting incentives"
+              title="Voting incentives (average)"
               tooltipText={votingIncentivesTooltipText}
               apr={votingAprDisplayed}
               aprOpacity={isVotingPresent ? 1 : 0.5}
@@ -237,10 +238,11 @@ function BaseAprTooltip({
               {...basePopoverAprItemProps}
               displayValueFormatter={usedDisplayValueFormatter}
               pt={3}
+              px={2}
               fontColor="font.special"
               title={totalVeBalTitle || 'Total APR'}
               apr={totalCombinedDisplayed}
-              boxBackground={balRewardGradient}
+              backgroundColor={balRewardGradient}
               textBackground="background.special"
               textBackgroundClip="text"
               roundedBottom="md"
@@ -256,6 +258,7 @@ function BaseAprTooltip({
               {...basePopoverAprItemProps}
               displayValueFormatter={usedDisplayValueFormatter}
               pt={3}
+              pl={6}
               fontWeight={500}
               fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
               title="Extra BAL (veBAL boost)"
@@ -268,6 +271,7 @@ function BaseAprTooltip({
               {...basePopoverAprItemProps}
               displayValueFormatter={usedDisplayValueFormatter}
               pt={3}
+              pl={2}
               fontColor="font.special"
               title={maxVeBalText || 'Max veBAL APR'}
               tooltipText={
@@ -281,6 +285,7 @@ function BaseAprTooltip({
               boxBackground={balRewardGradient}
               textBackground="background.special"
               textBackgroundClip="text"
+              backgroundColor="background.level3"
               roundedBottom="md"
             />
           </Stack>
