@@ -1,7 +1,6 @@
 // https://nextjs.org/docs/pages/building-your-application/configuring/eslint#lint-staged
 import baseConfig from '../../.lintstagedrc.cjs'
-
-const path = require('path')
+import path from 'path'
 
 const buildEslintCommand = filenames =>
   `next lint --fix --max-warnings 0 --file ${filenames
