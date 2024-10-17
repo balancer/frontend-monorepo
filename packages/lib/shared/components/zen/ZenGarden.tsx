@@ -24,7 +24,7 @@ const commonProps = (subdued = false) =>
     borderWidth: 1,
     transformOrigin: '50% 0',
     borderColor: subdued ? 'border.subduedZen' : 'border.zen',
-  } as BoxProps)
+  }) as BoxProps
 
 function getZenGardenProps(
   variant: ZenGardenVariant,

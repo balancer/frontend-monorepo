@@ -359,8 +359,8 @@ export function usePoolCharts() {
       activePeriod.value in dataRangeToDaysMap
         ? dataRangeToDaysMap[activePeriod.value]
         : daysSinceMinDataDate > MIN_DISPLAY_PERIOD_DAYS
-        ? daysSinceMinDataDate
-        : MIN_DISPLAY_PERIOD_DAYS
+          ? daysSinceMinDataDate
+          : MIN_DISPLAY_PERIOD_DAYS
 
     if (iterateTo === undefined) {
       throw new Error("DataRangeToDaysMap doesn't have a value for the selected period")

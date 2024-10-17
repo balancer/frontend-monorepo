@@ -205,8 +205,8 @@ const getDefaultPoolActivityChartOptions = (
           metaData.type === GqlPoolEventType.Add
             ? 'Add'
             : metaData.type === GqlPoolEventType.Remove
-            ? 'Remove'
-            : 'Swap'
+              ? 'Remove'
+              : 'Swap'
 
         const arrow = `<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" fill="none"><path stroke="#718096" stroke-linecap="round" stroke-linejoin="round" d="M2 1h6v6M1 8l7-7"/></svg>`
 
@@ -228,8 +228,8 @@ const getDefaultPoolActivityChartOptions = (
                   <div style="color: ${
                     toolTipTheme.text
                   }; display:flex;justify-content:start;align-items:center;gap:6px; margin-bottom:${
-                  index === tokens.length - 1 ? `4px` : `-20px`
-                }">
+                    index === tokens.length - 1 ? `4px` : `-20px`
+                  }">
                     <img src="${
                       token.token?.logoURI
                     }" style="width: 16px; height: 16px; border-radius: 50%; margin-right;letter-spacing:-0.1px" />

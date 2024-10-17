@@ -85,8 +85,8 @@ function fiatFormat(val: Numberish, { abbreviated = true }: FormatOpts = {}): st
   const format = abbreviated
     ? FIAT_FORMAT_A
     : isMoreThanOrEqualToAmount(val, FIAT_CENTS_THRESHOLD)
-    ? FIAT_FORMAT_WITHOUT_DECIMALS
-    : FIAT_FORMAT
+      ? FIAT_FORMAT_WITHOUT_DECIMALS
+      : FIAT_FORMAT
   return numeral(toSafeValue(val)).format(format)
 }
 
