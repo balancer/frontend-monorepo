@@ -49,7 +49,7 @@ const balRewardGradient =
   'linear-gradient(90deg, rgba(179, 174, 245, 0.5) 0%, rgba(215, 203, 231, 0.5) 25%, rgba(229, 200, 200, 0.5) 50%, rgba(234, 168, 121, 0.5) 100%)'
 
 const basePopoverAprItemProps = {
-  pl: 3,
+  pl: 4,
   pr: 2,
   pb: 3,
   backgroundColor: 'background.level1',
@@ -258,7 +258,7 @@ function BaseAprTooltip({
               {...basePopoverAprItemProps}
               displayValueFormatter={usedDisplayValueFormatter}
               pt={3}
-              pl={4}
+              pl={6}
               fontWeight={500}
               fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
               title="Extra BAL (veBAL boost)"
@@ -271,7 +271,7 @@ function BaseAprTooltip({
               {...basePopoverAprItemProps}
               displayValueFormatter={usedDisplayValueFormatter}
               pt={3}
-              pl={3}
+              pl={2}
               fontColor="font.special"
               title={maxVeBalText || 'Max veBAL APR'}
               tooltipText={
