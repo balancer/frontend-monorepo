@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
+import { Box, Center, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 import { getPoolPath, getPoolTypeLabel } from '../../pool.utils'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
@@ -24,14 +24,28 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 function PoolVersionTag({ pool }: { pool: PoolListItem }) {
   if (isCowAmmPool(pool.type)) {
     return (
-      <BalBadge>
-        <CowIcon width={16} height={10} />
+      <BalBadge w={8} h={8} p={0} fontSize="xs" textTransform="lowercase">
+        <Center w="full" h="full">
+          <CowIcon />
+        </Center>
       </BalBadge>
     )
   } else if (pool.protocolVersion === 3) {
-    return <BalBadge>v3</BalBadge>
+    return (
+      <BalBadge w={8} h={8} p={0} fontSize="xs" textTransform="lowercase">
+        <Center w="full" h="full">
+          v2
+        </Center>
+      </BalBadge>
+    )
   } else if (pool.protocolVersion === 2) {
-    return <BalBadge>v2</BalBadge>
+    return (
+      <BalBadge w={8} h={8} p={0} fontSize="xs" textTransform="lowercase">
+        <Center w="full" h="full">
+          v2
+        </Center>
+      </BalBadge>
+    )
   }
   return null
 }
