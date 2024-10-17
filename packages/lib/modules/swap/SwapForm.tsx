@@ -41,6 +41,7 @@ import { useTokens } from '../tokens/TokensProvider'
 import { useIsPoolSwap } from './useIsPoolSwap'
 import { CompactTokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectList/CompactTokenSelectModal'
 import { PoolSwapCard } from './PoolSwapCard'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -99,6 +100,22 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     } else {
       console.error('Unhandled token select key', tokenSelectKey)
     }
+  }
+
+  function handleTokenSelectForPoolSwap(token: GqlToken) {
+    if (
+      tokens.length === 2 &&
+      tokenSelectKey === 'tokenIn' &&
+      isSameAddress(token.address, tokenOut.address)
+    )
+      return switchTokens()
+    if (
+      tokens.length === 2 &&
+      tokenSelectKey === 'tokenOut' &&
+      isSameAddress(token.address, tokenIn.address)
+    )
+      return switchTokens()
+    handleTokenSelect(token)
   }
 
   function openTokenSelectModal(tokenSelectKey: 'tokenIn' | 'tokenOut') {
@@ -254,7 +271,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
           isOpen={tokenSelectDisclosure.isOpen}
           onOpen={tokenSelectDisclosure.onOpen}
           onClose={tokenSelectDisclosure.onClose}
-          onTokenSelect={handleTokenSelect}
+          onTokenSelect={handleTokenSelectForPoolSwap}
         />
       ) : (
         <TokenSelectModal
