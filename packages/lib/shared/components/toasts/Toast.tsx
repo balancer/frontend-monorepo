@@ -45,10 +45,10 @@ export function Toast({ id, status, isClosable, title, description, linkUrl }: P
       status === 'loading'
         ? 'orange.300'
         : status === 'success'
-        ? 'green.300'
-        : status === 'error'
-        ? 'red.300'
-        : 'transparent',
+          ? 'green.300'
+          : status === 'error'
+            ? 'red.300'
+            : 'transparent',
     opacity: 0.2,
     rounded: 'md',
     zIndex: 1001,

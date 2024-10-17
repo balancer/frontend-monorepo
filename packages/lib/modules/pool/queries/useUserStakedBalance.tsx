@@ -116,13 +116,16 @@ function poolContracts(poolByStaking: Record<Address, Pool>, userAddress: Addres
 }
 
 function createPoolByStakingRecord(pools: Pool[]): Record<Address, Pool> {
-  return pools.reduce((acc, pool) => {
-    const stakingAddresses = getStakingAddresses(pool)
-    stakingAddresses.forEach(stakingAddress => {
-      acc[stakingAddress] = pool
-    })
-    return acc
-  }, {} as Record<Address, Pool>)
+  return pools.reduce(
+    (acc, pool) => {
+      const stakingAddresses = getStakingAddresses(pool)
+      stakingAddresses.forEach(stakingAddress => {
+        acc[stakingAddress] = pool
+      })
+      return acc
+    },
+    {} as Record<Address, Pool>
+  )
 }
 
 function getStakingAddresses(pool: Pool): Address[] {

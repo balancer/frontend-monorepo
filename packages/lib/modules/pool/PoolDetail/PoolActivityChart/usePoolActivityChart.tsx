@@ -147,8 +147,8 @@ const getDefaultPoolActivityChartOptions = (
             <div style="font-size: 14px; font-weight: 700; color: ${
               toolTipTheme.text
             }; display:flex;justify-content:start;gap:4px;letter-spacing:-0.25px;${
-          toolTipTheme.heading
-        };">
+              toolTipTheme.heading
+            };">
               <span>${data.seriesName}</span>
               <span>${currencyFormatter(metaData.usdValue)}</span>
             </div>
@@ -158,8 +158,8 @@ const getDefaultPoolActivityChartOptions = (
                   <div style="color: ${
                     toolTipTheme.text
                   }; display:flex;justify-content:start;align-items:center;gap:6px; margin-bottom:${
-                  index === tokens.length - 1 ? `4px` : `-20px`
-                }">
+                    index === tokens.length - 1 ? `4px` : `-20px`
+                  }">
                     <img src="${
                       token.token?.logoURI
                     }" style="width: 16px; height: 16px; border-radius: 50%; margin-right;letter-spacing:-0.1px" />

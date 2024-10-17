@@ -4,4 +4,5 @@ module.exports = {
   semi: false,
   proseWrap: "always",
   printWidth: 100,
-}
+  trailingComma: "es5",
+};
