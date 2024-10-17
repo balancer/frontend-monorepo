@@ -1,4 +1,10 @@
-import { balAddress, daiAddress, usdcAddress, usdtAddress, wETHAddress } from '@repo/lib/debug-helpers'
+import {
+  balAddress,
+  daiAddress,
+  usdcAddress,
+  usdtAddress,
+  wETHAddress,
+} from '@repo/lib/debug-helpers'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import {

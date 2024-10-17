@@ -31,7 +31,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled }:
         abi: permit2Abi,
         functionName: 'allowance',
         args: [owner, tokenAddress, spender],
-      } as const)
+      }) as const
   )
 
   const { data, isLoading } = useReadContracts({

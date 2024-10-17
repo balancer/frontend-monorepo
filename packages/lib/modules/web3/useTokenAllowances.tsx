@@ -33,7 +33,7 @@ export function useTokenAllowances({
         abi: erc20Abi,
         functionName: 'allowance',
         args: [userAddress, spenderAddress],
-      } satisfies AllowanceContracts)
+      }) satisfies AllowanceContracts
   )
 
   const { data, isLoading, isRefetching, refetch } = useReadContracts({
