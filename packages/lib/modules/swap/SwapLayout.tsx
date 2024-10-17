@@ -3,7 +3,7 @@
 import { ChainSlug, slugToChainMap } from '@repo/lib/modules/pool/pool.utils'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSignatureProvider'
-import { SwapProps, SwapProvider } from '@repo/lib/modules/swap/SwapProvider'
+import { SwapProviderProps, SwapProvider } from '@repo/lib/modules/swap/SwapProvider'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -12,7 +12,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PropsWithChildren } from 'react'
 
 type Props = PropsWithChildren<{
-  props: SwapProps
+  props: SwapProviderProps
 }>
 
 // Layout shared by standard swap page (/swap) and pool swap page (/poolid/swap)

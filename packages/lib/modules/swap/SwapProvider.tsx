@@ -83,13 +83,13 @@ function selectSwapHandler(
   return new DefaultSwapHandler(apolloClient)
 }
 
-export type SwapProps = {
+export type SwapProviderProps = {
   pathParams: PathParams
   isPoolSwap?: boolean
   // Only used by pool swap
   poolTokens?: GqlToken[]
 }
-export function _useSwap({ isPoolSwap = false, pathParams }: SwapProps) {
+export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
   const isPoolSwapUrl = useIsPoolSwapUrl()
   const swapStateVar = useMakeVarPersisted<SwapState>(
@@ -586,7 +586,7 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProps) {
 }
 
 type Props = PropsWithChildren<{
-  params: SwapProps
+  params: SwapProviderProps
 }>
 
 export function SwapProvider({ params, children }: Props) {

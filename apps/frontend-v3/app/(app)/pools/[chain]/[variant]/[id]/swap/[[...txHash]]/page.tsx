@@ -7,7 +7,7 @@ import { chainToSlugMap } from '@repo/lib/modules/pool/pool.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { SwapForm } from '@repo/lib/modules/swap/SwapForm'
 import SwapLayout from '@repo/lib/modules/swap/SwapLayout'
-import { PathParams } from '@repo/lib/modules/swap/SwapProvider'
+import { PathParams, SwapProviderProps } from '@repo/lib/modules/swap/SwapProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { Hash } from 'viem'
 
@@ -28,14 +28,14 @@ export default function PoolSwapPage({ params: { txHash } }: Props) {
     chain: chainToSlugMap[pool.chain],
     tokenIn: poolTokens[0].address,
     tokenOut: poolTokens[1].address,
-    poolTokens,
     urlTxHash: maybeTxHash,
   }
+  const props: SwapProviderProps = { pathParams, isPoolSwap: true, poolTokens }
 
   return (
     <PoolActionsLayout>
       {isLoading ? null : (
-        <SwapLayout pathParams={pathParams}>
+        <SwapLayout props={props}>
           <SwapForm redirectToPoolPage={redirectToPoolPage} />
         </SwapLayout>
       )}
