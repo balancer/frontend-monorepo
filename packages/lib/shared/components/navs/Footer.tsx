@@ -5,73 +5,19 @@ import { Stack, Divider, Text, Box, VStack, HStack, Link, IconButton } from '@ch
 import { staggeredFadeIn } from '@repo/lib/shared/utils/animations'
 import { motion } from 'framer-motion'
 import { DefaultPageContainer } from '../containers/DefaultPageContainer'
-import { BalancerLogoType } from '../imgs/BalancerLogoType'
 import { ArrowUpRight } from 'react-feather'
-import { useNav } from './useNav'
+import { AppLink } from '../navs/useNav'
+import { LinkSection } from './footer.types'
+import { ReactNode } from 'react'
 
-type LinkSection = {
+type CardContentProps = {
+  linkSections: LinkSection[]
+  logoType: ReactNode
   title: string
-  links: { href: string; label: string; isExternal?: boolean }[]
+  subTitle: string
 }
 
-function CardContent() {
-  const linkSections: LinkSection[] = [
-    {
-      title: 'Build on Balancer',
-      links: [
-        { label: 'Home', href: '/' },
-        { label: 'Balancer v3', href: '/build/v3' },
-
-        { label: 'v3 Docs', href: 'https://docs-v3.balancer.fi', isExternal: true },
-        {
-          label: 'Prototype on v3',
-          href: 'https://github.com/balancer/scaffold-balancer-v3',
-          isExternal: true,
-        },
-        { label: 'Grants', href: 'https://grants.balancer.community', isExternal: true },
-        { label: 'v2 Docs', href: 'https://docs.balancer.fi', isExternal: true },
-      ],
-    },
-    {
-      title: 'Use Balancer protocol',
-      links: [
-        { label: 'Explore pools', href: '/pools' },
-        { label: 'Swap tokens', href: '/swap' },
-        { label: 'View portfolio', href: '/portfolio' },
-        { label: 'Get veBAL', href: 'https://app.balancer.fi/#/vebal', isExternal: true },
-        {
-          label: 'Create an LBP',
-          href: 'https://www.fjordfoundry.com/?utm_source=balancer&utm_medium=website',
-          isExternal: true,
-        },
-        {
-          label: 'Create an NFT drop',
-          href: 'https://fjordnfts.com/?utm_source=balancer&utm_medium=website',
-          isExternal: true,
-        },
-      ],
-    },
-    {
-      title: 'Ecosystem',
-      links: [
-        { label: 'Forum', href: 'https://forum.balancer.fi', isExternal: true },
-        { label: 'Governance', href: 'https://vote.balancer.fi', isExternal: true },
-        {
-          label: 'Bug bounties',
-          href: 'https://immunefi.com/bug-bounty/balancer',
-          isExternal: true,
-        },
-        { label: 'Dune Analytics', href: 'https://dune.com/balancer', isExternal: true },
-        { label: 'Defilytica', href: 'https://balancer.defilytica.com', isExternal: true },
-        {
-          label: 'Brand assets',
-          href: 'https://github.com/balancer/brand-assets',
-          isExternal: true,
-        },
-      ],
-    },
-  ]
-
+function CardContent({ linkSections, logoType, title, subTitle }: CardContentProps) {
   return (
     <Stack
       direction={{ base: 'column', lg: 'row' }}
@@ -81,13 +27,13 @@ function CardContent() {
       w="full"
     >
       <VStack color="font.primary" align="start" spacing="lg" width={{ base: 'auto', md: '70%' }}>
-        <BalancerLogoType width="120px" />
+        {logoType}
         <VStack align="start" spacing="sm">
           <Text variant="secondary" fontSize="4xl" fontWeight="500" letterSpacing="-0.4px">
-            AMMs made easy
+            {title}
           </Text>
           <Text variant="secondary" sx={{ textWrap: 'balance' }}>
-            Balancer is a battle-tested toolkit for true AMM experimentation and innovation.
+            {subTitle}
           </Text>
         </VStack>
       </VStack>
@@ -137,12 +83,10 @@ function CardContent() {
   )
 }
 
-function SocialLinks() {
-  const { getSocialLinks } = useNav()
-
+function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
   return (
     <HStack spacing="ms" w={{ base: 'full', lg: 'auto' }}>
-      {getSocialLinks(24).map(({ href, icon }) => (
+      {socialLinks.map(({ href, icon }) => (
         <IconButton
           as={Link}
           key={href}
@@ -163,15 +107,7 @@ function SocialLinks() {
   )
 }
 
-function LegalLinks() {
-  const legalLinks = [
-    { label: 'Terms of use', href: '/terms-of-use' },
-    { label: 'Privacy policy', href: '/privacy-policy' },
-    { label: 'Cookies policy', href: '/cookies-policy' },
-    { label: '3rd party services', href: '/3rd-party-services' },
-    { label: 'Risks', href: '/risks' },
-  ]
-
+function LegalLinks({ legalLinks }: { legalLinks: AppLink[] }) {
   return (
     <HStack
       w="full"
@@ -195,12 +131,33 @@ function LegalLinks() {
   )
 }
 
-export function Footer() {
+type FooterProps = {
+  linkSections: LinkSection[]
+  socialLinks: AppLink[]
+  legalLinks: AppLink[]
+  logoType: ReactNode
+  title: string
+  subTitle: string
+}
+
+export function Footer({
+  linkSections,
+  socialLinks,
+  legalLinks,
+  logoType,
+  title,
+  subTitle,
+}: FooterProps) {
   return (
     <Box as="footer" background="background.level0" shadow="innerLg">
       <DefaultPageContainer py="xl">
         <VStack align="start" spacing="lg" pt="md">
-          <CardContent />
+          <CardContent
+            linkSections={linkSections}
+            logoType={logoType}
+            title={title}
+            subTitle={subTitle}
+          />
           <Divider />
           <Stack
             align="start"
@@ -214,8 +171,8 @@ export function Footer() {
             animate="show"
             w="full"
           >
-            <SocialLinks />
-            <LegalLinks />
+            <SocialLinks socialLinks={socialLinks} />
+            <LegalLinks legalLinks={legalLinks} />
           </Stack>
         </VStack>
       </DefaultPageContainer>

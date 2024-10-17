@@ -1,12 +1,12 @@
 'use client'
 
-import { Navbar } from '@repo/lib/shared/components/navs/Navbar'
 import { Box, VStack, Card, useColorModeValue } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 import { PoolActionsNav } from './PoolActionsNav'
 import { usePool } from '../PoolProvider'
 import { usePoolRedirect } from '../pool.hooks'
 import { PoolName } from '../PoolName'
+import { NavBar } from '@repo/lib/shared/components/navs/NavBar'
 
 type Props = PropsWithChildren
 
@@ -28,7 +28,7 @@ export function PoolActionsLayout({ children }: Props) {
       onClick={redirectToPoolPage}
     >
       <VStack w="full" bg={bg} backdropFilter={blur} zIndex={51} onClick={redirectToPoolPage}>
-        <Navbar leftSlot={<PoolName pool={pool} color="font.light" />} disableBlur />
+        <NavBar leftSlot={<PoolName pool={pool} color="font.light" />} disableBlur />
         <Box w="full" px={['0', 'md']} pt="72px">
           <Card
             position="relative"
