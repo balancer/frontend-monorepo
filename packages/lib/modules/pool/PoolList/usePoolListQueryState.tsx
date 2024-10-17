@@ -26,7 +26,7 @@ export function usePoolListQueryState() {
 
   const [orderDirection, setOrderDirection] = useQueryState(
     'orderDirection',
-    poolListQueryStateParsers.orderDirection,
+    poolListQueryStateParsers.orderDirection
   )
 
   const [poolTypes, setPoolTypes] = useQueryState('poolTypes', poolListQueryStateParsers.poolTypes)
@@ -34,19 +34,19 @@ export function usePoolListQueryState() {
 
   const [textSearch, setTextSearch] = useQueryState(
     'textSearch',
-    poolListQueryStateParsers.textSearch,
+    poolListQueryStateParsers.textSearch
   )
 
   const [userAddress, setUserAddress] = useQueryState(
     'userAddress',
-    poolListQueryStateParsers.userAddress,
+    poolListQueryStateParsers.userAddress
   )
 
   const [minTvl, setMinTvl] = useQueryState('minTvl', poolListQueryStateParsers.minTvl)
 
   const [poolCategories, setPoolCategories] = useQueryState(
     'poolCategories',
-    poolListQueryStateParsers.poolCategories,
+    poolListQueryStateParsers.poolCategories
   )
 
   // Set internal checked state
@@ -90,7 +90,7 @@ export function usePoolListQueryState() {
       setSkip(0)
       setOrderBy(sortingState[0].id)
       setOrderDirection(
-        sortingState[0].desc ? GqlPoolOrderDirection.Desc : GqlPoolOrderDirection.Asc,
+        sortingState[0].desc ? GqlPoolOrderDirection.Desc : GqlPoolOrderDirection.Asc
       )
     } else {
       setOrderBy(GqlPoolOrderBy.TotalLiquidity)
@@ -171,13 +171,13 @@ export function usePoolListQueryState() {
   const mappedPoolTypes = uniq(
     (poolTypes.length > 0 ? poolTypes : Object.keys(POOL_TYPE_MAP))
       .map(poolType => POOL_TYPE_MAP[poolType as keyof typeof POOL_TYPE_MAP])
-      .flat(),
+      .flat()
   )
 
   const mappedPoolCategories = uniq(
     (poolCategories.length > 0 ? poolCategories : [])
       .map(poolCategory => POOL_CATEGORY_MAP[poolCategory as keyof typeof POOL_CATEGORY_MAP])
-      .flat(),
+      .flat()
   )
 
   const queryVariables = {

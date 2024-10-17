@@ -7,7 +7,7 @@ test.skip('aNested50Weth503Pool builds a proper nested pool mock', () => {
   type PoolGetPool = Parameters<typeof mapPoolToNestedPoolState>[0]
 
   const nestedPoolState: NestedPoolState = mapPoolToNestedPoolState(
-    aNested50Weth503Pool() as unknown as PoolGetPool,
+    aNested50Weth503Pool() as unknown as PoolGetPool
   )
 
   expect(nestedPoolState.pools).toMatchInlineSnapshot(`

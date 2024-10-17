@@ -62,7 +62,7 @@ export function useProportionalInputs() {
         }
 
         return { tokenAddress, humanAmount: '' }
-      }),
+      })
     )
   }
 

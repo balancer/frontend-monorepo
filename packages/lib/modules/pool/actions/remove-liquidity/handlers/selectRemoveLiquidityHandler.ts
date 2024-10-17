@@ -16,7 +16,7 @@ import { SingleTokenRemoveLiquidityV3Handler } from './SingleTokenRemoveLiquidit
 
 export function selectRemoveLiquidityHandler(
   pool: Pool,
-  kind: RemoveLiquidityType,
+  kind: RemoveLiquidityType
 ): RemoveLiquidityHandler {
   // TODO: Depending on the pool attributes we will return a different handler
   // if (pool.id === 'TWAMM-example') {

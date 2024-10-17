@@ -48,7 +48,7 @@ export const SparklesIcon = ({
 
   const hasRewardApr =
     pool.dynamicData.aprItems.filter(item =>
-      [GqlPoolAprItemType.Staking, GqlPoolAprItemType.VebalEmissions].includes(item.type),
+      [GqlPoolAprItemType.Staking, GqlPoolAprItemType.VebalEmissions].includes(item.type)
     ).length > 0
 
   const hasOnlySwapApr =
@@ -57,29 +57,29 @@ export const SparklesIcon = ({
 
   const defaultGradFrom = useColorModeValue(
     '#91A1B6', // light from
-    '#A0AEC0', // dark from
+    '#A0AEC0' // dark from
   )
   const defaultGradTo = useColorModeValue(
     '#BCCCE1', // light to
-    '#E9EEF5', // dark to
+    '#E9EEF5' // dark to
   )
 
   const corePoolGradFrom = useColorModeValue(
     '#BFA672', // light from
-    '#AE8C56', // dark from
+    '#AE8C56' // dark from
   )
   const corePoolGradTo = useColorModeValue(
     '#D9C47F', // light to
-    '#F4EAD2', // dark to
+    '#F4EAD2' // dark to
   )
 
   const rewardsGradFrom = useColorModeValue(
     '#F49A55', // light from
-    '#F49175', // dark from
+    '#F49175' // dark from
   )
   const rewardsGradTo = useColorModeValue(
     '#FCD45B', // light to
-    '#FFCC33', // dark to
+    '#FFCC33' // dark to
   )
 
   let gradFromColor = defaultGradFrom

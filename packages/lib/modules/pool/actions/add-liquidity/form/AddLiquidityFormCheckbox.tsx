@@ -20,7 +20,7 @@ export function AddLiquidityFormCheckbox() {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
 
   const hasNoPoolTokensInWallet = tokens.every(
-    token => token && balanceFor(token.address)?.formatted === '0',
+    token => token && balanceFor(token.address)?.formatted === '0'
   )
 
   return (

@@ -38,7 +38,7 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithAddress[]
   ): Promise<NestedQueryAddLiquidityOutput> {
     const addLiquidity = new AddLiquidityNested()
 
@@ -79,7 +79,7 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
    * PRIVATE METHODS
    */
   private constructSdkInput(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithAddress[]
   ): AddLiquidityNestedInput {
     const amountsIn = this.helpers.toSdkInputAmounts(humanAmountsIn)
 

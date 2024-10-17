@@ -22,7 +22,7 @@ export type StepProps = {
 */
 export function getStepSettings(
   { step, currentIndex, index, colorMode, isLastStep }: StepProps,
-  transaction?: ManagedResult,
+  transaction?: ManagedResult
 ) {
   const isActive = index === currentIndex
 

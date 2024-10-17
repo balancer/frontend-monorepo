@@ -89,7 +89,7 @@ export function useAprTooltip({
 
   const yieldBearingTokensAprDisplayed = yieldBearingTokensDisplayed.reduce(
     (acc, item) => acc.plus(item.apr),
-    bn(0),
+    bn(0)
   )
 
   // Staking incentives
@@ -144,7 +144,7 @@ export function useAprTooltip({
 
   const stakingIncentivesAprDisplayed = stakingIncentivesDisplayed.reduce(
     (acc, item) => acc.plus(item.apr),
-    bn(0),
+    bn(0)
   )
 
   const isSwapFeePresent = !swapFeesDisplayed.isZero()

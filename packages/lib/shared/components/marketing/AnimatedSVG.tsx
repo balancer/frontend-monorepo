@@ -14,7 +14,7 @@ export const AnimatedSVG: React.FC = () => {
   const pathD: MotionValue<string> = useTransform(
     scrollYProgress,
     [0, 1],
-    ['M 0 0 C 71 0 58 0 100 0 Q 50 0 0 0 Z', 'M 0 0 C 70 2 58 22 100 0 Q 50 0 0 0 Z'],
+    ['M 0 0 C 71 0 58 0 100 0 Q 50 0 0 0 Z', 'M 0 0 C 70 2 58 22 100 0 Q 50 0 0 0 Z']
   )
 
   return (

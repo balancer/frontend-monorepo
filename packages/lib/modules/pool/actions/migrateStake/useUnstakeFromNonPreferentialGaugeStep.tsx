@@ -23,7 +23,7 @@ const unstakeStepId = 'unstake-non-preferential-gauge'
 */
 export function useUnstakeFromNonPreferentialGaugeStep(
   pool: Pool,
-  refetchPoolBalances: () => void,
+  refetchPoolBalances: () => void
 ) {
   const { userAddress } = useUserAccount()
   const { getTransaction } = useTransactionState()
@@ -49,7 +49,7 @@ export function useUnstakeFromNonPreferentialGaugeStep(
       poolId: pool.id,
       chainId,
       amount,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -80,7 +80,7 @@ export function useUnstakeFromNonPreferentialGaugeStep(
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={unstakeStepId} {...props} />,
     }),
-    [transaction, amount, props],
+    [transaction, amount, props]
   )
 
   return {

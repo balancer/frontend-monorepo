@@ -12,7 +12,7 @@ import { aGqlPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.
 function testBuildUnstakeCallData(amount: bigint, userAddress: Address = defaultTestUserAccount) {
   const batchRelayerService = new BatchRelayerService(
     mainnetNetworkConfig.contracts.balancer.relayerV6,
-    gaugeActionsService,
+    gaugeActionsService
   )
   const gaugeService = new GaugeService(batchRelayerService)
   const gauges = [aGqlPoolElementMock().staking?.id || ''] as Address[]
@@ -24,7 +24,7 @@ function testBuildUnstakeCallData(amount: bigint, userAddress: Address = default
       hasUnclaimedBalRewards: false,
       hasUnclaimedNonBalRewards: false,
       userAddress,
-    }),
+    })
   )
   return result
 }

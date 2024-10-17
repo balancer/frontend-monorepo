@@ -117,7 +117,7 @@ const getDefaultPoolActivityChartOptions = (
   theme: any, // TODO: type this
   currencyFormatter: NumberFormatter,
   isMobile = false,
-  is2xl = false,
+  is2xl = false
   // chain: GqlChain
 ): echarts.EChartsCoreOption => {
   const toolTipTheme = {
@@ -257,7 +257,7 @@ const getDefaultPoolActivityChartOptions = (
             };">
                 <a style="display:flex;align-items:center;" href=${addressLink} target="_blank">
                   <span style="font-size: 0.75rem; margin-right:4px;">By: ${abbreviateAddress(
-                    userAddress,
+                    userAddress
                   )}</span>
                   ${arrow}
                 </a>
@@ -385,7 +385,7 @@ export function useEcosystemPoolActivityChart() {
     if (!response) return { total: 0, elapsedMinutes: 0 }
 
     const elapsedMinutes = Math.floor(
-      (Date.now() / 1000 - response.poolEvents[response.poolEvents.length - 1].timestamp) / 60,
+      (Date.now() / 1000 - response.poolEvents[response.poolEvents.length - 1].timestamp) / 60
     )
 
     const total = Object.keys(chartData).reduce((acc, chain) => {
@@ -438,7 +438,7 @@ export function useEcosystemPoolActivityChart() {
       theme,
       toCurrency,
       isMobile,
-      is2xl,
+      is2xl
     ),
     eChartsRef,
     chartData,

@@ -110,19 +110,19 @@ export const poolListQueryStateParsers = {
   first: parseAsInteger.withDefault(20),
   skip: parseAsInteger.withDefault(0),
   orderBy: parseAsStringEnum<GqlPoolOrderBy>(Object.values(GqlPoolOrderBy)).withDefault(
-    GqlPoolOrderBy.TotalLiquidity,
+    GqlPoolOrderBy.TotalLiquidity
   ),
   orderDirection: parseAsStringEnum<GqlPoolOrderDirection>(
-    Object.values(GqlPoolOrderDirection),
+    Object.values(GqlPoolOrderDirection)
   ).withDefault(GqlPoolOrderDirection.Desc),
   poolTypes: parseAsArrayOf(
-    parseAsStringEnum<PoolFilterType>(Object.values(poolTypeFilters)),
+    parseAsStringEnum<PoolFilterType>(Object.values(poolTypeFilters))
   ).withDefault([]),
   networks: parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChain))).withDefault([]),
   textSearch: parseAsString,
   userAddress: parseAsString,
   minTvl: parseAsFloat.withDefault(0),
   poolCategories: parseAsArrayOf(
-    parseAsStringEnum<PoolCategoryType>(Object.values(poolCategoryFilters)),
+    parseAsStringEnum<PoolCategoryType>(Object.values(poolCategoryFilters))
   ).withDefault([]),
 }

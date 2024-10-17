@@ -16,7 +16,7 @@ export function useAsyncEffectOnce(effect: () => Promise<void>, onError?: (error
 export function useAsyncEffect(
   effect: () => Promise<void>,
   deps?: DependencyList,
-  cleanup?: () => void,
+  cleanup?: () => void
 ) {
   useEffect(() => {
     effect()

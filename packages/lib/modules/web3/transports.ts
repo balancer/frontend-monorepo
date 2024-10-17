@@ -15,7 +15,7 @@ export function getTransports(chain: Chain) {
 }
 
 export const transports = Object.fromEntries(
-  chains.map(chain => [chain.id, getTransports(chain)]),
+  chains.map(chain => [chain.id, getTransports(chain)])
 ) as Record<number, ReturnType<typeof getTransports>>
 
 export function getRpcUrl(chainId: number): string {

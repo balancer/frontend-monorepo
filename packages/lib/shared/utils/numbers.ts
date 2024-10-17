@@ -219,7 +219,7 @@ function isMoreThanOrEqualToAmount(value: Numberish, amount: Numberish): boolean
 
 function isSmallPercentage(
   value: Numberish,
-  { isPercentage = false }: { isPercentage?: boolean } = {},
+  { isPercentage = false }: { isPercentage?: boolean } = {}
 ): boolean {
   // if the value is already a percentage (like in slippageFormat) we divide by 100 so that slippageFormat('10') is '10%'
   const val = isPercentage ? bn(value).div(100) : bn(value)
@@ -234,7 +234,7 @@ export function isSuperSmallAmount(value: Numberish): boolean {
 export function safeTokenFormat(
   amount: bigint | null | undefined,
   decimals: number,
-  opts?: FormatOpts,
+  opts?: FormatOpts
 ): string {
   if (!amount) return '-'
 

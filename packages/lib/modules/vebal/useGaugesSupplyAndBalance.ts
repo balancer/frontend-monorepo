@@ -25,7 +25,7 @@ export function useGaugesSupplyAndBalance(gauges: GaugeArg[]) {
   })
 
   const { results: gaugesTotalSupply, isLoading: isLoadingTotalSupply } = useMulticall(
-    gaugesTotalSupplyDataRequests,
+    gaugesTotalSupplyDataRequests
   )
   const gaugesBalancesDataRequests = gauges.map(gauge => {
     return {
@@ -39,7 +39,7 @@ export function useGaugesSupplyAndBalance(gauges: GaugeArg[]) {
   })
 
   const { results: gaugesBalances, isLoading: isLoadingBalances } = useMulticall(
-    gaugesBalancesDataRequests,
+    gaugesBalancesDataRequests
   )
 
   // get gauge total supply and user balance

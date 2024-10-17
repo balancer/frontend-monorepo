@@ -47,7 +47,7 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       simulationQueryData: simulationQuery.data,
       buildCallQueryData: buildCallDataQuery.data,
       tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
-    },
+    }
   )
 
   const transaction = getTransaction(removeLiquidityStepId)
@@ -79,6 +79,6 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       onDeactivated: () => setIsStepActivated(false),
       onSuccess: () => refetchPoolUserBalances(),
     }),
-    [transaction, simulationQuery.data, buildCallDataQuery.data],
+    [transaction, simulationQuery.data, buildCallDataQuery.data]
   )
 }

@@ -41,7 +41,7 @@ export class NestedProportionalRemoveLiquidityHandler implements RemoveLiquidity
 
     const sdkQueryOutput = await removeLiquidity.query(
       removeLiquidityInput,
-      this.helpers.nestedPoolState,
+      this.helpers.nestedPoolState
     )
 
     return { amountsOut: sdkQueryOutput.amountsOut, sdkQueryOutput }

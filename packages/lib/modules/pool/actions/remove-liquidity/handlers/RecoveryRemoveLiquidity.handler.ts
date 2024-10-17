@@ -43,7 +43,7 @@ export class RecoveryRemoveLiquidityHandler {
 
     const sdkQueryOutput = await removeLiquidity.queryRemoveLiquidityRecovery(
       removeLiquidityInput,
-      this.helpers.poolStateWithBalances,
+      this.helpers.poolStateWithBalances
     )
 
     return { amountsOut: sdkQueryOutput.amountsOut.filter(a => a.amount > 0n), sdkQueryOutput }

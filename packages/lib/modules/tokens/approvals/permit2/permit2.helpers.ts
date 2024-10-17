@@ -10,7 +10,7 @@ import { GetTokenFn } from '../../TokensProvider'
 export function hasValidPermit2(
   queryOutput?: SdkQueryAddLiquidityOutput,
   expirations?: ExpirationByTokenAddress,
-  allowedAmounts?: AllowedAmountsByTokenAddress,
+  allowedAmounts?: AllowedAmountsByTokenAddress
 ): boolean {
   if (!expirations || !allowedAmounts) return false
 

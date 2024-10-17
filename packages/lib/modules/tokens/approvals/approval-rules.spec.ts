@@ -29,7 +29,7 @@ describe('getRequiredTokenApprovals', () => {
         rawAmounts,
         allowanceFor,
         skipAllowanceCheck: true,
-      }),
+      })
     ).toEqual([])
   })
 
@@ -39,7 +39,7 @@ describe('getRequiredTokenApprovals', () => {
         chainId,
         rawAmounts: [],
         allowanceFor,
-      }),
+      })
     ).toEqual([])
   })
 
@@ -49,7 +49,7 @@ describe('getRequiredTokenApprovals', () => {
         rawAmounts,
         chainId,
         allowanceFor,
-      }),
+      })
     ).toEqual([
       {
         isPermit2: false,
@@ -83,7 +83,7 @@ describe('getRequiredTokenApprovals', () => {
         rawAmounts,
         chainId,
         allowanceFor,
-      }),
+      })
     ).toEqual([
       {
         requiredRawAmount: 0n,
@@ -117,7 +117,7 @@ describe('getRequiredTokenApprovals', () => {
         rawAmounts,
         chainId,
         allowanceFor,
-      }),
+      })
     ).toEqual([
       {
         isPermit2: false,

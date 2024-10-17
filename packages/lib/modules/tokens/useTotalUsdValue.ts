@@ -16,7 +16,7 @@ export function useTotalUsdValue(tokens: GqlToken[]) {
 
         return usdValueForToken(token, amountIn.humanAmount)
       }),
-    [usdValueForToken, tokens],
+    [usdValueForToken, tokens]
   )
 
   function usdValueFor(humanAmountsIn: HumanTokenAmountWithAddress[]) {

@@ -74,7 +74,7 @@ const dataRangeToDaysMap: { [key in GqlPoolSnapshotDataRange]?: number } = {
 const getDefaultPoolChartOptions = (
   currencyFormatter: NumberFormatter,
   nextTheme: ColorMode = 'dark',
-  theme: any, // TODO: type this
+  theme: any // TODO: type this
 ) => {
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
@@ -230,7 +230,7 @@ export function getPoolTabsList({
 export function usePoolSnapshots(
   poolId: string,
   chainId: GqlChain,
-  range: GqlPoolSnapshotDataRange = GqlPoolSnapshotDataRange.ThirtyDays,
+  range: GqlPoolSnapshotDataRange = GqlPoolSnapshotDataRange.ThirtyDays
 ) {
   return useQuery(GetPoolSnapshotsDocument, {
     variables: {
@@ -269,7 +269,7 @@ export function usePoolCharts() {
   const { data, loading: isLoadingSnapshots } = usePoolSnapshots(
     poolId as string,
     pool.chain,
-    activePeriod.value,
+    activePeriod.value
   )
 
   const isLoading = isLoadingSnapshots
@@ -524,7 +524,7 @@ export function usePoolCharts() {
       setChartValue(Number(chartHoverValue))
       setChartDate(format(new Date(Number(chartHoverDate) * 1000), 'dd MMM yyyy'))
     },
-    [chartData],
+    [chartData]
   )
 
   const handleMouseLeave = useCallback(() => {

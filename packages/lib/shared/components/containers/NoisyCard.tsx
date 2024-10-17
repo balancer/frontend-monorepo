@@ -30,7 +30,7 @@ export function NoisyCard({
 
   const gradientColor = useColorModeValue(
     'rgba(255, 255, 255, 0.4)', // Light mode color
-    'rgba(255, 255, 255, 0.03)', // Dark mode color
+    'rgba(255, 255, 255, 0.03)' // Dark mode color
   )
 
   const gradient = useMotionTemplate`

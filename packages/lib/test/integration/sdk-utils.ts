@@ -63,7 +63,7 @@ export async function getSdkTestUtils({
   async function approveToken(
     account: Address,
     token: Address,
-    amount = MAX_UINT256, // approve max by default
+    amount = MAX_UINT256 // approve max by default
   ): Promise<boolean> {
     // approve token on the vault
     const hash = await client.writeContract({
@@ -91,7 +91,7 @@ export async function getSdkTestUtils({
   }
 
   async function getPoolTokenBalances(
-    tokens = getTokensForBalanceCheck(true),
+    tokens = getTokensForBalanceCheck(true)
   ): Promise<Promise<bigint[]>> {
     const balances: Promise<bigint>[] = []
     for (let i = 0; i < tokens.length; i++) {
@@ -128,7 +128,7 @@ export async function getSdkTestUtils({
 
   async function calculateBalanceDeltas(
     balanceBefore: bigint[],
-    transactionReceipt: TransactionReceipt,
+    transactionReceipt: TransactionReceipt
   ) {
     const { gasUsed, effectiveGasPrice } = transactionReceipt
     const gasPrice = gasUsed * effectiveGasPrice
@@ -164,7 +164,7 @@ export async function getSdkTestUtils({
     token: Address,
     slot: number,
     balance: bigint,
-    isVyperMapping = false,
+    isVyperMapping = false
   ): Promise<void> {
     // Get storage slot index
 
@@ -197,15 +197,15 @@ export async function getSdkTestUtils({
   async function findTokenBalanceSlot(
     accountAddress: Address,
     tokenAddress: Address,
-    isVyperMapping = false,
+    isVyperMapping = false
   ): Promise<number> {
     const probeA = encodeAbiParameters(
       [{ name: 'probeA', type: 'uint256' }],
-      [BigInt((Math.random() * 10000).toFixed())],
+      [BigInt((Math.random() * 10000).toFixed())]
     )
     const probeB = encodeAbiParameters(
       [{ name: 'probeA', type: 'uint256' }],
-      [BigInt((Math.random() * 10000).toFixed())],
+      [BigInt((Math.random() * 10000).toFixed())]
     )
     for (let i = 0; i < 999; i++) {
       // encode probed slot
@@ -266,7 +266,7 @@ export async function getSdkTestUtils({
   async function setupTokens(
     humanBalances: HumanAmount[],
     isVyperMapping: boolean[] = Array(getPoolTokens().length).fill(false),
-    slots?: number[],
+    slots?: number[]
   ): Promise<void> {
     // await client.impersonateAccount({ address: account })
 
@@ -277,7 +277,7 @@ export async function getSdkTestUtils({
       _slots = slots
     } else {
       _slots = await Promise.all(
-        tokens.map(async (token, i) => findTokenBalanceSlot(account, token, isVyperMapping[i])),
+        tokens.map(async (token, i) => findTokenBalanceSlot(account, token, isVyperMapping[i]))
       )
       console.log(`slots: ${_slots}`)
     }
@@ -291,7 +291,7 @@ export async function getSdkTestUtils({
     humanBalance: HumanAmount,
     tokenAddress: Address,
     isVyperMapping = false,
-    slot?: number,
+    slot?: number
   ): Promise<void> {
     if (process.env.NODE_ENV === 'test') {
       await client.impersonateAccount({ address: account })

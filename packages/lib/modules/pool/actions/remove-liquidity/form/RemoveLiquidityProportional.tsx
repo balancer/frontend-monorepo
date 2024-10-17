@@ -18,7 +18,7 @@ export function RemoveLiquidityProportional({ tokens, poolType }: Props) {
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
 
   const nativeAssets = validTokens.filter(token =>
-    isNativeOrWrappedNative(token.address as Address, token.chain),
+    isNativeOrWrappedNative(token.address as Address, token.chain)
   )
 
   function handleTokenSelect(token: GqlToken) {
@@ -51,7 +51,7 @@ export function RemoveLiquidityProportional({ tokens, poolType }: Props) {
                   }
                   isLoading={isLoading}
                 />
-              ),
+              )
           )}
         </VStack>
       </Card>

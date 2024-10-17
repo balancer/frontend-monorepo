@@ -23,7 +23,7 @@ type PoolEventsProps = {
 
 export function usePoolEvents(
   { poolIdIn, chainIn, first, skip, range, typeIn, userAddress }: PoolEventsProps,
-  opts: { skip?: boolean; fetchPolicy?: FetchPolicy } = {},
+  opts: { skip?: boolean; fetchPolicy?: FetchPolicy } = {}
 ) {
   const poolIds = (poolIdIn || []).map(id => id.toLowerCase())
 

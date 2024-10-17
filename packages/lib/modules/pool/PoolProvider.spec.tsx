@@ -35,7 +35,7 @@ describe('Gql pool helpers', () => {
     const result = await testUsePool()
 
     expect(result.current.poolExplorerLink).toBe(
-      'https://etherscan.io/address/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56',
+      'https://etherscan.io/address/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56'
     )
   })
 
@@ -43,7 +43,7 @@ describe('Gql pool helpers', () => {
     const result = await testUsePool()
 
     expect(result.current.gaugeExplorerLink).toBe(
-      `https://etherscan.io/address/0x2d42910d826e5500579d121596e98a6eb33c0a1b`,
+      `https://etherscan.io/address/0x2d42910d826e5500579d121596e98a6eb33c0a1b`
     )
   })
 

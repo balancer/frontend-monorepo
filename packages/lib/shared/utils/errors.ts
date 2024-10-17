@@ -41,7 +41,7 @@ export class SentryError extends Error {
       name?: string
       cause?: Error
       context?: Partial<ScopeContext>
-    } = {},
+    } = {}
   ) {
     const { cause, context, name } = options
 
@@ -70,7 +70,7 @@ export function ensureError(value: unknown): Error & { shortMessage?: string; di
   const shortMessage = stringified
   const error = new ErrorWithShortMessage(
     `This value was thrown as is, not through an Error: ${stringified}`,
-    shortMessage,
+    shortMessage
   )
 
   return error
@@ -100,7 +100,7 @@ type QueryMeta = {
 */
 export function getTenderlyUrlFromErrorMessage(
   error: Error,
-  queryMeta?: QueryMeta,
+  queryMeta?: QueryMeta
 ): string | undefined {
   const queryParams = queryMeta?.context?.extra?.params
   const chainId = queryParams?.chainId

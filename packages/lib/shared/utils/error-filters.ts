@@ -32,7 +32,7 @@ export function isNotEnoughGasError(error?: Error | null): boolean {
 
 export function isNotEnoughGasErrorMessage(errorMessage: string): boolean {
   return errorMessage.startsWith(
-    'The total cost (gas * gas fee + value) of executing this transaction exceeds the balance of the account.',
+    'The total cost (gas * gas fee + value) of executing this transaction exceeds the balance of the account.'
   )
 }
 

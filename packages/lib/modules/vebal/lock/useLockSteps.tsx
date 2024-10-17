@@ -48,7 +48,7 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionType }: UseCre
       confirmed: getConfirmedLabel(lockActionType, lockAmount, lockEndDate),
       tooltip: getTooltip(lockActionType),
     }),
-    [lockActionType, lockAmount, lockEndDate],
+    [lockActionType, lockAmount, lockEndDate]
   )
 
   const txSimulationMeta = sentryMetaForWagmiSimulation(
@@ -58,7 +58,7 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionType }: UseCre
       lockAmount: lockAmount.rawAmount.toString(),
       lockEndDate,
       lockActionType,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = useMemo(() => {
@@ -104,7 +104,7 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionType }: UseCre
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={lockActionType.toString()} {...props} />,
     }),
-    [labels, onSuccess, props, lockActionType],
+    [labels, onSuccess, props, lockActionType]
   )
 
   const steps = [lockStep, ...tokenApprovalSteps]

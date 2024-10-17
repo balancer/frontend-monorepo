@@ -47,7 +47,7 @@ function calcUserBoost({
           .times(_userVeBALBalance)
           .div(_veBALTotalSupply)
           .times(_gaugeTotalSupply)
-          .div(_userGaugeBalance),
+          .div(_userGaugeBalance)
       )
     : bn(1)
 
@@ -122,7 +122,7 @@ export function useVebalBoost(pools: Pool[]) {
 
         return acc
       },
-      {} as Record<string, string>,
+      {} as Record<string, string>
     )
   }, [gaugeDataByPoolMap, veBalTotalSupplyL2, userVeBALBalances, mainnetLockedInfo])
 

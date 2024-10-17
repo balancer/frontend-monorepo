@@ -72,7 +72,7 @@ export function _useRecentTransactions() {
   const waitForUnconfirmedTransactions = useCallback(
     async (transactions: Record<string, TrackedTransaction>) => {
       const unconfirmedTransactions = Object.values(transactions).filter(
-        tx => tx.status === 'confirming',
+        tx => tx.status === 'confirming'
       )
 
       const updatePayload = {
@@ -112,7 +112,7 @@ export function _useRecentTransactions() {
             error,
             'waitForTransactionReceiptError',
             'Error in waitForTransactionReceipt inside RecentTransactionsProvider',
-            { txHash: tx.hash },
+            { txHash: tx.hash }
           )
           const isTimeoutError = ensureError(error).name === 'WaitForTransactionReceiptTimeoutError'
           updatePayload[tx.hash] = {
@@ -125,7 +125,7 @@ export function _useRecentTransactions() {
       updateLocalStorage(updatePayload)
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [publicClient],
+    [publicClient]
   )
 
   // fetch recent transactions from local storage
@@ -173,9 +173,9 @@ export function _useRecentTransactions() {
     const mostRecentTransactions = keyBy(
       take(
         orderBy(Object.values(updatedTrackedTransactions), 'timestamp', 'desc'),
-        NUM_RECENT_TRANSACTIONS,
+        NUM_RECENT_TRANSACTIONS
       ),
-      'hash',
+      'hash'
     )
 
     setTransactions(mostRecentTransactions)
@@ -226,7 +226,7 @@ export function _useRecentTransactions() {
           <Toast
             linkUrl={getBlockExplorerTxUrl(
               updatedCachedTransaction.hash,
-              updatedCachedTransaction.chain,
+              updatedCachedTransaction.chain
             )}
             {...rest}
           />
@@ -238,7 +238,7 @@ export function _useRecentTransactions() {
   function updateLocalStorage(customUpdate?: Record<string, TrackedTransaction>) {
     localStorage.setItem(
       'balancer.recentTransactions',
-      JSON.stringify(customUpdate || transactions),
+      JSON.stringify(customUpdate || transactions)
     )
   }
 

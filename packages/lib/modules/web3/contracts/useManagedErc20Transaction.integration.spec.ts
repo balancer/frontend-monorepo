@@ -23,7 +23,7 @@ test('token approval transaction (wETH)', async () => {
       enabled: true,
       simulationMeta: {},
       labels: {} as TransactionLabels,
-    }),
+    })
   )
 
   await waitFor(() => expect(result.current.simulation.isSuccess).toBeTruthy())

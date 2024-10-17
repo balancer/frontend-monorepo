@@ -273,7 +273,7 @@ function BaseAprTooltip({
               tooltipText={
                 shouldDisplayMaxVeBalTooltip
                   ? `${defaultDisplayValueFormatter(
-                      defaultNumberFormatter(maxVeBal.toString()),
+                      defaultNumberFormatter(maxVeBal.toString())
                     )} APR`
                   : ''
               }

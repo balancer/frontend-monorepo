@@ -52,7 +52,7 @@ export function useLayerZeroTxLinks(syncTxHashes: Record<Address, SyncTxHashes>)
 
       return intervalId
     },
-    [userAddress, syncTxHashes, syncLayerZeroTxLinks],
+    [userAddress, syncTxHashes, syncLayerZeroTxLinks]
   )
 
   useEffect(() => {

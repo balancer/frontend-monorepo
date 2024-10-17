@@ -44,7 +44,7 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
 
     const sdkQueryOutput = await removeLiquidity.query(
       removeLiquidityInput,
-      this.helpers.nestedPoolState,
+      this.helpers.nestedPoolState
     )
 
     return { amountsOut: sdkQueryOutput.amountsOut, sdkQueryOutput }
@@ -58,7 +58,7 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
 
     const priceImpactABA: PriceImpactAmount = await PriceImpact.removeLiquidityNested(
       removeLiquidityInput,
-      this.helpers.nestedPoolState,
+      this.helpers.nestedPoolState
     )
 
     return priceImpactABA.decimal
@@ -94,7 +94,7 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
    */
   private constructSdkInput(
     humanBptIn: HumanAmount,
-    tokenOut: Address,
+    tokenOut: Address
   ): RemoveLiquidityNestedSingleTokenInput {
     const result: RemoveLiquidityNestedSingleTokenInput = {
       bptAmountIn: parseEther(humanBptIn),

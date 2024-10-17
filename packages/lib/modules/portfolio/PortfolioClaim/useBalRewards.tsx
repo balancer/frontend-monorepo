@@ -40,7 +40,7 @@ export function useBalTokenRewards(pools: ClaimablePool[]) {
   const gaugeAddresses = Object.keys(poolByGaugeMap)
 
   function claimableTokensCall(
-    gaugeAddress: Address | string,
+    gaugeAddress: Address | string
   ): WriteContractParameters<typeof balancerV2GaugeV5Abi, 'claimable_tokens'> | undefined {
     const pool = poolByGaugeMap[gaugeAddress]
 

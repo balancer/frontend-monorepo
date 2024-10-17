@@ -36,7 +36,7 @@ export function useClaimVeBalRewardsStep({
     {
       userAddress,
       feeDistributor: networkConfig.contracts.feeDistributor,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -64,6 +64,6 @@ export function useClaimVeBalRewardsStep({
       renderAction: () => <ManagedTransactionButton id={claimVeBalRewardsStepId} {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction, userAddress],
+    [transaction, userAddress]
   )
 }

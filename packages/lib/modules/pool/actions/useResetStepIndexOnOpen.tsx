@@ -8,7 +8,7 @@ import { TransactionStepsResponse } from '../../transactions/transaction-steps/u
  */
 export function useResetStepIndexOnOpen(
   isOpen: boolean,
-  transactionSteps: TransactionStepsResponse,
+  transactionSteps: TransactionStepsResponse
 ) {
   useEffect(() => {
     if (isOpen) transactionSteps.setCurrentStepIndex(0)

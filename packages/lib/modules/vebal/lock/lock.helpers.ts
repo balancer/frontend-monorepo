@@ -77,7 +77,7 @@ export function getConfirmingLabel(lockActionType: LockActionType) {
 export function getConfirmedLabel(
   lockActionType: LockActionType,
   lockAmount: RawAmount,
-  lockEndDate: string,
+  lockEndDate: string
 ) {
   switch (lockActionType) {
     case LockActionType.CreateLock:

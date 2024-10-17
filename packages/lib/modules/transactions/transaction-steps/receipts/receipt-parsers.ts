@@ -31,7 +31,7 @@ export function parseAddLiquidityReceipt({
 
   const sentErc20Tokens: HumanTokenAmountWithAddress[] = getOutgoingLogs(
     receiptLogs,
-    userAddress,
+    userAddress
   ).map(log => {
     const tokenDecimals = getToken(log.address, chain)?.decimals
     return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
@@ -64,7 +64,7 @@ export function parseRemoveLiquidityReceipt({
 
   const receivedErc20Tokens: HumanTokenAmountWithAddress[] = getIncomingLogs(
     receiptLogs,
-    userAddress,
+    userAddress
   ).map(log => {
     const tokenDecimals = getToken(log.address, chain)?.decimals
     return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)

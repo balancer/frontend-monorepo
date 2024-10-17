@@ -33,7 +33,7 @@ export function useTokenAllowances({
         abi: erc20Abi,
         functionName: 'allowance',
         args: [userAddress, spenderAddress],
-      }) satisfies AllowanceContracts,
+      }) satisfies AllowanceContracts
   )
 
   const { data, isLoading, isRefetching, refetch } = useReadContracts({
@@ -44,7 +44,7 @@ export function useTokenAllowances({
 
   const allowancesByTokenAddress = useMemo(
     () => (data ? zipObject(tokenAddresses, data) : {}),
-    [data, tokenAddresses],
+    [data, tokenAddresses]
   )
 
   const allowanceFor = useCallback(
@@ -52,7 +52,7 @@ export function useTokenAllowances({
       // We don't need isSameAddress cause we use the same tokensAddresses source
       return allowancesByTokenAddress[tokenAddress] ?? 0n
     },
-    [allowancesByTokenAddress],
+    [allowancesByTokenAddress]
   )
 
   return {

@@ -25,7 +25,7 @@ export function _usePoolList({ fixedPoolTypes }: { fixedPoolTypes?: GqlPoolType[
     GetPoolsDocument,
     {
       variables,
-    },
+    }
   )
 
   const pools = loading && previousData ? previousData.pools : data?.pools || []

@@ -29,7 +29,7 @@ export const defaultTokenListMock: MswTokenList = allFakeGqlTokens
 export const defaultTokenPriceMock = aTokenPriceMock()
 
 export const defaultTokenPriceListMock = allFakeGqlTokens.map(token =>
-  aTokenPriceMock({ address: token.address, chain: token.chain }),
+  aTokenPriceMock({ address: token.address, chain: token.chain })
 )
 
 export const defaultGetTokensQueryMock: GetTokensQuery = {

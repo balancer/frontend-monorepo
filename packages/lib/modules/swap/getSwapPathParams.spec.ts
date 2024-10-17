@@ -18,7 +18,7 @@ describe('Parses swap params from the url slug when', () => {
       getSwapPathParams([
         'ethereum',
         '0x11380dcffb24c512da18f032d9f7354d154cfda6bbab0633df182fcd202c4244',
-      ]),
+      ])
     ).toEqual({
       chain: 'ethereum',
       urlTxHash: '0x11380dcffb24c512da18f032d9f7354d154cfda6bbab0633df182fcd202c4244',

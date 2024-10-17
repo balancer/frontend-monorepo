@@ -11,7 +11,7 @@ import { NestedSingleTokenRemoveLiquidityHandler } from './NestedSingleTokenRemo
 function selectNestedSingleTokenHandler(pool: Pool): NestedSingleTokenRemoveLiquidityHandler {
   return selectRemoveLiquidityHandler(
     pool,
-    RemoveLiquidityType.SingleToken,
+    RemoveLiquidityType.SingleToken
   ) as NestedSingleTokenRemoveLiquidityHandler
 }
 

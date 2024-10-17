@@ -159,9 +159,9 @@ export default function PoolMyLiquidity() {
       getProportionalExitAmountsFromScaledBptIn(
         getBptBalanceForTab(),
         poolTokens,
-        pool.dynamicData.totalShares,
+        pool.dynamicData.totalShares
       ),
-      'address',
+      'address'
     )
   }
 

@@ -31,7 +31,7 @@ export function useCurrency() {
   // Converts a USD value to the user's currency and formats in fiat style.
   function toCurrency(
     usdVal: Numberish,
-    { withSymbol = true, abbreviated = true }: CurrencyOpts = {},
+    { withSymbol = true, abbreviated = true }: CurrencyOpts = {}
   ): string {
     const symbol = hasFxRates ? symbolForCurrency(currency) : '$'
     const convertedAmount = toUserCurrency(usdVal)

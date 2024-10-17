@@ -13,7 +13,7 @@ async function testQuery(humanAmountsIn: HumanTokenAmountWithAddress[]) {
     () => useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enabled: true }),
     {
       wrapper: DefaultPoolTestProvider,
-    },
+    }
   )
   return result
 }

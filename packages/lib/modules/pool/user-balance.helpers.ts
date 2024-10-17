@@ -12,7 +12,7 @@ export function calcTotalStakedBalance(pool: Pool | PoolListItem): HumanAmount {
   if (!userBalance) return '0'
 
   return safeSum(
-    userBalance.stakedBalances.map(stakedBalance => bn(stakedBalance.balance)),
+    userBalance.stakedBalances.map(stakedBalance => bn(stakedBalance.balance))
   ) as HumanAmount
 }
 
@@ -23,7 +23,7 @@ export function calcGaugeStakedBalance(pool: Pool | PoolListItem): HumanAmount {
   return safeSum(
     userBalance.stakedBalances
       .filter(stakedBalance => stakedBalance.stakingType === GqlPoolStakingType.Gauge)
-      .map(stakedBalance => bn(stakedBalance.balance)),
+      .map(stakedBalance => bn(stakedBalance.balance))
   ) as HumanAmount
 }
 
@@ -32,7 +32,7 @@ export function calcTotalStakedBalanceUsd(pool: Pool): number {
   if (!userBalance) return 0
 
   return Number(
-    safeSum(userBalance.stakedBalances.map(stakedBalance => bn(stakedBalance.balanceUsd))),
+    safeSum(userBalance.stakedBalances.map(stakedBalance => bn(stakedBalance.balanceUsd)))
   )
 }
 
@@ -93,7 +93,7 @@ export function calcNonOnChainFetchedStakedBalance(pool: Pool): string {
     .filter(
       balance =>
         balance.stakingType !== GqlPoolStakingType.Gauge &&
-        balance.stakingType !== GqlPoolStakingType.Aura,
+        balance.stakingType !== GqlPoolStakingType.Aura
     )
     .map(stakedBalance => stakedBalance.balance)
 
@@ -119,7 +119,7 @@ export function getStakedBalance(pool: Pool, stakingType: GqlPoolStakingType): S
   const stakedBalance = userBalance.stakedBalances.find(
     balance =>
       balance.stakingType === stakingType &&
-      (balance.stakingId === stakingAddress || stakingType === GqlPoolStakingType.Vebal),
+      (balance.stakingId === stakingAddress || stakingType === GqlPoolStakingType.Vebal)
   )
 
   if (!stakedBalance) {
@@ -158,19 +158,19 @@ export function hasVeBalStaking(pool: Pool | PoolListItem): boolean {
 
 export function hasStakedBalanceFor(
   pool: Pool | PoolListItem,
-  stakingType: GqlPoolStakingType,
+  stakingType: GqlPoolStakingType
 ): boolean {
   const userBalance = pool.userBalance
   if (!userBalance) return false
 
   return userBalance.stakedBalances.some(
-    balance => balance.stakingType === stakingType && bn(balance.balance).gt(0),
+    balance => balance.stakingType === stakingType && bn(balance.balance).gt(0)
   )
 }
 
 export function hasStakingType(
   pool: Pool | PoolListItem,
-  stakingType: GqlPoolStakingType,
+  stakingType: GqlPoolStakingType
 ): boolean {
   const userBalance = pool.userBalance
   if (!userBalance) return false

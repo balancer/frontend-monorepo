@@ -123,7 +123,7 @@ export default function RecentTransactions() {
   const hasTransactions = !isEmpty(transactions)
 
   const confirmingTxCount = Object.values(transactions).filter(
-    tx => tx.status === 'confirming',
+    tx => tx.status === 'confirming'
   ).length
 
   return (

@@ -81,7 +81,7 @@ export function toUtcTime(date: Date) {
     date.getUTCDate(),
     date.getUTCHours(),
     date.getUTCMinutes(),
-    date.getUTCSeconds(),
+    date.getUTCSeconds()
   )
 }
 

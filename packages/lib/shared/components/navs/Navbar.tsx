@@ -185,7 +185,7 @@ export function Navbar({ leftSlot, rightSlot, disableBlur, ...rest }: Props & Bo
   const scrollYBoundedProgressDelayed = useTransform(
     scrollYBoundedProgress,
     [0, 0.75, 1],
-    [0, 0, 1],
+    [0, 0, 1]
   )
 
   const blurEffect = useTransform(scrollYBoundedProgressDelayed, [0, 1], [10, 0])

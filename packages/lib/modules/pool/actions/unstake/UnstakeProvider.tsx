@@ -41,7 +41,7 @@ export function _useUnstake() {
         tokenAddress: reward.tokenAddress,
         humanAmount: reward.humanBalance as HumanAmount,
       })),
-    [allClaimableRewards],
+    [allClaimableRewards]
   )
 
   const { gaugeAddress, amountOut } = getUnstakeQuote(pool)
@@ -61,7 +61,7 @@ export function _useUnstake() {
 
   const { isDisabled, disabledReason } = isDisabledWithReason(
     [!isConnected, LABELS.walletNotConnected],
-    [isZero(amountOut) && !hasRewardAmounts, "There's no staked amount to be unstaked"],
+    [isZero(amountOut) && !hasRewardAmounts, "There's no staked amount to be unstaked"]
   )
 
   /**

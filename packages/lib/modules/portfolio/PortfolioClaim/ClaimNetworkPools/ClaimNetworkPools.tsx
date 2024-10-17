@@ -80,7 +80,7 @@ export function ClaimNetworkPools() {
                         onClick={() => router.push(`/portfolio/${chainToSlugMap[pools[0].chain]}`)}
                       />
                     </motion.div>
-                  ),
+                  )
               )}
 
               {hasProtocolRewards && (

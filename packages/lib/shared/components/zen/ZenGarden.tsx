@@ -30,7 +30,7 @@ function getZenGardenProps(
   variant: ZenGardenVariant,
   widthPx: string,
   heightPx: string,
-  subdued = false,
+  subdued = false
 ) {
   switch (variant) {
     case 'circle':

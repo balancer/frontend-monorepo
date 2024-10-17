@@ -36,7 +36,7 @@ describe('weighted add flow', () => {
     await utils.setupTokens([...getPoolTokens().map(() => '1000' as HumanAmount), '1000'])
 
     const handler = selectAddLiquidityHandler(
-      aWjAuraWethPoolElementMock(),
+      aWjAuraWethPoolElementMock()
     ) as UnbalancedAddLiquidityV2Handler
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = poolTokens.map(t => ({
@@ -73,7 +73,7 @@ describe('weighted add flow', () => {
     const transactionReceipt = await act(async () =>
       mainnetTestPublicClient.waitForTransactionReceipt({
         hash: hash,
-      }),
+      })
     )
     expect(transactionReceipt.status).to.eq('success')
   })

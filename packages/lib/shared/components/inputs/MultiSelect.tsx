@@ -59,7 +59,7 @@ export function MultiSelect<Value = string>({
                     <Box key={`selected-option-label-${option.value}`}>{option.selectedLabel}</Box>
                   ) : (
                     <Tag key={`selected-label-${option.value}`}>{option.label}</Tag>
-                  ),
+                  )
                 )}
               </HStack>
             ) : (

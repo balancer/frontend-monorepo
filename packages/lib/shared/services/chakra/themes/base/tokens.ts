@@ -203,14 +203,14 @@ export function getTokens(colors: any, primaryTextColor: string) {
           innerBase:
             '0px 2px 4px 0px rgba(0, 0, 0, 0.05) inset, 0px 4px 8px 0px rgba(0, 0, 0, 0.05) inset, 0px 10px 20px 0px rgba(0, 0, 0, 0.05) inset, 0px -1px 0px 0px rgba(255, 255, 255, 0.8) inset',
           innerFocus: `0px 2px 4px 0px ${tinycolor(colors.purple['500']).setAlpha(
-            0.1,
+            0.1
           )} inset, 0px 4px 8px 0px ${tinycolor(colors.purple['500']).setAlpha(
-            0.2,
+            0.2
           )} inset, 0 0 0 1px ${colors.purple['500']}`,
           innerError: `0px 2px 4px 0px ${tinycolor(colors.red['500']).setAlpha(
-            0.1,
+            0.1
           )} inset, 0px 4px 8px 0px ${tinycolor(colors.red['500']).setAlpha(
-            0.1,
+            0.1
           )} inset, 0 0 0 1px ${colors.red['500']}`,
         },
         innerXl:
@@ -247,14 +247,14 @@ export function getTokens(colors: any, primaryTextColor: string) {
           innerBase:
             '0px 2px 4px 0px rgba(0, 0, 0, 0.10) inset, 0px 4px 8px 0px rgba(0, 0, 0, 0.10) inset, 0px 10px 20px 0px rgba(0, 0, 0, 0.10) inset, 0px -1px 0px 0px rgba(255, 255, 255, 0.15) inset',
           innerFocus: `0px 2px 4px 0px ${tinycolor(colors.purple['400']).setAlpha(
-            0.1,
+            0.1
           )} inset, 0px 4px 8px 0px ${tinycolor(colors.purple['400']).setAlpha(
-            0.2,
+            0.2
           )} inset, 0 0 0 1px ${colors.purple['400']}`,
           innerError: `0px 2px 4px 0px ${tinycolor(colors.red['500']).setAlpha(
-            0.2,
+            0.2
           )} inset, 0px 4px 8px 0px ${tinycolor(colors.red['500']).setAlpha(
-            0.2,
+            0.2
           )} inset, 0 0 0 1px ${colors.red['500']}`,
         },
         innerXl:

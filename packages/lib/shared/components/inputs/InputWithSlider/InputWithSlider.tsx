@@ -39,7 +39,7 @@ export const InputWithSlider = forwardRef(
       isWarning,
       ...numberInputProps
     }: NumberInputProps & Props,
-    ref,
+    ref
   ) => {
     const [sliderPercent, setSliderPercent] = useState<number>(100)
     const { toCurrency } = useCurrency()
@@ -144,5 +144,5 @@ export const InputWithSlider = forwardRef(
         </Box>
       </VStack>
     )
-  },
+  }
 )

@@ -3,5 +3,5 @@ import { TransactionBundle } from './contract.types'
 
 export type BuildTransactionLabels = (
   args?: any,
-  transactionBundle?: TransactionBundle,
+  transactionBundle?: TransactionBundle
 ) => TransactionLabels

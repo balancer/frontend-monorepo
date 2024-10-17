@@ -24,7 +24,7 @@ export function _useMigrateStake() {
   const { steps, isLoading, isClaimable } = useMigrateStakeSteps(
     pool,
     migratedAmount,
-    refetchPoolBalances,
+    refetchPoolBalances
   )
   const transactionSteps = useTransactionSteps(steps, isLoading)
 
@@ -32,7 +32,7 @@ export function _useMigrateStake() {
 
   const { isDisabled, disabledReason } = isDisabledWithReason(
     [!isConnected, LABELS.walletNotConnected],
-    [isZero(migratedAmount), "There's no staked amount to be migrated"],
+    [isZero(migratedAmount), "There's no staked amount to be migrated"]
   )
 
   return {

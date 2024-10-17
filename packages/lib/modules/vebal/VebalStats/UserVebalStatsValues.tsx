@@ -25,7 +25,7 @@ export function UserVebalStatsValues() {
       const rank = vebalUserData.data?.veBalGetUser.rank ?? undefined
       const percentOfAllSupply = vebalUserData.data
         ? bn(vebalUserData.data.veBalGetUser.balance || 0).div(
-            lockInfo.mainnetLockedInfo.totalSupply || 0,
+            lockInfo.mainnetLockedInfo.totalSupply || 0
           )
         : undefined
       const lockedUntil =

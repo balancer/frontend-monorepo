@@ -34,7 +34,7 @@ export function useApproveMinterStep(chain: GqlChain): {
     'Error in wagmi tx simulation (Minter approval transaction)',
     {
       minter: contracts.balancer.minter,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -58,7 +58,7 @@ export function useApproveMinterStep(chain: GqlChain): {
       onSuccess: () => refetch(),
     }),
     /* eslint-disable react-hooks/exhaustive-deps */
-    [hasMinterApproval, isConnected, isLoading],
+    [hasMinterApproval, isConnected, isLoading]
   )
 
   return {

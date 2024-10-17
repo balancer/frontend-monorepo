@@ -8,7 +8,7 @@ export function selectStakingService(chain: GqlChain, stakingType: GqlPoolStakin
   const networkConfig = getNetworkConfig(chain)
   const batchRelayerService = new BatchRelayerService(
     networkConfig.contracts.balancer.relayerV6,
-    gaugeActionsService,
+    gaugeActionsService
   )
 
   if (stakingType === 'GAUGE') {

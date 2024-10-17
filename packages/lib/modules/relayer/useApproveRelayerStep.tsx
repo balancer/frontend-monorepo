@@ -38,7 +38,7 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
       userAddress,
       relayerAddress,
       chainId,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -62,7 +62,7 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
       onSuccess: () => refetch(),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hasApprovedRelayer, isConnected, isLoading],
+    [hasApprovedRelayer, isConnected, isLoading]
   )
 
   return {

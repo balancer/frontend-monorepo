@@ -20,12 +20,12 @@ function StakeAprTooltip({ pool, totalUsdValue }: Props) {
 
   const numberFormatter = useCallback(
     (value: string) => bn(value).times(totalUsdValue).dividedBy(52),
-    [totalUsdValue],
+    [totalUsdValue]
   )
 
   const displayValueFormatter = useCallback(
     (value: BigNumber) => toCurrency(value.toString(), { abbreviated: false }),
-    [toCurrency],
+    [toCurrency]
   )
 
   return (

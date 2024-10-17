@@ -63,6 +63,6 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
       renderAction: () => <SignRelayerButton />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signRelayerState, isLoading, isConnected],
+    [signRelayerState, isLoading, isConnected]
   )
 }

@@ -40,7 +40,7 @@ export function sentryMetaForAddLiquidityHandler(errorMessage: string, params: A
 type RemoveMetaParams = RemoveLiquidityParams & { chainId: number; blockNumber?: bigint }
 export function sentryMetaForRemoveLiquidityHandler(
   errorMessage: string,
-  params: RemoveMetaParams,
+  params: RemoveMetaParams
 ) {
   return createRemoveHandlerMetadata('HandlerQueryError', errorMessage, params)
 }
@@ -85,7 +85,7 @@ export function captureFatalError(
   error: unknown,
   errorName: string,
   errorMessage: string,
-  extra: Extras,
+  extra: Extras
 ) {
   captureSentryError(error, createFatalMetadata(errorName, errorMessage, extra))
 }
@@ -121,7 +121,7 @@ export function createFatalErrorMetadata(errorName: string, errorMessage: string
 function createAddHandlerMetadata(
   errorName: string,
   errorMessage: string,
-  params: AddLiquidityParams,
+  params: AddLiquidityParams
 ) {
   const { pool, ...restParams } = params
   const extra: Extras = {
@@ -142,7 +142,7 @@ function createAddHandlerMetadata(
 function createRemoveHandlerMetadata(
   errorName: string,
   errorMessage: string,
-  params: RemoveMetaParams,
+  params: RemoveMetaParams
 ) {
   const extra: Extras = {
     handler: params.handler.constructor.name,
@@ -157,7 +157,7 @@ function createRemoveHandlerMetadata(
 function createSwapHandlerMetadata(
   errorName: string,
   errorMessage: string,
-  params: SwapMetaParams,
+  params: SwapMetaParams
 ) {
   const { handler, ...rest } = params
   const extra: Extras = {
@@ -170,7 +170,7 @@ function createSwapHandlerMetadata(
 function createFatalMetadata(
   errorName: string,
   errorMessage: string,
-  extra: Extras,
+  extra: Extras
 ): SentryMetadata {
   const context: Partial<ScopeContext> = {
     extra,
@@ -186,7 +186,7 @@ function createFatalMetadata(
 function createNonFatalMetadata(
   errorName: string,
   errorMessage = '',
-  extra: Extras = {},
+  extra: Extras = {}
 ): SentryMetadata {
   const context: Partial<ScopeContext> = {
     extra,
@@ -202,7 +202,7 @@ function createNonFatalMetadata(
 export function createErrorMetadata(
   errorName: string,
   errorMessage: string,
-  extra: Extras,
+  extra: Extras
 ): SentryMetadata {
   const context: Partial<ScopeContext> = {
     extra,
@@ -222,7 +222,7 @@ export function createErrorMetadata(
  */
 export function captureSentryError(
   e: unknown,
-  { context, errorMessage, errorName }: SentryMetadata,
+  { context, errorMessage, errorName }: SentryMetadata
 ) {
   const causeError = ensureError(e)
   if (isUserRejectedError(causeError)) return

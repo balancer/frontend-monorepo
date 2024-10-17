@@ -41,7 +41,7 @@ export class AuraBalSwapHandler implements SwapHandler {
     const swapAmountToken = swapType === GqlSorSwapType.ExactIn ? tokenIn : tokenOut
     const swapAmount = TokenAmount.fromHumanAmount(
       swapAmountToken,
-      variables.swapAmount as HumanAmount,
+      variables.swapAmount as HumanAmount
     )
     const kind = this.swapTypeToKind(swapType)
 
@@ -67,7 +67,7 @@ export class AuraBalSwapHandler implements SwapHandler {
     // Format return amount to human readable
     const returnAmount = formatUnits(
       queryOutput.expectedAmountOut.amount,
-      queryOutput.expectedAmountOut.token.decimals,
+      queryOutput.expectedAmountOut.token.decimals
     )
 
     return {

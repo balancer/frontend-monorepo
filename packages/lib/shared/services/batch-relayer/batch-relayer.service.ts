@@ -11,7 +11,7 @@ import { encodeFunctionData, Hex } from 'viem'
 export class BatchRelayerService {
   constructor(
     public readonly batchRelayerAddress: string,
-    private readonly gaugeActionsService: GaugeActionsService,
+    private readonly gaugeActionsService: GaugeActionsService
   ) {}
 
   public encodePeekChainedReferenceValue(reference: bigint): string {

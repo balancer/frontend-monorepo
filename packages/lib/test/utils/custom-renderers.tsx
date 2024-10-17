@@ -36,7 +36,7 @@ export const EmptyWrapper = ({ children }: PropsWithChildren) => <>{children}</>
 
 export function testHook<TResult, TProps>(
   hook: (props: TProps) => TResult,
-  options?: RenderHookOptions<TProps> | undefined,
+  options?: RenderHookOptions<TProps> | undefined
 ) {
   function MixedProviders({ children }: PropsWithChildren) {
     const LocalProviders = options?.wrapper || EmptyWrapper

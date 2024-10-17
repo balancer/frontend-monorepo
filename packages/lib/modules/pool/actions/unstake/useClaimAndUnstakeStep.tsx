@@ -77,7 +77,7 @@ export function useClaimAndUnstakeStep({
       poolId: pool.id,
       chainId,
       unstakeArgs: data,
-    },
+    }
   )
 
   const props: ManagedTransactionInput = {
@@ -108,7 +108,7 @@ export function useClaimAndUnstakeStep({
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={claimAndUnstakeStepId} {...props} />,
     }),
-    [transaction, data, props],
+    [transaction, data, props]
   )
 
   return {

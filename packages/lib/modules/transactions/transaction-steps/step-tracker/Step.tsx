@@ -36,7 +36,7 @@ export function StepIndicator({
 }: StepProps & { transaction?: ManagedResult }) {
   const { color, isActive, isActiveLoading, status, stepNumber } = getStepSettings(
     props,
-    transaction,
+    transaction
   )
 
   if (status === 'complete') {

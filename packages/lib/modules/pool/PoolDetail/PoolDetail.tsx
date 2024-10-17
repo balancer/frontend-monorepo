@@ -40,7 +40,7 @@ export function PoolDetail() {
     },
     {
       skip: !isConnected,
-    },
+    }
   )
 
   useEffect(() => {

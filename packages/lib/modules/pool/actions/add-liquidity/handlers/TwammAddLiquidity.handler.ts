@@ -21,7 +21,7 @@ export class TwammAddLiquidityHandler implements AddLiquidityHandler {
     this.humanAmountsIn = humanAmountsIn
     const tokenAmount = TokenAmount.fromHumanAmount(
       {} as unknown as Token,
-      humanAmountsIn[0]?.humanAmount || '0',
+      humanAmountsIn[0]?.humanAmount || '0'
     )
     const bptOut: TokenAmount = tokenAmount
     return { bptOut }
@@ -37,7 +37,7 @@ export class TwammAddLiquidityHandler implements AddLiquidityHandler {
     if (!this.humanAmountsIn || !this.humanAmountsIn[0]) {
       throw new Error(
         `Missing humanAmountsIn.
-This probably means that you tried to run build callData before running queryAddLiquidity`,
+This probably means that you tried to run build callData before running queryAddLiquidity`
       )
     }
 

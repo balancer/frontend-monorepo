@@ -39,7 +39,7 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
           functionName: 'balanceOf',
           args: [userAddress as Address],
           chainId: getChainId(pool.chain),
-        }) as const,
+        }) as const
     ),
   })
 
@@ -61,7 +61,7 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
           unstakedBalance: humanUnstakedBalance,
           unstakedBalanceUsd: bn(humanUnstakedBalance).times(bptPrice),
         }
-      }),
+      })
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, unstakedPoolBalances, pools, userAddress, isFetching])

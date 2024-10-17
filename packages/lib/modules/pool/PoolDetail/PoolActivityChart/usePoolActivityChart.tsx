@@ -37,7 +37,7 @@ const getDefaultPoolActivityChartOptions = (
   maxDate: number,
   maxYAxisValue: number,
   sortedPoolEvents: PoolActivityEl[],
-  isLoading: boolean,
+  isLoading: boolean
 ): echarts.EChartsCoreOption => {
   const toolTipTheme = {
     heading: 'font-weight: bold; color: #E5D3BE',
@@ -69,7 +69,7 @@ const getDefaultPoolActivityChartOptions = (
               differenceInDays(secondsToMilliseconds(maxDate), secondsToMilliseconds(minDate)) < 1
                 ? ' HH:mm'
                 : ''
-            }`,
+            }`
           ),
         color: theme.semanticTokens.colors.font.primary[colorMode],
         opacity: 0.5,
@@ -187,7 +187,7 @@ const getDefaultPoolActivityChartOptions = (
             };">
                 <a style="display:flex;align-items:center;" href=${addressLink} target="_blank">
                   <span style="font-size: 0.75rem; margin-right:4px;">By: ${abbreviateAddress(
-                    userAddress,
+                    userAddress
                   )}</span>
                   ${arrow}
                 </a>
@@ -274,7 +274,7 @@ export function usePoolActivityChart() {
       maxDate,
       maxYAxisValue,
       sortedPoolEvents,
-      isLoading,
+      isLoading
     ),
     eChartsRef,
     chartHeight,
