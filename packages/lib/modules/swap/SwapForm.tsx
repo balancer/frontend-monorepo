@@ -44,10 +44,9 @@ import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type Props = {
-  isPoolSwap?: boolean
   redirectToPoolPage?: () => void // Only used for pool swaps
 }
-export function SwapForm({ redirectToPoolPage, isPoolSwap = false }: Props) {
+export function SwapForm({ redirectToPoolPage }: Props) {
   const isPoolSwapUrl = useIsPoolSwapUrl()
 
   const {
@@ -63,6 +62,7 @@ export function SwapForm({ redirectToPoolPage, isPoolSwap = false }: Props) {
     swapAction,
     swapTxHash,
     transactionSteps,
+    isPoolSwap,
     setSelectedChain,
     setTokenInAmount,
     setTokenOutAmount,

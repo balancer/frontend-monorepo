@@ -572,6 +572,7 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) 
     hasQuoteContext,
     isWrap,
     swapTxConfirmed,
+    isPoolSwap,
     replaceUrlPath,
     resetSwapAmounts,
     setTokenSelectKey,
