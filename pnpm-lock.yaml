@@ -91,7 +91,7 @@ importers:
         version: 2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
       wagmi:
         specifier: ^2.12.16
-        version: 2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@3.29.4)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
+        version: 2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
     devDependencies:
       '@chakra-ui/cli':
         specifier: ^2.4.1
@@ -319,6 +319,9 @@ importers:
       '@chakra-ui/anatomy':
         specifier: ^2.2.2
         version: 2.2.2
+      '@chakra-ui/clickable':
+        specifier: ^2.1.0
+        version: 2.1.0(react@18.2.0)
       '@chakra-ui/hooks':
         specifier: ^2.2.1
         version: 2.2.1(react@18.2.0)
@@ -13775,6 +13778,24 @@ snapshots:
       - '@types/react'
       - babel-plugin-macros
 
+  '@rainbow-me/rainbowkit@2.1.6(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(wagmi@2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8))':
+    dependencies:
+      '@tanstack/react-query': 5.56.2(react@18.2.0)
+      '@vanilla-extract/css': 1.15.5(babel-plugin-macros@3.1.0)
+      '@vanilla-extract/dynamic': 2.1.2
+      '@vanilla-extract/sprinkles': 1.6.3(@vanilla-extract/css@1.15.5(babel-plugin-macros@3.1.0))
+      clsx: 2.1.1
+      qrcode: 1.5.4
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-remove-scroll: 2.6.0(@types/react@18.2.34)(react@18.2.0)
+      ua-parser-js: 1.0.39
+      viem: 2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
+      wagmi: 2.12.17(@tanstack/query-core@5.56.2)(@tanstack/react-query@5.56.2(react@18.2.0))(@types/react@18.2.34)(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react-native@0.75.3(@babel/core@7.25.2)(@babel/preset-env@7.25.4(@babel/core@7.25.2))(@types/react@18.2.34)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10))(react@18.2.0)(rollup@4.21.3)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
+    transitivePeerDependencies:
+      - '@types/react'
+      - babel-plugin-macros
+
   '@react-native-community/cli-clean@14.1.0':
     dependencies:
       '@react-native-community/cli-tools': 14.1.0
@@ -14275,6 +14296,35 @@ snapshots:
       stacktrace-parser: 0.1.10
     optionalDependencies:
       webpack: 5.94.0(esbuild@0.19.12)
+    transitivePeerDependencies:
+      - '@opentelemetry/api'
+      - '@opentelemetry/core'
+      - '@opentelemetry/instrumentation'
+      - '@opentelemetry/sdk-trace-base'
+      - encoding
+      - react
+      - supports-color
+
+  '@sentry/nextjs@8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(next@14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(webpack@5.94.0)':
+    dependencies:
+      '@opentelemetry/instrumentation-http': 0.53.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.27.0
+      '@rollup/plugin-commonjs': 26.0.1(rollup@3.29.4)
+      '@sentry/core': 8.30.0
+      '@sentry/node': 8.30.0
+      '@sentry/opentelemetry': 8.30.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.53.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.26.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.27.0)
+      '@sentry/react': 8.30.0(react@18.2.0)
+      '@sentry/types': 8.30.0
+      '@sentry/utils': 8.30.0
+      '@sentry/vercel-edge': 8.30.0
+      '@sentry/webpack-plugin': 2.22.3(webpack@5.94.0)
+      chalk: 3.0.0
+      next: 14.2.0(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(babel-plugin-macros@3.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      resolve: 1.22.8
+      rollup: 3.29.4
+      stacktrace-parser: 0.1.10
+    optionalDependencies:
+      webpack: 5.94.0
     transitivePeerDependencies:
       - '@opentelemetry/api'
       - '@opentelemetry/core'

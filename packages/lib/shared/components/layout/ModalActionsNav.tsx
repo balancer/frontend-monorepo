@@ -2,15 +2,18 @@
 
 import { Card, HStack, IconButton } from '@chakra-ui/react'
 import Image from 'next/image'
-import { usePool } from '../PoolProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { CloseIcon } from '@chakra-ui/icons'
-import { getPoolPath } from '../pool.utils'
 import Link from 'next/link'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function PoolActionsNav() {
-  const { pool } = usePool()
-  const networkConfig = getNetworkConfig(pool.chain)
+export interface ModalActionsNavProps {
+  chain: GqlChain
+  redirectPath: string
+}
+
+export function ModalActionsNav({ chain, redirectPath }: ModalActionsNavProps) {
+  const networkConfig = getNetworkConfig(chain)
 
   return (
     <HStack justify="space-between" mb="4">
@@ -26,7 +29,7 @@ export function PoolActionsNav() {
 
       <IconButton
         as={Link}
-        href={getPoolPath(pool)}
+        href={redirectPath}
         isRound={true}
         variant="outline"
         aria-label="Close"
