@@ -24,15 +24,15 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 function PoolVersionTag({ pool }: { pool: PoolListItem }) {
   if (isCowAmmPool(pool.type)) {
     return (
-      <BalBadge w={8} h={8} p={0} fontSize="xs" textTransform="lowercase">
+      <BalBadge w={8} h={8} p={0} fontSize="xs" color="font.secondary" textTransform="lowercase">
         <Center w="full" h="full">
-          <CowIcon />
+          <CowIcon width={18} height={18} />
         </Center>
       </BalBadge>
     )
   } else if (pool.protocolVersion === 3) {
     return (
-      <BalBadge w={8} h={8} p={0} fontSize="xs" textTransform="lowercase">
+      <BalBadge w={8} h={8} p={0} fontSize="xs" color="font.secondary" textTransform="lowercase">
         <Center w="full" h="full">
           v2
         </Center>
@@ -40,7 +40,7 @@ function PoolVersionTag({ pool }: { pool: PoolListItem }) {
     )
   } else if (pool.protocolVersion === 2) {
     return (
-      <BalBadge w={8} h={8} p={0} fontSize="xs" textTransform="lowercase">
+      <BalBadge w={8} h={8} p={0} fontSize="xs" color="font.secondary" textTransform="lowercase">
         <Center w="full" h="full">
           v2
         </Center>
