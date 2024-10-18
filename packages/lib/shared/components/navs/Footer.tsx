@@ -27,7 +27,7 @@ function CardContent({ linkSections, logoType, title, subTitle }: CardContentPro
       w="full"
     >
       <VStack color="font.primary" align="start" spacing="lg" width={{ base: 'auto', md: '70%' }}>
-        {logoType}
+        <Box w="120px">{logoType}</Box>
         <VStack align="start" spacing="sm">
           <Text variant="secondary" fontSize="4xl" fontWeight="500" letterSpacing="-0.4px">
             {title}
