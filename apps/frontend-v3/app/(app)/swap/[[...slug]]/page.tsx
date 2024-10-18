@@ -1,13 +1,10 @@
 /* eslint-disable max-len */
 
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { SwapForm } from '@repo/lib/modules/swap/SwapForm'
 import { Metadata } from 'next'
 
-const { projectName } = getProjectConfig()
-
 export const metadata: Metadata = {
-  title: `Swap tokens on ${projectName}`,
+  title: 'Swap tokens on Balancer',
   description: `Swap tokens on networks like Ethereum, Optimism, Arbitrum and Base via the Balancer decentralized exchange`,
 }
 

@@ -1,9 +1,10 @@
-import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
-import { ProjectConfigBalancer } from '@repo/lib/config/projects/balancer'
+import { ProjectConfigBeets } from './projects/beets'
+import { ProjectConfigBalancer } from './projects/balancer'
+import { ProjectConfig } from './config.types'
 
-export const allProjects = {
-  [ProjectConfigBalancer.projectId]: { ...ProjectConfigBalancer },
-  [ProjectConfigBeets.projectId]: { ...ProjectConfigBeets },
+export const allProjects: Record<string, ProjectConfig> = {
+  [ProjectConfigBalancer.projectId]: ProjectConfigBalancer,
+  [ProjectConfigBeets.projectId]: ProjectConfigBeets,
 }
 
 const PROJECT_CONFIG = process.env.NEXT_PUBLIC_PROJECT_ID

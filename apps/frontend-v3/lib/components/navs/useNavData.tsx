@@ -1,37 +1,20 @@
-import { usePathname } from 'next/navigation'
-import { XIcon } from '../icons/social/XIcon'
-import { DiscordIcon } from '../icons/social/DiscordIcon'
-import { MediumIcon } from '../icons/social/MediumIcon'
-import { YoutubeIcon } from '../icons/social/YoutubeIcon'
-import { GithubIcon } from '../icons/social/GithubIcon'
-import { useParams } from 'next/navigation'
-import { ReactNode } from 'react'
+import { XIcon } from '@repo/lib/shared/components/icons/social/XIcon'
+import { DiscordIcon } from '@repo/lib/shared/components/icons/social/DiscordIcon'
+import { MediumIcon } from '@repo/lib/shared/components/icons/social/MediumIcon'
+import { YoutubeIcon } from '@repo/lib/shared/components/icons/social/YoutubeIcon'
+import { GithubIcon } from '@repo/lib/shared/components/icons/social/GithubIcon'
+import { isDev, isStaging } from '@repo/lib/config/app.config'
 
-export type AppLink = {
-  href: string
-  label?: string
-  icon?: ReactNode
-}
+export function useNavData() {
+  const appLinks = []
 
-export function useNav() {
-  const pathname = usePathname()
-  const { chain } = useParams()
-  const swapHref = chain ? '/swap/' + chain : '/swap'
-
-  const defaultAppLinks: AppLink[] = [
-    {
-      href: '/pools',
-      label: 'Pools',
-    },
-    {
-      href: swapHref,
-      label: 'Swap',
-    },
-    {
-      href: '/portfolio',
-      label: 'Portfolio',
-    },
-  ]
+  // To-do: Remove this when veBAL is live
+  if (isDev || isStaging) {
+    appLinks.push({
+      label: 'veBAL (wip)',
+      href: '/vebal',
+    })
+  }
 
   const ecosystemLinks = [
     { label: 'Build', href: 'https://balancer.fi/build' },
@@ -69,9 +52,5 @@ export function useNav() {
     },
   ]
 
-  function linkColorFor(path: string) {
-    return pathname === path ? 'font.highlight' : 'font.primary'
-  }
-
-  return { defaultAppLinks, ecosystemLinks, getSocialLinks, linkColorFor }
+  return { appLinks, ecosystemLinks, getSocialLinks }
 }

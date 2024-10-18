@@ -4,7 +4,7 @@ import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
 import { Metadata } from 'next'
-import { CowFooter } from '../../../../../../packages/lib/shared/components/navs/CowFooter'
+import { CowFooter } from '@repo/lib/shared/components/navs/CowFooter'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { CowHeader } from '@repo/lib/shared/components/navs/CowHeader'
 
