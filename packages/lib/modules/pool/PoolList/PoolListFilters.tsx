@@ -419,7 +419,11 @@ function ProtocolVersionFilter() {
   useEffect(() => {
     if (activeProtocolVersionTab.value === 'cow') {
       togglePoolType(true, GqlPoolType.CowAmm)
-    } else if (activeProtocolVersionTab.value === 'v3') {
+    } else {
+      togglePoolType(false, GqlPoolType.CowAmm)
+    }
+
+    if (activeProtocolVersionTab.value === 'v3') {
       setProtocolVersion(3)
     } else if (activeProtocolVersionTab.value === 'v2') {
       setProtocolVersion(2)
