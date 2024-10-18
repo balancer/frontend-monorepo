@@ -119,6 +119,7 @@ export const poolListQueryStateParsers = {
     parseAsStringEnum<PoolFilterType>(Object.values(poolTypeFilters))
   ).withDefault([]),
   networks: parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChain))).withDefault([]),
+  protocolVersion: parseAsInteger,
   textSearch: parseAsString,
   userAddress: parseAsString,
   minTvl: parseAsFloat.withDefault(0),

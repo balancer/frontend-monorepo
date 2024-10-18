@@ -34,7 +34,7 @@ function PoolVersionTag({ pool }: { pool: PoolListItem }) {
     return (
       <BalBadge w={8} h={8} p={0} fontSize="xs" color="font.secondary" textTransform="lowercase">
         <Center w="full" h="full">
-          v2
+          v3
         </Center>
       </BalBadge>
     )
