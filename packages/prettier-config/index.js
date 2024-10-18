@@ -1,8 +1,3 @@
-module.exports = {
-  singleQuote: true,
-  arrowParens: "avoid",
-  semi: false,
-  proseWrap: "always",
-  printWidth: 100,
-  trailingComma: "es5",
-};
+import config from './.prettierrc.json' assert { type: 'json' }
+
+export default config
