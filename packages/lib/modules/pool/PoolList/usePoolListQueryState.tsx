@@ -18,11 +18,34 @@ import {
   SortingState,
 } from '../pool.types'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
+import { useState } from 'react'
+import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+
+export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
+  {
+    value: 'all',
+    label: 'All',
+  },
+  {
+    value: 'v2',
+    label: 'v2',
+  },
+  {
+    value: 'v3',
+    label: 'v3',
+  },
+  {
+    value: 'cow',
+    label: 'CoW',
+  },
+] as const
 
 export function usePoolListQueryState() {
   const [first, setFirst] = useQueryState('first', poolListQueryStateParsers.first)
   const [skip, setSkip] = useQueryState('skip', poolListQueryStateParsers.skip)
   const [orderBy, setOrderBy] = useQueryState('orderBy', poolListQueryStateParsers.orderBy)
+
+  const [activeProtocolVersionTab, setActiveProtocolVersionTab] = useState(PROTOCOL_VERSION_TABS[0])
 
   const [orderDirection, setOrderDirection] = useQueryState(
     'orderDirection',
@@ -30,6 +53,10 @@ export function usePoolListQueryState() {
   )
 
   const [poolTypes, setPoolTypes] = useQueryState('poolTypes', poolListQueryStateParsers.poolTypes)
+  const [protocolVersion, setProtocolVersion] = useQueryState(
+    'protocolVersion',
+    poolListQueryStateParsers.protocolVersion
+  )
   const [networks, setNetworks] = useQueryState('networks', poolListQueryStateParsers.networks)
 
   const [textSearch, setTextSearch] = useQueryState(
@@ -150,6 +177,7 @@ export function usePoolListQueryState() {
     setSkip(null)
     setOrderBy(null)
     setOrderDirection(null)
+    setProtocolVersion(null)
   }
 
   const totalFilterCount =
@@ -157,7 +185,8 @@ export function usePoolListQueryState() {
     poolTypes.length +
     (userAddress ? 1 : 0) +
     (minTvl > 0 ? 1 : 0) +
-    poolCategories.length
+    poolCategories.length +
+    (protocolVersion ? 1 : 0)
 
   const sorting: SortingState = orderBy
     ? [{ id: orderBy, desc: orderDirection === GqlPoolOrderDirection.Desc }]
@@ -192,6 +221,7 @@ export function usePoolListQueryState() {
       minTvl,
       tagIn: mappedPoolCategories.length > 0 ? mappedPoolCategories : null,
       tagNotIn: ['BLACK_LISTED'],
+      protocolVersionIn: protocolVersion ? [protocolVersion] : undefined,
     },
     textSearch,
   }
@@ -205,6 +235,7 @@ export function usePoolListQueryState() {
       poolTypes,
       networks,
       textSearch,
+      protocolVersion,
     },
     toggleUserAddress,
     toggleNetwork,
@@ -220,7 +251,11 @@ export function usePoolListQueryState() {
     resetFilters,
     poolCategoryLabel,
     setNetworks,
+    setProtocolVersion,
+    setActiveProtocolVersionTab,
+    activeProtocolVersionTab,
     poolCategories,
+    protocolVersion,
     minTvl,
     searchText: textSearch,
     pagination,

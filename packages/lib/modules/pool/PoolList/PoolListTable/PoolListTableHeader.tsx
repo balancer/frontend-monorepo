@@ -37,7 +37,7 @@ export function PoolListTableHeader({ ...rest }) {
       </GridItem>
       <GridItem justifySelf="start">
         <Text fontWeight="bold" textAlign="left">
-          Type
+          Details
         </Text>
       </GridItem>
       {orderBy.map((orderByItem, index) => (
