@@ -17,14 +17,30 @@ import {
 } from '@chakra-ui/react'
 import { useRef } from 'react'
 import { ArrowUpRight, Menu } from 'react-feather'
-import { BalancerLogoType } from '../imgs/BalancerLogoType'
-import { useNav } from './useNav'
+import { AppLink, useNav } from './useNav'
 import NextLink from 'next/link'
 import { useRouter } from 'next/navigation'
 import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
 
-function NavLinks({ onClick }: { onClick?: () => void }) {
-  const { appLinks, linkColorFor } = useNav()
+type NavLinkProps = {
+  appLinks: AppLink[]
+  onClick?: () => void
+}
+
+type EcosystemLinkProps = {
+  ecosystemLinks: AppLink[]
+}
+
+type SocialLinkProps = {
+  socialLinks: AppLink[]
+}
+
+type MobileNavProps = NavLinkProps &
+  EcosystemLinkProps &
+  SocialLinkProps & { LogoType: React.FC<any> }
+
+function NavLinks({ appLinks, onClick }: NavLinkProps) {
+  const { linkColorFor } = useNav()
 
   return (
     <VStack align="start" w="full">
@@ -47,9 +63,7 @@ function NavLinks({ onClick }: { onClick?: () => void }) {
   )
 }
 
-function EcosystemLinks() {
-  const { ecosystemLinks } = useNav()
-
+function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
   return (
     <VStack align="start" w="full">
       <Text color="grayText" mb="sm" size="xs">
@@ -75,12 +89,10 @@ function EcosystemLinks() {
   )
 }
 
-function SocialLinks() {
-  const { getSocialLinks } = useNav()
-
+function SocialLinks({ socialLinks }: SocialLinkProps) {
   return (
     <HStack justify="space-between" w="full">
-      {getSocialLinks().map(({ href, icon }) => (
+      {socialLinks.map(({ href, icon }) => (
         <Button as={Link} href={href} isExternal key={href} variant="tertiary">
           {icon}
         </Button>
@@ -89,12 +101,12 @@ function SocialLinks() {
   )
 }
 
-export function MobileNav() {
+export function MobileNav({ appLinks, ecosystemLinks, socialLinks, LogoType }: MobileNavProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef(null)
   const router = useRouter()
 
-  function hommRedirect() {
+  function homeRedirect() {
     onClose()
     router.push('/')
   }
@@ -109,17 +121,15 @@ export function MobileNav() {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <BalancerLogoType onClick={hommRedirect} width="106px" />
+            <LogoType onClick={homeRedirect} width="106px" />
           </DrawerHeader>
-
           <DrawerBody>
-            <NavLinks onClick={onClose} />
+            <NavLinks appLinks={appLinks} onClick={onClose} />
             <Divider my={4} />
-            <EcosystemLinks />
+            <EcosystemLinks ecosystemLinks={ecosystemLinks} />
           </DrawerBody>
-
           <DrawerFooter>
-            <SocialLinks />
+            <SocialLinks socialLinks={socialLinks} />
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

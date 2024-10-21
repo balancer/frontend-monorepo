@@ -1,20 +1,20 @@
 'use client'
 
 import { Box, BoxProps, Center, Text } from '@chakra-ui/react'
-import { TokenSelectListRow } from './TokenSelectModal/TokenSelectList/TokenSelectListRow'
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
-import { useTokenBalances } from './TokenBalancesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { Virtuoso } from 'react-virtuoso'
+import { useTokenBalances } from '../../TokenBalancesProvider'
+import { TokenSelectListRow } from './TokenSelectListRow'
 
 type Props = {
   tokens: GqlToken[]
   onTokenSelect: (token: GqlToken) => void
 }
 
-export function NativeAssetSelectList({ tokens, onTokenSelect, ...rest }: Props & BoxProps) {
+export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props & BoxProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
@@ -39,6 +39,8 @@ export function NativeAssetSelectList({ tokens, onTokenSelect, ...rest }: Props 
   function keyFor(token: GqlToken, index: number) {
     return `${token.address}:${token.chain}:${index}`
   }
+
+  const style = { height: `${tokens.length * 75}px` }
 
   return (
     <Box {...rest}>
@@ -66,7 +68,7 @@ export function NativeAssetSelectList({ tokens, onTokenSelect, ...rest }: Props 
               />
             )
           }}
-          style={{ height: '150px' }}
+          style={style}
         />
       )}
     </Box>

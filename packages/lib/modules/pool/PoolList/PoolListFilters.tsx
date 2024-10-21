@@ -33,7 +33,7 @@ import {
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
-import { usePoolListQueryState } from './usePoolListQueryState'
+import { PROTOCOL_VERSION_TABS, usePoolListQueryState } from './usePoolListQueryState'
 import {
   PoolFilterType,
   poolTypeFilters,
@@ -49,11 +49,14 @@ import { useDebouncedCallback } from 'use-debounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
 import { motion, AnimatePresence } from 'framer-motion'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
-import { getChainShortName } from '@repo/lib/config/app.config'
+import { getChainShortName, isDev, isStaging } from '@repo/lib/config/app.config'
 import { usePoolList } from './PoolListProvider'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import Image from 'next/image'
+import ButtonGroup, {
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
@@ -133,9 +136,11 @@ function PoolTypeFilters() {
     }
   }, [poolTypes])
 
+  const _poolTypeFilters = poolTypeFilters.filter(poolType => poolType !== GqlPoolType.CowAmm)
+
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {poolTypeFilters.map(poolType => (
+      {_poolTypeFilters.map(poolType => (
         <Box as={motion.div} key={poolType} variants={staggeredFadeInUp}>
           <Checkbox
             isChecked={!!poolTypes.find(selected => selected === poolType)}
@@ -380,11 +385,74 @@ const FilterButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
   )
 })
 
+function ProtocolVersionFilter() {
+  const {
+    togglePoolType,
+    setProtocolVersion,
+    protocolVersion,
+    poolTypes,
+    activeProtocolVersionTab,
+    setActiveProtocolVersionTab,
+  } = usePoolListQueryState()
+
+  const tabs =
+    isDev || isStaging
+      ? PROTOCOL_VERSION_TABS
+      : PROTOCOL_VERSION_TABS.filter(tab => tab.value !== 'v3')
+
+  function toggleTab(option: ButtonGroupOption) {
+    setActiveProtocolVersionTab(option)
+  }
+
+  useEffect(() => {
+    if (protocolVersion === 3) {
+      setActiveProtocolVersionTab(tabs[2])
+    } else if (protocolVersion === 2) {
+      setActiveProtocolVersionTab(tabs[1])
+    } else if (poolTypes.includes(GqlPoolType.CowAmm)) {
+      setActiveProtocolVersionTab(tabs[3])
+    } else {
+      setActiveProtocolVersionTab(tabs[0])
+    }
+  }, [])
+
+  useEffect(() => {
+    if (activeProtocolVersionTab.value === 'cow') {
+      togglePoolType(true, GqlPoolType.CowAmm)
+    } else {
+      togglePoolType(false, GqlPoolType.CowAmm)
+    }
+
+    if (activeProtocolVersionTab.value === 'v3') {
+      setProtocolVersion(3)
+    } else if (activeProtocolVersionTab.value === 'v2') {
+      setProtocolVersion(2)
+    } else {
+      setProtocolVersion(null)
+    }
+  }, [activeProtocolVersionTab])
+
+  return (
+    <ButtonGroup
+      currentOption={activeProtocolVersionTab}
+      groupId="protocol-version"
+      onChange={toggleTab}
+      options={tabs}
+      size="xxs"
+    />
+  )
+}
+
 export function PoolListFilters() {
   const { isConnected } = useUserAccount()
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-  const { resetFilters, totalFilterCount } = usePoolListQueryState()
+  const { resetFilters, totalFilterCount, setActiveProtocolVersionTab } = usePoolListQueryState()
   const { isFixedPoolType } = usePoolList()
+
+  function _resetFilters() {
+    resetFilters()
+    setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
+  }
 
   return (
     <VStack w="full">
@@ -412,7 +480,7 @@ export function PoolListFilters() {
                       as={motion.div}
                       exit="exit"
                       initial="hidden"
-                      spacing="xxs"
+                      spacing="md"
                       variants={staggeredFadeInUp}
                     >
                       <Box as={motion.div} lineHeight="0" p="0" variants={staggeredFadeInUp}>
@@ -422,13 +490,12 @@ export function PoolListFilters() {
                             backgroundClip="text"
                             display="inline"
                             fontSize="xs"
-                            lineHeight="1"
                             variant="eyebrow"
                           >
                             Filters
                           </Text>
 
-                          <Button onClick={resetFilters} size="xs" variant="link">
+                          <Button onClick={_resetFilters} size="xs" variant="link">
                             {totalFilterCount === 0 ? (
                               <VisuallyHidden>Reset all</VisuallyHidden>
                             ) : (
@@ -447,21 +514,27 @@ export function PoolListFilters() {
                         </Box>
                       ) : null}
                       <Box as={motion.div} variants={staggeredFadeInUp} w="full">
-                        <Heading as="h3" my="sm" size="sm">
+                        <Heading as="h3" mb="sm" size="sm">
                           Networks
                         </Heading>
                         <PoolNetworkFilters />
                       </Box>
+                      <Box as={motion.div} variants={staggeredFadeInUp}>
+                        <Heading as="h3" mb="sm" size="sm">
+                          Protocol version
+                        </Heading>
+                        <ProtocolVersionFilter />
+                      </Box>
                       {!isFixedPoolType && (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
-                          <Heading as="h3" my="sm" size="sm">
+                          <Heading as="h3" mb="sm" size="sm">
                             Pool types
                           </Heading>
                           <PoolTypeFilters />
                         </Box>
                       )}
                       <Box as={motion.div} variants={staggeredFadeInUp}>
-                        <Heading as="h3" my="sm" size="sm">
+                        <Heading as="h3" mb="sm" size="sm">
                           Pool categories
                         </Heading>
                         <PoolCategoryFilters />

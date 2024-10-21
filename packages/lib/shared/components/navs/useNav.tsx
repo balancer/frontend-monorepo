@@ -5,15 +5,20 @@ import { MediumIcon } from '../icons/social/MediumIcon'
 import { YoutubeIcon } from '../icons/social/YoutubeIcon'
 import { GithubIcon } from '../icons/social/GithubIcon'
 import { useParams } from 'next/navigation'
-import { isDev, isStaging } from '@repo/lib/config/app.config'
+import { ReactNode } from 'react'
+
+export type AppLink = {
+  href: string
+  label?: string
+  icon?: ReactNode
+}
 
 export function useNav() {
   const pathname = usePathname()
-
   const { chain } = useParams()
   const swapHref = chain ? '/swap/' + chain : '/swap'
 
-  const appLinks = [
+  const defaultAppLinks: AppLink[] = [
     {
       href: '/pools',
       label: 'Pools',
@@ -27,14 +32,6 @@ export function useNav() {
       label: 'Portfolio',
     },
   ]
-
-  // To-do: Remove this when veBAL is live
-  if (isDev || isStaging) {
-    appLinks.push({
-      href: '/vebal/manage',
-      label: 'veBAL (manage)',
-    })
-  }
 
   const ecosystemLinks = [
     { label: 'Build', href: 'https://balancer.fi/build' },
@@ -76,5 +73,5 @@ export function useNav() {
     return pathname === path ? 'font.highlight' : 'font.primary'
   }
 
-  return { appLinks, ecosystemLinks, getSocialLinks, linkColorFor }
+  return { defaultAppLinks, ecosystemLinks, getSocialLinks, linkColorFor }
 }

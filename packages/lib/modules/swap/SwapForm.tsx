@@ -38,8 +38,17 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { ConnectWallet } from '../web3/ConnectWallet'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '../tokens/TokensProvider'
+import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
+import { CompactTokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectList/CompactTokenSelectModal'
+import { PoolSwapCard } from './PoolSwapCard'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
-export function SwapForm() {
+type Props = {
+  redirectToPoolPage?: () => void // Only used for pool swaps
+}
+export function SwapForm({ redirectToPoolPage }: Props) {
+  const isPoolSwapUrl = useIsPoolSwapUrl()
+
   const {
     tokenIn,
     tokenOut,
@@ -53,6 +62,7 @@ export function SwapForm() {
     swapAction,
     swapTxHash,
     transactionSteps,
+    isPoolSwap,
     setSelectedChain,
     setTokenInAmount,
     setTokenOutAmount,
@@ -94,6 +104,24 @@ export function SwapForm() {
     }
   }
 
+  function handleTokenSelectForPoolSwap(token: GqlToken) {
+    if (
+      tokens.length === 2 &&
+      tokenSelectKey === 'tokenIn' &&
+      isSameAddress(token.address, tokenOut.address)
+    ) {
+      return switchTokens()
+    }
+    if (
+      tokens.length === 2 &&
+      tokenSelectKey === 'tokenOut' &&
+      isSameAddress(token.address, tokenIn.address)
+    ) {
+      return switchTokens()
+    }
+    handleTokenSelect(token)
+  }
+
   function openTokenSelectModal(tokenSelectKey: 'tokenIn' | 'tokenOut') {
     setTokenSelectKey(tokenSelectKey)
     tokenSelectDisclosure.onOpen()
@@ -107,8 +135,9 @@ export function SwapForm() {
 
     if (swapTxHash) {
       resetSwapAmounts()
-      replaceUrlPath()
       transactionSteps.resetTransactionSteps()
+      if (isPoolSwapUrl) return redirectToPoolPage?.()
+      replaceUrlPath()
     }
   }
 
@@ -124,7 +153,7 @@ export function SwapForm() {
       >
         <Card rounded="xl">
           <CardHeader as={HStack} justify="space-between" w="full" zIndex={11}>
-            <span>{capitalize(swapAction)}</span>
+            <span>{isPoolSwap ? 'Single pool swap' : capitalize(swapAction)}</span>
             <HStack>
               <Tooltip label={copiedDeepLink ? 'Copied!' : 'Copy swap link'}>
                 <Button color="grayText" onClick={copyDeepLink} size="sm" variant="tertiary">
@@ -137,14 +166,17 @@ export function SwapForm() {
           </CardHeader>
           <CardBody align="start" as={VStack}>
             <VStack spacing="md" w="full">
+              {isPoolSwap ? <PoolSwapCard /> : null}
               <SafeAppAlert />
-              <ChainSelect
-                onChange={newValue => {
-                  setSelectedChain(newValue as GqlChain)
-                  setTokenInAmount('')
-                }}
-                value={selectedChain}
-              />
+              {!isPoolSwap && (
+                <ChainSelect
+                  onChange={newValue => {
+                    setSelectedChain(newValue as GqlChain)
+                    setTokenInAmount('')
+                  }}
+                  value={selectedChain}
+                />
+              )}
               <VStack w="full">
                 <TokenInput
                   address={tokenIn.address}
@@ -200,11 +232,11 @@ export function SwapForm() {
                 </motion.div>
               )}
 
-              {simulationQuery.isError && (
+              {simulationQuery.isError ? (
                 <ErrorAlert title="Error fetching swap">
                   {parseSwapError(simulationQuery.error?.message)}
                 </ErrorAlert>
-              )}
+              ) : null}
             </VStack>
           </CardBody>
           <CardFooter>
@@ -235,16 +267,29 @@ export function SwapForm() {
           </CardFooter>
         </Card>
       </Center>
-      <TokenSelectModal
-        chain={selectedChain}
-        currentToken={tokenSelectKey === 'tokenIn' ? tokenIn.address : tokenOut.address}
-        finalFocusRef={tokenSelectKey === 'tokenIn' ? finalRefTokenIn : finalRefTokenOut}
-        isOpen={tokenSelectDisclosure.isOpen}
-        onClose={tokenSelectDisclosure.onClose}
-        onOpen={tokenSelectDisclosure.onOpen}
-        onTokenSelect={handleTokenSelect}
-        tokens={tokens}
-      />
+      {isPoolSwap ? (
+        <CompactTokenSelectModal
+          chain={selectedChain}
+          finalFocusRef={tokenSelectKey === 'tokenIn' ? finalRefTokenIn : finalRefTokenOut}
+          isOpen={tokenSelectDisclosure.isOpen}
+          onClose={tokenSelectDisclosure.onClose}
+          onOpen={tokenSelectDisclosure.onOpen}
+          onTokenSelect={handleTokenSelectForPoolSwap}
+          tokens={tokens}
+        />
+      ) : (
+        <TokenSelectModal
+          chain={selectedChain}
+          currentToken={tokenSelectKey === 'tokenIn' ? tokenIn.address : tokenOut.address}
+          finalFocusRef={tokenSelectKey === 'tokenIn' ? finalRefTokenIn : finalRefTokenOut}
+          isOpen={tokenSelectDisclosure.isOpen}
+          onClose={tokenSelectDisclosure.onClose}
+          onOpen={tokenSelectDisclosure.onOpen}
+          onTokenSelect={handleTokenSelect}
+          tokens={tokens}
+        />
+      )}
+
       <SwapPreviewModal
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}

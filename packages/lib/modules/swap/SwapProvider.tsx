@@ -48,6 +48,7 @@ import { usePriceImpact } from '../price-impact/PriceImpactProvider'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
 import { isAuraBalSwap } from './swap.helpers'
 import { AuraBalSwapHandler } from './handlers/AuraBalSwap.handler'
+import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -82,7 +83,15 @@ function selectSwapHandler(
   return new DefaultSwapHandler(apolloClient)
 }
 
-export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
+export type SwapProviderProps = {
+  pathParams: PathParams
+  isPoolSwap?: boolean
+  // Only used by pool swap
+  poolTokens?: GqlToken[]
+}
+export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) {
+  const urlTxHash = pathParams.urlTxHash
+  const isPoolSwapUrl = useIsPoolSwapUrl()
   const swapStateVar = useMakeVarPersisted<SwapState>(
     {
       tokenIn: {
@@ -335,6 +344,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
   }
 
   function replaceUrlPath() {
+    if (isPoolSwapUrl) return // Avoid redirection when the swap is within a pool page
     const { selectedChain, tokenIn, tokenOut, swapType } = swapState
     const { popularTokens } = networkConfig.tokens
     const chainSlug = chainToSlugMap[selectedChain]
@@ -509,6 +519,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
 
   // Update selecteable tokens when the chain changes
   useEffect(() => {
+    if (isPoolSwap) return
     setTokens(getTokensByChain(swapState.selectedChain))
   }, [swapState.selectedChain])
 
@@ -561,6 +572,7 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
     hasQuoteContext,
     isWrap,
     swapTxConfirmed,
+    isPoolSwap,
     replaceUrlPath,
     resetSwapAmounts,
     setTokenSelectKey,
@@ -575,11 +587,11 @@ export function _useSwap({ urlTxHash, ...pathParams }: PathParams) {
 }
 
 type Props = PropsWithChildren<{
-  pathParams: PathParams
+  params: SwapProviderProps
 }>
 
-export function SwapProvider({ pathParams, children }: Props) {
-  const hook = _useSwap(pathParams)
+export function SwapProvider({ params, children }: Props) {
+  const hook = _useSwap(params)
   return <SwapContext.Provider value={hook}>{children}</SwapContext.Provider>
 }
 
