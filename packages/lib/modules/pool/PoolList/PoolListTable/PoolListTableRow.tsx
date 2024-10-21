@@ -24,24 +24,24 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 function PoolVersionTag({ pool }: { pool: PoolListItem }) {
   if (isCowAmmPool(pool.type)) {
     return (
-      <BalBadge w={8} h={8} p={0} fontSize="xs" color="font.secondary" textTransform="lowercase">
-        <Center w="full" h="full">
-          <CowIcon width={18} height={18} />
+      <BalBadge color="font.secondary" fontSize="xs" h={8} p={0} textTransform="lowercase" w={8}>
+        <Center h="full" w="full">
+          <CowIcon height={18} width={18} />
         </Center>
       </BalBadge>
     )
   } else if (pool.protocolVersion === 3) {
     return (
-      <BalBadge w={8} h={8} p={0} fontSize="xs" color="font.secondary" textTransform="lowercase">
-        <Center w="full" h="full">
+      <BalBadge color="font.secondary" fontSize="xs" h={8} p={0} textTransform="lowercase" w={8}>
+        <Center h="full" w="full">
           v3
         </Center>
       </BalBadge>
     )
   } else if (pool.protocolVersion === 2) {
     return (
-      <BalBadge w={8} h={8} p={0} fontSize="xs" color="font.secondary" textTransform="lowercase">
-        <Center w="full" h="full">
+      <BalBadge color="font.secondary" fontSize="xs" h={8} p={0} textTransform="lowercase" w={8}>
+        <Center h="full" w="full">
           v2
         </Center>
       </BalBadge>
@@ -57,58 +57,56 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
   return (
     <FadeInOnView>
       <Box
-        key={keyValue}
-        transition="all 0.2s ease-in-out"
         _hover={{
           bg: 'background.level0',
         }}
-        rounded="md"
+        key={keyValue}
         px={{ base: '0', sm: 'md' }}
+        rounded="md"
+        transition="all 0.2s ease-in-out"
         w="full"
       >
-        <Link href={getPoolPath(pool)} prefetch={true}>
-          <Grid {...rest} py={{ base: 'ms', md: 'md' }} pr="4">
+        <Link href={getPoolPath(pool)} prefetch>
+          <Grid {...rest} pr="4" py={{ base: 'ms', md: 'md' }}>
             <GridItem>
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
               <PoolListTokenPills
-                pool={pool}
                 h={['32px', '36px']}
-                p={['xxs', 'sm']}
-                pr={[1.5, 'ms']}
                 iconSize={20}
+                p={['xxs', 'sm']}
+                pool={pool}
+                pr={[1.5, 'ms']}
               />
             </GridItem>
             <GridItem minW="32">
               <HStack>
                 <PoolVersionTag pool={pool} />
-                <Text textAlign="left" fontWeight="medium" textTransform="capitalize">
+                <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
                   {getPoolTypeLabel(pool.type)}
                 </Text>
               </HStack>
             </GridItem>
-            {userAddress && (
-              <GridItem>
-                <Text textAlign="right" fontWeight="medium">
+            {userAddress ? <GridItem>
+                <Text fontWeight="medium" textAlign="right">
                   {toCurrency(getUserTotalBalanceUsd(pool), { abbreviated: false })}
                 </Text>
-              </GridItem>
-            )}
+              </GridItem> : null}
             <GridItem>
               <Text
-                title={toCurrency(pool.dynamicData.totalLiquidity, { abbreviated: false })}
-                textAlign="right"
                 fontWeight="medium"
+                textAlign="right"
+                title={toCurrency(pool.dynamicData.totalLiquidity, { abbreviated: false })}
               >
                 {toCurrency(pool.dynamicData.totalLiquidity)}
               </Text>
             </GridItem>
             <GridItem textAlign="right">
               <Text
-                title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
-                textAlign="right"
                 fontWeight="medium"
+                textAlign="right"
+                title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
               >
                 {toCurrency(pool.dynamicData.volume24h)}
               </Text>
@@ -116,10 +114,10 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
             <GridItem justifySelf="end" pr={{ base: 'md', xl: '0' }}>
               <MemoizedMainAprTooltip
                 aprItems={pool.dynamicData.aprItems}
+                height="auto"
+                pool={pool}
                 poolId={pool.id}
                 textProps={{ fontWeight: 'medium', textAlign: 'right' }}
-                pool={pool}
-                height="auto"
               />
             </GridItem>
           </Grid>

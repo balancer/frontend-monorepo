@@ -435,10 +435,10 @@ function ProtocolVersionFilter() {
   return (
     <ButtonGroup
       currentOption={activeProtocolVersionTab}
-      options={tabs}
-      onChange={toggleTab}
-      size="xxs"
       groupId="protocol-version"
+      onChange={toggleTab}
+      options={tabs}
+      size="xxs"
     />
   )
 }

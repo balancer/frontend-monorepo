@@ -28,39 +28,37 @@ export function PoolAdvancedOptions() {
   return (
     <Popover
       isOpen={isPopoverOpen}
-      onOpen={() => setIsPopoverOpen(true)}
       onClose={() => setIsPopoverOpen(false)}
+      onOpen={() => setIsPopoverOpen(true)}
       placement="bottom-end"
     >
       <PopoverTrigger>
-        <Button variant="tertiary" size="lg" color="grayText">
-          {<MoreVertical size={16} />}
+        <Button color="grayText" size="lg" variant="tertiary">
+          <MoreVertical size={16} />
         </Button>
-      </PopoverTrigger >
-      <Box zIndex="popover" shadow="2xl" width="max">
+      </PopoverTrigger>
+      <Box shadow="2xl" width="max" zIndex="popover">
         <PopoverContent>
           <PopoverArrow bg="background.level3" />
           <PopoverCloseButton top="sm" />
           <PopoverBody p="lg">
             <AnimatePresence>
-              {isPopoverOpen && (
-                <VStack
+              {isPopoverOpen ? <VStack
                   align="start"
-                  spacing="xxs"
-                  as={motion.div}
-                  initial="hidden"
                   animate="show"
+                  as={motion.div}
                   exit="exit"
+                  initial="hidden"
+                  spacing="xxs"
                   variants={staggeredFadeInUp}
                 >
                   <HStack>
                     <SwapIcon size={24} />
-                    <Link as={NextLink} href={`${pathname}/swap`} prefetch={true} variant="nav">
+                    <Link as={NextLink} href={`${pathname}/swap`} prefetch variant="nav">
                       Swap tokens directly via this pool
                     </Link>
                   </HStack>
-                </VStack>
-              )}
+                </VStack> : null}
             </AnimatePresence>
           </PopoverBody>
         </PopoverContent>

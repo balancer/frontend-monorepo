@@ -1,11 +1,8 @@
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
-const { projectName } = getProjectConfig()
-
 export const metadata: Metadata = {
-  title: `${projectName} DeFi Liquidity Pools`,
+  title: 'Beets DeFi Liquidity Pools',
   description: `
     Explore DeFi liquidity pools or create your own.
     Provide liquidity to accumulate yield from swap fees

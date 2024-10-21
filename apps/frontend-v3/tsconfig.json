@@ -19,9 +19,7 @@
     "global.d.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "../../packages/lib/global.d.ts",
-    "../../packages/lib/shared/components/navs/CowFooter.tsx",
-    "../../packages/lib/shared/app/react-query.provider.tsx"
+    "../../packages/lib/global.d.ts"
   ],
   "exclude": ["node_modules", ".next"]
 }
