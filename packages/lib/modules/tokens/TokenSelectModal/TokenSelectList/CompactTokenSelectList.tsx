@@ -1,20 +1,20 @@
 'use client'
 
 import { Box, BoxProps, Center, Text } from '@chakra-ui/react'
-import { TokenSelectListRow } from './TokenSelectModal/TokenSelectList/TokenSelectListRow'
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
-import { useTokenBalances } from './TokenBalancesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { Virtuoso } from 'react-virtuoso'
+import { useTokenBalances } from '../../TokenBalancesProvider'
+import { TokenSelectListRow } from './TokenSelectListRow'
 
 type Props = {
   tokens: GqlToken[]
   onTokenSelect: (token: GqlToken) => void
 }
 
-export function NativeAssetSelectList({ tokens, onTokenSelect, ...rest }: Props & BoxProps) {
+export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props & BoxProps) {
   const [activeIndex, setActiveIndex] = useState(0)
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
@@ -40,6 +40,8 @@ export function NativeAssetSelectList({ tokens, onTokenSelect, ...rest }: Props 
     return `${token.address}:${token.chain}:${index}`
   }
 
+  const style = { height: `${tokens.length * 75}px` }
+
   return (
     <Box {...rest}>
       {tokens.length === 0 ? (
@@ -50,7 +52,6 @@ export function NativeAssetSelectList({ tokens, onTokenSelect, ...rest }: Props 
         </Center>
       ) : (
         <Virtuoso
-          style={{ height: '150px' }}
           data={tokens}
           itemContent={index => {
             const token = tokens[index]
@@ -58,15 +59,16 @@ export function NativeAssetSelectList({ tokens, onTokenSelect, ...rest }: Props 
 
             return (
               <TokenSelectListRow
-                key={keyFor(token, index)}
                 active={index === activeIndex}
+                isBalancesLoading={isBalancesLoading}
+                key={keyFor(token, index)}
                 onClick={() => onTokenSelect(token)}
                 token={token}
                 userBalance={userBalance}
-                isBalancesLoading={isBalancesLoading}
               />
             )
           }}
+          style={style}
         />
       )}
     </Box>

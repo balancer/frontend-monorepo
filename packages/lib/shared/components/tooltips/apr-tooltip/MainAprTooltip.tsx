@@ -34,7 +34,7 @@ interface Props
   id?: string
 }
 
-export const SparklesIcon = ({
+export function SparklesIcon({
   isOpen,
   pool,
   id,
@@ -42,7 +42,7 @@ export const SparklesIcon = ({
   isOpen: boolean
   pool: Pool | PoolListItem | FeaturedPool
   id?: string
-}) => {
+}) {
   const { corePoolId } = getProjectConfig()
   const hoverColor = isLBP(pool.type) ? 'inherit' : 'font.highlight'
 
@@ -96,7 +96,7 @@ export const SparklesIcon = ({
   }
 
   return (
-    <Box w="16px" h="auto" minW="16px">
+    <Box h="auto" minW="16px" w="16px">
       <Center w="16px">
         {isLBP(pool.type) ? (
           <Icon as={Info} boxSize={4} color={isOpen ? hoverColor : 'gray.400'} />
@@ -146,36 +146,36 @@ function MainAprTooltip({
   return (
     <BaseAprTooltip
       {...props}
-      maxVeBalText="Max veBAL APR"
+      customPopoverContent={customPopoverContent}
+      maxVeBalText="Total max veBAL APR"
+      poolType={pool.type}
       totalBaseText={hasVeBalBoost => `Total ${hasVeBalBoost ? 'base' : ''} APR`}
       totalBaseVeBalText="Total base APR"
-      customPopoverContent={customPopoverContent}
       vebalBoost={vebalBoost}
-      poolType={pool.type}
     >
       {({ isOpen }) => (
         <HStack align="center" alignItems="center">
-          <Button variant="unstyled" _focus={{ outline: 'none' }} px="0" h={height}>
+          <Button _focus={{ outline: 'none' }} h={height} px="0" variant="unstyled">
             <HStack
               _hover={{ color: hoverColor }}
               color={isOpen ? hoverColor : 'font.primary'}
-              opacity={isLBP(pool.type) ? 0.5 : 1}
               gap="xs"
+              opacity={isLBP(pool.type) ? 0.5 : 1}
             >
               {!onlySparkles && (
                 <Text
-                  textAlign="left"
                   color={isOpen ? hoverColor : 'font.primary'}
+                  noOfLines={2}
+                  textAlign="left"
                   textDecoration={isLBP(pool.type) ? 'line-through' : 'none'}
                   whiteSpace="pre-wrap"
-                  noOfLines={2}
                   {...textProps}
                 >
                   {apr || aprToShow}
                   {aprLabel ? ' APR' : ''}
                 </Text>
               )}
-              <SparklesIcon isOpen={isOpen} pool={pool} id={id} />
+              <SparklesIcon id={id} isOpen={isOpen} pool={pool} />
             </HStack>
           </Button>
         </HStack>

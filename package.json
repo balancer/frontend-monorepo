@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo build",
     "build:dev": "turbo build:dev",
+    "dev": "pnpm run dev:bal",
     "dev:bal": "turbo dev --filter frontend-v3",
     "dev:beets": "turbo dev --filter beets-frontend-v3",
     "graphql:gen": "turbo graphql:gen",

@@ -1,4 +1,4 @@
-import { Stack, Button, VStack, useDisclosure } from '@chakra-ui/react'
+import { Stack, Button, VStack, useDisclosure, HStack } from '@chakra-ui/react'
 import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 
@@ -13,6 +13,7 @@ import {
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { useState } from 'react'
 import { getXavePoolLink } from '../../pool.utils'
+// import { PoolAdvancedOptions } from './PoolAdvancedOptions'
 
 export function PoolHeader() {
   const pathname = usePathname()
@@ -47,27 +48,35 @@ export function PoolHeader() {
     <VStack align="start" w="full">
       <PoolBreadcrumbs />
       <Stack
-        w="full"
+        direction={{ base: 'column', md: 'row' }}
         justify="space-between"
         spacing="md"
-        direction={{ base: 'column', md: 'row' }}
+        w="full"
       >
         <PoolMetaBadges />
-        <Stack spacing="md" direction={{ base: 'column', md: 'row' }}>
+        <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
           <PoolCategories />
-          <Button
-            onClick={handleClick}
-            variant="primary"
-            size="lg"
-            isDisabled={isAddLiquidityBlocked}
-          >
-            Add liquidity
-          </Button>
+          <HStack spacing="sm">
+            <Button
+              isDisabled={isAddLiquidityBlocked}
+              onClick={handleClick}
+              size="lg"
+              variant="primary"
+              w="full"
+            >
+              Add liquidity
+            </Button>
+
+            {/*
+            Will be enabled when pool swaps handler is implemented:
+            <PoolAdvancedOptions />
+            */}
+          </HStack>
           <PartnerRedirectModal
-            partner={redirectPartner}
-            redirectUrl={redirectPartnerUrl}
             isOpen={partnerRedirectDisclosure.isOpen}
             onClose={partnerRedirectDisclosure.onClose}
+            partner={redirectPartner}
+            redirectUrl={redirectPartnerUrl}
           />
         </Stack>
       </Stack>

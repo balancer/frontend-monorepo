@@ -46,10 +46,10 @@ interface Props {
 
 const balRewardGradient =
   // eslint-disable-next-line max-len
-  'linear-gradient(90deg, rgba(179, 174, 245, 0.1) 0%, rgba(215, 203, 231, 0.1) 25%, rgba(229, 200, 200, 0.1) 50%, rgba(234, 168, 121, 0.1) 100%)'
+  'linear-gradient(90deg, rgba(179, 174, 245, 0.5) 0%, rgba(215, 203, 231, 0.5) 25%, rgba(229, 200, 200, 0.5) 50%, rgba(234, 168, 121, 0.5) 100%)'
 
 const basePopoverAprItemProps = {
-  pl: 2,
+  pl: 4,
   pr: 2,
   pb: 3,
   backgroundColor: 'background.level1',
@@ -122,36 +122,36 @@ function BaseAprTooltip({
 
   const popoverContent = customPopoverContent || (
     <PopoverContent
-      w="fit-content"
-      shadow="3xl"
-      overflow="hidden"
       minWidth={['100px', '300px']}
+      overflow="hidden"
       p="0"
+      shadow="3xl"
+      w="fit-content"
     >
       <TooltipAprItem
         {...basePopoverAprItemProps}
+        apr={swapFeesDisplayed}
+        aprOpacity={isSwapFeePresent ? 1 : 0.5}
         displayValueFormatter={usedDisplayValueFormatter}
         pt={3}
         title="Swap fees"
-        apr={swapFeesDisplayed}
-        aprOpacity={isSwapFeePresent ? 1 : 0.5}
         tooltipText={swapFeesTooltipText}
       />
       <TooltipAprItem
         {...basePopoverAprItemProps}
-        displayValueFormatter={usedDisplayValueFormatter}
-        title="Staking incentives"
         apr={stakingIncentivesAprDisplayed}
         aprOpacity={isStakingPresent ? 1 : 0.5}
+        displayValueFormatter={usedDisplayValueFormatter}
+        title="Staking incentives"
       >
         {stakingIncentivesDisplayed.map((item, index) => {
           return (
             <TooltipAprItem
               {...subitemPopoverAprItemProps}
+              apr={item.apr}
               displayValueFormatter={usedDisplayValueFormatter}
               key={index}
               title={item.title}
-              apr={item.apr}
               tooltipText={item.tooltipText}
             />
           )
@@ -159,116 +159,121 @@ function BaseAprTooltip({
       </TooltipAprItem>
       <TooltipAprItem
         {...basePopoverAprItemProps}
-        displayValueFormatter={usedDisplayValueFormatter}
-        title="Yield bearing tokens"
         apr={yieldBearingTokensAprDisplayed}
         aprOpacity={isYieldPresent ? 1 : 0.5}
+        displayValueFormatter={usedDisplayValueFormatter}
+        title="Yield bearing tokens"
       >
         {yieldBearingTokensDisplayed.map((item, index) => {
           return (
             <TooltipAprItem
               {...subitemPopoverAprItemProps}
+              apr={item.apr}
               displayValueFormatter={usedDisplayValueFormatter}
               key={index}
               title={item.title}
-              apr={item.apr}
               tooltipText={inherentTokenYieldTooltipText}
             />
           )
         })}
       </TooltipAprItem>
-      {hasMerklIncentives && (
-        <TooltipAprItem
+      {hasMerklIncentives ? <TooltipAprItem
           {...basePopoverAprItemProps}
+          apr={merklIncentivesAprDisplayed}
           displayValueFormatter={usedDisplayValueFormatter}
           title="Merkl.xyz incentives"
-          apr={merklIncentivesAprDisplayed}
           tooltipText={merklIncentivesTooltipText}
-        />
-      )}
+        /> : null}
       {isCowAmmPool(poolType) && (
         <TooltipAprItem
           {...basePopoverAprItemProps}
+          apr={surplusIncentivesAprDisplayed}
           displayValueFormatter={usedDisplayValueFormatter}
           title="Prevented LVR"
-          apr={surplusIncentivesAprDisplayed}
           tooltipText={surplusIncentivesTooltipText}
         />
       )}
       <Divider />
       <TooltipAprItem
         {...basePopoverAprItemProps}
+        apr={totalBaseDisplayed}
+        backgroundColor="background.level3"
         displayValueFormatter={usedDisplayValueFormatter}
-        pt={3}
-        backgroundColor="background.level4"
         fontColor="font.maxContrast"
+        pl={2}
+        pt={3}
+        title={totalBaseTitle}
         tooltipText={
           shouldDisplayBaseTooltip
             ? `${defaultDisplayValueFormatter(defaultNumberFormatter(totalBase.toString()))} APR`
             : ''
         }
-        title={totalBaseTitle}
-        apr={totalBaseDisplayed}
       />
-      {isVebal && (
-        <>
+      {isVebal ? <>
           <Divider />
-          <Stack roundedBottom="md" gap={0}>
+          <Stack gap={0} roundedBottom="md">
             <TooltipAprItem
               pt={3}
               {...basePopoverAprItemProps}
-              displayValueFormatter={usedDisplayValueFormatter}
-              title="Max locking incentives"
-              tooltipText={lockingIncentivesTooltipText}
               apr={lockingAprDisplayed}
               aprOpacity={isLockingAprPresent ? 1 : 0.5}
+              displayValueFormatter={usedDisplayValueFormatter}
+              title="Protocol revenue share (max)"
+              tooltipText={lockingIncentivesTooltipText}
             />
             <TooltipAprItem
               {...basePopoverAprItemProps}
-              displayValueFormatter={usedDisplayValueFormatter}
-              title="Average voting incentives"
-              tooltipText={votingIncentivesTooltipText}
               apr={votingAprDisplayed}
               aprOpacity={isVotingPresent ? 1 : 0.5}
+              displayValueFormatter={usedDisplayValueFormatter}
+              title="Voting incentives (average)"
+              tooltipText={votingIncentivesTooltipText}
             />
             <Divider />
 
             <TooltipAprItem
               {...basePopoverAprItemProps}
-              displayValueFormatter={usedDisplayValueFormatter}
-              pt={3}
-              fontColor="font.special"
-              title={totalVeBalTitle || 'Total APR'}
               apr={totalCombinedDisplayed}
-              boxBackground={balRewardGradient}
+              backgroundColor={balRewardGradient}
+              displayValueFormatter={usedDisplayValueFormatter}
+              fontColor="font.special"
+              pt={3}
+              px={2}
+              roundedBottom="md"
               textBackground="background.special"
               textBackgroundClip="text"
-              roundedBottom="md"
+              title={totalVeBalTitle || 'Total APR'}
             />
           </Stack>
-        </>
-      )}
-      {hasVeBalBoost && (
-        <>
+        </> : null}
+      {hasVeBalBoost ? <>
           <Divider />
-          <Stack roundedBottom="md" gap={0}>
+          <Stack gap={0} roundedBottom="md">
             <TooltipAprItem
               {...basePopoverAprItemProps}
-              displayValueFormatter={usedDisplayValueFormatter}
-              pt={3}
-              fontWeight={500}
-              fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
-              title="Extra BAL (veBAL boost)"
               apr={extraBalAprDisplayed}
+              displayValueFormatter={usedDisplayValueFormatter}
+              fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
+              fontWeight={500}
+              pl={6}
+              pt={3}
+              title="Extra BAL (veBAL boost)"
               tooltipText={extraBalTooltipText}
             />
             <Divider />
 
             <TooltipAprItem
               {...basePopoverAprItemProps}
+              apr={maxVeBalDisplayed}
+              backgroundColor="background.level3"
+              boxBackground={balRewardGradient}
               displayValueFormatter={usedDisplayValueFormatter}
-              pt={3}
               fontColor="font.special"
+              pl={2}
+              pt={3}
+              roundedBottom="md"
+              textBackground="background.special"
+              textBackgroundClip="text"
               title={maxVeBalText || 'Max veBAL APR'}
               tooltipText={
                 shouldDisplayMaxVeBalTooltip
@@ -277,20 +282,14 @@ function BaseAprTooltip({
                     )} APR`
                   : ''
               }
-              apr={maxVeBalDisplayed}
-              boxBackground={balRewardGradient}
-              textBackground="background.special"
-              textBackgroundClip="text"
-              roundedBottom="md"
             />
           </Stack>
-        </>
-      )}
+        </> : null}
     </PopoverContent>
   )
 
   return (
-    <Popover trigger="hover" placement={placement}>
+    <Popover placement={placement} trigger="hover">
       {({ isOpen }) => (
         <>
           <PopoverTrigger>

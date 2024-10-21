@@ -8,9 +8,11 @@
     "react-internal.js"
   ],
   "devDependencies": {
+    "@repo/prettier-config": "workspace:*",
     "@typescript-eslint/parser": "^7.1.0",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@vercel/style-guide": "^5.2.0",
+    "eslint": "8.43.0",
     "eslint-plugin-only-warn": "^1.1.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-turbo": "^2.0.0",

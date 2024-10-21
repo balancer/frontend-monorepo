@@ -20,6 +20,7 @@ import { SwapSummary } from './SwapSummary'
 import { useSwapReceipt } from '../../transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../../tokens/TokensProvider'
+import { useIsPoolSwapUrl } from '../useIsPoolSwapUrl'
 
 type Props = {
   isOpen: boolean
@@ -34,6 +35,7 @@ export function SwapPreviewModal({
   finalFocusRef,
   ...rest
 }: Props & Omit<ModalProps, 'children'>) {
+  const isPoolSwapUrl = useIsPoolSwapUrl()
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
   const { userAddress } = useUserAccount()
@@ -59,7 +61,10 @@ export function SwapPreviewModal({
 
   useEffect(() => {
     if (!isWrap && swapTxHash && !window.location.pathname.includes(swapTxHash)) {
-      window.history.pushState({}, '', `/swap/${chainToSlugMap[selectedChain]}/${swapTxHash}`)
+      const url = isPoolSwapUrl
+        ? `${window.location.pathname}/${swapTxHash}`
+        : `/swap/${chainToSlugMap[selectedChain]}/${swapTxHash}`
+      window.history.pushState({}, '', url)
     }
   }, [swapTxHash])
 
@@ -74,36 +79,34 @@ export function SwapPreviewModal({
 
   return (
     <Modal
+      finalFocusRef={finalFocusRef}
+      initialFocusRef={initialFocusRef}
+      isCentered
       isOpen={isOpen}
       onClose={onClose}
-      initialFocusRef={initialFocusRef}
-      finalFocusRef={finalFocusRef}
-      isCentered
       preserveScrollBarGap
       {...rest}
     >
       <SuccessOverlay startAnimation={!!swapTxHash && hasQuoteContext} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
-        {isDesktop && hasQuoteContext && (
-          <DesktopStepTracker transactionSteps={transactionSteps} chain={selectedChain} />
-        )}
+        {isDesktop && hasQuoteContext ? <DesktopStepTracker chain={selectedChain} transactionSteps={transactionSteps} /> : null}
         <TransactionModalHeader
+          chain={selectedChain}
+          isReceiptLoading={swapReceipt.isLoading}
           label={`Review ${capitalize(swapAction)}`}
           timeout={<SwapTimeout />}
           txHash={swapTxHash}
-          chain={selectedChain}
-          isReceiptLoading={swapReceipt.isLoading}
         />
         <ModalCloseButton />
         <ModalBody>
           <SwapSummary {...swapReceipt} />
         </ModalBody>
         <ActionModalFooter
-          isSuccess={!!swapTxHash && !swapReceipt.isLoading}
           currentStep={transactionSteps.currentStep}
-          returnLabel="Swap again"
+          isSuccess={!!swapTxHash && !swapReceipt.isLoading}
           returnAction={onClose}
+          returnLabel={isPoolSwapUrl ? 'Return to pool' : 'Swap again'}
           urlTxHash={urlTxHash}
         />
       </ModalContent>
