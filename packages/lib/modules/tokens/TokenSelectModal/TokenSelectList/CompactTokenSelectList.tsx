@@ -52,7 +52,6 @@ export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props
         </Center>
       ) : (
         <Virtuoso
-          style={style}
           data={tokens}
           itemContent={index => {
             const token = tokens[index]
@@ -60,15 +59,16 @@ export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props
 
             return (
               <TokenSelectListRow
-                key={keyFor(token, index)}
                 active={index === activeIndex}
+                isBalancesLoading={isBalancesLoading}
+                key={keyFor(token, index)}
                 onClick={() => onTokenSelect(token)}
                 token={token}
                 userBalance={userBalance}
-                isBalancesLoading={isBalancesLoading}
               />
             )
           }}
+          style={style}
         />
       )}
     </Box>

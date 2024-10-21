@@ -1,9 +1,5 @@
 /* eslint-disable max-len */
 import { Metadata } from 'next'
-import { Providers } from './providers'
-import { Navbar } from '@repo/lib/shared/components/navs/Navbar'
-import { Footer } from '@repo/lib/shared/components/navs/Footer'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
 import NextTopLoader from 'nextjs-toploader'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -11,11 +7,12 @@ import '@repo/lib/assets/css/global.css'
 import { Fathom } from '@repo/lib/shared/services/fathom/Fathom'
 import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
 import { PropsWithChildren } from 'react'
-
-const { projectName } = getProjectConfig()
+import { Providers } from '@repo/lib/shared/components/site/providers'
+import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
+import { FooterContainer } from '@/lib/components/footer/FooterContainer'
 
 export const metadata: Metadata = {
-  title: `${projectName} DeFi Liquidity Pools`,
+  title: 'Balancer DeFi Liquidity Pools',
   description: `Explore DeFi liquidity pools and swap tokens. Provide liquidity to accumulate yield from swap fees while retaining your token exposure as prices move.`,
   icons: [
     { rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' },
@@ -49,9 +46,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <NextTopLoader showSpinner={false} color="#7f6ae8" />
         <Providers>
           <GlobalAlerts />
-          <Navbar />
+          <NavBarContainer />
           {children}
-          <Footer />
+          <FooterContainer />
           <SpeedInsights />
         </Providers>
       </body>

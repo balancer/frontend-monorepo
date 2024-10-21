@@ -1,6 +1,12 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "NEXT_PUBLIC_BALANCER_API_URL",
+    "NEXT_PUBLIC_APP_ENV",
+    "NEXT_PUBLIC_ALLOW_SKIP_TRANSACTION",
+    "NEXT_PUBLIC_PROJECT_ID"
+  ],
   "tasks": {
     "dev": {
       "cache": false,
