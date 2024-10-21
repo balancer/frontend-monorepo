@@ -40,7 +40,7 @@ export function SwapRate() {
   }
 
   return (
-    <Text variant="secondary" fontSize="sm" cursor="pointer" onClick={togglePriceDirection}>
+    <Text cursor="pointer" fontSize="sm" onClick={togglePriceDirection} variant="secondary">
       {simulationQuery.data && priceLabel}
     </Text>
   )

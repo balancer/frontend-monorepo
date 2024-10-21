@@ -41,11 +41,11 @@ export function MigrateStakeModal({
 
   return (
     <Modal
+      finalFocusRef={finalFocusRef}
+      initialFocusRef={initialFocusRef}
+      isCentered
       isOpen={isOpen}
       onClose={onClose}
-      initialFocusRef={initialFocusRef}
-      finalFocusRef={finalFocusRef}
-      isCentered
       preserveScrollBarGap
       {...rest}
     >
@@ -54,9 +54,9 @@ export function MigrateStakeModal({
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />}
         <TransactionModalHeader
+          chain={pool.chain}
           label="Confirm gauge migration"
           txHash={restakeTxHash}
-          chain={pool.chain}
         />
         <ModalCloseButton />
         <ModalBody>
@@ -68,10 +68,10 @@ export function MigrateStakeModal({
           </AnimateHeightChange>
         </ModalBody>
         <ActionModalFooter
-          isSuccess={!!restakeTxHash}
           currentStep={transactionSteps.currentStep}
-          returnLabel="Return to pool"
+          isSuccess={!!restakeTxHash}
           returnAction={redirectToPoolPage}
+          returnLabel="Return to pool"
         />
       </ModalContent>
     </Modal>

@@ -16,7 +16,7 @@ export function UnstakeForm() {
   const { onClose, onOpen, isOpen } = useModalWithPoolRedirect(pool, unstakeTxHash)
 
   return (
-    <Box h="full" w="full" maxW="lg" mx="auto">
+    <Box h="full" maxW="lg" mx="auto" w="full">
       <Card>
         <CardHeader>Claim & Unstake</CardHeader>
         <CardBody>
@@ -26,20 +26,20 @@ export function UnstakeForm() {
         <CardFooter>
           <Tooltip label={isDisabled ? disabledReason : ''}>
             <Button
-              ref={nextBtn}
-              variant="secondary"
-              w="full"
-              size="lg"
               isDisabled={isDisabled}
               isLoading={isLoading}
               onClick={() => !isDisabled && onOpen()}
+              ref={nextBtn}
+              size="lg"
+              variant="secondary"
+              w="full"
             >
               Next
             </Button>
           </Tooltip>
         </CardFooter>
       </Card>
-      <UnstakeModal finalFocusRef={nextBtn} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <UnstakeModal finalFocusRef={nextBtn} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
     </Box>
   )
 }

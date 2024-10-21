@@ -9,13 +9,15 @@ import { RemoveLiquidityProvider } from './RemoveLiquidityProvider'
 
 const PoolProvider = buildDefaultPoolTestProvider(aWjAuraWethPoolElementMock())
 
-export const Providers = ({ children }: PropsWithChildren) => (
-  <PoolProvider>
-    <RemoveLiquidityProvider>
-      <DefaultRemoveLiquidityTestProvider>{children}</DefaultRemoveLiquidityTestProvider>
-    </RemoveLiquidityProvider>
-  </PoolProvider>
-)
+export function Providers({ children }: PropsWithChildren) {
+  return (
+    <PoolProvider>
+      <RemoveLiquidityProvider>
+        <DefaultRemoveLiquidityTestProvider>{children}</DefaultRemoveLiquidityTestProvider>
+      </RemoveLiquidityProvider>
+    </PoolProvider>
+  )
+}
 
 // async function testConstructRemoveLiquidityStep() {
 //   const { result } = testHook(

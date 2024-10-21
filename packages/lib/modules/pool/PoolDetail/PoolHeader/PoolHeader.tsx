@@ -47,27 +47,27 @@ export function PoolHeader() {
     <VStack align="start" w="full">
       <PoolBreadcrumbs />
       <Stack
-        w="full"
+        direction={{ base: 'column', md: 'row' }}
         justify="space-between"
         spacing="md"
-        direction={{ base: 'column', md: 'row' }}
+        w="full"
       >
         <PoolMetaBadges />
-        <Stack spacing="md" direction={{ base: 'column', md: 'row' }}>
+        <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
           <PoolCategories />
           <Button
-            onClick={handleClick}
-            variant="primary"
-            size="lg"
             isDisabled={isAddLiquidityBlocked}
+            onClick={handleClick}
+            size="lg"
+            variant="primary"
           >
             Add liquidity
           </Button>
           <PartnerRedirectModal
-            partner={redirectPartner}
-            redirectUrl={redirectPartnerUrl}
             isOpen={partnerRedirectDisclosure.isOpen}
             onClose={partnerRedirectDisclosure.onClose}
+            partner={redirectPartner}
+            redirectUrl={redirectPartnerUrl}
           />
         </Stack>
       </Stack>

@@ -98,14 +98,14 @@ export function Web3Provider({
   return (
     <ReactQueryClientProvider>
       <WagmiProvider config={wagmiConfig}>
-        <RainbowKitProvider theme={customTheme} avatar={CustomAvatar}>
+        <RainbowKitProvider avatar={CustomAvatar} theme={customTheme}>
           <UserAccountProvider>
             <UserSettingsProvider
+              initAcceptedPolicies={undefined}
               initCurrency={undefined}
-              initSlippage={undefined}
               initEnableSignatures={undefined}
               initPoolListView={undefined}
-              initAcceptedPolicies={undefined}
+              initSlippage={undefined}
             >
               {children}
               <BlockedAddressModal />

@@ -68,5 +68,6 @@ module.exports = {
         ],
       },
     ],
+    'react/jsx-no-leaked-render': 'off',
   },
 }

@@ -18,10 +18,10 @@ function Content() {
   return (
     <HStack flexWrap={{ base: 'wrap', md: 'nowrap' }}>
       <BalAlertContent
-        title="Consider using the Balancer Safe web app"
         description="For a better experience, use the Balancer Safe app with your Safe wallet."
         forceColumnMode
-      ></BalAlertContent>
+        title="Consider using the Balancer Safe web app"
+      />
       <BalAlertButtonLink href="https://app.safe.global/share/safe-app?appUrl=https://balancer.fi/pools">
         Open app
       </BalAlertButtonLink>

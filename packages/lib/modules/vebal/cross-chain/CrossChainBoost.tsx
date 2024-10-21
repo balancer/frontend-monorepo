@@ -47,14 +47,14 @@ export function CrossChainBoost() {
   const myVebalBalance = data?.veBalGetUser.balance
 
   return (
-    <Stack w="full" h="full" height="300px">
+    <Stack h="full" height="300px" w="full">
       <HStack>
-        <Text fontWeight="bold" fontSize="lg">
+        <Text fontSize="lg" fontWeight="bold">
           Cross chain veBAL boosts
         </Text>
 
         <Tooltip label={tooltipLabel}>
-          <InfoOutlineIcon fontSize="sm" color="font.light" />
+          <InfoOutlineIcon color="font.light" fontSize="sm" />
         </Tooltip>
       </HStack>
       {isConnected ? (
@@ -81,14 +81,14 @@ export function CrossChainBoost() {
                         <Flex>
                           {showingUnsyncedNetworks.map(chain => (
                             <Image
+                              alt={`Chain icon for ${chain.toLowerCase()}`}
+                              height={20}
                               key={chain}
                               src={`/images/chains/${chain}.svg`}
-                              alt={`Chain icon for ${chain.toLowerCase()}`}
-                              width={20}
-                              height={20}
                               title={`${chain} (${Number(myVebalBalance).toFixed(4)} - ${
                                 l2VeBalBalances[chain]
                               })`}
+                              width={20}
                             />
                           ))}
                         </Flex>
@@ -97,7 +97,7 @@ export function CrossChainBoost() {
                       )}
                     </CardBody>
                     <CardFooter>
-                      <Button size="lg" variant="primary" onClick={() => setSyncIsOpen(true)}>
+                      <Button onClick={() => setSyncIsOpen(true)} size="lg" variant="primary">
                         Sync
                       </Button>
                     </CardFooter>
@@ -115,12 +115,12 @@ export function CrossChainBoost() {
                         <Flex>
                           {networksBySyncState.synced.map(chain => (
                             <Image
+                              alt={`Chain icon for ${chain.toLowerCase()}`}
+                              height={20}
                               key={chain}
                               src={`/images/chains/${chain}.svg`}
-                              alt={`Chain icon for ${chain.toLowerCase()}`}
-                              width={20}
-                              height={20}
                               title={chain}
+                              width={20}
                             />
                           ))}
                         </Flex>

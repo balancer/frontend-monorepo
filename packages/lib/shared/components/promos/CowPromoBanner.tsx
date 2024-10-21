@@ -9,88 +9,88 @@ export function CowPromoBanner() {
 
   return (
     <Box
-      position="relative"
-      height="140px"
       background={bgColor}
-      width="full"
+      boxShadow="lg"
+      height="140px"
       maxW="100%"
-      rounded="lg"
       overflow="hidden"
+      position="relative"
+      rounded="lg"
       sx={{
         width: '100% !important',
         maxWidth: '100% !important',
       }}
-      boxShadow="lg"
+      width="full"
     >
       <Box zIndex="0">
-        <Box position="absolute" left="0" top="0">
+        <Box left="0" position="absolute" top="0">
           <Picture
-            imgName="cowmarks-left"
             altText="Cow marks"
             defaultImgType="svg"
-            imgSvg={true}
-            imgSvgPortrait={true}
             directory="/images/partners/"
+            imgName="cowmarks-left"
+            imgSvg
+            imgSvgPortrait
           />
         </Box>
       </Box>
 
       <Box zIndex="0">
-        <Box position="absolute" right="0" bottom="0" zIndex="0">
+        <Box bottom="0" position="absolute" right="0" zIndex="0">
           <Picture
-            imgName="cowmarks-right"
             altText="Cow marks"
             defaultImgType="svg"
-            imgSvg={true}
-            imgSvgPortrait={true}
             directory="/images/partners/"
+            imgName="cowmarks-right"
+            imgSvg
+            imgSvgPortrait
           />
         </Box>
       </Box>
 
-      <Center h="100%" className="copy" zIndex="1">
+      <Center className="copy" h="100%" zIndex="1">
         <Flex
-          gap={{ base: 'sm', md: 'md' }}
-          direction={{ base: 'column', sm: 'row' }}
-          justifyContent="center"
           alignItems="center"
+          borderRadius="xl"
+          direction={{ base: 'column', sm: 'row' }}
+          gap={{ base: 'sm', md: 'md' }}
+          justifyContent="center"
           pr="4px"
           zIndex="1"
-          borderRadius="xl"
         >
           <Flex
-            gap={{ base: 'ms', md: 'md' }}
             alignItems="center"
             direction={{ base: 'row', sm: 'row' }}
+            gap={{ base: 'ms', md: 'md' }}
           >
-            <Box w="clamp(54px, 10vw, 78px)" h="auto">
+            <Box h="auto" w="clamp(54px, 10vw, 78px)">
               <Picture
-                imgName="cowamm-logo"
                 altText="CoW AMM logo"
                 defaultImgType="svg"
-                imgSvg={true}
                 directory="/images/partners/"
+                imgName="cowamm-logo"
+                imgSvg
               />
             </Box>
-            <Box px="xs" borderRadius="xl" bg="#194D05">
+            <Box bg="#194D05" borderRadius="xl" px="xs">
               <Heading color="#BCEC79" fontSize={{ base: '3xl', md: '4xl' }} fontWeight="bold">
                 CoW AMM is live
               </Heading>
             </Box>
           </Flex>
           <Button
-            size="lg"
+            _hover={{ bg: '#E2F8BF' }}
             as={NextLink}
-            prefetch={true}
-            href="/pools/cow"
-            flex="1"
-            rounded="full"
-            py="sm"
-            w="max-content"
-            h={{ base: '32px', sm: '40px', md: '48px' }}
             bg="#BCEC79"
             color="#194D05"
-            _hover={{ bg: '#E2F8BF' }}
+            flex="1"
+            h={{ base: '32px', sm: '40px', md: '48px' }}
+            href="/pools/cow"
+            prefetch
+            py="sm"
+            rounded="full"
+            size="lg"
+            w="max-content"
           >
             View pools
           </Button>

@@ -35,14 +35,14 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
     <VStack align="start" w="full">
       <InputGroup>
         <Input
-          value={slippage}
-          type="number"
-          bg="background.level1"
           autoComplete="off"
           autoCorrect="off"
+          bg="background.level1"
           min={0}
           onChange={e => setSlippage(e.currentTarget.value)}
           onKeyDown={blockInvalidNumberInput}
+          type="number"
+          value={slippage}
         />
         <InputRightElement pointerEvents="none">
           <Percent color="grayText" size="20px" />
@@ -52,9 +52,9 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
         {presetOpts.map(preset => (
           <Button
             key={preset}
+            onClick={() => setSlippage(preset)}
             size="xs"
             variant={slippage === preset ? 'outline' : 'solid'}
-            onClick={() => setSlippage(preset)}
           >
             <Text>{preset}%</Text>
           </Button>
@@ -90,7 +90,7 @@ export function UserSettings() {
   return (
     <Popover isLazy>
       <PopoverTrigger>
-        <Button variant="tertiary" p="0">
+        <Button p="0" variant="tertiary">
           <Settings size={18} />
         </Button>
       </PopoverTrigger>
@@ -104,34 +104,34 @@ export function UserSettings() {
               Settings
             </Heading>
           </HStack>
-          <VStack align="start" spacing="lg" p="md">
+          <VStack align="start" p="md" spacing="lg">
             <Box w="full">
-              <Heading size="sm" pb="2">
+              <Heading pb="2" size="sm">
                 Currency
               </Heading>
               <CurrencySelect id="user-settings-currency-select" />
             </Box>
             <Box w="full">
-              <Heading size="sm" pb="2">
+              <Heading pb="2" size="sm">
                 Slippage
               </Heading>
-              <SlippageInput slippage={slippage} setSlippage={setSlippage} />
+              <SlippageInput setSlippage={setSlippage} slippage={slippage} />
             </Box>
             <Box w="full">
-              <Heading size="sm" pb="xs">
+              <Heading pb="xs" size="sm">
                 Use Signatures
               </Heading>
-              <Text fontSize="sm" pb="sm" color="font.secondary">
+              <Text color="font.secondary" fontSize="sm" pb="sm">
                 Signatures allow for gas-free transactions, where possible. If your wallet
                 doesn&apos;t support signatures, you can turn it off.
               </Text>
               <EnableSignaturesSelect />
             </Box>
             <Box w="full">
-              <Heading size="sm" pb="xs">
+              <Heading pb="xs" size="sm">
                 Sound effects
               </Heading>
-              <Text fontSize="sm" pb="sm" color="font.secondary">
+              <Text color="font.secondary" fontSize="sm" pb="sm">
                 Allow sound effects for successful transactions. Disable if you prefer a silent
                 experience.
               </Text>

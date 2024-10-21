@@ -2,15 +2,15 @@
 export function BullseyeIcon() {
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      strokeWidth="1.5"
-      stroke="currentColor"
       fill="none"
+      height="16"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      viewBox="0 0 16 16"
+      width="16"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g opacity="1" clipPath="url(#clip0_176_20128)">
+      <g clipPath="url(#clip0_176_20128)" opacity="1">
         <path
           d="M7.33398 8.0026C7.33398 8.17942 7.40422 8.34898 7.52925 8.47401C7.65427 8.59903 7.82384 8.66927 8.00065 8.66927C8.17746 8.66927 8.34703 8.59903 8.47206 8.47401C8.59708 8.34898 8.66732 8.17942 8.66732 8.0026C8.66732 7.82579 8.59708 7.65622 8.47206 7.5312C8.34703 7.40618 8.17746 7.33594 8.00065 7.33594C7.82384 7.33594 7.65427 7.40618 7.52925 7.5312C7.40422 7.65622 7.33398 7.82579 7.33398 8.0026Z"
           stroke="url(#paint0_linear_176_20128)"
@@ -44,62 +44,62 @@ export function BullseyeIcon() {
       </g>
       <defs>
         <linearGradient
+          gradientUnits="userSpaceOnUse"
           id="paint0_linear_176_20128"
           x1="7.31711"
-          y1="8.16927"
           x2="8.92116"
+          y1="8.16927"
           y2="8.17611"
-          gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#B4BDC8" />
           <stop offset="1" stopColor="#B4BDC8" stopOpacity="0.6" />
         </linearGradient>
         <linearGradient
+          gradientUnits="userSpaceOnUse"
           id="paint1_linear_176_20128"
           x1="4.58163"
-          y1="8.83073"
           x2="12.6019"
+          y1="8.83073"
           y2="8.86493"
-          gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#B4BDC8" />
           <stop offset="1" stopColor="#B4BDC8" stopOpacity="0.6" />
         </linearGradient>
         <linearGradient
+          gradientUnits="userSpaceOnUse"
           id="paint2_linear_176_20128"
           x1="1.84615"
-          y1="9.5"
           x2="16.2827"
+          y1="9.5"
           y2="9.56156"
-          gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#B4BDC8" />
           <stop offset="1" stopColor="#B4BDC8" stopOpacity="0.6" />
         </linearGradient>
         <linearGradient
+          gradientUnits="userSpaceOnUse"
           id="paint3_linear_176_20128"
           x1="9.94937"
-          y1="4.5"
           x2="14.7615"
+          y1="4.5"
           y2="4.52052"
-          gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#B4BDC8" />
           <stop offset="1" stopColor="#B4BDC8" stopOpacity="0.6" />
         </linearGradient>
         <linearGradient
+          gradientUnits="userSpaceOnUse"
           id="paint4_linear_176_20128"
           x1="7.97468"
-          y1="7.25"
           x2="10.3808"
+          y1="7.25"
           y2="7.26026"
-          gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#B4BDC8" />
           <stop offset="1" stopColor="#B4BDC8" stopOpacity="0.6" />
         </linearGradient>
         <clipPath id="clip0_176_20128">
-          <rect width="16" height="16" fill="white" />
+          <rect fill="white" height="16" width="16" />
         </clipPath>
       </defs>
     </svg>

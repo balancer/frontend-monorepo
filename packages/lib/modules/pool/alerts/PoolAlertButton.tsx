@@ -3,7 +3,7 @@ import { PropsWithChildren } from 'react'
 
 export function PoolAlertButton({ onClick, children }: PropsWithChildren<ButtonProps>) {
   return (
-    <Button onClick={onClick} variant="outline" h="24px" py="md" my="-2">
+    <Button h="24px" my="-2" onClick={onClick} py="md" variant="outline">
       {children}
     </Button>
   )

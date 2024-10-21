@@ -58,23 +58,23 @@ function TokenInfo({
   return (
     <HStack spacing="sm">
       {!isBpt && (
-        <TokenIcon chain={chain} address={address} size={40} alt={token?.symbol || address} />
+        <TokenIcon address={address} alt={token?.symbol || address} chain={chain} size={40} />
       )}
-      <VStack spacing="none" alignItems="flex-start">
+      <VStack alignItems="flex-start" spacing="none">
         <HStack spacing="none">
           <Heading
-            fontWeight="bold"
             as="h6"
             fontSize="md"
+            fontWeight="bold"
             variant={disabled ? 'secondary' : 'primary'}
           >
             {tokenSymbol}
           </Heading>
           {showInfoPopover && (
-            <TokenInfoPopover tokenAddress={address} chain={chain} isBpt={isBpt} />
+            <TokenInfoPopover chain={chain} isBpt={isBpt} tokenAddress={address} />
           )}
         </HStack>
-        <Text fontWeight="medium" variant="secondary" fontSize="0.85rem">
+        <Text fontSize="0.85rem" fontWeight="medium" variant="secondary">
           {tokenName}
         </Text>
       </VStack>
@@ -149,11 +149,11 @@ export default function TokenRow({
   }, [value])
 
   return (
-    <VStack align="start" w="full" spacing="md">
+    <VStack align="start" spacing="md" w="full">
       {label && typeof label === 'string' ? <Text color="grayText">{label}</Text> : label}
-      <HStack width="full" justifyContent="space-between">
+      <HStack justifyContent="space-between" width="full">
         {toggleTokenSelect ? (
-          <Button variant="tertiary" onClick={toggleTokenSelect} cursor="pointer" size="xl" p="2">
+          <Button cursor="pointer" onClick={toggleTokenSelect} p="2" size="xl" variant="tertiary">
             <TokenInfo {...props} showInfoPopover={false} showSelect />
           </Button>
         ) : (
@@ -161,18 +161,18 @@ export default function TokenRow({
         )}
 
         <HStack align="start" spacing="none">
-          <VStack spacing="xs" alignItems="flex-end" textAlign="right">
+          <VStack alignItems="flex-end" spacing="xs" textAlign="right">
             {isLoading ? (
               <>
-                <Skeleton w="10" h="4" />
-                <Skeleton w="10" h="4" />
+                <Skeleton h="4" w="10" />
+                <Skeleton h="4" w="10" />
               </>
             ) : (
               <>
-                <Heading fontWeight="bold" as="h6" fontSize="md" title={value.toString()}>
+                <Heading as="h6" fontSize="md" fontWeight="bold" title={value.toString()}>
                   {isZero(amount) && showZeroAmountAsDash ? '-' : amount ? amount : '0'}
                 </Heading>
-                <Text fontWeight="medium" variant="secondary" fontSize="sm">
+                <Text fontSize="sm" fontWeight="medium" variant="secondary">
                   {showZeroAmountAsDash && usdValue && isZero(usdValue)
                     ? '-'
                     : toCurrency(usdValue ?? '0', { abbreviated })}
@@ -181,34 +181,34 @@ export default function TokenRow({
             )}
           </VStack>
           {actualWeight && (
-            <VStack spacing="xs" alignItems="flex-end" w="24">
+            <VStack alignItems="flex-end" spacing="xs" w="24">
               {isLoading ? (
                 <>
-                  <Skeleton w="10" h="4" />
-                  <Skeleton w="10" h="4" />
+                  <Skeleton h="4" w="10" />
+                  <Skeleton h="4" w="10" />
                 </>
               ) : (
                 <>
-                  <Heading fontWeight="bold" as="h6" fontSize="md">
+                  <Heading as="h6" fontSize="md" fontWeight="bold">
                     {fNum('weight', actualWeight, { abbreviated: false })}
                   </Heading>
-                  <HStack spacing="xs" align="center">
+                  <HStack align="center" spacing="xs">
                     {targetWeight ? (
                       <>
-                        <Text fontWeight="medium" variant="secondary" fontSize="sm">
+                        <Text fontSize="sm" fontWeight="medium" variant="secondary">
                           {fNum('weight', targetWeight)}
                         </Text>
                         <Popover trigger="hover">
                           <PopoverTrigger>
                             <Box
+                              _hover={{ opacity: 1 }}
                               opacity="0.5"
                               transition="opacity 0.2s var(--ease-out-cubic)"
-                              _hover={{ opacity: 1 }}
                             >
                               <BullseyeIcon />
                             </Box>
                           </PopoverTrigger>
-                          <PopoverContent p="sm" w="auto" maxW="300px">
+                          <PopoverContent maxW="300px" p="sm" w="auto">
                             <Text fontSize="sm" variant="secondary">
                               The target weight percentage set for this token in the context of a
                               Weighted Pool.
@@ -218,15 +218,15 @@ export default function TokenRow({
                       </>
                     ) : (
                       <>
-                        <Text fontWeight="medium" variant="secondary" fontSize="sm">
+                        <Text fontSize="sm" fontWeight="medium" variant="secondary">
                           N/A
                         </Text>
                         <Popover trigger="hover">
                           <PopoverTrigger>
                             <Box
+                              _hover={{ opacity: 1 }}
                               opacity="0.5"
                               transition="opacity 0.2s var(--ease-out-cubic)"
-                              _hover={{ opacity: 1 }}
                             >
                               <BullseyeIcon />
                             </Box>

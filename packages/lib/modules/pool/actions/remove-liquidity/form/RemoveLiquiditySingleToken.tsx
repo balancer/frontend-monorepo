@@ -35,17 +35,17 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
 
   return (
     <VStack w="full">
-      <HStack w="full" justify="space-between">
-        <Text fontWeight="bold" fontSize="1rem">
+      <HStack justify="space-between" w="full">
+        <Text fontSize="1rem" fontWeight="bold">
           Choose a token to receive
         </Text>
       </HStack>
       <Box
+        bg="background.level1"
+        border="white"
         borderRadius="md"
         p="md"
         shadow="innerBase"
-        bg="background.level1"
-        border="white"
         w="full"
       >
         <RadioGroup onChange={onChange} value={singleTokenOutAddress ?? tokens[0]?.address}>
@@ -56,12 +56,12 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
                   <HStack key={token.address} w="full">
                     <Radio value={token.address} />
                     <TokenRow
-                      chain={token.chain}
                       address={token.address as Address}
-                      value={amountOutForToken(token.address as Address)}
+                      chain={token.chain}
                       disabled={token.address !== singleTokenOutAddress}
-                      showZeroAmountAsDash
                       isLoading={isLoading}
+                      showZeroAmountAsDash
+                      value={amountOutForToken(token.address as Address)}
                     />
                   </HStack>
                 )

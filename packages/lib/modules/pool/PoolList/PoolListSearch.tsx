@@ -12,11 +12,11 @@ export function PoolListSearch() {
       <form>
         <FormControl w="full">
           <SearchInput
-            search={searchText}
-            setSearch={setSearch}
-            placeholder="Search..."
             ariaLabel="search for a pool"
             isLoading={loading}
+            placeholder="Search..."
+            search={searchText}
+            setSearch={setSearch}
           />
         </FormControl>
       </form>

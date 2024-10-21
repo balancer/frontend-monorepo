@@ -127,10 +127,10 @@ export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): 
           const renderAction = () => (
             <ChainSyncButton
               key={stepId}
-              network={network}
-              stepId={stepId}
               layerZeroChainId={layerZeroChainId}
+              network={network}
               omniVotingEscrow={omniVotingEscrow}
+              stepId={stepId}
             />
           )
 

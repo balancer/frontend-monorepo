@@ -3,7 +3,7 @@ import { PropsWithChildren } from 'react'
 
 export default function DebugLayout({ children }: PropsWithChildren) {
   return (
-    <DefaultPageContainer width="90%" maxW="90%">
+    <DefaultPageContainer maxW="90%" width="90%">
       {children}
     </DefaultPageContainer>
   )

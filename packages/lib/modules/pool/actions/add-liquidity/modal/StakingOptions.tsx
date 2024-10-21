@@ -27,54 +27,54 @@ export function StakingOptions() {
   return (
     <>
       <Text mb="2">Staking options</Text>
-      <HStack w="full" justify="space-between" alignItems="stretch">
-        <Card variant="modalSubSection" position="relative">
+      <HStack alignItems="stretch" justify="space-between" w="full">
+        <Card position="relative" variant="modalSubSection">
           <VStack align="left" spacing="md">
             <Text color="grayText">Balancer</Text>
             <HStack>
-              <Text fontWeight="bold" color="font.primary" fontSize="md">
+              <Text color="font.primary" fontSize="md" fontWeight="bold">
                 {/* SHOULD WE USE MAX APR instead of the range?? */}
                 {/* {fNum('apr', totalApr)} */}
                 {getTotalAprLabel(pool.dynamicData.aprItems)}
               </Text>
-              <Icon as={StarsIcon} width="20px" height="20px" />
+              <Icon as={StarsIcon} height="20px" width="20px" />
             </HStack>
-            <Flex position="absolute" top={3} right={2}>
-              <Image src="/images/protocols/balancer.svg" width={30} height={30} alt="balancer" />
+            <Flex position="absolute" right={2} top={3}>
+              <Image alt="balancer" height={30} src="/images/protocols/balancer.svg" width={30} />
             </Flex>
             <Button
               as={Link}
               href={stakePath}
-              w="full"
-              variant={canStake ? 'primary' : 'disabled'}
               isDisabled={!canStake}
-              prefetch={true}
+              prefetch
+              variant={canStake ? 'primary' : 'disabled'}
+              w="full"
             >
               Stake
             </Button>
           </VStack>
         </Card>
-        <Card variant="modalSubSection" position="relative">
+        <Card position="relative" variant="modalSubSection">
           <VStack align="left" spacing="md">
             <Text color="grayText">Aura</Text>
             <HStack>
-              <Text fontWeight="bold" color="font.primary" fontSize="md">
+              <Text color="font.primary" fontSize="md" fontWeight="bold">
                 {pool.staking?.aura ? fNum('apr', pool.staking.aura.apr) : 'Not available'}
               </Text>
             </HStack>
-            <Flex position="absolute" top={3} right={2}>
-              <Image src="/images/protocols/aura.svg" width={30} height={30} alt="balancer" />
+            <Flex position="absolute" right={2} top={3}>
+              <Image alt="balancer" height={30} src="/images/protocols/aura.svg" width={30} />
             </Flex>
             {pool.staking && pool.staking.aura && (
               <>
-                <Button w="full" variant={'secondary'} onClick={auraDisclosure.onOpen}>
+                <Button onClick={auraDisclosure.onOpen} variant="secondary" w="full">
                   Learn more
                 </Button>
                 <PartnerRedirectModal
-                  partner={RedirectPartner.Aura}
-                  redirectUrl={getAuraPoolLink(getChainId(chain), pool.staking.aura.auraPoolId)}
                   isOpen={auraDisclosure.isOpen}
                   onClose={auraDisclosure.onClose}
+                  partner={RedirectPartner.Aura}
+                  redirectUrl={getAuraPoolLink(getChainId(chain), pool.staking.aura.auraPoolId)}
                 />
               </>
             )}

@@ -39,14 +39,14 @@ export function OrderRoute() {
         <Popover trigger="hover">
           <PopoverTrigger>
             <Box
+              _hover={{ opacity: 1 }}
               opacity="0.5"
               transition="opacity 0.2s var(--ease-out-cubic)"
-              _hover={{ opacity: 1 }}
             >
               <InfoIcon />
             </Box>
           </PopoverTrigger>
-          <PopoverContent p="sm" w="auto" maxW="300px">
+          <PopoverContent maxW="300px" p="sm" w="auto">
             <Text fontSize="sm" variant="secondary">
               Balancer Vault version and number of swap hops
             </Text>
@@ -102,7 +102,7 @@ export function SwapDetails() {
         You can change your slippage tolerance in your settings.`
 
   return (
-    <VStack spacing="sm" align="start" w="full" fontSize="sm">
+    <VStack align="start" fontSize="sm" spacing="sm" w="full">
       <HStack justify="space-between" w="full">
         <Text color={priceImpactColor}>Price impact</Text>
         <HStack>
@@ -117,9 +117,9 @@ export function SwapDetails() {
             <PopoverTrigger>
               {priceImpactLevel === 'low' ? (
                 <Box
+                  _hover={{ opacity: 1 }}
                   opacity="0.5"
                   transition="opacity 0.2s var(--ease-out-cubic)"
-                  _hover={{ opacity: 1 }}
                 >
                   <InfoIcon />
                 </Box>
@@ -147,9 +147,9 @@ export function SwapDetails() {
           <Popover trigger="hover">
             <PopoverTrigger>
               <Box
+                _hover={{ opacity: 1 }}
                 opacity="0.5"
                 transition="opacity 0.2s var(--ease-out-cubic)"
-                _hover={{ opacity: 1 }}
               >
                 <InfoIcon />
               </Box>
@@ -171,9 +171,9 @@ export function SwapDetails() {
           <Popover trigger="hover">
             <PopoverTrigger>
               <Box
+                _hover={{ opacity: 1 }}
                 opacity="0.5"
                 transition="opacity 0.2s var(--ease-out-cubic)"
-                _hover={{ opacity: 1 }}
               >
                 <InfoIcon />
               </Box>

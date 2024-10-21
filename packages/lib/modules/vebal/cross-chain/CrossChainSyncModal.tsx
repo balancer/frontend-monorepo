@@ -53,7 +53,7 @@ function NetworksSelectionStep({ networks, selectedNetworks, toggleNetwork }: Ne
       </Text>
       <Card gap="4">
         <Heading>
-          <HStack w="full" justifyContent="space-between">
+          <HStack justifyContent="space-between" w="full">
             <Text>Ethereum</Text>
             <Text> {Number(myVebalBalance).toFixed(4)} veBAL</Text>
           </HStack>
@@ -77,11 +77,11 @@ interface NetworkOptionsProps {
 function NetworkOptions({ networks, selectedNetworks, toggleNetwork }: NetworkOptionsProps) {
   const { l2VeBalBalances } = useCrossChainSync()
   return (
-    <VStack align="start" w="full" spacing="xs">
+    <VStack align="start" spacing="xs" w="full">
       {networks.map(network => (
         <Checkbox
-          key={`checkbox-${String(network)}`}
           isChecked={selectedNetworks.includes(network)}
+          key={`checkbox-${String(network)}`}
           onChange={e => toggleNetwork(e.target.checked, network)}
         >
           <HStack w="full">
@@ -124,18 +124,18 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onModalClose} isCentered preserveScrollBarGap>
+    <Modal isCentered isOpen={isOpen} onClose={onModalClose} preserveScrollBarGap>
       <SuccessOverlay startAnimation={!!transactionHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {showTransactionSteps && isDesktop && (
-          <DesktopStepTracker transactionSteps={transactionSteps} chain={GqlChain.Mainnet} />
+          <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
         )}
         {showTransactionSteps ? (
           <TransactionModalHeader
+            chain={GqlChain.Mainnet}
             label="Sync veBAL"
             txHash={transactionHash}
-            chain={GqlChain.Mainnet}
           />
         ) : (
           <ModalHeader>Sync veBAL: Select networks</ModalHeader>
@@ -146,7 +146,7 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
             {showTransactionSteps ? (
               <>
                 {isMobile && (
-                  <MobileStepTracker transactionSteps={transactionSteps} chain={GqlChain.Mainnet} />
+                  <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
                 )}
               </>
             ) : (
@@ -161,18 +161,18 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
 
         {showTransactionSteps ? (
           <ActionModalFooter
-            isSuccess={!!transactionHash}
             currentStep={transactionSteps.currentStep}
-            returnLabel="Return to vebal"
+            isSuccess={!!transactionHash}
             returnAction={onClose}
+            returnLabel="Return to vebal"
           />
         ) : (
           <ModalFooter>
             <Button
               isDisabled={selectedNetworks.length === 0}
               onClick={() => setShowTransactionSteps(true)}
-              w="full"
               size="lg"
+              w="full"
             >
               Next
             </Button>

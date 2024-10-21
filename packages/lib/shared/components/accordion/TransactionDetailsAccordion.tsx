@@ -25,7 +25,7 @@ export function TransactionDetailsAccordion() {
     : '-'
 
   return (
-    <Accordion w="full" variant="button" allowToggle>
+    <Accordion allowToggle variant="button" w="full">
       <AccordionItem>
         <AccordionButton>
           <Box as="span" color="font.primary" flex="1" textAlign="left">
@@ -34,13 +34,13 @@ export function TransactionDetailsAccordion() {
           <AccordionIcon textColor="font.highlight" />
         </AccordionButton>
         <AccordionPanel pb="md">
-          <VStack w="full" textColor="grayText">
-            <HStack w="full" justifyContent="space-between">
+          <VStack textColor="grayText" w="full">
+            <HStack justifyContent="space-between" w="full">
               <div>Total added</div>
               <div> {toCurrency(totalUSDValue, { abbreviated: false })}</div>
             </HStack>
             {priceImpact && (
-              <HStack w="full" justifyContent="space-between">
+              <HStack justifyContent="space-between" w="full">
                 <div>Price impact</div>
                 <div>{toCurrency(priceImpactUsdValue)}</div>
               </HStack>
@@ -50,7 +50,7 @@ export function TransactionDetailsAccordion() {
               <div>TODO</div>
             </HStack> */}
             {!isCowAmmPool(pool.type) && (
-              <HStack w="full" justifyContent="space-between">
+              <HStack justifyContent="space-between" w="full">
                 <div>Share of pool</div>
                 <div>{fNum('sharePercent', calcUserShareOfPool(pool))}</div>
               </HStack>

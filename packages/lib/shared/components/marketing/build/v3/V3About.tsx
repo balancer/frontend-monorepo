@@ -13,45 +13,45 @@ import Section from '@repo/lib/shared/components/layout/Section'
 export function V3About() {
   return (
     <Section className="about-v3">
-      <Box maxW="maxContent" m="0 auto" px={{ base: 'md', xl: '0' }}>
+      <Box m="0 auto" maxW="maxContent" px={{ base: 'md', xl: '0' }}>
         <Box
-          pb={{ base: 'lg', md: '2xl' }}
-          w="full"
-          maxW="4xl"
           m="auto"
+          maxW="4xl"
+          pb={{ base: 'lg', md: '2xl' }}
           textAlign={{ base: 'left', md: 'center' }}
+          w="full"
         >
           <Text pb="lg" variant="eyebrow" w="full">
             Core Features
           </Text>
           <Heading
-            pb="md"
-            w="full"
             as="h2"
+            pb="md"
             size="2xl"
             sx={{
               textWrap: 'balance',
             }}
+            w="full"
           >
             Code less. Build more.
           </Heading>
           <Text
-            w="full"
             sx={{
               textWrap: 'balance',
             }}
+            w="full"
           >
             To simplify the developer experience, v3 removes complexity from the creation of new
             AMMs and custom pools by optimizing the vault and creating a new hooks framework.
           </Text>
         </Box>
 
-        <Box w="full" maxW="2xl" m="auto">
+        <Box m="auto" maxW="2xl" w="full">
           <Accordion allowMultiple>
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">Simplified AMM Deployment </Text>
                   </Box>
                   <AccordionIcon />
@@ -72,7 +72,7 @@ export function V3About() {
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">Reusable Hooks</Text>
                   </Box>
                   <AccordionIcon />
@@ -93,7 +93,7 @@ export function V3About() {
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">Optimized Vault</Text>
                   </Box>
                   <AccordionIcon />
@@ -115,7 +115,7 @@ export function V3About() {
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">Decimal Scaling</Text>
                   </Box>
                   <AccordionIcon />
@@ -136,7 +136,7 @@ export function V3About() {
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">Rate Scaling</Text>
                   </Box>
                   <AccordionIcon />
@@ -159,7 +159,7 @@ export function V3About() {
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">Liquidity Invariant Approximation</Text>
                   </Box>
                   <AccordionIcon />
@@ -181,7 +181,7 @@ export function V3About() {
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">Transient Accounting</Text>
                   </Box>
                   <AccordionIcon />
@@ -204,7 +204,7 @@ export function V3About() {
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">ERC20MultiToken</Text>
                   </Box>
                   <AccordionIcon />
@@ -225,7 +225,7 @@ export function V3About() {
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">Swap Fee Management</Text>
                   </Box>
                   <AccordionIcon />
@@ -246,7 +246,7 @@ export function V3About() {
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">Pool Creator Fee</Text>
                   </Box>
                   <AccordionIcon />
@@ -267,7 +267,7 @@ export function V3About() {
             <AccordionItem>
               <h2>
                 <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left" py="ms">
+                  <Box as="span" flex="1" py="ms" textAlign="left">
                     <Text fontWeight="bold">Pool Pause Manager</Text>
                   </Box>
                   <AccordionIcon />

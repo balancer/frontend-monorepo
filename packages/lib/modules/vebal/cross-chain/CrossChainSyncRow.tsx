@@ -12,14 +12,14 @@ export function CrossChainSyncRow({ network, current }: { network: GqlChain; cur
   const myVebalBalance = data?.veBalGetUser.balance
 
   return (
-    <VStack opacity={current ? 1 : 0.6} alignItems="unset">
+    <VStack alignItems="unset" opacity={current ? 1 : 0.6}>
       <HStack alignSelf="start">
         <Image
-          src={`/images/chains/${network}.svg`}
           alt={`Chain icon for ${getChainShortName(network)}`}
-          width={20}
           height={20}
+          src={`/images/chains/${network}.svg`}
           title={getChainShortName(network)}
+          width={20}
         />
         <Text>{getChainShortName(network)}</Text>
       </HStack>

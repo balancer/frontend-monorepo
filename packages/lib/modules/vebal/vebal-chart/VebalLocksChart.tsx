@@ -10,9 +10,9 @@ export function VeBALLocksChart(props: CardProps) {
     <Card position="relative" {...props}>
       <ReactECharts
         onChartReady={onChartReady}
-        style={{ height: '100%', width: '100%' }}
-        option={options}
         onEvents={onEvents}
+        option={options}
+        style={{ height: '100%', width: '100%' }}
       />
     </Card>
   )

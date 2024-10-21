@@ -60,7 +60,7 @@ export function AcceptPoliciesModal() {
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleOnClose} isCentered preserveScrollBarGap>
+    <Modal isCentered isOpen={isOpen} onClose={handleOnClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Accept Balancer UI policies</ModalHeader>
@@ -68,12 +68,12 @@ export function AcceptPoliciesModal() {
         <ModalBody>
           <VStack align="flex-start" gap="md">
             <Checkbox
-              size="lg"
+              alignItems="start"
               isChecked={isChecked}
               onChange={e => setIsChecked(e.target.checked)}
-              alignItems="start"
+              size="lg"
             >
-              <Box fontSize="md" color="font.primary" mt="-3px">
+              <Box color="font.primary" fontSize="md" mt="-3px">
                 By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
                 <Link as={NextLink} href="/terms-of-use">
                   Terms of Use
@@ -101,11 +101,11 @@ export function AcceptPoliciesModal() {
         </ModalBody>
         <ModalFooter>
           <Button
-            variant="secondary"
-            w="full"
-            size="lg"
             isDisabled={!isChecked}
             onClick={handleClick}
+            size="lg"
+            variant="secondary"
+            w="full"
           >
             Proceed
           </Button>

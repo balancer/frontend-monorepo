@@ -12,7 +12,7 @@ import { ReactLenis } from '@studio-freight/react-lenis'
 
 export default function Home() {
   return (
-    <ReactLenis root options={{ lerp: 0.1, duration: 1.5 }}>
+    <ReactLenis options={{ lerp: 0.1, duration: 1.5 }} root>
       <Box className="build">
         <V3Hero />
         <V3VideoTutorial />

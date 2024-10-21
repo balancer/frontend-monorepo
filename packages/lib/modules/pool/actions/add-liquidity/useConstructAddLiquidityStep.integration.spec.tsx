@@ -8,11 +8,13 @@ import { PropsWithChildren } from 'react'
 
 const PoolProvider = buildDefaultPoolTestProvider(aWjAuraWethPoolElementMock())
 
-export const Providers = ({ children }: PropsWithChildren) => (
-  <PoolProvider>
-    <DefaultAddLiquidityTestProvider>{children}</DefaultAddLiquidityTestProvider>
-  </PoolProvider>
-)
+export function Providers({ children }: PropsWithChildren) {
+  return (
+    <PoolProvider>
+      <DefaultAddLiquidityTestProvider>{children}</DefaultAddLiquidityTestProvider>
+    </PoolProvider>
+  )
+}
 
 // async function testConstructAddLiquidityStep() {
 //   const { result } = testHook(

@@ -9,5 +9,5 @@ type Props = {
 export function SimulationError({ simulationQuery }: Props) {
   if (!simulationQuery.isError) return
 
-  return <GenericError error={simulationQuery.error}></GenericError>
+  return <GenericError error={simulationQuery.error} />
 }

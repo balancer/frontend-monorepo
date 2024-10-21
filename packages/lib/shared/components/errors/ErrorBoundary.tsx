@@ -20,7 +20,7 @@ export function BoundaryError({ error, resetErrorBoundary }: BoundaryErrorProps)
   const _error = ensureError(error)
 
   return (
-    <Box w="full" minH="200px" border="2px dashed" borderColor="red.500" p="md" rounded="lg">
+    <Box border="2px dashed" borderColor="red.500" minH="200px" p="md" rounded="lg" w="full">
       <VStack align="start" spacing="md">
         <Heading size="md">Something went wrong! :(</Heading>
         <VStack align="start" spacing="xs">
@@ -35,7 +35,7 @@ export function BoundaryError({ error, resetErrorBoundary }: BoundaryErrorProps)
           </Text>
         </VStack>
 
-        <Button size="sm" onClick={resetErrorBoundary}>
+        <Button onClick={resetErrorBoundary} size="sm">
           Try again
         </Button>
       </VStack>

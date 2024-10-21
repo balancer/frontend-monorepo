@@ -38,17 +38,17 @@ export function PortfolioSummary() {
   return (
     <FadeInOnView>
       <Card
-        variant="level2"
-        width="full"
-        display="flex"
         alignItems="center"
+        borderWidth={0}
+        direction={['column', 'column', 'row']}
+        display="flex"
+        gap={[3, 5]}
+        justifyContent={['space-around']}
+        p={['md', 'md']}
         position="relative"
         shadow="2xl"
-        borderWidth={0}
-        p={['md', 'md']}
-        direction={['column', 'column', 'row']}
-        justifyContent={['space-around']}
-        gap={[3, 5]}
+        variant="level2"
+        width="full"
       >
         <NoisyCard
           cardProps={{
@@ -56,9 +56,9 @@ export function PortfolioSummary() {
           }}
           contentProps={commonNoisyCardProps.contentProps}
         >
-          <ZenGarden variant="diamond" sizePx="225px" />
-          <Icon as={BarChart} color="font.primary" mb="sm" width="30px" height="30px" />
-          <Heading size="sm" color="grayText" mb="sm">
+          <ZenGarden sizePx="225px" variant="diamond" />
+          <Icon as={BarChart} color="font.primary" height="30px" mb="sm" width="30px" />
+          <Heading color="grayText" mb="sm" size="sm">
             My Balancer liquidity
           </Heading>
           {isLoadingPortfolio ? (
@@ -74,16 +74,16 @@ export function PortfolioSummary() {
           }}
           contentProps={commonNoisyCardProps.contentProps}
         >
-          <ZenGarden variant="diamond" sizePx="225px" />
-          <Icon as={StarsIcon} mb="sm" width="30px" height="30px" />
-          <Heading size="sm" mb="sm" color="grayText">
+          <ZenGarden sizePx="225px" variant="diamond" />
+          <Icon as={StarsIcon} height="30px" mb="sm" width="30px" />
+          <Heading color="grayText" mb="sm" size="sm">
             Claimable incentives
           </Heading>
 
           {isLoadingPortfolio || isLoadingClaimableRewards ? (
             <Skeleton height="10" w="36" />
           ) : (
-            <Heading variant="special" size="lg">
+            <Heading size="lg" variant="special">
               {toCurrency(totalClaimableBalance)}
             </Heading>
           )}

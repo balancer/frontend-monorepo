@@ -25,55 +25,55 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
   return (
     <FadeInOnView>
       <Box
-        key={keyValue}
-        transition="all 0.2s ease-in-out"
         _hover={{
           bg: 'background.level0',
         }}
-        rounded="md"
+        key={keyValue}
         px={{ base: '0', sm: 'md' }}
+        rounded="md"
+        transition="all 0.2s ease-in-out"
         w="full"
       >
-        <Link href={getPoolPath(pool)} prefetch={true}>
-          <Grid {...rest} py={{ base: 'ms', md: 'md' }} pr="4">
+        <Link href={getPoolPath(pool)} prefetch>
+          <Grid {...rest} pr="4" py={{ base: 'ms', md: 'md' }}>
             <GridItem>
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
               <PoolListTokenPills
-                pool={pool}
                 h={['32px', '36px']}
-                p={['xxs', 'sm']}
-                pr={[1.5, 'ms']}
                 iconSize={20}
+                p={['xxs', 'sm']}
+                pool={pool}
+                pr={[1.5, 'ms']}
               />
             </GridItem>
             <GridItem>
-              <Text textAlign="left" fontWeight="medium" textTransform="capitalize">
+              <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
                 {getPoolTypeLabel(pool.type)}
               </Text>
             </GridItem>
             {userAddress && (
               <GridItem>
-                <Text textAlign="right" fontWeight="medium">
+                <Text fontWeight="medium" textAlign="right">
                   {toCurrency(getUserTotalBalanceUsd(pool), { abbreviated: false })}
                 </Text>
               </GridItem>
             )}
             <GridItem>
               <Text
-                title={toCurrency(pool.dynamicData.totalLiquidity, { abbreviated: false })}
-                textAlign="right"
                 fontWeight="medium"
+                textAlign="right"
+                title={toCurrency(pool.dynamicData.totalLiquidity, { abbreviated: false })}
               >
                 {toCurrency(pool.dynamicData.totalLiquidity)}
               </Text>
             </GridItem>
             <GridItem textAlign="right">
               <Text
-                title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
-                textAlign="right"
                 fontWeight="medium"
+                textAlign="right"
+                title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
               >
                 {toCurrency(pool.dynamicData.volume24h)}
               </Text>
@@ -81,10 +81,10 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
             <GridItem justifySelf="end" pr={{ base: 'md', xl: '0' }}>
               <MemoizedMainAprTooltip
                 aprItems={pool.dynamicData.aprItems}
+                height="auto"
+                pool={pool}
                 poolId={pool.id}
                 textProps={{ fontWeight: 'medium', textAlign: 'right' }}
-                pool={pool}
-                height="auto"
               />
             </GridItem>
           </Grid>

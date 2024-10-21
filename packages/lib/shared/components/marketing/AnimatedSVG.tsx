@@ -18,9 +18,9 @@ export const AnimatedSVG: React.FC = () => {
   )
 
   return (
-    <Box ref={containerRef} w="100%" h="400px" position="relative">
-      <svg width="100%" height="100%" viewBox="0 0 100 10" preserveAspectRatio="none">
-        <motion.path fill={bgColor} d={pathD} style={{ pathLength }} strokeWidth={0.1} />
+    <Box h="400px" position="relative" ref={containerRef} w="100%">
+      <svg height="100%" preserveAspectRatio="none" viewBox="0 0 100 10" width="100%">
+        <motion.path d={pathD} fill={bgColor} strokeWidth={0.1} style={{ pathLength }} />
       </svg>
     </Box>
   )

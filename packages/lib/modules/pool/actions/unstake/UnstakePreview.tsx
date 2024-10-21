@@ -13,20 +13,20 @@ export function UnstakePreview() {
     <VStack spacing="sm" w="full">
       <Card variant="subSection">
         <TokenRow
-          label={unstakeTxHash ? 'Unstaked LP tokens' : 'Staked LP tokens'}
           address={pool.address as Address}
-          value={quoteAmountOut}
           chain={pool.chain}
-          pool={pool}
           isBpt
+          label={unstakeTxHash ? 'Unstaked LP tokens' : 'Staked LP tokens'}
+          pool={pool}
+          value={quoteAmountOut}
         />
       </Card>
       <Card variant="subSection">
         <TokenRowGroup
-          label={unstakeTxHash ? 'Claimed rewards' : 'Claimable rewards'}
           amounts={rewardAmounts}
-          totalUSDValue={totalClaimableUsd}
           chain={pool.chain}
+          label={unstakeTxHash ? 'Claimed rewards' : 'Claimable rewards'}
+          totalUSDValue={totalClaimableUsd}
         />
       </Card>
     </VStack>

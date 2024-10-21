@@ -14,7 +14,7 @@ export function StakeForm() {
   const { onClose, onOpen, isOpen } = useModalWithPoolRedirect(pool, stakeTxHash)
 
   return (
-    <Box h="full" w="full" maxW="lg" mx="auto">
+    <Box h="full" maxW="lg" mx="auto" w="full">
       <Card>
         <CardHeader>Stake for rewards</CardHeader>
         <CardBody>
@@ -24,20 +24,20 @@ export function StakeForm() {
         <CardFooter>
           <Tooltip label={isDisabled ? disabledReason : ''}>
             <Button
-              ref={nextBtn}
-              variant="secondary"
-              w="full"
-              size="lg"
               isDisabled={isDisabled}
               isLoading={isLoading}
               onClick={() => !isDisabled && onOpen()}
+              ref={nextBtn}
+              size="lg"
+              variant="secondary"
+              w="full"
             >
               Next
             </Button>
           </Tooltip>
         </CardFooter>
       </Card>
-      <StakeModal finalFocusRef={nextBtn} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <StakeModal finalFocusRef={nextBtn} isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
     </Box>
   )
 }

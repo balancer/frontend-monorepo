@@ -7,9 +7,9 @@ import { PoolRisks } from './PoolRisks/PoolRisks'
 
 export function PoolInfoLayout() {
   return (
-    <Stack w="full" spacing="md" direction={{ base: 'column', md: 'row' }} justifyContent="stretch">
+    <Stack direction={{ base: 'column', md: 'row' }} justifyContent="stretch" spacing="md" w="full">
       <PoolAttributes />
-      <VStack w="full" spacing="md">
+      <VStack spacing="md" w="full">
         <PoolRisks h="full" />
         <PoolContracts h="full" />
       </VStack>

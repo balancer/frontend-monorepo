@@ -19,9 +19,9 @@ export function Step(props: StepProps) {
 
   return (
     <HStack alignItems="flex-start">
-      <StepIndicator transaction={transaction} {...props}></StepIndicator>
-      <VStack spacing="0" alignItems="start">
-        <Text mt={isActive ? -0.3 : 0} color={color} fontWeight="bold">
+      <StepIndicator transaction={transaction} {...props} />
+      <VStack alignItems="start" spacing="0">
+        <Text color={color} fontWeight="bold" mt={isActive ? -0.3 : 0}>
           {title}
         </Text>
         <NestedInfo color={color} details={props.step.details} />
@@ -42,13 +42,13 @@ export function StepIndicator({
   if (status === 'complete') {
     return (
       <CircularProgress
-        value={100}
-        trackColor="border.base"
-        thickness="6"
-        size="7"
         color="font.highlight"
+        size="7"
+        thickness="6"
+        trackColor="border.base"
+        value={100}
       >
-        <CircularProgressLabel fontSize="md" color="font.highlight" pl={1.5}>
+        <CircularProgressLabel color="font.highlight" fontSize="md" pl={1.5}>
           <Check size={15} strokeWidth={4} />
         </CircularProgressLabel>
       </CircularProgress>
@@ -57,14 +57,14 @@ export function StepIndicator({
 
   return (
     <CircularProgress
-      value={100}
-      isIndeterminate={isActiveLoading}
-      trackColor="border.base"
-      thickness={isActive ? 8 : 6}
-      size="7"
       color={color}
+      isIndeterminate={isActiveLoading}
+      size="7"
+      thickness={isActive ? 8 : 6}
+      trackColor="border.base"
+      value={100}
     >
-      <CircularProgressLabel fontSize="sm" fontWeight="bold" color={color}>
+      <CircularProgressLabel color={color} fontSize="sm" fontWeight="bold">
         {stepNumber}
       </CircularProgressLabel>
     </CircularProgress>
@@ -73,17 +73,17 @@ export function StepIndicator({
 
 function NestedInfo({ color, details }: { color: string; details?: StepDetails }) {
   return (
-    <Box mt="0" p="1" pl="0" mb="0">
-      <Text fontSize="sm" color={color} lineHeight="1">
+    <Box mb="0" mt="0" p="1" pl="0">
+      <Text color={color} fontSize="sm" lineHeight="1">
         {details?.gasless ? 'Free signature' : 'Gas transaction'}
       </Text>
 
       {details?.batchApprovalTokens &&
         details.batchApprovalTokens.length > 1 &&
         details.batchApprovalTokens.map((token, index) => (
-          <HStack mt={index === 0 ? '2' : '1'} key={token}>
+          <HStack key={token} mt={index === 0 ? '2' : '1'}>
             <SubStepIndicator color={color} label={indexToLetter(index)} />
-            <Text fontSize="sm" color={color}>
+            <Text color={color} fontSize="sm">
               {token}
             </Text>
           </HStack>
@@ -94,8 +94,8 @@ function NestedInfo({ color, details }: { color: string; details?: StepDetails }
 
 function SubStepIndicator({ color, label }: { color: string; label: string }) {
   return (
-    <CircularProgress value={100} trackColor="border.base" thickness="2" size="6" color={color}>
-      <CircularProgressLabel fontSize="xs" fontWeight="bold" color={color}>
+    <CircularProgress color={color} size="6" thickness="2" trackColor="border.base" value={100}>
+      <CircularProgressLabel color={color} fontSize="xs" fontWeight="bold">
         {label}
       </CircularProgressLabel>
     </CircularProgress>

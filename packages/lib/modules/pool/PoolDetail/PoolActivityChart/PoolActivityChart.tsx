@@ -9,8 +9,8 @@ import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 
 const AnimateOpacity: FC<PropsWithChildren<object>> = ({ children }) => (
   <motion.div
-    initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
+    initial={{ opacity: 0 }}
     transition={{ duration: 0.5, delay: 0.2 }}
   >
     {children}
@@ -39,39 +39,39 @@ export function PoolActivityChart() {
 
   return (
     <Box position="relative">
-      {isLoading && <Skeleton w="100%" h="100%" position="absolute" />}
+      {isLoading && <Skeleton h="100%" position="absolute" w="100%" />}
       {chartOption && (
         <Box>
           <motion.div
-            initial={{ height: 90 }}
             animate={{ height: chartHeight, opacity: isExpanded ? [0, 1] : 1 }}
+            initial={{ height: 90 }}
             transition={{ duration: 0.2, ease: easeOut }}
           >
             <ReactECharts
-              style={{ height: `${chartHeight}px` }}
-              option={chartOption}
               onEvents={{}}
+              option={chartOption}
               ref={eChartsRef}
+              style={{ height: `${chartHeight}px` }}
             />
           </motion.div>
         </Box>
       )}
       {isExpanded && (
         <AnimateOpacity>
-          <Divider pt="2" mb="4" />
+          <Divider mb="4" pt="2" />
         </AnimateOpacity>
       )}
       {!isLoading && isExpanded && (
         <AnimateOpacity>
-          <HStack spacing="4" px={['1', '2']}>
+          <HStack px={['1', '2']} spacing="4">
             {legendTabs.map((tab, index) => (
-              <HStack alignItems="center" key={index} gap="2">
+              <HStack alignItems="center" gap="2" key={index}>
                 <Box
-                  height="2"
-                  width="2"
                   backgroundImage={tab.color}
                   borderRadius="50%"
                   display="inline-block"
+                  height="2"
+                  width="2"
                 />
                 <Text color="font.secondary" fontSize="sm">
                   {tab.label}

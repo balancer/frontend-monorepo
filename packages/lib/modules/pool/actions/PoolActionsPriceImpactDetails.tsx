@@ -56,12 +56,12 @@ export function PoolActionsPriceImpactDetails({
     : currentShareOfPool.minus(changedShareOfPool)
 
   return (
-    <VStack spacing="sm" align="start" w="full" fontSize="sm">
+    <VStack align="start" fontSize="sm" spacing="sm" w="full">
       <HStack justify="space-between" w="full">
         <Text color="grayText">Price impact</Text>
         <HStack>
           {isLoading ? (
-            <Skeleton w="40px" h="16px" />
+            <Skeleton h="16px" w="40px" />
           ) : priceImpactLevel === 'unknown' ? (
             <Text>Unknown</Text>
           ) : (
@@ -73,9 +73,9 @@ export function PoolActionsPriceImpactDetails({
             <PopoverTrigger>
               {priceImpactLevel === 'low' ? (
                 <Box
+                  _hover={{ opacity: 1 }}
                   opacity="0.5"
                   transition="opacity 0.2s var(--ease-out-cubic)"
-                  _hover={{ opacity: 1 }}
                 >
                   <InfoIcon />
                 </Box>
@@ -85,7 +85,7 @@ export function PoolActionsPriceImpactDetails({
                 </Box>
               )}
             </PopoverTrigger>
-            <PopoverContent p="sm" w="auto" maxW="300px">
+            <PopoverContent maxW="300px" p="sm" w="auto">
               <Text fontSize="sm" variant="secondary">
                 In general, adding or removing liquidity in proportional amounts to the token
                 weights of the pool incur low price impact. Adding custom token amounts
@@ -100,7 +100,7 @@ export function PoolActionsPriceImpactDetails({
         <Text color="grayText">Max slippage</Text>
         <HStack>
           {isLoading ? (
-            <Skeleton w="40px" h="16px" />
+            <Skeleton h="16px" w="40px" />
           ) : (
             <NumberText color="grayText">
               {toCurrency(maxSlippageUsd, { abbreviated: false })} ({fNum('slippage', slippage)})
@@ -109,14 +109,14 @@ export function PoolActionsPriceImpactDetails({
           <Popover trigger="hover">
             <PopoverTrigger>
               <Box
+                _hover={{ opacity: 1 }}
                 opacity="0.5"
                 transition="opacity 0.2s var(--ease-out-cubic)"
-                _hover={{ opacity: 1 }}
               >
                 <InfoIcon />
               </Box>
             </PopoverTrigger>
-            <PopoverContent p="sm" w="auto" maxW="300px">
+            <PopoverContent maxW="300px" p="sm" w="auto">
               <Text fontSize="sm" variant="secondary">
                 Slippage occurs when market conditions change between the time your order is
                 submitted and the time it gets executed on-chain. Slippage tolerance is the maximum
@@ -132,26 +132,24 @@ export function PoolActionsPriceImpactDetails({
           <HStack>
             <HStack gap="0.5">
               {isLoading || !bptAmount ? (
-                <Skeleton w="40px" h="16px" />
+                <Skeleton h="16px" w="40px" />
               ) : (
-                <>
-                  <NumberText color="grayText">
-                    {fNum('token', formatUnits(bptAmount, BPT_DECIMALS))}
-                  </NumberText>
-                </>
+                <NumberText color="grayText">
+                  {fNum('token', formatUnits(bptAmount, BPT_DECIMALS))}
+                </NumberText>
               )}
             </HStack>
             <Popover trigger="hover">
               <PopoverTrigger>
                 <Box
+                  _hover={{ opacity: 1 }}
                   opacity="0.5"
                   transition="opacity 0.2s var(--ease-out-cubic)"
-                  _hover={{ opacity: 1 }}
                 >
                   <InfoIcon />
                 </Box>
               </PopoverTrigger>
-              <PopoverContent p="sm" w="auto" maxW="300px">
+              <PopoverContent maxW="300px" p="sm" w="auto">
                 <Text fontSize="sm" variant="secondary">
                   LP tokens are digital assets which are issued to Liquidity Providers to represent
                   their share of the pool. LP tokens can be redeemed to reclaim the original tokens
@@ -167,7 +165,7 @@ export function PoolActionsPriceImpactDetails({
         <HStack>
           <HStack gap="0.5">
             {isLoading ? (
-              <Skeleton w="40px" h="16px" />
+              <Skeleton h="16px" w="40px" />
             ) : (
               <>
                 <NumberText color="grayText">{fNum('sharePercent', currentShareOfPool)}</NumberText>
@@ -179,14 +177,14 @@ export function PoolActionsPriceImpactDetails({
           <Popover trigger="hover">
             <PopoverTrigger>
               <Box
+                _hover={{ opacity: 1 }}
                 opacity="0.5"
                 transition="opacity 0.2s var(--ease-out-cubic)"
-                _hover={{ opacity: 1 }}
               >
                 <InfoIcon />
               </Box>
             </PopoverTrigger>
-            <PopoverContent p="sm" w="auto" maxW="300px">
+            <PopoverContent maxW="300px" p="sm" w="auto">
               <Text fontSize="sm" variant="secondary">
                 The percentage of the pool that you will own after this transaction.
               </Text>

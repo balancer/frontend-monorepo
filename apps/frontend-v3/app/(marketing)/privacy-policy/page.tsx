@@ -354,7 +354,7 @@ export default function Privacy() {
                 Our Services do not respond to “Do Not Track” signals communicated by your browser.
                 We do not knowingly retain or sell tracking information collected about your online
                 activity. For more information about Do Not Track, please visit{' '}
-                <a className="link" target="_blank" href="https://allaboutdnt.com/">
+                <a className="link" href="https://allaboutdnt.com/" rel="noopener" target="_blank">
                   www.allaboutdnt.com
                 </a>
                 .

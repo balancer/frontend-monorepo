@@ -27,7 +27,7 @@ const options: CurrencyOption[] = Object.values(SupportedCurrency).map(currency 
   label: (
     <HStack>
       <Circle bg="background.level2" size={6}>
-        <Image src={currencyIconMap[currency]} width={20} height={20} alt={currency} />
+        <Image alt={currency} height={20} src={currencyIconMap[currency]} width={20} />
       </Circle>
       <Text>{currency}</Text>
     </HStack>
@@ -47,11 +47,11 @@ export function CurrencySelect({ id }: { id: string }) {
 
   return (
     <Select<CurrencyOption, false, GroupBase<CurrencyOption>>
-      instanceId={id}
-      value={_value}
-      options={options}
-      onChange={handleChange}
       chakraStyles={chakraStyles}
+      instanceId={id}
+      onChange={handleChange}
+      options={options}
+      value={_value}
     />
   )
 }
