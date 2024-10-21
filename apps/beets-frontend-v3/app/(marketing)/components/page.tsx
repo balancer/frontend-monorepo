@@ -1180,12 +1180,12 @@ export default function Components() {
                   }}
                   _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
                   bg="input.bgDefault"
+                  border="1px solid"
+                  borderColor="input.borderDefault"
                   isDisabled
                   placeholder="Placeholder"
                   type="email"
-                  border="1px solid"
                   // boxShadow="input.innerBase"
-                  borderColor="input.borderDefault"
                 />
               </FormControl>
             </Box>
