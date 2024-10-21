@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, GridProps, Text } from '@chakra-ui/react'
+import { Box, Center, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 import { getPoolPath, getPoolTypeLabel } from '../../pool.utils'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
@@ -10,6 +10,9 @@ import { PoolListItem } from '../../pool.types'
 import { PoolListTokenPills } from '../PoolListTokenPills'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { isCowAmmPool } from '../../pool.helpers'
+import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
+import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -17,6 +20,35 @@ interface Props extends GridProps {
 }
 
 const MemoizedMainAprTooltip = memo(MainAprTooltip)
+
+function PoolVersionTag({ pool }: { pool: PoolListItem }) {
+  if (isCowAmmPool(pool.type)) {
+    return (
+      <BalBadge w={8} h={8} p={0} fontSize="xs" color="font.secondary" textTransform="lowercase">
+        <Center w="full" h="full">
+          <CowIcon width={18} height={18} />
+        </Center>
+      </BalBadge>
+    )
+  } else if (pool.protocolVersion === 3) {
+    return (
+      <BalBadge w={8} h={8} p={0} fontSize="xs" color="font.secondary" textTransform="lowercase">
+        <Center w="full" h="full">
+          v3
+        </Center>
+      </BalBadge>
+    )
+  } else if (pool.protocolVersion === 2) {
+    return (
+      <BalBadge w={8} h={8} p={0} fontSize="xs" color="font.secondary" textTransform="lowercase">
+        <Center w="full" h="full">
+          v2
+        </Center>
+      </BalBadge>
+    )
+  }
+  return null
+}
 
 export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
   const { userAddress } = usePoolListQueryState()
@@ -48,10 +80,13 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
                 iconSize={20}
               />
             </GridItem>
-            <GridItem>
-              <Text textAlign="left" fontWeight="medium" textTransform="capitalize">
-                {getPoolTypeLabel(pool.type)}
-              </Text>
+            <GridItem minW="32">
+              <HStack>
+                <PoolVersionTag pool={pool} />
+                <Text textAlign="left" fontWeight="medium" textTransform="capitalize">
+                  {getPoolTypeLabel(pool.type)}
+                </Text>
+              </HStack>
             </GridItem>
             {userAddress && (
               <GridItem>
