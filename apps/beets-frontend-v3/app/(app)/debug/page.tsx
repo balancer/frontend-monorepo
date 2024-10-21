@@ -7,7 +7,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 export default function Debug() {
   return (
     <FadeInOnView>
-      <VStack padding="lg" margin="lg">
+      <VStack margin="lg" padding="lg">
         <Heading size="md">Demos</Heading>
         <Link as={NextLink} href="/debug/pools">
           Pools
@@ -35,9 +35,6 @@ export default function Debug() {
         </Link>
         <Link as={NextLink} href="/debug/revoke-relayer-approval">
           Revoke relayer approval
-        </Link>
-        <Link as={NextLink} href="/debug/permit2-allowance">
-          Permit2 allowance
         </Link>
         <Link as={NextLink} href="/debug/permit2-allowance">
           Permit2 allowance

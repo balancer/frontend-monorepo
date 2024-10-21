@@ -4,15 +4,14 @@ import { useApproveRelayerStep } from '@repo/lib/modules/relayer/useApproveRelay
 import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { getSpenderForAddLiquidity } from '@repo/lib/modules/tokens/token.helpers'
-import { useSignPermit2Step } from '@repo/lib/modules/transactions/transaction-steps/useSignPermit2Step'
 import { useSignRelayerStep } from '@repo/lib/modules/transactions/transaction-steps/useSignRelayerStep'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { useMemo } from 'react'
 import { usePool } from '../../PoolProvider'
 import { requiresPermit2Approval } from '../../pool.helpers'
 import { LiquidityActionHelpers } from '../LiquidityActionHelpers'
-import { SdkQueryAddLiquidityOutput } from './add-liquidity.types'
 import { AddLiquidityStepParams, useAddLiquidityStep } from './useAddLiquidityStep'
+import { useSignPermit2AddStep } from './useSignPermit2AddStep'
 
 type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
@@ -48,13 +47,13 @@ export function useAddLiquiditySteps({
       isPermit2,
     })
 
-  const signPermit2Step = useSignPermit2Step({
-    pool,
+
+  const wethIsEth = helpers.isNativeAssetIn(humanAmountsIn)
+
+  const signPermit2Step = useSignPermit2AddStep({
+    wethIsEth,
     humanAmountsIn,
-    slippagePercent: slippage,
-    queryOutput: simulationQuery.data as SdkQueryAddLiquidityOutput,
-    isPermit2,
-    wethIsEth: helpers.isNativeAssetIn(humanAmountsIn),
+    simulationQuery,
   })
 
   const isSignPermit2Loading = isPermit2 && !signPermit2Step

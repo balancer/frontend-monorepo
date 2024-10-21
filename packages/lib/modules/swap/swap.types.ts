@@ -7,6 +7,7 @@ import {
   AuraBalSwapQueryOutput,
   ExactInQueryOutput,
   ExactOutQueryOutput,
+  Permit2,
   Swap,
 } from '@balancer/sdk'
 import { Address, Hex } from 'viem'
@@ -30,6 +31,7 @@ export type SimulateSwapInputs = {
   tokenOut: Address
   swapType: GqlSorSwapType
   swapAmount: string
+  permit2?: Permit2
 }
 
 type ApiSwapQuery = GetSorSwapsQuery['swaps']
@@ -54,6 +56,7 @@ export interface BuildSwapInputs extends SwapState {
   simulateResponse: SimulateSwapResponse
   wethIsEth: boolean
   relayerApprovalSignature?: Hex
+  permit2?: Permit2 // only used by v3 swaps
 }
 
 export interface SdkBuildSwapInputs extends BuildSwapInputs {

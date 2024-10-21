@@ -11,6 +11,7 @@ import { useRelayerSignature } from '../../relayer/RelayerSignatureProvider'
 import { SwapMetaParams, sentryMetaForSwapHandler } from '@repo/lib/shared/utils/query-errors'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useBlockNumber } from 'wagmi'
+import { usePermit2Signature } from '../../tokens/approvals/permit2/Permit2SignatureProvider'
 
 export type BuildSwapQueryResponse = ReturnType<typeof useBuildSwapQuery>
 
@@ -34,6 +35,7 @@ export function useBuildSwapQuery({
   const { userAddress, isConnected } = useUserAccount()
   const { slippage } = useUserSettings()
   const { relayerApprovalSignature } = useRelayerSignature()
+  const { permit2Signature: permit2 } = usePermit2Signature()
 
   const { selectedChain, tokenIn, tokenOut, swapType } = swapState
   const chainId = getChainId(selectedChain)
@@ -59,8 +61,10 @@ export function useBuildSwapQuery({
       simulateResponse,
       wethIsEth,
       relayerApprovalSignature,
+      permit2,
     })
     console.log('Swap callData built:', response)
+    if (permit2) console.log('Swap permit2:', permit2)
 
     return response
   }

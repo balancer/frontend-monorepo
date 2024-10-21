@@ -1,64 +1,96 @@
-import { SdkQueryAddLiquidityOutput } from '@repo/lib/modules/pool/actions/add-liquidity/add-liquidity.types'
+import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
 import { getNowTimestampInSecs } from '@repo/lib/shared/utils/time'
-import { AllowedAmountsByTokenAddress, ExpirationByTokenAddress } from './usePermit2Allowance'
 import { Address } from 'viem'
-import { TokenAmount } from '@balancer/sdk'
-import { getGqlChain } from '@repo/lib/config/app.config'
-import { filterWrappedNativeAsset } from '../../token.helpers'
 import { GetTokenFn } from '../../TokensProvider'
+import { AllowedAmountsByTokenAddress, ExpirationByTokenAddress } from './usePermit2Allowance'
+import { TokenAmountIn } from './useSignPermit2'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { isWrappedNativeAsset } from '../../token.helpers'
 
 export function hasValidPermit2(
-  queryOutput?: SdkQueryAddLiquidityOutput,
+  tokenAmountsIn?: TokenAmountIn[],
   expirations?: ExpirationByTokenAddress,
-  allowedAmounts?: AllowedAmountsByTokenAddress
+  allowedAmounts?: AllowedAmountsByTokenAddress,
 ): boolean {
-  if (!expirations || !allowedAmounts) return false
+  if (!expirations || !allowedAmounts || !tokenAmountsIn) return false
 
   const approvalExpired = (tokenAddress: Address) =>
-    expirations[tokenAddress] >= getNowTimestampInSecs()
-  const alreadyAllowed = (amountIn: TokenAmount) =>
-    !approvalExpired(amountIn.token.address) &&
-    allowedAmounts[amountIn.token.address] >= amountIn.amount
-  const amountInValid = (amountIn: TokenAmount) =>
+    expirations[tokenAddress] < getNowTimestampInSecs()
+  const alreadyAllowed = (amountIn: TokenAmountIn) =>
+    !approvalExpired(amountIn.address) &&
+    allowedAmounts[amountIn.address] >= amountIn.amount
+  const amountInValid = (amountIn: TokenAmountIn) =>
     amountIn.amount === 0n || alreadyAllowed(amountIn)
-  const isValid = !!queryOutput?.sdkQueryOutput.amountsIn.every(amountInValid)
+  const isValid = tokenAmountsIn.every(amountInValid)
+  /*
+   // Delete after debug:
+   if (tokenAmountsIn) {
+     const tokenAddress = tokenAmountsIn[0].address
+     const amountIn = tokenAmountsIn[0]
+     console.log({tokenAddress,
+       approvalExpired: approvalExpired(tokenAddress),
+       alreadyAllowed: alreadyAllowed(amountIn),
+     })
+   }
+  */
   return isValid
 }
 
 type BasePermit2Params = {
-  queryOutput?: SdkQueryAddLiquidityOutput
+  tokenAmountsIn?: TokenAmountIn[]
+  chainId: number
   wethIsEth: boolean
 }
 
 // Returns the symbols of the tokens that need to be approved for permit2
-export function getTokenSymbolsForPermit2({
+export function getTokenSymbolsForPermit({
   getToken,
-  queryOutput,
+  tokenAmountsIn,
   wethIsEth,
-}: BasePermit2Params & { getToken: GetTokenFn }) {
-  if (!queryOutput) return []
-  const chain = getGqlChain(queryOutput.sdkQueryOutput.chainId)
+  chainId,
+}: BasePermit2Params & { getToken: GetTokenFn }): string[] {
+  if (!tokenAmountsIn) return []
+  const chain = getGqlChain(chainId)
   const tokenSymbols = filterWrappedNativeAsset({
     wethIsEth,
-    amountsIn: queryOutput.sdkQueryOutput.amountsIn,
+    tokenAmountsIn,
     chain,
   })
-    .filter(a => a.amount > 0n)
-    .map(a => getToken(a.token.address, chain)?.symbol ?? 'Unknown')
+    .filter(t => t.amount > 0n) // This must be filtered in a different place (caller??)
+    .map(t => getToken(t.address, chain)?.symbol ?? 'Unknown')
   return tokenSymbols
 }
 
 // Returns the token addresses that need to be approved for permit2
-export function getTokenAddressesForPermit2({
+export function getTokenAddressesForPermit({
   wethIsEth,
-  queryOutput,
+  tokenAmountsIn,
+  chainId,
 }: BasePermit2Params): Address[] | undefined {
-  if (!queryOutput?.sdkQueryOutput) return undefined
-  const chain = getGqlChain(queryOutput.sdkQueryOutput.chainId)
-  const result = filterWrappedNativeAsset({
+  if (!tokenAmountsIn) return undefined
+  const chain = getGqlChain(chainId)
+  return filterWrappedNativeAsset({
     wethIsEth,
     chain,
-    amountsIn: queryOutput.sdkQueryOutput.amountsIn,
-  }).map(a => a.token.address)
-  return result
+    tokenAmountsIn,
+  }).map(t => t.address)
 }
+
+export function permit2Address(chain: GqlChain): Address {
+  return getNetworkConfig(chain).contracts.permit2 || ('' as Address)
+}
+
+function filterWrappedNativeAsset({
+  tokenAmountsIn,
+  wethIsEth,
+  chain,
+}: {
+  tokenAmountsIn?: TokenAmountIn[],
+  wethIsEth: boolean
+  chain: GqlChain
+}): TokenAmountIn[] {
+  if (!tokenAmountsIn) return []
+  if (!wethIsEth) return tokenAmountsIn
+  return tokenAmountsIn.filter(t => !isWrappedNativeAsset(t.address, chain))
+}
+
