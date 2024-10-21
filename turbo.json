@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": ["BALANCER_API_URL", "APP_ENV", "ALLOW_SKIP_TRANSACTION"],
   "tasks": {
     "dev": {
       "cache": false,
