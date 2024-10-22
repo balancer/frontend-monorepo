@@ -8,7 +8,6 @@ import {
   Popover,
   PopoverArrow,
   PopoverBody,
-  PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
   VStack,
