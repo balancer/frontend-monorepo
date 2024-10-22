@@ -1,8 +1,5 @@
 import { Path, TokenApi } from '@balancer/sdk'
-import {
-  GqlSorSwapType,
-  GqlToken,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Hex, parseUnits } from 'viem'
 import { ProtocolVersion } from '../../pool/pool.types'
@@ -12,7 +9,11 @@ import { BaseDefaultSwapHandler } from './BaseDefaultSwap.handler'
 export class PoolSwapHandler extends BaseDefaultSwapHandler {
   name = 'PoolSwapHandler'
 
-  constructor(public poolId: Hex, public tokens: GqlToken[], public poolVersion: ProtocolVersion) {
+  constructor(
+    public poolId: Hex,
+    public tokens: GqlToken[],
+    public poolVersion: ProtocolVersion,
+  ) {
     super()
   }
 
@@ -31,19 +32,17 @@ export class PoolSwapHandler extends BaseDefaultSwapHandler {
       throw new Error('TokenIn not found in pool swap handler')
     }
 
-    const inputAmountRaw: bigint = swapType === GqlSorSwapType.ExactIn
-    ? parseUnits(swapAmount, tokenIn.decimals)
-    : 0n
-    const outputAmountRaw: bigint = swapType === GqlSorSwapType.ExactOut
-    ? parseUnits(swapAmount, tokenOut.decimals)
-    : 0n
+    const inputAmountRaw: bigint =
+      swapType === GqlSorSwapType.ExactIn ? parseUnits(swapAmount, tokenIn.decimals) : 0n
+    const outputAmountRaw: bigint =
+      swapType === GqlSorSwapType.ExactOut ? parseUnits(swapAmount, tokenOut.decimals) : 0n
 
     const poolPath: Path = {
       pools: [this.poolId],
       inputAmountRaw,
       outputAmountRaw,
       protocolVersion: this.poolVersion,
-      tokens: [tokenIn as TokenApi, tokenOut as TokenApi ],
+      tokens: [tokenIn as TokenApi, tokenOut as TokenApi],
     }
 
     const paths = [poolPath]
@@ -53,6 +52,6 @@ export class PoolSwapHandler extends BaseDefaultSwapHandler {
       paths,
       hopCount: 1,
       swapInputs: variables,
-   })
+    })
   }
 }
