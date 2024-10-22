@@ -54,7 +54,7 @@ export function PoolAdvancedOptions() {
                   <HStack>
                     <SwapIcon size={20} />
                     <Link as={NextLink} href={`${pathname}/swap`} prefetch variant="nav">
-                      Force token swap via this pool
+                      Swap through pool
                     </Link>
                   </HStack>
                 </VStack>
