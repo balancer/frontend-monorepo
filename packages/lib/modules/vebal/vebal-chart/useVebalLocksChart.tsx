@@ -9,9 +9,9 @@ import { EChartsOption, ECharts } from 'echarts'
 import { format, differenceInDays } from 'date-fns'
 import BigNumber from 'bignumber.js'
 import { lockSnapshots } from './test-locks'
-import { useVebalLockInfo } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useTheme as useNextTheme } from 'next-themes'
+import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
 
 type ChartValueAcc = [string, number][]
 

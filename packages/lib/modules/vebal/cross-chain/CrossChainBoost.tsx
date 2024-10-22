@@ -19,7 +19,7 @@ import {
 import { useCrossChainSync } from './CrossChainSyncProvider'
 import Image from 'next/image'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/useVebalLockInfo'
+import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
 
 import { CrossChainSyncModal } from '@repo/lib/modules/vebal/cross-chain/CrossChainSyncModal'
 import { useState } from 'react'

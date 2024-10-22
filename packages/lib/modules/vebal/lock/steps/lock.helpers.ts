@@ -1,5 +1,6 @@
 import { toUtcTime } from '@repo/lib/shared/utils/time'
-import { RawAmount } from '../../tokens/approvals/approval-rules'
+import { RawAmount } from '../../../tokens/approvals/approval-rules'
+import { LockMode } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
 
 export enum LockActionType {
   CreateLock = 'createLock',
@@ -27,6 +28,38 @@ export function getLockContractFunctionName(action: LockActionType) {
 
 export function parseDate(date: string) {
   return (toUtcTime(new Date(date)) / 1000).toString()
+}
+
+export function getModalLabel(mode: LockMode, extendExpired: boolean) {
+  switch (mode) {
+    case LockMode.Lock:
+      return 'Lock to get veBAL'
+    case LockMode.Extend:
+      return 'Extend lock'
+    case LockMode.Unlock:
+      if (extendExpired) {
+        return 'Extend expired lock'
+      }
+      return 'veBAL expiry'
+    default:
+      return ''
+  }
+}
+
+export function getPreviewLabel(mode: LockMode, extendExpired: boolean) {
+  switch (mode) {
+    case LockMode.Lock:
+      return 'Lock'
+    case LockMode.Extend:
+      return 'Extend lock'
+    case LockMode.Unlock:
+      if (extendExpired) {
+        return 'Extend expired lock'
+      }
+      return 'Unlock'
+    default:
+      return ''
+  }
 }
 
 export function getInitLabel(lockActionType: LockActionType) {
