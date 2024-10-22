@@ -6,6 +6,5 @@
   "dependencies": {},
   "publishConfig": {
     "access": "public"
-  },
-  "type": "module"
+  }
 }
