@@ -1,11 +1,12 @@
-const {resolve} = require('node:path');
+const { resolve } = require('node:path')
 
-const project = resolve(process.cwd(), 'tsconfig.json');
+const project = resolve(process.cwd(), 'tsconfig.json')
 
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
   extends: [
     'eslint:recommended',
+
     'plugin:@typescript-eslint/recommended',
     require.resolve('@vercel/style-guide/eslint/next'),
     require.resolve('@vercel/style-guide/eslint/react'),
@@ -33,11 +34,11 @@ module.exports = {
     '.*.js',
     'node_modules/',
   ],
-  overrides: [{files: ['*.js?(x)', '*.ts?(x)']}],
+  overrides: [{ files: ['*.js?(x)', '*.ts?(x)'] }],
   rules: {
     curly: ['error', 'multi-line'],
     'no-console': ['off'],
-    'max-len': ['warn', {code: 120, ignoreComments: true, ignoreUrls: true}],
+    'max-len': ['warn', { code: 120, ignoreComments: true, ignoreUrls: true }],
     '@typescript-eslint/no-explicit-any': ['off'],
     'no-html-link-for-pages': ['off'],
     'no-restricted-imports': [
@@ -63,4 +64,4 @@ module.exports = {
     ],
     'react/jsx-no-leaked-render': 'off',
   },
-};
+}
