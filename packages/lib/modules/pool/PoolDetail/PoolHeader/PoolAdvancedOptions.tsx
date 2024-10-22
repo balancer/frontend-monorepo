@@ -40,8 +40,7 @@ export function PoolAdvancedOptions() {
       <Box shadow="2xl" width="max" zIndex="popover">
         <PopoverContent>
           <PopoverArrow bg="background.level3" />
-          <PopoverCloseButton top="sm" />
-          <PopoverBody p="lg">
+          <PopoverBody px="md" py="lg">
             <AnimatePresence>
               {isPopoverOpen ? (
                 <VStack
@@ -54,9 +53,9 @@ export function PoolAdvancedOptions() {
                   variants={staggeredFadeInUp}
                 >
                   <HStack>
-                    <SwapIcon size={24} />
+                    <SwapIcon size={20} />
                     <Link as={NextLink} href={`${pathname}/swap`} prefetch variant="nav">
-                      Swap tokens directly via this pool
+                      Force token swap via this pool
                     </Link>
                   </HStack>
                 </VStack>
