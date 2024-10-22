@@ -128,7 +128,7 @@ function AddLiquidityMainForm() {
 
   const onModalOpen = async () => {
     previewModalDisclosure.onOpen()
-    if (true) {
+    if (requiresProportionalInput(pool)) {
       // Edge-case refetch to avoid mismatches in proportional bptOut calculations
       await refetchQuote()
     }
@@ -186,7 +186,7 @@ function AddLiquidityMainForm() {
         <CardHeader>
           <HStack justify="space-between" w="full">
             <span>Add liquidity</span>
-            {true ? (
+            {requiresProportionalInput(pool) ? (
               <ProportionalTransactionSettings
                 setSlippage={setProportionalSlippage}
                 size="sm"
@@ -204,7 +204,7 @@ function AddLiquidityMainForm() {
           <SafeAppAlert />
           {!nestedAddLiquidityEnabled ? (
             <TokenInputsWithAddable
-              requiresProportionalInput
+              requiresProportionalInput={requiresProportionalInput(pool)}
               tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}
               totalUSDValue={totalUSDValue}
             />
