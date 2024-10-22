@@ -10,8 +10,10 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
 
 export function _usePoolList({ fixedPoolTypes }: { fixedPoolTypes?: GqlPoolType[] } = {}) {
-  const { queryVariables, toggleUserAddress } = usePoolListQueryState()
+  const queryState = usePoolListQueryState()
   const { userAddress } = useUserAccount()
+
+  const { queryVariables, toggleUserAddress } = queryState
 
   const variables = {
     ...queryVariables,
@@ -43,6 +45,7 @@ export function _usePoolList({ fixedPoolTypes }: { fixedPoolTypes?: GqlPoolType[
   return {
     pools,
     count: data?.count || previousData?.count,
+    queryState,
     loading,
     error,
     networkStatus,
