@@ -73,7 +73,7 @@ function selectSwapHandler(
   apolloClient: ApolloClient<object>,
   tokens: GqlToken[],
   poolId?: Hex,
-  poolVersion?: ProtocolVersion
+  poolVersion?: ProtocolVersion,
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -115,7 +115,7 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
       swapType: GqlSorSwapType.ExactIn,
       selectedChain: GqlChain.Mainnet,
     },
-    'swapState'
+    'swapState',
   )
 
   const swapState = useReactiveVar(swapStateVar)
@@ -134,24 +134,20 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
   const previewModalDisclosure = useDisclosure()
 
   const client = useApolloClient()
-  const handler = useMemo(
-    () =>
-      {
-        if (isPoolSwap) resetSwapAmounts()
+  const handler = useMemo(() => {
+    if (isPoolSwap) resetSwapAmounts()
 
-        return selectSwapHandler(
-          swapState.tokenIn.address,
-          swapState.tokenOut.address,
-          swapState.selectedChain,
-          swapState.swapType,
-          client,
-          tokens,
-          poolId,
-          poolVersion
-        )
-      },
-    [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain]
-  )
+    return selectSwapHandler(
+      swapState.tokenIn.address,
+      swapState.tokenOut.address,
+      swapState.selectedChain,
+      swapState.swapType,
+      client,
+      tokens,
+      poolId,
+      poolVersion,
+    )
+  }, [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain])
 
   const isTokenInSet = swapState.tokenIn.address !== emptyAddress
   const isTokenOutSet = swapState.tokenOut.address !== emptyAddress
@@ -170,13 +166,14 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
   const tokenInUsd = usdValueForToken(tokenInInfo, swapState.tokenIn.amount)
   const tokenOutUsd = usdValueForToken(tokenOutInfo, swapState.tokenOut.amount)
 
-  const getSwapAmount = () =>
-    {
-      const swapState = swapStateVar()
-      return (swapState.swapType === GqlSorSwapType.ExactIn
+  const getSwapAmount = () => {
+    const swapState = swapStateVar()
+    return (
+      (swapState.swapType === GqlSorSwapType.ExactIn
         ? swapState.tokenIn.amount
         : swapState.tokenOut.amount) || '0'
-    }
+    )
+  }
 
   const shouldFetchSwap = (state: SwapState, urlTxHash?: Hash) => {
     if (urlTxHash) return false
@@ -207,11 +204,11 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
       swapType,
     })
 
-     if (swapType === GqlSorSwapType.ExactIn) {
+    if (swapType === GqlSorSwapType.ExactIn) {
       setTokenOutAmount(returnAmount, { userTriggered: false })
-     } else {
-       setTokenInAmount(returnAmount, { userTriggered: false })
-     }
+    } else {
+      setTokenInAmount(returnAmount, { userTriggered: false })
+    }
   }
 
   function setSelectedChain(_selectedChain: GqlChain) {
@@ -265,7 +262,7 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
 
   function setTokenInAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {}
+    { userTriggered = true }: { userTriggered?: boolean } = {},
   ) {
     const state = swapStateVar()
     const newState = {
@@ -292,7 +289,7 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
 
   function setTokenOutAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {}
+    { userTriggered = true }: { userTriggered?: boolean } = {},
   ) {
     const state = swapStateVar()
     const newState = {
@@ -414,7 +411,7 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
       const wrapType = getWrapType(
         swapState.tokenIn.address,
         swapState.tokenOut.address,
-        swapState.selectedChain
+        swapState.selectedChain,
       )
       return wrapType ? wrapType : OSwapAction.SWAP
     }
@@ -568,7 +565,7 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [hasValidationErrors, 'Invalid input'],
     [simulationQuery.isError, 'Error fetching swap'],
-    [simulationQuery.isLoading, 'Fetching swap...']
+    [simulationQuery.isLoading, 'Fetching swap...'],
   )
 
   return {
