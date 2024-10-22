@@ -28,7 +28,6 @@ import {
   TagLabel,
   Text,
   useColorModeValue,
-  VisuallyHidden,
   VStack,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
@@ -423,13 +422,13 @@ function ProtocolVersionFilter() {
 
   useEffect(() => {
     if (protocolVersion === 3) {
-      setActiveProtocolVersionTab(tabs[2])
+      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[2])
     } else if (protocolVersion === 2) {
-      setActiveProtocolVersionTab(tabs[1])
+      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[1])
     } else if (poolTypes.includes(GqlPoolType.CowAmm)) {
-      setActiveProtocolVersionTab(tabs[3])
+      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[3])
     } else {
-      setActiveProtocolVersionTab(tabs[0])
+      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
     }
   }, [])
 
@@ -513,7 +512,7 @@ export function PoolListFilters() {
                           >
                             Filters
                           </Text>
-                          {totalFilterCount === 0 && (
+                          {totalFilterCount > 0 && (
                             <Button onClick={_resetFilters} size="xs" variant="link">
                               Reset all
                             </Button>
