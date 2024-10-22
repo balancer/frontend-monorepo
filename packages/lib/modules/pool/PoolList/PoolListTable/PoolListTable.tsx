@@ -1,6 +1,5 @@
 'use client'
 
-import { usePoolListQueryState } from '../usePoolListQueryState'
 import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
 import { PoolListTableHeader } from './PoolListTableHeader'
 import { PoolListTableRow } from './PoolListTableRow'
@@ -8,6 +7,7 @@ import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPa
 import { PoolListItem } from '../../pool.types'
 import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
+import { usePoolList } from '../PoolListProvider'
 
 interface Props {
   pools: PoolListItem[]
@@ -17,7 +17,7 @@ interface Props {
 
 export function PoolListTable({ pools, count, loading }: Props) {
   const isMounted = useIsMounted()
-  const { pagination, setPagination, userAddress } = usePoolListQueryState()
+  const { queryState: { pagination, setPagination, userAddress } } = usePoolList()
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination)
   const showPagination = !!pools.length && !!count && count > pagination.pageSize
 

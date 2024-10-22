@@ -3,12 +3,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { useState, useEffect } from 'react'
-import { usePoolListQueryState } from './usePoolListQueryState'
+import { usePoolList } from './PoolListProvider'
 
 const defaultOrderBy = [GqlPoolOrderBy.TotalLiquidity, GqlPoolOrderBy.Volume24h, GqlPoolOrderBy.Apr]
 
 export function usePoolOrderByState() {
-  const { sorting, setSorting, userAddress } = usePoolListQueryState()
+  const { queryState: { sorting, setSorting, userAddress } } = usePoolList()
   const [orderBy, setOrderBy] = useState(defaultOrderBy)
 
   useEffect(() => {
