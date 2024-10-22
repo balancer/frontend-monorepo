@@ -37,7 +37,7 @@ export default function Privacy() {
 
                 <ul>
                   <li>
-                    <Link scroll href="risks#general">
+                    <Link href="risks#general" scroll>
                       <h6>General risks</h6>
                     </Link>
                     <ul>
@@ -137,10 +137,10 @@ export default function Privacy() {
           <FadeInOnView>
             <div className="subsection">
               <h2>Risks for Liquidity Providers (LPs)</h2>
-              <h3 id="general" className="anchor">
+              <h3 className="anchor" id="general">
                 General risks
               </h3>
-              <h4 id="smart-contract-risk" className="anchor">
+              <h4 className="anchor" id="smart-contract-risk">
                 Smart contract risk
               </h4>
               <p>
@@ -204,7 +204,7 @@ export default function Privacy() {
             </div>
           </FadeInOnView>
           <FadeInOnView>
-            <div id="economic-risk" className="subsection anchor">
+            <div className="subsection anchor" id="economic-risk">
               <h4>Mechanism / Economic risk</h4>
               <p>
                 An mechanism or economic exploit of a DeFi protocol occurs when an attacker is able
@@ -240,7 +240,7 @@ export default function Privacy() {
             </div>
           </FadeInOnView>
           <FadeInOnView>
-            <div id="toxic-token-risk" className="subsection anchor">
+            <div className="subsection anchor" id="toxic-token-risk">
               <h4>Toxic pool token risk</h4>
               <p>
                 A liquidity pool is only as good as its weakest token. This is because liquidity
@@ -281,7 +281,7 @@ export default function Privacy() {
                   </ul>
                 </li>
               </ul>
-              <h5 id="rebasing-tokens" className="anchor">
+              <h5 className="anchor" id="rebasing-tokens">
                 Rebasing tokens
               </h5>
               <p>
@@ -357,7 +357,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="composability-risk" className="anchor">
+              <h4 className="anchor" id="composability-risk">
                 DeFi composability risks
               </h4>
               <p>
@@ -384,7 +384,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="governance-risk" className="anchor">
+              <h4 className="anchor" id="governance-risk">
                 DAO Governance risk
               </h4>
               <p>
@@ -486,7 +486,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="flash-loans-risk" className="anchor">
+              <h4 className="anchor" id="flash-loans-risk">
                 Flash Loans risk
               </h4>
               <p>
@@ -516,7 +516,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="mutable-attributes-risk" className="anchor">
+              <h4 className="anchor" id="mutable-attributes-risk">
                 Mutable pool attributes
               </h4>
               <p>
@@ -578,7 +578,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="join-exit-risk" className="anchor">
+              <h4 className="anchor" id="join-exit-risk">
                 Loss of funds on join/exit of a pool
               </h4>
               <h5>Due to high price impact</h5>
@@ -644,7 +644,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="impermanent-loss-risk" className="anchor">
+              <h4 className="anchor" id="impermanent-loss-risk">
                 Impermanent loss
               </h4>
               <p>
@@ -710,7 +710,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="ui-risk" className="anchor">
+              <h4 className="anchor" id="ui-risk">
                 User Interface (UI) risk
               </h4>
               <p>
@@ -772,7 +772,7 @@ export default function Privacy() {
           <FadeInOnView>
             <div className="subsection">
               {' '}
-              <h4 id="regulatory-risk" className="anchor">
+              <h4 className="anchor" id="regulatory-risk">
                 Regulatory risk
               </h4>
               <p>
@@ -799,7 +799,7 @@ export default function Privacy() {
               <FadeInOnView>
                 <div className="subsection">
                   {' '}
-                  <h3 id="pool-type-risks" className="anchor">
+                  <h3 className="anchor" id="pool-type-risks">
                     Pool type risks
                   </h3>
                   <p>
@@ -811,7 +811,7 @@ export default function Privacy() {
               </FadeInOnView>
               <FadeInOnView>
                 <div className="subsection">
-                  <h4 id="weighted-pools" className="anchor">
+                  <h4 className="anchor" id="weighted-pools">
                     Weighted Pools
                   </h4>
                   <p>
@@ -846,7 +846,7 @@ export default function Privacy() {
               </FadeInOnView>
               <FadeInOnView>
                 <div className="subsection">
-                  <h4 id="stable-pools" className="anchor">
+                  <h4 className="anchor" id="stable-pools">
                     Stable Pools
                   </h4>
                   <h5>Loss of stablecoin peg</h5>
@@ -893,7 +893,7 @@ export default function Privacy() {
               </FadeInOnView>
               <FadeInOnView>
                 <div className="subsection">
-                  <h4 id="composable-pools" className="anchor">
+                  <h4 className="anchor" id="composable-pools">
                     Composable Stable Pools &amp; MetaStable Pools
                   </h4>
                   <p>
@@ -926,7 +926,7 @@ export default function Privacy() {
                     of rate providers.
                   </p>
                   <div>
-                    <h5 id="rate-provider-risk" className="anchor">
+                    <h5 className="anchor" id="rate-provider-risk">
                       Rate provider risk
                     </h5>
                     <p>
@@ -1000,7 +1000,7 @@ export default function Privacy() {
               </FadeInOnView>
               <FadeInOnView>
                 <div className="subsection">
-                  <h4 id="boosted-pools" className="anchor">
+                  <h4 className="anchor" id="boosted-pools">
                     Boosted Pools
                   </h4>
                   <p>
@@ -1063,7 +1063,7 @@ export default function Privacy() {
 
               <FadeInOnView>
                 <div className="subsection">
-                  <h4 id="concentrated-liquidity-pools" className="anchor">
+                  <h4 className="anchor" id="concentrated-liquidity-pools">
                     Concentrated Liquidity Pools
                   </h4>
                   <p>
@@ -1144,7 +1144,7 @@ export default function Privacy() {
               <Divider />
               <FadeInOnView>
                 <div className="subsection">
-                  <h3 id="network-risks" className="anchor">
+                  <h3 className="anchor" id="network-risks">
                     Network risks (L2s and Sidechains)
                   </h3>
                   <p>
@@ -1173,7 +1173,7 @@ export default function Privacy() {
               </FadeInOnView>
               <FadeInOnView>
                 <div className="subsection">
-                  <h4 id="arbitrum" className="anchor">
+                  <h4 className="anchor" id="arbitrum">
                     Arbitrum One risks
                   </h4>
                   <p>
@@ -1189,7 +1189,7 @@ export default function Privacy() {
               </FadeInOnView>
             </FadeInOnView>
             <div className="subsection">
-              <h4 id="optimism" className="anchor">
+              <h4 className="anchor" id="optimism">
                 Optimism risks
               </h4>
               <p>
@@ -1207,7 +1207,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="base" className="anchor">
+              <h4 className="anchor" id="base">
                 Base Chain risks
               </h4>
               <p>
@@ -1223,7 +1223,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="polygon" className="anchor">
+              <h4 className="anchor" id="polygon">
                 Polygon PoS risks
               </h4>
               <p>
@@ -1241,7 +1241,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="polygon-zkevm" className="anchor">
+              <h4 className="anchor" id="polygon-zkevm">
                 Polygon zkEVM risks
               </h4>
               <p>
@@ -1259,7 +1259,7 @@ export default function Privacy() {
           <FadeInOnView>
             <div className="subsection">
               {' '}
-              <h4 id="gnosis" className="anchor">
+              <h4 className="anchor" id="gnosis">
                 Gnosis chain risks
               </h4>
               <p>
@@ -1277,7 +1277,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h4 id="avalanche" className="anchor">
+              <h4 className="anchor" id="avalanche">
                 Avalanche risks
               </h4>
               <p>

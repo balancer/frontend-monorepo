@@ -15,24 +15,24 @@ export function CowFooter() {
       <Center>
         <VStack>
           <Text color="grayText">{`Can't find the pool you're looking for?`}</Text>
-          <Button as={Link} href="https://pool-creator.balancer.fi/cow" target="_blank" rel="">
+          <Button as={Link} href="https://pool-creator.balancer.fi/cow" rel="" target="_blank">
             Create a pool
           </Button>
         </VStack>
       </Center>
-      <Box zIndex="-1" position="relative">
+      <Box position="relative" zIndex="-1">
         <FadeInOnView animateOnce={false}>
-          <Box maxW="maxContent" mx="auto" px={{ base: '0', '2xl': 'md' }} pt="xl" zIndex="0">
+          <Box maxW="maxContent" mx="auto" pt="xl" px={{ base: '0', '2xl': 'md' }} zIndex="0">
             {banners?.footerSrc && (
               <Picture
-                imgName="cow-footer"
                 altText="CoW AMM footer"
                 defaultImgType="svg"
-                imgSvg={true}
-                imgSvgPortraitDark={true}
-                imgSvgPortrait={true}
-                imgSvgDark={true}
                 directory="/images/partners/"
+                imgName="cow-footer"
+                imgSvg
+                imgSvgDark
+                imgSvgPortrait
+                imgSvgPortraitDark
               />
             )}
           </Box>

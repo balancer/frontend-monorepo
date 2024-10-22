@@ -67,19 +67,19 @@ export function TokenIcon({
     <Popover trigger="hover">
       <PopoverTrigger>
         <Image
-          src={hasError || !iconSrc ? fallbackSVG.toDataUriSync() : iconSrc}
           alt={alt}
-          width={`${size}px`}
-          height={`${size}px`}
-          borderRadius="100%"
-          border={border}
           backgroundColor="background.level4"
+          border={border}
+          borderRadius="100%"
+          height={`${size}px`}
           onError={() => !hasError && setHasError(true)}
+          src={hasError || !iconSrc ? fallbackSVG.toDataUriSync() : iconSrc}
+          width={`${size}px`}
           {...rest}
         />
       </PopoverTrigger>
 
-      <PopoverContent p="sm" w="auto" maxW="300px">
+      <PopoverContent maxW="300px" p="sm" w="auto">
         <Text fontSize="sm" variant="secondary">
           {alt}
         </Text>

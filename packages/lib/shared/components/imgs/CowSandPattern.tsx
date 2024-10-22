@@ -5,43 +5,43 @@ export function CowSandPattern({
   ...props
 }: SVGProps<SVGSVGElement> & { color?: string }) {
   return (
-    <svg viewBox="0 0 644 368" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg fill="none" viewBox="0 0 644 368" xmlns="http://www.w3.org/2000/svg" {...props}>
       <g stroke={color}>
         <rect
-          vectorEffect="non-scaling-stroke"
+          height="223"
           opacity=".9"
+          rx="40.5"
+          vectorEffect="non-scaling-stroke"
+          width="419"
           x="416.5"
           y="290.5"
-          width="419"
-          height="223"
-          rx="40.5"
         />
         <rect
-          vectorEffect="non-scaling-stroke"
+          height="90"
           opacity=".9"
+          rx="40.5"
+          vectorEffect="non-scaling-stroke"
+          width="189"
           x="512.5"
           y="74.5"
-          width="189"
-          height="90"
-          rx="40.5"
         />
         <rect
-          vectorEffect="non-scaling-stroke"
+          height="149"
           opacity=".9"
+          rx="40.5"
+          vectorEffect="non-scaling-stroke"
+          width="313"
           x="-64.5"
           y="-45.5"
-          width="313"
-          height="149"
-          rx="40.5"
         />
         <rect
-          vectorEffect="non-scaling-stroke"
+          height="212"
           opacity=".9"
+          rx="40.5"
+          vectorEffect="non-scaling-stroke"
+          width="256"
           x="-79.5"
           y="261.5"
-          width="256"
-          height="212"
-          rx="40.5"
         />
       </g>
     </svg>

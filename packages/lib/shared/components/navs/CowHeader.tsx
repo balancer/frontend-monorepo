@@ -12,14 +12,14 @@ export function CowHeader() {
           base: '/images/partners/cow/banner-mobile.svg',
           md: '/images/partners/cow/banner-desktop.svg',
         }}
-        backgroundSize="cover"
-        backgroundRepeat="no-repeat"
         backgroundPosition={{ base: 'bottom', md: 'bottom' }}
-        rounded="xl"
+        backgroundRepeat="no-repeat"
+        backgroundSize="cover"
         bg="#194D05"
+        rounded="xl"
       >
         <Center>
-          <VStack p="xl" maxW="xl" textAlign="center" spacing="lg">
+          <VStack maxW="xl" p="xl" spacing="lg" textAlign="center">
             <Heading
               color="#BCEC79"
               sx={{
@@ -32,26 +32,26 @@ export function CowHeader() {
               CoW AMM protects LPs from LVR so they can provide liquidity with less risk and more
               return.{' '}
               <Link
-                href="https://cow.fi/cow-amm"
-                textDecoration="underline"
-                isExternal
-                color="#BCEC79"
                 _hover={{ color: '#fff' }}
-                role="group"
+                color="#BCEC79"
+                href="https://cow.fi/cow-amm"
+                isExternal
                 position="relative"
+                role="group"
+                textDecoration="underline"
               >
                 Learn more
                 <Box
+                  _groupHover={{ transform: 'translateX(1.5px)' }}
                   display="inline"
                   position="absolute"
                   transition="transform 0.2s var(--ease-out-cubic)"
-                  _groupHover={{ transform: 'translateX(1.5px)' }}
                 >
                   <ArrowUpRight size={14} style={{ display: 'inline' }} />
                 </Box>
               </Link>
             </Text>
-            <Image src="/images/partners/cow/cow-amm-logo.svg" alt="cow-logo" h="30px" />
+            <Image alt="cow-logo" h="30px" src="/images/partners/cow/cow-amm-logo.svg" />
           </VStack>
         </Center>
       </Card>

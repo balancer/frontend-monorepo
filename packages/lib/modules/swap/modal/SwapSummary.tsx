@@ -47,44 +47,44 @@ export function SwapSummary({
   }
 
   if (!isUserAddressLoading && !userAddress) {
-    return <BalAlert status="warning" content="User is not connected" />
+    return <BalAlert content="User is not connected" status="warning" />
   }
   if (shouldShowErrors && error) {
-    return <BalAlert status="warning" content="We were unable to find this transaction hash" />
+    return <BalAlert content="We were unable to find this transaction hash" status="warning" />
   }
   if (shouldShowErrors && !isLoadingReceipt && (!receivedToken || !sentToken)) {
     return (
       <BalAlert
-        status="warning"
         content="We were unable to find logs for this transaction hash and the connected account"
+        status="warning"
       />
     )
   }
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
-      {isMobile && <MobileStepTracker transactionSteps={transactionSteps} chain={selectedChain} />}
+      {isMobile && <MobileStepTracker chain={selectedChain} transactionSteps={transactionSteps} />}
 
       <Card variant="modalSubSection">
         <SwapTokenRow
-          label={shouldShowReceipt || isWrapComplete ? 'You paid' : 'You pay'}
           chain={selectedChain}
-          tokenAmount={shouldShowReceipt ? sentToken.humanAmount : tokenIn.amount}
+          label={shouldShowReceipt || isWrapComplete ? 'You paid' : 'You pay'}
           tokenAddress={shouldShowReceipt ? sentToken.tokenAddress : tokenIn.address}
+          tokenAmount={shouldShowReceipt ? sentToken.humanAmount : tokenIn.amount}
         />
       </Card>
 
       <Card variant="modalSubSection">
         <SwapTokenRow
+          chain={selectedChain}
           label={tokenOutLabel()}
           rightLabel={
             shouldShowReceipt
               ? slippageDiffLabel(receivedToken.humanAmount || '0', expectedTokenOut)
               : undefined
           }
-          chain={selectedChain}
-          tokenAmount={shouldShowReceipt ? receivedToken.humanAmount : tokenOut.amount}
           tokenAddress={shouldShowReceipt ? receivedToken.tokenAddress : tokenOut.address}
+          tokenAmount={shouldShowReceipt ? receivedToken.humanAmount : tokenOut.amount}
         />
       </Card>
 
@@ -98,7 +98,7 @@ export function SwapSummary({
             )}
           </CardPopAnim>
           <CardPopAnim key="exchange-rate">
-            <Card variant="modalSubSection" fontSize="sm">
+            <Card fontSize="sm" variant="modalSubSection">
               <HStack justify="space-between" w="full">
                 <Text color="grayText">Exchange rate</Text>
                 <SwapRate />

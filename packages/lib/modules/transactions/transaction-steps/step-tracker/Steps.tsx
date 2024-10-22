@@ -17,11 +17,11 @@ export function Steps({ transactionSteps }: Props) {
         steps.map((step, index) => (
           <div key={step.id + index}>
             <Step
+              colorMode={colorMode}
               currentIndex={currentStepIndex}
               index={index}
-              step={step}
-              colorMode={colorMode}
               isLastStep={isLastStep(index)}
+              step={step}
             />
           </div>
         ))}

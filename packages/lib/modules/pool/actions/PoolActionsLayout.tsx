@@ -19,25 +19,25 @@ export function PoolActionsLayout({ children }: Props) {
 
   return (
     <Box
+      bg="transparent"
+      left={0}
+      onClick={redirectToPoolPage}
       pos="absolute"
       top={0}
-      left={0}
       w="full"
-      bg="transparent"
       zIndex={100}
-      onClick={redirectToPoolPage}
     >
-      <VStack w="full" bg={bg} backdropFilter={blur} zIndex={51} onClick={redirectToPoolPage}>
-        <NavBar leftSlot={<PoolName pool={pool} color="font.light" />} disableBlur />
-        <Box w="full" px={['0', 'md']} pt="72px">
+      <VStack backdropFilter={blur} bg={bg} onClick={redirectToPoolPage} w="full" zIndex={51}>
+        <NavBar disableBlur leftSlot={<PoolName color="font.light" pool={pool} />} />
+        <Box pt="72px" px={['0', 'md']} w="full">
           <Card
-            position="relative"
-            variant="level1"
-            shadow="lg"
             borderBottomRadius={0}
             borderTopRadius="2xl"
             minH="calc(100vh - 80px)"
             onClick={e => e.stopPropagation()}
+            position="relative"
+            shadow="lg"
+            variant="level1"
           >
             <PoolActionsNav />
             {children}

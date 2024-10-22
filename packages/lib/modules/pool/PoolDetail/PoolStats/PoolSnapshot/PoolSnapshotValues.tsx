@@ -64,8 +64,8 @@ export function PoolSnapshotValues() {
 
   return (
     <>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           TVL
         </Text>
         {poolStatsValues ? (
@@ -74,24 +74,24 @@ export function PoolSnapshotValues() {
           <Skeleton height="30px" w="100px" />
         )}
       </VStack>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           APR for LPs
         </Text>
         <MemoizedMainAprTooltip
           aprItems={pool.dynamicData.aprItems}
-          poolId={pool.id}
           height="28px"
+          pool={pool}
+          poolId={pool.id}
           textProps={{
             fontWeight: 'bold',
             fontSize: '2xl',
             lineHeight: '28px',
           }}
-          pool={pool}
         />
       </VStack>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           {incomeLabel}
         </Text>
         {poolStatsValues ? (
@@ -100,8 +100,8 @@ export function PoolSnapshotValues() {
           <Skeleton height="30px" w="100px" />
         )}
       </VStack>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           Weekly incentives
         </Text>
         {poolStatsValues ? (
@@ -109,7 +109,7 @@ export function PoolSnapshotValues() {
             <Heading size="h4">
               {poolStatsValues.weeklyRewards ? poolStatsValues.weeklyRewards : 'N/A'}
             </Heading>
-            <TokenIconStack tokens={tokens} chain={chain} size={20} />
+            <TokenIconStack chain={chain} size={20} tokens={tokens} />
           </HStack>
         ) : (
           <Skeleton height="30px" w="100px" />

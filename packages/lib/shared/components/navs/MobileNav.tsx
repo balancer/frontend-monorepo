@@ -46,14 +46,14 @@ function NavLinks({ appLinks, onClick }: NavLinkProps) {
     <VStack align="start" w="full">
       {appLinks.map(link => (
         <Link
-          key={link.href}
           as={NextLink}
-          href={link.href}
-          prefetch={true}
-          variant="nav"
           color={linkColorFor(link.href)}
-          onClick={onClick}
           fontSize="xl"
+          href={link.href}
+          key={link.href}
+          onClick={onClick}
+          prefetch
+          variant="nav"
         >
           {link.label}
         </Link>
@@ -66,18 +66,18 @@ function NavLinks({ appLinks, onClick }: NavLinkProps) {
 function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
   return (
     <VStack align="start" w="full">
-      <Text color="grayText" size="xs" mb="sm">
+      <Text color="grayText" mb="sm" size="xs">
         Ecosystem
       </Text>
       {ecosystemLinks.map(link => (
         <Link
-          key={link.href}
-          href={link.href}
-          variant="nav"
-          isExternal
-          display="flex"
           alignItems="center"
+          display="flex"
           gap="xs"
+          href={link.href}
+          isExternal
+          key={link.href}
+          variant="nav"
         >
           {link.label}
           <Box color="grayText">
@@ -93,7 +93,7 @@ function SocialLinks({ socialLinks }: SocialLinkProps) {
   return (
     <HStack justify="space-between" w="full">
       {socialLinks.map(({ href, icon }) => (
-        <Button as={Link} key={href} href={href} variant="tertiary" isExternal>
+        <Button as={Link} href={href} isExternal key={href} variant="tertiary">
           {icon}
         </Button>
       ))}
@@ -113,18 +113,18 @@ export function MobileNav({ appLinks, ecosystemLinks, socialLinks, LogoType }: M
 
   return (
     <>
-      <Button ref={btnRef} variant="tertiary" onClick={onOpen}>
+      <Button onClick={onOpen} ref={btnRef} variant="tertiary">
         <Menu size={18} />
       </Button>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} finalFocusRef={btnRef}>
+      <Drawer finalFocusRef={btnRef} isOpen={isOpen} onClose={onClose} placement="right">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <LogoType width="106px" onClick={homeRedirect} />
+            <LogoType onClick={homeRedirect} width="106px" />
           </DrawerHeader>
           <DrawerBody>
-            <NavLinks onClick={onClose} appLinks={appLinks} />
+            <NavLinks appLinks={appLinks} onClick={onClose} />
             <Divider my={4} />
             <EcosystemLinks ecosystemLinks={ecosystemLinks} />
           </DrawerBody>

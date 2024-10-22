@@ -7,25 +7,25 @@ export function V3Grants() {
   return (
     <Section className="grants">
       <FadeInOnView>
-        <Box maxW="maxContent" m="0 auto" px={{ base: 'md', xl: '0' }}>
+        <Box m="0 auto" maxW="maxContent" px={{ base: 'md', xl: '0' }}>
           <Box
-            pb={{ base: 'md', md: 'lg' }}
-            w="full"
-            maxW="4xl"
             m="auto"
+            maxW="4xl"
+            pb={{ base: 'md', md: 'lg' }}
             textAlign={{ base: 'left', md: 'center' }}
+            w="full"
           >
             <Text pb="lg" variant="eyebrow" w="full">
               Balancer grants
             </Text>
             <Heading
-              pb="md"
               as="h2"
+              pb="md"
               size="2xl"
-              w="full"
               sx={{
                 textWrap: 'balance',
               }}
+              w="full"
             >
               Get help to innovate on v3
             </Heading>
@@ -43,25 +43,25 @@ export function V3Grants() {
             <Flex
               gap="ms"
               justify={{ base: 'start', md: 'center' }}
-              width="max-content"
               m={{ base: 'none', md: 'auto' }}
+              width="max-content"
             >
               <Button
-                size="lg"
                 as={NextLink}
-                href="https://grants.balancer.community"
-                variant="primary"
                 flex="1"
+                href="https://grants.balancer.community"
+                size="lg"
+                variant="primary"
               >
                 Get a Grant
               </Button>
 
               <Button
-                size="lg"
                 as={NextLink}
-                href="https://docs-v3.balancer.fi/"
-                variant="secondary"
                 flex="1"
+                href="https://docs-v3.balancer.fi/"
+                size="lg"
+                variant="secondary"
               >
                 View v3 docs
               </Button>

@@ -69,10 +69,10 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       isComplete,
       renderAction: () => (
         <ManagedSendTransactionButton
+          gasEstimationMeta={gasEstimationMeta}
           id={removeLiquidityStepId}
           labels={labels}
           txConfig={buildCallDataQuery.data}
-          gasEstimationMeta={gasEstimationMeta}
         />
       ),
       onActivated: () => setIsStepActivated(true),

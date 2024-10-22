@@ -109,14 +109,16 @@ export function SwapForm({ redirectToPoolPage }: Props) {
       tokens.length === 2 &&
       tokenSelectKey === 'tokenIn' &&
       isSameAddress(token.address, tokenOut.address)
-    )
-      {return switchTokens()}
+    ) {
+      return switchTokens()
+    }
     if (
       tokens.length === 2 &&
       tokenSelectKey === 'tokenOut' &&
       isSameAddress(token.address, tokenIn.address)
-    )
-      {return switchTokens()}
+    ) {
+      return switchTokens()
+    }
     handleTokenSelect(token)
   }
 
@@ -230,9 +232,11 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                 </motion.div>
               )}
 
-              {simulationQuery.isError ? <ErrorAlert title="Error fetching swap">
+              {simulationQuery.isError ? (
+                <ErrorAlert title="Error fetching swap">
                   {parseSwapError(simulationQuery.error?.message)}
-                </ErrorAlert> : null}
+                </ErrorAlert>
+              ) : null}
             </VStack>
           </CardBody>
           <CardFooter>

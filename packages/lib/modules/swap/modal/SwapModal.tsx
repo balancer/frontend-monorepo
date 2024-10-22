@@ -90,7 +90,9 @@ export function SwapPreviewModal({
       <SuccessOverlay startAnimation={!!swapTxHash && hasQuoteContext} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
-        {isDesktop && hasQuoteContext ? <DesktopStepTracker chain={selectedChain} transactionSteps={transactionSteps} /> : null}
+        {isDesktop && hasQuoteContext && (
+          <DesktopStepTracker chain={selectedChain} transactionSteps={transactionSteps} />
+        )}
         <TransactionModalHeader
           chain={selectedChain}
           isReceiptLoading={swapReceipt.isLoading}

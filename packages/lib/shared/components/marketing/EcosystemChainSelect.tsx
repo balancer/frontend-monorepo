@@ -36,11 +36,11 @@ const networkOptions: ChainOption[] = [
     label: (
       <HStack>
         <Box
-          height="2"
-          width="2"
           backgroundImage={`linear-gradient(to bottom, ${gradientMap[network].from}, ${gradientMap[network].to})`}
           borderRadius="50%"
           display="inline-block"
+          height="2"
+          width="2"
         />
         <Text>{getChainShortName(network)}</Text>
       </HStack>
@@ -60,15 +60,10 @@ export function EcosystemChainSelect({ value, onChange }: Props) {
   useEffect(() => setChainValue(networkOptions.find(option => option.value === value)), [value])
 
   return (
-    <Box data-lenis-prevent as={motion.div} animate={pulseOnceWithDelay} w="200px" zIndex="10">
+    <Box animate={pulseOnceWithDelay} as={motion.div} data-lenis-prevent w="200px" zIndex="10">
       <Select<ChainOption, false, GroupBase<ChainOption>>
         // width="300px"
-        instanceId="chain-select"
-        name="Chain"
-        value={chainValue}
-        options={networkOptions}
         chakraStyles={chakraStyles}
-        onChange={handleChange}
         components={{
           DropdownIndicator: props => (
             <chakraComponents.DropdownIndicator {...props}>
@@ -78,6 +73,11 @@ export function EcosystemChainSelect({ value, onChange }: Props) {
             </chakraComponents.DropdownIndicator>
           ),
         }}
+        instanceId="chain-select"
+        name="Chain"
+        onChange={handleChange}
+        options={networkOptions}
+        value={chainValue}
       />
     </Box>
   )

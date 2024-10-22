@@ -21,40 +21,40 @@ export default function PoolMetaBadges() {
   const { pool, chain } = usePool()
 
   return (
-    <Flex gap={{ base: 'xs', sm: 'sm' }} alignItems="center" wrap="wrap">
+    <Flex alignItems="center" gap={{ base: 'xs', sm: 'sm' }} wrap="wrap">
       <Badge
-        py="2.5"
-        px="2.5"
-        rounded="full"
         background="background.level2"
         border="1px solid"
         borderColor="border.base"
+        px="2.5"
+        py="2.5"
+        rounded="full"
         shadow="sm"
         title={getChainShortName(chain)}
       >
         <Image
-          src={`/images/chains/${chain}.svg`}
           alt={`Chain icon for ${chain.toLowerCase()}`}
-          width={20}
           height={20}
+          src={`/images/chains/${chain}.svg`}
+          width={20}
         />
       </Badge>
-      <PoolListTokenPills pool={pool} py="2" px="sm" />
+      <PoolListTokenPills pool={pool} px="sm" py="2" />
       {!shouldHideSwapFee(pool.type) && (
         <Popover trigger="hover">
           <PopoverTrigger>
             <Badge
-              fontWeight="normal"
-              py="xs"
-              px="sm"
+              alignItems="center"
               background="background.level2"
               border="1px solid"
               borderColor="border.base"
-              shadow="sm"
-              rounded="full"
               display="flex"
-              alignItems="center"
+              fontWeight="normal"
               h={{ base: '28px' }}
+              px="sm"
+              py="xs"
+              rounded="full"
+              shadow="sm"
             >
               <HStack color="font.primary">
                 <Repeat size={12} />
@@ -62,7 +62,7 @@ export default function PoolMetaBadges() {
               </HStack>
             </Badge>
           </PopoverTrigger>
-          <PopoverContent p="sm" w="auto" maxW="300px">
+          <PopoverContent maxW="300px" p="sm" w="auto">
             <Text fontSize="sm" variant="secondary">
               The swap fee rate earned by Liquidity Providers anytime a swap is routed through this
               pool. These fees automatically accumulate into each LP&rsquo;s position.

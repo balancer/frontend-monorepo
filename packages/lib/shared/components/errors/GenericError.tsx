@@ -25,7 +25,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
   if (isViemHttpFetchError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
-        <Text variant="secondary" color="black">
+        <Text color="black" variant="secondary">
           It looks like there was a network issue. Check your connection and try again. You can
           report the problem in{' '}
           <BalAlertLink href="https://discord.balancer.fi/">our discord</BalAlertLink> if the issue
@@ -37,7 +37,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
   if (isPausedError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
-        <Text variant="secondary" color="black">
+        <Text color="black" variant="secondary">
           The pool or one of the pool tokens is paused. Check{' '}
           <BalAlertLink href="https://discord.balancer.fi/">our discord</BalAlertLink> for more
           information.
@@ -48,7 +48,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
   if (isTooManyRequestsError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
-        <Text variant="secondary" color="black">
+        <Text color="black" variant="secondary">
           Too many RPC requests. Please try again in some minutes. You can report the problem in{' '}
           <BalAlertLink href="https://discord.balancer.fi/">our discord</BalAlertLink> if the issue
           persists.
@@ -59,7 +59,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
   if (isNotEnoughGasError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
-        <Text variant="secondary" color="black">
+        <Text color="black" variant="secondary">
           It looks like you don&apos;t have enough gas to complete this transaction. If you believe
           this is a mistake, please report it in{' '}
           <BalAlertLink href="https://discord.balancer.fi/">our discord.</BalAlertLink>
@@ -72,7 +72,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
   if (errorMessage === 'RPC Request failed.' || errorMessage === 'An unknown RPC error occurred.') {
     return (
       <ErrorAlert title={errorMessage} {...rest}>
-        <Text variant="secondary" color="black">
+        <Text color="black" variant="secondary">
           It looks like there was an RPC Request issue. You can report the problem in{' '}
           <BalAlertLink href="https://discord.balancer.fi/">our discord</BalAlertLink> if the issue
           persists.
@@ -83,7 +83,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
 
   return (
     <ErrorAlert title={errorName} {...rest}>
-      <Text variant="secondary" color="black">
+      <Text color="black" variant="secondary">
         Error details: {errorMessage}
       </Text>
     </ErrorAlert>

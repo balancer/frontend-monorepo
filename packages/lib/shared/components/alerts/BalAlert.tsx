@@ -23,31 +23,31 @@ export function BalAlert({
   onClose,
 }: BalAlertProps) {
   return (
-    <Alert status={status} rounded={isNavAlert ? 'none' : 'default'}>
+    <Alert rounded={isNavAlert ? 'none' : 'default'} status={status}>
       {ssr ? <AlertIcon /> : <AlertIcon as={getAlertIcon(status)} />}
 
       <AlertTitle
-        gap={1}
-        display="flex"
-        w="full"
         color="black"
-        wordBreak="break-word"
+        display="flex"
         flexDirection="column"
+        gap={1}
+        w="full"
+        wordBreak="break-word"
       >
         {content}
       </AlertTitle>
       {learnMoreLink && <BalAlertButtonLink href={learnMoreLink}>More</BalAlertButtonLink>}
       {isSoftWarning && (
         <CloseButton
-          onClick={onClose}
-          variant="softWarning"
-          color="font.dark"
-          ml="auto"
-          size="sm"
-          aria-label="Close"
           _hover={{
             transform: 'scale(1.2)',
           }}
+          aria-label="Close"
+          color="font.dark"
+          ml="auto"
+          onClick={onClose}
+          size="sm"
+          variant="softWarning"
         />
       )}
     </Alert>

@@ -73,10 +73,10 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
       onSuccess,
       renderAction: () => (
         <ManagedSendTransactionButton
+          gasEstimationMeta={gasEstimationMeta}
           id={addLiquidityStepId}
           labels={labels}
           txConfig={buildCallDataQuery.data}
-          gasEstimationMeta={gasEstimationMeta}
         />
       ),
     }),

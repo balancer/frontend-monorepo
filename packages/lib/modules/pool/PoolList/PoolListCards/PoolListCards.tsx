@@ -23,8 +23,8 @@ export function PoolListCards({ pools, count, loading }: Props) {
   if (!isMounted) return <Skeleton height="500px" w="full" />
 
   return (
-    <Box w="full" style={{ position: 'relative' }}>
-      <Grid templateColumns={{ base: '1fr', lg: 'repeat(4, 1fr)' }} w="full" gap="4">
+    <Box style={{ position: 'relative' }} w="full">
+      <Grid gap="4" templateColumns={{ base: '1fr', lg: 'repeat(4, 1fr)' }} w="full">
         {pools.map(pool => (
           <PoolListCard key={pool.id} pool={pool} />
         ))}
@@ -32,21 +32,21 @@ export function PoolListCards({ pools, count, loading }: Props) {
 
       {!loading && pools.length === 0 && (
         <Center
-          py="2xl"
           border="1px"
-          borderStyle="dashed"
           borderColor="border.base"
           borderRadius="md"
+          borderStyle="dashed"
+          py="2xl"
         >
           <Text color="font.secondary">No pools found</Text>
         </Center>
       )}
       {loading && (
-        <Grid templateColumns={{ base: '1fr', lg: 'repeat(4, 1fr)' }} w="full" gap="4">
-          <Skeleton w="full" h="350px" />
-          <Skeleton w="full" h="350px" />
-          <Skeleton w="full" h="350px" />
-          <Skeleton w="full" h="350px" />
+        <Grid gap="4" templateColumns={{ base: '1fr', lg: 'repeat(4, 1fr)' }} w="full">
+          <Skeleton h="350px" w="full" />
+          <Skeleton h="350px" w="full" />
+          <Skeleton h="350px" w="full" />
+          <Skeleton h="350px" w="full" />
         </Grid>
       )}
 

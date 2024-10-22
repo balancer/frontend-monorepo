@@ -12,29 +12,29 @@ export function BalAlertButtonLink({
   return (
     <Box>
       <Button
-        as={NextLink}
-        target="_blank"
-        href={href}
-        width="auto"
-        variant="outline"
-        h="32px"
-        py="ms"
-        px="sm"
-        my="-1"
-        color="font.dark"
-        borderColor="font.dark"
-        fontSize="sm"
+        _active={{
+          borderColor: 'font.dark',
+          color: 'green',
+        }}
         _hover={{
           transform: 'scale(1.05)',
           color: 'font.dark',
           borderColor: 'font.dark',
           backgroundColor: 'transparent',
         }}
-        _active={{
-          borderColor: 'font.dark',
-          color: 'green',
-        }}
+        as={NextLink}
+        borderColor="font.dark"
+        color="font.dark"
+        fontSize="sm"
+        h="32px"
+        href={href}
+        my="-1"
+        px="sm"
+        py="ms"
         rightIcon={<ArrowUpRight size="14" />}
+        target="_blank"
+        variant="outline"
+        width="auto"
       >
         {children}
       </Button>

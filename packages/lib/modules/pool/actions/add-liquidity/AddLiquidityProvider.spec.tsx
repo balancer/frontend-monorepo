@@ -19,11 +19,13 @@ import { nestedPoolMock } from '../../__mocks__/nestedPoolMock'
 async function testUseAddLiquidity(pool: GqlPoolElement = aBalWethPoolElementMock()) {
   const PoolProvider = buildDefaultPoolTestProvider(pool)
 
-  const Providers = ({ children }: PropsWithChildren) => (
-    <PoolProvider>
-      <DefaultAddLiquidityTestProvider>{children}</DefaultAddLiquidityTestProvider>
-    </PoolProvider>
-  )
+  function Providers({ children }: PropsWithChildren) {
+    return (
+      <PoolProvider>
+        <DefaultAddLiquidityTestProvider>{children}</DefaultAddLiquidityTestProvider>
+      </PoolProvider>
+    )
+  }
   const { result } = testHook(() => _useAddLiquidity(), {
     wrapper: Providers,
   })

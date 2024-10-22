@@ -68,11 +68,11 @@ export function RemoveLiquidityModal({
 
   return (
     <Modal
+      finalFocusRef={finalFocusRef}
+      initialFocusRef={initialFocusRef}
+      isCentered
       isOpen={isOpen}
       onClose={onClose}
-      initialFocusRef={initialFocusRef}
-      finalFocusRef={finalFocusRef}
-      isCentered
       preserveScrollBarGap
       {...rest}
     >
@@ -80,15 +80,15 @@ export function RemoveLiquidityModal({
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
         {isDesktop && hasQuoteContext && (
-          <DesktopStepTracker transactionSteps={transactionSteps} chain={pool.chain} />
+          <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
         )}
 
         <TransactionModalHeader
+          chain={pool.chain}
+          isReceiptLoading={receiptProps.isLoading}
           label="Remove liquidity"
           timeout={<RemoveLiquidityTimeout />}
           txHash={removeLiquidityTxHash}
-          chain={pool.chain}
-          isReceiptLoading={receiptProps.isLoading}
         />
 
         <ModalCloseButton />
@@ -96,10 +96,10 @@ export function RemoveLiquidityModal({
           <RemoveLiquiditySummary {...receiptProps} />
         </ModalBody>
         <ActionModalFooter
-          isSuccess={!!removeLiquidityTxHash && !receiptProps.isLoading}
           currentStep={transactionSteps.currentStep}
-          returnLabel="Return to pool"
+          isSuccess={!!removeLiquidityTxHash && !receiptProps.isLoading}
           returnAction={redirectToPoolPage}
+          returnLabel="Return to pool"
           urlTxHash={urlTxHash}
         />
       </ModalContent>

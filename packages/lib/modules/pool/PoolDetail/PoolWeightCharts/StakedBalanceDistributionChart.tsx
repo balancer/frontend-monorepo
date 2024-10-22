@@ -107,27 +107,27 @@ export default function StakedBalanceDistributionChart({
   return (
     <HStack p={{ base: 'sm', md: '0' }} spacing={{ base: 'lg', md: '2xl' }}>
       <Box
-        width={`${chartSizeValues.boxWidth}px`}
         height={`${chartSizeValues.boxHeight}px`}
         position="relative"
+        width={`${chartSizeValues.boxWidth}px`}
       >
         <Box
-          position="absolute"
+          alignItems="center"
           as={motion.div}
           bottom="0"
-          left="0"
-          right="0"
-          width={`${chartSizeValues.boxWidth * 0.5}px`}
-          height={`${chartSizeValues.boxHeight * 0.5}px`}
-          shadow="lg"
-          zIndex={4}
-          mx="auto"
           display="flex"
+          height={`${chartSizeValues.boxHeight * 0.5}px`}
           justifyContent="center"
-          alignItems="center"
+          left="0"
+          mx="auto"
+          position="absolute"
+          right="0"
+          rounded="full"
+          shadow="lg"
           top="50%"
           transform="translateY(-50%)"
-          rounded="full"
+          width={`${chartSizeValues.boxWidth * 0.5}px`}
+          zIndex={4}
         >
           <NoisyCard
             cardProps={{
@@ -142,51 +142,51 @@ export default function StakedBalanceDistributionChart({
               bg: 'background.level3',
             }}
             shadowContainerProps={{ shadow: 'none' }}
-          ></NoisyCard>
+          />
         </Box>
         <Box
-          position="relative"
-          width={`${chartSizeValues.boxWidth}px`}
-          height={`${chartSizeValues.boxHeight}px`}
           background="background.level3"
-          shadow="lg"
+          height={`${chartSizeValues.boxHeight}px`}
+          position="relative"
           rounded="full"
+          shadow="lg"
+          width={`${chartSizeValues.boxWidth}px`}
         >
           <Box
-            position="absolute"
-            top="50%"
-            right="0"
+            bg="transparent"
+            height={`${chartSizeValues.boxHeight * 0.8}px`}
             left="0"
             marginX="auto"
-            bg="transparent"
-            zIndex={2}
-            shadow={'lg'}
+            position="absolute"
+            right="0"
+            rounded="full"
+            shadow="lg"
+            top="50%"
             transform="translateY(-50%)"
             width={`${chartSizeValues.boxWidth * 0.8}px`}
-            height={`${chartSizeValues.boxHeight * 0.8}px`}
-            rounded="full"
+            zIndex={2}
           />
           <ReactECharts
+            onEvents={{}}
+            option={chartOption}
+            ref={eChartsRef}
             style={{
               width: `${chartSizeValues.boxWidth}px`,
               height: `${chartSizeValues.boxHeight}px`,
             }}
-            option={chartOption}
-            onEvents={{}}
-            ref={eChartsRef}
           />
         </Box>
       </Box>
       <VStack alignItems="flex-start">
         <HStack>
-          <Box width="12px" height="12px" bg="font.light" rounded="full" />
-          <Text whiteSpace="nowrap" color="font.secondary">
+          <Box bg="font.light" height="12px" rounded="full" width="12px" />
+          <Text color="font.secondary" whiteSpace="nowrap">
             Unstaked
           </Text>
         </HStack>
         <HStack>
-          <Box width="12px" height="12px" bg="chart.stakedBalance" rounded="full" />
-          <Text whiteSpace="nowrap" color="font.secondary">
+          <Box bg="chart.stakedBalance" height="12px" rounded="full" width="12px" />
+          <Text color="font.secondary" whiteSpace="nowrap">
             Staked on Balancer
           </Text>
         </HStack>

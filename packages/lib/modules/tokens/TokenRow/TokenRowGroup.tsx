@@ -43,12 +43,12 @@ export function TokenRowGroup({
 
         return (
           <TokenRow
-            key={`${index}-${amount.tokenAddress}-${amount.humanAmount}`}
-            value={amount.humanAmount}
+            abbreviated={false}
             address={amount.tokenAddress}
             chain={chain}
-            abbreviated={false}
             isLoading={isLoading}
+            key={`${index}-${amount.tokenAddress}-${amount.humanAmount}`}
+            value={amount.humanAmount}
           />
         )
       })}

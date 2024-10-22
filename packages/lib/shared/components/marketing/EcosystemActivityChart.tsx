@@ -27,7 +27,7 @@ import {
 } from '@repo/lib/modules/marketing/useEcosystemPoolActivity'
 
 const AnimateOpacity: FC<PropsWithChildren<object>> = ({ children }) => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+  <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ duration: 0.5 }}>
     {children}
   </motion.div>
 )
@@ -57,23 +57,23 @@ export function EcosystemActivityChart() {
   return (
     <Card>
       <Box position="relative">
-        {isLoading && <Skeleton w="100%" h="100%" position="absolute" />}
+        {isLoading && <Skeleton h="100%" position="absolute" w="100%" />}
 
         <Box opacity={isLoading ? 0 : 1}>
           <Stack
-            w="full"
+            alignItems="start"
             direction={{ base: 'column', sm: 'row' }}
             justify="space-between"
-            width="full"
             justifyContent="space-between"
-            alignItems="start"
             role="group"
+            w="full"
+            width="full"
           >
             <VStack alignItems="flex-start" gap={0.5}>
               <Heading fontWeight="bold" size="h5">
                 {headerInfo.total} transactions
               </Heading>
-              <Text variant="primary" fontSize="0.85rem">
+              <Text fontSize="0.85rem" variant="primary">
                 In the last {headerInfo.elapsedMinutes} mins
               </Text>
             </VStack>
@@ -81,43 +81,43 @@ export function EcosystemActivityChart() {
             <Flex flexWrap="wrap" gap="2">
               <ButtonGroup
                 currentOption={activeTab}
-                options={tabsList}
+                groupId="pool-activity"
                 onChange={option => {
                   setActiveTab(option as PoolActivityChartTypeTab)
                 }}
+                options={tabsList}
                 size="xxs"
-                groupId="pool-activity"
               />
 
               <EcosystemChainSelect
-                value={activeNetwork}
                 onChange={network => {
                   setActiveNetwork(network)
                 }}
+                value={activeNetwork}
               />
             </Flex>
           </Stack>
           <Box>
             <ReactECharts
-              style={{ height: `${chartHeight}px` }}
               option={chartOption}
               ref={eChartsRef}
+              style={{ height: `${chartHeight}px` }}
             />
           </Box>
 
           <AnimateOpacity>
-            <Divider pt="2" mb="4" />
+            <Divider mb="4" pt="2" />
 
             <Flex flexWrap="wrap" gap={['1', '1', '4']} px={['1', '2']}>
               {legendTabs.map((tab, index) => (
-                <HStack alignItems="center" key={index} gap="2">
+                <HStack alignItems="center" gap="2" key={index}>
                   <Box
-                    key={index}
-                    height="2"
-                    width="2"
                     backgroundImage={tab.color}
                     borderRadius="50%"
                     display="inline-block"
+                    height="2"
+                    key={index}
+                    width="2"
                   />
                   <Text color="font.secondary" fontSize="sm" textTransform="capitalize">
                     {tab.label}

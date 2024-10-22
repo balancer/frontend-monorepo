@@ -43,11 +43,10 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
 
         return (
           <TokenInput
-            key={token.address}
             address={token.address}
             chain={token.chain}
-            weight={weightFor(token.address)}
-            value={currentValueFor(token.address as Address)}
+            isDisabled={hasNoLiquidity(pool)}
+            key={token.address}
             onChange={e =>
               setAmountIn(token.address as Address, e.currentTarget.value as HumanAmount)
             }
@@ -56,7 +55,8 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
                 ? tokenSelectDisclosureOpen
                 : undefined
             }
-            isDisabled={hasNoLiquidity(pool)}
+            value={currentValueFor(token.address as Address)}
+            weight={weightFor(token.address)}
           />
         )
       })}

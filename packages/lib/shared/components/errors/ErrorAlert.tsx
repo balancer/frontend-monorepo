@@ -10,9 +10,9 @@ type Props = AlertProps & {
 
 export function ErrorAlert({ title, children, ...rest }: PropsWithChildren<Props>) {
   return (
-    <Alert rounded="md" status="error" mb="0" {...rest}>
+    <Alert mb="0" rounded="md" status="error" {...rest}>
       <AlertIcon as={XCircle} boxSize="1.5em" />
-      <Box ml="md" maxHeight="160" overflowY="auto" paddingRight="2">
+      <Box maxHeight="160" ml="md" overflowY="auto" paddingRight="2">
         {title && <AlertTitle color="black">{title}</AlertTitle>}
         <AlertDescription>{children}</AlertDescription>
       </Box>

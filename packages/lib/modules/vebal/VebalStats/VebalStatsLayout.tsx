@@ -6,9 +6,9 @@ import { VeBALLocksChart } from '@repo/lib/modules/vebal/vebal-chart/VebalLocksC
 
 export function VebalStatsLayout() {
   return (
-    <Stack w="full" spacing="md" direction={{ base: 'column', md: 'row' }} justifyContent="stretch">
+    <Stack direction={{ base: 'column', md: 'row' }} justifyContent="stretch" spacing="md" w="full">
       <VebalStats w={{ base: 'full', md: 'md' }} />
-      <VeBALLocksChart w="full" h={{ base: 'md', md: 'auto' }} />
+      <VeBALLocksChart h={{ base: 'md', md: 'auto' }} w="full" />
     </Stack>
   )
 }

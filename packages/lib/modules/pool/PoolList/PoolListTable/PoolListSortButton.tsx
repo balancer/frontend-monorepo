@@ -26,10 +26,10 @@ export default function PoolListSortButton({ title, isDesc, isCurrentSort, ...re
         </Text>
         <VStack alignContent="center" gap="0" spacing="0">
           {(!isCurrentSort || !isDesc) && (
-            <Icon as={ChevronUp} size="10" color={getColor(isCurrentSort)} />
+            <Icon as={ChevronUp} color={getColor(isCurrentSort)} size="10" />
           )}
           {(!isCurrentSort || isDesc) && (
-            <Icon as={ChevronDown} size="10" color={getColor(isCurrentSort)} />
+            <Icon as={ChevronDown} color={getColor(isCurrentSort)} size="10" />
           )}
         </VStack>
       </HStack>

@@ -177,13 +177,15 @@ function BaseAprTooltip({
           )
         })}
       </TooltipAprItem>
-      {hasMerklIncentives ? <TooltipAprItem
+      {hasMerklIncentives ? (
+        <TooltipAprItem
           {...basePopoverAprItemProps}
           apr={merklIncentivesAprDisplayed}
           displayValueFormatter={usedDisplayValueFormatter}
           title="Merkl.xyz incentives"
           tooltipText={merklIncentivesTooltipText}
-        /> : null}
+        />
+      ) : null}
       {isCowAmmPool(poolType) && (
         <TooltipAprItem
           {...basePopoverAprItemProps}
@@ -209,7 +211,8 @@ function BaseAprTooltip({
             : ''
         }
       />
-      {isVebal ? <>
+      {isVebal ? (
+        <>
           <Divider />
           <Stack gap={0} roundedBottom="md">
             <TooltipAprItem
@@ -245,8 +248,10 @@ function BaseAprTooltip({
               title={totalVeBalTitle || 'Total APR'}
             />
           </Stack>
-        </> : null}
-      {hasVeBalBoost ? <>
+        </>
+      ) : null}
+      {hasVeBalBoost ? (
+        <>
           <Divider />
           <Stack gap={0} roundedBottom="md">
             <TooltipAprItem
@@ -284,7 +289,8 @@ function BaseAprTooltip({
               }
             />
           </Stack>
-        </> : null}
+        </>
+      ) : null}
     </PopoverContent>
   )
 

@@ -31,7 +31,7 @@ export default function AddLiquidityLayout({ params: { txHash }, children }: Pro
 
   if (isNotSupported(pool)) {
     return (
-      <Alert status="info" w="fit-content" minW="50%">
+      <Alert minW="50%" status="info" w="fit-content">
         This pool type is not currently supported in the Balancer V3 UI
       </Alert>
     )

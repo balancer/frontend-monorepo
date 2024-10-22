@@ -32,8 +32,8 @@ function AddLiquidityAprTooltip({ weeklyYield, totalUsdValue, pool, ...props }: 
 
   const customPopoverContent =
     totalUsdValue === '0' ? (
-      <PopoverContent w="fit-content" shadow="3xl" maxWidth={'224px'} p="3">
-        <Text variant="secondary" fontSize="sm" lineHeight="18px" fontWeight="500">
+      <PopoverContent maxWidth="224px" p="3" shadow="3xl" w="fit-content">
+        <Text fontSize="sm" fontWeight="500" lineHeight="18px" variant="secondary">
           Enter some amounts of liquidity to add to simulate your potential weekly yield.
         </Text>
         <PopoverArrow bg="background.level3" />
@@ -43,29 +43,29 @@ function AddLiquidityAprTooltip({ weeklyYield, totalUsdValue, pool, ...props }: 
   return (
     <BaseAprTooltip
       {...props}
-      poolId={pool.id}
-      numberFormatter={numberFormatter}
+      customPopoverContent={customPopoverContent}
       displayValueFormatter={displayValueFormatter}
+      maxVeBalText="Total with max veBAL"
+      numberFormatter={numberFormatter}
+      placement="top-start"
+      poolId={pool.id}
+      poolType={pool.type}
+      shouldDisplayBaseTooltip
+      shouldDisplayMaxVeBalTooltip
       totalBaseText="Total weekly base"
       totalBaseVeBalText="Total weekly base"
       totalVeBalTitle="Total weekly"
-      maxVeBalText="Total with max veBAL"
-      placement="top-start"
-      vebalBoost="1"
-      customPopoverContent={customPopoverContent}
-      shouldDisplayBaseTooltip
-      shouldDisplayMaxVeBalTooltip
       usePortal={false}
-      poolType={pool.type}
+      vebalBoost="1"
     >
       <HStack align="center" alignItems="center">
-        <Card cursor="pointer" variant="subSection" w="full" p={['sm', 'ms']}>
+        <Card cursor="pointer" p={['sm', 'ms']} variant="subSection" w="full">
           <VStack align="start" spacing="sm">
-            <Text variant="special" fontSize="sm" lineHeight="16px" fontWeight="500">
+            <Text fontSize="sm" fontWeight="500" lineHeight="16px" variant="special">
               Potential weekly yield
             </Text>
             <HStack spacing="xs">
-              <Text variant="special" fontSize="md" lineHeight="16px" fontWeight="700">
+              <Text fontSize="md" fontWeight="700" lineHeight="16px" variant="special">
                 {weeklyYield ? toCurrency(weeklyYield, { abbreviated: false }) : '-'}
               </Text>
               <SparklesIcon isOpen={false} pool={pool} />

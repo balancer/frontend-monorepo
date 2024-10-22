@@ -43,14 +43,9 @@ export function ChainSelect({ value, onChange }: Props) {
   useEffect(() => setChainValue(networkOptions.find(option => option.value === value)), [value])
 
   return (
-    <Box as={motion.div} animate={pulseOnceWithDelay} w="full" zIndex="10">
+    <Box animate={pulseOnceWithDelay} as={motion.div} w="full" zIndex="10">
       <Select<ChainOption, false, GroupBase<ChainOption>>
-        instanceId="chain-select"
-        name="Chain"
-        value={chainValue}
-        options={networkOptions}
         chakraStyles={chakraStyles}
-        onChange={handleChange}
         components={{
           DropdownIndicator: props => (
             <chakraComponents.DropdownIndicator {...props}>
@@ -61,6 +56,11 @@ export function ChainSelect({ value, onChange }: Props) {
             </chakraComponents.DropdownIndicator>
           ),
         }}
+        instanceId="chain-select"
+        name="Chain"
+        onChange={handleChange}
+        options={networkOptions}
+        value={chainValue}
       />
     </Box>
   )

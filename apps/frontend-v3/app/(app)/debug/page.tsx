@@ -7,7 +7,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 export default function Debug() {
   return (
     <FadeInOnView>
-      <VStack padding="lg" margin="lg">
+      <VStack margin="lg" padding="lg">
         <Heading size="md">Demos</Heading>
         <Link as={NextLink} href="/debug/pools">
           Pools

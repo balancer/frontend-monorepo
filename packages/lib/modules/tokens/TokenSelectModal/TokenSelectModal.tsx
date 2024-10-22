@@ -58,10 +58,10 @@ export function TokenSelectModal({
 
   return (
     <Modal
-      isOpen={isOpen}
-      onClose={closeModal}
       finalFocusRef={finalFocusRef}
       isCentered
+      isOpen={isOpen}
+      onClose={closeModal}
       preserveScrollBarGap
       {...rest}
     >
@@ -70,13 +70,13 @@ export function TokenSelectModal({
         <ModalHeader color="font.primary">Select a token: {getChainShortName(chain)}</ModalHeader>
         <ModalCloseButton />
         <ModalBody p={0}>
-          <VStack w="full" align="start" spacing="md">
+          <VStack align="start" spacing="md" w="full">
             <Box px="md" w="full">
               <SearchInput
+                ariaLabel="search for a token"
+                placeholder="Search by name, symbol or address"
                 search={searchTerm}
                 setSearch={setSearchTerm}
-                placeholder="Search by name, symbol or address"
-                ariaLabel="search for a token"
                 tabIndex={1}
               />
             </Box>
@@ -84,22 +84,22 @@ export function TokenSelectModal({
               <Box px="md" w="full">
                 <TokenSelectPopular
                   chain={chain}
+                  currentToken={currentToken}
                   excludeNativeAsset={excludeNativeAsset}
                   onTokenSelect={closeOnSelect}
-                  currentToken={currentToken}
                 />
               </Box>
             )}
             <Box pr="0" w="full">
               <TokenSelectList
                 chain={chain}
-                tokens={tokens}
-                excludeNativeAsset={excludeNativeAsset}
-                pinNativeAsset={pinNativeAsset}
-                listHeight={500}
-                searchTerm={searchTerm}
                 currentToken={currentToken}
+                excludeNativeAsset={excludeNativeAsset}
+                listHeight={500}
                 onTokenSelect={closeOnSelect}
+                pinNativeAsset={pinNativeAsset}
+                searchTerm={searchTerm}
+                tokens={tokens}
               />
             </Box>
           </VStack>

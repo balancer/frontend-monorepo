@@ -56,18 +56,18 @@ function TokenInputSelector({ token, weight, toggleTokenSelect }: TokenInputSele
 
   return tokenConfig ? (
     <Button
-      variant={tokenConfig.variant}
-      onClick={toggleTokenSelect}
       cursor={toggleTokenSelect ? 'pointer' : 'default'}
+      onClick={toggleTokenSelect}
+      variant={tokenConfig.variant}
     >
       {tokenConfig && tokenConfig.showIcon && (
         <Box mr="sm">
-          <TokenIcon logoURI={token?.logoURI} alt={tokenConfig.label} size={22} loading="lazy" />
+          <TokenIcon alt={tokenConfig.label} loading="lazy" logoURI={token?.logoURI} size={22} />
         </Box>
       )}
       {tokenConfig && tokenConfig.label}
       {weight && (
-        <Text fontWeight="normal" ml="sm" fontSize="sm">
+        <Text fontSize="sm" fontWeight="normal" ml="sm">
           {fNum('weight', weight)}
         </Text>
       )}
@@ -129,14 +129,14 @@ function TokenInputFooter({
   }
 
   return (
-    <HStack h="4" w="full" justify="space-between">
+    <HStack h="4" justify="space-between" w="full">
       {isBalancesLoading || !isMounted ? (
-        <Skeleton w="12" h="full" />
+        <Skeleton h="full" w="12" />
       ) : (
         <Text
-          variant="secondary"
-          fontSize="sm"
           color={showPriceImpact ? priceImpactColor : 'font.secondary'}
+          fontSize="sm"
+          variant="secondary"
         >
           {toCurrency(usdValue, { abbreviated: false })}
           {showPriceImpact &&
@@ -145,21 +145,21 @@ function TokenInputFooter({
         </Text>
       )}
       {isBalancesLoading || !isMounted ? (
-        <Skeleton w="12" h="full" />
+        <Skeleton h="full" w="12" />
       ) : (
         <HStack
-          title="Use wallet balance"
+          _hover={noBalance || _isNativeAsset ? {} : { color: 'font.highlight' }}
+          color={inputLabelColor}
           cursor={noBalance || _isNativeAsset ? 'default' : 'pointer'}
           onClick={handleBalanceClick}
-          color={inputLabelColor}
-          _hover={noBalance || _isNativeAsset ? {} : { color: 'font.highlight' }}
+          title="Use wallet balance"
         >
           {hasError && (
-            <Text fontSize="sm" color="inherit">
+            <Text color="inherit" fontSize="sm">
               {getValidationError(token)}
             </Text>
           )}
-          <Text fontSize="sm" color="inherit">
+          <Text color="inherit" fontSize="sm">
             {fNum('token', userBalance, { abbreviated: false })}
           </Text>
           <Box>
@@ -234,57 +234,57 @@ export const TokenInput = forwardRef(
 
     return (
       <Box
-        borderRadius="md"
-        p={['ms', 'md']}
-        shadow="innerBase"
         bg="background.level0"
         border="white"
+        borderRadius="md"
         boxShadow={boxShadow}
+        p={['ms', 'md']}
+        shadow="innerBase"
         w="full"
         {...boxProps}
       >
         <VStack align="start" spacing="md">
-          <InputGroup border="transparent" background="transparent">
-            <Box w="full" position="relative">
+          <InputGroup background="transparent" border="transparent">
+            <Box position="relative" w="full">
               <Input
-                ref={ref}
-                type="number"
-                placeholder="0.00"
-                autoComplete="off"
-                autoCorrect="off"
-                min={0}
-                border="0px solid transparent"
-                bg="transparent"
-                shadow="none"
-                p="0"
-                fontSize="3xl"
-                fontWeight="medium"
-                value={value}
-                title={inputTitle}
-                onChange={handleOnChange}
-                onKeyDown={blockInvalidNumberInput}
-                outline="none"
-                boxShadow="none"
-                _hover={{
-                  border: '0px solid transparent',
-                  boxShadow: 'none',
-                }}
                 _focus={{
                   outline: 'none',
                   border: '0px solid transparent',
                   boxShadow: 'none',
                 }}
+                _hover={{
+                  border: '0px solid transparent',
+                  boxShadow: 'none',
+                }}
+                autoComplete="off"
+                autoCorrect="off"
+                bg="transparent"
+                border="0px solid transparent"
+                boxShadow="none"
+                fontSize="3xl"
+                fontWeight="medium"
+                min={0}
+                onChange={handleOnChange}
+                onKeyDown={blockInvalidNumberInput}
+                outline="none"
+                p="0"
+                placeholder="0.00"
+                ref={ref}
+                shadow="none"
+                title={inputTitle}
+                type="number"
+                value={value}
                 {...inputProps}
               />
               <Box
-                position="absolute"
                 bgGradient="linear(to-r, transparent, background.level0 70%)"
-                w="8"
                 h="full"
-                top={0}
+                position="absolute"
                 right={0}
+                top={0}
+                w="8"
                 zIndex={9999}
-              ></Box>
+              />
             </Box>
 
             {tokenInputSelector && (

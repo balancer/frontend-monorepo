@@ -15,15 +15,15 @@ export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, 
   return (
     <Grid
       {...rest}
+      borderBottom="1px solid"
+      borderColor="border.base"
       p={['ms', 'md']}
       px="xs"
       w="full"
-      borderBottom="1px solid"
-      borderColor="border.base"
     >
       <GridItem>
         <VStack align="start" w="full">
-          <Icon as={Globe} boxSize="5" ml="1" color="font.primary" />
+          <Icon as={Globe} boxSize="5" color="font.primary" ml="1" />
         </VStack>
       </GridItem>
       <GridItem>
@@ -36,10 +36,10 @@ export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, 
       </GridItem>
       {portfolioOrderBy.map((orderByItem, index) => (
         <SortableHeader
+          align={index === 0 ? 'left' : 'right'}
+          isSorted={orderByItem.id === currentSortingObj.id}
           key={index}
           label={orderByItem.title}
-          isSorted={orderByItem.id === currentSortingObj.id}
-          sorting={currentSortingObj.desc ? 'desc' : 'asc'}
           onSort={() => {
             if (orderByItem.id === currentSortingObj.id) {
               setCurrentSortingObj({
@@ -50,7 +50,7 @@ export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, 
               setCurrentSortingObj({ id: orderByItem.id, desc: false })
             }
           }}
-          align={index === 0 ? 'left' : 'right'}
+          sorting={currentSortingObj.desc ? 'desc' : 'asc'}
         />
       ))}
     </Grid>

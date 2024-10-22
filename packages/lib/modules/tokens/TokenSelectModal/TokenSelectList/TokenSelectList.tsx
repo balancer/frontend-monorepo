@@ -30,7 +30,7 @@ function OtherTokens() {
   return (
     <Box bg="background.level1">
       <Divider />
-      <HStack px="md" pt="sm">
+      <HStack pt="sm" px="md">
         <Box color="font.secondary">
           <CoinsIcon size={20} />
         </Box>
@@ -51,9 +51,9 @@ interface InYourWalletProps {
 
 function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: InYourWalletProps) {
   return (
-    <Box pb="0" mr="0">
+    <Box mr="0" pb="0">
       <Divider />
-      <Box py="sm" px="md" bg="background.level1">
+      <Box bg="background.level1" px="md" py="sm">
         <HStack zIndex="1">
           <Box color="font.secondary">
             <WalletIcon size={20} />
@@ -63,21 +63,21 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
           </Text>
           {!isConnected && (
             <Button
-              ml="auto"
-              size="sm"
-              variant="link"
+              _hover={{ color: 'font.linkHover' }}
               color="font.link"
               height="24px !important"
-              padding="0"
-              _hover={{ color: 'font.linkHover' }}
+              ml="auto"
               onClick={openConnectModal}
+              padding="0"
+              size="sm"
+              variant="link"
             >
               Connect wallet
             </Button>
           )}
           {isConnected && hasNoTokensInWallet && (
             <Box ml="auto">
-              <Text fontSize="sm" fontWeight="bold" color="red.500">
+              <Text color="red.500" fontSize="sm" fontWeight="bold">
                 No tokens on this network
               </Text>
             </Box>
@@ -125,10 +125,10 @@ export function TokenSelectList({
 
   const groups = [
     <InYourWallet
-      key="in-your-wallet"
-      isConnected={isConnected}
-      openConnectModal={openConnectModal}
       hasNoTokensInWallet={!tokensWithBalance.length}
+      isConnected={isConnected}
+      key="in-your-wallet"
+      openConnectModal={openConnectModal}
     />,
     <OtherTokens key="other-tokens" />,
   ]
@@ -164,7 +164,7 @@ export function TokenSelectList({
     <Box height={listHeight} {...rest}>
       {tokensToShow.length === 0 ? (
         <Box p="lg">
-          <Text mb="xxs" fontWeight="bold" color="font.error">
+          <Text color="font.error" fontWeight="bold" mb="xxs">
             No tokens found
           </Text>
           <Text color="font.secondary" fontSize="sm">
@@ -176,28 +176,28 @@ export function TokenSelectList({
         </Box>
       ) : (
         <GroupedVirtuoso
-          ref={ref}
-          groupCounts={groupCounts}
-          style={{ height: listHeight }}
           groupContent={index => {
             return groups[index]
           }}
+          groupCounts={groupCounts}
           itemContent={index => {
             const token = tokensToShow[index]
             const userBalance = isConnected ? balanceFor(token) : undefined
 
             return (
               <TokenSelectListRow
-                key={keyFor(token, index)}
                 active={index === activeIndex}
-                onClick={() => !isCurrentToken(token) && onTokenSelect(token)}
+                isBalancesLoading={isBalancesLoading || isLoadingTokenPrices}
                 isCurrentToken={isCurrentToken(token)}
+                key={keyFor(token, index)}
+                onClick={() => !isCurrentToken(token) && onTokenSelect(token)}
                 token={token}
                 userBalance={userBalance}
-                isBalancesLoading={isBalancesLoading || isLoadingTokenPrices}
               />
             )
           }}
+          ref={ref}
+          style={{ height: listHeight }}
         />
       )}
     </Box>

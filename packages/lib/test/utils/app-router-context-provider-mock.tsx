@@ -10,10 +10,10 @@ export type AppRouterContextProviderMockProps = {
 }
 
 // https://github.com/vercel/next.js/discussions/48937
-export const AppRouterContextProviderMock = ({
+export function AppRouterContextProviderMock({
   router,
   children,
-}: AppRouterContextProviderMockProps): ReactNode => {
+}: AppRouterContextProviderMockProps): ReactNode {
   const mockedRouter: AppRouterInstance = {
     back: vi.fn(),
     forward: vi.fn(),

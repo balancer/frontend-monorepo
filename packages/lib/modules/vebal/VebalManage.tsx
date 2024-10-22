@@ -15,33 +15,33 @@ export function VebalManage() {
       <VebalBreadcrumbs />
       <VStack align="start" w="full">
         <Stack
-          w="full"
-          justify="space-between"
           alignItems="center"
-          spacing="md"
           direction={{ base: 'column', md: 'row' }}
+          justify="space-between"
+          spacing="md"
+          w="full"
         >
           <Heading as="h2" size="lg" variant="special">
             Manage veBAL
           </Heading>
 
-          <Stack spacing="md" direction={{ base: 'column', md: 'row' }}>
+          <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
             <Button
+              isDisabled={false}
               onClick={() => {
                 //
               }}
               size="lg"
-              isDisabled={false}
             >
               Extend lock
             </Button>
             <Button
+              isDisabled={false}
               onClick={() => {
                 //
               }}
-              variant="primary"
               size="lg"
-              isDisabled={false}
+              variant="primary"
             >
               Get veBAL
             </Button>

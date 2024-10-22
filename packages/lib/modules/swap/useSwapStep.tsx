@@ -91,10 +91,10 @@ export function useSwapStep({
       renderAction: () => (
         <VStack w="full">
           <ManagedSendTransactionButton
+            gasEstimationMeta={gasEstimationMeta}
             id={swapStepId}
             labels={labels}
             txConfig={buildSwapQuery.data}
-            gasEstimationMeta={gasEstimationMeta}
           />
         </VStack>
       ),

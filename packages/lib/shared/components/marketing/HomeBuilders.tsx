@@ -9,34 +9,34 @@ import { Picture } from '@repo/lib/shared/components/other/Picture'
 export function HomeBuilders() {
   return (
     <Section className="builders">
-      <Box maxW="maxContent" m="0 auto" px={{ base: 'md', xl: '0' }}>
+      <Box m="0 auto" maxW="maxContent" px={{ base: 'md', xl: '0' }}>
         <Box
-          pb={{ base: 'md', md: 'lg' }}
-          w="full"
-          maxW="4xl"
           m="auto"
+          maxW="4xl"
+          pb={{ base: 'md', md: 'lg' }}
           textAlign={{ base: 'left', md: 'center' }}
+          w="full"
         >
           <FadeInOnView>
             <Text pb="lg" variant="eyebrow" w="full">
               For Builders
             </Text>
             <Heading
-              pb="md"
-              w="full"
               as="h2"
+              pb="md"
               size="2xl"
               sx={{
                 textWrap: 'balance',
               }}
+              w="full"
             >
               DeFi&rsquo;s most extensive AMM product suite
             </Heading>
             <Text
-              w="full"
               sx={{
                 textWrap: 'balance',
               }}
+              w="full"
             >
               Balancer is a Decentralized Finance (DeFi) protocol that provides permissionless
               technology to streamline AMM development for developers and empower liquidity
@@ -48,41 +48,41 @@ export function HomeBuilders() {
         <FadeInOnView>
           <Box maxW={{ base: '720px', lg: '100%' }} mx="auto">
             <Grid
-              templateRows={{ base: 'repeat(4, 1fr', md: 'repeat(3, 1fr', lg: 'repeat(2, 1fr' }}
+              gap={4}
               templateColumns={{
                 base: 'repeat(1, 1fr',
                 md: 'repeat(2, 1fr',
                 lg: 'repeat(4, 1fr',
               }}
-              gap={4}
+              templateRows={{ base: 'repeat(4, 1fr', md: 'repeat(3, 1fr', lg: 'repeat(2, 1fr' }}
             >
               <Card
-                variant="level2"
                 gridArea={{ base: 'auto', md: '1 / 1 / 2 / 3', lg: '1 / 1 / 3 / 3' }}
+                variant="level2"
               >
-                <Flex direction="column" justify="flex-end" h="100%">
-                  <Box overflow="hidden" pb="md" rounded="lg" h="100%">
+                <Flex direction="column" h="100%" justify="flex-end">
+                  <Box h="100%" overflow="hidden" pb="md" rounded="lg">
                     <ParallaxImage
-                      scaleStart="100%"
                       scaleEnd="120%"
-                      yStart="-10%"
-                      yEnd="30%"
+                      scaleStart="100%"
                       transformOrigin="bottom"
+                      yEnd="30%"
+                      yStart="-10%"
                     >
                       <Picture
-                        imgName="build"
                         altText="Liquidity pools"
                         defaultImgType="jpg"
-                        imgJpg={true}
-                        imgAvif={true}
-                        imgAvifDark={true}
+                        imgAvif
+                        imgAvifDark
+                        imgJpg
+                        imgName="build"
                       />
                     </ParallaxImage>
                   </Box>
                   <Heading
                     as="h5"
-                    size="h5"
                     pb="sm"
+                    size="h5"
                     sx={{
                       textWrap: 'balance',
                     }}
@@ -102,28 +102,28 @@ export function HomeBuilders() {
               </Card>
 
               <Card>
-                <Flex direction="column" justify="flex-end" h="100%">
-                  <Box overflow="hidden" pb="md" rounded="lg" h="100%">
+                <Flex direction="column" h="100%" justify="flex-end">
+                  <Box h="100%" overflow="hidden" pb="md" rounded="lg">
                     <ParallaxImage
-                      scaleStart="100%"
                       scaleEnd="120%"
-                      yStart="-10%"
-                      yEnd="30%"
+                      scaleStart="100%"
                       transformOrigin="bottom"
+                      yEnd="30%"
+                      yStart="-10%"
                     >
                       <Picture
-                        imgName="vebal"
                         altText="veBAL tokens"
                         defaultImgType="jpg"
-                        imgJpg={true}
-                        imgJpgDark={true}
+                        imgJpg
+                        imgJpgDark
+                        imgName="vebal"
                       />
                     </ParallaxImage>
                   </Box>
                   <Heading
                     as="h5"
-                    size="h5"
                     pb="sm"
+                    size="h5"
                     sx={{
                       textWrap: 'balance',
                     }}
@@ -142,28 +142,28 @@ export function HomeBuilders() {
               </Card>
 
               <Card>
-                <Flex direction="column" justify="flex-end" h="100%">
-                  <Box overflow="hidden" pb="md" rounded="lg" h="100%">
+                <Flex direction="column" h="100%" justify="flex-end">
+                  <Box h="100%" overflow="hidden" pb="md" rounded="lg">
                     <ParallaxImage
-                      scaleStart="100%"
                       scaleEnd="120%"
-                      yStart="-10%"
-                      yEnd="30%"
+                      scaleStart="100%"
                       transformOrigin="bottom"
+                      yEnd="30%"
+                      yStart="-10%"
                     >
                       <Picture
-                        imgName="aggregators"
                         altText="Aggregator integrations like CoW, 1inch and Paraswap"
                         defaultImgType="jpg"
-                        imgJpg={true}
-                        imgJpgDark={true}
+                        imgJpg
+                        imgJpgDark
+                        imgName="aggregators"
                       />
                     </ParallaxImage>
                   </Box>
                   <Heading
                     as="h5"
-                    size="h5"
                     pb="sm"
+                    size="h5"
                     sx={{
                       textWrap: 'balance',
                     }}
@@ -182,32 +182,32 @@ export function HomeBuilders() {
               </Card>
 
               <Card gridArea={{ base: 'auto', md: '3 / 1 / 4 / 3', lg: '1 / 4 / 3 / 5' }}>
-                <Flex direction="column" justify="flex-end" h="100%">
-                  <Box overflow="hidden" pb="md" rounded="lg" h="100%">
+                <Flex direction="column" h="100%" justify="flex-end">
+                  <Box h="100%" overflow="hidden" pb="md" rounded="lg">
                     <ParallaxImage
-                      scaleStart="100%"
                       scaleEnd="120%"
-                      yStart="-10%"
-                      yEnd="30%"
+                      scaleStart="100%"
                       transformOrigin="bottom"
+                      yEnd="30%"
+                      yStart="-10%"
                     >
                       <Picture
-                        imgName="network"
                         altText="The Balancer network"
                         defaultImgType="jpg"
-                        imgAvif={true}
-                        imgAvifDark={true}
-                        imgAvifPortrait={true}
-                        imgAvifPortraitDark={true}
-                        imgJpgDark={true}
-                        imgJpg={true}
+                        imgAvif
+                        imgAvifDark
+                        imgAvifPortrait
+                        imgAvifPortraitDark
+                        imgJpg
+                        imgJpgDark
+                        imgName="network"
                       />
                     </ParallaxImage>
                   </Box>
                   <Heading
                     as="h5"
-                    size="h5"
                     pb="sm"
+                    size="h5"
                     sx={{
                       textWrap: 'balance',
                     }}

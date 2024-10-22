@@ -28,7 +28,7 @@ export default async function NotFound() {
           <Text>{description}</Text>
         </VStack>
 
-        <Button as={Link} size="sm" href={redirectUrl}>
+        <Button as={Link} href={redirectUrl} size="sm">
           {redirectText}
         </Button>
       </VStack>

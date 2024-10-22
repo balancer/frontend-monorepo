@@ -59,27 +59,31 @@ export function useSignPermit2Step(params: AddLiquidityPermit2Params): Transacti
     isLoadingPermit2Allowances ||
     signPermit2State === SignatureState.Confirming
 
-  const SignPermitButton = () => (
-    <VStack width="full">
-      {error && <BalAlert status="error" content={error} />}
-      {!isConnected && <ConnectWallet width="full" isLoading={isLoading} />}
-      {shouldChangeNetwork && isConnected && <NetworkSwitchButton {...networkSwitchButtonProps} />}
-      {!shouldChangeNetwork && isConnected && (
-        <Button
-          width="full"
-          w="full"
-          size="lg"
-          variant="primary"
-          isDisabled={isDisabled}
-          isLoading={isLoading}
-          onClick={() => signPermit2(params.pool)}
-          loadingText={buttonLabel}
-        >
-          {buttonLabel}
-        </Button>
-      )}
-    </VStack>
-  )
+  function SignPermitButton() {
+    return (
+      <VStack width="full">
+        {error && <BalAlert content={error} status="error" />}
+        {!isConnected && <ConnectWallet isLoading={isLoading} width="full" />}
+        {shouldChangeNetwork && isConnected && (
+          <NetworkSwitchButton {...networkSwitchButtonProps} />
+        )}
+        {!shouldChangeNetwork && isConnected && (
+          <Button
+            isDisabled={isDisabled}
+            isLoading={isLoading}
+            loadingText={buttonLabel}
+            onClick={() => signPermit2(params.pool)}
+            size="lg"
+            variant="primary"
+            w="full"
+            width="full"
+          >
+            {buttonLabel}
+          </Button>
+        )}
+      </VStack>
+    )
+  }
 
   const isComplete = () => signPermit2State === SignatureState.Completed || isValidPermit2
 

@@ -10,26 +10,26 @@ import { Picture } from '@repo/lib/shared/components/other/Picture'
 export function HomeProtocols() {
   return (
     <Section className="protocols">
-      <Box maxW="maxContent" m="0 auto" px={{ base: 'md', xl: '0' }}>
+      <Box m="0 auto" maxW="maxContent" px={{ base: 'md', xl: '0' }}>
         <Box
-          pb={{ base: 'md', md: 'lg' }}
-          w="full"
-          maxW="4xl"
           m="auto"
+          maxW="4xl"
+          pb={{ base: 'md', md: 'lg' }}
           textAlign={{ base: 'left', md: 'center' }}
+          w="full"
         >
           <FadeInOnView>
             <Text pb="lg" variant="eyebrow" w="full">
               For Protocols
             </Text>
             <Heading
-              pb="md"
-              w="full"
               as="h2"
+              pb="md"
               size="2xl"
               sx={{
                 textWrap: 'balance',
               }}
+              w="full"
             >
               Plug in to DeFi&rsquo;s liquidity hub
             </Heading>
@@ -46,28 +46,28 @@ export function HomeProtocols() {
         </Box>
       </Box>
 
-      <Box maxW="maxContent" m="0 auto">
+      <Box m="0 auto" maxW="maxContent">
         <FadeInOnView>
           <ParallaxImage>
             <Picture
-              imgName="bootstrap-liquidity"
               altText="Pools plugged into Balancer vault"
-              width="1320"
-              height="775"
               defaultImgType="png"
-              imgAvif={true}
-              imgPng={true}
-              imgAvifPortrait={true}
+              height="775"
+              imgAvif
+              imgAvifPortrait
+              imgName="bootstrap-liquidity"
+              imgPng
+              width="1320"
             />
           </ParallaxImage>
         </FadeInOnView>
       </Box>
 
-      <Box maxW="maxContent" m="0 auto" px={{ base: 'md', xl: '0' }}>
+      <Box m="0 auto" maxW="maxContent" px={{ base: 'md', xl: '0' }}>
         <FadeInOnView>
-          <SimpleGrid columns={{ base: 2, md: 4 }} spacing={{ base: 8, md: 8, xl: '12' }} py="xl">
+          <SimpleGrid columns={{ base: 2, md: 4 }} py="xl" spacing={{ base: 8, md: 8, xl: '12' }}>
             <Box>
-              <Heading variant="h5" as="h5" size="h5" pb="sm">
+              <Heading as="h5" pb="sm" size="h5" variant="h5">
                 Get swaps on day 1
               </Heading>
               <Text>
@@ -76,7 +76,7 @@ export function HomeProtocols() {
               </Text>
             </Box>
             <Box>
-              <Heading variant="h5" as="h5" size="h5" pb="sm">
+              <Heading as="h5" pb="sm" size="h5" variant="h5">
                 Liquidity incentives
               </Heading>
               <Text>
@@ -85,7 +85,7 @@ export function HomeProtocols() {
               </Text>
             </Box>
             <Box>
-              <Heading variant="h5" as="h5" size="h5" pb="sm">
+              <Heading as="h5" pb="sm" size="h5" variant="h5">
                 Access Balancer&lsquo;s community
               </Heading>
               <Text>
@@ -94,7 +94,7 @@ export function HomeProtocols() {
               </Text>
             </Box>
             <Box>
-              <Heading variant="h5" as="h5" size="h5" pb="sm">
+              <Heading as="h5" pb="sm" size="h5" variant="h5">
                 ve8020 tokenomics
               </Heading>
               <Text>

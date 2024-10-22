@@ -5,16 +5,16 @@ export function PoolDetailSkeleton() {
   return (
     <DefaultPageContainer>
       <VStack align="start" spacing="2xl" w="full">
-        <VStack align="start" w="full" spacing="md">
-          <Skeleton w="lg" maxW="full" h="100px" />
-          <HStack w="full" spacing="md">
-            <Skeleton w="300px" h="400px" display={{ base: 'none', md: 'block' }} />
-            <Skeleton w="full" h="400px" />
+        <VStack align="start" spacing="md" w="full">
+          <Skeleton h="100px" maxW="full" w="lg" />
+          <HStack spacing="md" w="full">
+            <Skeleton display={{ base: 'none', md: 'block' }} h="400px" w="300px" />
+            <Skeleton h="400px" w="full" />
           </HStack>
         </VStack>
-        <Skeleton w="full" h="400px" />
-        <Skeleton w="full" h="400px" />
-        <Skeleton w="full" h="400px" />
+        <Skeleton h="400px" w="full" />
+        <Skeleton h="400px" w="full" />
+        <Skeleton h="400px" w="full" />
       </VStack>
     </DefaultPageContainer>
   )

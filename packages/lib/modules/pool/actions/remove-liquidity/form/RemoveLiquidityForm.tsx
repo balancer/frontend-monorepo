@@ -123,7 +123,7 @@ export function RemoveLiquidityForm() {
 
   return (
     <TokenBalancesProvider extTokens={validTokens}>
-      <Box h="full" w="full" maxW="lg" mx="auto" pb="2xl">
+      <Box h="full" maxW="lg" mx="auto" pb="2xl" w="full">
         <Card>
           <CardHeader>
             <HStack justify="space-between" w="full">
@@ -131,28 +131,28 @@ export function RemoveLiquidityForm() {
               <TransactionSettings size="sm" />
             </HStack>
           </CardHeader>
-          <VStack spacing="md" align="start">
+          <VStack align="start" spacing="md">
             <SafeAppAlert />
             {!requiresProportionalInput(pool) && (
               <HStack>
                 <ButtonGroup
                   currentOption={activeTab}
-                  options={TABS}
-                  onChange={toggleTab}
-                  size="xxs"
                   groupId="remove"
+                  onChange={toggleTab}
+                  options={TABS}
+                  size="xxs"
                 />
                 <Popover trigger="hover">
                   <PopoverTrigger>
                     <Box
+                      _hover={{ opacity: 1 }}
                       opacity="0.5"
                       transition="opacity 0.2s var(--ease-out-cubic)"
-                      _hover={{ opacity: 1 }}
                     >
                       <InfoIcon />
                     </Box>
                   </PopoverTrigger>
-                  <PopoverContent p="sm" w="auto" maxW="300px">
+                  <PopoverContent maxW="300px" p="sm" w="auto">
                     <Text fontSize="sm" variant="secondary">
                       Proportional liquidity removal does not impact the prices of tokens on exit,
                       which maximizes your returns. Alternatively, Single-token removal may be more
@@ -163,12 +163,12 @@ export function RemoveLiquidityForm() {
                 </Popover>
               </HStack>
             )}
-            <VStack w="full" spacing="md" align="start">
+            <VStack align="start" spacing="md" w="full">
               <InputWithSlider
-                value={totalUSDValue}
-                onPercentChanged={setHumanBptInPercent}
                 isNumberInputDisabled
                 isWarning={isWarning}
+                onPercentChanged={setHumanBptInPercent}
+                value={totalUSDValue}
               >
                 <Text fontSize="sm">Amount</Text>
                 <Text fontSize="sm" variant="secondary">
@@ -176,30 +176,29 @@ export function RemoveLiquidityForm() {
                 </Text>
               </InputWithSlider>
               {isWarning && (
-                <Text fontSize="xs" color="font.warning">
+                <Text color="font.warning" fontSize="xs">
                   You can only remove up to 25% of a single asset from the pool in one transaction
                 </Text>
               )}
               {activeTab === TABS[0] && (
-                <RemoveLiquidityProportional tokens={tokens} poolType={pool.type} />
+                <RemoveLiquidityProportional poolType={pool.type} tokens={tokens} />
               )}
               {activeTab === TABS[1] && (
-                <RemoveLiquiditySingleToken tokens={tokens} chain={pool.chain} />
+                <RemoveLiquiditySingleToken chain={pool.chain} tokens={tokens} />
               )}
             </VStack>
-            <VStack spacing="sm" align="start" w="full">
+            <VStack align="start" spacing="sm" w="full">
               {!simulationQuery.isError && (
                 <PriceImpactAccordion
-                  setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                   accordionButtonComponent={
                     <HStack>
-                      <Text variant="secondary" fontSize="sm" color="font.secondary">
+                      <Text color="font.secondary" fontSize="sm" variant="secondary">
                         Price impact:{' '}
                       </Text>
                       {isFetching ? (
-                        <Skeleton w="40px" h="16px" />
+                        <Skeleton h="16px" w="40px" />
                       ) : (
-                        <Text variant="secondary" fontSize="sm" color={priceImpactColor}>
+                        <Text color={priceImpactColor} fontSize="sm" variant="secondary">
                           {priceImpactLabel}
                         </Text>
                       )}
@@ -207,26 +206,27 @@ export function RemoveLiquidityForm() {
                   }
                   accordionPanelComponent={
                     <PoolActionsPriceImpactDetails
-                      totalUSDValue={totalUSDValue}
                       bptAmount={BigInt(parseUnits(quoteBptIn, 18))}
-                      slippage={slippage}
                       isLoading={isFetching}
+                      slippage={slippage}
+                      totalUSDValue={totalUSDValue}
                     />
                   }
                   isDisabled={priceImpactQuery.isLoading && !priceImpactQuery.isSuccess}
+                  setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                 />
               )}
             </VStack>
             <SimulationError simulationQuery={simulationQuery} />
             <TooltipWithTouch label={isDisabled ? disabledReason : ''}>
               <Button
-                ref={nextBtn}
-                variant="secondary"
-                w="full"
-                size="lg"
                 isDisabled={isDisabled || isWarning}
                 isLoading={simulationQuery.isLoading || priceImpactQuery.isLoading}
                 onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
+                ref={nextBtn}
+                size="lg"
+                variant="secondary"
+                w="full"
               >
                 Next
               </Button>
@@ -236,8 +236,8 @@ export function RemoveLiquidityForm() {
         <RemoveLiquidityModal
           finalFocusRef={nextBtn}
           isOpen={previewModalDisclosure.isOpen}
-          onOpen={previewModalDisclosure.onOpen}
           onClose={onModalClose}
+          onOpen={previewModalDisclosure.onOpen}
         />
       </Box>
     </TokenBalancesProvider>

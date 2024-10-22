@@ -26,24 +26,24 @@ export function AddLiquidityFormCheckbox() {
   return (
     <HStack spacing="xs">
       <Checkbox
-        size="lg"
         isChecked={acceptPoolRisks}
-        onChange={e => setAcceptPoolRisks(e.target.checked)}
         isDisabled={isBalancesLoading || hasNoPoolTokensInWallet}
+        onChange={e => setAcceptPoolRisks(e.target.checked)}
+        size="lg"
       >
         <Text fontSize="md">I accept the risks of interacting with this pool</Text>
       </Checkbox>
       <Popover placement="top" trigger="hover">
         <PopoverTrigger>
           <IconButton
-            size="xs"
+            _hover={{ bg: 'background.level2' }}
             aria-label="pool-risks-info"
             bg="background.level2"
-            _hover={{ bg: 'background.level2' }}
             icon={<InfoIcon />}
+            size="xs"
           />
         </PopoverTrigger>
-        <Box zIndex="popover" shadow="2xl">
+        <Box shadow="2xl" zIndex="popover">
           <PopoverContent>
             <PopoverArrow bg="background.level3" />
             <PopoverBody>

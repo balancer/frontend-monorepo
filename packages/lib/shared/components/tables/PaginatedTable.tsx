@@ -23,9 +23,9 @@ export function PaginatedTable({
 }: Props<any>) {
   return (
     <>
-      <VStack w="full" overflowX="scroll" className="hide-scrollbar">
+      <VStack className="hide-scrollbar" overflowX="scroll" w="full">
         {renderTableHeader()}
-        <Box w="full" position="relative">
+        <Box position="relative" w="full">
           {items.length > 0 && (
             <VStack gap="0">
               {items.map((item, index) => (
@@ -43,7 +43,7 @@ export function PaginatedTable({
           {loading &&
             items.length === 0 &&
             Array.from({ length: 20 }).map((_, index) => (
-              <Box key={index} w="full" py="xs">
+              <Box key={index} py="xs" w="full">
                 <Skeleton height="68px" w="full" />
               </Box>
             ))}

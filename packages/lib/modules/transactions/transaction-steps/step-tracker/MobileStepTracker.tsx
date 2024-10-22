@@ -33,27 +33,27 @@ export function MobileStepTracker({ chain, transactionSteps }: Props) {
   const stepLabel = `Step ${currentStepNumber}/${totalSteps}`
 
   return (
-    <Accordion width="full" variant="button" allowToggle textAlign="left">
+    <Accordion allowToggle textAlign="left" variant="button" width="full">
       <AccordionItem>
         {({ isExpanded }) => (
           <>
             <AccordionButton>
-              <HStack width="full" justify="flex-start" fontSize="md">
+              <HStack fontSize="md" justify="flex-start" width="full">
                 {currentStep && (
                   <StepIndicator
-                    transaction={currentTransaction}
+                    colorMode={colorMode}
                     currentIndex={currentStepIndex}
                     index={currentStepIndex}
-                    step={currentStep}
-                    colorMode={colorMode}
                     isLastStep={isLastStep(currentStepIndex)}
+                    step={currentStep}
+                    transaction={currentTransaction}
                   />
                 )}
                 <Text>{currentStep?.labels.title}</Text>
               </HStack>
-              <HStack justify="flex-end" fontSize="sm">
+              <HStack fontSize="sm" justify="flex-end">
                 {isExpanded && <GasPriceCard chain={chain} />}
-                <Text whiteSpace="nowrap" color={isExpanded ? 'font.link' : 'font.highlight'}>
+                <Text color={isExpanded ? 'font.link' : 'font.highlight'} whiteSpace="nowrap">
                   {stepLabel}
                 </Text>
                 <AccordionIcon textColor={isExpanded ? 'font.link' : 'font.highlight'} />

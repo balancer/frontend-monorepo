@@ -78,17 +78,17 @@ export function Toast({ id, status, isClosable, title, description, linkUrl }: P
             <div ref={ref} />
             <Tooltip label="View on explorer" portalProps={{ containerRef: ref }}>
               <IconButton
-                as={Link}
-                href={linkUrl}
-                target="_blank"
-                position="absolute"
-                size="xs"
-                top="xs"
-                right="8"
                 aria-label="View on explorer"
-                w="6"
+                as={Link}
                 h="6"
+                href={linkUrl}
                 icon={<ArrowUpRight size={12} strokeWidth={3} />}
+                position="absolute"
+                right="8"
+                size="xs"
+                target="_blank"
+                top="xs"
+                w="6"
               />
             </Tooltip>
           </>
@@ -96,51 +96,51 @@ export function Toast({ id, status, isClosable, title, description, linkUrl }: P
 
         {isClosable && (
           <IconButton
-            onClick={closeToast}
-            position="absolute"
-            size="xs"
-            top="xs"
-            right="xs"
             aria-label="Close toast"
-            w="6"
             h="6"
             icon={<X size={12} strokeWidth={3} />}
+            onClick={closeToast}
+            position="absolute"
+            right="xs"
+            size="xs"
+            top="xs"
+            w="6"
           />
         )}
         <HStack align="start">
           {status === 'loading' && (
             <CircularProgress
-              isIndeterminate
               color="font.warning"
-              trackColor="border.base"
-              size={5}
+              isIndeterminate
               mt="1"
+              size={5}
+              trackColor="border.base"
             />
           )}
           {status === 'success' && (
             <CircularProgress
-              value={100}
-              trackColor="border.base"
-              size={5}
               color="font.highlight"
               mt="1"
+              size={5}
+              trackColor="border.base"
+              value={100}
             >
-              <CircularProgressLabel fontSize="md" color="font.highlight" pl={1}>
+              <CircularProgressLabel color="font.highlight" fontSize="md" pl={1}>
                 <Check size={12} strokeWidth={4} />
               </CircularProgressLabel>
             </CircularProgress>
           )}
           {status === 'error' && (
-            <CircularProgress value={100} trackColor="border.base" size={5} color="red.500" mt="1">
+            <CircularProgress color="red.500" mt="1" size={5} trackColor="border.base" value={100}>
               <CircularProgressLabel>
-                <Text fontWeight="bold" color="red.500" fontSize="xs">
+                <Text color="red.500" fontSize="xs" fontWeight="bold">
                   !
                 </Text>
               </CircularProgressLabel>
             </CircularProgress>
           )}
           <VStack align="start" spacing="none">
-            <Box color="font.primary" fontWeight="bold" fontSize="md">
+            <Box color="font.primary" fontSize="md" fontWeight="bold">
               {title}
             </Box>
             {description && <Box fontSize="sm">{description}</Box>}

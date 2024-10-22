@@ -33,21 +33,21 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
       <>
         This pool was deprecated due to a{' '}
         <Link
-          href="https://forum.balancer.fi/t/vulnerability-disclosure/3179"
-          target="blank"
-          rel="noreferrer"
-          color="font.dark"
           _hover={{ color: 'font.maxContrast' }}
+          color="font.dark"
+          href="https://forum.balancer.fi/t/vulnerability-disclosure/3179"
+          rel="noreferrer"
+          target="blank"
         >
           vulnerability
         </Link>
         . You're advised to withdraw your liquidity asap. Add it to the{' '}
         <Link
-          href="https://app.balancer.fi/#/ethereum/pool/0xa13a9247ea42d743238089903570127dda72fe4400000000000000000000035d"
-          target="blank"
-          rel="noreferrer"
-          color="font.dark"
           _hover={{ color: 'font.maxContrast' }}
+          color="font.dark"
+          href="https://app.balancer.fi/#/ethereum/pool/0xa13a9247ea42d743238089903570127dda72fe4400000000000000000000035d"
+          rel="noreferrer"
+          target="blank"
         >
           upgraded pool{' '}
         </Link>
@@ -84,22 +84,22 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
         Ideally you should withdraw in a proportional fashion to reduce price impact. The Ren 1.0
         network is expected to be{' '}
         <Link
-          href="https://medium.com/renproject/moving-on-from-alameda-da62a823ce93"
-          target="blank"
-          rel="noreferrer"
-          color="font.dark"
           _hover={{ color: 'font.maxContrast' }}
+          color="font.dark"
+          href="https://medium.com/renproject/moving-on-from-alameda-da62a823ce93"
+          rel="noreferrer"
+          target="blank"
         >
           sunset
         </Link>{' '}
         in December 2022. This will render this version of the renBTC token as valueless, which will
         trend the overall pool value towards zero. Ren Protocol also strongly advises to{' '}
         <Link
-          href="https://twitter.com/renprotocol/status/1595807696296751104"
-          target="blank"
-          rel="noreferrer"
-          color="font.dark"
           _hover={{ color: 'font.maxContrast' }}
+          color="font.dark"
+          href="https://twitter.com/renprotocol/status/1595807696296751104"
+          rel="noreferrer"
+          target="blank"
         >
           bridge all ren assets
         </Link>{' '}

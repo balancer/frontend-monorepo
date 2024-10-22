@@ -88,11 +88,13 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
                 </Text>
               </HStack>
             </GridItem>
-            {userAddress ? <GridItem>
+            {userAddress ? (
+              <GridItem>
                 <Text fontWeight="medium" textAlign="right">
                   {toCurrency(getUserTotalBalanceUsd(pool), { abbreviated: false })}
                 </Text>
-              </GridItem> : null}
+              </GridItem>
+            ) : null}
             <GridItem>
               <Text
                 fontWeight="medium"

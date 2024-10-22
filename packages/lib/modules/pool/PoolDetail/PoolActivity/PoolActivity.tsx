@@ -67,12 +67,12 @@ function Content() {
   return (
     <Card role="group">
       <Stack
-        w="full"
+        alignItems="start"
         direction={{ base: 'column', md: 'row' }}
         justify="space-between"
-        width="full"
         justifyContent="space-between"
-        alignItems="start"
+        w="full"
+        width="full"
       >
         <VStack alignItems="flex-start" gap="0.5">
           <Box
@@ -87,7 +87,7 @@ function Content() {
             (isLoading ? (
               <Skeleton height="20px" w="100px" />
             ) : (
-              <Text fontWeight="medium" variant="secondary" fontSize="sm">
+              <Text fontSize="sm" fontWeight="medium" variant="secondary">
                 {transactionsLabel}
               </Text>
             ))}
@@ -95,25 +95,25 @@ function Content() {
         <HStack>
           <ButtonGroup
             currentOption={activeTab}
-            options={tabsList}
+            groupId="pool-activity"
             onChange={option => {
               setActiveTab(option)
             }}
+            options={tabsList}
             size="xxs"
-            groupId="pool-activity"
           />
           <PoolActivityViewType />
-          <Box shadow={isChartView ? '2xl' : 'none'} h="34px" w="34px" borderRadius="full">
+          <Box borderRadius="full" h="34px" shadow={isChartView ? '2xl' : 'none'} w="34px">
             <IconButton
               aria-label={isExpanded ? 'Minimize chart' : 'Expand chart'}
+              borderRadius="full"
+              h="34px"
               icon={isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
               onClick={() => setIsExpanded(!isExpanded)}
               size="sm"
-              variant="outline"
-              borderRadius="full"
-              h="34px"
-              w="34px"
               transition="transform 0.2s var(--ease-out-cubic)"
+              variant="outline"
+              w="34px"
               {...(isChartView && !isExpanded && groupHoverProps)}
               isDisabled={!isChartView}
             />

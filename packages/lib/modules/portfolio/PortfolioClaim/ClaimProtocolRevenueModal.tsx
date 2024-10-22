@@ -59,40 +59,40 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
     }))
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered preserveScrollBarGap>
+    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
       <SuccessOverlay startAnimation={!!claimTxHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && (
-          <DesktopStepTracker transactionSteps={transactionSteps} chain={GqlChain.Mainnet} />
+          <DesktopStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
         )}
         <TransactionModalHeader
+          chain={GqlChain.Mainnet}
           label="Claim protocol revenue share"
           txHash={claimTxHash}
-          chain={GqlChain.Mainnet}
         />
         <ModalCloseButton />
         <ModalBody>
           <AnimateHeightChange spacing="sm" w="full">
             {isMobile && (
-              <MobileStepTracker transactionSteps={transactionSteps} chain={GqlChain.Mainnet} />
+              <MobileStepTracker chain={GqlChain.Mainnet} transactionSteps={transactionSteps} />
             )}
 
             <Card variant="modalSubSection">
               <TokenRowGroup
-                label={claimTxHash ? 'You got' : "You'll get"}
                 amounts={rewards}
-                totalUSDValue={rewardsBalanceSnapshot.toString()}
                 chain={GqlChain.Mainnet}
+                label={claimTxHash ? 'You got' : "You'll get"}
+                totalUSDValue={rewardsBalanceSnapshot.toString()}
               />
             </Card>
           </AnimateHeightChange>
         </ModalBody>
         <ActionModalFooter
-          isSuccess={!!claimTxHash}
           currentStep={transactionSteps.currentStep}
-          returnLabel="Return to portfolio"
+          isSuccess={!!claimTxHash}
           returnAction={onClose}
+          returnLabel="Return to portfolio"
         />
       </ModalContent>
     </Modal>

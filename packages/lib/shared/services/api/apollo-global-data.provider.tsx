@@ -57,8 +57,8 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
 
   return (
     <TokensProvider
-      tokensData={tokensQueryData}
       tokenPricesData={tokenPricesQueryData}
+      tokensData={tokensQueryData}
       variables={tokensQueryVariables}
     >
       <FiatFxRatesProvider data={exchangeRates}>

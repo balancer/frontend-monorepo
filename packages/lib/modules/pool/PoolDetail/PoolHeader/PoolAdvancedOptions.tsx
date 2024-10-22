@@ -43,7 +43,8 @@ export function PoolAdvancedOptions() {
           <PopoverCloseButton top="sm" />
           <PopoverBody p="lg">
             <AnimatePresence>
-              {isPopoverOpen ? <VStack
+              {isPopoverOpen ? (
+                <VStack
                   align="start"
                   animate="show"
                   as={motion.div}
@@ -58,7 +59,8 @@ export function PoolAdvancedOptions() {
                       Swap tokens directly via this pool
                     </Link>
                   </HStack>
-                </VStack> : null}
+                </VStack>
+              ) : null}
             </AnimatePresence>
           </PopoverBody>
         </PopoverContent>
