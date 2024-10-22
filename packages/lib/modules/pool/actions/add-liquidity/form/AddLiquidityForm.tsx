@@ -56,6 +56,8 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
+type PriceImpactErrorType = Error & { shortMessage: string }
+
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
   const { validTokens, proportionalSlippage } = useAddLiquidity()
@@ -87,6 +89,8 @@ function AddLiquidityMainForm() {
     proportionalSlippage,
     slippage,
     setProportionalSlippage,
+    setNeedsToUpdateInputs,
+    needsToUpdateInputs,
   } = useAddLiquidity()
 
   const nextBtn = useRef(null)
@@ -103,6 +107,16 @@ function AddLiquidityMainForm() {
     setPriceImpact(priceImpactQuery.data)
   }, [priceImpactQuery.data])
 
+  useEffect(() => {
+    if (priceImpactQuery.error) {
+      const error = priceImpactQuery.error as PriceImpactErrorType
+      const balError = error.shortMessage.split(/\r?\n/)[1]
+      setNeedsToUpdateInputs(balError === 'BAL#304')
+    } else {
+      setNeedsToUpdateInputs(false)
+    }
+  }, [priceImpactQuery.error])
+
   const hasPriceImpact = priceImpact !== undefined && priceImpact !== null
   const priceImpactLabel = hasPriceImpact ? fNum('priceImpact', priceImpact) : '-'
 
@@ -114,7 +128,7 @@ function AddLiquidityMainForm() {
 
   const onModalOpen = async () => {
     previewModalDisclosure.onOpen()
-    if (requiresProportionalInput(pool)) {
+    if (true) {
       // Edge-case refetch to avoid mismatches in proportional bptOut calculations
       await refetchQuote()
     }
@@ -172,7 +186,7 @@ function AddLiquidityMainForm() {
         <CardHeader>
           <HStack justify="space-between" w="full">
             <span>Add liquidity</span>
-            {requiresProportionalInput(pool) ? (
+            {true ? (
               <ProportionalTransactionSettings
                 setSlippage={setProportionalSlippage}
                 size="sm"
@@ -190,7 +204,7 @@ function AddLiquidityMainForm() {
           <SafeAppAlert />
           {!nestedAddLiquidityEnabled ? (
             <TokenInputsWithAddable
-              requiresProportionalInput={requiresProportionalInput(pool)}
+              requiresProportionalInput
               tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}
               totalUSDValue={totalUSDValue}
             />
@@ -198,6 +212,12 @@ function AddLiquidityMainForm() {
             <TokenInputs tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()} />
           )}
           <VStack align="start" spacing="sm" w="full">
+            {needsToUpdateInputs && (
+              <Text color="font.warning" fontSize="sm">
+                Using these amounts will unbalance the pool.
+                <br /> Please adjust your input(s) and try again.
+              </Text>
+            )}
             {!simulationQuery.isError && (
               <PriceImpactAccordion
                 accordionButtonComponent={
