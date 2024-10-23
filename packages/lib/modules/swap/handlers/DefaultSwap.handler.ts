@@ -66,20 +66,28 @@ export class DefaultSwapHandler implements SwapHandler {
   }
 
   build({
-    simulateResponse: { swap, queryOutput },
+    simulateResponse: { swap, queryOutput, protocolVersion },
     slippagePercent,
     account,
     selectedChain,
     wethIsEth,
+    permit2,
   }: SdkBuildSwapInputs): TransactionConfig {
-    const tx = swap.buildCall({
+    const baseBuildCallParams = {
       slippage: Slippage.fromPercentage(slippagePercent as `${number}`),
       deadline: BigInt(Number.MAX_SAFE_INTEGER),
-      sender: account,
-      recipient: account,
       wethIsEth,
       queryOutput,
-    })
+    }
+    const isV3SwapRoute = protocolVersion === 3
+
+    const buildCallParams = isV3SwapRoute
+      ? baseBuildCallParams
+      : {...baseBuildCallParams, sender: account, recipient: account}
+
+    const tx = isV3SwapRoute && permit2
+      ? swap.buildCallWithPermit2(buildCallParams, permit2)
+      : swap.buildCall(buildCallParams)
 
     return {
       account,
