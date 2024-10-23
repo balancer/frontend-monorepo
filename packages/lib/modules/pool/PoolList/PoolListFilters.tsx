@@ -28,12 +28,11 @@ import {
   TagLabel,
   Text,
   useColorModeValue,
-  VisuallyHidden,
   VStack,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
-import { PROTOCOL_VERSION_TABS, usePoolListQueryState } from './usePoolListQueryState'
+import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
 import {
   PoolFilterType,
   poolTypeFilters,
@@ -62,7 +61,9 @@ const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
 
 export function useFilterTagsVisible() {
-  const { networks, poolTypes, minTvl, poolCategories } = usePoolListQueryState()
+  const {
+    queryState: { networks, poolTypes, minTvl, poolCategories },
+  } = usePoolList()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -75,7 +76,9 @@ export function useFilterTagsVisible() {
 }
 
 function UserPoolFilter() {
-  const { userAddress, toggleUserAddress } = usePoolListQueryState()
+  const {
+    queryState: { userAddress, toggleUserAddress },
+  } = usePoolList()
   const { userAddress: connectedUserAddress } = useUserAccount()
   const [checked, setChecked] = useState(false)
 
@@ -100,8 +103,9 @@ function UserPoolFilter() {
 }
 
 function PoolCategoryFilters() {
-  const { togglePoolCategory, poolCategories, setPoolCategories, poolCategoryLabel } =
-    usePoolListQueryState()
+  const {
+    queryState: { togglePoolCategory, poolCategories, setPoolCategories, poolCategoryLabel },
+  } = usePoolList()
 
   // remove query param when empty
   useEffect(() => {
@@ -127,7 +131,9 @@ function PoolCategoryFilters() {
 }
 
 function PoolTypeFilters() {
-  const { togglePoolType, poolTypes, poolTypeLabel, setPoolTypes } = usePoolListQueryState()
+  const {
+    queryState: { togglePoolType, poolTypes, poolTypeLabel, setPoolTypes },
+  } = usePoolList()
 
   // remove query param when empty
   useEffect(() => {
@@ -158,7 +164,9 @@ function PoolTypeFilters() {
 
 function PoolNetworkFilters() {
   const { supportedNetworks } = getProjectConfig()
-  const { networks: toggledNetworks, toggleNetwork, setNetworks } = usePoolListQueryState()
+  const {
+    queryState: { networks: toggledNetworks, toggleNetwork, setNetworks },
+  } = usePoolList()
 
   // Sort networks alphabetically after mainnet
   const sortedNetworks = [supportedNetworks[0], ...supportedNetworks.slice(1).sort()]
@@ -188,7 +196,9 @@ function PoolNetworkFilters() {
 
 function PoolMinTvlFilter() {
   const { toCurrency } = useCurrency()
-  const { minTvl, setMinTvl } = usePoolListQueryState()
+  const {
+    queryState: { minTvl, setMinTvl },
+  } = usePoolList()
   const [sliderValue, setSliderValue] = useState(minTvl)
 
   const debounced = useDebouncedCallback((val: number) => {
@@ -236,17 +246,19 @@ function PoolMinTvlFilter() {
 
 export function FilterTags() {
   const {
-    networks,
-    toggleNetwork,
-    poolTypes,
-    togglePoolType,
-    poolTypeLabel,
-    minTvl,
-    setMinTvl,
-    poolCategories,
-    togglePoolCategory,
-    poolCategoryLabel,
-  } = usePoolListQueryState()
+    queryState: {
+      networks,
+      toggleNetwork,
+      poolTypes,
+      togglePoolType,
+      poolTypeLabel,
+      minTvl,
+      setMinTvl,
+      poolCategories,
+      togglePoolCategory,
+      poolCategoryLabel,
+    },
+  } = usePoolList()
   const { toCurrency } = useCurrency()
 
   if (
@@ -255,7 +267,7 @@ export function FilterTags() {
     minTvl === 0 &&
     poolCategories.length === 0
   ) {
-    return <></>
+    return null
   }
 
   return (
@@ -357,7 +369,9 @@ export function FilterTags() {
 }
 
 const FilterButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
-  const { totalFilterCount } = usePoolListQueryState()
+  const {
+    queryState: { totalFilterCount },
+  } = usePoolList()
   const { isMobile } = useBreakpoints()
   const textColor = useColorModeValue('#fff', 'font.dark')
 
@@ -387,13 +401,15 @@ const FilterButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
 
 function ProtocolVersionFilter() {
   const {
-    togglePoolType,
-    setProtocolVersion,
-    protocolVersion,
-    poolTypes,
-    activeProtocolVersionTab,
-    setActiveProtocolVersionTab,
-  } = usePoolListQueryState()
+    queryState: {
+      togglePoolType,
+      setProtocolVersion,
+      protocolVersion,
+      poolTypes,
+      activeProtocolVersionTab,
+      setActiveProtocolVersionTab,
+    },
+  } = usePoolList()
 
   const tabs =
     isDev || isStaging
@@ -406,13 +422,13 @@ function ProtocolVersionFilter() {
 
   useEffect(() => {
     if (protocolVersion === 3) {
-      setActiveProtocolVersionTab(tabs[2])
+      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[2])
     } else if (protocolVersion === 2) {
-      setActiveProtocolVersionTab(tabs[1])
+      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[1])
     } else if (poolTypes.includes(GqlPoolType.CowAmm)) {
-      setActiveProtocolVersionTab(tabs[3])
+      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[3])
     } else {
-      setActiveProtocolVersionTab(tabs[0])
+      setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
     }
   }, [])
 
@@ -446,8 +462,10 @@ function ProtocolVersionFilter() {
 export function PoolListFilters() {
   const { isConnected } = useUserAccount()
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-  const { resetFilters, totalFilterCount, setActiveProtocolVersionTab } = usePoolListQueryState()
-  const { isFixedPoolType } = usePoolList()
+  const {
+    isFixedPoolType,
+    queryState: { resetFilters, totalFilterCount, setActiveProtocolVersionTab },
+  } = usePoolList()
 
   function _resetFilters() {
     resetFilters()
@@ -494,14 +512,11 @@ export function PoolListFilters() {
                           >
                             Filters
                           </Text>
-
-                          <Button onClick={_resetFilters} size="xs" variant="link">
-                            {totalFilterCount === 0 ? (
-                              <VisuallyHidden>Reset all</VisuallyHidden>
-                            ) : (
-                              'Reset all'
-                            )}
-                          </Button>
+                          {totalFilterCount > 0 && (
+                            <Button onClick={_resetFilters} size="xs" variant="link">
+                              Reset all
+                            </Button>
+                          )}
                         </Flex>
                       </Box>
 

@@ -1,13 +1,13 @@
 'use client'
 
 import { Box } from '@chakra-ui/react'
-import { usePoolListQueryState } from './usePoolListQueryState'
 import { orderByHash, SortingState } from '../pool.types'
 import { usePoolOrderByState } from './usePoolOrderByState'
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { ReactNode, useMemo } from 'react'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
+import { usePoolList } from './PoolListProvider'
 
 interface SortOption extends OptionBase {
   label: ReactNode
@@ -16,7 +16,7 @@ interface SortOption extends OptionBase {
 
 export function PoolListSortType() {
   const isMounted = useIsMounted()
-  const { sorting, setSorting } = usePoolListQueryState()
+  const { queryState: { sorting, setSorting } } = usePoolList()
   const { orderBy } = usePoolOrderByState()
   const chakraStyles = getSelectStyles<SortOption>()
 
