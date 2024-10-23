@@ -13,10 +13,7 @@ import {
   hasValidPermit2,
 } from '../../tokens/approvals/permit2/permit2.helpers'
 import { usePermit2Allowance } from '../../tokens/approvals/permit2/usePermit2Allowance'
-import {
-  BasePermit2Params,
-  useSignPermit2,
-} from '../../tokens/approvals/permit2/useSignPermit2'
+import { BasePermit2Params, useSignPermit2 } from '../../tokens/approvals/permit2/useSignPermit2'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
 import { useChainSwitch } from '../../web3/useChainSwitch'
 import { StepDetails, TransactionStep } from './lib'
@@ -53,10 +50,11 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     error,
   } = useSignPermit2({
     ...params,
-    nonces
+    nonces,
   })
 
-  const { shouldChangeNetwork, NetworkSwitchButton, networkSwitchButtonProps } = useChainSwitch(chainId)
+  const { shouldChangeNetwork, NetworkSwitchButton, networkSwitchButtonProps } =
+    useChainSwitch(chainId)
 
   const isLoading =
     isLoadingSignature ||
@@ -64,23 +62,29 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     signPermit2State === SignatureState.Confirming
 
   function SignPermitButton() {
-    return <VStack width="full">
-      {error ? <BalAlert content={error} status="error" /> : null}
-      {!isConnected && <ConnectWallet isLoading={isLoading} width="full" />}
-      {shouldChangeNetwork && isConnected ? <NetworkSwitchButton {...networkSwitchButtonProps} /> : null}
-      {!shouldChangeNetwork && isConnected ? <Button
-        isDisabled={isDisabled}
-        isLoading={isLoading}
-        loadingText={buttonLabel}
-        onClick={() => signPermit2()}
-        size="lg"
-        variant="primary"
-        w="full"
-        width="full"
-      >
-        {buttonLabel}
-      </Button> : null}
-    </VStack>
+    return (
+      <VStack width="full">
+        {error ? <BalAlert content={error} status="error" /> : null}
+        {!isConnected && <ConnectWallet isLoading={isLoading} width="full" />}
+        {shouldChangeNetwork && isConnected ? (
+          <NetworkSwitchButton {...networkSwitchButtonProps} />
+        ) : null}
+        {!shouldChangeNetwork && isConnected ? (
+          <Button
+            isDisabled={isDisabled}
+            isLoading={isLoading}
+            loadingText={buttonLabel}
+            onClick={() => signPermit2()}
+            size="lg"
+            variant="primary"
+            w="full"
+            width="full"
+          >
+            {buttonLabel}
+          </Button>
+        ) : null}
+      </VStack>
+    )
   }
 
   const isComplete = () => signPermit2State === SignatureState.Completed || isValidPermit2

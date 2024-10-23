@@ -26,20 +26,20 @@ export function TokenIconStack({ tokens, chain, size = 64, ...rest }: Props & St
 
         return (
           <Box
-            key={tokenAddress}
-            ml={i > 0 ? getNestingMargin() : 0}
-            zIndex={9 - i}
             border="2px solid"
             borderColor="background.base"
             borderRadius="100%"
-            width={`${size + 4}px`}
             height={`${size + 4}px`}
+            key={tokenAddress}
+            ml={i > 0 ? getNestingMargin() : 0}
+            width={`${size + 4}px`}
+            zIndex={9 - i}
           >
             <TokenIcon
-              chain={chain}
               address={tokenAddress}
-              size={size}
               alt={token?.symbol || tokenAddress}
+              chain={chain}
+              size={size}
             />
           </Box>
         )

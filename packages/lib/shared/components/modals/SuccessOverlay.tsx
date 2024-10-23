@@ -5,7 +5,7 @@ export function SuccessOverlay({ startAnimation }: { startAnimation?: boolean })
   return (
     <ModalOverlay>
       {startAnimation && (
-        <Center position="absolute" h="full" w="full">
+        <Center h="full" position="absolute" w="full">
           <Box className="ripple ripple-1" />
           <Box className="ripple ripple-2" />
           <Box className="ripple ripple-3" />

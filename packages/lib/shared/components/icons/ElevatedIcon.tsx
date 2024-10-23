@@ -11,15 +11,15 @@ export function ElevatedIcon({
 }: Props & IconProps) {
   return (
     <Box
-      rounded="full"
-      width={sizePx}
-      height={sizePx}
-      background={background}
-      shadow="2xl"
-      display="flex"
-      justifyContent="center"
       alignItems="center"
+      background={background}
       color="font.secondary"
+      display="flex"
+      height={sizePx}
+      justifyContent="center"
+      rounded="full"
+      shadow="2xl"
+      width={sizePx}
     >
       <Icon {...rest} />
     </Box>

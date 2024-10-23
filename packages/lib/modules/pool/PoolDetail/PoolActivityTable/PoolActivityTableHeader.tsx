@@ -36,27 +36,27 @@ export function PoolActivityTableHeader({ ...rest }) {
           <Text fontWeight="bold">User</Text>
         </GridItem>
         <SortableHeader
-          label="Action"
           isSorted={isSortedByAction}
-          sorting={sorting}
+          label="Action"
           onSort={handleSort}
+          sorting={sorting}
         />
         <GridItem>
           <Text fontWeight="bold">Transaction details</Text>
         </GridItem>
         <SortableHeader
-          label="Value"
-          isSorted={isSortedByValue}
-          sorting={sorting}
-          onSort={handleSort}
           align="right"
+          isSorted={isSortedByValue}
+          label="Value"
+          onSort={handleSort}
+          sorting={sorting}
         />
         <SortableHeader
-          label="Time"
-          isSorted={isSortedByTime}
-          sorting={sorting}
-          onSort={handleSort}
           align="right"
+          isSorted={isSortedByTime}
+          label="Time"
+          onSort={handleSort}
+          sorting={sorting}
         />
       </Grid>
       <Divider w="full" />

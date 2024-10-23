@@ -12,7 +12,7 @@ const FadeInOnView: React.FC<FadeInOnViewProps> = ({ children, animateOnce = tru
   const isInView = useInView(ref, { once: animateOnce })
 
   return (
-    <div ref={ref} className={`${isInView ? 'visible' : 'hidden'} fade-in-opacity fade-in-scale`}>
+    <div className={`${isInView ? 'visible' : 'hidden'} fade-in-opacity fade-in-scale`} ref={ref}>
       {children}
     </div>
   )

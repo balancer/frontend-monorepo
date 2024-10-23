@@ -45,15 +45,15 @@ export function TooltipAprItem({
   ...props
 }: PopoverAprItemProps) {
   return (
-    <Box fontSize="sm" background={boxBackground} bg={bg} {...props}>
+    <Box background={boxBackground} bg={bg} fontSize="sm" {...props}>
       <HStack justifyContent="space-between">
         <Text
-          fontWeight={fontWeight}
-          fontSize="sm"
-          color={fontColor}
-          variant={textVariant}
           background={textBackground}
           backgroundClip={textBackgroundClip}
+          color={fontColor}
+          fontSize="sm"
+          fontWeight={fontWeight}
+          variant={textVariant}
         >
           {title}
         </Text>
@@ -61,18 +61,18 @@ export function TooltipAprItem({
           <Popover trigger="hover">
             <PopoverTrigger>
               <Text
-                fontWeight={fontWeight}
-                fontSize="sm"
-                opacity={aprOpacity}
-                color={fontColor}
-                variant={textVariant}
                 className="tooltip-dashed-underline"
+                color={fontColor}
+                fontSize="sm"
+                fontWeight={fontWeight}
+                opacity={aprOpacity}
+                variant={textVariant}
               >
                 {displayValueFormatter(apr)}
               </Text>
             </PopoverTrigger>
             <Portal>
-              <PopoverContent p="sm" w="auto" maxW="300px">
+              <PopoverContent maxW="300px" p="sm" w="auto">
                 <Text fontSize="sm" variant="secondary">
                   {tooltipText}
                 </Text>
@@ -81,10 +81,10 @@ export function TooltipAprItem({
           </Popover>
         ) : (
           <Text
-            fontWeight={fontWeight}
-            fontSize="sm"
-            opacity={aprOpacity}
             color={fontColor}
+            fontSize="sm"
+            fontWeight={fontWeight}
+            opacity={aprOpacity}
             variant={textVariant}
           >
             {displayValueFormatter(apr)}

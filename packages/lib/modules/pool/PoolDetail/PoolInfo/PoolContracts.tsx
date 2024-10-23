@@ -45,29 +45,29 @@ function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlTo
   const warnings = getRateProviderWarnings(data?.warnings || [])
 
   if (!data) {
-    icon = <Icon as={AlertTriangle} color="font.warning" size={16} cursor="pointer" />
+    icon = <Icon as={AlertTriangle} color="font.warning" cursor="pointer" size={16} />
     level = 1
   } else {
     if (data.reviewed && data.summary === 'safe') {
       if (warnings.length > 0) {
-        icon = <Icon as={AlertTriangle} color="font.warning" size={16} cursor="pointer" />
+        icon = <Icon as={AlertTriangle} color="font.warning" cursor="pointer" size={16} />
         level = 1
       } else {
         icon = (
           <Box as="span" cursor="pointer">
-            <Image src="/images/icons/notes.svg" alt="Notes" width={16} height={16} />
+            <Image alt="Notes" height={16} src="/images/icons/notes.svg" width={16} />
           </Box>
         )
         level = 2
       }
     } else {
-      icon = <Icon as={XCircle} color="red.500" size={16} cursor="pointer" />
+      icon = <Icon as={XCircle} color="red.500" cursor="pointer" size={16} />
       level = 0
     }
   }
 
   return (
-    <RateProviderInfoPopOver level={level} token={token} data={data}>
+    <RateProviderInfoPopOver data={data} level={level} token={token}>
       {icon}
     </RateProviderInfoPopOver>
   )
@@ -115,19 +115,19 @@ export function PoolContracts({ ...props }: CardProps) {
   return (
     <Card {...props}>
       <VStack alignItems="flex-start" spacing="md" width="full">
-        <Heading variant="h4" fontSize="xl">
+        <Heading fontSize="xl" variant="h4">
           Pool contracts
         </Heading>
         <Divider />
         {contracts.map((contract, index) => (
-          <Grid key={index} templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} gap="sm" w="full">
+          <Grid gap="sm" key={index} templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} w="full">
             <GridItem>
               <Text minW="120px" variant="secondary">
                 {contract.label}:
               </Text>
             </GridItem>
             <GridItem>
-              <Link target="_blank" href={contract.explorerLink} variant="link">
+              <Link href={contract.explorerLink} target="_blank" variant="link">
                 <HStack gap="xxs">
                   <Text color="link">{abbreviateAddress(contract.address)}</Text>
                   <ArrowUpRight size={12} />
@@ -137,16 +137,16 @@ export function PoolContracts({ ...props }: CardProps) {
           </Grid>
         ))}
         {rateProviders.length > 0 && (
-          <Grid templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} gap="sm" w="full">
+          <Grid gap="sm" templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} w="full">
             <GridItem>
               <Popover trigger="hover">
                 <PopoverTrigger>
-                  <Text minW="120px" variant="secondary" className="tooltip-dashed-underline">
+                  <Text className="tooltip-dashed-underline" minW="120px" variant="secondary">
                     {rateProviders.length === 1 ? 'Rate provider:' : 'Rate providers:'}
                   </Text>
                 </PopoverTrigger>
 
-                <PopoverContent p="sm" w="auto" maxW="300px">
+                <PopoverContent maxW="300px" p="sm" w="auto">
                   <Text fontSize="sm" variant="secondary">
                     Rate Providers are contracts that provide an exchange rate between two assets.
                     This can come from any on-chain source, including oracles or from other
@@ -163,18 +163,18 @@ export function PoolContracts({ ...props }: CardProps) {
                   return (
                     token && (
                       <HStack key={provider.tokenAddress}>
-                        <Tooltip label={token.symbol} fontSize="sm" shouldWrapChildren>
+                        <Tooltip fontSize="sm" label={token.symbol} shouldWrapChildren>
                           <TokenIcon
-                            chain={chain}
                             address={token.address}
-                            size={16}
                             alt={token.address}
+                            chain={chain}
+                            size={16}
                           />
                         </Tooltip>
                         <Link
+                          href={getBlockExplorerAddressUrl(provider.rateProviderAddress, chain)}
                           key={provider.rateProviderAddress}
                           target="_blank"
-                          href={getBlockExplorerAddressUrl(provider.rateProviderAddress, chain)}
                           variant="link"
                         >
                           <HStack gap="xxs">

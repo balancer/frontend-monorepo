@@ -30,32 +30,32 @@ export function BalAlertContent({
   children,
 }: PropsWithChildren<AlertContentProps>) {
   return (
-    <HStack w="full" flexWrap="wrap" justifyContent="space-between">
-      <HStack maxWidth={{ base: '100%', md: '80%' }} flexWrap="wrap">
+    <HStack flexWrap="wrap" justifyContent="space-between" w="full">
+      <HStack flexWrap="wrap" maxWidth={{ base: '100%', md: '80%' }}>
         <Flex
           direction={forceColumnMode ? 'column' : { base: 'column', md: 'row' }}
           gap={forceColumnMode ? '0' : { base: '0', md: 'sm' }}
         >
           <HStack gap="xs">
             {title && (
-              <Text fontWeight="bold" color="black" minWidth="max-content">
+              <Text color="black" fontWeight="bold" minWidth="max-content">
                 {title}
               </Text>
             )}
             {tooltipLabel && (
-              <Box position="relative" top="-1.5px" px="xxs">
+              <Box position="relative" px="xxs" top="-1.5px">
                 <Popover trigger="hover">
                   <PopoverTrigger>
                     <Box
+                      _hover={{ opacity: 1 }}
                       opacity="0.8"
                       transition="opacity 0.2s var(--ease-out-cubic)"
-                      _hover={{ opacity: 1 }}
                     >
-                      <InfoOutlineIcon fontSize="sm" color="font.dark" />
+                      <InfoOutlineIcon color="font.dark" fontSize="sm" />
                     </Box>
                   </PopoverTrigger>
                   <Portal>
-                    <PopoverContent p="sm" w="auto" maxW="300px">
+                    <PopoverContent maxW="300px" p="sm" w="auto">
                       <Text fontSize="sm" variant="secondary">
                         {tooltipLabel}
                       </Text>

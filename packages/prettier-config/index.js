@@ -1,3 +1,3 @@
-import config from './.prettierrc.json' assert { type: 'json' }
+const config = require('./.prettierrc.json')
 
-export default config
+module.exports = config

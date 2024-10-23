@@ -14,9 +14,9 @@ export function DefaultPageContainer({
     <Box pt={noVerticalPadding ? '0px' : '72px'}>
       <Container
         maxW="maxContent"
-        py={noVerticalPadding ? 0 : ['xl', '2xl']}
-        px={['ms', 'md']}
         overflowX={{ base: 'hidden', md: 'visible' }}
+        px={['ms', 'md']}
+        py={noVerticalPadding ? 0 : ['xl', '2xl']}
         {...rest}
       >
         {children}

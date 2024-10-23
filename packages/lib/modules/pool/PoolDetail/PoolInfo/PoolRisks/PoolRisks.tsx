@@ -28,8 +28,8 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
       <UnorderedList ml="6">
         {risks.map(risk => (
           <Link
-            key={`pool-risk-${risk.path.replaceAll('//', '')}`}
             href={risk.path}
+            key={`pool-risk-${risk.path.replaceAll('//', '')}`}
             target="_blank"
           >
             <ListItem>{risk.title}</ListItem>
@@ -44,7 +44,7 @@ export function PoolRisks({ ...props }: CardProps) {
   return (
     <Card {...props}>
       <VStack alignItems="flex-start" spacing="4" width="full">
-        <Heading variant="h4" fontSize="1.25rem">
+        <Heading fontSize="1.25rem" variant="h4">
           Pool risks
         </Heading>
         <Divider />

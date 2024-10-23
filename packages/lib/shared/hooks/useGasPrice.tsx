@@ -28,10 +28,10 @@ export function GasPriceCard({ chain }: { chain: GqlChain }) {
   const gasPriceColor = isHighGasPrice ? 'red.500' : 'grayText'
 
   return (
-    <Box p="xs" shadow="sm" background="background.level3" rounded="sm" color={gasPriceColor}>
+    <Box background="background.level3" color={gasPriceColor} p="xs" rounded="sm" shadow="sm">
       <HStack spacing="xs">
         <GasIcon size={16} />
-        <Text color={gasPriceColor} fontWeight="bold" fontSize="xs">
+        <Text color={gasPriceColor} fontSize="xs" fontWeight="bold">
           {gasPrice ? gasPrice.toString() : '-'}
         </Text>
       </HStack>

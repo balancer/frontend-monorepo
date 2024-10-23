@@ -23,13 +23,13 @@ export function BptRow({
         {rightLabel && <Text color="grayText">{rightLabel}</Text>}
       </HStack>
       <TokenRow
-        value={bptAmount}
+        abbreviated={false}
         address={pool.address as Address}
         chain={pool.chain}
-        abbreviated={false}
-        isBpt={true}
-        pool={pool}
+        isBpt
         isLoading={isLoading}
+        pool={pool}
+        value={bptAmount}
       />
     </VStack>
   )

@@ -56,46 +56,46 @@ export function FeaturedPools({
   return (
     <>
       <PoolCarousel
-        featuredPools={featuredPools}
         display="block"
-        visibility={{ base: 'visible', md: 'hidden' }}
+        featuredPools={featuredPools}
+        getGraphic={getGraphicCarousel}
         opacity={{ base: '1', md: '0' }}
         position={{ base: 'relative', md: 'absolute' }}
+        visibility={{ base: 'visible', md: 'hidden' }}
         w="full"
-        getGraphic={getGraphicCarousel}
       />
       <Card
-        display={{ base: 'none', md: 'flex' }}
-        variant="level2"
-        width="full"
         alignItems="center"
+        display={{ base: 'none', md: 'flex' }}
         justifyContent="center"
         position="relative"
+        variant="level2"
+        width="full"
       >
         <Box position="absolute" top="0">
           <Text
             color="font.secondary"
-            variant="eyebrow"
+            fontSize="11px"
+            position="relative"
             px="4"
             py="1.5"
             top="-2px"
-            fontSize="11px"
-            position="relative"
+            variant="eyebrow"
           >
             Featured pools
           </Text>
         </Box>
-        <HStack w="full" pt="2" gap="md">
+        <HStack gap="md" pt="2" w="full">
           {featuredPools.slice(0, 3).map((featured, index) => {
             return (
               <FeaturePoolCard
-                key={index}
-                pool={featured.pool}
+                bgSize="300px"
                 chain={featured.pool.chain}
                 featuredReason={featured.description}
-                isSmall
-                bgSize="300px"
                 graphic={getGraphic(index)}
+                isSmall
+                key={index}
+                pool={featured.pool}
               />
             )
           })}

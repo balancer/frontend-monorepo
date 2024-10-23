@@ -74,8 +74,8 @@ export function PoolDetail() {
     <>
       <DefaultPageContainer>
         <ClaimProvider pools={[pool]}>
-          <VStack w="full" spacing="2xl">
-            <VStack w="full" spacing="md">
+          <VStack spacing="2xl" w="full">
+            <VStack spacing="md" w="full">
               <PoolAlerts />
               <PoolHeader />
               {banners?.headerSrc && <CowPoolBanner />}
@@ -84,15 +84,15 @@ export function PoolDetail() {
             </VStack>
             {isConnected && (userHasLiquidity || userhasPoolEvents) && (
               <Stack
-                w="full"
-                spacing="md"
                 direction={{ base: 'column', xl: 'row' }}
                 justifyContent="stretch"
+                spacing="md"
+                w="full"
               >
                 <PoolMyLiquidity />
                 <PoolUserEvents
-                  userPoolEvents={userPoolEvents}
                   isLoading={isLoadingUserPoolEvents}
+                  userPoolEvents={userPoolEvents}
                 />
               </Stack>
             )}

@@ -54,32 +54,32 @@ export function TokenSelectListRow({
 
   return (
     <Box {...boxStyles} {...rest} role="group">
-      <HStack height="full" spacing="md" justify="space-between" maxW="full">
-        <HStack height="full" spacing="ms" maxW="full">
+      <HStack height="full" justify="space-between" maxW="full" spacing="md">
+        <HStack height="full" maxW="full" spacing="ms">
           <Box
-            transition="all 0.2s var(--ease-out-cubic)"
             _groupHover={isCurrentToken ? {} : { transform: 'scale(1.075)' }}
+            transition="all 0.2s var(--ease-out-cubic)"
           >
-            <TokenIcon address={token.address} chain={token.chain} alt={token.symbol} />
+            <TokenIcon address={token.address} alt={token.symbol} chain={token.chain} />
           </Box>
-          <VStack height="full" align="start" justify="center" spacing="none" maxW="full">
+          <VStack align="start" height="full" justify="center" maxW="full" spacing="none">
             <HStack spacing="xxs">
               <Text color={active ? 'font.link' : 'font.primary'} fontWeight="bold">
                 {token.symbol}
               </Text>
               <Box onClick={e => e.stopPropagation()}>
-                <TokenInfoPopover tokenAddress={token.address} chain={token.chain} />
+                <TokenInfoPopover chain={token.chain} tokenAddress={token.address} />
               </Box>
             </HStack>
             <Text
-              title={token.name}
-              fontSize="sm"
-              whiteSpace="normal"
               color="grayText"
+              fontSize="sm"
               fontWeight="medium"
               lineHeight="1"
-              pr="lg"
               maxW="80"
+              pr="lg"
+              title={token.name}
+              whiteSpace="normal"
             >
               {token.name}
             </Text>
@@ -88,13 +88,13 @@ export function TokenSelectListRow({
         {isConnected && tokenBalance !== '0' && (
           <VStack align="end" justify="center" spacing="none">
             <Text
-              title={userBalance?.amount.toString()}
               color={active ? 'font.link' : 'font.primary'}
               fontWeight="bold"
+              title={userBalance?.amount.toString()}
             >
               {tokenBalance}
             </Text>
-            <Text fontSize="sm" color="grayText" fontWeight="medium">
+            <Text color="grayText" fontSize="sm" fontWeight="medium">
               {fiatValue}
             </Text>
           </VStack>

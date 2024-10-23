@@ -38,8 +38,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   return (
     <ChakraProvider
-      theme={getTheme()}
       cssVarsRoot="body"
+      theme={getTheme()}
       toastOptions={{ defaultOptions: { position: 'bottom-left' } }}
     >
       {children}

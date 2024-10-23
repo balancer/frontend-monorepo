@@ -91,8 +91,8 @@ export function ZenGarden({
 
   return [...Array(repetitions).keys()].map((_, i) => (
     <Box
-      zIndex={0}
       key={`zen-garden-${variant}-${i}`}
+      zIndex={0}
       {...shapeProps}
       {...rest}
       transform={`${getShapeTransform(variant, i)} ${transform || ''}`}
@@ -115,29 +115,29 @@ export function PoolZenGarden({
 
   if (!poolType) {
     return (
-      <ZenGarden repetitions={repetitions} subdued={subdued} variant="circle" sizePx={sizePx} />
+      <ZenGarden repetitions={repetitions} sizePx={sizePx} subdued={subdued} variant="circle" />
     )
   }
   if (isWeighted(poolType)) {
     return (
-      <ZenGarden repetitions={repetitions} subdued={subdued} variant="circle" sizePx={sizePx} />
+      <ZenGarden repetitions={repetitions} sizePx={sizePx} subdued={subdued} variant="circle" />
     )
   }
   if (isCowAmmPool(poolType)) {
     return (
-      <Box position="absolute" zIndex="0" width="100%" height="100%" top="0">
-        <CowSandPattern width="100%" height="100%" color={strokeColor} />
+      <Box height="100%" position="absolute" top="0" width="100%" zIndex="0">
+        <CowSandPattern color={strokeColor} height="100%" width="100%" />
       </Box>
     )
   }
   if (isStable(poolType)) {
     return (
-      <ZenGarden repetitions={repetitions} subdued={subdued} variant="square" sizePx={sizePx} />
+      <ZenGarden repetitions={repetitions} sizePx={sizePx} subdued={subdued} variant="square" />
     )
   }
   if (isClp(poolType)) {
     return (
-      <ZenGarden repetitions={repetitions} subdued={subdued} variant="diamond" sizePx={sizePx} />
+      <ZenGarden repetitions={repetitions} sizePx={sizePx} subdued={subdued} variant="diamond" />
     )
   }
 }

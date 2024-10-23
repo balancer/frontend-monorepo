@@ -93,22 +93,19 @@ export function FeaturePoolCard({
     >
       <Box
         as={motion.div}
-        key={carouselIndex}
         height={{ base: '100%', md: '280px' }}
-        position="relative"
-        width="100%"
+        key={carouselIndex}
         padding="1.25rem 0.5rem"
+        position="relative"
         transition="all 0.2s var(--ease-out-cubic)"
+        width="100%"
         {...anim}
         role="group"
       >
-        <VStack cursor="pointer" justifyContent="center" spacing={isSmall ? 'sm' : 'md'} h="full">
+        <VStack cursor="pointer" h="full" justifyContent="center" spacing={isSmall ? 'sm' : 'md'}>
           <VStack spacing="4">
             <Box
-              textAlign="center"
-              transform="translateY(2px)"
               _groupHover={{ opacity: '1', transform: 'translateY(0)' }}
-              transition="all 0.3s var(--ease-out-cubic)"
               css={{
                 '@media(pointer: fine)': {
                   opacity: '0',
@@ -117,68 +114,71 @@ export function FeaturePoolCard({
                   opacity: '1',
                 },
               }}
+              textAlign="center"
+              transform="translateY(2px)"
+              transition="all 0.3s var(--ease-out-cubic)"
             >
-              <Text variant="special" fontWeight="bold" fontSize="sm" textAlign="center" mb="1">
+              <Text fontSize="sm" fontWeight="bold" mb="1" textAlign="center" variant="special">
                 {featuredReason}
               </Text>
             </Box>
             <FadeInOnView>
               <Box position="relative">
                 <Box
+                  _groupHover={{ transform: 'scale(1.1) rotate(60deg)' }}
                   color="background.level0"
                   transition="transform 0.2s var(--ease-out-cubic)"
-                  _groupHover={{ transform: 'scale(1.1) rotate(60deg)' }}
                 >
                   {graphic}
                 </Box>
 
                 <Box
-                  position="absolute"
-                  top="50%"
-                  left="50%"
-                  transformOrigin="center"
-                  transform="translate(-50%, -50%)"
-                  zIndex={5}
-                  transition="all 0.2s var(--ease-out-cubic)"
                   _groupHover={{
                     background: 'background.level4',
                     transform: 'translateX(-50%, -50%) scale(1.5)',
                   }}
                   background="background.level2"
                   height="44px"
-                  width="44px"
+                  left="50%"
+                  position="absolute"
                   rounded="full"
                   shadow="2xl"
+                  top="50%"
+                  transform="translate(-50%, -50%)"
+                  transformOrigin="center"
+                  transition="all 0.2s var(--ease-out-cubic)"
+                  width="44px"
+                  zIndex={5}
                 >
                   <Image
-                    position="absolute"
-                    top="50%"
-                    left="50%"
-                    transformOrigin="center"
-                    transition="transform 0.3s var(--ease-out-cubic)"
-                    transform="translate(-50%, -50%)"
-                    src={`/images/chains/${chain}.svg`}
-                    alt={`Chain icon for ${chain.toLowerCase()}`}
-                    width="28px"
-                    height="28px"
                     _groupHover={{
                       transform: 'translate(-50%, -50%) scale(1.15)',
                     }}
+                    alt={`Chain icon for ${chain.toLowerCase()}`}
+                    height="28px"
+                    left="50%"
+                    position="absolute"
+                    src={`/images/chains/${chain}.svg`}
+                    top="50%"
+                    transform="translate(-50%, -50%)"
+                    transformOrigin="center"
+                    transition="transform 0.3s var(--ease-out-cubic)"
+                    width="28px"
                   />
                 </Box>
               </Box>
             </FadeInOnView>
             <VStack spacing="0" zIndex={1}>
-              <HStack mb="1" gap="0">
+              <HStack gap="0" mb="1">
                 <PoolName
-                  pool={pool}
-                  fontSize="md"
-                  noOfLines={1}
                   MemoizedMainAprTooltip={MemoizedMainAprTooltip}
+                  fontSize="md"
                   isCarousel={isCarousel}
+                  noOfLines={1}
+                  pool={pool}
                 />
               </HStack>
-              <Text mb="0.5" variant="secondary" fontWeight="medium" fontSize="sm">
+              <Text fontSize="sm" fontWeight="medium" mb="0.5" variant="secondary">
                 {getPoolTypeLabel(pool.type)} pool
               </Text>
             </VStack>
@@ -186,13 +186,13 @@ export function FeaturePoolCard({
         </VStack>
 
         <Box
-          transition="transform 0.2s var(--ease-out-cubic)"
-          position="relative"
-          opacity={{ base: '0', md: '1' }}
-          top="-50%"
           _groupHover={{ transformOrigin: '50%', transform: 'scale(1.03)' }}
+          opacity={{ base: '0', md: '1' }}
+          position="relative"
+          top="-50%"
+          transition="transform 0.2s var(--ease-out-cubic)"
         >
-          <PoolZenGarden repetitions={10} subdued={isSmall} sizePx={bgSize} />
+          <PoolZenGarden repetitions={10} sizePx={bgSize} subdued={isSmall} />
         </Box>
       </Box>
     </NoisyCard>

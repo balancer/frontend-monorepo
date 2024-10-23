@@ -19,23 +19,23 @@ export function SuccessActions({
       <Divider />
       <HStack justify="space-between" w="full">
         <Button
-          variant="ghost"
           leftIcon={<CornerDownLeft size="14" />}
-          size="xs"
           onClick={returnAction}
+          size="xs"
+          variant="ghost"
         >
           {returnLabel}
         </Button>
-        <Button variant="ghost" leftIcon={<ThumbsUp size="14" />} size="xs" onClick={openNpsModal}>
+        <Button leftIcon={<ThumbsUp size="14" />} onClick={openNpsModal} size="xs" variant="ghost">
           Give feedback
         </Button>
         <Button
           as={Link}
           href="https://discord.balancer.fi"
-          target="_blank"
-          variant="ghost"
           leftIcon={<MessageSquare size="14" />}
           size="xs"
+          target="_blank"
+          variant="ghost"
         >
           Ask questions
         </Button>
@@ -63,32 +63,32 @@ export function ActionModalFooter({
   if (urlTxHash) {
     return (
       <ModalFooter>
-        <SuccessActions returnLabel={returnLabel} returnAction={returnAction} />
+        <SuccessActions returnAction={returnAction} returnLabel={returnLabel} />
       </ModalFooter>
     )
   }
   return (
     <ModalFooter>
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence initial={false} mode="wait">
         {isSuccess ? (
           <motion.div
-            key="footer"
-            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            key="footer"
             style={{ width: '100%' }}
+            transition={{ duration: 0.3 }}
           >
-            <SuccessActions returnLabel={returnLabel} returnAction={returnAction} />
+            <SuccessActions returnAction={returnAction} returnLabel={returnLabel} />
           </motion.div>
         ) : (
           <motion.div
-            key="action"
-            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            key="action"
             style={{ width: '100%' }}
+            transition={{ duration: 0.3 }}
           >
             <VStack w="full">
               {/* Keep currentStep?. optional chaining cause some edge cases require it */}

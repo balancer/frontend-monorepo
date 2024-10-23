@@ -9,7 +9,7 @@ import { BeetsLogoType } from '../imgs/BeetsLogoType'
 export function NavLogo() {
   return (
     <Box as={motion.div} variants={fadeIn}>
-      <Link as={NextLink} variant="nav" href="/" prefetch={true}>
+      <Link as={NextLink} href="/" prefetch variant="nav">
         <Box>
           <Box display={{ base: 'block', md: 'none' }}>
             <BeetsLogo width="26px" />

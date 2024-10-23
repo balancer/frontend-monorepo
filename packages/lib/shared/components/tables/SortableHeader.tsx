@@ -26,12 +26,12 @@ export function SortableHeader({
 
   return (
     <GridItem justifySelf={align === 'left' ? 'start' : 'end'}>
-      <Button size="sm" variant="ghost" onClick={() => onSort(label.toLowerCase())}>
-        <HStack gap="0" alignItems="center">
+      <Button onClick={() => onSort(label.toLowerCase())} size="sm" variant="ghost">
+        <HStack alignItems="center" gap="0">
           <Text color={color} fontWeight="bold">
             {label}
           </Text>
-          <Box fontSize="xs" ml="1" color={color}>
+          <Box color={color} fontSize="xs" ml="1">
             {renderSortIcon()}
           </Box>
         </HStack>

@@ -19,14 +19,14 @@ export function CopyTokenAddressButton({
   return (
     <Tooltip label="Copy token address">
       <IconButton
-        size="xs"
+        aria-label="Copy token address"
+        h="6"
+        icon={isCopied ? <CheckCircleIcon /> : <CopyIcon />}
         isRound
+        onClick={copyToClipboard}
+        size="xs"
         variant="ghost"
         w="6"
-        h="6"
-        aria-label="Copy token address"
-        icon={isCopied ? <CheckCircleIcon /> : <CopyIcon />}
-        onClick={copyToClipboard}
         {...rest}
       />
     </Tooltip>

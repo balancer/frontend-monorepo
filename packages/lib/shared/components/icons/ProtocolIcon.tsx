@@ -7,5 +7,5 @@ type Props = Omit<ImageProps, 'src' | 'alt'> & {
 export function ProtocolIcon({ width = 20, height = 20, protocol, ...props }: Props) {
   const src = protocolIconPaths[protocol]
   const alt = protocol
-  return <Image width={width} height={height} src={src} alt={alt} {...props} />
+  return <Image alt={alt} height={height} src={src} width={width} {...props} />
 }

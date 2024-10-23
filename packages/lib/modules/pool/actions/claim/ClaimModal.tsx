@@ -72,23 +72,23 @@ export function ClaimModal({
 
   return (
     <Modal
+      isCentered
       isOpen={isOpen}
       onClose={() => {
         onClose(!!claimTxHash)
       }}
-      isCentered
       preserveScrollBarGap
       {...rest}
     >
       <SuccessOverlay startAnimation={!!claimTxHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker transactionSteps={transactionSteps} chain={chain} />}
-        <TransactionModalHeader label="Claim incentives" txHash={claimTxHash} chain={chain} />
+        {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
+        <TransactionModalHeader chain={chain} label="Claim incentives" txHash={claimTxHash} />
         <ModalCloseButton />
         <ModalBody>
           <AnimateHeightChange spacing="sm">
-            {isMobile && <MobileStepTracker transactionSteps={transactionSteps} chain={chain} />}
+            {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
             {isLoading ? (
               <Text>Loading data...</Text>
             ) : noQuoteRewards ? (
@@ -107,13 +107,13 @@ export function ClaimModal({
         </ModalBody>
 
         <ActionModalFooter
-          isSuccess={!!claimTxHash}
           currentStep={transactionSteps.currentStep}
-          returnLabel="Return to portfolio"
+          isSuccess={!!claimTxHash}
           returnAction={() => {
             onClose(!!claimTxHash)
             router.push('/portfolio')
           }}
+          returnLabel="Return to portfolio"
         />
       </ModalContent>
     </Modal>

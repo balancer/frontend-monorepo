@@ -1,16 +1,16 @@
 import { Tooltip, Box, TooltipProps } from '@chakra-ui/react'
 import { useState } from 'react'
 
-export const TooltipWithTouch = ({ children, ...rest }: TooltipProps) => {
+export function TooltipWithTouch({ children, ...rest }: TooltipProps) {
   const [isLabelOpen, setIsLabelOpen] = useState(false)
 
   return (
     <Tooltip isOpen={isLabelOpen} {...rest}>
       <Box
-        w="full"
+        onClick={() => setIsLabelOpen(true)}
         onMouseEnter={() => setIsLabelOpen(true)}
         onMouseLeave={() => setIsLabelOpen(false)}
-        onClick={() => setIsLabelOpen(true)}
+        w="full"
       >
         {children}
       </Box>

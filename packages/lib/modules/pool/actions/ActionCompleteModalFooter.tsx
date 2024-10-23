@@ -6,13 +6,13 @@ export function ActionCompleteModalFooter() {
     <VStack w="full">
       <Divider />
       <HStack justify="space-between" w="full">
-        <Button variant="ghost" leftIcon={<CornerDownLeft size="14" />} size="xs">
+        <Button leftIcon={<CornerDownLeft size="14" />} size="xs" variant="ghost">
           Return to pool
         </Button>
-        <Button variant="ghost" leftIcon={<ThumbsUp size="14" />} size="xs">
+        <Button leftIcon={<ThumbsUp size="14" />} size="xs" variant="ghost">
           Give feedback
         </Button>
-        <Button variant="ghost" leftIcon={<MessageSquare size="14" />} size="xs">
+        <Button leftIcon={<MessageSquare size="14" />} size="xs" variant="ghost">
           Ask questions
         </Button>
       </HStack>

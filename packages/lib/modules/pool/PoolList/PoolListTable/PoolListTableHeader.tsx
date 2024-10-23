@@ -1,18 +1,18 @@
 'use client'
 
 import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
-import { usePoolListQueryState } from '../usePoolListQueryState'
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolsColumnSort, orderByHash } from '../../pool.types'
 import { usePoolOrderByState } from '../usePoolOrderByState'
 import { Globe } from 'react-feather'
 import { SortableHeader } from '@repo/lib/shared/components/tables/SortableHeader'
+import { usePoolList } from '../PoolListProvider'
 
 const setIsDesc = (id: GqlPoolOrderBy, currentSortingObj: PoolsColumnSort) =>
   currentSortingObj.id === id ? !currentSortingObj.desc : true
 
 export function PoolListTableHeader({ ...rest }) {
-  const { sorting, setSorting } = usePoolListQueryState()
+  const { queryState: { sorting, setSorting } } = usePoolList()
   const { orderBy } = usePoolOrderByState()
   const sortingObj = sorting[0]
 

@@ -10,10 +10,10 @@ import { HomeActivity } from '@repo/lib/shared/components/marketing/HomeActivity
 
 export default function Home() {
   return (
-    <ReactLenis root options={{ lerp: 0.1, duration: 1.5 }}>
+    <ReactLenis options={{ lerp: 0.1, duration: 1.5 }} root>
       <Box className="homepage" overflowX="hidden">
         <HomeHero />
-        <Box height={{ base: '100px', md: '200px' }} zIndex="-1" position="relative">
+        <Box height={{ base: '100px', md: '200px' }} position="relative" zIndex="-1">
           <AnimatedSVG />
         </Box>
         <HomeBuilders />

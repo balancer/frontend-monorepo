@@ -15,23 +15,23 @@ export function PoolActionsNav() {
   return (
     <HStack justify="space-between" mb="4">
       <Card
-        variant="level2"
-        p={{ base: 'xs', sm: 'xs', md: 'sm' }}
-        width={{ base: '32px', md: '40px' }}
         h={{ base: '32px', md: '40px' }}
+        p={{ base: 'xs', sm: 'xs', md: 'sm' }}
         shadow="sm"
+        variant="level2"
+        width={{ base: '32px', md: '40px' }}
       >
-        <Image src={networkConfig.iconPath} width="24" height="24" alt={networkConfig.shortName} />
+        <Image alt={networkConfig.shortName} height="24" src={networkConfig.iconPath} width="24" />
       </Card>
 
       <IconButton
+        aria-label="Close"
         as={Link}
         href={getPoolPath(pool)}
-        isRound={true}
-        variant="outline"
-        aria-label="Close"
-        prefetch={true}
         icon={<CloseIcon />}
+        isRound
+        prefetch
+        variant="outline"
       />
     </HStack>
   )

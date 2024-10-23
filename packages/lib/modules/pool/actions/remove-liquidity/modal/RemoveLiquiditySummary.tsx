@@ -43,16 +43,16 @@ export function RemoveLiquiditySummary({
   const shouldShowReceipt = removeLiquidityTxHash && !isLoadingReceipt && receivedTokens.length > 0
 
   if (!isUserAddressLoading && !userAddress) {
-    return <BalAlert status="warning" content="User is not connected" />
+    return <BalAlert content="User is not connected" status="warning" />
   }
   if (shouldShowErrors && error) {
-    return <BalAlert status="warning" content="We were unable to find this transaction hash" />
+    return <BalAlert content="We were unable to find this transaction hash" status="warning" />
   }
   if (shouldShowErrors && !isLoadingReceipt && !receivedTokens.length) {
     return (
       <BalAlert
-        status="warning"
         content="We were unable to find logs for this transaction hash and the connected account"
+        status="warning"
       />
     )
   }
@@ -60,26 +60,26 @@ export function RemoveLiquiditySummary({
   return (
     <AnimateHeightChange spacing="sm">
       {isMobile && hasQuoteContext && (
-        <MobileStepTracker transactionSteps={transactionSteps} chain={pool.chain} />
+        <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
       )}
 
       <Card variant="modalSubSection">
         <BptRow
-          label={shouldShowReceipt ? 'You removed' : "You're removing"}
           bptAmount={shouldShowReceipt ? sentBptUnits : quoteBptIn}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
+          label={shouldShowReceipt ? 'You removed' : "You're removing"}
           pool={pool}
         />
       </Card>
 
       <Card variant="modalSubSection">
         <TokenRowGroup
-          label={shouldShowReceipt ? 'You received' : "You're expected to get (if no slippage)"}
           amounts={shouldShowReceipt ? receivedTokens : _amountsOut}
           chain={pool.chain}
-          totalUSDValue={shouldShowReceipt ? undefined : totalUSDValue}
           isLoading={shouldShowReceipt ? isLoadingReceipt : false}
+          label={shouldShowReceipt ? 'You received' : "You're expected to get (if no slippage)"}
           tokens={shouldShowReceipt ? getTokensByChain(pool.chain) : undefined}
+          totalUSDValue={shouldShowReceipt ? undefined : totalUSDValue}
         />
       </Card>
 
@@ -88,9 +88,9 @@ export function RemoveLiquiditySummary({
           <Card variant="modalSubSection">
             <VStack align="start" spacing="sm">
               <PoolActionsPriceImpactDetails
-                totalUSDValue={totalUSDValue}
-                slippage={slippage}
                 bptAmount={BigInt(parseUnits(quoteBptIn, 18))}
+                slippage={slippage}
+                totalUSDValue={totalUSDValue}
               />
             </VStack>
           </Card>

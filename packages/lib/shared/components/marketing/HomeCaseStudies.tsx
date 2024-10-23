@@ -38,31 +38,31 @@ export function HomeCaseStudies() {
   return (
     <Box overflowX="hidden">
       <VStack
-        w="full"
-        py={['xl', 'xl']}
-        px={['ms', 'md']}
         alignItems={{ base: 'flex-start', md: 'center' }}
+        px={['ms', 'md']}
+        py={['xl', 'xl']}
+        w="full"
       >
         <Text>Top DeFi protocols build with Balancer</Text>
         <Flex display={{ base: 'none', md: 'flex' }} justifyContent="center">
-          <Box position="relative" h="54px"></Box>
-          <Box position="absolute" bottom="20px">
+          <Box h="54px" position="relative" />
+          <Box bottom="20px" position="absolute">
             <Box
-              as={motion.div}
-              onMouseMove={e => mouseX.set(e.pageX)}
-              onMouseLeave={() => mouseX.set(Infinity)}
-              mx="auto"
-              display="flex"
               alignItems="flex-end"
-              justifyContent="center"
-              gap="sm"
+              as={motion.div}
+              display="flex"
               flexWrap="wrap"
+              gap="sm"
+              justifyContent="center"
+              mx="auto"
+              onMouseLeave={() => mouseX.set(Infinity)}
+              onMouseMove={e => mouseX.set(e.pageX)}
             >
               {logos.map((logo, i) => (
                 <AppIcon
-                  mouseX={mouseX}
-                  key={i}
                   Icon={logo.icon}
+                  key={i}
+                  mouseX={mouseX}
                   name={logo.name}
                   onClick={() => openRedirectModal(logo.partner)}
                 />
@@ -71,16 +71,16 @@ export function HomeCaseStudies() {
           </Box>
         </Flex>
         <Flex
+          display={{ base: 'flex', md: 'none' }}
           flexWrap="wrap"
           gap="ms"
-          display={{ base: 'flex', md: 'none' }}
           justifyContent="flex-start"
           pt="sm"
         >
           {logos.map((logo, i) => (
             <SmallIcon
-              key={i}
               Icon={logo.icon}
+              key={i}
               name={logo.name}
               onClick={() => openRedirectModal(logo.partner)}
             />
@@ -88,9 +88,9 @@ export function HomeCaseStudies() {
         </Flex>
       </VStack>
       <PartnerRedirectModal
-        partner={redirectPartner}
         isOpen={partnerRedirectDisclosure.isOpen}
         onClose={partnerRedirectDisclosure.onClose}
+        partner={redirectPartner}
       />
     </Box>
   )
@@ -118,22 +118,6 @@ function AppIcon({
 
   return (
     <Box
-      as={motion.div}
-      ref={ref}
-      style={{ width }}
-      aspectRatio={1}
-      w="200px"
-      borderRadius="full"
-      transition="color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out"
-      shadow="sm"
-      color="brown.300"
-      bg="background.level2"
-      willChange="box-shadow, background-color"
-      _hover={{
-        bg: 'background.level4',
-        color: 'brown.500',
-        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
-      }}
       _dark={{
         bg: 'background.level2',
         color: 'font.secondary',
@@ -143,11 +127,27 @@ function AppIcon({
           boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
         },
       }}
+      _hover={{
+        bg: 'background.level4',
+        color: 'brown.500',
+        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
+      }}
+      alignItems="center"
+      as={motion.div}
+      aspectRatio={1}
+      bg="background.level2"
+      borderRadius="full"
+      color="brown.300"
       cursor="pointer"
       display="flex"
-      alignItems="center"
       justifyContent="center"
+      ref={ref}
+      shadow="sm"
+      style={{ width }}
       title={name}
+      transition="color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out"
+      w="200px"
+      willChange="box-shadow, background-color"
       {...rest}
     >
       <Icon />
@@ -162,21 +162,6 @@ function SmallIcon({
 }: { Icon: React.ComponentType; name: string } & BoxProps) {
   return (
     <Box
-      aspectRatio={1}
-      w="60px"
-      borderRadius="full"
-      transition="color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out, transform 0.3s ease-out"
-      shadow="sm"
-      color="brown.300"
-      bg="background.level2"
-      willChange="box-shadow, background-color"
-      _hover={{
-        bg: 'background.level4',
-        color: 'brown.500',
-        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
-        transform: 'scale(1.1)',
-        transition: 'scale 0.3s ease-out',
-      }}
       _dark={{
         bg: 'background.level2',
         color: 'font.secondary',
@@ -186,11 +171,26 @@ function SmallIcon({
           boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
         },
       }}
+      _hover={{
+        bg: 'background.level4',
+        color: 'brown.500',
+        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
+        transform: 'scale(1.1)',
+        transition: 'scale 0.3s ease-out',
+      }}
+      alignItems="center"
+      aspectRatio={1}
+      bg="background.level2"
+      borderRadius="full"
+      color="brown.300"
       cursor="pointer"
       display="flex"
-      alignItems="center"
       justifyContent="center"
+      shadow="sm"
       title={name}
+      transition="color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out, transform 0.3s ease-out"
+      w="60px"
+      willChange="box-shadow, background-color"
       {...rest}
     >
       <Icon />

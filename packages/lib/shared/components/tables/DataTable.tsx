@@ -93,11 +93,11 @@ export function DataTable<Data extends object>({
                   const width = header.getSize()
                   return (
                     <Th
-                      key={header.id}
                       isNumeric={meta?.isNumeric}
+                      key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
-                      w={width === 9999 ? 'auto' : `${width}px`} // use '9999' in your column definition, for one column only!!
                       p={noColumnPadding && noColumnPadding.includes(header.id) ? '0' : ''}
+                      w={width === 9999 ? 'auto' : `${width}px`} // use '9999' in your column definition, for one column only!!
                     >
                       <HStack
                         style={
@@ -106,7 +106,7 @@ export function DataTable<Data extends object>({
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())} -{' '}
                         {header.column.getCanSort() && (
-                          <chakra.span h="full" cursor="pointer">
+                          <chakra.span cursor="pointer" h="full">
                             {{
                               asc: <SortingIcon direction="asc" />,
                               desc: <SortingIcon direction="desc" />,
@@ -137,13 +137,13 @@ export function DataTable<Data extends object>({
 
                   return (
                     <Td
-                      key={cell.id}
                       isNumeric={meta?.isNumeric}
+                      key={cell.id}
                       px={noColumnPadding && noColumnPadding.includes(cell.column.id) ? '0' : '6'}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       {cell.id.includes('_detail') && (
-                        <Link href={getPoolPath(pool)} prefetch={true} style={{ color: '#2299DD' }}>
+                        <Link href={getPoolPath(pool)} prefetch style={{ color: '#2299DD' }}>
                           Pre-Fetched Link
                         </Link>
                       )}
@@ -156,23 +156,23 @@ export function DataTable<Data extends object>({
         </Table>
       </TableContainer>
       {!rows.length && (
-        <Center w="full" h="200px">
+        <Center h="200px" w="full">
           {noResultsText}
         </Center>
       )}
       {!!rows.length && rowCount > pagination.pageSize && (
         <Pagination
+          canNextPage={table.getCanNextPage()}
+          canPreviousPage={table.getCanPreviousPage()}
+          currentPageNumber={table.getState().pagination.pageIndex + 1}
           goToFirstPage={() => table.setPageIndex(0)}
           goToLastPage={() => table.setPageIndex(table.getPageCount() - 1)}
           goToNextPage={() => table.nextPage()}
           goToPreviousPage={() => table.previousPage()}
-          canPreviousPage={table.getCanPreviousPage()}
-          canNextPage={table.getCanNextPage()}
-          currentPageNumber={table.getState().pagination.pageIndex + 1}
-          totalPageCount={table.getPageCount()}
+          pageSize={table.getState().pagination.pageSize}
           setPageIndex={table.setPageIndex}
           setPageSize={table.setPageSize}
-          pageSize={table.getState().pagination.pageSize}
+          totalPageCount={table.getPageCount()}
         />
       )}
     </>

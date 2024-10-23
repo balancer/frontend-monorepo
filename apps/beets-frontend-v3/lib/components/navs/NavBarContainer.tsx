@@ -14,15 +14,15 @@ export function NavBarContainer() {
   return (
     <NavBar
       appLinks={allAppLinks}
-      navLogo={<NavLogo />}
       mobileNav={
         <MobileNav
+          LogoType={BeetsLogoType}
           appLinks={allAppLinks}
           ecosystemLinks={ecosystemLinks}
           socialLinks={getSocialLinks()}
-          LogoType={BeetsLogoType}
         />
       }
+      navLogo={<NavLogo />}
     />
   )
 }

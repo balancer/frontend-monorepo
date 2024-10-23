@@ -10,5 +10,5 @@ export type VebalAllStatsValues = {
 }
 
 export function AllVebalStatsValues() {
-  return <Stack></Stack>
+  return <Stack />
 }

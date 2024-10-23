@@ -26,33 +26,37 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
     getChainId(params.pool.chain)
   )
 
-  const SignPermitButton = () => (
-    <VStack width="full">
-      {error && <BalAlert status="error" content={error} />}
-      {!isConnected && <ConnectWallet width="full" isLoading={isLoading} />}
-      {shouldChangeNetwork && isConnected && <NetworkSwitchButton {...networkSwitchButtonProps} />}
-      {!shouldChangeNetwork && isConnected && (
-        <Button
-          width="full"
-          w="full"
-          size="lg"
-          variant="primary"
-          isDisabled={isDisabled}
-          isLoading={isLoading}
-          onClick={signPermit}
-          loadingText={buttonLabel}
-        >
-          <HStack spacing="sm" width="100%">
-            <Text fontWeight="bold" color={primaryTextColor}>
-              {buttonLabel}
-            </Text>
-            <Spacer />
-            <SignIcon size={16} />
-          </HStack>
-        </Button>
-      )}
-    </VStack>
-  )
+  function SignPermitButton() {
+    return (
+      <VStack width="full">
+        {error && <BalAlert content={error} status="error" />}
+        {!isConnected && <ConnectWallet isLoading={isLoading} width="full" />}
+        {shouldChangeNetwork && isConnected && (
+          <NetworkSwitchButton {...networkSwitchButtonProps} />
+        )}
+        {!shouldChangeNetwork && isConnected && (
+          <Button
+            isDisabled={isDisabled}
+            isLoading={isLoading}
+            loadingText={buttonLabel}
+            onClick={signPermit}
+            size="lg"
+            variant="primary"
+            w="full"
+            width="full"
+          >
+            <HStack spacing="sm" width="100%">
+              <Text color={primaryTextColor} fontWeight="bold">
+                {buttonLabel}
+              </Text>
+              <Spacer />
+              <SignIcon size={16} />
+            </HStack>
+          </Button>
+        )}
+      </VStack>
+    )
+  }
 
   const isComplete = () => signPermitState === SignatureState.Completed
 

@@ -79,14 +79,14 @@ export function TransactionStepButton({ step }: Props) {
       )}
       {!shouldChangeNetwork && isTransactButtonVisible && (
         <Button
-          width="full"
-          w="full"
-          size="lg"
-          variant="primary"
           isDisabled={isButtonDisabled}
           isLoading={isButtonLoading}
-          onClick={handleOnClick}
           loadingText={getButtonLabel()}
+          onClick={handleOnClick}
+          size="lg"
+          variant="primary"
+          w="full"
+          width="full"
         >
           {getButtonLabel()}
         </Button>

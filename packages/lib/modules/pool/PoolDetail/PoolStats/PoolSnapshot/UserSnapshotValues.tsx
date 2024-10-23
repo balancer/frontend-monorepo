@@ -99,8 +99,8 @@ export function UserSnapshotValues() {
 
   return (
     <>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My liquidity
         </Text>
         {poolMyStatsValues ? (
@@ -110,12 +110,12 @@ export function UserSnapshotValues() {
                 {toCurrency(poolMyStatsValues.myLiquidity)}
               </Heading>
               <Text
+                _groupHover={{ opacity: '1' }}
                 color="font.link"
                 cursor="pointer"
-                opacity="0"
                 fontSize="sm"
+                opacity="0"
                 transition="opacity 0.2s var(--ease-out-cubic)"
-                _groupHover={{ opacity: '1' }}
               >
                 Manage
               </Text>
@@ -127,24 +127,24 @@ export function UserSnapshotValues() {
           <Skeleton height="28px" w="100px" />
         )}
       </VStack>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My APR
         </Text>
         {poolMyStatsValues && poolMyStatsValues.myLiquidity ? (
           <MemoizedMainAprTooltip
             aprItems={pool.dynamicData.aprItems}
+            pool={pool}
             poolId={pool.id}
             textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
             vebalBoost={boost || '1'}
-            pool={pool}
           />
         ) : (
           <Heading size="h4">&mdash;</Heading>
         )}
       </VStack>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           {`My potential weekly yield${
             poolMyStatsValues && !poolMyStatsValues.myLiquidity ? ' on $10k' : ''
           }`}
@@ -155,8 +155,8 @@ export function UserSnapshotValues() {
           <Skeleton height="28px" w="100px" />
         )}
       </VStack>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My claimable rewards
         </Text>
         {poolMyStatsValues ? (
@@ -165,14 +165,14 @@ export function UserSnapshotValues() {
           ) : (
             <HStack>
               <Heading size="h4">{toCurrency(poolMyStatsValues.myClaimableRewards)}</Heading>
-              <TokenIconStack tokens={tokens} chain={chain} size={20} />
+              <TokenIconStack chain={chain} size={20} tokens={tokens} />
               <Tooltip label={isDisabled ? disabledReason : ''}>
                 <Button
-                  variant="primary"
-                  w="full"
-                  size="xxs"
                   isDisabled={isDisabled}
                   onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
+                  size="xxs"
+                  variant="primary"
+                  w="full"
                 >
                   Claim
                 </Button>
@@ -184,9 +184,9 @@ export function UserSnapshotValues() {
         )}
       </VStack>
       <ClaimModal
+        chain={pool.chain}
         isOpen={previewModalDisclosure.isOpen}
         onClose={onModalClose}
-        chain={pool.chain}
       />
     </>
   )

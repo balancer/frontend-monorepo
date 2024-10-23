@@ -42,27 +42,29 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
 
   const isTypeAdd = poolEvent.type === 'ADD'
 
-  const Action = () => (
-    <HStack>
-      <Box
-        as="span"
-        h="8px"
-        w="8px"
-        borderRadius="50%"
-        display="inline-block"
-        backgroundColor={isTypeAdd ? 'green.500' : 'red.500'}
-      ></Box>
-      <Text>{isTypeAdd ? 'Add' : 'Remove'}</Text>
-    </HStack>
-  )
+  function Action() {
+    return (
+      <HStack>
+        <Box
+          as="span"
+          backgroundColor={isTypeAdd ? 'green.500' : 'red.500'}
+          borderRadius="50%"
+          display="inline-block"
+          h="8px"
+          w="8px"
+        />
+        <Text>{isTypeAdd ? 'Add' : 'Remove'}</Text>
+      </HStack>
+    )
+  }
 
   const Tokens = () =>
     poolEvent.tokens
       .filter(token => token.amount !== '0')
       .map(token => (
         <HStack gap={['xs', 'sm']} key={token.address} mb="sm">
-          <TokenIcon chain={chain} address={token.address} size={24} alt={token.address} />
-          <Text textOverflow="ellipsis" whiteSpace="nowrap" overflow="hidden">
+          <TokenIcon address={token.address} alt={token.address} chain={chain} size={24} />
+          <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
             {fNum('token', token.amount)}
           </Text>
         </HStack>
@@ -70,15 +72,15 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
 
   return (
     <Grid
-      w="full"
-      templateColumns={{ base: 'fit-content(150px) 50px 1fr', md: GRID_COLUMNS }}
+      gap={{ base: '2', md: '4' }}
+      mb="4"
       templateAreas={{
         base: `"action value time"
                "tokens tokens tokens"`,
         md: `"action tokens value time"`,
       }}
-      gap={{ base: '2', md: '4' }}
-      mb="4"
+      templateColumns={{ base: 'fit-content(150px) 50px 1fr', md: GRID_COLUMNS }}
+      w="full"
     >
       <GridItem area="action">
         <Action />
@@ -90,13 +92,13 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
         <Text>{usdValue}</Text>
       </GridItem>
       <GridItem area="time" mr="sm">
-        <HStack justifyContent="flex-end" gap="1">
+        <HStack gap="1" justifyContent="flex-end">
           <Text color="grayText">
             {formatDistanceToNow(new Date(secondsToMilliseconds(poolEvent.timestamp)), {
               addSuffix: true,
             })}
           </Text>
-          <Link href={txUrl} target="_blank" color="grayText">
+          <Link color="grayText" href={txUrl} target="_blank">
             <ArrowUpRight size={16} />
           </Link>
         </HStack>
@@ -171,28 +173,28 @@ export default function PoolUserEvents({
 
   return (
     <Card h={height}>
-      {isLoading && <Skeleton w="full" h="full" />}
+      {isLoading && <Skeleton h="full" w="full" />}
       {!isLoading && (
-        <VStack spacing="md" w="full" h="full" alignItems="flex-start">
+        <VStack alignItems="flex-start" h="full" spacing="md" w="full">
           <Heading
-            bg="font.special"
             backgroundClip="text"
+            bg="font.special"
             fontWeight="bold"
-            size="h5"
             lineHeight="34px" // to align with 'My liquidity'
+            size="h5"
           >
             My transactions
           </Heading>
           <Divider />
           <Box display={{ base: 'none', md: 'block' }} w="full">
-            <Grid w="full" templateColumns={{ base: '1fr', md: GRID_COLUMNS }} gap="4">
+            <Grid gap="4" templateColumns={{ base: '1fr', md: GRID_COLUMNS }} w="full">
               {['Action', 'Tokens', 'Value', 'Time'].map((label, index) => (
                 <GridItem
                   key={index}
-                  textAlign={index > 1 ? 'right' : 'left'}
                   mr={index === 3 ? 'md' : 0}
+                  textAlign={index > 1 ? 'right' : 'left'}
                 >
-                  <Text fontWeight="medium" variant="secondary" fontSize="0.85rem">
+                  <Text fontSize="0.85rem" fontWeight="medium" variant="secondary">
                     {label}
                   </Text>
                 </GridItem>
@@ -200,7 +202,7 @@ export default function PoolUserEvents({
             </Grid>
             <Divider mt="md" />
           </Box>
-          <Box w="full" overflowY="auto">
+          <Box overflowY="auto" w="full">
             {isEmpty(poolEvents) ? (
               <>
                 <Text variant="secondary">No recent transactions</Text>
@@ -211,26 +213,26 @@ export default function PoolUserEvents({
             ) : (
               poolEvents.map(poolEvent => (
                 <PoolEventRow
-                  poolEvent={poolEvent}
-                  key={poolEvent.id}
-                  usdValue={toCurrency(poolEvent.valueUSD)}
                   chain={chain}
+                  key={poolEvent.id}
+                  poolEvent={poolEvent}
                   txUrl={getBlockExplorerTxUrl(poolEvent.tx)}
+                  usdValue={toCurrency(poolEvent.valueUSD)}
                 />
               ))
             )}
           </Box>
           <Divider />
-          <HStack spacing="4" mt="auto">
-            <Text variant="secondary" fontSize="0.85rem">
+          <HStack mt="auto" spacing="4">
+            <Text fontSize="0.85rem" variant="secondary">
               {`${stakedPercentage} ${getShareTitle()}`}
             </Text>
             {showBoostValue && (
               <>
-                <Text variant="secondary" fontSize="0.85rem">
+                <Text fontSize="0.85rem" variant="secondary">
                   &middot;
                 </Text>
-                <Text variant="secondary" fontSize="0.85rem">
+                <Text fontSize="0.85rem" variant="secondary">
                   {`${boost}x boost`}
                 </Text>
               </>

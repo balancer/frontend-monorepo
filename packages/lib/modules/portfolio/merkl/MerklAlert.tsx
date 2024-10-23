@@ -18,11 +18,11 @@ function MerklTitle() {
       </HStack>
       <Button
         as={Link}
-        target="_blank"
         href="https://app.merkl.xyz/"
-        width="auto"
-        variant="outline"
         rightIcon={<ArrowUpRight />}
+        target="_blank"
+        variant="outline"
+        width="auto"
       >
         Learn more
       </Button>

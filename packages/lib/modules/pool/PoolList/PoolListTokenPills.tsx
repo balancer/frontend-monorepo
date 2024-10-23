@@ -19,17 +19,17 @@ function WeightedTokenPills({
           <Badge
             key={token.address}
             {...badgeProps}
-            display="flex"
             alignItems="center"
             bg="background.level2"
+            borderColor="border.base"
             borderRadius="full"
             borderWidth={1}
-            borderColor="border.base"
+            display="flex"
             shadow="sm"
             textTransform="none"
           >
             <HStack gap={['xs', 'sm']}>
-              <TokenIcon chain={chain} address={token.address} size={iconSize} alt={token.symbol} />
+              <TokenIcon address={token.address} alt={token.symbol} chain={chain} size={iconSize} />
               <HStack gap={['xs', '1.5']}>
                 <Text fontWeight="bold" noOfLines={1}>
                   {token.symbol}
@@ -60,21 +60,21 @@ function StableTokenPills({
           <Badge
             key={token.address}
             {...badgeProps}
-            display="flex"
             alignItems="center"
-            pl={[isFirstToken(i) ? 1 : 12, isFirstToken(i) ? 2 : 12]}
             bg="background.level2"
+            borderColor="border.base"
             borderRadius="full"
             borderWidth={1}
-            borderColor="border.base"
-            shadow="sm"
+            display="flex"
             ml={isFirstToken(i) ? 0 : -10}
-            zIndex={zIndices[i]}
+            pl={[isFirstToken(i) ? 1 : 12, isFirstToken(i) ? 2 : 12]}
+            shadow="sm"
             textTransform="none"
+            zIndex={zIndices[i]}
           >
             <HStack gap={['xs', '1.5']}>
-              <TokenIcon chain={chain} address={token.address} size={iconSize} alt={token.symbol} />
-              <Text fontWeight="bold" noOfLines={1} maxW="20">
+              <TokenIcon address={token.address} alt={token.symbol} chain={chain} size={iconSize} />
+              <Text fontWeight="bold" maxW="20" noOfLines={1}>
                 {token.symbol}
               </Text>
             </HStack>
@@ -97,9 +97,9 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
   if (shouldUseStablePills) {
     return (
       <StableTokenPills
-        tokens={pool.displayTokens}
         chain={pool.chain}
         iconSize={iconSize}
+        tokens={pool.displayTokens}
         {...badgeProps}
       />
     )
@@ -108,9 +108,9 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
   if (shouldUseWeightedPills) {
     return (
       <WeightedTokenPills
-        tokens={pool.displayTokens}
         chain={pool.chain}
         iconSize={iconSize}
+        tokens={pool.displayTokens}
         {...badgeProps}
       />
     )
@@ -118,9 +118,9 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
 
   return (
     <WeightedTokenPills
-      tokens={pool.displayTokens}
       chain={pool.chain}
       iconSize={iconSize}
+      tokens={pool.displayTokens}
       {...badgeProps}
     />
   )

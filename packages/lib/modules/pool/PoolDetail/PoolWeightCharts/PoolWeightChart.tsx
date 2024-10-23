@@ -105,20 +105,20 @@ function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boo
   const chartOuter = isSmall ? '' : theme.semanticTokens.shadows.chartIconOuter[colorModeKey]
   return (
     <Box
+      alignItems="center"
+      display="flex"
+      filter={chartOuter}
+      height="55%"
+      justifyContent="center"
+      opacity={opacity}
+      overflow="hidden"
       position="absolute"
+      rounded="full"
       top="50%"
       transform="translateY(-50%)"
       width="55%"
-      height="55%"
-      overflow="hidden"
-      filter={chartOuter}
-      opacity={opacity}
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      rounded="full"
     >
-      <Box bg="background.level3" width="full" height="full" filter={chartOuter} shadow="2xl" />
+      <Box bg="background.level3" filter={chartOuter} height="full" shadow="2xl" width="full" />
     </Box>
   )
 }
@@ -126,24 +126,24 @@ function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boo
 function InnerSymbolCircle({ opacity }: { opacity: string; isSmall: boolean }) {
   return (
     <Box
+      height="45%"
+      opacity={opacity}
+      overflow="hidden"
       position="absolute"
+      rounded="full"
       top="50%"
       transform="translateY(-50%)"
       width="45%"
-      height="45%"
-      overflow="hidden"
-      rounded="full"
-      opacity={opacity}
     >
       <Box
-        bg="background.level4"
-        width="full"
-        height="full"
-        display="flex"
-        justifyContent="center"
         alignItems="center"
+        bg="background.level4"
+        display="flex"
+        height="full"
+        justifyContent="center"
         position="relative"
-      ></Box>
+        width="full"
+      />
     </Box>
   )
 }
@@ -223,29 +223,29 @@ export function PoolWeightChart({
   return (
     <VStack>
       <Box
-        width={`${chartSizeValues.boxWidth}px`}
+        _groupHover={{ transform: 'translateY(0) scale(1.05)' }}
         height={`${chartSizeValues.boxHeight}`}
         position="relative"
         transition="all 0.2s var(--ease-out-cubic)"
-        _groupHover={{ transform: 'translateY(0) scale(1.05)' }}
+        width={`${chartSizeValues.boxWidth}px`}
       >
-        <Box width="full" height="full" rounded="full" shadow="md" top="0" position="absolute" />
+        <Box height="full" position="absolute" rounded="full" shadow="md" top="0" width="full" />
         <Box
-          position="absolute"
+          alignItems="center"
           as={motion.div}
           bottom="0"
-          left="0"
-          right="0"
-          width={`${chartSizeValues.boxWidth * 0.7}px`}
-          height={`${chartSizeValues.boxHeight * 0.7}px`}
-          zIndex={4}
-          mx="auto"
           display="flex"
+          height={`${chartSizeValues.boxHeight * 0.7}px`}
           justifyContent="center"
-          alignItems="center"
+          left="0"
+          mx="auto"
+          position="absolute"
+          right="0"
+          rounded="full"
           top="50%"
           transform="translateY(-50%)"
-          rounded="full"
+          width={`${chartSizeValues.boxWidth * 0.7}px`}
+          zIndex={4}
         >
           <NoisyCard
             cardProps={{
@@ -262,50 +262,50 @@ export function PoolWeightChart({
             shadowContainerProps={{ shadow: 'none' }}
           >
             <Box
+              _groupHover={{ transform: 'scale(1.15) translateY(-50%)' }}
               position="absolute"
               top="50%"
-              transformOrigin="center"
               transform="translateY(-50%)"
-              zIndex={5}
+              transformOrigin="center"
               transition="all 0.2s ease-out"
-              _groupHover={{ transform: 'scale(1.15) translateY(-50%)' }}
+              zIndex={5}
             >
               <Image
-                src={`/images/chains/${chain}.svg`}
                 alt={`Chain icon for ${chain.toLowerCase()}`}
-                width={isSmall ? 28 : 36}
                 height={isSmall ? 28 : 36}
+                src={`/images/chains/${chain}.svg`}
+                width={isSmall ? 28 : 36}
               />
             </Box>
 
             {/* Since these triangles utilise clip-path, we cannot use box-shadow, we need to utilise css filters */}
             {/* Simply applying an opacity to the background color will achieve weird effects, so to match the designs */}
             {/* We utilise layers of the same component! */}
-            <OuterSymbolCircle opacity="10%" isSmall={isSmall || false} />
-            <OuterSymbolCircle opacity="20%" isSmall={isSmall || false} />
-            <OuterSymbolCircle opacity="20%" isSmall={isSmall || false} />
-            <InnerSymbolCircle opacity="30%" isSmall={isSmall || false} />
-            <InnerSymbolCircle opacity="30%" isSmall={isSmall || false} />
-            <InnerSymbolCircle opacity="30%" isSmall={isSmall || false} />
+            <OuterSymbolCircle isSmall={isSmall || false} opacity="10%" />
+            <OuterSymbolCircle isSmall={isSmall || false} opacity="20%" />
+            <OuterSymbolCircle isSmall={isSmall || false} opacity="20%" />
+            <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
+            <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
+            <InnerSymbolCircle isSmall={isSmall || false} opacity="30%" />
           </NoisyCard>
         </Box>
         <Box
+          height={`${chartSizeValues.boxHeight}`}
           position="relative"
           width={`${chartSizeValues.boxWidth}`}
-          height={`${chartSizeValues.boxHeight}`}
         >
           <ReactECharts
+            onEvents={{}}
+            option={chartOption}
+            ref={eChartsRef}
             style={{
               width: `${chartSizeValues.boxWidth}px`,
               height: `${chartSizeValues.boxHeight}px`,
             }}
-            option={chartOption}
-            onEvents={{}}
-            ref={eChartsRef}
           />
         </Box>
       </Box>
-      {hasLegend && <PoolWeightChartLegend displayTokens={displayTokens} colors={colors} />}
+      {hasLegend && <PoolWeightChartLegend colors={colors} displayTokens={displayTokens} />}
     </VStack>
   )
 }

@@ -25,7 +25,7 @@ export function TransactionSettings(props: ButtonProps) {
   const { slippage, setSlippage } = useUserSettings()
 
   return (
-    <Popover placement="bottom-end" isLazy>
+    <Popover isLazy placement="bottom-end">
       <PopoverTrigger>
         <Button variant="tertiary" {...props}>
           <HStack textColor="grayText">
@@ -43,10 +43,10 @@ export function TransactionSettings(props: ButtonProps) {
           <Heading size="md">Transaction settings</Heading>
         </PopoverHeader>
         <PopoverBody p="md">
-          <VStack align="start" w="full" spacing="sm">
+          <VStack align="start" spacing="sm" w="full">
             <VStack align="start" w="full">
               <Heading size="sm">Slippage</Heading>
-              <SlippageInput slippage={slippage} setSlippage={setSlippage} />
+              <SlippageInput setSlippage={setSlippage} slippage={slippage} />
             </VStack>
             <VStack align="start" w="full">
               <Heading size="sm">Currency</Heading>
@@ -72,7 +72,7 @@ export function ProportionalTransactionSettings({
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Popover placement="bottom-end" isLazy isOpen={isOpen} onClose={onClose}>
+    <Popover isLazy isOpen={isOpen} onClose={onClose} placement="bottom-end">
       <PopoverTrigger>
         <Button onClick={onOpen} variant="tertiary" {...props}>
           <HStack textColor="grayText">
@@ -91,7 +91,7 @@ export function ProportionalTransactionSettings({
           <Heading size="md">Transaction settings</Heading>
         </PopoverHeader>
         <PopoverBody p="md">
-          <VStack align="start" w="full" spacing="sm">
+          <VStack align="start" spacing="sm" w="full">
             <VStack align="start" w="full">
               <HStack>
                 <Heading size="sm">Slippage</Heading>
@@ -103,7 +103,7 @@ export function ProportionalTransactionSettings({
                   <PopoverContent>
                     <PopoverArrow />
                     <PopoverBody>
-                      <Text variant="secondary" fontSize="sm" lineHeight="18px" fontWeight="500">
+                      <Text fontSize="sm" fontWeight="500" lineHeight="18px" variant="secondary">
                         Slippage is set to 0 by default for forced proportional actions to reduce
                         dust left over. If you need to set slippage higher than 0 it will
                         effectively lower the amount of tokens you can add in the form below. Then,
@@ -114,7 +114,7 @@ export function ProportionalTransactionSettings({
                   </PopoverContent>
                 </Popover>
               </HStack>
-              <SlippageInput slippage={slippage} setSlippage={setSlippage} />
+              <SlippageInput setSlippage={setSlippage} slippage={slippage} />
             </VStack>
             <VStack align="start" w="full">
               <Heading size="sm">Currency</Heading>

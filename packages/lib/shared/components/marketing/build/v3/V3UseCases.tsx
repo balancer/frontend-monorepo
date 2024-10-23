@@ -68,7 +68,7 @@ function UseCaseModal({ useCase, isOpen, onClose }: ModalProps) {
   const info = useCaseInfo[useCase]
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered preserveScrollBarGap>
+    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{info.title}</ModalHeader>
@@ -85,7 +85,7 @@ function UseCaseModal({ useCase, isOpen, onClose }: ModalProps) {
                 <ArrowUpRight size={16} />
               </HStack>
             </Button>
-            <Button variant="tertiary" w="full" onClick={onClose}>
+            <Button onClick={onClose} variant="tertiary" w="full">
               Close
             </Button>
           </HStack>
@@ -107,33 +107,33 @@ export function V3UseCases() {
 
   return (
     <Section className="use-cases">
-      <Box maxW="maxContent" m="0 auto" px={{ base: 'md', xl: '0' }}>
+      <Box m="0 auto" maxW="maxContent" px={{ base: 'md', xl: '0' }}>
         <Box
-          pb={{ base: 'md', md: 'lg' }}
-          w="full"
-          maxW="6xl"
           m="auto"
+          maxW="6xl"
+          pb={{ base: 'md', md: 'lg' }}
           textAlign={{ base: 'left', md: 'center' }}
+          w="full"
         >
           <FadeInOnView>
             <Text pb="lg" variant="eyebrow" w="full">
               Use cases
             </Text>
             <Heading
-              pb="md"
-              w="full"
               as="h2"
+              pb="md"
               size="2xl"
               sx={{
                 textWrap: 'balance',
               }}
+              w="full"
             >
               Flexible design space for AMMs
             </Heading>
             <Text
-              pb="lg"
-              maxW="4xl"
               m="auto"
+              maxW="4xl"
+              pb="lg"
               sx={{
                 textWrap: 'balance',
               }}
@@ -145,40 +145,40 @@ export function V3UseCases() {
           <FadeInOnView>
             <Flex gap={{ base: 'md', md: 'lg', lg: 'xl' }} pt={{ base: '0', md: 'md' }}>
               <Box
-                position="relative"
-                rounded="full"
                 cursor="pointer"
                 onClick={() => openModal(UseCase.BoostedPools)}
+                position="relative"
+                rounded="full"
               >
-                <Center transition="transform 0.3s ease-out" _hover={{ transform: 'scale(1.1)' }}>
+                <Center _hover={{ transform: 'scale(1.1)' }} transition="transform 0.3s ease-out">
                   <Box className="enso" role="group">
                     <Picture
-                      imgName="use-case-1"
                       altText="100% boosted pools"
                       defaultImgType="png"
                       directory="/images/v3/"
-                      imgPngDark={true}
-                      imgPng={true}
+                      imgName="use-case-1"
+                      imgPng
+                      imgPngDark
                     />
                   </Box>
 
                   <Box
-                    textAlign="center"
-                    position="absolute"
-                    top="50%"
                     left="50%"
-                    transform="translate(-50%,-50%)"
-                    zIndex="10"
-                    width="full"
                     padding="md"
+                    position="absolute"
+                    textAlign="center"
+                    top="50%"
+                    transform="translate(-50%,-50%)"
+                    width="full"
+                    zIndex="10"
                   >
                     <Box>
                       <Text
-                        fontWeight="bold"
                         color="white"
+                        fontSize={{ base: 'md', lg: 'xl' }}
+                        fontWeight="bold"
                         position="relative"
                         top={{ base: '0', md: '0' }}
-                        fontSize={{ base: 'md', lg: 'xl' }}
                       >
                         100% Boosted Pools
                       </Text>
@@ -187,40 +187,40 @@ export function V3UseCases() {
                 </Center>
               </Box>
               <Box
-                position="relative"
-                rounded="full"
                 cursor="pointer"
                 onClick={() => openModal(UseCase.Stablesurge)}
+                position="relative"
+                rounded="full"
               >
-                <Center transition="transform 0.3s ease-out" _hover={{ transform: 'scale(1.1)' }}>
+                <Center _hover={{ transform: 'scale(1.1)' }} transition="transform 0.3s ease-out">
                   <Box className="enso">
                     <Picture
-                      imgName="use-case-2"
                       altText="100% boosted pools"
                       defaultImgType="png"
                       directory="/images/v3/"
-                      imgPngDark={true}
-                      imgPng={true}
+                      imgName="use-case-2"
+                      imgPng
+                      imgPngDark
                     />
                   </Box>
 
                   <Box
-                    textAlign="center"
-                    position="absolute"
-                    top="50%"
                     left="50%"
-                    transform="translate(-50%,-50%)"
-                    zIndex="10"
-                    width="full"
                     padding="md"
+                    position="absolute"
+                    textAlign="center"
+                    top="50%"
+                    transform="translate(-50%,-50%)"
+                    width="full"
+                    zIndex="10"
                   >
                     <Box>
                       <Text
-                        fontWeight="bold"
                         color="white"
+                        fontSize={{ base: 'md', lg: 'xl' }}
+                        fontWeight="bold"
                         position="relative"
                         top={{ base: '0', md: '0' }}
-                        fontSize={{ base: 'md', lg: 'xl' }}
                       >
                         Custom Pools and Hooks
                       </Text>
@@ -230,40 +230,40 @@ export function V3UseCases() {
               </Box>
 
               <Box
-                position="relative"
-                rounded="full"
                 cursor="pointer"
                 onClick={() => openModal(UseCase.LVRMitigation)}
+                position="relative"
+                rounded="full"
               >
-                <Center transition="transform 0.3s ease-out" _hover={{ transform: 'scale(1.1)' }}>
+                <Center _hover={{ transform: 'scale(1.1)' }} transition="transform 0.3s ease-out">
                   <Box className="enso">
                     <Picture
-                      imgName="use-case-3"
                       altText="100% boosted pools"
                       defaultImgType="png"
                       directory="/images/v3/"
-                      imgPngDark={true}
-                      imgPng={true}
+                      imgName="use-case-3"
+                      imgPng
+                      imgPngDark
                     />
                   </Box>
 
                   <Box
-                    textAlign="center"
-                    position="absolute"
-                    top="50%"
                     left="50%"
-                    transform="translate(-50%,-50%)"
-                    zIndex="10"
-                    width="full"
                     padding="md"
+                    position="absolute"
+                    textAlign="center"
+                    top="50%"
+                    transform="translate(-50%,-50%)"
+                    width="full"
+                    zIndex="10"
                   >
                     <Box>
                       <Text
-                        fontWeight="bold"
                         color="white"
+                        fontSize={{ base: 'md', lg: 'xl' }}
+                        fontWeight="bold"
                         position="relative"
                         top={{ base: '0', md: '0' }}
-                        fontSize={{ base: 'md', lg: 'xl' }}
                       >
                         LVR mitigation
                       </Text>

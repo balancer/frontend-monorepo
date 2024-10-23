@@ -8,41 +8,41 @@ export function V3Hero() {
       {/* <SandPatterns> */}
       <Flex direction="column" justify="center" pb="2xl">
         <Flex
-          direction={{ base: 'column', md: 'row' }}
           alignItems={{ base: 'null', md: 'center' }}
+          direction={{ base: 'column', md: 'row' }}
           height="100%"
         >
           <Flex
-            direction="column"
-            w="full"
-            justifyContent="center"
             alignItems={{ base: 'start', md: 'center' }}
+            direction="column"
+            justifyContent="center"
             px={['ms', 'md']}
             py={['lg', 'lg']}
+            w="full"
           >
             <Box
-              py={{ base: 'lg', md: '2xl' }}
-              pb={{ base: 'md', md: 'lg' }}
-              w="full"
-              maxW="4xl"
               m="auto"
+              maxW="4xl"
+              pb={{ base: 'md', md: 'lg' }}
+              py={{ base: 'lg', md: '2xl' }}
               textAlign={{ base: 'left', md: 'center' }}
+              w="full"
             >
               <FadeInOnView>
                 <Text pb="xl" variant="eyebrow" w="full">
                   Balancer v3
                 </Text>
                 <Heading
-                  position="relative"
-                  pb="xl"
                   fontWeight="normal"
                   left={{ base: '-3px', md: '0' }}
                   letterSpacing="-5px"
                   lineHeight="0.9"
-                  w="full"
+                  pb="xl"
+                  position="relative"
                   sx={{
                     fontSize: 'clamp(100px, 15vw, 120px)',
                   }}
+                  w="full"
                 >
                   AMMs made easy
                 </Heading>
@@ -60,25 +60,25 @@ export function V3Hero() {
                   <Flex
                     gap="ms"
                     justify={{ base: 'start', md: 'center' }}
-                    width="max-content"
                     m={{ base: 'none', md: 'auto' }}
+                    width="max-content"
                   >
                     <Button
-                      size="lg"
                       as={NextLink}
-                      href="https://docs-v3.balancer.fi/"
-                      variant="primary"
                       flex="1"
+                      href="https://docs-v3.balancer.fi/"
+                      size="lg"
+                      variant="primary"
                     >
                       View v3 docs
                     </Button>
 
                     <Button
-                      size="lg"
                       as={NextLink}
-                      href="https://github.com/balancer/scaffold-balancer-v3"
-                      variant="secondary"
                       flex="1"
+                      href="https://github.com/balancer/scaffold-balancer-v3"
+                      size="lg"
+                      variant="secondary"
                     >
                       Prototype on v3
                     </Button>

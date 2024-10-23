@@ -257,60 +257,60 @@ export default function PoolMyLiquidity() {
   }
 
   return (
-    <Card ref={myLiquiditySectionRef} h="fit-content">
+    <Card h="fit-content" ref={myLiquiditySectionRef}>
       <VStack spacing="md" width="full">
         <Flex
-          width="full"
-          justifyContent="space-between"
+          alignItems="start"
           direction={{ base: 'column', sm: 'row' }}
           gap="ms"
-          alignItems="start"
+          justifyContent="space-between"
+          width="full"
         >
-          <Heading bg="font.special" backgroundClip="text" fontWeight="bold" size="h5">
+          <Heading backgroundClip="text" bg="font.special" fontWeight="bold" size="h5">
             My liquidity
           </Heading>
           <ButtonGroup
-            size="xxs"
             currentOption={activeTab}
-            options={options}
-            onChange={handleTabChanged}
             groupId="my-liquidity"
+            onChange={handleTabChanged}
+            options={options}
+            size="xxs"
             width="max-content"
           />
         </Flex>
         <Divider />
         <VStack spacing="md" width="full">
-          <HStack width="full" justifyContent="space-between">
+          <HStack justifyContent="space-between" width="full">
             <VStack alignItems="flex-start">
               <Heading fontWeight="bold" size="h6">
                 {getTitlePrefix()}
               </Heading>
-              <Text variant="secondary" fontSize="0.85rem">
+              <Text fontSize="0.85rem" variant="secondary">
                 Pool share
               </Text>
             </VStack>
             <VStack alignItems="flex-end">
               {isLoadingOnchainUserBalances || isConnecting ? (
-                <Skeleton w="12" h="5" />
+                <Skeleton h="5" w="12" />
               ) : (
                 <Heading fontWeight="bold" size="h6">
                   {toCurrency(totalBalanceUsd)}
                 </Heading>
               )}
-              <Text variant="secondary" fontSize="0.85rem">
+              <Text fontSize="0.85rem" variant="secondary">
                 {shareofPoolLabel}
               </Text>
             </VStack>
           </HStack>
           <Divider />
-          <VStack spacing="md" width="full" alignItems="flex-start" h={`${height - 270}px}`}>
+          <VStack alignItems="flex-start" h={`${height - 270}px}`} spacing="md" width="full">
             {activeTab.value === 'aura' && !totalBalanceUsd && pool.staking?.aura ? (
-              <HStack w="full" bg="aura.purple" p="2" rounded="md" mb="3xl" justify="space-between">
+              <HStack bg="aura.purple" justify="space-between" mb="3xl" p="2" rounded="md" w="full">
                 <Text color="white">Aura APR: {fNum('apr', pool.staking.aura.apr)}</Text>
                 <Button
                   color="white"
-                  variant="outline"
                   onClick={() => openRedirectModal(RedirectPartner.Aura)}
+                  variant="outline"
                 >
                   <HStack>
                     <Text>Learn more</Text>
@@ -322,51 +322,51 @@ export default function PoolMyLiquidity() {
               pool.displayTokens.map(token => {
                 return (
                   <TokenRow
-                    chain={chain}
-                    key={`my-liquidity-token-${token.address}`}
-                    address={token.address as Address}
-                    value={tokenBalanceFor(token.address)}
-                    isLoading={isLoadingOnchainUserBalances || isConnecting}
                     abbreviated={false}
+                    address={token.address as Address}
+                    chain={chain}
+                    isLoading={isLoadingOnchainUserBalances || isConnecting}
+                    key={`my-liquidity-token-${token.address}`}
+                    value={tokenBalanceFor(token.address)}
                   />
                 )
               })
             )}
             <PartnerRedirectModal
-              partner={redirectPartner}
-              redirectUrl={redirectPartnerUrl}
               isOpen={partnerRedirectDisclosure.isOpen}
               onClose={partnerRedirectDisclosure.onClose}
+              partner={redirectPartner}
+              redirectUrl={redirectPartnerUrl}
             />
           </VStack>
           <Divider />
-          <HStack mt="md" width="full" justifyContent="flex-start">
+          <HStack justifyContent="flex-start" mt="md" width="full">
             <Button
-              onClick={() => handleAddLiquidity()}
-              variant="primary"
               flex="1"
               isDisabled={isAddLiquidityBlocked}
               maxW="120px"
+              onClick={() => handleAddLiquidity()}
+              variant="primary"
             >
               Add
             </Button>
             <Button
+              flex="1"
+              isDisabled={!hasUnstakedBalance}
+              maxW="120px"
               onClick={() => handleRemoveLiquidity()}
               variant={hasUnstakedBalance ? 'tertiary' : 'disabled'}
-              isDisabled={!hasUnstakedBalance}
-              flex="1"
-              maxW="120px"
             >
               Remove
             </Button>
-            <Text variant="secondary" opacity="0.25" px={{ base: '0', sm: 'ms' }}>
+            <Text opacity="0.25" px={{ base: '0', sm: 'ms' }} variant="secondary">
               |
             </Text>
             {isVeBal ? (
               <VeBalLink
                 flex="1"
                 triggerEl={
-                  <Button w="100%" variant="secondary">
+                  <Button variant="secondary" w="100%">
                     {lockBtnText}
                   </Button>
                 }
@@ -374,33 +374,33 @@ export default function PoolMyLiquidity() {
             ) : (
               <>
                 <Button
+                  flex="1"
+                  isDisabled={!(canStake && hasUnstakedBalance)}
+                  maxW="120px"
                   onClick={() => router.push(`${pathname}/stake`)}
                   variant={canStake && hasUnstakedBalance ? 'secondary' : 'disabled'}
-                  isDisabled={!(canStake && hasUnstakedBalance)}
-                  flex="1"
-                  maxW="120px"
                 >
                   Stake
                 </Button>
                 {shouldMigrateStake(pool) ? (
                   <Tooltip label={migrateStakeTooltipLabel}>
                     <Button
-                      onClick={() => router.push(`${pathname}/migrate-stake`)}
-                      variant="secondary"
-                      rightIcon={<InfoOutlineIcon fontSize="sm" />}
                       flex="1"
                       maxW="120px"
+                      onClick={() => router.push(`${pathname}/migrate-stake`)}
+                      rightIcon={<InfoOutlineIcon fontSize="sm" />}
+                      variant="secondary"
                     >
                       Migrate stake
                     </Button>
                   </Tooltip>
                 ) : (
                   <Button
+                    flex="1"
+                    isDisabled={!hasGaugeStakedBalance}
+                    maxW="120px"
                     onClick={() => router.push(`${pathname}/unstake`)}
                     variant={hasGaugeStakedBalance ? 'tertiary' : 'disabled'}
-                    isDisabled={!hasGaugeStakedBalance}
-                    flex="1"
-                    maxW="120px"
                   >
                     Unstake
                   </Button>

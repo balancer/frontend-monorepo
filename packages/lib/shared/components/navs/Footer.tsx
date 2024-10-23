@@ -26,44 +26,44 @@ function CardContent({ linkSections, logoType, title, subTitle }: CardContentPro
       spacing={{ base: 'xl', lg: 'md' }}
       w="full"
     >
-      <VStack color="font.primary" align="start" spacing="lg" width={{ base: 'auto', md: '70%' }}>
+      <VStack align="start" color="font.primary" spacing="lg" width={{ base: 'auto', md: '70%' }}>
         <Box w="120px">{logoType}</Box>
         <VStack align="start" spacing="sm">
-          <Text variant="secondary" fontSize="4xl" fontWeight="500" letterSpacing="-0.4px">
+          <Text fontSize="4xl" fontWeight="500" letterSpacing="-0.4px" variant="secondary">
             {title}
           </Text>
-          <Text variant="secondary" sx={{ textWrap: 'balance' }}>
+          <Text sx={{ textWrap: 'balance' }} variant="secondary">
             {subTitle}
           </Text>
         </VStack>
       </VStack>
       <Stack
-        direction={{ base: 'column', lg: 'row' }}
-        w="full"
-        justify="space-between"
         align="start"
+        direction={{ base: 'column', lg: 'row' }}
+        justify="space-between"
         spacing={{ base: 'lg', lg: 'md' }}
+        w="full"
       >
         {linkSections.map(section => (
-          <VStack key={section.title} align="start" spacing={{ base: 'sm', lg: 'ms' }}>
-            <Text variant="eyebrow" fontSize={{ base: 'xs', md: 'xs' }} color="font.secondary">
+          <VStack align="start" key={section.title} spacing={{ base: 'sm', lg: 'ms' }}>
+            <Text color="font.secondary" fontSize={{ base: 'xs', md: 'xs' }} variant="eyebrow">
               {section.title}
             </Text>
             <VStack align="start" spacing={{ base: 'xs', lg: 'sm' }}>
               {section.links.map(link => (
                 <Link
                   as={NextLink}
-                  variant="nav"
-                  key={link.href}
-                  href={link.href}
-                  flexBasis="row"
                   flex="auto"
+                  flexBasis="row"
+                  href={link.href}
+                  key={link.href}
+                  variant="nav"
                 >
                   <HStack gap="xxs">
                     <Box
+                      fontSize={{ base: 'sm', md: 'md' }}
                       fontWeight="medium"
                       letterSpacing="-0.25px"
-                      fontSize={{ base: 'sm', md: 'md' }}
                     >
                       {link.label}
                     </Box>
@@ -88,17 +88,17 @@ function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
     <HStack spacing="ms" w={{ base: 'full', lg: 'auto' }}>
       {socialLinks.map(({ href, icon }) => (
         <IconButton
-          as={Link}
-          key={href}
-          href={href}
           aria-label="Social icon"
-          variant="tertiary"
-          isRound
-          rounded="full"
-          isExternal
-          w="44px"
-          h="44px"
+          as={Link}
           bg="background.level2"
+          h="44px"
+          href={href}
+          isExternal
+          isRound
+          key={href}
+          rounded="full"
+          variant="tertiary"
+          w="44px"
         >
           {icon}
         </IconButton>
@@ -110,19 +110,19 @@ function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
 function LegalLinks({ legalLinks }: { legalLinks: AppLink[] }) {
   return (
     <HStack
-      w="full"
       justify={{ base: 'start', lg: 'end' }}
-      spacing={{ base: 'sm', lg: 'md' }}
-      wrap="wrap"
       p={{ base: 'sm', lg: '0' }}
+      spacing={{ base: 'sm', lg: 'md' }}
+      w="full"
+      wrap="wrap"
     >
       {legalLinks.map(link => (
         <Link
+          as={NextLink}
           color="font.secondary"
           fontSize={{ base: 'xs', md: 'sm' }}
-          key={link.href}
           href={link.href}
-          as={NextLink}
+          key={link.href}
         >
           {link.label}
         </Link>
@@ -151,24 +151,24 @@ export function Footer({
   return (
     <Box as="footer" background="background.level0" shadow="innerLg">
       <DefaultPageContainer py="xl">
-        <VStack align="start" spacing="lg" pt="md">
+        <VStack align="start" pt="md" spacing="lg">
           <CardContent
             linkSections={linkSections}
             logoType={logoType}
-            title={title}
             subTitle={subTitle}
+            title={title}
           />
           <Divider />
           <Stack
             align="start"
-            direction={{ base: 'column', lg: 'row' }}
-            justify="space-between"
             alignItems={{ base: 'none', lg: 'center' }}
-            gap="md"
-            as={motion.div}
-            variants={staggeredFadeIn}
-            initial="hidden"
             animate="show"
+            as={motion.div}
+            direction={{ base: 'column', lg: 'row' }}
+            gap="md"
+            initial="hidden"
+            justify="space-between"
+            variants={staggeredFadeIn}
             w="full"
           >
             <SocialLinks socialLinks={socialLinks} />

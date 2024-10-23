@@ -6,17 +6,17 @@ export default function Noise({ children }: { children: ReactNode | ReactNode[] 
   return (
     <Container
       backgroundImage={`url('/images/background-noise.png')`}
-      width="full"
       height="full"
       maxWidth="full"
       p="0"
+      width="full"
     >
       <Container
         backgroundColor="background.baseWithOpacity"
-        width="full"
         height="full"
         maxWidth="full"
         p="0"
+        width="full"
       >
         {children}
       </Container>

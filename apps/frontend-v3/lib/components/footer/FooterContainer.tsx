@@ -9,12 +9,12 @@ export function FooterContainer() {
 
   return (
     <Footer
-      linkSections={linkSections}
-      socialLinks={getSocialLinks()}
       legalLinks={legalLinks}
-      title="AMMs made easy"
-      subTitle="Balancer is a battle-tested toolkit for true AMM experimentation and innovation."
+      linkSections={linkSections}
       logoType={<BalancerLogoType />}
+      socialLinks={getSocialLinks()}
+      subTitle="Balancer is a battle-tested toolkit for true AMM experimentation and innovation."
+      title="AMMs made easy"
     />
   )
 }

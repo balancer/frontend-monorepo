@@ -27,27 +27,27 @@ function onSwap(PoolSwapParams calldata params)
 
   return (
     <Section className="technical">
-      <Box maxW="maxContent" m="0 auto" px={{ base: 'md', xl: '0' }}>
+      <Box m="0 auto" maxW="maxContent" px={{ base: 'md', xl: '0' }}>
         <Box
-          pb={{ base: 'md', md: 'lg' }}
-          w="full"
-          maxW="4xl"
           m="auto"
+          maxW="4xl"
+          pb={{ base: 'md', md: 'lg' }}
           textAlign={{ base: 'left', md: 'center' }}
+          w="full"
         >
           <FadeInOnView>
-            <Box maxW="4xl" m="auto">
+            <Box m="auto" maxW="4xl">
               <Text pb="lg" variant="eyebrow" w="full">
                 Code
               </Text>
               <Heading
-                pb="md"
-                w="full"
                 as="h2"
+                pb="md"
                 size="2xl"
                 sx={{
                   textWrap: 'balance',
                 }}
+                w="full"
               >
                 Building on v3 is simple
               </Heading>
@@ -66,21 +66,21 @@ function onSwap(PoolSwapParams calldata params)
 
           <FadeInOnView>
             <Box mb="xl">
-              <Box bg="background.level2" my="lg" p="md" textAlign="left" rounded="xl" shadow="xl">
+              <Box bg="background.level2" my="lg" p="md" rounded="xl" shadow="xl" textAlign="left">
                 <SyntaxHighlighter
-                  language="solidity"
-                  style={vscDarkPlus}
                   className="syntax-highlighter"
-                  customStyle={{
-                    margin: 0,
-                    padding: '16px',
-                    borderRadius: '0 0 8px 8px',
-                  }}
                   codeTagProps={{
                     style: {
                       fontSize: '12px',
                     },
                   }}
+                  customStyle={{
+                    margin: 0,
+                    padding: '16px',
+                    borderRadius: '0 0 8px 8px',
+                  }}
+                  language="solidity"
+                  style={vscDarkPlus}
                 >
                   {code}
                 </SyntaxHighlighter>
@@ -92,25 +92,25 @@ function onSwap(PoolSwapParams calldata params)
             <Flex
               gap="ms"
               justify={{ base: 'start', md: 'center' }}
-              width="max-content"
               m={{ base: 'none', md: 'auto' }}
+              width="max-content"
             >
               <Button
-                size="lg"
                 as={NextLink}
-                href="https://docs-v3.balancer.fi/"
-                variant="primary"
                 flex="1"
+                href="https://docs-v3.balancer.fi/"
+                size="lg"
+                variant="primary"
               >
                 View v3 docs
               </Button>
 
               <Button
-                size="lg"
                 as={NextLink}
-                href="https://github.com/balancer/scaffold-balancer-v3"
-                variant="secondary"
                 flex="1"
+                href="https://github.com/balancer/scaffold-balancer-v3"
+                size="lg"
+                variant="secondary"
               >
                 Prototype on v3
               </Button>

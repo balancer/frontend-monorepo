@@ -10,9 +10,9 @@ export function CrossChainSyncModalContent({
   networks: GqlChain[]
 }) {
   return (
-    <Card variant="modalSubSection" gap="4">
+    <Card gap="4" variant="modalSubSection">
       {networks.map(network => (
-        <CrossChainSyncRow key={network} network={network} current={network === currentNetwork} />
+        <CrossChainSyncRow current={network === currentNetwork} key={network} network={network} />
       ))}
     </Card>
   )

@@ -49,46 +49,46 @@ export function Pagination({
   return (
     <Center w={{ base: isSmall ? '90vw' : '95vw', lg: 'full' }} {...rest}>
       <Grid
-        w={{ base: 'full', lg: '75%' }}
+        gap={{ base: '2', lg: '4' }}
         mt={{ base: '4', lg: '8' }}
-        templateColumns={{
-          base: '2fr repeat(2, 1fr)',
-          lg: 'repeat(5, 1fr)',
-        }}
         templateAreas={{
           base: `"left page right"
                  "goto goto size"`,
           lg: `"left goto page size right"`,
         }}
-        gap={{ base: '2', lg: '4' }}
+        templateColumns={{
+          base: '2fr repeat(2, 1fr)',
+          lg: 'repeat(5, 1fr)',
+        }}
+        w={{ base: 'full', lg: '75%' }}
       >
         <GridItem area="left" justifySelf={{ base: 'start', lg: 'end' }}>
           <IconButton
             aria-label="first page"
-            onClick={goToFirstPage}
-            isDisabled={!canPreviousPage}
             icon={<ArrowLeftIcon h="3" w="3" />}
+            isDisabled={!canPreviousPage}
             mr="2"
+            onClick={goToFirstPage}
             size="sm"
           />
 
           <IconButton
             aria-label="previous page"
-            onClick={goToPreviousPage}
-            isDisabled={!canPreviousPage}
             icon={<ChevronLeftIcon h="6" w="6" />}
+            isDisabled={!canPreviousPage}
+            onClick={goToPreviousPage}
             size="sm"
           />
         </GridItem>
-        <GridItem area="page" alignSelf="center">
+        <GridItem alignSelf="center" area="page">
           <Center>
-            <Text flexShrink="0" mr="8" fontSize="sm" color="grayText">
+            <Text color="grayText" flexShrink="0" fontSize="sm" mr="8">
               Page{' '}
-              <Text fontWeight="bold" as="span" color="grayText">
+              <Text as="span" color="grayText" fontWeight="bold">
                 {currentPageNumber}
               </Text>{' '}
               of{' '}
-              <Text fontWeight="bold" as="span" color="grayText">
+              <Text as="span" color="grayText" fontWeight="bold">
                 {totalPageCount}
               </Text>
             </Text>
@@ -96,20 +96,20 @@ export function Pagination({
         </GridItem>
         <GridItem area="goto" justifySelf={{ base: 'start', lg: 'end' }}>
           <HStack alignContent="space-between">
-            <Text flexShrink="0" color="grayText" fontSize="sm">
+            <Text color="grayText" flexShrink="0" fontSize="sm">
               Go to page:
             </Text>{' '}
             <NumberInput
-              ml="2"
-              w="28"
-              min={1}
+              defaultValue={currentPageNumber}
               max={totalPageCount}
+              min={1}
+              ml="2"
               onChange={value => {
                 const page = value ? parseInt(value) - 1 : 0
                 setPageIndex(page)
               }}
-              defaultValue={currentPageNumber}
               size="sm"
+              w="28"
             >
               <NumberInputField />
               <NumberInputStepper>
@@ -121,13 +121,13 @@ export function Pagination({
         </GridItem>
         <GridItem area="size">
           <Select
-            w="32"
-            value={pageSize}
-            size="sm"
+            disabled={!changeSize}
             onChange={e => {
               setPageSize(Number(e.target.value))
             }}
-            disabled={!changeSize}
+            size="sm"
+            value={pageSize}
+            w="32"
           >
             {[10, 20, 30, 40, 50].map(pageSize => (
               <option key={pageSize} value={pageSize}>
@@ -139,18 +139,18 @@ export function Pagination({
         <GridItem area="right" justifySelf={{ base: 'end', lg: 'start' }}>
           <IconButton
             aria-label="next page"
-            onClick={goToNextPage}
-            isDisabled={!canNextPage}
-            size="sm"
             icon={<ChevronRightIcon h="6" w="6" />}
+            isDisabled={!canNextPage}
+            onClick={goToNextPage}
+            size="sm"
           />
           <IconButton
             aria-label="last page"
-            onClick={goToLastPage}
-            isDisabled={!canNextPage}
-            size="sm"
             icon={<ArrowRightIcon h="3" w="3" />}
+            isDisabled={!canNextPage}
             ml="2"
+            onClick={goToLastPage}
+            size="sm"
           />
         </GridItem>
       </Grid>

@@ -16,22 +16,22 @@ export function MigrateStakePreview() {
     <VStack spacing="sm" w="full">
       <Card variant="subSection">
         <TokenRow
-          label={restakeTxHash ? 'Staked LP tokens migrated' : 'Staked LP tokens to migrate'}
           address={pool.address as Address}
-          value={migratedAmount}
           chain={pool.chain}
-          pool={pool}
           isBpt
+          label={restakeTxHash ? 'Staked LP tokens migrated' : 'Staked LP tokens to migrate'}
+          pool={pool}
+          value={migratedAmount}
         />
       </Card>
 
       {isClaimable && (
         <Card variant="subSection">
           <TokenRowGroup
-            label={restakeTxHash ? 'Claimed rewards' : 'Claimable rewards'}
             amounts={rewardAmounts}
-            totalUSDValue={totalClaimableUsd}
             chain={pool.chain}
+            label={restakeTxHash ? 'Claimed rewards' : 'Claimable rewards'}
+            totalUSDValue={totalClaimableUsd}
           />
         </Card>
       )}

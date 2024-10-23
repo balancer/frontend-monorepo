@@ -44,8 +44,8 @@ export function UserVebalStatsValues() {
 
   return (
     <>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My veBAL
         </Text>
         {vebalUserData.loading ? (
@@ -60,8 +60,8 @@ export function UserVebalStatsValues() {
           </Heading>
         )}
       </VStack>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My rank
         </Text>
         {vebalUserData.loading ? (
@@ -70,8 +70,8 @@ export function UserVebalStatsValues() {
           <Heading size="h4">{vebalUserStatsValues?.rank ?? <>&mdash;</>}</Heading>
         )}
       </VStack>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My share of veBAL
         </Text>
         {vebalUserData.loading ? (
@@ -86,8 +86,8 @@ export function UserVebalStatsValues() {
           </Heading>
         )}
       </VStack>
-      <VStack spacing="0" align="flex-start" w="full">
-        <Text variant="secondary" fontWeight="semibold" fontSize="sm" mt="xxs">
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           Expiry date
         </Text>
         {lockInfo.isLoading ? (

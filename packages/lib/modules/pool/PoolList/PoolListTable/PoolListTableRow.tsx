@@ -5,7 +5,6 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { usePoolListQueryState } from '../usePoolListQueryState'
 import { PoolListItem } from '../../pool.types'
 import { PoolListTokenPills } from '../PoolListTokenPills'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
@@ -13,6 +12,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { isCowAmmPool } from '../../pool.helpers'
 import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
+import { usePoolList } from '../PoolListProvider'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -51,7 +51,7 @@ function PoolVersionTag({ pool }: { pool: PoolListItem }) {
 }
 
 export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
-  const { userAddress } = usePoolListQueryState()
+  const { queryState: { userAddress } } = usePoolList()
   const { toCurrency } = useCurrency()
 
   return (
@@ -88,11 +88,13 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
                 </Text>
               </HStack>
             </GridItem>
-            {userAddress ? <GridItem>
+            {userAddress ? (
+              <GridItem>
                 <Text fontWeight="medium" textAlign="right">
                   {toCurrency(getUserTotalBalanceUsd(pool), { abbreviated: false })}
                 </Text>
-              </GridItem> : null}
+              </GridItem>
+            ) : null}
             <GridItem>
               <Text
                 fontWeight="medium"

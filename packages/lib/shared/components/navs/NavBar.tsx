@@ -48,15 +48,15 @@ function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
   const { linkColorFor } = useNav()
 
   return (
-    <HStack spacing="lg" fontWeight="medium" {...props}>
+    <HStack fontWeight="medium" spacing="lg" {...props}>
       {appLinks.map(link => (
-        <Box key={link.href} as={motion.div} variants={fadeIn}>
+        <Box as={motion.div} key={link.href} variants={fadeIn}>
           <Link
             as={NextLink}
-            href={link.href}
-            prefetch={true}
-            variant="nav"
             color={linkColorFor(link.href)}
+            href={link.href}
+            prefetch
+            variant="nav"
           >
             {link.label}
           </Link>
@@ -67,13 +67,7 @@ function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
       </Box>
       {(isDev || isStaging) && (
         <Box as={motion.div} variants={fadeIn}>
-          <Link
-            as={NextLink}
-            variant="nav"
-            href="/debug"
-            prefetch={true}
-            color={linkColorFor('/debug')}
-          >
+          <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
             Debug
           </Link>
         </Box>
@@ -95,7 +89,7 @@ function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
         },
         {
           el: (
-            <Button size="md" px={7} as={NextLink} href="/pools" prefetch={true} variant="primary">
+            <Button as={NextLink} href="/pools" prefetch px={7} size="md" variant="primary">
               Launch app
             </Button>
           ),
@@ -143,7 +137,7 @@ function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
   return (
     <>
       {actions.map(({ el, display }, i) => (
-        <Box key={i} as={motion.div} variants={fadeIn} display={display}>
+        <Box as={motion.div} display={display} key={i} variants={fadeIn}>
           {el}
         </Box>
       ))}
@@ -186,20 +180,6 @@ export function NavBar({
 
   return (
     <Box
-      as={motion.div}
-      w="full"
-      pos="fixed"
-      zIndex={100}
-      top="0"
-      transition="all 0.3s ease-in-out"
-      style={{
-        backdropFilter: disableBlur ? 'none' : backdropFilter,
-        top: disableBlur ? 0 : top,
-        opacity: disableBlur ? 1 : opacity,
-      }}
-      onScroll={e => console.log('NavBar scroll:', e)}
-      boxShadow={showShadow ? 'lg' : 'none'}
-      borderColor="border.base"
       _before={{
         content: '""',
         position: 'absolute',
@@ -211,16 +191,30 @@ export function NavBar({
         opacity: 0.5,
         zIndex: -1,
       }}
+      as={motion.div}
+      borderColor="border.base"
+      boxShadow={showShadow ? 'lg' : 'none'}
+      onScroll={e => console.log('Navbar scroll:', e)}
+      pos="fixed"
+      style={{
+        backdropFilter: disableBlur ? 'none' : backdropFilter,
+        top: disableBlur ? 0 : top,
+        opacity: disableBlur ? 1 : opacity,
+      }}
+      top="0"
+      transition="all 0.3s ease-in-out"
+      w="full"
+      zIndex={100}
       {...rest}
     >
-      <HStack padding={{ base: 'sm', md: 'md' }} justify="space-between" as="nav">
+      <HStack as="nav" justify="space-between" padding={{ base: 'sm', md: 'md' }}>
         <HStack
-          spacing="lg"
-          onClick={e => e.stopPropagation()}
-          as={motion.div}
-          variants={staggeredFadeIn}
-          initial="hidden"
           animate="show"
+          as={motion.div}
+          initial="hidden"
+          onClick={e => e.stopPropagation()}
+          spacing="lg"
+          variants={staggeredFadeIn}
         >
           {leftSlot || (
             <>
@@ -230,12 +224,12 @@ export function NavBar({
           )}
         </HStack>
         <HStack
-          order={{ md: '2' }}
-          onClick={e => e.stopPropagation()}
-          as={motion.div}
-          variants={staggeredFadeIn}
-          initial="hidden"
           animate="show"
+          as={motion.div}
+          initial="hidden"
+          onClick={e => e.stopPropagation()}
+          order={{ md: '2' }}
+          variants={staggeredFadeIn}
         >
           {rightSlot || <NavActions mobileNav={mobileNav} />}
         </HStack>

@@ -8,10 +8,10 @@ import NextLink from 'next/link'
 export function HomeActivity() {
   return (
     <Section className="activity">
-      <Box maxW="maxContent" m="0 auto" px={{ base: 'md', xl: '0' }} pb="2xl">
+      <Box m="0 auto" maxW="maxContent" pb="2xl" px={{ base: 'md', xl: '0' }}>
         <FadeInOnView>
-          <Box pb="xl" w="full" maxW="4xl" m="auto" textAlign={{ base: 'left', md: 'center' }}>
-            <Heading w="full" pb="xl">
+          <Box m="auto" maxW="4xl" pb="xl" textAlign={{ base: 'left', md: 'center' }} w="full">
+            <Heading pb="xl" w="full">
               Building together &gt; Building alone
             </Heading>
             <Text
@@ -24,7 +24,7 @@ export function HomeActivity() {
               deployments including Ethereum, Arbitrum, Avalanche, and other L2 deployments.
             </Text>
 
-            <Box pt="md" pb="lg">
+            <Box pb="lg" pt="md">
               <ProtocolStatsSection />
             </Box>
           </Box>
@@ -42,29 +42,15 @@ export function HomeActivity() {
           <Flex
             gap="ms"
             justify={{ base: 'start', md: 'center' }}
-            width="max-content"
             m={{ base: 'none', md: 'auto' }}
             px={{ base: 'md', lg: '0' }}
+            width="max-content"
           >
-            <Button
-              flex="1"
-              size="lg"
-              as={NextLink}
-              href="/pools"
-              prefetch={true}
-              variant="primary"
-            >
+            <Button as={NextLink} flex="1" href="/pools" prefetch size="lg" variant="primary">
               Explore pools
             </Button>
 
-            <Button
-              flex="1"
-              size="lg"
-              as={NextLink}
-              href="/build/v3"
-              prefetch={true}
-              variant="secondary"
-            >
+            <Button as={NextLink} flex="1" href="/build/v3" prefetch size="lg" variant="secondary">
               Build on v3
             </Button>
           </Flex>
