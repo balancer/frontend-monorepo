@@ -18,7 +18,14 @@ export function isUnhandledAddPriceImpactError(error: Error | null): boolean {
 }
 
 export function cannotCalculatePriceImpactError(error: Error | null): boolean {
-  if (error && error.name === 'ContractFunctionExecutionError') {
+  const errorsToExclude = ['BAL#304'] // these errors are handled elsewhere
+  const hasErrorsToExclude = (err: string) => error?.message.includes(err)
+
+  if (
+    error &&
+    error.name === 'ContractFunctionExecutionError' &&
+    !errorsToExclude.some(hasErrorsToExclude)
+  ) {
     return true
   }
   return false
