@@ -44,3 +44,12 @@ export function isPausedError(error?: Error | null): boolean {
 export function isPausedErrorMessage(errorMessage: string): boolean {
   return errorMessage.includes('reverted with the following reason:\nBAL#402\n')
 }
+
+export function isUnbalancedJoinError(error?: Error | null): boolean {
+  if (!error) return false
+  return isUnbalancedJoinErrorMessage(error.message)
+}
+
+export function isUnbalancedJoinErrorMessage(errorMessage: string): boolean {
+  return errorMessage.includes('reverted with the following reason:\nBAL#304\n')
+}

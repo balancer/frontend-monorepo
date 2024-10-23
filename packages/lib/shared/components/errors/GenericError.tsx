@@ -6,6 +6,7 @@ import {
   isNotEnoughGasError,
   isPausedError,
   isTooManyRequestsError,
+  isUnbalancedJoinError,
   isUserRejectedError,
   isViemHttpFetchError,
 } from '../../utils/error-filters'
@@ -22,6 +23,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
   const error = ensureError(_error)
   if (isUserRejectedError(error)) return null
   const errorName = customErrorName ? `${customErrorName} (${error.name})` : error.name
+
   if (isViemHttpFetchError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
@@ -34,6 +36,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
       </ErrorAlert>
     )
   }
+
   if (isPausedError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
@@ -45,6 +48,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
       </ErrorAlert>
     )
   }
+
   if (isTooManyRequestsError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
@@ -56,6 +60,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
       </ErrorAlert>
     )
   }
+
   if (isNotEnoughGasError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
@@ -67,6 +72,18 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
       </ErrorAlert>
     )
   }
+
+  if (isUnbalancedJoinError(_error)) {
+    return (
+      <ErrorAlert title={customErrorName} {...rest}>
+        <Text color="black" variant="secondary">
+          You are trying to add liquidity with amounts that would cause the pool to become
+          unbalanced. Please adjust your input(s) and try again.
+        </Text>
+      </ErrorAlert>
+    )
+  }
+
   const errorMessage = error?.shortMessage || error.message
 
   if (errorMessage === 'RPC Request failed.' || errorMessage === 'An unknown RPC error occurred.') {
