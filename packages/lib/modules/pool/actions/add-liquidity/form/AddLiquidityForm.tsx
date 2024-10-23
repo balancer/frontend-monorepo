@@ -109,7 +109,7 @@ function AddLiquidityMainForm() {
   useEffect(() => {
     humanAmountsIn.forEach(amount => {
       if (priceImpactQuery.error?.message.includes('BAL#304') && amount.humanAmount) {
-        setValidationError(amount.tokenAddress, 'Amount is causing an unbalanced join')
+        setValidationError(amount.tokenAddress, 'Amount causes pool imbalance')
       }
     })
   }, [priceImpactQuery.error])
