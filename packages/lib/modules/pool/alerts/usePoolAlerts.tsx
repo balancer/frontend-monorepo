@@ -1,7 +1,7 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
-import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { isNil } from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -53,6 +53,9 @@ export function usePoolAlerts(pool: Pool) {
   }
 
   const getTokenPoolAlerts = (pool: Pool): PoolAlert[] => {
+    // Disable alerts for Sepolia pools
+    if (pool.chain === GqlChain.Sepolia) return []
+
     const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
     const alerts: PoolAlert[] = []

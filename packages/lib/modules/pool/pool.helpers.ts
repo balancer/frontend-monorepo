@@ -181,7 +181,7 @@ type Pool = GetPoolQuery['pool']
 export function usePoolHelpers(pool: Pool, chain: GqlChain) {
   const gaugeExplorerLink = getBlockExplorerAddressUrl(
     pool?.staking?.gauge?.gaugeAddress as Address,
-    chain
+    chain,
   )
   const poolExplorerLink = getBlockExplorerAddressUrl(pool.address as Address, chain)
 
@@ -219,7 +219,7 @@ export function isNotSupported(pool: Pool) {
  */
 export function isClaimableGauge(
   gauge: GqlPoolStakingGauge | GqlPoolStakingOtherGauge,
-  chain: GqlChain | number
+  chain: GqlChain | number,
 ): boolean {
   return !(gauge.version === 1 && isNotMainnet(chain))
 }
@@ -261,6 +261,9 @@ export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
 export function shouldBlockAddLiquidity(pool: Pool) {
+  // avoid blocking Sepolia pools
+  if (pool.chain === GqlChain.Sepolia) return false
+
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
   // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
