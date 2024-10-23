@@ -77,8 +77,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
     return (
       <ErrorAlert title={customErrorName} {...rest}>
         <Text color="black" variant="secondary">
-          You are trying to add liquidity with amounts that would cause the pool to become
-          unbalanced. Please adjust your input(s) and try again.
+          Your input(s) would excessively unbalance the pool. Please adjust to be more proportional.
         </Text>
       </ErrorAlert>
     )
