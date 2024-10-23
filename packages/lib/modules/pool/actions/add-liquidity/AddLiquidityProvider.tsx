@@ -41,7 +41,6 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const [wethIsEth, setWethIsEth] = useState(false)
   const [totalUSDValue, setTotalUSDValue] = useState('0')
   const [proportionalSlippage, setProportionalSlippage] = useState<string>('0')
-  const [needsToUpdateInputs, setNeedsToUpdateInputs] = useState(false)
   const { pool, refetch: refetchPool, isLoading } = usePool()
   const { getToken, getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } =
     useTokens()
@@ -151,7 +150,6 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     [!isConnected, LABELS.walletNotConnected],
     [areEmptyAmounts(humanAmountsIn), 'You must specify one or more token amounts'],
     [hasValidationErrors, 'Errors in token inputs'],
-    [needsToUpdateInputs, 'Update inputs first'],
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [simulationQuery.isLoading, 'Fetching quote...'],
     [simulationQuery.isError, 'Error fetching quote'],
@@ -195,7 +193,6 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     slippage,
     proportionalSlippage,
     isForcedProportionalAdd,
-    needsToUpdateInputs,
     setProportionalSlippage,
     refetchQuote,
     setHumanAmountIn,
@@ -204,7 +201,6 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     setAcceptPoolRisks,
     setWethIsEth,
     setInitialHumanAmountsIn,
-    setNeedsToUpdateInputs,
   }
 }
 

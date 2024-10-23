@@ -22,7 +22,7 @@ import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvid
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
-import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
+import { useTokenInputsValidation } from '../tokens/TokenInputsValidationProvider'
 
 interface PriceImpactAccordionProps {
   setNeedsToAcceptPIRisk: (value: boolean) => void
@@ -40,7 +40,7 @@ export function PriceImpactAccordion({
   cannotCalculatePriceImpact = false,
 }: PriceImpactAccordionProps) {
   const acceptHighImpactDisclosure = useDisclosure()
-  const { needsToUpdateInputs } = useAddLiquidity()
+  const { hasValidationErrors } = useTokenInputsValidation()
 
   const {
     priceImpactLevel,
@@ -91,7 +91,7 @@ export function PriceImpactAccordion({
           <AccordionPanel py="md">{accordionPanelComponent}</AccordionPanel>
         </AccordionItem>
       </Accordion>
-      {!needsToUpdateInputs &&
+      {!hasValidationErrors &&
         (priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
           <>
             <VStack align="start" mt="md" spacing="md" w="full">

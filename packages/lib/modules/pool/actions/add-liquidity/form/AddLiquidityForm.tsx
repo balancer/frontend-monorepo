@@ -89,8 +89,7 @@ function AddLiquidityMainForm() {
     proportionalSlippage,
     slippage,
     setProportionalSlippage,
-    setNeedsToUpdateInputs,
-    needsToUpdateInputs,
+    humanAmountsIn,
   } = useAddLiquidity()
 
   const nextBtn = useRef(null)
@@ -108,14 +107,18 @@ function AddLiquidityMainForm() {
   }, [priceImpactQuery.data])
 
   useEffect(() => {
-    if (priceImpactQuery.error) {
-      const error = priceImpactQuery.error as PriceImpactErrorType
-      const balError = error.shortMessage.split(/\r?\n/)[1]
-      setNeedsToUpdateInputs(balError === 'BAL#304')
-    } else {
-      setNeedsToUpdateInputs(false)
-    }
+    humanAmountsIn.forEach(amount => {
+      if (priceImpactQuery.error?.message.includes('BAL#304') && amount.humanAmount) {
+        setValidationError(amount.tokenAddress, 'Amount is causing an unbalanced join')
+      }
+    })
   }, [priceImpactQuery.error])
+
+  useEffect(() => {
+    humanAmountsIn.forEach(amount => {
+      setValidationError(amount.tokenAddress, '')
+    })
+  }, [humanAmountsIn])
 
   const hasPriceImpact = priceImpact !== undefined && priceImpact !== null
   const priceImpactLabel = hasPriceImpact ? fNum('priceImpact', priceImpact) : '-'
@@ -212,12 +215,6 @@ function AddLiquidityMainForm() {
             <TokenInputs tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()} />
           )}
           <VStack align="start" spacing="sm" w="full">
-            {needsToUpdateInputs && (
-              <Text color="font.warning" fontSize="sm">
-                Using these amounts will unbalance the pool.
-                <br /> Please adjust your input(s) and try again.
-              </Text>
-            )}
             {!simulationQuery.isError && (
               <PriceImpactAccordion
                 accordionButtonComponent={
