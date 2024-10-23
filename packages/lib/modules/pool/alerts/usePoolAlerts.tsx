@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 import { zeroAddress } from 'viem'
 import { Pool } from '../PoolProvider'
 import { migrateStakeTooltipLabel } from '../actions/stake.helpers'
-import { hasReviewedRateProvider, isV3Pool } from '../pool.helpers'
+import { hasReviewedRateProvider, isV2Pool } from '../pool.helpers'
 import { shouldMigrateStake } from '../user-balance.helpers'
 import { VulnerabilityDataMap } from './pool-issues/PoolIssue.labels'
 import { PoolIssue } from './pool-issues/PoolIssue.type'
@@ -61,7 +61,7 @@ export function usePoolAlerts(pool: Pool) {
     const alerts: PoolAlert[] = []
 
     poolTokens?.forEach(token => {
-      if (!isV3Pool(pool) && !token.isAllowed) {
+      if (isV2Pool(pool) && !token.isAllowed) {
         alerts.push({
           identifier: `TokenNotAllowed-${token.symbol}`,
           content: `The token ${token.symbol} is currently not supported.`,
