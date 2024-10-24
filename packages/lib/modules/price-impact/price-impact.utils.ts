@@ -1,3 +1,4 @@
+import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 
@@ -18,9 +19,12 @@ export function isUnhandledAddPriceImpactError(error: Error | null): boolean {
 }
 
 export function cannotCalculatePriceImpactError(error: Error | null): boolean {
-  if (error && error.name === 'ContractFunctionExecutionError') {
+  const hasUnbalancedAddError = isUnbalancedAddErrorMessage(error)
+
+  if (error && error.name === 'ContractFunctionExecutionError' && !hasUnbalancedAddError) {
     return true
   }
+
   return false
 }
 
