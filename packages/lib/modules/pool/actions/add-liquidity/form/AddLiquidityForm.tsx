@@ -55,8 +55,7 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-
-type PriceImpactErrorType = Error & { shortMessage: string }
+import { isUnbalancedJoinErrorMessage } from '@repo/lib/shared/utils/error-filters'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -108,7 +107,7 @@ function AddLiquidityMainForm() {
 
   useEffect(() => {
     humanAmountsIn.forEach(amount => {
-      if (priceImpactQuery.error?.message.includes('BAL#304') && amount.humanAmount) {
+      if (isUnbalancedJoinErrorMessage(priceImpactQuery.error) && amount.humanAmount) {
         setValidationError(amount.tokenAddress, 'Amount causes pool imbalance')
       }
     })

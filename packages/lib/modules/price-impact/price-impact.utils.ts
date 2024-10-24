@@ -1,3 +1,4 @@
+import { isUnbalancedJoinErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 
@@ -18,16 +19,12 @@ export function isUnhandledAddPriceImpactError(error: Error | null): boolean {
 }
 
 export function cannotCalculatePriceImpactError(error: Error | null): boolean {
-  const errorsToExclude = ['BAL#304'] // these errors are handled elsewhere
-  const hasErrorsToExclude = (err: string) => error?.message.includes(err)
+  const hasUnbalancedJoinError = isUnbalancedJoinErrorMessage(error)
 
-  if (
-    error &&
-    error.name === 'ContractFunctionExecutionError' &&
-    !errorsToExclude.some(hasErrorsToExclude)
-  ) {
+  if (error && error.name === 'ContractFunctionExecutionError' && !hasUnbalancedJoinError) {
     return true
   }
+
   return false
 }
 
