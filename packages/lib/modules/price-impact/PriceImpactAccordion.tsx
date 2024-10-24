@@ -39,7 +39,6 @@ export function PriceImpactAccordion({
   cannotCalculatePriceImpact = false,
 }: PriceImpactAccordionProps) {
   const acceptHighImpactDisclosure = useDisclosure()
-
   const {
     priceImpactLevel,
     priceImpactColor,
