@@ -261,6 +261,9 @@ export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
 export function shouldBlockAddLiquidity(pool: Pool) {
+  // avoid blocking Sepolia pools
+  if (pool.chain === GqlChain.Sepolia) return false
+
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
   // If pool is an LBP, paused or in recovery mode, we should block adding liquidity

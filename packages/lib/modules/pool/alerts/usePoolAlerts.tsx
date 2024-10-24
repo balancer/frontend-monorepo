@@ -1,14 +1,14 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
-import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { isNil } from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { zeroAddress } from 'viem'
 import { Pool } from '../PoolProvider'
 import { migrateStakeTooltipLabel } from '../actions/stake.helpers'
-import { hasReviewedRateProvider } from '../pool.helpers'
+import { hasReviewedRateProvider, isV2Pool } from '../pool.helpers'
 import { shouldMigrateStake } from '../user-balance.helpers'
 import { VulnerabilityDataMap } from './pool-issues/PoolIssue.labels'
 import { PoolIssue } from './pool-issues/PoolIssue.type'
@@ -53,12 +53,15 @@ export function usePoolAlerts(pool: Pool) {
   }
 
   const getTokenPoolAlerts = (pool: Pool): PoolAlert[] => {
+    // Disable alerts for Sepolia pools
+    if (pool.chain === GqlChain.Sepolia) return []
+
     const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
     const alerts: PoolAlert[] = []
 
     poolTokens?.forEach(token => {
-      if (!token.isAllowed) {
+      if (isV2Pool(pool) && !token.isAllowed) {
         alerts.push({
           identifier: `TokenNotAllowed-${token.symbol}`,
           content: `The token ${token.symbol} is currently not supported.`,
