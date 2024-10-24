@@ -55,7 +55,6 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { isUnbalancedJoinErrorMessage } from '@repo/lib/shared/utils/error-filters'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -104,20 +103,6 @@ function AddLiquidityMainForm() {
   useEffect(() => {
     setPriceImpact(priceImpactQuery.data)
   }, [priceImpactQuery.data])
-
-  useEffect(() => {
-    humanAmountsIn.forEach(amount => {
-      if (isUnbalancedJoinErrorMessage(priceImpactQuery.error) && amount.humanAmount) {
-        setValidationError(amount.tokenAddress, 'Amount causes pool imbalance')
-      }
-    })
-  }, [priceImpactQuery.error])
-
-  useEffect(() => {
-    humanAmountsIn.forEach(amount => {
-      setValidationError(amount.tokenAddress, '')
-    })
-  }, [humanAmountsIn])
 
   const hasPriceImpact = priceImpact !== undefined && priceImpact !== null
   const priceImpactLabel = hasPriceImpact ? fNum('priceImpact', priceImpact) : '-'
