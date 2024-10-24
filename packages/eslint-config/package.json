@@ -17,5 +17,9 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-turbo": "^2.0.0",
     "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "eslint": "eslint .",
+    "eslint:fix": "eslint . --fix"
   }
 }

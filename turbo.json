@@ -22,10 +22,13 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^transit"],
+      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"]
     },
     "lint:fix": {
-      "dependsOn": ["^lint:fix"]
+      "dependsOn": ["^transit"],
+      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"],
+      "cache": false
     },
     "typecheck": {
       "dependsOn": ["graphql:gen", "transit"],
