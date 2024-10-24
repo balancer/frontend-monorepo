@@ -1,3 +1,3 @@
 export default {
-  '*.json': ['prettier --write'],
+  '*.json': ['pnpm format:fix'],
 };

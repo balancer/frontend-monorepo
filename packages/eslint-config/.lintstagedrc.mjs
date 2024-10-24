@@ -1,4 +1,4 @@
 export default {
-  '*.js': ['eslint --fix'],
-  '*.{json,js,md}': ['prettier --write'],
-};
+  '*.js': ['pnpm lint:fix'],
+  '*.{json,js,md}': ['pnpm format:fix'],
+}
