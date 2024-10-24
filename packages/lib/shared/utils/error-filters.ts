@@ -52,7 +52,7 @@ export function isUnbalancedJoinError(error?: Error | null): boolean {
 
 export function isUnbalancedJoinErrorMessage(error: Error | null): boolean {
   const errorStrings = ['BAL#304', 'queryAddLiquidityUnbalanced'] // [v2 error, v3 error]
-  const hasErrorsToExclude = (errorString: string) => error?.message.includes(errorString)
+  const hasErrors = (errorString: string) => error?.message.includes(errorString)
 
-  return errorStrings.some(hasErrorsToExclude)
+  return errorStrings.some(hasErrors)
 }
