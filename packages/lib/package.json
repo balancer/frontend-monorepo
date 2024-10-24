@@ -8,6 +8,8 @@
     "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config -c ./shared/services/api/codegen.ts",
     "lint": "eslint . --cache --cache-location 'node_modules/.cache/.eslintcache'",
     "lint:fix": "eslint . --fix --cache --cache-location 'node_modules/.cache/.eslintcache'",
+    "format": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
+    "format:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
     "test": "pnpm test:unit & pnpm run test:integration",
     "test:integration": "vitest -c ./vitest.config.integration.ts",
     "test:unit": "vitest",
