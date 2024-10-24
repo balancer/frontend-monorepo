@@ -32,6 +32,8 @@ interface MulticallLockInfoResponse {
   }
 }
 
+export type UseVebalLockInfoResult = ReturnType<typeof useVebalLockInfo>
+
 export function useVebalLockInfo() {
   const { userAddress, isConnected } = useUserAccount()
 
