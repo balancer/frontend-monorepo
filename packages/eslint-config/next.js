@@ -6,6 +6,7 @@ const project = resolve(process.cwd(), 'tsconfig.json')
 module.exports = {
   extends: [
     'eslint:recommended',
+
     'plugin:@typescript-eslint/recommended',
     require.resolve('@vercel/style-guide/eslint/next'),
     require.resolve('@vercel/style-guide/eslint/react'),
@@ -52,13 +53,6 @@ module.exports = {
           {
             group: ['wagmi/dist'],
             message: 'Invalid import: remove dist from import path',
-          },
-          {
-            group: ['@apollo/client'],
-            importNames: ['useQuery'],
-            message:
-              // eslint-disable-next-line max-len
-              'Import useQuery from @apollo/experimental-nextjs-app-support/ssr to avoid u.inFlightLinkObservables errors',
           },
           {
             group: ['act'],

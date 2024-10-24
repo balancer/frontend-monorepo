@@ -16,18 +16,18 @@ import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { SdkSimulateSwapResponse } from './swap.types'
-import { DefaultSwapHandler } from './handlers/DefaultSwap.handler'
 import { useTokens } from '../tokens/TokensProvider'
 import { NativeWrapHandler } from './handlers/NativeWrap.handler'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import pluralize from 'pluralize'
+import { BaseDefaultSwapHandler } from './handlers/BaseDefaultSwap.handler'
 
 export function OrderRoute() {
   const { simulationQuery } = useSwap()
 
   const queryData = simulationQuery.data as SdkSimulateSwapResponse
   const orderRouteVersion = queryData ? queryData.protocolVersion : 2
-  const hopCount = queryData ? queryData.routes[0]?.hops?.length : 0
+  const hopCount = queryData ? queryData.hopCount : 0
 
   return (
     <HStack justify="space-between" w="full">
@@ -65,7 +65,7 @@ export function SwapDetails() {
 
   const { priceImpactLevel, priceImpactColor, PriceImpactIcon, priceImpact } = usePriceImpact()
 
-  const isDefaultSwap = handler instanceof DefaultSwapHandler
+  const isDefaultSwap = handler instanceof BaseDefaultSwapHandler
   const isNativeWrapOrUnwrap = handler instanceof NativeWrapHandler
 
   const _slippage = isNativeWrapOrUnwrap ? 0 : slippage
@@ -94,10 +94,10 @@ export function SwapDetails() {
       'from unfavortable market price movements before your transaction executes on-chain.'
 
   const slippageLabel = isExactIn
-    ? `This is the maximum slippage that the swap will allow. 
+    ? `This is the maximum slippage that the swap will allow.
         It is based on the quoted amount out minus your slippage tolerance, using current market prices.
         You can change your slippage tolerance in your settings.`
-    : `This is the maximum slippage that the swap will allow. 
+    : `This is the maximum slippage that the swap will allow.
         It is based on the quoted amount in plus your slippage tolerance, using current market prices.
         You can change your slippage tolerance in your settings.`
 
@@ -187,7 +187,7 @@ export function SwapDetails() {
         </HStack>
       </HStack>
 
-      {isDefaultSwap && <OrderRoute />}
+      {isDefaultSwap ? <OrderRoute /> : null}
     </VStack>
   )
 }

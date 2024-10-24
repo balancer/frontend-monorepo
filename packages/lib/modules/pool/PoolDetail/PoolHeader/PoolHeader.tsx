@@ -13,7 +13,7 @@ import {
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { useState } from 'react'
 import { getXavePoolLink } from '../../pool.utils'
-// import { PoolAdvancedOptions } from './PoolAdvancedOptions'
+import { PoolAdvancedOptions } from './PoolAdvancedOptions'
 
 export function PoolHeader() {
   const pathname = usePathname()
@@ -67,10 +67,7 @@ export function PoolHeader() {
               Add liquidity
             </Button>
 
-            {/*
-            Will be enabled when pool swaps handler is implemented:
             <PoolAdvancedOptions />
-            */}
           </HStack>
           <PartnerRedirectModal
             isOpen={partnerRedirectDisclosure.isOpen}
