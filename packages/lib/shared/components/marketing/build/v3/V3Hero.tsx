@@ -1,6 +1,7 @@
 import { Button, Heading, Text, Flex, Box } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import NextLink from 'next/link'
+import RiveAnimationTest from './RiveAnimationTest'
 
 export function V3Hero() {
   return (
@@ -85,6 +86,9 @@ export function V3Hero() {
                   </Flex>
                 </Box>
               </FadeInOnView>
+            </Box>
+            <Box height="800px" width="1200px">
+              <RiveAnimationTest />
             </Box>
           </Flex>
         </Flex>
