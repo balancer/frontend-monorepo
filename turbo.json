@@ -28,7 +28,8 @@
       "dependsOn": ["^lint:fix"]
     },
     "typecheck": {
-      "dependsOn": ["graphql:gen", "^typecheck"]
+      "dependsOn": ["graphql:gen", "transit"],
+      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
     },
     "test:unit": {
       "dependsOn": ["graphql:gen", "^test:unit"]
@@ -41,6 +42,9 @@
       "dependsOn": ["^graphql:gen"],
       "inputs": [".env*"],
       "outputs": ["shared/services/api/generated/**"]
+    },
+    "transit": {
+      "dependsOn": ["^transit"]
     }
   }
 }
