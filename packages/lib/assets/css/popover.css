@@ -139,7 +139,9 @@
 .content {
   opacity: 0;
   filter: blur(4px);
-  transition: opacity var(--speed), filter var(--speed);
+  transition:
+    opacity var(--speed),
+    filter var(--speed);
 }
 
 #disclose:popover-open .content {

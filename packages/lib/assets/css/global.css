@@ -35,7 +35,9 @@ body {
 .visible {
   opacity: 1;
   transform: translateY(0) scale(1);
-  transition: opacity 1s var(--ease-out-cubic), transform 1s var(--ease-out-cubic);
+  transition:
+    opacity 1s var(--ease-out-cubic),
+    transform 1s var(--ease-out-cubic);
   transform-origin: top center;
 }
 

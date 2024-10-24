@@ -17,7 +17,9 @@ interface Props {
 
 export function PoolListTable({ pools, count, loading }: Props) {
   const isMounted = useIsMounted()
-  const { queryState: { pagination, setPagination, userAddress } } = usePoolList()
+  const {
+    queryState: { pagination, setPagination, userAddress },
+  } = usePoolList()
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination)
   const showPagination = !!pools.length && !!count && count > pagination.pageSize
 

@@ -8,7 +8,9 @@ import { usePoolList } from './PoolListProvider'
 const defaultOrderBy = [GqlPoolOrderBy.TotalLiquidity, GqlPoolOrderBy.Volume24h, GqlPoolOrderBy.Apr]
 
 export function usePoolOrderByState() {
-  const { queryState: { sorting, setSorting, userAddress } } = usePoolList()
+  const {
+    queryState: { sorting, setSorting, userAddress },
+  } = usePoolList()
   const [orderBy, setOrderBy] = useState(defaultOrderBy)
 
   useEffect(() => {
