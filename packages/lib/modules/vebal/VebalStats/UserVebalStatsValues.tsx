@@ -4,9 +4,9 @@ import React, { useMemo } from 'react'
 import { Heading, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/useVebalLockInfo'
 import { differenceInDays, format } from 'date-fns'
 import BigNumber from 'bignumber.js'
+import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
 
 export type VebalUserStatsValues = {
   balance: string | undefined
@@ -74,7 +74,7 @@ export function UserVebalStatsValues() {
         <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My share of veBAL
         </Text>
-        {vebalUserData.loading ? (
+        {vebalUserData.loading || lockInfo.isLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
           <Heading size="h4">

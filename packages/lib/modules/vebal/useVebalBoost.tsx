@@ -4,9 +4,9 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { isUndefined } from 'lodash'
 import { useGaugesSupplyAndBalance } from './useGaugesSupplyAndBalance'
 import { useGaugeTotalSupplyAndUserBalance } from './useGaugeTotalSupplyAndUserBalance'
-import { useVebalLockInfo } from './useVebalLockInfo'
 import { getChainId } from '@repo/lib/config/app.config'
 import { Pool } from '../pool/PoolProvider'
+import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
 
 export type VeBalLockInfo = {
   lockedEndDate: number

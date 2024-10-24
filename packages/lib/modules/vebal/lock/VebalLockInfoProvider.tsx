@@ -1,12 +1,40 @@
-import { useMemo } from 'react'
-import { useUserAccount } from '../web3/UserAccountProvider'
-import { useMulticall } from '../web3/contracts/useMulticall'
-import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { Hex, formatUnits } from 'viem'
+'use client'
+
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { createContext, PropsWithChildren, useMemo } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { AbiMap } from '../web3/contracts/AbiMap'
+import { formatUnits, Hex } from 'viem'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { mainnet } from 'viem/chains'
+import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
+import { useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
+import { useCurrentDate } from '@repo/lib/shared/hooks/useCurrentDate'
 import { toJsTimestamp } from '@repo/lib/shared/utils/time'
+import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
+
+export type UseVebalLockInfoResult = ReturnType<typeof _useVebalLockInfo>
+export const VebalLockInfoContext = createContext<UseVebalLockInfoResult | null>(null)
+
+function getAvailableLockActions(
+  hasLock: boolean | undefined,
+  isExpired: boolean | undefined
+): Record<LockActionType, boolean> {
+  if (typeof hasLock === 'boolean' && typeof isExpired === 'boolean') {
+    return {
+      [LockActionType.CreateLock]: !hasLock,
+      [LockActionType.Unlock]: isExpired,
+      [LockActionType.IncreaseLock]: hasLock,
+      [LockActionType.ExtendLock]: hasLock,
+    }
+  }
+  return {
+    [LockActionType.CreateLock]: false,
+    [LockActionType.Unlock]: false,
+    [LockActionType.IncreaseLock]: false,
+    [LockActionType.ExtendLock]: false,
+  }
+}
 
 interface MulticallLockInfoResponse {
   locked: {
@@ -32,7 +60,7 @@ interface MulticallLockInfoResponse {
   }
 }
 
-export function useVebalLockInfo() {
+export function _useVebalLockInfo() {
   const { userAddress, isConnected } = useUserAccount()
 
   const lockInfoRequestsData = [
@@ -67,6 +95,8 @@ export function useVebalLockInfo() {
     enabled: isConnected,
   })
 
+  const now = useCurrentDate()
+
   const mainnetLockedInfo = useMemo(() => {
     const mainnetResults = results[mainnetNetworkConfig.chainId]
 
@@ -96,7 +126,7 @@ export function useVebalLockInfo() {
 
     const hasExistingLock = bn(lockedAmount).gt(0)
     const lockedEndDateNormalised = toJsTimestamp(Number(lockedEndDate))
-    const isExpired = hasExistingLock && Date.now() > lockedEndDateNormalised
+    const isExpired = hasExistingLock && Number(now) >= lockedEndDateNormalised
 
     return {
       lockedEndDate: lockedEndDateNormalised,
@@ -106,7 +136,22 @@ export function useVebalLockInfo() {
       hasExistingLock,
       isExpired,
     }
-  }, [results])
+  }, [results, now])
 
-  return { results, mainnetLockedInfo, isLoading, refetchAll }
+  const availableLockActions = useMemo(() => {
+    return getAvailableLockActions(mainnetLockedInfo.hasExistingLock, mainnetLockedInfo.isExpired)
+  }, [mainnetLockedInfo])
+
+  return { results, mainnetLockedInfo, isLoading, refetchAll, availableLockActions }
 }
+
+export function VebalLockInfoProvider({ children }: PropsWithChildren) {
+  const vebalLockInfo = _useVebalLockInfo()
+
+  return (
+    <VebalLockInfoContext.Provider value={vebalLockInfo}>{children}</VebalLockInfoContext.Provider>
+  )
+}
+
+export const useVebalLockInfo = (): UseVebalLockInfoResult =>
+  useMandatoryContext(VebalLockInfoContext, 'VebalLockInfo')
