@@ -6,7 +6,7 @@ import {
   isNotEnoughGasError,
   isPausedError,
   isTooManyRequestsError,
-  isUnbalancedJoinError,
+  isUnbalancedAddError,
   isUserRejectedError,
   isViemHttpFetchError,
 } from '../../utils/error-filters'
@@ -73,7 +73,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
     )
   }
 
-  if (isUnbalancedJoinError(_error)) {
+  if (isUnbalancedAddError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
         <Text color="black" variant="secondary">
