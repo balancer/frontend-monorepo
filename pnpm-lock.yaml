@@ -207,6 +207,9 @@ importers:
       react:
         specifier: 18.2.0
         version: 18.2.0
+      react-canvas:
+        specifier: link:@types/rive-app/react-canvas
+        version: link:@types/rive-app/react-canvas
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)

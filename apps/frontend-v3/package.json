@@ -28,6 +28,7 @@
     "next-themes": "^0.3.0",
     "nextjs-toploader": "^1.6.4",
     "react": "18.2.0",
+    "react-canvas": "link:@types/rive-app/react-canvas",
     "react-dom": "18.2.0",
     "react-use-measure": "^2.1.1",
     "viem": "^2.21.18",
