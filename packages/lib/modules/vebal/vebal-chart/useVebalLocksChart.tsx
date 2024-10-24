@@ -8,8 +8,7 @@ import * as echarts from 'echarts/core'
 import { EChartsOption, ECharts } from 'echarts'
 import { format, differenceInDays } from 'date-fns'
 import BigNumber from 'bignumber.js'
-import { lockSnapshots } from './test-locks'
-import { useVebalLockInfo } from '../../vebal/useVebalLockInfo'
+import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useTheme as useNextTheme } from 'next-themes'
 
@@ -17,9 +16,11 @@ type ChartValueAcc = [string, number][]
 
 interface LockSnapshot {
   bias: string
-  slope: string
   timestamp: number
+  slope: string
 }
+
+export const MIN_CHART_VALUES = 2
 
 function groupValuesByDates(chartValues: ChartValueAcc) {
   return chartValues.reduce((acc: Record<string, number[]>, item) => {
@@ -80,15 +81,19 @@ function filterAndFlattenValues(valuesByDates: Record<string, number[]>) {
 const MAIN_SERIES_ID = 'main-series'
 const FUTURE_SERIES_ID = 'future-series'
 
-export function useVebalLocksChart() {
+export interface UseVebalLocksChartParams {
+  lockSnapshots: LockSnapshot[]
+  mainnetLockedInfo: UseVebalLockInfoResult['mainnetLockedInfo']
+}
+
+export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVebalLocksChartParams) {
   const theme = useChakraTheme()
   const { theme: nextTheme } = useNextTheme()
 
   const instanceRef = useRef<ECharts>()
 
-  const userHistoricalLocks = lockSnapshots
+  const userHistoricalLocks = [...lockSnapshots].sort((a, b) => a.timestamp - b.timestamp)
 
-  const { mainnetLockedInfo } = useVebalLockInfo()
   const lockedUntil = mainnetLockedInfo.lockedEndDate
     ? differenceInDays(new Date(mainnetLockedInfo.lockedEndDate), new Date())
     : 0
@@ -96,9 +101,12 @@ export function useVebalLocksChart() {
   const isExpired = mainnetLockedInfo.isExpired
 
   const chartValues = useMemo(() => {
-    if (!userHistoricalLocks) return []
-
-    const processedValues = processLockSnapshots(lockSnapshots)
+    const processedValues = processLockSnapshots(
+      userHistoricalLocks.map(userHistoricalLock => ({
+        ...userHistoricalLock,
+        slope: userHistoricalLock.slope,
+      }))
+    )
     const valuesByDates = groupValuesByDates(processedValues)
     return filterAndFlattenValues(valuesByDates)
   }, [userHistoricalLocks])
@@ -234,7 +242,7 @@ export function useVebalLocksChart() {
 
           if (!mouseoverRef.current) {
             if (firstPoint.seriesId === MAIN_SERIES_ID) {
-              if (firstPoint.dataIndex === chartValues.length - 1) {
+              if ([firstPoint.dataIndex, secondPoint?.dataIndex].includes(chartValues.length - 1)) {
                 return `
                 <div style="padding: unset; display: flex; flex-direction: column; justify-content: center;
                   ${toolTipTheme.container}">
@@ -356,5 +364,6 @@ export function useVebalLocksChart() {
     options,
     onChartReady,
     onEvents,
+    insufficientData: chartValues.length < MIN_CHART_VALUES,
   }
 }

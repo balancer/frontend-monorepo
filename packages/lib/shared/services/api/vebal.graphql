@@ -8,5 +8,11 @@ query GetVeBalUser(
   ) {
     balance
     rank
+    lockSnapshots {
+      balance
+      timestamp
+      bias
+      slope
+    }
   }
 }
