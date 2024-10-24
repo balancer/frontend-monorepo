@@ -20,6 +20,7 @@
     "@repo/lib": "workspace:*",
     "@sentry/nextjs": "^8.13.0",
     "@studio-freight/react-lenis": "^0.0.47",
+    "@types/three": "^0.169.0",
     "@vercel/speed-insights": "^1.0.1",
     "framer-motion": "^10.13.0",
     "lodash": "^4.17.21",
@@ -29,6 +30,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-use-measure": "^2.1.1",
+    "three": "^0.169.0",
     "viem": "^2.21.18",
     "wagmi": "^2.12.16"
   },
