@@ -12,6 +12,7 @@ import { useCallback, useMemo } from 'react'
 export interface SliderWithStepsProps extends SliderProps {
   steps: number[]
   minValue?: number
+  variant?: 'lock'
 }
 
 export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsProps) {

@@ -798,22 +798,30 @@ export function getComponents(tokens: any, primaryTextColor: string) {
       baseStyle: {
         filledTrack: {
           bg: 'background.highlight',
-          height: '5px',
         },
         thumb: {
           borderColor: 'background.highlight',
           boxShadow: 'md',
-          height: '16px',
-          width: '16px',
         },
-        track: {
-          _dark: {
-            bg: '#282D34', // fix: what token?
+      },
+      variants: {
+        lock: {
+          filledTrack: {
+            height: '5px',
           },
-          _light: {
-            bg: '#D7D2CB', // inversion of #282D34
+          thumb: {
+            height: '16px',
+            width: '16px',
           },
-          height: '5px',
+          track: {
+            _dark: {
+              bg: '#282D34', // fix: what token?
+            },
+            _light: {
+              bg: '#D7D2CB', // inversion of #282D34
+            },
+            height: '5px',
+          },
         },
       },
     },

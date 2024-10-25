@@ -44,6 +44,7 @@ export function LockDurationSlider({
         step={step}
         steps={steps}
         value={value}
+        variant="lock"
       />
     </Box>
   )
