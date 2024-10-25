@@ -6,7 +6,8 @@
     "baseUrl": ".",
     "paths": {
       "@repo/lib/*": ["*"]
-    }
+    },
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": ["**/*.ts", "**/*.tsx", "global.d.ts"],
   "exclude": ["node_modules"]
