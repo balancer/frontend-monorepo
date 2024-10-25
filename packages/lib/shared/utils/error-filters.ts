@@ -44,3 +44,15 @@ export function isPausedError(error?: Error | null): boolean {
 export function isPausedErrorMessage(errorMessage: string): boolean {
   return errorMessage.includes('reverted with the following reason:\nBAL#402\n')
 }
+
+export function isUnbalancedAddError(error?: Error | null): boolean {
+  if (!error) return false
+  return isUnbalancedAddErrorMessage(error)
+}
+
+export function isUnbalancedAddErrorMessage(error: Error | null): boolean {
+  const errorStrings = ['BAL#304', 'queryAddLiquidityUnbalanced'] // [v2 error, v3 error]
+  const hasErrors = (errorString: string) => error?.message.includes(errorString)
+
+  return errorStrings.some(hasErrors)
+}

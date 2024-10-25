@@ -11,7 +11,8 @@
     "paths": {
       "@/*": ["./*"],
       "@repo/*": ["../../packages/*"]
-    }
+    },
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": [
     "**/*.ts",

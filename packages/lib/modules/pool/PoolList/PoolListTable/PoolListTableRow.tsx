@@ -51,7 +51,9 @@ function PoolVersionTag({ pool }: { pool: PoolListItem }) {
 }
 
 export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
-  const { queryState: { userAddress } } = usePoolList()
+  const {
+    queryState: { userAddress },
+  } = usePoolList()
   const { toCurrency } = useCurrency()
 
   return (

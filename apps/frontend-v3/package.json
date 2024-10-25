@@ -9,6 +9,8 @@
     "gen:wagmi": "pnpm wagmi generate",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
+    "format": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --cache-location='node_modules/.cache/.prettiercache' --log-level warn",
+    "format:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
     "start": "next start",
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },

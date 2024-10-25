@@ -1,4 +1,3 @@
-import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import {
   AddLiquidityNested,
   AddLiquidityNestedInput,
@@ -6,12 +5,14 @@ import {
   PriceImpact,
   Slippage,
 } from '@balancer/sdk'
+import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
+import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Pool } from '../../../PoolProvider'
 import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
 import { NestedBuildAddLiquidityInput, NestedQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
-import { getRpcUrl } from '@repo/lib/modules/web3/transports'
+import { AddLiquidityNestedCallInputV2 } from './TemporaryNestedSdkTypes'
 
 /**
  * NestedAddLiquidityHandler is a handler that implements the
@@ -38,7 +39,7 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
   ): Promise<NestedQueryAddLiquidityOutput> {
     const addLiquidity = new AddLiquidityNested()
 
@@ -64,7 +65,7 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
       accountAddress: account,
       relayerApprovalSignature,
       wethIsEth: this.helpers.isNativeAssetIn(humanAmountsIn),
-    })
+    } as AddLiquidityNestedCallInputV2)
 
     return {
       account,
@@ -79,7 +80,7 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
    * PRIVATE METHODS
    */
   private constructSdkInput(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
   ): AddLiquidityNestedInput {
     const amountsIn = this.helpers.toSdkInputAmounts(humanAmountsIn)
 
