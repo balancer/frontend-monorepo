@@ -135,8 +135,6 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
 
   const client = useApolloClient()
   const handler = useMemo(() => {
-    if (isPoolSwap) resetSwapAmounts()
-
     return selectSwapHandler(
       swapState.tokenIn.address,
       swapState.tokenOut.address,
@@ -493,6 +491,7 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
     setInitialAmounts(amountIn, amountOut)
 
     if (!swapState.tokenIn.address && !swapState.tokenOut.address) setDefaultTokens()
+    if (isPoolSwap) resetSwapAmounts()
   }, [])
 
   // When wallet chain changes, update the swap form chain
