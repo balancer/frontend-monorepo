@@ -19,7 +19,7 @@ import {
 import { useCrossChainSync } from './CrossChainSyncProvider'
 import Image from 'next/image'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 import { CrossChainSyncModal } from '@repo/lib/modules/vebal/cross-chain/CrossChainSyncModal'
 import { useState } from 'react'
@@ -34,7 +34,7 @@ const tooltipLabel = `Sidechains & Layer 2 networks like Polygon and Arbitrum do
 
 export function CrossChainBoost() {
   const { isConnected } = useUserAccount()
-  const { mainnetLockedInfo } = useVebalLockInfo()
+  const { mainnetLockedInfo } = useVebalLockData()
 
   const { hasExistingLock, isExpired } = mainnetLockedInfo
   const { networksBySyncState, l2VeBalBalances, isLoading, showingUnsyncedNetworks } =

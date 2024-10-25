@@ -21,13 +21,13 @@ import { useVebalLock } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { VebalLockModal } from '@repo/lib/modules/vebal/lock/modal/VebalLockModal'
 import { useRouter } from 'next/navigation'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { getModalLabel } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
 
 export function VebalLockForm() {
-  const { refetchAll } = useVebalLockInfo()
+  const { refetchAll } = useVebalLockData()
   const {
-    vebalToken,
+    vebalBptToken,
     lpToken,
     setLpToken,
     isDisabled,
@@ -63,8 +63,8 @@ export function VebalLockForm() {
               Amount to lock
             </Text>
             <TokenInput
-              address={vebalToken.address}
-              chain={vebalToken.chain}
+              address={vebalBptToken.address}
+              chain={vebalBptToken.chain}
               onChange={e => setLpToken(e.currentTarget.value as HumanAmount)}
               value={lpToken}
             />

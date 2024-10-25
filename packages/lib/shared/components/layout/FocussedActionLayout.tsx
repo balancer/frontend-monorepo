@@ -3,7 +3,7 @@
 import { Box, VStack, Card, useColorModeValue } from '@chakra-ui/react'
 import { PropsWithChildren, ReactNode } from 'react'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
-import { ModalActionsNav } from '@repo/lib/shared/components/layout/ModalActionsNav'
+import { FocussedActionNav } from '@repo/lib/shared/components/layout/FocussedActionNav'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NavBar } from '@repo/lib/shared/components/navs/NavBar'
 
@@ -13,7 +13,12 @@ type ModalLayoutProps = PropsWithChildren & {
   chain: GqlChain
 }
 
-export function ModalActionsLayout({ children, redirectPath, leftSlot, chain }: ModalLayoutProps) {
+export function FocussedActionLayout({
+  children,
+  redirectPath,
+  leftSlot,
+  chain,
+}: ModalLayoutProps) {
   const bg = useColorModeValue('blackAlpha.800', 'blackAlpha.700')
   const blur = useColorModeValue('blur(8px)', 'blur(5px)')
 
@@ -41,7 +46,7 @@ export function ModalActionsLayout({ children, redirectPath, leftSlot, chain }: 
             shadow="lg"
             variant="level1"
           >
-            <ModalActionsNav chain={chain} redirectPath={redirectPath} />
+            <FocussedActionNav chain={chain} redirectPath={redirectPath} />
             {children}
           </Card>
         </Box>

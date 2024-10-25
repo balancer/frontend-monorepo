@@ -5,7 +5,7 @@ import { VebalBreadcrumbs } from '@repo/lib/modules/vebal/VebalBreadcrumbs'
 import { ReactNode } from 'react'
 import NextLink from 'next/link'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 interface HeaderProps {
   before?: ReactNode
@@ -39,7 +39,7 @@ function SectionHeader({ before, after }: HeaderProps) {
 }
 
 export function VebalManage() {
-  const lockInfo = useVebalLockInfo()
+  const lockData = useVebalLockData()
   const { isConnected } = useUserAccount()
 
   if (!isConnected) {
@@ -69,11 +69,11 @@ export function VebalManage() {
         <SectionHeader
           after={
             <>
-              {!!lockInfo.mainnetLockedInfo.hasExistingLock && (
+              {!!lockData.mainnetLockedInfo.hasExistingLock && (
                 <Button
                   as={NextLink}
                   href="/vebal/manage/lock"
-                  isLoading={lockInfo.isLoading}
+                  isLoading={lockData.isLoading}
                   size="lg"
                 >
                   Extend lock
@@ -82,15 +82,15 @@ export function VebalManage() {
               <Button
                 as={NextLink}
                 href={
-                  lockInfo.mainnetLockedInfo.isExpired
+                  lockData.mainnetLockedInfo.isExpired
                     ? '/vebal/manage/unlock'
                     : '/vebal/manage/lock'
                 }
-                isLoading={lockInfo.isLoading}
+                isLoading={lockData.isLoading}
                 size="lg"
                 variant="primary"
               >
-                {lockInfo.mainnetLockedInfo.isExpired ? 'Unlock' : 'Get veBAL'}
+                {lockData.mainnetLockedInfo.isExpired ? 'Unlock' : 'Get veBAL'}
               </Button>
             </>
           }

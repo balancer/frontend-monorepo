@@ -6,9 +6,9 @@ import { useGaugesSupplyAndBalance } from './useGaugesSupplyAndBalance'
 import { useGaugeTotalSupplyAndUserBalance } from './useGaugeTotalSupplyAndUserBalance'
 import { getChainId } from '@repo/lib/config/app.config'
 import { Pool } from '../pool/PoolProvider'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
-export type VeBalLockInfo = {
+export type VeBalLockData = {
   lockedEndDate: number
   lockedAmount: string
   totalSupply: string
@@ -57,7 +57,7 @@ function calcUserBoost({
 }
 
 export function useVebalBoost(pools: Pool[]) {
-  const { mainnetLockedInfo } = useVebalLockInfo()
+  const { mainnetLockedInfo } = useVebalLockData()
 
   const gauges = useMemo(() => {
     if (!pools) return []

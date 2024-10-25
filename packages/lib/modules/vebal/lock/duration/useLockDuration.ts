@@ -1,26 +1,63 @@
-import { useToday } from '@repo/lib/shared/hooks/useCurrentDate'
+import { useToday } from '@repo/lib/shared/hooks/date.hooks'
 import { useEffect, useMemo, useState } from 'react'
 import {
+  addDays,
   addMonths,
   addWeeks,
   differenceInMonths,
   differenceInWeeks,
   format,
   isEqual,
+  isThursday,
+  nextThursday,
+  previousThursday,
   startOfDay,
 } from 'date-fns'
 import { range } from 'lodash'
-import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/constants'
-import { UseVebalLockInfoResult } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
 import {
-  getMinLockEndDate,
-  useLockEndDate,
-  UseLockEndDateProps,
-} from '@repo/lib/modules/vebal/lock/duration/useLockEndDate'
+  MAX_LOCK_PERIOD_IN_DAYS,
+  MIN_LOCK_PERIOD_IN_DAYS,
+  PRETTY_DATE_FORMAT,
+} from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
+import { UseVebalLockDataResult } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
+
+function getMinLockEndDate(date: Date) {
+  const minLockTimestamp = addDays(date, MIN_LOCK_PERIOD_IN_DAYS)
+
+  const timestamp = isThursday(minLockTimestamp) ? minLockTimestamp : nextThursday(minLockTimestamp)
+
+  return startOfDay(timestamp)
+}
+
+function getMaxLockEndDate(date: Date) {
+  const maxLockTimestamp = addDays(date, MAX_LOCK_PERIOD_IN_DAYS)
+
+  const timestamp = isThursday(maxLockTimestamp)
+    ? maxLockTimestamp
+    : previousThursday(maxLockTimestamp)
+
+  return startOfDay(timestamp)
+}
+
+interface UseLockEndDateProps {
+  lockedEndDate?: Date
+}
+
+function useLockEndDate({ lockedEndDate }: UseLockEndDateProps) {
+  const today = useToday()
+
+  const minLockEndDate = useMemo(() => {
+    return getMinLockEndDate(lockedEndDate ?? today)
+  }, [lockedEndDate, today])
+
+  const maxLockEndDate = useMemo(() => getMaxLockEndDate(today), [today])
+
+  return { minLockEndDate, maxLockEndDate }
+}
 
 export interface UseLockDurationProps extends UseLockEndDateProps {
   initialValue?: number
-  mainnetLockedInfo: UseVebalLockInfoResult['mainnetLockedInfo']
+  mainnetLockedInfo: UseVebalLockDataResult['mainnetLockedInfo']
 }
 
 export type UseLockDurationResult = ReturnType<typeof useLockDuration>

@@ -1,7 +1,7 @@
 'use client'
 
 import { PropsWithChildren } from 'react'
-import { ModalActionsLayout } from '@repo/lib/shared/components/layout/ModalActionsLayout'
+import { FocussedActionLayout } from '@repo/lib/shared/components/layout/FocussedActionLayout'
 import { HStack, Text } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
@@ -9,7 +9,7 @@ type Props = PropsWithChildren
 
 export function VebalLockActionsLayout({ children }: Props) {
   return (
-    <ModalActionsLayout
+    <FocussedActionLayout
       chain={GqlChain.Mainnet}
       leftSlot={
         <HStack px="sm">
@@ -21,6 +21,6 @@ export function VebalLockActionsLayout({ children }: Props) {
       redirectPath="/vebal/manage"
     >
       {children}
-    </ModalActionsLayout>
+    </FocussedActionLayout>
   )
 }

@@ -9,12 +9,12 @@ import { mainnet } from 'viem/chains'
 import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
-import { useCurrentDate } from '@repo/lib/shared/hooks/useCurrentDate'
+import { dateHooks } from '@repo/lib/shared/hooks/date.hooks'
 import { toJsTimestamp } from '@repo/lib/shared/utils/time'
 import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
 
-export type UseVebalLockInfoResult = ReturnType<typeof _useVebalLockInfo>
-export const VebalLockInfoContext = createContext<UseVebalLockInfoResult | null>(null)
+export type UseVebalLockDataResult = ReturnType<typeof _useVebalLockData>
+export const VebalLockDataContext = createContext<UseVebalLockDataResult | null>(null)
 
 function getAvailableLockActions(
   hasLock: boolean | undefined,
@@ -36,7 +36,7 @@ function getAvailableLockActions(
   }
 }
 
-interface MulticallLockInfoResponse {
+interface MulticallLockDataResponse {
   locked: {
     locked: {
       result?: {
@@ -60,10 +60,10 @@ interface MulticallLockInfoResponse {
   }
 }
 
-export function _useVebalLockInfo() {
+export function _useVebalLockData() {
   const { userAddress, isConnected } = useUserAccount()
 
-  const lockInfoRequestsData = [
+  const lockDataRequestsData = [
     {
       path: 'locked',
       fn: 'locked',
@@ -79,8 +79,8 @@ export function _useVebalLockInfo() {
     },
   ]
 
-  // get lock info
-  const lockInfoRequests = lockInfoRequestsData.map(v => {
+  // get lock data
+  const lockDataRequests = lockDataRequestsData.map(v => {
     return {
       chainId: mainnet.id,
       id: `${v.path}.${v.fn}`,
@@ -91,11 +91,11 @@ export function _useVebalLockInfo() {
     }
   })
 
-  const { results, refetchAll, isLoading } = useMulticall(lockInfoRequests, {
+  const { results, refetchAll, isLoading } = useMulticall(lockDataRequests, {
     enabled: isConnected,
   })
 
-  const now = useCurrentDate()
+  const now = dateHooks()
 
   const mainnetLockedInfo = useMemo(() => {
     const mainnetResults = results[mainnetNetworkConfig.chainId]
@@ -115,7 +115,7 @@ export function _useVebalLockInfo() {
       return {}
     }
 
-    const data = mainnetResults.data as MulticallLockInfoResponse
+    const data = mainnetResults.data as MulticallLockDataResponse
 
     const lockedData = data.locked.locked
     const totalSupply = data.totalSupply.totalSupply.result || BigInt(0)
@@ -145,13 +145,13 @@ export function _useVebalLockInfo() {
   return { results, mainnetLockedInfo, isLoading, refetchAll, availableLockActions }
 }
 
-export function VebalLockInfoProvider({ children }: PropsWithChildren) {
-  const vebalLockInfo = _useVebalLockInfo()
+export function VebalLockDataProvider({ children }: PropsWithChildren) {
+  const vebalLockData = _useVebalLockData()
 
   return (
-    <VebalLockInfoContext.Provider value={vebalLockInfo}>{children}</VebalLockInfoContext.Provider>
+    <VebalLockDataContext.Provider value={vebalLockData}>{children}</VebalLockDataContext.Provider>
   )
 }
 
-export const useVebalLockInfo = (): UseVebalLockInfoResult =>
-  useMandatoryContext(VebalLockInfoContext, 'VebalLockInfo')
+export const useVebalLockData = (): UseVebalLockDataResult =>
+  useMandatoryContext(VebalLockDataContext, 'VebalLockData')

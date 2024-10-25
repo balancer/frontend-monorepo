@@ -2,12 +2,12 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { Center } from '@chakra-ui/react'
 import { VebalUnlockForm } from '@repo/lib/modules/vebal/lock/form/VebalUnlockForm'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { VebalLockForm } from '@repo/lib/modules/vebal/lock/form/VebalLockForm'
 
 export function VebalUnlock() {
   const { isConnected } = useUserAccount()
-  const { mainnetLockedInfo } = useVebalLockInfo()
+  const { mainnetLockedInfo } = useVebalLockData()
 
   if (!isConnected) {
     return (

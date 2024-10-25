@@ -3,13 +3,13 @@ import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
 import { useLockSteps } from '@repo/lib/modules/vebal/lock/steps/useLockSteps'
 import { Address, parseUnits } from 'viem'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { useVebalLock } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
 
-export function useLockStepsPreview(extendExpired: boolean) {
-  const { vebalToken, totalAmount, lockDuration, isIncreasedLockAmount } = useVebalLock()
+export function useBuildLockSteps(extendExpired: boolean) {
+  const { vebalBptToken, totalAmount, lockDuration, isIncreasedLockAmount } = useVebalLock()
 
-  const { mainnetLockedInfo } = useVebalLockInfo()
+  const { mainnetLockedInfo } = useVebalLockData()
 
   const lockActionTypes = useMemo(() => {
     if (mainnetLockedInfo.isExpired) {
@@ -35,8 +35,8 @@ export function useLockStepsPreview(extendExpired: boolean) {
 
   const { steps, isLoadingSteps } = useLockSteps({
     lockAmount: {
-      rawAmount: parseUnits(totalAmount.toString(), vebalToken.decimals),
-      address: vebalToken.address as Address,
+      rawAmount: parseUnits(totalAmount.toString(), vebalBptToken.decimals),
+      address: vebalBptToken.address as Address,
     },
     lockActionTypes,
     lockEndDate: lockDuration.lockEndDate.toString(),

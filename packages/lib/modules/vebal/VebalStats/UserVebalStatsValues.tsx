@@ -6,7 +6,7 @@ import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { differenceInDays, format } from 'date-fns'
 import BigNumber from 'bignumber.js'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 export type VebalUserStatsValues = {
   balance: string | undefined
@@ -16,7 +16,7 @@ export type VebalUserStatsValues = {
 }
 
 export function UserVebalStatsValues() {
-  const lockInfo = useVebalLockInfo()
+  const lockData = useVebalLockData()
   const vebalUserData = useVebalUserData()
 
   const vebalUserStatsValues: VebalUserStatsValues | undefined = useMemo(() => {
@@ -25,13 +25,13 @@ export function UserVebalStatsValues() {
       const rank = vebalUserData.data?.veBalGetUser.rank ?? undefined
       const percentOfAllSupply = vebalUserData.data
         ? bn(vebalUserData.data.veBalGetUser.balance || 0).div(
-            lockInfo.mainnetLockedInfo.totalSupply || 0
+            lockData.mainnetLockedInfo.totalSupply || 0
           )
         : undefined
       const lockedUntil =
-        !lockInfo.mainnetLockedInfo.lockedEndDate || lockInfo.mainnetLockedInfo.isExpired
+        !lockData.mainnetLockedInfo.lockedEndDate || lockData.mainnetLockedInfo.isExpired
           ? undefined
-          : format(lockInfo.mainnetLockedInfo.lockedEndDate, 'yyyy-MM-dd')
+          : format(lockData.mainnetLockedInfo.lockedEndDate, 'yyyy-MM-dd')
 
       return {
         balance,
@@ -40,7 +40,7 @@ export function UserVebalStatsValues() {
         lockedUntil,
       }
     }
-  }, [lockInfo.mainnetLockedInfo, vebalUserData.isConnected, vebalUserData.data])
+  }, [lockData.mainnetLockedInfo, vebalUserData.isConnected, vebalUserData.data])
 
   return (
     <>
@@ -74,7 +74,7 @@ export function UserVebalStatsValues() {
         <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My share of veBAL
         </Text>
-        {vebalUserData.loading || lockInfo.isLoading ? (
+        {vebalUserData.loading || lockData.isLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
           <Heading size="h4">
@@ -90,7 +90,7 @@ export function UserVebalStatsValues() {
         <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           Expiry date
         </Text>
-        {lockInfo.isLoading ? (
+        {lockData.isLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
           <Tooltip

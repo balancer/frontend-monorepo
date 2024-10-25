@@ -145,6 +145,10 @@ export function _useTokens(
       .toString()
   }, [])
 
+  const vebalBptToken = tokens.find(
+    t => t.address === mainnetNetworkConfig.tokens.addresses.veBalBpt
+  )
+
   return {
     tokens,
     prices,
@@ -161,6 +165,7 @@ export function _useTokens(
     calcTotalUsdValue,
     startTokenPricePolling: () => startPolling(pollInterval),
     stopTokenPricePolling: stopPolling,
+    vebalBptToken,
   }
 }
 
@@ -180,15 +185,3 @@ export function TokensProvider({
 }
 
 export const useTokens = (): UseTokensResult => useMandatoryContext(TokensContext, 'Tokens')
-
-export function useVebalToken() {
-  const { getTokensByChain } = useTokens()
-
-  const tokens = getTokensByChain(GqlChain.Mainnet)
-
-  const vebalBptToken = tokens.find(
-    t => t.address === mainnetNetworkConfig.tokens.addresses.veBalBpt
-  )
-
-  return vebalBptToken
-}

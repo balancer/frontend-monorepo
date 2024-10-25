@@ -22,11 +22,11 @@ import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { useClickable } from '@chakra-ui/clickable'
 import { getModalLabel } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
 import { format } from 'date-fns'
-import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/constants'
+import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
 
 export interface ClickableCardProps extends CardProps {
   color?: string
@@ -38,8 +38,8 @@ export function ClickableCard(props: ClickableCardProps) {
 }
 
 export function VebalUnlockForm() {
-  const { refetchAll, mainnetLockedInfo, isLoading } = useVebalLockInfo()
-  const { vebalToken, previewModalDisclosure } = useVebalLock()
+  const { refetchAll, mainnetLockedInfo, isLoading } = useVebalLockData()
+  const { vebalBptToken, previewModalDisclosure } = useVebalLock()
 
   const router = useRouter()
 
@@ -90,7 +90,7 @@ export function VebalUnlockForm() {
             ) : (
               <Card variant="subSection">
                 <TokenRow
-                  address={vebalToken.address as Address}
+                  address={vebalBptToken.address as Address}
                   chain={GqlChain.Mainnet}
                   value={mainnetLockedInfo.lockedAmount ?? 0}
                 />

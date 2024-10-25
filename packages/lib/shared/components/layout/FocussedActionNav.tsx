@@ -12,7 +12,7 @@ export interface ModalActionsNavProps {
   redirectPath: string
 }
 
-export function ModalActionsNav({ chain, redirectPath }: ModalActionsNavProps) {
+export function FocussedActionNav({ chain, redirectPath }: ModalActionsNavProps) {
   const networkConfig = getNetworkConfig(chain)
 
   return (

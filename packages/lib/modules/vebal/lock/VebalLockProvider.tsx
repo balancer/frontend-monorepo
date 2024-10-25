@@ -2,14 +2,14 @@
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren, useMemo, useState } from 'react'
-import { useVebalToken } from '@repo/lib/modules/tokens/TokensProvider'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { HumanAmount } from '@balancer/sdk'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useDisclosure } from '@chakra-ui/hooks'
-import { useLockDuration } from '@repo/lib/modules/vebal/lock/duration/lock-duration.hooks'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { useLockDuration } from '@repo/lib/modules/vebal/lock/duration/useLockDuration'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { differenceInSeconds } from 'date-fns'
 import { getPreviousThursday, oneYearInSecs } from '@repo/lib/shared/utils/time'
 import BigNumber from 'bignumber.js'
@@ -60,10 +60,10 @@ export function expectedVeBal({ bpt, minLockEndDate, lockEndDate }: ExpectedVeBa
 }
 
 export function _useVebalLock() {
-  const vebalToken = useVebalToken()
-  if (!vebalToken) throw new Error('vebalBptToken not found')
+  const { vebalBptToken } = useTokens()
+  if (!vebalBptToken) throw new Error('vebalBptToken not found')
 
-  const { mainnetLockedInfo, isLoading } = useVebalLockInfo()
+  const { mainnetLockedInfo, isLoading } = useVebalLockData()
   const { hasValidationErrors } = useTokenInputsValidation()
 
   const [lpToken, setLpToken] = useState<HumanAmount>()
@@ -135,7 +135,7 @@ export function _useVebalLock() {
   return {
     lpToken,
     setLpToken,
-    vebalToken,
+    vebalBptToken,
     isDisabled,
     disabledReason,
     totalAmount,

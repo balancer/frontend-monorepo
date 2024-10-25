@@ -5,7 +5,7 @@ import { PortfolioTable } from './PortfolioTable/PortfolioTable'
 import { ClaimNetworkPools } from './PortfolioClaim/ClaimNetworkPools/ClaimNetworkPools'
 import { TransactionStateProvider } from '../transactions/transaction-steps/TransactionStateProvider'
 
-import { VebalLockInfoProvider } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 export default function Portfolio() {
   return (
@@ -15,9 +15,9 @@ export default function Portfolio() {
         <ClaimNetworkPools />
       </TransactionStateProvider>
 
-      <VebalLockInfoProvider>
+      <VebalLockDataProvider>
         <PortfolioTable />
-      </VebalLockInfoProvider>
+      </VebalLockDataProvider>
     </Stack>
   )
 }

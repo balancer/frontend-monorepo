@@ -11,7 +11,7 @@ import BigNumber from 'bignumber.js'
 import { lockSnapshots } from './test-locks'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useTheme as useNextTheme } from 'next-themes'
-import { useVebalLockInfo } from '@repo/lib/modules/vebal/lock/VebalLockInfoProvider'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 type ChartValueAcc = [string, number][]
 
@@ -88,7 +88,7 @@ export function useVebalLocksChart() {
 
   const userHistoricalLocks = lockSnapshots
 
-  const { mainnetLockedInfo } = useVebalLockInfo()
+  const { mainnetLockedInfo } = useVebalLockData()
   const lockedUntil = mainnetLockedInfo.lockedEndDate
     ? differenceInDays(new Date(mainnetLockedInfo.lockedEndDate), new Date())
     : 0

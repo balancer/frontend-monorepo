@@ -24,7 +24,7 @@ import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { VebalLockDetails } from '@repo/lib/modules/vebal/lock/VebalLockDetails'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useRouter } from 'next/navigation'
-import { useLockStepsPreview } from '@repo/lib/modules/vebal/lock/steps/useLockStepsPreview'
+import { useBuildLockSteps } from '@repo/lib/modules/vebal/lock/steps/useBuildLockSteps'
 import { getPreviewLabel } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
 
 type Props = {
@@ -42,8 +42,8 @@ export function VebalLockModal({
   const router = useRouter()
 
   const { isDesktop, isMobile } = useBreakpoints()
-  const { vebalToken, totalAmount, lockMode } = useVebalLock()
-  const { transactionSteps, lockTxHash } = useLockStepsPreview(extendExpired)
+  const { vebalBptToken, totalAmount, lockMode } = useVebalLock()
+  const { transactionSteps, lockTxHash } = useBuildLockSteps(extendExpired)
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
 
@@ -84,7 +84,7 @@ export function VebalLockModal({
                   <Text>Lock amount</Text>
                   <Card variant="modalSubSection">
                     <TokenRow
-                      address={vebalToken.address as Address}
+                      address={vebalBptToken.address as Address}
                       chain={GqlChain.Mainnet}
                       value={totalAmount}
                     />
