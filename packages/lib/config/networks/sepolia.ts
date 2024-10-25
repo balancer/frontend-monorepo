@@ -1,6 +1,8 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
+import { BALANCER_ROUTER, VAULT_V3 } from '@balancer/sdk'
+import { sepolia } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
   chainId: 11155111,
@@ -31,8 +33,8 @@ const networkConfig: NetworkConfig = {
     multicall2: '0xca11bde05977b3631167028862be2a173976ca11',
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      vaultV3: '0x30AF3689547354f82C70256894B07C9D0f067BB6',
-      router: '0x77eDc69766409C599F06Ef0B551a0990CBfe13A7',
+      vaultV3: VAULT_V3[sepolia.id],
+      router: BALANCER_ROUTER[sepolia.id],
       relayerV6: '0x7852fB9d0895e6e8b3EedA553c03F6e2F9124dF9',
       minter: '0x1783Cd84b3d01854A96B4eD5843753C2CcbD574A',
     },

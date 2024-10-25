@@ -22,13 +22,17 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^transit"],
+      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"]
     },
     "lint:fix": {
-      "dependsOn": ["^lint:fix"]
+      "dependsOn": ["^transit"],
+      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"],
+      "cache": false
     },
     "typecheck": {
-      "dependsOn": ["graphql:gen", "^typecheck"]
+      "dependsOn": ["graphql:gen", "transit"],
+      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
     },
     "test:unit": {
       "dependsOn": ["graphql:gen", "^test:unit"]
@@ -41,6 +45,25 @@
       "dependsOn": ["^graphql:gen"],
       "inputs": [".env*"],
       "outputs": ["shared/services/api/generated/**"]
+    },
+    "transit": {
+      "dependsOn": ["^transit"]
+    },
+    "//#format": {
+      "outputs": ["node_modules/.cache/.prettiercache"]
+    },
+    "format": {
+      "dependsOn": ["^transit"],
+      "outputs": ["node_modules/.cache/.prettiercache"]
+    },
+    "//#format:fix": {
+      "outputs": ["node_modules/.cache/.prettiercache"],
+      "cache": false
+    },
+    "format:fix": {
+      "dependsOn": ["^transit"],
+      "outputs": ["node_modules/.cache/.prettiercache"],
+      "cache": false
     }
   }
 }

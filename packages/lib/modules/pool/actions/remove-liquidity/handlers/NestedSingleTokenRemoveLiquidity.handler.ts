@@ -2,11 +2,12 @@ import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.typ
 import {
   HumanAmount,
   RemoveLiquidityNested,
-  RemoveLiquidityNestedSingleTokenInput,
+  RemoveLiquidityNestedSingleTokenInputV2,
   RemoveLiquidityNestedQueryOutput,
   Slippage,
   PriceImpactAmount,
   PriceImpact,
+  RemoveLiquidityNestedCallInputV2,
 } from '@balancer/sdk'
 import { Address, parseEther } from 'viem'
 import { Pool } from '../../../PoolProvider'
@@ -44,7 +45,7 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
 
     const sdkQueryOutput = await removeLiquidity.query(
       removeLiquidityInput,
-      this.helpers.nestedPoolState
+      this.helpers.nestedPoolState,
     )
 
     return { amountsOut: sdkQueryOutput.amountsOut, sdkQueryOutput }
@@ -58,7 +59,7 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
 
     const priceImpactABA: PriceImpactAmount = await PriceImpact.removeLiquidityNested(
       removeLiquidityInput,
-      this.helpers.nestedPoolState
+      this.helpers.nestedPoolState,
     )
 
     return priceImpactABA.decimal
@@ -79,7 +80,7 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
       accountAddress: account,
       relayerApprovalSignature,
       wethIsEth,
-    })
+    } as RemoveLiquidityNestedCallInputV2)
 
     return {
       account,
@@ -94,9 +95,9 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
    */
   private constructSdkInput(
     humanBptIn: HumanAmount,
-    tokenOut: Address
-  ): RemoveLiquidityNestedSingleTokenInput {
-    const result: RemoveLiquidityNestedSingleTokenInput = {
+    tokenOut: Address,
+  ): RemoveLiquidityNestedSingleTokenInputV2 {
+    const result: RemoveLiquidityNestedSingleTokenInputV2 = {
       bptAmountIn: parseEther(humanBptIn),
       tokenOut,
       // Ignore TS error until base chain is added to the SDK setup:
