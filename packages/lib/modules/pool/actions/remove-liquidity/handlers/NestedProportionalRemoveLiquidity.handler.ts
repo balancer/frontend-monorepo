@@ -2,7 +2,8 @@ import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.typ
 import {
   HumanAmount,
   RemoveLiquidityNested,
-  RemoveLiquidityNestedProportionalInput,
+  RemoveLiquidityNestedCallInputV2,
+  RemoveLiquidityNestedProportionalInputV2,
   RemoveLiquidityNestedQueryOutput,
   Slippage,
 } from '@balancer/sdk'
@@ -41,7 +42,7 @@ export class NestedProportionalRemoveLiquidityHandler implements RemoveLiquidity
 
     const sdkQueryOutput = await removeLiquidity.query(
       removeLiquidityInput,
-      this.helpers.nestedPoolState
+      this.helpers.nestedPoolState,
     )
 
     return { amountsOut: sdkQueryOutput.amountsOut, sdkQueryOutput }
@@ -67,7 +68,7 @@ export class NestedProportionalRemoveLiquidityHandler implements RemoveLiquidity
       accountAddress: account,
       relayerApprovalSignature,
       wethIsEth,
-    })
+    } as RemoveLiquidityNestedCallInputV2)
 
     return {
       account,
@@ -80,8 +81,8 @@ export class NestedProportionalRemoveLiquidityHandler implements RemoveLiquidity
   /**
    * PRIVATE METHODS
    */
-  private constructSdkInput(humanBptIn: HumanAmount): RemoveLiquidityNestedProportionalInput {
-    const result: RemoveLiquidityNestedProportionalInput = {
+  private constructSdkInput(humanBptIn: HumanAmount): RemoveLiquidityNestedProportionalInputV2 {
+    const result: RemoveLiquidityNestedProportionalInputV2 = {
       bptAmountIn: parseEther(humanBptIn),
       // Ignore TS error until base chain is added to the SDK setup:
       // https://github.com/balancer/b-sdk/issues/221

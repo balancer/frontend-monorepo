@@ -16,7 +16,9 @@ interface SortOption extends OptionBase {
 
 export function PoolListSortType() {
   const isMounted = useIsMounted()
-  const { queryState: { sorting, setSorting } } = usePoolList()
+  const {
+    queryState: { sorting, setSorting },
+  } = usePoolList()
   const { orderBy } = usePoolOrderByState()
   const chakraStyles = getSelectStyles<SortOption>()
 

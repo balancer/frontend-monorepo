@@ -12,7 +12,9 @@ const setIsDesc = (id: GqlPoolOrderBy, currentSortingObj: PoolsColumnSort) =>
   currentSortingObj.id === id ? !currentSortingObj.desc : true
 
 export function PoolListTableHeader({ ...rest }) {
-  const { queryState: { sorting, setSorting } } = usePoolList()
+  const {
+    queryState: { sorting, setSorting },
+  } = usePoolList()
   const { orderBy } = usePoolOrderByState()
   const sortingObj = sorting[0]
 
