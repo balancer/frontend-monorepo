@@ -2,15 +2,15 @@
 
 import {
   Box,
+  Button,
   Card,
   CardHeader,
-  HStack,
-  VStack,
-  Text,
-  GridItem,
   Grid,
-  Button,
+  GridItem,
+  HStack,
+  Text,
   Tooltip,
+  VStack,
 } from '@chakra-ui/react'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { HumanAmount } from '@balancer/sdk'

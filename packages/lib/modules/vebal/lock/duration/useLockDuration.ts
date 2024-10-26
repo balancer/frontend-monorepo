@@ -154,6 +154,10 @@ export function useLockDuration({
     return `~${weeksValue} weeks`
   }, [lockEndDate, sliderMaxDate, today])
 
+  const lockedUntilDateFormatted = lockedEndDate
+    ? format(lockedEndDate, PRETTY_DATE_FORMAT)
+    : undefined
+
   return {
     minLockEndDate,
     maxLockEndDate,
@@ -169,5 +173,6 @@ export function useLockDuration({
     lockUntilDateFormatted,
     isValidLockEndDate,
     isExtendedLockEndDate,
+    lockedUntilDateFormatted,
   }
 }

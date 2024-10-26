@@ -12,51 +12,17 @@ export function VebalLockDetails({ variant, isLoading }: VebalLockDetailsProps) 
   const detailed = variant === 'detailed'
 
   const { shareOfVeBal, expectedVeBalAmount, lockDuration } = useVebalLock()
-  const { minLockVeBal, bonusVeBal, totalExpectedVeBal } = expectedVeBalAmount
+  const { totalExpectedVeBal } = expectedVeBalAmount
+
+  const lockedUntilDateFormatted =
+    lockDuration.lockedUntilDateFormatted &&
+    lockDuration.lockedUntilDateFormatted !== lockDuration.lockUntilDateFormatted
+      ? lockDuration.lockedUntilDateFormatted
+      : undefined
 
   return (
     <VStack align="start" fontSize="sm" spacing="sm" w="full">
-      {!!detailed && (
-        <HStack justify="space-between" w="full">
-          <Text color="grayText">veBAL (from minimum lock)</Text>
-          <HStack>
-            {isLoading ? (
-              <Skeleton h="16px" w="40px" />
-            ) : (
-              <NumberText color="grayText">
-                {minLockVeBal.eq(0) ? '-' : fNum('token', minLockVeBal)}
-              </NumberText>
-            )}
-          </HStack>
-        </HStack>
-      )}
-      {!!detailed && (
-        <HStack justify="space-between" w="full">
-          <Text color="grayText">Bonus veBAL (from extended lock)</Text>
-          <HStack>
-            {isLoading ? (
-              <Skeleton h="16px" w="40px" />
-            ) : (
-              <NumberText color="grayText">
-                {bonusVeBal.eq(0) ? '-' : fNum('token', bonusVeBal)}
-              </NumberText>
-            )}
-          </HStack>
-        </HStack>
-      )}
       <HStack justify="space-between" w="full">
-        <Text>Total veBAL</Text>
-        <HStack>
-          {isLoading ? (
-            <Skeleton h="16px" w="40px" />
-          ) : (
-            <NumberText fontWeight={detailed ? '700' : undefined}>
-              {totalExpectedVeBal.eq(0) ? '-' : fNum('token', totalExpectedVeBal)}
-            </NumberText>
-          )}
-        </HStack>
-      </HStack>
-      <HStack justify="space-between" mt={variant === 'detailed' ? 'sm' : undefined} w="full">
         <Text color="grayText">Total share of veBAL</Text>
         <HStack>
           {isLoading ? (
@@ -68,13 +34,39 @@ export function VebalLockDetails({ variant, isLoading }: VebalLockDetailsProps) 
           ) : null}
         </HStack>
       </HStack>
+      {lockedUntilDateFormatted && (
+        <HStack justify="space-between" w="full">
+          <Text color="grayText">Prior lock-up end date</Text>
+          <HStack>
+            {isLoading ? (
+              <Skeleton h="16px" w="40px" />
+            ) : (
+              <NumberText color="grayText">{lockedUntilDateFormatted}</NumberText>
+            )}
+          </HStack>
+        </HStack>
+      )}
       <HStack justify="space-between" w="full">
-        <Text color="grayText"> {detailed ? 'veBAL lock-up end date' : 'Lock-up end date'}</Text>
+        <Text color="grayText">
+          {lockedUntilDateFormatted ? 'New lock-up end date' : 'Lock-up end date'}
+        </Text>
         <HStack>
           {isLoading ? (
             <Skeleton h="16px" w="40px" />
           ) : (
             <NumberText color="grayText">{lockDuration.lockUntilDateFormatted}</NumberText>
+          )}
+        </HStack>
+      </HStack>
+      <HStack justify="space-between" w="full">
+        <Text>Total veBAL {lockedUntilDateFormatted && ' (with extended lock)'}</Text>
+        <HStack>
+          {isLoading ? (
+            <Skeleton h="16px" w="40px" />
+          ) : (
+            <NumberText fontWeight={detailed ? '700' : undefined}>
+              {totalExpectedVeBal.eq(0) ? '-' : fNum('token', totalExpectedVeBal)}
+            </NumberText>
           )}
         </HStack>
       </HStack>

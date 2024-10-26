@@ -20,6 +20,7 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionTypes }: UseLo
       chain: mainnetNetworkConfig.chain,
       approvalAmounts: [lockAmount],
       actionType: 'Locking',
+      lpToken: 'token',
     })
 
   const unlockStep = useLockStep({ lockAmount, lockEndDate, lockActionType: LockActionType.Unlock })
