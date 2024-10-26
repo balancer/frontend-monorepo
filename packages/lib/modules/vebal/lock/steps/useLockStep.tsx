@@ -8,7 +8,7 @@ import {
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { Hex, parseUnits } from 'viem'
+import { Hex } from 'viem'
 import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
 import {
   LockActionType,

@@ -24,8 +24,14 @@ import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { VebalLockDetails } from '@repo/lib/modules/vebal/lock/VebalLockDetails'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useRouter } from 'next/navigation'
-import { useBuildLockSteps } from '@repo/lib/modules/vebal/lock/steps/useBuildLockSteps'
+import {
+  useBuildLockSteps,
+  UseBuildLockStepsArgs,
+} from '@repo/lib/modules/vebal/lock/steps/useBuildLockSteps'
 import { getPreviewLabel } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
+import { useEffect, useState } from 'react'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 type Props = {
   isOpen: boolean
@@ -41,13 +47,43 @@ export function VebalLockModal({
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const router = useRouter()
 
+  const { userAddress, isLoading: userAccountIsLoading } = useUserAccount()
   const { isDesktop, isMobile } = useBreakpoints()
-  const { vebalBptToken, totalAmount, lockMode } = useVebalLock()
-  const { transactionSteps, lockTxHash } = useBuildLockSteps(extendExpired)
+  const {
+    vebalBptToken,
+    totalAmount,
+    lockDuration,
+    lockMode,
+    isIncreasedLockAmount,
+    isLoading: vebalLockIsLoading,
+  } = useVebalLock()
+  const { mainnetLockedInfo, isLoading: vebalLockDataIsLoading } = useVebalLockData()
+
+  // This value should be static when modal is opened
+  const [buildLockStepsArgs, setBuildLockStepsArgs] = useState<UseBuildLockStepsArgs>(() => ({
+    extendExpired,
+    totalAmount,
+    lockDuration: lockDuration,
+    isIncreasedLockAmount: isIncreasedLockAmount,
+    mainnetLockedInfo: mainnetLockedInfo,
+  }))
+
+  // "freeze" useBuildLockSteps args on modal open/close (update value only on userAddress change)
+  useEffect(() => {
+    setBuildLockStepsArgs({
+      extendExpired,
+      totalAmount,
+      lockDuration: lockDuration,
+      isIncreasedLockAmount: isIncreasedLockAmount,
+      mainnetLockedInfo: mainnetLockedInfo,
+    })
+  }, [isOpen, userAddress])
+
+  const { transactionSteps, lockTxHash } = useBuildLockSteps(buildLockStepsArgs)
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
 
-  const isLoading = false
+  const isLoading = vebalLockIsLoading || vebalLockDataIsLoading || userAccountIsLoading
 
   return (
     <Modal

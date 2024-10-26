@@ -3,13 +3,25 @@ import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
 import { useLockSteps } from '@repo/lib/modules/vebal/lock/steps/useLockSteps'
 import { Address, parseUnits } from 'viem'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
-import { useVebalLock } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
+import { UseVebalLockDataResult } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
+import { useVebalLock, UseVebalLockResult } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
 
-export function useBuildLockSteps(extendExpired: boolean) {
-  const { vebalBptToken, totalAmount, lockDuration, isIncreasedLockAmount } = useVebalLock()
+export interface UseBuildLockStepsArgs {
+  extendExpired: boolean
+  totalAmount: UseVebalLockResult['totalAmount']
+  lockDuration: UseVebalLockResult['lockDuration']
+  isIncreasedLockAmount: UseVebalLockResult['isIncreasedLockAmount']
+  mainnetLockedInfo: UseVebalLockDataResult['mainnetLockedInfo']
+}
 
-  const { mainnetLockedInfo } = useVebalLockData()
+export function useBuildLockSteps({
+  extendExpired,
+  lockDuration,
+  isIncreasedLockAmount,
+  totalAmount,
+  mainnetLockedInfo,
+}: UseBuildLockStepsArgs) {
+  const { vebalBptToken } = useVebalLock()
 
   const lockActionTypes = useMemo(() => {
     if (mainnetLockedInfo.isExpired) {
