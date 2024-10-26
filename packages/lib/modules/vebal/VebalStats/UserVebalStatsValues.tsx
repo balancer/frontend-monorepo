@@ -1,18 +1,21 @@
 'use client'
 
 import React, { useMemo } from 'react'
-import { Heading, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { Heading, HStack, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { differenceInDays, format } from 'date-fns'
 import BigNumber from 'bignumber.js'
 import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
+import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
+import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 
 export type VebalUserStatsValues = {
   balance: string | undefined
   rank: number | undefined
   percentOfAllSupply: BigNumber | undefined
   lockedUntil: string | undefined
+  lockExpired: boolean | undefined
 }
 
 export function UserVebalStatsValues() {
@@ -28,16 +31,16 @@ export function UserVebalStatsValues() {
             lockData.mainnetLockedInfo.totalSupply || 0
           )
         : undefined
-      const lockedUntil =
-        !lockData.mainnetLockedInfo.lockedEndDate || lockData.mainnetLockedInfo.isExpired
-          ? undefined
-          : format(lockData.mainnetLockedInfo.lockedEndDate, 'yyyy-MM-dd')
+      const lockedUntil = lockData.mainnetLockedInfo.lockedEndDate
+        ? format(lockData.mainnetLockedInfo.lockedEndDate, 'yyyy-MM-dd')
+        : undefined
 
       return {
         balance,
         rank,
         percentOfAllSupply,
         lockedUntil,
+        lockExpired: lockData.mainnetLockedInfo.isExpired,
       }
     }
   }, [lockData.mainnetLockedInfo, vebalUserData.isConnected, vebalUserData.data])
@@ -67,7 +70,13 @@ export function UserVebalStatsValues() {
         {vebalUserData.loading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
-          <Heading size="h4">{vebalUserStatsValues?.rank ?? <>&mdash;</>}</Heading>
+          <Heading size="h4">
+            {vebalUserStatsValues && vebalUserStatsValues.rank ? (
+              fNum('integer', vebalUserStatsValues.rank)
+            ) : (
+              <>&mdash;</>
+            )}
+          </Heading>
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
@@ -95,16 +104,23 @@ export function UserVebalStatsValues() {
         ) : (
           <Tooltip
             label={
-              vebalUserStatsValues?.lockedUntil
-                ? `Expires ${format(new Date(vebalUserStatsValues.lockedUntil), 'dd MMM yyyy')}`
-                : undefined
+              vebalUserStatsValues?.lockExpired
+                ? 'You are no longer receiving veBAL benefits like voting incentives and a share of protocol revenue.'
+                : vebalUserStatsValues?.lockedUntil
+                  ? `Expires ${format(new Date(vebalUserStatsValues.lockedUntil), PRETTY_DATE_FORMAT)}`
+                  : undefined
             }
           >
-            <Heading size="h4">
-              {vebalUserStatsValues?.lockedUntil ? (
-                `${differenceInDays(new Date(vebalUserStatsValues.lockedUntil), new Date())} days`
-              ) : (
+            <Heading color={vebalUserStatsValues?.lockExpired ? 'font.error' : undefined} size="h4">
+              {!vebalUserStatsValues?.lockedUntil ? (
                 <>&mdash;</>
+              ) : vebalUserStatsValues.lockExpired ? (
+                <HStack>
+                  <>{format(new Date(vebalUserStatsValues.lockedUntil), PRETTY_DATE_FORMAT)}</>
+                  <AlertIcon />
+                </HStack>
+              ) : (
+                `${differenceInDays(new Date(vebalUserStatsValues.lockedUntil), new Date())} days`
               )}
             </Heading>
           </Tooltip>
