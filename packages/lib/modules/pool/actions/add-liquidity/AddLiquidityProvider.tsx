@@ -30,6 +30,7 @@ import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/p
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { getPoolTokens } from '../../pool.helpers'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
+import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -152,6 +153,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     [areEmptyAmounts(humanAmountsIn), 'You must specify one or more token amounts'],
     [hasValidationErrors, 'Errors in token inputs'],
     [needsToAcceptHighPI, 'Accept high price impact first'],
+    [isUnbalancedAddErrorMessage(priceImpactQuery.error), 'Unbalanced join'],
     [simulationQuery.isLoading, 'Fetching quote...'],
     [simulationQuery.isError, 'Error fetching quote'],
     [priceImpactQuery.isLoading, 'Fetching price impact...'],

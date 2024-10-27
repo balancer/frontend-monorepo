@@ -6,6 +6,7 @@ import {
   isNotEnoughGasError,
   isPausedError,
   isTooManyRequestsError,
+  isUnbalancedAddError,
   isUserRejectedError,
   isViemHttpFetchError,
 } from '../../utils/error-filters'
@@ -22,6 +23,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
   const error = ensureError(_error)
   if (isUserRejectedError(error)) return null
   const errorName = customErrorName ? `${customErrorName} (${error.name})` : error.name
+
   if (isViemHttpFetchError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
@@ -34,6 +36,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
       </ErrorAlert>
     )
   }
+
   if (isPausedError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
@@ -45,6 +48,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
       </ErrorAlert>
     )
   }
+
   if (isTooManyRequestsError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
@@ -56,6 +60,7 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
       </ErrorAlert>
     )
   }
+
   if (isNotEnoughGasError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
@@ -67,6 +72,17 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
       </ErrorAlert>
     )
   }
+
+  if (isUnbalancedAddError(_error)) {
+    return (
+      <ErrorAlert title={customErrorName} {...rest}>
+        <Text color="black" variant="secondary">
+          Your input(s) would excessively unbalance the pool. Please adjust to be more proportional.
+        </Text>
+      </ErrorAlert>
+    )
+  }
+
   const errorMessage = error?.shortMessage || error.message
 
   if (errorMessage === 'RPC Request failed.' || errorMessage === 'An unknown RPC error occurred.') {
