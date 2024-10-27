@@ -6,7 +6,7 @@ import { startOfDay } from 'date-fns'
  * Returns actual (autoupdated) new Date()
  * @param interval - Autoupdate interval in ms (default: 1 min)
  */
-export function dateHooks(interval = oneMinInMs) {
+export function useCurrentDate(interval = oneMinInMs) {
   const [date, setDate] = useState(() => new Date())
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export function dateHooks(interval = oneMinInMs) {
  * @param interval
  */
 export function useToday(interval = oneMinInMs) {
-  const currentDate = dateHooks(interval)
+  const currentDate = useCurrentDate(interval)
   const today = startOfDay(currentDate).getTime()
   return useMemo(() => new Date(today), [today])
 }

@@ -9,7 +9,7 @@ import { mainnet } from 'viem/chains'
 import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
-import { dateHooks } from '@repo/lib/shared/hooks/date.hooks'
+import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 import { toJsTimestamp } from '@repo/lib/shared/utils/time'
 import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
 
@@ -95,7 +95,7 @@ export function _useVebalLockData() {
     enabled: isConnected,
   })
 
-  const now = dateHooks()
+  const now = useCurrentDate()
 
   const mainnetLockedInfo = useMemo(() => {
     const mainnetResults = results[mainnetNetworkConfig.chainId]
