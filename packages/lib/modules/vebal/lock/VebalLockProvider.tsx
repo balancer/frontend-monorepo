@@ -33,10 +33,17 @@ export enum LockMode {
 interface ExpectedVeBalArgs {
   bpt: string
   minLockEndDate: Date
+  maxLockEndDate: Date
   lockEndDate: Date
 }
-export function expectedVeBal({ bpt, minLockEndDate, lockEndDate }: ExpectedVeBalArgs): {
+export function expectedVeBal({
+  bpt,
+  minLockEndDate,
+  lockEndDate,
+  maxLockEndDate,
+}: ExpectedVeBalArgs): {
   minLockVeBal: BigNumber
+  maxLockVeBal: BigNumber
   bonusVeBal: BigNumber
   totalExpectedVeBal: BigNumber
 } {
@@ -46,15 +53,18 @@ export function expectedVeBal({ bpt, minLockEndDate, lockEndDate }: ExpectedVeBa
 
   const lockTime = differenceInSeconds(previousThursdayBeforeLockDate, now)
   const minLockTime = differenceInSeconds(previousThursdayBeforeMinLockDate, now)
+  const maxLockTime = differenceInSeconds(maxLockEndDate, now)
 
   const totalExpectedVeBal = bn(bpt).times(lockTime).div(oneYearInSecs)
 
   const minLockVeBal = bn(bpt).times(minLockTime).div(oneYearInSecs)
+  const maxLockVeBal = bn(bpt).times(maxLockTime).div(oneYearInSecs)
   const bonusVeBal = totalExpectedVeBal.minus(minLockVeBal)
 
   return {
     totalExpectedVeBal,
     minLockVeBal,
+    maxLockVeBal,
     bonusVeBal,
   }
 }
@@ -64,19 +74,26 @@ export function _useVebalLock() {
   if (!vebalBptToken) throw new Error('vebalBptToken not found')
 
   const { mainnetLockedInfo, isLoading } = useVebalLockData()
-  const { hasValidationErrors } = useTokenInputsValidation()
+  const { hasValidationErrors, resetValidationErrors } = useTokenInputsValidation()
 
   const [lpToken, setLpToken] = useState<HumanAmount>()
+  const resetLpToken = () => {
+    setLpToken(undefined)
+    resetValidationErrors()
+  }
 
   const lpTokenAmount = bn(lpToken || 0)
 
+  const lockedAmount = mainnetLockedInfo.hasExistingLock
+    ? mainnetLockedInfo.lockedAmount
+    : undefined
+
   const totalAmount = useMemo(() => {
-    if (mainnetLockedInfo.hasExistingLock) {
-      const lockedAmount = bn(mainnetLockedInfo.lockedAmount ?? 0)
-      return lockedAmount.plus(lpTokenAmount)
+    if (lockedAmount) {
+      return bn(lockedAmount).plus(lpTokenAmount)
     }
     return lpTokenAmount
-  }, [lpTokenAmount, mainnetLockedInfo])
+  }, [lpTokenAmount, lockedAmount])
 
   const lockDuration = useLockDuration({
     lockedEndDate: mainnetLockedInfo.lockedEndDate
@@ -124,6 +141,7 @@ export function _useVebalLock() {
     bpt: totalAmount.toString(),
     lockEndDate: lockDuration.lockEndDate,
     minLockEndDate: lockDuration.minLockEndDate,
+    maxLockEndDate: lockDuration.maxLockEndDate,
   })
 
   const shareOfVeBal = useMemo(() => {
@@ -135,9 +153,11 @@ export function _useVebalLock() {
   return {
     lpToken,
     setLpToken,
+    resetLpToken,
     vebalBptToken,
     isDisabled,
     disabledReason,
+    lockedAmount,
     totalAmount,
     lockDuration,
     isLoading,

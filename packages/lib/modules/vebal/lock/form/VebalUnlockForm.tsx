@@ -18,7 +18,6 @@ import {
 import { LockMode, useVebalLock } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
 import { VebalLockModal } from '@repo/lib/modules/vebal/lock/modal/VebalLockModal'
 import NextLink from 'next/link'
-import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
@@ -27,6 +26,7 @@ import { useClickable } from '@chakra-ui/clickable'
 import { getModalLabel } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
 import { format } from 'date-fns'
 import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
+import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'
 
 export interface ClickableCardProps extends CardProps {
   color?: string
@@ -39,7 +39,7 @@ export function ClickableCard(props: ClickableCardProps) {
 
 export function VebalUnlockForm() {
   const { refetchAll, mainnetLockedInfo, isLoading } = useVebalLockData()
-  const { vebalBptToken, previewModalDisclosure } = useVebalLock()
+  const { vebalBptToken, previewModalDisclosure, lockDuration } = useVebalLock()
 
   const router = useRouter()
 
@@ -66,7 +66,7 @@ export function VebalUnlockForm() {
         <VStack align="start" spacing="lg" w="full">
           <Alert status="error" w="full">
             <AlertIcon />
-            <VStack alignItems="start">
+            <VStack alignItems="start" spacing="none">
               <AlertTitle>
                 Your veBAL expired on{' '}
                 {isLoading ? (
@@ -89,10 +89,24 @@ export function VebalUnlockForm() {
               <Skeleton h="75px" w="full" />
             ) : (
               <Card variant="subSection">
-                <TokenRow
+                <TokenRowWithDetails
                   address={vebalBptToken.address as Address}
                   chain={GqlChain.Mainnet}
                   value={mainnetLockedInfo.lockedAmount ?? 0}
+                  details={
+                    lockDuration.lockedUntilDateFormatted
+                      ? [
+                          [
+                            <Text fontSize="sm" key={1} variant="secondary">
+                              Lock-up period ended
+                            </Text>,
+                            <Text fontSize="sm" key={2} variant="secondary">
+                              {lockDuration.lockedUntilDateFormatted}
+                            </Text>,
+                          ],
+                        ]
+                      : undefined
+                  }
                 />
               </Card>
             )}
