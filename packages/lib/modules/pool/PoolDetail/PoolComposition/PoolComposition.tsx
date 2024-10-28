@@ -1,7 +1,6 @@
 'use client'
 
 import { Card, Divider, HStack, Heading, Skeleton, Stack, Text, VStack } from '@chakra-ui/react'
-import React from 'react'
 import { usePool } from '../../PoolProvider'
 import { Address } from 'viem'
 import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
@@ -14,6 +13,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { getPoolDisplayTokens } from '../../pool.utils'
+import { PoolTypeTag } from '../PoolTypeTag'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -77,12 +77,6 @@ export function PoolComposition() {
   const displayTokens = getPoolDisplayTokens(pool)
   const totalLiquidity = calcTotalUsdValue(displayTokens, chain)
 
-  function CardContentBlock() {
-    return (
-      <CardContent chain={chain} displayTokens={displayTokens} totalLiquidity={totalLiquidity} />
-    )
-  }
-
   return (
     <Card>
       <Stack
@@ -92,18 +86,20 @@ export function PoolComposition() {
         spacing="md"
       >
         <VStack align="flex-start" spacing="md" w="full">
-          <Heading fontWeight="bold" size={{ base: 'h4', md: 'h5' }}>
-            Pool composition
-          </Heading>
-          {isMobile ? (
-            <CardContentBlock />
-          ) : (
-            <Card variant="subSection" w="full">
-              <CardContentBlock />
-            </Card>
-          )}
-          {isMobile && <Divider />}
-          <Text color="grayText" fontSize="sm" mt="auto" pb="sm">
+          <HStack justifyContent="space-between" w="full">
+            <Heading fontWeight="bold" size={{ base: 'h4', md: 'h5' }}>
+              Pool composition
+            </Heading>
+            <PoolTypeTag pool={pool} />
+          </HStack>
+          <Divider />
+          <CardContent
+            chain={chain}
+            displayTokens={displayTokens}
+            totalLiquidity={totalLiquidity}
+          />
+          <Divider mt="auto" />
+          <Text color="grayText" fontSize="sm" pb="sm">
             From {fNum('integer', pool.dynamicData.holdersCount)} Liquidity Providers
           </Text>
         </VStack>
