@@ -43,6 +43,7 @@ import { CompactTokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectL
 import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isPoolSwapAllowed } from '../pool/pool.helpers'
+import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -110,19 +111,23 @@ export function SwapForm({ redirectToPoolPage }: Props) {
   function handleTokenSelectForPoolSwap(token: GqlToken) {
     const tokenAddress = token.address as Address
 
+    console.log({ tokensLength: tokens.length, tokenSelectKey, tokenAddress, tokenIn, tokenOut })
+
     if (
       tokens.length === 2 &&
       tokenSelectKey === 'tokenIn' &&
       isSameAddress(tokenAddress, tokenOut.address)
     ) {
-      return switchTokens()
+      if (tokenOut.address) return switchTokens()
+      return setTokenIn(tokenAddress)
     }
     if (
       tokens.length === 2 &&
       tokenSelectKey === 'tokenOut' &&
       isSameAddress(tokenAddress, tokenIn.address)
     ) {
-      return switchTokens()
+      if (tokenIn.address) return switchTokens()
+      return setTokenOut(tokenAddress)
     }
 
     if (!token) return
@@ -130,6 +135,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     if (
       pool &&
       tokenSelectKey === 'tokenIn' &&
+      supportsNestedActions(pool) &&
       !isPoolSwapAllowed(pool, tokenAddress, tokenOut.address)
     ) {
       setTokenIn(tokenAddress)
@@ -140,6 +146,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     if (
       pool &&
       tokenSelectKey === 'tokenOut' &&
+      supportsNestedActions(pool) &&
       !isPoolSwapAllowed(pool, tokenAddress, tokenIn.address)
     ) {
       setTokenIn('' as Address)
