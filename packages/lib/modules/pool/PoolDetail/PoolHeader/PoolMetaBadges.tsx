@@ -16,6 +16,8 @@ import { Repeat } from 'react-feather'
 import { PoolListTokenPills } from '../../PoolList/PoolListTokenPills'
 import { shouldHideSwapFee } from '../../pool.utils'
 import { getChainShortName } from '@repo/lib/config/app.config'
+import { PoolTypeTag } from '../PoolTypeTag'
+import { PoolVersionTag } from '../../PoolList/PoolListTable/PoolVersionTag'
 
 export default function PoolMetaBadges() {
   const { pool, chain } = usePool()
@@ -40,6 +42,8 @@ export default function PoolMetaBadges() {
         />
       </Badge>
       <PoolListTokenPills pool={pool} px="sm" py="2" />
+      <PoolVersionTag isSmall pool={pool} />
+      <PoolTypeTag pool={pool} />
       {!shouldHideSwapFee(pool.type) && (
         <Popover trigger="hover">
           <PopoverTrigger>
