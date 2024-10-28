@@ -111,8 +111,6 @@ export function SwapForm({ redirectToPoolPage }: Props) {
   function handleTokenSelectForPoolSwap(token: GqlToken) {
     const tokenAddress = token.address as Address
 
-    console.log({ tokensLength: tokens.length, tokenSelectKey, tokenAddress, tokenIn, tokenOut })
-
     if (
       tokens.length === 2 &&
       tokenSelectKey === 'tokenIn' &&
