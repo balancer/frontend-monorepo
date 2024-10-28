@@ -26,6 +26,8 @@ export enum BaseVariant {
   v3 = 'v3',
 }
 
+export type ProtocolVersion = 1 | 2 | 3
+
 // these variants support extra features in project config
 export enum PartnerVariant {
   cow = 'cow',

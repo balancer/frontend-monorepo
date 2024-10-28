@@ -1,22 +1,38 @@
 'use client'
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { GqlChain, GqlSorSwapType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
-import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ApolloClient, useApolloClient, useReactiveVar } from '@apollo/client'
+import { HumanAmount } from '@balancer/sdk'
+import { useDisclosure } from '@chakra-ui/react'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
+import { useMakeVarPersisted } from '@repo/lib/shared/hooks/useMakeVarPersisted'
+import { useVault } from '@repo/lib/shared/hooks/useVault'
+import { LABELS } from '@repo/lib/shared/labels'
+import { GqlChain, GqlSorSwapType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import { invert } from 'lodash'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
-import { Address, Hash, isAddress, parseUnits } from 'viem'
+import { Address, Hash, Hex, isAddress, parseUnits } from 'viem'
+import { ChainSlug, chainToSlugMap, slugToChainMap } from '../pool/pool.utils'
+import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
+import { usePriceImpact } from '../price-impact/PriceImpactProvider'
+import { useTokenBalances } from '../tokens/TokenBalancesProvider'
+import { useTokenInputsValidation } from '../tokens/TokenInputsValidationProvider'
+import { useTokens } from '../tokens/TokensProvider'
+import { useTransactionSteps } from '../transactions/transaction-steps/useTransactionSteps'
 import { emptyAddress } from '../web3/contracts/wagmi-helpers'
 import { useUserAccount } from '../web3/UserAccountProvider'
-import { LABELS } from '@repo/lib/shared/labels'
-import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
+import { AuraBalSwapHandler } from './handlers/AuraBalSwap.handler'
 import { DefaultSwapHandler } from './handlers/DefaultSwap.handler'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { NativeWrapHandler } from './handlers/NativeWrap.handler'
+import { PoolSwapHandler } from './handlers/PoolSwap.handler'
+import { SwapHandler } from './handlers/Swap.handler'
 import { useSimulateSwapQuery } from './queries/useSimulateSwapQuery'
-import { useTokens } from '../tokens/TokensProvider'
-import { useDisclosure } from '@chakra-ui/react'
-import { useSwapSteps } from './useSwapSteps'
+import { isAuraBalSwap } from './swap.helpers'
 import {
   OSwapAction,
   SdkSimulateSwapResponse,
@@ -24,10 +40,8 @@ import {
   SwapAction,
   SwapState,
 } from './swap.types'
-import { SwapHandler } from './handlers/Swap.handler'
-import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
-import { useVault } from '@repo/lib/shared/hooks/useVault'
-import { NativeWrapHandler } from './handlers/NativeWrap.handler'
+import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
+import { useSwapSteps } from './useSwapSteps'
 import {
   getWrapHandlerClass,
   getWrapType,
@@ -36,19 +50,7 @@ import {
   isSupportedWrap,
   isWrapOrUnwrap,
 } from './wrap.helpers'
-import { useTokenInputsValidation } from '../tokens/TokenInputsValidationProvider'
-import { useMakeVarPersisted } from '@repo/lib/shared/hooks/useMakeVarPersisted'
-import { HumanAmount } from '@balancer/sdk'
-import { ChainSlug, chainToSlugMap, slugToChainMap } from '../pool/pool.utils'
-import { invert } from 'lodash'
-import { useTransactionSteps } from '../transactions/transaction-steps/useTransactionSteps'
-import { useTokenBalances } from '../tokens/TokenBalancesProvider'
-import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
-import { usePriceImpact } from '../price-impact/PriceImpactProvider'
-import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
-import { isAuraBalSwap } from './swap.helpers'
-import { AuraBalSwapHandler } from './handlers/AuraBalSwap.handler'
-import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
+import { ProtocolVersion } from '../pool/pool.types'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -69,7 +71,9 @@ function selectSwapHandler(
   chain: GqlChain,
   swapType: GqlSorSwapType,
   apolloClient: ApolloClient<object>,
-  tokens: GqlToken[]
+  tokens: GqlToken[],
+  poolId?: Hex,
+  poolVersion?: ProtocolVersion,
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -80,17 +84,21 @@ function selectSwapHandler(
     return new AuraBalSwapHandler(tokens)
   }
 
+  if (poolId && poolVersion) return new PoolSwapHandler(poolId, tokens, poolVersion)
+
   return new DefaultSwapHandler(apolloClient)
 }
 
 export type SwapProviderProps = {
   pathParams: PathParams
-  isPoolSwap?: boolean
   // Only used by pool swap
+  poolId?: Hex
   poolTokens?: GqlToken[]
+  poolVersion?: ProtocolVersion
 }
-export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) {
+export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
+  const isPoolSwap = !!poolId
   const isPoolSwapUrl = useIsPoolSwapUrl()
   const swapStateVar = useMakeVarPersisted<SwapState>(
     {
@@ -107,7 +115,7 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) 
       swapType: GqlSorSwapType.ExactIn,
       selectedChain: GqlChain.Mainnet,
     },
-    'swapState'
+    'swapState',
   )
 
   const swapState = useReactiveVar(swapStateVar)
@@ -126,18 +134,18 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) 
   const previewModalDisclosure = useDisclosure()
 
   const client = useApolloClient()
-  const handler = useMemo(
-    () =>
-      selectSwapHandler(
-        swapState.tokenIn.address,
-        swapState.tokenOut.address,
-        swapState.selectedChain,
-        swapState.swapType,
-        client,
-        tokens
-      ),
-    [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain]
-  )
+  const handler = useMemo(() => {
+    return selectSwapHandler(
+      swapState.tokenIn.address,
+      swapState.tokenOut.address,
+      swapState.selectedChain,
+      swapState.swapType,
+      client,
+      tokens,
+      poolId,
+      poolVersion,
+    )
+  }, [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain])
 
   const isTokenInSet = swapState.tokenIn.address !== emptyAddress
   const isTokenOutSet = swapState.tokenOut.address !== emptyAddress
@@ -156,19 +164,24 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) 
   const tokenInUsd = usdValueForToken(tokenInInfo, swapState.tokenIn.amount)
   const tokenOutUsd = usdValueForToken(tokenOutInfo, swapState.tokenOut.amount)
 
+  const getSwapAmount = () => {
+    const swapState = swapStateVar()
+    return (
+      (swapState.swapType === GqlSorSwapType.ExactIn
+        ? swapState.tokenIn.amount
+        : swapState.tokenOut.amount) || '0'
+    )
+  }
+
   const shouldFetchSwap = (state: SwapState, urlTxHash?: Hash) => {
     if (urlTxHash) return false
     return (
       isAddress(state.tokenIn.address) &&
       isAddress(state.tokenOut.address) &&
       !!state.swapType &&
-      bn(getSwapAmount(swapState)).gt(0)
+      bn(getSwapAmount()).gt(0)
     )
   }
-
-  const getSwapAmount = (state: SwapState) =>
-    (state.swapType === GqlSorSwapType.ExactIn ? state.tokenIn.amount : state.tokenOut.amount) ||
-    '0'
 
   const simulationQuery = useSimulateSwapQuery({
     handler,
@@ -177,7 +190,7 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) 
       tokenIn: swapState.tokenIn.address,
       tokenOut: swapState.tokenOut.address,
       swapType: swapState.swapType,
-      swapAmount: getSwapAmount(swapState),
+      swapAmount: getSwapAmount(),
     },
     enabled: shouldFetchSwap(swapState, urlTxHash),
   })
@@ -247,7 +260,7 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) 
 
   function setTokenInAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {}
+    { userTriggered = true }: { userTriggered?: boolean } = {},
   ) {
     const state = swapStateVar()
     const newState = {
@@ -274,7 +287,7 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) 
 
   function setTokenOutAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {}
+    { userTriggered = true }: { userTriggered?: boolean } = {},
   ) {
     const state = swapStateVar()
     const newState = {
@@ -396,7 +409,7 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) 
       const wrapType = getWrapType(
         swapState.tokenIn.address,
         swapState.tokenOut.address,
-        swapState.selectedChain
+        swapState.selectedChain,
       )
       return wrapType ? wrapType : OSwapAction.SWAP
     }
@@ -478,6 +491,7 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) 
     setInitialAmounts(amountIn, amountOut)
 
     if (!swapState.tokenIn.address && !swapState.tokenOut.address) setDefaultTokens()
+    if (isPoolSwap) resetSwapAmounts()
   }, [])
 
   // When wallet chain changes, update the swap form chain
@@ -550,7 +564,7 @@ export function _useSwap({ isPoolSwap = false, pathParams }: SwapProviderProps) 
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [hasValidationErrors, 'Invalid input'],
     [simulationQuery.isError, 'Error fetching swap'],
-    [simulationQuery.isLoading, 'Fetching swap...']
+    [simulationQuery.isLoading, 'Fetching swap...'],
   )
 
   return {
