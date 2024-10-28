@@ -16,7 +16,7 @@ import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisable
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { invert } from 'lodash'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
-import { Address, Hash, Hex, isAddress, parseUnits } from 'viem'
+import { Address, Hash, isAddress, parseUnits } from 'viem'
 import { ChainSlug, chainToSlugMap, slugToChainMap } from '../pool/pool.utils'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
 import { usePriceImpact } from '../price-impact/PriceImpactProvider'
@@ -50,7 +50,8 @@ import {
   isSupportedWrap,
   isWrapOrUnwrap,
 } from './wrap.helpers'
-import { ProtocolVersion } from '../pool/pool.types'
+import { Pool } from '../pool/PoolProvider'
+import { getChildTokens, getStandardRootTokens, isStandardRootToken } from '../pool/pool.helpers'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -72,8 +73,8 @@ function selectSwapHandler(
   swapType: GqlSorSwapType,
   apolloClient: ApolloClient<object>,
   tokens: GqlToken[],
-  poolId?: Hex,
-  poolVersion?: ProtocolVersion,
+  pool?: Pool,
+  poolActionableTokens?: GqlToken[],
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -84,7 +85,9 @@ function selectSwapHandler(
     return new AuraBalSwapHandler(tokens)
   }
 
-  if (poolId && poolVersion) return new PoolSwapHandler(poolId, tokens, poolVersion)
+  if (pool && poolActionableTokens) {
+    return new PoolSwapHandler(pool, poolActionableTokens)
+  }
 
   return new DefaultSwapHandler(apolloClient)
 }
@@ -92,13 +95,12 @@ function selectSwapHandler(
 export type SwapProviderProps = {
   pathParams: PathParams
   // Only used by pool swap
-  poolId?: Hex
-  poolTokens?: GqlToken[]
-  poolVersion?: ProtocolVersion
+  pool?: Pool
+  poolActionableTokens?: GqlToken[]
 }
-export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps) {
+export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
-  const isPoolSwap = !!poolId
+  const isPoolSwap = pool && poolActionableTokens
   const isPoolSwapUrl = useIsPoolSwapUrl()
   const swapStateVar = useMakeVarPersisted<SwapState>(
     {
@@ -142,8 +144,8 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
       swapState.swapType,
       client,
       tokens,
-      poolId,
-      poolVersion,
+      pool,
+      poolActionableTokens,
     )
   }, [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain])
 
@@ -479,11 +481,27 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
     } else resetSwapAmounts()
   }
 
+  // Sets initial swap state for pool swap edge-case
+  function setInitialPoolSwapState(pool: Pool) {
+    const { tokenIn } = pathParams
+    setInitialTokenIn(tokenIn)
+    if (isStandardRootToken(pool, tokenIn as Address)) {
+      setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
+    } else {
+      setInitialTokenOut(getStandardRootTokens(pool, poolActionableTokens)[0].address)
+    }
+    resetSwapAmounts()
+  }
+
   // Set state on initial load
   useEffect(() => {
     if (urlTxHash) return
 
     const { chain, tokenIn, tokenOut, amountIn, amountOut } = pathParams
+
+    if (isPoolSwap) {
+      return setInitialPoolSwapState(pool)
+    }
 
     setInitialChain(chain)
     setInitialTokenIn(tokenIn)
@@ -491,7 +509,6 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
     setInitialAmounts(amountIn, amountOut)
 
     if (!swapState.tokenIn.address && !swapState.tokenOut.address) setDefaultTokens()
-    if (isPoolSwap) resetSwapAmounts()
   }, [])
 
   // When wallet chain changes, update the swap form chain
@@ -531,7 +548,7 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
     if (!swapTxHash) replaceUrlPath()
   }, [swapState.selectedChain, swapState.tokenIn, swapState.tokenOut, swapState.tokenIn.amount])
 
-  // Update selecteable tokens when the chain changes
+  // Update selectable tokens when the chain changes
   useEffect(() => {
     if (isPoolSwap) return
     setTokens(getTokensByChain(swapState.selectedChain))
@@ -587,6 +604,8 @@ export function _useSwap({ poolId, poolVersion, pathParams }: SwapProviderProps)
     isWrap,
     swapTxConfirmed,
     isPoolSwap,
+    pool,
+    poolActionableTokens,
     replaceUrlPath,
     resetSwapAmounts,
     setTokenSelectKey,

@@ -42,6 +42,7 @@ import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
 import { CompactTokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectList/CompactTokenSelectModal'
 import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { isPoolSwapAllowed } from '../pool/pool.helpers'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -63,6 +64,8 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     swapTxHash,
     transactionSteps,
     isPoolSwap,
+    pool,
+    poolActionableTokens,
     setSelectedChain,
     setTokenInAmount,
     setTokenOutAmount,
@@ -105,20 +108,45 @@ export function SwapForm({ redirectToPoolPage }: Props) {
   }
 
   function handleTokenSelectForPoolSwap(token: GqlToken) {
+    const tokenAddress = token.address as Address
+
     if (
       tokens.length === 2 &&
       tokenSelectKey === 'tokenIn' &&
-      isSameAddress(token.address, tokenOut.address)
+      isSameAddress(tokenAddress, tokenOut.address)
     ) {
       return switchTokens()
     }
     if (
       tokens.length === 2 &&
       tokenSelectKey === 'tokenOut' &&
-      isSameAddress(token.address, tokenIn.address)
+      isSameAddress(tokenAddress, tokenIn.address)
     ) {
       return switchTokens()
     }
+
+    if (!token) return
+
+    if (
+      pool &&
+      tokenSelectKey === 'tokenIn' &&
+      !isPoolSwapAllowed(pool, tokenAddress, tokenOut.address)
+    ) {
+      setTokenIn(tokenAddress)
+      setTokenOut('' as Address)
+      return
+    }
+
+    if (
+      pool &&
+      tokenSelectKey === 'tokenOut' &&
+      !isPoolSwapAllowed(pool, tokenAddress, tokenIn.address)
+    ) {
+      setTokenIn('' as Address)
+      setTokenOut(tokenAddress)
+      return
+    }
+
     handleTokenSelect(token)
   }
 
@@ -275,7 +303,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
           onClose={tokenSelectDisclosure.onClose}
           onOpen={tokenSelectDisclosure.onOpen}
           onTokenSelect={handleTokenSelectForPoolSwap}
-          tokens={tokens}
+          tokens={poolActionableTokens || []}
         />
       ) : (
         <TokenSelectModal

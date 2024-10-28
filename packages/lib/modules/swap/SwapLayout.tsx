@@ -20,7 +20,7 @@ export default function SwapLayout({ props, children }: Props) {
   const chain = props.pathParams.chain
   const { getTokensByChain } = useTokens()
   const initChain = chain ? slugToChainMap[chain as ChainSlug] : GqlChain.Mainnet
-  const initTokens = props.poolTokens || getTokensByChain(initChain)
+  const initTokens = props.poolActionableTokens || getTokensByChain(initChain)
 
   return (
     <TransactionStateProvider>
