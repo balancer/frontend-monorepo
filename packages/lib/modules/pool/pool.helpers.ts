@@ -371,16 +371,16 @@ export function getNestedBptTokens(poolTokens: PoolToken[]) {
   return poolTokens.filter(token => token.nestedPool)
 }
 
-// Returns the parent BPT token whose nested tokens include the given underlying token address
-export function getNestedBptParentToken(poolTokens: PoolToken[], underlyingTokenAddress: Address) {
+// Returns the parent BPT token whose nested tokens include the given child token address
+export function getNestedBptParentToken(poolTokens: PoolToken[], childTokenAddress: Address) {
   const nestedBptToken = getNestedBptTokens(poolTokens).find(token =>
     token.nestedPool?.tokens.some(nestedToken =>
-      isSameAddress(nestedToken.address, underlyingTokenAddress),
+      isSameAddress(nestedToken.address, childTokenAddress),
     ),
   )
   if (!nestedBptToken) {
     throw new Error(
-      `Provided nestedTokenAddress ${underlyingTokenAddress} does not belong to any underlying token amongst the nested pool/s (${getNestedBptTokens(
+      `Provided nestedTokenAddress ${childTokenAddress} does not belong to any underlying token amongst the nested pool/s (${getNestedBptTokens(
         poolTokens,
       )
         .map(t => t.symbol)
