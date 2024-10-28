@@ -52,6 +52,7 @@ import {
 } from './wrap.helpers'
 import { Pool } from '../pool/PoolProvider'
 import { getChildTokens, getStandardRootTokens, isStandardRootToken } from '../pool/pool.helpers'
+import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -485,17 +486,16 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   function setInitialPoolSwapState(pool: Pool) {
     const { tokenIn } = pathParams
     setInitialTokenIn(tokenIn)
-    const hasPoolActionableTokens: boolean = (poolActionableTokens?.length ?? 0) > 0
-    if (isStandardRootToken(pool, tokenIn as Address)) {
-      setInitialTokenOut(
-        hasPoolActionableTokens ? getChildTokens(pool, poolActionableTokens)[0].address : undefined,
-      )
+
+    if (supportsNestedActions(pool)) {
+      if (isStandardRootToken(pool, tokenIn as Address)) {
+        setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
+      } else {
+        setInitialTokenOut(getStandardRootTokens(pool, poolActionableTokens)[0].address)
+      }
     } else {
-      setInitialTokenOut(
-        hasPoolActionableTokens
-          ? getStandardRootTokens(pool, poolActionableTokens)[0].address
-          : undefined,
-      )
+      // Does not support nested actions:
+      setInitialTokenOut(poolActionableTokens?.[1]?.address)
     }
     resetSwapAmounts()
   }
