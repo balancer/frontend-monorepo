@@ -1,6 +1,6 @@
 import { TransactionBundle } from '@repo/lib/modules/web3/contracts/contract.types'
 import { ReactNode } from 'react'
-import { LockActionType } from '../../vebal/lock/steps/lock.helpers'
+import { LockActionType } from '../../vebal/lock/steps/lock-steps.utils'
 
 export enum TransactionState {
   Ready = 'init',

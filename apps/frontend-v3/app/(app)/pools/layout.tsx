@@ -1,6 +1,5 @@
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
-import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 export const metadata: Metadata = {
   title: 'Balancer DeFi Liquidity Pools',
@@ -12,5 +11,5 @@ export const metadata: Metadata = {
 }
 
 export default async function Pools({ children }: PropsWithChildren) {
-  return <VebalLockDataProvider>{children}</VebalLockDataProvider>
+  return <>{children}</>
 }

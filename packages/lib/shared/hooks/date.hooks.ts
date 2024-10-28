@@ -26,7 +26,7 @@ export function useCurrentDate(interval = oneMinInMs) {
 
 /**
  * Returns actual (autoupdated) start of day
- * @description Actually updates once per 24h, when new day (tomorrow) begins
+ * @description Is updated once per 24h, when new day (tomorrow) begins
  * @param interval
  */
 export function useToday(interval = oneMinInMs) {

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
+import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock-steps.utils'
 import { useLockSteps } from '@repo/lib/modules/vebal/lock/steps/useLockSteps'
 import { Address, parseUnits } from 'viem'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'

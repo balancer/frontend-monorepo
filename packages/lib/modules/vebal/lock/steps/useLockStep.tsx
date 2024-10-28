@@ -19,7 +19,7 @@ import {
   getTooltip,
   parseDate,
   getLockContractFunctionName,
-} from './lock.helpers'
+} from './lock-steps.utils'
 import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 

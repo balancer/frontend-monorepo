@@ -11,7 +11,7 @@ import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
 import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 import { toJsTimestamp } from '@repo/lib/shared/utils/time'
-import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
+import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock-steps.utils'
 
 export type UseVebalLockDataResult = ReturnType<typeof _useVebalLockData>
 export const VebalLockDataContext = createContext<UseVebalLockDataResult | null>(null)

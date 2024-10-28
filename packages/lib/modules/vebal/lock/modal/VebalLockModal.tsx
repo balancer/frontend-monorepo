@@ -32,7 +32,7 @@ import {
   useBuildLockSteps,
   UseBuildLockStepsArgs,
 } from '@repo/lib/modules/vebal/lock/steps/useBuildLockSteps'
-import { getPreviewLabel } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
+import { getPreviewLabel } from '@repo/lib/modules/vebal/lock/steps/lock-steps.utils'
 import { useEffect, useState } from 'react'
 import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'

@@ -1,5 +1,5 @@
 import { RawAmount } from '@repo/lib/modules/tokens/approvals/approval-rules'
-import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock.helpers'
+import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock-steps.utils'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { useLockStep } from '@repo/lib/modules/vebal/lock/steps/useLockStep'
