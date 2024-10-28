@@ -28,65 +28,79 @@ function TagWrapper({ children }: { children: React.ReactNode }) {
   )
 }
 
-function getPoolTypeLabel(type: GqlPoolType) {
+// TODO: add boosted tag
+function getPoolTypeLabel(pool: Pool) {
+  const { tags, type } = pool
+  const textProps = { fontSize: 'sm', variant: 'secondary' }
+
+  if (tags?.includes('VE8020')) {
+    return <Text {...textProps}>ve8020 weighted</Text>
+  }
+
   switch (type) {
     case GqlPoolType.CowAmm:
       return (
         <>
           <ProtocolIcon protocol={Protocol.CowAmm} />
-          <Text>Weighted</Text>
+          <Text {...textProps}>Weighted</Text>
         </>
       )
+
     case GqlPoolType.Weighted:
-      return 'Weighted'
+      return <Text {...textProps}>Weighted</Text>
+
     case GqlPoolType.Stable:
     case GqlPoolType.PhantomStable:
     case GqlPoolType.ComposableStable:
-      return 'Stable'
+      return <Text {...textProps}>Stable</Text>
+
     case GqlPoolType.Fx:
       return (
         <>
           <ProtocolIcon protocol={Protocol.Xave} />
-          <Text color="font.primary">FX</Text>
+          <Text {...textProps}>FX</Text>
         </>
       )
+
     case GqlPoolType.LiquidityBootstrapping:
       return (
         <>
           <ProtocolIcon protocol={Protocol.Fjord} />
-          <Text color="font.primary">LBP</Text>
+          <Text {...textProps}>LBP</Text>
         </>
       )
+
     case GqlPoolType.Gyro:
       return (
         <>
           <ProtocolIcon protocol={Protocol.Gyro} />
-          <Text color="font.primary">2-CLP</Text>
+          <Text {...textProps}>2-CLP</Text>
         </>
       )
+
     case GqlPoolType.Gyro3:
       return (
         <>
           <ProtocolIcon protocol={Protocol.Gyro} />
-          <Text color="font.primary">3-CLP</Text>
+          <Text {...textProps}>3-CLP</Text>
         </>
       )
+
     case GqlPoolType.Gyroe:
       return (
         <>
           <ProtocolIcon protocol={Protocol.Gyro} />
-          <Text color="font.primary">E-CLP</Text>
+          <Text {...textProps}>E-CLP</Text>
         </>
       )
+
     default:
       return null
   }
 }
 
 export function PoolTypeTag({ pool }: PoolChipProps) {
-  const label = getPoolTypeLabel(GqlPoolType.CowAmm)
-
-  if (!pool || !label) return null
+  const label = getPoolTypeLabel(pool)
 
   return <TagWrapper>{label}</TagWrapper>
 }
