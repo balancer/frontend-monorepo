@@ -16,31 +16,6 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
   public abstract name: string
   public abstract simulate({ ...variables }: SimulateSwapInputs): Promise<SdkSimulateSwapResponse>
 
-  buildOld({
-    simulateResponse: { swap, queryOutput },
-    slippagePercent,
-    account,
-    selectedChain,
-    wethIsEth,
-  }: SdkBuildSwapInputs): TransactionConfig {
-    const tx = swap.buildCall({
-      slippage: Slippage.fromPercentage(slippagePercent as `${number}`),
-      deadline: BigInt(Number.MAX_SAFE_INTEGER),
-      sender: account,
-      recipient: account,
-      wethIsEth,
-      queryOutput,
-    })
-
-    return {
-      account,
-      chainId: getChainId(selectedChain),
-      data: tx.callData,
-      value: tx.value,
-      to: tx.to,
-    }
-  }
-
   build({
     simulateResponse: { swap, queryOutput, protocolVersion },
     slippagePercent,
