@@ -14,7 +14,7 @@ export class PoolSwapHandler extends BaseDefaultSwapHandler {
 
   constructor(
     public pool: Pool,
-    public gqlTokens: GqlToken[],
+    public poolActionableTokens: GqlToken[],
   ) {
     super()
   }
@@ -22,7 +22,7 @@ export class PoolSwapHandler extends BaseDefaultSwapHandler {
   async simulate({ ...variables }: SimulateSwapInputs): Promise<SdkSimulateSwapResponse> {
     const { swapType, swapAmount } = variables
 
-    const tokenIn = this.gqlTokens.find(token => {
+    const tokenIn = this.poolActionableTokens.find(token => {
       return isSameAddress(token.address, variables.tokenIn)
     }) as TokenApi
 
@@ -30,7 +30,7 @@ export class PoolSwapHandler extends BaseDefaultSwapHandler {
       throw new Error('TokenIn not found in pool swap handler')
     }
 
-    const tokenOut = this.gqlTokens.find(token =>
+    const tokenOut = this.poolActionableTokens.find(token =>
       isSameAddress(token.address, variables.tokenOut),
     ) as TokenApi
 
