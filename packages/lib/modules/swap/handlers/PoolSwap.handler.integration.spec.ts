@@ -19,9 +19,9 @@ describe('PoolSwap handler with v2 nested pool', async () => {
   const getToken: GetTokenFn = (address: string) => {
     return fakeTokenByAddress(address as Address)
   }
-  const gqlTokens = getPoolActionableTokens(pool, getToken)
+  const poolActionableTokens = getPoolActionableTokens(pool, getToken)
 
-  const handler = new PoolSwapHandler(pool, gqlTokens)
+  const handler = new PoolSwapHandler(pool, poolActionableTokens)
 
   it('simulates exact in swap', async () => {
     const result = await handler.simulate({
