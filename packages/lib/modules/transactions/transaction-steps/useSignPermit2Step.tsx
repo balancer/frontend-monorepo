@@ -64,11 +64,11 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
   function SignPermitButton() {
     return (
       <VStack width="full">
-        {error ? <BalAlert content={error} status="error" /> : null}
+        {error && <BalAlert content={error} status="error" />}
         {!isConnected && <ConnectWallet isLoading={isLoading} width="full" />}
-        {shouldChangeNetwork && isConnected ? (
+        {shouldChangeNetwork && isConnected && (
           <NetworkSwitchButton {...networkSwitchButtonProps} />
-        ) : null}
+        )}
         {!shouldChangeNetwork && isConnected ? (
           <Button
             isDisabled={isDisabled}
@@ -113,7 +113,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
       renderAction: () => <SignPermitButton />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signPermit2State, isLoading, isConnected, isValidPermit2],
+    [signPermit2State, isLoading, isConnected, isValidPermit2]
   )
 }
 
