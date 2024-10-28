@@ -1,7 +1,7 @@
 import { PublicWalletClient } from '@balancer/sdk'
 import { signPermit2Add } from '@repo/lib/modules/tokens/approvals/permit2/signPermit2Add'
 import { NoncesByTokenAddress } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2Allowance'
-import { SignPermit2Callback } from '@repo/lib/modules/tokens/approvals/permit2/useSignPermit2'
+import { SignPermit2Fn as SignPermit2Fn } from '@repo/lib/modules/tokens/approvals/permit2/useSignPermit2'
 import { useSignPermit2Step } from '@repo/lib/modules/transactions/transaction-steps/useSignPermit2Step'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { SdkQueryAddLiquidityOutput } from './add-liquidity.types'
@@ -13,7 +13,7 @@ import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsPro
 import { toTokenAmountsIn } from '../LiquidityActionHelpers'
 
 type Props = {
-  wethIsEth: boolean,
+  wethIsEth: boolean
   simulationQuery: AddLiquiditySimulationQueryResult
   humanAmountsIn: HumanTokenAmountWithAddress[]
 }
@@ -26,7 +26,10 @@ export function useSignPermit2AddStep({ wethIsEth, humanAmountsIn, simulationQue
   const isPermit2 = requiresPermit2Approval(pool)
   const queryOutput = simulationQuery.data as SdkQueryAddLiquidityOutput
 
-  const signPermit2Callback: SignPermit2Callback = (sdkClient: PublicWalletClient, nonces: NoncesByTokenAddress) => {
+  const signPermit2Fn: SignPermit2Fn = (
+    sdkClient: PublicWalletClient,
+    nonces: NoncesByTokenAddress,
+  ) => {
     return signPermit2Add({
       sdkClient,
       pool,
@@ -35,13 +38,13 @@ export function useSignPermit2AddStep({ wethIsEth, humanAmountsIn, simulationQue
       account: userAddress,
       sdkQueryOutput: queryOutput?.sdkQueryOutput,
       slippagePercent: slippage,
-      nonces
+      nonces,
     })
   }
 
   const signPermit2Step = useSignPermit2Step({
     chainId,
-    signPermit2Callback,
+    signPermit2Fn,
     wethIsEth,
     tokenAmountsIn: toTokenAmountsIn(queryOutput?.sdkQueryOutput),
     isPermit2,

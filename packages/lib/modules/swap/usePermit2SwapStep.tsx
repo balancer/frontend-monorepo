@@ -5,20 +5,26 @@ import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { signPermit2Swap } from '../tokens/approvals/permit2/signPermit2Swap'
 import { NoncesByTokenAddress } from '../tokens/approvals/permit2/usePermit2Allowance'
-import { SignPermit2Callback, TokenAmountIn } from '../tokens/approvals/permit2/useSignPermit2'
+import { SignPermit2Fn, TokenAmountIn } from '../tokens/approvals/permit2/useSignPermit2'
 import { useSignPermit2Step } from '../transactions/transaction-steps/useSignPermit2Step'
 import { SwapSimulationQueryResult } from './queries/useSimulateSwapQuery'
 import { SdkSimulateSwapResponse } from './swap.types'
 
 type Props = {
-  wethIsEth: boolean,
+  wethIsEth: boolean
   simulationQuery: SwapSimulationQueryResult
   tokenInInfo?: GqlToken
   chainId: number
   isPermit2: boolean
 }
 
-export function useSignPermit2SwapStep({ chainId, wethIsEth, tokenInInfo, simulationQuery, isPermit2 }: Props) {
+export function useSignPermit2SwapStep({
+  chainId,
+  wethIsEth,
+  tokenInInfo,
+  simulationQuery,
+  isPermit2,
+}: Props) {
   const { userAddress } = useUserAccount()
   const { slippage } = useUserSettings()
 
@@ -29,8 +35,12 @@ export function useSignPermit2SwapStep({ chainId, wethIsEth, tokenInInfo, simula
   function getTokenInAmount(simulationQuery: SwapSimulationQueryResult): bigint {
     if (!simulationQuery.data) return 0n
     const queryData = simulationQuery.data as SdkSimulateSwapResponse
-    if (queryData.queryOutput.swapKind === SwapKind.GivenIn) return queryData.queryOutput.amountIn.amount
-    if (queryData.queryOutput.swapKind === SwapKind.GivenOut) return queryData.queryOutput.expectedAmountIn.amount
+    if (queryData.queryOutput.swapKind === SwapKind.GivenIn) {
+      return queryData.queryOutput.amountIn.amount
+    }
+    if (queryData.queryOutput.swapKind === SwapKind.GivenOut) {
+      return queryData.queryOutput.expectedAmountIn.amount
+    }
     return 0n
   }
 
@@ -39,7 +49,10 @@ export function useSignPermit2SwapStep({ chainId, wethIsEth, tokenInInfo, simula
     amount: getTokenInAmount(simulationQuery),
   }
 
-  const signPermit2Callback: SignPermit2Callback = (sdkClient: PublicWalletClient, nonces: NoncesByTokenAddress) => {
+  const signPermit2Fn: SignPermit2Fn = (
+    sdkClient: PublicWalletClient,
+    nonces: NoncesByTokenAddress,
+  ) => {
     return signPermit2Swap({
       sdkClient,
       wethIsEth,
@@ -47,13 +60,13 @@ export function useSignPermit2SwapStep({ chainId, wethIsEth, tokenInInfo, simula
       queryOutput: queryData.queryOutput,
       slippagePercent: slippage,
       nonces,
-      tokenIn
+      tokenIn,
     })
   }
 
   return useSignPermit2Step({
     chainId,
-    signPermit2Callback,
+    signPermit2Fn,
     wethIsEth,
     tokenAmountsIn: [tokenIn],
     isPermit2,

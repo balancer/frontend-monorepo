@@ -16,11 +16,13 @@ import { NoncesByTokenAddress } from './usePermit2Allowance'
 import { Address } from 'viem'
 
 // eslint-disable-next-line no-unused-vars
-export type SignPermit2Callback = (sdkClient: PublicWalletClient, nonces: NoncesByTokenAddress) =>
-  Promise<Permit2 | undefined>
+export type SignPermit2Fn = (
+  sdkClient: PublicWalletClient,
+  nonces: NoncesByTokenAddress,
+) => Promise<Permit2 | undefined>
 
 export type TokenAmountIn = {
-  amount: bigint,
+  amount: bigint
   address: Address
 }
 
@@ -31,15 +33,15 @@ export type BasePermit2Params = {
   wethIsEth: boolean
   isSimulationReady: boolean
   chainId: number
-  signPermit2Callback: SignPermit2Callback
+  signPermit2Fn: SignPermit2Fn
 }
 export function useSignPermit2({
   tokenAmountsIn,
   nonces,
   wethIsEth,
   chainId,
-  signPermit2Callback,
-  isSimulationReady
+  signPermit2Fn,
+  isSimulationReady,
 }: BasePermit2Params) {
   const sdkClient = useSdkWalletClient()
 
@@ -49,7 +51,6 @@ export function useSignPermit2({
   const { signPermit2State, setSignPermit2State, setPermit2Signature } = usePermit2Signature()
 
   const [error, setError] = useState<string | undefined>()
-
 
   useEffect(() => {
     if (sdkClient === undefined) setSignPermit2State(SignatureState.Preparing)
@@ -70,7 +71,7 @@ export function useSignPermit2({
     setError(undefined)
 
     try {
-      const signature = await signPermit2Callback(sdkClient, nonces)
+      const signature = await signPermit2Fn(sdkClient, nonces)
 
       if (signature) {
         setSignPermit2State(SignatureState.Completed)
