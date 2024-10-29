@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   HStack,
-  Link,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -19,10 +18,13 @@ import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { MoreVertical } from 'react-feather'
+import { shouldBlockAddLiquidity } from '../../pool.helpers'
+import { usePool } from '../../PoolProvider'
 
 export function PoolAdvancedOptions() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const pathname = usePathname()
+  const { pool } = usePool()
 
   return (
     <Popover
@@ -53,9 +55,16 @@ export function PoolAdvancedOptions() {
                 >
                   <HStack>
                     <SwapIcon size={20} />
-                    <Link as={NextLink} href={`${pathname}/swap`} prefetch variant="nav">
+                    <Button
+                      as={NextLink}
+                      href={`${pathname}/swap`}
+                      isDisabled={shouldBlockAddLiquidity(pool)}
+                      size="lg"
+                      variant="primary"
+                      w="full"
+                    >
                       Swap through pool
-                    </Link>
+                    </Button>
                   </HStack>
                 </VStack>
               ) : null}
