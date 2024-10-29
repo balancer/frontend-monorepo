@@ -43,7 +43,7 @@
     },
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
-      "inputs": [".env*"],
+      "inputs": [".env*", "shared/services/api/*.graphql"],
       "outputs": ["shared/services/api/generated/**"]
     },
     "transit": {
