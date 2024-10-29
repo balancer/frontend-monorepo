@@ -158,6 +158,9 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   if ((isTokenInSet && !tokenInInfo) || (isTokenOutSet && !tokenOutInfo)) {
     try {
+      if (isPoolSwap) {
+        throw new Error('Cannot perform pool swap without token metadata')
+      }
       setDefaultTokens()
     } catch (error) {
       throw new Error('Token metadata not found')
@@ -484,6 +487,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   // Sets initial swap state for pool swap edge-case
   function setInitialPoolSwapState(pool: Pool) {
+    setInitialChain(pool.chain)
     const { tokenIn } = pathParams
     setInitialTokenIn(tokenIn)
 
