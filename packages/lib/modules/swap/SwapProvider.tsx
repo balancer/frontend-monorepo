@@ -75,7 +75,7 @@ function selectSwapHandler(
   apolloClient: ApolloClient<object>,
   tokens: GqlToken[],
   pool?: Pool,
-  poolActionableTokens?: GqlToken[],
+  poolActionableTokens?: GqlToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -116,9 +116,9 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
         scaledAmount: BigInt(0),
       },
       swapType: GqlSorSwapType.ExactIn,
-      selectedChain: GqlChain.Mainnet,
+      selectedChain: isPoolSwap ? pool.chain : GqlChain.Mainnet,
     },
-    'swapState',
+    'swapState'
   )
 
   const swapState = useReactiveVar(swapStateVar)
@@ -133,7 +133,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const { hasValidationErrors } = useTokenInputsValidation()
   const { setPriceImpact, setPriceImpactLevel } = usePriceImpact()
 
-  const networkConfig = getNetworkConfig(swapState.selectedChain)
+  const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
+  const networkConfig = getNetworkConfig(selectedChain)
   const previewModalDisclosure = useDisclosure()
 
   const client = useApolloClient()
@@ -141,26 +142,23 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     return selectSwapHandler(
       swapState.tokenIn.address,
       swapState.tokenOut.address,
-      swapState.selectedChain,
+      selectedChain,
       swapState.swapType,
       client,
       tokens,
       pool,
-      poolActionableTokens,
+      poolActionableTokens
     )
-  }, [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain])
+  }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 
   const isTokenInSet = swapState.tokenIn.address !== emptyAddress
   const isTokenOutSet = swapState.tokenOut.address !== emptyAddress
 
-  const tokenInInfo = getToken(swapState.tokenIn.address, swapState.selectedChain)
-  const tokenOutInfo = getToken(swapState.tokenOut.address, swapState.selectedChain)
+  const tokenInInfo = getToken(swapState.tokenIn.address, selectedChain)
+  const tokenOutInfo = getToken(swapState.tokenOut.address, selectedChain)
 
-  if ((isTokenInSet && !tokenInInfo) || (isTokenOutSet && !tokenOutInfo)) {
+  if ((isTokenInSet && !tokenInInfo) || (isTokenOutSet && !tokenOutInfo && !isPoolSwap)) {
     try {
-      if (isPoolSwap) {
-        throw new Error('Cannot perform pool swap without token metadata')
-      }
       setDefaultTokens()
     } catch (error) {
       throw new Error('Token metadata not found')
@@ -192,7 +190,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const simulationQuery = useSimulateSwapQuery({
     handler,
     swapInputs: {
-      chain: swapState.selectedChain,
+      chain: selectedChain,
       tokenIn: swapState.tokenIn.address,
       tokenOut: swapState.tokenOut.address,
       swapType: swapState.swapType,
@@ -266,7 +264,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   function setTokenInAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {},
+    { userTriggered = true }: { userTriggered?: boolean } = {}
   ) {
     const state = swapStateVar()
     const newState = {
@@ -293,7 +291,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   function setTokenOutAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {},
+    { userTriggered = true }: { userTriggered?: boolean } = {}
   ) {
     const state = swapStateVar()
     const newState = {
@@ -359,7 +357,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   }
 
   function setDefaultTokens() {
-    swapStateVar(getDefaultTokenState(swapState.selectedChain))
+    swapStateVar(getDefaultTokenState(selectedChain))
   }
 
   function replaceUrlPath() {
@@ -409,19 +407,17 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const { vaultAddress } = useVault(protocolVersion)
 
   const swapAction: SwapAction = useMemo(() => {
-    if (
-      isWrapOrUnwrap(swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain)
-    ) {
+    if (isWrapOrUnwrap(swapState.tokenIn.address, swapState.tokenOut.address, selectedChain)) {
       const wrapType = getWrapType(
         swapState.tokenIn.address,
         swapState.tokenOut.address,
-        swapState.selectedChain,
+        selectedChain
       )
       return wrapType ? wrapType : OSwapAction.SWAP
     }
 
     return OSwapAction.SWAP
-  }, [swapState.tokenIn.address, swapState.tokenOut.address, swapState.selectedChain])
+  }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 
   const isWrap = swapAction === 'wrap' || swapAction === 'unwrap'
 
@@ -524,7 +520,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   // When wallet chain changes, update the swap form chain
   useEffect(() => {
-    if (isConnected && initUserChain && walletChain !== swapState.selectedChain) {
+    if (isConnected && initUserChain && walletChain !== selectedChain) {
       setSelectedChain(walletChain)
     } else if (isConnected) {
       setInitUserChain(walletChain)
@@ -540,7 +536,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   // Check if tokenIn is a base wrap token and set tokenOut as the wrapped token.
   useEffect(() => {
-    const wrapper = getWrapperForBaseToken(swapState.tokenIn.address, swapState.selectedChain)
+    const wrapper = getWrapperForBaseToken(swapState.tokenIn.address, selectedChain)
     if (wrapper) setTokenOut(wrapper.wrappedToken)
 
     // If the token in address changes we should reset tx step index because
@@ -550,20 +546,20 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   // Check if tokenOut is a base wrap token and set tokenIn as the wrapped token.
   useEffect(() => {
-    const wrapper = getWrapperForBaseToken(swapState.tokenOut.address, swapState.selectedChain)
+    const wrapper = getWrapperForBaseToken(swapState.tokenOut.address, selectedChain)
     if (wrapper) setTokenIn(wrapper.wrappedToken)
   }, [swapState.tokenOut.address])
 
   // Update the URL path when the tokens change
   useEffect(() => {
     if (!swapTxHash) replaceUrlPath()
-  }, [swapState.selectedChain, swapState.tokenIn, swapState.tokenOut, swapState.tokenIn.amount])
+  }, [selectedChain, swapState.tokenIn, swapState.tokenOut, swapState.tokenIn.amount])
 
   // Update selectable tokens when the chain changes
   useEffect(() => {
     if (isPoolSwap) return
-    setTokens(getTokensByChain(swapState.selectedChain))
-  }, [swapState.selectedChain])
+    setTokens(getTokensByChain(selectedChain))
+  }, [selectedChain])
 
   // Open the preview modal when a swap tx hash is present
   useEffect(() => {
@@ -592,7 +588,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [hasValidationErrors, 'Invalid input'],
     [simulationQuery.isError, 'Error fetching swap'],
-    [simulationQuery.isLoading, 'Fetching swap...'],
+    [simulationQuery.isLoading, 'Fetching swap...']
   )
 
   return {
