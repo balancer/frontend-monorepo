@@ -35,7 +35,6 @@
     },
     "typecheck": {
       "dependsOn": ["^graphql:gen", "^transit"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["node_modules/.cache/tsbuildinfo.json"]
     },
     "test:unit": {
@@ -48,7 +47,8 @@
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
       "inputs": [".env*"],
-      "outputs": ["shared/services/api/generated/**"]
+      "outputs": ["shared/services/api/generated/**"],
+      "cache": false
     },
     "//#format": {
       "outputs": ["node_modules/.cache/.prettiercache"]
