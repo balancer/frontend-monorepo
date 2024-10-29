@@ -4,11 +4,13 @@ import {
   Box,
   Button,
   HStack,
+  Link,
   Popover,
   PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Text,
   VStack,
 } from '@chakra-ui/react'
 import { SwapIcon } from '@repo/lib/shared/components/icons/SwapIcon'
@@ -25,6 +27,8 @@ export function PoolAdvancedOptions() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const pathname = usePathname()
   const { pool } = usePool()
+
+  const isPoolSwapDisabled = shouldBlockAddLiquidity(pool)
 
   return (
     <Popover
@@ -55,16 +59,15 @@ export function PoolAdvancedOptions() {
                 >
                   <HStack>
                     <SwapIcon size={20} />
-                    <Button
-                      as={NextLink}
-                      href={`${pathname}/swap`}
-                      isDisabled={shouldBlockAddLiquidity(pool)}
-                      size="lg"
-                      variant="primary"
-                      w="full"
-                    >
-                      Swap through pool
-                    </Button>
+                    {isPoolSwapDisabled ? (
+                      <Text color="font.button.disabled" cursor="not-allowed" opacity="0.3">
+                        Swap through pool
+                      </Text>
+                    ) : (
+                      <Link as={NextLink} href={`${pathname}/swap`} prefetch variant="nav">
+                        Swap through pool
+                      </Link>
+                    )}
                   </HStack>
                 </VStack>
               ) : null}
