@@ -94,7 +94,7 @@ export function FeaturedPools({
                 featuredReason={featured.description}
                 graphic={getGraphic(index)}
                 isSmall
-                key={index}
+                key={featured.pool.id}
                 pool={featured.pool}
               />
             )

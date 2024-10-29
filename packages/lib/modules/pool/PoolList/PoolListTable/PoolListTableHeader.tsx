@@ -42,8 +42,8 @@ export function PoolListTableHeader({ ...rest }) {
           Details
         </Text>
       </GridItem>
-      {orderBy.map((orderByItem, index) => (
-        <GridItem justifySelf="end" key={index}>
+      {orderBy.map(orderByItem => (
+        <GridItem justifySelf="end" key={orderByItem}>
           <SortableHeader
             isSorted={sortingObj.id === orderByItem}
             label={orderByHash[orderByItem]}
