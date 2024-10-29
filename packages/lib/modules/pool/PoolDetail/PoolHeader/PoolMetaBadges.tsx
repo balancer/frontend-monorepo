@@ -14,8 +14,10 @@ import Image from 'next/image'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { Repeat } from 'react-feather'
 import { PoolListTokenPills } from '../../PoolList/PoolListTokenPills'
-import { shouldHideSwapFee } from '../../pool.utils'
+import { getPoolTypeLabel, shouldHideSwapFee } from '../../pool.utils'
 import { getChainShortName } from '@repo/lib/config/app.config'
+import { PoolVersionTag } from '../../PoolVersionTag'
+import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
 
 export default function PoolMetaBadges() {
   const { pool, chain } = usePool()
@@ -40,6 +42,10 @@ export default function PoolMetaBadges() {
         />
       </Badge>
       <PoolListTokenPills pool={pool} px="sm" py="2" />
+      <PoolVersionTag pool={pool} size={7} />
+      <BalBadge color="font.secondary" fontSize="xs" textTransform="none">
+        {getPoolTypeLabel(pool.type)}
+      </BalBadge>
       {!shouldHideSwapFee(pool.type) && (
         <Popover trigger="hover">
           <PopoverTrigger>
@@ -52,7 +58,7 @@ export default function PoolMetaBadges() {
               fontWeight="normal"
               h={{ base: '28px' }}
               px="sm"
-              py="xs"
+              py="sm"
               rounded="full"
               shadow="sm"
             >
