@@ -39,7 +39,14 @@ export type SimulateSwapResponse = Pick<
   'effectivePrice' | 'effectivePriceReversed' | 'returnAmount' | 'swapType'
 >
 
-export interface SdkSimulateSwapResponse extends SimulateSwapResponse, ApiSwapQuery {
+export interface SdkSimulateSwapResponse extends SimulateSwapResponse {
+  swap: Swap
+  queryOutput: ExactInQueryOutput | ExactOutQueryOutput
+  protocolVersion: number
+  hopCount: number
+}
+
+export interface SimulateSinglePoolSwapResponse extends SimulateSwapResponse {
   swap: Swap
   queryOutput: ExactInQueryOutput | ExactOutQueryOutput
 }
