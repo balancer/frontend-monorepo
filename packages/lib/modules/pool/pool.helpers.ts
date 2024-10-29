@@ -27,6 +27,7 @@ import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getLeafTokens } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
+import { PoolListItem } from './pool.types'
 
 /**
  * METHODS
@@ -63,9 +64,9 @@ export function isFx(poolType: GqlPoolType | string): boolean {
   return poolType === GqlPoolType.Fx
 }
 
-// TODO: verify how to determine boosted pool from api
-export function isBoosted(poolType: GqlPoolType) {
-  return poolType === GqlPoolType.PhantomStable
+// TODO: also needs to be added for Pool type
+export function isBoosted(pool: PoolListItem) {
+  return pool.hasErc4626 || pool.hasNestedErc4626
 }
 
 export function isGyro(poolType: GqlPoolType) {
