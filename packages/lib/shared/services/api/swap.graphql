@@ -25,6 +25,7 @@ query GetSorSwaps(
       tokens {
         address
         decimals
+        isBuffer
       }
     }
     priceImpact {
