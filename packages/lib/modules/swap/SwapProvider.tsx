@@ -159,9 +159,6 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   if ((isTokenInSet && !tokenInInfo) || (isTokenOutSet && !tokenOutInfo && !isPoolSwap)) {
     try {
-      if (isPoolSwap) {
-        throw new Error('Cannot perform pool swap without token metadata')
-      }
       setDefaultTokens()
     } catch (error) {
       throw new Error('Token metadata not found')
