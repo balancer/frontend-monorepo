@@ -10,6 +10,9 @@ const config: CodegenConfig = {
       schema: process.env.NEXT_PUBLIC_BALANCER_API_URL,
       documents: ['./shared/services/api/**/*.graphql'],
       preset: 'client',
+      presetConfig: {
+        fragmentMasking: false,
+      },
       config: {
         nonOptionalTypename: true,
         scalars: {
