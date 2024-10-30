@@ -45,25 +45,25 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled }:
   const nonces: NoncesByTokenAddress | undefined =
     tokenAddresses && data
       ? zipObject(
-        tokenAddresses,
-        data.map(result => result[2])
-      )
+          tokenAddresses,
+          data.map(result => result[2])
+        )
       : undefined
 
   const expirations: ExpirationByTokenAddress | undefined =
     tokenAddresses && data
       ? zipObject(
-        tokenAddresses,
-        data.map(result => result[1])
-      )
+          tokenAddresses,
+          data.map(result => result[1])
+        )
       : undefined
 
   const allowedAmounts: AllowedAmountsByTokenAddress | undefined =
     tokenAddresses && data
       ? zipObject(
-        tokenAddresses,
-        data.map(result => result[0])
-      )
+          tokenAddresses,
+          data.map(result => result[0])
+        )
       : undefined
 
   return {
