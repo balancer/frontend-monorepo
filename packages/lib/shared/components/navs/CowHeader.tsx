@@ -28,7 +28,7 @@ export function CowHeader() {
             >
               The first MEV-capturing AMM
             </Heading>
-            <Text color="#BCEC79">
+            <Box color="#BCEC79" fontWeight="medium">
               CoW AMM protects LPs from LVR so they can provide liquidity with less risk and more
               return.{' '}
               <Link
@@ -50,7 +50,7 @@ export function CowHeader() {
                   <ArrowUpRight size={14} style={{ display: 'inline' }} />
                 </Box>
               </Link>
-            </Text>
+            </Box>
             <Image alt="cow-logo" h="30px" src="/images/partners/cow/cow-amm-logo.svg" />
           </VStack>
         </Center>
