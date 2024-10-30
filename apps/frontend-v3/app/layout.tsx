@@ -10,6 +10,9 @@ import { PropsWithChildren } from 'react'
 import { Providers } from '@repo/lib/shared/components/site/providers'
 import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
 import { FooterContainer } from '@/lib/components/footer/FooterContainer'
+import { DEFAULT_THEME_COLOR_MODE } from '@repo/lib/shared/services/chakra/themes/base/foundations'
+import { ThemeProvider as ColorThemeProvider } from 'next-themes'
+import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
 
 export const metadata: Metadata = {
   title: 'Balancer DeFi Liquidity Pools',
@@ -44,13 +47,17 @@ export default function RootLayout({ children }: PropsWithChildren) {
       >
         <Fathom />
         <NextTopLoader color="#7f6ae8" showSpinner={false} />
-        <Providers>
-          <GlobalAlerts />
-          <NavBarContainer />
-          {children}
-          <FooterContainer />
-          <SpeedInsights />
-        </Providers>
+        <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
+          <ThemeProvider>
+            <Providers>
+              <GlobalAlerts />
+              <NavBarContainer />
+              {children}
+              <FooterContainer />
+              <SpeedInsights />
+            </Providers>
+          </ThemeProvider>
+        </ColorThemeProvider>
       </body>
     </html>
   )

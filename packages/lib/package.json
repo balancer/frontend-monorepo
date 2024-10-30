@@ -3,8 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "gen:theme-typings": "chakra-cli tokens ./shared/services/chakra/themes/bal/bal.theme.ts",
-    "postinstall": "npm run gen:theme-typings",
     "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config -c ./shared/services/api/codegen.ts",
     "lint": "eslint . --cache --cache-location 'node_modules/.cache/.eslintcache'",
     "lint:fix": "eslint . --fix --cache --cache-location 'node_modules/.cache/.eslintcache'",

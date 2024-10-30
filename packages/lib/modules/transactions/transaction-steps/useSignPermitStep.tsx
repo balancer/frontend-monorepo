@@ -13,7 +13,6 @@ import { useChainSwitch } from '../../web3/useChainSwitch'
 import { TransactionStep } from './lib'
 import { getChainId } from '@repo/lib/config/app.config'
 import { SignIcon } from '@repo/lib/shared/components/icons/SignIcon'
-import { primaryTextColor } from '@repo/lib/shared/services/chakra/themes/bal/colors'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
 
 export function useSignPermitStep(params: RemoveLiquidityPermitParams): TransactionStep {
@@ -46,7 +45,7 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
             width="full"
           >
             <HStack spacing="sm" width="100%">
-              <Text color={primaryTextColor} fontWeight="bold">
+              <Text fontWeight="bold" variant="primaryGradient">
                 {buttonLabel}
               </Text>
               <Spacer />
