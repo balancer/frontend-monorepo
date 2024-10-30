@@ -30,8 +30,7 @@
     },
     "lint:fix": {
       "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"],
-      "cache": false
+      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"]
     },
     "typecheck": {
       "dependsOn": ["^graphql:gen", "^transit"],
@@ -47,8 +46,7 @@
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
       "inputs": ["**/*.graphql"],
-      "outputs": ["shared/services/api/generated/**"],
-      "cache": false
+      "outputs": ["shared/services/api/generated/**"]
     },
     "//#format": {
       "outputs": ["node_modules/.cache/.prettiercache"]
