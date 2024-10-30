@@ -75,7 +75,7 @@ function selectSwapHandler(
   apolloClient: ApolloClient<object>,
   tokens: GqlToken[],
   pool?: Pool,
-  poolActionableTokens?: GqlToken[]
+  poolActionableTokens?: GqlToken[],
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -118,7 +118,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       swapType: GqlSorSwapType.ExactIn,
       selectedChain: isPoolSwap ? pool.chain : GqlChain.Mainnet,
     },
-    'swapState'
+    'swapState',
   )
 
   const swapState = useReactiveVar(swapStateVar)
@@ -147,7 +147,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       client,
       tokens,
       pool,
-      poolActionableTokens
+      poolActionableTokens,
     )
   }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 
@@ -264,7 +264,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   function setTokenInAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {}
+    { userTriggered = true }: { userTriggered?: boolean } = {},
   ) {
     const state = swapStateVar()
     const newState = {
@@ -291,7 +291,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   function setTokenOutAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {}
+    { userTriggered = true }: { userTriggered?: boolean } = {},
   ) {
     const state = swapStateVar()
     const newState = {
@@ -411,7 +411,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       const wrapType = getWrapType(
         swapState.tokenIn.address,
         swapState.tokenOut.address,
-        selectedChain
+        selectedChain,
       )
       return wrapType ? wrapType : OSwapAction.SWAP
     }
@@ -483,8 +483,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   // Sets initial swap state for pool swap edge-case
   function setInitialPoolSwapState(pool: Pool) {
-    setInitialChain(pool.chain)
     const { tokenIn } = pathParams
+    setInitialChain(pool.chain)
     setInitialChain(pool.chain)
     setInitialTokenIn(tokenIn)
 
@@ -589,7 +589,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [hasValidationErrors, 'Invalid input'],
     [simulationQuery.isError, 'Error fetching swap'],
-    [simulationQuery.isLoading, 'Fetching swap...']
+    [simulationQuery.isLoading, 'Fetching swap...'],
   )
 
   return {
