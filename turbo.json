@@ -47,7 +47,8 @@
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
       "inputs": ["**/*.graphql"],
-      "outputs": ["shared/services/api/generated/**"]
+      "outputs": ["shared/services/api/generated/**"],
+      "cache": false
     },
     "//#format": {
       "outputs": ["node_modules/.cache/.prettiercache"]
