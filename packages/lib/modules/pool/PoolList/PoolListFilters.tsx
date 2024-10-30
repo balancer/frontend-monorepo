@@ -41,7 +41,7 @@ import {
 } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useEffect, useState } from 'react'
-import { Filter } from 'react-feather'
+import { Filter, Plus } from 'react-feather'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useDebouncedCallback } from 'use-debounce'
@@ -469,6 +469,7 @@ export function PoolListFilters() {
     queryState: { resetFilters, totalFilterCount, setActiveProtocolVersionTab },
   } = usePoolList()
   const { isCowPath } = useCow()
+  const { isMobile } = useBreakpoints()
 
   function _resetFilters() {
     resetFilters()
@@ -573,13 +574,16 @@ export function PoolListFilters() {
         {isCowPath && (
           <Button
             as={Link}
+            display="flex"
+            gap="2"
             href="https://pool-creator.balancer.fi/cow"
             ml="ms"
             rel=""
             target="_blank"
             variant="tertiary"
           >
-            Create a pool
+            <Icon as={Plus} boxSize={4} />
+            {!isMobile && 'Create a pool'}
           </Button>
         )}
       </HStack>
