@@ -485,7 +485,6 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   function setInitialPoolSwapState(pool: Pool) {
     const { tokenIn } = pathParams
     setInitialChain(pool.chain)
-    setInitialChain(pool.chain)
     setInitialTokenIn(tokenIn)
 
     if (supportsNestedActions(pool)) {
