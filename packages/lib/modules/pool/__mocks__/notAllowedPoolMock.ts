@@ -106,6 +106,8 @@ export const notAllowedPoolMock: Pool = {
       priceRateProviderData: null,
       nestedPool: null,
       __typename: 'GqlPoolTokenDetail',
+      isErc4626: false,
+      underlyingToken: null,
     },
     {
       id: '0x241df159b03a90455edee61625655fc0ea5fa3dd0002000000000000000003fc-0x8db0a6d1b06950b4e81c4f67d1289fc7b9359c7f',
@@ -124,6 +126,8 @@ export const notAllowedPoolMock: Pool = {
       priceRateProviderData: null,
       nestedPool: null,
       __typename: 'GqlPoolTokenDetail',
+      isErc4626: false,
+      underlyingToken: null,
     },
   ],
   __typename: 'GqlPoolWeighted',

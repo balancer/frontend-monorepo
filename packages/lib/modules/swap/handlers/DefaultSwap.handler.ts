@@ -1,26 +1,18 @@
-import { getChainId } from '@repo/lib/config/app.config'
-import { SwapHandler } from './Swap.handler'
-import {
-  GetSorSwapsDocument,
-  GqlSorSwapType,
-} from '@repo/lib/shared/services/api/generated/graphql'
 import { ApolloClient } from '@apollo/client'
-import { Path, Slippage, Swap, SwapKind, TokenAmount } from '@balancer/sdk'
-import { formatUnits } from 'viem'
-import { TransactionConfig } from '../../web3/contracts/contract.types'
-import { SdkBuildSwapInputs, SdkSimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
-import { getRpcUrl } from '../../web3/transports'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { Path } from '@balancer/sdk'
+import { GetSorSwapsDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import { ProtocolVersion } from '../../pool/pool.types'
+import { SdkSimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
+import { BaseDefaultSwapHandler } from './BaseDefaultSwap.handler'
 
-export class DefaultSwapHandler implements SwapHandler {
+export class DefaultSwapHandler extends BaseDefaultSwapHandler {
   name = 'DefaultSwapHandler'
 
-  constructor(public apolloClient: ApolloClient<object>) {}
+  constructor(public apolloClient: ApolloClient<object>) {
+    super()
+  }
 
   async simulate({ ...variables }: SimulateSwapInputs): Promise<SdkSimulateSwapResponse> {
-    const { chain, swapType } = variables
-    const rpcUrl = getRpcUrl(getChainId(chain))
-
     const { data } = await this.apolloClient.query({
       query: GetSorSwapsDocument,
       variables: { ...variables, queryBatchSwap: false }, // We don't need the API to do a query because we're doing that via the SDK below.
@@ -28,6 +20,7 @@ export class DefaultSwapHandler implements SwapHandler {
       notifyOnNetworkStatusChange: true,
     })
 
+    const hopCount: number = data.swaps.routes[0]?.hops?.length || 0
     const paths = data.swaps.paths.map(
       path =>
         ({
@@ -37,67 +30,11 @@ export class DefaultSwapHandler implements SwapHandler {
         }) as Path
     )
 
-    const swap = new Swap({
-      chainId: getChainId(chain),
+    return this.runSimulation({
+      protocolVersion: data.swaps.protocolVersion as ProtocolVersion,
       paths,
-      swapKind: this.swapTypeToKind(swapType),
+      hopCount,
+      swapInputs: variables,
     })
-
-    // Get accurate return amount with onchain call
-    const queryOutput = await swap.query(rpcUrl)
-    let onchainReturnAmount: TokenAmount
-    if (queryOutput.swapKind === SwapKind.GivenIn) {
-      onchainReturnAmount = queryOutput.expectedAmountOut
-    } else {
-      onchainReturnAmount = queryOutput.expectedAmountIn
-    }
-
-    // Format return amount to human readable
-    const returnAmount = formatUnits(onchainReturnAmount.amount, onchainReturnAmount.token.decimals)
-
-    return {
-      ...data.swaps,
-      returnAmount,
-      swap,
-      queryOutput,
-      effectivePrice: bn(variables.swapAmount).div(returnAmount).toString(),
-      effectivePriceReversed: bn(returnAmount).div(variables.swapAmount).toString(),
-    }
-  }
-
-  build({
-    simulateResponse: { swap, queryOutput },
-    slippagePercent,
-    account,
-    selectedChain,
-    wethIsEth,
-  }: SdkBuildSwapInputs): TransactionConfig {
-    const tx = swap.buildCall({
-      slippage: Slippage.fromPercentage(slippagePercent as `${number}`),
-      deadline: BigInt(Number.MAX_SAFE_INTEGER),
-      sender: account,
-      recipient: account,
-      wethIsEth,
-      queryOutput,
-    })
-
-    return {
-      account,
-      chainId: getChainId(selectedChain),
-      data: tx.callData,
-      value: tx.value,
-      to: tx.to,
-    }
-  }
-
-  private swapTypeToKind(swapType: GqlSorSwapType): SwapKind {
-    switch (swapType) {
-      case GqlSorSwapType.ExactIn:
-        return SwapKind.GivenIn
-      case GqlSorSwapType.ExactOut:
-        return SwapKind.GivenOut
-      default:
-        throw new Error('Invalid swap type')
-    }
   }
 }

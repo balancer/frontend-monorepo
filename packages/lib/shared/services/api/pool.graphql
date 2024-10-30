@@ -225,6 +225,13 @@ fragment PoolTokens on GqlPoolTokenDetail {
       decimals
     }
   }
+  isErc4626
+  underlyingToken {
+    address
+    decimals
+    name
+    symbol
+  }
 }
 
 query GetPoolSnapshots($poolId: String!, $range: GqlPoolSnapshotDataRange!, $chainId: GqlChain!) {

@@ -56,7 +56,7 @@ export default function PoolMetaBadges() {
               fontWeight="normal"
               h={{ base: '28px' }}
               px="sm"
-              py="xs"
+              py="sm"
               rounded="full"
               shadow="sm"
             >

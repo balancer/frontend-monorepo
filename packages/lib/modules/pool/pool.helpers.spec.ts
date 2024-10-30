@@ -2,7 +2,7 @@
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Pool } from './PoolProvider'
-import { getPoolTokens } from './pool.helpers'
+import { getPoolActionableTokens } from './pool.helpers'
 
 describe('getPoolTokens', () => {
   it('when pool supports nested actions', () => {
@@ -53,7 +53,7 @@ describe('getPoolTokens', () => {
       ],
     } as unknown as Pool
 
-    const result = getPoolTokens(pool, getTokenMock(pool))
+    const result = getPoolActionableTokens(pool, getTokenMock(pool))
     expect(result.map(t => t.symbol)).toEqual(['USDT', 'USDC', 'WXDAI', 'WETH', 'WBTC']) // contains 'staBAL3' nested tokens (USDT, USDC, WXDAI)
   })
 
@@ -101,7 +101,7 @@ describe('getPoolTokens', () => {
       ],
     } as unknown as Pool
 
-    const result = getPoolTokens(pool, getTokenMock(pool))
+    const result = getPoolActionableTokens(pool, getTokenMock(pool))
     expect(result.map(t => t.symbol)).toEqual(['WETH', 'osETH']) // excludes 'osETH/wETH-BPT' bpt token
   })
 })

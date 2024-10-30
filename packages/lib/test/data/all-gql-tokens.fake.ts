@@ -1,4 +1,6 @@
 import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { Address } from 'viem'
 
 export const fakeTokenSymbols = [
   'ETH',
@@ -208,6 +210,18 @@ export function fakeTokenBySymbol(symbol: FakeTokenSymbol) {
       allFakeGqlTokens.map(token => token.symbol)
     )
     throw new Error(`Invalid symbol for fake token: ${symbol}`)
+  }
+  return token
+}
+
+export function fakeTokenByAddress(address: Address) {
+  const token = allFakeGqlTokens.find(token => isSameAddress(token.address, address))
+  if (!token) {
+    console.log(
+      'Available fake tokens: ',
+      allFakeGqlTokens.map(token => token.symbol)
+    )
+    throw new Error(`Invalid address for fake token: ${address}`)
   }
   return token
 }

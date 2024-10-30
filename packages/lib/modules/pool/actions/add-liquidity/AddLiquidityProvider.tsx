@@ -28,7 +28,7 @@ import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { getPoolTokens } from '../../pool.helpers'
+import { getPoolActionableTokens } from '../../pool.helpers'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 
@@ -62,7 +62,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const wNativeAsset = getWrappedNativeAssetToken(chain)
   const isForcedProportionalAdd = requiresProportionalInput(pool)
   const slippage = isForcedProportionalAdd ? proportionalSlippage : userSlippage
-  const tokens = getPoolTokens(pool, getToken)
+  const tokens = getPoolActionableTokens(pool, getToken)
 
   function setInitialHumanAmountsIn() {
     const amountsIn = tokens.map(

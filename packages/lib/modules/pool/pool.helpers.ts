@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import {
@@ -24,7 +25,7 @@ import { getUserTotalBalanceInt } from './user-balance.helpers'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
-import { getLeafTokens } from '../tokens/token.helpers'
+import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { PoolListItem } from './pool.types'
@@ -338,7 +339,14 @@ export function getRateProviderWarnings(warnings: string[]) {
   return warnings.filter(warning => !isEmpty(warning))
 }
 
-export function getPoolTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
+/*
+  Depending on the pool type, iterates pool.poolTokens and returns the list of GqlTokens that can be used in the pool's actions (add/remove/swap).
+
+  For instance:
+    If the pool supports nested actions, returns the leaf tokens.
+    If the pool is boosted, returns the underlying tokens instead of the ERC4626 tokens.
+*/
+export function getPoolActionableTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
   type PoolToken = Pool['poolTokens'][0]
   function toGqlTokens(tokens: PoolToken[]): GqlToken[] {
     return tokens
@@ -354,4 +362,75 @@ export function getPoolTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
   }
 
   return toGqlTokens(pool.poolTokens)
+}
+
+export function getNonBptTokens(pool: Pool) {
+  return pool.poolTokens.filter(token => !token.nestedPool)
+}
+
+export function getNestedBptTokens(poolTokens: PoolToken[]) {
+  return poolTokens.filter(token => token.nestedPool)
+}
+
+// Returns the parent BPT token whose nested tokens include the given child token address
+export function getNestedBptParentToken(poolTokens: PoolToken[], childTokenAddress: Address) {
+  const nestedBptToken = getNestedBptTokens(poolTokens).find(token =>
+    token.nestedPool?.tokens.some(nestedToken =>
+      isSameAddress(nestedToken.address, childTokenAddress)
+    )
+  )
+  if (!nestedBptToken) {
+    throw new Error(
+      `Provided nestedTokenAddress ${childTokenAddress} does not belong to any underlying token amongst the nested pool/s (${getNestedBptTokens(
+        poolTokens
+      )
+        .map(t => t.symbol)
+        .join(' ,')})`
+    )
+  }
+
+  return nestedBptToken
+}
+
+// Returns true if the given token address belongs to a top level token that is not a nestedBpt
+export function isStandardRootToken(pool?: Pool, tokenAddress?: Address): boolean {
+  if (!pool || !tokenAddress) return true
+  const token = pool.poolTokens.find(token => isSameAddress(token.address, tokenAddress))
+  return token?.hasNestedPool === false
+}
+
+// Returns the top level tokens that is not nestedBpt
+export function getStandardRootTokens(pool: Pool, poolActionableTokens?: GqlToken[]): GqlToken[] {
+  if (!poolActionableTokens) return []
+  return poolActionableTokens.filter(token => isStandardRootToken(pool, token.address as Address))
+}
+
+// Returns the child tokens (children of a parent nestedBpt)
+export function getChildTokens(pool: Pool, poolActionableTokens?: GqlToken[]): GqlToken[] {
+  if (!poolActionableTokens) return []
+  return poolActionableTokens.filter(token => !isStandardRootToken(pool, token.address as Address))
+}
+
+export function toGqlTokens(
+  poolTokens: PoolToken[],
+  getToken: GetTokenFn,
+  chain: GqlChain
+): GqlToken[] {
+  return poolTokens
+    .map(token => getToken(token.address, chain))
+    .filter((token): token is GqlToken => token !== undefined)
+}
+
+/*
+  Allowed pool swaps:
+    1. From a standard root token to another standard root token
+    2. From a standard root token to a nested child token
+    3. From a nested child token to a standard root token
+  Disallowed pool swaps:
+    1. From a nested child token to another nested child token
+*/
+export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address): boolean {
+  if (isStandardRootToken(pool, token1) && isStandardRootToken(pool, token2)) return false
+  if (!isStandardRootToken(pool, token1) && !isStandardRootToken(pool, token2)) return false
+  return true
 }

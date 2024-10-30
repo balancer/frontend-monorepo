@@ -113,7 +113,7 @@ export function requiresDoubleApproval(
   )
 }
 
-type PoolToken = Pool['poolTokens'][0]
+export type PoolToken = Pool['poolTokens'][0]
 export function getLeafTokens(poolTokens: PoolToken[]) {
   const leafTokens: PoolToken[] = []
 

@@ -15,7 +15,7 @@ import { useRemoveLiquidityPriceImpactQuery } from './queries/useRemoveLiquidity
 import { RemoveLiquidityType } from './remove-liquidity.types'
 import { Address, Hash } from 'viem'
 import { emptyTokenAmounts, toHumanAmount } from '../LiquidityActionHelpers'
-import { getPoolTokens, isCowAmmPool } from '../../pool.helpers'
+import { getPoolActionableTokens, isCowAmmPool } from '../../pool.helpers'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
 import { useRemoveLiquiditySteps } from './useRemoveLiquiditySteps'
@@ -52,7 +52,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     .times(humanBptInPercent / 100)
     .toFixed() as HumanAmount
 
-  const tokens = getPoolTokens(pool, getToken)
+  const tokens = getPoolActionableTokens(pool, getToken)
 
   const chain = pool.chain
   const nativeAsset = getNativeAssetToken(chain)
