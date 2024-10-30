@@ -56,6 +56,7 @@ import Image from 'next/image'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+import { useCow } from '../../cow/useCow'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
@@ -466,6 +467,7 @@ export function PoolListFilters() {
     isFixedPoolType,
     queryState: { resetFilters, totalFilterCount, setActiveProtocolVersionTab },
   } = usePoolList()
+  const { isCowPath } = useCow()
 
   function _resetFilters() {
     resetFilters()
@@ -534,12 +536,14 @@ export function PoolListFilters() {
                         </Heading>
                         <PoolNetworkFilters />
                       </Box>
-                      <Box as={motion.div} variants={staggeredFadeInUp}>
-                        <Heading as="h3" mb="sm" size="sm">
-                          Protocol version
-                        </Heading>
-                        <ProtocolVersionFilter />
-                      </Box>
+                      {!isCowPath && (
+                        <Box as={motion.div} variants={staggeredFadeInUp}>
+                          <Heading as="h3" mb="sm" size="sm">
+                            Protocol version
+                          </Heading>
+                          <ProtocolVersionFilter />
+                        </Box>
+                      )}
                       {!isFixedPoolType && (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
                           <Heading as="h3" mb="sm" size="sm">
