@@ -57,6 +57,7 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
+import Link from 'next/link'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
@@ -569,6 +570,18 @@ export function PoolListFilters() {
             </PopoverContent>
           </Box>
         </Popover>
+        {isCowPath && (
+          <Button
+            as={Link}
+            href="https://pool-creator.balancer.fi/cow"
+            ml="ms"
+            rel=""
+            target="_blank"
+            variant="tertiary"
+          >
+            Create a pool
+          </Button>
+        )}
       </HStack>
     </VStack>
   )
