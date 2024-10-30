@@ -10,15 +10,14 @@ import { isWrappedNativeAsset } from '../../token.helpers'
 export function hasValidPermit2(
   tokenAmountsIn?: TokenAmountIn[],
   expirations?: ExpirationByTokenAddress,
-  allowedAmounts?: AllowedAmountsByTokenAddress,
+  allowedAmounts?: AllowedAmountsByTokenAddress
 ): boolean {
   if (!expirations || !allowedAmounts || !tokenAmountsIn) return false
 
   const approvalExpired = (tokenAddress: Address) =>
     expirations[tokenAddress] < getNowTimestampInSecs()
   const alreadyAllowed = (amountIn: TokenAmountIn) =>
-    !approvalExpired(amountIn.address) &&
-    allowedAmounts[amountIn.address] >= amountIn.amount
+    !approvalExpired(amountIn.address) && allowedAmounts[amountIn.address] >= amountIn.amount
   const amountInValid = (amountIn: TokenAmountIn) =>
     amountIn.amount === 0n || alreadyAllowed(amountIn)
   const isValid = tokenAmountsIn.every(amountInValid)
@@ -43,7 +42,7 @@ type BasePermit2Params = {
 }
 
 // Returns the symbols of the tokens that need to be approved for permit2
-export function getTokenSymbolsForPermit({
+export function getTokenSymbolsForPermit2({
   getToken,
   tokenAmountsIn,
   wethIsEth,
@@ -56,13 +55,13 @@ export function getTokenSymbolsForPermit({
     tokenAmountsIn,
     chain,
   })
-    .filter(t => t.amount > 0n) // This must be filtered in a different place (caller??)
+    .filter(t => t.amount > 0n)
     .map(t => getToken(t.address, chain)?.symbol ?? 'Unknown')
   return tokenSymbols
 }
 
 // Returns the token addresses that need to be approved for permit2
-export function getTokenAddressesForPermit({
+export function getTokenAddressesForPermit2({
   wethIsEth,
   tokenAmountsIn,
   chainId,
@@ -85,7 +84,7 @@ function filterWrappedNativeAsset({
   wethIsEth,
   chain,
 }: {
-  tokenAmountsIn?: TokenAmountIn[],
+  tokenAmountsIn?: TokenAmountIn[]
   wethIsEth: boolean
   chain: GqlChain
 }): TokenAmountIn[] {
@@ -93,4 +92,3 @@ function filterWrappedNativeAsset({
   if (!wethIsEth) return tokenAmountsIn
   return tokenAmountsIn.filter(t => !isWrappedNativeAsset(t.address, chain))
 }
-

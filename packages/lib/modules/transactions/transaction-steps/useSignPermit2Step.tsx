@@ -8,8 +8,8 @@ import { useMemo } from 'react'
 
 import { useTokens } from '../../tokens/TokensProvider'
 import {
-  getTokenAddressesForPermit,
-  getTokenSymbolsForPermit,
+  getTokenAddressesForPermit2,
+  getTokenSymbolsForPermit2,
   hasValidPermit2,
 } from '../../tokens/approvals/permit2/permit2.helpers'
 import { usePermit2Allowance } from '../../tokens/approvals/permit2/usePermit2Allowance'
@@ -30,7 +30,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
 
   const { isLoadingPermit2Allowances, nonces, expirations, allowedAmounts } = usePermit2Allowance({
     chainId,
-    tokenAddresses: getTokenAddressesForPermit({
+    tokenAddresses: getTokenAddressesForPermit2({
       chainId,
       tokenAmountsIn: params.tokenAmountsIn,
       wethIsEth: params.wethIsEth,
@@ -91,7 +91,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
 
   const details: StepDetails = {
     gasless: true,
-    batchApprovalTokens: getTokenSymbolsForPermit({
+    batchApprovalTokens: getTokenSymbolsForPermit2({
       chainId,
       getToken,
       tokenAmountsIn,
