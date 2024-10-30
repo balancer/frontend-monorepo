@@ -21,11 +21,11 @@ query GetSorSwaps(
       inputAmountRaw
       outputAmountRaw
       pools
+      isBuffer
       protocolVersion
       tokens {
         address
         decimals
-        isBuffer
       }
     }
     priceImpact {
