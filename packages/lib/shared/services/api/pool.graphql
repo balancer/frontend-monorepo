@@ -109,107 +109,22 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
         stakingId
       }
     }
-
     ... on GqlPoolWeighted {
       nestingType
       poolTokens {
-        ... on GqlPoolTokenDetail {
-          id
-          index
-          name
-          symbol
-          balance
-          balanceUSD
-          address
-          priceRate
-          decimals
-          weight
-          hasNestedPool
-          isAllowed
-          priceRateProvider
-          priceRateProviderData {
-            ...PriceRateProviderDataFields
-          }
-          nestedPool {
-            id
-            address
-            type
-            tokens {
-              index
-              address
-              decimals
-            }
-          }
-          isAllowed
-        }
+        ...PoolTokens
       }
     }
     ... on GqlPoolStable {
       amp
       poolTokens {
-        ... on GqlPoolTokenDetail {
-          id
-          index
-          name
-          symbol
-          balance
-          balanceUSD
-          address
-          priceRate
-          decimals
-          weight
-          hasNestedPool
-          isAllowed
-          priceRateProvider
-          priceRateProviderData {
-            ...PriceRateProviderDataFields
-          }
-          nestedPool {
-            id
-            address
-            type
-            tokens {
-              index
-              address
-              decimals
-            }
-          }
-          isAllowed
-        }
+        ...PoolTokens
       }
     }
     ... on GqlPoolMetaStable {
       amp
       poolTokens {
-        ... on GqlPoolTokenDetail {
-          id
-          index
-          name
-          symbol
-          balance
-          balanceUSD
-          address
-          priceRate
-          decimals
-          weight
-          hasNestedPool
-          isAllowed
-          priceRateProvider
-          priceRateProviderData {
-            ...PriceRateProviderDataFields
-          }
-          nestedPool {
-            id
-            address
-            type
-            tokens {
-              index
-              address
-              decimals
-            }
-          }
-          isAllowed
-        }
+        ...PoolTokens
       }
     }
     ... on GqlPoolElement {
@@ -217,35 +132,7 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       principalToken
       baseToken
       poolTokens {
-        ... on GqlPoolTokenDetail {
-          id
-          index
-          name
-          symbol
-          balance
-          balanceUSD
-          address
-          priceRate
-          decimals
-          weight
-          hasNestedPool
-          isAllowed
-          priceRateProvider
-          priceRateProviderData {
-            ...PriceRateProviderDataFields
-          }
-          nestedPool {
-            id
-            address
-            type
-            tokens {
-              index
-              address
-              decimals
-            }
-          }
-          isAllowed
-        }
+        ...PoolTokens
       }
     }
     ... on GqlPoolComposableStable {
@@ -253,70 +140,14 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       nestingType
       bptPriceRate
       poolTokens {
-        ... on GqlPoolTokenDetail {
-          id
-          index
-          name
-          symbol
-          balance
-          balanceUSD
-          address
-          priceRate
-          decimals
-          weight
-          hasNestedPool
-          isAllowed
-          priceRateProvider
-          priceRateProviderData {
-            ...PriceRateProviderDataFields
-          }
-          nestedPool {
-            id
-            address
-            type
-            tokens {
-              index
-              address
-              decimals
-            }
-          }
-          isAllowed
-        }
+        ...PoolTokens
       }
     }
     ... on GqlPoolLiquidityBootstrapping {
       name
       nestingType
       poolTokens {
-        ... on GqlPoolTokenDetail {
-          id
-          index
-          name
-          symbol
-          balance
-          balanceUSD
-          address
-          priceRate
-          decimals
-          weight
-          hasNestedPool
-          isAllowed
-          priceRateProvider
-          priceRateProviderData {
-            ...PriceRateProviderDataFields
-          }
-          nestedPool {
-            id
-            address
-            type
-            tokens {
-              index
-              address
-              decimals
-            }
-          }
-          isAllowed
-        }
+        ...PoolTokens
       }
     }
     ... on GqlPoolGyro {
@@ -338,37 +169,10 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       v
       w
       z
+
       nestingType
       poolTokens {
-        ... on GqlPoolTokenDetail {
-          id
-          index
-          name
-          symbol
-          balance
-          balanceUSD
-          address
-          priceRate
-          decimals
-          weight
-          hasNestedPool
-          isAllowed
-          priceRateProvider
-          priceRateProviderData {
-            ...PriceRateProviderDataFields
-          }
-          nestedPool {
-            id
-            address
-            type
-            tokens {
-              index
-              address
-              decimals
-            }
-          }
-          isAllowed
-        }
+        ...PoolTokens
       }
     }
     ... on GqlPoolFx {
@@ -378,52 +182,49 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       epsilon
       lambda
       poolTokens {
-        ... on GqlPoolTokenDetail {
-          id
-          index
-          name
-          symbol
-          balance
-          balanceUSD
-          address
-          priceRate
-          decimals
-          weight
-          hasNestedPool
-          isAllowed
-          priceRateProvider
-          priceRateProviderData {
-            ...PriceRateProviderDataFields
-          }
-          nestedPool {
-            id
-            address
-            type
-            tokens {
-              index
-              address
-              decimals
-            }
-          }
-          isAllowed
-        }
+        ...PoolTokens
       }
     }
   }
 }
 
-fragment PriceRateProviderDataFields on GqlPriceRateProviderData {
-  address
+fragment PoolTokens on GqlPoolTokenDetail {
+  id
+  index
   name
-  summary
-  reviewed
-  warnings
-  upgradeableComponents {
-    entryPoint
-    implementationReviewed
+  symbol
+  balance
+  balanceUSD
+  address
+  priceRate
+  decimals
+  weight
+  hasNestedPool
+  isAllowed
+  priceRateProvider
+  priceRateProviderData {
+    address
+    name
+    summary
+    reviewed
+    warnings
+    upgradeableComponents {
+      entryPoint
+      implementationReviewed
+    }
+    reviewFile
+    factory
   }
-  reviewFile
-  factory
+  nestedPool {
+    id
+    address
+    type
+    tokens {
+      index
+      address
+      decimals
+    }
+  }
 }
 
 query GetPoolSnapshots($poolId: String!, $range: GqlPoolSnapshotDataRange!, $chainId: GqlChain!) {
