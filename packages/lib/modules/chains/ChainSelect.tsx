@@ -6,7 +6,14 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { Box, HStack, Text } from '@chakra-ui/react'
-import { Select, OptionBase, GroupBase, SingleValue, chakraComponents } from 'chakra-react-select'
+import {
+  Select,
+  OptionBase,
+  GroupBase,
+  SingleValue,
+  chakraComponents,
+  DropdownIndicatorProps,
+} from 'chakra-react-select'
 import { ReactNode, useEffect, useState } from 'react'
 import { ChevronDown, Globe } from 'react-feather'
 import { motion } from 'framer-motion'
@@ -32,6 +39,19 @@ const networkOptions: ChainOption[] = getProjectConfig().supportedNetworks.map(n
   value: network,
 }))
 
+function DropdownIndicator({
+  ...props
+}: DropdownIndicatorProps<ChainOption, false, GroupBase<ChainOption>>) {
+  return (
+    <chakraComponents.DropdownIndicator {...props}>
+      <HStack>
+        <Globe size={16} />
+        <ChevronDown size={16} />
+      </HStack>
+    </chakraComponents.DropdownIndicator>
+  )
+}
+
 export function ChainSelect({ value, onChange }: Props) {
   const [chainValue, setChainValue] = useState<ChainOption | undefined>(undefined)
   const chakraStyles = getSelectStyles<ChainOption>()
@@ -46,16 +66,7 @@ export function ChainSelect({ value, onChange }: Props) {
     <Box animate={pulseOnceWithDelay} as={motion.div} w="full" zIndex="10">
       <Select<ChainOption, false, GroupBase<ChainOption>>
         chakraStyles={chakraStyles}
-        components={{
-          DropdownIndicator: props => (
-            <chakraComponents.DropdownIndicator {...props}>
-              <HStack>
-                <Globe size={16} />
-                <ChevronDown size={16} />
-              </HStack>
-            </chakraComponents.DropdownIndicator>
-          ),
-        }}
+        components={{ DropdownIndicator: DropdownIndicator }}
         instanceId="chain-select"
         name="Chain"
         onChange={handleChange}
