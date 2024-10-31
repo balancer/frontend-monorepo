@@ -65,8 +65,7 @@ export function isFx(poolType: GqlPoolType | string): boolean {
   return poolType === GqlPoolType.Fx
 }
 
-// TODO: also needs to be added for Pool type
-export function isBoosted(pool: PoolListItem) {
+export function isBoosted(pool: PoolListItem | Pool) {
   return pool.hasErc4626 || pool.hasNestedErc4626
 }
 
