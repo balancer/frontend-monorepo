@@ -1,5 +1,6 @@
 import {
   AddLiquidityNested,
+  AddLiquidityNestedCallInputV2,
   AddLiquidityNestedInput,
   ChainId,
   PriceImpact,
@@ -12,7 +13,6 @@ import { Pool } from '../../../PoolProvider'
 import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
 import { NestedBuildAddLiquidityInput, NestedQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
-import { AddLiquidityNestedCallInputV2 } from './TemporaryNestedSdkTypes'
 
 /**
  * NestedAddLiquidityHandler is a handler that implements the
@@ -39,7 +39,7 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithAddress[]
   ): Promise<NestedQueryAddLiquidityOutput> {
     const addLiquidity = new AddLiquidityNested()
 
@@ -80,7 +80,7 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
    * PRIVATE METHODS
    */
   private constructSdkInput(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
+    humanAmountsIn: HumanTokenAmountWithAddress[]
   ): AddLiquidityNestedInput {
     const amountsIn = this.helpers.toSdkInputAmounts(humanAmountsIn)
 
