@@ -1,7 +1,7 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
-import { BALANCER_BATCH_ROUTER, BALANCER_ROUTER, VAULT_V3 } from '@balancer/sdk'
+import { BALANCER_BATCH_ROUTER, BALANCER_ROUTER, PERMIT2, VAULT_V3 } from '@balancer/sdk'
 import { sepolia } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -40,7 +40,7 @@ const networkConfig: NetworkConfig = {
       minter: '0x1783Cd84b3d01854A96B4eD5843753C2CcbD574A',
     },
     veBAL: '0x150A72e4D4d81BbF045565E232c50Ed0931ad795',
-    permit2: '0x000000000022D473030F116dDEE9F6B43aC78BA3',
+    permit2: PERMIT2[sepolia.id],
   },
   pools: convertHexToLowerCase({
     issues: {},

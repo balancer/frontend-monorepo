@@ -76,6 +76,7 @@ export function getTokenAddressesForPermit2({
 }
 
 export function permit2Address(chain: GqlChain): Address {
+  // TODO: Remove this when all chains have permit2 defined to it's not optional anymore
   return getNetworkConfig(chain).contracts.permit2 || ('' as Address)
 }
 
