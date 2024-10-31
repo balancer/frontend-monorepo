@@ -3,6 +3,7 @@ import { Pool } from '../PoolProvider'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
+import { isBoosted } from '../pool.helpers'
 
 type PoolChipProps = {
   pool: Pool
@@ -32,6 +33,16 @@ function TagWrapper({ children }: { children: React.ReactNode }) {
 function getPoolTypeLabel(pool: Pool) {
   const { tags, type } = pool
   const textProps = { fontSize: 'sm', variant: 'secondary' }
+
+  if (isBoosted(pool)) {
+    return (
+      <>
+        {/* add protocol icon dynamically */}
+        {/* <ProtocolIcon protocol={Protocol.CowAmm} /> */}
+        <Text {...textProps}>Boosted</Text>
+      </>
+    )
+  }
 
   if (tags?.includes('VE8020')) {
     return <Text {...textProps}>ve8020 weighted</Text>
