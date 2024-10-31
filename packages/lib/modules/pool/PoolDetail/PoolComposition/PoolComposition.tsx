@@ -1,6 +1,18 @@
 'use client'
 
-import { Card, Divider, HStack, Heading, Skeleton, Stack, Text, VStack } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Card,
+  Divider,
+  HStack,
+  Heading,
+  Skeleton,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
 import { Address } from 'viem'
 import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
@@ -14,6 +26,8 @@ import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { getPoolDisplayTokens } from '../../pool.utils'
 import { PoolTypeTag } from '../PoolTypeTag'
+import { isBoosted } from '../../pool.helpers'
+import { Protocol, protocolMessages } from '@repo/lib/modules/protocols/useProtocols'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -92,6 +106,13 @@ export function PoolComposition() {
             </Heading>
             <PoolTypeTag pool={pool} />
           </HStack>
+          {isBoosted(pool) && (
+            <Alert status="info">
+              <AlertIcon />
+              {/* TODO: set protocol dynamically */}
+              <AlertDescription>{protocolMessages[Protocol.Aave]}</AlertDescription>
+            </Alert>
+          )}
           <Divider />
           <CardContent
             chain={chain}

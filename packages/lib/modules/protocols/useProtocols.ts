@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export enum Protocol {
   Aave = 'aave',
   Aura = 'aura',
@@ -43,4 +44,11 @@ export const protocolIconPaths: Record<Protocol, string> = {
   [Protocol.Granary]: '/images/protocols/granary.svg',
   [Protocol.Tetu]: '/images/protocols/tetu.png',
   [Protocol.Zerovix]: '/images/protocols/0vix.svg',
+}
+
+export type boostedProtocols = Protocol.Aave
+
+export const protocolMessages: Record<boostedProtocols, string> = {
+  [Protocol.Aave]:
+    "The magic of this Boosted pool lies in its composition—under the hood, it contains wrapped Aave tokens that earn interest from Aave borrowers, continuously growing the pool's worth.",
 }
