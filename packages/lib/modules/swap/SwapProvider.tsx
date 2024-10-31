@@ -75,7 +75,7 @@ function selectSwapHandler(
   apolloClient: ApolloClient<object>,
   tokens: GqlToken[],
   pool?: Pool,
-  poolActionableTokens?: GqlToken[],
+  poolActionableTokens?: GqlToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -118,7 +118,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       swapType: GqlSorSwapType.ExactIn,
       selectedChain: isPoolSwap ? pool.chain : GqlChain.Mainnet,
     },
-    'swapState',
+    'swapState'
   )
 
   const swapState = useReactiveVar(swapStateVar)
@@ -147,7 +147,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       client,
       tokens,
       pool,
-      poolActionableTokens,
+      poolActionableTokens
     )
   }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 
@@ -157,7 +157,10 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const tokenInInfo = getToken(swapState.tokenIn.address, selectedChain)
   const tokenOutInfo = getToken(swapState.tokenOut.address, selectedChain)
 
-  if ((isTokenInSet && !tokenInInfo) || (isTokenOutSet && !tokenOutInfo && !isPoolSwap)) {
+  if (
+    (isTokenInSet && !tokenInInfo && !isPoolSwap) ||
+    (isTokenOutSet && !tokenOutInfo && !isPoolSwap)
+  ) {
     try {
       setDefaultTokens()
     } catch (error) {
@@ -264,7 +267,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   function setTokenInAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {},
+    { userTriggered = true }: { userTriggered?: boolean } = {}
   ) {
     const state = swapStateVar()
     const newState = {
@@ -291,7 +294,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   function setTokenOutAmount(
     amount: string,
-    { userTriggered = true }: { userTriggered?: boolean } = {},
+    { userTriggered = true }: { userTriggered?: boolean } = {}
   ) {
     const state = swapStateVar()
     const newState = {
@@ -411,7 +414,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       const wrapType = getWrapType(
         swapState.tokenIn.address,
         swapState.tokenOut.address,
-        selectedChain,
+        selectedChain
       )
       return wrapType ? wrapType : OSwapAction.SWAP
     }
@@ -446,8 +449,9 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     const { popularTokens } = networkConfig.tokens
     const symbolToAddressMap = invert(popularTokens || {}) as Record<string, Address>
     if (slugTokenIn) {
-      if (isAddress(slugTokenIn)) setTokenIn(slugTokenIn as Address)
-      else if (symbolToAddressMap[slugTokenIn] && isAddress(symbolToAddressMap[slugTokenIn])) {
+      if (isAddress(slugTokenIn)) {
+        setTokenIn(slugTokenIn as Address)
+      } else if (symbolToAddressMap[slugTokenIn] && isAddress(symbolToAddressMap[slugTokenIn])) {
         setTokenIn(symbolToAddressMap[slugTokenIn])
       }
     }
@@ -485,9 +489,9 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   function setInitialPoolSwapState(pool: Pool) {
     const { tokenIn } = pathParams
     setInitialChain(pool.chain)
-    setInitialTokenIn(tokenIn)
 
     if (supportsNestedActions(pool)) {
+      setInitialTokenIn(tokenIn)
       if (isStandardRootToken(pool, tokenIn as Address)) {
         setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
       } else {
@@ -495,6 +499,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       }
     } else {
       // Does not support nested actions:
+      setInitialTokenIn(poolActionableTokens?.[0]?.address)
       setInitialTokenOut(poolActionableTokens?.[1]?.address)
     }
     resetSwapAmounts()
@@ -588,11 +593,12 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [hasValidationErrors, 'Invalid input'],
     [simulationQuery.isError, 'Error fetching swap'],
-    [simulationQuery.isLoading, 'Fetching swap...'],
+    [simulationQuery.isLoading, 'Fetching swap...']
   )
 
   return {
     ...swapState,
+    selectedChain,
     transactionSteps,
     tokens,
     tokenInInfo,
