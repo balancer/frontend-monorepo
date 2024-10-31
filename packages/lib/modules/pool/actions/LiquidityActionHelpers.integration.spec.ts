@@ -66,7 +66,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
   })
 
   // Unskip when sepolia V3 pools are available in production api
-  it('for v3 BOOSTED pool', async () => {
+  it.skip('for v3 BOOSTED pool', async () => {
     const poolId = '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8' // Sepolia stataEthUSDC stataEthUSDT
 
     const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
