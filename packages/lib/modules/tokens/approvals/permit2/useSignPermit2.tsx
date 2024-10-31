@@ -18,7 +18,7 @@ import { Address } from 'viem'
 // eslint-disable-next-line no-unused-vars
 export type SignPermit2Fn = (
   sdkClient: PublicWalletClient,
-  nonces: NoncesByTokenAddress
+  nonces: NoncesByTokenAddress,
 ) => Promise<Permit2 | undefined>
 
 export type TokenAmountIn = {
@@ -34,6 +34,7 @@ export type BasePermit2Params = {
   isSimulationReady: boolean
   chainId: number
   signPermit2Fn: SignPermit2Fn
+  spender: Address
 }
 export function useSignPermit2({
   tokenAmountsIn,
@@ -100,7 +101,7 @@ export function useSignPermit2({
     signPermit2State,
     buttonLabel: getButtonLabel(
       signPermit2State,
-      getTokenSymbolsForPermit2({ getToken, chainId, tokenAmountsIn, wethIsEth })
+      getTokenSymbolsForPermit2({ getToken, chainId, tokenAmountsIn, wethIsEth }),
     ),
     isLoading: isSignatureLoading(signPermit2State) || !tokenAmountsIn,
     isDisabled: isSignatureDisabled(signPermit2State),

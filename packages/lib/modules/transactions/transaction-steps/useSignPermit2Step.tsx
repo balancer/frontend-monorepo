@@ -37,6 +37,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     }),
     owner: userAddress,
     enabled: params.isPermit2,
+    spender: params.spender,
   })
 
   const isValidPermit2 = hasValidPermit2(tokenAmountsIn, expirations, allowedAmounts)
@@ -113,7 +114,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
       renderAction: () => <SignPermitButton />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signPermit2State, isLoading, isConnected, isValidPermit2]
+    [signPermit2State, isLoading, isConnected, isValidPermit2],
   )
 }
 

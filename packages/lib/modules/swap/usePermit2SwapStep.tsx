@@ -9,6 +9,7 @@ import { SignPermit2Fn, TokenAmountIn } from '../tokens/approvals/permit2/useSig
 import { useSignPermit2Step } from '../transactions/transaction-steps/useSignPermit2Step'
 import { SwapSimulationQueryResult } from './queries/useSimulateSwapQuery'
 import { SdkSimulateSwapResponse } from './swap.types'
+import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
 
 type Props = {
   wethIsEth: boolean
@@ -64,6 +65,17 @@ export function useSignPermit2SwapStep({
     })
   }
 
+  const networkConfig = getNetworkConfig(getGqlChain(chainId))
+  // TODO: It would be better to use the to field from buildCall response but that requires a deep swap step refactor
+  const batchRouter = networkConfig.contracts.balancer.balancerBatchRouter
+
+  if (!batchRouter) {
+    throw new Error(
+      'Balancer batch router address is not yet defined in the network config for chainId: ' +
+        chainId,
+    )
+  }
+
   return useSignPermit2Step({
     chainId,
     signPermit2Fn,
@@ -71,5 +83,6 @@ export function useSignPermit2SwapStep({
     tokenAmountsIn: [tokenIn],
     isPermit2,
     isSimulationReady: !!simulationQuery.data,
+    spender: batchRouter,
   })
 }

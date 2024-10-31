@@ -16,12 +16,11 @@ type Params = {
   tokenAddresses?: Address[]
   owner?: Address
   enabled: boolean
+  spender: Address
 }
-export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled }: Params) {
+export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, spender }: Params) {
   const networkConfig = getNetworkConfig(getGqlChain(chainId))
   const permit2Address = networkConfig.contracts.permit2!
-  const balancerRouter = networkConfig.contracts.balancer.router!
-  const spender = balancerRouter
 
   const contracts = tokenAddresses?.map(
     tokenAddress =>
@@ -31,7 +30,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled }:
         abi: permit2Abi,
         functionName: 'allowance',
         args: [owner, tokenAddress, spender],
-      }) as const
+      }) as const,
   )
 
   const { data, isLoading } = useReadContracts({
@@ -46,7 +45,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled }:
     tokenAddresses && data
       ? zipObject(
           tokenAddresses,
-          data.map(result => result[2])
+          data.map(result => result[2]),
         )
       : undefined
 
@@ -54,7 +53,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled }:
     tokenAddresses && data
       ? zipObject(
           tokenAddresses,
-          data.map(result => result[1])
+          data.map(result => result[1]),
         )
       : undefined
 
@@ -62,7 +61,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled }:
     tokenAddresses && data
       ? zipObject(
           tokenAddresses,
-          data.map(result => result[0])
+          data.map(result => result[0]),
         )
       : undefined
 

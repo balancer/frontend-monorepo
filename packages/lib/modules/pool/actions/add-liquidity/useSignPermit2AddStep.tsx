@@ -11,6 +11,7 @@ import { usePool } from '../../PoolProvider'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { toTokenAmountsIn } from '../LiquidityActionHelpers'
+import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
 
 type Props = {
   wethIsEth: boolean
@@ -42,6 +43,15 @@ export function useSignPermit2AddStep({ wethIsEth, humanAmountsIn, simulationQue
     })
   }
 
+  const networkConfig = getNetworkConfig(getGqlChain(chainId))
+  const balancerRouter = networkConfig.contracts.balancer.balancerRouter
+
+  if (!balancerRouter) {
+    throw new Error(
+      'Balancer router address is not yet defined in the network config for chainId: ' + chainId,
+    )
+  }
+
   const signPermit2Step = useSignPermit2Step({
     chainId,
     signPermit2Fn,
@@ -49,6 +59,7 @@ export function useSignPermit2AddStep({ wethIsEth, humanAmountsIn, simulationQue
     tokenAmountsIn: toTokenAmountsIn(queryOutput?.sdkQueryOutput),
     isPermit2,
     isSimulationReady: !!queryOutput?.sdkQueryOutput.bptOut.amount,
+    spender: balancerRouter,
   })
 
   return signPermit2Step
