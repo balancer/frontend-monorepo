@@ -22,7 +22,6 @@ export enum Protocol {
 }
 
 export const protocolIconPaths: Record<Protocol, string> = {
-  /* For now we only use these icons (Aura and Balancer)*/
   [Protocol.Aura]: '/images/protocols/aura.svg',
   [Protocol.Balancer]: '/images/protocols/balancer.svg',
   [Protocol.Gyro]: '/images/protocols/gyro.png',
@@ -30,7 +29,7 @@ export const protocolIconPaths: Record<Protocol, string> = {
   [Protocol.CowAmm]: '/images/protocols/cowamm.png',
   [Protocol.Xave]: '/images/protocols/xave.png',
   [Protocol.Aave]: '/images/protocols/aave.svg',
-
+  /* Icons below are yet unused */
   [Protocol.Agave]: '/images/protocols/agave.png',
   [Protocol.Beefy]: '/images/protocols/beefy.svg',
   [Protocol.Euler]: '/images/protocols/euler.svg',
