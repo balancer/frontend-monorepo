@@ -28,6 +28,7 @@ import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
+import { TokenCore } from './pool.types'
 
 /**
  * METHODS
@@ -182,7 +183,7 @@ type Pool = GetPoolQuery['pool']
 export function usePoolHelpers(pool: Pool, chain: GqlChain) {
   const gaugeExplorerLink = getBlockExplorerAddressUrl(
     pool?.staking?.gauge?.gaugeAddress as Address,
-    chain
+    chain,
   )
   const poolExplorerLink = getBlockExplorerAddressUrl(pool.address as Address, chain)
 
@@ -220,7 +221,7 @@ export function isNotSupported(pool: Pool) {
  */
 export function isClaimableGauge(
   gauge: GqlPoolStakingGauge | GqlPoolStakingOtherGauge,
-  chain: GqlChain | number
+  chain: GqlChain | number,
 ): boolean {
   return !(gauge.version === 1 && isNotMainnet(chain))
 }
@@ -375,16 +376,16 @@ export function getNestedBptTokens(poolTokens: PoolToken[]) {
 export function getNestedBptParentToken(poolTokens: PoolToken[], childTokenAddress: Address) {
   const nestedBptToken = getNestedBptTokens(poolTokens).find(token =>
     token.nestedPool?.tokens.some(nestedToken =>
-      isSameAddress(nestedToken.address, childTokenAddress)
-    )
+      isSameAddress(nestedToken.address, childTokenAddress),
+    ),
   )
   if (!nestedBptToken) {
     throw new Error(
       `Provided nestedTokenAddress ${childTokenAddress} does not belong to any underlying token amongst the nested pool/s (${getNestedBptTokens(
-        poolTokens
+        poolTokens,
       )
         .map(t => t.symbol)
-        .join(' ,')})`
+        .join(' ,')})`,
     )
   }
 
@@ -413,7 +414,7 @@ export function getChildTokens(pool: Pool, poolActionableTokens?: GqlToken[]): G
 export function toGqlTokens(
   poolTokens: PoolToken[],
   getToken: GetTokenFn,
-  chain: GqlChain
+  chain: GqlChain,
 ): GqlToken[] {
   return poolTokens
     .map(token => getToken(token.address, chain))
@@ -435,23 +436,12 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
 }
 
 /*
-  Core token info required for pool actions
-  PoolToken and GqlTokens are super sets of TokenCore
-*/
-export type TokenCore = {
-  address: Address
-  name: string
-  symbol: string
-  decimals: number
-}
-
-/*
   Returns all the top level tokens + children nested tokens + ERC4626 underlying tokens.
   That is, the tokens that we can use in the pool's actions (add/remove/swap)
  */
 export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
   const underlyingTokens: TokenCore[] = pool.poolTokens.flatMap(token =>
-    token.isErc4626 ? (token.underlyingToken as TokenCore) : []
+    token.isErc4626 ? (token.underlyingToken as TokenCore) : [],
   )
 
   const nestedChildrenTokens: PoolToken[] = pool.poolTokens
@@ -464,7 +454,7 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
 
   return underlyingTokens.concat(
     toBasicTokens(nestedChildrenTokens),
-    toBasicTokens(standardTopLevelTokens)
+    toBasicTokens(standardTopLevelTokens),
   )
 }
 
@@ -476,6 +466,6 @@ function toBasicTokens(poolTokens: PoolToken[]): TokenCore[] {
         name: t.name,
         symbol: t.symbol,
         decimals: t.decimals,
-      }) as TokenCore
+      }) as TokenCore,
   )
 }

@@ -13,7 +13,7 @@ import {
   parseAsString,
   parseAsStringEnum,
 } from 'nuqs'
-import { Hex } from 'viem'
+import { Address, Hex } from 'viem'
 
 export type PoolId = Hex
 
@@ -112,13 +112,13 @@ export const poolListQueryStateParsers = {
   first: parseAsInteger.withDefault(20),
   skip: parseAsInteger.withDefault(0),
   orderBy: parseAsStringEnum<GqlPoolOrderBy>(Object.values(GqlPoolOrderBy)).withDefault(
-    GqlPoolOrderBy.TotalLiquidity
+    GqlPoolOrderBy.TotalLiquidity,
   ),
   orderDirection: parseAsStringEnum<GqlPoolOrderDirection>(
-    Object.values(GqlPoolOrderDirection)
+    Object.values(GqlPoolOrderDirection),
   ).withDefault(GqlPoolOrderDirection.Desc),
   poolTypes: parseAsArrayOf(
-    parseAsStringEnum<PoolFilterType>(Object.values(poolTypeFilters))
+    parseAsStringEnum<PoolFilterType>(Object.values(poolTypeFilters)),
   ).withDefault([]),
   networks: parseAsArrayOf(parseAsStringEnum<GqlChain>(Object.values(GqlChain))).withDefault([]),
   protocolVersion: parseAsInteger,
@@ -126,6 +126,17 @@ export const poolListQueryStateParsers = {
   userAddress: parseAsString,
   minTvl: parseAsFloat.withDefault(0),
   poolCategories: parseAsArrayOf(
-    parseAsStringEnum<PoolCategoryType>(Object.values(poolCategoryFilters))
+    parseAsStringEnum<PoolCategoryType>(Object.values(poolCategoryFilters)),
   ).withDefault([]),
+}
+
+/*
+  Core token info required for pool actions
+  PoolToken and GqlTokens are super sets of TokenCore
+*/
+export type TokenCore = {
+  address: Address
+  name: string
+  symbol: string
+  decimals: number
 }
