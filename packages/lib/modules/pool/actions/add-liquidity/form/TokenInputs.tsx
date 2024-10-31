@@ -38,8 +38,8 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
 
   return (
     <VStack spacing="md" w="full">
-      {tokens.map((token, i) => {
-        if (!token) return <div key={i}>Missing token</div>
+      {tokens.map(token => {
+        if (!token) return <div key="missing-token">Missing token</div>
 
         return (
           <TokenInput

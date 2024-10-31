@@ -105,11 +105,11 @@ export function ProtocolStatsSection() {
       maxW={{ base: '500px', md: '100%' }}
       spacing={{ base: 6, md: 8 }}
     >
-      {stats.map((stat, index) => (
+      {stats.map(stat => (
         <ProtocolStatItem
           imgName={stat.imgName}
           isLoading={statQuery.loading}
-          key={index}
+          key={stat.title}
           title={stat.title}
           value={stat.value.toString()}
         />
