@@ -1,21 +1,24 @@
 /* eslint-disable max-len */
 'use client'
+
 import ReactECharts from 'echarts-for-react'
 import { Box, Divider, HStack, Skeleton, Text, useTheme } from '@chakra-ui/react'
 import { usePoolActivityChart } from './usePoolActivityChart'
-import { FC, PropsWithChildren } from 'react'
+import { PropsWithChildren } from 'react'
 import { motion, easeOut } from 'framer-motion'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
 
-const AnimateOpacity: FC<PropsWithChildren<object>> = ({ children }) => (
-  <motion.div
-    animate={{ opacity: 1 }}
-    initial={{ opacity: 0 }}
-    transition={{ duration: 0.5, delay: 0.2 }}
-  >
-    {children}
-  </motion.div>
-)
+function AnimateOpacity({ children }: PropsWithChildren) {
+  return (
+    <motion.div
+      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
+      {children}
+    </motion.div>
+  )
+}
 
 export function PoolActivityChart() {
   const { isExpanded, isLoading } = usePoolActivity()
@@ -65,6 +68,7 @@ export function PoolActivityChart() {
         <AnimateOpacity>
           <HStack px={['1', '2']} spacing="4">
             {legendTabs.map((tab, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <HStack alignItems="center" gap="2" key={index}>
                 <Box
                   backgroundImage={tab.color}

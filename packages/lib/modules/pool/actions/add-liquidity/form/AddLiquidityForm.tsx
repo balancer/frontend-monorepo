@@ -87,7 +87,6 @@ function AddLiquidityMainForm() {
     proportionalSlippage,
     slippage,
     setProportionalSlippage,
-    humanAmountsIn,
   } = useAddLiquidity()
 
   const nextBtn = useRef(null)

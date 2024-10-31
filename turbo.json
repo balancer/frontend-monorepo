@@ -5,7 +5,11 @@
     "NEXT_PUBLIC_BALANCER_API_URL",
     "NEXT_PUBLIC_APP_ENV",
     "NEXT_PUBLIC_ALLOW_SKIP_TRANSACTION",
-    "NEXT_PUBLIC_PROJECT_ID"
+    "NEXT_PUBLIC_PROJECT_ID",
+    "NEXT_PRIVATE_DRPC_KEY",
+    "PRIVATE_HYPERNATIVE_API_ID",
+    "PRIVATE_HYPERNATIVE_API_SECRET",
+    "NEXT_PUBLIC_WALLET_CONNECT_ID"
   ],
   "tasks": {
     "dev": {
@@ -21,6 +25,9 @@
       "dependsOn": ["^start"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
+    "transit": {
+      "dependsOn": ["^transit"]
+    },
     "lint": {
       "dependsOn": ["^transit"],
       "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"]
@@ -31,23 +38,20 @@
       "cache": false
     },
     "typecheck": {
-      "dependsOn": ["graphql:gen", "transit"],
+      "dependsOn": ["^graphql:gen", "^transit"],
       "outputs": ["node_modules/.cache/tsbuildinfo.json"]
     },
     "test:unit": {
-      "dependsOn": ["graphql:gen", "^test:unit"]
+      "dependsOn": ["^graphql:gen", "^test:unit"]
     },
     "test:integration": {
-      "dependsOn": ["graphql:gen", "^test:integration"],
+      "dependsOn": ["^graphql:gen", "^test:integration"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
-      "inputs": [".env*"],
+      "inputs": ["**/*.graphql"],
       "outputs": ["shared/services/api/generated/**"]
-    },
-    "transit": {
-      "dependsOn": ["^transit"]
     },
     "//#format": {
       "outputs": ["node_modules/.cache/.prettiercache"]

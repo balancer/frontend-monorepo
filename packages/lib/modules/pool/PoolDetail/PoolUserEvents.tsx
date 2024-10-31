@@ -35,28 +35,28 @@ type PoolEventRowProps = {
 
 const GRID_COLUMNS = '100px 150px 100px 1fr'
 
+function Action({ isTypeAdd }: { isTypeAdd: boolean }) {
+  return (
+    <HStack>
+      <Box
+        as="span"
+        backgroundColor={isTypeAdd ? 'green.500' : 'red.500'}
+        borderRadius="50%"
+        display="inline-block"
+        h="8px"
+        w="8px"
+      />
+      <Text>{isTypeAdd ? 'Add' : 'Remove'}</Text>
+    </HStack>
+  )
+}
+
 function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) {
   if (poolEvent.__typename !== 'GqlPoolAddRemoveEventV3') {
     return null
   }
 
   const isTypeAdd = poolEvent.type === 'ADD'
-
-  function Action() {
-    return (
-      <HStack>
-        <Box
-          as="span"
-          backgroundColor={isTypeAdd ? 'green.500' : 'red.500'}
-          borderRadius="50%"
-          display="inline-block"
-          h="8px"
-          w="8px"
-        />
-        <Text>{isTypeAdd ? 'Add' : 'Remove'}</Text>
-      </HStack>
-    )
-  }
 
   const Tokens = () =>
     poolEvent.tokens
@@ -83,7 +83,7 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
       w="full"
     >
       <GridItem area="action">
-        <Action />
+        <Action isTypeAdd={isTypeAdd} />
       </GridItem>
       <GridItem area="tokens">
         <Tokens />
@@ -190,7 +190,7 @@ export default function PoolUserEvents({
             <Grid gap="4" templateColumns={{ base: '1fr', md: GRID_COLUMNS }} w="full">
               {['Action', 'Tokens', 'Value', 'Time'].map((label, index) => (
                 <GridItem
-                  key={index}
+                  key={label}
                   mr={index === 3 ? 'md' : 0}
                   textAlign={index > 1 ? 'right' : 'left'}
                 >

@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react'
 import { Box, Flex } from '@chakra-ui/react'
 import { motion, MotionStyle, useAnimation, useReducedMotion } from 'framer-motion'
 
-const SandPatterns: React.FC<PropsWithChildren> = ({ children, ...rest }) => {
+function SandPatterns({ children, ...rest }: PropsWithChildren) {
   const circles = Array.from({ length: 10 }, (_, i) => i + 1)
   const controls = useAnimation()
   const shouldReduceMotion = useReducedMotion()
@@ -45,6 +45,7 @@ const SandPatterns: React.FC<PropsWithChildren> = ({ children, ...rest }) => {
           animate={controls}
           custom={index}
           initial={{ width: 0, height: 0, borderRadius: 50 }}
+          // eslint-disable-next-line react/no-array-index-key
           key={index}
           style={circleStyle}
         />
