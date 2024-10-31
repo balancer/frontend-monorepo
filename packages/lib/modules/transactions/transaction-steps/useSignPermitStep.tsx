@@ -45,7 +45,7 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
             width="full"
           >
             <HStack spacing="sm" width="100%">
-              <Text fontWeight="bold" variant="primaryGradient">
+              <Text color="font.primaryGradient" fontWeight="bold">
                 {buttonLabel}
               </Text>
               <Spacer />
