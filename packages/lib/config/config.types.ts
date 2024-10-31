@@ -41,8 +41,8 @@ export interface ContractsConfig {
       TODO: make it required when v3 is deployed in all networks
       IDEAL: remove this config completely and use the SDK build "to" to get the required router
       */
-    balancerRouter?: Address
-    balancerBatchRouter?: Address
+    router?: Address
+    batchRouter?: Address
     relayerV6: Address
     minter: Address
   }

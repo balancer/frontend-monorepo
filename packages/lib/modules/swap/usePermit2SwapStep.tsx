@@ -17,6 +17,9 @@ type Props = {
   tokenInInfo?: GqlToken
   chainId: number
   isPermit2: boolean
+  // TODO: remove this field once we refactor to use:
+  // https://github.com/balancer/b-sdk/issues/462
+  isPoolSwap: boolean
 }
 
 export function useSignPermit2SwapStep({
@@ -25,6 +28,7 @@ export function useSignPermit2SwapStep({
   tokenInInfo,
   simulationQuery,
   isPermit2,
+  isPoolSwap,
 }: Props) {
   const { userAddress } = useUserAccount()
   const { slippage } = useUserSettings()
@@ -52,7 +56,7 @@ export function useSignPermit2SwapStep({
 
   const signPermit2Fn: SignPermit2Fn = (
     sdkClient: PublicWalletClient,
-    nonces: NoncesByTokenAddress,
+    nonces: NoncesByTokenAddress
   ) => {
     return signPermit2Swap({
       sdkClient,
@@ -66,15 +70,26 @@ export function useSignPermit2SwapStep({
   }
 
   const networkConfig = getNetworkConfig(getGqlChain(chainId))
-  // TODO: It would be better to use the to field from buildCall response but that requires a deep swap step refactor
-  const batchRouter = networkConfig.contracts.balancer.balancerBatchRouter
+  const router = networkConfig.contracts.balancer.router
+  const batchRouter = networkConfig.contracts.balancer.batchRouter
 
-  if (!batchRouter) {
+  if (!router) {
     throw new Error(
-      'Balancer batch router address is not yet defined in the network config for chainId: ' +
-        chainId,
+      'Balancer router address is not yet defined in the network config for chainId: ' + chainId
     )
   }
+  if (!batchRouter) {
+    throw new Error(
+      'Balancer batchRouter address is not yet defined in the network config for chainId: ' +
+        chainId
+    )
+  }
+
+  /*
+    TODO: refactor to get the sender from the exposed to field
+    https://github.com/balancer/b-sdk/issues/462
+  */
+  const spender = isPoolSwap ? router : batchRouter
 
   return useSignPermit2Step({
     chainId,
@@ -83,6 +98,6 @@ export function useSignPermit2SwapStep({
     tokenAmountsIn: [tokenIn],
     isPermit2,
     isSimulationReady: !!simulationQuery.data,
-    spender: batchRouter,
+    spender,
   })
 }

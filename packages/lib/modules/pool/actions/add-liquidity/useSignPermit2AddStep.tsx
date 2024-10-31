@@ -29,7 +29,7 @@ export function useSignPermit2AddStep({ wethIsEth, humanAmountsIn, simulationQue
 
   const signPermit2Fn: SignPermit2Fn = (
     sdkClient: PublicWalletClient,
-    nonces: NoncesByTokenAddress,
+    nonces: NoncesByTokenAddress
   ) => {
     return signPermit2Add({
       sdkClient,
@@ -44,11 +44,11 @@ export function useSignPermit2AddStep({ wethIsEth, humanAmountsIn, simulationQue
   }
 
   const networkConfig = getNetworkConfig(getGqlChain(chainId))
-  const balancerRouter = networkConfig.contracts.balancer.balancerRouter
+  const balancerRouter = networkConfig.contracts.balancer.router
 
   if (!balancerRouter) {
     throw new Error(
-      'Balancer router address is not yet defined in the network config for chainId: ' + chainId,
+      'Balancer router address is not yet defined in the network config for chainId: ' + chainId
     )
   }
 

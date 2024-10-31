@@ -16,6 +16,9 @@ import { permit2Address } from '../tokens/approvals/permit2/permit2.helpers'
 
 type Params = SwapStepParams & {
   vaultAddress: Address
+  // TODO: remove this field once we refactor to use:
+  // https://github.com/balancer/b-sdk/issues/462
+  isPoolSwap: boolean
 }
 
 export function useSwapSteps({
@@ -27,6 +30,7 @@ export function useSwapSteps({
   swapAction,
   tokenInInfo,
   tokenOutInfo,
+  isPoolSwap,
 }: Params) {
   const chain = swapState.selectedChain
   const chainId = getChainId(chain)
@@ -64,7 +68,14 @@ export function useSwapSteps({
       isPermit2,
     })
 
-  const signPermit2Step = useSignPermit2SwapStep({ chainId, wethIsEth, tokenInInfo, simulationQuery, isPermit2 })
+  const signPermit2Step = useSignPermit2SwapStep({
+    chainId,
+    wethIsEth,
+    tokenInInfo,
+    simulationQuery,
+    isPermit2,
+    isPoolSwap,
+  })
 
   const swapStep = useSwapStep({
     handler,
@@ -79,8 +90,7 @@ export function useSwapSteps({
   const isSignPermit2Loading = isPermit2 && !signPermit2Step
 
   const steps = useMemo(() => {
-    const swapSteps =
-      isPermit2 && signPermit2Step ? [signPermit2Step, swapStep] : [swapStep]
+    const swapSteps = isPermit2 && signPermit2Step ? [signPermit2Step, swapStep] : [swapStep]
 
     if (swapRequiresRelayer) {
       if (relayerMode === 'approveRelayer') {

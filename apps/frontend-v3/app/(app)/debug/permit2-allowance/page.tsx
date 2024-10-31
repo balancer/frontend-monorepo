@@ -18,9 +18,8 @@ export default function Page() {
 
   const { chain, userAddress } = useUserAccount()
   const chainId = chain?.id || sepolia.id
-  const balancerRouter = getNetworkConfig(getGqlChain(chainId)).contracts.balancer.balancerRouter!
-  const balancerBatchRouter = getNetworkConfig(getGqlChain(chainId)).contracts.balancer
-    .balancerBatchRouter!
+  const balancerRouter = getNetworkConfig(getGqlChain(chainId)).contracts.balancer.router!
+  const balancerBatchRouter = getNetworkConfig(getGqlChain(chainId)).contracts.balancer.batchRouter!
 
   function onRouterChange(option: RouterOption) {
     if (option === 'BALANCER_ROUTER') setRouter(balancerRouter)

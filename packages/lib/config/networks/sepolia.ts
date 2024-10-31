@@ -34,8 +34,8 @@ const networkConfig: NetworkConfig = {
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
       vaultV3: VAULT_V3[sepolia.id],
-      balancerRouter: BALANCER_ROUTER[sepolia.id],
-      balancerBatchRouter: BALANCER_BATCH_ROUTER[sepolia.id],
+      router: BALANCER_ROUTER[sepolia.id],
+      batchRouter: BALANCER_BATCH_ROUTER[sepolia.id],
       relayerV6: '0x7852fB9d0895e6e8b3EedA553c03F6e2F9124dF9',
       minter: '0x1783Cd84b3d01854A96B4eD5843753C2CcbD574A',
     },

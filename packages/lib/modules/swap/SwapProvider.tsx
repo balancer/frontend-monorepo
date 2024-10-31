@@ -436,6 +436,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     swapAction,
     tokenInInfo,
     tokenOutInfo,
+    isPoolSwap: !!isPoolSwap,
   })
 
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)

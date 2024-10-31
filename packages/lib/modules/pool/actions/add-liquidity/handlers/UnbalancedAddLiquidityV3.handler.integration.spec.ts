@@ -43,7 +43,7 @@ describe.skip('When adding unbalanced liquidity for a V3 pool', async () => {
       queryOutput,
     })
 
-    const sepoliaRouter = getNetworkConfig(GqlChain.Sepolia).contracts.balancer.balancerRouter
+    const sepoliaRouter = getNetworkConfig(GqlChain.Sepolia).contracts.balancer.router
 
     expect(result.to).toBe(sepoliaRouter)
     expect(result.data).toBeDefined()
