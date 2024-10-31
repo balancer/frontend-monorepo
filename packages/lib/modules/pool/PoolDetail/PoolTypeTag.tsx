@@ -37,8 +37,8 @@ function getPoolTypeLabel(pool: Pool) {
   if (isBoosted(pool)) {
     return (
       <>
-        {/* add protocol icon dynamically */}
-        {/* <ProtocolIcon protocol={Protocol.CowAmm} /> */}
+        {/* TODO: set protocol dynamically */}
+        <ProtocolIcon protocol={Protocol.Aave} />
         <Text {...textProps}>Boosted</Text>
       </>
     )
