@@ -18,6 +18,9 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     liquidityManagement {
       disableUnbalancedLiquidity
     }
+    hook {
+      address
+    }
     dynamicData {
       poolId
       swapEnabled
