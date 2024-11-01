@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
-import { getGqlChain, allowSkipTransaction } from '@repo/lib/config/app.config'
+import { getGqlChain } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import {
@@ -20,6 +20,12 @@ import { useTxHash } from '../safe.hooks'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import { useMockedTxHash } from '@repo/lib/modules/web3/contracts/useMockedTxHash'
+
+/**
+ * Allows to skip transaction confirmation step in the wallet and go directly to success state
+ * Mostly used for testing cross-chain sync
+ */
+const allowSkipTransaction = false
 
 type IAbiMap = typeof AbiMap
 type AbiMapKey = keyof typeof AbiMap

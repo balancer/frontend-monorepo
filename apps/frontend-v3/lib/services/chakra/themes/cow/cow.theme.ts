@@ -1,9 +1,9 @@
 import { ThemeTypings, extendTheme } from '@chakra-ui/react'
 import { colors, primaryTextColor } from './colors'
-import { getComponents } from '../base/components'
-import { config, fonts, styles } from '../base/foundations'
-import { proseTheme } from '../base/prose'
-import { getSemanticTokens } from '../base/semantic-tokens'
+import { getComponents } from '@repo/lib/shared/services/chakra/themes/base/components'
+import { config, fonts, styles } from '@repo/lib/shared/services/chakra/themes/base/foundations'
+import { proseTheme } from '@repo/lib/shared/services/chakra/themes/base/prose'
+import { getSemanticTokens } from '@repo/lib/shared/services/chakra/themes/base/semantic-tokens'
 import { getCowTokens } from './tokens'
 
 const tokens = getCowTokens(colors, primaryTextColor)
