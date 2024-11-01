@@ -13,20 +13,20 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { usePool } from '../../PoolProvider'
+import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
-import { PoolWeightChart } from '../PoolWeightCharts/PoolWeightChart'
+import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { getPoolDisplayTokens } from '../../pool.utils'
-import { PoolTypeTag } from '../PoolTypeTag'
-import { isBoosted } from '../../pool.helpers'
+import { getPoolDisplayTokens } from '../pool.utils'
+import { PoolTypeTag } from './PoolTypeTag'
+import { isBoosted } from '../pool.helpers'
 import { Protocol, protocolMessages } from '@repo/lib/modules/protocols/useProtocols'
 
 type CardContentProps = {
