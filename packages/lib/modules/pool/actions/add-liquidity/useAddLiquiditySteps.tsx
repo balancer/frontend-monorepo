@@ -47,7 +47,6 @@ export function useAddLiquiditySteps({
       isPermit2,
     })
 
-
   const wethIsEth = helpers.isNativeAssetIn(humanAmountsIn)
 
   const signPermit2Step = useSignPermit2AddStep({

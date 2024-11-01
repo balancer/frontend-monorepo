@@ -48,7 +48,7 @@ export function isAuraBalSwap(
   tokenIn: Address,
   tokenOut: Address,
   chain: GqlChain,
-  swapType: GqlSorSwapType,
+  swapType: GqlSorSwapType
 ) {
   const auraBAL = getAuraBalAddress(chain)
   if (!auraBAL) return false
@@ -61,7 +61,7 @@ export function isAuraBalSwap(
 
   const tokenInOrOutIsAuraBal = isSameAddress(tokenIn, auraBAL) || isSameAddress(tokenOut, auraBAL)
   const tokenInOrOutIsRelevantToken = relevantTokens.some(
-    token => isSameAddress(tokenIn, token) || isSameAddress(tokenOut, token),
+    token => isSameAddress(tokenIn, token) || isSameAddress(tokenOut, token)
   )
   const isExactInSwap = swapType === GqlSorSwapType.ExactIn
 

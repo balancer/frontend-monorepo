@@ -10,7 +10,7 @@ import { isWrappedNativeAsset } from '../../token.helpers'
 export function hasValidPermit2(
   tokenAmountsIn?: TokenAmountIn[],
   expirations?: ExpirationByTokenAddress,
-  allowedAmounts?: AllowedAmountsByTokenAddress,
+  allowedAmounts?: AllowedAmountsByTokenAddress
 ): boolean {
   if (!expirations || !allowedAmounts || !tokenAmountsIn) return false
 

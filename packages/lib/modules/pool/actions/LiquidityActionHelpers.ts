@@ -323,12 +323,12 @@ export function formatBuildCallParams<T>(buildCallParams: T, account: Address) {
   return { ...buildCallParams, sender: account, recipient: account }
 }
 
-export function toTokenAmountsIn(sdkQueryOutput: AddLiquidityQueryOutput): TokenAmountIn[] | undefined {
+export function toTokenAmountsIn(
+  sdkQueryOutput: AddLiquidityQueryOutput
+): TokenAmountIn[] | undefined {
   if (!sdkQueryOutput) return
-  return sdkQueryOutput.amountsIn.map(amountIn => (
-    {
-      address: amountIn.token.address,
-      amount: amountIn.amount
-    }
-  ))
+  return sdkQueryOutput.amountsIn.map(amountIn => ({
+    address: amountIn.token.address,
+    amount: amountIn.amount,
+  }))
 }

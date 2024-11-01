@@ -60,7 +60,6 @@ async function sign({
     pool,
   })
 
-
   const filteredAmountsIn = filterWrappedNativeAsset({
     wethIsEth,
     chain: pool.chain,
@@ -91,7 +90,7 @@ function maximizePositiveAmounts(amountsIn: TokenAmount[]): TokenAmount[] {
       ({
         ...item,
         amount: item.amount > 0n ? MaxAllowance : item.amount,
-      }) as TokenAmount,
+      }) as TokenAmount
   )
 }
 
@@ -109,5 +108,3 @@ function filterWrappedNativeAsset({
     return !isWrappedNativeAsset(a.token.address, chain)
   })
 }
-
-

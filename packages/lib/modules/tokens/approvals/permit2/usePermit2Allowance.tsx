@@ -30,7 +30,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, s
         abi: permit2Abi,
         functionName: 'allowance',
         args: [owner, tokenAddress, spender],
-      }) as const,
+      }) as const
   )
 
   const { data, isLoading } = useReadContracts({
@@ -45,7 +45,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, s
     tokenAddresses && data
       ? zipObject(
           tokenAddresses,
-          data.map(result => result[2]),
+          data.map(result => result[2])
         )
       : undefined
 
@@ -53,7 +53,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, s
     tokenAddresses && data
       ? zipObject(
           tokenAddresses,
-          data.map(result => result[1]),
+          data.map(result => result[1])
         )
       : undefined
 
@@ -61,7 +61,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, s
     tokenAddresses && data
       ? zipObject(
           tokenAddresses,
-          data.map(result => result[0]),
+          data.map(result => result[0])
         )
       : undefined
 

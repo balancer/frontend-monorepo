@@ -43,20 +43,21 @@ async function sign({
   slippagePercent,
   nonces,
   tokenIn,
-  wethIsEth
+  wethIsEth,
 }: SignPermit2SwapParams): Promise<Permit2> {
   if (!sdkClient) throw new Error('Missing sdkClient')
   if (!nonces) throw new Error('Missing nonces')
   if (!tokenIn) throw new Error('Missing token in')
-
 
   // Instead of MaxAllowanceTransferAmount(MaxUint160) we use MaxUint159 to avoid overflow issues
   const MaxUint159 = BigInt('0x7fffffffffffffffffffffffffffffffffffffff')
   const MaxAllowance = MaxUint159
 
   const maximizedQueryOutput = { ...queryOutput }
-  if (maximizedQueryOutput.swapKind === SwapKind.GivenIn) maximizedQueryOutput.amountIn.amount = MaxAllowance
-  if (maximizedQueryOutput.swapKind === SwapKind.GivenOut) maximizedQueryOutput.amountOut.amount = MaxAllowance
+  if (maximizedQueryOutput.swapKind === SwapKind.GivenIn)
+    {maximizedQueryOutput.amountIn.amount = MaxAllowance}
+  if (maximizedQueryOutput.swapKind === SwapKind.GivenOut)
+    {maximizedQueryOutput.amountOut.amount = MaxAllowance}
 
   const signature = await Permit2Helper.signSwapApproval({
     client: sdkClient,
@@ -71,6 +72,3 @@ async function sign({
 
   return signature
 }
-
-
-

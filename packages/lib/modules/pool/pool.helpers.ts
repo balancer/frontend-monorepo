@@ -182,7 +182,7 @@ type Pool = GetPoolQuery['pool']
 export function usePoolHelpers(pool: Pool, chain: GqlChain) {
   const gaugeExplorerLink = getBlockExplorerAddressUrl(
     pool?.staking?.gauge?.gaugeAddress as Address,
-    chain,
+    chain
   )
   const poolExplorerLink = getBlockExplorerAddressUrl(pool.address as Address, chain)
 
@@ -220,7 +220,7 @@ export function isNotSupported(pool: Pool) {
  */
 export function isClaimableGauge(
   gauge: GqlPoolStakingGauge | GqlPoolStakingOtherGauge,
-  chain: GqlChain | number,
+  chain: GqlChain | number
 ): boolean {
   return !(gauge.version === 1 && isNotMainnet(chain))
 }
@@ -375,16 +375,16 @@ export function getNestedBptTokens(poolTokens: PoolToken[]) {
 export function getNestedBptParentToken(poolTokens: PoolToken[], childTokenAddress: Address) {
   const nestedBptToken = getNestedBptTokens(poolTokens).find(token =>
     token.nestedPool?.tokens.some(nestedToken =>
-      isSameAddress(nestedToken.address, childTokenAddress),
-    ),
+      isSameAddress(nestedToken.address, childTokenAddress)
+    )
   )
   if (!nestedBptToken) {
     throw new Error(
       `Provided nestedTokenAddress ${childTokenAddress} does not belong to any underlying token amongst the nested pool/s (${getNestedBptTokens(
-        poolTokens,
+        poolTokens
       )
         .map(t => t.symbol)
-        .join(' ,')})`,
+        .join(' ,')})`
     )
   }
 
@@ -413,7 +413,7 @@ export function getChildTokens(pool: Pool, poolActionableTokens?: GqlToken[]): G
 export function toGqlTokens(
   poolTokens: PoolToken[],
   getToken: GetTokenFn,
-  chain: GqlChain,
+  chain: GqlChain
 ): GqlToken[] {
   return poolTokens
     .map(token => getToken(token.address, chain))
