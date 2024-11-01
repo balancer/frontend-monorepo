@@ -20,6 +20,8 @@ import { getPoolCategories } from '@repo/lib/modules/pool/categories/getPoolCate
 import { PoolCategoriesProvider } from '@repo/lib/modules/pool/categories/PoolCategoriesProvider'
 import { mins } from '../../utils/time'
 import { PropsWithChildren } from 'react'
+import { getHooksMetadata } from '@repo/lib/modules/hooks/getHooksMetadata'
+import { HooksProvider } from '@repo/lib/modules/hooks/HooksProvider'
 
 export const revalidate = 60
 
@@ -54,6 +56,7 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
 
   const exchangeRates = await getFxRates()
   const poolCategories = await getPoolCategories()
+  const hooksMetadata = await getHooksMetadata()
 
   return (
     <TokensProvider
@@ -62,7 +65,9 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
       variables={tokensQueryVariables}
     >
       <FiatFxRatesProvider data={exchangeRates}>
-        <PoolCategoriesProvider data={poolCategories}>{children}</PoolCategoriesProvider>
+        <PoolCategoriesProvider data={poolCategories}>
+          <HooksProvider data={hooksMetadata}>{children}</HooksProvider>
+        </PoolCategoriesProvider>
       </FiatFxRatesProvider>
     </TokensProvider>
   )
