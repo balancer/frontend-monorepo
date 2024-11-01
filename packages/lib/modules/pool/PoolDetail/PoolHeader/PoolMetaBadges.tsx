@@ -8,6 +8,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
+  Center,
 } from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
 import Image from 'next/image'
@@ -18,9 +19,12 @@ import { getPoolTypeLabel, shouldHideSwapFee } from '../../pool.utils'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { PoolVersionTag } from '../../PoolVersionTag'
 import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
+import { useHook } from '@repo/lib/modules/hooks/useHook'
+import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 
 export default function PoolMetaBadges() {
   const { pool, chain } = usePool()
+  const { hasHook } = useHook(pool)
 
   return (
     <Flex alignItems="center" gap={{ base: 'xs', sm: 'sm' }} wrap="wrap">
@@ -46,6 +50,13 @@ export default function PoolMetaBadges() {
       <BalBadge color="font.secondary" fontSize="xs" textTransform="none">
         {getPoolTypeLabel(pool.type)}
       </BalBadge>
+      {hasHook && (
+        <BalBadge color="font.primary" fontSize="xs" h={8} w={8}>
+          <Center h="full" w="full">
+            <HookIcon size={20} />
+          </Center>
+        </BalBadge>
+      )}
       {!shouldHideSwapFee(pool.type) && (
         <Popover trigger="hover">
           <PopoverTrigger>
