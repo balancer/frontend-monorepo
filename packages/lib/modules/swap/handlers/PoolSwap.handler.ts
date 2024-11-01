@@ -14,7 +14,7 @@ export class PoolSwapHandler extends BaseDefaultSwapHandler {
 
   constructor(
     public pool: Pool,
-    public poolActionableTokens: GqlToken[],
+    public poolActionableTokens: GqlToken[]
   ) {
     super()
   }
@@ -31,7 +31,7 @@ export class PoolSwapHandler extends BaseDefaultSwapHandler {
     }
 
     const tokenOut = this.poolActionableTokens.find(token =>
-      isSameAddress(token.address, variables.tokenOut),
+      isSameAddress(token.address, variables.tokenOut)
     ) as TokenApi
 
     if (!tokenOut) {
