@@ -13,30 +13,30 @@ import {
   Button,
   Link,
 } from '@chakra-ui/react'
-import { PoolCategory } from './getPoolCategories'
+import { PoolTag } from './getPoolTags'
 import { usePool } from '../PoolProvider'
-import { usePoolCategories } from './PoolCategoriesProvider'
 import NextLink from 'next/link'
 import { isInteger, toNumber } from 'lodash'
+import { usePoolTags } from './PoolTagsProvider'
 
-function PoolCategoryBadge({ category }: { category: PoolCategory }) {
-  const { getCategoryIconSrc } = usePoolCategories()
-  const categoryIconSrc = getCategoryIconSrc(category)
-
-  function CategoryValue() {
-    if (category.value) {
-      if (category.id.includes('points') && isInteger(toNumber(category.value))) {
-        return <Text ml="xs" mr="xs">{`${category.value}x`}</Text>
-      }
+function TagValue({ tag }: { tag: PoolTag }) {
+  if (tag.value) {
+    if (tag.id.includes('points') && isInteger(toNumber(tag.value))) {
+      return <Text ml="xs" mr="xs">{`${tag.value}x`}</Text>
     }
-    return null
   }
+  return null
+}
+
+function PoolTagBadge({ tag }: { tag: PoolTag }) {
+  const { getTagIconSrc } = usePoolTags()
+  const tagIconSrc = getTagIconSrc(tag)
 
   return (
     <Popover trigger="hover">
       <PopoverTrigger>
         <HStack>
-          {categoryIconSrc && (
+          {tagIconSrc && (
             <Badge
               alignItems="center"
               bg="background.level2"
@@ -49,7 +49,7 @@ function PoolCategoryBadge({ category }: { category: PoolCategory }) {
               textTransform="none"
               zIndex={2}
             >
-              <Image alt={category.name} h={6} src={categoryIconSrc} w={6} />
+              <Image alt={tag.name} h={6} src={tagIconSrc} w={6} />
             </Badge>
           )}
           <Badge
@@ -60,20 +60,20 @@ function PoolCategoryBadge({ category }: { category: PoolCategory }) {
             borderWidth={1}
             display="flex"
             minH="34px"
-            ml={categoryIconSrc ? -9 : 0}
+            ml={tagIconSrc ? -9 : 0}
             p="xs"
-            pl={categoryIconSrc ? 8 : undefined}
+            pl={tagIconSrc ? 8 : undefined}
             shadow="sm"
             textTransform="none"
           >
-            {category.iconUrl ? (
-              <Image alt={category.name} h={6} rounded="full" src={category.iconUrl} w={6} />
+            {tag.iconUrl ? (
+              <Image alt={tag.name} h={6} rounded="full" src={tag.iconUrl} w={6} />
             ) : (
               <Text fontSize="xs" fontWeight="bold" px="sm" textTransform="uppercase">
-                {category.name}
+                {tag.name}
               </Text>
             )}
-            <CategoryValue />
+            <TagValue tag={tag} />
           </Badge>
         </HStack>
       </PopoverTrigger>
@@ -84,19 +84,19 @@ function PoolCategoryBadge({ category }: { category: PoolCategory }) {
           <VStack align="start" spacing="md">
             <VStack align="start" spacing="xs">
               <Text fontSize="lg" fontWeight="bold">
-                {category.name}
+                {tag.name}
               </Text>
-              {category.url && (
-                <Link color="grayText" fontSize="sm" href={category.url} isExternal>
-                  {category.url}
+              {tag.url && (
+                <Link color="grayText" fontSize="sm" href={tag.url} isExternal>
+                  {tag.url}
                 </Link>
               )}
             </VStack>
-            <Text>{category.description}</Text>
-            {category.url && (
+            <Text>{tag.description}</Text>
+            {tag.url && (
               <Button
                 as={NextLink}
-                href={category.url}
+                href={tag.url}
                 rel="noreferrer"
                 size="sm"
                 target="_blank"
@@ -113,16 +113,16 @@ function PoolCategoryBadge({ category }: { category: PoolCategory }) {
   )
 }
 
-export function PoolCategories() {
+export function PoolTags() {
   const { pool } = usePool()
-  const { getPoolCategories } = usePoolCategories()
+  const { getPoolTags } = usePoolTags()
 
-  const poolCategories = getPoolCategories(pool)
+  const poolTags = getPoolTags(pool)
 
   return (
     <HStack>
-      {poolCategories.map(category => (
-        <PoolCategoryBadge category={category} key={category.id} />
+      {poolTags.map(tag => (
+        <PoolTagBadge key={tag.id} tag={tag} />
       ))}
     </HStack>
   )
