@@ -29,6 +29,7 @@ import {
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 import { Pool } from '../PoolProvider'
 import {
+  allPoolTokens,
   isAffectedByCspIssue,
   isComposableStableV1,
   isCowAmmPool,
@@ -105,11 +106,13 @@ export class LiquidityActionHelpers {
             decimals,
           }
         }
-        const token = this.pool.allTokens.find(token => isSameAddress(token.address, tokenAddress))
+
+        const allTokens = allPoolTokens(this.pool)
+        const token = allTokens.find(token => isSameAddress(token.address, tokenAddress))
         if (!token) {
           throw new Error(
             `Provided token address ${tokenAddress} not found in pool tokens [${Object.keys(
-              this.pool.allTokens.map(t => t.address)
+              allTokens.map(t => t.address)
             ).join(' , \n')}]`
           )
         }
