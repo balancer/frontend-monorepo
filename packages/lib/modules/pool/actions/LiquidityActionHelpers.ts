@@ -29,6 +29,7 @@ import {
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 import { Pool } from '../PoolProvider'
 import {
+  allPoolTokens,
   isAffectedByCspIssue,
   isComposableStableV1,
   isCowAmmPool,
@@ -78,7 +79,7 @@ export class LiquidityActionHelpers {
 
   public getAmountsToApprove(
     humanAmountsIn: HumanTokenAmountWithAddress[],
-    isPermit2 = false
+    isPermit2 = false,
   ): TokenAmountToApprove[] {
     return this.toInputAmounts(humanAmountsIn).map(({ address, rawAmount }) => {
       return {
@@ -105,12 +106,14 @@ export class LiquidityActionHelpers {
             decimals,
           }
         }
-        const token = this.pool.allTokens.find(token => isSameAddress(token.address, tokenAddress))
+
+        const allTokens = allPoolTokens(this.pool)
+        const token = allTokens.find(token => isSameAddress(token.address, tokenAddress))
         if (!token) {
           throw new Error(
             `Provided token address ${tokenAddress} not found in pool tokens [${Object.keys(
-              this.pool.allTokens.map(t => t.address)
-            ).join(' , \n')}]`
+              allTokens.map(t => t.address),
+            ).join(' , \n')}]`,
           )
         }
         return {
@@ -161,14 +164,14 @@ export function toHumanAmount(tokenAmount: TokenAmount): HumanAmount {
 
 export function ensureLastQueryResponse<Q>(
   liquidityActionDescription: string,
-  queryResponse?: Q
+  queryResponse?: Q,
 ): Q {
   if (!queryResponse) {
     // This should never happen but this is a check against potential regression bugs
     console.error(`Missing queryResponse in ${liquidityActionDescription}`)
     throw new SentryError(
       `Missing queryResponse.
-It looks that you tried to call useBuildCallData before the last query finished generating queryResponse`
+It looks that you tried to call useBuildCallData before the last query finished generating queryResponse`,
     )
   }
 
@@ -245,13 +248,13 @@ export function toPoolStateWithBalances(pool: Pool): PoolStateWithBalances {
 export function filterHumanAmountsIn(
   humanAmountsIn: HumanTokenAmountWithAddress[],
   tokenAddress: Address,
-  chain: GqlChain
+  chain: GqlChain,
 ) {
   return humanAmountsIn.filter(
     amountIn =>
       !isSameAddress(amountIn.tokenAddress, tokenAddress) &&
       !(isNativeAsset(tokenAddress, chain) && isWrappedNativeAsset(amountIn.tokenAddress, chain)) &&
-      !(isNativeAsset(amountIn.tokenAddress, chain) && isWrappedNativeAsset(tokenAddress, chain))
+      !(isNativeAsset(amountIn.tokenAddress, chain) && isWrappedNativeAsset(tokenAddress, chain)),
   )
 }
 
@@ -279,7 +282,7 @@ export function shouldShowNativeWrappedSelector(token: GqlToken, poolType: GqlPo
 
 export function replaceWrappedWithNativeAsset(
   validTokens: GqlToken[],
-  nativeAsset: GqlToken | undefined
+  nativeAsset: GqlToken | undefined,
 ) {
   if (!nativeAsset) return validTokens
   return validTokens.map(token => {
@@ -294,10 +297,10 @@ export function replaceWrappedWithNativeAsset(
 export function injectNativeAsset(
   validTokens: GqlToken[],
   nativeAsset: GqlToken | undefined,
-  pool: Pool
+  pool: Pool,
 ) {
   const isWrappedNativeAssetInPool = validTokens.find(token =>
-    isWrappedNativeAsset(token.address as Address, pool.chain)
+    isWrappedNativeAsset(token.address as Address, pool.chain),
   )
 
   if (
