@@ -29,7 +29,6 @@ function TagWrapper({ children }: { children: React.ReactNode }) {
   )
 }
 
-// TODO: add boosted tag
 function getPoolTypeLabel(pool: Pool) {
   const { tags, type } = pool
   const textProps = { fontSize: 'sm', variant: 'secondary' }
