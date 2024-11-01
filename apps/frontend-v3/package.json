@@ -12,7 +12,9 @@
     "format": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --cache-location='node_modules/.cache/.prettiercache' --log-level warn",
     "format:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
     "start": "next start",
-    "typecheck": "tsc --project tsconfig.json --noEmit"
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/bal/bal.theme.ts",
+    "postinstall": "npm run gen:theme-typings"
   },
   "dependencies": {
     "@chakra-ui/hooks": "^2.2.1",
@@ -31,6 +33,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-use-measure": "^2.1.1",
+    "tinycolor2": "^1.6.0",
     "viem": "^2.21.18",
     "wagmi": "^2.12.16"
   },
@@ -46,6 +49,7 @@
     "@types/node": "20.3.2",
     "@types/react": "18.2.34",
     "@types/react-dom": "18.2.6",
+    "@types/tinycolor2": "^1.4.6",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "@wagmi/cli": "^2.1.15",

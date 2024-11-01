@@ -31,6 +31,7 @@ import Image from 'next/image'
 import { RateProviderInfoPopOver } from './RateProviderInfo'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { getRateProviderWarnings } from '@repo/lib/modules/pool/pool.helpers'
+import { useHook } from '@repo/lib/modules/hooks/useHook'
 
 type RateProvider = {
   tokenAddress: Address
@@ -78,6 +79,7 @@ export function PoolContracts({ ...props }: CardProps) {
     usePool()
 
   const { getToken } = useTokens()
+  const { hasHook, hookAddress } = useHook(pool)
 
   const contracts = useMemo(() => {
     const contracts = [
@@ -93,6 +95,14 @@ export function PoolContracts({ ...props }: CardProps) {
         label: 'veBAL gauge',
         address: gaugeAddress,
         explorerLink: gaugeExplorerLink,
+      })
+    }
+
+    if (hasHook) {
+      contracts.push({
+        label: 'Hook',
+        address: hookAddress,
+        explorerLink: getBlockExplorerAddressUrl(hookAddress, chain),
       })
     }
 
@@ -119,8 +129,13 @@ export function PoolContracts({ ...props }: CardProps) {
           Pool contracts
         </Heading>
         <Divider />
-        {contracts.map((contract, index) => (
-          <Grid gap="sm" key={index} templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} w="full">
+        {contracts.map(contract => (
+          <Grid
+            gap="sm"
+            key={contract.address}
+            templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }}
+            w="full"
+          >
             <GridItem>
               <Text minW="120px" variant="secondary">
                 {contract.label}:

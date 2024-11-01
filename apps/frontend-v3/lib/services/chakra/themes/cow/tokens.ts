@@ -1,5 +1,5 @@
 import tinycolor from 'tinycolor2'
-import { getTokens } from '../base/tokens'
+import { getTokens } from '@repo/lib/shared/services/chakra/themes/base/tokens'
 
 export function getCowTokens(colors: any, primaryTextColor: any) {
   const baseTokens = getTokens(colors, primaryTextColor)
