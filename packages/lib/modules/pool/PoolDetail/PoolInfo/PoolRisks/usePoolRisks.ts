@@ -97,11 +97,6 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   if (isMetaStable(pool.type)) result.push(metaStableRisks)
   if (isGyro(pool.type)) result.push(clpRisks)
   if (isBoosted(pool)) result.push(boostedRisks)
-  //   if (isBoosted(pool)) {
-  //     result.push(boostedRisks)
-  //     const thirdPartyRisks = generateThirdPartyComposabilityRisks(pool)
-  //     if (thirdPartyRisks) result.push(thirdPartyRisks)
-  //   }
   if (pool.chain === GqlChain.Arbitrum) result.push(arbitrumRisks)
   if (pool.chain === GqlChain.Optimism) result.push(optimismRisks)
   if (pool.chain === GqlChain.Polygon) result.push(polygonRisks)
@@ -116,27 +111,6 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
 
   return result
 }
-
-// export function generateThirdPartyComposabilityRisks(pool): Risk | undefined {
-//   const protocols = boostedProtocols(pool)
-
-//   if (protocols?.includes(Protocol.Tetu) || protocols?.includes(Protocol.Idle))
-//     return getLink(
-//       RiskKey.Composability,
-//       'Third party DeFi composability risks: May use multiple yield protocols'
-//     )
-
-//   if (protocols?.includes(Protocol.Reaper)) protocols.push(Protocol.Granary)
-
-//   if (protocols) {
-//     return getLink(
-//       RiskKey.Composability,
-//       `Third party DeFi composability risks: ${protocols
-//         .map(protocol => capitalize(protocol))
-//         .join(', ')}`
-//     )
-//   }
-// }
 
 function hasOwner(pool: GqlPoolElement) {
   return !['', zeroAddress].includes(pool?.owner ? pool.owner.toString() : '')
