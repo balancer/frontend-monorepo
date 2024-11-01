@@ -112,7 +112,7 @@ export class LiquidityActionHelpers {
         if (!token) {
           throw new Error(
             `Provided token address ${tokenAddress} not found in pool tokens [${Object.keys(
-              this.pool.allTokens.map(t => t.address)
+              allTokens.map(t => t.address)
             ).join(' , \n')}]`
           )
         }

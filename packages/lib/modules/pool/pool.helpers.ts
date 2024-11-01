@@ -28,6 +28,7 @@ import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
+import { TokenCore } from './pool.types'
 
 /**
  * METHODS
@@ -435,23 +436,12 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
 }
 
 /*
-  Core token info required for pool actions
-  PoolToken and GqlTokens are super sets of TokenCore
-*/
-export type TokenCore = {
-  address: Address
-  name: string
-  symbol: string
-  decimals: number
-}
-
-/*
   Returns all the top level tokens + children nested tokens + ERC4626 underlying tokens.
   That is, the tokens that we can use in the pool's actions (add/remove/swap)
  */
 export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
-  const underlyingTokens: TokenCore[] = pool.poolTokens.flatMap(token =>
-    token.isErc4626 ? (token.underlyingToken as TokenCore) : []
+  const underlyingTokens: TokenCore[] = pool.poolTokens.flatMap((token, index) =>
+    token.isErc4626 ? ({ ...token.underlyingToken, index } as TokenCore) : []
   )
 
   const nestedChildrenTokens: PoolToken[] = pool.poolTokens
@@ -463,12 +453,12 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     .filter((token): token is PoolToken => token !== undefined)
 
   return underlyingTokens.concat(
-    toBasicTokens(nestedChildrenTokens),
-    toBasicTokens(standardTopLevelTokens)
+    toTokenCores(nestedChildrenTokens),
+    toTokenCores(standardTopLevelTokens)
   )
 }
 
-function toBasicTokens(poolTokens: PoolToken[]): TokenCore[] {
+function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
   return poolTokens.map(
     t =>
       ({
@@ -476,6 +466,7 @@ function toBasicTokens(poolTokens: PoolToken[]): TokenCore[] {
         name: t.name,
         symbol: t.symbol,
         decimals: t.decimals,
+        index: t.index,
       }) as TokenCore
   )
 }
