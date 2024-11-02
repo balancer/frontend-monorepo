@@ -16,8 +16,8 @@ export default function DebugPools() {
           <Link as={NextLink} href="/pools/sepolia/v3/0x75F49D54978d08E4E76a873dA6c78E8f6b2901C2">
             Sepolia WEIGHTED with Proportional joins (Balancer 50 BAL 50 WETH -ExitFee Hook)
           </Link>
-          <Link as={NextLink} href="/pools/sepolia/v3/0xec9821d4a8b0976353e85fa872cedeffbbf306f2">
-            Sepolia reference BOOSTED pool (Balancer DAI/USDC/USDT)
+          <Link as={NextLink} href="/pools/sepolia/v3/0x6dbdd7a36d900083a5b86a55583d90021e9f33e8">
+            Sepolia reference BOOSTED pool (Balancer USDC/USDT)
           </Link>
         </VStack>
 
