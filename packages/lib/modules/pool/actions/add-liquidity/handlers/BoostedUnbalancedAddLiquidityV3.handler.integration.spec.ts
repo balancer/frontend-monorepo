@@ -3,11 +3,9 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
-import { Pool } from '../../../PoolProvider'
+import { getPoolMock } from '../../../__mocks__/getPoolMock'
 import { BoostedUnbalancedAddLiquidityV3Handler } from './BoostedUnbalancedAddLiquidityV3.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
-import { getPoolMock } from '../../../__mocks__/getPoolMock'
-import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 
 // TODO: unskip this test when sepolia V3 pools are available in production api
 describe('When adding unbalanced liquidity for a V3 BOOSTED pool', async () => {
