@@ -27,7 +27,7 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
           ...path,
           inputAmountRaw: BigInt(path.inputAmountRaw),
           outputAmountRaw: BigInt(path.outputAmountRaw),
-        }) as Path,
+        }) as Path
     )
 
     return this.runSimulation({
