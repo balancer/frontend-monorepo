@@ -13,7 +13,7 @@ import { useChainSwitch } from '../../web3/useChainSwitch'
 import { TransactionStep } from './lib'
 import { getChainId } from '@repo/lib/config/app.config'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
-import { ButtonLabelWithIcon } from '@repo/lib/shared/components/btns/button-group/ButtonLabelWithIcon'
+import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 
 export function useSignPermitStep(params: RemoveLiquidityPermitParams): TransactionStep {
   const { isConnected } = useUserAccount()
@@ -44,7 +44,7 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
             w="full"
             width="full"
           >
-            <ButtonLabelWithIcon icon="sign">{buttonLabel}</ButtonLabelWithIcon>
+            <LabelWithIcon icon="sign">{buttonLabel}</LabelWithIcon>
           </Button>
         )}
       </VStack>

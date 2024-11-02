@@ -10,7 +10,7 @@ import { useChainSwitch } from '../../web3/useChainSwitch'
 import { getChainId } from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
-import { ButtonLabelWithIcon } from '@repo/lib/shared/components/btns/button-group/ButtonLabelWithIcon'
+import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 
 export const signRelayerStepTitle = 'Sign relayer'
 
@@ -45,7 +45,7 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
             w="full"
             width="full"
           >
-            <ButtonLabelWithIcon icon="sign">{buttonLabel}</ButtonLabelWithIcon>
+            <LabelWithIcon icon="sign">{buttonLabel}</LabelWithIcon>
           </Button>
         )}
       </VStack>
