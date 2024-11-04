@@ -45,7 +45,13 @@ export default function PoolMetaBadges() {
           width={20}
         />
       </Badge>
-      <PoolListTokenPills pool={pool} px="sm" py="2" />
+      <PoolListTokenPills
+        chain={pool.chain}
+        displayTokens={pool.displayTokens}
+        px="sm"
+        py="2"
+        type={pool.type}
+      />
       <PoolVersionTag pool={pool} size={7} />
       <BalBadge color="font.secondary" fontSize="xs" textTransform="none">
         {getPoolTypeLabel(pool.type)}

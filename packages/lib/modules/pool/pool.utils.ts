@@ -59,10 +59,10 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
 }
 export const slugToChainMap = invert(chainToSlugMap) as Record<ChainSlug, GqlChain>
 
-function getVariant(pool: Pool | PoolListItem): PoolVariant {
+function getVariant(type: GqlPoolType, protocolVersion: number | undefined): PoolVariant {
   // if a pool has certain properties return a custom variant
-  if (pool.type === GqlPoolType.CowAmm) return PartnerVariant.cow
-  if (pool.protocolVersion === 3) return BaseVariant.v3
+  if (type === GqlPoolType.CowAmm) return PartnerVariant.cow
+  if (protocolVersion === 3) return BaseVariant.v3
 
   // default variant
   return BaseVariant.v2
@@ -70,14 +70,15 @@ function getVariant(pool: Pool | PoolListItem): PoolVariant {
 
 /**
  * Constructs path to pool detail page.
- * @param {String} id Pool ID could be ID or address depending on variant.
- * @param {GqlChain} chain Chain enum.
- * @param {String} variant Pool variant, defaults to v2.
  * @returns {String} Path to pool detail page.
  */
-export function getPoolPath(pool: Pool | PoolListItem) {
-  const variant = getVariant(pool)
-  return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${pool.id}`
+export function getPoolPath(
+  params: Pick<Pool | PoolListItem, 'id' | 'chain' | 'type'> & {
+    protocolVersion: number | undefined
+  }
+) {
+  const variant = getVariant(params.type, params.protocolVersion)
+  return `/pools/${chainToSlugMap[params.chain]}/${variant}/${params.id}`
 }
 
 // TODO: the following 2 functions (getAprLabel & getTotalAprLabel) most likely need revisiting somewhere in the near future and refactored to just one

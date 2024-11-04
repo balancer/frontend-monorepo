@@ -1,17 +1,21 @@
 import { Badge, BadgeProps, HStack, Text, Wrap } from '@chakra-ui/react'
-import { GqlChain, GqlPoolTokenDisplay } from '@repo/lib/shared/services/api/generated/graphql'
-import { PoolListItem } from '../pool.types'
+import {
+  GqlChain,
+  GqlPoolTokenDisplay,
+  GqlPoolType,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { isStableLike, isWeightedLike } from '../pool.helpers'
-import { Pool } from '../PoolProvider'
+
+type DisplayToken = Pick<GqlPoolTokenDisplay, 'address' | 'symbol' | 'weight'>
 
 function WeightedTokenPills({
   tokens,
   chain,
   iconSize = 24,
   ...badgeProps
-}: { tokens: GqlPoolTokenDisplay[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
+}: { tokens: DisplayToken[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
   return (
     <Wrap spacing="xs">
       {tokens.map(token => {
@@ -49,7 +53,7 @@ function StableTokenPills({
   chain,
   iconSize = 24,
   ...badgeProps
-}: { tokens: GqlPoolTokenDisplay[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
+}: { tokens: DisplayToken[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
   const isFirstToken = (index: number) => index === 0
   const zIndices = Array.from({ length: tokens.length }, (_, index) => index).reverse()
 
@@ -86,42 +90,40 @@ function StableTokenPills({
 }
 
 type Props = {
-  pool: Pool | PoolListItem
+  type: GqlPoolType
+  chain: GqlChain
+  displayTokens: DisplayToken[]
   iconSize?: number
 }
 
-export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props & BadgeProps) {
-  const shouldUseWeightedPills = isWeightedLike(pool.type)
-  const shouldUseStablePills = isStableLike(pool.type)
+export function PoolListTokenPills({
+  chain,
+  type,
+  displayTokens,
+  iconSize = 24,
+  ...badgeProps
+}: Props & BadgeProps) {
+  const shouldUseWeightedPills = isWeightedLike(type)
+  const shouldUseStablePills = isStableLike(type)
 
   if (shouldUseStablePills) {
     return (
-      <StableTokenPills
-        chain={pool.chain}
-        iconSize={iconSize}
-        tokens={pool.displayTokens}
-        {...badgeProps}
-      />
+      <StableTokenPills chain={chain} iconSize={iconSize} tokens={displayTokens} {...badgeProps} />
     )
   }
 
   if (shouldUseWeightedPills) {
     return (
       <WeightedTokenPills
-        chain={pool.chain}
+        chain={chain}
         iconSize={iconSize}
-        tokens={pool.displayTokens}
+        tokens={displayTokens}
         {...badgeProps}
       />
     )
   }
 
   return (
-    <WeightedTokenPills
-      chain={pool.chain}
-      iconSize={iconSize}
-      tokens={pool.displayTokens}
-      {...badgeProps}
-    />
+    <WeightedTokenPills chain={chain} iconSize={iconSize} tokens={displayTokens} {...badgeProps} />
   )
 }
