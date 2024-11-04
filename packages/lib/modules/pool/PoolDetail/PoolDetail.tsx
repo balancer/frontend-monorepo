@@ -1,7 +1,7 @@
 'use client'
 
 import { VStack, Stack } from '@chakra-ui/react'
-import { PoolComposition } from './PoolComposition/PoolComposition'
+import { PoolComposition } from './PoolComposition'
 import { PoolInfoLayout } from './PoolInfo/PoolInfoLayout'
 import { usePool } from '../PoolProvider'
 import PoolMyLiquidity from './PoolMyLiquidity'

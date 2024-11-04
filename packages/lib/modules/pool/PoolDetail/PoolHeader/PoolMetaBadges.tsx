@@ -15,10 +15,11 @@ import Image from 'next/image'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { Repeat } from 'react-feather'
 import { PoolListTokenPills } from '../../PoolList/PoolListTokenPills'
-import { getPoolTypeLabel, shouldHideSwapFee } from '../../pool.utils'
+import { shouldHideSwapFee } from '../../pool.utils'
 import { getChainShortName } from '@repo/lib/config/app.config'
-import { PoolVersionTag } from '../../PoolVersionTag'
+import { PoolTypeTag } from '../PoolTypeTag'
 import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
+import { PoolVersionTag } from '../../PoolList/PoolListTable/PoolVersionTag'
 import { useHook } from '@repo/lib/modules/hooks/useHook'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 
@@ -46,10 +47,8 @@ export default function PoolMetaBadges() {
         />
       </Badge>
       <PoolListTokenPills pool={pool} px="sm" py="2" />
-      <PoolVersionTag pool={pool} size={7} />
-      <BalBadge color="font.secondary" fontSize="xs" textTransform="none">
-        {getPoolTypeLabel(pool.type)}
-      </BalBadge>
+      <PoolVersionTag isSmall pool={pool} />
+      <PoolTypeTag pool={pool} />
       {hasHook && (
         <BalBadge color="font.primary" fontSize="xs" h={8} w={8}>
           <Center h="full" w="full">
