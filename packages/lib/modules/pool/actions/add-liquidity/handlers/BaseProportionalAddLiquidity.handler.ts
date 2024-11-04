@@ -3,6 +3,7 @@ import {
   AddLiquidity,
   AddLiquidityKind,
   AddLiquidityProportionalInput,
+  Address,
   HumanAmount,
   InputAmount,
   Slippage,
@@ -29,16 +30,17 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
+    userAddress: Address
   ): Promise<SdkQueryAddLiquidityOutput> {
     const referenceAmount = this.helpers.toSdkInputAmounts(humanAmountsIn)[0]
 
     const addLiquidity = new AddLiquidity()
 
-    const addLiquidityInput = this.constructSdkInput(referenceAmount)
+    const addLiquidityInput = this.constructSdkInput(referenceAmount, userAddress)
     const sdkQueryOutput = await addLiquidity.query(addLiquidityInput, this.helpers.poolState)
 
-    return { bptOut: sdkQueryOutput.bptOut, sdkQueryOutput }
+    return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
   }
 
   public async buildCallData({
@@ -69,12 +71,16 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
   /**
    * PRIVATE METHODS
    */
-  private constructSdkInput(referenceAmount: InputAmount): AddLiquidityProportionalInput {
+  private constructSdkInput(
+    referenceAmount: InputAmount,
+    userAddress: Address
+  ): AddLiquidityProportionalInput {
     return {
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
       referenceAmount,
       kind: AddLiquidityKind.Proportional,
+      sender: userAddress,
     }
   }
 }

@@ -1,4 +1,4 @@
-import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { useMemo } from 'react'
 import { Address, parseUnits } from 'viem'
 import { useShouldSignRelayerApproval } from '../relayer/signRelayerApproval.hooks'
@@ -30,7 +30,6 @@ export function useSwapSteps({
   swapAction,
   tokenInInfo,
   tokenOutInfo,
-  isPoolSwap,
 }: Params) {
   const chain = swapState.selectedChain
   const chainId = getChainId(chain)
@@ -74,7 +73,6 @@ export function useSwapSteps({
     tokenInInfo,
     simulationQuery,
     isPermit2,
-    isPoolSwap,
   })
 
   const swapStep = useSwapStep({

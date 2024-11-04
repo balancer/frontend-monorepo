@@ -49,6 +49,7 @@ export function useRemoveLiquidityPriceImpactQuery({
     handler.getPriceImpact({
       humanBptIn: debouncedBptIn,
       tokenOut,
+      userAddress,
     })
 
   return useQuery({

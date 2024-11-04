@@ -26,18 +26,18 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
   const { isConnected, userAddress } = useUserAccount()
   const { getToken } = useTokens()
 
-  const { chainId, tokenAmountsIn } = params
+  const { chainId, tokenAmountsIn, spender, isPermit2, wethIsEth } = params
 
   const { isLoadingPermit2Allowances, nonces, expirations, allowedAmounts } = usePermit2Allowance({
     chainId,
     tokenAddresses: getTokenAddressesForPermit2({
       chainId,
-      tokenAmountsIn: params.tokenAmountsIn,
-      wethIsEth: params.wethIsEth,
+      tokenAmountsIn,
+      wethIsEth,
     }),
     owner: userAddress,
-    enabled: params.isPermit2,
-    spender: params.spender,
+    enabled: isPermit2 && !!spender,
+    spender: spender,
   })
 
   const isValidPermit2 = hasValidPermit2(tokenAmountsIn, expirations, allowedAmounts)

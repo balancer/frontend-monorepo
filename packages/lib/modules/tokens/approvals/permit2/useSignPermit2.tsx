@@ -104,7 +104,7 @@ export function useSignPermit2({
       getTokenSymbolsForPermit2({ getToken, chainId, tokenAmountsIn, wethIsEth })
     ),
     isLoading: isSignatureLoading(signPermit2State) || !tokenAmountsIn,
-    isDisabled: isSignatureDisabled(signPermit2State),
+    isDisabled: isSignatureDisabled(signPermit2State) || !nonces || !sdkClient,
     error,
   }
 }

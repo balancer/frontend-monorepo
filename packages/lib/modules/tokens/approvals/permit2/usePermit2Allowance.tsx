@@ -37,7 +37,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, s
     contracts,
     allowFailure: false,
     query: {
-      enabled: enabled && tokenAddresses && tokenAddresses.length > 0 && !!owner,
+      enabled: enabled && tokenAddresses && tokenAddresses.length > 0 && !!owner && !!spender,
     },
   })
 

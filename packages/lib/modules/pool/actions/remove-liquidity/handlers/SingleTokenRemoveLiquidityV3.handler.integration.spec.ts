@@ -28,6 +28,7 @@ describe.skip('When removing unbalanced liquidity for a weighted V3 pool', async
   const defaultQueryInput: QueryRemoveLiquidityInput = {
     humanBptIn: '0.001',
     tokenOut: balAddress,
+    userAddress: defaultTestUserAccount,
   }
 
   test('queries amounts out', async () => {

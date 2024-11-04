@@ -31,9 +31,10 @@ export abstract class BaseSingleTokenRemoveLiquidityHandler implements RemoveLiq
   public async simulate({
     humanBptIn,
     tokenOut,
+    userAddress,
   }: QueryRemoveLiquidityInput): Promise<SdkQueryRemoveLiquidityOutput> {
     const removeLiquidity = new RemoveLiquidity()
-    const removeLiquidityInput = this.constructSdkInput(humanBptIn, tokenOut)
+    const removeLiquidityInput = this.constructSdkInput(humanBptIn, tokenOut, userAddress)
 
     const sdkQueryOutput = await removeLiquidity.query(removeLiquidityInput, this.helpers.poolState)
 
@@ -70,7 +71,8 @@ export abstract class BaseSingleTokenRemoveLiquidityHandler implements RemoveLiq
    */
   private constructSdkInput(
     humanBptIn: HumanAmount,
-    tokenOut: Address
+    tokenOut: Address,
+    userAddress?: Address
   ): RemoveLiquiditySingleTokenExactInInput {
     const bptInInputAmount: InputAmount = {
       rawAmount: parseEther(humanBptIn),
@@ -84,6 +86,7 @@ export abstract class BaseSingleTokenRemoveLiquidityHandler implements RemoveLiq
       bptIn: bptInInputAmount,
       kind: RemoveLiquidityKind.SingleTokenExactIn,
       tokenOut,
+      sender: userAddress,
     }
   }
 }
