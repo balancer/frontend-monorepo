@@ -27,7 +27,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { getPoolDisplayTokens } from '../pool.utils'
 import { PoolTypeTag } from './PoolTypeTag'
 import { isBoosted } from '../pool.helpers'
-import { Protocol, protocolMessages } from '@repo/lib/modules/protocols/useProtocols'
+import { Protocol, protocolDescriptions } from '@repo/lib/modules/protocols/useProtocols'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -126,7 +126,7 @@ export function PoolComposition() {
             <Alert status="info">
               <AlertIcon />
               {/* TODO: set protocol dynamically */}
-              <AlertDescription>{protocolMessages[Protocol.Aave]}</AlertDescription>
+              <AlertDescription>{protocolDescriptions[Protocol.Aave]}</AlertDescription>
             </Alert>
           )}
           <Divider />
