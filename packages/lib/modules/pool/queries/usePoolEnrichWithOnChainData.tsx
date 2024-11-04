@@ -17,9 +17,9 @@ import { cowAmmPoolAbi } from '../../web3/contracts/abi/cowAmmAbi'
 import { weightedPoolAbi_V3, vaultExtensionAbi_V3 } from '@balancer/sdk'
 
 export function usePoolEnrichWithOnChainData(pool: Pool) {
-  const { priceFor } = useTokens()
+  const { priceForAddress } = useTokens()
   const { isLoading, poolTokenBalances, totalSupply, refetch } = usePoolOnchainData(pool)
-  const clone = enrichPool({ isLoading, pool, priceFor, poolTokenBalances, totalSupply })
+  const clone = enrichPool({ isLoading, pool, priceForAddress, poolTokenBalances, totalSupply })
 
   return { isLoading, pool: clone, refetch }
 }
@@ -151,11 +151,11 @@ function useCowPoolOnchainData(pool: Pool) {
 type Params = {
   isLoading: boolean
   pool: Pool
-  priceFor: (address: string, chain: GqlChain) => number
+  priceForAddress: (address: string, chain: GqlChain) => number
   poolTokenBalances: readonly bigint[] | undefined
   totalSupply: bigint | undefined
 }
-function enrichPool({ isLoading, pool, priceFor, poolTokenBalances, totalSupply }: Params) {
+function enrichPool({ isLoading, pool, priceForAddress, poolTokenBalances, totalSupply }: Params) {
   if (isLoading || !poolTokenBalances) return pool
 
   const clone = cloneDeep(pool)
@@ -170,12 +170,12 @@ function enrichPool({ isLoading, pool, priceFor, poolTokenBalances, totalSupply 
     if (!poolTokenBalance) return
     const tokenBalance = formatUnits(poolTokenBalance, token.decimals)
     token.balance = tokenBalance
-    token.balanceUSD = bn(tokenBalance).times(priceFor(token.address, pool.chain)).toString()
+    token.balanceUSD = bn(tokenBalance).times(priceForAddress(token.address, pool.chain)).toString()
   })
 
   clone.dynamicData.totalLiquidity = safeSum(
     filteredTokens.map(
-      token => (priceFor(token.address, pool.chain) || 0) * parseFloat(token.balance)
+      token => (priceForAddress(token.address, pool.chain) || 0) * parseFloat(token.balance)
     )
   )
 

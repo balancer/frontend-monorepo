@@ -81,14 +81,22 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
               />
               {poolToken.hasNestedPool && poolToken.nestedPool && (
                 <VStack pl="10" w="full">
-                  {poolToken.nestedPool.tokens.map(nestedPoolToken => (
-                    <TokenRow
-                      address={nestedPoolToken.address as Address}
-                      chain={chain}
-                      key={`nested-pool-${nestedPoolToken.address}`}
-                      value={nestedPoolToken.balance}
-                    />
-                  ))}
+                  {poolToken.nestedPool.tokens.map(nestedPoolToken => {
+                    const calculatedWeight = bn(nestedPoolToken.balanceUSD).div(
+                      bn(poolToken.nestedPool?.totalLiquidity || '0')
+                    )
+                    return (
+                      <TokenRow
+                        actualWeight={bn(poolToken.nestedPool?.nestedPercentage || '0')
+                          .times(calculatedWeight)
+                          .toString()}
+                        address={nestedPoolToken.address as Address}
+                        chain={chain}
+                        key={`nested-pool-${nestedPoolToken.address}`}
+                        value={bn(nestedPoolToken.balance).times(calculatedWeight).toString()}
+                      />
+                    )
+                  })}
                 </VStack>
               )}
             </>

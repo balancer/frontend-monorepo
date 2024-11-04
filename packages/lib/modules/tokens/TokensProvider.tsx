@@ -109,6 +109,14 @@ export function _useTokens(
     return price.price
   }
 
+  // this also fetches the price for a bpt
+  function priceForAddress(address: string, chain: GqlChain): number {
+    const price = getPricesForChain(chain).find(price => isSameAddress(price.address, address))
+    if (!price) return 0
+
+    return price.price
+  }
+
   function usdValueForToken(token: GqlToken | undefined, amount: Numberish) {
     if (!token) return '0'
     if (amount === '') return '0'
@@ -139,7 +147,7 @@ export function _useTokens(
   const calcTotalUsdValue = useCallback((displayTokens: GqlPoolTokenDetail[], chain: GqlChain) => {
     return displayTokens
       .reduce((total, token) => {
-        return total.plus(bn(priceFor(token.address, chain)).times(token.balance))
+        return total.plus(bn(priceForAddress(token.address, chain)).times(token.balance))
       }, bn(0))
       .toString()
   }, [])
@@ -160,6 +168,7 @@ export function _useTokens(
     calcTotalUsdValue,
     startTokenPricePolling: () => startPolling(pollInterval),
     stopTokenPricePolling: stopPolling,
+    priceForAddress,
   }
 }
 
