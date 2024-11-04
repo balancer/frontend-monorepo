@@ -224,10 +224,24 @@ fragment PoolTokens on GqlPoolTokenDetail {
     id
     address
     type
+    bptPriceRate
+    nestedPercentage
+    nestedShares
+    totalLiquidity
+    totalShares
     tokens {
       index
       address
       decimals
+      balance
+      balanceUSD
+      weight
+      underlyingToken {
+        address
+        decimals
+        name
+        symbol
+      }
     }
   }
   isErc4626
