@@ -31,9 +31,11 @@ function WeightedTokenPills({
             <HStack gap={['xs', 'sm']}>
               <TokenIcon address={token.address} alt={token.symbol} chain={chain} size={iconSize} />
               <HStack gap={['xs', '1.5']}>
-                <Text fontWeight="bold" noOfLines={1}>
-                  {token.symbol}
-                </Text>
+                {tokens.length < 5 && (
+                  <Text fontWeight="bold" noOfLines={1}>
+                    {token.symbol}
+                  </Text>
+                )}
                 <Text fontSize="xs">{fNum('weight', token.weight || '')}</Text>
               </HStack>
             </HStack>
@@ -74,9 +76,11 @@ function StableTokenPills({
           >
             <HStack gap={['xs', '1.5']}>
               <TokenIcon address={token.address} alt={token.symbol} chain={chain} size={iconSize} />
-              <Text fontWeight="bold" maxW="20" noOfLines={1}>
-                {token.symbol}
-              </Text>
+              {tokens.length < 5 && (
+                <Text fontWeight="bold" noOfLines={1}>
+                  {token.symbol}
+                </Text>
+              )}
             </HStack>
           </Badge>
         )
