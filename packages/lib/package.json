@@ -3,8 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "gen:theme-typings": "chakra-cli tokens ./shared/services/chakra/themes/bal/bal.theme.ts",
-    "postinstall": "npm run gen:theme-typings",
     "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config -c ./shared/services/api/codegen.ts",
     "lint": "eslint . --cache --cache-location 'node_modules/.cache/.eslintcache'",
     "lint:fix": "eslint . --fix --cache --cache-location 'node_modules/.cache/.eslintcache'",
@@ -19,7 +17,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
-    "@balancer/sdk": "^0.29.0",
+    "@balancer/sdk": "^0.30.1",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "^2.2.1",

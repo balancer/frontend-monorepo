@@ -28,6 +28,7 @@ import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
+import { TokenCore } from './pool.types'
 
 /**
  * METHODS
@@ -136,7 +137,7 @@ export function noInitLiquidity(pool: GqlPoolBase): boolean {
   return new BigNumber(pool.dynamicData.totalShares || '0').eq(0)
 }
 export function preMintedBptIndex(pool: GqlPoolBase): number | void {
-  return pool.allTokens.findIndex(token => isSameAddress(token.address, pool.address))
+  return allPoolTokens(pool).findIndex(token => isSameAddress(token.address, pool.address))
 }
 
 export function calcBptPrice(totalLiquidity: string, totalShares: string): string {
@@ -182,7 +183,7 @@ type Pool = GetPoolQuery['pool']
 export function usePoolHelpers(pool: Pool, chain: GqlChain) {
   const gaugeExplorerLink = getBlockExplorerAddressUrl(
     pool?.staking?.gauge?.gaugeAddress as Address,
-    chain,
+    chain
   )
   const poolExplorerLink = getBlockExplorerAddressUrl(pool.address as Address, chain)
 
@@ -220,7 +221,7 @@ export function isNotSupported(pool: Pool) {
  */
 export function isClaimableGauge(
   gauge: GqlPoolStakingGauge | GqlPoolStakingOtherGauge,
-  chain: GqlChain | number,
+  chain: GqlChain | number
 ): boolean {
   return !(gauge.version === 1 && isNotMainnet(chain))
 }
@@ -375,16 +376,16 @@ export function getNestedBptTokens(poolTokens: PoolToken[]) {
 export function getNestedBptParentToken(poolTokens: PoolToken[], childTokenAddress: Address) {
   const nestedBptToken = getNestedBptTokens(poolTokens).find(token =>
     token.nestedPool?.tokens.some(nestedToken =>
-      isSameAddress(nestedToken.address, childTokenAddress),
-    ),
+      isSameAddress(nestedToken.address, childTokenAddress)
+    )
   )
   if (!nestedBptToken) {
     throw new Error(
       `Provided nestedTokenAddress ${childTokenAddress} does not belong to any underlying token amongst the nested pool/s (${getNestedBptTokens(
-        poolTokens,
+        poolTokens
       )
         .map(t => t.symbol)
-        .join(' ,')})`,
+        .join(' ,')})`
     )
   }
 
@@ -413,7 +414,7 @@ export function getChildTokens(pool: Pool, poolActionableTokens?: GqlToken[]): G
 export function toGqlTokens(
   poolTokens: PoolToken[],
   getToken: GetTokenFn,
-  chain: GqlChain,
+  chain: GqlChain
 ): GqlToken[] {
   return poolTokens
     .map(token => getToken(token.address, chain))
@@ -432,4 +433,40 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
   if (isStandardRootToken(pool, token1) && isStandardRootToken(pool, token2)) return false
   if (!isStandardRootToken(pool, token1) && !isStandardRootToken(pool, token2)) return false
   return true
+}
+
+/*
+  Returns all the top level tokens + children nested tokens + ERC4626 underlying tokens.
+  That is, the tokens that we can use in the pool's actions (add/remove/swap)
+ */
+export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
+  const underlyingTokens: TokenCore[] = pool.poolTokens.flatMap((token, index) =>
+    token.isErc4626 ? ({ ...token.underlyingToken, index } as TokenCore) : []
+  )
+
+  const nestedChildrenTokens: PoolToken[] = pool.poolTokens
+    .flatMap(token => (token.nestedPool ? token.nestedPool.tokens : []))
+    .filter((token): token is PoolToken => token !== undefined)
+
+  const standardTopLevelTokens: PoolToken[] = pool.poolTokens
+    .flatMap(token => (!token.hasNestedPool && !token.isErc4626 ? token : []))
+    .filter((token): token is PoolToken => token !== undefined)
+
+  return underlyingTokens.concat(
+    toTokenCores(nestedChildrenTokens),
+    toTokenCores(standardTopLevelTokens)
+  )
+}
+
+function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
+  return poolTokens.map(
+    t =>
+      ({
+        address: t.address as Address,
+        name: t.name,
+        symbol: t.symbol,
+        decimals: t.decimals,
+        index: t.index,
+      }) as TokenCore
+  )
 }

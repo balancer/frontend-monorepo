@@ -207,7 +207,7 @@ export function fakeTokenBySymbol(symbol: FakeTokenSymbol) {
   if (!token) {
     console.log(
       'Available fake tokens: ',
-      allFakeGqlTokens.map(token => token.symbol),
+      allFakeGqlTokens.map(token => token.symbol)
     )
     throw new Error(`Invalid symbol for fake token: ${symbol}`)
   }
@@ -219,7 +219,7 @@ export function fakeTokenByAddress(address: Address) {
   if (!token) {
     console.log(
       'Available fake tokens: ',
-      allFakeGqlTokens.map(token => token.symbol),
+      allFakeGqlTokens.map(token => token.symbol)
     )
     throw new Error(`Invalid address for fake token: ${address}`)
   }

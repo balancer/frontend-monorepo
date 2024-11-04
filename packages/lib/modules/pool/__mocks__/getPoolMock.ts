@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import fetch from 'cross-fetch'
 
 import { visit } from 'graphql/language/visitor'
@@ -39,10 +40,9 @@ export async function getPoolMock(
     .then(response => response.json())
     .then(result => result.data)) as GetPoolQuery
 
-  if (!getPoolQuery.pool) {
-    throw new Error(
-      `Pool not found in api ${process.env.NEXT_PUBLIC_BALANCER_API_URL} network ${chain} poolId ${poolId}`
-    )
+  if (!getPoolQuery?.pool) {
+    const errorMessage = `Pool not found in api ${process.env.NEXT_PUBLIC_BALANCER_API_URL} network ${chain} poolId ${poolId}`
+    throw new Error(errorMessage)
   }
 
   return getPoolQuery.pool as GqlPoolElement
