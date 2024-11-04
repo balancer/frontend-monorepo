@@ -48,7 +48,7 @@ export const protocolIconPaths: Record<Protocol, string> = {
 
 export type boostedProtocols = Protocol.Aave
 
-export const protocolMessages: Record<boostedProtocols, string> = {
+export const protocolDescriptions: Record<boostedProtocols, string> = {
   [Protocol.Aave]:
     "The magic of this Boosted pool lies in its composition—under the hood, it contains wrapped Aave tokens that earn interest from Aave borrowers, continuously growing the pool's worth.",
 }
