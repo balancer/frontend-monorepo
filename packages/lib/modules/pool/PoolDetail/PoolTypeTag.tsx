@@ -5,7 +5,7 @@ import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { isBoosted } from '../pool.helpers'
 
-type PoolChipProps = {
+type PoolTypeTagProps = {
   pool: Pool
 }
 
@@ -109,7 +109,7 @@ function getPoolTypeLabel(pool: Pool) {
   }
 }
 
-export function PoolTypeTag({ pool }: PoolChipProps) {
+export function PoolTypeTag({ pool }: PoolTypeTagProps) {
   const label = getPoolTypeLabel(pool)
 
   return <TagWrapper>{label}</TagWrapper>
