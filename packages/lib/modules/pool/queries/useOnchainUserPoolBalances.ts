@@ -111,7 +111,7 @@ function overwriteOnchainPoolBalanceData(
       return pool
     }
 
-    const bptPrice = calcBptPriceFor(pool)
+    const bptPrice = calcBptPriceFor(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares)
 
     // Unstaked balances
     const onchainUnstakedBalances = ocUnstakedBalances[pool.id]

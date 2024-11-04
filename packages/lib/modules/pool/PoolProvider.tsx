@@ -60,7 +60,7 @@ export function _usePool({
 
   pool = poolWithOnchainUserBalances || pool
 
-  const bptPrice = calcBptPriceFor(pool)
+  const bptPrice = calcBptPriceFor(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares)
 
   const tvl = calcTotalUsdValue(getPoolDisplayTokens(pool), pool.chain)
 

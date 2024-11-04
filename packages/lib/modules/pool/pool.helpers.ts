@@ -143,12 +143,16 @@ export function calcBptPrice(totalLiquidity: string, totalShares: string): strin
   return bn(totalLiquidity).div(totalShares).toString()
 }
 
-export function calcBptPriceFor(pool: GetPoolQuery['pool']): string {
-  return calcBptPrice(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares)
+export function calcBptPriceFor(totalLiquidity: string, totalShares: string): string {
+  return calcBptPrice(totalLiquidity, totalShares)
 }
 
-export function bptUsdValue(pool: GetPoolQuery['pool'], bptAmount: Numberish): string {
-  return bn(bptAmount).times(calcBptPriceFor(pool)).toString()
+export function bptUsdValue(
+  totalLiquidity: string,
+  totalShares: string,
+  bptAmount: Numberish
+): string {
+  return bn(bptAmount).times(calcBptPrice(totalLiquidity, totalShares)).toString()
 }
 
 export function createdAfterTimestamp(pool: GqlPoolBase): boolean {

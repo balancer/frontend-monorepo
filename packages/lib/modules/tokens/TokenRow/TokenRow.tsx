@@ -102,6 +102,8 @@ type Props = {
   pool?: Pool
   showZeroAmountAsDash?: boolean
   toggleTokenSelect?: () => void
+  totalLiquidity?: string
+  totalShares?: string
 }
 
 export default function TokenRow({
@@ -117,6 +119,8 @@ export default function TokenRow({
   pool,
   abbreviated = true,
   showZeroAmountAsDash = false,
+  totalLiquidity,
+  totalShares,
   toggleTokenSelect,
 }: Props) {
   const { getToken, usdValueForToken } = useTokens()
@@ -138,8 +142,12 @@ export default function TokenRow({
 
   useEffect(() => {
     if (value) {
-      if (isBpt && pool) {
-        setUsdValue(bptUsdValue(pool, value))
+      if (totalLiquidity && totalShares) {
+        setUsdValue(bptUsdValue(totalLiquidity, totalShares, value))
+      } else if (isBpt && pool) {
+        setUsdValue(
+          bptUsdValue(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares, value)
+        )
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))
       }

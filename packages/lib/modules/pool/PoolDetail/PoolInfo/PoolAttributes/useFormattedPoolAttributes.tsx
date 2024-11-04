@@ -97,7 +97,9 @@ export function useFormattedPoolAttributes() {
       },
       {
         title: 'LP token price',
-        value: toCurrency(bptUsdValue(pool, '1')),
+        value: toCurrency(
+          bptUsdValue(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares, '1')
+        ),
       },
     ]
     if (shouldHideSwapFee(pool?.type)) {

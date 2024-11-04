@@ -17,7 +17,7 @@ import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
@@ -61,21 +61,37 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
       <Divider />
       <VStack spacing="md" width="full">
         {displayTokens.map(poolToken => {
+          const actualWeight = poolToken.hasNestedPool
+            ? poolToken.nestedPool?.nestedPercentage
+            : calcWeightForBalance(poolToken.address, poolToken.balance, totalLiquidity, chain)
           return (
-            <TokenRow
-              actualWeight={calcWeightForBalance(
-                poolToken.address,
-                poolToken.balance,
-                totalLiquidity,
-                chain
+            <>
+              <TokenRow
+                actualWeight={actualWeight}
+                address={poolToken.address as Address}
+                chain={chain}
+                key={`my-liquidity-token-${poolToken.address}`}
+                pool={pool}
+                targetWeight={poolToken.weight || undefined}
+                value={poolToken.balance}
+                {...(poolToken.hasNestedPool && {
+                  totalLiquidity: poolToken.nestedPool?.totalLiquidity,
+                  totalShares: poolToken.nestedPool?.totalShares,
+                })}
+              />
+              {poolToken.hasNestedPool && poolToken.nestedPool && (
+                <VStack pl="10" w="full">
+                  {poolToken.nestedPool.tokens.map(nestedPoolToken => (
+                    <TokenRow
+                      address={nestedPoolToken.address as Address}
+                      chain={chain}
+                      key={`nested-pool-${nestedPoolToken.address}`}
+                      value={nestedPoolToken.balance}
+                    />
+                  ))}
+                </VStack>
               )}
-              address={poolToken.address as Address}
-              chain={chain}
-              key={`my-liquidity-token-${poolToken.address}`}
-              pool={pool}
-              targetWeight={poolToken.weight || undefined}
-              value={poolToken.balance}
-            />
+            </>
           )
         })}
       </VStack>
