@@ -443,18 +443,27 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     token.isErc4626 ? ({ ...token.underlyingToken, index } as TokenCore) : []
   )
 
+  const nestedParentTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
+    token.nestedPool ? token : []
+  )
+
   const nestedChildrenTokens: PoolToken[] = pool.poolTokens
     .flatMap(token => (token.nestedPool ? token.nestedPool.tokens : []))
     .filter((token): token is PoolToken => token !== undefined)
 
-  const standardTopLevelTokens: PoolToken[] = pool.poolTokens
-    .flatMap(token => (!token.hasNestedPool && !token.isErc4626 ? token : []))
-    .filter((token): token is PoolToken => token !== undefined)
-
-  return underlyingTokens.concat(
-    toTokenCores(nestedChildrenTokens),
-    toTokenCores(standardTopLevelTokens)
+  const standardTopLevelTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
+    !token.hasNestedPool && !token.isErc4626 ? token : []
   )
+
+  return [
+    ...new Set(
+      underlyingTokens.concat(
+        toTokenCores(nestedParentTokens),
+        toTokenCores(nestedChildrenTokens),
+        toTokenCores(standardTopLevelTokens)
+      )
+    ),
+  ]
 }
 
 function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {

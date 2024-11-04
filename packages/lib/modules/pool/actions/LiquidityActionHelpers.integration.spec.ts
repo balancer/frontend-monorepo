@@ -1,8 +1,10 @@
 /* eslint-disable max-len */
 import {
+  bal80Weth20Address,
   balAddress,
   bpt3PoolAddress,
   daiAddress,
+  sdBalAddress,
   usdcAddress,
   usdtAddress,
   wETHAddress,
@@ -45,6 +47,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
     ]
 
     expect(allPoolTokens(nestedPool).map(t => t.address)).toEqual([
+      '0x79c58f70905f734641735bc61e45c19dd9ad60bc', // BPT
       daiAddress,
       bpt3PoolAddress,
       usdcAddress,
@@ -92,4 +95,16 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
       },
     ])
   })
+})
+
+it('allPoolTokens for v2 pool with BPT', async () => {
+  const poolId = '0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d' // MAINNET Balancer sdBAL Stable Pool
+
+  const sdBalPool = await getPoolMock(poolId, GqlChain.Mainnet)
+
+  expect(
+    allPoolTokens(sdBalPool)
+      .map(t => t.address)
+      .sort()
+  ).toEqual([bal80Weth20Address, balAddress, wETHAddress, sdBalAddress])
 })
