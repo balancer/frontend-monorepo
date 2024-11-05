@@ -3,7 +3,7 @@
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { Button, HStack, VStack, Text, Spacer } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import {
   RemoveLiquidityPermitParams,
@@ -12,8 +12,8 @@ import {
 import { useChainSwitch } from '../../web3/useChainSwitch'
 import { TransactionStep } from './lib'
 import { getChainId } from '@repo/lib/config/app.config'
-import { SignIcon } from '@repo/lib/shared/components/icons/SignIcon'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
+import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 
 export function useSignPermitStep(params: RemoveLiquidityPermitParams): TransactionStep {
   const { isConnected } = useUserAccount()
@@ -44,13 +44,7 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
             w="full"
             width="full"
           >
-            <HStack spacing="sm" width="100%">
-              <Text color="font.primaryGradient" fontWeight="bold">
-                {buttonLabel}
-              </Text>
-              <Spacer />
-              <SignIcon size={16} />
-            </HStack>
+            <LabelWithIcon icon="sign">{buttonLabel}</LabelWithIcon>
           </Button>
         )}
       </VStack>

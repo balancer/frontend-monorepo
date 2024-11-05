@@ -17,6 +17,7 @@ import { BasePermit2Params, useSignPermit2 } from '../../tokens/approvals/permit
 import { SignatureState } from '../../web3/signatures/signature.helpers'
 import { useChainSwitch } from '../../web3/useChainSwitch'
 import { StepDetails, TransactionStep } from './lib'
+import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 
 /*
   Returns a transaction step to sign a permit2 for the token amounts in
@@ -81,7 +82,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
             w="full"
             width="full"
           >
-            {buttonLabel}
+            <LabelWithIcon icon="sign">{buttonLabel}</LabelWithIcon>
           </Button>
         ) : null}
       </VStack>
