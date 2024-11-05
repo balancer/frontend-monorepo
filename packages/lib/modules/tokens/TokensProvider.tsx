@@ -137,7 +137,7 @@ export function _useTokens(
       totalLiquidity: string,
       chain: GqlChain
     ): string => {
-      const tokenPrice = priceFor(tokenAddress, chain)
+      const tokenPrice = priceForAddress(tokenAddress, chain)
 
       return bn(tokenPrice).times(tokenBalance).div(totalLiquidity).toString()
     },

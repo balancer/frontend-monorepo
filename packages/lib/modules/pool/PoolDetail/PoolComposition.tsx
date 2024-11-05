@@ -40,6 +40,8 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
   const { calcWeightForBalance } = useTokens()
   const { pool } = usePool()
 
+  console.log({ pool })
+
   return (
     <VStack key={pool.address} spacing="md" width="full">
       <HStack justifyContent="space-between" width="full">
@@ -61,9 +63,12 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
       <Divider />
       <VStack spacing="md" width="full">
         {displayTokens.map(poolToken => {
-          const actualWeight = poolToken.hasNestedPool
-            ? poolToken.nestedPool?.nestedPercentage
-            : calcWeightForBalance(poolToken.address, poolToken.balance, totalLiquidity, chain)
+          const actualWeight = calcWeightForBalance(
+            poolToken.address,
+            poolToken.balance,
+            totalLiquidity,
+            chain
+          )
           return (
             <>
               <TokenRow
@@ -80,20 +85,19 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
                 })}
               />
               {poolToken.hasNestedPool && poolToken.nestedPool && (
-                <VStack pl="10" w="full">
+                <VStack pl="8" w="full">
                   {poolToken.nestedPool.tokens.map(nestedPoolToken => {
                     const calculatedWeight = bn(nestedPoolToken.balanceUSD).div(
-                      bn(poolToken.nestedPool?.totalLiquidity || '0')
+                      bn(poolToken.balanceUSD)
                     )
                     return (
                       <TokenRow
-                        actualWeight={bn(poolToken.nestedPool?.nestedPercentage || '0')
-                          .times(calculatedWeight)
-                          .toString()}
+                        actualWeight={bn(actualWeight).times(calculatedWeight).toString()}
                         address={nestedPoolToken.address as Address}
                         chain={chain}
+                        iconSize={35}
                         key={`nested-pool-${nestedPoolToken.address}`}
-                        value={bn(nestedPoolToken.balance).times(calculatedWeight).toString()}
+                        value={nestedPoolToken.balance}
                       />
                     )
                   })}
