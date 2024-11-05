@@ -10,7 +10,8 @@ import { PoolListTokenPills } from '../PoolListTokenPills'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { usePoolList } from '../PoolListProvider'
-import { PoolVersionTag } from '../../PoolVersionTag'
+import { PoolVersionTag } from './PoolVersionTag'
+import { isBoosted } from '../../pool.helpers'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -55,8 +56,9 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
               <HStack>
                 <PoolVersionTag pool={pool} />
                 <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
-                  {getPoolTypeLabel(pool.type)}
+                  {isBoosted(pool) ? 'Boosted' : getPoolTypeLabel(pool.type)}
                 </Text>
+                {/* TODO: add icon of protocol supplying the boost */}
               </HStack>
             </GridItem>
             {userAddress ? (

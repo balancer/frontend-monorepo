@@ -1,5 +1,5 @@
 import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
-import { isMetaStable, isStable, isWeighted, isGyro } from '../../../pool.helpers'
+import { isMetaStable, isStable, isWeighted, isGyro, isBoosted } from '../../../pool.helpers'
 import { zeroAddress } from 'viem'
 
 export enum RiskKey {
@@ -77,7 +77,7 @@ const stableRisks = getLink(RiskKey.Stable)
 //   'Composable Stable pool risks'
 // )
 const metaStableRisks = getLink(RiskKey.ComposableStable, RISK_TITLES[RiskKey.MetaStable])
-// const boostedRisks = getLink(RiskKey.Boosted)
+const boostedRisks = getLink(RiskKey.Boosted)
 const clpRisks = getLink(RiskKey.Clp)
 const arbitrumRisks = getLink(RiskKey.Arbitrum)
 const polygonRisks = getLink(RiskKey.Polygon)
@@ -96,12 +96,7 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   //   if (isComposableStable(pool.poolType)) result.push(composableRisks)
   if (isMetaStable(pool.type)) result.push(metaStableRisks)
   if (isGyro(pool.type)) result.push(clpRisks)
-  //   if (isBoosted(pool)) {
-  //     result.push(boostedRisks)
-  //     const thirdPartyRisks = generateThirdPartyComposabilityRisks(pool)
-  //     if (thirdPartyRisks) result.push(thirdPartyRisks)
-  //   }
-
+  if (isBoosted(pool)) result.push(boostedRisks)
   if (pool.chain === GqlChain.Arbitrum) result.push(arbitrumRisks)
   if (pool.chain === GqlChain.Optimism) result.push(optimismRisks)
   if (pool.chain === GqlChain.Polygon) result.push(polygonRisks)
@@ -116,27 +111,6 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
 
   return result
 }
-
-// export function generateThirdPartyComposabilityRisks(pool): Risk | undefined {
-//   const protocols = boostedProtocols(pool)
-
-//   if (protocols?.includes(Protocol.Tetu) || protocols?.includes(Protocol.Idle))
-//     return getLink(
-//       RiskKey.Composability,
-//       'Third party DeFi composability risks: May use multiple yield protocols'
-//     )
-
-//   if (protocols?.includes(Protocol.Reaper)) protocols.push(Protocol.Granary)
-
-//   if (protocols) {
-//     return getLink(
-//       RiskKey.Composability,
-//       `Third party DeFi composability risks: ${protocols
-//         .map(protocol => capitalize(protocol))
-//         .join(', ')}`
-//     )
-//   }
-// }
 
 function hasOwner(pool: GqlPoolElement) {
   return !['', zeroAddress].includes(pool?.owner ? pool.owner.toString() : '')

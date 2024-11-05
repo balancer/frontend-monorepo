@@ -5,7 +5,7 @@ import PoolMetaBadges from './PoolMetaBadges'
 import { usePool } from '../../PoolProvider'
 import { isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
-import { PoolCategories } from '../../categories/PoolCategories'
+import { PoolTags } from '../../tags/PoolTags'
 import { PoolBreadcrumbs } from './PoolBreadcrumbs'
 import {
   PartnerRedirectModal,
@@ -55,7 +55,7 @@ export function PoolHeader() {
       >
         <PoolMetaBadges />
         <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
-          <PoolCategories />
+          <PoolTags />
           <HStack spacing="sm">
             <Button
               isDisabled={isAddLiquidityBlocked}
