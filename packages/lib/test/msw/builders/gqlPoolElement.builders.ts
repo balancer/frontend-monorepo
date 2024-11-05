@@ -1,6 +1,6 @@
 import {
   balAddress,
-  bpt3PoolAddress,
+  usdcDaiUsdtBptAddress,
   poolId,
   wETHAddress,
   wjAuraAddress,
@@ -128,7 +128,7 @@ export function aGqlPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlP
 export function aNested50Weth503Pool(...options: Partial<GqlPoolElement>[]): GqlPoolElement {
   const tokens = [
     aTokenExpandedMock({
-      address: bpt3PoolAddress, // 3POOL-BPT
+      address: usdcDaiUsdtBptAddress, // 3POOL-BPT
     }),
     aTokenExpandedMock({ symbol: 'WETH', isMainToken: true }),
   ]
