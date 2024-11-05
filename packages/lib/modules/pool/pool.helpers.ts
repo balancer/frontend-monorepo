@@ -15,7 +15,7 @@ import {
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, uniqBy } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
 import { BPT_DECIMALS } from './pool.constants'
 import { isNotMainnet } from '../chains/chain.utils'
@@ -28,7 +28,7 @@ import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
-import { PoolListItem, TokenCore } from './pool.types'
+import { TokenCore, PoolListItem } from './pool.types'
 
 /**
  * METHODS
@@ -66,9 +66,7 @@ export function isFx(poolType: GqlPoolType | string): boolean {
 }
 
 export function isBoosted(pool: PoolListItem | Pool) {
-  // TODO: merge https://github.com/balancer/frontend-monorepo/pull/110/
-  return pool.id === '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8'
-  // return pool.hasErc4626 || pool.hasNestedErc4626
+  return pool.hasErc4626 || pool.hasNestedErc4626
 }
 
 export function isGyro(poolType: GqlPoolType) {
@@ -445,18 +443,26 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     token.isErc4626 ? ({ ...token.underlyingToken, index } as TokenCore) : []
   )
 
+  const nestedParentTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
+    token.nestedPool ? token : []
+  )
+
   const nestedChildrenTokens: PoolToken[] = pool.poolTokens
     .flatMap(token => (token.nestedPool ? token.nestedPool.tokens : []))
     .filter((token): token is PoolToken => token !== undefined)
 
-  const standardTopLevelTokens: PoolToken[] = pool.poolTokens
-    .flatMap(token => (!token.hasNestedPool && !token.isErc4626 ? token : []))
-    .filter((token): token is PoolToken => token !== undefined)
+  const standardTopLevelTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
+    !token.hasNestedPool && !token.isErc4626 ? token : []
+  )
 
-  return underlyingTokens.concat(
+  const allTokens = underlyingTokens.concat(
+    toTokenCores(nestedParentTokens),
     toTokenCores(nestedChildrenTokens),
     toTokenCores(standardTopLevelTokens)
   )
+
+  // Remove duplicates as phantom BPTs can be both in the top level and inside nested pools
+  return uniqBy(allTokens, 'address')
 }
 
 function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {

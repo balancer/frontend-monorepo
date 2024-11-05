@@ -137,9 +137,9 @@ export class LiquidityActionHelpers {
         const token = allTokens.find(token => isSameAddress(token.address, tokenAddress))
         if (!token) {
           throw new Error(
-            `Provided token address ${tokenAddress} not found in pool tokens [${Object.keys(
-              allTokens.map(t => t.address)
-            ).join(' , \n')}]`
+            `Provided token address ${tokenAddress} not found in pool tokens [${allTokens
+              .map(t => t.address)
+              .join(' , \n')}]`
           )
         }
         return {

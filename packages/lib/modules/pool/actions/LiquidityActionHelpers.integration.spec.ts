@@ -1,8 +1,10 @@
 /* eslint-disable max-len */
 import {
+  bal80Weth20Address,
   balAddress,
-  bpt3PoolAddress,
+  usdcDaiUsdtBptAddress,
   daiAddress,
+  sdBalAddress,
   usdcAddress,
   usdtAddress,
   wETHAddress,
@@ -36,7 +38,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
     ])
   })
 
-  it('for v2 pool with nested BPTs', async () => {
+  it('for v2 composable stable pool with a nested phantom BPT', async () => {
     // Balancer 50WETH-50-3pool
     const poolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0'
     const nestedPool = await getPoolMock(poolId, GqlChain.Mainnet)
@@ -45,8 +47,8 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
     ]
 
     expect(allPoolTokens(nestedPool).map(t => t.address)).toEqual([
+      usdcDaiUsdtBptAddress, // Phantom BPT
       daiAddress,
-      bpt3PoolAddress,
       usdcAddress,
       usdtAddress,
       wETHAddress,
@@ -54,15 +56,40 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
 
     const helpers = new LiquidityActionHelpers(nestedPool)
 
-    expect(helpers.toInputAmounts(humanAmountsIn)).toMatchInlineSnapshot(`
-      [
-        {
-          "address": "0x6b175474e89094c44da98b954eedeac495271d0f",
-          "decimals": 18,
-          "rawAmount": 100000000000000000000n,
-        },
-      ]
-    `)
+    expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
+      {
+        address: daiAddress,
+        decimals: 18,
+        rawAmount: 100000000000000000000n,
+      },
+    ])
+  })
+
+  it('allPoolTokens for v2 STABLE pool with non-phantom BPT', async () => {
+    const poolId = '0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d' // MAINNET Balancer sdBAL Stable Pool
+
+    const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+      // User can add liquidity with BPT token
+      { humanAmount: '100', tokenAddress: bal80Weth20Address },
+    ]
+
+    const sdBalPool = await getPoolMock(poolId, GqlChain.Mainnet)
+
+    expect(
+      allPoolTokens(sdBalPool)
+        .map(t => t.address)
+        .sort()
+    ).toEqual([bal80Weth20Address, balAddress, wETHAddress, sdBalAddress])
+
+    const helpers = new LiquidityActionHelpers(sdBalPool)
+
+    expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
+      {
+        address: bal80Weth20Address,
+        decimals: 18,
+        rawAmount: 100000000000000000000n,
+      },
+    ])
   })
 })
 
