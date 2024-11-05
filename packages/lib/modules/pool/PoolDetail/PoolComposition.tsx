@@ -41,7 +41,7 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
   const { pool } = usePool()
 
   return (
-    <VStack spacing="md" width="full">
+    <VStack key={pool.address} spacing="md" width="full">
       <HStack justifyContent="space-between" width="full">
         <VStack alignItems="flex-start">
           <Heading fontWeight="bold" size={{ base: 'h5', md: 'h6' }}>
