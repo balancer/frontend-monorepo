@@ -21,6 +21,7 @@ import {
 import { SignatureState } from '../../web3/signatures/signature.helpers'
 import { useChainSwitch } from '../../web3/useChainSwitch'
 import { StepDetails as StepDetails, TransactionStep } from './lib'
+import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 
 /*
   Returns a transaction step to sign a permit2 for the given pool and token amounts
@@ -78,7 +79,7 @@ export function useSignPermit2Step(params: AddLiquidityPermit2Params): Transacti
             w="full"
             width="full"
           >
-            {buttonLabel}
+            <LabelWithIcon icon="sign">{buttonLabel}</LabelWithIcon>
           </Button>
         )}
       </VStack>
