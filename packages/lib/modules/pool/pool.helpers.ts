@@ -15,7 +15,7 @@ import {
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
-import { isEmpty, isNil } from 'lodash'
+import { isEmpty, isNil, uniqBy } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
 import { BPT_DECIMALS } from './pool.constants'
 import { isNotMainnet } from '../chains/chain.utils'
@@ -455,15 +455,14 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     !token.hasNestedPool && !token.isErc4626 ? token : []
   )
 
-  return [
-    ...new Set(
-      underlyingTokens.concat(
-        toTokenCores(nestedParentTokens),
-        toTokenCores(nestedChildrenTokens),
-        toTokenCores(standardTopLevelTokens)
-      )
-    ),
-  ]
+  const allTokens = underlyingTokens.concat(
+    toTokenCores(nestedParentTokens),
+    toTokenCores(nestedChildrenTokens),
+    toTokenCores(standardTopLevelTokens)
+  )
+
+  // Remove duplicates as phantom BPTs can be both in the top level and inside nested pools
+  return uniqBy(allTokens, 'address')
 }
 
 function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {

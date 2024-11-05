@@ -9,7 +9,7 @@ export const balAddress = '0xba100000625a3754423978a60c9317c58a424e3d' as const
 export const wETHAddress = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' as const
 export const wjAuraAddress = '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F' as const
 
-export const bpt3PoolAddress = '0x79c58f70905f734641735bc61e45c19dd9ad60bc' as const
+export const usdcDaiUsdtBptAddress = '0x79c58f70905f734641735bc61e45c19dd9ad60bc' as const //USDC-DAI-USDT
 export const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f' as const
 export const usdcAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as const
 export const usdtAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7' as const
