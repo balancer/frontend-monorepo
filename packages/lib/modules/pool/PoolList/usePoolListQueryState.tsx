@@ -10,11 +10,11 @@ import { uniq } from 'lodash'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { useQueryState } from 'nuqs'
 import {
-  POOL_CATEGORY_MAP,
+  POOL_TAG_MAP,
   POOL_TYPE_MAP,
-  PoolCategoryType,
   PoolFilterType,
   poolListQueryStateParsers,
+  PoolTagType,
   SortingState,
 } from '../pool.types'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
@@ -71,10 +71,7 @@ export function usePoolListQueryState() {
 
   const [minTvl, setMinTvl] = useQueryState('minTvl', poolListQueryStateParsers.minTvl)
 
-  const [poolCategories, setPoolCategories] = useQueryState(
-    'poolCategories',
-    poolListQueryStateParsers.poolCategories
-  )
+  const [poolTags, setPoolTags] = useQueryState('poolTags', poolListQueryStateParsers.poolTags)
 
   // Set internal checked state
   function toggleUserAddress(checked: boolean, address: string) {
@@ -86,11 +83,11 @@ export function usePoolListQueryState() {
   }
 
   // Set internal checked state
-  function togglePoolCategory(checked: boolean, poolCategory: PoolCategoryType) {
+  function togglePoolTag(checked: boolean, poolTag: PoolTagType) {
     if (checked) {
-      setPoolCategories(current => uniq([...current, poolCategory]))
+      setPoolTags(current => uniq([...current, poolTag]))
     } else {
-      setPoolCategories(current => current.filter(item => item !== poolCategory))
+      setPoolTags(current => current.filter(item => item !== poolTag))
     }
   }
 
@@ -156,14 +153,14 @@ export function usePoolListQueryState() {
     }
   }
 
-  function poolCategoryLabel(poolCategory: PoolCategoryType) {
-    switch (poolCategory) {
+  function poolTagLabel(poolTag: PoolTagType) {
+    switch (poolTag) {
       case 'INCENTIVIZED':
         return 'Incentivized'
       case 'POINTS':
         return 'Points'
       default:
-        return (poolCategory as string).toLowerCase().replace('_', ' ')
+        return (poolTag as string).toLowerCase().replace('_', ' ')
     }
   }
 
@@ -171,7 +168,7 @@ export function usePoolListQueryState() {
     setNetworks(null)
     setPoolTypes(null)
     setMinTvl(null)
-    setPoolCategories(null)
+    setPoolTags(null)
     setUserAddress(null)
     setFirst(null)
     setSkip(null)
@@ -185,7 +182,7 @@ export function usePoolListQueryState() {
     poolTypes.length +
     (userAddress ? 1 : 0) +
     (minTvl > 0 ? 1 : 0) +
-    poolCategories.length +
+    poolTags.length +
     (protocolVersion ? 1 : 0)
 
   const sorting: SortingState = orderBy
@@ -203,9 +200,9 @@ export function usePoolListQueryState() {
       .flat()
   )
 
-  const mappedPoolCategories = uniq(
-    (poolCategories.length > 0 ? poolCategories : [])
-      .map(poolCategory => POOL_CATEGORY_MAP[poolCategory as keyof typeof POOL_CATEGORY_MAP])
+  const mappedPoolTags = uniq(
+    (poolTags.length > 0 ? poolTags : [])
+      .map(poolTag => POOL_TAG_MAP[poolTag as keyof typeof POOL_TAG_MAP])
       .flat()
   )
 
@@ -219,7 +216,7 @@ export function usePoolListQueryState() {
       chainIn: networks.length > 0 ? networks : getProjectConfig().supportedNetworks,
       userAddress,
       minTvl,
-      tagIn: mappedPoolCategories.length > 0 ? mappedPoolCategories : null,
+      tagIn: mappedPoolTags.length > 0 ? mappedPoolTags : null,
       tagNotIn: ['BLACK_LISTED'],
       protocolVersionIn: protocolVersion ? [protocolVersion] : undefined,
     },
@@ -240,21 +237,21 @@ export function usePoolListQueryState() {
     toggleUserAddress,
     toggleNetwork,
     togglePoolType,
-    togglePoolCategory,
+    togglePoolTag,
     poolTypeLabel,
     setSorting,
     setPagination,
     setSearch,
     setMinTvl,
     setPoolTypes,
-    setPoolCategories,
+    setPoolTags,
     resetFilters,
-    poolCategoryLabel,
+    poolTagLabel,
     setNetworks,
     setProtocolVersion,
     setActiveProtocolVersionTab,
     activeProtocolVersionTab,
-    poolCategories,
+    poolTags,
     protocolVersion,
     minTvl,
     searchText: textSearch,
