@@ -60,7 +60,7 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
    */
   protected constructSdkInput(
     humanAmountsIn: HumanTokenAmountWithAddress[],
-    userData?: Address
+    userAddress?: Address
   ): AddLiquidityUnbalancedInput {
     const amountsIn = this.helpers.toSdkInputAmounts(humanAmountsIn)
 
@@ -69,7 +69,7 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
       rpcUrl: getRpcUrl(this.helpers.chainId),
       amountsIn,
       kind: AddLiquidityKind.Unbalanced,
-      userData,
+      sender: userAddress,
     }
   }
 }
