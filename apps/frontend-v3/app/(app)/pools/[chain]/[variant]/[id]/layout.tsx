@@ -58,10 +58,6 @@ export default async function PoolLayout({ params: { id, chain, variant }, child
 
   const { data, error } = await getPoolQuery(chain, id)
 
-  console.log({
-    error,
-    data,
-  })
   if (error) {
     if (error?.message === 'Pool with id does not exist') {
       notFound()
