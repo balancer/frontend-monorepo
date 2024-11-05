@@ -39,6 +39,7 @@ type DataProps = {
   showSelect?: boolean
   showInfoPopover?: boolean
   isBpt?: boolean
+  iconSize?: number
 }
 
 function TokenInfo({
@@ -51,6 +52,7 @@ function TokenInfo({
   showSelect = false,
   showInfoPopover = true,
   isBpt = false,
+  iconSize = 40,
 }: DataProps) {
   const tokenSymbol = isBpt ? 'LP token' : token?.symbol || displayToken?.symbol
   const tokenName = isBpt ? pool?.name : token?.name || displayToken?.name
@@ -58,7 +60,7 @@ function TokenInfo({
   return (
     <HStack spacing="sm">
       {!isBpt && (
-        <TokenIcon address={address} alt={token?.symbol || address} chain={chain} size={40} />
+        <TokenIcon address={address} alt={token?.symbol || address} chain={chain} size={iconSize} />
       )}
       <VStack alignItems="flex-start" spacing="none">
         <HStack spacing="none">
@@ -104,6 +106,7 @@ type Props = {
   toggleTokenSelect?: () => void
   totalLiquidity?: string
   totalShares?: string
+  iconSize?: number
 }
 
 export default function TokenRow({
@@ -122,6 +125,7 @@ export default function TokenRow({
   totalLiquidity,
   totalShares,
   toggleTokenSelect,
+  iconSize,
 }: Props) {
   const { getToken, usdValueForToken } = useTokens()
   const { toCurrency } = useCurrency()
@@ -138,6 +142,7 @@ export default function TokenRow({
     displayToken,
     pool,
     disabled,
+    iconSize,
   }
 
   useEffect(() => {
@@ -167,7 +172,6 @@ export default function TokenRow({
         ) : (
           <TokenInfo {...props} isBpt={isBpt} />
         )}
-
         <HStack align="start" spacing="none">
           <VStack alignItems="flex-end" spacing="xs" textAlign="right">
             {isLoading ? (
