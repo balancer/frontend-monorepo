@@ -12,9 +12,9 @@ import {
   VStack,
   StackProps,
 } from '@chakra-ui/react'
-import { VoteListItem } from '@repo/lib/modules/vebal/vote/vote.types'
-import { useMemo } from 'react'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
+import React, { useMemo } from 'react'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import tinycolor from 'tinycolor2'
 
 function VoteUpIcon() {
@@ -43,33 +43,66 @@ function VoteDownIcon() {
 
 interface TooltipItemProps extends StackProps {
   label: string
-  value: string
+  value: React.ReactNode
   valueColor?: string
 }
 
 function TooltipItem({ label, value, valueColor, ...props }: TooltipItemProps) {
   return (
     <HStack justifyContent="space-between" {...props}>
-      <Text color="font.primary">{label}</Text>
-      <Text color={valueColor ?? 'font.primary'}>{value}</Text>
+      <Text color="font.primary" fontSize="sm">
+        {label}
+      </Text>
+      <Text color={valueColor ?? 'font.primary'} fontSize="sm">
+        {value}
+      </Text>
     </HStack>
   )
 }
 
+function formatVotesAsPercent(votes: string): string {
+  const normalizedVotes = bn(votes).shiftedBy(-18).abs()
+  return fNum('apr', normalizedVotes)
+}
+
 interface Props {
-  vote: VoteListItem
+  vote: VotingPoolWithData
   usePortal?: boolean
 }
 
 export function VoteRateTooltip({ vote, usePortal = true }: Props) {
+  const votesThisPeriod = vote.gaugeVotes ? formatVotesAsPercent(vote.gaugeVotes.votes) : undefined
+  const votesNextPeriod = vote.gaugeVotes
+    ? formatVotesAsPercent(vote.gaugeVotes.votesNextPeriod)
+    : undefined
+
+  const voteDifference = vote.gaugeVotes
+    ? bn(vote.gaugeVotes.votesNextPeriod).minus(vote.gaugeVotes.votes).toNumber()
+    : undefined
+
+  const voteDifferenceText = useMemo(() => {
+    const text = formatVotesAsPercent(voteDifference ? voteDifference.toString() : '0')
+    const prefix = !voteDifference ? '' : voteDifference > 0 ? '+' : '-'
+    return `${prefix}${text}`
+  }, [voteDifference])
+
+  const voteDifferenceColor = !voteDifference
+    ? undefined
+    : voteDifference > 0
+      ? 'green.500'
+      : 'red.400'
+
+  const differenceIcon = !voteDifference ? undefined : voteDifference > 0 ? (
+    <VoteUpIcon />
+  ) : (
+    <VoteDownIcon />
+  )
+
   /* fix: where is data? */
   const voteState = useMemo(() => {
     return {
       currentPeriodVebal: Math.random() * 20000,
       nextPeriodVebal: Math.random() * 20000,
-      currentPeriodShare: Math.random(),
-      nextPeriodShare: Math.random(),
-      change: Math.random() - 0.5,
     }
   }, [])
 
@@ -87,19 +120,14 @@ export function VoteRateTooltip({ vote, usePortal = true }: Props) {
         <TooltipItem
           label="Current period share of votes"
           mt="sm"
-          value={fNum('apr', voteState.currentPeriodShare)}
+          value={votesThisPeriod ?? <>&mdash;</>}
         />
-        <TooltipItem
-          label="Next period share of votes"
-          value={fNum('apr', voteState.nextPeriodShare)}
-        />
+        <TooltipItem label="Next period share of votes" value={votesNextPeriod ?? <>&mdash;</>} />
         <TooltipItem
           label="Change"
           mt="sm"
-          value={fNum('apr', voteState.change)}
-          valueColor={
-            !voteState.change ? undefined : voteState.change > 0 ? 'green.500' : 'red.400'
-          }
+          value={voteDifferenceText}
+          valueColor={voteDifferenceColor}
         />
       </VStack>
     </PopoverContent>
@@ -115,13 +143,9 @@ export function VoteRateTooltip({ vote, usePortal = true }: Props) {
               textDecoration="underline"
               textDecorationStyle="dotted"
             >
-              {fNum('apr', voteState.change)}
+              {votesNextPeriod ?? <>&mdash;</>}
             </Text>
-            {!voteState.change ? undefined : voteState.change > 0 ? (
-              <VoteUpIcon />
-            ) : (
-              <VoteDownIcon />
-            )}
+            {differenceIcon}
           </HStack>
         </PopoverTrigger>
 

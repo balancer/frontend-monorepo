@@ -81,6 +81,7 @@ const networkConfig: NetworkConfig = {
     veDelegationProxy: '0x6f5a2eE11E7a772AeB5114A20d0D7c0ff61EB8A0',
     veBAL: '0xC128a9954e6c874eA3d62ce62B468bA073093F25',
     omniVotingEscrow: '0x96484f2aBF5e58b15176dbF1A799627B53F13B6d',
+    gaugeController: '0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD',
   },
 
   pools: convertHexToLowerCase({

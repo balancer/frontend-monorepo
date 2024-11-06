@@ -6,11 +6,11 @@ import { VoteListTableRow } from './VoteListTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
-import { VoteListItem } from '@repo/lib/modules/vebal/vote/vote.types'
+import { VoteListItem, VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 
 interface Props {
-  voteList: VoteListItem[]
+  voteList: VotingPoolWithData[]
   count: number
   loading: boolean
 }
@@ -25,7 +25,7 @@ export function VoteListTable({ voteList, count, loading }: Props) {
 
   const rowProps = {
     px: { base: 'sm', sm: '0' },
-    gridTemplateColumns: `32px minmax(320px, 1fr) 120px 120px 120px 120px 100px`,
+    gridTemplateColumns: `32px minmax(320px, 1fr) 120px 100px 120px 120px 100px`,
     alignItems: 'center',
     gap: { base: 'xxs', xl: 'lg' },
   }
@@ -46,7 +46,7 @@ export function VoteListTable({ voteList, count, loading }: Props) {
         noItemsFoundLabel="No votes found"
         paginationProps={paginationProps}
         renderTableHeader={() => <VoteListTableHeader {...rowProps} />}
-        renderTableRow={(item: VoteListItem, index) => {
+        renderTableRow={(item: VotingPoolWithData, index) => {
           return <VoteListTableRow keyValue={index} vote={item} {...rowProps} />
         }}
         showPagination={showPagination}

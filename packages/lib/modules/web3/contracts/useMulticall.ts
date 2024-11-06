@@ -11,7 +11,12 @@ export type ChainContractConfig = ContractFunctionParameters & {
   id: string
 }
 
-type Options = { enabled?: boolean }
+type Options = {
+  enabled?: boolean
+  refetchOnMount?: boolean
+  refetchOnReconnect?: boolean
+  refetchOnWindowFocus?: boolean
+}
 
 export function useMulticall(multicallRequests: ChainContractConfig[], options: Options = {}) {
   const config = useConfig()

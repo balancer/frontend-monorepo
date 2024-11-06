@@ -48,6 +48,7 @@ export interface ContractsConfig {
   permit2?: Address
   omniVotingEscrow?: Address
   gaugeWorkingBalanceHelper?: Address
+  gaugeController?: Address
 }
 export interface PoolsConfig {
   issues: Partial<Record<PoolIssue, string[]>>
