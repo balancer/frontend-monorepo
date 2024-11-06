@@ -43,7 +43,7 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
   console.log({ pool })
 
   return (
-    <VStack key={pool.address} spacing="md" width="full">
+    <VStack spacing="md" width="full">
       <HStack justifyContent="space-between" width="full">
         <VStack alignItems="flex-start">
           <Heading fontWeight="bold" size={{ base: 'h5', md: 'h6' }}>
@@ -70,12 +70,11 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
             chain
           )
           return (
-            <>
+            <VStack key={`pool-${poolToken.address}`} w="full">
               <TokenRow
                 actualWeight={actualWeight}
                 address={poolToken.address as Address}
                 chain={chain}
-                key={`my-liquidity-token-${poolToken.address}`}
                 pool={pool}
                 targetWeight={poolToken.weight || undefined}
                 value={poolToken.balance}
@@ -103,7 +102,7 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
                   })}
                 </VStack>
               )}
-            </>
+            </VStack>
           )
         })}
       </VStack>
