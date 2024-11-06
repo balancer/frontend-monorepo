@@ -35,7 +35,10 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
       return 0
     }
     const input = this.constructSdkInput(humanAmountsIn)
-    const priceImpactABA = await PriceImpact.addLiquidityNested(input, this.helpers.nestedPoolState)
+    const priceImpactABA = await PriceImpact.addLiquidityNested(
+      input,
+      this.helpers.nestedPoolStateV2
+    )
     return priceImpactABA.decimal
   }
 
@@ -47,7 +50,10 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
 
     const addLiquidityInput = this.constructSdkInput(humanAmountsIn, userAddress)
 
-    const sdkQueryOutput = await addLiquidity.query(addLiquidityInput, this.helpers.nestedPoolState)
+    const sdkQueryOutput = await addLiquidity.query(
+      addLiquidityInput,
+      this.helpers.nestedPoolStateV2
+    )
 
     return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
   }

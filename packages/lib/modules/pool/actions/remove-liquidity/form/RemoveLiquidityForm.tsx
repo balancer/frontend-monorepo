@@ -39,19 +39,24 @@ import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
-
-const TABS: ButtonGroupOption[] = [
-  {
-    value: 'proportional',
-    label: 'Proportional',
-  },
-  {
-    value: 'single',
-    label: 'Single token',
-  },
-] as const
+import { isBoosted } from '../../../pool.helpers'
 
 export function RemoveLiquidityForm() {
+  const { pool } = usePool()
+
+  const TABS: ButtonGroupOption[] = [
+    {
+      value: 'proportional',
+      label: 'Proportional',
+    },
+    {
+      value: 'single',
+      label: 'Single token',
+      //Boosted pools do not support single token removes
+      disabled: isBoosted(pool),
+    },
+  ] as const
+
   const {
     transactionSteps,
     tokens,
@@ -72,7 +77,6 @@ export function RemoveLiquidityForm() {
     setHumanBptInPercent,
     setNeedsToAcceptHighPI,
   } = useRemoveLiquidity()
-  const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const nextBtn = useRef(null)

@@ -3,18 +3,31 @@ import {
   AddLiquidityBoostedInput,
   AddLiquidityBoostedV3,
   Hex,
+  PriceImpact,
+  PriceImpactAmount,
 } from '@balancer/sdk'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { BaseUnbalancedAddLiquidityHandler } from './BaseUnbalancedAddLiquidity.handler'
 import { constructBaseBuildCallInput } from './add-liquidity.utils'
+import { areEmptyAmounts } from '../../LiquidityActionHelpers'
 
 export class BoostedUnbalancedAddLiquidityV3Handler extends BaseUnbalancedAddLiquidityHandler {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async getPriceImpact(humanAmountsIn?: HumanTokenAmountWithAddress[]): Promise<number> {
-    // TODO: Return 0 until SDK implements Price Impact for boosted pools
-    return 0
+  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<number> {
+    if (areEmptyAmounts(humanAmountsIn)) {
+      // Avoid price impact calculation when there are no amounts in
+      return 0
+    }
+
+    const addLiquidityInput = this.constructSdkInput(humanAmountsIn)
+
+    const priceImpactABA: PriceImpactAmount = await PriceImpact.addLiquidityUnbalancedBoosted(
+      addLiquidityInput,
+      this.helpers.boostedPoolState
+    )
+
+    return priceImpactABA.decimal
   }
 
   public async simulate(
