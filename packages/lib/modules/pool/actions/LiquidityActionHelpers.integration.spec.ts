@@ -46,12 +46,16 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
       { humanAmount: '100', tokenAddress: daiAddress },
     ]
 
-    expect(allPoolTokens(nestedPool).map(t => t.address)).toEqual([
-      usdcDaiUsdtBptAddress, // Phantom BPT
+    expect(
+      allPoolTokens(nestedPool)
+        .map(t => t.address)
+        .sort()
+    ).toEqual([
       daiAddress,
+      usdcDaiUsdtBptAddress, // Phantom BPT
       usdcAddress,
-      usdtAddress,
       wETHAddress,
+      usdtAddress,
     ])
 
     const helpers = new LiquidityActionHelpers(nestedPool)
@@ -107,7 +111,7 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
   ]
 
   it('allPoolTokens', async () => {
-    expect(allPoolTokens(v3Pool).map(t => t.address)).toMatchInlineSnapshot([
+    expect(allPoolTokens(v3Pool).map(t => t.address)).toEqual([
       usdcSepoliaAddress,
       usdtSepoliaAddress,
     ])
@@ -146,65 +150,108 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
 
   it('boostedPoolState', async () => {
     const helpers = new LiquidityActionHelpers(v3Pool)
-    expect(helpers.boostedPoolState).toMatchInlineSnapshot(`
+    expect(helpers.boostedPoolState).toMatchObject({
+      address: '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8',
+      id: '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8',
+      protocolVersion: 3,
+      tokens: [
+        {
+          address: '0x8a88124522dbbf1e56352ba3de1d9f78c143751e',
+          balance: expect.any(String),
+          balanceUSD: expect.any(String),
+          decimals: 6,
+          hasNestedPool: false,
+          id: '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8-0x8a88124522dbbf1e56352ba3de1d9f78c143751e',
+          index: 0,
+          isAllowed: true,
+          isErc4626: true,
+          name: 'Static Aave Ethereum USDC',
+          nestedPool: null,
+          priceRate: expect.any(String),
+          priceRateProvider: '0x34101091673238545de8a846621823d9993c3085',
+          priceRateProviderData: null,
+          symbol: 'stataEthUSDC',
+          underlyingToken: {
+            address: '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8',
+            decimals: 6,
+            index: 0,
+            name: 'USDC (AAVE Faucet)',
+            symbol: 'usdc-aave',
+          },
+          weight: null,
+        },
+        {
+          address: '0x978206fae13faf5a8d293fb614326b237684b750',
+          balance: expect.any(String),
+          balanceUSD: expect.any(String),
+          decimals: 6,
+          hasNestedPool: false,
+          id: '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8-0x978206fae13faf5a8d293fb614326b237684b750',
+          index: 1,
+          isAllowed: true,
+          isErc4626: true,
+          name: 'Static Aave Ethereum USDT',
+          nestedPool: null,
+          priceRate: expect.any(String),
+          priceRateProvider: '0xb1b171a07463654cc1fe3df4ec05f754e41f0a65',
+          priceRateProviderData: null,
+          symbol: 'stataEthUSDT',
+          underlyingToken: {
+            address: '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0',
+            decimals: 6,
+            index: 1,
+            name: 'USDT (AAVE Faucet)',
+            symbol: 'usdt-aave',
+          },
+          weight: null,
+        },
+      ],
+      type: 'Stable',
+    })
+  })
+})
+
+// Unskip when sepolia V3 pools are available in production api
+describe('Liquidity helpers for V3 NESTED pool', async () => {
+  const poolId = '0x0270daf4ee12ccb1abc8aa365054eecb1b7f4f6b' // Sepolia Balancer 50 WETH 50 USD
+
+  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
+  const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0'
+  const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
+  const helpers = new LiquidityActionHelpers(v3Pool)
+  const wethAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9'
+
+  const usdcUsdtSepoliaBptAddress = '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8'
+
+  const aaveUSDCAddress = '0x8a88124522dbbf1e56352ba3de1d9f78c143751e'
+  const aaveUSDTAddress = '0x978206fae13faf5a8d293fb614326b237684b750'
+
+  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress },
+  ]
+
+  it('allPoolTokens', async () => {
+    expect(
+      allPoolTokens(v3Pool)
+        .map(t => t.address)
+        .sort()
+    ).toEqual([
+      usdcUsdtSepoliaBptAddress,
+      wethAddress,
+      aaveUSDCAddress,
+      usdcSepoliaAddress,
+      aaveUSDTAddress,
+      usdtSepoliaAddress,
+    ])
+  })
+
+  it('toInputAmounts', async () => {
+    expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
       {
-        "address": "0x6dbdd7a36d900083a5b86a55583d90021e9f33e8",
-        "id": "0x6dbdd7a36d900083a5b86a55583d90021e9f33e8",
-        "protocolVersion": 3,
-        "tokens": [
-          {
-            "address": "0x8a88124522dbbf1e56352ba3de1d9f78c143751e",
-            "balance": "50091.839731",
-            "balanceUSD": "57605.61569065",
-            "decimals": 6,
-            "hasNestedPool": false,
-            "id": "0x6dbdd7a36d900083a5b86a55583d90021e9f33e8-0x8a88124522dbbf1e56352ba3de1d9f78c143751e",
-            "index": 0,
-            "isAllowed": true,
-            "isErc4626": true,
-            "name": "Static Aave Ethereum USDC",
-            "nestedPool": null,
-            "priceRate": "1.145966506799814568",
-            "priceRateProvider": "0x34101091673238545de8a846621823d9993c3085",
-            "priceRateProviderData": null,
-            "symbol": "stataEthUSDC",
-            "underlyingToken": {
-              "address": "0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8",
-              "decimals": 6,
-              "index": 0,
-              "name": "USDC (AAVE Faucet)",
-              "symbol": "usdc-aave",
-            },
-            "weight": null,
-          },
-          {
-            "address": "0x978206fae13faf5a8d293fb614326b237684b750",
-            "balance": "50078.509111",
-            "balanceUSD": "63332.4639216519",
-            "decimals": 6,
-            "hasNestedPool": false,
-            "id": "0x6dbdd7a36d900083a5b86a55583d90021e9f33e8-0x978206fae13faf5a8d293fb614326b237684b750",
-            "index": 1,
-            "isAllowed": true,
-            "isErc4626": true,
-            "name": "Static Aave Ethereum USDT",
-            "nestedPool": null,
-            "priceRate": "1.272714209074833514",
-            "priceRateProvider": "0xb1b171a07463654cc1fe3df4ec05f754e41f0a65",
-            "priceRateProviderData": null,
-            "symbol": "stataEthUSDT",
-            "underlyingToken": {
-              "address": "0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0",
-              "decimals": 6,
-              "index": 1,
-              "name": "USDT (AAVE Faucet)",
-              "symbol": "usdt-aave",
-            },
-            "weight": null,
-          },
-        ],
-        "type": "Stable",
-      }
-    `)
+        address: usdcSepoliaAddress,
+        decimals: 6,
+        rawAmount: 100000n,
+      },
+    ])
   })
 })
