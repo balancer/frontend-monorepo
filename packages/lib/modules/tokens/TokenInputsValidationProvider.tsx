@@ -25,9 +25,19 @@ export function _useTokenInputsValidation() {
     return error
   }
 
+  function resetValidationErrors() {
+    setValidationErrors({})
+  }
+
   const hasValidationErrors = Object.values(validationErrors).some(error => error !== '')
 
-  return { setValidationError, getValidationError, hasValidationError, hasValidationErrors }
+  return {
+    setValidationError,
+    getValidationError,
+    hasValidationError,
+    hasValidationErrors,
+    resetValidationErrors,
+  }
 }
 
 export type Result = ReturnType<typeof _useTokenInputsValidation>

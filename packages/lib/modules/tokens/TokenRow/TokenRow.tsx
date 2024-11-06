@@ -87,7 +87,7 @@ function TokenInfo({
   )
 }
 
-type Props = {
+export type TokenRowProps = {
   label?: string | ReactNode
   address: Address
   chain: GqlChain
@@ -118,7 +118,7 @@ export default function TokenRow({
   abbreviated = true,
   showZeroAmountAsDash = false,
   toggleTokenSelect,
-}: Props) {
+}: TokenRowProps) {
   const { getToken, usdValueForToken } = useTokens()
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
