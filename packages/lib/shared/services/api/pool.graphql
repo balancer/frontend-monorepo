@@ -235,6 +235,7 @@ fragment PoolTokens on GqlPoolTokenDetail {
       decimals
       balance
       balanceUSD
+      symbol
       weight
       underlyingToken {
         address

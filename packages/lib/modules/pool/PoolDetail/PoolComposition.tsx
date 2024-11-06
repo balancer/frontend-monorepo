@@ -24,10 +24,11 @@ import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { getPoolDisplayTokens } from '../pool.utils'
+import { getPoolDisplayTokens, getPoolDisplayTokensWithPossibleNestedPools } from '../pool.utils'
 import { PoolTypeTag } from './PoolTypeTag'
 import { isBoosted } from '../pool.helpers'
 import { Protocol, protocolDescriptions } from '@repo/lib/modules/protocols/useProtocols'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -112,12 +113,21 @@ export function PoolComposition() {
   const { pool, chain, isLoading } = usePool()
   const { isMobile } = useBreakpoints()
   const { calcTotalUsdValue } = useTokens()
+  const cardRef = useRef<HTMLDivElement | null>(null)
+  const [height, setHeight] = useState(0)
 
   const displayTokens = getPoolDisplayTokens(pool)
   const totalLiquidity = calcTotalUsdValue(displayTokens, chain)
 
+  useLayoutEffect(() => {
+    if (cardRef.current) {
+      setHeight(cardRef.current.offsetHeight)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <Card>
+    <Card ref={cardRef}>
       <Stack
         direction={{ base: 'column', md: 'row' }}
         justifyContent="stretch"
@@ -150,16 +160,21 @@ export function PoolComposition() {
           </Text>
         </VStack>
         <NoisyCard
-          cardProps={{ position: 'relative', overflow: 'hidden', height: ['300px', '400px'] }}
+          cardProps={{
+            position: 'relative',
+            overflow: 'hidden',
+            height: ['300px', `${height - 35}px`],
+          }}
           contentProps={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
-          <PoolZenGarden poolType={pool.type} sizePx={isMobile ? '300px' : '400px'} />
+          <PoolZenGarden poolType={pool.type} sizePx={isMobile ? '300px' : `${height - 35}px`} />
           {isLoading ? (
             <Skeleton h="full" w="full" />
           ) : (
             <PoolWeightChart
               chain={chain}
-              displayTokens={displayTokens}
+              displayTokens={getPoolDisplayTokensWithPossibleNestedPools(pool)}
+              hasLegend
               totalLiquidity={totalLiquidity}
             />
           )}
