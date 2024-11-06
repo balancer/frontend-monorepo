@@ -6,6 +6,7 @@ import {
   AddLiquidity,
   AddLiquidityKind,
   AddLiquidityUnbalancedInput,
+  Address,
   PriceImpact,
   PriceImpactAmount,
 } from '@balancer/sdk'
@@ -25,14 +26,15 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
+    userAddress: Address
   ): Promise<SdkQueryAddLiquidityOutput> {
     const addLiquidity = new AddLiquidity()
-    const addLiquidityInput = this.constructSdkInput(humanAmountsIn)
+    const addLiquidityInput = this.constructSdkInput(humanAmountsIn, userAddress)
 
     const sdkQueryOutput = await addLiquidity.query(addLiquidityInput, this.helpers.poolState)
 
-    return { bptOut: sdkQueryOutput.bptOut, sdkQueryOutput }
+    return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
   }
 
   public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<number> {
@@ -57,7 +59,8 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
    * PRIVATE METHODS
    */
   protected constructSdkInput(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
+    userAddress?: Address
   ): AddLiquidityUnbalancedInput {
     const amountsIn = this.helpers.toSdkInputAmounts(humanAmountsIn)
 
@@ -66,6 +69,7 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
       rpcUrl: getRpcUrl(this.helpers.chainId),
       amountsIn,
       kind: AddLiquidityKind.Unbalanced,
+      sender: userAddress,
     }
   }
 }

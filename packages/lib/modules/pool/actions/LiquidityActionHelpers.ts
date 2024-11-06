@@ -6,6 +6,7 @@ import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { SentryError } from '@repo/lib/shared/utils/errors'
 import { bn, isZero } from '@repo/lib/shared/utils/numbers'
 import {
+  AddLiquidityQueryOutput,
   HumanAmount,
   InputAmount,
   MinimalToken,
@@ -39,6 +40,7 @@ import {
   isUnbalancedLiquidityDisabled,
   isV3Pool,
 } from '../pool.helpers'
+import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
 
 // Null object used to avoid conditional checks during hook loading state
 const NullPool: Pool = {
@@ -348,4 +350,14 @@ export function hasNoLiquidity(pool: Pool): boolean {
 export function formatBuildCallParams<T>(buildCallParams: T, account: Address) {
   // sender and recipient must be defined only for v1 and v2 pools
   return { ...buildCallParams, sender: account, recipient: account }
+}
+
+export function toTokenAmountsIn(
+  sdkQueryOutput: AddLiquidityQueryOutput
+): TokenAmountIn[] | undefined {
+  if (!sdkQueryOutput) return
+  return sdkQueryOutput.amountsIn.map(amountIn => ({
+    address: amountIn.token.address,
+    amount: amountIn.amount,
+  }))
 }

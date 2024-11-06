@@ -14,6 +14,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 */
 export interface QueryAddLiquidityOutput {
   bptOut: TokenAmount
+  to: Address
 }
 
 export interface BuildAddLiquidityInput {

@@ -2,7 +2,6 @@ import { Pool } from '@repo/lib/modules/pool/PoolProvider'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { get24HoursFromNowInSecs } from '@repo/lib/shared/utils/time'
 import {
-  AddLiquidityBaseQueryOutput,
   AddLiquidityQueryOutput,
   Address,
   Permit2,
@@ -13,23 +12,21 @@ import {
 import { HumanTokenAmountWithAddress } from '../../token.types'
 import { NoncesByTokenAddress } from './usePermit2Allowance'
 import { constructBaseBuildCallInput } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/add-liquidity.utils'
-import { filterWrappedNativeAsset } from '../../token.helpers'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { isWrappedNativeAsset } from '../../token.helpers'
 
-export interface Permit2AddLiquidityInput {
-  account: Address
-  slippagePercent: string
-  sdkQueryOutput: AddLiquidityQueryOutput
-}
-
-type SignPermit2Params = {
+type SignPermit2AddParams = {
   sdkClient?: PublicWalletClient
   pool: Pool
   humanAmountsIn: HumanTokenAmountWithAddress[]
-  permit2Input: Permit2AddLiquidityInput
-  nonces: NoncesByTokenAddress
+  nonces?: NoncesByTokenAddress
   wethIsEth: boolean
+  account: Address
+  slippagePercent: string
+  sdkQueryOutput?: AddLiquidityQueryOutput
 }
-export async function signPermit2Add(params: SignPermit2Params): Promise<Permit2 | undefined> {
+export async function signPermit2Add(params: SignPermit2AddParams): Promise<Permit2 | undefined> {
+  if (!params.nonces) throw new Error('Missing nonces in signPermitAdd')
   try {
     const signature = await sign(params)
     return signature
@@ -47,27 +44,32 @@ async function sign({
   pool,
   humanAmountsIn,
   wethIsEth,
-  permit2Input,
+  account,
+  sdkQueryOutput,
+  slippagePercent,
   nonces,
-}: SignPermit2Params): Promise<Permit2> {
+}: SignPermit2AddParams): Promise<Permit2> {
   if (!sdkClient) throw new Error('Missing sdkClient')
+  if (!nonces) throw new Error('Missing nonces')
+  if (!sdkQueryOutput) throw new Error('Missing sdkQueryOutput')
+
   const baseInput = constructBaseBuildCallInput({
     humanAmountsIn,
-    slippagePercent: permit2Input.slippagePercent,
-    sdkQueryOutput: permit2Input.sdkQueryOutput as AddLiquidityBaseQueryOutput,
+    slippagePercent: slippagePercent,
+    sdkQueryOutput,
     pool,
   })
 
   const filteredAmountsIn = filterWrappedNativeAsset({
     wethIsEth,
     chain: pool.chain,
-    amountsIn: baseInput.amountsIn,
+    amountsIn: sdkQueryOutput.amountsIn,
   })
 
   const signature = await Permit2Helper.signAddLiquidityApproval({
     ...baseInput,
     client: sdkClient,
-    owner: permit2Input.account,
+    owner: account,
     nonces: filteredAmountsIn.map(a => nonces[a.token.address]),
     amountsIn: maximizePositiveAmounts(filteredAmountsIn),
     // Permit2 allowance expires in 24H
@@ -90,4 +92,19 @@ function maximizePositiveAmounts(amountsIn: TokenAmount[]): TokenAmount[] {
         amount: item.amount > 0n ? MaxAllowance : item.amount,
       }) as TokenAmount
   )
+}
+
+function filterWrappedNativeAsset({
+  amountsIn,
+  wethIsEth,
+  chain,
+}: {
+  amountsIn: TokenAmount[]
+  wethIsEth: boolean
+  chain: GqlChain
+}): TokenAmount[] {
+  if (!wethIsEth) return amountsIn
+  return amountsIn.filter(a => {
+    return !isWrappedNativeAsset(a.token.address, chain)
+  })
 }

@@ -28,7 +28,7 @@ export class BoostedUnbalancedAddLiquidityV3Handler extends BaseUnbalancedAddLiq
       this.helpers.boostedPoolState
     )
 
-    return { bptOut: sdkQueryOutput.bptOut, sdkQueryOutput }
+    return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
   }
 
   public async buildCallData({

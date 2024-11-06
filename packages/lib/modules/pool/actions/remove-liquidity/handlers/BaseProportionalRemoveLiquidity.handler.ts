@@ -27,9 +27,10 @@ export abstract class BaseProportionalRemoveLiquidityHandler implements RemoveLi
 
   public async simulate({
     humanBptIn: bptIn,
+    userAddress,
   }: QueryRemoveLiquidityInput): Promise<SdkQueryRemoveLiquidityOutput> {
     const removeLiquidity = new RemoveLiquidity()
-    const removeLiquidityInput = this.constructSdkInput(bptIn)
+    const removeLiquidityInput = this.constructSdkInput(bptIn, userAddress)
 
     const sdkQueryOutput = await removeLiquidity.query(removeLiquidityInput, this.helpers.poolState)
 
@@ -46,7 +47,10 @@ export abstract class BaseProportionalRemoveLiquidityHandler implements RemoveLi
   /**
    * PRIVATE METHODS
    */
-  protected constructSdkInput(humanBptIn: HumanAmount): RemoveLiquidityProportionalInput {
+  protected constructSdkInput(
+    humanBptIn: HumanAmount,
+    userAddress: Address
+  ): RemoveLiquidityProportionalInput {
     const bptIn: InputAmount = {
       rawAmount: parseEther(humanBptIn),
       decimals: BPT_DECIMALS,
@@ -58,6 +62,7 @@ export abstract class BaseProportionalRemoveLiquidityHandler implements RemoveLi
       rpcUrl: getRpcUrl(this.helpers.chainId),
       bptIn,
       kind: RemoveLiquidityKind.Proportional,
+      sender: userAddress,
     }
   }
 }

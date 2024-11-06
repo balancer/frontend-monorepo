@@ -1,5 +1,5 @@
 import { Path, Slippage, Swap, SwapKind, TokenAmount } from '@balancer/sdk'
-import { getChainId } from '@repo/lib/config/app.config'
+import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
 import { SdkBuildSwapInputs, SdkSimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
@@ -8,6 +8,7 @@ import { formatUnits } from 'viem'
 import { getRpcUrl } from '../../web3/transports'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { ProtocolVersion } from '../../pool/pool.types'
+import { SdkSimulationResponseWithRouter } from '../queries/useSimulateSwapQuery'
 
 /**
  * Base abstract class that shares common logic shared by Default standard swaps and single pool swaps.
@@ -17,20 +18,29 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
   public abstract simulate({ ...variables }: SimulateSwapInputs): Promise<SdkSimulateSwapResponse>
 
   build({
-    simulateResponse: { swap, queryOutput },
+    simulateResponse: { swap, queryOutput, protocolVersion },
     slippagePercent,
     account,
     selectedChain,
     wethIsEth,
+    permit2,
   }: SdkBuildSwapInputs): TransactionConfig {
-    const tx = swap.buildCall({
+    const baseBuildCallParams = {
       slippage: Slippage.fromPercentage(slippagePercent as `${number}`),
       deadline: BigInt(Number.MAX_SAFE_INTEGER),
-      sender: account,
-      recipient: account,
       wethIsEth,
       queryOutput,
-    })
+    }
+    const isV3SwapRoute = protocolVersion === 3
+
+    const buildCallParams = isV3SwapRoute
+      ? baseBuildCallParams
+      : { ...baseBuildCallParams, sender: account, recipient: account }
+
+    const tx =
+      isV3SwapRoute && permit2
+        ? swap.buildCallWithPermit2(buildCallParams, permit2)
+        : swap.buildCall(buildCallParams)
 
     return {
       account,
@@ -54,7 +64,7 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
     swapInputs: SimulateSwapInputs
     paths: Path[]
     hopCount: number
-  }): Promise<SdkSimulateSwapResponse> {
+  }): Promise<SdkSimulationResponseWithRouter> {
     const { chain, swapType, swapAmount } = swapInputs
 
     // Get accurate return amount with onchain call
@@ -77,6 +87,8 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
     // Format return amount to human readable
     const returnAmount = formatUnits(onchainReturnAmount.amount, onchainReturnAmount.token.decimals)
 
+    const networkConfig = getNetworkConfig(chain)
+
     return {
       protocolVersion,
       hopCount,
@@ -86,6 +98,9 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
       queryOutput,
       effectivePrice: bn(swapAmount).div(returnAmount).toString(),
       effectivePriceReversed: bn(returnAmount).div(swapAmount).toString(),
+      router: swap.isBatchSwap
+        ? networkConfig.contracts.balancer.batchRouter
+        : networkConfig.contracts.balancer.router,
     }
   }
 
