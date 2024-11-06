@@ -1,5 +1,12 @@
 import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
-import { isMetaStable, isStable, isWeighted, isGyro, isBoosted } from '../../../pool.helpers'
+import {
+  isMetaStable,
+  isStable,
+  isWeighted,
+  isGyro,
+  isBoosted,
+  hasNestedPools,
+} from '../../../pool.helpers'
 import { zeroAddress } from 'viem'
 
 export enum RiskKey {
@@ -33,6 +40,7 @@ export enum RiskKey {
   Composability = 'composability-risk',
   RateProvider = 'rate-provider-risk',
   RateProviderBridge = 'rate-provider-bridges',
+  NestedPool = 'nested-pools',
 }
 
 export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
@@ -54,6 +62,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.Composability]: 'Composability risks',
   [RiskKey.RateProvider]: 'Rate provider risks',
   [RiskKey.RateProviderBridge]: 'Rate provider cross-chain bridge risks: Layer Zero',
+  [RiskKey.NestedPool]: 'Nested pool risks',
 }
 
 export type Risk = {
@@ -87,6 +96,7 @@ const gnosisRisks = getLink(RiskKey.Gnosis)
 const baseRisks = getLink(RiskKey.Base)
 const avalancheRisks = getLink(RiskKey.Avalanche)
 const mutableRisks = getLink(RiskKey.Mutable)
+const nestedPoolRisks = getLink(RiskKey.NestedPool)
 
 export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   const result: Risk[] = []
@@ -104,6 +114,7 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   if (pool.chain === GqlChain.Gnosis) result.push(gnosisRisks)
   if (pool.chain === GqlChain.Base) result.push(baseRisks)
   if (pool.chain === GqlChain.Avalanche) result.push(avalancheRisks)
+  if (hasNestedPools(pool)) result.push(nestedPoolRisks)
 
   if (hasOwner(pool)) result.push(mutableRisks)
 
