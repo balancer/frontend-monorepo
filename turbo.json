@@ -33,8 +33,7 @@
     },
     "lint:fix": {
       "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"],
-      "cache": false
+      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"]
     },
     "typecheck": {
       "dependsOn": ["^graphql:gen", "^transit"],

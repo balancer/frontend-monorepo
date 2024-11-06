@@ -38,7 +38,7 @@ export function useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enable
 
   const queryKey = addLiquidityKeys.preview(params)
 
-  const queryFn = async () => handler.simulate(debouncedHumanAmountsIn)
+  const queryFn = async () => handler.simulate(debouncedHumanAmountsIn, userAddress)
 
   return useQuery({
     queryKey,

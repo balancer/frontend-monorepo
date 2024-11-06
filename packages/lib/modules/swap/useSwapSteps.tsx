@@ -1,18 +1,24 @@
+import { getChainId } from '@repo/lib/config/app.config'
 import { useMemo } from 'react'
 import { Address, parseUnits } from 'viem'
+import { useShouldSignRelayerApproval } from '../relayer/signRelayerApproval.hooks'
+import { useApproveRelayerStep } from '../relayer/useApproveRelayerStep'
+import { useRelayerMode } from '../relayer/useRelayerMode'
 import { ApprovalAction } from '../tokens/approvals/approval-labels'
 import { RawAmount } from '../tokens/approvals/approval-rules'
 import { useTokenApprovalSteps } from '../tokens/approvals/useTokenApprovalSteps'
-import { OSwapAction } from './swap.types'
-import { SwapStepParams, useSwapStep } from './useSwapStep'
-import { useRelayerMode } from '../relayer/useRelayerMode'
-import { useShouldSignRelayerApproval } from '../relayer/signRelayerApproval.hooks'
-import { getChainId } from '@repo/lib/config/app.config'
-import { useApproveRelayerStep } from '../relayer/useApproveRelayerStep'
 import { useSignRelayerStep } from '../transactions/transaction-steps/useSignRelayerStep'
+import { orderRouteVersion } from './swap.helpers'
+import { OSwapAction } from './swap.types'
+import { useSignPermit2SwapStep } from './usePermit2SwapStep'
+import { SwapStepParams, useSwapStep } from './useSwapStep'
+import { permit2Address } from '../tokens/approvals/permit2/permit2.helpers'
 
 type Params = SwapStepParams & {
   vaultAddress: Address
+  // TODO: remove this field once we refactor to use:
+  // https://github.com/balancer/b-sdk/issues/462
+  isPoolSwap: boolean
 }
 
 export function useSwapSteps({
@@ -25,7 +31,10 @@ export function useSwapSteps({
   tokenInInfo,
   tokenOutInfo,
 }: Params) {
-  const chainId = getChainId(swapState.selectedChain)
+  const chain = swapState.selectedChain
+  const chainId = getChainId(chain)
+
+  const isPermit2 = orderRouteVersion(simulationQuery) === 3
 
   const relayerMode = useRelayerMode()
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
@@ -51,11 +60,20 @@ export function useSwapSteps({
 
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
-      spenderAddress: vaultAddress,
-      chain: swapState.selectedChain,
+      spenderAddress: isPermit2 ? permit2Address(chain) : vaultAddress,
+      chain,
       approvalAmounts: tokenInAmounts,
       actionType: approvalActionType,
+      isPermit2,
     })
+
+  const signPermit2Step = useSignPermit2SwapStep({
+    chainId,
+    wethIsEth,
+    tokenInInfo,
+    simulationQuery,
+    isPermit2,
+  })
 
   const swapStep = useSwapStep({
     handler,
@@ -67,19 +85,25 @@ export function useSwapSteps({
     tokenOutInfo,
   })
 
+  const isSignPermit2Loading = isPermit2 && !signPermit2Step
+
   const steps = useMemo(() => {
+    const swapSteps = isPermit2 && signPermit2Step ? [signPermit2Step, swapStep] : [swapStep]
+
     if (swapRequiresRelayer) {
       if (relayerMode === 'approveRelayer') {
-        return [approveRelayerStep, ...tokenApprovalSteps, swapStep]
+        return [approveRelayerStep, ...tokenApprovalSteps, ...swapSteps]
       } else if (shouldSignRelayerApproval) {
-        return [signRelayerStep, ...tokenApprovalSteps, swapStep]
+        return [signRelayerStep, ...tokenApprovalSteps, ...swapSteps]
       }
     }
-    return [...tokenApprovalSteps, swapStep]
+    return [...tokenApprovalSteps, ...swapSteps]
   }, [
     swapRequiresRelayer,
     tokenApprovalSteps,
+    isPermit2,
     swapStep,
+    signPermit2Step,
     relayerMode,
     shouldSignRelayerApproval,
     approveRelayerStep,
@@ -87,7 +111,7 @@ export function useSwapSteps({
   ])
 
   return {
-    isLoadingSteps: isLoadingTokenApprovalSteps || isLoadingRelayerApproval,
+    isLoadingSteps: isLoadingTokenApprovalSteps || isLoadingRelayerApproval || isSignPermit2Loading,
     steps,
   }
 }

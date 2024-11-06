@@ -33,12 +33,7 @@ import {
 import { PoolListSearch } from './PoolListSearch'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
-import {
-  PoolFilterType,
-  poolTypeFilters,
-  PoolCategoryType,
-  poolCategoryFilters,
-} from '../pool.types'
+import { PoolFilterType, poolTagFilters, PoolTagType, poolTypeFilters } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useEffect, useState } from 'react'
 import { Filter, Plus } from 'react-feather'
@@ -64,15 +59,13 @@ const SLIDER_STEP_SIZE = 100000
 
 export function useFilterTagsVisible() {
   const {
-    queryState: { networks, poolTypes, minTvl, poolCategories },
+    queryState: { networks, poolTypes, minTvl, poolTags },
   } = usePoolList()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    setIsVisible(
-      networks.length > 0 || poolTypes.length > 0 || minTvl > 0 || poolCategories.length > 0
-    )
-  }, [networks, poolTypes, minTvl, poolCategories])
+    setIsVisible(networks.length > 0 || poolTypes.length > 0 || minTvl > 0 || poolTags.length > 0)
+  }, [networks, poolTypes, minTvl, poolTags])
 
   return isVisible
 }
@@ -106,25 +99,25 @@ function UserPoolFilter() {
 
 function PoolCategoryFilters() {
   const {
-    queryState: { togglePoolCategory, poolCategories, setPoolCategories, poolCategoryLabel },
+    queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel },
   } = usePoolList()
 
   // remove query param when empty
   useEffect(() => {
-    if (!poolCategories.length) {
-      setPoolCategories(null)
+    if (!poolTags.length) {
+      setPoolTags(null)
     }
-  }, [poolCategories])
+  }, [poolTags])
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {poolCategoryFilters.map(category => (
-        <Box as={motion.div} key={category} variants={staggeredFadeInUp}>
+      {poolTagFilters.map(tag => (
+        <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
           <Checkbox
-            isChecked={!!poolCategories.find(selected => selected === category)}
-            onChange={e => togglePoolCategory(e.target.checked, category as PoolCategoryType)}
+            isChecked={!!poolTags.find(selected => selected === tag)}
+            onChange={e => togglePoolTag(e.target.checked, tag as PoolTagType)}
           >
-            <Text fontSize="sm">{poolCategoryLabel(category)}</Text>
+            <Text fontSize="sm">{poolTagLabel(tag)}</Text>
           </Checkbox>
         </Box>
       ))}
@@ -256,19 +249,14 @@ export function FilterTags() {
       poolTypeLabel,
       minTvl,
       setMinTvl,
-      poolCategories,
-      togglePoolCategory,
-      poolCategoryLabel,
+      poolTags,
+      togglePoolTag,
+      poolTagLabel,
     },
   } = usePoolList()
   const { toCurrency } = useCurrency()
 
-  if (
-    networks.length === 0 &&
-    poolTypes.length === 0 &&
-    minTvl === 0 &&
-    poolCategories.length === 0
-  ) {
+  if (networks.length === 0 && poolTypes.length === 0 && minTvl === 0 && poolTags.length === 0) {
     return null
   }
 
@@ -344,12 +332,12 @@ export function FilterTags() {
         </AnimatePresence>
       )}
       <AnimatePresence>
-        {poolCategories.map(poolCategory => (
+        {poolTags.map(tag => (
           <motion.div
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 0 }}
             initial={{ opacity: 0, y: 40 }}
-            key={poolCategory}
+            key={tag}
             transition={{
               enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
               exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
@@ -358,10 +346,10 @@ export function FilterTags() {
             <Tag size="lg">
               <TagLabel>
                 <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
-                  {poolCategoryLabel(poolCategory)}
+                  {poolTagLabel(tag)}
                 </Text>
               </TagLabel>
-              <TagCloseButton onClick={() => togglePoolCategory(false, poolCategory)} />
+              <TagCloseButton onClick={() => togglePoolTag(false, tag)} />
             </Tag>
           </motion.div>
         ))}

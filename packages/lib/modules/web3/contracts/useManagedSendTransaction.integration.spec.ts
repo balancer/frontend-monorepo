@@ -44,7 +44,7 @@ describe('weighted add flow', () => {
       tokenAddress: t.address,
     }))
 
-    const queryOutput = await handler.simulate(humanAmountsIn)
+    const queryOutput = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     const txConfig = await handler.buildCallData({
       humanAmountsIn,

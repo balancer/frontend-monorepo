@@ -33,7 +33,7 @@ describe('When adding proportional liquidity for a CoW AMM pool', async () => {
       { humanAmount: '1', tokenAddress: wETHAddress },
     ]
 
-    const result = await handler.simulate(humanAmountsIn)
+    const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     expect(result.bptOut.amount).toBeGreaterThan(0n)
     const usdcAmountIn = result.sdkQueryOutput.amountsIn[0]
@@ -54,7 +54,7 @@ describe('When adding proportional liquidity for a CoW AMM pool', async () => {
     const handler = selectProportionalHandler(cowAmmPool)
 
     // Store query response in handler instance
-    const queryOutput = await handler.simulate(humanAmountsIn)
+    const queryOutput = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     const result = await handler.buildCallData({
       humanAmountsIn,
@@ -88,7 +88,7 @@ describe('When adding proportional liquidity for a gyro pool', () => {
       { humanAmount: '1', tokenAddress: polygonUsdcAddress },
     ]
 
-    const result = await handler.simulate(humanAmountsIn)
+    const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     expect(result.bptOut.amount).toBeGreaterThan(0n)
     const usdcAmountIn = result.sdkQueryOutput.amountsIn[0]
@@ -108,7 +108,7 @@ describe('When adding proportional liquidity for a gyro pool', () => {
     const handler = selectProportionalHandler(gyroPoolMock)
 
     // Store query response in handler instance
-    const queryOutput = await handler.simulate(humanAmountsIn)
+    const queryOutput = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     const result = await handler.buildCallData({
       humanAmountsIn,

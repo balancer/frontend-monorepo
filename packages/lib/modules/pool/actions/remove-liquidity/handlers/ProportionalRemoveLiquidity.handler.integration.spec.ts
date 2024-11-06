@@ -26,6 +26,7 @@ function selectProportionalHandler(pool: Pool): ProportionalRemoveLiquidityHandl
 const defaultQueryInput: QueryRemoveLiquidityInput = {
   humanBptIn: '1',
   tokenOut: emptyAddress, // We don't use in this scenario it but it is required to simplify TS interfaces
+  userAddress: defaultTestUserAccount,
 }
 
 const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0.2' }
@@ -95,6 +96,7 @@ describe.skip('When proportionally removing liquidity for a weighted v3 pool', a
   const defaultQueryInput: QueryRemoveLiquidityInput = {
     humanBptIn: '0.01',
     tokenOut: emptyAddress, // We don't use in this scenario it but it is required to simplify TS interfaces
+    userAddress: defaultTestUserAccount,
   }
 
   test('returns ZERO price impact', async () => {

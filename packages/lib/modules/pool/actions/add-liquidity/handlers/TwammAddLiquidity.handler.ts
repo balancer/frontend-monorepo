@@ -24,7 +24,7 @@ export class TwammAddLiquidityHandler implements AddLiquidityHandler {
       humanAmountsIn[0]?.humanAmount || '0'
     )
     const bptOut: TokenAmount = tokenAmount
-    return { bptOut }
+    return { bptOut, to: emptyAddress }
   }
 
   // TODO: This is a non-sense example implementation

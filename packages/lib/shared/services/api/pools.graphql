@@ -20,6 +20,8 @@ query GetPools(
     decimals
     protocolVersion
     tags
+    hasErc4626
+    hasNestedErc4626
     displayTokens {
       id
       address
