@@ -77,30 +77,30 @@ function useV3PoolOnchainData(pool: Pool) {
     ],
   })
 
+  const nestedPoolTokens = pool.poolTokens.filter(token => token.hasNestedPool)
+
   const v3QueryNestedPools = useReadContracts({
     query: {
       enabled: isV3Pool(pool) && pool.poolTokens.some(token => token.hasNestedPool),
     },
     allowFailure: false,
     contracts: [
-      ...pool.poolTokens
-        .filter(token => token.hasNestedPool)
-        .map(token => ({
-          chainId,
-          abi: vaultExtensionAbi_V3,
-          address: vaultAddress,
-          functionName: 'getPoolTokenInfo',
-          args: [token.address as Address],
-        })),
-      ...pool.poolTokens
-        .filter(token => token.hasNestedPool)
-        .map(token => ({
-          chainId,
-          abi: weightedPoolAbi_V3,
-          address: token.address as Address,
-          functionName: 'totalSupply',
-          args: [],
-        })),
+      // first half of nestedPoolData will be token balances
+      ...nestedPoolTokens.map(token => ({
+        chainId,
+        abi: vaultExtensionAbi_V3,
+        address: vaultAddress,
+        functionName: 'getPoolTokenInfo',
+        args: [token.address as Address],
+      })),
+      // second half of nestedPoolData will be totalSupply
+      ...nestedPoolTokens.map(token => ({
+        chainId,
+        abi: weightedPoolAbi_V3,
+        address: token.address as Address,
+        functionName: 'totalSupply',
+        args: [],
+      })),
     ],
   })
 
@@ -234,8 +234,8 @@ function enrichPool({
 
   if (nestedPoolData) {
     const nestedPoolTokens = clone.poolTokens.filter(poolToken => poolToken.hasNestedPool)
-    const nestedPoolBalancesIndex = 0
-    const totalSupplyIndex = 1
+    const nestedPoolBalancesIndex = 0 // first half of nestedPoolData is token balances
+    const totalSupplyIndex = nestedPoolData.length / 2 // second half of nestedPoolData is totalSupply
 
     nestedPoolTokens.forEach((poolToken, poolTokenIndex) => {
       if (!poolToken.nestedPool) return
