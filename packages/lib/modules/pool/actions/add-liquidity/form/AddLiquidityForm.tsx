@@ -190,8 +190,8 @@ function AddLiquidityMainForm() {
           )}
           <SafeAppAlert />
           {/* //TODO:
-          Error: Reference amount must be relative to a token in the pool or its BPT
-          Avoid proportional inputs to avoid error above until SDK calculateProportionalAmounts for boosted is implemented
+            Avoid proportional inputs to avoid error above until SDK calculateProportionalAmounts for boosted is implemented
+            https://github.com/balancer/b-sdk/issues/468
           */}
           {!nestedAddLiquidityEnabled && !isBoosted(pool) ? (
             <TokenInputsWithAddable

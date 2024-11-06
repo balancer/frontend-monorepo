@@ -10,7 +10,7 @@ import {
   wETHAddress,
 } from '@repo/lib/debug-helpers'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolMock } from '../__mocks__/getPoolMock'
 import { allPoolTokens } from '../pool.helpers'
 import { LiquidityActionHelpers } from './LiquidityActionHelpers'
@@ -98,12 +98,13 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
 })
 
 // Unskip when sepolia V3 pools are available in production api
-describe('Liquidity helpers for V3 Boosted pools', async () => {
+describe.skip('Liquidity helpers for V3 Boosted pools', async () => {
   const poolId = '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8' // Sepolia stataEthUSDC stataEthUSDT
 
   const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
   const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0'
-  const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
+  // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
+  const v3Pool = {} as GqlPoolElement
   const helpers = new LiquidityActionHelpers(v3Pool)
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
@@ -212,12 +213,14 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
 })
 
 // Unskip when sepolia V3 pools are available in production api
-describe('Liquidity helpers for V3 NESTED pool', async () => {
+describe.skip('Liquidity helpers for V3 NESTED pool', async () => {
   const poolId = '0x0270daf4ee12ccb1abc8aa365054eecb1b7f4f6b' // Sepolia Balancer 50 WETH 50 USD
 
   const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
   const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0'
-  const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
+  // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
+  const v3Pool = {} as GqlPoolElement
+
   const helpers = new LiquidityActionHelpers(v3Pool)
   const wethAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9'
 
