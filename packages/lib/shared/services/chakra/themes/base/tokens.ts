@@ -54,6 +54,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           maxContrast: '#000',
           highlight: colors.green['600'],
           warning: colors.orange['500'],
+          error: colors.red['600'],
         },
         // Input colors
         input: {
@@ -143,6 +144,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           maxContrast: '#fff',
           highlight: colors.green['500'],
           warning: colors.orange['300'],
+          error: colors.red['400'],
         },
         input: {
           labelFocus: colors.purple['400'],

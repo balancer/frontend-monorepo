@@ -804,6 +804,26 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           boxShadow: 'md',
         },
       },
+      variants: {
+        lock: {
+          filledTrack: {
+            height: '5px',
+          },
+          thumb: {
+            height: '16px',
+            width: '16px',
+          },
+          track: {
+            _dark: {
+              bg: '#282D34', // fix: what token?
+            },
+            _light: {
+              bg: '#D7D2CB', // inversion of #282D34
+            },
+            height: '5px',
+          },
+        },
+      },
     },
     Switch: {
       baseStyle: {
