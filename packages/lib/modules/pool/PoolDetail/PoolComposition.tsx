@@ -40,8 +40,6 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
   const { calcWeightForBalance } = useTokens()
   const { pool } = usePool()
 
-  console.log({ pool })
-
   return (
     <VStack spacing="md" width="full">
       <HStack justifyContent="space-between" width="full">

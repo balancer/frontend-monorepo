@@ -207,8 +207,6 @@ function enrichPool({
 }: Params) {
   if (isLoading || !poolTokenBalances) return pool
 
-  console.log({ nestedPoolData })
-
   const clone = cloneDeep(pool)
 
   const filteredTokens = clone.poolTokens.filter(token =>
@@ -271,8 +269,6 @@ function enrichPool({
       })
     })
   }
-
-  console.log({ clone })
 
   return clone
 }
