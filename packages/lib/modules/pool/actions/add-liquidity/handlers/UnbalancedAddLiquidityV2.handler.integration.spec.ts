@@ -45,7 +45,7 @@ describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
 
     const handler = selectUnbalancedHandler()
 
-    const result = await handler.simulate(humanAmountsIn)
+    const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     expect(result.bptOut.amount).toBeGreaterThan(300000000000000000000n)
   })
@@ -59,7 +59,7 @@ describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
     const handler = selectUnbalancedHandler()
 
     // Store query response in handler instance
-    const queryOutput = await handler.simulate(humanAmountsIn)
+    const queryOutput = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     const result = await handler.buildCallData({
       humanAmountsIn,

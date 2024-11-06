@@ -13,6 +13,7 @@ import { Pool } from '../../../PoolProvider'
 import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
 import { NestedBuildAddLiquidityInput, NestedQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
+import { Address } from 'viem'
 
 /**
  * NestedAddLiquidityHandler is a handler that implements the
@@ -39,15 +40,16 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
   }
 
   public async simulate(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
+    userAddress: Address
   ): Promise<NestedQueryAddLiquidityOutput> {
     const addLiquidity = new AddLiquidityNested()
 
-    const addLiquidityInput = this.constructSdkInput(humanAmountsIn)
+    const addLiquidityInput = this.constructSdkInput(humanAmountsIn, userAddress)
 
     const sdkQueryOutput = await addLiquidity.query(addLiquidityInput, this.helpers.nestedPoolState)
 
-    return { bptOut: sdkQueryOutput.bptOut, sdkQueryOutput }
+    return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
   }
 
   public async buildCallData({
@@ -80,7 +82,8 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
    * PRIVATE METHODS
    */
   private constructSdkInput(
-    humanAmountsIn: HumanTokenAmountWithAddress[]
+    humanAmountsIn: HumanTokenAmountWithAddress[],
+    userAddress?: Address
   ): AddLiquidityNestedInput {
     const amountsIn = this.helpers.toSdkInputAmounts(humanAmountsIn)
 
@@ -90,6 +93,7 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
       chainId: this.helpers.chainId as ChainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
       amountsIn: nonEmptyAmountsIn,
+      sender: userAddress,
     }
   }
 }

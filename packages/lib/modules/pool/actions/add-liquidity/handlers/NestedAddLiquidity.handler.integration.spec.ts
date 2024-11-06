@@ -36,7 +36,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
       { humanAmount: '1', tokenAddress: daiAddress },
     ]
 
-    const result = await handler.simulate(humanAmountsIn)
+    const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     expect(result.bptOut.amount).toBeGreaterThan(15000000000000000n)
   })
@@ -51,7 +51,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
       { humanAmount: '1', tokenAddress: usdtAddress },
     ]
 
-    const result = await handler.simulate(humanAmountsIn)
+    const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     expect(result.bptOut.amount).toBeGreaterThan(40000000000000000n)
   })
@@ -64,7 +64,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
     const handler = selectNestedHandler(nestedPool)
 
     // Store query response in handler instance
-    const queryOutput = await handler.simulate(humanAmountsIn)
+    const queryOutput = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     const result = await handler.buildCallData({
       humanAmountsIn,

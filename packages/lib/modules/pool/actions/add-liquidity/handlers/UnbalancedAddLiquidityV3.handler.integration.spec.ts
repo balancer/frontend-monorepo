@@ -27,14 +27,14 @@ describe.skip('When adding unbalanced liquidity for a V3 pool', async () => {
   })
 
   it('queries bptOut', async () => {
-    const result = await handler.simulate(humanAmountsIn)
+    const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     expect(result.bptOut.amount).toBeGreaterThan(100000000000000n)
   })
 
   it('builds Tx Config', async () => {
     // Store query response in handler instance
-    const queryOutput = await handler.simulate(humanAmountsIn)
+    const queryOutput = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
 
     const result = await handler.buildCallData({
       humanAmountsIn,

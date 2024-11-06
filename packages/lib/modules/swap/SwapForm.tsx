@@ -199,7 +199,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
           </CardHeader>
           <CardBody align="start" as={VStack}>
             <VStack spacing="md" w="full">
-              {isPoolSwap ? <PoolSwapCard /> : null}
+              {isPoolSwap && <PoolSwapCard />}
               <SafeAppAlert />
               {!isPoolSwap && (
                 <ChainSelect
