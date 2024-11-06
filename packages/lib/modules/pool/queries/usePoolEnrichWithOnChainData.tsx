@@ -194,7 +194,7 @@ type Params = {
   priceForAddress: (address: string, chain: GqlChain) => number
   poolTokenBalances: readonly bigint[] | undefined
   totalSupply: bigint | undefined
-  nestedPoolData: any
+  nestedPoolData: any // TODO: how to type this?
 }
 
 function enrichPool({
