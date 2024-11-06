@@ -11,6 +11,7 @@ import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
 import React, { useState } from 'react'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteCapTooltip } from '@repo/lib/modules/vebal/vote/VoteCapTooltip'
+import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -98,12 +99,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             {gaugeVotesIsLoading ? (
               <Skeleton h="20px" w="60px" />
             ) : (
-              <HStack spacing="xs">
-                {vote.gauge.relativeWeightCap && vote.gauge.relativeWeightCap !== '1' ? (
-                  <VoteCapTooltip vote={vote} />
-                ) : undefined}
-                <VoteRateTooltip vote={vote} />
-              </HStack>
+              <VoteListVotesCell vote={vote} />
             )}
           </GridItem>
           <GridItem justifySelf="end">

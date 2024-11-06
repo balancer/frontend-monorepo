@@ -7,23 +7,32 @@ import {
   PopoverContent,
   VStack,
 } from '@chakra-ui/react'
-import { VoteListItem } from '@repo/lib/modules/vebal/vote/vote.types'
 import { VoteCapIcon } from '@repo/lib/shared/components/icons/VoteCapIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
+import { VotesState } from '@repo/lib/modules/vebal/vote/vote.types'
 
 interface Props {
-  vote: VoteListItem
+  relativeWeightCap: number
+  votesState?: VotesState
   usePortal?: boolean
 }
 
-export function VoteCapTooltip({ vote, usePortal = true }: Props) {
-  const relativeWeightCap = vote.gauge.relativeWeightCap ? Number(vote.gauge.relativeWeightCap) : 0
+export function VoteCapTooltip({ relativeWeightCap, votesState, usePortal = true }: Props) {
+  const votesColor =
+    votesState === 'normal' ? undefined : votesState === 'close' ? 'font.warning' : 'red.400'
+
+  const voteCapText =
+    votesState === 'normal'
+      ? 'vote cap'
+      : votesState === 'close'
+        ? 'vote cap is close'
+        : 'vote cap exceeded'
 
   const popoverContent = (
     <PopoverContent bg="background.level3" minWidth={['100px', '170px']} p="sm" shadow="3xl">
       <VStack alignItems="start" spacing="sm" width="full">
-        <Text color="font.secondary" fontWeight={700} fontSize="sm">
-          {fNum('apr', relativeWeightCap)} vote cap
+        <Text color={votesColor ?? 'font.secondary'} fontSize="sm" fontWeight={700}>
+          {fNum('apr', relativeWeightCap)} {voteCapText}
         </Text>
         <Text color="font.secondary" fontSize="sm">
           Governance by veBAL holders have set a cap on this gauge. Any votes that push the vote
@@ -36,8 +45,8 @@ export function VoteCapTooltip({ vote, usePortal = true }: Props) {
     <Popover trigger="hover">
       <>
         <PopoverTrigger>
-          <HStack color="font.secondary">
-            <VoteCapIcon width="16px" height="16px" />
+          <HStack color={votesColor ?? 'font.secondary'}>
+            <VoteCapIcon height="16px" width="16px" />
           </HStack>
         </PopoverTrigger>
 

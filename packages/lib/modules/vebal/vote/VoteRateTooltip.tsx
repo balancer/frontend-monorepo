@@ -12,10 +12,10 @@ import {
   VStack,
   StackProps,
 } from '@chakra-ui/react'
-import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
-import React, { useMemo } from 'react'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { useMemo, ReactNode } from 'react'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 import tinycolor from 'tinycolor2'
+import { VotesState } from '@repo/lib/modules/vebal/vote/vote.types'
 
 function VoteUpIcon() {
   const [color, _bgColor] = useToken('colors', ['green.500', 'green.600'])
@@ -43,7 +43,7 @@ function VoteDownIcon() {
 
 interface TooltipItemProps extends StackProps {
   label: string
-  value: React.ReactNode
+  value: ReactNode
   valueColor?: string
 }
 
@@ -60,28 +60,26 @@ function TooltipItem({ label, value, valueColor, ...props }: TooltipItemProps) {
   )
 }
 
-function formatVotesAsPercent(votes: string): string {
-  const normalizedVotes = bn(votes).shiftedBy(-18).abs()
+function formatVotesAsPercent(votes: number): string {
+  const normalizedVotes = Math.abs(votes)
   return fNum('apr', normalizedVotes)
 }
 
 interface Props {
-  vote: VotingPoolWithData
+  votes?: number
+  votesNextPeriod?: number
+  votesState?: VotesState
   usePortal?: boolean
 }
 
-export function VoteRateTooltip({ vote, usePortal = true }: Props) {
-  const votesThisPeriod = vote.gaugeVotes ? formatVotesAsPercent(vote.gaugeVotes.votes) : undefined
-  const votesNextPeriod = vote.gaugeVotes
-    ? formatVotesAsPercent(vote.gaugeVotes.votesNextPeriod)
-    : undefined
+export function VoteRateTooltip({ votes, votesState, votesNextPeriod, usePortal = true }: Props) {
+  const votesThisPeriodText = votes ? formatVotesAsPercent(votes) : undefined
+  const votesNextPeriodText = votesNextPeriod ? formatVotesAsPercent(votesNextPeriod) : undefined
 
-  const voteDifference = vote.gaugeVotes
-    ? bn(vote.gaugeVotes.votesNextPeriod).minus(vote.gaugeVotes.votes).toNumber()
-    : undefined
+  const voteDifference = votes && votesNextPeriod ? votesNextPeriod - votes : undefined
 
   const voteDifferenceText = useMemo(() => {
-    const text = formatVotesAsPercent(voteDifference ? voteDifference.toString() : '0')
+    const text = formatVotesAsPercent(voteDifference ? voteDifference : 0)
     const prefix = !voteDifference ? '' : voteDifference > 0 ? '+' : '-'
     return `${prefix}${text}`
   }, [voteDifference])
@@ -106,6 +104,9 @@ export function VoteRateTooltip({ vote, usePortal = true }: Props) {
     }
   }, [])
 
+  const votesColor =
+    votesState === 'normal' ? undefined : votesState === 'close' ? 'font.warning' : 'red.400'
+
   const popoverContent = (
     <PopoverContent bg="background.base" minWidth={['100px', '300px']} p="sm" shadow="3xl">
       <VStack alignItems="stretch" spacing="sm" width="full">
@@ -120,9 +121,12 @@ export function VoteRateTooltip({ vote, usePortal = true }: Props) {
         <TooltipItem
           label="Current period share of votes"
           mt="sm"
-          value={votesThisPeriod ?? <>&mdash;</>}
+          value={votesThisPeriodText ?? <>&mdash;</>}
         />
-        <TooltipItem label="Next period share of votes" value={votesNextPeriod ?? <>&mdash;</>} />
+        <TooltipItem
+          label="Next period share of votes"
+          value={votesNextPeriodText ?? <>&mdash;</>}
+        />
         <TooltipItem
           label="Change"
           mt="sm"
@@ -132,18 +136,20 @@ export function VoteRateTooltip({ vote, usePortal = true }: Props) {
       </VStack>
     </PopoverContent>
   )
+
   return (
     <Popover trigger="hover">
       <>
         <PopoverTrigger>
           <HStack>
             <Text
+              color={votesColor}
               fontWeight="medium"
               textAlign="right"
               textDecoration="underline"
               textDecorationStyle="dotted"
             >
-              {votesNextPeriod ?? <>&mdash;</>}
+              {votesNextPeriodText ?? <>&mdash;</>}
             </Text>
             {differenceIcon}
           </HStack>
