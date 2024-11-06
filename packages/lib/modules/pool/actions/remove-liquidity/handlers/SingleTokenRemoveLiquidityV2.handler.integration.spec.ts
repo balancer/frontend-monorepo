@@ -17,6 +17,7 @@ function selectSingleTokenHandler(pool: Pool): SingleTokenRemoveLiquidityV2Handl
 const defaultQueryInput: QueryRemoveLiquidityInput = {
   humanBptIn: '1',
   tokenOut: balAddress,
+  userAddress: defaultTestUserAccount,
 }
 
 const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0.2' }
@@ -44,6 +45,7 @@ describe('When removing unbalanced liquidity for a weighted V2 pool', () => {
     const inputs: QueryRemoveLiquidityInput = {
       humanBptIn: '1',
       tokenOut: balAddress,
+      userAddress: defaultTestUserAccount,
     }
 
     const queryOutput = await handler.simulate(inputs)

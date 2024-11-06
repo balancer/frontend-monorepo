@@ -157,7 +157,10 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const tokenInInfo = getToken(swapState.tokenIn.address, selectedChain)
   const tokenOutInfo = getToken(swapState.tokenOut.address, selectedChain)
 
-  if ((isTokenInSet && !tokenInInfo) || (isTokenOutSet && !tokenOutInfo && !isPoolSwap)) {
+  if (
+    (isTokenInSet && !tokenInInfo && !isPoolSwap) ||
+    (isTokenOutSet && !tokenOutInfo && !isPoolSwap)
+  ) {
     try {
       setDefaultTokens()
     } catch (error) {
@@ -433,6 +436,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     swapAction,
     tokenInInfo,
     tokenOutInfo,
+    isPoolSwap: !!isPoolSwap,
   })
 
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
@@ -446,8 +450,9 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     const { popularTokens } = networkConfig.tokens
     const symbolToAddressMap = invert(popularTokens || {}) as Record<string, Address>
     if (slugTokenIn) {
-      if (isAddress(slugTokenIn)) setTokenIn(slugTokenIn as Address)
-      else if (symbolToAddressMap[slugTokenIn] && isAddress(symbolToAddressMap[slugTokenIn])) {
+      if (isAddress(slugTokenIn)) {
+        setTokenIn(slugTokenIn as Address)
+      } else if (symbolToAddressMap[slugTokenIn] && isAddress(symbolToAddressMap[slugTokenIn])) {
         setTokenIn(symbolToAddressMap[slugTokenIn])
       }
     }
@@ -483,11 +488,11 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   // Sets initial swap state for pool swap edge-case
   function setInitialPoolSwapState(pool: Pool) {
-    setInitialChain(pool.chain)
     const { tokenIn } = pathParams
-    setInitialTokenIn(tokenIn)
+    setInitialChain(pool.chain)
 
     if (supportsNestedActions(pool)) {
+      setInitialTokenIn(tokenIn)
       if (isStandardRootToken(pool, tokenIn as Address)) {
         setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
       } else {
@@ -495,6 +500,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       }
     } else {
       // Does not support nested actions:
+      setInitialTokenIn(poolActionableTokens?.[0]?.address)
       setInitialTokenOut(poolActionableTokens?.[1]?.address)
     }
     resetSwapAmounts()
@@ -593,6 +599,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   return {
     ...swapState,
+    selectedChain,
     transactionSteps,
     tokens,
     tokenInInfo,

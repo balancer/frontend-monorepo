@@ -11,6 +11,7 @@ import BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useTheme as useNextTheme } from 'next-themes'
+import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 type ChartValueAcc = [string, number][]
 

@@ -10,6 +10,7 @@ import { getGqlChain } from '@repo/lib/config/app.config'
 import { TransactionTimeoutError } from '@repo/lib/shared/components/errors/TransactionTimeoutError'
 import { useState } from 'react'
 import { ensureError } from '@repo/lib/shared/utils/errors'
+import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 
 interface Props {
   step: { labels: TransactionLabels } & ManagedResult
@@ -88,7 +89,7 @@ export function TransactionStepButton({ step }: Props) {
           w="full"
           width="full"
         >
-          {getButtonLabel()}
+          <LabelWithIcon icon="gas">{getButtonLabel()}</LabelWithIcon>
         </Button>
       )}
     </VStack>

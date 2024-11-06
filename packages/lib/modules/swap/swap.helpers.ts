@@ -1,5 +1,5 @@
 import { Address } from 'viem'
-import { OSwapAction, SwapAction } from './swap.types'
+import { OSwapAction, SdkSimulateSwapResponse, SwapAction } from './swap.types'
 import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   getNativeAssetAddress,
@@ -8,6 +8,7 @@ import {
 } from '@repo/lib/config/app.config'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isMainnet } from '../chains/chain.utils'
+import { SwapSimulationQueryResult } from './queries/useSimulateSwapQuery'
 
 export function swapActionPastTense(action: SwapAction): string {
   switch (action) {
@@ -65,4 +66,14 @@ export function isAuraBalSwap(
   const isExactInSwap = swapType === GqlSorSwapType.ExactIn
 
   return tokenInOrOutIsAuraBal && tokenInOrOutIsRelevantToken && isExactInSwap && isMainnet(chain)
+}
+
+export function isV3SwapRoute(simulationQuery: SwapSimulationQueryResult): boolean {
+  return orderRouteVersion(simulationQuery) === 3
+}
+
+export function orderRouteVersion(simulationQuery: SwapSimulationQueryResult): number {
+  const queryData = simulationQuery.data as SdkSimulateSwapResponse
+  const orderRouteVersion = queryData ? queryData.protocolVersion : 2
+  return orderRouteVersion
 }

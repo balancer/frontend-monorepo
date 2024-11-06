@@ -10,6 +10,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PropsWithChildren } from 'react'
+import { Permit2SignatureProvider } from '../tokens/approvals/permit2/Permit2SignatureProvider'
 
 type Props = PropsWithChildren<{
   props: SwapProviderProps
@@ -24,15 +25,17 @@ export default function SwapLayout({ props, children }: Props) {
 
   return (
     <TransactionStateProvider>
-      <RelayerSignatureProvider>
-        <TokenInputsValidationProvider>
-          <TokenBalancesProvider initTokens={initTokens}>
-            <PriceImpactProvider>
-              <SwapProvider params={props}>{children}</SwapProvider>
-            </PriceImpactProvider>
-          </TokenBalancesProvider>
-        </TokenInputsValidationProvider>
-      </RelayerSignatureProvider>
+      <Permit2SignatureProvider>
+        <RelayerSignatureProvider>
+          <TokenInputsValidationProvider>
+            <TokenBalancesProvider initTokens={initTokens}>
+              <PriceImpactProvider>
+                <SwapProvider params={props}>{children}</SwapProvider>
+              </PriceImpactProvider>
+            </TokenBalancesProvider>
+          </TokenInputsValidationProvider>
+        </RelayerSignatureProvider>
+      </Permit2SignatureProvider>
     </TransactionStateProvider>
   )
 }

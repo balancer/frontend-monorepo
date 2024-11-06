@@ -50,6 +50,7 @@ export function useRemoveLiquiditySimulationQuery({
     handler.simulate({
       humanBptIn: debouncedHumanBptIn,
       tokenOut,
+      userAddress,
     })
 
   const result = useQuery({

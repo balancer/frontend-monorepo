@@ -21,6 +21,7 @@ import { Address } from 'viem'
 import { useSkipInitialQuery } from '@repo/lib/shared/hooks/useSkipInitialQuery'
 import { getNativeAssetAddress, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
 import { mins } from '@repo/lib/shared/utils/time'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 
 export type UseTokensResult = ReturnType<typeof _useTokens>
 export const TokensContext = createContext<UseTokensResult | null>(null)
@@ -152,6 +153,10 @@ export function _useTokens(
       .toString()
   }, [])
 
+  const vebalBptToken = tokens.find(
+    t => t.address === mainnetNetworkConfig.tokens.addresses.veBalBpt
+  )
+
   return {
     tokens,
     prices,
@@ -169,6 +174,7 @@ export function _useTokens(
     startTokenPricePolling: () => startPolling(pollInterval),
     stopTokenPricePolling: stopPolling,
     priceForAddress,
+    vebalBptToken,
   }
 }
 

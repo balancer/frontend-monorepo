@@ -16,12 +16,11 @@ type Params = {
   tokenAddresses?: Address[]
   owner?: Address
   enabled: boolean
+  spender: Address
 }
-export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled }: Params) {
+export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, spender }: Params) {
   const networkConfig = getNetworkConfig(getGqlChain(chainId))
   const permit2Address = networkConfig.contracts.permit2!
-  const balancerRouter = networkConfig.contracts.balancer.router!
-  const spender = balancerRouter
 
   const contracts = tokenAddresses?.map(
     tokenAddress =>
@@ -38,7 +37,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled }:
     contracts,
     allowFailure: false,
     query: {
-      enabled: enabled && tokenAddresses && tokenAddresses.length > 0 && !!owner,
+      enabled: enabled && tokenAddresses && tokenAddresses.length > 0 && !!owner && !!spender,
     },
   })
 

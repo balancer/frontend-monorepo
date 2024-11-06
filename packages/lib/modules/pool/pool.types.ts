@@ -84,9 +84,9 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
   [GqlPoolType.Fx]: [GqlPoolType.Fx],
 }
 
-export const poolCategoryFilters = ['INCENTIVIZED', 'VE8020', 'POINTS'] as const
-export type PoolCategoryType = (typeof poolCategoryFilters)[number]
-export const POOL_CATEGORY_MAP: { [key in PoolCategoryType]: string[] } = {
+export const poolTagFilters = ['INCENTIVIZED', 'VE8020', 'POINTS'] as const
+export type PoolTagType = (typeof poolTagFilters)[number]
+export const POOL_TAG_MAP: { [key in PoolTagType]: string[] } = {
   INCENTIVIZED: ['INCENTIVIZED'],
   POINTS: [
     'POINTS_EIGENLAYER',
@@ -125,8 +125,8 @@ export const poolListQueryStateParsers = {
   textSearch: parseAsString,
   userAddress: parseAsString,
   minTvl: parseAsFloat.withDefault(0),
-  poolCategories: parseAsArrayOf(
-    parseAsStringEnum<PoolCategoryType>(Object.values(poolCategoryFilters))
+  poolTags: parseAsArrayOf(
+    parseAsStringEnum<PoolTagType>(Object.values(poolTagFilters))
   ).withDefault([]),
 }
 
