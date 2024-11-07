@@ -22,6 +22,7 @@ export type Params = {
   actionType: ApprovalAction
   isPermit2?: boolean
   bptSymbol?: string //Edge-case for approving
+  lpToken?: string
 }
 
 /*
@@ -34,6 +35,7 @@ export function useTokenApprovalSteps({
   actionType,
   bptSymbol,
   isPermit2 = false,
+  lpToken,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
   const { getToken } = useTokens()
@@ -72,7 +74,7 @@ export function useTokenApprovalSteps({
       const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
       const token = getToken(tokenAddress, chain)
       const symbol = bptSymbol ?? (token && token?.symbol) ?? 'Unknown'
-      const labels = buildTokenApprovalLabels({ actionType, symbol, isPermit2 })
+      const labels = buildTokenApprovalLabels({ actionType, symbol, isPermit2, lpToken })
 
       const isComplete = () => {
         const isAllowed = tokenAllowances.allowanceFor(tokenAddress) >= requiredRawAmount

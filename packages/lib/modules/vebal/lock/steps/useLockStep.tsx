@@ -1,16 +1,15 @@
-import { useMemo, useCallback } from 'react'
-import { useTokenApprovalSteps } from '../../tokens/approvals/useTokenApprovalSteps'
-import { useUserAccount } from '../../web3/UserAccountProvider'
+import { useMemo, useCallback, useState } from 'react'
+import { useUserAccount } from '../../../web3/UserAccountProvider'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { RawAmount } from '../../tokens/approvals/approval-rules'
+import { RawAmount } from '../../../tokens/approvals/approval-rules'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { Address, parseUnits } from 'viem'
-import { ManagedTransactionInput } from '../../web3/contracts/useManagedTransaction'
+import { Hex } from 'viem'
+import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
 import {
   LockActionType,
   getDescription,
@@ -20,24 +19,19 @@ import {
   getTooltip,
   parseDate,
   getLockContractFunctionName,
-} from './lock.helpers'
+} from './lock-steps.utils'
+import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
-type UseCreateLockArgs = {
+type UseLockStepArgs = {
   lockAmount: RawAmount
   lockEndDate: string
   lockActionType: LockActionType
 }
 
-export function useLockSteps({ lockAmount, lockEndDate, lockActionType }: UseCreateLockArgs) {
+export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLockStepArgs) {
   const { userAddress } = useUserAccount()
   const amount = lockAmount.rawAmount.toString()
-  const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
-    useTokenApprovalSteps({
-      spenderAddress: mainnetNetworkConfig.contracts.veBAL as Address,
-      chain: mainnetNetworkConfig.chain,
-      approvalAmounts: [lockAmount],
-      actionType: 'Locking',
-    })
 
   const labels: TransactionLabels = useMemo(
     () => ({
@@ -65,11 +59,11 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionType }: UseCre
     function getArgs() {
       switch (lockActionType) {
         case LockActionType.CreateLock:
-          return [parseUnits(amount, 18), parseDate(lockEndDate)]
+          return [bn(amount), parseDate(lockEndDate)]
         case LockActionType.ExtendLock:
           return [parseDate(lockEndDate)]
         case LockActionType.IncreaseLock:
-          return [parseUnits(amount, 18)]
+          return [bn(amount)]
         default:
           return []
       }
@@ -80,7 +74,7 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionType }: UseCre
       labels,
       chainId: mainnetNetworkConfig.chainId,
       contractId: 'balancer.veBAL',
-      contractAddress: mainnetNetworkConfig.contracts.veBAL as Address,
+      contractAddress: mainnetNetworkConfig.contracts.veBAL as Hex,
       functionName: getLockContractFunctionName(lockActionType),
       args: getArgs() as any,
       txSimulationMeta,
@@ -91,26 +85,27 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionType }: UseCre
     // Handle success actions
   }, [])
 
+  const { getTransaction } = useTransactionState()
+
+  const transaction = getTransaction(lockActionType)
+
+  const isComplete = () => transaction?.result.isSuccess || false
+
+  const [isStepActivated, setIsStepActivated] = useState(false)
+
   const lockStep: TransactionStep = useMemo(
     () => ({
       id: lockActionType,
       stepType: lockActionType,
       labels,
-      contractId: 'veBAL',
-      contractAddress: mainnetNetworkConfig.contracts.veBAL,
-      isComplete: () => false,
-      // onActivated: () => {},
-      // onDeactivated: () => {},
+      isComplete,
       onSuccess,
+      onActivated: () => setIsStepActivated(true),
+      onDeactivated: () => setIsStepActivated(false),
       renderAction: () => <ManagedTransactionButton id={lockActionType.toString()} {...props} />,
     }),
-    [labels, onSuccess, props, lockActionType]
+    [lockActionType, labels, isComplete, onSuccess, props]
   )
 
-  const steps = [lockStep, ...tokenApprovalSteps]
-
-  return {
-    isLoadingSteps: isLoadingTokenApprovalSteps,
-    steps,
-  }
+  return lockStep
 }

@@ -1,5 +1,9 @@
 import { toUtcTime } from '@repo/lib/shared/utils/time'
-import { RawAmount } from '../../tokens/approvals/approval-rules'
+import { RawAmount } from '../../../tokens/approvals/approval-rules'
+import { LockMode } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import { format } from 'date-fns'
+import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
 
 export enum LockActionType {
   CreateLock = 'createLock',
@@ -27,6 +31,38 @@ export function getLockContractFunctionName(action: LockActionType) {
 
 export function parseDate(date: string) {
   return (toUtcTime(new Date(date)) / 1000).toString()
+}
+
+export function getModalLabel(mode: LockMode, extendExpired: boolean) {
+  switch (mode) {
+    case LockMode.Lock:
+      return 'Lock to get veBAL'
+    case LockMode.Extend:
+      return 'Extend lock'
+    case LockMode.Unlock:
+      if (extendExpired) {
+        return 'Extend expired lock'
+      }
+      return 'veBAL expiry'
+    default:
+      return ''
+  }
+}
+
+export function getPreviewLabel(mode: LockMode, extendExpired: boolean) {
+  switch (mode) {
+    case LockMode.Lock:
+      return 'Lock'
+    case LockMode.Extend:
+      return 'Extend lock'
+    case LockMode.Unlock:
+      if (extendExpired) {
+        return 'Extend expired lock'
+      }
+      return 'Unlock'
+    default:
+      return ''
+  }
 }
 
 export function getInitLabel(lockActionType: LockActionType) {
@@ -81,11 +117,12 @@ export function getConfirmedLabel(
 ) {
   switch (lockActionType) {
     case LockActionType.CreateLock:
-      return `Lock created for ${lockAmount.rawAmount} tokens until ${lockEndDate}`
+      // eslint-disable-next-line max-len
+      return `Lock created for ${fNum('token', lockAmount.rawAmount)} tokens until ${format(new Date(lockEndDate), PRETTY_DATE_FORMAT)}`
     case LockActionType.ExtendLock:
-      return `Lock extended until ${lockEndDate}`
+      return `Lock extended until ${format(new Date(lockEndDate), PRETTY_DATE_FORMAT)}`
     case LockActionType.IncreaseLock:
-      return `Lock amount increased by ${lockAmount.rawAmount}`
+      return `Lock amount increased by ${fNum('token', lockAmount.rawAmount)}`
     case LockActionType.Unlock:
       return 'Lock unlocked'
     default:
