@@ -14,9 +14,12 @@ import {
   PoolGetPool,
   PoolState,
   PoolStateWithBalances,
+  PoolStateWithUnderlyings,
+  PoolTokenWithUnderlying,
   Token,
   TokenAmount,
   mapPoolToNestedPoolStateV2,
+  mapPoolToNestedPoolStateV3,
   mapPoolType,
 } from '@balancer/sdk'
 import BigNumber from 'bignumber.js'
@@ -61,10 +64,42 @@ export class LiquidityActionHelpers {
   }
 
   /* Used by default nested SDK handlers */
-  public get nestedPoolState(): NestedPoolState {
+  public get nestedPoolStateV2(): NestedPoolState {
     const result = mapPoolToNestedPoolStateV2(this.pool as PoolGetPool)
     result.protocolVersion = 2
     return result
+  }
+
+  /* Used by default nested SDK handlers */
+  public get nestedPoolStateV3(): NestedPoolState {
+    const result = mapPoolToNestedPoolStateV3(this.pool as PoolGetPool)
+    result.protocolVersion = 3
+    return result
+  }
+
+  /* Used by V3 boosted SDK handlers */
+  public get boostedPoolState(): PoolStateWithUnderlyings & { totalShares: HumanAmount } {
+    const poolTokensWithUnderlyings: PoolTokenWithUnderlying[] = this.pool.poolTokens.map(
+      (token, index) => ({
+        ...token,
+        address: token.address as Address,
+        underlyingToken: {
+          ...token.underlyingToken,
+          address: token.underlyingToken?.address as Address,
+          decimals: token.underlyingToken?.decimals as number,
+          index, //TODO: review that this index is always the expected one
+        },
+      })
+    )
+    const state: PoolStateWithUnderlyings & { totalShares: HumanAmount } = {
+      id: this.pool.id as Hex,
+      address: this.pool.address as Address,
+      protocolVersion: 3,
+      type: mapPoolType(this.pool.type),
+      tokens: poolTokensWithUnderlyings,
+      totalShares: this.pool.dynamicData.totalShares as HumanAmount,
+    }
+    return state
   }
 
   public get poolStateWithBalances(): PoolStateWithBalances {

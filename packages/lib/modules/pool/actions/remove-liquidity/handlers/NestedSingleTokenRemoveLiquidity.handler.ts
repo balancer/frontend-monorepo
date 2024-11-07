@@ -45,7 +45,7 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
 
     const sdkQueryOutput = await removeLiquidity.query(
       removeLiquidityInput,
-      this.helpers.nestedPoolState
+      this.helpers.nestedPoolStateV2
     )
 
     return { amountsOut: sdkQueryOutput.amountsOut, sdkQueryOutput }
@@ -59,7 +59,7 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
 
     const priceImpactABA: PriceImpactAmount = await PriceImpact.removeLiquidityNested(
       removeLiquidityInput,
-      this.helpers.nestedPoolState
+      this.helpers.nestedPoolStateV2
     )
 
     return priceImpactABA.decimal
