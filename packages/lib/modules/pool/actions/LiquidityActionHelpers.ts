@@ -105,6 +105,12 @@ export class LiquidityActionHelpers {
     return state
   }
 
+  public get poolStateWithBalances(): PoolStateWithBalances {
+    return isBoosted(this.pool)
+      ? this.boostedPoolStateWithBalances
+      : toPoolStateWithBalances(this.pool)
+  }
+
   /* Used by calculateProportionalAmounts for V3 boosted proportional adds */
   public get boostedPoolStateWithBalances(): PoolStateWithBalances {
     const underlyingTokensWithBalance: PoolTokenWithBalance[] = this.pool.poolTokens.map(
@@ -114,7 +120,7 @@ export class LiquidityActionHelpers {
               address: token.underlyingToken?.address as Address,
               decimals: token.underlyingToken?.decimals as number,
               index,
-              // balance: token.underlyingToken?.balance as HumanAmount,
+              // TODO: balance: token.underlyingToken?.balance * rate as HumanAmount,
               balance: token.balance as HumanAmount,
             }
           : {
@@ -133,12 +139,6 @@ export class LiquidityActionHelpers {
       totalShares: this.pool.dynamicData.totalShares as HumanAmount,
     }
     return state
-  }
-
-  public get poolStateWithBalances(): PoolStateWithBalances {
-    return isBoosted(this.pool)
-      ? this.boostedPoolStateWithBalances
-      : toPoolStateWithBalances(this.pool)
   }
 
   public get networkConfig() {
