@@ -95,6 +95,11 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
                         chain={chain}
                         iconSize={35}
                         key={`nested-pool-${nestedPoolToken.address}`}
+                        targetWeight={
+                          nestedPoolToken.weight && poolToken.weight
+                            ? bn(nestedPoolToken.weight).times(poolToken.weight).toString()
+                            : undefined
+                        }
                         value={nestedPoolToken.balance}
                       />
                     )
