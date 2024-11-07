@@ -89,7 +89,7 @@ export interface Config {
   }
 }
 
-interface Banners {
+export interface Banners {
   headerSrc: string
   footerSrc: string
 }
