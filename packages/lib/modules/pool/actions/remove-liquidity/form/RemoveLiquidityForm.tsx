@@ -56,6 +56,9 @@ export function RemoveLiquidityForm() {
       disabled: isBoosted(pool),
     },
   ] as const
+  const [activeTab, setActiveTab] = useState(TABS[0])
+  const isProportionalTabSelected = activeTab.value === 'proportional'
+  const isSingleTabSelected = activeTab.value === 'single'
 
   const {
     transactionSteps,
@@ -80,7 +83,6 @@ export function RemoveLiquidityForm() {
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const nextBtn = useRef(null)
-  const [activeTab, setActiveTab] = useState(TABS[0])
   const { startTokenPricePolling } = useTokens()
   const { slippage } = useUserSettings()
 
@@ -184,10 +186,10 @@ export function RemoveLiquidityForm() {
                   You can only remove up to 25% of a single asset from the pool in one transaction
                 </Text>
               )}
-              {activeTab === TABS[0] && (
+              {isProportionalTabSelected && (
                 <RemoveLiquidityProportional poolType={pool.type} tokens={tokens} />
               )}
-              {activeTab === TABS[1] && (
+              {isSingleTabSelected && (
                 <RemoveLiquiditySingleToken chain={pool.chain} tokens={tokens} />
               )}
             </VStack>

@@ -25,6 +25,11 @@ export abstract class BaseProportionalRemoveLiquidityHandler implements RemoveLi
     this.helpers = new LiquidityActionHelpers(pool)
   }
 
+  public async getPriceImpact(): Promise<number> {
+    // proportional remove liquidity does not have price impact
+    return 0
+  }
+
   public async simulate({
     humanBptIn: bptIn,
     userAddress,
@@ -35,11 +40,6 @@ export abstract class BaseProportionalRemoveLiquidityHandler implements RemoveLi
     const sdkQueryOutput = await removeLiquidity.query(removeLiquidityInput, this.helpers.poolState)
 
     return { amountsOut: sdkQueryOutput.amountsOut.filter(a => a.amount > 0n), sdkQueryOutput }
-  }
-
-  public async getPriceImpact(): Promise<number> {
-    // proportional remove liquidity does not have price impact
-    return 0
   }
 
   public abstract buildCallData(inputs: BuildRemoveLiquidityInput): Promise<TransactionConfig>

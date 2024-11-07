@@ -1,10 +1,11 @@
 import { Pool } from '../../../PoolProvider'
-import { isV3Pool } from '../../../pool.helpers'
+import { isBoosted, isV3Pool } from '../../../pool.helpers'
 import {
   shouldUseRecoveryRemoveLiquidity,
   supportsNestedActions,
 } from '../../LiquidityActionHelpers'
 import { RemoveLiquidityType } from '../remove-liquidity.types'
+import { BoostedProportionalRemoveLiquidityV3Handler } from './BoostedProportionalRemoveLiquidityV3.handler'
 import { NestedProportionalRemoveLiquidityHandler } from './NestedProportionalRemoveLiquidity.handler'
 import { NestedSingleTokenRemoveLiquidityHandler } from './NestedSingleTokenRemoveLiquidity.handler'
 import { ProportionalRemoveLiquidityHandler } from './ProportionalRemoveLiquidity.handler'
@@ -27,6 +28,10 @@ export function selectRemoveLiquidityHandler(
   if (shouldUseRecoveryRemoveLiquidity(pool)) {
     console.log('Recovery handler')
     return new RecoveryRemoveLiquidityHandler(pool)
+  }
+
+  if (isV3Pool(pool) && isBoosted(pool)) {
+    return new BoostedProportionalRemoveLiquidityV3Handler(pool)
   }
 
   if (supportsNestedActions(pool) && kind === RemoveLiquidityType.Proportional) {

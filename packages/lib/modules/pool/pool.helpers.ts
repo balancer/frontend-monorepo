@@ -489,7 +489,7 @@ export function getBoostedGqlTokens(pool: Pool, getToken: GetTokenFn): GqlToken[
   const underlyingTokens = pool.poolTokens
     .flatMap(token =>
       token.isErc4626
-        ? [getToken(token?.underlyingToken?.address as Address, pool.chain), token]
+        ? [getToken(token?.underlyingToken?.address as Address, pool.chain)]
         : toGqlTokens([token], getToken, pool.chain)
     )
     .filter((token): token is GqlToken => token !== undefined)

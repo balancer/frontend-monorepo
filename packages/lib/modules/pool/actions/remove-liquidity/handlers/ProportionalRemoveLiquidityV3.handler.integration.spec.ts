@@ -71,7 +71,8 @@ describe.skip('When proportionally removing liquidity for a weighted v3 pool', a
 })
 
 // TODO: unskip this test when sepolia V3 pools are available in production api
-describe('When proportionally removing liquidity for a BOOSTED v3 pool', async () => {
+describe.skip(`When proportionally removing liquidity using NON BOOSTED remove for a BOOSTED v3 pool
+          (if the user wants to get wrapping tokens instead of underlying ones)`, async () => {
   // Sepolia
   // const poolId = '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8' // Sepolia stataEthUSDC stataEthUSDT
 
@@ -85,14 +86,6 @@ describe('When proportionally removing liquidity for a BOOSTED v3 pool', async (
     tokenOut: emptyAddress, // We don't use in this scenario it but it is required to simplify TS interfaces
     userAddress: defaultTestUserAccount,
   }
-
-  test('returns ZERO price impact', async () => {
-    const handler = selectProportionalHandler(v3Pool)
-
-    const priceImpact = await handler.getPriceImpact()
-
-    expect(priceImpact).toBe(0)
-  })
 
   test('queries amounts out', async () => {
     const handler = selectProportionalHandler(v3Pool)
