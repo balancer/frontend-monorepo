@@ -8,6 +8,8 @@ import {
   PublicWalletClient,
   RemoveLiquidityQueryOutput,
 } from '@balancer/sdk'
+import { isBoosted } from '@repo/lib/modules/pool/pool.helpers'
+import { Pool } from '@repo/lib/modules/pool/PoolProvider'
 
 export interface PermitRemoveLiquidityInput {
   account: Address
@@ -19,16 +21,18 @@ type Params = {
   sdkClient?: PublicWalletClient
   permitInput: PermitRemoveLiquidityInput
   wethIsEth: boolean
+  pool: Pool
 }
 export async function signRemoveLiquidityPermit({
   wethIsEth,
   sdkClient,
   permitInput,
+  pool,
 }: Params): Promise<Permit | undefined> {
   if (!sdkClient) return undefined
 
   try {
-    const signature = await signPermit({ permitInput, wethIsEth, sdkClient })
+    const signature = await signPermit({ permitInput, wethIsEth, sdkClient, pool })
     return signature
   } catch (e: unknown) {
     const error = ensureError(e)
@@ -39,13 +43,18 @@ export async function signRemoveLiquidityPermit({
   }
 }
 
-async function signPermit({ permitInput, wethIsEth, sdkClient }: Params): Promise<Permit> {
+async function signPermit({ permitInput, wethIsEth, sdkClient, pool }: Params): Promise<Permit> {
   const baseInput = constructRemoveBaseBuildCallInput({
     wethIsEth,
     slippagePercent: permitInput.slippagePercent,
     sdkQueryOutput: permitInput.sdkQueryOutput as RemoveLiquidityQueryOutput,
   })
-  const signature = await PermitHelper.signRemoveLiquidityApproval({
+
+  const signPermitFn = isBoosted(pool)
+    ? PermitHelper.signRemoveLiquidityBoostedApproval
+    : PermitHelper.signRemoveLiquidityApproval
+
+  const signature = await signPermitFn({
     ...baseInput,
     /* eslint-disable @typescript-eslint/no-non-null-assertion */
     client: sdkClient!,
