@@ -23,7 +23,7 @@ export default function SwapLayout({ params: { slug }, children }: Props) {
   const { getTokensByChain } = useTokens()
   const initChain = pathParams.chain
     ? slugToChainMap[pathParams.chain as ChainSlug]
-    : GqlChain.Mainnet
+    : GqlChain.Fantom
   const initTokens = getTokensByChain(initChain)
   const props: SwapProviderProps = {
     pathParams,
