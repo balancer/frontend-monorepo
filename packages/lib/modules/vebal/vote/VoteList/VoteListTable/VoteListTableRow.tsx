@@ -6,11 +6,9 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { PoolListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { getPoolPath, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
-import { VoteRateTooltip } from '@repo/lib/modules/vebal/vote/VoteRateTooltip'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
 import React, { useState } from 'react'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
-import { VoteCapTooltip } from '@repo/lib/modules/vebal/vote/VoteCapTooltip'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
 
 interface Props extends GridProps {
@@ -77,7 +75,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
               {getPoolTypeLabel(vote.type)}
             </Text>
           </GridItem>
-          <GridItem textAlign="right" justifySelf="end">
+          <GridItem justifySelf="end" textAlign="right">
             {votingIncentivesLoading ? (
               <Skeleton h="20px" w="60px" />
             ) : vote.votingIncentive ? (
