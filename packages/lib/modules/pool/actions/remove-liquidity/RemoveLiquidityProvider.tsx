@@ -23,6 +23,7 @@ import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
+import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof _useRemoveLiquidity>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
@@ -73,7 +74,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const isSingleToken = removalType === RemoveLiquidityType.SingleToken
   const isProportional = removalType === RemoveLiquidityType.Proportional
 
-  function tokensToShow() {
+  function tokensToShow(): GqlToken[] {
     // Cow AMM pools don't support wethIsEth
     if (isCowAmmPool(pool.type)) return tokens
 
@@ -83,13 +84,15 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     // if wethIsEth we only show the native asset
     if (includesWrappedNativeAsset && wethIsEth) {
       // replace the wrapped native asset with the native asset
-      return tokens.map(token => {
-        if (token && isWrappedNativeAsset(token.address as Address, chain)) {
-          return nativeAsset
-        } else {
-          return token
-        }
-      })
+      return tokens
+        .map(token => {
+          if (token && isWrappedNativeAsset(token.address as Address, chain)) {
+            return nativeAsset
+          } else {
+            return token
+          }
+        })
+        .filter((token): token is GqlToken => token !== undefined)
     }
 
     return tokens
