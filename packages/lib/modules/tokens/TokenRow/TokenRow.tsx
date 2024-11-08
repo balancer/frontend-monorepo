@@ -39,6 +39,7 @@ type DataProps = {
   showInfoPopover?: boolean
   isBpt?: boolean
   isNestedBpt?: boolean
+  isNestedPoolToken?: boolean
   iconSize?: number
 }
 
@@ -52,10 +53,26 @@ function TokenInfo({
   showSelect = false,
   showInfoPopover = true,
   isBpt = false,
+  isNestedPoolToken = false,
   iconSize = 40,
 }: DataProps) {
   const tokenSymbol = isBpt ? 'LP token' : token?.symbol || displayToken?.symbol
   const tokenName = isBpt ? pool?.name : token?.name || displayToken?.name
+
+  const headingProps = {
+    as: 'h6' as const,
+    fontSize: isNestedPoolToken ? 'md' : 'lg',
+    fontWeight: 'bold',
+    lineHeight: isNestedPoolToken ? '20px' : '24px',
+    variant: disabled ? 'secondary' : 'primary',
+  }
+
+  const tokenNameProps = {
+    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontWeight: 'medium',
+    lineHeight: '24px',
+    variant: 'secondary',
+  }
 
   return (
     <HStack spacing="sm">
@@ -64,21 +81,12 @@ function TokenInfo({
       )}
       <VStack alignItems="flex-start" spacing="none">
         <HStack spacing="none">
-          <Heading
-            as="h6"
-            fontSize="md"
-            fontWeight="bold"
-            variant={disabled ? 'secondary' : 'primary'}
-          >
-            {tokenSymbol}
-          </Heading>
+          <Heading {...headingProps}>{tokenSymbol}</Heading>
           {showInfoPopover && (
             <TokenInfoPopover chain={chain} isBpt={isBpt} tokenAddress={address} />
           )}
         </HStack>
-        <Text fontSize="0.85rem" fontWeight="medium" variant="secondary">
-          {tokenName}
-        </Text>
+        <Text {...tokenNameProps}>{tokenName}</Text>
       </VStack>
       {showSelect && (
         <Box ml="sm">
@@ -102,6 +110,7 @@ export type TokenRowProps = {
   abbreviated?: boolean
   isBpt?: boolean
   isNestedBpt?: boolean
+  isNestedPoolToken?: boolean
   pool?: Pool
   showZeroAmountAsDash?: boolean
   toggleTokenSelect?: () => void
@@ -119,6 +128,7 @@ export default function TokenRow({
   isLoading,
   isBpt,
   isNestedBpt,
+  isNestedPoolToken,
   pool,
   abbreviated = true,
   showZeroAmountAsDash = false,
@@ -141,6 +151,7 @@ export default function TokenRow({
     pool,
     disabled,
     iconSize,
+    isNestedPoolToken,
   }
 
   useEffect(() => {
@@ -154,6 +165,20 @@ export default function TokenRow({
       setAmount(fNum('token', value, { abbreviated }))
     }
   }, [value])
+
+  const headingProps = {
+    as: 'h6' as const,
+    fontSize: isNestedPoolToken ? 'md' : 'lg',
+    fontWeight: isNestedPoolToken ? 'normal' : 'bold',
+    lineHeight: isNestedPoolToken ? '20px' : '24px',
+  }
+
+  const subTextProps = {
+    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontWeight: 'medium',
+    lineHeight: '24px',
+    variant: 'secondary',
+  }
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -175,10 +200,10 @@ export default function TokenRow({
               </>
             ) : (
               <>
-                <Heading as="h6" fontSize="md" fontWeight="bold" title={value.toString()}>
+                <Heading {...headingProps} title={value.toString()}>
                   {isZero(amount) && showZeroAmountAsDash ? '-' : amount ? amount : '0'}
                 </Heading>
-                <Text fontSize="sm" fontWeight="medium" variant="secondary">
+                <Text {...subTextProps}>
                   {showZeroAmountAsDash && usdValue && isZero(usdValue)
                     ? '-'
                     : toCurrency(usdValue ?? '0', { abbreviated })}
@@ -195,15 +220,13 @@ export default function TokenRow({
                 </>
               ) : (
                 <>
-                  <Heading as="h6" fontSize="md" fontWeight="bold">
+                  <Heading {...headingProps}>
                     {fNum('weight', actualWeight, { abbreviated: false })}
                   </Heading>
                   <HStack align="center" spacing="xs">
                     {targetWeight ? (
                       <>
-                        <Text fontSize="sm" fontWeight="medium" variant="secondary">
-                          {fNum('weight', targetWeight)}
-                        </Text>
+                        <Text {...subTextProps}>{fNum('weight', targetWeight)}</Text>
                         <Popover trigger="hover">
                           <PopoverTrigger>
                             <Box

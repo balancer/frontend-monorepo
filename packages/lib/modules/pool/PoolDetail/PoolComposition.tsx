@@ -45,12 +45,12 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
     <VStack spacing="md" width="full">
       <HStack justifyContent="space-between" width="full">
         <VStack alignItems="flex-start">
-          <Heading fontWeight="bold" size={{ base: 'h5', md: 'h6' }}>
+          <Heading fontWeight="bold" size="h5">
             Total liquidity
           </Heading>
         </VStack>
         <VStack alignItems="flex-end">
-          <Heading fontWeight="bold" size={{ base: 'h5', md: 'h6' }}>
+          <Heading fontWeight="bold" size="h5">
             {totalLiquidity ? (
               toCurrency(totalLiquidity, { abbreviated: false })
             ) : (
@@ -93,6 +93,7 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
                         address={nestedPoolToken.address as Address}
                         chain={chain}
                         iconSize={35}
+                        isNestedPoolToken
                         key={`nested-pool-${nestedPoolToken.address}`}
                         targetWeight={
                           nestedPoolToken.weight && poolToken.weight
@@ -140,7 +141,7 @@ export function PoolComposition() {
       >
         <VStack align="flex-start" spacing="md" w="full">
           <HStack justifyContent="space-between" w="full">
-            <Heading fontWeight="bold" size={{ base: 'h4', md: 'h5' }}>
+            <Heading fontWeight="bold" size="h4">
               Pool composition
             </Heading>
             <PoolTypeTag pool={pool} />
