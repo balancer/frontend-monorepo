@@ -258,7 +258,7 @@ describe.skip('Liquidity helpers for V3 NESTED pool', async () => {
     ])
   })
 
-  it.only('toInputAmounts', async () => {
+  it('toInputAmounts', async () => {
     expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
       {
         address: usdcSepoliaAddress,
