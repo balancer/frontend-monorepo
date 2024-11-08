@@ -9,10 +9,13 @@ import {
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
-import { Address } from 'viem'
+import { Address, Hex } from 'viem'
 import { Pool } from '../../../PoolProvider'
 import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
-import { NestedBuildAddLiquidityInput, NestedQueryAddLiquidityOutput } from '../add-liquidity.types'
+import {
+  NestedBuildAddLiquidityInputV3,
+  NestedQueryAddLiquidityOutputV3,
+} from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 
 export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
@@ -38,32 +41,49 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
   public async simulate(
     humanAmountsIn: HumanTokenAmountWithAddress[],
     userAddress: Address
-  ): Promise<NestedQueryAddLiquidityOutput> {
+  ): Promise<NestedQueryAddLiquidityOutputV3> {
     const addLiquidity = new AddLiquidityNested()
 
-    const addLiquidityInput = this.constructSdkInput(humanAmountsIn, userAddress)
+    const addLiquidityInput: AddLiquidityNestedInputV3 = {
+      ...this.constructSdkInput(humanAmountsIn),
+      sender: userAddress,
+    }
 
     const sdkQueryOutput = await addLiquidity.query(
       addLiquidityInput,
       this.helpers.nestedPoolStateV3
     )
 
-    return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
+    return {
+      bptOut: sdkQueryOutput.bptOut,
+      to: sdkQueryOutput.to,
+      sdkQueryOutput: {
+        ...sdkQueryOutput,
+        protocolVersion: 3,
+        userData: '0x' as Hex,
+        parentPool: this.helpers.pool.address as Address,
+        chainId: this.helpers.chainId as ChainId,
+      },
+    }
   }
 
   public async buildCallData({
     account,
     slippagePercent,
     queryOutput,
-  }: NestedBuildAddLiquidityInput): Promise<TransactionConfig> {
+    permit2,
+  }: NestedBuildAddLiquidityInputV3): Promise<TransactionConfig> {
     const addLiquidity = new AddLiquidityNested()
 
-    const { callData, to, value } = addLiquidity.buildCall({
+    const buildCallParams: AddLiquidityNestedCallInputV3 = {
       ...queryOutput.sdkQueryOutput,
-      protocolVersion: 3,
       slippage: Slippage.fromPercentage(`${Number(slippagePercent)}`),
-      userData: '0x',
-    } as AddLiquidityNestedCallInputV3)
+      amountsIn: queryOutput.sdkQueryOutput.amountsIn,
+    }
+
+    const { callData, to, value } = permit2
+      ? addLiquidity.buildCallWithPermit2(buildCallParams, permit2)
+      : addLiquidity.buildCall(buildCallParams)
 
     return {
       account,
@@ -78,8 +98,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
    * PRIVATE METHODS
    */
   private constructSdkInput(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
-    userAddress?: Address
+    humanAmountsIn: HumanTokenAmountWithAddress[]
   ): AddLiquidityNestedInputV3 {
     const amountsIn = this.helpers.toSdkInputAmounts(humanAmountsIn)
 
@@ -89,7 +108,6 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
       chainId: this.helpers.chainId as ChainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
       amountsIn: nonEmptyAmountsIn,
-      sender: userAddress,
     }
   }
 }

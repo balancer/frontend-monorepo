@@ -2,6 +2,7 @@ import {
   AddLiquidityNested,
   AddLiquidityNestedCallInputV2,
   AddLiquidityNestedInput,
+  AddLiquidityNestedQueryOutputV2,
   ChainId,
   PriceImpact,
   Slippage,
@@ -11,7 +12,10 @@ import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.typ
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Pool } from '../../../PoolProvider'
 import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
-import { NestedBuildAddLiquidityInput, NestedQueryAddLiquidityOutput } from '../add-liquidity.types'
+import {
+  NestedBuildAddLiquidityInput,
+  NestedQueryAddLiquidityOutputV2,
+} from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { Address } from 'viem'
 
@@ -38,15 +42,15 @@ export class NestedAddLiquidityV2Handler implements AddLiquidityHandler {
   public async simulate(
     humanAmountsIn: HumanTokenAmountWithAddress[],
     userAddress: Address
-  ): Promise<NestedQueryAddLiquidityOutput> {
+  ): Promise<NestedQueryAddLiquidityOutputV2> {
     const addLiquidity = new AddLiquidityNested()
 
     const addLiquidityInput = this.constructSdkInput(humanAmountsIn, userAddress)
 
-    const sdkQueryOutput = await addLiquidity.query(
+    const sdkQueryOutput: AddLiquidityNestedQueryOutputV2 = (await addLiquidity.query(
       addLiquidityInput,
       this.helpers.nestedPoolStateV2
-    )
+    )) as AddLiquidityNestedQueryOutputV2
 
     return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
   }
