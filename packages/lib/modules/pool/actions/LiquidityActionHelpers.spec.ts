@@ -82,10 +82,10 @@ it('returns NestedPoolState for nested pools', () => {
 
   expect(nestedPoolState.mainTokens).toHaveLength(4)
   expect(nestedPoolState.mainTokens.map(t => t.address)).toEqual([
-    wETHAddress,
-    usdtAddress,
     daiAddress,
+    usdtAddress,
     usdcAddress,
+    wETHAddress,
   ])
 })
 

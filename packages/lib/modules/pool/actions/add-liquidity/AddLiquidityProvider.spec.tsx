@@ -14,8 +14,9 @@ import {
 import { PropsWithChildren } from 'react'
 import { _useAddLiquidity } from './AddLiquidityProvider'
 import { nestedPoolMock } from '../../__mocks__/nestedPoolMock'
+import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 
-async function testUseAddLiquidity(pool: GqlPoolElement = nestedPoolMock) {
+async function testUseAddLiquidity(pool: GqlPoolElement = aBalWethPoolElementMock()) {
   const PoolProvider = buildDefaultPoolTestProvider(pool)
 
   function Providers({ children }: PropsWithChildren) {
