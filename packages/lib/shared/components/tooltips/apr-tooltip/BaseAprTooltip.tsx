@@ -144,13 +144,13 @@ function BaseAprTooltip({
         displayValueFormatter={usedDisplayValueFormatter}
         title="Staking incentives"
       >
-        {stakingIncentivesDisplayed.map((item, index) => {
+        {stakingIncentivesDisplayed.map(item => {
           return (
             <TooltipAprItem
               {...subitemPopoverAprItemProps}
               apr={item.apr}
               displayValueFormatter={usedDisplayValueFormatter}
-              key={index}
+              key={`${item.title}-${item.apr}`}
               title={item.title}
               tooltipText={item.tooltipText}
             />

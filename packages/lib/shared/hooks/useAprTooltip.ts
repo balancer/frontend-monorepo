@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
 import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'

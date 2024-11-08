@@ -29,7 +29,7 @@ export function PaginatedTable({
           {items.length > 0 && (
             <VStack gap="0">
               {items.map((item, index) => (
-                <Box key={`${item.id}-${index}`} w="full">
+                <Box key={item.id} w="full">
                   {renderTableRow(item, index)}
                 </Box>
               ))}
@@ -43,6 +43,7 @@ export function PaginatedTable({
           {loading &&
             items.length === 0 &&
             Array.from({ length: 20 }).map((_, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Box key={index} py="xs" w="full">
                 <Skeleton height="68px" w="full" />
               </Box>
