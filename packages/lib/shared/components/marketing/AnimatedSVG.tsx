@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { Box, useToken } from '@chakra-ui/react'
 import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
 
-export const AnimatedSVG: React.FC = () => {
+export function AnimatedSVG(): JSX.Element {
   const [bgColor] = useToken('colors', ['background.level2'])
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({

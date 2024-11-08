@@ -19,8 +19,11 @@ export function V3VideoTutorial() {
           </Text>
           <Box mb="md" paddingTop="56.25%" position="relative" width="100%">
             <iframe
+              // eslint-disable-next-line max-len
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               className="youtube"
+              frameBorder="0"
               referrerPolicy="strict-origin-when-cross-origin"
               src="https://www.youtube.com/embed/oJAXQCMVdfA?si=lbZgEgKtWeNOdWR-"
               style={{
@@ -31,9 +34,6 @@ export function V3VideoTutorial() {
                 height: '100%',
               }}
               title="YouTube video player"
-              frameBorder="0"
-              // eslint-disable-next-line max-len
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             />
           </Box>
           <Text

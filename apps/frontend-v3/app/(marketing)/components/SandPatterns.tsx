@@ -40,13 +40,12 @@ function SandPatterns({ children, ...rest }: PropsWithChildren) {
 
   return (
     <Box height="100vh" position="relative" width="100%">
-      {circles.map((_, index) => (
+      {circles.map(circleNum => (
         <motion.div
           animate={controls}
-          custom={index}
+          custom={circleNum - 1} // Keep the same index for animation
           initial={{ width: 0, height: 0, borderRadius: 50 }}
-          // eslint-disable-next-line react/no-array-index-key
-          key={index}
+          key={`circle-${circleNum}`}
           style={circleStyle}
         />
       ))}
