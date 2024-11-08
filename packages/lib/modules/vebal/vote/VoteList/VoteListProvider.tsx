@@ -1,39 +1,37 @@
 'use client'
 
 import { createContext, PropsWithChildren, useMemo } from 'react'
-import { GetVeBalVotingListDocument } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery } from '@apollo/client'
+import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { usePoolListQueryState } from '@repo/lib/modules/pool/PoolList/usePoolListQueryState'
-import { useHiddenHandVotingIncentives } from '@repo/lib/modules/vebal/vote/hidden-hand/useHiddenHandVotingIncentives'
 import { useGaugeVotes } from '@repo/lib/modules/vebal/vote/gauge/useGaugeVotes'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { orderBy } from 'lodash'
+import { HiddenHandData } from '@repo/lib/modules/vebal/vote/hidden-hand/hidden-hand.types'
 
-export function _useVoteList() {
+export interface UseVoteListArgs {
+  data: GetVeBalVotingListQuery | undefined
+  voteListLoading?: boolean
+  error?: any
+  votingIncentives?: HiddenHandData[]
+  votingIncentivesLoading?: boolean
+  votingIncentivesError?: any
+}
+
+export function _useVoteList({
+  data,
+  voteListLoading = false,
+  error,
+  votingIncentives,
+  votingIncentivesError,
+  votingIncentivesLoading = false,
+}: UseVoteListArgs) {
   // todo: implement vote's sorting/filtering
   const queryState = usePoolListQueryState()
 
-  const {
-    data,
-    loading: voteListLoading,
-    previousData,
-    refetch,
-    error,
-  } = useQuery(GetVeBalVotingListDocument)
-
-  const voteListData =
-    voteListLoading && previousData
-      ? previousData.veBalGetVotingList
-      : data?.veBalGetVotingList || []
+  const voteListData = data?.veBalGetVotingList || []
 
   const pagination = queryState.pagination
-
-  const {
-    data: votingIncentives,
-    isLoading: votingIncentivesLoading,
-    error: votingIncentivesError,
-  } = useHiddenHandVotingIncentives()
 
   const gaugeAddresses = useMemo(() => voteListData.map(vote => vote.gauge.address), [voteListData])
 
@@ -67,8 +65,7 @@ export function _useVoteList() {
     sortedVoteList,
     voteListLoading,
     loading: voteListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
-    count: data?.veBalGetVotingList.length || previousData?.veBalGetVotingList.length,
-    refetch,
+    count: data?.veBalGetVotingList.length,
     error,
     votingIncentivesLoading,
     votingIncentivesError,
@@ -78,8 +75,8 @@ export function _useVoteList() {
 
 export const VoteListContext = createContext<ReturnType<typeof _useVoteList> | null>(null)
 
-export function VoteListProvider({ children }: PropsWithChildren) {
-  const hook = _useVoteList()
+export function VoteListProvider({ children, ...props }: PropsWithChildren<UseVoteListArgs>) {
+  const hook = _useVoteList(props)
 
   return <VoteListContext.Provider value={hook}>{children}</VoteListContext.Provider>
 }

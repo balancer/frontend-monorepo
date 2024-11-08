@@ -13,7 +13,7 @@ export async function getHiddenHandVotingIncentives(timestamp?: number): Promise
         ? `${HIDDEN_HAND_PROPOSAL_BALANCER_API_URL}/${timestamp}`
         : HIDDEN_HAND_PROPOSAL_BALANCER_API_URL,
       {
-        next: { revalidate: mins(15).toSecs() },
+        next: { revalidate: mins(1).toSecs() },
       }
     )
 
