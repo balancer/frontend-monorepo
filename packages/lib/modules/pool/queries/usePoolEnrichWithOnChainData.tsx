@@ -17,7 +17,7 @@ import { cowAmmPoolAbi } from '../../web3/contracts/abi/cowAmmAbi'
 import { weightedPoolAbi_V3, vaultExtensionAbi_V3 } from '@balancer/sdk'
 
 export function usePoolEnrichWithOnChainData(pool: Pool) {
-  const { priceForAddress } = useTokens()
+  const { priceFor } = useTokens()
 
   const { isLoading, poolTokenBalances, totalSupply, nestedPoolData, refetch } =
     usePoolOnchainData(pool)
@@ -25,7 +25,7 @@ export function usePoolEnrichWithOnChainData(pool: Pool) {
   const clone = enrichPool({
     isLoading,
     pool,
-    priceForAddress,
+    priceFor,
     poolTokenBalances,
     totalSupply,
     nestedPoolData,
@@ -191,7 +191,7 @@ function useCowPoolOnchainData(pool: Pool) {
 type Params = {
   isLoading: boolean
   pool: Pool
-  priceForAddress: (address: string, chain: GqlChain) => number
+  priceFor: (address: string, chain: GqlChain) => number
   poolTokenBalances: readonly bigint[] | undefined
   totalSupply: bigint | undefined
   nestedPoolData: any // TODO: how to type this?
@@ -200,7 +200,7 @@ type Params = {
 function enrichPool({
   isLoading,
   pool,
-  priceForAddress,
+  priceFor,
   poolTokenBalances,
   totalSupply,
   nestedPoolData,
@@ -219,12 +219,14 @@ function enrichPool({
     if (!poolTokenBalance) return
     const tokenBalance = formatUnits(poolTokenBalance, token.decimals)
     token.balance = tokenBalance
-    token.balanceUSD = bn(tokenBalance).times(priceForAddress(token.address, pool.chain)).toString()
+    token.balanceUSD = bn(tokenBalance).times(priceFor(token.address, pool.chain)).toString()
   })
+
+  console.log({ price: priceFor('0xhfdshfkdsfh', pool.chain) })
 
   clone.dynamicData.totalLiquidity = safeSum(
     filteredTokens.map(
-      token => (priceForAddress(token.address, pool.chain) || 0) * parseFloat(token.balance)
+      token => (priceFor(token.address, pool.chain) || 0) * parseFloat(token.balance)
     )
   )
 
@@ -242,7 +244,7 @@ function enrichPool({
       poolToken.nestedPool.totalShares = formatUnits(totalSupply || 0n, BPT_DECIMALS)
 
       poolToken.nestedPool.totalLiquidity = bn(poolToken.nestedPool.totalShares)
-        .times(priceForAddress(poolToken.address, pool.chain))
+        .times(priceFor(poolToken.address, pool.chain))
         .toString()
 
       poolToken.nestedPool.nestedPercentage = bn(poolToken.balance)
@@ -264,7 +266,7 @@ function enrichPool({
           .toString()
 
         nestedPoolToken.balanceUSD = bn(nestedPoolToken.balance)
-          .times(priceForAddress(nestedPoolToken.address, pool.chain))
+          .times(priceFor(nestedPoolToken.address, pool.chain))
           .toString()
       })
     })

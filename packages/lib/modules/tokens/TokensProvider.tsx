@@ -126,9 +126,11 @@ export function _useTokens(
 
   function priceFor(address: string, chain: GqlChain): number {
     const token = getToken(address, chain)
-    if (!token) return 0
-
-    return priceForToken(token)
+    if (token) {
+      return priceForToken(token)
+    } else {
+      return priceForAddress(address, chain)
+    }
   }
 
   const calcWeightForBalance = useCallback(
