@@ -2,7 +2,7 @@ import { mins } from '@repo/lib/shared/utils/time'
 import {
   HiddenHandData,
   HiddenHandIncentives,
-} from '@repo/lib/modules/vebal/vote/hidden-hand/hidden-hand.type'
+} from '@repo/lib/modules/vebal/vote/hidden-hand/hidden-hand.types'
 
 const HIDDEN_HAND_PROPOSAL_BALANCER_API_URL = 'https://api.hiddenhand.finance/proposal/balancer'
 

@@ -96,13 +96,10 @@ export function VoteRateTooltip({ votes, votesState, votesNextPeriod, usePortal 
     <VoteDownIcon />
   )
 
-  /* fix: where is data? */
-  const voteState = useMemo(() => {
-    return {
-      currentPeriodVebal: Math.random() * 20000,
-      nextPeriodVebal: Math.random() * 20000,
-    }
-  }, [])
+  const voteState = {
+    currentPeriodVebal: '-',
+    nextPeriodVebal: '-',
+  }
 
   const votesColor =
     votesState === 'normal' ? undefined : votesState === 'close' ? 'font.warning' : 'red.400'

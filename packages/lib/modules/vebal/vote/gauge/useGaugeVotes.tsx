@@ -52,16 +52,7 @@ export interface UseGaugeVotesParams {
 export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
   const { userAddress, isConnected } = useUserAccount()
 
-  const thisWeekTimestamp = useMemo(() => {
-    // this makes sure we don't compute votes from before Mar31 in the "This period" entry,
-    // since the system is not fully active between Mar31 and Apr6
-    // (ie the first period starts on Apr7)
-    const thisWeekTimestamp = toUnixTimestamp(Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs)
-    if (thisWeekTimestamp == FIRST_WEEK_TIMESTAMP) {
-      return thisWeekTimestamp - oneWeekInSecs
-    }
-    return thisWeekTimestamp
-  }, [])
+  const thisWeekTimestamp = toUnixTimestamp(Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs)
 
   const nextWeekTimestamp = useMemo(() => {
     return toUnixTimestamp(Math.floor((Date.now() + oneWeekInMs) / oneWeekInMs) * oneWeekInMs)
