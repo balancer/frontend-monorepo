@@ -94,7 +94,10 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
     })
   }, [gaugeAddresses, thisWeekTimestamp, nextWeekTimestamp, isConnected, userAddress])
 
-  const { results, refetchAll, isLoading } = useMulticall(gaugeRequests, { ...onlyExplicitRefetch })
+  const { results, refetchAll, isLoading } = useMulticall(gaugeRequests, {
+    ...onlyExplicitRefetch,
+    batchSize: 25_000, // 25kb batch ~ 190kb payload
+  })
 
   const gaugeVotes = useMemo(() => {
     const mainnetResults = results[mainnetNetworkConfig.chainId]

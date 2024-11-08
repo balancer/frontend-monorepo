@@ -12,13 +12,20 @@ export type ChainContractConfig = ContractFunctionParameters & {
 }
 
 type Options = {
+  // react-query options
   enabled?: boolean
   refetchOnMount?: boolean
   refetchOnReconnect?: boolean
   refetchOnWindowFocus?: boolean
+
+  // multicall options
+  batchSize?: number
 }
 
-export function useMulticall(multicallRequests: ChainContractConfig[], options: Options = {}) {
+export function useMulticall(
+  multicallRequests: ChainContractConfig[],
+  { batchSize, ...options }: Options = {}
+) {
   const config = useConfig()
   // Want the results for each chainId to be independent of each other so we don't have
   // a large blob of queries that resolves at once, but have to option to have the results
@@ -38,6 +45,7 @@ export function useMulticall(multicallRequests: ChainContractConfig[], options: 
           const results = await multicall(config, {
             contracts: multicalls,
             chainId: Number(chain),
+            batchSize,
           })
 
           // map the result to its id based on the call index
