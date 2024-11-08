@@ -1,6 +1,7 @@
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { BuildAddLiquidityInput, QueryAddLiquidityOutput } from '../add-liquidity.types'
+import { Address } from 'viem'
 
 /**
  * AddLiquidityHandler is an interface that defines the methods that must be implemented by a handler.
@@ -18,7 +19,10 @@ import { BuildAddLiquidityInput, QueryAddLiquidityOutput } from '../add-liquidit
 export interface AddLiquidityHandler {
   // Query the expected output of adding liquidity and store it inside the handler instance
   // Also returns bptOut to be used by the UI
-  simulate(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<QueryAddLiquidityOutput>
+  simulate(
+    humanAmountsIn: HumanTokenAmountWithAddress[],
+    sender: Address
+  ): Promise<QueryAddLiquidityOutput>
 
   // Calculate the price impact of adding liquidity
   getPriceImpact(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<number>

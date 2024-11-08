@@ -55,6 +55,7 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { isBoosted } from '../../../pool.helpers'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -188,7 +189,11 @@ function AddLiquidityMainForm() {
             <BalAlert content="You cannot add because the pool has no liquidity" status="warning" />
           )}
           <SafeAppAlert />
-          {!nestedAddLiquidityEnabled ? (
+          {/* //TODO:
+            Avoid proportional inputs to avoid error above until SDK calculateProportionalAmounts for boosted is implemented
+            https://github.com/balancer/b-sdk/issues/468
+          */}
+          {!nestedAddLiquidityEnabled && !isBoosted(pool) ? (
             <TokenInputsWithAddable
               requiresProportionalInput={requiresProportionalInput(pool)}
               tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}

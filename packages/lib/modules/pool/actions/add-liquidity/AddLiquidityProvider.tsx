@@ -70,7 +70,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
         ({
           tokenAddress: token.address,
           humanAmount: '',
-        }) as HumanTokenAmountWithAddress,
+        }) as HumanTokenAmountWithAddress
     )
     setHumanAmountsIn(amountsIn)
   }

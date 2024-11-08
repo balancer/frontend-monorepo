@@ -8,7 +8,7 @@ import {
 } from './LiquidityActionHelpers'
 import { nestedPoolMock } from '../__mocks__/nestedPoolMock'
 import {
-  bpt3PoolAddress,
+  usdcDaiUsdtBptAddress,
   wETHAddress,
   threePoolId,
   daiAddress,
@@ -64,18 +64,18 @@ it('returns poolState for non nested pools', () => {
 
 it('returns NestedPoolState for nested pools', () => {
   const helpers = new LiquidityActionHelpers(nestedPoolMock)
-  const nestedPoolState = helpers.nestedPoolState
+  const nestedPoolState = helpers.nestedPoolStateV2
 
   expect(nestedPoolState.pools).toHaveLength(2)
   const firstPool = nestedPoolState.pools[0]
   expect(firstPool.id).toBe(nestedPoolMock.id)
-  expect(firstPool.tokens.map(t => t.address)).toEqual([bpt3PoolAddress, wETHAddress])
+  expect(firstPool.tokens.map(t => t.address)).toEqual([usdcDaiUsdtBptAddress, wETHAddress])
 
   const secondPool = nestedPoolState.pools[1]
   expect(secondPool.id).toBe(threePoolId)
   expect(secondPool.tokens.map(t => t.address)).toEqual([
     daiAddress,
-    bpt3PoolAddress,
+    usdcDaiUsdtBptAddress,
     usdcAddress,
     usdtAddress,
   ])

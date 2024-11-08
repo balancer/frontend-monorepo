@@ -14,17 +14,19 @@ export type TokenApprovalLabelArgs = {
   symbol: string
   requiredRawAmount: bigint
   isPermit2?: boolean
+  lpToken?: string
 }
 
 export const buildTokenApprovalLabels: BuildTransactionLabels = ({
   actionType,
   symbol,
   isPermit2 = false,
+  lpToken,
 }: TokenApprovalLabelArgs) => {
   return {
-    init: initApprovalLabelFor(actionType, symbol, isPermit2),
+    init: initApprovalLabelFor(actionType, symbol, isPermit2, lpToken),
     title: titleFor(actionType, symbol, isPermit2),
-    description: descriptionFor(actionType, symbol),
+    description: descriptionFor(actionType, symbol, lpToken),
     confirming: actionType === 'Unapprove' ? `Unapproving ${symbol}...` : `Approving ${symbol}...`,
     confirmed: `${symbol} ${actionType === 'Unapprove' ? 'unapproved' : 'approved!'}`,
     tooltip: tooltipApprovalLabelFor(actionType, symbol),
@@ -32,15 +34,20 @@ export const buildTokenApprovalLabels: BuildTransactionLabels = ({
   }
 }
 
-function initApprovalLabelFor(actionType: ApprovalAction, symbol: string, isPermit2: boolean) {
+function initApprovalLabelFor(
+  actionType: ApprovalAction,
+  symbol: string,
+  isPermit2: boolean,
+  lpToken = 'LP token'
+) {
   if (isPermit2 && actionType === 'AddLiquidity') {
     return `${symbol}: Approve Permit`
   }
   switch (actionType) {
     case 'Locking':
-      return `Approve LP token to lock`
+      return `Approve ${lpToken} to lock`
     case 'Staking':
-      return `Approve LP token to stake`
+      return `Approve ${lpToken} to stake`
     case 'Swapping':
       return `Approve ${symbol} to swap`
     case 'Unapprove':
@@ -62,12 +69,12 @@ function titleFor(actionType: ApprovalAction, symbol: string, isPermit2: boolean
   }
   return isPermit2 ? `${symbol}: Approve Permit` : `Approve ${symbol}`
 }
-function descriptionFor(actionType: ApprovalAction, symbol: string) {
+function descriptionFor(actionType: ApprovalAction, symbol: string, lpToken = 'LP token') {
   switch (actionType) {
     case 'Locking':
-      return `Approval of LP token to lock`
+      return `Approval of ${lpToken} to lock`
     case 'Staking':
-      return `Approval of LP token to stake`
+      return `Approval of ${lpToken} to stake`
     case 'Swapping':
       return `Approval of ${symbol} to swap`
     case 'Unapprove':

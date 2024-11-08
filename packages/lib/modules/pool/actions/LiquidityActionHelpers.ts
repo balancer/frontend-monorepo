@@ -6,6 +6,7 @@ import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { SentryError } from '@repo/lib/shared/utils/errors'
 import { bn, isZero } from '@repo/lib/shared/utils/numbers'
 import {
+  AddLiquidityQueryOutput,
   HumanAmount,
   InputAmount,
   MinimalToken,
@@ -13,9 +14,12 @@ import {
   PoolGetPool,
   PoolState,
   PoolStateWithBalances,
+  PoolStateWithUnderlyings,
+  PoolTokenWithUnderlying,
   Token,
   TokenAmount,
   mapPoolToNestedPoolStateV2,
+  mapPoolToNestedPoolStateV3,
   mapPoolType,
 } from '@balancer/sdk'
 import BigNumber from 'bignumber.js'
@@ -37,6 +41,7 @@ import {
   isUnbalancedLiquidityDisabled,
   isV3Pool,
 } from '../pool.helpers'
+import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
 
 // Null object used to avoid conditional checks during hook loading state
 const NullPool: Pool = {
@@ -59,10 +64,42 @@ export class LiquidityActionHelpers {
   }
 
   /* Used by default nested SDK handlers */
-  public get nestedPoolState(): NestedPoolState {
+  public get nestedPoolStateV2(): NestedPoolState {
     const result = mapPoolToNestedPoolStateV2(this.pool as PoolGetPool)
     result.protocolVersion = 2
     return result
+  }
+
+  /* Used by default nested SDK handlers */
+  public get nestedPoolStateV3(): NestedPoolState {
+    const result = mapPoolToNestedPoolStateV3(this.pool as PoolGetPool)
+    result.protocolVersion = 3
+    return result
+  }
+
+  /* Used by V3 boosted SDK handlers */
+  public get boostedPoolState(): PoolStateWithUnderlyings & { totalShares: HumanAmount } {
+    const poolTokensWithUnderlyings: PoolTokenWithUnderlying[] = this.pool.poolTokens.map(
+      (token, index) => ({
+        ...token,
+        address: token.address as Address,
+        underlyingToken: {
+          ...token.underlyingToken,
+          address: token.underlyingToken?.address as Address,
+          decimals: token.underlyingToken?.decimals as number,
+          index, //TODO: review that this index is always the expected one
+        },
+      })
+    )
+    const state: PoolStateWithUnderlyings & { totalShares: HumanAmount } = {
+      id: this.pool.id as Hex,
+      address: this.pool.address as Address,
+      protocolVersion: 3,
+      type: mapPoolType(this.pool.type),
+      tokens: poolTokensWithUnderlyings,
+      totalShares: this.pool.dynamicData.totalShares as HumanAmount,
+    }
+    return state
   }
 
   public get poolStateWithBalances(): PoolStateWithBalances {
@@ -79,7 +116,7 @@ export class LiquidityActionHelpers {
 
   public getAmountsToApprove(
     humanAmountsIn: HumanTokenAmountWithAddress[],
-    isPermit2 = false,
+    isPermit2 = false
   ): TokenAmountToApprove[] {
     return this.toInputAmounts(humanAmountsIn).map(({ address, rawAmount }) => {
       return {
@@ -111,9 +148,9 @@ export class LiquidityActionHelpers {
         const token = allTokens.find(token => isSameAddress(token.address, tokenAddress))
         if (!token) {
           throw new Error(
-            `Provided token address ${tokenAddress} not found in pool tokens [${Object.keys(
-              allTokens.map(t => t.address),
-            ).join(' , \n')}]`,
+            `Provided token address ${tokenAddress} not found in pool tokens [${allTokens
+              .map(t => t.address)
+              .join(' , \n')}]`
           )
         }
         return {
@@ -164,14 +201,14 @@ export function toHumanAmount(tokenAmount: TokenAmount): HumanAmount {
 
 export function ensureLastQueryResponse<Q>(
   liquidityActionDescription: string,
-  queryResponse?: Q,
+  queryResponse?: Q
 ): Q {
   if (!queryResponse) {
     // This should never happen but this is a check against potential regression bugs
     console.error(`Missing queryResponse in ${liquidityActionDescription}`)
     throw new SentryError(
       `Missing queryResponse.
-It looks that you tried to call useBuildCallData before the last query finished generating queryResponse`,
+It looks that you tried to call useBuildCallData before the last query finished generating queryResponse`
     )
   }
 
@@ -248,13 +285,13 @@ export function toPoolStateWithBalances(pool: Pool): PoolStateWithBalances {
 export function filterHumanAmountsIn(
   humanAmountsIn: HumanTokenAmountWithAddress[],
   tokenAddress: Address,
-  chain: GqlChain,
+  chain: GqlChain
 ) {
   return humanAmountsIn.filter(
     amountIn =>
       !isSameAddress(amountIn.tokenAddress, tokenAddress) &&
       !(isNativeAsset(tokenAddress, chain) && isWrappedNativeAsset(amountIn.tokenAddress, chain)) &&
-      !(isNativeAsset(amountIn.tokenAddress, chain) && isWrappedNativeAsset(tokenAddress, chain)),
+      !(isNativeAsset(amountIn.tokenAddress, chain) && isWrappedNativeAsset(tokenAddress, chain))
   )
 }
 
@@ -282,7 +319,7 @@ export function shouldShowNativeWrappedSelector(token: GqlToken, poolType: GqlPo
 
 export function replaceWrappedWithNativeAsset(
   validTokens: GqlToken[],
-  nativeAsset: GqlToken | undefined,
+  nativeAsset: GqlToken | undefined
 ) {
   if (!nativeAsset) return validTokens
   return validTokens.map(token => {
@@ -297,10 +334,10 @@ export function replaceWrappedWithNativeAsset(
 export function injectNativeAsset(
   validTokens: GqlToken[],
   nativeAsset: GqlToken | undefined,
-  pool: Pool,
+  pool: Pool
 ) {
   const isWrappedNativeAssetInPool = validTokens.find(token =>
-    isWrappedNativeAsset(token.address as Address, pool.chain),
+    isWrappedNativeAsset(token.address as Address, pool.chain)
   )
 
   if (
@@ -322,4 +359,14 @@ export function hasNoLiquidity(pool: Pool): boolean {
 export function formatBuildCallParams<T>(buildCallParams: T, account: Address) {
   // sender and recipient must be defined only for v1 and v2 pools
   return { ...buildCallParams, sender: account, recipient: account }
+}
+
+export function toTokenAmountsIn(
+  sdkQueryOutput: AddLiquidityQueryOutput
+): TokenAmountIn[] | undefined {
+  if (!sdkQueryOutput) return
+  return sdkQueryOutput.amountsIn.map(amountIn => ({
+    address: amountIn.token.address,
+    amount: amountIn.amount,
+  }))
 }

@@ -23,6 +23,7 @@ import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
+import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof _useRemoveLiquidity>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
@@ -33,7 +34,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const [wethIsEth, setWethIsEth] = useState(false)
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [removalType, setRemovalType] = useState<RemoveLiquidityType>(
-    RemoveLiquidityType.Proportional,
+    RemoveLiquidityType.Proportional
   )
 
   // Quote state, fixed when remove liquidity tx goes into confirming/confirmed
@@ -58,12 +59,12 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const nativeAsset = getNativeAssetToken(chain)
   const wNativeAsset = getWrappedNativeAssetToken(chain)
   const includesWrappedNativeAsset: boolean = tokens.some(token =>
-    isWrappedNativeAsset(token.address as Address, chain),
+    isWrappedNativeAsset(token.address as Address, chain)
   )
 
   const handler = useMemo(
     () => selectRemoveLiquidityHandler(pool, removalType),
-    [pool.id, removalType, isLoading],
+    [pool.id, removalType, isLoading]
   )
 
   const totalUsdFromBprPrice = bn(humanBptIn).times(bptPrice).toFixed()
@@ -73,7 +74,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const isSingleToken = removalType === RemoveLiquidityType.SingleToken
   const isProportional = removalType === RemoveLiquidityType.Proportional
 
-  function tokensToShow() {
+  function tokensToShow(): GqlToken[] {
     // Cow AMM pools don't support wethIsEth
     if (isCowAmmPool(pool.type)) return tokens
 
@@ -83,13 +84,15 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     // if wethIsEth we only show the native asset
     if (includesWrappedNativeAsset && wethIsEth) {
       // replace the wrapped native asset with the native asset
-      return tokens.map(token => {
-        if (token && isWrappedNativeAsset(token.address as Address, chain)) {
-          return nativeAsset
-        } else {
-          return token
-        }
-      })
+      return tokens
+        .map(token => {
+          if (token && isWrappedNativeAsset(token.address as Address, chain)) {
+            return nativeAsset
+          } else {
+            return token
+          }
+        })
+        .filter((token): token is GqlToken => token !== undefined)
     }
 
     return tokens
@@ -172,7 +175,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   function updateQuoteState(
     bptIn: HumanAmount,
     amountsOut: TokenAmount[] | undefined,
-    priceImpact: number | undefined,
+    priceImpact: number | undefined
   ) {
     setQuoteBptIn(bptIn)
     if (!amountsOut) setQuoteAmountsOut(emptyTokenAmounts(pool))
@@ -197,11 +200,11 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     quoteAmountsOut.map(tokenAmount => [
       getAddressForTokenAmount(tokenAmount),
       toHumanAmount(tokenAmount),
-    ]),
+    ])
   )
 
   const amountsOut: HumanTokenAmountWithAddress[] = Object.entries(amountOutMap).map(
-    ([address, amount]) => ({ tokenAddress: address as Address, humanAmount: amount }),
+    ([address, amount]) => ({ tokenAddress: address as Address, humanAmount: amount })
   )
 
   const usdAmountOutMap: Record<Address, HumanAmount> = Object.fromEntries(
@@ -213,7 +216,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
       const tokenUnits = amountOutForToken(token.address as Address)
 
       return [tokenAddress, usdValueForToken(token, tokenUnits) as HumanAmount]
-    }),
+    })
   )
 
   // while the single token balance is more than 25% of the pool, we use the wallet balance usd for the view
@@ -233,7 +236,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     [simulationQuery.isLoading, 'Fetching quote...'],
     [simulationQuery.isError, 'Error fetching quote'],
     [priceImpactQuery.isLoading, 'Fetching price impact...'],
-    [priceImpactQuery.isError, 'Error fetching price impact'],
+    [priceImpactQuery.isError, 'Error fetching price impact']
   )
 
   /**

@@ -18,6 +18,7 @@ function selectNestedSingleTokenHandler(pool: Pool): NestedSingleTokenRemoveLiqu
 const defaultQueryInput: QueryRemoveLiquidityInput = {
   humanBptIn: '1',
   tokenOut: daiAddress,
+  userAddress: defaultTestUserAccount,
 }
 
 const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0.2' }

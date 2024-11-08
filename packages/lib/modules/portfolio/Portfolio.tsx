@@ -12,6 +12,7 @@ export default function Portfolio() {
       <TransactionStateProvider>
         <ClaimNetworkPools />
       </TransactionStateProvider>
+
       <PortfolioTable />
     </Stack>
   )

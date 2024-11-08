@@ -8,7 +8,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { includesAddress, isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
 import { HumanTokenAmountWithAddress, TokenBase } from './token.types'
-import { InputAmount, TokenAmount } from '@balancer/sdk'
+import { InputAmount } from '@balancer/sdk'
 import { Pool } from '../pool/PoolProvider'
 import { getVaultConfig, isCowAmmPool, isV3Pool } from '../pool/pool.helpers'
 
@@ -18,14 +18,14 @@ export function isNativeAsset(token: TokenBase | string, chain: GqlChain | Suppo
 
 export function isWrappedNativeAsset(
   token: TokenBase | string,
-  chain: GqlChain | SupportedChainId,
+  chain: GqlChain | SupportedChainId
 ) {
   return wrappedNativeAssetFilter(chain)(token)
 }
 
 export function isNativeOrWrappedNative(
   token: TokenBase | string,
-  chain: GqlChain | SupportedChainId,
+  chain: GqlChain | SupportedChainId
 ) {
   return isWrappedNativeAsset(token, chain) || isNativeAsset(token, chain)
 }
@@ -90,7 +90,7 @@ export function swapNativeWithWrapped(inputAmounts: InputAmount[], chain: GqlCha
 */
 export function swapWrappedWithNative(
   inputAmounts: HumanTokenAmountWithAddress[],
-  chain: GqlChain,
+  chain: GqlChain
 ) {
   return inputAmounts.map(inputAmount => {
     if (isWrappedNativeAsset(inputAmount.tokenAddress, chain)) {
@@ -105,11 +105,11 @@ export function swapWrappedWithNative(
 
 export function requiresDoubleApproval(
   chainId: GqlChain | SupportedChainId,
-  tokenAddress: Address,
+  tokenAddress: Address
 ) {
   return includesAddress(
     getNetworkConfig(chainId).tokens.doubleApprovalRequired || [],
-    tokenAddress,
+    tokenAddress
   )
 }
 
@@ -121,7 +121,7 @@ export function getLeafTokens(poolTokens: PoolToken[]) {
     if (poolToken.nestedPool) {
       const nestedTokens = poolToken.nestedPool.tokens.filter(
         // Exclude the pool token itself
-        t => !isSameAddress(t.address, poolToken.address),
+        t => !isSameAddress(t.address, poolToken.address)
       ) as PoolToken[]
       leafTokens.push(...nestedTokens)
     } else {
@@ -143,20 +143,4 @@ export function getSpenderForAddLiquidity(pool: Pool): Address {
   }
   const { vaultAddress } = getVaultConfig(pool)
   return vaultAddress
-}
-
-// Excludes wrapped native asset from amountsIn when wethIsEth
-export function filterWrappedNativeAsset({
-  amountsIn,
-  wethIsEth,
-  chain,
-}: {
-  amountsIn: TokenAmount[]
-  wethIsEth: boolean
-  chain: GqlChain
-}): TokenAmount[] {
-  if (!wethIsEth) return amountsIn
-  return amountsIn.filter(a => {
-    return !isWrappedNativeAsset(a.token.address, chain)
-  })
 }

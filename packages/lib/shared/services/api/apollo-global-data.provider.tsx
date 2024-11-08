@@ -16,12 +16,12 @@ import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { TokensProvider } from '@repo/lib/modules/tokens/TokensProvider'
 import { FiatFxRatesProvider } from '../../hooks/FxRatesProvider'
 import { getFxRates } from '../../utils/currencies'
-import { getPoolCategories } from '@repo/lib/modules/pool/categories/getPoolCategories'
-import { PoolCategoriesProvider } from '@repo/lib/modules/pool/categories/PoolCategoriesProvider'
 import { mins } from '../../utils/time'
 import { PropsWithChildren } from 'react'
 import { getHooksMetadata } from '@repo/lib/modules/hooks/getHooksMetadata'
 import { HooksProvider } from '@repo/lib/modules/hooks/HooksProvider'
+import { getPoolTags } from '@repo/lib/modules/pool/tags/getPoolTags'
+import { PoolTagsProvider } from '@repo/lib/modules/pool/tags/PoolTagsProvider'
 
 export const revalidate = 60
 
@@ -55,8 +55,8 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
   })
 
   const exchangeRates = await getFxRates()
-  const poolCategories = await getPoolCategories()
   const hooksMetadata = await getHooksMetadata()
+  const poolTags = await getPoolTags()
 
   return (
     <TokensProvider
@@ -65,9 +65,9 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
       variables={tokensQueryVariables}
     >
       <FiatFxRatesProvider data={exchangeRates}>
-        <PoolCategoriesProvider data={poolCategories}>
+        <PoolTagsProvider data={poolTags}>
           <HooksProvider data={hooksMetadata}>{children}</HooksProvider>
-        </PoolCategoriesProvider>
+        </PoolTagsProvider>
       </FiatFxRatesProvider>
     </TokensProvider>
   )

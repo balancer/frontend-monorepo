@@ -1307,7 +1307,7 @@ export default function Privacy() {
                 building a safer and more inclusive environment for all. Please feel free to reach
                 out with any questions, suggestions or propose changes for this page directly via
                 the{' '}
-                <a href="https://github.com/balancer/frontend-v3/blob/main/app/(marketing)/risks/page.tsx">
+                <a href="https://github.com/balancer/frontend-monorepo/blob/main/apps/frontend-v3/app/(marketing)/risks/page.tsx">
                   Balancer Github
                 </a>
                 .

@@ -39,19 +39,27 @@ import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
-
-const TABS: ButtonGroupOption[] = [
-  {
-    value: 'proportional',
-    label: 'Proportional',
-  },
-  {
-    value: 'single',
-    label: 'Single token',
-  },
-] as const
+import { isBoosted } from '../../../pool.helpers'
 
 export function RemoveLiquidityForm() {
+  const { pool } = usePool()
+
+  const TABS: ButtonGroupOption[] = [
+    {
+      value: 'proportional',
+      label: 'Proportional',
+    },
+    {
+      value: 'single',
+      label: 'Single token',
+      //Boosted pools do not support single token removes
+      disabled: isBoosted(pool),
+    },
+  ] as const
+  const [activeTab, setActiveTab] = useState(TABS[0])
+  const isProportionalTabSelected = activeTab.value === 'proportional'
+  const isSingleTabSelected = activeTab.value === 'single'
+
   const {
     transactionSteps,
     tokens,
@@ -72,11 +80,9 @@ export function RemoveLiquidityForm() {
     setHumanBptInPercent,
     setNeedsToAcceptHighPI,
   } = useRemoveLiquidity()
-  const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const nextBtn = useRef(null)
-  const [activeTab, setActiveTab] = useState(TABS[0])
   const { startTokenPricePolling } = useTokens()
   const { slippage } = useUserSettings()
 
@@ -180,10 +186,10 @@ export function RemoveLiquidityForm() {
                   You can only remove up to 25% of a single asset from the pool in one transaction
                 </Text>
               )}
-              {activeTab === TABS[0] && (
+              {isProportionalTabSelected && (
                 <RemoveLiquidityProportional poolType={pool.type} tokens={tokens} />
               )}
-              {activeTab === TABS[1] && (
+              {isSingleTabSelected && (
                 <RemoveLiquiditySingleToken chain={pool.chain} tokens={tokens} />
               )}
             </VStack>

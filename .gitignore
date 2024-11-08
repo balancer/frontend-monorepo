@@ -26,7 +26,6 @@ coverage
 out/
 dist
 
-
 # debug
 npm-debug.log*
 yarn-debug.log*

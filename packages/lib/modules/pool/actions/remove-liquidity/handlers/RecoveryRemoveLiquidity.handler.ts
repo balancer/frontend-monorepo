@@ -37,9 +37,10 @@ export class RecoveryRemoveLiquidityHandler {
 
   public async simulate({
     humanBptIn: bptIn,
+    userAddress,
   }: QueryRemoveLiquidityInput): Promise<SdkQueryRemoveLiquidityOutput> {
     const removeLiquidity = new RemoveLiquidity()
-    const removeLiquidityInput = this.constructSdkInput(bptIn)
+    const removeLiquidityInput = this.constructSdkInput(bptIn, userAddress)
 
     const sdkQueryOutput = await removeLiquidity.queryRemoveLiquidityRecovery(
       removeLiquidityInput,
@@ -76,7 +77,10 @@ export class RecoveryRemoveLiquidityHandler {
   /**
    * PRIVATE METHODS
    */
-  protected constructSdkInput(humanBptIn: HumanAmount): RemoveLiquidityRecoveryInput {
+  protected constructSdkInput(
+    humanBptIn: HumanAmount,
+    userAddress: Address
+  ): RemoveLiquidityRecoveryInput {
     const bptIn: InputAmount = {
       rawAmount: parseEther(humanBptIn),
       decimals: BPT_DECIMALS,
@@ -88,6 +92,7 @@ export class RecoveryRemoveLiquidityHandler {
       rpcUrl: getRpcUrl(this.helpers.chainId),
       bptIn,
       kind: RemoveLiquidityKind.Recovery,
+      sender: userAddress,
     }
   }
 }
