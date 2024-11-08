@@ -1,10 +1,39 @@
-import { Badge, BadgeProps, HStack, Text, Wrap } from '@chakra-ui/react'
+import { Badge, BadgeProps, Box, HStack, Text, Wrap } from '@chakra-ui/react'
 import { GqlChain, GqlPoolTokenDisplay } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolListItem } from '../pool.types'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { isStableLike, isWeightedLike } from '../pool.helpers'
 import { Pool } from '../PoolProvider'
+
+function NestedTokenPill({
+  nestedTokens,
+  chain,
+  iconSize = 24,
+}: {
+  nestedTokens: GqlPoolTokenDisplay[]
+  chain: GqlChain
+  iconSize?: number
+}) {
+  const isFirstToken = (index: number) => index === 0
+
+  return nestedTokens.map((nestedToken, i) => {
+    const nestedZIndices = Array.from(
+      { length: nestedTokens?.length || 0 },
+      (_, index) => index
+    ).reverse()
+    return (
+      <Box key={nestedToken.address} ml={isFirstToken(i) ? 0 : -3} zIndex={nestedZIndices[i]}>
+        <TokenIcon
+          address={nestedToken.address}
+          alt={nestedToken.symbol}
+          chain={chain}
+          size={iconSize}
+        />
+      </Box>
+    )
+  })
+}
 
 function WeightedTokenPills({
   tokens,
@@ -29,15 +58,40 @@ function WeightedTokenPills({
             textTransform="none"
           >
             <HStack gap={['xs', 'sm']}>
-              <TokenIcon address={token.address} alt={token.symbol} chain={chain} size={iconSize} />
-              <HStack gap={['xs', '1.5']}>
-                {tokens.length < 5 && (
-                  <Text fontWeight="bold" noOfLines={1}>
-                    {token.symbol}
-                  </Text>
-                )}
-                <Text fontSize="xs">{fNum('weight', token.weight || '')}</Text>
-              </HStack>
+              {!token.nestedTokens && (
+                <>
+                  <TokenIcon
+                    address={token.address}
+                    alt={token.symbol}
+                    chain={chain}
+                    size={iconSize}
+                  />
+                  <HStack gap={['xs', '1.5']}>
+                    {tokens.length < 5 && (
+                      <Text fontWeight="bold" noOfLines={1}>
+                        {token.symbol}
+                      </Text>
+                    )}
+                    <Text fontSize="xs">{fNum('weight', token.weight || '')}</Text>
+                  </HStack>
+                </>
+              )}
+
+              {token.nestedTokens && (
+                <>
+                  <NestedTokenPill
+                    chain={chain}
+                    iconSize={iconSize}
+                    nestedTokens={token.nestedTokens}
+                  />
+                  <HStack gap={['xs', '1.5']}>
+                    <Text fontWeight="bold" noOfLines={1}>
+                      {token.name}
+                    </Text>
+                    <Text fontSize="xs">{fNum('weight', token.weight || '')}</Text>
+                  </HStack>
+                </>
+              )}
             </HStack>
           </Badge>
         )
@@ -75,16 +129,76 @@ function StableTokenPills({
             zIndex={zIndices[i]}
           >
             <HStack gap={['xs', '1.5']}>
-              <TokenIcon address={token.address} alt={token.symbol} chain={chain} size={iconSize} />
-              {tokens.length < 5 && (
-                <Text fontWeight="bold" noOfLines={1}>
-                  {token.symbol}
-                </Text>
+              {!token.nestedTokens && (
+                <>
+                  <TokenIcon
+                    address={token.address}
+                    alt={token.symbol}
+                    chain={chain}
+                    size={iconSize}
+                  />
+                  {tokens.length < 5 && (
+                    <Text fontWeight="bold" noOfLines={1}>
+                      {token.symbol}
+                    </Text>
+                  )}
+                </>
+              )}
+              {token.nestedTokens && (
+                <>
+                  <NestedTokenPill
+                    chain={chain}
+                    iconSize={iconSize}
+                    nestedTokens={token.nestedTokens}
+                  />
+                  <Text fontWeight="bold" noOfLines={1}>
+                    {token.name}
+                  </Text>
+                </>
               )}
             </HStack>
           </Badge>
         )
       })}
+    </HStack>
+  )
+}
+
+function BoostedTokenPills({
+  pool,
+  chain,
+  iconSize = 24,
+  ...badgeProps
+}: { pool: Pool | PoolListItem; chain: GqlChain; iconSize?: number } & BadgeProps) {
+  return (
+    <HStack spacing={0}>
+      <Badge
+        {...badgeProps}
+        alignItems="center"
+        bg="background.level2"
+        borderColor="border.base"
+        borderRadius="full"
+        borderWidth={1}
+        shadow="sm"
+        textTransform="none"
+      >
+        <HStack gap={['xs', '1.5']}>
+          <HStack>
+            {pool.displayTokens.map(token => (
+              <TokenIcon
+                address={token.address}
+                alt={token.symbol}
+                chain={chain}
+                key={token.address}
+                size={iconSize}
+              />
+            ))}
+          </HStack>
+          <Text fontWeight="bold" noOfLines={1}>
+            {pool.name}
+          </Text>
+        </HStack>
+      </Badge>
     </HStack>
   )
 }
@@ -97,6 +211,10 @@ type Props = {
 export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props & BadgeProps) {
   const shouldUseWeightedPills = isWeightedLike(pool.type)
   const shouldUseStablePills = isStableLike(pool.type)
+
+  if (pool.hasErc4626 && !pool.hasNestedErc4626) {
+    return <BoostedTokenPills chain={pool.chain} iconSize={iconSize} pool={pool} {...badgeProps} />
+  }
 
   if (shouldUseStablePills) {
     return (
