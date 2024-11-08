@@ -43,6 +43,7 @@ export interface ContractsConfig {
       */
     router?: Address
     batchRouter?: Address
+    compositeLiquidityRouter?: Address
     relayerV6: Address
     minter: Address
   }

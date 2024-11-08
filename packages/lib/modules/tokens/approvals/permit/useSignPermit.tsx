@@ -57,6 +57,7 @@ export function useSignPermit({
           sdkQueryOutput: queryOutput.sdkQueryOutput,
         },
         wethIsEth,
+        pool,
       })
 
       if (signature) {
