@@ -139,22 +139,6 @@ export function preMintedBptIndex(pool: GqlPoolBase): number | void {
   return allPoolTokens(pool).findIndex(token => isSameAddress(token.address, pool.address))
 }
 
-export function calcBptPrice(totalLiquidity: string, totalShares: string): string {
-  return bn(totalLiquidity).div(totalShares).toString()
-}
-
-export function calcBptPriceFor(totalLiquidity: string, totalShares: string): string {
-  return calcBptPrice(totalLiquidity, totalShares)
-}
-
-export function bptUsdValue(
-  totalLiquidity: string,
-  totalShares: string,
-  bptAmount: Numberish
-): string {
-  return bn(bptAmount).times(calcBptPrice(totalLiquidity, totalShares)).toString()
-}
-
 export function createdAfterTimestamp(pool: GqlPoolBase): boolean {
   // Pools should always have valid createTime so, for safety, we block the pool in case we don't get it
   // (createTime should probably not be treated as optional in the SDK types)

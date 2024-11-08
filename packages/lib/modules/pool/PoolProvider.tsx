@@ -11,7 +11,7 @@ import { createContext, PropsWithChildren, useRef } from 'react'
 import { useQuery } from '@apollo/client'
 import { FetchPoolProps } from './pool.types'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { calcBptPriceFor, usePoolHelpers } from './pool.helpers'
+import { usePoolHelpers } from './pool.helpers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { usePoolEnrichWithOnChainData } from '@repo/lib/modules/pool/queries/usePoolEnrichWithOnChainData'
 import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances'
@@ -34,6 +34,8 @@ export function _usePool({
 }: FetchPoolProps & { initialData: GetPoolQuery }) {
   useInvalidVariantRedirect(initialData.pool)
   const { userAddress } = useUserAccount()
+  const { priceFor } = useTokens()
+
   const queryVariables = { id, chain, userAddress: userAddress.toLowerCase() }
 
   const myLiquiditySectionRef = useRef<HTMLDivElement | null>(null)
@@ -60,7 +62,7 @@ export function _usePool({
 
   pool = poolWithOnchainUserBalances || pool
 
-  const bptPrice = calcBptPriceFor(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares)
+  const bptPrice = priceFor(pool.address, pool.chain)
 
   const tvl = calcTotalUsdValue(getPoolDisplayTokens(pool), pool.chain)
 

@@ -124,6 +124,11 @@ export function _useTokens(
     return bn(amount).times(priceForToken(token)).toFixed()
   }
 
+  function usdValueForBpt(address: string, chain: GqlChain, amount: Numberish) {
+    if (amount === '') return '0'
+    return bn(amount).times(priceForAddress(address, chain)).toFixed()
+  }
+
   function priceFor(address: string, chain: GqlChain): number {
     const token = getToken(address, chain)
     if (token) {
@@ -176,6 +181,7 @@ export function _useTokens(
     startTokenPricePolling: () => startPolling(pollInterval),
     stopTokenPricePolling: stopPolling,
     priceForAddress,
+    usdValueForBpt,
     vebalBptToken,
   }
 }

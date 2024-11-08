@@ -7,13 +7,15 @@ import { DELEGATE_OWNER } from '@repo/lib/config/app.config'
 import { zeroAddress } from 'viem'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { bptUsdValue, isBoosted, isCowAmmPool, isStable } from '../../../pool.helpers'
+import { isBoosted, isCowAmmPool, isStable } from '../../../pool.helpers'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 export function useFormattedPoolAttributes() {
   const { pool } = usePool()
   const { toCurrency } = useCurrency()
+  const { usdValueForBpt } = useTokens()
 
   const poolOwnerData = useMemo(() => {
     if (!pool) return
@@ -97,9 +99,7 @@ export function useFormattedPoolAttributes() {
       },
       {
         title: 'LP token price',
-        value: toCurrency(
-          bptUsdValue(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares, '1')
-        ),
+        value: toCurrency(usdValueForBpt(pool.address, pool.chain, '1')),
       },
     ]
     if (shouldHideSwapFee(pool?.type)) {

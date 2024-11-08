@@ -23,7 +23,6 @@ import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Numberish, fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool/PoolProvider'
-import { bptUsdValue } from '../../pool/pool.helpers'
 import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
@@ -39,6 +38,7 @@ type DataProps = {
   showSelect?: boolean
   showInfoPopover?: boolean
   isBpt?: boolean
+  isNestedBpt?: boolean
   iconSize?: number
 }
 
@@ -101,11 +101,10 @@ export type TokenRowProps = {
   isLoading?: boolean
   abbreviated?: boolean
   isBpt?: boolean
+  isNestedBpt?: boolean
   pool?: Pool
   showZeroAmountAsDash?: boolean
   toggleTokenSelect?: () => void
-  totalLiquidity?: string
-  totalShares?: string
   iconSize?: number
 }
 
@@ -119,15 +118,14 @@ export default function TokenRow({
   disabled,
   isLoading,
   isBpt,
+  isNestedBpt,
   pool,
   abbreviated = true,
   showZeroAmountAsDash = false,
-  totalLiquidity,
-  totalShares,
   toggleTokenSelect,
   iconSize,
 }: TokenRowProps) {
-  const { getToken, usdValueForToken } = useTokens()
+  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
@@ -147,12 +145,8 @@ export default function TokenRow({
 
   useEffect(() => {
     if (value) {
-      if (totalLiquidity && totalShares) {
-        setUsdValue(bptUsdValue(totalLiquidity, totalShares, value))
-      } else if (isBpt && pool) {
-        setUsdValue(
-          bptUsdValue(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares, value)
-        )
+      if ((isBpt || isNestedBpt) && pool) {
+        setUsdValue(usdValueForBpt(pool.address, pool.chain, value))
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))
       }

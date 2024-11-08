@@ -78,8 +78,7 @@ function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps)
                 targetWeight={poolToken.weight || undefined}
                 value={poolToken.balance}
                 {...(poolToken.hasNestedPool && {
-                  totalLiquidity: poolToken.nestedPool?.totalLiquidity,
-                  totalShares: poolToken.nestedPool?.totalShares,
+                  isNestedBpt: true,
                 })}
               />
               {poolToken.hasNestedPool && poolToken.nestedPool && (
