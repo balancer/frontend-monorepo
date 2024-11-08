@@ -22,7 +22,7 @@ export function getVotesState(relativeWeightCap: number, votesNextPeriod: number
   if (votesNextPeriod > relativeWeightCap) {
     return VotesState.Exceeded
   }
-  if (relativeWeightCap * 0.75 <= votesNextPeriod) {
+  if (relativeWeightCap - votesNextPeriod <= 0.01) {
     return VotesState.Close
   }
   return VotesState.Normal
