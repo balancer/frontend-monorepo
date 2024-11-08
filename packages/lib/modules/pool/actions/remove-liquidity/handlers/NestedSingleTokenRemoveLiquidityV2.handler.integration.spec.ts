@@ -30,7 +30,7 @@ const nestedPool = await getPoolMock(
 )
 
 describe('When removing liquidity with single token in a nested pool', () => {
-  test.only('returns price impact', async () => {
+  test('returns price impact', async () => {
     const handler = selectNestedSingleTokenHandler(nestedPool)
 
     const priceImpact = await handler.getPriceImpact(defaultQueryInput)
