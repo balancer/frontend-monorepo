@@ -327,6 +327,10 @@ export function isV3Pool(pool: Pool): boolean {
   return pool.protocolVersion === 3
 }
 
+export function isV3WithNestedActionsPool(pool: Pool): boolean {
+  return supportsNestedActions(pool) && isV3Pool(pool)
+}
+
 export function requiresPermit2Approval(pool: Pool): boolean {
   return isV3Pool(pool)
 }
@@ -348,21 +352,21 @@ export function getRateProviderWarnings(warnings: string[]) {
 */
 export function getPoolActionableTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
   type PoolToken = Pool['poolTokens'][0]
-  function toGqlTokens(tokens: PoolToken[]): GqlToken[] {
+  function toGqlTokens(tokens: PoolToken[] | TokenCore[]): GqlToken[] {
     return tokens
       .filter(token => !isSameAddress(token.address, pool.address)) // Exclude the BPT pool token itself
       .map(token => getToken(token.address, pool.chain))
       .filter((token): token is GqlToken => token !== undefined)
   }
 
-  if (isBoosted(pool)) {
-    return getBoostedGqlTokens(pool, getToken)
-  }
-
   // TODO add exception for composable pools where we can allow adding
   // liquidity with nested tokens
   if (supportsNestedActions(pool)) {
     return toGqlTokens(getLeafTokens(pool.poolTokens))
+  }
+
+  if (isBoosted(pool)) {
+    return getBoostedGqlTokens(pool, getToken)
   }
 
   return toGqlTokens(pool.poolTokens)

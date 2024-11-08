@@ -28,7 +28,7 @@ import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { getPoolActionableTokens } from '../../pool.helpers'
+import { getPoolActionableTokens, isV3WithNestedActionsPool } from '../../pool.helpers'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 
@@ -174,7 +174,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   return {
     transactionSteps,
     humanAmountsIn,
-    tokens: wethIsEth ? tokensWithNativeAsset : tokens,
+    tokens: wethIsEth && !isV3WithNestedActionsPool(pool) ? tokensWithNativeAsset : tokens,
     validTokens,
     totalUSDValue,
     simulationQuery,

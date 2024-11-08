@@ -15,14 +15,7 @@ import { NestedBuildAddLiquidityInput, NestedQueryAddLiquidityOutput } from '../
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { Address } from 'viem'
 
-/**
- * NestedAddLiquidityHandler is a handler that implements the
- * AddLiquidityHandler interface for nested adds, e.g. where the user
- * specifies the token amounts in. It uses the Balancer SDK to implement it's
- * methods. It also handles the case where one of the input tokens is the native
- * asset instead of the wrapped native asset.
- */
-export class NestedAddLiquidityHandler implements AddLiquidityHandler {
+export class NestedAddLiquidityV2Handler implements AddLiquidityHandler {
   helpers: LiquidityActionHelpers
 
   constructor(pool: Pool) {
