@@ -61,7 +61,7 @@ async function signPermit({ permitInput, wethIsEth, sdkClient, pool }: Params): 
     return PermitHelper.signRemoveLiquidityNestedApproval({
       ...baseParams,
       // TODO: We can inline baseParams if the SDK renames bptAmountIn to bptIn to match the naming with the rest of the output types
-      bptAmountIn: baseInput.bptIn,
+      // bptAmountIn: baseInput.bptIn,
     })
   }
 
