@@ -1,13 +1,15 @@
-import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import {
   HumanAmount,
   RemoveLiquidityNested,
-  RemoveLiquidityNestedCallInputV2,
-  RemoveLiquidityNestedProportionalInputV2,
+  RemoveLiquidityNestedCallInputV3,
+  RemoveLiquidityNestedProportionalInputV3,
   RemoveLiquidityNestedQueryOutput,
+  RemoveLiquidityNestedV3,
   Slippage,
 } from '@balancer/sdk'
-import { parseEther } from 'viem'
+import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
+import { getRpcUrl } from '@repo/lib/modules/web3/transports'
+import { Address, Hex, parseEther } from 'viem'
 import { Pool } from '../../../PoolProvider'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import {
@@ -16,7 +18,6 @@ import {
   QueryRemoveLiquidityOutput,
 } from '../remove-liquidity.types'
 import { RemoveLiquidityHandler } from './RemoveLiquidity.handler'
-import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 
 export interface NestedProportionalQueryRemoveLiquidityOutput extends QueryRemoveLiquidityOutput {
   sdkQueryOutput: RemoveLiquidityNestedQueryOutput
@@ -26,49 +27,60 @@ export interface NestedProportionalQueryRemoveLiquidityInput extends BuildRemove
   queryOutput: NestedProportionalQueryRemoveLiquidityOutput
 }
 
-export class NestedProportionalRemoveLiquidityHandler implements RemoveLiquidityHandler {
+export class NestedProportionalRemoveLiquidityV3Handler implements RemoveLiquidityHandler {
   helpers: LiquidityActionHelpers
 
   constructor(pool: Pool) {
     this.helpers = new LiquidityActionHelpers(pool)
   }
 
+  public async getPriceImpact(): Promise<number> {
+    console.log('price impact v3')
+    // proportional remove liquidity does not have price impact
+    return 0
+  }
+
   public async simulate({
     humanBptIn,
+    userAddress,
   }: QueryRemoveLiquidityInput): Promise<NestedProportionalQueryRemoveLiquidityOutput> {
-    const removeLiquidity = new RemoveLiquidityNested()
+    console.log('price simulation v3')
+    const removeLiquidity = new RemoveLiquidityNestedV3()
 
-    const removeLiquidityInput = this.constructSdkInput(humanBptIn)
+    const removeLiquidityInput: RemoveLiquidityNestedProportionalInputV3 = this.constructSdkInput(
+      humanBptIn,
+      userAddress
+    )
 
     const sdkQueryOutput = await removeLiquidity.query(
       removeLiquidityInput,
-      this.helpers.nestedPoolStateV2
+      this.helpers.nestedPoolStateV3
     )
 
-    return { amountsOut: sdkQueryOutput.amountsOut, sdkQueryOutput }
-  }
+    console.log('price simulation v3 result: ', { sdkQueryOutput })
 
-  public async getPriceImpact(): Promise<number> {
-    // proportional remove liquidity does not have price impact
-    return 0
+    return { amountsOut: sdkQueryOutput.amountsOut, sdkQueryOutput }
   }
 
   public async buildCallData({
     account,
     slippagePercent,
     queryOutput,
-    wethIsEth,
-    relayerApprovalSignature,
+    permit,
   }: NestedProportionalQueryRemoveLiquidityInput): Promise<TransactionConfig> {
     const removeLiquidity = new RemoveLiquidityNested()
 
-    const { callData, to } = removeLiquidity.buildCall({
+    const buildCallParams: RemoveLiquidityNestedCallInputV3 = {
       ...queryOutput.sdkQueryOutput,
+      protocolVersion: 3,
+      userData: '0x' as Hex,
       slippage: Slippage.fromPercentage(`${Number(slippagePercent)}`),
-      accountAddress: account,
-      relayerApprovalSignature,
-      wethIsEth,
-    } as RemoveLiquidityNestedCallInputV2)
+      parentPool: this.helpers.pool.address as Address,
+    }
+
+    const { callData, to } = permit
+      ? removeLiquidity.buildCallWithPermit(buildCallParams, permit)
+      : removeLiquidity.buildCall(buildCallParams)
 
     return {
       account,
@@ -81,11 +93,15 @@ export class NestedProportionalRemoveLiquidityHandler implements RemoveLiquidity
   /**
    * PRIVATE METHODS
    */
-  private constructSdkInput(humanBptIn: HumanAmount): RemoveLiquidityNestedProportionalInputV2 {
-    const result: RemoveLiquidityNestedProportionalInputV2 = {
+  private constructSdkInput(
+    humanBptIn: HumanAmount,
+    userAddress: Address
+  ): RemoveLiquidityNestedProportionalInputV3 {
+    const result: RemoveLiquidityNestedProportionalInputV3 = {
       bptAmountIn: parseEther(humanBptIn),
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
+      sender: userAddress,
     }
 
     return result

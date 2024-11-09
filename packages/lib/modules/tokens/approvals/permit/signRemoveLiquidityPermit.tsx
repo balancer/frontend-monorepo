@@ -8,7 +8,7 @@ import {
   PublicWalletClient,
   RemoveLiquidityQueryOutput,
 } from '@balancer/sdk'
-import { isBoosted } from '@repo/lib/modules/pool/pool.helpers'
+import { isBoosted, isV3WithNestedActionsPool } from '@repo/lib/modules/pool/pool.helpers'
 import { Pool } from '@repo/lib/modules/pool/PoolProvider'
 
 export interface PermitRemoveLiquidityInput {
@@ -50,15 +50,22 @@ async function signPermit({ permitInput, wethIsEth, sdkClient, pool }: Params): 
     sdkQueryOutput: permitInput.sdkQueryOutput as RemoveLiquidityQueryOutput,
   })
 
-  const signPermitFn = isBoosted(pool)
-    ? PermitHelper.signRemoveLiquidityBoostedApproval
-    : PermitHelper.signRemoveLiquidityApproval
-
-  const signature = await signPermitFn({
+  const baseParams = {
     ...baseInput,
     /* eslint-disable @typescript-eslint/no-non-null-assertion */
     client: sdkClient!,
     owner: permitInput.account,
-  })
-  return signature
+  }
+
+  if (isV3WithNestedActionsPool(pool)) {
+    return PermitHelper.signRemoveLiquidityNestedApproval({
+      ...baseParams,
+      // TODO: We can inline baseParams if the SDK renames bptAmountIn to bptIn to match the naming with the rest of the output types
+      bptAmountIn: baseInput.bptIn,
+    })
+  }
+
+  if (isBoosted(pool)) return PermitHelper.signRemoveLiquidityBoostedApproval(baseParams)
+
+  return PermitHelper.signRemoveLiquidityApproval(baseParams)
 }
