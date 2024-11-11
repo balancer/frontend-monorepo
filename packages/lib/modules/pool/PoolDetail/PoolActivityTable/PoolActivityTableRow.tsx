@@ -85,7 +85,7 @@ function TransactionDetails({
     <HStack wrap="wrap">
       {tokensWithAmount.map((token, index) => {
         return (
-          <React.Fragment key={index}>
+          <React.Fragment key={token.token?.address}>
             <Badge
               {...badgeProps}
               alignItems="center"
