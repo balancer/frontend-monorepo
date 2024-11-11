@@ -126,11 +126,12 @@ export function _useTokens(
 
   function usdValueForBpt(address: string, chain: GqlChain, amount: Numberish) {
     if (amount === '') return '0'
-    return bn(amount).times(priceForAddress(address, chain)).toFixed()
+    return bn(amount).times(priceFor(address, chain)).toFixed()
   }
 
   function priceFor(address: string, chain: GqlChain): number {
     const token = getToken(address, chain)
+
     if (token) {
       return priceForToken(token)
     } else {
@@ -145,7 +146,7 @@ export function _useTokens(
       totalLiquidity: string,
       chain: GqlChain
     ): string => {
-      const tokenPrice = priceForAddress(tokenAddress, chain)
+      const tokenPrice = priceFor(tokenAddress, chain)
 
       return bn(tokenPrice).times(tokenBalance).div(totalLiquidity).toString()
     },
@@ -155,7 +156,7 @@ export function _useTokens(
   const calcTotalUsdValue = useCallback((displayTokens: GqlPoolTokenDetail[], chain: GqlChain) => {
     return displayTokens
       .reduce((total, token) => {
-        return total.plus(bn(priceForAddress(token.address, chain)).times(token.balance))
+        return total.plus(bn(priceFor(token.address, chain)).times(token.balance))
       }, bn(0))
       .toString()
   }, [])
