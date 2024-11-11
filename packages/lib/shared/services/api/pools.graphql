@@ -131,6 +131,7 @@ query GetFeaturedPools($chains: [GqlChain!]!) {
     primary
     description
     pool {
+      address
       id
       name
       factory
