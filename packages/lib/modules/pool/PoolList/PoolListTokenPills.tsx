@@ -76,7 +76,6 @@ function WeightedTokenPills({
                   </HStack>
                 </>
               )}
-
               {token.nestedTokens && (
                 <>
                   <NestedTokenPill
