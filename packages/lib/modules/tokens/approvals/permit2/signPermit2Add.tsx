@@ -14,6 +14,7 @@ import { NoncesByTokenAddress } from './usePermit2Allowance'
 import { constructBaseBuildCallInput } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/add-liquidity.utils'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isWrappedNativeAsset } from '../../token.helpers'
+import { isBoosted } from '@repo/lib/modules/pool/pool.helpers'
 
 type SignPermit2AddParams = {
   sdkClient?: PublicWalletClient
@@ -27,6 +28,7 @@ type SignPermit2AddParams = {
 }
 export async function signPermit2Add(params: SignPermit2AddParams): Promise<Permit2 | undefined> {
   if (!params.nonces) throw new Error('Missing nonces in signPermitAdd')
+
   try {
     const signature = await sign(params)
     return signature
@@ -66,7 +68,11 @@ async function sign({
     amountsIn: sdkQueryOutput.amountsIn,
   })
 
-  const signature = await Permit2Helper.signAddLiquidityApproval({
+  const signFn = isBoosted(pool)
+    ? Permit2Helper.signAddLiquidityBoostedApproval
+    : Permit2Helper.signAddLiquidityApproval
+
+  const signature = await signFn({
     ...baseInput,
     client: sdkClient,
     owner: account,
