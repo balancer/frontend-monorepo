@@ -62,6 +62,7 @@ function getPoolTypeLabel(pool: Pool) {
     case GqlPoolType.Stable:
     case GqlPoolType.PhantomStable:
     case GqlPoolType.ComposableStable:
+    case GqlPoolType.MetaStable:
       return <Text {...textProps}>Stable</Text>
 
     case GqlPoolType.Fx:
