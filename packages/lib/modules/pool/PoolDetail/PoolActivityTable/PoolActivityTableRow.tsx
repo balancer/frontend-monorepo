@@ -38,7 +38,7 @@ interface Props extends GridProps {
 }
 
 function EnsOrAddress({ userAddress, chain }: { userAddress: `0x${string}`; chain: GqlChain }) {
-  const chainId = getChainId(getProjectConfig().defaultNetwork) // perform ENS lookup through defaultNetwork
+  const chainId = getChainId(getProjectConfig().ensNetwork) // perform ENS lookup through ensNetwork
   const { data: name } = useEnsName({ address: userAddress, chainId })
 
   const { data: ensAvatar } = useEnsAvatar({

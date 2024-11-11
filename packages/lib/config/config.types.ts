@@ -107,4 +107,5 @@ export interface ProjectConfig {
   corePoolId: string // this prop is used to adjust the color of the SparklesIcon
   variantConfig?: VariantConfig
   defaultNetwork: GqlChain
+  ensNetwork: GqlChain
 }
