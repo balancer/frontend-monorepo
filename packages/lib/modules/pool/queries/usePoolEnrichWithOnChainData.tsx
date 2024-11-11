@@ -222,8 +222,6 @@ function enrichPool({
     token.balanceUSD = bn(tokenBalance).times(priceFor(token.address, pool.chain)).toString()
   })
 
-  console.log({ price: priceFor('0xhfdshfkdsfh', pool.chain) })
-
   clone.dynamicData.totalLiquidity = safeSum(
     filteredTokens.map(
       token => (priceFor(token.address, pool.chain) || 0) * parseFloat(token.balance)
