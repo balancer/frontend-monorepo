@@ -164,6 +164,7 @@ export default function TokenRow({
 
       setAmount(fNum('token', value, { abbreviated }))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
   const headingProps = {
