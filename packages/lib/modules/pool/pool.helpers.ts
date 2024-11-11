@@ -14,7 +14,7 @@ import {
   GqlToken,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { isEmpty, isNil, uniqBy } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
