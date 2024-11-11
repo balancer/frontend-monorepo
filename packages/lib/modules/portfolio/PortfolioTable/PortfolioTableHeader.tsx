@@ -38,7 +38,7 @@ export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, 
         <SortableHeader
           align={index === 0 ? 'left' : 'right'}
           isSorted={orderByItem.id === currentSortingObj.id}
-          key={index}
+          key={orderByItem.id}
           label={orderByItem.title}
           onSort={() => {
             if (orderByItem.id === currentSortingObj.id) {
