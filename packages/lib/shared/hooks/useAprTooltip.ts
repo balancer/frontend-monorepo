@@ -19,9 +19,13 @@ prevents this loss (also called LVR), thereby increasing LP returns.`
 export const extraBalTooltipText = `veBAL holders can get an extra boost of up to 2.5x on their staking yield.
 The more veBAL held, the higher the boost.`
 
-export const lockingIncentivesTooltipText = `The protocol revenue share for Liquidity Providers with 1-year locked Balancer ve8020 tokens.`
+export const lockingIncentivesTooltipText = `The protocol revenue share for Liquidity Providers 
+                                            with 1-year locked Balancer ve8020 tokens.`
 
-export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL holders who participate in weekly gauge voting by third parties on platforms like Hidden Hand. Your incentives are determined by your veBAL voting power compared to other voters. The listed APR represents an average rather than a guaranteed return for active participants.`
+export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL holders who 
+                        participate in weekly gauge voting by third parties on platforms like Hidden Hand. 
+                        Your incentives are determined by your veBAL voting power compared to other voters. 
+                        The listed APR represents an average rather than a guaranteed return for active participants.`
 
 const stakingBalTooltipText = `The base APR all stakers in this pool get (determined by weekly gauge voting).
 In addition, veBAL holders can get an extra boost of up to 2.5x.`
