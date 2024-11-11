@@ -1,0 +1,61 @@
+fragment PoolTokens on GqlPoolTokenDetail {
+  id
+  index
+  name
+  symbol
+  balance
+  balanceUSD
+  address
+  priceRate
+  decimals
+  weight
+  hasNestedPool
+  isAllowed
+  priceRateProvider
+  priceRateProviderData {
+    address
+    name
+    summary
+    reviewed
+    warnings
+    upgradeableComponents {
+      entryPoint
+      implementationReviewed
+    }
+    reviewFile
+    factory
+  }
+  nestedPool {
+    id
+    address
+    type
+    bptPriceRate
+    nestedPercentage
+    nestedShares
+    totalLiquidity
+    totalShares
+    tokens {
+      index
+      address
+      decimals
+      balance
+      balanceUSD
+      symbol
+      weight
+      isErc4626
+      underlyingToken {
+        address
+        decimals
+        name
+        symbol
+      }
+    }
+  }
+  isErc4626
+  underlyingToken {
+    address
+    decimals
+    name
+    symbol
+  }
+}
