@@ -118,7 +118,6 @@ export function EcosystemActivityChart() {
                     borderRadius="50%"
                     display="inline-block"
                     height="2"
-                    key={tab.label}
                     width="2"
                   />
                   <Text color="font.secondary" fontSize="sm" textTransform="capitalize">
