@@ -1,3 +1,11 @@
+fragment UnderlyingToken on GqlToken {
+  chainId
+  address
+  decimals
+  name
+  symbol
+}
+
 fragment PoolTokens on GqlPoolTokenDetail {
   id
   index
@@ -25,12 +33,6 @@ fragment PoolTokens on GqlPoolTokenDetail {
     reviewFile
     factory
   }
-  underlyingToken {
-    address
-    decimals
-    name
-    symbol
-  }
   nestedPool {
     id
     address
@@ -50,18 +52,12 @@ fragment PoolTokens on GqlPoolTokenDetail {
       weight
       isErc4626
       underlyingToken {
-        address
-        decimals
-        name
-        symbol
+        ...UnderlyingToken
       }
     }
   }
   isErc4626
   underlyingToken {
-    address
-    decimals
-    name
-    symbol
+    ...UnderlyingToken
   }
 }
