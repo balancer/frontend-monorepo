@@ -20,20 +20,15 @@ function NestedTokenPill({
   return nestedTokens.map((nestedToken, i) => {
     const nestedZIndices = Array.from(
       { length: nestedTokens?.length || 0 },
-      (_, index) => index
+      (_, index) => index + 1
     ).reverse()
 
-    const underlyingToken = nestedToken.underlyingToken
+    const token = nestedToken.underlyingToken ?? nestedToken
 
     return (
-      underlyingToken && (
-        <Box key={underlyingToken.address} ml={isFirstToken(i) ? 0 : -3} zIndex={nestedZIndices[i]}>
-          <TokenIcon
-            address={underlyingToken.address}
-            alt={underlyingToken.symbol}
-            chain={chain}
-            size={iconSize}
-          />
+      token && (
+        <Box key={token.address} ml={isFirstToken(i) ? 0 : -3} zIndex={nestedZIndices[i]}>
+          <TokenIcon address={token.address} alt={token.symbol} chain={chain} size={iconSize} />
         </Box>
       )
     )
@@ -188,16 +183,16 @@ function BoostedTokenPills({
       >
         <HStack gap={['xs', '1.5']}>
           <HStack>
-            {pool.poolTokens.map(token => {
-              const underlyingToken = token.underlyingToken
+            {pool.poolTokens.map(poolToken => {
+              const token = poolToken.underlyingToken ?? poolToken
 
               return (
-                underlyingToken && (
+                token && (
                   <TokenIcon
-                    address={underlyingToken.address}
-                    alt={underlyingToken.symbol}
+                    address={token.address}
+                    alt={token.symbol}
                     chain={chain}
-                    key={underlyingToken.address}
+                    key={token.address}
                     size={iconSize}
                   />
                 )
