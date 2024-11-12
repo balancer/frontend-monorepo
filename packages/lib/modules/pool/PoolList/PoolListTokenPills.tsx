@@ -1,5 +1,5 @@
 import { Badge, BadgeProps, Box, HStack, Text, Wrap } from '@chakra-ui/react'
-import { GqlChain, GqlPoolTokenDisplay } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolListItem } from '../pool.types'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -11,7 +11,7 @@ function NestedTokenPill({
   chain,
   iconSize = 24,
 }: {
-  nestedTokens: GqlPoolTokenDisplay[]
+  nestedTokens: GqlPoolTokenDetail[]
   chain: GqlChain
   iconSize?: number
 }) {
@@ -22,15 +22,20 @@ function NestedTokenPill({
       { length: nestedTokens?.length || 0 },
       (_, index) => index
     ).reverse()
+
+    const underlyingToken = nestedToken.underlyingToken
+
     return (
-      <Box key={nestedToken.address} ml={isFirstToken(i) ? 0 : -3} zIndex={nestedZIndices[i]}>
-        <TokenIcon
-          address={nestedToken.address}
-          alt={nestedToken.symbol}
-          chain={chain}
-          size={iconSize}
-        />
-      </Box>
+      underlyingToken && (
+        <Box key={underlyingToken.address} ml={isFirstToken(i) ? 0 : -3} zIndex={nestedZIndices[i]}>
+          <TokenIcon
+            address={underlyingToken.address}
+            alt={underlyingToken.symbol}
+            chain={chain}
+            size={iconSize}
+          />
+        </Box>
+      )
     )
   })
 }
@@ -40,7 +45,7 @@ function WeightedTokenPills({
   chain,
   iconSize = 24,
   ...badgeProps
-}: { tokens: GqlPoolTokenDisplay[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
+}: { tokens: GqlPoolTokenDetail[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
   return (
     <Wrap spacing="xs">
       {tokens.map(token => {
@@ -58,7 +63,7 @@ function WeightedTokenPills({
             textTransform="none"
           >
             <HStack gap={['xs', 'sm']}>
-              {!token.nestedTokens && (
+              {!token.nestedPool && (
                 <>
                   <TokenIcon
                     address={token.address}
@@ -76,12 +81,12 @@ function WeightedTokenPills({
                   </HStack>
                 </>
               )}
-              {token.nestedTokens && (
+              {token.nestedPool && (
                 <>
                   <NestedTokenPill
                     chain={chain}
                     iconSize={iconSize}
-                    nestedTokens={token.nestedTokens}
+                    nestedTokens={token.nestedPool.tokens}
                   />
                   <HStack gap={['xs', '1.5']}>
                     <Text fontWeight="bold" noOfLines={1}>
@@ -104,7 +109,7 @@ function StableTokenPills({
   chain,
   iconSize = 24,
   ...badgeProps
-}: { tokens: GqlPoolTokenDisplay[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
+}: { tokens: GqlPoolTokenDetail[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
   const isFirstToken = (index: number) => index === 0
   const zIndices = Array.from({ length: tokens.length }, (_, index) => index).reverse()
 
@@ -128,7 +133,7 @@ function StableTokenPills({
             zIndex={zIndices[i]}
           >
             <HStack gap={['xs', '1.5']}>
-              {!token.nestedTokens && (
+              {!token.nestedPool && (
                 <>
                   <TokenIcon
                     address={token.address}
@@ -143,12 +148,12 @@ function StableTokenPills({
                   )}
                 </>
               )}
-              {token.nestedTokens && (
+              {token.nestedPool && (
                 <>
                   <NestedTokenPill
                     chain={chain}
                     iconSize={iconSize}
-                    nestedTokens={token.nestedTokens}
+                    nestedTokens={token.nestedPool.tokens}
                   />
                   <Text fontWeight="bold" noOfLines={1}>
                     {token.name}
@@ -183,15 +188,21 @@ function BoostedTokenPills({
       >
         <HStack gap={['xs', '1.5']}>
           <HStack>
-            {pool.displayTokens.map(token => (
-              <TokenIcon
-                address={token.address}
-                alt={token.symbol}
-                chain={chain}
-                key={token.address}
-                size={iconSize}
-              />
-            ))}
+            {pool.poolTokens.map(token => {
+              const underlyingToken = token.underlyingToken
+
+              return (
+                underlyingToken && (
+                  <TokenIcon
+                    address={underlyingToken.address}
+                    alt={underlyingToken.symbol}
+                    chain={chain}
+                    key={underlyingToken.address}
+                    size={iconSize}
+                  />
+                )
+              )
+            })}
           </HStack>
           <Text fontWeight="bold" noOfLines={1}>
             {pool.name}
@@ -211,6 +222,11 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
   const shouldUseWeightedPills = isWeightedLike(pool.type)
   const shouldUseStablePills = isStableLike(pool.type)
 
+  // TODO: fix difference between Pool and PoolListItem types
+  const poolTokens = pool.poolTokens.filter(
+    token => token.address !== pool.address
+  ) as GqlPoolTokenDetail[]
+
   if (pool.hasErc4626 && !pool.hasNestedErc4626) {
     return <BoostedTokenPills chain={pool.chain} iconSize={iconSize} pool={pool} {...badgeProps} />
   }
@@ -220,7 +236,7 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
       <StableTokenPills
         chain={pool.chain}
         iconSize={iconSize}
-        tokens={pool.displayTokens}
+        tokens={poolTokens}
         {...badgeProps}
       />
     )
@@ -231,7 +247,7 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
       <WeightedTokenPills
         chain={pool.chain}
         iconSize={iconSize}
-        tokens={pool.displayTokens}
+        tokens={poolTokens}
         {...badgeProps}
       />
     )
@@ -241,7 +257,7 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
     <WeightedTokenPills
       chain={pool.chain}
       iconSize={iconSize}
-      tokens={pool.displayTokens}
+      tokens={poolTokens}
       {...badgeProps}
     />
   )

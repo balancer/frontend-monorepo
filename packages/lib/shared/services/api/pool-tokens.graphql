@@ -25,6 +25,12 @@ fragment PoolTokens on GqlPoolTokenDetail {
     reviewFile
     factory
   }
+  underlyingToken {
+    address
+    decimals
+    name
+    symbol
+  }
   nestedPool {
     id
     address
