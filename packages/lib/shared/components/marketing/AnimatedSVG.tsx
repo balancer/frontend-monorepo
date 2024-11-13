@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { Box, useToken } from '@chakra-ui/react'
 import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
 
@@ -25,5 +25,3 @@ export function AnimatedSVG(): JSX.Element {
     </Box>
   )
 }
-
-export default AnimatedSVG
