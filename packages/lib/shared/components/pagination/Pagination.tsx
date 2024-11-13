@@ -10,7 +10,6 @@ interface Props {
   canNextPage: boolean
   currentPageNumber: number
   totalPageCount: number
-  setPageIndex: (page: number) => void
   setPageSize: (page: number) => void
   pageSize: number
   changeSize?: boolean
