@@ -27,3 +27,17 @@ export function getVotesState(relativeWeightCap: number, votesNextPeriod: number
   }
   return VotesState.Normal
 }
+
+export enum SortingBy {
+  type = 'type',
+  bribes = 'bribes',
+  bribesPerVebal = 'bribesPerVebal',
+  votes = 'votes',
+}
+
+export const orderByHash: Record<SortingBy, string> = {
+  type: 'Type',
+  bribes: 'Bribes',
+  bribesPerVebal: 'Bribes/veBAL',
+  votes: 'veBAL votes',
+}

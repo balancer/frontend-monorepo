@@ -10,7 +10,23 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { BoundaryError } from '@repo/lib/shared/components/errors/ErrorBoundary'
 
 export function PoolListLayout() {
-  const { pools, loading, count } = usePoolList()
+  const {
+    pools,
+    loading,
+    count,
+    queryState: {
+      networks,
+      toggleNetwork,
+      poolTypes,
+      togglePoolType,
+      poolTypeLabel,
+      minTvl,
+      setMinTvl,
+      poolTags,
+      togglePoolTag,
+      poolTagLabel,
+    },
+  } = usePoolList()
   const isFilterVisible = useFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
 
@@ -56,7 +72,18 @@ export function PoolListLayout() {
               </Box>
             </Box>
           </HStack>
-          <FilterTags />
+          <FilterTags
+            networks={networks}
+            toggleNetwork={toggleNetwork}
+            poolTypes={poolTypes}
+            togglePoolType={togglePoolType}
+            poolTypeLabel={poolTypeLabel}
+            minTvl={minTvl}
+            setMinTvl={setMinTvl}
+            poolTags={poolTags}
+            togglePoolTag={togglePoolTag}
+            poolTagLabel={poolTagLabel}
+          />
         </VStack>
 
         <Stack

@@ -40,6 +40,25 @@ export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
   },
 ] as const
 
+export function poolTypeLabel(poolType: GqlPoolType) {
+  switch (poolType) {
+    case GqlPoolType.Weighted:
+      return 'Weighted'
+    case GqlPoolType.Stable:
+      return 'Stable'
+    case GqlPoolType.LiquidityBootstrapping:
+      return 'Liquidity Bootstrapping (LBP)'
+    case GqlPoolType.Gyro:
+      return 'Gyro CLP'
+    case GqlPoolType.CowAmm:
+      return 'CoW AMM'
+    case GqlPoolType.Fx:
+      return 'FX'
+    default:
+      return poolType.toLowerCase()
+  }
+}
+
 export function usePoolListQueryState() {
   const [first, setFirst] = useQueryState('first', poolListQueryStateParsers.first)
   const [skip, setSkip] = useQueryState('skip', poolListQueryStateParsers.skip)
@@ -132,25 +151,6 @@ export function usePoolListQueryState() {
       setSkip(0)
     }
     setTextSearch(text)
-  }
-
-  function poolTypeLabel(poolType: GqlPoolType) {
-    switch (poolType) {
-      case GqlPoolType.Weighted:
-        return 'Weighted'
-      case GqlPoolType.Stable:
-        return 'Stable'
-      case GqlPoolType.LiquidityBootstrapping:
-        return 'Liquidity Bootstrapping (LBP)'
-      case GqlPoolType.Gyro:
-        return 'Gyro CLP'
-      case GqlPoolType.CowAmm:
-        return 'CoW AMM'
-      case GqlPoolType.Fx:
-        return 'FX'
-      default:
-        return poolType.toLowerCase()
-    }
   }
 
   function poolTagLabel(poolTag: PoolTagType) {

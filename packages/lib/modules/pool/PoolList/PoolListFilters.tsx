@@ -125,11 +125,19 @@ function PoolCategoryFilters() {
   )
 }
 
-function PoolTypeFilters() {
-  const {
-    queryState: { togglePoolType, poolTypes, poolTypeLabel, setPoolTypes },
-  } = usePoolList()
+export interface PoolTypeFiltersArgs {
+  poolTypes: PoolFilterType[]
+  poolTypeLabel: (poolType: PoolFilterType) => string
+  setPoolTypes: (value: PoolFilterType[] | null) => void
+  togglePoolType: (checked: boolean, value: PoolFilterType) => void
+}
 
+export function PoolTypeFilters({
+  togglePoolType,
+  poolTypes,
+  poolTypeLabel,
+  setPoolTypes,
+}: PoolTypeFiltersArgs) {
   // remove query param when empty
   useEffect(() => {
     if (!poolTypes.length) {
@@ -157,11 +165,18 @@ function PoolTypeFilters() {
   )
 }
 
-function PoolNetworkFilters() {
+export interface PoolNetworkFiltersArgs {
+  toggledNetworks: GqlChain[]
+  toggleNetwork: (checked: boolean, value: GqlChain) => void
+  setNetworks: (value: GqlChain[] | null) => void
+}
+
+export function PoolNetworkFilters({
+  toggledNetworks,
+  toggleNetwork,
+  setNetworks,
+}: PoolNetworkFiltersArgs) {
   const { supportedNetworks } = getProjectConfig()
-  const {
-    queryState: { networks: toggledNetworks, toggleNetwork, setNetworks },
-  } = usePoolList()
 
   // Sort networks alphabetically after mainnet
   const sortedNetworks = [supportedNetworks[0], ...supportedNetworks.slice(1).sort()]
@@ -239,24 +254,44 @@ function PoolMinTvlFilter() {
   )
 }
 
-export function FilterTags() {
-  const {
-    queryState: {
-      networks,
-      toggleNetwork,
-      poolTypes,
-      togglePoolType,
-      poolTypeLabel,
-      minTvl,
-      setMinTvl,
-      poolTags,
-      togglePoolTag,
-      poolTagLabel,
-    },
-  } = usePoolList()
+export interface FilterTagsPops {
+  networks: GqlChain[]
+  toggleNetwork: (checked: boolean, value: GqlChain) => void
+  poolTypes: PoolFilterType[]
+  togglePoolType: (checked: boolean, value: PoolFilterType) => void
+  poolTypeLabel: (poolType: PoolFilterType) => string
+  minTvl?: number
+  setMinTvl?: (value: number | null) => void
+  poolTags?: PoolTagType[]
+  togglePoolTag?: (checked: boolean, value: PoolTagType) => void
+  poolTagLabel?: (poolTag: PoolTagType) => string
+  includeExpiredPools?: boolean
+  toggleIncludeExpiredPools?: (checked: boolean) => void
+}
+
+export function FilterTags({
+  networks,
+  toggleNetwork,
+  poolTypes,
+  togglePoolType,
+  poolTypeLabel,
+  minTvl,
+  setMinTvl,
+  poolTags,
+  togglePoolTag,
+  poolTagLabel,
+  includeExpiredPools,
+  toggleIncludeExpiredPools,
+}: FilterTagsPops) {
   const { toCurrency } = useCurrency()
 
-  if (networks.length === 0 && poolTypes.length === 0 && minTvl === 0 && poolTags.length === 0) {
+  if (
+    networks.length === 0 &&
+    poolTypes.length === 0 &&
+    minTvl === 0 &&
+    (poolTags ? poolTags.length === 0 : true) &&
+    !includeExpiredPools
+  ) {
     return null
   }
 
@@ -308,7 +343,7 @@ export function FilterTags() {
           </motion.div>
         ))}
       </AnimatePresence>
-      {minTvl > 0 && (
+      {minTvl && minTvl > 0 && (
         <AnimatePresence>
           <motion.div
             animate={{ opacity: 1, y: 0 }}
@@ -326,18 +361,43 @@ export function FilterTags() {
                   {`TVL > ${toCurrency(minTvl)}`}
                 </Text>
               </TagLabel>
-              <TagCloseButton onClick={() => setMinTvl(0)} />
+              <TagCloseButton onClick={() => setMinTvl && setMinTvl(0)} />
             </Tag>
           </motion.div>
         </AnimatePresence>
       )}
-      <AnimatePresence>
-        {poolTags.map(tag => (
+      {poolTags && poolTagLabel && (
+        <AnimatePresence>
+          {poolTags.map(tag => (
+            <motion.div
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              key={tag}
+              transition={{
+                enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
+                exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
+              }}
+            >
+              <Tag size="lg">
+                <TagLabel>
+                  <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
+                    {poolTagLabel(tag)}
+                  </Text>
+                </TagLabel>
+                <TagCloseButton onClick={() => togglePoolTag && togglePoolTag(false, tag)} />
+              </Tag>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      )}
+      {includeExpiredPools && (
+        <AnimatePresence>
           <motion.div
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 0 }}
             initial={{ opacity: 0, y: 40 }}
-            key={tag}
+            key="minTvl"
             transition={{
               enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
               exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
@@ -346,48 +406,49 @@ export function FilterTags() {
             <Tag size="lg">
               <TagLabel>
                 <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
-                  {poolTagLabel(tag)}
+                  {`Expired`}
                 </Text>
               </TagLabel>
-              <TagCloseButton onClick={() => togglePoolTag(false, tag)} />
+              <TagCloseButton
+                onClick={() => toggleIncludeExpiredPools && toggleIncludeExpiredPools(false)}
+              />
             </Tag>
           </motion.div>
-        ))}
-      </AnimatePresence>
+        </AnimatePresence>
+      )}
     </HStack>
   )
 }
 
-const FilterButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
-  const {
-    queryState: { totalFilterCount },
-  } = usePoolList()
-  const { isMobile } = useBreakpoints()
-  const textColor = useColorModeValue('#fff', 'font.dark')
+export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number }, 'button'>(
+  ({ totalFilterCount, ...props }, ref) => {
+    const { isMobile } = useBreakpoints()
+    const textColor = useColorModeValue('#fff', 'font.dark')
 
-  return (
-    <Button ref={ref} {...props} display="flex" gap="2" variant="tertiary">
-      <Icon as={Filter} boxSize={4} />
-      {!isMobile && 'Filters'}
-      {totalFilterCount > 0 && (
-        <Badge
-          bg="font.highlight"
-          borderRadius="full"
-          color={textColor}
-          p="0"
-          position="absolute"
-          right="-9px"
-          shadow="lg"
-          top="-9px"
-        >
-          <Center h="5" w="5">
-            {totalFilterCount}
-          </Center>
-        </Badge>
-      )}
-    </Button>
-  )
-})
+    return (
+      <Button ref={ref} {...props} display="flex" gap="2" variant="tertiary">
+        <Icon as={Filter} boxSize={4} />
+        {!isMobile && 'Filters'}
+        {totalFilterCount > 0 && (
+          <Badge
+            bg="font.highlight"
+            borderRadius="full"
+            color={textColor}
+            p="0"
+            position="absolute"
+            right="-9px"
+            shadow="lg"
+            top="-9px"
+          >
+            <Center h="5" w="5">
+              {totalFilterCount}
+            </Center>
+          </Badge>
+        )}
+      </Button>
+    )
+  }
+)
 
 function ProtocolVersionFilter() {
   const {
@@ -454,7 +515,18 @@ export function PoolListFilters() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const {
     isFixedPoolType,
-    queryState: { resetFilters, totalFilterCount, setActiveProtocolVersionTab },
+    queryState: {
+      resetFilters,
+      totalFilterCount,
+      setActiveProtocolVersionTab,
+      networks: toggledNetworks,
+      toggleNetwork,
+      setNetworks,
+      togglePoolType,
+      poolTypes,
+      poolTypeLabel,
+      setPoolTypes,
+    },
   } = usePoolList()
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
@@ -475,7 +547,7 @@ export function PoolListFilters() {
           placement="bottom-end"
         >
           <PopoverTrigger>
-            <FilterButton ml="ms" />
+            <FilterButton totalFilterCount={totalFilterCount} ml="ms" />
           </PopoverTrigger>
           <Box shadow="2xl" zIndex="popover">
             <PopoverContent>
@@ -524,7 +596,11 @@ export function PoolListFilters() {
                         <Heading as="h3" mb="sm" size="sm">
                           Networks
                         </Heading>
-                        <PoolNetworkFilters />
+                        <PoolNetworkFilters
+                          toggleNetwork={toggleNetwork}
+                          toggledNetworks={toggledNetworks}
+                          setNetworks={setNetworks}
+                        />
                       </Box>
                       {!isCowPath && (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
@@ -539,7 +615,12 @@ export function PoolListFilters() {
                           <Heading as="h3" mb="sm" size="sm">
                             Pool types
                           </Heading>
-                          <PoolTypeFilters />
+                          <PoolTypeFilters
+                            togglePoolType={togglePoolType}
+                            poolTypes={poolTypes}
+                            poolTypeLabel={poolTypeLabel}
+                            setPoolTypes={setPoolTypes}
+                          />
                         </Box>
                       )}
                       <Box as={motion.div} variants={staggeredFadeInUp}>

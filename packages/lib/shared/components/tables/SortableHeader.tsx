@@ -3,10 +3,15 @@ import { SortableIcon } from '../icons/SortableIcon'
 import { ArrowDownIcon } from '../icons/ArrowDownIcon'
 import { ArrowUpIcon } from '../icons/ArrowUpIcon'
 
+export enum Sorting {
+  asc = 'asc',
+  desc = 'desc',
+}
+
 type SortableHeaderProps = {
   label: string
   isSorted: boolean
-  sorting: 'asc' | 'desc'
+  sorting: Sorting
   onSort: (newSortingBy: any) => void
   align?: 'left' | 'right'
 }

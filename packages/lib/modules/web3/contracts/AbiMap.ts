@@ -13,6 +13,7 @@ import {
   veDelegationProxyAbi,
 } from './abi/generated'
 import { VeDelegationProxyL2Abi } from './abi/veDelegationProxyL2'
+import { LiquidityGaugeV5Abi } from './abi/LiquidityGaugeV5Abi'
 
 export const AbiMap = {
   'balancer.vaultV2': balancerV2VaultAbi,
@@ -28,6 +29,7 @@ export const AbiMap = {
   'balancer.LiquidityGauge': LiquidityGaugeAbi,
   'balancer.omniVotingEscrowAbi': OmniVotingEscrowAbi,
   'balancer.gaugeControllerAbi': GaugeControllerAbi,
+  'balancer.liquidityGaugeV5Abi': LiquidityGaugeV5Abi,
 }
 
 export type AbiMapType = keyof typeof AbiMap | undefined
