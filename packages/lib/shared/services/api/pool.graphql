@@ -20,6 +20,29 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     }
     hook {
       address
+      chain
+      dynamicData {
+        addLiquidityFeePercentage
+        removeLiquidityFeePercentage
+        swapFeePercentage
+      }
+      reviewData {
+        name
+        summary
+        warnings
+        reviewFile
+      }
+      poolsIds
+      shouldCallAfterAddLiquidity
+      shouldCallAfterInitialize
+      shouldCallAfterRemoveLiquidity
+      shouldCallAfterSwap
+      shouldCallBeforeAddLiquidity
+      shouldCallBeforeInitialize
+      shouldCallBeforeRemoveLiquidity
+      shouldCallBeforeSwap
+      shouldCallComputeDynamicSwapFee
+      enableHookAdjustedAmounts
     }
     dynamicData {
       poolId
@@ -263,12 +286,28 @@ fragment PoolTokens on GqlPoolTokenDetail {
     hook {
       address
       chain
+      dynamicData {
+        addLiquidityFeePercentage
+        removeLiquidityFeePercentage
+        swapFeePercentage
+      }
       reviewData {
         name
         summary
         warnings
         reviewFile
       }
+      poolsIds
+      shouldCallAfterAddLiquidity
+      shouldCallAfterInitialize
+      shouldCallAfterRemoveLiquidity
+      shouldCallAfterSwap
+      shouldCallBeforeAddLiquidity
+      shouldCallBeforeInitialize
+      shouldCallBeforeRemoveLiquidity
+      shouldCallBeforeSwap
+      shouldCallComputeDynamicSwapFee
+      enableHookAdjustedAmounts
     }
   }
   isErc4626
