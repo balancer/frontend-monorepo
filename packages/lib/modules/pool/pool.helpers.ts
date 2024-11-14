@@ -12,6 +12,7 @@ import {
   GqlPoolTokenDetail,
   GqlPoolType,
   GqlToken,
+  Hook,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
@@ -254,8 +255,17 @@ export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
   return !!token.priceRateProvider && !!token.priceRateProviderData
 }
 
-export function hasReviewedHook(pool: Pool): boolean {
-  return !!pool.hook && !!pool.hook.reviewData
+export function hasLegitRateProvider(token: GqlPoolTokenDetail): boolean {
+  const isPriceRateProviderLegit =
+    isNil(token.priceRateProvider) || // if null, we consider rate provider as zero address
+    token.priceRateProvider === zeroAddress ||
+    token.priceRateProvider === token.nestedPool?.address
+
+  return isNil(token.priceRateProviderData) && isPriceRateProviderLegit
+}
+
+export function hasReviewedHook(hook: Hook): boolean {
+  return !!hook.reviewData
 }
 
 /**
@@ -270,6 +280,10 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
   // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
   if (isLBP(pool.type) || pool.dynamicData.isPaused || pool.dynamicData.isInRecoveryMode) {
+    return true
+  }
+
+  if (pool.hook && (!hasReviewedHook(pool.hook) || pool.hook?.reviewData?.summary === 'unsafe')) {
     return true
   }
 

@@ -2,17 +2,21 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
-import { isNil } from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { zeroAddress } from 'viem'
 import { Pool } from '../PoolProvider'
 import { migrateStakeTooltipLabel } from '../actions/stake.helpers'
-import { hasReviewedRateProvider, isV2Pool } from '../pool.helpers'
+import {
+  hasLegitRateProvider,
+  hasReviewedHook,
+  hasReviewedRateProvider,
+  isV2Pool,
+} from '../pool.helpers'
 import { shouldMigrateStake } from '../user-balance.helpers'
 import { VulnerabilityDataMap } from './pool-issues/PoolIssue.labels'
 import { PoolIssue } from './pool-issues/PoolIssue.type'
 import { BalAlertProps } from '@repo/lib/shared/components/alerts/BalAlert'
+import { convertCamelCaseToTitleCase } from '@repo/lib/shared/utils/strings'
 
 export type PoolAlert = {
   identifier: string
@@ -57,6 +61,7 @@ export function usePoolAlerts(pool: Pool) {
     if (pool.chain === GqlChain.Sepolia) return []
 
     const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
+    const hook = pool.hook
 
     const alerts: PoolAlert[] = []
 
@@ -70,12 +75,7 @@ export function usePoolAlerts(pool: Pool) {
         })
       }
 
-      const isPriceRateProviderLegit =
-        isNil(token.priceRateProvider) || // if null, we consider rate provider as zero address
-        token.priceRateProvider === zeroAddress ||
-        token.priceRateProvider === token.nestedPool?.address
-
-      if (isNil(token.priceRateProviderData) && isPriceRateProviderLegit) {
+      if (hasLegitRateProvider(token)) {
         return
       }
 
@@ -93,9 +93,124 @@ export function usePoolAlerts(pool: Pool) {
         alerts.push({
           identifier: `UnsafePriceProvider-${token.symbol}`,
           // eslint-disable-next-line max-len
-          content: `The rate provider for ${token.symbol} has been reviewed as 'unsafe'. For your safety, you can't interact with this pool on this UI. `,
+          content: `The rate provider for ${token.symbol} has been reviewed as 'unsafe'. For your safety, you can't interact with this pool on this UI.`,
           status: 'error',
           isSoftWarning: true,
+        })
+      }
+    })
+
+    if (hook) {
+      const hookName = hook.reviewData?.name
+        ? convertCamelCaseToTitleCase(hook.reviewData.name)
+        : ''
+
+      if (!hasReviewedHook(hook)) {
+        alerts.push({
+          identifier: `PoolHookNotReviewed`,
+          // eslint-disable-next-line max-len
+          content: `This pool contains a hook called ${hookName} which has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
+          status: 'error',
+          isSoftWarning: true,
+        })
+      }
+
+      if (hook.reviewData?.summary === 'unsafe') {
+        alerts.push({
+          identifier: `PoolHookReviewedUnsafe`,
+          // eslint-disable-next-line max-len
+          content: `This pool contains a hook called ${hookName} which has been reviewed as 'unsafe'. For your safety, you can’t interact with this pool on this UI.`,
+          status: 'error',
+          isSoftWarning: true,
+        })
+      }
+
+      if (hook.reviewData?.summary === 'safe' && hook.reviewData?.warnings.length > 0) {
+        alerts.push({
+          identifier: `PoolHookReviewedSafeWithWarnings`,
+          // eslint-disable-next-line max-len
+          content: `This pool contains a a hook called ${hookName} which has been reviewed as ‘safe’ but with warnings. Please review it in the Pool contracts section.`,
+          status: 'error',
+          isSoftWarning: true,
+        })
+      }
+    }
+
+    // check alerts for nested pools & tokens
+    poolTokens?.forEach(token => {
+      if (token.hasNestedPool && token.nestedPool) {
+        const nestedPool = token.nestedPool
+
+        if (!nestedPool.hook) {
+          return
+        }
+
+        if (nestedPool.hook) {
+          const hookName = nestedPool.hook.reviewData?.name
+            ? convertCamelCaseToTitleCase(nestedPool.hook.reviewData.name)
+            : ''
+
+          if (!hasReviewedHook(nestedPool.hook)) {
+            alerts.push({
+              identifier: `NestedPoolHookNotReviewed`,
+              // eslint-disable-next-line max-len
+              content: `This pool contains a nested pool with a hook called ${hookName} which has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
+              status: 'error',
+              isSoftWarning: true,
+            })
+          }
+
+          if (nestedPool.hook?.reviewData?.summary === 'unsafe') {
+            alerts.push({
+              identifier: `NestedPoolHookReviewedUnsafe`,
+              // eslint-disable-next-line max-len
+              content: `This pool contains a nested pool with a hook called ${hookName} which has been reviewed as 'unsafe'. For your safety, you can’t interact with this pool on this UI.`,
+              status: 'error',
+              isSoftWarning: true,
+            })
+          }
+
+          if (
+            nestedPool.hook?.reviewData?.summary === 'safe' &&
+            nestedPool.hook?.reviewData?.warnings.length > 0
+          ) {
+            alerts.push({
+              identifier: `NestedPoolHookReviewedSafeWithWarnings`,
+              // eslint-disable-next-line max-len
+              content: `This pool contains a a hook called ${hookName} which has been reviewed as ‘safe’ but with warnings. Please review it in the Pool contracts section.`,
+              status: 'error',
+              isSoftWarning: true,
+            })
+          }
+        }
+
+        nestedPool.tokens.forEach(nestedToken => {
+          if (hasLegitRateProvider(nestedToken)) {
+            return
+          }
+
+          if (!hasReviewedRateProvider(nestedToken)) {
+            alerts.push({
+              identifier: `NestedPriceProviderNotReviewed-${nestedToken.symbol}`,
+              // eslint-disable-next-line max-len
+              content: `The rate provider for ${nestedToken.symbol} in a nested pool has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
+              status: 'error',
+              isSoftWarning: true,
+            })
+          }
+
+          if (
+            nestedToken.priceRateProviderData &&
+            nestedToken.priceRateProviderData?.summary !== 'safe'
+          ) {
+            alerts.push({
+              identifier: `UnsafeNestedPriceProvider-${nestedToken.symbol}`,
+              // eslint-disable-next-line max-len
+              content: `The rate provider for ${nestedToken.symbol} in a nested pool has been reviewed as 'unsafe'. For your safety, you can't interact with this pool on this UI.`,
+              status: 'error',
+              isSoftWarning: true,
+            })
+          }
         })
       }
     })
