@@ -251,11 +251,11 @@ export function allClaimableGaugeAddressesFor(pool: ClaimablePool) {
 }
 
 export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
-  return (
-    !!token.priceRateProvider &&
-    !!token.priceRateProviderData &&
-    token.priceRateProviderData.reviewed
-  )
+  return !!token.priceRateProvider && !!token.priceRateProviderData
+}
+
+export function hasReviewedHook(pool: Pool): boolean {
+  return !!pool.hook && !!pool.hook.reviewData
 }
 
 /**
