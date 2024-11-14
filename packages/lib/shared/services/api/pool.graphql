@@ -245,6 +245,21 @@ fragment PoolTokens on GqlPoolTokenDetail {
         name
         symbol
       }
+      priceRateProvider
+      priceRateProviderData {
+        address
+        name
+        summary
+        reviewed
+        warnings
+        upgradeableComponents {
+          entryPoint
+          implementationReviewed
+        }
+        reviewFile
+        factory
+      }
+    }
     hook {
       address
       chain
