@@ -114,6 +114,16 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
         stakingId
       }
     }
+    hook {
+      address
+      chain
+      reviewData {
+        name
+        summary
+        warnings
+        reviewFile
+      }
+    }
     ... on GqlPoolWeighted {
       nestingType
       poolTokens {
