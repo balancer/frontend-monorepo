@@ -21,3 +21,6 @@ export function arrayToSentence(arr: string[]): string {
   const lastElement = arr.pop()
   return arr.join(', ') + ', and ' + lastElement
 }
+
+export const convertCamelCaseToTitleCase = (s: string): string =>
+  s.replace(/([A-Z])/g, ' $1').trim()
