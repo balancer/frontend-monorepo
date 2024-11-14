@@ -245,6 +245,15 @@ fragment PoolTokens on GqlPoolTokenDetail {
         name
         symbol
       }
+    hook {
+      address
+      chain
+      reviewData {
+        name
+        summary
+        warnings
+        reviewFile
+      }
     }
   }
   isErc4626
