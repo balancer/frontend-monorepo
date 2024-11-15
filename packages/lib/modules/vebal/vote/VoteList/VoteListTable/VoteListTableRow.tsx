@@ -10,6 +10,7 @@ import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
 import React, { useState } from 'react'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
+import { VoteExpiredTooltip } from '@repo/lib/modules/vebal/vote/VoteExpiredTooltip'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -64,6 +65,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                   pr={[1.5, 'ms']}
                   type={vote.type}
                 />
+                {vote.gaugeVotes?.isKilled && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">
                   <ArrowUpIcon transform="rotate(90)" />
                 </Box>

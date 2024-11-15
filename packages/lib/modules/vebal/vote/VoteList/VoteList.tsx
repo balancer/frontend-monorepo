@@ -1,4 +1,3 @@
-import { PoolListProvider } from '@repo/lib/modules/pool/PoolList/PoolListProvider'
 import { VoteListLayout } from './VoteListLayout'
 import { VoteListProvider } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { getHiddenHandVotingIncentives } from '@repo/lib/modules/vebal/vote/hidden-hand/getHiddenHandVotingIncentives'
@@ -33,10 +32,7 @@ export async function VoteList() {
       votingIncentives={votingIncentives}
       votingIncentivesError={errorToJson(votingIncentivesError)}
     >
-      {/* fix: remove PoolListProvider when voteFilters implemented */}
-      <PoolListProvider>
-        <VoteListLayout />
-      </PoolListProvider>
+      <VoteListLayout />
     </VoteListProvider>
   )
 }

@@ -22,6 +22,7 @@ export interface RawVotesData {
   gaugeWeightNextPeriod: { result?: bigint; status: string }
   userVotes?: { result?: UserVotesData; status: string }
   lastUserVoteTime?: { result?: bigint; status: string }
+  isKilled?: { result?: boolean; status: string }
 }
 
 export interface VotesData {
@@ -29,6 +30,7 @@ export interface VotesData {
   votesNextPeriod: string
   userVotes: string
   lastUserVoteTime: number
+  isKilled: boolean
 }
 
 export type RawVotesDataMap = Record<string, RawVotesData>
@@ -42,6 +44,7 @@ function formatVotes(votesData: RawVotesData): VotesData {
     votesNextPeriod,
     userVotes: votesData?.userVotes?.result?.power.toString() || '0',
     lastUserVoteTime: Number(votesData?.lastUserVoteTime?.result) || 0,
+    isKilled: votesData?.isKilled?.result ?? false,
   }
 }
 
@@ -65,29 +68,44 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
           path: 'gaugeWeightThisPeriod',
           fn: 'gauge_relative_weight_write',
           args: [gaugeAddress, thisWeekTimestamp],
+          abi: AbiMap['balancer.gaugeControllerAbi'] as any,
+          address: mainnetNetworkConfig.contracts.gaugeController as Hex,
         },
         {
           path: 'gaugeWeightNextPeriod',
           fn: 'gauge_relative_weight_write',
           args: [gaugeAddress, nextWeekTimestamp],
+          abi: AbiMap['balancer.gaugeControllerAbi'] as any,
+          address: mainnetNetworkConfig.contracts.gaugeController as Hex,
         },
         isConnected && {
           path: 'userVotes',
           fn: 'vote_user_slopes',
           args: [userAddress, gaugeAddress],
+          abi: AbiMap['balancer.gaugeControllerAbi'] as any,
+          address: mainnetNetworkConfig.contracts.gaugeController as Hex,
         },
         isConnected && {
           path: 'lastUserVoteTime',
           fn: 'last_user_vote',
           args: [userAddress, gaugeAddress],
+          abi: AbiMap['balancer.gaugeControllerAbi'] as any,
+          address: mainnetNetworkConfig.contracts.gaugeController as Hex,
         },
-      ]).filter(Boolean)
+        {
+          path: 'isKilled',
+          fn: 'is_killed',
+          args: [],
+          abi: AbiMap['balancer.liquidityGaugeV5Abi'] as any,
+          address: gaugeAddress as Hex,
+        },
+      ])
 
       return requests.map(v => ({
         chainId: mainnet.id,
         id: `${gaugeAddress}.${v.path}`,
-        abi: AbiMap['balancer.gaugeControllerAbi'] as any,
-        address: mainnetNetworkConfig.contracts.gaugeController as Hex,
+        abi: v.abi,
+        address: v.address,
         functionName: v.fn,
         args: v.args,
       }))

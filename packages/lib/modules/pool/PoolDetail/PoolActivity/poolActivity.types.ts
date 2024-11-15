@@ -29,11 +29,6 @@ export interface PoolActivityTypeTab {
   label: string
 }
 
-export enum Sorting {
-  asc = 'asc',
-  desc = 'desc',
-}
-
 export function getPoolActivityTabsList({
   variant,
   poolType,
