@@ -1,15 +1,14 @@
 import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-
 import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
-
 // import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
 // import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 // import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 // import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
 import { CowPromoBanner } from '@repo/lib/shared/components/promos/CowPromoBanner'
+import { PoolListDisplayType } from '@repo/lib/modules/pool/pool.types'
 
 export default async function PoolsPage() {
   // Featured pools set up
@@ -47,7 +46,7 @@ export default async function PoolsPage() {
       <DefaultPageContainer noVerticalPadding pb={['xl', '2xl']} pt={['lg', '54px']}>
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
-            <PoolList />
+            <PoolList displayType={PoolListDisplayType.Name} filterProtocolVersion={['cow']} />
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>

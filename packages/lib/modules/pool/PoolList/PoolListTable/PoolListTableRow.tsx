@@ -5,7 +5,7 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { PoolListItem } from '../../pool.types'
+import { PoolListDisplayType, PoolListItem } from '../../pool.types'
 import { PoolListTokenPills } from '../PoolListTokenPills'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -23,7 +23,9 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
   const {
     queryState: { userAddress },
+    displayType,
   } = usePoolList()
+
   const { toCurrency } = useCurrency()
 
   return (
@@ -44,13 +46,20 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
-              <PoolListTokenPills
-                h={['32px', '36px']}
-                iconSize={20}
-                p={['xxs', 'sm']}
-                pool={pool}
-                pr={[1.5, 'ms']}
-              />
+              {displayType === PoolListDisplayType.TokenPills && (
+                <PoolListTokenPills
+                  h={['32px', '36px']}
+                  iconSize={20}
+                  p={['xxs', 'sm']}
+                  pool={pool}
+                  pr={[1.5, 'ms']}
+                />
+              )}
+              {displayType === PoolListDisplayType.Name && (
+                <Text fontWeight="medium" textAlign="left">
+                  {pool.name}
+                </Text>
+              )}
             </GridItem>
             <GridItem minW="32">
               <HStack>

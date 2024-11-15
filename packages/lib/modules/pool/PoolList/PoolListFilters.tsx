@@ -399,6 +399,7 @@ function ProtocolVersionFilter() {
       activeProtocolVersionTab,
       setActiveProtocolVersionTab,
     },
+    filterProtocolVersion,
   } = usePoolList()
 
   const tabs =
@@ -443,7 +444,7 @@ function ProtocolVersionFilter() {
       currentOption={activeProtocolVersionTab}
       groupId="protocol-version"
       onChange={toggleTab}
-      options={tabs}
+      options={tabs.filter(tab => !filterProtocolVersion.includes(tab.value))}
       size="xxs"
     />
   )
