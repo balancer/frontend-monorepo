@@ -100,6 +100,7 @@ function UserPoolFilter() {
 function PoolCategoryFilters() {
   const {
     queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel },
+    hidePoolTags,
   } = usePoolList()
 
   // remove query param when empty
@@ -111,16 +112,18 @@ function PoolCategoryFilters() {
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {poolTagFilters.map(tag => (
-        <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
-          <Checkbox
-            isChecked={!!poolTags.find(selected => selected === tag)}
-            onChange={e => togglePoolTag(e.target.checked, tag as PoolTagType)}
-          >
-            <Text fontSize="sm">{poolTagLabel(tag)}</Text>
-          </Checkbox>
-        </Box>
-      ))}
+      {poolTagFilters
+        .filter(tag => !hidePoolTags.includes(tag))
+        .map(tag => (
+          <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
+            <Checkbox
+              isChecked={!!poolTags.find(selected => selected === tag)}
+              onChange={e => togglePoolTag(e.target.checked, tag as PoolTagType)}
+            >
+              <Text fontSize="sm">{poolTagLabel(tag)}</Text>
+            </Checkbox>
+          </Box>
+        ))}
     </Box>
   )
 }
@@ -128,6 +131,7 @@ function PoolCategoryFilters() {
 function PoolTypeFilters() {
   const {
     queryState: { togglePoolType, poolTypes, poolTypeLabel, setPoolTypes },
+    hidePoolTypes,
   } = usePoolList()
 
   // remove query param when empty
@@ -137,7 +141,7 @@ function PoolTypeFilters() {
     }
   }, [poolTypes])
 
-  const _poolTypeFilters = poolTypeFilters.filter(poolType => poolType !== GqlPoolType.CowAmm)
+  const _poolTypeFilters = poolTypeFilters.filter(poolType => !hidePoolTypes.includes(poolType))
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
@@ -549,7 +553,6 @@ export function PoolListFilters() {
                         </Heading>
                         <PoolCategoryFilters />
                       </Box>
-
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />
                       </Box>

@@ -7,15 +7,21 @@ export async function PoolList({
   displayType,
   fixedPoolTypes,
   hideProtocolVersion,
+  hidePoolTypes,
+  hidePoolTags,
 }: {
   displayType?: PoolListDisplayType
   fixedPoolTypes?: GqlPoolType[]
   hideProtocolVersion?: string[]
+  hidePoolTypes?: GqlPoolType[]
+  hidePoolTags?: string[]
 }) {
   return (
     <PoolListProvider
       displayType={displayType}
       fixedPoolTypes={fixedPoolTypes}
+      hidePoolTags={hidePoolTags}
+      hidePoolTypes={hidePoolTypes}
       hideProtocolVersion={hideProtocolVersion}
     >
       <PoolListLayout />

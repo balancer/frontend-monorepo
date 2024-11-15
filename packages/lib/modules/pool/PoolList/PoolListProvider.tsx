@@ -14,10 +14,14 @@ export function _usePoolList({
   fixedPoolTypes,
   _displayType,
   _hideProtocolVersion,
+  _hidePoolTypes,
+  _hidePoolTags,
 }: {
   fixedPoolTypes?: GqlPoolType[]
   _displayType?: PoolListDisplayType
   _hideProtocolVersion?: string[]
+  _hidePoolTypes?: GqlPoolType[]
+  _hidePoolTags?: string[]
 } = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress } = useUserAccount()
@@ -28,6 +32,8 @@ export function _usePoolList({
   )
 
   const [hideProtocolVersion, setHideProtocolVersion] = useState<string[]>([])
+  const [hidePoolTypes, setHidePoolTypes] = useState<GqlPoolType[]>([])
+  const [hidePoolTags, setHidePoolTags] = useState<string[]>([])
 
   const { queryVariables, toggleUserAddress } = queryState
 
@@ -70,6 +76,18 @@ export function _usePoolList({
     }
   }, [_hideProtocolVersion])
 
+  useEffect(() => {
+    if (_hidePoolTypes) {
+      setHidePoolTypes(_hidePoolTypes)
+    }
+  }, [_hidePoolTypes])
+
+  useEffect(() => {
+    if (_hidePoolTags) {
+      setHidePoolTags(_hidePoolTags)
+    }
+  }, [_hidePoolTags])
+
   return {
     pools,
     count: data?.count || previousData?.count,
@@ -83,6 +101,10 @@ export function _usePoolList({
     setDisplayType,
     hideProtocolVersion,
     setHideProtocolVersion,
+    hidePoolTypes,
+    setHidePoolTypes,
+    hidePoolTags,
+    setHidePoolTags,
   }
 }
 
@@ -92,16 +114,22 @@ export function PoolListProvider({
   fixedPoolTypes,
   displayType,
   hideProtocolVersion,
+  hidePoolTypes,
+  hidePoolTags,
   children,
 }: PropsWithChildren<{
   fixedPoolTypes?: GqlPoolType[]
   displayType?: PoolListDisplayType
   hideProtocolVersion?: string[]
+  hidePoolTypes?: GqlPoolType[]
+  hidePoolTags?: string[]
 }>) {
   const hook = _usePoolList({
     fixedPoolTypes,
     _displayType: displayType,
     _hideProtocolVersion: hideProtocolVersion,
+    _hidePoolTypes: hidePoolTypes,
+    _hidePoolTags: hidePoolTags,
   })
 
   return <PoolListContext.Provider value={hook}>{children}</PoolListContext.Provider>
