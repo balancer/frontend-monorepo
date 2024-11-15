@@ -46,7 +46,7 @@ export default async function PoolsPage() {
       <DefaultPageContainer noVerticalPadding pb={['xl', '2xl']} pt={['lg', '54px']}>
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
-            <PoolList displayType={PoolListDisplayType.Name} filterProtocolVersion={['cow']} />
+            <PoolList displayType={PoolListDisplayType.Name} hideProtocolVersion={['cow']} />
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>

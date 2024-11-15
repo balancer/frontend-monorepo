@@ -6,17 +6,17 @@ import { PoolListDisplayType } from '../pool.types'
 export async function PoolList({
   displayType,
   fixedPoolTypes,
-  filterProtocolVersion,
+  hideProtocolVersion,
 }: {
   displayType?: PoolListDisplayType
   fixedPoolTypes?: GqlPoolType[]
-  filterProtocolVersion?: string[]
+  hideProtocolVersion?: string[]
 }) {
   return (
     <PoolListProvider
       displayType={displayType}
-      filterProtocolVersion={filterProtocolVersion}
       fixedPoolTypes={fixedPoolTypes}
+      hideProtocolVersion={hideProtocolVersion}
     >
       <PoolListLayout />
     </PoolListProvider>
