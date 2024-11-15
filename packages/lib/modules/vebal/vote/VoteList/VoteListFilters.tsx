@@ -72,7 +72,7 @@ export function VoteListFilters() {
           placement="bottom-end"
         >
           <PopoverTrigger>
-            <FilterButton totalFilterCount={totalFilterCount} ml="ms" />
+            <FilterButton ml="ms" totalFilterCount={totalFilterCount} />
           </PopoverTrigger>
           <Box shadow="2xl" zIndex="popover">
             <PopoverContent>
@@ -114,9 +114,9 @@ export function VoteListFilters() {
                           Networks
                         </Heading>
                         <PoolNetworkFilters
+                          setNetworks={setNetworks}
                           toggleNetwork={toggleNetwork}
                           toggledNetworks={toggledNetworks}
-                          setNetworks={setNetworks}
                         />
                       </Box>
                       <Box as={motion.div} variants={staggeredFadeInUp}>
@@ -124,10 +124,10 @@ export function VoteListFilters() {
                           Pool types
                         </Heading>
                         <PoolTypeFilters
-                          togglePoolType={togglePoolType}
-                          poolTypes={poolTypes}
                           poolTypeLabel={poolTypeLabel}
+                          poolTypes={poolTypes}
                           setPoolTypes={setPoolTypes}
+                          togglePoolType={togglePoolType}
                         />
                       </Box>
                       <Box as={motion.div} variants={staggeredFadeInUp} w="full">

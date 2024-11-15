@@ -74,13 +74,13 @@ export function VoteListLayout() {
             </Box>
           </HStack>
           <FilterTags
-            poolTypeLabel={poolTypeLabel}
-            networks={networks}
-            toggleNetwork={toggleNetwork}
-            poolTypes={poolTypes}
-            togglePoolType={togglePoolType}
             includeExpiredPools={includeExpiredPools}
+            networks={networks}
+            poolTypeLabel={poolTypeLabel}
+            poolTypes={poolTypes}
             toggleIncludeExpiredPools={toggleIncludeExpiredPools}
+            toggleNetwork={toggleNetwork}
+            togglePoolType={togglePoolType}
           />
         </VStack>
 

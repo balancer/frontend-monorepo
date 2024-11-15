@@ -16,7 +16,7 @@ export function VoteExpiredTooltip({ usePortal }: Props) {
   const popoverContent = (
     <PopoverContent bg="background.level3" minWidth={['100px', '170px']} p="sm" shadow="3xl">
       <VStack alignItems="start" spacing="sm" width="full">
-        <Text color={'font.secondary'} fontSize="md" fontWeight={700}>
+        <Text color="font.secondary" fontSize="md" fontWeight={700}>
           Expired pool gauge
         </Text>
         <Text color="font.secondary" fontSize="sm">

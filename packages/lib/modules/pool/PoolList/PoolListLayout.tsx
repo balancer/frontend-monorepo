@@ -73,16 +73,16 @@ export function PoolListLayout() {
             </Box>
           </HStack>
           <FilterTags
-            networks={networks}
-            toggleNetwork={toggleNetwork}
-            poolTypes={poolTypes}
-            togglePoolType={togglePoolType}
-            poolTypeLabel={poolTypeLabel}
             minTvl={minTvl}
-            setMinTvl={setMinTvl}
-            poolTags={poolTags}
-            togglePoolTag={togglePoolTag}
+            networks={networks}
             poolTagLabel={poolTagLabel}
+            poolTags={poolTags}
+            poolTypeLabel={poolTypeLabel}
+            poolTypes={poolTypes}
+            setMinTvl={setMinTvl}
+            toggleNetwork={toggleNetwork}
+            togglePoolTag={togglePoolTag}
+            togglePoolType={togglePoolType}
           />
         </VStack>
 

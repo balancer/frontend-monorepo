@@ -406,7 +406,7 @@ export function FilterTags({
             <Tag size="lg">
               <TagLabel>
                 <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
-                  {`Expired`}
+                  Expired
                 </Text>
               </TagLabel>
               <TagCloseButton
@@ -547,7 +547,7 @@ export function PoolListFilters() {
           placement="bottom-end"
         >
           <PopoverTrigger>
-            <FilterButton totalFilterCount={totalFilterCount} ml="ms" />
+            <FilterButton ml="ms" totalFilterCount={totalFilterCount} />
           </PopoverTrigger>
           <Box shadow="2xl" zIndex="popover">
             <PopoverContent>
@@ -597,9 +597,9 @@ export function PoolListFilters() {
                           Networks
                         </Heading>
                         <PoolNetworkFilters
+                          setNetworks={setNetworks}
                           toggleNetwork={toggleNetwork}
                           toggledNetworks={toggledNetworks}
-                          setNetworks={setNetworks}
                         />
                       </Box>
                       {!isCowPath && (
@@ -616,10 +616,10 @@ export function PoolListFilters() {
                             Pool types
                           </Heading>
                           <PoolTypeFilters
-                            togglePoolType={togglePoolType}
-                            poolTypes={poolTypes}
                             poolTypeLabel={poolTypeLabel}
+                            poolTypes={poolTypes}
                             setPoolTypes={setPoolTypes}
+                            togglePoolType={togglePoolType}
                           />
                         </Box>
                       )}
