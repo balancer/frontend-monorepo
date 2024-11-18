@@ -30,7 +30,7 @@ export function useSignPermit2SwapStep({
   const { userAddress } = useUserAccount()
   const { slippage } = useUserSettings()
 
-  const tokenInAddress = tokenInInfo?.address as Address
+  const tokenInAddress = (tokenInInfo?.address ?? '') as Address
 
   const queryData = simulationQuery.data as SdkSimulationResponseWithRouter
 
