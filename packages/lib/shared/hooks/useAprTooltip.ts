@@ -34,7 +34,7 @@ const stakingTokenTooltipText = '3rd party incentives (outside the veBAL system)
 
 // Types that must be added to the total base
 const TOTAL_BASE_APR_TYPES = [
-  GqlPoolAprItemType.SwapFee,
+  GqlPoolAprItemType.SwapFee_24H,
   GqlPoolAprItemType.IbYield,
   GqlPoolAprItemType.Staking,
   GqlPoolAprItemType.Merkl,
@@ -51,14 +51,16 @@ export const TOTAL_APR_TYPES = [
 ]
 
 function absMaxApr(aprItems: GqlPoolAprItem[], boost?: number) {
-  return aprItems.reduce((acc, item) => {
-    const hasBoost = boost && boost > 1
-    if (hasBoost && item.type === GqlPoolAprItemType.Staking) {
-      return acc.plus(bn(item.apr).times(boost))
-    }
+  return aprItems
+    .filter(item => TOTAL_APR_TYPES.includes(item.type))
+    .reduce((acc, item) => {
+      const hasBoost = boost && boost > 1
+      if (hasBoost && item.type === GqlPoolAprItemType.Staking) {
+        return acc.plus(bn(item.apr).times(boost))
+      }
 
-    return acc.plus(bn(item.apr))
-  }, bn(0))
+      return acc.plus(bn(item.apr))
+    }, bn(0))
 }
 
 export function useAprTooltip({
