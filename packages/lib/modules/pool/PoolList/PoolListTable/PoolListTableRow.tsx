@@ -12,6 +12,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { usePoolList } from '../PoolListProvider'
 import { PoolVersionTag } from './PoolVersionTag'
 import { isBoosted } from '../../pool.helpers'
+import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -19,6 +20,30 @@ interface Props extends GridProps {
 }
 
 const MemoizedMainAprTooltip = memo(MainAprTooltip)
+
+function PoolName({ pool }: { pool: PoolListItem }) {
+  const isFirstToken = (index: number) => index === 0
+  const zIndices = Array.from({ length: pool.displayTokens.length }, (_, index) => index).reverse()
+
+  return (
+    <HStack>
+      {pool.displayTokens.map((token, i) => (
+        <Box key={token.address} ml={isFirstToken(i) ? 0 : -3} zIndex={zIndices[i]}>
+          <TokenIcon
+            address={token.address}
+            alt={token.symbol}
+            chain={pool.chain}
+            size={20}
+            weight={token.weight}
+          />
+        </Box>
+      ))}
+      <Text fontWeight="medium" textAlign="left">
+        {pool.name}
+      </Text>
+    </HStack>
+  )
+}
 
 export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
   const {
@@ -55,11 +80,7 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
                   pr={[1.5, 'ms']}
                 />
               )}
-              {displayType === PoolListDisplayType.Name && (
-                <Text fontWeight="medium" textAlign="left">
-                  {pool.name}
-                </Text>
-              )}
+              {displayType === PoolListDisplayType.Name && <PoolName pool={pool} />}
             </GridItem>
             <GridItem minW="32">
               <HStack>
