@@ -51,7 +51,6 @@ export default async function PoolsPage() {
               hidePoolTags={['VE8020']}
               hidePoolTypes={[
                 GqlPoolType.LiquidityBootstrapping,
-                GqlPoolType.Gyro,
                 GqlPoolType.CowAmm,
                 GqlPoolType.Fx,
               ]}
