@@ -33,9 +33,6 @@ export function useSignPermit2SwapStep({
   const tokenInAddress = (tokenInInfo?.address ?? '') as Address
 
   const queryData = simulationQuery.data as SdkSimulationResponseWithRouter
-  console.log('COCOCO', { queryData, isPermit2 })
-
-  // if (!queryData) return undefined
 
   function getTokenInAmount(): bigint {
     if (!queryData?.queryOutput) return 0n
