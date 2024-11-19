@@ -77,7 +77,7 @@ export function useAprTooltip({
   const hasVeBalBoost = !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
 
   // Swap fees
-  const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee)
+  const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
   const swapFeesDisplayed = numberFormatter(swapFee ? swapFee.apr.toString() : '0')
 
   // Yield bearing tokens
