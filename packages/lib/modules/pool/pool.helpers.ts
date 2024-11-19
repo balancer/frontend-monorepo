@@ -4,6 +4,7 @@ import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplo
 import {
   GetPoolQuery,
   GqlChain,
+  GqlNestedPool,
   GqlPoolBase,
   GqlPoolNestingType,
   GqlPoolStakingGauge,
@@ -354,6 +355,10 @@ export function getPoolActionableTokens(pool: Pool, getToken: GetTokenFn): GqlTo
       .filter((token): token is GqlToken => token !== undefined)
   }
 
+  if (isBoosted(pool)) {
+    return getBoostedGqlTokens(pool, getToken)
+  }
+
   // TODO add exception for composable pools where we can allow adding
   // liquidity with nested tokens
   if (supportsNestedActions(pool)) {
@@ -435,21 +440,35 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
 }
 
 /*
-  Returns all the top level tokens + children nested tokens + ERC4626 underlying tokens.
-  That is, the tokens that we can use in the pool's actions (add/remove/swap)
+  Returns all the tokens in the structure of the given pool:
+  top level tokens + children nested tokens + ERC4626 underlying tokens.
  */
 export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
-  const underlyingTokens: TokenCore[] = pool.poolTokens.flatMap((token, index) =>
-    token.isErc4626 ? ({ ...token.underlyingToken, index } as TokenCore) : []
-  )
+  const extractUnderlyingTokens = (token: PoolToken): TokenCore[] => {
+    if (token.isErc4626 && token.underlyingToken) {
+      return [{ ...token.underlyingToken, index: token.index } as TokenCore]
+    }
+    return []
+  }
+
+  const extractNestedUnderlyingTokens = (nestedPool?: GqlNestedPool): TokenCore[] => {
+    if (!nestedPool) return []
+    return nestedPool.tokens.flatMap((nestedToken, index) =>
+      nestedToken.isErc4626 && nestedToken.underlyingToken
+        ? ([nestedToken, { ...nestedToken.underlyingToken, index }] as TokenCore[]) // Is index is not relevant in this case?
+        : [nestedToken as TokenCore]
+    )
+  }
+
+  const underlyingTokens: TokenCore[] = pool.poolTokens.flatMap(extractUnderlyingTokens)
 
   const nestedParentTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
     token.nestedPool ? token : []
   )
 
-  const nestedChildrenTokens: PoolToken[] = pool.poolTokens
-    .flatMap(token => (token.nestedPool ? token.nestedPool.tokens : []))
-    .filter((token): token is PoolToken => token !== undefined)
+  const nestedChildrenTokens: TokenCore[] = pool.poolTokens.flatMap(token =>
+    token.nestedPool ? extractNestedUnderlyingTokens(token.nestedPool as GqlNestedPool) : []
+  )
 
   const standardTopLevelTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
     !token.hasNestedPool && !token.isErc4626 ? token : []
@@ -457,12 +476,24 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
 
   const allTokens = underlyingTokens.concat(
     toTokenCores(nestedParentTokens),
-    toTokenCores(nestedChildrenTokens),
+    nestedChildrenTokens,
     toTokenCores(standardTopLevelTokens)
   )
 
   // Remove duplicates as phantom BPTs can be both in the top level and inside nested pools
   return uniqBy(allTokens, 'address')
+}
+
+// Returns top level standard tokens + Erc4626 underlying tokens
+export function getBoostedGqlTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
+  const underlyingTokens = pool.poolTokens
+    .flatMap(token =>
+      token.isErc4626
+        ? [getToken(token?.underlyingToken?.address as Address, pool.chain)]
+        : toGqlTokens([token], getToken, pool.chain)
+    )
+    .filter((token): token is GqlToken => token !== undefined)
+  return underlyingTokens
 }
 
 function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {

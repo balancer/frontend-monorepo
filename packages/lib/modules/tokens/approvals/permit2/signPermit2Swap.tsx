@@ -54,10 +54,12 @@ async function sign({
   const MaxAllowance = MaxUint159
 
   const maximizedQueryOutput = { ...queryOutput }
-  if (maximizedQueryOutput.swapKind === SwapKind.GivenIn)
-    {maximizedQueryOutput.amountIn.amount = MaxAllowance}
-  if (maximizedQueryOutput.swapKind === SwapKind.GivenOut)
-    {maximizedQueryOutput.amountOut.amount = MaxAllowance}
+  if (maximizedQueryOutput.swapKind === SwapKind.GivenIn) {
+    maximizedQueryOutput.amountIn.amount = MaxAllowance
+  }
+  if (maximizedQueryOutput.swapKind === SwapKind.GivenOut) {
+    maximizedQueryOutput.amountOut.amount = MaxAllowance
+  }
 
   const signature = await Permit2Helper.signSwapApproval({
     client: sdkClient,

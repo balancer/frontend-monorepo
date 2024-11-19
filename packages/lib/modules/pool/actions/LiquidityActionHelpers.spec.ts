@@ -64,7 +64,7 @@ it('returns poolState for non nested pools', () => {
 
 it('returns NestedPoolState for nested pools', () => {
   const helpers = new LiquidityActionHelpers(nestedPoolMock)
-  const nestedPoolState = helpers.nestedPoolState
+  const nestedPoolState = helpers.nestedPoolStateV2
 
   expect(nestedPoolState.pools).toHaveLength(2)
   const firstPool = nestedPoolState.pools[0]
