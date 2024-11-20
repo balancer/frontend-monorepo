@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { createContext, PropsWithChildren, useEffect, useState } from 'react'
+import { createContext, PropsWithChildren, useEffect } from 'react'
 import { GetPoolsDocument, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@apollo/client'
 import { usePoolListQueryState } from './usePoolListQueryState'
@@ -12,28 +12,19 @@ import { PoolListDisplayType } from '../pool.types'
 
 export function _usePoolList({
   fixedPoolTypes,
-  _displayType,
-  _hideProtocolVersion,
-  _hidePoolTypes,
-  _hidePoolTags,
+  displayType,
+  hideProtocolVersion,
+  hidePoolTypes,
+  hidePoolTags,
 }: {
   fixedPoolTypes?: GqlPoolType[]
-  _displayType?: PoolListDisplayType
-  _hideProtocolVersion?: string[]
-  _hidePoolTypes?: GqlPoolType[]
-  _hidePoolTags?: string[]
+  displayType?: PoolListDisplayType
+  hideProtocolVersion?: string[]
+  hidePoolTypes?: GqlPoolType[]
+  hidePoolTags?: string[]
 } = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress } = useUserAccount()
-
-  // set options
-  const [displayType, setDisplayType] = useState<PoolListDisplayType>(
-    PoolListDisplayType.TokenPills
-  )
-
-  const [hideProtocolVersion, setHideProtocolVersion] = useState<string[]>([])
-  const [hidePoolTypes, setHidePoolTypes] = useState<GqlPoolType[]>([])
-  const [hidePoolTags, setHidePoolTags] = useState<string[]>([])
 
   const { queryVariables, toggleUserAddress } = queryState
 
@@ -64,30 +55,6 @@ export function _usePoolList({
     }
   }, [userAddress])
 
-  useEffect(() => {
-    if (_displayType) {
-      setDisplayType(_displayType)
-    }
-  }, [_displayType])
-
-  useEffect(() => {
-    if (_hideProtocolVersion) {
-      setHideProtocolVersion(_hideProtocolVersion)
-    }
-  }, [_hideProtocolVersion])
-
-  useEffect(() => {
-    if (_hidePoolTypes) {
-      setHidePoolTypes(_hidePoolTypes)
-    }
-  }, [_hidePoolTypes])
-
-  useEffect(() => {
-    if (_hidePoolTags) {
-      setHidePoolTags(_hidePoolTags)
-    }
-  }, [_hidePoolTags])
-
   return {
     pools,
     count: data?.count || previousData?.count,
@@ -98,13 +65,9 @@ export function _usePoolList({
     isFixedPoolType,
     refetch,
     displayType,
-    setDisplayType,
     hideProtocolVersion,
-    setHideProtocolVersion,
     hidePoolTypes,
-    setHidePoolTypes,
     hidePoolTags,
-    setHidePoolTags,
   }
 }
 
@@ -126,10 +89,10 @@ export function PoolListProvider({
 }>) {
   const hook = _usePoolList({
     fixedPoolTypes,
-    _displayType: displayType,
-    _hideProtocolVersion: hideProtocolVersion,
-    _hidePoolTypes: hidePoolTypes,
-    _hidePoolTags: hidePoolTags,
+    displayType,
+    hideProtocolVersion,
+    hidePoolTypes,
+    hidePoolTags,
   })
 
   return <PoolListContext.Provider value={hook}>{children}</PoolListContext.Provider>
