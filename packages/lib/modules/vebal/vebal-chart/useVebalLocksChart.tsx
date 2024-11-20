@@ -1,9 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
-
 import * as echarts from 'echarts/core'
 import { EChartsOption, ECharts } from 'echarts'
 import { format, differenceInDays } from 'date-fns'

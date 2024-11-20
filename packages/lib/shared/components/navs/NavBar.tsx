@@ -132,11 +132,13 @@ function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
     }
 
     return defaultActions
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, isConnected])
 
   return (
     <>
       {actions.map(({ el, display }, i) => (
+        // eslint-disable-next-line react/no-array-index-key
         <Box as={motion.div} display={display} key={i} variants={fadeIn}>
           {el}
         </Box>

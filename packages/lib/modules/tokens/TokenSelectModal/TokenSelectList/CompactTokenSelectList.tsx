@@ -42,6 +42,22 @@ export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props
 
   const style = { height: `${tokens.length * 75}px` }
 
+  function renderRow(index: number) {
+    const token = tokens[index]
+    const userBalance = isConnected ? balanceFor(token) : undefined
+
+    return (
+      <TokenSelectListRow
+        active={index === activeIndex}
+        isBalancesLoading={isBalancesLoading}
+        key={keyFor(token, index)}
+        onClick={() => onTokenSelect(token)}
+        token={token}
+        userBalance={userBalance}
+      />
+    )
+  }
+
   return (
     <Box {...rest}>
       {tokens.length === 0 ? (
@@ -51,25 +67,7 @@ export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props
           </Text>
         </Center>
       ) : (
-        <Virtuoso
-          data={tokens}
-          itemContent={index => {
-            const token = tokens[index]
-            const userBalance = isConnected ? balanceFor(token) : undefined
-
-            return (
-              <TokenSelectListRow
-                active={index === activeIndex}
-                isBalancesLoading={isBalancesLoading}
-                key={keyFor(token, index)}
-                onClick={() => onTokenSelect(token)}
-                token={token}
-                userBalance={userBalance}
-              />
-            )
-          }}
-          style={style}
-        />
+        <Virtuoso data={tokens} itemContent={renderRow} style={style} />
       )}
     </Box>
   )

@@ -32,16 +32,20 @@ export default function GlobalError({
   const title = error.digest ? `Something went wrong (${error.digest})` : 'Something went wrong'
 
   return (
-    <html>
+    <html lang="en">
       <body>
         <NextError statusCode={500} title={title} />
         <div style={{ marginTop: '16px' }}>
           {href && (
             <a href={window.location.href}>
-              <button>Reload Page</button>
+              <button type="button">Reload Page</button>
             </a>
           )}
-          {showResetButton && <button onClick={() => reset?.()}>Try Reset (dev)</button>}
+          {showResetButton && (
+            <button onClick={() => reset?.()} type="button">
+              Try Reset (dev)
+            </button>
+          )}
         </div>
       </body>
     </html>

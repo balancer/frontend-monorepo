@@ -144,13 +144,13 @@ function BaseAprTooltip({
         displayValueFormatter={usedDisplayValueFormatter}
         title="Staking incentives"
       >
-        {stakingIncentivesDisplayed.map((item, index) => {
+        {stakingIncentivesDisplayed.map(item => {
           return (
             <TooltipAprItem
               {...subitemPopoverAprItemProps}
               apr={item.apr}
               displayValueFormatter={usedDisplayValueFormatter}
-              key={index}
+              key={`staking-${item.title}-${item.apr}`}
               title={item.title}
               tooltipText={item.tooltipText}
             />
@@ -164,13 +164,13 @@ function BaseAprTooltip({
         displayValueFormatter={usedDisplayValueFormatter}
         title="Yield bearing tokens"
       >
-        {yieldBearingTokensDisplayed.map((item, index) => {
+        {yieldBearingTokensDisplayed.map(item => {
           return (
             <TooltipAprItem
               {...subitemPopoverAprItemProps}
               apr={item.apr}
               displayValueFormatter={usedDisplayValueFormatter}
-              key={index}
+              key={`yield-bearing-${item.title}-${item.apr}`}
               title={item.title}
               tooltipText={inherentTokenYieldTooltipText}
             />
