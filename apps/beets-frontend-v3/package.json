@@ -6,6 +6,7 @@
   "scripts": {
     "build": "pnpm --filter @repo/lib graphql:gen && next build",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3001\"",
+    "dev:mock": "next dev -p 3001",
     "gen:wagmi": "pnpm wagmi generate",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
