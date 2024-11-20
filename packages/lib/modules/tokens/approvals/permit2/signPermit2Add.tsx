@@ -70,7 +70,6 @@ async function sign({
 
   function getSignFn() {
     if (isV3WithNestedActionsPool(pool)) {
-      console.log('isV3WithNestedActionsPool edge case')
       // this edge case fails if you provide an amountIn with zero amount
       filteredAmountsIn = filteredAmountsIn.filter(a => a.amount > 0n)
       return Permit2Helper.signAddLiquidityNestedApproval
