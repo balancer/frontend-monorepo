@@ -23,8 +23,6 @@ export function getPaginationProps(
     setPagination({ pageIndex: pagination.pageIndex + 1, pageSize: pagination.pageSize })
   const goToPreviousPage = () =>
     setPagination({ pageIndex: pagination.pageIndex - 1, pageSize: pagination.pageSize })
-  const setPageIndex = (value: number) =>
-    setPagination({ pageIndex: value, pageSize: pagination.pageSize })
   const setPageSize = (value: number) =>
     setPagination({ pageIndex: pagination.pageIndex, pageSize: value })
 
@@ -38,7 +36,6 @@ export function getPaginationProps(
     goToLastPage,
     goToNextPage,
     goToPreviousPage,
-    setPageIndex,
     setPageSize,
     changeSize,
   }

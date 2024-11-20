@@ -170,7 +170,6 @@ export function DataTable<Data extends object>({
           goToNextPage={() => table.nextPage()}
           goToPreviousPage={() => table.previousPage()}
           pageSize={table.getState().pagination.pageSize}
-          setPageIndex={table.setPageIndex}
           setPageSize={table.setPageSize}
           totalPageCount={table.getPageCount()}
         />
