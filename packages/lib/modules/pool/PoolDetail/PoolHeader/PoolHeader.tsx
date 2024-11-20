@@ -45,7 +45,7 @@ export function PoolHeader() {
   }
 
   return (
-    <VStack align="start" w="full">
+    <VStack align="start" spacing="md" w="full">
       <PoolBreadcrumbs />
       <Stack
         direction={{ base: 'column', md: 'row' }}

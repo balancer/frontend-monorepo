@@ -44,7 +44,7 @@ export function PaginatedTable({
             items.length === 0 &&
             Array.from({ length: 20 }).map((_, index) => (
               // eslint-disable-next-line react/no-array-index-key
-              <Box key={index} py="xs" w="full">
+              <Box key={`table-row-skeleton-${index}`} px="xs" py="xs" w="full">
                 <Skeleton height="68px" w="full" />
               </Box>
             ))}
