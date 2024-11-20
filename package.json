@@ -17,9 +17,9 @@
     "stylelint": "stylelint '**/*.css'",
     "stylelint:fix": "pnpm run stylelint -- --fix",
     "test:integration": "turbo test:integration --log-order=stream --",
-    "test:unit:lib": "pnpm --filter lib run test:unit",
-    "test:integration:lib": "pnpm --filter lib run test:integration",
+    "test:integration:stream": "turbo test:integration --ui=stream --",
     "test:unit": "turbo test:unit --log-order=stream --",
+    "test:unit:stream": "turbo test:unit --ui=stream --",
     "typecheck": "turbo typecheck",
     "prepare": "husky"
   },
