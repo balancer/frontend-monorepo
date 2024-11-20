@@ -79,7 +79,6 @@ export function PoolContracts({ ...props }: CardProps) {
     usePool()
 
   const { getToken } = useTokens()
-  const { hasHook, hookAddress } = useHook(pool)
 
   const contracts = useMemo(() => {
     const contracts = [
@@ -98,14 +97,6 @@ export function PoolContracts({ ...props }: CardProps) {
       })
     }
 
-    if (hasHook) {
-      contracts.push({
-        label: 'Hook',
-        address: hookAddress,
-        explorerLink: getBlockExplorerAddressUrl(hookAddress, chain),
-      })
-    }
-
     return contracts
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pool, hasGaugeAddress])
@@ -120,6 +111,13 @@ export function PoolContracts({ ...props }: CardProps) {
       .filter(
         item => item.rateProviderAddress && item.rateProviderAddress !== zeroAddress
       ) as RateProvider[]
+  }, [pool])
+
+  const hooks = useMemo(() => {
+    const nestedHooks = pool.poolTokens.flatMap(token =>
+      token.nestedPool ? token.nestedPool.hook : []
+    )
+    return [...(pool.hook ? [pool.hook] : []), ...nestedHooks]
   }, [pool])
 
   return (
@@ -151,6 +149,48 @@ export function PoolContracts({ ...props }: CardProps) {
             </GridItem>
           </Grid>
         ))}
+        {hooks.length > 0 && (
+          <Grid gap="sm" templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} w="full">
+            <GridItem>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <Text className="tooltip-dashed-underline" minW="120px" variant="secondary">
+                    {hooks.length === 1 ? 'Hook:' : 'Hooks:'}
+                  </Text>
+                </PopoverTrigger>
+                <PopoverContent maxW="300px" p="sm" w="auto">
+                  <Text fontSize="sm" variant="secondary">
+                    Hooks are contracts that can be used to modify the behavior of the pool.
+                  </Text>
+                </PopoverContent>
+              </Popover>
+            </GridItem>
+            <GridItem>
+              <VStack alignItems="flex-start">
+                {hooks.map((hook, index) => {
+                  return (
+                    hook && (
+                      <HStack key={hook.address}>
+                        <Link
+                          href={getBlockExplorerAddressUrl(hook.address, chain)}
+                          key={hook.address}
+                          target="_blank"
+                          variant="link"
+                        >
+                          <HStack gap="xxs">
+                            <Text color="link">{abbreviateAddress(hook.address)}</Text>
+                            <ArrowUpRight size={12} />
+                          </HStack>
+                        </Link>
+                        {(index > 0 || !pool.hook) && <Text variant="secondary">(nested)</Text>}
+                      </HStack>
+                    )
+                  )
+                })}
+              </VStack>
+            </GridItem>
+          </Grid>
+        )}
         {rateProviders.length > 0 && (
           <Grid gap="sm" templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} w="full">
             <GridItem>
@@ -160,7 +200,6 @@ export function PoolContracts({ ...props }: CardProps) {
                     {rateProviders.length === 1 ? 'Rate provider:' : 'Rate providers:'}
                   </Text>
                 </PopoverTrigger>
-
                 <PopoverContent maxW="300px" p="sm" w="auto">
                   <Text fontSize="sm" variant="secondary">
                     Rate Providers are contracts that provide an exchange rate between two assets.
