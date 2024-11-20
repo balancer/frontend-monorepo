@@ -244,6 +244,11 @@ fragment PoolTokens on GqlPoolTokenDetail {
     name
     symbol
   }
+  erc4626ReviewData {
+    reviewFile
+    summary
+    warnings
+  }
 }
 
 query GetPoolSnapshots($poolId: String!, $range: GqlPoolSnapshotDataRange!, $chainId: GqlChain!) {
