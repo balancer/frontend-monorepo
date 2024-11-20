@@ -5,7 +5,7 @@ type SectionProps = HTMLChakraProps<'section'> & {
   variant?: string
 }
 
-const Section: React.FC<SectionProps> = ({ variant, ...props }) => {
+function Section({ variant, ...props }: SectionProps) {
   const styles = useStyleConfig('Section', { variant })
 
   return <chakra.section __css={styles} {...props} />
