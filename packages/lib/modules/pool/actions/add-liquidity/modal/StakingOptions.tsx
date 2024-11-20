@@ -12,6 +12,7 @@ import {
   PartnerRedirectModal,
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export function StakingOptions() {
   const { chain, pool } = usePool()
@@ -24,13 +25,15 @@ export function StakingOptions() {
 
   const auraDisclosure = useDisclosure()
 
+  const projectConfig = getProjectConfig()
+
   return (
     <>
       <Text mb="2">Staking options</Text>
       <HStack alignItems="stretch" justify="space-between" w="full">
         <Card position="relative" variant="modalSubSection">
           <VStack align="left" spacing="md">
-            <Text color="grayText">Balancer</Text>
+            <Text color="grayText">{projectConfig.projectName}</Text>
             <HStack>
               <Text color="font.primary" fontSize="md" fontWeight="bold">
                 {/* SHOULD WE USE MAX APR instead of the range?? */}
@@ -40,7 +43,12 @@ export function StakingOptions() {
               <Icon as={StarsIcon} height="20px" width="20px" />
             </HStack>
             <Flex position="absolute" right={2} top={3}>
-              <Image alt="balancer" height={30} src="/images/protocols/balancer.svg" width={30} />
+              <Image
+                alt={projectConfig.projectId}
+                height={30}
+                src={`/images/protocols/${projectConfig.projectId}.svg`}
+                width={30}
+              />
             </Flex>
             <Button
               as={Link}
