@@ -20,6 +20,8 @@ import { mins } from '../../utils/time'
 import { PropsWithChildren } from 'react'
 import { getPoolTags } from '@repo/lib/modules/pool/tags/getPoolTags'
 import { PoolTagsProvider } from '@repo/lib/modules/pool/tags/PoolTagsProvider'
+import { getErc4626Metadata } from '@repo/lib/modules/erc4626/getErc4626Metadata'
+import { Erc4626MetadataProvider } from '@repo/lib/modules/erc4626/Erc4626MetadataProvider'
 
 export const revalidate = 60
 
@@ -54,6 +56,7 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
 
   const exchangeRates = await getFxRates()
   const poolTags = await getPoolTags()
+  const erc4626Metadata = await getErc4626Metadata()
 
   return (
     <TokensProvider
@@ -62,7 +65,9 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
       variables={tokensQueryVariables}
     >
       <FiatFxRatesProvider data={exchangeRates}>
-        <PoolTagsProvider data={poolTags}>{children}</PoolTagsProvider>
+        <PoolTagsProvider data={poolTags}>
+          <Erc4626MetadataProvider data={erc4626Metadata}>{children}</Erc4626MetadataProvider>
+        </PoolTagsProvider>
       </FiatFxRatesProvider>
     </TokensProvider>
   )
