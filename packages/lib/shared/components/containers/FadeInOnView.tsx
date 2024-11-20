@@ -7,7 +7,7 @@ interface FadeInOnViewProps extends PropsWithChildren {
   animateOnce?: boolean
 }
 
-const FadeInOnView: React.FC<FadeInOnViewProps> = ({ children, animateOnce = true }) => {
+function FadeInOnView({ children, animateOnce = true }: FadeInOnViewProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: animateOnce })
 

@@ -89,6 +89,69 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
   )
 }
 
+interface TokenRowProps {
+  index: number
+  token: GqlToken
+  isConnected: boolean
+  balanceFor: (token: GqlToken) => any
+  isBalancesLoading: boolean
+  isLoadingTokenPrices: boolean
+  activeIndex: number
+  isCurrentToken: (token: GqlToken) => boolean
+  onTokenSelect: (token: GqlToken) => void
+}
+
+function TokenRow({
+  index,
+  token,
+  isConnected,
+  balanceFor,
+  isBalancesLoading,
+  isLoadingTokenPrices,
+  activeIndex,
+  isCurrentToken,
+  onTokenSelect,
+}: TokenRowProps) {
+  const userBalance = isConnected ? balanceFor(token) : undefined
+
+  return (
+    <TokenSelectListRow
+      active={index === activeIndex}
+      isBalancesLoading={isBalancesLoading || isLoadingTokenPrices}
+      isCurrentToken={isCurrentToken(token)}
+      onClick={() => !isCurrentToken(token) && onTokenSelect(token)}
+      token={token}
+      userBalance={userBalance}
+    />
+  )
+}
+
+function renderTokenRow(
+  index: number,
+  activeIndex: number,
+  balanceFor: (token: GqlToken) => any,
+  isBalancesLoading: boolean,
+  isConnected: boolean,
+  isCurrentToken: (token: GqlToken) => boolean,
+  isLoadingTokenPrices: boolean,
+  onTokenSelect: (token: GqlToken) => void,
+  tokensToShow: GqlToken[]
+) {
+  return (
+    <TokenRow
+      activeIndex={activeIndex}
+      balanceFor={balanceFor}
+      index={index}
+      isBalancesLoading={isBalancesLoading}
+      isConnected={isConnected}
+      isCurrentToken={isCurrentToken}
+      isLoadingTokenPrices={isLoadingTokenPrices}
+      onTokenSelect={onTokenSelect}
+      token={tokensToShow[index]}
+    />
+  )
+}
+
 export function TokenSelectList({
   chain,
   tokens,
@@ -121,7 +184,7 @@ export function TokenSelectList({
   const tokensToShow = [...tokensWithBalance, ...tokensWithoutBalance]
 
   const isCurrentToken = (token: GqlToken) =>
-    currentToken && isSameAddress(token.address, currentToken)
+    !!currentToken && isSameAddress(token.address, currentToken)
 
   const groups = [
     <InYourWallet
@@ -156,10 +219,6 @@ export function TokenSelectList({
     ref.current?.scrollIntoView({ index: activeIndex, behavior: 'auto' })
   }, [activeIndex])
 
-  function keyFor(token: GqlToken, index: number) {
-    return `${token.address}:${token.chain}:${index}`
-  }
-
   return (
     <Box height={listHeight} {...rest}>
       {tokensToShow.length === 0 ? (
@@ -176,26 +235,21 @@ export function TokenSelectList({
         </Box>
       ) : (
         <GroupedVirtuoso
-          groupContent={index => {
-            return groups[index]
-          }}
+          groupContent={index => groups[index]}
           groupCounts={groupCounts}
-          itemContent={index => {
-            const token = tokensToShow[index]
-            const userBalance = isConnected ? balanceFor(token) : undefined
-
-            return (
-              <TokenSelectListRow
-                active={index === activeIndex}
-                isBalancesLoading={isBalancesLoading || isLoadingTokenPrices}
-                isCurrentToken={isCurrentToken(token)}
-                key={keyFor(token, index)}
-                onClick={() => !isCurrentToken(token) && onTokenSelect(token)}
-                token={token}
-                userBalance={userBalance}
-              />
+          itemContent={index =>
+            renderTokenRow(
+              index,
+              activeIndex,
+              balanceFor,
+              isBalancesLoading,
+              isConnected,
+              isCurrentToken,
+              isLoadingTokenPrices,
+              onTokenSelect,
+              tokensToShow
             )
-          }}
+          }
           ref={ref}
           style={{ height: listHeight }}
         />

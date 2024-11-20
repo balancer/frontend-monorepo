@@ -31,13 +31,18 @@ export function PoolActivityTable() {
 
   if (!isMounted) return <Skeleton height="500px" w="full" />
 
+  const items = sortedPoolEvents.map(item => ({
+    ...item,
+    id: item[0],
+  }))
+
   return (
     <>
       <Box className="hide-scrollbar" overflowX="auto" w="full">
         <Box minWidth="800px">
           <PaginatedTable
             alignItems="flex-start"
-            items={sortedPoolEvents}
+            items={items}
             loading={isLoading}
             noItemsFoundLabel="No pool events found"
             paginationProps={paginationProps}

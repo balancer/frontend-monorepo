@@ -58,10 +58,10 @@ export function HomeCaseStudies() {
               onMouseLeave={() => mouseX.set(Infinity)}
               onMouseMove={e => mouseX.set(e.pageX)}
             >
-              {logos.map((logo, i) => (
+              {logos.map(logo => (
                 <AppIcon
                   Icon={logo.icon}
-                  key={i}
+                  key={logo.name.toLowerCase()}
                   mouseX={mouseX}
                   name={logo.name}
                   onClick={() => openRedirectModal(logo.partner)}
@@ -77,10 +77,10 @@ export function HomeCaseStudies() {
           justifyContent="flex-start"
           pt="sm"
         >
-          {logos.map((logo, i) => (
+          {logos.map(logo => (
             <SmallIcon
               Icon={logo.icon}
-              key={i}
+              key={logo.name.toLowerCase()}
               name={logo.name}
               onClick={() => openRedirectModal(logo.partner)}
             />
