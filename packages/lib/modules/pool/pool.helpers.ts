@@ -268,6 +268,14 @@ export function hasReviewedHook(hook: Hook): boolean {
   return !!hook.reviewData
 }
 
+export function hasHooks(pool: Pool): boolean {
+  const nestedHooks = pool.poolTokens
+    .filter(token => token.hasNestedPool)
+    .map(token => token.nestedPool?.hook)
+
+  return !![pool.hook, ...nestedHooks].length
+}
+
 /**
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
