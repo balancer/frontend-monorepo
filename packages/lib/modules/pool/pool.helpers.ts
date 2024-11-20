@@ -349,7 +349,7 @@ export function isUnbalancedLiquidityDisabled(pool: Pool): boolean {
   return !!pool.liquidityManagement?.disableUnbalancedLiquidity
 }
 
-export function getRateProviderWarnings(warnings: string[]) {
+export function getWarnings(warnings: string[]) {
   return warnings.filter(warning => !isEmpty(warning))
 }
 

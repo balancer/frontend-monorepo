@@ -1,5 +1,4 @@
-import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { GqlPriceRateProviderData, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { HookReviewData } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   Popover,
   PopoverTrigger,
@@ -18,33 +17,30 @@ import { ArrowUpRight } from 'react-feather'
 import { getWarnings } from '../../pool.helpers'
 import { PropsWithChildren } from 'react'
 
-type RateProviderInfoPopOverProps = {
-  token: GqlToken
-  data: GqlPriceRateProviderData | null
-  level: number
-} & PropsWithChildren
-
 type PopoverInfoBodyProps = {
-  data: GqlPriceRateProviderData
+  data: HookReviewData | undefined | null
   level: number
 }
 
+type HookInfoPopOverProps = PopoverInfoBodyProps & PropsWithChildren
+
 function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
-  const warnings = getWarnings(data.warnings || [])
+  const warnings = getWarnings(data?.warnings || [])
+
   return (
     <>
       {level === 0 && (
         <>
           <Text fontSize="sm">
-            This rate provider has not been reviewed.
+            This hook has not been reviewed.
             <br />
             Proceed with caution.
           </Text>
           <Text fontSize="sm">
             Learn more about{' '}
-            <Link href="/risks#rate-provider-risk" target="_blank">
+            <Link href="/risks#hook-risk" target="_blank">
               <Box as="span" color="font.link">
-                rate provider risks
+                hook risks
               </Box>
             </Link>
           </Text>
@@ -57,7 +53,7 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
               Review summary:
             </Text>
             <Text fontSize="sm">
-              {data.summary === 'safe' ? 'No vulnerabilities were reported' : 'Unsafe'}
+              {data?.summary === 'safe' ? 'No vulnerabilities were reported' : 'Unsafe'}
             </Text>
           </VStack>
           <VStack alignItems="flex-start" gap="0">
@@ -71,31 +67,15 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
                 None except{' '}
                 <Link href="/risks#rate-provider-risk" target="_blank">
                   <Box as="span" color="font.link">
-                    rate provider risks
+                    hook risks
                   </Box>
                 </Link>
               </Text>
             )}
           </VStack>
-          <VStack alignItems="flex-start" gap="0">
-            <Text color="grayText" fontSize="sm">
-              Upgradeable components:
-            </Text>
-            {data.upgradeableComponents && data.upgradeableComponents.length > 0 ? (
-              <Text fontSize="sm">Yes, see review details</Text>
-            ) : (
-              <Text fontSize="sm">None</Text>
-            )}
-          </VStack>
-          <VStack alignItems="flex-start" gap="0">
-            <Text color="grayText" fontSize="sm">
-              Rate provider factory:
-            </Text>
-            <Text fontSize="sm">{data.factory ?? 'None'}</Text>
-          </VStack>
-          {data.reviewFile && (
+          {data?.reviewFile && (
             <Link
-              href={`https://github.com/balancer/code-review/blob/main/rate-providers/${data.reviewFile}`}
+              href={`https://github.com/balancer/code-review/blob/main/hooks/${data.reviewFile}`}
               target="_blank"
             >
               <HStack gap="xxs">
@@ -112,17 +92,12 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
   )
 }
 
-export function RateProviderInfoPopOver({
-  token,
-  data,
-  level,
-  children,
-}: RateProviderInfoPopOverProps) {
+export function HookInfoPopOver({ data, level, children }: HookInfoPopOverProps) {
   const body = data ? (
     <PopoverInfoBody data={data} level={level} />
   ) : (
     <Text fontSize="sm">
-      Rate provider data is missing.
+      Hook data is missing.
       <br />
       Proceed with caution.
     </Text>
@@ -137,15 +112,8 @@ export function RateProviderInfoPopOver({
           <VStack alignItems="flex-start" spacing="ms" w="full">
             <HStack w="full">
               <Heading fontSize="1.125rem" variant="h4">
-                {token.symbol} rate provider
+                Hook
               </Heading>
-              <TokenIcon
-                address={token.address}
-                alt={token.address}
-                chain={token.chain}
-                ml="auto"
-                size={24}
-              />
             </HStack>
             {body}
           </VStack>

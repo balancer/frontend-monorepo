@@ -22,7 +22,11 @@ import {
 import { usePool } from '../../PoolProvider'
 import { ArrowUpRight } from 'react-feather'
 import { useMemo } from 'react'
-import { GqlPriceRateProviderData, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlPriceRateProviderData,
+  GqlToken,
+  HookReviewData,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
@@ -30,8 +34,8 @@ import { AlertTriangle, XCircle } from 'react-feather'
 import Image from 'next/image'
 import { RateProviderInfoPopOver } from './RateProviderInfo'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
-import { getRateProviderWarnings } from '@repo/lib/modules/pool/pool.helpers'
-import { useHook } from '@repo/lib/modules/hooks/useHook'
+import { getWarnings } from '@repo/lib/modules/pool/pool.helpers'
+import { HookInfoPopOver } from './HookInfo'
 
 type RateProvider = {
   tokenAddress: Address
@@ -39,18 +43,16 @@ type RateProvider = {
   priceRateProviderData: GqlPriceRateProviderData | null
 }
 
-function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlToken) {
+function getIconAndLevel(hasWarnings: boolean, isSafe: boolean, hasData: boolean) {
   let icon
   let level
 
-  const warnings = getRateProviderWarnings(data?.warnings || [])
-
-  if (!data) {
+  if (!hasData) {
     icon = <Icon as={AlertTriangle} color="font.warning" cursor="pointer" size={16} />
     level = 1
   } else {
-    if (data.reviewed && data.summary === 'safe') {
-      if (warnings.length > 0) {
+    if (isSafe) {
+      if (hasWarnings) {
         icon = <Icon as={AlertTriangle} color="font.warning" cursor="pointer" size={16} />
         level = 1
       } else {
@@ -67,10 +69,34 @@ function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlTo
     }
   }
 
+  return { icon, level }
+}
+
+function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlToken) {
+  const hasWarnings = getWarnings(data?.warnings || []).length > 0
+  const isSafe = !!data?.reviewed && data?.summary === 'safe'
+  const hasData = !!data
+
+  const { icon, level } = getIconAndLevel(hasWarnings, isSafe, hasData)
+
   return (
     <RateProviderInfoPopOver data={data} level={level} token={token}>
       {icon}
     </RateProviderInfoPopOver>
+  )
+}
+
+function getHookIcon(data: HookReviewData | undefined | null) {
+  const hasWarnings = getWarnings(data?.warnings || []).length > 0
+  const isSafe = !!data?.summary && data?.summary === 'safe'
+  const hasData = !!data
+
+  const { icon, level } = getIconAndLevel(hasWarnings, isSafe, hasData)
+
+  return (
+    <HookInfoPopOver data={data} level={level}>
+      {icon}
+    </HookInfoPopOver>
   )
 }
 
@@ -183,6 +209,7 @@ export function PoolContracts({ ...props }: CardProps) {
                           </HStack>
                         </Link>
                         {(index > 0 || !pool.hook) && <Text variant="secondary">(nested)</Text>}
+                        {getHookIcon(hook.reviewData)}
                       </HStack>
                     )
                   )
