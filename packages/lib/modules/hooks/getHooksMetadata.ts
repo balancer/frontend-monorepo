@@ -1,7 +1,7 @@
 import { mins } from '@repo/lib/shared/utils/time'
 
 const HOOKS_METADATA_URL =
-  'https://raw.githubusercontent.com/balancer/metadata/main/pools/hooks/index.json'
+  'https://raw.githubusercontent.com/balancer/metadata/refs/heads/main/hooks/index.json'
 
 export type HooksMetadata = {
   id: string

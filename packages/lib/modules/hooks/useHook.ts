@@ -17,7 +17,7 @@ export function useHook(pool: Pool) {
   const hasHookData = !!hook
 
   useEffect(() => {
-    console.log('hook', hook, hasHookData)
+    console.log('hook', hook, hasHookData, pool.hook, metadata)
   }, [hasHookData, hook])
 
   return {
