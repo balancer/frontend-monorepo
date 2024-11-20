@@ -49,6 +49,16 @@ const networkOptions: ChainOption[] = [
   })),
 ]
 
+function CustomDropdownIndicator(props: any) {
+  return (
+    <chakraComponents.DropdownIndicator {...props}>
+      <HStack>
+        <ChevronDown size={16} />
+      </HStack>
+    </chakraComponents.DropdownIndicator>
+  )
+}
+
 export function EcosystemChainSelect({ value, onChange }: Props) {
   const [chainValue, setChainValue] = useState<ChainOption | undefined>(undefined)
   const chakraStyles = getSelectStyles<ChainOption>()
@@ -65,13 +75,7 @@ export function EcosystemChainSelect({ value, onChange }: Props) {
         // width="300px"
         chakraStyles={chakraStyles}
         components={{
-          DropdownIndicator: props => (
-            <chakraComponents.DropdownIndicator {...props}>
-              <HStack>
-                <ChevronDown size={16} />
-              </HStack>
-            </chakraComponents.DropdownIndicator>
-          ),
+          DropdownIndicator: CustomDropdownIndicator,
         }}
         instanceId="chain-select"
         name="Chain"

@@ -27,7 +27,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { getPoolDisplayTokens } from '../pool.utils'
 import { PoolTypeTag } from './PoolTypeTag'
 import { isBoosted } from '../pool.helpers'
-import { Protocol, protocolDescriptions } from '@repo/lib/modules/protocols/useProtocols'
+import { useErc4626Metadata } from '../../erc4626/Erc4626MetadataProvider'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -87,9 +87,11 @@ export function PoolComposition() {
   const { pool, chain, isLoading } = usePool()
   const { isMobile } = useBreakpoints()
   const { calcTotalUsdValue } = useTokens()
+  const { getErc4626Metadata } = useErc4626Metadata()
 
   const displayTokens = getPoolDisplayTokens(pool)
   const totalLiquidity = calcTotalUsdValue(displayTokens, chain)
+  const erc4626Metadata = getErc4626Metadata(pool)
 
   return (
     <Card>
@@ -106,13 +108,13 @@ export function PoolComposition() {
             </Heading>
             <PoolTypeTag pool={pool} />
           </HStack>
-          {isBoosted(pool) && (
-            <Alert status="info">
-              <AlertIcon />
-              {/* TODO: set protocol dynamically */}
-              <AlertDescription>{protocolDescriptions[Protocol.Aave]}</AlertDescription>
-            </Alert>
-          )}
+          {isBoosted(pool) &&
+            erc4626Metadata.map(metadata => (
+              <Alert key={metadata.name} status="info">
+                <AlertIcon />
+                <AlertDescription>{metadata.description}</AlertDescription>
+              </Alert>
+            ))}
           <Divider />
           <CardContent
             chain={chain}

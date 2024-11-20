@@ -38,7 +38,7 @@ export function TokenRowGroup({
           hasMultipleAmounts && <Text>{toCurrency(usdValue, { abbreviated: false })}</Text>
         )}
       </HStack>
-      {amounts.map((amount, index) => {
+      {amounts.map(amount => {
         if (!amount.tokenAddress) return <div key={JSON.stringify(amount)}>Missing token</div>
 
         return (
@@ -47,7 +47,7 @@ export function TokenRowGroup({
             address={amount.tokenAddress}
             chain={chain}
             isLoading={isLoading}
-            key={`${index}-${amount.tokenAddress}-${amount.humanAmount}`}
+            key={`${amount.tokenAddress}-${amount.humanAmount}`}
             value={amount.humanAmount}
           />
         )

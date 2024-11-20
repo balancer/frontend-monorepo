@@ -56,7 +56,7 @@ export function _usePriceImpact() {
         )
       case 'low':
       default:
-        return <></>
+        return null
     }
   }
 
