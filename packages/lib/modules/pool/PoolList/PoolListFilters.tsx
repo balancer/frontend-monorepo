@@ -113,7 +113,7 @@ function PoolCategoryFilters() {
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
       {poolTagFilters
-        .filter(tag => hidePoolTags && !hidePoolTags.includes(tag))
+        .filter(tag => !hidePoolTags.includes(tag))
         .map(tag => (
           <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
             <Checkbox
@@ -141,9 +141,7 @@ function PoolTypeFilters() {
     }
   }, [poolTypes])
 
-  const _poolTypeFilters = poolTypeFilters.filter(
-    poolType => hidePoolTypes && !hidePoolTypes.includes(poolType)
-  )
+  const _poolTypeFilters = poolTypeFilters.filter(poolType => !hidePoolTypes.includes(poolType))
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
@@ -450,7 +448,7 @@ function ProtocolVersionFilter() {
       currentOption={activeProtocolVersionTab}
       groupId="protocol-version"
       onChange={toggleTab}
-      options={tabs.filter(tab => hideProtocolVersion && !hideProtocolVersion.includes(tab.value))}
+      options={tabs.filter(tab => !hideProtocolVersion.includes(tab.value))}
       size="xxs"
     />
   )

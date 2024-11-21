@@ -12,10 +12,10 @@ import { PoolListDisplayType } from '../pool.types'
 
 export function _usePoolList({
   fixedPoolTypes,
-  displayType,
-  hideProtocolVersion,
-  hidePoolTypes,
-  hidePoolTags,
+  displayType = PoolListDisplayType.TokenPills,
+  hideProtocolVersion = [],
+  hidePoolTypes = [],
+  hidePoolTags = [],
 }: {
   fixedPoolTypes?: GqlPoolType[]
   displayType?: PoolListDisplayType
@@ -82,10 +82,10 @@ export function PoolListProvider({
   children,
 }: PropsWithChildren<{
   fixedPoolTypes?: GqlPoolType[]
-  displayType?: PoolListDisplayType
-  hideProtocolVersion?: string[]
-  hidePoolTypes?: GqlPoolType[]
-  hidePoolTags?: string[]
+  displayType: PoolListDisplayType
+  hideProtocolVersion: string[]
+  hidePoolTypes: GqlPoolType[]
+  hidePoolTags: string[]
 }>) {
   const hook = _usePoolList({
     fixedPoolTypes,

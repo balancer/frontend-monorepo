@@ -4,11 +4,11 @@ import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolListDisplayType } from '../pool.types'
 
 export async function PoolList({
-  displayType,
   fixedPoolTypes,
-  hideProtocolVersion,
-  hidePoolTypes,
-  hidePoolTags,
+  displayType = PoolListDisplayType.TokenPills,
+  hideProtocolVersion = [],
+  hidePoolTypes = [],
+  hidePoolTags = [],
 }: {
   displayType?: PoolListDisplayType
   fixedPoolTypes?: GqlPoolType[]
