@@ -110,14 +110,14 @@ export function Hero() {
           <VStack spacing="md">
             <Title />
             <Text color="font.secondary" fontSize="2xl" fontWeight="thin" textAlign="center">
-              V3 consolidates, re-engineers and builds on previous innovations, <br />
-              code less, build more.
+              V3 consolidates, re-engineers and builds on previous innovations. <br />
+              Code less, build more.
             </Text>
           </VStack>
 
           <Button
             as={NextLink}
-            href="https://app.merkl.xyz/"
+            href="https://docs.balancer.fi"
             mt="lg"
             rightIcon={<ArrowUpRight />}
             size="lg"
