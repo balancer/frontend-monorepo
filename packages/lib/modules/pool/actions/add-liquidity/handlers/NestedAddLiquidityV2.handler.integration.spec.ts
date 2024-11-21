@@ -3,7 +3,7 @@ import networkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress, usdcAddress, usdtAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { mainnetTestPublicClient } from '@repo/lib/test/utils/wagmi/wagmi-test-clients'
 import { Pool } from '../../../PoolProvider'
-import { NestedAddLiquidityHandler } from './NestedAddLiquidity.handler'
+import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
@@ -11,7 +11,7 @@ import { getPoolMock } from '../../../__mocks__/getPoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 function selectNestedHandler(pool: Pool) {
-  return selectAddLiquidityHandler(pool) as NestedAddLiquidityHandler
+  return selectAddLiquidityHandler(pool) as NestedAddLiquidityV2Handler
 }
 
 // Balancer 50WETH-50-3pool

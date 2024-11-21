@@ -1,5 +1,6 @@
 import {
-  AddLiquidityNestedQueryOutput,
+  AddLiquidityNestedQueryOutputV2,
+  AddLiquidityNestedQueryOutputV3,
   AddLiquidityQueryOutput,
   Permit2,
   TokenAmount,
@@ -36,13 +37,21 @@ export interface SdkQueryAddLiquidityOutput extends QueryAddLiquidityOutput {
   sdkQueryOutput: AddLiquidityQueryOutput
 }
 
-export interface NestedQueryAddLiquidityOutput extends QueryAddLiquidityOutput {
-  sdkQueryOutput: AddLiquidityNestedQueryOutput
+export interface NestedQueryAddLiquidityOutputV2 extends QueryAddLiquidityOutput {
+  sdkQueryOutput: AddLiquidityNestedQueryOutputV2
+}
+
+export interface NestedQueryAddLiquidityOutputV3 extends QueryAddLiquidityOutput {
+  sdkQueryOutput: AddLiquidityNestedQueryOutputV3
 }
 
 export interface SdkBuildAddLiquidityInput extends BuildAddLiquidityInput {
   queryOutput: SdkQueryAddLiquidityOutput
 }
 export interface NestedBuildAddLiquidityInput extends BuildAddLiquidityInput {
-  queryOutput: NestedQueryAddLiquidityOutput
+  queryOutput: NestedQueryAddLiquidityOutputV2
+}
+
+export interface NestedBuildAddLiquidityInputV3 extends BuildAddLiquidityInput {
+  queryOutput: NestedQueryAddLiquidityOutputV3
 }

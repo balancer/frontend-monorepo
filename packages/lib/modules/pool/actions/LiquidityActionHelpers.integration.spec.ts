@@ -282,4 +282,14 @@ describe.skip('Liquidity helpers for V3 NESTED pool', async () => {
       },
     ])
   })
+
+  it('toInputAmounts', async () => {
+    expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
+      {
+        address: usdcSepoliaAddress,
+        decimals: 6,
+        rawAmount: 100000n,
+      },
+    ])
+  })
 })
