@@ -35,7 +35,6 @@ export class NestedProportionalRemoveLiquidityV3Handler implements RemoveLiquidi
   }
 
   public async getPriceImpact(): Promise<number> {
-    console.log('price impact v3')
     // proportional remove liquidity does not have price impact
     return 0
   }
@@ -44,7 +43,6 @@ export class NestedProportionalRemoveLiquidityV3Handler implements RemoveLiquidi
     humanBptIn,
     userAddress,
   }: QueryRemoveLiquidityInput): Promise<NestedProportionalQueryRemoveLiquidityOutput> {
-    console.log('price simulation v3')
     const removeLiquidity = new RemoveLiquidityNestedV3()
 
     const removeLiquidityInput: RemoveLiquidityNestedProportionalInputV3 = this.constructSdkInput(
