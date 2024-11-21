@@ -169,7 +169,7 @@ export function _useVebalLock() {
   }
 }
 
-export function VebalLockProvider({ children }: PropsWithChildren & {}) {
+export function VebalLockProvider({ children }: PropsWithChildren) {
   const vebalLock = _useVebalLock()
 
   return <VebalLockContext.Provider value={vebalLock}>{children}</VebalLockContext.Provider>

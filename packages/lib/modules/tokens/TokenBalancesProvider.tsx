@@ -39,6 +39,7 @@ export function _useTokenBalances(
   if (!initTokens && !extTokens) throw new Error('initTokens or tokens must be provided')
   if (initTokens && extTokens) throw new Error('initTokens and tokens cannot be provided together')
 
+  // eslint-disable-next-line react/hook-use-state
   const [_tokens, _setTokens] = useState<GqlToken[]>(initTokens || [])
 
   const { userAddress } = useUserAccount()

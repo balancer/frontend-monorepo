@@ -10,14 +10,14 @@ type NetworkConfigProps = {
 }
 
 export function NetworkIcon({ chain, size = 12, ...rest }: { chain: GqlChain } & SquareProps) {
-  const [networkConfig, setnetworkConfig] = useState<NetworkConfigProps | undefined>(undefined)
+  const [networkConfig, setNetworkConfig] = useState<NetworkConfigProps | undefined>(undefined)
   const { iconPath, shortName } = getNetworkConfig(chain)
 
   const imageSize = Number(size) * 2 + 8
 
   useEffect(() => {
     if (shortName && iconPath) {
-      setnetworkConfig({ iconPath, shortName })
+      setNetworkConfig({ iconPath, shortName })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shortName])

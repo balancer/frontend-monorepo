@@ -92,7 +92,6 @@ export function VebalUnlockForm() {
                 <TokenRowWithDetails
                   address={vebalBptToken.address as Address}
                   chain={GqlChain.Mainnet}
-                  value={mainnetLockedInfo.lockedAmount ?? 0}
                   details={
                     lockDuration.lockedUntilDateFormatted
                       ? [
@@ -107,6 +106,7 @@ export function VebalUnlockForm() {
                         ]
                       : undefined
                   }
+                  value={mainnetLockedInfo.lockedAmount ?? 0}
                 />
               </Card>
             )}

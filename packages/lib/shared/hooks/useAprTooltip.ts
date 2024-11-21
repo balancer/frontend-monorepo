@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
 import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'
@@ -19,9 +20,13 @@ prevents this loss (also called LVR), thereby increasing LP returns.`
 export const extraBalTooltipText = `veBAL holders can get an extra boost of up to 2.5x on their staking yield.
 The more veBAL held, the higher the boost.`
 
-export const lockingIncentivesTooltipText = `The protocol revenue share for Liquidity Providers with 1-year locked Balancer ve8020 tokens.`
+export const lockingIncentivesTooltipText = `The protocol revenue share for Liquidity Providers 
+                                            with 1-year locked Balancer ve8020 tokens.`
 
-export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL holders who participate in weekly gauge voting by third parties on platforms like Hidden Hand. Your incentives are determined by your veBAL voting power compared to other voters. The listed APR represents an average rather than a guaranteed return for active participants.`
+export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL holders who 
+                        participate in weekly gauge voting by third parties on platforms like Hidden Hand. 
+                        Your incentives are determined by your veBAL voting power compared to other voters. 
+                        The listed APR represents an average rather than a guaranteed return for active participants.`
 
 const stakingBalTooltipText = `The base APR all stakers in this pool get (determined by weekly gauge voting).
 In addition, veBAL holders can get an extra boost of up to 2.5x.`
@@ -30,7 +35,7 @@ const stakingTokenTooltipText = '3rd party incentives (outside the veBAL system)
 
 // Types that must be added to the total base
 const TOTAL_BASE_APR_TYPES = [
-  GqlPoolAprItemType.SwapFee,
+  GqlPoolAprItemType.SwapFee_24H,
   GqlPoolAprItemType.IbYield,
   GqlPoolAprItemType.Staking,
   GqlPoolAprItemType.Merkl,
@@ -47,14 +52,16 @@ export const TOTAL_APR_TYPES = [
 ]
 
 function absMaxApr(aprItems: GqlPoolAprItem[], boost?: number) {
-  return aprItems.reduce((acc, item) => {
-    const hasBoost = boost && boost > 1
-    if (hasBoost && item.type === GqlPoolAprItemType.Staking) {
-      return acc.plus(bn(item.apr).times(boost))
-    }
+  return aprItems
+    .filter(item => TOTAL_APR_TYPES.includes(item.type))
+    .reduce((acc, item) => {
+      const hasBoost = boost && boost > 1
+      if (hasBoost && item.type === GqlPoolAprItemType.Staking) {
+        return acc.plus(bn(item.apr).times(boost))
+      }
 
-    return acc.plus(bn(item.apr))
-  }, bn(0))
+      return acc.plus(bn(item.apr))
+    }, bn(0))
 }
 
 export function useAprTooltip({
@@ -71,7 +78,7 @@ export function useAprTooltip({
   const hasVeBalBoost = !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
 
   // Swap fees
-  const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee)
+  const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
   const swapFeesDisplayed = numberFormatter(swapFee ? swapFee.apr.toString() : '0')
 
   // Yield bearing tokens

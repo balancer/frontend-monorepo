@@ -1,9 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
-
 import * as echarts from 'echarts/core'
 import { EChartsOption, ECharts } from 'echarts'
 import { format, differenceInDays } from 'date-fns'
@@ -11,7 +9,6 @@ import BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useTheme as useNextTheme } from 'next-themes'
-import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 type ChartValueAcc = [string, number][]
 

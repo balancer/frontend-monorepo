@@ -30,12 +30,12 @@ export function useSignPermit2SwapStep({
   const { userAddress } = useUserAccount()
   const { slippage } = useUserSettings()
 
-  const tokenInAddress = tokenInInfo?.address as Address
+  const tokenInAddress = (tokenInInfo?.address ?? '') as Address
 
   const queryData = simulationQuery.data as SdkSimulationResponseWithRouter
 
-  function getTokenInAmount(simulationQuery: SwapSimulationQueryResult): bigint {
-    if (!simulationQuery.data) return 0n
+  function getTokenInAmount(): bigint {
+    if (!queryData?.queryOutput) return 0n
     if (queryData.queryOutput.swapKind === SwapKind.GivenIn) {
       return queryData.queryOutput.amountIn.amount
     }
@@ -47,7 +47,7 @@ export function useSignPermit2SwapStep({
 
   const tokenIn: TokenAmountIn = {
     address: tokenInAddress,
-    amount: getTokenInAmount(simulationQuery),
+    amount: getTokenInAmount(),
   }
 
   const signPermit2Fn: SignPermit2Fn = (

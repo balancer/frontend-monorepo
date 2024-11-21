@@ -49,7 +49,7 @@ it('When the pool has BAL staking incentives (outside the veBAL system)', () => 
       __typename: 'GqlPoolAprItem',
       id: '0xf08d4dea369c456d26a3168ff0024b904f2d8b91-swap-apr',
       title: 'Swap fees APR',
-      type: GqlPoolAprItemType.SwapFee,
+      type: GqlPoolAprItemType.SwapFee_24H,
       apr: 0.01557208351741454,
     },
     {
@@ -87,7 +87,7 @@ it('When the pool has BAL staking incentives (inside the veBAL system)', () => {
       __typename: 'GqlPoolAprItem',
       id: '0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112-swap-apr',
       title: 'Swap fees APR',
-      type: GqlPoolAprItemType.SwapFee,
+      type: GqlPoolAprItemType.SwapFee_24H,
       apr: 0.001428043486003915,
     },
     {

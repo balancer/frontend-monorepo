@@ -159,6 +159,8 @@ export function usePoolListQueryState() {
         return 'Incentivized'
       case 'POINTS':
         return 'Points'
+      case 'BOOSTED':
+        return 'Boosted'
       default:
         return (poolTag as string).toLowerCase().replace('_', ' ')
     }
