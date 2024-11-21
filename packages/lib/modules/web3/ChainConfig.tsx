@@ -57,13 +57,12 @@ export const rpcOverrides: Record<GqlChain, string | undefined> = {
   [GqlChain.Fraxtal]: getPrivateRpcUrl(GqlChain.Fraxtal),
 }
 
-const customMainnet = { iconUrl: '/images/chains/MAINNET.svg', ...mainnet }
 const gqlChainToWagmiChainMap = {
-  [GqlChain.Mainnet]: customMainnet,
+  [GqlChain.Mainnet]: { iconUrl: '/images/chains/MAINNET.svg', ...mainnet },
   [GqlChain.Arbitrum]: { iconUrl: '/images/chains/ARBITRUM.svg', ...arbitrum },
   [GqlChain.Base]: { iconUrl: '/images/chains/BASE.svg', ...base },
   [GqlChain.Avalanche]: { iconUrl: '/images/chains/AVALANCHE.svg', ...avalanche },
-  [GqlChain.Fantom]: fantom,
+  [GqlChain.Fantom]: { iconUrl: '/images/chains/FANTOM.svg', ...fantom },
   [GqlChain.Gnosis]: { iconUrl: '/images/chains/GNOSIS.svg', ...gnosis },
   [GqlChain.Optimism]: { iconUrl: '/images/chains/OPTIMISM.svg', ...optimism },
   [GqlChain.Polygon]: { iconUrl: '/images/chains/POLYGON.svg', ...polygon },
@@ -74,10 +73,13 @@ const gqlChainToWagmiChainMap = {
 } as const satisfies Record<GqlChain, Chain>
 
 export const supportedNetworks = getProjectConfig().supportedNetworks
+const chainToFilter = getProjectConfig().defaultNetwork
+const customChain = gqlChainToWagmiChainMap[chainToFilter]
+
 export const chains: readonly [Chain, ...Chain[]] = [
-  customMainnet,
+  customChain,
   ...supportedNetworks
-    .filter(chain => chain !== GqlChain.Mainnet)
+    .filter(chain => chain !== chainToFilter)
     .map(gqlChain => gqlChainToWagmiChainMap[gqlChain]),
 ]
 
