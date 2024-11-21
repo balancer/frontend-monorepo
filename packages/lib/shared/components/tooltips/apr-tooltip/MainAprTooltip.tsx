@@ -52,8 +52,8 @@ export function SparklesIcon({
     ).length > 0
 
   const hasOnlySwapApr =
-    pool.dynamicData.aprItems.filter(item => item.type === GqlPoolAprItemType.SwapFee).length ===
-    pool.dynamicData.aprItems.length
+    pool.dynamicData.aprItems.filter(item => item.type === GqlPoolAprItemType.SwapFee_24H)
+      .length === pool.dynamicData.aprItems.length
 
   const defaultGradFrom = useColorModeValue(
     '#91A1B6', // light from
