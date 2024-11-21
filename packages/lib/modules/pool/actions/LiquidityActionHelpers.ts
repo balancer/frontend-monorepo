@@ -15,6 +15,7 @@ import {
   PoolState,
   PoolStateWithBalances,
   PoolStateWithUnderlyings,
+  PoolTokenWithBalance,
   PoolTokenWithUnderlying,
   Token,
   TokenAmount,
@@ -35,6 +36,7 @@ import { Pool } from '../PoolProvider'
 import {
   allPoolTokens,
   isAffectedByCspIssue,
+  isBoosted,
   isComposableStableV1,
   isCowAmmPool,
   isGyro,
@@ -83,6 +85,7 @@ export class LiquidityActionHelpers {
       (token, index) => ({
         ...token,
         address: token.address as Address,
+        balance: token.balance as HumanAmount,
         underlyingToken: {
           ...token.underlyingToken,
           address: token.underlyingToken?.address as Address,
@@ -103,7 +106,39 @@ export class LiquidityActionHelpers {
   }
 
   public get poolStateWithBalances(): PoolStateWithBalances {
-    return toPoolStateWithBalances(this.pool)
+    return isBoosted(this.pool)
+      ? this.boostedPoolStateWithBalances
+      : toPoolStateWithBalances(this.pool)
+  }
+
+  /* Used by calculateProportionalAmounts for V3 boosted proportional adds */
+  public get boostedPoolStateWithBalances(): PoolStateWithBalances {
+    const underlyingTokensWithBalance: PoolTokenWithBalance[] = this.pool.poolTokens.map(
+      (token, index) =>
+        token.underlyingToken
+          ? {
+              address: token.underlyingToken?.address as Address,
+              decimals: token.underlyingToken?.decimals as number,
+              index,
+              // TODO: balance: token.underlyingToken?.balance * rate as HumanAmount,
+              balance: token.balance as HumanAmount,
+            }
+          : {
+              address: token.address as Address,
+              decimals: token.decimals as number,
+              balance: token.balance as HumanAmount,
+              index,
+            }
+    )
+    const state: PoolStateWithBalances = {
+      id: this.pool.id as Hex,
+      address: this.pool.address as Address,
+      protocolVersion: 3,
+      type: mapPoolType(this.pool.type),
+      tokens: underlyingTokensWithBalance,
+      totalShares: this.pool.dynamicData.totalShares as HumanAmount,
+    }
+    return state
   }
 
   public get networkConfig() {
