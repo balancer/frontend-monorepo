@@ -117,7 +117,7 @@ export function Hero() {
 
           <Button
             as={NextLink}
-            href="https://docs.balancer.fi"
+            href="https://docs-v3.balancer.fi"
             mt="lg"
             rightIcon={<ArrowUpRight />}
             size="lg"
