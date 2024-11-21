@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react'
 import { Box, Flex } from '@chakra-ui/react'
 import { motion, MotionStyle, useAnimation, useReducedMotion } from 'framer-motion'
 
-const SandPatterns: React.FC<PropsWithChildren> = ({ children, ...rest }) => {
+function SandPatterns({ children, ...rest }: PropsWithChildren) {
   const circles = Array.from({ length: 10 }, (_, i) => i + 1)
   const controls = useAnimation()
   const shouldReduceMotion = useReducedMotion()
@@ -40,12 +40,12 @@ const SandPatterns: React.FC<PropsWithChildren> = ({ children, ...rest }) => {
 
   return (
     <Box height="100vh" position="relative" width="100%">
-      {circles.map((_, index) => (
+      {circles.map(circleNum => (
         <motion.div
           animate={controls}
-          custom={index}
+          custom={circleNum - 1} // Keep the same index for animation
           initial={{ width: 0, height: 0, borderRadius: 50 }}
-          key={index}
+          key={`circle-${circleNum}`}
           style={circleStyle}
         />
       ))}

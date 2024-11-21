@@ -13,6 +13,8 @@ import { usePoolList } from '../PoolListProvider'
 import { PoolVersionTag } from './PoolVersionTag'
 import { isBoosted } from '../../pool.helpers'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
+import { useErc4626Metadata } from '../../../erc4626/Erc4626MetadataProvider'
+import Image from 'next/image'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -52,6 +54,9 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
   } = usePoolList()
 
   const { toCurrency } = useCurrency()
+  const { getErc4626Metadata } = useErc4626Metadata()
+
+  const erc4626Metadata = getErc4626Metadata(pool)
 
   return (
     <FadeInOnView>
@@ -88,7 +93,15 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
                 <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
                   {isBoosted(pool) ? 'Boosted' : getPoolTypeLabel(pool.type)}
                 </Text>
-                {/* TODO: add icon of protocol supplying the boost */}
+                {erc4626Metadata.map(metadata => (
+                  <Image
+                    alt={metadata.name}
+                    height={20}
+                    key={metadata.name}
+                    src={metadata.iconUrl || ''}
+                    width={20}
+                  />
+                ))}
               </HStack>
             </GridItem>
             {userAddress ? (
