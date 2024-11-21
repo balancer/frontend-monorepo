@@ -1,15 +1,16 @@
-// eslint-disable-next-line max-len
-import { constructRemoveBaseBuildCallInput } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/add-liquidity.utils'
-import { ensureError } from '@repo/lib/shared/utils/errors'
+/* eslint-disable max-len */
 import {
   Address,
   Permit,
   PermitHelper,
   PublicWalletClient,
+  RemoveLiquidityNestedQueryOutput,
   RemoveLiquidityQueryOutput,
 } from '@balancer/sdk'
+import { constructRemoveBaseBuildCallInput } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/add-liquidity.utils'
 import { isBoosted, isV3WithNestedActionsPool } from '@repo/lib/modules/pool/pool.helpers'
 import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { ensureError } from '@repo/lib/shared/utils/errors'
 
 export interface PermitRemoveLiquidityInput {
   account: Address
@@ -58,10 +59,13 @@ async function signPermit({ permitInput, wethIsEth, sdkClient, pool }: Params): 
   }
 
   if (isV3WithNestedActionsPool(pool)) {
+    // Cast to unknown to avoid type assertion as this concrete case has a very specific type
+    // that requires bptAmountIn (when others don't)
+    const nestedOutput = permitInput.sdkQueryOutput as unknown as RemoveLiquidityNestedQueryOutput
+
     return PermitHelper.signRemoveLiquidityNestedApproval({
       ...baseParams,
-      // TODO: We can inline baseParams if the SDK renames bptAmountIn to bptIn to match the naming with the rest of the output types
-      // bptAmountIn: baseInput.bptIn,
+      bptAmountIn: nestedOutput.bptAmountIn,
     })
   }
 
