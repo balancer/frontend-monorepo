@@ -399,19 +399,21 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           background: 'background.button.primary',
           backgroundPosition: '100% 0',
           backgroundSize: '100% 100%',
-          transition: '0.1s ease-in-out',
-          shadow: 'md',
+          transition: '0.3s ease-in-out',
+          boxShadow: '0 3px 20px hsla(245, 97%, 76%, 0.4)',
           _hover: {
             shadow: 'sm',
             backgroundSize: '120% 100%',
+            boxShadow: '0 3px 20px hsla(9, 85%, 71%, 0.4)',
           },
         },
         secondary: {
           color: 'font.dark',
           background: 'background.button.secondary',
-          shadow: 'md',
+          boxShadow: '0 3px 20px hsla(33, 58%, 76%, 0.4)',
           _hover: {
             shadow: 'sm',
+            boxShadow: '0 3px 20px hsla(32, 43%, 82%, 0.5)',
           },
         },
         tertiary: {
