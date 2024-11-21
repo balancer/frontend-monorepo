@@ -1,14 +1,15 @@
+/* eslint-disable max-len */
 'use client'
 
-import { Text, Center, Heading, VStack, useColorModeValue, Button } from '@chakra-ui/react'
+import { Text, Center, VStack, useColorModeValue, Button } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { useEffect, useState, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
+import { Title } from './Title'
 
 const backgroundImages = ['zenbg-1.webp', 'zenbg-2.webp', 'zenbg-3.webp', 'zenbg-4.webp']
-const buildWords = ['AMMs', 'custom pools', 'hooks', 'DEXs']
 
 function BalancerLogo() {
   const iconColor = useColorModeValue('#2D3239', '#E5D3BE')
@@ -72,9 +73,8 @@ function BalancerLogo() {
 
 export function Hero() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [currentWordIndex, setCurrentWordIndex] = useState(0)
-  const [width, setWidth] = useState(0)
-  const textRef = useRef<HTMLSpanElement>(null)
+
+  const hiddenRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -83,23 +83,6 @@ export function Hero() {
 
     return () => clearInterval(interval)
   }, [])
-
-  useEffect(() => {
-    const wordInterval = setInterval(() => {
-      setCurrentWordIndex(prev => (prev === buildWords.length - 1 ? 0 : prev + 1))
-    }, 3000) // Change word every 3 seconds
-
-    return () => clearInterval(wordInterval)
-  }, [])
-
-  // Update width when word changes
-  useEffect(() => {
-    if (textRef.current) {
-      const newWidth = textRef.current.offsetWidth
-      console.log('Measured width for word:', buildWords[currentWordIndex + 1], newWidth)
-      setWidth(newWidth)
-    }
-  }, [currentWordIndex])
 
   return (
     <Noise>
@@ -125,40 +108,7 @@ export function Hero() {
         <VStack mt="-100px" spacing="lg">
           <BalancerLogo />
           <VStack spacing="md">
-            <Heading alignItems="center" as="h1" display="flex" justifyContent="center" size="2xl">
-              Build{' '}
-              <motion.div
-                animate={{
-                  width,
-                }}
-                style={{
-                  overflow: 'hidden',
-                }}
-                transition={{
-                  type: 'spring',
-                  bounce: 0.25,
-                  duration: 0.8,
-                }}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.span
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    initial={{ opacity: 0 }}
-                    key={buildWords[currentWordIndex]}
-                    ref={textRef}
-                    style={{
-                      display: 'inline-block',
-                      marginInline: '0.2em',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {buildWords[currentWordIndex]}
-                  </motion.span>
-                </AnimatePresence>
-              </motion.div>{' '}
-              on Balancer V3
-            </Heading>
+            <Title />
             <Text color="font.secondary" fontSize="2xl" fontWeight="thin" textAlign="center">
               V3 consolidates, re-engineers and builds on previous innovations, <br />
               code less, build more.
@@ -178,6 +128,16 @@ export function Hero() {
           </Button>
         </VStack>
       </Center>
+      <span
+        ref={hiddenRef}
+        style={{
+          position: 'absolute',
+          visibility: 'hidden',
+          fontSize: '3xl', // Match your heading size
+          fontWeight: 'bold',
+          whiteSpace: 'nowrap',
+        }}
+      />
     </Noise>
   )
 }
