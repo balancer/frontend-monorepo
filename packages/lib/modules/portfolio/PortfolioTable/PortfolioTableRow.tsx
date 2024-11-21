@@ -63,11 +63,13 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
             </GridItem>
             <GridItem>
               <PoolListTokenPills
+                chain={pool.chain}
+                displayTokens={pool.displayTokens}
                 h={['32px', '36px']}
                 iconSize={20}
                 p={['xxs', 'sm']}
-                pool={pool}
                 pr={[1.5, 'ms']}
+                type={pool.type}
               />
             </GridItem>
             <GridItem>

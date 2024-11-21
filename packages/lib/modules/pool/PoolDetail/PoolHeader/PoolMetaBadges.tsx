@@ -46,7 +46,13 @@ export default function PoolMetaBadges() {
           width={20}
         />
       </Badge>
-      <PoolListTokenPills pool={pool} px="sm" py="2" />
+      <PoolListTokenPills
+        chain={pool.chain}
+        displayTokens={pool.displayTokens}
+        px="sm"
+        py="2"
+        type={pool.type}
+      />
       <PoolVersionTag isSmall pool={pool} />
       <PoolTypeTag pool={pool} />
       {hasHook && (
