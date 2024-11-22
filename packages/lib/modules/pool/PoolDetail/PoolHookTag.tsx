@@ -1,5 +1,5 @@
-import { Center, Popover, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
-import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
+import { Badge, Center, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
+
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { useHook } from '../../hooks/useHook'
 import { usePool } from '../PoolProvider'
@@ -11,15 +11,32 @@ export function PoolHookTag() {
   if (!hook) return null
 
   return (
-    <Popover>
+    <Popover trigger="hover">
       <PopoverTrigger>
-        <BalBadge color="font.primary" fontSize="xs" h={8} w={8}>
+        <Badge
+          alignItems="center"
+          background="background.level2"
+          border="1px solid"
+          borderColor="border.base"
+          color="font.primary"
+          display="flex"
+          fontSize="xs"
+          fontWeight="normal"
+          h={8}
+          rounded="full"
+          shadow="sm"
+          w={8}
+        >
           <Center h="full" w="full">
-            <HookIcon size={20} />
+            <HookIcon size={32} />
           </Center>
-        </BalBadge>
+        </Badge>
       </PopoverTrigger>
-      <PopoverContent>{hook.name}</PopoverContent>
+      <PopoverContent px="sm" py="sm" width="fit-content">
+        <Text fontSize="sm" variant="secondary">
+          {hook.name}
+        </Text>
+      </PopoverContent>
     </Popover>
   )
 }
