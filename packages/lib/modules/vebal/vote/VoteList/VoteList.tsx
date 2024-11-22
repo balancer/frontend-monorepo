@@ -6,6 +6,7 @@ import { GetVeBalVotingListDocument } from '@repo/lib/shared/services/api/genera
 import { mins } from '@repo/lib/shared/utils/time'
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
 import { errorToJson } from '@repo/lib/shared/utils/errors'
+import { PoolListDisplayType } from '@repo/lib/modules/pool/pool.types'
 
 export async function VoteList() {
   const client = getApolloServerClient()
@@ -34,7 +35,12 @@ export async function VoteList() {
       votingIncentivesError={errorToJson(votingIncentivesError)}
     >
       {/* fix: remove PoolListProvider when voteFilters implemented */}
-      <PoolListProvider>
+      <PoolListProvider
+        displayType={PoolListDisplayType.TokenPills}
+        hidePoolTypes={[]}
+        hidePoolTags={[]}
+        hideProtocolVersion={[]}
+      >
         <VoteListLayout />
       </PoolListProvider>
     </VoteListProvider>

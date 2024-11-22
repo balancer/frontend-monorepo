@@ -6,6 +6,7 @@ import { PartnerVariant } from '@repo/lib/modules/pool/pool.types'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { isCowAmmPool } from './pool.helpers'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
+import { Banners } from '@repo/lib/config/config.types'
 
 export function usePoolRedirect(pool: Pool) {
   const path = getPoolPath(pool)
@@ -15,7 +16,7 @@ export function usePoolRedirect(pool: Pool) {
   return { redirectToPoolPage }
 }
 
-export function getVariantConfig(variant: PartnerVariant) {
+export function getVariantConfig(variant: PartnerVariant): { banners?: Banners } {
   const { variantConfig } = getProjectConfig()
   return variantConfig?.[variant] || {}
 }

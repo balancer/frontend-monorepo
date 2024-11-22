@@ -14,7 +14,7 @@ const aprItems = [
     id: '0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112-swap-apr',
     title: 'Swap fees APR',
     apr: 0.0007062046857971015,
-    type: 'SWAP_FEE',
+    type: 'SWAP_FEE_24H',
   },
   {
     __typename: 'GqlPoolAprItem',

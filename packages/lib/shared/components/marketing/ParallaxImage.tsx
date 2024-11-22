@@ -12,7 +12,7 @@ interface ParallaxImageProps {
   overflow?: string
 }
 
-export const ParallaxImage: React.FC<ParallaxImageProps> = ({
+export function ParallaxImage({
   children,
   scaleStart = '90%',
   scaleEnd = '110%',
@@ -20,7 +20,7 @@ export const ParallaxImage: React.FC<ParallaxImageProps> = ({
   yEnd = '20%',
   transformOrigin = 'bottom',
   overflow = 'hidden',
-}) => {
+}: ParallaxImageProps) {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({
     target: ref,

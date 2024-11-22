@@ -3,7 +3,15 @@ import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
-import { Address, Log, erc20Abi, formatUnits, parseAbiItem, parseEventLogs } from 'viem'
+import {
+  Address,
+  Log,
+  erc20Abi,
+  formatUnits,
+  parseAbiItem,
+  parseEventLogs,
+  zeroAddress,
+} from 'viem'
 import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
 
@@ -60,7 +68,7 @@ export function parseRemoveLiquidityReceipt({
   getToken,
 }: ParseProps) {
   const nativeAssetReceived =
-    getIncomingWithdrawals(receiptLogs, chain, userAddress)?.[0]?.args?.wad || 0n
+    (getIncomingWithdrawals(receiptLogs, chain, userAddress) as bigint) || 0n
 
   const receivedErc20Tokens: HumanTokenAmountWithAddress[] = getIncomingLogs(
     receiptLogs,
@@ -114,7 +122,7 @@ export function parseSwapReceipt({
    * GET RECEIVED AMOUNT
    */
   const nativeAssetReceived =
-    getIncomingWithdrawals(receiptLogs, chain, userAddress)[0]?.args?.wad || 0n
+    (getIncomingWithdrawals(receiptLogs, chain, userAddress) as bigint) || 0n
 
   const incomingData = getIncomingLogs(receiptLogs, userAddress)[0]
   const receivedTokenValue = incomingData?.args?.value || 0n
@@ -170,11 +178,23 @@ function getIncomingLogs(logs: Log[], userAddress?: Address) {
 function getIncomingWithdrawals(logs: Log[], chain: GqlChain, userAddress?: Address) {
   if (!userAddress) return []
   const networkConfig = getNetworkConfig(chain)
-  // Catches when the wNativeAsset is withdrawn from the vault, assumption is
-  // that his means the user is getting the same value in the native asset.
-  return parseEventLogs({
-    abi: [parseAbiItem('event Withdrawal(address indexed src, uint256 wad)')],
-    args: { src: networkConfig.contracts.balancer.vaultV2 },
-    logs: logs,
-  })
+
+  // Fantom uses the Transfer event instead of Withdrawal
+  if (chain === GqlChain.Fantom) {
+    return parseEventLogs({
+      abi: [
+        parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
+      ],
+      args: { from: networkConfig.contracts.balancer.vaultV2, to: zeroAddress },
+      logs: logs,
+    })[0]?.args?.value
+  } else {
+    // Catches when the wNativeAsset is withdrawn from the vault, assumption is
+    // that his means the user is getting the same value in the native asset.
+    return parseEventLogs({
+      abi: [parseAbiItem('event Withdrawal(address indexed src, uint256 wad)')],
+      args: { src: networkConfig.contracts.balancer.vaultV2 },
+      logs: logs,
+    })[0]?.args?.wad
+  }
 }

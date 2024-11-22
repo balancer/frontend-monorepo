@@ -77,7 +77,7 @@ export function TokenSelectModal({
                 placeholder="Search by name, symbol or address"
                 search={searchTerm}
                 setSearch={setSearchTerm}
-                tabIndex={1}
+                tabIndex={0}
               />
             </Box>
             {!searchTerm && (
