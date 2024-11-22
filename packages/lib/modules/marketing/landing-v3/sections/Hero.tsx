@@ -105,7 +105,7 @@ export function Hero() {
           right: 0,
           bottom: 0,
         }}
-        transition={{ duration: 2 }}
+        transition={{ duration: 0.5 }}
       />
       <Center h="100vh" minHeight="600px">
         <VStack mt="-100px" spacing="lg">
@@ -121,7 +121,7 @@ export function Hero() {
             <motion.div
               animate={{ opacity: 1 }}
               initial={{ opacity: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
+              transition={{ delay: 0.2, duration: 1 }}
             >
               <Text color="font.secondary" fontSize="2xl" fontWeight="thin" textAlign="center">
                 V3 consolidates, re-engineers and builds on previous innovations. <br />
@@ -134,12 +134,12 @@ export function Hero() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{
-              delay: 1,
-              duration: 0.5,
+              delay: 0.3,
+              duration: 1,
               type: 'spring',
-              stiffness: 100,
-              damping: 10,
-              mass: 0.5,
+              stiffness: 200,
+              damping: 15,
+              mass: 1,
             }}
           >
             <Button
