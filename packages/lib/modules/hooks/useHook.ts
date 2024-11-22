@@ -1,4 +1,3 @@
-import { Address } from 'viem'
 import { Pool } from '../pool/PoolProvider'
 import { useHooks } from './HooksProvider'
 import { getChainId } from '@repo/lib/config/app.config'
@@ -6,21 +5,31 @@ import { getChainId } from '@repo/lib/config/app.config'
 export function useHook(pool: Pool) {
   const { metadata } = useHooks()
   const hasHook = !!pool.hook?.address
+  const hasNestedHook = pool.poolTokens.map(token => token.nestedPool?.hook).some(Boolean)
 
-  const hookAddress = (pool.hook?.address || '0x') as Address
+  const hookAddresses = [
+    ...(hasHook ? [pool.hook?.address] : []),
+    ...pool.poolTokens.map(token => token.nestedPool?.hook?.address),
+  ]
+
   const chainId = getChainId(pool.chain)
 
-  const hook = metadata?.find(metadata => {
-    const metadataAddresses = metadata.addresses[chainId.toString()]
-    return metadataAddresses && metadataAddresses.includes(hookAddress)
-  })
+  const hooks = hookAddresses
+    .map(hookAddress =>
+      metadata?.find(metadata => {
+        const metadataAddresses = metadata.addresses[chainId.toString()]
+        return hookAddress && metadataAddresses && metadataAddresses.includes(hookAddress)
+      })
+    )
+    .filter(Boolean)
 
-  const hasHookData = !!hook
+  const hasHookData = !!hooks
 
   return {
     hasHook,
-    hookAddress,
+    hasNestedHook,
+    hookAddresses,
     hasHookData,
-    hook,
+    hooks,
   }
 }
