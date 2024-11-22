@@ -101,9 +101,11 @@ export function usePoolAlerts(pool: Pool) {
     })
 
     if (hook) {
-      const hookName = hook.reviewData?.name
-        ? convertCamelCaseToTitleCase(hook.reviewData.name)
-        : ''
+      // TODO fix this
+      // const hookName = hook.reviewData?.name
+      //   ? convertCamelCaseToTitleCase(hook.reviewData.name)
+      //   : ''
+      const hookName = 'test'
 
       if (!hasReviewedHook(hook)) {
         alerts.push({
@@ -146,9 +148,12 @@ export function usePoolAlerts(pool: Pool) {
         }
 
         if (nestedPool.hook) {
-          const hookName = nestedPool.hook.reviewData?.name
-            ? convertCamelCaseToTitleCase(nestedPool.hook.reviewData.name)
-            : ''
+          // TODO fix this
+          // const hookName = nestedPool.hook.reviewData?.name
+          //   ? convertCamelCaseToTitleCase(nestedPool.hook.reviewData.name)
+          //   : ''
+
+          const hookName = 'test'
 
           if (!hasReviewedHook(nestedPool.hook)) {
             alerts.push({

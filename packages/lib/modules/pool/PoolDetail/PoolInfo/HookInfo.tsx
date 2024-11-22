@@ -1,4 +1,4 @@
-import { HookReviewData } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlHookReviewData } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   Popover,
   PopoverTrigger,
@@ -18,7 +18,7 @@ import { getWarnings } from '../../pool.helpers'
 import { PropsWithChildren } from 'react'
 
 type PopoverInfoBodyProps = {
-  data: HookReviewData | undefined | null
+  data: GqlHookReviewData | undefined | null
   level: number
 }
 

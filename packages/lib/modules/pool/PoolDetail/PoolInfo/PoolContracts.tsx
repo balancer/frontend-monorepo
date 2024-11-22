@@ -25,7 +25,7 @@ import { useMemo } from 'react'
 import {
   GqlPriceRateProviderData,
   GqlToken,
-  HookReviewData,
+  GqlHookReviewData,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -86,7 +86,7 @@ function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlTo
   )
 }
 
-function getHookIcon(data: HookReviewData | undefined | null) {
+function getHookIcon(data: GqlHookReviewData | undefined | null) {
   const hasWarnings = getWarnings(data?.warnings || []).length > 0
   const isSafe = !!data?.summary && data?.summary === 'safe'
   const hasData = !!data

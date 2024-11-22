@@ -12,7 +12,7 @@ import {
   GqlPoolTokenDetail,
   GqlPoolType,
   GqlToken,
-  Hook,
+  GqlHook,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
@@ -264,7 +264,7 @@ export function hasLegitRateProvider(token: GqlPoolTokenDetail): boolean {
   return isNil(token.priceRateProviderData) && isPriceRateProviderLegit
 }
 
-export function hasReviewedHook(hook: Hook): boolean {
+export function hasReviewedHook(hook: GqlHook): boolean {
   return !!hook.reviewData
 }
 
