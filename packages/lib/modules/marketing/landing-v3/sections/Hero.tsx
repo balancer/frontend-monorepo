@@ -82,7 +82,7 @@ export function Hero() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex(prev => (prev === backgroundImages.length - 1 ? 0 : prev + 1))
-    }, 10000) // Change image every 10 seconds
+    }, 7500) // Change image every 10 seconds
 
     return () => clearInterval(interval)
   }, [])
