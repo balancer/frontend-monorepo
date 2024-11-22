@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
-    "@balancer/sdk": "0.31.2",
+    "@balancer/sdk": "0.32.1",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "^2.2.1",
@@ -107,8 +107,8 @@
     "@wagmi/cli": "^2.1.15",
     "autoprefixer": "^10.4.14",
     "concurrently": "^8.2.2",
-    "eslint": "8.43.0",
     "cross-fetch": "^4.0.0",
+    "eslint": "8.43.0",
     "happy-dom": "^12.10.3",
     "lokijs": "^1.5.12",
     "msw": "2.0.10",

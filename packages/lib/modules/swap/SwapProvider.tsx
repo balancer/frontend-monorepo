@@ -53,6 +53,7 @@ import {
 import { Pool } from '../pool/PoolProvider'
 import { getChildTokens, getStandardRootTokens, isStandardRootToken } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -116,7 +117,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
         scaledAmount: BigInt(0),
       },
       swapType: GqlSorSwapType.ExactIn,
-      selectedChain: isPoolSwap ? pool.chain : GqlChain.Mainnet,
+      selectedChain: isPoolSwap ? pool.chain : getProjectConfig().defaultNetwork,
     },
     'swapState'
   )

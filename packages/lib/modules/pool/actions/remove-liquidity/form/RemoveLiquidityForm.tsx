@@ -187,7 +187,7 @@ export function RemoveLiquidityForm() {
                 </Text>
               )}
               {isProportionalTabSelected && (
-                <RemoveLiquidityProportional poolType={pool.type} tokens={tokens} />
+                <RemoveLiquidityProportional pool={pool} tokens={tokens} />
               )}
               {isSingleTabSelected && (
                 <RemoveLiquiditySingleToken chain={pool.chain} tokens={tokens} />
