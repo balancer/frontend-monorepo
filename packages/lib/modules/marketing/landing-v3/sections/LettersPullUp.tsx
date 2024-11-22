@@ -25,7 +25,7 @@ export function LettersPullUp({
       transition: {
         delay: i * 0.07,
         color: {
-          duration: 3,
+          duration: 1.5,
         },
         filter: {
           duration: 1,
