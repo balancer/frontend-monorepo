@@ -99,7 +99,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
 
 // Unskip when sepolia V3 pools are available in production api
 describe.skip('Liquidity helpers for V3 Boosted pools', async () => {
-  const poolId = '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8' // Sepolia stataEthUSDC stataEthUSDT
+  // const poolId = '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8' // Sepolia stataEthUSDC stataEthUSDT
 
   const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
   const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0'
@@ -210,11 +210,36 @@ describe.skip('Liquidity helpers for V3 Boosted pools', async () => {
       type: 'Stable',
     })
   })
+
+  it('poolStateWithBalances (that calls boostedPoolStateWithBalances underneath)', async () => {
+    const helpers = new LiquidityActionHelpers(v3Pool)
+    expect(helpers.poolStateWithBalances).toEqual({
+      address: '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8',
+      id: '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8',
+      protocolVersion: 3,
+      tokens: [
+        {
+          address: '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8',
+          balance: expect.any(String),
+          decimals: 6,
+          index: 0,
+        },
+        {
+          address: '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0',
+          balance: expect.any(String),
+          decimals: 6,
+          index: 1,
+        },
+      ],
+      totalShares: expect.any(String),
+      type: 'Stable',
+    })
+  })
 })
 
 // Unskip when sepolia V3 pools are available in production api
 describe.skip('Liquidity helpers for V3 NESTED pool', async () => {
-  const poolId = '0x0270daf4ee12ccb1abc8aa365054eecb1b7f4f6b' // Sepolia Balancer 50 WETH 50 USD
+  // const poolId = '0x0270daf4ee12ccb1abc8aa365054eecb1b7f4f6b' // Sepolia Balancer 50 WETH 50 USD
 
   const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
   const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0'
@@ -245,6 +270,16 @@ describe.skip('Liquidity helpers for V3 NESTED pool', async () => {
       usdcSepoliaAddress,
       aaveUSDTAddress,
       usdtSepoliaAddress,
+    ])
+  })
+
+  it('toInputAmounts', async () => {
+    expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
+      {
+        address: usdcSepoliaAddress,
+        decimals: 6,
+        rawAmount: 100000n,
+      },
     ])
   })
 

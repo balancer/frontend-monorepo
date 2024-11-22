@@ -2,7 +2,7 @@
 
 import { PropsWithChildren } from 'react'
 import { getSwapPathParams } from '@repo/lib/modules/swap/getSwapPathParams'
-import SwapLayout from '../../../../../../packages/lib/modules/swap/SwapLayout'
+import SwapLayout from '@repo/lib/modules/swap/SwapLayout'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { SwapProviderProps } from '@repo/lib/modules/swap/SwapProvider'
 

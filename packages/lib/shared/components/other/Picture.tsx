@@ -25,7 +25,7 @@ interface PictureProps {
   height?: string | number
 }
 
-export const Picture: React.FC<PictureProps> = ({
+export function Picture({
   imgName,
   altText,
   defaultImgType,
@@ -47,7 +47,7 @@ export const Picture: React.FC<PictureProps> = ({
   directory = '/images/homepage/',
   width,
   height,
-}) => {
+}: PictureProps) {
   const imagePath = `${directory}${imgName}`
 
   const { colorMode } = useColorMode()

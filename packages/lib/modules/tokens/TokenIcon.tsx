@@ -7,6 +7,7 @@ import { identicon } from '@dicebear/collection'
 import { Address } from 'viem'
 import { useTokens } from './TokensProvider'
 import { Image, ImageProps, Text, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 
 type Props = {
   address?: Address | string
@@ -16,6 +17,7 @@ type Props = {
   alt: string
   size?: number
   border?: string
+  weight?: string | null
 }
 
 export function TokenIcon({
@@ -25,6 +27,7 @@ export function TokenIcon({
   alt,
   size = 36,
   border,
+  weight,
   ...rest
 }: Props & Omit<ImageProps, 'src'>) {
   const [hasError, setHasError] = useState(false)
@@ -81,7 +84,7 @@ export function TokenIcon({
 
       <PopoverContent maxW="300px" p="sm" w="auto">
         <Text fontSize="sm" variant="secondary">
-          {alt}
+          {weight ? `${fNum('weight', weight)} ${alt}` : alt}
         </Text>
       </PopoverContent>
     </Popover>

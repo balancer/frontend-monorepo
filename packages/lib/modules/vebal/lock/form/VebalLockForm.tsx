@@ -69,6 +69,7 @@ export function VebalLockForm() {
 
   useEffect(() => {
     onEditAmountToggle(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditAmountDisabled])
 
   const amountMode: 'edit' | 'show' = isEditAmountDisabled

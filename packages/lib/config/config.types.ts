@@ -90,7 +90,7 @@ export interface Config {
   }
 }
 
-interface Banners {
+export interface Banners {
   headerSrc: string
   footerSrc: string
 }
@@ -107,4 +107,6 @@ export interface ProjectConfig {
   supportedNetworks: GqlChain[]
   corePoolId: string // this prop is used to adjust the color of the SparklesIcon
   variantConfig?: VariantConfig
+  defaultNetwork: GqlChain
+  ensNetwork: GqlChain
 }
