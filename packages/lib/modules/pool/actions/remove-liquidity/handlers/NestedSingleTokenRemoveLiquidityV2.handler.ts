@@ -28,11 +28,28 @@ export interface NestedSingleTokenQueryRemoveLiquidityInput extends BuildRemoveL
   queryOutput: NestedSingleTokenQueryRemoveLiquidityOutput
 }
 
-export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityHandler {
+export class NestedSingleTokenRemoveLiquidityV2Handler implements RemoveLiquidityHandler {
   helpers: LiquidityActionHelpers
 
   constructor(pool: Pool) {
     this.helpers = new LiquidityActionHelpers(pool)
+  }
+
+  public async getPriceImpact({
+    humanBptIn,
+    tokenOut,
+  }: QueryRemoveLiquidityInput): Promise<number> {
+    const removeLiquidityInput: RemoveLiquidityNestedSingleTokenInputV2 = this.constructSdkInput(
+      humanBptIn,
+      tokenOut
+    )
+
+    const priceImpactABA: PriceImpactAmount = await PriceImpact.removeLiquidityNested(
+      removeLiquidityInput,
+      this.helpers.nestedPoolStateV2
+    )
+
+    return priceImpactABA.decimal
   }
 
   public async simulate({
@@ -41,7 +58,10 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
   }: QueryRemoveLiquidityInput): Promise<NestedSingleTokenQueryRemoveLiquidityOutput> {
     const removeLiquidity = new RemoveLiquidityNested()
 
-    const removeLiquidityInput = this.constructSdkInput(humanBptIn, tokenOut)
+    const removeLiquidityInput: RemoveLiquidityNestedSingleTokenInputV2 = this.constructSdkInput(
+      humanBptIn,
+      tokenOut
+    )
 
     const sdkQueryOutput = await removeLiquidity.query(
       removeLiquidityInput,
@@ -49,20 +69,6 @@ export class NestedSingleTokenRemoveLiquidityHandler implements RemoveLiquidityH
     )
 
     return { amountsOut: sdkQueryOutput.amountsOut, sdkQueryOutput }
-  }
-
-  public async getPriceImpact({
-    humanBptIn,
-    tokenOut,
-  }: QueryRemoveLiquidityInput): Promise<number> {
-    const removeLiquidityInput = this.constructSdkInput(humanBptIn, tokenOut)
-
-    const priceImpactABA: PriceImpactAmount = await PriceImpact.removeLiquidityNested(
-      removeLiquidityInput,
-      this.helpers.nestedPoolStateV2
-    )
-
-    return priceImpactABA.decimal
   }
 
   public async buildCallData({

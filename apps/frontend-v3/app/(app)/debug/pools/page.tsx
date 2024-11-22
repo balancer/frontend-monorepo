@@ -28,49 +28,55 @@ export default function DebugPools() {
           <Heading size="md">Debug V2 pools</Heading>
           <Link
             as={NextLink}
-            href="/pools/ethereum/v2/0x68e3266c9c8bbd44ad9dca5afbfe629022aee9fe000200000000000000000512/add-liquidity"
+            href="/pools/ethereum/v2/0x68e3266c9c8bbd44ad9dca5afbfe629022aee9fe000200000000000000000512"
           >
             Mainnet WEIGHTED (wjAura-weth)
           </Link>
           <Link
             as={NextLink}
-            href="/pools/ethereum/v2/0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080/add-liquidity"
+            href="/pools/ethereum/v2/0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080"
           >
             Mainnet META_STABLE (wstETH_wETH)
           </Link>
           <Link
             as={NextLink}
-            href="/pools/ethereum/v2/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112/add-liquidity"
+            href="/pools/ethereum/v2/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112"
           >
             Mainnet STABLE (B-rETH-STABLE in Mainnet)
           </Link>
           <Link
             as={NextLink}
-            href="/pools/ethereum/v2/0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249/add-liquidity"
+            href="/pools/ethereum/v2/0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249"
           >
             Mainnet STABLE with BPT tokens (AuraBal 80/20 pool in Mainnet)
           </Link>
           <Link
             as={NextLink}
-            href="/pools/optimism/v2/0x3dc09db8e571da76dd04e9176afc7feee0b89106000000000000000000000019/add-liquidity"
+            href="/pools/optimism/v2/0x3dc09db8e571da76dd04e9176afc7feee0b89106000000000000000000000019"
           >
             Optimism STABLE (FRAX_USDC_MAI)
           </Link>
           <Link
             as={NextLink}
-            href="/pools/ethereum/v2/0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0/add-liquidity"
+            href="/pools/ethereum/v2/0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0"
           >
             Mainnet NESTED (50WETH-50-3pool)
           </Link>
           <Link
             as={NextLink}
-            href="/pools/ethereum/v2/0xc6853f0539f7d4926c719326d60bd84a752bbb8f00020000000000000000065e/add-liquidity"
+            href="/pools/gnosis/v2/0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053"
+          >
+            Gnosis NESTED (Balancer staBAL3-WETH-WBTC)
+          </Link>
+          <Link
+            as={NextLink}
+            href="/pools/ethereum/v2/0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053"
           >
             Mainnet GYRO (2CLP-WSTETH-WETH)
           </Link>
           <Link
             as={NextLink}
-            href="/pools/polygon/v2/0xee278d943584dd8640eaf4cc6c7a5c80c0073e85000200000000000000000bc7/add-liquidity"
+            href="/pools/polygon/v2/0xee278d943584dd8640eaf4cc6c7a5c80c0073e85000200000000000000000bc7"
           >
             Polygon GYRO (2CLP_WMATIC/MATICX)
           </Link>
