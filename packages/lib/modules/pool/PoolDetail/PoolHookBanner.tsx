@@ -22,10 +22,10 @@ export function PoolHookBanner() {
           display="flex"
           fontSize="xs"
           fontWeight="normal"
-          h="60px"
+          h={14}
           rounded="full"
           shadow="sm"
-          w="60px"
+          w={14}
         >
           <Center h="full" w="full">
             <HookIcon size={45} />
