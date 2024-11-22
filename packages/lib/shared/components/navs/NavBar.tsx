@@ -215,7 +215,7 @@ export function NavBar({
           as={motion.div}
           initial="hidden"
           onClick={e => e.stopPropagation()}
-          spacing="lg"
+          spacing="2xl"
           variants={staggeredFadeIn}
         >
           {leftSlot || (

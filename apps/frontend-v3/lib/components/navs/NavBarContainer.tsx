@@ -16,9 +16,9 @@ export function NavBarContainer() {
   return (
     <AnimatePresence>
       <motion.div
-        animate={{ y: 0, opacity: 1 }}
-        initial={{ y: -20, opacity: 0 }}
-        transition={{ delay: 2, duration: 1, ease: 'easeInOut' }}
+        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        transition={{ duration: 0.5, ease: 'easeInOut' }}
       >
         <NavBar
           appLinks={allAppLinks}

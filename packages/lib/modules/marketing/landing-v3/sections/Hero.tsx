@@ -40,6 +40,7 @@ function BalancerLogo() {
             repeat: Infinity,
             ease: 'easeInOut',
             repeatDelay: 0.2,
+            delay: 1,
           }}
         />
         {/* Middle rock */}
@@ -52,6 +53,7 @@ function BalancerLogo() {
             repeat: Infinity,
             ease: 'easeInOut',
             repeatDelay: 0.2,
+            delay: 1,
           }}
         />
         {/* Top rock */}
@@ -64,6 +66,7 @@ function BalancerLogo() {
             repeat: Infinity,
             ease: 'easeInOut',
             repeatDelay: 0.2,
+            delay: 1,
           }}
         />
       </motion.svg>
@@ -102,30 +105,48 @@ export function Hero() {
           right: 0,
           bottom: 0,
         }}
-        transition={{ duration: 3 }}
+        transition={{ duration: 2 }}
       />
       <Center h="100vh" minHeight="600px">
         <VStack mt="-100px" spacing="lg">
-          <BalancerLogo />
+          <motion.div
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <BalancerLogo />
+          </motion.div>
           <VStack spacing="md">
             <Title />
-            <Text color="font.secondary" fontSize="2xl" fontWeight="thin" textAlign="center">
-              V3 consolidates, re-engineers and builds on previous innovations. <br />
-              Code less, build more.
-            </Text>
+            <motion.div
+              animate={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
+              transition={{ delay: 0.5, duration: 1 }}
+            >
+              <Text color="font.secondary" fontSize="2xl" fontWeight="thin" textAlign="center">
+                V3 consolidates, re-engineers and builds on previous innovations. <br />
+                Code less, build more.
+              </Text>
+            </motion.div>
           </VStack>
 
-          <Button
-            as={NextLink}
-            href="https://docs-v3.balancer.fi"
-            mt="lg"
-            rightIcon={<ArrowUpRight />}
-            size="lg"
-            target="_blank"
-            variant="secondary"
+          <motion.div
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
+            transition={{ delay: 1, duration: 1 }}
           >
-            Get Started
-          </Button>
+            <Button
+              as={NextLink}
+              href="https://docs-v3.balancer.fi"
+              mt="xl"
+              rightIcon={<ArrowUpRight />}
+              size="lg"
+              target="_blank"
+              variant="secondary"
+            >
+              Get Started
+            </Button>
+          </motion.div>
         </VStack>
       </Center>
       <span

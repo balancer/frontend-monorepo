@@ -1,10 +1,17 @@
 'use client'
 
 import { Heading } from '@chakra-ui/react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { useEffect, useState, useRef } from 'react'
+import { LettersPullUp } from './LettersPullUp'
 
-const buildWords = ['AMMs', 'custom pools', 'hooks', 'a DEX']
+const buildWords = [
+  { word: 'DeFi', color: '#457dff' },
+  { word: 'AMMs', color: '#00d395' },
+  { word: 'custom pools', color: '#ea6249' },
+  { word: 'hooks', color: '#f97316' },
+  { word: 'a DEX', color: '#F06147' },
+]
 
 export function Title() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
@@ -15,8 +22,10 @@ export function Title() {
   useEffect(() => {
     if (measureRef.current) {
       const newWidths: Record<string, number> = {}
-      buildWords.forEach(word => {
+      buildWords.forEach(({ word }) => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         measureRef.current!.textContent = word
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         newWidths[word] = measureRef.current!.offsetWidth + 20
       })
       setWidths(newWidths)
@@ -33,34 +42,25 @@ export function Title() {
   }, [currentWordIndex])
 
   return (
-    <Heading alignItems="center" as="h1" display="flex" justifyContent="center" size="2xl">
+    <Heading alignItems="center" as="h1" display="flex" justifyContent="center" size="3xl">
       Build{' '}
-      <AnimatePresence initial={false} mode="wait">
+      <AnimatePresence mode="wait">
         <motion.div
           animate={{
-            width: widths[buildWords[currentWordIndex]] || 'auto',
+            width: widths[buildWords[currentWordIndex].word] || 'auto',
           }}
           key="width"
-          transition={{ duration: 0.5, ease: 'easeInOut' }}
+          transition={{
+            type: 'spring',
+            stiffness: 150,
+            damping: 15,
+            mass: 1,
+          }}
         >
           {buildWords.map(
-            word =>
-              buildWords[currentWordIndex] === word && (
-                <motion.span
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  initial={{ opacity: 0 }}
-                  key={word}
-                  style={{
-                    marginLeft: '10px',
-                    marginRight: '10px',
-                    whiteSpace: 'nowrap',
-                    color: 'red',
-                  }}
-                  transition={{ duration: 0.5, ease: 'easeInOut' }}
-                >
-                  {word}
-                </motion.span>
+            ({ word, color }) =>
+              buildWords[currentWordIndex].word === word && (
+                <LettersPullUp initialColor={color} key={word} text={word} />
               )
           )}
         </motion.div>
