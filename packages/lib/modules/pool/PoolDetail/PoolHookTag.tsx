@@ -23,14 +23,12 @@ export function PoolHookTag() {
           fontSize="xs"
           fontWeight="normal"
           h={8}
-          px="sm"
-          py="xs"
           rounded="full"
           shadow="sm"
           w={8}
         >
           <Center h="full" w="full">
-            <HookIcon size={20} />
+            <HookIcon size={32} />
           </Center>
         </Badge>
       </PopoverTrigger>
