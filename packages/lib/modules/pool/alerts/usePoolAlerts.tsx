@@ -1,4 +1,4 @@
-import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
@@ -16,7 +16,7 @@ import { shouldMigrateStake } from '../user-balance.helpers'
 import { VulnerabilityDataMap } from './pool-issues/PoolIssue.labels'
 import { PoolIssue } from './pool-issues/PoolIssue.type'
 import { BalAlertProps } from '@repo/lib/shared/components/alerts/BalAlert'
-import { convertCamelCaseToTitleCase } from '@repo/lib/shared/utils/strings'
+import { useHook } from '../../hooks/useHook'
 
 export type PoolAlert = {
   identifier: string
@@ -26,6 +26,7 @@ export function usePoolAlerts(pool: Pool) {
   const pathname = usePathname()
   const router = useRouter()
   const [poolAlerts, setPoolAlerts] = useState<PoolAlert[]>([])
+  const { hooks } = useHook(pool)
 
   const getNetworkPoolAlerts = (pool: Pool): PoolAlert[] => {
     const networkPoolsIssues = getNetworkConfig(pool.chain).pools?.issues
@@ -101,11 +102,9 @@ export function usePoolAlerts(pool: Pool) {
     })
 
     if (hook) {
-      // TODO fix this
-      // const hookName = hook.reviewData?.name
-      //   ? convertCamelCaseToTitleCase(hook.reviewData.name)
-      //   : ''
-      const hookName = 'test'
+      const hookName = hooks.find(
+        hook => pool.hook && hook?.addresses[getChainId(pool.chain)]?.includes(pool.hook.address)
+      )?.name
 
       if (!hasReviewedHook(hook)) {
         alerts.push({
@@ -148,12 +147,11 @@ export function usePoolAlerts(pool: Pool) {
         }
 
         if (nestedPool.hook) {
-          // TODO fix this
-          // const hookName = nestedPool.hook.reviewData?.name
-          //   ? convertCamelCaseToTitleCase(nestedPool.hook.reviewData.name)
-          //   : ''
-
-          const hookName = 'test'
+          const hookName = hooks.find(
+            hook =>
+              nestedPool.hook &&
+              hook?.addresses[getChainId(pool.chain)]?.includes(nestedPool.hook.address)
+          )?.name
 
           if (!hasReviewedHook(nestedPool.hook)) {
             alerts.push({
