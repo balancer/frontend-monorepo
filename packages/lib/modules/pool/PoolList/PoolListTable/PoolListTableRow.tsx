@@ -1,6 +1,6 @@
 import { Box, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import { getPoolPath, getPoolTypeLabel } from '../../pool.utils'
+import { getPoolDisplayTokens, getPoolPath, getPoolTypeLabel } from '../../pool.utils'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
@@ -25,11 +25,12 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
 function PoolName({ pool }: { pool: PoolListItem }) {
   const isFirstToken = (index: number) => index === 0
-  const zIndices = Array.from({ length: pool.displayTokens.length }, (_, index) => index).reverse()
+  const displayTokens = getPoolDisplayTokens(pool)
+  const zIndices = Array.from({ length: displayTokens.length }, (_, index) => index).reverse()
 
   return (
     <HStack>
-      {pool.displayTokens.map((token, i) => (
+      {displayTokens.map((token, i) => (
         <Box key={token.address} ml={isFirstToken(i) ? 0 : -3} zIndex={zIndices[i]}>
           <TokenIcon
             address={token.address}
@@ -78,13 +79,15 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
             <GridItem>
               {displayType === PoolListDisplayType.TokenPills && (
                 <PoolListTokenPills
-                  chain={pool.chain}
-                  displayTokens={pool.displayTokens}
+                  pool={{
+                    displayTokens: getPoolDisplayTokens(pool),
+                    type: pool.type,
+                    chain: pool.chain,
+                  }}
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
                   pr={[1.5, 'ms']}
-                  type={pool.type}
                 />
               )}
               {displayType === PoolListDisplayType.Name && <PoolName pool={pool} />}

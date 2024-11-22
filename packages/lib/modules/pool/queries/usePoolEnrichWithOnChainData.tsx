@@ -12,7 +12,7 @@ import {
   balancerV2ComposableStablePoolV5Abi,
   balancerV2VaultAbi,
 } from '../../web3/contracts/abi/generated'
-import { isComposableStablePool } from '../pool.utils'
+import { getPoolDisplayTokens, isComposableStablePool } from '../pool.utils'
 import { cowAmmPoolAbi } from '../../web3/contracts/abi/cowAmmAbi'
 import { weightedPoolAbi_V3, vaultExtensionAbi_V3 } from '@balancer/sdk'
 
@@ -160,9 +160,7 @@ function enrichPool({ isLoading, pool, priceFor, poolTokenBalances, totalSupply 
 
   const clone = cloneDeep(pool)
 
-  const filteredTokens = clone.poolTokens.filter(token =>
-    pool.displayTokens.find(displayToken => token.address === displayToken.address)
-  )
+  const filteredTokens = getPoolDisplayTokens(clone)
 
   clone.poolTokens.forEach((token, index) => {
     if (!poolTokenBalances) return

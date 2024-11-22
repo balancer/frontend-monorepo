@@ -1,14 +1,14 @@
 import { Badge, BadgeProps, HStack, Text, Wrap } from '@chakra-ui/react'
 import {
   GqlChain,
-  GqlPoolTokenDisplay,
+  GqlPoolTokenDetail,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { isStableLike, isWeightedLike } from '../pool.helpers'
 
-type DisplayToken = Pick<GqlPoolTokenDisplay, 'address' | 'symbol' | 'weight'>
+type DisplayToken = Pick<GqlPoolTokenDetail, 'address' | 'symbol' | 'weight'>
 
 function WeightedTokenPills({
   tokens,
@@ -93,20 +93,20 @@ function StableTokenPills({
   )
 }
 
-type Props = {
+type PoolData = {
   type: GqlPoolType
   chain: GqlChain
   displayTokens: DisplayToken[]
+}
+
+type Props = {
+  pool: PoolData
   iconSize?: number
 }
 
-export function PoolListTokenPills({
-  chain,
-  type,
-  displayTokens,
-  iconSize = 24,
-  ...badgeProps
-}: Props & BadgeProps) {
+export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props & BadgeProps) {
+  const { chain, type, displayTokens } = pool
+
   const shouldUseWeightedPills = isWeightedLike(type)
   const shouldUseStablePills = isStableLike(type)
 

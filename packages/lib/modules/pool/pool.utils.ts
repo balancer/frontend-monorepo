@@ -279,7 +279,9 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
   return poolType === GqlPoolType.CowAmm
 }
 
-export function getPoolDisplayTokens(pool: Pool) {
+export function getPoolDisplayTokens(
+  pool: Pick<Pool | PoolListItem, 'displayTokens' | 'poolTokens'>
+) {
   return pool.poolTokens.filter(token =>
     pool.displayTokens.find(
       (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address

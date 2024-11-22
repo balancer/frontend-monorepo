@@ -15,7 +15,7 @@ import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
 import {
   GqlChain,
-  GqlPoolTokenDisplay,
+  GqlPoolTokenDetail,
   GqlToken,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { ReactNode, useEffect, useState } from 'react'
@@ -28,12 +28,13 @@ import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { getPoolDisplayTokens } from '@repo/lib/modules/pool/pool.utils'
 
 type DataProps = {
   address: Address
   chain: GqlChain
   token?: GqlToken
-  displayToken?: GqlPoolTokenDisplay
+  displayToken?: GqlPoolTokenDetail
   pool?: Pool
   disabled?: boolean
   showSelect?: boolean
@@ -124,7 +125,8 @@ export default function TokenRow({
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
   const token = getToken(address, chain)
-  const displayToken = pool?.displayTokens.find(t => isSameAddress(t.address, address))
+  const displayTokens = pool ? getPoolDisplayTokens(pool) : []
+  const displayToken = displayTokens.find(t => isSameAddress(t.address, address))
 
   // TokenRowTemplate default props
   const props = {

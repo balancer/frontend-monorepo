@@ -4,7 +4,7 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { getPoolPath, getPoolTypeLabel } from '../../pool/pool.utils'
+import { getPoolDisplayTokens, getPoolPath, getPoolTypeLabel } from '../../pool/pool.utils'
 import { PoolListTokenPills } from '../../pool/PoolList/PoolListTokenPills'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
@@ -63,13 +63,15 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
             </GridItem>
             <GridItem>
               <PoolListTokenPills
-                chain={pool.chain}
-                displayTokens={pool.displayTokens}
+                pool={{
+                  displayTokens: getPoolDisplayTokens(pool),
+                  type: pool.type,
+                  chain: pool.chain,
+                }}
                 h={['32px', '36px']}
                 iconSize={20}
                 p={['xxs', 'sm']}
                 pr={[1.5, 'ms']}
-                type={pool.type}
               />
             </GridItem>
             <GridItem>

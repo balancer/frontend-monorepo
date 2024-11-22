@@ -56,13 +56,15 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             >
               <HStack>
                 <PoolListTokenPills
-                  chain={vote.chain}
-                  displayTokens={vote.tokens}
+                  pool={{
+                    displayTokens: vote.tokens,
+                    type: vote.type,
+                    chain: vote.chain,
+                  }}
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
                   pr={[1.5, 'ms']}
-                  type={vote.type}
                 />
                 <Box color="font.secondary">
                   <ArrowUpIcon transform="rotate(90)" />

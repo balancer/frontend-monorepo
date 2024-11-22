@@ -25,6 +25,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { keyBy } from 'lodash'
 import {
   getAuraPoolLink,
+  getPoolDisplayTokens,
   getProportionalExitAmountsFromScaledBptIn,
   getXavePoolLink,
 } from '../pool.utils'
@@ -256,6 +257,8 @@ export default function PoolMyLiquidity() {
     }
   }
 
+  const displayTokens = getPoolDisplayTokens(pool)
+
   return (
     <Card h="fit-content" ref={myLiquiditySectionRef}>
       <VStack spacing="md" width="full">
@@ -319,7 +322,7 @@ export default function PoolMyLiquidity() {
                 </Button>
               </HStack>
             ) : (
-              pool.displayTokens.map(token => {
+              displayTokens.map(token => {
                 return (
                   <TokenRow
                     abbreviated={false}

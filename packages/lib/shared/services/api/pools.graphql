@@ -36,6 +36,26 @@ query GetPools(
         symbol
       }
     }
+    poolTokens {
+      id
+      address
+      symbol
+      weight
+      name
+      nestedPool {
+        id
+        address
+        symbol
+        name
+        tokens {
+          id
+          address
+          symbol
+          weight
+          name
+        }
+      }
+    }
     dynamicData {
       totalLiquidity
       lifetimeVolume

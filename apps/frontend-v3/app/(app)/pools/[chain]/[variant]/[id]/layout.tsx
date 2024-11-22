@@ -1,6 +1,11 @@
 /* eslint-disable max-len */
 import { FetchPoolProps } from '@repo/lib/modules/pool/pool.types'
-import { ChainSlug, getPoolTypeLabel, slugToChainMap } from '@repo/lib/modules/pool/pool.utils'
+import {
+  ChainSlug,
+  getPoolDisplayTokens,
+  getPoolTypeLabel,
+  slugToChainMap,
+} from '@repo/lib/modules/pool/pool.utils'
 import { PropsWithChildren, Suspense } from 'react'
 import { PoolDetailSkeleton } from '@repo/lib/modules/pool/PoolDetail/PoolDetailSkeleton'
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
@@ -43,7 +48,8 @@ export async function generateMetadata({
   const pool = data?.pool
   if (!pool) return {}
 
-  const poolTokenString = arrayToSentence(pool.displayTokens.map(token => token.symbol))
+  const displayTokens = getPoolDisplayTokens(pool)
+  const poolTokenString = arrayToSentence(displayTokens.map(token => token.symbol))
 
   return {
     title: `Liquidity Pool (${variant}): ${pool.name}`,
