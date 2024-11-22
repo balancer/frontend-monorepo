@@ -2,23 +2,20 @@ import { Address } from 'viem'
 import { Pool } from '../pool/PoolProvider'
 import { useHooks } from './HooksProvider'
 import { getChainId } from '@repo/lib/config/app.config'
-import { useEffect } from 'react'
 
 export function useHook(pool: Pool) {
   const { metadata } = useHooks()
   const hasHook = !!pool.hook?.address
 
   const hookAddress = (pool.hook?.address || '0x') as Address
+  const chainId = getChainId(pool.chain)
 
-  const hook = metadata?.find(
-    metadata => metadata.addresses[getChainId(pool.chain).toString()] === hookAddress
-  )
+  const hook = metadata?.find(metadata => {
+    const metadataAddresses = metadata.addresses[chainId.toString()]
+    return metadataAddresses.includes(hookAddress)
+  })
 
   const hasHookData = !!hook
-
-  useEffect(() => {
-    console.log('hook', hook, hasHookData, pool.hook, metadata)
-  }, [hasHookData, hook])
 
   return {
     hasHook,
