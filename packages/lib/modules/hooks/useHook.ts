@@ -12,7 +12,7 @@ export function useHook(pool: Pool) {
 
   const hook = metadata?.find(metadata => {
     const metadataAddresses = metadata.addresses[chainId.toString()]
-    return metadataAddresses.includes(hookAddress)
+    return metadataAddresses && metadataAddresses.includes(hookAddress)
   })
 
   const hasHookData = !!hook

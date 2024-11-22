@@ -7,7 +7,7 @@ export type HooksMetadata = {
   id: string
   name: string
   description: string
-  addresses: Record<string, string> // chainId -> address
+  addresses: Record<string, string[]> // chainId -> addresses[]
 }
 
 export async function getHooksMetadata(): Promise<HooksMetadata[] | undefined> {
