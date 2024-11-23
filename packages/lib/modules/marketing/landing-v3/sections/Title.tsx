@@ -4,25 +4,30 @@ import { Heading } from '@chakra-ui/react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { useEffect, useState, useRef } from 'react'
 import { LettersPullUp } from './LettersPullUp'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 const buildWords = [
   { word: 'DeFi', color: '#457dff' },
   { word: 'AMMs', color: '#00d395' },
-  { word: 'custom pools', color: '#ea6249' },
   { word: 'hooks', color: '#f97316' },
   { word: 'a DEX', color: '#F06147' },
+  { word: 'LBPs', color: '#F06147' },
+  { word: 'custom pools', color: '#ea6249' },
 ]
 
 export function Title() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
   const [widths, setWidths] = useState<Record<string, number>>({})
   const measureRef = useRef<HTMLSpanElement>(null)
+  const { isMobile } = useBreakpoints()
+
+  const words = isMobile ? buildWords.slice(0, -1) : buildWords
 
   // Measure all words once on mount
   useEffect(() => {
     if (measureRef.current) {
       const newWidths: Record<string, number> = {}
-      buildWords.forEach(({ word }) => {
+      words.forEach(({ word }) => {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         measureRef.current!.textContent = word
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -34,20 +39,28 @@ export function Title() {
 
   useEffect(() => {
     const wordInterval = setInterval(() => {
-      const nextIndex = currentWordIndex === buildWords.length - 1 ? 0 : currentWordIndex + 1
+      const nextIndex = currentWordIndex === words.length - 1 ? 0 : currentWordIndex + 1
       setCurrentWordIndex(nextIndex)
     }, 5000)
 
     return () => clearInterval(wordInterval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentWordIndex])
 
   return (
-    <Heading alignItems="center" as="h1" display="flex" justifyContent="center" size="3xl">
+    <Heading
+      alignItems="center"
+      as="h1"
+      display="flex"
+      justifyContent="center"
+      size={{ base: 'xl', md: '3xl' }}
+      textAlign="center"
+    >
       Build{' '}
       <AnimatePresence mode="wait">
         <motion.div
           animate={{
-            width: widths[buildWords[currentWordIndex].word] || 'auto',
+            width: widths[words[currentWordIndex].word] || 'auto',
           }}
           key="width"
           transition={{
@@ -57,9 +70,9 @@ export function Title() {
             mass: 1,
           }}
         >
-          {buildWords.map(
+          {words.map(
             ({ word, color }) =>
-              buildWords[currentWordIndex].word === word && (
+              words[currentWordIndex].word === word && (
                 <LettersPullUp initialColor={color} key={word} text={word} />
               )
           )}

@@ -107,8 +107,8 @@ export function Hero() {
         }}
         transition={{ duration: 0.5 }}
       />
-      <Center h="100vh" minHeight="600px">
-        <VStack mt="-100px" spacing="lg">
+      <Center h="100vh" maxW="full" minHeight="600px">
+        <VStack maxW="full" mt="-100px" spacing="lg">
           <motion.div
             animate={{ opacity: 1 }}
             initial={{ opacity: 0 }}
@@ -116,14 +116,19 @@ export function Hero() {
           >
             <BalancerLogo />
           </motion.div>
-          <VStack spacing="md">
+          <VStack maxW="full" px="sm" spacing="md">
             <Title />
             <motion.div
               animate={{ opacity: 1 }}
               initial={{ opacity: 0 }}
               transition={{ delay: 0.2, duration: 1 }}
             >
-              <Text color="font.secondary" fontSize="2xl" fontWeight="thin" textAlign="center">
+              <Text
+                color="font.secondary"
+                fontSize={{ base: 'xl', md: '2xl' }}
+                fontWeight="thin"
+                textAlign="center"
+              >
                 V3 consolidates, re-engineers and builds on previous innovations. <br />
                 Code less, build more.
               </Text>
