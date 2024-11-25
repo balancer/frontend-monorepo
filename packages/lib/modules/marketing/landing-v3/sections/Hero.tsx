@@ -240,7 +240,7 @@ export function Hero() {
       </div> */}
       <Center h="100vh" maxW="full" minHeight="600px" position="relative">
         <motion.div
-          animate={{ opacity: 0.5 }}
+          animate={{ opacity: 0.4 }}
           initial={{ opacity: 0 }}
           style={{
             backgroundImage: `url(/images/graphics/zen-writing-3.webp)`,
