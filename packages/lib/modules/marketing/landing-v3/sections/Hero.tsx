@@ -90,8 +90,8 @@ export function Hero() {
   return (
     <Noise>
       <motion.div
-        animate={{ opacity: 0.3 }}
-        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.8 }}
+        initial={{ opacity: 0.2 }}
         style={{
           backgroundImage: `url(/images/bgs/${backgroundImages[currentImageIndex]})`,
           backgroundPosition: 'center',
@@ -107,7 +107,23 @@ export function Hero() {
         }}
         transition={{ duration: 0.5 }}
       />
-      <Center h="100vh" maxW="full" minHeight="600px">
+      <Center h="100vh" maxW="full" minHeight="600px" position="relative">
+        <motion.div
+          animate={{ opacity: 0.5 }}
+          initial={{ opacity: 0 }}
+          style={{
+            backgroundImage: `url(/images/graphics/zen-writing-3.webp)`,
+            backgroundPosition: 'center',
+            backgroundSize: '400px',
+            backgroundRepeat: 'no-repeat',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
+          transition={{ duration: 5 }}
+        />
         <VStack maxW="full" mt="-100px" spacing="lg">
           <motion.div
             animate={{ opacity: 1 }}
