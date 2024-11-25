@@ -5,8 +5,9 @@ import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { useEffect, useState, useRef } from 'react'
 import { LettersPullUp } from './LettersPullUp'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { is } from 'date-fns/locale'
 
-const buildWords = [
+const words = [
   { word: 'DeFi', color: '#457dff' },
   { word: 'AMMs', color: '#00d395' },
   { word: 'hooks', color: '#f97316' },
@@ -20,8 +21,6 @@ export function Title() {
   const [widths, setWidths] = useState<Record<string, number>>({})
   const measureRef = useRef<HTMLSpanElement>(null)
   const { isMobile } = useBreakpoints()
-
-  const words = isMobile ? buildWords.slice(0, -1) : buildWords
 
   // Measure all words once on mount
   useEffect(() => {
@@ -48,46 +47,58 @@ export function Title() {
   }, [currentWordIndex])
 
   return (
-    <Heading
-      alignItems="center"
-      as="h1"
-      display="flex"
-      justifyContent="center"
-      size={{ base: 'xl', md: '3xl' }}
-      textAlign="center"
-    >
-      Build{' '}
-      <AnimatePresence mode="wait">
-        <motion.div
-          animate={{
-            width: widths[words[currentWordIndex].word] || 'auto',
+    <>
+      <Heading
+        alignItems="center"
+        as="h1"
+        display="flex"
+        justifyContent="center"
+        size={{ base: 'xl', md: '3xl' }}
+        textAlign="center"
+      >
+        Build{' '}
+        <AnimatePresence mode="wait">
+          <motion.div
+            animate={{
+              width: widths[words[currentWordIndex].word] || 'auto',
+            }}
+            key="width"
+            transition={{
+              type: 'spring',
+              stiffness: 150,
+              damping: 15,
+              mass: 1,
+            }}
+          >
+            {words.map(
+              ({ word, color }) =>
+                words[currentWordIndex].word === word && (
+                  <LettersPullUp initialColor={color} key={word} text={word} />
+                )
+            )}
+          </motion.div>
+        </AnimatePresence>
+        {/* Hidden measurement element */}
+        <span
+          ref={measureRef}
+          style={{
+            visibility: 'hidden',
+            position: 'absolute',
+            whiteSpace: 'nowrap',
           }}
-          key="width"
-          transition={{
-            type: 'spring',
-            stiffness: 150,
-            damping: 15,
-            mass: 1,
-          }}
+        />
+        {!isMobile && <> on Balancer V3</>}
+      </Heading>
+      {isMobile && (
+        <Heading
+          justifyContent="center"
+          mt="-4"
+          size={{ base: 'xl', md: '3xl' }}
+          textAlign="center"
         >
-          {words.map(
-            ({ word, color }) =>
-              words[currentWordIndex].word === word && (
-                <LettersPullUp initialColor={color} key={word} text={word} />
-              )
-          )}
-        </motion.div>
-      </AnimatePresence>
-      {/* Hidden measurement element */}
-      <span
-        ref={measureRef}
-        style={{
-          visibility: 'hidden',
-          position: 'absolute',
-          whiteSpace: 'nowrap',
-        }}
-      />{' '}
-      on Balancer V3
-    </Heading>
+          on Balancer V3
+        </Heading>
+      )}
+    </>
   )
 }
