@@ -192,7 +192,7 @@ export function Hero() {
           backgroundSize: 'cover',
           height: '100vh',
           minHeight: '600px',
-          transition: 'background-image 4s ease-in-out',
+          transition: 'background-image 3s ease-in-out',
           position: 'absolute',
           top: 0,
           left: 0,
