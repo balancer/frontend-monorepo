@@ -9,6 +9,7 @@ export function PoolHookTag() {
   const { pool } = usePool()
   const { hooks } = useHook(pool)
 
+  // TODO: add nested hook support when needed
   const hook = hooks.find(
     hook => pool.hook && hook?.addresses[getChainId(pool.chain)]?.includes(pool.hook.address)
   )
