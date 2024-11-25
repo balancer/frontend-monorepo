@@ -198,7 +198,6 @@ export function Hero() {
           left: 0,
           right: 0,
           bottom: 0,
-          zIndex: 0,
         }}
         transition={{ duration: 0.5 }}
       />
