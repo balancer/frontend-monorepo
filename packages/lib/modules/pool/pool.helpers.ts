@@ -255,13 +255,13 @@ export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
   return !!token.priceRateProvider && !!token.priceRateProviderData
 }
 
-export function hasLegitRateProvider(token: GqlPoolTokenDetail): boolean {
-  const isPriceRateProviderLegit =
+export function hasRateProvider(token: GqlPoolTokenDetail): boolean {
+  const isPriceRateProvider =
     isNil(token.priceRateProvider) || // if null, we consider rate provider as zero address
     token.priceRateProvider === zeroAddress ||
     token.priceRateProvider === token.nestedPool?.address
 
-  return isNil(token.priceRateProviderData) && isPriceRateProviderLegit
+  return !isPriceRateProvider && !isNil(token.priceRateProviderData)
 }
 
 export function hasReviewedHook(hook: GqlHook): boolean {

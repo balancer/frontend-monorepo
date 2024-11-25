@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { Pool } from '../PoolProvider'
 import { migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import {
-  hasLegitRateProvider,
+  hasRateProvider,
   hasReviewedHook,
   hasReviewedRateProvider,
   isV2Pool,
@@ -76,7 +76,7 @@ export function usePoolAlerts(pool: Pool) {
         })
       }
 
-      if (hasLegitRateProvider(token)) {
+      if (!hasRateProvider(token)) {
         return
       }
 
@@ -188,7 +188,7 @@ export function usePoolAlerts(pool: Pool) {
         }
 
         nestedPool.tokens.forEach(nestedToken => {
-          if (hasLegitRateProvider(nestedToken)) {
+          if (!hasRateProvider(nestedToken)) {
             return
           }
 
