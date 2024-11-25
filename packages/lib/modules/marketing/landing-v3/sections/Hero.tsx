@@ -162,21 +162,21 @@ function BalancerLogo() {
 
 export function Hero() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isAnimationPaused, setIsAnimationPaused] = useState(false)
+  // const [isAnimationPaused, setIsAnimationPaused] = useState(false)
   const hiddenRef = useRef<HTMLSpanElement>(null)
 
-  const handleHover = useCallback(() => {
-    setIsAnimationPaused(true)
-  }, [])
+  // const handleHover = useCallback(() => {
+  //   setIsAnimationPaused(true)
+  // }, [])
 
-  const handleHoverEnd = useCallback(() => {
-    setIsAnimationPaused(false)
-  }, [])
+  // const handleHoverEnd = useCallback(() => {
+  //   setIsAnimationPaused(false)
+  // }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex(prev => (prev === backgroundImages.length - 1 ? 0 : prev + 1))
-    }, 7500) // Change image every 10 seconds
+    }, 10000)
 
     return () => clearInterval(interval)
   }, [])
@@ -192,7 +192,7 @@ export function Hero() {
           backgroundSize: 'cover',
           height: '100vh',
           minHeight: '600px',
-          transition: 'background-image 2s ease-in-out',
+          transition: 'background-image 4s ease-in-out',
           position: 'absolute',
           top: 0,
           left: 0,
@@ -202,12 +202,12 @@ export function Hero() {
         }}
         transition={{ duration: 0.5 }}
       />
-      <div
+      {/* Rotating rocks in case we want them */}
+      {/* <div
         onMouseLeave={() => setIsAnimationPaused(false)}
         style={{ position: 'fixed', left: '50%', top: '50%', zIndex: 1 }}
       >
-        {/* Rotating rocks in case we want them */}
-        {/* <AnimatedCircle
+        <AnimatedCircle
           color="blue"
           delay={0}
           duration={50}
@@ -236,8 +236,8 @@ export function Hero() {
           onHoverEnd={handleHoverEnd}
           radius={600}
           size={60}
-        /> */}
-      </div>
+        />
+      </div> */}
       <Center h="100vh" maxW="full" minHeight="600px" position="relative">
         <motion.div
           animate={{ opacity: 0.5 }}
