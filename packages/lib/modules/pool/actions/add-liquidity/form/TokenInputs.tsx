@@ -51,9 +51,7 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
               setAmountIn(token.address as Address, e.currentTarget.value as HumanAmount)
             }
             toggleTokenSelect={
-              shouldShowNativeWrappedSelector(token, pool.type)
-                ? tokenSelectDisclosureOpen
-                : undefined
+              shouldShowNativeWrappedSelector(token, pool) ? tokenSelectDisclosureOpen : undefined
             }
             value={currentValueFor(token.address as Address)}
             weight={weightFor(token.address)}

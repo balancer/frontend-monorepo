@@ -34,7 +34,19 @@ const connectors = connectorsForWallets(
       ],
     },
   ],
-  { appName, projectId }
+  {
+    appName,
+    projectId,
+    walletConnectParameters: {
+      // Enforce wallet connect popup always on top
+      // More info: https://github.com/wevm/wagmi/discussions/2775
+      qrModalOptions: {
+        themeVariables: {
+          '--wcm-z-index': '9999999',
+        },
+      },
+    },
+  }
 )
 
 export type WagmiConfig = ReturnType<typeof createConfig>

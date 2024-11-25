@@ -34,9 +34,7 @@ export interface NetworkSwitchButtonProps {
   isPending: boolean
 }
 
-export const NetworkSwitchButton: React.FC<NetworkSwitchButtonProps> = function ({
-  ...networkSwitchButtonProps
-}) {
+export function NetworkSwitchButton({ ...networkSwitchButtonProps }: NetworkSwitchButtonProps) {
   return (
     <Button
       isLoading={networkSwitchButtonProps.isPending}
