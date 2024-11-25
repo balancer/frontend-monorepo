@@ -146,6 +146,14 @@ export function PoolContracts({ ...props }: CardProps) {
     return [...(pool.hook ? [pool.hook] : []), ...nestedHooks]
   }, [pool])
 
+  const erc4626Tokens = useMemo(() => {
+    const erc4626Tokens = pool.poolTokens.filter(token => token.isErc4626)
+    const erc4626NestedTokens = pool.poolTokens.flatMap(token =>
+      token.nestedPool ? token.nestedPool.tokens.filter(token => token.isErc4626) : []
+    )
+    return [...(erc4626Tokens ? erc4626Tokens : []), ...erc4626NestedTokens]
+  }, [pool])
+
   return (
     <Card {...props}>
       <VStack alignItems="flex-start" spacing="md" width="full">
@@ -266,6 +274,57 @@ export function PoolContracts({ ...props }: CardProps) {
                           </HStack>
                         </Link>
                         {getRateProviderIcon(provider.priceRateProviderData, token)}
+                      </HStack>
+                    )
+                  )
+                })}
+              </VStack>
+            </GridItem>
+          </Grid>
+        )}
+        {erc4626Tokens.length > 0 && (
+          <Grid gap="sm" templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} w="full">
+            <GridItem>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <Text className="tooltip-dashed-underline" minW="120px" variant="secondary">
+                    {erc4626Tokens.length === 1 ? 'ERC4626 token:' : 'ERC4626 tokens:'}
+                  </Text>
+                </PopoverTrigger>
+                <PopoverContent maxW="300px" p="sm" w="auto">
+                  <Text fontSize="sm" variant="secondary">
+                    erc4626 text
+                  </Text>
+                </PopoverContent>
+              </Popover>
+            </GridItem>
+            <GridItem>
+              <VStack alignItems="flex-start">
+                {erc4626Tokens.map(erc4626Token => {
+                  const token = getToken(erc4626Token.address, chain)
+                  return (
+                    token && (
+                      <HStack key={erc4626Token.address}>
+                        <Tooltip fontSize="sm" label={token.symbol} shouldWrapChildren>
+                          <TokenIcon
+                            address={token.address}
+                            alt={token.address}
+                            chain={chain}
+                            size={16}
+                          />
+                        </Tooltip>
+                        <Link
+                          href={getBlockExplorerAddressUrl(erc4626Token.address, chain)}
+                          key={erc4626Token.address}
+                          target="_blank"
+                          variant="link"
+                        >
+                          <HStack gap="xxs">
+                            <Text color="link">{abbreviateAddress(erc4626Token.address)}</Text>
+                            <ArrowUpRight size={12} />
+                          </HStack>
+                        </Link>
+                        {/* {getRateProviderIcon(erc4626Token.address, token)} */}
                       </HStack>
                     )
                   )
