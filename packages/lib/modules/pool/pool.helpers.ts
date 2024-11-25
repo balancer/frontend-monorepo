@@ -12,6 +12,7 @@ import {
   GqlPoolTokenDetail,
   GqlPoolType,
   GqlToken,
+  GqlHook,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
@@ -251,11 +252,28 @@ export function allClaimableGaugeAddressesFor(pool: ClaimablePool) {
 }
 
 export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
-  return (
-    !!token.priceRateProvider &&
-    !!token.priceRateProviderData &&
-    token.priceRateProviderData.reviewed
-  )
+  return !!token.priceRateProvider && !!token.priceRateProviderData
+}
+
+export function hasRateProvider(token: GqlPoolTokenDetail): boolean {
+  const isPriceRateProvider =
+    isNil(token.priceRateProvider) || // if null, we consider rate provider as zero address
+    token.priceRateProvider === zeroAddress ||
+    token.priceRateProvider === token.nestedPool?.address
+
+  return !isPriceRateProvider && !isNil(token.priceRateProviderData)
+}
+
+export function hasReviewedHook(hook: GqlHook): boolean {
+  return !!hook.reviewData
+}
+
+export function hasHooks(pool: Pool): boolean {
+  const nestedHooks = pool.poolTokens
+    .filter(token => token.hasNestedPool)
+    .map(token => token.nestedPool?.hook)
+
+  return !![pool.hook, ...nestedHooks].length
 }
 
 /**
@@ -270,6 +288,10 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
   // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
   if (isLBP(pool.type) || pool.dynamicData.isPaused || pool.dynamicData.isInRecoveryMode) {
+    return true
+  }
+
+  if (pool.hook && (!hasReviewedHook(pool.hook) || pool.hook?.reviewData?.summary === 'unsafe')) {
     return true
   }
 
@@ -339,7 +361,7 @@ export function isUnbalancedLiquidityDisabled(pool: Pool): boolean {
   return !!pool.liquidityManagement?.disableUnbalancedLiquidity
 }
 
-export function getRateProviderWarnings(warnings: string[]) {
+export function getWarnings(warnings: string[]) {
   return warnings.filter(warning => !isEmpty(warning))
 }
 

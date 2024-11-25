@@ -1,3 +1,5 @@
+#import "./hook.graphql"
+
 query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
   pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
     id
@@ -19,7 +21,7 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       disableUnbalancedLiquidity
     }
     hook {
-      address
+      ...Hook
     }
     dynamicData {
       poolId
@@ -174,7 +176,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       v
       w
       z
-
       nestingType
       poolTokens {
         ...PoolTokens
@@ -235,6 +236,23 @@ fragment PoolTokens on GqlPoolTokenDetail {
         name
         symbol
       }
+      priceRateProvider
+      priceRateProviderData {
+        address
+        name
+        summary
+        reviewed
+        warnings
+        upgradeableComponents {
+          entryPoint
+          implementationReviewed
+        }
+        reviewFile
+        factory
+      }
+    }
+    hook {
+      ...Hook
     }
   }
   isErc4626
