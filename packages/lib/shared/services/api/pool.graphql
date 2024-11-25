@@ -227,9 +227,15 @@ fragment PoolTokens on GqlPoolTokenDetail {
     type
     tokens {
       index
+      name
       address
       decimals
       isErc4626
+      erc4626ReviewData {
+        reviewFile
+        summary
+        warnings
+      }
       underlyingToken {
         address
         decimals
