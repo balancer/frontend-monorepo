@@ -3,8 +3,8 @@
 
 import { Text, Center, VStack, useColorModeValue, Button } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
-import { useEffect, useState, useRef, useCallback } from 'react'
-import { motion, useAnimationControls } from 'framer-motion'
+import { useEffect, useState, useRef } from 'react'
+import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { Title } from './Title'
