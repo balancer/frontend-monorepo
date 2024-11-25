@@ -1,4 +1,5 @@
 #import "./pool-tokens.graphql"
+#import "./hook.graphql"
 
 query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
   pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
@@ -21,7 +22,7 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       disableUnbalancedLiquidity
     }
     hook {
-      address
+      ...Hook
     }
     dynamicData {
       poolId
@@ -176,7 +177,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       v
       w
       z
-
       nestingType
       poolTokens {
         ...PoolTokens

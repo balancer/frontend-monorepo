@@ -3,13 +3,26 @@
 
 import { createContext, PropsWithChildren, useEffect } from 'react'
 import { GetPoolsDocument, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { useQuery } from '@apollo/client'
 import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
+import { PoolListDisplayType } from '../pool.types'
 
-export function _usePoolList({ fixedPoolTypes }: { fixedPoolTypes?: GqlPoolType[] } = {}) {
+export function _usePoolList({
+  fixedPoolTypes,
+  displayType = PoolListDisplayType.TokenPills,
+  hideProtocolVersion = [],
+  hidePoolTypes = [],
+  hidePoolTags = [],
+}: {
+  fixedPoolTypes?: GqlPoolType[]
+  displayType?: PoolListDisplayType
+  hideProtocolVersion?: string[]
+  hidePoolTypes?: GqlPoolType[]
+  hidePoolTags?: string[]
+} = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress } = useUserAccount()
 
@@ -51,6 +64,10 @@ export function _usePoolList({ fixedPoolTypes }: { fixedPoolTypes?: GqlPoolType[
     networkStatus,
     isFixedPoolType,
     refetch,
+    displayType,
+    hideProtocolVersion,
+    hidePoolTypes,
+    hidePoolTags,
   }
 }
 
@@ -58,9 +75,25 @@ export const PoolListContext = createContext<ReturnType<typeof _usePoolList> | n
 
 export function PoolListProvider({
   fixedPoolTypes,
+  displayType,
+  hideProtocolVersion,
+  hidePoolTypes,
+  hidePoolTags,
   children,
-}: PropsWithChildren<{ fixedPoolTypes?: GqlPoolType[] }>) {
-  const hook = _usePoolList({ fixedPoolTypes })
+}: PropsWithChildren<{
+  fixedPoolTypes?: GqlPoolType[]
+  displayType: PoolListDisplayType
+  hideProtocolVersion: string[]
+  hidePoolTypes: GqlPoolType[]
+  hidePoolTags: string[]
+}>) {
+  const hook = _usePoolList({
+    fixedPoolTypes,
+    displayType,
+    hideProtocolVersion,
+    hidePoolTypes,
+    hidePoolTags,
+  })
 
   return <PoolListContext.Provider value={hook}>{children}</PoolListContext.Provider>
 }

@@ -16,8 +16,8 @@
     "format:fix": "prettier '*.*(md|json|yaml|ts|js|tsx)' --write --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
     "stylelint": "stylelint '**/*.css'",
     "stylelint:fix": "pnpm run stylelint -- --fix",
-    "test:integration": "turbo test:integration --log-order=stream --",
-    "test:unit": "turbo test:unit --log-order=stream --",
+    "test:integration": "turbo test:integration --ui=stream --log-order=stream --",
+    "test:unit": "turbo test:unit --ui=stream --log-order=stream --",
     "typecheck": "turbo typecheck",
     "prepare": "husky"
   },

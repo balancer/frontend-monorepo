@@ -55,6 +55,9 @@ fragment PoolTokens on GqlPoolTokenDetail {
         ...UnderlyingToken
       }
     }
+    hook {
+      ...Hook
+    }
   }
   isErc4626
   underlyingToken {
