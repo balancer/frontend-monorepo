@@ -9,7 +9,7 @@ import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { Title } from './Title'
 
-const backgroundImages = ['zenbg-1.webp', 'zenbg-2.webp', 'zenbg-3.webp', 'zenbg-4.webp']
+const backgroundImages = ['zenbg-1.webp', 'zenbg-4.webp', 'zenbg-2.webp', 'zenbg-3.webp']
 
 function BalancerLogo() {
   const iconColor = useColorModeValue('#2D3239', '#E5D3BE')
