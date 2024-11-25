@@ -3,13 +3,99 @@
 
 import { Text, Center, VStack, useColorModeValue, Button } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
-import { useEffect, useState, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useState, useRef, useCallback } from 'react'
+import { motion, useAnimationControls } from 'framer-motion'
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { Title } from './Title'
 
 const backgroundImages = ['zenbg-1.webp', 'zenbg-4.webp', 'zenbg-2.webp', 'zenbg-3.webp']
+
+// function AnimatedCircle({
+//   radius,
+//   duration,
+//   delay,
+//   size,
+//   color,
+//   isPaused,
+//   onHover,
+//   onHoverEnd,
+// }: {
+//   radius: number
+//   duration: number
+//   delay: number
+//   size: number
+//   color: string
+//   isPaused: boolean
+//   onHover: () => void
+//   onHoverEnd: () => void
+// }) {
+//   const circleRef = useRef<HTMLDivElement>(null)
+//   const [lastX, setLastX] = useState(0)
+//   const [lastY, setLastY] = useState(0)
+//   const [hasStarted, setHasStarted] = useState(false)
+//   const controls = useAnimationControls()
+
+//   useEffect(() => {
+//     if (isPaused) {
+//       setLastX(circleRef.current?.getBoundingClientRect().x ?? 0)
+//       setLastY(circleRef.current?.getBoundingClientRect().y ?? 0)
+//       controls.stop()
+//     } else if (hasStarted) {
+//       controls.start({
+//         x: lastX,
+//         y: lastY,
+//       })
+//     } else {
+//       controls.start({
+//         opacity: 1,
+//         x: Array.from({ length: 360 }, (_, i) => radius * Math.cos(((i + 90) * Math.PI) / 180)),
+//         y: Array.from({ length: 360 }, (_, i) => radius * Math.sin(((i + 90) * Math.PI) / 180)),
+//       })
+//       setHasStarted(true)
+//     }
+//   }, [isPaused, controls])
+
+//   return (
+//     <motion.div
+//       animate={{
+//         opacity: 1,
+//         x: Array.from({ length: 360 }, (_, i) => radius * Math.cos(((i + 90) * Math.PI) / 180)),
+//         y: Array.from({ length: 360 }, (_, i) => radius * Math.sin(((i + 90) * Math.PI) / 180)),
+//       }}
+//       initial={{ opacity: 0 }}
+//       onHoverEnd={onHoverEnd}
+//       onHoverStart={onHover}
+//       ref={circleRef}
+//       style={{
+//         position: 'absolute',
+//         width: size,
+//         height: size,
+//         borderRadius: '50%',
+//         backgroundColor: color,
+//         cursor: 'pointer',
+//         animationPlayState: isPaused ? 'paused' : 'running',
+//       }}
+//       transition={{
+//         opacity: { duration: 1, delay },
+//         x: {
+//           duration,
+//           repeat: Infinity,
+//           ease: 'linear',
+//           delay,
+//           repeatType: 'loop',
+//         },
+//         y: {
+//           duration,
+//           repeat: Infinity,
+//           ease: 'linear',
+//           delay,
+//           repeatType: 'loop',
+//         },
+//       }}
+//     />
+//   )
+// }
 
 function BalancerLogo() {
   const iconColor = useColorModeValue('#2D3239', '#E5D3BE')
@@ -76,8 +162,16 @@ function BalancerLogo() {
 
 export function Hero() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-
+  const [isAnimationPaused, setIsAnimationPaused] = useState(false)
   const hiddenRef = useRef<HTMLSpanElement>(null)
+
+  const handleHover = useCallback(() => {
+    setIsAnimationPaused(true)
+  }, [])
+
+  const handleHoverEnd = useCallback(() => {
+    setIsAnimationPaused(false)
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -104,9 +198,46 @@ export function Hero() {
           left: 0,
           right: 0,
           bottom: 0,
+          zIndex: 0,
         }}
         transition={{ duration: 0.5 }}
       />
+      <div
+        onMouseLeave={() => setIsAnimationPaused(false)}
+        style={{ position: 'fixed', left: '50%', top: '50%', zIndex: 1 }}
+      >
+        {/* Rotating rocks in case we want them */}
+        {/* <AnimatedCircle
+          color="blue"
+          delay={0}
+          duration={50}
+          isPaused={isAnimationPaused}
+          onHover={handleHover}
+          onHoverEnd={handleHoverEnd}
+          radius={500}
+          size={100}
+        />
+        <AnimatedCircle
+          color="red"
+          delay={4}
+          duration={50}
+          isPaused={isAnimationPaused}
+          onHover={handleHover}
+          onHoverEnd={handleHoverEnd}
+          radius={550}
+          size={80}
+        />
+        <AnimatedCircle
+          color="green"
+          delay={8}
+          duration={50}
+          isPaused={isAnimationPaused}
+          onHover={handleHover}
+          onHoverEnd={handleHoverEnd}
+          radius={600}
+          size={60}
+        /> */}
+      </div>
       <Center h="100vh" maxW="full" minHeight="600px" position="relative">
         <motion.div
           animate={{ opacity: 0.5 }}
