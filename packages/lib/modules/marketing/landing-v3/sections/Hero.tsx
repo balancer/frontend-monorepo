@@ -266,9 +266,9 @@ export function Hero() {
           <VStack maxW="full" px="sm" spacing="md">
             <Title />
             <motion.div
-              animate={{ opacity: 1 }}
-              initial={{ opacity: 0 }}
-              transition={{ delay: 0.2, duration: 1 }}
+              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              transition={{ delay: 0.3, duration: 1 }}
             >
               <Text
                 color="font.secondary"
@@ -286,11 +286,11 @@ export function Hero() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{
-              delay: 0.3,
-              duration: 1,
+              delay: 0.5,
+              duration: 2,
               type: 'spring',
-              stiffness: 200,
-              damping: 15,
+              stiffness: 100,
+              damping: 10,
               mass: 1,
             }}
           >
