@@ -5,9 +5,9 @@ import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 
 export function PoolHookBanner() {
   const { pool } = usePool()
-  const { hooks } = useHook(pool)
+  const { hooks, hasHookData } = useHook(pool)
 
-  if (!hooks) return null
+  if (!hasHookData) return null
 
   return (
     <Card>

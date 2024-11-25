@@ -23,7 +23,7 @@ export function useHook(pool: Pool) {
     )
     .filter(Boolean)
 
-  const hasHookData = !!hooks
+  const hasHookData = !!hooks && hooks.length > 0
 
   return {
     hasHook,
