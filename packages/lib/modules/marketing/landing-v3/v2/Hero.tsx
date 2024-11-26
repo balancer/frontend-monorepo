@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import { Box, Button, Center, Heading, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, Circle, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion } from 'framer-motion'
 import NextLink from 'next/link'
@@ -18,6 +18,7 @@ import zenBg2Src from './images/zenbg-2.webp'
 import zenBg3Src from './images/zenbg-3.webp'
 // @ts-ignore
 import zenBg4Src from './images/zenbg-4.webp'
+import { TriangleDownIcon } from '@chakra-ui/icons'
 
 const backgroundImages = [zenBg1Src, zenBg4Src, zenBg2Src, zenBg3Src]
 
@@ -105,10 +106,29 @@ export function Hero() {
                 View V3 docs
               </Button>
             </HStack>
-            <Box h="48px" overflow="hidden" position="relative" rounded="lg" shadow="lg" w="72px">
-              <Image alt="sand" fill src="/images/bgs/sand-1.jpeg" style={{ objectFit: 'cover' }} />
-              <Box bg="background.base" h="full" opacity={0.8} position="absolute" w="full" />
-            </Box>
+            <HStack alignItems="center" mt="lg" spacing="md">
+              <Box h="48px" overflow="hidden" position="relative" rounded="lg" shadow="md" w="72px">
+                <Image
+                  alt="sand"
+                  fill
+                  src="/images/bgs/sand-1.jpeg"
+                  style={{ objectFit: 'cover' }}
+                />
+                <Box bg="background.base" h="full" opacity={0.8} position="absolute" w="full" />
+                <Center h="full" position="relative" w="full">
+                  <Circle bg="background.button.primary" shadow="md" size="30px">
+                    <Center>
+                      <TriangleDownIcon
+                        color="white"
+                        mr="-2px"
+                        style={{ transform: 'rotate(270deg)' }}
+                      />
+                    </Center>
+                  </Circle>
+                </Center>
+              </Box>
+              <Text>Learn about Balancer V3</Text>
+            </HStack>
           </VStack>
         </Center>
       </DefaultPageContainer>
