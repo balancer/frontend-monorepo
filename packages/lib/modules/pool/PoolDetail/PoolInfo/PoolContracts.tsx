@@ -288,12 +288,14 @@ export function PoolContracts({ ...props }: CardProps) {
               <Popover trigger="hover">
                 <PopoverTrigger>
                   <Text className="tooltip-dashed-underline" minW="120px" variant="secondary">
-                    {erc4626Tokens.length === 1 ? 'ERC4626 token:' : 'ERC4626 tokens:'}
+                    {erc4626Tokens.length === 1 ? 'Tokenized vault:' : 'Tokenized vaults:'}
                   </Text>
                 </PopoverTrigger>
                 <PopoverContent maxW="300px" p="sm" w="auto">
                   <Text fontSize="sm" variant="secondary">
-                    erc4626 text
+                    ERC-4626 (tokenized vault) is a standard to optimize and unify the technical
+                    parameters of yield-bearing vaults. It provides a standard API for tokenized
+                    yield-bearing vaults that represent shares of a single underlying ERC-20 token.
                   </Text>
                 </PopoverContent>
               </Popover>
