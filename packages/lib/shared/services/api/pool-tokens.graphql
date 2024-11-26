@@ -8,6 +8,12 @@ fragment UnderlyingToken on GqlToken {
   symbol
 }
 
+fragment Erc4626ReviewData on Erc4626ReviewData {
+  reviewFile
+  summary
+  warnings
+}
+
 fragment PoolTokens on GqlPoolTokenDetail {
   id
   index
@@ -56,6 +62,9 @@ fragment PoolTokens on GqlPoolTokenDetail {
       underlyingToken {
         ...UnderlyingToken
       }
+      erc4626ReviewData {
+        ...Erc4626ReviewData
+      }
     }
     hook {
       ...Hook
@@ -64,5 +73,8 @@ fragment PoolTokens on GqlPoolTokenDetail {
   isErc4626
   underlyingToken {
     ...UnderlyingToken
+  }
+  erc4626ReviewData {
+    ...Erc4626ReviewData
   }
 }
