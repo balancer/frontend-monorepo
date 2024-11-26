@@ -717,29 +717,29 @@ export default function Privacy() {
                 Hooks
               </h4>
               <p>
-                Hooks introduces complex logic into Balancer pools and changes in its parameters 
-                can significantly impact the risk profile of a pool. This complexity increases the 
-                potential for unforeseen errors or vulnerabilities in the hook's code, that may 
-                i.e. amplify impermanent loss, introduce new sources of volatility or impose 
-                restrictions on pool interactions like joins and exits.
+                Hooks introduces complex logic into Balancer pools and changes in its parameters can
+                significantly impact the risk profile of a pool. This complexity increases the
+                potential for unforeseen errors or vulnerabilities in the hook's code, that may i.e.
+                amplify impermanent loss, introduce new sources of volatility or impose restrictions
+                on pool interactions like joins and exits.
               </p>
               <ul>
                 <li>
-                  Hook specific risk: Balancer hooks introduce unique functionalities to Balancer 
-                  pools, and while they offer exciting possibilities, they also present specific 
+                  Hook specific risk: Balancer hooks introduce unique functionalities to Balancer
+                  pools, and while they offer exciting possibilities, they also present specific
                   risks that users should be aware of.
                 </li>
                 <li>
-                  Hook Interactions: Hooks can interact with each other and with the pool contracts 
-                  in unexpected ways. These interactions may lead to unintended and yet unknown 
+                  Hook Interactions: Hooks can interact with each other and with the pool contracts
+                  in unexpected ways. These interactions may lead to unintended and yet unknown
                   consequences or exploits.
                 </li>
                 <li>
-                  Hook Updates: Hooks may be updated or modified over time. These updates could 
-                  introduce new risks or alter the functionality of the pool in ways that may 
+                  Hook Updates: Hooks may be updated or modified over time. These updates could
+                  introduce new risks or alter the functionality of the pool in ways that may
                   negatively impact your assets.
                 </li>
-              </ul>              
+              </ul>
             </div>
           </FadeInOnView>
           <FadeInOnView>
@@ -1051,7 +1051,7 @@ export default function Privacy() {
                     </li>
                     <li>
                       For traders, Boosted Pools are a cheaper entry/exit into decentralized lending
-                      protocols like Aave.                      
+                      protocols like Aave.
                     </li>
                     <li>
                       Boosted Pools increase the opportunity for LPs to gain exposure to a wide
@@ -1060,8 +1060,8 @@ export default function Privacy() {
                   </ul>
                   <h5>Third party platform risk exposure (DeFi composability risk)</h5>
                   <p>
-                    Since boosted pools deposit excess liquidity into third-party protocols, like Aave,
-                    to generate yield, LPs must fully understand the risks of the underlying 
+                    Since boosted pools deposit excess liquidity into third-party protocols, like
+                    Aave, to generate yield, LPs must fully understand the risks of the underlying
                     protocol since a portion of their funds will be exposed to the risks of that
                     protocol. Some of the risks of the underlying protocol may include smart
                     contract bugs, economic attack vulnerabilities and counterparty risk from the
@@ -1074,13 +1074,13 @@ export default function Privacy() {
                   <p>
                     Also note, some boosted pools may use strategies that utilize multiple yield
                     protocols in order to maximize yield. Since these strategies may change exposure
-                    to the underlying yield protocols at any time, LPs must accept the risk that 
-                    the protocol utilizing these strategies carefully vets all third party protocols
-                    to reduce composability risks.
+                    to the underlying yield protocols at any time, LPs must accept the risk that the
+                    protocol utilizing these strategies carefully vets all third party protocols to
+                    reduce composability risks.
                   </p>
                   <p>
-                    If the underlying protocol were to get hacked, LPs in a boosted pool that deposits 
-                    liquidity in that protocol could lose funds.
+                    If the underlying protocol were to get hacked, LPs in a boosted pool that
+                    deposits liquidity in that protocol could lose funds.
                   </p>
                   <h5>Depegging risk</h5>
                   <p>

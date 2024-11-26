@@ -1,3 +1,4 @@
+#import "./pool-tokens.graphql"
 #import "./hook.graphql"
 
 query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
@@ -191,87 +192,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
         ...PoolTokens
       }
     }
-  }
-}
-
-fragment PoolTokens on GqlPoolTokenDetail {
-  id
-  index
-  name
-  symbol
-  balance
-  balanceUSD
-  address
-  priceRate
-  decimals
-  weight
-  hasNestedPool
-  isAllowed
-  priceRateProvider
-  priceRateProviderData {
-    address
-    name
-    summary
-    reviewed
-    warnings
-    upgradeableComponents {
-      entryPoint
-      implementationReviewed
-    }
-    reviewFile
-    factory
-  }
-  nestedPool {
-    id
-    address
-    type
-    tokens {
-      index
-      name
-      address
-      decimals
-      isErc4626
-      erc4626ReviewData {
-        reviewFile
-        summary
-        warnings
-      }
-      underlyingToken {
-        address
-        decimals
-        name
-        symbol
-      }
-      priceRateProvider
-      priceRateProviderData {
-        address
-        name
-        summary
-        reviewed
-        warnings
-        upgradeableComponents {
-          entryPoint
-          implementationReviewed
-        }
-        reviewFile
-        factory
-      }
-    }
-    hook {
-      ...Hook
-    }
-  }
-  isErc4626
-  underlyingToken {
-    address
-    decimals
-    name
-    symbol
-  }
-  erc4626ReviewData {
-    reviewFile
-    summary
-    warnings
   }
 }
 

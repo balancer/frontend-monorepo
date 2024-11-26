@@ -13,7 +13,6 @@ import {
   Link,
   Divider,
   Text,
-  Tooltip,
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -159,7 +158,7 @@ export function PoolContracts({ ...props }: CardProps) {
     const nestedHooks = pool.poolTokens.flatMap(token =>
       token.nestedPool ? token.nestedPool.hook : []
     )
-    return [...(pool.hook ? [pool.hook] : []), ...nestedHooks]
+    return [...(pool.hook ? [pool.hook] : []), ...nestedHooks].filter(Boolean)
   }, [pool])
 
   const erc4626Tokens = useMemo(() => {

@@ -15,7 +15,7 @@ import {
   GqlHook,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { isEmpty, isNil, uniqBy } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
@@ -141,18 +141,6 @@ export function preMintedBptIndex(pool: GqlPoolBase): number | void {
   return allPoolTokens(pool).findIndex(token => isSameAddress(token.address, pool.address))
 }
 
-export function calcBptPrice(totalLiquidity: string, totalShares: string): string {
-  return bn(totalLiquidity).div(totalShares).toString()
-}
-
-export function calcBptPriceFor(pool: GetPoolQuery['pool']): string {
-  return calcBptPrice(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares)
-}
-
-export function bptUsdValue(pool: GetPoolQuery['pool'], bptAmount: Numberish): string {
-  return bn(bptAmount).times(calcBptPriceFor(pool)).toString()
-}
-
 export function createdAfterTimestamp(pool: GqlPoolBase): boolean {
   // Pools should always have valid createTime so, for safety, we block the pool in case we don't get it
   // (createTime should probably not be treated as optional in the SDK types)
@@ -206,7 +194,11 @@ export function usePoolHelpers(pool: Pool, chain: GqlChain) {
 export function hasNestedPools(pool: Pool) {
   // The following discriminator is needed because not all pools in GqlPoolQuery do have nestingType property
   // and the real TS discriminator is __typename which we don't want to use
-  return 'nestingType' in pool && pool.nestingType !== GqlPoolNestingType.NoNesting
+  return (
+    ('nestingType' in pool && pool.nestingType !== GqlPoolNestingType.NoNesting) ||
+    // stable pools don't have nestingType but they can have nested pools in v3
+    pool.poolTokens.some(token => token.hasNestedPool)
+  )
 }
 
 export function isNotSupported(pool: Pool) {

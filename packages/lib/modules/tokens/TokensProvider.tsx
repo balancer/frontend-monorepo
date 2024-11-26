@@ -110,17 +110,33 @@ export function _useTokens(
     return price.price
   }
 
+  // this also fetches the price for a bpt
+  function priceForAddress(address: string, chain: GqlChain): number {
+    const price = getPricesForChain(chain).find(price => isSameAddress(price.address, address))
+    if (!price) return 0
+
+    return price.price
+  }
+
   function usdValueForToken(token: GqlToken | undefined, amount: Numberish) {
     if (!token) return '0'
     if (amount === '') return '0'
     return bn(amount).times(priceForToken(token)).toFixed()
   }
 
+  function usdValueForBpt(address: string, chain: GqlChain, amount: Numberish) {
+    if (amount === '') return '0'
+    return bn(amount).times(priceFor(address, chain)).toFixed()
+  }
+
   function priceFor(address: string, chain: GqlChain): number {
     const token = getToken(address, chain)
-    if (!token) return 0
 
-    return priceForToken(token)
+    if (token) {
+      return priceForToken(token)
+    } else {
+      return priceForAddress(address, chain)
+    }
   }
 
   const calcWeightForBalance = useCallback(
@@ -165,6 +181,8 @@ export function _useTokens(
     calcTotalUsdValue,
     startTokenPricePolling: () => startPolling(pollInterval),
     stopTokenPricePolling: stopPolling,
+    priceForAddress,
+    usdValueForBpt,
     vebalBptToken,
   }
 }
