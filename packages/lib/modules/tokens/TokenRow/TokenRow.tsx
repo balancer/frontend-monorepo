@@ -157,7 +157,7 @@ export default function TokenRow({
   useEffect(() => {
     if (value) {
       if ((isBpt || isNestedBpt) && pool) {
-        setUsdValue(usdValueForBpt(pool.address, pool.chain, value))
+        setUsdValue(usdValueForBpt(address, chain, value))
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))
       }
@@ -190,7 +190,7 @@ export default function TokenRow({
             <TokenInfo {...props} showInfoPopover={false} showSelect />
           </Button>
         ) : (
-          <TokenInfo {...props} isBpt={isBpt} />
+          <TokenInfo {...props} isBpt={isBpt || isNestedBpt} />
         )}
         <HStack align="start" spacing="none">
           <VStack alignItems="flex-end" spacing="xs" textAlign="right">
