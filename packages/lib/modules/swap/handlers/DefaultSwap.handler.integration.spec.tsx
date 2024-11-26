@@ -1,27 +1,19 @@
 /* eslint-disable max-len */
+import { ExactInQueryOutput, ExactOutQueryOutput } from '@balancer/sdk'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
-import { fakeTokenByAddress } from '@repo/lib/test/data/all-gql-tokens.fake'
-import { Address } from 'viem'
-import { getPoolMock } from '../../pool/__mocks__/getPoolMock'
-import { getPoolActionableTokens } from '../../pool/pool.helpers'
-import { GetTokenFn } from '../../tokens/TokensProvider'
-import { PoolSwapHandler } from './PoolSwap.handler'
-import { ExactInQueryOutput, ExactOutQueryOutput } from '@balancer/sdk'
-import { SwapTokenInput } from '../swap.types'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
-import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
+import { apolloTestClient } from '@repo/lib/test/utils/apollo-test-client'
+import { getPoolMock } from '../../pool/__mocks__/getPoolMock'
+import { SwapTokenInput } from '../swap.types'
+import { DefaultSwapHandler } from './DefaultSwap.handler'
 
-describe('PoolSwap handler with v2 nested pool', async () => {
+describe('Pool Swap handler with v2 nested pool', async () => {
   const mainnetNestedPoolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0' // Balancer 50WETH-50-3pool
   const pool = await getPoolMock(mainnetNestedPoolId, GqlChain.Mainnet)
 
-  const getToken: GetTokenFn = (address: string) => {
-    return fakeTokenByAddress(address as Address)
-  }
-  const poolActionableTokens = getPoolActionableTokens(pool, getToken)
-
-  const handler = new PoolSwapHandler(pool, poolActionableTokens)
+  const handler = new DefaultSwapHandler(apolloTestClient)
 
   it('simulates exact in swap', async () => {
     const result = await handler.simulate({
@@ -32,7 +24,7 @@ describe('PoolSwap handler with v2 nested pool', async () => {
       tokenOut: daiAddress,
     })
 
-    expect(result.hopCount).toBe(2)
+    expect(result.hopCount).toBe(1)
     expect(result.protocolVersion).toBe(2)
 
     const queryOutput = result.queryOutput as ExactInQueryOutput
@@ -41,6 +33,7 @@ describe('PoolSwap handler with v2 nested pool', async () => {
     expect(queryOutput.expectedAmountOut.token.address).toBe(daiAddress)
     expect(queryOutput.expectedAmountOut.amount).toBeGreaterThan(200000000000000000n)
   })
+
   it('builds exact in swap', async () => {
     const result = await handler.simulate({
       chain: pool.chain,
@@ -86,7 +79,7 @@ describe('PoolSwap handler with v2 nested pool', async () => {
       tokenOut: daiAddress,
     })
 
-    expect(result.hopCount).toBe(2)
+    expect(result.hopCount).toBe(3)
     expect(result.protocolVersion).toBe(2)
 
     const queryOutput = result.queryOutput as ExactOutQueryOutput
