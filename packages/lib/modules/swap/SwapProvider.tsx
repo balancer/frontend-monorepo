@@ -187,6 +187,16 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     )
   }
 
+  function getPoolIds() {
+    if (!isPoolSwap) return undefined
+
+    const tokensNestedPools = pool.poolTokens
+      .map(poolToken => poolToken.nestedPool?.id)
+      .filter(Boolean) as string[]
+
+    return [pool.id, ...tokensNestedPools]
+  }
+
   const simulationQuery = useSimulateSwapQuery({
     handler,
     swapInputs: {
@@ -195,7 +205,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       tokenOut: swapState.tokenOut.address,
       swapType: swapState.swapType,
       swapAmount: getSwapAmount(),
-      poolIds: isPoolSwap ? [pool.id] : undefined,
+      poolIds: getPoolIds(),
     },
     enabled: shouldFetchSwap(swapState, urlTxHash),
   })
