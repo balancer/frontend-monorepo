@@ -26,6 +26,7 @@ import {
   GqlPriceRateProviderData,
   GqlToken,
   GqlHookReviewData,
+  Erc4626ReviewData,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -36,6 +37,7 @@ import { RateProviderInfoPopOver } from './RateProviderInfo'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { getWarnings } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
+import { Erc4626InfoPopOver } from './Erc4626Info'
 
 type RateProvider = {
   tokenAddress: Address
@@ -83,6 +85,20 @@ function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlTo
     <RateProviderInfoPopOver data={data} level={level} token={token}>
       {icon}
     </RateProviderInfoPopOver>
+  )
+}
+
+function getErc4626Icon(data: Erc4626ReviewData | undefined | null, token: GqlToken) {
+  const hasWarnings = getWarnings(data?.warnings || []).length > 0
+  const hasData = !!data
+  const isSafe = hasData && data?.summary === 'safe'
+
+  const { icon, level } = getIconAndLevel(hasWarnings, isSafe, hasData)
+
+  return (
+    <Erc4626InfoPopOver data={data} level={level} token={token}>
+      {icon}
+    </Erc4626InfoPopOver>
   )
 }
 
@@ -144,6 +160,14 @@ export function PoolContracts({ ...props }: CardProps) {
       token.nestedPool ? token.nestedPool.hook : []
     )
     return [...(pool.hook ? [pool.hook] : []), ...nestedHooks]
+  }, [pool])
+
+  const erc4626Tokens = useMemo(() => {
+    const erc4626Tokens = pool.poolTokens.filter(token => token.isErc4626)
+    const erc4626NestedTokens = pool.poolTokens.flatMap(token =>
+      token.nestedPool ? token.nestedPool.tokens.filter(token => token.isErc4626) : []
+    )
+    return [...(erc4626Tokens ? erc4626Tokens : []), ...erc4626NestedTokens]
   }, [pool])
 
   return (
@@ -244,14 +268,12 @@ export function PoolContracts({ ...props }: CardProps) {
                   return (
                     token && (
                       <HStack key={provider.tokenAddress}>
-                        <Tooltip fontSize="sm" label={token.symbol} shouldWrapChildren>
-                          <TokenIcon
-                            address={token.address}
-                            alt={token.address}
-                            chain={chain}
-                            size={16}
-                          />
-                        </Tooltip>
+                        <TokenIcon
+                          address={token.address}
+                          alt={token.symbol}
+                          chain={chain}
+                          size={16}
+                        />
                         <Link
                           href={getBlockExplorerAddressUrl(provider.rateProviderAddress, chain)}
                           key={provider.rateProviderAddress}
@@ -266,6 +288,57 @@ export function PoolContracts({ ...props }: CardProps) {
                           </HStack>
                         </Link>
                         {getRateProviderIcon(provider.priceRateProviderData, token)}
+                      </HStack>
+                    )
+                  )
+                })}
+              </VStack>
+            </GridItem>
+          </Grid>
+        )}
+        {erc4626Tokens.length > 0 && (
+          <Grid gap="sm" templateColumns={{ base: '1fr 2fr', md: '1fr 3fr' }} w="full">
+            <GridItem>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <Text className="tooltip-dashed-underline" minW="120px" variant="secondary">
+                    {erc4626Tokens.length === 1 ? 'Tokenized vault:' : 'Tokenized vaults:'}
+                  </Text>
+                </PopoverTrigger>
+                <PopoverContent maxW="300px" p="sm" w="auto">
+                  <Text fontSize="sm" variant="secondary">
+                    ERC-4626 (tokenized vault) is a standard to optimize and unify the technical
+                    parameters of yield-bearing vaults. It provides a standard API for tokenized
+                    yield-bearing vaults that represent shares of a single underlying ERC-20 token.
+                  </Text>
+                </PopoverContent>
+              </Popover>
+            </GridItem>
+            <GridItem>
+              <VStack alignItems="flex-start">
+                {erc4626Tokens.map(erc4626Token => {
+                  const token = getToken(erc4626Token.address, chain)
+                  return (
+                    token && (
+                      <HStack key={erc4626Token.address}>
+                        <TokenIcon
+                          address={token.address}
+                          alt={token.symbol}
+                          chain={chain}
+                          size={16}
+                        />
+                        <Link
+                          href={getBlockExplorerAddressUrl(erc4626Token.address, chain)}
+                          key={erc4626Token.address}
+                          target="_blank"
+                          variant="link"
+                        >
+                          <HStack gap="xxs">
+                            <Text color="link">{abbreviateAddress(erc4626Token.address)}</Text>
+                            <ArrowUpRight size={12} />
+                          </HStack>
+                        </Link>
+                        {getErc4626Icon(erc4626Token.erc4626ReviewData, token)}
                       </HStack>
                     )
                   )

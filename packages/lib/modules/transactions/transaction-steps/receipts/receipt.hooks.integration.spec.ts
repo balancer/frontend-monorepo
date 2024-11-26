@@ -65,7 +65,10 @@ test('queries add liquidity transaction', async () => {
   expect(result.current.receivedBptUnits).toBe('7.669852124112308228')
 })
 
-test('queries add liquidity with native token', async () => {
+/*
+  Skip until dRPC fixes issue with polygon tx queries
+*/
+test.skip('queries add liquidity with native token', async () => {
   // https://polygonscan.com/tx/0x611a0eeeff15c2a5efc587b173fa577475134de2554a452259f112db67bd4de8
   const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
   const txHash = '0x611a0eeeff15c2a5efc587b173fa577475134de2554a452259f112db67bd4de8'
