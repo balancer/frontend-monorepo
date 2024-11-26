@@ -74,9 +74,7 @@ function selectSwapHandler(
   chain: GqlChain,
   swapType: GqlSorSwapType,
   apolloClient: ApolloClient<object>,
-  tokens: GqlToken[],
-  pool?: Pool,
-  poolActionableTokens?: GqlToken[]
+  tokens: GqlToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -87,9 +85,9 @@ function selectSwapHandler(
     return new AuraBalSwapHandler(tokens)
   }
 
-  if (pool && poolActionableTokens) {
-    return new PoolSwapHandler(pool, poolActionableTokens)
-  }
+  // if (pool && poolActionableTokens) {
+  //   return new PoolSwapHandler(pool, poolActionableTokens)
+  // }
 
   return new DefaultSwapHandler(apolloClient)
 }
@@ -146,9 +144,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       selectedChain,
       swapState.swapType,
       client,
-      tokens,
-      pool,
-      poolActionableTokens
+      tokens
     )
   }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 
@@ -199,6 +195,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       tokenOut: swapState.tokenOut.address,
       swapType: swapState.swapType,
       swapAmount: getSwapAmount(),
+      poolIds: isPoolSwap ? [pool.id] : undefined,
     },
     enabled: shouldFetchSwap(swapState, urlTxHash),
   })
