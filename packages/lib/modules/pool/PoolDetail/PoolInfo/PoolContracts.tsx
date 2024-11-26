@@ -26,6 +26,7 @@ import {
   GqlPriceRateProviderData,
   GqlToken,
   GqlHookReviewData,
+  Erc4626ReviewData,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -36,6 +37,7 @@ import { RateProviderInfoPopOver } from './RateProviderInfo'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { getWarnings } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
+import { Erc4626InfoPopOver } from './Erc4626Info'
 
 type RateProvider = {
   tokenAddress: Address
@@ -83,6 +85,20 @@ function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlTo
     <RateProviderInfoPopOver data={data} level={level} token={token}>
       {icon}
     </RateProviderInfoPopOver>
+  )
+}
+
+function getErc4626Icon(data: Erc4626ReviewData | undefined | null, token: GqlToken) {
+  const hasWarnings = getWarnings(data?.warnings || []).length > 0
+  const hasData = !!data
+  const isSafe = hasData && data?.summary === 'safe'
+
+  const { icon, level } = getIconAndLevel(hasWarnings, isSafe, hasData)
+
+  return (
+    <Erc4626InfoPopOver data={data} level={level} token={token}>
+      {icon}
+    </Erc4626InfoPopOver>
   )
 }
 
@@ -252,14 +268,12 @@ export function PoolContracts({ ...props }: CardProps) {
                   return (
                     token && (
                       <HStack key={provider.tokenAddress}>
-                        <Tooltip fontSize="sm" label={token.symbol} shouldWrapChildren>
-                          <TokenIcon
-                            address={token.address}
-                            alt={token.address}
-                            chain={chain}
-                            size={16}
-                          />
-                        </Tooltip>
+                        <TokenIcon
+                          address={token.address}
+                          alt={token.symbol}
+                          chain={chain}
+                          size={16}
+                        />
                         <Link
                           href={getBlockExplorerAddressUrl(provider.rateProviderAddress, chain)}
                           key={provider.rateProviderAddress}
@@ -307,14 +321,12 @@ export function PoolContracts({ ...props }: CardProps) {
                   return (
                     token && (
                       <HStack key={erc4626Token.address}>
-                        <Tooltip fontSize="sm" label={token.symbol} shouldWrapChildren>
-                          <TokenIcon
-                            address={token.address}
-                            alt={token.address}
-                            chain={chain}
-                            size={16}
-                          />
-                        </Tooltip>
+                        <TokenIcon
+                          address={token.address}
+                          alt={token.symbol}
+                          chain={chain}
+                          size={16}
+                        />
                         <Link
                           href={getBlockExplorerAddressUrl(erc4626Token.address, chain)}
                           key={erc4626Token.address}
@@ -326,7 +338,7 @@ export function PoolContracts({ ...props }: CardProps) {
                             <ArrowUpRight size={12} />
                           </HStack>
                         </Link>
-                        {/* {getRateProviderIcon(erc4626Token.address, token)} */}
+                        {getErc4626Icon(erc4626Token.erc4626ReviewData, token)}
                       </HStack>
                     )
                   )
