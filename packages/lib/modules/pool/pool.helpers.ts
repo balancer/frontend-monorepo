@@ -12,9 +12,10 @@ import {
   GqlPoolTokenDetail,
   GqlPoolType,
   GqlToken,
+  GqlHook,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { isEmpty, isNil, uniqBy } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
@@ -140,18 +141,6 @@ export function preMintedBptIndex(pool: GqlPoolBase): number | void {
   return allPoolTokens(pool).findIndex(token => isSameAddress(token.address, pool.address))
 }
 
-export function calcBptPrice(totalLiquidity: string, totalShares: string): string {
-  return bn(totalLiquidity).div(totalShares).toString()
-}
-
-export function calcBptPriceFor(pool: GetPoolQuery['pool']): string {
-  return calcBptPrice(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares)
-}
-
-export function bptUsdValue(pool: GetPoolQuery['pool'], bptAmount: Numberish): string {
-  return bn(bptAmount).times(calcBptPriceFor(pool)).toString()
-}
-
 export function createdAfterTimestamp(pool: GqlPoolBase): boolean {
   // Pools should always have valid createTime so, for safety, we block the pool in case we don't get it
   // (createTime should probably not be treated as optional in the SDK types)
@@ -205,7 +194,11 @@ export function usePoolHelpers(pool: Pool, chain: GqlChain) {
 export function hasNestedPools(pool: Pool) {
   // The following discriminator is needed because not all pools in GqlPoolQuery do have nestingType property
   // and the real TS discriminator is __typename which we don't want to use
-  return 'nestingType' in pool && pool.nestingType !== GqlPoolNestingType.NoNesting
+  return (
+    ('nestingType' in pool && pool.nestingType !== GqlPoolNestingType.NoNesting) ||
+    // stable pools don't have nestingType but they can have nested pools in v3
+    pool.poolTokens.some(token => token.hasNestedPool)
+  )
 }
 
 export function isNotSupported(pool: Pool) {
@@ -251,11 +244,28 @@ export function allClaimableGaugeAddressesFor(pool: ClaimablePool) {
 }
 
 export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
-  return (
-    !!token.priceRateProvider &&
-    !!token.priceRateProviderData &&
-    token.priceRateProviderData.reviewed
-  )
+  return !!token.priceRateProvider && !!token.priceRateProviderData
+}
+
+export function hasRateProvider(token: GqlPoolTokenDetail): boolean {
+  const isPriceRateProvider =
+    isNil(token.priceRateProvider) || // if null, we consider rate provider as zero address
+    token.priceRateProvider === zeroAddress ||
+    token.priceRateProvider === token.nestedPool?.address
+
+  return !isPriceRateProvider && !isNil(token.priceRateProviderData)
+}
+
+export function hasReviewedHook(hook: GqlHook): boolean {
+  return !!hook.reviewData
+}
+
+export function hasHooks(pool: Pool): boolean {
+  const nestedHooks = pool.poolTokens
+    .filter(token => token.hasNestedPool)
+    .map(token => token.nestedPool?.hook)
+
+  return !![pool.hook, ...nestedHooks].length
 }
 
 /**
@@ -270,6 +280,10 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
   // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
   if (isLBP(pool.type) || pool.dynamicData.isPaused || pool.dynamicData.isInRecoveryMode) {
+    return true
+  }
+
+  if (pool.hook && (!hasReviewedHook(pool.hook) || pool.hook?.reviewData?.summary === 'unsafe')) {
     return true
   }
 
@@ -327,6 +341,10 @@ export function isV3Pool(pool: Pool): boolean {
   return pool.protocolVersion === 3
 }
 
+export function isV3WithNestedActionsPool(pool: Pool): boolean {
+  return supportsNestedActions(pool) && isV3Pool(pool)
+}
+
 export function requiresPermit2Approval(pool: Pool): boolean {
   return isV3Pool(pool)
 }
@@ -335,7 +353,7 @@ export function isUnbalancedLiquidityDisabled(pool: Pool): boolean {
   return !!pool.liquidityManagement?.disableUnbalancedLiquidity
 }
 
-export function getRateProviderWarnings(warnings: string[]) {
+export function getWarnings(warnings: string[]) {
   return warnings.filter(warning => !isEmpty(warning))
 }
 
@@ -348,21 +366,21 @@ export function getRateProviderWarnings(warnings: string[]) {
 */
 export function getPoolActionableTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
   type PoolToken = Pool['poolTokens'][0]
-  function toGqlTokens(tokens: PoolToken[]): GqlToken[] {
+  function toGqlTokens(tokens: PoolToken[] | TokenCore[]): GqlToken[] {
     return tokens
       .filter(token => !isSameAddress(token.address, pool.address)) // Exclude the BPT pool token itself
       .map(token => getToken(token.address, pool.chain))
       .filter((token): token is GqlToken => token !== undefined)
   }
 
-  if (isBoosted(pool)) {
-    return getBoostedGqlTokens(pool, getToken)
-  }
-
   // TODO add exception for composable pools where we can allow adding
   // liquidity with nested tokens
   if (supportsNestedActions(pool)) {
     return toGqlTokens(getLeafTokens(pool.poolTokens))
+  }
+
+  if (isBoosted(pool)) {
+    return getBoostedGqlTokens(pool, getToken)
   }
 
   return toGqlTokens(pool.poolTokens)

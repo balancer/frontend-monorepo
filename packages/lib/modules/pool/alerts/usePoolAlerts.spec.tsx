@@ -3,11 +3,13 @@ import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { notAllowedPoolMock } from '../__mocks__/notAllowedPoolMock'
 import { usePoolAlerts } from './usePoolAlerts'
 import { recoveryPoolMock } from '../__mocks__/recoveryPoolMock'
+import { HooksProvider } from '../../hooks/HooksProvider'
 
 describe('Creates pool alerts for', () => {
   test('a pool with 2 not allowed tokens', () => {
-    const { result } = testHook(() => usePoolAlerts(notAllowedPoolMock))
-
+    const { result } = testHook(() => usePoolAlerts(notAllowedPoolMock), {
+      wrapper: ({ children }) => <HooksProvider data={[]}>{children}</HooksProvider>,
+    })
     expect(result.current.poolAlerts).toMatchInlineSnapshot(`
       [
         {
@@ -27,7 +29,9 @@ describe('Creates pool alerts for', () => {
   })
 
   test('a pool with 2 vulnerability alerts', () => {
-    const { result } = testHook(() => usePoolAlerts(recoveryPoolMock))
+    const { result } = testHook(() => usePoolAlerts(recoveryPoolMock), {
+      wrapper: ({ children }) => <HooksProvider data={[]}>{children}</HooksProvider>,
+    })
 
     expect(result.current.poolAlerts).toMatchInlineSnapshot(`
       [

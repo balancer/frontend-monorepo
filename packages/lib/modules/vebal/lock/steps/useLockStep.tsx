@@ -89,22 +89,21 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
 
   const transaction = getTransaction(lockActionType)
 
-  const isComplete = () => transaction?.result.isSuccess || false
-
   const [isStepActivated, setIsStepActivated] = useState(false)
 
   const lockStep: TransactionStep = useMemo(
     () => ({
+      isStepActivated,
       id: lockActionType,
       stepType: lockActionType,
       labels,
-      isComplete,
+      isComplete: () => transaction?.result.isSuccess || false,
       onSuccess,
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
       renderAction: () => <ManagedTransactionButton id={lockActionType.toString()} {...props} />,
     }),
-    [lockActionType, labels, isComplete, onSuccess, props]
+    [lockActionType, labels, onSuccess, props, transaction, isStepActivated]
   )
 
   return lockStep

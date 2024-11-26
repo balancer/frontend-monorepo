@@ -102,18 +102,21 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
   }
 
   return useMemo(
-    () => ({
-      id: 'sign-permit2',
-      stepType: 'signPermit2',
-      details,
-      labels: {
-        title: getTitle(details),
-        init: `Sign permit`,
-        tooltip: 'Sign permit',
-      },
-      isComplete,
-      renderAction: () => <SignPermitButton />,
-    }),
+    () => {
+      if (!isPermit2) return
+      return {
+        id: 'sign-permit2',
+        stepType: 'signPermit2',
+        details,
+        labels: {
+          title: getTitle(details),
+          init: `Sign permit`,
+          tooltip: 'Sign permit',
+        },
+        isComplete,
+        renderAction: () => <SignPermitButton />,
+      }
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [signPermit2State, isLoading, isConnected, isValidPermit2]
   )

@@ -2,6 +2,7 @@ import {
   AddLiquidityNested,
   AddLiquidityNestedCallInputV2,
   AddLiquidityNestedInput,
+  AddLiquidityNestedQueryOutputV2,
   ChainId,
   PriceImpact,
   Slippage,
@@ -11,18 +12,14 @@ import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.typ
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Pool } from '../../../PoolProvider'
 import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
-import { NestedBuildAddLiquidityInput, NestedQueryAddLiquidityOutput } from '../add-liquidity.types'
+import {
+  NestedBuildAddLiquidityInput,
+  NestedQueryAddLiquidityOutputV2,
+} from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { Address } from 'viem'
 
-/**
- * NestedAddLiquidityHandler is a handler that implements the
- * AddLiquidityHandler interface for nested adds, e.g. where the user
- * specifies the token amounts in. It uses the Balancer SDK to implement it's
- * methods. It also handles the case where one of the input tokens is the native
- * asset instead of the wrapped native asset.
- */
-export class NestedAddLiquidityHandler implements AddLiquidityHandler {
+export class NestedAddLiquidityV2Handler implements AddLiquidityHandler {
   helpers: LiquidityActionHelpers
 
   constructor(pool: Pool) {
@@ -45,15 +42,15 @@ export class NestedAddLiquidityHandler implements AddLiquidityHandler {
   public async simulate(
     humanAmountsIn: HumanTokenAmountWithAddress[],
     userAddress: Address
-  ): Promise<NestedQueryAddLiquidityOutput> {
+  ): Promise<NestedQueryAddLiquidityOutputV2> {
     const addLiquidity = new AddLiquidityNested()
 
     const addLiquidityInput = this.constructSdkInput(humanAmountsIn, userAddress)
 
-    const sdkQueryOutput = await addLiquidity.query(
+    const sdkQueryOutput: AddLiquidityNestedQueryOutputV2 = (await addLiquidity.query(
       addLiquidityInput,
       this.helpers.nestedPoolStateV2
-    )
+    )) as AddLiquidityNestedQueryOutputV2
 
     return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
   }

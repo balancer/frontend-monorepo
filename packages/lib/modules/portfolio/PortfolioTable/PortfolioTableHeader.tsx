@@ -1,5 +1,4 @@
 import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
-
 import { Globe } from 'react-feather'
 import { SortableHeader } from '@repo/lib/shared/components/tables/SortableHeader'
 import { PortfolioTableSortingId, PortfolioSortingData, portfolioOrderBy } from './PortfolioTable'
@@ -38,7 +37,7 @@ export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, 
         <SortableHeader
           align={index === 0 ? 'left' : 'right'}
           isSorted={orderByItem.id === currentSortingObj.id}
-          key={index}
+          key={orderByItem.id}
           label={orderByItem.title}
           onSort={() => {
             if (orderByItem.id === currentSortingObj.id) {
