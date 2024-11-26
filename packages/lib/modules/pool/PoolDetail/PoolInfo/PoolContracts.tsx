@@ -13,7 +13,6 @@ import {
   Link,
   Divider,
   Text,
-  Tooltip,
   Popover,
   PopoverTrigger,
   PopoverContent,
