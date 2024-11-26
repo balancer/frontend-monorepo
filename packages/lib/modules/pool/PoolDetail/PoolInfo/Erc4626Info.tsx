@@ -42,9 +42,9 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
           </Text>
           <Text fontSize="sm">
             Learn more about{' '}
-            <Link href="/risks#tokenized-vault-risk" target="_blank">
+            <Link href="/risks#boosted-pools" target="_blank">
               <Box as="span" color="font.link">
-                tokenized vault risks
+                boosted pools (tokenized vaults) risks
               </Box>
             </Link>
           </Text>
@@ -69,9 +69,9 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
             ) : (
               <Text fontSize="sm">
                 None except{' '}
-                <Link href="/risks#tokenized-vault-risk" target="_blank">
+                <Link href="/risks#boosted-pools" target="_blank">
                   <Box as="span" color="font.link">
-                    tokenized vault risks
+                    boosted pools (tokenized vaults) risks
                   </Box>
                 </Link>
               </Text>
