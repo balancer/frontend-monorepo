@@ -143,7 +143,7 @@ function useV2PoolOnchainData(pool: Pool) {
     ...v2Query,
     poolTokenBalances: v2Query.data?.[0][1],
     totalSupply: v2Query.data?.[1],
-    nestedPoolData: undefined, // v2 pools that have nested pools are no longer supported?
+    nestedPoolData: undefined, // v2 pools w/ nested pools will not be supported
   }
 }
 
@@ -184,7 +184,7 @@ function useCowPoolOnchainData(pool: Pool) {
     ...cowQuery,
     totalSupply: cowQuery.data?.at(-1),
     poolTokenBalances: cowQuery.data?.slice(0, -1),
-    nestedPoolData: undefined, // v1 pools don't have nested pools?
+    nestedPoolData: undefined, // TODO: add support for v1 pools w/ nested pools when needed
   }
 }
 
