@@ -13,7 +13,6 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
   }
 
   async simulate({ ...variables }: SimulateSwapInputs): Promise<SdkSimulateSwapResponse> {
-    console.log('variables', variables)
     const { data } = await this.apolloClient.query({
       query: GetSorSwapsDocument,
       variables: {

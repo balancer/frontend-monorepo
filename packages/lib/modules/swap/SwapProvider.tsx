@@ -85,10 +85,6 @@ function selectSwapHandler(
     return new AuraBalSwapHandler(tokens)
   }
 
-  // if (pool && poolActionableTokens) {
-  //   return new PoolSwapHandler(pool, poolActionableTokens)
-  // }
-
   return new DefaultSwapHandler(apolloClient)
 }
 
@@ -187,7 +183,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     )
   }
 
-  function getPoolIds() {
+  function getPoolSwapPoolsIds(): string[] | undefined {
     if (!isPoolSwap) return undefined
 
     const tokensNestedPools = pool.poolTokens
@@ -205,7 +201,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       tokenOut: swapState.tokenOut.address,
       swapType: swapState.swapType,
       swapAmount: getSwapAmount(),
-      poolIds: getPoolIds(),
+      // We only use this field to filter by the specific pool swap path in pool swap flow
+      poolIds: getPoolSwapPoolsIds(),
     },
     enabled: shouldFetchSwap(swapState, urlTxHash),
   })
