@@ -1,15 +1,27 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable max-len */
 'use client'
 
-import { Text, Center, VStack, useColorModeValue, Button } from '@chakra-ui/react'
+import { Text, Center, VStack, useColorModeValue, Button, Box } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { useEffect, useState, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { Title } from './Title'
+import Image from 'next/image'
 
-const backgroundImages = ['zenbg-1.webp', 'zenbg-4.webp', 'zenbg-2.webp', 'zenbg-3.webp']
+// @ts-ignore
+import zenBg1Src from './images/zenbg-1.webp'
+// @ts-ignore
+import zenBg2Src from './images/zenbg-2.webp'
+// @ts-ignore
+import zenBg3Src from './images/zenbg-3.webp'
+// @ts-ignore
+import zenBg4Src from './images/zenbg-4.webp'
+
+const backgroundImages = [zenBg1Src, zenBg4Src, zenBg2Src, zenBg3Src]
+// const backgroundImages = ['zenbg-1.webp', 'zenbg-4.webp', 'zenbg-2.webp', 'zenbg-3.webp']
 
 // function AnimatedCircle({
 //   radius,
@@ -183,7 +195,39 @@ export function Hero() {
 
   return (
     <Noise>
-      <motion.div
+      <Box bottom={0} h="100vh" left={0} minH="600px" position="absolute" right={0} top={0}>
+        <AnimatePresence>
+          {backgroundImages.map(
+            (image, index) =>
+              index === currentImageIndex && (
+                <motion.div
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0 }}
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                  }}
+                  transition={{ duration: 3, ease: 'easeInOut' }}
+                >
+                  <Image
+                    alt="background"
+                    fill
+                    sizes="100vw"
+                    src={image}
+                    style={{ objectFit: 'cover', objectPosition: 'center' }}
+                  />
+                </motion.div>
+              )
+          )}
+        </AnimatePresence>
+      </Box>
+      {/* <motion.div
         animate={{ opacity: 0.8 }}
         initial={{ opacity: 0.2 }}
         style={{
@@ -200,7 +244,14 @@ export function Hero() {
           bottom: 0,
         }}
         transition={{ duration: 0.5 }}
-      />
+      >
+        {backgroundImages.map((image, index) => (
+          <motion.div
+            key={image}
+            style={{ backgroundImage: `url(/images/bgs/${image})` }}
+          />
+        ))}
+      </motion.div> */}
       {/* Rotating rocks in case we want them */}
       {/* <div
         onMouseLeave={() => setIsAnimationPaused(false)}
