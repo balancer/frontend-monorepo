@@ -115,15 +115,8 @@ export class LiquidityActionHelpers {
   /* Used by calculateProportionalAmounts for V3 boosted proportional adds */
   public get boostedPoolStateWithBalances(): PoolStateWithBalances {
     const underlyingTokensWithBalance: PoolTokenWithBalance[] = this.pool.poolTokens.map(
-      (token, index) => {
-        if (token.underlyingToken) {
-          console.log({
-            tokenName: token.underlyingToken.symbol,
-            underlyingBalance: bn(token.balance).multipliedBy(bn(token.priceRate)).toFixed(),
-            wrappingBalance: token.balance,
-          })
-        }
-        return token.underlyingToken
+      (token, index) =>
+        token.underlyingToken
           ? {
               address: token.underlyingToken?.address as Address,
               decimals: token.underlyingToken?.decimals as number,
@@ -136,7 +129,6 @@ export class LiquidityActionHelpers {
               balance: token.balance as HumanAmount,
               index,
             }
-      }
     )
     const state: PoolStateWithBalances = {
       id: this.pool.id as Hex,
