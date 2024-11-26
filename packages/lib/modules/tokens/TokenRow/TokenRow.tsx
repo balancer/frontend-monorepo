@@ -23,7 +23,6 @@ import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Numberish, fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool/PoolProvider'
-import { bptUsdValue } from '../../pool/pool.helpers'
 import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
@@ -39,6 +38,9 @@ type DataProps = {
   showSelect?: boolean
   showInfoPopover?: boolean
   isBpt?: boolean
+  isNestedBpt?: boolean
+  isNestedPoolToken?: boolean
+  iconSize?: number
 }
 
 function TokenInfo({
@@ -51,32 +53,40 @@ function TokenInfo({
   showSelect = false,
   showInfoPopover = true,
   isBpt = false,
+  isNestedPoolToken = false,
+  iconSize = 40,
 }: DataProps) {
   const tokenSymbol = isBpt ? 'LP token' : token?.symbol || displayToken?.symbol
   const tokenName = isBpt ? pool?.name : token?.name || displayToken?.name
 
+  const headingProps = {
+    as: 'h6' as const,
+    fontSize: isNestedPoolToken ? 'md' : 'lg',
+    fontWeight: 'bold',
+    lineHeight: isNestedPoolToken ? '20px' : '24px',
+    variant: disabled ? 'secondary' : 'primary',
+  }
+
+  const tokenNameProps = {
+    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontWeight: 'medium',
+    lineHeight: '24px',
+    variant: 'secondary',
+  }
+
   return (
     <HStack spacing="sm">
       {!isBpt && (
-        <TokenIcon address={address} alt={token?.symbol || address} chain={chain} size={40} />
+        <TokenIcon address={address} alt={token?.symbol || address} chain={chain} size={iconSize} />
       )}
       <VStack alignItems="flex-start" spacing="none">
         <HStack spacing="none">
-          <Heading
-            as="h6"
-            fontSize="md"
-            fontWeight="bold"
-            variant={disabled ? 'secondary' : 'primary'}
-          >
-            {tokenSymbol}
-          </Heading>
+          <Heading {...headingProps}>{tokenSymbol}</Heading>
           {showInfoPopover && (
             <TokenInfoPopover chain={chain} isBpt={isBpt} tokenAddress={address} />
           )}
         </HStack>
-        <Text fontSize="0.85rem" fontWeight="medium" variant="secondary">
-          {tokenName}
-        </Text>
+        <Text {...tokenNameProps}>{tokenName}</Text>
       </VStack>
       {showSelect && (
         <Box ml="sm">
@@ -99,9 +109,12 @@ export type TokenRowProps = {
   isLoading?: boolean
   abbreviated?: boolean
   isBpt?: boolean
+  isNestedBpt?: boolean
+  isNestedPoolToken?: boolean
   pool?: Pool
   showZeroAmountAsDash?: boolean
   toggleTokenSelect?: () => void
+  iconSize?: number
 }
 
 export default function TokenRow({
@@ -114,12 +127,15 @@ export default function TokenRow({
   disabled,
   isLoading,
   isBpt,
+  isNestedBpt,
+  isNestedPoolToken,
   pool,
   abbreviated = true,
   showZeroAmountAsDash = false,
   toggleTokenSelect,
+  iconSize,
 }: TokenRowProps) {
-  const { getToken, usdValueForToken } = useTokens()
+  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
@@ -134,12 +150,14 @@ export default function TokenRow({
     displayToken,
     pool,
     disabled,
+    iconSize,
+    isNestedPoolToken,
   }
 
   useEffect(() => {
     if (value) {
-      if (isBpt && pool) {
-        setUsdValue(bptUsdValue(pool, value))
+      if ((isBpt || isNestedBpt) && pool) {
+        setUsdValue(usdValueForBpt(pool.address, pool.chain, value))
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))
       }
@@ -148,6 +166,20 @@ export default function TokenRow({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
+
+  const headingProps = {
+    as: 'h6' as const,
+    fontSize: isNestedPoolToken ? 'md' : 'lg',
+    fontWeight: isNestedPoolToken ? 'normal' : 'bold',
+    lineHeight: isNestedPoolToken ? '20px' : '24px',
+  }
+
+  const subTextProps = {
+    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontWeight: 'medium',
+    lineHeight: '24px',
+    variant: 'secondary',
+  }
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -160,7 +192,6 @@ export default function TokenRow({
         ) : (
           <TokenInfo {...props} isBpt={isBpt} />
         )}
-
         <HStack align="start" spacing="none">
           <VStack alignItems="flex-end" spacing="xs" textAlign="right">
             {isLoading ? (
@@ -170,10 +201,10 @@ export default function TokenRow({
               </>
             ) : (
               <>
-                <Heading as="h6" fontSize="md" fontWeight="bold" title={value.toString()}>
+                <Heading {...headingProps} title={value.toString()}>
                   {isZero(amount) && showZeroAmountAsDash ? '-' : amount ? amount : '0'}
                 </Heading>
-                <Text fontSize="sm" fontWeight="medium" variant="secondary">
+                <Text {...subTextProps}>
                   {showZeroAmountAsDash && usdValue && isZero(usdValue)
                     ? '-'
                     : toCurrency(usdValue ?? '0', { abbreviated })}
@@ -190,15 +221,13 @@ export default function TokenRow({
                 </>
               ) : (
                 <>
-                  <Heading as="h6" fontSize="md" fontWeight="bold">
+                  <Heading {...headingProps}>
                     {fNum('weight', actualWeight, { abbreviated: false })}
                   </Heading>
                   <HStack align="center" spacing="xs">
                     {targetWeight ? (
                       <>
-                        <Text fontSize="sm" fontWeight="medium" variant="secondary">
-                          {fNum('weight', targetWeight)}
-                        </Text>
+                        <Text {...subTextProps}>{fNum('weight', targetWeight)}</Text>
                         <Popover trigger="hover">
                           <PopoverTrigger>
                             <Box

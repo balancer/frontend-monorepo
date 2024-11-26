@@ -11,10 +11,10 @@ import BigNumber from 'bignumber.js'
 import { useEffect } from 'react'
 import { ReadContractsErrorType } from 'wagmi/actions'
 import { Pool as OriginalPool } from '../PoolProvider'
-import { calcBptPriceFor } from '../pool.helpers'
 import { calcNonOnChainFetchedStakedBalance } from '../user-balance.helpers'
 import { StakedBalancesByPoolId, useUserStakedBalance } from './useUserStakedBalance'
 import { UnstakedBalanceByPoolId, useUserUnstakedBalance } from './useUserUnstakedBalance'
+import { useTokens } from '../../tokens/TokensProvider'
 
 type Pool = OriginalPool & {
   nonGaugeStakedBalance?: BigNumber
@@ -111,7 +111,8 @@ function overwriteOnchainPoolBalanceData(
       return pool
     }
 
-    const bptPrice = calcBptPriceFor(pool)
+    const { priceFor } = useTokens()
+    const bptPrice = priceFor(pool.address, pool.chain)
 
     // Unstaked balances
     const onchainUnstakedBalances = ocUnstakedBalances[pool.id]

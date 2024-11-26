@@ -1,5 +1,5 @@
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { GqlPriceRateProviderData, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { Erc4626ReviewData, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   Popover,
   PopoverTrigger,
@@ -18,14 +18,14 @@ import { ArrowUpRight } from 'react-feather'
 import { getWarnings } from '../../pool.helpers'
 import { PropsWithChildren } from 'react'
 
-type RateProviderInfoPopOverProps = {
+type Erc4626InfoPopOverProps = {
   token: GqlToken
-  data: GqlPriceRateProviderData | null
+  data: Erc4626ReviewData | undefined | null
   level: number
 } & PropsWithChildren
 
 type PopoverInfoBodyProps = {
-  data: GqlPriceRateProviderData
+  data: Erc4626ReviewData
   level: number
 }
 
@@ -36,15 +36,15 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
       {level === 0 && (
         <>
           <Text fontSize="sm">
-            This rate provider has not been reviewed.
+            This tokenized vault has not been reviewed.
             <br />
             Proceed with caution.
           </Text>
           <Text fontSize="sm">
             Learn more about{' '}
-            <Link href="/risks#rate-provider-risk" target="_blank">
+            <Link href="/risks#tokenized-vault-risk" target="_blank">
               <Box as="span" color="font.link">
-                rate provider risks
+                tokenized vault risks
               </Box>
             </Link>
           </Text>
@@ -69,33 +69,17 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
             ) : (
               <Text fontSize="sm">
                 None except{' '}
-                <Link href="/risks#rate-provider-risk" target="_blank">
+                <Link href="/risks#tokenized-vault-risk" target="_blank">
                   <Box as="span" color="font.link">
-                    rate provider risks
+                    tokenized vault risks
                   </Box>
                 </Link>
               </Text>
             )}
           </VStack>
-          <VStack alignItems="flex-start" gap="0">
-            <Text color="grayText" fontSize="sm">
-              Upgradeable components:
-            </Text>
-            {data.upgradeableComponents && data.upgradeableComponents.length > 0 ? (
-              <Text fontSize="sm">Yes, see review details</Text>
-            ) : (
-              <Text fontSize="sm">None</Text>
-            )}
-          </VStack>
-          <VStack alignItems="flex-start" gap="0">
-            <Text color="grayText" fontSize="sm">
-              Rate provider factory:
-            </Text>
-            <Text fontSize="sm">{data.factory ?? 'None'}</Text>
-          </VStack>
           {data.reviewFile && (
             <Link
-              href={`https://github.com/balancer/code-review/blob/main/rate-providers/${data.reviewFile}`}
+              href={`https://github.com/balancer/code-review/blob/main/erc4626/${data.reviewFile}`}
               target="_blank"
             >
               <HStack gap="xxs">
@@ -112,12 +96,7 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
   )
 }
 
-export function RateProviderInfoPopOver({
-  token,
-  data,
-  level,
-  children,
-}: RateProviderInfoPopOverProps) {
+export function Erc4626InfoPopOver({ token, data, level, children }: Erc4626InfoPopOverProps) {
   const body = data ? (
     <PopoverInfoBody data={data} level={level} />
   ) : (
@@ -137,11 +116,11 @@ export function RateProviderInfoPopOver({
           <VStack alignItems="flex-start" spacing="ms" w="full">
             <HStack w="full">
               <Heading fontSize="1.125rem" variant="h4">
-                {token.symbol} rate provider
+                {token.symbol} tokenized vault
               </Heading>
               <TokenIcon
                 address={token.address}
-                alt={token.address}
+                alt={token.symbol}
                 chain={token.chain}
                 ml="auto"
                 size={24}
