@@ -1,8 +1,15 @@
 'use client'
-import { Container } from '@chakra-ui/react'
+import { Container, ContainerProps } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
-export default function Noise({ children }: { children: ReactNode | ReactNode[] }) {
+export default function Noise({
+  backgroundColor = 'background.baseWithOpacity',
+  children,
+  ...rest
+}: {
+  backgroundColor?: string
+  children: ReactNode | ReactNode[]
+} & ContainerProps) {
   return (
     <Container
       backgroundImage={`url('/images/background-noise.png')`}
@@ -12,11 +19,12 @@ export default function Noise({ children }: { children: ReactNode | ReactNode[] 
       width="full"
     >
       <Container
-        backgroundColor="background.baseWithOpacity"
+        backgroundColor={backgroundColor}
         height="full"
         maxWidth="full"
         p="0"
         width="full"
+        {...rest}
       >
         {children}
       </Container>

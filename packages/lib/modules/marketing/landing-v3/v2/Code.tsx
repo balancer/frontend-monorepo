@@ -6,7 +6,7 @@ import Noise from '@repo/lib/shared/components/layout/Noise'
 
 export function Code() {
   return (
-    <Noise>
+    <Noise backgroundColor="background.level0WithOpacity">
       <DefaultPageContainer>
         <Heading>Code</Heading>
       </DefaultPageContainer>
