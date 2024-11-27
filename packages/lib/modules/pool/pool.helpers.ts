@@ -2,7 +2,6 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import {
-  GetPoolQuery,
   GqlChain,
   GqlNestedPool,
   GqlPoolBase,
@@ -31,6 +30,7 @@ import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem } from './pool.types'
+import { Pool } from './PoolProvider'
 
 /**
  * METHODS
@@ -168,18 +168,14 @@ export function calcShareOfPool(pool: Pool, rawBalance: bigint) {
   return bn(rawBalance).div(bn(parseUnits(pool.dynamicData.totalShares, BPT_DECIMALS)))
 }
 
-type Pool = GetPoolQuery['pool']
-export function usePoolHelpers(pool: Pool, chain: GqlChain) {
+export function getPoolHelpers(pool: Pool, chain: GqlChain) {
   const gaugeExplorerLink = getBlockExplorerAddressUrl(
     pool?.staking?.gauge?.gaugeAddress as Address,
     chain
   )
   const poolExplorerLink = getBlockExplorerAddressUrl(pool.address as Address, chain)
-
   const hasGaugeAddress = !!pool?.staking?.gauge?.gaugeAddress
-
   const gaugeAddress = pool?.staking?.gauge?.gaugeAddress || ''
-
   const chainId = getChainId(pool.chain)
 
   return {
