@@ -26,7 +26,7 @@ export function Hero() {
           <motion.div
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 0.01 }}
             style={{
               position: 'absolute',
               top: 0,
