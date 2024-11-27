@@ -65,7 +65,7 @@ function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
             ) : (
               <Text fontSize="sm">
                 None except{' '}
-                <Link href="/risks#rate-provider-risk" target="_blank">
+                <Link href="/risks#hooks-risk" target="_blank">
                   <Box as="span" color="font.link">
                     hook risks
                   </Box>
