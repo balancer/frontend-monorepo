@@ -23,6 +23,11 @@ export default function SwapLayout({ props, children }: Props) {
   const initChain = chain ? slugToChainMap[chain as ChainSlug] : getProjectConfig().defaultNetwork
   const initTokens = props.poolActionableTokens || getTokensByChain(initChain)
 
+  if (!initTokens) {
+    // Avoid "Cant scale amount without token metadata" error when tokens are not ready in SwapProvider
+    return null
+  }
+
   return (
     <TransactionStateProvider>
       <Permit2SignatureProvider>

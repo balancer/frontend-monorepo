@@ -121,8 +121,7 @@ export class LiquidityActionHelpers {
               address: token.underlyingToken?.address as Address,
               decimals: token.underlyingToken?.decimals as number,
               index,
-              // TODO: balance: token.underlyingToken?.balance * rate as HumanAmount,
-              balance: token.balance as HumanAmount,
+              balance: bn(token.balance).multipliedBy(bn(token.priceRate)).toFixed() as HumanAmount,
             }
           : {
               address: token.address as Address,
