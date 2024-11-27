@@ -21,13 +21,13 @@ import { useTokens } from '../tokens/TokensProvider'
 
 export type Pool = GetPoolQuery['pool']
 export type FeaturedPool = GetFeaturedPoolsQuery['featuredPools'][0]['pool']
-export type UsePoolResponse = ReturnType<typeof usePoolData> & {
+export type UsePoolResponse = ReturnType<typeof _usePool> & {
   chain: GqlChain
 }
 
 export const PoolContext = createContext<UsePoolResponse | null>(null)
 
-function usePoolData({ id, chain, initialData }: FetchPoolProps & { initialData: GetPoolQuery }) {
+function _usePool({ id, chain, initialData }: FetchPoolProps & { initialData: GetPoolQuery }) {
   const { userAddress } = useUserAccount()
   const { priceFor, calcTotalUsdValue } = useTokens()
   const myLiquiditySectionRef = useRef<HTMLDivElement | null>(null)
@@ -81,7 +81,7 @@ export function PoolProvider({
   children,
   data,
 }: PropsWithChildren<FetchPoolProps> & { data: GetPoolQuery }) {
-  const hook = usePoolData({ id, chain, variant, initialData: data })
+  const hook = _usePool({ id, chain, variant, initialData: data })
   return <PoolContext.Provider value={{ ...hook, chain }}>{children}</PoolContext.Provider>
 }
 
