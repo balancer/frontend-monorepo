@@ -22,6 +22,9 @@ export default function DebugPools() {
           <Link as={NextLink} href="/pools/sepolia/v3/0xc9233cc69435591b193b50f702ac31e404a08b10">
             Sepolia reference NESTED pool (Balancer 50 WETH 50 USD)
           </Link>
+          <Link as={NextLink} href="/pools/sepolia/v3/0x42de4fa875126fdbaf590b2fc3802adbca58acee">
+            Sepolia reference stable pool (Balancer DAI/USDC/USDT)
+          </Link>
         </VStack>
 
         <VStack align="start" margin="lg" padding="lg">
