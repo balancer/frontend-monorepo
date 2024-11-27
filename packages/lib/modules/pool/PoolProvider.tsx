@@ -11,7 +11,7 @@ import { createContext, PropsWithChildren, useRef } from 'react'
 import { useQuery } from '@apollo/client'
 import { FetchPoolProps } from './pool.types'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { usePoolHelpers } from './pool.helpers'
+import { getPoolHelpers } from './pool.helpers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { usePoolEnrichWithOnChainData } from './queries/usePoolEnrichWithOnChainData'
 import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances'
@@ -70,7 +70,7 @@ function usePoolData({ id, chain, initialData }: FetchPoolProps & { initialData:
     // TODO: we assume here that we never need to reload the entire pool.
     // this assumption may need to be questioned
     refetch,
-    ...usePoolHelpers(pool, chain),
+    ...getPoolHelpers(pool, chain),
   }
 }
 
