@@ -6,72 +6,22 @@ import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion } from 'framer-motion'
 import NextLink from 'next/link'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { ArrowUpRight } from 'react-feather'
 import { TriangleDownIcon } from '@chakra-ui/icons'
 
-// @ts-ignore
-import zenBg1Src from './images/zenbg-1.webp'
-// @ts-ignore
-import zenBg2Src from './images/zenbg-2.webp'
-// @ts-ignore
-import zenBg3Src from './images/zenbg-3.webp'
-// @ts-ignore
-import zenBg4Src from './images/zenbg-4.webp'
 // @ts-ignore
 import bgDarkSrc from './images/bg-dark-3.png'
 // @ts-ignore
 import bgLightSrc from './images/bg-light-4.png'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
-const backgroundImages = [zenBg1Src, zenBg4Src, zenBg2Src, zenBg3Src]
-
 export function Hero() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const isDarkMode = useIsDarkMode()
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex(prev => (prev === backgroundImages.length - 1 ? 0 : prev + 1))
-    }, 10000)
-
-    return () => clearInterval(interval)
-  }, [])
 
   return (
     <Noise>
       <Box bottom={0} h="100vh" left={0} minH="600px" position="absolute" right={0} top={0}>
-        {/* <AnimatePresence>
-          {backgroundImages.map(
-            (image, index) =>
-              index === currentImageIndex && (
-                <motion.div
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  initial={{ opacity: 0 }}
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={index}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                  }}
-                  transition={{ duration: 3, ease: 'easeInOut' }}
-                >
-                  <Image
-                    alt="background"
-                    fill
-                    sizes="100vm"
-                    src={image}
-                    style={{ objectFit: 'cover', objectPosition: 'center' }}
-                  />
-                </motion.div>
-              )
-          )}
-        </AnimatePresence> */}
         <AnimatePresence>
           <motion.div
             animate={{ opacity: 0.5 }}
