@@ -27,7 +27,11 @@ export type UsePoolResponse = ReturnType<typeof _usePool> & {
 
 export const PoolContext = createContext<UsePoolResponse | null>(null)
 
-function _usePool({ id, chain, initialData }: FetchPoolProps & { initialData: GetPoolQuery }) {
+export function _usePool({
+  id,
+  chain,
+  initialData,
+}: FetchPoolProps & { initialData: GetPoolQuery }) {
   const { userAddress } = useUserAccount()
   const { priceFor, calcTotalUsdValue } = useTokens()
   const myLiquiditySectionRef = useRef<HTMLDivElement | null>(null)
