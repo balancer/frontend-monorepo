@@ -2,10 +2,15 @@ import { Badge, Card, Center, Heading, HStack, Stack, Text, VStack } from '@chak
 import { useHook } from '../../hooks/useHook'
 import { usePool } from '../PoolProvider'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
+import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function PoolHookBanner() {
   const { pool } = usePool()
-  const { hooks, hasHookData } = useHook(pool)
+  const { hooks, hasHookData } = useHook({
+    hook: pool.hook,
+    poolTokens: pool.poolTokens as GqlPoolTokenDetail[],
+    chain: pool.chain,
+  })
 
   if (!hasHookData) return null
 

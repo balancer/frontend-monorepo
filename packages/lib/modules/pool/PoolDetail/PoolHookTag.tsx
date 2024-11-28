@@ -1,11 +1,33 @@
-import { Badge, Center, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
+import {
+  Badge,
+  Center,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Portal,
+  Text,
+} from '@chakra-ui/react'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { useHook } from '../../hooks/useHook'
-import { usePool } from '../PoolProvider'
 
-export function PoolHookTag() {
-  const { pool } = usePool()
-  const { hooks } = useHook(pool)
+import {
+  GqlHook,
+  GqlPoolTokenDetail,
+  GqlChain,
+} from '@repo/lib/shared/services/api/generated/graphql'
+
+type Props = {
+  poolHook: GqlHook | null | undefined
+  poolTokens: GqlPoolTokenDetail[]
+  chain: GqlChain
+}
+
+export function PoolHookTag({ poolHook, poolTokens, chain }: Props) {
+  const { hooks } = useHook({
+    hook: poolHook,
+    poolTokens,
+    chain,
+  })
 
   // TODO: add nested hook support when needed
 
@@ -35,11 +57,13 @@ export function PoolHookTag() {
           </Center>
         </Badge>
       </PopoverTrigger>
-      <PopoverContent px="sm" py="sm" width="fit-content">
-        <Text fontSize="sm" variant="secondary">
-          {hook.name}
-        </Text>
-      </PopoverContent>
+      <Portal>
+        <PopoverContent px="sm" py="sm" width="fit-content">
+          <Text fontSize="sm" variant="secondary">
+            {hook.name}
+          </Text>
+        </PopoverContent>
+      </Portal>
     </Popover>
   )
 }

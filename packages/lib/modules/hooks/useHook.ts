@@ -1,18 +1,30 @@
-import { Pool } from '../pool/PoolProvider'
+import {
+  GqlChain,
+  GqlHook,
+  GqlPoolTokenDetail,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { useHooks } from './HooksProvider'
 import { getChainId } from '@repo/lib/config/app.config'
 
-export function useHook(pool: Pool) {
+export function useHook({
+  hook,
+  poolTokens,
+  chain,
+}: {
+  hook: GqlHook | null | undefined
+  poolTokens: GqlPoolTokenDetail[]
+  chain: GqlChain
+}) {
   const { metadata } = useHooks()
-  const hasHook = !!pool.hook?.address
-  const hasNestedHook = pool.poolTokens.map(token => token.nestedPool?.hook).some(Boolean)
+  const hasHook = !!hook?.address
+  const hasNestedHook = poolTokens.map(token => token.nestedPool?.hook).some(Boolean)
 
   const hookAddresses = [
-    ...(hasHook ? [pool.hook?.address] : []),
-    ...pool.poolTokens.map(token => token.nestedPool?.hook?.address),
+    ...(hasHook ? [hook.address] : []),
+    ...poolTokens.map(token => token.nestedPool?.hook?.address),
   ]
 
-  const chainId = getChainId(pool.chain)
+  const chainId = getChainId(chain)
 
   const hooks = hookAddresses
     .map(hookAddress =>

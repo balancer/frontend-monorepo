@@ -15,6 +15,8 @@ import { isBoosted } from '../../pool.helpers'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { useErc4626Metadata } from '../../../erc4626/Erc4626MetadataProvider'
 import Image from 'next/image'
+import { PoolHookTag } from '../../PoolDetail/PoolHookTag'
+import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -102,6 +104,11 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
                     width={20}
                   />
                 ))}
+                <PoolHookTag
+                  chain={pool.chain}
+                  poolHook={pool.hook}
+                  poolTokens={pool.poolTokens as GqlPoolTokenDetail[]}
+                />
               </HStack>
             </GridItem>
             {userAddress ? (
