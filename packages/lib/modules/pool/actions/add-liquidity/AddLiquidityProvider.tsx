@@ -41,6 +41,8 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
   const [totalUSDValue, setTotalUSDValue] = useState('0')
+  // Used when the user explicitly choses proportional input mode
+  const [wantsProportional, setWantsProportional] = useState(false)
   const [proportionalSlippage, setProportionalSlippage] = useState<string>('0')
 
   const { pool, refetch: refetchPool, isLoading } = usePool()
@@ -110,6 +112,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     handler,
     humanAmountsIn,
     enabled: !urlTxHash,
+    wantsProportional,
   })
 
   /**
@@ -196,6 +199,8 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     slippage,
     proportionalSlippage,
     isForcedProportionalAdd,
+    wantsProportional,
+    setWantsProportional,
     setProportionalSlippage,
     refetchQuote,
     setHumanAmountIn,

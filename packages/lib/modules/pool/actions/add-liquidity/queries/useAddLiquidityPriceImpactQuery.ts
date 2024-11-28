@@ -17,9 +17,15 @@ type Params = {
   handler: AddLiquidityHandler
   humanAmountsIn: HumanTokenAmountWithAddress[]
   enabled: boolean
+  wantsProportional?: boolean
 }
 
-export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabled }: Params) {
+export function useAddLiquidityPriceImpactQuery({
+  handler,
+  humanAmountsIn,
+  enabled,
+  wantsProportional = false,
+}: Params) {
   const { pool, chainId } = usePool()
   const { userAddress } = useUserAccount()
   const { slippage } = useUserSettings()
@@ -36,7 +42,7 @@ export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabl
 
   const queryKey = addLiquidityKeys.priceImpact(params)
 
-  const queryFn = async () => handler.getPriceImpact(humanAmountsIn)
+  const queryFn = async () => handler.getPriceImpact(humanAmountsIn, wantsProportional)
 
   return useQuery({
     queryKey,

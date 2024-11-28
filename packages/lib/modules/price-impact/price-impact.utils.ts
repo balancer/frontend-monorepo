@@ -28,6 +28,12 @@ export function cannotCalculatePriceImpactError(error: Error | null): boolean {
   if (error.name === 'ContractFunctionExecutionError') return true
   // All Swap PI errors are shown as unknown price impact
   if (
+    error.message.startsWith('Unexpected error while calculating') &&
+    error.message.includes('PI')
+  ) {
+    return true
+  }
+  if (
     error.message.startsWith(
       'Unexpected error while calculating addLiquidityUnbalanced PI at Swap step'
     )

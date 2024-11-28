@@ -3,7 +3,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Card, HStack, Spacer, VStack, Text, Box, Tooltip } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { XOctagon } from 'react-feather'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputs } from './TokenInputs'
@@ -26,8 +26,7 @@ export function TokenInputsWithAddable({
 }: Props) {
   const { isConnected } = useUserAccount()
   const { toCurrency } = useCurrency()
-  const { setHumanAmountIn } = useAddLiquidity()
-  const [wantsProportional, setWantsProportional] = useState(false)
+  const { setHumanAmountIn, wantsProportional, setWantsProportional } = useAddLiquidity()
 
   const {
     handleProportionalHumanInputChange,
