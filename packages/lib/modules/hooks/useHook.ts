@@ -17,7 +17,7 @@ export function useHook(pool: Pool) {
   const hooks = hookAddresses
     .map(hookAddress =>
       metadata?.find(metadata => {
-        const metadataAddresses = metadata.addresses[chainId.toString()].map(address =>
+        const metadataAddresses = metadata.addresses[chainId.toString()]?.map(address =>
           address.toLowerCase()
         )
         return (
