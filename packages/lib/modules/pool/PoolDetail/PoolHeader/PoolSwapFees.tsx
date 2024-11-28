@@ -41,7 +41,9 @@ export function PoolSwapFees({ pool }: { pool: Pool }) {
                     <FluidIcon />
                   </Box>
                 ) : (
-                  <Text fontSize="xs">{fNum('feePercent', pool.dynamicData.swapFee)}</Text>
+                  <Text color={isOpen ? 'font.highlight' : 'inherit'} fontSize="xs">
+                    {fNum('feePercent', pool.dynamicData.swapFee)}
+                  </Text>
                 )}
               </HStack>
             </Badge>
