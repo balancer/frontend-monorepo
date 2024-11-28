@@ -22,25 +22,60 @@ import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { SandBg } from './shared/SandBg'
 import Image from 'next/image'
+import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
 // @ts-ignore
 import bgCirclesSrc from './images/circles-right.svg'
-import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
+// @ts-ignore
+import createCustomAMMsSrc from './images/video-createCustomAMMs.png'
+// @ts-ignore
+import scaffoldBalancerSrc from './images/video-scaffoldBalancer.png'
+// @ts-ignore
+import createHookSrc from './images/video-createHook.png'
+// @ts-ignore
+import createRouterSrc from './images/video-createRouter.png'
+
+const videos = {
+  createCustomAMMs: {
+    title: 'Create Custom AMMs on Balancer v3',
+    url: 'https://youtu.be/oJAXQCMVdfA?si=Vnusjr2rzGVLI4Lm',
+    src: createCustomAMMsSrc,
+  },
+  scaffoldBalancer: {
+    title: 'Prototype v3 on Scaffold Balancer',
+    url: 'https://youtu.be/m6q5M34ZdXw?si=FfZhc6fQRHht3JME',
+    src: scaffoldBalancerSrc,
+  },
+  createHook: {
+    title: 'Create a Hook on Balancer v3',
+    url: 'https://youtu.be/kaz6duliRPA?si=CMTRINvkDwrR-7s-',
+    src: createHookSrc,
+  },
+  createRouter: {
+    title: 'Create a Router on Balancer v3',
+    url: 'https://youtu.be/pO1ChmSFTaY?si=6wRUk2Ff5yJyGrIn',
+    src: createRouterSrc,
+  },
+}
 
 export function VideoBox({
   label,
   labelProps = {},
   bgVariant,
-  url,
+  id,
+  feature = false,
   ...props
 }: BoxProps & {
   label?: string | ReactNode
   labelProps?: BoxProps
   bgVariant?: 1 | 2 | 3
-  url: string
+  id: keyof typeof videos
+  feature?: boolean
 }) {
+  const video = videos[id]
+
   return (
-    <NextLink href={url} rel="noopener noreferrer" target="_blank">
+    <NextLink href={video.url} rel="noopener noreferrer" role="group" target="_blank">
       <Box
         background="background.level0"
         overflow="hidden"
@@ -50,6 +85,27 @@ export function VideoBox({
         target="_blank"
         {...props}
       >
+        {feature && (
+          <>
+            <Image
+              alt="initial frame"
+              fill
+              src={video.src}
+              style={{
+                objectFit: 'cover',
+              }}
+            />
+            <Box
+              _groupHover={{ opacity: 0.8 }}
+              bg="background.base"
+              h="full"
+              opacity={0.9}
+              position="absolute"
+              transition="opacity 0.4s ease-in-out"
+              w="full"
+            />
+          </>
+        )}
         {bgVariant && <SandBg variant={bgVariant} />}
         <Center h="full" position="absolute" w="full">
           <PlayVideoButton size={62} />
@@ -109,50 +165,51 @@ export function Videos() {
           </HStack>
           <Card>
             <VideoBox
+              feature
+              id="createCustomAMMs"
               label={
                 <Text fontSize="xl" fontWeight="bold">
-                  Create Custom AMMs on Balancer v3
+                  {videos.createCustomAMMs.title}
                 </Text>
               }
               mb="md"
-              minH="500px"
-              url="https://youtu.be/oJAXQCMVdfA?si=Vnusjr2rzGVLI4Lm"
+              minH="600px"
             />
             <Grid gap="md" templateColumns="repeat(3, 1fr)">
               <GridItem>
                 <VideoBox
                   bgVariant={1}
+                  id="scaffoldBalancer"
                   label={
                     <Text fontSize="md" fontWeight="bold">
-                      Prototype v3 on Scaffold Balancer
+                      {videos.scaffoldBalancer.title}
                     </Text>
                   }
                   minH="200px"
-                  url="https://youtu.be/m6q5M34ZdXw?si=FfZhc6fQRHht3JME"
                 />
               </GridItem>
               <GridItem>
                 <VideoBox
                   bgVariant={2}
+                  id="createHook"
                   label={
                     <Text fontSize="md" fontWeight="bold">
-                      Create a Hook on Balancer v3
+                      {videos.createHook.title}
                     </Text>
                   }
                   minH="200px"
-                  url="https://youtu.be/kaz6duliRPA?si=CMTRINvkDwrR-7s-"
                 />
               </GridItem>
               <GridItem>
                 <VideoBox
                   bgVariant={3}
+                  id="createRouter"
                   label={
                     <Text fontSize="md" fontWeight="bold">
-                      Create a Router on Balancer v3
+                      {videos.createRouter.title}
                     </Text>
                   }
                   minH="200px"
-                  url="https://youtu.be/pO1ChmSFTaY?si=6wRUk2Ff5yJyGrIn"
                 />
               </GridItem>
             </Grid>

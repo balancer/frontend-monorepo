@@ -76,10 +76,10 @@ export function Code() {
                     >
                       SIMPLICITY
                     </Text>
-                    <Heading as="h4" size="lg">
+                    <Heading as="h4" size="xl">
                       Building on v3 is simple
                     </Heading>
-                    <Text color="font.secondary">
+                    <Text color="font.secondary" fontSize="lg">
                       To make custom pool creation easy, core functions have been moved from pools
                       into the heavily audited vault. For example, here’s all the code needed to
                       build a swap function for a Constant Product Pool.
