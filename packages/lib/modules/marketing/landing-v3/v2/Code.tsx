@@ -12,8 +12,6 @@ import PrismLoader from '@repo/lib/shared/services/prism/PrismLoader'
 import bgSrc from './images/sand-pattern-1.svg'
 // @ts-ignore
 import bgSrcDark from './images/sand-pattern-1-dark.svg'
-// @ts-ignore
-import bgCirclesSrc from './images/circles-right.svg'
 
 const codeSnippet = `// Swap function on constant product pool
 function onSwap(PoolSwapParams calldata params)
@@ -107,25 +105,6 @@ export function Code() {
           </Box>
         </Card>
       </DefaultPageContainer>
-      <Box minH="500px" position="relative" w="full">
-        <Box
-          bottom={0}
-          h="500px"
-          left={0}
-          opacity={isDarkMode ? 0.1 : 0.4}
-          position="absolute"
-          top={0}
-          w="100vw"
-        >
-          <Image
-            alt="background"
-            fill
-            sizes="100vw"
-            src={bgCirclesSrc}
-            style={{ objectFit: 'contain', objectPosition: 'left', rotate: '180deg' }}
-          />
-        </Box>
-      </Box>
       <PrismLoader />
     </Noise>
   )

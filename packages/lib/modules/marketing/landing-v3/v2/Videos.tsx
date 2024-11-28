@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
 import {
@@ -20,6 +21,11 @@ import { ReactNode } from 'react'
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { SandBg } from './shared/SandBg'
+import Image from 'next/image'
+
+// @ts-ignore
+import bgCirclesSrc from './images/circles-right.svg'
+import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
 export function VideoBox({
   label,
@@ -65,9 +71,30 @@ export function VideoBox({
 }
 
 export function Videos() {
+  const isDarkMode = useIsDarkMode()
+
   return (
     <Noise backgroundColor="background.level0WithOpacity">
-      <DefaultPageContainer>
+      <Box minH="500px" position="absolute" w="full">
+        <Box
+          bottom={0}
+          h="500px"
+          left={0}
+          opacity={isDarkMode ? 0.1 : 0.4}
+          position="absolute"
+          top={0}
+          w="100vw"
+        >
+          <Image
+            alt="background"
+            fill
+            sizes="100vw"
+            src={bgCirclesSrc}
+            style={{ objectFit: 'contain', objectPosition: 'left', rotate: '180deg' }}
+          />
+        </Box>
+      </Box>
+      <DefaultPageContainer noVerticalPadding pt="200px">
         <VStack align="start" spacing="lg" w="full">
           <HStack align="end" justify="space-between" w="full">
             <Heading>Code walkthroughs</Heading>
