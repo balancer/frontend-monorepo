@@ -25,33 +25,42 @@ export function VideoBox({
   label,
   labelProps = {},
   bgVariant,
+  url,
   ...props
-}: BoxProps & { label?: string | ReactNode; labelProps?: BoxProps; bgVariant?: 1 | 2 | 3 }) {
+}: BoxProps & {
+  label?: string | ReactNode
+  labelProps?: BoxProps
+  bgVariant?: 1 | 2 | 3
+  url: string
+}) {
   return (
-    <Box
-      background="background.level0"
-      overflow="hidden"
-      position="relative"
-      rounded="md"
-      shadow="md"
-      {...props}
-    >
-      {bgVariant && <SandBg variant={bgVariant} />}
-      <Center h="full" position="absolute" w="full">
-        <PlayVideoButton size={62} />
-      </Center>
+    <NextLink href={url} rel="noopener noreferrer" target="_blank">
       <Box
-        bottom="0"
-        left="0"
-        p="md"
-        position="absolute"
-        right="0"
-        textAlign="center"
-        {...labelProps}
+        background="background.level0"
+        overflow="hidden"
+        position="relative"
+        rounded="md"
+        shadow="md"
+        target="_blank"
+        {...props}
       >
-        {label}
+        {bgVariant && <SandBg variant={bgVariant} />}
+        <Center h="full" position="absolute" w="full">
+          <PlayVideoButton size={62} />
+        </Center>
+        <Box
+          bottom="0"
+          left="0"
+          p="md"
+          position="absolute"
+          right="0"
+          textAlign="center"
+          {...labelProps}
+        >
+          {label}
+        </Box>
       </Box>
-    </Box>
+    </NextLink>
   )
 }
 
@@ -80,6 +89,7 @@ export function Videos() {
               }
               mb="md"
               minH="500px"
+              url="https://youtu.be/oJAXQCMVdfA?si=Vnusjr2rzGVLI4Lm"
             />
             <Grid gap="md" templateColumns="repeat(3, 1fr)">
               <GridItem>
@@ -91,6 +101,7 @@ export function Videos() {
                     </Text>
                   }
                   minH="200px"
+                  url="https://youtu.be/m6q5M34ZdXw?si=FfZhc6fQRHht3JME"
                 />
               </GridItem>
               <GridItem>
@@ -102,6 +113,7 @@ export function Videos() {
                     </Text>
                   }
                   minH="200px"
+                  url="https://youtu.be/kaz6duliRPA?si=CMTRINvkDwrR-7s-"
                 />
               </GridItem>
               <GridItem>
@@ -113,6 +125,7 @@ export function Videos() {
                     </Text>
                   }
                   minH="200px"
+                  url="https://youtu.be/pO1ChmSFTaY?si=6wRUk2Ff5yJyGrIn"
                 />
               </GridItem>
             </Grid>
