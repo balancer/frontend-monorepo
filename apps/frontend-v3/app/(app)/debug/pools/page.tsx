@@ -10,17 +10,20 @@ export default function DebugPools() {
       <HStack align="start" mx="auto" spacing="24px" width="80%">
         <VStack align="start" margin="lg" padding="lg">
           <Heading size="md">Debug V3 pools</Heading>
-          <Link as={NextLink} href="/pools/sepolia/v3/0xce701deac1b660da4ee05f6f3f7cbafddb6a79fe">
+          <Link as={NextLink} href="/pools/sepolia/v3/0xe69b70a86a4e1fd33da95693a1ae12be1c26c8ea">
             Sepolia WEIGHTED (Balancer 50 BAL 50 DAI-aave)
           </Link>
-          <Link as={NextLink} href="/pools/sepolia/v3/0x75F49D54978d08E4E76a873dA6c78E8f6b2901C2">
+          <Link as={NextLink} href="/pools/sepolia/v3/0xa8c18ce5e987d7d82ccaccb93223e9bb5df4a3c0">
             Sepolia WEIGHTED with Proportional joins (Balancer 50 BAL 50 WETH -ExitFee Hook)
           </Link>
-          <Link as={NextLink} href="/pools/sepolia/v3/0x6dbdd7a36d900083a5b86a55583d90021e9f33e8">
+          <Link as={NextLink} href="/pools/sepolia/v3/0xd63db0b88dca565633fb8d70a70b9b8093d34a7e">
             Sepolia reference BOOSTED pool (Balancer USDC/USDT)
           </Link>
-          <Link as={NextLink} href="/pools/sepolia/v3/0x0270daf4ee12ccb1abc8aa365054eecb1b7f4f6b">
+          <Link as={NextLink} href="/pools/sepolia/v3/0xc9233cc69435591b193b50f702ac31e404a08b10">
             Sepolia reference NESTED pool (Balancer 50 WETH 50 USD)
+          </Link>
+          <Link as={NextLink} href="/pools/sepolia/v3/0x42de4fa875126fdbaf590b2fc3802adbca58acee">
+            Sepolia reference stable pool (Balancer DAI/USDC/USDT)
           </Link>
         </VStack>
 

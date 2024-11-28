@@ -42,7 +42,7 @@ export enum RiskKey {
   RateProvider = 'rate-provider-risk',
   RateProviderBridge = 'rate-provider-bridges',
   NestedPool = 'nested-pools',
-  Hook = 'hook-risk',
+  Hook = 'hooks-risk',
 }
 
 export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
