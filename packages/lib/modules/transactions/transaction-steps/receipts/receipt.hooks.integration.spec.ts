@@ -137,7 +137,10 @@ describe('queries swap transaction', () => {
     })
   })
 
-  test('when the native asset is the token in (from POL to DAI)', async () => {
+  /*
+  Skip until dRPC fixes issue with polygon tx queries
+  */
+  test.skip('when the native asset is the token in (from POL to DAI)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
     // https://polygonscan.com/tx/0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c
     const txHash = '0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c'
