@@ -10,9 +10,8 @@ export function PoolHookTag() {
   const { hooks } = useHook(pool)
 
   // TODO: add nested hook support when needed
-  const hook = hooks.find(
-    hook => pool.hook && hook?.addresses[getChainId(pool.chain)]?.includes(pool.hook.address)
-  )
+
+  const hook = hooks[0]
 
   if (!hook) return null
 
