@@ -21,7 +21,7 @@ export function Hero() {
   const isDarkMode = useIsDarkMode()
 
   return (
-    <Noise>
+    <Noise position="relative">
       <Box bottom={0} h="100vh" left={0} minH="600px" position="absolute" right={0} top={0}>
         <AnimatePresence>
           <motion.div
@@ -108,6 +108,15 @@ export function Hero() {
           </VStack>
         </Center>
       </DefaultPageContainer>
+      <Box
+        bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
+        bottom="0"
+        h="150px"
+        left="0"
+        mb="-75px"
+        position="absolute"
+        w="full"
+      />
     </Noise>
   )
 }
