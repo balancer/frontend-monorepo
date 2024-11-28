@@ -11,20 +11,23 @@ import {
   Link,
   Skeleton,
 } from '@chakra-ui/react'
-import { usePool } from '../PoolProvider'
+import { usePool } from '../../PoolProvider'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { GetPoolEventsQuery, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GetPoolEventsQuery,
+  GqlChain,
+  GqlPoolStakingType,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
 import { useBlockExplorer } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { ArrowUpRight } from 'react-feather'
-import { PoolEventItem } from '../usePoolEvents'
-import { calcTotalStakedBalance, getUserTotalBalance } from '../user-balance.helpers'
+import { PoolEventItem } from '../../usePoolEvents'
+import { calcTotalStakedBalance, getUserTotalBalance } from '../../user-balance.helpers'
 import { fNum, bn } from '@repo/lib/shared/utils/numbers'
-import { useVebalBoost } from '@repo/lib/modules/vebal/useVebalBoost'
 import { isEmpty } from 'lodash'
-import { isVebalPool } from '../pool.helpers'
+import { BoostText } from './BoostText'
 
 type PoolEventRowProps = {
   poolEvent: PoolEventItem
@@ -119,10 +122,9 @@ export default function PoolUserEvents({
   const [poolEvents, setPoolEvents] = useState<PoolEventItem[]>([])
   const { toCurrency } = useCurrency()
   const { getBlockExplorerTxUrl } = useBlockExplorer(chain)
-  const { veBalBoostMap } = useVebalBoost([pool])
 
-  const isVeBal = isVebalPool(pool.id)
-  const showBoostValue = !isVeBal
+  const isVeBal = pool.staking?.type === GqlPoolStakingType.Vebal
+  const showBoostValue = pool.staking?.type === GqlPoolStakingType.Gauge && !isVeBal
 
   // keep this card the same height as the 'My liquidity' section
   useLayoutEffect(() => {
@@ -160,16 +162,6 @@ export default function PoolUserEvents({
       return fNum('stakedPercentage', ratio)
     }
   }, [pool])
-
-  const boost = useMemo(() => {
-    const boost = veBalBoostMap[pool.id]
-
-    if (!boost || boost === '1') {
-      return '1.00'
-    }
-
-    return fNum('boost', bn(boost))
-  }, [veBalBoostMap, pool])
 
   return (
     <Card h={height}>
@@ -227,16 +219,7 @@ export default function PoolUserEvents({
             <Text fontSize="0.85rem" variant="secondary">
               {`${stakedPercentage} ${getShareTitle()}`}
             </Text>
-            {showBoostValue && (
-              <>
-                <Text fontSize="0.85rem" variant="secondary">
-                  &middot;
-                </Text>
-                <Text fontSize="0.85rem" variant="secondary">
-                  {`${boost}x boost`}
-                </Text>
-              </>
-            )}
+            {showBoostValue && <BoostText pool={pool} />}
           </HStack>
         </VStack>
       )}
