@@ -51,7 +51,7 @@ const networkConfig: NetworkConfig = {
   },
   pools: convertHexToLowerCase({
     issues: {},
-    allowNestedActions: ['0x0270daf4ee12ccb1abc8aa365054eecb1b7f4f6b'],
+    allowNestedActions: ['0xc9233cc69435591b193b50f702ac31e404a08b10'],
   }),
   layerZeroChainId: 10161,
 }
