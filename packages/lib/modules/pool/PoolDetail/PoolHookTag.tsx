@@ -1,18 +1,15 @@
 import { Badge, Center, Popover, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react'
-
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { useHook } from '../../hooks/useHook'
 import { usePool } from '../PoolProvider'
-import { getChainId } from '@repo/lib/config/app.config'
 
 export function PoolHookTag() {
   const { pool } = usePool()
   const { hooks } = useHook(pool)
 
   // TODO: add nested hook support when needed
-  const hook = hooks.find(
-    hook => pool.hook && hook?.addresses[getChainId(pool.chain)]?.includes(pool.hook.address)
-  )
+
+  const hook = hooks[0]
 
   if (!hook) return null
 

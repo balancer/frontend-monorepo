@@ -17,8 +17,12 @@ export function useHook(pool: Pool) {
   const hooks = hookAddresses
     .map(hookAddress =>
       metadata?.find(metadata => {
-        const metadataAddresses = metadata.addresses[chainId.toString()]
-        return hookAddress && metadataAddresses && metadataAddresses.includes(hookAddress)
+        const metadataAddresses = metadata.addresses[chainId.toString()].map(address =>
+          address.toLowerCase()
+        )
+        return (
+          hookAddress && metadataAddresses && metadataAddresses.includes(hookAddress.toLowerCase())
+        )
       })
     )
     .filter(Boolean)
