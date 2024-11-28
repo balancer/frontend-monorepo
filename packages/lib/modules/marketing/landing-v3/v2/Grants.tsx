@@ -1,25 +1,11 @@
 'use client'
 
-import {
-  VStack,
-  HStack,
-  Heading,
-  Button,
-  Text,
-  GridItem,
-  Grid,
-  Box,
-  Center,
-  Link,
-} from '@chakra-ui/react'
+import { VStack, HStack, Heading, Button, Text, GridItem, Grid, Box } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { ArrowUpRight } from 'react-feather'
 import { GraniteBg } from './shared/GraniteBg'
-import { SpearbitLogo } from '@repo/lib/shared/components/imgs/SpearbitLogo'
-import { TrailOfBitsLogo } from '@repo/lib/shared/components/imgs/TrailOfBitsLogo'
-import { CertoraLogo } from '@repo/lib/shared/components/imgs/CertoraLogo'
 
 const grantIdeas = [
   {

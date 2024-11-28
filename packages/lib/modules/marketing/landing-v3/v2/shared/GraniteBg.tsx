@@ -16,7 +16,7 @@ export function GraniteBg() {
         src={graniteSrc}
         style={{ objectFit: 'cover', filter: 'grayscale(100%)' }}
       />
-      <Box bg="background.base" h="full" opacity={0.85} position="absolute" w="full" />
+      <Box bg="background.base" h="full" opacity={0.9} position="absolute" w="full" />
     </>
   )
 }
