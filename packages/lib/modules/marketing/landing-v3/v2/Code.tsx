@@ -6,12 +6,14 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import Image from 'next/image'
+import PrismLoader from '@repo/lib/shared/services/prism/PrismLoader'
 
 // @ts-ignore
 import bgSrc from './images/sand-pattern-1.svg'
 // @ts-ignore
 import bgSrcDark from './images/sand-pattern-1-dark.svg'
-import PrismLoader from '@repo/lib/shared/services/prism/PrismLoader'
+// @ts-ignore
+import bgCirclesSrc from './images/circles-right.svg'
 
 const codeSnippet = `// Swap function on constant product pool
 function onSwap(PoolSwapParams calldata params)
@@ -43,7 +45,7 @@ export function Code() {
               bottom={0}
               h="100%"
               left={0}
-              opacity={isDarkMode ? 0.3 : 0.3}
+              opacity={isDarkMode ? 0.3 : 0.2}
               position="absolute"
               right={0}
               shadow="innerXl"
@@ -94,12 +96,9 @@ export function Code() {
                         minHeight: '400px',
                         padding: '2rem',
                         borderRadius: '8px',
-                        margin: '0 !important',
                       }}
                     >
-                      <code className="language-solidity" style={{ margin: '0px !important' }}>
-                        {codeSnippet}
-                      </code>
+                      <code className="language-solidity">{codeSnippet}</code>
                     </pre>
                   </Card>
                 </GridItem>
@@ -108,6 +107,25 @@ export function Code() {
           </Box>
         </Card>
       </DefaultPageContainer>
+      <Box minH="500px" position="relative" w="full">
+        <Box
+          bottom={0}
+          h="500px"
+          left={0}
+          opacity={isDarkMode ? 0.1 : 0.4}
+          position="absolute"
+          top={0}
+          w="100vw"
+        >
+          <Image
+            alt="background"
+            fill
+            sizes="100vw"
+            src={bgCirclesSrc}
+            style={{ objectFit: 'contain', objectPosition: 'left', rotate: '180deg' }}
+          />
+        </Box>
+      </Box>
       <PrismLoader />
     </Noise>
   )
