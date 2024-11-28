@@ -25,7 +25,7 @@ const v3BadgeStyles = {
     inset: '-1px',
     padding: '1px',
     borderRadius: 'inherit',
-    background: 'linear-gradient(90deg, #B3AEF5 0%, #D7CBE7 25%, #E5C8C8 50%, #EAA879 100%)',
+    background: 'background.special',
     WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
     WebkitMaskComposite: 'xor',
     maskComposite: 'exclude',
