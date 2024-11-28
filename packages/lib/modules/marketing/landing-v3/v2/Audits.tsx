@@ -34,7 +34,7 @@ export function Audits() {
                 fontSize="sm"
                 textTransform="uppercase"
               >
-                BALANCER GRANTS
+                SAFTEY & SECURITY
               </Text>
               <Heading>Audited by the best</Heading>
             </VStack>
