@@ -112,7 +112,10 @@ test('queries remove liquidity transaction', async () => {
   expect(result.current.sentBptUnits).toBe('6439.400687368663510166')
 })
 
-describe('queries swap transaction', () => {
+/*
+  Skip until dRPC fixes issue with polygon tx queries
+*/
+describe.skip('queries swap transaction', () => {
   const maticAddress = '0x0000000000000000000000000000000000001010'
   const wMaticAddress = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
   const daiAddress = '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
@@ -137,10 +140,7 @@ describe('queries swap transaction', () => {
     })
   })
 
-  /*
-  Skip until dRPC fixes issue with polygon tx queries
-  */
-  test.skip('when the native asset is the token in (from POL to DAI)', async () => {
+  test('when the native asset is the token in (from POL to DAI)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
     // https://polygonscan.com/tx/0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c
     const txHash = '0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c'
@@ -160,10 +160,7 @@ describe('queries swap transaction', () => {
     })
   })
 
-  /*
-  Skip until dRPC fixes issue with polygon tx queries
-  */
-  test.skip('when the native asset is the token out (from DAI to POL)', async () => {
+  test('when the native asset is the token out (from DAI to POL)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
     // https://polygonscan.com/tx/0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288
     const txHash = '0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288'
