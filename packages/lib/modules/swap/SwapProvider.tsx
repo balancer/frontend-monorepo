@@ -29,7 +29,6 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { AuraBalSwapHandler } from './handlers/AuraBalSwap.handler'
 import { DefaultSwapHandler } from './handlers/DefaultSwap.handler'
 import { NativeWrapHandler } from './handlers/NativeWrap.handler'
-import { PoolSwapHandler } from './handlers/PoolSwap.handler'
 import { SwapHandler } from './handlers/Swap.handler'
 import { useSimulateSwapQuery } from './queries/useSimulateSwapQuery'
 import { isAuraBalSwap } from './swap.helpers'
@@ -74,9 +73,7 @@ function selectSwapHandler(
   chain: GqlChain,
   swapType: GqlSorSwapType,
   apolloClient: ApolloClient<object>,
-  tokens: GqlToken[],
-  pool?: Pool,
-  poolActionableTokens?: GqlToken[]
+  tokens: GqlToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -85,10 +82,6 @@ function selectSwapHandler(
     return new WrapHandler()
   } else if (isAuraBalSwap(tokenInAddress, tokenOutAddress, chain, swapType)) {
     return new AuraBalSwapHandler(tokens)
-  }
-
-  if (pool && poolActionableTokens) {
-    return new PoolSwapHandler(pool, poolActionableTokens)
   }
 
   return new DefaultSwapHandler(apolloClient)
@@ -146,9 +139,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       selectedChain,
       swapState.swapType,
       client,
-      tokens,
-      pool,
-      poolActionableTokens
+      tokens
     )
   }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 
@@ -191,6 +182,16 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     )
   }
 
+  function getPoolSwapPoolsIds(): string[] | undefined {
+    if (!isPoolSwap) return undefined
+
+    const tokensNestedPools = pool.poolTokens
+      .map(poolToken => poolToken.nestedPool?.id)
+      .filter(Boolean) as string[]
+
+    return [pool.id, ...tokensNestedPools]
+  }
+
   const simulationQuery = useSimulateSwapQuery({
     handler,
     swapInputs: {
@@ -199,6 +200,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       tokenOut: swapState.tokenOut.address,
       swapType: swapState.swapType,
       swapAmount: getSwapAmount(),
+      // We only use this field to filter by the specific pool swap path in pool swap flow
+      poolIds: getPoolSwapPoolsIds(),
     },
     enabled: shouldFetchSwap(swapState, urlTxHash),
   })

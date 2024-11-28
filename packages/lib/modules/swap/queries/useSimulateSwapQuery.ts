@@ -25,7 +25,7 @@ export type SimulateSwapParams = {
 
 export function useSimulateSwapQuery({
   handler,
-  swapInputs: { swapAmount, chain, tokenIn, tokenOut, swapType },
+  swapInputs: { swapAmount, chain, tokenIn, tokenOut, swapType, poolIds },
   enabled = true,
 }: SimulateSwapParams) {
   const debouncedSwapAmount = useDebounce(swapAmount, defaultDebounceMs)[0]
@@ -36,6 +36,7 @@ export function useSimulateSwapQuery({
     tokenIn,
     tokenOut,
     chain,
+    poolIds,
   }
 
   const chainId = getChainId(chain)

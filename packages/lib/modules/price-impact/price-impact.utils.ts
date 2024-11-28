@@ -19,9 +19,19 @@ export function isUnhandledAddPriceImpactError(error: Error | null): boolean {
 }
 
 export function cannotCalculatePriceImpactError(error: Error | null): boolean {
-  const hasUnbalancedAddError = isUnbalancedAddErrorMessage(error)
+  // TODO: narrow unknown price impact errors when we have better knowledge about them
+  // const hasUnbalancedAddError = isUnbalancedAddErrorMessage(error)
 
-  if (error && error.name === 'ContractFunctionExecutionError' && !hasUnbalancedAddError) {
+  if (!error) return false
+
+  // All ContractFunctionExecutionErrors are shown as unknown price impact
+  if (error.name === 'ContractFunctionExecutionError') return true
+  // All Swap PI errors are shown as unknown price impact
+  if (
+    error.message.startsWith(
+      'Unexpected error while calculating addLiquidityUnbalanced PI at Swap step'
+    )
+  ) {
     return true
   }
 

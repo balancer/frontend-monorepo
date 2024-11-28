@@ -2,7 +2,6 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import {
-  GetPoolQuery,
   GqlChain,
   GqlNestedPool,
   GqlPoolBase,
@@ -12,9 +11,10 @@ import {
   GqlPoolTokenDetail,
   GqlPoolType,
   GqlToken,
+  GqlHook,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { isEmpty, isNil, uniqBy } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
@@ -30,6 +30,7 @@ import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem } from './pool.types'
+import { Pool } from './PoolProvider'
 
 /**
  * METHODS
@@ -140,18 +141,6 @@ export function preMintedBptIndex(pool: GqlPoolBase): number | void {
   return allPoolTokens(pool).findIndex(token => isSameAddress(token.address, pool.address))
 }
 
-export function calcBptPrice(totalLiquidity: string, totalShares: string): string {
-  return bn(totalLiquidity).div(totalShares).toString()
-}
-
-export function calcBptPriceFor(pool: GetPoolQuery['pool']): string {
-  return calcBptPrice(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares)
-}
-
-export function bptUsdValue(pool: GetPoolQuery['pool'], bptAmount: Numberish): string {
-  return bn(bptAmount).times(calcBptPriceFor(pool)).toString()
-}
-
 export function createdAfterTimestamp(pool: GqlPoolBase): boolean {
   // Pools should always have valid createTime so, for safety, we block the pool in case we don't get it
   // (createTime should probably not be treated as optional in the SDK types)
@@ -179,18 +168,14 @@ export function calcShareOfPool(pool: Pool, rawBalance: bigint) {
   return bn(rawBalance).div(bn(parseUnits(pool.dynamicData.totalShares, BPT_DECIMALS)))
 }
 
-type Pool = GetPoolQuery['pool']
-export function usePoolHelpers(pool: Pool, chain: GqlChain) {
+export function getPoolHelpers(pool: Pool, chain: GqlChain) {
   const gaugeExplorerLink = getBlockExplorerAddressUrl(
     pool?.staking?.gauge?.gaugeAddress as Address,
     chain
   )
   const poolExplorerLink = getBlockExplorerAddressUrl(pool.address as Address, chain)
-
   const hasGaugeAddress = !!pool?.staking?.gauge?.gaugeAddress
-
   const gaugeAddress = pool?.staking?.gauge?.gaugeAddress || ''
-
   const chainId = getChainId(pool.chain)
 
   return {
@@ -205,7 +190,11 @@ export function usePoolHelpers(pool: Pool, chain: GqlChain) {
 export function hasNestedPools(pool: Pool) {
   // The following discriminator is needed because not all pools in GqlPoolQuery do have nestingType property
   // and the real TS discriminator is __typename which we don't want to use
-  return 'nestingType' in pool && pool.nestingType !== GqlPoolNestingType.NoNesting
+  return (
+    ('nestingType' in pool && pool.nestingType !== GqlPoolNestingType.NoNesting) ||
+    // stable pools don't have nestingType but they can have nested pools in v3
+    pool.poolTokens.some(token => token.hasNestedPool)
+  )
 }
 
 export function isNotSupported(pool: Pool) {
@@ -251,11 +240,28 @@ export function allClaimableGaugeAddressesFor(pool: ClaimablePool) {
 }
 
 export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
-  return (
-    !!token.priceRateProvider &&
-    !!token.priceRateProviderData &&
-    token.priceRateProviderData.reviewed
-  )
+  return !!token.priceRateProvider && !!token.priceRateProviderData
+}
+
+export function hasRateProvider(token: GqlPoolTokenDetail): boolean {
+  const isPriceRateProvider =
+    isNil(token.priceRateProvider) || // if null, we consider rate provider as zero address
+    token.priceRateProvider === zeroAddress ||
+    token.priceRateProvider === token.nestedPool?.address
+
+  return !isPriceRateProvider && !isNil(token.priceRateProviderData)
+}
+
+export function hasReviewedHook(hook: GqlHook): boolean {
+  return !!hook.reviewData
+}
+
+export function hasHooks(pool: Pool): boolean {
+  const nestedHooks = pool.poolTokens
+    .filter(token => token.hasNestedPool)
+    .map(token => token.nestedPool?.hook)
+
+  return !![pool.hook, ...nestedHooks].length
 }
 
 /**
@@ -270,6 +276,10 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
   // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
   if (isLBP(pool.type) || pool.dynamicData.isPaused || pool.dynamicData.isInRecoveryMode) {
+    return true
+  }
+
+  if (pool.hook && (!hasReviewedHook(pool.hook) || pool.hook?.reviewData?.summary === 'unsafe')) {
     return true
   }
 
@@ -339,7 +349,7 @@ export function isUnbalancedLiquidityDisabled(pool: Pool): boolean {
   return !!pool.liquidityManagement?.disableUnbalancedLiquidity
 }
 
-export function getRateProviderWarnings(warnings: string[]) {
+export function getWarnings(warnings: string[]) {
   return warnings.filter(warning => !isEmpty(warning))
 }
 
