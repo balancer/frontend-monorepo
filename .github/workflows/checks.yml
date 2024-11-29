@@ -14,7 +14,7 @@ env:
 
 jobs:
   Build:
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
 
@@ -34,7 +34,7 @@ jobs:
         run: pnpm run build
 
   Lint:
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
       - name: Setup
@@ -48,7 +48,7 @@ jobs:
       #   run: pnpm stylelint
 
   Unit-Test:
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
       - name: Setup
@@ -59,7 +59,7 @@ jobs:
         run: pnpm test:unit
 
   Integration-Test:
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
       - name: Setup
