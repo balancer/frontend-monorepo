@@ -19,7 +19,7 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Address } from 'viem'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -99,6 +99,7 @@ function AddLiquidityMainForm() {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
+  const [tabIndex, setTabIndex] = useState(0)
 
   useEffect(() => {
     setPriceImpact(priceImpactQuery.data)
@@ -192,6 +193,8 @@ function AddLiquidityMainForm() {
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
             pool={pool}
+            setTabIndex={setTabIndex}
+            tabIndex={tabIndex}
             tokenSelectDisclosure={tokenSelectDisclosure}
             totalUSDValue={totalUSDValue}
           />

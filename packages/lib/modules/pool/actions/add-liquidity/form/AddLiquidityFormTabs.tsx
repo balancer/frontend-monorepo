@@ -12,6 +12,7 @@ import { TokenInputs } from './TokenInputs'
 import { TokenInputsWithAddable } from './TokenInputsWithAddable'
 import { Pool } from '../../../PoolProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { useEffect } from 'react'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
@@ -44,11 +45,15 @@ export function AddLiquidityFormTabs({
   tokenSelectDisclosure,
   totalUSDValue,
   nestedAddLiquidityEnabled,
+  tabIndex,
+  setTabIndex,
 }: {
   pool: Pool
   tokenSelectDisclosure: UseDisclosureReturn
   totalUSDValue: string
   nestedAddLiquidityEnabled: boolean
+  tabIndex: number
+  setTabIndex: (index: number) => void
 }) {
   const isBelowMinTvlThreshold = bn(pool.dynamicData.totalLiquidity).lt(
     bn(MIN_LIQUIDITY_FOR_BALANCED_ADD)
@@ -61,11 +66,23 @@ export function AddLiquidityFormTabs({
     ? 'Liquidity must be added proportionally until the pool TVL is greater than $50000'
     : 'This pool requires liquidity to be added proportionally'
 
+  const handleTabsChange = (index: number) => {
+    setTabIndex(index)
+  }
+
+  useEffect(() => {
+    if (isDisabledUnbalancedTab) {
+      setTabIndex(1)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDisabledUnbalancedTab])
+
   return (
     <Tabs
       colorScheme="brown"
-      defaultIndex={isDisabledUnbalancedTab ? 1 : 0}
+      index={tabIndex}
       isFitted
+      onChange={handleTabsChange}
       variant="soft-rounded"
     >
       <TabList>
