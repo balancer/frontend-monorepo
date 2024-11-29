@@ -13,6 +13,8 @@ import {
   Text,
   VStack,
   Link,
+  chakra,
+  Center,
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Image from 'next/image'
@@ -25,6 +27,38 @@ import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMod
 import { useState } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion } from 'framer-motion'
+import { GraniteBg } from './shared/GraniteBg'
+import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
+import { RadialPattern } from './shared/RadialPattern'
+import { PieIcon } from '@repo/lib/shared/components/icons/PieIcon'
+import { StarsIconPlain } from '@repo/lib/shared/components/icons/StarsIconPlain'
+
+const keyFeatures = [
+  {
+    title: 'Custom Pools',
+    subTitle: 'Code less, build more.',
+    description:
+      'Design pools tailored to your vision with Balancer’s vault-first architecture. Build smarter, faster, and with less complexity.',
+    icon: PieIcon,
+    iconSize: 40,
+  },
+  {
+    title: '100% Boosted Pools',
+    subTitle: 'Passive Yield, Simplified.',
+    description:
+      'Put your liquidity to work 100% of the time. Seamless integration with Aave and Morpho delivers passive, diversified yield in a single click.',
+    icon: StarsIconPlain,
+    iconSize: 32,
+  },
+  {
+    title: 'Hooks Framework',
+    subTitle: 'Endless Possibilities',
+    description:
+      'Extend pool functionality with modular hooks. Customize pool behavior, implement advanced strategies, and unlock entirely new AMM design spaces with ease.',
+    icon: HookIcon,
+    iconSize: 70,
+  },
+]
 
 const features = [
   {
@@ -297,6 +331,53 @@ function FeatureText({
   )
 }
 
+export function FeatureCard({ feature }: { feature: (typeof keyFeatures)[number] }) {
+  return (
+    <Box minH="150px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
+      <GraniteBg />
+      <RadialPattern
+        borderColor="white"
+        borderWidth="1px"
+        circleCount={8}
+        padding="15px"
+        position="absolute"
+        right={-50}
+        size="180px"
+        top={-50}
+      >
+        <Center color="white" h="full" opacity={0.8} w="full">
+          {feature.icon({
+            size: feature.iconSize,
+            style: {
+              filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 1))',
+            },
+          })}
+        </Center>
+      </RadialPattern>
+      <Text
+        background="font.secondary"
+        backgroundClip="text"
+        fontSize="xs"
+        left="0"
+        p="md"
+        position="absolute"
+        textTransform="uppercase"
+        top="0"
+      >
+        v3 feature
+      </Text>
+      <Box bottom="0" left="0" p="md" position="absolute">
+        <Text fontSize="xl" fontWeight="bold">
+          {feature.title}
+        </Text>
+        <Text fontSize="xl" opacity={0.6}>
+          {feature.subTitle}
+        </Text>
+      </Box>
+    </Box>
+  )
+}
+
 const MotionGridItem = motion(GridItem)
 
 export function Build() {
@@ -390,7 +471,26 @@ export function Build() {
               </AnimatePresence>
             </GridItem>
           </Grid>
-          <Grid gap="2xl" mt="300px" templateColumns="repeat(2, 1fr)">
+
+          <Heading as="h4" mt="200px" mx="auto" size="lg">
+            <chakra.span color="font.primary">Balancer v3 redefines AMM innovation</chakra.span>
+            <chakra.span color="font.primary" style={{ opacity: 0.6 }}>
+              {' '}
+              by shifting repetitive development tasks into the heavily audited vault. By
+              formalizing custom pool requirements, the platform ensures consistency, flexibility,
+              and faster deployment.
+            </chakra.span>
+          </Heading>
+
+          <Grid gap="2xl" mt="2xl" templateColumns="repeat(3, 1fr)">
+            {keyFeatures.map((feature, index) => (
+              <GridItem key={index}>
+                <FeatureCard feature={feature} />
+              </GridItem>
+            ))}
+          </Grid>
+
+          <Grid gap="2xl" mt="2xl" templateColumns="repeat(2, 1fr)">
             {features.map((feature, index) => (
               <GridItem key={index}>
                 <FeatureText {...feature} />

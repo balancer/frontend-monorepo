@@ -1,5 +1,7 @@
+import { SVGProps } from 'react'
+
 /* eslint-disable max-len */
-export function HookIcon({ size = 24 }: { size?: number }) {
+export function HookIcon({ size = 24, ...props }: { size?: number } & SVGProps<SVGSVGElement>) {
   return (
     <svg
       fill="none"
@@ -8,6 +10,7 @@ export function HookIcon({ size = 24 }: { size?: number }) {
       viewBox="0 0 24 24"
       width={size}
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <g
         clipPath="url(#a)"

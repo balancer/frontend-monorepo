@@ -80,8 +80,9 @@ export function Hero() {
               maxW="full"
               w="650px"
             >
-              Balancer v3 powers the next generation of AMM innovation. Simplified pool creation
-              with an optimized vault. Plug in audited reusable hooks for additional functionality.
+              The ultimate platform for custom liquidity solutions. Designed to empower developers,
+              protocols, and creators, Balancer v3 combines simplicity, flexibility, and
+              cutting-edge technology to reshape the future of AMMs.
             </Heading>
             <HStack>
               <Button
