@@ -1,7 +1,7 @@
 import { getChainId, getNativeAsset, getNetworkConfig } from '@repo/lib/config/app.config'
 import { TokenAmountToApprove } from '@repo/lib/modules/tokens/approvals/approval-rules'
 import { nullAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { SentryError } from '@repo/lib/shared/utils/errors'
 import { bn, isZero } from '@repo/lib/shared/utils/numbers'
@@ -41,6 +41,7 @@ import {
   isCowAmmPool,
   isGyro,
   isUnbalancedLiquidityDisabled,
+  isV2Pool,
   isV3Pool,
   isV3WithNestedActionsPool,
 } from '../pool.helpers'
@@ -275,6 +276,17 @@ export function shouldUseRecoveryRemoveLiquidity(pool: Pool): boolean {
 export function requiresProportionalInput(pool: Pool): boolean {
   if (isV3Pool(pool) && isUnbalancedLiquidityDisabled(pool)) return true
   return isGyro(pool.type) || isCowAmmPool(pool.type)
+}
+
+// Some pool types do not support AddLiquidityKind.Proportional in the SDK
+export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
+  if (
+    isV2Pool(pool) &&
+    (pool.type === GqlPoolType.Stable || pool.type === GqlPoolType.MetaStable)
+  ) {
+    return false
+  }
+  return true
 }
 
 type ProtocolVersion = PoolState['protocolVersion']

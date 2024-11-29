@@ -260,8 +260,9 @@ export function FilterTags() {
   } = usePoolList()
   const { toCurrency } = useCurrency()
 
+  // prevents layout shift in mobile view
   if (networks.length === 0 && poolTypes.length === 0 && minTvl === 0 && poolTags.length === 0) {
-    return null
+    return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
   }
 
   return (
@@ -510,7 +511,12 @@ export function PoolListFilters() {
                             Filters
                           </Text>
                           {totalFilterCount > 0 && (
-                            <Button onClick={_resetFilters} size="xs" variant="link">
+                            <Button
+                              h="fit-content"
+                              onClick={_resetFilters}
+                              size="xs"
+                              variant="link"
+                            >
                               Reset all
                             </Button>
                           )}
