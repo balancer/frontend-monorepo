@@ -19,7 +19,6 @@ import { getChainShortName } from '@repo/lib/config/app.config'
 import { PoolTypeTag } from '../PoolTypeTag'
 import { PoolVersionTag } from '../../PoolList/PoolListTable/PoolVersionTag'
 import { PoolHookTag } from '../PoolHookTag'
-import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 
 export default function PoolMetaBadges() {
   const { pool, chain } = usePool()
@@ -46,11 +45,7 @@ export default function PoolMetaBadges() {
       <PoolListTokenPills pool={pool} px="sm" py="2" />
       <PoolVersionTag isSmall pool={pool} />
       <PoolTypeTag pool={pool} />
-      <PoolHookTag
-        chain={pool.chain}
-        poolHook={pool.hook}
-        poolTokens={pool.poolTokens as GqlPoolTokenDetail[]}
-      />
+      <PoolHookTag pool={pool} />
       {!shouldHideSwapFee(pool.type) && (
         <Popover trigger="hover">
           <PopoverTrigger>

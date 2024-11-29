@@ -26,11 +26,7 @@ export function usePoolAlerts(pool: Pool) {
   const pathname = usePathname()
   const router = useRouter()
   const [poolAlerts, setPoolAlerts] = useState<PoolAlert[]>([])
-  const { hooks } = useHook({
-    hook: pool.hook,
-    poolTokens: pool.poolTokens as GqlPoolTokenDetail[],
-    chain: pool.chain,
-  })
+  const { hooks } = useHook(pool)
 
   const getNetworkPoolAlerts = (pool: Pool): PoolAlert[] => {
     const networkPoolsIssues = getNetworkConfig(pool.chain).pools?.issues

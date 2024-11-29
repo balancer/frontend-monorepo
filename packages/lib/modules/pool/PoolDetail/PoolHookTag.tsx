@@ -10,27 +10,17 @@ import {
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { useHook } from '../../hooks/useHook'
 
-import {
-  GqlHook,
-  GqlPoolTokenDetail,
-  GqlChain,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { PoolListItem } from '../pool.types'
+import { Pool } from '../PoolProvider'
 
 type Props = {
-  poolHook: GqlHook | null | undefined
-  poolTokens: GqlPoolTokenDetail[]
-  chain: GqlChain
+  pool: Pool | PoolListItem
 }
 
-export function PoolHookTag({ poolHook, poolTokens, chain }: Props) {
-  const { hooks } = useHook({
-    hook: poolHook,
-    poolTokens,
-    chain,
-  })
+export function PoolHookTag({ pool }: Props) {
+  const { hooks } = useHook(pool)
 
   // TODO: add nested hook support when needed
-
   const hook = hooks[0]
 
   if (!hook) return null

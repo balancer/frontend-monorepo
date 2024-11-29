@@ -104,11 +104,7 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
                     width={20}
                   />
                 ))}
-                <PoolHookTag
-                  chain={pool.chain}
-                  poolHook={pool.hook}
-                  poolTokens={pool.poolTokens as GqlPoolTokenDetail[]}
-                />
+                <PoolHookTag pool={pool} />
               </HStack>
             </GridItem>
             {userAddress ? (
