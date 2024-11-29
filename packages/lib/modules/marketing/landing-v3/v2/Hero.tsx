@@ -109,7 +109,7 @@ export function Hero() {
         </Center>
       </DefaultPageContainer>
       <Box
-        bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
+        bgGradient="linear(transparent 0%, background.level0 50%, transparent 100%)"
         bottom="0"
         h="150px"
         left="0"
