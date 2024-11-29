@@ -52,7 +52,10 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage: userSlippage } = useUserSettings()
 
-  const handler = useMemo(() => selectAddLiquidityHandler(pool), [pool.id, isLoading])
+  const handler = useMemo(
+    () => selectAddLiquidityHandler(pool, wantsProportional),
+    [pool.id, isLoading, wantsProportional]
+  )
 
   /**
    * Helper functions & variables
@@ -112,7 +115,6 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     handler,
     humanAmountsIn,
     enabled: !urlTxHash,
-    wantsProportional,
   })
 
   /**

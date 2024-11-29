@@ -25,10 +25,7 @@ export interface AddLiquidityHandler {
   ): Promise<QueryAddLiquidityOutput>
 
   // Calculate the price impact of adding liquidity
-  getPriceImpact(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
-    wantsProportional?: boolean // Used when the user is explicitly using the proportional add liquidity feature
-  ): Promise<number>
+  getPriceImpact(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<number>
   /*
     Build tx callData payload for adding liquidity
     It is responsibility of the UI to avoid calling buildAddLiquidityCallData before the last queryAddLiquidity was finished

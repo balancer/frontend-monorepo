@@ -37,17 +37,11 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
     return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
   }
 
-  public async getPriceImpact(
-    humanAmountsIn: HumanTokenAmountWithAddress[],
-    wantsProportional = false
-  ): Promise<number> {
+  public async getPriceImpact(humanAmountsIn: HumanTokenAmountWithAddress[]): Promise<number> {
     if (areEmptyAmounts(humanAmountsIn)) {
       // Avoid price impact calculation when there are no amounts in
       return 0
     }
-
-    // When the user is explicitly using the proportional add liquidity feature
-    if (wantsProportional) return 0
 
     const addLiquidityInput = this.constructSdkInput(humanAmountsIn)
 
