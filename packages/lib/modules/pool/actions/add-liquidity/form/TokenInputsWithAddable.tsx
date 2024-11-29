@@ -3,7 +3,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Card, HStack, Spacer, VStack, Text, Box, Tooltip } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { XOctagon } from 'react-feather'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputs } from './TokenInputs'
@@ -12,19 +12,18 @@ import { useMaximumInputs } from './useMaximumInputs'
 
 type Props = {
   tokenSelectDisclosureOpen: () => void
-  isProportionalInput: boolean
+  isProportional: boolean
   totalUSDValue: string
 }
 
 export function TokenInputsWithAddable({
   tokenSelectDisclosureOpen,
-  isProportionalInput,
+  isProportional,
   totalUSDValue,
 }: Props) {
   const { isConnected } = useUserAccount()
   const { toCurrency } = useCurrency()
   const { setHumanAmountIn } = useAddLiquidity()
-  const [wantsProportional, setWantsProportional] = useState(false)
 
   const {
     handleProportionalHumanInputChange,
@@ -33,7 +32,6 @@ export function TokenInputsWithAddable({
     maximizedUsdValue: maximizedUsdValueForProportionalInput,
     canMaximize: canMaximizeForProportionalInput,
     setIsMaximized: setIsMaximizedForProportionalInput,
-    clearAmountsIn,
   } = useProportionalInputs()
 
   const {
@@ -43,8 +41,6 @@ export function TokenInputsWithAddable({
     handleMaximizeUserAmounts: handleMaximizeUserAmountsForMaximumInput,
     setIsMaximized: setIsMaximizedForMaximumInput,
   } = useMaximumInputs()
-
-  const isProportional = isProportionalInput || wantsProportional
 
   const handleMaximizeUserAmounts = isProportional
     ? handleMaximizeUserAmountsForProportionalInput
@@ -71,12 +67,7 @@ export function TokenInputsWithAddable({
       setIsMaximized(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalUSDValue, wantsProportional])
-
-  function handleWantsProportional() {
-    setWantsProportional(!wantsProportional)
-    clearAmountsIn()
-  }
+  }, [totalUSDValue])
 
   return (
     <VStack spacing="md" w="full">
@@ -90,7 +81,7 @@ export function TokenInputsWithAddable({
               {canMaximizeForProportionalInput ? (
                 <Text color="grayText" fontSize="sm">
                   <Box as="span" color="font.highlight">
-                    {`${isProportionalInput ? 'Proportional ' : 'Total '}`}
+                    {`${isProportional ? 'Proportional ' : 'Total '}`}
                   </Box>
                   addable pool tokens
                 </Text>
@@ -126,7 +117,7 @@ export function TokenInputsWithAddable({
             {!canMaximize && (
               <Tooltip
                 label={
-                  isProportionalInput
+                  isProportional
                     ? 'For pools that require proportional liquidity, you need a balance above zero for every token in order to add any liquidity.'
                     : 'You have no eligible tokens that can be added to this pool. Go swap to get at least one pool token. '
                 }

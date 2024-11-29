@@ -13,6 +13,7 @@ import { TokenInputsWithAddable } from './TokenInputsWithAddable'
 import { Pool } from '../../../PoolProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useEffect } from 'react'
+import { useProportionalInputs } from './useProportionalInputs'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
@@ -20,19 +21,19 @@ export function TokenInputsBase({
   nestedAddLiquidityEnabled,
   tokenSelectDisclosure,
   totalUSDValue,
-  isProportionalInput,
+  isProportional,
 }: {
   nestedAddLiquidityEnabled: boolean
   tokenSelectDisclosure: UseDisclosureReturn
   totalUSDValue: string
-  isProportionalInput: boolean
+  isProportional: boolean
 }) {
   if (nestedAddLiquidityEnabled) {
     return <TokenInputs tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()} />
   } else {
     return (
       <TokenInputsWithAddable
-        isProportionalInput={isProportionalInput}
+        isProportional={isProportional}
         tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}
         totalUSDValue={totalUSDValue}
       />
@@ -55,6 +56,8 @@ export function AddLiquidityFormTabs({
   tabIndex: number
   setTabIndex: (index: number) => void
 }) {
+  const { clearAmountsIn } = useProportionalInputs()
+
   const isBelowMinTvlThreshold = bn(pool.dynamicData.totalLiquidity).lt(
     bn(MIN_LIQUIDITY_FOR_BALANCED_ADD)
   )
@@ -67,6 +70,7 @@ export function AddLiquidityFormTabs({
     : 'This pool requires liquidity to be added proportionally'
 
   const handleTabsChange = (index: number) => {
+    clearAmountsIn()
     setTabIndex(index)
   }
 
@@ -102,7 +106,7 @@ export function AddLiquidityFormTabs({
       <TabPanels>
         <TabPanel>
           <TokenInputsBase
-            isProportionalInput={false}
+            isProportional={false}
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
             tokenSelectDisclosure={tokenSelectDisclosure}
             totalUSDValue={totalUSDValue}
@@ -110,7 +114,7 @@ export function AddLiquidityFormTabs({
         </TabPanel>
         <TabPanel>
           <TokenInputsBase
-            isProportionalInput
+            isProportional
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
             tokenSelectDisclosure={tokenSelectDisclosure}
             totalUSDValue={totalUSDValue}
