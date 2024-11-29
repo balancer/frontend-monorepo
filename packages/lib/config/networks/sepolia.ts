@@ -54,6 +54,7 @@ const networkConfig: NetworkConfig = {
     allowNestedActions: [
       '0x965f7d7387d81056ebf0edaf4a869dc46471a676',
       '0xc9233cc69435591b193b50f702ac31e404a08b10',
+      '0x42de4fa875126fdbaf590b2fc3802adbca58acee',
     ],
   }),
   layerZeroChainId: 10161,
