@@ -88,6 +88,7 @@ function AddLiquidityMainForm() {
     proportionalSlippage,
     slippage,
     setProportionalSlippage,
+    wantsProportional,
   } = useAddLiquidity()
 
   const nextBtn = useRef(null)
@@ -173,7 +174,7 @@ function AddLiquidityMainForm() {
         <CardHeader>
           <HStack justify="space-between" w="full">
             <span>Add liquidity</span>
-            {requiresProportionalInput(pool) ? (
+            {requiresProportionalInput(pool) || wantsProportional ? (
               <ProportionalTransactionSettings
                 setSlippage={setProportionalSlippage}
                 size="sm"
