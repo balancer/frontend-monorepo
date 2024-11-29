@@ -11,6 +11,9 @@ import { requiresProportionalInput } from '../../LiquidityActionHelpers'
 import { TokenInputs } from './TokenInputs'
 import { TokenInputsWithAddable } from './TokenInputsWithAddable'
 import { Pool } from '../../../PoolProvider'
+import { bn } from '@repo/lib/shared/utils/numbers'
+
+const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
 export function TokenInputsBase({
   nestedAddLiquidityEnabled,
@@ -47,8 +50,16 @@ export function AddLiquidityFormTabs({
   totalUSDValue: string
   nestedAddLiquidityEnabled: boolean
 }) {
-  const isDisabledUnbalancedTab = requiresProportionalInput(pool)
+  const isBelowMinTvlThreshold = bn(pool.dynamicData.totalLiquidity).lt(
+    bn(MIN_LIQUIDITY_FOR_BALANCED_ADD)
+  )
+
+  const isDisabledUnbalancedTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold
   const isDisabledBalancedTab = nestedAddLiquidityEnabled
+
+  const UnbalancedTabTooltipLabel = isBelowMinTvlThreshold
+    ? 'Liquidity must be added proportionally until the pool TVL is greater than $50000'
+    : 'This pool requires liquidity to be added proportionally'
 
   return (
     <Tabs
@@ -58,13 +69,7 @@ export function AddLiquidityFormTabs({
       variant="soft-rounded"
     >
       <TabList>
-        <Tooltip
-          label={
-            isDisabledUnbalancedTab
-              ? 'This pool requires liquidity to be added proportionally'
-              : undefined
-          }
-        >
+        <Tooltip label={UnbalancedTabTooltipLabel}>
           <Tab isDisabled={isDisabledUnbalancedTab}>Unbalanced</Tab>
         </Tooltip>
         <Tooltip
