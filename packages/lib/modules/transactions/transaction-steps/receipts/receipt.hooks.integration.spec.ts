@@ -88,7 +88,10 @@ test.skip('queries add liquidity with native token', async () => {
   expect(result.current.receivedBptUnits).toBe('0.984524168989962117')
 })
 
-test('queries remove liquidity transaction', async () => {
+/*
+  Skip until dRPC fixes issue with polygon tx queries
+*/
+test.skip('queries remove liquidity transaction', async () => {
   // https://etherscan.io/tx/0x71301b46984d3d2e6b58c1fc0c99cc0561ec0f26d53bda8413528a7fb6828fc3
   const userAddress = '0x84f240cA232917d771DFBbd8C917B4669Ed640CD'
   const txHash = '0x71301b46984d3d2e6b58c1fc0c99cc0561ec0f26d53bda8413528a7fb6828fc3'
@@ -112,7 +115,10 @@ test('queries remove liquidity transaction', async () => {
   expect(result.current.sentBptUnits).toBe('6439.400687368663510166')
 })
 
-describe('queries swap transaction', () => {
+/*
+  Skip until dRPC fixes issue with polygon tx queries
+*/
+describe.skip('queries swap transaction', () => {
   const maticAddress = '0x0000000000000000000000000000000000001010'
   const wMaticAddress = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
   const daiAddress = '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
