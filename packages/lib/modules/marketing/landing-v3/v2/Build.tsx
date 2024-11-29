@@ -313,7 +313,7 @@ export function Build() {
           opacity={isDarkMode ? 0.1 : 0.4}
           position="absolute"
           right={0}
-          top={300}
+          top={100}
           w="45vw"
         >
           <Image
