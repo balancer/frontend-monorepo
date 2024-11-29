@@ -51,7 +51,12 @@ export function AddLiquidityFormTabs({
   const isDisabledBalancedTab = nestedAddLiquidityEnabled
 
   return (
-    <Tabs colorScheme="brown" isFitted variant="soft-rounded">
+    <Tabs
+      colorScheme="brown"
+      defaultIndex={isDisabledUnbalancedTab ? 1 : 0}
+      isFitted
+      variant="soft-rounded"
+    >
       <TabList>
         <Tooltip
           label={
