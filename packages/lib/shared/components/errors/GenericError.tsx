@@ -24,6 +24,8 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
   if (isUserRejectedError(error)) return null
   const errorName = customErrorName ? `${customErrorName} (${error.name})` : error.name
 
+  if (isUnbalancedAddError(_error)) return null //We handle this specific error in UnbalancedAddError component
+
   if (isViemHttpFetchError(_error)) {
     return (
       <ErrorAlert title={customErrorName} {...rest}>
@@ -68,16 +70,6 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
           It looks like you don&apos;t have enough gas to complete this transaction. If you believe
           this is a mistake, please report it in{' '}
           <BalAlertLink href="https://discord.balancer.fi/">our discord.</BalAlertLink>
-        </Text>
-      </ErrorAlert>
-    )
-  }
-
-  if (isUnbalancedAddError(_error)) {
-    return (
-      <ErrorAlert title={customErrorName} {...rest}>
-        <Text color="black" variant="secondary">
-          Your input(s) would excessively unbalance the pool. Please adjust to be more proportional.
         </Text>
       </ErrorAlert>
     )
