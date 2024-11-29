@@ -40,6 +40,7 @@ import {
   isComposableStableV1,
   isCowAmmPool,
   isGyro,
+  isStable,
   isUnbalancedLiquidityDisabled,
   isV3Pool,
   isV3WithNestedActionsPool,
@@ -275,6 +276,11 @@ export function shouldUseRecoveryRemoveLiquidity(pool: Pool): boolean {
 export function requiresProportionalInput(pool: Pool): boolean {
   if (isV3Pool(pool) && isUnbalancedLiquidityDisabled(pool)) return true
   return isGyro(pool.type) || isCowAmmPool(pool.type)
+}
+
+// Some pool types do not support AddLiquidityKind.Proportional in the SDK
+export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
+  return !isStable(pool.type)
 }
 
 type ProtocolVersion = PoolState['protocolVersion']
