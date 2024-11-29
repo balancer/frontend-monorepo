@@ -37,7 +37,17 @@ export function Code() {
   return (
     <Noise backgroundColor="background.level0WithOpacity">
       <DefaultPageContainer>
-        <Card>
+        <VStack alignItems="center" spacing="md" textAlign="center">
+          <Heading as="h3" size="xl">
+            Code less, build more.
+          </Heading>
+          <Text color="font.secondary" fontSize="lg" maxW="2xl">
+            Balancer v3’s architecture focuses on simplicity, flexibility, and extensibility at its
+            core. The v3 vault more formally defines the requirements of a custom pool, shifting
+            core design patterns out of the pool and into the vault.
+          </Text>
+        </VStack>
+        <Card mt="2xl">
           <Box background="background.level0" minH="500px" position="relative" shadow="innerXl">
             <Box
               bottom={0}
@@ -80,9 +90,10 @@ export function Code() {
                       Building on v3 is simple
                     </Heading>
                     <Text color="font.secondary" fontSize="lg">
-                      To make custom pool creation easy, core functions have been moved from pools
-                      into the heavily audited vault. For example, here’s all the code needed to
-                      build a swap function for a Constant Product Pool.
+                      Balancer v3’s architecture focuses on simplicity, flexibility, and
+                      extensibility at its core. The v3 vault more formally defines the requirements
+                      of a custom pool, shifting core design patterns out of the pool and into the
+                      vault.
                     </Text>
                   </VStack>
                 </GridItem>

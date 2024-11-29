@@ -326,21 +326,6 @@ export function Build() {
         </Box>
         <DefaultPageContainer minH="800px" noVerticalPadding position="relative" py="3xl">
           <Grid gap="xl" templateColumns="repeat(2, 1fr)">
-            <GridItem>
-              <VStack alignItems="start" spacing="md">
-                <Heading as="h3" size="xl">
-                  Building on v3 is easy
-                </Heading>
-                <Text color="font.secondary" fontSize="lg">
-                  Balancer v3’s architecture focuses on simplicity, flexibility, and extensibility
-                  at its core. The v3 vault more formally defines the requirements of a custom pool,
-                  shifting core design patterns out of the pool and into the vault.
-                </Text>
-              </VStack>
-            </GridItem>
-            <GridItem />
-          </Grid>
-          <Grid gap="xl" templateColumns="repeat(2, 1fr)">
             <GridItem />
             <GridItem borderRadius="lg">
               <VStack alignItems="start" spacing="md">

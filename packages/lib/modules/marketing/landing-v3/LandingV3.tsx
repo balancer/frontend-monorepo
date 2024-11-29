@@ -10,8 +10,8 @@ export function LandingV3() {
   return (
     <>
       <HeroV2 />
-      <Build />
       <Code />
+      <Build />
       <Videos />
       <Audits />
       <Grants />

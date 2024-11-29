@@ -25,7 +25,7 @@ export function Hero() {
       <Box bottom={0} h="100vh" left={0} minH="600px" position="absolute" right={0} top={0}>
         <AnimatePresence>
           <motion.div
-            animate={{ opacity: 0.5 }}
+            animate={{ opacity: isDarkMode ? 0.4 : 0.5 }}
             exit={{ opacity: 0 }}
             initial={{ opacity: 0.01 }}
             style={{
