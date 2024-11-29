@@ -55,6 +55,7 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -188,15 +189,12 @@ function AddLiquidityMainForm() {
             <BalAlert content="You cannot add because the pool has no liquidity" status="warning" />
           )}
           <SafeAppAlert />
-          {!nestedAddLiquidityEnabled ? (
-            <TokenInputsWithAddable
-              requiresProportionalInput={requiresProportionalInput(pool)}
-              tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}
-              totalUSDValue={totalUSDValue}
-            />
-          ) : (
-            <TokenInputs tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()} />
-          )}
+          <AddLiquidityFormTabs
+            nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
+            pool={pool}
+            tokenSelectDisclosure={tokenSelectDisclosure}
+            totalUSDValue={totalUSDValue}
+          />
           <VStack align="start" spacing="sm" w="full">
             {!simulationQuery.isError && (
               <PriceImpactAccordion

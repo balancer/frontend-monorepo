@@ -9,19 +9,16 @@ import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputs } from './TokenInputs'
 import { useProportionalInputs } from './useProportionalInputs'
 import { useMaximumInputs } from './useMaximumInputs'
-import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { hasNoLiquidity } from '../../LiquidityActionHelpers'
-import { usePool } from '../../../PoolProvider'
 
 type Props = {
   tokenSelectDisclosureOpen: () => void
-  requiresProportionalInput: boolean
+  isProportionalInput: boolean
   totalUSDValue: string
 }
 
 export function TokenInputsWithAddable({
   tokenSelectDisclosureOpen,
-  requiresProportionalInput,
+  isProportionalInput,
   totalUSDValue,
 }: Props) {
   const { isConnected } = useUserAccount()
@@ -38,7 +35,6 @@ export function TokenInputsWithAddable({
     setIsMaximized: setIsMaximizedForProportionalInput,
     clearAmountsIn,
   } = useProportionalInputs()
-  const { pool } = usePool()
 
   const {
     canMaximize: canMaximizeForMaximumInput,
@@ -48,7 +44,7 @@ export function TokenInputsWithAddable({
     setIsMaximized: setIsMaximizedForMaximumInput,
   } = useMaximumInputs()
 
-  const isProportional = requiresProportionalInput || wantsProportional
+  const isProportional = isProportionalInput || wantsProportional
 
   const handleMaximizeUserAmounts = isProportional
     ? handleMaximizeUserAmountsForProportionalInput
@@ -84,9 +80,6 @@ export function TokenInputsWithAddable({
 
   return (
     <VStack spacing="md" w="full">
-      {requiresProportionalInput && !hasNoLiquidity(pool) && (
-        <BalAlert content="This pool requires liquidity to be added proportionally" status="info" />
-      )}
       {isConnected && (
         <Card p={['sm', 'ms']} variant="subSection" w="full">
           <HStack w="full">
@@ -94,15 +87,10 @@ export function TokenInputsWithAddable({
               <WalletIcon size={18} />
             </Box>
             <HStack spacing="xs">
-              {!requiresProportionalInput && canMaximizeForProportionalInput ? (
+              {canMaximizeForProportionalInput ? (
                 <Text color="grayText" fontSize="sm">
-                  <Box
-                    as="span"
-                    color="font.highlight"
-                    cursor="pointer"
-                    onClick={handleWantsProportional}
-                  >
-                    {`${wantsProportional ? 'Proportional ' : 'Total '}`}
+                  <Box as="span" color="font.highlight">
+                    {`${isProportionalInput ? 'Proportional ' : 'Total '}`}
                   </Box>
                   addable pool tokens
                 </Text>
@@ -138,7 +126,7 @@ export function TokenInputsWithAddable({
             {!canMaximize && (
               <Tooltip
                 label={
-                  requiresProportionalInput
+                  isProportionalInput
                     ? 'For pools that require proportional liquidity, you need a balance above zero for every token in order to add any liquidity.'
                     : 'You have no eligible tokens that can be added to this pool. Go swap to get at least one pool token. '
                 }
