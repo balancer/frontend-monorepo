@@ -7,6 +7,7 @@ import {
 } from '@sentry/types'
 import { SentryError, ensureError } from './errors'
 import {
+  isInvariantRatioSimulationErrorMessage,
   isNotEnoughGasErrorMessage,
   isPausedErrorMessage,
   isUserRejectedError,
@@ -354,6 +355,17 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
   }
 
   if (isPausedErrorMessage(message)) return true
+
+  /*
+    When hitting Invariant Ratio Above max error (only in v3 pools) we enforce proportional UX so we don't need sentry logs
+    Context: https://github.com/balancer/balancer-maths/blob/8aaf871acd9e138ba855f03be723cdfd630f4246/typescript/src/weighted/weightedMath.ts#L10
+    */
+  if (
+    isInvariantRatioSimulationErrorMessage(message) ||
+    isInvariantRatioSimulationErrorMessage(message)
+  ) {
+    return true
+  }
 
   return false
 }
