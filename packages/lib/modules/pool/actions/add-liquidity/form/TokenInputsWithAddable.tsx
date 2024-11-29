@@ -23,7 +23,8 @@ export function TokenInputsWithAddable({
 }: Props) {
   const { isConnected } = useUserAccount()
   const { toCurrency } = useCurrency()
-  const { setHumanAmountIn } = useAddLiquidity()
+
+  const { setHumanAmountIn, wantsProportional, setWantsProportional } = useAddLiquidity()
 
   const {
     handleProportionalHumanInputChange,
