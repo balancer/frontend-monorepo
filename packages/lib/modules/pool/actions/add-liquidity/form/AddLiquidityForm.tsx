@@ -56,6 +56,7 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
+import { UnbalancedAddError } from '@repo/lib/shared/components/errors/UnbalancedAddError'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -262,6 +263,12 @@ function AddLiquidityMainForm() {
             <GenericError
               customErrorName="Error in query simulation"
               error={simulationQuery.error}
+            />
+          )}
+          {(simulationQuery.isError || priceImpactQuery.isError) && (
+            <UnbalancedAddError
+              error={simulationQuery.error || priceImpactQuery.error}
+              goToProportionalAdds={() => setTabIndex(1)}
             />
           )}
           {isConnected ? (

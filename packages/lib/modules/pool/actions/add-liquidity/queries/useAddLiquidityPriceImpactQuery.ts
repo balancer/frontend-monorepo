@@ -12,6 +12,7 @@ import { usePool } from '../../../PoolProvider'
 import { sentryMetaForAddLiquidityHandler } from '@repo/lib/shared/utils/query-errors'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { useBlockNumber } from 'wagmi'
+import { isInvariantRatioPIErrorMessage } from '@repo/lib/shared/utils/error-filters'
 
 type Params = {
   handler: AddLiquidityHandler
@@ -42,6 +43,14 @@ export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabl
     queryKey,
     queryFn,
     enabled: enabled && !areEmptyAmounts(debouncedHumanAmountsIn),
+    retry(failureCount, error) {
+      if (isInvariantRatioPIErrorMessage(error?.message)) {
+        // Avoid more retries
+        return false
+      }
+      // 3 retries by default
+      return failureCount < 3
+    },
     gcTime: 0,
     meta: sentryMetaForAddLiquidityHandler('Error in add liquidity priceImpact query', {
       ...params,

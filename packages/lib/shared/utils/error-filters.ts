@@ -47,7 +47,14 @@ export function isPausedErrorMessage(errorMessage: string): boolean {
 
 export function isUnbalancedAddError(error?: Error | null): boolean {
   if (!error) return false
-  return isUnbalancedAddErrorMessage(error)
+  if (
+    isInvariantRatioSimulationErrorMessage(error?.message) ||
+    isInvariantRatioPIErrorMessage(error?.message) ||
+    isUnbalancedAddErrorMessage(error)
+  ) {
+    return true
+  }
+  return false
 }
 
 export function isUnbalancedAddErrorMessage(error: Error | null): boolean {
@@ -55,4 +62,22 @@ export function isUnbalancedAddErrorMessage(error: Error | null): boolean {
   const hasErrors = (errorString: string) => error?.message.includes(errorString)
 
   return errorStrings.some(hasErrors)
+}
+
+export function isInvariantRatioSimulationErrorMessage(errorMessage?: string): boolean {
+  return (
+    !!errorMessage?.includes('InvariantRatioAboveMax') ||
+    !!errorMessage?.includes('InvariantRatioBelowMin')
+  )
+}
+
+export function isInvariantRatioPIErrorMessage(errorMessage?: string): boolean {
+  if (
+    errorMessage?.includes(
+      'addLiquidityUnbalanced operation will fail at SC level with user defined input.'
+    )
+  ) {
+    return true
+  }
+  return false
 }

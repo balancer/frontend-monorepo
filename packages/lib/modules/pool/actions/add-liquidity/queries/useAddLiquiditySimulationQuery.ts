@@ -12,6 +12,7 @@ import { usePool } from '../../../PoolProvider'
 import { sentryMetaForAddLiquidityHandler } from '@repo/lib/shared/utils/query-errors'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { useBlockNumber } from 'wagmi'
+import { isInvariantRatioSimulationErrorMessage } from '@repo/lib/shared/utils/error-filters'
 
 export type AddLiquiditySimulationQueryResult = ReturnType<typeof useAddLiquiditySimulationQuery>
 
@@ -45,6 +46,14 @@ export function useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enable
     queryFn,
     enabled: enabled && !areEmptyAmounts(debouncedHumanAmountsIn),
     gcTime: 0,
+    retry(failureCount, error) {
+      if (isInvariantRatioSimulationErrorMessage(error?.message)) {
+        // Avoid more retries
+        return false
+      }
+      // 3 retries by default
+      return failureCount < 3
+    },
     meta: sentryMetaForAddLiquidityHandler('Error in add liquidity simulation query', {
       ...params,
       chainId,
