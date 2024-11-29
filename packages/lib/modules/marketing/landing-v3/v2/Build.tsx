@@ -410,9 +410,7 @@ export function Build() {
             <GridItem />
             <GridItem borderRadius="lg">
               <VStack alignItems="start" spacing="md">
-                <Heading as="h4" size="lg">
-                  Contracts
-                </Heading>
+                <Heading>Contracts</Heading>
                 <Text color="font.secondary" fontSize="lg">
                   The four main contracts of Balancer v3 enhance flexibility and minimize the
                   intricacies involved in constructing pools, empowering builders to focus on
@@ -482,7 +480,7 @@ export function Build() {
             </chakra.span>
           </Heading>
 
-          <Grid gap="2xl" mt="2xl" templateColumns="repeat(3, 1fr)">
+          <Grid gap="xl" mt="2xl" templateColumns="repeat(3, 1fr)">
             {keyFeatures.map((feature, index) => (
               <GridItem key={index}>
                 <FeatureCard feature={feature} />

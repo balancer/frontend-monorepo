@@ -153,7 +153,7 @@ export function Videos() {
       <DefaultPageContainer noVerticalPadding pt="200px">
         <VStack align="start" spacing="lg" w="full">
           <HStack align="end" justify="space-between" w="full">
-            <Heading>Code walkthroughs</Heading>
+            <Heading>Learn to build on v3</Heading>
             <Button
               as={NextLink}
               href="https://github.com/balancer/scaffold-balancer-v3"

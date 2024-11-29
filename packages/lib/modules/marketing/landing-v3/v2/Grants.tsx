@@ -20,18 +20,6 @@ const grantIdeas = [
     title: 'Custom pool',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   },
-  {
-    title: 'Pool hook',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  },
-  {
-    title: 'Custom AMM',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  },
-  {
-    title: 'Custom pool',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  },
 ]
 
 export function Grants() {
@@ -48,7 +36,7 @@ export function Grants() {
             >
               BALANCER GRANTS
             </Text>
-            <Heading>Get help to innovate on v3 Get a grant</Heading>
+            <Heading>Get help to innovate on v3</Heading>
             <Text color="font.secondary" maxW="3xl">
               Balancer Community Grants aim to accelerate the development of the Balancer ecosystem.
               Grants for innovation on Balancer v3 will be prioritized. This program is managed by
