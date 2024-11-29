@@ -90,10 +90,9 @@ export function Code() {
                       Building on v3 is simple
                     </Heading>
                     <Text color="font.secondary" fontSize="lg">
-                      Balancer v3’s architecture focuses on simplicity, flexibility, and
-                      extensibility at its core. The v3 vault more formally defines the requirements
-                      of a custom pool, shifting core design patterns out of the pool and into the
-                      vault.
+                      To make custom pool creation easy, core functions have been moved from pools
+                      into the heavily audited vault. For example, here’s all the code needed to
+                      build a swap function for a Constant Product Pool.
                     </Text>
                   </VStack>
                 </GridItem>
