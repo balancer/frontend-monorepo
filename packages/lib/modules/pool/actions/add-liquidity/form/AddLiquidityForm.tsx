@@ -119,11 +119,14 @@ function AddLiquidityMainForm() {
   const hasPriceImpact = priceImpact !== undefined && priceImpact !== null
   const priceImpactLabel = hasPriceImpact ? fNum('priceImpact', priceImpact) : '-'
 
-  const isUnbalancedError = isUnbalancedAddError(simulationQuery.error || priceImpactQuery.error)
+  const nestedAddLiquidityEnabled = supportsNestedActions(pool) // TODO && !userToggledEscapeHatch
+
+  const isUnbalancedError =
+    !nestedAddLiquidityEnabled && //Nested adds to not support proportional for now
+    isUnbalancedAddError(simulationQuery.error || priceImpactQuery.error)
 
   const weeklyYield = calcPotentialYieldFor(pool, totalUSDValue)
 
-  const nestedAddLiquidityEnabled = supportsNestedActions(pool) // TODO && !userToggledEscapeHatch
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
   const isFetching = simulationQuery.isFetching || priceImpactQuery.isFetching
 
@@ -282,6 +285,7 @@ function AddLiquidityMainForm() {
             <GenericError
               customErrorName="Error in query simulation"
               error={simulationQuery.error}
+              skipError={isUnbalancedError}
             />
           )}
 

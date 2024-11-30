@@ -6,7 +6,6 @@ import {
   isNotEnoughGasError,
   isPausedError,
   isTooManyRequestsError,
-  isUnbalancedAddError,
   isUserRejectedError,
   isViemHttpFetchError,
 } from '../../utils/error-filters'
@@ -17,14 +16,14 @@ type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
 type Props = AlertProps & {
   error: ErrorWithOptionalShortMessage
   customErrorName?: string
+  skipError?: boolean
 }
 
-export function GenericError({ error: _error, customErrorName, ...rest }: Props) {
+export function GenericError({ error: _error, customErrorName, skipError, ...rest }: Props) {
+  if (skipError) return
   const error = ensureError(_error)
   if (isUserRejectedError(error)) return null
   const errorName = customErrorName ? `${customErrorName} (${error.name})` : error.name
-
-  if (isUnbalancedAddError(_error)) return null //We handle this specific error in UnbalancedAddError component
 
   if (isViemHttpFetchError(_error)) {
     return (
