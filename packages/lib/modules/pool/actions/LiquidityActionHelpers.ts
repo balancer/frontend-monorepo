@@ -43,7 +43,7 @@ import {
   isUnbalancedLiquidityDisabled,
   isV2Pool,
   isV3Pool,
-  isV3WithNestedActionsPool,
+  isV3NotSupportingWethIsEth,
 } from '../pool.helpers'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
 
@@ -359,7 +359,7 @@ export function emptyTokenAmounts(pool: Pool): TokenAmount[] {
 
 export function shouldShowNativeWrappedSelector(token: GqlToken, pool: Pool) {
   return (
-    !isV3WithNestedActionsPool(pool) && // V3 nested actions don't support wethIsEth currently
+    !isV3NotSupportingWethIsEth(pool) && // V3 boosted/nested actions don't support wethIsEth currently
     !isCowAmmPool(pool.type) && // Cow AMM pools don't support wethIsEth
     isNativeOrWrappedNative(token.address as Address, token.chain)
   )
