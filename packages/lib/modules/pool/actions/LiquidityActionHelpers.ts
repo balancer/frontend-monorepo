@@ -84,7 +84,7 @@ export class LiquidityActionHelpers {
   /* Used by V3 boosted SDK handlers */
   public get boostedPoolState(): PoolStateWithUnderlyings & { totalShares: HumanAmount } {
     const poolTokensWithUnderlyings: PoolTokenWithUnderlying[] = this.pool.poolTokens.map(
-      (token, index) => ({
+      token => ({
         ...token,
         address: token.address as Address,
         balance: token.balance as HumanAmount,
@@ -93,7 +93,7 @@ export class LiquidityActionHelpers {
               ...token.underlyingToken,
               address: token.underlyingToken?.address as Address,
               decimals: token.underlyingToken?.decimals as number,
-              index, //TODO: review that this index is always the expected one
+              index: token.index, //TODO: review that this index is always the expected one
             }
           : null, // TODO: unit test this case with http://localhost:3000/pools/sepolia/v3/0xbb83ba331c3254c8c44645430126797dceda89c0/add-liquidity
       })
