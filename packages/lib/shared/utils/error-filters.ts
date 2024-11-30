@@ -57,7 +57,7 @@ export function isUnbalancedAddError(error?: Error | null): boolean {
   return false
 }
 
-export function isUnbalancedAddErrorMessage(error: Error | null): boolean {
+export function isUnbalancedAddErrorMessage(error?: Error | null): boolean {
   const errorStrings = ['BAL#304', 'queryAddLiquidityUnbalanced'] // [v2 error, v3 error]
   const hasErrors = (errorString: string) => error?.message.includes(errorString)
 
@@ -72,10 +72,12 @@ export function isInvariantRatioSimulationErrorMessage(errorMessage?: string): b
 }
 
 export function isInvariantRatioPIErrorMessage(errorMessage?: string): boolean {
+  if (!errorMessage) return false
   if (
-    errorMessage?.includes(
+    errorMessage.includes(
       'addLiquidityUnbalanced operation will fail at SC level with user defined input.'
-    )
+    ) ||
+    errorMessage.includes('Arithmetic operation resulted in underflow or overflow.')
   ) {
     return true
   }

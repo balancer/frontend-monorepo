@@ -1,24 +1,22 @@
-import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import {
-  AddLiquidity,
+  AddLiquidityBoostedBuildCallInput,
+  AddLiquidityBoostedV3,
   AddLiquidityKind,
   AddLiquidityProportionalInput,
   Address,
-  HumanAmount,
+  Hex,
   InputAmount,
-  Slippage,
 } from '@balancer/sdk'
+import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
+import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Pool } from '../../../PoolProvider'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
+import { constructBaseBuildCallInput } from './add-liquidity.utils'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
-import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 
-/**
- * Base abstract class that shares common logic shared by v3 and v2/v1 pool proportional add handlers
- */
-export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidityHandler {
+export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
   protected helpers: LiquidityActionHelpers
 
   constructor(pool: Pool) {
@@ -33,13 +31,15 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
     humanAmountsIn: HumanTokenAmountWithAddress[],
     userAddress: Address
   ): Promise<SdkQueryAddLiquidityOutput> {
-    //TODO: instead of getting the zero index we should get the one that the user introduced
     const referenceAmount = this.helpers.toSdkInputAmounts(humanAmountsIn)[0]
 
-    const addLiquidity = new AddLiquidity()
+    const addLiquidity = new AddLiquidityBoostedV3()
 
     const addLiquidityInput = this.constructSdkInput(referenceAmount, userAddress)
-    const sdkQueryOutput = await addLiquidity.query(addLiquidityInput, this.helpers.poolState)
+    const sdkQueryOutput = await addLiquidity.query(
+      addLiquidityInput,
+      this.helpers.boostedPoolState
+    )
 
     return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
   }
@@ -49,16 +49,24 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
     queryOutput,
     humanAmountsIn,
     slippagePercent,
+    permit2,
   }: SdkBuildAddLiquidityInput): Promise<TransactionConfig> {
-    const addLiquidity = new AddLiquidity()
+    const addLiquidity = new AddLiquidityBoostedV3()
 
-    const { callData, to, value } = addLiquidity.buildCall({
-      ...queryOutput.sdkQueryOutput,
-      slippage: Slippage.fromPercentage(slippagePercent as HumanAmount),
-      sender: account,
-      recipient: account,
-      wethIsEth: this.helpers.isNativeAssetIn(humanAmountsIn),
-    })
+    const buildCallParams: AddLiquidityBoostedBuildCallInput = {
+      ...constructBaseBuildCallInput({
+        humanAmountsIn,
+        sdkQueryOutput: queryOutput.sdkQueryOutput,
+        slippagePercent: slippagePercent,
+        pool: this.helpers.pool,
+      }),
+      protocolVersion: 3,
+      userData: '0x' as Hex,
+    }
+
+    const { callData, to, value } = permit2
+      ? addLiquidity.buildCallWithPermit2(buildCallParams, permit2)
+      : addLiquidity.buildCall(buildCallParams)
 
     return {
       account,
@@ -76,7 +84,6 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
     referenceAmount: InputAmount,
     userAddress: Address
   ): AddLiquidityProportionalInput {
-    console.log({ referenceAmount })
     return {
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),

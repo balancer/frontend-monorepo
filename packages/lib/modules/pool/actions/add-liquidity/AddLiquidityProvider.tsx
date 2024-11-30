@@ -3,7 +3,7 @@
 
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { HumanAmount } from '@balancer/sdk'
+import { HumanAmount, isSameAddress } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { Address, Hash } from 'viem'
 import { usePool } from '../../PoolProvider'
@@ -89,6 +89,19 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
         humanAmount,
       },
     ])
+  }
+
+  function clearAmountsIn(changedAmount?: HumanTokenAmountWithAddress) {
+    setHumanAmountsIn(
+      humanAmountsIn.map(({ tokenAddress }) => {
+        // Keeps user inputs like '0' or '0.' instead of replacing them with ''
+        if (changedAmount && isSameAddress(changedAmount.tokenAddress, tokenAddress)) {
+          return changedAmount
+        }
+
+        return { tokenAddress, humanAmount: '' }
+      })
+    )
   }
 
   const tokensWithNativeAsset = replaceWrappedWithNativeAsset(tokens, nativeAsset)
@@ -207,6 +220,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     refetchQuote,
     setHumanAmountIn,
     setHumanAmountsIn,
+    clearAmountsIn,
     setNeedsToAcceptHighPI,
     setAcceptPoolRisks,
     setWethIsEth,

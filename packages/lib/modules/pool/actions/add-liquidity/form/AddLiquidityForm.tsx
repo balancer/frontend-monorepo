@@ -28,8 +28,6 @@ import {
   ProportionalTransactionSettings,
   TransactionSettings,
 } from '@repo/lib/modules/user/settings/TransactionSettings'
-import { TokenInputs } from './TokenInputs'
-import { TokenInputsWithAddable } from './TokenInputsWithAddable'
 import { usePool } from '../../../PoolProvider'
 import {
   hasNoLiquidity,
@@ -57,6 +55,7 @@ import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
 import { UnbalancedAddError } from '@repo/lib/shared/components/errors/UnbalancedAddError'
+import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -89,6 +88,7 @@ function AddLiquidityMainForm() {
     proportionalSlippage,
     slippage,
     setProportionalSlippage,
+    setWantsProportional,
     wantsProportional,
   } = useAddLiquidity()
 
@@ -103,12 +103,23 @@ function AddLiquidityMainForm() {
   const { startTokenPricePolling } = useTokens()
   const [tabIndex, setTabIndex] = useState(0)
 
+  const setUnbalancedTab = () => {
+    setTabIndex(0)
+    setWantsProportional(false)
+  }
+  const setProportionalTab = () => {
+    setTabIndex(1)
+    setWantsProportional(true)
+  }
+
   useEffect(() => {
     setPriceImpact(priceImpactQuery.data)
   }, [priceImpactQuery.data])
 
   const hasPriceImpact = priceImpact !== undefined && priceImpact !== null
   const priceImpactLabel = hasPriceImpact ? fNum('priceImpact', priceImpact) : '-'
+
+  const isUnbalancedError = isUnbalancedAddError(simulationQuery.error || priceImpactQuery.error)
 
   const weeklyYield = calcPotentialYieldFor(pool, totalUSDValue)
 
@@ -194,12 +205,18 @@ function AddLiquidityMainForm() {
           <SafeAppAlert />
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
-            pool={pool}
-            setTabIndex={setTabIndex}
+            setProportionalTab={setProportionalTab}
+            setUnbalancedTab={setUnbalancedTab}
             tabIndex={tabIndex}
             tokenSelectDisclosure={tokenSelectDisclosure}
             totalUSDValue={totalUSDValue}
           />
+          {!wantsProportional && isUnbalancedError && (
+            <UnbalancedAddError
+              error={simulationQuery.error || priceImpactQuery.error}
+              goToProportionalAdds={setProportionalTab}
+            />
+          )}
           <VStack align="start" spacing="sm" w="full">
             {!simulationQuery.isError && (
               <PriceImpactAccordion
@@ -226,6 +243,7 @@ function AddLiquidityMainForm() {
                     totalUSDValue={totalUSDValue}
                   />
                 }
+                avoidPriceImpactAlert={isUnbalancedError}
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
                 isDisabled={!priceImpactQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
@@ -266,12 +284,7 @@ function AddLiquidityMainForm() {
               error={simulationQuery.error}
             />
           )}
-          {(simulationQuery.isError || priceImpactQuery.isError) && (
-            <UnbalancedAddError
-              error={simulationQuery.error || priceImpactQuery.error}
-              goToProportionalAdds={() => setTabIndex(1)}
-            />
-          )}
+
           {isConnected ? (
             <Tooltip label={isDisabled ? disabledReason : ''}>
               <Button
