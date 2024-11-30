@@ -88,12 +88,14 @@ export class LiquidityActionHelpers {
         ...token,
         address: token.address as Address,
         balance: token.balance as HumanAmount,
-        underlyingToken: {
-          ...token.underlyingToken,
-          address: token.underlyingToken?.address as Address,
-          decimals: token.underlyingToken?.decimals as number,
-          index, //TODO: review that this index is always the expected one
-        },
+        underlyingToken: token.underlyingToken?.address
+          ? {
+              ...token.underlyingToken,
+              address: token.underlyingToken?.address as Address,
+              decimals: token.underlyingToken?.decimals as number,
+              index, //TODO: review that this index is always the expected one
+            }
+          : null, // TODO: unit test this case with http://localhost:3000/pools/sepolia/v3/0xbb83ba331c3254c8c44645430126797dceda89c0/add-liquidity
       })
     )
     const state: PoolStateWithUnderlyings & { totalShares: HumanAmount } = {
