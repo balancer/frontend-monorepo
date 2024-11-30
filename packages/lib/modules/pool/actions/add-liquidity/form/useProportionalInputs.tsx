@@ -14,12 +14,15 @@ import { useAddLiquidity } from '../AddLiquidityProvider'
 
 export function useProportionalInputs() {
   const { isConnected } = useUserAccount()
-  const { helpers, setHumanAmountsIn, clearAmountsIn, wethIsEth } = useAddLiquidity()
+  const { helpers, setHumanAmountsIn, clearAmountsIn, wethIsEth, setReferenceAmountAddress } =
+    useAddLiquidity()
   const { balances, isBalancesLoading } = useTokenBalances()
   const { isLoading: isPoolLoading } = usePool()
 
   function handleProportionalHumanInputChange(tokenAddress: Address, humanAmount: HumanAmount) {
     if (isEmptyHumanAmount(humanAmount)) return clearAmountsIn({ tokenAddress, humanAmount })
+
+    setReferenceAmountAddress(tokenAddress)
 
     const proportionalHumanAmountsIn = _calculateProportionalHumanAmountsIn({
       tokenAddress,

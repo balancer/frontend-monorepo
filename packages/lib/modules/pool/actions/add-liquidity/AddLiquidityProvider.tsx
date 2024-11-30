@@ -37,6 +37,8 @@ export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>
 
 export function _useAddLiquidity(urlTxHash?: Hash) {
   const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>([])
+  // only used by Proportional handlers that require a referenceAmount
+  const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
@@ -123,6 +125,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     handler,
     humanAmountsIn,
     enabled: !urlTxHash,
+    referenceAmountAddress,
   })
   const priceImpactQuery = useAddLiquidityPriceImpactQuery({
     handler,
@@ -215,12 +218,14 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     proportionalSlippage,
     isForcedProportionalAdd,
     wantsProportional,
+    referenceAmountAddress,
     setWantsProportional,
     setProportionalSlippage,
     refetchQuote,
     setHumanAmountIn,
     setHumanAmountsIn,
     clearAmountsIn,
+    setReferenceAmountAddress,
     setNeedsToAcceptHighPI,
     setAcceptPoolRisks,
     setWethIsEth,

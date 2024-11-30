@@ -6,6 +6,7 @@ import {
   Address,
   Hex,
   InputAmount,
+  isSameAddress,
 } from '@balancer/sdk'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
@@ -29,9 +30,17 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
 
   public async simulate(
     humanAmountsIn: HumanTokenAmountWithAddress[],
-    userAddress: Address
+    userAddress: Address,
+    referenceAmountAddress?: Address
   ): Promise<SdkQueryAddLiquidityOutput> {
-    const referenceAmount = this.helpers.toSdkInputAmounts(humanAmountsIn)[0]
+    // TODO: generalize to other handlers with referenceAmountAddress
+    const inputAmounts = this.helpers.toSdkInputAmounts(humanAmountsIn)
+    const foundReferenceAmount =
+      referenceAmountAddress &&
+      inputAmounts.find(item => isSameAddress(item.address, referenceAmountAddress))
+    const referenceAmount = foundReferenceAmount || inputAmounts[0]
+
+    console.log({ referenceAmount })
 
     const addLiquidity = new AddLiquidityBoostedV3()
 
