@@ -10,33 +10,8 @@ import {
   supportsProportionalAddLiquidityKind,
 } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-import { TokenInputs } from './TokenInputs'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 10000
-
-export function TokenInputsBase({
-  nestedAddLiquidityEnabled,
-  tokenSelectDisclosure,
-  totalUSDValue,
-  isProportional,
-}: {
-  nestedAddLiquidityEnabled: boolean
-  tokenSelectDisclosure: UseDisclosureReturn
-  totalUSDValue: string
-  isProportional: boolean
-}) {
-  if (nestedAddLiquidityEnabled) {
-    return <TokenInputs tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()} />
-  } else {
-    return (
-      <TokenInputsMaybeProportional
-        isProportional={isProportional}
-        tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}
-        totalUSDValue={totalUSDValue}
-      />
-    )
-  }
-}
 
 export function AddLiquidityFormTabs({
   tokenSelectDisclosure,
@@ -58,6 +33,12 @@ export function AddLiquidityFormTabs({
 
   const isDisabledProportionalTab =
     nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)
+  /* TODO: test nested unbalanced + proportional calculations
+  it does not work now due to "'Reference amount must be relative to a token in the pool or its BPT',"
+  cause tokensWithBpt does not contain leaf tokens inside BPT:
+  http://localhost:3000/pools/sepolia/v3/0xc9233cc69435591b193b50f702ac31e404a08b10
+  */
+  // const isDisabledProportionalTab = !supportsProportionalAddLiquidityKind(pool)
 
   const isBelowMinTvlThreshold =
     !isDisabledProportionalTab &&
@@ -100,6 +81,8 @@ export function AddLiquidityFormTabs({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDisabledUnbalancedTab, isLoading])
 
+  const isProportional = tabIndex === 1
+
   return (
     <VStack>
       <ButtonGroup
@@ -110,21 +93,11 @@ export function AddLiquidityFormTabs({
         size="md"
         width="36"
       />
-      {tabIndex === 0 ? (
-        <TokenInputsBase
-          isProportional={false}
-          nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
-          tokenSelectDisclosure={tokenSelectDisclosure}
-          totalUSDValue={totalUSDValue}
-        />
-      ) : (
-        <TokenInputsBase
-          isProportional
-          nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
-          tokenSelectDisclosure={tokenSelectDisclosure}
-          totalUSDValue={totalUSDValue}
-        />
-      )}
+      <TokenInputsMaybeProportional
+        isProportional={isProportional}
+        tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}
+        totalUSDValue={totalUSDValue}
+      />
     </VStack>
   )
 }

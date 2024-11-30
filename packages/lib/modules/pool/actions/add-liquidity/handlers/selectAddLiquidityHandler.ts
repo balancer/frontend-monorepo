@@ -25,6 +25,10 @@ export function selectAddLiquidityHandler(
   // We should add a toggle to the form which allows the user to revert to
   // adding liquidity in the first level pool tokens.
   if (supportsNestedActions(pool)) {
+    // TODO: console.log(
+    //   'NestedAddLiquidityV3Handler should work with unbalanced + calculate proportional',
+    //   { wantsProportional }
+    // )
     return isV3Pool(pool)
       ? new NestedAddLiquidityV3Handler(pool)
       : new NestedAddLiquidityV2Handler(pool)
