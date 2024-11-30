@@ -56,6 +56,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
 import { UnbalancedAddError } from '@repo/lib/shared/components/errors/UnbalancedAddError'
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
+import { isV3NotSupportingWethIsEth } from '../../../pool.helpers'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -144,7 +145,7 @@ function AddLiquidityMainForm() {
 
   // if native asset balance is higher set that asset as the 'default'
   useEffect(() => {
-    if (!isBalancesLoading && nativeAsset && wNativeAsset) {
+    if (!isBalancesLoading && nativeAsset && wNativeAsset && !isV3NotSupportingWethIsEth(pool)) {
       const nativeAssetBalance = balanceFor(nativeAsset.address)
       const wNativeAssetBalance = balanceFor(wNativeAsset.address)
       if (
