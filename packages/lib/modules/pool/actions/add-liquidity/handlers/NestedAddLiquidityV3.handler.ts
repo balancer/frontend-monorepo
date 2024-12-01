@@ -31,6 +31,9 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
       return 0
     }
     const input = this.constructSdkInput(humanAmountsIn)
+
+    console.log('NESTED PRICE IMPACT: ', { input, nestedPoolState: this.helpers.nestedPoolStateV3 })
+
     const priceImpactABA = await PriceImpact.addLiquidityNested(
       input,
       this.helpers.nestedPoolStateV3
