@@ -45,6 +45,7 @@ export function useAddLiquidityPriceImpactQuery({ handler, humanAmountsIn, enabl
     enabled: enabled && !areEmptyAmounts(debouncedHumanAmountsIn),
     retry(failureCount, error) {
       if (isInvariantRatioPIErrorMessage(error?.message)) {
+        console.log('Silenced PI error: ', error)
         // Avoid more retries
         return false
       }
