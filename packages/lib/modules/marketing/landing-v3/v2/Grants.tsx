@@ -49,7 +49,9 @@ export function Grants() {
             </Text>
           </VStack>
           <HStack align="end" justify="space-between" w="full">
-            <Text fontSize="2xl">Some fund-worthy ideas to get you started</Text>
+            <Text fontSize="2xl" opacity={0.8}>
+              Some fund-worthy ideas to get you started
+            </Text>
             <Button
               as={NextLink}
               href="https://grants.balancer.community/"

@@ -42,7 +42,8 @@ export function RadialPattern({
       circles.push(
         <Box
           alignItems="center"
-          border={`${borderWidth} solid ${borderColor}`}
+          border={`${borderWidth} solid`}
+          borderColor={borderColor}
           borderRadius="50%"
           display="flex"
           height={currentSize}

@@ -5,6 +5,7 @@ import { Code } from './v2/Code'
 import { Videos } from './v2/Videos'
 import { Audits } from './v2/Audits'
 import { Grants } from './v2/Grants'
+import { Grow } from './v2/Grow'
 
 export function LandingV3() {
   return (
@@ -15,6 +16,7 @@ export function LandingV3() {
       <Videos />
       <Audits />
       <Grants />
+      <Grow />
     </>
   )
 }
