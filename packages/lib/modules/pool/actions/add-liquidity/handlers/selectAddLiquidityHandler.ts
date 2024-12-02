@@ -5,14 +5,18 @@ import { TwammAddLiquidityHandler } from './TwammAddLiquidity.handler'
 import { UnbalancedAddLiquidityV2Handler } from './UnbalancedAddLiquidityV2.handler'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
-import { requiresProportionalInput, supportsNestedActions } from '../../LiquidityActionHelpers'
+import {
+  requiresProportionalInput,
+  supportsProportionalAddLiquidityKind,
+  supportsNestedActions,
+} from '../../LiquidityActionHelpers'
 import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.handler'
 import { isBoosted, isV3Pool } from '../../../pool.helpers'
 import { ProportionalAddLiquidityHandlerV3 } from './ProportionalAddLiquidityV3.handler'
 import { UnbalancedAddLiquidityV3Handler } from './UnbalancedAddLiquidityV3.handler'
 import { BoostedUnbalancedAddLiquidityV3Handler } from './BoostedUnbalancedAddLiquidityV3.handler'
 import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'
-import { ProportionalBoostedAddLiquidityV3 } from './ProportionalBoostedAddLiquidityV3.handler'
+import { ProportionalBoostedUnbalancedAddLiquidityV3Handler } from './ProportionalBoostedUnbalancedAddLiquidityV3.handler'
 
 export function selectAddLiquidityHandler(
   pool: Pool,
@@ -25,18 +29,14 @@ export function selectAddLiquidityHandler(
   // We should add a toggle to the form which allows the user to revert to
   // adding liquidity in the first level pool tokens.
   if (supportsNestedActions(pool)) {
-    // TODO: console.log(
-    //   'NestedAddLiquidityV3Handler should work with unbalanced + calculate proportional',
-    //   { wantsProportional }
-    // )
     return isV3Pool(pool)
       ? new NestedAddLiquidityV3Handler(pool)
       : new NestedAddLiquidityV2Handler(pool)
   }
 
   if (isBoosted(pool)) {
-    if (wantsProportional) {
-      return new ProportionalBoostedAddLiquidityV3(pool)
+    if (wantsProportional && supportsProportionalAddLiquidityKind(pool)) {
+      return new ProportionalBoostedUnbalancedAddLiquidityV3Handler(pool)
     }
     return new BoostedUnbalancedAddLiquidityV3Handler(pool)
   }

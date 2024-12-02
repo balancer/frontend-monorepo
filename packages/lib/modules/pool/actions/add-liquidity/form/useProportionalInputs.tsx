@@ -1,28 +1,86 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { Address, HumanAmount, InputAmount, calculateProportionalAmounts } from '@balancer/sdk'
-import { swapWrappedWithNative } from '@repo/lib/modules/tokens/token.helpers'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import { Address, HumanAmount, InputAmount, calculateProportionalAmounts } from '@balancer/sdk'
+import { useMemo, useState } from 'react'
 import { formatUnits } from 'viem'
 import { usePool } from '../../../PoolProvider'
-import { LiquidityActionHelpers, isEmptyHumanAmount } from '../../LiquidityActionHelpers'
+import {
+  LiquidityActionHelpers,
+  hasNoLiquidity,
+  isEmptyHumanAmount,
+} from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
+import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
+import { HumanTokenAmountWithAddress, TokenAmount } from '@repo/lib/modules/tokens/token.types'
+import { swapWrappedWithNative } from '@repo/lib/modules/tokens/token.helpers'
+
+type OptimalToken = {
+  tokenAddress: Address
+  userBalance: HumanAmount
+}
 
 export function useProportionalInputs() {
   const { isConnected } = useUserAccount()
-  const { helpers, setHumanAmountsIn, clearAmountsIn, wethIsEth, setReferenceAmountAddress } =
-    useAddLiquidity()
-  const { balances, isBalancesLoading } = useTokenBalances()
-  const { isLoading: isPoolLoading } = usePool()
+  const {
+    validTokens,
+    helpers,
+    humanAmountsIn,
+    setHumanAmountsIn,
+    wethIsEth,
+    nativeAsset,
+    wNativeAsset,
+  } = useAddLiquidity()
+  const { usdValueFor } = useTotalUsdValue(validTokens)
+  const { balanceFor, balances, isBalancesLoading } = useTokenBalances()
+  const { isLoading: isPoolLoading, pool } = usePool()
+  const [isMaximized, setIsMaximized] = useState(false)
+  const { isLoadingTokenPrices } = useTokens()
+
+  // Depending on if the user is using WETH or ETH, we need to filter out the
+  // native asset or wrapped native asset.
+  const nativeAssetFilter = (balance: TokenAmount) =>
+    wethIsEth
+      ? wNativeAsset && balance.address !== wNativeAsset.address
+      : nativeAsset && balance.address !== nativeAsset.address
+
+  const filteredBalances = useMemo(() => {
+    return balances.filter(nativeAssetFilter)
+  }, [wethIsEth, isBalancesLoading, balances])
+
+  function clearAmountsIn(changedAmount?: HumanTokenAmountWithAddress) {
+    setHumanAmountsIn(
+      humanAmountsIn.map(({ tokenAddress }) => {
+        // Keeps user inputs like '0' or '0.' instead of replacing them with ''
+        if (changedAmount && isSameAddress(changedAmount.tokenAddress, tokenAddress)) {
+          return changedAmount
+        }
+
+        return { tokenAddress, humanAmount: '' }
+      })
+    )
+  }
+
+  function handleMaximizeUserAmounts() {
+    if (!optimalToken) return
+    if (isMaximized) return setIsMaximized(false)
+    handleProportionalHumanInputChange(optimalToken.tokenAddress, optimalToken.userBalance)
+    setIsMaximized(true)
+  }
 
   function handleProportionalHumanInputChange(tokenAddress: Address, humanAmount: HumanAmount) {
-    if (isEmptyHumanAmount(humanAmount)) return clearAmountsIn({ tokenAddress, humanAmount })
+    // Checks if the user is entering the max amount for the tokenWithMinValue
+    const isMaximizing: boolean =
+      tokenAddress === optimalToken?.tokenAddress && humanAmount === optimalToken?.userBalance
 
-    setReferenceAmountAddress(tokenAddress)
+    setIsMaximized(isMaximizing)
+
+    if (isEmptyHumanAmount(humanAmount)) return clearAmountsIn({ tokenAddress, humanAmount })
 
     const proportionalHumanAmountsIn = _calculateProportionalHumanAmountsIn({
       tokenAddress,
@@ -34,18 +92,71 @@ export function useProportionalInputs() {
     setHumanAmountsIn(proportionalHumanAmountsIn)
   }
 
-  /*
-    TODO: show warning/tooltip/alert when one of the tokens have zero balance
-    (same for unbalanced tab when all tokens have zero balance)
-    Old implementation:
-    https://github.com/balancer/frontend-monorepo/blob/f68ad17b46f559e2e5556d972a193b3fa6e3706b/packages/lib/modules/pool/actions/add-liquidity/form/TokenInputsWithAddable.tsx#L122
-  */
-  const hasBalanceForAllTokens =
+  const shouldCalculateMaximizeAmounts =
     isConnected && !isBalancesLoading && !isPoolLoading && balances.length > 0
 
+  /*
+    Finds the optimal token.
+    A token is optimal when using its maximum user balance produces a valid proportional amounts result
+    (where the rest of the tokens have enough user balance for that proportional result).
+  */
+  const optimalToken = useMemo((): OptimalToken | undefined => {
+    if (isLoadingTokenPrices || !shouldCalculateMaximizeAmounts || hasNoLiquidity(pool)) return
+
+    const humanBalanceFor = (tokenAddress: string): HumanAmount => {
+      return (balanceFor(tokenAddress)?.formatted || '0') as HumanAmount
+    }
+
+    const optimalToken = filteredBalances.find(({ address }) => {
+      const humanBalance = humanBalanceFor(address)
+      if (isEmptyHumanAmount(humanBalance)) return false
+
+      const proportionalAmounts = _calculateProportionalHumanAmountsIn({
+        tokenAddress: address as Address,
+        humanAmount: humanBalance,
+        helpers,
+        wethIsEth,
+      })
+
+      // The user must have enough token balance for this proportional result
+      const haveEnoughBalance = proportionalAmounts.every(({ tokenAddress, humanAmount }) => {
+        return bn(humanBalanceFor(tokenAddress)).gte(bn(humanAmount))
+      })
+
+      return haveEnoughBalance
+    })
+
+    if (!optimalToken) return
+
+    return {
+      tokenAddress: optimalToken.address,
+      userBalance: humanBalanceFor(optimalToken.address),
+    } as OptimalToken
+  }, [shouldCalculateMaximizeAmounts, filteredBalances])
+
+  const maximizedUsdValue = useMemo(() => {
+    if (!shouldCalculateMaximizeAmounts || !optimalToken) return ''
+
+    const maxProportionalHumanAmountsIn = _calculateProportionalHumanAmountsIn({
+      tokenAddress: optimalToken.tokenAddress as Address,
+      humanAmount: optimalToken.userBalance,
+      helpers,
+      wethIsEth,
+    })
+
+    return usdValueFor(maxProportionalHumanAmountsIn)
+  }, [shouldCalculateMaximizeAmounts, optimalToken, isLoadingTokenPrices])
+
+  const canMaximize = !!optimalToken?.userBalance
+
   return {
-    hasBalanceForAllTokens,
+    canMaximize,
+    isMaximized,
+    maximizedUsdValue,
     handleProportionalHumanInputChange,
+    handleMaximizeUserAmounts,
+    setIsMaximized,
+    clearAmountsIn,
   }
 }
 
@@ -61,17 +172,8 @@ export function _calculateProportionalHumanAmountsIn({
   helpers,
   wethIsEth,
 }: Params): HumanTokenAmountWithAddress[] {
-  const referenceAmount: InputAmount = helpers.toSdkInputAmounts([{ tokenAddress, humanAmount }])[0]
-
-  // getBptAmountFromReferenceAmount(
-  //   constructProportionalSdkAddInput(helpers.chainId, referenceAmount, userAddress as Address),
-  //   helpers.poolStateWithBalances
-  // ).then(result => console.log({ result }))
-
-  const proportionalAmounts = calculateProportionalAmounts(
-    helpers.poolStateWithBalances,
-    referenceAmount
-  )
+  const amountIn: InputAmount = helpers.toSdkInputAmounts([{ tokenAddress, humanAmount }])[0]
+  const proportionalAmounts = calculateProportionalAmounts(helpers.poolStateWithBalances, amountIn)
     .tokenAmounts.map(({ address, rawAmount, decimals }) => {
       // Use the humanAmount entered by the user to avoid displaying rounding updates from calculateProportionalAmounts
       if (address === tokenAddress) return { tokenAddress, humanAmount }
