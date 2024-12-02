@@ -132,7 +132,7 @@ function IconPopover({ option }: { option: ButtonGroupOption }) {
         <Icon as={Info} />
       </PopoverTrigger>
       {option?.iconTooltipLabel && (
-        <PopoverContent p="sm" w="auto">
+        <PopoverContent maxW="300px" p="sm" w="auto">
           <Text fontSize="sm" variant="secondary" whiteSpace="pre-wrap">
             {option.iconTooltipLabel}
           </Text>
