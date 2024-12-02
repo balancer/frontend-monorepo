@@ -122,9 +122,7 @@ function AddLiquidityMainForm() {
 
   const nestedAddLiquidityEnabled = supportsNestedActions(pool) // TODO && !userToggledEscapeHatch
 
-  const isUnbalancedError =
-    !nestedAddLiquidityEnabled && //Nested adds to not support proportional for now
-    isUnbalancedAddError(simulationQuery.error || priceImpactQuery.error)
+  const isUnbalancedError = isUnbalancedAddError(simulationQuery.error || priceImpactQuery.error)
 
   const weeklyYield = calcPotentialYieldFor(pool, totalUSDValue)
 
@@ -219,6 +217,7 @@ function AddLiquidityMainForm() {
             <UnbalancedAddError
               error={simulationQuery.error || priceImpactQuery.error}
               goToProportionalAdds={setProportionalTab}
+              isProportionalSupported={!nestedAddLiquidityEnabled}
             />
           )}
           <VStack align="start" spacing="sm" w="full">
@@ -247,7 +246,7 @@ function AddLiquidityMainForm() {
                     totalUSDValue={totalUSDValue}
                   />
                 }
-                avoidPriceImpactAlert={isUnbalancedError}
+                avoidPriceImpactAlert={isUnbalancedError && !nestedAddLiquidityEnabled}
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
                 isDisabled={!priceImpactQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}

@@ -2,8 +2,9 @@
 
 import { AlertProps, Text } from '@chakra-ui/react'
 import {
+  isInvariantRatioAboveMaxSimulationErrorMessage,
+  isInvariantRatioAboveMinSimulationErrorMessage,
   isInvariantRatioPIErrorMessage,
-  isInvariantRatioSimulationErrorMessage,
   isUnbalancedAddError,
   isUnbalancedAddErrorMessage,
 } from '../../utils/error-filters'
@@ -14,9 +15,14 @@ import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/Ad
 type Props = AlertProps & {
   error?: Error | null
   goToProportionalAdds: () => void
+  isProportionalSupported?: boolean
 }
 
-export function UnbalancedAddError({ error, goToProportionalAdds }: Props) {
+export function UnbalancedAddError({
+  error,
+  goToProportionalAdds,
+  isProportionalSupported = true,
+}: Props) {
   const { clearAmountsIn } = useAddLiquidity()
   const goToProportionalMode = () => {
     clearAmountsIn()
@@ -27,10 +33,14 @@ export function UnbalancedAddError({ error, goToProportionalAdds }: Props) {
     return (
       <ErrorAlert title={getErrorTitle(error)}>
         <Text color="black" variant="secondary">
-          {getErrorMessage(error)}{' '}
-          <BalAlertLink onClick={goToProportionalMode}>
-            {getUseProportionalLabel(error)}
-          </BalAlertLink>
+          {getErrorMessage(isProportionalSupported, error)}{' '}
+          {isProportionalSupported ? (
+            <BalAlertLink onClick={goToProportionalMode}>
+              {getUseProportionalLabel(isProportionalSupported, error)}
+            </BalAlertLink>
+          ) : (
+            getUseProportionalLabel(isProportionalSupported, error)
+          )}
         </Text>
       </ErrorAlert>
     )
@@ -41,25 +51,39 @@ export function UnbalancedAddError({ error, goToProportionalAdds }: Props) {
 
 // TODO: Improve these error messages
 function getErrorTitle(error?: Error | null) {
+  if (isInvariantRatioAboveMaxSimulationErrorMessage(error?.message)) {
+    return 'Amount exceeds pool limits'
+  }
+  if (isInvariantRatioAboveMinSimulationErrorMessage(error?.message)) {
+    return 'Amount is below pool limits'
+  }
+
   if (isInvariantRatioPIErrorMessage(error?.message)) return 'Unknown price impact'
   return 'Token amounts error'
 }
 
-function getErrorMessage(error?: Error | null) {
+function getErrorMessage(isProportionalSupported: boolean, error?: Error | null) {
   if (!error) return 'Unexpected error.'
-  if (isUnbalancedAddErrorMessage(error)) {
-    return 'Your input(s) would excessively unbalance the pool.'
-  }
-  if (isInvariantRatioSimulationErrorMessage(error?.message)) {
-    return 'Your input(s) would cause an invariant error in the vault'
+
+  if (isInvariantRatioAboveMaxSimulationErrorMessage(error?.message)) {
+    return 'Your input(s) would cause an invariant error in the vault.'
   }
   if (isInvariantRatioPIErrorMessage(error?.message)) {
+    if (!isProportionalSupported) {
+      return 'The price impact cannot be calculated. Proceed if you know exactly what you are doing.'
+    }
     return 'The price impact cannot be calculated. Proceed if you know exactly what you are doing or'
+  }
+  if (isUnbalancedAddErrorMessage(error)) {
+    return 'Your input(s) would excessively unbalance the pool.'
   }
   return 'Unexpected error. Please ask for support'
 }
 
-function getUseProportionalLabel(error?: Error | null) {
-  if (isInvariantRatioPIErrorMessage(error?.message)) return 'try proportional mode.'
+function getUseProportionalLabel(isProportionalSupported: boolean, error?: Error | null) {
+  if (!isProportionalSupported) return 'Please try different amounts.'
+  if (isInvariantRatioPIErrorMessage(error?.message)) {
+    return 'try proportional mode.'
+  }
   return 'Please use proportional mode.'
 }

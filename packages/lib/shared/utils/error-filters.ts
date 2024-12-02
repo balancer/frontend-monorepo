@@ -66,9 +66,16 @@ export function isUnbalancedAddErrorMessage(error?: Error | null): boolean {
 
 export function isInvariantRatioSimulationErrorMessage(errorMessage?: string): boolean {
   return (
-    !!errorMessage?.includes('InvariantRatioAboveMax') ||
-    !!errorMessage?.includes('InvariantRatioBelowMin')
+    isInvariantRatioAboveMaxSimulationErrorMessage(errorMessage) ||
+    isInvariantRatioAboveMinSimulationErrorMessage(errorMessage)
   )
+}
+
+export function isInvariantRatioAboveMaxSimulationErrorMessage(errorMessage?: string): boolean {
+  return !!errorMessage?.includes('InvariantRatioAboveMax')
+}
+export function isInvariantRatioAboveMinSimulationErrorMessage(errorMessage?: string): boolean {
+  return !!errorMessage?.includes('InvariantRatioBelowMin')
 }
 
 export function isInvariantRatioPIErrorMessage(errorMessage?: string): boolean {
