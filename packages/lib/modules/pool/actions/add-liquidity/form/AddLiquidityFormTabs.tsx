@@ -30,8 +30,6 @@ export function AddLiquidityFormTabs({
 }) {
   const { clearAmountsIn } = useAddLiquidity()
   const { isLoading, pool } = usePool()
-  const [width, setWidth] = useState(0)
-  const ref = useRef<HTMLDivElement | null>(null)
 
   const isDisabledProportionalTab =
     nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)
@@ -85,15 +83,8 @@ export function AddLiquidityFormTabs({
 
   const isProportional = tabIndex === 1
 
-  useLayoutEffect(() => {
-    if (ref.current) {
-      setWidth(ref.current.offsetWidth)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return (
-    <VStack ref={ref}>
+    <VStack>
       <ButtonGroup
         currentOption={options[tabIndex]}
         groupId="add-liquidity"
@@ -102,7 +93,6 @@ export function AddLiquidityFormTabs({
         onChange={handleTabChanged}
         options={options}
         size="md"
-        width={width / 2} // split width between 2 buttons
       />
       <TokenInputsMaybeProportional
         isProportional={isProportional}

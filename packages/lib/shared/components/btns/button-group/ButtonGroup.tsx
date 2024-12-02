@@ -42,30 +42,34 @@ export default function ButtonGroup(props: Props) {
         spacing="1"
         w={isFullWidth ? 'full' : undefined}
       >
-        {options.map(option => {
+        {options.map(function (option) {
           const isActive = currentOption?.value === option.value
           return option?.tooltipLabel ? (
-            <Popover key={`button-group-option-${option.value}`} trigger="hover">
-              <PopoverTrigger>
-                <Box _hover={{ opacity: 0.75 }} transition="opacity 0.2s var(--ease-out-cubic)">
-                  <GroupOptionButton isActive={isActive} option={option} {...props} />
-                </Box>
-              </PopoverTrigger>
-              {option?.tooltipLabel && (
-                <PopoverContent maxW="300px" p="sm" w="auto">
-                  <Text fontSize="sm" variant="secondary">
-                    {option.tooltipLabel}
-                  </Text>
-                </PopoverContent>
-              )}
-            </Popover>
+            <Box flex="1" key={`button-group-option-${option.value}`}>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <Box _hover={{ opacity: 0.75 }} transition="opacity 0.2s var(--ease-out-cubic)">
+                    <GroupOptionButton isActive={isActive} option={option} {...props} />
+                  </Box>
+                </PopoverTrigger>
+                {option?.tooltipLabel && (
+                  <PopoverContent maxW="300px" p="sm" w="auto">
+                    <Text fontSize="sm" variant="secondary">
+                      {option.tooltipLabel}
+                    </Text>
+                  </PopoverContent>
+                )}
+              </Popover>
+            </Box>
           ) : (
-            <GroupOptionButton
-              isActive={isActive}
-              key={`button-group-option-${option.value}`}
-              option={option}
-              {...props}
-            />
+            <Box flex="1" key={`button-group-option-${option.value}`}>
+              <GroupOptionButton
+                isActive={isActive}
+                key={`button-group-option-${option.value}`}
+                option={option}
+                {...props}
+              />
+            </Box>
           )
         })}
       </HStack>
@@ -94,7 +98,7 @@ function GroupOptionButton({
       role="group"
       size={size}
       variant={isActive ? 'buttonGroupActive' : 'buttonGroupInactive'}
-      width={width}
+      width={width || 'full'}
     >
       {isActive && (
         <Box
