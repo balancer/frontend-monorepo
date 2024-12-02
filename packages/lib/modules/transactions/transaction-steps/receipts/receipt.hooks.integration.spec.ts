@@ -109,7 +109,10 @@ test('queries remove liquidity transaction', async () => {
   expect(result.current.sentBptUnits).toBe('6439.400687368663510166')
 })
 
-describe('queries swap transaction', () => {
+/*
+  Skip until dRPC fixes issue with polygon tx queries
+*/
+describe.skip('queries swap transaction', () => {
   const maticAddress = '0x0000000000000000000000000000000000001010'
   const wMaticAddress = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
   const daiAddress = '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'

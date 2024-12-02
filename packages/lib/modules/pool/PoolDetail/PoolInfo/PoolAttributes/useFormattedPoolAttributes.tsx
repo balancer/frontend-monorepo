@@ -3,7 +3,6 @@
 import { useMemo } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { format } from 'date-fns'
-import { DELEGATE_OWNER } from '@repo/lib/config/app.config'
 import { zeroAddress } from 'viem'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -11,11 +10,14 @@ import { isBoosted, isCowAmmPool, isStable } from '../../../pool.helpers'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export function useFormattedPoolAttributes() {
   const { pool } = usePool()
   const { toCurrency } = useCurrency()
   const { usdValueForBpt } = useTokens()
+
+  const { delegateOwner } = getProjectConfig()
 
   const poolOwnerData = useMemo(() => {
     if (!pool) return
@@ -31,7 +33,7 @@ export function useFormattedPoolAttributes() {
       }
     }
 
-    if (owner === DELEGATE_OWNER) {
+    if (owner === delegateOwner) {
       return {
         title: 'Delegate owner',
         link: '',
