@@ -13,6 +13,7 @@ import { sentryMetaForAddLiquidityHandler } from '@repo/lib/shared/utils/query-e
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { useBlockNumber } from 'wagmi'
 import { isInvariantRatioSimulationErrorMessage } from '@repo/lib/shared/utils/error-filters'
+import { Address } from 'viem'
 
 export type AddLiquiditySimulationQueryResult = ReturnType<typeof useAddLiquiditySimulationQuery>
 
@@ -20,9 +21,15 @@ type Params = {
   handler: AddLiquidityHandler
   humanAmountsIn: HumanTokenAmountWithAddress[]
   enabled: boolean
+  referenceAmountAddress?: Address // only used by Proportional handlers that require a referenceAmount
 }
 
-export function useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enabled }: Params) {
+export function useAddLiquiditySimulationQuery({
+  handler,
+  humanAmountsIn,
+  enabled,
+  referenceAmountAddress,
+}: Params) {
   const { userAddress } = useUserAccount()
   const { pool, chainId } = usePool()
   const { data: blockNumber } = useBlockNumber({ chainId })
@@ -39,7 +46,8 @@ export function useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enable
 
   const queryKey = addLiquidityKeys.preview(params)
 
-  const queryFn = async () => handler.simulate(debouncedHumanAmountsIn, userAddress)
+  const queryFn = async () =>
+    handler.simulate(debouncedHumanAmountsIn, userAddress, referenceAmountAddress)
 
   return useQuery({
     queryKey,
@@ -48,6 +56,7 @@ export function useAddLiquiditySimulationQuery({ handler, humanAmountsIn, enable
     gcTime: 0,
     retry(failureCount, error) {
       if (isInvariantRatioSimulationErrorMessage(error?.message)) {
+        if (failureCount === 1) console.log('Silenced simulation error: ', { error })
         // Avoid more retries
         return false
       }

@@ -50,5 +50,5 @@ export type boostedProtocols = Protocol.Aave
 
 export const protocolDescriptions: Record<boostedProtocols, string> = {
   [Protocol.Aave]:
-    "The magic of this Boosted pool lies in its composition—under the hood, it contains wrapped Aave tokens that earn interest from Aave borrowers, continuously growing the pool's worth.",
+    "This Boosted pool's underlying mechanics are powered by wrapped Aave tokens, which generate yield from lending activities on the Aave protocol, resulting in continuous appreciation of the pool's total value",
 }

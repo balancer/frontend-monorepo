@@ -125,18 +125,25 @@ export function getLeafTokens(poolTokens: PoolToken[]) {
         t => !isSameAddress(t.address, poolToken.address)
       ) as PoolToken[]
 
-      const nestedLeafTokens = nestedTokens.map(t =>
-        t.isErc4626 && t.underlyingToken
-          ? { ...t.underlyingToken, address: t.underlyingToken.address as Address, index: t.index }
-          : { ...t, address: t.address as Address }
-      )
+      const nestedLeafTokens = nestedTokens.map(t => getTokenOrUnderlying(t))
       leafTokens.push(...nestedLeafTokens)
     } else {
-      leafTokens.push(poolToken as TokenCore)
+      // TODO: add unit test for this case: pol id 0x42de4fa875126fdbaf590b2fc3802adbca58acee
+      leafTokens.push(getTokenOrUnderlying(poolToken))
     }
   })
 
   return leafTokens
+}
+
+function getTokenOrUnderlying(token: PoolToken): TokenCore {
+  return token.isErc4626 && token.underlyingToken
+    ? {
+        ...token.underlyingToken,
+        address: token.underlyingToken.address as Address,
+        index: token.index,
+      }
+    : { ...token, address: token.address as Address }
 }
 
 export function getSpenderForAddLiquidity(pool: Pool): Address {

@@ -43,7 +43,7 @@ import {
   isUnbalancedLiquidityDisabled,
   isV2Pool,
   isV3Pool,
-  isV3WithNestedActionsPool,
+  isV3NotSupportingWethIsEth,
 } from '../pool.helpers'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
 
@@ -84,16 +84,18 @@ export class LiquidityActionHelpers {
   /* Used by V3 boosted SDK handlers */
   public get boostedPoolState(): PoolStateWithUnderlyings & { totalShares: HumanAmount } {
     const poolTokensWithUnderlyings: PoolTokenWithUnderlying[] = this.pool.poolTokens.map(
-      (token, index) => ({
+      token => ({
         ...token,
         address: token.address as Address,
         balance: token.balance as HumanAmount,
-        underlyingToken: {
-          ...token.underlyingToken,
-          address: token.underlyingToken?.address as Address,
-          decimals: token.underlyingToken?.decimals as number,
-          index, //TODO: review that this index is always the expected one
-        },
+        underlyingToken: token.underlyingToken?.address
+          ? {
+              ...token.underlyingToken,
+              address: token.underlyingToken?.address as Address,
+              decimals: token.underlyingToken?.decimals as number,
+              index: token.index, //TODO: review that this index is always the expected one
+            }
+          : null,
       })
     )
     const state: PoolStateWithUnderlyings & { totalShares: HumanAmount } = {
@@ -359,7 +361,7 @@ export function emptyTokenAmounts(pool: Pool): TokenAmount[] {
 
 export function shouldShowNativeWrappedSelector(token: GqlToken, pool: Pool) {
   return (
-    !isV3WithNestedActionsPool(pool) && // V3 nested actions don't support wethIsEth currently
+    !isV3NotSupportingWethIsEth(pool) && // V3 boosted/nested actions don't support wethIsEth currently
     !isCowAmmPool(pool.type) && // Cow AMM pools don't support wethIsEth
     isNativeOrWrappedNative(token.address as Address, token.chain)
   )
