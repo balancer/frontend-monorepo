@@ -95,7 +95,7 @@ export class LiquidityActionHelpers {
               decimals: token.underlyingToken?.decimals as number,
               index: token.index, //TODO: review that this index is always the expected one
             }
-          : null, // TODO: unit test this case with http://localhost:3000/pools/sepolia/v3/0xbb83ba331c3254c8c44645430126797dceda89c0/add-liquidity
+          : null,
       })
     )
     const state: PoolStateWithUnderlyings & { totalShares: HumanAmount } = {
