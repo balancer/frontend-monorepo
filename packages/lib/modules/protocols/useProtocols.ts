@@ -45,10 +45,3 @@ export const protocolIconPaths: Record<Protocol, string> = {
   [Protocol.Tetu]: '/images/protocols/tetu.png',
   [Protocol.Zerovix]: '/images/protocols/0vix.svg',
 }
-
-export type boostedProtocols = Protocol.Aave
-
-export const protocolDescriptions: Record<boostedProtocols, string> = {
-  [Protocol.Aave]:
-    "This Boosted pool's underlying mechanics are powered by wrapped Aave tokens, which generate yield from lending activities on the Aave protocol, resulting in continuous appreciation of the pool's total value",
-}
