@@ -76,7 +76,6 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
     referenceAmount: InputAmount,
     userAddress: Address
   ): AddLiquidityProportionalInput {
-    console.log({ referenceAmount })
     return {
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
