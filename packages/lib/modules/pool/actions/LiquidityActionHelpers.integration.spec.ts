@@ -14,6 +14,7 @@ import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generate
 import { getPoolMock } from '../__mocks__/getPoolMock'
 import { allPoolTokens } from '../pool.helpers'
 import { LiquidityActionHelpers } from './LiquidityActionHelpers'
+import { Pool } from '../PoolProvider'
 
 describe('Calculates toInputAmounts from allPoolTokens', () => {
   it('for v2 weighted pool with no nested tokens', async () => {
@@ -291,5 +292,83 @@ describe.skip('Liquidity helpers for V3 NESTED pool', async () => {
         rawAmount: 100000n,
       },
     ])
+  })
+})
+
+// Unskip when sepolia V3 pools are available in production api
+test.skip('Nested pool state for V3 NESTED POOL', async () => {
+  // const poolId = '0xc9233cc69435591b193b50f702ac31e404a08b10' // Sepolia Balancer 50 WETH 50 USD
+
+  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
+  const daiSepoliaAddress = '0xff34b3d4aee8ddcd6f9afffb6fe49bd371b8a357'
+  const wethSepoliaAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9'
+  // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
+  const v3Pool = {} as Pool
+
+  const helpers = new LiquidityActionHelpers(v3Pool)
+
+  const state = helpers.nestedPoolStateV3
+
+  expect(state).toEqual({
+    mainTokens: [
+      {
+        address: wethSepoliaAddress,
+        decimals: 18,
+        index: 0,
+      },
+      {
+        address: usdcSepoliaAddress,
+        decimals: 6,
+        index: 0,
+      },
+      {
+        address: daiSepoliaAddress,
+        decimals: 18,
+        index: 1,
+      },
+    ],
+    pools: [
+      {
+        address: '0xc9233cc69435591b193b50f702ac31e404a08b10',
+        id: '0xc9233cc69435591b193b50f702ac31e404a08b10',
+        level: 1,
+        tokens: [
+          {
+            address: wethSepoliaAddress,
+            decimals: 18,
+            index: 0,
+            underlyingToken: null,
+          },
+          {
+            address: '0x946e59e9637f44eb122fe64b372aaf6ed0441da1',
+            decimals: 18,
+            index: 1,
+            underlyingToken: null,
+          },
+        ],
+        type: 'Weighted',
+      },
+      {
+        address: '0x946e59e9637f44eb122fe64b372aaf6ed0441da1',
+        id: '0x946e59e9637f44eb122fe64b372aaf6ed0441da1',
+        level: 0,
+        tokens: [
+          {
+            address: usdcSepoliaAddress,
+            decimals: 6,
+            index: 0,
+            underlyingToken: null,
+          },
+          {
+            address: daiSepoliaAddress,
+            decimals: 18,
+            index: 1,
+            underlyingToken: null,
+          },
+        ],
+        type: 'Weighted',
+      },
+    ],
+    protocolVersion: 3,
   })
 })

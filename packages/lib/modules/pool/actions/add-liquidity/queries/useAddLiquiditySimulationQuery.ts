@@ -56,6 +56,7 @@ export function useAddLiquiditySimulationQuery({
     gcTime: 0,
     retry(failureCount, error) {
       if (isInvariantRatioSimulationErrorMessage(error?.message)) {
+        if (failureCount === 1) console.log('Silenced simulation error: ', { error })
         // Avoid more retries
         return false
       }
