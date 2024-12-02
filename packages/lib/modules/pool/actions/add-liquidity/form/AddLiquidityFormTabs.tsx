@@ -96,7 +96,7 @@ export function AddLiquidityFormTabs({
     <VStack ref={ref}>
       <ButtonGroup
         currentOption={options[tabIndex]}
-        groupId="my-liquidity"
+        groupId="add-liquidity"
         hasLargeTextLabel
         isFullWidth
         onChange={handleTabChanged}
