@@ -15,6 +15,7 @@ import {
   Link,
   chakra,
   Center,
+  Stack,
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Image from 'next/image'
@@ -62,21 +63,6 @@ const keyFeatures = [
 
 const features = [
   {
-    title: '100% Boosted Pools',
-    shortDescription:
-      'Balancer v3 introduces 100% Boosted Pools, enhancing capital efficiency for passive LPs.',
-    description: `Balancer v3 introduces 100% Boosted Pools, enhancing capital efficiency for passive LPs.\n\nThese pools deposit idle liquidity in trusted platforms like Aave, providing LPs exposure to an additional layer of sustainable yield. Unlike v2, v3 registers yield-bearing tokens directly with the pool, using Buffers to facilitate gas-efficient swaps.\n\nBuffers act as simple two-token liquidity pools that hold a yield bearing token (waUSDC) and it's underlying counterpart (USDC), minimizing external calls and providing LPs with full yield exposure while optimizing gas usage.`,
-    imageSrc: '/images/graphics/stone-1.png',
-  },
-  {
-    title: 'Custom Pools & Reusable Hooks',
-    shortDescription:
-      'Balancer v3 is a platform for AMM experimentation and innovation, allowing custom pools to iterate on existing or define entirely new swap invariants.',
-    description:
-      "Balancer v3 is a platform for AMM experimentation and innovation, allowing custom pools to iterate on existing or define entirely new swap invariants. With the v3 vault handling much of the responsibility that was previously delegated to the pool contract, internally developed pools are significantly less complex. By shifting core design patterns out of the pool and into the vault, v3 produces a 10x improvement in pool developer experience.\n\nAdditionally, v3 introduces a hooks framework that allows developers to easily extend existing pool types at various key points throughout the pool's lifecycle, unlocking an infinite design space.",
-    imageSrc: '/images/graphics/stone-2.png',
-  },
-  {
     title: 'LVR/MEV Mitigation',
     shortDescription:
       'Balancer v3 focuses on minimizing MEV and maximizing LP profitability by collaborating with intent-centric projects like CowSwap.',
@@ -84,12 +70,12 @@ const features = [
       'Balancer v3 focuses on minimizing MEV and maximizing LP profitability by collaborating with intent-centric projects like CowSwap.\n\nv3 leverages custom AMM logic and a hooks framework to enable third-party teams easily to develop MEV mitigation strategies.\n\nSupported by Balancer DAO, this approach aims to help bolster MEV innovation for LPs, enhancing fairness and profitability in on-chain interactions for the future to come.',
     imageSrc: '/images/graphics/stone-2.png',
   },
-  {
-    title: 'Simplified AMM Deployment',
-    shortDescription:
-      'Remove low-level tasks. Supply custom AMM logic, and harness the full benefit of an optimized tech stack.',
-    imageSrc: '/images/graphics/stone-1.png',
-  },
+  // {
+  //   title: 'Simplified AMM Deployment',
+  //   shortDescription:
+  //     'Remove low-level tasks. Supply custom AMM logic, and harness the full benefit of an optimized tech stack.',
+  //   imageSrc: '/images/graphics/stone-1.png',
+  // },
   {
     title: 'Decimal Scaling',
     shortDescription:
@@ -114,12 +100,12 @@ const features = [
       "EIP-1153's transient op-codes unlock a new, expressive design, the “Till” pattern. This allows the vault to efficiently enforce contract-level invariants in the scope of a callback, supporting design patterns that were previously not possible.",
     imageSrc: '/images/graphics/stone-1.png',
   },
-  {
-    title: 'ERC20MultiToken',
-    shortDescription:
-      'Ensures atomic updates to pool token balances and total supply within the vault, reducing risks of read-only reentrancy attack vectors.',
-    imageSrc: '/images/graphics/stone-1.png',
-  },
+  // {
+  //   title: 'ERC20MultiToken',
+  //   shortDescription:
+  //     'Ensures atomic updates to pool token balances and total supply within the vault, reducing risks of read-only reentrancy attack vectors.',
+  //   imageSrc: '/images/graphics/stone-1.png',
+  // },
   {
     title: 'Swap Fee Management',
     shortDescription:
@@ -278,62 +264,66 @@ function FeatureText({
   title,
   shortDescription,
   description,
-  imageSrc,
+  index,
 }: {
   title: string
   shortDescription: string
   description?: string
-  imageSrc: string
+  index: number
 }) {
   const [isExpanded, setIsExpanded] = useState(false)
 
+  const isOdd = index % 2 === 1
+
   return (
-    <HStack alignItems="start" spacing="lg">
-      <Box flexShrink={0} opacity={0.6}>
-        <Image alt="feature" height={75} src={imageSrc} width={75} />
-      </Box>
-      <VStack alignItems="start" position="relative" spacing="md">
-        <Heading as="h5" size="md">
-          {title}
-        </Heading>
-        <Box position="relative">
-          <Text color="font.secondary" fontSize="lg" whiteSpace="pre-line">
-            {shortDescription}
-            {description && (
-              <Link ml="sm" onClick={() => setIsExpanded(!isExpanded)}>
-                {isExpanded ? 'Show less' : 'Read more'}
-              </Link>
-            )}
-          </Text>
-          {isExpanded && (
-            <Box
-              bg="background.level0"
-              borderRadius="md"
-              boxShadow="lg"
-              left={-4}
-              maxW="600px"
-              p={4}
-              position="absolute"
-              top={-4}
-              zIndex={10}
-            >
-              <Text color="font.secondary" fontSize="lg" whiteSpace="pre-line">
-                {description}
-                <Link ml="sm" onClick={() => setIsExpanded(false)}>
-                  Show less
-                </Link>
-              </Text>
-            </Box>
+    <VStack
+      alignItems="start"
+      position="relative"
+      spacing="sm"
+      {...(isOdd && { bg: 'background.level0' })}
+      p="md"
+      rounded="lg"
+    >
+      <Heading as="h5" size="md">
+        {title}
+      </Heading>
+      <Box position="relative">
+        <Text color="font.secondary" fontSize="lg" whiteSpace="pre-line">
+          {shortDescription}
+          {description && (
+            <Link ml="sm" onClick={() => setIsExpanded(!isExpanded)}>
+              {isExpanded ? 'Show less' : 'Read more'}
+            </Link>
           )}
-        </Box>
-      </VStack>
-    </HStack>
+        </Text>
+        {isExpanded && (
+          <Box
+            bg="background.level0"
+            borderRadius="md"
+            boxShadow="lg"
+            left={-4}
+            maxW="600px"
+            p={4}
+            position="absolute"
+            top={-4}
+            zIndex={10}
+          >
+            <Text color="font.secondary" fontSize="lg" whiteSpace="pre-line">
+              {description}
+              <Link ml="sm" onClick={() => setIsExpanded(false)}>
+                Show less
+              </Link>
+            </Text>
+          </Box>
+        )}
+      </Box>
+    </VStack>
   )
 }
 
 export function FeatureCard({ feature }: { feature: (typeof keyFeatures)[number] }) {
   return (
-    <Box minH="150px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
+    <Box minH="175px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
       <GraniteBg />
       <RadialPattern
         borderColor="white"
@@ -364,7 +354,7 @@ export function FeatureCard({ feature }: { feature: (typeof keyFeatures)[number]
         textTransform="uppercase"
         top="0"
       >
-        v3 feature
+        Key v3 feature
       </Text>
       <Box bottom="0" left="0" p="md" position="absolute">
         <Text fontSize="xl" fontWeight="bold">
@@ -488,13 +478,33 @@ export function Build() {
             ))}
           </Grid>
 
-          <Grid gap="2xl" mt="2xl" templateColumns="repeat(2, 1fr)">
+          <Stack direction={{ base: 'column', lg: 'row' }} gap="2xl" mt="3xl">
+            <Box alignSelf="flex-start" position="sticky" top="82px" w="full">
+              <VStack alignItems="start" spacing="sm">
+                <Heading as="h4" size="lg">
+                  Technical highlights
+                </Heading>
+                <Text color="font.secondary" fontSize="lg">
+                  Balancer v3 introduces a series of technical enhancements that streamline the
+                  development and deployment of custom pools, while maintaining the flexibility and
+                  interoperability that have made Balancer a leader in the DeFi space.
+                </Text>
+              </VStack>
+            </Box>
+            <VStack spacing="md" w="full">
+              {features.map((feature, index) => (
+                <FeatureText index={index} key={index} {...feature} />
+              ))}
+            </VStack>
+          </Stack>
+
+          {/* <Grid gap="2xl" mt="2xl" templateColumns="repeat(2, 1fr)">
             {features.map((feature, index) => (
               <GridItem key={index}>
                 <FeatureText {...feature} />
               </GridItem>
             ))}
-          </Grid>
+          </Grid> */}
         </DefaultPageContainer>
       </Box>
     </Noise>
