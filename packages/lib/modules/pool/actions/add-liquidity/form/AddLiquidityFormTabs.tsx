@@ -3,7 +3,7 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { usePool } from '../../../PoolProvider'
 import {
   requiresProportionalInput,
@@ -30,6 +30,8 @@ export function AddLiquidityFormTabs({
 }) {
   const { clearAmountsIn } = useAddLiquidity()
   const { isLoading, pool } = usePool()
+  const [width, setWidth] = useState(0)
+  const ref = useRef<HTMLDivElement | null>(null)
 
   const isDisabledProportionalTab =
     nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)
@@ -83,8 +85,15 @@ export function AddLiquidityFormTabs({
 
   const isProportional = tabIndex === 1
 
+  useLayoutEffect(() => {
+    if (ref.current) {
+      setWidth(ref.current.offsetWidth)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <VStack>
+    <VStack ref={ref}>
       <ButtonGroup
         currentOption={options[tabIndex]}
         groupId="my-liquidity"
@@ -93,7 +102,7 @@ export function AddLiquidityFormTabs({
         onChange={handleTabChanged}
         options={options}
         size="md"
-        width="50%"
+        width={width / 2} // split width between 2 buttons
       />
       <TokenInputsMaybeProportional
         isProportional={isProportional}
