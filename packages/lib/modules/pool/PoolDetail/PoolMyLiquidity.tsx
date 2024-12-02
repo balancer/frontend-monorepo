@@ -17,7 +17,7 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useMemo, useState, useLayoutEffect } from 'react'
+import React, { useMemo, useState, useLayoutEffect } from 'react'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { usePathname, useRouter } from 'next/navigation'

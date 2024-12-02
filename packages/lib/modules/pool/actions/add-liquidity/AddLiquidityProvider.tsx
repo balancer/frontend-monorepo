@@ -3,7 +3,7 @@
 
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { HumanAmount, isSameAddress } from '@balancer/sdk'
+import { HumanAmount } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { Address, Hash } from 'viem'
 import { usePool } from '../../PoolProvider'
@@ -28,7 +28,7 @@ import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { getPoolActionableTokens, isV3NotSupportingWethIsEth } from '../../pool.helpers'
+import { getPoolActionableTokens, isV3WithNestedActionsPool } from '../../pool.helpers'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 
@@ -37,8 +37,6 @@ export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>
 
 export function _useAddLiquidity(urlTxHash?: Hash) {
   const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>([])
-  // only used by Proportional handlers that require a referenceAmount
-  const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
@@ -93,19 +91,6 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     ])
   }
 
-  function clearAmountsIn(changedAmount?: HumanTokenAmountWithAddress) {
-    setHumanAmountsIn(
-      humanAmountsIn.map(({ tokenAddress }) => {
-        // Keeps user inputs like '0' or '0.' instead of replacing them with ''
-        if (changedAmount && isSameAddress(changedAmount.tokenAddress, tokenAddress)) {
-          return changedAmount
-        }
-
-        return { tokenAddress, humanAmount: '' }
-      })
-    )
-  }
-
   const tokensWithNativeAsset = replaceWrappedWithNativeAsset(tokens, nativeAsset)
 
   const validTokens = injectNativeAsset(tokens, nativeAsset, pool)
@@ -125,7 +110,6 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     handler,
     humanAmountsIn,
     enabled: !urlTxHash,
-    referenceAmountAddress,
   })
   const priceImpactQuery = useAddLiquidityPriceImpactQuery({
     handler,
@@ -195,7 +179,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   return {
     transactionSteps,
     humanAmountsIn,
-    tokens: wethIsEth && !isV3NotSupportingWethIsEth(pool) ? tokensWithNativeAsset : tokens,
+    tokens: wethIsEth && !isV3WithNestedActionsPool(pool) ? tokensWithNativeAsset : tokens,
     validTokens,
     totalUSDValue,
     simulationQuery,
@@ -218,14 +202,11 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     proportionalSlippage,
     isForcedProportionalAdd,
     wantsProportional,
-    referenceAmountAddress,
     setWantsProportional,
     setProportionalSlippage,
     refetchQuote,
     setHumanAmountIn,
     setHumanAmountsIn,
-    clearAmountsIn,
-    setReferenceAmountAddress,
     setNeedsToAcceptHighPI,
     setAcceptPoolRisks,
     setWethIsEth,

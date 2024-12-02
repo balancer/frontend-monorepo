@@ -21,8 +21,7 @@ export interface AddLiquidityHandler {
   // Also returns bptOut to be used by the UI
   simulate(
     humanAmountsIn: HumanTokenAmountWithAddress[],
-    sender: Address,
-    referenceAmountAddress?: Address // only used by Proportional handlers that require a referenceAmount
+    sender: Address
   ): Promise<QueryAddLiquidityOutput>
 
   // Calculate the price impact of adding liquidity
