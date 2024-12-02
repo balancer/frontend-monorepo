@@ -27,6 +27,7 @@ type Props = {
   size?: ButtonProps['size']
   width?: ButtonProps['width']
   isFullWidth?: boolean
+  hasLargeTextLabel?: boolean
 }
 
 export default function ButtonGroup(props: Props) {
@@ -78,6 +79,7 @@ function GroupOptionButton({
   size,
   width,
   groupId,
+  hasLargeTextLabel,
   onChange,
 }: { option: ButtonGroupOption; isActive: boolean } & Props) {
   return (
@@ -105,7 +107,7 @@ function GroupOptionButton({
           shadow="md"
         />
       )}
-      <Box position="relative" zIndex="8">
+      <Box fontSize={hasLargeTextLabel ? 'lg' : undefined} position="relative" zIndex="8">
         {option.label}
       </Box>
     </Button>
