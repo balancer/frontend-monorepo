@@ -26,13 +26,21 @@ type Props = {
   groupId: string
   size?: ButtonProps['size']
   width?: ButtonProps['width']
+  isFullWidth?: boolean
 }
 
 export default function ButtonGroup(props: Props) {
-  const { groupId, options, currentOption } = props
+  const { groupId, options, currentOption, isFullWidth } = props
   return (
     <LayoutGroup id={groupId}>
-      <HStack background="level0" p="1" rounded="md" shadow="innerXl" spacing="1">
+      <HStack
+        background="level0"
+        p="1"
+        rounded="md"
+        shadow="innerXl"
+        spacing="1"
+        w={isFullWidth ? 'full' : undefined}
+      >
         {options.map(option => {
           const isActive = currentOption?.value === option.value
           return option?.tooltipLabel ? (
