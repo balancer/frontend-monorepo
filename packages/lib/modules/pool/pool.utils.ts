@@ -278,6 +278,10 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
   return poolType === GqlPoolType.CowAmm
 }
 
+export function shouldCallComputeDynamicSwapFee(pool: Pool) {
+  return pool.hook && pool.hook.shouldCallComputeDynamicSwapFee
+}
+
 export function getPoolDisplayTokens(pool: Pool) {
   return pool.poolTokens.filter(token =>
     pool.displayTokens.find(
