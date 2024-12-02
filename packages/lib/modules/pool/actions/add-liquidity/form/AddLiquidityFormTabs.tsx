@@ -4,7 +4,7 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { usePool } from '../../../PoolProvider'
 import {
   requiresProportionalInput,
@@ -12,6 +12,7 @@ import {
 } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
 export function AddLiquidityFormTabs({
@@ -19,18 +20,19 @@ export function AddLiquidityFormTabs({
   totalUSDValue,
   nestedAddLiquidityEnabled,
   tabIndex,
-  setUnbalancedTab,
+  setFlexibleTab,
   setProportionalTab,
 }: {
   tokenSelectDisclosure: UseDisclosureReturn
   totalUSDValue: string
   nestedAddLiquidityEnabled: boolean
   tabIndex: number
-  setUnbalancedTab: () => void
+  setFlexibleTab: () => void
   setProportionalTab: () => void
 }) {
   const { clearAmountsIn } = useAddLiquidity()
   const { isLoading, pool } = usePool()
+  const { toCurrency } = useCurrency()
 
   const isDisabledProportionalTab =
     nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)
@@ -45,24 +47,25 @@ export function AddLiquidityFormTabs({
     !isDisabledProportionalTab &&
     bn(pool.dynamicData.totalLiquidity).lt(bn(MIN_LIQUIDITY_FOR_BALANCED_ADD))
 
-  const isDisabledUnbalancedTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold
+  const isDisabledFlexibleTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold
 
   const proportionalTabTooltipLabel = requiresProportionalInput(pool)
     ? 'This pool requires liquidity to be added proportionally'
     : isBelowMinTvlThreshold
-      ? `Liquidity must be added proportionally until the pool TVL is greater than $${MIN_LIQUIDITY_FOR_BALANCED_ADD}`
+      ? `Liquidity must be added proportionally until the pool TVL is greater than $${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD)}`
       : undefined
 
   function handleTabChanged(option: ButtonGroupOption): void {
+    if (tabIndex.toString() === option.value) return // Avoids handling click in the current tab
     clearAmountsIn()
-    option.value === '0' ? setUnbalancedTab() : setProportionalTab()
+    option.value === '0' ? setFlexibleTab() : setProportionalTab()
   }
 
   const options: ButtonGroupOption[] = [
     {
       value: '0',
       label: 'Flexible',
-      disabled: isDisabledUnbalancedTab,
+      disabled: isDisabledFlexibleTab,
       iconTooltipLabel:
         'Enter any amount for each token manually. Balances are independent, and no automatic adjustments will be made.',
       tabTooltipLabel: proportionalTabTooltipLabel,
@@ -80,11 +83,11 @@ export function AddLiquidityFormTabs({
   ]
 
   useEffect(() => {
-    if (!isLoading && isDisabledUnbalancedTab) {
+    if (!isLoading && isDisabledFlexibleTab) {
       setProportionalTab()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDisabledUnbalancedTab, isLoading])
+  }, [isDisabledFlexibleTab, isLoading])
 
   const isProportional = tabIndex === 1
 

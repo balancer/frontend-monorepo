@@ -104,7 +104,7 @@ function AddLiquidityMainForm() {
   const { startTokenPricePolling } = useTokens()
   const [tabIndex, setTabIndex] = useState(0)
 
-  const setUnbalancedTab = () => {
+  const setFlexibleTab = () => {
     setTabIndex(0)
     setWantsProportional(false)
   }
@@ -207,8 +207,8 @@ function AddLiquidityMainForm() {
           <SafeAppAlert />
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
+            setFlexibleTab={setFlexibleTab}
             setProportionalTab={setProportionalTab}
-            setUnbalancedTab={setUnbalancedTab}
             tabIndex={tabIndex}
             tokenSelectDisclosure={tokenSelectDisclosure}
             totalUSDValue={totalUSDValue}
