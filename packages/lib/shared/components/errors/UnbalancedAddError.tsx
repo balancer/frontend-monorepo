@@ -29,61 +29,66 @@ export function UnbalancedAddError({
     goToProportionalAdds()
   }
 
-  if (isUnbalancedAddError(error)) {
-    return (
-      <ErrorAlert title={getErrorTitle(error)}>
-        <Text color="black" variant="secondary">
-          {getErrorMessage(isProportionalSupported, error)}{' '}
-          {isProportionalSupported ? (
-            <BalAlertLink onClick={goToProportionalMode}>
-              {getUseProportionalLabel(isProportionalSupported, error)}
-            </BalAlertLink>
-          ) : (
-            getUseProportionalLabel(isProportionalSupported, error)
-          )}
-        </Text>
-      </ErrorAlert>
-    )
-  }
+  if (!isUnbalancedAddError(error)) return null
 
-  return null
+  const errorLabels = getErrorLabels(isProportionalSupported, error)
+
+  if (!errorLabels) return null
+
+  return (
+    <ErrorAlert title={errorLabels.errorTitle}>
+      <Text color="black" variant="secondary">
+        {errorLabels.errorMessage}{' '}
+        {isProportionalSupported ? (
+          <BalAlertLink onClick={goToProportionalMode}>
+            {errorLabels.proportionalLabel}
+          </BalAlertLink>
+        ) : (
+          errorLabels.proportionalLabel
+        )}
+      </Text>
+    </ErrorAlert>
+  )
 }
 
-// TODO: Improve these error messages
-function getErrorTitle(error?: Error | null) {
-  if (isInvariantRatioAboveMaxSimulationErrorMessage(error?.message)) {
-    return 'Amount exceeds pool limits'
-  }
-  if (isInvariantRatioAboveMinSimulationErrorMessage(error?.message)) {
-    return 'Amount is below pool limits'
-  }
-
-  if (isInvariantRatioPIErrorMessage(error?.message)) return 'Unknown price impact'
-  return 'Token amounts error'
+export type UnbalancedErrorLabels = {
+  errorTitle: string
+  errorMessage: string
+  proportionalLabel: string
 }
 
-function getErrorMessage(isProportionalSupported: boolean, error?: Error | null) {
-  if (!error) return 'Unexpected error.'
+export function getErrorLabels(
+  isProportionalSupported: boolean,
+  error?: Error | null
+): UnbalancedErrorLabels | undefined {
+  let errorTitle = 'Token amounts error'
+  let errorMessage = 'Unexpected error. Please ask for support'
+  let proportionalLabel = 'Please use proportional mode.'
 
-  if (isInvariantRatioAboveMaxSimulationErrorMessage(error?.message)) {
-    return 'Your input(s) would cause an invariant error in the vault.'
-  }
-  if (isInvariantRatioPIErrorMessage(error?.message)) {
-    if (!isProportionalSupported) {
-      return 'The price impact cannot be calculated. Proceed if you know exactly what you are doing.'
-    }
-    return 'The price impact cannot be calculated. Proceed if you know exactly what you are doing or'
-  }
-  if (isUnbalancedAddErrorMessage(error)) {
-    return 'Your input(s) would excessively unbalance the pool.'
-  }
-  return 'Unexpected error. Please ask for support'
-}
+  if (!error) return
 
-function getUseProportionalLabel(isProportionalSupported: boolean, error?: Error | null) {
-  if (!isProportionalSupported) return 'Please try different amounts.'
-  if (isInvariantRatioPIErrorMessage(error?.message)) {
-    return 'try proportional mode.'
+  if (isInvariantRatioAboveMaxSimulationErrorMessage(error.message)) {
+    errorTitle = 'Amount exceeds pool limits'
+    errorMessage = 'Your input(s) would cause an invariant error in the vault.'
+  } else if (isInvariantRatioAboveMinSimulationErrorMessage(error.message)) {
+    errorTitle = 'Amount is below pool limits'
+  } else if (isInvariantRatioPIErrorMessage(error.message)) {
+    errorTitle = 'Unknown price impact'
+    errorMessage = isProportionalSupported
+      ? 'The price impact cannot be calculated. Proceed if you know exactly what you are doing or'
+      : 'The price impact cannot be calculated. Proceed if you know exactly what you are doing.'
+    proportionalLabel = 'try proportional mode.'
+  } else if (isUnbalancedAddErrorMessage(error)) {
+    errorMessage = 'Your input(s) would excessively unbalance the pool.'
   }
-  return 'Please use proportional mode.'
+
+  if (!isProportionalSupported) {
+    proportionalLabel = 'Please try different amounts.'
+  }
+
+  return {
+    errorTitle,
+    errorMessage,
+    proportionalLabel,
+  }
 }
