@@ -88,6 +88,7 @@ export function AddLiquidityFormTabs({
       <ButtonGroup
         currentOption={options[tabIndex]}
         groupId="my-liquidity"
+        hasLargeTextLabel
         isFullWidth
         onChange={handleTabChanged}
         options={options}
