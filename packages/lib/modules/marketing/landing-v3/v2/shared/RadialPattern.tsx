@@ -2,7 +2,7 @@
 
 import { Box, BoxProps } from '@chakra-ui/react'
 
-interface RadialPatternProps extends BoxProps {
+export interface RadialPatternProps extends BoxProps {
   circleCount?: number
   size?: number | string
   innerSize?: number | string

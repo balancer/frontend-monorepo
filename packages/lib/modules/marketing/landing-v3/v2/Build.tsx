@@ -16,6 +16,8 @@ import {
   chakra,
   Center,
   Stack,
+  TextProps,
+  BoxProps,
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Image from 'next/image'
@@ -25,12 +27,12 @@ import bgSrc from './images/circles-right.svg'
 import { ArrowUpRight, Code } from 'react-feather'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion } from 'framer-motion'
 import { GraniteBg } from './shared/GraniteBg'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
-import { RadialPattern } from './shared/RadialPattern'
+import { RadialPattern, RadialPatternProps } from './shared/RadialPattern'
 import { PieIcon } from '@repo/lib/shared/components/icons/PieIcon'
 import { StarsIconPlain } from '@repo/lib/shared/components/icons/StarsIconPlain'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -41,24 +43,26 @@ const keyFeatures = [
     subTitle: 'Code less, build more.',
     description:
       'Design pools tailored to your vision with Balancer’s vault-first architecture. Build smarter, faster, and with less complexity.',
-    icon: PieIcon,
-    iconSize: 40,
+    icon: <PieIcon size={40} style={{ filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 1))' }} />,
   },
   {
     title: '100% Boosted Pools',
     subTitle: 'Passive Yield, Simplified.',
     description:
       'Put your liquidity to work 100% of the time. Seamless integration with Aave and Morpho delivers passive, diversified yield in a single click.',
-    icon: StarsIconPlain,
-    iconSize: 32,
+    icon: (
+      <StarsIconPlain
+        size={32}
+        style={{ filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 1))' }}
+      />
+    ),
   },
   {
     title: 'Hooks Framework',
     subTitle: 'Endless Possibilities',
     description:
       'Extend pool functionality with modular hooks. Customize pool behavior, implement advanced strategies, and unlock entirely new AMM design spaces with ease.',
-    icon: HookIcon,
-    iconSize: 70,
+    icon: <HookIcon size={70} style={{ filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 1))' }} />,
   },
 ]
 
@@ -322,48 +326,76 @@ function FeatureText({
   )
 }
 
-export function FeatureCard({ feature }: { feature: (typeof keyFeatures)[number] }) {
+type FeatureCardProps = {
+  title: string
+  subTitle?: string
+  label?: string
+  icon?: ReactNode
+  stat?: string
+  featureOpacity?: number
+  titleSize?: string
+  radialPatternProps?: RadialPatternProps
+  statProps?: TextProps
+}
+
+export function FeatureCard({
+  title,
+  subTitle,
+  icon,
+  label,
+  stat,
+  featureOpacity = 1,
+  titleSize = 'xl',
+  radialPatternProps,
+  statProps,
+  ...rest
+}: FeatureCardProps & BoxProps) {
   return (
-    <Box minH="175px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
+    <Box minH="175px" overflow="hidden" position="relative" rounded="lg" shadow="lg" {...rest}>
       <GraniteBg />
       <RadialPattern
-        borderColor="white"
-        borderWidth="1px"
+        borderColor="rgba(255, 255, 255, 0.3)"
+        borderWidth="2px"
         circleCount={8}
         padding="15px"
         position="absolute"
         right={-50}
         size="180px"
         top={-50}
+        {...radialPatternProps}
       >
-        <Center color="white" h="full" opacity={0.8} w="full">
-          {feature.icon({
-            size: feature.iconSize,
-            style: {
-              filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 1))',
-            },
-          })}
+        <Center color="white" h="full" opacity={featureOpacity} w="full">
+          {icon && icon}
+          {stat && (
+            <Text fontSize="2xl" {...statProps}>
+              {stat}
+            </Text>
+          )}
         </Center>
       </RadialPattern>
-      <Text
-        background="font.secondary"
-        backgroundClip="text"
-        fontSize="xs"
-        left="0"
-        p="md"
-        position="absolute"
-        textTransform="uppercase"
-        top="0"
-      >
-        Key v3 feature
-      </Text>
+      {label && (
+        <Text
+          background="font.secondary"
+          backgroundClip="text"
+          fontSize="xs"
+          left="0"
+          p="md"
+          position="absolute"
+          textTransform="uppercase"
+          top="0"
+        >
+          {label}
+        </Text>
+      )}
       <Box bottom="0" left="0" p="md" position="absolute">
-        <Text fontSize="xl" fontWeight="bold">
-          {feature.title}
+        <Text fontSize={titleSize} fontWeight="bold">
+          {title}
         </Text>
-        <Text fontSize="xl" opacity={0.6}>
-          {feature.subTitle}
-        </Text>
+        {subTitle && (
+          <Text fontSize="xl" opacity={0.6}>
+            {subTitle}
+          </Text>
+        )}
       </Box>
     </Box>
   )
@@ -479,7 +511,7 @@ export function Build() {
           >
             {keyFeatures.map((feature, index) => (
               <GridItem key={index}>
-                <FeatureCard feature={feature} />
+                <FeatureCard {...feature} />
               </GridItem>
             ))}
           </Grid>
