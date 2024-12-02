@@ -1,8 +1,11 @@
+import { InfoIcon } from '@chakra-ui/icons'
 import {
+  AlertIcon,
   Box,
   Button,
   ButtonProps,
   HStack,
+  Icon,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -10,12 +13,14 @@ import {
 } from '@chakra-ui/react'
 import { LayoutGroup, motion } from 'framer-motion'
 import { ReactNode } from 'react'
+import { Info } from 'react-feather'
 
 export type ButtonGroupOption = {
   value: string
   label: string | ReactNode
   disabled?: boolean
-  tooltipLabel?: string
+  tabTooltipLabel?: string // Popover tooltip on full tab hover
+  iconTooltipLabel?: string // Popover tooltip on icon hover
   rightIcon?: ButtonProps['rightIcon']
 }
 
@@ -44,7 +49,7 @@ export default function ButtonGroup(props: Props) {
       >
         {options.map(function (option) {
           const isActive = currentOption?.value === option.value
-          return option?.tooltipLabel ? (
+          return option?.tabTooltipLabel ? (
             <Box flex="1" key={`button-group-option-${option.value}`}>
               <Popover trigger="hover">
                 <PopoverTrigger>
@@ -52,10 +57,10 @@ export default function ButtonGroup(props: Props) {
                     <GroupOptionButton isActive={isActive} option={option} {...props} />
                   </Box>
                 </PopoverTrigger>
-                {option?.tooltipLabel && (
+                {option?.tabTooltipLabel && (
                   <PopoverContent maxW="300px" p="sm" w="auto">
                     <Text fontSize="sm" variant="secondary">
-                      {option.tooltipLabel}
+                      {option.tabTooltipLabel}
                     </Text>
                   </PopoverContent>
                 )}
@@ -94,7 +99,7 @@ function GroupOptionButton({
       key={`button-group-option-${option.value}`}
       onClick={() => onChange(option)}
       position="relative"
-      rightIcon={option.rightIcon}
+      rightIcon={<IconPopover option={option} />}
       role="group"
       size={size}
       variant={isActive ? 'buttonGroupActive' : 'buttonGroupInactive'}
@@ -115,5 +120,24 @@ function GroupOptionButton({
         {option.label}
       </Box>
     </Button>
+  )
+}
+
+function IconPopover({ option }: { option: ButtonGroupOption }) {
+  if (option.tabTooltipLabel) return null
+  if (!option.iconTooltipLabel) return null
+  return (
+    <Popover key={option.iconTooltipLabel} placement="top" trigger="hover">
+      <PopoverTrigger>
+        <Icon as={Info} />
+      </PopoverTrigger>
+      {option?.iconTooltipLabel && (
+        <PopoverContent p="sm" w="auto">
+          <Text fontSize="sm" variant="secondary" whiteSpace="pre-wrap">
+            {option.iconTooltipLabel}
+          </Text>
+        </PopoverContent>
+      )}
+    </Popover>
   )
 }

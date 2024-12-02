@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { UseDisclosureReturn, VStack } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
@@ -46,7 +47,7 @@ export function AddLiquidityFormTabs({
 
   const isDisabledUnbalancedTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold
 
-  const unbalancedTabTooltipLabel = requiresProportionalInput(pool)
+  const proportionalTabTooltipLabel = requiresProportionalInput(pool)
     ? 'This pool requires liquidity to be added proportionally'
     : isBelowMinTvlThreshold
       ? `Liquidity must be added proportionally until the pool TVL is greater than $${MIN_LIQUIDITY_FOR_BALANCED_ADD}`
@@ -62,13 +63,17 @@ export function AddLiquidityFormTabs({
       value: '0',
       label: 'Flexible',
       disabled: isDisabledUnbalancedTab,
-      tooltipLabel: unbalancedTabTooltipLabel,
+      iconTooltipLabel:
+        'Enter any amount for each token manually. Balances are independent, and no automatic adjustments will be made.',
+      tabTooltipLabel: proportionalTabTooltipLabel,
     },
     {
       value: '1',
       label: 'Proportional',
       disabled: isDisabledProportionalTab,
-      tooltipLabel: isDisabledProportionalTab
+      iconTooltipLabel:
+        "When you enter an amount for one token, the others are automatically adjusted to maintain the pool's proportional balance.",
+      tabTooltipLabel: isDisabledProportionalTab
         ? 'This pool does not support liquidity to be added proportionally'
         : undefined,
     },
