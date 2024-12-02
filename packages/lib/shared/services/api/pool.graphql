@@ -7,7 +7,9 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     address
     name
     version
-    owner
+    swapFeeManager
+    pauseManager
+    poolCreator
     decimals
     factory
     symbol
