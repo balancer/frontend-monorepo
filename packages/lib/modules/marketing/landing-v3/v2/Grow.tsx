@@ -23,7 +23,7 @@ export function Grow() {
         <Grid gap="md" mt="2xl" templateColumns="repeat(12, 1fr)" templateRows="repeat(3, 1fr)">
           <GridItem colSpan={4}>
             <FeatureCard
-              radialPatternProps={{ innerSize: '90px', size: '200px' }}
+              radialPatternProps={{ innerSize: '100px', size: '200px' }}
               stat="$1.1B"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="TVL"
@@ -32,7 +32,7 @@ export function Grow() {
           </GridItem>
           <GridItem colSpan={4}>
             <FeatureCard
-              radialPatternProps={{ innerSize: '90px', size: '200px' }}
+              radialPatternProps={{ innerSize: '100px', size: '200px' }}
               stat="4K+"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="Pools"
@@ -41,7 +41,7 @@ export function Grow() {
           </GridItem>
           <GridItem colSpan={4}>
             <FeatureCard
-              radialPatternProps={{ innerSize: '90px', size: '200px' }}
+              radialPatternProps={{ innerSize: '100px', size: '200px' }}
               stat="$54M"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="24hr Volume"
@@ -60,10 +60,10 @@ export function Grow() {
           <GridItem colSpan={6} rowSpan={2}>
             <FeatureCard
               h="full"
-              radialPatternProps={{ innerSize: '90px', size: '200px' }}
-              stat="$10+"
+              radialPatternProps={{ innerSize: '100px', size: '250px' }}
+              stat="10+"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
-              subTitle="Instant markets for your liquidity."
+              subTitle="Instant volume for your liquidity."
               title="Aggregator Integrations"
               titleSize="3xl"
             />
