@@ -280,7 +280,7 @@ function FeatureText({
     <VStack
       alignItems="start"
       position="relative"
-      spacing="sm"
+      spacing="md"
       {...(isOdd && { bg: 'background.level0' })}
       p="md"
       rounded="lg"

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 'use client'
 
 import { VStack, HStack, Heading, Button, Text, GridItem, Grid, Box } from '@chakra-ui/react'
@@ -10,15 +11,18 @@ import { GraniteBg } from './shared/GraniteBg'
 const grantIdeas = [
   {
     title: 'Pool hook',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    description:
+      'Hooks enable limitless pool customization possibilities in v3. We actively fund innovative products that solve real problems or create new value. Pool creators can earn additional revenue through customizable fees.',
   },
   {
     title: 'Custom AMM',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    description:
+      'Balancer is the home for AMM innovation and development is now easier than ever on v3. We are looking to fund innovative ideas to solve LVR, recapture MEV and other ways to bring more value to LPs.',
   },
   {
     title: 'Custom pool',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    description:
+      'Build your custom pool easily on Balancer v3 and follow in the footsteps of Gyroscope and Xave Finance. Get a grant to kickstart your project using custom invariants to create the next innovation in DeFi.',
   },
 ]
 
