@@ -11,7 +11,7 @@ import {
 } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
-const MIN_LIQUIDITY_FOR_BALANCED_ADD = 10000
+const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
 export function AddLiquidityFormTabs({
   tokenSelectDisclosure,
