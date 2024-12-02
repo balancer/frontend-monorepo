@@ -12,6 +12,7 @@ import PrismLoader from '@repo/lib/shared/services/prism/PrismLoader'
 import bgSrc from './images/sand-pattern-1.svg'
 // @ts-ignore
 import bgSrcDark from './images/sand-pattern-1-dark.svg'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 const codeSnippet = `// Swap function on constant product pool
 function onSwap(PoolSwapParams calldata params)
@@ -33,6 +34,7 @@ function onSwap(PoolSwapParams calldata params)
 
 export function Code() {
   const isDarkMode = useIsDarkMode()
+  const { isMobile } = useBreakpoints()
 
   return (
     <Noise backgroundColor="background.level0WithOpacity">
@@ -68,13 +70,13 @@ export function Code() {
                 style={{ objectFit: 'cover', objectPosition: 'center' }}
               />
             </Box>
-            <Center minH="500px" position="relative">
+            <Center position="relative">
               <Grid
                 alignItems="center"
                 gap="2xl"
-                px="2xl"
+                px={{ base: 'xs', lg: '2xl' }}
                 py="2xl"
-                templateColumns={{ base: '1fr', md: '1fr 1fr' }}
+                templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
               >
                 <GridItem>
                   <VStack alignItems="start" spacing="md">
@@ -96,17 +98,24 @@ export function Code() {
                     </Text>
                   </VStack>
                 </GridItem>
-                <GridItem>
+                <GridItem maxW="100%">
                   <Card>
                     <pre
                       className="language-solidity"
                       style={{
-                        minHeight: '400px',
                         padding: '2rem',
                         borderRadius: '8px',
                       }}
                     >
-                      <code className="language-solidity">{codeSnippet}</code>
+                      <code
+                        className="language-solidity"
+                        style={{
+                          whiteSpace: isMobile ? 'pre-line' : 'pre',
+                          wordBreak: isMobile ? 'break-word' : 'normal',
+                        }}
+                      >
+                        {codeSnippet}
+                      </code>
                     </pre>
                   </Card>
                 </GridItem>

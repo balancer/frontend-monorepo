@@ -33,6 +33,7 @@ import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { RadialPattern } from './shared/RadialPattern'
 import { PieIcon } from '@repo/lib/shared/components/icons/PieIcon'
 import { StarsIconPlain } from '@repo/lib/shared/components/icons/StarsIconPlain'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 const keyFeatures = [
   {
@@ -373,6 +374,7 @@ const MotionGridItem = motion(GridItem)
 export function Build() {
   const isDarkMode = useIsDarkMode()
   const [expandedCard, setExpandedCard] = useState<string | null>(null)
+  const { isMobile } = useBreakpoints()
 
   return (
     <Noise>
@@ -385,7 +387,7 @@ export function Build() {
           position="absolute"
           right={0}
           top={100}
-          w="45vw"
+          w={{ base: '80vw', lg: '45vw' }}
         >
           <Image
             alt="background"
@@ -396,8 +398,8 @@ export function Build() {
           />
         </Box>
         <DefaultPageContainer minH="800px" noVerticalPadding position="relative" py="3xl">
-          <Grid gap="xl" templateColumns="repeat(2, 1fr)">
-            <GridItem />
+          <Grid gap="xl" templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }}>
+            {!isMobile && <GridItem />}
             <GridItem borderRadius="lg">
               <VStack alignItems="start" spacing="md">
                 <Heading>Contracts</Heading>
@@ -411,7 +413,7 @@ export function Build() {
                 <Grid
                   gap="md"
                   mt="2xl"
-                  templateColumns="repeat(2, 1fr)"
+                  templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
                   templateRows="repeat(2, minmax(200px, auto))"
                 >
                   {contracts.map((contract, index) => (
@@ -470,7 +472,11 @@ export function Build() {
             </chakra.span>
           </Heading>
 
-          <Grid gap="xl" mt="2xl" templateColumns="repeat(3, 1fr)">
+          <Grid
+            gap="xl"
+            mt="2xl"
+            templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
+          >
             {keyFeatures.map((feature, index) => (
               <GridItem key={index}>
                 <FeatureCard feature={feature} />
@@ -497,14 +503,6 @@ export function Build() {
               ))}
             </VStack>
           </Stack>
-
-          {/* <Grid gap="2xl" mt="2xl" templateColumns="repeat(2, 1fr)">
-            {features.map((feature, index) => (
-              <GridItem key={index}>
-                <FeatureText {...feature} />
-              </GridItem>
-            ))}
-          </Grid> */}
         </DefaultPageContainer>
       </Box>
     </Noise>
