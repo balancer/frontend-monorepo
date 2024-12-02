@@ -88,10 +88,11 @@ export function AddLiquidityFormTabs({
       <ButtonGroup
         currentOption={options[tabIndex]}
         groupId="my-liquidity"
+        isFullWidth
         onChange={handleTabChanged}
         options={options}
         size="md"
-        width="36"
+        width="50%"
       />
       <TokenInputsMaybeProportional
         isProportional={isProportional}
