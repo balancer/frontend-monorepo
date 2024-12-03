@@ -1,8 +1,9 @@
-import { Pool } from '../pool/PoolProvider'
 import { useHooks } from './HooksProvider'
 import { getChainId } from '@repo/lib/config/app.config'
+import { Pool } from '../pool/PoolProvider'
+import { PoolListItem } from '../pool/pool.types'
 
-export function useHook(pool: Pool) {
+export function useHook(pool: Pool | PoolListItem) {
   const { metadata } = useHooks()
   const hasHook = !!pool.hook?.address
   const hasNestedHook = pool.poolTokens.map(token => token.nestedPool?.hook).some(Boolean)
