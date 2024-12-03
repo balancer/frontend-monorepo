@@ -75,12 +75,6 @@ const features = [
       'Balancer v3 focuses on minimizing MEV and maximizing LP profitability by collaborating with intent-centric projects like CowSwap.\n\nv3 leverages custom AMM logic and a hooks framework to enable third-party teams easily to develop MEV mitigation strategies.\n\nSupported by Balancer DAO, this approach aims to help bolster MEV innovation for LPs, enhancing fairness and profitability in on-chain interactions for the future to come.',
     imageSrc: '/images/graphics/stone-2.png',
   },
-  // {
-  //   title: 'Simplified AMM Deployment',
-  //   shortDescription:
-  //     'Remove low-level tasks. Supply custom AMM logic, and harness the full benefit of an optimized tech stack.',
-  //   imageSrc: '/images/graphics/stone-1.png',
-  // },
   {
     title: 'Decimal Scaling',
     shortDescription:
@@ -105,12 +99,12 @@ const features = [
       "EIP-1153's transient op-codes unlock a new, expressive design, the “Till” pattern. This allows the vault to efficiently enforce contract-level invariants in the scope of a callback, supporting design patterns that were previously not possible.",
     imageSrc: '/images/graphics/stone-1.png',
   },
-  // {
-  //   title: 'ERC20MultiToken',
-  //   shortDescription:
-  //     'Ensures atomic updates to pool token balances and total supply within the vault, reducing risks of read-only reentrancy attack vectors.',
-  //   imageSrc: '/images/graphics/stone-1.png',
-  // },
+  {
+    title: 'ERC20MultiToken',
+    shortDescription:
+      'Ensures atomic updates to pool token balances and total supply within the vault, reducing risks of read-only reentrancy attack vectors.',
+    imageSrc: '/images/graphics/stone-1.png',
+  },
   {
     title: 'Swap Fee Management',
     shortDescription:
@@ -445,6 +439,7 @@ export function Build() {
                 <Grid
                   gap="md"
                   mt="2xl"
+                  position="relative"
                   templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
                   templateRows="repeat(2, minmax(200px, auto))"
                 >
@@ -470,6 +465,8 @@ export function Build() {
                       style={{
                         display:
                           expandedCard && expandedCard !== contract.title ? 'hidden' : 'block',
+                        position:
+                          expandedCard && expandedCard !== contract.title ? 'absolute' : 'relative',
                       }}
                       transition={{
                         layout: {
