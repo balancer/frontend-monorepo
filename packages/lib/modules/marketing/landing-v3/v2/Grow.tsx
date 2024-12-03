@@ -1,12 +1,69 @@
 'use client'
 
-import { Heading, VStack, Text, Grid, GridItem, Box } from '@chakra-ui/react'
+import {
+  Heading,
+  VStack,
+  Text,
+  Grid,
+  GridItem,
+  Center,
+  Box,
+  useDisclosure,
+  BoxProps,
+} from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
-import { RadialPattern } from './shared/RadialPattern'
 import { FeatureCard } from './Build'
+import { BeetsIcon } from '@repo/lib/shared/components/icons/logos/BeetsIcon'
+import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
+import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
+import { GyroIcon } from '@repo/lib/shared/components/icons/logos/GyroIcon'
+import { XaveIcon } from '@repo/lib/shared/components/icons/logos/XaveIcon'
+import { CronIcon } from '@repo/lib/shared/components/icons/logos/CronIcon'
+import { ReactNode, useState } from 'react'
+import {
+  PartnerRedirectModal,
+  RedirectPartner,
+} from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+
+function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
+  return (
+    <Box
+      _hover={{
+        bg: 'background.level3',
+      }}
+      bg="background.level2"
+      color="font.primary"
+      cursor="pointer"
+      h="full"
+      rounded="lg"
+      shadow="md"
+      transition="background 0.5s ease-in-out"
+      w="full"
+      {...props}
+    >
+      <Center
+        _hover={{ opacity: 1 }}
+        h="full"
+        opacity={0.7}
+        transition="opacity 0.5s ease-in-out"
+        w="full"
+      >
+        {icon}
+      </Center>
+    </Box>
+  )
+}
 
 export function Grow() {
+  const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Aura)
+  const partnerRedirectDisclosure = useDisclosure()
+
+  function openRedirectModal(partner: RedirectPartner) {
+    setRedirectPartner(partner)
+    partnerRedirectDisclosure.onOpen()
+  }
+
   return (
     <Noise>
       <DefaultPageContainer>
@@ -48,14 +105,23 @@ export function Grow() {
               titleSize="3xl"
             />
           </GridItem>
-          <GridItem border="1px solid red" colSpan={2}>
-            P1
+          <GridItem colSpan={2}>
+            <PartnerButton
+              icon={<CowIcon size={80} />}
+              onClick={() => openRedirectModal(RedirectPartner.CoW)}
+            />
           </GridItem>
-          <GridItem border="1px solid red" colSpan={2}>
-            P2
+          <GridItem colSpan={2}>
+            <PartnerButton
+              icon={<AuraIcon size={80} />}
+              onClick={() => openRedirectModal(RedirectPartner.Aura)}
+            />
           </GridItem>
-          <GridItem border="1px solid red" colSpan={2}>
-            P3
+          <GridItem colSpan={2}>
+            <PartnerButton
+              icon={<BeetsIcon size={80} />}
+              onClick={() => openRedirectModal(RedirectPartner.Beets)}
+            />
           </GridItem>
           <GridItem colSpan={6} rowSpan={2}>
             <FeatureCard
@@ -68,139 +134,31 @@ export function Grow() {
               titleSize="3xl"
             />
           </GridItem>
-          <GridItem border="1px solid red" colSpan={2}>
-            P5
+          <GridItem colSpan={2}>
+            <PartnerButton
+              icon={<GyroIcon size={80} />}
+              onClick={() => openRedirectModal(RedirectPartner.Gyro)}
+            />
           </GridItem>
-          <GridItem border="1px solid red" colSpan={2}>
-            P6
+          <GridItem colSpan={2}>
+            <PartnerButton
+              icon={<XaveIcon size={80} />}
+              onClick={() => openRedirectModal(RedirectPartner.Xave)}
+            />
           </GridItem>
-          <GridItem border="1px solid red" colSpan={2}>
-            P7
+          <GridItem colSpan={2}>
+            <PartnerButton
+              icon={<CronIcon size={80} />}
+              onClick={() => openRedirectModal(RedirectPartner.Cron)}
+            />
           </GridItem>
         </Grid>
-        {/* <Grid gap="md" mt="2xl" templateColumns="repeat(4, 1fr)" textAlign="center" w="full">
-          <GridItem minH="200px">
-            <Box border="0px solid" position="relative">
-              <RadialPattern
-                borderColor="border.base"
-                borderWidth="2px"
-                circleCount={8}
-                innerSize="100px"
-                left="calc(50% - 100px)"
-                position="absolute"
-                size="200px"
-                top="0"
-              >
-                <Heading as="h4" size="xl" w="auto">
-                  $1.1B
-                </Heading>
-              </RadialPattern>
-              <Box position="relative" pt="150px">
-                <Text
-                  color="font.secondary"
-                  fontSize="2xl"
-                  mx="auto"
-                  px="md"
-                  rounded="full"
-                  w="fit-content"
-                >
-                  TVL
-                </Text>
-              </Box>
-            </Box>
-          </GridItem>
-          <GridItem minH="200px">
-            <Box border="0px solid" position="relative">
-              <RadialPattern
-                borderColor="border.base"
-                borderWidth="2px"
-                circleCount={8}
-                innerSize="100px"
-                left="calc(50% - 100px)"
-                position="absolute"
-                size="200px"
-                top="0"
-              >
-                <Heading as="h4" size="xl" w="auto">
-                  4K+
-                </Heading>
-              </RadialPattern>
-              <Box position="relative" pt="150px">
-                <Text
-                  color="font.secondary"
-                  fontSize="2xl"
-                  mx="auto"
-                  px="md"
-                  rounded="full"
-                  w="fit-content"
-                >
-                  Pools
-                </Text>
-              </Box>
-            </Box>
-          </GridItem>
-          <GridItem minH="200px">
-            <Box border="0px solid" position="relative">
-              <RadialPattern
-                borderColor="border.base"
-                borderWidth="2px"
-                circleCount={8}
-                innerSize="100px"
-                left="calc(50% - 100px)"
-                position="absolute"
-                size="200px"
-                top="0"
-              >
-                <Heading as="h4" size="xl" w="auto">
-                  $1.1B
-                </Heading>
-              </RadialPattern>
-              <Box position="relative" pt="150px">
-                <Text
-                  color="font.secondary"
-                  fontSize="2xl"
-                  mx="auto"
-                  px="md"
-                  rounded="full"
-                  w="fit-content"
-                >
-                  24hr Volume
-                </Text>
-              </Box>
-            </Box>
-          </GridItem>
-          <GridItem minH="200px">
-            <Box border="0px solid" position="relative">
-              <RadialPattern
-                borderColor="border.base"
-                borderWidth="2px"
-                circleCount={8}
-                innerSize="100px"
-                left="calc(50% - 100px)"
-                position="absolute"
-                size="200px"
-                top="0"
-              >
-                <Heading as="h4" size="xl" w="auto">
-                  10+
-                </Heading>
-              </RadialPattern>
-              <Box position="relative" pt="150px">
-                <Text
-                  color="font.secondary"
-                  fontSize="2xl"
-                  mx="auto"
-                  px="md"
-                  rounded="full"
-                  w="fit-content"
-                >
-                  Aggregator Integrations
-                </Text>
-              </Box>
-            </Box>
-          </GridItem>
-        </Grid> */}
       </DefaultPageContainer>
+      <PartnerRedirectModal
+        isOpen={partnerRedirectDisclosure.isOpen}
+        onClose={partnerRedirectDisclosure.onClose}
+        partner={redirectPartner}
+      />
     </Noise>
   )
 }
