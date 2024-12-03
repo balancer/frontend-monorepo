@@ -36,7 +36,7 @@ export default function PoolMetaBadges() {
       <PoolListTokenPills pool={pool} px="sm" py="2" />
       <PoolVersionTag isSmall pool={pool} />
       <PoolTypeTag pool={pool} />
-      <PoolHookTag />
+      <PoolHookTag pool={pool} />
       {!shouldHideSwapFee(pool.type) && <PoolSwapFees pool={pool} />}
     </Flex>
   )
