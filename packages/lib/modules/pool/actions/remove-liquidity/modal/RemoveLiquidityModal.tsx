@@ -19,6 +19,7 @@ import { RemoveLiquiditySummary } from './RemoveLiquiditySummary'
 import { useRemoveLiquidityReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { ProtocolVersion } from '../../../pool.types'
 
 type Props = {
   isOpen: boolean
@@ -46,6 +47,7 @@ export function RemoveLiquidityModal({
     chain,
     txHash: removeLiquidityTxHash,
     userAddress,
+    protocolVersion: pool.protocolVersion as ProtocolVersion,
   })
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
