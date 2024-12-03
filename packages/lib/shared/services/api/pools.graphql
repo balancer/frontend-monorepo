@@ -96,6 +96,7 @@ query GetPools(
     factory
     id
     name
+    owner
     swapFeeManager
     pauseManager
     poolCreator
