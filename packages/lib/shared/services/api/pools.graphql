@@ -38,6 +38,9 @@ query GetPools(
         symbol
       }
     }
+    hook {
+      ...Hook
+    }
     dynamicData {
       totalLiquidity
       lifetimeVolume

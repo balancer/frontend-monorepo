@@ -6,6 +6,7 @@ import { isBoosted } from '@repo/lib/modules/pool/pool.helpers'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import Image from 'next/image'
 import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { PoolHookTag } from '@repo/lib/modules/pool/PoolDetail/PoolHookTag'
 
 interface Props {
   pool: PoolListItem | Pool
@@ -31,6 +32,7 @@ export function PollListTableDetailsCell({ pool }: Props) {
           width={20}
         />
       ))}
+      <PoolHookTag pool={pool} />
     </HStack>
   )
 }
