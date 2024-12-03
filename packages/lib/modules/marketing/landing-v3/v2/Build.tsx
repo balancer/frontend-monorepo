@@ -43,26 +43,21 @@ const keyFeatures = [
     subTitle: 'Code less, build more.',
     description:
       'Design pools tailored to your vision with Balancer’s vault-first architecture. Build smarter, faster, and with less complexity.',
-    icon: <PieIcon size={40} style={{ filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 1))' }} />,
+    icon: <PieIcon size={40} />,
   },
   {
     title: '100% Boosted Pools',
     subTitle: 'Passive Yield, Simplified.',
     description:
       'Put your liquidity to work 100% of the time. Seamless integration with Aave and Morpho delivers passive, diversified yield in a single click.',
-    icon: (
-      <StarsIconPlain
-        size={32}
-        style={{ filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 1))' }}
-      />
-    ),
+    icon: <StarsIconPlain size={32} />,
   },
   {
     title: 'Hooks Framework',
     subTitle: 'Endless Possibilities',
     description:
       'Extend pool functionality with modular hooks. Customize pool behavior, implement advanced strategies, and unlock entirely new AMM design spaces with ease.',
-    icon: <HookIcon size={70} style={{ filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 1))' }} />,
+    icon: <HookIcon size={70} />,
   },
 ]
 
@@ -330,6 +325,7 @@ type FeatureCardProps = {
   titleSize?: string
   radialPatternProps?: RadialPatternProps
   statProps?: TextProps
+  iconProps?: BoxProps
 }
 
 export function FeatureCard({
@@ -342,6 +338,7 @@ export function FeatureCard({
   titleSize = 'xl',
   radialPatternProps,
   statProps,
+  iconProps,
   ...rest
 }: FeatureCardProps & BoxProps) {
   return (
@@ -358,7 +355,7 @@ export function FeatureCard({
         top={-50}
         {...radialPatternProps}
       >
-        <Center color="white" h="full" opacity={featureOpacity} w="full">
+        <Center color="white" h="full" opacity={featureOpacity} w="full" {...iconProps}>
           {icon && icon}
           {stat && (
             <Text fontSize="2xl" {...statProps}>
@@ -508,7 +505,7 @@ export function Build() {
           >
             {keyFeatures.map((feature, index) => (
               <GridItem key={index}>
-                <FeatureCard {...feature} />
+                <FeatureCard {...feature} iconProps={{ color: 'font.primary' }} />
               </GridItem>
             ))}
           </Grid>
