@@ -42,9 +42,9 @@ export function RadialPattern({
       circles.push(
         <Box
           alignItems="center"
-          border={`${borderWidth} solid`}
-          borderColor={borderColor}
           borderRadius="50%"
+          // eslint-disable-next-line max-len
+          boxShadow="-3px -3px 15px 1px rgba(255, 255, 255, 0.2), inset 3px 3px 15px 1px rgba(0, 0, 0, 0.4), 3px 3px 15px 1px rgba(0, 0, 0, 0.4), inset -3px -3px 15px 1px rgba(255, 255, 255, 0.2)"
           display="flex"
           height={currentSize}
           justifyContent="center"
