@@ -23,7 +23,7 @@ export function useFormattedPoolAttributes() {
 
   const poolOwnerData = useMemo(() => {
     if (!pool) return
-    const { owner } = pool
+    const { owner, swapFeeManager } = pool
     if (!owner) return
 
     if ((owner === zeroAddress && isV2) || isCowAmmPool(pool.type)) {
@@ -46,13 +46,15 @@ export function useFormattedPoolAttributes() {
       }
     }
 
+    const editableBy = `editable by ${isV2 ? 'pool owner' : 'swap fee manager'}`
+
     return {
-      title: abbreviateAddress(owner || ''),
+      title: abbreviateAddress((isV2 ? owner : swapFeeManager) || ''),
       link: '',
-      editableText: 'editable by pool owner',
+      editableText: editableBy,
       attributeImmutabilityText: isStable(pool.type)
-        ? ' except for swap fees and AMP factor editable by the pool owner'
-        : ' except for swap fees editable by the pool owner',
+        ? ` except for swap fees and AMP factor ${editableBy}`
+        : ` except for swap fees ${editableBy}`,
     }
   }, [pool])
 
