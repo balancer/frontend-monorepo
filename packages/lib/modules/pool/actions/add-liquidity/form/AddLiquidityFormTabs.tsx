@@ -52,7 +52,7 @@ export function AddLiquidityFormTabs({
   const proportionalTabTooltipLabel = requiresProportionalInput(pool)
     ? 'This pool requires liquidity to be added proportionally'
     : isBelowMinTvlThreshold
-      ? `Liquidity must be added proportionally until the pool TVL is greater than $${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD)}`
+      ? `Liquidity must be added proportionally until the pool TVL is greater than ${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD, { abbreviated: false, noDecimals: true })}`
       : undefined
 
   function handleTabChanged(option: ButtonGroupOption): void {

@@ -5,7 +5,7 @@ import { useFxRates } from './FxRatesProvider'
 import { symbolForCurrency } from '../utils/currencies'
 import { Numberish, bn, fNum } from '../utils/numbers'
 
-type CurrencyOpts = { withSymbol?: boolean; abbreviated?: boolean }
+type CurrencyOpts = { withSymbol?: boolean; abbreviated?: boolean; noDecimals?: boolean }
 
 export function useCurrency() {
   const { currency } = useUserSettings()
@@ -31,11 +31,12 @@ export function useCurrency() {
   // Converts a USD value to the user's currency and formats in fiat style.
   function toCurrency(
     usdVal: Numberish,
-    { withSymbol = true, abbreviated = true }: CurrencyOpts = {}
+    { withSymbol = true, abbreviated = true, noDecimals = false }: CurrencyOpts = {}
   ): string {
     const symbol = hasFxRates ? symbolForCurrency(currency) : '$'
     const convertedAmount = toUserCurrency(usdVal)
-    const formattedAmount = fNum('fiat', convertedAmount, { abbreviated })
+
+    const formattedAmount = fNum(noDecimals ? 'integer' : 'fiat', convertedAmount, { abbreviated })
 
     if (formattedAmount.startsWith('<')) {
       return withSymbol ? '<' + symbol + formattedAmount.substring(1) : formattedAmount
