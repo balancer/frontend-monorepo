@@ -52,7 +52,7 @@ export function Audits() {
               <NextLink href="https://spearbit.com/" rel="noopener noreferrer" target="_blank">
                 <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
                   <GraniteBg />
-                  <Center h="full" position="absolute" w="full">
+                  <Center color="font.primary" h="full" position="absolute" w="full">
                     <SpearbitLogo />
                   </Center>
                 </Box>
@@ -66,7 +66,7 @@ export function Audits() {
               >
                 <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
                   <GraniteBg />
-                  <Center h="full" position="absolute" w="full">
+                  <Center color="font.primary" h="full" position="absolute" w="full">
                     <TrailOfBitsLogo />
                   </Center>
                 </Box>
@@ -76,7 +76,7 @@ export function Audits() {
               <NextLink href="https://www.certora.com/" rel="noopener noreferrer" target="_blank">
                 <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
                   <GraniteBg />
-                  <Center h="full" position="absolute" w="full">
+                  <Center color="font.primary" h="full" position="absolute" w="full">
                     <CertoraLogo />
                   </Center>
                 </Box>
