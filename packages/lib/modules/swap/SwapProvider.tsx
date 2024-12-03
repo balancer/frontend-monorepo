@@ -53,6 +53,7 @@ import { Pool } from '../pool/PoolProvider'
 import { getChildTokens, getStandardRootTokens, isStandardRootToken } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { ProtocolVersion } from '../pool/pool.types'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -410,7 +411,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     isSameAddress(swapState.tokenOut.address, networkConfig.tokens.nativeAsset.address)
   const validAmountOut = bn(swapState.tokenOut.amount).gt(0)
 
-  const protocolVersion = (simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion || 2
+  const protocolVersion =
+    ((simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion as ProtocolVersion) || 2
   const { vaultAddress } = useVault(protocolVersion)
 
   const swapAction: SwapAction = useMemo(() => {
@@ -624,6 +626,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     isPoolSwap,
     pool,
     poolActionableTokens,
+    protocolVersion,
     replaceUrlPath,
     resetSwapAmounts,
     setTokenSelectKey,
