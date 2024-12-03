@@ -109,4 +109,5 @@ export interface ProjectConfig {
   variantConfig?: VariantConfig
   defaultNetwork: GqlChain
   ensNetwork: GqlChain
+  delegateOwner: Address
 }

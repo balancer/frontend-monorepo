@@ -65,10 +65,7 @@ test('queries add liquidity transaction', async () => {
   expect(result.current.receivedBptUnits).toBe('7.669852124112308228')
 })
 
-/*
-  Skip until dRPC fixes issue with polygon tx queries
-*/
-test.skip('queries add liquidity with native token', async () => {
+test('queries add liquidity with native token', async () => {
   // https://polygonscan.com/tx/0x611a0eeeff15c2a5efc587b173fa577475134de2554a452259f112db67bd4de8
   const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
   const txHash = '0x611a0eeeff15c2a5efc587b173fa577475134de2554a452259f112db67bd4de8'
@@ -88,10 +85,7 @@ test.skip('queries add liquidity with native token', async () => {
   expect(result.current.receivedBptUnits).toBe('0.984524168989962117')
 })
 
-/*
-  Skip until dRPC fixes issue with polygon tx queries
-*/
-test.skip('queries remove liquidity transaction', async () => {
+test('queries remove liquidity transaction', async () => {
   // https://etherscan.io/tx/0x71301b46984d3d2e6b58c1fc0c99cc0561ec0f26d53bda8413528a7fb6828fc3
   const userAddress = '0x84f240cA232917d771DFBbd8C917B4669Ed640CD'
   const txHash = '0x71301b46984d3d2e6b58c1fc0c99cc0561ec0f26d53bda8413528a7fb6828fc3'

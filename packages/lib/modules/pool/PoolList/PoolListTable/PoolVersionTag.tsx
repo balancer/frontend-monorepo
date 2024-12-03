@@ -1,4 +1,4 @@
-import { Center } from '@chakra-ui/react'
+import { Center, Text } from '@chakra-ui/react'
 import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
 import { isCowAmmPool } from '../../pool.helpers'
@@ -17,6 +17,21 @@ function getPoolVersionLabel(pool: PoolListItem | Pool) {
   }
 }
 
+const v3BadgeStyles = {
+  position: 'relative',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    inset: '-1px',
+    padding: '1px',
+    borderRadius: 'inherit',
+    background: 'background.special',
+    WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+    WebkitMaskComposite: 'xor',
+    maskComposite: 'exclude',
+  },
+}
+
 export function PoolVersionTag({
   pool,
   isSmall,
@@ -28,6 +43,7 @@ export function PoolVersionTag({
   if (!label) return null
 
   const size = isSmall ? '7' : '8'
+  const isV3 = pool.protocolVersion === 3
 
   return (
     <BalBadge
@@ -35,11 +51,14 @@ export function PoolVersionTag({
       fontSize="xs"
       h={size}
       p="0"
+      sx={isV3 ? v3BadgeStyles : undefined}
       textTransform="lowercase"
       w={size}
     >
       <Center h="full" w="full">
-        {label}
+        <Text fontSize="xs" variant={isV3 ? 'special' : 'secondary'}>
+          {label}
+        </Text>
       </Center>
     </BalBadge>
   )
