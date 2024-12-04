@@ -18,7 +18,10 @@ import {
   CardFooter,
   CardBody,
 } from '@chakra-ui/react'
-import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import {
+  PriceImpactLevel,
+  usePriceImpact,
+} from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
@@ -69,6 +72,19 @@ export function PriceImpactAccordion({
     }
   }
 
+  const getPriceImpactExceedsLabel = (priceImpactLevel: PriceImpactLevel) => {
+    switch (priceImpactLevel) {
+      case 'medium':
+        return '1.00%'
+      case 'high':
+        return '5.00%'
+      case 'max':
+        return '10.00%'
+      default:
+        return ''
+    }
+  }
+
   return (
     <Box w="full">
       <Accordion allowToggle variant="button" w="full">
@@ -93,7 +109,6 @@ export function PriceImpactAccordion({
       {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
         <>
           <VStack align="start" mt="md" spacing="md" w="full">
-            <div>LEVEL: {priceImpactLevel}</div>
             {!avoidPriceImpactAlert && (
               <Alert status="error">
                 <PriceImpactIcon mt="1" priceImpactLevel={priceImpactLevel} size={24} />
@@ -101,9 +116,7 @@ export function PriceImpactAccordion({
                   <AlertTitle>
                     {isUnknownPriceImpact
                       ? 'Unknown price impact'
-                      : `Price impact is high: Exceeds ${
-                          priceImpactLevel === 'high' ? '1' : '5'
-                        }.00%`}
+                      : `Price impact is high: Exceeds ${getPriceImpactExceedsLabel(priceImpactLevel)}`}
                   </AlertTitle>
                   <AlertDescription>
                     <Text color="font.dark" fontSize="sm">

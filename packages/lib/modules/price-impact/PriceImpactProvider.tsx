@@ -3,7 +3,7 @@ import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { useMandatoryContext } from '../../shared/utils/contexts'
 import { Box, BoxProps } from '@chakra-ui/react'
 
-type PriceImpactLevel = 'low' | 'medium' | 'high' | 'max' | 'unknown'
+export type PriceImpactLevel = 'low' | 'medium' | 'high' | 'max' | 'unknown'
 
 export function _usePriceImpact() {
   const [priceImpactLevel, setPriceImpactLevel] = useState<PriceImpactLevel>('low')
