@@ -13,6 +13,7 @@ import {
 } from './queries/useAddLiquidityBuildCallDataQuery'
 import { usePool } from '../../PoolProvider'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
+import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 
 export const addLiquidityStepId = 'add-liquidity'
 
@@ -71,14 +72,17 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
       onSuccess,
-      renderAction: () => (
-        <ManagedSendTransactionButton
-          gasEstimationMeta={gasEstimationMeta}
-          id={addLiquidityStepId}
-          labels={labels}
-          txConfig={buildCallDataQuery.data}
-        />
-      ),
+      renderAction: () => {
+        if (!buildCallDataQuery.data) return <DisabledTransactionButton />
+        return (
+          <ManagedSendTransactionButton
+            gasEstimationMeta={gasEstimationMeta}
+            id={addLiquidityStepId}
+            labels={labels}
+            txConfig={buildCallDataQuery.data}
+          />
+        )
+      },
     }),
     [transaction, simulationQuery.data, buildCallDataQuery.data]
   )

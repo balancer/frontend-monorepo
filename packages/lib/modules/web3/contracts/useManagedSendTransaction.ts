@@ -18,14 +18,13 @@ import {
 } from '@repo/lib/shared/utils/query-errors'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useRecentTransactions } from '../../transactions/RecentTransactionsProvider'
-import { mainnet } from 'viem/chains'
 import { useTxHash } from '../safe.hooks'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 
 export type ManagedSendTransactionInput = {
   labels: TransactionLabels
-  txConfig?: TransactionConfig
+  txConfig: TransactionConfig
   gasEstimationMeta?: Record<string, unknown>
 }
 
@@ -34,8 +33,7 @@ export function useManagedSendTransaction({
   txConfig,
   gasEstimationMeta,
 }: ManagedSendTransactionInput) {
-  // chainId will always have the correct value as the transaction is disabled when txConfig is undefined
-  const chainId = txConfig?.chainId || mainnet.id
+  const chainId = txConfig.chainId
   const { shouldChangeNetwork } = useChainSwitch(chainId)
   const { minConfirmations } = useNetworkConfig()
   const { updateTrackedTransaction } = useRecentTransactions()

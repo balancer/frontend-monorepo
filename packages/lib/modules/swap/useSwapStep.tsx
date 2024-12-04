@@ -17,6 +17,7 @@ import { useTokenBalances } from '../tokens/TokenBalancesProvider'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { useTenderly } from '../web3/useTenderly'
 import { getChainId } from '@repo/lib/config/app.config'
+import { DisabledTransactionButton } from '../transactions/transaction-steps/TransactionStepButton'
 
 export const swapStepId = 'swap'
 
@@ -88,16 +89,19 @@ export function useSwapStep({
       onActivated: () => setIsBuildQueryEnabled(true),
       onDeactivated: () => setIsBuildQueryEnabled(false),
       onSuccess: () => refetchBalances(),
-      renderAction: () => (
-        <VStack w="full">
-          <ManagedSendTransactionButton
-            gasEstimationMeta={gasEstimationMeta}
-            id={swapStepId}
-            labels={labels}
-            txConfig={buildSwapQuery.data}
-          />
-        </VStack>
-      ),
+      renderAction: () => {
+        if (!buildSwapQuery.data) return <DisabledTransactionButton />
+        return (
+          <VStack w="full">
+            <ManagedSendTransactionButton
+              gasEstimationMeta={gasEstimationMeta}
+              id={swapStepId}
+              labels={labels}
+              txConfig={buildSwapQuery.data}
+            />
+          </VStack>
+        )
+      },
     }),
     [transaction, simulationQuery.data, buildSwapQuery.data]
   )
