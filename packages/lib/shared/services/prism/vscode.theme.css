@@ -67,7 +67,7 @@ pre[class*='language-'] {
 
 .token.comment,
 .token.prolog {
-  color: #6a9955;
+  color: #00674e;
 }
 
 .token.punctuation,
@@ -93,7 +93,7 @@ pre[class*='language-'] {
 .token.char,
 .token.builtin,
 .token.deleted {
-  color: #ce9178;
+  color: #fdba74;
 }
 
 .language-css .token.string.url {
@@ -122,7 +122,7 @@ pre[class*='language-'] {
 }
 
 .token.atrule .token.url .token.function {
-  color: #dcdcaa;
+  color: #e5d3be;
 }
 
 .token.atrule .token.url .token.punctuation {
@@ -130,7 +130,7 @@ pre[class*='language-'] {
 }
 
 .token.keyword {
-  color: #569cd6;
+  color: #9f95f0;
 }
 
 .token.keyword.module,
@@ -140,7 +140,7 @@ pre[class*='language-'] {
 
 .token.function,
 .token.function .token.maybe-class-name {
-  color: #dcdcaa;
+  color: #e5d3be;
 }
 
 .token.regex {
