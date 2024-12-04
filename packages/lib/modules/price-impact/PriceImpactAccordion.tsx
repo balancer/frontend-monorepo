@@ -18,13 +18,11 @@ import {
   CardFooter,
   CardBody,
 } from '@chakra-ui/react'
-import {
-  PriceImpactLevel,
-  usePriceImpact,
-} from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ReactNode, useEffect } from 'react'
 import { PriceImpactAcceptModal } from './PriceImpactAcceptModal'
+import { getPriceImpactExceedsLabel } from './price-impact.utils'
 
 interface PriceImpactAccordionProps {
   setNeedsToAcceptPIRisk: (value: boolean) => void
@@ -69,19 +67,6 @@ export function PriceImpactAccordion({
       setAcceptPriceImpactRisk(true)
     } else {
       acceptHighImpactDisclosure.onOpen()
-    }
-  }
-
-  const getPriceImpactExceedsLabel = (priceImpactLevel: PriceImpactLevel) => {
-    switch (priceImpactLevel) {
-      case 'medium':
-        return '1.00%'
-      case 'high':
-        return '5.00%'
-      case 'max':
-        return '10.00%'
-      default:
-        return ''
     }
   }
 
