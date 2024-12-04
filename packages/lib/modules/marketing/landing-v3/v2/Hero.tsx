@@ -77,8 +77,8 @@ export function Hero() {
               color="font.secondary"
               fontSize={{ base: 'xl', md: '2xl' }}
               fontWeight="thin"
-              maxW="full"
-              w="650px"
+              maxW="800px"
+              w="full"
             >
               The ultimate platform for custom liquidity solutions. Designed to empower developers,
               protocols, and creators, Balancer v3 combines simplicity, flexibility, and

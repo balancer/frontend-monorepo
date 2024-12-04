@@ -167,7 +167,7 @@ export function Videos() {
               mb="md"
               minH="600px"
             />
-            <Grid gap="md" templateColumns="repeat(3, 1fr)">
+            <Grid gap="md" templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}>
               <GridItem>
                 <VideoBox
                   bgVariant={1}

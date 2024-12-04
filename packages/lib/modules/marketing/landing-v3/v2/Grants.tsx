@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 'use client'
 
-import { VStack, HStack, Heading, Button, Text, GridItem, Grid, Box } from '@chakra-ui/react'
+import { VStack, HStack, Heading, Button, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
@@ -48,7 +48,12 @@ export function Grants() {
               Balancer ecosystem.
             </Text>
           </VStack>
-          <HStack align="end" justify="space-between" w="full">
+          <Stack
+            align={{ base: 'start', lg: 'end' }}
+            direction={{ base: 'column', lg: 'row' }}
+            justify="space-between"
+            w="full"
+          >
             <Text fontSize="2xl" opacity={0.8}>
               Some fund-worthy ideas to get you started
             </Text>
@@ -60,8 +65,12 @@ export function Grants() {
             >
               Get a grant
             </Button>
-          </HStack>
-          <Grid gap="md" templateColumns="repeat(3, 1fr)" w="full">
+          </Stack>
+          <Grid
+            gap="md"
+            templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
+            w="full"
+          >
             {grantIdeas.map(idea => (
               <GridItem key={idea.title}>
                 <NextLink href="https://spearbit.com/" rel="noopener noreferrer" target="_blank">

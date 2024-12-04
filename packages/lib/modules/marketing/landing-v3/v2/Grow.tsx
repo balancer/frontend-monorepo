@@ -25,6 +25,7 @@ import {
   PartnerRedirectModal,
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
   return (
@@ -36,6 +37,7 @@ function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
       color="font.primary"
       cursor="pointer"
       h="full"
+      p="md"
       rounded="lg"
       shadow="md"
       transition="background 0.5s ease-in-out"
@@ -58,6 +60,7 @@ function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
 export function Grow() {
   const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Aura)
   const partnerRedirectDisclosure = useDisclosure()
+  const { isMobile } = useBreakpoints()
 
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
@@ -76,13 +79,14 @@ export function Grow() {
           </Text>
         </VStack>
         <Grid gap="md" mt="2xl" templateColumns="repeat(12, 1fr)" templateRows="repeat(3, 1fr)">
-          <GridItem colSpan={4}>
+          <GridItem colSpan={{ base: 12, lg: 4 }} order={1}>
             <FeatureCard
               radialPatternProps={{
                 innerHeight: 100,
                 innerWidth: 100,
                 height: 200,
                 width: 200,
+                circleCount: 6,
               }}
               stat="$1.1B"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
@@ -90,13 +94,14 @@ export function Grow() {
               titleSize="3xl"
             />
           </GridItem>
-          <GridItem colSpan={4}>
+          <GridItem colSpan={{ base: 12, lg: 4 }} order={2}>
             <FeatureCard
               radialPatternProps={{
                 innerHeight: 100,
                 innerWidth: 100,
                 height: 200,
                 width: 200,
+                circleCount: 6,
               }}
               stat="4K+"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
@@ -104,13 +109,14 @@ export function Grow() {
               titleSize="3xl"
             />
           </GridItem>
-          <GridItem colSpan={4}>
+          <GridItem colSpan={{ base: 12, lg: 4 }} order={3}>
             <FeatureCard
               radialPatternProps={{
                 innerHeight: 100,
                 innerWidth: 100,
                 height: 200,
                 width: 200,
+                circleCount: 6,
               }}
               stat="$54M"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
@@ -118,32 +124,33 @@ export function Grow() {
               titleSize="3xl"
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{ base: 6, lg: 2 }} order={4}>
             <PartnerButton
               icon={<CowIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.CoW)}
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{ base: 6, lg: 2 }} order={5}>
             <PartnerButton
               icon={<AuraIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Aura)}
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{ base: 6, lg: 2 }} order={6}>
             <PartnerButton
               icon={<BeetsIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Beets)}
             />
           </GridItem>
-          <GridItem colSpan={6} rowSpan={2}>
+          <GridItem colSpan={{ base: 12, lg: 6 }} order={{ base: 10, lg: 7 }} rowSpan={2}>
             <FeatureCard
               h="full"
               radialPatternProps={{
                 innerHeight: 100,
                 innerWidth: 100,
-                height: 250,
-                width: 250,
+                height: isMobile ? 200 : 250,
+                width: isMobile ? 200 : 250,
+                circleCount: isMobile ? 6 : 8,
               }}
               stat="10+"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
@@ -152,19 +159,19 @@ export function Grow() {
               titleSize="3xl"
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{ base: 6, lg: 2 }} order={{ base: 7, lg: 8 }}>
             <PartnerButton
               icon={<GyroIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Gyro)}
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{ base: 6, lg: 2 }} order={{ base: 8, lg: 9 }}>
             <PartnerButton
               icon={<XaveIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Xave)}
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{ base: 6, lg: 2 }} order={{ base: 9, lg: 10 }}>
             <PartnerButton
               icon={<CronIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Cron)}

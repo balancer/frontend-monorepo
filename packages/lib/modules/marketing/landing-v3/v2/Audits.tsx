@@ -2,7 +2,6 @@
 
 import {
   VStack,
-  HStack,
   Heading,
   Button,
   Text,
@@ -11,6 +10,7 @@ import {
   Box,
   Center,
   Link,
+  Stack,
 } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
@@ -26,7 +26,13 @@ export function Audits() {
     <Noise backgroundColor="background.level0WithOpacity ">
       <DefaultPageContainer noVerticalPadding py="2xl">
         <VStack align="start" spacing="lg" w="full">
-          <HStack align="end" justify="space-between" w="full">
+          <Stack
+            align="end"
+            alignItems={{ base: 'start', lg: 'end' }}
+            direction={{ base: 'column', lg: 'row' }}
+            justify="space-between"
+            w="full"
+          >
             <VStack align="start">
               <Text
                 background="font.specialSecondary"
@@ -46,8 +52,12 @@ export function Audits() {
             >
               View reports
             </Button>
-          </HStack>
-          <Grid gap="md" templateColumns="repeat(3, 1fr)" w="full">
+          </Stack>
+          <Grid
+            gap="md"
+            templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
+            w="full"
+          >
             <GridItem>
               <NextLink href="https://spearbit.com/" rel="noopener noreferrer" target="_blank">
                 <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
