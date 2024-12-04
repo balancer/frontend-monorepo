@@ -65,12 +65,10 @@ export function Grow() {
   }
 
   return (
-    <Noise>
-      <DefaultPageContainer>
+    <Noise backgroundColor="background.level0WithOpacity">
+      <DefaultPageContainer noVerticalPadding py="3xl">
         <VStack alignItems="center" spacing="md" textAlign="center">
-          <Heading as="h3" size="xl">
-            Grow with us.
-          </Heading>
+          <Heading>Grow with us.</Heading>
           <Text color="font.secondary" fontSize="2xl" maxW="2xl">
             Balancer v3 is DeFi infrastructure to be built on.
             <br />

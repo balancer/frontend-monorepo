@@ -12,10 +12,11 @@ export function LandingV3() {
       <HeroV2 />
       <Code />
       <Build />
-      <Videos />
-      <Audits />
-      <Grants />
       <Grow />
+      <Audits />
+      <Videos />
+
+      <Grants />
     </>
   )
 }

@@ -24,7 +24,7 @@ import { CertoraLogo } from '@repo/lib/shared/components/imgs/CertoraLogo'
 export function Audits() {
   return (
     <Noise backgroundColor="background.level0WithOpacity ">
-      <DefaultPageContainer>
+      <DefaultPageContainer noVerticalPadding py="2xl">
         <VStack align="start" spacing="lg" w="full">
           <HStack align="end" justify="space-between" w="full">
             <VStack align="start">

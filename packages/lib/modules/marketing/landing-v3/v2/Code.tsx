@@ -40,9 +40,7 @@ export function Code() {
     <Noise backgroundColor="background.level0WithOpacity">
       <DefaultPageContainer>
         <VStack alignItems="center" spacing="md" textAlign="center">
-          <Heading as="h3" size="xl">
-            Code less, build more.
-          </Heading>
+          <Heading>Code less, build more.</Heading>
           <Text color="font.secondary" fontSize="lg" maxW="2xl">
             Balancer v3’s architecture focuses on simplicity, flexibility, and extensibility at its
             core. The v3 vault more formally defines the requirements of a custom pool, shifting
