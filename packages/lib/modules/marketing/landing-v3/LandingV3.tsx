@@ -15,7 +15,6 @@ export function LandingV3() {
       <Grow />
       <Audits />
       <Videos />
-
       <Grants />
     </>
   )

@@ -29,7 +29,7 @@ const grantIdeas = [
 export function Grants() {
   return (
     <Noise backgroundColor="background.level0WithOpacity ">
-      <DefaultPageContainer>
+      <DefaultPageContainer noVerticalPadding py={['xl', '3xl']}>
         <VStack align="start" spacing="lg" w="full">
           <VStack align="start">
             <Text
@@ -65,7 +65,7 @@ export function Grants() {
             {grantIdeas.map(idea => (
               <GridItem key={idea.title}>
                 <NextLink href="https://spearbit.com/" rel="noopener noreferrer" target="_blank">
-                  <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
+                  <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="2xl">
                     <GraniteBg />
                     <VStack align="start" p="md" position="relative">
                       <Text fontSize="lg">{idea.title}</Text>

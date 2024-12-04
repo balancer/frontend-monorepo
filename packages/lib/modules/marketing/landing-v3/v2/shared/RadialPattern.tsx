@@ -38,6 +38,9 @@ export function RadialPattern({
   const heightDifference = totalHeightDifference / (circleCount - 1)
   const opacityStep = (maxOpacity - minOpacity) / (circleCount - 1)
 
+  const shadowBlackOpacity = isDarkMode ? 0.3 : 0.1
+  const shadowWhiteOpacity = isDarkMode ? 0.1 : 0.3
+
   const renderCircles = () => {
     const circles = []
 
@@ -47,9 +50,6 @@ export function RadialPattern({
       const currentOpacity = maxOpacity - opacityStep * (i - 1)
       const isInnermost = i === 1
       const borderRadius = Math.max(parseInt(currentHeight), parseInt(currentWidth)) / 2
-
-      const shadowBlackOpacity = isDarkMode ? 0.3 : 0.1
-      const shadowWhiteOpacity = isDarkMode ? 0.1 : 0.3
 
       circles.push(
         <Box

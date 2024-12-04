@@ -22,10 +22,7 @@ import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { SandBg } from './shared/SandBg'
 import Image from 'next/image'
-import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 
-// @ts-ignore
-import bgCirclesSrc from './images/circles-right.svg'
 // @ts-ignore
 import createCustomAMMsSrc from './images/video-createCustomAMMs.png'
 // @ts-ignore
@@ -34,6 +31,7 @@ import scaffoldBalancerSrc from './images/video-scaffoldBalancer.png'
 import createHookSrc from './images/video-createHook.png'
 // @ts-ignore
 import createRouterSrc from './images/video-createRouter.png'
+import { RadialPattern } from './shared/RadialPattern'
 
 const videos = {
   createCustomAMMs: {
@@ -127,30 +125,24 @@ export function VideoBox({
 }
 
 export function Videos() {
-  const isDarkMode = useIsDarkMode()
-
   return (
-    <Noise backgroundColor="background.level0WithOpacity">
+    <Noise backgroundColor="background.level0WithOpacity" position="relative">
       <Box minH="500px" position="absolute" w="full">
-        <Box
-          bottom={0}
-          h="500px"
-          left={0}
-          opacity={isDarkMode ? 0.1 : 0.4}
-          position="absolute"
-          top={0}
-          w="100vw"
-        >
-          <Image
-            alt="background"
-            fill
-            sizes="100vw"
-            src={bgCirclesSrc}
-            style={{ objectFit: 'contain', objectPosition: 'left', rotate: '180deg' }}
+        <Box bottom={0} h="500px" left={0} position="absolute" top={0} w="100vw">
+          <RadialPattern
+            circleCount={8}
+            height={700}
+            innerHeight={150}
+            innerWidth={500}
+            padding="15px"
+            position="absolute"
+            right={-400}
+            top={-100}
+            width={1000}
           />
         </Box>
       </Box>
-      <DefaultPageContainer noVerticalPadding pt="200px">
+      <DefaultPageContainer noVerticalPadding position="relative" py={['xl', '3xl']} zIndex={2}>
         <VStack align="start" spacing="lg" w="full">
           <HStack align="end" justify="space-between" w="full">
             <Heading>Learn to build on v3</Heading>
@@ -216,6 +208,21 @@ export function Videos() {
           </Card>
         </VStack>
       </DefaultPageContainer>
+      <Box minH="500px" position="absolute" w="full" zIndex={1}>
+        <Box bottom={0} h="500px" left={0} position="absolute" top={0} w="100vw">
+          <RadialPattern
+            circleCount={8}
+            height={700}
+            innerHeight={150}
+            innerWidth={500}
+            left={-400}
+            padding="15px"
+            position="absolute"
+            top={-500}
+            width={1000}
+          />
+        </Box>
+      </Box>
     </Noise>
   )
 }

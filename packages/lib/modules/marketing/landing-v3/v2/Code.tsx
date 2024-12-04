@@ -5,13 +5,8 @@ import { Box, Card, Center, Grid, GridItem, Heading, Text, VStack } from '@chakr
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
-import Image from 'next/image'
 import PrismLoader from '@repo/lib/shared/services/prism/PrismLoader'
 
-// @ts-ignore
-import bgSrc from './images/sand-pattern-1.svg'
-// @ts-ignore
-import bgSrcDark from './images/sand-pattern-1-dark.svg'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { RadialPattern } from './shared/RadialPattern'
 
@@ -39,7 +34,7 @@ export function Code() {
 
   return (
     <Noise backgroundColor="background.level0WithOpacity">
-      <DefaultPageContainer>
+      <DefaultPageContainer noVerticalPadding py={['xl', '2xl']}>
         <VStack alignItems="center" spacing="md" textAlign="center">
           <Heading>Code less, build more.</Heading>
           <Text color="font.secondary" fontSize="lg" maxW="2xl">
