@@ -345,14 +345,13 @@ export function FeatureCard({
     <Box minH="175px" overflow="hidden" position="relative" rounded="lg" shadow="lg" {...rest}>
       <GraniteBg />
       <RadialPattern
-        borderColor="rgba(255, 255, 255, 0.3)"
-        borderWidth="2px"
         circleCount={8}
+        height={180}
         padding="15px"
         position="absolute"
         right={-50}
-        size="180px"
         top={-50}
+        width={180}
         {...radialPatternProps}
       >
         <Center color="white" h="full" opacity={featureOpacity} w="full" {...iconProps}>
@@ -395,7 +394,6 @@ export function FeatureCard({
 const MotionGridItem = motion(GridItem)
 
 export function Build() {
-  const isDarkMode = useIsDarkMode()
   const [expandedCard, setExpandedCard] = useState<string | null>(null)
   const { isMobile } = useBreakpoints()
 
@@ -406,18 +404,22 @@ export function Build() {
           bottom={0}
           h="700px"
           left={0}
-          opacity={isDarkMode ? 0.1 : 0.4}
+          // opacity={isDarkMode ? 0.1 : 0.4}
           position="absolute"
           right={0}
           top={100}
           w={{ base: '80vw', lg: '45vw' }}
         >
-          <Image
-            alt="background"
-            fill
-            sizes="100vw"
-            src={bgSrc}
-            style={{ objectFit: 'contain', objectPosition: 'left' }}
+          <RadialPattern
+            circleCount={8}
+            height={500}
+            innerHeight={100}
+            innerWidth={450}
+            left={-250}
+            padding="15px"
+            position="absolute"
+            top="calc(50% - 250px)"
+            width={800}
           />
         </Box>
         <DefaultPageContainer minH="800px" noVerticalPadding position="relative" py="3xl">

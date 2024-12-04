@@ -80,7 +80,12 @@ export function Grow() {
         <Grid gap="md" mt="2xl" templateColumns="repeat(12, 1fr)" templateRows="repeat(3, 1fr)">
           <GridItem colSpan={4}>
             <FeatureCard
-              radialPatternProps={{ innerSize: '100px', size: '200px' }}
+              radialPatternProps={{
+                innerHeight: 100,
+                innerWidth: 100,
+                height: 200,
+                width: 200,
+              }}
               stat="$1.1B"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="TVL"
@@ -89,7 +94,12 @@ export function Grow() {
           </GridItem>
           <GridItem colSpan={4}>
             <FeatureCard
-              radialPatternProps={{ innerSize: '100px', size: '200px' }}
+              radialPatternProps={{
+                innerHeight: 100,
+                innerWidth: 100,
+                height: 200,
+                width: 200,
+              }}
               stat="4K+"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="Pools"
@@ -98,7 +108,12 @@ export function Grow() {
           </GridItem>
           <GridItem colSpan={4}>
             <FeatureCard
-              radialPatternProps={{ innerSize: '100px', size: '200px' }}
+              radialPatternProps={{
+                innerHeight: 100,
+                innerWidth: 100,
+                height: 200,
+                width: 200,
+              }}
               stat="$54M"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="24hr Volume"
@@ -126,7 +141,12 @@ export function Grow() {
           <GridItem colSpan={6} rowSpan={2}>
             <FeatureCard
               h="full"
-              radialPatternProps={{ innerSize: '100px', size: '250px' }}
+              radialPatternProps={{
+                innerHeight: 100,
+                innerWidth: 100,
+                height: 250,
+                width: 250,
+              }}
               stat="10+"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               subTitle="Instant volume for your liquidity."
