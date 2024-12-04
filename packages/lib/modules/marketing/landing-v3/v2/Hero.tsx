@@ -10,7 +10,7 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import { ArrowUpRight } from 'react-feather'
 
 // @ts-ignore
-import bgDarkSrc from './images/bg-dark-3.png'
+import bgDarkSrc from './images/bg-dark-4.png'
 // @ts-ignore
 import bgLightSrc from './images/bg-light-4.png'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
@@ -25,7 +25,7 @@ export function Hero() {
       <Box bottom={0} h="100vh" left={0} minH="600px" position="absolute" right={0} top={0}>
         <AnimatePresence>
           <motion.div
-            animate={{ opacity: isDarkMode ? 0.4 : 0.5 }}
+            animate={{ opacity: isDarkMode ? 0.3 : 0.5 }}
             exit={{ opacity: 0 }}
             initial={{ opacity: 0.01 }}
             style={{
@@ -112,9 +112,9 @@ export function Hero() {
       <Box
         bgGradient="linear(transparent 0%, background.level0 50%, transparent 100%)"
         bottom="0"
-        h="150px"
+        h="200px"
         left="0"
-        mb="-75px"
+        mb="-100px"
         position="absolute"
         w="full"
       />

@@ -34,7 +34,7 @@ export function Code() {
 
   return (
     <Noise backgroundColor="background.level0WithOpacity">
-      <DefaultPageContainer noVerticalPadding py={['xl', '2xl']}>
+      <DefaultPageContainer noVerticalPadding py={['xl', '3xl']}>
         <VStack alignItems="center" spacing="md" textAlign="center">
           <Heading>Code less, build more.</Heading>
           <Text color="font.secondary" fontSize="lg" maxW="2xl">
