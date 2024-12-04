@@ -1,6 +1,4 @@
-import { InfoIcon } from '@chakra-ui/icons'
 import {
-  AlertIcon,
   Box,
   Button,
   ButtonProps,
