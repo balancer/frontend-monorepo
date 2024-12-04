@@ -20,13 +20,10 @@ import {
   BoxProps,
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import Image from 'next/image'
 
 // @ts-ignore
-import bgSrc from './images/circles-right.svg'
 import { ArrowUpRight, Code } from 'react-feather'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
-import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { ReactNode, useState } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion } from 'framer-motion'
