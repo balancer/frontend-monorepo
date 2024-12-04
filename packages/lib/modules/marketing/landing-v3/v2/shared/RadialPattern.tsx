@@ -12,6 +12,7 @@ export interface RadialPatternProps extends BoxProps {
   innerHeight?: number
   maxOpacity?: number
   minOpacity?: number
+  intensity?: number
   children?: React.ReactNode
 }
 
@@ -24,6 +25,7 @@ export function RadialPattern({
   maxOpacity = 1,
   minOpacity = 0.05,
   children,
+  intensity = 1,
   ...rest
 }: RadialPatternProps) {
   const isDarkMode = useIsDarkMode()
@@ -38,8 +40,8 @@ export function RadialPattern({
   const heightDifference = totalHeightDifference / (circleCount - 1)
   const opacityStep = (maxOpacity - minOpacity) / (circleCount - 1)
 
-  const shadowBlackOpacity = isDarkMode ? 0.3 : 0.1
-  const shadowWhiteOpacity = isDarkMode ? 0.1 : 0.3
+  const shadowBlackOpacity = isDarkMode ? intensity * 0.3 : intensity * 0.1
+  const shadowWhiteOpacity = isDarkMode ? intensity * 0.1 : intensity * 0.3
 
   const renderCircles = () => {
     const circles = []

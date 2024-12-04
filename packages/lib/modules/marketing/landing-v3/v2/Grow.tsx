@@ -91,7 +91,7 @@ export function Grow() {
               stat="$1.1B"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="TVL"
-              titleSize="3xl"
+              titleSize="2xl"
             />
           </GridItem>
           <GridItem colSpan={{ base: 12, lg: 4 }} order={2}>
@@ -106,7 +106,7 @@ export function Grow() {
               stat="4K+"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="Pools"
-              titleSize="3xl"
+              titleSize="2xl"
             />
           </GridItem>
           <GridItem colSpan={{ base: 12, lg: 4 }} order={3}>
@@ -121,7 +121,7 @@ export function Grow() {
               stat="$54M"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="24hr Volume"
-              titleSize="3xl"
+              titleSize="2xl"
             />
           </GridItem>
           <GridItem colSpan={{ base: 6, lg: 2 }} order={4}>

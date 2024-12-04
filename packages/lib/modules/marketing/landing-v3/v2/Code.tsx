@@ -45,83 +45,82 @@ export function Code() {
         </VStack>
         <Card mt="2xl">
           <Box background="background.level0" minH="500px" position="relative" shadow="innerXl">
-            <Noise backgroundColor="background.level0WithOpacity">
-              <Box
-                bottom={0}
-                h="100%"
-                left={0}
-                opacity={isDarkMode ? 0.3 : 0.2}
-                overflow="hidden"
+            <Box
+              bottom={0}
+              h="100%"
+              left={0}
+              opacity={isDarkMode ? 0.3 : 0.2}
+              overflow="hidden"
+              position="absolute"
+              right={0}
+              shadow="innerXl"
+              top={0}
+              w="100%"
+            >
+              <RadialPattern
+                circleCount={12}
+                height={800}
+                innerHeight={100}
+                innerWidth={100}
+                intensity={2}
+                left="calc(50% - 400px)"
+                padding="15px"
                 position="absolute"
-                right={0}
-                shadow="innerXl"
-                top={0}
-                w="100%"
+                top="calc(50% - 400px)"
+                width={800}
+              />
+            </Box>
+            <Center position="relative">
+              <Grid
+                alignItems="center"
+                gap="2xl"
+                px={{ base: 'xs', lg: '2xl' }}
+                py="2xl"
+                templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
               >
-                <RadialPattern
-                  circleCount={12}
-                  height={800}
-                  innerHeight={100}
-                  innerWidth={100}
-                  left="calc(50% - 400px)"
-                  padding="15px"
-                  position="absolute"
-                  top="calc(50% - 400px)"
-                  width={800}
-                />
-              </Box>
-              <Center position="relative">
-                <Grid
-                  alignItems="center"
-                  gap="2xl"
-                  px={{ base: 'xs', lg: '2xl' }}
-                  py="2xl"
-                  templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
-                >
-                  <GridItem>
-                    <VStack alignItems="start" spacing="md">
-                      <Text
-                        background="font.specialSecondary"
-                        backgroundClip="text"
-                        fontSize="sm"
-                        textTransform="uppercase"
-                      >
-                        SIMPLICITY
-                      </Text>
-                      <Heading as="h4" size="xl">
-                        Building on v3 is simple
-                      </Heading>
-                      <Text color="font.secondary" fontSize="lg">
-                        To make custom pool creation easy, core functions have been moved from pools
-                        into the heavily audited vault. For example, here’s all the code needed to
-                        build a swap function for a Constant Product Pool.
-                      </Text>
-                    </VStack>
-                  </GridItem>
-                  <GridItem maxW="100%">
-                    <Card>
-                      <pre
+                <GridItem>
+                  <VStack alignItems="start" spacing="md">
+                    <Text
+                      background="font.specialSecondary"
+                      backgroundClip="text"
+                      fontSize="sm"
+                      textTransform="uppercase"
+                    >
+                      SIMPLICITY
+                    </Text>
+                    <Heading as="h4" size="xl">
+                      Building on v3 is simple
+                    </Heading>
+                    <Text color="font.secondary" fontSize="lg">
+                      To make custom pool creation easy, core functions have been moved from pools
+                      into the heavily audited vault. For example, here’s all the code needed to
+                      build a swap function for a Constant Product Pool.
+                    </Text>
+                  </VStack>
+                </GridItem>
+                <GridItem maxW="100%">
+                  <Card>
+                    <pre
+                      className="language-solidity"
+                      style={{
+                        padding: '2rem',
+                        borderRadius: '8px',
+                      }}
+                    >
+                      <code
                         className="language-solidity"
                         style={{
-                          padding: '2rem',
-                          borderRadius: '8px',
+                          whiteSpace: isMobile ? 'pre-line' : 'pre',
+                          wordBreak: isMobile ? 'break-word' : 'normal',
                         }}
                       >
-                        <code
-                          className="language-solidity"
-                          style={{
-                            whiteSpace: isMobile ? 'pre-line' : 'pre',
-                            wordBreak: isMobile ? 'break-word' : 'normal',
-                          }}
-                        >
-                          {codeSnippet}
-                        </code>
-                      </pre>
-                    </Card>
-                  </GridItem>
-                </Grid>
-              </Center>
-            </Noise>
+                        {codeSnippet}
+                      </code>
+                    </pre>
+                  </Card>
+                </GridItem>
+              </Grid>
+            </Center>
           </Box>
         </Card>
       </DefaultPageContainer>
