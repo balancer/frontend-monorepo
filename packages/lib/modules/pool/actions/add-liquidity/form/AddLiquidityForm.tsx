@@ -215,7 +215,7 @@ function AddLiquidityMainForm() {
           />
           {!wantsProportional && isUnbalancedError && (
             <UnbalancedAddError
-              error={simulationQuery.error || priceImpactQuery.error}
+              error={(simulationQuery.error || priceImpactQuery.error) as Error}
               goToProportionalAdds={setProportionalTab}
               isProportionalSupported={!nestedAddLiquidityEnabled}
             />

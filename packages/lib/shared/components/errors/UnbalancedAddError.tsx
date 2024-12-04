@@ -13,7 +13,7 @@ import { ErrorAlert } from './ErrorAlert'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
 
 type Props = AlertProps & {
-  error?: Error | null
+  error: Error
   goToProportionalAdds: () => void
   isProportionalSupported?: boolean
 }
@@ -59,13 +59,12 @@ export type UnbalancedErrorLabels = {
 
 export function getErrorLabels(
   isProportionalSupported: boolean,
-  error?: Error | null
+  error: Error
 ): UnbalancedErrorLabels | undefined {
+  if (!error) return
   let errorTitle = 'Token amounts error'
   let errorMessage = 'Unexpected error. Please ask for support'
   let proportionalLabel = 'Please use proportional mode.'
-
-  if (!error) return
 
   if (isInvariantRatioAboveMaxSimulationErrorMessage(error.message)) {
     errorTitle = 'Amount exceeds pool limits'

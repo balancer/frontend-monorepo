@@ -461,12 +461,6 @@ export function toGqlTokens(
 */
 export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address): boolean {
   if (
-    isStandardOrUnderlyingRootToken(pool, token1) &&
-    isStandardOrUnderlyingRootToken(pool, token2)
-  ) {
-    return false
-  }
-  if (
     !isStandardOrUnderlyingRootToken(pool, token1) &&
     !isStandardOrUnderlyingRootToken(pool, token2)
   ) {

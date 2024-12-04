@@ -55,13 +55,11 @@ export default function ButtonGroup(props: Props) {
                     <GroupOptionButton isActive={isActive} option={option} {...props} />
                   </Box>
                 </PopoverTrigger>
-                {option?.tabTooltipLabel && (
-                  <PopoverContent maxW="300px" p="sm" w="auto">
-                    <Text fontSize="sm" variant="secondary">
-                      {option.tabTooltipLabel}
-                    </Text>
-                  </PopoverContent>
-                )}
+                <PopoverContent maxW="300px" p="sm" w="auto">
+                  <Text fontSize="sm" variant="secondary">
+                    {option.tabTooltipLabel}
+                  </Text>
+                </PopoverContent>
               </Popover>
             </Box>
           ) : (
@@ -125,17 +123,15 @@ function IconPopover({ option }: { option: ButtonGroupOption }) {
   if (option.tabTooltipLabel) return null
   if (!option.iconTooltipLabel) return null
   return (
-    <Popover key={option.iconTooltipLabel} placement="top" trigger="hover">
+    <Popover placement="top" trigger="hover">
       <PopoverTrigger>
         <Icon as={Info} />
       </PopoverTrigger>
-      {option?.iconTooltipLabel && (
-        <PopoverContent maxW="300px" p="sm" w="auto">
-          <Text fontSize="sm" variant="secondary" whiteSpace="pre-wrap">
-            {option.iconTooltipLabel}
-          </Text>
-        </PopoverContent>
-      )}
+      <PopoverContent maxW="300px" p="sm" w="auto">
+        <Text fontSize="sm" variant="secondary" whiteSpace="pre-wrap">
+          {option.iconTooltipLabel}
+        </Text>
+      </PopoverContent>
     </Popover>
   )
 }
