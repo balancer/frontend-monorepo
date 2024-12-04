@@ -6,7 +6,6 @@ import {
   isNotEnoughGasError,
   isPausedError,
   isTooManyRequestsError,
-  isUnbalancedAddError,
   isUserRejectedError,
   isViemHttpFetchError,
 } from '../../utils/error-filters'
@@ -17,9 +16,11 @@ type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
 type Props = AlertProps & {
   error: ErrorWithOptionalShortMessage
   customErrorName?: string
+  skipError?: boolean
 }
 
-export function GenericError({ error: _error, customErrorName, ...rest }: Props) {
+export function GenericError({ error: _error, customErrorName, skipError, ...rest }: Props) {
+  if (skipError) return
   const error = ensureError(_error)
   if (isUserRejectedError(error)) return null
   const errorName = customErrorName ? `${customErrorName} (${error.name})` : error.name
@@ -68,16 +69,6 @@ export function GenericError({ error: _error, customErrorName, ...rest }: Props)
           It looks like you don&apos;t have enough gas to complete this transaction. If you believe
           this is a mistake, please report it in{' '}
           <BalAlertLink href="https://discord.balancer.fi/">our discord.</BalAlertLink>
-        </Text>
-      </ErrorAlert>
-    )
-  }
-
-  if (isUnbalancedAddError(_error)) {
-    return (
-      <ErrorAlert title={customErrorName} {...rest}>
-        <Text color="black" variant="secondary">
-          Your input(s) would excessively unbalance the pool. Please adjust to be more proportional.
         </Text>
       </ErrorAlert>
     )

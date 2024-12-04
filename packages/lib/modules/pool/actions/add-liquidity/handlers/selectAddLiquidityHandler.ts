@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { getChainId } from '@repo/lib/config/app.config'
 import { Pool } from '../../../PoolProvider'
 import { TwammAddLiquidityHandler } from './TwammAddLiquidity.handler'
@@ -11,8 +12,12 @@ import { ProportionalAddLiquidityHandlerV3 } from './ProportionalAddLiquidityV3.
 import { UnbalancedAddLiquidityV3Handler } from './UnbalancedAddLiquidityV3.handler'
 import { BoostedUnbalancedAddLiquidityV3Handler } from './BoostedUnbalancedAddLiquidityV3.handler'
 import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'
+import { ProportionalBoostedAddLiquidityV3 } from './ProportionalBoostedAddLiquidityV3.handler'
 
-export function selectAddLiquidityHandler(pool: Pool): AddLiquidityHandler {
+export function selectAddLiquidityHandler(
+  pool: Pool,
+  wantsProportional = false
+): AddLiquidityHandler {
   // This is just an example to illustrate how edge-case handlers would receive different inputs but return a common contract
   if (pool.id === 'TWAMM-example') return new TwammAddLiquidityHandler(getChainId(pool.chain))
 
@@ -20,14 +25,23 @@ export function selectAddLiquidityHandler(pool: Pool): AddLiquidityHandler {
   // We should add a toggle to the form which allows the user to revert to
   // adding liquidity in the first level pool tokens.
   if (supportsNestedActions(pool)) {
+    // TODO: console.log(
+    //   'NestedAddLiquidityV3Handler should work with unbalanced + calculate proportional',
+    //   { wantsProportional }
+    // )
     return isV3Pool(pool)
       ? new NestedAddLiquidityV3Handler(pool)
       : new NestedAddLiquidityV2Handler(pool)
   }
 
-  if (isBoosted(pool)) return new BoostedUnbalancedAddLiquidityV3Handler(pool)
+  if (isBoosted(pool)) {
+    if (wantsProportional) {
+      return new ProportionalBoostedAddLiquidityV3(pool)
+    }
+    return new BoostedUnbalancedAddLiquidityV3Handler(pool)
+  }
 
-  if (requiresProportionalInput(pool)) {
+  if (requiresProportionalInput(pool) || wantsProportional) {
     if (isV3Pool(pool)) {
       return new ProportionalAddLiquidityHandlerV3(pool)
     }

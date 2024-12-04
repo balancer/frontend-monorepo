@@ -14,6 +14,7 @@ import {
 } from 'viem'
 import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
+import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 
 type ParseProps = {
   receiptLogs: Log[]
@@ -21,6 +22,7 @@ type ParseProps = {
   userAddress?: Address
   txValue: bigint
   getToken: (address: Address, chain: GqlChain) => GqlToken | undefined
+  protocolVersion: ProtocolVersion
 }
 
 export type ParseReceipt =
@@ -66,9 +68,10 @@ export function parseRemoveLiquidityReceipt({
   userAddress,
   chain,
   getToken,
+  protocolVersion,
 }: ParseProps) {
   const nativeAssetReceived =
-    (getIncomingWithdrawals(receiptLogs, chain, userAddress) as bigint) || 0n
+    (getIncomingWithdrawals(receiptLogs, chain, protocolVersion, userAddress) as bigint) || 0n
 
   const receivedErc20Tokens: HumanTokenAmountWithAddress[] = getIncomingLogs(
     receiptLogs,
@@ -100,6 +103,7 @@ export function parseSwapReceipt({
   chain,
   getToken,
   txValue,
+  protocolVersion,
 }: ParseProps) {
   /**
    * GET SENT AMOUNT
@@ -122,7 +126,7 @@ export function parseSwapReceipt({
    * GET RECEIVED AMOUNT
    */
   const nativeAssetReceived =
-    (getIncomingWithdrawals(receiptLogs, chain, userAddress) as bigint) || 0n
+    (getIncomingWithdrawals(receiptLogs, chain, protocolVersion, userAddress) as bigint) || 0n
 
   const incomingData = getIncomingLogs(receiptLogs, userAddress)[0]
   const receivedTokenValue = incomingData?.args?.value || 0n
@@ -174,10 +178,19 @@ function getIncomingLogs(logs: Log[], userAddress?: Address) {
   })
 }
 
-// TODO V3 - This works for v2 vault but may not work for v3
-function getIncomingWithdrawals(logs: Log[], chain: GqlChain, userAddress?: Address) {
+function getIncomingWithdrawals(
+  logs: Log[],
+  chain: GqlChain,
+  protocolVersion: ProtocolVersion,
+  userAddress?: Address
+) {
   if (!userAddress) return []
   const networkConfig = getNetworkConfig(chain)
+
+  const from =
+    protocolVersion === 3
+      ? networkConfig.contracts.balancer.batchRouter
+      : networkConfig.contracts.balancer.vaultV2
 
   // Fantom uses the Transfer event instead of Withdrawal
   if (chain === GqlChain.Fantom) {
@@ -185,7 +198,7 @@ function getIncomingWithdrawals(logs: Log[], chain: GqlChain, userAddress?: Addr
       abi: [
         parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
       ],
-      args: { from: networkConfig.contracts.balancer.vaultV2, to: zeroAddress },
+      args: { from: from, to: zeroAddress },
       logs: logs,
     })[0]?.args?.value
   } else {
@@ -193,7 +206,7 @@ function getIncomingWithdrawals(logs: Log[], chain: GqlChain, userAddress?: Addr
     // that his means the user is getting the same value in the native asset.
     return parseEventLogs({
       abi: [parseAbiItem('event Withdrawal(address indexed src, uint256 wad)')],
-      args: { src: networkConfig.contracts.balancer.vaultV2 },
+      args: { src: from },
       logs: logs,
     })[0]?.args?.wad
   }
