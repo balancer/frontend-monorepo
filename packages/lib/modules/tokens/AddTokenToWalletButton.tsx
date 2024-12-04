@@ -5,6 +5,7 @@ import { IconButton, IconButtonProps, Tooltip } from '@chakra-ui/react'
 import { useWalletClient } from 'wagmi'
 import { useTokens } from './TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { ensureError } from '@repo/lib/shared/utils/errors'
 
 export function AddTokenToWalletButton({
   tokenAddress,
@@ -21,15 +22,26 @@ export function AddTokenToWalletButton({
     if (!token) {
       return
     }
-    await walletClient?.watchAsset({
-      type: 'ERC20',
-      options: {
-        address: token.address,
-        decimals: token.decimals,
-        symbol: token.symbol,
-        ...(token.logoURI && { image: token.logoURI }),
-      },
-    })
+    try {
+      await walletClient?.watchAsset({
+        type: 'ERC20',
+        options: {
+          address: token.address,
+          decimals: token.decimals,
+          symbol: token.symbol,
+          ...(token.logoURI && { image: token.logoURI }),
+        },
+      })
+    } catch (e) {
+      const error = ensureError(e)
+      /*
+        There are edge cases where wallets like MetaMask do not support adding tokens with certain symbols.
+        More details: https://ethereum.stackexchange.com/questions/161798/programatically-override-token-symbol-with-metamask-wallet-watchasset
+      */
+      if (error.name === 'InvalidParamsRpcError') {
+        console.log('Your wallet does not support adding this token.', { error })
+      }
+    }
   }
 
   return (

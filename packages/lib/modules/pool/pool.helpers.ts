@@ -341,6 +341,10 @@ export function isV3WithNestedActionsPool(pool: Pool): boolean {
   return supportsNestedActions(pool) && isV3Pool(pool)
 }
 
+export function isV3NotSupportingWethIsEth(pool: Pool): boolean {
+  return (supportsNestedActions(pool) || isBoosted(pool)) && isV3Pool(pool)
+}
+
 export function requiresPermit2Approval(pool: Pool): boolean {
   return isV3Pool(pool)
 }
@@ -410,23 +414,31 @@ export function getNestedBptParentToken(poolTokens: PoolToken[], childTokenAddre
   return nestedBptToken
 }
 
-// Returns true if the given token address belongs to a top level token that is not a nestedBpt
-export function isStandardRootToken(pool?: Pool, tokenAddress?: Address): boolean {
+// Returns true if the given token address belongs to a top level standard/underlying token that is not a nestedBpt
+export function isStandardOrUnderlyingRootToken(pool?: Pool, tokenAddress?: Address): boolean {
   if (!pool || !tokenAddress) return true
-  const token = pool.poolTokens.find(token => isSameAddress(token.address, tokenAddress))
+  const token = pool.poolTokens.find(
+    token =>
+      isSameAddress(token.address, tokenAddress) ||
+      isSameAddress(token.underlyingToken?.address || '', tokenAddress)
+  )
   return token?.hasNestedPool === false
 }
 
 // Returns the top level tokens that is not nestedBpt
 export function getStandardRootTokens(pool: Pool, poolActionableTokens?: GqlToken[]): GqlToken[] {
   if (!poolActionableTokens) return []
-  return poolActionableTokens.filter(token => isStandardRootToken(pool, token.address as Address))
+  return poolActionableTokens.filter(token =>
+    isStandardOrUnderlyingRootToken(pool, token.address as Address)
+  )
 }
 
 // Returns the child tokens (children of a parent nestedBpt)
 export function getChildTokens(pool: Pool, poolActionableTokens?: GqlToken[]): GqlToken[] {
   if (!poolActionableTokens) return []
-  return poolActionableTokens.filter(token => !isStandardRootToken(pool, token.address as Address))
+  return poolActionableTokens.filter(
+    token => !isStandardOrUnderlyingRootToken(pool, token.address as Address)
+  )
 }
 
 export function toGqlTokens(
@@ -448,8 +460,12 @@ export function toGqlTokens(
     1. From a nested child token to another nested child token
 */
 export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address): boolean {
-  if (isStandardRootToken(pool, token1) && isStandardRootToken(pool, token2)) return false
-  if (!isStandardRootToken(pool, token1) && !isStandardRootToken(pool, token2)) return false
+  if (
+    !isStandardOrUnderlyingRootToken(pool, token1) &&
+    !isStandardOrUnderlyingRootToken(pool, token2)
+  ) {
+    return false
+  }
   return true
 }
 

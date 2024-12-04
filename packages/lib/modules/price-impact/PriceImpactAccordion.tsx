@@ -30,6 +30,7 @@ interface PriceImpactAccordionProps {
   isDisabled?: boolean
   // Unknown price impact due to limitations in ABA priceImpact calculation
   cannotCalculatePriceImpact?: boolean
+  avoidPriceImpactAlert?: boolean
 }
 export function PriceImpactAccordion({
   setNeedsToAcceptPIRisk,
@@ -37,6 +38,7 @@ export function PriceImpactAccordion({
   accordionPanelComponent,
   isDisabled,
   cannotCalculatePriceImpact = false,
+  avoidPriceImpactAlert = false,
 }: PriceImpactAccordionProps) {
   const acceptHighImpactDisclosure = useDisclosure()
   const {
@@ -91,25 +93,27 @@ export function PriceImpactAccordion({
       {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
         <>
           <VStack align="start" mt="md" spacing="md" w="full">
-            <Alert status="error">
-              <PriceImpactIcon mt="1" priceImpactLevel={priceImpactLevel} size={24} />
-              <Box ml="md">
-                <AlertTitle>
-                  {isUnknownPriceImpact
-                    ? 'Unknown price impact'
-                    : `Price impact is high: Exceeds ${
-                        priceImpactLevel === 'high' ? '1' : '5'
-                      }.00%`}
-                </AlertTitle>
-                <AlertDescription>
-                  <Text color="font.dark" fontSize="sm">
+            {!avoidPriceImpactAlert && (
+              <Alert status="error">
+                <PriceImpactIcon mt="1" priceImpactLevel={priceImpactLevel} size={24} />
+                <Box ml="md">
+                  <AlertTitle>
                     {isUnknownPriceImpact
-                      ? 'The price impact cannot be calculated. Only proceed if you know exactly what you are doing.'
-                      : 'The higher the price impact, the worse exchange rate you get for this swap.'}
-                  </Text>
-                </AlertDescription>
-              </Box>
-            </Alert>
+                      ? 'Unknown price impact'
+                      : `Price impact is high: Exceeds ${
+                          priceImpactLevel === 'high' ? '1' : '5'
+                        }.00%`}
+                  </AlertTitle>
+                  <AlertDescription>
+                    <Text color="font.dark" fontSize="sm">
+                      {isUnknownPriceImpact
+                        ? 'The price impact cannot be calculated. Only proceed if you know exactly what you are doing.'
+                        : 'The higher the price impact, the worse exchange rate you get for this swap.'}
+                    </Text>
+                  </AlertDescription>
+                </Box>
+              </Alert>
+            )}
             <Card variant="subSection">
               <CardBody>
                 <Text fontWeight="bold" mb="sm">

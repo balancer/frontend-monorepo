@@ -50,7 +50,11 @@ import {
   isWrapOrUnwrap,
 } from './wrap.helpers'
 import { Pool } from '../pool/PoolProvider'
-import { getChildTokens, getStandardRootTokens, isStandardRootToken } from '../pool/pool.helpers'
+import {
+  getChildTokens,
+  getStandardRootTokens,
+  isStandardOrUnderlyingRootToken,
+} from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { ProtocolVersion } from '../pool/pool.types'
@@ -499,7 +503,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
     if (supportsNestedActions(pool)) {
       setInitialTokenIn(tokenIn)
-      if (isStandardRootToken(pool, tokenIn as Address)) {
+      if (isStandardOrUnderlyingRootToken(pool, tokenIn as Address)) {
         setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
       } else {
         setInitialTokenOut(getStandardRootTokens(pool, poolActionableTokens)[0].address)

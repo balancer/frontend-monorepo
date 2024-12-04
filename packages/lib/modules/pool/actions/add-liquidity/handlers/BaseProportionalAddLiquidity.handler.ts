@@ -33,6 +33,7 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
     humanAmountsIn: HumanTokenAmountWithAddress[],
     userAddress: Address
   ): Promise<SdkQueryAddLiquidityOutput> {
+    //TODO: instead of getting the zero index we should get the one that the user introduced
     const referenceAmount = this.helpers.toSdkInputAmounts(humanAmountsIn)[0]
 
     const addLiquidity = new AddLiquidity()

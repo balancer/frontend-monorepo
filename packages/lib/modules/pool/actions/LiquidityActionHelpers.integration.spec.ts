@@ -14,6 +14,7 @@ import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generate
 import { getPoolMock } from '../__mocks__/getPoolMock'
 import { allPoolTokens } from '../pool.helpers'
 import { LiquidityActionHelpers } from './LiquidityActionHelpers'
+import { Pool } from '../PoolProvider'
 
 describe('Calculates toInputAmounts from allPoolTokens', () => {
   it('for v2 weighted pool with no nested tokens', async () => {
@@ -291,5 +292,165 @@ describe.skip('Liquidity helpers for V3 NESTED pool', async () => {
         rawAmount: 100000n,
       },
     ])
+  })
+})
+
+// Unskip when sepolia V3 pools are available in production api
+test.skip('Nested pool state for V3 BOOSTED POOL', async () => {
+  // const poolId = '0xbb83ba331c3254c8c44645430126797dceda89c0' // Sepolia Balancer 50 WETH 50 stataUSDC
+
+  // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
+  const v3Pool = {} as Pool
+
+  const helpers = new LiquidityActionHelpers(v3Pool)
+
+  const state = helpers.boostedPoolState
+
+  expect(state).toMatchInlineSnapshot(`
+    {
+      "address": "0xbb83ba331c3254c8c44645430126797dceda89c0",
+      "id": "0xbb83ba331c3254c8c44645430126797dceda89c0",
+      "protocolVersion": 3,
+      "tokens": [
+        {
+          "address": "0x7b79995e5f793a07bc00c21412e50ecae098e7f9",
+          "balance": "10.030375954528889",
+          "balanceUSD": "35947.96468719563",
+          "decimals": 18,
+          "erc4626ReviewData": null,
+          "hasNestedPool": false,
+          "id": "0xbb83ba331c3254c8c44645430126797dceda89c0-0x7b79995e5f793a07bc00c21412e50ecae098e7f9",
+          "index": 0,
+          "isAllowed": true,
+          "isErc4626": false,
+          "name": "Wrapped Ether",
+          "nestedPool": null,
+          "priceRate": "1",
+          "priceRateProvider": "0x0000000000000000000000000000000000000000",
+          "priceRateProviderData": null,
+          "symbol": "WETH",
+          "underlyingToken": null,
+          "weight": "0.5",
+        },
+        {
+          "address": "0x8a88124522dbbf1e56352ba3de1d9f78c143751e",
+          "balance": "25922.046716",
+          "balanceUSD": "30847.23559204",
+          "decimals": 6,
+          "erc4626ReviewData": null,
+          "hasNestedPool": false,
+          "id": "0xbb83ba331c3254c8c44645430126797dceda89c0-0x8a88124522dbbf1e56352ba3de1d9f78c143751e",
+          "index": 1,
+          "isAllowed": true,
+          "isErc4626": true,
+          "name": "Static Aave Ethereum USDC",
+          "nestedPool": null,
+          "priceRate": "1.188770181245210492",
+          "priceRateProvider": "0x34101091673238545de8a846621823d9993c3085",
+          "priceRateProviderData": {
+            "address": "0x34101091673238545de8a846621823d9993c3085",
+            "factory": null,
+            "name": "waUSDC Rate Provider",
+            "reviewFile": "./StatATokenTestnetRateProvider.md",
+            "reviewed": true,
+            "summary": "safe",
+            "upgradeableComponents": [],
+            "warnings": [
+              "",
+            ],
+          },
+          "symbol": "stataEthUSDC",
+          "underlyingToken": {
+            "address": "0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8",
+            "chainId": 11155111,
+            "decimals": 6,
+            "index": 1,
+            "name": "USDC (AAVE Faucet)",
+            "symbol": "usdc-aave",
+          },
+          "weight": "0.5",
+        },
+      ],
+      "totalShares": "555.900851855167757901",
+      "type": "Weighted",
+    }
+  `)
+})
+
+// Unskip when sepolia V3 pools are available in production api
+test.skip('Nested pool state for V3 NESTED POOL', async () => {
+  // const poolId = '0xc9233cc69435591b193b50f702ac31e404a08b10' // Sepolia Balancer 50 WETH 50 USD
+
+  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
+  const daiSepoliaAddress = '0xff34b3d4aee8ddcd6f9afffb6fe49bd371b8a357'
+  const wethSepoliaAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9'
+  // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
+  const v3Pool = {} as Pool
+
+  const helpers = new LiquidityActionHelpers(v3Pool)
+
+  const state = helpers.nestedPoolStateV3
+
+  expect(state).toEqual({
+    mainTokens: [
+      {
+        address: wethSepoliaAddress,
+        decimals: 18,
+        index: 0,
+      },
+      {
+        address: usdcSepoliaAddress,
+        decimals: 6,
+        index: 0,
+      },
+      {
+        address: daiSepoliaAddress,
+        decimals: 18,
+        index: 1,
+      },
+    ],
+    pools: [
+      {
+        address: '0xc9233cc69435591b193b50f702ac31e404a08b10',
+        id: '0xc9233cc69435591b193b50f702ac31e404a08b10',
+        level: 1,
+        tokens: [
+          {
+            address: wethSepoliaAddress,
+            decimals: 18,
+            index: 0,
+            underlyingToken: null,
+          },
+          {
+            address: '0x946e59e9637f44eb122fe64b372aaf6ed0441da1',
+            decimals: 18,
+            index: 1,
+            underlyingToken: null,
+          },
+        ],
+        type: 'Weighted',
+      },
+      {
+        address: '0x946e59e9637f44eb122fe64b372aaf6ed0441da1',
+        id: '0x946e59e9637f44eb122fe64b372aaf6ed0441da1',
+        level: 0,
+        tokens: [
+          {
+            address: usdcSepoliaAddress,
+            decimals: 6,
+            index: 0,
+            underlyingToken: null,
+          },
+          {
+            address: daiSepoliaAddress,
+            decimals: 18,
+            index: 1,
+            underlyingToken: null,
+          },
+        ],
+        type: 'Weighted',
+      },
+    ],
+    protocolVersion: 3,
   })
 })

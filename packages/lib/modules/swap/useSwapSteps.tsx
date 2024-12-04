@@ -13,6 +13,7 @@ import { OSwapAction } from './swap.types'
 import { useSignPermit2SwapStep } from './usePermit2SwapStep'
 import { SwapStepParams, useSwapStep } from './useSwapStep'
 import { permit2Address } from '../tokens/approvals/permit2/permit2.helpers'
+import { isNativeAsset } from '../tokens/token.helpers'
 
 type Params = SwapStepParams & {
   vaultAddress: Address
@@ -87,8 +88,12 @@ export function useSwapSteps({
 
   const isSignPermit2Loading = isPermit2 && !signPermit2Step
 
+  // native tokenIn does not require permit2 signature
+  const isNativeTokenIn = tokenInInfo && isNativeAsset(tokenInInfo?.address, chain)
+
   const steps = useMemo(() => {
-    const swapSteps = isPermit2 && signPermit2Step ? [signPermit2Step, swapStep] : [swapStep]
+    const swapSteps =
+      isPermit2 && signPermit2Step && !isNativeTokenIn ? [signPermit2Step, swapStep] : [swapStep]
 
     if (swapRequiresRelayer) {
       if (relayerMode === 'approveRelayer') {
@@ -108,6 +113,7 @@ export function useSwapSteps({
     shouldSignRelayerApproval,
     approveRelayerStep,
     signRelayerStep,
+    isNativeTokenIn,
   ])
 
   return {

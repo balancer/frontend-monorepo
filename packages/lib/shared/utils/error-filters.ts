@@ -45,7 +45,7 @@ export function isPausedErrorMessage(errorMessage: string): boolean {
   return errorMessage.includes('reverted with the following reason:\nBAL#402\n')
 }
 
-export function isUnbalancedAddError(error?: Error | null): boolean {
+export function isUnbalancedAddError(error: Error | null): boolean {
   if (!error) return false
   if (
     isInvariantRatioSimulationErrorMessage(error?.message) ||
@@ -66,16 +66,25 @@ export function isUnbalancedAddErrorMessage(error: Error | null): boolean {
 
 export function isInvariantRatioSimulationErrorMessage(errorMessage?: string): boolean {
   return (
-    !!errorMessage?.includes('InvariantRatioAboveMax') ||
-    !!errorMessage?.includes('InvariantRatioBelowMin')
+    isInvariantRatioAboveMaxSimulationErrorMessage(errorMessage) ||
+    isInvariantRatioAboveMinSimulationErrorMessage(errorMessage)
   )
 }
 
+export function isInvariantRatioAboveMaxSimulationErrorMessage(errorMessage?: string): boolean {
+  return !!errorMessage?.includes('InvariantRatioAboveMax')
+}
+export function isInvariantRatioAboveMinSimulationErrorMessage(errorMessage?: string): boolean {
+  return !!errorMessage?.includes('InvariantRatioBelowMin')
+}
+
 export function isInvariantRatioPIErrorMessage(errorMessage?: string): boolean {
+  if (!errorMessage) return false
   if (
-    errorMessage?.includes(
+    errorMessage.includes(
       'addLiquidityUnbalanced operation will fail at SC level with user defined input.'
-    )
+    ) ||
+    errorMessage.includes('Arithmetic operation resulted in underflow or overflow.')
   ) {
     return true
   }
