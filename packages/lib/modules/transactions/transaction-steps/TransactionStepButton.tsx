@@ -117,3 +117,7 @@ function TransactionError({ step }: Props) {
 
   return null
 }
+
+export function DisabledTransactionButton() {
+  return <Button isDisabled isLoading size="lg" variant="primary" w="full" width="full" />
+}

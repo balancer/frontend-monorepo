@@ -93,6 +93,7 @@ export function PriceImpactAccordion({
       {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (
         <>
           <VStack align="start" mt="md" spacing="md" w="full">
+            <div>LEVEL: {priceImpactLevel}</div>
             {!avoidPriceImpactAlert && (
               <Alert status="error">
                 <PriceImpactIcon mt="1" priceImpactLevel={priceImpactLevel} size={24} />
