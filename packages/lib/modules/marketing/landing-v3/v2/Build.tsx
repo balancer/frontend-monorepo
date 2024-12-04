@@ -404,7 +404,6 @@ export function Build() {
           bottom={0}
           h="700px"
           left={0}
-          // opacity={isDarkMode ? 0.1 : 0.4}
           position="absolute"
           right={0}
           top={100}
@@ -412,14 +411,14 @@ export function Build() {
         >
           <RadialPattern
             circleCount={8}
-            height={500}
-            innerHeight={100}
-            innerWidth={450}
-            left={-250}
+            height={700}
+            innerHeight={150}
+            innerWidth={500}
+            left={-400}
             padding="15px"
             position="absolute"
-            top="calc(50% - 250px)"
-            width={800}
+            top={0}
+            width={1000}
           />
         </Box>
         <DefaultPageContainer minH="800px" noVerticalPadding position="relative" py="3xl">
