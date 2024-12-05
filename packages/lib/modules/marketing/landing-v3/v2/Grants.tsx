@@ -29,7 +29,7 @@ const grantIdeas = [
 export function Grants() {
   return (
     <Noise backgroundColor="background.level0WithOpacity ">
-      <DefaultPageContainer noVerticalPadding py={['xl', '3xl']}>
+      <DefaultPageContainer noVerticalPadding py={['xl', '10rem']}>
         <VStack align="start" spacing="lg" w="full">
           <VStack align="start">
             <Text

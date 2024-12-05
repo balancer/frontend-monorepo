@@ -142,7 +142,7 @@ export function Videos() {
           />
         </Box>
       </Box>
-      <DefaultPageContainer noVerticalPadding position="relative" py={['xl', '3xl']} zIndex={2}>
+      <DefaultPageContainer noVerticalPadding position="relative" py={['xl', '10rem']} zIndex={2}>
         <VStack align="start" spacing="lg" w="full">
           <HStack align="end" justify="space-between" w="full">
             <Heading>Learn to build on v3</Heading>

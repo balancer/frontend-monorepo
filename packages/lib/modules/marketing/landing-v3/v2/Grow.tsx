@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
-import { FeatureCard } from './Build'
 import { BeetsIcon } from '@repo/lib/shared/components/icons/logos/BeetsIcon'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
 import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
@@ -26,6 +25,7 @@ import {
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { FeatureCard } from './shared/FeatureCard'
 
 function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
   return (
@@ -69,7 +69,7 @@ export function Grow() {
 
   return (
     <Noise backgroundColor="background.level0WithOpacity">
-      <DefaultPageContainer noVerticalPadding py="3xl">
+      <DefaultPageContainer noVerticalPadding py={['xl', '10rem']}>
         <VStack alignItems="center" spacing="md" textAlign="center">
           <Heading>Grow with us.</Heading>
           <Text color="font.secondary" fontSize="2xl" maxW="2xl">

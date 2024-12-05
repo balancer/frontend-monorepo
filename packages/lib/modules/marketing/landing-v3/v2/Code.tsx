@@ -33,8 +33,8 @@ export function Code() {
   const { isMobile } = useBreakpoints()
 
   return (
-    <Noise backgroundColor="background.level0WithOpacity">
-      <DefaultPageContainer noVerticalPadding py={['xl', '3xl']}>
+    <Noise backgroundColor="background.level0WithOpacity" position="relative">
+      <DefaultPageContainer noVerticalPadding py={['xl', '10rem']}>
         <VStack alignItems="center" spacing="md" textAlign="center">
           <Heading>Code less, build more.</Heading>
           <Text color="font.secondary" fontSize="lg" maxW="2xl">
@@ -125,6 +125,15 @@ export function Code() {
         </Card>
       </DefaultPageContainer>
       <PrismLoader />
+      <Box
+        bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
+        bottom="0"
+        h="200px"
+        left="0"
+        mb="-100px"
+        position="absolute"
+        w="full"
+      />
     </Noise>
   )
 }
