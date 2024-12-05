@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { CornerDownLeft, MessageSquare, ThumbsUp } from 'react-feather'
 import { TransactionStep } from '../../../modules/transactions/transaction-steps/lib'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export function SuccessActions({
   returnLabel,
@@ -31,7 +32,7 @@ export function SuccessActions({
         </Button>
         <Button
           as={Link}
-          href="https://discord.balancer.fi"
+          href={getProjectConfig().externalLinks.discordUrl}
           leftIcon={<MessageSquare size="14" />}
           size="xs"
           target="_blank"

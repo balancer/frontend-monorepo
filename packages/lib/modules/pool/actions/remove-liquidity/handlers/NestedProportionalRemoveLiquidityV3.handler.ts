@@ -11,7 +11,7 @@ import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.typ
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Address, Hex, parseEther } from 'viem'
 import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
+import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import {
   BuildRemoveLiquidityInput,
   QueryRemoveLiquidityInput,
@@ -99,7 +99,7 @@ export class NestedProportionalRemoveLiquidityV3Handler implements RemoveLiquidi
       bptAmountIn: parseEther(humanBptIn),
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
-      sender: userAddress,
+      sender: getSender(userAddress),
     }
 
     return result

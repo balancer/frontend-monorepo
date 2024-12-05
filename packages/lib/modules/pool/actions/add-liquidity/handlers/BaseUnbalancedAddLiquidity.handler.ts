@@ -11,7 +11,7 @@ import {
   PriceImpactAmount,
 } from '@balancer/sdk'
 import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
+import { LiquidityActionHelpers, areEmptyAmounts, getSender } from '../../LiquidityActionHelpers'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 
@@ -69,7 +69,7 @@ export abstract class BaseUnbalancedAddLiquidityHandler implements AddLiquidityH
       rpcUrl: getRpcUrl(this.helpers.chainId),
       amountsIn,
       kind: AddLiquidityKind.Unbalanced,
-      sender: userAddress,
+      sender: getSender(userAddress),
     }
   }
 }

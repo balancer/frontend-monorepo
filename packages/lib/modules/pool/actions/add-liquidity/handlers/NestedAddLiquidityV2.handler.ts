@@ -11,7 +11,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
+import { LiquidityActionHelpers, areEmptyAmounts, getSender } from '../../LiquidityActionHelpers'
 import {
   NestedBuildAddLiquidityInput,
   NestedQueryAddLiquidityOutputV2,
@@ -96,7 +96,7 @@ export class NestedAddLiquidityV2Handler implements AddLiquidityHandler {
       chainId: this.helpers.chainId as ChainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
       amountsIn: nonEmptyAmountsIn,
-      sender: userAddress,
+      sender: getSender(userAddress),
     }
   }
 }
