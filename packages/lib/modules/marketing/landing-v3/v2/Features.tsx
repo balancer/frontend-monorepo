@@ -1,15 +1,29 @@
 /* eslint-disable max-len */
 'use client'
 
-import { Box, Grid, GridItem, Heading, Text, VStack, Link, chakra, Stack } from '@chakra-ui/react'
+import {
+  Box,
+  Grid,
+  GridItem,
+  Heading,
+  Text,
+  VStack,
+  Link,
+  chakra,
+  Stack,
+  Center,
+} from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { PieIcon } from '@repo/lib/shared/components/icons/PieIcon'
 import { StarsIconPlain } from '@repo/lib/shared/components/icons/StarsIconPlain'
 import { FeatureCard } from './shared/FeatureCard'
+import { RadialPattern } from './shared/RadialPattern'
+import { BalancerLogoAnimated } from '@repo/lib/shared/components/icons/BalancerIconAnimated'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 const keyFeatures = [
   {
@@ -156,6 +170,36 @@ function FeatureText({
 }
 
 export function Features() {
+  const [scrollPercentage, setScrollPercentage] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { isMobile } = useBreakpoints()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect()
+        const windowHeight = window.innerHeight
+
+        // Add a buffer of 100px to delay the start of the animation
+        const buffer = 300
+
+        // Calculate progress with buffer
+        const progress = Math.min(
+          Math.max(((windowHeight - (rect.top + buffer)) / rect.height) * 100, 0),
+          100
+        )
+        setScrollPercentage(progress)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Initial calculation
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   return (
     <Noise position="relative">
       <DefaultPageContainer
@@ -195,14 +239,29 @@ export function Features() {
                 interoperability that have made Balancer a leader in the DeFi space.
               </Text>
             </VStack>
+            {!isMobile && (
+              <Center pt="xl">
+                <RadialPattern
+                  circleCount={10}
+                  height={500}
+                  innerHeight={150}
+                  innerWidth={150}
+                  progress={scrollPercentage}
+                  width={500}
+                >
+                  <BalancerLogoAnimated />
+                </RadialPattern>
+              </Center>
+            )}
           </Box>
-          <VStack spacing="md" w="full">
+          <VStack ref={containerRef} spacing="md" w="full">
             {features.map((feature, index) => (
               <FeatureText index={index} key={index} {...feature} />
             ))}
           </VStack>
         </Stack>
       </DefaultPageContainer>
+
       <Box
         bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
         bottom="0"

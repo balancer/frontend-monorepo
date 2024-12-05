@@ -2,7 +2,9 @@
 'use client'
 
 import { Box, BoxProps } from '@chakra-ui/react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
+import { ReactNode, useMemo } from 'react'
 
 export interface RadialPatternProps extends BoxProps {
   circleCount?: number
@@ -13,7 +15,69 @@ export interface RadialPatternProps extends BoxProps {
   maxOpacity?: number
   minOpacity?: number
   intensity?: number
+  progress?: number
   children?: React.ReactNode
+}
+
+const MotionBox = motion(Box)
+
+function Circle({
+  progress,
+  circleProgressStage,
+  currentOpacity,
+  currentHeight,
+  currentWidth,
+  borderRadius,
+  shadowWhiteOpacity,
+  shadowBlackOpacity,
+  isInnermost,
+  children,
+}: {
+  progress: number | undefined
+  circleProgressStage: number
+  currentOpacity: number
+  currentHeight: string
+  currentWidth: string
+  borderRadius: number
+  shadowWhiteOpacity: number
+  shadowBlackOpacity: number
+  isInnermost: boolean
+  children: ReactNode
+}) {
+  return (
+    <MotionBox
+      alignItems="center"
+      animate={
+        progress !== undefined
+          ? {
+              opacity: progress > circleProgressStage ? currentOpacity : 0,
+            }
+          : undefined
+      }
+      borderRadius={`${borderRadius}px`}
+      boxShadow={`-3px -3px 15px 1px rgba(255, 255, 255, ${shadowWhiteOpacity}), inset 3px 3px 15px 1px rgba(0, 0, 0, ${shadowBlackOpacity}), 3px 3px 15px 1px rgba(0, 0, 0, ${shadowBlackOpacity}), inset -3px -3px 15px 1px rgba(255, 255, 255, ${shadowWhiteOpacity})`}
+      display="flex"
+      height={currentHeight}
+      initial={progress !== undefined ? { opacity: 0 } : false}
+      justifyContent="center"
+      left="50%"
+      opacity={progress !== undefined ? undefined : currentOpacity}
+      position="absolute"
+      top="50%"
+      transform="translate(-50%, -50%)"
+      transition={
+        progress !== undefined
+          ? {
+              duration: 0.5,
+              ease: 'easeOut',
+            }
+          : undefined
+      }
+      width={currentWidth}
+    >
+      {isInnermost && children}
+    </MotionBox>
+  )
 }
 
 export function RadialPattern({
@@ -26,6 +90,7 @@ export function RadialPattern({
   minOpacity = 0.05,
   children,
   intensity = 1,
+  progress,
   ...rest
 }: RadialPatternProps) {
   const isDarkMode = useIsDarkMode()
@@ -43,39 +108,30 @@ export function RadialPattern({
   const shadowBlackOpacity = isDarkMode ? intensity * 0.3 : intensity * 0.1
   const shadowWhiteOpacity = isDarkMode ? intensity * 0.1 : intensity * 0.3
 
-  const renderCircles = () => {
+  const circles = useMemo(() => {
     const circles = []
-
     for (let i = circleCount; i >= 1; i--) {
       const currentWidth = `${baseWidth - widthDifference * (circleCount - i)}px`
       const currentHeight = `${baseHeight - heightDifference * (circleCount - i)}px`
-      const currentOpacity = maxOpacity - opacityStep * (i - 1)
-      const isInnermost = i === 1
-      const borderRadius = Math.max(parseInt(currentHeight), parseInt(currentWidth)) / 2
-
-      circles.push(
-        <Box
-          alignItems="center"
-          borderRadius={`${borderRadius}px`}
-          boxShadow={`-3px -3px 15px 1px rgba(255, 255, 255, ${shadowWhiteOpacity}), inset 3px 3px 15px 1px rgba(0, 0, 0, ${shadowBlackOpacity}), 3px 3px 15px 1px rgba(0, 0, 0, ${shadowBlackOpacity}), inset -3px -3px 15px 1px rgba(255, 255, 255, ${shadowWhiteOpacity})`}
-          display="flex"
-          height={currentHeight}
-          justifyContent="center"
-          key={i}
-          left="50%"
-          opacity={currentOpacity}
-          position="absolute"
-          top="50%"
-          transform="translate(-50%, -50%)"
-          width={currentWidth}
-        >
-          {isInnermost && children}
-        </Box>
-      )
+      circles.push({
+        currentWidth,
+        currentHeight,
+        currentOpacity: maxOpacity - opacityStep * (i - 1),
+        isInnermost: i === 1,
+        borderRadius: Math.max(parseInt(currentHeight), parseInt(currentWidth)) / 2,
+        circleProgressStage: (100 / circleCount) * (circleCount - i),
+      })
     }
-
     return circles
-  }
+  }, [
+    circleCount,
+    baseWidth,
+    baseHeight,
+    widthDifference,
+    heightDifference,
+    maxOpacity,
+    opacityStep,
+  ])
 
   return (
     <Box
@@ -87,7 +143,19 @@ export function RadialPattern({
       width={`${baseWidth}px`}
       {...rest}
     >
-      {renderCircles()}
+      <AnimatePresence>
+        {circles.map((circle, i) => (
+          <Circle
+            key={i}
+            progress={progress}
+            shadowBlackOpacity={shadowBlackOpacity}
+            shadowWhiteOpacity={shadowWhiteOpacity}
+            {...circle}
+          >
+            {children}
+          </Circle>
+        ))}
+      </AnimatePresence>
     </Box>
   )
 }
