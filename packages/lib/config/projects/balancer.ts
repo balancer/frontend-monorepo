@@ -34,3 +34,5 @@ export const ProjectConfigBalancer: ProjectConfig = {
   ensNetwork: GqlChain.Mainnet,
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b',
 }
+
+export const balancerDiscordUrl = 'https://discord.balancer.fi/'
