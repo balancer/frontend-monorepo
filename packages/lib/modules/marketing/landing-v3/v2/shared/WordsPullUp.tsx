@@ -12,13 +12,14 @@ export function WordsPullUp({ text, ...rest }: { text: string } & BoxProps) {
   const [shouldAnimate, setShouldAnimate] = useState(false)
 
   const pullupVariant = {
-    initial: { y: 10, opacity: 0, willChange: 'transform, opacity' },
+    initial: { y: 10, opacity: 0, filter: 'blur(3px)', willChange: 'transform, opacity, filter' },
     animate: (i: number) => ({
       y: 0,
       opacity: 1,
+      filter: 'blur(0px)',
       transition: {
-        delay: i * 0.1,
-        duration: 0.5,
+        delay: 0.5 + i * 0.1,
+        duration: 1,
       },
     }),
   }

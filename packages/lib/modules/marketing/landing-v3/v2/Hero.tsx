@@ -20,6 +20,9 @@ import { WordsPullUp } from './shared/WordsPullUp'
 import { useEffect, useRef, useState } from 'react'
 
 const MotionText = motion(Text)
+const MotionHeading = motion(Heading)
+const MotionButton = motion(Button)
+const MotionBox = motion(Box)
 
 export function Hero() {
   const isDarkMode = useIsDarkMode()
@@ -79,13 +82,21 @@ export function Hero() {
         <Center h="full" justifyContent="start">
           <VStack alignItems="start" spacing="md">
             <MotionText
-              animate={shouldAnimate ? { opacity: 1, willChange: 'opacity' } : {}}
+              animate={
+                shouldAnimate
+                  ? {
+                      opacity: 1,
+                      filter: 'blur(0px)',
+                      willChange: 'opacity, filter',
+                    }
+                  : {}
+              }
               background="font.specialSecondary"
               backgroundClip="text"
               fontSize="sm"
-              initial={{ opacity: 0 }}
+              initial={{ opacity: 0, filter: 'blur(3px)' }}
               textTransform="uppercase"
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              transition={{ delay: 0.5, duration: 0.3, delayChildren: 0.5, ease: 'easeInOut' }}
             >
               Balancer V3 is live
             </MotionText>
@@ -98,43 +109,67 @@ export function Hero() {
               lineHeight={1}
               text="AMMs made easy"
             />
-            <Heading
+            <MotionHeading
+              animate={
+                shouldAnimate
+                  ? {
+                      opacity: 1,
+                      y: 0,
+                      filter: 'blur(0px)',
+                      willChange: 'transform, opacity, filter',
+                    }
+                  : {}
+              }
               as="h2"
               color="font.secondary"
               fontSize={{ base: 'xl', md: '2xl' }}
               fontWeight="thin"
+              initial={{ opacity: 0, y: 10, filter: 'blur(3px)' }}
               maxW="700px"
+              transition={{ duration: 0.5, delay: 0.5, ease: 'easeInOut' }}
               w="full"
             >
               The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
               simplicity and flexibility to reshape the future of AMMs.
-            </Heading>
+            </MotionHeading>
             <HStack alignItems="center" mt="xl" spacing="lg">
-              <Button
+              <MotionButton
+                animate={shouldAnimate ? { opacity: 1 } : {}}
                 as={NextLink}
                 href="https://docs-v3.balancer.fi"
+                initial={{ opacity: 0 }}
                 rightIcon={<ArrowUpRight />}
                 size="lg"
                 target="_blank"
+                transition={{ duration: 0.5, delay: 0.5, ease: 'easeInOut' }}
                 variant="secondary"
               >
-                View V3 docs
-              </Button>
+                View v3 docs
+              </MotionButton>
               <HStack alignItems="center" spacing="md">
-                <Box
+                <MotionBox
+                  animate={shouldAnimate ? { opacity: 1 } : {}}
                   h="48px"
+                  initial={{ opacity: 0 }}
                   overflow="hidden"
                   position="relative"
                   rounded="lg"
                   shadow="sm"
+                  transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
                   w="72px"
                 >
                   <SandBg variant={1} />
                   <Center h="full" position="relative" w="full">
                     <PlayVideoButton size={10} />
                   </Center>
-                </Box>
-                <Text>Learn about Balancer V3</Text>
+                </MotionBox>
+                <MotionText
+                  animate={shouldAnimate ? { opacity: 1 } : {}}
+                  initial={{ opacity: 0 }}
+                  transition={{ duration: 0.5, delay: 0.9, ease: 'easeInOut' }}
+                >
+                  Learn about Balancer V3
+                </MotionText>
               </HStack>
             </HStack>
           </VStack>
