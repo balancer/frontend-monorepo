@@ -1,5 +1,6 @@
 import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
+import { PriceImpactLevel } from './PriceImpactProvider'
 
 /*
  ABA priceImpact calculation has some known limitations. Examples:
@@ -51,4 +52,39 @@ export function calcMarketPriceImpact(usdIn: string, usdOut: string) {
   const priceImpact = bn(1).minus(bn(usdIn).div(usdOut))
 
   return BigNumber.min(priceImpact, 0).abs().toString()
+}
+
+export function getPriceImpactColor(priceImpactLevel: PriceImpactLevel) {
+  switch (priceImpactLevel) {
+    case 'unknown':
+    case 'high':
+    case 'max':
+      return 'red.400'
+    case 'medium':
+      return 'font.warning'
+    case 'low':
+    default:
+      return 'grayText'
+  }
+}
+
+export function getPriceImpactLevel(priceImpact: number): PriceImpactLevel {
+  if (priceImpact === null || priceImpact === undefined) return 'unknown'
+  if (priceImpact < 0.01) return 'low' // 1%
+  if (priceImpact < 0.05) return 'medium' // 5%
+  if (priceImpact < 0.1) return 'high' // 10%
+  return 'max'
+}
+
+export const getPriceImpactExceedsLabel = (priceImpactLevel: PriceImpactLevel) => {
+  switch (priceImpactLevel) {
+    case 'medium':
+      return '1.00%'
+    case 'high':
+      return '5.00%'
+    case 'max':
+      return '10.00%'
+    default:
+      return ''
+  }
 }

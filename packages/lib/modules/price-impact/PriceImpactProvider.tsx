@@ -2,8 +2,9 @@ import { AlertTriangle, XOctagon } from 'react-feather'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { useMandatoryContext } from '../../shared/utils/contexts'
 import { Box, BoxProps } from '@chakra-ui/react'
+import { getPriceImpactColor, getPriceImpactLevel } from './price-impact.utils'
 
-type PriceImpactLevel = 'low' | 'medium' | 'high' | 'max' | 'unknown'
+export type PriceImpactLevel = 'low' | 'medium' | 'high' | 'max' | 'unknown'
 
 export function _usePriceImpact() {
   const [priceImpactLevel, setPriceImpactLevel] = useState<PriceImpactLevel>('low')
@@ -11,28 +12,6 @@ export function _usePriceImpact() {
   const [acceptPriceImpactRisk, setAcceptPriceImpactRisk] = useState(false)
   const [priceImpact, setPriceImpact] = useState<string | number | undefined | null>()
   const [hasToAcceptHighPriceImpact, setHasToAcceptHighPriceImpact] = useState(false)
-
-  function getPriceImpactLevel(priceImpact: number): PriceImpactLevel {
-    if (priceImpact === null || priceImpact === undefined) return 'unknown'
-    if (priceImpact < 0.01) return 'low' // 1%
-    if (priceImpact < 0.05) return 'medium' // 5%
-    if (priceImpact < 0.1) return 'high' // 10%
-    return 'max'
-  }
-
-  function getPriceImpactColor(priceImpactLevel: PriceImpactLevel) {
-    switch (priceImpactLevel) {
-      case 'unknown':
-      case 'high':
-      case 'max':
-        return 'red.400'
-      case 'medium':
-        return 'font.warning'
-      case 'low':
-      default:
-        return 'grayText'
-    }
-  }
 
   function PriceImpactIcon({
     priceImpactLevel,
@@ -95,7 +74,6 @@ export function _usePriceImpact() {
     priceImpact,
     setPriceImpactColor,
     setAcceptPriceImpactRisk,
-    getPriceImpactColor,
     PriceImpactIcon,
     setPriceImpact,
     setPriceImpactLevel,
