@@ -40,8 +40,6 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       inputAmounts.find(item => isSameAddress(item.address, referenceAmountAddress))
     const referenceAmount = foundReferenceAmount || inputAmounts[0]
 
-    console.log({ referenceAmount })
-
     const addLiquidity = new AddLiquidityBoostedV3()
 
     const addLiquidityInput = this.constructSdkInput(referenceAmount, userAddress)

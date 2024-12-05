@@ -6,7 +6,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { bn, isZero, safeSum } from '@repo/lib/shared/utils/numbers'
+import { bn, isSmallUsd, isZero, safeSum } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount, TokenAmount, isSameAddress } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
@@ -44,8 +44,13 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const [quotePriceImpact, setQuotePriceImpact] = useState<number>()
 
   const { pool, chainId, bptPrice, isLoading } = usePool()
-  const { getToken, usdValueForToken, getNativeAssetToken, getWrappedNativeAssetToken } =
-    useTokens()
+  const {
+    getToken,
+    usdValueForToken,
+    getNativeAssetToken,
+    getWrappedNativeAssetToken,
+    usdValueForBpt,
+  } = useTokens()
   const { isConnected } = useUserAccount()
 
   const maxHumanBptIn: HumanAmount = getUserWalletBalance(pool)
@@ -121,7 +126,13 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
    * Queries
    */
 
-  const enabled = !urlTxHash && !!tokenOut && !isSingleTokenBalanceMoreThat25Percent
+  const usdValueForHumanBptIn = usdValueForBpt(pool.address, chain, humanBptIn)
+
+  const enabled =
+    !urlTxHash &&
+    !!tokenOut &&
+    !isSingleTokenBalanceMoreThat25Percent &&
+    !isSmallUsd(usdValueForHumanBptIn)
 
   const simulationQuery = useRemoveLiquiditySimulationQuery({
     handler,
