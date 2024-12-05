@@ -158,8 +158,14 @@ function FeatureText({
 export function Features() {
   return (
     <Noise position="relative">
-      <DefaultPageContainer minH="800px" noVerticalPadding position="relative" py={['xl', '10rem']}>
-        <Heading as="h4" mt="10rem" mx="auto" size="lg">
+      <DefaultPageContainer
+        minH="800px"
+        noVerticalPadding
+        position="relative"
+        pt={['xl', '3xl']}
+        py={['xl', '10rem']}
+      >
+        <Heading as="h4" mx="auto" size="lg">
           <chakra.span color="font.primary">Custom liquidity solutions.</chakra.span>
           <chakra.span color="font.primary" style={{ opacity: 0.6 }}>
             {' '}
