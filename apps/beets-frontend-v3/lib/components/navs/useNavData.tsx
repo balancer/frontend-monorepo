@@ -11,8 +11,8 @@ export function useNavData() {
       label: 'maBEETS',
     },
     {
-      href: '/sftmx',
-      label: 'sFTMX',
+      href: '/lst',
+      label: 'LST',
     },
   ]
 
