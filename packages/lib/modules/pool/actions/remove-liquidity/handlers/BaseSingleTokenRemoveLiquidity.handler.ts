@@ -86,7 +86,7 @@ export abstract class BaseSingleTokenRemoveLiquidityHandler implements RemoveLiq
       bptIn: bptInInputAmount,
       kind: RemoveLiquidityKind.SingleTokenExactIn,
       tokenOut,
-      sender: userAddress,
+      sender: userAddress || '0x',
     }
   }
 }

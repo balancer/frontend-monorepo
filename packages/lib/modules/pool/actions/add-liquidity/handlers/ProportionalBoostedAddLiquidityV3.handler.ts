@@ -98,7 +98,7 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       rpcUrl: getRpcUrl(this.helpers.chainId),
       referenceAmount,
       kind: AddLiquidityKind.Proportional,
-      sender: userAddress,
+      sender: userAddress || '0x',
     }
   }
 }

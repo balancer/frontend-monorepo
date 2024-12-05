@@ -99,7 +99,7 @@ export class NestedProportionalRemoveLiquidityV3Handler implements RemoveLiquidi
       bptAmountIn: parseEther(humanBptIn),
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
-      sender: userAddress,
+      sender: userAddress || '0x',
     }
 
     return result

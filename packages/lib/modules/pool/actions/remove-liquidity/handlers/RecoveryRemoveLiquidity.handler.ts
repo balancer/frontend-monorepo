@@ -92,7 +92,7 @@ export class RecoveryRemoveLiquidityHandler {
       rpcUrl: getRpcUrl(this.helpers.chainId),
       bptIn,
       kind: RemoveLiquidityKind.Recovery,
-      sender: userAddress,
+      sender: userAddress || '0x',
     }
   }
 }

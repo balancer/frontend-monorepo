@@ -51,7 +51,7 @@ export function constructProportionalSdkAddInput(
     rpcUrl: getRpcUrl(chainId),
     referenceAmount,
     kind: AddLiquidityKind.Proportional,
-    sender: userAddress,
+    sender: userAddress || '0x',
   }
 }
 

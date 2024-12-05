@@ -81,7 +81,7 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
       rpcUrl: getRpcUrl(this.helpers.chainId),
       referenceAmount,
       kind: AddLiquidityKind.Proportional,
-      sender: userAddress,
+      sender: userAddress || '0x',
     }
   }
 }

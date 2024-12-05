@@ -47,7 +47,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
 
     const addLiquidityInput: AddLiquidityNestedInputV3 = {
       ...this.constructSdkInput(humanAmountsIn),
-      sender: userAddress,
+      sender: userAddress || '0x',
     }
 
     const sdkQueryOutput = await addLiquidity.query(
