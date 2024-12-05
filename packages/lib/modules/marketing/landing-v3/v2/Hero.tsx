@@ -3,7 +3,7 @@
 
 import { Box, Button, Center, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useInView } from 'framer-motion'
 import NextLink from 'next/link'
 import Image from 'next/image'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
@@ -16,18 +16,35 @@ import bgLightSrc from './images/bg-light-4.png'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButton'
 import { SandBg } from './shared/SandBg'
+import { WordsPullUp } from './shared/WordsPullUp'
+import { useEffect, useRef, useState } from 'react'
+
+const MotionText = motion(Text)
 
 export function Hero() {
   const isDarkMode = useIsDarkMode()
+
+  const [shouldAnimate, setShouldAnimate] = useState(false)
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true })
+
+  useEffect(() => {
+    if (isInView) {
+      setShouldAnimate(true)
+    }
+  }, [isInView])
 
   return (
     <Noise position="relative">
       <Box bottom={0} h="100vh" left={0} minH="600px" position="absolute" right={0} top={0}>
         <AnimatePresence>
           <motion.div
-            animate={{ opacity: isDarkMode ? 0.3 : 0.5 }}
+            animate={
+              shouldAnimate ? { opacity: isDarkMode ? 0.3 : 0.5, willChange: 'opacity' } : {}
+            }
             exit={{ opacity: 0 }}
             initial={{ opacity: 0.01 }}
+            ref={ref}
             style={{
               position: 'absolute',
               top: 0,
@@ -61,17 +78,26 @@ export function Hero() {
       <DefaultPageContainer flex="1" h="100vh" minH="600px" noVerticalPadding position="relative">
         <Center h="full" justifyContent="start">
           <VStack alignItems="start" spacing="md">
-            <Text
+            <MotionText
+              animate={shouldAnimate ? { opacity: 1, willChange: 'opacity' } : {}}
               background="font.specialSecondary"
               backgroundClip="text"
               fontSize="sm"
+              initial={{ opacity: 0 }}
               textTransform="uppercase"
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
               Balancer V3 is live
-            </Text>
-            <Heading as="h1" size={{ base: 'xl', md: '3xl' }}>
-              AMMs made easy
-            </Heading>
+            </MotionText>
+
+            <WordsPullUp
+              as="h1"
+              color="font.primary"
+              fontSize={{ base: 'xl', md: '6xl' }}
+              fontWeight="bold"
+              lineHeight={1}
+              text="AMMs made easy"
+            />
             <Heading
               as="h2"
               color="font.secondary"
@@ -83,11 +109,10 @@ export function Hero() {
               The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
               simplicity and flexibility to reshape the future of AMMs.
             </Heading>
-            <HStack>
+            <HStack alignItems="center" mt="xl" spacing="lg">
               <Button
                 as={NextLink}
                 href="https://docs-v3.balancer.fi"
-                mt="xl"
                 rightIcon={<ArrowUpRight />}
                 size="lg"
                 target="_blank"
@@ -95,15 +120,22 @@ export function Hero() {
               >
                 View V3 docs
               </Button>
-            </HStack>
-            <HStack alignItems="center" mt="lg" spacing="md">
-              <Box h="48px" overflow="hidden" position="relative" rounded="lg" shadow="md" w="72px">
-                <SandBg variant={1} />
-                <Center h="full" position="relative" w="full">
-                  <PlayVideoButton size={10} />
-                </Center>
-              </Box>
-              <Text>Learn about Balancer V3</Text>
+              <HStack alignItems="center" spacing="md">
+                <Box
+                  h="48px"
+                  overflow="hidden"
+                  position="relative"
+                  rounded="lg"
+                  shadow="sm"
+                  w="72px"
+                >
+                  <SandBg variant={1} />
+                  <Center h="full" position="relative" w="full">
+                    <PlayVideoButton size={10} />
+                  </Center>
+                </Box>
+                <Text>Learn about Balancer V3</Text>
+              </HStack>
             </HStack>
           </VStack>
         </Center>
