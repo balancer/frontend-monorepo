@@ -1,7 +1,7 @@
 import { ErrorAlert } from './ErrorAlert'
 import { AlertProps, Text } from '@chakra-ui/react'
 import { BalAlertLink } from '../alerts/BalAlertLink'
-import { balancerDiscordUrl } from '@repo/lib/config/projects/balancer'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 type Props = AlertProps & {
   error: Error
@@ -16,7 +16,7 @@ export function UnbalancedNestedAddError({ error }: Props) {
       <Text color="black" variant="secondary">
         Your input(s) would fail with the current pool balances. Please try more proportional
         amounts or report the issue in{' '}
-        <BalAlertLink href={balancerDiscordUrl}>our discord</BalAlertLink>.
+        <BalAlertLink href={getProjectConfig().externalLinks.discordUrl}>our discord</BalAlertLink>.
       </Text>
     </ErrorAlert>
   )

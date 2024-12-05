@@ -11,7 +11,9 @@ import {
 } from '../../utils/error-filters'
 import { ensureError } from '../../utils/errors'
 import { BalAlertLink } from '../alerts/BalAlertLink'
-import { balancerDiscordUrl } from '@repo/lib/config/projects/balancer'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+
+const balancerDiscordUrl = getProjectConfig().externalLinks.discordUrl
 
 type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
 type Props = AlertProps & {

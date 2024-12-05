@@ -6,7 +6,7 @@ import { YoutubeIcon } from '../icons/social/YoutubeIcon'
 import { GithubIcon } from '../icons/social/GithubIcon'
 import { useParams } from 'next/navigation'
 import { ReactNode } from 'react'
-import { balancerDiscordUrl } from '@repo/lib/config/projects/balancer'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export type AppLink = {
   href: string
@@ -54,7 +54,7 @@ export function useNav() {
     },
     {
       icon: <DiscordIcon size={size} />,
-      href: balancerDiscordUrl,
+      href: getProjectConfig().externalLinks.discordUrl,
     },
     {
       icon: <MediumIcon size={size} />,
