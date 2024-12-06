@@ -29,7 +29,6 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { AuraBalSwapHandler } from './handlers/AuraBalSwap.handler'
 import { DefaultSwapHandler } from './handlers/DefaultSwap.handler'
 import { NativeWrapHandler } from './handlers/NativeWrap.handler'
-import { PoolSwapHandler } from './handlers/PoolSwap.handler'
 import { SwapHandler } from './handlers/Swap.handler'
 import { useSimulateSwapQuery } from './queries/useSimulateSwapQuery'
 import { isAuraBalSwap } from './swap.helpers'
@@ -51,9 +50,14 @@ import {
   isWrapOrUnwrap,
 } from './wrap.helpers'
 import { Pool } from '../pool/PoolProvider'
-import { getChildTokens, getStandardRootTokens, isStandardRootToken } from '../pool/pool.helpers'
+import {
+  getChildTokens,
+  getStandardRootTokens,
+  isStandardOrUnderlyingRootToken,
+} from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { ProtocolVersion } from '../pool/pool.types'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -74,9 +78,7 @@ function selectSwapHandler(
   chain: GqlChain,
   swapType: GqlSorSwapType,
   apolloClient: ApolloClient<object>,
-  tokens: GqlToken[],
-  pool?: Pool,
-  poolActionableTokens?: GqlToken[]
+  tokens: GqlToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -85,10 +87,6 @@ function selectSwapHandler(
     return new WrapHandler()
   } else if (isAuraBalSwap(tokenInAddress, tokenOutAddress, chain, swapType)) {
     return new AuraBalSwapHandler(tokens)
-  }
-
-  if (pool && poolActionableTokens) {
-    return new PoolSwapHandler(pool, poolActionableTokens)
   }
 
   return new DefaultSwapHandler(apolloClient)
@@ -146,9 +144,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       selectedChain,
       swapState.swapType,
       client,
-      tokens,
-      pool,
-      poolActionableTokens
+      tokens
     )
   }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 
@@ -191,6 +187,16 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     )
   }
 
+  function getPoolSwapPoolsIds(): string[] | undefined {
+    if (!isPoolSwap) return undefined
+
+    const tokensNestedPools = pool.poolTokens
+      .map(poolToken => poolToken.nestedPool?.id)
+      .filter(Boolean) as string[]
+
+    return [pool.id, ...tokensNestedPools]
+  }
+
   const simulationQuery = useSimulateSwapQuery({
     handler,
     swapInputs: {
@@ -199,6 +205,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       tokenOut: swapState.tokenOut.address,
       swapType: swapState.swapType,
       swapAmount: getSwapAmount(),
+      // We only use this field to filter by the specific pool swap path in pool swap flow
+      poolIds: getPoolSwapPoolsIds(),
     },
     enabled: shouldFetchSwap(swapState, urlTxHash),
   })
@@ -407,7 +415,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     isSameAddress(swapState.tokenOut.address, networkConfig.tokens.nativeAsset.address)
   const validAmountOut = bn(swapState.tokenOut.amount).gt(0)
 
-  const protocolVersion = (simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion || 2
+  const protocolVersion =
+    ((simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion as ProtocolVersion) || 2
   const { vaultAddress } = useVault(protocolVersion)
 
   const swapAction: SwapAction = useMemo(() => {
@@ -494,7 +503,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
     if (supportsNestedActions(pool)) {
       setInitialTokenIn(tokenIn)
-      if (isStandardRootToken(pool, tokenIn as Address)) {
+      if (isStandardOrUnderlyingRootToken(pool, tokenIn as Address)) {
         setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
       } else {
         setInitialTokenOut(getStandardRootTokens(pool, poolActionableTokens)[0].address)
@@ -621,6 +630,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     isPoolSwap,
     pool,
     poolActionableTokens,
+    protocolVersion,
     replaceUrlPath,
     resetSwapAmounts,
     setTokenSelectKey,

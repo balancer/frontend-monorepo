@@ -73,6 +73,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
     case GqlPoolType.Stable:
     case GqlPoolType.PhantomStable:
     case GqlPoolType.ComposableStable:
+    case GqlPoolType.MetaStable:
       return <Text {...textProps}>Stable</Text>
 
     case GqlPoolType.Fx:

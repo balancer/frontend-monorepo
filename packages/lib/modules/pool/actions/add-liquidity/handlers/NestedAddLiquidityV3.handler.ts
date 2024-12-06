@@ -11,7 +11,7 @@ import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.typ
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Address, Hex } from 'viem'
 import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
+import { LiquidityActionHelpers, areEmptyAmounts, getSender } from '../../LiquidityActionHelpers'
 import {
   NestedBuildAddLiquidityInputV3,
   NestedQueryAddLiquidityOutputV3,
@@ -31,6 +31,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
       return 0
     }
     const input = this.constructSdkInput(humanAmountsIn)
+
     const priceImpactABA = await PriceImpact.addLiquidityNested(
       input,
       this.helpers.nestedPoolStateV3
@@ -46,7 +47,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
 
     const addLiquidityInput: AddLiquidityNestedInputV3 = {
       ...this.constructSdkInput(humanAmountsIn),
-      sender: userAddress,
+      sender: getSender(userAddress),
     }
 
     const sdkQueryOutput = await addLiquidity.query(

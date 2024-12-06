@@ -14,6 +14,7 @@ import {
   AddLiquidityBuildQueryParams,
   useAddLiquidityBuildCallDataQuery,
 } from './queries/useAddLiquidityBuildCallDataQuery'
+import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 
 export const addLiquidityStepId = 'add-liquidity'
 
@@ -72,14 +73,17 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
       onSuccess,
-      renderAction: () => (
-        <ManagedSendTransactionButton
-          gasEstimationMeta={gasEstimationMeta}
-          id={addLiquidityStepId}
-          labels={labels}
-          txConfig={buildCallDataQuery.data}
-        />
-      ),
+      renderAction: () => {
+        if (!buildCallDataQuery.data) return <DisabledTransactionButton />
+        return (
+          <ManagedSendTransactionButton
+            gasEstimationMeta={gasEstimationMeta}
+            id={addLiquidityStepId}
+            labels={labels}
+            txConfig={buildCallDataQuery.data}
+          />
+        )
+      },
       // The following fields are only used within Safe App
       renderBatchAction: (currentStep: TransactionStep) => {
         return (

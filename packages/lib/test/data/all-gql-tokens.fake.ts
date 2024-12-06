@@ -81,13 +81,97 @@ export const allFakeGqlTokens: GqlToken[] = [
     name: 'Balancer',
     symbol: 'BAL',
     decimals: 18,
-    chainId: 1,
+    chainId: 11155111,
     chain: GqlChain.Sepolia,
     logoURI:
       'https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xba100000625a3754423978a60c9317c58a424e3d.png',
     priority: 0,
     tradable: true,
     isErc4626: false,
+  },
+  {
+    __typename: 'GqlToken',
+    address: '0x8a88124522dbbf1e56352ba3de1d9f78c143751e',
+    name: 'Static Aave Ethereum USDC',
+    symbol: 'stataEthUSDC',
+    decimals: 6,
+    chain: GqlChain.Sepolia,
+    chainId: 11155111,
+    logoURI: null,
+    priority: 0,
+    tradable: true,
+    isErc4626: true,
+    coingeckoId: null,
+  },
+  {
+    __typename: 'GqlToken',
+    address: '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8',
+    name: 'USDC (AAVE Faucet)',
+    symbol: 'usdc-aave',
+    decimals: 6,
+    chain: GqlChain.Sepolia,
+    chainId: 11155111,
+    logoURI: null,
+    priority: 0,
+    tradable: true,
+    isErc4626: false,
+    coingeckoId: 'usd-coin',
+  },
+  {
+    __typename: 'GqlToken',
+    address: '0x978206fae13faf5a8d293fb614326b237684b750',
+    name: 'Static Aave Ethereum USDT',
+    symbol: 'stataEthUSDT',
+    decimals: 6,
+    chain: GqlChain.Sepolia,
+    chainId: 11155111,
+    logoURI: null,
+    priority: 0,
+    tradable: true,
+    isErc4626: true,
+    coingeckoId: null,
+  },
+  {
+    __typename: 'GqlToken',
+    address: '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0',
+    name: 'USDT (AAVE Faucet)',
+    symbol: 'usdt-aave',
+    decimals: 6,
+    chain: GqlChain.Sepolia,
+    chainId: 11155111,
+    logoURI: null,
+    priority: 0,
+    tradable: true,
+    isErc4626: false,
+    coingeckoId: 'tether',
+  },
+  {
+    __typename: 'GqlToken',
+    address: '0xff34b3d4aee8ddcd6f9afffb6fe49bd371b8a357',
+    name: 'DAI (AAVE Faucet)',
+    symbol: 'dai-aave',
+    decimals: 18,
+    chain: GqlChain.Sepolia,
+    chainId: 11155111,
+    logoURI: null,
+    priority: 0,
+    tradable: true,
+    isErc4626: false,
+    coingeckoId: 'dai',
+  },
+  {
+    __typename: 'GqlToken',
+    address: '0xde46e43f46ff74a23a65ebb0580cbe3dfe684a17',
+    name: 'Static Aave Ethereum DAI',
+    symbol: 'stataEthDAI',
+    decimals: 18,
+    chain: GqlChain.Sepolia,
+    chainId: 11155111,
+    logoURI: null,
+    priority: 0,
+    tradable: true,
+    isErc4626: true,
+    coingeckoId: null,
   },
   {
     __typename: 'GqlToken',
@@ -224,6 +308,24 @@ export function fakeTokenByAddress(address: Address) {
     throw new Error(`Invalid address for fake token: ${address}`)
   }
   return token
+}
+
+export function fakeTokenByAddressAndChain(address: Address, chain: GqlChain) {
+  const token = allFakeGqlTokens.find(
+    token => isSameAddress(token.address, address) && token.chain === chain
+  )
+  if (!token) {
+    console.log(
+      'Available fake tokens: ',
+      allFakeGqlTokens.map(token => token.symbol)
+    )
+    throw new Error(`Invalid address for fake token: ${address}, chain: ${chain}`)
+  }
+  return token
+}
+
+export function fakeGetToken(address: string, chain: GqlChain): GqlToken | undefined {
+  return fakeTokenByAddressAndChain(address as Address, chain as GqlChain)
 }
 
 // console.log(

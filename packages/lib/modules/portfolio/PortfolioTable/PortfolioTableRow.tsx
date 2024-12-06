@@ -4,7 +4,7 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { getPoolPath, getPoolTypeLabel } from '../../pool/pool.utils'
+import { getPoolPath } from '../../pool/pool.utils'
 import { PoolListTokenPills } from '../../pool/PoolList/PoolListTokenPills'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
@@ -12,6 +12,7 @@ import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -71,9 +72,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
               />
             </GridItem>
             <GridItem>
-              <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
-                {getPoolTypeLabel(pool.type)}
-              </Text>
+              <PollListTableDetailsCell pool={pool} />
             </GridItem>
             <GridItem display="flex" justifyContent="left" px="sm">
               <HStack>

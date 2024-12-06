@@ -64,10 +64,10 @@ test('getPoolMock creates a proper nested pool mock (nestedPoolMock)', () => {
     ]
   `)
 
-  expect(nestedPoolState.mainTokens.map(t => t.address)).toEqual([
-    daiAddress,
-    usdtAddress,
-    usdcAddress,
+  expect(nestedPoolState.mainTokens.sort().map(t => t.address)).toEqual([
     wETHAddress,
+    daiAddress,
+    usdcAddress,
+    usdtAddress,
   ])
 })

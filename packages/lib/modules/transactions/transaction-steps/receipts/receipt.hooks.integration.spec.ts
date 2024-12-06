@@ -1,40 +1,60 @@
+/* eslint-disable max-len */
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { getGqlChain } from '@repo/lib/config/app.config'
-import { polAddress } from '@repo/lib/debug-helpers'
+import { ethAddress, polAddress } from '@repo/lib/debug-helpers'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, Hash } from 'viem'
 import { polygon } from 'viem/chains'
 import { useAddLiquidityReceipt, useRemoveLiquidityReceipt, useSwapReceipt } from './receipt.hooks'
+import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 
-async function testAddReceipt(userAddress: Address, txHash: Hash, chainId = 1) {
+async function testAddReceipt(
+  userAddress: Address,
+  txHash: Hash,
+  chainId = 1,
+  protocolVersion: ProtocolVersion = 2
+) {
   const { result } = testHook(() => {
     return useAddLiquidityReceipt({
       chain: getGqlChain(chainId),
       txHash,
       userAddress,
+      protocolVersion,
     })
   })
   return result
 }
 
-async function testRemoveReceipt(userAddress: Address, txHash: Hash, chainId = 1) {
+async function testRemoveReceipt(
+  userAddress: Address,
+  txHash: Hash,
+  chainId = 1,
+  protocolVersion: ProtocolVersion = 2
+) {
   const { result } = testHook(() => {
     return useRemoveLiquidityReceipt({
       txHash,
       userAddress,
       chain: getGqlChain(chainId),
+      protocolVersion,
     })
   })
   return result
 }
 
-async function testSwapReceipt(userAddress: Address, txHash: Hash, chain: GqlChain) {
+async function testSwapReceipt(
+  userAddress: Address,
+  txHash: Hash,
+  chain: GqlChain,
+  protocolVersion: ProtocolVersion = 2
+) {
   const { result } = testHook(() => {
     return useSwapReceipt({
       txHash,
       userAddress,
       chain,
+      protocolVersion,
     })
   })
   return result
@@ -171,6 +191,29 @@ describe('queries swap transaction', () => {
     expect(result.current.receivedToken).toEqual({
       humanAmount: '0.241277224191485579',
       tokenAddress: maticAddress,
+    })
+  })
+
+  test('when the native asset is the token out that goes through a wrap (from stataEthDAI to WETH and then to ETH)', async () => {
+    const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
+    // https://sepolia.etherscan.io/tx/0xd8ad2a7f8e51be9735ae2886ca936cca62e395524b284f7a97cf7ad33a361a04
+    const txHash = '0xd8ad2a7f8e51be9735ae2886ca936cca62e395524b284f7a97cf7ad33a361a04'
+
+    const protocolVersion = 3
+    const result = await testSwapReceipt(userAddress, txHash, GqlChain.Sepolia, protocolVersion)
+
+    const stataEthDai = '0xde46e43f46ff74a23a65ebb0580cbe3dfe684a17'
+
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+    expect(result.current.sentToken).toEqual({
+      humanAmount: '25',
+      tokenAddress: stataEthDai.toLowerCase(),
+    })
+
+    expect(result.current.receivedToken).toEqual({
+      humanAmount: '0.136746996966924842',
+      tokenAddress: ethAddress,
     })
   })
 })

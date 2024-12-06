@@ -21,6 +21,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { ProtocolVersion } from '../../../pool.types'
 
 type Props = {
   isOpen: boolean
@@ -54,6 +55,7 @@ export function AddLiquidityModal({
     chain,
     txHash: addLiquidityTxHash,
     userAddress,
+    protocolVersion: pool.protocolVersion as ProtocolVersion,
   })
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)

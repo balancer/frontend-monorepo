@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { ArrowUpRight } from 'react-feather'
-import { getRateProviderWarnings } from '../../pool.helpers'
+import { getWarnings } from '../../pool.helpers'
 import { PropsWithChildren } from 'react'
 
 type RateProviderInfoPopOverProps = {
@@ -30,7 +30,7 @@ type PopoverInfoBodyProps = {
 }
 
 function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
-  const warnings = getRateProviderWarnings(data.warnings || [])
+  const warnings = getWarnings(data.warnings || [])
   return (
     <>
       {level === 0 && (

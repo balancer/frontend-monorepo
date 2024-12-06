@@ -30,7 +30,7 @@ export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, 
       </GridItem>
       <GridItem justifySelf="start">
         <Text fontWeight="bold" textAlign="left">
-          Type
+          Details
         </Text>
       </GridItem>
       {portfolioOrderBy.map((orderByItem, index) => (

@@ -278,10 +278,38 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
   return poolType === GqlPoolType.CowAmm
 }
 
+export function shouldCallComputeDynamicSwapFee(pool: Pool) {
+  return pool.hook && pool.hook.shouldCallComputeDynamicSwapFee
+}
+
 export function getPoolDisplayTokens(pool: Pool) {
   return pool.poolTokens.filter(token =>
     pool.displayTokens.find(
       (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address
     )
   ) as GqlPoolTokenDetail[]
+}
+
+export function getPoolDisplayTokensWithPossibleNestedPools(pool: Pool) {
+  const displayTokens = getPoolDisplayTokens(pool)
+
+  const hasNestedPools = displayTokens.some(token => token.hasNestedPool)
+
+  if (hasNestedPools) {
+    const displayTokensWithNestedPools: GqlPoolTokenDetail[] = []
+
+    displayTokens.forEach(token => {
+      if (token.hasNestedPool) {
+        token.nestedPool?.tokens.forEach(nestedPoolToken => {
+          displayTokensWithNestedPools.push(nestedPoolToken)
+        })
+      } else {
+        displayTokensWithNestedPools.push(token)
+      }
+    })
+
+    return displayTokensWithNestedPools
+  }
+
+  return displayTokens
 }

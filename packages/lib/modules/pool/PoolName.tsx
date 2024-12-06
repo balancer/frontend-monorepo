@@ -15,19 +15,19 @@ function isFeaturedPool(pool: PoolListItem | Pool | FeaturedPool): pool is Featu
 }
 
 export function PoolName({ pool, MemoizedMainAprTooltip, isCarousel, ...rest }: PoolNameProps) {
-  const displayTokens = pool.displayTokens
+  const poolTokens = pool.poolTokens.filter(token => token.address !== pool.address)
 
   return (
     <HStack alignItems="center" gap="xxs" justify="start" px="sm" wrap="wrap">
-      {displayTokens.map((token, idx) => {
+      {poolTokens.map((token, idx) => {
         return (
           <HStack alignItems="center" gap="xxs" justify="center" key={token.address}>
             <Text as="span" fontWeight="bold" {...rest} fontSize="sm" lineHeight="1">
-              {token.nestedTokens ? token.name : token.symbol}
+              {token.nestedPool ? token.name : token.symbol}
               {token.weight && ` ${fNum('weight', token.weight || '')}`}
             </Text>
             <Text {...rest} lineHeight="1">
-              {idx <= displayTokens.length - 2 && '/'}
+              {idx <= poolTokens.length - 2 && '/'}
             </Text>
           </HStack>
         )

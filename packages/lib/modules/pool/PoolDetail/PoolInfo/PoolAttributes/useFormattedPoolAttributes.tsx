@@ -3,24 +3,30 @@
 import { useMemo } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { format } from 'date-fns'
-import { DELEGATE_OWNER } from '@repo/lib/config/app.config'
 import { zeroAddress } from 'viem'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { bptUsdValue, isBoosted, isCowAmmPool, isStable } from '../../../pool.helpers'
+import { isBoosted, isCowAmmPool, isStable, isV2Pool, isV3Pool } from '../../../pool.helpers'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export function useFormattedPoolAttributes() {
   const { pool } = usePool()
   const { toCurrency } = useCurrency()
+  const { usdValueForBpt } = useTokens()
+
+  const { delegateOwner } = getProjectConfig()
+  const isV2 = isV2Pool(pool)
+  const isV3 = isV3Pool(pool)
 
   const poolOwnerData = useMemo(() => {
     if (!pool) return
-    const { owner } = pool
+    const { owner, swapFeeManager } = pool
     if (!owner) return
 
-    if (owner === zeroAddress || isCowAmmPool(pool.type)) {
+    if ((owner === zeroAddress && isV2) || isCowAmmPool(pool.type)) {
       return {
         title: 'No owner',
         link: '',
@@ -29,9 +35,9 @@ export function useFormattedPoolAttributes() {
       }
     }
 
-    if (owner === DELEGATE_OWNER) {
+    if (owner === delegateOwner || (owner === zeroAddress && isV3)) {
       return {
-        title: 'Delegate owner',
+        title: `Delegate ${isV2 ? 'owner' : 'manager'}`,
         link: '',
         editableText: 'editable by governance',
         attributeImmutabilityText: isStable(pool.type)
@@ -40,13 +46,15 @@ export function useFormattedPoolAttributes() {
       }
     }
 
+    const editableBy = `editable by ${isV2 ? 'pool owner' : 'swap fee manager'}`
+
     return {
-      title: abbreviateAddress(owner || ''),
+      title: abbreviateAddress((isV2 ? owner : swapFeeManager) || ''),
       link: '',
-      editableText: 'editable by pool owner',
+      editableText: editableBy,
       attributeImmutabilityText: isStable(pool.type)
-        ? ' except for swap fees and AMP factor editable by the pool owner'
-        : ' except for swap fees editable by the pool owner',
+        ? ` except for swap fees and AMP factor ${editableBy}`
+        : ` except for swap fees ${editableBy}`,
     }
   }, [pool])
 
@@ -83,7 +91,7 @@ export function useFormattedPoolAttributes() {
         : null,
       poolOwnerData
         ? {
-            title: 'Pool Owner',
+            title: isV2 ? 'Pool owner' : 'Swap fee manager',
             value: poolOwnerData.title,
           }
         : null,
@@ -97,7 +105,7 @@ export function useFormattedPoolAttributes() {
       },
       {
         title: 'LP token price',
-        value: toCurrency(bptUsdValue(pool, '1')),
+        value: toCurrency(usdValueForBpt(pool.address, pool.chain, '1')),
       },
     ]
     if (shouldHideSwapFee(pool?.type)) {

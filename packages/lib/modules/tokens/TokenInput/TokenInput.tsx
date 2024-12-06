@@ -21,7 +21,7 @@ import { useTokens } from '../TokensProvider'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInput } from './useTokenInput'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { blockInvalidNumberInput, bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { blockInvalidNumberInput, bn, fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { TokenIcon } from '../TokenIcon'
 import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
 import { ChevronDown } from 'react-feather'
@@ -128,6 +128,12 @@ function TokenInputFooter({
     }
   }
 
+  const priceImpactLabel = priceImpact
+    ? isZero(priceImpact)
+      ? ' (0.00%)'
+      : ` (-${fNum('priceImpact', priceImpact)})`
+    : ''
+
   return (
     <HStack h="4" justify="space-between" w="full">
       {isBalancesLoading || !isMounted ? (
@@ -139,9 +145,7 @@ function TokenInputFooter({
           variant="secondary"
         >
           {toCurrency(usdValue, { abbreviated: false })}
-          {showPriceImpact &&
-            priceImpactLevel !== 'unknown' &&
-            ` (-${fNum('priceImpact', priceImpact)})`}
+          {showPriceImpact && priceImpactLevel !== 'unknown' && priceImpactLabel}
         </Text>
       )}
       {isBalancesLoading || !isMounted ? (
