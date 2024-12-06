@@ -108,6 +108,7 @@ export function Hero() {
               fontSize={{ base: 'xl', md: '6xl' }}
               fontWeight="bold"
               lineHeight={1}
+              pr="2"
               text="AMMs made easy"
             />
             <MotionHeading

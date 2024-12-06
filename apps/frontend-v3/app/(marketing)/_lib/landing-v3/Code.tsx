@@ -1,14 +1,23 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import { Box, Card, Center, Grid, GridItem, Heading, Text, VStack } from '@chakra-ui/react'
+import { Box, Card, Center, Grid, GridItem, Text, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
-import PrismLoader from '@repo/lib/shared/services/prism/PrismLoader'
-
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { RadialPattern } from './shared/RadialPattern'
+import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
+import { TextFade } from '@repo/lib/shared/components/animations/TextFade'
+import { BlurIn } from '@repo/lib/shared/components/animations/BlurIn'
+import { useEffect, useRef, useState } from 'react'
+import Prism from 'prismjs'
+import './vscode.theme.css'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-solidity'
+import { useInView } from 'framer-motion'
+
+const TYPING_SPEED = 20 // milliseconds per character
 
 const codeSnippet = `// Swap function on constant product pool
 function onSwap(PoolSwapParams calldata params)
@@ -31,17 +40,48 @@ function onSwap(PoolSwapParams calldata params)
 export function Code() {
   const isDarkMode = useIsDarkMode()
   const { isMobile } = useBreakpoints()
+  const [displayedText, setDisplayedText] = useState('')
+  const codeBoxRef = useRef(null)
+  const isInView = useInView(codeBoxRef, { once: true, margin: '-100px' })
+
+  useEffect(() => {
+    if (isInView) {
+      setDisplayedText('')
+
+      let currentIndex = 0
+      const intervalId = setInterval(() => {
+        if (currentIndex <= codeSnippet.length - 1) {
+          const nextText = codeSnippet.slice(0, currentIndex + 1)
+          setDisplayedText(Prism.highlight(nextText, Prism.languages.solidity, 'solidity'))
+          currentIndex++
+        } else {
+          clearInterval(intervalId)
+        }
+      }, TYPING_SPEED)
+
+      return () => clearInterval(intervalId)
+    }
+  }, [isInView])
 
   return (
     <Noise backgroundColor="background.level0WithOpacity" position="relative">
       <DefaultPageContainer noVerticalPadding py={['xl', '10rem']}>
         <VStack alignItems="center" spacing="md" textAlign="center">
-          <Heading>Code less, build more.</Heading>
-          <Text color="font.secondary" fontSize="lg" maxW="2xl">
-            Balancer v3’s architecture focuses on simplicity, flexibility, and extensibility at its
-            core. The v3 vault more formally defines the requirements of a custom pool, shifting
-            core design patterns out of the pool and into the vault.
-          </Text>
+          <WordsPullUp
+            as="h2"
+            color="font.primary"
+            fontSize="4xl"
+            fontWeight="bold"
+            lineHeight={1}
+            text="Code less, build more."
+          />
+          <TextFade delay={0.4} direction="up">
+            <Text color="font.secondary" fontSize="lg" maxW="2xl">
+              Balancer v3’s architecture focuses on simplicity, flexibility, and extensibility at
+              its core. The v3 vault more formally defines the requirements of a custom pool,
+              shifting core design patterns out of the pool and into the vault.
+            </Text>
+          </TextFade>
         </VStack>
         <Card mt="2xl">
           <Box background="background.level0" minH="500px" position="relative" shadow="innerXl">
@@ -80,42 +120,51 @@ export function Code() {
               >
                 <GridItem>
                   <VStack alignItems="start" spacing="md">
-                    <Text
-                      background="font.specialSecondary"
-                      backgroundClip="text"
-                      fontSize="sm"
-                      textTransform="uppercase"
-                    >
-                      SIMPLICITY
-                    </Text>
-                    <Heading as="h4" size="xl">
-                      Building on v3 is simple
-                    </Heading>
-                    <Text color="font.secondary" fontSize="lg">
-                      To make custom pool creation easy, core functions have been moved from pools
-                      into the heavily audited vault. For example, here’s all the code needed to
-                      build a swap function for a Constant Product Pool.
-                    </Text>
+                    <BlurIn delay={0.4}>
+                      <Text
+                        background="font.specialSecondary"
+                        backgroundClip="text"
+                        fontSize="sm"
+                        textTransform="uppercase"
+                      >
+                        SIMPLICITY
+                      </Text>
+                    </BlurIn>
+                    <WordsPullUp
+                      as="h3"
+                      color="font.primary"
+                      fontSize="4xl"
+                      fontWeight="bold"
+                      lineHeight={1}
+                      text="Building on v3 is simple"
+                    />
+                    <TextFade delay={0.4} direction="up">
+                      <Text color="font.secondary" fontSize="lg">
+                        To make custom pool creation easy, core functions have been moved from pools
+                        into the heavily audited vault. For example, here’s all the code needed to
+                        build a swap function for a Constant Product Pool.
+                      </Text>
+                    </TextFade>
                   </VStack>
                 </GridItem>
                 <GridItem maxW="100%">
-                  <Card>
+                  <Card ref={codeBoxRef}>
                     <pre
                       className="language-solidity"
                       style={{
                         padding: '2rem',
                         borderRadius: '8px',
+                        minHeight: '400px',
                       }}
                     >
                       <code
                         className="language-solidity"
+                        dangerouslySetInnerHTML={{ __html: displayedText }}
                         style={{
                           whiteSpace: isMobile ? 'pre-line' : 'pre',
                           wordBreak: isMobile ? 'break-word' : 'normal',
                         }}
-                      >
-                        {codeSnippet}
-                      </code>
+                      />
                     </pre>
                   </Card>
                 </GridItem>
@@ -124,7 +173,6 @@ export function Code() {
           </Box>
         </Card>
       </DefaultPageContainer>
-      <PrismLoader />
       <Box
         bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
         bottom="0"
