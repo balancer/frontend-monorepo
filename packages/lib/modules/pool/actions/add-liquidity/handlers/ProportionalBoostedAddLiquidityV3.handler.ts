@@ -12,7 +12,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
+import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { constructBaseBuildCallInput } from './add-liquidity.utils'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
@@ -39,8 +39,6 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       referenceAmountAddress &&
       inputAmounts.find(item => isSameAddress(item.address, referenceAmountAddress))
     const referenceAmount = foundReferenceAmount || inputAmounts[0]
-
-    console.log({ referenceAmount })
 
     const addLiquidity = new AddLiquidityBoostedV3()
 
@@ -98,7 +96,7 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       rpcUrl: getRpcUrl(this.helpers.chainId),
       referenceAmount,
       kind: AddLiquidityKind.Proportional,
-      sender: userAddress,
+      sender: getSender(userAddress),
     }
   }
 }

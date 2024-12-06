@@ -261,7 +261,7 @@ export function hasHooks(pool: Pool): boolean {
     .filter(token => token.hasNestedPool)
     .map(token => token.nestedPool?.hook)
 
-  return !![pool.hook, ...nestedHooks].length
+  return !![pool.hook, ...nestedHooks].filter(Boolean).length
 }
 
 /**

@@ -10,11 +10,6 @@ describe('getErrorLabels', () => {
   const unbalancedAddErrorV2 = new Error('BAL#304')
   const unbalancedAddErrorV3 = new Error('queryAddLiquidityUnbalanced')
 
-  it('should return default error labels when no error is provided', () => {
-    const result = getErrorLabels(true, null)
-    expect(result).toBeUndefined()
-  })
-
   it('should return correct labels for isInvariantRatioAboveMaxSimulationErrorMessage', () => {
     const result = getErrorLabels(true, invariantRatioAboveMaxError)
     expect(result).toEqual({

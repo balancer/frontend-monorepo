@@ -57,6 +57,7 @@ import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
 import { UnbalancedAddError } from '@repo/lib/shared/components/errors/UnbalancedAddError'
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { isV3NotSupportingWethIsEth } from '../../../pool.helpers'
+import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -123,6 +124,8 @@ function AddLiquidityMainForm() {
   const nestedAddLiquidityEnabled = supportsNestedActions(pool) // TODO && !userToggledEscapeHatch
 
   const isUnbalancedError = isUnbalancedAddError(simulationQuery.error || priceImpactQuery.error)
+
+  const shouldShowUnbalancedError = isUnbalancedError && !nestedAddLiquidityEnabled
 
   const weeklyYield = calcPotentialYieldFor(pool, totalUSDValue)
 
@@ -213,7 +216,7 @@ function AddLiquidityMainForm() {
             tokenSelectDisclosure={tokenSelectDisclosure}
             totalUSDValue={totalUSDValue}
           />
-          {!wantsProportional && isUnbalancedError && (
+          {!wantsProportional && shouldShowUnbalancedError && (
             <UnbalancedAddError
               error={(simulationQuery.error || priceImpactQuery.error) as Error}
               goToProportionalAdds={setProportionalTab}
@@ -246,7 +249,7 @@ function AddLiquidityMainForm() {
                     totalUSDValue={totalUSDValue}
                   />
                 }
-                avoidPriceImpactAlert={isUnbalancedError && !nestedAddLiquidityEnabled}
+                avoidPriceImpactAlert={shouldShowUnbalancedError}
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
                 isDisabled={!priceImpactQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
@@ -281,11 +284,14 @@ function AddLiquidityMainForm() {
           {!simulationQuery.isError && priceImpactQuery.isError && (
             <PriceImpactError priceImpactQuery={priceImpactQuery} />
           )}
-          {simulationQuery.isError && (
+          {simulationQuery.isError && nestedAddLiquidityEnabled && (
+            <UnbalancedNestedAddError error={simulationQuery.error} />
+          )}
+          {simulationQuery.isError && !nestedAddLiquidityEnabled && (
             <GenericError
               customErrorName="Error in query simulation"
               error={simulationQuery.error}
-              skipError={isUnbalancedError}
+              skipError={shouldShowUnbalancedError}
             />
           )}
 

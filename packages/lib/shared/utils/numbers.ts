@@ -52,6 +52,8 @@ export const SMALL_PERCENTAGE_LABEL = '<0.01%'
 // fiat value threshold for displaying the fiat format without cents
 export const FIAT_CENTS_THRESHOLD = '100000'
 
+export const USD_LOWER_THRESHOLD = 0.009
+
 const NUMERAL_DECIMAL_LIMIT = 9
 
 export type Numberish = string | number | bigint | BigNumber
@@ -243,4 +245,8 @@ export function safeTokenFormat(
 
 export function isZero(amount: Numberish): boolean {
   return bn(amount).isZero()
+}
+
+export function isSmallUsd(value: Numberish): boolean {
+  return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
 }

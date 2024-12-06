@@ -31,7 +31,16 @@ export function useProportionalInputs() {
       wethIsEth,
     })
 
-    setHumanAmountsIn(proportionalHumanAmountsIn)
+    const proportionalHumanAmountsInWithOriginalUserInput = proportionalHumanAmountsIn.map(
+      amount => {
+        if (isSameAddress(amount.tokenAddress, tokenAddress)) {
+          return { ...amount, humanAmount } // We don't want to change the user input with the result of the proportional calculation
+        }
+        return amount
+      }
+    )
+
+    setHumanAmountsIn(proportionalHumanAmountsInWithOriginalUserInput)
   }
 
   /*
@@ -62,11 +71,6 @@ export function _calculateProportionalHumanAmountsIn({
   wethIsEth,
 }: Params): HumanTokenAmountWithAddress[] {
   const referenceAmount: InputAmount = helpers.toSdkInputAmounts([{ tokenAddress, humanAmount }])[0]
-
-  // getBptAmountFromReferenceAmount(
-  //   constructProportionalSdkAddInput(helpers.chainId, referenceAmount, userAddress as Address),
-  //   helpers.poolStateWithBalances
-  // ).then(result => console.log({ result }))
 
   const proportionalAmounts = calculateProportionalAmounts(
     helpers.poolStateWithBalances,

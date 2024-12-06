@@ -12,7 +12,7 @@ import {
   Slippage,
 } from '@balancer/sdk'
 import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
+import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 
@@ -51,7 +51,7 @@ export function constructProportionalSdkAddInput(
     rpcUrl: getRpcUrl(chainId),
     referenceAmount,
     kind: AddLiquidityKind.Proportional,
-    sender: userAddress,
+    sender: getSender(userAddress),
   }
 }
 
