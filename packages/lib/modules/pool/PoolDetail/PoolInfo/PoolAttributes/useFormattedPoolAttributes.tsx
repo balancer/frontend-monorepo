@@ -11,6 +11,14 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { compact } from 'lodash'
+import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
+
+type FormattedPoolAttributes = {
+  title: string
+  value: string
+  link?: string
+}
 
 export function useFormattedPoolAttributes() {
   const { pool } = usePool()
@@ -23,7 +31,7 @@ export function useFormattedPoolAttributes() {
 
   const poolOwnerData = useMemo(() => {
     if (!pool) return
-    const { owner, swapFeeManager } = pool
+    const { owner, swapFeeManager, chain } = pool
     if (!owner) return
 
     if ((owner === zeroAddress && isV2) || isCowAmmPool(pool.type)) {
@@ -48,9 +56,15 @@ export function useFormattedPoolAttributes() {
 
     const editableBy = `editable by ${isV2 ? 'pool owner' : 'swap fee manager'}`
 
+    const link = isV2
+      ? getBlockExplorerAddressUrl(owner, chain)
+      : swapFeeManager
+        ? getBlockExplorerAddressUrl(swapFeeManager, chain)
+        : ''
+
     return {
       title: abbreviateAddress((isV2 ? owner : swapFeeManager) || ''),
-      link: '',
+      link,
       editableText: editableBy,
       attributeImmutabilityText: isStable(pool.type)
         ? ` except for swap fees and AMP factor ${editableBy}`
@@ -58,11 +72,11 @@ export function useFormattedPoolAttributes() {
     }
   }, [pool])
 
-  const formattedPoolAttributes = useMemo(() => {
+  const formattedPoolAttributes = useMemo((): FormattedPoolAttributes[] => {
     if (!pool) return []
     const { name, symbol, createTime, dynamicData, type } = pool
 
-    const attributes = [
+    const attributes = compact([
       {
         title: 'Name',
         value: name,
@@ -93,6 +107,7 @@ export function useFormattedPoolAttributes() {
         ? {
             title: isV2 ? 'Pool owner' : 'Swap fee manager',
             value: poolOwnerData.title,
+            link: poolOwnerData.link || undefined,
           }
         : null,
       {
@@ -107,7 +122,7 @@ export function useFormattedPoolAttributes() {
         title: 'LP token price',
         value: toCurrency(usdValueForBpt(pool.address, pool.chain, '1')),
       },
-    ]
+    ])
     if (shouldHideSwapFee(pool?.type)) {
       return attributes.filter(a => a?.title !== 'Swap fees')
     }
