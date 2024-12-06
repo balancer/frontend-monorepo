@@ -2,18 +2,7 @@
 'use client'
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import {
-  Box,
-  Card,
-  Grid,
-  GridItem,
-  Heading,
-  HStack,
-  IconButton,
-  Text,
-  VStack,
-  Link,
-} from '@chakra-ui/react'
+import { Box, Card, Grid, GridItem, HStack, IconButton, Text, VStack, Link } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 
 // @ts-ignore
@@ -24,6 +13,8 @@ import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion } from 'framer-motion'
 import { RadialPattern } from './shared/RadialPattern'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
+import { TextFade } from '@repo/lib/shared/components/animations/TextFade'
 
 const contracts = [
   {
@@ -199,12 +190,21 @@ export function Contracts() {
             {!isMobile && <GridItem />}
             <GridItem borderRadius="lg">
               <VStack alignItems="start" spacing="md">
-                <Heading>Contracts</Heading>
-                <Text color="font.secondary" fontSize="lg">
-                  The four main contracts of Balancer v3 enhance flexibility and minimize the
-                  intricacies involved in constructing pools, empowering builders to focus on
-                  innovation rather than grappling with complex code.
-                </Text>
+                <WordsPullUp
+                  as="h3"
+                  color="font.primary"
+                  fontSize="4xl"
+                  fontWeight="bold"
+                  lineHeight={1}
+                  text="Contracts"
+                />
+                <TextFade delay={0.4} direction="up">
+                  <Text color="font.secondary" fontSize="lg">
+                    The four main contracts of Balancer v3 enhance flexibility and minimize the
+                    intricacies involved in constructing pools, empowering builders to focus on
+                    innovation rather than grappling with complex code.
+                  </Text>
+                </TextFade>
               </VStack>
               <AnimatePresence initial={false} mode="wait">
                 <Grid
