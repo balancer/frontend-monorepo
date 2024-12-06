@@ -67,8 +67,17 @@ function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
       </Box>
       {(isDev || isStaging) && (
         <Box as={motion.div} variants={fadeIn}>
-          <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
+          {/* <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
             Debug
+          </Link> */}
+          <Link
+            as={NextLink}
+            color={linkColorFor('/testooors')}
+            href="/testooors"
+            prefetch
+            variant="nav"
+          >
+            Test
           </Link>
         </Box>
       )}
