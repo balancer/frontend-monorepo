@@ -4,17 +4,29 @@ import { PropsWithChildren } from 'react'
 import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { LstProvider } from './LstProvider'
+import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 
 export default function LstLayout({ children }: PropsWithChildren) {
   const { tokens } = useTokens()
-  const nativeAsset = tokens.find(t => t.address === fantomNetworkConfig.tokens.nativeAsset.address)
+  const nativeAsset = tokens.find(
+    t =>
+      t.address === fantomNetworkConfig.tokens.nativeAsset.address &&
+      t.chainId === fantomNetworkConfig.chainId
+  )
+
+  console.log({ nativeAsset })
 
   if (!nativeAsset) throw new Error('Native asset not found')
   return (
-    <TokenInputsValidationProvider>
-      <TokenBalancesProvider initTokens={[nativeAsset]}>
-        <PriceImpactProvider>{children}</PriceImpactProvider>
-      </TokenBalancesProvider>
-    </TokenInputsValidationProvider>
+    <TransactionStateProvider>
+      <LstProvider>
+        <TokenInputsValidationProvider>
+          <TokenBalancesProvider initTokens={[nativeAsset]}>
+            <PriceImpactProvider>{children}</PriceImpactProvider>
+          </TokenBalancesProvider>
+        </TokenInputsValidationProvider>
+      </LstProvider>
+    </TransactionStateProvider>
   )
 }

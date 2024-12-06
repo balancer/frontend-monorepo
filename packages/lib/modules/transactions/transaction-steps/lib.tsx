@@ -44,6 +44,9 @@ export type StepType =
   | LockActionType
   | 'signPermit'
   | 'signPermit2'
+  | 'stakeLst'
+  | 'unstakeLst'
+  | 'withdrawLst'
 
 export type TxActionId =
   | 'SignBatchRelayer'

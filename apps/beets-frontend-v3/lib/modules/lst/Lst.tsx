@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 'use client'
 
 import {
@@ -14,6 +15,7 @@ import {
   Link,
   Stack,
   Tooltip,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
@@ -24,14 +26,20 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useRef } from 'react'
 import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
+import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+import { useLst } from './LstProvider'
+import { LstStakeModal } from './modals/LstStakeModal'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function Lst() {
   const { isConnected } = useUserAccount()
   const isMounted = useIsMounted()
   const nextBtn = useRef(null)
+  const { activeTab, setActiveTab, TABS, amount, setAmount } = useLst()
+  const stakeModalDisclosure = useDisclosure()
 
   const isLoading = !isMounted
-  const loadingText = isLoading ? 'Fetching swap...' : undefined
+  const loadingText = isLoading ? 'Loading...' : undefined
 
   return (
     <FadeInOnView>
@@ -44,16 +52,27 @@ export function Lst() {
         w={['100vw', 'full']}
       >
         <Card rounded="xl">
-          <CardHeader as={HStack} justify="space-between" w="full" zIndex={11}>
-            <Box as="span">LST</Box>
+          <CardHeader as={HStack} justify="space-between" w="full">
+            <Heading as="h2" size="lg">
+              Liquid staking
+            </Heading>
           </CardHeader>
           <CardBody align="start" as={VStack}>
             <VStack spacing="md" w="full">
+              <ButtonGroup
+                currentOption={activeTab}
+                groupId="add-liquidity"
+                hasLargeTextLabel
+                isFullWidth
+                onChange={setActiveTab}
+                options={TABS}
+                size="md"
+              />
               <TokenInput
                 address={fantomNetworkConfig.tokens.nativeAsset.address}
                 chain={GqlChain.Fantom}
-                onChange={e => console.log(e.currentTarget.value)}
-                value="0"
+                onChange={e => setAmount(e.currentTarget.value)}
+                value={amount}
               />
 
               {/* {simulationQuery.isError ? (
@@ -67,10 +86,10 @@ export function Lst() {
             {isConnected ? (
               //   <Tooltip label={isDisabled ? disabledReason : ''}>
               <Button
-                isDisabled={false}
+                isDisabled={bn(amount).lt(1)}
                 isLoading={false}
                 loadingText={loadingText}
-                // onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
+                onClick={() => stakeModalDisclosure.onOpen()}
                 ref={nextBtn}
                 size="lg"
                 variant="secondary"
@@ -91,12 +110,12 @@ export function Lst() {
           </CardFooter>
         </Card>
       </Center>
-      {/* <SwapPreviewModal
+      <LstStakeModal
         finalFocusRef={nextBtn}
-        isOpen={previewModalDisclosure.isOpen}
-        onClose={onModalClose}
-        onOpen={previewModalDisclosure.onOpen}
-      /> */}
+        isOpen={stakeModalDisclosure.isOpen}
+        onClose={stakeModalDisclosure.onClose}
+        onOpen={stakeModalDisclosure.onOpen}
+      />
     </FadeInOnView>
   )
 }
