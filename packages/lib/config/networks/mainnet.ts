@@ -5,6 +5,8 @@ import { NetworkConfig } from '../config.types'
 import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
 import { SupportedWrapHandler } from '@repo/lib/modules/swap/swap.types'
 import { Address } from 'viem'
+import { VAULT_V3 } from '@balancer/sdk'
+import { mainnet } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
   chainId: 1,
@@ -75,6 +77,7 @@ const networkConfig: NetworkConfig = {
     multicall2: '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      vaultV3: VAULT_V3[mainnet.id],
       relayerV6: '0x35Cea9e57A393ac66Aaa7E25C391D52C74B5648f',
       minter: '0x239e55F427D44C3cc793f49bFB507ebe76638a2b',
       router: '0xNotYetAvailable' as Address,

@@ -3,6 +3,8 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
+import { VAULT_V3 } from '@balancer/sdk'
+import { gnosis } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
   chainId: 100,
@@ -51,6 +53,7 @@ const networkConfig: NetworkConfig = {
     multicall2: '0xbb6fab6b627947dae0a75808250d8b2652952cb5',
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      vaultV3: VAULT_V3[gnosis.id],
       relayerV6: '0x2163c2FcD0940e84B8a68991bF926eDfB0Cd926C',
       minter: '0xA8920455934Da4D853faac1f94Fe7bEf72943eF1',
     },
