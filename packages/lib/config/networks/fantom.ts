@@ -36,6 +36,10 @@ const networkConfig: NetworkConfig = {
       relayerV6: '0x0faa25293a36241c214f3760c6ff443e1b731981',
       minter: zeroAddress,
     },
+    beets: {
+      lstStaking: '0x310A1f7bd9dDE18CCFD701A796Ecb83CcbedE21A',
+      lstStakingProxy: '0xB458BfC855ab504a8a327720FcEF98886065529b',
+    },
   },
   pools: convertHexToLowerCase({ issues: {} }),
 }

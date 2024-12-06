@@ -47,6 +47,10 @@ export interface ContractsConfig {
     relayerV6: Address
     minter: Address
   }
+  beets?: {
+    lstStaking?: Address
+    lstStakingProxy?: Address
+  }
   feeDistributor?: Address
   veDelegationProxy?: Address
   veBAL?: Address
