@@ -15,9 +15,15 @@ import { Pool } from '../PoolProvider'
 
 type Props = {
   pool: Pool | PoolListItem
+  size?: 'sm' | 'md'
 }
 
-export function PoolHookTag({ pool }: Props) {
+const badgeSize = {
+  sm: { h: 7, w: 7, iconSize: 25 },
+  md: { h: 8, w: 8, iconSize: 32 },
+}
+
+export function PoolHookTag({ pool, size = 'md' }: Props) {
   const { hooks } = useHook(pool)
 
   // TODO: add nested hook support when needed
@@ -37,13 +43,13 @@ export function PoolHookTag({ pool }: Props) {
           display="flex"
           fontSize="xs"
           fontWeight="normal"
-          h={8}
+          h={badgeSize[size].h}
           rounded="full"
           shadow="sm"
-          w={8}
+          w={badgeSize[size].w}
         >
           <Center h="full" w="full">
-            <HookIcon size={32} />
+            <HookIcon size={badgeSize[size].iconSize} />
           </Center>
         </Badge>
       </PopoverTrigger>

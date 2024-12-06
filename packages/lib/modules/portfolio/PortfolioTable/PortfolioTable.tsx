@@ -49,7 +49,7 @@ export const portfolioOrderBy: {
 
 const rowProps = {
   px: [0, 4],
-  gridTemplateColumns: `32px minmax(320px, 1fr) 150px 120px 120px 130px 170px`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) 180px 110px 110px 130px 170px`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 }
