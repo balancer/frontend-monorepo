@@ -17,7 +17,6 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "global.d.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "../../packages/lib/global.d.ts"
