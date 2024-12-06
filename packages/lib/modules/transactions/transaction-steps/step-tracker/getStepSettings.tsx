@@ -14,6 +14,7 @@ export type StepProps = {
   currentIndex: number
   colorMode: ColorMode
   isLastStep: boolean
+  isTxBatch?: boolean
 }
 
 /*

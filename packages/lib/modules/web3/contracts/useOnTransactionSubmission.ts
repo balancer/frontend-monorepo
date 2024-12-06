@@ -9,9 +9,15 @@ type NewTrackedTransactionRequest = {
   labels: TransactionLabels
   chain: GqlChain
   hash?: Address
+  isConfirmed?: boolean
 }
 
-export function useOnTransactionSubmission({ labels, hash, chain }: NewTrackedTransactionRequest) {
+export function useOnTransactionSubmission({
+  labels,
+  hash,
+  chain,
+  isConfirmed = false,
+}: NewTrackedTransactionRequest) {
   const { addTrackedTransaction } = useRecentTransactions()
 
   // on successful submission to chain, add tx to cache
@@ -23,7 +29,7 @@ export function useOnTransactionSubmission({ labels, hash, chain }: NewTrackedTr
         chain,
         label: labels.confirming || 'Confirming transaction',
         description: labels.description,
-        status: 'confirming',
+        status: isConfirmed ? 'confirmed' : 'confirming',
         timestamp: Date.now(),
         init: labels.init,
         poolId: labels.poolId,

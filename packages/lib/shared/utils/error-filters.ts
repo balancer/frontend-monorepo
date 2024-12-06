@@ -1,5 +1,10 @@
 export function isUserRejectedError(error: Error): boolean {
-  return error.message.startsWith('User rejected the request.')
+  return (
+    error.message.startsWith('User rejected the request.') ||
+    // This is the rejection message in special cases like:
+    // - when the user rejects a transaction in the Safe App when connected via WalletConnect
+    error.message.includes('Details: User rejected transaction')
+  )
 }
 
 /*

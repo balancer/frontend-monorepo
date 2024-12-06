@@ -6,7 +6,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { Alert, Button, VStack } from '@chakra-ui/react'
 import { TransactionStep } from './lib'
 import { useMemo } from 'react'
-import { useChainSwitch } from '../../web3/useChainSwitch'
+import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
 import { getChainId } from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
@@ -19,8 +19,7 @@ export function useSignRelayerStep(chain: GqlChain): TransactionStep {
   const { isConnected } = useUserAccount()
   const { signRelayer, signRelayerState, isLoading, isDisabled, buttonLabel, error } =
     useSignRelayerApproval(chainId)
-  const { shouldChangeNetwork, NetworkSwitchButton, networkSwitchButtonProps } =
-    useChainSwitch(chainId)
+  const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
 
   function SignRelayerButton() {
     return (

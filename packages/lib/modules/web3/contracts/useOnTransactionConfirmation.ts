@@ -4,9 +4,10 @@ import { useRecentTransactions } from '../../transactions/RecentTransactionsProv
 import { TransactionLabels } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 
+export type TrackedTransactionStatus = 'success' | 'reverted' | undefined
 type updateTrackedTransactionRequest = {
   labels: TransactionLabels
-  status?: 'success' | 'reverted'
+  status?: TrackedTransactionStatus
   hash?: Address
 }
 

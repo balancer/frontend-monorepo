@@ -5,14 +5,15 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
+import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { usePool } from '../../PoolProvider'
 import {
   AddLiquidityBuildQueryParams,
   useAddLiquidityBuildCallDataQuery,
 } from './queries/useAddLiquidityBuildCallDataQuery'
-import { usePool } from '../../PoolProvider'
-import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 
 export const addLiquidityStepId = 'add-liquidity'
@@ -83,6 +84,22 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
           />
         )
       },
+      // The following fields are only used within Safe App
+      renderBatchAction: (currentStep: TransactionStep) => {
+        return (
+          <TransactionBatchButton
+            chainId={chainId}
+            currentStep={currentStep}
+            id={addLiquidityStepId}
+            labels={labels}
+          />
+        )
+      },
+      // Last step in smart account batch
+      isBatchEnd: true,
+      batchableTxCall: buildCallDataQuery.data
+        ? { data: buildCallDataQuery.data.data, to: buildCallDataQuery.data.to }
+        : undefined,
     }),
     [transaction, simulationQuery.data, buildCallDataQuery.data]
   )

@@ -5,9 +5,10 @@ import { TransactionStepsResponse } from '../useTransactionSteps'
 
 type Props = {
   transactionSteps: TransactionStepsResponse
+  isTxBatch?: boolean
 }
 
-export function Steps({ transactionSteps }: Props) {
+export function Steps({ transactionSteps, isTxBatch }: Props) {
   const { steps, currentStepIndex, isLastStep } = transactionSteps
   const colorMode = useThemeColorMode()
 
@@ -22,6 +23,7 @@ export function Steps({ transactionSteps }: Props) {
               currentIndex={currentStepIndex}
               index={index}
               isLastStep={isLastStep(index)}
+              isTxBatch={isTxBatch}
               step={step}
             />
           </div>
