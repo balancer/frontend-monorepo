@@ -20,7 +20,7 @@ import {
 import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { TokenAmountHumanReadable } from '../tokens/token.types'
-import { formatUnits, parseUnits } from 'viem'
+import { Address, formatUnits, parseUnits } from 'viem'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { Pool } from './PoolProvider'
 import BigNumber from 'bignumber.js'
@@ -78,6 +78,17 @@ function getVariant(pool: Pool | PoolListItem): PoolVariant {
 export function getPoolPath(pool: Pool | PoolListItem) {
   const variant = getVariant(pool)
   return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${pool.id}`
+}
+
+export function getNestedPoolPath({
+  pool,
+  nestedPoolAddress,
+}: {
+  pool: Pool | PoolListItem
+  nestedPoolAddress: Address
+}) {
+  const variant = getVariant(pool)
+  return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${nestedPoolAddress}`
 }
 
 // TODO: the following 2 functions (getAprLabel & getTotalAprLabel) most likely need revisiting somewhere in the near future and refactored to just one
