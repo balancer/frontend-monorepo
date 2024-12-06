@@ -132,7 +132,7 @@ export function Hero() {
               The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
               simplicity and flexibility to reshape the future of AMMs.
             </MotionHeading>
-            <HStack alignItems="center" mt="xl" spacing="lg">
+            <HStack alignItems="center" mt="xl" spacing="xl">
               <MotionButton
                 animate={shouldAnimate ? { opacity: 1 } : {}}
                 as={NextLink}
@@ -168,7 +168,7 @@ export function Hero() {
                   initial={{ opacity: 0 }}
                   transition={{ duration: 0.5, delay: 0.9, ease: 'easeInOut' }}
                 >
-                  Learn about Balancer V3
+                  Learn about Balancer v3
                 </MotionText>
               </HStack>
             </HStack>

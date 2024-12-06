@@ -37,7 +37,8 @@
     "tinycolor2": "^1.6.0",
     "viem": "^2.21.18",
     "wagmi": "^2.12.16",
-    "react-feather": "^2.0.10"
+    "react-feather": "^2.0.10",
+    "@chakra-ui/icons": "^2.1.1"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
