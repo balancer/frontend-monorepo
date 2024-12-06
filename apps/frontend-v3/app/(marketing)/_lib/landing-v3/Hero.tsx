@@ -96,7 +96,7 @@ export function Hero() {
               fontSize="sm"
               initial={{ opacity: 0, filter: 'blur(3px)' }}
               textTransform="uppercase"
-              transition={{ delay: 0.5, duration: 0.3, delayChildren: 0.5, ease: 'easeInOut' }}
+              transition={{ delay: 0.7, duration: 0.3, delayChildren: 0.5, ease: 'easeInOut' }}
             >
               Balancer V3 is live
             </MotionText>
@@ -104,6 +104,7 @@ export function Hero() {
             <WordsPullUp
               as="h1"
               color="font.primary"
+              delay={0.7}
               fontSize={{ base: 'xl', md: '6xl' }}
               fontWeight="bold"
               lineHeight={1}
@@ -126,7 +127,7 @@ export function Hero() {
               fontWeight="thin"
               initial={{ opacity: 0, y: 10, filter: 'blur(3px)' }}
               maxW="700px"
-              transition={{ duration: 0.5, delay: 0.5, ease: 'easeInOut' }}
+              transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
               w="full"
             >
               The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
@@ -141,7 +142,7 @@ export function Hero() {
                 rightIcon={<ArrowUpRight />}
                 size="lg"
                 target="_blank"
-                transition={{ duration: 0.5, delay: 0.5, ease: 'easeInOut' }}
+                transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
                 variant="secondary"
               >
                 View v3 docs

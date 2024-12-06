@@ -7,7 +7,11 @@ import { useEffect, useState } from 'react'
 
 const MotionBox = motion(Box)
 
-export function WordsPullUp({ text, ...rest }: { text: string } & BoxProps) {
+export function WordsPullUp({
+  text,
+  delay = 0,
+  ...rest
+}: { text: string; delay?: number } & BoxProps) {
   const splittedText = text.split(' ')
   const [shouldAnimate, setShouldAnimate] = useState(false)
 
@@ -18,7 +22,7 @@ export function WordsPullUp({ text, ...rest }: { text: string } & BoxProps) {
       opacity: 1,
       filter: 'blur(0px)',
       transition: {
-        delay: 0.5 + i * 0.1,
+        delay: delay + i * 0.1,
         duration: 1,
       },
     }),
