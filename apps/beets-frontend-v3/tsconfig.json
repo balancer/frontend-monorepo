@@ -12,7 +12,8 @@
       "@/*": ["./*"],
       "@repo/*": ["../../packages/*"]
     },
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "jsx": "preserve"
   },
   "include": [
     "**/*.ts",
