@@ -1,5 +1,5 @@
-import { LandingV3 } from '@repo/lib/modules/marketing/landing-v3/LandingV3'
+import { LandingV3Layout } from './_lib/landing-v3/LandingV3Layout'
 
 export default function Home() {
-  return <LandingV3 />
+  return <LandingV3Layout />
 }
