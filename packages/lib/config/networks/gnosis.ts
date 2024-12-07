@@ -3,7 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
-import { VAULT_V3 } from '@balancer/sdk'
+import { PERMIT2, VAULT_V3 } from '@balancer/sdk'
 import { gnosis } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -58,6 +58,7 @@ const networkConfig: NetworkConfig = {
       minter: '0xA8920455934Da4D853faac1f94Fe7bEf72943eF1',
     },
     veDelegationProxy: '0x7A2535f5fB47b8e44c02Ef5D9990588313fe8F05',
+    permit2: PERMIT2[gnosis.id],
   },
   pools: convertHexToLowerCase({
     issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Gnosis] },
