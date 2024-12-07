@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import { Box, Button, Center, Heading, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, Heading, HStack, Stack, Text, VStack } from '@chakra-ui/react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import NextLink from 'next/link'
@@ -105,7 +105,7 @@ export function Hero() {
               as="h1"
               color="font.primary"
               delay={0.7}
-              fontSize={{ base: 'xl', md: '6xl' }}
+              fontSize={{ base: '4xl', md: '6xl' }}
               fontWeight="bold"
               lineHeight={1}
               pr="2"
@@ -134,7 +134,12 @@ export function Hero() {
               The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
               simplicity and flexibility to reshape the future of AMMs.
             </MotionHeading>
-            <HStack alignItems="center" mt="xl" spacing="xl">
+            <Stack
+              alignItems={{ base: 'start', md: 'center' }}
+              direction={{ base: 'column', md: 'row' }}
+              mt="xl"
+              spacing="xl"
+            >
               <MotionButton
                 animate={shouldAnimate ? { opacity: 1 } : {}}
                 as={NextLink}
@@ -173,7 +178,7 @@ export function Hero() {
                   Learn about Balancer v3
                 </MotionText>
               </HStack>
-            </HStack>
+            </Stack>
           </VStack>
         </Center>
       </DefaultPageContainer>
