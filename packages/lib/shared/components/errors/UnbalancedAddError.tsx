@@ -78,7 +78,7 @@ export function getErrorLabels(
       : 'The price impact cannot be calculated. Proceed if you know exactly what you are doing.'
     proportionalLabel = 'try proportional mode.'
   } else if (isUnbalancedAddErrorMessage(error)) {
-    errorMessage = 'Your input(s) would excessively unbalance the pool.'
+    errorMessage = 'Your input(s) are either too large or would excessively unbalance the pool.'
   }
 
   if (!isProportionalSupported) {
