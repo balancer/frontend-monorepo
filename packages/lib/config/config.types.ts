@@ -18,6 +18,12 @@ export interface TokensConfig {
     symbol: string
     decimals: number
   }
+  stakedAsset?: {
+    name: string
+    address: Address
+    symbol: string
+    decimals: number
+  }
   supportedWrappers?: {
     baseToken: Address
     wrappedToken: Address

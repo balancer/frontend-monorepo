@@ -25,6 +25,12 @@ const networkConfig: NetworkConfig = {
       symbol: 'FTM',
       decimals: 18,
     },
+    stakedAsset: {
+      name: 'sFTMx',
+      address: '0xd7028092c830b5C8FcE061Af2E593413EbbC1fc1',
+      symbol: 'sFTMx',
+      decimals: 18,
+    },
     defaultSwapTokens: {
       tokenIn: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     },
