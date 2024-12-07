@@ -248,7 +248,7 @@ export default function PoolUserEvents({
             lineHeight="34px" // to align with 'My liquidity'
             size="h5"
           >
-            My transactions 2
+            My transactions
           </Heading>
           <Divider />
           <Box display={{ base: 'none', md: 'block' }} w="full">
