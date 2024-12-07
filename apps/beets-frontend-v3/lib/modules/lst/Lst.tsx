@@ -30,6 +30,7 @@ import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGro
 import { useLst } from './LstProvider'
 import { LstStakeModal } from './modals/LstStakeModal'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 export function Lst() {
   const { isConnected } = useUserAccount()
@@ -37,9 +38,22 @@ export function Lst() {
   const nextBtn = useRef(null)
   const { activeTab, setActiveTab, TABS, amount, setAmount } = useLst()
   const stakeModalDisclosure = useDisclosure()
+  const { startTokenPricePolling } = useTokens()
 
   const isLoading = !isMounted
   const loadingText = isLoading ? 'Loading...' : undefined
+
+  function onModalClose() {
+    // restart polling for token prices when modal is closed again
+    startTokenPricePolling()
+
+    stakeModalDisclosure.onClose()
+
+    // if (swapTxHash) {
+    //   resetSwapAmounts()
+    //   transactionSteps.resetTransactionSteps()
+    // }
+  }
 
   return (
     <FadeInOnView>
@@ -113,7 +127,7 @@ export function Lst() {
       <LstStakeModal
         finalFocusRef={nextBtn}
         isOpen={stakeModalDisclosure.isOpen}
-        onClose={stakeModalDisclosure.onClose}
+        onClose={onModalClose}
         onOpen={stakeModalDisclosure.onOpen}
       />
     </FadeInOnView>

@@ -5,40 +5,53 @@ import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useLstStakeStep } from './useLstStakeStep'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
 
 const TABS: ButtonGroupOption[] = [
   {
     value: '0',
     label: 'Stake',
     disabled: false,
-    iconTooltipLabel:
-      'Enter any amount for each token manually. Balances are independent, and no automatic adjustments will be made.',
   },
   {
     value: '1',
     label: 'Unstake',
-    disabled: false,
-    iconTooltipLabel:
-      "When you enter an amount for one token, the others are automatically adjusted to maintain the pool's proportional balance.",
+    disabled: false, // TODO: disable when no tokens staked
   },
   {
     value: '2',
     label: 'Withdraw',
-    disabled: false,
-    iconTooltipLabel:
-      "When you enter an amount for one token, the others are automatically adjusted to maintain the pool's proportional balance.",
+    disabled: false, // TODO: disable when no tokens unstaked
   },
 ]
 
 export function _useLst() {
   const [activeTab, setActiveTab] = useState(TABS[0])
-  const [amount, setAmount] = useState('0')
+  const [amount, setAmount] = useState('')
   const { step: stakeStep } = useLstStakeStep(amount)
   const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
 
+  const nativeAsset = fantomNetworkConfig.tokens.nativeAsset.address
+  const stakedAsset = fantomNetworkConfig.tokens.stakedAsset?.address || ''
+
   const chain = GqlChain.Fantom
 
-  return { activeTab, setActiveTab, TABS, stakeTransactionSteps, amount, setAmount, chain }
+  const lstStakeTxHash = stakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
+  const lstStakeTxConfirmed = stakeTransactionSteps.lastTransactionConfirmed
+
+  return {
+    activeTab,
+    setActiveTab,
+    TABS,
+    stakeTransactionSteps,
+    amount,
+    setAmount,
+    chain,
+    lstStakeTxHash,
+    lstStakeTxConfirmed,
+    nativeAsset,
+    stakedAsset,
+  }
 }
 
 export type Result = ReturnType<typeof _useLst>

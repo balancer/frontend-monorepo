@@ -13,11 +13,12 @@ import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverla
 import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
 //import { SwapSummary } from '@repo/lib/modules/swap/SwapSummary'
-import { useSwapReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
+import { useLstStakeReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useLst } from '../LstProvider'
 import { LstStakeSummary } from './LstStakeSummary'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 type Props = {
   isOpen: boolean
@@ -36,9 +37,16 @@ export function LstStakeModal({
   const initialFocusRef = useRef(null)
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
-  const { stakeTransactionSteps, chain } = useLst()
+  const { stakeTransactionSteps, chain, lstStakeTxHash } = useLst()
 
   useResetStepIndexOnOpen(isOpen, stakeTransactionSteps)
+
+  const lstStakeReceipt = useLstStakeReceipt({
+    txHash: lstStakeTxHash,
+    userAddress,
+    chain,
+    protocolVersion: 2, // TODO: make this optional
+  })
 
   useEffect(() => {
     if (isOpen) {
@@ -59,13 +67,13 @@ export function LstStakeModal({
       preserveScrollBarGap
       {...rest}
     >
-      {/* <SuccessOverlay startAnimation={!!swapTxHash && hasQuoteContext} /> */}
+      <SuccessOverlay startAnimation={!!lstStakeTxHash} />
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />}
         <TransactionModalHeader chain={chain} isReceiptLoading label="Review stake" txHash="0x" />
         <ModalCloseButton />
         <ModalBody>
-          <LstStakeSummary />
+          <LstStakeSummary {...lstStakeReceipt} />
         </ModalBody>
         <ActionModalFooter
           currentStep={stakeTransactionSteps.currentStep}
