@@ -33,7 +33,7 @@ const TABS: ButtonGroupOption[] = [
 export function _useLst() {
   const [activeTab, setActiveTab] = useState(TABS[0])
   const [amount, setAmount] = useState('0')
-  const { step: stakeStep } = useLstStakeStep(activeTab.value)
+  const { step: stakeStep } = useLstStakeStep(amount)
   const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
 
   const chain = GqlChain.Fantom

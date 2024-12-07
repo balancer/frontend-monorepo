@@ -11,6 +11,7 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { useMemo } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { parseUnits } from 'viem'
 
 export function useLstStakeStep(amount: string) {
   const { getTransaction } = useTransactionState()
@@ -25,7 +26,7 @@ export function useLstStakeStep(amount: string) {
   }
 
   const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation (Claim all rewards transaction)',
+    'Error in wagmi tx simulation (Liquid staking transaction)',
     {}
   )
 
@@ -38,7 +39,7 @@ export function useLstStakeStep(amount: string) {
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
     functionName: 'deposit',
     args: [],
-    value: amount,
+    value: parseUnits(amount, 18),
     enabled: true,
     txSimulationMeta,
   }

@@ -17,7 +17,6 @@ import { useSwapReceipt } from '@repo/lib/modules/transactions/transaction-steps
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useLst } from '../LstProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { LstStakeSummary } from './LstStakeSummary'
 
 type Props = {
@@ -68,13 +67,13 @@ export function LstStakeModal({
         <ModalBody>
           <LstStakeSummary />
         </ModalBody>
-        {/* <ActionModalFooter
+        <ActionModalFooter
           currentStep={stakeTransactionSteps.currentStep}
           isSuccess={false}
           returnAction={onClose}
           returnLabel="Stake again"
-          urlTxHash="0x"
-        /> */}
+          urlTxHash=""
+        />
       </ModalContent>
     </Modal>
   )

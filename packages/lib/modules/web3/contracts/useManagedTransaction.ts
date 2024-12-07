@@ -39,7 +39,7 @@ export interface ManagedTransactionInput {
   args?: ContractFunctionArgs<IAbiMap[AbiMapKey], WriteAbiMutability> | null
   txSimulationMeta?: Record<string, unknown>
   enabled: boolean
-  value?: string
+  value?: bigint
 }
 
 export function useManagedTransaction({
@@ -69,7 +69,7 @@ export function useManagedTransaction({
       // In chains like polygon, we don't want background refetches while waiting for min block confirmations
       ...onlyExplicitRefetch,
     },
-    value: value ? BigInt(value) : undefined,
+    value,
   })
 
   const { mockedTxHash, setMockedTxHash } = useMockedTxHash()
