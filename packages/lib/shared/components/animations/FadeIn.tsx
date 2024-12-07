@@ -6,7 +6,7 @@ import { Children, isValidElement, ReactNode, useRef } from 'react'
 
 const MotionBox = motion(Box)
 
-export function TextFade({
+export function FadeIn({
   direction,
   children,
   delay = 0,

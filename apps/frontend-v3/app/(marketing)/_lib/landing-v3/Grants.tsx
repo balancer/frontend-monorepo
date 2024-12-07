@@ -7,6 +7,9 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { ArrowUpRight } from 'react-feather'
 import { GraniteBg } from './shared/GraniteBg'
+import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
+import { BlurIn } from '@repo/lib/shared/components/animations/BlurIn'
+import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 
 const grantIdeas = [
   {
@@ -32,21 +35,32 @@ export function Grants() {
       <DefaultPageContainer noVerticalPadding py={['xl', '10rem']}>
         <VStack align="start" spacing="lg" w="full">
           <VStack align="start">
-            <Text
-              background="font.specialSecondary"
-              backgroundClip="text"
-              fontSize="sm"
-              textTransform="uppercase"
-            >
-              BALANCER GRANTS
-            </Text>
-            <Heading>Get help to innovate on v3</Heading>
-            <Text color="font.secondary" maxW="3xl">
-              Balancer Community Grants aim to accelerate the development of the Balancer ecosystem.
-              Grants for innovation on Balancer v3 will be prioritized. This program is managed by
-              the Balancer Grants DAO, an independent community-owned grants program for the
-              Balancer ecosystem.
-            </Text>
+            <BlurIn delay={0.4}>
+              <Text
+                background="font.specialSecondary"
+                backgroundClip="text"
+                fontSize="sm"
+                textTransform="uppercase"
+              >
+                BALANCER GRANTS
+              </Text>
+            </BlurIn>
+            <WordsPullUp
+              as="h2"
+              color="font.primary"
+              fontSize="4xl"
+              fontWeight="bold"
+              lineHeight={1}
+              text="Get help to innovate on v3"
+            />
+            <FadeIn delay={0.4} direction="up">
+              <Text color="font.secondary" maxW="3xl">
+                Balancer Community Grants aim to accelerate the development of the Balancer
+                ecosystem. Grants for innovation on Balancer v3 will be prioritized. This program is
+                managed by the Balancer Grants DAO, an independent community-owned grants program
+                for the Balancer ecosystem.
+              </Text>
+            </FadeIn>
           </VStack>
           <Stack
             align={{ base: 'start', lg: 'end' }}
@@ -54,9 +68,11 @@ export function Grants() {
             justify="space-between"
             w="full"
           >
-            <Text fontSize="2xl" opacity={0.8}>
-              Some fund-worthy ideas to get you started
-            </Text>
+            <FadeIn delay={0.5} direction="up">
+              <Text fontSize="2xl" opacity={0.8}>
+                Some fund-worthy ideas to get you started
+              </Text>
+            </FadeIn>
             <Button
               as={NextLink}
               href="https://grants.balancer.community/"

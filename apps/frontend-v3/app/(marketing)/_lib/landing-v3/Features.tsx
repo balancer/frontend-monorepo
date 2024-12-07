@@ -24,6 +24,8 @@ import { FeatureCard } from './shared/FeatureCard'
 import { RadialPattern } from './shared/RadialPattern'
 import { BalancerLogoAnimated } from '@repo/lib/shared/components/icons/BalancerIconAnimated'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
+import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 
 const keyFeatures = [
   {
@@ -209,15 +211,17 @@ export function Features() {
         pt={['xl', '3xl']}
         py={['xl', '10rem']}
       >
-        <Heading as="h4" mx="auto" size="lg">
-          <chakra.span color="font.primary">Custom liquidity solutions.</chakra.span>
-          <chakra.span color="font.primary" style={{ opacity: 0.6 }}>
-            {' '}
-            By shifting repetitive development tasks into the heavily audited vault and formalizing
-            custom pool requirements, the platform ensures consistency, flexibility, and faster
-            development.
-          </chakra.span>
-        </Heading>
+        <FadeIn delay={0.2} direction="up">
+          <Heading as="h4" mx="auto" size="lg">
+            <chakra.span color="font.primary">Custom liquidity solutions.</chakra.span>
+            <chakra.span color="font.primary" style={{ opacity: 0.6 }}>
+              {' '}
+              By shifting repetitive development tasks into the heavily audited vault and
+              formalizing custom pool requirements, the platform ensures consistency, flexibility,
+              and faster development.
+            </chakra.span>
+          </Heading>
+        </FadeIn>
 
         <Grid gap="xl" mt="2xl" templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}>
           {keyFeatures.map((feature, index) => (
@@ -230,14 +234,21 @@ export function Features() {
         <Stack direction={{ base: 'column', lg: 'row' }} gap="2xl" mt="3xl">
           <Box alignSelf="flex-start" position="sticky" top="82px" w="full">
             <VStack alignItems="start" spacing="sm">
-              <Heading as="h4" size="lg">
-                Technical highlights
-              </Heading>
-              <Text color="font.secondary" fontSize="lg">
-                Balancer v3 introduces a series of technical enhancements that streamline the
-                development and deployment of custom pools, while maintaining the flexibility and
-                interoperability that have made Balancer a leader in the DeFi space.
-              </Text>
+              <WordsPullUp
+                as="h2"
+                color="font.primary"
+                fontSize="4xl"
+                fontWeight="bold"
+                lineHeight={1}
+                text="Technical highlights"
+              />
+              <FadeIn delay={0.4} direction="up">
+                <Text color="font.secondary" fontSize="lg">
+                  Balancer v3 introduces a series of technical enhancements that streamline the
+                  development and deployment of custom pools, while maintaining the flexibility and
+                  interoperability that have made Balancer a leader in the DeFi space.
+                </Text>
+              </FadeIn>
             </VStack>
             {!isMobile && (
               <Center pt="xl">

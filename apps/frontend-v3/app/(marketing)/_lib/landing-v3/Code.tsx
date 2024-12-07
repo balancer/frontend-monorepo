@@ -8,7 +8,7 @@ import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMod
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { RadialPattern } from './shared/RadialPattern'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
-import { TextFade } from '@repo/lib/shared/components/animations/TextFade'
+import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 import { BlurIn } from '@repo/lib/shared/components/animations/BlurIn'
 import { useEffect, useRef, useState } from 'react'
 import Prism from 'prismjs'
@@ -75,13 +75,13 @@ export function Code() {
             lineHeight={1}
             text="Code less, build more."
           />
-          <TextFade delay={0.4} direction="up">
+          <FadeIn delay={0.4} direction="up">
             <Text color="font.secondary" fontSize="lg" maxW="2xl">
               Balancer v3’s architecture focuses on simplicity, flexibility, and extensibility at
               its core. The v3 vault more formally defines the requirements of a custom pool,
               shifting core design patterns out of the pool and into the vault.
             </Text>
-          </TextFade>
+          </FadeIn>
         </VStack>
         <Card mt="2xl">
           <Box background="background.level0" minH="500px" position="relative" shadow="innerXl">
@@ -138,13 +138,13 @@ export function Code() {
                       lineHeight={1}
                       text="Building on v3 is simple"
                     />
-                    <TextFade delay={0.4} direction="up">
+                    <FadeIn delay={0.4} direction="up">
                       <Text color="font.secondary" fontSize="lg">
                         To make custom pool creation easy, core functions have been moved from pools
                         into the heavily audited vault. For example, here’s all the code needed to
                         build a swap function for a Constant Product Pool.
                       </Text>
-                    </TextFade>
+                    </FadeIn>
                   </VStack>
                 </GridItem>
                 <GridItem maxW="100%">

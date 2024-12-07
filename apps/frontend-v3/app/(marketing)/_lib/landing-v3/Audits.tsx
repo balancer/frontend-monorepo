@@ -20,6 +20,8 @@ import { GraniteBg } from './shared/GraniteBg'
 import { SpearbitLogo } from '@repo/lib/shared/components/imgs/SpearbitLogo'
 import { TrailOfBitsLogo } from '@repo/lib/shared/components/imgs/TrailOfBitsLogo'
 import { CertoraLogo } from '@repo/lib/shared/components/imgs/CertoraLogo'
+import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
+import { BlurIn } from '@repo/lib/shared/components/animations/BlurIn'
 
 export function Audits() {
   return (
@@ -34,15 +36,24 @@ export function Audits() {
             w="full"
           >
             <VStack align="start">
-              <Text
-                background="font.specialSecondary"
-                backgroundClip="text"
-                fontSize="sm"
-                textTransform="uppercase"
-              >
-                SAFTEY & SECURITY
-              </Text>
-              <Heading>Audited by the best</Heading>
+              <BlurIn delay={0.4}>
+                <Text
+                  background="font.specialSecondary"
+                  backgroundClip="text"
+                  fontSize="sm"
+                  textTransform="uppercase"
+                >
+                  SAFTEY & SECURITY
+                </Text>
+              </BlurIn>
+              <WordsPullUp
+                as="h2"
+                color="font.primary"
+                fontSize="4xl"
+                fontWeight="bold"
+                lineHeight={1}
+                text="Audited by the best"
+              />
             </VStack>
             <Button
               as={NextLink}

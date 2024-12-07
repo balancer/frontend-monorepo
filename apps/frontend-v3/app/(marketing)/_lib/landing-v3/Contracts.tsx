@@ -14,7 +14,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { RadialPattern } from './shared/RadialPattern'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
-import { TextFade } from '@repo/lib/shared/components/animations/TextFade'
+import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 
 const contracts = [
   {
@@ -198,13 +198,13 @@ export function Contracts() {
                   lineHeight={1}
                   text="Contracts"
                 />
-                <TextFade delay={0.4} direction="up">
+                <FadeIn delay={0.4} direction="up">
                   <Text color="font.secondary" fontSize="lg">
                     The four main contracts of Balancer v3 enhance flexibility and minimize the
                     intricacies involved in constructing pools, empowering builders to focus on
                     innovation rather than grappling with complex code.
                   </Text>
-                </TextFade>
+                </FadeIn>
               </VStack>
               <AnimatePresence initial={false} mode="wait">
                 <Grid

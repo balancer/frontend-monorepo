@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Heading,
   VStack,
   Text,
   Grid,
@@ -26,6 +25,8 @@ import {
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { FeatureCard } from './shared/FeatureCard'
+import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
+import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 
 function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
   return (
@@ -71,12 +72,21 @@ export function Grow() {
     <Noise backgroundColor="background.level0WithOpacity">
       <DefaultPageContainer noVerticalPadding py={['xl', '10rem']}>
         <VStack alignItems="center" spacing="md" textAlign="center">
-          <Heading>Grow with us.</Heading>
-          <Text color="font.secondary" fontSize="2xl" maxW="2xl">
-            Balancer v3 is DeFi infrastructure to be built on.
-            <br />
-            Our growth is your growth.
-          </Text>
+          <WordsPullUp
+            as="h2"
+            color="font.primary"
+            fontSize="4xl"
+            fontWeight="bold"
+            lineHeight={1}
+            text="Grow with us."
+          />
+          <FadeIn delay={0.4} direction="up">
+            <Text color="font.secondary" fontSize="2xl" maxW="2xl">
+              Balancer v3 is DeFi infrastructure to be built on.
+              <br />
+              Our growth is your growth.
+            </Text>
+          </FadeIn>
         </VStack>
         <Grid gap="md" mt="2xl" templateColumns="repeat(12, 1fr)" templateRows="repeat(3, 1fr)">
           <GridItem colSpan={{ base: 12, lg: 4 }} order={1}>

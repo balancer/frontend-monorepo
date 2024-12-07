@@ -32,6 +32,7 @@ import createHookSrc from './images/video-createHook.png'
 // @ts-ignore
 import createRouterSrc from './images/video-createRouter.png'
 import { RadialPattern } from './shared/RadialPattern'
+import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 
 const videos = {
   createCustomAMMs: {
@@ -145,7 +146,14 @@ export function Videos() {
       <DefaultPageContainer noVerticalPadding position="relative" py={['xl', '10rem']} zIndex={2}>
         <VStack align="start" spacing="lg" w="full">
           <HStack align="end" justify="space-between" w="full">
-            <Heading>Learn to build on v3</Heading>
+            <WordsPullUp
+              as="h2"
+              color="font.primary"
+              fontSize="4xl"
+              fontWeight="bold"
+              lineHeight={1}
+              text="Learn to build on v3"
+            />
             <Button
               as={NextLink}
               href="https://github.com/balancer/scaffold-balancer-v3"
