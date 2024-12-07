@@ -15,9 +15,8 @@ export default function LstLayout({ children }: PropsWithChildren) {
       t.chainId === fantomNetworkConfig.chainId
   )
 
-  console.log({ nativeAsset })
-
   if (!nativeAsset) throw new Error('Native asset not found')
+
   return (
     <TransactionStateProvider>
       <LstProvider>
