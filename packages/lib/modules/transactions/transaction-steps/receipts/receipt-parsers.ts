@@ -29,6 +29,7 @@ export type ParseReceipt =
   | typeof parseAddLiquidityReceipt
   | typeof parseRemoveLiquidityReceipt
   | typeof parseSwapReceipt
+  | typeof parseLstStakeReceipt
 
 export function parseAddLiquidityReceipt({
   chain,
@@ -143,6 +144,26 @@ export function parseSwapReceipt({
   return {
     sentToken: sentHumanAmountWithAddress,
     receivedToken: receivedHumanAmountWithAddress,
+  }
+}
+
+export function parseLstStakeReceipt({ receiptLogs, userAddress, chain, getToken }: ParseProps) {
+  console.log({ receiptLogs, userAddress, chain, getToken })
+
+  const receivedTokens: HumanTokenAmountWithAddress[] = getIncomingLogs(
+    receiptLogs,
+    userAddress
+  ).map(log => {
+    const tokenDecimals = getToken(log.address, chain)?.decimals
+    return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
+  })
+
+  const sentNativeAssetAmountScaled = getOutgoingLogs(receiptLogs, userAddress)?.[0]?.args?.value
+  const sentNativeAssetAmount = formatUnits(sentNativeAssetAmountScaled || 0n, 18)
+
+  return {
+    receivedTokens,
+    sentNativeAssetAmount,
   }
 }
 
