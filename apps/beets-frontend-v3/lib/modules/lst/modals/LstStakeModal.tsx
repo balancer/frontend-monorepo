@@ -80,7 +80,6 @@ export function LstStakeModal({
           isSuccess={false}
           returnAction={onClose}
           returnLabel="Stake again"
-          urlTxHash=""
         />
       </ModalContent>
     </Modal>
