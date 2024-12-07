@@ -19,7 +19,7 @@ export function PollListTableDetailsCell({ pool }: Props) {
 
   return (
     <HStack>
-      <PoolVersionTag pool={pool} />
+      <PoolVersionTag isSmall pool={pool} />
       <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
         {isBoosted(pool) ? 'Boosted' : getPoolTypeLabel(pool.type)}
       </Text>
@@ -32,7 +32,7 @@ export function PollListTableDetailsCell({ pool }: Props) {
           width={20}
         />
       ))}
-      <PoolHookTag pool={pool} />
+      <PoolHookTag pool={pool} size="sm" />
     </HStack>
   )
 }

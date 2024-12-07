@@ -111,6 +111,10 @@ type VariantConfig = {
   }
 }
 
+interface ExternalUrls {
+  discordUrl: string
+}
+
 export interface ProjectConfig {
   projectId: 'beets' | 'balancer'
   projectName: string
@@ -120,4 +124,5 @@ export interface ProjectConfig {
   defaultNetwork: GqlChain
   ensNetwork: GqlChain
   delegateOwner: Address
+  externalLinks: ExternalUrls
 }

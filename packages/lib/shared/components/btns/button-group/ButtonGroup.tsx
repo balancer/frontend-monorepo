@@ -40,6 +40,7 @@ export default function ButtonGroup(props: Props) {
       <HStack
         background="level0"
         p="1"
+        pt="3px" // TODO: maybe there a better way to align the buttons
         rounded="md"
         shadow="innerXl"
         spacing="1"
@@ -64,12 +65,7 @@ export default function ButtonGroup(props: Props) {
             </Box>
           ) : (
             <Box flex="1" key={`button-group-option-${option.value}`}>
-              <GroupOptionButton
-                isActive={isActive}
-                key={`button-group-option-${option.value}`}
-                option={option}
-                {...props}
-              />
+              <GroupOptionButton isActive={isActive} option={option} {...props} />
             </Box>
           )
         })}
@@ -92,10 +88,13 @@ function GroupOptionButton({
       bg="transparent"
       id={`button-group-${option.value}`}
       isDisabled={option.disabled}
-      key={`button-group-option-${option.value}`}
       onClick={() => onChange(option)}
       position="relative"
-      rightIcon={<IconPopover option={option} />}
+      rightIcon={
+        !option.tabTooltipLabel && option.iconTooltipLabel ? (
+          <IconPopover option={option} />
+        ) : undefined
+      }
       role="group"
       size={size}
       variant={isActive ? 'buttonGroupActive' : 'buttonGroupInactive'}
@@ -120,8 +119,6 @@ function GroupOptionButton({
 }
 
 function IconPopover({ option }: { option: ButtonGroupOption }) {
-  if (option.tabTooltipLabel) return null
-  if (!option.iconTooltipLabel) return null
   return (
     <Popover placement="top" trigger="hover">
       <PopoverTrigger>

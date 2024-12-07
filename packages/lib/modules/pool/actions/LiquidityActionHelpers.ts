@@ -420,3 +420,8 @@ export function toTokenAmountsIn(
     amount: amountIn.amount,
   }))
 }
+
+export function getSender(userAddress?: Address): Address | undefined {
+  if (userAddress === ('' as Address)) return undefined // '' would cause an error in the SDK
+  return userAddress
+}

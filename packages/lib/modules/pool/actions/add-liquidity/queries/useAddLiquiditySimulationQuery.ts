@@ -60,8 +60,8 @@ export function useAddLiquiditySimulationQuery({
         // Avoid more retries
         return false
       }
-      // 3 retries by default
-      return failureCount < 3
+      // 2 retries by default
+      return failureCount < 2
     },
     meta: sentryMetaForAddLiquidityHandler('Error in add liquidity simulation query', {
       ...params,
