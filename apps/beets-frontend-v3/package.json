@@ -18,6 +18,7 @@
     "postinstall": "npm run gen:theme-typings"
   },
   "dependencies": {
+    "@balancer/sdk": "0.33.3",
     "@chakra-ui/hooks": "^2.2.1",
     "@chakra-ui/react": "^2.8.2",
     "@chakra-ui/theme-tools": "^2.1.2",
