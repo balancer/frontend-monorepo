@@ -3,7 +3,7 @@ import { useState, PropsWithChildren, createContext } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { useLstStakeStep } from './useLstStakeStep'
+import { useLstStakeStep } from './hooks/useLstStakeStep'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
 
