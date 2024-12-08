@@ -7,7 +7,7 @@ import {
   GqlPoolSnapshotDataRange,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { useQuery } from '@apollo/client'
 import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { usePool } from '../../../PoolProvider'

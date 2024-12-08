@@ -52,7 +52,7 @@ describe('getErrorLabels', () => {
     const result = getErrorLabels(true, unbalancedAddErrorV2)
     expect(result).toEqual({
       errorTitle: 'Token amounts error',
-      errorMessage: 'Your input(s) would excessively unbalance the pool.',
+      errorMessage: 'Your input(s) are either too large or would excessively unbalance the pool.',
       proportionalLabel: 'Please use proportional mode.',
     })
   })
@@ -61,7 +61,7 @@ describe('getErrorLabels', () => {
     const result = getErrorLabels(true, unbalancedAddErrorV3)
     expect(result).toEqual({
       errorTitle: 'Token amounts error',
-      errorMessage: 'Your input(s) would excessively unbalance the pool.',
+      errorMessage: 'Your input(s) are either too large or would excessively unbalance the pool.',
       proportionalLabel: 'Please use proportional mode.',
     })
   })

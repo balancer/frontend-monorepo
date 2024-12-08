@@ -194,7 +194,8 @@ describe('queries swap transaction', () => {
     })
   })
 
-  test('when the native asset is the token out that goes through a wrap (from stataEthDAI to WETH and then to ETH)', async () => {
+  //TODO: adapt to a sepolia swap in v12
+  test.skip('when the native asset is the token out that goes through a wrap (from stataEthDAI to WETH and then to ETH)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
     // https://sepolia.etherscan.io/tx/0xd8ad2a7f8e51be9735ae2886ca936cca62e395524b284f7a97cf7ad33a361a04
     const txHash = '0xd8ad2a7f8e51be9735ae2886ca936cca62e395524b284f7a97cf7ad33a361a04'

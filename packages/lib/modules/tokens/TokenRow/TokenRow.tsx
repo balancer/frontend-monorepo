@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   VStack,
+  Link,
 } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
@@ -27,6 +28,8 @@ import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import NextLink from 'next/link'
+import { getNestedPoolPath } from '../../pool/pool.utils'
 
 type DataProps = {
   address: Address
@@ -81,7 +84,13 @@ function TokenInfo({
       )}
       <VStack alignItems="flex-start" spacing="none">
         <HStack spacing="none">
-          <Heading {...headingProps}>{tokenSymbol}</Heading>
+          {isBpt && pool ? (
+            <Link as={NextLink} href={getNestedPoolPath({ pool, nestedPoolAddress: address })}>
+              <Heading {...headingProps}>{tokenSymbol}</Heading>
+            </Link>
+          ) : (
+            <Heading {...headingProps}>{tokenSymbol}</Heading>
+          )}
           {showInfoPopover && (
             <TokenInfoPopover chain={chain} isBpt={isBpt} tokenAddress={address} />
           )}
