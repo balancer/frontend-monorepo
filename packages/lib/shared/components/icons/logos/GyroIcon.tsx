@@ -1,7 +1,16 @@
+import { SVGProps } from 'react'
+
 /* eslint-disable max-len */
-export function GyroIcon() {
+export function GyroIcon({ size = 30, ...props }: { size: number } & SVGProps<SVGSVGElement>) {
   return (
-    <svg fill="none" height="30" width="28" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      fill="none"
+      height={size}
+      viewBox="0 0 28 30"
+      width={size}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
       <path
         d="M16.184 19.094c-1.75.958-3.378 2.346-5.619 3.014l3.613 3.188 1.398-.9 1.32-.902 2.648-1.96s-1.611-1.244-3.36-2.44Z"
         fill="url(#a)"

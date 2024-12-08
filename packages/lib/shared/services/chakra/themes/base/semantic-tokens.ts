@@ -54,7 +54,7 @@ export function getSemanticTokens(tokens: any, colors: any) {
           _dark: tokens.colors.dark.background.baseWithOpacity,
         },
         level0WithOpacity: {
-          default: tokens.colors.light.background.baseWithOpacity,
+          default: tokens.colors.light.background.level0WithOpacity,
           _dark: tokens.colors.dark.background.level0WithOpacity,
         },
         special: {

@@ -1,5 +1,6 @@
 'use client'
 
+import { motion, AnimatePresence } from 'framer-motion'
 import { useNavData } from './useNavData'
 import { NavBar } from '@repo/lib/shared/components/navs/NavBar'
 import { NavLogo } from './NavLogo'
@@ -11,18 +12,27 @@ export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
   const { defaultAppLinks } = useNav()
   const allAppLinks = [...defaultAppLinks, ...appLinks]
+
   return (
-    <NavBar
-      appLinks={allAppLinks}
-      mobileNav={
-        <MobileNav
-          LogoType={BalancerLogoType}
+    <AnimatePresence>
+      <motion.div
+        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        transition={{ duration: 0.5, ease: 'easeInOut' }}
+      >
+        <NavBar
           appLinks={allAppLinks}
-          ecosystemLinks={ecosystemLinks}
-          socialLinks={getSocialLinks()}
+          mobileNav={
+            <MobileNav
+              LogoType={BalancerLogoType}
+              appLinks={allAppLinks}
+              ecosystemLinks={ecosystemLinks}
+              socialLinks={getSocialLinks()}
+            />
+          }
+          navLogo={<NavLogo />}
         />
-      }
-      navLogo={<NavLogo />}
-    />
+      </motion.div>
+    </AnimatePresence>
   )
 }
