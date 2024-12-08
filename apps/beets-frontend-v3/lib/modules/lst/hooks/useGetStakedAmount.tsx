@@ -1,13 +1,14 @@
+'use client'
+
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from 'wagmi'
-import { useLst } from '../LstProvider'
 import { beetsFtmStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetStakedAmount(amount: bigint) {
+export function useGetStakedAmount(amount: bigint, chain: GqlChain) {
   const { isConnected } = useUserAccount()
-  const { chain } = useLst()
   const chainId = getChainId(chain)
 
   const { shouldChangeNetwork } = useChainSwitch(chainId)

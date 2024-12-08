@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-import { useState, PropsWithChildren, createContext } from 'react'
+'use client'
+
+import { useState, PropsWithChildren, createContext, useEffect } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
@@ -26,19 +28,19 @@ const TABS: ButtonGroupOption[] = [
   },
 ]
 
+const CHAIN = GqlChain.Fantom
+
 export function _useLst() {
   const [activeTab, setActiveTab] = useState(TABS[0])
   const [amount, setAmount] = useState('')
-  const { step: stakeStep } = useLstStakeStep(amount)
+  const { step: stakeStep } = useLstStakeStep(amount, CHAIN)
   const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
 
-  const { step: unstakeStep } = useLstUnstakeStep(amount)
+  const { step: unstakeStep } = useLstUnstakeStep(amount, CHAIN)
   const unstakeTransactionSteps = useTransactionSteps([unstakeStep], false)
 
   const nativeAsset = fantomNetworkConfig.tokens.nativeAsset.address
   const stakedAsset = fantomNetworkConfig.tokens.stakedAsset?.address || ''
-
-  const chain = GqlChain.Fantom
 
   const lstStakeTxHash = stakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstStakeTxConfirmed = stakeTransactionSteps.lastTransactionConfirmed
@@ -49,11 +51,11 @@ export function _useLst() {
   return {
     activeTab,
     setActiveTab,
-    TABS,
+    tabs: TABS,
     stakeTransactionSteps,
     amount,
     setAmount,
-    chain,
+    chain: CHAIN,
     lstStakeTxHash,
     lstStakeTxConfirmed,
     nativeAsset,

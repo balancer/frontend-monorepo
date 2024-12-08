@@ -1,3 +1,5 @@
+'use client'
+
 import { getChainId } from '@repo/lib/config/app.config'
 import networkConfigs from '@repo/lib/config/networks'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
@@ -14,12 +16,11 @@ import { parseUnits } from 'viem'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { noop } from 'lodash'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { useLst } from '../LstProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useLstStakeStep(humanAmount: string) {
+export function useLstStakeStep(humanAmount: string, chain: GqlChain) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
-  const { chain } = useLst()
 
   const labels: TransactionLabels = {
     init: 'Stake',

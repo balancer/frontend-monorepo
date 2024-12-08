@@ -22,7 +22,6 @@ import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useRef } from 'react'
 import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
@@ -36,12 +35,14 @@ export function Lst() {
   const { isConnected } = useUserAccount()
   const isMounted = useIsMounted()
   const nextBtn = useRef(null)
-  const { activeTab, setActiveTab, TABS, amount, setAmount } = useLst()
+  const { activeTab, setActiveTab, tabs, amount, setAmount, chain } = useLst()
   const stakeModalDisclosure = useDisclosure()
   const { startTokenPricePolling } = useTokens()
 
   const isLoading = !isMounted
   const loadingText = isLoading ? 'Loading...' : undefined
+
+  console.log({ isMounted })
 
   function onModalClose() {
     // restart polling for token prices when modal is closed again
@@ -79,12 +80,12 @@ export function Lst() {
                 hasLargeTextLabel
                 isFullWidth
                 onChange={setActiveTab}
-                options={TABS}
+                options={tabs}
                 size="md"
               />
               <TokenInput
                 address={fantomNetworkConfig.tokens.nativeAsset.address}
-                chain={GqlChain.Fantom}
+                chain={chain}
                 onChange={e => setAmount(e.currentTarget.value)}
                 value={amount}
               />
@@ -95,7 +96,7 @@ export function Lst() {
               //   <Tooltip label={isDisabled ? disabledReason : ''}>
               <Button
                 isDisabled={bn(amount).lt(1)}
-                isLoading={false}
+                isLoading={isLoading}
                 loadingText={loadingText}
                 onClick={() => stakeModalDisclosure.onOpen()}
                 ref={nextBtn}

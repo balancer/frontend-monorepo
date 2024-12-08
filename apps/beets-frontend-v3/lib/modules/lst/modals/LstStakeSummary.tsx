@@ -18,7 +18,7 @@ export function LstStakeSummary({
   const { chain, stakeTransactionSteps, lstStakeTxHash, nativeAsset, stakedAsset, amount } =
     useLst()
 
-  const { stakedAmount } = useGetStakedAmount(parseUnits(amount, 18))
+  const { stakedAmount } = useGetStakedAmount(parseUnits(amount, 18), chain)
 
   const shouldShowReceipt =
     !!lstStakeTxHash && !isLoadingReceipt && !!receivedTokens && !!sentNativeAssetAmount

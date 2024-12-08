@@ -1,3 +1,5 @@
+'use client'
+
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { PropsWithChildren } from 'react'
@@ -7,7 +9,7 @@ import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactP
 import { LstProvider } from './LstProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 
-export default function LstLayout({ children }: PropsWithChildren) {
+export default function LstProvidersLayout({ children }: PropsWithChildren) {
   const { tokens } = useTokens()
   const nativeAsset = tokens.find(
     t =>

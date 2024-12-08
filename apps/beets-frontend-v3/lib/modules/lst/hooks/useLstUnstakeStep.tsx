@@ -1,3 +1,5 @@
+'use client'
+
 import { getChainId } from '@repo/lib/config/app.config'
 import networkConfigs from '@repo/lib/config/networks'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
@@ -13,13 +15,12 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { parseUnits } from 'viem'
 import { noop } from 'lodash'
 import { useGetPenalty } from './useGetPenalty'
-import { useLst } from '../LstProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useLstUnstakeStep(humanAmount: string) {
+export function useLstUnstakeStep(humanAmount: string, chain: GqlChain) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
-  const { penalty } = useGetPenalty(parseUnits(humanAmount, 18))
-  const { chain } = useLst()
+  const { penalty } = useGetPenalty(parseUnits(humanAmount, 18), chain)
 
   const labels: TransactionLabels = {
     init: 'Unstake',
