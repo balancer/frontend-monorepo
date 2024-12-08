@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import { Box, Card, Center, Grid, GridItem, Stack, Text, VStack } from '@chakra-ui/react'
+import { Box, Card, Center, Stack, Text, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
@@ -64,7 +64,7 @@ export function Code() {
   }, [isInView])
 
   return (
-    <Noise backgroundColor="background.level0WithOpacity">
+    <Noise backgroundColor="background.level0WithOpacity" position="relative">
       <DefaultPageContainer noVerticalPadding position="relative" py={['3xl', '10rem']}>
         <VStack alignItems="center" spacing="md" textAlign="center">
           <WordsPullUp
@@ -75,7 +75,7 @@ export function Code() {
             lineHeight={1}
             text="Code less, build more."
           />
-          <FadeIn delay={0.4} direction="up">
+          <FadeIn delay={0.4} direction="up" duration={1}>
             <Text color="font.secondary" fontSize="lg" maxW="2xl">
               Balancer v3’s architecture focuses on simplicity, flexibility, and extensibility at
               its core. The v3 vault more formally defines the requirements of a custom pool,
@@ -132,13 +132,13 @@ export function Code() {
                     <WordsPullUp
                       as="h3"
                       color="font.primary"
-                      fontSize={{ base: '3xl', lg: '4xl' }}
+                      fontSize={{ base: '2xl', lg: '4xl' }}
                       fontWeight="bold"
                       lineHeight={1}
                       pr={{ base: 'xxs', lg: '1' }}
                       text="Building on v3 is simple"
                     />
-                    <FadeIn delay={0.4} direction="up">
+                    <FadeIn delay={0.4} direction="up" duration={1}>
                       <Text color="font.secondary" fontSize="lg">
                         To make custom pool creation easy, core functions have been moved from pools
                         into the heavily audited vault. For example, here’s all the code needed to

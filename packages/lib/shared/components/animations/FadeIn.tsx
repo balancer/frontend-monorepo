@@ -28,7 +28,7 @@ export function FadeIn({
       opacity: 1,
       filter: 'blur(0px)',
       y: 0,
-      transition: { duration, ease: 'easeInOut' },
+      transition: { duration, delay, ease: 'easeInOut' },
     },
     hidden: { opacity: 0, filter: 'blur(3px)', y: direction === 'down' ? -15 : 15 },
   }

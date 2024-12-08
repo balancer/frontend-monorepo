@@ -11,8 +11,9 @@ export function WordsPullUp({
   text,
   delay = 0,
   pr = '1',
+  animateMargin = '-50px',
   ...rest
-}: { text: string; delay?: number; pr?: BoxProps['pr'] } & BoxProps) {
+}: { text: string; delay?: number; pr?: BoxProps['pr']; animateMargin?: string } & BoxProps) {
   const splittedText = text.split(' ')
   const [shouldAnimate, setShouldAnimate] = useState(false)
 
@@ -30,7 +31,7 @@ export function WordsPullUp({
   }
 
   const ref = React.useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px' })
+  const isInView = useInView(ref, { once: true, margin: animateMargin })
 
   useEffect(() => {
     if (isInView && !shouldAnimate) {
