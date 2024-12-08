@@ -22,7 +22,7 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -34,6 +34,7 @@ import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider
 import { LstStake } from './components/LstStake'
 import { LstUnstake } from './components/LstUnstake'
 import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
+import { LstUnstakeModal } from './modals/LstUnstakeModal'
 
 export function Lst() {
   const { isConnected } = useUserAccount()
@@ -41,8 +42,10 @@ export function Lst() {
   const nextBtn = useRef(null)
   const { activeTab, setActiveTab, amount } = useLst()
   const stakeModalDisclosure = useDisclosure()
+  const unstakeModalDisclosure = useDisclosure()
   const { startTokenPricePolling } = useTokens()
   const { isBalancesLoading, balanceFor } = useTokenBalances()
+  const [disclosure, setDisclosure] = useState(stakeModalDisclosure)
 
   const isLoading = !isMounted || isBalancesLoading
   const loadingText = isLoading ? 'Loading...' : undefined
@@ -72,6 +75,14 @@ export function Lst() {
   useEffect(() => {
     setActiveTab(tabs[0])
   }, [])
+
+  useEffect(() => {
+    if (activeTab?.value === '0') {
+      setDisclosure(stakeModalDisclosure)
+    } else if (activeTab?.value === '1') {
+      setDisclosure(unstakeModalDisclosure)
+    }
+  }, [activeTab])
 
   function onModalClose() {
     // restart polling for token prices when modal is closed again
@@ -123,7 +134,7 @@ export function Lst() {
                 isDisabled={bn(amount).lt(1)}
                 isLoading={isLoading}
                 loadingText={loadingText}
-                onClick={() => stakeModalDisclosure.onOpen()}
+                onClick={() => disclosure.onOpen()}
                 ref={nextBtn}
                 size="lg"
                 variant="secondary"
@@ -149,6 +160,12 @@ export function Lst() {
         isOpen={stakeModalDisclosure.isOpen}
         onClose={onModalClose}
         onOpen={stakeModalDisclosure.onOpen}
+      />
+      <LstUnstakeModal
+        finalFocusRef={nextBtn}
+        isOpen={unstakeModalDisclosure.isOpen}
+        onClose={onModalClose}
+        onOpen={unstakeModalDisclosure.onOpen}
       />
     </FadeInOnView>
   )

@@ -31,6 +31,7 @@ export type ParseReceipt =
   | typeof parseRemoveLiquidityReceipt
   | typeof parseSwapReceipt
   | typeof parseLstStakeReceipt
+  | typeof parseLstUnstakeReceipt
 
 export function parseAddLiquidityReceipt({
   chain,
@@ -149,6 +150,20 @@ export function parseSwapReceipt({
 }
 
 export function parseLstStakeReceipt({ receiptLogs, userAddress, chain, getToken }: ParseProps) {
+  const receivedToken: HumanTokenAmountWithAddress[] = getIncomingLogs(
+    receiptLogs,
+    userAddress
+  ).map(log => {
+    const tokenDecimals = getToken(log.address, chain)?.decimals
+    return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
+  })
+
+  return {
+    receivedToken,
+  }
+}
+
+export function parseLstUnstakeReceipt({ receiptLogs, userAddress, chain, getToken }: ParseProps) {
   const receivedToken: HumanTokenAmountWithAddress[] = getIncomingLogs(
     receiptLogs,
     userAddress

@@ -12,12 +12,11 @@ import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/trans
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
-//import { SwapSummary } from '@repo/lib/modules/swap/SwapSummary'
-import { useLstStakeReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
+import { useLstUnstakeReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useLst } from '../LstProvider'
-import { LstStakeSummary } from '../components/LstStakeSummary'
+import { LstUnstakeSummary } from '../components/LstUnstakeSummary'
 
 type Props = {
   isOpen: boolean
@@ -36,12 +35,12 @@ export function LstUnstakeModal({
   const initialFocusRef = useRef(null)
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
-  const { stakeTransactionSteps, chain, lstStakeTxHash } = useLst()
+  const { unstakeTransactionSteps, chain, lstUnstakeTxHash } = useLst()
 
-  useResetStepIndexOnOpen(isOpen, stakeTransactionSteps)
+  useResetStepIndexOnOpen(isOpen, unstakeTransactionSteps)
 
-  const lstStakeReceipt = useLstStakeReceipt({
-    txHash: lstStakeTxHash,
+  const lstUnstakeReceipt = useLstUnstakeReceipt({
+    txHash: lstUnstakeTxHash,
     userAddress,
     chain,
     protocolVersion: 2, // TODO: make this optional
@@ -66,19 +65,21 @@ export function LstUnstakeModal({
       preserveScrollBarGap
       {...rest}
     >
-      <SuccessOverlay startAnimation={!!lstStakeTxHash} />
+      <SuccessOverlay startAnimation={!!lstUnstakeTxHash} />
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={stakeTransactionSteps} />}
-        <TransactionModalHeader chain={chain} isReceiptLoading label="Review stake" txHash="0x" />
+        {isDesktop && (
+          <DesktopStepTracker chain={chain} transactionSteps={unstakeTransactionSteps} />
+        )}
+        <TransactionModalHeader chain={chain} isReceiptLoading label="Review unstake" txHash="0x" />
         <ModalCloseButton />
         <ModalBody>
-          <LstStakeSummary {...lstStakeReceipt} />
+          <LstUnstakeSummary {...lstUnstakeReceipt} />
         </ModalBody>
         <ActionModalFooter
-          currentStep={stakeTransactionSteps.currentStep}
+          currentStep={unstakeTransactionSteps.currentStep}
           isSuccess={false}
           returnAction={onClose}
-          returnLabel="Stake again"
+          returnLabel="Unstake again"
         />
       </ModalContent>
     </Modal>
