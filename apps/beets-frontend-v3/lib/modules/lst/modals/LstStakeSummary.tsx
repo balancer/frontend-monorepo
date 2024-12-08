@@ -38,7 +38,7 @@ export function LstStakeSummary({
           chain={chain}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
           tokenAddress={stakedAsset}
-          tokenAmount="0" // TODO: add simulated amount here
+          tokenAmount="0" // TODO: add estimated amount here
         />
       </Card>
     </AnimateHeightChange>
