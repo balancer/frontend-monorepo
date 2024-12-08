@@ -158,7 +158,6 @@ export function parseLstStakeReceipt({ receiptLogs, userAddress, chain, getToken
 
   const sentNativeAssetAmountScaled = getOutgoingLogs(receiptLogs, userAddress)?.[0]?.args?.value
   // TODO: this should not be undefined (maybe merging main into this branch fixes it)
-  console.log({ sentNativeAssetAmountScaled })
   const sentNativeAssetAmount = formatUnits(sentNativeAssetAmountScaled || 0n, 18)
 
   return {

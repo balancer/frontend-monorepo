@@ -42,8 +42,6 @@ export function Lst() {
   const isLoading = !isMounted
   const loadingText = isLoading ? 'Loading...' : undefined
 
-  console.log({ isMounted })
-
   function onModalClose() {
     // restart polling for token prices when modal is closed again
     startTokenPricePolling()
