@@ -2,7 +2,6 @@
 
 import {
   VStack,
-  Heading,
   Button,
   Text,
   GridItem,
@@ -11,6 +10,7 @@ import {
   Center,
   Link,
   Stack,
+  IconButton,
 } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
@@ -22,6 +22,49 @@ import { TrailOfBitsLogo } from '@repo/lib/shared/components/imgs/TrailOfBitsLog
 import { CertoraLogo } from '@repo/lib/shared/components/imgs/CertoraLogo'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { BlurIn } from '@repo/lib/shared/components/animations/BlurIn'
+import { motion } from 'framer-motion'
+import { ReactNode } from 'react'
+
+const MotionBox = motion(Box)
+
+function AuditCard({ href, logo }: { href: string; logo: ReactNode }) {
+  return (
+    <NextLink href={href} rel="noopener noreferrer" target="_blank">
+      <MotionBox
+        minH="200px"
+        overflow="hidden"
+        position="relative"
+        role="group"
+        rounded="lg"
+        shadow="lg"
+        whileHover={{
+          scale: 1.02,
+          transition: { duration: 0.3 },
+        }}
+      >
+        <GraniteBg />
+        <Center color="font.primary" h="full" position="absolute" w="full">
+          {logo}
+        </Center>
+        <IconButton
+          _groupHover={{
+            opacity: 1,
+          }}
+          aria-label="View report"
+          bottom="md"
+          h="50px"
+          icon={<ArrowUpRight />}
+          isRound
+          opacity={0}
+          position="absolute"
+          right="md"
+          transition="opacity 0.3s ease"
+          w="50px"
+        />
+      </MotionBox>
+    </NextLink>
+  )
+}
 
 export function Audits() {
   return (
@@ -58,7 +101,7 @@ export function Audits() {
             </VStack>
             <Button
               as={NextLink}
-              href="https://github.com/balancer/scaffold-balancer-v3"
+              href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits"
               rightIcon={<ArrowUpRight />}
               variant="secondary"
             >
@@ -71,45 +114,26 @@ export function Audits() {
             w="full"
           >
             <GridItem>
-              <NextLink href="https://spearbit.com/" rel="noopener noreferrer" target="_blank">
-                <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
-                  <GraniteBg />
-                  <Center color="font.primary" h="full" position="absolute" w="full">
-                    <SpearbitLogo />
-                  </Center>
-                </Box>
-              </NextLink>
+              <AuditCard href="https://spearbit.com/" logo={<SpearbitLogo />} />
             </GridItem>
             <GridItem>
-              <NextLink
-                href="https://www.trailofbits.com/"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
-                  <GraniteBg />
-                  <Center color="font.primary" h="full" position="absolute" w="full">
-                    <TrailOfBitsLogo />
-                  </Center>
-                </Box>
-              </NextLink>
+              <AuditCard
+                href="https://github.com/balancer/balancer-v3-monorepo/blob/main/audits/trail-of-bits/2024-10-08.pdf"
+                logo={<TrailOfBitsLogo />}
+              />
             </GridItem>
             <GridItem>
-              <NextLink href="https://www.certora.com/" rel="noopener noreferrer" target="_blank">
-                <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="lg">
-                  <GraniteBg />
-                  <Center color="font.primary" h="full" position="absolute" w="full">
-                    <CertoraLogo />
-                  </Center>
-                </Box>
-              </NextLink>
+              <AuditCard
+                href="https://github.com/balancer/balancer-v3-monorepo/blob/main/audits/certora/2024-09-04.pdf"
+                logo={<CertoraLogo />}
+              />
             </GridItem>
           </Grid>
           <VStack align="start" mt="md" spacing="xs">
             <Text fontSize="lg">Review the code and report vulnerabilities</Text>
             <Text color="font.secondary">
               Up to $1m is up for grabs in the bug bounty on{' '}
-              <Link href="https://immunefi.com/" isExternal>
+              <Link href="https://immunefi.com/bug-bounty/balancer/information/" isExternal>
                 Immunefi
               </Link>
               .
