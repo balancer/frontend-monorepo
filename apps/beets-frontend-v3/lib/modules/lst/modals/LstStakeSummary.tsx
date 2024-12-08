@@ -4,7 +4,6 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useLst } from '../LstProvider'
 import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
-import { HumanAmount } from '@balancer/sdk'
 import { SwapTokenRow } from '@repo/lib/modules/tokens/TokenRow/SwapTokenRow'
 
 export function LstStakeSummary({
@@ -16,8 +15,6 @@ export function LstStakeSummary({
   const { isMobile } = useBreakpoints()
   const { chain, stakeTransactionSteps, lstStakeTxHash, nativeAsset, stakedAsset, amount } =
     useLst()
-
-  //const expectedTokenOut = simulationQuery?.data?.returnAmount as HumanAmount
 
   const shouldShowReceipt =
     !!lstStakeTxHash && !isLoadingReceipt && !!receivedTokens && !!sentNativeAssetAmount

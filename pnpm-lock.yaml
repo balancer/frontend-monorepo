@@ -38,9 +38,6 @@ importers:
 
   apps/beets-frontend-v3:
     dependencies:
-      '@balancer/sdk':
-        specifier: 0.33.3
-        version: 0.33.3(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@chakra-ui/hooks':
         specifier: ^2.2.1
         version: 2.2.1(react@18.2.0)
@@ -15918,7 +15915,7 @@ snapshots:
       eventemitter3: 5.0.1
       mipd: 0.0.7(typescript@5.4.5)
       viem: 2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
-      zustand: 5.0.0(@types/react@18.2.34)(react@18.2.0)(use-sync-external-store@1.2.2(react@18.2.0))
+      zustand: 5.0.0(@types/react@18.2.34)(react@18.2.0)(use-sync-external-store@1.2.0(react@18.2.0))
     optionalDependencies:
       '@tanstack/query-core': 5.56.2
       typescript: 5.4.5
@@ -22322,9 +22319,3 @@ snapshots:
       '@types/react': 18.2.34
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
-
-  zustand@5.0.0(@types/react@18.2.34)(react@18.2.0)(use-sync-external-store@1.2.2(react@18.2.0)):
-    optionalDependencies:
-      '@types/react': 18.2.34
-      react: 18.2.0
-      use-sync-external-store: 1.2.2(react@18.2.0)
