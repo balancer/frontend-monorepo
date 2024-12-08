@@ -18,7 +18,6 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useLst } from '../LstProvider'
 import { LstStakeSummary } from './LstStakeSummary'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 type Props = {
   isOpen: boolean
