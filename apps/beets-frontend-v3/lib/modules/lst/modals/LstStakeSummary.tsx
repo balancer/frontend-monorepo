@@ -10,7 +10,6 @@ export function LstStakeSummary({
   isLoading: isLoadingReceipt,
   receivedTokens,
   sentNativeAssetAmount,
-  error,
 }: LstStakeReceiptResult) {
   const { isMobile } = useBreakpoints()
   const { chain, stakeTransactionSteps, lstStakeTxHash, nativeAsset, stakedAsset, amount } =

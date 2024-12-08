@@ -12,8 +12,11 @@ import { useMemo } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { parseUnits } from 'viem'
+import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
+import { noop } from 'lodash'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
-export function useLstStakeStep(amount: string) {
+export function useLstStakeStep(humanAmount: string) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
 
@@ -39,8 +42,8 @@ export function useLstStakeStep(amount: string) {
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
     functionName: 'deposit',
     args: [],
-    value: parseUnits(amount, 18),
-    enabled: true,
+    value: parseUnits(humanAmount, BPT_DECIMALS),
+    enabled: bn(humanAmount).gte(1) && isConnected,
     txSimulationMeta,
   }
 
@@ -54,9 +57,9 @@ export function useLstStakeStep(amount: string) {
       labels,
       stepType: 'stakeLst',
       isComplete,
-      onActivated: () => {},
-      onDeactivated: () => {},
-      onSuccess: () => {},
+      onActivated: noop,
+      onDeactivated: noop,
+      onSuccess: noop,
       renderAction: () => <ManagedTransactionButton id="stakeLst" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
