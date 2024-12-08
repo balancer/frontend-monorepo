@@ -8,6 +8,8 @@ import {
   parseAddLiquidityReceipt,
   parseRemoveLiquidityReceipt,
   parseSwapReceipt,
+  parseLstStakeReceipt,
+  parseLstUnstakeReceipt,
 } from './receipt-parsers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 
@@ -56,6 +58,30 @@ export function useSwapReceipt(props: BaseReceiptProps) {
   return {
     ...result,
     sentToken: data?.sentToken,
+    receivedToken: data?.receivedToken,
+  }
+}
+
+export type LstStakeReceiptResult = ReturnType<typeof useLstStakeReceipt>
+
+export function useLstStakeReceipt(props: BaseReceiptProps) {
+  const result = useTxReceipt({ ...props, parseReceipt: parseLstStakeReceipt })
+  const data = result.data as ReturnType<typeof parseLstStakeReceipt> | undefined
+
+  return {
+    ...result,
+    receivedToken: data?.receivedToken,
+  }
+}
+
+export type LstUnstakeReceiptResult = ReturnType<typeof useLstUnstakeReceipt>
+
+export function useLstUnstakeReceipt(props: BaseReceiptProps) {
+  const result = useTxReceipt({ ...props, parseReceipt: parseLstUnstakeReceipt })
+  const data = result.data as ReturnType<typeof parseLstUnstakeReceipt> | undefined
+
+  return {
+    ...result,
     receivedToken: data?.receivedToken,
   }
 }
