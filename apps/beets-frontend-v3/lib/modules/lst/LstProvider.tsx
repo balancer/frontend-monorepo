@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 'use client'
 
-import { useState, PropsWithChildren, createContext, useEffect } from 'react'
+import { useState, PropsWithChildren, createContext } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
@@ -35,7 +35,6 @@ export function _useLst() {
   const [amount, setAmount] = useState('')
   const { step: stakeStep } = useLstStakeStep(amount, CHAIN)
   const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
-
   const { step: unstakeStep } = useLstUnstakeStep(amount, CHAIN)
   const unstakeTransactionSteps = useTransactionSteps([unstakeStep], false)
 
