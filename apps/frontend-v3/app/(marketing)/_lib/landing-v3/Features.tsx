@@ -267,7 +267,9 @@ export function Features() {
           </Box>
           <VStack ref={containerRef} spacing="md" w="full">
             {features.map((feature, index) => (
-              <FeatureText index={index} key={index} {...feature} />
+              <FadeIn direction="up" key={index}>
+                <FeatureText index={index} {...feature} />
+              </FadeIn>
             ))}
           </VStack>
         </Stack>
