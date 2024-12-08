@@ -1,7 +1,7 @@
 'use client'
 
-import { Lst } from '@/lib/modules/lst/Lst'
-import LstProvidersLayout from '@/lib/modules/lst/LstProvidersLayout'
+import { Lst } from '@repo/lib/modules/lst/Lst'
+import LstProvidersLayout from '@repo/lib/modules/lst/LstProvidersLayout'
 
 export default function LstPage() {
   return (
