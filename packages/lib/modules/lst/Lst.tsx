@@ -30,6 +30,7 @@ import { useLst } from './LstProvider'
 import { LstStakeModal } from './modals/LstStakeModal'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 
 export function Lst() {
   const { isConnected } = useUserAccount()
@@ -38,8 +39,9 @@ export function Lst() {
   const { activeTab, setActiveTab, tabs, amount, setAmount, chain } = useLst()
   const stakeModalDisclosure = useDisclosure()
   const { startTokenPricePolling } = useTokens()
+  const { isBalancesLoading } = useTokenBalances()
 
-  const isLoading = !isMounted
+  const isLoading = !isMounted || isBalancesLoading
   const loadingText = isLoading ? 'Loading...' : undefined
 
   function onModalClose() {

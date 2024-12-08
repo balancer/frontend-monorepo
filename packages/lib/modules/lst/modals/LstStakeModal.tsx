@@ -16,7 +16,7 @@ import { useLstStakeReceipt } from '@repo/lib/modules/transactions/transaction-s
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useLst } from '../LstProvider'
-import { LstStakeSummary } from './LstStakeSummary'
+import { LstStakeSummary } from '../components/LstStakeSummary'
 
 type Props = {
   isOpen: boolean
