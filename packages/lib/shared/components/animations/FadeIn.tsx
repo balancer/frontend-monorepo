@@ -1,6 +1,6 @@
 'use client'
 
-import { Box } from '@chakra-ui/react'
+import { Box, BoxProps } from '@chakra-ui/react'
 import { motion, useInView } from 'framer-motion'
 import { Children, isValidElement, ReactNode, useRef } from 'react'
 
