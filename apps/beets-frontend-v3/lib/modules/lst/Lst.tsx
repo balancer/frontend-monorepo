@@ -88,12 +88,6 @@ export function Lst() {
                 onChange={e => setAmount(e.currentTarget.value)}
                 value={amount}
               />
-
-              {/* {simulationQuery.isError ? (
-                <ErrorAlert title="Error fetching swap">
-                  {parseSwapError(simulationQuery.error?.message)}
-                </ErrorAlert>
-              ) : null} */}
             </VStack>
           </CardBody>
           <CardFooter>
