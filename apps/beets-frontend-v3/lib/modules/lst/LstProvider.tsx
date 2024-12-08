@@ -6,6 +6,7 @@ import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-
 import { useLstStakeStep } from './hooks/useLstStakeStep'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
+import { useLstUnstakeStep } from './hooks/useLstUnstakeStep'
 
 const TABS: ButtonGroupOption[] = [
   {
@@ -31,6 +32,9 @@ export function _useLst() {
   const { step: stakeStep } = useLstStakeStep(amount)
   const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
 
+  const { step: unstakeStep } = useLstUnstakeStep(amount)
+  const unstakeTransactionSteps = useTransactionSteps([unstakeStep], false)
+
   const nativeAsset = fantomNetworkConfig.tokens.nativeAsset.address
   const stakedAsset = fantomNetworkConfig.tokens.stakedAsset?.address || ''
 
@@ -38,6 +42,9 @@ export function _useLst() {
 
   const lstStakeTxHash = stakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstStakeTxConfirmed = stakeTransactionSteps.lastTransactionConfirmed
+
+  const lstUnstakeTxHash = unstakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
+  const lstUnstakeTxConfirmed = unstakeTransactionSteps.lastTransactionConfirmed
 
   return {
     activeTab,
@@ -51,6 +58,9 @@ export function _useLst() {
     lstStakeTxConfirmed,
     nativeAsset,
     stakedAsset,
+    unstakeTransactionSteps,
+    lstUnstakeTxHash,
+    lstUnstakeTxConfirmed,
   }
 }
 

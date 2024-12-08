@@ -11,38 +11,39 @@ import { useMemo } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { parseUnits } from 'viem'
-import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { noop } from 'lodash'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { useGetPenalty } from './useGetPenalty'
 import { useLst } from '../LstProvider'
 
-export function useLstStakeStep(humanAmount: string) {
+export function useLstUnstakeStep(humanAmount: string) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
+  const { penalty } = useGetPenalty(parseUnits(humanAmount, 18))
   const { chain } = useLst()
 
   const labels: TransactionLabels = {
-    init: 'Stake',
-    title: 'Stake',
-    confirming: 'Confirming stake...',
-    confirmed: 'Staked!',
+    init: 'Unstake',
+    title: 'Unstake',
+    confirming: 'Confirming unstake...',
+    confirmed: 'Unstaked!',
     tooltip: 'tooltip',
   }
 
   const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation (LST staking transaction)',
+    'Error in wagmi tx simulation (LST unstaking transaction)',
     {}
   )
+
+  const wrID = parseUnits(`${Date.now()}`, 18) // just get a unique ID here
 
   const props: ManagedTransactionInput = {
     labels,
     chainId: getChainId(chain),
     contractId: 'beets.lstStaking',
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
-    functionName: 'deposit',
-    args: [],
-    value: parseUnits(humanAmount, BPT_DECIMALS),
-    enabled: bn(humanAmount).gte(1) && isConnected,
+    functionName: 'undelegate',
+    args: [wrID, parseUnits(humanAmount, 18), penalty],
+    enabled: isConnected,
     txSimulationMeta,
   }
 
