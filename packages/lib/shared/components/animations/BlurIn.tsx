@@ -1,6 +1,6 @@
 'use client'
 
-import { Box } from '@chakra-ui/react'
+import { Box, BoxProps } from '@chakra-ui/react'
 import { motion, useInView } from 'framer-motion'
 import { ReactNode, useRef } from 'react'
 
@@ -10,13 +10,14 @@ export function BlurIn({
   children,
   delay = 0,
   duration = 0.5,
+  ...rest
 }: {
   children: ReactNode
   delay?: number
   duration?: number
-}) {
+} & BoxProps) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const isInView = useInView(ref, { once: true, margin: '-50px' })
 
   return (
     <MotionBox
@@ -24,6 +25,7 @@ export function BlurIn({
       initial={{ filter: 'blur(20px)', opacity: 0 }}
       ref={ref}
       transition={{ duration, delay }}
+      {...rest}
     >
       {children}
     </MotionBox>

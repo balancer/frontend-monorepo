@@ -26,16 +26,17 @@ import { BlurIn } from '@repo/lib/shared/components/animations/BlurIn'
 export function Audits() {
   return (
     <Noise backgroundColor="background.level0WithOpacity ">
-      <DefaultPageContainer noVerticalPadding py={['xl', '10rem']}>
+      <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
         <VStack align="start" spacing="lg" w="full">
           <Stack
             align="end"
             alignItems={{ base: 'start', lg: 'end' }}
             direction={{ base: 'column', lg: 'row' }}
             justify="space-between"
+            spacing="lg"
             w="full"
           >
-            <VStack align="start">
+            <VStack align="start" spacing="md">
               <BlurIn delay={0.4}>
                 <Text
                   background="font.specialSecondary"

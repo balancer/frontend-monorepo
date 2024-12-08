@@ -13,6 +13,7 @@ export function FadeIn({
   staggerChildren = 0.1,
   delayChildren = 0,
   duration = 0.5,
+  ...rest
 }: {
   direction: 'up' | 'down'
   children: ReactNode
@@ -21,7 +22,7 @@ export function FadeIn({
   delayChildren?: number
   delay?: number
   duration?: number
-}) {
+} & BoxProps) {
   const FADE_DOWN = {
     show: {
       opacity: 1,
@@ -49,6 +50,7 @@ export function FadeIn({
           },
         },
       }}
+      {...rest}
     >
       {Children.map(children, child =>
         isValidElement(child) ? <MotionBox variants={FADE_DOWN}>{child}</MotionBox> : child

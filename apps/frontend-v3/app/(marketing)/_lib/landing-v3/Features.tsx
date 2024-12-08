@@ -209,7 +209,7 @@ export function Features() {
         noVerticalPadding
         position="relative"
         pt={['xl', '3xl']}
-        py={['xl', '10rem']}
+        py={['3xl', '10rem']}
       >
         <FadeIn delay={0.2} direction="up">
           <Heading as="h4" mx="auto" size="lg">

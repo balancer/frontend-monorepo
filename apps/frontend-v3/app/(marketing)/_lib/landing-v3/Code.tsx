@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import { Box, Card, Center, Grid, GridItem, Text, VStack } from '@chakra-ui/react'
+import { Box, Card, Center, Grid, GridItem, Stack, Text, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { useIsDarkMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
@@ -64,8 +64,8 @@ export function Code() {
   }, [isInView])
 
   return (
-    <Noise backgroundColor="background.level0WithOpacity" position="relative">
-      <DefaultPageContainer noVerticalPadding py={['xl', '10rem']}>
+    <Noise backgroundColor="background.level0WithOpacity">
+      <DefaultPageContainer noVerticalPadding position="relative" py={['3xl', '10rem']}>
         <VStack alignItems="center" spacing="md" textAlign="center">
           <WordsPullUp
             as="h2"
@@ -110,16 +110,15 @@ export function Code() {
                 width={800}
               />
             </Box>
-            <Center position="relative">
-              <Grid
+            <Center px={{ base: 'xs', lg: '2xl' }} py="2xl">
+              <Stack
                 alignItems="center"
+                direction={{ base: 'column', lg: 'row' }}
                 gap="2xl"
-                px={{ base: 'xs', lg: '2xl' }}
-                py="2xl"
-                templateColumns={{ base: '1fr', lg: '1fr 1fr' }}
+                w="full"
               >
-                <GridItem>
-                  <VStack alignItems="start" spacing="md">
+                <Box w="full">
+                  <VStack alignItems="start" px={{ base: 'md', lg: '0' }} spacing="md">
                     <BlurIn delay={0.4}>
                       <Text
                         background="font.specialSecondary"
@@ -133,9 +132,10 @@ export function Code() {
                     <WordsPullUp
                       as="h3"
                       color="font.primary"
-                      fontSize="4xl"
+                      fontSize={{ base: '3xl', lg: '4xl' }}
                       fontWeight="bold"
                       lineHeight={1}
+                      pr={{ base: 'xxs', lg: '1' }}
                       text="Building on v3 is simple"
                     />
                     <FadeIn delay={0.4} direction="up">
@@ -146,8 +146,8 @@ export function Code() {
                       </Text>
                     </FadeIn>
                   </VStack>
-                </GridItem>
-                <GridItem maxW="100%">
+                </Box>
+                <Box w="full">
                   <Card ref={codeBoxRef}>
                     <pre
                       className="language-solidity"
@@ -167,8 +167,8 @@ export function Code() {
                       />
                     </pre>
                   </Card>
-                </GridItem>
-              </Grid>
+                </Box>
+              </Stack>
             </Center>
           </Box>
         </Card>

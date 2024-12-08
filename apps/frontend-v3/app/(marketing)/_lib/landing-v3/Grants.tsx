@@ -32,9 +32,9 @@ const grantIdeas = [
 export function Grants() {
   return (
     <Noise backgroundColor="background.level0WithOpacity ">
-      <DefaultPageContainer noVerticalPadding py={['xl', '10rem']}>
+      <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
         <VStack align="start" spacing="lg" w="full">
-          <VStack align="start">
+          <VStack align="start" w="full">
             <BlurIn delay={0.4}>
               <Text
                 background="font.specialSecondary"
@@ -48,13 +48,13 @@ export function Grants() {
             <WordsPullUp
               as="h2"
               color="font.primary"
-              fontSize="4xl"
+              fontSize={{ base: '3xl', lg: '4xl' }}
               fontWeight="bold"
               lineHeight={1}
               text="Get help to innovate on v3"
             />
-            <FadeIn delay={0.4} direction="up">
-              <Text color="font.secondary" maxW="3xl">
+            <FadeIn delay={0.4} direction="up" w="full">
+              <Text color="font.secondary" maxW="full" w="3xl">
                 Balancer Community Grants aim to accelerate the development of the Balancer
                 ecosystem. Grants for innovation on Balancer v3 will be prioritized. This program is
                 managed by the Balancer Grants DAO, an independent community-owned grants program
@@ -69,7 +69,7 @@ export function Grants() {
             w="full"
           >
             <FadeIn delay={0.5} direction="up">
-              <Text fontSize="2xl" opacity={0.8}>
+              <Text fontSize={{ base: 'xl', lg: '2xl' }} opacity={0.8}>
                 Some fund-worthy ideas to get you started
               </Text>
             </FadeIn>

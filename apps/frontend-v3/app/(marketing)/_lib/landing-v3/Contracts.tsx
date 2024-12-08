@@ -184,7 +184,7 @@ export function Contracts() {
           minH="800px"
           noVerticalPadding
           position="relative"
-          py={['xl', '10rem']}
+          py={['3xl', '10rem']}
         >
           <Grid gap="xl" templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(2, 1fr)' }}>
             {!isMobile && <GridItem />}

@@ -70,7 +70,7 @@ export function Grow() {
 
   return (
     <Noise backgroundColor="background.level0WithOpacity">
-      <DefaultPageContainer noVerticalPadding py={['xl', '10rem']}>
+      <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
         <VStack alignItems="center" spacing="md" textAlign="center">
           <WordsPullUp
             as="h2"
@@ -81,7 +81,7 @@ export function Grow() {
             text="Grow with us."
           />
           <FadeIn delay={0.4} direction="up">
-            <Text color="font.secondary" fontSize="2xl" maxW="2xl">
+            <Text color="font.secondary" fontSize={{ base: 'lg', lg: '2xl' }} maxW="2xl">
               Balancer v3 is DeFi infrastructure to be built on.
               <br />
               Our growth is your growth.

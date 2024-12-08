@@ -13,6 +13,7 @@ import {
   VStack,
   Text,
   Center,
+  Stack,
 } from '@chakra-ui/react'
 import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButton'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
@@ -143,9 +144,15 @@ export function Videos() {
           />
         </Box>
       </Box>
-      <DefaultPageContainer noVerticalPadding position="relative" py={['xl', '10rem']} zIndex={2}>
+      <DefaultPageContainer noVerticalPadding position="relative" py={['3xl', '10rem']} zIndex={2}>
         <VStack align="start" spacing="lg" w="full">
-          <HStack align="end" justify="space-between" w="full">
+          <Stack
+            align={{ base: 'start', lg: 'end' }}
+            direction={{ base: 'column', lg: 'row' }}
+            justify="space-between"
+            spacing="lg"
+            w="full"
+          >
             <WordsPullUp
               as="h2"
               color="font.primary"
@@ -162,7 +169,7 @@ export function Videos() {
             >
               Prototype on v3
             </Button>
-          </HStack>
+          </Stack>
           <Card>
             <VideoBox
               feature
