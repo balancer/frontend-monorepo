@@ -421,7 +421,7 @@ function ProtocolVersionFilter() {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[2])
     } else if (protocolVersion === 2) {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[1])
-    } else if (poolTypes.includes(GqlPoolType.CowAmm)) {
+    } else if (poolTypes.includes(GqlPoolType.CowAmm) || protocolVersion === 1) {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[3])
     } else {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
@@ -429,16 +429,12 @@ function ProtocolVersionFilter() {
   }, [])
 
   useEffect(() => {
-    if (activeProtocolVersionTab.value === 'cow') {
-      togglePoolType(true, GqlPoolType.CowAmm)
-    } else {
-      togglePoolType(false, GqlPoolType.CowAmm)
-    }
-
     if (activeProtocolVersionTab.value === 'v3') {
       setProtocolVersion(3)
     } else if (activeProtocolVersionTab.value === 'v2') {
       setProtocolVersion(2)
+    } else if (activeProtocolVersionTab.value === 'cow') {
+      setProtocolVersion(1)
     } else {
       setProtocolVersion(null)
     }
