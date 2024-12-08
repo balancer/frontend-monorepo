@@ -15,6 +15,7 @@ import {
 import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
+import { beetsFtmStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 
 type ParseProps = {
   receiptLogs: Log[]
@@ -148,7 +149,7 @@ export function parseSwapReceipt({
 }
 
 export function parseLstStakeReceipt({ receiptLogs, userAddress, chain, getToken }: ParseProps) {
-  const receivedTokens: HumanTokenAmountWithAddress[] = getIncomingLogs(
+  const receivedToken: HumanTokenAmountWithAddress[] = getIncomingLogs(
     receiptLogs,
     userAddress
   ).map(log => {
@@ -156,13 +157,8 @@ export function parseLstStakeReceipt({ receiptLogs, userAddress, chain, getToken
     return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
   })
 
-  const sentNativeAssetAmountScaled = getOutgoingLogs(receiptLogs, userAddress)?.[0]?.args?.value
-  // TODO: this should not be undefined (maybe merging main into this branch fixes it)
-  const sentNativeAssetAmount = formatUnits(sentNativeAssetAmountScaled || 0n, 18)
-
   return {
-    receivedTokens,
-    sentNativeAssetAmount,
+    receivedToken,
   }
 }
 

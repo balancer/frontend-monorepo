@@ -69,8 +69,7 @@ export function useLstStakeReceipt(props: BaseReceiptProps) {
 
   return {
     ...result,
-    receivedTokens: data?.receivedTokens,
-    sentNativeAssetAmount: data?.sentNativeAssetAmount,
+    receivedToken: data?.receivedToken,
   }
 }
 

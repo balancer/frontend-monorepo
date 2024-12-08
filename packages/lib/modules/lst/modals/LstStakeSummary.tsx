@@ -5,23 +5,21 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { useLst } from '../LstProvider'
 import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { SwapTokenRow } from '@repo/lib/modules/tokens/TokenRow/SwapTokenRow'
-import { useGetStakedAmount } from '../hooks/useGetStakedAmount'
+import { useGetStakedAmountPreview } from '../hooks/useGetStakedAmountPreview'
 import { formatUnits, parseUnits } from 'viem'
 
 export function LstStakeSummary({
   isLoading: isLoadingReceipt,
-  receivedTokens,
-  sentNativeAssetAmount,
+  receivedToken,
 }: LstStakeReceiptResult) {
   const { isMobile } = useBreakpoints()
 
   const { chain, stakeTransactionSteps, lstStakeTxHash, nativeAsset, stakedAsset, amount } =
     useLst()
 
-  const { stakedAmount } = useGetStakedAmount(parseUnits(amount, 18), chain)
+  const { stakedAmountPreview } = useGetStakedAmountPreview(parseUnits(amount, 18), chain)
 
-  const shouldShowReceipt =
-    !!lstStakeTxHash && !isLoadingReceipt && !!receivedTokens && !!sentNativeAssetAmount
+  const shouldShowReceipt = !!lstStakeTxHash && !isLoadingReceipt && !!receivedToken
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
@@ -39,7 +37,9 @@ export function LstStakeSummary({
           chain={chain}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
           tokenAddress={stakedAsset}
-          tokenAmount={formatUnits(stakedAmount, 18)}
+          tokenAmount={
+            shouldShowReceipt ? receivedToken[0].humanAmount : formatUnits(stakedAmountPreview, 18)
+          }
         />
       </Card>
     </AnimateHeightChange>

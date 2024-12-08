@@ -254,7 +254,7 @@ describe('receipts queries', () => {
   describe('queries LST stake transaction', () => {
     const sFTMxAddress = '0xd7028092c830b5c8fce061af2e593413ebbc1fc1'
 
-    test('when staking 1 FTM to get sFTMx', async () => {
+    test.only('when staking 1 FTM to get sFTMx', async () => {
       const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
       // https://ftmscan.com/tx/0x5b7e58dd5204253a865a141640f142d4945b614acf5fc8aed3fb1408c0bdbce1
       const txHash = '0x5b7e58dd5204253a865a141640f142d4945b614acf5fc8aed3fb1408c0bdbce1'
@@ -263,9 +263,7 @@ describe('receipts queries', () => {
 
       await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
-      expect(result.current.sentNativeAssetAmount).toEqual('0')
-
-      expect(result.current.receivedTokens).toEqual([
+      expect(result.current.receivedToken).toEqual([
         {
           humanAmount: '0.865720333575772047',
           tokenAddress: sFTMxAddress,

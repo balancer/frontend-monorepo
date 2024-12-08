@@ -7,7 +7,7 @@ import { useReadContract } from 'wagmi'
 import { beetsFtmStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetStakedAmount(amount: bigint, chain: GqlChain) {
+export function useGetStakedAmountPreview(amount: bigint, chain: GqlChain) {
   const { isConnected } = useUserAccount()
   const chainId = getChainId(chain)
 
@@ -25,6 +25,6 @@ export function useGetStakedAmount(amount: bigint, chain: GqlChain) {
 
   return {
     ...query,
-    stakedAmount: query.data ?? 0n,
+    stakedAmountPreview: query.data ?? 0n,
   }
 }

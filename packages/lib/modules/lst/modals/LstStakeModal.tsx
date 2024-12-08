@@ -12,7 +12,6 @@ import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/trans
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
-//import { SwapSummary } from '@repo/lib/modules/swap/SwapSummary'
 import { useLstStakeReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -76,7 +75,7 @@ export function LstStakeModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={stakeTransactionSteps.currentStep}
-          isSuccess={false}
+          isSuccess={!!lstStakeTxHash && !lstStakeReceipt.isLoading}
           returnAction={onClose}
           returnLabel="Stake again"
         />
