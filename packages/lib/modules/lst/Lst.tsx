@@ -18,31 +18,60 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
-import { useRef } from 'react'
-import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
-import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+import { useEffect, useRef } from 'react'
+import ButtonGroup, {
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useLst } from './LstProvider'
 import { LstStakeModal } from './modals/LstStakeModal'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { LstStake } from './components/LstStake'
+import { LstUnstake } from './components/LstUnstake'
+import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
 
 export function Lst() {
   const { isConnected } = useUserAccount()
   const isMounted = useIsMounted()
   const nextBtn = useRef(null)
-  const { activeTab, setActiveTab, tabs, amount, setAmount, chain } = useLst()
+  const { activeTab, setActiveTab, amount } = useLst()
   const stakeModalDisclosure = useDisclosure()
   const { startTokenPricePolling } = useTokens()
-  const { isBalancesLoading } = useTokenBalances()
+  const { isBalancesLoading, balanceFor } = useTokenBalances()
 
   const isLoading = !isMounted || isBalancesLoading
   const loadingText = isLoading ? 'Loading...' : undefined
+
+  const isUnstakeDisabled = bn(
+    balanceFor(fantomNetworkConfig.tokens.stakedAsset?.address || '')?.amount || 0
+  ).lte(0)
+
+  const tabs: ButtonGroupOption[] = [
+    {
+      value: '0',
+      label: 'Stake',
+      disabled: false,
+    },
+    {
+      value: '1',
+      label: 'Unstake',
+      disabled: isUnstakeDisabled,
+    },
+    {
+      value: '2',
+      label: 'Withdraw',
+      disabled: true, // TODO: disable when no tokens unstaked
+    },
+  ]
+
+  useEffect(() => {
+    setActiveTab(tabs[0])
+  }, [])
 
   function onModalClose() {
     // restart polling for token prices when modal is closed again
@@ -83,13 +112,9 @@ export function Lst() {
                 options={tabs}
                 size="md"
               />
-              <TokenInput
-                address={fantomNetworkConfig.tokens.nativeAsset.address}
-                chain={chain}
-                onChange={e => setAmount(e.currentTarget.value)}
-                value={amount}
-              />
             </VStack>
+            {activeTab?.value === '0' && <LstStake />}
+            {activeTab?.value === '1' && <LstUnstake />}
           </CardBody>
           <CardFooter>
             {isConnected ? (

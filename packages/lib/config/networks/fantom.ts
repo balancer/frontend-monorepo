@@ -27,7 +27,7 @@ const networkConfig: NetworkConfig = {
     },
     stakedAsset: {
       name: 'sFTMx',
-      address: '0xd7028092c830b5C8FcE061Af2E593413EbbC1fc1',
+      address: '0xd7028092c830b5c8fce061af2e593413ebbc1fc1',
       symbol: 'sFTMx',
       decimals: 18,
     },

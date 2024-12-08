@@ -11,19 +11,20 @@ import { TransactionStateProvider } from '@repo/lib/modules/transactions/transac
 
 export default function LstProvidersLayout({ children }: PropsWithChildren) {
   const { tokens } = useTokens()
-  const nativeAsset = tokens.find(
+  const stakingTokens = tokens.filter(
     t =>
-      t.address === fantomNetworkConfig.tokens.nativeAsset.address &&
-      t.chainId === fantomNetworkConfig.chainId
+      (t.address === fantomNetworkConfig.tokens.nativeAsset.address &&
+        t.chainId === fantomNetworkConfig.chainId) ||
+      t.address === fantomNetworkConfig.tokens.stakedAsset?.address
   )
 
-  if (!nativeAsset) throw new Error('Native asset not found')
+  if (stakingTokens.length === 0) throw new Error('Staking tokens not found')
 
   return (
     <TransactionStateProvider>
       <LstProvider>
         <TokenInputsValidationProvider>
-          <TokenBalancesProvider initTokens={[nativeAsset]}>
+          <TokenBalancesProvider initTokens={stakingTokens}>
             <PriceImpactProvider>{children}</PriceImpactProvider>
           </TokenBalancesProvider>
         </TokenInputsValidationProvider>

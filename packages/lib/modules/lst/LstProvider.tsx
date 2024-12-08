@@ -10,28 +10,10 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
 import { useLstUnstakeStep } from './hooks/useLstUnstakeStep'
 
-const TABS: ButtonGroupOption[] = [
-  {
-    value: '0',
-    label: 'Stake',
-    disabled: false,
-  },
-  {
-    value: '1',
-    label: 'Unstake',
-    disabled: false, // TODO: disable when no tokens staked
-  },
-  {
-    value: '2',
-    label: 'Withdraw',
-    disabled: false, // TODO: disable when no tokens unstaked
-  },
-]
-
 const CHAIN = GqlChain.Fantom
 
 export function _useLst() {
-  const [activeTab, setActiveTab] = useState(TABS[0])
+  const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
   const [amount, setAmount] = useState('')
   const { step: stakeStep } = useLstStakeStep(amount, CHAIN)
   const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
@@ -50,7 +32,6 @@ export function _useLst() {
   return {
     activeTab,
     setActiveTab,
-    tabs: TABS,
     stakeTransactionSteps,
     amount,
     setAmount,

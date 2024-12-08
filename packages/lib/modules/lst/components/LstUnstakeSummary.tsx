@@ -10,8 +10,7 @@ import { SwapTokenRow } from '@repo/lib/modules/tokens/TokenRow/SwapTokenRow'
 
 export function LstUnstakeSummary({
   isLoading: isLoadingReceipt,
-  receivedTokens,
-  sentNativeAssetAmount,
+  receivedToken,
 }: LstStakeReceiptResult) {
   const { isMobile } = useBreakpoints()
 
@@ -20,8 +19,7 @@ export function LstUnstakeSummary({
 
   //const { unstakedAmount } = useGetUnstakedAmount(parseUnits(amount, 18))
 
-  const shouldShowReceipt =
-    !!lstStakeTxHash && !isLoadingReceipt && !!receivedTokens && !!sentNativeAssetAmount
+  const shouldShowReceipt = !!lstStakeTxHash && !isLoadingReceipt && !!receivedToken
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
