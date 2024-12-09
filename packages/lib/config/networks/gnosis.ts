@@ -62,7 +62,10 @@ const networkConfig: NetworkConfig = {
   },
   pools: convertHexToLowerCase({
     issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Gnosis] },
-    allowNestedActions: ['0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053'],
+    allowNestedActions: [
+      '0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053',
+      '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522', // waGnoGNO 50% / sDAI 50%
+    ],
   }),
   layerZeroChainId: 145,
   supportsVeBalSync: true,
