@@ -6,6 +6,7 @@ import { Grants } from './Grants'
 import { Grow } from './Grow'
 import { Contracts } from './Contracts'
 import { Features } from './Features'
+import { FooterCta } from './FooterCta'
 
 export function LandingV3Layout() {
   return (
@@ -18,6 +19,7 @@ export function LandingV3Layout() {
       <Audits />
       <Videos />
       <Grants />
+      <FooterCta />
     </>
   )
 }

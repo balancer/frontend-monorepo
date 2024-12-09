@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 'use client'
 
-import { VStack, Heading, Button, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'
+import { VStack, Button, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
@@ -31,7 +31,7 @@ const grantIdeas = [
 
 export function Grants() {
   return (
-    <Noise backgroundColor="background.level0WithOpacity ">
+    <Noise backgroundColor="background.level0WithOpacity" position="relative">
       <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
         <VStack align="start" spacing="lg" w="full">
           <VStack align="start" w="full">
@@ -104,6 +104,16 @@ export function Grants() {
           </Grid>
         </VStack>
       </DefaultPageContainer>
+
+      <Box
+        bgGradient="linear(transparent 0%, background.base 50%, transparent 100%)"
+        bottom="0"
+        h="200px"
+        left="0"
+        mb="-100px"
+        position="absolute"
+        w="full"
+      />
     </Noise>
   )
 }
