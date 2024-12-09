@@ -94,10 +94,10 @@ export function VideoBox({
               }}
             />
             <Box
-              _groupHover={{ opacity: 0.8 }}
+              _groupHover={{ opacity: 0.5 }}
               bg="background.base"
               h="full"
-              opacity={0.9}
+              opacity={0.8}
               position="absolute"
               transition="opacity 0.4s ease-in-out"
               w="full"
