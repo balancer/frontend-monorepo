@@ -18,7 +18,7 @@ import { noop } from 'lodash'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useLstStakeStep(humanAmount: string, chain: GqlChain) {
+export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: boolean) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
 
@@ -43,7 +43,7 @@ export function useLstStakeStep(humanAmount: string, chain: GqlChain) {
     functionName: 'deposit',
     args: [],
     value: parseUnits(humanAmount, BPT_DECIMALS),
-    enabled: bn(humanAmount).gte(1) && isConnected,
+    enabled: bn(humanAmount).gte(1) && isConnected && enabled,
     txSimulationMeta,
   }
 

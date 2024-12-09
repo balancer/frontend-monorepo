@@ -17,7 +17,7 @@ import { noop } from 'lodash'
 import { useGetPenalty } from './useGetPenalty'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useLstUnstakeStep(humanAmount: string, chain: GqlChain) {
+export function useLstUnstakeStep(humanAmount: string, chain: GqlChain, enabled: boolean) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
   const { penalty } = useGetPenalty(parseUnits(humanAmount, 18), chain)
@@ -35,7 +35,7 @@ export function useLstUnstakeStep(humanAmount: string, chain: GqlChain) {
     {}
   )
 
-  const wrID = BigInt(Date.now()) // just get a unique ID here
+  // const wrID = BigInt(Date.now()) // just get a unique ID here
 
   const props: ManagedTransactionInput = {
     labels,
@@ -43,8 +43,8 @@ export function useLstUnstakeStep(humanAmount: string, chain: GqlChain) {
     contractId: 'beets.lstStaking',
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
     functionName: 'undelegate',
-    args: [wrID, parseUnits(humanAmount, 18), penalty],
-    enabled: isConnected && !!humanAmount,
+    args: [123456789n, parseUnits(humanAmount, 18), penalty],
+    enabled: isConnected && !!humanAmount && enabled,
     txSimulationMeta,
   }
 
