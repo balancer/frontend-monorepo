@@ -17,7 +17,7 @@ import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
 import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
 import { GyroIcon } from '@repo/lib/shared/components/icons/logos/GyroIcon'
 import { XaveIcon } from '@repo/lib/shared/components/icons/logos/XaveIcon'
-import { CronIcon } from '@repo/lib/shared/components/icons/logos/CronIcon'
+import { QuantAmmIcon } from '@repo/lib/shared/components/icons/logos/QuantAmmIcon'
 import { ReactNode, useEffect, useState } from 'react'
 import {
   PartnerRedirectModal,
@@ -189,8 +189,8 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
           </GridItem>
           <GridItem colSpan={{ base: 6, lg: 2 }} order={{ base: 9, lg: 10 }}>
             <PartnerButton
-              icon={<CronIcon size={80} />}
-              onClick={() => openRedirectModal(RedirectPartner.Cron)}
+              icon={<QuantAmmIcon size={80} />}
+              onClick={() => openRedirectModal(RedirectPartner.QuantAmm)}
             />
           </GridItem>
         </Grid>
