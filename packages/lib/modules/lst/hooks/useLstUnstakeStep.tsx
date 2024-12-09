@@ -35,7 +35,7 @@ export function useLstUnstakeStep(humanAmount: string, chain: GqlChain) {
     {}
   )
 
-  const wrID = parseUnits(`${Date.now()}`, 18) // just get a unique ID here
+  const wrID = `${Date.now()}` as unknown as bigint // just get a unique ID here
 
   const props: ManagedTransactionInput = {
     labels,
@@ -44,24 +44,24 @@ export function useLstUnstakeStep(humanAmount: string, chain: GqlChain) {
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
     functionName: 'undelegate',
     args: [wrID, parseUnits(humanAmount, 18), penalty],
-    enabled: isConnected,
+    enabled: isConnected && !!humanAmount,
     txSimulationMeta,
   }
 
-  const transaction = getTransaction('stakeLst')
+  const transaction = getTransaction('unstakeLst')
 
   const isComplete = () => isConnected && !!transaction?.result.isSuccess
 
   const step = useMemo(
     (): TransactionStep => ({
-      id: 'stakeLst',
+      id: 'unstakeLst',
       labels,
-      stepType: 'stakeLst',
+      stepType: 'unstakeLst',
       isComplete,
       onActivated: noop,
       onDeactivated: noop,
       onSuccess: noop,
-      renderAction: () => <ManagedTransactionButton id="stakeLst" {...props} />,
+      renderAction: () => <ManagedTransactionButton id="unstakeLst" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [transaction]

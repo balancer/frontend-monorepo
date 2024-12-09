@@ -40,7 +40,15 @@ export function Lst() {
   const { isConnected } = useUserAccount()
   const isMounted = useIsMounted()
   const nextBtn = useRef(null)
-  const { activeTab, setActiveTab, amount } = useLst()
+  const {
+    activeTab,
+    setActiveTab,
+    setAmount,
+    isDisabled,
+    disabledReason,
+    isStakeTab,
+    isUnstakeTab,
+  } = useLst()
   const stakeModalDisclosure = useDisclosure()
   const unstakeModalDisclosure = useDisclosure()
   const { startTokenPricePolling } = useTokens()
@@ -77,11 +85,12 @@ export function Lst() {
   }, [])
 
   useEffect(() => {
-    if (activeTab?.value === '0') {
+    if (isStakeTab) {
       setDisclosure(stakeModalDisclosure)
-    } else if (activeTab?.value === '1') {
+    } else if (isUnstakeTab) {
       setDisclosure(unstakeModalDisclosure)
     }
+    setAmount('')
   }, [activeTab])
 
   function onModalClose() {
@@ -129,21 +138,21 @@ export function Lst() {
           </CardBody>
           <CardFooter>
             {isConnected ? (
-              //   <Tooltip label={isDisabled ? disabledReason : ''}>
-              <Button
-                isDisabled={bn(amount).lt(1)}
-                isLoading={isLoading}
-                loadingText={loadingText}
-                onClick={() => disclosure.onOpen()}
-                ref={nextBtn}
-                size="lg"
-                variant="secondary"
-                w="full"
-              >
-                Next
-              </Button>
+              <Tooltip label={isDisabled ? disabledReason : ''}>
+                <Button
+                  isDisabled={isDisabled}
+                  isLoading={isLoading}
+                  loadingText={loadingText}
+                  onClick={() => disclosure.onOpen()}
+                  ref={nextBtn}
+                  size="lg"
+                  variant="secondary"
+                  w="full"
+                >
+                  Next
+                </Button>
+              </Tooltip>
             ) : (
-              //   </Tooltip>
               <ConnectWallet
                 isLoading={isLoading}
                 loadingText={loadingText}

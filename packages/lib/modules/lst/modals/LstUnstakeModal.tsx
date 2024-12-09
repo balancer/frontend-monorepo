@@ -77,7 +77,7 @@ export function LstUnstakeModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={unstakeTransactionSteps.currentStep}
-          isSuccess={false}
+          isSuccess={!!lstUnstakeTxHash && !lstUnstakeReceipt.isLoading}
           returnAction={onClose}
           returnLabel="Unstake again"
         />
