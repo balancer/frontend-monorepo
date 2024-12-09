@@ -7,15 +7,16 @@ import { Grow } from './Grow'
 import { Contracts } from './Contracts'
 import { Features } from './Features'
 import { FooterCta } from './FooterCta'
+import { GetProtocolStatsQuery } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function LandingV3Layout() {
+export function LandingV3Layout({ protocolData }: { protocolData: GetProtocolStatsQuery }) {
   return (
     <>
       <Hero />
       <Code />
       <Contracts />
       <Features />
-      <Grow />
+      <Grow protocolData={protocolData} />
       <Audits />
       <Videos />
       <Grants />

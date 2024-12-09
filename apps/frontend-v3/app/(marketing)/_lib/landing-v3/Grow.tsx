@@ -18,7 +18,7 @@ import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
 import { GyroIcon } from '@repo/lib/shared/components/icons/logos/GyroIcon'
 import { XaveIcon } from '@repo/lib/shared/components/icons/logos/XaveIcon'
 import { CronIcon } from '@repo/lib/shared/components/icons/logos/CronIcon'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import {
   PartnerRedirectModal,
   RedirectPartner,
@@ -27,6 +27,8 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { FeatureCard } from './shared/FeatureCard'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
+import { GetProtocolStatsQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 
 function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
   return (
@@ -58,7 +60,7 @@ function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
   )
 }
 
-export function Grow() {
+export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) {
   const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Aura)
   const partnerRedirectDisclosure = useDisclosure()
   const { isMobile } = useBreakpoints()
@@ -67,6 +69,10 @@ export function Grow() {
     setRedirectPartner(partner)
     partnerRedirectDisclosure.onOpen()
   }
+
+  useEffect(() => {
+    console.log(protocolData)
+  }, [protocolData])
 
   return (
     <Noise backgroundColor="background.level0WithOpacity">
@@ -98,7 +104,7 @@ export function Grow() {
                 width: 200,
                 circleCount: 6,
               }}
-              stat="$1.1B"
+              stat={fNumCustom(protocolData.protocolMetricsAggregated.totalLiquidity, '$0,0.0a')}
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="TVL"
               titleSize="2xl"
@@ -113,7 +119,7 @@ export function Grow() {
                 width: 200,
                 circleCount: 6,
               }}
-              stat="4K+"
+              stat={fNumCustom(protocolData.protocolMetricsAggregated.poolCount, '0,0.0a')}
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="Pools"
               titleSize="2xl"
@@ -128,7 +134,7 @@ export function Grow() {
                 width: 200,
                 circleCount: 6,
               }}
-              stat="$54M"
+              stat={fNumCustom(protocolData.protocolMetricsAggregated.swapVolume24h, '$0,0a')}
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="24hr Volume"
               titleSize="2xl"
