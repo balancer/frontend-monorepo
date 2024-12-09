@@ -35,7 +35,7 @@ export function useLstUnstakeStep(humanAmount: string, chain: GqlChain) {
     {}
   )
 
-  const wrID = `${Date.now()}` as unknown as bigint // just get a unique ID here
+  const wrID = BigInt(Date.now()) // just get a unique ID here
 
   const props: ManagedTransactionInput = {
     labels,
