@@ -14,6 +14,7 @@ import { LABELS } from '@repo/lib/shared/labels'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useTokens } from '../tokens/TokensProvider'
+import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 
 const CHAIN = GqlChain.Fantom
 const WITHDRAW_DELAY = 604800 // 1 week
@@ -22,8 +23,20 @@ export function _useLst() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
   const [amount, setAmount] = useState('')
   const [wrID, setWrID] = useState<bigint>()
+  const [first, setFirst] = useState(5)
+  const [skip, setSkip] = useState(0)
   const { isConnected } = useUserAccount()
   const { getToken } = useTokens()
+
+  function setPagination(pagination: PaginationState) {
+    setFirst(pagination.pageSize)
+    setSkip(pagination.pageIndex * pagination.pageSize)
+  }
+
+  const pagination: PaginationState = {
+    pageIndex: skip / first,
+    pageSize: first,
+  }
 
   const isStakeTab = activeTab?.value === '0'
   const isUnstakeTab = activeTab?.value === '1'
@@ -74,6 +87,10 @@ export function _useLst() {
     wrID,
     setWrID,
     withdrawDelay: WITHDRAW_DELAY,
+    pagination,
+    setPagination,
+    first,
+    skip,
   }
 }
 
