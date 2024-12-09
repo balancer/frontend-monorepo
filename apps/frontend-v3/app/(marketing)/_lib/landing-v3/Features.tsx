@@ -32,7 +32,7 @@ const keyFeatures = [
     title: 'Custom Pools',
     subTitle: 'Code less, build more.',
     description:
-      'Design pools tailored to your vision with Balancer’s vault-first architecture. Build smarter, faster, and with less complexity.',
+      'Design pools tailored to your vision with Balancer’s Vault-first architecture. Build smarter, faster, and with less complexity.',
     icon: <PieIcon size={40} />,
   },
   {
@@ -63,13 +63,13 @@ const features = [
   {
     title: 'Decimal Scaling',
     shortDescription:
-      'To alleviate the challenges of managing tokens with variable decimals, the vault provides the pool with token balances and input values scaled to 18 decimals.',
+      'To alleviate the challenges of managing tokens with variable decimals, the Vault provides the pool with token balances and input values scaled to 18 decimals.',
     imageSrc: '/images/graphics/stone-1.png',
   },
   {
     title: 'Rate Scaling',
     shortDescription:
-      'V3 abstracts the complexity of managing LSTs by moving all rate scaling into the vault, providing pools with uniform rate-scaled balances and input values by default, ensuring that yield from yield-bearing tokens is not captured by arbitrage traders.',
+      'V3 abstracts the complexity of managing LSTs by moving all rate scaling into the Vault, providing pools with uniform rate-scaled balances and input values by default, ensuring that yield from yield-bearing tokens is not captured by arbitrage traders.',
     imageSrc: '/images/graphics/stone-2.png',
   },
   {
@@ -81,19 +81,19 @@ const features = [
   {
     title: 'Transient Accounting',
     shortDescription:
-      "EIP-1153's transient op-codes unlock a new, expressive design, the “Till” pattern. This allows the vault to efficiently enforce contract-level invariants in the scope of a callback, supporting design patterns that were previously not possible.",
+      "EIP-1153's transient op-codes unlock a new, expressive design, the “Till” pattern. This allows the Vault to efficiently enforce contract-level invariants in the scope of a callback, supporting design patterns that were previously not possible.",
     imageSrc: '/images/graphics/stone-1.png',
   },
   {
     title: 'ERC20MultiToken',
     shortDescription:
-      'Ensures atomic updates to pool token balances and total supply within the vault, reducing risks of read-only reentrancy attack vectors.',
+      'Ensures atomic updates to pool token balances and total supply within the Vault, reducing risks of read-only reentrancy attack vectors.',
     imageSrc: '/images/graphics/stone-1.png',
   },
   {
     title: 'Swap Fee Management',
     shortDescription:
-      'Standardizes swap fee implementation within the vault for consistent interfaces across pools, while allowing flexibility at the hook level.',
+      'Standardizes swap fee implementation within the Vault for consistent interfaces across pools, while allowing flexibility at the hook level.',
     imageSrc: '/images/graphics/stone-2.png',
   },
   {
@@ -105,7 +105,7 @@ const features = [
   {
     title: 'Pool Pause Manager',
     shortDescription:
-      'The pool can define its pause window on registration, relying on the vault to enforce the time window and manage authentication.',
+      'The pool can define its pause window on registration, relying on the Vault to enforce the time window and manage authentication.',
     imageSrc: '/images/graphics/stone-1.png',
   },
 ]
@@ -216,7 +216,7 @@ export function Features() {
             <chakra.span color="font.primary">Custom liquidity solutions.</chakra.span>
             <chakra.span color="font.primary" style={{ opacity: 0.6 }}>
               {' '}
-              By shifting repetitive development tasks into the heavily audited vault and
+              By shifting repetitive development tasks into the heavily audited Vault and
               formalizing custom pool requirements, the platform ensures consistency, flexibility,
               and faster development.
             </chakra.span>

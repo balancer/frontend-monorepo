@@ -78,8 +78,8 @@ export function Code() {
           <FadeIn delay={0.4} direction="up" duration={1}>
             <Text color="font.secondary" fontSize="lg" maxW="2xl">
               Balancer v3’s architecture focuses on simplicity, flexibility, and extensibility at
-              its core. The v3 vault more formally defines the requirements of a custom pool,
-              shifting core design patterns out of the pool and into the vault.
+              its core. The v3 Vault more formally defines the requirements of a custom pool,
+              shifting core design patterns out of the pool and into the Vault.
             </Text>
           </FadeIn>
         </VStack>
@@ -141,7 +141,7 @@ export function Code() {
                     <FadeIn delay={0.4} direction="up" duration={1}>
                       <Text color="font.secondary" fontSize="lg">
                         To make custom pool creation easy, core functions have been moved from pools
-                        into the heavily audited vault. For example, here’s all the code needed to
+                        into the heavily audited Vault. For example, here’s all the code needed to
                         build a swap function for a Constant Product Pool.
                       </Text>
                     </FadeIn>
