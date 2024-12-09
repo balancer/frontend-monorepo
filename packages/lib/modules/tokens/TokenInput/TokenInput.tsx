@@ -21,7 +21,7 @@ import { useTokens } from '../TokensProvider'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInput } from './useTokenInput'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { blockInvalidNumberInput, bn, fNum, isZero } from '@repo/lib/shared/utils/numbers'
+import { blockInvalidNumberInput, bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenIcon } from '../TokenIcon'
 import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
 import { ChevronDown } from 'react-feather'
@@ -30,6 +30,7 @@ import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvid
 import { useEffect, useState } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
+import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
 
 type TokenInputSelectorProps = {
   token: GqlToken | undefined
@@ -128,12 +129,6 @@ function TokenInputFooter({
     }
   }
 
-  const priceImpactLabel = priceImpact
-    ? isZero(priceImpact)
-      ? ' (0.00%)'
-      : ` (-${fNum('priceImpact', priceImpact)})`
-    : ''
-
   return (
     <HStack h="4" justify="space-between" w="full">
       {isBalancesLoading || !isMounted ? (
@@ -145,7 +140,7 @@ function TokenInputFooter({
           variant="secondary"
         >
           {toCurrency(usdValue, { abbreviated: false })}
-          {showPriceImpact && priceImpactLevel !== 'unknown' && priceImpactLabel}
+          {showPriceImpact && priceImpactLevel !== 'unknown' && getPriceImpactLabel(priceImpact)}
         </Text>
       )}
       {isBalancesLoading || !isMounted ? (
