@@ -75,7 +75,7 @@ const features = [
   {
     title: 'Liquidity Invariant Approximation',
     shortDescription:
-      'Supports unbalanced add/remove liquidity operations across all pool types, dramatically enhancing user experience, as users are not forced to add liquidity in proportional amounts.',
+      'Supports unbalanced add/remove liquidity operations across all pool types, drastically enhancing user experience, as users are not forced to add liquidity in proportional amounts.',
     imageSrc: '/images/graphics/stone-2.png',
   },
   {
