@@ -89,11 +89,15 @@ export const getPriceImpactExceedsLabel = (priceImpactLevel: PriceImpactLevel) =
 }
 
 export function getPriceImpactLabel(priceImpact: string | number | null | undefined) {
-  return priceImpact
-    ? isZero(priceImpact)
-      ? ' (0.00%)'
-      : ` (-${fNum('priceImpact', priceImpact)})`
-    : ''
+  if (!priceImpact) {
+    return ''
+  }
+
+  if (isZero(priceImpact)) {
+    return ' (0.00%)'
+  }
+
+  return ` (-${fNum('priceImpact', priceImpact)})`
 }
 
 export function getFullPriceImpactLabel(
