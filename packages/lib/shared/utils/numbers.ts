@@ -247,6 +247,10 @@ export function isZero(amount: Numberish): boolean {
   return bn(amount).isZero()
 }
 
+export function isNegative(amount: Numberish): boolean {
+  return bn(amount).isNegative()
+}
+
 export function isSmallUsd(value: Numberish): boolean {
   return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
 }

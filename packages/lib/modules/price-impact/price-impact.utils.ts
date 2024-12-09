@@ -1,4 +1,4 @@
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, isNegative, isZero } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { PriceImpactLevel } from './PriceImpactProvider'
 
@@ -86,4 +86,34 @@ export const getPriceImpactExceedsLabel = (priceImpactLevel: PriceImpactLevel) =
     default:
       return ''
   }
+}
+
+export function getPriceImpactLabel(priceImpact: string | number | null | undefined) {
+  if (!priceImpact) {
+    return ''
+  }
+
+  if (isZero(priceImpact)) {
+    return ' (0.00%)'
+  }
+
+  return ` (-${fNum('priceImpact', priceImpact)})`
+}
+
+export function getFullPriceImpactLabel(
+  priceImpact: string | number | null | undefined,
+  currencyPriceImpact: string
+) {
+  if (!priceImpact) return '-'
+  if (isZero(priceImpact) || isNegative(priceImpact)) return `${currencyPriceImpact} (0.00%)`
+
+  return `-${currencyPriceImpact}${getPriceImpactLabel(priceImpact)}`
+}
+
+export function getMaxSlippageLabel(slippage: string | 0, currencyMaxSlippage: string) {
+  if (!slippage) return '-'
+  if (isZero(slippage) || isNegative(slippage)) return `${currencyMaxSlippage} (0.00%)`
+
+  const slippageLabel = fNum('slippage', slippage)
+  return `-${currencyMaxSlippage} (-${slippageLabel})`
 }
