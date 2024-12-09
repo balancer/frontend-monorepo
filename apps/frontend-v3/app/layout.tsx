@@ -15,8 +15,9 @@ import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
 
 export const metadata: Metadata = {
-  title: 'Balancer DeFi Liquidity Pools',
-  description: `Explore DeFi liquidity pools and swap tokens. Provide liquidity to accumulate yield from swap fees while retaining your token exposure as prices move.`,
+  title: 'Balancer - DeFi Liquidity Pools',
+  description: `Explore DeFi liquidity pools and swap tokens. The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
+              simplicity and flexibility to reshape the future of AMMs.`,
   icons: [
     { rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' },
     {
