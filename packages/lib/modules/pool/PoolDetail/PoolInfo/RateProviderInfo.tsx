@@ -17,9 +17,10 @@ import Link from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { getWarnings } from '../../pool.helpers'
 import { PropsWithChildren } from 'react'
+import { ApiToken } from '../../pool.types'
 
 type RateProviderInfoPopOverProps = {
-  token: GqlToken
+  token: GqlToken | ApiToken
   data: GqlPriceRateProviderData | null
   level: number
 } & PropsWithChildren

@@ -4,8 +4,9 @@ import { safeSum } from '@repo/lib/shared/utils/numbers'
 import { useCallback } from 'react'
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { HumanTokenAmountWithAddress } from './token.types'
+import { ApiToken } from '../pool/pool.types'
 
-export function useTotalUsdValue(tokens: GqlToken[]) {
+export function useTotalUsdValue(tokens: GqlToken[] | ApiToken[]) {
   const { usdValueForToken } = useTokens()
   const calculateUsdAmountsIn = useCallback(
     (humanAmountsIn: HumanTokenAmountWithAddress[]) =>

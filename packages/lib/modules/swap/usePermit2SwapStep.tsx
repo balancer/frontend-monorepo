@@ -11,11 +11,12 @@ import {
   SdkSimulationResponseWithRouter,
   SwapSimulationQueryResult,
 } from './queries/useSimulateSwapQuery'
+import { ApiToken } from '../pool/pool.types'
 
 type Props = {
   wethIsEth: boolean
   simulationQuery: SwapSimulationQueryResult
-  tokenInInfo?: GqlToken
+  tokenInInfo?: GqlToken | ApiToken
   chainId: number
   isPermit2: boolean
 }

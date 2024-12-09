@@ -30,11 +30,12 @@ import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
+import { ApiToken } from '../../pool/pool.types'
 
 type DataProps = {
   address: Address
   chain: GqlChain
-  token?: GqlToken
+  token?: ApiToken
   displayToken?: GqlPoolTokenDisplay
   pool?: Pool
   disabled?: boolean

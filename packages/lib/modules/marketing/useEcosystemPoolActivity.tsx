@@ -25,9 +25,10 @@ import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { usePoolEvents } from '../pool/usePoolEvents'
 import { supportedNetworks } from '../web3/ChainConfig'
 import { getChainShortName } from '@repo/lib/config/app.config'
+import { ApiToken } from '../pool/pool.types'
 
 type ChartInfoTokens = {
-  token?: GqlToken
+  token?: GqlToken | ApiToken
   amount: string
 }
 

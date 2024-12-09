@@ -11,7 +11,7 @@ import { HumanTokenAmountWithAddress, TokenBase } from './token.types'
 import { InputAmount } from '@balancer/sdk'
 import { Pool } from '../pool/PoolProvider'
 import { getVaultConfig, isCowAmmPool, isV3Pool } from '../pool/pool.helpers'
-import { TokenCore } from '../pool/pool.types'
+import { ApiToken, TokenCore } from '../pool/pool.types'
 
 export function isNativeAsset(token: TokenBase | string, chain: GqlChain | SupportedChainId) {
   return nativeAssetFilter(chain)(token)
@@ -116,7 +116,7 @@ export function requiresDoubleApproval(
 
 export type PoolToken = Pool['poolTokens'][0]
 export function getLeafTokens(poolTokens: PoolToken[]) {
-  const leafTokens: TokenCore[] = []
+  const leafTokens: ApiToken[] = []
 
   poolTokens.forEach(poolToken => {
     if (poolToken.nestedPool) {
@@ -136,14 +136,24 @@ export function getLeafTokens(poolTokens: PoolToken[]) {
   return leafTokens
 }
 
-function getTokenOrUnderlying(token: PoolToken): TokenCore {
+function getTokenOrUnderlying(token: PoolToken): ApiToken {
   return token.isErc4626 && token.underlyingToken
     ? {
         ...token.underlyingToken,
         address: token.underlyingToken.address as Address,
-        index: token.index,
+        chainId: token.underlyingToken.chainId as number,
+        chain: token.underlyingToken.chain as GqlChain,
+        priority: token.underlyingToken.priority as number,
+        tradable: token.underlyingToken.tradable as boolean,
       }
-    : { ...token, address: token.address as Address }
+    : {
+        ...token,
+        address: token.address as Address,
+        chainId: token.chainId as number,
+        chain: token.chain as GqlChain,
+        priority: token.priority as number,
+        tradable: token.tradable as boolean,
+      }
 }
 
 export function getSpenderForAddLiquidity(pool: Pool): Address {

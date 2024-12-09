@@ -100,10 +100,12 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
 
 // Unskip when sepolia V3 pools are available in production api
 describe.skip('Liquidity helpers for V3 Boosted pools', async () => {
-  // const poolId = '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8' // Sepolia stataEthUSDC stataEthUSDT
+  // const poolId = '0x59fa488dda749cdd41772bb068bb23ee955a6d7a' // Balancer USDC/USDT
 
-  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
-  const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0'
+  // const aUsdcSepoliaAddress = '0x8a88124522dbbf1e56352ba3de1d9f78c143751e'
+  // const aUsdtSepoliaAddress = '0x978206fae13faf5a8d293fb614326b237684b750'
+  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // underlying token
+  const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0' // underlying token
   // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
   const v3Pool = {} as GqlPoolElement
   const helpers = new LiquidityActionHelpers(v3Pool)
@@ -112,11 +114,12 @@ describe.skip('Liquidity helpers for V3 Boosted pools', async () => {
     { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress },
   ]
 
-  it('allPoolTokens', async () => {
-    expect(allPoolTokens(v3Pool).map(t => t.address)).toEqual([
-      usdcSepoliaAddress,
-      usdtSepoliaAddress,
-    ])
+  it.only('allPoolTokens', async () => {
+    expect(
+      allPoolTokens(v3Pool)
+        .map(t => t.address)
+        .sort()
+    ).toEqual([usdcSepoliaAddress, usdtSepoliaAddress])
   })
 
   it('allPoolTokens snapshot', async () => {
@@ -452,5 +455,142 @@ test.skip('Nested pool state for V3 NESTED POOL', async () => {
       },
     ],
     protocolVersion: 3,
+  })
+})
+
+describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
+  const poolId = '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522' // Gnosis Balancer aGNO/sDAI
+
+  const waGnoGNOAddress = '0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644'
+  const gnoAddress = '0x9c58bacc331c9aa871afd802db6379a98e80cedb'
+
+  const sDaiAddress = '0xaf204776c7245bf4147c2612bf6e5972ee483701'
+  const wxDai = '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
+
+  const v3Pool = await getPoolMock(poolId, GqlChain.Gnosis)
+  const helpers = new LiquidityActionHelpers(v3Pool)
+
+  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    { humanAmount: '0.1', tokenAddress: gnoAddress },
+  ]
+
+  it('allPoolTokens snapshot', async () => {
+    expect(allPoolTokens(v3Pool)).toMatchInlineSnapshot(`
+      [
+        {
+          "address": "0x9c58bacc331c9aa871afd802db6379a98e80cedb",
+          "chainId": 100,
+          "decimals": 18,
+          "index": 0,
+          "name": "Gnosis Token on xDai",
+          "symbol": "GNO",
+        },
+        {
+          "address": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+          "chainId": 100,
+          "decimals": 18,
+          "index": 1,
+          "name": "Wrapped XDAI",
+          "symbol": "WXDAI",
+        },
+      ]
+    `)
+  })
+
+  it('toInputAmounts', async () => {
+    expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
+      {
+        address: gnoAddress,
+        decimals: 18,
+        rawAmount: 100000000000000000n,
+      },
+    ])
+  })
+
+  it('boostedPoolState', async () => {
+    const helpers = new LiquidityActionHelpers(v3Pool)
+    expect(helpers.boostedPoolState).toMatchObject({
+      address: poolId,
+      id: poolId,
+      protocolVersion: 3,
+      tokens: [
+        {
+          address: waGnoGNOAddress,
+          balance: expect.any(String),
+          balanceUSD: expect.any(String),
+          decimals: 18,
+          hasNestedPool: false,
+          id: '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522-0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644',
+          index: 0,
+          isAllowed: true,
+          isErc4626: true,
+          name: 'Wrapped Aave Gnosis GNO',
+          nestedPool: null,
+          priceRate: expect.any(String),
+          priceRateProvider: '0xbbb4966335677ea24f7b86dc19a423412390e1fb',
+          priceRateProviderData: expect.any(Object),
+          symbol: 'waGnoGNO',
+          underlyingToken: {
+            address: gnoAddress,
+            decimals: 18,
+            index: 0,
+            name: 'Gnosis Token on xDai',
+            symbol: 'GNO',
+          },
+          weight: '0.5',
+        },
+        {
+          address: sDaiAddress,
+          balance: expect.any(String),
+          balanceUSD: expect.any(String),
+          decimals: 18,
+          hasNestedPool: false,
+          id: '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522-0xaf204776c7245bf4147c2612bf6e5972ee483701',
+          index: 1,
+          isAllowed: true,
+          isErc4626: true,
+          name: 'Savings xDAI',
+          nestedPool: null,
+          priceRate: expect.any(String),
+          priceRateProvider: '0x89c80a4540a00b5270347e02e2e144c71da2eced',
+          priceRateProviderData: expect.any(Object),
+          symbol: 'sDAI',
+          underlyingToken: {
+            address: wxDai,
+            decimals: 18,
+            index: 1,
+            name: 'Wrapped XDAI',
+            symbol: 'WXDAI',
+          },
+          weight: '0.5',
+        },
+      ],
+      type: 'Weighted',
+    })
+  })
+
+  it('poolStateWithBalances (that calls boostedPoolStateWithBalances underneath)', async () => {
+    const helpers = new LiquidityActionHelpers(v3Pool)
+    expect(helpers.poolStateWithBalances).toEqual({
+      address: poolId,
+      id: poolId,
+      protocolVersion: 3,
+      tokens: [
+        {
+          address: gnoAddress,
+          balance: expect.any(String),
+          decimals: 18,
+          index: 0,
+        },
+        {
+          address: wxDai,
+          balance: expect.any(String),
+          decimals: 18,
+          index: 1,
+        },
+      ],
+      totalShares: expect.any(String),
+      type: 'Weighted',
+    })
   })
 })
