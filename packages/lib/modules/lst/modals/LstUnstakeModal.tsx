@@ -35,7 +35,7 @@ export function LstUnstakeModal({
   const initialFocusRef = useRef(null)
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
-  const { unstakeTransactionSteps, chain, lstUnstakeTxHash } = useLst()
+  const { unstakeTransactionSteps, chain, lstUnstakeTxHash, setWrID } = useLst()
 
   useResetStepIndexOnOpen(isOpen, unstakeTransactionSteps)
 
@@ -50,6 +50,7 @@ export function LstUnstakeModal({
     if (isOpen) {
       // stop polling for token prices when modal is opened to prevent unwanted re-renders
       stopTokenPricePolling()
+      setWrID(BigInt(Date.now()))
     }
   }, [isOpen])
 

@@ -19,15 +19,17 @@ const CHAIN = GqlChain.Fantom
 export function _useLst() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
   const [amount, setAmount] = useState('')
+  const [wrID, setWrID] = useState<bigint>()
+  const { isConnected } = useUserAccount()
+
   const isStakeTab = activeTab?.value === '0'
   const isUnstakeTab = activeTab?.value === '1'
   const isWithdrawTab = activeTab?.value === '2'
-  const { isConnected } = useUserAccount()
 
   const { step: stakeStep } = useLstStakeStep(amount, CHAIN, isStakeTab)
   const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
 
-  const { step: unstakeStep } = useLstUnstakeStep(amount, CHAIN, isUnstakeTab)
+  const { step: unstakeStep } = useLstUnstakeStep(amount, CHAIN, isUnstakeTab, wrID)
   const unstakeTransactionSteps = useTransactionSteps([unstakeStep], false)
 
   const nativeAsset = fantomNetworkConfig.tokens.nativeAsset.address
@@ -66,6 +68,8 @@ export function _useLst() {
     isStakeTab,
     isUnstakeTab,
     isWithdrawTab,
+    wrID,
+    setWrID,
   }
 }
 
