@@ -57,7 +57,7 @@ import {
 } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
-import { ProtocolVersion } from '../pool/pool.types'
+import { ApiToken, ProtocolVersion } from '../pool/pool.types'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -78,7 +78,7 @@ function selectSwapHandler(
   chain: GqlChain,
   swapType: GqlSorSwapType,
   apolloClient: ApolloClient<object>,
-  tokens: GqlToken[]
+  tokens: GqlToken[] | ApiToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -96,7 +96,7 @@ export type SwapProviderProps = {
   pathParams: PathParams
   // Only used by pool swap
   pool?: Pool
-  poolActionableTokens?: GqlToken[]
+  poolActionableTokens?: GqlToken[] | ApiToken[]
 }
 export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
@@ -396,7 +396,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     window.history.replaceState({}, '', newPath.join(''))
   }
 
-  function scaleTokenAmount(amount: string, token: GqlToken | undefined): bigint {
+  function scaleTokenAmount(amount: string, token: GqlToken | ApiToken | undefined): bigint {
     if (amount === '') return parseUnits('0', 18)
     if (!token) throw new Error('Cant scale amount without token metadata')
     return parseUnits(amount, token.decimals)

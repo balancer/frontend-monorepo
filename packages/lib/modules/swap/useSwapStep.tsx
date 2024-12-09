@@ -18,13 +18,14 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { useTenderly } from '../web3/useTenderly'
 import { getChainId } from '@repo/lib/config/app.config'
 import { DisabledTransactionButton } from '../transactions/transaction-steps/TransactionStepButton'
+import { ApiToken } from '../pool/pool.types'
 
 export const swapStepId = 'swap'
 
 export type SwapStepParams = BuildSwapQueryParams & {
   swapAction: SwapAction
-  tokenInInfo: GqlToken | undefined
-  tokenOutInfo: GqlToken | undefined
+  tokenInInfo: GqlToken | ApiToken | undefined
+  tokenOutInfo: GqlToken | ApiToken | undefined
 }
 
 export function useSwapStep({

@@ -4,6 +4,7 @@ import { ChangeEvent } from 'react'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
 import { Address } from 'viem'
+import { ApiToken } from '../../pool/pool.types'
 
 export function overflowProtected(value: Numberish, decimalLimit: number): string {
   const stringValue = value.toString()
@@ -16,7 +17,7 @@ export function overflowProtected(value: Numberish, decimalLimit: number): strin
 }
 
 type Params = {
-  token: GqlToken | undefined
+  token: GqlToken | ApiToken | undefined
   disableBalanceValidation?: boolean
   onChange?: (event: { currentTarget: { value: string } }) => void
 }

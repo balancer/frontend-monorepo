@@ -24,6 +24,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { ApiToken } from '../../pool.types'
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof _useRemoveLiquidity>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
@@ -79,7 +80,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const isSingleToken = removalType === RemoveLiquidityType.SingleToken
   const isProportional = removalType === RemoveLiquidityType.Proportional
 
-  function tokensToShow(): GqlToken[] {
+  function tokensToShow(): GqlToken[] | ApiToken[] {
     // Cow AMM pools don't support wethIsEth
     if (isCowAmmPool(pool.type)) return tokens
 
@@ -97,7 +98,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
             return token
           }
         })
-        .filter((token): token is GqlToken => token !== undefined)
+        .filter((token): token is GqlToken | ApiToken => token !== undefined)
     }
 
     return tokens

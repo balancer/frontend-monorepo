@@ -9,9 +9,10 @@ import { useTokens } from '../../TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenInfoPopover } from '../../TokenInfoPopover'
+import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 type Props = {
-  token: GqlToken
+  token: GqlToken | ApiToken
   userBalance?: TokenAmount
   isBalancesLoading?: boolean
   active?: boolean

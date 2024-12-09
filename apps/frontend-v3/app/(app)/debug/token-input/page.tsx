@@ -11,16 +11,19 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { daiAddress } from '@repo/lib/debug-helpers'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 export default function TokenInputPage() {
   const [currentValue, setCurrentValue] = useState('')
   const { getToken, getTokensByChain } = useTokens()
   const tokenSelectDisclosure = useDisclosure()
-  const [token, setToken] = useState<GqlToken>(getToken(daiAddress, 1) as GqlToken)
+  const [token, setToken] = useState<GqlToken | ApiToken>(
+    getToken(daiAddress, 1) as GqlToken | ApiToken
+  )
 
   const tokens = getTokensByChain(1)
 
-  function handleTokenSelect(token: GqlToken) {
+  function handleTokenSelect(token: GqlToken | ApiToken) {
     setToken(token)
   }
 

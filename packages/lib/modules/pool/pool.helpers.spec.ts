@@ -3,6 +3,7 @@ import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Pool } from './PoolProvider'
 import { getPoolActionableTokens } from './pool.helpers'
+import { ApiToken } from './pool.types'
 
 describe('getPoolTokens', () => {
   it('when pool supports nested actions', () => {
@@ -123,7 +124,7 @@ function getTokenMock(pool: Pool) {
     return tokens
   }
   // Returns a getToken mock function that looks for a token by address in the whole pool structure (including nested pools)
-  return function (address: string): GqlToken | undefined {
+  return function (address: string): GqlToken | ApiToken | undefined {
     return getAllTokens(pool).find(token =>
       isSameAddress(token.address, address)
     ) as unknown as GqlToken

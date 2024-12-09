@@ -44,6 +44,7 @@ import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isPoolSwapAllowed } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
+import { ApiToken } from '../pool/pool.types'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -97,7 +98,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     setTimeout(() => setCopiedDeepLink(false), 2000)
   }
 
-  function handleTokenSelect(token: GqlToken) {
+  function handleTokenSelect(token: GqlToken | ApiToken) {
     if (!token) return
     if (tokenSelectKey === 'tokenIn') {
       setTokenIn(token.address as Address)
@@ -108,7 +109,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     }
   }
 
-  function handleTokenSelectForPoolSwap(token: GqlToken) {
+  function handleTokenSelectForPoolSwap(token: GqlToken | ApiToken) {
     const tokenAddress = token.address as Address
 
     if (
