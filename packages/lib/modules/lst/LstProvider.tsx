@@ -13,14 +13,17 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
+import { useTokens } from '../tokens/TokensProvider'
 
 const CHAIN = GqlChain.Fantom
+const WITHDRAW_DELAY = 604800 // 1 week
 
 export function _useLst() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
   const [amount, setAmount] = useState('')
   const [wrID, setWrID] = useState<bigint>()
   const { isConnected } = useUserAccount()
+  const { getToken } = useTokens()
 
   const isStakeTab = activeTab?.value === '0'
   const isUnstakeTab = activeTab?.value === '1'
@@ -32,8 +35,8 @@ export function _useLst() {
   const { step: unstakeStep } = useLstUnstakeStep(amount, CHAIN, isUnstakeTab, wrID)
   const unstakeTransactionSteps = useTransactionSteps([unstakeStep], false)
 
-  const nativeAsset = fantomNetworkConfig.tokens.nativeAsset.address
-  const stakedAsset = fantomNetworkConfig.tokens.stakedAsset?.address || ''
+  const nativeAsset = getToken(fantomNetworkConfig.tokens.nativeAsset.address, CHAIN)
+  const stakedAsset = getToken(fantomNetworkConfig.tokens.stakedAsset?.address || '', CHAIN)
 
   const lstStakeTxHash = stakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstStakeTxConfirmed = stakeTransactionSteps.lastTransactionConfirmed
@@ -70,6 +73,7 @@ export function _useLst() {
     isWithdrawTab,
     wrID,
     setWrID,
+    withdrawDelay: WITHDRAW_DELAY,
   }
 }
 

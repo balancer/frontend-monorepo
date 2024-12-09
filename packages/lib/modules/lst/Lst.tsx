@@ -33,7 +33,6 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { LstStake } from './components/LstStake'
 import { LstUnstake } from './components/LstUnstake'
-import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
 import { LstUnstakeModal } from './modals/LstUnstakeModal'
 import { LstWithdraw } from './components/LstWithdraw'
 
@@ -52,6 +51,7 @@ export function Lst() {
     isWithdrawTab,
     stakeTransactionSteps,
     unstakeTransactionSteps,
+    stakedAsset,
   } = useLst()
   const stakeModalDisclosure = useDisclosure()
   const unstakeModalDisclosure = useDisclosure()
@@ -62,9 +62,7 @@ export function Lst() {
   const isLoading = !isMounted || isBalancesLoading
   const loadingText = isLoading ? 'Loading...' : undefined
 
-  const isUnstakeDisabled = bn(
-    balanceFor(fantomNetworkConfig.tokens.stakedAsset?.address || '')?.amount || 0
-  ).lte(0)
+  const isUnstakeDisabled = bn(balanceFor(stakedAsset?.address || '')?.amount || 0).lte(0)
 
   const tabs: ButtonGroupOption[] = [
     {

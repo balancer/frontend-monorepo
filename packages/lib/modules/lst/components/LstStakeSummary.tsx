@@ -30,7 +30,7 @@ export function LstStakeSummary({
           chain={chain}
           isLoading={isLoadingStakedAmountPreview}
           label={shouldShowReceipt ? 'You staked' : 'You stake'}
-          tokenAddress={nativeAsset}
+          tokenAddress={nativeAsset?.address || ''}
           tokenAmount={amount}
         />
       </Card>
@@ -39,7 +39,7 @@ export function LstStakeSummary({
           chain={chain}
           isLoading={isLoadingStakedAmountPreview || isLoadingReceipt}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
-          tokenAddress={stakedAsset}
+          tokenAddress={stakedAsset?.address || ''}
           tokenAmount={
             shouldShowReceipt ? receivedToken[0].humanAmount : formatUnits(stakedAmountPreview, 18)
           }

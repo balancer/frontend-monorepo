@@ -74,6 +74,7 @@ export function useLstStakeReceipt(props: BaseReceiptProps) {
   }
 }
 
+// TODO: unstake receipt is not really used but this might change in the future
 export type LstUnstakeReceiptResult = ReturnType<typeof useLstUnstakeReceipt>
 
 export function useLstUnstakeReceipt(props: BaseReceiptProps) {
