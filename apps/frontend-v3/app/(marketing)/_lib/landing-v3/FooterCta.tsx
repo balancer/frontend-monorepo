@@ -63,7 +63,7 @@ export function FooterCta() {
             innerWidth={500}
             padding="15px"
             position="absolute"
-            right={-400}
+            right={{ base: -700, lg: -700, xl: -600, '2xl': -400 }}
             top="calc(50% - 300px)"
             width={1000}
           />
@@ -72,7 +72,7 @@ export function FooterCta() {
             height={600}
             innerHeight={150}
             innerWidth={500}
-            left={-400}
+            left={{ base: -700, lg: -700, xl: -600, '2xl': -400 }}
             padding="15px"
             position="absolute"
             top="calc(50% - 300px)"
@@ -100,22 +100,24 @@ export function FooterCta() {
           <WordsPullUp
             as="h2"
             color="font.primary"
-            fontSize="4xl"
+            fontSize={{ base: '2xl', lg: '4xl' }}
             fontWeight="bold"
             lineHeight={1}
+            pr={{ base: 0.8, lg: 0.9 }}
             text="Ready to build on Balancer?"
           />
-          <HStack justifyContent="center" mr="-25px" ref={ref} spacing="lg">
+          <HStack justifyContent="center" ref={ref} spacing="lg">
             <MotionButton
               animate={shouldAnimate ? { opacity: 1 } : {}}
               as={NextLink}
               href="https://docs-v3.balancer.fi"
               initial={{ opacity: 0 }}
               rightIcon={<ArrowUpRight />}
-              size="lg"
+              size={{ base: 'md', lg: 'lg' }}
               target="_blank"
               transition={{ duration: 0.5, delay: 0.4, ease: 'easeInOut' }}
               variant="primary"
+              w={{ base: '150px', lg: '190px' }}
             >
               View v3 docs
             </MotionButton>
@@ -125,10 +127,11 @@ export function FooterCta() {
               href="https://github.com/balancer/scaffold-balancer-v3"
               initial={{ opacity: 0 }}
               rightIcon={<ArrowUpRight />}
-              size="lg"
+              size={{ base: 'md', lg: 'lg' }}
               target="_blank"
               transition={{ duration: 0.5, delay: 0.4, ease: 'easeInOut' }}
               variant="secondary"
+              w={{ base: '150px', lg: '190px' }}
             >
               Prototype on v3
             </MotionButton>
