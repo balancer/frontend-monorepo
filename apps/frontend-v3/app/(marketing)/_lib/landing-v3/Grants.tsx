@@ -52,7 +52,7 @@ export function Grants() {
               fontWeight="bold"
               lineHeight={1}
               pr={{ base: 'xxs', lg: '1' }}
-              text="Get help to innovate on v3"
+              text="Innovate with us."
             />
             <FadeIn delay={0.4} direction="up" duration={1} w="full">
               <Text color="font.secondary" maxW="full" w="3xl">

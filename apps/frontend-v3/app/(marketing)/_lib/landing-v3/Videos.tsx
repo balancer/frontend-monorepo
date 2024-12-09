@@ -8,8 +8,6 @@ import {
   Card,
   Grid,
   GridItem,
-  Heading,
-  HStack,
   VStack,
   Text,
   Center,
@@ -159,7 +157,7 @@ export function Videos() {
               fontSize="4xl"
               fontWeight="bold"
               lineHeight={1}
-              text="Learn to build on v3"
+              text="Build on v3."
             />
             <Button
               as={NextLink}

@@ -96,7 +96,7 @@ export function Audits() {
                 fontSize="4xl"
                 fontWeight="bold"
                 lineHeight={1}
-                text="Audited by the best"
+                text="Audited by the best."
               />
             </VStack>
             <Button
