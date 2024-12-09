@@ -30,24 +30,24 @@ import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 const keyFeatures = [
   {
     title: 'Custom Pools',
-    subTitle: 'Code less, build more.',
+    subTitle: 'Streamlined custom pool creation.',
     description:
       'Design pools tailored to your vision with Balancer’s Vault-first architecture. Build smarter, faster, and with less complexity.',
     icon: <PieIcon size={40} />,
   },
   {
-    title: '100% Boosted Pools',
-    subTitle: 'Passive Yield, Simplified.',
-    description:
-      'Put your liquidity to work 100% of the time. Seamless integration with Aave and Morpho delivers passive, diversified yield in a single click.',
-    icon: <StarsIconPlain size={32} />,
-  },
-  {
     title: 'Hooks Framework',
-    subTitle: 'Endless Possibilities',
+    subTitle: 'Limitless pool customizability.',
     description:
       'Extend pool functionality with modular hooks. Customize pool behavior, implement advanced strategies, and unlock entirely new AMM design spaces with ease.',
     icon: <HookIcon size={70} />,
+  },
+  {
+    title: '100% Boosted Pools',
+    subTitle: 'Boosted earnings, simplified strategy.',
+    description:
+      'Put your liquidity to work 100% of the time. Seamless integration with Aave and Morpho delivers passive, diversified yield in a single click.',
+    icon: <StarsIconPlain size={32} />,
   },
 ]
 
@@ -216,9 +216,8 @@ export function Features() {
             <chakra.span color="font.primary">Custom liquidity solutions.</chakra.span>
             <chakra.span color="font.primary" style={{ opacity: 0.6 }}>
               {' '}
-              By shifting repetitive development tasks into the heavily audited Vault and
-              formalizing custom pool requirements, the platform ensures consistency, flexibility,
-              and faster development.
+              With v3, developers harness a tech stack that automates low-level development tasks,
+              enabling them to focus exclusively on innovation.
             </chakra.span>
           </Heading>
         </FadeIn>

@@ -136,7 +136,7 @@ export function Code() {
                       fontWeight="bold"
                       lineHeight={1}
                       pr={{ base: 'xxs', lg: '1' }}
-                      text="Building on v3 is simple"
+                      text="Building on v3 is simple."
                     />
                     <FadeIn delay={0.4} direction="up" duration={1}>
                       <Text color="font.secondary" fontSize="lg">
