@@ -15,6 +15,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           level4: '#FFFFFF',
           base: colors.base.light,
           baseWithOpacity: createBackgroundOpacity(colors.base.hslLight, 0.5),
+          level0WithOpacity: 'hsla(#EBE8E0, 0.5)',
           special: colors.gradient.dawnLight,
           specialAlpha15: colors.gradient.dawnLightAlpha15,
           specialSecondary: colors.gradient.sunsetLight,

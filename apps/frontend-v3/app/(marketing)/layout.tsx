@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 }
 
 export default function MarketingLayout({ children }: PropsWithChildren) {
-  return <Box pt="72px">{children}</Box>
+  return <Box>{children}</Box>
 }

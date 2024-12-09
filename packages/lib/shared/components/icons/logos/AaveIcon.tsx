@@ -1,7 +1,13 @@
 /* eslint-disable max-len */
-export function AaveIcon() {
+export function AaveIcon({ size = 44 }: { size?: number }) {
   return (
-    <svg fill="none" height="44" width="44" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      fill="none"
+      height={size}
+      viewBox="0 0 44 44"
+      width={size}
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M17.91 23.073a3.46 3.46 0 1 0-1.11-6.832 3.46 3.46 0 0 0 1.11 6.832ZM26.955 23.073a3.46 3.46 0 1 0-1.11-6.832 3.46 3.46 0 0 0 1.11 6.832Z"
         fill="currentColor"
