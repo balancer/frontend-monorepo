@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-export function BeetsIcon({ size = 32 }: { size: number }) {
+export function BeetsIcon({ size = 32 }: { size?: number }) {
   return (
     <svg
       fill="none"

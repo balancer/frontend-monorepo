@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-export function CronIcon({ size = 30 }: { size: number }) {
+export function CronIcon({ size = 30 }: { size?: number }) {
   return (
     <svg
       fill="none"

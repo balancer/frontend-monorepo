@@ -188,6 +188,9 @@ export function Grow() {
             />
           </GridItem>
         </Grid>
+        <Text color="font.secondary" fontSize="sm" mt="md">
+          *Data includes liquidity and volume on Balancer v2, v3 & CoW AMM.
+        </Text>
       </DefaultPageContainer>
       <PartnerRedirectModal
         isOpen={partnerRedirectDisclosure.isOpen}

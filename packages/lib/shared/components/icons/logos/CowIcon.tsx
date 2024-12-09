@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-export function CowIcon({ size = 36 }: { size: number }) {
+export function CowIcon({ size = 36 }: { size?: number }) {
   return (
     <svg
       fill="none"

@@ -1,7 +1,7 @@
 import { SVGProps } from 'react'
 
 /* eslint-disable max-len */
-export function GyroIcon({ size = 30, ...props }: { size: number } & SVGProps<SVGSVGElement>) {
+export function GyroIcon({ size = 30, ...props }: { size?: number } & SVGProps<SVGSVGElement>) {
   return (
     <svg
       fill="none"
