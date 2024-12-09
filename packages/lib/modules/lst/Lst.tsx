@@ -35,6 +35,7 @@ import { LstStake } from './components/LstStake'
 import { LstUnstake } from './components/LstUnstake'
 import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
 import { LstUnstakeModal } from './modals/LstUnstakeModal'
+import { LstWithdraw } from './components/LstWithdraw'
 
 export function Lst() {
   const { isConnected } = useUserAccount()
@@ -48,6 +49,9 @@ export function Lst() {
     disabledReason,
     isStakeTab,
     isUnstakeTab,
+    isWithdrawTab,
+    stakeTransactionSteps,
+    unstakeTransactionSteps,
   } = useLst()
   const stakeModalDisclosure = useDisclosure()
   const unstakeModalDisclosure = useDisclosure()
@@ -76,7 +80,7 @@ export function Lst() {
     {
       value: '2',
       label: 'Withdraw',
-      disabled: true, // TODO: disable when no tokens unstaked
+      disabled: false, // TODO: disable when no tokens unstaked
     },
   ]
 
@@ -97,12 +101,15 @@ export function Lst() {
     // restart polling for token prices when modal is closed again
     startTokenPricePolling()
 
-    stakeModalDisclosure.onClose()
+    // just reset all transaction steps
+    stakeTransactionSteps.resetTransactionSteps()
+    unstakeTransactionSteps.resetTransactionSteps()
 
-    // if (swapTxHash) {
-    //   resetSwapAmounts()
-    //   transactionSteps.resetTransactionSteps()
-    // }
+    // reset amounts
+    setAmount('')
+
+    // finally close the modal
+    disclosure.onClose()
   }
 
   return (
@@ -133,11 +140,12 @@ export function Lst() {
                 size="md"
               />
             </VStack>
-            {activeTab?.value === '0' && <LstStake />}
-            {activeTab?.value === '1' && <LstUnstake />}
+            {isStakeTab && <LstStake />}
+            {isUnstakeTab && <LstUnstake />}
+            {isWithdrawTab && <LstWithdraw />}
           </CardBody>
           <CardFooter>
-            {isConnected ? (
+            {isConnected && !isWithdrawTab && (
               <Tooltip label={isDisabled ? disabledReason : ''}>
                 <Button
                   isDisabled={isDisabled}
@@ -152,7 +160,8 @@ export function Lst() {
                   Next
                 </Button>
               </Tooltip>
-            ) : (
+            )}
+            {!isConnected && (
               <ConnectWallet
                 isLoading={isLoading}
                 loadingText={loadingText}
