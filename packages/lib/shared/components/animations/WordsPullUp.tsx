@@ -10,7 +10,7 @@ const MotionBox = motion(Box)
 export function WordsPullUp({
   text,
   delay = 0,
-  pr = '1',
+  pr = '0.9',
   animateMargin = '-50px',
   ...rest
 }: { text: string; delay?: number; pr?: BoxProps['pr']; animateMargin?: string } & BoxProps) {
