@@ -1,4 +1,4 @@
-import { Stack, Button, VStack, useDisclosure, HStack } from '@chakra-ui/react'
+import { Stack, Button, VStack, useDisclosure, HStack, Tooltip } from '@chakra-ui/react'
 import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 
@@ -57,16 +57,18 @@ export function PoolHeader() {
         <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
           <PoolTags />
           <HStack spacing="sm">
-            <Button
-              isDisabled={isAddLiquidityBlocked}
-              onClick={handleClick}
-              size="lg"
-              variant="primary"
-              w="full"
-            >
-              Add liquidity
-            </Button>
-
+            {/* TODO: add proper reason */}
+            <Tooltip label={isAddLiquidityBlocked ? '' : ''}>
+              <Button
+                isDisabled={isAddLiquidityBlocked}
+                onClick={handleClick}
+                size="lg"
+                variant="primary"
+                w="full"
+              >
+                Add liquidity
+              </Button>
+            </Tooltip>
             <PoolAdvancedOptions />
           </HStack>
           <PartnerRedirectModal
