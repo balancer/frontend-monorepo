@@ -70,7 +70,7 @@ export function useFormattedPoolAttributes() {
         ? ` except for swap fees and AMP factor ${editableBy}`
         : ` except for swap fees ${editableBy}`,
     }
-  }, [pool])
+  }, [pool, isV2, isV3, delegateOwner])
 
   const formattedPoolAttributes = useMemo((): FormattedPoolAttributes[] => {
     if (!pool) return []
