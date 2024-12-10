@@ -183,7 +183,7 @@ const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.Unknown]: 'Unknown',
   [GqlPoolType.Fx]: 'FX',
   [GqlPoolType.ComposableStable]: 'Stable',
-  [GqlPoolType.CowAmm]: 'CoW AMM',
+  [GqlPoolType.CowAmm]: 'Weighted',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {

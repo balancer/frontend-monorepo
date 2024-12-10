@@ -44,7 +44,7 @@ export function useSignPermit2({
   signPermit2Fn,
   isSimulationReady,
 }: BasePermit2Params) {
-  const sdkClient = useSdkWalletClient()
+  const { sdkClient, isLoading } = useSdkWalletClient()
 
   const toast = useToast()
   const { getToken } = useTokens()
@@ -54,15 +54,14 @@ export function useSignPermit2({
   const [error, setError] = useState<string | undefined>()
 
   useEffect(() => {
-    if (sdkClient === undefined) setSignPermit2State(SignatureState.Preparing)
-  }, [sdkClient])
-
-  useEffect(() => {
+    if (isLoading) {
+      return setSignPermit2State(SignatureState.Preparing)
+    }
     if (isSimulationReady) {
       setPermit2Signature(undefined)
       setSignPermit2State(SignatureState.Ready)
     }
-  }, [isSimulationReady])
+  }, [isSimulationReady, isLoading])
 
   async function signPermit2() {
     if (!tokenAmountsIn) throw new Error('No tokenAmountsIn provided for permit2 signature')

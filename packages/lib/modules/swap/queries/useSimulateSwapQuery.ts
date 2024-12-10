@@ -11,6 +11,7 @@ import { isZero } from '@repo/lib/shared/utils/numbers'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useBlockNumber } from 'wagmi'
 import { Address } from 'viem'
+import { isWrapWithTooSmallAmount } from '@repo/lib/shared/utils/error-filters'
 
 export type SwapSimulationQueryResult = ReturnType<typeof useSimulateSwapQuery>
 export type SdkSimulationResponseWithRouter = SdkSimulateSwapResponse & {
@@ -51,6 +52,14 @@ export function useSimulateSwapQuery({
     queryFn,
     enabled: enabled && !isZero(debouncedSwapAmount),
     gcTime: 0,
+    retry(failureCount, error) {
+      if (isWrapWithTooSmallAmount(error?.message)) {
+        // Avoid more retries
+        return false
+      }
+      // 2 retries by default
+      return failureCount < 2
+    },
     meta: sentryMetaForSwapHandler('Error in swap simulation query', {
       chainId: getChainId(chain),
       blockNumber,
