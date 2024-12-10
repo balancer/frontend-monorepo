@@ -265,6 +265,10 @@ export const TokenInput = forwardRef(
                 min={0}
                 onChange={handleOnChange}
                 onKeyDown={blockInvalidNumberInput}
+                onWheel={e => {
+                  // Avoid changing the input value when scrolling
+                  return e.currentTarget.blur()
+                }}
                 outline="none"
                 p="0"
                 placeholder="0.00"
