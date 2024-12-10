@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
-    "@balancer/sdk": "0.33.3",
+    "@balancer/sdk": "0.33.5",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "^2.2.1",
@@ -31,7 +31,8 @@
     "@emotion/styled": "^11.11.0",
     "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
-    "@rainbow-me/rainbowkit": "2.2.0",
+    "@rainbow-me/rainbowkit": "2.2.1",
+    "@safe-global/safe-apps-sdk": "9.1.0",
     "@sentry/nextjs": "^8.13.0",
     "@studio-freight/react-lenis": "^0.0.47",
     "@tanstack/react-query": "^5.56.2",
@@ -70,8 +71,8 @@
     "use-debounce": "^10.0.0",
     "use-sound": "^4.0.1",
     "usehooks-ts": "^3.1.0",
-    "viem": "2.21.51",
-    "wagmi": "2.13.0"
+    "viem": "2.21.54",
+    "wagmi": "2.13.3"
   },
   "devDependencies": {
     "@apollo/experimental-nextjs-app-support": "^0.11.3",

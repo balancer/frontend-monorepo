@@ -183,7 +183,7 @@ const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.Unknown]: 'Unknown',
   [GqlPoolType.Fx]: 'FX',
   [GqlPoolType.ComposableStable]: 'Stable',
-  [GqlPoolType.CowAmm]: 'CoW AMM',
+  [GqlPoolType.CowAmm]: 'Weighted',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {
@@ -293,7 +293,7 @@ export function shouldCallComputeDynamicSwapFee(pool: Pool) {
   return pool.hook && pool.hook.shouldCallComputeDynamicSwapFee
 }
 
-export function getPoolDisplayTokens(pool: Pool) {
+export function getPoolDisplayTokens(pool: Pool | PoolListItem) {
   return pool.poolTokens.filter(token =>
     pool.displayTokens.find(
       (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address
