@@ -51,6 +51,11 @@ export function useAddLiquiditySteps({
       isPermit2,
     })
 
+  console.log(
+    'pending token approvals: ',
+    tokenApprovalSteps.filter(t => !t.isComplete()).map(t => t.details)
+  )
+
   const wethIsEth = helpers.isNativeAssetIn(humanAmountsIn)
 
   const signPermit2Step = useSignPermit2AddStep({
