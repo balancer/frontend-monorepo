@@ -134,25 +134,36 @@ export function Hero() {
               The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
               simplicity and flexibility to reshape the future of AMMs.
             </MotionHeading>
-            <Stack
-              alignItems={{ base: 'start', md: 'center' }}
-              direction={{ base: 'column', md: 'row' }}
-              mt="xl"
-              spacing="xl"
-            >
-              <MotionButton
-                animate={shouldAnimate ? { opacity: 1 } : {}}
-                as={NextLink}
-                href="https://docs-v3.balancer.fi"
-                initial={{ opacity: 0 }}
-                rightIcon={<ArrowUpRight />}
-                size="lg"
-                target="_blank"
-                transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
-                variant="secondary"
-              >
-                View v3 docs
-              </MotionButton>
+            <VStack alignItems="start" mt="xl" spacing="xl">
+              <HStack spacing="lg">
+                <MotionButton
+                  animate={shouldAnimate ? { opacity: 1 } : {}}
+                  as={NextLink}
+                  href="https://docs-v3.balancer.fi"
+                  initial={{ opacity: 0 }}
+                  rightIcon={<ArrowUpRight />}
+                  size="lg"
+                  target="_blank"
+                  transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
+                  variant="secondary"
+                >
+                  View v3 docs
+                </MotionButton>
+                <MotionButton
+                  animate={shouldAnimate ? { opacity: 1 } : {}}
+                  as={NextLink}
+                  href="https://scaffold-balancerv3.vercel.app"
+                  initial={{ opacity: 0 }}
+                  rightIcon={<ArrowUpRight />}
+                  size="lg"
+                  target="_blank"
+                  transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
+                  variant="primary"
+                >
+                  View demo
+                </MotionButton>
+              </HStack>
+
               <HStack alignItems="center" spacing="md">
                 <MotionBox
                   animate={shouldAnimate ? { opacity: 1 } : {}}
@@ -181,7 +192,7 @@ export function Hero() {
                   Learn about Balancer v3
                 </MotionText>
               </HStack>
-            </Stack>
+            </VStack>
           </VStack>
         </Center>
       </DefaultPageContainer>
