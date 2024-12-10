@@ -26,6 +26,9 @@ import { BalancerLogoAnimated } from '@repo/lib/shared/components/icons/Balancer
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
+import { motion } from 'framer-motion'
+
+const MotionBox = motion(Box)
 
 const keyFeatures = [
   {
@@ -147,16 +150,18 @@ function FeatureText({
           )}
         </Text>
         {isExpanded && (
-          <Box
+          <MotionBox
+            animate={{ opacity: 1 }}
             bg="background.level0"
             borderRadius="md"
             boxShadow="lg"
+            initial={{ opacity: 0 }}
             left={-4}
             maxW="600px"
             p={4}
             position="absolute"
             top={-4}
-            zIndex={10}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
             <Text color="font.secondary" fontSize="lg" whiteSpace="pre-line">
               {description}
@@ -164,7 +169,7 @@ function FeatureText({
                 Show less
               </Link>
             </Text>
-          </Box>
+          </MotionBox>
         )}
       </Box>
     </VStack>
@@ -231,8 +236,8 @@ export function Features() {
         </Grid>
 
         <Stack direction={{ base: 'column', lg: 'row' }} gap="2xl" mt="3xl">
-          <Box alignSelf="flex-start" position="sticky" top="82px" w="full">
-            <VStack alignItems="start" spacing="sm">
+          <Box alignSelf="flex-start" h="700px" position="sticky" top="82px" w="full">
+            <VStack alignItems="start" spacing="md">
               <WordsPullUp
                 as="h2"
                 color="font.primary"
@@ -250,23 +255,25 @@ export function Features() {
               </FadeIn>
             </VStack>
             {!isMobile && (
-              <Center pt="xl">
+              <Center position="relative">
                 <RadialPattern
-                  circleCount={10}
-                  height={500}
+                  circleCount={8}
+                  height={600}
                   innerHeight={150}
                   innerWidth={150}
+                  position="absolute"
                   progress={scrollPercentage}
-                  width={500}
+                  top={-10}
+                  width={600}
                 >
-                  <BalancerLogoAnimated />
+                  <BalancerLogoAnimated size={100} />
                 </RadialPattern>
               </Center>
             )}
           </Box>
           <VStack ref={containerRef} spacing="md" w="full">
             {features.map((feature, index) => (
-              <FadeIn direction="up" key={index}>
+              <FadeIn direction="up" key={index} zIndex={10 - index}>
                 <FeatureText index={index} {...feature} />
               </FadeIn>
             ))}

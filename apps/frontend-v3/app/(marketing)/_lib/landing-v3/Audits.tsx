@@ -96,7 +96,7 @@ export function Audits() {
                 fontSize="4xl"
                 fontWeight="bold"
                 lineHeight={1}
-                text="Audited by the best."
+                text="Audited by the best"
               />
             </VStack>
             <Button
@@ -114,7 +114,10 @@ export function Audits() {
             w="full"
           >
             <GridItem>
-              <AuditCard href="https://spearbit.com/" logo={<SpearbitLogo />} />
+              <AuditCard
+                href="https://github.com/balancer/balancer-v3-monorepo/blob/main/audits/spearbit/2024-10-04.pdf"
+                logo={<SpearbitLogo />}
+              />
             </GridItem>
             <GridItem>
               <AuditCard
