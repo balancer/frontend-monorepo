@@ -166,7 +166,7 @@ export function Hero() {
                       : {}
                   }
                   as={NextLink}
-                  href="https://scaffold-balancerv3.vercel.app"
+                  href="https://scaffold.balancer.fi"
                   initial={{ opacity: 0 }}
                   rightIcon={<ArrowUpRight />}
                   size="lg"
