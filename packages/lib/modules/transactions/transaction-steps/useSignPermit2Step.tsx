@@ -118,7 +118,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signPermit2State, isLoading, isConnected, isValidPermit2]
+    [signPermit2State, isLoading, isConnected, isValidPermit2, shouldChangeNetwork]
   )
 }
 

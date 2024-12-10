@@ -1,5 +1,5 @@
 import { Path, Slippage, Swap, SwapKind, TokenAmount } from '@balancer/sdk'
-import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
 import { SdkBuildSwapInputs, SdkSimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
@@ -87,8 +87,7 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
     // Format return amount to human readable
     const returnAmount = formatUnits(onchainReturnAmount.amount, onchainReturnAmount.token.decimals)
 
-    const networkConfig = getNetworkConfig(chain)
-
+    if (!queryOutput.to) throw new Error('No router found in swap query output')
     return {
       protocolVersion,
       hopCount,
@@ -98,9 +97,7 @@ export abstract class BaseDefaultSwapHandler implements SwapHandler {
       queryOutput,
       effectivePrice: bn(swapAmount).div(returnAmount).toString(),
       effectivePriceReversed: bn(returnAmount).div(swapAmount).toString(),
-      router: swap.isBatchSwap
-        ? networkConfig.contracts.balancer.batchRouter
-        : networkConfig.contracts.balancer.router,
+      router: queryOutput.to,
     }
   }
 

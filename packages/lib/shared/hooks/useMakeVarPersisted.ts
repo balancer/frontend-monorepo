@@ -3,13 +3,27 @@
 'use client'
 
 import { makeVar } from '@apollo/client'
+import { useRef } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
-export function useMakeVarPersisted<T>(initialValue: T, storageName: string) {
+export function useMakeVarPersisted<T>(
+  initialValue: T,
+  storageName: string,
+  shouldDiscardPersistedValue = false
+) {
   const [value, setValue] = useLocalStorage(storageName, initialValue)
 
-  // Create a reactive var with stored/initial value
-  const rv = makeVar(value)
+  const isInitialized = useRef(false)
+
+  const shouldLoadInitialValue = !isInitialized.current && shouldDiscardPersistedValue
+  if (!isInitialized.current) {
+    isInitialized.current = true
+  }
+  /*
+    Create a reactive var with stored/initial value
+    If shouldDiscardPersistedValue is true, discard the persisted value on first render
+  */
+  const rv = shouldLoadInitialValue ? makeVar(initialValue) : makeVar(value)
 
   const onNextChange = (newValue: T | undefined) => {
     try {

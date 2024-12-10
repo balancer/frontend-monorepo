@@ -19,7 +19,7 @@ type Props = {
 // Page for swapping from a pool page
 export default function PoolSwapPage({ params: { txHash } }: Props) {
   const { getToken } = useTokens()
-  const { pool, isLoading } = usePool()
+  const { pool } = usePool()
   const { redirectToPoolPage } = usePoolRedirect(pool)
 
   const poolActionableTokens = getPoolActionableTokens(pool, getToken)
@@ -48,16 +48,18 @@ export default function PoolSwapPage({ params: { txHash } }: Props) {
   const props: SwapProviderProps = {
     pathParams,
     pool,
-    poolActionableTokens: poolActionableTokens || [],
+    poolActionableTokens: poolActionableTokens,
   }
+
+  const shouldRenderLayout = !!pool
 
   return (
     <PoolActionsLayout>
-      {isLoading ? null : (
+      {shouldRenderLayout ? (
         <SwapLayout props={props}>
           <SwapForm redirectToPoolPage={redirectToPoolPage} />
         </SwapLayout>
-      )}
+      ) : null}
     </PoolActionsLayout>
   )
 }
