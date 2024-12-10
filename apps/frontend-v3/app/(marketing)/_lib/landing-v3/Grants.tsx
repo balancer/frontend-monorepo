@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 'use client'
 
-import { VStack, Button, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'
+import { VStack, Button, Heading, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
@@ -34,13 +34,13 @@ export function Grants() {
     <Noise backgroundColor="background.level0WithOpacity" position="relative">
       <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
         <VStack align="start" spacing="lg" w="full">
-          <VStack align="start" w="full">
+          <VStack align="start" spacing="lg" w="full">
             <BlurIn delay={0.4}>
               <Text
                 background="font.specialSecondary"
                 backgroundClip="text"
                 fontSize="sm"
-                textTransform="uppercase"
+                variant="eyebrow"
               >
                 BALANCER GRANTS
               </Text>
@@ -55,7 +55,7 @@ export function Grants() {
               text="Innovate with us"
             />
             <FadeIn delay={0.4} direction="up" duration={1} w="full">
-              <Text color="font.secondary" maxW="full" w="3xl">
+              <Text color="font.secondary" fontSize="lg" maxW="full" w="3xl">
                 Balancer Community Grants aim to accelerate the development of the Balancer
                 ecosystem. Grants for innovation on Balancer v3 will be prioritized. This program is
                 managed by the Balancer Grants DAO, an independent community-owned grants program
@@ -70,7 +70,7 @@ export function Grants() {
             w="full"
           >
             <FadeIn delay={0.5} direction="up" duration={1}>
-              <Text fontSize={{ base: 'lg', lg: '2xl' }} opacity={0.8}>
+              <Text fontSize={{ base: 'lg', lg: '2xl' }} fontWeight="bold" opacity={0.8}>
                 Some fund-worthy ideas to get you started
               </Text>
             </FadeIn>
@@ -93,7 +93,9 @@ export function Grants() {
                 <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="2xl">
                   <GraniteBg />
                   <VStack align="start" p="md" position="relative">
-                    <Text fontSize="lg">{idea.title}</Text>
+                    <Heading variant="h6" fontSize="lg">
+                      {idea.title}
+                    </Heading>
                     <Text color="font.secondary">{idea.description}</Text>
                   </VStack>
                 </Box>

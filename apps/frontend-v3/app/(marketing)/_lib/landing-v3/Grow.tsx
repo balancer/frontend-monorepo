@@ -83,7 +83,7 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
             text="Grow with us"
           />
           <FadeIn delay={0.4} direction="up" duration={1}>
-            <Text color="font.secondary" fontSize={{ base: 'lg', lg: '2xl' }} maxW="2xl">
+            <Text color="font.secondary" fontSize="lg" maxW="2xl">
               Balancer v3 is DeFi infrastructure to be built on.
               {isMobile ? <>&nbsp;</> : <br />}
               Our growth is your growth.
@@ -190,8 +190,8 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
             />
           </GridItem>
         </Grid>
-        <Text color="font.secondary" fontSize="sm" mt="md">
-          *Data includes liquidity and volume on Balancer v2, v3 & CoW AMM.
+        <Text color="font.secondary" fontSize="sm" mt="xl">
+          * Data includes liquidity and volume on Balancer v2, v3 & CoW AMM.
         </Text>
       </DefaultPageContainer>
       <PartnerRedirectModal

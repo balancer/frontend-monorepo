@@ -129,7 +129,7 @@ function FeatureText({
     <VStack
       alignItems="start"
       position="relative"
-      spacing="md"
+      spacing="sm"
       {...(isOdd && { bg: 'background.level0' })}
       p="md"
       rounded="lg"
@@ -138,7 +138,7 @@ function FeatureText({
         {title}
       </Heading>
       <Box position="relative">
-        <Text color="font.secondary" fontSize="lg" whiteSpace="pre-line">
+        <Text color="font.secondary" whiteSpace="pre-line">
           {shortDescription}
           {description && (
             <Link ml="sm" onClick={() => setIsExpanded(!isExpanded)}>
@@ -232,7 +232,7 @@ export function Features() {
 
         <Stack direction={{ base: 'column', lg: 'row' }} gap="2xl" mt="3xl">
           <Box alignSelf="flex-start" position="sticky" top="82px" w="full">
-            <VStack alignItems="start" spacing="sm">
+            <VStack alignItems="start" spacing="lg">
               <WordsPullUp
                 as="h2"
                 color="font.primary"

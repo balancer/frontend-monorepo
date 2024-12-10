@@ -11,6 +11,7 @@ import {
   Link,
   Stack,
   IconButton,
+  Heading,
 } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
@@ -79,13 +80,13 @@ export function Audits() {
             spacing="lg"
             w="full"
           >
-            <VStack align="start" spacing="md">
+            <VStack align="start" spacing="lg">
               <BlurIn delay={0.4}>
                 <Text
                   background="font.specialSecondary"
                   backgroundClip="text"
                   fontSize="sm"
-                  textTransform="uppercase"
+                  variant="eyebrow"
                 >
                   SAFTEY & SECURITY
                 </Text>
@@ -130,7 +131,9 @@ export function Audits() {
             </GridItem>
           </Grid>
           <VStack align="start" mt="md" spacing="xs">
-            <Text fontSize="lg">Review the code and report vulnerabilities</Text>
+            <Heading variant="h6" fontSize="lg">
+              Review the code and report vulnerabilities
+            </Heading>
             <Text color="font.secondary">
               Up to $1m is up for grabs in the bug bounty on{' '}
               <Link href="https://immunefi.com/bug-bounty/balancer/information/" isExternal>

@@ -118,13 +118,13 @@ export function Code() {
                 w="full"
               >
                 <Box w="full">
-                  <VStack alignItems="start" px={{ base: 'md', lg: '0' }} spacing="md">
+                  <VStack alignItems="start" px={{ base: 'md', lg: '0' }} spacing="lg">
                     <BlurIn delay={0.4}>
                       <Text
                         background="font.specialSecondary"
                         backgroundClip="text"
                         fontSize="sm"
-                        textTransform="uppercase"
+                        variant="eyebrow"
                       >
                         SIMPLICITY
                       </Text>
@@ -139,7 +139,7 @@ export function Code() {
                       text="Building on v3 is simple"
                     />
                     <FadeIn delay={0.4} direction="up" duration={1}>
-                      <Text color="font.secondary" fontSize="lg">
+                      <Text color="font.secondary">
                         To make custom pool creation easy, core functions have been moved from pools
                         into the heavily audited Vault. For example, here’s all the code needed to
                         build a swap function for a Constant Product Pool.

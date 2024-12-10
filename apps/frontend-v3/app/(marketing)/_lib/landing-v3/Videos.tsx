@@ -157,7 +157,7 @@ export function Videos() {
               fontSize="4xl"
               fontWeight="bold"
               lineHeight={1}
-              text="Build on v3"
+              text="v3 video tutorials"
             />
             <Button
               as={NextLink}
