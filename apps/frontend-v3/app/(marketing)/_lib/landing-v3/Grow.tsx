@@ -80,7 +80,7 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
             fontSize="4xl"
             fontWeight="bold"
             lineHeight={1}
-            text="Grow with us."
+            text="Grow with us"
           />
           <FadeIn delay={0.4} direction="up" duration={1}>
             <Text color="font.secondary" fontSize={{ base: 'lg', lg: '2xl' }} maxW="2xl">
@@ -166,7 +166,7 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
               }}
               stat="10+"
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
-              subTitle="Instant volume for your liquidity."
+              subTitle="Instant volume for your liquidity"
               title="Aggregator Integrations"
               titleSize="3xl"
             />

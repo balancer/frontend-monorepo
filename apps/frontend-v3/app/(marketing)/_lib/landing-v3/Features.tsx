@@ -30,14 +30,14 @@ import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 const keyFeatures = [
   {
     title: 'Custom Pools',
-    subTitle: 'Streamlined custom pool creation.',
+    subTitle: 'Streamlined custom pool creation',
     description:
       'Design pools tailored to your vision with Balancer’s Vault-first architecture. Build smarter, faster, and with less complexity.',
     icon: <PieIcon size={40} />,
   },
   {
     title: 'Hooks Framework',
-    subTitle: 'Limitless pool customizability.',
+    subTitle: 'Limitless pool customizability',
     description:
       'Extend pool functionality with modular hooks. Customize pool behavior, implement advanced strategies, and unlock entirely new AMM design spaces with ease.',
     icon: <HookIcon size={70} />,
