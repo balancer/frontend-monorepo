@@ -13,6 +13,7 @@ export function GraniteBg() {
       <Image
         alt="sand"
         fill
+        sizes="100%"
         src={graniteSrc}
         style={{ objectFit: 'cover', filter: 'grayscale(100%)' }}
       />
