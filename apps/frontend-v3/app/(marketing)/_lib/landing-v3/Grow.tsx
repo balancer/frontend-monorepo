@@ -79,6 +79,7 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
             color="font.primary"
             fontSize="4xl"
             fontWeight="bold"
+            letterSpacing="-0.04rem"
             lineHeight={1}
             text="Grow with us"
           />

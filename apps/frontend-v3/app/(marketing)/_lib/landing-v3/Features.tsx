@@ -238,6 +238,7 @@ export function Features() {
                 color="font.primary"
                 fontSize="4xl"
                 fontWeight="bold"
+                letterSpacing="-0.04rem"
                 lineHeight={1}
                 text="Technical highlights"
               />

@@ -195,6 +195,7 @@ export function Contracts() {
                   color="font.primary"
                   fontSize="4xl"
                   fontWeight="bold"
+                  letterSpacing="-0.04rem"
                   lineHeight={1}
                   text="Contracts"
                 />

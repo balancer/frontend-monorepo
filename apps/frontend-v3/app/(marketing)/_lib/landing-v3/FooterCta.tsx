@@ -104,6 +104,7 @@ export function FooterCta() {
             color="font.primary"
             fontSize={{ base: '2xl', lg: '4xl' }}
             fontWeight="bold"
+            letterSpacing="-0.04rem"
             lineHeight={1}
             pr={{ base: 0.8, lg: 0.9 }}
             text="Ready to build on Balancer?"

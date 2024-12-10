@@ -50,6 +50,7 @@ export function Grants() {
               color="font.primary"
               fontSize={{ base: '2xl', lg: '4xl' }}
               fontWeight="bold"
+              letterSpacing="-0.04rem"
               lineHeight={1}
               pr={{ base: 'xxs', lg: '0.9' }}
               text="Innovate with us"

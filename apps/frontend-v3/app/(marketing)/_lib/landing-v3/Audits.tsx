@@ -96,6 +96,7 @@ export function Audits() {
                 color="font.primary"
                 fontSize="4xl"
                 fontWeight="bold"
+                letterSpacing="-0.04rem"
                 lineHeight={1}
                 text="Audited by the best"
               />
@@ -131,7 +132,7 @@ export function Audits() {
             </GridItem>
           </Grid>
           <VStack align="start" mt="md" spacing="xs">
-            <Heading variant="h6" fontSize="lg">
+            <Heading fontSize="lg" variant="h6">
               Review the code and report vulnerabilities
             </Heading>
             <Text color="font.secondary">
