@@ -128,7 +128,7 @@ export function Hero() {
               fontWeight="thin"
               initial={{ opacity: 0, y: 10, filter: 'blur(3px)' }}
               maxW="700px"
-              transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
+              transition={{ duration: 1, delay: 0.9, ease: 'easeInOut' }}
               w="full"
             >
               The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
@@ -137,27 +137,41 @@ export function Hero() {
             <VStack alignItems="start" mt="xl" spacing="xl">
               <HStack spacing="lg">
                 <MotionButton
-                  animate={shouldAnimate ? { opacity: 1 } : {}}
+                  animate={
+                    shouldAnimate
+                      ? {
+                          opacity: 1,
+                          willChange: 'opacity',
+                        }
+                      : {}
+                  }
                   as={NextLink}
                   href="https://docs-v3.balancer.fi"
                   initial={{ opacity: 0 }}
                   rightIcon={<ArrowUpRight />}
                   size="lg"
                   target="_blank"
-                  transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
+                  transition={{ duration: 2, delay: 1.2 }}
                   variant="secondary"
                 >
                   View v3 docs
                 </MotionButton>
                 <MotionButton
-                  animate={shouldAnimate ? { opacity: 1 } : {}}
+                  animate={
+                    shouldAnimate
+                      ? {
+                          opacity: 1,
+                          willChange: 'opacity',
+                        }
+                      : {}
+                  }
                   as={NextLink}
                   href="https://scaffold-balancerv3.vercel.app"
                   initial={{ opacity: 0 }}
                   rightIcon={<ArrowUpRight />}
                   size="lg"
                   target="_blank"
-                  transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
+                  transition={{ duration: 2, delay: 1.2 }}
                   variant="primary"
                 >
                   View demo
@@ -176,7 +190,7 @@ export function Hero() {
                   rounded="lg"
                   shadow="sm"
                   target="_blank"
-                  transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
+                  transition={{ duration: 2, delay: 1.4 }}
                   w="72px"
                 >
                   <SandBg variant={1} />
@@ -187,7 +201,7 @@ export function Hero() {
                 <MotionText
                   animate={shouldAnimate ? { opacity: 1 } : {}}
                   initial={{ opacity: 0 }}
-                  transition={{ duration: 0.5, delay: 0.9, ease: 'easeInOut' }}
+                  transition={{ duration: 2, delay: 1.4 }}
                 >
                   Learn about Balancer v3
                 </MotionText>

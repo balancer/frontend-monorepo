@@ -82,7 +82,7 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
             lineHeight={1}
             text="Grow with us"
           />
-          <FadeIn delay={0.4} direction="up" duration={1}>
+          <FadeIn delay={0.2} direction="up" duration={0.6}>
             <Text color="font.secondary" fontSize={{ base: 'lg', lg: '2xl' }} maxW="2xl">
               Balancer v3 is DeFi infrastructure to be built on.
               {isMobile ? <>&nbsp;</> : <br />}

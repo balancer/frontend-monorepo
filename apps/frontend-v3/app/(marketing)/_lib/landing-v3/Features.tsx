@@ -216,7 +216,7 @@ export function Features() {
         pt={['xl', '3xl']}
         py={['3xl', '10rem']}
       >
-        <FadeIn delay={0.2} direction="up" duration={1}>
+        <FadeIn delay={0.2} direction="up" duration={0.6}>
           <Heading as="h4" mx="auto" size="lg">
             <chakra.span color="font.primary">Custom liquidity solutions.</chakra.span>
             <chakra.span color="font.primary" style={{ opacity: 0.6 }}>
@@ -246,7 +246,7 @@ export function Features() {
                 lineHeight={1}
                 text="Technical highlights"
               />
-              <FadeIn delay={0.4} direction="up" duration={1}>
+              <FadeIn delay={0.2} direction="up" duration={0.6}>
                 <Text color="font.secondary" fontSize="lg">
                   Balancer v3 introduces a series of technical enhancements that streamline the
                   development and deployment of custom pools, while maintaining the flexibility and

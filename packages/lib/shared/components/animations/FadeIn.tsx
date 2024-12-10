@@ -33,7 +33,7 @@ export function FadeIn({
     hidden: { opacity: 0, filter: 'blur(3px)', y: direction === 'down' ? -15 : 15 },
   }
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const isInView = useInView(ref, { once: true, margin: '-50px' })
 
   return (
     <MotionBox

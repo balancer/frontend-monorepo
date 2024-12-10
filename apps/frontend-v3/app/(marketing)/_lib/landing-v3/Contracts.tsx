@@ -198,7 +198,7 @@ export function Contracts() {
                   lineHeight={1}
                   text="Contracts"
                 />
-                <FadeIn delay={0.4} direction="up" duration={1}>
+                <FadeIn delay={0.2} direction="up" duration={0.6}>
                   <Text color="font.secondary" fontSize="lg">
                     The four main contracts of Balancer v3 enhance flexibility and minimize the
                     intricacies involved in constructing pools, empowering builders to focus on
