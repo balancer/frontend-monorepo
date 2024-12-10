@@ -14,7 +14,7 @@ import { Address } from 'viem'
 
 export type SwapSimulationQueryResult = ReturnType<typeof useSimulateSwapQuery>
 export type SdkSimulationResponseWithRouter = SdkSimulateSwapResponse & {
-  router?: Address
+  router: Address
 }
 
 export type SimulateSwapParams = {

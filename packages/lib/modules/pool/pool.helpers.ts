@@ -315,7 +315,7 @@ function isAffectedBy(pool: Pool, poolIssue: PoolIssue) {
 export function getVaultConfig(pool: Pool) {
   const networkConfig = getNetworkConfig(pool.chain)
   const vaultAddress =
-    pool.protocolVersion === 3 && pool.chain === GqlChain.Sepolia
+    pool.protocolVersion === 3
       ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         networkConfig.contracts.balancer.vaultV3!
       : networkConfig.contracts.balancer.vaultV2
