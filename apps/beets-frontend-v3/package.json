@@ -35,7 +35,8 @@
     "react-dom": "18.2.0",
     "react-use-measure": "^2.1.1",
     "viem": "^2.21.18",
-    "wagmi": "^2.12.16"
+    "wagmi": "^2.12.16",
+    "tinycolor2": "^1.6.0"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
