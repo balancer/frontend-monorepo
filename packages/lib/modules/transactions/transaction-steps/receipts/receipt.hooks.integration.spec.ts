@@ -5,7 +5,7 @@ import { getGqlChain } from '@repo/lib/config/app.config'
 import { ethAddress, polAddress } from '@repo/lib/debug-helpers'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, Hash } from 'viem'
-import { polygon } from 'viem/chains'
+import { gnosis, polygon } from 'viem/chains'
 import { useAddLiquidityReceipt, useRemoveLiquidityReceipt, useSwapReceipt } from './receipt.hooks'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 
@@ -103,6 +103,42 @@ test('queries add liquidity with native token', async () => {
   ])
 
   expect(result.current.receivedBptUnits).toBe('0.984524168989962117')
+})
+
+test('queries add liquidity in V3 GNOSIS pool', async () => {
+  const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
+
+  // const poolId = '0xecc5aebd9569c82a0944007b22d03801a8fdfe99' // 59EURe 1sDAI 40USDC.e
+  //https://gnosisscan.io/tx/0x61286503bc38b6eda1477d3812cdd268114f3443138a513259a76c42b9cc53ac
+  const txHash = '0x61286503bc38b6eda1477d3812cdd268114f3443138a513259a76c42b9cc53ac'
+
+  const result = await testAddReceipt(userAddress, txHash, gnosis.id)
+
+  await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+  await waitFor(() => expect(result.current.sentTokens).toBeDefined())
+
+  expect(result.current.sentTokens).toEqual([
+    {
+      humanAmount: '0.00000000000001',
+      tokenAddress: '0x2a22f9c3b484c3629090feed35f17ff8f88f76f0',
+    },
+    {
+      humanAmount: '0.000063840672042232',
+      tokenAddress: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d',
+    },
+    // the following one is excluded to avoid duplication
+    // ERC-20: Monerium EURe (EURe)
+    // {
+    //   humanAmount: '0.014361104681096343',
+    //   tokenAddress: '0x420ca0f9b9b604ce0fd9c18ef134c705e5fa3430',
+    // },
+    {
+      humanAmount: '0.014361104681096343',
+      tokenAddress: '0xcb444e90d8198415266c6a2724b7900fb12fc56e', // Monerium EUR emoney (EURe)
+    },
+  ])
+
+  expect(result.current.receivedBptUnits).toBe('0.012149307213559577')
 })
 
 test('queries remove liquidity transaction', async () => {

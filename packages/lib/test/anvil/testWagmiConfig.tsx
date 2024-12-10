@@ -1,6 +1,6 @@
 import { NetworksWithFork, getTestRpcSetup, testAccounts } from '@repo/lib/test/anvil/anvil-setup'
 import { Address, Chain, http } from 'viem'
-import { mainnet, polygon, sepolia } from 'viem/chains'
+import { gnosis, mainnet, polygon, sepolia } from 'viem/chains'
 import { createConfig } from 'wagmi'
 import { mock } from 'wagmi/connectors'
 
@@ -19,7 +19,12 @@ export const sepoliaTest = {
   ...getTestRpcUrls('Sepolia'),
 } as const satisfies Chain
 
-export const testChains = [mainnetTest, polygonTest, sepoliaTest] as const
+export const gnosisTest = {
+  ...gnosis,
+  ...getTestRpcUrls('Gnosis'),
+} as const satisfies Chain
+
+export const testChains = [mainnetTest, polygonTest, sepoliaTest, gnosisTest] as const
 
 function getTestRpcUrls(networkName: NetworksWithFork) {
   const { port, rpcUrl } = getTestRpcSetup(networkName)
@@ -49,6 +54,7 @@ function createTestWagmiConfig() {
       [mainnetTest.id]: http(),
       [polygonTest.id]: http(),
       [sepoliaTest.id]: http(),
+      [gnosisTest.id]: http(),
     },
     ssr: false,
   })

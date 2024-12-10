@@ -15,6 +15,7 @@ import {
 import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type ParseProps = {
   receiptLogs: Log[]
@@ -57,8 +58,17 @@ export function parseAddLiquidityReceipt({
   const receivedBptAmount = getIncomingLogs(receiptLogs, userAddress)?.[0]?.args?.value
   const receivedBptUnits = formatUnits(receivedBptAmount || 0n, BPT_DECIMALS)
 
+  // ERC-20: Monerium EURe (EURe)
+  const erc20EURe = '0x420ca0f9b9b604ce0fd9c18ef134c705e5fa3430'
+
   return {
-    sentTokens,
+    /*
+      TODO:
+        properly implement this filter getting this info from LiquidityAdded/Removed event instead of Transfers
+        They use frontend (erc20) <> controller (upgradable proxy) setup - where calls to erc20 are forwarded to the controller.
+        Both emit events, which explains the duplicates.
+    */
+    sentTokens: sentTokens.filter(t => !isSameAddress(t.tokenAddress, erc20EURe)),
     receivedBptUnits,
   }
 }
