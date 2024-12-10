@@ -108,13 +108,13 @@ export function FooterCta() {
             pr={{ base: 0.8, lg: 0.9 }}
             text="Ready to build on Balancer?"
           />
-          <HStack justifyContent="center" ref={ref} spacing="lg">
+          <HStack justifyContent="center" ref={ref} spacing="md">
             <MotionButton
               animate={shouldAnimate ? { opacity: 1 } : {}}
               as={NextLink}
               href="https://docs-v3.balancer.fi"
               initial={{ opacity: 0 }}
-              rightIcon={<ArrowUpRight />}
+              rightIcon={<ArrowUpRight size="20px" />}
               size={{ base: 'md', lg: 'lg' }}
               target="_blank"
               transition={{ duration: 0.5, delay: 0.4, ease: 'easeInOut' }}
@@ -128,7 +128,7 @@ export function FooterCta() {
               as={NextLink}
               href="https://github.com/balancer/scaffold-balancer-v3"
               initial={{ opacity: 0 }}
-              rightIcon={<ArrowUpRight />}
+              rightIcon={<ArrowUpRight size="20px" />}
               size={{ base: 'md', lg: 'lg' }}
               target="_blank"
               transition={{ duration: 0.5, delay: 0.4, ease: 'easeInOut' }}

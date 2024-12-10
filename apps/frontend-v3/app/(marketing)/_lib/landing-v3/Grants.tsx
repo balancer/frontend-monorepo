@@ -77,7 +77,7 @@ export function Grants() {
             <Button
               as={NextLink}
               href="https://grants.balancer.community/"
-              rightIcon={<ArrowUpRight />}
+              rightIcon={<ArrowUpRight size="20px" />}
               variant="secondary"
             >
               Get a grant
