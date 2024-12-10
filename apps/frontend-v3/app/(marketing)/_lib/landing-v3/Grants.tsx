@@ -90,15 +90,13 @@ export function Grants() {
           >
             {grantIdeas.map(idea => (
               <GridItem key={idea.title}>
-                <NextLink href="https://spearbit.com/" rel="noopener noreferrer" target="_blank">
-                  <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="2xl">
-                    <GraniteBg />
-                    <VStack align="start" p="md" position="relative">
-                      <Text fontSize="lg">{idea.title}</Text>
-                      <Text color="font.secondary">{idea.description}</Text>
-                    </VStack>
-                  </Box>
-                </NextLink>
+                <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="2xl">
+                  <GraniteBg />
+                  <VStack align="start" p="md" position="relative">
+                    <Text fontSize="lg">{idea.title}</Text>
+                    <Text color="font.secondary">{idea.description}</Text>
+                  </VStack>
+                </Box>
               </GridItem>
             ))}
           </Grid>

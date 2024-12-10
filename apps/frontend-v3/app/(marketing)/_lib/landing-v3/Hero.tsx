@@ -156,12 +156,15 @@ export function Hero() {
               <HStack alignItems="center" spacing="md">
                 <MotionBox
                   animate={shouldAnimate ? { opacity: 1 } : {}}
+                  as={NextLink}
                   h="48px"
+                  href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
                   initial={{ opacity: 0 }}
                   overflow="hidden"
                   position="relative"
                   rounded="lg"
                   shadow="sm"
+                  target="_blank"
                   transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
                   w="72px"
                 >

@@ -70,10 +70,6 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
     partnerRedirectDisclosure.onOpen()
   }
 
-  useEffect(() => {
-    console.log(protocolData)
-  }, [protocolData])
-
   return (
     <Noise backgroundColor="background.level0WithOpacity">
       <DefaultPageContainer noVerticalPadding py={['3xl', '10rem']}>
