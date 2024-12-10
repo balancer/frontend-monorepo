@@ -63,6 +63,7 @@ export function FooterCta() {
             innerWidth={500}
             padding="15px"
             position="absolute"
+            progress={patternProgress}
             right={{ base: -700, lg: -700, xl: -600, '2xl': -400 }}
             top="calc(50% - 300px)"
             width={1000}
@@ -75,6 +76,7 @@ export function FooterCta() {
             left={{ base: -700, lg: -700, xl: -600, '2xl': -400 }}
             padding="15px"
             position="absolute"
+            progress={patternProgress}
             top="calc(50% - 300px)"
             width={1000}
           />
