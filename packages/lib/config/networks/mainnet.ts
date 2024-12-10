@@ -5,7 +5,7 @@ import { NetworkConfig } from '../config.types'
 import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
 import { SupportedWrapHandler } from '@repo/lib/modules/swap/swap.types'
 import { Address } from 'viem'
-import { VAULT_V3 } from '@balancer/sdk'
+import { PERMIT2, VAULT_V3 } from '@balancer/sdk'
 import { mainnet } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -86,6 +86,7 @@ const networkConfig: NetworkConfig = {
     veDelegationProxy: '0x6f5a2eE11E7a772AeB5114A20d0D7c0ff61EB8A0',
     veBAL: '0xC128a9954e6c874eA3d62ce62B468bA073093F25',
     omniVotingEscrow: '0x96484f2aBF5e58b15176dbF1A799627B53F13B6d',
+    permit2: PERMIT2[mainnet.id],
   },
 
   pools: convertHexToLowerCase({

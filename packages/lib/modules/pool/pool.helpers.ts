@@ -68,7 +68,7 @@ export function isFx(poolType: GqlPoolType | string): boolean {
 }
 
 export function isBoosted(pool: PoolListItem | Pool) {
-  return pool.hasErc4626 || pool.hasNestedErc4626
+  return isV3Pool(pool) && (pool.hasErc4626 || pool.hasNestedErc4626)
 }
 
 export function isGyro(poolType: GqlPoolType) {
@@ -333,7 +333,7 @@ export function isV2Pool(pool: Pool): boolean {
   return pool.protocolVersion === 2
 }
 
-export function isV3Pool(pool: Pool): boolean {
+export function isV3Pool(pool: Pool | PoolListItem): boolean {
   return pool.protocolVersion === 3
 }
 

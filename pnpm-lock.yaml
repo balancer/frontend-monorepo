@@ -86,6 +86,9 @@ importers:
       react-use-measure:
         specifier: ^2.1.1
         version: 2.1.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      tinycolor2:
+        specifier: ^1.6.0
+        version: 1.6.0
       viem:
         specifier: ^2.21.18
         version: 2.21.22(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -126,6 +129,9 @@ importers:
       '@types/react-dom':
         specifier: 18.2.6
         version: 18.2.6
+      '@types/tinycolor2':
+        specifier: ^1.4.6
+        version: 1.4.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.60.1
         version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.43.0)(typescript@5.4.5))(eslint@8.43.0)(typescript@5.4.5)

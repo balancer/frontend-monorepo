@@ -16,6 +16,7 @@ import {
   injectNativeAsset,
   replaceWrappedWithNativeAsset,
   requiresProportionalInput,
+  supportsNestedActions,
 } from '../LiquidityActionHelpers'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -174,7 +175,10 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     [areEmptyAmounts(humanAmountsIn), 'You must specify one or more token amounts'],
     [hasValidationErrors, 'Errors in token inputs'],
     [needsToAcceptHighPI, 'Accept high price impact first'],
-    [isUnbalancedAddErrorMessage(priceImpactQuery.error), 'Unbalanced join'],
+    [
+      isUnbalancedAddErrorMessage(priceImpactQuery.error) && !supportsNestedActions(pool),
+      'Unbalanced join',
+    ],
     [simulationQuery.isLoading, 'Fetching quote...'],
     [simulationQuery.isError, 'Error fetching quote'],
     [priceImpactQuery.isLoading, 'Fetching price impact...'],
