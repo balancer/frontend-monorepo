@@ -31,9 +31,10 @@ import { useEffect, useState } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
+import { ApiToken } from '../../pool/pool.types'
 
 type TokenInputSelectorProps = {
-  token: GqlToken | undefined
+  token: GqlToken | ApiToken | undefined
   weight?: string
   toggleTokenSelect?: () => void
 }
@@ -84,7 +85,7 @@ function TokenInputSelector({ token, weight, toggleTokenSelect }: TokenInputSele
 }
 
 type TokenInputFooterProps = {
-  token: GqlToken | undefined
+  token: GqlToken | ApiToken | undefined
   value?: string
   updateValue: (value: string) => void
   hasPriceImpact?: boolean

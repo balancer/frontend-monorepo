@@ -5,6 +5,7 @@ import {
   GqlPoolType,
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
+  GetTokensQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   parseAsArrayOf,
@@ -144,6 +145,9 @@ export type TokenCore = {
   decimals: number
   index: number
 }
+
+// export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & { index: number }
+export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'>
 
 export enum PoolListDisplayType {
   Name = 'name',

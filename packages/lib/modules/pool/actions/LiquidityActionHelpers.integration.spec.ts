@@ -100,10 +100,12 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
 
 // Unskip when sepolia V3 pools are available in production api
 describe.skip('Liquidity helpers for V3 Boosted pools', async () => {
-  // const poolId = '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8' // Sepolia stataEthUSDC stataEthUSDT
+  // const poolId = '0x59fa488dda749cdd41772bb068bb23ee955a6d7a' // Balancer USDC/USDT
 
-  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
-  const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0'
+  // const aUsdcSepoliaAddress = '0x8a88124522dbbf1e56352ba3de1d9f78c143751e'
+  // const aUsdtSepoliaAddress = '0x978206fae13faf5a8d293fb614326b237684b750'
+  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // underlying token
+  const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0' // underlying token
   // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
   const v3Pool = {} as GqlPoolElement
   const helpers = new LiquidityActionHelpers(v3Pool)
@@ -112,11 +114,12 @@ describe.skip('Liquidity helpers for V3 Boosted pools', async () => {
     { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress },
   ]
 
-  it('allPoolTokens', async () => {
-    expect(allPoolTokens(v3Pool).map(t => t.address)).toEqual([
-      usdcSepoliaAddress,
-      usdtSepoliaAddress,
-    ])
+  it.only('allPoolTokens', async () => {
+    expect(
+      allPoolTokens(v3Pool)
+        .map(t => t.address)
+        .sort()
+    ).toEqual([usdcSepoliaAddress, usdtSepoliaAddress])
   })
 
   it('allPoolTokens snapshot', async () => {

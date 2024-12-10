@@ -5,10 +5,11 @@ import { orderBy } from 'lodash'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { exclNativeAssetFilter, nativeAssetFilter } from '../../token.helpers'
 import { useCallback, useMemo } from 'react'
+import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 export function useTokenSelectList(
   chain: GqlChain,
-  tokens: GqlToken[],
+  tokens: GqlToken[] | ApiToken[],
   excludeNativeAsset: boolean,
   pinNativeAsset: boolean,
   searchTerm?: string
@@ -16,10 +17,10 @@ export function useTokenSelectList(
   const { usdValueForToken } = useTokens()
   const { balanceFor } = useTokenBalances()
 
-  const symbolMatch = (token: GqlToken, searchTerm: string) =>
+  const symbolMatch = (token: GqlToken | ApiToken, searchTerm: string) =>
     token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
 
-  const nameMatch = (token: GqlToken, searchTerm: string) =>
+  const nameMatch = (token: GqlToken | ApiToken, searchTerm: string) =>
     token.name.toLowerCase().includes(searchTerm.toLowerCase())
 
   const getFilteredTokens = useCallback(() => {

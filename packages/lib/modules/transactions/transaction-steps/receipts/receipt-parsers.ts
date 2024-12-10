@@ -14,14 +14,14 @@ import {
 } from 'viem'
 import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
-import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken, ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 
 type ParseProps = {
   receiptLogs: Log[]
   chain: GqlChain
   userAddress?: Address
   txValue: bigint
-  getToken: (address: Address, chain: GqlChain) => GqlToken | undefined
+  getToken: (address: Address, chain: GqlChain) => GqlToken | ApiToken | undefined
   protocolVersion: ProtocolVersion
 }
 

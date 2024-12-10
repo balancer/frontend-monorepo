@@ -4,6 +4,7 @@ import { VStack, HStack, Skeleton, Text } from '@chakra-ui/react'
 import TokenRow from './TokenRow'
 import { useTotalUsdValue } from '../useTotalUsdValue'
 import { HumanTokenAmountWithAddress } from '../token.types'
+import { ApiToken } from '../../pool/pool.types'
 
 export function TokenRowGroup({
   label,
@@ -17,7 +18,7 @@ export function TokenRowGroup({
   amounts: HumanTokenAmountWithAddress[]
   chain: GqlChain
   totalUSDValue?: string
-  tokens?: GqlToken[]
+  tokens?: GqlToken[] | ApiToken[]
   isLoading?: boolean
 }) {
   const { toCurrency } = useCurrency()

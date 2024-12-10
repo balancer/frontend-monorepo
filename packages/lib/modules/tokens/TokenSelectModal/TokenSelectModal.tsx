@@ -18,9 +18,10 @@ import { TokenSelectPopular } from './TokenSelectPopular'
 import { SearchInput } from '@repo/lib/shared/components/inputs/SearchInput'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { Address } from 'viem'
+import { ApiToken } from '../../pool/pool.types'
 
 type Props = {
-  tokens: GqlToken[]
+  tokens: GqlToken[] | ApiToken[]
   chain: GqlChain
   currentToken?: Address
   excludeNativeAsset?: boolean
@@ -29,7 +30,7 @@ type Props = {
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement>
-  onTokenSelect: (token: GqlToken) => void
+  onTokenSelect: (token: GqlToken | ApiToken) => void
 }
 
 export function TokenSelectModal({
@@ -46,7 +47,7 @@ export function TokenSelectModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const [searchTerm, setSearchTerm] = useState('')
 
-  function closeOnSelect(token: GqlToken) {
+  function closeOnSelect(token: GqlToken | ApiToken) {
     onTokenSelect(token)
     closeModal()
   }

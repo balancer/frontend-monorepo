@@ -46,6 +46,7 @@ import {
   isV3NotSupportingWethIsEth,
 } from '../pool.helpers'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
+import { ApiToken } from '../pool.types'
 
 // Null object used to avoid conditional checks during hook loading state
 const NullPool: Pool = {
@@ -359,7 +360,7 @@ export function emptyTokenAmounts(pool: Pool): TokenAmount[] {
   return pool.poolTokens.map(token => TokenAmount.fromHumanAmount(token as unknown as Token, '0'))
 }
 
-export function shouldShowNativeWrappedSelector(token: GqlToken, pool: Pool) {
+export function shouldShowNativeWrappedSelector(token: GqlToken | ApiToken, pool: Pool) {
   return (
     !isV3NotSupportingWethIsEth(pool) && // V3 boosted/nested actions don't support wethIsEth currently
     !isCowAmmPool(pool.type) && // Cow AMM pools don't support wethIsEth
@@ -368,8 +369,8 @@ export function shouldShowNativeWrappedSelector(token: GqlToken, pool: Pool) {
 }
 
 export function replaceWrappedWithNativeAsset(
-  validTokens: GqlToken[],
-  nativeAsset: GqlToken | undefined
+  validTokens: GqlToken[] | ApiToken[],
+  nativeAsset: GqlToken | ApiToken | undefined
 ) {
   if (!nativeAsset) return validTokens
   return validTokens.map(token => {
@@ -382,8 +383,8 @@ export function replaceWrappedWithNativeAsset(
 }
 
 export function injectNativeAsset(
-  validTokens: GqlToken[],
-  nativeAsset: GqlToken | undefined,
+  validTokens: GqlToken[] | ApiToken[],
+  nativeAsset: GqlToken | ApiToken | undefined,
   pool: Pool
 ) {
   const isWrappedNativeAssetInPool = validTokens.find(token =>
