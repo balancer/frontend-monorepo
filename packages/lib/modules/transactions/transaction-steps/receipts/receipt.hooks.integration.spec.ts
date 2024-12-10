@@ -105,7 +105,7 @@ test('queries add liquidity with native token', async () => {
   expect(result.current.receivedBptUnits).toBe('0.984524168989962117')
 })
 
-test.only('queries add liquidity in V3 GNOSIS pool', async () => {
+test('queries add liquidity in V3 GNOSIS pool', async () => {
   const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
 
   // const poolId = '0xecc5aebd9569c82a0944007b22d03801a8fdfe99' // 59EURe 1sDAI 40USDC.e
