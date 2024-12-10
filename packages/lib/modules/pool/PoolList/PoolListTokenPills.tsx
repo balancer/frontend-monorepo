@@ -5,6 +5,7 @@ import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { isStableLike, isWeightedLike } from '../pool.helpers'
 import { Pool } from '../PoolProvider'
+import { getPoolDisplayTokens } from '../pool.utils'
 
 function NestedTokenPill({
   nestedTokens,
@@ -163,51 +164,6 @@ function StableTokenPills({
   )
 }
 
-function BoostedTokenPills({
-  pool,
-  chain,
-  iconSize = 24,
-  ...badgeProps
-}: { pool: Pool | PoolListItem; chain: GqlChain; iconSize?: number } & BadgeProps) {
-  return (
-    <HStack spacing={0}>
-      <Badge
-        {...badgeProps}
-        alignItems="center"
-        bg="background.level2"
-        borderColor="border.base"
-        borderRadius="full"
-        borderWidth={1}
-        shadow="sm"
-        textTransform="none"
-      >
-        <HStack gap={['xs', '1.5']}>
-          <HStack>
-            {pool.poolTokens.map(poolToken => {
-              const token = poolToken.underlyingToken ?? poolToken
-
-              return (
-                token && (
-                  <TokenIcon
-                    address={token.address}
-                    alt={token.symbol}
-                    chain={chain}
-                    key={token.address}
-                    size={iconSize}
-                  />
-                )
-              )
-            })}
-          </HStack>
-          <Text fontWeight="bold" noOfLines={1}>
-            {pool.name}
-          </Text>
-        </HStack>
-      </Badge>
-    </HStack>
-  )
-}
-
 type Props = {
   pool: Pool | PoolListItem
   iconSize?: number
@@ -218,12 +174,12 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
   const shouldUseStablePills = isStableLike(pool.type)
 
   // TODO: fix difference between Pool and PoolListItem types
-  const poolTokens = pool.poolTokens.filter(
+  let poolTokens = pool.poolTokens.filter(
     token => token.address !== pool.address
   ) as GqlPoolTokenDetail[]
 
   if (pool.hasErc4626 && !pool.hasNestedErc4626) {
-    return <BoostedTokenPills chain={pool.chain} iconSize={iconSize} pool={pool} {...badgeProps} />
+    poolTokens = getPoolDisplayTokens(pool)
   }
 
   if (shouldUseStablePills) {
