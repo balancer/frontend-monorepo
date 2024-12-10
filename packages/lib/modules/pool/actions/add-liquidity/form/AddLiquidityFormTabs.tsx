@@ -92,7 +92,7 @@ export function AddLiquidityFormTabs({
   const isProportional = tabIndex === 1
 
   return (
-    <VStack>
+    <VStack w="full">
       <ButtonGroup
         currentOption={options[tabIndex]}
         groupId="add-liquidity"
