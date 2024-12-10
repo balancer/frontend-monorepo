@@ -133,7 +133,9 @@ export function useAprTooltip({
     .reduce((acc, item) => acc.plus(item.apr), bn(0))
   const totalBaseDisplayed = numberFormatter(totalBase.toString())
 
-  const totalCombined = aprItems.reduce((acc, item) => acc.plus(item.apr), bn(0))
+  const totalCombined = aprItems
+    .filter(item => TOTAL_APR_TYPES.includes(item.type))
+    .reduce((acc, item) => acc.plus(item.apr), bn(0))
   const totalCombinedDisplayed = numberFormatter(totalCombined.toString())
 
   const extraBalAprDisplayed = hasVeBalBoost ? maxVeBalDisplayed.minus(totalBaseDisplayed) : bn(0)
