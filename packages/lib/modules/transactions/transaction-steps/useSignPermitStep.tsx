@@ -9,7 +9,7 @@ import {
   RemoveLiquidityPermitParams,
   useSignPermit as useSignPermit,
 } from '../../tokens/approvals/permit/useSignPermit'
-import { useChainSwitch } from '../../web3/useChainSwitch'
+import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
 import { TransactionStep } from './lib'
 import { getChainId } from '@repo/lib/config/app.config'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
@@ -21,7 +21,7 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
   const { signPermit, signPermitState, isLoading, isDisabled, buttonLabel, error } = useSignPermit({
     ...params,
   })
-  const { shouldChangeNetwork, NetworkSwitchButton, networkSwitchButtonProps } = useChainSwitch(
+  const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(
     getChainId(params.pool.chain)
   )
 

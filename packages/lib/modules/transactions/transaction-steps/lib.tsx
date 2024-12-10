@@ -1,6 +1,8 @@
 import { TransactionBundle } from '@repo/lib/modules/web3/contracts/contract.types'
 import { ReactNode } from 'react'
 import { LockActionType } from '../../vebal/lock/steps/lock-steps.utils'
+import { BaseTransaction } from '@safe-global/safe-apps-sdk'
+import { Address, Hash } from 'viem'
 
 export enum TransactionState {
   Ready = 'init',
@@ -77,6 +79,44 @@ export type StepDetails = {
   batchApprovalTokens?: string[]
 }
 
+export type TxCall = {
+  to: Address
+  data: Hash
+}
+
+export type SafeAppTx = BaseTransaction
+
+export type TxBatch = SafeAppTx[]
+
+/*
+  Smart accounts, like Gnosis Safe, support batching multiple transactions into an atomic one
+  We use the gnosis Safe Apps SDK to implement that feature:
+  Repo and docs: https://github.com/safe-global/safe-apps-sdk/tree/main/packages/safe-apps-sdk#safe-apps-sdk
+
+  Nice to have:
+    It would be great to generalize the implementation to be supported by non Gnosis Safe,
+    as other wallets like Coinbase wallet also support Smart Account features,
+    However we found that wagmi is not fully supporting this features yet.
+    More info:
+    https://wagmi.sh/react/api/hooks/useSendCalls
+    https://wagmi.sh/react/api/hooks/useCallsStatus
+*/
+type MaybeBatchableTx = {
+  // TxCall representation of the TransactionStep when it must be executed inside a tx batch
+  batchableTxCall?: TxCall
+  /*
+    true when the current transaction step is the last one in the batch
+    Example:
+    we have 3 transactions in a batch (2 token approval transactions and 1 add liquidity transaction)
+    the add liquidity transaction should have isBatchEnd = true
+  */
+  isBatchEnd?: boolean
+  // Used instead of renderAction when the step is a batch with uncompleted nested steps
+  renderBatchAction?: (currentStep: TransactionStep) => React.ReactNode
+  // Example: token approval steps are nested inside addLiquidity step
+  nestedSteps?: TransactionStep[]
+}
+
 export type TransactionStep = {
   id: string
   stepType: StepType
@@ -88,7 +128,7 @@ export type TransactionStep = {
   onSuccess?: () => void
   onActivated?: () => void
   onDeactivated?: () => void
-}
+} & MaybeBatchableTx
 
 export function getTransactionState(transactionBundle?: TransactionBundle): TransactionState {
   if (!transactionBundle) return TransactionState.Ready
