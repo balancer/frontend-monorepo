@@ -91,15 +91,14 @@ export function Hero() {
                     }
                   : {}
               }
-              background="font.specialSecondary"
+              background="font.special"
               backgroundClip="text"
               fontSize="sm"
               initial={{ opacity: 0, filter: 'blur(3px)' }}
-              letterSpacing="1px"
-              textTransform="uppercase"
               transition={{ delay: 0.7, duration: 0.3, delayChildren: 0.5, ease: 'easeInOut' }}
+              variant="eyebrow"
             >
-              Balancer V3 is live
+              Balancer v3 is live
             </MotionText>
 
             <WordsPullUp
@@ -165,7 +164,7 @@ export function Hero() {
                 Prototype v3
               </MotionButton>
             </Stack>
-            <HStack alignItems="center" spacing="md" mt="md">
+            <HStack alignItems="center" mt="xl" spacing="md">
               <MotionBox
                 animate={shouldAnimate ? { opacity: 1 } : {}}
                 as={NextLink}
@@ -175,12 +174,13 @@ export function Hero() {
                 overflow="hidden"
                 position="relative"
                 rounded="lg"
-                shadow="sm"
+                shadow="md"
                 target="_blank"
                 transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
-                w="144px"
+                w="136px"
               >
                 <SandBg variant={1} />
+
                 <Center h="full" position="relative" w="full">
                   <PlayVideoButton size={10} />
                 </Center>
