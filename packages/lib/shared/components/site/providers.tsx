@@ -7,7 +7,6 @@ import { UserSettingsProvider } from '@repo/lib/modules/user/settings/UserSettin
 
 import { wagmiConfig } from '@repo/lib/modules/web3/WagmiConfig'
 import { GlobalAlertsProvider } from '@repo/lib/shared/components/alerts/GlobalAlertsProvider'
-import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -16,9 +15,7 @@ export function Providers({ children }: { children: ReactNode }) {
         <ApolloClientProvider>
           <ApolloGlobalDataProvider>
             <UserSettingsProvider>
-              <VebalLockDataProvider>
-                <RecentTransactionsProvider>{children}</RecentTransactionsProvider>
-              </VebalLockDataProvider>
+              <RecentTransactionsProvider>{children}</RecentTransactionsProvider>
             </UserSettingsProvider>
           </ApolloGlobalDataProvider>
         </ApolloClientProvider>
