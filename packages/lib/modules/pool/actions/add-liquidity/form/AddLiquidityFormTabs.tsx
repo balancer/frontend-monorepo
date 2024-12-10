@@ -44,6 +44,7 @@ export function AddLiquidityFormTabs({
   // const isDisabledProportionalTab = !supportsProportionalAddLiquidityKind(pool)
 
   const isBelowMinTvlThreshold =
+    isV3Pool(pool) &&
     !isDisabledProportionalTab &&
     bn(pool.dynamicData.totalLiquidity).lt(bn(MIN_LIQUIDITY_FOR_BALANCED_ADD))
 
