@@ -34,7 +34,7 @@ import { AlertTriangle, XCircle } from 'react-feather'
 import Image from 'next/image'
 import { RateProviderInfoPopOver } from './RateProviderInfo'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
-import { getWarnings } from '@repo/lib/modules/pool/pool.helpers'
+import { getWarnings, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
 import { Erc4626InfoPopOver } from './Erc4626Info'
 
@@ -162,6 +162,8 @@ export function PoolContracts({ ...props }: CardProps) {
   }, [pool])
 
   const erc4626Tokens = useMemo(() => {
+    if (!isV3Pool(pool)) return []
+
     const erc4626Tokens = pool.poolTokens.filter(token => token.isErc4626)
     const erc4626NestedTokens = pool.poolTokens.flatMap(token =>
       token.nestedPool ? token.nestedPool.tokens.filter(token => token.isErc4626) : []
