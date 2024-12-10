@@ -80,7 +80,7 @@ export function Hero() {
 
       <DefaultPageContainer flex="1" h="100vh" minH="600px" noVerticalPadding position="relative">
         <Center h="full" justifyContent="start">
-          <VStack alignItems="start" spacing="md">
+          <VStack alignItems="start" spacing="xl">
             <MotionText
               animate={
                 shouldAnimate
@@ -95,6 +95,7 @@ export function Hero() {
               backgroundClip="text"
               fontSize="sm"
               initial={{ opacity: 0, filter: 'blur(3px)' }}
+              letterSpacing="1px"
               textTransform="uppercase"
               transition={{ delay: 0.7, duration: 0.3, delayChildren: 0.5, ease: 'easeInOut' }}
             >
@@ -107,6 +108,7 @@ export function Hero() {
               delay={0.7}
               fontSize={{ base: '4xl', md: '6xl' }}
               fontWeight="bold"
+              letterSpacing="-2px"
               lineHeight={1}
               pr="2"
               text="AMMs made easy"
@@ -134,54 +136,63 @@ export function Hero() {
               The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
               simplicity and flexibility to reshape the future of AMMs.
             </MotionHeading>
-            <Stack
-              alignItems={{ base: 'start', md: 'center' }}
-              direction={{ base: 'column', md: 'row' }}
-              mt="xl"
-              spacing="xl"
-            >
+            <Stack alignItems={{ base: 'start', md: 'center' }} direction="row" mt="0" spacing="ms">
               <MotionButton
                 animate={shouldAnimate ? { opacity: 1 } : {}}
                 as={NextLink}
                 href="https://docs-v3.balancer.fi"
                 initial={{ opacity: 0 }}
-                rightIcon={<ArrowUpRight />}
+                rightIcon={<ArrowUpRight size="20px" />}
+                size="lg"
+                target="_blank"
+                transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
+                variant="primary"
+              >
+                View v3 docs
+              </MotionButton>
+
+              <MotionButton
+                animate={shouldAnimate ? { opacity: 1 } : {}}
+                as={NextLink}
+                href="https://github.com/balancer/scaffold-balancer-v3"
+                initial={{ opacity: 0 }}
+                rightIcon={<ArrowUpRight size="20px" />}
                 size="lg"
                 target="_blank"
                 transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
                 variant="secondary"
               >
-                View v3 docs
+                Prototype v3
               </MotionButton>
-              <HStack alignItems="center" spacing="md">
-                <MotionBox
-                  animate={shouldAnimate ? { opacity: 1 } : {}}
-                  as={NextLink}
-                  h="48px"
-                  href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
-                  initial={{ opacity: 0 }}
-                  overflow="hidden"
-                  position="relative"
-                  rounded="lg"
-                  shadow="sm"
-                  target="_blank"
-                  transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
-                  w="72px"
-                >
-                  <SandBg variant={1} />
-                  <Center h="full" position="relative" w="full">
-                    <PlayVideoButton size={10} />
-                  </Center>
-                </MotionBox>
-                <MotionText
-                  animate={shouldAnimate ? { opacity: 1 } : {}}
-                  initial={{ opacity: 0 }}
-                  transition={{ duration: 0.5, delay: 0.9, ease: 'easeInOut' }}
-                >
-                  Learn about Balancer v3
-                </MotionText>
-              </HStack>
             </Stack>
+            <HStack alignItems="center" spacing="md" mt="md">
+              <MotionBox
+                animate={shouldAnimate ? { opacity: 1 } : {}}
+                as={NextLink}
+                h="84px"
+                href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
+                initial={{ opacity: 0 }}
+                overflow="hidden"
+                position="relative"
+                rounded="lg"
+                shadow="sm"
+                target="_blank"
+                transition={{ duration: 0.5, delay: 0.7, ease: 'easeInOut' }}
+                w="144px"
+              >
+                <SandBg variant={1} />
+                <Center h="full" position="relative" w="full">
+                  <PlayVideoButton size={10} />
+                </Center>
+              </MotionBox>
+              <MotionText
+                animate={shouldAnimate ? { opacity: 1 } : {}}
+                initial={{ opacity: 0 }}
+                transition={{ duration: 0.5, delay: 0.9, ease: 'easeInOut' }}
+              >
+                Learn about Balancer v3
+              </MotionText>
+            </HStack>
           </VStack>
         </Center>
       </DefaultPageContainer>
