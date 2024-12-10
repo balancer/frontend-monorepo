@@ -305,6 +305,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
             _dark: '#414853',
           },
         },
+        navLink: {
+          default: 'red',
+          _dark: 'red',
+        },
         dark: colors.gray['700'], // always dark
         light: '#E5D3BE', // always light
       },

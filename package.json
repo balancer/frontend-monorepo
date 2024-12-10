@@ -19,7 +19,8 @@
     "test:integration": "turbo test:integration --ui=stream --log-order=stream --",
     "test:unit": "turbo test:unit --ui=stream --log-order=stream --",
     "typecheck": "turbo typecheck",
-    "prepare": "husky"
+    "prepare": "husky",
+    "gen:theme-typings": "turbo gen:theme-typings"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

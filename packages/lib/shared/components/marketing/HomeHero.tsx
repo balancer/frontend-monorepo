@@ -108,7 +108,7 @@ export function HomeHero() {
                 <Box h="24px">
                   <Link href="/build/v3">
                     <Flex>
-                      <Text background="font.special" backgroundClip="text" variant="eyebrow">
+                      <Text background="font.navLink" backgroundClip="text" variant="eyebrow">
                         Balancer protocol: v3 Soon&nbsp;
                       </Text>
                       <Text display="none" opacity="0" variant="eyebrow" visibility="hidden">

@@ -67,6 +67,11 @@
       "dependsOn": ["^transit"],
       "outputs": ["node_modules/.cache/.prettiercache"],
       "cache": false
+    },
+    "gen:theme-typings": {
+      "dependsOn": ["^gen:theme-typings"],
+      "outputs": ["node_modules/@chakra-ui/**/*.d.ts"],
+      "cache": false
     }
   }
 }
