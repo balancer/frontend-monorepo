@@ -122,8 +122,6 @@ export function LstWithdraw() {
 
   const [withdrawalsView, setWithdrawalsView] = useState(withdrawalsDataOrdered.slice(skip, first))
 
-  console.log({ paginationProps, pagination })
-
   useEffect(() => {
     if (withdrawalsDataOrdered.length < first) {
       setWithdrawalsView(withdrawalsDataOrdered.slice(skip))
@@ -131,8 +129,6 @@ export function LstWithdraw() {
       setWithdrawalsView(withdrawalsDataOrdered.slice(skip, first + skip))
     }
   }, [skip])
-
-  console.log({ withdrawalsView, withdrawalsDataOrdered, skip, first })
 
   const rowProps = {
     px: { base: 'sm', sm: '0' },
