@@ -5,7 +5,6 @@ import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { isStableLike, isWeightedLike } from '../pool.helpers'
 import { Pool } from '../PoolProvider'
-import { getPoolDisplayTokens } from '../pool.utils'
 
 function NestedTokenPill({
   nestedTokens,
