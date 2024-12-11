@@ -29,7 +29,6 @@ export function Pagination({
   setPageSize,
   pageSize,
   changeSize = true,
-  isSmall = false, // set to true when table is NOT directly used in a card
   hideDropdown = false,
   ...rest
 }: Props) {
