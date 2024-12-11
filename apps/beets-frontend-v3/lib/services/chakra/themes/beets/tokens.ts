@@ -94,6 +94,7 @@ export function getBeetsTokens(colors: any, primaryTextColor: any) {
           borderDefault: colors.gray['900'],
           borderHover: colors.gray['700'],
           borderFocus: colors.gray['500'],
+          bgDefault: '#262626',
         },
       },
     },
