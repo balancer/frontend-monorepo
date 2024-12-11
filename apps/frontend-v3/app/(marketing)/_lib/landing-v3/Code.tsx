@@ -76,7 +76,7 @@ export function Code() {
             lineHeight={1}
             text="Code less, build more."
           />
-          <FadeIn delay={0.4} direction="up" duration={1}>
+          <FadeIn delay={0.2} direction="up" duration={0.6}>
             <Text color="font.secondary" fontSize="lg" maxW="2xl">
               Balancer v3’s architecture focuses on simplicity, flexibility, and extensibility at
               its core. The v3 Vault more formally defines the requirements of a custom pool,
@@ -140,7 +140,7 @@ export function Code() {
                       pr={{ base: 'xxs', lg: '0.9' }}
                       text="Building on v3 is simple"
                     />
-                    <FadeIn delay={0.4} direction="up" duration={1}>
+                    <FadeIn delay={0.2} direction="up" duration={0.6}>
                       <Text color="font.secondary">
                         To make custom pool creation easy, core functions have been moved from pools
                         into the heavily audited Vault. For example, here’s all the code needed to

@@ -19,6 +19,8 @@ import { AddLiquiditySummary } from './AddLiquiditySummary'
 import { useAddLiquidityReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
+import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { ProtocolVersion } from '../../../pool.types'
 
 type Props = {
@@ -44,6 +46,7 @@ export function AddLiquidityModal({
     setInitialHumanAmountsIn,
   } = useAddLiquidity()
   const { pool, chain } = usePool()
+  const shouldBatchTransactions = useShouldBatchTransactions(pool)
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
@@ -90,7 +93,11 @@ export function AddLiquidityModal({
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
         {isDesktop && hasQuoteContext && (
-          <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
+          <DesktopStepTracker
+            chain={pool.chain}
+            isTxBatch={shouldBatchTransactions}
+            transactionSteps={transactionSteps}
+          />
         )}
         <TransactionModalHeader
           chain={pool.chain}
@@ -101,6 +108,7 @@ export function AddLiquidityModal({
         />
         <ModalCloseButton />
         <ModalBody>
+          <TxBatchAlert currentStep={transactionSteps.currentStep} mb="sm" />
           <AddLiquiditySummary {...receiptProps} />
         </ModalBody>
         <ActionModalFooter

@@ -55,7 +55,7 @@ export function Grants() {
               pr={{ base: 'xxs', lg: '0.9' }}
               text="Innovate with us"
             />
-            <FadeIn delay={0.4} direction="up" duration={1} w="full">
+            <FadeIn delay={0.2} direction="up" duration={0.6} w="full">
               <Text color="font.secondary" fontSize="lg" maxW="full" w="3xl">
                 Balancer Community Grants aim to accelerate the development of the Balancer
                 ecosystem. Grants for innovation on Balancer v3 will be prioritized. This program is
@@ -70,7 +70,7 @@ export function Grants() {
             justify="space-between"
             w="full"
           >
-            <FadeIn delay={0.5} direction="up" duration={1}>
+            <FadeIn delay={0.5} direction="up" duration={0.6}>
               <Text fontSize={{ base: 'lg', lg: '2xl' }} fontWeight="bold" opacity={0.8}>
                 Some fund-worthy ideas to get you started
               </Text>

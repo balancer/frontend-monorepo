@@ -3,7 +3,7 @@ import { getViemClient } from '@repo/lib/shared/services/viem/viem.client'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { Hex, parseAbiItem } from 'viem'
-import { useUserAccount } from '../../web3/UserAccountProvider'
+import { useUserAccount } from '../../../web3/UserAccountProvider'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 
 type Props = {

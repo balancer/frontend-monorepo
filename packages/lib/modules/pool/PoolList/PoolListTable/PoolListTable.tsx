@@ -23,7 +23,7 @@ export function PoolListTable({ pools, count, loading }: Props) {
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination)
   const showPagination = !!pools.length && !!count && count > pagination.pageSize
 
-  const numberColumnWidth = userAddress ? '150px' : '175px'
+  const numberColumnWidth = userAddress ? '120px' : '175px'
   const furthestLeftColWidth = '120px'
 
   const rowProps = {

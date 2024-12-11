@@ -1,4 +1,11 @@
-import { Alert, AlertIcon, AlertStatus, AlertTitle, CloseButton } from '@chakra-ui/react'
+import {
+  Alert,
+  AlertIcon,
+  AlertProps,
+  AlertStatus,
+  AlertTitle,
+  CloseButton,
+} from '@chakra-ui/react'
 import { MouseEventHandler, ReactNode } from 'react'
 import { AlertTriangle, Check, Info, Loader, XOctagon } from 'react-feather'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
@@ -11,7 +18,7 @@ export type BalAlertProps = {
   isNavAlert?: boolean
   onClose?: MouseEventHandler
   ssr?: boolean
-}
+} & Omit<AlertProps, 'status' | 'children' | 'content'>
 
 export function BalAlert({
   content,
@@ -21,9 +28,10 @@ export function BalAlert({
   isNavAlert = false,
   ssr = false, // Use true whe rendering alerts on the server side
   onClose,
+  ...rest
 }: BalAlertProps) {
   return (
-    <Alert rounded={isNavAlert ? 'none' : 'default'} status={status}>
+    <Alert rounded={isNavAlert ? 'none' : 'default'} status={status} {...rest}>
       {ssr ? <AlertIcon /> : <AlertIcon as={getAlertIcon(status)} />}
 
       <AlertTitle
