@@ -561,21 +561,19 @@ export function PoolListFilters() {
             </PopoverContent>
           </Box>
         </Popover>
-        {isCowPath && (
-          <Button
-            as={Link}
-            display="flex"
-            gap="2"
-            href="https://pool-creator.balancer.fi/cow"
-            ml="ms"
-            rel=""
-            target="_blank"
-            variant="tertiary"
-          >
-            <Icon as={Plus} boxSize={4} />
-            {!isMobile && 'Create a pool'}
-          </Button>
-        )}
+        <Button
+          as={Link}
+          display="flex"
+          gap="2"
+          href={`https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`}
+          ml="ms"
+          rel=""
+          target="_blank"
+          variant="tertiary"
+        >
+          <Icon as={Plus} boxSize={4} />
+          {!isMobile && 'Create a pool'}
+        </Button>
       </HStack>
     </VStack>
   )
