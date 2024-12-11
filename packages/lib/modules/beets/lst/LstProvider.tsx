@@ -15,6 +15,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useTokens } from '../../tokens/TokensProvider'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
+import { useLstWithdrawStep } from './hooks/useLstWithdrawStep'
 
 const CHAIN = GqlChain.Fantom
 const WITHDRAW_DELAY = 604800 // 1 week
@@ -42,20 +43,23 @@ export function _useLst() {
   const isUnstakeTab = activeTab?.value === '1'
   const isWithdrawTab = activeTab?.value === '2'
 
-  const { step: stakeStep } = useLstStakeStep(amount, CHAIN, isStakeTab)
-  const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
-
-  const { step: unstakeStep } = useLstUnstakeStep(amount, CHAIN, isUnstakeTab, wrID)
-  const unstakeTransactionSteps = useTransactionSteps([unstakeStep], false)
-
   const nativeAsset = getToken(fantomNetworkConfig.tokens.nativeAsset.address, CHAIN)
   const stakedAsset = getToken(fantomNetworkConfig.tokens.stakedAsset?.address || '', CHAIN)
 
+  const { step: stakeStep } = useLstStakeStep(amount, CHAIN, isStakeTab)
+  const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
   const lstStakeTxHash = stakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstStakeTxConfirmed = stakeTransactionSteps.lastTransactionConfirmed
 
+  const { step: unstakeStep } = useLstUnstakeStep(amount, CHAIN, isUnstakeTab, wrID)
+  const unstakeTransactionSteps = useTransactionSteps([unstakeStep], false)
   const lstUnstakeTxHash = unstakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstUnstakeTxConfirmed = unstakeTransactionSteps.lastTransactionConfirmed
+
+  const { step: withdrawStep } = useLstWithdrawStep(amount, CHAIN, isWithdrawTab, wrID)
+  const withdrawTransactionSteps = useTransactionSteps([withdrawStep], false)
+  const lstWithdrawTxHash = withdrawTransactionSteps.lastTransaction?.result?.data?.transactionHash
+  const lstWithdrawTxConfirmed = withdrawTransactionSteps.lastTransactionConfirmed
 
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
@@ -91,6 +95,9 @@ export function _useLst() {
     setPagination,
     first,
     skip,
+    withdrawTransactionSteps,
+    lstWithdrawTxHash,
+    lstWithdrawTxConfirmed,
   }
 }
 

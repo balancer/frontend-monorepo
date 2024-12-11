@@ -6,10 +6,12 @@ import { orderBy } from 'lodash'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import { LstWithdrawModal } from '../modals/LstWithdrawModal'
+import { useDisclosure } from '@chakra-ui/react'
 
 export function LstWithdraw() {
-  const { stakedAsset, pagination, setPagination, first, skip } = useLst()
-
+  const { stakedAsset, pagination, setPagination, first, skip, chain } = useLst()
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const withdrawalsData = [
     {
       amountSftmx: '0.1',
@@ -138,22 +140,26 @@ export function LstWithdraw() {
   }
 
   return (
-    <PaginatedTable
-      alignItems="flex-start"
-      items={withdrawalsView}
-      loading={false}
-      noItemsFoundLabel="No requests found"
-      paginationProps={{ ...paginationProps, mt: 'auto' }}
-      renderTableHeader={() => <LstWithdrawTableHeader {...rowProps} />}
-      renderTableRow={(withdrawal: any, index) => (
-        <LstWithdrawTableRow
-          keyValue={index}
-          withdrawal={withdrawal}
-          {...rowProps}
-          token={stakedAsset}
-        />
-      )}
-      showPagination={showPagination}
-    />
+    <>
+      <PaginatedTable
+        alignItems="flex-start"
+        items={withdrawalsView}
+        loading={false}
+        noItemsFoundLabel="No requests found"
+        paginationProps={{ ...paginationProps, mt: 'auto' }}
+        renderTableHeader={() => <LstWithdrawTableHeader {...rowProps} />}
+        renderTableRow={(withdrawal: any, index) => (
+          <LstWithdrawTableRow
+            keyValue={index}
+            withdrawal={withdrawal}
+            {...rowProps}
+            onOpen={onOpen}
+            token={stakedAsset}
+          />
+        )}
+        showPagination={showPagination}
+      />
+      <LstWithdrawModal chain={chain} isOpen={isOpen} onClose={onClose} />
+    </>
   )
 }

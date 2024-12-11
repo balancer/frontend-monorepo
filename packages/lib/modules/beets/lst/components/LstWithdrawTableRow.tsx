@@ -10,9 +10,10 @@ interface Props extends GridProps {
   withdrawal: any
   keyValue: number
   token: GqlToken | undefined
+  onOpen(): void
 }
 
-export function LstWithdrawTableRow({ withdrawal, keyValue, token, ...rest }: Props) {
+export function LstWithdrawTableRow({ withdrawal, keyValue, token, onOpen, ...rest }: Props) {
   const { withdrawDelay } = useLst()
 
   const requestTimestamp = Number(withdrawal.requestTimestamp) + withdrawDelay
@@ -49,7 +50,7 @@ export function LstWithdrawTableRow({ withdrawal, keyValue, token, ...rest }: Pr
             {/* <Tooltip label={isDisabled ? disabledReason : ''}> */}
             <Button
               isDisabled={withdrawal.isWithdrawn || now < requestTimestamp}
-              //onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
+              onClick={() => onOpen()}
               size="xxs"
               variant="primary"
               w="full"
