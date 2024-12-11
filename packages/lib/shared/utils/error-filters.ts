@@ -1,5 +1,10 @@
 export function isUserRejectedError(error: Error): boolean {
-  return error.message.startsWith('User rejected the request.')
+  return (
+    error.message.startsWith('User rejected the request.') ||
+    // This is the rejection message in special cases like:
+    // - when the user rejects a transaction in the Safe App when connected via WalletConnect
+    error.message.includes('Details: User rejected transaction')
+  )
 }
 
 /*
@@ -89,4 +94,9 @@ export function isInvariantRatioPIErrorMessage(errorMessage?: string): boolean {
     return true
   }
   return false
+}
+
+export function isWrapWithTooSmallAmount(errorMessage?: string): boolean {
+  if (!errorMessage) return false
+  return errorMessage?.includes('WrapAmountTooSmall')
 }

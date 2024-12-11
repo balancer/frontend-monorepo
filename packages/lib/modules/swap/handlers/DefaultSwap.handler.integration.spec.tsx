@@ -9,7 +9,13 @@ import { getPoolMock } from '../../pool/__mocks__/getPoolMock'
 import { SwapTokenInput } from '../swap.types'
 import { DefaultSwapHandler } from './DefaultSwap.handler'
 
-describe('Pool Swap handler with v2 nested pool', async () => {
+/*
+  TODO: Skip until we fix why we randomly have this error:
+  https://github.com/balancer/frontend-monorepo/actions/runs/12261623377/job/34209050943?pr=288
+
+  The contract function "querySwap" reverted with the following reason: BAL#500
+*/
+describe.skip('Pool Swap handler with v2 nested pool', async () => {
   const mainnetNestedPoolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0' // Balancer 50WETH-50-3pool
   const pool = await getPoolMock(mainnetNestedPoolId, GqlChain.Mainnet)
 

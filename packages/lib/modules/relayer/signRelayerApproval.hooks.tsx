@@ -28,15 +28,15 @@ export function useSignRelayerApproval(chainId: SupportedChainId) {
 
   const [error, setError] = useState<string | undefined>()
 
-  const sdkClient = useSdkWalletClient()
+  const { sdkClient, isLoading } = useSdkWalletClient()
 
   useEffect(() => {
-    if (sdkClient === undefined) {
+    if (isLoading) {
       setSignRelayerState(SignatureState.Preparing)
     } else {
       setSignRelayerState(SignatureState.Ready)
     }
-  }, [setSignRelayerState, sdkClient])
+  }, [setSignRelayerState, isLoading])
 
   async function signRelayer() {
     setSignRelayerState(SignatureState.Confirming)

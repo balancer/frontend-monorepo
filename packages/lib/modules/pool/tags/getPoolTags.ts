@@ -20,7 +20,7 @@ export type PoolTag = {
 export async function getPoolTags(): Promise<PoolTag[] | undefined> {
   try {
     const res = await fetch(POOL_TAGS_URL, {
-      next: { revalidate: mins(15).toSecs() },
+      next: { revalidate: mins(5).toSecs() },
     })
     const tags = (await res.json()) as PoolTag[]
 
