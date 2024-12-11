@@ -18,7 +18,7 @@ import { AuraIcon } from '@repo/lib/shared/components/icons/logos/AuraIcon'
 import { GyroIcon } from '@repo/lib/shared/components/icons/logos/GyroIcon'
 import { XaveIcon } from '@repo/lib/shared/components/icons/logos/XaveIcon'
 import { QuantAmmIcon } from '@repo/lib/shared/components/icons/logos/QuantAmmIcon'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useRef, useState } from 'react'
 import {
   PartnerRedirectModal,
   RedirectPartner,
@@ -29,6 +29,10 @@ import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 import { GetProtocolStatsQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
+import { motion, useInView } from 'framer-motion'
+
+const MotionGrid = motion(Grid)
+const MotionGridItem = motion(GridItem)
 
 function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
   return (
@@ -65,9 +69,37 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
   const partnerRedirectDisclosure = useDisclosure()
   const { isMobile } = useBreakpoints()
 
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-50px' })
+
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
     partnerRedirectDisclosure.onOpen()
+  }
+
+  const gridVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  }
+
+  const gridItemVariants = {
+    show: {
+      opacity: 1,
+      filter: 'blur(0px)',
+      y: 0,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+        damping: 10,
+      },
+    },
+    hidden: { opacity: 0, filter: 'blur(3px)', scale: 0.95, y: 15 },
   }
 
   return (
@@ -91,8 +123,17 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
             </Text>
           </FadeIn>
         </VStack>
-        <Grid gap="md" mt="2xl" templateColumns="repeat(12, 1fr)" templateRows="repeat(3, 1fr)">
-          <GridItem colSpan={{ base: 12, lg: 4 }} order={1}>
+        <MotionGrid
+          animate={isInView ? 'show' : 'hidden'}
+          gap="md"
+          initial="hidden"
+          mt="2xl"
+          ref={ref}
+          templateColumns="repeat(12, 1fr)"
+          templateRows="repeat(3, 1fr)"
+          variants={gridVariants}
+        >
+          <MotionGridItem colSpan={{ base: 12, lg: 4 }} order={1} variants={gridItemVariants}>
             <FeatureCard
               radialPatternProps={{
                 innerHeight: 100,
@@ -106,8 +147,8 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
               title="TVL"
               titleSize="2xl"
             />
-          </GridItem>
-          <GridItem colSpan={{ base: 12, lg: 4 }} order={2}>
+          </MotionGridItem>
+          <MotionGridItem colSpan={{ base: 12, lg: 4 }} order={2} variants={gridItemVariants}>
             <FeatureCard
               radialPatternProps={{
                 innerHeight: 100,
@@ -121,8 +162,8 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
               title="Pools"
               titleSize="2xl"
             />
-          </GridItem>
-          <GridItem colSpan={{ base: 12, lg: 4 }} order={3}>
+          </MotionGridItem>
+          <MotionGridItem colSpan={{ base: 12, lg: 4 }} order={3} variants={gridItemVariants}>
             <FeatureCard
               radialPatternProps={{
                 innerHeight: 100,
@@ -136,26 +177,31 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
               title="24hr Volume"
               titleSize="2xl"
             />
-          </GridItem>
-          <GridItem colSpan={{ base: 6, lg: 2 }} order={4}>
+          </MotionGridItem>
+          <MotionGridItem colSpan={{ base: 6, lg: 2 }} order={4} variants={gridItemVariants}>
             <PartnerButton
               icon={<CowIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.CoW)}
             />
-          </GridItem>
-          <GridItem colSpan={{ base: 6, lg: 2 }} order={5}>
+          </MotionGridItem>
+          <MotionGridItem colSpan={{ base: 6, lg: 2 }} order={5} variants={gridItemVariants}>
             <PartnerButton
               icon={<AuraIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Aura)}
             />
-          </GridItem>
-          <GridItem colSpan={{ base: 6, lg: 2 }} order={6}>
+          </MotionGridItem>
+          <MotionGridItem colSpan={{ base: 6, lg: 2 }} order={6} variants={gridItemVariants}>
             <PartnerButton
               icon={<BeetsIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Beets)}
             />
-          </GridItem>
-          <GridItem colSpan={{ base: 12, lg: 6 }} order={{ base: 10, lg: 7 }} rowSpan={2}>
+          </MotionGridItem>
+          <MotionGridItem
+            colSpan={{ base: 12, lg: 6 }}
+            order={{ base: 10, lg: 7 }}
+            rowSpan={2}
+            variants={gridItemVariants}
+          >
             <FeatureCard
               h="full"
               radialPatternProps={{
@@ -171,26 +217,38 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
               title="Aggregator Integrations"
               titleSize="3xl"
             />
-          </GridItem>
-          <GridItem colSpan={{ base: 6, lg: 2 }} order={{ base: 7, lg: 8 }}>
+          </MotionGridItem>
+          <MotionGridItem
+            colSpan={{ base: 6, lg: 2 }}
+            order={{ base: 7, lg: 8 }}
+            variants={gridItemVariants}
+          >
             <PartnerButton
               icon={<GyroIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Gyro)}
             />
-          </GridItem>
-          <GridItem colSpan={{ base: 6, lg: 2 }} order={{ base: 8, lg: 9 }}>
+          </MotionGridItem>
+          <MotionGridItem
+            colSpan={{ base: 6, lg: 2 }}
+            order={{ base: 8, lg: 9 }}
+            variants={gridItemVariants}
+          >
             <PartnerButton
               icon={<XaveIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.Xave)}
             />
-          </GridItem>
-          <GridItem colSpan={{ base: 6, lg: 2 }} order={{ base: 9, lg: 10 }}>
+          </MotionGridItem>
+          <MotionGridItem
+            colSpan={{ base: 6, lg: 2 }}
+            order={{ base: 9, lg: 10 }}
+            variants={gridItemVariants}
+          >
             <PartnerButton
               icon={<QuantAmmIcon size={80} />}
               onClick={() => openRedirectModal(RedirectPartner.QuantAmm)}
             />
-          </GridItem>
-        </Grid>
+          </MotionGridItem>
+        </MotionGrid>
         <Text color="font.secondary" fontSize="sm" mt="xl">
           * Data includes liquidity and volume on Balancer v2, v3 & CoW AMM.
         </Text>
