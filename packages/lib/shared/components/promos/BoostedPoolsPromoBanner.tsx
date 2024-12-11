@@ -53,7 +53,7 @@ export function BoostedPoolsPromoBanner() {
                 fontWeight="regular"
                 lineHeight="1"
               >
-                Passive yield, simplified
+                Boosted earnings, simplified strategy
               </Heading>
             </Box>
           </Flex>
