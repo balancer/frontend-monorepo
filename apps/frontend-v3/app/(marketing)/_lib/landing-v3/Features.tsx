@@ -26,9 +26,11 @@ import { BalancerLogoAnimated } from '@repo/lib/shared/components/icons/Balancer
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 
 const MotionBox = motion(Box)
+const MotionGrid = motion(Grid)
+const MotionGridItem = motion(GridItem)
 
 const keyFeatures = [
   {
@@ -181,6 +183,34 @@ export function Features() {
   const containerRef = useRef<HTMLDivElement>(null)
   const { isMobile } = useBreakpoints()
 
+  const gridRef = useRef(null)
+  const isInView = useInView(gridRef, { once: true, margin: '-50px' })
+
+  const gridVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  }
+
+  const gridItemVariants = {
+    show: {
+      opacity: 1,
+      filter: 'blur(0px)',
+      y: 0,
+      scale: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+        damping: 10,
+      },
+    },
+    hidden: { opacity: 0, filter: 'blur(3px)', scale: 0.95, y: 15 },
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       if (containerRef.current) {
@@ -227,13 +257,21 @@ export function Features() {
           </Heading>
         </FadeIn>
 
-        <Grid gap="xl" mt="2xl" templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}>
+        <MotionGrid
+          animate={isInView ? 'show' : 'hidden'}
+          gap="xl"
+          initial="hidden"
+          mt="2xl"
+          ref={gridRef}
+          templateColumns={{ base: 'repeat(1, 1fr)', lg: 'repeat(3, 1fr)' }}
+          variants={gridVariants}
+        >
           {keyFeatures.map((feature, index) => (
-            <GridItem key={index}>
+            <MotionGridItem key={index} variants={gridItemVariants}>
               <FeatureCard {...feature} iconProps={{ color: 'font.primary' }} />
-            </GridItem>
+            </MotionGridItem>
           ))}
-        </Grid>
+        </MotionGrid>
 
         <Stack direction={{ base: 'column', lg: 'row' }} gap="2xl" mt="3xl">
           <Box alignSelf="flex-start" h="700px" position="sticky" top="82px" w="full">
