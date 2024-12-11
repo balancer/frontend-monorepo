@@ -364,7 +364,7 @@ export function getWarnings(warnings: string[]) {
     If the pool supports nested actions, returns the leaf tokens.
     If the pool is boosted, returns the underlying tokens instead of the ERC4626 tokens.
 */
-export function getPoolActionableTokens(pool: Pool, getToken: GetTokenFn): ApiToken[] {
+export function getPoolActionableTokens(pool: Pool): ApiToken[] {
   function excludeNestedBptTokens(tokens: ApiToken[]): ApiToken[] {
     return tokens
       .filter(token => !isSameAddress(token.address, pool.address)) // Exclude the BPT pool token itself
@@ -378,7 +378,7 @@ export function getPoolActionableTokens(pool: Pool, getToken: GetTokenFn): ApiTo
   }
 
   if (isBoosted(pool)) {
-    return excludeNestedBptTokens(getBoostedGqlTokens(pool, getToken))
+    return excludeNestedBptTokens(getBoostedGqlTokens(pool))
   }
 
   return excludeNestedBptTokens(pool.poolTokens as ApiToken[])
@@ -532,7 +532,7 @@ function shouldUseUnderlyingToken(token: PoolToken, pool: Pool | GqlPoolBase): b
 }
 
 // Returns top level standard tokens + Erc4626 (only v3) underlying tokens
-export function getBoostedGqlTokens(pool: Pool, getToken: GetTokenFn): ApiToken[] {
+export function getBoostedGqlTokens(pool: Pool): ApiToken[] {
   const underlyingTokens = pool.poolTokens
     .flatMap(token =>
       shouldUseUnderlyingToken(token, pool)

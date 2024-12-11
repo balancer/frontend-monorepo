@@ -54,7 +54,7 @@ describe('getPoolTokens', () => {
       ],
     } as unknown as Pool
 
-    const result = getPoolActionableTokens(pool, getTokenMock(pool))
+    const result = getPoolActionableTokens(pool)
     expect(result.map(t => t.symbol)).toEqual(['USDT', 'USDC', 'WXDAI', 'WETH', 'WBTC']) // contains 'staBAL3' nested tokens (USDT, USDC, WXDAI)
   })
 
@@ -102,7 +102,7 @@ describe('getPoolTokens', () => {
       ],
     } as unknown as Pool
 
-    const result = getPoolActionableTokens(pool, getTokenMock(pool))
+    const result = getPoolActionableTokens(pool)
     expect(result.map(t => t.symbol)).toEqual(['WETH', 'osETH']) // excludes 'osETH/wETH-BPT' bpt token
   })
 })

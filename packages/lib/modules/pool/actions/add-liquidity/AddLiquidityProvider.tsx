@@ -49,8 +49,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const [proportionalSlippage, setProportionalSlippage] = useState<string>('0')
 
   const { pool, refetch: refetchPool, isLoading } = usePool()
-  const { getToken, getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } =
-    useTokens()
+  const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage: userSlippage } = useUserSettings()
@@ -70,7 +69,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const wNativeAsset = getWrappedNativeAssetToken(chain)
   const isForcedProportionalAdd = requiresProportionalInput(pool)
   const slippage = isForcedProportionalAdd ? proportionalSlippage : userSlippage
-  const tokens = getPoolActionableTokens(pool, getToken)
+  const tokens = getPoolActionableTokens(pool)
 
   function setInitialHumanAmountsIn() {
     const amountsIn = tokens.map(

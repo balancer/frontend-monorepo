@@ -114,7 +114,7 @@ describe.skip('Liquidity helpers for V3 Boosted pools', async () => {
     { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress },
   ]
 
-  it.only('allPoolTokens', async () => {
+  it('allPoolTokens', async () => {
     expect(
       allPoolTokens(v3Pool)
         .map(t => t.address)
@@ -479,19 +479,27 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
       [
         {
           "address": "0x9c58bacc331c9aa871afd802db6379a98e80cedb",
+          "chain": "GNOSIS",
           "chainId": 100,
           "decimals": 18,
           "index": 0,
+          "isErc4626": false,
           "name": "Gnosis Token on xDai",
+          "priority": 0,
           "symbol": "GNO",
+          "tradable": true,
         },
         {
           "address": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+          "chain": "GNOSIS",
           "chainId": 100,
           "decimals": 18,
           "index": 1,
+          "isErc4626": false,
           "name": "Wrapped XDAI",
+          "priority": 0,
           "symbol": "WXDAI",
+          "tradable": true,
         },
       ]
     `)

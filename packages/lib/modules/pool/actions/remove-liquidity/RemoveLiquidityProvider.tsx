@@ -59,7 +59,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     .times(humanBptInPercent / 100)
     .toFixed() as HumanAmount
 
-  const tokens = getPoolActionableTokens(pool, getToken)
+  const tokens = getPoolActionableTokens(pool)
 
   const chain = pool.chain
   const nativeAsset = getNativeAssetToken(chain)
