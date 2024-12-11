@@ -276,19 +276,16 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
   // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
   if (isLBP(pool.type) || pool.dynamicData.isPaused || pool.dynamicData.isInRecoveryMode) {
-    console.log('LBP/Paused/Recovery')
     return true
   }
 
   if (pool.hook && (!hasReviewedHook(pool.hook) || pool.hook?.reviewData?.summary === 'unsafe')) {
-    console.log('Unreviewed hook')
     return true
   }
 
   return poolTokens.some(token => {
     // if token is not allowed - we should block adding liquidity
     if (!token.isAllowed && !isCowAmmPool(pool.type)) {
-      console.log('Not allowed token')
       return true
     }
 
@@ -300,12 +297,10 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
     // if price rate provider is set but is not reviewed - we should block adding liquidity
     if (!hasReviewedRateProvider(token)) {
-      console.log('Not reviewed rate provider')
       return true
     }
 
     if (token.priceRateProviderData?.summary !== 'safe') {
-      console.log('priceRateProvider is not safe')
       return true
     }
 
