@@ -8,7 +8,7 @@ import { PoolVariant } from '../../pool.types'
 import { usePool } from '../../PoolProvider'
 import { GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePoolEvents } from '../../usePoolEvents'
-import { ChainSlug, getChainSlug } from '../../pool.utils'
+import { slugToChainMap, ChainSlug } from '../../pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { differenceInCalendarDays } from 'date-fns'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -41,7 +41,7 @@ function _usePoolActivity() {
   const [isExpanded, setIsExpanded] = useState(false)
   const { isChartView } = usePoolActivityViewType()
 
-  const _chain = getChainSlug(chain as ChainSlug)
+  const _chain = slugToChainMap[chain as ChainSlug]
 
   const tabsList = useMemo(() => {
     const poolType = pool?.type
