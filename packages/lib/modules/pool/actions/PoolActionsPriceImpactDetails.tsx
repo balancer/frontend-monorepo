@@ -15,7 +15,7 @@ import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvid
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePool } from '../PoolProvider'
 import { ArrowRight } from 'react-feather'
-import { calcFutureUserShareOfPool, calcShareOfPool, calcUserShareOfPool } from '../pool.helpers'
+import { calcFutureUserShareOfPool, calcUserShareOfPool } from '../pool.helpers'
 import { isNumber } from 'lodash'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { formatUnits } from 'viem'
