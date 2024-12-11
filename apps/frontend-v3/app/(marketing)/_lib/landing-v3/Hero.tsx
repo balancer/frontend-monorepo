@@ -182,7 +182,7 @@ export function Hero() {
               <MotionBox
                 animate={shouldAnimate ? { opacity: 1 } : {}}
                 as={NextLink}
-                h="74px"
+                h="56px"
                 href="https://youtu.be/vjB2cogaO-c?si=E3q4o82JfPz-Hwkk"
                 initial={{ opacity: 0 }}
                 overflow="hidden"
@@ -191,7 +191,7 @@ export function Hero() {
                 shadow="md"
                 target="_blank"
                 transition={{ duration: 2, delay: 1.4 }}
-                w="120px"
+                w="90px"
               >
                 <SandBg variant={1} />
 
