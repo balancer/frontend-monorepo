@@ -1,10 +1,10 @@
 import { Box, Button, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { TokenIcon } from '../../tokens/TokenIcon'
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { format } from 'date-fns'
 import { useLst } from '../LstProvider'
+import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 
 interface Props extends GridProps {
   withdrawal: any

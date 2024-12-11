@@ -1,7 +1,7 @@
 import { VStack, HStack, Text } from '@chakra-ui/react'
+import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
-import TokenRow from '../../tokens/TokenRow/TokenRow'
 
 export function LstTokenRow({
   label,

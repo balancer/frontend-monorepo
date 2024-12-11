@@ -1,6 +1,6 @@
-import { TokenInput } from '../../tokens/TokenInput/TokenInput'
 import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
 import { useLst } from '../LstProvider'
+import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 
 export function LstStake() {
   const { amount, setAmount, chain } = useLst()

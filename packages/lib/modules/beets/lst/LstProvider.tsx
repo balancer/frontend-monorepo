@@ -9,11 +9,11 @@ import { useLstStakeStep } from './hooks/useLstStakeStep'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
 import { useLstUnstakeStep } from './hooks/useLstUnstakeStep'
-import { useUserAccount } from '../web3/UserAccountProvider'
+import { useUserAccount } from '../../web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { useTokens } from '../tokens/TokensProvider'
+import { useTokens } from '../../tokens/TokensProvider'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 
 const CHAIN = GqlChain.Fantom
