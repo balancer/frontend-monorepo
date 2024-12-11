@@ -3,7 +3,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 
 import { usePool } from '../../PoolProvider'
-import { isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
+import { getPoolAddBlockedReason, isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 import { PoolTags } from '../../tags/PoolTags'
 import { PoolBreadcrumbs } from './PoolBreadcrumbs'
@@ -57,8 +57,8 @@ export function PoolHeader() {
         <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
           <PoolTags />
           <HStack spacing="sm">
-            {/* TODO: add proper reason */}
-            <Tooltip label={isAddLiquidityBlocked ? '' : ''}>
+            {/* TODO: Add block reason alerts*/}
+            <Tooltip label={isAddLiquidityBlocked ? getPoolAddBlockedReason(pool) : ''}>
               <Button
                 isDisabled={isAddLiquidityBlocked}
                 onClick={handleClick}
