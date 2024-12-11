@@ -81,11 +81,10 @@ export function getBeetsTokens(colors: any, primaryTextColor: any) {
           ...baseTokens.colors.dark.text,
           primary: '#FFFFFF',
           secondary: '#DDDDDD',
-          link: '#05D690',
+          link: '#91e2c1',
           linkHover: '#91e2c1',
           special: 'linear-gradient(90deg, #78EABC 0%, #18B575 100%)',
-          highlight: '#FF0000',
-          navLink: '#91e2c1'
+          highlight: '#05D690',
         },
         input: {
           ...baseTokens.colors.dark.input,

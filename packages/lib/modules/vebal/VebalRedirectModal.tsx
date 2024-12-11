@@ -28,7 +28,7 @@ export function VeBalLink({ triggerEl, ...props }: VebalRedirectModalProps) {
 
   return (
     <>
-      <Link color="font.navLink" onClick={onOpen} variant="nav" {...props}>
+      <Link color="font.primary" onClick={onOpen} variant="nav" {...props}>
         {triggerEl || 'veBAL'}
       </Link>
 
