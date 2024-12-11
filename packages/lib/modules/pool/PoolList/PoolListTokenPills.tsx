@@ -178,6 +178,7 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
   ) as GqlPoolTokenDetail[]
 
   if (pool.hasErc4626 && !pool.hasNestedErc4626) {
+    // TODO: Move this into a general 'displayTokens' helper function.
     poolTokens = poolTokens.map(token =>
       token.underlyingToken
         ? ({ ...token, ...token.underlyingToken } as unknown as GqlPoolTokenDetail)
