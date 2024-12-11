@@ -397,7 +397,6 @@ const FilterButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
 function ProtocolVersionFilter() {
   const {
     queryState: {
-      togglePoolType,
       setProtocolVersion,
       protocolVersion,
       poolTypes,
