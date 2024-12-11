@@ -95,3 +95,8 @@ export function isInvariantRatioPIErrorMessage(errorMessage?: string): boolean {
   }
   return false
 }
+
+export function isWrapWithTooSmallAmount(errorMessage?: string): boolean {
+  if (!errorMessage) return false
+  return errorMessage?.includes('WrapAmountTooSmall')
+}
