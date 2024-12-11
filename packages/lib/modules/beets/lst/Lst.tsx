@@ -120,7 +120,7 @@ export function Lst() {
         position="relative"
         w={['100vw', 'full']}
       >
-        <Card rounded="xl">
+        <Card minH="590px" rounded="xl">
           <CardHeader as={HStack} justify="space-between" w="full">
             <Heading as="h2" size="lg">
               Liquid staking
