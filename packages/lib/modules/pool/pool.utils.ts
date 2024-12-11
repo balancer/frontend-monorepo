@@ -57,7 +57,12 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
   [GqlChain.Mode]: ChainSlug.Mode,
   [GqlChain.Fraxtal]: ChainSlug.Fraxtal,
 }
-export const slugToChainMap = invert(chainToSlugMap) as Record<ChainSlug, GqlChain>
+const slugToChainMap = invert(chainToSlugMap) as Record<ChainSlug, GqlChain>
+export function getChainSlug(chainSlug: ChainSlug): GqlChain {
+  const chain = slugToChainMap[chainSlug]
+  if (!chain) throw new Error(`Chain ${chainSlug} is not a valid chainName`)
+  return chain
+}
 
 function getVariant(pool: Pool | PoolListItem): PoolVariant {
   // if a pool has certain properties return a custom variant
@@ -183,7 +188,7 @@ const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.Unknown]: 'Unknown',
   [GqlPoolType.Fx]: 'FX',
   [GqlPoolType.ComposableStable]: 'Stable',
-  [GqlPoolType.CowAmm]: 'CoW AMM',
+  [GqlPoolType.CowAmm]: 'Weighted',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {
@@ -293,7 +298,7 @@ export function shouldCallComputeDynamicSwapFee(pool: Pool) {
   return pool.hook && pool.hook.shouldCallComputeDynamicSwapFee
 }
 
-export function getPoolDisplayTokens(pool: Pool) {
+export function getPoolDisplayTokens(pool: Pool | PoolListItem) {
   return pool.poolTokens.filter(token =>
     pool.displayTokens.find(
       (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address
