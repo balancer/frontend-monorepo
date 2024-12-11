@@ -43,6 +43,7 @@ export function getCowTokens(colors: any, primaryTextColor: any) {
           link: '#408A13',
           linkHover: colors.green['900'],
           special: 'linear-gradient(90deg, #194D05 0%, #30940A 100%)',
+          navLink: '#194D05',
         },
         input: {
           ...baseTokens.colors.light.input,
@@ -84,6 +85,7 @@ export function getCowTokens(colors: any, primaryTextColor: any) {
           link: '#6FC025',
           linkHover: colors.green['300'],
           special: 'linear-gradient(90deg, #BCEC79 0%, #81C91C 100%)',
+          navLink: '#E4F9C3',
         },
         input: {
           ...baseTokens.colors.dark.input,

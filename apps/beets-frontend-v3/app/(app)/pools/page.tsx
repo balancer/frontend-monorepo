@@ -10,6 +10,7 @@ import { Suspense } from 'react'
 import { CowPromoBanner } from '@repo/lib/shared/components/promos/CowPromoBanner'
 import { PoolListDisplayType } from '@repo/lib/modules/pool/pool.types'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { BeetsPromoBanner } from '@/lib/components/promos/BeetsPromoBanner'
 
 export default async function PoolsPage() {
   // Featured pools set up
@@ -29,11 +30,11 @@ export default async function PoolsPage() {
 
   return (
     <>
-      <Box bg="background.level0" borderBottom="1px solid" borderColor="border.base">
+      <Box>
         <DefaultPageContainer pb={['xl', '2xl']} pt={['xl', '40px']}>
           <FadeInOnView animateOnce={false}>
             <Box>
-              <CowPromoBanner />
+              <BeetsPromoBanner />
             </Box>
           </FadeInOnView>
           {/* <FadeInOnView animateOnce={false}>

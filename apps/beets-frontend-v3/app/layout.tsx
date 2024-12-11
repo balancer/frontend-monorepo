@@ -41,6 +41,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         style={{ marginRight: '0px !important' }} // Required to prevent layout shift introduced by Rainbowkit
         suppressHydrationWarning
       >
+        <div style={{ backgroundImage: 'url(/images/misc/pattern-sml-7@2x.webp)', backgroundSize: '8%'}}>
         <NextTopLoader color="#7f6ae8" showSpinner={false} />
         <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
           <ThemeProvider>
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
             </Providers>
           </ThemeProvider>
         </ColorThemeProvider>
+        </div>
       </body>
     </html>
   )

@@ -10,6 +10,16 @@ const tokens = getBeetsTokens(colors, primaryTextColor)
 const components = getComponents(tokens, primaryTextColor)
 const semanticTokens = getSemanticTokens(tokens, colors)
 
+semanticTokens.colors.font.dark = '#111111'
+semanticTokens.colors.font.light = '#FFFFFF'
+
+components.Button.variants.tertiary.background = 'background.button.primary'
+components.Button.variants.tertiary._active.background = 'background.button.primary'
+components.Button.variants.tertiary.color = 'font.dark'
+
+components.Card.baseStyle.container.background = 'rgba(145,226,193,0.07)'
+components.Card.baseStyle.container.shadow = 'none'
+
 export const beetsTheme = {
   config,
   fonts,

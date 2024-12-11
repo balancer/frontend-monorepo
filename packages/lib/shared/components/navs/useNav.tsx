@@ -71,7 +71,7 @@ export function useNav() {
   ]
 
   function linkColorFor(path: string) {
-    return pathname === path ? 'font.highlight' : 'font.primary'
+    return pathname === path ? 'font.highlight' : 'font.navLink'
   }
 
   return { defaultAppLinks, ecosystemLinks, getSocialLinks, linkColorFor }

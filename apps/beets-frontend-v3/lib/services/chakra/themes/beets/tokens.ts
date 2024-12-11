@@ -57,7 +57,7 @@ export function getBeetsTokens(colors: any, primaryTextColor: any) {
         ...baseTokens.colors.dark,
         background: {
           ...baseTokens.colors.dark.background,
-          level0: '#1e1e1e',
+          level0: 'linear-gradient(90deg, #111111 0%, #333333 100%)',
           level1: '#343434',
           level2: '#4b4b4b',
           level3: '#616161',
@@ -73,17 +73,19 @@ export function getBeetsTokens(colors: any, primaryTextColor: any) {
         button: {
           ...baseTokens.colors.dark.button,
           background: {
-            primary: 'linear-gradient(90deg, #78EABC 0%, #18B575 100%)',
-            secondary: '#91e2c1',
+            primary: 'linear-gradient(90deg, #91E2C1 0%, #05D690 100%)',
+            secondary: '#05D690',
           },
         },
         text: {
           ...baseTokens.colors.dark.text,
-          primary: '#EEEEEE',
+          primary: '#FFFFFF',
           secondary: '#DDDDDD',
-          link: '#91e2c1',
-          linkHover: colors.gray['300'],
+          link: '#05D690',
+          linkHover: '#91e2c1',
           special: 'linear-gradient(90deg, #78EABC 0%, #18B575 100%)',
+          highlight: '#FF0000',
+          navLink: '#91e2c1'
         },
         input: {
           ...baseTokens.colors.dark.input,

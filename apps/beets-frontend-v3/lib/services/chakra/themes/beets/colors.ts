@@ -6,7 +6,7 @@ export const colors = {
   base: {
     light: '#E6F9C4',
     hslLight: '103, 49%, 71%',
-    dark: 'hsla(0, 0%, 17%, 1)',
+    dark: 'linear-gradient(90deg, #111111 0%, #333333 100%)',
     hslDark: '0, 0%, 17%',
   },
 }

@@ -271,6 +271,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
           default: tokens.colors.light.text.linkHover,
           _dark: tokens.colors.dark.text.linkHover,
         },
+        navLink: {
+          default: tokens.colors.light.text.navLink,
+          _dark: tokens.colors.dark.text.navLink,
+        },
         maxContrast: {
           default: tokens.colors.light.text.maxContrast,
           _dark: tokens.colors.dark.text.maxContrast,
