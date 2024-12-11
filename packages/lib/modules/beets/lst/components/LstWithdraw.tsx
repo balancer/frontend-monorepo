@@ -143,7 +143,7 @@ export function LstWithdraw() {
       items={withdrawalsView}
       loading={false}
       noItemsFoundLabel="No requests found"
-      paginationProps={paginationProps}
+      paginationProps={{ ...paginationProps, mt: 'auto' }}
       renderTableHeader={() => <LstWithdrawTableHeader {...rowProps} />}
       renderTableRow={(withdrawal: any, index) => (
         <LstWithdrawTableRow
