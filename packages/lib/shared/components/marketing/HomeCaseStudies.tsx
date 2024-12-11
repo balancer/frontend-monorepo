@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
 import { MotionValue, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { ReactNode, useRef, useState } from 'react'
 import { Box, BoxProps, Flex, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { BeetsIcon } from '@repo/lib/shared/components/icons/logos/BeetsIcon'
 import { AaveIcon } from '@repo/lib/shared/components/icons/logos/AaveIcon'
@@ -60,7 +60,7 @@ export function HomeCaseStudies() {
             >
               {logos.map(logo => (
                 <AppIcon
-                  Icon={logo.icon}
+                  Icon={<logo.icon />}
                   key={logo.name.toLowerCase()}
                   mouseX={mouseX}
                   name={logo.name}
@@ -79,7 +79,7 @@ export function HomeCaseStudies() {
         >
           {logos.map(logo => (
             <SmallIcon
-              Icon={logo.icon}
+              Icon={<logo.icon />}
               key={logo.name.toLowerCase()}
               name={logo.name}
               onClick={() => openRedirectModal(logo.partner)}
@@ -103,7 +103,7 @@ function AppIcon({
   ...rest
 }: {
   mouseX: MotionValue
-  Icon: React.ComponentType
+  Icon: ReactNode
   name: string
 } & BoxProps) {
   const ref = useRef<HTMLDivElement>(null)
@@ -150,16 +150,12 @@ function AppIcon({
       willChange="box-shadow, background-color"
       {...rest}
     >
-      <Icon />
+      {Icon}
     </Box>
   )
 }
 
-function SmallIcon({
-  Icon,
-  name,
-  ...rest
-}: { Icon: React.ComponentType; name: string } & BoxProps) {
+function SmallIcon({ Icon, name, ...rest }: { Icon: ReactNode; name: string } & BoxProps) {
   return (
     <Box
       _dark={{
@@ -193,7 +189,7 @@ function SmallIcon({
       willChange="box-shadow, background-color"
       {...rest}
     >
-      <Icon />
+      {Icon}
     </Box>
   )
 }

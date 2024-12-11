@@ -10,3 +10,9 @@ export function useThemeColorMode(): ColorMode {
 
   return _theme || DEFAULT_THEME_COLOR_MODE
 }
+
+export function useIsDarkMode() {
+  const theme = useThemeColorMode()
+
+  return theme === 'dark'
+}

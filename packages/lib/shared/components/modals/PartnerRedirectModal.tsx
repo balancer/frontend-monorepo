@@ -27,6 +27,7 @@ export enum RedirectPartner {
   Xave = 'xave',
   Cron = 'cron',
   Fjord = 'fjord',
+  QuantAmm = 'quant-amm',
 }
 
 type Props = {
@@ -119,6 +120,15 @@ const partnerInfo: PartnerInfo = {
       "Fjord (Formerly known as Copper Launch) is a community platform that connects inspired projects with passionate supporters utilizing the power of Liquidity Bootstrapping Pools (LBPs). Fair launch your token and build your community in minutes via Fjord's user friendly platform.",
     url: 'https://fjordfoundry.com',
     imageName: 'fjord',
+  },
+  [RedirectPartner.QuantAmm]: {
+    shortName: 'QuantAmm',
+    fullName: 'QuantAmm',
+    category: 'Blockchain Traded Funds (BTFs)',
+    description:
+      'QuantAMM is a next generation DeFi protocol launching Blockchain Traded Funds (BTFs).\n\nLPs are no longer only chasing swap fees: the weights of the pool change to take advantage of current underlying price movements and therefore can overcome MEV and Impermanent Loss. QuantAMM does this in a continuous, responsive way with advanced, fully on-chain TradFi-style strategies. It avoids unresponsive, low-reward index products, and side-steps vault-like products where LPs have to trust off-chain managers with murky strategies & exposures. QuantAMM also allows community members with strategy ideas to use protocol-provided highly efficient strategy building blocks to build their own automated strategy pool.',
+    url: 'https://www.quantamm.fi',
+    imageName: 'quantamm',
   },
 }
 
