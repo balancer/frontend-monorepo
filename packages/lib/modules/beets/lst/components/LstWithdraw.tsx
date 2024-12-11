@@ -12,6 +12,7 @@ import { useDisclosure } from '@chakra-ui/react'
 export function LstWithdraw() {
   const { stakedAsset, pagination, setPagination, first, skip, chain } = useLst()
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   const withdrawalsData = [
     {
       amountSftmx: '0.1',

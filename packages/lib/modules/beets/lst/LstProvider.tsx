@@ -26,6 +26,7 @@ export function _useLst() {
   const [wrID, setWrID] = useState<bigint>()
   const [first, setFirst] = useState(5)
   const [skip, setSkip] = useState(0)
+  const [withdrawWrID, setWithdrawWrID] = useState<string>('')
   const { isConnected } = useUserAccount()
   const { getToken } = useTokens()
 
@@ -56,7 +57,12 @@ export function _useLst() {
   const lstUnstakeTxHash = unstakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstUnstakeTxConfirmed = unstakeTransactionSteps.lastTransactionConfirmed
 
-  const { step: withdrawStep } = useLstWithdrawStep(amount, CHAIN, isWithdrawTab, wrID)
+  const { step: withdrawStep } = useLstWithdrawStep(
+    amount,
+    CHAIN,
+    isWithdrawTab,
+    BigInt(withdrawWrID)
+  )
   const withdrawTransactionSteps = useTransactionSteps([withdrawStep], false)
   const lstWithdrawTxHash = withdrawTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstWithdrawTxConfirmed = withdrawTransactionSteps.lastTransactionConfirmed
@@ -98,6 +104,8 @@ export function _useLst() {
     withdrawTransactionSteps,
     lstWithdrawTxHash,
     lstWithdrawTxConfirmed,
+    withdrawWrID,
+    setWithdrawWrID,
   }
 }
 
