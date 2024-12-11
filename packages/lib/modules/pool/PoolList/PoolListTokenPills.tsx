@@ -5,7 +5,6 @@ import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { isStableLike, isWeightedLike } from '../pool.helpers'
 import { Pool } from '../PoolProvider'
-import { getPoolDisplayTokens } from '../pool.utils'
 
 function NestedTokenPill({
   nestedTokens,
@@ -179,7 +178,12 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
   ) as GqlPoolTokenDetail[]
 
   if (pool.hasErc4626 && !pool.hasNestedErc4626) {
-    poolTokens = getPoolDisplayTokens(pool)
+    // TODO: Move this into a general 'displayTokens' helper function.
+    poolTokens = poolTokens.map(token =>
+      token.underlyingToken
+        ? ({ ...token, ...token.underlyingToken } as unknown as GqlPoolTokenDetail)
+        : token
+    )
   }
 
   if (shouldUseStablePills) {

@@ -285,7 +285,9 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
   return poolTokens.some(token => {
     // if token is not allowed - we should block adding liquidity
-    if (!token.isAllowed && !isCowAmmPool(pool.type)) return true
+    if (!token.isAllowed && !isCowAmmPool(pool.type)) {
+      return true
+    }
 
     // if rateProvider is null - we consider it as zero address and not block adding liquidity
     if (isNil(token.priceRateProvider) || token.priceRateProvider === zeroAddress) return false
@@ -294,12 +296,52 @@ export function shouldBlockAddLiquidity(pool: Pool) {
     if (token.priceRateProvider === token.nestedPool?.address) return false
 
     // if price rate provider is set but is not reviewed - we should block adding liquidity
-    if (!hasReviewedRateProvider(token)) return true
+    if (!hasReviewedRateProvider(token)) {
+      return true
+    }
 
-    if (token.priceRateProviderData?.summary !== 'safe') return true
+    if (token.priceRateProviderData?.summary !== 'safe') {
+      return true
+    }
 
     return false
   })
+}
+
+/**
+ *  TODO: improve the implementation to display all the blocking reasons instead of just the first one
+ */
+export function getPoolAddBlockedReason(pool: Pool): string {
+  const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
+
+  if (isLBP(pool.type)) return 'LBP pool'
+  if (pool.dynamicData.isPaused) return 'Paused pool'
+  if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
+
+  if (pool.hook && !hasReviewedHook(pool.hook)) {
+    return 'Unreviewed hook'
+  }
+
+  if (pool.hook?.reviewData?.summary === 'unsafe') {
+    return 'Unsafe hook'
+  }
+
+  for (const token of poolTokens) {
+    // if token is not allowed - we should block adding liquidity
+    if (!token.isAllowed && !isCowAmmPool(pool.type)) {
+      return `Token: ${token.symbol} is not allowed` // TODO: Add instructions and link to get it approved
+    }
+
+    // if price rate provider is set but is not reviewed - we should block adding liquidity
+    if (!hasReviewedRateProvider(token)) {
+      return `Rate provider for token ${token.symbol} was not yet reviewed` // TODO: Add instructions and link to get it reviewed
+    }
+
+    if (token.priceRateProviderData?.summary !== 'safe') {
+      return `Rate provider for token ${token.symbol} is not safe` // TODO: Add instructions and link to get it reviewed
+    }
+  }
+  return ''
 }
 
 export function isAffectedByCspIssue(pool: Pool) {
