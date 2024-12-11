@@ -274,7 +274,13 @@ export function Features() {
         </MotionGrid>
 
         <Stack direction={{ base: 'column', lg: 'row' }} gap="2xl" mt="3xl">
-          <Box alignSelf="flex-start" h="700px" position="sticky" top="82px" w="full">
+          <Box
+            alignSelf="flex-start"
+            h={isMobile ? 'auto' : '700px'}
+            position="sticky"
+            top="82px"
+            w="full"
+          >
             <VStack alignItems="start" spacing="lg">
               <WordsPullUp
                 as="h2"
