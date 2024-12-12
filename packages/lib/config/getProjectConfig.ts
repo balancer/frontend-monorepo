@@ -14,3 +14,11 @@ const PROJECT_CONFIG = process.env.NEXT_PUBLIC_PROJECT_ID
 export function getProjectConfig() {
   return PROJECT_CONFIG
 }
+
+export function isBeetsProject() {
+  return getProjectConfig().projectId === 'beets'
+}
+
+export function isBalancerProject() {
+  return getProjectConfig().projectId === 'balancer'
+}
