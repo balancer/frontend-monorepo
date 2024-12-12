@@ -12,7 +12,7 @@ export function useNavData() {
     },
     {
       href: '/sftmx',
-      label: 'sFTMX',
+      label: 'Stake S',
     },
   ]
 
