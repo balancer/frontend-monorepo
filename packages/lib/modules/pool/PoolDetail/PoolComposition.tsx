@@ -13,7 +13,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { usePool } from '../PoolProvider'
+import { Pool, usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -34,12 +34,12 @@ type CardContentProps = {
   totalLiquidity: string
   displayTokens: GqlPoolTokenDetail[]
   chain: GqlChain
+  pool: Pool
 }
 
-function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps) {
+function CardContent({ totalLiquidity, displayTokens, chain, pool }: CardContentProps) {
   const { toCurrency } = useCurrency()
   const { calcWeightForBalance } = useTokens()
-  const { pool } = usePool()
 
   return (
     <VStack spacing="md" width="full">
@@ -159,6 +159,7 @@ export function PoolComposition() {
           <CardContent
             chain={chain}
             displayTokens={displayTokens}
+            pool={pool}
             totalLiquidity={totalLiquidity}
           />
           <Divider mt="auto" />
