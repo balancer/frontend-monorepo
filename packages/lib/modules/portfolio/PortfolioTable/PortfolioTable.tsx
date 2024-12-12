@@ -18,6 +18,7 @@ import { ExpandedPoolInfo, ExpandedPoolType, useExpandedPools } from './useExpan
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -144,7 +145,7 @@ export function PortfolioTable() {
     <FadeInOnView>
       <Stack gap={5}>
         <HStack>
-          <Heading size="lg">Balancer portfolio</Heading>
+          <Heading size="lg">{`${getProjectConfig().projectName} portfolio`}</Heading>
         </HStack>
         {isConnected ? (
           <Card
