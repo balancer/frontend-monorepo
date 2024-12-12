@@ -97,7 +97,7 @@ function _usePoolActivity() {
 
     const data = events.reduce(
       (acc: PoolActivity, item) => {
-        const { type, timestamp, valueUSD, userAddress, tx } = item
+        const { type, timestamp, valueUSD, userAddress, tx, id } = item
 
         const usdValue = valueUSD.toString() ?? ''
         const tokens: PoolActivityTokens[] = []
@@ -128,7 +128,7 @@ function _usePoolActivity() {
         const elToPush = [
           timestamp,
           isExpanded ? usdValue : '0',
-          { userAddress, tokens, usdValue, tx, action: 'swap' }, // action will be overwritten again below
+          { userAddress, tokens, usdValue, tx, action: 'swap', id }, // action will be overwritten again below
         ] as PoolActivityEl
 
         switch (type) {

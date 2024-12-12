@@ -33,7 +33,7 @@ export function PoolActivityTable() {
 
   const items = sortedPoolEvents.map(item => ({
     ...item,
-    id: item[0],
+    id: item[2].id,
   }))
 
   return (

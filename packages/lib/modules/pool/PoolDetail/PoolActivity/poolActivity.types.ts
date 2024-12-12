@@ -12,6 +12,7 @@ export type PoolActivityMetaData = {
   tx: string
   usdValue: string
   action: 'swap' | 'add' | 'remove'
+  id: string
 }
 
 export type PoolActivityEl = [number, string, PoolActivityMetaData]
