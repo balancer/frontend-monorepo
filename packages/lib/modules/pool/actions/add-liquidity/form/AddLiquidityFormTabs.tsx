@@ -7,6 +7,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { useEffect } from 'react'
 import { usePool } from '../../../PoolProvider'
 import {
+  hasWeightedPool2Tokens,
   requiresProportionalInput,
   supportsProportionalAddLiquidityKind,
 } from '../../LiquidityActionHelpers'
@@ -36,7 +37,9 @@ export function AddLiquidityFormTabs({
   const { toCurrency } = useCurrency()
 
   const isDisabledProportionalTab =
-    nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)
+    nestedAddLiquidityEnabled ||
+    !supportsProportionalAddLiquidityKind(pool) ||
+    hasWeightedPool2Tokens(pool)
   /* TODO: test nested unbalanced + proportional calculations
   it does not work now due to "'Reference amount must be relative to a token in the pool or its BPT',"
   cause tokensWithBpt does not contain leaf tokens inside BPT:

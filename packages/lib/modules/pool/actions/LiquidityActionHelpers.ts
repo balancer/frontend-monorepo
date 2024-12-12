@@ -291,6 +291,22 @@ export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
   return true
 }
 
+// v2 Pools with WeightedPool2Tokens pool types do not support AddLiquidityKind.Proportional in the SDK
+// TODO: get this data from the API
+export function hasWeightedPool2Tokens(pool: Pool): boolean {
+  if (
+    isV2Pool(pool) &&
+    isSameAddress(
+      pool.address,
+      // TODO: get this data from the API
+      '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56' // 80 BAL 20 WETH
+    )
+  ) {
+    return true
+  }
+  return false
+}
+
 type ProtocolVersion = PoolState['protocolVersion']
 
 export function toPoolState(pool: Pool): PoolState {
