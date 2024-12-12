@@ -34,9 +34,10 @@ import { AlertTriangle, XCircle } from 'react-feather'
 import Image from 'next/image'
 import { RateProviderInfoPopOver } from './RateProviderInfo'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
-import { getWarnings, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
+import { getWarnings } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
 import { Erc4626InfoPopOver } from './Erc4626Info'
+import { useIgnoreErc4626 } from '../../metadata/useIgnoreErc4626'
 
 type RateProvider = {
   tokenAddress: Address
@@ -118,7 +119,7 @@ function getHookIcon(data: GqlHookReviewData | undefined | null) {
 export function PoolContracts({ ...props }: CardProps) {
   const { pool, chain, poolExplorerLink, hasGaugeAddress, gaugeAddress, gaugeExplorerLink } =
     usePool()
-
+  const ignoreErc4626 = useIgnoreErc4626(pool)
   const { getToken } = useTokens()
 
   const contracts = useMemo(() => {
@@ -162,14 +163,14 @@ export function PoolContracts({ ...props }: CardProps) {
   }, [pool])
 
   const erc4626Tokens = useMemo(() => {
-    if (!isV3Pool(pool)) return []
+    if (ignoreErc4626) return []
 
     const erc4626Tokens = pool.poolTokens.filter(token => token.isErc4626)
     const erc4626NestedTokens = pool.poolTokens.flatMap(token =>
       token.nestedPool ? token.nestedPool.tokens.filter(token => token.isErc4626) : []
     )
     return [...(erc4626Tokens ? erc4626Tokens : []), ...erc4626NestedTokens]
-  }, [pool])
+  }, [pool, ignoreErc4626])
 
   return (
     <Card {...props}>

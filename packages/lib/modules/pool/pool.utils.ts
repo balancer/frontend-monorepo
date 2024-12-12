@@ -25,6 +25,7 @@ import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { Pool } from './PoolProvider'
 import BigNumber from 'bignumber.js'
 import { TOTAL_APR_TYPES } from '@repo/lib/shared/hooks/useAprTooltip'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 // URL slug for each chain
 export enum ChainSlug {
@@ -291,6 +292,10 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
 
 export function shouldCallComputeDynamicSwapFee(pool: Pool) {
   return pool.hook && pool.hook.shouldCallComputeDynamicSwapFee
+}
+
+export function getPoolTokensExclSelf(pool: Pool | PoolListItem) {
+  return pool.poolTokens.filter(token => !isSameAddress(token.address, pool.address))
 }
 
 export function getPoolDisplayTokens(pool: Pool | PoolListItem) {

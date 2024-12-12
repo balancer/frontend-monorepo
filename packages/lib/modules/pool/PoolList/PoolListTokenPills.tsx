@@ -3,8 +3,10 @@ import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/gene
 import { PoolListItem } from '../pool.types'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { isStableLike, isV3Pool, isWeightedLike } from '../pool.helpers'
+import { isStableLike, isWeightedLike } from '../pool.helpers'
 import { Pool } from '../PoolProvider'
+import { usePoolTokens } from '../tokens/usePoolTokens'
+import { useMemo } from 'react'
 
 function NestedTokenPill({
   nestedTokens,
@@ -172,19 +174,10 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
   const shouldUseWeightedPills = isWeightedLike(pool.type)
   const shouldUseStablePills = isStableLike(pool.type)
 
-  // TODO: fix difference between Pool and PoolListItem types
-  let poolTokens = pool.poolTokens.filter(
-    token => token.address !== pool.address
-  ) as GqlPoolTokenDetail[]
+  const { getPoolActionTokens } = usePoolTokens(pool)
 
-  if (isV3Pool(pool) && pool.hasErc4626 && !pool.hasNestedErc4626) {
-    // TODO: Move this into a general 'displayTokens' helper function.
-    poolTokens = poolTokens.map(token =>
-      token.underlyingToken
-        ? ({ ...token, ...token.underlyingToken } as unknown as GqlPoolTokenDetail)
-        : token
-    )
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const poolTokens = useMemo(() => getPoolActionTokens() as unknown as GqlPoolTokenDetail[], [pool])
 
   if (shouldUseStablePills) {
     return (
