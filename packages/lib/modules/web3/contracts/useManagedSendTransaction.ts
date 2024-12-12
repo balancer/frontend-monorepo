@@ -18,14 +18,13 @@ import {
 } from '@repo/lib/shared/utils/query-errors'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useRecentTransactions } from '../../transactions/RecentTransactionsProvider'
-import { mainnet } from 'viem/chains'
 import { useTxHash } from '../safe.hooks'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 
 export type ManagedSendTransactionInput = {
   labels: TransactionLabels
-  txConfig?: TransactionConfig
+  txConfig: TransactionConfig
   gasEstimationMeta?: Record<string, unknown>
 }
 
@@ -34,8 +33,7 @@ export function useManagedSendTransaction({
   txConfig,
   gasEstimationMeta,
 }: ManagedSendTransactionInput) {
-  // chainId will always have the correct value as the transaction is disabled when txConfig is undefined
-  const chainId = txConfig?.chainId || mainnet.id
+  const chainId = txConfig.chainId
   const { shouldChangeNetwork } = useChainSwitch(chainId)
   const { minConfirmations } = useNetworkConfig()
   const { updateTrackedTransaction } = useRecentTransactions()
@@ -82,29 +80,6 @@ export function useManagedSendTransaction({
     result: transactionStatusQuery,
     isSafeTxLoading,
   }
-
-  // when the transaction is successfully submitted to the chain
-  // start monitoring the hash
-  //
-  // when the transaction has an execution error, update that within
-  // the global transaction cache too
-  useEffect(() => {
-    if (bundle?.execution?.data) {
-      // add transaction here
-    }
-  }, [bundle.execution?.data])
-
-  // when the transaction has an execution error, update that within
-  // the global transaction cache
-  // this can either be an execution error or a confirmation error
-  useEffect(() => {
-    if (bundle?.execution?.error) {
-      // monitor execution error here
-    }
-    if (bundle?.result?.error) {
-      // monitor confirmation error here
-    }
-  }, [bundle.execution?.error, bundle.result?.error])
 
   useEffect(() => {
     if (transactionStatusQuery.error) {

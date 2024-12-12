@@ -20,7 +20,7 @@ import {
 import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { TokenAmountHumanReadable } from '../tokens/token.types'
-import { formatUnits, parseUnits } from 'viem'
+import { Address, formatUnits, parseUnits } from 'viem'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { Pool } from './PoolProvider'
 import BigNumber from 'bignumber.js'
@@ -78,6 +78,17 @@ function getVariant(pool: Pool | PoolListItem): PoolVariant {
 export function getPoolPath(pool: Pool | PoolListItem) {
   const variant = getVariant(pool)
   return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${pool.id}`
+}
+
+export function getNestedPoolPath({
+  pool,
+  nestedPoolAddress,
+}: {
+  pool: Pool | PoolListItem
+  nestedPoolAddress: Address
+}) {
+  const variant = getVariant(pool)
+  return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${nestedPoolAddress}`
 }
 
 // TODO: the following 2 functions (getAprLabel & getTotalAprLabel) most likely need revisiting somewhere in the near future and refactored to just one
@@ -172,7 +183,7 @@ const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.Unknown]: 'Unknown',
   [GqlPoolType.Fx]: 'FX',
   [GqlPoolType.ComposableStable]: 'Stable',
-  [GqlPoolType.CowAmm]: 'CoW AMM',
+  [GqlPoolType.CowAmm]: 'Weighted',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {
@@ -278,10 +289,38 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
   return poolType === GqlPoolType.CowAmm
 }
 
-export function getPoolDisplayTokens(pool: Pool) {
+export function shouldCallComputeDynamicSwapFee(pool: Pool) {
+  return pool.hook && pool.hook.shouldCallComputeDynamicSwapFee
+}
+
+export function getPoolDisplayTokens(pool: Pool | PoolListItem) {
   return pool.poolTokens.filter(token =>
     pool.displayTokens.find(
       (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address
     )
   ) as GqlPoolTokenDetail[]
+}
+
+export function getPoolDisplayTokensWithPossibleNestedPools(pool: Pool) {
+  const displayTokens = getPoolDisplayTokens(pool)
+
+  const hasNestedPools = displayTokens.some(token => token.hasNestedPool)
+
+  if (hasNestedPools) {
+    const displayTokensWithNestedPools: GqlPoolTokenDetail[] = []
+
+    displayTokens.forEach(token => {
+      if (token.hasNestedPool) {
+        token.nestedPool?.tokens.forEach(nestedPoolToken => {
+          displayTokensWithNestedPools.push(nestedPoolToken)
+        })
+      } else {
+        displayTokensWithNestedPools.push(token)
+      }
+    })
+
+    return displayTokensWithNestedPools
+  }
+
+  return displayTokens
 }

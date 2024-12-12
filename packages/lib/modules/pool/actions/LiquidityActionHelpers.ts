@@ -15,6 +15,7 @@ import {
   PoolState,
   PoolStateWithBalances,
   PoolStateWithUnderlyings,
+  PoolTokenWithBalance,
   PoolTokenWithUnderlying,
   Token,
   TokenAmount,
@@ -35,11 +36,14 @@ import { Pool } from '../PoolProvider'
 import {
   allPoolTokens,
   isAffectedByCspIssue,
+  isBoosted,
   isComposableStableV1,
   isCowAmmPool,
   isGyro,
   isUnbalancedLiquidityDisabled,
+  isV2Pool,
   isV3Pool,
+  isV3NotSupportingWethIsEth,
 } from '../pool.helpers'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
 
@@ -80,15 +84,18 @@ export class LiquidityActionHelpers {
   /* Used by V3 boosted SDK handlers */
   public get boostedPoolState(): PoolStateWithUnderlyings & { totalShares: HumanAmount } {
     const poolTokensWithUnderlyings: PoolTokenWithUnderlying[] = this.pool.poolTokens.map(
-      (token, index) => ({
+      token => ({
         ...token,
         address: token.address as Address,
-        underlyingToken: {
-          ...token.underlyingToken,
-          address: token.underlyingToken?.address as Address,
-          decimals: token.underlyingToken?.decimals as number,
-          index, //TODO: review that this index is always the expected one
-        },
+        balance: token.balance as HumanAmount,
+        underlyingToken: token.underlyingToken?.address
+          ? {
+              ...token.underlyingToken,
+              address: token.underlyingToken?.address as Address,
+              decimals: token.underlyingToken?.decimals as number,
+              index: token.index, //TODO: review that this index is always the expected one
+            }
+          : null,
       })
     )
     const state: PoolStateWithUnderlyings & { totalShares: HumanAmount } = {
@@ -103,7 +110,38 @@ export class LiquidityActionHelpers {
   }
 
   public get poolStateWithBalances(): PoolStateWithBalances {
-    return toPoolStateWithBalances(this.pool)
+    return isBoosted(this.pool)
+      ? this.boostedPoolStateWithBalances
+      : toPoolStateWithBalances(this.pool)
+  }
+
+  /* Used by calculateProportionalAmounts for V3 boosted proportional adds */
+  public get boostedPoolStateWithBalances(): PoolStateWithBalances {
+    const underlyingTokensWithBalance: PoolTokenWithBalance[] = this.pool.poolTokens.map(
+      (token, index) =>
+        token.underlyingToken
+          ? {
+              address: token.underlyingToken?.address as Address,
+              decimals: token.underlyingToken?.decimals as number,
+              index,
+              balance: bn(token.balance).multipliedBy(bn(token.priceRate)).toFixed() as HumanAmount,
+            }
+          : {
+              address: token.address as Address,
+              decimals: token.decimals as number,
+              balance: token.balance as HumanAmount,
+              index,
+            }
+    )
+    const state: PoolStateWithBalances = {
+      id: this.pool.id as Hex,
+      address: this.pool.address as Address,
+      protocolVersion: 3,
+      type: mapPoolType(this.pool.type),
+      tokens: underlyingTokensWithBalance,
+      totalShares: this.pool.dynamicData.totalShares as HumanAmount,
+    }
+    return state
   }
 
   public get networkConfig() {
@@ -242,6 +280,17 @@ export function requiresProportionalInput(pool: Pool): boolean {
   return isGyro(pool.type) || isCowAmmPool(pool.type)
 }
 
+// Some pool types do not support AddLiquidityKind.Proportional in the SDK
+export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
+  if (
+    isV2Pool(pool) &&
+    (pool.type === GqlPoolType.Stable || pool.type === GqlPoolType.MetaStable)
+  ) {
+    return false
+  }
+  return true
+}
+
 type ProtocolVersion = PoolState['protocolVersion']
 
 export function toPoolState(pool: Pool): PoolState {
@@ -310,9 +359,10 @@ export function emptyTokenAmounts(pool: Pool): TokenAmount[] {
   return pool.poolTokens.map(token => TokenAmount.fromHumanAmount(token as unknown as Token, '0'))
 }
 
-export function shouldShowNativeWrappedSelector(token: GqlToken, poolType: GqlPoolType) {
+export function shouldShowNativeWrappedSelector(token: GqlToken, pool: Pool) {
   return (
-    !isCowAmmPool(poolType) && // Cow AMM pools don't support wethIsEth
+    !isV3NotSupportingWethIsEth(pool) && // V3 boosted/nested actions don't support wethIsEth currently
+    !isCowAmmPool(pool.type) && // Cow AMM pools don't support wethIsEth
     isNativeOrWrappedNative(token.address as Address, token.chain)
   )
 }
@@ -369,4 +419,9 @@ export function toTokenAmountsIn(
     address: amountIn.token.address,
     amount: amountIn.amount,
   }))
+}
+
+export function getSender(userAddress?: Address): Address | undefined {
+  if (userAddress === ('' as Address)) return undefined // '' would cause an error in the SDK
+  return userAddress
 }

@@ -6,6 +6,7 @@
   "scripts": {
     "build": "pnpm --filter @repo/lib graphql:gen && next build",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev\"",
+    "dev:no-gen": "next dev",
     "gen:wagmi": "pnpm wagmi generate",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -35,7 +36,10 @@
     "react-use-measure": "^2.1.1",
     "tinycolor2": "^1.6.0",
     "viem": "^2.21.18",
-    "wagmi": "^2.12.16"
+    "wagmi": "^2.12.16",
+    "react-feather": "^2.0.10",
+    "@chakra-ui/icons": "^2.1.1",
+    "prismjs": "^1.29.0"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
@@ -60,7 +64,8 @@
     "happy-dom": "^12.10.3",
     "lokijs": "^1.5.12",
     "sentry-testkit": "^5.0.9",
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "@types/prismjs": "^1.26.5"
   },
   "engines": {
     "node": ">=18.x"

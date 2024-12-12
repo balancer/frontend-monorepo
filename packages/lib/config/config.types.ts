@@ -90,7 +90,7 @@ export interface Config {
   }
 }
 
-interface Banners {
+export interface Banners {
   headerSrc: string
   footerSrc: string
 }
@@ -101,10 +101,18 @@ type VariantConfig = {
   }
 }
 
+interface ExternalUrls {
+  discordUrl: string
+}
+
 export interface ProjectConfig {
   projectId: 'beets' | 'balancer'
   projectName: string
   supportedNetworks: GqlChain[]
   corePoolId: string // this prop is used to adjust the color of the SparklesIcon
   variantConfig?: VariantConfig
+  defaultNetwork: GqlChain
+  ensNetwork: GqlChain
+  delegateOwner: Address
+  externalLinks: ExternalUrls
 }

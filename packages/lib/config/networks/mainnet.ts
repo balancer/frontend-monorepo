@@ -5,6 +5,13 @@ import { NetworkConfig } from '../config.types'
 import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
 import { SupportedWrapHandler } from '@repo/lib/modules/swap/swap.types'
 import { Address } from 'viem'
+import {
+  BALANCER_BATCH_ROUTER,
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  PERMIT2,
+  VAULT_V3,
+} from '@balancer/sdk'
+import { mainnet } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
   chainId: 1,
@@ -75,14 +82,18 @@ const networkConfig: NetworkConfig = {
     multicall2: '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      vaultV3: VAULT_V3[mainnet.id],
       relayerV6: '0x35Cea9e57A393ac66Aaa7E25C391D52C74B5648f',
       minter: '0x239e55F427D44C3cc793f49bFB507ebe76638a2b',
       router: '0xNotYetAvailable' as Address,
+      batchRouter: BALANCER_BATCH_ROUTER[mainnet.id],
+      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[mainnet.id],
     },
     feeDistributor: '0xD3cf852898b21fc233251427c2DC93d3d604F3BB',
     veDelegationProxy: '0x6f5a2eE11E7a772AeB5114A20d0D7c0ff61EB8A0',
     veBAL: '0xC128a9954e6c874eA3d62ce62B468bA073093F25',
     omniVotingEscrow: '0x96484f2aBF5e58b15176dbF1A799627B53F13B6d',
+    permit2: PERMIT2[mainnet.id],
   },
 
   pools: convertHexToLowerCase({

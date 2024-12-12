@@ -99,13 +99,13 @@ export const colors = {
     // sand: 'linear(to-t, #E6C6A0 0%, #E5D3BE 100%)',
 
     dawnLight:
-      'linear-gradient(90deg, hsla(245, 97%, 76%, 1) 0%, hsla(266, 85%, 69%, 1) 40%, hsla(9, 85%, 71%, 1) 100%)',
+      'linear-gradient(45deg, hsla(245, 97%, 76%, 1) 0%, hsla(266, 85%, 69%, 1) 40%, hsla(9, 85%, 71%, 1) 100%)',
     dawnLightAlpha15:
-      'linear-gradient(90deg, hsla(245, 97%, 76%, 0.15) 0%, hsla(266, 85%, 69%, 0.15) 40%, hsla(9, 85%, 71%, 0.15) 100%)',
+      'linear-gradient(45deg, hsla(245, 97%, 76%, 0.15) 0%, hsla(266, 85%, 69%, 0.15) 40%, hsla(9, 85%, 71%, 0.15) 100%)',
     dawnDark:
-      'linear-gradient(90deg, hsla(244, 78%, 82%, 1) 0%, hsla(266, 37%, 85%, 1) 25%, hsla(0, 36%, 84%, 1) 50%, hsla(25, 73%, 70%, 1) 100%)',
+      'linear-gradient(135deg, hsla(244, 78%, 82%, 1) 0%, hsla(266, 37%, 85%, 1) 40%, hsla(0, 36%, 84%, 1) 60%, hsla(25, 73%, 70%, 1) 100%)',
     dawnDarkAlpha15:
-      'linear-gradient(90deg, hsla(244, 78%, 82%, 0.15) 0%, hsla(266, 37%, 85%, 0.15) 25%, hsla(0, 36%, 84%, 0.15) 50%, hsla(25, 73%, 70%, 0.15) 100%)',
+      'linear-gradient(45deg, hsla(244, 78%, 82%, 0.15) 0%, hsla(266, 37%, 85%, 0.15) 25%, hsla(0, 36%, 84%, 0.15) 50%, hsla(25, 73%, 70%, 0.15) 100%)',
     sunsetLight: 'linear-gradient(45deg, #F06147 0%, #EA9A43 100%)',
     sunsetDark: 'linear-gradient(45deg, #F06147 0%, #EA9A43 100%)',
     sandLight: 'linear-gradient(180deg, #E5D3BE 0%, #E6C6A0 100%)',

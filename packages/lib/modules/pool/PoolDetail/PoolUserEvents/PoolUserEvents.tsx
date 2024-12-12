@@ -18,6 +18,8 @@ import {
   GetPoolEventsQuery,
   GqlChain,
   GqlPoolStakingType,
+  GqlPoolAddRemoveEventV3,
+  GqlPoolSwapEventV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
@@ -38,40 +40,31 @@ type PoolEventRowProps = {
 
 const GRID_COLUMNS = '100px 150px 100px 1fr'
 
-function Action({ isTypeAdd }: { isTypeAdd: boolean }) {
+function Action({ poolEventType }: { poolEventType: 'Add' | 'Remove' | 'Swap' }) {
+  const eventTypeColor =
+    poolEventType === 'Add' ? 'green.500' : poolEventType === 'Remove' ? 'red.500' : 'blue.500'
   return (
     <HStack>
       <Box
         as="span"
-        backgroundColor={isTypeAdd ? 'green.500' : 'red.500'}
+        backgroundColor={eventTypeColor}
         borderRadius="50%"
         display="inline-block"
         h="8px"
         w="8px"
       />
-      <Text>{isTypeAdd ? 'Add' : 'Remove'}</Text>
+      <Text>{poolEventType}</Text>
     </HStack>
   )
 }
 
 function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) {
-  if (poolEvent.__typename !== 'GqlPoolAddRemoveEventV3') {
+  // Only show add/remove/swap events
+  if (!['GqlPoolAddRemoveEventV3', 'GqlPoolSwapEventV3'].includes(poolEvent.__typename)) {
     return null
   }
 
-  const isTypeAdd = poolEvent.type === 'ADD'
-
-  const Tokens = () =>
-    poolEvent.tokens
-      .filter(token => token.amount !== '0')
-      .map(token => (
-        <HStack gap={['xs', 'sm']} key={token.address} mb="sm">
-          <TokenIcon address={token.address} alt={token.address} chain={chain} size={24} />
-          <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
-            {fNum('token', token.amount)}
-          </Text>
-        </HStack>
-      ))
+  const poolEventType = getEventType(poolEvent)
 
   return (
     <Grid
@@ -86,10 +79,10 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
       w="full"
     >
       <GridItem area="action">
-        <Action isTypeAdd={isTypeAdd} />
+        <Action poolEventType={poolEventType} />
       </GridItem>
       <GridItem area="tokens">
-        <Tokens />
+        <Tokens chain={chain} poolEvent={poolEvent} />
       </GridItem>
       <GridItem area="value" textAlign={{ base: 'left', md: 'right' }}>
         <Text>{usdValue}</Text>
@@ -107,6 +100,75 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
         </HStack>
       </GridItem>
     </Grid>
+  )
+}
+
+function getEventType(item: PoolEventItem) {
+  switch (item.type) {
+    case 'SWAP':
+      return 'Swap'
+    case 'ADD':
+      return 'Add'
+    case 'REMOVE':
+      return 'Remove'
+    default:
+      throw new Error(`Unknown event type: ${item.type}`)
+  }
+}
+
+function Tokens({ poolEvent, chain }: { poolEvent: PoolEventItem; chain: GqlChain }) {
+  if (poolEvent.__typename === 'GqlPoolSwapEventV3') {
+    const swapEvent = poolEvent as GqlPoolSwapEventV3
+    return <SwapTokens chain={chain} swapEvent={swapEvent} />
+  }
+
+  const addRemoveEvent = poolEvent as GqlPoolAddRemoveEventV3
+  return <AddRemoveTokens addRemoveEvent={addRemoveEvent} chain={chain} />
+}
+
+function AddRemoveTokens({
+  addRemoveEvent,
+  chain,
+}: {
+  addRemoveEvent: GqlPoolAddRemoveEventV3
+  chain: GqlChain
+}) {
+  return addRemoveEvent.tokens
+    .filter(token => token.amount !== '0')
+    .map(token => (
+      <HStack gap={['xs', 'sm']} key={token.address} mb="sm">
+        <TokenIcon address={token.address} alt={token.address} chain={chain} size={24} />
+        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+          {fNum('token', token.amount)}
+        </Text>
+      </HStack>
+    ))
+}
+
+function SwapTokens({ swapEvent, chain }: { swapEvent: GqlPoolSwapEventV3; chain: GqlChain }) {
+  const tokenIn = swapEvent.tokenIn
+  const tokenOut = swapEvent.tokenOut
+  return (
+    <>
+      <HStack gap={['xs', 'sm']} mb="sm">
+        <TokenIcon address={tokenIn.address} alt={tokenIn.address} chain={chain} size={24} />
+        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+          {fNum('token', tokenIn.amount)} in
+        </Text>
+      </HStack>
+
+      <HStack gap={['xs', 'sm']} mb="sm">
+        <TokenIcon
+          address={swapEvent.tokenOut.address}
+          alt={swapEvent.tokenOut.address}
+          chain={chain}
+          size={24}
+        />
+        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+          {fNum('token', tokenOut.amount)} out
+        </Text>
+      </HStack>
+    </>
   )
 }
 

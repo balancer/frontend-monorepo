@@ -11,6 +11,7 @@ import { HumanTokenAmountWithAddress, TokenBase } from './token.types'
 import { InputAmount } from '@balancer/sdk'
 import { Pool } from '../pool/PoolProvider'
 import { getVaultConfig, isCowAmmPool, isV3Pool } from '../pool/pool.helpers'
+import { TokenCore } from '../pool/pool.types'
 
 export function isNativeAsset(token: TokenBase | string, chain: GqlChain | SupportedChainId) {
   return nativeAssetFilter(chain)(token)
@@ -115,7 +116,7 @@ export function requiresDoubleApproval(
 
 export type PoolToken = Pool['poolTokens'][0]
 export function getLeafTokens(poolTokens: PoolToken[]) {
-  const leafTokens: PoolToken[] = []
+  const leafTokens: TokenCore[] = []
 
   poolTokens.forEach(poolToken => {
     if (poolToken.nestedPool) {
@@ -123,13 +124,26 @@ export function getLeafTokens(poolTokens: PoolToken[]) {
         // Exclude the pool token itself
         t => !isSameAddress(t.address, poolToken.address)
       ) as PoolToken[]
-      leafTokens.push(...nestedTokens)
+
+      const nestedLeafTokens = nestedTokens.map(t => getTokenOrUnderlying(t))
+      leafTokens.push(...nestedLeafTokens)
     } else {
-      leafTokens.push(poolToken)
+      // TODO: add unit test for this case: pol id 0x42de4fa875126fdbaf590b2fc3802adbca58acee
+      leafTokens.push(getTokenOrUnderlying(poolToken))
     }
   })
 
   return leafTokens
+}
+
+function getTokenOrUnderlying(token: PoolToken): TokenCore {
+  return token.isErc4626 && token.underlyingToken
+    ? {
+        ...token.underlyingToken,
+        address: token.underlyingToken.address as Address,
+        index: token.index,
+      }
+    : { ...token, address: token.address as Address }
 }
 
 export function getSpenderForAddLiquidity(pool: Pool): Address {

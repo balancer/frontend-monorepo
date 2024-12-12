@@ -30,6 +30,7 @@ import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvid
 import { useEffect, useState } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
+import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
 
 type TokenInputSelectorProps = {
   token: GqlToken | undefined
@@ -139,9 +140,7 @@ function TokenInputFooter({
           variant="secondary"
         >
           {toCurrency(usdValue, { abbreviated: false })}
-          {showPriceImpact &&
-            priceImpactLevel !== 'unknown' &&
-            ` (-${fNum('priceImpact', priceImpact)})`}
+          {showPriceImpact && priceImpactLevel !== 'unknown' && getPriceImpactLabel(priceImpact)}
         </Text>
       )}
       {isBalancesLoading || !isMounted ? (
@@ -266,6 +265,10 @@ export const TokenInput = forwardRef(
                 min={0}
                 onChange={handleOnChange}
                 onKeyDown={blockInvalidNumberInput}
+                onWheel={e => {
+                  // Avoid changing the input value when scrolling
+                  return e.currentTarget.blur()
+                }}
                 outline="none"
                 p="0"
                 placeholder="0.00"

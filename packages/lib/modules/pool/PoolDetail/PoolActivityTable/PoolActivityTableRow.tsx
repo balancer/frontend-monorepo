@@ -30,6 +30,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import React from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePool } from '../../PoolProvider'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 interface Props extends GridProps {
   event: PoolActivityEl
@@ -37,7 +38,7 @@ interface Props extends GridProps {
 }
 
 function EnsOrAddress({ userAddress, chain }: { userAddress: `0x${string}`; chain: GqlChain }) {
-  const chainId = getChainId(GqlChain.Mainnet) // perform ENS lookup through mainnet
+  const chainId = getChainId(getProjectConfig().ensNetwork) // perform ENS lookup through ensNetwork
   const { data: name } = useEnsName({ address: userAddress, chainId })
 
   const { data: ensAvatar } = useEnsAvatar({
@@ -85,7 +86,7 @@ function TransactionDetails({
     <HStack wrap="wrap">
       {tokensWithAmount.map((token, index) => {
         return (
-          <React.Fragment key={index}>
+          <React.Fragment key={token.token?.address}>
             <Badge
               {...badgeProps}
               alignItems="center"

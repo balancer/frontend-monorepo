@@ -1,3 +1,5 @@
+#import "./pool-tokens.graphql"
+
 query GetPools(
   $first: Int
   $skip: Int
@@ -35,6 +37,9 @@ query GetPools(
         weight
         symbol
       }
+    }
+    hook {
+      ...Hook
     }
     dynamicData {
       totalLiquidity
@@ -95,6 +100,9 @@ query GetPools(
     id
     name
     owner
+    swapFeeManager
+    pauseManager
+    poolCreator
     symbol
     type
     userBalance {
@@ -108,6 +116,9 @@ query GetPools(
         stakingType
         stakingId
       }
+    }
+    poolTokens {
+      ...PoolTokens
     }
   }
   count: poolGetPoolsCount(
@@ -126,6 +137,7 @@ query GetFeaturedPools($chains: [GqlChain!]!) {
     primary
     description
     pool {
+      address
       id
       name
       factory
@@ -144,19 +156,8 @@ query GetFeaturedPools($chains: [GqlChain!]!) {
           rewardTokenAddress
         }
       }
-      displayTokens {
-        id
-        address
-        name
-        weight
-        symbol
-        nestedTokens {
-          id
-          address
-          name
-          weight
-          symbol
-        }
+      poolTokens {
+        ...PoolTokens
       }
     }
   }

@@ -67,8 +67,17 @@ function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
       </Box>
       {(isDev || isStaging) && (
         <Box as={motion.div} variants={fadeIn}>
-          <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
+          {/* <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
             Debug
+          </Link> */}
+          <Link
+            as={NextLink}
+            color={linkColorFor('/testooors')}
+            href="/testooors"
+            prefetch
+            variant="nav"
+          >
+            Test
           </Link>
         </Box>
       )}
@@ -132,11 +141,13 @@ function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
     }
 
     return defaultActions
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, isConnected])
 
   return (
     <>
       {actions.map(({ el, display }, i) => (
+        // eslint-disable-next-line react/no-array-index-key
         <Box as={motion.div} display={display} key={i} variants={fadeIn}>
           {el}
         </Box>
@@ -213,7 +224,7 @@ export function NavBar({
           as={motion.div}
           initial="hidden"
           onClick={e => e.stopPropagation()}
-          spacing="lg"
+          spacing="xl"
           variants={staggeredFadeIn}
         >
           {leftSlot || (

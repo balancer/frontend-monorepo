@@ -15,7 +15,7 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
   async simulate({ ...variables }: SimulateSwapInputs): Promise<SdkSimulateSwapResponse> {
     const { data } = await this.apolloClient.query({
       query: GetSorSwapsDocument,
-      variables: { ...variables, queryBatchSwap: false }, // We don't need the API to do a query because we're doing that via the SDK below.
+      variables,
       fetchPolicy: 'no-cache',
       notifyOnNetworkStatusChange: true,
     })

@@ -12,6 +12,9 @@ import { requiresPermit2Approval } from '../../pool.helpers'
 import { LiquidityActionHelpers } from '../LiquidityActionHelpers'
 import { AddLiquidityStepParams, useAddLiquidityStep } from './useAddLiquidityStep'
 import { useSignPermit2AddStep } from './useSignPermit2AddStep'
+import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
 
 type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
@@ -23,6 +26,7 @@ export function useAddLiquiditySteps({
   simulationQuery,
 }: AddLiquidityStepsParams) {
   const { pool, chainId, chain } = usePool()
+  const shouldBatchTransactions = useShouldBatchTransactions(pool)
   const { slippage } = useUserSettings()
   const relayerMode = useRelayerMode(pool)
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
@@ -64,17 +68,23 @@ export function useAddLiquiditySteps({
     slippage,
   })
 
-  const addSteps =
+  const addSteps: TransactionStep[] =
     isPermit2 && signPermit2Step ? [signPermit2Step, addLiquidityStep] : [addLiquidityStep]
 
-  const steps = useMemo(() => {
+  addLiquidityStep.nestedSteps = tokenApprovalSteps
+  const approveAndAddSteps =
+    shouldBatchTransactions && hasSomePendingNestedTxInBatch(addLiquidityStep)
+      ? [addLiquidityStep] // Hide token approvals when batching
+      : [...tokenApprovalSteps, ...addSteps]
+
+  const steps = useMemo<TransactionStep[]>(() => {
     if (relayerMode === 'approveRelayer') {
-      return [approveRelayerStep, ...tokenApprovalSteps, ...addSteps]
+      return [approveRelayerStep, ...approveAndAddSteps]
     } else if (shouldSignRelayerApproval) {
-      return [signRelayerStep, ...tokenApprovalSteps, ...addSteps]
+      return [signRelayerStep, ...approveAndAddSteps]
     }
 
-    return [...tokenApprovalSteps, ...addSteps]
+    return [...approveAndAddSteps]
   }, [
     relayerMode,
     shouldSignRelayerApproval,

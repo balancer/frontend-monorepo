@@ -14,7 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { FC, PropsWithChildren } from 'react'
+import { PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
 
 import { EcosystemChainSelect } from './EcosystemChainSelect'
@@ -26,11 +26,13 @@ import {
   useEcosystemPoolActivityChart,
 } from '@repo/lib/modules/marketing/useEcosystemPoolActivity'
 
-const AnimateOpacity: FC<PropsWithChildren<object>> = ({ children }) => (
-  <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ duration: 0.5 }}>
-    {children}
-  </motion.div>
-)
+function AnimateOpacity({ children }: PropsWithChildren) {
+  return (
+    <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+      {children}
+    </motion.div>
+  )
+}
 
 export function EcosystemActivityChart() {
   const chartHeight = 500
@@ -109,14 +111,13 @@ export function EcosystemActivityChart() {
             <Divider mb="4" pt="2" />
 
             <Flex flexWrap="wrap" gap={['1', '1', '4']} px={['1', '2']}>
-              {legendTabs.map((tab, index) => (
-                <HStack alignItems="center" gap="2" key={index}>
+              {legendTabs.map(tab => (
+                <HStack alignItems="center" gap="2" key={tab.label}>
                   <Box
                     backgroundImage={tab.color}
                     borderRadius="50%"
                     display="inline-block"
                     height="2"
-                    key={index}
                     width="2"
                   />
                   <Text color="font.secondary" fontSize="sm" textTransform="capitalize">

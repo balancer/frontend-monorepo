@@ -52,7 +52,9 @@ export function RemoveLiquidityForm() {
     {
       value: 'single',
       label: 'Single token',
-      //Boosted pools do not support single token removes
+      tabTooltipLabel: isBoosted(pool)
+        ? 'Boosted pools do not support single token removes'
+        : undefined,
       disabled: isBoosted(pool),
     },
   ] as const
@@ -187,7 +189,7 @@ export function RemoveLiquidityForm() {
                 </Text>
               )}
               {isProportionalTabSelected && (
-                <RemoveLiquidityProportional poolType={pool.type} tokens={tokens} />
+                <RemoveLiquidityProportional pool={pool} tokens={tokens} />
               )}
               {isSingleTabSelected && (
                 <RemoveLiquiditySingleToken chain={pool.chain} tokens={tokens} />
