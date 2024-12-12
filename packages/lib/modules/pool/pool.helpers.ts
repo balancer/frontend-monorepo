@@ -164,8 +164,22 @@ export function calcUserShareOfPool(pool: Pool) {
   return calcShareOfPool(pool, userBalance)
 }
 
+export function calcFutureUserShareOfPool(pool: Pool, bptAmount: BigNumber) {
+  const userBalance = getUserTotalBalanceInt(pool)
+  const poolBalance = calcPoolBalance(pool)
+
+  const newUserBalance = bn(userBalance).plus(bn(bptAmount))
+  const newPoolBalance = poolBalance.plus(bn(bptAmount))
+  return bn(newUserBalance).div(newPoolBalance)
+}
+
 export function calcShareOfPool(pool: Pool, rawBalance: bigint) {
-  return bn(rawBalance).div(bn(parseUnits(pool.dynamicData.totalShares, BPT_DECIMALS)))
+  const poolBalance = calcPoolBalance(pool)
+  return bn(rawBalance).div(bn(poolBalance))
+}
+
+export function calcPoolBalance(pool: Pool) {
+  return bn(parseUnits(pool.dynamicData.totalShares, BPT_DECIMALS))
 }
 
 export function getPoolHelpers(pool: Pool, chain: GqlChain) {

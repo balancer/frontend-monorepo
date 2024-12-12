@@ -15,7 +15,7 @@ import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvid
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePool } from '../PoolProvider'
 import { ArrowRight } from 'react-feather'
-import { calcShareOfPool, calcUserShareOfPool } from '../pool.helpers'
+import { calcFutureUserShareOfPool, calcUserShareOfPool } from '../pool.helpers'
 import { isNumber } from 'lodash'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { formatUnits } from 'viem'
@@ -48,12 +48,12 @@ export function PoolActionsPriceImpactDetails({
   const priceImpactUsd = bn(priceImpact || 0).times(totalUSDValue)
   const maxSlippageUsd = bn(slippage).div(100).times(totalUSDValue)
 
-  const changedShareOfPool = calcShareOfPool(pool, bptAmount || 0n)
   const currentShareOfPool = calcUserShareOfPool(pool)
 
-  const futureShareOfPool = isAddLiquidity
-    ? currentShareOfPool.plus(changedShareOfPool)
-    : currentShareOfPool.minus(changedShareOfPool)
+  const futureShareOfPool = calcFutureUserShareOfPool(
+    pool,
+    bn(bptAmount || 0n).multipliedBy(isAddLiquidity ? 1 : -1)
+  )
 
   return (
     <VStack align="start" fontSize="sm" spacing="sm" w="full">

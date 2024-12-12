@@ -25,6 +25,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { keyBy } from 'lodash'
 import {
   getAuraPoolLink,
+  getPoolDisplayTokens,
   getProportionalExitAmountsFromScaledBptIn,
   getXavePoolLink,
 } from '../pool.utils'
@@ -80,6 +81,7 @@ export default function PoolMyLiquidity() {
   const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Aura)
   const [redirectPartnerUrl, setRedirectPartnerUrl] = useState<string>()
 
+  const displayTokens = getPoolDisplayTokens(pool)
   const isVeBal = isVebalPool(pool.id)
   const tabs = useMemo(() => {
     const tabsArr = getTabs(isVeBal)
@@ -319,7 +321,7 @@ export default function PoolMyLiquidity() {
                 </Button>
               </HStack>
             ) : (
-              pool.poolTokens.map(poolToken => {
+              displayTokens.map(poolToken => {
                 return (
                   <VStack key={`pool-${poolToken.address}`} w="full">
                     <TokenRow
