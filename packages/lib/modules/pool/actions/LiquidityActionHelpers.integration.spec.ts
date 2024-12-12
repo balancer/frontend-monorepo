@@ -454,3 +454,210 @@ test.skip('Nested pool state for V3 NESTED POOL', async () => {
     protocolVersion: 3,
   })
 })
+
+describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
+  const poolId = '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522' // Gnosis Balancer aGNO/sDAI
+
+  const waGnoGNOAddress = '0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644'
+  const gnoAddress = '0x9c58bacc331c9aa871afd802db6379a98e80cedb'
+
+  const sDaiAddress = '0xaf204776c7245bf4147c2612bf6e5972ee483701'
+  const wxDai = '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
+
+  const v3Pool = await getPoolMock(poolId, GqlChain.Gnosis)
+  const helpers = new LiquidityActionHelpers(v3Pool)
+
+  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    { humanAmount: '0.1', tokenAddress: gnoAddress },
+  ]
+
+  it('allPoolTokens snapshot', async () => {
+    expect(allPoolTokens(v3Pool)).toMatchInlineSnapshot(`
+      [
+        {
+          "address": "0x9c58bacc331c9aa871afd802db6379a98e80cedb",
+          "chainId": 100,
+          "decimals": 18,
+          "index": 0,
+          "name": "Gnosis Token on xDai",
+          "symbol": "GNO",
+        },
+        {
+          "address": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
+          "chainId": 100,
+          "decimals": 18,
+          "index": 1,
+          "name": "Wrapped XDAI",
+          "symbol": "WXDAI",
+        },
+      ]
+    `)
+  })
+
+  it('toInputAmounts', async () => {
+    expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
+      {
+        address: gnoAddress,
+        decimals: 18,
+        rawAmount: 100000000000000000n,
+      },
+    ])
+  })
+
+  it('boostedPoolState', async () => {
+    const helpers = new LiquidityActionHelpers(v3Pool)
+    expect(helpers.boostedPoolState).toMatchObject({
+      address: poolId,
+      id: poolId,
+      protocolVersion: 3,
+      tokens: [
+        {
+          address: waGnoGNOAddress,
+          balance: expect.any(String),
+          balanceUSD: expect.any(String),
+          decimals: 18,
+          hasNestedPool: false,
+          id: '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522-0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644',
+          index: 0,
+          isAllowed: true,
+          isErc4626: true,
+          name: 'Wrapped Aave Gnosis GNO',
+          nestedPool: null,
+          priceRate: expect.any(String),
+          priceRateProvider: '0xbbb4966335677ea24f7b86dc19a423412390e1fb',
+          priceRateProviderData: expect.any(Object),
+          symbol: 'waGnoGNO',
+          underlyingToken: {
+            address: gnoAddress,
+            decimals: 18,
+            index: 0,
+            name: 'Gnosis Token on xDai',
+            symbol: 'GNO',
+          },
+          weight: '0.5',
+        },
+        {
+          address: sDaiAddress,
+          balance: expect.any(String),
+          balanceUSD: expect.any(String),
+          decimals: 18,
+          hasNestedPool: false,
+          id: '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522-0xaf204776c7245bf4147c2612bf6e5972ee483701',
+          index: 1,
+          isAllowed: true,
+          isErc4626: true,
+          name: 'Savings xDAI',
+          nestedPool: null,
+          priceRate: expect.any(String),
+          priceRateProvider: '0x89c80a4540a00b5270347e02e2e144c71da2eced',
+          priceRateProviderData: expect.any(Object),
+          symbol: 'sDAI',
+          underlyingToken: {
+            address: wxDai,
+            decimals: 18,
+            index: 1,
+            name: 'Wrapped XDAI',
+            symbol: 'WXDAI',
+          },
+          weight: '0.5',
+        },
+      ],
+      type: 'Weighted',
+    })
+  })
+
+  it('poolStateWithBalances (that calls boostedPoolStateWithBalances underneath)', async () => {
+    const helpers = new LiquidityActionHelpers(v3Pool)
+    expect(helpers.poolStateWithBalances).toEqual({
+      address: poolId,
+      id: poolId,
+      protocolVersion: 3,
+      tokens: [
+        {
+          address: gnoAddress,
+          balance: expect.any(String),
+          decimals: 18,
+          index: 0,
+        },
+        {
+          address: wxDai,
+          balance: expect.any(String),
+          decimals: 18,
+          index: 1,
+        },
+      ],
+      totalShares: expect.any(String),
+      type: 'Weighted',
+    })
+  })
+})
+
+describe('Liquidity helpers for GNOSIS V2 pool with isErc4626 tokens (v2 pools are not boosted so they should not use underlying tokens)', async () => {
+  const poolId = '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063' // Gnosis Balancer 50sDAI-50wstETHr
+
+  const wstETHAddress = '0x6c76971f98945ae98dd7d4dfca8711ebea946ea6'
+  const sDaiAddress = '0xaf204776c7245bf4147c2612bf6e5972ee483701'
+
+  const v2Pool = await getPoolMock(poolId, GqlChain.Gnosis)
+  const helpers = new LiquidityActionHelpers(v2Pool)
+
+  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    { humanAmount: '0.1', tokenAddress: sDaiAddress },
+  ]
+
+  it('allPoolTokens return sDaiAddress instead of its underlying token cause it a V2 pool', async () => {
+    expect(allPoolTokens(v2Pool)).toMatchInlineSnapshot(`
+      [
+        {
+          "address": "0x6c76971f98945ae98dd7d4dfca8711ebea946ea6",
+          "decimals": 18,
+          "index": 0,
+          "name": "Wrapped liquid staked Ether 2.0 from Mainnet",
+          "symbol": "wstETH",
+        },
+        {
+          "address": "0xaf204776c7245bf4147c2612bf6e5972ee483701",
+          "decimals": 18,
+          "index": 1,
+          "name": "Savings xDAI",
+          "symbol": "sDAI",
+        },
+      ]
+    `)
+  })
+
+  it('toInputAmounts', async () => {
+    expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
+      {
+        address: sDaiAddress,
+        decimals: 18,
+        rawAmount: 100000000000000000n,
+      },
+    ])
+  })
+
+  it('poolStateWithBalances', async () => {
+    const helpers = new LiquidityActionHelpers(v2Pool)
+    expect(helpers.poolStateWithBalances).toEqual({
+      id: poolId,
+      address: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9',
+      protocolVersion: 2,
+      tokens: [
+        {
+          address: wstETHAddress,
+          balance: expect.any(String),
+          decimals: 18,
+          index: 0,
+        },
+        {
+          address: sDaiAddress,
+          balance: expect.any(String),
+          decimals: 18,
+          index: 1,
+        },
+      ],
+      totalShares: expect.any(String),
+      type: 'Weighted',
+    })
+  })
+})

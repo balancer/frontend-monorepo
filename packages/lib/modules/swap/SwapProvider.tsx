@@ -102,6 +102,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const urlTxHash = pathParams.urlTxHash
   const isPoolSwapUrl = useIsPoolSwapUrl()
   const isPoolSwap = pool && poolActionableTokens // Hint to tell TS that pool and poolActionableTokens must be defined when poolSwap
+  const shouldDiscardOldPersistedValue = isPoolSwapUrl
   const swapStateVar = useMakeVarPersisted<SwapState>(
     {
       tokenIn: {
@@ -117,7 +118,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       swapType: GqlSorSwapType.ExactIn,
       selectedChain: isPoolSwap ? pool.chain : getProjectConfig().defaultNetwork,
     },
-    'swapState'
+    'swapState',
+    shouldDiscardOldPersistedValue
   )
 
   const swapState = useReactiveVar(swapStateVar)

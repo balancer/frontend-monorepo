@@ -101,7 +101,7 @@ export function Erc4626InfoPopOver({ token, data, level, children }: Erc4626Info
     <PopoverInfoBody data={data} level={level} />
   ) : (
     <Text fontSize="sm">
-      Rate provider data is missing.
+      Tokenized vault data is missing.
       <br />
       Proceed with caution.
     </Text>

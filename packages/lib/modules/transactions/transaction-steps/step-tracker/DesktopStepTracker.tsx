@@ -9,9 +9,10 @@ import { TransactionStepsResponse } from '../useTransactionSteps'
 type Props = {
   chain: GqlChain
   transactionSteps: TransactionStepsResponse
+  isTxBatch?: boolean
 }
 
-export function DesktopStepTracker({ chain, transactionSteps }: Props) {
+export function DesktopStepTracker({ chain, transactionSteps, isTxBatch }: Props) {
   return (
     <Card padding={0} position="absolute" right="-274px" width="250px">
       <VStack alignItems="flex-start" w="full">
@@ -24,7 +25,7 @@ export function DesktopStepTracker({ chain, transactionSteps }: Props) {
 
         <Divider p="0" />
         <Box p="sm" pb="md">
-          <Steps transactionSteps={transactionSteps} />
+          <Steps isTxBatch={isTxBatch} transactionSteps={transactionSteps} />
         </Box>
       </VStack>
     </Card>
