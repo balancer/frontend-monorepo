@@ -15,9 +15,6 @@ semanticTokens.colors.font.light = '#FFFFFF'
 semanticTokens.colors.grayText._dark = '#BBBBBB'
 
 
-components.Card.baseStyle.container.background = 'rgba(145,226,193,0.07)'
-components.Card.baseStyle.container.shadow = 'none'
-
 export const beetsTheme = {
   config,
   fonts,
