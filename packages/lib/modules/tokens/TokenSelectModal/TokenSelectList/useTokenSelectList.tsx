@@ -9,7 +9,7 @@ import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 export function useTokenSelectList(
   chain: GqlChain,
-  tokens: GqlToken[] | ApiToken[],
+  tokens: ApiToken[],
   excludeNativeAsset: boolean,
   pinNativeAsset: boolean,
   searchTerm?: string
@@ -17,10 +17,10 @@ export function useTokenSelectList(
   const { usdValueForToken } = useTokens()
   const { balanceFor } = useTokenBalances()
 
-  const symbolMatch = (token: GqlToken | ApiToken, searchTerm: string) =>
+  const symbolMatch = (token: ApiToken, searchTerm: string) =>
     token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
 
-  const nameMatch = (token: GqlToken | ApiToken, searchTerm: string) =>
+  const nameMatch = (token: ApiToken, searchTerm: string) =>
     token.name.toLowerCase().includes(searchTerm.toLowerCase())
 
   const getFilteredTokens = useCallback(() => {

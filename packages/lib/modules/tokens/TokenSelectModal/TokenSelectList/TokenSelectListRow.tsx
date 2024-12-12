@@ -12,7 +12,7 @@ import { TokenInfoPopover } from '../../TokenInfoPopover'
 import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 type Props = {
-  token: GqlToken | ApiToken
+  token: ApiToken
   userBalance?: TokenAmount
   isBalancesLoading?: boolean
   active?: boolean

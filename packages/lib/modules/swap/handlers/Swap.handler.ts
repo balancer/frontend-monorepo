@@ -10,7 +10,7 @@ import { ApiToken } from '../../pool/pool.types'
  */
 export interface SwapHandler {
   apolloClient?: ApolloClient<object>
-  tokens?: GqlToken[] | ApiToken[]
+  tokens?: ApiToken[]
   name: string
 
   simulate(inputs: SimulateSwapInputs): Promise<SimulateSwapResponse>

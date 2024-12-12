@@ -17,7 +17,7 @@ export function overflowProtected(value: Numberish, decimalLimit: number): strin
 }
 
 type Params = {
-  token: GqlToken | ApiToken | undefined
+  token: ApiToken | undefined
   disableBalanceValidation?: boolean
   onChange?: (event: { currentTarget: { value: string } }) => void
 }

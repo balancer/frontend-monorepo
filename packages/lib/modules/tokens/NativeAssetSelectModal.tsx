@@ -22,8 +22,8 @@ type Props = {
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement>
-  onTokenSelect: (token: GqlToken | ApiToken) => void
-  nativeAssets: GqlToken[] | ApiToken[]
+  onTokenSelect: (token: ApiToken) => void
+  nativeAssets: ApiToken[]
 }
 
 export function NativeAssetSelectModal({
@@ -34,7 +34,7 @@ export function NativeAssetSelectModal({
   nativeAssets,
   ...rest
 }: Props & Omit<ModalProps, 'children'>) {
-  function closeOnSelect(token: GqlToken | ApiToken) {
+  function closeOnSelect(token: ApiToken) {
     onClose()
     onTokenSelect(token)
   }

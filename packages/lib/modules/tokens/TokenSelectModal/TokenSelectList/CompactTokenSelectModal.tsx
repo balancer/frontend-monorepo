@@ -22,8 +22,8 @@ type Props = {
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement>
-  onTokenSelect: (token: GqlToken | ApiToken) => void
-  tokens: GqlToken[] | ApiToken[]
+  onTokenSelect: (token: ApiToken) => void
+  tokens: ApiToken[]
 }
 
 export function CompactTokenSelectModal({
@@ -34,7 +34,7 @@ export function CompactTokenSelectModal({
   tokens,
   ...rest
 }: Props & Omit<ModalProps, 'children'>) {
-  function closeOnSelect(token: GqlToken | ApiToken) {
+  function closeOnSelect(token: ApiToken) {
     onClose()
     onTokenSelect(token)
   }

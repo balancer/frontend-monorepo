@@ -160,7 +160,7 @@ function AddLiquidityMainForm() {
     }
   }, [isBalancesLoading])
 
-  function handleTokenSelect(token: GqlToken | ApiToken) {
+  function handleTokenSelect(token: ApiToken) {
     if (isNativeAsset(token.address as Address, token.chain)) {
       setWethIsEth(true)
     } else {

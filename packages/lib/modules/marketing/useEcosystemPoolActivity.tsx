@@ -28,7 +28,7 @@ import { getChainShortName } from '@repo/lib/config/app.config'
 import { ApiToken } from '../pool/pool.types'
 
 type ChartInfoTokens = {
-  token?: GqlToken | ApiToken
+  token?: ApiToken
   amount: string
 }
 

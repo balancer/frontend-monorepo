@@ -2,7 +2,7 @@ import { GqlPoolType, GqlToken } from '@repo/lib/shared/services/api/generated/g
 import { ApiToken, BaseVariant, PoolVariant } from '../../pool.types'
 
 export type PoolActivityTokens = {
-  token?: GqlToken | ApiToken
+  token?: ApiToken
   amount: string
 }
 

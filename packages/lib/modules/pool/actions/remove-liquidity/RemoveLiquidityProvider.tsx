@@ -80,7 +80,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const isSingleToken = removalType === RemoveLiquidityType.SingleToken
   const isProportional = removalType === RemoveLiquidityType.Proportional
 
-  function tokensToShow(): GqlToken[] | ApiToken[] {
+  function tokensToShow(): ApiToken[] {
     // Cow AMM pools don't support wethIsEth
     if (isCowAmmPool(pool.type)) return tokens
 
@@ -98,7 +98,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
             return token
           }
         })
-        .filter((token): token is GqlToken | ApiToken => token !== undefined)
+        .filter((token): token is ApiToken => token !== undefined)
     }
 
     return tokens

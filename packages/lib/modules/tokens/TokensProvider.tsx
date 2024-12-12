@@ -27,7 +27,7 @@ import { ApiToken } from '../pool/pool.types'
 export type UseTokensResult = ReturnType<typeof _useTokens>
 export const TokensContext = createContext<UseTokensResult | null>(null)
 
-export type GetTokenFn = (address: string, chain: GqlChain) => GqlToken | ApiToken | undefined
+export type GetTokenFn = (address: string, chain: GqlChain) => ApiToken | undefined
 
 export function _useTokens(
   initTokenData: GetTokensQuery,
@@ -102,7 +102,7 @@ export function _useTokens(
     )
   }
 
-  function priceForToken(token: GqlToken | ApiToken): number {
+  function priceForToken(token: ApiToken): number {
     const price = getPricesForChain(token.chain).find(price =>
       isSameAddress(price.address, token.address)
     )
@@ -119,7 +119,7 @@ export function _useTokens(
     return price.price
   }
 
-  function usdValueForToken(token: GqlToken | ApiToken | undefined, amount: Numberish) {
+  function usdValueForToken(token: ApiToken | undefined, amount: Numberish) {
     if (!token) return '0'
     if (amount === '') return '0'
     return bn(amount).times(priceForToken(token)).toFixed()

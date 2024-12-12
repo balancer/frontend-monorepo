@@ -18,7 +18,7 @@ export function TokenRowGroup({
   amounts: HumanTokenAmountWithAddress[]
   chain: GqlChain
   totalUSDValue?: string
-  tokens?: GqlToken[] | ApiToken[]
+  tokens?: ApiToken[]
   isLoading?: boolean
 }) {
   const { toCurrency } = useCurrency()

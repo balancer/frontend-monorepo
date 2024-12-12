@@ -3,7 +3,7 @@
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { Button, Card, Heading, Text, VStack, useDisclosure } from '@chakra-ui/react'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useState } from 'react'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
@@ -17,13 +17,11 @@ export default function TokenInputPage() {
   const [currentValue, setCurrentValue] = useState('')
   const { getToken, getTokensByChain } = useTokens()
   const tokenSelectDisclosure = useDisclosure()
-  const [token, setToken] = useState<GqlToken | ApiToken>(
-    getToken(daiAddress, 1) as GqlToken | ApiToken
-  )
+  const [token, setToken] = useState<ApiToken>(getToken(daiAddress, 1) as ApiToken)
 
   const tokens = getTokensByChain(1)
 
-  function handleTokenSelect(token: GqlToken | ApiToken) {
+  function handleTokenSelect(token: ApiToken) {
     setToken(token)
   }
 

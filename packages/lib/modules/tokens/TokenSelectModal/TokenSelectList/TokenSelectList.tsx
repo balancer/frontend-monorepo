@@ -19,13 +19,13 @@ import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 type Props = {
   chain: GqlChain
-  tokens: GqlToken[] | ApiToken[]
+  tokens: ApiToken[]
   excludeNativeAsset?: boolean
   pinNativeAsset?: boolean
   listHeight: number
   searchTerm?: string
   currentToken?: Address
-  onTokenSelect: (token: GqlToken | ApiToken) => void
+  onTokenSelect: (token: ApiToken) => void
 }
 function OtherTokens() {
   return (
@@ -92,14 +92,14 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
 
 interface TokenRowProps {
   index: number
-  token: GqlToken | ApiToken
+  token: ApiToken
   isConnected: boolean
-  balanceFor: (token: GqlToken | ApiToken) => any
+  balanceFor: (token: ApiToken) => any
   isBalancesLoading: boolean
   isLoadingTokenPrices: boolean
   activeIndex: number
-  isCurrentToken: (token: GqlToken | ApiToken) => boolean
-  onTokenSelect: (token: GqlToken | ApiToken) => void
+  isCurrentToken: (token: ApiToken) => boolean
+  onTokenSelect: (token: ApiToken) => void
 }
 
 function TokenRow({
@@ -130,13 +130,13 @@ function TokenRow({
 function renderTokenRow(
   index: number,
   activeIndex: number,
-  balanceFor: (token: GqlToken | ApiToken) => any,
+  balanceFor: (token: ApiToken) => any,
   isBalancesLoading: boolean,
   isConnected: boolean,
-  isCurrentToken: (token: GqlToken | ApiToken) => boolean,
+  isCurrentToken: (token: ApiToken) => boolean,
   isLoadingTokenPrices: boolean,
-  onTokenSelect: (token: GqlToken | ApiToken) => void,
-  tokensToShow: GqlToken[] | ApiToken[]
+  onTokenSelect: (token: ApiToken) => void,
+  tokensToShow: ApiToken[]
 ) {
   return (
     <TokenRow
@@ -184,7 +184,7 @@ export function TokenSelectList({
   const tokensWithoutBalance = orderedTokens.filter(token => !tokensWithBalance.includes(token))
   const tokensToShow = [...tokensWithBalance, ...tokensWithoutBalance]
 
-  const isCurrentToken = (token: GqlToken | ApiToken) =>
+  const isCurrentToken = (token: ApiToken) =>
     !!currentToken && isSameAddress(token.address, currentToken)
 
   const groups = [

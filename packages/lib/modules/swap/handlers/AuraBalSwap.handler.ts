@@ -17,7 +17,7 @@ import { ApiToken } from '../../pool/pool.types'
 export class AuraBalSwapHandler implements SwapHandler {
   name = 'AuraBalSwapHandler'
 
-  constructor(public tokens: GqlToken[] | ApiToken[]) {}
+  constructor(public tokens: ApiToken[]) {}
 
   async simulate({ ...variables }: SimulateSwapInputs): Promise<AuraBalSimulateSwapResponse> {
     const { chain, swapType } = variables

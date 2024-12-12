@@ -33,15 +33,15 @@ export const TokenBalancesContext = createContext<UseTokenBalancesResponse | nul
  * case the buffer is set to the slippage percentage set by the user.
  */
 export function _useTokenBalances(
-  initTokens?: GqlToken[] | ApiToken[],
-  extTokens?: GqlToken[] | ApiToken[],
+  initTokens?: ApiToken[],
+  extTokens?: ApiToken[],
   bufferPercentage: HumanAmount | string = '0'
 ) {
   if (!initTokens && !extTokens) throw new Error('initTokens or tokens must be provided')
   if (initTokens && extTokens) throw new Error('initTokens and tokens cannot be provided together')
 
   // eslint-disable-next-line react/hook-use-state
-  const [_tokens, _setTokens] = useState<GqlToken[] | ApiToken[]>(initTokens || [])
+  const [_tokens, _setTokens] = useState<ApiToken[]>(initTokens || [])
 
   const { userAddress } = useUserAccount()
 
@@ -128,7 +128,7 @@ export function _useTokenBalances(
     return balances.find(balance => isSameAddress(balance.address, address))
   }
 
-  function setTokens(tokens: GqlToken[] | ApiToken[]) {
+  function setTokens(tokens: ApiToken[]) {
     if (extTokens) throw new Error('Cannot set tokens when using external tokens')
     _setTokens(tokens)
   }
@@ -145,8 +145,8 @@ export function _useTokenBalances(
 }
 
 type ProviderProps = PropsWithChildren<{
-  initTokens?: GqlToken[] | ApiToken[]
-  extTokens?: GqlToken[] | ApiToken[]
+  initTokens?: ApiToken[]
+  extTokens?: ApiToken[]
   bufferPercentage?: HumanAmount | string
 }>
 

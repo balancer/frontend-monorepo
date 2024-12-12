@@ -20,7 +20,7 @@ import { PropsWithChildren } from 'react'
 import { ApiToken } from '../../pool.types'
 
 type Erc4626InfoPopOverProps = {
-  token: GqlToken | ApiToken
+  token: ApiToken
   data: Erc4626ReviewData | undefined | null
   level: number
 } & PropsWithChildren

@@ -34,7 +34,7 @@ import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
 import { ApiToken } from '../../pool/pool.types'
 
 type TokenInputSelectorProps = {
-  token: GqlToken | ApiToken | undefined
+  token: ApiToken | undefined
   weight?: string
   toggleTokenSelect?: () => void
 }
@@ -85,7 +85,7 @@ function TokenInputSelector({ token, weight, toggleTokenSelect }: TokenInputSele
 }
 
 type TokenInputFooterProps = {
-  token: GqlToken | ApiToken | undefined
+  token: ApiToken | undefined
   value?: string
   updateValue: (value: string) => void
   hasPriceImpact?: boolean

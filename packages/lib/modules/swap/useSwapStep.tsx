@@ -24,8 +24,8 @@ export const swapStepId = 'swap'
 
 export type SwapStepParams = BuildSwapQueryParams & {
   swapAction: SwapAction
-  tokenInInfo: GqlToken | ApiToken | undefined
-  tokenOutInfo: GqlToken | ApiToken | undefined
+  tokenInInfo: ApiToken | undefined
+  tokenOutInfo: ApiToken | undefined
 }
 
 export function useSwapStep({

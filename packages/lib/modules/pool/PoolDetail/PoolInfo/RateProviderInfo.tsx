@@ -20,7 +20,7 @@ import { PropsWithChildren } from 'react'
 import { ApiToken } from '../../pool.types'
 
 type RateProviderInfoPopOverProps = {
-  token: GqlToken | ApiToken
+  token: ApiToken
   data: GqlPriceRateProviderData | null
   level: number
 } & PropsWithChildren

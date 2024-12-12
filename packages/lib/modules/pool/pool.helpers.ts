@@ -480,10 +480,7 @@ export function isStandardOrUnderlyingRootToken(pool?: Pool, tokenAddress?: Addr
 }
 
 // Returns the top level tokens that is not nestedBpt
-export function getStandardRootTokens(
-  pool: Pool,
-  poolActionableTokens?: GqlToken[] | ApiToken[]
-): GqlToken[] | ApiToken[] {
+export function getStandardRootTokens(pool: Pool, poolActionableTokens?: ApiToken[]): ApiToken[] {
   if (!poolActionableTokens) return []
   return poolActionableTokens.filter(token =>
     isStandardOrUnderlyingRootToken(pool, token.address as Address)
@@ -491,10 +488,7 @@ export function getStandardRootTokens(
 }
 
 // Returns the child tokens (children of a parent nestedBpt)
-export function getChildTokens(
-  pool: Pool,
-  poolActionableTokens?: GqlToken[] | ApiToken[]
-): GqlToken[] | ApiToken[] {
+export function getChildTokens(pool: Pool, poolActionableTokens?: ApiToken[]): ApiToken[] {
   if (!poolActionableTokens) return []
   return poolActionableTokens.filter(
     token => !isStandardOrUnderlyingRootToken(pool, token.address as Address)

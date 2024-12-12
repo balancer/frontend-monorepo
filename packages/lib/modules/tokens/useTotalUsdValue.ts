@@ -6,7 +6,7 @@ import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { HumanTokenAmountWithAddress } from './token.types'
 import { ApiToken } from '../pool/pool.types'
 
-export function useTotalUsdValue(tokens: GqlToken[] | ApiToken[]) {
+export function useTotalUsdValue(tokens: ApiToken[]) {
   const { usdValueForToken } = useTokens()
   const calculateUsdAmountsIn = useCallback(
     (humanAmountsIn: HumanTokenAmountWithAddress[]) =>

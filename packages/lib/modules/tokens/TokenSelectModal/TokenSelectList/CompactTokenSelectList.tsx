@@ -11,8 +11,8 @@ import { TokenSelectListRow } from './TokenSelectListRow'
 import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 type Props = {
-  tokens: GqlToken[] | ApiToken[]
-  onTokenSelect: (token: GqlToken | ApiToken) => void
+  tokens: ApiToken[]
+  onTokenSelect: (token: ApiToken) => void
 }
 
 export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props & BoxProps) {
@@ -37,7 +37,7 @@ export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props
   useHotkeys('tab', incrementActiveIndex, hotkeyOpts)
   useHotkeys('enter', selectActiveToken, [tokens, activeIndex], hotkeyOpts)
 
-  function keyFor(token: GqlToken | ApiToken, index: number) {
+  function keyFor(token: ApiToken, index: number) {
     return `${token.address}:${token.chain}:${index}`
   }
 

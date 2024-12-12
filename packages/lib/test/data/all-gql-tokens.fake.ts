@@ -325,7 +325,7 @@ export function fakeTokenByAddressAndChain(address: Address, chain: GqlChain) {
   return token
 }
 
-export function fakeGetToken(address: string, chain: GqlChain): GqlToken | ApiToken | undefined {
+export function fakeGetToken(address: string, chain: GqlChain): ApiToken | undefined {
   return fakeTokenByAddressAndChain(address as Address, chain as GqlChain)
 }
 

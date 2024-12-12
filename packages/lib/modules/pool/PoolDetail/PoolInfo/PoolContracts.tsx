@@ -74,7 +74,7 @@ function getIconAndLevel(hasWarnings: boolean, isSafe: boolean, hasData: boolean
   return { icon, level }
 }
 
-function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlToken | ApiToken) {
+function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: ApiToken) {
   const hasWarnings = getWarnings(data?.warnings || []).length > 0
   const isSafe = !!data?.reviewed && data?.summary === 'safe'
   const hasData = !!data
@@ -88,7 +88,7 @@ function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlTo
   )
 }
 
-function getErc4626Icon(data: Erc4626ReviewData | undefined | null, token: GqlToken | ApiToken) {
+function getErc4626Icon(data: Erc4626ReviewData | undefined | null, token: ApiToken) {
   const hasWarnings = getWarnings(data?.warnings || []).length > 0
   const hasData = !!data
   const isSafe = hasData && data?.summary === 'safe'

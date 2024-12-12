@@ -15,11 +15,11 @@ export function _useTokenInputsValidation() {
     setValidationErrors({ ...validationErrors })
   }
 
-  function hasValidationError(token: GqlToken | ApiToken | undefined) {
+  function hasValidationError(token: ApiToken | undefined) {
     return !!getValidationError(token)
   }
 
-  function getValidationError(token: GqlToken | ApiToken | undefined): string {
+  function getValidationError(token: ApiToken | undefined): string {
     if (!token) return ''
     const error = validationErrors[token.address as Address]
     if (!error) return ''

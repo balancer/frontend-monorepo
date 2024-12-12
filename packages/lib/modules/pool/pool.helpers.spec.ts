@@ -124,7 +124,7 @@ function getTokenMock(pool: Pool) {
     return tokens
   }
   // Returns a getToken mock function that looks for a token by address in the whole pool structure (including nested pools)
-  return function (address: string): GqlToken | ApiToken | undefined {
+  return function (address: string): ApiToken | undefined {
     return getAllTokens(pool).find(token =>
       isSameAddress(token.address, address)
     ) as unknown as GqlToken

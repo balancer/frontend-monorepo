@@ -9,7 +9,7 @@ import { isNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { ApiToken } from '../../../pool.types'
 
 interface RemoveLiquiditySingleTokenProps {
-  tokens: (GqlToken | ApiToken | undefined)[]
+  tokens: (ApiToken | undefined)[]
   chain: GqlChain
 }
 

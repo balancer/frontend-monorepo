@@ -22,7 +22,7 @@ type ParseProps = {
   chain: GqlChain
   userAddress?: Address
   txValue: bigint
-  getToken: (address: Address, chain: GqlChain) => GqlToken | ApiToken | undefined
+  getToken: (address: Address, chain: GqlChain) => ApiToken | undefined
   protocolVersion: ProtocolVersion
 }
 

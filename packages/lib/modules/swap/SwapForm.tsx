@@ -99,7 +99,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     setTimeout(() => setCopiedDeepLink(false), 2000)
   }
 
-  function handleTokenSelect(token: GqlToken | ApiToken) {
+  function handleTokenSelect(token: ApiToken) {
     if (!token) return
     if (tokenSelectKey === 'tokenIn') {
       setTokenIn(token.address as Address)
@@ -110,7 +110,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     }
   }
 
-  function handleTokenSelectForPoolSwap(token: GqlToken | ApiToken) {
+  function handleTokenSelectForPoolSwap(token: ApiToken) {
     const tokenAddress = token.address as Address
 
     if (

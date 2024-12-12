@@ -16,7 +16,7 @@ import { ApiToken } from '../pool/pool.types'
 type Props = {
   wethIsEth: boolean
   simulationQuery: SwapSimulationQueryResult
-  tokenInInfo?: GqlToken | ApiToken
+  tokenInInfo?: ApiToken
   chainId: number
   isPermit2: boolean
 }

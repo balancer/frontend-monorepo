@@ -360,7 +360,7 @@ export function emptyTokenAmounts(pool: Pool): TokenAmount[] {
   return pool.poolTokens.map(token => TokenAmount.fromHumanAmount(token as unknown as Token, '0'))
 }
 
-export function shouldShowNativeWrappedSelector(token: GqlToken | ApiToken, pool: Pool) {
+export function shouldShowNativeWrappedSelector(token: ApiToken, pool: Pool) {
   return (
     !isV3NotSupportingWethIsEth(pool) && // V3 boosted/nested actions don't support wethIsEth currently
     !isCowAmmPool(pool.type) && // Cow AMM pools don't support wethIsEth
@@ -369,8 +369,8 @@ export function shouldShowNativeWrappedSelector(token: GqlToken | ApiToken, pool
 }
 
 export function replaceWrappedWithNativeAsset(
-  validTokens: GqlToken[] | ApiToken[],
-  nativeAsset: GqlToken | ApiToken | undefined
+  validTokens: ApiToken[],
+  nativeAsset: ApiToken | undefined
 ) {
   if (!nativeAsset) return validTokens
   return validTokens.map(token => {
@@ -383,8 +383,8 @@ export function replaceWrappedWithNativeAsset(
 }
 
 export function injectNativeAsset(
-  validTokens: GqlToken[] | ApiToken[],
-  nativeAsset: GqlToken | ApiToken | undefined,
+  validTokens: ApiToken[],
+  nativeAsset: ApiToken | undefined,
   pool: Pool
 ) {
   const isWrappedNativeAssetInPool = validTokens.find(token =>

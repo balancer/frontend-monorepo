@@ -21,7 +21,7 @@ import { Address } from 'viem'
 import { ApiToken } from '../../pool/pool.types'
 
 type Props = {
-  tokens: GqlToken[] | ApiToken[]
+  tokens: ApiToken[]
   chain: GqlChain
   currentToken?: Address
   excludeNativeAsset?: boolean
@@ -30,7 +30,7 @@ type Props = {
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement>
-  onTokenSelect: (token: GqlToken | ApiToken) => void
+  onTokenSelect: (token: ApiToken) => void
 }
 
 export function TokenSelectModal({
@@ -47,7 +47,7 @@ export function TokenSelectModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const [searchTerm, setSearchTerm] = useState('')
 
-  function closeOnSelect(token: GqlToken | ApiToken) {
+  function closeOnSelect(token: ApiToken) {
     onTokenSelect(token)
     closeModal()
   }

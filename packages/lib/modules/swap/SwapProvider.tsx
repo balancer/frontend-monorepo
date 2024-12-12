@@ -78,7 +78,7 @@ function selectSwapHandler(
   chain: GqlChain,
   swapType: GqlSorSwapType,
   apolloClient: ApolloClient<object>,
-  tokens: GqlToken[] | ApiToken[]
+  tokens: ApiToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -96,7 +96,7 @@ export type SwapProviderProps = {
   pathParams: PathParams
   // Only used by pool swap
   pool?: Pool
-  poolActionableTokens?: GqlToken[] | ApiToken[]
+  poolActionableTokens?: ApiToken[]
 }
 export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
@@ -398,7 +398,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     window.history.replaceState({}, '', newPath.join(''))
   }
 
-  function scaleTokenAmount(amount: string, token: GqlToken | ApiToken | undefined): bigint {
+  function scaleTokenAmount(amount: string, token: ApiToken | undefined): bigint {
     if (amount === '') return parseUnits('0', 18)
     if (!token) throw new Error('Cant scale amount without token metadata')
     return parseUnits(amount, token.decimals)
