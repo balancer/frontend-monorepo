@@ -1,3 +1,4 @@
+import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { balancerMinterAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -16,8 +17,9 @@ export function useHasMinterApproval() {
     account: userAddress,
     functionName: 'getMinterApproval',
     args: [contracts.balancer.relayerV6, userAddress],
-    query: { enabled: isConnected },
+    query: { enabled: isConnected && isBalancerProject() }, // Only Balancer project supports minter approval
   })
+
   return {
     ...query,
     hasMinterApproval: query.data ?? false,
