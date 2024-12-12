@@ -21,6 +21,7 @@ import { CowFooter } from '@repo/lib/shared/components/navs/CowFooter'
 import { CowPoolBanner } from '@repo/lib/shared/components/navs/CowPoolBanner'
 import { PoolActivity } from './PoolActivity/PoolActivity'
 import { PoolHookBanner } from './PoolHookBanner'
+import { usePoolMetadata } from '../metadata/PoolMetadataProvider'
 
 export function PoolDetail() {
   const { pool, chain } = usePool()

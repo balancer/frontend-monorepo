@@ -8,6 +8,7 @@ import { usePoolList } from './PoolListProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ErrorBoundary } from 'react-error-boundary'
 import { BoundaryError } from '@repo/lib/shared/components/errors/ErrorBoundary'
+import { usePoolMetadata } from '../metadata/PoolMetadataProvider'
 
 export function PoolListLayout() {
   const { pools, loading, count } = usePoolList()
