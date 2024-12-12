@@ -12,10 +12,8 @@ const semanticTokens = getSemanticTokens(tokens, colors)
 
 semanticTokens.colors.font.dark = '#111111'
 semanticTokens.colors.font.light = '#FFFFFF'
+semanticTokens.colors.grayText._dark = '#BBBBBB'
 
-components.Button.variants.tertiary.background = 'background.button.primary'
-components.Button.variants.tertiary._active.background = 'background.button.primary'
-components.Button.variants.tertiary.color = 'font.dark'
 
 components.Card.baseStyle.container.background = 'rgba(145,226,193,0.07)'
 components.Card.baseStyle.container.shadow = 'none'
@@ -23,7 +21,14 @@ components.Card.baseStyle.container.shadow = 'none'
 export const beetsTheme = {
   config,
   fonts,
-  styles,
+  styles: {
+    global: {
+      ...styles.global,
+      body: {
+        background: 'linear-gradient(90deg, #111111 0%, #333333 100%)',
+      },
+    }
+  },
   colors,
   semanticTokens,
   components,
