@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   Popover,
   PopoverTrigger,
@@ -13,6 +14,7 @@ import { Repeat } from 'react-feather'
 import { Pool } from '../../PoolProvider'
 import { shouldCallComputeDynamicSwapFee } from '../../pool.utils'
 import { FluidIcon } from '@repo/lib/shared/components/icons/FluidIcon'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export function PoolSwapFees({ pool }: { pool: Pool }) {
   const isDynamicSwapFee = shouldCallComputeDynamicSwapFee(pool)
@@ -59,7 +61,7 @@ export function PoolSwapFees({ pool }: { pool: Pool }) {
                 </Text>
               ) : (
                 <Text fontSize="sm" variant="secondary">
-                  This pool has a dynamic fee rate that may be updated through Balancer governance.
+                  {`This pool has a dynamic fee rate that may be updated through ${getProjectConfig().projectName} governance.`}
                 </Text>
               )}
             </VStack>
