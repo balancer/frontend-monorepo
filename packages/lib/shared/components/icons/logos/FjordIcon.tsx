@@ -1,7 +1,13 @@
 /* eslint-disable max-len */
-export function FjordIcon() {
+export function FjordIcon({ size = 38 }: { size?: number }) {
   return (
-    <svg fill="none" height="12" width="38" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      fill="none"
+      height={size}
+      viewBox="0 0 38 13"
+      width={size}
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M12.635.127h-2.067v6.982a2.697 2.697 0 0 1-2.696 2.697H5.024v2.066h2.837a4.773 4.773 0 0 0 4.773-4.774V.127h.001Zm5.043 0a2.904 2.904 0 0 0-2.903 2.904v8.841h5.549c1.603 0 2.903-1.3 2.903-2.904V.127h-5.55Zm3.482 8.885a.794.794 0 0 1-.793.794H16.84V2.988a.794.794 0 0 1 .794-.794h3.526v6.818Zm11.816-6.82V.128H30.14a4.773 4.773 0 0 0-4.773 4.774v6.971h2.066V4.89a2.697 2.697 0 0 1 2.696-2.697h2.848Z"
         fill="currentColor"
