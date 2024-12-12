@@ -14,6 +14,7 @@ semanticTokens.colors.font.dark = '#111111'
 semanticTokens.colors.font.light = '#FFFFFF'
 semanticTokens.colors.grayText._dark = '#BBBBBB'
 
+components.Button.variants.buttonGroupActive._dark.color = '#363636'
 
 export const beetsTheme = {
   config,
@@ -24,7 +25,7 @@ export const beetsTheme = {
       body: {
         background: 'linear-gradient(90deg, #111111 0%, #333333 100%)',
       },
-    }
+    },
   },
   colors,
   semanticTokens,
