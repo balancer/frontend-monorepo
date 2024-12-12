@@ -13,6 +13,7 @@ import { getCanStake } from '../../pool/actions/stake.helpers'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
+import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -80,16 +81,17 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
                 <StakingIcons pool={pool} />
               </HStack>
             </GridItem>
-            {/* TO-DO vebal boost */}
-            <GridItem px="sm">
-              <Text
-                fontWeight="medium"
-                textAlign="right"
-                title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
-              >
-                {vebalBoostValue ? `${Number(vebalBoostValue).toFixed(2)}x` : '-'}
-              </Text>
-            </GridItem>
+            {isBalancerProject() && (
+              <GridItem px="sm">
+                <Text
+                  fontWeight="medium"
+                  textAlign="right"
+                  title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
+                >
+                  {vebalBoostValue ? `${Number(vebalBoostValue).toFixed(2)}x` : '-'}
+                </Text>
+              </GridItem>
+            )}
             <GridItem px="sm">
               <Text fontWeight="medium" textAlign="right">
                 {toCurrency(pool.poolPositionUsd, { abbreviated: false })}
