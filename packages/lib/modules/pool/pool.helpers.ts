@@ -618,15 +618,3 @@ function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
       }) as TokenCore
   )
 }
-
-// export function toHumanAmountsInWithSymbolAndAddress(humanAmountsIn: HumanTokenAmountWithAddress[], pool: Pool) {
-//   return humanAmountsIn.map(({ humanAmount, tokenAddress}) => {
-//     const token = pool.poolTokens.find(t => isSameAddress(t.address, tokenAddress))
-//     return {
-//       amount,
-//       address,
-//       symbol: token?.symbol || '',
-//     }
-//   })
-
-// }
