@@ -7,7 +7,7 @@ import { isBoosted } from '../pool.helpers'
 import Image from 'next/image'
 import { PoolListItem } from '../pool.types'
 import { Erc4626Metadata } from '../metadata/getErc4626Metadata'
-import { usePoolMetadata } from '../metadata/PoolMetadataProvider'
+import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
 
 type PoolTypeTagProps = {
   pool: Pool | PoolListItem
@@ -122,7 +122,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
 }
 
 export function PoolTypeTag({ pool }: PoolTypeTagProps) {
-  const { getErc4626Metadata } = usePoolMetadata()
+  const { getErc4626Metadata } = usePoolsMetadata()
   const erc4626Metadata = getErc4626Metadata(pool)
 
   const label = getPoolTypeLabel(pool, erc4626Metadata)
