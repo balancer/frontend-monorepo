@@ -35,15 +35,15 @@ export function _useUnstake() {
     isLoading: isLoadingClaims,
   } = useClaimsData([pool] as unknown[] as PoolListItem[])
 
-  const rewardAmounts: HumanTokenAmount[] = useMemo(
-    () =>
-      allClaimableRewards.map(reward => ({
-        tokenAddress: reward.tokenAddress,
-        humanAmount: reward.humanBalance as HumanAmount,
-        symbol: 'LP token', // Review this
-      })),
-    [allClaimableRewards]
-  )
+  const rewardAmounts: HumanTokenAmount[] = useMemo(() => {
+    console.log('aqui estoy colegas', allClaimableRewards)
+
+    return allClaimableRewards.map(reward => ({
+      tokenAddress: reward.tokenAddress,
+      humanAmount: reward.humanBalance as HumanAmount,
+      symbol: 'LP token',
+    }))
+  }, [allClaimableRewards])
 
   const { gaugeAddress, amountOut } = getUnstakeQuote(pool)
 
