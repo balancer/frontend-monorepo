@@ -57,7 +57,7 @@ const NullPool: Pool = {
   tokens: [],
 } as unknown as Pool
 
-type InputAmountWithSymbol = InputAmount & { symbol?: string }
+type InputAmountWithSymbol = InputAmount & { symbol: string }
 
 /*
   This class provides helper methods to traverse the pool state and prepare data structures needed by add/remove liquidity handlers
@@ -176,7 +176,7 @@ export class LiquidityActionHelpers {
 
     return humanAmountsIn
       .filter(({ humanAmount }) => bn(humanAmount).gt(0))
-      .map(({ tokenAddress, humanAmount }) => {
+      .map(({ tokenAddress, humanAmount, symbol }) => {
         const chain = this.pool.chain
         if (isNativeAsset(tokenAddress, chain)) {
           const decimals = getNativeAsset(chain).decimals
@@ -184,6 +184,7 @@ export class LiquidityActionHelpers {
             address: tokenAddress as Address,
             rawAmount: parseUnits(humanAmount, decimals),
             decimals,
+            symbol,
           }
         }
 

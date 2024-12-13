@@ -11,7 +11,7 @@ export type TokenAmountToApprove = {
   requiredRawAmount: bigint // actual amount that the transaction requires
   requestedRawAmount: bigint // amount that we are going to request (normally MAX_BIGINT)
   isPermit2: boolean // whether the approval is for Permit2 or standard token approval
-  symbol?: string // token symbol to be displayed in the approval steps
+  symbol: string // token symbol to be displayed in the approval steps
 }
 
 // This is a subtype of InputAmount as we only need rawAmount and address

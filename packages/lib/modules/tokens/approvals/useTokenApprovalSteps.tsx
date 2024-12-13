@@ -77,7 +77,7 @@ export function useTokenApprovalSteps({
       const isApprovingZeroForDoubleApproval =
         requiresDoubleApproval(chain, tokenAddress) && requiredRawAmount === 0n
       const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
-      const token = getToken(tokenAddress, chain) //TODO: do we really need this just for the symbol
+      const token = getToken(tokenAddress, chain)
 
       const symbol = approvalSymbol || (bptSymbol ?? (token && token?.symbol) ?? 'Unknown')
       const labels = buildTokenApprovalLabels({ actionType, symbol, isPermit2, lpToken })
