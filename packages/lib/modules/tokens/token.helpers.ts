@@ -1,10 +1,11 @@
 import {
+  getChainId,
   getNativeAssetAddress,
   getNetworkConfig,
   getWrappedNativeAssetAddress,
 } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { includesAddress, isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
 import { HumanTokenAmountWithAddress, TokenBase } from './token.types'
@@ -128,7 +129,7 @@ export function getLeafTokens(poolTokens: PoolToken[]) {
       const nestedLeafTokens = nestedTokens.map(t => getTokenOrUnderlying(t))
       leafTokens.push(...nestedLeafTokens)
     } else {
-      // TODO: add unit test for this case: pol id 0x42de4fa875126fdbaf590b2fc3802adbca58acee
+      // TODO: add unit test for this case: pool id 0x42de4fa875126fdbaf590b2fc3802adbca58acee
       leafTokens.push(getTokenOrUnderlying(poolToken))
     }
   })
@@ -157,4 +158,16 @@ export function getSpenderForAddLiquidity(pool: Pool): Address {
   }
   const { vaultAddress } = getVaultConfig(pool)
   return vaultAddress
+}
+
+export function buildGqlToken(token: PoolToken | TokenCore, chain: GqlChain): GqlToken {
+  return {
+    ...token,
+    __typename: 'GqlToken',
+    chain,
+    chainId: getChainId(chain),
+    priority: 0,
+    tradable: true,
+    isErc4626: false,
+  }
 }

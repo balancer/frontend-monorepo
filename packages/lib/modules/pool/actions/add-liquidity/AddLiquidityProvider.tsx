@@ -29,9 +29,10 @@ import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { getPoolActionableTokens, isV3NotSupportingWethIsEth } from '../../pool.helpers'
+import { isV3NotSupportingWethIsEth } from '../../pool.helpers'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
+import { usePoolTokens } from '../../tokens/usePoolTokens'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -49,11 +50,11 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const [proportionalSlippage, setProportionalSlippage] = useState<string>('0')
 
   const { pool, refetch: refetchPool, isLoading } = usePool()
-  const { getToken, getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } =
-    useTokens()
+  const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage: userSlippage } = useUserSettings()
+  const { getPoolActionTokens, toGqlTokens } = usePoolTokens(pool)
 
   const handler = useMemo(
     () => selectAddLiquidityHandler(pool, wantsProportional),
@@ -70,7 +71,8 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const wNativeAsset = getWrappedNativeAssetToken(chain)
   const isForcedProportionalAdd = requiresProportionalInput(pool)
   const slippage = isForcedProportionalAdd ? proportionalSlippage : userSlippage
-  const tokens = getPoolActionableTokens(pool, getToken)
+  const poolActionTokens = getPoolActionTokens()
+  const tokens = toGqlTokens(poolActionTokens)
 
   function setInitialHumanAmountsIn() {
     const amountsIn = tokens.map(

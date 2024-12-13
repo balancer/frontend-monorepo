@@ -254,9 +254,9 @@ It looks that you tried to call useBuildCallData before the last query finished 
 }
 
 export function supportsNestedActions(pool: Pool): boolean {
-  const allowNestedActions = getNetworkConfig(pool.chain).pools?.allowNestedActions ?? []
-  if (allowNestedActions.includes(pool.id)) return true
-  return false
+  const disableNestedActions = getNetworkConfig(pool.chain).pools?.disableNestedActions ?? []
+  if (disableNestedActions.includes(pool.id)) return false
+  return true
 }
 
 export function shouldUseRecoveryRemoveLiquidity(pool: Pool): boolean {

@@ -57,6 +57,7 @@ export interface ContractsConfig {
 export interface PoolsConfig {
   issues: Partial<Record<PoolIssue, string[]>>
   allowNestedActions?: string[] // pool ids
+  disableNestedActions?: string[] // pool ids
 }
 
 export interface BlockExplorerConfig {

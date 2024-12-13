@@ -177,7 +177,7 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
   const { getPoolActionTokens } = usePoolTokens(pool)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const poolTokens = useMemo(() => getPoolActionTokens() as unknown as GqlPoolTokenDetail[], [pool])
+  const poolTokens = useMemo(() => getPoolActionTokens(), [pool])
 
   if (shouldUseStablePills) {
     return (
