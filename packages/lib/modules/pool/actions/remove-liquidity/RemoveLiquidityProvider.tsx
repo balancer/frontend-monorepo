@@ -15,7 +15,7 @@ import { useRemoveLiquidityPriceImpactQuery } from './queries/useRemoveLiquidity
 import { RemoveLiquidityType } from './remove-liquidity.types'
 import { Address, Hash } from 'viem'
 import { emptyTokenAmounts, toHumanAmount } from '../LiquidityActionHelpers'
-import { getPoolActionableTokens, isCowAmmPool } from '../../pool.helpers'
+import { isCowAmmPool } from '../../pool.helpers'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
 import { useRemoveLiquiditySteps } from './useRemoveLiquiditySteps'
@@ -24,6 +24,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { usePoolTokens } from '../../tokens/usePoolTokens'
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof _useRemoveLiquidity>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
@@ -52,13 +53,15 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     usdValueForBpt,
   } = useTokens()
   const { isConnected } = useUserAccount()
+  const { getPoolActionTokens, toGqlTokens } = usePoolTokens(pool)
 
   const maxHumanBptIn: HumanAmount = getUserWalletBalance(pool)
   const humanBptIn: HumanAmount = bn(maxHumanBptIn)
     .times(humanBptInPercent / 100)
     .toFixed() as HumanAmount
 
-  const tokens = getPoolActionableTokens(pool, getToken)
+  const poolActionTokens = getPoolActionTokens()
+  const tokens = toGqlTokens(poolActionTokens)
 
   const chain = pool.chain
   const nativeAsset = getNativeAssetToken(chain)
