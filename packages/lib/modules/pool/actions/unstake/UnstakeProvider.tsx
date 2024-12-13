@@ -36,8 +36,6 @@ export function _useUnstake() {
   } = useClaimsData([pool] as unknown[] as PoolListItem[])
 
   const rewardAmounts: HumanTokenAmount[] = useMemo(() => {
-    console.log('aqui estoy colegas', allClaimableRewards)
-
     return allClaimableRewards.map(reward => ({
       tokenAddress: reward.tokenAddress,
       humanAmount: reward.humanBalance as HumanAmount,
