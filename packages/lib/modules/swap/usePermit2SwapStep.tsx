@@ -1,7 +1,6 @@
 import { PublicWalletClient, SwapKind } from '@balancer/sdk'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { signPermit2Swap } from '../tokens/approvals/permit2/signPermit2Swap'
 import { NoncesByTokenAddress } from '../tokens/approvals/permit2/usePermit2Allowance'
@@ -49,6 +48,7 @@ export function useSignPermit2SwapStep({
   const tokenIn: TokenAmountIn = {
     address: tokenInAddress,
     amount: getTokenInAmount(),
+    symbol: tokenInInfo?.symbol ?? '',
   }
 
   const signPermit2Fn: SignPermit2Fn = (

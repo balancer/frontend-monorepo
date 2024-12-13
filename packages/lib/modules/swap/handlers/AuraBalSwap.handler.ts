@@ -1,6 +1,6 @@
 import { getChainId, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
 import { SwapHandler } from './Swap.handler'
-import { GqlSorSwapType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { AuraBalSwap, HumanAmount, Slippage, SwapKind, Token, TokenAmount } from '@balancer/sdk'
 import { formatUnits } from 'viem'
 import { TransactionConfig } from '../../web3/contracts/contract.types'

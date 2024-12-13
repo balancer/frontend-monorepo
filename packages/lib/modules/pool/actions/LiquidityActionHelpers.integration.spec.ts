@@ -23,7 +23,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
     const pool = await getPoolMock(poolId, GqlChain.Mainnet)
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '100', tokenAddress: balAddress },
+      { humanAmount: '100', tokenAddress: balAddress, symbol: 'BAL' },
     ]
 
     expect(allPoolTokens(pool).map(t => t.address)).toEqual([balAddress, wETHAddress])
@@ -35,6 +35,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
         address: balAddress,
         decimals: 18,
         rawAmount: 100000000000000000000n,
+        symbol: 'BAL',
       },
     ])
   })
@@ -44,7 +45,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
     const poolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0'
     const nestedPool = await getPoolMock(poolId, GqlChain.Mainnet)
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '100', tokenAddress: daiAddress },
+      { humanAmount: '100', tokenAddress: daiAddress, symbol: 'DAI' },
     ]
 
     expect(
@@ -66,6 +67,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
         address: daiAddress,
         decimals: 18,
         rawAmount: 100000000000000000000n,
+        symbol: 'DAI',
       },
     ])
   })
@@ -75,7 +77,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
       // User can add liquidity with BPT token
-      { humanAmount: '100', tokenAddress: bal80Weth20Address },
+      { humanAmount: '100', tokenAddress: bal80Weth20Address, symbol: 'BAL-80-WETH-20' },
     ]
 
     const sdBalPool = await getPoolMock(poolId, GqlChain.Mainnet)
@@ -93,6 +95,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
         address: bal80Weth20Address,
         decimals: 18,
         rawAmount: 100000000000000000000n,
+        symbol: 'B-80BAL-20WETH',
       },
     ])
   })
@@ -111,7 +114,7 @@ describe.skip('Liquidity helpers for V3 Boosted pools', async () => {
   const helpers = new LiquidityActionHelpers(v3Pool)
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress },
+    { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress, symbol: 'usdc-aave' },
   ]
 
   it('allPoolTokens', async () => {
@@ -471,7 +474,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
   const helpers = new LiquidityActionHelpers(v3Pool)
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: gnoAddress },
+    { humanAmount: '0.1', tokenAddress: gnoAddress, symbol: 'GNO' },
   ]
 
   it('allPoolTokens snapshot', async () => {
@@ -511,6 +514,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
         address: gnoAddress,
         decimals: 18,
         rawAmount: 100000000000000000n,
+        symbol: 'GNO',
       },
     ])
   })
@@ -613,7 +617,7 @@ describe('Liquidity helpers for GNOSIS V2 pool with isErc4626 tokens (v2 pools a
   const helpers = new LiquidityActionHelpers(v2Pool)
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: sDaiAddress },
+    { humanAmount: '0.1', tokenAddress: sDaiAddress, symbol: 'sDAI' },
   ]
 
   it('allPoolTokens return sDaiAddress instead of its underlying token cause it a V2 pool', async () => {
@@ -643,6 +647,7 @@ describe('Liquidity helpers for GNOSIS V2 pool with isErc4626 tokens (v2 pools a
         address: sDaiAddress,
         decimals: 18,
         rawAmount: 100000000000000000n,
+        symbol: 'sDAI',
       },
     ])
   })

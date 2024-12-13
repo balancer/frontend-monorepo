@@ -44,6 +44,7 @@ import {
   isV2Pool,
   isV3Pool,
   isV3NotSupportingWethIsEth,
+  getActionableTokenSymbol,
 } from '../pool.helpers'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
 import { ApiToken } from '../pool.types'
@@ -55,6 +56,8 @@ const NullPool: Pool = {
   type: 'Null',
   tokens: [],
 } as unknown as Pool
+
+type InputAmountWithSymbol = InputAmount & { symbol?: string }
 
 /*
   This class provides helper methods to traverse the pool state and prepare data structures needed by add/remove liquidity handlers
@@ -157,17 +160,18 @@ export class LiquidityActionHelpers {
     humanAmountsIn: HumanTokenAmountWithAddress[],
     isPermit2 = false
   ): TokenAmountToApprove[] {
-    return this.toInputAmounts(humanAmountsIn).map(({ address, rawAmount }) => {
+    return this.toInputAmounts(humanAmountsIn).map(({ address, rawAmount, symbol }) => {
       return {
         isPermit2,
         tokenAddress: address,
         requiredRawAmount: rawAmount,
         requestedRawAmount: rawAmount, //This amount will be probably replaced by MAX_BIGINT depending on the approval rules
+        symbol,
       }
     })
   }
 
-  public toInputAmounts(humanAmountsIn: HumanTokenAmountWithAddress[]): InputAmount[] {
+  public toInputAmounts(humanAmountsIn: HumanTokenAmountWithAddress[]): InputAmountWithSymbol[] {
     if (!humanAmountsIn.length) return []
 
     return humanAmountsIn
@@ -196,6 +200,7 @@ export class LiquidityActionHelpers {
           address: token.address as Address,
           rawAmount: parseUnits(humanAmount, token.decimals),
           decimals: token.decimals,
+          symbol: token.symbol,
         }
       })
   }
@@ -236,6 +241,14 @@ export const areEmptyAmounts = (humanAmountsIn: HumanTokenAmountWithAddress[]) =
 
 export function toHumanAmount(tokenAmount: TokenAmount): HumanAmount {
   return formatUnits(tokenAmount.amount, tokenAmount.token.decimals) as HumanAmount
+}
+
+export function toHumanAmountWithAddress(tokenAmount: TokenAmount): HumanTokenAmountWithAddress {
+  return {
+    tokenAddress: tokenAmount.token.address,
+    humanAmount: formatUnits(tokenAmount.amount, tokenAmount.token.decimals),
+    symbol: tokenAmount.token.symbol,
+  } as HumanTokenAmountWithAddress
 }
 
 export function ensureLastQueryResponse<Q>(
@@ -413,12 +426,14 @@ export function formatBuildCallParams<T>(buildCallParams: T, account: Address) {
 }
 
 export function toTokenAmountsIn(
-  sdkQueryOutput: AddLiquidityQueryOutput
+  sdkQueryOutput: AddLiquidityQueryOutput,
+  pool: Pool
 ): TokenAmountIn[] | undefined {
   if (!sdkQueryOutput) return
   return sdkQueryOutput.amountsIn.map(amountIn => ({
     address: amountIn.token.address,
     amount: amountIn.amount,
+    symbol: amountIn.token.symbol || getActionableTokenSymbol(amountIn.token.address, pool),
   }))
 }
 

@@ -40,7 +40,6 @@ import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvid
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
 import { isNativeOrWrappedNative, isNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { NativeAssetSelectModal } from '@repo/lib/modules/tokens/NativeAssetSelectModal'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
@@ -166,7 +165,7 @@ function AddLiquidityMainForm() {
     } else {
       setWethIsEth(false)
     }
-    setAmountIn(token.address as Address, '')
+    setAmountIn(token, '')
 
     // reset any validation errors for native assets
     nativeAssets.forEach(nativeAsset => {

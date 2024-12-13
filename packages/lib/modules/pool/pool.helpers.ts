@@ -31,6 +31,7 @@ import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem, ApiToken } from './pool.types'
 import { Pool } from './PoolProvider'
+import { HumanTokenAmountWithAddress } from '../tokens/token.types'
 
 /**
  * METHODS
@@ -413,6 +414,18 @@ export function getWarnings(warnings: string[]) {
   return warnings.filter(warning => !isEmpty(warning))
 }
 
+export function getActionableTokenSymbol(tokenAddress: Address, pool: Pool): string {
+  const token = getPoolActionableTokens(pool).find(token =>
+    isSameAddress(token.address, tokenAddress)
+  )
+  if (!token) {
+    console.log('Token symbol not found for address ', tokenAddress)
+    return ''
+  }
+
+  return token.symbol
+}
+
 /*
   Depending on the pool type, iterates pool.poolTokens and returns the list of GqlTokens that can be used in the pool's actions (add/remove/swap).
 
@@ -605,3 +618,15 @@ function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
       }) as TokenCore
   )
 }
+
+// export function toHumanAmountsInWithSymbolAndAddress(humanAmountsIn: HumanTokenAmountWithAddress[], pool: Pool) {
+//   return humanAmountsIn.map(({ humanAmount, tokenAddress}) => {
+//     const token = pool.poolTokens.find(t => isSameAddress(t.address, tokenAddress))
+//     return {
+//       amount,
+//       address,
+//       symbol: token?.symbol || '',
+//     }
+//   })
+
+// }

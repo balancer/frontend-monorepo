@@ -16,7 +16,7 @@ import {
   forwardRef,
   useTheme,
 } from '@chakra-ui/react'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../TokensProvider'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInput } from './useTokenInput'
@@ -173,6 +173,7 @@ function TokenInputFooter({
 
 type Props = {
   address?: string
+  apiToken?: ApiToken
   chain?: GqlChain | number
   weight?: string
   value?: string
@@ -189,6 +190,7 @@ export const TokenInput = forwardRef(
   (
     {
       address,
+      apiToken,
       chain,
       weight,
       value,
@@ -209,7 +211,8 @@ export const TokenInput = forwardRef(
 
     const { colors } = useTheme()
     const { getToken } = useTokens()
-    const token = address && chain ? getToken(address, chain) : undefined
+    const tokenFromAddress = address && chain ? getToken(address, chain) : undefined
+    const token = apiToken || tokenFromAddress
     const { hasValidationError } = useTokenInputsValidation()
 
     const { handleOnChange, updateValue, validateInput } = useTokenInput({

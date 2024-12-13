@@ -1,10 +1,12 @@
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { VStack, HStack, Skeleton, Text } from '@chakra-ui/react'
-import TokenRow from './TokenRow'
-import { useTotalUsdValue } from '../useTotalUsdValue'
-import { HumanTokenAmountWithAddress } from '../token.types'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from '../../pool/pool.types'
+import { HumanTokenAmount } from '../token.types'
+import { useTotalUsdValue } from '../useTotalUsdValue'
+import TokenRow from './TokenRow'
+
+type HumanTokenAmountWithSymbol = HumanTokenAmount & { symbol?: string }
 
 export function TokenRowGroup({
   label,
@@ -15,7 +17,7 @@ export function TokenRowGroup({
   isLoading = false,
 }: {
   label: string
-  amounts: HumanTokenAmountWithAddress[]
+  amounts: HumanTokenAmountWithSymbol[]
   chain: GqlChain
   totalUSDValue?: string
   tokens?: ApiToken[]
@@ -49,6 +51,7 @@ export function TokenRowGroup({
             chain={chain}
             isLoading={isLoading}
             key={`${amount.tokenAddress}-${amount.humanAmount}`}
+            symbol={amount?.symbol}
             value={amount.humanAmount}
           />
         )
