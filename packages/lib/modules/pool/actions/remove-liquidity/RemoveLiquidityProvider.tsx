@@ -221,7 +221,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const amountsOut: HumanTokenAmountWithAddress[] = quoteAmountsOut.map(tokenAmount => ({
     tokenAddress: getAddressForTokenAmount(tokenAmount),
     humanAmount: formatUnits(tokenAmount.amount, tokenAmount.token.decimals),
-    symbol: tokenAmount.token.symbol || 'Unknown', //TODO: review this
+    symbol: tokenAmount.token.symbol || 'Unknown',
   }))
 
   const usdAmountOutMap: Record<Address, HumanAmount> = Object.fromEntries(
