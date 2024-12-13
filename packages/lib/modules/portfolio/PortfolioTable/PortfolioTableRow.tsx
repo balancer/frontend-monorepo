@@ -13,7 +13,7 @@ import { getCanStake } from '../../pool/actions/stake.helpers'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
-import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
+import { isBalancerProject, isBeetsProject } from '@repo/lib/config/getProjectConfig'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -126,7 +126,7 @@ function StakingIcons({ pool }: { pool: ExpandedPoolInfo }) {
 
   const shouldHideIcon = pool.poolType === ExpandedPoolType.Unstaked || !canStake
 
-  if (shouldHideIcon) {
+  if (shouldHideIcon || isBeetsProject()) {
     return null
   }
 
