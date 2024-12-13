@@ -146,7 +146,6 @@ export type TokenCore = {
   index: number
 }
 
-// export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & { index: number }
 export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'>
 
 export enum PoolListDisplayType {
