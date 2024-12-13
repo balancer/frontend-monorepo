@@ -2,7 +2,7 @@
 
 import { Box, BoxProps, Button, HStack, Text, Divider } from '@chakra-ui/react'
 import { TokenSelectListRow } from './TokenSelectListRow'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useEffect, useRef, useState } from 'react'

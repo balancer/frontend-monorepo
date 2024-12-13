@@ -12,7 +12,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { RefObject } from 'react'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { CompactTokenSelectList } from './CompactTokenSelectList'
 import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 

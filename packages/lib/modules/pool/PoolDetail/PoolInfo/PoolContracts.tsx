@@ -23,7 +23,6 @@ import { ArrowUpRight } from 'react-feather'
 import { useMemo } from 'react'
 import {
   GqlPriceRateProviderData,
-  GqlToken,
   GqlHookReviewData,
   Erc4626ReviewData,
 } from '@repo/lib/shared/services/api/generated/graphql'

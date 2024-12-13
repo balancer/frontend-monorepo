@@ -1,7 +1,6 @@
 'use client'
 
 import { Box, BoxProps, Center, Text } from '@chakra-ui/react'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'

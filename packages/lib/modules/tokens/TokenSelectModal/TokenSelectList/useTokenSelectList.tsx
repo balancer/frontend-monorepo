@@ -1,4 +1,4 @@
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../../TokensProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { orderBy } from 'lodash'
