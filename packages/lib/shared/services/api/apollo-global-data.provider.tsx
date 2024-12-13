@@ -23,7 +23,7 @@ import { HooksProvider } from '@repo/lib/modules/hooks/HooksProvider'
 import { getPoolTags } from '@repo/lib/modules/pool/tags/getPoolTags'
 import { PoolTagsProvider } from '@repo/lib/modules/pool/tags/PoolTagsProvider'
 import { getErc4626Metadata } from '@repo/lib/modules/pool/metadata/getErc4626Metadata'
-import { PoolMetadataProvider } from '@repo/lib/modules/pool/metadata/PoolMetadataProvider'
+import { PoolsMetadataProvider } from '@repo/lib/modules/pool/metadata/PoolsMetadataProvider'
 import { getPoolsMetadata } from '@repo/lib/modules/pool/metadata/getPoolsMetadata'
 
 export const revalidate = 60
@@ -75,9 +75,9 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
       <FiatFxRatesProvider data={exchangeRates}>
         <PoolTagsProvider data={poolTags}>
           <HooksProvider data={hooksMetadata}>
-            <PoolMetadataProvider erc4626Metadata={erc4626Metadata} poolsMetadata={poolsMetadata}>
+            <PoolsMetadataProvider erc4626Metadata={erc4626Metadata} poolsMetadata={poolsMetadata}>
               {children}
-            </PoolMetadataProvider>
+            </PoolsMetadataProvider>
           </HooksProvider>
         </PoolTagsProvider>
       </FiatFxRatesProvider>

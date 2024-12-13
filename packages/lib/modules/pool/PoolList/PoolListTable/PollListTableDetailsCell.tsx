@@ -6,14 +6,14 @@ import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import Image from 'next/image'
 import { Pool } from '@repo/lib/modules/pool/PoolProvider'
 import { PoolHookTag } from '@repo/lib/modules/pool/PoolDetail/PoolHookTag'
-import { usePoolMetadata } from '../../metadata/PoolMetadataProvider'
+import { usePoolsMetadata } from '../../metadata/PoolsMetadataProvider'
 
 interface Props {
   pool: PoolListItem | Pool
 }
 
 export function PollListTableDetailsCell({ pool }: Props) {
-  const { getErc4626Metadata } = usePoolMetadata()
+  const { getErc4626Metadata } = usePoolsMetadata()
 
   const erc4626Metadata = getErc4626Metadata(pool)
 

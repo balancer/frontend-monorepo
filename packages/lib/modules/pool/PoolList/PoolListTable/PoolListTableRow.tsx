@@ -12,6 +12,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { usePoolList } from '../PoolListProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
+import { usePoolMetadata } from '../../metadata/usePoolMetadata'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -49,6 +50,7 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
     queryState: { userAddress },
     displayType,
   } = usePoolList()
+  const { name } = usePoolMetadata(pool)
 
   const { toCurrency } = useCurrency()
 
@@ -73,7 +75,8 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
               {displayType === PoolListDisplayType.TokenPills && (
                 <PoolListTokenPills
                   h={['32px', '36px']}
-                  iconSize={20}
+                  iconSize={name ? 24 : 20}
+                  nameSize="sm"
                   p={['xxs', 'sm']}
                   pool={pool}
                   pr={[1.5, 'ms']}
