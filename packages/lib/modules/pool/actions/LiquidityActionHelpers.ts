@@ -288,18 +288,17 @@ export function supportsProportionalAddLiquidityKind(pool: Pool): boolean {
   ) {
     return false
   }
+  // WeightedPool2Tokens pool types do not support AddLiquidityKind.Proportional in the SDK
+  if (isWeightedPool2Tokens(pool)) return false
   return true
 }
 
-// v2 Pools with WeightedPool2Tokens pool types do not support AddLiquidityKind.Proportional in the SDK
-// TODO: get this data from the API
-export function hasWeightedPool2Tokens(pool: Pool): boolean {
+export function isWeightedPool2Tokens(pool: Pool): boolean {
   if (
     isV2Pool(pool) &&
     isSameAddress(
-      pool.address,
-      // TODO: get this data from the API
-      '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56' // 80 BAL 20 WETH
+      (pool?.factory as Address) || '',
+      '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0' // WeightedPool2Tokens factory
     )
   ) {
     return true
