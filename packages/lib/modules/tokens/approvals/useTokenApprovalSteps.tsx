@@ -12,7 +12,7 @@ import { useTokenAllowances } from '../../web3/useTokenAllowances'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../TokensProvider'
 import { ApprovalAction, buildTokenApprovalLabels } from './approval-labels'
-import { RawAmount, getRequiredTokenApprovals } from './approval-rules'
+import { RawAmount, areEmptyRawAmounts, getRequiredTokenApprovals } from './approval-rules'
 import { requiresDoubleApproval } from '../token.helpers'
 
 export type Params = {
@@ -56,6 +56,7 @@ export function useTokenApprovalSteps({
     userAddress,
     spenderAddress,
     tokenAddresses: approvalTokenAddresses,
+    enabled: !areEmptyRawAmounts(_approvalAmounts),
   })
 
   const tokenAmountsToApprove = getRequiredTokenApprovals({
