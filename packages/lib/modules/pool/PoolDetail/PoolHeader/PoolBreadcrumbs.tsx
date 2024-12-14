@@ -31,7 +31,7 @@ export function PoolBreadcrumbs() {
         <BreadcrumbLink href={poolsHref}>{poolsLabel}</BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem isCurrentPage>
-        <BreadcrumbLink href="#">{pool.name}</BreadcrumbLink>
+        <BreadcrumbLink href="#">{pool.symbol}</BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>
   )

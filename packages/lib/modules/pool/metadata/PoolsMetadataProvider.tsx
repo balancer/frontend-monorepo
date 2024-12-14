@@ -8,10 +8,10 @@ import { PoolListItem } from '../pool.types'
 import { getChainId } from '@repo/lib/config/app.config'
 import { PoolMetadata, PoolsMetadata } from './getPoolsMetadata'
 
-export type UsePoolMetadataResult = ReturnType<typeof _usePoolMetadata>
-export const PoolMetadataContext = createContext<UsePoolMetadataResult | null>(null)
+export type UsePoolsMetadataResult = ReturnType<typeof _usePoolsMetadata>
+export const PoolsMetadataContext = createContext<UsePoolsMetadataResult | null>(null)
 
-export function _usePoolMetadata(
+export function _usePoolsMetadata(
   erc4626Metadata: Erc4626Metadata[] | undefined,
   poolsMetadata: PoolsMetadata | undefined
 ) {
@@ -34,7 +34,7 @@ export function _usePoolMetadata(
   return { getErc4626Metadata, getPoolMetadata }
 }
 
-export function PoolMetadataProvider({
+export function PoolsMetadataProvider({
   children,
   erc4626Metadata,
   poolsMetadata,
@@ -42,9 +42,9 @@ export function PoolMetadataProvider({
   erc4626Metadata: Erc4626Metadata[] | undefined
   poolsMetadata: PoolsMetadata | undefined
 }) {
-  const hook = _usePoolMetadata(erc4626Metadata, poolsMetadata)
-  return <PoolMetadataContext.Provider value={hook}>{children}</PoolMetadataContext.Provider>
+  const hook = _usePoolsMetadata(erc4626Metadata, poolsMetadata)
+  return <PoolsMetadataContext.Provider value={hook}>{children}</PoolsMetadataContext.Provider>
 }
 
-export const usePoolMetadata = (): UsePoolMetadataResult =>
-  useMandatoryContext(PoolMetadataContext, 'PoolMetadata')
+export const usePoolsMetadata = (): UsePoolsMetadataResult =>
+  useMandatoryContext(PoolsMetadataContext, 'PoolsMetadata')
