@@ -502,7 +502,9 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   // Sets initial swap state for pool swap edge-case
   function setInitialPoolSwapState(pool: Pool) {
     const { tokenIn } = pathParams
-    setInitialChain(pool.chain)
+    const slugChain = chainToSlugMap[pool.chain]
+    if (!slugChain) throw new Error(`Chain slug not found for chain ${pool.chain}`)
+    setInitialChain(slugChain)
 
     if (supportsNestedActions(pool)) {
       setInitialTokenIn(tokenIn)
