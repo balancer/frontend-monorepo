@@ -43,7 +43,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
 import { motion, AnimatePresence } from 'framer-motion'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
-import { getChainShortName, isDev, isStaging } from '@repo/lib/config/app.config'
+import { getChainShortName } from '@repo/lib/config/app.config'
 import { usePoolList } from './PoolListProvider'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -397,7 +397,6 @@ const FilterButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
 function ProtocolVersionFilter() {
   const {
     queryState: {
-      togglePoolType,
       setProtocolVersion,
       protocolVersion,
       poolTypes,
@@ -407,10 +406,7 @@ function ProtocolVersionFilter() {
     hideProtocolVersion,
   } = usePoolList()
 
-  const tabs =
-    isDev || isStaging
-      ? PROTOCOL_VERSION_TABS
-      : PROTOCOL_VERSION_TABS.filter(tab => tab.value !== 'v3')
+  const tabs = PROTOCOL_VERSION_TABS
 
   function toggleTab(option: ButtonGroupOption) {
     setActiveProtocolVersionTab(option)
@@ -565,21 +561,19 @@ export function PoolListFilters() {
             </PopoverContent>
           </Box>
         </Popover>
-        {isCowPath && (
-          <Button
-            as={Link}
-            display="flex"
-            gap="2"
-            href="https://pool-creator.balancer.fi/cow"
-            ml="ms"
-            rel=""
-            target="_blank"
-            variant="tertiary"
-          >
-            <Icon as={Plus} boxSize={4} />
-            {!isMobile && 'Create a pool'}
-          </Button>
-        )}
+        <Button
+          as={Link}
+          display="flex"
+          gap="2"
+          href={`https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`}
+          ml="ms"
+          rel=""
+          target="_blank"
+          variant="tertiary"
+        >
+          <Icon as={Plus} boxSize={4} />
+          {!isMobile && 'Create a pool'}
+        </Button>
       </HStack>
     </VStack>
   )

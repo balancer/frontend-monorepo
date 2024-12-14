@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
-export function CowIcon({ width = 36, height = 24 }: { width?: number; height?: number }) {
+export function CowIcon({ size = 36 }: { size?: number }) {
   return (
     <svg
       fill="none"
-      height={height}
+      height={size}
       viewBox="0 0 36 24"
-      width={width}
+      width={size}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

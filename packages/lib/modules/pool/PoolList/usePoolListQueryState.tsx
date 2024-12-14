@@ -20,7 +20,6 @@ import {
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { useState } from 'react'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { isProd } from '@repo/lib/config/app.config'
 
 export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
   {
@@ -209,7 +208,6 @@ export function usePoolListQueryState() {
       .flat()
   )
 
-  const allVersionsFilter = isProd ? [1, 2] : undefined
   const queryVariables = {
     first,
     skip,
@@ -222,7 +220,7 @@ export function usePoolListQueryState() {
       minTvl,
       tagIn: mappedPoolTags.length > 0 ? mappedPoolTags : null,
       tagNotIn: ['BLACK_LISTED'],
-      protocolVersionIn: protocolVersion ? [protocolVersion] : allVersionsFilter,
+      protocolVersionIn: protocolVersion ? [protocolVersion] : undefined,
     },
     textSearch,
   }

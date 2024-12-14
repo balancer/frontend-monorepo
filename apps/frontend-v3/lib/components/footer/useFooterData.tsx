@@ -6,8 +6,6 @@ export function useFooterData() {
       title: 'Build on Balancer',
       links: [
         { label: 'Home', href: '/' },
-        { label: 'Balancer v3', href: '/build/v3' },
-
         { label: 'v3 Docs', href: 'https://docs-v3.balancer.fi', isExternal: true },
         {
           label: 'Prototype on v3',

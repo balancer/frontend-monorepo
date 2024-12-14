@@ -202,6 +202,10 @@ export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): s
   }
 }
 
+export function fNumCustom(val: Numberish, format: string): string {
+  return numeral(toSafeValue(val)).format(format)
+}
+
 // Edge case where we need to display 3 decimals for small amounts between 0.001 and 0.01
 function requiresThreeDecimals(value: Numberish): boolean {
   return !isZero(value) && bn(value).gte(0.001) && bn(value).lte(0.009)

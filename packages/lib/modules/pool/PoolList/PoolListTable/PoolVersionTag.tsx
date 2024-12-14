@@ -7,7 +7,7 @@ import { Pool } from '../../PoolProvider'
 
 function getPoolVersionLabel(pool: PoolListItem | Pool) {
   if (isCowAmmPool(pool.type)) {
-    return <CowIcon height={18} width={18} />
+    return <CowIcon size={18} />
   } else if (pool.protocolVersion === 3) {
     return 'v3'
   } else if (pool.protocolVersion === 2) {

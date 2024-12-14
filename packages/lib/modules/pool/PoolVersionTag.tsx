@@ -19,7 +19,7 @@ export function PoolVersionTag({ pool, size = 8 }: { pool: PoolListItem | Pool; 
         w={size}
       >
         <Center h="full" w="full">
-          <CowIcon height={18} width={18} />
+          <CowIcon size={18} />
         </Center>
       </BalBadge>
     )
