@@ -3,7 +3,7 @@ import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/gene
 import { PoolListItem } from '../pool.types'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { isStableLike, isWeightedLike } from '../pool.helpers'
+import { isStableLike, isV3Pool, isWeightedLike } from '../pool.helpers'
 import { Pool } from '../PoolProvider'
 
 function NestedTokenPill({
@@ -177,7 +177,7 @@ export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props
     token => token.address !== pool.address
   ) as GqlPoolTokenDetail[]
 
-  if (pool.hasErc4626 && !pool.hasNestedErc4626) {
+  if (isV3Pool(pool) && pool.hasErc4626 && !pool.hasNestedErc4626) {
     // TODO: Move this into a general 'displayTokens' helper function.
     poolTokens = poolTokens.map(token =>
       token.underlyingToken
