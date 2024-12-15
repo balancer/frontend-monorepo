@@ -23,6 +23,7 @@ export type Params = {
   isPermit2?: boolean
   bptSymbol?: string //Edge-case for approving
   lpToken?: string
+  enabled?: boolean
 }
 
 /*
@@ -35,6 +36,7 @@ export function useTokenApprovalSteps({
   actionType,
   bptSymbol,
   isPermit2 = false,
+  enabled = true,
   lpToken,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
@@ -56,7 +58,7 @@ export function useTokenApprovalSteps({
     userAddress,
     spenderAddress,
     tokenAddresses: approvalTokenAddresses,
-    enabled: !areEmptyRawAmounts(_approvalAmounts),
+    enabled: enabled && !areEmptyRawAmounts(_approvalAmounts) && !!spenderAddress,
   })
 
   const tokenAmountsToApprove = getRequiredTokenApprovals({
