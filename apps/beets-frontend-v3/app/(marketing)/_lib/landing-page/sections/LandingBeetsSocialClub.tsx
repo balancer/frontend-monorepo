@@ -21,29 +21,20 @@ import { LudwigSocial4 } from '../components/LudwigSocial4'
 import { LudwigSocial5 } from '../components/LudwigSocial5'
 import { DiscordIcon } from '@repo/lib/shared/components/icons/social/DiscordIcon'
 import NextLink from 'next/link'
+import Image from 'next/image'
 
 export function LandingBeetsSocialClub() {
   return (
     <>
       <DefaultPageContainer noVerticalPadding pb="3xl">
-        <HStack justifyContent="center" spacing="lg" mb="2xl">
-          <Box opacity={0.2}>
-            <LudwigSocial1 />
-          </Box>
-          <Box opacity={0.2}>
-            <LudwigSocial2 />
-          </Box>
-          <Box>Beets social club</Box>
-          <Box opacity={0.2}>
-            <LudwigSocial3 />
-          </Box>
-          <Box opacity={0.2}>
-            <LudwigSocial4 />
-          </Box>
-          <Box opacity={0.2}>
-            <LudwigSocial5 />
-          </Box>
-        </HStack>
+        <Box
+          height="140px"
+          backgroundImage="url(/images/misc/beets-social-club.png)"
+          backgroundSize="auto 100%"
+          backgroundRepeat="no-repeat"
+          backgroundPosition="center"
+          mb="xl"
+        />
         <Center mb="lg">
           <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl" textAlign="center">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices

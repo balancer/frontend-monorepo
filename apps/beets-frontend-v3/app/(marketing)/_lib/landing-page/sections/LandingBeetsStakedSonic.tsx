@@ -1,76 +1,92 @@
 'use client'
 
 import React from 'react'
-import { Box, Center, Grid, GridItem, Heading, HStack, Link, Text, VStack } from '@chakra-ui/react'
+import { Box, Center, Flex, Heading, Text, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { CoingeckoIcon } from '@repo/lib/shared/components/icons/CoingeckoIcon'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-
-export function FeatureCard({ title, description }: { title: string; description: string }) {
-  return (
-    <HStack align="start" h="full" spacing="none" w="full">
-      <Box bg="rgba(0, 0, 0, 0.1)" borderBottom="30px solid rgba(0, 0, 0, 0.4)" h="full" w="40%" />
-      <VStack align="start" borderBottom="30px solid rgba(0, 0, 0, 0.3)" h="full" p="lg" w="60%">
-        <Heading fontSize="2xl">{title}</Heading>
-        <Text fontSize="lg">{description}</Text>
-      </VStack>
-    </HStack>
-  )
-}
 
 export function LandingBeetsStakedSonic() {
-  const { toCurrency } = useCurrency()
-
   return (
     <>
-      <Center py="200px" textAlign="center">
+      <Center mb="2xl" textAlign="center">
         <VStack>
-          <Heading fontSize="5xl">maBEETS</Heading>
+          <Heading fontSize="5xl">Beets Staked Sonic (stS)</Heading>
           <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl">
-            The $BEETS token is our primary method of incentive and reward. But it's so much more.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices
+            dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo.
           </Text>
         </VStack>
       </Center>
       <DefaultPageContainer noVerticalPadding pb="3xl">
         <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
-          <Grid
-            gap="xl"
-            templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }}
-            templateRows={{ base: 'repeat(4, 1fr)', lg: 'repeat(2, 1fr)' }}
-          >
-            <GridItem>
-              <FeatureCard
-                description="$BEETS is a key instrument in many incentivized pools as well as 'bribe' rewards and other partner offers."
-                title="Rewards"
-              />
-            </GridItem>
-            <GridItem>
-              <FeatureCard
-                description="Vest $BEETS in the maBEETS initiative to get voting power in our DAO based governance model."
-                title="Vote"
-              />
-            </GridItem>
-            <GridItem>
-              <FeatureCard
-                description="$BEETS is bridgeable between Optimism and Fantom - and more importantly for existing holders on FTM, easily migratable to Sonic."
-                title="Bridge & Migrate"
-              />
-            </GridItem>
-            <GridItem>
-              <Center h="full" w="full">
-                <VStack>
-                  <Heading size="lg">$BEETS Price</Heading>
-                  <Text fontSize="3xl">{toCurrency(0.0303)}</Text>
-                  <HStack>
-                    <Link href="https://www.coingecko.com/en/coins/beethoven-x" isExternal>
-                      View price history
-                    </Link>
-                    <CoingeckoIcon height={16} width={16} />
-                  </HStack>
-                </VStack>
-              </Center>
-            </GridItem>
-          </Grid>
+          <Flex>
+            <Box flex="1" mr="2xl">
+              <Box mb="2xl">
+                <Heading fontSize="3xl">Stake and transact</Heading>
+                <Text fontSize="lg" fontWeight="thin">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean scelerisque
+                  vehicula diam vitae ultrices. Ut et elementum lorem. Sed et augue elit.
+                  Pellentesque sed turpis odio. Sed lacinia maximus lacus mollis aliquam. Aenean a
+                  sem lacus. In aliquam velit elit, eu semper mi euismod vitae.
+                </Text>
+              </Box>
+              <Box>
+                <Heading fontSize="3xl">Value appreciation with $S</Heading>
+                <Text fontSize="lg" fontWeight="thin">
+                  In molestie imperdiet nulla, vitae vestibulum lectus tempor ac. Donec dui purus,
+                  pharetra id sem eget, dictum congue eros. Vestibulum dignissim nisi non dolor
+                  maximus, ac vestibulum urna porttitor. Sed iaculis bibendum libero in commodo.
+                  Nulla rhoncus risus nibh.
+                </Text>
+              </Box>
+            </Box>
+            <Box flex="1">
+              <Flex mb="xl">
+                <Box
+                  width="170px"
+                  height="170px"
+                  bg="rgba(255, 255, 255, 0.05)"
+                  borderRadius="lg"
+                />
+                <Box flex="1" ml="xl">
+                  <Heading fontSize="2xl">Sonic network staking rewards</Heading>
+                  <Text fontSize="lg" fontWeight="thin">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a
+                    ultrices dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo.
+                  </Text>
+                </Box>
+              </Flex>
+              <Flex mb="xl">
+                <Box flex="1" mr="xl">
+                  <Heading fontSize="2xl">Max DeFi interoperability</Heading>
+                  <Text fontSize="lg" fontWeight="thin">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a
+                    ultrices dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo.
+                  </Text>
+                </Box>
+                <Box
+                  width="170px"
+                  height="170px"
+                  bg="rgba(255, 255, 255, 0.05)"
+                  borderRadius="lg"
+                />
+              </Flex>
+              <Flex>
+                <Box
+                  width="170px"
+                  height="170px"
+                  bg="rgba(255, 255, 255, 0.05)"
+                  borderRadius="lg"
+                />
+                <Box flex="1" ml="xl">
+                  <Heading fontSize="2xl">Decentralization</Heading>
+                  <Text fontSize="lg" fontWeight="thin">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a
+                    ultrices dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo.
+                  </Text>
+                </Box>
+              </Flex>
+            </Box>
+          </Flex>
         </Box>
       </DefaultPageContainer>
     </>
