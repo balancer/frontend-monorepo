@@ -7,7 +7,7 @@ import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useLstStakeStep } from './hooks/useLstStakeStep'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
+import sonicNetworkConfig from '@repo/lib/config/networks/sonic'
 import { useLstUnstakeStep } from './hooks/useLstUnstakeStep'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
@@ -17,8 +17,7 @@ import { useTokens } from '../../tokens/TokensProvider'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { useLstWithdrawStep } from './hooks/useLstWithdrawStep'
 
-const CHAIN = GqlChain.Fantom
-const WITHDRAW_DELAY = 604800 // 1 week
+const CHAIN = GqlChain.Fantom // TODO: change to Sonic
 
 export function _useLst() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
@@ -44,8 +43,8 @@ export function _useLst() {
   const isUnstakeTab = activeTab?.value === '1'
   const isWithdrawTab = activeTab?.value === '2'
 
-  const nativeAsset = getToken(fantomNetworkConfig.tokens.nativeAsset.address, CHAIN)
-  const stakedAsset = getToken(fantomNetworkConfig.tokens.stakedAsset?.address || '', CHAIN)
+  const nativeAsset = getToken(sonicNetworkConfig.tokens.nativeAsset.address, CHAIN)
+  const stakedAsset = getToken(sonicNetworkConfig.tokens.stakedAsset?.address || '', CHAIN)
 
   const { step: stakeStep } = useLstStakeStep(amount, CHAIN, isStakeTab)
   const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
@@ -96,7 +95,7 @@ export function _useLst() {
     isWithdrawTab,
     wrID,
     setWrID,
-    withdrawDelay: WITHDRAW_DELAY,
+    withdrawDelay: 0, // TODO: get from onchain
     pagination,
     setPagination,
     first,

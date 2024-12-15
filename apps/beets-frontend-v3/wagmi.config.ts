@@ -1,7 +1,7 @@
 import { defineConfig, loadEnv } from '@wagmi/cli'
 import { etherscan } from '@wagmi/cli/plugins'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import fantomNetworkConfig from '@repo/lib/config/networks/fantom'
+import sonicNetworkConfig from '@repo/lib/config/networks/sonic'
 import { erc20Abi } from 'viem'
 
 const CONTRACTS: Array<{ name: string; abi: any }> = [
@@ -74,16 +74,16 @@ export default defineConfig(() => {
           },
         ],
       }),
-      etherscan({
-        apiKey: env.FTMSCAN_API_KEY,
-        chainId: 250,
-        contracts: [
-          {
-            name: 'BeetsFTMStaking',
-            address: fantomNetworkConfig.contracts.beets?.lstStaking,
-          },
-        ],
-      }),
+      // etherscan({
+      //   apiKey: env.SONICSCAN_API_KEY,
+      //   chainId: 146,
+      //   contracts: [
+      //     {
+      //       name: 'SonicStaking',
+      //       address: sonicNetworkConfig.contracts.beets?.lstStaking,
+      //     },
+      //   ],
+      // }),
     ],
   }
 })
