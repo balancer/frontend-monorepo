@@ -18,14 +18,14 @@ export function FeatureCard({ title, description }: { title: string; description
   )
 }
 
-export function Token() {
+export function LandingBeetsStakedSonic() {
   const { toCurrency } = useCurrency()
 
   return (
     <>
       <Center py="200px" textAlign="center">
         <VStack>
-          <Heading fontSize="5xl">The $BEETS token</Heading>
+          <Heading fontSize="5xl">maBEETS</Heading>
           <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl">
             The $BEETS token is our primary method of incentive and reward. But it's so much more.
           </Text>
