@@ -28,7 +28,7 @@ import { getPoolDisplayTokens, getPoolDisplayTokensWithPossibleNestedPools } fro
 import { PoolTypeTag } from './PoolTypeTag'
 import { isBoosted } from '../pool.helpers'
 import { useLayoutEffect, useRef, useState } from 'react'
-import { useErc4626Metadata } from '../../erc4626/Erc4626MetadataProvider'
+import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -120,7 +120,7 @@ export function PoolComposition() {
   const { calcTotalUsdValue } = useTokens()
   const cardRef = useRef<HTMLDivElement | null>(null)
   const [height, setHeight] = useState(0)
-  const { getErc4626Metadata } = useErc4626Metadata()
+  const { getErc4626Metadata } = usePoolsMetadata()
 
   const displayTokens = getPoolDisplayTokens(pool)
   const totalLiquidity = calcTotalUsdValue(displayTokens, chain)

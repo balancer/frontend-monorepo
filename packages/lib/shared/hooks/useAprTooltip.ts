@@ -83,7 +83,7 @@ export function useAprTooltip({
   const colorMode = useThemeColorMode()
 
   const hasVeBalBoost =
-    isBalancerProject() && !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
+    isBalancerProject && !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
 
   // Swap fees
   const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)

@@ -93,7 +93,7 @@ export function _useVebalLockData() {
   })
 
   const { results, refetchAll, isLoading } = useMulticall(lockDataRequests, {
-    enabled: isConnected && isBalancerProject(), // Only Balancer project supports veBAL logic
+    enabled: isConnected && isBalancerProject, // Only Balancer project supports veBAL logic
   })
 
   const now = useCurrentDate()

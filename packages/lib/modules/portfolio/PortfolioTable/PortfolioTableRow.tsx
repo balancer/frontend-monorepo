@@ -81,7 +81,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
                 <StakingIcons pool={pool} />
               </HStack>
             </GridItem>
-            {isBalancerProject() && (
+            {isBalancerProject && (
               <GridItem px="sm">
                 <Text
                   fontWeight="medium"
@@ -126,7 +126,7 @@ function StakingIcons({ pool }: { pool: ExpandedPoolInfo }) {
 
   const shouldHideIcon = pool.poolType === ExpandedPoolType.Unstaked || !canStake
 
-  if (shouldHideIcon || isBeetsProject()) {
+  if (shouldHideIcon || isBeetsProject) {
     return null
   }
 
