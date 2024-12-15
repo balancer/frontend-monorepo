@@ -5,7 +5,7 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { useLst } from '../LstProvider'
 import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { LstTokenRow } from './LstTokenRow'
-import { useGetStakedAmountPreview } from '../hooks/useGetStakedAmountPreview'
+import { useGetConvertToShares } from '../hooks/useGetConvertToShares'
 import { formatUnits, parseUnits } from 'viem'
 
 export function LstStakeSummary({
@@ -17,8 +17,10 @@ export function LstStakeSummary({
   const { chain, stakeTransactionSteps, lstStakeTxHash, nativeAsset, stakedAsset, amount } =
     useLst()
 
-  const { stakedAmountPreview, isLoading: isLoadingStakedAmountPreview } =
-    useGetStakedAmountPreview(parseUnits(amount, 18), chain)
+  const { sharesAmount, isLoading: isLoadingSharesAmount } = useGetConvertToShares(
+    parseUnits(amount, 18),
+    chain
+  )
 
   const shouldShowReceipt = !!lstStakeTxHash && !isLoadingReceipt && !!receivedToken
 
@@ -28,7 +30,7 @@ export function LstStakeSummary({
       <Card variant="modalSubSection">
         <LstTokenRow
           chain={chain}
-          isLoading={isLoadingStakedAmountPreview}
+          isLoading={isLoadingSharesAmount}
           label={shouldShowReceipt ? 'You staked' : 'You stake'}
           tokenAddress={nativeAsset?.address || ''}
           tokenAmount={amount}
@@ -37,11 +39,11 @@ export function LstStakeSummary({
       <Card variant="modalSubSection">
         <LstTokenRow
           chain={chain}
-          isLoading={isLoadingStakedAmountPreview || isLoadingReceipt}
+          isLoading={isLoadingSharesAmount || isLoadingReceipt}
           label={shouldShowReceipt ? 'You received' : 'You receive'}
           tokenAddress={stakedAsset?.address || ''}
           tokenAmount={
-            shouldShowReceipt ? receivedToken[0].humanAmount : formatUnits(stakedAmountPreview, 18)
+            shouldShowReceipt ? receivedToken[0].humanAmount : formatUnits(sharesAmount, 18)
           }
         />
       </Card>

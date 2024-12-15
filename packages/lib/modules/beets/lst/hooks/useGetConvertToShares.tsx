@@ -4,10 +4,10 @@ import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from 'wagmi'
-import { beetsFtmStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
+import { sonicStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetStakedAmountPreview(amount: bigint, chain: GqlChain) {
+export function useGetConvertToShares(assetAmount: bigint, chain: GqlChain) {
   const { isConnected } = useUserAccount()
   const chainId = getChainId(chain)
 
@@ -16,15 +16,15 @@ export function useGetStakedAmountPreview(amount: bigint, chain: GqlChain) {
 
   const query = useReadContract({
     chainId,
-    abi: beetsFtmStakingAbi,
+    abi: sonicStakingAbi,
     address: config.contracts.beets?.lstStakingProxy,
-    functionName: 'getFTMxAmountForFTM',
-    args: [amount, false],
-    query: { enabled: isConnected && !shouldChangeNetwork && !!amount },
+    functionName: 'convertToShares',
+    args: [assetAmount],
+    query: { enabled: isConnected && !shouldChangeNetwork && !!assetAmount },
   })
 
   return {
     ...query,
-    stakedAmountPreview: query.data ?? 0n,
+    sharesAmount: query.data ?? 0n,
   }
 }

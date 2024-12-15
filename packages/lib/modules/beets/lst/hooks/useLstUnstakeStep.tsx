@@ -14,7 +14,6 @@ import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useMan
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { parseUnits } from 'viem'
 import { noop } from 'lodash'
-import { useGetPenalty } from './useGetPenalty'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useLstUnstakeStep(
@@ -25,7 +24,6 @@ export function useLstUnstakeStep(
 ) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
-  const { penalty } = useGetPenalty(parseUnits(humanAmount, 18), chain)
 
   const labels: TransactionLabels = {
     init: 'Unstake',
@@ -46,7 +44,7 @@ export function useLstUnstakeStep(
     contractId: 'beets.lstStaking',
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
     functionName: 'undelegate',
-    args: [wrID || 0n, parseUnits(humanAmount, 18), penalty],
+    args: [wrID || 0n, parseUnits(humanAmount, 18)],
     enabled: isConnected && !!humanAmount && enabled && !!wrID,
     txSimulationMeta,
   }

@@ -4,7 +4,7 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useLst } from '../LstProvider'
 import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
-import { useGetExchangeRate } from '../hooks/useGetExchangeRate'
+import { useGetRate } from '../hooks/useGetRate'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { LstTokenRow } from './LstTokenRow'
 
@@ -17,11 +17,11 @@ export function LstUnstakeSummary({
   const { chain, stakeTransactionSteps, lstUnstakeTxHash, nativeAsset, stakedAsset, amount } =
     useLst()
 
-  const { exchangeRate, isLoading: isLoadingExchangeRate } = useGetExchangeRate(chain)
+  const { rate, isLoading: isLoadingRate } = useGetRate(chain)
 
-  const estimatedAmount = bn(amount).times(exchangeRate).toString() // TODO: maybe get this from the wrID after the tx is confirmed
+  const estimatedAmount = bn(amount).times(rate).toString() // TODO: maybe get this from the wrID after the tx is confirmed
   const shouldShowReceipt = !!lstUnstakeTxHash && !isLoadingReceipt && !!receivedToken
-  const isLoading = isLoadingReceipt || isLoadingExchangeRate
+  const isLoading = isLoadingReceipt || isLoadingRate
 
   return (
     <AnimateHeightChange spacing="sm" w="full">

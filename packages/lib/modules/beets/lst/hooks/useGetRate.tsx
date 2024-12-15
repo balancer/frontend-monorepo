@@ -4,11 +4,11 @@ import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from 'wagmi'
-import { beetsFtmStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
+import { sonicStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { formatUnits } from 'viem'
 
-export function useGetExchangeRate(chain: GqlChain) {
+export function useGetRate(chain: GqlChain) {
   const { isConnected } = useUserAccount()
 
   const chainId = getChainId(chain)
@@ -18,15 +18,15 @@ export function useGetExchangeRate(chain: GqlChain) {
 
   const query = useReadContract({
     chainId,
-    abi: beetsFtmStakingAbi,
+    abi: sonicStakingAbi,
     address: config.contracts.beets?.lstStakingProxy,
-    functionName: 'getExchangeRate',
+    functionName: 'getRate',
     args: [],
     query: { enabled: isConnected && !shouldChangeNetwork },
   })
 
   return {
     ...query,
-    exchangeRate: formatUnits(query.data ?? 1n, 18),
+    rate: formatUnits(query.data ?? 1n, 18),
   }
 }

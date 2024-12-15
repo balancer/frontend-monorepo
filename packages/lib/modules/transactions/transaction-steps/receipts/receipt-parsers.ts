@@ -15,7 +15,6 @@ import {
 import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
-import { beetsFtmStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 
 type ParseProps = {
   receiptLogs: Log[]
