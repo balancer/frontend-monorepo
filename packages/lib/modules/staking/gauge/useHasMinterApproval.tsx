@@ -17,7 +17,7 @@ export function useHasMinterApproval() {
     account: userAddress,
     functionName: 'getMinterApproval',
     args: [contracts.balancer.relayerV6, userAddress],
-    query: { enabled: isConnected && isBalancerProject() }, // Only Balancer project supports minter approval
+    query: { enabled: isConnected && isBalancerProject }, // Only Balancer project supports minter approval
   })
 
   return {

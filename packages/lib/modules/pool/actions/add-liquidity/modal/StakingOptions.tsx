@@ -12,7 +12,7 @@ import {
   PartnerRedirectModal,
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
-import { getProjectConfig, isBalancerProject } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG, isBalancerProject } from '@repo/lib/config/getProjectConfig'
 
 export function StakingOptions() {
   const { chain, pool } = usePool()
@@ -25,15 +25,13 @@ export function StakingOptions() {
 
   const auraDisclosure = useDisclosure()
 
-  const projectConfig = getProjectConfig()
-
   return (
     <>
       <Text mb="2">Staking options</Text>
       <HStack alignItems="stretch" justify="space-between" w="full">
         <Card position="relative" variant="modalSubSection">
           <VStack align="left" spacing="md">
-            <Text color="grayText">{projectConfig.projectName}</Text>
+            <Text color="grayText">{PROJECT_CONFIG.projectName}</Text>
             <HStack>
               <Text color="font.primary" fontSize="md" fontWeight="bold">
                 {/* SHOULD WE USE MAX APR instead of the range?? */}
@@ -44,9 +42,9 @@ export function StakingOptions() {
             </HStack>
             <Flex position="absolute" right={2} top={3}>
               <Image
-                alt={projectConfig.projectId}
+                alt={PROJECT_CONFIG.projectId}
                 height={30}
-                src={`/images/protocols/${projectConfig.projectId}.svg`}
+                src={`/images/protocols/${PROJECT_CONFIG.projectId}.svg`}
                 width={30}
               />
             </Flex>
@@ -62,7 +60,7 @@ export function StakingOptions() {
             </Button>
           </VStack>
         </Card>
-        {isBalancerProject() && pool.staking?.aura && (
+        {isBalancerProject && pool.staking?.aura && (
           <Card position="relative" variant="modalSubSection">
             <VStack align="left" spacing="md">
               <Text color="grayText">Aura</Text>
