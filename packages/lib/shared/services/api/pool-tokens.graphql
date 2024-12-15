@@ -6,6 +6,7 @@ fragment UnderlyingToken on GqlToken {
   decimals
   name
   symbol
+  isBufferAllowed
 }
 
 fragment Erc4626ReviewData on Erc4626ReviewData {
