@@ -13,6 +13,7 @@ import {
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { PROJECT_CONFIG, isBalancerProject } from '@repo/lib/config/getProjectConfig'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function StakingOptions() {
   const { chain, pool } = usePool()
@@ -60,7 +61,7 @@ export function StakingOptions() {
             </Button>
           </VStack>
         </Card>
-        {isBalancerProject && pool.staking?.aura && (
+        {(isBalancerProject || pool.chain === GqlChain.Optimism) && pool.staking?.aura && (
           <Card position="relative" variant="modalSubSection">
             <VStack align="left" spacing="md">
               <Text color="grayText">Aura</Text>
