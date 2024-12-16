@@ -193,7 +193,7 @@ export function PoolListTokenPills({
   // TODO: Move this into a general 'displayTokens' helper function.
   if (isV3Pool(pool) && pool.hasErc4626 && pool.hasAnyAllowedBuffer) {
     poolTokens = poolTokens.map(token =>
-      !token?.underlyingToken?.isBufferAllowed
+      token.isErc4626 && token.isBufferAllowed
         ? ({ ...token, ...token.underlyingToken } as unknown as GqlPoolTokenDetail)
         : token
     )
