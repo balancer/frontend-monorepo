@@ -14,6 +14,7 @@ export const styles = {
   global: {
     html: {
       scrollBehavior: 'smooth',
+      overscrollBehaviorY: 'none',
     },
     'body > div[data-rk]': {
       minHeight: '100vh',

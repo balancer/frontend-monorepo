@@ -6,6 +6,7 @@ import { BarChart } from 'react-feather'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 const commonNoisyCardProps: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -59,7 +60,7 @@ export function PortfolioSummary() {
           <ZenGarden sizePx="225px" variant="diamond" />
           <Icon as={BarChart} color="font.primary" height="30px" mb="sm" width="30px" />
           <Heading color="grayText" mb="sm" size="sm">
-            My Balancer liquidity
+            {`My ${getProjectConfig().projectName} liquidity`}
           </Heading>
           {isLoadingPortfolio ? (
             <Skeleton height="10" w="36" />

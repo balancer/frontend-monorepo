@@ -13,11 +13,11 @@ import { FooterContainer } from '@/lib/components/footer/FooterContainer'
 import { DEFAULT_THEME_COLOR_MODE } from '@repo/lib/shared/services/chakra/themes/base/foundations'
 import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
-import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 export const metadata: Metadata = {
-  title: 'Balancer DeFi Liquidity Pools',
-  description: `Explore DeFi liquidity pools and swap tokens. Provide liquidity to accumulate yield from swap fees while retaining your token exposure as prices move.`,
+  title: 'Balancer - DeFi Liquidity Pools',
+  description: `Explore DeFi liquidity pools and swap tokens. The ultimate platform for custom liquidity solutions. Balancer v3 perfectly balances
+              simplicity and flexibility to reshape the future of AMMs.`,
   icons: [
     { rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' },
     {
@@ -51,13 +51,11 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
           <ThemeProvider>
             <Providers>
-              <VebalLockDataProvider>
-                <GlobalAlerts />
-                <NavBarContainer />
-                {children}
-                <FooterContainer />
-                <SpeedInsights />
-              </VebalLockDataProvider>
+              <GlobalAlerts />
+              <NavBarContainer />
+              {children}
+              <FooterContainer />
+              <SpeedInsights />
             </Providers>
           </ThemeProvider>
         </ColorThemeProvider>

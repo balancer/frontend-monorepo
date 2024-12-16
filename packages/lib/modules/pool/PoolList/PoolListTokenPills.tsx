@@ -1,11 +1,16 @@
-import { Badge, BadgeProps, Box, HStack, Text, Wrap } from '@chakra-ui/react'
-import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
+import { Badge, BadgeProps, Box, Heading, HStack, Text, Wrap } from '@chakra-ui/react'
+import {
+  GqlChain,
+  GqlPoolTokenDetail,
+  GqlPoolTokenDisplay,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolListItem } from '../pool.types'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { isStableLike, isWeightedLike } from '../pool.helpers'
+import { isStableLike, isV3Pool, isWeightedLike } from '../pool.helpers'
 import { Pool } from '../PoolProvider'
-import { getPoolDisplayTokens } from '../pool.utils'
+import { usePoolMetadata } from '../metadata/usePoolMetadata'
+import { TokenIconStack } from '../../tokens/TokenIconStack'
 
 function NestedTokenPill({
   nestedTokens,
@@ -167,19 +172,44 @@ function StableTokenPills({
 type Props = {
   pool: Pool | PoolListItem
   iconSize?: number
+  nameSize?: string
 }
 
-export function PoolListTokenPills({ pool, iconSize = 24, ...badgeProps }: Props & BadgeProps) {
+export function PoolListTokenPills({
+  pool,
+  iconSize = 24,
+  nameSize = 'md',
+  ...badgeProps
+}: Props & BadgeProps) {
   const shouldUseWeightedPills = isWeightedLike(pool.type)
   const shouldUseStablePills = isStableLike(pool.type)
+  const { name } = usePoolMetadata(pool)
 
   // TODO: fix difference between Pool and PoolListItem types
   let poolTokens = pool.poolTokens.filter(
     token => token.address !== pool.address
   ) as GqlPoolTokenDetail[]
 
-  if (pool.hasErc4626 && !pool.hasNestedErc4626) {
-    poolTokens = getPoolDisplayTokens(pool)
+  if (isV3Pool(pool) && pool.hasErc4626 && !pool.hasNestedErc4626) {
+    // TODO: Move this into a general 'displayTokens' helper function.
+    poolTokens = poolTokens.map(token =>
+      token.underlyingToken
+        ? ({ ...token, ...token.underlyingToken } as unknown as GqlPoolTokenDetail)
+        : token
+    )
+  }
+
+  if (name) {
+    return (
+      <HStack>
+        <TokenIconStack
+          chain={pool.chain}
+          size={iconSize}
+          tokens={poolTokens as unknown as GqlPoolTokenDisplay[]}
+        />
+        <Heading size={nameSize}>{name}</Heading>
+      </HStack>
+    )
   }
 
   if (shouldUseStablePills) {

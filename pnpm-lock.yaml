@@ -229,7 +229,7 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       viem:
-        specifier: ^2.21.55
+        specifier: 2.21.55
         version: 2.21.55(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
       wagmi:
         specifier: ^2.12.16
@@ -469,6 +469,9 @@ importers:
       pluralize:
         specifier: ^8.0.0
         version: 8.0.0
+      prismjs:
+        specifier: ^1.29.0
+        version: 1.29.0
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -499,6 +502,9 @@ importers:
       react-virtuoso:
         specifier: ^4.7.1
         version: 4.10.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      three:
+        specifier: ^0.170.0
+        version: 0.170.0
       tinycolor2:
         specifier: ^1.6.0
         version: 1.6.0
@@ -581,6 +587,9 @@ importers:
       '@types/pluralize':
         specifier: ^0.0.33
         version: 0.0.33
+      '@types/prismjs':
+        specifier: ^1.26.5
+        version: 1.26.5
       '@types/react':
         specifier: 18.2.34
         version: 18.2.34
@@ -590,6 +599,9 @@ importers:
       '@types/react-syntax-highlighter':
         specifier: ^15.5.13
         version: 15.5.13
+      '@types/three':
+        specifier: ^0.170.0
+        version: 0.170.0
       '@types/tinycolor2':
         specifier: ^1.4.6
         version: 1.4.6

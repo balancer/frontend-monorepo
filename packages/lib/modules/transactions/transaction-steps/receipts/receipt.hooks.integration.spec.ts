@@ -5,7 +5,7 @@ import { getGqlChain } from '@repo/lib/config/app.config'
 import { ethAddress, polAddress } from '@repo/lib/debug-helpers'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, Hash } from 'viem'
-import { polygon } from 'viem/chains'
+import { gnosis, polygon } from 'viem/chains'
 import {
   useAddLiquidityReceipt,
   useLstStakeReceipt,
@@ -82,163 +82,197 @@ async function testLstStakeReceipt(
   return result
 }
 
-describe('receipts queries', () => {
-  test('queries add liquidity transaction', async () => {
-    // https://etherscan.io/tx/0x887f144bdfe73c7e585b0630361038bda9665aa213933f637d1d6fae9046652e
-    const userAddress = '0x2a88a454A7b0C29d36D5A121b7Cf582db01bfCEC'
-    const txHash = '0x887f144bdfe73c7e585b0630361038bda9665aa213933f637d1d6fae9046652e'
+test('queries add liquidity transaction', async () => {
+  // https://etherscan.io/tx/0x887f144bdfe73c7e585b0630361038bda9665aa213933f637d1d6fae9046652e
+  const userAddress = '0x2a88a454A7b0C29d36D5A121b7Cf582db01bfCEC'
+  const txHash = '0x887f144bdfe73c7e585b0630361038bda9665aa213933f637d1d6fae9046652e'
 
-    const result = await testAddReceipt(userAddress, txHash)
+  const result = await testAddReceipt(userAddress, txHash)
 
-    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+  await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
-    await waitFor(() => expect(result.current.sentTokens).toBeDefined())
+  await waitFor(() => expect(result.current.sentTokens).toBeDefined())
 
-    expect(result.current.sentTokens).toEqual([
-      {
-        tokenAddress: '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f',
-        humanAmount: '12',
-      },
-      {
-        tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-        humanAmount: '0.04',
-      },
-    ])
+  expect(result.current.sentTokens).toEqual([
+    {
+      tokenAddress: '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f',
+      humanAmount: '12',
+    },
+    {
+      tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      humanAmount: '0.04',
+    },
+  ])
 
-    expect(result.current.receivedBptUnits).toBe('7.669852124112308228')
-  })
+  expect(result.current.receivedBptUnits).toBe('7.669852124112308228')
+})
 
-  test('queries add liquidity with native token', async () => {
-    // https://polygonscan.com/tx/0x611a0eeeff15c2a5efc587b173fa577475134de2554a452259f112db67bd4de8
+test('queries add liquidity with native token', async () => {
+  // https://polygonscan.com/tx/0x611a0eeeff15c2a5efc587b173fa577475134de2554a452259f112db67bd4de8
+  const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
+  const txHash = '0x611a0eeeff15c2a5efc587b173fa577475134de2554a452259f112db67bd4de8'
+
+  const result = await testAddReceipt(userAddress, txHash, polygon.id)
+
+  await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+  await waitFor(() => expect(result.current.sentTokens).toBeDefined())
+
+  expect(result.current.sentTokens).toEqual([
+    {
+      tokenAddress: polAddress,
+      humanAmount: '1',
+    },
+  ])
+
+  expect(result.current.receivedBptUnits).toBe('0.984524168989962117')
+})
+
+test('queries add liquidity in V3 GNOSIS pool', async () => {
+  const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
+
+  // const poolId = '0xecc5aebd9569c82a0944007b22d03801a8fdfe99' // 59EURe 1sDAI 40USDC.e
+  //https://gnosisscan.io/tx/0x61286503bc38b6eda1477d3812cdd268114f3443138a513259a76c42b9cc53ac
+  const txHash = '0x61286503bc38b6eda1477d3812cdd268114f3443138a513259a76c42b9cc53ac'
+
+  const result = await testAddReceipt(userAddress, txHash, gnosis.id)
+
+  await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+  await waitFor(() => expect(result.current.sentTokens).toBeDefined())
+
+  expect(result.current.sentTokens).toEqual([
+    {
+      humanAmount: '0.00000000000001',
+      tokenAddress: '0x2a22f9c3b484c3629090feed35f17ff8f88f76f0',
+    },
+    {
+      humanAmount: '0.000063840672042232',
+      tokenAddress: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d',
+    },
+    // the following one is excluded to avoid duplication
+    // ERC-20: Monerium EURe (EURe)
+    // {
+    //   humanAmount: '0.014361104681096343',
+    //   tokenAddress: '0x420ca0f9b9b604ce0fd9c18ef134c705e5fa3430',
+    // },
+    {
+      humanAmount: '0.014361104681096343',
+      tokenAddress: '0xcb444e90d8198415266c6a2724b7900fb12fc56e', // Monerium EUR emoney (EURe)
+    },
+  ])
+
+  expect(result.current.receivedBptUnits).toBe('0.012149307213559577')
+})
+
+test('queries remove liquidity transaction', async () => {
+  // https://etherscan.io/tx/0x71301b46984d3d2e6b58c1fc0c99cc0561ec0f26d53bda8413528a7fb6828fc3
+  const userAddress = '0x84f240cA232917d771DFBbd8C917B4669Ed640CD'
+  const txHash = '0x71301b46984d3d2e6b58c1fc0c99cc0561ec0f26d53bda8413528a7fb6828fc3'
+
+  const result = await testRemoveReceipt(userAddress, txHash)
+
+  await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+  await waitFor(() => expect(result.current.receivedTokens).toBeDefined())
+
+  expect(result.current.receivedTokens).toEqual([
+    {
+      humanAmount: '16597.845312687911573359',
+      tokenAddress: '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f',
+    },
+    {
+      humanAmount: '4.553531492712836774',
+      tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+    },
+  ])
+
+  expect(result.current.sentBptUnits).toBe('6439.400687368663510166')
+})
+
+describe('queries swap transaction', () => {
+  const maticAddress = '0x0000000000000000000000000000000000001010'
+  const wMaticAddress = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
+  const daiAddress = '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
+
+  test('when the native asset is not included (from DAI to WMATIC)', async () => {
     const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
-    const txHash = '0x611a0eeeff15c2a5efc587b173fa577475134de2554a452259f112db67bd4de8'
+    // https://polygonscan.com/tx/0x11380dcffb24c512da18f032d9f7354d154cfda6bbab0633df182fcd202c4244
+    const txHash = '0x11380dcffb24c512da18f032d9f7354d154cfda6bbab0633df182fcd202c4244'
 
-    const result = await testAddReceipt(userAddress, txHash, polygon.id)
-
-    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
-    await waitFor(() => expect(result.current.sentTokens).toBeDefined())
-
-    expect(result.current.sentTokens).toEqual([
-      {
-        tokenAddress: polAddress,
-        humanAmount: '1',
-      },
-    ])
-
-    expect(result.current.receivedBptUnits).toBe('0.984524168989962117')
-  })
-
-  test('queries remove liquidity transaction', async () => {
-    // https://etherscan.io/tx/0x71301b46984d3d2e6b58c1fc0c99cc0561ec0f26d53bda8413528a7fb6828fc3
-    const userAddress = '0x84f240cA232917d771DFBbd8C917B4669Ed640CD'
-    const txHash = '0x71301b46984d3d2e6b58c1fc0c99cc0561ec0f26d53bda8413528a7fb6828fc3'
-
-    const result = await testRemoveReceipt(userAddress, txHash)
+    const result = await testSwapReceipt(userAddress, txHash, GqlChain.Polygon)
 
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
-    await waitFor(() => expect(result.current.receivedTokens).toBeDefined())
 
-    expect(result.current.receivedTokens).toEqual([
-      {
-        humanAmount: '16597.845312687911573359',
-        tokenAddress: '0x198d7387fa97a73f05b8578cdeff8f2a1f34cd1f',
-      },
-      {
-        humanAmount: '4.553531492712836774',
-        tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      },
-    ])
+    expect(result.current.sentToken).toEqual({
+      humanAmount: '1',
+      tokenAddress: daiAddress.toLowerCase(),
+    })
 
-    expect(result.current.sentBptUnits).toBe('6439.400687368663510166')
+    expect(result.current.receivedToken).toEqual({
+      humanAmount: '1.419839650912753603',
+      tokenAddress: wMaticAddress,
+    })
   })
 
-  describe('queries swap transaction', () => {
-    const maticAddress = '0x0000000000000000000000000000000000001010'
-    const wMaticAddress = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
-    const daiAddress = '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063'
+  test('when the native asset is the token in (from POL to DAI)', async () => {
+    const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
+    // https://polygonscan.com/tx/0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c
+    const txHash = '0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c'
 
-    test('when the native asset is not included (from DAI to WMATIC)', async () => {
-      const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
-      // https://polygonscan.com/tx/0x11380dcffb24c512da18f032d9f7354d154cfda6bbab0633df182fcd202c4244
-      const txHash = '0x11380dcffb24c512da18f032d9f7354d154cfda6bbab0633df182fcd202c4244'
+    const result = await testSwapReceipt(userAddress, txHash, GqlChain.Polygon)
 
-      const result = await testSwapReceipt(userAddress, txHash, GqlChain.Polygon)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
-      await waitFor(() => expect(result.current.isLoading).toBeFalsy())
-
-      expect(result.current.sentToken).toEqual({
-        humanAmount: '1',
-        tokenAddress: daiAddress.toLowerCase(),
-      })
-
-      expect(result.current.receivedToken).toEqual({
-        humanAmount: '1.419839650912753603',
-        tokenAddress: wMaticAddress,
-      })
+    expect(result.current.sentToken).toEqual({
+      humanAmount: '1',
+      tokenAddress: maticAddress,
     })
 
-    test('when the native asset is the token in (from POL to DAI)', async () => {
-      const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
-      // https://polygonscan.com/tx/0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c
-      const txHash = '0x78ddd90502509a264a5e8f4f3732668db669e7614f4887f2a233ce39e5eafa7c'
+    expect(result.current.receivedToken).toEqual({
+      humanAmount: '0.693570611425675513',
+      tokenAddress: daiAddress.toLowerCase(),
+    })
+  })
 
-      const result = await testSwapReceipt(userAddress, txHash, GqlChain.Polygon)
+  test('when the native asset is the token out (from DAI to POL)', async () => {
+    const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
+    // https://polygonscan.com/tx/0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288
+    const txHash = '0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288'
 
-      await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    const result = await testSwapReceipt(userAddress, txHash, GqlChain.Polygon)
 
-      expect(result.current.sentToken).toEqual({
-        humanAmount: '1',
-        tokenAddress: maticAddress,
-      })
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
-      expect(result.current.receivedToken).toEqual({
-        humanAmount: '0.693570611425675513',
-        tokenAddress: daiAddress.toLowerCase(),
-      })
+    expect(result.current.sentToken).toEqual({
+      humanAmount: '0.1',
+      tokenAddress: daiAddress.toLowerCase(),
     })
 
-    test('when the native asset is the token out (from DAI to POL)', async () => {
-      const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
-      // https://polygonscan.com/tx/0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288
-      const txHash = '0xe0b75845d13ae12029c8dfef68488b3bf35347460fafdb3a15a5c7f884226288'
+    expect(result.current.receivedToken).toEqual({
+      humanAmount: '0.241277224191485579',
+      tokenAddress: maticAddress,
+    })
+  })
 
-      const result = await testSwapReceipt(userAddress, txHash, GqlChain.Polygon)
+  //TODO: adapt to a sepolia swap in v12
+  test.skip('when the native asset is the token out that goes through a wrap (from stataEthDAI to WETH and then to ETH)', async () => {
+    const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
+    // https://sepolia.etherscan.io/tx/0xd8ad2a7f8e51be9735ae2886ca936cca62e395524b284f7a97cf7ad33a361a04
+    const txHash = '0xd8ad2a7f8e51be9735ae2886ca936cca62e395524b284f7a97cf7ad33a361a04'
 
-      await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    const protocolVersion = 3
+    const result = await testSwapReceipt(userAddress, txHash, GqlChain.Sepolia, protocolVersion)
 
-      expect(result.current.sentToken).toEqual({
-        humanAmount: '0.1',
-        tokenAddress: daiAddress.toLowerCase(),
-      })
+    const stataEthDai = '0xde46e43f46ff74a23a65ebb0580cbe3dfe684a17'
 
-      expect(result.current.receivedToken).toEqual({
-        humanAmount: '0.241277224191485579',
-        tokenAddress: maticAddress,
-      })
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+    expect(result.current.sentToken).toEqual({
+      humanAmount: '25',
+      tokenAddress: stataEthDai.toLowerCase(),
     })
 
-    //TODO: adapt to a sepolia swap in v12
-    test.skip('when the native asset is the token out that goes through a wrap (from stataEthDAI to WETH and then to ETH)', async () => {
-      const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
-      // https://sepolia.etherscan.io/tx/0xd8ad2a7f8e51be9735ae2886ca936cca62e395524b284f7a97cf7ad33a361a04
-      const txHash = '0xd8ad2a7f8e51be9735ae2886ca936cca62e395524b284f7a97cf7ad33a361a04'
-
-      const protocolVersion = 3
-      const result = await testSwapReceipt(userAddress, txHash, GqlChain.Sepolia, protocolVersion)
-
-      const stataEthDai = '0xde46e43f46ff74a23a65ebb0580cbe3dfe684a17'
-
-      await waitFor(() => expect(result.current.isLoading).toBeFalsy())
-
-      expect(result.current.sentToken).toEqual({
-        humanAmount: '25',
-        tokenAddress: stataEthDai.toLowerCase(),
-      })
-
-      expect(result.current.receivedToken).toEqual({
-        humanAmount: '0.136746996966924842',
-        tokenAddress: ethAddress,
-      })
+    expect(result.current.receivedToken).toEqual({
+      humanAmount: '0.136746996966924842',
+      tokenAddress: ethAddress,
     })
   })
 

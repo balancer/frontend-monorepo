@@ -14,7 +14,7 @@ import { AppLink, useNav } from './useNav'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { isBeetsProject } from '@repo/lib/config/getProjectConfig'
+import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
 
 type Props = {
   mobileNav?: ReactNode
@@ -63,8 +63,8 @@ function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
           </Link>
         </Box>
       ))}
-      {/* Vebal is not supported in beets project (no config for mainnet) */}
-      {!isBeetsProject() && (
+      {/* Vebal is only supported in Balancer project */}
+      {!isBalancerProject && (
         <Box as={motion.div} variants={fadeIn}>
           )<VeBalLink />
         </Box>
@@ -228,7 +228,7 @@ export function NavBar({
           as={motion.div}
           initial="hidden"
           onClick={e => e.stopPropagation()}
-          spacing="lg"
+          spacing="xl"
           variants={staggeredFadeIn}
         >
           {leftSlot || (
