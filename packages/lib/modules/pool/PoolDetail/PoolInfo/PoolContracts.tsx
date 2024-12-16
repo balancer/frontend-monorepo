@@ -37,6 +37,7 @@ import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplo
 import { getWarnings, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
 import { Erc4626InfoPopOver } from './Erc4626Info'
+import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
 
 type RateProvider = {
   tokenAddress: Address
@@ -132,7 +133,7 @@ export function PoolContracts({ ...props }: CardProps) {
 
     if (hasGaugeAddress) {
       contracts.push({
-        label: 'veBAL gauge',
+        label: `${isBalancerProject ? 'veBAL g' : 'G'}auge`,
         address: gaugeAddress,
         explorerLink: gaugeExplorerLink,
       })
