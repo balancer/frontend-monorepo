@@ -26,7 +26,7 @@ describe.skip('When adding nested liquidity for a weighted pool', () => {
     const handler = selectNestedHandler(nestedPool)
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '100', tokenAddress: usdcAaveAddress },
+      { humanAmount: '100', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
     ]
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
     expect(priceImpact).toBeGreaterThan(0)
@@ -36,7 +36,7 @@ describe.skip('When adding nested liquidity for a weighted pool', () => {
     const handler = selectNestedHandler(nestedPool)
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: usdcAaveAddress },
+      { humanAmount: '1', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
     ]
 
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
@@ -48,9 +48,9 @@ describe.skip('When adding nested liquidity for a weighted pool', () => {
     const handler = selectNestedHandler(nestedPool)
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '0.1', tokenAddress: wethAddress },
-      { humanAmount: '0.1', tokenAddress: usdcAaveAddress },
-      { humanAmount: '0.1', tokenAddress: usdtAaveAddress },
+      { humanAmount: '0.1', tokenAddress: wethAddress, symbol: 'WETH' },
+      { humanAmount: '0.1', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
+      { humanAmount: '0.1', tokenAddress: usdtAaveAddress, symbol: 'USDT' },
     ]
 
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
@@ -60,7 +60,7 @@ describe.skip('When adding nested liquidity for a weighted pool', () => {
 
   test('builds Tx Config', async () => {
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: usdcAaveAddress },
+      { humanAmount: '1', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
     ]
 
     const handler = selectNestedHandler(nestedPool)

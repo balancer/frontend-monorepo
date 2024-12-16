@@ -30,13 +30,16 @@ export function OrderRoute() {
   const orderRouteVersion = queryData ? queryData.protocolVersion : 2
   const hopCount = queryData ? queryData.hopCount : 0
 
+  function getRouteHopsLabel() {
+    if (hopCount === 0) return 'Unknown'
+    return `Bv${orderRouteVersion}: ${hopCount} ${pluralize('hop', hopCount)}`
+  }
+
   return (
     <HStack justify="space-between" w="full">
       <Text color="grayText">Order route</Text>
       <HStack>
-        <Text color="grayText">
-          Bv{orderRouteVersion}: {hopCount} {pluralize('hop', hopCount)}
-        </Text>
+        <Text color="grayText">{getRouteHopsLabel()}</Text>
         <Popover trigger="hover">
           <PopoverTrigger>
             <Box

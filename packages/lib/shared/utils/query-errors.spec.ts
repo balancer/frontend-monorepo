@@ -94,8 +94,8 @@ describe('Captures sentry error', () => {
       slippage: '0.1',
       pool,
       humanAmountsIn: [
-        { humanAmount: '3', tokenAddress: wjAuraAddress },
-        { humanAmount: '0.01', tokenAddress: wETHAddress },
+        { humanAmount: '3', tokenAddress: wjAuraAddress, symbol: 'wjAura' },
+        { humanAmount: '0.01', tokenAddress: wETHAddress, symbol: 'wETH' },
       ],
     }
 

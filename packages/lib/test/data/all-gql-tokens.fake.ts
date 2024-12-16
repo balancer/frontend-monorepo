@@ -33,6 +33,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
   },
   {
     __typename: 'GqlToken',
@@ -47,6 +48,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
   },
   {
     __typename: 'GqlToken',
@@ -61,6 +63,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
   },
   {
     __typename: 'GqlToken',
@@ -75,6 +78,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
   },
   {
     __typename: 'GqlToken',
@@ -89,6 +93,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
   },
   {
     __typename: 'GqlToken',
@@ -102,6 +107,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: true,
+    isBufferAllowed: true,
     coingeckoId: null,
   },
   {
@@ -116,6 +122,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
     coingeckoId: 'usd-coin',
   },
   {
@@ -130,6 +137,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: true,
+    isBufferAllowed: true,
     coingeckoId: null,
   },
   {
@@ -144,6 +152,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
     coingeckoId: 'tether',
   },
   {
@@ -158,6 +167,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
     coingeckoId: 'dai',
   },
   {
@@ -172,6 +182,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: true,
+    isBufferAllowed: true,
     coingeckoId: null,
   },
   {
@@ -186,6 +197,7 @@ export const allFakeGqlTokens: GqlToken[] = [
       'https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xd33526068d116ce69f19a9ee46f0bd304f21a51f.png',
     priority: 0,
     tradable: true,
+    isBufferAllowed: true,
     isErc4626: false,
   },
   {
@@ -200,6 +212,7 @@ export const allFakeGqlTokens: GqlToken[] = [
       'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png',
     priority: 0,
     tradable: false,
+    isBufferAllowed: true,
     isErc4626: false,
   },
   {
@@ -215,6 +228,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: false,
     isErc4626: false,
+    isBufferAllowed: true,
   },
   {
     __typename: 'GqlToken',
@@ -229,6 +243,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: false,
     isErc4626: false,
+    isBufferAllowed: true,
   },
   {
     __typename: 'GqlToken',
@@ -242,6 +257,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: false,
     isErc4626: false,
+    isBufferAllowed: true,
   },
   {
     __typename: 'GqlToken',
@@ -255,6 +271,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
   },
   {
     __typename: 'GqlToken',
@@ -269,6 +286,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
   },
   {
     // Used in 50WETH-50-3pool nested pool tests
@@ -284,6 +302,7 @@ export const allFakeGqlTokens: GqlToken[] = [
     priority: 0,
     tradable: true,
     isErc4626: false,
+    isBufferAllowed: true,
   },
 ]
 

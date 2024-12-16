@@ -77,7 +77,7 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
       // User can add liquidity with BPT token
-      { humanAmount: '100', tokenAddress: bal80Weth20Address, symbol: 'BAL-80-WETH-20' },
+      { humanAmount: '100', tokenAddress: bal80Weth20Address, symbol: '80BAL-20WETH' },
     ]
 
     const sdBalPool = await getPoolMock(poolId, GqlChain.Mainnet)
@@ -103,26 +103,23 @@ describe('Calculates toInputAmounts from allPoolTokens', () => {
 
 // Unskip when sepolia V3 pools are available in production api
 describe.skip('Liquidity helpers for V3 Boosted pools', async () => {
-  // const poolId = '0x59fa488dda749cdd41772bb068bb23ee955a6d7a' // Balancer USDC/USDT
+  // const poolId = '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8' // Sepolia stataEthUSDC stataEthUSDT
 
-  // const aUsdcSepoliaAddress = '0x8a88124522dbbf1e56352ba3de1d9f78c143751e'
-  // const aUsdtSepoliaAddress = '0x978206fae13faf5a8d293fb614326b237684b750'
-  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // underlying token
-  const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0' // underlying token
+  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8'
+  const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0'
   // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
   const v3Pool = {} as GqlPoolElement
   const helpers = new LiquidityActionHelpers(v3Pool)
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress, symbol: 'usdc-aave' },
+    { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress, symbol: 'USDC' },
   ]
 
   it('allPoolTokens', async () => {
-    expect(
-      allPoolTokens(v3Pool)
-        .map(t => t.address)
-        .sort()
-    ).toEqual([usdcSepoliaAddress, usdtSepoliaAddress])
+    expect(allPoolTokens(v3Pool).map(t => t.address)).toEqual([
+      usdcSepoliaAddress,
+      usdtSepoliaAddress,
+    ])
   })
 
   it('allPoolTokens snapshot', async () => {
@@ -262,7 +259,7 @@ describe.skip('Liquidity helpers for V3 NESTED pool', async () => {
   const aaveUSDTAddress = '0x978206fae13faf5a8d293fb614326b237684b750'
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress },
+    { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress, symbol: 'USDC' },
   ]
 
   it('allPoolTokens', async () => {
@@ -486,6 +483,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           "chainId": 100,
           "decimals": 18,
           "index": 0,
+          "isBufferAllowed": true,
           "isErc4626": false,
           "name": "Gnosis Token on xDai",
           "priority": 0,
@@ -493,16 +491,18 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           "tradable": true,
         },
         {
-          "address": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
-          "chain": "GNOSIS",
-          "chainId": 100,
+          "address": "0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644",
+          "decimals": 18,
+          "index": 0,
+          "name": "Wrapped Aave Gnosis GNO",
+          "symbol": "waGnoGNO",
+        },
+        {
+          "address": "0xaf204776c7245bf4147c2612bf6e5972ee483701",
           "decimals": 18,
           "index": 1,
-          "isErc4626": false,
-          "name": "Wrapped XDAI",
-          "priority": 0,
-          "symbol": "WXDAI",
-          "tradable": true,
+          "name": "Savings xDAI",
+          "symbol": "sDAI",
         },
       ]
     `)

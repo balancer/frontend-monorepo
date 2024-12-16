@@ -12,7 +12,7 @@ import { useTokenAllowances } from '../../web3/useTokenAllowances'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../TokensProvider'
 import { ApprovalAction, buildTokenApprovalLabels } from './approval-labels'
-import { RawAmount, getRequiredTokenApprovals } from './approval-rules'
+import { RawAmount, areEmptyRawAmounts, getRequiredTokenApprovals } from './approval-rules'
 import { requiresDoubleApproval } from '../token.helpers'
 
 export type Params = {
@@ -23,6 +23,7 @@ export type Params = {
   isPermit2?: boolean
   bptSymbol?: string //Edge-case for approving
   lpToken?: string
+  enabled?: boolean
 }
 
 /*
@@ -35,6 +36,7 @@ export function useTokenApprovalSteps({
   actionType,
   bptSymbol,
   isPermit2 = false,
+  enabled = true,
   lpToken,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
@@ -56,6 +58,7 @@ export function useTokenApprovalSteps({
     userAddress,
     spenderAddress,
     tokenAddresses: approvalTokenAddresses,
+    enabled: enabled && !areEmptyRawAmounts(_approvalAmounts) && !!spenderAddress,
   })
 
   const tokenAmountsToApprove = getRequiredTokenApprovals({

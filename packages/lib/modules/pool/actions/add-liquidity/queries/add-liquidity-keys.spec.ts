@@ -9,8 +9,16 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 
 function testGenerateLiquidityKeys(pool: Pool) {
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F', humanAmount: '0' },
-    { tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', humanAmount: '0' },
+    {
+      tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F',
+      humanAmount: '0',
+      symbol: 'wjAura',
+    },
+    {
+      tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+      humanAmount: '0',
+      symbol: 'WETH',
+    },
   ]
   return addLiquidityKeys.priceImpact({
     handler: new UnbalancedAddLiquidityV2Handler(aWjAuraWethPoolElementMock()),

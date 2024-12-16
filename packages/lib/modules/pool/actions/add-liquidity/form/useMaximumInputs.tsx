@@ -40,6 +40,7 @@ export function useMaximumInputs() {
       .map(balance => ({
         humanAmount: balance.formatted as HumanAmount,
         tokenAddress: balance.address as Address,
+        symbol: 'TBD', // TODO: finish with Groninge
       }))
     setHumanAmountsIn(amounts)
     setIsMaximized(true)

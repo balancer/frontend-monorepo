@@ -16,8 +16,8 @@ describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
     const handler = selectUnbalancedHandler()
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: wETHAddress },
-      { humanAmount: '1', tokenAddress: wjAuraAddress },
+      { humanAmount: '1', tokenAddress: wETHAddress, symbol: 'ETH' },
+      { humanAmount: '1', tokenAddress: wjAuraAddress, symbol: 'wjAura' },
     ]
 
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
@@ -28,8 +28,8 @@ describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
     const handler = selectUnbalancedHandler()
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '0', tokenAddress: wETHAddress },
-      { humanAmount: '', tokenAddress: balAddress },
+      { humanAmount: '0', tokenAddress: wETHAddress, symbol: 'WETH' },
+      { humanAmount: '', tokenAddress: balAddress, symbol: 'BAL' },
     ]
 
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
@@ -39,8 +39,8 @@ describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
 
   test('queries bptOut', async () => {
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: wETHAddress },
-      { humanAmount: '1', tokenAddress: wjAuraAddress },
+      { humanAmount: '1', tokenAddress: wETHAddress, symbol: 'WETH' },
+      { humanAmount: '1', tokenAddress: wjAuraAddress, symbol: 'wjAura' },
     ]
 
     const handler = selectUnbalancedHandler()
@@ -52,8 +52,8 @@ describe('When adding unbalanced liquidity for a weighted V2 pool', () => {
 
   test('builds Tx Config', async () => {
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: wETHAddress },
-      { humanAmount: '1', tokenAddress: wjAuraAddress },
+      { humanAmount: '1', tokenAddress: wETHAddress, symbol: 'WETH' },
+      { humanAmount: '1', tokenAddress: wjAuraAddress, symbol: 'wjAura' },
     ]
 
     const handler = selectUnbalancedHandler()

@@ -13,6 +13,7 @@ test('swapWrappedWithNative', () => {
     {
       humanAmount: '1',
       tokenAddress: wETHAddress,
+      symbol: 'WETH',
     },
   ]
   const result = swapWrappedWithNative(inputAmounts, GqlChain.Mainnet)
