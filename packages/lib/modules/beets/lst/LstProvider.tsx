@@ -18,6 +18,7 @@ import { PaginationState } from '@repo/lib/shared/components/pagination/paginati
 import { useLstWithdrawStep } from './hooks/useLstWithdrawStep'
 
 const CHAIN = GqlChain.Sonic
+const WITHDRAW_DELAY = 1209600 // 14 days in seconds
 
 export function _useLst() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
@@ -98,7 +99,7 @@ export function _useLst() {
     isStakeTab,
     isUnstakeTab,
     isWithdrawTab,
-    withdrawDelay: 0, // TODO: get from onchain
+    withdrawDelay: WITHDRAW_DELAY,
     pagination,
     setPagination,
     first,

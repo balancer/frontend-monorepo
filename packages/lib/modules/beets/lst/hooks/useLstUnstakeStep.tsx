@@ -38,8 +38,8 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
     chainId: getChainId(chain),
     contractId: 'beets.lstStaking',
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
-    functionName: 'undelegateFromPool',
-    args: [parseUnits(sharesAmount, 18)],
+    functionName: 'undelegateMany',
+    args: [[BigInt(1)], [parseUnits(sharesAmount, 18)]], // TODO: make dynamic
     enabled: isConnected && !!sharesAmount && enabled,
     txSimulationMeta,
   }

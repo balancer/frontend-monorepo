@@ -83,7 +83,11 @@ export function Lst() {
   const { isBalancesLoading, balanceFor } = useTokenBalances()
   const [disclosure, setDisclosure] = useState(stakeModalDisclosure)
   const { userNumWithdraws } = useGetUserNumWithdraws(chain)
-  const { data, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(chain, userNumWithdraws)
+  const {
+    data,
+    isLoading: isWithdrawalsLoading,
+    refetch,
+  } = useGetUserWithdraws(chain, userNumWithdraws)
 
   const isLoading = !isMounted || isBalancesLoading || isWithdrawalsLoading
   const loadingText = isLoading ? 'Loading...' : undefined
@@ -120,6 +124,8 @@ export function Lst() {
     } else if (isUnstakeTab) {
       setDisclosure(unstakeModalDisclosure)
       setAmountShares('')
+    } else if (isWithdrawTab) {
+      refetch()
     }
   }, [activeTab])
 
