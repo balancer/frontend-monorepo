@@ -1,10 +1,8 @@
-import React from 'react'
-import { LandingBeetsHero } from './sections/LandingBeetsHero'
 import { LandingBeetsData } from './sections/LandingBeetsData'
-import { Token } from './sections/Token'
+import { LandingBeetsHero } from './sections/LandingBeetsHero'
 import { LandingBeetsSocialClub } from './sections/LandingBeetsSocialClub'
-import { LandingMaBeetsSection } from './sections/LandingMaBeetsSection'
 import { LandingBeetsStakedSonic } from './sections/LandingBeetsStakedSonic'
+import { LandingMaBeetsSection } from './sections/LandingMaBeetsSection'
 
 export function LandingPageLayout() {
   return (
@@ -14,7 +12,6 @@ export function LandingPageLayout() {
       <LandingBeetsStakedSonic />
       <LandingBeetsSocialClub />
       <LandingMaBeetsSection />
-      <Token />
     </>
   )
 }

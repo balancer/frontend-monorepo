@@ -88,13 +88,13 @@ function ChainStats({ chain }: { chain: MockGqlChain }) {
   const { toCurrency } = useCurrency()
 
   return (
-    <Box bg="rgba(0, 0, 0, 0.2)" p="lg" w="full">
+    <Box bg="rgba(0, 0, 0, 0.2)" p="lg" w="full" height="360px" display="flex" flexDir="column">
       <HStack justify="space-between" mb="sm" w="full">
         <Text fontSize="2xl">TVL</Text>
         <Text fontSize="2xl">{toCurrency(tvl)}</Text>
       </HStack>
       <Progress colorScheme="cyan" rounded="lg" value={(tvl / TOTAL_TVL) * 100} w="full" />
-      <Box minH="100px">
+      <Box flex="1">
         {sSonicBeetsTvl && <SubStatBar color="red" label="sSONICBeets" stat={sSonicBeetsTvl} />}
         {maBeetsTvl && <SubStatBar color="green" label="maBEETS" stat={maBeetsTvl} />}
         {boostedPoolTvl && <SubStatBar color="cyan" label="Boosted Pools" stat={boostedPoolTvl} />}
