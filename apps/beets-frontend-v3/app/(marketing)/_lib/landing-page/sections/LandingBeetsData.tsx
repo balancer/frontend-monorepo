@@ -55,7 +55,7 @@ const MockNetworkData: Record<MockGqlChain, NetworkStats> = {
   },
 }
 
-export function SubStatBar({
+function SubStatBar({
   stat,
   label,
   color,
@@ -74,7 +74,7 @@ export function SubStatBar({
   )
 }
 
-export function ChainStats({ chain }: { chain: MockGqlChain }) {
+function ChainStats({ chain }: { chain: MockGqlChain }) {
   const {
     tvl,
     sSonicBeetsTvl,
@@ -124,29 +124,32 @@ export function ChainStats({ chain }: { chain: MockGqlChain }) {
   )
 }
 
-export function ChainDataCard({
-  chain,
-  networkColor,
-}: {
-  chain: MockGqlChain
-  networkColor: string
-}) {
+function ChainDataCard({ chain, networkColor }: { chain: MockGqlChain; networkColor: string }) {
   return (
-    <VStack p="xl" spacing="xl">
-      <VStack align="flex-start" spacing="md">
+    <Box p="xl">
+      <Box mb="lg">
         <Heading fontSize="3xl">
           Beets on{' '}
           <chakra.span color={networkColor} transform="capitalize">
             {chain}
           </chakra.span>
         </Heading>
-        <Text>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor
-          sit amet consectetur adipisicing elit.
-        </Text>
-      </VStack>
+      </Box>
       <ChainStats chain={chain} />
-    </VStack>
+    </Box>
+  )
+}
+
+function GlobalStatsCard({ label, value }: { label: string; value: string }) {
+  return (
+    <Flex alignItems="flex-end" mx="md" my="sm">
+      <Box flex="1" textAlign="left" color="font.highlight" fontWeight="semibold">
+        {label}
+      </Box>
+      <Box>
+        <Text fontSize="4xl">{value}</Text>
+      </Box>
+    </Flex>
   )
 }
 
@@ -170,39 +173,18 @@ export function LandingBeetsData() {
               <BeetsByTheNumbers />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
-              <Flex alignItems="flex-end" mx="md" my="sm">
-                <Box flex="1" textAlign="left" color="font.highlight" fontWeight="semibold">
-                  TVL
-                </Box>
-                <Box>
-                  <Text fontSize="4xl">$165.56m</Text>
-                </Box>
-              </Flex>
+              <GlobalStatsCard label="TVL" value="$165.56m" />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
-              <Flex alignItems="flex-end" mx="md" my="sm">
-                <Box flex="1" textAlign="left" color="font.highlight" fontWeight="semibold">
-                  24 VOL
-                </Box>
-                <Box>
-                  <Text fontSize="4xl">$80.12m</Text>
-                </Box>
-              </Flex>
+              <GlobalStatsCard label="24 VOL" value="$80.12m" />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
-              <Flex alignItems="flex-end" mx="md" my="sm">
-                <Box flex="1" textAlign="left" color="font.highlight" fontWeight="semibold">
-                  24h FEES
-                </Box>
-                <Box>
-                  <Text fontSize="4xl">$72.5k</Text>
-                </Box>
-              </Flex>
+              <GlobalStatsCard label="24h FEES" value="$72.5k" />
             </GridItem>
           </Grid>
         </Box>
         <Grid gap="none" templateColumns={{ base: '1fr', lg: 'repeat(3, 1fr)' }} w="full">
-          <GridItem bg="rgba(255, 255, 255, 0.05)" minH="500px">
+          <GridItem bg="rgba(255, 255, 255, 0.05)">
             <ChainDataCard chain="SONIC" networkColor="orange" />
           </GridItem>
           <GridItem bg="rgba(0, 0, 0, 0.05)">
