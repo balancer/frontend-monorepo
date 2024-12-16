@@ -27,6 +27,7 @@ query GetTokens($chains: [GqlChain!]!) {
     priority
     tradable
     isErc4626
+    isBufferAllowed
     coingeckoId
   }
 }

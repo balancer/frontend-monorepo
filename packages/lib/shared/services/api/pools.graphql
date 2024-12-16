@@ -24,6 +24,7 @@ query GetPools(
     tags
     hasErc4626
     hasNestedErc4626
+    hasAnyAllowedBuffer
     displayTokens {
       id
       address

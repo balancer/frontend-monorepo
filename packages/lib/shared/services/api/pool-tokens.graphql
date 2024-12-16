@@ -6,6 +6,7 @@ fragment UnderlyingToken on GqlToken {
   decimals
   name
   symbol
+  isBufferAllowed
 }
 
 fragment Erc4626ReviewData on Erc4626ReviewData {
@@ -59,6 +60,7 @@ fragment PoolTokens on GqlPoolTokenDetail {
       symbol
       weight
       isErc4626
+      isBufferAllowed
       underlyingToken {
         ...UnderlyingToken
       }
@@ -71,6 +73,7 @@ fragment PoolTokens on GqlPoolTokenDetail {
     }
   }
   isErc4626
+  isBufferAllowed
   underlyingToken {
     ...UnderlyingToken
   }
