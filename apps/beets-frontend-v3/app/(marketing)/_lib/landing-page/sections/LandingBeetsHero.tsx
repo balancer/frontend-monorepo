@@ -1,9 +1,9 @@
 import { Center, Heading, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 
-export function Hero() {
+export function LandingBeetsHero() {
   return (
-    <Center py="200px" textAlign="center">
+    <Center pt="200px" pb="100px" textAlign="center">
       <VStack>
         <Heading fontSize="5xl">DeFine your financial future</Heading>
         <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl">

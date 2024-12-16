@@ -1,6 +1,6 @@
 import React from 'react'
-import { Hero } from './sections/Hero'
-import { Data } from './sections/Data'
+import { LandingBeetsHero } from './sections/LandingBeetsHero'
+import { LandingBeetsData } from './sections/LandingBeetsData'
 import { Token } from './sections/Token'
 import { LandingBeetsSocialClub } from './sections/LandingBeetsSocialClub'
 import { LandingMaBeetsSection } from './sections/LandingMaBeetsSection'
@@ -9,12 +9,12 @@ import { LandingBeetsStakedSonic } from './sections/LandingBeetsStakedSonic'
 export function LandingPageLayout() {
   return (
     <>
-      <Hero />
-      <Data />
-      <Token />
+      <LandingBeetsHero />
+      <LandingBeetsData />
+      <LandingBeetsStakedSonic />
       <LandingBeetsSocialClub />
       <LandingMaBeetsSection />
-      <LandingBeetsStakedSonic />
+      <Token />
     </>
   )
 }

@@ -23,7 +23,7 @@ export function Token() {
 
   return (
     <>
-      <Center py="200px" textAlign="center">
+      <Center textAlign="center" mb="xl">
         <VStack>
           <Heading fontSize="5xl">The $BEETS token</Heading>
           <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl">

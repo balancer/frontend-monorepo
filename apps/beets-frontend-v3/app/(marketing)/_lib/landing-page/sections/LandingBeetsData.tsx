@@ -4,6 +4,7 @@ import React from 'react'
 import {
   Box,
   BoxProps,
+  Flex,
   Grid,
   GridItem,
   HStack,
@@ -15,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-
+import { BeetsByTheNumbers } from '../components/BeetsByTheNumbers'
 const TOTAL_TVL = 144_000_000
 
 type NetworkStats = {
@@ -149,20 +150,56 @@ export function ChainDataCard({
   )
 }
 
-export function Data() {
+export function LandingBeetsData() {
   return (
     <DefaultPageContainer noVerticalPadding py="3xl">
       <VStack spacing="lg">
-        <Box
-          alignItems="center"
-          bg="rgba(0, 0, 0, 0.1)"
-          display="flex"
-          h="80px"
-          justifyContent="center"
-          textAlign="center"
-          w="full"
-        >
-          <Text>Aggregate data...</Text>
+        <Box bg="rgba(0, 0, 0, 0.1)" display="flex" w="full">
+          <Grid
+            gap="sm"
+            templateColumns={{
+              base: '1fr',
+              lg: '1fr',
+              xl: '1.25fr 1fr 1fr 1fr',
+            }}
+            w="full"
+            px="lg"
+            py="lg"
+          >
+            <GridItem display="flex" alignItems="center">
+              <BeetsByTheNumbers />
+            </GridItem>
+            <GridItem bg="rgba(0, 0, 0, 0.2)">
+              <Flex alignItems="flex-end" mx="md" my="sm">
+                <Box flex="1" textAlign="left" color="font.highlight" fontWeight="semibold">
+                  TVL
+                </Box>
+                <Box>
+                  <Text fontSize="4xl">$165.56m</Text>
+                </Box>
+              </Flex>
+            </GridItem>
+            <GridItem bg="rgba(0, 0, 0, 0.2)">
+              <Flex alignItems="flex-end" mx="md" my="sm">
+                <Box flex="1" textAlign="left" color="font.highlight" fontWeight="semibold">
+                  24 VOL
+                </Box>
+                <Box>
+                  <Text fontSize="4xl">$80.12m</Text>
+                </Box>
+              </Flex>
+            </GridItem>
+            <GridItem bg="rgba(0, 0, 0, 0.2)">
+              <Flex alignItems="flex-end" mx="md" my="sm">
+                <Box flex="1" textAlign="left" color="font.highlight" fontWeight="semibold">
+                  24h FEES
+                </Box>
+                <Box>
+                  <Text fontSize="4xl">$72.5k</Text>
+                </Box>
+              </Flex>
+            </GridItem>
+          </Grid>
         </Box>
         <Grid gap="none" templateColumns={{ base: '1fr', lg: 'repeat(3, 1fr)' }} w="full">
           <GridItem bg="rgba(255, 255, 255, 0.05)" minH="500px">
