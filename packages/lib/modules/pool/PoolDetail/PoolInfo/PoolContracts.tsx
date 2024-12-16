@@ -166,10 +166,10 @@ export function PoolContracts({ ...props }: CardProps) {
     // Avoid showing tokenized vaults when no token has isBufferAllowed
     if (isV3Pool(pool) && !pool.hasAnyAllowedBuffer) return []
 
-    const erc4626Tokens = pool.poolTokens.filter(token => token.isErc4626 && token.hasBufferAllowed)
+    const erc4626Tokens = pool.poolTokens.filter(token => token.isErc4626 && token.isBufferAllowed)
     const erc4626NestedTokens = pool.poolTokens.flatMap(token =>
       token.nestedPool
-        ? token.nestedPool.tokens.filter(token => token.isErc4626 && token.hasBufferAllowed)
+        ? token.nestedPool.tokens.filter(token => token.isErc4626 && token.isBufferAllowed)
         : []
     )
     return [...(erc4626Tokens ? erc4626Tokens : []), ...erc4626NestedTokens]

@@ -110,6 +110,7 @@ export const notAllowedPoolMock: Pool = {
       nestedPool: null,
       __typename: 'GqlPoolTokenDetail',
       isErc4626: false,
+      isBufferAllowed: false,
       underlyingToken: null,
     },
     {
@@ -130,6 +131,7 @@ export const notAllowedPoolMock: Pool = {
       nestedPool: null,
       __typename: 'GqlPoolTokenDetail',
       isErc4626: false,
+      isBufferAllowed: false,
       underlyingToken: null,
     },
   ],
