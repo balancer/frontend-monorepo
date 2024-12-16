@@ -44,6 +44,8 @@ export function TokenSelectListRow({
     px: 'md',
     cursor: isCurrentToken ? 'not-allowed' : 'pointer',
     opacity: isCurrentToken ? 0.5 : 1,
+    rounded: 'md',
+    mb: 'sm',
     _hover: isCurrentToken
       ? {}
       : {
