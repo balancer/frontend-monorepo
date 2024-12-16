@@ -44,11 +44,13 @@ export function LandingBeetsSecuritySection() {
     >
       <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
         <Grid
-          gap="lg"
+          gap="2xl"
           templateColumns={{
             base: '1fr',
             lg: '1fr 1fr 1fr',
           }}
+          bg="rgba(0, 0, 0, 0.2)"
+          p="lg"
         >
           <Card
             title={
