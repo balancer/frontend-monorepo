@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Center, Heading, HStack, Text, VStack } from '@chakra-ui/react'
+import { Box, Center, Grid, GridItem, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { LandingSectionContainer } from '../components/LandingSectionContainer'
 import { MaBeetsAddLiquiditySvg } from '../components/MaBeetsAddLiquiditySvg'
@@ -33,6 +33,36 @@ function FeatureCard({
   )
 }
 
+function HowItWorksCard({
+  title,
+  description,
+  image,
+}: {
+  title: string
+  description: string
+  image: React.ReactNode
+}) {
+  return (
+    <GridItem
+      p={{ base: 'lg', lg: 'none' }}
+      bg={{ base: 'rgba(0, 0, 0, 0.2)', lg: 'none' }}
+      display={{ base: 'flex', lg: 'block' }}
+      flexDirection="column"
+      alignItems="center"
+    >
+      <Box height="100px" mb="lg">
+        {image}
+      </Box>
+      <Heading fontSize="xl" mb="md">
+        {title}
+      </Heading>
+      <Text fontWeight="thin" fontSize="lg">
+        {description}
+      </Text>
+    </GridItem>
+  )
+}
+
 export function LandingMaBeetsSection() {
   return (
     <LandingSectionContainer
@@ -46,62 +76,57 @@ export function LandingMaBeetsSection() {
       }}
     >
       <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
-        <Box display="flex" mb="xl">
-          <Box flex={1} mr="md">
+        <Grid
+          gap="xl"
+          templateColumns={{
+            base: '1fr',
+            lg: '1fr 1fr',
+          }}
+          mb="xl"
+        >
+          <GridItem>
             <FeatureCard
               title="Maturity vs Locking"
               description="Your voting power grows with time, rewarding commitment and active participation, not lock-ups."
               image={<MaBeetsMaturityVsLockingSvg />}
             />
-          </Box>
-          <Box flex={1} ml="md">
+          </GridItem>
+          <GridItem>
             <FeatureCard
               title="Fairer Rewards"
               description="Earn based on both the size and maturity of your position, aligning long-term contributors with the protocol’s success. "
               image={<MaBeetsFairerRewardsSvg />}
             />
-          </Box>
-        </Box>
+          </GridItem>
+        </Grid>
         <Box mb="lg">
           <Center>
             <Heading fontSize="3xl">How it works</Heading>
           </Center>
         </Box>
-        <Box display="flex">
-          <Box flex="1">
-            <Box height="100px" mb="lg">
-              <MaBeetsAddLiquiditySvg />
-            </Box>
-            <Heading fontSize="xl" mb="md">
-              Add Liquidity
-            </Heading>
-            <Text fontWeight="thin" fontSize="lg">
-              Join the Fresh Beets Pool (80/20 BEETS/stS) to receive fBEETS.
-            </Text>
-          </Box>
-          <Box flex="1" mx="lg">
-            <Box height="100px" mb="lg">
-              <MaBeetsMintMabeetsSvg />
-            </Box>
-            <Heading fontSize="xl" mb="md">
-              Mint maBEETS
-            </Heading>
-            <Text fontWeight="thin" fontSize="lg">
-              Deposit your fBEETS to create a maBEETS position tied to a Relic NFT.
-            </Text>
-          </Box>
-          <Box flex="1">
-            <Box height="100px" mb="lg">
-              <MaBeetsGrowEarnSvg />
-            </Box>
-            <Heading fontSize="xl" mb="md">
-              Grow & Earn
-            </Heading>
-            <Text fontWeight="thin" fontSize="lg">
-              As your position matures, enjoy increasing rewards and voting power.
-            </Text>
-          </Box>
-        </Box>
+        <Grid
+          gap="lg"
+          templateColumns={{
+            base: '1fr',
+            lg: '1fr 1fr 1fr',
+          }}
+        >
+          <HowItWorksCard
+            title="Add Liquidity"
+            description="Join the Fresh Beets Pool (80/20 BEETS/stS) to receive fBEETS."
+            image={<MaBeetsAddLiquiditySvg />}
+          />
+          <HowItWorksCard
+            title="Mint maBEETS"
+            description="Deposit your fBEETS to create a maBEETS position tied to a Relic NFT."
+            image={<MaBeetsMintMabeetsSvg />}
+          />
+          <HowItWorksCard
+            title="Grow & Earn"
+            description="As your position matures, enjoy increasing rewards and voting power."
+            image={<MaBeetsGrowEarnSvg />}
+          />
+        </Grid>
       </Box>
     </LandingSectionContainer>
   )

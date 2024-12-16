@@ -1,15 +1,13 @@
 'use client'
 
 import { useNavData } from '@/lib/components/navs/useNavData'
-import { Box, Button, Center, HStack, IconButton, Link, Text } from '@chakra-ui/react'
+import { Box, Center, HStack, IconButton, Link, Text } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { DiscordIcon } from '@repo/lib/shared/components/icons/social/DiscordIcon'
-import { AppLink, useNav } from '@repo/lib/shared/components/navs/useNav'
-import NextLink from 'next/link'
+import { AppLink } from '@repo/lib/shared/components/navs/useNav'
 
 function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
   return (
-    <HStack spacing="lg" w={{ base: 'full', lg: 'auto' }}>
+    <HStack spacing="lg">
       {socialLinks.map(({ href, icon }) => (
         <IconButton
           aria-label="Social icon"

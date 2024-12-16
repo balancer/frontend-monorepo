@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Heading, Text } from '@chakra-ui/react'
+import { Box, Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react'
 import React from 'react'
 import { LandingSectionContainer } from '../components/LandingSectionContainer'
 import { SecurityAuditsSvg } from '../components/SecurityAuditsSvg'
@@ -17,7 +17,7 @@ function Card({
   image: React.ReactNode
 }) {
   return (
-    <Box flex="1" mx="lg">
+    <GridItem mb={{ base: 'lg', lg: 'none' }}>
       <Flex mb="md">
         <Box flex="1">
           <Heading fontSize="2xl">{title}</Heading>
@@ -27,7 +27,7 @@ function Card({
       <Text fontSize="lg" fontWeight="thin">
         {description}
       </Text>
-    </Box>
+    </GridItem>
   )
 }
 
@@ -43,7 +43,13 @@ export function LandingBeetsSecuritySection() {
       }}
     >
       <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
-        <Flex bg="rgba(0, 0, 0, 0.2)" py="lg">
+        <Grid
+          gap="lg"
+          templateColumns={{
+            base: '1fr',
+            lg: '1fr 1fr 1fr',
+          }}
+        >
           <Card
             title={
               <>
@@ -77,7 +83,7 @@ export function LandingBeetsSecuritySection() {
             description="Ongoing security assessments ensure the integrity of the beets ecosystem."
             image={<SecurityMonitoringSvg />}
           />
-        </Flex>
+        </Grid>
       </Box>
     </LandingSectionContainer>
   )

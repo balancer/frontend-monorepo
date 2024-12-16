@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Flex, Heading, Text } from '@chakra-ui/react'
+import { Box, Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react'
 import { LandingSectionContainer } from '../components/LandingSectionContainer'
 import { StakedSonicComposabilitySvg } from '../components/StakedSonicComposabilitySvg'
 import { StakedSonicDecentralizationSvg } from '../components/StakedSonicDecentralizationSvg'
@@ -21,15 +21,21 @@ export function LandingBeetsStakedSonic() {
         bg="rgba(255, 255, 255, 0.05)"
         p="xl"
         w="full"
-        backgroundImage="url(/images/misc/staking-bg.png)"
+        backgroundImage={{ base: 'none', lg: 'url(/images/misc/staking-bg.png)' }}
         backgroundPosition="left bottom"
         backgroundSize="50%"
         backgroundRepeat="no-repeat"
       >
-        <Flex>
-          <Box flex="1" mr="2xl">
+        <Grid
+          gap="sm"
+          templateColumns={{
+            base: '1fr',
+            lg: '1fr 1fr',
+          }}
+        >
+          <GridItem>
             <Box mb="xl">
-              <Heading fontSize="3xl">Sonic’s Leading LST</Heading>
+              <Heading fontSize="3xl">Sonic's Leading LST</Heading>
               <Text fontSize="lg" fontWeight="thin">
                 stS redefines Liquid Staking by combining deep liquidity, robust security, and
                 competitive yield into one powerful position. Purpose-built for Sonic, stS delivers
@@ -37,15 +43,15 @@ export function LandingBeetsStakedSonic() {
                 flexibility.
               </Text>
             </Box>
-            <Box>
+            <Box mb="xl">
               <Heading fontSize="3xl">Earn Network Rewards</Heading>
               <Text fontSize="lg" fontWeight="thin">
                 Convert S to stS and earn continuous staking yields - while keeping your capital
                 fully liquid.
               </Text>
             </Box>
-          </Box>
-          <Box flex="1">
+          </GridItem>
+          <GridItem>
             <Flex mb="xl" alignItems="center">
               <Box width="170px" height="170px" bg="rgba(255, 255, 255, 0.05)">
                 <StakedSonicDecentralizationSvg />
@@ -82,8 +88,8 @@ export function LandingBeetsStakedSonic() {
                 </Text>
               </Box>
             </Flex>
-          </Box>
-        </Flex>
+          </GridItem>
+        </Grid>
       </Box>
     </LandingSectionContainer>
   )

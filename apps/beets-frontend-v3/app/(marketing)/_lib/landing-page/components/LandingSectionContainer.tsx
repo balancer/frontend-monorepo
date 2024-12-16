@@ -19,10 +19,12 @@ export function LandingSectionContainer({
 }) {
   return (
     <>
-      <Center textAlign="center" pb="2xl">
+      <Center textAlign="center" pb="2xl" width="full">
         <VStack>
-          <Heading fontSize="5xl">{title}</Heading>
-          <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl">
+          <Heading fontSize="5xl" maxW="full">
+            {title}
+          </Heading>
+          <Text fontSize="2xl" fontWeight="thin" maxW="full" w={{ base: 'full', lg: '2xl' }}>
             {subtitle}
           </Text>
         </VStack>
