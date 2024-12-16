@@ -49,6 +49,7 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
   [GqlChain.Polygon]: ChainSlug.Polygon,
   [GqlChain.Avalanche]: ChainSlug.Avalanche,
   [GqlChain.Fantom]: ChainSlug.Fantom,
+  [GqlChain.Sonic]: ChainSlug.Fantom, //TODO: groninge will fix it in another PR
   [GqlChain.Base]: ChainSlug.Base,
   [GqlChain.Optimism]: ChainSlug.Optimisim,
   [GqlChain.Zkevm]: ChainSlug.Zkevm,
