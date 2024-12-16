@@ -566,8 +566,16 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     token.nestedPool ? extractNestedUnderlyingTokens(token.nestedPool as GqlNestedPool) : []
   )
 
+  const isTopLevelToken = (token: PoolToken): boolean => {
+    if (token.hasNestedPool) return false
+    if (!isV3Pool(pool)) return true
+    if (!token.isErc4626) return true
+    if (token.isErc4626 && !token.isBufferAllowed) return true
+    return true
+  }
+
   const standardTopLevelTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
-    !token.hasNestedPool && (!isV3Pool(pool) || !token.isErc4626) ? token : []
+    isTopLevelToken(token) ? token : []
   )
 
   const allTokens = underlyingTokens.concat(
