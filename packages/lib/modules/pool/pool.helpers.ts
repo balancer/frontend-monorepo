@@ -278,11 +278,16 @@ export function hasHooks(pool: Pool): boolean {
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
 }
 
+// Emergency flag to block adds for all V3 pools
+const shouldBlockV3PoolAdds = false
+
 /**
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
 export function shouldBlockAddLiquidity(pool: Pool) {
+  if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
+
   // avoid blocking Sepolia pools
   if (pool.chain === GqlChain.Sepolia) return false
 
@@ -327,6 +332,8 @@ export function shouldBlockAddLiquidity(pool: Pool) {
  */
 export function getPoolAddBlockedReason(pool: Pool): string {
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
+
+  if (isV3Pool(pool) && shouldBlockV3PoolAdds) return 'Adds are blocked for all V3 pools'
 
   if (isLBP(pool.type)) return 'LBP pool'
   if (pool.dynamicData.isPaused) return 'Paused pool'
