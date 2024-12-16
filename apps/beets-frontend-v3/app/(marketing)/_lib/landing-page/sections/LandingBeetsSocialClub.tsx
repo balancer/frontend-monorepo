@@ -1,29 +1,40 @@
 'use client'
 
-import React from 'react'
-import {
-  Box,
-  Button,
-  Center,
-  Grid,
-  GridItem,
-  Heading,
-  HStack,
-  Link,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
+import { useNavData } from '@/lib/components/navs/useNavData'
+import { Box, Button, Center, HStack, IconButton, Link, Text } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { LudwigSocial1 } from '../components/LudwigSocial1'
-import { LudwigSocial2 } from '../components/LudwigSocial2'
-import { LudwigSocial3 } from '../components/LudwigSocial3'
-import { LudwigSocial4 } from '../components/LudwigSocial4'
-import { LudwigSocial5 } from '../components/LudwigSocial5'
 import { DiscordIcon } from '@repo/lib/shared/components/icons/social/DiscordIcon'
+import { AppLink, useNav } from '@repo/lib/shared/components/navs/useNav'
 import NextLink from 'next/link'
-import Image from 'next/image'
+
+function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
+  return (
+    <HStack spacing="lg" w={{ base: 'full', lg: 'auto' }}>
+      {socialLinks.map(({ href, icon }) => (
+        <IconButton
+          aria-label="Social icon"
+          as={Link}
+          bg="background.level2"
+          h="72px"
+          href={href}
+          isExternal
+          isRound
+          key={href}
+          rounded="full"
+          variant="tertiary"
+          w="72px"
+        >
+          {icon}
+        </IconButton>
+      ))}
+    </HStack>
+  )
+}
 
 export function LandingBeetsSocialClub() {
+  const { getSocialLinks } = useNavData()
+  const socialLinks = getSocialLinks(36)
+
   return (
     <>
       <DefaultPageContainer noVerticalPadding pb="3xl">
@@ -33,29 +44,17 @@ export function LandingBeetsSocialClub() {
           backgroundSize="auto 100%"
           backgroundRepeat="no-repeat"
           backgroundPosition="center"
-          mb="xl"
+          mb="2xl"
         />
-        <Center mb="lg">
+        <Center mb="2xl">
           <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl" textAlign="center">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices
-            dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo. Ut porttitor posuere
-            feugiat. Vivamus ut velit sed lacus pretium porta. Mauris nec dui vel tellus tempor.
+            Join our vibrant community of DeFi enthusiasts, builders, and visionaries. Share
+            insights, collaborate on projects, and help shape the BEETS ecosystem together. Connect,
+            learn, and grow with us.
           </Text>
         </Center>
-        <Center mb="lg">
-          <DiscordIcon size={80} />
-        </Center>
-
         <Center>
-          <Button
-            as={NextLink}
-            href="https://beets.fi/discord"
-            size="lg"
-            variant="primary"
-            target="_blank"
-          >
-            beets.fi/discord
-          </Button>
+          <SocialLinks socialLinks={socialLinks} />
         </Center>
       </DefaultPageContainer>
     </>
