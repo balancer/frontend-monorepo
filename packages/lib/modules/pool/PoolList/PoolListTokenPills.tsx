@@ -190,11 +190,13 @@ export function PoolListTokenPills({
     token => token.address !== pool.address
   ) as GqlPoolTokenDetail[]
 
-  if (isV3Pool(pool) && pool.hasErc4626 && !pool.hasNestedErc4626) {
-    // TODO: Move this into a general 'displayTokens' helper function.
+  // if (isV3Pool(pool) && pool.hasErc4626 && pool.hasAnyAllowedBuffer) {
+  // TODO: Move this into a general 'displayTokens' helper function.
+  if (isV3Pool(pool) && pool.hasErc4626 && pool.hasAnyAllowedBuffer) {
     poolTokens = poolTokens.map(token =>
-      token.underlyingToken
-        ? ({ ...token, ...token.underlyingToken } as unknown as GqlPoolTokenDetail)
+      !token?.underlyingToken?.isBufferAllowed
+        ? // && token.address !== '0xc824a08db624942c5e5f330d56530cd1598859fd' // uncomment to debug until when api is synced
+          ({ ...token, ...token.underlyingToken } as unknown as GqlPoolTokenDetail)
         : token
     )
   }
