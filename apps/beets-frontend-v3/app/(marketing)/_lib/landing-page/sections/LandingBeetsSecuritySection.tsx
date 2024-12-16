@@ -37,6 +37,10 @@ export function LandingBeetsSecuritySection() {
       title="Code you can trust"
       subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices
             dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo."
+      button={{
+        text: 'Learn more',
+        href: '',
+      }}
     >
       <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
         <Flex bg="rgba(0, 0, 0, 0.2)" py="lg">

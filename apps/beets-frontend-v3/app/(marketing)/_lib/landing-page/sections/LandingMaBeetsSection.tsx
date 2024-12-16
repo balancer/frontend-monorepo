@@ -40,6 +40,10 @@ export function LandingMaBeetsSection() {
       subtitle="Shape the Future. Earn as You Grow. maBEETS unlocks maturity-adjusted voting power,
             allowing you to participate in governance decisions and earn rewards without locking
             your assets."
+      button={{
+        text: 'Get maBEETS',
+        href: '',
+      }}
     >
       <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
         <Box display="flex" mb="xl">

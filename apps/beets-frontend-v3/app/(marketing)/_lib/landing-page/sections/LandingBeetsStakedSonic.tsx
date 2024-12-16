@@ -12,6 +12,10 @@ export function LandingBeetsStakedSonic() {
       title="stS: Liquid Staking on Sonic"
       subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices
             dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo."
+      button={{
+        text: 'Stake',
+        href: '',
+      }}
     >
       <Box
         bg="rgba(255, 255, 255, 0.05)"

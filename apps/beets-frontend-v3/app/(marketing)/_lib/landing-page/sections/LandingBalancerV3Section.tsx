@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Heading, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react'
 import React from 'react'
 import { BalancerV3BoostedPoolsSvg } from '../components/BalancerV3BoostedPoolsSvg'
 import { BalancerV3CustomPoolsSvg } from '../components/BalancerV3CustomPoolsSvg'
@@ -35,6 +35,10 @@ export function LandingBalancerV3Section() {
     <LandingSectionContainer
       title="Powered by Balancer v3"
       subtitle="Revolutionizing Liquidity, Redefining DeFi"
+      button={{
+        text: 'Discover Balancer v3',
+        href: '',
+      }}
     >
       <Box bg="rgba(255, 255, 255, 0.05)" pb="xl" px="xl" w="full">
         <Box

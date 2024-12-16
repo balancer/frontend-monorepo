@@ -1,15 +1,21 @@
-import { Center, Heading, VStack, Text } from '@chakra-ui/react'
+import { Center, Heading, VStack, Text, Button, Box, Flex } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import React from 'react'
+import NextLink from 'next/link'
 
 export function LandingSectionContainer({
   children,
   title,
   subtitle,
+  button,
 }: {
   children: React.ReactNode
   title: string
   subtitle: string
+  button?: {
+    text: string
+    href: string
+  }
 }) {
   return (
     <>
@@ -21,8 +27,15 @@ export function LandingSectionContainer({
           </Text>
         </VStack>
       </Center>
-      <DefaultPageContainer noVerticalPadding pb="3xl">
+      <DefaultPageContainer noVerticalPadding>
         {children}
+        {button && (
+          <Flex justify="center" pt="2xl">
+            <Button variant="primary" as={NextLink} href={button.href} minWidth="160px">
+              {button.text}
+            </Button>
+          </Flex>
+        )}
       </DefaultPageContainer>
     </>
   )
