@@ -3,6 +3,9 @@
 import React from 'react'
 import { Box, Center, Flex, Heading, Text, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { StakedSonicDecentralizationSvg } from '../components/StakedSonicDecentralizationSvg'
+import { StakedSonicComposabilitySvg } from '../components/StakedSonicComposabilitySvg'
+import { StakedSonicStakingRewardsSvg } from '../components/StakedSonicStakingRewardsSvg'
 
 export function LandingBeetsStakedSonic() {
   return (
@@ -23,13 +26,11 @@ export function LandingBeetsStakedSonic() {
               <Box mb="2xl">
                 <Heading fontSize="3xl">Earn Network Rewards</Heading>
                 <Text fontSize="lg" fontWeight="thin">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean scelerisque
-                  vehicula diam vitae ultrices. Ut et elementum lorem. Sed et augue elit.
-                  Pellentesque sed turpis odio. Sed lacinia maximus lacus mollis aliquam. Aenean a
-                  sem lacus. In aliquam velit elit, eu semper mi euismod vitae.
+                  Convert S to stS and earn continuous staking yields - while keeping your capital
+                  fully liquid.
                 </Text>
               </Box>
-              <Box>
+              {/* <Box>
                 <Heading fontSize="3xl">Value appreciation with $S</Heading>
                 <Text fontSize="lg" fontWeight="thin">
                   In molestie imperdiet nulla, vitae vestibulum lectus tempor ac. Donec dui purus,
@@ -37,51 +38,42 @@ export function LandingBeetsStakedSonic() {
                   maximus, ac vestibulum urna porttitor. Sed iaculis bibendum libero in commodo.
                   Nulla rhoncus risus nibh.
                 </Text>
-              </Box>
+              </Box> */}
             </Box>
             <Box flex="1">
-              <Flex mb="xl">
-                <Box
-                  width="170px"
-                  height="170px"
-                  bg="rgba(255, 255, 255, 0.05)"
-                  borderRadius="lg"
-                />
+              <Flex mb="xl" alignItems="center">
+                <Box width="170px" height="170px" bg="rgba(255, 255, 255, 0.05)">
+                  <StakedSonicDecentralizationSvg />
+                </Box>
                 <Box flex="1" ml="xl">
-                  <Heading fontSize="2xl">Sonic network staking rewards</Heading>
+                  <Heading fontSize="2xl">Drive Decentralization</Heading>
                   <Text fontSize="lg" fontWeight="thin">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a
-                    ultrices dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo.
+                    Support Sonic's security by distributing consensus power, enhancing ecosystem
+                    resilience.
                   </Text>
                 </Box>
               </Flex>
-              <Flex mb="xl">
+              <Flex mb="xl" alignItems="center">
                 <Box flex="1" mr="xl">
-                  <Heading fontSize="2xl">Max DeFi interoperability</Heading>
+                  <Heading fontSize="2xl">Composability</Heading>
                   <Text fontSize="lg" fontWeight="thin">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a
-                    ultrices dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo.
+                    Use stS seamlessly across DeFi - access lending markets, liquidity pools, and
+                    more without pausing your rewards.
                   </Text>
                 </Box>
-                <Box
-                  width="170px"
-                  height="170px"
-                  bg="rgba(255, 255, 255, 0.05)"
-                  borderRadius="lg"
-                />
+                <Box width="170px" height="170px" bg="rgba(255, 255, 255, 0.05)">
+                  <StakedSonicComposabilitySvg />
+                </Box>
               </Flex>
-              <Flex>
-                <Box
-                  width="170px"
-                  height="170px"
-                  bg="rgba(255, 255, 255, 0.05)"
-                  borderRadius="lg"
-                />
+              <Flex alignItems="center">
+                <Box width="170px" height="170px" bg="rgba(255, 255, 255, 0.05)">
+                  <StakedSonicStakingRewardsSvg />
+                </Box>
                 <Box flex="1" ml="xl">
-                  <Heading fontSize="2xl">Decentralization</Heading>
+                  <Heading fontSize="2xl">Security & Trust</Heading>
                   <Text fontSize="lg" fontWeight="thin">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a
-                    ultrices dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo.
+                    Protected by audited contracts and transparent governance, stS ensures your
+                    assets remain secure and accessible.
                   </Text>
                 </Box>
               </Flex>
