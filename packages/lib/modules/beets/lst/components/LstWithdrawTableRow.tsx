@@ -14,16 +14,10 @@ interface Props extends GridProps {
 }
 
 export function LstWithdrawTableRow({ withdrawal, keyValue, token, onOpen, ...rest }: Props) {
-  const { withdrawDelay, setWithdrawWrID } = useLst()
+  const { withdrawDelay } = useLst()
 
   const requestTimestamp = Number(withdrawal.requestTimestamp) + withdrawDelay
   const now = new Date().getTime() / 1000
-
-  function onModalOpen() {
-    setWithdrawWrID(withdrawal.id)
-    console.log({ withdrawal })
-    onOpen()
-  }
 
   return (
     <FadeInOnView>
@@ -56,7 +50,7 @@ export function LstWithdrawTableRow({ withdrawal, keyValue, token, onOpen, ...re
             {/* <Tooltip label={isDisabled ? disabledReason : ''}> */}
             <Button
               isDisabled={withdrawal.isWithdrawn || now < requestTimestamp}
-              onClick={onModalOpen}
+              onClick={onOpen}
               size="xxs"
               variant="primary"
               w="full"

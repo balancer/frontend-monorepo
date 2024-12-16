@@ -39,7 +39,8 @@ export function Lst() {
   const {
     activeTab,
     setActiveTab,
-    setAmount,
+    setAmountAssets,
+    setAmountShares,
     isDisabled,
     disabledReason,
     isStakeTab,
@@ -69,7 +70,8 @@ export function Lst() {
     {
       value: '1',
       label: 'Unstake',
-      disabled: isUnstakeDisabled,
+      //      disabled: isUnstakeDisabled,
+      disabled: false, // for testing
     },
     {
       value: '2',
@@ -85,10 +87,11 @@ export function Lst() {
   useEffect(() => {
     if (isStakeTab) {
       setDisclosure(stakeModalDisclosure)
+      setAmountAssets('')
     } else if (isUnstakeTab) {
       setDisclosure(unstakeModalDisclosure)
+      setAmountShares('')
     }
-    setAmount('')
   }, [activeTab])
 
   function onModalClose() {
@@ -100,7 +103,8 @@ export function Lst() {
     unstakeTransactionSteps.resetTransactionSteps()
 
     // reset amounts
-    setAmount('')
+    setAmountAssets('')
+    setAmountShares('')
 
     // finally close the modal
     disclosure.onClose()

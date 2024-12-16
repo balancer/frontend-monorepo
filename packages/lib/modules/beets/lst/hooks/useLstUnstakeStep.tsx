@@ -16,12 +16,7 @@ import { parseUnits } from 'viem'
 import { noop } from 'lodash'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useLstUnstakeStep(
-  humanAmount: string,
-  chain: GqlChain,
-  enabled: boolean,
-  wrID: bigint | undefined
-) {
+export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled: boolean) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
 
@@ -43,9 +38,9 @@ export function useLstUnstakeStep(
     chainId: getChainId(chain),
     contractId: 'beets.lstStaking',
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
-    functionName: 'undelegate',
-    args: [wrID || 0n, parseUnits(humanAmount, 18)],
-    enabled: isConnected && !!humanAmount && enabled && !!wrID,
+    functionName: 'undelegateFromPool',
+    args: [parseUnits(sharesAmount, 18)],
+    enabled: isConnected && !!sharesAmount && enabled,
     txSimulationMeta,
   }
 

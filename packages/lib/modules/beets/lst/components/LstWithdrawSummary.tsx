@@ -11,8 +11,7 @@ export function LstWithdrawSummary({
   receivedToken,
 }: LstWithdrawReceiptResult) {
   const { isMobile } = useBreakpoints()
-
-  const { chain, withdrawTransactionSteps, lstWithdrawTxHash, nativeAsset, amount } = useLst()
+  const { chain, withdrawTransactionSteps, lstWithdrawTxHash, nativeAsset } = useLst()
 
   const shouldShowReceipt = !!lstWithdrawTxHash && !isLoadingReceipt && !!receivedToken
   const isLoading = isLoadingReceipt
@@ -26,7 +25,7 @@ export function LstWithdrawSummary({
           isLoading={isLoading}
           label={shouldShowReceipt ? 'You withdrew' : 'You withdraw'}
           tokenAddress={nativeAsset?.address || ''}
-          tokenAmount={amount}
+          tokenAmount="0"
         />
       </Card>
     </AnimateHeightChange>

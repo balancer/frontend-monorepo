@@ -14,11 +14,11 @@ export function LstStakeSummary({
 }: LstStakeReceiptResult) {
   const { isMobile } = useBreakpoints()
 
-  const { chain, stakeTransactionSteps, lstStakeTxHash, nativeAsset, stakedAsset, amount } =
+  const { chain, stakeTransactionSteps, lstStakeTxHash, nativeAsset, stakedAsset, amountAssets } =
     useLst()
 
   const { sharesAmount, isLoading: isLoadingSharesAmount } = useGetConvertToShares(
-    parseUnits(amount, 18),
+    parseUnits(amountAssets, 18),
     chain
   )
 
@@ -33,7 +33,7 @@ export function LstStakeSummary({
           isLoading={isLoadingSharesAmount}
           label={shouldShowReceipt ? 'You staked' : 'You stake'}
           tokenAddress={nativeAsset?.address || ''}
-          tokenAmount={amount}
+          tokenAmount={amountAssets}
         />
       </Card>
       <Card variant="modalSubSection">

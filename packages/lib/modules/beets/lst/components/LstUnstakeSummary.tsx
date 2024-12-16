@@ -4,9 +4,9 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useLst } from '../LstProvider'
 import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
-import { useGetRate } from '../hooks/useGetRate'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { LstTokenRow } from './LstTokenRow'
+import { useGetConvertToAssets } from '../hooks/useGetConvertToAssets'
+import { formatUnits, parseUnits } from 'viem'
 
 export function LstUnstakeSummary({
   isLoading: isLoadingReceipt,
@@ -14,14 +14,16 @@ export function LstUnstakeSummary({
 }: LstStakeReceiptResult) {
   const { isMobile } = useBreakpoints()
 
-  const { chain, stakeTransactionSteps, lstUnstakeTxHash, nativeAsset, stakedAsset, amount } =
+  const { chain, stakeTransactionSteps, lstUnstakeTxHash, nativeAsset, stakedAsset, amountShares } =
     useLst()
 
-  const { rate, isLoading: isLoadingRate } = useGetRate(chain)
+  const { assetsAmount, isLoading: isLoadingAssets } = useGetConvertToAssets(
+    parseUnits(amountShares, 18),
+    chain
+  )
 
-  const estimatedAmount = bn(amount).times(rate).toString() // TODO: maybe get this from the wrID after the tx is confirmed
   const shouldShowReceipt = !!lstUnstakeTxHash && !isLoadingReceipt && !!receivedToken
-  const isLoading = isLoadingReceipt || isLoadingRate
+  const isLoading = isLoadingReceipt || isLoadingAssets
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
@@ -32,7 +34,7 @@ export function LstUnstakeSummary({
           isLoading={isLoading}
           label={shouldShowReceipt ? 'You unstaked' : 'You unstake'}
           tokenAddress={stakedAsset?.address || ''}
-          tokenAmount={amount}
+          tokenAmount={amountShares}
         />
       </Card>
       <Card variant="modalSubSection">
@@ -41,7 +43,7 @@ export function LstUnstakeSummary({
           isLoading={isLoading}
           label="You will receive (estimated)"
           tokenAddress={nativeAsset?.address || ''}
-          tokenAmount={fNum('token', estimatedAmount)}
+          tokenAmount={formatUnits(assetsAmount, 18)}
         />
       </Card>
     </AnimateHeightChange>

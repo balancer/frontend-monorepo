@@ -21,8 +21,8 @@ const CHAIN = GqlChain.Sonic
 
 export function _useLst() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
-  const [amount, setAmount] = useState('')
-  const [wrID, setWrID] = useState<bigint>()
+  const [amountAssets, setAmountAssets] = useState('')
+  const [amountShares, setAmountShares] = useState('')
   const [first, setFirst] = useState(5)
   const [skip, setSkip] = useState(0)
   const [withdrawWrID, setWithdrawWrID] = useState<string>('')
@@ -46,18 +46,18 @@ export function _useLst() {
   const nativeAsset = getToken(sonicNetworkConfig.tokens.nativeAsset.address, CHAIN)
   const stakedAsset = getToken(sonicNetworkConfig.tokens.stakedAsset?.address || '', CHAIN)
 
-  const { step: stakeStep } = useLstStakeStep(amount, CHAIN, isStakeTab)
+  const { step: stakeStep } = useLstStakeStep(amountAssets, CHAIN, isStakeTab)
   const stakeTransactionSteps = useTransactionSteps([stakeStep], false)
   const lstStakeTxHash = stakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstStakeTxConfirmed = stakeTransactionSteps.lastTransactionConfirmed
 
-  const { step: unstakeStep } = useLstUnstakeStep(amount, CHAIN, isUnstakeTab, wrID)
+  const { step: unstakeStep } = useLstUnstakeStep(amountShares, CHAIN, isUnstakeTab)
   const unstakeTransactionSteps = useTransactionSteps([unstakeStep], false)
   const lstUnstakeTxHash = unstakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstUnstakeTxConfirmed = unstakeTransactionSteps.lastTransactionConfirmed
 
   const { step: withdrawStep } = useLstWithdrawStep(
-    amount,
+    amountAssets,
     CHAIN,
     isWithdrawTab,
     BigInt(withdrawWrID)
@@ -68,8 +68,11 @@ export function _useLst() {
 
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
-    [isStakeTab && (!amount || bn(amount).lt(0.01)), 'Minimum amount to stake is 0.01'],
-    [isUnstakeTab && (!amount || bn(amount).lte(0)), 'Please enter an amount to unstake'],
+    [isStakeTab && (!amountAssets || bn(amountAssets).lt(0.01)), 'Minimum amount to stake is 0.01'],
+    [
+      isUnstakeTab && (!amountShares || bn(amountShares).lte(0)),
+      'Please enter an amount to unstake',
+    ],
   ]
 
   const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
@@ -78,8 +81,10 @@ export function _useLst() {
     activeTab,
     setActiveTab,
     stakeTransactionSteps,
-    amount,
-    setAmount,
+    amountAssets,
+    setAmountAssets,
+    amountShares,
+    setAmountShares,
     chain: CHAIN,
     lstStakeTxHash,
     lstStakeTxConfirmed,
@@ -93,8 +98,6 @@ export function _useLst() {
     isStakeTab,
     isUnstakeTab,
     isWithdrawTab,
-    wrID,
-    setWrID,
     withdrawDelay: 0, // TODO: get from onchain
     pagination,
     setPagination,

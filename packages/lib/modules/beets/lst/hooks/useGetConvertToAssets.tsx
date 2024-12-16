@@ -25,6 +25,6 @@ export function useGetConvertToAssets(sharesAmount: bigint, chain: GqlChain) {
 
   return {
     ...query,
-    assetAmount: query.data ?? 0n,
+    assetsAmount: query.data ?? 0n,
   }
 }
