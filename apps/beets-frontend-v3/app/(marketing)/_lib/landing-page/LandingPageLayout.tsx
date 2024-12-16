@@ -6,25 +6,27 @@ import { LandingMaBeetsSection } from './sections/LandingMaBeetsSection'
 import { LandingBalancerV3Section } from './sections/LandingBalancerV3Section'
 import { LandingBeetsSecuritySection } from './sections/LandingBeetsSecuritySection'
 import { Box } from '@chakra-ui/react'
+import { BeetsLandingHeroImg } from './components/BeetsLandingHeroImg'
 
 export function LandingPageLayout() {
   return (
-    <>
+    <Box position="relative">
+      <BeetsLandingHeroImg />
       <LandingBeetsHero />
       <LandingBeetsData />
-      <Box pb="3xl" mb="2xl" mt="2xl">
+      <Box mb="2xl" mt="2xl" pb="3xl">
         <LandingBeetsStakedSonic />
       </Box>
-      <Box pb="3xl" mb="2xl">
+      <Box mb="2xl" pb="3xl">
         <LandingBalancerV3Section />
       </Box>
-      <Box pb="3xl" mb="2xl">
+      <Box mb="2xl" pb="3xl">
         <LandingMaBeetsSection />
       </Box>
-      <Box pb="3xl" mb="2xl">
+      <Box mb="2xl" pb="3xl">
         <LandingBeetsSecuritySection />
       </Box>
       <LandingBeetsSocialClub />
-    </>
+    </Box>
   )
 }

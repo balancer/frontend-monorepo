@@ -88,7 +88,7 @@ function ChainStats({ chain }: { chain: MockGqlChain }) {
   const { toCurrency } = useCurrency()
 
   return (
-    <Box bg="rgba(0, 0, 0, 0.2)" p="lg" w="full" height="360px" display="flex" flexDir="column">
+    <Box bg="rgba(0, 0, 0, 0.2)" display="flex" flexDir="column" height="360px" p="lg" w="full">
       <HStack justify="space-between" mb="sm" w="full">
         <Text fontSize="2xl">TVL</Text>
         <Text fontSize="2xl">{toCurrency(tvl)}</Text>
@@ -143,7 +143,7 @@ function ChainDataCard({ chain, networkColor }: { chain: MockGqlChain; networkCo
 function GlobalStatsCard({ label, value }: { label: string; value: string }) {
   return (
     <Flex alignItems="flex-end" mx="md" my="sm">
-      <Box flex="1" textAlign="left" color="font.highlight" fontWeight="semibold">
+      <Box color="font.highlight" flex="1" fontWeight="semibold" textAlign="left">
         {label}
       </Box>
       <Box>
@@ -155,21 +155,21 @@ function GlobalStatsCard({ label, value }: { label: string; value: string }) {
 
 export function LandingBeetsData() {
   return (
-    <DefaultPageContainer noVerticalPadding py="3xl">
+    <DefaultPageContainer noVerticalPadding position="relative" py="3xl">
       <VStack spacing="lg">
         <Box bg="rgba(0, 0, 0, 0.1)" display="flex" w="full">
           <Grid
             gap="sm"
+            px="lg"
+            py="lg"
             templateColumns={{
               base: '1fr',
               lg: '1fr',
               xl: '1.25fr 1fr 1fr 1fr',
             }}
             w="full"
-            px="lg"
-            py="lg"
           >
-            <GridItem display="flex" alignItems="center">
+            <GridItem alignItems="center" display="flex">
               <BeetsByTheNumbers />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
