@@ -68,7 +68,7 @@ export function isFx(poolType: GqlPoolType | string): boolean {
 }
 
 export function isBoosted(pool: PoolListItem | Pool) {
-  return isV3Pool(pool) && (pool.hasErc4626 || pool.hasNestedErc4626)
+  return isV3Pool(pool) && pool.hasAnyAllowedBuffer // this means that the pool has at least one ERC4626 token with allowed buffer
 }
 
 export function isGyro(poolType: GqlPoolType) {
@@ -566,8 +566,16 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     token.nestedPool ? extractNestedUnderlyingTokens(token.nestedPool as GqlNestedPool) : []
   )
 
+  const isTopLevelToken = (token: PoolToken): boolean => {
+    if (token.hasNestedPool) return false
+    if (!isV3Pool(pool)) return true
+    if (!token.isErc4626) return true
+    if (token.isErc4626 && !token.isBufferAllowed) return true
+    return true
+  }
+
   const standardTopLevelTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
-    !token.hasNestedPool && (!isV3Pool(pool) || !token.isErc4626) ? token : []
+    isTopLevelToken(token) ? token : []
   )
 
   const allTokens = underlyingTokens.concat(
@@ -581,13 +589,14 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
 }
 
 function shouldUseUnderlyingToken(token: PoolToken, pool: Pool | GqlPoolBase): boolean {
-  if (isV3Pool(pool) && token.isErc4626 && !token.underlyingToken) {
+  if (isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !token.underlyingToken) {
+    // This should never happen unless the API some some inconsistency
     throw new Error(
       `Underlying token is missing for ERC4626 token with address ${token.address} in chain ${pool.chain}`
     )
   }
   // Only v3 pools should underlying tokens
-  return isV3Pool(pool) && token.isErc4626 && !!token.underlyingToken
+  return isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !!token.underlyingToken
 }
 
 // Returns top level standard tokens + Erc4626 (only v3) underlying tokens
