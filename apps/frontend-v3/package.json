@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@chakra-ui/hooks": "^2.2.1",
+    "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.2",
     "@chakra-ui/theme-tools": "^2.1.2",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
@@ -31,15 +32,14 @@
     "next": "14.2.0",
     "next-themes": "^0.3.0",
     "nextjs-toploader": "^1.6.4",
+    "prismjs": "^1.29.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-feather": "^2.0.10",
     "react-use-measure": "^2.1.1",
     "tinycolor2": "^1.6.0",
-    "viem": "^2.21.18",
-    "wagmi": "^2.12.16",
-    "react-feather": "^2.0.10",
-    "@chakra-ui/icons": "^2.1.1",
-    "prismjs": "^1.29.0"
+    "viem": "2.21.55",
+    "wagmi": "^2.12.16"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
@@ -51,6 +51,7 @@
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.14.195",
     "@types/node": "20.3.2",
+    "@types/prismjs": "^1.26.5",
     "@types/react": "18.2.34",
     "@types/react-dom": "18.2.6",
     "@types/tinycolor2": "^1.4.6",
@@ -64,8 +65,7 @@
     "happy-dom": "^12.10.3",
     "lokijs": "^1.5.12",
     "sentry-testkit": "^5.0.9",
-    "typescript": "5.4.5",
-    "@types/prismjs": "^1.26.5"
+    "typescript": "5.4.5"
   },
   "engines": {
     "node": ">=18.x"

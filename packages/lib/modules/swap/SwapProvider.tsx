@@ -228,7 +228,6 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   }
 
   function setSelectedChain(_selectedChain: GqlChain) {
-    if (isPoolSwapUrl) return
     const defaultTokenState = getDefaultTokenState(_selectedChain)
     swapStateVar(defaultTokenState)
   }

@@ -35,6 +35,7 @@ export function useSwapSteps({
   const chain = swapState.selectedChain
   const chainId = getChainId(chain)
 
+  const hasSimulationQuery = !!simulationQuery
   const isPermit2 = orderRouteVersion(simulationQuery) === 3
 
   const relayerMode = useRelayerMode()
@@ -66,6 +67,7 @@ export function useSwapSteps({
       approvalAmounts: tokenInAmounts,
       actionType: approvalActionType,
       isPermit2,
+      enabled: hasSimulationQuery,
     })
 
   const signPermit2Step = useSignPermit2SwapStep({
