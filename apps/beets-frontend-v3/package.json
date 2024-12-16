@@ -35,7 +35,7 @@
     "react-dom": "18.2.0",
     "react-use-measure": "^2.1.1",
     "tinycolor2": "^1.6.0",
-    "viem": "^2.21.18",
+    "viem": "2.21.55",
     "wagmi": "^2.12.16"
   },
   "devDependencies": {

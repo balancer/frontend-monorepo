@@ -68,7 +68,7 @@ export function isFx(poolType: GqlPoolType | string): boolean {
 }
 
 export function isBoosted(pool: PoolListItem | Pool) {
-  return isV3Pool(pool) && (pool.hasErc4626 || pool.hasNestedErc4626)
+  return isV3Pool(pool) && pool.hasAnyAllowedBuffer // this means that the pool has at least one ERC4626 token with allowed buffer
 }
 
 export function isGyro(poolType: GqlPoolType) {
@@ -164,8 +164,22 @@ export function calcUserShareOfPool(pool: Pool) {
   return calcShareOfPool(pool, userBalance)
 }
 
+export function calcFutureUserShareOfPool(pool: Pool, bptAmount: BigNumber) {
+  const userBalance = getUserTotalBalanceInt(pool)
+  const poolBalance = calcPoolBalance(pool)
+
+  const newUserBalance = bn(userBalance).plus(bn(bptAmount))
+  const newPoolBalance = poolBalance.plus(bn(bptAmount))
+  return bn(newUserBalance).div(newPoolBalance)
+}
+
 export function calcShareOfPool(pool: Pool, rawBalance: bigint) {
-  return bn(rawBalance).div(bn(parseUnits(pool.dynamicData.totalShares, BPT_DECIMALS)))
+  const poolBalance = calcPoolBalance(pool)
+  return bn(rawBalance).div(bn(poolBalance))
+}
+
+export function calcPoolBalance(pool: Pool) {
+  return bn(parseUnits(pool.dynamicData.totalShares, BPT_DECIMALS))
 }
 
 export function getPoolHelpers(pool: Pool, chain: GqlChain) {
@@ -264,11 +278,16 @@ export function hasHooks(pool: Pool): boolean {
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
 }
 
+// Emergency flag to block adds for all V3 pools
+const shouldBlockV3PoolAdds = false
+
 /**
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
 export function shouldBlockAddLiquidity(pool: Pool) {
+  if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
+
   // avoid blocking Sepolia pools
   if (pool.chain === GqlChain.Sepolia) return false
 
@@ -313,6 +332,8 @@ export function shouldBlockAddLiquidity(pool: Pool) {
  */
 export function getPoolAddBlockedReason(pool: Pool): string {
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
+
+  if (isV3Pool(pool) && shouldBlockV3PoolAdds) return 'Adds are blocked for all V3 pools'
 
   if (isLBP(pool.type)) return 'LBP pool'
   if (pool.dynamicData.isPaused) return 'Paused pool'
@@ -545,8 +566,16 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     token.nestedPool ? extractNestedUnderlyingTokens(token.nestedPool as GqlNestedPool) : []
   )
 
+  const isTopLevelToken = (token: PoolToken): boolean => {
+    if (token.hasNestedPool) return false
+    if (!isV3Pool(pool)) return true
+    if (!token.isErc4626) return true
+    if (token.isErc4626 && !token.isBufferAllowed) return true
+    return true
+  }
+
   const standardTopLevelTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
-    !token.hasNestedPool && (!isV3Pool(pool) || !token.isErc4626) ? token : []
+    isTopLevelToken(token) ? token : []
   )
 
   const allTokens = underlyingTokens.concat(
@@ -560,13 +589,14 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
 }
 
 function shouldUseUnderlyingToken(token: PoolToken, pool: Pool | GqlPoolBase): boolean {
-  if (isV3Pool(pool) && token.isErc4626 && !token.underlyingToken) {
+  if (isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !token.underlyingToken) {
+    // This should never happen unless the API some some inconsistency
     throw new Error(
       `Underlying token is missing for ERC4626 token with address ${token.address} in chain ${pool.chain}`
     )
   }
   // Only v3 pools should underlying tokens
-  return isV3Pool(pool) && token.isErc4626 && !!token.underlyingToken
+  return isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !!token.underlyingToken
 }
 
 // Returns top level standard tokens + Erc4626 (only v3) underlying tokens

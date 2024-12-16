@@ -13,7 +13,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { usePool } from '../PoolProvider'
+import { Pool, usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -28,18 +28,18 @@ import { getPoolDisplayTokens, getPoolDisplayTokensWithPossibleNestedPools } fro
 import { PoolTypeTag } from './PoolTypeTag'
 import { isBoosted } from '../pool.helpers'
 import { useLayoutEffect, useRef, useState } from 'react'
-import { useErc4626Metadata } from '../../erc4626/Erc4626MetadataProvider'
+import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
 
 type CardContentProps = {
   totalLiquidity: string
   displayTokens: GqlPoolTokenDetail[]
   chain: GqlChain
+  pool: Pool
 }
 
-function CardContent({ totalLiquidity, displayTokens, chain }: CardContentProps) {
+function CardContent({ totalLiquidity, displayTokens, chain, pool }: CardContentProps) {
   const { toCurrency } = useCurrency()
   const { calcWeightForBalance } = useTokens()
-  const { pool } = usePool()
 
   return (
     <VStack spacing="md" width="full">
@@ -120,7 +120,7 @@ export function PoolComposition() {
   const { calcTotalUsdValue } = useTokens()
   const cardRef = useRef<HTMLDivElement | null>(null)
   const [height, setHeight] = useState(0)
-  const { getErc4626Metadata } = useErc4626Metadata()
+  const { getErc4626Metadata } = usePoolsMetadata()
 
   const displayTokens = getPoolDisplayTokens(pool)
   const totalLiquidity = calcTotalUsdValue(displayTokens, chain)
@@ -159,6 +159,7 @@ export function PoolComposition() {
           <CardContent
             chain={chain}
             displayTokens={displayTokens}
+            pool={pool}
             totalLiquidity={totalLiquidity}
           />
           <Divider mt="auto" />

@@ -31,9 +31,9 @@
     "@emotion/styled": "^11.11.0",
     "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
+    "@rainbow-me/rainbowkit": "2.2.1",
     "@react-three/drei": "^9.117.3",
     "@react-three/fiber": "^8.17.10",
-    "@rainbow-me/rainbowkit": "2.2.1",
     "@safe-global/safe-apps-sdk": "9.1.0",
     "@sentry/nextjs": "^8.13.0",
     "@studio-freight/react-lenis": "^0.0.47",
@@ -75,7 +75,7 @@
     "use-debounce": "^10.0.0",
     "use-sound": "^4.0.1",
     "usehooks-ts": "^3.1.0",
-    "viem": "2.21.54",
+    "viem": "2.21.55",
     "wagmi": "2.13.3"
   },
   "devDependencies": {
@@ -121,7 +121,7 @@
     "msw": "2.0.10",
     "sentry-testkit": "^5.0.9",
     "typescript": "5.4.5",
-    "vitest": "^2.1.1",
-    "vitest-mock-extended": "^2.0.2"
+    "vitest": "2.1.8",
+    "vitest-mock-extended": "2.0.2"
   }
 }
