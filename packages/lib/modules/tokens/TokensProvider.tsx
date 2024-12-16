@@ -105,7 +105,11 @@ export function _useTokens(
     const price = getPricesForChain(token.chain).find(price =>
       isSameAddress(price.address, token.address)
     )
-    if (!price) return 0
+    if (!price) {
+      // Useful for troubleshooting production issues
+      console.error('Price not found for token ', token)
+      return 0
+    }
 
     return price.price
   }
