@@ -2,6 +2,12 @@
 'use client'
 
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
   Button,
   Card,
   CardBody,
@@ -33,6 +39,24 @@ import { LstUnstakeModal } from './modals/LstUnstakeModal'
 import { LstWithdraw } from './components/LstWithdraw'
 import { useGetUserWithdraws, UserWithdraw } from './hooks/useGetUserWithdraws'
 import { useGetUserNumWithdraws } from './hooks/useGetUserNumWithdraws'
+
+const FAQ_ITEMS = [
+  {
+    question: 'What is liquid staking?',
+    answer:
+      'Liquid staking is a process where you can lock up your assets in a smart contract and receive a tokenized representation of your assets.',
+  },
+  {
+    question: 'What is liquid staking??',
+    answer:
+      'Liquid staking is a process where you can lock up your assets in a smart contract and receive a tokenized representation of your assets.',
+  },
+  {
+    question: 'What is liquid staking???',
+    answer:
+      'Liquid staking is a process where you can lock up your assets in a smart contract and receive a tokenized representation of your assets.',
+  },
+]
 
 export function Lst() {
   const { isConnected } = useUserAccount()
@@ -125,61 +149,86 @@ export function Lst() {
         position="relative"
         w={['100vw', 'full']}
       >
-        <Card minH="590px" rounded="xl">
-          <CardHeader as={HStack} justify="space-between" w="full">
-            <Heading as="h2" size="lg">
-              Liquid staking
-            </Heading>
-          </CardHeader>
-          <CardBody align="start" as={VStack}>
-            <VStack spacing="md" w="full">
-              <ButtonGroup
-                currentOption={activeTab}
-                groupId="add-liquidity"
-                hasLargeTextLabel
-                isFullWidth
-                onChange={setActiveTab}
-                options={tabs}
-                size="md"
-              />
-            </VStack>
-            {isStakeTab && <LstStake />}
-            {isUnstakeTab && <LstUnstake />}
-            {isWithdrawTab && !isWithdrawalsLoading && (
-              <LstWithdraw
-                isLoading={isWithdrawalsLoading}
-                withdrawalsData={data as UserWithdraw[]}
-              />
-            )}
-          </CardBody>
-          <CardFooter>
-            {isConnected && !isWithdrawTab && (
-              <Tooltip label={isDisabled ? disabledReason : ''}>
-                <Button
-                  isDisabled={isDisabled}
+        <VStack gap="xl" w="full">
+          <Card rounded="xl" w="full">
+            <CardHeader as={HStack} justify="space-between" w="full">
+              <Heading as="h2" size="lg">
+                Liquid staking
+              </Heading>
+            </CardHeader>
+            <CardBody align="start" as={VStack}>
+              <VStack spacing="md" w="full">
+                <ButtonGroup
+                  currentOption={activeTab}
+                  groupId="add-liquidity"
+                  hasLargeTextLabel
+                  isFullWidth
+                  onChange={setActiveTab}
+                  options={tabs}
+                  size="md"
+                />
+              </VStack>
+              {isStakeTab && <LstStake />}
+              {isUnstakeTab && <LstUnstake />}
+              {isWithdrawTab && !isWithdrawalsLoading && (
+                <LstWithdraw
+                  isLoading={isWithdrawalsLoading}
+                  withdrawalsData={data as UserWithdraw[]}
+                />
+              )}
+            </CardBody>
+            <CardFooter>
+              {isConnected && !isWithdrawTab && (
+                <Tooltip label={isDisabled ? disabledReason : ''}>
+                  <Button
+                    isDisabled={isDisabled}
+                    isLoading={isLoading}
+                    loadingText={loadingText}
+                    onClick={() => disclosure.onOpen()}
+                    ref={nextBtn}
+                    size="lg"
+                    variant="secondary"
+                    w="full"
+                  >
+                    Next
+                  </Button>
+                </Tooltip>
+              )}
+              {!isConnected && (
+                <ConnectWallet
                   isLoading={isLoading}
                   loadingText={loadingText}
-                  onClick={() => disclosure.onOpen()}
-                  ref={nextBtn}
                   size="lg"
-                  variant="secondary"
+                  variant="primary"
                   w="full"
-                >
-                  Next
-                </Button>
-              </Tooltip>
-            )}
-            {!isConnected && (
-              <ConnectWallet
-                isLoading={isLoading}
-                loadingText={loadingText}
-                size="lg"
-                variant="primary"
-                w="full"
-              />
-            )}
-          </CardFooter>
-        </Card>
+                />
+              )}
+            </CardFooter>
+          </Card>
+          <Card rounded="xl" w="full">
+            <CardHeader as={HStack} justify="space-between" w="full">
+              <Heading as="h2" size="lg">
+                FAQ
+              </Heading>
+            </CardHeader>
+            <CardBody align="start" as={VStack} />
+            <Accordion allowToggle variant="button">
+              {FAQ_ITEMS.map(item => (
+                <AccordionItem key={item.question}>
+                  <h2>
+                    <AccordionButton>
+                      <Box as="span" flex="1" textAlign="left">
+                        {item.question}
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb="md">{item.answer}</AccordionPanel>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </Card>
+        </VStack>
       </Center>
       <LstStakeModal
         finalFocusRef={nextBtn}
