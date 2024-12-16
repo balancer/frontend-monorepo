@@ -484,13 +484,18 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           "symbol": "GNO",
         },
         {
-          "address": "0xe91d153e0b41518a2ce8dd3d7944fa863463a97d",
-          "chainId": 100,
+          "address": "0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644",
+          "decimals": 18,
+          "index": 0,
+          "name": "Wrapped Aave Gnosis GNO",
+          "symbol": "waGnoGNO",
+        },
+        {
+          "address": "0xaf204776c7245bf4147c2612bf6e5972ee483701",
           "decimals": 18,
           "index": 1,
-          "isBufferAllowed": true,
-          "name": "Wrapped XDAI",
-          "symbol": "WXDAI",
+          "name": "Savings xDAI",
+          "symbol": "sDAI",
         },
       ]
     `)
