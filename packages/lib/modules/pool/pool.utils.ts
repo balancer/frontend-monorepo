@@ -49,6 +49,7 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
   [GqlChain.Polygon]: ChainSlug.Polygon,
   [GqlChain.Avalanche]: ChainSlug.Avalanche,
   [GqlChain.Fantom]: ChainSlug.Fantom,
+  [GqlChain.Sonic]: ChainSlug.Fantom, //TODO: groninge will fix it in another PR
   [GqlChain.Base]: ChainSlug.Base,
   [GqlChain.Optimism]: ChainSlug.Optimisim,
   [GqlChain.Zkevm]: ChainSlug.Zkevm,
@@ -57,7 +58,13 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
   [GqlChain.Mode]: ChainSlug.Mode,
   [GqlChain.Fraxtal]: ChainSlug.Fraxtal,
 }
+
 export const slugToChainMap = invert(chainToSlugMap) as Record<ChainSlug, GqlChain>
+export function getChainSlug(chainSlug: ChainSlug): GqlChain {
+  const chain = slugToChainMap[chainSlug]
+  if (!chain) throw new Error(`Chain ${chainSlug} is not a valid chainName`)
+  return chain
+}
 
 function getVariant(pool: Pool | PoolListItem): PoolVariant {
   // if a pool has certain properties return a custom variant
