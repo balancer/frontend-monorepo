@@ -39,7 +39,7 @@ const networkConfig: NetworkConfig = {
     multicall2: '0xc07500b9fe7bea9efd5b54341d0aa3658a33d39a',
     balancer: {
       vaultV2: '0xba12222222228d8ba445958a75a0704d566bf2c8',
-      relayerV6: '0x0faa25293a36241c214f3760c6ff443e1b731981',
+      relayerV6: '0x7b52D5ef006E59e3227629f97F182D6442380bb6',
       minter: zeroAddress,
     },
     beets: {
