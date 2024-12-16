@@ -1,14 +1,14 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export const beetsSupportedNetworks = [GqlChain.Fantom, GqlChain.Optimism, GqlChain.Sonic]
+export const beetsSupportedNetworks = [GqlChain.Optimism, GqlChain.Sonic]
 //  as const satisifies GqlChain[]
 
 export const ProjectConfigBeets: ProjectConfig = {
   projectId: 'beets',
   projectName: 'Beets',
   supportedNetworks: beetsSupportedNetworks,
-  corePoolId: '0x9e4341acef4147196e99d648c5e43b3fc9d026780002000000000000000005ec', // maBEETS BEETS8020 (Fresh BEETS) pool on Fantom
+  corePoolId: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005', // maBEETS BEETS8020 (Fresh BEETS) pool on Sonic
   defaultNetwork: GqlChain.Sonic,
   ensNetwork: GqlChain.Sonic,
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b', // TODO update this for sonic & optimism,

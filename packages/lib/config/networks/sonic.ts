@@ -8,7 +8,7 @@ const networkConfig: NetworkConfig = {
   chainId: 146,
   name: 'Sonic',
   shortName: 'Sonic',
-  chain: GqlChain.Fantom, // TODO: change to Sonic
+  chain: GqlChain.Sonic,
   iconPath: '/images/chains/SONIC.svg',
   blockExplorer: {
     baseUrl: 'https://sonicscan.org',
