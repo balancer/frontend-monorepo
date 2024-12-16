@@ -1,11 +1,12 @@
-import { Center, Heading, Text, VStack } from '@chakra-ui/react'
+import { Center, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
+import { Title } from '../components/Title'
 
 export function LandingBeetsHero() {
   return (
-    <Center pt="200px" pb="100px" textAlign="center">
+    <Center pb="100px" pt="200px" textAlign="center">
       <VStack>
-        <Heading fontSize="5xl">DeFine your financial future</Heading>
+        <Title mb="md" />
         <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl">
           Formely Beethoven X, Beets is an established, trusted, community-led project providing
           innovative crypto investment opportunities with Balancer tech on the Sonic & Optimisim
