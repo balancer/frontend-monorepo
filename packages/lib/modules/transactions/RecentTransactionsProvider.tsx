@@ -242,7 +242,7 @@ export function _useRecentTransactions() {
 
   function updateLocalStorage(customUpdate?: Record<string, TrackedTransaction>) {
     localStorage.setItem(
-      'balancer.recentTransactions',
+      'balancer.recentTransactions', // TODO: make this dynamic
       JSON.stringify(customUpdate || transactions)
     )
   }

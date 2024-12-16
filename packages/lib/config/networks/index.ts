@@ -26,7 +26,7 @@ const networkConfigs = {
   [GqlChain.Sepolia]: sepolia,
   [GqlChain.Mode]: mode,
   [GqlChain.Fraxtal]: fraxtal,
-  sonic: sonic, // TODO: add to GqlChain
+  [GqlChain.Sonic]: sonic,
 }
 
 export default networkConfigs

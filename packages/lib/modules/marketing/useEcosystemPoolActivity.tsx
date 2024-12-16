@@ -93,6 +93,10 @@ export const gradientMap: Record<GqlChain, { from: string; to: string }> = {
     from: '#D1B3FF',
     to: '#A384FF',
   },
+  [GqlChain.Sonic]: {
+    from: '#D1B3FF',
+    to: '#A384FF',
+  },
 }
 
 function getDefaultChainMeta() {
@@ -109,6 +113,7 @@ function getDefaultChainMeta() {
     [GqlChain.Fraxtal]: [],
     [GqlChain.Mode]: [],
     [GqlChain.Sepolia]: [],
+    [GqlChain.Sonic]: [],
   }
 }
 

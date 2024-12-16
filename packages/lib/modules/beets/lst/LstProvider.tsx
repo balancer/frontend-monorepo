@@ -17,7 +17,7 @@ import { useTokens } from '../../tokens/TokensProvider'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { useLstWithdrawStep } from './hooks/useLstWithdrawStep'
 
-const CHAIN = GqlChain.Fantom // TODO: change to Sonic
+const CHAIN = GqlChain.Sonic
 
 export function _useLst() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
@@ -68,7 +68,7 @@ export function _useLst() {
 
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
-    [isStakeTab && (!amount || bn(amount).lt(1)), 'Minimum amount to stake is 1'],
+    [isStakeTab && (!amount || bn(amount).lt(0.01)), 'Minimum amount to stake is 0.01'],
     [isUnstakeTab && (!amount || bn(amount).lte(0)), 'Please enter an amount to unstake'],
   ]
 

@@ -27,7 +27,7 @@ const networkConfig: NetworkConfig = {
     },
     stakedAsset: {
       name: 'Beets Staked Sonic',
-      address: '0xf4fa7f3308a1543e7d89950519341c7ce479400b',
+      address: '0xe5da20f15420ad15de0fa650600afc998bbe3955',
       symbol: 'stS',
       decimals: 18,
     },
@@ -43,8 +43,8 @@ const networkConfig: NetworkConfig = {
       minter: zeroAddress,
     },
     beets: {
-      lstStaking: '0xbf46aef3c4c119495245e6b1911a4a961859038d',
-      lstStakingProxy: '0xf4fa7f3308a1543e7d89950519341c7ce479400b',
+      lstStaking: '0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141',
+      lstStakingProxy: '0xe5da20f15420ad15de0fa650600afc998bbe3955',
     },
   },
   pools: convertHexToLowerCase({ issues: {} }),
