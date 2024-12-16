@@ -5,9 +5,11 @@ import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { format } from 'date-fns'
 import { useLst } from '../LstProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
+import { UserWithdraw } from '../hooks/useGetUserWithdraws'
+import { formatUnits } from 'viem'
 
 interface Props extends GridProps {
-  withdrawal: any
+  withdrawal: UserWithdraw
   keyValue: number
   token: GqlToken | undefined
   onOpen(): void
@@ -42,7 +44,7 @@ export function LstWithdrawTableRow({ withdrawal, keyValue, token, onOpen, ...re
                   size={24}
                 />
               )}
-              <Text>{fNum('token', withdrawal.amountSftmx)}</Text>
+              <Text>{formatUnits(withdrawal.assetAmount, 18)}</Text>
             </HStack>
           </GridItem>
           <GridItem>{format(new Date(requestTimestamp * 1000), 'dd MMMM yyyy HH:mm')}</GridItem>

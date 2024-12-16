@@ -31,6 +31,8 @@ import { LstStake } from './components/LstStake'
 import { LstUnstake } from './components/LstUnstake'
 import { LstUnstakeModal } from './modals/LstUnstakeModal'
 import { LstWithdraw } from './components/LstWithdraw'
+import { useGetUserWithdraws, UserWithdraw } from './hooks/useGetUserWithdraws'
+import { useGetUserNumWithdraws } from './hooks/useGetUserNumWithdraws'
 
 export function Lst() {
   const { isConnected } = useUserAccount()
@@ -49,14 +51,17 @@ export function Lst() {
     stakeTransactionSteps,
     unstakeTransactionSteps,
     stakedAsset,
+    chain,
   } = useLst()
   const stakeModalDisclosure = useDisclosure()
   const unstakeModalDisclosure = useDisclosure()
   const { startTokenPricePolling } = useTokens()
   const { isBalancesLoading, balanceFor } = useTokenBalances()
   const [disclosure, setDisclosure] = useState(stakeModalDisclosure)
+  const { userNumWithdraws } = useGetUserNumWithdraws(chain)
+  const { data, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(chain, userNumWithdraws)
 
-  const isLoading = !isMounted || isBalancesLoading
+  const isLoading = !isMounted || isBalancesLoading || isWithdrawalsLoading
   const loadingText = isLoading ? 'Loading...' : undefined
 
   const isUnstakeDisabled = bn(balanceFor(stakedAsset?.address || '')?.amount || 0).lte(0)
@@ -140,7 +145,12 @@ export function Lst() {
             </VStack>
             {isStakeTab && <LstStake />}
             {isUnstakeTab && <LstUnstake />}
-            {isWithdrawTab && <LstWithdraw />}
+            {isWithdrawTab && !isWithdrawalsLoading && (
+              <LstWithdraw
+                isLoading={isWithdrawalsLoading}
+                withdrawalsData={data as UserWithdraw[]}
+              />
+            )}
           </CardBody>
           <CardFooter>
             {isConnected && !isWithdrawTab && (

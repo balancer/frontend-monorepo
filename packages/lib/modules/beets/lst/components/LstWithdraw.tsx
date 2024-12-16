@@ -8,115 +8,17 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { LstWithdrawModal } from '../modals/LstWithdrawModal'
 import { useDisclosure } from '@chakra-ui/react'
+import { UserWithdraw } from '../hooks/useGetUserWithdraws'
 
-export function LstWithdraw() {
+export function LstWithdraw({
+  withdrawalsData,
+  isLoading,
+}: {
+  withdrawalsData: UserWithdraw[]
+  isLoading: boolean
+}) {
   const { stakedAsset, pagination, setPagination, first, skip, chain } = useLst()
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const withdrawalsData = [
-    {
-      amountSftmx: '0.1',
-      id: '1711618042230',
-      isWithdrawn: false,
-      requestTimestamp: 1711618053,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1710162573905',
-      isWithdrawn: false,
-      requestTimestamp: 1710162575,
-    },
-    {
-      amountSftmx: '1',
-      id: '1725187575341',
-      isWithdrawn: false,
-      requestTimestamp: 1725187576,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1728364914420',
-      isWithdrawn: false,
-      requestTimestamp: 1728364922,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1733745081753',
-      isWithdrawn: false,
-      requestTimestamp: 1733745109,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1733746230766',
-      isWithdrawn: false,
-      requestTimestamp: 1733746233,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1733745491083',
-      isWithdrawn: false,
-      requestTimestamp: 1733745586,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1733746260555',
-      isWithdrawn: false,
-      requestTimestamp: 1733746263,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1733740433907',
-      isWithdrawn: false,
-      requestTimestamp: 1733740450,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1704286751621',
-      isWithdrawn: false,
-      requestTimestamp: 1704286768,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1703753087133',
-      isWithdrawn: false,
-      requestTimestamp: 1703753087,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1703670165317',
-      isWithdrawn: true,
-      requestTimestamp: 1703670173,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1703670090970',
-      isWithdrawn: true,
-      requestTimestamp: 1703670097,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1704289055483',
-      isWithdrawn: false,
-      requestTimestamp: 1704289065,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '1703668029605',
-      isWithdrawn: true,
-      requestTimestamp: 1703668034,
-    },
-    {
-      amountSftmx: '0.8',
-      id: '170265065707900000000',
-      isWithdrawn: true,
-      requestTimestamp: 1702650663,
-    },
-    {
-      amountSftmx: '0.1',
-      id: '170366651117500000000',
-      isWithdrawn: true,
-      requestTimestamp: 1703666512,
-    },
-  ]
 
   const withdrawalsDataOrdered = orderBy(withdrawalsData, 'requestTimestamp', 'desc')
   const count = withdrawalsDataOrdered.length
@@ -145,7 +47,7 @@ export function LstWithdraw() {
       <PaginatedTable
         alignItems="flex-start"
         items={withdrawalsView}
-        loading={false}
+        loading={isLoading}
         noItemsFoundLabel="No requests found"
         paginationProps={{ ...paginationProps, mt: 'auto' }}
         renderTableHeader={() => <LstWithdrawTableHeader {...rowProps} />}
