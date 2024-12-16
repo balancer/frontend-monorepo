@@ -31,22 +31,22 @@ export function LandingBeetsStakedSonic() {
         >
           <Flex>
             <Box flex="1" mr="2xl">
-              <Box mb="2xl">
+              <Box mb="xl">
+                <Heading fontSize="3xl">Sonic’s Leading LST</Heading>
+                <Text fontSize="lg" fontWeight="thin">
+                  stS redefines Liquid Staking by combining deep liquidity, robust security, and
+                  competitive yield into one powerful position. Purpose-built for Sonic, stS
+                  delivers an unparalleled staking experience—maximizing rewards without sacrificing
+                  flexibility.
+                </Text>
+              </Box>
+              <Box>
                 <Heading fontSize="3xl">Earn Network Rewards</Heading>
                 <Text fontSize="lg" fontWeight="thin">
                   Convert S to stS and earn continuous staking yields - while keeping your capital
                   fully liquid.
                 </Text>
               </Box>
-              {/* <Box>
-                <Heading fontSize="3xl">Value appreciation with $S</Heading>
-                <Text fontSize="lg" fontWeight="thin">
-                  In molestie imperdiet nulla, vitae vestibulum lectus tempor ac. Donec dui purus,
-                  pharetra id sem eget, dictum congue eros. Vestibulum dignissim nisi non dolor
-                  maximus, ac vestibulum urna porttitor. Sed iaculis bibendum libero in commodo.
-                  Nulla rhoncus risus nibh.
-                </Text>
-              </Box> */}
             </Box>
             <Box flex="1">
               <Flex mb="xl" alignItems="center">
