@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, HeadingProps } from '@chakra-ui/react'
+import { Box, BoxProps, Heading } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState, useRef } from 'react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -13,7 +13,7 @@ const words = [
   { word: 'Growth', color: '#F06147' },
 ]
 
-export function Title({ ...rest }: HeadingProps) {
+export function Title({ ...rest }: BoxProps) {
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
   const [widths, setWidths] = useState<Record<string, number>>({})
   const measureRef = useRef<HTMLSpanElement>(null)
@@ -44,17 +44,15 @@ export function Title({ ...rest }: HeadingProps) {
   }, [currentWordIndex])
 
   return (
-    <>
+    <Box textAlign="center" {...rest}>
       <Heading
         alignItems="center"
         as="h1"
         display="flex"
         justifyContent="center"
-        lineHeight="2"
         pb="sm"
-        size={{ base: 'xl', md: '3xl' }}
+        size={{ base: '2xl', md: '3xl' }}
         textAlign="center"
-        {...rest}
       >
         Powering{' '}
         <AnimatePresence mode="wait">
@@ -98,13 +96,13 @@ export function Title({ ...rest }: HeadingProps) {
       {isMobile && (
         <Heading
           justifyContent="center"
-          mt="-4"
-          size={{ base: 'xl', md: '3xl' }}
+          mx="auto"
+          size={{ base: '2xl', md: '3xl' }}
           textAlign="center"
         >
-          on Balancer V3
+          on Sonic
         </Heading>
       )}
-    </>
+    </Box>
   )
 }
