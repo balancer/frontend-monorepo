@@ -43,7 +43,7 @@ export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: b
     functionName: 'deposit',
     args: [],
     value: parseUnits(humanAmount, BPT_DECIMALS),
-    enabled: bn(humanAmount).gte(1) && isConnected && enabled,
+    enabled: bn(humanAmount).gte(0.01) && isConnected && enabled,
     txSimulationMeta,
   }
 
