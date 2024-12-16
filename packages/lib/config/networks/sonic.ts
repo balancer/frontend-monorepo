@@ -36,9 +36,9 @@ const networkConfig: NetworkConfig = {
     },
   },
   contracts: {
-    multicall2: '0x66335d7ad8011f6aa3f48aadcb523b62b38ed961',
+    multicall2: '0xc07500b9fe7bea9efd5b54341d0aa3658a33d39a',
     balancer: {
-      vaultV2: '0x20dd72Ed959b6147912C2e529F0a0C651c33c9ce',
+      vaultV2: '0xba12222222228d8ba445958a75a0704d566bf2c8',
       relayerV6: '0x0faa25293a36241c214f3760c6ff443e1b731981',
       minter: zeroAddress,
     },
