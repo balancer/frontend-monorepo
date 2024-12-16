@@ -7,12 +7,13 @@ import { AppLink } from '@repo/lib/shared/components/navs/useNav'
 export function useNavData() {
   const appLinks: AppLink[] = [
     {
-      href: '/mabeets',
-      label: 'maBEETS',
+      href: '/sts',
+      label: 'stS',
     },
     {
-      href: '/lst',
-      label: 'LST',
+      href: 'https://ma.beets.fi',
+      label: 'maBEETS',
+      isExternal: true,
     },
   ]
 

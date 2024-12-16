@@ -56,6 +56,7 @@ function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
             as={NextLink}
             color={linkColorFor(link.href)}
             href={link.href}
+            isExternal={link.isExternal}
             prefetch
             variant="nav"
           >
@@ -64,9 +65,9 @@ function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
         </Box>
       ))}
       {/* Vebal is only supported in Balancer project */}
-      {!isBalancerProject && (
+      {isBalancerProject && (
         <Box as={motion.div} variants={fadeIn}>
-          )<VeBalLink />
+          <VeBalLink />
         </Box>
       )}
       {(isDev || isStaging) && (
