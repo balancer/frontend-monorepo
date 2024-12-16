@@ -89,7 +89,10 @@ export function LandingMaBeetsSection() {
               </Text>
             </Box>
             <Box flex="1">
-              <Box height="100px" bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" mb="lg" />
+              <Box height="100px" mb="lg">
+                <MaBeetsGrowEarnSvg />
+              </Box>
+              {/* <Box height="100px" bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" mb="lg" /> */}
               <Heading fontSize="xl">Grow & Earn</Heading>
               <Text fontWeight="thin" fontSize="lg">
                 As your position matures, enjoy increasing rewards and voting power.

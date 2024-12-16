@@ -20,7 +20,15 @@ export function LandingBeetsStakedSonic() {
         </VStack>
       </Center>
       <DefaultPageContainer noVerticalPadding pb="3xl">
-        <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
+        <Box
+          bg="rgba(255, 255, 255, 0.05)"
+          p="xl"
+          w="full"
+          backgroundImage="url(/images/misc/staking-bg.png)"
+          backgroundPosition="left bottom"
+          backgroundSize="50%"
+          backgroundRepeat="no-repeat"
+        >
           <Flex>
             <Box flex="1" mr="2xl">
               <Box mb="2xl">
