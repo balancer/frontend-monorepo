@@ -3,32 +3,46 @@
 import React from 'react'
 import { Box, Center, Grid, GridItem, Heading, HStack, Link, Text, VStack } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { CoingeckoIcon } from '@repo/lib/shared/components/icons/CoingeckoIcon'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { MaBeetsMaturityVsLockingSvg } from '../components/MaBeetsMaturityVsLocking'
+import { MaBeetsFairerRewardsSvg } from '../components/MaBeetsFairerRewardsSvg'
+import { MaBeetsAddLiquiditySvg } from '../components/MaBeetsAddLiquiditySvg'
+import { MaBeetsMintMabeetsSvg } from '../components/MaBeetsMintMabeetsSvg'
+import { MaBeetsGrowEarnSvg } from '../components/MaBeetsGrowEarnSvg'
 
-export function FeatureCard({ title, description }: { title: string; description: string }) {
+function FeatureCard({
+  title,
+  description,
+  image,
+}: {
+  title: string
+  description: string
+  image: React.ReactNode
+}) {
   return (
     <HStack align="start" h="full" spacing="none" w="full">
-      <Box bg="rgba(0, 0, 0, 0.1)" borderBottom="30px solid rgba(0, 0, 0, 0.4)" h="full" w="40%" />
+      <Box bg="rgba(0, 0, 0, 0.1)" borderBottom="30px solid rgba(0, 0, 0, 0.4)" h="full" w="40%">
+        {image}
+      </Box>
       <VStack align="start" borderBottom="30px solid rgba(0, 0, 0, 0.3)" h="full" p="lg" w="60%">
         <Heading fontSize="2xl">{title}</Heading>
-        <Text fontSize="lg">{description}</Text>
+        <Text fontSize="lg" fontWeight="thin">
+          {description}
+        </Text>
       </VStack>
     </HStack>
   )
 }
 
 export function LandingMaBeetsSection() {
-  const { toCurrency } = useCurrency()
-
   return (
     <>
       <Center textAlign="center" pb="2xl">
         <VStack>
-          <Heading fontSize="5xl">maBEETS</Heading>
+          <Heading fontSize="5xl">maBEETS: Your Voice, Your Rewards</Heading>
           <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices
-            dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo.
+            Shape the Future. Earn as You Grow. maBEETS unlocks maturity-adjusted voting power,
+            allowing you to participate in governance decisions and earn rewards without locking
+            your assets.
           </Text>
         </VStack>
       </Center>
@@ -38,14 +52,15 @@ export function LandingMaBeetsSection() {
             <Box flex={1} mr="md">
               <FeatureCard
                 title="Maturity vs Locking"
-                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo."
+                description="Your voting power grows with time, rewarding commitment and active participation, not lock-ups."
+                image={<MaBeetsMaturityVsLockingSvg />}
               />
             </Box>
             <Box flex={1} ml="md">
               <FeatureCard
                 title="Fairer Rewards"
-                description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices
-            dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo."
+                description="Earn based on both the size and maturity of your position, aligning long-term contributors with the protocol’s success. "
+                image={<MaBeetsFairerRewardsSvg />}
               />
             </Box>
           </Box>
@@ -56,27 +71,28 @@ export function LandingMaBeetsSection() {
           </Box>
           <Box display="flex">
             <Box flex="1">
-              <Box height="100px" bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" mb="lg" />
-              <Heading fontSize="xl">Deposit & receive fBEETS</Heading>
+              <Box height="100px" mb="lg">
+                <MaBeetsAddLiquiditySvg />
+              </Box>
+              <Heading fontSize="xl">Add Liquidity</Heading>
               <Text fontWeight="thin" fontSize="lg">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a
-                ultrices dapibus.
+                Join the Fresh Beets Pool (80/20 BEETS/stS) to receive fBEETS.
               </Text>
             </Box>
             <Box flex="1" mx="lg">
-              <Box height="100px" bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" mb="lg" />
-              <Heading fontSize="xl">Deposit fBEETS</Heading>
+              <Box height="100px" mb="lg">
+                <MaBeetsMintMabeetsSvg />
+              </Box>
+              <Heading fontSize="xl">Mint maBEETS</Heading>
               <Text fontWeight="thin" fontSize="lg">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a
-                ultrices dapibus.
+                Deposit your fBEETS to create a maBEETS position tied to a Relic NFT.
               </Text>
             </Box>
             <Box flex="1">
               <Box height="100px" bg="rgba(255, 255, 255, 0.05)" borderRadius="lg" mb="lg" />
-              <Heading fontSize="xl">Receive maBEETS relic</Heading>
+              <Heading fontSize="xl">Grow & Earn</Heading>
               <Text fontWeight="thin" fontSize="lg">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a
-                ultrices dapibus.
+                As your position matures, enjoy increasing rewards and voting power.
               </Text>
             </Box>
           </Box>

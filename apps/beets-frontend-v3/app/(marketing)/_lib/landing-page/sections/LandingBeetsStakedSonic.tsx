@@ -9,7 +9,7 @@ export function LandingBeetsStakedSonic() {
     <>
       <Center mb="2xl" textAlign="center">
         <VStack>
-          <Heading fontSize="5xl">Beets Staked Sonic (stS)</Heading>
+          <Heading fontSize="5xl">stS: Liquid Staking on Sonic</Heading>
           <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices
             dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo.
@@ -21,7 +21,7 @@ export function LandingBeetsStakedSonic() {
           <Flex>
             <Box flex="1" mr="2xl">
               <Box mb="2xl">
-                <Heading fontSize="3xl">Stake and transact</Heading>
+                <Heading fontSize="3xl">Earn Network Rewards</Heading>
                 <Text fontSize="lg" fontWeight="thin">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean scelerisque
                   vehicula diam vitae ultrices. Ut et elementum lorem. Sed et augue elit.
