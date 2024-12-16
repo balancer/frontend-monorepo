@@ -15,6 +15,7 @@ type Props = {
   userAddress: Address
   spenderAddress: Address
   tokenAddresses: Address[]
+  enabled?: boolean
 }
 
 type AllowanceContracts = ReadContractParameters<Erc20Abi, 'allowance'> & { chainId: number }
@@ -24,6 +25,7 @@ export function useTokenAllowances({
   userAddress,
   spenderAddress,
   tokenAddresses,
+  enabled = true,
 }: Props) {
   const contracts = tokenAddresses.map(
     tokenAddress =>
@@ -39,7 +41,10 @@ export function useTokenAllowances({
   const { data, isLoading, isRefetching, refetch } = useReadContracts({
     contracts,
     allowFailure: false,
-    query: { enabled: !!spenderAddress && !!userAddress, ...onlyExplicitRefetch },
+    query: {
+      enabled: enabled && !!spenderAddress && !!userAddress && tokenAddresses.length > 0,
+      ...onlyExplicitRefetch,
+    },
   })
 
   const allowancesByTokenAddress = useMemo(
