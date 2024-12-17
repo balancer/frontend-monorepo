@@ -103,7 +103,7 @@ export function AcceptPoliciesModal() {
                   By connecting my wallet, I agree to Beets&apos;{' '}
                   <Link as={NextLink} href="/terms-of-service">
                     Terms of Service
-                  </Link>
+                  </Link>{' '}
                   and{' '}
                   <Link as={NextLink} href="/risks">
                     Risks
