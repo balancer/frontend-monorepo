@@ -10,8 +10,7 @@ export function LandingBeetsStakedSonic() {
   return (
     <LandingSectionContainer
       title="stS: Liquid Staking on Sonic"
-      subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices
-            dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo."
+      subtitle="stS redefines Liquid Staking by combining deep liquidity, robust security, and competitive yield into one powerful position. Purpose-built for Sonic, stS delivers an unparalleled staking experience—maximizing rewards without sacrificing flexibility."
       button={{
         text: 'Stake',
         href: '',
@@ -34,7 +33,7 @@ export function LandingBeetsStakedSonic() {
           }}
         >
           <GridItem>
-            <Box mb="xl">
+            {/* <Box mb="xl">
               <Heading fontSize="3xl">Sonic's Leading LST</Heading>
               <Text fontSize="lg" fontWeight="thin">
                 stS redefines Liquid Staking by combining deep liquidity, robust security, and
@@ -42,7 +41,7 @@ export function LandingBeetsStakedSonic() {
                 an unparalleled staking experience—maximizing rewards without sacrificing
                 flexibility.
               </Text>
-            </Box>
+            </Box> */}
             <Box mb="xl">
               <Heading fontSize="3xl">Earn Network Rewards</Heading>
               <Text fontSize="lg" fontWeight="thin">
