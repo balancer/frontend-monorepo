@@ -30,7 +30,6 @@ import ButtonGroup, {
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useLst } from './LstProvider'
 import { LstStakeModal } from './modals/LstStakeModal'
-import { bn } from '@repo/lib/shared/utils/numbers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { LstStake } from './components/LstStake'
@@ -81,14 +80,11 @@ export function Lst() {
   const { startTokenPricePolling } = useTokens()
   const { isBalancesLoading } = useTokenBalances()
   const [disclosure, setDisclosure] = useState(stakeModalDisclosure)
-  const { userNumWithdraws } = useGetUserNumWithdraws(chain)
-  const {
-    data,
-    isLoading: isWithdrawalsLoading,
-    refetch,
-  } = useGetUserWithdraws(chain, userNumWithdraws)
+  const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(chain)
+  const { data, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(chain, userNumWithdraws)
 
-  const isLoading = !isMounted || isBalancesLoading || isWithdrawalsLoading
+  const isLoading =
+    !isMounted || isBalancesLoading || isWithdrawalsLoading || isUserNumWithdrawsLoading
   const loadingText = isLoading ? 'Loading...' : undefined
 
   const tabs: ButtonGroupOption[] = [
@@ -120,8 +116,6 @@ export function Lst() {
     } else if (isUnstakeTab) {
       setDisclosure(unstakeModalDisclosure)
       setAmountShares('')
-    } else if (isWithdrawTab) {
-      refetch()
     }
   }, [activeTab])
 
@@ -174,7 +168,7 @@ export function Lst() {
               {isUnstakeTab && <LstUnstake />}
               {isWithdrawTab && !isWithdrawalsLoading && (
                 <LstWithdraw
-                  isLoading={isWithdrawalsLoading}
+                  isLoading={isWithdrawalsLoading || isUserNumWithdrawsLoading}
                   withdrawalsData={data as UserWithdraw[]}
                 />
               )}

@@ -16,11 +16,21 @@ import { parseUnits } from 'viem'
 import { noop } from 'lodash'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { useGetUserWithdraws } from './useGetUserWithdraws'
+import { useGetUserNumWithdraws } from './useGetUserNumWithdraws'
 
 export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled: boolean) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
+  const { userNumWithdraws, refetch: refetchUserNumWithdraws } = useGetUserNumWithdraws(chain)
+  const { refetch: refetchWithdrawals } = useGetUserWithdraws(chain, userNumWithdraws)
+
+  function onSuccess() {
+    refetchBalances()
+    refetchUserNumWithdraws()
+    refetchWithdrawals()
+  }
 
   const labels: TransactionLabels = {
     init: 'Unstake',
@@ -58,7 +68,7 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
       isComplete,
       onActivated: noop,
       onDeactivated: noop,
-      onSuccess: () => refetchBalances(),
+      onSuccess: onSuccess,
       renderAction: () => <ManagedTransactionButton id="unstakeLst" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
