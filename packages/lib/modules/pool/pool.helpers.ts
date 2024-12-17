@@ -421,6 +421,7 @@ export function getWarnings(warnings: string[]) {
   return warnings.filter(warning => !isEmpty(warning))
 }
 
+// TODO: refactor into a more generic function that looks for the symbol in any pool token
 export function getActionableTokenSymbol(tokenAddress: Address, pool: Pool): string {
   const token = getPoolActionableTokens(pool).find(token =>
     isSameAddress(token.address, tokenAddress)
