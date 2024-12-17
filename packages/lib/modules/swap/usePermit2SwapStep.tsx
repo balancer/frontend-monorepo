@@ -45,11 +45,13 @@ export function useSignPermit2SwapStep({
     return 0n
   }
 
-  const tokenIn: TokenAmountIn = {
-    address: tokenInAddress,
-    amount: getTokenInAmount(),
-    symbol: tokenInInfo?.symbol ?? '',
-  }
+  const tokenIn: TokenAmountIn | undefined = tokenInInfo
+    ? {
+        address: tokenInAddress,
+        amount: getTokenInAmount(),
+        symbol: tokenInInfo.symbol,
+      }
+    : undefined
 
   const signPermit2Fn: SignPermit2Fn = (
     sdkClient: PublicWalletClient,
@@ -72,7 +74,7 @@ export function useSignPermit2SwapStep({
     chainId,
     signPermit2Fn,
     wethIsEth,
-    tokenAmountsIn: [tokenIn],
+    tokenAmountsIn: tokenIn ? [tokenIn] : undefined,
     isPermit2,
     isSimulationReady: !!swapRouter,
     spender: swapRouter || ('' as Address),
