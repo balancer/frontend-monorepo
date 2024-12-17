@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { HumanTokenAmount, HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmount } from '@repo/lib/modules/tokens/token.types'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
@@ -35,13 +35,14 @@ export function _useUnstake() {
     isLoading: isLoadingClaims,
   } = useClaimsData([pool] as unknown[] as PoolListItem[])
 
-  const rewardAmounts: HumanTokenAmount[] = useMemo(() => {
-    return allClaimableRewards.map(reward => ({
-      tokenAddress: reward.tokenAddress,
-      humanAmount: reward.humanBalance as HumanAmount,
-      symbol: 'LP token',
-    }))
-  }, [allClaimableRewards])
+  const rewardAmounts: HumanTokenAmount[] = useMemo(
+    () =>
+      allClaimableRewards.map(reward => ({
+        tokenAddress: reward.tokenAddress,
+        humanAmount: reward.humanBalance as HumanAmount,
+      })),
+    [allClaimableRewards]
+  )
 
   const { gaugeAddress, amountOut } = getUnstakeQuote(pool)
 
