@@ -1,8 +1,8 @@
 import { Address, Hex } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { fantom, gnosis, mainnet, polygon, sepolia } from 'viem/chains'
+import { fantom, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
 
-const networksWithFork = [mainnet, polygon, sepolia, gnosis, fantom] as const
+const networksWithFork = [mainnet, polygon, sepolia, gnosis, fantom, sonic] as const
 export type NetworksWithFork = (typeof networksWithFork)[number]['name']
 
 export type NetworkSetup = {
@@ -43,6 +43,7 @@ const ANVIL_PORTS: Record<NetworksWithFork, number> = {
   Sepolia: 8845,
   Fantom: 8945,
   Gnosis: 9045,
+  Sonic: 9145,
 }
 
 export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
@@ -74,6 +75,12 @@ export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
     fallBackRpc: 'https://gateway.tenderly.co/public/fantom',
     port: ANVIL_PORTS.Fantom,
     forkBlockNumber: 99471829n,
+  },
+  Sonic: {
+    networkName: 'Sonic',
+    fallBackRpc: 'https://gateway.tenderly.co/public/sonic',
+    port: ANVIL_PORTS.Sonic,
+    // forkBlockNumber: ,
   },
   Gnosis: {
     networkName: 'Gnosis',
@@ -109,6 +116,9 @@ export function getForkUrl(networkName: NetworksWithFork, verbose = false): stri
   const privateKey = process.env['NEXT_PRIVATE_DRPC_KEY']
   const dRpcUrl = (chainName: string) =>
     `https://lb.drpc.org/ogrpc?network=${chainName}&dkey=${privateKey}`
+  const ALCHEMY_KEY = process.env.NEXT_PRIVATE_ALCHEMY_KEY || ''
+  const alchemyUrl = (chainName: string) =>
+    `https://${chainName}-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`
 
   if (privateKey) {
     if (network.networkName === 'Ethereum') {
@@ -122,6 +132,9 @@ export function getForkUrl(networkName: NetworksWithFork, verbose = false): stri
     }
     if (network.networkName === 'Fantom') {
       return dRpcUrl('fantom')
+    }
+    if (network.networkName === 'Sonic') {
+      return alchemyUrl('sonic')
     }
     if (network.networkName === 'Gnosis') {
       return dRpcUrl('gnosis')
