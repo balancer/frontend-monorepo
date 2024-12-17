@@ -137,23 +137,8 @@ export function getLeafTokens(poolTokens: PoolToken[]) {
 }
 
 function getTokenOrUnderlying(token: PoolToken): ApiToken {
-  return token.isErc4626 && token.underlyingToken
-    ? {
-        ...token.underlyingToken,
-        address: token.underlyingToken.address as Address,
-        chainId: token.underlyingToken.chainId as number,
-        chain: token.underlyingToken.chain as GqlChain,
-        priority: token.underlyingToken.priority as number,
-        tradable: token.underlyingToken.tradable as boolean,
-      }
-    : {
-        ...token,
-        address: token.address as Address,
-        chainId: token.chainId as number,
-        chain: token.chain as GqlChain,
-        priority: token.priority as number,
-        tradable: token.tradable as boolean,
-      }
+  // TODO: Do we need to check for isBufferedToken here?
+  return token.isErc4626 && token.underlyingToken ? token.underlyingToken : buildApiToken(token)
 }
 
 export function getSpenderForAddLiquidity(pool: Pool): Address {
@@ -167,4 +152,16 @@ export function getSpenderForAddLiquidity(pool: Pool): Address {
   }
   const { vaultAddress } = getVaultConfig(pool)
   return vaultAddress
+}
+
+function buildApiToken(poolToken: PoolToken) {
+  return {
+    ...poolToken,
+    // The following fields are (wrongly) optional in the generated PoolToken schema so we have to cast them to satisfy TS
+    address: poolToken.address as Address,
+    chainId: poolToken.chainId as number,
+    chain: poolToken.chain as GqlChain,
+    priority: poolToken.priority as number,
+    tradable: poolToken.tradable as boolean,
+  }
 }
