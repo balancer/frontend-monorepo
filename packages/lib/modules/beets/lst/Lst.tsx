@@ -74,13 +74,12 @@ export function Lst() {
     isWithdrawTab,
     stakeTransactionSteps,
     unstakeTransactionSteps,
-    stakedAsset,
     chain,
   } = useLst()
   const stakeModalDisclosure = useDisclosure()
   const unstakeModalDisclosure = useDisclosure()
   const { startTokenPricePolling } = useTokens()
-  const { isBalancesLoading, balanceFor } = useTokenBalances()
+  const { isBalancesLoading } = useTokenBalances()
   const [disclosure, setDisclosure] = useState(stakeModalDisclosure)
   const { userNumWithdraws } = useGetUserNumWithdraws(chain)
   const {
@@ -92,8 +91,6 @@ export function Lst() {
   const isLoading = !isMounted || isBalancesLoading || isWithdrawalsLoading
   const loadingText = isLoading ? 'Loading...' : undefined
 
-  const isUnstakeDisabled = bn(balanceFor(stakedAsset?.address || '')?.amount || 0).lte(0)
-
   const tabs: ButtonGroupOption[] = [
     {
       value: '0',
@@ -103,13 +100,12 @@ export function Lst() {
     {
       value: '1',
       label: 'Unstake',
-      //      disabled: isUnstakeDisabled,
-      disabled: false, // for testing
+      disabled: false,
     },
     {
       value: '2',
       label: 'Withdraw',
-      disabled: false, // TODO: disable when no tokens unstaked
+      disabled: false,
     },
   ]
 

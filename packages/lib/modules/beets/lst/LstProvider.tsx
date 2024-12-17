@@ -16,6 +16,7 @@ import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisable
 import { useTokens } from '../../tokens/TokensProvider'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { useLstWithdrawStep } from './hooks/useLstWithdrawStep'
+import { useTokenInputsValidation } from '../../tokens/TokenInputsValidationProvider'
 
 const CHAIN = GqlChain.Sonic
 const WITHDRAW_DELAY = 1209600 // 14 days in seconds
@@ -29,6 +30,7 @@ export function _useLst() {
   const [withdrawWrID, setWithdrawWrID] = useState<string>('')
   const { isConnected } = useUserAccount()
   const { getToken } = useTokens()
+  const { hasValidationError, getValidationError } = useTokenInputsValidation()
 
   function setPagination(pagination: PaginationState) {
     setFirst(pagination.pageSize)
@@ -67,6 +69,9 @@ export function _useLst() {
   const lstWithdrawTxHash = withdrawTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstWithdrawTxConfirmed = withdrawTransactionSteps.lastTransactionConfirmed
 
+  const hasStakedAssetValidationError = hasValidationError(stakedAsset)
+  const hasNativeAssetValidationError = hasValidationError(nativeAsset)
+
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
     [isStakeTab && (!amountAssets || bn(amountAssets).lt(0.01)), 'Minimum amount to stake is 0.01'],
@@ -74,6 +79,8 @@ export function _useLst() {
       isUnstakeTab && (!amountShares || bn(amountShares).lte(0)),
       'Please enter an amount to unstake',
     ],
+    [isStakeTab && hasNativeAssetValidationError, getValidationError(nativeAsset)],
+    [isUnstakeTab && hasStakedAssetValidationError, getValidationError(stakedAsset)],
   ]
 
   const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
