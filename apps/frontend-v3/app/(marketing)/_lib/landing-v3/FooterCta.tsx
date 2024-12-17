@@ -113,7 +113,7 @@ export function FooterCta() {
             <MotionButton
               animate={shouldAnimate ? { opacity: 1 } : {}}
               as={NextLink}
-              href="https://docs-v3.balancer.fi"
+              href="https://docs.balancer.fi"
               initial={{ opacity: 0 }}
               rightIcon={<ArrowUpRight size="20px" />}
               size={{ base: 'md', lg: 'lg' }}

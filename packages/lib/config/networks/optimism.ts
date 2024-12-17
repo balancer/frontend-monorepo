@@ -50,6 +50,7 @@ const networkConfig: NetworkConfig = {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
       relayerV6: '0x015ACA20a1422F3c729086c17f15F10e0CfbC75A',
       minter: '0x4fb47126Fa83A8734991E41B942Ac29A3266C968',
+      WeightedPool2TokensFactory: '0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e',
     },
     veDelegationProxy: '0x9dA18982a33FD0c7051B19F0d7C76F2d5E7e017c',
   },
