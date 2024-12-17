@@ -16,21 +16,7 @@ import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
 export const metadata: Metadata = {
   title: 'Beets DeFi Liquidity Pools',
   description: `Explore DeFi liquidity pools and swap tokens. Provide liquidity to accumulate yield from swap fees while retaining your token exposure as prices move.`,
-  icons: [
-    { rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      url: '/favicon-light.png',
-      media: '(prefers-color-scheme: light)',
-    },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      url: '/favicon-dark.png',
-      media: '(prefers-color-scheme: dark)',
-    },
-  ],
+  icons: [{ rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' }],
 }
 
 export default function RootLayout({ children }: PropsWithChildren) {
