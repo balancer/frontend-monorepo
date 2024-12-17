@@ -59,8 +59,8 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
   [GqlChain.Fraxtal]: ChainSlug.Fraxtal,
 }
 
-export const slugToChainMap = invert(chainToSlugMap) as Record<ChainSlug, GqlChain>
 export function getChainSlug(chainSlug: ChainSlug): GqlChain {
+  const slugToChainMap = invert(chainToSlugMap) as Record<ChainSlug, GqlChain>
   const chain = slugToChainMap[chainSlug]
   if (!chain) throw new Error(`Chain ${chainSlug} is not a valid chainName`)
   return chain
