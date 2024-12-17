@@ -31,6 +31,7 @@ import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem } from './pool.types'
 import { Pool } from './PoolProvider'
+import { isBeetsProject, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 /**
  * METHODS
@@ -286,6 +287,9 @@ export function shouldBlockAddLiquidity(pool: Pool) {
   // avoid blocking Sepolia pools
   if (pool.chain === GqlChain.Sepolia) return false
 
+  // don't add liquidity to the maBEETS pool thru the pool page
+  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) return true
+
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
   // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
@@ -331,6 +335,11 @@ export function getPoolAddBlockedReason(pool: Pool): string {
   if (isLBP(pool.type)) return 'LBP pool'
   if (pool.dynamicData.isPaused) return 'Paused pool'
   if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
+
+  // don't add liquidity to the maBEETS pool thru the pool page
+  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) {
+    return 'Please manage your liquidity on the maBEETS page.'
+  }
 
   if (pool.hook && !hasReviewedHook(pool.hook)) {
     return 'Unreviewed hook'
