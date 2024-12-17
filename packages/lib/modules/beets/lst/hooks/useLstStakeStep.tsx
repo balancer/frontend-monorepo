@@ -17,10 +17,12 @@ import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { noop } from 'lodash'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 
 export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: boolean) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
+  const { refetchBalances } = useTokenBalances()
 
   const labels: TransactionLabels = {
     init: 'Stake',
@@ -59,7 +61,7 @@ export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: b
       isComplete,
       onActivated: noop,
       onDeactivated: noop,
-      onSuccess: noop,
+      onSuccess: () => refetchBalances(),
       renderAction: () => <ManagedTransactionButton id="stakeLst" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

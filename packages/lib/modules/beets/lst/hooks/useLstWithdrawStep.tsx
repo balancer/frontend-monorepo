@@ -14,6 +14,7 @@ import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useMan
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { noop } from 'lodash'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 
 export function useLstWithdrawStep(
   humanAmount: string,
@@ -23,6 +24,7 @@ export function useLstWithdrawStep(
 ) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
+  const { refetchBalances } = useTokenBalances()
 
   const labels: TransactionLabels = {
     init: 'Withdraw',
@@ -60,7 +62,7 @@ export function useLstWithdrawStep(
       isComplete,
       onActivated: noop,
       onDeactivated: noop,
-      onSuccess: noop,
+      onSuccess: () => refetchBalances(),
       renderAction: () => <ManagedTransactionButton id="withdrawLst" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
