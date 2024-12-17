@@ -1,5 +1,6 @@
-import { Box, Center, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Text, VStack } from '@chakra-ui/react'
 import { Title } from '../components/Title'
+import NextLink from 'next/link'
 
 export function LandingBeetsHero() {
   return (
@@ -18,6 +19,14 @@ export function LandingBeetsHero() {
             LST-focused liquidity pools, beets is the ultimate destination for your liquid-staked
             tokens.
           </Text>
+          <Flex gap="lg" mt="lg">
+            <Button size="lg" variant="primary" as={NextLink} href="/stake">
+              Stake $S
+            </Button>
+            <Button size="lg" variant="secondary" as={NextLink} href="/pools">
+              Explore Pools
+            </Button>
+          </Flex>
         </VStack>
       </Center>
     </Box>

@@ -7,12 +7,8 @@ import { AppLink } from '@repo/lib/shared/components/navs/useNav'
 export function useNavData() {
   const appLinks: AppLink[] = [
     {
-      href: '/mabeets',
-      label: 'maBEETS',
-    },
-    {
       href: '/sftmx',
-      label: 'Stake S',
+      label: 'Stake $S',
     },
   ]
 

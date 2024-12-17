@@ -15,6 +15,7 @@ export function LandingSectionContainer({
   button?: {
     text: string
     href: string
+    isExternal?: boolean
   }
 }) {
   return (
@@ -33,7 +34,13 @@ export function LandingSectionContainer({
         {children}
         {button && (
           <Flex justify="center" pt="2xl">
-            <Button variant="primary" as={NextLink} href={button.href} minWidth="160px">
+            <Button
+              variant="primary"
+              as={NextLink}
+              href={button.href}
+              minWidth="160px"
+              target={button.isExternal ? '_blank' : undefined}
+            >
               {button.text}
             </Button>
           </Flex>

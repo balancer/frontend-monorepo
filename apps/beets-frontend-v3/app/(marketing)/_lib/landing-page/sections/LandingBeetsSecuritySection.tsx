@@ -35,12 +35,7 @@ export function LandingBeetsSecuritySection() {
   return (
     <LandingSectionContainer
       title="Code you can trust"
-      subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis suscipit ligula a ultrices
-            dapibus. Maecenas sit amet lectus tortor. Nam luctus eros leo."
-      button={{
-        text: 'Learn more',
-        href: '',
-      }}
+      subtitle="Built with security at its core, beets prioritizes trust at every level. From rigorous audits to open-source transparency and continuous monitoring, our ecosystem ensures your assets remain safe, reliable, and accessible."
     >
       <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
         <Grid

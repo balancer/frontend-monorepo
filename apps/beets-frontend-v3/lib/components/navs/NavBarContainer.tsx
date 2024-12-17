@@ -7,6 +7,10 @@ import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BeetsLogoType } from '../imgs/BeetsLogoType'
 import { LzBeetsMigrator } from '@repo/lib/shared/components/btns/LzBeetsMigrator'
+import { Box } from '@chakra-ui/react'
+import { motion } from 'framer-motion'
+import { fadeIn } from '@repo/lib/shared/utils/animations'
+import { MaBeetsNavLink } from './MaBeetsNavLink'
 
 export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
@@ -31,6 +35,11 @@ export function NavBarContainer() {
           <LzBeetsMigrator />
           <NavActions hideDarkModeToggle mobileNav={mobileNav} />
         </>
+      }
+      customLinks={
+        <Box as={motion.div} variants={fadeIn}>
+          <MaBeetsNavLink />
+        </Box>
       }
     />
   )

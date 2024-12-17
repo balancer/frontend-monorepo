@@ -7,6 +7,9 @@ import { NavLogo } from './NavLogo'
 import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BalancerLogoType } from '../imgs/BalancerLogoType'
+import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
+import { Box } from '@chakra-ui/react'
+import { fadeIn } from '@repo/lib/shared/utils/animations'
 
 export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
@@ -31,6 +34,11 @@ export function NavBarContainer() {
             />
           }
           navLogo={<NavLogo />}
+          customLinks={
+            <Box as={motion.div} variants={fadeIn}>
+              <VeBalLink />
+            </Box>
+          }
         />
       </motion.div>
     </AnimatePresence>

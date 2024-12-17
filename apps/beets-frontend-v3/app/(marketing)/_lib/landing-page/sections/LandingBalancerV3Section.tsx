@@ -43,7 +43,8 @@ export function LandingBalancerV3Section() {
       subtitle="Revolutionizing Liquidity, Redefining DeFi"
       button={{
         text: 'Discover Balancer v3',
-        href: '',
+        href: 'https://docs.balancer.fi',
+        isExternal: true,
       }}
     >
       <Box bg="rgba(255, 255, 255, 0.05)" pb="xl" px="xl" w="full">
@@ -62,11 +63,11 @@ export function LandingBalancerV3Section() {
             fontSize="2xl"
             fontWeight="thin"
             textAlign="center"
-            pb="2xl"
+            pb="xl"
             w={{ base: 'full', lg: '2xl' }}
           >
-            Balancer v3 shifts complexity into a unified Vault, simplifying pool creation and
-            enhancing flexibility.
+            Balancer v3 provides permissionless technology to streamline AMM development for
+            developers and empower liquidity providers with an ever-expanding DEX product suite.
           </Box>
         </Box>
 

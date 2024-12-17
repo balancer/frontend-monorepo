@@ -135,7 +135,7 @@ export function LzBeetsMigrator() {
         <PopoverCloseButton />
         <PopoverHeader fontWeight="bold">Migrate your BEETS</PopoverHeader>
         <PopoverBody>
-          Transfer your LZBEETS for native BEETS on Sonic.
+          Exchange your LZBEETS for native BEETS on Sonic.
           {isConnected ? (
             <MigrationButton balance={balanceData?.value || 0n} />
           ) : (
