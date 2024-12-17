@@ -14,9 +14,9 @@ export function LandingBeetsHero() {
             px={{ base: 'md', md: 'none' }}
             w="2xl"
           >
-            Formely Beethoven X, Beets is an established, trusted, community-led project providing
-            innovative crypto investment opportunities with Balancer tech on the Sonic & Optimisim
-            networks.
+            The Flagship LST Hub on Sonic. From seamless staking to earning real yield on
+            LST-focused liquidity pools, beets is the ultimate destination for your liquid-staked
+            tokens.
           </Text>
         </VStack>
       </Center>
