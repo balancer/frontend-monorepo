@@ -452,6 +452,7 @@ export function PoolListFilters() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const {
     isFixedPoolType,
+    showPoolCreator,
     queryState: { resetFilters, totalFilterCount, setActiveProtocolVersionTab },
   } = usePoolList()
   const { isCowPath } = useCow()
@@ -561,19 +562,21 @@ export function PoolListFilters() {
             </PopoverContent>
           </Box>
         </Popover>
-        <Button
-          as={Link}
-          display="flex"
-          gap="2"
-          href={`https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`}
-          ml="ms"
-          rel=""
-          target="_blank"
-          variant="tertiary"
-        >
-          <Icon as={Plus} boxSize={4} />
-          {!isMobile && 'Create a pool'}
-        </Button>
+        {showPoolCreator && (
+          <Button
+            as={Link}
+            display="flex"
+            gap="2"
+            href={`https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`}
+            ml="ms"
+            rel=""
+            target="_blank"
+            variant="tertiary"
+          >
+            <Icon as={Plus} boxSize={4} />
+            {!isMobile && 'Create a pool'}
+          </Button>
+        )}
       </HStack>
     </VStack>
   )

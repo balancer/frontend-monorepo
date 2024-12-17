@@ -45,7 +45,7 @@ export default async function PoolsPage() {
       <DefaultPageContainer noVerticalPadding pb={['xl', '2xl']} pt={['lg', '54px']}>
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
-            <PoolList hidePoolTypes={[GqlPoolType.CowAmm]} />
+            <PoolList hidePoolTypes={[GqlPoolType.CowAmm]} showPoolCreator />
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
