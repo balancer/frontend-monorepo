@@ -719,9 +719,9 @@ export default function Privacy() {
               <p>
                 Hooks introduces complex logic into Balancer pools and changes in its parameters can
                 significantly impact the risk profile of a pool. This complexity increases the
-                potential for unforeseen errors or vulnerabilities in the hook's code, that may i.e.
-                amplify impermanent loss, introduce new sources of volatility or impose restrictions
-                on pool interactions like joins and exits.
+                potential for unforeseen errors or vulnerabilities in the hook&apos;s code, that may
+                i.e. amplify impermanent loss, introduce new sources of volatility or impose
+                restrictions on pool interactions like joins and exits.
               </p>
               <ul>
                 <li>
