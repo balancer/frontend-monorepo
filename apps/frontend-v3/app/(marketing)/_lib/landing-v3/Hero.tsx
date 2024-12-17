@@ -146,7 +146,7 @@ export function Hero() {
                     : {}
                 }
                 as={NextLink}
-                href="https://docs-v3.balancer.fi"
+                href="https://docs.balancer.fi"
                 initial={{ opacity: 0 }}
                 rightIcon={<ArrowUpRight size="20px" />}
                 size="lg"

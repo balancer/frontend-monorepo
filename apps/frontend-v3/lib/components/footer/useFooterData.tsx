@@ -6,7 +6,7 @@ export function useFooterData() {
       title: 'Build on Balancer',
       links: [
         { label: 'Home', href: '/' },
-        { label: 'v3 Docs', href: 'https://docs-v3.balancer.fi', isExternal: true },
+        { label: 'v3 Docs', href: 'https://docs.balancer.fi', isExternal: true },
         {
           label: 'Prototype on v3',
           href: 'https://github.com/balancer/scaffold-balancer-v3',
