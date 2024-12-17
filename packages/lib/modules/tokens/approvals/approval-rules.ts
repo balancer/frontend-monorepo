@@ -84,3 +84,7 @@ function isDoubleApprovalRequired(
 ): boolean {
   return !!(requiresDoubleApproval(chainId, tokenAddress) && allowanceFor(tokenAddress) > 0n)
 }
+
+export function areEmptyRawAmounts(amountsIn: RawAmount[]) {
+  return !amountsIn || amountsIn.length === 0 || amountsIn.every(amount => amount.rawAmount === 0n)
+}

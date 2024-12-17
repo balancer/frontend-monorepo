@@ -17,7 +17,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { invert } from 'lodash'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { Address, Hash, isAddress, parseUnits } from 'viem'
-import { ChainSlug, chainToSlugMap, slugToChainMap } from '../pool/pool.utils'
+import { ChainSlug, chainToSlugMap, getChainSlug } from '../pool/pool.utils'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
 import { usePriceImpact } from '../price-impact/PriceImpactProvider'
 import { useTokenBalances } from '../tokens/TokenBalancesProvider'
@@ -228,7 +228,6 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   }
 
   function setSelectedChain(_selectedChain: GqlChain) {
-    if (isPoolSwapUrl) return
     const defaultTokenState = getDefaultTokenState(_selectedChain)
     swapStateVar(defaultTokenState)
   }
@@ -484,8 +483,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   function setInitialChain(slugChain?: string) {
     const _chain =
-      slugChain && slugToChainMap[slugChain as ChainSlug]
-        ? slugToChainMap[slugChain as ChainSlug]
+      slugChain && getChainSlug(slugChain as ChainSlug)
+        ? getChainSlug(slugChain as ChainSlug)
         : walletChain
 
     setSelectedChain(_chain)
@@ -502,7 +501,9 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   // Sets initial swap state for pool swap edge-case
   function setInitialPoolSwapState(pool: Pool) {
     const { tokenIn } = pathParams
-    setInitialChain(pool.chain)
+    const slugChain = chainToSlugMap[pool.chain]
+    if (!slugChain) throw new Error(`Chain slug not found for chain ${pool.chain}`)
+    setInitialChain(slugChain)
 
     if (supportsNestedActions(pool)) {
       setInitialTokenIn(tokenIn)

@@ -19,7 +19,7 @@ import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
 const contracts = [
   {
     title: 'Router',
-    url: 'https://docs-v3.balancer.fi/concepts/router/overview.html',
+    url: 'https://docs.balancer.fi/concepts/router/overview.html',
     shortDescription: 'Entry-point for all pool operations',
     description:
       'Routers serve as the pivotal interface for users, facilitating efficient interaction with the underlying Vault primitives. Rather than directly engaging with the Vault, users are encouraged to use Routers as their primary entry point. This approach streamlines operations and enhances flexibility by abstracting multi-step operations into simple user-facing functions.',
@@ -36,7 +36,7 @@ const contracts = [
   },
   {
     title: 'Pool',
-    url: 'https://docs-v3.balancer.fi/concepts/explore-available-balancer-pools/',
+    url: 'https://docs.balancer.fi/concepts/explore-available-balancer-pools/',
     shortDescription: 'Handles math for pool operations',
     description:
       'Balancer Pools are smart contracts that define how traders can swap between tokens on Balancer Protocol. The architecture of Balancer Protocol empowers anyone to create custom pool types. What makes Balancer Pools unique from those of other protocols is their unparalleled flexibility. With the introduction of Hooks and Dynamic Swap Fees, the degree of customization is boundless.\n\nBalancer has already developed, audited and deployed a variety of pool types showcasing diverse functionalities. These pools are readily accessible for existing use cases without requiring permission. ',
@@ -52,7 +52,7 @@ const contracts = [
   },
   {
     title: 'Vault',
-    url: 'https://docs-v3.balancer.fi/concepts/vault/',
+    url: 'https://docs.balancer.fi/concepts/vault/',
     shortDescription: 'Handles accounting & holds tokens',
     description:
       'The Vault is the core of the Balancer protocol; it is a smart contract that holds and manages all tokens in each Balancer pool. First introduced in Balancer v2, the vault architecture separates token accounting from pool logic, allowing for simplified pool contracts that focus on the implementation of their swap, add liquidity and remove liquidity logic.',
@@ -73,7 +73,7 @@ const contracts = [
   },
   {
     title: 'Hook',
-    url: 'https://docs-v3.balancer.fi/concepts/core-concepts/hooks.html',
+    url: 'https://docs.balancer.fi/concepts/core-concepts/hooks.html',
     shortDescription: 'Can execute actions before and/or after pool does math',
     description:
       'Hooks introduce a framework to extend existing pool types at various key points throughout the pool’s lifecycle. Hooks can execute actions during pool operation and also compute a dynamic swap fee.\n\nHooks are implemented as standalone contracts that can have their own internal logic and state. One hook contract can facilitate many pools (and pool types). The hook system is flexible and allows developers to implement custom logic at different points of the pool’s lifecycle.',

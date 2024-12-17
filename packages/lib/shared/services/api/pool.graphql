@@ -21,6 +21,7 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     tags
     hasErc4626
     hasNestedErc4626
+    hasAnyAllowedBuffer
     liquidityManagement {
       disableUnbalancedLiquidity
     }

@@ -60,6 +60,7 @@ fragment PoolTokens on GqlPoolTokenDetail {
       symbol
       weight
       isErc4626
+      isBufferAllowed
       underlyingToken {
         ...UnderlyingToken
       }
@@ -72,6 +73,7 @@ fragment PoolTokens on GqlPoolTokenDetail {
     }
   }
   isErc4626
+  isBufferAllowed
   underlyingToken {
     ...UnderlyingToken
   }

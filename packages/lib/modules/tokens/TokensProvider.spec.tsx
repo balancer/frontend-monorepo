@@ -44,6 +44,7 @@ test('gets tokens by token address', async () => {
           "chain": "MAINNET",
           "chainId": 1,
           "decimals": 18,
+          "isBufferAllowed": true,
           "isErc4626": false,
           "logoURI": "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xba100000625a3754423978a60c9317c58a424e3d.png",
           "name": "Balancer",
