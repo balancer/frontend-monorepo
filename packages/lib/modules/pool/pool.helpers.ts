@@ -258,12 +258,12 @@ export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
 }
 
 export function hasRateProvider(token: GqlPoolTokenDetail): boolean {
-  const isPriceRateProvider =
+  const hasNoPriceRateProvider =
     isNil(token.priceRateProvider) || // if null, we consider rate provider as zero address
     token.priceRateProvider === zeroAddress ||
     token.priceRateProvider === token.nestedPool?.address
 
-  return !isPriceRateProvider && !isNil(token.priceRateProviderData)
+  return !hasNoPriceRateProvider && !isNil(token.priceRateProviderData)
 }
 
 export function hasReviewedHook(hook: GqlHook): boolean {
