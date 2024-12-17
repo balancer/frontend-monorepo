@@ -298,7 +298,7 @@ export function isWeightedPool2Tokens(pool: Pool): boolean {
     isV2Pool(pool) &&
     isSameAddress(
       (pool?.factory as Address) || '',
-      getNetworkConfig(pool.chain).contracts.balancer.WeightedPool2TokensFactory || '0xUndefined'
+      getNetworkConfig(pool.chain).contracts.balancer?.WeightedPool2TokensFactory || '0xUndefined'
     )
   ) {
     return true
