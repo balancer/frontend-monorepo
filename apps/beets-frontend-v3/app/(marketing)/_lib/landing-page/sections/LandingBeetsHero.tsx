@@ -3,8 +3,8 @@ import { Title } from '../components/Title'
 
 export function LandingBeetsHero() {
   return (
-    <Box maxW="100vw" position="relative">
-      <Center pb="100px" pt="200px" textAlign="center">
+    <Box maxW="100vw" position="relative" pt="72px">
+      <Center h="60vh" textAlign="center">
         <VStack w="100%">
           <Title mb="md" />
           <Text
