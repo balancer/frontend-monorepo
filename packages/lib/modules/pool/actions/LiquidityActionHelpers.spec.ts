@@ -132,6 +132,7 @@ describe('toInputAmounts', () => {
         address: ethAddress,
         decimals: 18,
         rawAmount: 30000000000000000000n,
+        symbol: 'ETH',
       },
     ])
   })
@@ -157,6 +158,7 @@ describe('toSdkInputAmounts', () => {
         address: wethAddress,
         decimals: 18,
         rawAmount: 30000000000000000000n,
+        symbol: 'wjAura',
       },
     ])
   })

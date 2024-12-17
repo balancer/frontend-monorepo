@@ -17,7 +17,7 @@ test('swapWrappedWithNative', () => {
     },
   ]
   const result = swapWrappedWithNative(inputAmounts, GqlChain.Mainnet)
-  expect(result).toEqual([{ humanAmount: '1', tokenAddress: ethAddress }])
+  expect(result).toEqual([{ humanAmount: '1', tokenAddress: ethAddress, symbol: 'WETH' }])
 })
 
 test('swapNativeWithWrapped', () => {
