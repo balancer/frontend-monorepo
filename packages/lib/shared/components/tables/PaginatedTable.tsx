@@ -10,9 +10,10 @@ interface Props<T> extends BoxProps {
   showPagination: boolean
   paginationProps: any // TODO: type this
   noItemsFoundLabel: string
+  getRowId: (item: T, index: number) => React.Key
 }
 
-export function PaginatedTable({
+export function PaginatedTable<T extends any>({
   items,
   loading,
   renderTableRow,
@@ -20,7 +21,8 @@ export function PaginatedTable({
   showPagination,
   paginationProps,
   noItemsFoundLabel,
-}: Props<any>) {
+  getRowId,
+}: Props<T>) {
   return (
     <>
       <VStack className="hide-scrollbar" overflowX="scroll" w="full">
@@ -29,7 +31,7 @@ export function PaginatedTable({
           {items.length > 0 && (
             <VStack gap="0">
               {items.map((item, index) => (
-                <Box key={item.id} w="full">
+                <Box key={getRowId(item, index)} w="full">
                   {renderTableRow(item, index)}
                 </Box>
               ))}

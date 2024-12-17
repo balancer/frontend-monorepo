@@ -47,6 +47,7 @@ export function PoolListTable({ pools, count, loading }: Props) {
     >
       <PaginatedTable
         items={pools}
+        getRowId={item => item.id}
         loading={loading}
         noItemsFoundLabel="No pools found"
         paginationProps={paginationProps}

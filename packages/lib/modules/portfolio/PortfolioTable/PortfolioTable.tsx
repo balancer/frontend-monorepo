@@ -163,6 +163,7 @@ export function PortfolioTable() {
           >
             <PaginatedTable
               alignItems="flex-start"
+              getRowId={row => row.uniqueKey}
               items={sortedPools}
               left={{ base: '-4px', sm: '0' }}
               loading={isLoadingPortfolio}
