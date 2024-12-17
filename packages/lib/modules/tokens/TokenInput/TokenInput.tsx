@@ -266,6 +266,7 @@ export const TokenInput = forwardRef(
                 boxShadow="none"
                 fontSize="3xl"
                 fontWeight="medium"
+                isDisabled={!token}
                 min={0}
                 onChange={handleOnChange}
                 onKeyDown={blockInvalidNumberInput}
@@ -283,15 +284,17 @@ export const TokenInput = forwardRef(
                 value={value}
                 {...inputProps}
               />
-              <Box
-                bgGradient="linear(to-r, transparent, background.level0 70%)"
-                h="full"
-                position="absolute"
-                right={0}
-                top={0}
-                w="8"
-                zIndex={9999}
-              />
+              {token && (
+                <Box
+                  bgGradient="linear(to-r, transparent, background.level0 70%)"
+                  h="full"
+                  position="absolute"
+                  right={0}
+                  top={0}
+                  w="8"
+                  zIndex={9999}
+                />
+              )}
             </Box>
 
             {tokenInputSelector && (
