@@ -38,7 +38,7 @@ module.exports = {
   rules: {
     curly: ['error', 'multi-line'],
     'no-console': ['off'],
-    'max-len': ['warn', { code: 120, ignoreComments: true, ignoreUrls: true }],
+    'max-len': ['warn', { code: 120, ignoreComments: true, ignoreUrls: true, ignoreTemplateLiterals: true, ignoreStrings: true }],
     '@typescript-eslint/no-explicit-any': ['off'],
     'no-html-link-for-pages': ['off'],
     'no-restricted-imports': [
