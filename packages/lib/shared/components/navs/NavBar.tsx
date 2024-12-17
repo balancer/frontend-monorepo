@@ -97,10 +97,14 @@ function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
   const actions = useMemo(() => {
     if (pathname === '/') {
       return [
-        {
-          el: <DarkModeToggle />,
-          display: { base: 'none', lg: 'block' },
-        },
+        ...(isBalancerProject
+          ? [
+              {
+                el: <DarkModeToggle />,
+                display: { base: 'none', lg: 'block' },
+              },
+            ]
+          : []),
         {
           el: (
             <Button as={NextLink} href="/pools" prefetch px={7} size="md" variant="primary">
@@ -121,10 +125,14 @@ function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
         el: <UserSettings />,
         display: { base: 'none', lg: 'block' },
       },
-      {
-        el: <DarkModeToggle />,
-        display: { base: 'none', lg: 'block' },
-      },
+      ...(isBalancerProject
+        ? [
+            {
+              el: <DarkModeToggle />,
+              display: { base: 'none', lg: 'block' },
+            },
+          ]
+        : []),
       {
         el: <ConnectWallet />,
         display: { base: 'block', lg: 'block' },
