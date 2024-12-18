@@ -58,20 +58,20 @@
       "inputs": ["**/*.graphql"],
       "outputs": ["shared/services/api/generated/**"]
     },
-    "//#format": {
-      "outputs": ["node_modules/.cache/.prettiercache"]
+    "prettier": {
+      "dependsOn": ["^prettier"],
+      "outputs": [".prettiercache"]
     },
-    "format": {
-      "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.prettiercache"]
-    },
-    "//#format:fix": {
-      "outputs": ["node_modules/.cache/.prettiercache"],
+    "prettier:fix": {
+      "dependsOn": ["^prettier:fix"],
+      "outputs": [".prettiercache"],
       "cache": false
     },
-    "format:fix": {
-      "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.prettiercache"],
+    "stylelint": {
+      "dependsOn": ["^stylelint"]
+    },
+    "stylelint:fix": {
+      "dependsOn": ["^stylelint:fix"],
       "cache": false
     }
   }
