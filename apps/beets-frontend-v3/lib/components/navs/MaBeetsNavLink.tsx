@@ -23,7 +23,7 @@ interface MaBeetsRedirectModalProps extends LinkProps {
   triggerEl?: ReactNode
 }
 
-export function MaBeetsNavLink({ triggerEl, ...props }: MaBeetsNavLinkProps) {
+export function MaBeetsNavLink({ triggerEl, ...props }: MaBeetsRedirectModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
