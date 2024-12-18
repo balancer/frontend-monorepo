@@ -13,7 +13,13 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { type BaseError, useBalance, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import {
+  type BaseError,
+  useBalance,
+  useReadContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from 'wagmi'
 import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import Link from 'next/link'
@@ -21,7 +27,8 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { formatUnits } from 'viem'
+import { Address, formatUnits } from 'viem'
+import { useTokenAllowances } from '@repo/lib/modules/web3/useTokenAllowances'
 
 const sonicChainId = 146
 const lzBeetsAddress = '0x1E5fe95fB90ac0530F581C617272cd0864626795'
@@ -105,6 +112,84 @@ function MigrationButton({ balance }: { balance: bigint }) {
   )
 }
 
+function ApproveButton({ balance }: { balance: bigint }) {
+  const [isRefetching, setIsRefetching] = useState(false)
+  const { data: hash, writeContract, isPending, error } = useWriteContract()
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
+  })
+
+  const hasLzBeetsBalance = bn(balance).gt(0)
+
+  function approve() {
+    writeContract({
+      address: lzBeetsAddress,
+      abi: [
+        {
+          name: 'approve',
+          type: 'function',
+          inputs: [{ type: 'address' }, { type: 'uint256' }],
+          outputs: [],
+        },
+      ],
+      functionName: 'approve',
+      chainId: sonicChainId,
+      args: [migratorAddress, balance],
+    })
+  }
+
+  useEffect(() => {
+    async function refetch() {
+      setIsRefetching(true)
+      // TODO: refetch balance
+      setIsRefetching(false)
+    }
+    if (isConfirmed) {
+      refetch()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConfirmed])
+
+  return (
+    <>
+      {error && (
+        <ErrorAlert>
+          <Text color="black" variant="secondary">
+            Error: {(error as BaseError).shortMessage || error.message}
+          </Text>
+        </ErrorAlert>
+      )}
+      {isConfirmed && !!hash && (
+        <Button
+          as={Link}
+          href={getBlockExplorerTxUrl(hash, GqlChain.Sonic)}
+          variant="flat"
+          w="full"
+        >
+          View on explorer
+        </Button>
+      )}
+      <Button
+        disabled={isPending || isConfirming || isRefetching || isConfirmed || !hasLzBeetsBalance}
+        isDisabled={isPending || isConfirming || isRefetching || isConfirmed || !hasLzBeetsBalance}
+        isLoading={isPending || isConfirming}
+        mt="md"
+        onClick={approve}
+        variant={isConfirmed ? 'flat' : 'primary'}
+        w="full"
+      >
+        {isPending
+          ? 'Confirm in wallet...'
+          : isConfirming
+            ? 'Confirming...'
+            : isConfirmed
+              ? 'Confirmed!'
+              : 'Approve'}
+      </Button>
+    </>
+  )
+}
+
 export function LzBeetsMigrator() {
   const { isConnected, userAddress } = useUserAccount()
   const [shouldShow, setShouldShow] = useState(false)
@@ -114,8 +199,16 @@ export function LzBeetsMigrator() {
     token: lzBeetsAddress,
   })
 
+  const { allowances } = useTokenAllowances({
+    chainId: sonicChainId,
+    userAddress: userAddress as Address,
+    spenderAddress: migratorAddress,
+    tokenAddresses: [lzBeetsAddress],
+  })
+
   const balance = formatUnits(balanceData?.value || 0n, balanceData?.decimals || 18)
   const hasBalance = bn(balanceData?.value || 0n).gt(0)
+  const hasAllowance = bn(allowances[lzBeetsAddress] || 0n).gt(bn(balanceData?.value || 0n))
 
   useEffect(() => {
     if (hasBalance && !shouldShow) {
@@ -148,7 +241,11 @@ export function LzBeetsMigrator() {
         <PopoverBody>
           Exchange your LZBEETS for BEETS on Sonic.
           {isConnected ? (
-            <MigrationButton balance={balanceData?.value || 0n} />
+            hasAllowance ? (
+              <MigrationButton balance={balanceData?.value || 0n} />
+            ) : (
+              <ApproveButton balance={balanceData?.value || 0n} />
+            )
           ) : (
             <ConnectWallet mt="md" variant="primary" w="full" />
           )}
