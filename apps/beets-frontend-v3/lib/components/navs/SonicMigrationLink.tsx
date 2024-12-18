@@ -32,7 +32,7 @@ export function SonicMigrationLink({ triggerEl, ...props }: SonicMigrationRedire
         {triggerEl || (
           <HStack>
             <FantomToSonicSvg height={24} />
-            <Box>Migration</Box>
+            <Box>Migrate</Box>
           </HStack>
         )}
       </Link>
