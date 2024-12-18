@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
-    "format:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn"
+    "format": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
+    "format:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn"
   }
 }
