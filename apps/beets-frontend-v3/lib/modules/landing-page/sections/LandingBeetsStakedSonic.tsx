@@ -13,7 +13,7 @@ export function LandingBeetsStakedSonic() {
       subtitle="stS redefines Liquid Staking by combining deep liquidity, robust security, and competitive yield into one powerful position. Purpose-built for Sonic, stS delivers an unparalleled staking experience—maximizing rewards without sacrificing flexibility."
       button={{
         text: 'Stake $S',
-        href: '',
+        href: '/stake',
       }}
     >
       <Box

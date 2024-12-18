@@ -48,25 +48,26 @@ export function MaBeetsRedirectModal({
     <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>maBEETS redirect</ModalHeader>
+        <ModalHeader>maBEETS</ModalHeader>
         <ModalCloseButton />
         <ModalBody color="grayText">
           <Text color="font.secondary">
-            A new and improved maBEETS experience is currently being crafted. In the meantime, go to
-            the old app to manage your maBEETS:
+            An integrated maBEETS experience is in the works. In the meantime, you can manage your
+            Sonic maBEETS relics at{' '}
+            <Link href="https://ma.beets.fi" target="_blank">
+              https://ma.beets.fi
+            </Link>
+            {'.'}
           </Text>
 
-          <UnorderedList>
-            <ListItem>
-              <Text color="font.secondary">Manage your relics</Text>
-            </ListItem>
-            <ListItem>
-              <Text color="font.secondary">Deposit into the fBEETS pool</Text>
-            </ListItem>
-            <ListItem>
-              <Text color="font.secondary">Claim your incentives</Text>
-            </ListItem>
-          </UnorderedList>
+          <Text color="font.secondary" mt="md">
+            It's recommended that you migrate Fantom maBEETS relics to Sonic. For more information,
+            refrer to the migration guide at{' '}
+            <Link href="https://docs.beets.fi" target="_blank">
+              https://docs.beets.fi
+            </Link>
+            .
+          </Text>
         </ModalBody>
 
         <ModalFooter>
@@ -76,9 +77,22 @@ export function MaBeetsRedirectModal({
             target="_blank"
             variant="primary"
             w="full"
+            mr="md"
           >
             <HStack>
-              <span>Manage your maBEETS</span>
+              <span>Sonic maBEETS</span>
+              <ArrowUpRight size={16} />
+            </HStack>
+          </Button>
+          <Button
+            as={NextLink}
+            href="https://ftm.beets.fi/mabeets"
+            target="_blank"
+            variant="tertiary"
+            w="full"
+          >
+            <HStack>
+              <span>Fantom maBEETS</span>
               <ArrowUpRight size={16} />
             </HStack>
           </Button>
