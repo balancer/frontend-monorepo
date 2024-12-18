@@ -264,7 +264,7 @@ function LzBeetsMigratorContent() {
         <PopoverHeader fontWeight="bold">Migrate your BEETS</PopoverHeader>
         <PopoverBody>
           When migrating BEETS from Fantom, you'll receive lzBEETS as a receipt token. Exchange your
-          LZBEETS for BEETS on Sonic here.
+          lzBEETS for BEETS on Sonic here.
           {isConnected ? (
             hasAllowance ? (
               <MigrationButton
