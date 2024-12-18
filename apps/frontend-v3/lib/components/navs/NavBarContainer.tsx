@@ -31,6 +31,7 @@ export function NavBarContainer() {
               appLinks={allAppLinks}
               ecosystemLinks={ecosystemLinks}
               socialLinks={getSocialLinks()}
+              customLinks={<VeBalLink fontSize="xl" />}
             />
           }
           navLogo={<NavLogo />}

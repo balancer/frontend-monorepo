@@ -14,6 +14,7 @@ import {
   Link,
   useDisclosure,
   LinkProps,
+  Box,
 } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
@@ -38,7 +39,7 @@ export function SonicMigrationLink({ triggerEl, ...props }: SonicMigrationRedire
               src="https://assets.coingecko.com/coins/images/4001/large/Fantom.png"
               width={24}
             />
-            <Text>Migration</Text>
+            <Box>Migration</Box>
           </HStack>
         )}
       </Link>
