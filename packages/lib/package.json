@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
-    "@balancer/sdk": "0.33.5",
+    "@balancer/sdk": "1.0.1",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "^2.2.1",
@@ -123,5 +123,10 @@
     "typescript": "5.4.5",
     "vitest": "2.1.8",
     "vitest-mock-extended": "2.0.2"
+  },
+  "overrides": {
+    "wagmi": {
+      "viem": "2.21.55"
+    }
   }
 }
