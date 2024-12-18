@@ -88,14 +88,14 @@ function ChainStats({ chain }: { chain: MockGqlChain }) {
   const { toCurrency } = useCurrency()
 
   return (
-    <Box bg="rgba(0, 0, 0, 0.2)" display="flex" flexDir="column" height="360px" p="lg" w="full">
+    <Box bg="rgba(0, 0, 0, 0.2)" display="flex" flexDir="column" height="300px" p="lg" w="full">
       <HStack justify="space-between" mb="sm" w="full">
         <Text fontSize="2xl">TVL</Text>
         <Text fontSize="2xl">{toCurrency(tvl)}</Text>
       </HStack>
       <Progress colorScheme="cyan" rounded="lg" value={(tvl / TOTAL_TVL) * 100} w="full" />
       <Box flex="1">
-        {sSonicBeetsTvl && <SubStatBar color="red" label="sSONICBeets" stat={sSonicBeetsTvl} />}
+        {/*sSonicBeetsTvl && <SubStatBar color="red" label="sSONICBeets" stat={sSonicBeetsTvl} />}
         {maBeetsTvl && <SubStatBar color="green" label="maBEETS" stat={maBeetsTvl} />}
         {boostedPoolTvl && <SubStatBar color="cyan" label="Boosted Pools" stat={boostedPoolTvl} />}
         {sFtmXLegacyTvl && (
@@ -103,7 +103,7 @@ function ChainStats({ chain }: { chain: MockGqlChain }) {
         )}
         {maBeetsLegacyTvl && (
           <SubStatBar color="purple" label="maBEETS (legacy)" stat={maBeetsLegacyTvl} />
-        )}
+        )*/}
       </Box>
 
       <Grid gap="sm" templateColumns="repeat(2, 1fr)">
