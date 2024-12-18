@@ -21,6 +21,7 @@ import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useUserAccount } from './UserAccountProvider'
 import { useDisconnect } from 'wagmi'
 import NextLink from 'next/link'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export function AcceptPoliciesModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -30,6 +31,8 @@ export function AcceptPoliciesModal() {
   const { disconnect } = useDisconnect()
 
   const isAddressInAcceptedPolicies = acceptedPolicies.includes(userAddress.toLowerCase())
+
+  const projectConfig = getProjectConfig()
 
   useEffect(() => {
     if (!isLoading && isConnected && !isAddressInAcceptedPolicies && !isBlocked) {
@@ -63,7 +66,7 @@ export function AcceptPoliciesModal() {
     <Modal isCentered isOpen={isOpen} onClose={handleOnClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Accept Balancer UI policies</ModalHeader>
+        <ModalHeader>{`Accept ${projectConfig.projectName} policies`}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack align="flex-start" gap="md">
@@ -74,7 +77,10 @@ export function AcceptPoliciesModal() {
               size="lg"
             >
               <Box color="font.primary" fontSize="md" mt="-3px">
-                By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
+                By connecting my wallet, I agree to{' '}
+                {projectConfig.projectId === 'balancer'
+                  ? "Balancer Foundation's "
+                  : `${projectConfig.projectName} `}
                 <Link as={NextLink} href="/terms-of-use">
                   Terms of Use
                 </Link>

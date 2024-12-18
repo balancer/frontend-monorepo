@@ -3,7 +3,7 @@ import { PoolName } from '@repo/lib/modules/pool/PoolName'
 import { Pool } from '@repo/lib/modules/pool/PoolProvider'
 import { ClaimModal } from '@repo/lib/modules/pool/actions/claim/ClaimModal'
 import { ClaimProvider } from '@repo/lib/modules/pool/actions/claim/ClaimProvider'
-import { ChainSlug, getPoolDisplayTokens, slugToChainMap } from '@repo/lib/modules/pool/pool.utils'
+import { ChainSlug, getChainSlug, getPoolDisplayTokens } from '@repo/lib/modules/pool/pool.utils'
 // eslint-disable-next-line max-len
 import { ClaimNetworkPoolsLayout } from '@repo/lib/modules/portfolio/PortfolioClaim/ClaimNetworkPools/ClaimNetworkPoolsLayout'
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
@@ -27,7 +27,8 @@ export default function NetworkClaim() {
     refetchClaimPoolData,
   } = usePortfolio()
 
-  const gqlChain = slugToChainMap[chain as ChainSlug]
+  const gqlChain = getChainSlug(chain as ChainSlug)
+
   const pools = poolsByChainMap[gqlChain]
   const chainName = capitalize(chain as string)
   const claimableFiatBalance = totalFiatClaimableBalanceByChain[gqlChain]

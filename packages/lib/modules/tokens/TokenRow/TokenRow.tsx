@@ -10,36 +10,38 @@ import {
   PopoverTrigger,
   PopoverContent,
   VStack,
+  Link,
 } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
-import {
-  GqlChain,
-  GqlPoolTokenDetail,
-  GqlToken,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Numberish, fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool/PoolProvider'
-import { bptUsdValue } from '../../pool/pool.helpers'
 import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { getPoolDisplayTokens } from '@repo/lib/modules/pool/pool.utils'
+import NextLink from 'next/link'
+import { getNestedPoolPath, getPoolDisplayTokens } from '../../pool/pool.utils'
+import { ApiToken } from '../../pool/pool.types'
 
-type DataProps = {
+export type TokenInfoProps = {
   address: Address
+  symbol?: string
   chain: GqlChain
-  token?: GqlToken
+  token?: ApiToken
   displayToken?: GqlPoolTokenDetail
   pool?: Pool
   disabled?: boolean
   showSelect?: boolean
   showInfoPopover?: boolean
   isBpt?: boolean
+  isNestedBpt?: boolean
+  isNestedPoolToken?: boolean
+  iconSize?: number
 }
 
 function TokenInfo({
@@ -47,37 +49,52 @@ function TokenInfo({
   chain,
   token,
   displayToken,
+  symbol,
   pool,
   disabled,
   showSelect = false,
   showInfoPopover = true,
   isBpt = false,
-}: DataProps) {
-  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || displayToken?.symbol
+  isNestedPoolToken = false,
+  iconSize = 40,
+}: TokenInfoProps) {
+  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || displayToken?.symbol
   const tokenName = isBpt ? pool?.name : token?.name || displayToken?.name
+
+  const headingProps = {
+    as: 'h6' as const,
+    fontSize: isNestedPoolToken ? 'md' : 'lg',
+    fontWeight: 'bold',
+    lineHeight: isNestedPoolToken ? '20px' : '24px',
+    variant: disabled ? 'secondary' : 'primary',
+  }
+
+  const tokenNameProps = {
+    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontWeight: 'medium',
+    lineHeight: '24px',
+    variant: 'secondary',
+  }
 
   return (
     <HStack spacing="sm">
       {!isBpt && (
-        <TokenIcon address={address} alt={token?.symbol || address} chain={chain} size={40} />
+        <TokenIcon address={address} alt={token?.symbol || address} chain={chain} size={iconSize} />
       )}
       <VStack alignItems="flex-start" spacing="none">
         <HStack spacing="none">
-          <Heading
-            as="h6"
-            fontSize="md"
-            fontWeight="bold"
-            variant={disabled ? 'secondary' : 'primary'}
-          >
-            {tokenSymbol}
-          </Heading>
+          {isBpt && pool ? (
+            <Link as={NextLink} href={getNestedPoolPath({ pool, nestedPoolAddress: address })}>
+              <Heading {...headingProps}>{tokenSymbol}</Heading>
+            </Link>
+          ) : (
+            <Heading {...headingProps}>{tokenSymbol}</Heading>
+          )}
           {showInfoPopover && (
             <TokenInfoPopover chain={chain} isBpt={isBpt} tokenAddress={address} />
           )}
         </HStack>
-        <Text fontSize="0.85rem" fontWeight="medium" variant="secondary">
-          {tokenName}
-        </Text>
+        <Text {...tokenNameProps}>{tokenName}</Text>
       </VStack>
       {showSelect && (
         <Box ml="sm">
@@ -91,6 +108,7 @@ function TokenInfo({
 export type TokenRowProps = {
   label?: string | ReactNode
   address: Address
+  symbol?: string
   chain: GqlChain
   value: Numberish
   actualWeight?: string
@@ -100,14 +118,18 @@ export type TokenRowProps = {
   isLoading?: boolean
   abbreviated?: boolean
   isBpt?: boolean
+  isNestedBpt?: boolean
+  isNestedPoolToken?: boolean
   pool?: Pool
   showZeroAmountAsDash?: boolean
   toggleTokenSelect?: () => void
+  iconSize?: number
 }
 
 export default function TokenRow({
   label,
   address,
+  symbol,
   value,
   actualWeight,
   targetWeight,
@@ -115,12 +137,15 @@ export default function TokenRow({
   disabled,
   isLoading,
   isBpt,
+  isNestedBpt,
+  isNestedPoolToken,
   pool,
   abbreviated = true,
   showZeroAmountAsDash = false,
   toggleTokenSelect,
+  iconSize,
 }: TokenRowProps) {
-  const { getToken, usdValueForToken } = useTokens()
+  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
@@ -129,19 +154,22 @@ export default function TokenRow({
   const displayToken = displayTokens.find(t => isSameAddress(t.address, address))
 
   // TokenRowTemplate default props
-  const props = {
+  const props: TokenInfoProps = {
     address,
     chain,
     token,
     displayToken,
     pool,
     disabled,
+    iconSize,
+    isNestedPoolToken,
+    symbol,
   }
 
   useEffect(() => {
     if (value) {
-      if (isBpt && pool) {
-        setUsdValue(bptUsdValue(pool, value))
+      if ((isBpt || isNestedBpt) && pool) {
+        setUsdValue(usdValueForBpt(address, chain, value))
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))
       }
@@ -150,6 +178,20 @@ export default function TokenRow({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
+
+  const headingProps = {
+    as: 'h6' as const,
+    fontSize: isNestedPoolToken ? 'md' : 'lg',
+    fontWeight: isNestedPoolToken ? 'normal' : 'bold',
+    lineHeight: isNestedPoolToken ? '20px' : '24px',
+  }
+
+  const subTextProps = {
+    fontSize: isNestedPoolToken ? 'sm' : 'md',
+    fontWeight: 'medium',
+    lineHeight: '24px',
+    variant: 'secondary',
+  }
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -160,9 +202,8 @@ export default function TokenRow({
             <TokenInfo {...props} showInfoPopover={false} showSelect />
           </Button>
         ) : (
-          <TokenInfo {...props} isBpt={isBpt} />
+          <TokenInfo {...props} isBpt={isBpt || isNestedBpt} />
         )}
-
         <HStack align="start" spacing="none">
           <VStack alignItems="flex-end" spacing="xs" textAlign="right">
             {isLoading ? (
@@ -172,10 +213,10 @@ export default function TokenRow({
               </>
             ) : (
               <>
-                <Heading as="h6" fontSize="md" fontWeight="bold" title={value.toString()}>
+                <Heading {...headingProps} title={value.toString()}>
                   {isZero(amount) && showZeroAmountAsDash ? '-' : amount ? amount : '0'}
                 </Heading>
-                <Text fontSize="sm" fontWeight="medium" variant="secondary">
+                <Text {...subTextProps}>
                   {showZeroAmountAsDash && usdValue && isZero(usdValue)
                     ? '-'
                     : toCurrency(usdValue ?? '0', { abbreviated })}
@@ -192,15 +233,13 @@ export default function TokenRow({
                 </>
               ) : (
                 <>
-                  <Heading as="h6" fontSize="md" fontWeight="bold">
+                  <Heading {...headingProps}>
                     {fNum('weight', actualWeight, { abbreviated: false })}
                   </Heading>
                   <HStack align="center" spacing="xs">
                     {targetWeight ? (
                       <>
-                        <Text fontSize="sm" fontWeight="medium" variant="secondary">
-                          {fNum('weight', targetWeight)}
-                        </Text>
+                        <Text {...subTextProps}>{fNum('weight', targetWeight)}</Text>
                         <Popover trigger="hover">
                           <PopoverTrigger>
                             <Box

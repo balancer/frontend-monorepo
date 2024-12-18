@@ -7,6 +7,7 @@ import {
 import { RemoveLiquidityType } from '../remove-liquidity.types'
 import { BoostedProportionalRemoveLiquidityV3Handler } from './BoostedProportionalRemoveLiquidityV3.handler'
 import { NestedProportionalRemoveLiquidityHandler } from './NestedProportionalRemoveLiquidity.handler'
+import { NestedProportionalRemoveLiquidityV3Handler } from './NestedProportionalRemoveLiquidityV3.handler'
 import { NestedSingleTokenRemoveLiquidityV2Handler } from './NestedSingleTokenRemoveLiquidityV2.handler'
 import { ProportionalRemoveLiquidityHandler } from './ProportionalRemoveLiquidity.handler'
 import { ProportionalRemoveLiquidityV3Handler } from './ProportionalRemoveLiquidityV3.handler'
@@ -30,15 +31,18 @@ export function selectRemoveLiquidityHandler(
     return new RecoveryRemoveLiquidityHandler(pool)
   }
 
-  if (isV3Pool(pool) && isBoosted(pool)) {
-    return new BoostedProportionalRemoveLiquidityV3Handler(pool)
+  if (supportsNestedActions(pool) && kind === RemoveLiquidityType.Proportional) {
+    return isV3Pool(pool)
+      ? new NestedProportionalRemoveLiquidityV3Handler(pool)
+      : new NestedProportionalRemoveLiquidityHandler(pool)
   }
 
-  if (supportsNestedActions(pool) && kind === RemoveLiquidityType.Proportional) {
-    return new NestedProportionalRemoveLiquidityHandler(pool)
-  }
   if (supportsNestedActions(pool) && kind === RemoveLiquidityType.SingleToken) {
     return new NestedSingleTokenRemoveLiquidityV2Handler(pool)
+  }
+
+  if (isV3Pool(pool) && isBoosted(pool)) {
+    return new BoostedProportionalRemoveLiquidityV3Handler(pool)
   }
 
   if (kind === RemoveLiquidityType.SingleToken) {

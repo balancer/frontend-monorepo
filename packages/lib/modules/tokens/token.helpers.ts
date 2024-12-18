@@ -11,7 +11,7 @@ import { HumanTokenAmountWithAddress, TokenBase } from './token.types'
 import { InputAmount } from '@balancer/sdk'
 import { Pool } from '../pool/PoolProvider'
 import { getVaultConfig, isCowAmmPool, isV3Pool } from '../pool/pool.helpers'
-import { TokenCore } from '../pool/pool.types'
+import { ApiToken } from '../pool/pool.types'
 
 export function isNativeAsset(token: TokenBase | string, chain: GqlChain | SupportedChainId) {
   return nativeAssetFilter(chain)(token)
@@ -116,7 +116,7 @@ export function requiresDoubleApproval(
 
 export type PoolToken = Pool['poolTokens'][0]
 export function getLeafTokens(poolTokens: PoolToken[]) {
-  const leafTokens: TokenCore[] = []
+  const leafTokens: ApiToken[] = []
 
   poolTokens.forEach(poolToken => {
     if (poolToken.nestedPool) {
@@ -125,18 +125,20 @@ export function getLeafTokens(poolTokens: PoolToken[]) {
         t => !isSameAddress(t.address, poolToken.address)
       ) as PoolToken[]
 
-      const nestedLeafTokens = nestedTokens.map(t =>
-        t.isErc4626 && t.underlyingToken
-          ? { ...t.underlyingToken, address: t.underlyingToken.address as Address, index: t.index }
-          : { ...t, address: t.address as Address }
-      )
+      const nestedLeafTokens = nestedTokens.map(t => getTokenOrUnderlying(t))
       leafTokens.push(...nestedLeafTokens)
     } else {
-      leafTokens.push(poolToken as TokenCore)
+      // TODO: add unit test for this case: pol id 0x42de4fa875126fdbaf590b2fc3802adbca58acee
+      leafTokens.push(getTokenOrUnderlying(poolToken))
     }
   })
 
   return leafTokens
+}
+
+function getTokenOrUnderlying(token: PoolToken): ApiToken {
+  // TODO: Do we need to check for isBufferedToken here?
+  return token.isErc4626 && token.underlyingToken ? token.underlyingToken : buildApiToken(token)
 }
 
 export function getSpenderForAddLiquidity(pool: Pool): Address {
@@ -150,4 +152,16 @@ export function getSpenderForAddLiquidity(pool: Pool): Address {
   }
   const { vaultAddress } = getVaultConfig(pool)
   return vaultAddress
+}
+
+function buildApiToken(poolToken: PoolToken) {
+  return {
+    ...poolToken,
+    // The following fields are (wrongly) optional in the generated PoolToken schema so we have to cast them to satisfy TS
+    address: poolToken.address as Address,
+    chainId: poolToken.chainId as number,
+    chain: poolToken.chain as GqlChain,
+    priority: poolToken.priority as number,
+    tradable: poolToken.tradable as boolean,
+  }
 }

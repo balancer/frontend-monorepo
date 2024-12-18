@@ -4,11 +4,7 @@
 import * as echarts from 'echarts/core'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { format } from 'date-fns'
-import {
-  GqlChain,
-  GqlPoolEventType,
-  GqlToken,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
@@ -25,9 +21,10 @@ import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { usePoolEvents } from '../pool/usePoolEvents'
 import { supportedNetworks } from '../web3/ChainConfig'
 import { getChainShortName } from '@repo/lib/config/app.config'
+import { ApiToken } from '../pool/pool.types'
 
 type ChartInfoTokens = {
-  token?: GqlToken
+  token?: ApiToken
   amount: string
 }
 
@@ -81,6 +78,11 @@ export const gradientMap: Record<GqlChain, { from: string; to: string }> = {
     from: '#7D84FF',
     to: '#5468FF',
   },
+  [GqlChain.Sonic]: {
+    //TODO: groninge will fix it in another PR
+    from: '#7D84FF',
+    to: '#5468FF',
+  },
   [GqlChain.Fraxtal]: {
     from: '#E0E7FF',
     to: '#8C9EFF',
@@ -106,6 +108,7 @@ function getDefaultChainMeta() {
     [GqlChain.Gnosis]: [],
     [GqlChain.Avalanche]: [],
     [GqlChain.Fantom]: [],
+    [GqlChain.Sonic]: [],
     [GqlChain.Fraxtal]: [],
     [GqlChain.Mode]: [],
     [GqlChain.Sepolia]: [],

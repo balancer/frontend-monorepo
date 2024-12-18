@@ -29,7 +29,7 @@ export function _useVoteList({
   // todo: implement vote's sorting/filtering
   const queryState = usePoolListQueryState()
 
-  const voteListData = data?.veBalGetVotingList || []
+  const voteListData = useMemo(() => data?.veBalGetVotingList || [], [data?.veBalGetVotingList])
 
   const pagination = queryState.pagination
 

@@ -2,9 +2,9 @@
 import { FetchPoolProps } from '@repo/lib/modules/pool/pool.types'
 import {
   ChainSlug,
+  getChainSlug,
   getPoolDisplayTokens,
   getPoolTypeLabel,
-  slugToChainMap,
 } from '@repo/lib/modules/pool/pool.utils'
 import { PropsWithChildren, Suspense } from 'react'
 import { PoolDetailSkeleton } from '@repo/lib/modules/pool/PoolDetail/PoolDetailSkeleton'
@@ -21,7 +21,7 @@ type Props = PropsWithChildren<{
 }>
 
 async function getPoolQuery(chain: ChainSlug, id: string) {
-  const _chain = slugToChainMap[chain]
+  const _chain = getChainSlug(chain)
   const variables = { id: id.toLowerCase(), chain: _chain }
 
   try {
@@ -60,7 +60,7 @@ export async function generateMetadata({
 }
 
 export default async function PoolLayout({ params: { id, chain, variant }, children }: Props) {
-  const _chain = slugToChainMap[chain]
+  const _chain = getChainSlug(chain)
 
   const { data, error } = await getPoolQuery(chain, id)
 

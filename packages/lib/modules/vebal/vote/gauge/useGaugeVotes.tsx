@@ -1,6 +1,6 @@
 import { ChainContractConfig, useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
 import { useMemo } from 'react'
-import { oneWeekInMs, oneWeekInSecs, toUnixTimestamp } from '@repo/lib/shared/utils/time'
+import { oneWeekInMs, toUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { mainnet } from 'viem/chains'
 import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
@@ -9,6 +9,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { compact } from 'lodash'
 import { onlyExplicitRefetch } from '../../../../shared/utils/queries'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const FIRST_WEEK_TIMESTAMP = 1648684800
 
 export interface UserVotesData {

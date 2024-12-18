@@ -15,8 +15,7 @@ export function PoolActivityTable() {
   const { sortedPoolEvents, pagination, setPagination, isLoading, count, showPagination } =
     usePoolActivity()
   const paginationProps = {
-    ...getPaginationProps(count, pagination, setPagination, false),
-    isSmall: true,
+    ...getPaginationProps(count, pagination, setPagination, true),
   }
 
   const rowProps = {
@@ -33,7 +32,7 @@ export function PoolActivityTable() {
 
   const items = sortedPoolEvents.map(item => ({
     ...item,
-    id: item[0],
+    id: item[2].id,
   }))
 
   return (

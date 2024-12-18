@@ -84,10 +84,6 @@ export class NestedProportionalRemoveLiquidityHandler implements RemoveLiquidity
   private constructSdkInput(humanBptIn: HumanAmount): RemoveLiquidityNestedProportionalInputV2 {
     const result: RemoveLiquidityNestedProportionalInputV2 = {
       bptAmountIn: parseEther(humanBptIn),
-      // Ignore TS error until base chain is added to the SDK setup:
-      // https://github.com/balancer/b-sdk/issues/221
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
     }

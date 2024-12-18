@@ -46,6 +46,7 @@ export interface ContractsConfig {
     compositeLiquidityRouter?: Address
     relayerV6: Address
     minter: Address
+    WeightedPool2TokensFactory?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address
@@ -102,6 +103,10 @@ type VariantConfig = {
   }
 }
 
+interface ExternalUrls {
+  discordUrl: string
+}
+
 export interface ProjectConfig {
   projectId: 'beets' | 'balancer'
   projectName: string
@@ -110,4 +115,6 @@ export interface ProjectConfig {
   variantConfig?: VariantConfig
   defaultNetwork: GqlChain
   ensNetwork: GqlChain
+  delegateOwner: Address
+  externalLinks: ExternalUrls
 }

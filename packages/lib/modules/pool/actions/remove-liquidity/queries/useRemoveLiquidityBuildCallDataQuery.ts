@@ -68,8 +68,8 @@ export function useRemoveLiquidityBuildCallDataQuery({
       wethIsEth,
       permit: permitSignature,
     })
-
     console.log('Call data built:', res)
+    if (permitSignature) console.log('permit for call data:', permitSignature)
     return res
   }
 

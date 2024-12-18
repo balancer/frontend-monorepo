@@ -15,7 +15,7 @@ import {
 import { usePermit2Allowance } from '../../tokens/approvals/permit2/usePermit2Allowance'
 import { BasePermit2Params, useSignPermit2 } from '../../tokens/approvals/permit2/useSignPermit2'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
-import { useChainSwitch } from '../../web3/useChainSwitch'
+import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
 import { StepDetails, TransactionStep } from './lib'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 
@@ -55,8 +55,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     nonces,
   })
 
-  const { shouldChangeNetwork, NetworkSwitchButton, networkSwitchButtonProps } =
-    useChainSwitch(chainId)
+  const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
 
   const isLoading =
     isLoadingSignature ||
@@ -118,14 +117,14 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signPermit2State, isLoading, isConnected, isValidPermit2]
+    [signPermit2State, isLoading, isConnected, isValidPermit2, shouldChangeNetwork]
   )
 }
 
 function getTitle(details?: StepDetails): string {
-  if (!details?.batchApprovalTokens) return `Permit on balancer`
+  if (!details?.batchApprovalTokens) return `Permit on Balancer`
   if (details.batchApprovalTokens.length === 1) {
-    return `${details.batchApprovalTokens[0]}: Permit on balancer`
+    return `${details.batchApprovalTokens[0]}: Permit on Balancer`
   }
   return 'Sign token approvals'
 }

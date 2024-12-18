@@ -21,6 +21,7 @@ import { NativeWrapHandler } from './handlers/NativeWrap.handler'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import pluralize from 'pluralize'
 import { BaseDefaultSwapHandler } from './handlers/BaseDefaultSwap.handler'
+import { getFullPriceImpactLabel, getMaxSlippageLabel } from '../price-impact/price-impact.utils'
 
 export function OrderRoute() {
   const { simulationQuery } = useSwap()
@@ -29,13 +30,16 @@ export function OrderRoute() {
   const orderRouteVersion = queryData ? queryData.protocolVersion : 2
   const hopCount = queryData ? queryData.hopCount : 0
 
+  function getRouteHopsLabel() {
+    if (hopCount === 0) return 'Unknown'
+    return `Bv${orderRouteVersion}: ${hopCount} ${pluralize('hop', hopCount)}`
+  }
+
   return (
     <HStack justify="space-between" w="full">
       <Text color="grayText">Order route</Text>
       <HStack>
-        <Text color="grayText">
-          Bv{orderRouteVersion}: {hopCount} {pluralize('hop', hopCount)}
-        </Text>
+        <Text color="grayText">{getRouteHopsLabel()}</Text>
         <Popover trigger="hover">
           <PopoverTrigger>
             <Box
@@ -76,9 +80,17 @@ export function SwapDetails() {
       ? usdValueForToken(tokenOutInfo, tokenOut.amount)
       : usdValueForToken(tokenInInfo, tokenIn.amount)
 
-  const priceImpactLabel = priceImpact ? fNum('priceImpact', priceImpact) : '-'
-  const priceImpacUsd = bn(priceImpact || 0).times(returnAmountUsd)
+  const priceImpactUsd = bn(priceImpact || 0).times(returnAmountUsd)
+  const fullPriceImpactLabel = getFullPriceImpactLabel(
+    priceImpact,
+    toCurrency(priceImpactUsd, { abbreviated: false })
+  )
+
   const maxSlippageUsd = bn(_slippage).div(100).times(returnAmountUsd)
+  const fullMaxSlippageLabel = getMaxSlippageLabel(
+    _slippage,
+    toCurrency(maxSlippageUsd, { abbreviated: false })
+  )
 
   const isExactIn = swapType === GqlSorSwapType.ExactIn
 
@@ -109,9 +121,7 @@ export function SwapDetails() {
           {priceImpactLevel === 'unknown' ? (
             <Text>Unknown</Text>
           ) : (
-            <NumberText color={priceImpactColor}>
-              -{toCurrency(priceImpacUsd, { abbreviated: false })} (-{priceImpactLabel})
-            </NumberText>
+            <NumberText color={priceImpactColor}>{fullPriceImpactLabel}</NumberText>
           )}
           <Popover trigger="hover">
             <PopoverTrigger>
@@ -141,9 +151,7 @@ export function SwapDetails() {
       <HStack justify="space-between" w="full">
         <Text color="grayText">Max slippage</Text>
         <HStack>
-          <NumberText color="grayText">
-            -{toCurrency(maxSlippageUsd, { abbreviated: false })} (-{fNum('slippage', _slippage)})
-          </NumberText>
+          <NumberText color="grayText">{fullMaxSlippageLabel}</NumberText>
           <Popover trigger="hover">
             <PopoverTrigger>
               <Box

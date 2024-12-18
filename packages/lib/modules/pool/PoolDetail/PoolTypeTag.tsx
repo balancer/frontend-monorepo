@@ -4,10 +4,10 @@ import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { isBoosted } from '../pool.helpers'
-import { Erc4626Metadata } from '@repo/lib/modules/erc4626/getErc4626Metadata'
-import { useErc4626Metadata } from '../../erc4626/Erc4626MetadataProvider'
 import Image from 'next/image'
 import { PoolListItem } from '../pool.types'
+import { Erc4626Metadata } from '../metadata/getErc4626Metadata'
+import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
 
 type PoolTypeTagProps = {
   pool: Pool | PoolListItem
@@ -73,6 +73,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
     case GqlPoolType.Stable:
     case GqlPoolType.PhantomStable:
     case GqlPoolType.ComposableStable:
+    case GqlPoolType.MetaStable:
       return <Text {...textProps}>Stable</Text>
 
     case GqlPoolType.Fx:
@@ -121,7 +122,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
 }
 
 export function PoolTypeTag({ pool }: PoolTypeTagProps) {
-  const { getErc4626Metadata } = useErc4626Metadata()
+  const { getErc4626Metadata } = usePoolsMetadata()
   const erc4626Metadata = getErc4626Metadata(pool)
 
   const label = getPoolTypeLabel(pool, erc4626Metadata)

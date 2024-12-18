@@ -22,6 +22,9 @@ function Content() {
         forceColumnMode
         title="Consider using the Balancer Safe web app"
       />
+      {/*
+        It is not possible to link to custom pool pages within balancer.fi/pools as the Safe App will not recognize them as valid Safe Apps :(
+      */}
       <BalAlertButtonLink href="https://app.safe.global/share/safe-app?appUrl=https://balancer.fi/pools">
         Open app
       </BalAlertButtonLink>

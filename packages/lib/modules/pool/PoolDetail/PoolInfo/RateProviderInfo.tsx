@@ -1,5 +1,5 @@
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { GqlPriceRateProviderData, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPriceRateProviderData } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   Popover,
   PopoverTrigger,
@@ -15,11 +15,12 @@ import {
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { ArrowUpRight } from 'react-feather'
-import { getRateProviderWarnings } from '../../pool.helpers'
+import { getWarnings } from '../../pool.helpers'
 import { PropsWithChildren } from 'react'
+import { ApiToken } from '../../pool.types'
 
 type RateProviderInfoPopOverProps = {
-  token: GqlToken
+  token: ApiToken
   data: GqlPriceRateProviderData | null
   level: number
 } & PropsWithChildren
@@ -30,7 +31,7 @@ type PopoverInfoBodyProps = {
 }
 
 function PopoverInfoBody({ data, level }: PopoverInfoBodyProps) {
-  const warnings = getRateProviderWarnings(data.warnings || [])
+  const warnings = getWarnings(data.warnings || [])
   return (
     <>
       {level === 0 && (

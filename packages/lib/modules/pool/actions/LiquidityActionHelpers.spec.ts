@@ -25,9 +25,13 @@ import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 describe('areEmptyAmounts', () => {
   test('when all humanAmounts are empty, zero or zero with decimals', () => {
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F', humanAmount: '' },
-      { tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', humanAmount: '0' },
-      { tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756bb3', humanAmount: '0.00' },
+      { tokenAddress: '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F', humanAmount: '', symbol: '' },
+      { tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', humanAmount: '0', symbol: '' },
+      {
+        tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756bb3',
+        humanAmount: '0.00',
+        symbol: '',
+      },
     ]
     expect(areEmptyAmounts(humanAmountsIn)).toBeTruthy()
   })
@@ -73,7 +77,7 @@ it('returns NestedPoolState for nested pools', () => {
 
   const secondPool = nestedPoolState.pools[1]
   expect(secondPool.id).toBe(threePoolId)
-  expect(secondPool.tokens.map(t => t.address)).toEqual([
+  expect(secondPool.tokens.sort().map(t => t.address)).toEqual([
     daiAddress,
     usdcDaiUsdtBptAddress,
     usdcAddress,
@@ -81,11 +85,11 @@ it('returns NestedPoolState for nested pools', () => {
   ])
 
   expect(nestedPoolState.mainTokens).toHaveLength(4)
-  expect(nestedPoolState.mainTokens.map(t => t.address)).toEqual([
-    daiAddress,
-    usdtAddress,
-    usdcAddress,
+  expect(nestedPoolState.mainTokens.sort().map(t => t.address)).toEqual([
     wETHAddress,
+    daiAddress,
+    usdcAddress,
+    usdtAddress,
   ])
 })
 
@@ -99,19 +103,21 @@ describe('toInputAmounts', () => {
   it('when the token input includes the wrapped native asset', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
     const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = [
-      { tokenAddress: wjAuraAddress, humanAmount: '10' },
-      { tokenAddress: wETHAddress, humanAmount: '20' },
+      { tokenAddress: wjAuraAddress, humanAmount: '10', symbol: '' },
+      { tokenAddress: wETHAddress, humanAmount: '20', symbol: 'BAL' },
     ]
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([
       {
         address: wjAuraAddress,
         decimals: 18,
         rawAmount: 10000000000000000000n,
+        symbol: 'BAL',
       },
       {
         address: wETHAddress,
         decimals: 18,
         rawAmount: 20000000000000000000n,
+        symbol: 'BAL',
       },
     ])
   })
@@ -119,13 +125,14 @@ describe('toInputAmounts', () => {
   it('when the token input is the native asset', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
     const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = [
-      { tokenAddress: ethAddress, humanAmount: '30' },
+      { tokenAddress: ethAddress, humanAmount: '30', symbol: 'ETH' },
     ]
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([
       {
         address: ethAddress,
         decimals: 18,
         rawAmount: 30000000000000000000n,
+        symbol: 'ETH',
       },
     ])
   })
@@ -133,7 +140,7 @@ describe('toInputAmounts', () => {
   it('when the token input is zero', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
     const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = [
-      { tokenAddress: wETHAddress, humanAmount: '0' },
+      { tokenAddress: wETHAddress, humanAmount: '0', symbol: 'WETH' },
     ]
     expect(helpers.toInputAmounts(humanTokenAmountsWithAddress)).toEqual([])
   })
@@ -143,7 +150,7 @@ describe('toSdkInputAmounts', () => {
   it('swaps the native asset by the wrapped native asset', () => {
     const helpers = new LiquidityActionHelpers(aWjAuraWethPoolElementMock())
     const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = [
-      { tokenAddress: ethAddress, humanAmount: '30' },
+      { tokenAddress: ethAddress, humanAmount: '30', symbol: 'wjAura' },
     ]
     const wethAddress = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
     expect(helpers.toSdkInputAmounts(humanTokenAmountsWithAddress)).toEqual([
@@ -151,6 +158,7 @@ describe('toSdkInputAmounts', () => {
         address: wethAddress,
         decimals: 18,
         rawAmount: 30000000000000000000n,
+        symbol: 'wjAura',
       },
     ])
   })
@@ -158,8 +166,8 @@ describe('toSdkInputAmounts', () => {
 
 test('trimDecimals', () => {
   const humanTokenAmountsWithAddress: HumanTokenAmountWithAddress[] = [
-    { tokenAddress: ethAddress, humanAmount: '0.001013801345314809' },
-    { tokenAddress: wETHAddress, humanAmount: '0.001302248169953014' },
+    { tokenAddress: ethAddress, humanAmount: '0.001013801345314809', symbol: 'ETH' },
+    { tokenAddress: wETHAddress, humanAmount: '0.001302248169953014', symbol: 'WETH' },
   ]
   expect(roundDecimals(humanTokenAmountsWithAddress)).toEqual([
     {

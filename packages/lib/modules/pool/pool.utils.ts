@@ -20,7 +20,7 @@ import {
 import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { TokenAmountHumanReadable } from '../tokens/token.types'
-import { formatUnits, parseUnits } from 'viem'
+import { Address, formatUnits, parseUnits } from 'viem'
 import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { Pool } from './PoolProvider'
 import BigNumber from 'bignumber.js'
@@ -49,6 +49,7 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
   [GqlChain.Polygon]: ChainSlug.Polygon,
   [GqlChain.Avalanche]: ChainSlug.Avalanche,
   [GqlChain.Fantom]: ChainSlug.Fantom,
+  [GqlChain.Sonic]: ChainSlug.Fantom, //TODO: groninge will fix it in another PR
   [GqlChain.Base]: ChainSlug.Base,
   [GqlChain.Optimism]: ChainSlug.Optimisim,
   [GqlChain.Zkevm]: ChainSlug.Zkevm,
@@ -57,7 +58,13 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
   [GqlChain.Mode]: ChainSlug.Mode,
   [GqlChain.Fraxtal]: ChainSlug.Fraxtal,
 }
-export const slugToChainMap = invert(chainToSlugMap) as Record<ChainSlug, GqlChain>
+
+export function getChainSlug(chainSlug: ChainSlug): GqlChain {
+  const slugToChainMap = invert(chainToSlugMap) as Record<ChainSlug, GqlChain>
+  const chain = slugToChainMap[chainSlug]
+  if (!chain) throw new Error(`Chain ${chainSlug} is not a valid chainName`)
+  return chain
+}
 
 function getVariant(type: GqlPoolType, protocolVersion: number | undefined): PoolVariant {
   // if a pool has certain properties return a custom variant
@@ -79,6 +86,17 @@ export function getPoolPath(
 ) {
   const variant = getVariant(params.type, params.protocolVersion)
   return `/pools/${chainToSlugMap[params.chain]}/${variant}/${params.id}`
+}
+
+export function getNestedPoolPath({
+  pool,
+  nestedPoolAddress,
+}: {
+  pool: Pool | PoolListItem
+  nestedPoolAddress: Address
+}) {
+  const variant = getVariant(pool.type, pool.protocolVersion)
+  return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${nestedPoolAddress}`
 }
 
 // TODO: the following 2 functions (getAprLabel & getTotalAprLabel) most likely need revisiting somewhere in the near future and refactored to just one
@@ -129,6 +147,11 @@ export function getTotalApr(
         return
       }
 
+      if (item.type === GqlPoolAprItemType.MabeetsEmissions) {
+        minTotal = bn(item.apr).plus(minTotal) // only add min here, max is already added thru staking boost
+        return
+      }
+
       minTotal = bn(item.apr).plus(minTotal)
       maxTotal = bn(item.apr).plus(maxTotal)
     })
@@ -173,7 +196,7 @@ const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.Unknown]: 'Unknown',
   [GqlPoolType.Fx]: 'FX',
   [GqlPoolType.ComposableStable]: 'Stable',
-  [GqlPoolType.CowAmm]: 'CoW AMM',
+  [GqlPoolType.CowAmm]: 'Weighted',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {
@@ -279,6 +302,10 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
   return poolType === GqlPoolType.CowAmm
 }
 
+export function shouldCallComputeDynamicSwapFee(pool: Pool) {
+  return pool.hook && pool.hook.shouldCallComputeDynamicSwapFee
+}
+
 export function getPoolDisplayTokens(
   pool: Pick<Pool | PoolListItem, 'displayTokens' | 'poolTokens'>
 ) {
@@ -287,4 +314,28 @@ export function getPoolDisplayTokens(
       (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address
     )
   ) as GqlPoolTokenDetail[]
+}
+
+export function getPoolDisplayTokensWithPossibleNestedPools(pool: Pool) {
+  const displayTokens = getPoolDisplayTokens(pool)
+
+  const hasNestedPools = displayTokens.some(token => token.hasNestedPool)
+
+  if (hasNestedPools) {
+    const displayTokensWithNestedPools: GqlPoolTokenDetail[] = []
+
+    displayTokens.forEach(token => {
+      if (token.hasNestedPool) {
+        token.nestedPool?.tokens.forEach(nestedPoolToken => {
+          displayTokensWithNestedPools.push(nestedPoolToken)
+        })
+      } else {
+        displayTokensWithNestedPools.push(token)
+      }
+    })
+
+    return displayTokensWithNestedPools
+  }
+
+  return displayTokens
 }

@@ -16,7 +16,7 @@ import {
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { parseEther } from 'viem'
 import { BPT_DECIMALS } from '../../../pool.constants'
-import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
+import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 
 /*
@@ -42,7 +42,7 @@ export class RecoveryRemoveLiquidityHandler {
     const removeLiquidity = new RemoveLiquidity()
     const removeLiquidityInput = this.constructSdkInput(bptIn, userAddress)
 
-    const sdkQueryOutput = await removeLiquidity.queryRemoveLiquidityRecovery(
+    const sdkQueryOutput = await removeLiquidity.query(
       removeLiquidityInput,
       this.helpers.poolStateWithBalances
     )
@@ -92,7 +92,7 @@ export class RecoveryRemoveLiquidityHandler {
       rpcUrl: getRpcUrl(this.helpers.chainId),
       bptIn,
       kind: RemoveLiquidityKind.Recovery,
-      sender: userAddress,
+      sender: getSender(userAddress),
     }
   }
 }

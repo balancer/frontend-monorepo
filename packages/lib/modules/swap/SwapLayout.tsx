@@ -1,6 +1,6 @@
 'use client'
 
-import { ChainSlug, slugToChainMap } from '@repo/lib/modules/pool/pool.utils'
+import { ChainSlug, getChainSlug } from '@repo/lib/modules/pool/pool.utils'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSignatureProvider'
 import { SwapProviderProps, SwapProvider } from '@repo/lib/modules/swap/SwapProvider'
@@ -20,8 +20,13 @@ type Props = PropsWithChildren<{
 export default function SwapLayout({ props, children }: Props) {
   const chain = props.pathParams.chain
   const { getTokensByChain } = useTokens()
-  const initChain = chain ? slugToChainMap[chain as ChainSlug] : getProjectConfig().defaultNetwork
+  const initChain = chain ? getChainSlug(chain as ChainSlug) : getProjectConfig().defaultNetwork
   const initTokens = props.poolActionableTokens || getTokensByChain(initChain)
+
+  if (!initTokens) {
+    // Avoid "Cant scale amount without token metadata" error when tokens are not ready in SwapProvider
+    return null
+  }
 
   return (
     <TransactionStateProvider>

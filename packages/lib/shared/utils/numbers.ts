@@ -52,6 +52,8 @@ export const SMALL_PERCENTAGE_LABEL = '<0.01%'
 // fiat value threshold for displaying the fiat format without cents
 export const FIAT_CENTS_THRESHOLD = '100000'
 
+export const USD_LOWER_THRESHOLD = 0.009
+
 const NUMERAL_DECIMAL_LIMIT = 9
 
 export type Numberish = string | number | bigint | BigNumber
@@ -200,6 +202,10 @@ export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): s
   }
 }
 
+export function fNumCustom(val: Numberish, format: string): string {
+  return numeral(toSafeValue(val)).format(format)
+}
+
 // Edge case where we need to display 3 decimals for small amounts between 0.001 and 0.01
 function requiresThreeDecimals(value: Numberish): boolean {
   return !isZero(value) && bn(value).gte(0.001) && bn(value).lte(0.009)
@@ -243,4 +249,12 @@ export function safeTokenFormat(
 
 export function isZero(amount: Numberish): boolean {
   return bn(amount).isZero()
+}
+
+export function isNegative(amount: Numberish): boolean {
+  return bn(amount).isNegative()
+}
+
+export function isSmallUsd(value: Numberish): boolean {
+  return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
 }

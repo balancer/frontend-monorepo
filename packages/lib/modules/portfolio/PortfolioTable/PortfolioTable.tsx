@@ -18,6 +18,7 @@ import { ExpandedPoolInfo, ExpandedPoolType, useExpandedPools } from './useExpan
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
+import { getProjectConfig, isBalancerProject } from '@repo/lib/config/getProjectConfig'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -33,10 +34,14 @@ export const portfolioOrderBy: {
     title: 'Staking',
     id: 'staking',
   },
-  {
-    title: 'veBAL boost',
-    id: 'vebal',
-  },
+  ...(isBalancerProject
+    ? [
+        {
+          title: 'veBAL boost',
+          id: 'vebal' as PortfolioTableSortingId,
+        },
+      ]
+    : []),
   {
     title: 'My liquidity',
     id: 'liquidity',
@@ -49,7 +54,9 @@ export const portfolioOrderBy: {
 
 const rowProps = {
   px: [0, 4],
-  gridTemplateColumns: `32px minmax(320px, 1fr) repeat(2, 100px) 120px 130px 170px`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) 180px 110px 110px ${
+    isBalancerProject ? '130px' : ''
+  } 170px`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 }
@@ -144,7 +151,7 @@ export function PortfolioTable() {
     <FadeInOnView>
       <Stack gap={5}>
         <HStack>
-          <Heading size="lg">Balancer portfolio</Heading>
+          <Heading size="lg">{`${getProjectConfig().projectName} portfolio`}</Heading>
         </HStack>
         {isConnected ? (
           <Card

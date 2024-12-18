@@ -37,8 +37,8 @@ export async function VoteList() {
       {/* fix: remove PoolListProvider when voteFilters implemented */}
       <PoolListProvider
         displayType={PoolListDisplayType.TokenPills}
-        hidePoolTypes={[]}
         hidePoolTags={[]}
+        hidePoolTypes={[]}
         hideProtocolVersion={[]}
       >
         <VoteListLayout />

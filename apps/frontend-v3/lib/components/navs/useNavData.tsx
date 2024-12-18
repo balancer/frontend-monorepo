@@ -4,6 +4,7 @@ import { MediumIcon } from '@repo/lib/shared/components/icons/social/MediumIcon'
 import { YoutubeIcon } from '@repo/lib/shared/components/icons/social/YoutubeIcon'
 import { GithubIcon } from '@repo/lib/shared/components/icons/social/GithubIcon'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export function useNavData() {
   const appLinks = []
@@ -36,7 +37,7 @@ export function useNavData() {
     },
     {
       icon: <DiscordIcon size={size} />,
-      href: 'https://discord.balancer.fi/',
+      href: getProjectConfig().externalLinks.discordUrl,
     },
     {
       icon: <MediumIcon size={size} />,

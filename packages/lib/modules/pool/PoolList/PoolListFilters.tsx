@@ -43,7 +43,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
 import { motion, AnimatePresence } from 'framer-motion'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
-import { getChainShortName, isDev, isStaging } from '@repo/lib/config/app.config'
+import { getChainShortName } from '@repo/lib/config/app.config'
 import { usePoolList } from './PoolListProvider'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -260,8 +260,9 @@ export function FilterTags() {
   } = usePoolList()
   const { toCurrency } = useCurrency()
 
+  // prevents layout shift in mobile view
   if (networks.length === 0 && poolTypes.length === 0 && minTvl === 0 && poolTags.length === 0) {
-    return null
+    return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
   }
 
   return (
@@ -396,7 +397,6 @@ const FilterButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
 function ProtocolVersionFilter() {
   const {
     queryState: {
-      togglePoolType,
       setProtocolVersion,
       protocolVersion,
       poolTypes,
@@ -406,10 +406,7 @@ function ProtocolVersionFilter() {
     hideProtocolVersion,
   } = usePoolList()
 
-  const tabs =
-    isDev || isStaging
-      ? PROTOCOL_VERSION_TABS
-      : PROTOCOL_VERSION_TABS.filter(tab => tab.value !== 'v3')
+  const tabs = PROTOCOL_VERSION_TABS
 
   function toggleTab(option: ButtonGroupOption) {
     setActiveProtocolVersionTab(option)
@@ -420,7 +417,7 @@ function ProtocolVersionFilter() {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[2])
     } else if (protocolVersion === 2) {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[1])
-    } else if (poolTypes.includes(GqlPoolType.CowAmm)) {
+    } else if (poolTypes.includes(GqlPoolType.CowAmm) || protocolVersion === 1) {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[3])
     } else {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
@@ -428,16 +425,12 @@ function ProtocolVersionFilter() {
   }, [])
 
   useEffect(() => {
-    if (activeProtocolVersionTab.value === 'cow') {
-      togglePoolType(true, GqlPoolType.CowAmm)
-    } else {
-      togglePoolType(false, GqlPoolType.CowAmm)
-    }
-
     if (activeProtocolVersionTab.value === 'v3') {
       setProtocolVersion(3)
     } else if (activeProtocolVersionTab.value === 'v2') {
       setProtocolVersion(2)
+    } else if (activeProtocolVersionTab.value === 'cow') {
+      setProtocolVersion(1)
     } else {
       setProtocolVersion(null)
     }
@@ -510,7 +503,12 @@ export function PoolListFilters() {
                             Filters
                           </Text>
                           {totalFilterCount > 0 && (
-                            <Button onClick={_resetFilters} size="xs" variant="link">
+                            <Button
+                              h="fit-content"
+                              onClick={_resetFilters}
+                              size="xs"
+                              variant="link"
+                            >
                               Reset all
                             </Button>
                           )}
@@ -563,21 +561,19 @@ export function PoolListFilters() {
             </PopoverContent>
           </Box>
         </Popover>
-        {isCowPath && (
-          <Button
-            as={Link}
-            display="flex"
-            gap="2"
-            href="https://pool-creator.balancer.fi/cow"
-            ml="ms"
-            rel=""
-            target="_blank"
-            variant="tertiary"
-          >
-            <Icon as={Plus} boxSize={4} />
-            {!isMobile && 'Create a pool'}
-          </Button>
-        )}
+        <Button
+          as={Link}
+          display="flex"
+          gap="2"
+          href={`https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`}
+          ml="ms"
+          rel=""
+          target="_blank"
+          variant="tertiary"
+        >
+          <Icon as={Plus} boxSize={4} />
+          {!isMobile && 'Create a pool'}
+        </Button>
       </HStack>
     </VStack>
   )

@@ -49,6 +49,7 @@ export function SearchInput({
         bg="input.bgDefault"
         border="1px solid"
         borderColor="input.borderDefault"
+        defaultValue={search ?? ''}
         id={SEARCH}
         onChange={debouncedChangeHandler}
         onKeyDown={event => {

@@ -6,7 +6,7 @@ import { VoteListTableRow } from './VoteListTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
 import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
-import { VoteListItem, VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
+import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 
 interface Props {

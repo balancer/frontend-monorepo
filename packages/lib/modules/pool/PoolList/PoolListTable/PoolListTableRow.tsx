@@ -1,6 +1,6 @@
 import { Box, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import { getPoolDisplayTokens, getPoolPath, getPoolTypeLabel } from '../../pool.utils'
+import { getPoolDisplayTokens, getPoolPath } from '../../pool.utils'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
@@ -10,11 +10,10 @@ import { PoolListTokenPills } from '../PoolListTokenPills'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { usePoolList } from '../PoolListProvider'
-import { PoolVersionTag } from './PoolVersionTag'
-import { isBoosted } from '../../pool.helpers'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { useErc4626Metadata } from '../../../erc4626/Erc4626MetadataProvider'
-import Image from 'next/image'
+import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
+import { usePoolMetadata } from '../../metadata/usePoolMetadata'
+import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -53,11 +52,9 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
     queryState: { userAddress },
     displayType,
   } = usePoolList()
+  const { name } = usePoolMetadata(pool)
 
   const { toCurrency } = useCurrency()
-  const { getErc4626Metadata } = useErc4626Metadata()
-
-  const erc4626Metadata = getErc4626Metadata(pool)
 
   return (
     <FadeInOnView>
@@ -79,35 +76,27 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
             <GridItem>
               {displayType === PoolListDisplayType.TokenPills && (
                 <PoolListTokenPills
+                  h={['32px', '36px']}
+                  iconSize={name ? 24 : 20}
+                  nameSize="sm"
+                  p={['xxs', 'sm']}
                   pool={{
                     displayTokens: getPoolDisplayTokens(pool),
                     type: pool.type,
                     chain: pool.chain,
+                    poolTokens: pool.poolTokens as GqlPoolTokenDetail[], // fix: poolTokens are incompatible
+                    address: pool.address,
+                    hasErc4626: pool.hasErc4626,
+                    hasAnyAllowedBuffer: pool.hasAnyAllowedBuffer,
+                    protocolVersion: pool.protocolVersion,
                   }}
-                  h={['32px', '36px']}
-                  iconSize={20}
-                  p={['xxs', 'sm']}
                   pr={[1.5, 'ms']}
                 />
               )}
               {displayType === PoolListDisplayType.Name && <PoolName pool={pool} />}
             </GridItem>
             <GridItem minW="32">
-              <HStack>
-                <PoolVersionTag pool={pool} />
-                <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
-                  {isBoosted(pool) ? 'Boosted' : getPoolTypeLabel(pool.type)}
-                </Text>
-                {erc4626Metadata.map(metadata => (
-                  <Image
-                    alt={metadata.name}
-                    height={20}
-                    key={metadata.name}
-                    src={metadata.iconUrl || ''}
-                    width={20}
-                  />
-                ))}
-              </HStack>
+              <PollListTableDetailsCell pool={pool} />
             </GridItem>
             {userAddress ? (
               <GridItem>
