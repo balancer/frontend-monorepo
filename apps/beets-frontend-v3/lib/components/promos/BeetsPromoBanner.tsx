@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React from 'react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { Button, Heading, Flex, Box, Center, useColorModeValue } from '@chakra-ui/react'
 import NextLink from 'next/link'
@@ -23,7 +23,7 @@ export function BeetsPromoBanner() {
       }}
       width="full"
     >
-       <Box zIndex="0">
+      {/* <Box zIndex="0">
         <Box left="0" position="absolute" top="0">
           <Picture
             altText="Cow marks"
@@ -34,7 +34,7 @@ export function BeetsPromoBanner() {
             imgSvgPortrait
           />
         </Box>
-      </Box> 
+      </Box> */}
 
       <Box zIndex="0">
         <Box left="0" position="absolute" top="0" zIndex="0">
@@ -42,7 +42,7 @@ export function BeetsPromoBanner() {
             altText="Cow marks"
             defaultImgType="svg"
             directory="/images/misc/"
-            imgName="banner1"
+            imgName="pools-banner"
             imgPng
             width="100%"
           />
