@@ -37,7 +37,7 @@ export function PoolActivityTable() {
         <Box minWidth="800px">
           <PaginatedTable
             alignItems="flex-start"
-            getRowId={([_timestamp, _value, poolActivityMetaData]) => poolActivityMetaData.id}
+            getRowId={([, , poolActivityMetaData]) => poolActivityMetaData.id}
             items={sortedPoolEvents}
             loading={isLoading}
             noItemsFoundLabel="No pool events found"

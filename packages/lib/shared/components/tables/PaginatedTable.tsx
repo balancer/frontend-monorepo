@@ -13,7 +13,7 @@ interface Props<T> extends BoxProps {
   getRowId: (item: T, index: number) => React.Key
 }
 
-export function PaginatedTable<T extends any>({
+export function PaginatedTable<T>({
   items,
   loading,
   renderTableRow,

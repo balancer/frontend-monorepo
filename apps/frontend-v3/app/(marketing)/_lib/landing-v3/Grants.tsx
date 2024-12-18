@@ -94,7 +94,7 @@ export function Grants() {
                 <Box minH="200px" overflow="hidden" position="relative" rounded="lg" shadow="2xl">
                   <GraniteBg />
                   <VStack align="start" p="md" position="relative">
-                    <Heading variant="h6" fontSize="lg">
+                    <Heading fontSize="lg" variant="h6">
                       {idea.title}
                     </Heading>
                     <Text color="font.secondary">{idea.description}</Text>
