@@ -13,6 +13,7 @@ import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { MaBeetsNavLink } from './MaBeetsNavLink'
 import { SonicMigrationLink } from './SonicMigrationLink'
 import Image from 'next/image'
+import { FantomToSonicSvg } from '../imgs/FantomToSonicSvg'
 
 export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
@@ -32,13 +33,8 @@ export function NavBarContainer() {
             fontSize="xl"
             triggerEl={
               <HStack>
-                <Box>Fantom migration</Box>
-                <Image
-                  alt="fantom"
-                  height={24}
-                  src="https://assets.coingecko.com/coins/images/4001/large/Fantom.png"
-                  width={24}
-                />
+                <Box>Migrate to Sonic</Box>
+                <FantomToSonicSvg height={24} />
               </HStack>
             }
           />
