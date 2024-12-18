@@ -13,7 +13,7 @@
     "test:unit": "vitest",
     "test:unit:coverage": "vitest --coverage",
     "test:unit:silent:coverage": "SILENT_TESTS=true vitest --coverage",
-    "typecheck": "tsc --project tsconfig.json --noEmit"
+    "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
