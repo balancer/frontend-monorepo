@@ -12,7 +12,8 @@
     "PRIVATE_CURRENCYAPI_KEY",
     "VITEST_POOL_ID",
     "NODE_ENV",
-    "SILENT_TESTS"
+    "SILENT_TESTS",
+    "NEXT_RUNTIME"
   ],
   "tasks": {
     "dev": {
