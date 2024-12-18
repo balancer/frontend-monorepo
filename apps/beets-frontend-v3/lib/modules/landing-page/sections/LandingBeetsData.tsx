@@ -4,6 +4,8 @@ import React from 'react'
 import {
   Box,
   BoxProps,
+  Button,
+  Center,
   Flex,
   Grid,
   GridItem,
@@ -25,6 +27,7 @@ import {
 import { getChainId } from '@repo/lib/config/app.config'
 //import { fNum } from '@repo/lib/shared/utils/numbers'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import NextLink from 'next/link'
 
 function SubStatBar({
   stat,
@@ -112,11 +115,13 @@ function ChainDataCard({
   networkColor,
   protocolData,
   totalTvl,
+  button,
 }: {
   chain: GqlChain
   networkColor: string
   protocolData: GetProtocolStatsPerChainQuery
   totalTvl: string
+  button: React.ReactNode
 }) {
   return (
     <Box p="xl">
@@ -129,6 +134,7 @@ function ChainDataCard({
         </Heading>
       </Box>
       <ChainStats protocolData={protocolData} totalTvl={totalTvl} />
+      <Center mt="xl">{button}</Center>
     </Box>
   )
 }
@@ -211,6 +217,11 @@ export function LandingBeetsData({
               networkColor="orange"
               protocolData={chainData[getChainId(GqlChain.Sonic)]}
               totalTvl={totalTvl}
+              button={
+                <Button variant="primary" as={NextLink} href="/pools?networks=SONIC">
+                  Sonic Pools
+                </Button>
+              }
             />
           </GridItem>
           <GridItem bg="rgba(0, 0, 0, 0.05)">
@@ -219,6 +230,11 @@ export function LandingBeetsData({
               networkColor="red"
               protocolData={chainData[getChainId(GqlChain.Optimism)]}
               totalTvl={totalTvl}
+              button={
+                <Button variant="primary" as={NextLink} href="/pools?networks=OPTIMISM">
+                  Optimism Pools
+                </Button>
+              }
             />
           </GridItem>
           <GridItem bg="rgba(0, 0, 0, 0.2)">
@@ -227,6 +243,16 @@ export function LandingBeetsData({
               networkColor="deepskyblue"
               protocolData={chainData[getChainId(GqlChain.Fantom)]}
               totalTvl={totalTvl}
+              button={
+                <Button
+                  variant="primary"
+                  as={NextLink}
+                  href="https://ftm.beets.fi/pools"
+                  target="_blank"
+                >
+                  Fantom Pools
+                </Button>
+              }
             />
           </GridItem>
         </Grid>
