@@ -11,6 +11,7 @@ import { Box } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { MaBeetsNavLink } from './MaBeetsNavLink'
+import { SonicMigrationLink } from './SonicMigrationLink'
 
 export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
@@ -37,9 +38,14 @@ export function NavBarContainer() {
         </>
       }
       customLinks={
-        <Box as={motion.div} variants={fadeIn}>
-          <MaBeetsNavLink />
-        </Box>
+        <>
+          <Box as={motion.div} variants={fadeIn}>
+            <MaBeetsNavLink />
+          </Box>
+          <Box as={motion.div} variants={fadeIn}>
+            <SonicMigrationLink />
+          </Box>
+        </>
       }
     />
   )

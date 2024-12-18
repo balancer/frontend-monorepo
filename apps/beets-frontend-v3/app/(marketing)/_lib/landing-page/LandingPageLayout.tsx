@@ -1,12 +1,12 @@
+import { Box } from '@chakra-ui/react'
+import { BeetsLandingHeroImg } from './components/BeetsLandingHeroImg'
+import { LandingBalancerV3Section } from './sections/LandingBalancerV3Section'
 import { LandingBeetsData } from './sections/LandingBeetsData'
 import { LandingBeetsHero } from './sections/LandingBeetsHero'
+import { LandingBeetsSecuritySection } from './sections/LandingBeetsSecuritySection'
 import { LandingBeetsSocialClub } from './sections/LandingBeetsSocialClub'
 import { LandingBeetsStakedSonic } from './sections/LandingBeetsStakedSonic'
 import { LandingMaBeetsSection } from './sections/LandingMaBeetsSection'
-import { LandingBalancerV3Section } from './sections/LandingBalancerV3Section'
-import { LandingBeetsSecuritySection } from './sections/LandingBeetsSecuritySection'
-import { Box } from '@chakra-ui/react'
-import { BeetsLandingHeroImg } from './components/BeetsLandingHeroImg'
 
 export function LandingPageLayout() {
   return (
