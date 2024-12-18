@@ -9,8 +9,8 @@ import { LettersPullUp } from '@repo/lib/shared/components/animations/LettersPul
 const words = [
   { word: 'DeFi', color: '#457dff' },
   { word: 'Staking', color: '#00d395' },
-  { word: 'Liquidity', color: '#f97316' },
-  { word: 'Growth', color: '#F06147' },
+  { word: 'Yield', color: '#f97316' },
+  //{ word: 'Growth', color: '#F06147' },
 ]
 
 export function Title({ ...rest }: BoxProps) {
@@ -73,7 +73,7 @@ export function Title({ ...rest }: BoxProps) {
                 words[currentWordIndex].word === word && (
                   <LettersPullUp
                     finalColorDark="#ffffff"
-                    finalColorLight="#000000"
+                    finalColorLight="#ffffff"
                     initialColor={color}
                     key={word}
                     text={word}
