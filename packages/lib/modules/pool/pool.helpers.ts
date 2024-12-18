@@ -31,7 +31,6 @@ import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem, ApiToken } from './pool.types'
 import { Pool } from './PoolProvider'
-import { HumanTokenAmountWithAddress } from '../tokens/token.types'
 
 /**
  * METHODS

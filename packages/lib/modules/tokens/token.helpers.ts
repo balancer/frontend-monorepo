@@ -11,7 +11,7 @@ import { HumanTokenAmountWithAddress, TokenBase } from './token.types'
 import { InputAmount } from '@balancer/sdk'
 import { Pool } from '../pool/PoolProvider'
 import { getVaultConfig, isCowAmmPool, isV3Pool } from '../pool/pool.helpers'
-import { ApiToken, TokenCore } from '../pool/pool.types'
+import { ApiToken } from '../pool/pool.types'
 
 export function isNativeAsset(token: TokenBase | string, chain: GqlChain | SupportedChainId) {
   return nativeAssetFilter(chain)(token)
