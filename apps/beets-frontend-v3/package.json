@@ -68,10 +68,5 @@
   "engines": {
     "node": ">=18.x"
   },
-  "engineStrict": true,
-  "overrides": {
-    "wagmi": {
-      "viem": "2.21.55"
-    }
-  }
+  "engineStrict": true
 }
