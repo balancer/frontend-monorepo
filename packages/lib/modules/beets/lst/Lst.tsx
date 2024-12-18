@@ -41,19 +41,24 @@ import { useGetUserNumWithdraws } from './hooks/useGetUserNumWithdraws'
 
 const FAQ_ITEMS = [
   {
-    question: 'What is liquid staking?',
+    question: 'What is stS?',
     answer:
-      'Liquid staking lets you stake your tokens, earn rewards, and stay liquid. When you stake, you mint stS tokens which automatically rebase to  reflect network rewards.',
+      'stS is a liquid-staked token that users receive when they stake S on the Beets platform. The value of stS naturally appreciates in relation to S thanks to native network staking rewards from validator delegation being automatically compounded within the token.',
+  },
+  {
+    question: 'What are the stS fees?',
+    answer:
+      'Due to the management of underlying nodes, validators earn 15% of the overall stS staking rewards. Beets also takes a 10% protocol fee on the rewards after the validator fees. The APY displayed on the UI is the APY the user receives (all fees have been subtracted automatically).',
   },
   {
     question: 'How do I get stS tokens?',
     answer:
-      'Stake your S tokens with the protocol to mint stS. It’s permissionless and seamless, running on public blockchains. You can interact with the smart contracts directly or get started easily through our main UI.',
+      'To stake, users simply need to head to the stS page and select how much S they wish to deposit. As an alternative to staking, users can swap out of stS on DEXs by swapping their stS for S on the Swap Page.',
   },
   {
     question: 'Where can I use stS tokens?',
     answer:
-      'From yield farming to liquidity pools to lending markets, stS is your gateway to a growing DeFi ecosystem on Sonic.',
+      'stS is fully liquid, meaning you can use stS seamlessly across DeFi and access lending markets, liquidity pools, and more without pausing your rewards.',
   },
 ]
 
