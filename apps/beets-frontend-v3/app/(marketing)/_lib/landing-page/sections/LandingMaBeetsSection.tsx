@@ -72,7 +72,8 @@ export function LandingMaBeetsSection() {
             your assets."
       button={{
         text: 'Get maBEETS',
-        href: '',
+        href: 'https://ma.beets.fi',
+        isExternal: true,
       }}
     >
       <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
