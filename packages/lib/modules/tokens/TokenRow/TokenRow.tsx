@@ -30,11 +30,13 @@ import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
+import { ApiToken } from '../../pool/pool.types'
 
-type DataProps = {
+export type TokenInfoProps = {
   address: Address
+  symbol?: string
   chain: GqlChain
-  token?: GqlToken
+  token?: ApiToken
   displayToken?: GqlPoolTokenDisplay
   pool?: Pool
   disabled?: boolean
@@ -51,6 +53,7 @@ function TokenInfo({
   chain,
   token,
   displayToken,
+  symbol,
   pool,
   disabled,
   showSelect = false,
@@ -58,8 +61,8 @@ function TokenInfo({
   isBpt = false,
   isNestedPoolToken = false,
   iconSize = 40,
-}: DataProps) {
-  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || displayToken?.symbol
+}: TokenInfoProps) {
+  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || displayToken?.symbol
   const tokenName = isBpt ? pool?.name : token?.name || displayToken?.name
 
   const headingProps = {
@@ -109,6 +112,7 @@ function TokenInfo({
 export type TokenRowProps = {
   label?: string | ReactNode
   address: Address
+  symbol?: string
   chain: GqlChain
   value: Numberish
   actualWeight?: string
@@ -129,6 +133,7 @@ export type TokenRowProps = {
 export default function TokenRow({
   label,
   address,
+  symbol,
   value,
   actualWeight,
   targetWeight,
@@ -152,7 +157,7 @@ export default function TokenRow({
   const displayToken = pool?.displayTokens.find(t => isSameAddress(t.address, address))
 
   // TokenRowTemplate default props
-  const props = {
+  const props: TokenInfoProps = {
     address,
     chain,
     token,
@@ -161,6 +166,7 @@ export default function TokenRow({
     disabled,
     iconSize,
     isNestedPoolToken,
+    symbol,
   }
 
   useEffect(() => {

@@ -4,6 +4,7 @@ import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useState } from 'react'
 import { Address } from 'viem'
+import { ApiToken } from '../pool/pool.types'
 
 export function _useTokenInputsValidation() {
   type ValidationErrorsByToken = Record<Address, string>
@@ -14,11 +15,11 @@ export function _useTokenInputsValidation() {
     setValidationErrors({ ...validationErrors })
   }
 
-  function hasValidationError(token: GqlToken | undefined) {
+  function hasValidationError(token: ApiToken | undefined) {
     return !!getValidationError(token)
   }
 
-  function getValidationError(token: GqlToken | undefined): string {
+  function getValidationError(token: ApiToken | undefined): string {
     if (!token) return ''
     const error = validationErrors[token.address as Address]
     if (!error) return ''

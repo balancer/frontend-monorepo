@@ -29,7 +29,7 @@ import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
-import { TokenCore, PoolListItem } from './pool.types'
+import { TokenCore, PoolListItem, ApiToken } from './pool.types'
 import { Pool } from './PoolProvider'
 
 /**
@@ -420,6 +420,19 @@ export function getWarnings(warnings: string[]) {
   return warnings.filter(warning => !isEmpty(warning))
 }
 
+// TODO: refactor into a more generic function that looks for the symbol in any pool token
+export function getActionableTokenSymbol(tokenAddress: Address, pool: Pool): string {
+  const token = getPoolActionableTokens(pool).find(token =>
+    isSameAddress(token.address, tokenAddress)
+  )
+  if (!token) {
+    console.log('Token symbol not found for address ', tokenAddress)
+    return ''
+  }
+
+  return token.symbol
+}
+
 /*
   Depending on the pool type, iterates pool.poolTokens and returns the list of GqlTokens that can be used in the pool's actions (add/remove/swap).
 
@@ -427,26 +440,24 @@ export function getWarnings(warnings: string[]) {
     If the pool supports nested actions, returns the leaf tokens.
     If the pool is boosted, returns the underlying tokens instead of the ERC4626 tokens.
 */
-export function getPoolActionableTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
-  type PoolToken = Pool['poolTokens'][0]
-  function toGqlTokens(tokens: PoolToken[] | TokenCore[]): GqlToken[] {
+export function getPoolActionableTokens(pool: Pool): ApiToken[] {
+  function excludeNestedBptTokens(tokens: ApiToken[]): ApiToken[] {
     return tokens
       .filter(token => !isSameAddress(token.address, pool.address)) // Exclude the BPT pool token itself
-      .map(token => getToken(token.address, pool.chain))
-      .filter((token): token is GqlToken => token !== undefined)
+      .filter(token => token !== undefined)
   }
 
   // TODO add exception for composable pools where we can allow adding
   // liquidity with nested tokens
   if (supportsNestedActions(pool)) {
-    return toGqlTokens(getLeafTokens(pool.poolTokens))
+    return excludeNestedBptTokens(getLeafTokens(pool.poolTokens))
   }
 
   if (isBoosted(pool)) {
-    return getBoostedGqlTokens(pool, getToken)
+    return excludeNestedBptTokens(getBoostedGqlTokens(pool))
   }
 
-  return toGqlTokens(pool.poolTokens)
+  return excludeNestedBptTokens(pool.poolTokens as ApiToken[])
 }
 
 export function getNonBptTokens(pool: Pool) {
@@ -489,7 +500,7 @@ export function isStandardOrUnderlyingRootToken(pool?: Pool, tokenAddress?: Addr
 }
 
 // Returns the top level tokens that is not nestedBpt
-export function getStandardRootTokens(pool: Pool, poolActionableTokens?: GqlToken[]): GqlToken[] {
+export function getStandardRootTokens(pool: Pool, poolActionableTokens?: ApiToken[]): ApiToken[] {
   if (!poolActionableTokens) return []
   return poolActionableTokens.filter(token =>
     isStandardOrUnderlyingRootToken(pool, token.address as Address)
@@ -497,7 +508,7 @@ export function getStandardRootTokens(pool: Pool, poolActionableTokens?: GqlToke
 }
 
 // Returns the child tokens (children of a parent nestedBpt)
-export function getChildTokens(pool: Pool, poolActionableTokens?: GqlToken[]): GqlToken[] {
+export function getChildTokens(pool: Pool, poolActionableTokens?: ApiToken[]): ApiToken[] {
   if (!poolActionableTokens) return []
   return poolActionableTokens.filter(
     token => !isStandardOrUnderlyingRootToken(pool, token.address as Address)
@@ -600,14 +611,14 @@ function shouldUseUnderlyingToken(token: PoolToken, pool: Pool | GqlPoolBase): b
 }
 
 // Returns top level standard tokens + Erc4626 (only v3) underlying tokens
-export function getBoostedGqlTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
+export function getBoostedGqlTokens(pool: Pool): ApiToken[] {
   const underlyingTokens = pool.poolTokens
     .flatMap(token =>
       shouldUseUnderlyingToken(token, pool)
-        ? [getToken(token.underlyingToken?.address as Address, pool.chain)]
-        : toGqlTokens([token], getToken, pool.chain)
+        ? [token.underlyingToken as ApiToken]
+        : [token as ApiToken]
     )
-    .filter((token): token is GqlToken => token !== undefined)
+    .filter((token): token is ApiToken => token !== undefined)
   return underlyingTokens
 }
 

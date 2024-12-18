@@ -13,7 +13,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { getStylesForModalContentWithStepTracker } from '../../transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { TokenRowGroup } from '../../tokens/TokenRow/TokenRowGroup'
-import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
+import { HumanTokenAmount } from '../../tokens/token.types'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useClaimVeBalRewardsStep } from '../../pool/actions/claim/useClaimVeBalRewardsStep'
@@ -51,7 +51,7 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
 
   const claimTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
 
-  const rewards: HumanTokenAmountWithAddress[] = rewardsDataSnapshot
+  const rewards: HumanTokenAmount[] = rewardsDataSnapshot
     .filter(reward => !bn(reward.balance).isZero())
     .map(reward => ({
       tokenAddress: reward.tokenAddress as Address,

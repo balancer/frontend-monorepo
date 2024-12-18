@@ -10,8 +10,9 @@ import { isNativeAsset, isNativeOrWrappedNative } from '@repo/lib/modules/tokens
 import { NativeAssetSelectModal } from '@repo/lib/modules/tokens/NativeAssetSelectModal'
 import { shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
 import { Pool } from '../../../PoolProvider'
+import { ApiToken } from '../../../pool.types'
 
-type Props = { tokens: GqlToken[]; pool: Pool }
+type Props = { tokens: ApiToken[]; pool: Pool }
 export function RemoveLiquidityProportional({ tokens, pool }: Props) {
   const { amountOutForToken, validTokens, setWethIsEth, simulationQuery, priceImpactQuery } =
     useRemoveLiquidity()
@@ -22,7 +23,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
     isNativeOrWrappedNative(token.address as Address, token.chain)
   )
 
-  function handleTokenSelect(token: GqlToken) {
+  function handleTokenSelect(token: ApiToken) {
     if (isNativeAsset(token.address as Address, token.chain)) {
       setWethIsEth(true)
     } else {

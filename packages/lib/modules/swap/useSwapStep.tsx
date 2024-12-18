@@ -4,7 +4,6 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { VStack } from '@chakra-ui/react'
 import { capitalize } from 'lodash'
@@ -18,13 +17,14 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { useTenderly } from '../web3/useTenderly'
 import { getChainId } from '@repo/lib/config/app.config'
 import { DisabledTransactionButton } from '../transactions/transaction-steps/TransactionStepButton'
+import { ApiToken } from '../pool/pool.types'
 
 export const swapStepId = 'swap'
 
 export type SwapStepParams = BuildSwapQueryParams & {
   swapAction: SwapAction
-  tokenInInfo: GqlToken | undefined
-  tokenOutInfo: GqlToken | undefined
+  tokenInInfo: ApiToken | undefined
+  tokenOutInfo: ApiToken | undefined
 }
 
 export function useSwapStep({

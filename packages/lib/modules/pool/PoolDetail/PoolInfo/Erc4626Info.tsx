@@ -17,9 +17,10 @@ import Link from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { getWarnings } from '../../pool.helpers'
 import { PropsWithChildren } from 'react'
+import { ApiToken } from '../../pool.types'
 
 type Erc4626InfoPopOverProps = {
-  token: GqlToken
+  token: ApiToken
   data: Erc4626ReviewData | undefined | null
   level: number
 } & PropsWithChildren
