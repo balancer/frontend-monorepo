@@ -4,16 +4,18 @@
   "private": true,
   "scripts": {
     "graphql:gen": "DOTENV_CONFIG_PATH=./.env.local graphql-codegen -r dotenv/config -c ./shared/services/api/codegen.ts",
-    "lint": "eslint . --cache --cache-location 'node_modules/.cache/.eslintcache'",
-    "lint:fix": "eslint . --fix --cache --cache-location 'node_modules/.cache/.eslintcache'",
-    "format": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
-    "format:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
+    "lint": "eslint . --cache",
+    "lint:fix": "eslint . --fix --max-warnings 0  --cache",
+    "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
+    "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
+    "stylelint": "stylelint '**/*.css'",
+    "stylelint:fix": "stylelint '**/*.css' --fix",
     "test": "pnpm test:unit & pnpm run test:integration",
     "test:integration": "vitest -c ./vitest.config.integration.ts",
     "test:unit": "vitest",
     "test:unit:coverage": "vitest --coverage",
     "test:unit:silent:coverage": "SILENT_TESTS=true vitest --coverage",
-    "typecheck": "tsc --project tsconfig.json --noEmit"
+    "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",

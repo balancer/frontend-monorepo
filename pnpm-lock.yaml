@@ -14992,7 +14992,7 @@ snapshots:
       pump: 3.0.2
       readable-stream: 3.6.2
       socket.io-client: 4.7.5(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      tslib: 2.8.0
+      tslib: 2.8.1
       util: 0.12.5
       uuid: 8.3.2
     transitivePeerDependencies:
@@ -19288,7 +19288,7 @@ snapshots:
       debug: 4.3.7
       enhanced-resolve: 5.17.1
       eslint: 8.43.0
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.3.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.3.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0)
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.3.3))(eslint@8.43.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.2
@@ -19300,12 +19300,13 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.3.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.3.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 6.17.0(eslint@8.43.0)(typescript@5.3.3)
       eslint: 8.43.0
+      eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.3.3))(eslint-plugin-import@2.29.0)(eslint@8.43.0)
     transitivePeerDependencies:
       - supports-color
