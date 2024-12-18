@@ -11,6 +11,7 @@ import {
   GetProtocolStatsPerChainQuery,
   GetProtocolStatsQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import { BeetsLandingModal } from './components/BeetsLandingModal'
 
 export function LandingPageLayout({
   protocolData,
@@ -37,6 +38,7 @@ export function LandingPageLayout({
         <LandingBeetsSecuritySection />
       </Box>
       <LandingBeetsSocialClub />
+      <BeetsLandingModal />
     </Box>
   )
 }
