@@ -61,8 +61,8 @@ export function MaBeetsRedirectModal({
           </Text>
 
           <Text color="font.secondary" mt="md">
-            It's recommended that you migrate any Fantom maBEETS relics to Sonic. For more
-            information, refrer to the migration guide at{' '}
+            It's recommended that you migrate Fantom maBEETS relics to Sonic. For more information,
+            refrer to the migration guide at{' '}
             <Link href="https://docs.beets.fi" target="_blank">
               https://docs.beets.fi
             </Link>
