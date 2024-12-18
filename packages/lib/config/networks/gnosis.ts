@@ -69,7 +69,6 @@ const networkConfig: NetworkConfig = {
   },
   pools: convertHexToLowerCase({
     issues: { [PoolIssue.CspPoolVulnWarning]: CSP_ISSUE_POOL_IDS[GqlChain.Gnosis] },
-    disallowNestedActions: [],
   }),
   layerZeroChainId: 145,
   supportsVeBalSync: true,
