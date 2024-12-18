@@ -140,6 +140,7 @@ const networkConfig: NetworkConfig = {
     },
     disallowNestedActions: [
       // TODO: remove this id from the list when the API fixes an issue where the API returns the PHANTOM pool itself in pool.poolTokens
+      // https://github.com/balancer/backend/issues/1363
       '0xdacf5fa19b1f720111609043ac67a9818262850c000000000000000000000635', // osETH/wETH-BPT
       '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249',
     ],
