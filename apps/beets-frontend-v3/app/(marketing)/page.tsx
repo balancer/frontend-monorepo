@@ -1,4 +1,4 @@
-import { LandingPageLayout } from './_lib/landing-page/LandingPageLayout'
+import { LandingPageLayout } from '@/lib/modules/landing-page/LandingPageLayout'
 
 export default function Home() {
   return <LandingPageLayout />
