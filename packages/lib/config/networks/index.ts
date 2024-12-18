@@ -11,6 +11,7 @@ import base from './base'
 import sepolia from './sepolia'
 import mode from './mode'
 import fraxtal from './fraxtal'
+import sonic from './sonic'
 
 const networkConfigs = {
   [GqlChain.Arbitrum]: arbitrum,
@@ -25,7 +26,7 @@ const networkConfigs = {
   [GqlChain.Mode]: mode,
   [GqlChain.Fraxtal]: fraxtal,
   [GqlChain.Fantom]: fantom,
-  [GqlChain.Sonic]: fantom, // TODO: groninge will fix it in another PR
+  [GqlChain.Sonic]: sonic,
 }
 
 export default networkConfigs

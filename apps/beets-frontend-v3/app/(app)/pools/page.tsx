@@ -49,13 +49,13 @@ export default async function PoolsPage() {
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
             <PoolList
               displayType={PoolListDisplayType.Name}
-              hidePoolTags={['VE8020']}
+              hidePoolTags={['VE8020', 'BOOSTED']}
               hidePoolTypes={[
                 GqlPoolType.LiquidityBootstrapping,
                 GqlPoolType.CowAmm,
                 GqlPoolType.Fx,
               ]}
-              hideProtocolVersion={['cow']}
+              hideProtocolVersion={['cow', 'v3']}
             />
           </Suspense>
         </FadeInOnView>

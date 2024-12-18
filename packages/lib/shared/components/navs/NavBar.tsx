@@ -1,19 +1,18 @@
 'use client'
 
-import NextLink from 'next/link'
-import DarkModeToggle from '../btns/DarkModeToggle'
-import { Box, HStack, BoxProps, Link, Button } from '@chakra-ui/react'
-import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
-import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
-import RecentTransactions from '../other/RecentTransactions'
+import { Box, BoxProps, Button, HStack, Link } from '@chakra-ui/react'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
-import { staggeredFadeIn, fadeIn } from '@repo/lib/shared/utils/animations'
-import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'framer-motion'
-import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
-import { AppLink, useNav } from './useNav'
-import { ReactNode, useEffect, useMemo, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
+import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { fadeIn, staggeredFadeIn } from '@repo/lib/shared/utils/animations'
+import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'framer-motion'
+import NextLink from 'next/link'
+import { usePathname } from 'next/navigation'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
+import DarkModeToggle from '../btns/DarkModeToggle'
+import RecentTransactions from '../other/RecentTransactions'
+import { AppLink, useNav } from './useNav'
 
 type Props = {
   mobileNav?: ReactNode
@@ -60,6 +59,7 @@ function NavLinks({
             as={NextLink}
             color={linkColorFor(link.href)}
             href={link.href}
+            isExternal={link.isExternal}
             prefetch
             variant="nav"
           >

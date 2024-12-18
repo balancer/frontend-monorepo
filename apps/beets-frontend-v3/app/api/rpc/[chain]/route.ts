@@ -10,6 +10,10 @@ const DRPC_KEY = process.env.NEXT_PRIVATE_DRPC_KEY || ''
 const dRpcUrl = (chainName: string) =>
   `https://lb.drpc.org/ogrpc?network=${chainName}&dkey=${DRPC_KEY}`
 
+const ALCHEMY_KEY = process.env.NEXT_PRIVATE_ALCHEMY_KEY || ''
+const alchemyUrl = (chainName: string) =>
+  `https://${chainName}-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`
+
 const chainToRpcMap: Record<GqlChain, string | undefined> = {
   [GqlChain.Mainnet]: dRpcUrl('ethereum'),
   [GqlChain.Arbitrum]: dRpcUrl('arbitrum'),
@@ -18,12 +22,12 @@ const chainToRpcMap: Record<GqlChain, string | undefined> = {
   [GqlChain.Polygon]: dRpcUrl('polygon'),
   [GqlChain.Avalanche]: dRpcUrl('avalanche'),
   [GqlChain.Fantom]: dRpcUrl('fantom'),
-  [GqlChain.Sonic]: dRpcUrl('fantom'), //TODO: groninge will fix it in another PR
   [GqlChain.Sepolia]: dRpcUrl('sepolia'),
   [GqlChain.Fraxtal]: dRpcUrl('fraxtal'),
   [GqlChain.Gnosis]: dRpcUrl('gnosis'),
   [GqlChain.Mode]: dRpcUrl('mode'),
   [GqlChain.Zkevm]: dRpcUrl('polygon-zkevm'),
+  [GqlChain.Sonic]: alchemyUrl('sonic'),
 }
 
 function getRpcUrl(chain: string) {

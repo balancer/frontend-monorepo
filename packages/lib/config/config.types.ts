@@ -18,6 +18,12 @@ export interface TokensConfig {
     symbol: string
     decimals: number
   }
+  stakedAsset?: {
+    name: string
+    address: Address
+    symbol: string
+    decimals: number
+  }
   supportedWrappers?: {
     baseToken: Address
     wrappedToken: Address
@@ -47,6 +53,10 @@ export interface ContractsConfig {
     relayerV6: Address
     minter: Address
     WeightedPool2TokensFactory?: Address
+  }
+  beets?: {
+    lstStaking?: Address
+    lstStakingProxy?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address

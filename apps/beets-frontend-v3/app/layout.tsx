@@ -17,21 +17,7 @@ import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDat
 export const metadata: Metadata = {
   title: 'Beets DeFi Liquidity Pools',
   description: `Explore DeFi liquidity pools and swap tokens. Provide liquidity to accumulate yield from swap fees while retaining your token exposure as prices move.`,
-  icons: [
-    { rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      url: '/favicon-light.png',
-      media: '(prefers-color-scheme: light)',
-    },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      url: '/favicon-dark.png',
-      media: '(prefers-color-scheme: dark)',
-    },
-  ],
+  icons: [{ rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' }],
 }
 
 export default function RootLayout({ children }: PropsWithChildren) {
@@ -42,21 +28,26 @@ export default function RootLayout({ children }: PropsWithChildren) {
         style={{ marginRight: '0px !important' }} // Required to prevent layout shift introduced by Rainbowkit
         suppressHydrationWarning
       >
-        <div style={{ backgroundImage: 'url(/images/misc/pattern-sml-7@2x.webp)', backgroundSize: '8%'}}>
-        <NextTopLoader color="#7f6ae8" showSpinner={false} />
-        <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
-          <ThemeProvider>
-            <Providers>
-              <VebalLockDataProvider>
-                <GlobalAlerts />
-                <NavBarContainer />
-                {children}
-                <FooterContainer />
-                <SpeedInsights />
-              </VebalLockDataProvider>
-            </Providers>
-          </ThemeProvider>
-        </ColorThemeProvider>
+        <div
+          style={{
+            backgroundImage: 'url(/images/misc/pattern-sml-7@2x.webp)',
+            backgroundSize: '8%',
+          }}
+        >
+          <NextTopLoader color="#7f6ae8" showSpinner={false} />
+          <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
+            <ThemeProvider>
+              <Providers>
+                <VebalLockDataProvider>
+                  <GlobalAlerts />
+                  <NavBarContainer />
+                  {children}
+                  <FooterContainer />
+                  <SpeedInsights />
+                </VebalLockDataProvider>
+              </Providers>
+            </ThemeProvider>
+          </ColorThemeProvider>
         </div>
       </body>
     </html>
