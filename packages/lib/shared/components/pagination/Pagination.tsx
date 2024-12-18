@@ -13,7 +13,6 @@ interface Props {
   setPageSize: (page: number) => void
   pageSize: number
   changeSize?: boolean
-  isSmall?: boolean
 }
 
 export function Pagination({
@@ -28,7 +27,6 @@ export function Pagination({
   setPageSize,
   pageSize,
   changeSize = true,
-  isSmall = false, // set to true when table is NOT directly used in a card
   ...rest
 }: Props) {
   return (
