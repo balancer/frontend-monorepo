@@ -1,25 +1,23 @@
 import {
-  Modal,
-  Text,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  UnorderedList,
-  ListItem,
-  ModalFooter,
+  Box,
   Button,
   HStack,
   Link,
-  useDisclosure,
   LinkProps,
-  Box,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
 } from '@chakra-ui/react'
-import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
 import { ReactNode } from 'react'
-import Image from 'next/image'
+import { ArrowUpRight } from 'react-feather'
+import { FantomToSonicSvg } from '../imgs/FantomToSonicSvg'
 
 interface SonicMigrationRedirectModalProps extends LinkProps {
   triggerEl?: ReactNode
@@ -33,12 +31,7 @@ export function SonicMigrationLink({ triggerEl, ...props }: SonicMigrationRedire
       <Link color="font.primary" onClick={onOpen} variant="nav" {...props}>
         {triggerEl || (
           <HStack>
-            <Image
-              alt="fantom"
-              height={24}
-              src="https://assets.coingecko.com/coins/images/4001/large/Fantom.png"
-              width={24}
-            />
+            <FantomToSonicSvg height={24} />
             <Box>Migration</Box>
           </HStack>
         )}
@@ -54,24 +47,22 @@ function SonicMigrationModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Migrating from Fantom Opera</ModalHeader>
+        <ModalHeader>Upgrade to Sonic</ModalHeader>
         <ModalCloseButton />
         <ModalBody color="grayText">
           <Text color="font.secondary">
-            Sonic is live! Do you still have assets on Fantom Opera?
+            Sonic is live, offering enhanced performance and new opportunities. If you still have
+            assets on Fantom, it's time to make the switch. We've prepared a migration guide to help
+            you get started.
           </Text>
 
-          <UnorderedList>
-            <ListItem>
-              <Text color="font.secondary">bullet point 1</Text>
-            </ListItem>
-            <ListItem>
-              <Text color="font.secondary">bullet point 2</Text>
-            </ListItem>
-            <ListItem>
-              <Text color="font.secondary">bullet point 3</Text>
-            </ListItem>
-          </UnorderedList>
+          <Text color="font.secondary" mt="md">
+            You can find the legacy Fantom app at{' '}
+            <Link href="https://ftm.beets.fi" target="_blank">
+              https://ftm.beets.fi
+            </Link>
+            .
+          </Text>
         </ModalBody>
 
         <ModalFooter>
@@ -84,7 +75,7 @@ function SonicMigrationModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             mr="md"
           >
             <HStack>
-              <span>Migration Docs</span>
+              <span>Migration Guide</span>
               <ArrowUpRight size={16} />
             </HStack>
           </Button>
