@@ -37,11 +37,6 @@ export function BeetsLandingModal() {
             next-generation DeFi.
           </Text>
           <Text color="font.secondary" mt="md">
-            Start your migration today and unlock the full potential of DeFi. [Learn More About
-            Migration] **Same tribe. New BEETS.**
-          </Text>
-
-          <Text color="font.secondary" mt="md">
             Start your migration today and unlock the full potential of DeFi.{' '}
             <Link href="https://docs.beets.fi/sonic" target="_blank">
               Learn More About Migration
