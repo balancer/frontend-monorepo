@@ -33,12 +33,22 @@ module.exports = {
     // Ignore dotfiles
     '.*.js',
     'node_modules/',
+    'next.config.js',
   ],
   overrides: [{ files: ['*.js?(x)', '*.ts?(x)'] }],
   rules: {
     curly: ['error', 'multi-line'],
     'no-console': ['off'],
-    'max-len': ['warn', { code: 120, ignoreComments: true, ignoreUrls: true, ignoreTemplateLiterals: true, ignoreStrings: true }],
+    'max-len': [
+      'warn',
+      {
+        code: 120,
+        ignoreComments: true,
+        ignoreUrls: true,
+        ignoreTemplateLiterals: true,
+        ignoreStrings: true,
+      },
+    ],
     '@typescript-eslint/no-explicit-any': ['off'],
     'no-html-link-for-pages': ['off'],
     'no-restricted-imports': [
