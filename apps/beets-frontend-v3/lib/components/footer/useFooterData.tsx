@@ -34,11 +34,6 @@ export function useFooterData() {
           isExternal: true,
         },
         { label: 'Analytics', href: 'https://beets.defilytica.com', isExternal: true },
-        {
-          label: 'Brand assets',
-          href: 'https://brand.beets.fi/',
-          isExternal: true,
-        },
       ],
     },
   ]
