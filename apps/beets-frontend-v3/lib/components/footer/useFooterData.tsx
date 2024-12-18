@@ -21,7 +21,7 @@ export function useFooterData() {
         { label: 'Explore pools', href: '/pools' },
         { label: 'Swap tokens', href: '/swap' },
         { label: 'View portfolio', href: '/portfolio' },
-        { label: 'Get maBEETS', href: 'https://beets.fi/mabeets', isExternal: true },
+        { label: 'Get maBEETS', href: 'https://ma.beets.fi', isExternal: true },
       ],
     },
     {
