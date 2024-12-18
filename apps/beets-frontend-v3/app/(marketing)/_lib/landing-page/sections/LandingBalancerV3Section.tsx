@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Flex, GridItem, Heading, Text, Grid } from '@chakra-ui/react'
+import { Box, Button, Flex, GridItem, Heading, Text, Grid, Center } from '@chakra-ui/react'
 import React from 'react'
 import { BalancerV3BoostedPoolsSvg } from '../components/BalancerV3BoostedPoolsSvg'
 import { BalancerV3CustomPoolsSvg } from '../components/BalancerV3CustomPoolsSvg'
@@ -96,17 +96,19 @@ export function LandingBalancerV3Section() {
             />
           </Grid>
         </Box>
-        <Box
-          fontSize="2xl"
-          fontWeight="thin"
-          textAlign="center"
-          pt="xl"
-          pb="md"
-          w={{ base: 'full', lg: '2xl' }}
-        >
-          Balancer v3 transforms beets into a hub of cutting-edge liquidity solutions, empowering
-          builders to shape the future of Sonic.
-        </Box>
+        <Center>
+          <Box
+            fontSize="2xl"
+            fontWeight="thin"
+            textAlign="center"
+            pt="xl"
+            pb="md"
+            w={{ base: 'full', lg: '2xl' }}
+          >
+            Balancer v3 transforms beets into a hub of cutting-edge liquidity solutions, empowering
+            builders to shape the future of Sonic.
+          </Box>
+        </Center>
       </Box>
     </LandingSectionContainer>
   )
