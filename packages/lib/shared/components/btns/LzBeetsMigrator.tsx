@@ -25,7 +25,7 @@ import { formatUnits } from 'viem'
 
 const sonicChainId = 146
 const lzBeetsAddress = '0x1E5fe95fB90ac0530F581C617272cd0864626795'
-const migratorAddress = '0x0000000000000000000000000000000000000000'
+const migratorAddress = '0x5f9a5CD0B77155AC1814EF6Cd9D82dA53d05E386'
 
 function MigrationButton({ balance }: { balance: bigint }) {
   const [isRefetching, setIsRefetching] = useState(false)
@@ -107,7 +107,7 @@ function MigrationButton({ balance }: { balance: bigint }) {
 
 export function LzBeetsMigrator() {
   const { isConnected, userAddress } = useUserAccount()
-
+  const [shouldShow, setShouldShow] = useState(false)
   const { data: balanceData } = useBalance({
     chainId: sonicChainId,
     address: userAddress,
@@ -115,6 +115,17 @@ export function LzBeetsMigrator() {
   })
 
   const balance = formatUnits(balanceData?.value || 0n, balanceData?.decimals || 18)
+  const hasBalance = bn(balanceData?.value || 0n).gt(0)
+
+  useEffect(() => {
+    if (hasBalance && !shouldShow) {
+      setShouldShow(true)
+    }
+  }, [hasBalance])
+
+  /* if (!shouldShow) {
+    return null
+  } */
 
   return (
     <Popover>
