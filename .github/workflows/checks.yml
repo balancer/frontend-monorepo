@@ -14,7 +14,7 @@ env:
 
 jobs:
   Build:
-    runs-on: macos-14
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -33,11 +33,10 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run lint
         run: pnpm lint
-      # TODO - re-enable prettier after formatting once switched from old repo
-      # - name: Run prettier
-      #   run: pnpm prettier
-      # - name: Run stylelint
-      #   run: pnpm stylelint
+      - name: Run prettier
+        run: pnpm prettier
+      - name: Run stylelint
+        run: pnpm stylelint
 
   Unit-Test:
     runs-on: macos-14
