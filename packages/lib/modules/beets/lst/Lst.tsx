@@ -43,17 +43,17 @@ const FAQ_ITEMS = [
   {
     question: 'What is liquid staking?',
     answer:
-      'Liquid staking is a process where you can lock up your assets in a smart contract and receive a tokenized representation of your assets.',
+      'Liquid staking lets you stake your tokens, earn rewards, and stay liquid. When you stake, you mint stS tokens which automatically rebase to  reflect network rewards.',
   },
   {
-    question: 'What is liquid staking??',
+    question: 'How do I get stS tokens?',
     answer:
-      'Liquid staking is a process where you can lock up your assets in a smart contract and receive a tokenized representation of your assets.',
+      'Stake your S tokens with the protocol to mint stS. It’s permissionless and seamless, running on public blockchains. You can interact with the smart contracts directly or get started easily through our main UI.',
   },
   {
-    question: 'What is liquid staking???',
+    question: 'Where can I use stS tokens?',
     answer:
-      'Liquid staking is a process where you can lock up your assets in a smart contract and receive a tokenized representation of your assets.',
+      'From yield farming to liquidity pools to lending markets, stS is your gateway to a growing DeFi ecosystem on Sonic.',
   },
 ]
 
