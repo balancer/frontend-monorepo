@@ -72,7 +72,7 @@ function SonicMigrationModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         <ModalFooter>
           <Button
             as={NextLink}
-            href="https://docs.beets.fi"
+            href="https://docs.beets.fi/sonic"
             target="_blank"
             variant="primary"
             w="full"
