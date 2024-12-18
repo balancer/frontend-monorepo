@@ -31,7 +31,7 @@ export function SonicMigrationLink({ triggerEl, ...props }: SonicMigrationRedire
       <Link color="font.primary" onClick={onOpen} variant="nav" {...props}>
         {triggerEl || (
           <HStack>
-            <FantomToSonicSvg height={24} />
+            <FantomToSonicSvg height={20} />
             <Box>Migrate</Box>
           </HStack>
         )}
