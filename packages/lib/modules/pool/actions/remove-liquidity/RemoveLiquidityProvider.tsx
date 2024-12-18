@@ -14,11 +14,7 @@ import { selectRemoveLiquidityHandler } from './handlers/selectRemoveLiquidityHa
 import { useRemoveLiquidityPriceImpactQuery } from './queries/useRemoveLiquidityPriceImpactQuery'
 import { RemoveLiquidityType } from './remove-liquidity.types'
 import { Address, formatUnits, Hash } from 'viem'
-import {
-  emptyTokenAmounts,
-  toHumanAmount,
-  toHumanAmountWithAddress,
-} from '../LiquidityActionHelpers'
+import { emptyTokenAmounts, toHumanAmountWithAddress } from '../LiquidityActionHelpers'
 import { getPoolActionableTokens, isCowAmmPool } from '../../pool.helpers'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
