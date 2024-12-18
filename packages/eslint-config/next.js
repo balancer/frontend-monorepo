@@ -33,6 +33,7 @@ module.exports = {
     // Ignore dotfiles
     '.*.js',
     'node_modules/',
+    'next.config.js',
   ],
   overrides: [{ files: ['*.js?(x)', '*.ts?(x)'] }],
   rules: {
