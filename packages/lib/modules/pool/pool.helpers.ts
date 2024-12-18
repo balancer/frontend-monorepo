@@ -293,7 +293,7 @@ export function shouldBlockAddLiquidity(pool: Pool) {
   if (pool.chain === GqlChain.Sepolia) return false
 
   // don't add liquidity to the maBEETS pool thru the pool page
-  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) return true
+  //if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) return true
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
@@ -344,9 +344,9 @@ export function getPoolAddBlockedReason(pool: Pool): string {
   if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
 
   // don't add liquidity to the maBEETS pool thru the pool page
-  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) {
-    return 'Please manage your liquidity on the maBEETS page.'
-  }
+  // if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) {
+  //   return 'Please manage your liquidity on the maBEETS page.'
+  // }
 
   if (pool.hook && !hasReviewedHook(pool.hook)) {
     return 'Unreviewed hook'
