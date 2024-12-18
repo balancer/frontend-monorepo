@@ -31,7 +31,6 @@ import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem, ApiToken } from './pool.types'
 import { Pool } from './PoolProvider'
-import { HumanTokenAmountWithAddress } from '../tokens/token.types'
 
 /**
  * METHODS
@@ -203,6 +202,7 @@ export function getPoolHelpers(pool: Pool, chain: GqlChain) {
 }
 
 export function hasNestedPools(pool: Pool) {
+  if (!pool.poolTokens) return false
   // The following discriminator is needed because not all pools in GqlPoolQuery do have nestingType property
   // and the real TS discriminator is __typename which we don't want to use
   return (
