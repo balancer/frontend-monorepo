@@ -21,7 +21,7 @@ export function useNavData() {
   const getSocialLinks = (size = 24) => [
     {
       icon: <XIcon size={size} />,
-      href: 'https://x.com/beethoven_x',
+      href: 'https://x.com/beets_fi',
     },
     {
       icon: <DiscordIcon size={size} />,
