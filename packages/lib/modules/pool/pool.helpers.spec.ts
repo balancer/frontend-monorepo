@@ -4,7 +4,7 @@ import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getPoolActionableTokens } from './pool.helpers'
 
 describe('getPoolTokens', () => {
-  it('when pool supports nested actions', () => {
+  it('when nested pool supports nested actions (default behavior)', () => {
     const pool = {
       id: '0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053',
       address: '0x2086f52651837600180de173b09470f54ef74910',
