@@ -39,6 +39,7 @@ export interface TokensConfig {
 
 export interface ContractsConfig {
   multicall2: Address
+  multicall3?: Address
   balancer: {
     vaultV2: Address
     // TODO: make it required when v3 is deployed in all networks
