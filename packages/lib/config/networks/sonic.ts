@@ -42,6 +42,7 @@ const networkConfig: NetworkConfig = {
       relayerV6: '0x7b52D5ef006E59e3227629f97F182D6442380bb6',
       minter: zeroAddress,
     },
+    veDelegationProxy: zeroAddress, // TODO: fix this dependency for Beets
     beets: {
       lstStaking: '0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141',
       lstStakingProxy: '0xe5da20f15420ad15de0fa650600afc998bbe3955',
