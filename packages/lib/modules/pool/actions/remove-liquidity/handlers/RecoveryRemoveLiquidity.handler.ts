@@ -42,7 +42,7 @@ export class RecoveryRemoveLiquidityHandler {
     const removeLiquidity = new RemoveLiquidity()
     const removeLiquidityInput = this.constructSdkInput(bptIn, userAddress)
 
-    const sdkQueryOutput = await removeLiquidity.queryRemoveLiquidityRecovery(
+    const sdkQueryOutput = await removeLiquidity.query(
       removeLiquidityInput,
       this.helpers.poolStateWithBalances
     )
