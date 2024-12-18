@@ -13,13 +13,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import {
-  type BaseError,
-  useBalance,
-  useReadContract,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from 'wagmi'
+import { type BaseError, useBalance, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import Link from 'next/link'
@@ -29,13 +23,26 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { Address, formatUnits } from 'viem'
 import { useTokenAllowances } from '@repo/lib/modules/web3/useTokenAllowances'
+import {
+  TokenBalancesProvider,
+  useTokenBalances,
+} from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { QueryObserverResult } from '@tanstack/react-query'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 const sonicChainId = 146
 const lzBeetsAddress = '0x1E5fe95fB90ac0530F581C617272cd0864626795'
 const migratorAddress = '0x5f9a5CD0B77155AC1814EF6Cd9D82dA53d05E386'
 
-function MigrationButton({ balance }: { balance: bigint }) {
-  const [isRefetching, setIsRefetching] = useState(false)
+function MigrationButton({
+  balance,
+  isBalancesRefetching,
+  refetchBalances,
+}: {
+  balance: bigint
+  isBalancesRefetching: boolean
+  refetchBalances: () => Promise<QueryObserverResult<unknown, Error>[]>
+}) {
   const { data: hash, writeContract, isPending, error } = useWriteContract()
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
@@ -61,13 +68,8 @@ function MigrationButton({ balance }: { balance: bigint }) {
   }
 
   useEffect(() => {
-    async function refetch() {
-      setIsRefetching(true)
-      // TODO: refetch balance
-      setIsRefetching(false)
-    }
     if (isConfirmed) {
-      refetch()
+      refetchBalances()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfirmed])
@@ -92,8 +94,12 @@ function MigrationButton({ balance }: { balance: bigint }) {
         </Button>
       )}
       <Button
-        disabled={isPending || isConfirming || isRefetching || isConfirmed || !hasLzBeetsBalance}
-        isDisabled={isPending || isConfirming || isRefetching || isConfirmed || !hasLzBeetsBalance}
+        disabled={
+          isPending || isConfirming || isBalancesRefetching || isConfirmed || !hasLzBeetsBalance
+        }
+        isDisabled={
+          isPending || isConfirming || isBalancesRefetching || isConfirmed || !hasLzBeetsBalance
+        }
         isLoading={isPending || isConfirming}
         mt="md"
         onClick={migrate}
@@ -112,8 +118,15 @@ function MigrationButton({ balance }: { balance: bigint }) {
   )
 }
 
-function ApproveButton({ balance }: { balance: bigint }) {
-  const [isRefetching, setIsRefetching] = useState(false)
+function ApproveButton({
+  balance,
+  isBalancesRefetching,
+  refetchBalances,
+}: {
+  balance: bigint
+  isBalancesRefetching: boolean
+  refetchBalances: () => Promise<QueryObserverResult<unknown, Error>[]>
+}) {
   const { data: hash, writeContract, isPending, error } = useWriteContract()
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
@@ -139,13 +152,8 @@ function ApproveButton({ balance }: { balance: bigint }) {
   }
 
   useEffect(() => {
-    async function refetch() {
-      setIsRefetching(true)
-      // TODO: refetch balance
-      setIsRefetching(false)
-    }
     if (isConfirmed) {
-      refetch()
+      refetchBalances()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfirmed])
@@ -170,8 +178,12 @@ function ApproveButton({ balance }: { balance: bigint }) {
         </Button>
       )}
       <Button
-        disabled={isPending || isConfirming || isRefetching || isConfirmed || !hasLzBeetsBalance}
-        isDisabled={isPending || isConfirming || isRefetching || isConfirmed || !hasLzBeetsBalance}
+        disabled={
+          isPending || isConfirming || isBalancesRefetching || isConfirmed || !hasLzBeetsBalance
+        }
+        isDisabled={
+          isPending || isConfirming || isBalancesRefetching || isConfirmed || !hasLzBeetsBalance
+        }
         isLoading={isPending || isConfirming}
         mt="md"
         onClick={approve}
@@ -191,8 +203,19 @@ function ApproveButton({ balance }: { balance: bigint }) {
 }
 
 export function LzBeetsMigrator() {
+  const { getTokensByChain } = useTokens()
+
+  return (
+    <TokenBalancesProvider initTokens={getTokensByChain(GqlChain.Sonic)}>
+      <LzBeetsMigratorContent />
+    </TokenBalancesProvider>
+  )
+}
+
+function LzBeetsMigratorContent() {
   const { isConnected, userAddress } = useUserAccount()
   const [shouldShow, setShouldShow] = useState(false)
+  const { refetchBalances, isBalancesRefetching } = useTokenBalances()
   const { data: balanceData } = useBalance({
     chainId: sonicChainId,
     address: userAddress,
@@ -227,11 +250,12 @@ export function LzBeetsMigrator() {
           <HStack>
             <TokenIcon
               address="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-              alt="LZBEETS"
+              alt="lzBEETS"
               chain={1}
+              logoURI="https://beethoven-assets.s3.eu-central-1.amazonaws.com/token-stargate-transitonBEETS.svg"
               size={24}
             />
-            <span>{fNum('token', balance)} LZBEETS</span>
+            <span>{fNum('token', balance)} lzBEETS</span>
           </HStack>
         </Button>
       </PopoverTrigger>
@@ -239,12 +263,20 @@ export function LzBeetsMigrator() {
         <PopoverCloseButton />
         <PopoverHeader fontWeight="bold">Migrate your BEETS</PopoverHeader>
         <PopoverBody>
-          Exchange your LZBEETS for BEETS on Sonic.
+          Exchange your lzBEETS for BEETS on Sonic.
           {isConnected ? (
             hasAllowance ? (
-              <MigrationButton balance={balanceData?.value || 0n} />
+              <MigrationButton
+                balance={balanceData?.value || 0n}
+                isBalancesRefetching={isBalancesRefetching}
+                refetchBalances={refetchBalances}
+              />
             ) : (
-              <ApproveButton balance={balanceData?.value || 0n} />
+              <ApproveButton
+                balance={balanceData?.value || 0n}
+                isBalancesRefetching={isBalancesRefetching}
+                refetchBalances={refetchBalances}
+              />
             )
           ) : (
             <ConnectWallet mt="md" variant="primary" w="full" />
