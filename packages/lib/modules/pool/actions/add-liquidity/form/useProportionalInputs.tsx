@@ -8,6 +8,7 @@ import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { formatUnits } from 'viem'
+import { ApiToken } from '../../../pool.types'
 import { usePool } from '../../../PoolProvider'
 import { LiquidityActionHelpers, isEmptyHumanAmount } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -19,13 +20,16 @@ export function useProportionalInputs() {
   const { balances, isBalancesLoading } = useTokenBalances()
   const { isLoading: isPoolLoading } = usePool()
 
-  function handleProportionalHumanInputChange(tokenAddress: Address, humanAmount: HumanAmount) {
-    if (isEmptyHumanAmount(humanAmount)) return clearAmountsIn({ tokenAddress, humanAmount })
+  function handleProportionalHumanInputChange(token: ApiToken, humanAmount: HumanAmount) {
+    const tokenAddress = token.address as Address
+    if (isEmptyHumanAmount(humanAmount)) {
+      return clearAmountsIn({ tokenAddress, humanAmount, symbol: token.symbol })
+    }
 
     setReferenceAmountAddress(tokenAddress)
 
     const proportionalHumanAmountsIn = _calculateProportionalHumanAmountsIn({
-      tokenAddress,
+      token,
       humanAmount,
       helpers,
       wethIsEth,
@@ -59,18 +63,22 @@ export function useProportionalInputs() {
 }
 
 type Params = {
-  tokenAddress: Address
+  token: ApiToken
   humanAmount: HumanAmount
   helpers: LiquidityActionHelpers
   wethIsEth: boolean
 }
 export function _calculateProportionalHumanAmountsIn({
-  tokenAddress,
+  token,
   humanAmount,
   helpers,
   wethIsEth,
 }: Params): HumanTokenAmountWithAddress[] {
-  const referenceAmount: InputAmount = helpers.toSdkInputAmounts([{ tokenAddress, humanAmount }])[0]
+  const tokenAddress = token.address as Address
+  const symbol = token.symbol
+  const referenceAmount: InputAmount = helpers.toSdkInputAmounts([
+    { tokenAddress, humanAmount, symbol },
+  ])[0]
 
   const proportionalAmounts = calculateProportionalAmounts(
     helpers.poolStateWithBalances,
@@ -78,12 +86,13 @@ export function _calculateProportionalHumanAmountsIn({
   )
     .tokenAmounts.map(({ address, rawAmount, decimals }) => {
       // Use the humanAmount entered by the user to avoid displaying rounding updates from calculateProportionalAmounts
-      if (address === tokenAddress) return { tokenAddress, humanAmount }
+      if (address === tokenAddress) return { tokenAddress, humanAmount, symbol }
 
       return {
         tokenAddress: address,
         humanAmount: formatUnits(rawAmount, decimals) as HumanAmount,
-      }
+        symbol,
+      } as HumanTokenAmountWithAddress
     })
     // user updated token must be in the first place of the array because the Proportional handler always calculates bptOut based on the first position
     .sort(sortUpdatedTokenFirst(tokenAddress))

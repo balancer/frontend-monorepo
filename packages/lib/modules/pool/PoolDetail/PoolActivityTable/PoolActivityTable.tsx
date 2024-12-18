@@ -16,7 +16,6 @@ export function PoolActivityTable() {
     usePoolActivity()
   const paginationProps = {
     ...getPaginationProps(count, pagination, setPagination, true),
-    isSmall: true,
   }
 
   const rowProps = {

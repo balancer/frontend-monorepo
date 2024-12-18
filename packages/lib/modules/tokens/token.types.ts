@@ -16,9 +16,15 @@ export interface TokenAmountHumanReadable {
   amount: string
 }
 
+export type HumanTokenAmount = {
+  humanAmount: HumanAmount | ''
+  tokenAddress: Address
+}
+
 export type HumanTokenAmountWithAddress = {
   humanAmount: HumanAmount | ''
   tokenAddress: Address
+  symbol: string
 }
 
 export interface TokenAmountScaled {

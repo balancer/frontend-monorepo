@@ -46,6 +46,7 @@ export interface ContractsConfig {
     compositeLiquidityRouter?: Address
     relayerV6: Address
     minter: Address
+    WeightedPool2TokensFactory?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address

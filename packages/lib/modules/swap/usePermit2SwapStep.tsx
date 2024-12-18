@@ -1,7 +1,6 @@
 import { PublicWalletClient, SwapKind } from '@balancer/sdk'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { signPermit2Swap } from '../tokens/approvals/permit2/signPermit2Swap'
 import { NoncesByTokenAddress } from '../tokens/approvals/permit2/usePermit2Allowance'
@@ -11,11 +10,12 @@ import {
   SdkSimulationResponseWithRouter,
   SwapSimulationQueryResult,
 } from './queries/useSimulateSwapQuery'
+import { ApiToken } from '../pool/pool.types'
 
 type Props = {
   wethIsEth: boolean
   simulationQuery: SwapSimulationQueryResult
-  tokenInInfo?: GqlToken
+  tokenInInfo?: ApiToken
   chainId: number
   isPermit2: boolean
 }
@@ -45,10 +45,13 @@ export function useSignPermit2SwapStep({
     return 0n
   }
 
-  const tokenIn: TokenAmountIn = {
-    address: tokenInAddress,
-    amount: getTokenInAmount(),
-  }
+  const tokenIn: TokenAmountIn | undefined = tokenInInfo
+    ? {
+        address: tokenInAddress,
+        amount: getTokenInAmount(),
+        symbol: tokenInInfo.symbol,
+      }
+    : undefined
 
   const signPermit2Fn: SignPermit2Fn = (
     sdkClient: PublicWalletClient,
@@ -71,7 +74,7 @@ export function useSignPermit2SwapStep({
     chainId,
     signPermit2Fn,
     wethIsEth,
-    tokenAmountsIn: [tokenIn],
+    tokenAmountsIn: tokenIn ? [tokenIn] : undefined,
     isPermit2,
     isSimulationReady: !!swapRouter,
     spender: swapRouter || ('' as Address),

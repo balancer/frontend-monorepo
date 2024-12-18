@@ -1,5 +1,5 @@
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { GqlPriceRateProviderData, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPriceRateProviderData } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   Popover,
   PopoverTrigger,
@@ -17,9 +17,10 @@ import Link from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { getWarnings } from '../../pool.helpers'
 import { PropsWithChildren } from 'react'
+import { ApiToken } from '../../pool.types'
 
 type RateProviderInfoPopOverProps = {
-  token: GqlToken
+  token: ApiToken
   data: GqlPriceRateProviderData | null
   level: number
 } & PropsWithChildren
