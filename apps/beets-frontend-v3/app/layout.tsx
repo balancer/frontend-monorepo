@@ -15,9 +15,10 @@ import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
 import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 export const metadata: Metadata = {
-  title: 'Beets DeFi Liquidity Pools',
-  description: `Explore DeFi liquidity pools and swap tokens. Provide liquidity to accumulate yield from swap fees while retaining your token exposure as prices move.`,
+  title: 'Beets',
+  description: `The Flagship LST Hub on Sonic. From seamless staking to earning real yield on LST-focused liquidity pools, beets is the ultimate destination for your liquid-staked tokens.`,
   icons: [{ rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' }],
+  metadataBase: new URL('https://zen.beets.fi'),
 }
 
 export default function RootLayout({ children }: PropsWithChildren) {
