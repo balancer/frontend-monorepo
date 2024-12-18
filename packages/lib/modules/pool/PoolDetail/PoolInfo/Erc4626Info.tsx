@@ -1,5 +1,5 @@
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { Erc4626ReviewData, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { Erc4626ReviewData } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   Popover,
   PopoverTrigger,
