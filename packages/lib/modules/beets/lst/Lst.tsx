@@ -38,6 +38,7 @@ import { LstUnstakeModal } from './modals/LstUnstakeModal'
 import { LstWithdraw } from './components/LstWithdraw'
 import { useGetUserWithdraws, UserWithdraw } from './hooks/useGetUserWithdraws'
 import { useGetUserNumWithdraws } from './hooks/useGetUserNumWithdraws'
+import { useGetStakedSonicData } from './hooks/useGetStakedSonicData'
 
 const FAQ_ITEMS = [
   {
@@ -87,6 +88,7 @@ export function Lst() {
   const [disclosure, setDisclosure] = useState(stakeModalDisclosure)
   const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(chain)
   const { data, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(chain, userNumWithdraws)
+  const { data: stakedSonicData, loading: isStakedSonicDataLoading } = useGetStakedSonicData()
 
   const isLoading =
     !isMounted || isBalancesLoading || isWithdrawalsLoading || isUserNumWithdrawsLoading
