@@ -7,13 +7,23 @@ import { LandingBeetsSecuritySection } from './sections/LandingBeetsSecuritySect
 import { LandingBeetsSocialClub } from './sections/LandingBeetsSocialClub'
 import { LandingBeetsStakedSonic } from './sections/LandingBeetsStakedSonic'
 import { LandingMaBeetsSection } from './sections/LandingMaBeetsSection'
+import {
+  GetProtocolStatsPerChainQuery,
+  GetProtocolStatsQuery,
+} from '@repo/lib/shared/services/api/generated/graphql'
 
-export function LandingPageLayout() {
+export function LandingPageLayout({
+  protocolData,
+  protocolDataPerChain,
+}: {
+  protocolData: GetProtocolStatsQuery
+  protocolDataPerChain: GetProtocolStatsPerChainQuery[]
+}) {
   return (
     <Box position="relative">
       <BeetsLandingHeroImg />
       <LandingBeetsHero />
-      <LandingBeetsData />
+      <LandingBeetsData protocolData={protocolData} protocolDataPerChain={protocolDataPerChain} />
       <Box mb="2xl" mt="2xl" pb="3xl">
         <LandingBeetsStakedSonic />
       </Box>
