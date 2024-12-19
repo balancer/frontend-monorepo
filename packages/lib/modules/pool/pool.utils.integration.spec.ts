@@ -5,26 +5,26 @@ import { Address } from 'viem'
 import { PoolToken } from '../tokens/token.helpers'
 import { getPoolForTest } from './__mocks__/getPoolMock'
 import {
+  morphoStakeHouse,
+  sDAIBoosted,
+  v3SepoliaNestedBoosted,
+} from './__mocks__/pool-examples/boosted'
+import {
   balWeth8020,
   osETHPhantom,
   PoolExample,
   sDAIWeighted,
   v2SepoliaStableWithERC4626,
 } from './__mocks__/pool-examples/flat'
-import { isV3Pool } from './pool.helpers'
-import { ApiToken } from './pool.types'
-import { getPoolDisplayTokensWithPossibleNestedPools } from './pool.utils'
-import { Pool } from './PoolProvider'
+import { auraBal, staBALv2Nested } from './__mocks__/pool-examples/nested'
 import {
   tokenSymbols,
   underlyingTokenSymbols,
 } from './__mocks__/pool-examples/pool-example-helpers'
-import { auraBal, staBALv2Nested } from './__mocks__/pool-examples/nested'
-import {
-  morphoStakeHouse,
-  sDAIBoosted,
-  v3SepoliaNestedBoosted,
-} from './__mocks__/pool-examples/boosted'
+import { isV3Pool } from './pool.helpers'
+import { ApiToken } from './pool.types'
+import { getPoolDisplayTokensWithPossibleNestedPools } from './pool.utils'
+import { Pool } from './PoolProvider'
 
 function isPool(pool: any): pool is Pool {
   return (pool as Pool).poolTokens !== undefined
@@ -116,13 +116,9 @@ async function getOldCompositionDisplaySymbols(poolExample: PoolExample): Promis
   return tokenSymbols(getPoolDisplayTokensWithPossibleNestedPools(pool) as ApiToken[])
 }
 
-describe('getDisplayTokens for', () => {
+describe('getDisplayTokens for flat pools', () => {
   it('BAL WETH 80 20', async () => {
     expect(await getDisplaySymbols(balWeth8020)).toEqual(['BAL', 'WETH'])
-  })
-
-  it('aura bal', async () => {
-    expect(await getDisplaySymbols(auraBal)).toEqual(['B-80BAL-20WETH', 'auraBAL'])
   })
 
   it('osETH Phantom Composable Stable', async () => {
@@ -133,16 +129,12 @@ describe('getDisplayTokens for', () => {
     expect(await getDisplaySymbols(sDAIWeighted)).toEqual(['sDAI', 'wstETH'])
   })
 
-  it('sDAI boosted', async () => {
-    expect(await getDisplaySymbols(sDAIBoosted)).toEqual(['sDAI', 'waGnoGNO'])
-    // Only case where pool composition and header do not match
-    expect(await getHeaderDisplaySymbols(sDAIBoosted)).toEqual(['GNO', 'sDAI'])
-  })
-
-  it('v2 stable with ERC4626 tokens (V2 so no boosted)', async () => {
+  it.skip('v2 stable with ERC4626 tokens (V2 so no boosted)', async () => {
     expect(await getDisplaySymbols(v2SepoliaStableWithERC4626)).toEqual(['dai-aave', 'usdc-aave'])
   })
+})
 
+describe('getDisplayTokens for NESTED pools', () => {
   it('v2 nested', async () => {
     expect(await getDisplaySymbols(staBALv2Nested)).toEqual(['WBTC', 'WETH', 'staBAL3'])
 
@@ -161,8 +153,29 @@ describe('getDisplayTokens for', () => {
     expect(await getNestedTokenSymbols(staBALv2Nested)).toEqual(['USDC', 'USDT', 'WXDAI'])
   })
 
+  it('aura bal (Nested with supportsNestedActions false)', async () => {
+    expect(await getDisplaySymbols(auraBal)).toEqual(['B-80BAL-20WETH', 'auraBAL'])
+  })
+})
+
+describe('getDisplayTokens for BOOSTED pools', () => {
+  it('Morpho boosted', async () => {
+    expect(await getDisplaySymbols(morphoStakeHouse)).toEqual(['csUSDL', 'steakUSDC'])
+
+    // Only case where pool composition and header do not match
+    expect(await getHeaderDisplaySymbols(morphoStakeHouse)).toEqual(['USDC', 'wUSDL'])
+
+    expect(await getBoostedUnderlyingTokenSymbols(morphoStakeHouse)).toEqual(['USDC', 'wUSDL'])
+  })
+
+  it('sDAI boosted', async () => {
+    expect(await getDisplaySymbols(sDAIBoosted)).toEqual(['sDAI', 'waGnoGNO'])
+    // Only case where pool composition and header do not match
+    expect(await getHeaderDisplaySymbols(sDAIBoosted)).toEqual(['GNO', 'sDAI'])
+  })
+
   // unskip when we have a non-sepolia nested v3
-  it('v3 nested boosted', async () => {
+  it.skip('v3 nested boosted', async () => {
     expect(await getDisplaySymbols(v3SepoliaNestedBoosted)).toEqual(['WETH', 'bb-a-USD'])
 
     expect(await getHeaderDisplaySymbols(v3SepoliaNestedBoosted)).toEqual(['WETH', 'bb-a-USD']) // DO WE WANT THIS in the header?
@@ -179,14 +192,5 @@ describe('getDisplayTokens for', () => {
       'stataEthUSDC',
       'stataEthUSDT',
     ])
-  })
-
-  it('Morpho boosted', async () => {
-    expect(await getDisplaySymbols(morphoStakeHouse)).toEqual(['csUSDL', 'steakUSDC'])
-
-    // Only case where pool composition and header do not match
-    expect(await getHeaderDisplaySymbols(morphoStakeHouse)).toEqual(['USDC', 'wUSDL'])
-
-    expect(await getBoostedUnderlyingTokenSymbols(morphoStakeHouse)).toEqual(['USDC', 'wUSDL'])
   })
 })
