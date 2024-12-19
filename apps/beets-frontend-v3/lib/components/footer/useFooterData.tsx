@@ -38,7 +38,7 @@ export function useFooterData() {
     },
   ]
 
-  const legalLinks = [{ label: 'Terms of use', href: '/terms-of-use' }]
+  const legalLinks = [{ label: 'Terms of use', href: '/terms-of-service' }]
 
   return { linkSections, legalLinks }
 }
