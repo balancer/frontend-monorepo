@@ -163,5 +163,7 @@ function buildApiToken(poolToken: PoolToken): ApiToken {
     chain: poolToken.chain as GqlChain,
     priority: poolToken.priority as number,
     tradable: poolToken.tradable as boolean,
-  } as ApiToken
+    weight: poolToken?.weight ?? undefined,
+    underlyingToken: poolToken?.underlyingToken ?? undefined,
+  }
 }
