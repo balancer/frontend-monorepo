@@ -21,11 +21,11 @@ export async function PoolList({
   return (
     <PoolListProvider
       displayType={displayType}
+      fixedChains={fixedChains}
       fixedPoolTypes={fixedPoolTypes}
       hidePoolTags={hidePoolTags}
       hidePoolTypes={hidePoolTypes}
       hideProtocolVersion={hideProtocolVersion}
-      fixedChains={fixedChains}
     >
       <PoolListLayout />
     </PoolListProvider>

@@ -53,7 +53,7 @@ export function BeetsLandingModal() {
         </ModalBody>
 
         <ModalFooter>
-          <Button onClick={onClose} variant="primary" w="full" mr="md">
+          <Button mr="md" onClick={onClose} variant="primary" w="full">
             <HStack>
               <span>Let me in</span>
             </HStack>

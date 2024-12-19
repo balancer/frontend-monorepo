@@ -4,7 +4,7 @@ import React from 'react'
 
 export function SecurityMonitoringSvg() {
   return (
-    <svg width="90" height="80" viewBox="0 0 90 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg fill="none" height="80" viewBox="0 0 90 80" width="90" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M67.6094 0.619141C59.3294 0.619141 52.6094 7.33914 52.6094 15.6191V30.6191H82.6094V15.6191C82.6094 7.33914 75.8894 0.619141 67.6094 0.619141Z"
         fill="white"

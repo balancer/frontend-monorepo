@@ -5,48 +5,48 @@ import React from 'react'
 export function StakedSonicStakingRewardsSvg() {
   return (
     <svg
-      width="170"
+      fill="none"
       height="170"
       viewBox="0 0 170 170"
-      fill="none"
+      width="170"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M85.1289 116.75V137.66" stroke="white" stroke-miterlimit="10" />
+      <path d="M85.1289 116.75V137.66" stroke="white" strokeMiterlimit="10" />
       <path
         d="M81.0391 134.35L81.7691 133.67L85.1291 137.28L88.4891 133.67L89.2191 134.35L85.1291 138.75L81.0391 134.35Z"
         fill="white"
       />
-      <path d="M85.1289 53.7501V32.8301" stroke="white" stroke-miterlimit="10" />
+      <path d="M85.1289 53.7501V32.8301" stroke="white" strokeMiterlimit="10" />
       <path
         d="M89.2191 36.15L88.4891 36.83L85.1291 33.22L81.7791 36.83L81.0391 36.15L85.1291 31.75L89.2191 36.15Z"
         fill="white"
       />
-      <path d="M62.8603 107.52L48.0703 122.31" stroke="white" stroke-miterlimit="10" />
+      <path d="M62.8603 107.52L48.0703 122.31" stroke="white" strokeMiterlimit="10" />
       <path
         d="M47.5208 117.079L48.5208 117.109L48.3408 122.039L53.2708 121.859L53.3008 122.859L47.3008 123.079L47.5208 117.079Z"
         fill="white"
       />
-      <path d="M107.41 62.9697L122.2 48.1797" stroke="white" stroke-miterlimit="10" />
+      <path d="M107.41 62.9697L122.2 48.1797" stroke="white" strokeMiterlimit="10" />
       <path
         d="M122.741 53.4199L121.741 53.3799L121.931 48.4599L117.001 48.6399L116.961 47.6399L122.961 47.4199L122.741 53.4199Z"
         fill="white"
       />
-      <path d="M53.6307 85.25H32.7207" stroke="white" stroke-miterlimit="10" />
+      <path d="M53.6307 85.25H32.7207" stroke="white" strokeMiterlimit="10" />
       <path
         d="M36.0309 81.1602L36.7109 81.8902L33.1009 85.2502L36.7109 88.6002L36.0309 89.3401L31.6309 85.2502L36.0309 81.1602Z"
         fill="white"
       />
-      <path d="M116.631 85.25H137.551" stroke="white" stroke-miterlimit="10" />
+      <path d="M116.631 85.25H137.551" stroke="white" strokeMiterlimit="10" />
       <path
         d="M134.231 89.3401L133.551 88.6102L137.161 85.2502L133.551 81.8902L134.231 81.1602L138.631 85.2502L134.231 89.3401Z"
         fill="white"
       />
-      <path d="M107.41 107.52L122.2 122.31" stroke="white" stroke-miterlimit="10" />
+      <path d="M107.41 107.52L122.2 122.31" stroke="white" strokeMiterlimit="10" />
       <path
         d="M116.961 122.859L117.001 121.859L121.921 122.039L121.741 117.109L122.741 117.079L122.961 123.079L116.961 122.859Z"
         fill="white"
       />
-      <path d="M62.8603 62.9697L48.0703 48.1797" stroke="white" stroke-miterlimit="10" />
+      <path d="M62.8603 62.9697L48.0703 48.1797" stroke="white" strokeMiterlimit="10" />
       <path
         d="M53.3008 47.6399L53.2708 48.6399L48.3408 48.4599L48.5208 53.3799L47.5208 53.4199L47.3008 47.4199L53.3008 47.6399Z"
         fill="white"
@@ -88,9 +88,9 @@ export function StakedSonicStakingRewardsSvg() {
         fill="#1A1A1A"
       />
       <path
-        opacity="0.5"
         d="M93.9808 84.9996L107.201 98.2196C105.001 101.91 101.901 105 98.2208 107.21L85.0008 93.9896L71.7808 107.21C68.0908 105.01 65.0008 101.91 62.8008 98.2296L76.0208 85.0096L62.8008 71.7896C65.0008 68.0996 68.1008 65.0096 71.7908 62.8096L85.0108 76.0296L98.2208 62.8096C101.911 65.0096 105.001 68.1096 107.211 71.7996L93.9908 85.0096L93.9808 84.9996Z"
         fill="url(#paint0_radial_28036_227)"
+        opacity="0.5"
       />
       <path
         d="M101.181 85C101.181 85.67 101.141 86.34 101.061 86.99C92.2305 88.88 84.8905 93.19 78.9205 100C78.1205 99.68 77.3405 99.29 76.6105 98.84C79.7406 95.1 83.4205 92.02 87.5205 89.42C82.5005 90.96 77.7606 93.01 73.7606 96.65C73.1606 96.07 72.6005 95.45 72.1005 94.78C76.8805 90.53 82.5606 88.16 88.5106 86.28H68.8605C68.8305 85.86 68.8105 85.43 68.8105 85C68.8105 84.57 68.8305 84.13 68.8605 83.71H88.5905C82.6305 81.85 76.9105 79.49 72.1005 75.22C72.6205 74.54 73.1806 73.91 73.8006 73.32C77.8606 77.02 82.7005 79.07 87.7805 80.67C83.5805 78.1 79.8105 75.02 76.5905 71.17C77.3305 70.72 78.1006 70.33 78.9106 70C84.8806 76.81 92.2206 81.12 101.051 83.01C101.131 83.66 101.171 84.33 101.171 85H101.181Z"
@@ -114,15 +114,15 @@ export function StakedSonicStakingRewardsSvg() {
       />
       <defs>
         <radialGradient
-          id="paint0_radial_28036_227"
           cx="0"
           cy="0"
-          r="1"
-          gradientUnits="userSpaceOnUse"
           gradientTransform="translate(85.0008 84.9996) scale(22.2 22.2)"
+          gradientUnits="userSpaceOnUse"
+          id="paint0_radial_28036_227"
+          r="1"
         >
-          <stop stop-color="#1A1A1A" />
-          <stop offset="0.81" stop-color="#FF0000" />
+          <stop stopColor="#1A1A1A" />
+          <stop offset="0.81" stopColor="#FF0000" />
         </radialGradient>
       </defs>
     </svg>

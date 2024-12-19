@@ -5,17 +5,17 @@ import React from 'react'
 export function MaBeetsGrowEarnSvg() {
   return (
     <svg
-      width="310"
+      fill="none"
       height="90"
       viewBox="0 0 310 90"
-      fill="none"
+      width="310"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_28091_85)">
+      <g clipPath="url(#clip0_28091_85)">
         <path
-          opacity="0.2"
           d="M44.8906 50.9805H266.391C273.291 50.9805 278.891 56.5805 278.891 63.4805C278.891 70.3805 273.291 75.9805 266.391 75.9805H44.8906V50.9805Z"
           fill="black"
+          opacity="0.2"
         />
         <path
           d="M91.5602 70.3205C95.509 70.3205 98.7102 67.1193 98.7102 63.1705C98.7102 59.2217 95.509 56.0205 91.5602 56.0205C87.6113 56.0205 84.4102 59.2217 84.4102 63.1705C84.4102 67.1193 87.6113 70.3205 91.5602 70.3205Z"
@@ -88,9 +88,9 @@ export function MaBeetsGrowEarnSvg() {
           />
         </g>
         <path
-          opacity="0.5"
           d="M11 49.5C11 32.1 25.1 18 42.5 18C59.9 18 74 32.1 74 49.5"
           fill="#600007"
+          opacity="0.5"
         />
         <path
           d="M37.4195 55.8903C37.6495 56.1103 37.7895 56.4303 37.7895 56.7803C37.7895 57.1303 37.6495 57.4403 37.4195 57.6703C37.1995 57.9003 36.8795 58.0403 36.5295 58.0403C36.1795 58.0403 35.8695 57.9003 35.6395 57.6703C35.4095 57.4403 35.2695 57.1303 35.2695 56.7803C35.2695 56.0903 35.8295 55.5303 36.5195 55.5303C36.8695 55.5303 37.1795 55.6703 37.4095 55.9003L37.4195 55.8903Z"
@@ -119,20 +119,20 @@ export function MaBeetsGrowEarnSvg() {
       </g>
       <defs>
         <filter
+          colorInterpolationFilters="sRGB"
+          filterUnits="userSpaceOnUse"
+          height="84.44"
           id="filter0_d_28091_85"
+          width="84.44"
           x="0.28"
           y="7.28"
-          width="84.44"
-          height="84.44"
-          filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
+            result="hardAlpha"
             type="matrix"
             values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-            result="hardAlpha"
           />
           <feOffset />
           <feGaussianBlur stdDeviation="5.36" />
@@ -140,27 +140,27 @@ export function MaBeetsGrowEarnSvg() {
             type="matrix"
             values="0 0 0 0 0 0 0 0 0 0.839216 0 0 0 0 0.560784 0 0 0 0.75 0"
           />
-          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_28091_85" />
+          <feBlend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_28091_85" />
           <feBlend
-            mode="normal"
             in="SourceGraphic"
             in2="effect1_dropShadow_28091_85"
+            mode="normal"
             result="shape"
           />
         </filter>
         <radialGradient
-          id="paint0_radial_28091_85"
           cx="0"
           cy="0"
-          r="1"
-          gradientUnits="userSpaceOnUse"
           gradientTransform="translate(42.5 49.5) scale(31.5)"
+          gradientUnits="userSpaceOnUse"
+          id="paint0_radial_28091_85"
+          r="1"
         >
-          <stop stop-color="#FF0000" />
-          <stop offset="1" stop-color="#620000" />
+          <stop stopColor="#FF0000" />
+          <stop offset="1" stopColor="#620000" />
         </radialGradient>
         <clipPath id="clip0_28091_85">
-          <rect width="310" height="90" fill="white" />
+          <rect fill="white" height="90" width="310" />
         </clipPath>
       </defs>
     </svg>

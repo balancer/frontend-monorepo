@@ -34,7 +34,10 @@ export function SonicMigrationLink({ triggerEl, ...props }: SonicMigrationRedire
             <FantomToSonicSvg height={20} />
             <Box>
               <Text>
-                Migrate<Text display={{ base: 'none', xl: 'inline' }}> to Sonic</Text>
+                Migrate{' '}
+                <Box as="span" display={{ base: 'none', xl: 'inline' }}>
+                  to Sonic
+                </Box>
               </Text>
             </Box>
           </HStack>
@@ -73,10 +76,10 @@ function SonicMigrationModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           <Button
             as={NextLink}
             href="https://docs.beets.fi/sonic"
+            mr="md"
             target="_blank"
             variant="primary"
             w="full"
-            mr="md"
           >
             <HStack>
               <span>Migration Guide</span>

@@ -4,13 +4,13 @@ import React from 'react'
 export function LudwigSocial3() {
   return (
     <svg
-      width="170"
+      fill="none"
       height="170"
       viewBox="0 0 170 170"
-      fill="none"
+      width="170"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_28018_151)">
+      <g clipPath="url(#clip0_28018_151)">
         <path
           d="M170 0V85H127.47C127.04 73.66 117.69 64.6 106.25 64.6C100.39 64.6 95.06 66.98 91.22 70.82C87.56 74.49 85.24 79.47 85.03 85H85V0H170Z"
           fill="#FBB03B"
@@ -36,7 +36,7 @@ export function LudwigSocial3() {
       </g>
       <defs>
         <clipPath id="clip0_28018_151">
-          <rect width="170" height="170.01" fill="white" />
+          <rect fill="white" height="170.01" width="170" />
         </clipPath>
       </defs>
     </svg>

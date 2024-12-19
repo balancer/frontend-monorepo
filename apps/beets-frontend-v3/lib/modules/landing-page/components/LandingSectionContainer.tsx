@@ -20,7 +20,7 @@ export function LandingSectionContainer({
 }) {
   return (
     <>
-      <Center textAlign="center" pb="2xl" width="full">
+      <Center pb="2xl" textAlign="center" width="full">
         <VStack>
           <Heading fontSize="5xl" maxW="full">
             {title}
@@ -35,11 +35,11 @@ export function LandingSectionContainer({
         {button && (
           <Flex justify="center" pt="2xl">
             <Button
-              variant="primary"
               as={NextLink}
               href={button.href}
               minWidth="160px"
               target={button.isExternal ? '_blank' : undefined}
+              variant="primary"
             >
               {button.text}
             </Button>

@@ -3,8 +3,8 @@ import { SVGProps } from 'react'
 
 export function BeetsLogo(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 460 460" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <g clip-path="url(#clip0_28354_41)">
+    <svg fill="none" viewBox="0 0 460 460" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <g clipPath="url(#clip0_28354_41)">
         <path
           d="M230 0C102.97 0 0 102.97 0 230V460H460V230C460 102.97 357.03 0 230 0Z"
           fill="white"
@@ -28,7 +28,7 @@ export function BeetsLogo(props: SVGProps<SVGSVGElement>) {
       </g>
       <defs>
         <clipPath id="clip0_28354_41">
-          <rect width="460" height="460" fill="white" />
+          <rect fill="white" height="460" width="460" />
         </clipPath>
       </defs>
     </svg>

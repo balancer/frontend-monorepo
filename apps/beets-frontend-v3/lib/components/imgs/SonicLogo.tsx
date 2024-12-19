@@ -3,8 +3,8 @@ import { SVGProps } from 'react'
 
 export function SonicLogo(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 296 296" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <circle cx="148" cy="148" r="148" fill="white" />
+    <svg fill="none" viewBox="0 0 296 296" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="148" cy="148" fill="white" r="148" />
       <path
         d="M173.302 178.08C126.435 192.14 87.6658 212.65 63.3914 236.68L62.3203 237.75C68.7768 243.85 75.8539 249.31 83.5016 253.94L85.1432 251.93C91.7699 243.85 98.877 236.03 106.274 228.67C126.134 208.91 148.857 191.79 173.322 178.05L173.292 178.07L173.302 178.08Z"
         fill="black"

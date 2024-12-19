@@ -5,16 +5,16 @@ import React from 'react'
 export function MaBeetsMintMabeetsSvg() {
   return (
     <svg
-      width="310"
+      fill="none"
       height="90"
       viewBox="0 0 310 90"
-      fill="none"
+      width="310"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        opacity="0.2"
         d="M168.23 16.7598H309.9V76.7598H168.23C151.67 76.7598 138.23 63.3198 138.23 46.7598C138.23 30.1998 151.67 16.7598 168.23 16.7598Z"
         fill="black"
+        opacity="0.2"
       />
       <path
         d="M169.57 67.2196C181.074 67.2196 190.4 57.8937 190.4 46.3896C190.4 34.8855 181.074 25.5596 169.57 25.5596C158.066 25.5596 148.74 34.8855 148.74 46.3896C148.74 57.8937 158.066 67.2196 169.57 67.2196Z"
@@ -38,7 +38,7 @@ export function MaBeetsMintMabeetsSvg() {
           fill="black"
         />
       </g>
-      <path d="M50.8906 47.2598H133.811" stroke="white" stroke-miterlimit="10" />
+      <path d="M50.8906 47.2598H133.811" stroke="white" strokeMiterlimit="10" />
       <path
         d="M130.491 51.3499L129.811 50.6199L133.421 47.2599L129.811 43.8999L130.491 43.1699L134.891 47.2599L130.491 51.3499Z"
         fill="white"
