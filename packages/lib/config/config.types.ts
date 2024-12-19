@@ -56,8 +56,11 @@ export interface ContractsConfig {
     WeightedPool2TokensFactory?: Address
   }
   beets?: {
-    lstStaking?: Address
-    lstStakingProxy?: Address
+    lstStaking: Address
+    lstStakingProxy: Address
+    // TODO: make it required when fantom is removed
+    sfcProxy?: Address
+    sfc?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address
