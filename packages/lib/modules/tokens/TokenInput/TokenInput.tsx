@@ -212,7 +212,11 @@ export const TokenInput = forwardRef(
     const { colors } = useTheme()
     const { getToken } = useTokens()
     const tokenFromAddress = address && chain ? getToken(address, chain) : undefined
-    const token = apiToken || tokenFromAddress
+
+    const token =
+      apiToken && tokenFromAddress
+        ? { ...apiToken, ...tokenFromAddress }
+        : apiToken || tokenFromAddress
     const { hasValidationError } = useTokenInputsValidation()
 
     const { handleOnChange, updateValue, validateInput } = useTokenInput({
