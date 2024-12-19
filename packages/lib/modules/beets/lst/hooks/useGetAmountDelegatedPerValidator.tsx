@@ -1,62 +1,74 @@
 'use client'
 
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
-import { sonicStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
-import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useReadContract } from 'wagmi'
+import { useGetRate } from './useGetRate'
+import { useGetStakedSonicData } from './useGetStakedSonicData'
+import { useMemo } from 'react'
+import { sfcAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
+import { zeroAddress } from 'viem'
+
+type Result = {
+  [key: string]: {
+    result: bigint
+    status: string
+  }
+}
 
 export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
-  const validatorIds = [...Array(100).keys()] // TODO: replace this with API data
-  const { isConnected, userAddress } = useUserAccount()
+  const { isConnected } = useUserAccount()
+  const { rate } = useGetRate(chain)
+  const { data, loading } = useGetStakedSonicData()
+
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
 
-  const rateQuery = useReadContract({
-    chainId,
-    abi: sonicStakingAbi,
-    address: config.contracts.beets?.lstStakingProxy,
-    functionName: 'getRate',
-    args: [],
-    query: { enabled: true },
-  })
+  const validatorIds = useMemo(() => {
+    if (!loading && data) {
+      return data.stsGetGqlStakedSonicData.delegatedValidators.map(v => v.validatorId)
+    }
+
+    return []
+  }, [data, loading])
 
   const getStakeRequests = validatorIds.map(validatorId => {
     return {
       chainId,
-      id: `${validatorId}`,
-      abi: [
-        {
-          type: 'function',
-          inputs: [
-            { name: 'user', internalType: 'address', type: 'address' },
-            { name: 'validatorId', internalType: 'uint256', type: 'uint256' },
-          ],
-          name: 'getStake',
-          outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-          stateMutability: 'view',
-        },
-      ],
-      address: config.contracts.beets?.sfc,
+      id: validatorId,
+      abi: sfcAbi,
+      address: config.contracts.beets?.sfcProxy || zeroAddress,
       functionName: 'getStake',
       args: [config.contracts.beets?.lstStakingProxy, validatorId],
+      enabled: isConnected,
     }
   })
 
-  const { results, refetchAll, isLoading } = useMulticall(getStakeRequests, {
+  const {
+    results: stakeRequests,
+    refetchAll,
+    isLoading,
+  } = useMulticall(getStakeRequests, {
     enabled: isConnected,
   })
 
-  // hook this up with the results from the multicall
+  const amountResults = useMemo(() => {
+    const results = stakeRequests[chainId]
+    if (results?.isSuccess) {
+      return results?.data as Result
+    }
+
+    return {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stakeRequests, isLoading])
+
   const amountDelegatedPerValidator = validatorIds.map(validatorId => ({
     validatorId,
-    amountDelegated: 0n,
+    amountDelegated: amountResults[validatorId]?.result ?? 0n,
   }))
 
   function chooseValidatorsForUnstakeAmount(unstakeAmountShares: bigint) {
-    const rate = rateQuery.data || 1n
     const unstakeAmountAssets = (unstakeAmountShares * rate) / 10n ** 18n
 
     const validator = amountDelegatedPerValidator.find(
@@ -66,7 +78,7 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
     // TODO: we should split the unstake amount across several validators down the line
     return [
       {
-        validatorId: validator?.validatorId || 0,
+        validatorId: validator?.validatorId || '1',
         unstakeAmountShares,
       },
     ]
@@ -74,7 +86,7 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
 
   return {
     amountDelegatedPerValidator,
-    results,
+    stakeRequests,
     refetchAll,
     isLoading,
     chooseValidatorsForUnstakeAmount,
