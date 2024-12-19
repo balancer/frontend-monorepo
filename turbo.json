@@ -8,7 +8,13 @@
     "NEXT_PRIVATE_DRPC_KEY",
     "PRIVATE_HYPERNATIVE_API_ID",
     "PRIVATE_HYPERNATIVE_API_SECRET",
-    "NEXT_PUBLIC_WALLET_CONNECT_ID"
+    "NEXT_PUBLIC_WALLET_CONNECT_ID",
+    "PRIVATE_CURRENCYAPI_KEY",
+    "VITEST_POOL_ID",
+    "NODE_ENV",
+    "SILENT_TESTS",
+    "NEXT_PUBLIC_SENTRY_DSN",
+    "NEXT_RUNTIME"
   ],
   "tasks": {
     "dev": {
@@ -52,20 +58,20 @@
       "inputs": ["**/*.graphql"],
       "outputs": ["shared/services/api/generated/**"]
     },
-    "//#format": {
-      "outputs": ["node_modules/.cache/.prettiercache"]
+    "prettier": {
+      "dependsOn": ["^prettier"],
+      "outputs": [".prettiercache"]
     },
-    "format": {
-      "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.prettiercache"]
-    },
-    "//#format:fix": {
-      "outputs": ["node_modules/.cache/.prettiercache"],
+    "prettier:fix": {
+      "dependsOn": ["^prettier:fix"],
+      "outputs": [".prettiercache"],
       "cache": false
     },
-    "format:fix": {
-      "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.prettiercache"],
+    "stylelint": {
+      "dependsOn": ["^stylelint"]
+    },
+    "stylelint:fix": {
+      "dependsOn": ["^stylelint:fix"],
       "cache": false
     }
   }

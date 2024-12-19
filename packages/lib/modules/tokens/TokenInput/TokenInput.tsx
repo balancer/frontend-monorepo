@@ -16,7 +16,7 @@ import {
   forwardRef,
   useTheme,
 } from '@chakra-ui/react'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../TokensProvider'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInput } from './useTokenInput'
@@ -31,9 +31,10 @@ import { useEffect, useState } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
+import { ApiToken } from '../../pool/pool.types'
 
 type TokenInputSelectorProps = {
-  token: GqlToken | undefined
+  token: ApiToken | undefined
   weight?: string
   toggleTokenSelect?: () => void
 }
@@ -84,7 +85,7 @@ function TokenInputSelector({ token, weight, toggleTokenSelect }: TokenInputSele
 }
 
 type TokenInputFooterProps = {
-  token: GqlToken | undefined
+  token: ApiToken | undefined
   value?: string
   updateValue: (value: string) => void
   hasPriceImpact?: boolean
@@ -172,6 +173,7 @@ function TokenInputFooter({
 
 type Props = {
   address?: string
+  apiToken?: ApiToken
   chain?: GqlChain | number
   weight?: string
   value?: string
@@ -188,6 +190,7 @@ export const TokenInput = forwardRef(
   (
     {
       address,
+      apiToken,
       chain,
       weight,
       value,
@@ -208,7 +211,8 @@ export const TokenInput = forwardRef(
 
     const { colors } = useTheme()
     const { getToken } = useTokens()
-    const token = address && chain ? getToken(address, chain) : undefined
+    const tokenFromAddress = address && chain ? getToken(address, chain) : undefined
+    const token = apiToken || tokenFromAddress
     const { hasValidationError } = useTokenInputsValidation()
 
     const { handleOnChange, updateValue, validateInput } = useTokenInput({

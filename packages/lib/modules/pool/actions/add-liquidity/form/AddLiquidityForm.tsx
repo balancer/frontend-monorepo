@@ -40,7 +40,6 @@ import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvid
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
 import { isNativeOrWrappedNative, isNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { NativeAssetSelectModal } from '@repo/lib/modules/tokens/NativeAssetSelectModal'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
@@ -58,6 +57,7 @@ import { UnbalancedAddError } from '@repo/lib/shared/components/errors/Unbalance
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { isV3NotSupportingWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
+import { ApiToken } from '../../../pool.types'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -159,13 +159,13 @@ function AddLiquidityMainForm() {
     }
   }, [isBalancesLoading])
 
-  function handleTokenSelect(token: GqlToken) {
+  function handleTokenSelect(token: ApiToken) {
     if (isNativeAsset(token.address as Address, token.chain)) {
       setWethIsEth(true)
     } else {
       setWethIsEth(false)
     }
-    setAmountIn(token.address as Address, '')
+    setAmountIn(token, '')
 
     // reset any validation errors for native assets
     nativeAssets.forEach(nativeAsset => {

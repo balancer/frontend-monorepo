@@ -30,7 +30,7 @@ describe('When adding proportional liquidity for a CoW AMM pool', async () => {
     const handler = selectProportionalHandler(cowAmmPool)
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: wETHAddress },
+      { humanAmount: '1', tokenAddress: wETHAddress, symbol: 'WETH' },
     ]
 
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
@@ -48,7 +48,7 @@ describe('When adding proportional liquidity for a CoW AMM pool', async () => {
 
   test('builds Tx Config', async () => {
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '0.1', tokenAddress: wETHAddress },
+      { humanAmount: '0.1', tokenAddress: wETHAddress, symbol: 'WETH' },
     ]
 
     const handler = selectProportionalHandler(cowAmmPool)
@@ -85,7 +85,7 @@ describe('When adding proportional liquidity for a gyro pool', () => {
     const handler = selectProportionalHandler(gyroPoolMock)
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: polygonUsdcAddress },
+      { humanAmount: '1', tokenAddress: polygonUsdcAddress, symbol: 'USDC' },
     ]
 
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
@@ -102,7 +102,7 @@ describe('When adding proportional liquidity for a gyro pool', () => {
 
   test('builds Tx Config', async () => {
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: polygonUsdcAddress },
+      { humanAmount: '1', tokenAddress: polygonUsdcAddress, symbol: 'USDC' },
     ]
 
     const handler = selectProportionalHandler(gyroPoolMock)

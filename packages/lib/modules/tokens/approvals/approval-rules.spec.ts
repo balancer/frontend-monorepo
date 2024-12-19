@@ -56,12 +56,14 @@ describe('getRequiredTokenApprovals', () => {
         tokenAddress: wETHAddress,
         requiredRawAmount: 10000000000000000000n,
         requestedRawAmount: MAX_BIGINT,
+        symbol: 'Unknown',
       },
       {
         isPermit2: false,
         tokenAddress: wjAuraAddress,
         requiredRawAmount: 20000000000000000000n,
         requestedRawAmount: MAX_BIGINT,
+        symbol: 'Unknown',
       },
     ])
   })
@@ -90,12 +92,14 @@ describe('getRequiredTokenApprovals', () => {
         requestedRawAmount: 0n,
         tokenAddress: usdtAddress,
         isPermit2: false,
+        symbol: 'Unknown',
       },
       {
         tokenAddress: usdtAddress,
         requiredRawAmount: 10000000000000000000n,
         requestedRawAmount: MAX_BIGINT,
         isPermit2: false,
+        symbol: 'Unknown',
       },
     ])
   })
@@ -124,6 +128,7 @@ describe('getRequiredTokenApprovals', () => {
         requiredRawAmount: 10000000000000000000n,
         requestedRawAmount: MAX_BIGINT,
         tokenAddress: usdtAddress,
+        symbol: 'Unknown',
       },
     ])
   })

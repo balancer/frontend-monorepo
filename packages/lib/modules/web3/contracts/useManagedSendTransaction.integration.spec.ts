@@ -42,6 +42,7 @@ describe('weighted add flow', () => {
     const humanAmountsIn: HumanTokenAmountWithAddress[] = poolTokens.map(t => ({
       humanAmount: '0.1',
       tokenAddress: t.address,
+      symbol: t.symbol || 'Unknown',
     }))
 
     const queryOutput = await handler.simulate(humanAmountsIn, defaultTestUserAccount)

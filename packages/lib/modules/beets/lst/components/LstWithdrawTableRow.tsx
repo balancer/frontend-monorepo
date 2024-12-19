@@ -1,17 +1,16 @@
 import { Box, Button, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { fNum } from '@repo/lib/shared/utils/numbers'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { format } from 'date-fns'
 import { useLst } from '../LstProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { UserWithdraw } from '../hooks/useGetUserWithdraws'
 import { formatUnits } from 'viem'
+import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 interface Props extends GridProps {
   withdrawal: UserWithdraw
   keyValue: number
-  token: GqlToken | undefined
+  token: ApiToken | undefined
   onOpen(): void
 }
 

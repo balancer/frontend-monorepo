@@ -94,8 +94,8 @@ describe('Captures sentry error', () => {
       slippage: '0.1',
       pool,
       humanAmountsIn: [
-        { humanAmount: '3', tokenAddress: wjAuraAddress },
-        { humanAmount: '0.01', tokenAddress: wETHAddress },
+        { humanAmount: '3', tokenAddress: wjAuraAddress, symbol: 'wjAura' },
+        { humanAmount: '0.01', tokenAddress: wETHAddress, symbol: 'wETH' },
       ],
     }
 
@@ -116,7 +116,7 @@ describe('Captures sentry error', () => {
           "handler": {
             "helpers": "[LiquidityActionHelpers]",
           },
-          "humanAmountsIn": "[{"humanAmount":"3","tokenAddress":"0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F"},{"humanAmount":"0.01","tokenAddress":"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"}]",
+          "humanAmountsIn": "[{"humanAmount":"3","tokenAddress":"0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F","symbol":"wjAura"},{"humanAmount":"0.01","tokenAddress":"0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2","symbol":"wETH"}]",
           "poolId": "0x68e3266c9c8bbd44ad9dca5afbfe629022aee9fe000200000000000000000512",
           "poolType": "WEIGHTED",
           "slippage": "0.1",

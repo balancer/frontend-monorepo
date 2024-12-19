@@ -1,11 +1,15 @@
 #import "./hook.graphql"
 
 fragment UnderlyingToken on GqlToken {
+  chain
   chainId
   address
   decimals
   name
   symbol
+  priority
+  tradable
+  isErc4626
   isBufferAllowed
 }
 
@@ -17,12 +21,19 @@ fragment Erc4626ReviewData on Erc4626ReviewData {
 
 fragment PoolTokens on GqlPoolTokenDetail {
   id
-  index
+  # The following field match UnderlyingToken token fragment
+  chain
+  chainId
+  address
+  decimals
   name
   symbol
+  priority
+  tradable
+  isErc4626
+  index
   balance
   balanceUSD
-  address
   priceRate
   decimals
   weight

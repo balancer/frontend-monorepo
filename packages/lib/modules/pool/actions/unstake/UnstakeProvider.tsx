@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { HumanTokenAmount } from '@repo/lib/modules/tokens/token.types'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
@@ -22,7 +22,7 @@ export const UnstakeContext = createContext<UseUnstakeResponse | null>(null)
 export function _useUnstake() {
   // State so that we can maintain the amounts in the modal after confirmation.
   const [quoteAmountOut, setQuoteAmountOut] = useState<HumanAmount>('0')
-  const [quoteRewardAmounts, setQuoteRewardAmounts] = useState<HumanTokenAmountWithAddress[]>([])
+  const [quoteRewardAmounts, setQuoteRewardAmounts] = useState<HumanTokenAmount[]>([])
   const [quoteTotalClaimableUsd, setQuoteTotalClaimableUsd] = useState<string>('0')
 
   const { pool, refetch: refetchPoolBalances, isLoading: isLoadingPool } = usePool()
@@ -35,7 +35,7 @@ export function _useUnstake() {
     isLoading: isLoadingClaims,
   } = useClaimsData([pool] as unknown[] as PoolListItem[])
 
-  const rewardAmounts: HumanTokenAmountWithAddress[] = useMemo(
+  const rewardAmounts: HumanTokenAmount[] = useMemo(
     () =>
       allClaimableRewards.map(reward => ({
         tokenAddress: reward.tokenAddress,

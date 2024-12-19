@@ -2,13 +2,13 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { safeSum } from '@repo/lib/shared/utils/numbers'
 import { useCallback } from 'react'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
-import { HumanTokenAmountWithAddress } from './token.types'
+import { HumanTokenAmount } from './token.types'
+import { ApiToken } from '../pool/pool.types'
 
-export function useTotalUsdValue(tokens: GqlToken[]) {
+export function useTotalUsdValue(tokens: ApiToken[]) {
   const { usdValueForToken } = useTokens()
   const calculateUsdAmountsIn = useCallback(
-    (humanAmountsIn: HumanTokenAmountWithAddress[]) =>
+    (humanAmountsIn: HumanTokenAmount[]) =>
       humanAmountsIn.map(amountIn => {
         const token = tokens.find(token => isSameAddress(token?.address, amountIn.tokenAddress))
 
@@ -19,7 +19,7 @@ export function useTotalUsdValue(tokens: GqlToken[]) {
     [usdValueForToken, tokens]
   )
 
-  function usdValueFor(humanAmountsIn: HumanTokenAmountWithAddress[]) {
+  function usdValueFor(humanAmountsIn: HumanTokenAmount[]) {
     return safeSum(calculateUsdAmountsIn(humanAmountsIn))
   }
 

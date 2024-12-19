@@ -14,23 +14,15 @@ env:
 
 jobs:
   Build:
-    runs-on: macos-14
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-
-      - name: Cache turbo build setup
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-
       - name: Setup
         uses: ./.github/actions/setup
       - name: Run build
         env:
-          NODE_OPTIONS: '--max_old_space_size=4096'
+          NODE_OPTIONS: "--max_old_space_size=4096"
         run: pnpm run build
 
   Lint:
@@ -41,11 +33,10 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run lint
         run: pnpm lint
-      # TODO - re-enable prettier after formatting once switched from old repo
-      # - name: Run prettier
-      #   run: pnpm prettier
-      # - name: Run stylelint
-      #   run: pnpm stylelint
+      - name: Run prettier
+        run: pnpm prettier
+      - name: Run stylelint
+        run: pnpm stylelint
 
   Unit-Test:
     runs-on: macos-14

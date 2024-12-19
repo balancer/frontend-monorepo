@@ -22,5 +22,5 @@
     ".next/types/**/*.ts",
     "../../packages/lib/global.d.ts"
   ],
-  "exclude": ["node_modules", ".next"]
+  "exclude": ["node_modules", ".next", "**/generated/**"]
 }

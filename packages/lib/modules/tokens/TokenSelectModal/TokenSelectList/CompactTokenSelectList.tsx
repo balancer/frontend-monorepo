@@ -1,17 +1,17 @@
 'use client'
 
 import { Box, BoxProps, Center, Text } from '@chakra-ui/react'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { Virtuoso } from 'react-virtuoso'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { TokenSelectListRow } from './TokenSelectListRow'
+import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 type Props = {
-  tokens: GqlToken[]
-  onTokenSelect: (token: GqlToken) => void
+  tokens: ApiToken[]
+  onTokenSelect: (token: ApiToken) => void
 }
 
 export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props & BoxProps) {
@@ -36,7 +36,7 @@ export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props
   useHotkeys('tab', incrementActiveIndex, hotkeyOpts)
   useHotkeys('enter', selectActiveToken, [tokens, activeIndex], hotkeyOpts)
 
-  function keyFor(token: GqlToken, index: number) {
+  function keyFor(token: ApiToken, index: number) {
     return `${token.address}:${token.chain}:${index}`
   }
 

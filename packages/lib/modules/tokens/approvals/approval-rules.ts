@@ -11,10 +11,11 @@ export type TokenAmountToApprove = {
   requiredRawAmount: bigint // actual amount that the transaction requires
   requestedRawAmount: bigint // amount that we are going to request (normally MAX_BIGINT)
   isPermit2: boolean // whether the approval is for Permit2 or standard token approval
+  symbol: string // token symbol to be displayed in the approval steps
 }
 
 // This is a subtype of InputAmount as we only need rawAmount and address
-export type RawAmount = Pick<InputAmount, 'address' | 'rawAmount'>
+export type RawAmount = Pick<InputAmount, 'address' | 'rawAmount'> & { symbol?: string }
 
 type TokenApprovalParams = {
   chainId: GqlChain | SupportedChainId | null
@@ -39,15 +40,18 @@ export function getRequiredTokenApprovals({
   if (!chainId) return []
   if (skipAllowanceCheck) return []
 
-  let tokenAmountsToApprove: TokenAmountToApprove[] = rawAmounts.map(({ address, rawAmount }) => {
-    return {
-      tokenAddress: address,
-      requiredRawAmount: rawAmount,
-      // The transaction only requires requiredRawAmount but we will normally request MAX_BIGINT
-      requestedRawAmount: approveMaxBigInt ? MAX_BIGINT : rawAmount,
-      isPermit2,
+  let tokenAmountsToApprove: TokenAmountToApprove[] = rawAmounts.map(
+    ({ address, rawAmount, symbol }) => {
+      return {
+        tokenAddress: address,
+        requiredRawAmount: rawAmount,
+        // The transaction only requires requiredRawAmount but we will normally request MAX_BIGINT
+        requestedRawAmount: approveMaxBigInt ? MAX_BIGINT : rawAmount,
+        isPermit2,
+        symbol: symbol || 'Unknown',
+      }
     }
-  })
+  )
 
   tokenAmountsToApprove = tokenAmountsToApprove.filter(
     ({ tokenAddress }) => !isNativeAsset(chainId, tokenAddress)
@@ -64,6 +68,7 @@ export function getRequiredTokenApprovals({
         requestedRawAmount: 0n,
         tokenAddress: t.tokenAddress,
         isPermit2,
+        symbol: t.symbol,
       }
       // Prepend approval for ZERO amount
       return [zeroTokenAmountToApprove, t]

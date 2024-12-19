@@ -1,7 +1,7 @@
 import { getChainId, getNativeAsset, getNetworkConfig } from '@repo/lib/config/app.config'
 import { TokenAmountToApprove } from '@repo/lib/modules/tokens/approvals/approval-rules'
 import { nullAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
-import { GqlChain, GqlPoolType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { SentryError } from '@repo/lib/shared/utils/errors'
 import { bn, isZero } from '@repo/lib/shared/utils/numbers'
@@ -44,8 +44,10 @@ import {
   isV2Pool,
   isV3Pool,
   isV3NotSupportingWethIsEth,
+  getActionableTokenSymbol,
 } from '../pool.helpers'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
+import { ApiToken } from '../pool.types'
 
 // Null object used to avoid conditional checks during hook loading state
 const NullPool: Pool = {
@@ -54,6 +56,8 @@ const NullPool: Pool = {
   type: 'Null',
   tokens: [],
 } as unknown as Pool
+
+type InputAmountWithSymbol = InputAmount & { symbol: string }
 
 /*
   This class provides helper methods to traverse the pool state and prepare data structures needed by add/remove liquidity handlers
@@ -156,22 +160,23 @@ export class LiquidityActionHelpers {
     humanAmountsIn: HumanTokenAmountWithAddress[],
     isPermit2 = false
   ): TokenAmountToApprove[] {
-    return this.toInputAmounts(humanAmountsIn).map(({ address, rawAmount }) => {
+    return this.toInputAmounts(humanAmountsIn).map(({ address, rawAmount, symbol }) => {
       return {
         isPermit2,
         tokenAddress: address,
         requiredRawAmount: rawAmount,
         requestedRawAmount: rawAmount, //This amount will be probably replaced by MAX_BIGINT depending on the approval rules
+        symbol,
       }
     })
   }
 
-  public toInputAmounts(humanAmountsIn: HumanTokenAmountWithAddress[]): InputAmount[] {
+  public toInputAmounts(humanAmountsIn: HumanTokenAmountWithAddress[]): InputAmountWithSymbol[] {
     if (!humanAmountsIn.length) return []
 
     return humanAmountsIn
       .filter(({ humanAmount }) => bn(humanAmount).gt(0))
-      .map(({ tokenAddress, humanAmount }) => {
+      .map(({ tokenAddress, humanAmount, symbol }) => {
         const chain = this.pool.chain
         if (isNativeAsset(tokenAddress, chain)) {
           const decimals = getNativeAsset(chain).decimals
@@ -179,6 +184,7 @@ export class LiquidityActionHelpers {
             address: tokenAddress as Address,
             rawAmount: parseUnits(humanAmount, decimals),
             decimals,
+            symbol,
           }
         }
 
@@ -195,6 +201,7 @@ export class LiquidityActionHelpers {
           address: token.address as Address,
           rawAmount: parseUnits(humanAmount, token.decimals),
           decimals: token.decimals,
+          symbol: token.symbol,
         }
       })
   }
@@ -235,6 +242,14 @@ export const areEmptyAmounts = (humanAmountsIn: HumanTokenAmountWithAddress[]) =
 
 export function toHumanAmount(tokenAmount: TokenAmount): HumanAmount {
   return formatUnits(tokenAmount.amount, tokenAmount.token.decimals) as HumanAmount
+}
+
+export function toHumanAmountWithAddress(tokenAmount: TokenAmount): HumanTokenAmountWithAddress {
+  return {
+    tokenAddress: tokenAmount.token.address,
+    humanAmount: formatUnits(tokenAmount.amount, tokenAmount.token.decimals),
+    symbol: tokenAmount.token.symbol,
+  } as HumanTokenAmountWithAddress
 }
 
 export function ensureLastQueryResponse<Q>(
@@ -374,7 +389,7 @@ export function emptyTokenAmounts(pool: Pool): TokenAmount[] {
   return pool.poolTokens.map(token => TokenAmount.fromHumanAmount(token as unknown as Token, '0'))
 }
 
-export function shouldShowNativeWrappedSelector(token: GqlToken, pool: Pool) {
+export function shouldShowNativeWrappedSelector(token: ApiToken, pool: Pool) {
   return (
     !isV3NotSupportingWethIsEth(pool) && // V3 boosted/nested actions don't support wethIsEth currently
     !isCowAmmPool(pool.type) && // Cow AMM pools don't support wethIsEth
@@ -383,8 +398,8 @@ export function shouldShowNativeWrappedSelector(token: GqlToken, pool: Pool) {
 }
 
 export function replaceWrappedWithNativeAsset(
-  validTokens: GqlToken[],
-  nativeAsset: GqlToken | undefined
+  validTokens: ApiToken[],
+  nativeAsset: ApiToken | undefined
 ) {
   if (!nativeAsset) return validTokens
   return validTokens.map(token => {
@@ -397,8 +412,8 @@ export function replaceWrappedWithNativeAsset(
 }
 
 export function injectNativeAsset(
-  validTokens: GqlToken[],
-  nativeAsset: GqlToken | undefined,
+  validTokens: ApiToken[],
+  nativeAsset: ApiToken | undefined,
   pool: Pool
 ) {
   const isWrappedNativeAssetInPool = validTokens.find(token =>
@@ -427,12 +442,14 @@ export function formatBuildCallParams<T>(buildCallParams: T, account: Address) {
 }
 
 export function toTokenAmountsIn(
-  sdkQueryOutput: AddLiquidityQueryOutput
+  sdkQueryOutput: AddLiquidityQueryOutput,
+  pool: Pool
 ): TokenAmountIn[] | undefined {
   if (!sdkQueryOutput) return
   return sdkQueryOutput.amountsIn.map(amountIn => ({
     address: amountIn.token.address,
     amount: amountIn.amount,
+    symbol: amountIn.token.symbol || getActionableTokenSymbol(amountIn.token.address, pool),
   }))
 }
 

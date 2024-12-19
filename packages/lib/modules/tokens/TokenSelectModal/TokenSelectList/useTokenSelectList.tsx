@@ -1,14 +1,15 @@
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../../TokensProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { orderBy } from 'lodash'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { exclNativeAssetFilter, nativeAssetFilter } from '../../token.helpers'
 import { useCallback, useMemo } from 'react'
+import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 export function useTokenSelectList(
   chain: GqlChain,
-  tokens: GqlToken[],
+  tokens: ApiToken[],
   excludeNativeAsset: boolean,
   pinNativeAsset: boolean,
   searchTerm?: string
@@ -16,10 +17,10 @@ export function useTokenSelectList(
   const { usdValueForToken } = useTokens()
   const { balanceFor } = useTokenBalances()
 
-  const symbolMatch = (token: GqlToken, searchTerm: string) =>
+  const symbolMatch = (token: ApiToken, searchTerm: string) =>
     token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
 
-  const nameMatch = (token: GqlToken, searchTerm: string) =>
+  const nameMatch = (token: ApiToken, searchTerm: string) =>
     token.name.toLowerCase().includes(searchTerm.toLowerCase())
 
   const getFilteredTokens = useCallback(() => {

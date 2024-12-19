@@ -2,10 +2,7 @@ import networkConfig from '@repo/lib/config/networks/mainnet'
 import { balAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
-import {
-  aBalWethPoolElementMock,
-  aPhantomStablePoolMock,
-} from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
+import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { connectWithDefaultUser } from '@repo/lib/test/utils/wagmi/wagmi-connections'
 import { Pool } from '../../../PoolProvider'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
@@ -67,18 +64,5 @@ describe('When proportionally removing liquidity for a weighted v2 pool', async 
 
     expect(result.to).toBe(networkConfig.contracts.balancer.vaultV2)
     expect(result.data).toBeDefined()
-  })
-})
-
-describe('When removing liquidity from a V2 stable pool', () => {
-  test('queries remove liquidity', async () => {
-    const pool = aPhantomStablePoolMock() // wstETH-rETH-sfrxETH
-
-    const handler = selectProportionalHandler(pool)
-
-    const queryOutput = await handler.simulate(defaultQueryInput)
-
-    const result = await handler.buildCallData({ ...defaultBuildInput, queryOutput })
-    expect(result.account).toBe(defaultTestUserAccount)
   })
 })

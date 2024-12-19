@@ -254,8 +254,8 @@ export function NavBar({
               {appLinks && (
                 <NavLinks
                   appLinks={appLinks}
-                  customLinksBefore={customLinksBefore}
                   customLinksAfter={customLinksAfter}
+                  customLinksBefore={customLinksBefore}
                   display={{ base: 'none', lg: 'flex' }}
                 />
               )}

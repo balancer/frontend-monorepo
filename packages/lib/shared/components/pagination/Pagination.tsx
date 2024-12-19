@@ -13,7 +13,6 @@ interface Props {
   setPageSize: (page: number) => void
   pageSize: number
   changeSize?: boolean
-  isSmall?: boolean
   hideDropdown?: boolean
 }
 

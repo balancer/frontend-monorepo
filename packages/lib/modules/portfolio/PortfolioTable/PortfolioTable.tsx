@@ -19,6 +19,7 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import { getProjectConfig, isBalancerProject } from '@repo/lib/config/getProjectConfig'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -131,10 +132,17 @@ export function PortfolioTable() {
       }
 
       if (currentSortingObj.id === 'apr') {
-        const [aApr] = getTotalApr(a.dynamicData.aprItems)
-        const [bApr] = getTotalApr(b.dynamicData.aprItems)
-
-        return currentSortingObj.desc ? bApr.minus(aApr).toNumber() : aApr.minus(bApr).toNumber()
+        const [aApr] =
+          a.poolType === ExpandedPoolType.StakedAura
+            ? [a.staking?.aura?.apr ?? 0]
+            : getTotalApr(a.dynamicData.aprItems)
+        const [bApr] =
+          b.poolType === ExpandedPoolType.StakedAura
+            ? [b.staking?.aura?.apr ?? 0]
+            : getTotalApr(b.dynamicData.aprItems)
+        return currentSortingObj.desc
+          ? bn(bApr).minus(aApr).toNumber()
+          : bn(aApr).minus(bApr).toNumber()
       }
 
       return 0
@@ -163,6 +171,7 @@ export function PortfolioTable() {
           >
             <PaginatedTable
               alignItems="flex-start"
+              getRowId={row => row.uniqueKey}
               items={sortedPools}
               left={{ base: '-4px', sm: '0' }}
               loading={isLoadingPortfolio}

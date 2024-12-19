@@ -22,8 +22,8 @@ async function testQuery(humanAmountsIn: HumanTokenAmountWithAddress[]) {
 test('queries price impact for add liquidity', async () => {
   await connectWithDefaultUser()
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { tokenAddress: wETHAddress, humanAmount: '1' },
-    { tokenAddress: wjAuraAddress, humanAmount: '1' },
+    { tokenAddress: wETHAddress, humanAmount: '1', symbol: 'WETH' },
+    { tokenAddress: wjAuraAddress, humanAmount: '1', symbol: 'wjAura' },
   ]
 
   const result = await testQuery(humanAmountsIn)

@@ -267,6 +267,7 @@ export function Features() {
           variants={gridVariants}
         >
           {keyFeatures.map((feature, index) => (
+            // eslint-disable-next-line react/no-array-index-key
             <MotionGridItem key={index} variants={gridItemVariants}>
               <FeatureCard {...feature} iconProps={{ color: 'font.primary' }} />
             </MotionGridItem>
@@ -318,6 +319,7 @@ export function Features() {
           </Box>
           <VStack ref={containerRef} spacing="md" w="full">
             {features.map((feature, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <FadeIn direction="up" key={index} zIndex={10 - index}>
                 <FeatureText index={index} {...feature} />
               </FadeIn>

@@ -1,6 +1,4 @@
 /* eslint-disable max-len */
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
-import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Pool } from './PoolProvider'
 import { getPoolActionableTokens } from './pool.helpers'
 
@@ -53,7 +51,7 @@ describe('getPoolTokens', () => {
       ],
     } as unknown as Pool
 
-    const result = getPoolActionableTokens(pool, getTokenMock(pool))
+    const result = getPoolActionableTokens(pool)
     expect(result.map(t => t.symbol)).toEqual(['USDT', 'USDC', 'WXDAI', 'WETH', 'WBTC']) // contains 'staBAL3' nested tokens (USDT, USDC, WXDAI)
   })
 
@@ -101,31 +99,7 @@ describe('getPoolTokens', () => {
       ],
     } as unknown as Pool
 
-    const result = getPoolActionableTokens(pool, getTokenMock(pool))
+    const result = getPoolActionableTokens(pool)
     expect(result.map(t => t.symbol)).toEqual(['WETH', 'osETH']) // excludes 'osETH/wETH-BPT' bpt token
   })
 })
-
-function getTokenMock(pool: Pool) {
-  const getAllTokens = (pool: Pool): GqlToken[] => {
-    const tokens: GqlToken[] = []
-
-    pool.poolTokens.forEach(poolToken => {
-      tokens.push({ address: poolToken.address, symbol: poolToken.symbol } as unknown as GqlToken)
-
-      if (poolToken.hasNestedPool && poolToken.nestedPool) {
-        poolToken.nestedPool.tokens.forEach(nestedToken => {
-          tokens.push(nestedToken as unknown as GqlToken)
-        })
-      }
-    })
-
-    return tokens
-  }
-  // Returns a getToken mock function that looks for a token by address in the whole pool structure (including nested pools)
-  return function (address: string): GqlToken | undefined {
-    return getAllTokens(pool).find(token =>
-      isSameAddress(token.address, address)
-    ) as unknown as GqlToken
-  }
-}

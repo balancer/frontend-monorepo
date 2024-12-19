@@ -13,8 +13,8 @@ import { usePool } from '../../PoolProvider'
 import { selectRemoveLiquidityHandler } from './handlers/selectRemoveLiquidityHandler'
 import { useRemoveLiquidityPriceImpactQuery } from './queries/useRemoveLiquidityPriceImpactQuery'
 import { RemoveLiquidityType } from './remove-liquidity.types'
-import { Address, Hash } from 'viem'
-import { emptyTokenAmounts, toHumanAmount } from '../LiquidityActionHelpers'
+import { Address, formatUnits, Hash } from 'viem'
+import { emptyTokenAmounts, toHumanAmountWithAddress } from '../LiquidityActionHelpers'
 import { getPoolActionableTokens, isCowAmmPool } from '../../pool.helpers'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
@@ -23,7 +23,7 @@ import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { ApiToken } from '../../pool.types'
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof _useRemoveLiquidity>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
@@ -58,7 +58,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     .times(humanBptInPercent / 100)
     .toFixed() as HumanAmount
 
-  const tokens = getPoolActionableTokens(pool, getToken)
+  const tokens = getPoolActionableTokens(pool)
 
   const chain = pool.chain
   const nativeAsset = getNativeAssetToken(chain)
@@ -79,7 +79,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   const isSingleToken = removalType === RemoveLiquidityType.SingleToken
   const isProportional = removalType === RemoveLiquidityType.Proportional
 
-  function tokensToShow(): GqlToken[] {
+  function tokensToShow(): ApiToken[] {
     // Cow AMM pools don't support wethIsEth
     if (isCowAmmPool(pool.type)) return tokens
 
@@ -97,7 +97,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
             return token
           }
         })
-        .filter((token): token is GqlToken => token !== undefined)
+        .filter((token): token is ApiToken => token !== undefined)
     }
 
     return tokens
@@ -175,7 +175,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
    */
   const amountOutForToken = (tokenAddress: Address): HumanAmount => {
     const amountOut = amountOutMap[tokenAddress]
-    return amountOut ? amountOut : '0'
+    return amountOut ? (amountOut.humanAmount as HumanAmount) : '0'
   }
 
   const usdOutForToken = (tokenAddress: Address): HumanAmount => {
@@ -207,16 +207,18 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
   /**
    * Derived state
    */
-  const amountOutMap: Record<Address, HumanAmount> = Object.fromEntries(
+  const amountOutMap: Record<Address, HumanTokenAmountWithAddress> = Object.fromEntries(
     quoteAmountsOut.map(tokenAmount => [
       getAddressForTokenAmount(tokenAmount),
-      toHumanAmount(tokenAmount),
+      toHumanAmountWithAddress(tokenAmount),
     ])
   )
 
-  const amountsOut: HumanTokenAmountWithAddress[] = Object.entries(amountOutMap).map(
-    ([address, amount]) => ({ tokenAddress: address as Address, humanAmount: amount })
-  )
+  const amountsOut: HumanTokenAmountWithAddress[] = quoteAmountsOut.map(tokenAmount => ({
+    tokenAddress: getAddressForTokenAmount(tokenAmount),
+    humanAmount: formatUnits(tokenAmount.amount, tokenAmount.token.decimals),
+    symbol: tokenAmount.token.symbol || 'Unknown',
+  }))
 
   const usdAmountOutMap: Record<Address, HumanAmount> = Object.fromEntries(
     quoteAmountsOut.map(tokenAmount => {

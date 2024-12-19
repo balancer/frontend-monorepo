@@ -57,7 +57,7 @@ async function sign({
 
   const baseInput = constructBaseBuildCallInput({
     humanAmountsIn,
-    slippagePercent: slippagePercent,
+    slippagePercent,
     sdkQueryOutput,
     pool,
   })
