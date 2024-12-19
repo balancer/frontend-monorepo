@@ -42,6 +42,26 @@ query GetPools(
     hook {
       ...Hook
     }
+    poolTokens {
+      id
+      address
+      symbol
+      weight
+      name
+      nestedPool {
+        id
+        address
+        symbol
+        name
+        tokens {
+          id
+          address
+          symbol
+          weight
+          name
+        }
+      }
+    }
     dynamicData {
       totalLiquidity
       lifetimeVolume
@@ -159,6 +179,20 @@ query GetFeaturedPools($chains: [GqlChain!]!) {
       }
       poolTokens {
         ...PoolTokens
+      }
+      displayTokens {
+        id
+        address
+        name
+        weight
+        symbol
+        nestedTokens {
+          id
+          address
+          name
+          weight
+          symbol
+        }
       }
     }
   }

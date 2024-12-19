@@ -147,3 +147,13 @@ function parseRequestError(error: Error, chainId: number): TransactionConfig | u
 
   return
 }
+
+/**
+ * Converts Error instance in JSON "plain" object
+ *
+ * @description Only plain objects are allowed as props within RSC
+ */
+export function errorToJson(err: unknown) {
+  if (err === undefined) return undefined
+  return JSON.parse(JSON.stringify(err, Object.getOwnPropertyNames(err)))
+}
