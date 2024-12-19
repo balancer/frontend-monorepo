@@ -1,3 +1,4 @@
+import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
@@ -343,7 +344,7 @@ export function fakeTokenByAddressAndChain(address: Address, chain: GqlChain) {
   return token
 }
 
-export function fakeGetToken(address: string, chain: GqlChain): GqlToken | undefined {
+export function fakeGetToken(address: string, chain: GqlChain): ApiToken | undefined {
   return fakeTokenByAddressAndChain(address as Address, chain as GqlChain)
 }
 

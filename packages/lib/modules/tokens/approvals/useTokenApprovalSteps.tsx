@@ -70,13 +70,19 @@ export function useTokenApprovalSteps({
 
   const steps = useMemo(() => {
     return tokenAmountsToApprove.map((tokenAmountToApprove, index) => {
-      const { tokenAddress, requiredRawAmount, requestedRawAmount } = tokenAmountToApprove
+      const {
+        tokenAddress,
+        requiredRawAmount,
+        requestedRawAmount,
+        symbol: approvalSymbol,
+      } = tokenAmountToApprove
       // USDT edge-case: requires setting approval to 0n before adjusting the value up again
       const isApprovingZeroForDoubleApproval =
         requiresDoubleApproval(chain, tokenAddress) && requiredRawAmount === 0n
       const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
       const token = getToken(tokenAddress, chain)
-      const symbol = bptSymbol ?? (token && token?.symbol) ?? 'Unknown'
+
+      const symbol = approvalSymbol || (bptSymbol ?? (token && token?.symbol) ?? 'Unknown')
       const labels = buildTokenApprovalLabels({ actionType, symbol, isPermit2, lpToken })
 
       const isComplete = () => {

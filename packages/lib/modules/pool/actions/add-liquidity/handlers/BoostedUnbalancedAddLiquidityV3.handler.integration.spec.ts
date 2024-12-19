@@ -20,8 +20,8 @@ describe.skip('When adding unbalanced liquidity for a V3 BOOSTED pool', async ()
   const handler = selectAddLiquidityHandler(v3Pool) as BoostedUnbalancedAddLiquidityV3Handler
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: usdcAaveAddress },
-    { humanAmount: '0.1', tokenAddress: usdtAaveAddress },
+    { humanAmount: '0.1', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
+    { humanAmount: '0.1', tokenAddress: usdtAaveAddress, symbol: 'USDT' },
   ]
 
   it('calculates price impact', async () => {
