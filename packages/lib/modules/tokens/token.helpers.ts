@@ -164,5 +164,6 @@ function buildApiToken(poolToken: PoolToken): ApiToken {
     priority: poolToken.priority as number,
     tradable: poolToken.tradable as boolean,
     weight: poolToken?.weight ?? undefined,
+    underlyingToken: poolToken?.underlyingToken ?? undefined,
   }
 }
