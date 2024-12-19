@@ -58,6 +58,7 @@ export interface ContractsConfig {
   beets?: {
     lstStaking?: Address
     lstStakingProxy?: Address
+    sfc?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address
