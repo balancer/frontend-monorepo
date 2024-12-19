@@ -57,7 +57,7 @@ export function MaBeetsRedirectModal({
             <Link href="https://ma.beets.fi" target="_blank">
               https://ma.beets.fi
             </Link>
-            {'.'}
+            .
           </Text>
 
           <Text color="font.secondary" mt="md">
@@ -74,10 +74,10 @@ export function MaBeetsRedirectModal({
           <Button
             as={NextLink}
             href="https://ma.beets.fi"
+            mr="md"
             target="_blank"
             variant="primary"
             w="full"
-            mr="md"
           >
             <HStack>
               <span>Sonic maBEETS</span>

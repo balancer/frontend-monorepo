@@ -34,27 +34,25 @@ export function LandingBeetsSocialClub() {
   const socialLinks = getSocialLinks(36)
 
   return (
-    <>
-      <DefaultPageContainer noVerticalPadding pb="3xl">
-        <Box
-          height="140px"
-          backgroundImage="url(/images/misc/beets-social-club.png)"
-          backgroundSize="auto 100%"
-          backgroundRepeat="no-repeat"
-          backgroundPosition="center"
-          mb="2xl"
-        />
-        <Center mb="2xl">
-          <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl" textAlign="center">
-            Join our vibrant community of DeFi enthusiasts, builders, and visionaries. Share
-            insights, collaborate on projects, and help shape the BEETS ecosystem together. Connect,
-            learn, and grow with us.
-          </Text>
-        </Center>
-        <Center>
-          <SocialLinks socialLinks={socialLinks} />
-        </Center>
-      </DefaultPageContainer>
-    </>
+    <DefaultPageContainer noVerticalPadding pb="3xl">
+      <Box
+        backgroundImage="url(/images/misc/beets-social-club.png)"
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
+        backgroundSize="auto 100%"
+        height="140px"
+        mb="2xl"
+      />
+      <Center mb="2xl">
+        <Text fontSize="2xl" fontWeight="thin" maxW="full" textAlign="center" w="2xl">
+          Join our vibrant community of DeFi enthusiasts, builders, and visionaries. Share insights,
+          collaborate on projects, and help shape the BEETS ecosystem together. Connect, learn, and
+          grow with us.
+        </Text>
+      </Center>
+      <Center>
+        <SocialLinks socialLinks={socialLinks} />
+      </Center>
+    </DefaultPageContainer>
   )
 }

@@ -3,8 +3,8 @@ import { SVGProps } from 'react'
 
 export function FantomToSonicSvg(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 95 35" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <g clip-path="url(#clip0_28380_48)">
+    <svg fill="none" viewBox="0 0 95 35" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <g clipPath="url(#clip0_28380_48)">
         <path d="M15.5285 12.7967L9.80078 15.8191V9.7749L15.5285 12.7967Z" fill="white" />
         <path d="M10.0547 17.3188L16.69 13.8191V20.8185L10.0547 17.3188Z" fill="white" />
         <path d="M24.7674 17.3188L18.1328 20.8185V13.8191L24.7674 17.3188Z" fill="white" />
@@ -32,7 +32,7 @@ export function FantomToSonicSvg(props: SVGProps<SVGSVGElement>) {
       </g>
       <defs>
         <clipPath id="clip0_28380_48">
-          <rect width="95" height="35" fill="white" />
+          <rect fill="white" height="35" width="95" />
         </clipPath>
       </defs>
     </svg>

@@ -4,13 +4,13 @@ import React from 'react'
 export function BeetsByTheNumbers() {
   return (
     <svg
-      width="310"
+      fill="none"
       height="48"
       viewBox="0 0 310 48"
-      fill="none"
+      width="310"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_28067_35)">
+      <g clipPath="url(#clip0_28067_35)">
         <path
           d="M23.8 47.6C36.9444 47.6 47.6 36.9444 47.6 23.8C47.6 10.6556 36.9444 0 23.8 0C10.6556 0 0 10.6556 0 23.8C0 36.9444 10.6556 47.6 23.8 47.6Z"
           fill="white"
@@ -106,7 +106,7 @@ export function BeetsByTheNumbers() {
       </g>
       <defs>
         <clipPath id="clip0_28067_35">
-          <rect width="309.35" height="47.59" fill="white" />
+          <rect fill="white" height="47.59" width="309.35" />
         </clipPath>
       </defs>
     </svg>
