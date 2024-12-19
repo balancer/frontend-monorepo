@@ -18,6 +18,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useGetUserWithdraws } from './useGetUserWithdraws'
 import { useGetUserNumWithdraws } from './useGetUserNumWithdraws'
+import { useGetAmountDelegatedPerValidator } from './useGetAmountDelegatedPerValidator'
 
 export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled: boolean) {
   const { getTransaction } = useTransactionState()
@@ -25,6 +26,8 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
   const { refetchBalances } = useTokenBalances()
   const { userNumWithdraws, refetch: refetchUserNumWithdraws } = useGetUserNumWithdraws(chain)
   const { refetch: refetchWithdrawals } = useGetUserWithdraws(chain, userNumWithdraws)
+  const { chooseValidatorsForUnstakeAmount } = useGetAmountDelegatedPerValidator(chain)
+  const validators = chooseValidatorsForUnstakeAmount(parseUnits(sharesAmount, 18))
 
   function onSuccess() {
     refetchBalances()
@@ -51,7 +54,11 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
     contractId: 'beets.lstStaking',
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
     functionName: 'undelegateMany',
-    args: [[BigInt(1)], [parseUnits(sharesAmount, 18)]], // TODO: make dynamic
+    //args: [[BigInt(1)], [parseUnits(sharesAmount, 18)]], // TODO: make dynamic
+    args: [
+      validators.map(validator => BigInt(validator.validatorId)),
+      validators.map(validator => validator.unstakeAmountAssets),
+    ],
     enabled: isConnected && !!sharesAmount && enabled,
     txSimulationMeta,
   }

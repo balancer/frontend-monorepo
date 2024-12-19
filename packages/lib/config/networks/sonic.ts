@@ -47,6 +47,7 @@ const networkConfig: NetworkConfig = {
     beets: {
       lstStaking: '0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141',
       lstStakingProxy: '0xe5da20f15420ad15de0fa650600afc998bbe3955',
+      sfc: '0xFC00FACE00000000000000000000000000000000',
     },
   },
   pools: convertHexToLowerCase({ issues: {} }),
