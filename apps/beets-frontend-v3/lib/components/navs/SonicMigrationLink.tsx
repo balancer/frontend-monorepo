@@ -34,7 +34,10 @@ export function SonicMigrationLink({ triggerEl, ...props }: SonicMigrationRedire
             <FantomToSonicSvg height={20} />
             <Box>
               <Text>
-                Migrate<Text display={{ base: 'none', xl: 'inline' }}> to Sonic</Text>
+                Migrate{' '}
+                <Box as="span" display={{ base: 'none', xl: 'inline' }}>
+                  to Sonic
+                </Box>
               </Text>
             </Box>
           </HStack>
