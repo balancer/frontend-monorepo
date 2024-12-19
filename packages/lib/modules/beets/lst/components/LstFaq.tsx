@@ -39,6 +39,11 @@ const FAQ_ITEMS = [
     answer:
       'stS is fully liquid, meaning you can use stS seamlessly across DeFi and access lending markets, liquidity pools, and more without pausing your rewards.',
   },
+  {
+    question: 'What is the stS exchange rate and how does it change?',
+    answer:
+      'The stS token accrues staking rewards via delegating the underlying S to trustworthy validators on the network. Every time staking rewards are added to the pool, the stS exchange rate to S increases.',
+  },
 ]
 
 export function LstFaq() {
