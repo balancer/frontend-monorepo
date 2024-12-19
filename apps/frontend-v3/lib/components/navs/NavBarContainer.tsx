@@ -35,7 +35,7 @@ export function NavBarContainer() {
             />
           }
           navLogo={<NavLogo />}
-          customLinks={
+          customLinksAfter={
             <Box as={motion.div} variants={fadeIn}>
               <VeBalLink />
             </Box>
