@@ -20,8 +20,8 @@ async function testQuery(humanAmountsIn: HumanTokenAmountWithAddress[]) {
 
 test('queries btp out for add liquidity', async () => {
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { tokenAddress: wETHAddress, humanAmount: '100' },
-    { tokenAddress: wjAuraAddress, humanAmount: '1' },
+    { tokenAddress: wETHAddress, humanAmount: '100', symbol: 'WETH' },
+    { tokenAddress: wjAuraAddress, humanAmount: '1', symbol: 'wjAura' },
   ]
 
   const result = await testQuery(humanAmountsIn)

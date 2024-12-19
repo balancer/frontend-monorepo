@@ -5,6 +5,7 @@ import { useAddLiquidity } from '../AddLiquidityProvider'
 import { VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { hasNoLiquidity, shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
+import { ApiToken } from '../../../pool.types'
 
 type Props = {
   tokenSelectDisclosureOpen: () => void
@@ -13,7 +14,7 @@ type Props = {
     Default scenario: only updates one token input
     Proportional scenario: updates all the inputs using proportional amount calculations
    */
-  customSetAmountIn?: (tokenAddress: Address, humanAmount: HumanAmount) => void
+  customSetAmountIn?: (token: ApiToken, humanAmount: HumanAmount) => void
 }
 export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Props) {
   const { pool } = usePool()
@@ -43,13 +44,11 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
 
         return (
           <TokenInput
-            address={token.address}
+            apiToken={token}
             chain={token.chain}
             isDisabled={hasNoLiquidity(pool)}
             key={token.address}
-            onChange={e =>
-              setAmountIn(token.address as Address, e.currentTarget.value as HumanAmount)
-            }
+            onChange={e => setAmountIn(token, e.currentTarget.value as HumanAmount)}
             toggleTokenSelect={
               shouldShowNativeWrappedSelector(token, pool) ? tokenSelectDisclosureOpen : undefined
             }

@@ -338,8 +338,8 @@ importers:
         specifier: ^3.11.8
         version: 3.11.8(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.9.0))(graphql@16.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@balancer/sdk':
-        specifier: 0.33.5
-        version: 0.33.5(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 1.0.1
+        version: 1.0.1(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/anatomy':
         specifier: ^2.2.2
         version: 2.2.2
@@ -1746,8 +1746,8 @@ packages:
     resolution: {integrity: sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA==}
     engines: {node: '>=6.9.0'}
 
-  '@balancer/sdk@0.33.5':
-    resolution: {integrity: sha512-aQbDZ7HUk9mD0BZWKYNDhbF5hDcipYg7AT7YcD9eb6jPkkq6YXN2/uqTDwdcZ/mkllHzjdjGdrmFKadSZqF6yw==}
+  '@balancer/sdk@1.0.1':
+    resolution: {integrity: sha512-/nbqzTWZdZjoHr8MKMBLOQewojdwqmIFYdVVv3NXUmnAi3Va27bo5mAKZ2n5yo/bJ4w5wtkXDEm2BixkUXWRvw==}
     engines: {node: '>=18.x'}
 
   '@bcoe/v8-coverage@0.2.3':
@@ -12849,7 +12849,7 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@balancer/sdk@0.33.5(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.24.1)':
+  '@balancer/sdk@1.0.1(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.24.1)':
     dependencies:
       decimal.js-light: 2.5.1
       lodash.clonedeep: 4.5.0
@@ -14992,7 +14992,7 @@ snapshots:
       pump: 3.0.2
       readable-stream: 3.6.2
       socket.io-client: 4.7.5(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      tslib: 2.8.0
+      tslib: 2.8.1
       util: 0.12.5
       uuid: 8.3.2
     transitivePeerDependencies:
@@ -19288,7 +19288,7 @@ snapshots:
       debug: 4.3.7
       enhanced-resolve: 5.17.1
       eslint: 8.43.0
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.3.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.3.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0)
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.3.3))(eslint@8.43.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.2
@@ -19300,12 +19300,13 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.3.3))(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.3.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1)(eslint@8.43.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 6.17.0(eslint@8.43.0)(typescript@5.3.3)
       eslint: 8.43.0
+      eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.3.3))(eslint-plugin-import@2.29.0)(eslint@8.43.0)
     transitivePeerDependencies:
       - supports-color
