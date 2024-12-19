@@ -198,7 +198,7 @@ export function LandingBeetsData({
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
               <GlobalStatsCard
-                label="24 VOL"
+                label="24h VOL"
                 value={toCurrency(protocolMetricsAggregated.swapVolume24h)}
               />
             </GridItem>
@@ -213,46 +213,46 @@ export function LandingBeetsData({
         <Grid gap="none" templateColumns={{ base: '1fr', lg: 'repeat(3, 1fr)' }} w="full">
           <GridItem bg="rgba(255, 255, 255, 0.05)">
             <ChainDataCard
+              button={
+                <Button as={NextLink} href="/pools?networks=SONIC" variant="primary">
+                  Sonic Pools
+                </Button>
+              }
               chain={GqlChain.Sonic}
               networkColor="orange"
               protocolData={chainData[getChainId(GqlChain.Sonic)]}
               totalTvl={totalTvl}
-              button={
-                <Button variant="primary" as={NextLink} href="/pools?networks=SONIC">
-                  Sonic Pools
-                </Button>
-              }
             />
           </GridItem>
           <GridItem bg="rgba(0, 0, 0, 0.05)">
             <ChainDataCard
+              button={
+                <Button as={NextLink} href="/pools?networks=OPTIMISM" variant="primary">
+                  Optimism Pools
+                </Button>
+              }
               chain={GqlChain.Optimism}
               networkColor="red"
               protocolData={chainData[getChainId(GqlChain.Optimism)]}
               totalTvl={totalTvl}
-              button={
-                <Button variant="primary" as={NextLink} href="/pools?networks=OPTIMISM">
-                  Optimism Pools
-                </Button>
-              }
             />
           </GridItem>
           <GridItem bg="rgba(0, 0, 0, 0.2)">
             <ChainDataCard
-              chain={GqlChain.Fantom}
-              networkColor="deepskyblue"
-              protocolData={chainData[getChainId(GqlChain.Fantom)]}
-              totalTvl={totalTvl}
               button={
                 <Button
-                  variant="primary"
                   as={NextLink}
                   href="https://ftm.beets.fi/pools"
                   target="_blank"
+                  variant="primary"
                 >
                   Fantom Pools
                 </Button>
               }
+              chain={GqlChain.Fantom}
+              networkColor="deepskyblue"
+              protocolData={chainData[getChainId(GqlChain.Fantom)]}
+              totalTvl={totalTvl}
             />
           </GridItem>
         </Grid>
