@@ -3892,11 +3892,67 @@ export const balancerV2WeightedPoolV4Config = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SFC
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0xFC00FACE00000000000000000000000000000000)
+ */
+export const sfcAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: 'implementation', internalType: 'address', type: 'address' },
+      { name: '_data', internalType: 'bytes', type: 'bytes' },
+    ],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'target', internalType: 'address', type: 'address' }],
+    name: 'AddressEmptyCode',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'implementation', internalType: 'address', type: 'address' }],
+    name: 'ERC1967InvalidImplementation',
+  },
+  { type: 'error', inputs: [], name: 'ERC1967NonPayable' },
+  { type: 'error', inputs: [], name: 'FailedCall' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'implementation',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'Upgraded',
+  },
+  { type: 'fallback', stateMutability: 'payable' },
+] as const
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0xFC00FACE00000000000000000000000000000000)
+ */
+export const sfcAddress = {
+  146: '0xFC00FACE00000000000000000000000000000000',
+} as const
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0xFC00FACE00000000000000000000000000000000)
+ */
+export const sfcConfig = { address: sfcAddress, abi: sfcAbi } as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SonicStaking
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- *
+ * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
  */
 export const sonicStakingAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -5168,14 +5224,14 @@ export const sonicStakingAbi = [
 ] as const
 
 /**
- *
+ * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
  */
 export const sonicStakingAddress = {
-  146: '0xBF46AeF3c4c119495245e6b1911A4a961859038d',
+  146: '0xD5F7FC8ba92756a34693bAA386Edcc8Dd5B3F141',
 } as const
 
 /**
- *
+ * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
  */
 export const sonicStakingConfig = {
   address: sonicStakingAddress,
