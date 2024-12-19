@@ -21,7 +21,8 @@ type Props = {
   leftSlot?: ReactNode
   rightSlot?: ReactNode
   disableBlur?: boolean
-  customLinks?: ReactNode
+  customLinksBefore?: ReactNode
+  customLinksAfter?: ReactNode
 }
 
 const clamp = (number: number, min: number, max: number) => Math.min(Math.max(number, min), max)
@@ -46,13 +47,19 @@ function useBoundedScroll(threshold: number) {
 
 function NavLinks({
   appLinks,
-  customLinks,
+  customLinksBefore,
+  customLinksAfter,
   ...props
-}: BoxProps & { appLinks: AppLink[]; customLinks?: ReactNode }) {
+}: BoxProps & {
+  appLinks: AppLink[]
+  customLinksBefore?: ReactNode
+  customLinksAfter?: ReactNode
+}) {
   const { linkColorFor } = useNav()
 
   return (
     <HStack fontWeight="medium" spacing="lg" {...props}>
+      {customLinksBefore}
       {appLinks.map(link => (
         <Box as={motion.div} key={link.href} variants={fadeIn}>
           <Link
@@ -67,7 +74,7 @@ function NavLinks({
           </Link>
         </Box>
       ))}
-      {customLinks}
+      {customLinksAfter}
       {(isDev || isStaging) && (
         <Box as={motion.div} variants={fadeIn}>
           {/* <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
@@ -175,7 +182,8 @@ export function NavBar({
   appLinks,
   navLogo,
   mobileNav,
-  customLinks,
+  customLinksBefore,
+  customLinksAfter,
   ...rest
 }: Props & BoxProps) {
   const [showShadow, setShowShadow] = useState(false)
@@ -246,7 +254,8 @@ export function NavBar({
               {appLinks && (
                 <NavLinks
                   appLinks={appLinks}
-                  customLinks={customLinks}
+                  customLinksAfter={customLinksAfter}
+                  customLinksBefore={customLinksBefore}
                   display={{ base: 'none', lg: 'flex' }}
                 />
               )}

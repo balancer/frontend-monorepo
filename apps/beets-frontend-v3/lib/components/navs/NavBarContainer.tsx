@@ -12,8 +12,8 @@ import { motion } from 'framer-motion'
 import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { MaBeetsNavLink } from './MaBeetsNavLink'
 import { SonicMigrationLink } from './SonicMigrationLink'
-import Image from 'next/image'
 import { FantomToSonicSvg } from '../imgs/FantomToSonicSvg'
+import { PoolsLink } from './PoolsLink'
 
 export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
@@ -24,8 +24,6 @@ export function NavBarContainer() {
     <MobileNav
       LogoType={BeetsLogoType}
       appLinks={allAppLinks}
-      ecosystemLinks={ecosystemLinks}
-      socialLinks={getSocialLinks()}
       customLinks={
         <>
           <MaBeetsNavLink fontSize="xl" />
@@ -40,20 +38,15 @@ export function NavBarContainer() {
           />
         </>
       }
+      ecosystemLinks={ecosystemLinks}
+      socialLinks={getSocialLinks()}
     />
   )
 
   return (
     <NavBar
-      appLinks={allAppLinks}
-      navLogo={<NavLogo />}
-      rightSlot={
-        <>
-          <LzBeetsMigrator />
-          <NavActions hideDarkModeToggle mobileNav={mobileNav} />
-        </>
-      }
-      customLinks={
+      appLinks={allAppLinks.slice(1)} // we remove the pools link for the custom dropdown link
+      customLinksAfter={
         <>
           <Box as={motion.div} variants={fadeIn}>
             <MaBeetsNavLink />
@@ -61,6 +54,18 @@ export function NavBarContainer() {
           <Box as={motion.div} variants={fadeIn}>
             <SonicMigrationLink />
           </Box>
+        </>
+      }
+      customLinksBefore={
+        <Box as={motion.div} variants={fadeIn}>
+          <PoolsLink />
+        </Box>
+      }
+      navLogo={<NavLogo />}
+      rightSlot={
+        <>
+          <LzBeetsMigrator />
+          <NavActions hideDarkModeToggle mobileNav={mobileNav} />
         </>
       }
     />
