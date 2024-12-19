@@ -41,6 +41,7 @@ export function VoteListTable({ voteList, count, loading }: Props) {
       w={{ base: '100vw', lg: 'full' }}
     >
       <PaginatedTable
+        getRowId={item => item.id}
         items={voteList}
         loading={loading}
         noItemsFoundLabel="No votes found"
