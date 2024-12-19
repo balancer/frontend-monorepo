@@ -1,10 +1,12 @@
 'use client'
 
-import { Box, Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react'
+import { Box, Flex, Grid, GridItem, Heading, HStack, Text, Link } from '@chakra-ui/react'
 import { LandingSectionContainer } from '../components/LandingSectionContainer'
 import { StakedSonicComposabilitySvg } from '../components/StakedSonicComposabilitySvg'
 import { StakedSonicDecentralizationSvg } from '../components/StakedSonicDecentralizationSvg'
 import { StakedSonicStakingRewardsSvg } from '../components/StakedSonicStakingRewardsSvg'
+import { SpearbitLogo } from '@repo/lib/shared/components/imgs/SpearbitLogo'
+import NextLink from 'next/link'
 
 export function LandingBeetsStakedSonic() {
   return (
@@ -81,10 +83,19 @@ export function LandingBeetsStakedSonic() {
               </Box>
               <Box flex="1" ml="xl">
                 <Heading fontSize="2xl">Security & Trust</Heading>
-                <Text fontSize="lg" fontWeight="thin">
+                <Text fontSize="lg" fontWeight="thin" mb="md">
                   Protected by audited contracts and transparent governance, stS ensures your assets
                   remain secure and accessible.
                 </Text>
+                <Link
+                  href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beethoven-Sonic-Staking-Spearbit-Security-Review-December-2024.pdf"
+                  target="_blank"
+                >
+                  <HStack gap="md">
+                    <Heading fontSize="2xl">Audited by: </Heading>
+                    <SpearbitLogo height="36px" width="176px" color="#25f2d0" />
+                  </HStack>
+                </Link>
               </Box>
             </Flex>
           </GridItem>
