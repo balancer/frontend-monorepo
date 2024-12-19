@@ -57,7 +57,7 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
     //args: [[BigInt(1)], [parseUnits(sharesAmount, 18)]], // TODO: make dynamic
     args: [
       validators.map(validator => BigInt(validator.validatorId)),
-      validators.map(validator => validator.unstakeAmountAssets),
+      validators.map(validator => validator.unstakeAmountShares),
     ],
     enabled: isConnected && !!sharesAmount && enabled,
     txSimulationMeta,

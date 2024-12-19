@@ -9,7 +9,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useReadContract } from 'wagmi'
 
 export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
-  const validatorIds = [...Array(100).keys()] // we query validator ids from 0 to 99 for the moment
+  const validatorIds = [...Array(100).keys()] // TODO: replace this with API data
   const { isConnected, userAddress } = useUserAccount()
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
@@ -41,7 +41,7 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
       ],
       address: config.contracts.beets?.sfc,
       functionName: 'getStake',
-      args: [userAddress, validatorId],
+      args: [config.contracts.beets?.lstStakingProxy, validatorId],
     }
   })
 
@@ -67,7 +67,7 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
     return [
       {
         validatorId: validator?.validatorId || 0,
-        unstakeAmountAssets,
+        unstakeAmountShares,
       },
     ]
   }
