@@ -31,7 +31,7 @@ import { PoolTypeTag } from './PoolTypeTag'
 import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
 import {
   getCompositionDisplayTokens,
-  getHeaderTokensWithPossibleNestedTokensWithBalance,
+  getCompositionDisplayTokensWithPossibleNestedTokensWithBalance,
 } from '../pool.tokens.display'
 
 type CardContentProps = {
@@ -185,7 +185,9 @@ export function PoolComposition() {
           ) : (
             <PoolWeightChart
               chain={chain}
-              displayTokens={getHeaderTokensWithPossibleNestedTokensWithBalance(pool as PoolCore)}
+              displayTokens={getCompositionDisplayTokensWithPossibleNestedTokensWithBalance(
+                pool as PoolCore
+              )}
               hasLegend
               totalLiquidity={totalLiquidity}
             />
