@@ -99,7 +99,7 @@
     "@types/echarts": "^4.9.19",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.14.195",
-    "@types/node": "20.3.2",
+    "@types/node": "22.10.2",
     "@types/numeral": "^2.0.2",
     "@types/pluralize": "^0.0.33",
     "@types/prismjs": "^1.26.5",
