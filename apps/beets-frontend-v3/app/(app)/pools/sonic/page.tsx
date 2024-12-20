@@ -24,8 +24,8 @@ export default function PoolsPage() {
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
             <PoolList
-              fixedChains={[GqlChain.Sonic]}
               displayType={PoolListDisplayType.Name}
+              fixedChains={[GqlChain.Sonic]}
               hidePoolTags={['VE8020', 'BOOSTED']}
               hidePoolTypes={[
                 GqlPoolType.LiquidityBootstrapping,

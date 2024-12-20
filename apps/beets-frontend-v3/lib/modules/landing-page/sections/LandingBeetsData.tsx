@@ -3,7 +3,7 @@
 import React from 'react'
 import {
   Box,
-  BoxProps,
+  //BoxProps,
   Button,
   Center,
   Flex,
@@ -29,30 +29,30 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import NextLink from 'next/link'
 
-function SubStatBar({
-  stat,
-  label,
-  color,
-  totalTvl,
-  ...rest
-}: { stat: number; label: string; color: string; totalTvl: string } & BoxProps) {
-  const { toCurrency } = useCurrency()
-  return (
-    <HStack justify="space-between" mt="sm" w="full" {...rest}>
-      <HStack w="full">
-        <Progress
-          colorScheme={color}
-          rounded="lg"
-          value={100}
-          // w={fNum('percentage', bn(stat).div(bn(totalTvl)).toString())}
-        />
-        <Text fontSize="xs">{label}</Text>
-      </HStack>
+// function SubStatBar({
+//   stat,
+//   label,
+//   color,
+//   totalTvl,
+//   ...rest
+// }: { stat: number; label: string; color: string; totalTvl: string } & BoxProps) {
+//   const { toCurrency } = useCurrency()
+//   return (
+//     <HStack justify="space-between" mt="sm" w="full" {...rest}>
+//       <HStack w="full">
+//         <Progress
+//           colorScheme={color}
+//           rounded="lg"
+//           value={100}
+//           // w={fNum('percentage', bn(stat).div(bn(totalTvl)).toString())}
+//         />
+//         <Text fontSize="xs">{label}</Text>
+//       </HStack>
 
-      <Text fontSize="xs">{toCurrency(stat)}</Text>
-    </HStack>
-  )
-}
+//       <Text fontSize="xs">{toCurrency(stat)}</Text>
+//     </HStack>
+//   )
+// }
 
 function ChainStats({
   protocolData,

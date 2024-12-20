@@ -34,7 +34,10 @@ export function SonicMigrationLink({ triggerEl, ...props }: SonicMigrationRedire
             <FantomToSonicSvg height={20} />
             <Box>
               <Text>
-                Migrate<Text display={{ base: 'none', xl: 'inline' }}> to Sonic</Text>
+                Migrate{' '}
+                <Box as="span" display={{ base: 'none', xl: 'inline' }}>
+                  to Sonic
+                </Box>
               </Text>
             </Box>
           </HStack>
@@ -56,8 +59,8 @@ function SonicMigrationModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         <ModalBody color="grayText">
           <Text color="font.secondary">
             Sonic mainnet is live, offering enhanced performance and new opportunities. If you still
-            have assets on Fantom Opera, it's time to make the switch. We've prepared a migration
-            guide to help you get started.
+            have assets on Fantom Opera, it&apos;s time to make the switch. We&apos;ve prepared a
+            migration guide to help you get started.
           </Text>
 
           <Text color="font.secondary" mt="md">
@@ -73,10 +76,10 @@ function SonicMigrationModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
           <Button
             as={NextLink}
             href="https://docs.beets.fi/sonic"
+            mr="md"
             target="_blank"
             variant="primary"
             w="full"
-            mr="md"
           >
             <HStack>
               <span>Migration Guide</span>

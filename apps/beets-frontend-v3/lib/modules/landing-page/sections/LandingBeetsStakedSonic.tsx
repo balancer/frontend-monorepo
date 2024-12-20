@@ -6,26 +6,25 @@ import { StakedSonicComposabilitySvg } from '../components/StakedSonicComposabil
 import { StakedSonicDecentralizationSvg } from '../components/StakedSonicDecentralizationSvg'
 import { StakedSonicStakingRewardsSvg } from '../components/StakedSonicStakingRewardsSvg'
 import { SpearbitLogo } from '@repo/lib/shared/components/imgs/SpearbitLogo'
-import NextLink from 'next/link'
 
 export function LandingBeetsStakedSonic() {
   return (
     <LandingSectionContainer
-      title="stS: Liquid Staking on Sonic"
-      subtitle="stS redefines Liquid Staking by combining deep liquidity, robust security, and competitive yield into one powerful position. Purpose-built for Sonic, stS delivers an unparalleled staking experience—maximizing rewards without sacrificing flexibility."
       button={{
         text: 'Stake $S',
         href: '/stake',
       }}
+      subtitle="stS redefines Liquid Staking by combining deep liquidity, robust security, and competitive yield into one powerful position. Purpose-built for Sonic, stS delivers an unparalleled staking experience—maximizing rewards without sacrificing flexibility."
+      title="stS: Liquid Staking on Sonic"
     >
       <Box
+        backgroundImage={{ base: 'none', lg: 'url(/images/misc/staking-bg.png)' }}
+        backgroundPosition="left bottom"
+        backgroundRepeat="no-repeat"
+        backgroundSize="50%"
         bg="rgba(255, 255, 255, 0.05)"
         p="xl"
         w="full"
-        backgroundImage={{ base: 'none', lg: 'url(/images/misc/staking-bg.png)' }}
-        backgroundPosition="left bottom"
-        backgroundSize="50%"
-        backgroundRepeat="no-repeat"
       >
         <Grid
           gap="sm"
@@ -53,19 +52,19 @@ export function LandingBeetsStakedSonic() {
             </Box>
           </GridItem>
           <GridItem>
-            <Flex mb="xl" alignItems="center">
-              <Box width="170px" height="170px" bg="rgba(255, 255, 255, 0.05)">
+            <Flex alignItems="center" mb="xl">
+              <Box bg="rgba(255, 255, 255, 0.05)" height="170px" width="170px">
                 <StakedSonicDecentralizationSvg />
               </Box>
               <Box flex="1" ml="xl">
                 <Heading fontSize="2xl">Drive Decentralization</Heading>
                 <Text fontSize="lg" fontWeight="thin">
-                  Support Sonic's security by distributing consensus power, enhancing ecosystem
+                  Support Sonic&apos;s security by distributing consensus power, enhancing ecosystem
                   resilience.
                 </Text>
               </Box>
             </Flex>
-            <Flex mb="xl" alignItems="center">
+            <Flex alignItems="center" mb="xl">
               <Box flex="1" mr="xl">
                 <Heading fontSize="2xl">Composability</Heading>
                 <Text fontSize="lg" fontWeight="thin">
@@ -73,12 +72,12 @@ export function LandingBeetsStakedSonic() {
                   without pausing your rewards.
                 </Text>
               </Box>
-              <Box width="170px" height="170px" bg="rgba(255, 255, 255, 0.05)">
+              <Box bg="rgba(255, 255, 255, 0.05)" height="170px" width="170px">
                 <StakedSonicComposabilitySvg />
               </Box>
             </Flex>
             <Flex alignItems="center">
-              <Box width="170px" height="170px" bg="rgba(255, 255, 255, 0.05)">
+              <Box bg="rgba(255, 255, 255, 0.05)" height="170px" width="170px">
                 <StakedSonicStakingRewardsSvg />
               </Box>
               <Box flex="1" ml="xl">
@@ -93,7 +92,7 @@ export function LandingBeetsStakedSonic() {
                 >
                   <HStack gap="md">
                     <Heading fontSize="2xl">Audited by: </Heading>
-                    <SpearbitLogo height="36px" width="176px" color="#25f2d0" />
+                    <SpearbitLogo color="#25f2d0" height="36px" width="176px" />
                   </HStack>
                 </Link>
               </Box>

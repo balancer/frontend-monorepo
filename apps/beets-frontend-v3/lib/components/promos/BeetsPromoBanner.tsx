@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, useColorModeValue } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 
 export function BeetsPromoBanner() {
   return (
@@ -18,11 +18,11 @@ export function BeetsPromoBanner() {
       width="full"
     >
       <Box
-        width="100%"
-        height="100%"
         backgroundImage="/images/misc/pools-banner.png"
-        backgroundSize="cover"
         backgroundPosition="center"
+        backgroundSize="cover"
+        height="100%"
+        width="100%"
       />
     </Box>
   )

@@ -4,8 +4,8 @@ import React from 'react'
 
 export function SecurityOpenSourceSvg() {
   return (
-    <svg width="90" height="80" viewBox="0 0 90 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_28098_41)">
+    <svg fill="none" height="80" viewBox="0 0 90 80" width="90" xmlns="http://www.w3.org/2000/svg">
+      <g clipPath="url(#clip0_28098_41)">
         <path d="M0 44.75V68.98H24.22H48.45V44.75H0Z" fill="white" />
         <path
           d="M33.3044 64.5592C36.6485 64.5592 39.3594 61.8483 39.3594 58.5042C39.3594 55.1601 36.6485 52.4492 33.3044 52.4492C29.9603 52.4492 27.2494 55.1601 27.2494 58.5042C27.2494 61.8483 29.9603 64.5592 33.3044 64.5592Z"
@@ -34,7 +34,7 @@ export function SecurityOpenSourceSvg() {
       </g>
       <defs>
         <clipPath id="clip0_28098_41">
-          <rect width="90" height="80" fill="white" />
+          <rect fill="white" height="80" width="90" />
         </clipPath>
       </defs>
     </svg>
