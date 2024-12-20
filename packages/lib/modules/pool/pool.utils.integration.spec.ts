@@ -7,7 +7,6 @@ import {
 import {
   balWeth8020,
   osETHPhantom,
-  PoolExample,
   sDAIWeighted,
   v2SepoliaStableWithERC4626,
 } from './__mocks__/pool-examples/flat'
@@ -16,6 +15,7 @@ import {
   tokenSymbols,
   underlyingTokenSymbols,
 } from './__mocks__/pool-examples/pool-example-helpers'
+import { PoolExample } from './__mocks__/pool-examples/pool-examples.types'
 import {
   getCompositionDisplayTokens,
   getHeaderDisplayTokens,

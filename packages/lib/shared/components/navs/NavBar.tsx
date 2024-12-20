@@ -66,20 +66,24 @@ function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
         <VeBalLink />
       </Box>
       {(isDev || isStaging) && (
-        <Box as={motion.div} variants={fadeIn}>
-          {/* <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
-            Debug
-          </Link> */}
-          <Link
-            as={NextLink}
-            color={linkColorFor('/testooors')}
-            href="/testooors"
-            prefetch
-            variant="nav"
-          >
-            Test
-          </Link>
-        </Box>
+        <>
+          <Box as={motion.div} variants={fadeIn}>
+            <Link
+              as={NextLink}
+              color={linkColorFor('/debug/pools')}
+              href="/debug/pools"
+              prefetch
+              variant="nav"
+            >
+              Test-Pools
+            </Link>
+          </Box>
+          <Box as={motion.div} variants={fadeIn}>
+            <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
+              Debug
+            </Link>
+          </Box>
+        </>
       )}
     </HStack>
   )
