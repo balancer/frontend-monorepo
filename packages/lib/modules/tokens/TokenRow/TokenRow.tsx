@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
-import { GqlChain, GqlPoolTokenDisplay } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -25,7 +25,7 @@ import { ChevronDown } from 'react-feather'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
-import { getNestedPoolPath } from '../../pool/pool.utils'
+import { getNestedPoolPath, getPoolDisplayTokens } from '../../pool/pool.utils'
 import { ApiToken } from '../../pool/pool.types'
 
 export type TokenInfoProps = {
@@ -33,7 +33,7 @@ export type TokenInfoProps = {
   symbol?: string
   chain: GqlChain
   token?: ApiToken
-  displayToken?: GqlPoolTokenDisplay
+  displayToken?: GqlPoolTokenDetail
   pool?: Pool
   disabled?: boolean
   showSelect?: boolean
@@ -150,7 +150,8 @@ export default function TokenRow({
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
   const token = getToken(address, chain)
-  const displayToken = pool?.displayTokens.find(t => isSameAddress(t.address, address))
+  const displayTokens = pool ? getPoolDisplayTokens(pool) : []
+  const displayToken = displayTokens.find(t => isSameAddress(t.address, address))
 
   // TokenRowTemplate default props
   const props: TokenInfoProps = {

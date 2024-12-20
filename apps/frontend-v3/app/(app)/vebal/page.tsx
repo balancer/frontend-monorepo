@@ -2,7 +2,7 @@ import { Button, Stack } from '@chakra-ui/react'
 
 import NextLink from 'next/link'
 
-export default function VebalPage() {
+export default function VeBALPage() {
   return (
     <Stack gap="lg" maxW="200px">
       <Button as={NextLink} href="/vebal/manage" size="lg" variant="primary">

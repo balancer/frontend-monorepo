@@ -3,7 +3,7 @@ import { PoolName } from '@repo/lib/modules/pool/PoolName'
 import { Pool } from '@repo/lib/modules/pool/PoolProvider'
 import { ClaimModal } from '@repo/lib/modules/pool/actions/claim/ClaimModal'
 import { ClaimProvider } from '@repo/lib/modules/pool/actions/claim/ClaimProvider'
-import { ChainSlug, getChainSlug } from '@repo/lib/modules/pool/pool.utils'
+import { ChainSlug, getChainSlug, getPoolDisplayTokens } from '@repo/lib/modules/pool/pool.utils'
 // eslint-disable-next-line max-len
 import { ClaimNetworkPoolsLayout } from '@repo/lib/modules/portfolio/PortfolioClaim/ClaimNetworkPools/ClaimNetworkPoolsLayout'
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
@@ -73,7 +73,11 @@ export default function NetworkClaim() {
                         </Text>
                       </HStack>
                       <HStack w="full">
-                        <TokenIconStack chain={pool.chain} size={36} tokens={pool.displayTokens} />
+                        <TokenIconStack
+                          chain={pool.chain}
+                          size={36}
+                          tokens={getPoolDisplayTokens(pool)}
+                        />
                         {hasMultipleClaims && (
                           <Button
                             minW="60px"
