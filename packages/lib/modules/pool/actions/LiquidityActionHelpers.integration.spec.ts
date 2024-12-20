@@ -485,6 +485,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           "index": 0,
           "isBufferAllowed": true,
           "isErc4626": false,
+          "logoURI": "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0x9c58bacc331c9aa871afd802db6379a98e80cedb.png",
           "name": "Gnosis Token on xDai",
           "priority": 0,
           "symbol": "GNO",
