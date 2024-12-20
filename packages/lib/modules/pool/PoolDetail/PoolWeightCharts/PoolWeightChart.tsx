@@ -31,7 +31,7 @@ export interface ChartSizeValues {
   haloTop: string
   haloLeft: string
   haloWidth: string
-  haloHeigth: string
+  haloHeight: string
 }
 
 export interface PoolWeightChartColorDef {
@@ -86,7 +86,7 @@ const smallSize: ChartSizeValues = {
   haloTop: '40%',
   haloLeft: '55px',
   haloWidth: '40px',
-  haloHeigth: '40px',
+  haloHeight: '40px',
 }
 
 const normalSize: ChartSizeValues = {
@@ -96,7 +96,7 @@ const normalSize: ChartSizeValues = {
   haloTop: '49%',
   haloLeft: '95px',
   haloWidth: '60px',
-  haloHeigth: '60px',
+  haloHeight: '60px',
 }
 
 function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boolean }) {
