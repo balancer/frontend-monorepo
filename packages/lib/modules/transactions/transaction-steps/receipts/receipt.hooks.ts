@@ -8,6 +8,9 @@ import {
   parseAddLiquidityReceipt,
   parseRemoveLiquidityReceipt,
   parseSwapReceipt,
+  parseLstStakeReceipt,
+  parseLstUnstakeReceipt,
+  parseLstWithdrawReceipt,
 } from './receipt-parsers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 
@@ -56,6 +59,43 @@ export function useSwapReceipt(props: BaseReceiptProps) {
   return {
     ...result,
     sentToken: data?.sentToken,
+    receivedToken: data?.receivedToken,
+  }
+}
+
+export type LstStakeReceiptResult = ReturnType<typeof useLstStakeReceipt>
+
+export function useLstStakeReceipt(props: BaseReceiptProps) {
+  const result = useTxReceipt({ ...props, parseReceipt: parseLstStakeReceipt })
+  const data = result.data as ReturnType<typeof parseLstStakeReceipt> | undefined
+
+  return {
+    ...result,
+    receivedToken: data?.receivedToken,
+  }
+}
+
+// TODO: unstake receipt is not really used but this might change in the future
+export type LstUnstakeReceiptResult = ReturnType<typeof useLstUnstakeReceipt>
+
+export function useLstUnstakeReceipt(props: BaseReceiptProps) {
+  const result = useTxReceipt({ ...props, parseReceipt: parseLstUnstakeReceipt })
+  const data = result.data as ReturnType<typeof parseLstUnstakeReceipt> | undefined
+
+  return {
+    ...result,
+    receivedToken: data?.receivedToken,
+  }
+}
+
+export type LstWithdrawReceiptResult = ReturnType<typeof useLstWithdrawReceipt>
+
+export function useLstWithdrawReceipt(props: BaseReceiptProps) {
+  const result = useTxReceipt({ ...props, parseReceipt: parseLstWithdrawReceipt })
+  const data = result.data as ReturnType<typeof parseLstWithdrawReceipt> | undefined
+
+  return {
+    ...result,
     receivedToken: data?.receivedToken,
   }
 }

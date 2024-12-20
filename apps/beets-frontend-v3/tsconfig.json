@@ -12,12 +12,12 @@
       "@/*": ["./*"],
       "@repo/*": ["../../packages/*"]
     },
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "jsx": "preserve"
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "global.d.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "../../packages/lib/global.d.ts"

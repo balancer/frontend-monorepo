@@ -4,10 +4,10 @@ import { colors as baseColors } from '@repo/lib/shared/services/chakra/themes/ba
 export const colors = {
   ...baseColors,
   base: {
-    light: 'background.level1',
-    hslLight: '44,22%,90%',
-    dark: 'blue',
-    hslDark: '216,12%,25%',
+    light: '#E6F9C4',
+    hslLight: '103, 49%, 71%',
+    dark: '#363636',
+    hslDark: '0, 0%, 17%',
   },
 }
 

@@ -132,7 +132,7 @@ export function PoolContracts({ ...props }: CardProps) {
 
     if (hasGaugeAddress) {
       contracts.push({
-        label: 'veBAL gauge',
+        label: 'Incentives gauge',
         address: gaugeAddress,
         explorerLink: gaugeExplorerLink,
       })

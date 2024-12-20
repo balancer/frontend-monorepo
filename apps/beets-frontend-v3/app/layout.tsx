@@ -12,25 +12,13 @@ import { FooterContainer } from '@/lib/components/footer/FooterContainer'
 import { DEFAULT_THEME_COLOR_MODE } from '@repo/lib/shared/services/chakra/themes/base/foundations'
 import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
+import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 export const metadata: Metadata = {
-  title: 'Beets DeFi Liquidity Pools',
-  description: `Explore DeFi liquidity pools and swap tokens. Provide liquidity to accumulate yield from swap fees while retaining your token exposure as prices move.`,
-  icons: [
-    { rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      url: '/favicon-light.png',
-      media: '(prefers-color-scheme: light)',
-    },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      url: '/favicon-dark.png',
-      media: '(prefers-color-scheme: dark)',
-    },
-  ],
+  title: 'Beets',
+  description: `The Flagship LST Hub on Sonic. From seamless staking to earning real yield on LST-focused liquidity pools, beets is the ultimate destination for your liquid-staked tokens.`,
+  icons: [{ rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' }],
+  metadataBase: new URL('https://zen.beets.fi'),
 }
 
 export default function RootLayout({ children }: PropsWithChildren) {
@@ -41,18 +29,27 @@ export default function RootLayout({ children }: PropsWithChildren) {
         style={{ marginRight: '0px !important' }} // Required to prevent layout shift introduced by Rainbowkit
         suppressHydrationWarning
       >
-        <NextTopLoader color="#7f6ae8" showSpinner={false} />
-        <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
-          <ThemeProvider>
-            <Providers>
-              <GlobalAlerts />
-              <NavBarContainer />
-              {children}
-              <FooterContainer />
-              <SpeedInsights />
-            </Providers>
-          </ThemeProvider>
-        </ColorThemeProvider>
+        <div
+          style={{
+            backgroundImage: 'url(/images/misc/pattern-sml-7@2x.webp)',
+            backgroundSize: '8%',
+          }}
+        >
+          <NextTopLoader color="#7f6ae8" showSpinner={false} />
+          <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
+            <ThemeProvider>
+              <Providers>
+                <VebalLockDataProvider>
+                  <GlobalAlerts />
+                  <NavBarContainer />
+                  {children}
+                  <FooterContainer />
+                  <SpeedInsights />
+                </VebalLockDataProvider>
+              </Providers>
+            </ThemeProvider>
+          </ColorThemeProvider>
+        </div>
       </body>
     </html>
   )

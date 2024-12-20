@@ -12,6 +12,7 @@ export type AppLink = {
   href: string
   label?: string
   icon?: ReactNode
+  isExternal?: boolean
 }
 
 export function useNav() {

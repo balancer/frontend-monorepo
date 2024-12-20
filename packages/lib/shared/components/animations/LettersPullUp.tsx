@@ -7,12 +7,16 @@ import * as React from 'react'
 export function LettersPullUp({
   text,
   initialColor = '#457dff',
+  finalColorLight = '#000000',
+  finalColorDark = '#ffffff',
 }: {
   text: string
   initialColor?: string
+  finalColorLight?: string
+  finalColorDark?: string
 }) {
   const splittedText = text.split('')
-  const finalColor = useColorModeValue('#2D3748', '#E5D3BE')
+  const finalColor = useColorModeValue(finalColorLight, finalColorDark)
 
   const pullupVariant = {
     initial: { y: -20, x: -10, opacity: 0, color: initialColor, filter: 'blur(10px)' },

@@ -24,10 +24,14 @@ const networksByChainId = keyBy(config.networks, 'chainId')
 
 /**
  * Fetches network config by chainId or network name type from API (GqlChain). If chain
- * param is not provided or incorrect, it will return mainnet config.
+ * param is not provided or incorrect, it will return the defaultNetwork config.
  */
-export function getNetworkConfig(chain?: GqlChain | number): NetworkConfig {
-  if (!chain) return config.networks.MAINNET
+export function getNetworkConfig(
+  chain?: GqlChain | number,
+  defaultNetwork?: GqlChain
+): NetworkConfig {
+  // cannot get default network directly from config here
+  if (!chain) return config.networks[defaultNetwork || GqlChain.Mainnet]
 
   if (typeof chain === 'number') {
     return networksByChainId[chain] || config.networks.MAINNET

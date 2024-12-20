@@ -25,7 +25,7 @@ const chainToRpcMap: Record<GqlChain, string | undefined> = {
   [GqlChain.Gnosis]: dRpcUrl('gnosis'),
   [GqlChain.Mode]: dRpcUrl('mode'),
   [GqlChain.Zkevm]: dRpcUrl('polygon-zkevm'),
-  [GqlChain.Sonic]: '', //TODO: groninge will fix it in another PR
+  [GqlChain.Sonic]: dRpcUrl('sonic'),
 }
 
 function getRpcUrl(chain: string) {

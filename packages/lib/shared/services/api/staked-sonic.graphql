@@ -1,0 +1,13 @@
+query GetStakedSonicData {
+  stsGetGqlStakedSonicData {
+    delegatedValidators {
+      assetsDelegated
+      validatorId
+    }
+    exchangeRate
+    stakingApr
+    totalAssets
+    totalAssetsDelegated
+    totalAssetsPool
+  }
+}
