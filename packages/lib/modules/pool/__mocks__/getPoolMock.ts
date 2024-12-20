@@ -12,8 +12,8 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { nested50WETH_50_3poolId } from '@repo/lib/debug-helpers'
 import { Address } from 'viem'
-import { PoolExample } from './pool-examples/flat'
 import { PoolCore } from '../pool.types'
+import { PoolExample } from './pool-examples/pool-examples.types'
 
 function astToQueryString(ast: any): string {
   return print(ast)
