@@ -30,7 +30,7 @@ import { Pool, usePool } from '../PoolProvider'
 import { PoolTypeTag } from './PoolTypeTag'
 import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
 import {
-  getCompositionDisplayTokens,
+  getCompositionTokens,
   getCompositionDisplayTokensWithPossibleNestedTokensWithBalance,
 } from '../pool.tokens.display'
 
@@ -126,7 +126,7 @@ export function PoolComposition() {
   const [height, setHeight] = useState(0)
   const { getErc4626Metadata } = usePoolsMetadata()
 
-  const displayTokens = getCompositionDisplayTokens(pool as PoolCore)
+  const displayTokens = getCompositionTokens(pool as PoolCore)
   const totalLiquidity = calcTotalUsdValue(displayTokens, chain)
   const erc4626Metadata = getErc4626Metadata(pool)
 

@@ -13,7 +13,7 @@ import { getPoolPath } from '../../pool.utils'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import { usePoolList } from '../PoolListProvider'
 import { PoolListTokenPills } from '../PoolListTokenPills'
-import { getHeaderDisplayTokens } from '../../pool.tokens.display'
+import { getUserReferenceTokens } from '../../pool.tokens.display'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -24,7 +24,7 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
 function PoolName({ pool }: { pool: PoolListItem }) {
   const isFirstToken = (index: number) => index === 0
-  const displayTokens = getHeaderDisplayTokens(pool as PoolCore)
+  const displayTokens = getUserReferenceTokens(pool as PoolCore)
   const zIndices = Array.from({ length: displayTokens.length }, (_, index) => index).reverse()
 
   return (

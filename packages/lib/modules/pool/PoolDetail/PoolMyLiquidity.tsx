@@ -54,7 +54,7 @@ import {
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { PoolCore } from '../pool.types'
-import { getHeaderTokensWithPossibleNestedTokensWithBalance } from '../pool.tokens.display'
+import { getUserReferenceTokensWithPossibleNestedTokensWithBalance } from '../pool.tokens.display'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -258,7 +258,7 @@ export default function PoolMyLiquidity() {
     }
   }
 
-  const displayTokens = getHeaderTokensWithPossibleNestedTokensWithBalance(pool as PoolCore)
+  const displayTokens = getUserReferenceTokensWithPossibleNestedTokensWithBalance(pool as PoolCore)
 
   return (
     <Card h="fit-content" ref={myLiquiditySectionRef}>
