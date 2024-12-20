@@ -18,6 +18,12 @@ export interface TokensConfig {
     symbol: string
     decimals: number
   }
+  stakedAsset?: {
+    name: string
+    address: Address
+    symbol: string
+    decimals: number
+  }
   supportedWrappers?: {
     baseToken: Address
     wrappedToken: Address
@@ -33,6 +39,7 @@ export interface TokensConfig {
 
 export interface ContractsConfig {
   multicall2: Address
+  multicall3?: Address
   balancer: {
     vaultV2: Address
     // TODO: make it required when v3 is deployed in all networks
@@ -47,6 +54,13 @@ export interface ContractsConfig {
     relayerV6: Address
     minter: Address
     WeightedPool2TokensFactory?: Address
+  }
+  beets?: {
+    lstStaking: Address
+    lstStakingProxy: Address
+    // TODO: make it required when fantom is removed
+    sfcProxy?: Address
+    sfc?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address

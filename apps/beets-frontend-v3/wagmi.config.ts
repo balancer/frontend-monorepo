@@ -1,7 +1,7 @@
 import { defineConfig, loadEnv } from '@wagmi/cli'
 import { etherscan } from '@wagmi/cli/plugins'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-
+import sonicNetworkConfig from '@repo/lib/config/networks/sonic'
 import { erc20Abi } from 'viem'
 
 const CONTRACTS: Array<{ name: string; abi: any }> = [
@@ -18,7 +18,7 @@ export default defineConfig(() => {
   })
 
   return {
-    out: 'lib/modules/web3/contracts/abi/generated.ts',
+    out: '../../packages/lib/modules/web3/contracts/abi/beets/generated.ts',
     contracts: CONTRACTS,
     plugins: [
       etherscan({
@@ -71,6 +71,20 @@ export default defineConfig(() => {
           {
             name: 'veDelegationProxy',
             address: mainnetNetworkConfig.contracts.veDelegationProxy,
+          },
+        ],
+      }),
+      etherscan({
+        apiKey: env.SONICSCAN_API_KEY,
+        chainId: 146,
+        contracts: [
+          {
+            name: 'SonicStaking',
+            address: sonicNetworkConfig.contracts.beets?.lstStaking,
+          },
+          {
+            name: 'SFC',
+            address: sonicNetworkConfig.contracts.beets?.sfc,
           },
         ],
       }),

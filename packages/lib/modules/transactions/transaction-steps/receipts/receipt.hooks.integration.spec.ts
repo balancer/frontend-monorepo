@@ -6,7 +6,12 @@ import { ethAddress, polAddress } from '@repo/lib/debug-helpers'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, Hash } from 'viem'
 import { gnosis, polygon } from 'viem/chains'
-import { useAddLiquidityReceipt, useRemoveLiquidityReceipt, useSwapReceipt } from './receipt.hooks'
+import {
+  useAddLiquidityReceipt,
+  useLstStakeReceipt,
+  useRemoveLiquidityReceipt,
+  useSwapReceipt,
+} from './receipt.hooks'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 
 async function testAddReceipt(
@@ -51,6 +56,23 @@ async function testSwapReceipt(
 ) {
   const { result } = testHook(() => {
     return useSwapReceipt({
+      txHash,
+      userAddress,
+      chain,
+      protocolVersion,
+    })
+  })
+  return result
+}
+
+async function testLstStakeReceipt(
+  userAddress: Address,
+  txHash: Hash,
+  chain: GqlChain,
+  protocolVersion: ProtocolVersion = 3
+) {
+  const { result } = testHook(() => {
+    return useLstStakeReceipt({
       txHash,
       userAddress,
       chain,
@@ -253,13 +275,55 @@ describe('queries swap transaction', () => {
       tokenAddress: ethAddress,
     })
   })
-})
 
-test('returns is loading when user is not provided', async () => {
-  const userAddress = '' as Address
-  const txHash = '0x887f144bdfe73c7e585b0630361038bda9665aa213933f637d1d6fae9046652e'
+  test('returns is loading when user is not provided', async () => {
+    const userAddress = '' as Address
+    const txHash = '0x887f144bdfe73c7e585b0630361038bda9665aa213933f637d1d6fae9046652e'
 
-  const result = await testAddReceipt(userAddress, txHash)
+    const result = await testAddReceipt(userAddress, txHash)
 
-  await waitFor(() => expect(result.current.isLoading).toBeTruthy())
+    await waitFor(() => expect(result.current.isLoading).toBeTruthy())
+  })
+
+  describe('queries LST stake transaction', () => {
+    const sFTMxAddress = '0xd7028092c830b5c8fce061af2e593413ebbc1fc1'
+
+    test('when staking 1 FTM to get sFTMx', async () => {
+      const userAddress = '0xf76142b79Db34E57852d68F9c52C0E24f7349647'
+      // https://ftmscan.com/tx/0x5b7e58dd5204253a865a141640f142d4945b614acf5fc8aed3fb1408c0bdbce1
+      const txHash = '0x5b7e58dd5204253a865a141640f142d4945b614acf5fc8aed3fb1408c0bdbce1'
+
+      const result = await testLstStakeReceipt(userAddress, txHash, GqlChain.Fantom)
+
+      await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+      expect(result.current.receivedToken).toEqual([
+        {
+          humanAmount: '0.865720333575772047',
+          tokenAddress: sFTMxAddress,
+        },
+      ])
+    })
+  })
+
+  describe('queries Sonic stake TX', () => {
+    const sTsAddress = '0xe5da20f15420ad15de0fa650600afc998bbe3955' // Beets staked
+
+    test.only('when staking 1 FTM to get sFTMx', async () => {
+      const userAddress = '0x6B808e314d7f758076922297bcD2eCd56aFe7B19'
+      // https://sonicscan.org/tx/0x5f39420411e1ce1490e84ff8d639a4897a2a5cbd2d5f7ece53b26567d0d2dd50
+      const txHash = '0x5f39420411e1ce1490e84ff8d639a4897a2a5cbd2d5f7ece53b26567d0d2dd50'
+
+      const result = await testLstStakeReceipt(userAddress, txHash, GqlChain.Sonic)
+
+      await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+      expect(result.current.receivedToken).toEqual([
+        {
+          humanAmount: 'TODO',
+          tokenAddress: sTsAddress,
+        },
+      ])
+    })
+  })
 })
