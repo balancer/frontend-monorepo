@@ -8,7 +8,6 @@ import {
   GetTokensQuery,
   GetTokensQueryVariables,
   GqlChain,
-  GqlPoolTokenDetail,
   GqlToken,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
@@ -22,7 +21,7 @@ import { useSkipInitialQuery } from '@repo/lib/shared/hooks/useSkipInitialQuery'
 import { getNativeAssetAddress, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
 import { mins } from '@repo/lib/shared/utils/time'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { ApiToken } from '../pool/pool.types'
+import { ApiToken, ApiTokenWithBalance } from '../pool/pool.types'
 
 export type UseTokensResult = ReturnType<typeof _useTokens>
 export const TokensContext = createContext<UseTokensResult | null>(null)
@@ -154,7 +153,7 @@ export function _useTokens(
     []
   )
 
-  const calcTotalUsdValue = useCallback((displayTokens: GqlPoolTokenDetail[], chain: GqlChain) => {
+  const calcTotalUsdValue = useCallback((displayTokens: ApiTokenWithBalance[], chain: GqlChain) => {
     return displayTokens
       .reduce((total, token) => {
         return total.plus(bn(priceFor(token.address, chain)).times(token.balance))
