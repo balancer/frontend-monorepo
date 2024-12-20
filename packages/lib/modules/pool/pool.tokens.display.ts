@@ -74,17 +74,13 @@ function excludeNestedBptTokens(tokens: PoolToken[] | ApiToken[], poolAddress: s
     .filter(token => token !== undefined) as ApiToken[]
 }
 
-export function getUserReferenceTokensWithPossibleNestedTokensWithBalance(
+export function getUserReferenceTokensWithPossibleNestedTokens(
   pool: PoolCore
 ): ApiTokenWithBalance[] {
-  return getUserReferenceTokensWithPossibleNestedTokens(pool) as ApiTokenWithBalance[]
+  return addPossibleNestedTokens(getUserReferenceTokens(pool as PoolCore)) as ApiTokenWithBalance[]
 }
 
-export function getUserReferenceTokensWithPossibleNestedTokens(pool: PoolCore) {
-  return addPossibleNestedTokens(getUserReferenceTokens(pool as PoolCore))
-}
-
-export function getCompositionDisplayTokensWithPossibleNestedTokensWithBalance(pool: PoolCore) {
+export function getCompositionTokensWithPossibleNestedTokensWithBalance(pool: PoolCore) {
   return addPossibleNestedTokens(getCompositionTokens(pool as PoolCore)) as ApiTokenWithBalance[]
 }
 
