@@ -18,11 +18,11 @@ export function LandingBeetsStakedSonic() {
       title="stS: Liquid Staking on Sonic"
     >
       <Box
+        backgroundColor="rgba(255, 255, 255, 0.05)"
         backgroundImage={{ base: 'none', lg: 'url(/images/misc/staking-bg.png)' }}
         backgroundPosition="left bottom"
         backgroundRepeat="no-repeat"
         backgroundSize="50%"
-        bg="rgba(255, 255, 255, 0.05)"
         p="xl"
         w="full"
       >
