@@ -6,7 +6,6 @@ import { StakedSonicComposabilitySvg } from '../components/StakedSonicComposabil
 import { StakedSonicDecentralizationSvg } from '../components/StakedSonicDecentralizationSvg'
 import { StakedSonicStakingRewardsSvg } from '../components/StakedSonicStakingRewardsSvg'
 import { SpearbitLogo } from '@repo/lib/shared/components/imgs/SpearbitLogo'
-import NextLink from 'next/link'
 
 export function LandingBeetsStakedSonic() {
   return (
@@ -19,11 +18,11 @@ export function LandingBeetsStakedSonic() {
       title="stS: Liquid Staking on Sonic"
     >
       <Box
+        backgroundColor="rgba(255, 255, 255, 0.05)"
         backgroundImage={{ base: 'none', lg: 'url(/images/misc/staking-bg.png)' }}
         backgroundPosition="left bottom"
         backgroundRepeat="no-repeat"
         backgroundSize="50%"
-        backgroundColor="rgba(255, 255, 255, 0.05)"
         p="xl"
         w="full"
       >
@@ -60,7 +59,7 @@ export function LandingBeetsStakedSonic() {
               <Box flex="1" ml="xl">
                 <Heading fontSize="2xl">Drive Decentralization</Heading>
                 <Text fontSize="lg" fontWeight="thin">
-                  Support Sonic's security by distributing consensus power, enhancing ecosystem
+                  Support Sonic&apos;s security by distributing consensus power, enhancing ecosystem
                   resilience.
                 </Text>
               </Box>

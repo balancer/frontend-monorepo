@@ -23,7 +23,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
     const handler = selectNestedHandler(nestedPool)
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '100', tokenAddress: daiAddress },
+      { humanAmount: '100', tokenAddress: daiAddress, symbol: 'DAI' },
     ]
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
     expect(priceImpact).toBeGreaterThan(0)
@@ -33,7 +33,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
     const handler = selectNestedHandler(nestedPool)
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: daiAddress },
+      { humanAmount: '1', tokenAddress: daiAddress, symbol: 'DAI' },
     ]
 
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
@@ -45,10 +45,10 @@ describe('When adding nested liquidity for a weighted pool', () => {
     const handler = selectNestedHandler(nestedPool)
 
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: wETHAddress },
-      { humanAmount: '1', tokenAddress: daiAddress },
-      { humanAmount: '1', tokenAddress: usdcAddress },
-      { humanAmount: '1', tokenAddress: usdtAddress },
+      { humanAmount: '1', tokenAddress: wETHAddress, symbol: 'WETH' },
+      { humanAmount: '1', tokenAddress: daiAddress, symbol: 'DAI' },
+      { humanAmount: '1', tokenAddress: usdcAddress, symbol: 'USDC' },
+      { humanAmount: '1', tokenAddress: usdtAddress, symbol: 'USDT' },
     ]
 
     const result = await handler.simulate(humanAmountsIn, defaultTestUserAccount)
@@ -58,7 +58,7 @@ describe('When adding nested liquidity for a weighted pool', () => {
 
   test('builds Tx Config', async () => {
     const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-      { humanAmount: '1', tokenAddress: daiAddress },
+      { humanAmount: '1', tokenAddress: daiAddress, symbol: 'DAI' },
     ]
 
     const handler = selectNestedHandler(nestedPool)

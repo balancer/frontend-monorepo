@@ -1,17 +1,17 @@
 import { Box, Button, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { fNum } from '@repo/lib/shared/utils/numbers'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { format } from 'date-fns'
 import { useLst } from '../LstProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { UserWithdraw } from '../hooks/useGetUserWithdraws'
 import { formatUnits } from 'viem'
+import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 
 interface Props extends GridProps {
   withdrawal: UserWithdraw
   keyValue: number
-  token: GqlToken | undefined
+  token: ApiToken | undefined
   onOpen(): void
 }
 
@@ -44,7 +44,7 @@ export function LstWithdrawTableRow({ withdrawal, keyValue, token, onOpen, ...re
                   size={24}
                 />
               )}
-              <Text>{formatUnits(withdrawal.assetAmount, 18)}</Text>
+              <Text>{fNum('token', formatUnits(withdrawal.assetAmount, 18))}</Text>
             </HStack>
           </GridItem>
           <GridItem>{format(new Date(requestTimestamp * 1000), 'dd MMMM yyyy HH:mm')}</GridItem>

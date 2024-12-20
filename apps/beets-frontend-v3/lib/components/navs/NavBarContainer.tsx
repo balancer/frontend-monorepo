@@ -12,7 +12,6 @@ import { motion } from 'framer-motion'
 import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { MaBeetsNavLink } from './MaBeetsNavLink'
 import { SonicMigrationLink } from './SonicMigrationLink'
-import Image from 'next/image'
 import { FantomToSonicSvg } from '../imgs/FantomToSonicSvg'
 import { PoolsLink } from './PoolsLink'
 

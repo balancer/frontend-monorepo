@@ -27,7 +27,8 @@ export function Token() {
         <VStack>
           <Heading fontSize="5xl">The $BEETS token</Heading>
           <Text fontSize="2xl" fontWeight="thin" maxW="full" w="2xl">
-            The $BEETS token is our primary method of incentive and reward. But it's so much more.
+            The $BEETS token is our primary method of incentive and reward. But it&apos;s so much
+            more.
           </Text>
         </VStack>
       </Center>

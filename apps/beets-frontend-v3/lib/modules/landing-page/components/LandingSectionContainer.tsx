@@ -1,4 +1,4 @@
-import { Center, Heading, VStack, Text, Button, Box, Flex } from '@chakra-ui/react'
+import { Center, Heading, VStack, Text, Button, Flex } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import React from 'react'
 import NextLink from 'next/link'

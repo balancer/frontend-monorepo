@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  Heading,
-  HStack,
   Link,
   Popover,
   PopoverArrow,
@@ -11,7 +9,6 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
-  Text,
 } from '@chakra-ui/react'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import NextLink from 'next/link'
@@ -50,7 +47,7 @@ export function PoolsLink() {
 
   return (
     <Popover>
-      {({ isOpen, onClose }) => (
+      {({ onClose }) => (
         <>
           <PopoverTrigger>
             <Button

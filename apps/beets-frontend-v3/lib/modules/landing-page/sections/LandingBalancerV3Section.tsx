@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Flex, GridItem, Heading, Text, Grid, Center } from '@chakra-ui/react'
+import { Box, GridItem, Heading, Text, Grid, Center } from '@chakra-ui/react'
 import React from 'react'
 import { BalancerV3BoostedPoolsSvg } from '../components/BalancerV3BoostedPoolsSvg'
 import { BalancerV3CustomPoolsSvg } from '../components/BalancerV3CustomPoolsSvg'

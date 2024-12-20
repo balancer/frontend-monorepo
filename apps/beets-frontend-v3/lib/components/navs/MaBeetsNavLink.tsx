@@ -6,8 +6,6 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  UnorderedList,
-  ListItem,
   ModalFooter,
   Button,
   HStack,
@@ -61,8 +59,8 @@ export function MaBeetsRedirectModal({
           </Text>
 
           <Text color="font.secondary" mt="md">
-            It's recommended that you migrate Fantom maBEETS relics to Sonic. For more information,
-            refrer to the migration guide at{' '}
+            It&apos;s recommended that you migrate Fantom maBEETS relics to Sonic. For more
+            information, refer to the migration guide at{' '}
             <Link href="https://docs.beets.fi/sonic" target="_blank">
               https://docs.beets.fi/sonic
             </Link>

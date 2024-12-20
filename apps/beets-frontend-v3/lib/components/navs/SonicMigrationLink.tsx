@@ -59,8 +59,8 @@ function SonicMigrationModal({ isOpen, onClose }: { isOpen: boolean; onClose: ()
         <ModalBody color="grayText">
           <Text color="font.secondary">
             Sonic mainnet is live, offering enhanced performance and new opportunities. If you still
-            have assets on Fantom Opera, it's time to make the switch. We've prepared a migration
-            guide to help you get started.
+            have assets on Fantom Opera, it&apos;s time to make the switch. We&apos;ve prepared a
+            migration guide to help you get started.
           </Text>
 
           <Text color="font.secondary" mt="md">
