@@ -63,11 +63,60 @@ async function getUserReferenceTokensWithPossibleNestedTokensSymbols(
   return tokenSymbols(getUserReferenceTokensWithPossibleNestedTokens(pool) as ApiToken[])
 }
 
+async function getUserReferenceTokensWeights(
+  poolExample: PoolExample
+): Promise<(string | undefined)[]> {
+  const pool = await getPoolForTest(poolExample)
+
+  return getUserReferenceTokens(pool).map(t => t.weight)
+}
+
+async function getUserReferenceTokensURIs(
+  poolExample: PoolExample
+): Promise<(string | null | undefined)[]> {
+  const pool = await getPoolForTest(poolExample)
+
+  return getUserReferenceTokens(pool).map(t => t.logoURI)
+}
+
+async function getCompositionTokensWeights(
+  poolExample: PoolExample
+): Promise<(string | undefined)[]> {
+  const pool = await getPoolForTest(poolExample)
+
+  return getCompositionTokens(pool).map(t => t.weight)
+}
+
+async function getCompositionTokensURIs(
+  poolExample: PoolExample
+): Promise<(string | null | undefined)[]> {
+  const pool = await getPoolForTest(poolExample)
+
+  return getCompositionTokens(pool).map(t => t.logoURI)
+}
+
 describe('getDisplayTokens for flat pools', () => {
   it('BAL WETH 80 20', async () => {
     expect(await getCompositionTokenSymbols(balWeth8020)).toEqual(['BAL', 'WETH'])
 
     expect(await getUserReferenceTokenSymbols(balWeth8020)).toEqual(['BAL', 'WETH'])
+
+    expect(await getUserReferenceTokensWeights(balWeth8020)).toEqual(['0.8', '0.2'])
+    expect(await getCompositionTokensWeights(balWeth8020)).toEqual(['0.8', '0.2'])
+
+    expect(await getUserReferenceTokensURIs(balWeth8020)).toMatchInlineSnapshot(`
+      [
+        "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xba100000625a3754423978a60c9317c58a424e3d.png",
+        "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
+      ]
+    `)
+
+    expect(await getCompositionTokensURIs(balWeth8020)).toMatchInlineSnapshot(`
+      [
+        "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xba100000625a3754423978a60c9317c58a424e3d.png",
+        "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
+      ]
+    `)
 
     expect(await getUserReferenceTokensWithPossibleNestedTokensSymbols(balWeth8020)).toEqual([
       'BAL',
