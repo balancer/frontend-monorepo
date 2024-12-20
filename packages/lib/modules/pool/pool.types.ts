@@ -146,7 +146,10 @@ export type TokenCore = {
   index: number
 }
 
-export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'>
+export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & {
+  nestedTokens?: ApiToken[]
+  underlyingToken?: ApiToken
+}
 
 export enum PoolListDisplayType {
   Name = 'name',

@@ -154,7 +154,7 @@ export function getSpenderForAddLiquidity(pool: Pool): Address {
   return vaultAddress
 }
 
-function buildApiToken(poolToken: PoolToken) {
+function buildApiToken(poolToken: PoolToken): ApiToken {
   return {
     ...poolToken,
     // The following fields are (wrongly) optional in the generated PoolToken schema so we have to cast them to satisfy TS
@@ -163,5 +163,5 @@ function buildApiToken(poolToken: PoolToken) {
     chain: poolToken.chain as GqlChain,
     priority: poolToken.priority as number,
     tradable: poolToken.tradable as boolean,
-  }
+  } as ApiToken
 }
