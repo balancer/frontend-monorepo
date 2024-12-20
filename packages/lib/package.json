@@ -51,7 +51,7 @@
     "echarts-for-react": "^3.0.2",
     "fathom-client": "^3.7.0",
     "framer-motion": "^10.13.0",
-    "graphql": "^16.7.1",
+    "graphql": "^16.10.0",
     "graphql-request": "^6.1.0",
     "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
