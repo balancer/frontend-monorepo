@@ -2,7 +2,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { PoolCore, PoolListItem } from './pool.types'
 import { HStack, Text, TextProps, Box } from '@chakra-ui/react'
 import { FeaturedPool, Pool } from './PoolProvider'
-import { getHeaderDisplayTokens } from './pool.tokens.display'
+import { getUserReferenceTokens } from './pool.tokens.display'
 
 interface PoolNameProps extends TextProps {
   pool: PoolListItem | Pool | FeaturedPool
@@ -16,7 +16,7 @@ function isFeaturedPool(pool: PoolListItem | Pool | FeaturedPool): pool is Featu
 }
 
 export function PoolName({ pool, MemoizedMainAprTooltip, isCarousel, ...rest }: PoolNameProps) {
-  const displayTokens = getHeaderDisplayTokens(pool as PoolCore).filter(
+  const displayTokens = getUserReferenceTokens(pool as PoolCore).filter(
     token => token.address !== pool.address
   )
 

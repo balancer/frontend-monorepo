@@ -5,7 +5,7 @@ import { TokenIcon } from '../../tokens/TokenIcon'
 import { TokenIconStack } from '../../tokens/TokenIconStack'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { isStableLike, isV3Pool, isWeightedLike } from '../pool.helpers'
-import { getHeaderDisplayTokens } from '../pool.tokens.display'
+import { getUserReferenceTokens } from '../pool.tokens.display'
 import { ApiToken, PoolCore } from '../pool.types'
 
 function NestedTokenPill({
@@ -193,7 +193,7 @@ export function PoolListTokenPills({
     )
   }
 
-  const headerTokens = getHeaderDisplayTokens(pool)
+  const headerTokens = getUserReferenceTokens(pool)
 
   if (name) {
     return (

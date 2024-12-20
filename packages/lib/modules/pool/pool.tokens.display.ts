@@ -15,12 +15,12 @@ export function isV3Pool(
   return pool.protocolVersion === 3
 }
 
-export function getCompositionDisplayTokens(pool: PoolCore | GqlNestedPool): ApiTokenWithBalance[] {
+export function getCompositionTokens(pool: PoolCore | GqlNestedPool): ApiTokenWithBalance[] {
   const tokens = getPoolTokens(pool).map(token => {
     if (token.hasNestedPool && token.nestedPool) {
       return {
         ...token,
-        nestedTokens: getCompositionDisplayTokens(token.nestedPool as GqlNestedPool),
+        nestedTokens: getCompositionTokens(token.nestedPool as GqlNestedPool),
       } as ApiTokenWithBalance
     }
     return token as ApiTokenWithBalance
@@ -31,7 +31,7 @@ export function getCompositionDisplayTokens(pool: PoolCore | GqlNestedPool): Api
   ) as ApiTokenWithBalance[]
 }
 
-export function getHeaderDisplayTokens(pool: PoolCore): ApiToken[] {
+export function getUserReferenceTokens(pool: PoolCore): ApiToken[] {
   //  excludeNestedBptTokens(pool.poolTokens, pool.address) //TODO: do we need this case?? How is Panthom displayed after API fix?
   if (isV3Pool(pool) && pool.hasErc4626 && pool.hasAnyAllowedBuffer) {
     return sortApiTokensBySymbol(
@@ -43,7 +43,7 @@ export function getHeaderDisplayTokens(pool: PoolCore): ApiToken[] {
     )
   }
 
-  return sortApiTokensBySymbol(getCompositionDisplayTokens(pool))
+  return sortApiTokensBySymbol(getCompositionTokens(pool))
 }
 
 function isPool(pool: any): pool is Pool {
@@ -74,20 +74,18 @@ function excludeNestedBptTokens(tokens: PoolToken[] | ApiToken[], poolAddress: s
     .filter(token => token !== undefined) as ApiToken[]
 }
 
-export function getHeaderTokensWithPossibleNestedTokensWithBalance(
+export function getUserReferenceTokensWithPossibleNestedTokensWithBalance(
   pool: PoolCore
 ): ApiTokenWithBalance[] {
-  return getHeaderTokensWithPossibleNestedTokens(pool) as ApiTokenWithBalance[]
+  return getUserReferenceTokensWithPossibleNestedTokens(pool) as ApiTokenWithBalance[]
 }
 
-export function getHeaderTokensWithPossibleNestedTokens(pool: PoolCore) {
-  return addPossibleNestedTokens(getHeaderDisplayTokens(pool as PoolCore))
+export function getUserReferenceTokensWithPossibleNestedTokens(pool: PoolCore) {
+  return addPossibleNestedTokens(getUserReferenceTokens(pool as PoolCore))
 }
 
 export function getCompositionDisplayTokensWithPossibleNestedTokensWithBalance(pool: PoolCore) {
-  return addPossibleNestedTokens(
-    getCompositionDisplayTokens(pool as PoolCore)
-  ) as ApiTokenWithBalance[]
+  return addPossibleNestedTokens(getCompositionTokens(pool as PoolCore)) as ApiTokenWithBalance[]
 }
 
 export function addPossibleNestedTokens(apiTokens: ApiToken[]) {

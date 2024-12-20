@@ -27,7 +27,7 @@ import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
 import { ApiToken, PoolCore } from '../../pool/pool.types'
-import { getHeaderTokensWithPossibleNestedTokens } from '../../pool/pool.tokens.display'
+import { getUserReferenceTokensWithPossibleNestedTokens } from '../../pool/pool.tokens.display'
 
 export type TokenInfoProps = {
   address: Address
@@ -151,7 +151,7 @@ export default function TokenRow({
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
   const token = getToken(address, chain)
-  const displayTokens = pool ? getHeaderTokensWithPossibleNestedTokens(pool as PoolCore) : []
+  const displayTokens = pool ? getUserReferenceTokensWithPossibleNestedTokens(pool as PoolCore) : []
   const displayToken = displayTokens.find(t => isSameAddress(t.address, address))
 
   // TokenRowTemplate default props

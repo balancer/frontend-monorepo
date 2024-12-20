@@ -17,7 +17,7 @@ import { usePoolEnrichWithOnChainData } from './queries/usePoolEnrichWithOnChain
 import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances'
 import { useInvalidVariantRedirect } from './pool.hooks'
 import { useTokens } from '../tokens/TokensProvider'
-import { getCompositionDisplayTokens } from './pool.tokens.display'
+import { getCompositionTokens } from './pool.tokens.display'
 
 export type Pool = GetPoolQuery['pool']
 export type FeaturedPool = GetFeaturedPoolsQuery['featuredPools'][0]['pool']
@@ -56,7 +56,7 @@ export function _usePool({
 
   const pool = poolWithOnchainUserBalances || poolWithOnChainData || data?.pool || initialData.pool
   const bptPrice = priceFor(pool.address, pool.chain)
-  const tvl = calcTotalUsdValue(getCompositionDisplayTokens(pool as PoolCore), pool.chain)
+  const tvl = calcTotalUsdValue(getCompositionTokens(pool as PoolCore), pool.chain)
   const isLoading = isLoadingOnchainData || isLoadingOnchainUserBalances
 
   const refetch = async () => {
