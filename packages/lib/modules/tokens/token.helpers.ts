@@ -4,7 +4,7 @@ import {
   getWrappedNativeAssetAddress,
 } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlNestedPool } from '@repo/lib/shared/services/api/generated/graphql'
 import { includesAddress, isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
 import { HumanTokenAmountWithAddress, TokenBase } from './token.types'
@@ -165,5 +165,6 @@ function buildApiToken(poolToken: PoolToken): ApiToken {
     tradable: poolToken.tradable as boolean,
     weight: poolToken?.weight ?? undefined,
     underlyingToken: poolToken?.underlyingToken ?? undefined,
+    nestedPool: poolToken?.nestedPool ? ({ ...poolToken.nestedPool } as GqlNestedPool) : undefined,
   }
 }

@@ -1,16 +1,12 @@
 import { Badge, BadgeProps, Box, Heading, HStack, Text, Wrap } from '@chakra-ui/react'
-import {
-  GqlChain,
-  GqlPoolTokenDetail,
-  GqlPoolTokenDisplay,
-} from '@repo/lib/shared/services/api/generated/graphql'
-import { PoolListItem } from '../pool.types'
-import { TokenIcon } from '../../tokens/TokenIcon'
+import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { isStableLike, isV3Pool, isWeightedLike } from '../pool.helpers'
-import { Pool } from '../PoolProvider'
-import { usePoolMetadata } from '../metadata/usePoolMetadata'
+import { TokenIcon } from '../../tokens/TokenIcon'
 import { TokenIconStack } from '../../tokens/TokenIconStack'
+import { usePoolMetadata } from '../metadata/usePoolMetadata'
+import { isStableLike, isV3Pool, isWeightedLike } from '../pool.helpers'
+import { getHeaderDisplayTokens } from '../pool.tokens.display'
+import { ApiToken, PoolCore } from '../pool.types'
 
 function NestedTokenPill({
   nestedTokens,
@@ -46,7 +42,7 @@ function WeightedTokenPills({
   chain,
   iconSize = 24,
   ...badgeProps
-}: { tokens: GqlPoolTokenDetail[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
+}: { tokens: ApiToken[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
   return (
     <Wrap spacing="xs">
       {tokens.map(token => {
@@ -110,7 +106,7 @@ function StableTokenPills({
   chain,
   iconSize = 24,
   ...badgeProps
-}: { tokens: GqlPoolTokenDetail[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
+}: { tokens: ApiToken[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
   const isFirstToken = (index: number) => index === 0
   const zIndices = Array.from({ length: tokens.length }, (_, index) => index).reverse()
 
@@ -169,44 +165,40 @@ function StableTokenPills({
   )
 }
 
-type Props = {
-  pool: Pool | PoolListItem
+type PoolListTokenPillsProps = {
+  pool: PoolCore
   iconSize?: number
   nameSize?: string
-}
+} & BadgeProps
 
 export function PoolListTokenPills({
   pool,
   iconSize = 24,
   nameSize = 'md',
   ...badgeProps
-}: Props & BadgeProps) {
+}: PoolListTokenPillsProps) {
   const shouldUseWeightedPills = isWeightedLike(pool.type)
   const shouldUseStablePills = isStableLike(pool.type)
   const { name } = usePoolMetadata(pool)
 
   // TODO: fix difference between Pool and PoolListItem types
-  let poolTokens = pool.poolTokens.filter(
-    token => token.address !== pool.address
-  ) as GqlPoolTokenDetail[]
+  let poolTokens = pool.poolTokens.filter(token => token.address !== pool.address) as ApiToken[]
 
   // TODO: Move this into a general 'displayTokens' helper function.
   if (isV3Pool(pool) && pool.hasErc4626 && pool.hasAnyAllowedBuffer) {
     poolTokens = poolTokens.map(token =>
       token.isErc4626 && token.isBufferAllowed
-        ? ({ ...token, ...token.underlyingToken } as unknown as GqlPoolTokenDetail)
+        ? ({ ...token, ...token.underlyingToken } as unknown as ApiToken)
         : token
     )
   }
 
+  const headerTokens = getHeaderDisplayTokens(pool)
+
   if (name) {
     return (
       <HStack>
-        <TokenIconStack
-          chain={pool.chain}
-          size={iconSize}
-          tokens={poolTokens as unknown as GqlPoolTokenDisplay[]}
-        />
+        <TokenIconStack chain={pool.chain} size={iconSize} tokens={poolTokens} />
         <Heading size={nameSize}>{name}</Heading>
       </HStack>
     )
@@ -217,7 +209,7 @@ export function PoolListTokenPills({
       <StableTokenPills
         chain={pool.chain}
         iconSize={iconSize}
-        tokens={poolTokens}
+        tokens={headerTokens}
         {...badgeProps}
       />
     )
@@ -228,7 +220,7 @@ export function PoolListTokenPills({
       <WeightedTokenPills
         chain={pool.chain}
         iconSize={iconSize}
-        tokens={poolTokens}
+        tokens={headerTokens}
         {...badgeProps}
       />
     )
@@ -238,7 +230,7 @@ export function PoolListTokenPills({
     <WeightedTokenPills
       chain={pool.chain}
       iconSize={iconSize}
-      tokens={poolTokens}
+      tokens={headerTokens}
       {...badgeProps}
     />
   )

@@ -95,6 +95,7 @@ const networkConfig: NetworkConfig = {
     veBAL: '0xC128a9954e6c874eA3d62ce62B468bA073093F25',
     omniVotingEscrow: '0x96484f2aBF5e58b15176dbF1A799627B53F13B6d',
     permit2: PERMIT2[mainnet.id],
+    gaugeController: '0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD',
   },
 
   pools: convertHexToLowerCase({

@@ -13,26 +13,30 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { Pool, usePool } from '../PoolProvider'
-import { Address } from 'viem'
-import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
-import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
-import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { getPoolDisplayTokens, getPoolDisplayTokensWithPossibleNestedPools } from '../pool.utils'
-import { PoolTypeTag } from './PoolTypeTag'
-import { isBoosted } from '../pool.helpers'
+import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useLayoutEffect, useRef, useState } from 'react'
+import { Address } from 'viem'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
+import { isBoosted } from '../pool.helpers'
+import { ApiTokenWithBalance, PoolCore } from '../pool.types'
+import { Pool, usePool } from '../PoolProvider'
+import { PoolTypeTag } from './PoolTypeTag'
+import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
+import {
+  getCompositionDisplayTokens,
+  getHeaderTokensWithPossibleNestedTokensWithBalance,
+} from '../pool.tokens.display'
 
 type CardContentProps = {
   totalLiquidity: string
-  displayTokens: GqlPoolTokenDetail[]
+  displayTokens: ApiTokenWithBalance[]
   chain: GqlChain
   pool: Pool
 }
@@ -122,7 +126,7 @@ export function PoolComposition() {
   const [height, setHeight] = useState(0)
   const { getErc4626Metadata } = usePoolsMetadata()
 
-  const displayTokens = getPoolDisplayTokens(pool)
+  const displayTokens = getCompositionDisplayTokens(pool as PoolCore)
   const totalLiquidity = calcTotalUsdValue(displayTokens, chain)
   const erc4626Metadata = getErc4626Metadata(pool)
 
@@ -181,7 +185,7 @@ export function PoolComposition() {
           ) : (
             <PoolWeightChart
               chain={chain}
-              displayTokens={getPoolDisplayTokensWithPossibleNestedPools(pool)}
+              displayTokens={getHeaderTokensWithPossibleNestedTokensWithBalance(pool as PoolCore)}
               hasLegend
               totalLiquidity={totalLiquidity}
             />

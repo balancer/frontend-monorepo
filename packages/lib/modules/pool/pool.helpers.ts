@@ -29,8 +29,7 @@ import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
-import { TokenCore, PoolListItem, ApiToken } from './pool.types'
-import { Pool } from './PoolProvider'
+import { TokenCore, PoolListItem, ApiToken, Pool } from './pool.types'
 import { isBeetsProject, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 /**
@@ -397,15 +396,21 @@ export function getVaultConfig(pool: Pool) {
   return { vaultAddress, balancerVaultAbi }
 }
 
-export function isV1Pool(pool: Pool): boolean {
+export function isV1Pool(
+  pool: Pick<Pool | PoolListItem | GqlPoolBase, 'protocolVersion'>
+): boolean {
   return pool.protocolVersion === 1
 }
 
-export function isV2Pool(pool: Pool): boolean {
+export function isV2Pool(
+  pool: Pick<Pool | PoolListItem | GqlPoolBase, 'protocolVersion'>
+): boolean {
   return pool.protocolVersion === 2
 }
 
-export function isV3Pool(pool: Pool | PoolListItem | GqlPoolBase): boolean {
+export function isV3Pool(
+  pool: Pick<Pool | PoolListItem | GqlPoolBase, 'protocolVersion'>
+): boolean {
   return pool.protocolVersion === 3
 }
 
