@@ -367,13 +367,13 @@ function LstInfo({
           isLoading={isStakedSonicDataLoading}
         />
         <LstStatRow
-          label="Total free"
+          label="Pending delegation ($S)"
           value={'123,123'}
           secondaryValue={'$123,123.12'}
           isLoading={isStakedSonicDataLoading}
         />
         <LstStatRow
-          label="stS Rate"
+          label="stS rate"
           value={'1.0003 S'}
           secondaryValue={'1 S = 0.9997 stS'}
           isLoading={isStakedSonicDataLoading}
