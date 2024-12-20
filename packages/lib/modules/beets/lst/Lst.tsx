@@ -51,6 +51,7 @@ import { getDefaultPoolChartOptions } from '../../pool/PoolDetail/PoolStats/Pool
 import { useTheme as useNextTheme } from 'next-themes'
 import ReactECharts from 'echarts-for-react'
 import * as echarts from 'echarts/core'
+import { LstStats } from './components/LstStats'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -251,6 +252,34 @@ function LstForm({
   )
 }
 
+function LstStatRow({
+  label,
+  value,
+  secondaryValue,
+  isLoading,
+}: {
+  label: string
+  value: string
+  secondaryValue?: string
+  isLoading?: boolean
+}) {
+  return (
+    <HStack justify="space-between" align="flex-start" w="full">
+      <Text color="font.secondary">{label}</Text>
+      <Box display="flex" flexDirection="column" alignItems="flex-end">
+        {isLoading ? <Skeleton h="full" w="12" /> : <Text fontWeight="bold">{value}</Text>}
+        {isLoading ? (
+          <Skeleton h="full" w="12" />
+        ) : (
+          <Text color="grayText" fontSize="sm">
+            {secondaryValue}
+          </Text>
+        )}
+      </Box>
+    </HStack>
+  )
+}
+
 function LstInfo({
   stakedSonicData,
   isStakedSonicDataLoading,
@@ -325,43 +354,34 @@ function LstInfo({
         w="full"
         zIndex={1}
       >
-        <HStack justify="space-between" w="full">
-          <Text color="font.secondary">Staking APR</Text>
-          {isStakedSonicDataLoading ? (
-            <Skeleton h="full" w="12" />
-          ) : (
-            <Text fontWeight="bold">
-              {fNum('apr', stakedSonicData?.stsGetGqlStakedSonicData.stakingApr || '0')}
-            </Text>
-          )}
-        </HStack>
-        <HStack justify="space-between" w="full">
-          <Text color="font.secondary">Total ($S)</Text>
-          {isStakedSonicDataLoading ? (
-            <Skeleton h="full" w="12" />
-          ) : (
-            <Text fontWeight="bold">{fNum('token', '9999.99999')}</Text>
-          )}
-        </HStack>
-        <HStack justify="space-between" w="full">
-          <Text color="font.secondary">Total staked ($S)</Text>
-          {isStakedSonicDataLoading ? (
-            <Skeleton h="full" w="12" />
-          ) : (
-            <Text fontWeight="bold">{fNum('token', '9999.9999')}</Text>
-          )}
-        </HStack>
-        <HStack justify="space-between" w="full">
-          <Text color="font.secondary">Total free</Text>
-          {isStakedSonicDataLoading ? (
-            <Skeleton h="full" w="12" />
-          ) : (
-            <Text fontWeight="bold">{toCurrency('0')}</Text>
-          )}
-        </HStack>
-        <Box minH="200px" w="full">
+        <LstStatRow
+          label="Total ($S)"
+          value={'10,000,000'}
+          secondaryValue={'$10,123,123.12'}
+          isLoading={isStakedSonicDataLoading}
+        />
+        <LstStatRow
+          label="Total staked ($S)"
+          value={'1,000,000'}
+          secondaryValue={'$1,000,000.00'}
+          isLoading={isStakedSonicDataLoading}
+        />
+        <LstStatRow
+          label="Total free"
+          value={'123,123'}
+          secondaryValue={'$123,123.12'}
+          isLoading={isStakedSonicDataLoading}
+        />
+        <LstStatRow
+          label="stS Rate"
+          value={'1.0003 S'}
+          secondaryValue={'1 S = 0.9997 stS'}
+          isLoading={isStakedSonicDataLoading}
+        />
+        <Box minH="120px" w="full" />
+        {/* <Box minH="200px" w="full">
           <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
-        </Box>
+        </Box> */}
       </VStack>
     </NoisyCard>
   )
@@ -372,8 +392,9 @@ export function Lst() {
 
   return (
     <FadeInOnView>
-      <DefaultPageContainer>
+      <DefaultPageContainer noVerticalPadding>
         <VStack gap="xl" w="full">
+          <LstStats />
           <Card rounded="xl" w="full">
             <Grid gap="lg" templateColumns="repeat(2, 1fr)">
               <GridItem>
