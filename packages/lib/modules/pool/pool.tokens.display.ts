@@ -84,8 +84,10 @@ export function getHeaderTokensWithPossibleNestedTokens(pool: PoolCore) {
   return addPossibleNestedTokens(getHeaderDisplayTokens(pool as PoolCore))
 }
 
-export function getCompositionDisplayTokensWithPossibleNestedTokens(pool: PoolCore) {
-  return addPossibleNestedTokens(getCompositionDisplayTokens(pool as PoolCore))
+export function getCompositionDisplayTokensWithPossibleNestedTokensWithBalance(pool: PoolCore) {
+  return addPossibleNestedTokens(
+    getCompositionDisplayTokens(pool as PoolCore)
+  ) as ApiTokenWithBalance[]
 }
 
 export function addPossibleNestedTokens(apiTokens: ApiToken[]) {
