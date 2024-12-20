@@ -6,6 +6,7 @@ import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { UserWithdraw } from '../hooks/useGetUserWithdraws'
 import { formatUnits } from 'viem'
 import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 
 interface Props extends GridProps {
   withdrawal: UserWithdraw
@@ -43,7 +44,7 @@ export function LstWithdrawTableRow({ withdrawal, keyValue, token, onOpen, ...re
                   size={24}
                 />
               )}
-              <Text>{formatUnits(withdrawal.assetAmount, 18)}</Text>
+              <Text>{fNum('token', formatUnits(withdrawal.assetAmount, 18))}</Text>
             </HStack>
           </GridItem>
           <GridItem>{format(new Date(requestTimestamp * 1000), 'dd MMMM yyyy HH:mm')}</GridItem>
