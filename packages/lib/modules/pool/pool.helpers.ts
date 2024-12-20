@@ -624,7 +624,7 @@ export function getBoostedGqlTokens(pool: Pool): ApiToken[] {
   const underlyingTokens = pool.poolTokens
     .flatMap(token =>
       shouldUseUnderlyingToken(token, pool)
-        ? [token.underlyingToken as ApiToken]
+        ? [{ ...token, ...token.underlyingToken } as ApiToken]
         : [token as ApiToken]
     )
     .filter((token): token is ApiToken => token !== undefined)
