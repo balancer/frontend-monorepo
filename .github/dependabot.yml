@@ -13,3 +13,4 @@ updates:
       - /packages/lib
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 4
