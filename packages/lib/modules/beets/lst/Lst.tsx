@@ -396,7 +396,7 @@ export function Lst() {
         <VStack gap="xl" w="full">
           <LstStats />
           <Card rounded="xl" w="full">
-            <Grid gap="lg" templateColumns="repeat(2, 1fr)">
+            <Grid gap="lg" templateColumns="5fr 4fr">
               <GridItem>
                 <LstForm
                   isStakedSonicDataLoading={isStakedSonicDataLoading}
