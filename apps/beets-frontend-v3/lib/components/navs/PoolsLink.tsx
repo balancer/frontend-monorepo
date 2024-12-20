@@ -28,16 +28,16 @@ function PoolNetworkLink({
   onClose: () => void
 }) {
   return (
-    <Link as={NextLink} href={href} color="font.primary" variant="nav" onClick={onClose}>
+    <Link as={NextLink} color="font.primary" href={href} onClick={onClose} variant="nav">
       <Box
-        width="100%"
-        px="sm"
-        height="36px"
-        display="flex"
-        alignItems="center"
         _hover={{ bg: 'background.level2' }}
+        alignItems="center"
         borderBottomLeftRadius={isLast ? 'md' : '0'}
         borderBottomRightRadius={isLast ? 'md' : '0'}
+        display="flex"
+        height="36px"
+        px="sm"
+        width="100%"
       >
         {text}
       </Box>
@@ -54,11 +54,11 @@ export function PoolsLink() {
         <>
           <PopoverTrigger>
             <Button
-              color={linkColorFor('/pools')}
-              variant="nav"
-              style={{ padding: '0px', height: '24px' }}
-              fontWeight="medium"
               _hover={{ color: 'font.link' }}
+              color={linkColorFor('/pools')}
+              fontWeight="medium"
+              style={{ padding: '0px', height: '24px' }}
+              variant="nav"
             >
               Pools
             </Button>
@@ -68,9 +68,9 @@ export function PoolsLink() {
             <PopoverCloseButton />
             <PopoverHeader fontWeight="bold">Select a network</PopoverHeader>
             <PopoverBody p="0">
-              <PoolNetworkLink text="Sonic" href="/pools?networks=SONIC" onClose={onClose} />
-              <PoolNetworkLink text="Optimism" href="/pools?networks=OPTIMISM" onClose={onClose} />
-              <PoolNetworkLink text="All Networks" href="/pools" isLast={true} onClose={onClose} />
+              <PoolNetworkLink href="/pools?networks=SONIC" onClose={onClose} text="Sonic" />
+              <PoolNetworkLink href="/pools?networks=OPTIMISM" onClose={onClose} text="Optimism" />
+              <PoolNetworkLink href="/pools" isLast onClose={onClose} text="All Networks" />
             </PopoverBody>
           </PopoverContent>
         </>

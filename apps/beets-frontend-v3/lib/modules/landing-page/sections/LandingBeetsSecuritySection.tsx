@@ -34,20 +34,22 @@ function Card({
 export function LandingBeetsSecuritySection() {
   return (
     <LandingSectionContainer
-      title="Code you can trust"
       subtitle="Built with security at its core, beets prioritizes trust at every level. From rigorous audits to open-source transparency and continuous monitoring, our ecosystem ensures your assets remain safe, reliable, and accessible."
+      title="Code you can trust"
     >
       <Box bg="rgba(255, 255, 255, 0.05)" p="xl" w="full">
         <Grid
+          bg="rgba(0, 0, 0, 0.2)"
           gap="2xl"
+          p="lg"
           templateColumns={{
             base: '1fr',
             lg: '1fr 1fr 1fr',
           }}
-          bg="rgba(0, 0, 0, 0.2)"
-          p="lg"
         >
           <Card
+            description="Our code is thoroughly audited by leading security firms."
+            image={<SecurityAuditsSvg />}
             title={
               <>
                 Rigorous
@@ -55,10 +57,10 @@ export function LandingBeetsSecuritySection() {
                 Audits
               </>
             }
-            description="Our code is thoroughly audited by leading security firms."
-            image={<SecurityAuditsSvg />}
           />
           <Card
+            description="All code is publicly available for community scrutiny and trust."
+            image={<SecurityOpenSourceSvg />}
             title={
               <>
                 Open-Source
@@ -66,10 +68,10 @@ export function LandingBeetsSecuritySection() {
                 Transparency
               </>
             }
-            description="All code is publicly available for community scrutiny and trust."
-            image={<SecurityOpenSourceSvg />}
           />
           <Card
+            description="Ongoing security assessments ensure the integrity of the beets ecosystem."
+            image={<SecurityMonitoringSvg />}
             title={
               <>
                 Continous
@@ -77,8 +79,6 @@ export function LandingBeetsSecuritySection() {
                 Monitoring
               </>
             }
-            description="Ongoing security assessments ensure the integrity of the beets ecosystem."
-            image={<SecurityMonitoringSvg />}
           />
         </Grid>
       </Box>

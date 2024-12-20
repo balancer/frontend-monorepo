@@ -20,10 +20,10 @@ export function LandingBeetsHero() {
             tokens.
           </Text>
           <Flex gap="lg" mt="lg">
-            <Button size="lg" variant="primary" as={NextLink} href="/stake">
+            <Button as={NextLink} href="/stake" size="lg" variant="primary">
               Stake $S
             </Button>
-            <Button size="lg" variant="secondary" as={NextLink} href="/pools">
+            <Button as={NextLink} href="/pools" size="lg" variant="secondary">
               Explore Pools
             </Button>
           </Flex>
