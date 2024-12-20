@@ -15,7 +15,7 @@ import { Button, Card, HStack, Heading, Skeleton, Stack, Text, VStack } from '@c
 import { capitalize } from 'lodash'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
-import { getHeaderDisplayTokens } from '@repo/lib/modules/pool/pool.tokens.display'
+import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool.tokens.display'
 import { PoolCore } from '@repo/lib/modules/pool/pool.types'
 
 export default function NetworkClaim() {
@@ -78,7 +78,7 @@ export default function NetworkClaim() {
                         <TokenIconStack
                           chain={pool.chain}
                           size={36}
-                          tokens={getHeaderDisplayTokens(pool as PoolCore)}
+                          tokens={getUserReferenceTokens(pool as PoolCore)}
                         />
                         {hasMultipleClaims && (
                           <Button

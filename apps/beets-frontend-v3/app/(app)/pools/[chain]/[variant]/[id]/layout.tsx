@@ -10,7 +10,7 @@ import { PoolProvider } from '@repo/lib/modules/pool/PoolProvider'
 import { arrayToSentence } from '@repo/lib/shared/utils/strings'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { notFound } from 'next/navigation'
-import { getHeaderDisplayTokens } from '@repo/lib/modules/pool/pool.tokens.display'
+import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool.tokens.display'
 
 type Props = PropsWithChildren<{
   params: Omit<FetchPoolProps, 'chain'> & { chain: ChainSlug }
@@ -44,7 +44,7 @@ export async function generateMetadata({
   const pool = data?.pool
   if (!pool) return {}
 
-  const displayTokens = getHeaderDisplayTokens(pool as PoolCore)
+  const displayTokens = getUserReferenceTokens(pool as PoolCore)
   const poolTokenString = arrayToSentence(displayTokens.map(token => token.symbol))
 
   return {
