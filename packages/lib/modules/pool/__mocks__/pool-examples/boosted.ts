@@ -1,7 +1,8 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { PoolExample } from './flat'
+import { PoolExample } from './pool-examples.types'
 
 export const v3SepoliaNestedBoosted: PoolExample = {
+  name: 'Bv3-50bbaUSD-50WETH',
   description: 'Edge case: V3 Nested Boosted',
   poolId: '0x693cc6a39bbf35464f53d6a5dbf7d6c2fa93741c',
   poolChain: GqlChain.Sepolia,
@@ -9,6 +10,7 @@ export const v3SepoliaNestedBoosted: PoolExample = {
 }
 
 export const morphoStakeHouse: PoolExample = {
+  name: 'Steakhouse/Coinshift Boosted',
   description: 'Edge case: boosted with custom morpho stuff',
   poolId: '0x5dd88b3aa3143173eb26552923922bdf33f50949',
   poolChain: GqlChain.Mainnet,
@@ -16,9 +18,12 @@ export const morphoStakeHouse: PoolExample = {
 }
 
 export const sDAIBoosted: PoolExample = {
+  name: 'aGNO/sDAI',
   description:
     'Edge case: BOOSTED with 2 ERC4626 tokens but one of them (sDAI) has isBufferAllowed == false',
   poolId: '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522',
   poolChain: GqlChain.Gnosis,
   version: 3,
 }
+
+export const boostedPoolExamples = [v3SepoliaNestedBoosted, morphoStakeHouse, sDAIBoosted]

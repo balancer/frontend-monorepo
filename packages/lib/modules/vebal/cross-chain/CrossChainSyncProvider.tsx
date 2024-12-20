@@ -156,9 +156,9 @@ export const _useCrossChainSync = () => {
     if (networksBySyncState.syncing.length > 0) {
       return {
         title: 'Wait until sync finalizes before restaking / triggering a gauge update on L2',
-        text: `Your sync has been initiated but it may take up to 30 mins to update across L2s. 
-              Once your veBAL is synced, you will need to interact with each gauge to register your new max boost. 
-              You can either claim, restake, or click the Update button, which will appear 
+        text: `Your sync has been initiated but it may take up to 30 mins to update across L2s.
+              Once your veBAL is synced, you will need to interact with each gauge to register your new max boost.
+              You can either claim, restake, or click the Update button, which will appear
               on each individual pool page staking section.`,
       }
     }
@@ -169,8 +169,8 @@ export const _useCrossChainSync = () => {
     if (!warningMessage && networksBySyncState.synced.length > 0) {
       return {
         title: 'Trigger pool gauge updates to get your boosts sooner',
-        text: `Pool gauges don’t automatically recognize changes in veBAL until triggered. 
-            Updates are triggered when any user interacts with a gauge, such as by claiming BAL, staking or unstaking. 
+        text: `Pool gauges don’t automatically recognize changes in veBAL until triggered.
+            Updates are triggered when any user interacts with a gauge, such as by claiming BAL, staking or unstaking.
             Trigger individual gauges yourself for your boosts to apply immediately.`,
       }
     }
@@ -195,7 +195,7 @@ export const _useCrossChainSync = () => {
   ])
 
   useEffect(() => {
-    let intervalId: NodeJS.Timer
+    let intervalId: NodeJS.Timeout
     if (networksBySyncState.syncing.length > 0) {
       intervalId = setInterval(() => {
         void refetch()

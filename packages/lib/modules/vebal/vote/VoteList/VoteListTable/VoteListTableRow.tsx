@@ -10,6 +10,7 @@ import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
 import React, { useMemo, useState } from 'react'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
+import { ApiToken, PoolCore } from '@repo/lib/modules/pool/pool.types'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -29,16 +30,21 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
 
   const { votingIncentivesLoading, gaugeVotesIsLoading } = useVoteList()
 
-  const pool = useMemo(
+  // TODO: it does not make sense to use PoolCore here, we should use a different type??
+  // Should we create custom pool pills for the voting list?
+  const pool: PoolCore = useMemo(
     () => ({
-      displayTokens: vote.tokens.map(token => ({ ...token, name: token.symbol })), // fix: no name
-      type: vote.type,
-      chain: vote.chain,
-      poolTokens: [],
       address: vote.address,
+      chain: vote.chain,
+      type: vote.type,
+      poolTokens: vote.tokens.map(
+        token => ({ ...token, name: token.symbol }) as unknown as ApiToken // TODO: fix type and remove unknown by adding missing fields to vote.tokens[0]
+      ),
+      name: '',
+      symbol: '',
       protocolVersion: 3, // fix: no data
-      hasAnyAllowedBuffer: false, // fix: no data
       hasErc4626: false, // fix: no data
+      hasAnyAllowedBuffer: false, // fix: no data
     }),
     [vote]
   )

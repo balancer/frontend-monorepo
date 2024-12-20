@@ -29,8 +29,7 @@ import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
-import { TokenCore, PoolListItem, ApiToken } from './pool.types'
-import { Pool } from './PoolProvider'
+import { TokenCore, PoolListItem, ApiToken, Pool } from './pool.types'
 
 /**
  * METHODS
@@ -621,7 +620,7 @@ export function getBoostedGqlTokens(pool: Pool): ApiToken[] {
   const underlyingTokens = pool.poolTokens
     .flatMap(token =>
       shouldUseUnderlyingToken(token, pool)
-        ? [token.underlyingToken as ApiToken]
+        ? [{ ...token, ...token.underlyingToken } as ApiToken]
         : [token as ApiToken]
     )
     .filter((token): token is ApiToken => token !== undefined)

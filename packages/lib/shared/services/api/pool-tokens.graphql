@@ -11,6 +11,7 @@ fragment UnderlyingToken on GqlToken {
   tradable
   isErc4626
   isBufferAllowed
+  logoURI
 }
 
 fragment Erc4626ReviewData on Erc4626ReviewData {
@@ -40,6 +41,7 @@ fragment PoolTokens on GqlPoolTokenDetail {
   hasNestedPool
   isAllowed
   priceRateProvider
+  logoURI
   priceRateProviderData {
     address
     name
@@ -72,6 +74,7 @@ fragment PoolTokens on GqlPoolTokenDetail {
       weight
       isErc4626
       isBufferAllowed
+      logoURI
       underlyingToken {
         ...UnderlyingToken
       }

@@ -1,10 +1,15 @@
 import { ApiToken } from '../../pool.types'
+import { chainToSlugMap } from '../../pool.utils'
+import { PoolExample } from './pool-examples.types'
 
-// TODO: move to testing utils
 export function tokenSymbols(apiTokens: ApiToken[]): string[] {
   return apiTokens.map(token => token.symbol).sort()
 }
 
 export function underlyingTokenSymbols(apiTokens: ApiToken[]): string[] {
   return apiTokens.map(token => token.underlyingToken?.symbol || '-').sort()
+}
+
+export function getPoolExampleUri(pool: PoolExample): string {
+  return `/pools/${chainToSlugMap[pool.poolChain]}/v${pool.version}/${pool.poolId}`
 }
