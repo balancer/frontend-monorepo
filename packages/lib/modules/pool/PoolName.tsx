@@ -1,8 +1,8 @@
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { PoolListItem } from './pool.types'
+import { PoolCore, PoolListItem } from './pool.types'
 import { HStack, Text, TextProps, Box } from '@chakra-ui/react'
 import { FeaturedPool, Pool } from './PoolProvider'
-import { getPoolDisplayTokens } from '@repo/lib/modules/pool/pool.utils'
+import { getHeaderDisplayTokens } from './pool.tokens.display'
 
 interface PoolNameProps extends TextProps {
   pool: PoolListItem | Pool | FeaturedPool
@@ -16,8 +16,9 @@ function isFeaturedPool(pool: PoolListItem | Pool | FeaturedPool): pool is Featu
 }
 
 export function PoolName({ pool, MemoizedMainAprTooltip, isCarousel, ...rest }: PoolNameProps) {
-  const _pool = pool as unknown as Pool //TODO: review in https://github.com/balancer/frontend-monorepo/pull/373
-  const displayTokens = getPoolDisplayTokens(_pool).filter(token => token.address !== pool.address)
+  const displayTokens = getHeaderDisplayTokens(pool as PoolCore).filter(
+    token => token.address !== pool.address
+  )
 
   return (
     <HStack alignItems="center" gap="xxs" justify="start" px="sm" wrap="wrap">

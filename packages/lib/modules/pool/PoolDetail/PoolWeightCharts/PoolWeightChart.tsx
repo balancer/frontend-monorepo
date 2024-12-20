@@ -1,6 +1,6 @@
 'use client'
 
-import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { Box, VStack, useTheme } from '@chakra-ui/react'
@@ -13,9 +13,10 @@ import ReactECharts from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
+import { ApiTokenWithBalance } from '../../pool.types'
 
 export interface PoolWeightChartProps {
-  displayTokens: GqlPoolTokenDetail[]
+  displayTokens: ApiTokenWithBalance[]
   chain: GqlChain
   totalLiquidity: string
   hasLegend?: boolean

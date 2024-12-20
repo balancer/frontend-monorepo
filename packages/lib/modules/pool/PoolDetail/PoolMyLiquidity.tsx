@@ -25,7 +25,6 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { keyBy } from 'lodash'
 import {
   getAuraPoolLink,
-  getPoolDisplayTokens,
   getProportionalExitAmountsFromScaledBptIn,
   getXavePoolLink,
 } from '../pool.utils'
@@ -54,6 +53,8 @@ import {
   PartnerRedirectModal,
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+import { PoolCore } from '../pool.types'
+import { getHeaderTokensWithPossibleNestedTokensWithBalance } from '../pool.tokens.display'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -257,7 +258,7 @@ export default function PoolMyLiquidity() {
     }
   }
 
-  const displayTokens = getPoolDisplayTokens(pool)
+  const displayTokens = getHeaderTokensWithPossibleNestedTokensWithBalance(pool as PoolCore)
 
   return (
     <Card h="fit-content" ref={myLiquiditySectionRef}>

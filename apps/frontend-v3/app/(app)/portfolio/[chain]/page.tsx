@@ -3,7 +3,7 @@ import { PoolName } from '@repo/lib/modules/pool/PoolName'
 import { Pool } from '@repo/lib/modules/pool/PoolProvider'
 import { ClaimModal } from '@repo/lib/modules/pool/actions/claim/ClaimModal'
 import { ClaimProvider } from '@repo/lib/modules/pool/actions/claim/ClaimProvider'
-import { ChainSlug, getChainSlug, getPoolDisplayTokens } from '@repo/lib/modules/pool/pool.utils'
+import { ChainSlug, getChainSlug } from '@repo/lib/modules/pool/pool.utils'
 // eslint-disable-next-line max-len
 import { ClaimNetworkPoolsLayout } from '@repo/lib/modules/portfolio/PortfolioClaim/ClaimNetworkPools/ClaimNetworkPoolsLayout'
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'
@@ -15,6 +15,8 @@ import { Button, Card, HStack, Heading, Skeleton, Stack, Text, VStack } from '@c
 import { capitalize } from 'lodash'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
+import { getHeaderDisplayTokens } from '@repo/lib/modules/pool/pool.tokens.display'
+import { PoolCore } from '@repo/lib/modules/pool/pool.types'
 
 export default function NetworkClaim() {
   const { toCurrency } = useCurrency()
@@ -75,7 +77,7 @@ export default function NetworkClaim() {
                         <TokenIconStack
                           chain={pool.chain}
                           size={36}
-                          tokens={getPoolDisplayTokens(pool)}
+                          tokens={getHeaderDisplayTokens(pool as PoolCore)}
                         />
                         {hasMultipleClaims && (
                           <Button
