@@ -23,7 +23,7 @@ export function LandingBeetsStakedSonic() {
         backgroundPosition="left bottom"
         backgroundRepeat="no-repeat"
         backgroundSize="50%"
-        bg="rgba(255, 255, 255, 0.05)"
+        backgroundColor="rgba(255, 255, 255, 0.05)"
         p="xl"
         w="full"
       >
