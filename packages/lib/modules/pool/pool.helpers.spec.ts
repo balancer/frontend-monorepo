@@ -1,9 +1,10 @@
 /* eslint-disable max-len */
 import { Pool } from './PoolProvider'
+import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getPoolActionableTokens } from './pool.helpers'
 
 describe('getPoolTokens', () => {
-  it('when pool supports nested actions', () => {
+  it('when nested pool supports nested actions (default behavior)', () => {
     const pool = {
       id: '0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053',
       address: '0x2086f52651837600180de173b09470f54ef74910',
@@ -55,7 +56,7 @@ describe('getPoolTokens', () => {
     expect(result.map(t => t.symbol)).toEqual(['USDT', 'USDC', 'WXDAI', 'WETH', 'WBTC']) // contains 'staBAL3' nested tokens (USDT, USDC, WXDAI)
   })
 
-  it('when pool does not support nested actions', () => {
+  it('when pool does not support nested actions (cause they are disabled in disallowNestedActions)', () => {
     const pool = {
       id: '0xdacf5fa19b1f720111609043ac67a9818262850c000000000000000000000635',
       address: '0xdacf5fa19b1f720111609043ac67a9818262850c',
@@ -98,6 +99,8 @@ describe('getPoolTokens', () => {
         },
       ],
     } as unknown as Pool
+
+    expect(supportsNestedActions(pool)).toBeFalsy()
 
     const result = getPoolActionableTokens(pool)
     expect(result.map(t => t.symbol)).toEqual(['WETH', 'osETH']) // excludes 'osETH/wETH-BPT' bpt token
