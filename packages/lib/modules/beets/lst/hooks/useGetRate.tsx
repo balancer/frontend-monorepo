@@ -6,7 +6,6 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from 'wagmi'
 import { sonicStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { formatUnits } from 'viem'
 
 export function useGetRate(chain: GqlChain) {
   const { isConnected } = useUserAccount()
@@ -27,6 +26,6 @@ export function useGetRate(chain: GqlChain) {
 
   return {
     ...query,
-    rate: formatUnits(query.data ?? 1n, 18),
+    rate: query.data ?? 1n,
   }
 }

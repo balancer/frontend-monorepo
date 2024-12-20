@@ -2,6 +2,7 @@
 
 import {
   Button,
+  Checkbox,
   HStack,
   Link,
   Modal,
@@ -16,17 +17,29 @@ import {
 } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export function BeetsLandingModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [hideOnNextVisit, setHideOnNextVisit] = useState(false)
 
   useEffect(() => {
-    onOpen()
+    const shouldShowModal = localStorage.getItem('hideLandingModal') !== 'true'
+
+    if (shouldShowModal) {
+      onOpen()
+    }
   }, [])
 
+  const handleClose = () => {
+    if (hideOnNextVisit) {
+      localStorage.setItem('hideLandingModal', 'true')
+    }
+    onClose()
+  }
+
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
+    <Modal isCentered isOpen={isOpen} onClose={handleClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Welcome to the new BEETS</ModalHeader>
@@ -52,24 +65,33 @@ export function BeetsLandingModal() {
           </Text>
         </ModalBody>
 
-        <ModalFooter>
-          <Button mr="md" onClick={onClose} variant="primary" w="full">
-            <HStack>
-              <span>Let me in</span>
-            </HStack>
-          </Button>
-          <Button
-            as={NextLink}
-            href="https://ftm.beets.fi"
-            target="_blank"
-            variant="tertiary"
-            w="full"
+        <ModalFooter alignItems="flex-start" flexDirection="column">
+          <Checkbox
+            isChecked={hideOnNextVisit}
+            mb="md"
+            onChange={e => setHideOnNextVisit(e.target.checked)}
           >
-            <HStack>
-              <span>Fantom App</span>
-              <ArrowUpRight size={16} />
-            </HStack>
-          </Button>
+            Do not show this message again
+          </Checkbox>
+          <HStack width="full">
+            <Button mr="md" onClick={handleClose} variant="primary" w="full">
+              <HStack>
+                <span>Let me in</span>
+              </HStack>
+            </Button>
+            <Button
+              as={NextLink}
+              href="https://ftm.beets.fi"
+              target="_blank"
+              variant="tertiary"
+              w="full"
+            >
+              <HStack>
+                <span>Fantom App</span>
+                <ArrowUpRight size={16} />
+              </HStack>
+            </Button>
+          </HStack>
         </ModalFooter>
       </ModalContent>
     </Modal>
