@@ -149,6 +149,7 @@ export type TokenCore = {
 export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & {
   nestedTokens?: ApiToken[]
   underlyingToken?: ApiToken
+  weight?: string
 }
 
 export enum PoolListDisplayType {
