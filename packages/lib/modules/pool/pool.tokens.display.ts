@@ -81,22 +81,28 @@ export function getHeaderTokensWithPossibleNestedTokensWithBalance(
 }
 
 export function getHeaderTokensWithPossibleNestedTokens(pool: PoolCore) {
-  const displayTokens = getHeaderDisplayTokens(pool as PoolCore)
+  return addPossibleNestedTokens(getHeaderDisplayTokens(pool as PoolCore))
+}
 
-  const hasNestedPools = displayTokens.some(token => token.hasNestedPool)
+export function getCompositionDisplayTokensWithPossibleNestedTokens(pool: PoolCore) {
+  return addPossibleNestedTokens(getCompositionDisplayTokens(pool as PoolCore))
+}
 
-  if (!hasNestedPools) return displayTokens
-  const displayTokensWithNestedPools: ApiToken[] = []
+export function addPossibleNestedTokens(apiTokens: ApiToken[]) {
+  const hasNestedPools = apiTokens.some(token => token.hasNestedPool)
 
-  displayTokens.forEach(token => {
+  if (!hasNestedPools) return apiTokens
+  const apiTokensWithNestedPools: ApiToken[] = []
+
+  apiTokens.forEach(token => {
     if (token.hasNestedPool) {
       token.nestedPool?.tokens.forEach(nestedPoolToken => {
-        displayTokensWithNestedPools.push(nestedPoolToken as ApiToken)
+        apiTokensWithNestedPools.push(nestedPoolToken as ApiToken)
       })
     } else {
-      displayTokensWithNestedPools.push(token)
+      apiTokensWithNestedPools.push(token)
     }
   })
 
-  return displayTokensWithNestedPools
+  return apiTokensWithNestedPools
 }
