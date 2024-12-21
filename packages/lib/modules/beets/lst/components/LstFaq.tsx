@@ -27,7 +27,7 @@ const FAQ_ITEMS = [
   {
     question: 'How do I get stS tokens?',
     answer:
-      'To stake, users simply need to head to the stS page and select how much $S they wish to deposit. As an alternative to staking, users can swap into stS on DEXs by swapping their $S for stS on the Swap Page',
+      'To stake, users simply need to head to the stS page and select how much $S they wish to deposit. As an alternative to staking, users can swap into stS on DEXs by swapping their $S for stS on the Swap Page.',
   },
   {
     question: 'How do I unstake stS for $S?',
