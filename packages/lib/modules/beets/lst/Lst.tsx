@@ -13,18 +13,15 @@ import {
   VStack,
   Text,
   Skeleton,
-  Icon,
   BoxProps,
   Grid,
   GridItem,
-  useTheme as useChakraTheme,
-  ColorMode,
 } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -42,20 +39,14 @@ import { useGetStakedSonicData } from './hooks/useGetStakedSonicData'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { ArrowRight } from 'react-feather'
 import { LstFaq } from './components/LstFaq'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { GetStakedSonicDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { getDefaultPoolChartOptions } from '../../pool/PoolDetail/PoolStats/PoolCharts/usePoolCharts'
-import { useTheme as useNextTheme } from 'next-themes'
-import ReactECharts from 'echarts-for-react'
-import * as echarts from 'echarts/core'
 import { LstStats } from './components/LstStats'
 import networkConfigs from '@repo/lib/config/networks'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
-import { useGetRate } from './hooks/useGetRate'
 
 const CHAIN = GqlChain.Sonic
 
@@ -78,22 +69,16 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
   },
 }
 
-function LstForm({
-  stakedSonicData,
-  isStakedSonicDataLoading,
-}: {
-  stakedSonicData?: GetStakedSonicDataQuery
-  isStakedSonicDataLoading: boolean
-}) {
+function LstForm() {
   const nextBtn = useRef(null)
   const stakeModalDisclosure = useDisclosure()
   const unstakeModalDisclosure = useDisclosure()
   const [disclosure, setDisclosure] = useState(stakeModalDisclosure)
-
   const isMounted = useIsMounted()
   const { isConnected } = useUserAccount()
   const { isBalancesLoading } = useTokenBalances()
   const { startTokenPricePolling } = useTokens()
+
   const {
     activeTab,
     setActiveTab,
@@ -108,28 +93,17 @@ function LstForm({
     unstakeTransactionSteps,
     chain,
   } = useLst()
+
   const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(chain)
+
   const { data: UserWithdraws, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(
     chain,
     userNumWithdraws
   )
   const isLoading =
     !isMounted || isBalancesLoading || isWithdrawalsLoading || isUserNumWithdrawsLoading
+
   const loadingText = isLoading ? 'Loading...' : undefined
-
-  const tokenIn = useMemo(() => (isStakeTab ? 'S' : 'stS'), [isStakeTab])
-
-  const tokenOut = useMemo(() => (isStakeTab ? 'stS' : 'S'), [isStakeTab])
-
-  const rate = useMemo(() => {
-    const rate = stakedSonicData?.stsGetGqlStakedSonicData.exchangeRate || '1'
-
-    if (isStakeTab) {
-      return bn(1).div(bn(rate))
-    }
-
-    return rate
-  }, [isStakeTab, stakedSonicData])
 
   const tabs: ButtonGroupOption[] = [
     {
@@ -270,9 +244,9 @@ function LstStatRow({
   isLoading?: boolean
 }) {
   return (
-    <HStack justify="space-between" align="flex-start" w="full">
+    <HStack align="flex-start" justify="space-between" w="full">
       <Text color="font.secondary">{label}</Text>
-      <Box display="flex" flexDirection="column" alignItems="flex-end">
+      <Box alignItems="flex-end" display="flex" flexDirection="column">
         {isLoading ? <Skeleton h="full" w="12" /> : <Text fontWeight="bold">{value}</Text>}
         {isLoading ? (
           <Skeleton h="full" w="12" />
@@ -293,58 +267,12 @@ function LstInfo({
   stakedSonicData?: GetStakedSonicDataQuery
   isStakedSonicDataLoading: boolean
 }) {
-  const { theme: nextTheme } = useNextTheme()
-  const theme = useChakraTheme()
   const lstAddress = (networkConfigs[CHAIN].contracts.beets?.lstStakingProxy || '') as Address
-  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
+  const { getToken, usdValueForToken } = useTokens()
   const lstToken = getToken(lstAddress, CHAIN)
   const { toCurrency } = useCurrency()
   const assetsToSharesRate = stakedSonicData?.stsGetGqlStakedSonicData.exchangeRate || '1.0'
   const sharesToAssetsRate = bn(1).div(bn(assetsToSharesRate))
-
-  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
-
-  const options = useMemo(() => {
-    return {
-      ...defaultChartOptions,
-      series: [
-        {
-          type: 'line',
-          data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-          smooth: true,
-          symbol: 'none',
-          lineStyle: {
-            width: 2,
-          },
-          itemStyle: {
-            color: 'red',
-            borderRadius: 100,
-          },
-          emphasis: {
-            itemStyle: {
-              color: 'red',
-              borderColor: 'red',
-            },
-          },
-          areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              {
-                offset: 0,
-                color: 'rgba(14, 165, 233, 0.08)',
-              },
-              {
-                offset: 1,
-                color: 'rgba(68, 9, 236, 0)',
-              },
-            ]),
-          },
-          animationEasing: function (k: number) {
-            return k === 1 ? 1 : 1 - Math.pow(2, -10 * k)
-          },
-        },
-      ],
-    }
-  }, [defaultChartOptions])
 
   return (
     <NoisyCard
@@ -366,43 +294,43 @@ function LstInfo({
         zIndex={1}
       >
         <LstStatRow
+          isLoading={isStakedSonicDataLoading}
           label="Total ($S)"
-          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')}
           secondaryValue={toCurrency(
             usdValueForToken(lstToken, stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')
           )}
-          isLoading={isStakedSonicDataLoading}
+          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')}
         />
         <LstStatRow
-          label="Total staked ($S)"
-          value={fNum(
-            'token',
-            stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
-          )}
+          isLoading={isStakedSonicDataLoading}
+          label="Delegated ($S)"
           secondaryValue={toCurrency(
             usdValueForToken(
               lstToken,
               stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
             )
           )}
-          isLoading={isStakedSonicDataLoading}
+          value={fNum(
+            'token',
+            stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
+          )}
         />
         <LstStatRow
+          isLoading={isStakedSonicDataLoading}
           label="Pending delegation ($S)"
-          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0')}
           secondaryValue={toCurrency(
             usdValueForToken(
               lstToken,
               stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0'
             )
           )}
-          isLoading={isStakedSonicDataLoading}
+          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0')}
         />
         <LstStatRow
-          label="stS rate"
-          value={`1 stS = ${fNum('token', assetsToSharesRate)} S`}
-          secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} stS`}
           isLoading={isStakedSonicDataLoading}
+          label="stS rate"
+          secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} stS`}
+          value={`1 stS = ${fNum('token', assetsToSharesRate)} S`}
         />
         <Box minH="120px" w="full" />
         {/* <Box minH="200px" w="full">
@@ -424,10 +352,7 @@ export function Lst() {
           <Card rounded="xl" w="full">
             <Grid gap="lg" templateColumns={{ base: '1fr', lg: '5fr 4fr' }}>
               <GridItem>
-                <LstForm
-                  isStakedSonicDataLoading={isStakedSonicDataLoading}
-                  stakedSonicData={stakedSonicData}
-                />
+                <LstForm />
               </GridItem>
               <GridItem>
                 <LstInfo
