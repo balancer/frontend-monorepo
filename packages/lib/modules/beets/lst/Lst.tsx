@@ -400,7 +400,7 @@ function LstInfo({
         />
         <LstStatRow
           label="stS rate"
-          value={fNum('token', assetsToSharesRate)}
+          value={`1 stS = ${fNum('token', assetsToSharesRate)} S`}
           secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} stS`}
           isLoading={isStakedSonicDataLoading}
         />
