@@ -25,21 +25,21 @@ export function NavBarContainer() {
       >
         <NavBar
           appLinks={allAppLinks}
-          mobileNav={
-            <MobileNav
-              LogoType={BalancerLogoType}
-              appLinks={allAppLinks}
-              ecosystemLinks={ecosystemLinks}
-              socialLinks={getSocialLinks()}
-              customLinks={<VeBalLink fontSize="xl" />}
-            />
-          }
-          navLogo={<NavLogo />}
           customLinksAfter={
             <Box as={motion.div} variants={fadeIn}>
               <VeBalLink />
             </Box>
           }
+          mobileNav={
+            <MobileNav
+              LogoType={BalancerLogoType}
+              appLinks={allAppLinks}
+              customLinks={<VeBalLink fontSize="xl" />}
+              ecosystemLinks={ecosystemLinks}
+              socialLinks={getSocialLinks()}
+            />
+          }
+          navLogo={<NavLogo />}
         />
       </motion.div>
     </AnimatePresence>

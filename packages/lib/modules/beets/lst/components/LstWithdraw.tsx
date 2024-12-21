@@ -33,6 +33,7 @@ export function LstWithdraw({
     } else {
       setWithdrawalsView(withdrawalsDataOrdered.slice(skip, first + skip))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [skip])
 
   const rowProps = {
@@ -46,6 +47,9 @@ export function LstWithdraw({
     <>
       <PaginatedTable
         alignItems="flex-start"
+        getRowId={(withdrawal: UserWithdraw) =>
+          `${withdrawal.requestTimestamp}-${withdrawal.validatorId}`
+        }
         items={withdrawalsView}
         loading={isLoading}
         noItemsFoundLabel="No requests found"

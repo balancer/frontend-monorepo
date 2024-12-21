@@ -5,32 +5,32 @@ import React from 'react'
 export function MaBeetsFairerRewardsSvg() {
   return (
     <svg
-      width="full"
+      fill="none"
       height="full"
       viewBox="0 0 300 250"
-      fill="none"
+      width="full"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M45.6195 110.1C58.9296 110.1 69.7195 99.3105 69.7195 86.0004C69.7195 72.6903 58.9296 61.9004 45.6195 61.9004C32.3095 61.9004 21.5195 72.6903 21.5195 86.0004C21.5195 99.3105 32.3095 110.1 45.6195 110.1Z"
         fill="#05D690"
       />
-      <path d="M94.5 87V127.92" stroke="white" stroke-miterlimit="10" />
+      <path d="M94.5 87V127.92" stroke="white" strokeMiterlimit="10" />
       <path
         d="M90.4102 124.6L91.1402 123.92L94.5002 127.53L97.8602 123.92L98.5901 124.6L94.5002 129L90.4102 124.6Z"
         fill="white"
       />
-      <path d="M154.5 87V127.92" stroke="white" stroke-miterlimit="10" />
+      <path d="M154.5 87V127.92" stroke="white" strokeMiterlimit="10" />
       <path
         d="M150.41 124.6L151.14 123.92L154.5 127.53L157.86 123.92L158.59 124.6L154.5 129L150.41 124.6Z"
         fill="white"
       />
-      <path d="M214.5 87V127.92" stroke="white" stroke-miterlimit="10" />
+      <path d="M214.5 87V127.92" stroke="white" strokeMiterlimit="10" />
       <path
         d="M210.41 124.6L211.14 123.92L214.5 127.53L217.86 123.92L218.59 124.6L214.5 129L210.41 124.6Z"
         fill="white"
       />
-      <path d="M70.5 86.5H299.5" stroke="white" stroke-miterlimit="10" />
+      <path d="M70.5 86.5H299.5" stroke="white" strokeMiterlimit="10" />
       <path
         d="M94.1797 170.5C105.225 170.5 114.18 161.546 114.18 150.5C114.18 139.454 105.225 130.5 94.1797 130.5C83.134 130.5 74.1797 139.454 74.1797 150.5C74.1797 161.546 83.134 170.5 94.1797 170.5Z"
         fill="#1A1A1A"

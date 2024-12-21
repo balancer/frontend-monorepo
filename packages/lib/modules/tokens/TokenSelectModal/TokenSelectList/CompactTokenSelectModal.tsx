@@ -12,8 +12,9 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { RefObject } from 'react'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { CompactTokenSelectList } from './CompactTokenSelectList'
+import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 type Props = {
   chain: GqlChain
@@ -21,8 +22,8 @@ type Props = {
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement>
-  onTokenSelect: (token: GqlToken) => void
-  tokens: GqlToken[]
+  onTokenSelect: (token: ApiToken) => void
+  tokens: ApiToken[]
 }
 
 export function CompactTokenSelectModal({
@@ -33,7 +34,7 @@ export function CompactTokenSelectModal({
   tokens,
   ...rest
 }: Props & Omit<ModalProps, 'children'>) {
-  function closeOnSelect(token: GqlToken) {
+  function closeOnSelect(token: ApiToken) {
     onClose()
     onTokenSelect(token)
   }

@@ -24,6 +24,7 @@ export type SignPermit2Fn = (
 export type TokenAmountIn = {
   amount: bigint
   address: Address
+  symbol: string
 }
 
 export type BasePermit2Params = {

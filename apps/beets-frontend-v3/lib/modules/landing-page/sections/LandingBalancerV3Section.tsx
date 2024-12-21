@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Flex, GridItem, Heading, Text, Grid, Center } from '@chakra-ui/react'
+import { Box, GridItem, Heading, Text, Grid, Center } from '@chakra-ui/react'
 import React from 'react'
 import { BalancerV3BoostedPoolsSvg } from '../components/BalancerV3BoostedPoolsSvg'
 import { BalancerV3CustomPoolsSvg } from '../components/BalancerV3CustomPoolsSvg'
@@ -17,11 +17,11 @@ function Card({
 }) {
   return (
     <GridItem
-      p={{ base: 'lg', lg: 'none' }}
+      alignItems="center"
       bg={{ base: 'rgba(0, 0, 0, 0.2)', lg: 'none' }}
       display={{ base: 'flex', lg: 'block' }}
       flexDirection="column"
-      alignItems="center"
+      p={{ base: 'lg', lg: 'none' }}
     >
       <Box pb="lg">{image}</Box>
       <Box>
@@ -39,31 +39,31 @@ function Card({
 export function LandingBalancerV3Section() {
   return (
     <LandingSectionContainer
-      title="Powered by Balancer v3"
-      subtitle="Revolutionizing Liquidity, Redefining DeFi"
       button={{
         text: 'Discover Balancer v3',
         href: 'https://docs.balancer.fi',
         isExternal: true,
       }}
+      subtitle="Revolutionizing Liquidity, Redefining DeFi"
+      title="Powered by Balancer v3"
     >
       <Box bg="rgba(255, 255, 255, 0.05)" pb="xl" px="xl" w="full">
         <Box
-          w="full"
-          height="350px"
+          alignItems="flex-end"
           backgroundImage="url(/images/misc/bal-v3.png)"
           backgroundPosition="center"
-          backgroundSize="100%"
           backgroundRepeat="no-repeat"
+          backgroundSize="100%"
           display="flex"
-          alignItems="flex-end"
+          height="350px"
           justifyContent="center"
+          w="full"
         >
           <Box
             fontSize="2xl"
             fontWeight="thin"
-            textAlign="center"
             pb="xl"
+            textAlign="center"
             w={{ base: 'full', lg: '2xl' }}
           >
             Balancer v3 provides permissionless technology to streamline AMM development for
@@ -80,19 +80,19 @@ export function LandingBalancerV3Section() {
             }}
           >
             <Card
-              title="Custom Pools"
               description="Easily build specialized liquidity pools tailored to your needs."
               image={<BalancerV3CustomPoolsSvg />}
+              title="Custom Pools"
             />
             <Card
-              title="Hooks Framework"
               description="Add custom logic to pools for enhanced control."
               image={<BalancerV3HooksSvg />}
+              title="Hooks Framework"
             />
             <Card
-              title="100% Boosted Pools"
               description="Maximize yields with integrated lending opportunities."
               image={<BalancerV3BoostedPoolsSvg />}
+              title="100% Boosted Pools"
             />
           </Grid>
         </Box>
@@ -100,9 +100,9 @@ export function LandingBalancerV3Section() {
           <Box
             fontSize="2xl"
             fontWeight="thin"
-            textAlign="center"
-            pt="xl"
             pb="md"
+            pt="xl"
+            textAlign="center"
             w={{ base: 'full', lg: '2xl' }}
           >
             Balancer v3 transforms beets into a hub of cutting-edge liquidity solutions, empowering

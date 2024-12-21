@@ -74,16 +74,20 @@ export default defineConfig(() => {
           },
         ],
       }),
-      // etherscan({
-      //   apiKey: env.SONICSCAN_API_KEY,
-      //   chainId: 146, // forced generation of abi for sonic
-      //   contracts: [
-      //     {
-      //       name: 'SonicStaking',
-      //       address: sonicNetworkConfig.contracts.beets?.lstStaking,
-      //     },
-      //   ],
-      // }),
+      etherscan({
+        apiKey: env.SONICSCAN_API_KEY,
+        chainId: 146,
+        contracts: [
+          {
+            name: 'SonicStaking',
+            address: sonicNetworkConfig.contracts.beets?.lstStaking,
+          },
+          {
+            name: 'SFC',
+            address: sonicNetworkConfig.contracts.beets?.sfc,
+          },
+        ],
+      }),
     ],
   }
 })

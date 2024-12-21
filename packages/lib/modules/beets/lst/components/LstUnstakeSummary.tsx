@@ -7,6 +7,8 @@ import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transactio
 import { LstTokenRow } from './LstTokenRow'
 import { useGetConvertToAssets } from '../hooks/useGetConvertToAssets'
 import { formatUnits, parseUnits } from 'viem'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 
 export function LstUnstakeSummary({
   isLoading: isLoadingReceipt,
@@ -46,6 +48,17 @@ export function LstUnstakeSummary({
           tokenAmount={formatUnits(assetsAmount, 18)}
         />
       </Card>
+      <BalAlert
+        content={
+          <BalAlertContent
+            // eslint-disable-next-line max-len
+            description="After initiating the unstake, you will need to return to the UI after 14 days to claim $S on the Withdraw tab"
+            forceColumnMode
+            title="Please note"
+          />
+        }
+        status="info"
+      />
     </AnimateHeightChange>
   )
 }

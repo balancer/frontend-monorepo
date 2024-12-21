@@ -32,6 +32,7 @@ import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { getPoolActionableTokens, isV3NotSupportingWethIsEth } from '../../pool.helpers'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
+import { ApiToken } from '../../pool.types'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -49,8 +50,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const [proportionalSlippage, setProportionalSlippage] = useState<string>('0')
 
   const { pool, refetch: refetchPool, isLoading } = usePool()
-  const { getToken, getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } =
-    useTokens()
+  const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage: userSlippage } = useUserSettings()
@@ -70,7 +70,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const wNativeAsset = getWrappedNativeAssetToken(chain)
   const isForcedProportionalAdd = requiresProportionalInput(pool)
   const slippage = isForcedProportionalAdd ? proportionalSlippage : userSlippage
-  const tokens = getPoolActionableTokens(pool, getToken)
+  const tokens = getPoolActionableTokens(pool)
 
   function setInitialHumanAmountsIn() {
     const amountsIn = tokens.map(
@@ -83,26 +83,28 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     setHumanAmountsIn(amountsIn)
   }
 
-  function setHumanAmountIn(tokenAddress: Address, humanAmount: HumanAmount | '') {
+  function setHumanAmountIn(token: ApiToken, humanAmount: HumanAmount | '') {
+    const tokenAddress = token.address as Address
     const amountsIn = filterHumanAmountsIn(humanAmountsIn, tokenAddress, chain)
     setHumanAmountsIn([
       ...amountsIn,
       {
         tokenAddress,
         humanAmount,
+        symbol: token.symbol,
       },
     ])
   }
 
   function clearAmountsIn(changedAmount?: HumanTokenAmountWithAddress) {
     setHumanAmountsIn(
-      humanAmountsIn.map(({ tokenAddress }) => {
+      humanAmountsIn.map(({ tokenAddress, symbol }) => {
         // Keeps user inputs like '0' or '0.' instead of replacing them with ''
         if (changedAmount && isSameAddress(changedAmount.tokenAddress, tokenAddress)) {
           return changedAmount
         }
 
-        return { tokenAddress, humanAmount: '' }
+        return { tokenAddress, humanAmount: '', symbol }
       })
     )
   }

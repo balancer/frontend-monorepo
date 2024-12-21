@@ -46,6 +46,7 @@ export function WordsPullUp({
           animate={shouldAnimate ? 'animate' : ''}
           custom={i}
           initial="initial"
+          // eslint-disable-next-line react/no-array-index-key
           key={i}
           pr={pr}
           ref={ref}

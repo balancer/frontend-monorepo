@@ -1,6 +1,6 @@
 import { getNativeAssetAddress, getNetworkConfig } from '@repo/lib/config/app.config'
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import {
@@ -12,9 +12,9 @@ import {
   parseEventLogs,
   zeroAddress,
 } from 'viem'
-import { HumanTokenAmountWithAddress } from '../../../tokens/token.types'
+import { HumanTokenAmount } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
-import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken, ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type ParseProps = {
@@ -22,7 +22,7 @@ type ParseProps = {
   chain: GqlChain
   userAddress?: Address
   txValue: bigint
-  getToken: (address: Address, chain: GqlChain) => GqlToken | undefined
+  getToken: (address: Address, chain: GqlChain) => ApiToken | undefined
   protocolVersion: ProtocolVersion
 }
 
@@ -43,19 +43,13 @@ export function parseAddLiquidityReceipt({
 }: ParseProps) {
   const nativeAssetSent = txValue || 0n
 
-  const sentErc20Tokens: HumanTokenAmountWithAddress[] = getOutgoingLogs(
-    receiptLogs,
-    userAddress
-  ).map(log => {
+  const sentErc20Tokens: HumanTokenAmount[] = getOutgoingLogs(receiptLogs, userAddress).map(log => {
     const tokenDecimals = getToken(log.address, chain)?.decimals
-    return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
+    return _toHumanAmount(log.address, log.args.value, tokenDecimals)
   })
 
   const sentTokens = bn(nativeAssetSent).gt(0)
-    ? [
-        ...sentErc20Tokens,
-        _toHumanAmountWithAddress(getNativeAssetAddress(chain), nativeAssetSent, 18),
-      ]
+    ? [...sentErc20Tokens, _toHumanAmount(getNativeAssetAddress(chain), nativeAssetSent, 18)]
     : sentErc20Tokens
 
   const receivedBptAmount = getIncomingLogs(receiptLogs, userAddress)?.[0]?.args?.value
@@ -86,18 +80,17 @@ export function parseRemoveLiquidityReceipt({
   const nativeAssetReceived =
     (getIncomingWithdrawals(receiptLogs, chain, protocolVersion, userAddress) as bigint) || 0n
 
-  const receivedErc20Tokens: HumanTokenAmountWithAddress[] = getIncomingLogs(
-    receiptLogs,
-    userAddress
-  ).map(log => {
-    const tokenDecimals = getToken(log.address, chain)?.decimals
-    return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
-  })
+  const receivedErc20Tokens: HumanTokenAmount[] = getIncomingLogs(receiptLogs, userAddress).map(
+    log => {
+      const tokenDecimals = getToken(log.address, chain)?.decimals
+      return _toHumanAmount(log.address, log.args.value, tokenDecimals)
+    }
+  )
 
   const receivedTokens = bn(nativeAssetReceived).gt(0)
     ? [
         ...receivedErc20Tokens,
-        _toHumanAmountWithAddress(getNativeAssetAddress(chain), nativeAssetReceived, 18),
+        _toHumanAmount(getNativeAssetAddress(chain), nativeAssetReceived, 18),
       ]
     : receivedErc20Tokens
 
@@ -128,11 +121,11 @@ export function parseSwapReceipt({
   const sentTokenAddress = outgoingData?.address
   const sentToken = sentTokenAddress ? getToken(sentTokenAddress, chain) : undefined
 
-  const sentHumanAmountWithAddress: HumanTokenAmountWithAddress =
+  const sentHumanAmountWithAddress: HumanTokenAmount =
     bn(sentTokenValue).gt(0) && sentTokenAddress
-      ? _toHumanAmountWithAddress(sentTokenAddress, outgoingData?.args?.value, sentToken?.decimals)
+      ? _toHumanAmount(sentTokenAddress, outgoingData?.args?.value, sentToken?.decimals)
       : bn(nativeAssetSent).gt(0)
-        ? _toHumanAmountWithAddress(getNativeAssetAddress(chain), nativeAssetSent, 18)
+        ? _toHumanAmount(getNativeAssetAddress(chain), nativeAssetSent, 18)
         : { tokenAddress: emptyAddress, humanAmount: '0' as HumanAmount }
 
   /**
@@ -148,9 +141,9 @@ export function parseSwapReceipt({
 
   const receivedHumanAmountWithAddress =
     bn(receivedTokenValue).gt(0) && receivedTokenAddress
-      ? _toHumanAmountWithAddress(receivedTokenAddress, receivedTokenValue, receivedToken?.decimals)
+      ? _toHumanAmount(receivedTokenAddress, receivedTokenValue, receivedToken?.decimals)
       : bn(nativeAssetReceived).gt(0)
-        ? _toHumanAmountWithAddress(getNativeAssetAddress(chain), nativeAssetReceived, 18)
+        ? _toHumanAmount(getNativeAssetAddress(chain), nativeAssetReceived, 18)
         : { tokenAddress: emptyAddress, humanAmount: '0' as HumanAmount }
 
   return {
@@ -160,12 +153,9 @@ export function parseSwapReceipt({
 }
 
 export function parseLstStakeReceipt({ receiptLogs, userAddress, chain, getToken }: ParseProps) {
-  const receivedToken: HumanTokenAmountWithAddress[] = getIncomingLogs(
-    receiptLogs,
-    userAddress
-  ).map(log => {
+  const receivedToken: HumanTokenAmount[] = getIncomingLogs(receiptLogs, userAddress).map(log => {
     const tokenDecimals = getToken(log.address, chain)?.decimals
-    return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
+    return _toHumanAmount(log.address, log.args.value, tokenDecimals)
   })
 
   return {
@@ -174,12 +164,9 @@ export function parseLstStakeReceipt({ receiptLogs, userAddress, chain, getToken
 }
 
 export function parseLstUnstakeReceipt({ receiptLogs, userAddress, chain, getToken }: ParseProps) {
-  const receivedToken: HumanTokenAmountWithAddress[] = getIncomingLogs(
-    receiptLogs,
-    userAddress
-  ).map(log => {
+  const receivedToken: HumanTokenAmount[] = getIncomingLogs(receiptLogs, userAddress).map(log => {
     const tokenDecimals = getToken(log.address, chain)?.decimals
-    return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
+    return _toHumanAmount(log.address, log.args.value, tokenDecimals)
   })
 
   return {
@@ -188,12 +175,9 @@ export function parseLstUnstakeReceipt({ receiptLogs, userAddress, chain, getTok
 }
 
 export function parseLstWithdrawReceipt({ receiptLogs, userAddress, chain, getToken }: ParseProps) {
-  const receivedToken: HumanTokenAmountWithAddress[] = getIncomingLogs(
-    receiptLogs,
-    userAddress
-  ).map(log => {
+  const receivedToken: HumanTokenAmount[] = getIncomingLogs(receiptLogs, userAddress).map(log => {
     const tokenDecimals = getToken(log.address, chain)?.decimals
-    return _toHumanAmountWithAddress(log.address, log.args.value, tokenDecimals)
+    return _toHumanAmount(log.address, log.args.value, tokenDecimals)
   })
 
   return {
@@ -204,9 +188,13 @@ export function parseLstWithdrawReceipt({ receiptLogs, userAddress, chain, getTo
 /*
   rawValue and tokenDecimals should always be valid so we use default values to avoid complex error handling
 */
-function _toHumanAmountWithAddress(tokenAddress: Address, rawValue = 0n, tokenDecimals = 18) {
+function _toHumanAmount(
+  tokenAddress: Address,
+  rawValue = 0n,
+  tokenDecimals = BPT_DECIMALS
+): HumanTokenAmount {
   const humanAmount = formatUnits(rawValue, tokenDecimals)
-  return { tokenAddress: tokenAddress, humanAmount: humanAmount } as HumanTokenAmountWithAddress
+  return { tokenAddress: tokenAddress, humanAmount: humanAmount }
 }
 
 function getOutgoingLogs(logs: Log[], userAddress?: Address) {

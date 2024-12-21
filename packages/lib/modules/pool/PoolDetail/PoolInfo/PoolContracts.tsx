@@ -23,7 +23,6 @@ import { ArrowUpRight } from 'react-feather'
 import { useMemo } from 'react'
 import {
   GqlPriceRateProviderData,
-  GqlToken,
   GqlHookReviewData,
   Erc4626ReviewData,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -37,6 +36,7 @@ import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplo
 import { getWarnings, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
 import { Erc4626InfoPopOver } from './Erc4626Info'
+import { ApiToken } from '../../pool.types'
 
 type RateProvider = {
   tokenAddress: Address
@@ -73,7 +73,7 @@ function getIconAndLevel(hasWarnings: boolean, isSafe: boolean, hasData: boolean
   return { icon, level }
 }
 
-function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlToken) {
+function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: ApiToken) {
   const hasWarnings = getWarnings(data?.warnings || []).length > 0
   const isSafe = !!data?.reviewed && data?.summary === 'safe'
   const hasData = !!data
@@ -87,7 +87,7 @@ function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: GqlTo
   )
 }
 
-function getErc4626Icon(data: Erc4626ReviewData | undefined | null, token: GqlToken) {
+function getErc4626Icon(data: Erc4626ReviewData | undefined | null, token: ApiToken) {
   const hasWarnings = getWarnings(data?.warnings || []).length > 0
   const hasData = !!data
   const isSafe = hasData && data?.summary === 'safe'

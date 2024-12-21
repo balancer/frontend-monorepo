@@ -17,7 +17,7 @@ const FAQ_ITEMS = [
   {
     question: 'What is stS?',
     answer:
-      'stS is a liquid-staked token that users receive when they stake S on the Beets platform. The value of stS naturally appreciates in relation to S thanks to native network staking rewards from validator delegation being automatically compounded within the token.',
+      'stS is a liquid-staked token that users receive when they stake $S on the Beets platform. The value of stS naturally appreciates in relation to $S thanks to native network staking rewards from validator delegation being automatically compounded within the token.',
   },
   {
     question: 'What are the stS fees?',
@@ -27,12 +27,12 @@ const FAQ_ITEMS = [
   {
     question: 'How do I get stS tokens?',
     answer:
-      'To stake, users simply need to head to the stS page and select how much S they wish to deposit. As an alternative to staking, users can swap out of stS on DEXs by swapping their stS for S on the Swap Page.',
+      'To stake, users simply need to head to the stS page and select how much $S they wish to deposit. As an alternative to staking, users can swap out of stS on DEXs by swapping their stS for $S on the Swap Page.',
   },
   {
-    question: 'How do I unstake stS for S?',
+    question: 'How do I unstake stS for $S?',
     answer:
-      'Unstaking stS involves a 14-day unbonding period aligned with staking on Sonic. After initiating the unstake, users will need to return to the UI after 14 days to claim S. For instant liquidity, users can swap stS for S directly on DEXs via the Swap Page. However, note that swapping may offer a less favorable exchange rate than unstaking, depending on the pool’s liquidity.',
+      'Unstaking stS involves a 14-day unbonding period aligned with staking on Sonic. After initiating the unstake, users will need to return to the UI after 14 days to claim $S. For instant liquidity, users can swap stS for $S directly on DEXs via the Swap Page. However, note that swapping may offer a less favorable exchange rate than unstaking, depending on the pool’s liquidity.',
   },
   {
     question: 'Where can I use stS tokens?',
@@ -42,7 +42,7 @@ const FAQ_ITEMS = [
   {
     question: 'What is the stS exchange rate and how does it change?',
     answer:
-      'The stS token accrues staking rewards via delegating the underlying S to trustworthy validators on the network. Every time staking rewards are added to the pool, the stS exchange rate to S increases.',
+      'The stS token accrues staking rewards via delegating the underlying $S to trustworthy validators on the network. Every time staking rewards are added to the pool, the stS exchange rate to $S increases.',
   },
 ]
 
