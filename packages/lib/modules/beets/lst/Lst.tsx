@@ -7,9 +7,6 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
-  Center,
-  Heading,
   HStack,
   Tooltip,
   useDisclosure,
@@ -18,6 +15,10 @@ import {
   Skeleton,
   Icon,
   BoxProps,
+  Grid,
+  GridItem,
+  useTheme as useChakraTheme,
+  ColorMode,
 } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -43,6 +44,20 @@ import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ArrowRight } from 'react-feather'
 import { LstFaq } from './components/LstFaq'
+import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { GetStakedSonicDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { getDefaultPoolChartOptions } from '../../pool/PoolDetail/PoolStats/PoolCharts/usePoolCharts'
+import { useTheme as useNextTheme } from 'next-themes'
+import ReactECharts from 'echarts-for-react'
+import * as echarts from 'echarts/core'
+import { LstStats } from './components/LstStats'
+import networkConfigs from '@repo/lib/config/networks'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { Address } from 'viem'
+import { useGetRate } from './hooks/useGetRate'
+
+const CHAIN = GqlChain.Sonic
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -52,17 +67,33 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
     borderBottomLeftRadius: 'none',
     borderTopLeftRadius: 'none',
     borderBottomRightRadius: 'none',
+    rounded: 'lg',
+    overflow: 'hidden',
   },
   cardProps: {
     position: 'relative',
     height: 'full',
+    rounded: 'lg',
+    overflow: 'hidden',
   },
 }
 
-export function Lst() {
-  const { isConnected } = useUserAccount()
-  const isMounted = useIsMounted()
+function LstForm({
+  stakedSonicData,
+  isStakedSonicDataLoading,
+}: {
+  stakedSonicData?: GetStakedSonicDataQuery
+  isStakedSonicDataLoading: boolean
+}) {
   const nextBtn = useRef(null)
+  const stakeModalDisclosure = useDisclosure()
+  const unstakeModalDisclosure = useDisclosure()
+  const [disclosure, setDisclosure] = useState(stakeModalDisclosure)
+
+  const isMounted = useIsMounted()
+  const { isConnected } = useUserAccount()
+  const { isBalancesLoading } = useTokenBalances()
+  const { startTokenPricePolling } = useTokens()
   const {
     activeTab,
     setActiveTab,
@@ -77,21 +108,28 @@ export function Lst() {
     unstakeTransactionSteps,
     chain,
   } = useLst()
-  const stakeModalDisclosure = useDisclosure()
-  const unstakeModalDisclosure = useDisclosure()
-  const { startTokenPricePolling } = useTokens()
-  const { isBalancesLoading } = useTokenBalances()
-  const [disclosure, setDisclosure] = useState(stakeModalDisclosure)
   const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(chain)
   const { data: UserWithdraws, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(
     chain,
     userNumWithdraws
   )
-  const { data: stakedSonicData, loading: isStakedSonicDataLoading } = useGetStakedSonicData()
-
   const isLoading =
     !isMounted || isBalancesLoading || isWithdrawalsLoading || isUserNumWithdrawsLoading
   const loadingText = isLoading ? 'Loading...' : undefined
+
+  const tokenIn = useMemo(() => (isStakeTab ? 'S' : 'stS'), [isStakeTab])
+
+  const tokenOut = useMemo(() => (isStakeTab ? 'stS' : 'S'), [isStakeTab])
+
+  const rate = useMemo(() => {
+    const rate = stakedSonicData?.stsGetGqlStakedSonicData.exchangeRate || '1'
+
+    if (isStakeTab) {
+      return bn(1).div(bn(rate))
+    }
+
+    return rate
+  }, [isStakeTab, stakedSonicData])
 
   const tabs: ButtonGroupOption[] = [
     {
@@ -112,10 +150,6 @@ export function Lst() {
   ]
 
   useEffect(() => {
-    setActiveTab(tabs[0])
-  }, [])
-
-  useEffect(() => {
     if (isStakeTab) {
       setDisclosure(stakeModalDisclosure)
       setAmountAssets('')
@@ -123,21 +157,13 @@ export function Lst() {
       setDisclosure(unstakeModalDisclosure)
       setAmountShares('')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab])
 
-  const tokenIn = useMemo(() => (isStakeTab ? 'S' : 'stS'), [isStakeTab])
-
-  const tokenOut = useMemo(() => (isStakeTab ? 'stS' : 'S'), [isStakeTab])
-
-  const rate = useMemo(() => {
-    const rate = stakedSonicData?.stsGetGqlStakedSonicData.exchangeRate || '1'
-
-    if (isStakeTab) {
-      return bn(1).div(bn(rate))
-    }
-
-    return rate
-  }, [isStakeTab, stakedSonicData])
+  useEffect(() => {
+    setActiveTab(tabs[0])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function onModalClose() {
     // restart polling for token prices when modal is closed again
@@ -156,122 +182,66 @@ export function Lst() {
   }
 
   return (
-    <FadeInOnView>
-      <Center
-        h="full"
-        left={['-12px', '0']}
-        maxW="lg"
-        mx="auto"
-        position="relative"
-        w={['100vw', 'full']}
-      >
-        <VStack gap="xl" w="full">
-          <Card rounded="xl" w="full">
-            <CardHeader as={HStack} justify="space-between" w="full">
-              <Heading as="h2" size="lg">
-                Liquid staking
-              </Heading>
-            </CardHeader>
-            <CardBody align="start" as={VStack}>
-              <VStack spacing="md" w="full">
-                <ButtonGroup
-                  currentOption={activeTab}
-                  groupId="add-liquidity"
-                  hasLargeTextLabel
-                  isFullWidth
-                  onChange={setActiveTab}
-                  options={tabs}
-                  size="md"
-                />
-              </VStack>
-              {isStakeTab && <LstStake />}
-              {isUnstakeTab && <LstUnstake />}
-              {isWithdrawTab && !isWithdrawalsLoading && (
-                <LstWithdraw
-                  isLoading={isWithdrawalsLoading || isUserNumWithdrawsLoading}
-                  withdrawalsData={UserWithdraws as UserWithdraw[]}
-                />
-              )}
-            </CardBody>
-            <CardFooter>
-              {isConnected && !isWithdrawTab && (
-                <Tooltip label={isDisabled ? disabledReason : ''}>
-                  <Button
-                    isDisabled={isDisabled}
-                    isLoading={isLoading}
-                    loadingText={loadingText}
-                    onClick={() => disclosure.onOpen()}
-                    ref={nextBtn}
-                    size="lg"
-                    variant="secondary"
-                    w="full"
-                  >
-                    Next
-                  </Button>
-                </Tooltip>
-              )}
-              {!isConnected && (
-                <ConnectWallet
-                  isLoading={isLoading}
-                  loadingText={loadingText}
-                  size="lg"
-                  variant="primary"
-                  w="full"
-                />
-              )}
-            </CardFooter>
-          </Card>
-          {!isWithdrawTab && (
-            <Card position="relative">
-              <NoisyCard
-                cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
-                contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
-              >
-                <Box bottom={0} left={0} overflow="hidden" position="absolute" right={0} top={0}>
-                  <ZenGarden sizePx="280px" subdued variant="circle" />
-                </Box>
-                <VStack
-                  align="flex-start"
-                  h="full"
-                  justify="flex-start"
-                  m="auto"
-                  p={{ base: 'sm', md: 'md' }}
-                  role="group"
-                  spacing="xl"
-                  w="full"
-                  zIndex={1}
-                >
-                  <HStack justify="space-between" w="full">
-                    <Text>APR:</Text>
-                    {isStakedSonicDataLoading ? (
-                      <Skeleton h="full" w="12" />
-                    ) : (
-                      <Text>
-                        {fNum('apr', stakedSonicData?.stsGetGqlStakedSonicData.stakingApr || '0')}
-                      </Text>
-                    )}
-                  </HStack>
-                  <HStack justify="space-between" w="full">
-                    <Text>Rate:</Text>
-                    <HStack>
-                      {isStakedSonicDataLoading ? (
-                        <Skeleton h="full" w="12" />
-                      ) : (
-                        <>
-                          <Text>{`1 ${tokenIn}`}</Text>
-                          <Icon as={ArrowRight} />
-                          <Text>{`${fNum('token', rate)} ${tokenOut}`}</Text>
-                        </>
-                      )}
-                    </HStack>
-                  </HStack>
-                </VStack>
-              </NoisyCard>
-            </Card>
-          )}
-          <LstFaq />
+    <VStack h="full" w="full">
+      <CardBody align="start" as={VStack} h="full" w="full">
+        <VStack spacing="md" w="full">
+          <ButtonGroup
+            currentOption={activeTab}
+            groupId="add-liquidity"
+            hasLargeTextLabel
+            isFullWidth
+            onChange={setActiveTab}
+            options={tabs}
+            size="md"
+          />
         </VStack>
-      </Center>
+        {isStakeTab && <LstStake />}
+        {isUnstakeTab && <LstUnstake />}
+        {isWithdrawTab && !isWithdrawalsLoading && (
+          <LstWithdraw
+            isLoading={isWithdrawalsLoading || isUserNumWithdrawsLoading}
+            withdrawalsData={UserWithdraws as UserWithdraw[]}
+          />
+        )}
+        {/* <HStack>
+          {isStakedSonicDataLoading ? (
+            <Skeleton h="full" w="12" />
+          ) : (
+            <>
+              <Text>{`1 ${tokenIn}`}</Text>
+              <Icon as={ArrowRight} />
+              <Text>{`${fNum('token', rate)} ${tokenOut}`}</Text>
+            </>
+          )}
+        </HStack> */}
+      </CardBody>
+      <CardFooter w="full">
+        {isConnected && !isWithdrawTab && (
+          <Tooltip label={isDisabled ? disabledReason : ''}>
+            <Button
+              isDisabled={isDisabled}
+              isLoading={isLoading}
+              loadingText={loadingText}
+              onClick={() => disclosure.onOpen()}
+              ref={nextBtn}
+              size="lg"
+              variant="secondary"
+              w="full"
+            >
+              Next
+            </Button>
+          </Tooltip>
+        )}
+        {!isConnected && (
+          <ConnectWallet
+            isLoading={isLoading}
+            loadingText={loadingText}
+            size="lg"
+            variant="primary"
+            w="full"
+          />
+        )}
+      </CardFooter>
       <LstStakeModal
         finalFocusRef={nextBtn}
         isOpen={stakeModalDisclosure.isOpen}
@@ -284,6 +254,192 @@ export function Lst() {
         onClose={onModalClose}
         onOpen={unstakeModalDisclosure.onOpen}
       />
+    </VStack>
+  )
+}
+
+function LstStatRow({
+  label,
+  value,
+  secondaryValue,
+  isLoading,
+}: {
+  label: string
+  value: string
+  secondaryValue?: string
+  isLoading?: boolean
+}) {
+  return (
+    <HStack justify="space-between" align="flex-start" w="full">
+      <Text color="font.secondary">{label}</Text>
+      <Box display="flex" flexDirection="column" alignItems="flex-end">
+        {isLoading ? <Skeleton h="full" w="12" /> : <Text fontWeight="bold">{value}</Text>}
+        {isLoading ? (
+          <Skeleton h="full" w="12" />
+        ) : (
+          <Text color="grayText" fontSize="sm">
+            {secondaryValue}
+          </Text>
+        )}
+      </Box>
+    </HStack>
+  )
+}
+
+function LstInfo({
+  stakedSonicData,
+  isStakedSonicDataLoading,
+}: {
+  stakedSonicData?: GetStakedSonicDataQuery
+  isStakedSonicDataLoading: boolean
+}) {
+  const { theme: nextTheme } = useNextTheme()
+  const theme = useChakraTheme()
+  const lstAddress = (networkConfigs[CHAIN].contracts.beets?.lstStakingProxy || '') as Address
+  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
+  const lstToken = getToken(lstAddress, CHAIN)
+  const { toCurrency } = useCurrency()
+  const assetsToSharesRate = stakedSonicData?.stsGetGqlStakedSonicData.exchangeRate || '1.0'
+  const sharesToAssetsRate = bn(1).div(bn(assetsToSharesRate))
+
+  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
+
+  const options = useMemo(() => {
+    return {
+      ...defaultChartOptions,
+      series: [
+        {
+          type: 'line',
+          data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+          smooth: true,
+          symbol: 'none',
+          lineStyle: {
+            width: 2,
+          },
+          itemStyle: {
+            color: 'red',
+            borderRadius: 100,
+          },
+          emphasis: {
+            itemStyle: {
+              color: 'red',
+              borderColor: 'red',
+            },
+          },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: 'rgba(14, 165, 233, 0.08)',
+              },
+              {
+                offset: 1,
+                color: 'rgba(68, 9, 236, 0)',
+              },
+            ]),
+          },
+          animationEasing: function (k: number) {
+            return k === 1 ? 1 : 1 - Math.pow(2, -10 * k)
+          },
+        },
+      ],
+    }
+  }, [defaultChartOptions])
+
+  return (
+    <NoisyCard
+      cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
+      contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
+    >
+      <Box bottom={0} left={0} overflow="hidden" position="absolute" right={0} top={0}>
+        <ZenGarden sizePx="280px" subdued variant="circle" />
+      </Box>
+      <VStack
+        align="flex-start"
+        h="full"
+        justify="flex-start"
+        m="auto"
+        p={{ base: 'md', md: 'lg' }}
+        role="group"
+        spacing="sm"
+        w="full"
+        zIndex={1}
+      >
+        <LstStatRow
+          label="Total ($S)"
+          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')}
+          secondaryValue={toCurrency(
+            usdValueForToken(lstToken, stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')
+          )}
+          isLoading={isStakedSonicDataLoading}
+        />
+        <LstStatRow
+          label="Total staked ($S)"
+          value={fNum(
+            'token',
+            stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
+          )}
+          secondaryValue={toCurrency(
+            usdValueForToken(
+              lstToken,
+              stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
+            )
+          )}
+          isLoading={isStakedSonicDataLoading}
+        />
+        <LstStatRow
+          label="Pending delegation ($S)"
+          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0')}
+          secondaryValue={toCurrency(
+            usdValueForToken(
+              lstToken,
+              stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0'
+            )
+          )}
+          isLoading={isStakedSonicDataLoading}
+        />
+        <LstStatRow
+          label="stS rate"
+          value={fNum('token', assetsToSharesRate)}
+          secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} stS`}
+          isLoading={isStakedSonicDataLoading}
+        />
+        <Box minH="120px" w="full" />
+        {/* <Box minH="200px" w="full">
+          <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
+        </Box> */}
+      </VStack>
+    </NoisyCard>
+  )
+}
+
+export function Lst() {
+  const { data: stakedSonicData, loading: isStakedSonicDataLoading } = useGetStakedSonicData()
+
+  return (
+    <FadeInOnView>
+      <DefaultPageContainer noVerticalPadding>
+        <VStack gap="xl" w="full">
+          <LstStats />
+          <Card rounded="xl" w="full">
+            <Grid gap="lg" templateColumns={{ base: '1fr', lg: '5fr 4fr' }}>
+              <GridItem>
+                <LstForm
+                  isStakedSonicDataLoading={isStakedSonicDataLoading}
+                  stakedSonicData={stakedSonicData}
+                />
+              </GridItem>
+              <GridItem>
+                <LstInfo
+                  isStakedSonicDataLoading={isStakedSonicDataLoading}
+                  stakedSonicData={stakedSonicData}
+                />
+              </GridItem>
+            </Grid>
+          </Card>
+          <LstFaq />
+        </VStack>
+      </DefaultPageContainer>
     </FadeInOnView>
   )
 }
