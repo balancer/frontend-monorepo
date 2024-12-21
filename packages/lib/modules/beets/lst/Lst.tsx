@@ -52,6 +52,12 @@ import { useTheme as useNextTheme } from 'next-themes'
 import ReactECharts from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { LstStats } from './components/LstStats'
+import networkConfigs from '@repo/lib/config/networks'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { Address } from 'viem'
+import { useGetRate } from './hooks/useGetRate'
+
+const CHAIN = GqlChain.Sonic
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -197,7 +203,7 @@ function LstForm({
             withdrawalsData={UserWithdraws as UserWithdraw[]}
           />
         )}
-        <HStack>
+        {/* <HStack>
           {isStakedSonicDataLoading ? (
             <Skeleton h="full" w="12" />
           ) : (
@@ -207,7 +213,7 @@ function LstForm({
               <Text>{`${fNum('token', rate)} ${tokenOut}`}</Text>
             </>
           )}
-        </HStack>
+        </HStack> */}
       </CardBody>
       <CardFooter w="full">
         {isConnected && !isWithdrawTab && (
@@ -287,9 +293,14 @@ function LstInfo({
   stakedSonicData?: GetStakedSonicDataQuery
   isStakedSonicDataLoading: boolean
 }) {
-  const { toCurrency } = useCurrency()
   const { theme: nextTheme } = useNextTheme()
   const theme = useChakraTheme()
+  const lstAddress = (networkConfigs[CHAIN].contracts.beets?.lstStakingProxy || '') as Address
+  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
+  const lstToken = getToken(lstAddress, CHAIN)
+  const { toCurrency } = useCurrency()
+  const assetsToSharesRate = stakedSonicData?.stsGetGqlStakedSonicData.exchangeRate || '1.0'
+  const sharesToAssetsRate = bn(1).div(bn(assetsToSharesRate))
 
   const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
 
@@ -356,26 +367,41 @@ function LstInfo({
       >
         <LstStatRow
           label="Total ($S)"
-          value={'10,000,000'}
-          secondaryValue={'$10,123,123.12'}
+          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')}
+          secondaryValue={toCurrency(
+            usdValueForToken(lstToken, stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')
+          )}
           isLoading={isStakedSonicDataLoading}
         />
         <LstStatRow
           label="Total staked ($S)"
-          value={'1,000,000'}
-          secondaryValue={'$1,000,000.00'}
+          value={fNum(
+            'token',
+            stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
+          )}
+          secondaryValue={toCurrency(
+            usdValueForToken(
+              lstToken,
+              stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
+            )
+          )}
           isLoading={isStakedSonicDataLoading}
         />
         <LstStatRow
           label="Pending delegation ($S)"
-          value={'123,123'}
-          secondaryValue={'$123,123.12'}
+          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0')}
+          secondaryValue={toCurrency(
+            usdValueForToken(
+              lstToken,
+              stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0'
+            )
+          )}
           isLoading={isStakedSonicDataLoading}
         />
         <LstStatRow
           label="stS rate"
-          value={'1.0003 S'}
-          secondaryValue={'1 S = 0.9997 stS'}
+          value={fNum('token', assetsToSharesRate)}
+          secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} stS`}
           isLoading={isStakedSonicDataLoading}
         />
         <Box minH="120px" w="full" />
@@ -396,7 +422,7 @@ export function Lst() {
         <VStack gap="xl" w="full">
           <LstStats />
           <Card rounded="xl" w="full">
-            <Grid gap="lg" templateColumns="5fr 4fr">
+            <Grid gap="lg" templateColumns={{ base: '1fr', lg: '5fr 4fr' }}>
               <GridItem>
                 <LstForm
                   isStakedSonicDataLoading={isStakedSonicDataLoading}

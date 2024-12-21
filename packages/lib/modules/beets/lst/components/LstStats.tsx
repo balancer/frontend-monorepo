@@ -1,10 +1,18 @@
 'use client'
 
-import { Box, Card, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Card, Flex, Grid, GridItem, Skeleton, Text } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { StsByTheNumbersSvg } from './StsByTheNumbersSvg'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
+import { useGetStakedSonicData } from '../hooks/useGetStakedSonicData'
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import networkConfigs from '@repo/lib/config/networks'
+import { Address } from 'viem'
+
+const CHAIN = GqlChain.Sonic
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -25,21 +33,39 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
   },
 }
 
-function GlobalStatsCard({ label, value }: { label: string; value: string }) {
+function GlobalStatsCard({
+  label,
+  value,
+  isLoading,
+}: {
+  label: string
+  value: string
+  isLoading: boolean
+}) {
   return (
     <Flex alignItems="flex-end" mx="md" my="sm">
       <Box color="font.highlight" flex="1" fontWeight="semibold" textAlign="left">
         {label}
       </Box>
       <Box>
-        <Text fontSize="4xl">{value}</Text>
+        {isLoading ? (
+          <Skeleton h="40px" w="full" color="white" />
+        ) : (
+          <Text fontSize="4xl">{value}</Text>
+        )}
       </Box>
     </Flex>
   )
 }
 
 export function LstStats({}: {}) {
+  const lstAddress = (networkConfigs[CHAIN].contracts.beets?.lstStakingProxy || '') as Address
+  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
+  const lstToken = getToken(lstAddress, CHAIN)
   const { toCurrency } = useCurrency()
+  const { data: stakedSonicData, loading: isStakedSonicDataLoading } = useGetStakedSonicData()
+  const stakingApr = stakedSonicData?.stsGetGqlStakedSonicData.stakingApr || '0'
+  const stakedSonic = stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0'
 
   return (
     <Card rounded="xl" w="full">
@@ -66,13 +92,25 @@ export function LstStats({}: {}) {
               <StsByTheNumbersSvg />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
-              <GlobalStatsCard label="APR" value="16.8%" />
+              <GlobalStatsCard
+                label="APR"
+                value={fNum('apr', stakingApr)}
+                isLoading={isStakedSonicDataLoading}
+              />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
-              <GlobalStatsCard label="TVL" value={toCurrency(1000000)} />
+              <GlobalStatsCard
+                label="TVL"
+                value={toCurrency(usdValueForToken(lstToken, stakedSonic))}
+                isLoading={isStakedSonicDataLoading}
+              />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
-              <GlobalStatsCard label="$S STAKED" value="1.00m" />
+              <GlobalStatsCard
+                label="Total $S"
+                value={fNum('token', stakedSonic)}
+                isLoading={isStakedSonicDataLoading}
+              />
             </GridItem>
           </Grid>
         </Box>
