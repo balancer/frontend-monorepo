@@ -87,6 +87,7 @@ function MigrationButton({
         <Button
           as={Link}
           href={getBlockExplorerTxUrl(hash, GqlChain.Sonic)}
+          target="_blank"
           variant="flat"
           w="full"
         >
@@ -171,6 +172,7 @@ function ApproveButton({
         <Button
           as={Link}
           href={getBlockExplorerTxUrl(hash, GqlChain.Sonic)}
+          target="_blank"
           variant="flat"
           w="full"
         >
