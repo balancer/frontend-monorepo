@@ -123,10 +123,12 @@ function ApproveButton({
   balance,
   isBalancesRefetching,
   refetchBalances,
+  refetchAllowances,
 }: {
   balance: bigint
   isBalancesRefetching: boolean
   refetchBalances: () => Promise<QueryObserverResult<unknown, Error>[]>
+  refetchAllowances: any // TODO: type this or leave it
 }) {
   const { data: hash, writeContract, isPending, error } = useWriteContract()
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
@@ -155,6 +157,7 @@ function ApproveButton({
   useEffect(() => {
     if (isConfirmed) {
       refetchBalances()
+      refetchAllowances()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfirmed])
@@ -224,7 +227,7 @@ function LzBeetsMigratorContent() {
     token: lzBeetsAddress,
   })
 
-  const { allowances } = useTokenAllowances({
+  const { allowances, refetchAllowances } = useTokenAllowances({
     chainId: sonicChainId,
     userAddress: userAddress as Address,
     spenderAddress: migratorAddress,
@@ -279,6 +282,7 @@ function LzBeetsMigratorContent() {
               <ApproveButton
                 balance={balanceData?.value || 0n}
                 isBalancesRefetching={isBalancesRefetching}
+                refetchAllowances={refetchAllowances}
                 refetchBalances={refetchBalances}
               />
             )
