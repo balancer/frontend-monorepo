@@ -237,6 +237,7 @@ function LzBeetsMigratorContent() {
     if (hasBalance && !shouldShow) {
       setShouldShow(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBalance])
 
   /* if (!shouldShow) {
@@ -263,8 +264,8 @@ function LzBeetsMigratorContent() {
         <PopoverCloseButton />
         <PopoverHeader fontWeight="bold">Migrate your BEETS</PopoverHeader>
         <PopoverBody>
-          When migrating BEETS from Fantom, you'll receive lzBEETS as a receipt token. Exchange your
-          lzBEETS for BEETS on Sonic here.
+          When migrating BEETS from Fantom, you&apos;ll receive lzBEETS as a receipt token. Exchange
+          your lzBEETS for BEETS on Sonic here.
           {isConnected ? (
             hasAllowance ? (
               <MigrationButton
