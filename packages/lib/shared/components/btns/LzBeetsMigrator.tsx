@@ -231,7 +231,7 @@ function LzBeetsMigratorContent() {
 
   const balance = formatUnits(balanceData?.value || 0n, balanceData?.decimals || 18)
   const hasBalance = bn(balanceData?.value || 0n).gt(0)
-  const hasAllowance = bn(allowances[lzBeetsAddress] || 0n).gt(bn(balanceData?.value || 0n))
+  const hasAllowance = bn(allowances[lzBeetsAddress] || 0n).gte(bn(balanceData?.value || 0n))
 
   useEffect(() => {
     if (hasBalance && !shouldShow) {
