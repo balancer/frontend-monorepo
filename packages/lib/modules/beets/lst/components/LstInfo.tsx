@@ -1,8 +1,13 @@
-import { Box, VStack, BoxProps } from '@chakra-ui/react'
+import { Box, VStack, BoxProps, HStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { GetStakedSonicDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { LstInfoStats } from './lstInfoStats'
+import ButtonGroup, {
+  ButtonGroupOption,
+} from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+import { useState } from 'react'
+import { LstValidatorDonutChart } from './LstValidatorDonutChart'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -23,6 +28,11 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
   },
 }
 
+const TABS: ButtonGroupOption[] = [
+  { label: 'Overview', value: 'overview' },
+  { label: 'Validators', value: 'validators' },
+]
+
 export function LstInfo({
   stakedSonicData,
   isStakedSonicDataLoading,
@@ -30,6 +40,13 @@ export function LstInfo({
   stakedSonicData?: GetStakedSonicDataQuery
   isStakedSonicDataLoading: boolean
 }) {
+  const [activeTab, setActiveTab] = useState<ButtonGroupOption>(TABS[0])
+
+  const data = stakedSonicData?.stsGetGqlStakedSonicData.delegatedValidators.map(v => ({
+    name: v.validatorId,
+    value: v.assetsDelegated,
+  }))
+
   return (
     <NoisyCard
       cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
@@ -49,10 +66,22 @@ export function LstInfo({
         w="full"
         zIndex={1}
       >
-        <LstInfoStats
-          isStakedSonicDataLoading={isStakedSonicDataLoading}
-          stakedSonicData={stakedSonicData}
-        />
+        <HStack alignSelf="flex-start" mb="md">
+          <ButtonGroup
+            currentOption={activeTab}
+            groupId="chart"
+            onChange={tab => setActiveTab(tab)}
+            options={TABS}
+            size="xxs"
+          />
+        </HStack>
+        {activeTab.value === 'overview' && (
+          <LstInfoStats
+            isStakedSonicDataLoading={isStakedSonicDataLoading}
+            stakedSonicData={stakedSonicData}
+          />
+        )}
+        {activeTab.value === 'validators' && <LstValidatorDonutChart data={data} />}
       </VStack>
     </NoisyCard>
   )
