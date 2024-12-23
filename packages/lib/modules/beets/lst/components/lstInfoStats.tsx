@@ -1,4 +1,4 @@
-import { Box, HStack, Skeleton, Text } from '@chakra-ui/react'
+import { Box, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import networkConfigs from '@repo/lib/config/networks'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -51,7 +51,7 @@ export function LstInfoStats({
   const sharesToAssetsRate = bn(1).div(bn(assetsToSharesRate))
 
   return (
-    <>
+    <VStack w="full">
       <LstStatRow
         isLoading={isStakedSonicDataLoading}
         label="Total ($S)"
@@ -88,6 +88,6 @@ export function LstInfoStats({
         secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} stS`}
         value={`1 stS = ${fNum('token', assetsToSharesRate)} S`}
       />
-    </>
+    </VStack>
   )
 }
