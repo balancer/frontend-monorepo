@@ -2,18 +2,13 @@
 'use client'
 
 import {
-  Box,
   Button,
   Card,
   CardBody,
   CardFooter,
-  HStack,
   Tooltip,
   useDisclosure,
   VStack,
-  Text,
-  Skeleton,
-  BoxProps,
   Grid,
   GridItem,
 } from '@chakra-ui/react'
@@ -36,38 +31,10 @@ import { LstWithdraw } from './components/LstWithdraw'
 import { useGetUserWithdraws, UserWithdraw } from './hooks/useGetUserWithdraws'
 import { useGetUserNumWithdraws } from './hooks/useGetUserNumWithdraws'
 import { useGetStakedSonicData } from './hooks/useGetStakedSonicData'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
-import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LstFaq } from './components/LstFaq'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { GetStakedSonicDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { LstStats } from './components/LstStats'
-import networkConfigs from '@repo/lib/config/networks'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Address } from 'viem'
-
-const CHAIN = GqlChain.Sonic
-
-const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
-  contentProps: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomLeftRadius: 'none',
-    borderTopLeftRadius: 'none',
-    borderBottomRightRadius: 'none',
-    rounded: 'lg',
-    overflow: 'hidden',
-  },
-  cardProps: {
-    position: 'relative',
-    height: 'full',
-    rounded: 'lg',
-    overflow: 'hidden',
-  },
-}
+import { LstInfo } from './components/LstInfo'
 
 function LstForm() {
   const nextBtn = useRef(null)
@@ -229,115 +196,6 @@ function LstForm() {
         onOpen={unstakeModalDisclosure.onOpen}
       />
     </VStack>
-  )
-}
-
-function LstStatRow({
-  label,
-  value,
-  secondaryValue,
-  isLoading,
-}: {
-  label: string
-  value: string
-  secondaryValue?: string
-  isLoading?: boolean
-}) {
-  return (
-    <HStack align="flex-start" justify="space-between" w="full">
-      <Text color="font.secondary">{label}</Text>
-      <Box alignItems="flex-end" display="flex" flexDirection="column">
-        {isLoading ? <Skeleton h="full" w="12" /> : <Text fontWeight="bold">{value}</Text>}
-        {isLoading ? (
-          <Skeleton h="full" w="12" />
-        ) : (
-          <Text color="grayText" fontSize="sm">
-            {secondaryValue}
-          </Text>
-        )}
-      </Box>
-    </HStack>
-  )
-}
-
-function LstInfo({
-  stakedSonicData,
-  isStakedSonicDataLoading,
-}: {
-  stakedSonicData?: GetStakedSonicDataQuery
-  isStakedSonicDataLoading: boolean
-}) {
-  const lstAddress = (networkConfigs[CHAIN].contracts.beets?.lstStakingProxy || '') as Address
-  const { getToken, usdValueForToken } = useTokens()
-  const lstToken = getToken(lstAddress, CHAIN)
-  const { toCurrency } = useCurrency()
-  const assetsToSharesRate = stakedSonicData?.stsGetGqlStakedSonicData.exchangeRate || '1.0'
-  const sharesToAssetsRate = bn(1).div(bn(assetsToSharesRate))
-
-  return (
-    <NoisyCard
-      cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
-      contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
-    >
-      <Box bottom={0} left={0} overflow="hidden" position="absolute" right={0} top={0}>
-        <ZenGarden sizePx="280px" subdued variant="circle" />
-      </Box>
-      <VStack
-        align="flex-start"
-        h="full"
-        justify="flex-start"
-        m="auto"
-        p={{ base: 'md', md: 'lg' }}
-        role="group"
-        spacing="sm"
-        w="full"
-        zIndex={1}
-      >
-        <LstStatRow
-          isLoading={isStakedSonicDataLoading}
-          label="Total ($S)"
-          secondaryValue={toCurrency(
-            usdValueForToken(lstToken, stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')
-          )}
-          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssets || '0')}
-        />
-        <LstStatRow
-          isLoading={isStakedSonicDataLoading}
-          label="Delegated ($S)"
-          secondaryValue={toCurrency(
-            usdValueForToken(
-              lstToken,
-              stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
-            )
-          )}
-          value={fNum(
-            'token',
-            stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsDelegated || '0'
-          )}
-        />
-        <LstStatRow
-          isLoading={isStakedSonicDataLoading}
-          label="Pending delegation ($S)"
-          secondaryValue={toCurrency(
-            usdValueForToken(
-              lstToken,
-              stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0'
-            )
-          )}
-          value={fNum('token', stakedSonicData?.stsGetGqlStakedSonicData.totalAssetsPool || '0')}
-        />
-        <LstStatRow
-          isLoading={isStakedSonicDataLoading}
-          label="stS rate"
-          secondaryValue={`1 S = ${fNum('token', sharesToAssetsRate)} stS`}
-          value={`1 stS = ${fNum('token', assetsToSharesRate)} S`}
-        />
-        <Box minH="120px" w="full" />
-        {/* <Box minH="200px" w="full">
-          <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
-        </Box> */}
-      </VStack>
-    </NoisyCard>
   )
 }
 
