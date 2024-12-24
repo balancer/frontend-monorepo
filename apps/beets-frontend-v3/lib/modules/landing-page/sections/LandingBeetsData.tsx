@@ -198,13 +198,13 @@ export function LandingBeetsData({
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
               <GlobalStatsCard
-                label="24h VOL"
+                label="24h Volume"
                 value={toCurrency(protocolMetricsAggregated.swapVolume24h)}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
               <GlobalStatsCard
-                label="24h FEES"
+                label="24h Fees"
                 value={toCurrency(protocolMetricsAggregated.swapFee24h)}
               />
             </GridItem>
