@@ -143,13 +143,14 @@ export function useAprTooltip({
     maBeetsReward ? maBeetsReward.apr.toString() : '0'
   )
 
-  const maxMaBeetsReward = aprItems.find(
+  const maBeetsStakingBoost = aprItems.find(
     item => item.type === GqlPoolAprItemType.StakingBoost && item.id.match(/beets-apr-boost/) // TODO: or add prop in api to distinguish?
   )
 
-  const maxMaBeetsRewardDisplayed = numberFormatter(
-    maxMaBeetsReward ? maxMaBeetsReward.apr.toString() : '0'
+  const maBeetsStakingBoostDisplayed = numberFormatter(
+    maBeetsStakingBoost ? maBeetsStakingBoost.apr.toString() : '0'
   )
+  const maxMaBeetsRewardDisplayed = bn(maBeetsRewardsDisplayed).plus(maBeetsStakingBoostDisplayed)
 
   const maxMaBeetsVotingReward = aprItems.find(
     item => item.type === GqlPoolAprItemType.StakingBoost && item.id.match(/voting-apr-boost/) // TODO: or add prop in api to distinguish?
@@ -162,6 +163,7 @@ export function useAprTooltip({
   const maBeetsTotalAprDisplayed = bn(swapFeesDisplayed)
     .plus(maxMaBeetsRewardDisplayed)
     .plus(maxMaBeetsVotingRewardDisplayed)
+    .plus(yieldBearingTokensAprDisplayed)
 
   const isMaBeetsPresent = !maBeetsRewardsDisplayed.isZero()
 
