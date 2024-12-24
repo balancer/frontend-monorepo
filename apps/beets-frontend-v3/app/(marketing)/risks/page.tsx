@@ -4,8 +4,23 @@ import Link from 'next/link'
 import { Container, Divider, Box } from '@chakra-ui/react'
 import { Prose } from '@nikolovlazar/chakra-ui-prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { useEffect } from 'react'
 
 export default function Privacy() {
+  useEffect(() => {
+    const handleHashChange = () => {
+      const { hash } = window.location
+      if (hash) {
+        const id = hash.substring(1)
+        const element = document.getElementById(id)
+        element?.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+
+    // Run on initial load
+    handleHashChange()
+  }, [])
+
   return (
     <Container p="0">
       <Prose>

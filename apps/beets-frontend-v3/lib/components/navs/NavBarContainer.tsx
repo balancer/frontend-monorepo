@@ -6,7 +6,6 @@ import { NavLogo } from './NavLogo'
 import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BeetsLogoType } from '../imgs/BeetsLogoType'
-import { LzBeetsMigrator } from '@repo/lib/shared/components/btns/LzBeetsMigrator'
 import { Box, HStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { fadeIn } from '@repo/lib/shared/utils/animations'
@@ -62,12 +61,7 @@ export function NavBarContainer() {
         </Box>
       }
       navLogo={<NavLogo />}
-      rightSlot={
-        <>
-          <LzBeetsMigrator />
-          <NavActions hideDarkModeToggle mobileNav={mobileNav} />
-        </>
-      }
+      rightSlot={<NavActions hideDarkModeToggle mobileNav={mobileNav} />}
     />
   )
 }

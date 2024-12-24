@@ -160,6 +160,8 @@ export function useAprTooltip({
   )
 
   const maBeetsTotalAprDisplayed = bn(swapFeesDisplayed)
+    .plus(yieldBearingTokensAprDisplayed)
+    .plus(maBeetsRewardsDisplayed)
     .plus(maxMaBeetsRewardDisplayed)
     .plus(maxMaBeetsVotingRewardDisplayed)
 

@@ -148,7 +148,8 @@ export function getTotalApr(
       }
 
       if (item.type === GqlPoolAprItemType.MabeetsEmissions) {
-        minTotal = bn(item.apr).plus(minTotal) // only add min here, max is already added thru staking boost
+        minTotal = bn(item.apr).plus(minTotal)
+        maxTotal = bn(item.apr).plus(maxTotal)
         return
       }
 
