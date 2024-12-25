@@ -1,6 +1,6 @@
 'use client'
 
-import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
+import { Grid, GridItem, Icon, PopoverContent, Text, VStack } from '@chakra-ui/react'
 import { Globe } from 'react-feather'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
@@ -36,8 +36,17 @@ export function VoteListTableHeader({ ...rest }) {
         <GridItem justifySelf="end" key={orderByItem} maxW="maxContent">
           <SortableHeader
             isSorted={sortingBy === orderByItem}
-            label={orderByHash[orderByItem]}
+            label={orderByHash[orderByItem].label}
             onSort={() => handleSort(orderByItem)}
+            popoverContent={
+              orderByHash[orderByItem].title ? (
+                <PopoverContent maxW="300px" p="sm" w="auto">
+                  <Text fontSize="sm" variant="secondary">
+                    {orderByHash[orderByItem].title}
+                  </Text>
+                </PopoverContent>
+              ) : undefined
+            }
             sorting={sorting}
           />
         </GridItem>
