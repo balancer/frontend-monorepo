@@ -2,6 +2,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { PoolListItem } from './pool.types'
 import { HStack, Text, TextProps, Box } from '@chakra-ui/react'
 import { FeaturedPool, Pool } from './PoolProvider'
+import { getPoolDisplayTokens } from '@repo/lib/modules/pool/pool.utils'
 
 interface PoolNameProps extends TextProps {
   pool: PoolListItem | Pool | FeaturedPool
@@ -15,7 +16,7 @@ function isFeaturedPool(pool: PoolListItem | Pool | FeaturedPool): pool is Featu
 }
 
 export function PoolName({ pool, MemoizedMainAprTooltip, isCarousel, ...rest }: PoolNameProps) {
-  const displayTokens = pool.displayTokens
+  const displayTokens = getPoolDisplayTokens(pool).filter(token => token.address !== pool.address)
 
   return (
     <HStack alignItems="center" gap="xxs" justify="start" px="sm" wrap="wrap">
@@ -23,7 +24,7 @@ export function PoolName({ pool, MemoizedMainAprTooltip, isCarousel, ...rest }: 
         return (
           <HStack alignItems="center" gap="xxs" justify="center" key={token.address}>
             <Text as="span" fontWeight="bold" {...rest} fontSize="sm" lineHeight="1">
-              {token.nestedTokens ? token.name : token.symbol}
+              {token.nestedPool ? token.name : token.symbol}
               {token.weight && ` ${fNum('weight', token.weight || '')}`}
             </Text>
             <Text {...rest} lineHeight="1">

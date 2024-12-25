@@ -1,31 +1,19 @@
 'use client'
 
-import {
-  Badge,
-  Flex,
-  HStack,
-  Text,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Center,
-} from '@chakra-ui/react'
+import { Badge, Flex } from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
 import Image from 'next/image'
-import { fNum } from '@repo/lib/shared/utils/numbers'
-import { Repeat } from 'react-feather'
 import { PoolListTokenPills } from '../../PoolList/PoolListTokenPills'
-import { shouldHideSwapFee } from '../../pool.utils'
+import { getPoolDisplayTokens, shouldHideSwapFee } from '../../pool.utils'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { PoolTypeTag } from '../PoolTypeTag'
-import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
 import { PoolVersionTag } from '../../PoolList/PoolListTable/PoolVersionTag'
-import { useHook } from '@repo/lib/modules/hooks/useHook'
-import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
+import { PoolHookTag } from '../PoolHookTag'
+import { PoolSwapFees } from './PoolSwapFees'
+import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 
 export default function PoolMetaBadges() {
   const { pool, chain } = usePool()
-  const { hasHook } = useHook(pool)
 
   return (
     <Flex alignItems="center" gap={{ base: 'xs', sm: 'sm' }} wrap="wrap">
@@ -47,51 +35,23 @@ export default function PoolMetaBadges() {
         />
       </Badge>
       <PoolListTokenPills
-        chain={pool.chain}
-        displayTokens={pool.displayTokens}
+        pool={{
+          displayTokens: getPoolDisplayTokens(pool),
+          type: pool.type,
+          chain: pool.chain,
+          poolTokens: pool.poolTokens as GqlPoolTokenDetail[], // fix: poolTokens are incompatible
+          address: pool.address,
+          hasErc4626: pool.hasErc4626,
+          hasAnyAllowedBuffer: pool.hasAnyAllowedBuffer,
+          protocolVersion: pool.protocolVersion,
+        }}
         px="sm"
         py="2"
-        type={pool.type}
       />
       <PoolVersionTag isSmall pool={pool} />
       <PoolTypeTag pool={pool} />
-      {hasHook && (
-        <BalBadge color="font.primary" fontSize="xs" h={8} w={8}>
-          <Center h="full" w="full">
-            <HookIcon size={20} />
-          </Center>
-        </BalBadge>
-      )}
-      {!shouldHideSwapFee(pool.type) && (
-        <Popover trigger="hover">
-          <PopoverTrigger>
-            <Badge
-              alignItems="center"
-              background="background.level2"
-              border="1px solid"
-              borderColor="border.base"
-              display="flex"
-              fontWeight="normal"
-              h={{ base: '28px' }}
-              px="sm"
-              py="sm"
-              rounded="full"
-              shadow="sm"
-            >
-              <HStack color="font.primary">
-                <Repeat size={12} />
-                <Text fontSize="xs">{fNum('feePercent', pool.dynamicData.swapFee)}</Text>
-              </HStack>
-            </Badge>
-          </PopoverTrigger>
-          <PopoverContent maxW="300px" p="sm" w="auto">
-            <Text fontSize="sm" variant="secondary">
-              The swap fee rate earned by Liquidity Providers anytime a swap is routed through this
-              pool. These fees automatically accumulate into each LP&rsquo;s position.
-            </Text>
-          </PopoverContent>
-        </Popover>
-      )}
+      <PoolHookTag pool={pool} />
+      {!shouldHideSwapFee(pool.type) && <PoolSwapFees pool={pool} />}
     </Flex>
   )
 }

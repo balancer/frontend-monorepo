@@ -1,6 +1,6 @@
 import { getChainId, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
 import { SwapHandler } from './Swap.handler'
-import { GqlSorSwapType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { AuraBalSwap, HumanAmount, Slippage, SwapKind, Token, TokenAmount } from '@balancer/sdk'
 import { formatUnits } from 'viem'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
@@ -12,11 +12,12 @@ import {
 import { getRpcUrl } from '../../web3/transports'
 import { isNativeAsset, isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { ApiToken } from '../../pool/pool.types'
 
 export class AuraBalSwapHandler implements SwapHandler {
   name = 'AuraBalSwapHandler'
 
-  constructor(public tokens: GqlToken[]) {}
+  constructor(public tokens: ApiToken[]) {}
 
   async simulate({ ...variables }: SimulateSwapInputs): Promise<AuraBalSimulateSwapResponse> {
     const { chain, swapType } = variables

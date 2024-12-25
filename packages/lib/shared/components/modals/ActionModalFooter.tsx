@@ -1,9 +1,14 @@
-import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
+'use client'
+
 import { Button, Divider, HStack, ModalFooter, VStack } from '@chakra-ui/react'
+import { useShouldRenderBatchTxButton } from '@repo/lib/modules/web3/safe.hooks'
+import { useAppzi } from '@repo/lib/shared/hooks/useAppzi'
 import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
+import { PropsWithChildren } from 'react'
 import { CornerDownLeft, MessageSquare, ThumbsUp } from 'react-feather'
 import { TransactionStep } from '../../../modules/transactions/transaction-steps/lib'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export function SuccessActions({
   returnLabel,
@@ -31,7 +36,7 @@ export function SuccessActions({
         </Button>
         <Button
           as={Link}
-          href="https://discord.balancer.fi"
+          href={getProjectConfig().externalLinks.discordUrl}
           leftIcon={<MessageSquare size="14" />}
           size="xs"
           target="_blank"
@@ -91,12 +96,19 @@ export function ActionModalFooter({
             transition={{ duration: 0.3 }}
           >
             <VStack w="full">
-              {/* Keep currentStep?. optional chaining cause some edge cases require it */}
-              {currentStep?.renderAction()}
+              <RenderActionButton currentStep={currentStep} />
             </VStack>
           </motion.div>
         )}
       </AnimatePresence>
     </ModalFooter>
   )
+}
+
+function RenderActionButton({ currentStep }: PropsWithChildren<{ currentStep: TransactionStep }>) {
+  const shouldRenderBatchButton = useShouldRenderBatchTxButton(currentStep)
+
+  if (shouldRenderBatchButton) return currentStep?.renderBatchAction?.(currentStep)
+
+  return currentStep?.renderAction()
 }

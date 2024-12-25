@@ -9,11 +9,13 @@ import {
   parseRemoveLiquidityReceipt,
   parseSwapReceipt,
 } from './receipt-parsers'
+import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 
 type BaseReceiptProps = {
   txHash?: Hex
   userAddress: Address
   chain: GqlChain
+  protocolVersion: ProtocolVersion
 }
 
 export type ReceiptProps = BaseReceiptProps & { parseReceipt: ParseReceipt }
@@ -58,7 +60,7 @@ export function useSwapReceipt(props: BaseReceiptProps) {
   }
 }
 
-function useTxReceipt({ txHash, chain, userAddress, parseReceipt }: ReceiptProps) {
+function useTxReceipt({ txHash, chain, userAddress, parseReceipt, protocolVersion }: ReceiptProps) {
   const { getToken, isLoadingTokenPrices } = useTokens()
   const chainId = getChainId(chain)
   // These queries will be cached if we are in the context of a transaction flow
@@ -89,6 +91,7 @@ function useTxReceipt({ txHash, chain, userAddress, parseReceipt }: ReceiptProps
           userAddress,
           txValue,
           getToken,
+          protocolVersion,
         })
       : undefined
 

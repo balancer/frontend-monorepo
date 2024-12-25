@@ -6,13 +6,14 @@
   "scripts": {
     "build": "pnpm --filter @repo/lib graphql:gen && next build",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3001\"",
+    "dev:no-gen": "next dev -p 3001",
     "gen:wagmi": "pnpm wagmi generate",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "format": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
-    "format:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
+    "lint": "eslint . --cache",
+    "lint:fix": "eslint . --fix --max-warnings 0  --cache",
+    "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
+    "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
     "start": "next start",
-    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
     "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/beets/beets.theme.ts",
     "postinstall": "npm run gen:theme-typings"
   },
@@ -33,7 +34,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-use-measure": "^2.1.1",
-    "viem": "^2.21.18",
+    "viem": "2.21.55",
     "wagmi": "^2.12.16"
   },
   "devDependencies": {
@@ -50,12 +51,12 @@
     "@types/react-dom": "18.2.6",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
-    "@wagmi/cli": "^2.1.15",
+    "@wagmi/cli": "2.1.22",
     "autoprefixer": "^10.4.14",
     "concurrently": "^8.2.2",
     "cross-fetch": "^4.0.0",
     "eslint": "8.43.0",
-    "happy-dom": "^12.10.3",
+    "happy-dom": "^15.10.2",
     "lokijs": "^1.5.12",
     "sentry-testkit": "^5.0.9",
     "typescript": "5.4.5"

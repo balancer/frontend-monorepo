@@ -1,5 +1,4 @@
 import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
-
 import { Globe } from 'react-feather'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { portfolioOrderBy, PortfolioSortingData, PortfolioTableSortingId } from './PortfolioTable'
@@ -31,7 +30,7 @@ export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, 
       </GridItem>
       <GridItem justifySelf="start">
         <Text fontWeight="bold" textAlign="left">
-          Type
+          Details
         </Text>
       </GridItem>
       {portfolioOrderBy.map((orderByItem, index) => (

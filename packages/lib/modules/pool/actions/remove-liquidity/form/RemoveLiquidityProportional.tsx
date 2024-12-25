@@ -2,16 +2,17 @@
 'use client'
 
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
-import { GqlPoolType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { Card, Text, VStack, useDisclosure } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { isNativeAsset, isNativeOrWrappedNative } from '@repo/lib/modules/tokens/token.helpers'
 import { NativeAssetSelectModal } from '@repo/lib/modules/tokens/NativeAssetSelectModal'
 import { shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
+import { Pool } from '../../../PoolProvider'
+import { ApiToken } from '../../../pool.types'
 
-type Props = { tokens: GqlToken[]; poolType: GqlPoolType }
-export function RemoveLiquidityProportional({ tokens, poolType }: Props) {
+type Props = { tokens: ApiToken[]; pool: Pool }
+export function RemoveLiquidityProportional({ tokens, pool }: Props) {
   const { amountOutForToken, validTokens, setWethIsEth, simulationQuery, priceImpactQuery } =
     useRemoveLiquidity()
   const tokenSelectDisclosure = useDisclosure()
@@ -21,7 +22,7 @@ export function RemoveLiquidityProportional({ tokens, poolType }: Props) {
     isNativeOrWrappedNative(token.address as Address, token.chain)
   )
 
-  function handleTokenSelect(token: GqlToken) {
+  function handleTokenSelect(token: ApiToken) {
     if (isNativeAsset(token.address as Address, token.chain)) {
       setWethIsEth(true)
     } else {
@@ -45,7 +46,7 @@ export function RemoveLiquidityProportional({ tokens, poolType }: Props) {
                   isLoading={isLoading}
                   key={token.address}
                   toggleTokenSelect={
-                    shouldShowNativeWrappedSelector(token, poolType)
+                    shouldShowNativeWrappedSelector(token, pool)
                       ? () => tokenSelectDisclosure.onOpen()
                       : undefined
                   }

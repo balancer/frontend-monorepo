@@ -43,7 +43,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
 import { motion, AnimatePresence } from 'framer-motion'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
-import { getChainShortName, isDev, isStaging } from '@repo/lib/config/app.config'
+import { getChainShortName } from '@repo/lib/config/app.config'
 import { usePoolList } from './PoolListProvider'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -100,6 +100,7 @@ function UserPoolFilter() {
 function PoolCategoryFilters() {
   const {
     queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel },
+    hidePoolTags,
   } = usePoolList()
 
   // remove query param when empty
@@ -111,16 +112,18 @@ function PoolCategoryFilters() {
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {poolTagFilters.map(tag => (
-        <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
-          <Checkbox
-            isChecked={!!poolTags.find(selected => selected === tag)}
-            onChange={e => togglePoolTag(e.target.checked, tag as PoolTagType)}
-          >
-            <Text fontSize="sm">{poolTagLabel(tag)}</Text>
-          </Checkbox>
-        </Box>
-      ))}
+      {poolTagFilters
+        .filter(tag => !hidePoolTags.includes(tag))
+        .map(tag => (
+          <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
+            <Checkbox
+              isChecked={!!poolTags.find(selected => selected === tag)}
+              onChange={e => togglePoolTag(e.target.checked, tag as PoolTagType)}
+            >
+              <Text fontSize="sm">{poolTagLabel(tag)}</Text>
+            </Checkbox>
+          </Box>
+        ))}
     </Box>
   )
 }
@@ -130,6 +133,7 @@ export interface PoolTypeFiltersArgs {
   poolTypeLabel: (poolType: PoolFilterType) => string
   setPoolTypes: (value: PoolFilterType[] | null) => void
   togglePoolType: (checked: boolean, value: PoolFilterType) => void
+  hidePoolTypes?: GqlPoolType[]
 }
 
 export function PoolTypeFilters({
@@ -137,6 +141,7 @@ export function PoolTypeFilters({
   poolTypes,
   poolTypeLabel,
   setPoolTypes,
+  hidePoolTypes,
 }: PoolTypeFiltersArgs) {
   // remove query param when empty
   useEffect(() => {
@@ -145,7 +150,9 @@ export function PoolTypeFilters({
     }
   }, [poolTypes])
 
-  const _poolTypeFilters = poolTypeFilters.filter(poolType => poolType !== GqlPoolType.CowAmm)
+  const _poolTypeFilters = poolTypeFilters.filter(
+    poolType => !(hidePoolTypes ?? []).includes(poolType)
+  )
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
@@ -285,6 +292,7 @@ export function FilterTags({
 }: FilterTagsPops) {
   const { toCurrency } = useCurrency()
 
+  // prevents layout shift in mobile view
   if (
     networks.length === 0 &&
     poolTypes.length === 0 &&
@@ -292,7 +300,7 @@ export function FilterTags({
     (poolTags ? poolTags.length === 0 : true) &&
     !includeExpiredPools
   ) {
-    return null
+    return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
   }
 
   return (
@@ -453,19 +461,16 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
 function ProtocolVersionFilter() {
   const {
     queryState: {
-      togglePoolType,
       setProtocolVersion,
       protocolVersion,
       poolTypes,
       activeProtocolVersionTab,
       setActiveProtocolVersionTab,
     },
+    hideProtocolVersion,
   } = usePoolList()
 
-  const tabs =
-    isDev || isStaging
-      ? PROTOCOL_VERSION_TABS
-      : PROTOCOL_VERSION_TABS.filter(tab => tab.value !== 'v3')
+  const tabs = PROTOCOL_VERSION_TABS
 
   function toggleTab(option: ButtonGroupOption) {
     setActiveProtocolVersionTab(option)
@@ -476,7 +481,7 @@ function ProtocolVersionFilter() {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[2])
     } else if (protocolVersion === 2) {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[1])
-    } else if (poolTypes.includes(GqlPoolType.CowAmm)) {
+    } else if (poolTypes.includes(GqlPoolType.CowAmm) || protocolVersion === 1) {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[3])
     } else {
       setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
@@ -484,16 +489,12 @@ function ProtocolVersionFilter() {
   }, [])
 
   useEffect(() => {
-    if (activeProtocolVersionTab.value === 'cow') {
-      togglePoolType(true, GqlPoolType.CowAmm)
-    } else {
-      togglePoolType(false, GqlPoolType.CowAmm)
-    }
-
     if (activeProtocolVersionTab.value === 'v3') {
       setProtocolVersion(3)
     } else if (activeProtocolVersionTab.value === 'v2') {
       setProtocolVersion(2)
+    } else if (activeProtocolVersionTab.value === 'cow') {
+      setProtocolVersion(1)
     } else {
       setProtocolVersion(null)
     }
@@ -504,7 +505,7 @@ function ProtocolVersionFilter() {
       currentOption={activeProtocolVersionTab}
       groupId="protocol-version"
       onChange={toggleTab}
-      options={tabs}
+      options={tabs.filter(tab => !hideProtocolVersion.includes(tab.value))}
       size="xxs"
     />
   )
@@ -527,6 +528,7 @@ export function PoolListFilters() {
       poolTypeLabel,
       setPoolTypes,
     },
+    hidePoolTypes,
   } = usePoolList()
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
@@ -577,7 +579,12 @@ export function PoolListFilters() {
                             Filters
                           </Text>
                           {totalFilterCount > 0 && (
-                            <Button onClick={_resetFilters} size="xs" variant="link">
+                            <Button
+                              h="fit-content"
+                              onClick={_resetFilters}
+                              size="xs"
+                              variant="link"
+                            >
                               Reset all
                             </Button>
                           )}
@@ -620,6 +627,7 @@ export function PoolListFilters() {
                             poolTypes={poolTypes}
                             setPoolTypes={setPoolTypes}
                             togglePoolType={togglePoolType}
+                            hidePoolTypes={hidePoolTypes}
                           />
                         </Box>
                       )}
@@ -629,7 +637,6 @@ export function PoolListFilters() {
                         </Heading>
                         <PoolCategoryFilters />
                       </Box>
-
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />
                       </Box>
@@ -640,21 +647,19 @@ export function PoolListFilters() {
             </PopoverContent>
           </Box>
         </Popover>
-        {isCowPath && (
-          <Button
-            as={Link}
-            display="flex"
-            gap="2"
-            href="https://pool-creator.balancer.fi/cow"
-            ml="ms"
-            rel=""
-            target="_blank"
-            variant="tertiary"
-          >
-            <Icon as={Plus} boxSize={4} />
-            {!isMobile && 'Create a pool'}
-          </Button>
-        )}
+        <Button
+          as={Link}
+          display="flex"
+          gap="2"
+          href={`https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`}
+          ml="ms"
+          rel=""
+          target="_blank"
+          variant="tertiary"
+        >
+          <Icon as={Plus} boxSize={4} />
+          {!isMobile && 'Create a pool'}
+        </Button>
       </HStack>
     </VStack>
   )

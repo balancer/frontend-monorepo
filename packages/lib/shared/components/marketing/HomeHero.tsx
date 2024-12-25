@@ -1,11 +1,11 @@
+/* eslint-disable react/no-unknown-property */
 'use client'
+
 import { Button, Heading, Text, VStack, Flex, Box, useToken } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
-
 import { ArrowUpRight } from 'react-feather'
-
 import { HomeCaseStudies } from '@repo/lib/shared/components/marketing/HomeCaseStudies'
 
 export function HomeHero() {
@@ -139,6 +139,7 @@ export function HomeHero() {
                     className="btn-popover"
                     popovertarget="disclose"
                     popovertargetaction="toggle"
+                    type="button"
                   >
                     Start building
                   </button>
@@ -214,7 +215,7 @@ export function HomeHero() {
                                   _groupHover={{
                                     textDecoration: 'none',
                                   }}
-                                  href="https://docs-v3.balancer.fi/"
+                                  href="https://docs.balancer.fi/"
                                 >
                                   <Flex alignItems="center" gap="xxs">
                                     <Text

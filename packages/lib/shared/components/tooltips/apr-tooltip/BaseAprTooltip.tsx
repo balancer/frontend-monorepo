@@ -106,6 +106,13 @@ function BaseAprTooltip({
     isVotingPresent,
     isLockingAprPresent,
     totalCombinedDisplayed,
+    isMaBeetsPresent,
+    maBeetsRewardsDisplayed,
+    maxMaBeetsRewardDisplayed,
+    maxMaBeetsVotingRewardDisplayed,
+    maBeetsVotingRewardsTooltipText,
+    maBeetsTotalAprDisplayed,
+    maBeetsRewardTooltipText,
   } = useAprTooltip({
     aprItems,
     vebalBoost: Number(vebalBoost),
@@ -137,6 +144,14 @@ function BaseAprTooltip({
         title="Swap fees"
         tooltipText={swapFeesTooltipText}
       />
+      {isMaBeetsPresent && (
+        <TooltipAprItem
+          {...basePopoverAprItemProps}
+          apr={maBeetsRewardsDisplayed}
+          displayValueFormatter={usedDisplayValueFormatter}
+          title="Min maBEETS APR"
+        />
+      )}
       <TooltipAprItem
         {...basePopoverAprItemProps}
         apr={stakingIncentivesAprDisplayed}
@@ -144,13 +159,13 @@ function BaseAprTooltip({
         displayValueFormatter={usedDisplayValueFormatter}
         title="Staking incentives"
       >
-        {stakingIncentivesDisplayed.map((item, index) => {
+        {stakingIncentivesDisplayed.map(item => {
           return (
             <TooltipAprItem
               {...subitemPopoverAprItemProps}
               apr={item.apr}
               displayValueFormatter={usedDisplayValueFormatter}
-              key={index}
+              key={`staking-${item.title}-${item.apr}`}
               title={item.title}
               tooltipText={item.tooltipText}
             />
@@ -164,13 +179,13 @@ function BaseAprTooltip({
         displayValueFormatter={usedDisplayValueFormatter}
         title="Yield bearing tokens"
       >
-        {yieldBearingTokensDisplayed.map((item, index) => {
+        {yieldBearingTokensDisplayed.map(item => {
           return (
             <TooltipAprItem
               {...subitemPopoverAprItemProps}
               apr={item.apr}
               displayValueFormatter={usedDisplayValueFormatter}
-              key={index}
+              key={`yield-bearing-${item.title}-${item.apr}`}
               title={item.title}
               tooltipText={inherentTokenYieldTooltipText}
             />
@@ -233,7 +248,6 @@ function BaseAprTooltip({
               tooltipText={votingIncentivesTooltipText}
             />
             <Divider />
-
             <TooltipAprItem
               {...basePopoverAprItemProps}
               apr={totalCombinedDisplayed}
@@ -266,7 +280,6 @@ function BaseAprTooltip({
               tooltipText={extraBalTooltipText}
             />
             <Divider />
-
             <TooltipAprItem
               {...basePopoverAprItemProps}
               apr={maxVeBalDisplayed}
@@ -291,6 +304,49 @@ function BaseAprTooltip({
           </Stack>
         </>
       ) : null}
+      {isMaBeetsPresent && (
+        <>
+          <Divider />
+          <Stack gap={0} roundedBottom="md">
+            <TooltipAprItem
+              {...basePopoverAprItemProps}
+              apr={maxMaBeetsRewardDisplayed}
+              displayValueFormatter={usedDisplayValueFormatter}
+              fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
+              fontWeight={500}
+              pl={6}
+              pt={3}
+              title="Max maBEETS APR"
+              tooltipText={maBeetsRewardTooltipText}
+            />
+            <TooltipAprItem
+              {...basePopoverAprItemProps}
+              apr={maxMaBeetsVotingRewardDisplayed}
+              displayValueFormatter={usedDisplayValueFormatter}
+              fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
+              fontWeight={500}
+              pl={6}
+              title="Max Voting APR"
+              tooltipText={maBeetsVotingRewardsTooltipText}
+            />
+            <Divider />
+            <TooltipAprItem
+              {...basePopoverAprItemProps}
+              apr={maBeetsTotalAprDisplayed}
+              backgroundColor="background.level3"
+              boxBackground={balRewardGradient}
+              displayValueFormatter={usedDisplayValueFormatter}
+              fontColor="font.special"
+              pl={2}
+              pt={3}
+              roundedBottom="md"
+              textBackground="background.special"
+              textBackgroundClip="text"
+              title="Max total APR"
+            />
+          </Stack>
+        </>
+      )}
     </PopoverContent>
   )
 

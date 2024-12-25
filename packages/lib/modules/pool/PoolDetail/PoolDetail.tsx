@@ -13,13 +13,14 @@ import { PoolAlerts } from '../alerts/PoolAlerts'
 import { ClaimProvider } from '../actions/claim/ClaimProvider'
 import { usePoolVariant } from '../pool.hooks'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import PoolUserEvents from './PoolUserEvents'
+import PoolUserEvents from './PoolUserEvents/PoolUserEvents'
 import { hasTotalBalance } from '../user-balance.helpers'
 import { usePoolEvents } from '../usePoolEvents'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { CowFooter } from '@repo/lib/shared/components/navs/CowFooter'
 import { CowPoolBanner } from '@repo/lib/shared/components/navs/CowPoolBanner'
 import { PoolActivity } from './PoolActivity/PoolActivity'
+import { PoolHookBanner } from './PoolHookBanner'
 
 export function PoolDetail() {
   const { pool, chain } = usePool()
@@ -98,6 +99,7 @@ export function PoolDetail() {
             )}
             <PoolActivity />
             <PoolComposition />
+            <PoolHookBanner />
             <PoolInfoLayout />
           </VStack>
         </ClaimProvider>

@@ -25,7 +25,6 @@ import {
 } from '@repo/lib/modules/pool/PoolList/PoolListFilters'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListSearch } from '@repo/lib/modules/vebal/vote/VoteList/VoteListSearch'
-import { PoolFilterType } from '@repo/lib/modules/pool/pool.types'
 
 export function useFilterTagsVisible() {
   const {

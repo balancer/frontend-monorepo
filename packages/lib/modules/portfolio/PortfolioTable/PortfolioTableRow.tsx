@@ -4,7 +4,7 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { getPoolPath, getPoolTypeLabel } from '../../pool/pool.utils'
+import { getPoolDisplayTokens, getPoolPath } from '../../pool/pool.utils'
 import { PoolListTokenPills } from '../../pool/PoolList/PoolListTokenPills'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
@@ -12,6 +12,9 @@ import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
+import { isBalancerProject, isBeetsProject } from '@repo/lib/config/getProjectConfig'
+import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -63,19 +66,24 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
             </GridItem>
             <GridItem>
               <PoolListTokenPills
-                chain={pool.chain}
-                displayTokens={pool.displayTokens}
                 h={['32px', '36px']}
                 iconSize={20}
                 p={['xxs', 'sm']}
+                pool={{
+                  displayTokens: getPoolDisplayTokens(pool),
+                  type: pool.type,
+                  chain: pool.chain,
+                  poolTokens: pool.poolTokens as GqlPoolTokenDetail[], // fix: poolTokens are incompatible
+                  address: pool.address,
+                  hasErc4626: pool.hasErc4626,
+                  hasAnyAllowedBuffer: pool.hasAnyAllowedBuffer,
+                  protocolVersion: pool.protocolVersion,
+                }}
                 pr={[1.5, 'ms']}
-                type={pool.type}
               />
             </GridItem>
             <GridItem>
-              <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
-                {getPoolTypeLabel(pool.type)}
-              </Text>
+              <PollListTableDetailsCell pool={pool} />
             </GridItem>
             <GridItem display="flex" justifyContent="left" px="sm">
               <HStack>
@@ -83,16 +91,17 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
                 <StakingIcons pool={pool} />
               </HStack>
             </GridItem>
-            {/* TO-DO vebal boost */}
-            <GridItem px="sm">
-              <Text
-                fontWeight="medium"
-                textAlign="right"
-                title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
-              >
-                {vebalBoostValue ? `${Number(vebalBoostValue).toFixed(2)}x` : '-'}
-              </Text>
-            </GridItem>
+            {isBalancerProject && (
+              <GridItem px="sm">
+                <Text
+                  fontWeight="medium"
+                  textAlign="right"
+                  title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
+                >
+                  {vebalBoostValue ? `${Number(vebalBoostValue).toFixed(2)}x` : '-'}
+                </Text>
+              </GridItem>
+            )}
             <GridItem px="sm">
               <Text fontWeight="medium" textAlign="right">
                 {toCurrency(pool.poolPositionUsd, { abbreviated: false })}
@@ -127,7 +136,7 @@ function StakingIcons({ pool }: { pool: ExpandedPoolInfo }) {
 
   const shouldHideIcon = pool.poolType === ExpandedPoolType.Unstaked || !canStake
 
-  if (shouldHideIcon) {
+  if (shouldHideIcon || isBeetsProject) {
     return null
   }
 

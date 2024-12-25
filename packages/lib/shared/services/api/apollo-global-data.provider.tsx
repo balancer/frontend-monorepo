@@ -18,8 +18,13 @@ import { FiatFxRatesProvider } from '../../hooks/FxRatesProvider'
 import { getFxRates } from '../../utils/currencies'
 import { mins } from '../../utils/time'
 import { PropsWithChildren } from 'react'
+import { getHooksMetadata } from '@repo/lib/modules/hooks/getHooksMetadata'
+import { HooksProvider } from '@repo/lib/modules/hooks/HooksProvider'
 import { getPoolTags } from '@repo/lib/modules/pool/tags/getPoolTags'
 import { PoolTagsProvider } from '@repo/lib/modules/pool/tags/PoolTagsProvider'
+import { getErc4626Metadata } from '@repo/lib/modules/pool/metadata/getErc4626Metadata'
+import { PoolsMetadataProvider } from '@repo/lib/modules/pool/metadata/PoolsMetadataProvider'
+import { getPoolsMetadata } from '@repo/lib/modules/pool/metadata/getPoolsMetadata'
 
 export const revalidate = 60
 
@@ -52,8 +57,14 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
     },
   })
 
-  const exchangeRates = await getFxRates()
-  const poolTags = await getPoolTags()
+  const [exchangeRates, hooksMetadata, poolTags, erc4626Metadata, poolsMetadata] =
+    await Promise.all([
+      getFxRates(),
+      getHooksMetadata(),
+      getPoolTags(),
+      getErc4626Metadata(),
+      getPoolsMetadata(),
+    ])
 
   return (
     <TokensProvider
@@ -62,7 +73,13 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
       variables={tokensQueryVariables}
     >
       <FiatFxRatesProvider data={exchangeRates}>
-        <PoolTagsProvider data={poolTags}>{children}</PoolTagsProvider>
+        <PoolTagsProvider data={poolTags}>
+          <HooksProvider data={hooksMetadata}>
+            <PoolsMetadataProvider erc4626Metadata={erc4626Metadata} poolsMetadata={poolsMetadata}>
+              {children}
+            </PoolsMetadataProvider>
+          </HooksProvider>
+        </PoolTagsProvider>
       </FiatFxRatesProvider>
     </TokensProvider>
   )

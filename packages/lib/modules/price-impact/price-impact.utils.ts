@@ -1,6 +1,6 @@
-import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, isNegative, isZero } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
+import { PriceImpactLevel } from './PriceImpactProvider'
 
 /*
  ABA priceImpact calculation has some known limitations. Examples:
@@ -19,9 +19,18 @@ export function isUnhandledAddPriceImpactError(error: Error | null): boolean {
 }
 
 export function cannotCalculatePriceImpactError(error: Error | null): boolean {
-  const hasUnbalancedAddError = isUnbalancedAddErrorMessage(error)
+  // TODO: narrow unknown price impact errors when we have better knowledge about them
+  // const hasUnbalancedAddError = isUnbalancedAddErrorMessage(error)
 
-  if (error && error.name === 'ContractFunctionExecutionError' && !hasUnbalancedAddError) {
+  if (!error) return false
+
+  // All ContractFunctionExecutionErrors are shown as unknown price impact
+  if (error.name === 'ContractFunctionExecutionError') return true
+  // All Swap PI errors are shown as unknown price impact
+  if (
+    error.message.startsWith('Unexpected error while calculating') &&
+    error.message.includes('PI at Swap step')
+  ) {
     return true
   }
 
@@ -42,4 +51,69 @@ export function calcMarketPriceImpact(usdIn: string, usdOut: string) {
   const priceImpact = bn(1).minus(bn(usdIn).div(usdOut))
 
   return BigNumber.min(priceImpact, 0).abs().toString()
+}
+
+export function getPriceImpactColor(priceImpactLevel: PriceImpactLevel) {
+  switch (priceImpactLevel) {
+    case 'unknown':
+    case 'high':
+    case 'max':
+      return 'red.400'
+    case 'medium':
+      return 'font.warning'
+    case 'low':
+    default:
+      return 'grayText'
+  }
+}
+
+export function getPriceImpactLevel(priceImpact: number): PriceImpactLevel {
+  if (priceImpact === null || priceImpact === undefined) return 'unknown'
+  if (priceImpact < 0.01) return 'low' // 1%
+  if (priceImpact < 0.05) return 'medium' // 5%
+  if (priceImpact < 0.1) return 'high' // 10%
+  return 'max'
+}
+
+export const getPriceImpactExceedsLabel = (priceImpactLevel: PriceImpactLevel) => {
+  switch (priceImpactLevel) {
+    case 'medium':
+      return '1.00%'
+    case 'high':
+      return '5.00%'
+    case 'max':
+      return '10.00%'
+    default:
+      return ''
+  }
+}
+
+export function getPriceImpactLabel(priceImpact: string | number | null | undefined) {
+  if (!priceImpact) {
+    return ''
+  }
+
+  if (isZero(priceImpact)) {
+    return ' (0.00%)'
+  }
+
+  return ` (-${fNum('priceImpact', priceImpact)})`
+}
+
+export function getFullPriceImpactLabel(
+  priceImpact: string | number | null | undefined,
+  currencyPriceImpact: string
+) {
+  if (!priceImpact) return '-'
+  if (isZero(priceImpact) || isNegative(priceImpact)) return `${currencyPriceImpact} (0.00%)`
+
+  return `-${currencyPriceImpact}${getPriceImpactLabel(priceImpact)}`
+}
+
+export function getMaxSlippageLabel(slippage: string | 0, currencyMaxSlippage: string) {
+  if (!slippage) return '-'
+  if (isZero(slippage) || isNegative(slippage)) return `${currencyMaxSlippage} (0.00%)`
+
+  const slippageLabel = fNum('slippage', slippage)
+  return `-${currencyMaxSlippage} (-${slippageLabel})`
 }

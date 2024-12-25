@@ -1,9 +1,12 @@
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { VStack, HStack, Skeleton, Text } from '@chakra-ui/react'
-import TokenRow from './TokenRow'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { ApiToken } from '../../pool/pool.types'
+import { HumanTokenAmount } from '../token.types'
 import { useTotalUsdValue } from '../useTotalUsdValue'
-import { HumanTokenAmountWithAddress } from '../token.types'
+import TokenRow from './TokenRow'
+
+type HumanTokenAmountWithSymbol = HumanTokenAmount & { symbol?: string }
 
 export function TokenRowGroup({
   label,
@@ -14,10 +17,10 @@ export function TokenRowGroup({
   isLoading = false,
 }: {
   label: string
-  amounts: HumanTokenAmountWithAddress[]
+  amounts: HumanTokenAmountWithSymbol[]
   chain: GqlChain
   totalUSDValue?: string
-  tokens?: GqlToken[]
+  tokens?: ApiToken[]
   isLoading?: boolean
 }) {
   const { toCurrency } = useCurrency()
@@ -38,7 +41,7 @@ export function TokenRowGroup({
           hasMultipleAmounts && <Text>{toCurrency(usdValue, { abbreviated: false })}</Text>
         )}
       </HStack>
-      {amounts.map((amount, index) => {
+      {amounts.map(amount => {
         if (!amount.tokenAddress) return <div key={JSON.stringify(amount)}>Missing token</div>
 
         return (
@@ -47,7 +50,8 @@ export function TokenRowGroup({
             address={amount.tokenAddress}
             chain={chain}
             isLoading={isLoading}
-            key={`${index}-${amount.tokenAddress}-${amount.humanAmount}`}
+            key={`${amount.tokenAddress}-${amount.humanAmount}`}
+            symbol={amount?.symbol}
             value={amount.humanAmount}
           />
         )

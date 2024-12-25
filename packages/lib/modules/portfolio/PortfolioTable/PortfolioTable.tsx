@@ -18,6 +18,8 @@ import { ExpandedPoolInfo, ExpandedPoolType, useExpandedPools } from './useExpan
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
+import { getProjectConfig, isBalancerProject } from '@repo/lib/config/getProjectConfig'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -33,10 +35,14 @@ export const portfolioOrderBy: {
     title: 'Staking',
     id: 'staking',
   },
-  {
-    title: 'veBAL boost',
-    id: 'vebal',
-  },
+  ...(isBalancerProject
+    ? [
+        {
+          title: 'veBAL boost',
+          id: 'vebal' as PortfolioTableSortingId,
+        },
+      ]
+    : []),
   {
     title: 'My liquidity',
     id: 'liquidity',
@@ -49,7 +55,9 @@ export const portfolioOrderBy: {
 
 const rowProps = {
   px: [0, 4],
-  gridTemplateColumns: `32px minmax(320px, 1fr) repeat(2, 100px) 120px 130px 170px`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) 180px 110px 110px ${
+    isBalancerProject ? '130px' : ''
+  } 170px`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 }
@@ -124,10 +132,17 @@ export function PortfolioTable() {
       }
 
       if (currentSortingObj.id === 'apr') {
-        const [aApr] = getTotalApr(a.dynamicData.aprItems)
-        const [bApr] = getTotalApr(b.dynamicData.aprItems)
-
-        return currentSortingObj.desc ? bApr.minus(aApr).toNumber() : aApr.minus(bApr).toNumber()
+        const [aApr] =
+          a.poolType === ExpandedPoolType.StakedAura
+            ? [a.staking?.aura?.apr ?? 0]
+            : getTotalApr(a.dynamicData.aprItems)
+        const [bApr] =
+          b.poolType === ExpandedPoolType.StakedAura
+            ? [b.staking?.aura?.apr ?? 0]
+            : getTotalApr(b.dynamicData.aprItems)
+        return currentSortingObj.desc
+          ? bn(bApr).minus(aApr).toNumber()
+          : bn(aApr).minus(bApr).toNumber()
       }
 
       return 0
@@ -144,7 +159,7 @@ export function PortfolioTable() {
     <FadeInOnView>
       <Stack gap={5}>
         <HStack>
-          <Heading size="lg">Balancer portfolio</Heading>
+          <Heading size="lg">{`${getProjectConfig().projectName} portfolio`}</Heading>
         </HStack>
         {isConnected ? (
           <Card
@@ -156,6 +171,7 @@ export function PortfolioTable() {
           >
             <PaginatedTable
               alignItems="flex-start"
+              getRowId={row => row.uniqueKey}
               items={sortedPools}
               left={{ base: '-4px', sm: '0' }}
               loading={isLoadingPortfolio}

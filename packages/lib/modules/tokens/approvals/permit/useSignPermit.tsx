@@ -33,10 +33,10 @@ export function useSignPermit({
 
   const [error, setError] = useState<string | undefined>()
 
-  const sdkClient = useSdkWalletClient()
+  const { sdkClient, isLoading } = useSdkWalletClient()
 
   useEffect(() => {
-    if (sdkClient === undefined) {
+    if (isLoading) {
       setSignPermitState(SignatureState.Preparing)
     } else {
       setSignPermitState(SignatureState.Ready)

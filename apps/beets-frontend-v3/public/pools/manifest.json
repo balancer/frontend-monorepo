@@ -1,7 +1,7 @@
 {
-  "short_name": "BeethovenX",
-  "name": "BeethovenX",
-  "description": "BeethovenX is a battle-tested toolkit for true AMM experimentation and innovation.",
+  "short_name": "Beets",
+  "name": "Beets",
+  "description": "Beets is a battle-tested toolkit for true AMM experimentation and innovation.",
   "icons": [
     {
       "src": "/beets.svg",

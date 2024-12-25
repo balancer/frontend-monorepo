@@ -49,12 +49,14 @@ export function SwapPreviewModal({
     swapTxHash,
     urlTxHash,
     hasQuoteContext,
+    protocolVersion,
   } = useSwap()
 
   const swapReceipt = useSwapReceipt({
     txHash: swapTxHash,
     userAddress,
     chain: selectedChain,
+    protocolVersion,
   })
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)

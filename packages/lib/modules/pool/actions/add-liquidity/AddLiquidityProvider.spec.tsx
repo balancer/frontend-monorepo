@@ -6,7 +6,6 @@ import {
   wETHAddress,
 } from '@repo/lib/debug-helpers'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
-import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import {
   DefaultAddLiquidityTestProvider,
   buildDefaultPoolTestProvider,
@@ -15,6 +14,7 @@ import {
 import { PropsWithChildren } from 'react'
 import { _useAddLiquidity } from './AddLiquidityProvider'
 import { nestedPoolMock } from '../../__mocks__/nestedPoolMock'
+import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 
 async function testUseAddLiquidity(pool: GqlPoolElement = aBalWethPoolElementMock()) {
   const PoolProvider = buildDefaultPoolTestProvider(pool)

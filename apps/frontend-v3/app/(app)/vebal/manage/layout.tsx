@@ -7,7 +7,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { CrossChainSyncProvider } from '@repo/lib/modules/vebal/cross-chain/CrossChainSyncProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 
-export default function VebalLayout({ children }: PropsWithChildren) {
+export default function VeBALManageLayout({ children }: PropsWithChildren) {
   const { vebalBptToken } = useTokens()
 
   if (!vebalBptToken) throw new Error('vebalBptToken not found')

@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
 import { GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
 import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'
@@ -32,14 +34,20 @@ In addition, veBAL holders can get an extra boost of up to 2.5x.`
 
 const stakingTokenTooltipText = '3rd party incentives (outside the veBAL system)'
 
+const maBeetsVotingRewardsTooltipText =
+  'To receive Voting APR you must vote for incentivized pools in the bi-weekly gauge vote. APR is dependent on your vote distribution.'
+
+const maBeetsRewardTooltipText = 'This is the APR you will receive when a relic is fully matured.'
+
 // Types that must be added to the total base
 const TOTAL_BASE_APR_TYPES = [
-  GqlPoolAprItemType.SwapFee,
+  GqlPoolAprItemType.SwapFee_24H,
   GqlPoolAprItemType.IbYield,
   GqlPoolAprItemType.Staking,
   GqlPoolAprItemType.Merkl,
-  GqlPoolAprItemType.Surplus,
+  GqlPoolAprItemType.Surplus_24H,
   GqlPoolAprItemType.VebalEmissions,
+  GqlPoolAprItemType.MabeetsEmissions,
 ]
 
 // Types that must be added to the total APR
@@ -51,14 +59,16 @@ export const TOTAL_APR_TYPES = [
 ]
 
 function absMaxApr(aprItems: GqlPoolAprItem[], boost?: number) {
-  return aprItems.reduce((acc, item) => {
-    const hasBoost = boost && boost > 1
-    if (hasBoost && item.type === GqlPoolAprItemType.Staking) {
-      return acc.plus(bn(item.apr).times(boost))
-    }
+  return aprItems
+    .filter(item => TOTAL_APR_TYPES.includes(item.type))
+    .reduce((acc, item) => {
+      const hasBoost = boost && boost > 1
+      if (hasBoost && item.type === GqlPoolAprItemType.Staking) {
+        return acc.plus(bn(item.apr).times(boost))
+      }
 
-    return acc.plus(bn(item.apr))
-  }, bn(0))
+      return acc.plus(bn(item.apr))
+    }, bn(0))
 }
 
 export function useAprTooltip({
@@ -72,10 +82,11 @@ export function useAprTooltip({
 }) {
   const colorMode = useThemeColorMode()
 
-  const hasVeBalBoost = !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
+  const hasVeBalBoost =
+    isBalancerProject && !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
 
   // Swap fees
-  const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee)
+  const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
   const swapFeesDisplayed = numberFormatter(swapFee ? swapFee.apr.toString() : '0')
 
   // Yield bearing tokens
@@ -116,7 +127,7 @@ export function useAprTooltip({
   const merklIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(merklIncentives)
 
   // Surplus incentives
-  const surplusIncentives = filterByType(aprItems, GqlPoolAprItemType.Surplus)
+  const surplusIncentives = filterByType(aprItems, GqlPoolAprItemType.Surplus_24H)
   const surplusIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(surplusIncentives)
 
   // Bal Reward
@@ -125,12 +136,43 @@ export function useAprTooltip({
   const maxVeBal = hasVeBalBoost ? absMaxApr(aprItems, vebalBoost) : bn(0)
   const maxVeBalDisplayed = numberFormatter(maxVeBal.toString())
 
+  // maBEETS Rewards (Beets)
+  const maBeetsReward = aprItems.find(item => item.type === GqlPoolAprItemType.MabeetsEmissions)
+
+  const maBeetsRewardsDisplayed = numberFormatter(
+    maBeetsReward ? maBeetsReward.apr.toString() : '0'
+  )
+
+  const maxMaBeetsReward = aprItems.find(
+    item => item.type === GqlPoolAprItemType.StakingBoost && item.id.match(/beets-apr-boost/) // TODO: or add prop in api to distinguish?
+  )
+
+  const maxMaBeetsRewardDisplayed = numberFormatter(
+    maxMaBeetsReward ? maxMaBeetsReward.apr.toString() : '0'
+  )
+
+  const maxMaBeetsVotingReward = aprItems.find(
+    item => item.type === GqlPoolAprItemType.StakingBoost && item.id.match(/voting-apr-boost/) // TODO: or add prop in api to distinguish?
+  )
+
+  const maxMaBeetsVotingRewardDisplayed = numberFormatter(
+    maxMaBeetsVotingReward ? maxMaBeetsVotingReward.apr.toString() : '0'
+  )
+
+  const maBeetsTotalAprDisplayed = bn(swapFeesDisplayed)
+    .plus(maxMaBeetsRewardDisplayed)
+    .plus(maxMaBeetsVotingRewardDisplayed)
+
+  const isMaBeetsPresent = !maBeetsRewardsDisplayed.isZero()
+
   const totalBase = aprItems
     .filter(item => TOTAL_BASE_APR_TYPES.includes(item.type))
     .reduce((acc, item) => acc.plus(item.apr), bn(0))
   const totalBaseDisplayed = numberFormatter(totalBase.toString())
 
-  const totalCombined = aprItems.reduce((acc, item) => acc.plus(item.apr), bn(0))
+  const totalCombined = aprItems
+    .filter(item => TOTAL_APR_TYPES.includes(item.type))
+    .reduce((acc, item) => acc.plus(item.apr), bn(0))
   const totalCombinedDisplayed = numberFormatter(totalCombined.toString())
 
   const extraBalAprDisplayed = hasVeBalBoost ? maxVeBalDisplayed.minus(totalBaseDisplayed) : bn(0)
@@ -188,6 +230,13 @@ export function useAprTooltip({
     totalBase,
     totalCombined,
     totalCombinedDisplayed,
+    isMaBeetsPresent,
+    maBeetsRewardsDisplayed,
+    maxMaBeetsRewardDisplayed,
+    maBeetsRewardTooltipText,
+    maxMaBeetsVotingRewardDisplayed,
+    maBeetsVotingRewardsTooltipText,
+    maBeetsTotalAprDisplayed,
   }
 }
 

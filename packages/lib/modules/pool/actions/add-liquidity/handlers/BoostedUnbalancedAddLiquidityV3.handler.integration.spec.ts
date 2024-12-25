@@ -3,7 +3,7 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
-import { getPoolMock } from '../../../__mocks__/getPoolMock'
+// import { getPoolMock } from '../../../__mocks__/getPoolMock'
 import { BoostedUnbalancedAddLiquidityV3Handler } from './BoostedUnbalancedAddLiquidityV3.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 
@@ -20,8 +20,8 @@ describe.skip('When adding unbalanced liquidity for a V3 BOOSTED pool', async ()
   const handler = selectAddLiquidityHandler(v3Pool) as BoostedUnbalancedAddLiquidityV3Handler
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: usdcAaveAddress },
-    { humanAmount: '0.1', tokenAddress: usdtAaveAddress },
+    { humanAmount: '0.1', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
+    { humanAmount: '0.1', tokenAddress: usdtAaveAddress, symbol: 'USDT' },
   ]
 
   it('calculates price impact', async () => {

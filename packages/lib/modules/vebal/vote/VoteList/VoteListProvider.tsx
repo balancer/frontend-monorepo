@@ -90,7 +90,7 @@ export function _useVoteList({
 }: UseVoteListArgs) {
   const filtersState = useVoteListFiltersState()
 
-  const voteListData = data?.veBalGetVotingList || []
+  const voteListData = useMemo(() => data?.veBalGetVotingList || [], [data?.veBalGetVotingList])
 
   const gaugeAddresses = useMemo(() => voteListData.map(vote => vote.gauge.address), [voteListData])
 

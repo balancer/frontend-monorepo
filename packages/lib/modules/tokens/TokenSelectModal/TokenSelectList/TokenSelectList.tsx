@@ -2,7 +2,7 @@
 
 import { Box, BoxProps, Button, HStack, Text, Divider } from '@chakra-ui/react'
 import { TokenSelectListRow } from './TokenSelectListRow'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useEffect, useRef, useState } from 'react'
@@ -15,16 +15,17 @@ import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { useTokens } from '../../TokensProvider'
 import { Address } from 'viem'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 
 type Props = {
   chain: GqlChain
-  tokens: GqlToken[]
+  tokens: ApiToken[]
   excludeNativeAsset?: boolean
   pinNativeAsset?: boolean
   listHeight: number
   searchTerm?: string
   currentToken?: Address
-  onTokenSelect: (token: GqlToken) => void
+  onTokenSelect: (token: ApiToken) => void
 }
 function OtherTokens() {
   return (
@@ -89,6 +90,69 @@ function InYourWallet({ isConnected, openConnectModal, hasNoTokensInWallet }: In
   )
 }
 
+interface TokenRowProps {
+  index: number
+  token: ApiToken
+  isConnected: boolean
+  balanceFor: (token: ApiToken) => any
+  isBalancesLoading: boolean
+  isLoadingTokenPrices: boolean
+  activeIndex: number
+  isCurrentToken: (token: ApiToken) => boolean
+  onTokenSelect: (token: ApiToken) => void
+}
+
+function TokenRow({
+  index,
+  token,
+  isConnected,
+  balanceFor,
+  isBalancesLoading,
+  isLoadingTokenPrices,
+  activeIndex,
+  isCurrentToken,
+  onTokenSelect,
+}: TokenRowProps) {
+  const userBalance = isConnected ? balanceFor(token) : undefined
+
+  return (
+    <TokenSelectListRow
+      active={index === activeIndex}
+      isBalancesLoading={isBalancesLoading || isLoadingTokenPrices}
+      isCurrentToken={isCurrentToken(token)}
+      onClick={() => !isCurrentToken(token) && onTokenSelect(token)}
+      token={token}
+      userBalance={userBalance}
+    />
+  )
+}
+
+function renderTokenRow(
+  index: number,
+  activeIndex: number,
+  balanceFor: (token: ApiToken) => any,
+  isBalancesLoading: boolean,
+  isConnected: boolean,
+  isCurrentToken: (token: ApiToken) => boolean,
+  isLoadingTokenPrices: boolean,
+  onTokenSelect: (token: ApiToken) => void,
+  tokensToShow: ApiToken[]
+) {
+  return (
+    <TokenRow
+      activeIndex={activeIndex}
+      balanceFor={balanceFor}
+      index={index}
+      isBalancesLoading={isBalancesLoading}
+      isConnected={isConnected}
+      isCurrentToken={isCurrentToken}
+      isLoadingTokenPrices={isLoadingTokenPrices}
+      onTokenSelect={onTokenSelect}
+      token={tokensToShow[index]}
+    />
+  )
+}
+
 export function TokenSelectList({
   chain,
   tokens,
@@ -120,8 +184,8 @@ export function TokenSelectList({
   const tokensWithoutBalance = orderedTokens.filter(token => !tokensWithBalance.includes(token))
   const tokensToShow = [...tokensWithBalance, ...tokensWithoutBalance]
 
-  const isCurrentToken = (token: GqlToken) =>
-    currentToken && isSameAddress(token.address, currentToken)
+  const isCurrentToken = (token: ApiToken) =>
+    !!currentToken && isSameAddress(token.address, currentToken)
 
   const groups = [
     <InYourWallet
@@ -156,10 +220,6 @@ export function TokenSelectList({
     ref.current?.scrollIntoView({ index: activeIndex, behavior: 'auto' })
   }, [activeIndex])
 
-  function keyFor(token: GqlToken, index: number) {
-    return `${token.address}:${token.chain}:${index}`
-  }
-
   return (
     <Box height={listHeight} {...rest}>
       {tokensToShow.length === 0 ? (
@@ -176,26 +236,21 @@ export function TokenSelectList({
         </Box>
       ) : (
         <GroupedVirtuoso
-          groupContent={index => {
-            return groups[index]
-          }}
+          groupContent={index => groups[index]}
           groupCounts={groupCounts}
-          itemContent={index => {
-            const token = tokensToShow[index]
-            const userBalance = isConnected ? balanceFor(token) : undefined
-
-            return (
-              <TokenSelectListRow
-                active={index === activeIndex}
-                isBalancesLoading={isBalancesLoading || isLoadingTokenPrices}
-                isCurrentToken={isCurrentToken(token)}
-                key={keyFor(token, index)}
-                onClick={() => !isCurrentToken(token) && onTokenSelect(token)}
-                token={token}
-                userBalance={userBalance}
-              />
+          itemContent={index =>
+            renderTokenRow(
+              index,
+              activeIndex,
+              balanceFor,
+              isBalancesLoading,
+              isConnected,
+              isCurrentToken,
+              isLoadingTokenPrices,
+              onTokenSelect,
+              tokensToShow
             )
-          }}
+          }
           ref={ref}
           style={{ height: listHeight }}
         />

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { memo, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'

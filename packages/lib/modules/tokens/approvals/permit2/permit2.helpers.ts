@@ -49,6 +49,7 @@ export function getTokenSymbolsForPermit2({
   chainId,
 }: BasePermit2Params & { getToken: GetTokenFn }): string[] {
   if (!tokenAmountsIn) return []
+
   const chain = getGqlChain(chainId)
   const tokenSymbols = filterWrappedNativeAsset({
     wethIsEth,
@@ -56,7 +57,10 @@ export function getTokenSymbolsForPermit2({
     chain,
   })
     .filter(t => t.amount > 0n)
-    .map(t => getToken(t.address, chain)?.symbol ?? 'Unknown')
+    .map(t => {
+      if (t.symbol) return t.symbol
+      return getToken(t.address, chain)?.symbol ?? 'Unknown'
+    })
   return tokenSymbols
 }
 

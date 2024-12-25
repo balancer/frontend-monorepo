@@ -1,14 +1,14 @@
-import { ChainContractConfig, useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
-import { useMemo } from 'react'
-import { oneWeekInMs, oneWeekInSecs, toUnixTimestamp } from '@repo/lib/shared/utils/time'
+import { useCallback, useMemo } from 'react'
+import { oneWeekInMs, toUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { mainnet } from 'viem/chains'
 import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { Hex } from 'viem'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { compact } from 'lodash'
 import { onlyExplicitRefetch } from '../../../../shared/utils/queries'
+import { useReadContracts } from 'wagmi'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const FIRST_WEEK_TIMESTAMP = 1648684800
 
 export interface UserVotesData {
@@ -18,8 +18,8 @@ export interface UserVotesData {
 }
 
 export interface RawVotesData {
-  gaugeWeightThisPeriod: { result?: bigint; status: string }
-  gaugeWeightNextPeriod: { result?: bigint; status: string }
+  gaugeWeightThisPeriod?: { result?: bigint; status: string }
+  gaugeWeightNextPeriod?: { result?: bigint; status: string }
   userVotes?: { result?: UserVotesData; status: string }
   lastUserVoteTime?: { result?: bigint; status: string }
   isKilled?: { result?: boolean; status: string }
@@ -33,11 +33,9 @@ export interface VotesData {
   isKilled: boolean
 }
 
-export type RawVotesDataMap = Record<string, RawVotesData>
-
 function formatVotes(votesData: RawVotesData): VotesData {
-  const votes = votesData.gaugeWeightThisPeriod.result?.toString() || '0'
-  const votesNextPeriod = votesData.gaugeWeightNextPeriod.result?.toString() || '0'
+  const votes = votesData.gaugeWeightThisPeriod?.result?.toString() || '0'
+  const votesNextPeriod = votesData.gaugeWeightNextPeriod?.result?.toString() || '0'
 
   return {
     votes,
@@ -46,6 +44,81 @@ function formatVotes(votesData: RawVotesData): VotesData {
     lastUserVoteTime: Number(votesData?.lastUserVoteTime?.result) || 0,
     isKilled: votesData?.isKilled?.result ?? false,
   }
+}
+
+const readContractsParams = {
+  batchSize: 25_000, // 25kb batch ~ 190kb payload
+  allowFailure: true,
+  query: onlyExplicitRefetch,
+} as const
+
+function useGaugeRelativeWeightsWrite(
+  gaugeAddresses: UseGaugeVotesParams['gaugeAddresses'],
+  timestamp: number
+) {
+  const { isConnected } = useUserAccount()
+  return useReadContracts({
+    ...readContractsParams,
+    query: {
+      ...readContractsParams.query,
+      enabled: isConnected,
+    },
+    contracts: gaugeAddresses.map(gaugeAddress => {
+      return {
+        chainId: mainnet.id,
+        abi: AbiMap['balancer.gaugeControllerAbi'],
+        address: mainnetNetworkConfig.contracts.gaugeController as Hex,
+        functionName: 'gauge_relative_weight_write',
+        args: [gaugeAddress, timestamp],
+      } as const
+    }),
+  })
+}
+
+function useVoteUserSlopes(
+  gaugeAddresses: UseGaugeVotesParams['gaugeAddresses'],
+  userAddress: string
+) {
+  const { isConnected } = useUserAccount()
+  return useReadContracts({
+    ...readContractsParams,
+    query: {
+      ...readContractsParams.query,
+      enabled: isConnected,
+    },
+    contracts: gaugeAddresses.map(gaugeAddress => {
+      return {
+        chainId: mainnet.id,
+        abi: AbiMap['balancer.gaugeControllerAbi'],
+        address: mainnetNetworkConfig.contracts.gaugeController as Hex,
+        functionName: 'vote_user_slopes',
+        args: [userAddress, gaugeAddress],
+      } as const
+    }),
+  })
+}
+
+function useLastUserVotes(
+  gaugeAddresses: UseGaugeVotesParams['gaugeAddresses'],
+  userAddress: string
+) {
+  const { isConnected } = useUserAccount()
+  return useReadContracts({
+    ...readContractsParams,
+    query: {
+      ...readContractsParams.query,
+      enabled: isConnected,
+    },
+    contracts: gaugeAddresses.map(gaugeAddress => {
+      return {
+        chainId: mainnet.id,
+        abi: AbiMap['balancer.gaugeControllerAbi'],
+        address: mainnetNetworkConfig.contracts.gaugeController as Hex,
+        functionName: 'last_user_vote',
+        args: [userAddress, gaugeAddress],
+      } as const
+    }),
+  })
 }
 
 export interface UseGaugeVotesParams {
@@ -61,88 +134,66 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
     return toUnixTimestamp(Math.floor((Date.now() + oneWeekInMs) / oneWeekInMs) * oneWeekInMs)
   }, [])
 
-  const gaugeRequests: ChainContractConfig[] = useMemo(() => {
-    return gaugeAddresses.flatMap(gaugeAddress => {
-      const requests = compact([
-        {
-          path: 'gaugeWeightThisPeriod',
-          fn: 'gauge_relative_weight_write',
-          args: [gaugeAddress, thisWeekTimestamp],
-          abi: AbiMap['balancer.gaugeControllerAbi'] as any,
-          address: mainnetNetworkConfig.contracts.gaugeController as Hex,
-        },
-        {
-          path: 'gaugeWeightNextPeriod',
-          fn: 'gauge_relative_weight_write',
-          args: [gaugeAddress, nextWeekTimestamp],
-          abi: AbiMap['balancer.gaugeControllerAbi'] as any,
-          address: mainnetNetworkConfig.contracts.gaugeController as Hex,
-        },
-        isConnected && {
-          path: 'userVotes',
-          fn: 'vote_user_slopes',
-          args: [userAddress, gaugeAddress],
-          abi: AbiMap['balancer.gaugeControllerAbi'] as any,
-          address: mainnetNetworkConfig.contracts.gaugeController as Hex,
-        },
-        isConnected && {
-          path: 'lastUserVoteTime',
-          fn: 'last_user_vote',
-          args: [userAddress, gaugeAddress],
-          abi: AbiMap['balancer.gaugeControllerAbi'] as any,
-          address: mainnetNetworkConfig.contracts.gaugeController as Hex,
-        },
-        {
-          path: 'isKilled',
-          fn: 'is_killed',
-          args: [],
-          abi: AbiMap['balancer.liquidityGaugeV5Abi'] as any,
-          address: gaugeAddress as Hex,
-        },
-      ])
+  const gaugeWeightThisPeriodQuery = useGaugeRelativeWeightsWrite(gaugeAddresses, thisWeekTimestamp)
+  const gaugeWeightNextPeriodQuery = useGaugeRelativeWeightsWrite(gaugeAddresses, nextWeekTimestamp)
+  const userVotesQuery = useVoteUserSlopes(isConnected ? gaugeAddresses : [], userAddress)
+  const lastUserVotesQuery = useLastUserVotes(isConnected ? gaugeAddresses : [], userAddress)
 
-      return requests.map(v => ({
-        chainId: mainnet.id,
-        id: `${gaugeAddress}.${v.path}`,
-        abi: v.abi,
-        address: v.address,
-        functionName: v.fn,
-        args: v.args,
-      }))
-    })
-  }, [gaugeAddresses, thisWeekTimestamp, nextWeekTimestamp, isConnected, userAddress])
+  const refetchAll = useCallback(() => {
+    return Promise.all([
+      gaugeWeightThisPeriodQuery.refetch(),
+      gaugeWeightNextPeriodQuery.refetch(),
+      userVotesQuery.refetch(),
+      lastUserVotesQuery.refetch(),
+    ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    gaugeWeightThisPeriodQuery.refetch,
+    gaugeWeightNextPeriodQuery.refetch,
+    userVotesQuery.refetch,
+    lastUserVotesQuery.refetch,
+  ])
 
-  const { results, refetchAll, isLoading } = useMulticall(gaugeRequests, {
-    ...onlyExplicitRefetch,
-    batchSize: 25_000, // 25kb batch ~ 190kb payload
-  })
+  const isLoading =
+    gaugeWeightThisPeriodQuery.isLoading ||
+    gaugeWeightNextPeriodQuery.isLoading ||
+    userVotesQuery.isLoading ||
+    lastUserVotesQuery.isLoading
 
   const gaugeVotes = useMemo(() => {
-    const mainnetResults = results[mainnetNetworkConfig.chainId]
-
-    if (!mainnetResults) {
-      // handle empty
+    if (isLoading) {
       return undefined
     }
-
-    if (mainnetResults.status === 'error') {
-      // handle error
-      return undefined
-    }
-
-    if (mainnetResults.status === 'pending') {
-      // handle loading
-      return undefined
-    }
-
-    const data = mainnetResults.data as RawVotesDataMap
 
     const result: Record<string, VotesData> = Object.fromEntries(
-      Object.keys(data).map(address => [address, formatVotes(data[address])])
+      Object.keys(gaugeAddresses).map((address, index) => {
+        const gaugeWeightThisPeriod = (gaugeWeightThisPeriodQuery.data ?? [])[index]
+        const gaugeWeightNextPeriod = (gaugeWeightNextPeriodQuery.data ?? [])[index]
+        const userVotes = (userVotesQuery.data ?? [])[index]
+        const lastUserVoteTime = (lastUserVotesQuery.data ?? [])[index]
+
+        return [
+          address,
+          formatVotes({
+            gaugeWeightThisPeriod,
+            gaugeWeightNextPeriod,
+            userVotes,
+            lastUserVoteTime,
+          }),
+        ]
+      })
     )
 
     return result
-  }, [results])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    gaugeWeightThisPeriodQuery.data,
+    gaugeWeightNextPeriodQuery.data,
+    userVotesQuery.data,
+    lastUserVotesQuery.data,
+    isLoading,
+    gaugeAddresses,
+  ])
 
   return {
     gaugeVotes,

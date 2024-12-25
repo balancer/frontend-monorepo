@@ -32,6 +32,7 @@ export type SimulateSwapInputs = {
   swapType: GqlSorSwapType
   swapAmount: string
   permit2?: Permit2
+  poolIds?: string[]
 }
 
 type ApiSwapQuery = GetSorSwapsQuery['swaps']

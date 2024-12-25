@@ -23,12 +23,12 @@ export function PoolListTable({ pools, count, loading }: Props) {
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination)
   const showPagination = !!pools.length && !!count && count > pagination.pageSize
 
-  const numberColumnWidth = userAddress ? '150px' : '175px'
+  const numberColumnWidth = userAddress ? '120px' : '175px'
   const furthestLeftColWidth = '120px'
 
   const rowProps = {
     px: { base: 'sm', sm: '0' },
-    gridTemplateColumns: `32px minmax(320px, 1fr) 100px ${
+    gridTemplateColumns: `32px minmax(320px, 1fr) 180px ${
       userAddress ? furthestLeftColWidth : ''
     } ${userAddress ? numberColumnWidth : furthestLeftColWidth} ${numberColumnWidth} 200px`,
     alignItems: 'center',
@@ -46,6 +46,7 @@ export function PoolListTable({ pools, count, loading }: Props) {
       w={{ base: '100vw', lg: 'full' }}
     >
       <PaginatedTable
+        getRowId={item => item.id}
         items={pools}
         loading={loading}
         noItemsFoundLabel="No pools found"

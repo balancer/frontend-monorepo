@@ -4,9 +4,13 @@ import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { isBoosted } from '../pool.helpers'
+import Image from 'next/image'
+import { PoolListItem } from '../pool.types'
+import { Erc4626Metadata } from '../metadata/getErc4626Metadata'
+import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
 
 type PoolTypeTagProps = {
-  pool: Pool
+  pool: Pool | PoolListItem
 }
 
 function TagWrapper({ children }: { children: React.ReactNode }) {
@@ -29,15 +33,22 @@ function TagWrapper({ children }: { children: React.ReactNode }) {
   )
 }
 
-function getPoolTypeLabel(pool: Pool) {
+function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Metadata[]) {
   const { tags, type } = pool
   const textProps = { fontSize: 'sm', variant: 'secondary' }
 
-  if (isBoosted(pool)) {
+  if (isBoosted(pool) && erc4626Metadata.length) {
     return (
       <>
-        {/* TODO: set protocol dynamically */}
-        <ProtocolIcon protocol={Protocol.Aave} />
+        {erc4626Metadata.map(metadata => (
+          <Image
+            alt={metadata.name}
+            height={20}
+            key={metadata.name}
+            src={metadata.iconUrl || ''}
+            width={20}
+          />
+        ))}
         <Text {...textProps}>Boosted</Text>
       </>
     )
@@ -62,6 +73,7 @@ function getPoolTypeLabel(pool: Pool) {
     case GqlPoolType.Stable:
     case GqlPoolType.PhantomStable:
     case GqlPoolType.ComposableStable:
+    case GqlPoolType.MetaStable:
       return <Text {...textProps}>Stable</Text>
 
     case GqlPoolType.Fx:
@@ -110,7 +122,10 @@ function getPoolTypeLabel(pool: Pool) {
 }
 
 export function PoolTypeTag({ pool }: PoolTypeTagProps) {
-  const label = getPoolTypeLabel(pool)
+  const { getErc4626Metadata } = usePoolsMetadata()
+  const erc4626Metadata = getErc4626Metadata(pool)
+
+  const label = getPoolTypeLabel(pool, erc4626Metadata)
 
   return <TagWrapper>{label}</TagWrapper>
 }

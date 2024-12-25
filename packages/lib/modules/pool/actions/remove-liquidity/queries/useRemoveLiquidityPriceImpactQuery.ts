@@ -39,7 +39,7 @@ export function useRemoveLiquidityPriceImpactQuery({
     userAddress,
     slippage,
     poolId,
-    humanBptIn: humanBptIn,
+    humanBptIn: debouncedBptIn,
     tokenOut,
   }
 

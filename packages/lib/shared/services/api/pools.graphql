@@ -1,3 +1,5 @@
+#import "./pool-tokens.graphql"
+
 query GetPools(
   $first: Int
   $skip: Int
@@ -22,6 +24,7 @@ query GetPools(
     tags
     hasErc4626
     hasNestedErc4626
+    hasAnyAllowedBuffer
     displayTokens {
       id
       address
@@ -34,6 +37,29 @@ query GetPools(
         name
         weight
         symbol
+      }
+    }
+    hook {
+      ...Hook
+    }
+    poolTokens {
+      id
+      address
+      symbol
+      weight
+      name
+      nestedPool {
+        id
+        address
+        symbol
+        name
+        tokens {
+          id
+          address
+          symbol
+          weight
+          name
+        }
       }
     }
     dynamicData {
@@ -95,6 +121,9 @@ query GetPools(
     id
     name
     owner
+    swapFeeManager
+    pauseManager
+    poolCreator
     symbol
     type
     userBalance {
@@ -108,6 +137,9 @@ query GetPools(
         stakingType
         stakingId
       }
+    }
+    poolTokens {
+      ...PoolTokens
     }
   }
   count: poolGetPoolsCount(
@@ -126,6 +158,7 @@ query GetFeaturedPools($chains: [GqlChain!]!) {
     primary
     description
     pool {
+      address
       id
       name
       factory
@@ -143,6 +176,9 @@ query GetFeaturedPools($chains: [GqlChain!]!) {
           rewardTokenSymbol
           rewardTokenAddress
         }
+      }
+      poolTokens {
+        ...PoolTokens
       }
       displayTokens {
         id

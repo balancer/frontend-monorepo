@@ -17,7 +17,7 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
-import React, { useMemo, useState, useLayoutEffect } from 'react'
+import { useMemo, useState, useLayoutEffect } from 'react'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { usePathname, useRouter } from 'next/navigation'
@@ -25,6 +25,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { keyBy } from 'lodash'
 import {
   getAuraPoolLink,
+  getPoolDisplayTokens,
   getProportionalExitAmountsFromScaledBptIn,
   getXavePoolLink,
 } from '../pool.utils'
@@ -256,6 +257,8 @@ export default function PoolMyLiquidity() {
     }
   }
 
+  const displayTokens = getPoolDisplayTokens(pool)
+
   return (
     <Card h="fit-content" ref={myLiquiditySectionRef}>
       <VStack spacing="md" width="full">
@@ -319,16 +322,37 @@ export default function PoolMyLiquidity() {
                 </Button>
               </HStack>
             ) : (
-              pool.displayTokens.map(token => {
+              displayTokens.map(poolToken => {
                 return (
-                  <TokenRow
-                    abbreviated={false}
-                    address={token.address as Address}
-                    chain={chain}
-                    isLoading={isLoadingOnchainUserBalances || isConnecting}
-                    key={`my-liquidity-token-${token.address}`}
-                    value={tokenBalanceFor(token.address)}
-                  />
+                  <VStack key={`pool-${poolToken.address}`} w="full">
+                    <TokenRow
+                      abbreviated={false}
+                      address={poolToken.address as Address}
+                      chain={chain}
+                      pool={pool}
+                      value={tokenBalanceFor(poolToken.address)}
+                      {...(poolToken.hasNestedPool && {
+                        isNestedBpt: true,
+                      })}
+                    />
+                    {poolToken.hasNestedPool && poolToken.nestedPool && (
+                      <VStack pl="8" w="full">
+                        {poolToken.nestedPool.tokens.map(nestedPoolToken => {
+                          return (
+                            <TokenRow
+                              abbreviated={false}
+                              address={nestedPoolToken.address as Address}
+                              chain={chain}
+                              iconSize={35}
+                              isNestedPoolToken
+                              key={`nested-pool-${nestedPoolToken.address}`}
+                              value={bn(nestedPoolToken.balance).times(shareOfPool).toString()}
+                            />
+                          )
+                        })}
+                      </VStack>
+                    )}
+                  </VStack>
                 )
               })
             )}

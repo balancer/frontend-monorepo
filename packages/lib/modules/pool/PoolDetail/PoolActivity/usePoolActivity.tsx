@@ -8,7 +8,7 @@ import { PoolVariant } from '../../pool.types'
 import { usePool } from '../../PoolProvider'
 import { GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePoolEvents } from '../../usePoolEvents'
-import { slugToChainMap, ChainSlug } from '../../pool.utils'
+import { ChainSlug, getChainSlug } from '../../pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { differenceInCalendarDays } from 'date-fns'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -41,7 +41,7 @@ function _usePoolActivity() {
   const [isExpanded, setIsExpanded] = useState(false)
   const { isChartView } = usePoolActivityViewType()
 
-  const _chain = slugToChainMap[chain as ChainSlug]
+  const _chain = getChainSlug(chain as ChainSlug)
 
   const tabsList = useMemo(() => {
     const poolType = pool?.type
@@ -97,7 +97,7 @@ function _usePoolActivity() {
 
     const data = events.reduce(
       (acc: PoolActivity, item) => {
-        const { type, timestamp, valueUSD, userAddress, tx } = item
+        const { type, timestamp, valueUSD, userAddress, tx, id } = item
 
         const usdValue = valueUSD.toString() ?? ''
         const tokens: PoolActivityTokens[] = []
@@ -128,7 +128,7 @@ function _usePoolActivity() {
         const elToPush = [
           timestamp,
           isExpanded ? usdValue : '0',
-          { userAddress, tokens, usdValue, tx, action: 'swap' }, // action will be overwritten again below
+          { userAddress, tokens, usdValue, tx, action: 'swap', id }, // action will be overwritten again below
         ] as PoolActivityEl
 
         switch (type) {

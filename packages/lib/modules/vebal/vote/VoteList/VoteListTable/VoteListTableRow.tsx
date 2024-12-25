@@ -7,7 +7,7 @@ import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { PoolListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { getPoolPath, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
 import { VoteExpiredTooltip } from '@repo/lib/modules/vebal/vote/VoteExpiredTooltip'
@@ -22,12 +22,27 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
 
   const [selected, setSelected] = useState(false)
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const toggleSelection = (e: React.MouseEvent<HTMLButtonElement>) => {
     // todo: implement selection
     setSelected(v => !v)
   }
 
   const { votingIncentivesLoading, gaugeVotesIsLoading } = useVoteList()
+
+  const pool = useMemo(
+    () => ({
+      displayTokens: vote.tokens.map(token => ({ ...token, name: token.symbol })), // fix: no name
+      type: vote.type,
+      chain: vote.chain,
+      poolTokens: [],
+      address: vote.address,
+      protocolVersion: 3, // fix: no data
+      hasAnyAllowedBuffer: false, // fix: no data
+      hasErc4626: false, // fix: no data
+    }),
+    [vote]
+  )
 
   return (
     <FadeInOnView>
@@ -57,13 +72,11 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             >
               <HStack>
                 <PoolListTokenPills
-                  chain={vote.chain}
-                  displayTokens={vote.tokens}
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
+                  pool={pool}
                   pr={[1.5, 'ms']}
-                  type={vote.type}
                 />
                 {vote.gaugeVotes?.isKilled && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">

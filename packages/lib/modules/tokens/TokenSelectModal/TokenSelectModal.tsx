@@ -13,14 +13,15 @@ import {
 } from '@chakra-ui/react'
 import { RefObject, useState } from 'react'
 import { TokenSelectList } from './TokenSelectList/TokenSelectList'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenSelectPopular } from './TokenSelectPopular'
 import { SearchInput } from '@repo/lib/shared/components/inputs/SearchInput'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { Address } from 'viem'
+import { ApiToken } from '../../pool/pool.types'
 
 type Props = {
-  tokens: GqlToken[]
+  tokens: ApiToken[]
   chain: GqlChain
   currentToken?: Address
   excludeNativeAsset?: boolean
@@ -29,7 +30,7 @@ type Props = {
   onClose(): void
   onOpen(): void
   finalFocusRef?: RefObject<HTMLInputElement>
-  onTokenSelect: (token: GqlToken) => void
+  onTokenSelect: (token: ApiToken) => void
 }
 
 export function TokenSelectModal({
@@ -46,7 +47,7 @@ export function TokenSelectModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const [searchTerm, setSearchTerm] = useState('')
 
-  function closeOnSelect(token: GqlToken) {
+  function closeOnSelect(token: ApiToken) {
     onTokenSelect(token)
     closeModal()
   }
@@ -77,7 +78,7 @@ export function TokenSelectModal({
                 placeholder="Search by name, symbol or address"
                 search={searchTerm}
                 setSearch={setSearchTerm}
-                tabIndex={1}
+                tabIndex={0}
               />
             </Box>
             {!searchTerm && (

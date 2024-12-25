@@ -15,8 +15,7 @@ export function PoolActivityTable() {
   const { sortedPoolEvents, pagination, setPagination, isLoading, count, showPagination } =
     usePoolActivity()
   const paginationProps = {
-    ...getPaginationProps(count, pagination, setPagination, false),
-    isSmall: true,
+    ...getPaginationProps(count, pagination, setPagination, true),
   }
 
   const rowProps = {
@@ -37,6 +36,7 @@ export function PoolActivityTable() {
         <Box minWidth="800px">
           <PaginatedTable
             alignItems="flex-start"
+            getRowId={([, , poolActivityMetaData]) => poolActivityMetaData.id}
             items={sortedPoolEvents}
             loading={isLoading}
             noItemsFoundLabel="No pool events found"

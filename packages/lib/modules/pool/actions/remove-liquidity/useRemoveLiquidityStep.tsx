@@ -13,6 +13,7 @@ import {
   useRemoveLiquidityBuildCallDataQuery,
 } from './queries/useRemoveLiquidityBuildCallDataQuery'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
+import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 
 export const removeLiquidityStepId = 'remove-liquidity'
 
@@ -67,14 +68,17 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       stepType: 'removeLiquidity',
       labels,
       isComplete,
-      renderAction: () => (
-        <ManagedSendTransactionButton
-          gasEstimationMeta={gasEstimationMeta}
-          id={removeLiquidityStepId}
-          labels={labels}
-          txConfig={buildCallDataQuery.data}
-        />
-      ),
+      renderAction: () => {
+        if (!buildCallDataQuery.data) return <DisabledTransactionButton />
+        return (
+          <ManagedSendTransactionButton
+            gasEstimationMeta={gasEstimationMeta}
+            id={removeLiquidityStepId}
+            labels={labels}
+            txConfig={buildCallDataQuery.data}
+          />
+        )
+      },
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
       onSuccess: () => refetchPoolUserBalances(),

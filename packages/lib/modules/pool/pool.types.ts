@@ -5,6 +5,7 @@ import {
   GqlPoolType,
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
+  GetTokensQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   parseAsArrayOf,
@@ -73,7 +74,9 @@ export const poolTypeFilters = [
   GqlPoolType.CowAmm,
   GqlPoolType.Fx,
 ] as const
+
 export type PoolFilterType = (typeof poolTypeFilters)[number]
+
 // We need to map toggalable pool types to their corresponding set of GqlPoolTypes.
 export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
   [GqlPoolType.Weighted]: [GqlPoolType.Weighted],
@@ -84,7 +87,7 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
   [GqlPoolType.Fx]: [GqlPoolType.Fx],
 }
 
-export const poolTagFilters = ['INCENTIVIZED', 'VE8020', 'POINTS'] as const
+export const poolTagFilters = ['INCENTIVIZED', 'VE8020', 'POINTS', 'BOOSTED'] as const
 export type PoolTagType = (typeof poolTagFilters)[number]
 export const POOL_TAG_MAP: { [key in PoolTagType]: string[] } = {
   INCENTIVIZED: ['INCENTIVIZED'],
@@ -97,6 +100,7 @@ export const POOL_TAG_MAP: { [key in PoolTagType]: string[] } = {
     'POINTS_MODE',
   ],
   VE8020: ['VE8020'],
+  BOOSTED: ['BOOSTED'],
 }
 
 export type SortingState = PoolsColumnSort[]
@@ -140,4 +144,11 @@ export type TokenCore = {
   symbol: string
   decimals: number
   index: number
+}
+
+export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'>
+
+export enum PoolListDisplayType {
+  Name = 'name',
+  TokenPills = 'token-pills',
 }
