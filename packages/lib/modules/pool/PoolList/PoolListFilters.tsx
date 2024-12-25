@@ -458,18 +458,23 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
   }
 )
 
-function ProtocolVersionFilter() {
-  const {
-    queryState: {
-      setProtocolVersion,
-      protocolVersion,
-      poolTypes,
-      activeProtocolVersionTab,
-      setActiveProtocolVersionTab,
-    },
-    hideProtocolVersion,
-  } = usePoolList()
+export interface ProtocolVersionFilterProps {
+  setProtocolVersion: React.Dispatch<React.SetStateAction<number | null>>
+  protocolVersion: number | null
+  poolTypes: PoolFilterType[]
+  activeProtocolVersionTab: ButtonGroupOption
+  setActiveProtocolVersionTab: React.Dispatch<React.SetStateAction<ButtonGroupOption>>
+  hideProtocolVersion?: string[]
+}
 
+export function ProtocolVersionFilter({
+  setProtocolVersion,
+  protocolVersion,
+  poolTypes,
+  activeProtocolVersionTab,
+  setActiveProtocolVersionTab,
+  hideProtocolVersion,
+}: ProtocolVersionFilterProps) {
   const tabs = PROTOCOL_VERSION_TABS
 
   function toggleTab(option: ButtonGroupOption) {
@@ -505,7 +510,7 @@ function ProtocolVersionFilter() {
       currentOption={activeProtocolVersionTab}
       groupId="protocol-version"
       onChange={toggleTab}
-      options={tabs.filter(tab => !hideProtocolVersion.includes(tab.value))}
+      options={tabs.filter(tab => !(hideProtocolVersion ?? []).includes(tab.value))}
       size="xxs"
     />
   )
@@ -527,8 +532,12 @@ export function PoolListFilters() {
       poolTypes,
       poolTypeLabel,
       setPoolTypes,
+      setProtocolVersion,
+      protocolVersion,
+      activeProtocolVersionTab,
     },
     hidePoolTypes,
+    hideProtocolVersion,
   } = usePoolList()
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
@@ -614,7 +623,14 @@ export function PoolListFilters() {
                           <Heading as="h3" mb="sm" size="sm">
                             Protocol version
                           </Heading>
-                          <ProtocolVersionFilter />
+                          <ProtocolVersionFilter
+                            activeProtocolVersionTab={activeProtocolVersionTab}
+                            hideProtocolVersion={hideProtocolVersion}
+                            poolTypes={poolTypes}
+                            protocolVersion={protocolVersion}
+                            setActiveProtocolVersionTab={setActiveProtocolVersionTab}
+                            setProtocolVersion={setProtocolVersion}
+                          />
                         </Box>
                       )}
                       {!isFixedPoolType && (
@@ -623,11 +639,11 @@ export function PoolListFilters() {
                             Pool types
                           </Heading>
                           <PoolTypeFilters
+                            hidePoolTypes={hidePoolTypes}
                             poolTypeLabel={poolTypeLabel}
                             poolTypes={poolTypes}
                             setPoolTypes={setPoolTypes}
                             togglePoolType={togglePoolType}
-                            hidePoolTypes={hidePoolTypes}
                           />
                         </Box>
                       )}
