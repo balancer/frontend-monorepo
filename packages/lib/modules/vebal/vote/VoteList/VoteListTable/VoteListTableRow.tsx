@@ -44,6 +44,8 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
     [vote]
   )
 
+  const isKilled = vote.gaugeVotes?.isKilled
+
   return (
     <FadeInOnView>
       <Box
@@ -78,7 +80,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                   pool={pool}
                   pr={[1.5, 'ms']}
                 />
-                {vote.gaugeVotes?.isKilled && <VoteExpiredTooltip usePortal />}
+                {isKilled && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">
                   <ArrowUpIcon transform="rotate(90)" />
                 </Box>
@@ -116,16 +118,28 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             )}
           </GridItem>
           <GridItem justifySelf="end">
-            <Button
-              color={selected ? 'font.secondary' : undefined}
-              fontSize="sm"
-              fontWeight="700"
-              onClick={toggleSelection}
-              variant={selected ? 'outline' : 'secondary'}
-              w="80px"
-            >
-              {selected ? 'Selected' : 'Select'}
-            </Button>
+            {isKilled ? (
+              <Button
+                color="font.secondary"
+                fontSize="sm"
+                fontWeight="700"
+                variant="outline"
+                w="80px"
+              >
+                Expired
+              </Button>
+            ) : (
+              <Button
+                color={selected ? 'font.secondary' : undefined}
+                fontSize="sm"
+                fontWeight="700"
+                onClick={toggleSelection}
+                variant={selected ? 'outline' : 'secondary'}
+                w="80px"
+              >
+                {selected ? 'Selected' : 'Select'}
+              </Button>
+            )}
           </GridItem>
         </Grid>
       </Box>
