@@ -218,7 +218,7 @@ function LstForm() {
         )}
       </CardBody>
       <CardFooter w="full">
-        {isConnected && !isWithdrawTab && amountShares !== '' && (
+        {isConnected && !isWithdrawTab && (
           <Tooltip label={isDisabled ? disabledReason : ''}>
             <Button
               isDisabled={isDisabled}
