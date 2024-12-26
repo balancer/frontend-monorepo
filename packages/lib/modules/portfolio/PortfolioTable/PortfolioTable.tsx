@@ -167,6 +167,7 @@ export function PortfolioTable() {
             left={{ base: '-4px', sm: '0' }}
             p={{ base: '0', sm: '0' }}
             position="relative"
+            pr={{ base: 'md' }}
             w={{ base: '100vw', lg: 'full' }}
           >
             <PaginatedTable
@@ -195,6 +196,7 @@ export function PortfolioTable() {
                   />
                 )
               }}
+              pr={{ base: 'md' }}
               showPagination={false}
               w={{ base: '100vw', lg: 'full' }}
             />
