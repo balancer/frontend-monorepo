@@ -16,6 +16,7 @@ import {
   BoxProps,
   Grid,
   GridItem,
+  Flex,
 } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -47,6 +48,8 @@ import { LstStats } from './components/LstStats'
 import networkConfigs from '@repo/lib/config/networks'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
+import { TokenIcon } from '../../tokens/TokenIcon'
+import numeral from 'numeral'
 
 const CHAIN = GqlChain.Sonic
 
@@ -82,6 +85,8 @@ function LstForm() {
   const {
     activeTab,
     setActiveTab,
+    amountAssets,
+    amountShares,
     setAmountAssets,
     setAmountShares,
     isDisabled,
@@ -92,6 +97,11 @@ function LstForm() {
     stakeTransactionSteps,
     unstakeTransactionSteps,
     chain,
+    nativeAsset,
+    stakedAsset,
+    getAmountShares,
+    getAmountAssets,
+    isRateLoading,
   } = useLst()
 
   const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(chain)
@@ -158,25 +168,27 @@ function LstForm() {
   return (
     <VStack h="full" w="full">
       <CardBody align="start" as={VStack} h="full" w="full">
-        <VStack spacing="md" w="full">
-          <ButtonGroup
-            currentOption={activeTab}
-            groupId="add-liquidity"
-            hasLargeTextLabel
-            isFullWidth
-            onChange={setActiveTab}
-            options={tabs}
-            size="md"
-          />
-        </VStack>
-        {isStakeTab && <LstStake />}
-        {isUnstakeTab && <LstUnstake />}
-        {isWithdrawTab && !isWithdrawalsLoading && (
-          <LstWithdraw
-            isLoading={isWithdrawalsLoading || isUserNumWithdrawsLoading}
-            withdrawalsData={UserWithdraws as UserWithdraw[]}
-          />
-        )}
+        <Box w="full" h="full">
+          <VStack spacing="md" w="full">
+            <ButtonGroup
+              currentOption={activeTab}
+              groupId="add-liquidity"
+              hasLargeTextLabel
+              isFullWidth
+              onChange={setActiveTab}
+              options={tabs}
+              size="md"
+            />
+          </VStack>
+          {isStakeTab && <LstStake />}
+          {isUnstakeTab && <LstUnstake />}
+          {isWithdrawTab && !isWithdrawalsLoading && (
+            <LstWithdraw
+              isLoading={isWithdrawalsLoading || isUserNumWithdrawsLoading}
+              withdrawalsData={UserWithdraws as UserWithdraw[]}
+            />
+          )}
+        </Box>
         {/* <HStack>
           {isStakedSonicDataLoading ? (
             <Skeleton h="full" w="12" />
@@ -188,9 +200,25 @@ function LstForm() {
             </>
           )}
         </HStack> */}
+        {isStakeTab && !isRateLoading && amountAssets !== '' && (
+          <LstYouWillReceive
+            label="You will receive"
+            amount={getAmountShares(amountAssets)}
+            address={stakedAsset?.address || ''}
+            symbol={stakedAsset?.symbol || ''}
+          />
+        )}
+        {isUnstakeTab && !isRateLoading && amountShares !== '' && (
+          <LstYouWillReceive
+            label="You can withdraw (after 14 days)"
+            amount={getAmountAssets(amountShares)}
+            address={nativeAsset?.address || ''}
+            symbol={nativeAsset?.symbol || ''}
+          />
+        )}
       </CardBody>
       <CardFooter w="full">
-        {isConnected && !isWithdrawTab && (
+        {isConnected && !isWithdrawTab && amountShares !== '' && (
           <Tooltip label={isDisabled ? disabledReason : ''}>
             <Button
               isDisabled={isDisabled}
@@ -229,6 +257,40 @@ function LstForm() {
         onOpen={unstakeModalDisclosure.onOpen}
       />
     </VStack>
+  )
+}
+
+function LstYouWillReceive({
+  label,
+  amount,
+  address,
+  symbol,
+}: {
+  label: string
+  amount: string
+  address: string
+  symbol: string
+}) {
+  const amountFormatted = numeral(amount).format('0,0.[000000]')
+
+  return (
+    <Box w="full">
+      <FadeInOnView>
+        <Flex w="full" alignItems="flex-end">
+          <Box flex="1">
+            <Text mb="sm" color="grayText">
+              {label}
+            </Text>
+            <Text fontSize="3xl">
+              {amountFormatted === 'NaN' ? amount : amountFormatted} {symbol}
+            </Text>
+          </Box>
+          <Box>
+            <TokenIcon address={address} alt={symbol} chain={CHAIN} size={40} />
+          </Box>
+        </Flex>
+      </FadeInOnView>
+    </Box>
   )
 }
 

@@ -17,6 +17,10 @@ import { useTokens } from '../../tokens/TokensProvider'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { useLstWithdrawStep } from './hooks/useLstWithdrawStep'
 import { useTokenInputsValidation } from '../../tokens/TokenInputsValidationProvider'
+import { useGetConvertToAssets } from './hooks/useGetConvertToAssets'
+import { useGetConvertToShares } from './hooks/useGetConvertToShares'
+import { formatUnits, parseUnits } from 'viem'
+import { useGetRate } from './hooks/useGetRate'
 
 const CHAIN = GqlChain.Sonic
 const WITHDRAW_DELAY = 1209600 // 14 days in seconds
@@ -85,6 +89,24 @@ export function _useLst() {
 
   const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
 
+  const { data: rate, isLoading: isRateLoading } = useGetRate(CHAIN)
+
+  function getAmountShares(amountAssets: string) {
+    if (amountAssets === '') return '0'
+
+    const amountShares = (parseUnits(amountAssets, 18) * 10n ** 18n) / (rate || 1n)
+
+    return formatUnits(amountShares, 18)
+  }
+
+  function getAmountAssets(amountShares: string) {
+    if (amountShares === '') return '0'
+
+    const amountAssets = (parseUnits(amountShares, 18) * (rate || 1n)) / 10n ** 18n
+
+    return formatUnits(amountAssets, 18)
+  }
+
   return {
     activeTab,
     setActiveTab,
@@ -116,6 +138,9 @@ export function _useLst() {
     lstWithdrawTxConfirmed,
     withdrawWrID,
     setWithdrawWrID,
+    getAmountShares,
+    getAmountAssets,
+    isRateLoading,
   }
 }
 
