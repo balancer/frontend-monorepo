@@ -279,7 +279,7 @@ export function LzBeetsMigrateModalContent() {
           </Box>
           <Text color="font.secondary">
             You have {balance} lzBEETS in your wallet. lzBEETS serve as a receipt token when
-            bridging to Sonic. Exchange your lzBEETS for native BEETS on Sonic.
+            bridging to Sonic. Claim your BEETS on Sonic now.
           </Text>
         </ModalBody>
 
