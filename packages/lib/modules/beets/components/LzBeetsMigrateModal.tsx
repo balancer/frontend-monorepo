@@ -40,8 +40,8 @@ import {
 } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { QueryObserverResult } from '@tanstack/react-query'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import NextLink from 'next/link'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
+import { useChainSwitch, NetworkSwitchButton } from '@repo/lib/modules/web3/useChainSwitch'
 
 const sonicChainId = 146
 const lzBeetsAddress = '0x1E5fe95fB90ac0530F581C617272cd0864626795'
@@ -224,80 +224,9 @@ export function LzBeetsMigrateModal() {
     </TokenBalancesProvider>
   )
 }
-/* 
-function LzBeetsMigratorContent() {
-  const { isConnected, userAddress } = useUserAccount()
-  const [shouldShow, setShouldShow] = useState(false)
-  const { refetchBalances, isBalancesRefetching } = useTokenBalances()
-  const { data: balanceData } = useBalance({
-    chainId: sonicChainId,
-    address: userAddress,
-    token: lzBeetsAddress,
-  })
-
-  const { allowances } = useTokenAllowances({
-    chainId: sonicChainId,
-    userAddress: userAddress as Address,
-    spenderAddress: migratorAddress,
-    tokenAddresses: [lzBeetsAddress],
-  })
-
-  const balance = formatUnits(balanceData?.value || 0n, balanceData?.decimals || 18)
-  const hasBalance = bn(balanceData?.value || 0n).gt(0)
-  const hasAllowance = bn(allowances[lzBeetsAddress] || 0n).gt(bn(balanceData?.value || 0n))
-
-  useEffect(() => {
-    if (hasBalance && !shouldShow) {
-      setShouldShow(true)
-    }
-  }, [hasBalance])
-
-  return (
-    <Popover>
-      <PopoverTrigger>
-        <Button>
-          <HStack>
-            <TokenIcon
-              address="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-              alt="lzBEETS"
-              chain={1}
-              logoURI="https://beethoven-assets.s3.eu-central-1.amazonaws.com/token-stargate-transitonBEETS.svg"
-              size={24}
-            />
-            <span>{fNum('token', balance)} lzBEETS</span>
-          </HStack>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent>
-        <PopoverCloseButton />
-        <PopoverHeader fontWeight="bold">Migrate your BEETS</PopoverHeader>
-        <PopoverBody>
-          When migrating BEETS from Fantom, you'll receive lzBEETS as a receipt token. Exchange your
-          lzBEETS for BEETS on Sonic here.
-          {isConnected ? (
-            hasAllowance ? (
-              <MigrationButton
-                balance={balanceData?.value || 0n}
-                isBalancesRefetching={isBalancesRefetching}
-                refetchBalances={refetchBalances}
-              />
-            ) : (
-              <ApproveButton
-                balance={balanceData?.value || 0n}
-                isBalancesRefetching={isBalancesRefetching}
-                refetchBalances={refetchBalances}
-              />
-            )
-          ) : (
-            <ConnectWallet mt="md" variant="primary" w="full" />
-          )}
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  )
-} */
 
 export function LzBeetsMigrateModalContent() {
+  const { shouldChangeNetwork } = useChainSwitch(sonicChainId)
   const [shouldShow, setShouldShow] = useState(true)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isConnected, userAddress } = useUserAccount()
@@ -356,7 +285,9 @@ export function LzBeetsMigrateModalContent() {
 
         <ModalFooter alignItems="flex-start" flexDirection="column">
           {isConnected ? (
-            hasAllowance ? (
+            shouldChangeNetwork ? (
+              <NetworkSwitchButton chainId={sonicChainId} />
+            ) : hasAllowance ? (
               <MigrationButton
                 balance={balanceData?.value || 0n}
                 isBalancesRefetching={isBalancesRefetching}
