@@ -50,7 +50,7 @@ export function MaBeetsRedirectModal({
         <ModalCloseButton />
         <ModalBody color="grayText">
           <Text color="font.secondary">
-            BEETS are live on Sonic! visit the Fantom App to migrate your BEETS and maBEETS relics
+            BEETS are live on Sonic! Visit the Fantom App to migrate your BEETS and maBEETS relics
             to sonic.
             {/*  <Link href="https://ma.beets.fi" target="_blank">
               https://ma.beets.fi
