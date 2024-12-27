@@ -1,47 +1,37 @@
 'use client'
 
-import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import {
-  Button,
-  HStack,
-  ModalFooter,
-  Popover,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  Text,
-  VStack,
   Box,
-  Checkbox,
+  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { type BaseError, useBalance, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
-import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
-import { getBlockExplorerTxUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
-import Link from 'next/link'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { Address, formatUnits } from 'viem'
-import { useTokenAllowances } from '@repo/lib/modules/web3/useTokenAllowances'
 import {
   TokenBalancesProvider,
   useTokenBalances,
 } from '@repo/lib/modules/tokens/TokenBalancesProvider'
-import { QueryObserverResult } from '@tanstack/react-query'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
-import { useChainSwitch, NetworkSwitchButton } from '@repo/lib/modules/web3/useChainSwitch'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
+import { NetworkSwitchButton, useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { useTokenAllowances } from '@repo/lib/modules/web3/useTokenAllowances'
+import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
+import { getBlockExplorerTxUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import { QueryObserverResult } from '@tanstack/react-query'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { Address, formatUnits } from 'viem'
+import { type BaseError, useBalance, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 
 const sonicChainId = 146
 const lzBeetsAddress = '0x1E5fe95fB90ac0530F581C617272cd0864626795'
@@ -133,12 +123,12 @@ function MigrationButton({
 
 function ApproveButton({
   balance,
-  isBalancesRefetching,
-  refetchBalances,
+  refetchAllowances,
+  isAllowancesLoading,
 }: {
   balance: bigint
-  isBalancesRefetching: boolean
-  refetchBalances: () => Promise<QueryObserverResult<unknown, Error>[]>
+  refetchAllowances: () => void
+  isAllowancesLoading: boolean
 }) {
   const { data: hash, writeContract, isPending, error } = useWriteContract()
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
@@ -166,7 +156,7 @@ function ApproveButton({
 
   useEffect(() => {
     if (isConfirmed) {
-      refetchBalances()
+      refetchAllowances()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfirmed])
@@ -180,22 +170,12 @@ function ApproveButton({
           </Text>
         </ErrorAlert>
       )}
-      {isConfirmed && !!hash && (
-        <Button
-          as={Link}
-          href={getBlockExplorerTxUrl(hash, GqlChain.Sonic)}
-          variant="flat"
-          w="full"
-        >
-          View on explorer
-        </Button>
-      )}
       <Button
         disabled={
-          isPending || isConfirming || isBalancesRefetching || isConfirmed || !hasLzBeetsBalance
+          isPending || isConfirming || isAllowancesLoading || isConfirmed || !hasLzBeetsBalance
         }
         isDisabled={
-          isPending || isConfirming || isBalancesRefetching || isConfirmed || !hasLzBeetsBalance
+          isPending || isConfirming || isAllowancesLoading || isConfirmed || !hasLzBeetsBalance
         }
         isLoading={isPending || isConfirming}
         mt="md"
@@ -237,16 +217,17 @@ export function LzBeetsMigrateModalContent() {
     token: lzBeetsAddress,
   })
 
-  const { allowances } = useTokenAllowances({
-    chainId: sonicChainId,
-    userAddress: userAddress as Address,
-    spenderAddress: migratorAddress,
-    tokenAddresses: [lzBeetsAddress],
-  })
+  const { allowances, refetchAllowances, isAllowancesRefetching, isAllowancesLoading } =
+    useTokenAllowances({
+      chainId: sonicChainId,
+      userAddress: userAddress as Address,
+      spenderAddress: migratorAddress,
+      tokenAddresses: [lzBeetsAddress],
+    })
 
   const balance = formatUnits(balanceData?.value || 0n, balanceData?.decimals || 18)
   const hasBalance = bn(balanceData?.value || 0n).gt(0)
-  const hasAllowance = bn(allowances[lzBeetsAddress] || 0n).gt(bn(balanceData?.value || 0n))
+  const hasAllowance = bn(allowances[lzBeetsAddress] || 0n).gte(bn(balanceData?.value || 0n))
 
   useEffect(() => {
     if (hasBalance && !isOpen && shouldShow) {
@@ -296,8 +277,8 @@ export function LzBeetsMigrateModalContent() {
             ) : (
               <ApproveButton
                 balance={balanceData?.value || 0n}
-                isBalancesRefetching={isBalancesRefetching}
-                refetchBalances={refetchBalances}
+                isAllowancesLoading={isAllowancesLoading || isAllowancesRefetching}
+                refetchAllowances={refetchAllowances}
               />
             )
           ) : (
