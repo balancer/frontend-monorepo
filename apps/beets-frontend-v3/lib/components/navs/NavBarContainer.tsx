@@ -44,7 +44,7 @@ export function NavBarContainer() {
 
   return (
     <NavBar
-      appLinks={allAppLinks.slice(1)} // we remove the pools link for the custom dropdown link
+      appLinks={allAppLinks}
       customLinksAfter={
         <>
           <Box as={motion.div} variants={fadeIn}>
@@ -55,11 +55,11 @@ export function NavBarContainer() {
           </Box>
         </>
       }
-      customLinksBefore={
+      /* customLinksBefore={
         <Box as={motion.div} variants={fadeIn}>
           <PoolsLink />
         </Box>
-      }
+      } */
       navLogo={<NavLogo />}
       rightSlot={<NavActions hideDarkModeToggle mobileNav={mobileNav} />}
     />
