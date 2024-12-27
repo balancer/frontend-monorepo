@@ -19,11 +19,11 @@ import {
   PoolActivityTokens,
   SortingBy,
   getPoolActivityTabsList,
-  Sorting,
 } from './poolActivity.types'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { usePoolActivityViewType } from '../PoolActivityViewType/usePoolActivityViewType'
 import { sortAlphabetically } from '@repo/lib/shared/utils/sorting'
+import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 
 export type PoolActivityResponse = ReturnType<typeof _usePoolActivity>
 export const PoolActivityContext = createContext<PoolActivityResponse | null>(null)

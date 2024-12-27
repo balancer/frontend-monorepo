@@ -2,8 +2,8 @@
 
 import { Divider, Grid, GridItem, Text } from '@chakra-ui/react'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
-import { Sorting, SortingBy } from '../PoolActivity/poolActivity.types'
-import { SortableHeader } from '@repo/lib/shared/components/tables/SortableHeader'
+import { SortingBy } from '../PoolActivity/poolActivity.types'
+import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 
 export function PoolActivityTableHeader({ ...rest }) {
   const {

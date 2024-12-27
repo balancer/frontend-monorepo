@@ -43,6 +43,7 @@ export function PoolListTable({ pools, count, loading }: Props) {
       left={{ base: '-4px', sm: '0' }}
       p={{ base: '0', sm: '0' }}
       position="relative"
+      pr={{ base: 'md' }}
       w={{ base: '100vw', lg: 'full' }}
     >
       <PaginatedTable
