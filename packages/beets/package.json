@@ -7,8 +7,6 @@
     "lint:fix": "eslint . --fix --max-warnings 0  --cache",
     "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
     "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
-    "stylelint": "stylelint '**/*.css'",
-    "stylelint:fix": "stylelint '**/*.css' --fix",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
   },
   "dependencies": {
