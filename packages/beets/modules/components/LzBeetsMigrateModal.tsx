@@ -233,6 +233,7 @@ export function LzBeetsMigrateModalContent() {
     if (hasBalance && !isOpen && shouldShow) {
       onOpen()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBalance, isOpen, shouldShow])
 
   function handleClose() {
