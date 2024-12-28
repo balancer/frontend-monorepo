@@ -3,12 +3,12 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useReadContract } from 'wagmi'
 import { sonicStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useReadContract } from '@repo/lib/modules/wagmi/wagmiWrappers'
 
-export function useGetUserNumWithdraws(chain: GqlChain) {
-  const { isConnected, userAddress } = useUserAccount()
+export function useGetConvertToShares(assetAmount: bigint, chain: GqlChain) {
+  const { isConnected } = useUserAccount()
   const chainId = getChainId(chain)
 
   const { shouldChangeNetwork } = useChainSwitch(chainId)
@@ -18,13 +18,13 @@ export function useGetUserNumWithdraws(chain: GqlChain) {
     chainId,
     abi: sonicStakingAbi,
     address: config.contracts.beets?.lstStakingProxy,
-    functionName: 'userNumWithdraws',
-    args: [userAddress],
-    query: { enabled: isConnected && !shouldChangeNetwork && !!userAddress },
+    functionName: 'convertToShares',
+    args: [assetAmount],
+    query: { enabled: isConnected && !shouldChangeNetwork && !!assetAmount },
   })
 
   return {
     ...query,
-    userNumWithdraws: query.data,
+    sharesAmount: query.data ?? 0n,
   }
 }

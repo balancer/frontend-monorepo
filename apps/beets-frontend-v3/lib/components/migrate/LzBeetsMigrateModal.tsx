@@ -27,11 +27,15 @@ import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { QueryObserverResult } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Address, formatUnits } from 'viem'
-import { type BaseError, useBalance, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { type BaseError } from 'wagmi'
+import {
+  useBalance,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from '@repo/lib/modules/wagmi/wagmiWrappers'
 
 const sonicChainId = 146
 const lzBeetsAddress = '0x1E5fe95fB90ac0530F581C617272cd0864626795'
@@ -44,7 +48,7 @@ function MigrationButton({
 }: {
   balance: bigint
   isBalancesRefetching: boolean
-  refetchBalances: () => Promise<QueryObserverResult<unknown, Error>[]>
+  refetchBalances: () => void
 }) {
   const { data: hash, writeContract, isPending, error } = useWriteContract()
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
