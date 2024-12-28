@@ -13,38 +13,30 @@ import { useMemo } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { parseUnits } from 'viem'
+import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { noop } from 'lodash'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
-import { useGetUserWithdraws } from './useGetUserWithdraws'
-import { useGetUserNumWithdraws } from './useGetUserNumWithdraws'
-import { useGetAmountDelegatedPerValidator } from './useGetAmountDelegatedPerValidator'
+import { NetworkConfig } from '@repo/lib/config/config.types'
 
-export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled: boolean) {
+export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: boolean) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
-  const { userNumWithdraws, refetch: refetchUserNumWithdraws } = useGetUserNumWithdraws(chain)
-  const { refetch: refetchWithdrawals } = useGetUserWithdraws(chain, userNumWithdraws)
-  const { chooseValidatorsForUnstakeAmount } = useGetAmountDelegatedPerValidator(chain)
-  const validators = chooseValidatorsForUnstakeAmount(parseUnits(sharesAmount, 18))
 
-  function onSuccess() {
-    refetchBalances()
-    refetchUserNumWithdraws()
-    refetchWithdrawals()
-  }
+  const configs: Partial<Record<GqlChain, NetworkConfig>> = networkConfigs
 
   const labels: TransactionLabels = {
-    init: 'Unstake',
-    title: 'Unstake',
-    confirming: 'Confirming unstake...',
-    confirmed: 'Unstaked!',
+    init: 'Stake',
+    title: 'Stake',
+    confirming: 'Confirming stake...',
+    confirmed: 'Staked!',
     tooltip: 'tooltip',
   }
 
   const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation (LST unstaking transaction)',
+    'Error in wagmi tx simulation (LST staking transaction)',
     {}
   )
 
@@ -52,31 +44,28 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
     labels,
     chainId: getChainId(chain),
     contractId: 'beets.lstStaking',
-    contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
-    functionName: 'undelegateMany',
-    //args: [[BigInt(1)], [parseUnits(sharesAmount, 18)]], // TODO: make dynamic
-    args: [
-      validators.map(validator => BigInt(validator.validatorId)),
-      validators.map(validator => validator.unstakeAmountShares),
-    ],
-    enabled: isConnected && !!sharesAmount && enabled,
+    contractAddress: configs[chain]?.contracts.beets?.lstStakingProxy || '',
+    functionName: 'deposit',
+    args: [],
+    value: parseUnits(humanAmount, BPT_DECIMALS),
+    enabled: bn(humanAmount).gte(0.01) && isConnected && enabled,
     txSimulationMeta,
   }
 
-  const transaction = getTransaction('unstakeLst')
+  const transaction = getTransaction('stakeLst')
 
   const isComplete = () => isConnected && !!transaction?.result.isSuccess
 
   const step = useMemo(
     (): TransactionStep => ({
-      id: 'unstakeLst',
+      id: 'stakeLst',
       labels,
-      stepType: 'unstakeLst',
+      stepType: 'stakeLst',
       isComplete,
       onActivated: noop,
       onDeactivated: noop,
-      onSuccess: onSuccess,
-      renderAction: () => <ManagedTransactionButton id="unstakeLst" {...props} />,
+      onSuccess: () => refetchBalances(),
+      renderAction: () => <ManagedTransactionButton id="stakeLst" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [transaction]

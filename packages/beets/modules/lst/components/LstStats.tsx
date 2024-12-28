@@ -11,8 +11,10 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import networkConfigs from '@repo/lib/config/networks'
 import { Address } from 'viem'
+import { NetworkConfig } from '@repo/lib/config/config.types'
 
 const CHAIN = GqlChain.Sonic
+const configs: Partial<Record<GqlChain, NetworkConfig>> = networkConfigs
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -49,7 +51,7 @@ function GlobalStatsCard({
       </Box>
       <Box>
         {isLoading ? (
-          <Skeleton h="40px" w="full" color="white" />
+          <Skeleton color="white" h="40px" w="full" />
         ) : (
           <Text fontSize="4xl">{value}</Text>
         )}
@@ -58,9 +60,9 @@ function GlobalStatsCard({
   )
 }
 
-export function LstStats({}: {}) {
-  const lstAddress = (networkConfigs[CHAIN].contracts.beets?.lstStakingProxy || '') as Address
-  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
+export function LstStats() {
+  const lstAddress = (configs[CHAIN]?.contracts.beets?.lstStakingProxy || '') as Address
+  const { getToken, usdValueForToken } = useTokens()
   const lstToken = getToken(lstAddress, CHAIN)
   const { toCurrency } = useCurrency()
   const { data: stakedSonicData, loading: isStakedSonicDataLoading } = useGetStakedSonicData()
@@ -93,23 +95,23 @@ export function LstStats({}: {}) {
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
+                isLoading={isStakedSonicDataLoading}
                 label="APR"
                 value={fNum('apr', stakingApr)}
-                isLoading={isStakedSonicDataLoading}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
+                isLoading={isStakedSonicDataLoading}
                 label="TVL"
                 value={toCurrency(usdValueForToken(lstToken, stakedSonic))}
-                isLoading={isStakedSonicDataLoading}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
+                isLoading={isStakedSonicDataLoading}
                 label="Total $S"
                 value={fNum('token', stakedSonic)}
-                isLoading={isStakedSonicDataLoading}
               />
             </GridItem>
           </Grid>

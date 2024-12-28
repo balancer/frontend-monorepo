@@ -8,12 +8,13 @@ import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInp
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { LstProvider } from './LstProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { TokenBase } from '@repo/lib/modules/tokens/token.types'
 
 export default function LstProvidersLayout({ children }: PropsWithChildren) {
   const { tokens } = useTokens()
 
   const stakingTokens = tokens.filter(
-    t =>
+    (t: TokenBase) =>
       (t.address === sonicNetworkConfig.tokens.nativeAsset.address &&
         t.chainId === sonicNetworkConfig.chainId) ||
       t.address === sonicNetworkConfig.tokens.stakedAsset?.address

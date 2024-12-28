@@ -1,0 +1,41 @@
+{
+  "name": "@repo/beets",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --cache",
+    "lint:fix": "eslint . --fix --max-warnings 0  --cache",
+    "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
+    "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
+    "stylelint": "stylelint '**/*.css'",
+    "stylelint:fix": "stylelint '**/*.css' --fix",
+    "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.11.8",
+    "@chakra-ui/react": "^2.8.2",
+    "@tanstack/react-query": "^5.56.2",
+    "date-fns": "^2.30.0",
+    "lodash": "^4.17.21",
+    "next": "14.2.0",
+    "numeral": "^2.0.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "viem": "2.21.55",
+    "wagmi": "2.13.3"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/prettier-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/lib": "workspace:*",
+    "@types/lodash": "^4.14.195",
+    "@types/numeral": "^2.0.2",
+    "@types/react": "18.2.34",
+    "@types/react-dom": "18.2.6",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "8.43.0",
+    "typescript": "5.4.5"
+  }
+}

@@ -1,7 +1,7 @@
 'use client'
 
-import { Lst } from '@repo/lib/modules/beets/lst/Lst'
-import LstProvidersLayout from '@repo/lib/modules/beets/lst/LstProvidersLayout'
+import { Lst } from '@repo/beets/modules/lst/Lst'
+import LstProvidersLayout from '@repo/beets/modules/lst/LstProvidersLayout'
 
 export default function LstPage() {
   return (

@@ -21,7 +21,7 @@ const nextConfig = {
       },
     ],
   },
-  transpilePackages: ['@repo/lib'],
+  transpilePackages: ['@repo/lib', '@repo/beets'],
 
   // Safe App setup
   headers: manifestHeaders,

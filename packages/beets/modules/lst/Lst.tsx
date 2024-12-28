@@ -42,16 +42,17 @@ import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LstFaq } from './components/LstFaq'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
-import { GetStakedSonicDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import { GetStakedSonicDataQuery, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { LstStats } from './components/LstStats'
 import networkConfigs from '@repo/lib/config/networks'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { NetworkConfig } from '@repo/lib/config/config.types'
 import { Address } from 'viem'
-import { TokenIcon } from '../../tokens/TokenIcon'
+import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import numeral from 'numeral'
 
 const CHAIN = GqlChain.Sonic
+const configs: Partial<Record<GqlChain, NetworkConfig>> = networkConfigs
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -168,7 +169,7 @@ function LstForm() {
   return (
     <VStack h="full" w="full">
       <CardBody align="start" as={VStack} h="full" w="full">
-        <Box w="full" h="full">
+        <Box h="full" w="full">
           <VStack spacing="md" w="full">
             <ButtonGroup
               currentOption={activeTab}
@@ -202,17 +203,17 @@ function LstForm() {
         </HStack> */}
         {isStakeTab && !isRateLoading && amountAssets !== '' && (
           <LstYouWillReceive
-            label="You will receive"
-            amount={getAmountShares(amountAssets)}
             address={stakedAsset?.address || ''}
+            amount={getAmountShares(amountAssets)}
+            label="You will receive"
             symbol={stakedAsset?.symbol || ''}
           />
         )}
         {isUnstakeTab && !isRateLoading && amountShares !== '' && (
           <LstYouWillReceive
-            label="You can withdraw (after 14 days)"
-            amount={getAmountAssets(amountShares)}
             address={nativeAsset?.address || ''}
+            amount={getAmountAssets(amountShares)}
+            label="You can withdraw (after 14 days)"
             symbol={nativeAsset?.symbol || ''}
           />
         )}
@@ -276,9 +277,9 @@ function LstYouWillReceive({
   return (
     <Box w="full">
       <FadeInOnView>
-        <Flex w="full" alignItems="flex-end">
+        <Flex alignItems="flex-end" w="full">
           <Box flex="1">
-            <Text mb="sm" color="grayText">
+            <Text color="grayText" mb="sm">
               {label}
             </Text>
             <Text fontSize="3xl">
@@ -329,7 +330,7 @@ function LstInfo({
   stakedSonicData?: GetStakedSonicDataQuery
   isStakedSonicDataLoading: boolean
 }) {
-  const lstAddress = (networkConfigs[CHAIN].contracts.beets?.lstStakingProxy || '') as Address
+  const lstAddress = (configs[CHAIN]?.contracts.beets?.lstStakingProxy || '') as Address
   const { getToken, usdValueForToken } = useTokens()
   const lstToken = getToken(lstAddress, CHAIN)
   const { toCurrency } = useCurrency()

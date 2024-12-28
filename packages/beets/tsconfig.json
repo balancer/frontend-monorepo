@@ -1,0 +1,14 @@
+{
+  "extends": "@repo/typescript-config/react-library.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "baseUrl": ".",
+    "paths": {
+      "@repo/lib/*": ["../lib/*"],
+      "@repo/beets/*": ["*"]
+    },
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+  },
+  "include": ["**/*.ts", "**/*.tsx", "..//lib/global.d.ts"],
+  "exclude": ["node_modules", "**/generated/**"]
+}

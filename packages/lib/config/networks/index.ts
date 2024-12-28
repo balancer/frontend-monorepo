@@ -29,4 +29,6 @@ const networkConfigs = {
   [GqlChain.Sonic]: sonic,
 }
 
+export type NetworkConfig = typeof networkConfigs
+
 export default networkConfigs

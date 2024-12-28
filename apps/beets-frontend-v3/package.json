@@ -23,6 +23,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@chakra-ui/theme-tools": "^2.1.2",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
+    "@repo/beets": "workspace:*",
     "@repo/lib": "workspace:*",
     "@sentry/nextjs": "^8.13.0",
     "@studio-freight/react-lenis": "^0.0.47",

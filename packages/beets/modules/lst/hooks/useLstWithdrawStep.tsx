@@ -12,28 +12,33 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { useMemo } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { parseUnits } from 'viem'
-import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { noop } from 'lodash'
-import { bn } from '@repo/lib/shared/utils/numbers'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { NetworkConfig } from '@repo/lib/config/config.types'
 
-export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: boolean) {
+export function useLstWithdrawStep(
+  humanAmount: string,
+  chain: GqlChain,
+  enabled: boolean,
+  wrID: bigint | undefined
+) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
 
+  const configs: Partial<Record<GqlChain, NetworkConfig>> = networkConfigs
+
   const labels: TransactionLabels = {
-    init: 'Stake',
-    title: 'Stake',
-    confirming: 'Confirming stake...',
-    confirmed: 'Staked!',
+    init: 'Withdraw',
+    title: 'Withdraw',
+    confirming: 'Confirming withdraw...',
+    confirmed: 'Withdrawn!',
     tooltip: 'tooltip',
   }
 
   const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation (LST staking transaction)',
+    'Error in wagmi tx simulation (LST withdrawing transaction)',
     {}
   )
 
@@ -41,28 +46,27 @@ export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: b
     labels,
     chainId: getChainId(chain),
     contractId: 'beets.lstStaking',
-    contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
-    functionName: 'deposit',
-    args: [],
-    value: parseUnits(humanAmount, BPT_DECIMALS),
-    enabled: bn(humanAmount).gte(0.01) && isConnected && enabled,
+    contractAddress: configs[chain]?.contracts.beets?.lstStakingProxy || '',
+    functionName: 'withdraw',
+    args: [wrID || 0n, 0n],
+    enabled: isConnected && !!humanAmount && enabled && !!wrID,
     txSimulationMeta,
   }
 
-  const transaction = getTransaction('stakeLst')
+  const transaction = getTransaction('withdrawLst')
 
   const isComplete = () => isConnected && !!transaction?.result.isSuccess
 
   const step = useMemo(
     (): TransactionStep => ({
-      id: 'stakeLst',
+      id: 'withdrawLst',
       labels,
-      stepType: 'stakeLst',
+      stepType: 'withdrawLst',
       isComplete,
       onActivated: noop,
       onDeactivated: noop,
       onSuccess: () => refetchBalances(),
-      renderAction: () => <ManagedTransactionButton id="stakeLst" {...props} />,
+      renderAction: () => <ManagedTransactionButton id="withdrawLst" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [transaction]

@@ -13,8 +13,9 @@ import { DEFAULT_THEME_COLOR_MODE } from '@repo/lib/shared/services/chakra/theme
 import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
 import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
-import { LzBeetsMigrateModal } from '@repo/lib/modules/beets/components/LzBeetsMigrateModal'
+import { LzBeetsMigrateModal } from '@repo/beets/modules/components/LzBeetsMigrateModal'
 import { PoolsNetworkWatcher } from '@/lib/components/navs/PoolsNetworkWatcher'
+
 export const metadata: Metadata = {
   title: 'Beets',
   description: `The Flagship LST Hub on Sonic. From seamless staking to earning real yield on LST-focused liquidity pools, beets is the ultimate destination for your liquid-staked tokens.`,
