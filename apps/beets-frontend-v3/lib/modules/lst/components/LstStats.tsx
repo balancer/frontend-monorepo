@@ -49,7 +49,7 @@ function GlobalStatsCard({
       </Box>
       <Box>
         {isLoading ? (
-          <Skeleton h="40px" w="full" color="white" />
+          <Skeleton color="white" h="40px" w="full" />
         ) : (
           <Text fontSize="4xl">{value}</Text>
         )}
@@ -58,9 +58,9 @@ function GlobalStatsCard({
   )
 }
 
-export function LstStats({}: {}) {
+export function LstStats() {
   const lstAddress = (networkConfigs[CHAIN].contracts.beets?.lstStakingProxy || '') as Address
-  const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
+  const { getToken, usdValueForToken } = useTokens()
   const lstToken = getToken(lstAddress, CHAIN)
   const { toCurrency } = useCurrency()
   const { data: stakedSonicData, loading: isStakedSonicDataLoading } = useGetStakedSonicData()
@@ -93,23 +93,23 @@ export function LstStats({}: {}) {
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
+                isLoading={isStakedSonicDataLoading}
                 label="APR"
                 value={fNum('apr', stakingApr)}
-                isLoading={isStakedSonicDataLoading}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
+                isLoading={isStakedSonicDataLoading}
                 label="TVL"
                 value={toCurrency(usdValueForToken(lstToken, stakedSonic))}
-                isLoading={isStakedSonicDataLoading}
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)" borderRadius="lg">
               <GlobalStatsCard
+                isLoading={isStakedSonicDataLoading}
                 label="Total $S"
                 value={fNum('token', stakedSonic)}
-                isLoading={isStakedSonicDataLoading}
               />
             </GridItem>
           </Grid>
