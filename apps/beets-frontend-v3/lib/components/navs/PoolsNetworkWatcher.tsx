@@ -24,6 +24,7 @@ export function PoolsNetworkWatcher() {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chain, pathname, searchParams.size])
 
   return <>{null}</>
