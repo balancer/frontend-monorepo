@@ -4,27 +4,19 @@ import { CustomAvatar } from './CustomAvatar'
 import { useUserAccount } from './UserAccountProvider'
 
 export function ConnectWallet({ ...rest }: ButtonProps) {
-  const { isLoading: isLoadingAccount, isConnected: isConnectedAccount } = useUserAccount()
+  const { isLoading, isConnected: isConnectedAccount } = useUserAccount()
 
   return (
     <ConnectButton.Custom>
-      {({
-        mounted,
-        openConnectModal,
-        authenticationStatus,
-        account,
-        chain,
-        openChainModal,
-        openAccountModal,
-      }) => {
-        const isReady = mounted && authenticationStatus !== 'loading'
-        const isLoading = authenticationStatus === 'loading' || isLoadingAccount
-        const isConnected =
-          isReady &&
-          account &&
-          chain &&
-          isConnectedAccount &&
-          (!authenticationStatus || authenticationStatus === 'authenticated')
+      {({ mounted, openConnectModal, account, chain, openChainModal, openAccountModal }) => {
+        const isConnected = mounted && account && chain && isConnectedAccount
+
+        console.log({
+          mounted,
+          account,
+          chain,
+          isConnectedAccount,
+        })
 
         if (!isConnected) {
           return (
