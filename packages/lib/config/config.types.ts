@@ -1,9 +1,9 @@
 import { Address } from 'viem'
-import { GqlChain } from '../shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType } from '../shared/services/api/generated/graphql'
 import { chains } from '@repo/lib/modules/web3/ChainConfig'
 import { PoolIssue } from '../modules/pool/alerts/pool-issues/PoolIssue.type'
 import { SupportedWrapHandler } from '../modules/swap/swap.types'
-import { PartnerVariant } from '../modules/pool/pool.types'
+import { PartnerVariant, PoolListDisplayType } from '../modules/pool/pool.types'
 
 export interface TokensConfig {
   addresses: {
@@ -120,6 +120,13 @@ interface ExternalUrls {
   discordUrl: string
 }
 
+type OptionsConfig = {
+  displayType: PoolListDisplayType
+  hidePoolTags: string[]
+  hidePoolTypes: GqlPoolType[]
+  hideProtocolVersion: string[]
+}
+
 export interface ProjectConfig {
   projectId: 'beets' | 'balancer'
   projectName: string
@@ -130,4 +137,5 @@ export interface ProjectConfig {
   ensNetwork: GqlChain
   delegateOwner: Address
   externalLinks: ExternalUrls
+  options?: OptionsConfig
 }
