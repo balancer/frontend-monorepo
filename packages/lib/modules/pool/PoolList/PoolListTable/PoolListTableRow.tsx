@@ -13,6 +13,7 @@ import { usePoolList } from '../PoolListProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
 import { usePoolMetadata } from '../../metadata/usePoolMetadata'
+import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -45,14 +46,47 @@ function PoolName({ pool }: { pool: PoolListItem }) {
   )
 }
 
+function DisplayType({
+  displayType,
+  pool,
+  name,
+}: {
+  displayType: PoolListDisplayType | undefined
+  pool: PoolListItem
+  name: string | undefined
+}) {
+  let component
+
+  switch (displayType) {
+    case PoolListDisplayType.Name:
+      component = <PoolName pool={pool} />
+      break
+    case PoolListDisplayType.TokenPills:
+    default:
+      component = (
+        <PoolListTokenPills
+          h={['32px', '36px']}
+          iconSize={name ? 24 : 20}
+          nameSize="sm"
+          p={['xxs', 'sm']}
+          pool={pool}
+          pr={[1.5, 'ms']}
+        />
+      )
+      break
+  }
+
+  return component
+}
+
 export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
+  const { name } = usePoolMetadata(pool)
+  const { toCurrency } = useCurrency()
+  const { options } = useProjectConfig()
+
   const {
     queryState: { userAddress },
-    displayType,
   } = usePoolList()
-  const { name } = usePoolMetadata(pool)
-
-  const { toCurrency } = useCurrency()
 
   return (
     <FadeInOnView>
@@ -72,17 +106,7 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
-              {displayType === PoolListDisplayType.TokenPills && (
-                <PoolListTokenPills
-                  h={['32px', '36px']}
-                  iconSize={name ? 24 : 20}
-                  nameSize="sm"
-                  p={['xxs', 'sm']}
-                  pool={pool}
-                  pr={[1.5, 'ms']}
-                />
-              )}
-              {displayType === PoolListDisplayType.Name && <PoolName pool={pool} />}
+              <DisplayType displayType={options?.displayType} name={name} pool={pool} />
             </GridItem>
             <GridItem minW="32">
               <PollListTableDetailsCell pool={pool} />
