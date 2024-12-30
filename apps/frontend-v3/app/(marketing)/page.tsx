@@ -2,13 +2,13 @@ import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-serv
 import { LandingV3Layout } from './_lib/landing-v3/LandingV3Layout'
 import { GetProtocolStatsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { mins } from '@repo/lib/shared/utils/time'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { ProjectConfigBalancer } from '@/lib/config/projectConfig'
 
 export default async function Home() {
   const client = getApolloServerClient()
 
   const variables = {
-    chains: getProjectConfig().supportedNetworks,
+    chains: ProjectConfigBalancer.supportedNetworks,
   }
 
   const { data: protocolData } = await client.query({

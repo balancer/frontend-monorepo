@@ -31,7 +31,6 @@ import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem, ApiToken } from './pool.types'
 import { Pool } from './PoolProvider'
-import { isBeetsProject, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 /**
  * METHODS
@@ -286,14 +285,14 @@ const shouldBlockV3PoolAdds = false
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
-export function shouldBlockAddLiquidity(pool: Pool) {
+export function shouldBlockAddLiquidity(pool: Pool, corePoolId = '') {
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
 
   // avoid blocking Sepolia pools
   if (pool.chain === GqlChain.Sepolia) return false
 
-  // don't add liquidity to the maBEETS pool thru the pool page
-  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) return true
+  // don't add liquidity thru the pool page (for maBEETS)
+  if (pool.id === corePoolId) return true
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
@@ -334,7 +333,7 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 /**
  *  TODO: improve the implementation to display all the blocking reasons instead of just the first one
  */
-export function getPoolAddBlockedReason(pool: Pool): string {
+export function getPoolAddBlockedReason(pool: Pool, corePoolId = ''): string {
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return 'Adds are blocked for all V3 pools'
@@ -343,8 +342,8 @@ export function getPoolAddBlockedReason(pool: Pool): string {
   if (pool.dynamicData.isPaused) return 'Paused pool'
   if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
 
-  // don't add liquidity to the maBEETS pool thru the pool page
-  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) {
+  // don't add liquidity thru the pool page (for maBEETS)
+  if (pool.id === corePoolId) {
     return 'Please manage your liquidity on the maBEETS page.'
   }
 
