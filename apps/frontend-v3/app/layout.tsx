@@ -13,6 +13,7 @@ import { FooterContainer } from '@/lib/components/footer/FooterContainer'
 import { DEFAULT_THEME_COLOR_MODE } from '@repo/lib/shared/services/chakra/themes/base/foundations'
 import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
+import { ProjectConfigBalancer } from '@/lib/config/projectConfig'
 
 export const metadata: Metadata = {
   title: 'Balancer - DeFi Liquidity Pools',
@@ -50,7 +51,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <NextTopLoader color="#7f6ae8" showSpinner={false} />
         <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
           <ThemeProvider>
-            <Providers>
+            <Providers config={ProjectConfigBalancer}>
               <GlobalAlerts />
               <NavBarContainer />
               {children}
