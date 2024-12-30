@@ -37,7 +37,7 @@ import { LstWithdraw } from './components/LstWithdraw'
 import { useGetUserWithdraws, UserWithdraw } from './hooks/useGetUserWithdraws'
 import { useGetUserNumWithdraws } from './hooks/useGetUserNumWithdraws'
 import { useGetStakedSonicData } from './hooks/useGetStakedSonicData'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LstFaq } from './components/LstFaq'
@@ -270,7 +270,7 @@ function LstYouWillReceive({
   address: string
   symbol: string
 }) {
-  const amountFormatted = fNum('token', amount)
+  const amountFormatted = fNumCustom(amount, '0,0.[000000]')
 
   return (
     <Box w="full">
