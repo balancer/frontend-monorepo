@@ -16,6 +16,7 @@ export function ConnectWallet({ ...rest }: ButtonProps) {
           account,
           chain,
           isConnectedAccount,
+          isLoading,
         })
 
         if (!isConnected) {
