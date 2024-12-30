@@ -37,7 +37,7 @@ import { LstWithdraw } from './components/LstWithdraw'
 import { useGetUserWithdraws, UserWithdraw } from './hooks/useGetUserWithdraws'
 import { useGetUserNumWithdraws } from './hooks/useGetUserNumWithdraws'
 import { useGetStakedSonicData } from './hooks/useGetStakedSonicData'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LstFaq } from './components/LstFaq'
@@ -48,8 +48,7 @@ import { LstStats } from './components/LstStats'
 import networkConfigs from '@repo/lib/config/networks'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
-import { TokenIcon } from '../../tokens/TokenIcon'
-import numeral from 'numeral'
+import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 
 const CHAIN = GqlChain.Sonic
 
@@ -168,7 +167,7 @@ function LstForm() {
   return (
     <VStack h="full" w="full">
       <CardBody align="start" as={VStack} h="full" w="full">
-        <Box w="full" h="full">
+        <Box h="full" w="full">
           <VStack spacing="md" w="full">
             <ButtonGroup
               currentOption={activeTab}
@@ -202,17 +201,17 @@ function LstForm() {
         </HStack> */}
         {isStakeTab && !isRateLoading && amountAssets !== '' && (
           <LstYouWillReceive
-            label="You will receive"
-            amount={getAmountShares(amountAssets)}
             address={stakedAsset?.address || ''}
+            amount={getAmountShares(amountAssets)}
+            label="You will receive"
             symbol={stakedAsset?.symbol || ''}
           />
         )}
         {isUnstakeTab && !isRateLoading && amountShares !== '' && (
           <LstYouWillReceive
-            label="You can withdraw (after 14 days)"
-            amount={getAmountAssets(amountShares)}
             address={nativeAsset?.address || ''}
+            amount={getAmountAssets(amountShares)}
+            label="You can withdraw (after 14 days)"
             symbol={nativeAsset?.symbol || ''}
           />
         )}
@@ -271,14 +270,14 @@ function LstYouWillReceive({
   address: string
   symbol: string
 }) {
-  const amountFormatted = numeral(amount).format('0,0.[000000]')
+  const amountFormatted = fNumCustom(amount, '0,0.[000000]')
 
   return (
     <Box w="full">
       <FadeInOnView>
-        <Flex w="full" alignItems="flex-end">
+        <Flex alignItems="flex-end" w="full">
           <Box flex="1">
-            <Text mb="sm" color="grayText">
+            <Text color="grayText" mb="sm">
               {label}
             </Text>
             <Text fontSize="3xl">

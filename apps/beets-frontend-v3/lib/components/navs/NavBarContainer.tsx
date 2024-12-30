@@ -12,7 +12,6 @@ import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { MaBeetsNavLink } from './MaBeetsNavLink'
 import { SonicMigrationLink } from './SonicMigrationLink'
 import { FantomToSonicSvg } from '../imgs/FantomToSonicSvg'
-import { PoolsLink } from './PoolsLink'
 
 export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()

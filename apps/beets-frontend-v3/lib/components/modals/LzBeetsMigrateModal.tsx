@@ -233,6 +233,7 @@ export function LzBeetsMigrateModalContent() {
     if (hasBalance && !isOpen && shouldShow) {
       onOpen()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasBalance, isOpen, shouldShow])
 
   function handleClose() {
@@ -253,9 +254,9 @@ export function LzBeetsMigrateModalContent() {
               address={lzBeetsAddress as Address}
               chain={GqlChain.Sonic}
               isLoading={false}
-              value={balance}
               logoURI="https://beethoven-assets.s3.eu-central-1.amazonaws.com/token-stargate-transitonBEETS.svg"
-              showZeroAmountAsDash={true}
+              showZeroAmountAsDash
+              value={balance}
             />
           </Box>
           <Text color="font.secondary">
