@@ -31,7 +31,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
-import { getProjectConfig, isBeetsProject } from '@repo/lib/config/getProjectConfig'
+import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
 import { PoolFilterType, poolTagFilters, PoolTagType, poolTypeFilters } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -160,8 +160,7 @@ function PoolTypeFilters({ hidePoolTypes }: { hidePoolTypes: string[] | undefine
   )
 }
 
-function PoolNetworkFilters() {
-  const { supportedNetworks } = getProjectConfig()
+function PoolNetworkFilters({ supportedNetworks }: { supportedNetworks: GqlChain[] }) {
   const {
     queryState: { networks: toggledNetworks, toggleNetwork, setNetworks },
   } = usePoolList()
@@ -458,16 +457,15 @@ export function PoolListFilters() {
   } = usePoolList()
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
-  const { options } = useProjectConfig()
+  const { options, externalLinks, supportedNetworks } = useProjectConfig()
 
   function _resetFilters() {
     resetFilters()
     setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
   }
 
-  const poolCreatorUrl = isBeetsProject
-    ? 'https://ma.beets.fi/compose'
-    : `https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`
+  const subPath = !isBalancerProject ? '' : isCowPath ? 'cow' : 'v3'
+  const poolCreatorUrl = `${externalLinks.poolComposerUrl}/${subPath}`
 
   return (
     <VStack w="full">
@@ -534,7 +532,7 @@ export function PoolListFilters() {
                         <Heading as="h3" mb="sm" size="sm">
                           Networks
                         </Heading>
-                        <PoolNetworkFilters />
+                        <PoolNetworkFilters supportedNetworks={supportedNetworks} />
                       </Box>
                       {!isCowPath && (
                         <Box as={motion.div} variants={staggeredFadeInUp}>

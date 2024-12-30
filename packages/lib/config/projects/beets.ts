@@ -14,5 +14,6 @@ export const ProjectConfigBeets: ProjectConfig = {
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b', // TODO update this for sonic & optimism,
   externalLinks: {
     discordUrl: 'https://beets.fi/discord',
+    poolComposerUrl: 'https://ma.beets.fi/compose',
   },
 }

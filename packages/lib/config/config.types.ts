@@ -118,6 +118,7 @@ type VariantConfig = {
 
 interface ExternalUrls {
   discordUrl: string
+  poolComposerUrl: string
 }
 
 type OptionsConfig = {
