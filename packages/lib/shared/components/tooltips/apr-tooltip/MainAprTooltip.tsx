@@ -16,9 +16,9 @@ import StarsIcon from '../../icons/StarsIcon'
 import { PoolListItem } from '@repo/lib/modules/pool/pool.types'
 import { FeaturedPool, Pool } from '@repo/lib/modules/pool/PoolProvider'
 import { isLBP } from '@repo/lib/modules/pool/pool.helpers'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { GqlPoolAprItemType } from '@repo/lib/shared/services/api/generated/graphql'
 import StarIcon from '../../icons/StarIcon'
+import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 
 interface Props
   extends Omit<
@@ -43,7 +43,8 @@ export function SparklesIcon({
   pool: Pool | PoolListItem | FeaturedPool
   id?: string
 }) {
-  const { corePoolId } = getProjectConfig()
+  const { corePoolId } = useProjectConfig()
+
   const hoverColor = isLBP(pool.type) ? 'inherit' : 'font.highlight'
 
   const hasRewardApr =
