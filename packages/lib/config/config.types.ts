@@ -138,5 +138,5 @@ export interface ProjectConfig {
   ensNetwork: GqlChain
   delegateOwner: Address
   externalLinks: ExternalUrls
-  options?: OptionsConfig
+  options: OptionsConfig
 }

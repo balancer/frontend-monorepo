@@ -98,7 +98,7 @@ function UserPoolFilter() {
   )
 }
 
-function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] | undefined }) {
+function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
   const {
     queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel },
   } = usePoolList()
@@ -128,7 +128,7 @@ function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] | undefi
   )
 }
 
-function PoolTypeFilters({ hidePoolTypes }: { hidePoolTypes: string[] | undefined }) {
+function PoolTypeFilters({ hidePoolTypes }: { hidePoolTypes: string[] }) {
   const {
     queryState: { togglePoolType, poolTypes, poolTypeLabel, setPoolTypes },
   } = usePoolList()
@@ -392,11 +392,7 @@ const FilterButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
   )
 })
 
-function ProtocolVersionFilter({
-  hideProtocolVersion,
-}: {
-  hideProtocolVersion: string[] | undefined
-}) {
+function ProtocolVersionFilter({ hideProtocolVersion }: { hideProtocolVersion: string[] }) {
   const {
     queryState: {
       setProtocolVersion,
@@ -540,7 +536,7 @@ export function PoolListFilters() {
                             Protocol version
                           </Heading>
                           <ProtocolVersionFilter
-                            hideProtocolVersion={options?.hideProtocolVersion}
+                            hideProtocolVersion={options.hideProtocolVersion}
                           />
                         </Box>
                       )}
@@ -549,14 +545,14 @@ export function PoolListFilters() {
                           <Heading as="h3" mb="sm" size="sm">
                             Pool types
                           </Heading>
-                          <PoolTypeFilters hidePoolTypes={options?.hidePoolTypes} />
+                          <PoolTypeFilters hidePoolTypes={options.hidePoolTypes} />
                         </Box>
                       )}
                       <Box as={motion.div} variants={staggeredFadeInUp}>
                         <Heading as="h3" mb="sm" size="sm">
                           Pool categories
                         </Heading>
-                        <PoolCategoryFilters hidePoolTags={options?.hidePoolTags} />
+                        <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
                       </Box>
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />
