@@ -3,7 +3,12 @@ import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 
 import { usePool } from '../../PoolProvider'
-import { getPoolAddBlockedReason, isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
+import {
+  getPoolAddBlockedReason,
+  isFx,
+  isMaBeetsPool,
+  shouldBlockAddLiquidity,
+} from '../../pool.helpers'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 import { PoolTags } from '../../tags/PoolTags'
 import { PoolBreadcrumbs } from './PoolBreadcrumbs'
@@ -23,7 +28,12 @@ export function PoolHeader() {
   const [redirectPartnerUrl, setRedirectPartnerUrl] = useState<string>()
   const partnerRedirectDisclosure = useDisclosure()
 
-  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool)
+  const shouldBlockCustom = isMaBeetsPool(pool.id)
+  const customReason = shouldBlockCustom
+    ? 'Please manage your liquidity on the maBEETS page.'
+    : undefined
+
+  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, shouldBlockCustom)
 
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
@@ -58,7 +68,9 @@ export function PoolHeader() {
           <PoolTags />
           <HStack spacing="sm">
             {/* TODO: Add block reason alerts*/}
-            <Tooltip label={isAddLiquidityBlocked ? getPoolAddBlockedReason(pool) : ''}>
+            <Tooltip
+              label={isAddLiquidityBlocked ? getPoolAddBlockedReason(pool, customReason) : ''}
+            >
               <Button
                 isDisabled={isAddLiquidityBlocked}
                 onClick={handleClick}

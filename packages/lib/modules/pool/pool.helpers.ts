@@ -124,6 +124,12 @@ export function isVebalPool(poolId: string): boolean {
   )
 }
 
+export function isMaBeetsPool(poolId: string): boolean {
+  return (
+    poolId.toLowerCase() === '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005'
+  )
+}
+
 export function isCowAmmPool(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.CowAmm
 }
@@ -285,14 +291,14 @@ const shouldBlockV3PoolAdds = false
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
-export function shouldBlockAddLiquidity(pool: Pool, corePoolId = '') {
+export function shouldBlockAddLiquidity(pool: Pool, shouldBlockCustom = false) {
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
 
   // avoid blocking Sepolia pools
   if (pool.chain === GqlChain.Sepolia) return false
 
-  // don't add liquidity thru the pool page (for maBEETS)
-  if (pool.id === corePoolId) return true
+  // block add liquidity for custom scenarios eg. maBEETS
+  if (shouldBlockCustom) return true
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
@@ -333,7 +339,7 @@ export function shouldBlockAddLiquidity(pool: Pool, corePoolId = '') {
 /**
  *  TODO: improve the implementation to display all the blocking reasons instead of just the first one
  */
-export function getPoolAddBlockedReason(pool: Pool, corePoolId = ''): string {
+export function getPoolAddBlockedReason(pool: Pool, customReason?: string): string {
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return 'Adds are blocked for all V3 pools'
@@ -342,9 +348,9 @@ export function getPoolAddBlockedReason(pool: Pool, corePoolId = ''): string {
   if (pool.dynamicData.isPaused) return 'Paused pool'
   if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
 
-  // don't add liquidity thru the pool page (for maBEETS)
-  if (pool.id === corePoolId) {
-    return 'Please manage your liquidity on the maBEETS page.'
+  // when a custom reason is provided return it eg. for maBEETS
+  if (customReason) {
+    return customReason
   }
 
   if (pool.hook && !hasReviewedHook(pool.hook)) {

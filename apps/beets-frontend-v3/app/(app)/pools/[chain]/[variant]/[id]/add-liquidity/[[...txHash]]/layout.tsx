@@ -1,6 +1,10 @@
 'use client'
 
-import { isNotSupported, shouldBlockAddLiquidity } from '@repo/lib/modules/pool/pool.helpers'
+import {
+  isMaBeetsPool,
+  isNotSupported,
+  shouldBlockAddLiquidity,
+} from '@repo/lib/modules/pool/pool.helpers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSignatureProvider'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
@@ -26,8 +30,9 @@ export default function AddLiquidityLayout({ params: { txHash }, children }: Pro
 
   const maybeTxHash = txHash?.[0] || ''
   const urlTxHash = isHash(maybeTxHash) ? maybeTxHash : undefined
+  const shouldBlockCustom = isMaBeetsPool(pool.id)
 
-  if (shouldBlockAddLiquidity(pool)) {
+  if (shouldBlockAddLiquidity(pool, shouldBlockCustom)) {
     return redirectToPoolPage()
   }
 
