@@ -32,7 +32,7 @@ export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL
 const stakingBalTooltipText = `The base APR all stakers in this pool get (determined by weekly gauge voting).
 In addition, veBAL holders can get an extra boost of up to 2.5x.`
 
-const stakingTokenTooltipText = '3rd party incentives (outside the veBAL system)'
+const stakingTokenTooltipText = `3rd party incentives (outside the ${isBalancerProject ? 'veBAL' : 'gauge bounty'} system)`
 
 const maBeetsVotingRewardsTooltipText =
   'To receive Voting APR you must vote for incentivized pools in the bi-weekly gauge vote. APR is dependent on your vote distribution.'
