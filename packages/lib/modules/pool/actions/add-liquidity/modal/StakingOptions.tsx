@@ -12,11 +12,13 @@ import {
   PartnerRedirectModal,
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
-import { PROJECT_CONFIG, isBalancerProject } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 
 export function StakingOptions() {
   const { chain, pool } = usePool()
+  const { projectName, projectId, options } = useProjectConfig()
+
   const canStake = !!pool.staking
   const stakePath = getPoolActionPath({
     id: pool.id,
@@ -32,7 +34,7 @@ export function StakingOptions() {
       <HStack alignItems="stretch" justify="space-between" w="full">
         <Card position="relative" variant="modalSubSection">
           <VStack align="left" spacing="md">
-            <Text color="grayText">{PROJECT_CONFIG.projectName}</Text>
+            <Text color="grayText">{projectName}</Text>
             <HStack>
               <Text color="font.primary" fontSize="md" fontWeight="bold">
                 {/* SHOULD WE USE MAX APR instead of the range?? */}
@@ -43,9 +45,9 @@ export function StakingOptions() {
             </HStack>
             <Flex position="absolute" right={2} top={3}>
               <Image
-                alt={PROJECT_CONFIG.projectId}
+                alt={projectId}
                 height={30}
-                src={`/images/protocols/${PROJECT_CONFIG.projectId}.svg`}
+                src={`/images/protocols/${projectId}.svg`}
                 width={30}
               />
             </Flex>
@@ -61,7 +63,7 @@ export function StakingOptions() {
             </Button>
           </VStack>
         </Card>
-        {(isBalancerProject || pool.chain === GqlChain.Optimism) && pool.staking?.aura && (
+        {(options.showAuraStaking || pool.chain === GqlChain.Optimism) && pool.staking?.aura && (
           <Card position="relative" variant="modalSubSection">
             <VStack align="left" spacing="md">
               <Text color="grayText">Aura</Text>
