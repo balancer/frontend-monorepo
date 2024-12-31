@@ -30,14 +30,14 @@ export function useNavData() {
     },
   ]
 
-  const getSocialLinks = (size = 24) => [
+  const getSocialLinks = (discordUrl: string, size = 24) => [
     {
       icon: <XIcon size={size} />,
       href: 'https://x.com/Balancer',
     },
     {
       icon: <DiscordIcon size={size} />,
-      href: ProjectConfigBalancer.externalLinks.discordUrl,
+      href: discordUrl,
     },
     {
       icon: <MediumIcon size={size} />,
