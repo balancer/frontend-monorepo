@@ -127,6 +127,7 @@ type OptionsConfig = {
   hidePoolTypes: GqlPoolType[]
   hideProtocolVersion: string[]
   showAuraStaking: boolean
+  showPoolName: boolean
 }
 
 export interface ProjectConfig {

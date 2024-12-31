@@ -2,10 +2,13 @@ import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button } from '@chakra
 import { usePool } from '../../PoolProvider'
 import { ChevronRight, Home } from 'react-feather'
 import { isCowAmmPool } from '../../pool.helpers'
-import { isBeetsProject } from '@repo/lib/config/getProjectConfig'
+import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 
 export function PoolBreadcrumbs() {
   const { pool } = usePool()
+  const {
+    options: { showPoolName },
+  } = useProjectConfig()
 
   const poolsLabel = isCowAmmPool(pool.type) ? 'CoW pools' : 'Pools'
   const poolsHref = isCowAmmPool(pool.type) ? '/pools/cow' : '/pools'
@@ -32,7 +35,7 @@ export function PoolBreadcrumbs() {
         <BreadcrumbLink href={poolsHref}>{poolsLabel}</BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem isCurrentPage>
-        <BreadcrumbLink href="#">{isBeetsProject ? pool.name : pool.symbol}</BreadcrumbLink>
+        <BreadcrumbLink href="#">{showPoolName ? pool.name : pool.symbol}</BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>
   )

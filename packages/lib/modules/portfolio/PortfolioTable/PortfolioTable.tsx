@@ -18,8 +18,8 @@ import { ExpandedPoolInfo, ExpandedPoolType, useExpandedPools } from './useExpan
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
-import { getProjectConfig, isBalancerProject } from '@repo/lib/config/getProjectConfig'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -84,6 +84,7 @@ export function PortfolioTable() {
   const [shouldFilterTinyBalances, setShouldFilterTinyBalances] = useState(true)
   const { portfolioData, isLoadingPortfolio } = usePortfolio()
   const { isConnected } = useUserAccount()
+  const { projectName } = useProjectConfig()
 
   // Filter out pools with tiny balances (<0.01 USD)
   const minUsdBalance = 0.01
@@ -159,7 +160,7 @@ export function PortfolioTable() {
     <FadeInOnView>
       <Stack gap={5}>
         <HStack>
-          <Heading size="lg">{`${getProjectConfig().projectName} portfolio`}</Heading>
+          <Heading size="lg">{`${projectName} portfolio`}</Heading>
         </HStack>
         {isConnected ? (
           <Card

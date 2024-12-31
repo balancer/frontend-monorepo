@@ -10,9 +10,9 @@ import { isBoosted, isCowAmmPool, isStable, isV2Pool, isV3Pool } from '../../../
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { compact } from 'lodash'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
+import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 
 type FormattedPoolAttributes = {
   title: string
@@ -24,8 +24,8 @@ export function useFormattedPoolAttributes() {
   const { pool } = usePool()
   const { toCurrency } = useCurrency()
   const { usdValueForBpt } = useTokens()
+  const { delegateOwner } = useProjectConfig()
 
-  const { delegateOwner } = getProjectConfig()
   const isV2 = isV2Pool(pool)
   const isV3 = isV3Pool(pool)
 
