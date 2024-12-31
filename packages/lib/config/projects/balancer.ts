@@ -1,6 +1,6 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
-import { PartnerVariant } from '@repo/lib/modules/pool/pool.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { PartnerVariant, PoolListDisplayType } from '@repo/lib/modules/pool/pool.types'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isProd } from '@repo/lib/config/app.config'
 
 export const ProjectConfigBalancer: ProjectConfig = {
@@ -36,5 +36,14 @@ export const ProjectConfigBalancer: ProjectConfig = {
   externalLinks: {
     discordUrl: 'https://discord.balancer.fi/',
     poolComposerUrl: 'https://pool-creator.balancer.fi',
+  },
+  // TODO: Remove this once config is moved to app folder
+  options: {
+    displayType: PoolListDisplayType.Name,
+    hidePoolTags: ['VE8020', 'BOOSTED'],
+    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
+    hideProtocolVersion: ['cow', 'v3'],
+    showAuraStaking: false,
+    showPoolName: true,
   },
 }

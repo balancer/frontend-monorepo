@@ -20,6 +20,7 @@ import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
+import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {

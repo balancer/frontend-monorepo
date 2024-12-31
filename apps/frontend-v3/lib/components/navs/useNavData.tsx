@@ -4,7 +4,6 @@ import { MediumIcon } from '@repo/lib/shared/components/icons/social/MediumIcon'
 import { YoutubeIcon } from '@repo/lib/shared/components/icons/social/YoutubeIcon'
 import { GithubIcon } from '@repo/lib/shared/components/icons/social/GithubIcon'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
-import { ProjectConfigBalancer } from '@/lib/config/projectConfig'
 
 export function useNavData() {
   const appLinks = []

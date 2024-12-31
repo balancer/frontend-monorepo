@@ -1,5 +1,6 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { PoolListDisplayType } from '@repo/lib/modules/pool/pool.types'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export const beetsSupportedNetworks = [GqlChain.Optimism, GqlChain.Sonic]
 //  as const satisifies GqlChain[]
@@ -15,5 +16,14 @@ export const ProjectConfigBeets: ProjectConfig = {
   externalLinks: {
     discordUrl: 'https://beets.fi/discord',
     poolComposerUrl: 'https://ma.beets.fi/compose',
+  },
+  // TODO: Remove this once config is moved to app folder
+  options: {
+    displayType: PoolListDisplayType.Name,
+    hidePoolTags: ['VE8020', 'BOOSTED'],
+    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
+    hideProtocolVersion: ['cow', 'v3'],
+    showAuraStaking: false,
+    showPoolName: true,
   },
 }
