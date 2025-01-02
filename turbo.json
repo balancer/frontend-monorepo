@@ -53,6 +53,10 @@
       "dependsOn": ["^graphql:gen", "^test:integration"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
+    "test:e2e": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
       "inputs": ["**/*.graphql"],
