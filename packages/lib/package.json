@@ -68,7 +68,7 @@
     "react-feather": "^2.0.10",
     "react-hook-form": "^7.47.0",
     "react-hotkeys-hook": "^4.4.1",
-    "react-swipeable": "^7.0.1",
+    "react-swipeable": "7.0.2",
     "react-syntax-highlighter": "^15.5.0",
     "react-use-measure": "^2.1.1",
     "react-virtuoso": "^4.7.1",
