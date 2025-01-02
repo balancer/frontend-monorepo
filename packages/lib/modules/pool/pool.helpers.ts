@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
-import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import {
   GqlChain,
   GqlNestedPool,
@@ -30,6 +29,7 @@ import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem, ApiToken, Pool } from './pool.types'
+import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 /**
  * METHODS

@@ -1,19 +1,11 @@
-import { GqlNestedPool, GqlPoolBase } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlNestedPool } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from './PoolProvider'
-import { ApiToken, ApiTokenWithBalance, PoolCore, PoolListItem } from './pool.types'
-// import { isV3Pool } from './pool.helpers'
+import { ApiToken, ApiTokenWithBalance, PoolCore } from './pool.types'
+import { isV3Pool } from './pool.helpers'
 import { PoolToken } from '../tokens/token.helpers'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
 import { sortBy } from 'lodash'
-
-// CRITICAL TODO: duplicated function as importing from pool.helpers creates a circular dependency or something
-// (use the import from pool.helpers to see the error)
-export function isV3Pool(
-  pool: Pick<Pool | PoolListItem | GqlPoolBase, 'protocolVersion'>
-): boolean {
-  return pool.protocolVersion === 3
-}
 
 export function getCompositionTokens(pool: PoolCore | GqlNestedPool): ApiTokenWithBalance[] {
   const tokens = getPoolTokens(pool).map(token => {
