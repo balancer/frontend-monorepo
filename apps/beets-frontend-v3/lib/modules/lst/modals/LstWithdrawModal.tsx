@@ -41,6 +41,7 @@ export function LstWithdrawModal({
   useResetStepIndexOnOpen(isOpen, withdrawTransactionSteps)
 
   function handleOnClose() {
+    withdrawTransactionSteps.resetTransactionSteps()
     setWithdrawId(0n)
     onClose()
   }

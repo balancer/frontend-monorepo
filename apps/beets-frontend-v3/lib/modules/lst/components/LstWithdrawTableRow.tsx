@@ -7,7 +7,6 @@ import { UserWithdraw } from '../hooks/useGetUserWithdraws'
 import { formatUnits } from 'viem'
 import { ApiToken } from '@repo/lib/modules/pool/pool.types'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { useUserWithdraws } from '../hooks/useUserWithdraws'
 
 interface Props extends GridProps {
   withdrawal: UserWithdraw
@@ -17,15 +16,14 @@ interface Props extends GridProps {
 }
 
 export function LstWithdrawTableRow({ withdrawal, keyValue, token, onOpen, ...rest }: Props) {
-  const { withdrawDelay, setWithdrawId } = useLst()
+  const { withdrawDelay, setWithdrawId, setAmountWithdraw } = useLst()
 
   const requestTimestamp = Number(withdrawal.requestTimestamp) + withdrawDelay
   const now = new Date().getTime() / 1000
 
-  const { withdrawId } = useUserWithdraws(keyValue)
-
   function onHandleClick() {
-    setWithdrawId(withdrawId)
+    setWithdrawId(withdrawal.id)
+    setAmountWithdraw(withdrawal.assetAmount)
     onOpen()
   }
 

@@ -27,6 +27,7 @@ export function _useLst() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
   const [amountAssets, setAmountAssets] = useState('')
   const [amountShares, setAmountShares] = useState('')
+  const [amountWithdraw, setAmountWithdraw] = useState(0n)
   const [first, setFirst] = useState(5)
   const [skip, setSkip] = useState(0)
   const [withdrawId, setWithdrawId] = useState<bigint>(0n)
@@ -134,6 +135,8 @@ export function _useLst() {
     getAmountShares,
     getAmountAssets,
     isRateLoading,
+    amountWithdraw,
+    setAmountWithdraw,
   }
 }
 
