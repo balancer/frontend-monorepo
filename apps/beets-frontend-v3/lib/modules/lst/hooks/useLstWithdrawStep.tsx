@@ -17,10 +17,9 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 
 export function useLstWithdrawStep(
-  humanAmount: string,
   chain: GqlChain,
   enabled: boolean,
-  wrID: bigint | undefined
+  withdrawId: bigint | undefined
 ) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
@@ -45,8 +44,8 @@ export function useLstWithdrawStep(
     contractId: 'beets.lstStaking',
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
     functionName: 'withdraw',
-    args: [wrID || 0n, 0n],
-    enabled: isConnected && !!humanAmount && enabled && !!wrID,
+    args: [withdrawId || 0n, false],
+    enabled: isConnected && enabled && !!withdrawId,
     txSimulationMeta,
   }
 
