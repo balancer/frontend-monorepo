@@ -5,13 +5,15 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { useLst } from '../LstProvider'
 import { LstWithdrawReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { LstTokenRow } from './LstTokenRow'
+import { formatUnits } from 'viem'
 
 export function LstWithdrawSummary({
   isLoading: isLoadingReceipt,
   receivedToken,
 }: LstWithdrawReceiptResult) {
   const { isMobile } = useBreakpoints()
-  const { chain, withdrawTransactionSteps, lstWithdrawTxHash, nativeAsset } = useLst()
+  const { chain, withdrawTransactionSteps, lstWithdrawTxHash, nativeAsset, amountWithdraw } =
+    useLst()
 
   const shouldShowReceipt = !!lstWithdrawTxHash && !isLoadingReceipt && !!receivedToken
   const isLoading = isLoadingReceipt
@@ -25,7 +27,7 @@ export function LstWithdrawSummary({
           isLoading={isLoading}
           label={shouldShowReceipt ? 'You withdrew' : 'You withdraw'}
           tokenAddress={nativeAsset?.address || ''}
-          tokenAmount="0"
+          tokenAmount={formatUnits(amountWithdraw, nativeAsset?.decimals || 18).toString()}
         />
       </Card>
     </AnimateHeightChange>

@@ -27,9 +27,10 @@ export function _useLst() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
   const [amountAssets, setAmountAssets] = useState('')
   const [amountShares, setAmountShares] = useState('')
+  const [amountWithdraw, setAmountWithdraw] = useState(0n)
   const [first, setFirst] = useState(5)
   const [skip, setSkip] = useState(0)
-  const [withdrawWrID, setWithdrawWrID] = useState<string>('')
+  const [withdrawId, setWithdrawId] = useState<bigint>(0n)
   const { isConnected } = useUserAccount()
   const { getToken } = useTokens()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
@@ -61,12 +62,7 @@ export function _useLst() {
   const lstUnstakeTxHash = unstakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstUnstakeTxConfirmed = unstakeTransactionSteps.lastTransactionConfirmed
 
-  const { step: withdrawStep } = useLstWithdrawStep(
-    amountAssets,
-    CHAIN,
-    isWithdrawTab,
-    BigInt(withdrawWrID)
-  )
+  const { step: withdrawStep } = useLstWithdrawStep(CHAIN, isWithdrawTab, withdrawId)
   const withdrawTransactionSteps = useTransactionSteps([withdrawStep], false)
   const lstWithdrawTxHash = withdrawTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstWithdrawTxConfirmed = withdrawTransactionSteps.lastTransactionConfirmed
@@ -134,11 +130,13 @@ export function _useLst() {
     withdrawTransactionSteps,
     lstWithdrawTxHash,
     lstWithdrawTxConfirmed,
-    withdrawWrID,
-    setWithdrawWrID,
+    withdrawId,
+    setWithdrawId,
     getAmountShares,
     getAmountAssets,
     isRateLoading,
+    amountWithdraw,
+    setAmountWithdraw,
   }
 }
 
