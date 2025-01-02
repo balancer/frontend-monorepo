@@ -86,6 +86,10 @@ export default defineConfig(() => {
             name: 'SFC',
             address: sonicNetworkConfig.contracts.beets?.sfc,
           },
+          {
+            name: 'SonicStakingWithdrawRequestHelper',
+            address: sonicNetworkConfig.contracts.beets?.lstWithdrawRequestHelper,
+          },
         ],
       }),
     ],
