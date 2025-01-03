@@ -127,7 +127,6 @@ type OptionsConfig = {
   hidePoolTags: string[]
   hidePoolTypes: GqlPoolType[]
   hideProtocolVersion: string[]
-  showAuraStaking: boolean
   showPoolName: boolean
 }
 

@@ -43,7 +43,6 @@ export const ProjectConfigBalancer: ProjectConfig = {
     hidePoolTags: ['VE8020', 'BOOSTED'],
     hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
     hideProtocolVersion: ['cow', 'v3'],
-    showAuraStaking: false,
     showPoolName: true,
   },
 }

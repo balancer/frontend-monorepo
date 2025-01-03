@@ -13,11 +13,12 @@ import {
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
+import { useProjectConfig, useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
 
 export function StakingOptions() {
   const { chain, pool } = usePool()
-  const { projectName, projectId, options } = useProjectConfig()
+  const { projectName, projectId } = useProjectConfig()
+  const { isVeBal } = useProjectFlags()
 
   const canStake = !!pool.staking
   const stakePath = getPoolActionPath({
@@ -63,7 +64,7 @@ export function StakingOptions() {
             </Button>
           </VStack>
         </Card>
-        {(options.showAuraStaking || pool.chain === GqlChain.Optimism) && pool.staking?.aura && (
+        {(isVeBal || pool.chain === GqlChain.Optimism) && pool.staking?.aura && (
           <Card position="relative" variant="modalSubSection">
             <VStack align="left" spacing="md">
               <Text color="grayText">Aura</Text>

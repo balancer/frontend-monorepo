@@ -42,7 +42,6 @@ export const ProjectConfigBalancer: ProjectConfig = {
     hidePoolTags: [],
     hidePoolTypes: [GqlPoolType.CowAmm],
     hideProtocolVersion: ['cow'],
-    showAuraStaking: true,
     showPoolName: false,
   },
 }
