@@ -54,7 +54,7 @@ import {
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { PoolCore } from '../pool.types'
-import { getUserReferenceTokensWithPossibleNestedTokens } from '../pool.tokens.display'
+import { getCompositionTokens } from '../pool.tokens.utils'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -258,7 +258,7 @@ export default function PoolMyLiquidity() {
     }
   }
 
-  const displayTokens = getUserReferenceTokensWithPossibleNestedTokens(pool as PoolCore)
+  const compositionTokens = getCompositionTokens(pool as PoolCore)
 
   return (
     <Card h="fit-content" ref={myLiquiditySectionRef}>
@@ -323,7 +323,7 @@ export default function PoolMyLiquidity() {
                 </Button>
               </HStack>
             ) : (
-              displayTokens.map(poolToken => {
+              compositionTokens.map(poolToken => {
                 return (
                   <VStack key={`pool-${poolToken.address}`} w="full">
                     <TokenRow

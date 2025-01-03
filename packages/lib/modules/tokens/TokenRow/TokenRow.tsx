@@ -26,15 +26,16 @@ import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
-import { ApiToken, PoolCore } from '../../pool/pool.types'
-import { getUserReferenceTokensWithPossibleNestedTokens } from '../../pool/pool.tokens.display'
+import { PoolCore } from '../../pool/pool.types'
+import { ApiToken } from '../token.types'
+import { getFlatUserReferenceTokens } from '../../pool/pool.tokens.utils'
 
 export type TokenInfoProps = {
   address: Address
   symbol?: string
   chain: GqlChain
   token?: ApiToken
-  displayToken?: ApiToken
+  poolToken?: ApiToken
   pool?: Pool
   disabled?: boolean
   showSelect?: boolean
@@ -49,7 +50,7 @@ function TokenInfo({
   address,
   chain,
   token,
-  displayToken,
+  poolToken,
   symbol,
   pool,
   disabled,
@@ -59,8 +60,8 @@ function TokenInfo({
   isNestedPoolToken = false,
   iconSize = 40,
 }: TokenInfoProps) {
-  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || displayToken?.symbol
-  const tokenName = isBpt ? pool?.name : token?.name || displayToken?.name
+  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || poolToken?.symbol
+  const tokenName = isBpt ? pool?.name : token?.name || poolToken?.name
 
   const headingProps = {
     as: 'h6' as const,
@@ -151,15 +152,15 @@ export default function TokenRow({
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
   const token = getToken(address, chain)
-  const displayTokens = pool ? getUserReferenceTokensWithPossibleNestedTokens(pool as PoolCore) : []
-  const displayToken = displayTokens.find(t => isSameAddress(t.address, address))
+  const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool as PoolCore) : []
+  const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
 
   // TokenRowTemplate default props
   const props: TokenInfoProps = {
     address,
     chain,
     token,
-    displayToken,
+    poolToken,
     pool,
     disabled,
     iconSize,

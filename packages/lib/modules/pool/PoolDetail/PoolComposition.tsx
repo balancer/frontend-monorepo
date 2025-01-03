@@ -25,23 +25,20 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import { Address } from 'viem'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
 import { isBoosted } from '../pool.helpers'
-import { ApiTokenWithBalance, PoolCore } from '../pool.types'
+import { PoolToken, PoolCore } from '../pool.types'
 import { Pool, usePool } from '../PoolProvider'
 import { PoolTypeTag } from './PoolTypeTag'
 import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
-import {
-  getCompositionTokens,
-  getCompositionTokensWithPossibleNestedTokensWithBalance,
-} from '../pool.tokens.display'
+import { getCompositionTokens, getFlatCompositionTokens } from '../pool.tokens.utils'
 
 type CardContentProps = {
   totalLiquidity: string
-  displayTokens: ApiTokenWithBalance[]
+  poolTokens: PoolToken[]
   chain: GqlChain
   pool: Pool
 }
 
-function CardContent({ totalLiquidity, displayTokens, chain, pool }: CardContentProps) {
+function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentProps) {
   const { toCurrency } = useCurrency()
   const { calcWeightForBalance } = useTokens()
 
@@ -65,7 +62,7 @@ function CardContent({ totalLiquidity, displayTokens, chain, pool }: CardContent
       </HStack>
       <Divider />
       <VStack spacing="md" width="full">
-        {displayTokens.map(poolToken => {
+        {poolTokens.map(poolToken => {
           const actualWeight = calcWeightForBalance(
             poolToken.address,
             poolToken.balance,
@@ -126,8 +123,8 @@ export function PoolComposition() {
   const [height, setHeight] = useState(0)
   const { getErc4626Metadata } = usePoolsMetadata()
 
-  const displayTokens = getCompositionTokens(pool as PoolCore)
-  const totalLiquidity = calcTotalUsdValue(displayTokens, chain)
+  const compositionTokens = getCompositionTokens(pool as PoolCore)
+  const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
   const erc4626Metadata = getErc4626Metadata(pool)
 
   useLayoutEffect(() => {
@@ -162,8 +159,8 @@ export function PoolComposition() {
           <Divider />
           <CardContent
             chain={chain}
-            displayTokens={displayTokens}
             pool={pool}
+            poolTokens={compositionTokens}
             totalLiquidity={totalLiquidity}
           />
           <Divider mt="auto" />
@@ -185,9 +182,7 @@ export function PoolComposition() {
           ) : (
             <PoolWeightChart
               chain={chain}
-              displayTokens={getCompositionTokensWithPossibleNestedTokensWithBalance(
-                pool as PoolCore
-              )}
+              displayTokens={getFlatCompositionTokens(pool as PoolCore)}
               hasLegend
               totalLiquidity={totalLiquidity}
             />

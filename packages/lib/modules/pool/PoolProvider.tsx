@@ -17,7 +17,7 @@ import { usePoolEnrichWithOnChainData } from './queries/usePoolEnrichWithOnChain
 import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances'
 import { useInvalidVariantRedirect } from './pool.hooks'
 import { useTokens } from '../tokens/TokensProvider'
-import { getCompositionTokens } from './pool.tokens.display'
+import { getCompositionTokens } from './pool.tokens.utils'
 
 export type Pool = GetPoolQuery['pool']
 export type FeaturedPool = GetFeaturedPoolsQuery['featuredPools'][0]['pool']
