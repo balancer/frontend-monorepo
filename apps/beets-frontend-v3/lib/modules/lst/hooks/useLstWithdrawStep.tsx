@@ -15,16 +15,19 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { noop } from 'lodash'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { useGetUserNumWithdraws } from './useGetUserNumWithdraws'
+import { useGetUserWithdraws } from './useGetUserWithdraws'
 
 export function useLstWithdrawStep(
-  humanAmount: string,
   chain: GqlChain,
   enabled: boolean,
-  wrID: bigint | undefined
+  withdrawId: bigint | undefined
 ) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
+  const { userNumWithdraws, refetch: refetchUserNumWithdraws } = useGetUserNumWithdraws(chain)
+  const { refetch: refetchWithdrawals } = useGetUserWithdraws(chain, userNumWithdraws)
 
   const labels: TransactionLabels = {
     init: 'Withdraw',
@@ -45,14 +48,20 @@ export function useLstWithdrawStep(
     contractId: 'beets.lstStaking',
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
     functionName: 'withdraw',
-    args: [wrID || 0n, 0n],
-    enabled: isConnected && !!humanAmount && enabled && !!wrID,
+    args: [withdrawId || 0n, false],
+    enabled: isConnected && enabled && !!withdrawId,
     txSimulationMeta,
   }
 
   const transaction = getTransaction('withdrawLst')
 
   const isComplete = () => isConnected && !!transaction?.result.isSuccess
+
+  function onSuccess() {
+    refetchBalances()
+    refetchUserNumWithdraws()
+    refetchWithdrawals()
+  }
 
   const step = useMemo(
     (): TransactionStep => ({
@@ -62,7 +71,7 @@ export function useLstWithdrawStep(
       isComplete,
       onActivated: noop,
       onDeactivated: noop,
-      onSuccess: () => refetchBalances(),
+      onSuccess,
       renderAction: () => <ManagedTransactionButton id="withdrawLst" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

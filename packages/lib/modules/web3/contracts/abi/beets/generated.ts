@@ -6175,6 +6175,123 @@ export const sonicStakingConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SonicStakingWithdrawRequestHelper
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
+ */
+export const sonicStakingWithdrawRequestHelperAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      {
+        name: '_sonicStaking',
+        internalType: 'address payable',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'error', inputs: [], name: 'UserWithdrawsMaxSizeCannotBeZero' },
+  { type: 'error', inputs: [], name: 'UserWithdrawsSkipTooLarge' },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'user', internalType: 'address', type: 'address' },
+      { name: 'skip', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxSize', internalType: 'uint256', type: 'uint256' },
+      { name: 'reverseOrder', internalType: 'bool', type: 'bool' },
+    ],
+    name: 'getUserWithdraws',
+    outputs: [
+      {
+        name: 'withdraws',
+        internalType: 'struct SonicStakingWithdrawRequestHelper.WithdrawRequest[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'id', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'kind',
+            internalType: 'enum SonicStaking.WithdrawKind',
+            type: 'uint8',
+          },
+          { name: 'validatorId', internalType: 'uint256', type: 'uint256' },
+          { name: 'assetAmount', internalType: 'uint256', type: 'uint256' },
+          { name: 'isWithdrawn', internalType: 'bool', type: 'bool' },
+          {
+            name: 'requestTimestamp',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'user', internalType: 'address', type: 'address' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'user', internalType: 'address', type: 'address' }],
+    name: 'getUserWithdrawsCount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'withdrawId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getWithdrawRequest',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct SonicStakingWithdrawRequestHelper.WithdrawRequest',
+        type: 'tuple',
+        components: [
+          { name: 'id', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'kind',
+            internalType: 'enum SonicStaking.WithdrawKind',
+            type: 'uint8',
+          },
+          { name: 'validatorId', internalType: 'uint256', type: 'uint256' },
+          { name: 'assetAmount', internalType: 'uint256', type: 'uint256' },
+          { name: 'isWithdrawn', internalType: 'bool', type: 'bool' },
+          {
+            name: 'requestTimestamp',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'user', internalType: 'address', type: 'address' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'sonicStaking',
+    outputs: [{ name: '', internalType: 'contract SonicStaking', type: 'address' }],
+    stateMutability: 'view',
+  },
+] as const
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
+ */
+export const sonicStakingWithdrawRequestHelperAddress = {
+  146: '0x52B16e3D7d25bA64F242e59f9A74799ecC432d78',
+} as const
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
+ */
+export const sonicStakingWithdrawRequestHelperConfig = {
+  address: sonicStakingWithdrawRequestHelperAddress,
+  abi: sonicStakingWithdrawRequestHelperAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // erc20
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -61,6 +61,7 @@ export interface ContractsConfig {
     // TODO: make it required when fantom is removed
     sfcProxy?: Address
     sfc?: Address
+    lstWithdrawRequestHelper?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address

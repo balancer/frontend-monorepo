@@ -5,8 +5,9 @@ import PoolMetaBadges from './PoolMetaBadges'
 import { usePool } from '../../PoolProvider'
 import {
   getPoolAddBlockedReason,
-  isFx,
   isMaBeetsPool,
+  isCowAmmPool,
+  isFx,
   shouldBlockAddLiquidity,
 } from '../../pool.helpers'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
@@ -27,6 +28,7 @@ export function PoolHeader() {
   const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Xave)
   const [redirectPartnerUrl, setRedirectPartnerUrl] = useState<string>()
   const partnerRedirectDisclosure = useDisclosure()
+  const isCowPool = isCowAmmPool(pool.type)
 
   const shouldBlockCustom = isMaBeetsPool(pool.id)
   const customReason = shouldBlockCustom
@@ -81,7 +83,7 @@ export function PoolHeader() {
                 Add liquidity
               </Button>
             </Tooltip>
-            <PoolAdvancedOptions />
+            {!isCowPool && <PoolAdvancedOptions />}
           </HStack>
           <PartnerRedirectModal
             isOpen={partnerRedirectDisclosure.isOpen}
