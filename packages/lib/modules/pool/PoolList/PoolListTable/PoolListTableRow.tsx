@@ -1,6 +1,6 @@
 import { Box, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
-import { getPoolPath } from '../../pool.utils'
+import { getPoolDisplayTokens, getPoolPath } from '../../pool.utils'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
@@ -13,6 +13,7 @@ import { usePoolList } from '../PoolListProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
 import { usePoolMetadata } from '../../metadata/usePoolMetadata'
+import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -23,11 +24,12 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
 function PoolName({ pool }: { pool: PoolListItem }) {
   const isFirstToken = (index: number) => index === 0
-  const zIndices = Array.from({ length: pool.displayTokens.length }, (_, index) => index).reverse()
+  const displayTokens = getPoolDisplayTokens(pool)
+  const zIndices = Array.from({ length: displayTokens.length }, (_, index) => index).reverse()
 
   return (
     <HStack>
-      {pool.displayTokens.map((token, i) => (
+      {displayTokens.map((token, i) => (
         <Box key={token.address} ml={isFirstToken(i) ? 0 : -3} zIndex={zIndices[i]}>
           <TokenIcon
             address={token.address}
@@ -78,7 +80,16 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
                   iconSize={name ? 24 : 20}
                   nameSize="sm"
                   p={['xxs', 'sm']}
-                  pool={pool}
+                  pool={{
+                    displayTokens: getPoolDisplayTokens(pool),
+                    type: pool.type,
+                    chain: pool.chain,
+                    poolTokens: pool.poolTokens as GqlPoolTokenDetail[], // fix: poolTokens are incompatible
+                    address: pool.address,
+                    hasErc4626: pool.hasErc4626,
+                    hasAnyAllowedBuffer: pool.hasAnyAllowedBuffer,
+                    protocolVersion: pool.protocolVersion,
+                  }}
                   pr={[1.5, 'ms']}
                 />
               )}
