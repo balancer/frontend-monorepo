@@ -18,6 +18,7 @@ const ProjectConfigContext = createContext<ProjectConfig | undefined>(undefined)
 const ProjectFlagsContext = createContext<ProjectFlags | undefined>(undefined)
 
 export function ProjectConfigProvider({ config, children }: ProjectConfigProviderProps) {
+  // TODO: set this dynamically like below or statically like 'isBeetsProject' & 'isBalancerProject'?
   const flags: ProjectFlags = {
     isMaBeets:
       config.corePoolId === '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005',
