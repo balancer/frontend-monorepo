@@ -3,7 +3,13 @@ import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 
 import { usePool } from '../../PoolProvider'
-import { getPoolAddBlockedReason, isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
+import {
+  getPoolAddBlockedReason,
+  isMaBeetsPool,
+  isCowAmmPool,
+  isFx,
+  shouldBlockAddLiquidity,
+} from '../../pool.helpers'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 import { PoolTags } from '../../tags/PoolTags'
 import { PoolBreadcrumbs } from './PoolBreadcrumbs'
@@ -22,8 +28,14 @@ export function PoolHeader() {
   const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Xave)
   const [redirectPartnerUrl, setRedirectPartnerUrl] = useState<string>()
   const partnerRedirectDisclosure = useDisclosure()
+  const isCowPool = isCowAmmPool(pool.type)
 
-  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool)
+  const shouldBlockCustom = isMaBeetsPool(pool.id)
+  const customReason = shouldBlockCustom
+    ? 'Please manage your liquidity on the maBEETS page.'
+    : undefined
+
+  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, shouldBlockCustom)
 
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
@@ -58,7 +70,9 @@ export function PoolHeader() {
           <PoolTags />
           <HStack spacing="sm">
             {/* TODO: Add block reason alerts*/}
-            <Tooltip label={isAddLiquidityBlocked ? getPoolAddBlockedReason(pool) : ''}>
+            <Tooltip
+              label={isAddLiquidityBlocked ? getPoolAddBlockedReason(pool, customReason) : ''}
+            >
               <Button
                 isDisabled={isAddLiquidityBlocked}
                 onClick={handleClick}
@@ -69,7 +83,7 @@ export function PoolHeader() {
                 Add liquidity
               </Button>
             </Tooltip>
-            <PoolAdvancedOptions />
+            {!isCowPool && <PoolAdvancedOptions />}
           </HStack>
           <PartnerRedirectModal
             isOpen={partnerRedirectDisclosure.isOpen}

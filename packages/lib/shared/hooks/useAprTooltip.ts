@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
-import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
-import { GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
+import { GqlChain, GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
 import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'
 import BigNumber from 'bignumber.js'
+import { useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
 
 export const swapFeesTooltipText = `LPs get swap fees anytime a swap is routed through this pool.
 These fees automatically accumulate into the LP's position, so there is no need to periodically claim.`
@@ -31,8 +31,6 @@ export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL
 
 const stakingBalTooltipText = `The base APR all stakers in this pool get (determined by weekly gauge voting).
 In addition, veBAL holders can get an extra boost of up to 2.5x.`
-
-const stakingTokenTooltipText = `3rd party incentives (outside the ${isBalancerProject ? 'veBAL' : 'gauge bounty'} system)`
 
 const maBeetsVotingRewardsTooltipText =
   'To receive Voting APR you must vote for incentivized pools in the bi-weekly gauge vote. APR is dependent on your vote distribution.'
@@ -75,15 +73,18 @@ export function useAprTooltip({
   aprItems,
   numberFormatter,
   vebalBoost,
+  chain,
 }: {
   aprItems: GqlPoolAprItem[]
   numberFormatter: (value: string) => BigNumber
   vebalBoost?: number
+  chain: GqlChain
 }) {
   const colorMode = useThemeColorMode()
+  const { isVeBal } = useProjectFlags()
 
   const hasVeBalBoost =
-    isBalancerProject && !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
+    isVeBal && !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
 
   // Swap fees
   const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
@@ -112,7 +113,7 @@ export function useAprTooltip({
   const stakingIncentivesDisplayed = stakingIncentives.map(item => ({
     title: item.rewardTokenSymbol || '',
     apr: numberFormatter(item.apr.toString()),
-    tooltipText: stakingTokenTooltipText,
+    tooltipText: `3rd party incentives (outside the ${isVeBal || chain === GqlChain.Optimism ? 'veBAL' : 'gauge bounty'} system)`,
   }))
 
   const votingApr = aprItems.find(item => item.type === GqlPoolAprItemType.Voting)

@@ -1,6 +1,10 @@
 'use client'
 
-import { isNotSupported, shouldBlockAddLiquidity } from '@repo/lib/modules/pool/pool.helpers'
+import {
+  isMaBeetsPool,
+  isNotSupported,
+  shouldBlockAddLiquidity,
+} from '@repo/lib/modules/pool/pool.helpers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSignatureProvider'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
@@ -13,6 +17,7 @@ import { usePoolRedirect } from '@repo/lib/modules/pool/pool.hooks'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { AddLiquidityProvider } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
+import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 
 type Props = PropsWithChildren<{
   params: { txHash?: string[] }
@@ -21,18 +26,20 @@ type Props = PropsWithChildren<{
 export default function AddLiquidityLayout({ params: { txHash }, children }: Props) {
   const { pool } = usePool()
   const { redirectToPoolPage } = usePoolRedirect(pool)
+  const { projectName } = useProjectConfig()
 
   const maybeTxHash = txHash?.[0] || ''
   const urlTxHash = isHash(maybeTxHash) ? maybeTxHash : undefined
+  const shouldBlockCustom = isMaBeetsPool(pool.id)
 
-  if (shouldBlockAddLiquidity(pool)) {
+  if (shouldBlockAddLiquidity(pool, shouldBlockCustom)) {
     return redirectToPoolPage()
   }
 
   if (isNotSupported(pool)) {
     return (
       <Alert minW="50%" status="info" w="fit-content">
-        This pool type is not currently supported in the Balancer V3 UI
+        {`This pool type is not currently supported in the ${projectName} UI`}
       </Alert>
     )
   }

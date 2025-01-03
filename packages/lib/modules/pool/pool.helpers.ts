@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
-import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import {
   GqlChain,
   GqlNestedPool,
@@ -31,7 +30,7 @@ import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem, ApiToken } from './pool.types'
 import { Pool } from './PoolProvider'
-import { isBeetsProject, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 /**
  * METHODS
@@ -122,6 +121,12 @@ export function isSwappingHaltable(poolType: GqlPoolType): boolean {
 export function isVebalPool(poolId: string): boolean {
   return (
     poolId.toLowerCase() === '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014'
+  )
+}
+
+export function isMaBeetsPool(poolId: string): boolean {
+  return (
+    poolId.toLowerCase() === '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005'
   )
 }
 
@@ -286,14 +291,14 @@ const shouldBlockV3PoolAdds = false
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
-export function shouldBlockAddLiquidity(pool: Pool) {
+export function shouldBlockAddLiquidity(pool: Pool, shouldBlockCustom = false) {
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
 
   // avoid blocking Sepolia pools
   if (pool.chain === GqlChain.Sepolia) return false
 
-  // don't add liquidity to the maBEETS pool thru the pool page
-  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) return true
+  // block add liquidity for custom scenarios eg. maBEETS
+  if (shouldBlockCustom) return true
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
@@ -334,7 +339,7 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 /**
  *  TODO: improve the implementation to display all the blocking reasons instead of just the first one
  */
-export function getPoolAddBlockedReason(pool: Pool): string {
+export function getPoolAddBlockedReason(pool: Pool, customReason?: string): string {
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return 'Adds are blocked for all V3 pools'
@@ -343,9 +348,9 @@ export function getPoolAddBlockedReason(pool: Pool): string {
   if (pool.dynamicData.isPaused) return 'Paused pool'
   if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
 
-  // don't add liquidity to the maBEETS pool thru the pool page
-  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) {
-    return 'Please manage your liquidity on the maBEETS page.'
+  // when a custom reason is provided return it eg. for maBEETS
+  if (customReason) {
+    return customReason
   }
 
   if (pool.hook && !hasReviewedHook(pool.hook)) {
@@ -624,7 +629,7 @@ export function getBoostedGqlTokens(pool: Pool): ApiToken[] {
   const underlyingTokens = pool.poolTokens
     .flatMap(token =>
       shouldUseUnderlyingToken(token, pool)
-        ? [token.underlyingToken as ApiToken]
+        ? [{ ...token, ...token.underlyingToken } as ApiToken]
         : [token as ApiToken]
     )
     .filter((token): token is ApiToken => token !== undefined)

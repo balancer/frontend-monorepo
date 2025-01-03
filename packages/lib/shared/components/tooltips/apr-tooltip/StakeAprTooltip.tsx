@@ -31,6 +31,7 @@ function StakeAprTooltip({ pool, totalUsdValue }: Props) {
   return (
     <BaseAprTooltip
       aprItems={pool.dynamicData.aprItems}
+      chain={pool.chain}
       displayValueFormatter={displayValueFormatter}
       maxVeBalText="Total with max veBAL"
       numberFormatter={numberFormatter}

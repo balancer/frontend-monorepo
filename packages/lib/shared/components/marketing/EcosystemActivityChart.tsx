@@ -16,10 +16,9 @@ import {
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
-
 import { EcosystemChainSelect } from './EcosystemChainSelect'
 import { getChainShortName } from '@repo/lib/config/app.config'
-import { supportedNetworks } from '@repo/lib/modules/web3/ChainConfig'
+import { supportedNetworks } from '@repo/lib/config/ProjectConfigProvider'
 import {
   PoolActivityChartTypeTab,
   gradientMap,

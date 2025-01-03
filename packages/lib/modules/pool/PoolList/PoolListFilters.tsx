@@ -31,7 +31,6 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
-import { getProjectConfig, isBeetsProject } from '@repo/lib/config/getProjectConfig'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
 import { PoolFilterType, poolTagFilters, PoolTagType, poolTypeFilters } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -53,6 +52,7 @@ import ButtonGroup, {
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
 import Link from 'next/link'
+import { useProjectConfig, useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
@@ -97,10 +97,9 @@ function UserPoolFilter() {
   )
 }
 
-function PoolCategoryFilters() {
+function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
   const {
     queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel },
-    hidePoolTags,
   } = usePoolList()
 
   // remove query param when empty
@@ -113,7 +112,7 @@ function PoolCategoryFilters() {
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
       {poolTagFilters
-        .filter(tag => !hidePoolTags.includes(tag))
+        .filter(tag => !hidePoolTags?.includes(tag))
         .map(tag => (
           <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
             <Checkbox
@@ -128,10 +127,9 @@ function PoolCategoryFilters() {
   )
 }
 
-function PoolTypeFilters() {
+function PoolTypeFilters({ hidePoolTypes }: { hidePoolTypes: string[] }) {
   const {
     queryState: { togglePoolType, poolTypes, poolTypeLabel, setPoolTypes },
-    hidePoolTypes,
   } = usePoolList()
 
   // remove query param when empty
@@ -141,7 +139,7 @@ function PoolTypeFilters() {
     }
   }, [poolTypes])
 
-  const _poolTypeFilters = poolTypeFilters.filter(poolType => !hidePoolTypes.includes(poolType))
+  const _poolTypeFilters = poolTypeFilters.filter(poolType => !hidePoolTypes?.includes(poolType))
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
@@ -161,8 +159,7 @@ function PoolTypeFilters() {
   )
 }
 
-function PoolNetworkFilters() {
-  const { supportedNetworks } = getProjectConfig()
+function PoolNetworkFilters({ supportedNetworks }: { supportedNetworks: GqlChain[] }) {
   const {
     queryState: { networks: toggledNetworks, toggleNetwork, setNetworks },
   } = usePoolList()
@@ -394,7 +391,7 @@ const FilterButton = forwardRef<ButtonProps, 'button'>((props, ref) => {
   )
 })
 
-function ProtocolVersionFilter() {
+function ProtocolVersionFilter({ hideProtocolVersion }: { hideProtocolVersion: string[] }) {
   const {
     queryState: {
       setProtocolVersion,
@@ -403,7 +400,6 @@ function ProtocolVersionFilter() {
       activeProtocolVersionTab,
       setActiveProtocolVersionTab,
     },
-    hideProtocolVersion,
   } = usePoolList()
 
   const tabs = PROTOCOL_VERSION_TABS
@@ -441,7 +437,7 @@ function ProtocolVersionFilter() {
       currentOption={activeProtocolVersionTab}
       groupId="protocol-version"
       onChange={toggleTab}
-      options={tabs.filter(tab => !hideProtocolVersion.includes(tab.value))}
+      options={tabs.filter(tab => !hideProtocolVersion?.includes(tab.value))}
       size="xxs"
     />
   )
@@ -456,15 +452,16 @@ export function PoolListFilters() {
   } = usePoolList()
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
+  const { options, externalLinks, supportedNetworks } = useProjectConfig()
+  const { isVeBal } = useProjectFlags()
 
   function _resetFilters() {
     resetFilters()
     setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
   }
 
-  const poolCreatorUrl = isBeetsProject
-    ? 'https://ma.beets.fi/compose'
-    : `https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`
+  const subPath = !isVeBal ? '' : isCowPath ? 'cow' : 'v3'
+  const poolCreatorUrl = `${externalLinks.poolComposerUrl}/${subPath}`
 
   return (
     <VStack w="full">
@@ -531,14 +528,16 @@ export function PoolListFilters() {
                         <Heading as="h3" mb="sm" size="sm">
                           Networks
                         </Heading>
-                        <PoolNetworkFilters />
+                        <PoolNetworkFilters supportedNetworks={supportedNetworks} />
                       </Box>
                       {!isCowPath && (
                         <Box as={motion.div} variants={staggeredFadeInUp}>
                           <Heading as="h3" mb="sm" size="sm">
                             Protocol version
                           </Heading>
-                          <ProtocolVersionFilter />
+                          <ProtocolVersionFilter
+                            hideProtocolVersion={options.hideProtocolVersion}
+                          />
                         </Box>
                       )}
                       {!isFixedPoolType && (
@@ -546,14 +545,14 @@ export function PoolListFilters() {
                           <Heading as="h3" mb="sm" size="sm">
                             Pool types
                           </Heading>
-                          <PoolTypeFilters />
+                          <PoolTypeFilters hidePoolTypes={options.hidePoolTypes} />
                         </Box>
                       )}
                       <Box as={motion.div} variants={staggeredFadeInUp}>
                         <Heading as="h3" mb="sm" size="sm">
                           Pool categories
                         </Heading>
-                        <PoolCategoryFilters />
+                        <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
                       </Box>
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />

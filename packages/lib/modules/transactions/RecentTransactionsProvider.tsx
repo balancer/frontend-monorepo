@@ -2,7 +2,6 @@
 
 import { getChainId } from '@repo/lib/config/app.config'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
-import { getBlockExplorerTxUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ensureError } from '@repo/lib/shared/utils/errors'
@@ -16,12 +15,13 @@ import { useConfig, usePublicClient } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 import { getWaitForReceiptTimeout } from '../web3/contracts/wagmi-helpers'
 import { TransactionStatus as SafeTxStatus } from '@safe-global/safe-apps-sdk'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
+import { projectId } from '@repo/lib/config/ProjectConfigProvider'
 
 export type RecentTransactionsResponse = ReturnType<typeof _useRecentTransactions>
 export const TransactionsContext = createContext<RecentTransactionsResponse | null>(null)
 const NUM_RECENT_TRANSACTIONS = 20
-const RECENT_TRANSACTIONS_KEY = `${PROJECT_CONFIG.projectId}.recentTransactions`
+const RECENT_TRANSACTIONS_KEY = `${projectId}.recentTransactions`
 
 // confirming = transaction has not been mined
 // confirmed = transaction has been mined and is present on chain

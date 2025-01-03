@@ -1,14 +1,15 @@
 'use client'
 
-import { getVariantConfig } from '@repo/lib/modules/pool/pool.hooks'
 import { PartnerVariant } from '@repo/lib/modules/pool/pool.types'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { Box, Button, Center, Text, VStack } from '@chakra-ui/react'
 import Link from 'next/link'
+import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 
 export function CowFooter() {
-  const { banners } = getVariantConfig(PartnerVariant.cow)
+  const { variantConfig } = useProjectConfig()
+  const { banners } = variantConfig?.[PartnerVariant.cow] || {}
 
   return (
     <>

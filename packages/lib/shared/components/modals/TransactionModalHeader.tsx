@@ -1,10 +1,10 @@
-import { useBlockExplorer } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Center, HStack, ModalHeader, VStack, Text, Link } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode } from 'react'
 import { ArrowUpRight, Check } from 'react-feather'
 import { Hash } from 'viem'
+import { getBlockExplorerTxUrl } from '../../utils/blockExplorer'
 
 export function TransactionModalHeader({
   label,
@@ -20,8 +20,6 @@ export function TransactionModalHeader({
   timeout?: ReactNode
   isReceiptLoading?: boolean
 }) {
-  const { getBlockExplorerTxUrl } = useBlockExplorer(chain)
-
   return (
     <ModalHeader>
       <HStack justify="space-between" pr="lg" w="full">
@@ -53,7 +51,11 @@ export function TransactionModalHeader({
                     <Text color="grayText" fontSize="sm">
                       View details on explorer
                     </Text>
-                    <Link color="grayText" href={getBlockExplorerTxUrl(txHash)} target="_blank">
+                    <Link
+                      color="grayText"
+                      href={getBlockExplorerTxUrl(txHash, chain)}
+                      target="_blank"
+                    >
                       <ArrowUpRight size={16} />
                     </Link>
                   </HStack>

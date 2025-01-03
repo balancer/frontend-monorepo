@@ -1,4 +1,3 @@
-import { getBlockExplorerName, useBlockExplorer } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   HStack,
@@ -19,6 +18,10 @@ import { AddTokenToWalletButton } from './AddTokenToWalletButton'
 import { ExternalLink } from 'react-feather'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { useTokens } from './TokensProvider'
+import {
+  getBlockExplorerName,
+  getBlockExplorerTokenUrl,
+} from '@repo/lib/shared/utils/blockExplorer'
 
 type Props = {
   tokenAddress: string | Address
@@ -27,7 +30,6 @@ type Props = {
 }
 
 export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) {
-  const { getBlockExplorerTokenUrl } = useBlockExplorer(chain)
   const { getToken } = useTokens()
   const token = getToken(tokenAddress, chain)
   const coingeckoId = token?.coingeckoId
@@ -84,7 +86,7 @@ export function TokenInfoPopover({ tokenAddress, chain, isBpt = false }: Props) 
                   as="a"
                   color="grayText"
                   h="6"
-                  href={getBlockExplorerTokenUrl(tokenAddress)}
+                  href={getBlockExplorerTokenUrl(tokenAddress, chain)}
                   icon={<ExternalLink size={12} />}
                   isRound
                   rel="noopener noreferrer"

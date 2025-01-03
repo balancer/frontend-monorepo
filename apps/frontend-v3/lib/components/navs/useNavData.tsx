@@ -4,7 +4,6 @@ import { MediumIcon } from '@repo/lib/shared/components/icons/social/MediumIcon'
 import { YoutubeIcon } from '@repo/lib/shared/components/icons/social/YoutubeIcon'
 import { GithubIcon } from '@repo/lib/shared/components/icons/social/GithubIcon'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export function useNavData() {
   const appLinks = []
@@ -30,14 +29,14 @@ export function useNavData() {
     },
   ]
 
-  const getSocialLinks = (size = 24) => [
+  const getSocialLinks = (discordUrl: string, size = 24) => [
     {
       icon: <XIcon size={size} />,
       href: 'https://x.com/Balancer',
     },
     {
       icon: <DiscordIcon size={size} />,
-      href: getProjectConfig().externalLinks.discordUrl,
+      href: discordUrl,
     },
     {
       icon: <MediumIcon size={size} />,
