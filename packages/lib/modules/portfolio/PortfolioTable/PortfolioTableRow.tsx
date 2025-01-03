@@ -105,6 +105,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
               ) : (
                 <MemoizedMainAprTooltip
                   aprItems={pool.dynamicData.aprItems}
+                  chain={pool.chain}
                   pool={pool}
                   poolId={pool.id}
                   textProps={{ fontWeight: 'medium' }}

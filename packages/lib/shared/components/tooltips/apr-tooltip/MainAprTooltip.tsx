@@ -147,6 +147,7 @@ function MainAprTooltip({
   return (
     <BaseAprTooltip
       {...props}
+      chain={pool.chain}
       customPopoverContent={customPopoverContent}
       maxVeBalText="Total max veBAL APR"
       poolType={pool.type}

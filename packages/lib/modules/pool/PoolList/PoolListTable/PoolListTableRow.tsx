@@ -81,6 +81,7 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
             <GridItem justifySelf="end" pr={{ base: 'md', xl: '0' }}>
               <MemoizedMainAprTooltip
                 aprItems={pool.dynamicData.aprItems}
+                chain={pool.chain}
                 height="auto"
                 pool={pool}
                 poolId={pool.id}
