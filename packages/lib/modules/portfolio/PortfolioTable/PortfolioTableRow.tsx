@@ -12,8 +12,7 @@ import { getCanStake } from '../../pool/actions/stake.helpers'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
-import { isBalancerProject, isBeetsProject } from '@repo/lib/config/getProjectConfig'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
+import { useProjectConfig, useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
 import { usePoolMetadata } from '../../pool/metadata/usePoolMetadata'
 import { PoolListPoolDisplay } from '../../pool/PoolList/PoolListPoolDisplay'
 
@@ -45,6 +44,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
   const { toCurrency } = useCurrency()
   const { name } = usePoolMetadata(pool)
   const { options } = useProjectConfig()
+  const { isVeBal } = useProjectFlags()
 
   const vebalBoostValue = veBalBoostMap?.[pool.id]
   const canStake = getCanStake(pool)
@@ -76,10 +76,10 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
             <GridItem display="flex" justifyContent="left" px="sm">
               <HStack>
                 <Text fontWeight="medium">{stakingText} </Text>
-                <StakingIcons pool={pool} />
+                <StakingIcons pool={pool} showIcon={isVeBal} />
               </HStack>
             </GridItem>
-            {isBalancerProject && (
+            {isVeBal && (
               <GridItem px="sm">
                 <Text
                   fontWeight="medium"
@@ -120,12 +120,12 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
   )
 }
 
-function StakingIcons({ pool }: { pool: ExpandedPoolInfo }) {
+function StakingIcons({ pool, showIcon }: { pool: ExpandedPoolInfo; showIcon: boolean }) {
   const canStake = getCanStake(pool)
 
   const shouldHideIcon = pool.poolType === ExpandedPoolType.Unstaked || !canStake
 
-  if (shouldHideIcon || isBeetsProject) {
+  if (shouldHideIcon || !showIcon) {
     return null
   }
 

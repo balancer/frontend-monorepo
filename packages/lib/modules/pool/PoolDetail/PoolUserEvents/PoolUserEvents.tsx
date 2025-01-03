@@ -29,8 +29,8 @@ import { calcTotalStakedBalance, getUserTotalBalance } from '../../user-balance.
 import { fNum, bn } from '@repo/lib/shared/utils/numbers'
 import { isEmpty } from 'lodash'
 import { BoostText } from './BoostText'
-import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
+import { useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
 
 type PoolEventRowProps = {
   poolEvent: PoolEventItem
@@ -184,10 +184,11 @@ export default function PoolUserEvents({
   const [height, setHeight] = useState(0)
   const [poolEvents, setPoolEvents] = useState<PoolEventItem[]>([])
   const { toCurrency } = useCurrency()
+  const { isVeBal } = useProjectFlags()
 
-  const isVeBal = pool.staking?.type === GqlPoolStakingType.Vebal
+  const isVeBalPoolStaking = pool.staking?.type === GqlPoolStakingType.Vebal
   const showBoostValue =
-    pool.staking?.type === GqlPoolStakingType.Gauge && !isVeBal && isBalancerProject
+    pool.staking?.type === GqlPoolStakingType.Gauge && !isVeBalPoolStaking && isVeBal
 
   // keep this card the same height as the 'My liquidity' section
   useLayoutEffect(() => {

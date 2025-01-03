@@ -31,7 +31,6 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
-import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
 import { PoolFilterType, poolTagFilters, PoolTagType, poolTypeFilters } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -53,7 +52,7 @@ import ButtonGroup, {
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
 import Link from 'next/link'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
+import { useProjectConfig, useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
@@ -454,13 +453,14 @@ export function PoolListFilters() {
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
   const { options, externalLinks, supportedNetworks } = useProjectConfig()
+  const { isVeBal } = useProjectFlags()
 
   function _resetFilters() {
     resetFilters()
     setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
   }
 
-  const subPath = !isBalancerProject ? '' : isCowPath ? 'cow' : 'v3'
+  const subPath = !isVeBal ? '' : isCowPath ? 'cow' : 'v3'
   const poolCreatorUrl = `${externalLinks.poolComposerUrl}/${subPath}`
 
   return (
