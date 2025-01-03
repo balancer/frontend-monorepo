@@ -1,3 +1,5 @@
+'use client'
+
 import { BeetsLogoType } from '../imgs/BeetsLogoType'
 import { useNavData } from '../navs/useNavData'
 import { useFooterData } from './useFooterData'

@@ -1,3 +1,5 @@
+'use client'
+
 import { BalancerLogoType } from '../imgs/BalancerLogoType'
 import { useNavData } from '../navs/useNavData'
 import { useFooterData } from './useFooterData'
