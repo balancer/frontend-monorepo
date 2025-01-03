@@ -25,20 +25,6 @@ query GetPools(
     hasErc4626
     hasNestedErc4626
     hasAnyAllowedBuffer
-    displayTokens {
-      id
-      address
-      name
-      weight
-      symbol
-      nestedTokens {
-        id
-        address
-        name
-        weight
-        symbol
-      }
-    }
     hook {
       ...Hook
     }
@@ -152,6 +138,7 @@ query GetPools(
   )
 }
 
+# TODO: extract fragment to share common PoolCore fields between GetPools and GetFeaturedPools
 query GetFeaturedPools($chains: [GqlChain!]!) {
   featuredPools: poolGetFeaturedPools(chains: $chains) {
     poolId
@@ -180,20 +167,9 @@ query GetFeaturedPools($chains: [GqlChain!]!) {
       poolTokens {
         ...PoolTokens
       }
-      displayTokens {
-        id
-        address
-        name
-        weight
-        symbol
-        nestedTokens {
-          id
-          address
-          name
-          weight
-          symbol
-        }
-      }
+      hasErc4626
+      hasNestedErc4626
+      hasAnyAllowedBuffer
     }
   }
 }

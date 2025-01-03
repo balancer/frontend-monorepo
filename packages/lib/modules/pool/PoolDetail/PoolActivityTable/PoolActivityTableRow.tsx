@@ -20,10 +20,6 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { createAvatar } from '@dicebear/core'
 import { identicon } from '@dicebear/collection'
 import { ArrowUpRight } from 'react-feather'
-import {
-  getBlockExplorerAddressUrl,
-  getBlockExplorerTxUrl,
-} from '@repo/lib/shared/hooks/useBlockExplorer'
 import { PoolActivityEl, PoolActivityTokens } from '../PoolActivity/poolActivity.types'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -31,6 +27,10 @@ import React from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePool } from '../../PoolProvider'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import {
+  getBlockExplorerAddressUrl,
+  getBlockExplorerTxUrl,
+} from '@repo/lib/shared/utils/blockExplorer'
 
 interface Props extends GridProps {
   event: PoolActivityEl

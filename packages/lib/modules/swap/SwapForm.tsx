@@ -45,7 +45,7 @@ import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isPoolSwapAllowed } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
-import { ApiToken } from '../pool/pool.types'
+import { ApiToken } from '../tokens/token.types'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps

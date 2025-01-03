@@ -5,7 +5,8 @@ import {
   GqlPoolType,
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
-  GetTokensQuery,
+  GqlNestedPool,
+  GetPoolQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   parseAsArrayOf,
@@ -15,12 +16,28 @@ import {
   parseAsStringEnum,
 } from 'nuqs'
 import { Address, Hex } from 'viem'
+import { ApiToken } from '../tokens/token.types'
+export type Pool = GetPoolQuery['pool']
 
 export type PoolId = Hex
 
 export type PoolList = GetPoolsQuery['pools']
 
+// TODO: Can we replace all PoolListItem with PoolCore??
 export type PoolListItem = PoolList[0]
+
+// TODO: Rethink all the logic around Pool, FeaturedPool, PoolListItem, GqlPoolElement...
+export type PoolCore = Pick<
+  PoolListItem,
+  | 'address'
+  | 'chain'
+  | 'type'
+  | 'name'
+  | 'symbol'
+  | 'protocolVersion'
+  | 'hasErc4626'
+  | 'hasAnyAllowedBuffer'
+> & { poolTokens: ApiToken[] }
 
 export enum BaseVariant {
   v2 = 'v2',
@@ -146,10 +163,10 @@ export type TokenCore = {
   index: number
 }
 
-export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & {
-  nestedTokens?: ApiToken[]
-  underlyingToken?: ApiToken
-}
+export type PoolToken = ApiToken &
+  Pool['poolTokens'][0] & {
+    nestedPool?: GqlNestedPool
+  }
 
 export enum PoolListDisplayType {
   Name = 'name',

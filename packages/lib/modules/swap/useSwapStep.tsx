@@ -17,7 +17,7 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { useTenderly } from '../web3/useTenderly'
 import { getChainId } from '@repo/lib/config/app.config'
 import { DisabledTransactionButton } from '../transactions/transaction-steps/TransactionStepButton'
-import { ApiToken } from '../pool/pool.types'
+import { ApiToken } from '../tokens/token.types'
 
 export const swapStepId = 'swap'
 

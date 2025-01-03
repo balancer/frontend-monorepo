@@ -14,7 +14,8 @@ import {
 } from 'viem'
 import { HumanTokenAmount } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
-import { ApiToken, ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
+import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 type ParseProps = {

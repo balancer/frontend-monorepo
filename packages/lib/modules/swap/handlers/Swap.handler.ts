@@ -1,7 +1,7 @@
 import { ApolloClient } from '@apollo/client'
 import { TransactionConfig } from '../../web3/contracts/contract.types'
 import { BuildSwapInputs, SimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
-import { ApiToken } from '../../pool/pool.types'
+import { ApiToken } from '../../tokens/token.types'
 
 /**
  * SwapHandler is an interface that defines the methods that must be implemented by a handler.

@@ -18,7 +18,7 @@ import { TokenSelectPopular } from './TokenSelectPopular'
 import { SearchInput } from '@repo/lib/shared/components/inputs/SearchInput'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { Address } from 'viem'
-import { ApiToken } from '../../pool/pool.types'
+import { ApiToken } from '../token.types'
 
 type Props = {
   tokens: ApiToken[]

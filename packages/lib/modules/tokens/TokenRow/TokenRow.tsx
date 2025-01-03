@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
-import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -25,15 +25,17 @@ import { ChevronDown } from 'react-feather'
 import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
-import { getNestedPoolPath, getPoolDisplayTokens } from '../../pool/pool.utils'
-import { ApiToken } from '../../pool/pool.types'
+import { getNestedPoolPath } from '../../pool/pool.utils'
+import { PoolCore } from '../../pool/pool.types'
+import { ApiToken } from '../token.types'
+import { getFlatUserReferenceTokens } from '../../pool/pool.tokens.utils'
 
 export type TokenInfoProps = {
   address: Address
   symbol?: string
   chain: GqlChain
   token?: ApiToken
-  displayToken?: GqlPoolTokenDetail
+  poolToken?: ApiToken
   pool?: Pool
   disabled?: boolean
   showSelect?: boolean
@@ -48,7 +50,7 @@ function TokenInfo({
   address,
   chain,
   token,
-  displayToken,
+  poolToken,
   symbol,
   pool,
   disabled,
@@ -58,8 +60,8 @@ function TokenInfo({
   isNestedPoolToken = false,
   iconSize = 40,
 }: TokenInfoProps) {
-  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || displayToken?.symbol
-  const tokenName = isBpt ? pool?.name : token?.name || displayToken?.name
+  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || poolToken?.symbol
+  const tokenName = isBpt ? pool?.name : token?.name || poolToken?.name
 
   const headingProps = {
     as: 'h6' as const,
@@ -150,15 +152,15 @@ export default function TokenRow({
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
   const token = getToken(address, chain)
-  const displayTokens = pool ? getPoolDisplayTokens(pool) : []
-  const displayToken = displayTokens.find(t => isSameAddress(t.address, address))
+  const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool as PoolCore) : []
+  const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
 
   // TokenRowTemplate default props
   const props: TokenInfoProps = {
     address,
     chain,
     token,
-    displayToken,
+    poolToken,
     pool,
     disabled,
     iconSize,

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Text, useDisclosure } from '@chakra-ui/react'
-import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'

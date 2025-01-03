@@ -3,7 +3,7 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useState } from 'react'
 import { Address } from 'viem'
-import { ApiToken } from '../pool/pool.types'
+import { ApiToken } from './token.types'
 
 export function _useTokenInputsValidation() {
   type ValidationErrorsByToken = Record<Address, string>

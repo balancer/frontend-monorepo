@@ -3,7 +3,7 @@ import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { safeSum } from '@repo/lib/shared/utils/numbers'
 import { useCallback } from 'react'
 import { HumanTokenAmount } from './token.types'
-import { ApiToken } from '../pool/pool.types'
+import { ApiToken } from './token.types'
 
 export function useTotalUsdValue(tokens: ApiToken[]) {
   const { usdValueForToken } = useTokens()

@@ -5,7 +5,7 @@ import { useAddLiquidity } from '../AddLiquidityProvider'
 import { VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { hasNoLiquidity, shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
-import { ApiToken } from '../../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 type Props = {
   tokenSelectDisclosureOpen: () => void
@@ -31,9 +31,8 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
 
   function weightFor(tokenAddress: string) {
     return (
-      pool.poolTokens.find(token =>
-        isSameAddress(token.address as Address, tokenAddress as Address)
-      )?.weight ?? undefined
+      tokens.find(token => isSameAddress(token.address as Address, tokenAddress as Address))
+        ?.weight ?? undefined
     )
   }
 
@@ -44,6 +43,7 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
 
         return (
           <TokenInput
+            address={token.address}
             apiToken={token}
             chain={token.chain}
             isDisabled={hasNoLiquidity(pool)}

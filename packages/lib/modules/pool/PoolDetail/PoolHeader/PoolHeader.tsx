@@ -3,7 +3,12 @@ import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 
 import { usePool } from '../../PoolProvider'
-import { getPoolAddBlockedReason, isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
+import {
+  getPoolAddBlockedReason,
+  isCowAmmPool,
+  isFx,
+  shouldBlockAddLiquidity,
+} from '../../pool.helpers'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 import { PoolTags } from '../../tags/PoolTags'
 import { PoolBreadcrumbs } from './PoolBreadcrumbs'
@@ -22,6 +27,7 @@ export function PoolHeader() {
   const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Xave)
   const [redirectPartnerUrl, setRedirectPartnerUrl] = useState<string>()
   const partnerRedirectDisclosure = useDisclosure()
+  const isCowPool = isCowAmmPool(pool.type)
 
   const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool)
 
@@ -69,7 +75,7 @@ export function PoolHeader() {
                 Add liquidity
               </Button>
             </Tooltip>
-            <PoolAdvancedOptions />
+            {!isCowPool && <PoolAdvancedOptions />}
           </HStack>
           <PartnerRedirectModal
             isOpen={partnerRedirectDisclosure.isOpen}

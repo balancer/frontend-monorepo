@@ -57,7 +57,7 @@ import { UnbalancedAddError } from '@repo/lib/shared/components/errors/Unbalance
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { isV3NotSupportingWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
-import { ApiToken } from '../../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {

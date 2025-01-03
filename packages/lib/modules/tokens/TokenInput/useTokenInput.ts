@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
 import { Address } from 'viem'
-import { ApiToken } from '../../pool/pool.types'
+import { ApiToken } from '../token.types'
 
 export function overflowProtected(value: Numberish, decimalLimit: number): string {
   const stringValue = value.toString()

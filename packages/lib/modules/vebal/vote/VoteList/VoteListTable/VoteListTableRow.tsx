@@ -4,10 +4,10 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
-import { PoolListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
+import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { getPoolPath, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
 
@@ -28,20 +28,6 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
   }
 
   const { votingIncentivesLoading, gaugeVotesIsLoading } = useVoteList()
-
-  const pool = useMemo(
-    () => ({
-      displayTokens: vote.tokens.map(token => ({ ...token, name: token.symbol })), // fix: no name
-      type: vote.type,
-      chain: vote.chain,
-      poolTokens: [],
-      address: vote.address,
-      protocolVersion: 3, // fix: no data
-      hasAnyAllowedBuffer: false, // fix: no data
-      hasErc4626: false, // fix: no data
-    }),
-    [vote]
-  )
 
   return (
     <FadeInOnView>
@@ -70,12 +56,12 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
               target="_blank"
             >
               <HStack>
-                <PoolListTokenPills
+                <VotingListTokenPills
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
-                  pool={pool}
                   pr={[1.5, 'ms']}
+                  vote={vote}
                 />
                 <Box color="font.secondary">
                   <ArrowUpIcon transform="rotate(90)" />
