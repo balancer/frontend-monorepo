@@ -12,6 +12,7 @@ import {
   GetTokenPricesDocument,
   GetTokensDocument,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { TokensProvider } from '@repo/lib/modules/tokens/TokensProvider'
 import { FiatFxRatesProvider } from '../../hooks/FxRatesProvider'
 import { getFxRates } from '../../utils/currencies'
@@ -24,7 +25,6 @@ import { PoolTagsProvider } from '@repo/lib/modules/pool/tags/PoolTagsProvider'
 import { getErc4626Metadata } from '@repo/lib/modules/pool/metadata/getErc4626Metadata'
 import { PoolsMetadataProvider } from '@repo/lib/modules/pool/metadata/PoolsMetadataProvider'
 import { getPoolsMetadata } from '@repo/lib/modules/pool/metadata/getPoolsMetadata'
-import { supportedNetworks } from '@repo/lib/config/ProjectConfigProvider'
 
 export const revalidate = 60
 
@@ -32,7 +32,7 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
   const client = getApolloServerClient()
 
   const tokensQueryVariables = {
-    chains: supportedNetworks,
+    chains: getProjectConfig().supportedNetworks,
   }
 
   const { data: tokensQueryData } = await client.query({
@@ -48,7 +48,7 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
   const { data: tokenPricesQueryData } = await client.query({
     query: GetTokenPricesDocument,
     variables: {
-      chains: supportedNetworks,
+      chains: getProjectConfig().supportedNetworks,
     },
     context: {
       fetchOptions: {
