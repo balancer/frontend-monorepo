@@ -5,7 +5,6 @@ import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolPath } from '../../pool/pool.utils'
-import { PoolListTokenPills } from '../../pool/PoolList/PoolListTokenPills'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
@@ -14,6 +13,9 @@ import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Aur
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
 import { isBalancerProject, isBeetsProject } from '@repo/lib/config/getProjectConfig'
+import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
+import { usePoolMetadata } from '../../pool/metadata/usePoolMetadata'
+import { PoolListPoolDisplay } from '../../pool/PoolList/PoolListPoolDisplay'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -41,6 +43,8 @@ function getStakingText(poolType: ExpandedPoolType) {
 
 export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Props) {
   const { toCurrency } = useCurrency()
+  const { name } = usePoolMetadata(pool)
+  const { options } = useProjectConfig()
 
   const vebalBoostValue = veBalBoostMap?.[pool.id]
   const canStake = getCanStake(pool)
@@ -64,13 +68,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
-              <PoolListTokenPills
-                h={['32px', '36px']}
-                iconSize={20}
-                p={['xxs', 'sm']}
-                pool={pool}
-                pr={[1.5, 'ms']}
-              />
+              <PoolListPoolDisplay displayType={options?.displayType} name={name} pool={pool} />
             </GridItem>
             <GridItem>
               <PollListTableDetailsCell pool={pool} />
