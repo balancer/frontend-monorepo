@@ -21,7 +21,8 @@ import { useSkipInitialQuery } from '@repo/lib/shared/hooks/useSkipInitialQuery'
 import { getNativeAssetAddress, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
 import { mins } from '@repo/lib/shared/utils/time'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { ApiToken, ApiTokenWithBalance } from '../pool/pool.types'
+import { PoolToken } from '../pool/pool.types'
+import { ApiToken } from './token.types'
 
 export type UseTokensResult = ReturnType<typeof _useTokens>
 export const TokensContext = createContext<UseTokensResult | null>(null)
@@ -153,8 +154,8 @@ export function _useTokens(
     []
   )
 
-  const calcTotalUsdValue = useCallback((displayTokens: ApiTokenWithBalance[], chain: GqlChain) => {
-    return displayTokens
+  const calcTotalUsdValue = useCallback((poolTokens: PoolToken[], chain: GqlChain) => {
+    return poolTokens
       .reduce((total, token) => {
         return total.plus(bn(priceFor(token.address, chain)).times(token.balance))
       }, bn(0))

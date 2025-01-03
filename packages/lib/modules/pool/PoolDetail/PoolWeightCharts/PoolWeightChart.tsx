@@ -13,10 +13,10 @@ import ReactECharts from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { ApiTokenWithBalance } from '../../pool.types'
+import { PoolToken } from '../../pool.types'
 
 export interface PoolWeightChartProps {
-  displayTokens: ApiTokenWithBalance[]
+  displayTokens: PoolToken[]
   chain: GqlChain
   totalLiquidity: string
   hasLegend?: boolean

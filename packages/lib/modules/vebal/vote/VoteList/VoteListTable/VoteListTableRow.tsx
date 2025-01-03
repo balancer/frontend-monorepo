@@ -4,13 +4,12 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
-import { PoolListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
+import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { getPoolPath, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
-import { ApiToken, PoolCore } from '@repo/lib/modules/pool/pool.types'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -29,25 +28,6 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
   }
 
   const { votingIncentivesLoading, gaugeVotesIsLoading } = useVoteList()
-
-  // TODO: it does not make sense to use PoolCore here, we should use a different type??
-  // Should we create custom pool pills for the voting list?
-  const pool: PoolCore = useMemo(
-    () => ({
-      address: vote.address,
-      chain: vote.chain,
-      type: vote.type,
-      poolTokens: vote.tokens.map(
-        token => ({ ...token, name: token.symbol }) as unknown as ApiToken // TODO: fix type and remove unknown by adding missing fields to vote.tokens[0]
-      ),
-      name: '',
-      symbol: '',
-      protocolVersion: 3, // fix: no data
-      hasErc4626: false, // fix: no data
-      hasAnyAllowedBuffer: false, // fix: no data
-    }),
-    [vote]
-  )
 
   return (
     <FadeInOnView>
@@ -76,12 +56,12 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
               target="_blank"
             >
               <HStack>
-                <PoolListTokenPills
+                <VotingListTokenPills
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
-                  pool={pool}
                   pr={[1.5, 'ms']}
+                  vote={vote}
                 />
                 <Box color="font.secondary">
                   <ArrowUpIcon transform="rotate(90)" />

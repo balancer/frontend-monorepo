@@ -5,9 +5,9 @@ import {
   GqlPoolType,
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
-  GetTokensQuery,
   GqlNestedPool,
   GetPoolQuery,
+  GetTokensQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   parseAsArrayOf,
@@ -17,6 +17,7 @@ import {
   parseAsStringEnum,
 } from 'nuqs'
 import { Address, Hex } from 'viem'
+import { ApiToken } from '../tokens/token.types'
 export type Pool = GetPoolQuery['pool']
 
 export type PoolId = Hex
@@ -163,16 +164,16 @@ export type TokenCore = {
   index: number
 }
 
-export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & {
-  underlyingToken?: ApiToken
-  weight?: string
-}
-
 export type ApiTokenWithBalance = ApiToken & {
   // TODO: check if we need balance fields in API for underlyingToken (add them if needed)
   balance: string
   balanceUSD: string
 }
+
+export type PoolToken = ApiToken &
+  Pool['poolTokens'][0] & {
+    nestedPool?: GqlNestedPool
+  }
 
 export enum PoolListDisplayType {
   Name = 'name',
