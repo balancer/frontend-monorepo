@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { PropsWithChildren } from 'react'
 import { CornerDownLeft, MessageSquare, ThumbsUp } from 'react-feather'
 import { TransactionStep } from '../../../modules/transactions/transaction-steps/lib'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG, isBalancerProject } from '@repo/lib/config/getProjectConfig'
 
 export function SuccessActions({
   returnLabel,
@@ -31,12 +31,19 @@ export function SuccessActions({
         >
           {returnLabel}
         </Button>
-        <Button leftIcon={<ThumbsUp size="14" />} onClick={openNpsModal} size="xs" variant="ghost">
-          Give feedback
-        </Button>
+        {isBalancerProject && (
+          <Button
+            leftIcon={<ThumbsUp size="14" />}
+            onClick={openNpsModal}
+            size="xs"
+            variant="ghost"
+          >
+            Give feedback
+          </Button>
+        )}
         <Button
           as={Link}
-          href={getProjectConfig().externalLinks.discordUrl}
+          href={PROJECT_CONFIG.externalLinks.discordUrl}
           leftIcon={<MessageSquare size="14" />}
           size="xs"
           target="_blank"

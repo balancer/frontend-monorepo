@@ -25,6 +25,15 @@ const nextConfig = {
 
   // Safe App setup
   headers: manifestHeaders,
+  redirects() {
+    return [
+      {
+        source: '/discord',
+        destination: 'https://discord.gg/kbPnYJjvwZ',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 module.exports = withSentryConfig(nextConfig, sentryOptions)

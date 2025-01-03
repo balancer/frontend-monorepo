@@ -9,6 +9,7 @@ import {
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isMainnet } from '../chains/chain.utils'
 import { SwapSimulationQueryResult } from './queries/useSimulateSwapQuery'
+import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 
 export function swapActionPastTense(action: SwapAction): string {
   switch (action) {
@@ -26,7 +27,7 @@ export function swapActionPastTense(action: SwapAction): string {
 const swapErrorPatterns = [
   {
     pattern: /must contain at least 1 path/,
-    message: "There's not enough liquidity on Balancer connecting these tokens to route this swap.",
+    message: `There's not enough liquidity on ${getProjectConfig().projectName} connecting these tokens to route this swap.`,
   },
   {
     pattern: /WrapAmountTooSmall/,

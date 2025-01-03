@@ -14,6 +14,7 @@ import {
   polygon,
   polygonZkEvm,
   sepolia,
+  sonic,
 } from 'wagmi/chains'
 
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
@@ -30,7 +31,6 @@ export const rpcFallbacks: Record<GqlChain, string | undefined> = {
   [GqlChain.Base]: 'https://base.llamarpc.com',
   [GqlChain.Avalanche]: 'https://avalanche.drpc.org',
   [GqlChain.Fantom]: 'https://1rpc.io/ftm',
-  [GqlChain.Sonic]: 'https://1rpc.io/ftm', //TODO: groninge will fix it in another PR
   [GqlChain.Gnosis]: 'https://gnosis.drpc.org',
   [GqlChain.Optimism]: 'https://optimism.drpc.org',
   [GqlChain.Polygon]: 'https://polygon.llamarpc.com',
@@ -38,6 +38,7 @@ export const rpcFallbacks: Record<GqlChain, string | undefined> = {
   [GqlChain.Sepolia]: 'https://sepolia.gateway.tenderly.co',
   [GqlChain.Mode]: 'https://mode.drpc.org',
   [GqlChain.Fraxtal]: 'https://fraxtal.drpc.org',
+  [GqlChain.Sonic]: 'https://rpc.soniclabs.com',
 }
 
 const baseUrl = getBaseUrl()
@@ -49,7 +50,6 @@ export const rpcOverrides: Record<GqlChain, string | undefined> = {
   [GqlChain.Base]: getPrivateRpcUrl(GqlChain.Base),
   [GqlChain.Avalanche]: getPrivateRpcUrl(GqlChain.Avalanche),
   [GqlChain.Fantom]: getPrivateRpcUrl(GqlChain.Fantom),
-  [GqlChain.Sonic]: getPrivateRpcUrl(GqlChain.Fantom), //TODO: groninge will fix it in another PR
   [GqlChain.Gnosis]: getPrivateRpcUrl(GqlChain.Gnosis),
   [GqlChain.Optimism]: getPrivateRpcUrl(GqlChain.Optimism),
   [GqlChain.Polygon]: getPrivateRpcUrl(GqlChain.Polygon),
@@ -57,6 +57,7 @@ export const rpcOverrides: Record<GqlChain, string | undefined> = {
   [GqlChain.Sepolia]: getPrivateRpcUrl(GqlChain.Sepolia),
   [GqlChain.Mode]: getPrivateRpcUrl(GqlChain.Mode),
   [GqlChain.Fraxtal]: getPrivateRpcUrl(GqlChain.Fraxtal),
+  [GqlChain.Sonic]: getPrivateRpcUrl(GqlChain.Sonic),
 }
 
 const gqlChainToWagmiChainMap = {
@@ -65,7 +66,6 @@ const gqlChainToWagmiChainMap = {
   [GqlChain.Base]: { iconUrl: '/images/chains/BASE.svg', ...base },
   [GqlChain.Avalanche]: { iconUrl: '/images/chains/AVALANCHE.svg', ...avalanche },
   [GqlChain.Fantom]: { iconUrl: '/images/chains/FANTOM.svg', ...fantom },
-  [GqlChain.Sonic]: { iconUrl: '/images/chains/FANTOM.svg', ...fantom }, //TODO: groninge will fix it in another PR
   [GqlChain.Gnosis]: { iconUrl: '/images/chains/GNOSIS.svg', ...gnosis },
   [GqlChain.Optimism]: { iconUrl: '/images/chains/OPTIMISM.svg', ...optimism },
   [GqlChain.Polygon]: { iconUrl: '/images/chains/POLYGON.svg', ...polygon },
@@ -73,6 +73,7 @@ const gqlChainToWagmiChainMap = {
   [GqlChain.Sepolia]: { iconUrl: '/images/chains/SEPOLIA.svg', ...sepolia },
   [GqlChain.Mode]: { iconUrl: '/images/chains/MODE.svg', ...mode },
   [GqlChain.Fraxtal]: { iconUrl: '/images/chains/FRAXTAL.svg', ...fraxtal },
+  [GqlChain.Sonic]: { iconUrl: '/images/chains/SONIC.svg', ...sonic },
 } as const satisfies Record<GqlChain, Chain>
 
 export const supportedNetworks = getProjectConfig().supportedNetworks
