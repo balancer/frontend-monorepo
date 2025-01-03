@@ -11,9 +11,7 @@ import {
 } from '../../utils/error-filters'
 import { ensureError } from '../../utils/errors'
 import { BalAlertLink } from '../alerts/BalAlertLink'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
-
-const balancerDiscordUrl = getProjectConfig().externalLinks.discordUrl
+import { discordUrl } from '@repo/lib/config/ProjectConfigProvider'
 
 type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
 type Props = AlertProps & {
@@ -33,8 +31,8 @@ export function GenericError({ error: _error, customErrorName, skipError, ...res
       <ErrorAlert title={customErrorName} {...rest}>
         <Text color="black" variant="secondary">
           It looks like there was a network issue. Check your connection and try again. You can
-          report the problem in <BalAlertLink href={balancerDiscordUrl}>our discord</BalAlertLink>{' '}
-          if the issue persists.
+          report the problem in <BalAlertLink href={discordUrl}>our discord</BalAlertLink> if the
+          issue persists.
         </Text>
       </ErrorAlert>
     )
@@ -45,7 +43,7 @@ export function GenericError({ error: _error, customErrorName, skipError, ...res
       <ErrorAlert title={customErrorName} {...rest}>
         <Text color="black" variant="secondary">
           The pool or one of the pool tokens is paused. Check{' '}
-          <BalAlertLink href={balancerDiscordUrl}>our discord</BalAlertLink> for more information.
+          <BalAlertLink href={discordUrl}>our discord</BalAlertLink> for more information.
         </Text>
       </ErrorAlert>
     )
@@ -56,7 +54,7 @@ export function GenericError({ error: _error, customErrorName, skipError, ...res
       <ErrorAlert title={customErrorName} {...rest}>
         <Text color="black" variant="secondary">
           Too many RPC requests. Please try again in some minutes. You can report the problem in{' '}
-          <BalAlertLink href={balancerDiscordUrl}>our discord</BalAlertLink> if the issue persists.
+          <BalAlertLink href={discordUrl}>our discord</BalAlertLink> if the issue persists.
         </Text>
       </ErrorAlert>
     )
@@ -68,7 +66,7 @@ export function GenericError({ error: _error, customErrorName, skipError, ...res
         <Text color="black" variant="secondary">
           It looks like you don&apos;t have enough gas to complete this transaction. If you believe
           this is a mistake, please report it in{' '}
-          <BalAlertLink href={balancerDiscordUrl}>our discord.</BalAlertLink>
+          <BalAlertLink href={discordUrl}>our discord.</BalAlertLink>
         </Text>
       </ErrorAlert>
     )
@@ -81,7 +79,7 @@ export function GenericError({ error: _error, customErrorName, skipError, ...res
       <ErrorAlert title={errorMessage} {...rest}>
         <Text color="black" variant="secondary">
           It looks like there was an RPC Request issue. You can report the problem in{' '}
-          <BalAlertLink href={balancerDiscordUrl}>our discord</BalAlertLink> if the issue persists.
+          <BalAlertLink href={discordUrl}>our discord</BalAlertLink> if the issue persists.
         </Text>
       </ErrorAlert>
     )

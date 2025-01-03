@@ -10,12 +10,11 @@ import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { usePoolEvents } from '../pool/usePoolEvents'
-import { supportedNetworks } from '../web3/ChainConfig'
+import { supportedNetworks } from '@repo/lib/config/ProjectConfigProvider'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { ApiToken } from '../pool/pool.types'
 import {

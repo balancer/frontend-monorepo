@@ -3,6 +3,7 @@
 import { createContext, ReactNode } from 'react'
 import { useMandatoryContext } from '../shared/utils/contexts'
 import { ProjectConfig } from './config.types'
+import { GqlChain } from '../shared/services/api/generated/graphql'
 
 type ProjectConfigProviderProps = {
   config: ProjectConfig
@@ -14,10 +15,23 @@ type ProjectFlags = {
   isVeBal: boolean
 }
 
+// Global project constants that can be imported
+export let projectName: string
+export let projectId: 'beets' | 'balancer'
+export let discordUrl: string
+export let supportedNetworks: GqlChain[]
+export let defaultNetwork: GqlChain
+
 const ProjectConfigContext = createContext<ProjectConfig | undefined>(undefined)
 const ProjectFlagsContext = createContext<ProjectFlags | undefined>(undefined)
 
 export function ProjectConfigProvider({ config, children }: ProjectConfigProviderProps) {
+  projectName = config.projectName
+  projectId = config.projectId
+  discordUrl = config.externalLinks.discordUrl
+  supportedNetworks = config.supportedNetworks
+  defaultNetwork = config.defaultNetwork
+
   // TODO: set this dynamically like below or statically like 'isBeetsProject' & 'isBalancerProject'?
   const flags: ProjectFlags = {
     isMaBeets:

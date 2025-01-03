@@ -4,14 +4,13 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
 // import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
-// import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 // import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 // import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
 import { BoostedPoolsPromoBanner } from '@repo/lib/shared/components/promos/BoostedPoolsPromoBanner'
 
 export default async function PoolsPage() {
   // Featured pools set up
-  // const { supportedNetworks } = getProjectConfig()
+  // const { supportedNetworks } = useProjectConfig()
 
   // const featuredPoolsQuery = await getApolloServerClient().query({
   //   query: GetFeaturedPoolsDocument,

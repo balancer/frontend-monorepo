@@ -8,9 +8,8 @@ import { ReactNode, useEffect, useState } from 'react'
 import { ChevronDown } from 'react-feather'
 import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
-
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { supportedNetworks } from '@repo/lib/modules/web3/ChainConfig'
+import { supportedNetworks } from '@repo/lib/config/ProjectConfigProvider'
 import { gradientMap } from '@repo/lib/modules/marketing/useEcosystemPoolActivity'
 
 interface ChainOption extends OptionBase {
