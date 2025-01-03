@@ -24,7 +24,7 @@ import { NetworkSwitchButton, useChainSwitch } from '@repo/lib/modules/web3/useC
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokenAllowances } from '@repo/lib/modules/web3/useTokenAllowances'
 import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
-import { getBlockExplorerTxUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
+import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { QueryObserverResult } from '@tanstack/react-query'
