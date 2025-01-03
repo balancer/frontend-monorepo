@@ -10,7 +10,7 @@ import * as echarts from 'echarts/core'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useMemo, useRef } from 'react'
-import { ApiToken } from '../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import PoolWeightChartLegend from './PoolWeightChartLegend'
 
 interface PoolWeightChartProps {

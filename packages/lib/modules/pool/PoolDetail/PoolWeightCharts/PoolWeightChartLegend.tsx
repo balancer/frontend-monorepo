@@ -1,5 +1,5 @@
 import { Box, HStack, Text } from '@chakra-ui/react'
-import { ApiToken } from '../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { PoolWeightChartColorDef } from './PoolWeightChart'
 
 export default function PoolWeightChartLegend({

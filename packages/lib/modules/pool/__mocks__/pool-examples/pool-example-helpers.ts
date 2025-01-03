@@ -1,4 +1,4 @@
-import { ApiToken } from '../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { chainToSlugMap } from '../../pool.utils'
 import { PoolExample } from './pool-examples.types'
 
