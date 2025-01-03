@@ -2,7 +2,6 @@
 
 import { getChainId } from '@repo/lib/config/app.config'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
-import { getBlockExplorerTxUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ensureError } from '@repo/lib/shared/utils/errors'
@@ -17,6 +16,7 @@ import { waitForTransactionReceipt } from 'wagmi/actions'
 import { getWaitForReceiptTimeout } from '../web3/contracts/wagmi-helpers'
 import { TransactionStatus as SafeTxStatus } from '@safe-global/safe-apps-sdk'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 export type RecentTransactionsResponse = ReturnType<typeof _useRecentTransactions>
 export const TransactionsContext = createContext<RecentTransactionsResponse | null>(null)

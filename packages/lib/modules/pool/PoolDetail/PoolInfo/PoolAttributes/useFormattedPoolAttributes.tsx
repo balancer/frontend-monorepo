@@ -12,7 +12,7 @@ import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { compact } from 'lodash'
-import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
+import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 type FormattedPoolAttributes = {
   title: string
