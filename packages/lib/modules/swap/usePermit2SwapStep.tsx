@@ -10,7 +10,7 @@ import {
   SdkSimulationResponseWithRouter,
   SwapSimulationQueryResult,
 } from './queries/useSimulateSwapQuery'
-import { ApiToken } from '../pool/pool.types'
+import { ApiToken } from '../tokens/token.types'
 
 type Props = {
   wethIsEth: boolean

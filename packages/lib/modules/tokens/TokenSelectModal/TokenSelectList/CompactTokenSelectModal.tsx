@@ -14,7 +14,7 @@ import {
 import { RefObject } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { CompactTokenSelectList } from './CompactTokenSelectList'
-import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '../../token.types'
 
 type Props = {
   chain: GqlChain

@@ -1,6 +1,6 @@
 import { Box, HStack, StackProps } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { ApiToken } from '../pool/pool.types'
+import { ApiToken } from './token.types'
 import { TokenIcon } from './TokenIcon'
 
 type Props = {

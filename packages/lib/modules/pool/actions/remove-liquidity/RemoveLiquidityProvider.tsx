@@ -23,7 +23,7 @@ import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { ApiToken } from '../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof _useRemoveLiquidity>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)

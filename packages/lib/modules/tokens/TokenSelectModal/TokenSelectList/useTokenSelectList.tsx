@@ -5,7 +5,7 @@ import { orderBy } from 'lodash'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { exclNativeAssetFilter, nativeAssetFilter } from '../../token.helpers'
 import { useCallback, useMemo } from 'react'
-import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '../../token.types'
 
 export function useTokenSelectList(
   chain: GqlChain,

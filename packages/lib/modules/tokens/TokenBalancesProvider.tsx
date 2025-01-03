@@ -16,7 +16,7 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { exclNativeAssetFilter, nativeAssetFilter } from './token.helpers'
 import { HumanAmount, Slippage } from '@balancer/sdk'
-import { ApiToken } from '../pool/pool.types'
+import { ApiToken } from './token.types'
 
 const BALANCE_CACHE_TIME_MS = 30_000
 
