@@ -9,14 +9,16 @@ import { useLstStakeStep } from './hooks/useLstStakeStep'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import sonicNetworkConfig from '@repo/lib/config/networks/sonic'
 import { useLstUnstakeStep } from './hooks/useLstUnstakeStep'
-import { useUserAccount } from '../../web3/UserAccountProvider'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { useTokens } from '../../tokens/TokensProvider'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { useLstWithdrawStep } from './hooks/useLstWithdrawStep'
-import { useTokenInputsValidation } from '../../tokens/TokenInputsValidationProvider'
+import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
+import { formatUnits, parseUnits } from 'viem'
+import { useGetRate } from './hooks/useGetRate'
 
 const CHAIN = GqlChain.Sonic
 const WITHDRAW_DELAY = 1209600 // 14 days in seconds
@@ -25,9 +27,10 @@ export function _useLst() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
   const [amountAssets, setAmountAssets] = useState('')
   const [amountShares, setAmountShares] = useState('')
+  const [amountWithdraw, setAmountWithdraw] = useState(0n)
   const [first, setFirst] = useState(5)
   const [skip, setSkip] = useState(0)
-  const [withdrawWrID, setWithdrawWrID] = useState<string>('')
+  const [withdrawId, setWithdrawId] = useState<bigint>(0n)
   const { isConnected } = useUserAccount()
   const { getToken } = useTokens()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
@@ -59,12 +62,7 @@ export function _useLst() {
   const lstUnstakeTxHash = unstakeTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstUnstakeTxConfirmed = unstakeTransactionSteps.lastTransactionConfirmed
 
-  const { step: withdrawStep } = useLstWithdrawStep(
-    amountAssets,
-    CHAIN,
-    isWithdrawTab,
-    BigInt(withdrawWrID)
-  )
+  const { step: withdrawStep } = useLstWithdrawStep(CHAIN, isWithdrawTab, withdrawId)
   const withdrawTransactionSteps = useTransactionSteps([withdrawStep], false)
   const lstWithdrawTxHash = withdrawTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const lstWithdrawTxConfirmed = withdrawTransactionSteps.lastTransactionConfirmed
@@ -84,6 +82,24 @@ export function _useLst() {
   ]
 
   const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
+
+  const { data: rate, isLoading: isRateLoading } = useGetRate(CHAIN)
+
+  function getAmountShares(amountAssets: string) {
+    if (amountAssets === '') return '0'
+
+    const amountShares = (parseUnits(amountAssets, 18) * 10n ** 18n) / (rate || 1n)
+
+    return formatUnits(amountShares, 18)
+  }
+
+  function getAmountAssets(amountShares: string) {
+    if (amountShares === '') return '0'
+
+    const amountAssets = (parseUnits(amountShares, 18) * (rate || 1n)) / 10n ** 18n
+
+    return formatUnits(amountAssets, 18)
+  }
 
   return {
     activeTab,
@@ -114,8 +130,13 @@ export function _useLst() {
     withdrawTransactionSteps,
     lstWithdrawTxHash,
     lstWithdrawTxConfirmed,
-    withdrawWrID,
-    setWithdrawWrID,
+    withdrawId,
+    setWithdrawId,
+    getAmountShares,
+    getAmountAssets,
+    isRateLoading,
+    amountWithdraw,
+    setAmountWithdraw,
   }
 }
 

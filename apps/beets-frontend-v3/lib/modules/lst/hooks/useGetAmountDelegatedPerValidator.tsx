@@ -3,7 +3,7 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlStakedSonicData } from '@repo/lib/shared/services/api/generated/graphql'
 import { useGetRate } from './useGetRate'
 import { useGetStakedSonicData } from './useGetStakedSonicData'
 import { useMemo } from 'react'
@@ -17,6 +17,8 @@ type Result = {
   }
 }
 
+type Validator = GqlStakedSonicData['delegatedValidators'][0]
+
 export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
   const { isConnected } = useUserAccount()
   const { rate } = useGetRate(chain)
@@ -25,9 +27,9 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
 
-  const validatorIds = useMemo(() => {
+  const validatorIds: string[] = useMemo(() => {
     if (!loading && data) {
-      return data.stsGetGqlStakedSonicData.delegatedValidators.map(v => v.validatorId)
+      return data.stsGetGqlStakedSonicData.delegatedValidators.map((v: Validator) => v.validatorId)
     }
 
     return []

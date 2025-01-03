@@ -27,7 +27,7 @@ const FAQ_ITEMS = [
   {
     question: 'How do I get stS tokens?',
     answer:
-      'To stake, users simply need to head to the stS page and select how much $S they wish to deposit. As an alternative to staking, users can swap out of stS on DEXs by swapping their stS for $S on the Swap Page.',
+      'To stake, users simply need to head to the stS page and select how much $S they wish to deposit. As an alternative to staking, users can swap into stS on DEXs by swapping their $S for stS on the Swap Page.',
   },
   {
     question: 'How do I unstake stS for $S?',
@@ -55,9 +55,9 @@ export function LstFaq() {
         </Heading>
       </CardHeader>
       <CardBody align="start" as={VStack} />
-      <Accordion allowToggle variant="button">
+      <Accordion allowToggle bg="transparent" variant="button">
         {FAQ_ITEMS.map(item => (
-          <AccordionItem key={item.question}>
+          <AccordionItem key={item.question} mb="sm">
             <h2>
               <AccordionButton>
                 <Box as="span" flex="1" textAlign="left">

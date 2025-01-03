@@ -34,7 +34,7 @@ export function LstWithdraw({
       setWithdrawalsView(withdrawalsDataOrdered.slice(skip, first + skip))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [skip])
+  }, [skip, withdrawalsData])
 
   const rowProps = {
     px: { base: 'sm', sm: '0' },

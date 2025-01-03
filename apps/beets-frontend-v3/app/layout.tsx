@@ -12,7 +12,8 @@ import { FooterContainer } from '@/lib/components/footer/FooterContainer'
 import { DEFAULT_THEME_COLOR_MODE } from '@repo/lib/shared/services/chakra/themes/base/foundations'
 import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
-import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
+import { LzBeetsMigrateModal } from '@/lib/components/modals/LzBeetsMigrateModal'
+import { PoolsNetworkWatcher } from '@/lib/components/navs/PoolsNetworkWatcher'
 
 export const metadata: Metadata = {
   title: 'Beets',
@@ -39,13 +40,13 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
             <ThemeProvider>
               <Providers>
-                <VebalLockDataProvider>
-                  <GlobalAlerts />
-                  <NavBarContainer />
-                  {children}
-                  <FooterContainer />
-                  <SpeedInsights />
-                </VebalLockDataProvider>
+                <GlobalAlerts />
+                <NavBarContainer />
+                {children}
+                <LzBeetsMigrateModal />
+                <FooterContainer />
+                <SpeedInsights />
+                <PoolsNetworkWatcher />
               </Providers>
             </ThemeProvider>
           </ColorThemeProvider>

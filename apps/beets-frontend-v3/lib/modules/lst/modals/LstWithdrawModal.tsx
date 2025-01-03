@@ -29,7 +29,7 @@ export function LstWithdrawModal({
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const { isDesktop } = useBreakpoints()
   const { userAddress } = useUserAccount()
-  const { withdrawTransactionSteps, lstWithdrawTxHash } = useLst()
+  const { withdrawTransactionSteps, lstWithdrawTxHash, setWithdrawId } = useLst()
 
   const lstWithdrawReceipt = useLstWithdrawReceipt({
     txHash: lstWithdrawTxHash,
@@ -40,8 +40,14 @@ export function LstWithdrawModal({
 
   useResetStepIndexOnOpen(isOpen, withdrawTransactionSteps)
 
+  function handleOnClose() {
+    withdrawTransactionSteps.resetTransactionSteps()
+    setWithdrawId(0n)
+    onClose()
+  }
+
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap {...rest}>
+    <Modal isCentered isOpen={isOpen} onClose={handleOnClose} preserveScrollBarGap {...rest}>
       <SuccessOverlay startAnimation={!!lstWithdrawTxHash} />
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && (
@@ -55,7 +61,7 @@ export function LstWithdrawModal({
         <ActionModalFooter
           currentStep={withdrawTransactionSteps.currentStep}
           isSuccess={!!lstWithdrawTxHash}
-          returnAction={onClose}
+          returnAction={handleOnClose}
           returnLabel="Return to withdraw"
         />
       </ModalContent>

@@ -50,19 +50,18 @@ export function MaBeetsRedirectModal({
         <ModalCloseButton />
         <ModalBody color="grayText">
           <Text color="font.secondary">
-            An integrated maBEETS experience is in the works. In the meantime, you can manage your
-            Sonic maBEETS relics at{' '}
-            <Link href="https://ma.beets.fi" target="_blank">
+            BEETS are live on Sonic! Visit the Fantom App to migrate your BEETS and maBEETS relics
+            to sonic.
+            {/*  <Link href="https://ma.beets.fi" target="_blank">
               https://ma.beets.fi
             </Link>
-            .
+            . */}
           </Text>
 
           <Text color="font.secondary" mt="md">
-            It&apos;s recommended that you migrate Fantom maBEETS relics to Sonic. For more
-            information, refer to the migration guide at{' '}
-            <Link href="https://docs.beets.fi/sonic" target="_blank">
-              https://docs.beets.fi/sonic
+            For more information, refer to the migration guide at{' '}
+            <Link href="https://docs.beets.fi/sonic#mabeets-and-beets" target="_blank">
+              https://docs.beets.fi/sonic#mabeets-and-beets
             </Link>
             .
           </Text>

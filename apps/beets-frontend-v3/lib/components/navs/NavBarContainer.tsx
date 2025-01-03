@@ -6,14 +6,12 @@ import { NavLogo } from './NavLogo'
 import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BeetsLogoType } from '../imgs/BeetsLogoType'
-import { LzBeetsMigrator } from '@repo/lib/shared/components/btns/LzBeetsMigrator'
 import { Box, HStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { MaBeetsNavLink } from './MaBeetsNavLink'
 import { SonicMigrationLink } from './SonicMigrationLink'
 import { FantomToSonicSvg } from '../imgs/FantomToSonicSvg'
-import { PoolsLink } from './PoolsLink'
 
 export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
@@ -45,7 +43,7 @@ export function NavBarContainer() {
 
   return (
     <NavBar
-      appLinks={allAppLinks.slice(1)} // we remove the pools link for the custom dropdown link
+      appLinks={allAppLinks}
       customLinksAfter={
         <>
           <Box as={motion.div} variants={fadeIn}>
@@ -56,18 +54,13 @@ export function NavBarContainer() {
           </Box>
         </>
       }
-      customLinksBefore={
+      /* customLinksBefore={
         <Box as={motion.div} variants={fadeIn}>
           <PoolsLink />
         </Box>
-      }
+      } */
       navLogo={<NavLogo />}
-      rightSlot={
-        <>
-          <LzBeetsMigrator />
-          <NavActions hideDarkModeToggle mobileNav={mobileNav} />
-        </>
-      }
+      rightSlot={<NavActions hideDarkModeToggle mobileNav={mobileNav} />}
     />
   )
 }
