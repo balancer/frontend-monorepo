@@ -166,7 +166,7 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
     }
 
     const result: Record<string, VotesData> = Object.fromEntries(
-      Object.keys(gaugeAddresses).map((address, index) => {
+      gaugeAddresses.map((address, index) => {
         const gaugeWeightThisPeriod = (gaugeWeightThisPeriodQuery.data ?? [])[index]
         const gaugeWeightNextPeriod = (gaugeWeightNextPeriodQuery.data ?? [])[index]
         const userVotes = (userVotesQuery.data ?? [])[index]
