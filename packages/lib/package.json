@@ -122,7 +122,7 @@
     "lokijs": "^1.5.12",
     "msw": "2.0.10",
     "sentry-testkit": "^5.0.9",
-    "typescript": "5.4.5",
+    "typescript": "5.7.2",
     "vitest": "2.1.8",
     "vitest-mock-extended": "2.0.2"
   }
