@@ -86,8 +86,7 @@ export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
     networkName: 'Gnosis',
     fallBackRpc: 'https://gnosis.drpc.org',
     port: ANVIL_PORTS.Gnosis,
-    // For now we will use the last block until v3 deployments are final
-    // forkBlockNumber: ,
+    forkBlockNumber: 37902207n,
   },
 }
 
