@@ -77,7 +77,7 @@ export function usePoolListQueryState() {
   useEffect(() => {
     setSkip(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolTypes, networks, userAddress, minTvl, poolTags])
+  }, [poolTypes, networks, minTvl, poolTags])
 
   // Set internal checked state
   function toggleUserAddress(checked: boolean, address: string) {
