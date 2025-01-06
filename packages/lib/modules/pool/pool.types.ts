@@ -18,18 +18,18 @@ import {
 } from 'nuqs'
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
+
 export type Pool = GetPoolQuery['pool']
 
 export type PoolId = Hex
 
 export type PoolList = GetPoolsQuery['pools']
 
-// TODO: Can we replace all PoolListItem with PoolCore??
 export type PoolListItem = PoolList[0]
 
-// TODO: Rethink all the logic around Pool, FeaturedPool, PoolListItem, GqlPoolElement...
 export type PoolCore = Pick<
   PoolListItem,
+  | 'id'
   | 'address'
   | 'chain'
   | 'type'
@@ -38,6 +38,7 @@ export type PoolCore = Pick<
   | 'protocolVersion'
   | 'hasErc4626'
   | 'hasAnyAllowedBuffer'
+  | 'tags'
 > & { poolTokens: ApiToken[] }
 
 export enum BaseVariant {
