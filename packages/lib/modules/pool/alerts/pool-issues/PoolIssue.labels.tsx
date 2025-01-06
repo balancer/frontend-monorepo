@@ -22,7 +22,7 @@ type VunerabilityData = {
 export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
   [PoolIssue.PoolProtocolFeeVulnWarning]: {
     jsxTitle: <>{vulnerabilityTitle}</>,
-    learnMoreLink: 'https://twitter.com/Balancer/status/1611363559685898247',
+    learnMoreLink: 'https://x.com/Balancer/status/1611363559685898247',
   },
   [PoolIssue.PoolOwnerVulnWarningGovernanceMigrate]: {
     jsxTitle: <>{vulnerabilityDisclosure}. You're advised to migrate your liquidity.</>,
@@ -97,7 +97,7 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
         <Link
           _hover={{ color: 'font.maxContrast' }}
           color="font.dark"
-          href="https://twitter.com/renprotocol/status/1595807696296751104"
+          href="https://x.com/renprotocol/status/1595807696296751104"
           rel="noreferrer"
           target="blank"
         >
@@ -137,6 +137,6 @@ export const VulnerabilityDataMap: Record<PoolIssue, VunerabilityData> = {
         remove remove liquidity from this pool.
       </>
     ),
-    learnMoreLink: 'https://twitter.com/XaveFinance/status/1725089131330756628',
+    learnMoreLink: 'https://x.com/XaveFinance/status/1725089131330756628',
   },
 }
