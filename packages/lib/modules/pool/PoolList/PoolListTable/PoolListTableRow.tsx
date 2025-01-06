@@ -11,8 +11,8 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { usePoolList } from '../PoolListProvider'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
 import { usePoolMetadata } from '../../metadata/usePoolMetadata'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 import { PoolListPoolDisplay } from '../PoolListPoolDisplay'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -24,7 +24,6 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
   const { name } = usePoolMetadata(pool)
   const { toCurrency } = useCurrency()
-  const { options } = useProjectConfig()
 
   const {
     queryState: { userAddress },
@@ -48,7 +47,11 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
-              <PoolListPoolDisplay displayType={options?.displayType} name={name} pool={pool} />
+              <PoolListPoolDisplay
+                displayType={PROJECT_CONFIG.options.displayType}
+                name={name}
+                pool={pool}
+              />
             </GridItem>
             <GridItem minW="32">
               <PollListTableDetailsCell pool={pool} />

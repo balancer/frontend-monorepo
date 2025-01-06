@@ -1,4 +1,4 @@
-import { useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { balancerMinterAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -6,7 +6,6 @@ import { useReadContract } from 'wagmi'
 
 export function useHasMinterApproval() {
   const { isConnected, userAddress } = useUserAccount()
-  const { isVeBal } = useProjectFlags()
 
   const networkConfig = useNetworkConfig()
   const { chainId, contracts } = networkConfig
@@ -18,7 +17,7 @@ export function useHasMinterApproval() {
     account: userAddress,
     functionName: 'getMinterApproval',
     args: [contracts.balancer.relayerV6, userAddress],
-    query: { enabled: isConnected && isVeBal }, // Only vebal needs minter approval
+    query: { enabled: isConnected && PROJECT_CONFIG.options.showVeBal }, // Only vebal needs minter approval
   })
 
   return {

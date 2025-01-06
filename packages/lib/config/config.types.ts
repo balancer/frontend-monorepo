@@ -128,6 +128,8 @@ type OptionsConfig = {
   hidePoolTypes: GqlPoolType[]
   hideProtocolVersion: string[]
   showPoolName: boolean
+  showVeBal: boolean
+  showMaBeets: boolean
 }
 
 export interface ProjectConfig {

@@ -30,7 +30,7 @@ import { fNum, bn } from '@repo/lib/shared/utils/numbers'
 import { isEmpty } from 'lodash'
 import { BoostText } from './BoostText'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
-import { useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type PoolEventRowProps = {
   poolEvent: PoolEventItem
@@ -184,11 +184,14 @@ export default function PoolUserEvents({
   const [height, setHeight] = useState(0)
   const [poolEvents, setPoolEvents] = useState<PoolEventItem[]>([])
   const { toCurrency } = useCurrency()
-  const { isVeBal } = useProjectFlags()
+
+  const {
+    options: { showVeBal },
+  } = PROJECT_CONFIG
 
   const isVeBalPoolStaking = pool.staking?.type === GqlPoolStakingType.Vebal
   const showBoostValue =
-    pool.staking?.type === GqlPoolStakingType.Gauge && !isVeBalPoolStaking && isVeBal
+    pool.staking?.type === GqlPoolStakingType.Gauge && !isVeBalPoolStaking && showVeBal
 
   // keep this card the same height as the 'My liquidity' section
   useLayoutEffect(() => {
@@ -205,7 +208,7 @@ export default function PoolUserEvents({
   }, [userPoolEvents, isLoading])
 
   function getShareTitle() {
-    if (isVeBal) {
+    if (showVeBal) {
       return 'locked'
     }
 

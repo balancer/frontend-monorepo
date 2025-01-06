@@ -26,11 +26,11 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import React from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePool } from '../../PoolProvider'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 import {
   getBlockExplorerAddressUrl,
   getBlockExplorerTxUrl,
 } from '@repo/lib/shared/utils/blockExplorer'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 interface Props extends GridProps {
   event: PoolActivityEl
@@ -38,8 +38,7 @@ interface Props extends GridProps {
 }
 
 function EnsOrAddress({ userAddress, chain }: { userAddress: `0x${string}`; chain: GqlChain }) {
-  const { ensNetwork } = useProjectConfig()
-  const chainId = getChainId(ensNetwork) // perform ENS lookup through ensNetwork
+  const chainId = getChainId(PROJECT_CONFIG.ensNetwork) // perform ENS lookup through ensNetwork
   const { data: name } = useEnsName({ address: userAddress, chainId })
 
   const { data: ensAvatar } = useEnsAvatar({

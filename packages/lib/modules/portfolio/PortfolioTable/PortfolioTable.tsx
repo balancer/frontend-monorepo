@@ -19,7 +19,7 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { useProjectConfig, useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -82,8 +82,7 @@ export function PortfolioTable() {
   const [shouldFilterTinyBalances, setShouldFilterTinyBalances] = useState(true)
   const { portfolioData, isLoadingPortfolio } = usePortfolio()
   const { isConnected } = useUserAccount()
-  const { projectName } = useProjectConfig()
-  const { isVeBal } = useProjectFlags()
+  const { projectName, options } = PROJECT_CONFIG
 
   // Filter out pools with tiny balances (<0.01 USD)
   const minUsdBalance = 0.01
@@ -182,7 +181,7 @@ export function PortfolioTable() {
                 <PortfolioTableHeader
                   currentSortingObj={currentSortingObj}
                   setCurrentSortingObj={setCurrentSortingObj}
-                  {...rowProps(isVeBal)}
+                  {...rowProps(options.showVeBal)}
                 />
               )}
               renderTableRow={(item: ExpandedPoolInfo, index) => {
@@ -191,7 +190,7 @@ export function PortfolioTable() {
                     keyValue={index}
                     pool={item}
                     veBalBoostMap={veBalBoostMap}
-                    {...rowProps(isVeBal)}
+                    {...rowProps(options.showVeBal)}
                   />
                 )
               }}

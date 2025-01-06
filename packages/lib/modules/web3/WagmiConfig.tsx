@@ -13,7 +13,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets'
 import { chains } from './ChainConfig'
 import { transports } from './transports'
-import { projectName } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID || ''
 
@@ -34,7 +34,7 @@ const connectors = connectorsForWallets(
     },
   ],
   {
-    appName: projectName,
+    appName: PROJECT_CONFIG.projectName,
     projectId,
     walletConnectParameters: {
       // Enforce wallet connect popup always on top

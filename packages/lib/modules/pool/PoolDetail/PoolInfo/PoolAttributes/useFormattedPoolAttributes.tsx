@@ -11,8 +11,8 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { compact } from 'lodash'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type FormattedPoolAttributes = {
   title: string
@@ -24,10 +24,10 @@ export function useFormattedPoolAttributes() {
   const { pool } = usePool()
   const { toCurrency } = useCurrency()
   const { usdValueForBpt } = useTokens()
-  const { delegateOwner } = useProjectConfig()
 
   const isV2 = isV2Pool(pool)
   const isV3 = isV3Pool(pool)
+  const delegateOwner = PROJECT_CONFIG.delegateOwner
 
   const poolOwnerData = useMemo(() => {
     if (!pool) return

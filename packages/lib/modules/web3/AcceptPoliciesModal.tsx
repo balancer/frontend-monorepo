@@ -21,7 +21,7 @@ import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useUserAccount } from './UserAccountProvider'
 import { useDisconnect } from 'wagmi'
 import NextLink from 'next/link'
-import { useProjectConfig, useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function AcceptPoliciesModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -29,8 +29,10 @@ export function AcceptPoliciesModal() {
   const { isBlocked, isLoading, isConnected, userAddress } = useUserAccount()
   const [isChecked, setIsChecked] = useState(false)
   const { disconnect } = useDisconnect()
-  const { projectName } = useProjectConfig()
-  const { isVeBal } = useProjectFlags()
+  const {
+    projectName,
+    options: { showVeBal },
+  } = PROJECT_CONFIG
 
   const isAddressInAcceptedPolicies = acceptedPolicies.includes(userAddress.toLowerCase())
 
@@ -76,7 +78,7 @@ export function AcceptPoliciesModal() {
               onChange={e => setIsChecked(e.target.checked)}
               size="lg"
             >
-              {isVeBal ? (
+              {showVeBal ? (
                 <Box color="font.primary" fontSize="md" mt="-3px">
                   By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
                   <Link as={NextLink} href="/terms-of-use">

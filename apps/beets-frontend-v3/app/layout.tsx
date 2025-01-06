@@ -14,7 +14,6 @@ import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
 import { LzBeetsMigrateModal } from '@/lib/components/modals/LzBeetsMigrateModal'
 import { PoolsNetworkWatcher } from '@/lib/components/navs/PoolsNetworkWatcher'
-import { ProjectConfigBeets } from '@/lib/config/projectConfig'
 
 export const metadata: Metadata = {
   title: 'Beets',
@@ -40,7 +39,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <NextTopLoader color="#7f6ae8" showSpinner={false} />
           <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
             <ThemeProvider>
-              <Providers config={ProjectConfigBeets}>
+              <Providers>
                 <GlobalAlerts />
                 <NavBarContainer />
                 {children}

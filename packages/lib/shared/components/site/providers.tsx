@@ -7,25 +7,21 @@ import { UserSettingsProvider } from '@repo/lib/modules/user/settings/UserSettin
 import { wagmiConfig } from '@repo/lib/modules/web3/WagmiConfig'
 import { GlobalAlertsProvider } from '@repo/lib/shared/components/alerts/GlobalAlertsProvider'
 import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
-import { ProjectConfig } from '@repo/lib/config/config.types'
-import { ProjectConfigProvider } from '@repo/lib/config/ProjectConfigProvider'
 
-export function Providers({ config, children }: { config: ProjectConfig; children: ReactNode }) {
+export function Providers({ children }: { children: ReactNode }) {
   return (
-    <ProjectConfigProvider config={config}>
-      <GlobalAlertsProvider>
-        <Web3Provider wagmiConfig={wagmiConfig}>
-          <ApolloClientProvider>
-            <ApolloGlobalDataProvider>
-              <UserSettingsProvider>
-                <VebalLockDataProvider>
-                  <RecentTransactionsProvider>{children}</RecentTransactionsProvider>
-                </VebalLockDataProvider>
-              </UserSettingsProvider>
-            </ApolloGlobalDataProvider>
-          </ApolloClientProvider>
-        </Web3Provider>
-      </GlobalAlertsProvider>
-    </ProjectConfigProvider>
+    <GlobalAlertsProvider>
+      <Web3Provider wagmiConfig={wagmiConfig}>
+        <ApolloClientProvider>
+          <ApolloGlobalDataProvider>
+            <UserSettingsProvider>
+              <VebalLockDataProvider>
+                <RecentTransactionsProvider>{children}</RecentTransactionsProvider>
+              </VebalLockDataProvider>
+            </UserSettingsProvider>
+          </ApolloGlobalDataProvider>
+        </ApolloClientProvider>
+      </Web3Provider>
+    </GlobalAlertsProvider>
   )
 }

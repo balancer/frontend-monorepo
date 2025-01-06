@@ -5,11 +5,10 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { Box, Button, Center, Text, VStack } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function CowFooter() {
-  const { variantConfig } = useProjectConfig()
-  const { banners } = variantConfig?.[PartnerVariant.cow] || {}
+  const { banners } = PROJECT_CONFIG.variantConfig?.[PartnerVariant.cow] || {}
 
   return (
     <>

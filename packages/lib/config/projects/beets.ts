@@ -24,5 +24,7 @@ export const ProjectConfigBeets: ProjectConfig = {
     hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
     hideProtocolVersion: ['cow', 'v3'],
     showPoolName: true,
+    showVeBal: false,
+    showMaBeets: true,
   },
 }

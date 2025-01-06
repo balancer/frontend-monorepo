@@ -2,13 +2,13 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { setTag } from '@sentry/nextjs'
 import { useEffect } from 'react'
 import { useUserAccount } from '../modules/web3/UserAccountProvider'
-import { useProjectConfig } from './ProjectConfigProvider'
+import { PROJECT_CONFIG } from './getProjectConfig'
 
 export function useNetworkConfig() {
   let defaultNetwork
 
   const { chain } = useUserAccount()
-  const { defaultNetwork: projectDefaultNetwork } = useProjectConfig()
+  const projectDefaultNetwork = PROJECT_CONFIG.defaultNetwork
 
   if (!chain) {
     defaultNetwork = projectDefaultNetwork

@@ -1,18 +1,18 @@
 import { LandingPageLayout } from '@/lib/modules/landing-page/LandingPageLayout'
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
-import { beetsSupportedNetworks } from '@/lib/config/projectConfig'
 import { mins } from '@repo/lib/shared/utils/time'
 import {
   GetProtocolStatsDocument,
   GetProtocolStatsPerChainDocument,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export default async function Home() {
   const client = getApolloServerClient()
 
   const variables = {
-    chains: [...beetsSupportedNetworks, GqlChain.Fantom], // manually adding Fantom to the list to get the data for the landing page
+    chains: [...PROJECT_CONFIG.supportedNetworks, GqlChain.Fantom], // manually adding Fantom to the list to get the data for the landing page
   }
 
   const { data: protocolData } = await client.query({

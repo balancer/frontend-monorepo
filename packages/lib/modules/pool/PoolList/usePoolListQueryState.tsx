@@ -19,7 +19,7 @@ import {
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
 import { useState } from 'react'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
   {
@@ -49,7 +49,6 @@ export function usePoolListQueryState() {
   const [networks, setNetworks] = useQueryState('networks', poolListQueryStateParsers.networks)
   const [minTvl, setMinTvl] = useQueryState('minTvl', poolListQueryStateParsers.minTvl)
   const [poolTags, setPoolTags] = useQueryState('poolTags', poolListQueryStateParsers.poolTags)
-  const { supportedNetworks } = useProjectConfig()
 
   const [orderDirection, setOrderDirection] = useQueryState(
     'orderDirection',
@@ -213,7 +212,7 @@ export function usePoolListQueryState() {
     orderDirection,
     where: {
       poolTypeIn: mappedPoolTypes,
-      chainIn: networks.length > 0 ? networks : supportedNetworks,
+      chainIn: networks.length > 0 ? networks : PROJECT_CONFIG.supportedNetworks,
       userAddress,
       minTvl,
       tagIn: mappedPoolTags.length > 0 ? mappedPoolTags : null,

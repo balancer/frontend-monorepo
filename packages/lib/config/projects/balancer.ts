@@ -44,5 +44,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
     hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
     hideProtocolVersion: ['cow', 'v3'],
     showPoolName: true,
+    showVeBal: true,
+    showMaBeets: false,
   },
 }

@@ -2,7 +2,7 @@
 
 import { useNavData } from '@/lib/components/navs/useNavData'
 import { Box, Center, HStack, IconButton, Link, Text } from '@chakra-ui/react'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { AppLink } from '@repo/lib/shared/components/navs/useNav'
 
@@ -32,11 +32,8 @@ function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
 
 export function LandingBeetsSocialClub() {
   const { getSocialLinks } = useNavData()
-  const {
-    externalLinks: { discordUrl },
-  } = useProjectConfig()
 
-  const socialLinks = getSocialLinks(discordUrl, 36)
+  const socialLinks = getSocialLinks(PROJECT_CONFIG.externalLinks.discordUrl, 36)
 
   return (
     <DefaultPageContainer noVerticalPadding pb="3xl">

@@ -16,12 +16,12 @@ import { waitForTransactionReceipt } from 'wagmi/actions'
 import { getWaitForReceiptTimeout } from '../web3/contracts/wagmi-helpers'
 import { TransactionStatus as SafeTxStatus } from '@safe-global/safe-apps-sdk'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
-import { projectId } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type RecentTransactionsResponse = ReturnType<typeof _useRecentTransactions>
 export const TransactionsContext = createContext<RecentTransactionsResponse | null>(null)
 const NUM_RECENT_TRANSACTIONS = 20
-const RECENT_TRANSACTIONS_KEY = `${projectId}.recentTransactions`
+const RECENT_TRANSACTIONS_KEY = `${PROJECT_CONFIG.projectId}.recentTransactions`
 
 // confirming = transaction has not been mined
 // confirmed = transaction has been mined and is present on chain

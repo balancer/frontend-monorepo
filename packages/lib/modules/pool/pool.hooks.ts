@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import { PartnerVariant } from '@repo/lib/modules/pool/pool.types'
 import { isCowAmmPool } from './pool.helpers'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function usePoolRedirect(pool: Pool) {
   const path = getPoolPath(pool)
@@ -17,9 +17,8 @@ export function usePoolRedirect(pool: Pool) {
 
 export function usePoolVariant() {
   const { variant } = useParams<{ variant: PartnerVariant }>()
-  const { variantConfig } = useProjectConfig()
 
-  const config = variantConfig?.[variant] || {}
+  const config = PROJECT_CONFIG.variantConfig?.[variant] || {}
 
   return {
     variant,

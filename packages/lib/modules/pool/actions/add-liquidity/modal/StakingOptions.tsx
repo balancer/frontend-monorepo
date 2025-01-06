@@ -13,12 +13,12 @@ import {
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useProjectConfig, useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function StakingOptions() {
   const { chain, pool } = usePool()
-  const { projectName, projectId } = useProjectConfig()
-  const { isVeBal } = useProjectFlags()
+
+  const { projectName, projectId } = PROJECT_CONFIG
 
   const canStake = !!pool.staking
   const stakePath = getPoolActionPath({
@@ -64,34 +64,35 @@ export function StakingOptions() {
             </Button>
           </VStack>
         </Card>
-        {(isVeBal || pool.chain === GqlChain.Optimism) && pool.staking?.aura && (
-          <Card position="relative" variant="modalSubSection">
-            <VStack align="left" spacing="md">
-              <Text color="grayText">Aura</Text>
-              <HStack>
-                <Text color="font.primary" fontSize="md" fontWeight="bold">
-                  {pool.staking?.aura ? fNum('apr', pool.staking.aura.apr) : 'Not available'}
-                </Text>
-              </HStack>
-              <Flex position="absolute" right={2} top={3}>
-                <Image alt="balancer" height={30} src="/images/protocols/aura.svg" width={30} />
-              </Flex>
-              {pool.staking && pool.staking.aura && (
-                <>
-                  <Button onClick={auraDisclosure.onOpen} variant="secondary" w="full">
-                    Learn more
-                  </Button>
-                  <PartnerRedirectModal
-                    isOpen={auraDisclosure.isOpen}
-                    onClose={auraDisclosure.onClose}
-                    partner={RedirectPartner.Aura}
-                    redirectUrl={getAuraPoolLink(getChainId(chain), pool.staking.aura.auraPoolId)}
-                  />
-                </>
-              )}
-            </VStack>
-          </Card>
-        )}
+        {(PROJECT_CONFIG.options.showVeBal || pool.chain === GqlChain.Optimism) &&
+          pool.staking?.aura && (
+            <Card position="relative" variant="modalSubSection">
+              <VStack align="left" spacing="md">
+                <Text color="grayText">Aura</Text>
+                <HStack>
+                  <Text color="font.primary" fontSize="md" fontWeight="bold">
+                    {pool.staking?.aura ? fNum('apr', pool.staking.aura.apr) : 'Not available'}
+                  </Text>
+                </HStack>
+                <Flex position="absolute" right={2} top={3}>
+                  <Image alt="balancer" height={30} src="/images/protocols/aura.svg" width={30} />
+                </Flex>
+                {pool.staking && pool.staking.aura && (
+                  <>
+                    <Button onClick={auraDisclosure.onOpen} variant="secondary" w="full">
+                      Learn more
+                    </Button>
+                    <PartnerRedirectModal
+                      isOpen={auraDisclosure.isOpen}
+                      onClose={auraDisclosure.onClose}
+                      partner={RedirectPartner.Aura}
+                      redirectUrl={getAuraPoolLink(getChainId(chain), pool.staking.aura.auraPoolId)}
+                    />
+                  </>
+                )}
+              </VStack>
+            </Card>
+          )}
       </HStack>
     </>
   )

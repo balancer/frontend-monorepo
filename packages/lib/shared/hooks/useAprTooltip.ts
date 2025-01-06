@@ -3,7 +3,7 @@ import { GqlChain, GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/ge
 import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'
 import BigNumber from 'bignumber.js'
-import { useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export const swapFeesTooltipText = `LPs get swap fees anytime a swap is routed through this pool.
 These fees automatically accumulate into the LP's position, so there is no need to periodically claim.`
@@ -81,10 +81,13 @@ export function useAprTooltip({
   chain: GqlChain
 }) {
   const colorMode = useThemeColorMode()
-  const { isVeBal } = useProjectFlags()
+
+  const {
+    options: { showVeBal },
+  } = PROJECT_CONFIG
 
   const hasVeBalBoost =
-    isVeBal && !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
+    showVeBal && !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
 
   // Swap fees
   const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
@@ -113,7 +116,7 @@ export function useAprTooltip({
   const stakingIncentivesDisplayed = stakingIncentives.map(item => ({
     title: item.rewardTokenSymbol || '',
     apr: numberFormatter(item.apr.toString()),
-    tooltipText: `3rd party incentives (outside the ${isVeBal || chain === GqlChain.Optimism ? 'veBAL' : 'gauge bounty'} system)`,
+    tooltipText: `3rd party incentives (outside the ${showVeBal || chain === GqlChain.Optimism ? 'veBAL' : 'gauge bounty'} system)`,
   }))
 
   const votingApr = aprItems.find(item => item.type === GqlPoolAprItemType.Voting)

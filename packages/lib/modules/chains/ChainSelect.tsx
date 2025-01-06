@@ -17,7 +17,7 @@ import { ReactNode, useEffect, useState } from 'react'
 import { ChevronDown, Globe } from 'react-feather'
 import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
-import { useProjectConfig } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 interface ChainOption extends OptionBase {
   label: ReactNode
@@ -44,11 +44,10 @@ function DropdownIndicator({
 
 export function ChainSelect({ value, onChange }: Props) {
   const [chainValue, setChainValue] = useState<ChainOption | undefined>(undefined)
-  const { supportedNetworks } = useProjectConfig()
 
   const chakraStyles = getSelectStyles<ChainOption>()
 
-  const networkOptions: ChainOption[] = supportedNetworks.map(network => ({
+  const networkOptions: ChainOption[] = PROJECT_CONFIG.supportedNetworks.map(network => ({
     label: (
       <HStack>
         <NetworkIcon chain={network} size={6} />

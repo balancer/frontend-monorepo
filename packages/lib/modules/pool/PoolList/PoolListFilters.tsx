@@ -52,7 +52,7 @@ import ButtonGroup, {
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
 import Link from 'next/link'
-import { useProjectConfig, useProjectFlags } from '@repo/lib/config/ProjectConfigProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
@@ -452,15 +452,14 @@ export function PoolListFilters() {
   } = usePoolList()
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
-  const { options, externalLinks, supportedNetworks } = useProjectConfig()
-  const { isVeBal } = useProjectFlags()
 
   function _resetFilters() {
     resetFilters()
     setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
   }
 
-  const subPath = !isVeBal ? '' : isCowPath ? 'cow' : 'v3'
+  const { options, externalLinks, supportedNetworks } = PROJECT_CONFIG
+  const subPath = !options.showVeBal ? '' : isCowPath ? 'cow' : 'v3'
   const poolCreatorUrl = `${externalLinks.poolComposerUrl}/${subPath}`
 
   return (
