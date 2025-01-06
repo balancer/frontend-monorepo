@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
-import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   getActionableTokenSymbol,
   getPoolActionableTokens,
   getStandardRootTokens,
   isStandardOrUnderlyingRootToken,
 } from './pool.helpers'
+import { Pool } from './pool.types'
 
 // Unskip when there is a non-sepolia nested pool in production api
 describe.skip('pool helper', async () => {
@@ -16,7 +16,7 @@ describe.skip('pool helper', async () => {
   const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0' // underlying token
 
   // const pool = await getPoolMock(nestedPoolId, GqlChain.Sepolia)
-  const pool = {} as GqlPoolElement
+  const pool = {} as Pool
 
   it('poolActionableTokens', async () => {
     const poolActionableTokens = getPoolActionableTokens(pool)

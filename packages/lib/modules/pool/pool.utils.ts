@@ -20,6 +20,7 @@ import {
   FetchPoolProps,
   PartnerVariant,
   PoolAction,
+  PoolCore,
   PoolListItem,
   PoolVariant,
 } from './pool.types'
@@ -79,7 +80,7 @@ function getVariant(type: GqlPoolType, protocolVersion: number | undefined): Poo
  * @returns {String} Path to pool detail page.
  */
 export function getPoolPath(
-  params: Pick<Pool | PoolListItem, 'id' | 'chain' | 'type'> & {
+  params: Pick<PoolCore, 'id' | 'chain' | 'type'> & {
     protocolVersion: number | undefined
   }
 ) {
@@ -91,7 +92,7 @@ export function getNestedPoolPath({
   pool,
   nestedPoolAddress,
 }: {
-  pool: Pool | PoolListItem
+  pool: Pool | PoolCore
   nestedPoolAddress: Address
 }) {
   const variant = getVariant(pool.type, pool.protocolVersion)
