@@ -80,7 +80,7 @@ export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
     networkName: 'Sonic',
     fallBackRpc: 'https://gateway.tenderly.co/public/sonic',
     port: ANVIL_PORTS.Sonic,
-    // forkBlockNumber: ,
+    forkBlockNumber: 2687659n,
   },
   Gnosis: {
     networkName: 'Gnosis',
@@ -116,9 +116,6 @@ export function getForkUrl(networkName: NetworksWithFork, verbose = false): stri
   const privateKey = process.env['NEXT_PRIVATE_DRPC_KEY']
   const dRpcUrl = (chainName: string) =>
     `https://lb.drpc.org/ogrpc?network=${chainName}&dkey=${privateKey}`
-  const ALCHEMY_KEY = process.env.NEXT_PRIVATE_ALCHEMY_KEY || ''
-  const alchemyUrl = (chainName: string) =>
-    `https://${chainName}-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`
 
   if (privateKey) {
     if (network.networkName === 'Ethereum') {
@@ -134,7 +131,7 @@ export function getForkUrl(networkName: NetworksWithFork, verbose = false): stri
       return dRpcUrl('fantom')
     }
     if (network.networkName === 'Sonic') {
-      return alchemyUrl('sonic')
+      return dRpcUrl('sonic')
     }
     if (network.networkName === 'Gnosis') {
       return dRpcUrl('gnosis')
