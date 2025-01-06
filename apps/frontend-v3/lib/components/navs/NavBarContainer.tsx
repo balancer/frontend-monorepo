@@ -25,7 +25,7 @@ export function NavBarContainer() {
       >
         <NavBar
           appLinks={allAppLinks}
-          customLinksAfter={
+          customLinks={
             <Box as={motion.div} variants={fadeIn}>
               <VeBalLink />
             </Box>

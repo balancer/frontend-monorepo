@@ -44,7 +44,7 @@ export function NavBarContainer() {
   return (
     <NavBar
       appLinks={allAppLinks}
-      customLinksAfter={
+      customLinks={
         <>
           <Box as={motion.div} variants={fadeIn}>
             <MaBeetsNavLink />
@@ -54,11 +54,6 @@ export function NavBarContainer() {
           </Box>
         </>
       }
-      /* customLinksBefore={
-        <Box as={motion.div} variants={fadeIn}>
-          <PoolsLink />
-        </Box>
-      } */
       navLogo={<NavLogo />}
       rightSlot={<NavActions hideDarkModeToggle mobileNav={mobileNav} />}
     />
