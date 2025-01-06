@@ -8,9 +8,10 @@ export function useNetworkConfig() {
   let defaultNetwork
 
   const { chain } = useUserAccount()
+  const projectDefaultNetwork = PROJECT_CONFIG.defaultNetwork
 
   if (!chain) {
-    defaultNetwork = PROJECT_CONFIG.defaultNetwork
+    defaultNetwork = projectDefaultNetwork
   }
 
   useEffect(() => {

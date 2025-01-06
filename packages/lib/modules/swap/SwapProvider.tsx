@@ -56,8 +56,8 @@ import {
   isStandardOrUnderlyingRootToken,
 } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { ApiToken, ProtocolVersion } from '../pool/pool.types'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -101,6 +101,7 @@ export type SwapProviderProps = {
 export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
   const isPoolSwapUrl = useIsPoolSwapUrl()
+
   const isPoolSwap = pool && poolActionableTokens // Hint to tell TS that pool and poolActionableTokens must be defined when poolSwap
   const shouldDiscardOldPersistedValue = isPoolSwapUrl
   const swapStateVar = useMakeVarPersisted<SwapState>(
@@ -116,7 +117,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
         scaledAmount: BigInt(0),
       },
       swapType: GqlSorSwapType.ExactIn,
-      selectedChain: isPoolSwap ? pool.chain : getProjectConfig().defaultNetwork,
+      selectedChain: isPoolSwap ? pool.chain : PROJECT_CONFIG.defaultNetwork,
     },
     'swapState',
     shouldDiscardOldPersistedValue

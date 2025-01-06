@@ -31,9 +31,8 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
 
   function weightFor(tokenAddress: string) {
     return (
-      pool.poolTokens.find(token =>
-        isSameAddress(token.address as Address, tokenAddress as Address)
-      )?.weight ?? undefined
+      tokens.find(token => isSameAddress(token.address as Address, tokenAddress as Address))
+        ?.weight ?? undefined
     )
   }
 
@@ -44,6 +43,7 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
 
         return (
           <TokenInput
+            address={token.address}
             apiToken={token}
             chain={token.chain}
             isDisabled={hasNoLiquidity(pool)}

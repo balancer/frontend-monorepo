@@ -10,10 +10,12 @@ import { BalancerLogoType } from '../imgs/BalancerLogoType'
 import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
 import { Box } from '@chakra-ui/react'
 import { fadeIn } from '@repo/lib/shared/utils/animations'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
   const { defaultAppLinks } = useNav()
+
   const allAppLinks = [...defaultAppLinks, ...appLinks]
 
   return (
@@ -36,7 +38,7 @@ export function NavBarContainer() {
               appLinks={allAppLinks}
               customLinks={<VeBalLink fontSize="xl" />}
               ecosystemLinks={ecosystemLinks}
-              socialLinks={getSocialLinks()}
+              socialLinks={getSocialLinks(PROJECT_CONFIG.externalLinks.discordUrl)}
             />
           }
           navLogo={<NavLogo />}

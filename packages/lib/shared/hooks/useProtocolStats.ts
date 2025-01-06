@@ -1,11 +1,11 @@
 import { useQuery } from '@apollo/client'
 import { GetProtocolStatsDocument } from '../services/api/generated/graphql'
-import { supportedNetworks } from '@repo/lib/modules/web3/ChainConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useProtocolStats() {
   const statQuery = useQuery(GetProtocolStatsDocument, {
     variables: {
-      chains: supportedNetworks,
+      chains: PROJECT_CONFIG.supportedNetworks,
     },
   })
 

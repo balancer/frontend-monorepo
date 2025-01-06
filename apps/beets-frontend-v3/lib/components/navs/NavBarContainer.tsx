@@ -12,6 +12,7 @@ import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { MaBeetsNavLink } from './MaBeetsNavLink'
 import { SonicMigrationLink } from './SonicMigrationLink'
 import { FantomToSonicSvg } from '../imgs/FantomToSonicSvg'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function NavBarContainer() {
   const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
@@ -37,7 +38,7 @@ export function NavBarContainer() {
         </>
       }
       ecosystemLinks={ecosystemLinks}
-      socialLinks={getSocialLinks()}
+      socialLinks={getSocialLinks(PROJECT_CONFIG.externalLinks.discordUrl)}
     />
   )
 

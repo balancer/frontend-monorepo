@@ -10,7 +10,13 @@ import { SparklesIcon } from './MainAprTooltip'
 interface Props
   extends Omit<
     BaseAprTooltipProps,
-    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText' | 'poolId' | 'poolType'
+    | 'children'
+    | 'totalBaseText'
+    | 'totalBaseVeBalText'
+    | 'maxVeBalText'
+    | 'poolId'
+    | 'poolType'
+    | 'chain'
   > {
   totalUsdValue: string
   weeklyYield: string
@@ -43,6 +49,7 @@ function AddLiquidityAprTooltip({ weeklyYield, totalUsdValue, pool, ...props }: 
   return (
     <BaseAprTooltip
       {...props}
+      chain={pool.chain}
       customPopoverContent={customPopoverContent}
       displayValueFormatter={displayValueFormatter}
       maxVeBalText="Total with max veBAL"

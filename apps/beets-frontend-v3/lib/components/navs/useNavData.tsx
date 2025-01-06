@@ -18,14 +18,14 @@ export function useNavData() {
     { label: 'Analytics', href: 'https://beets.defilytica.com/' },
   ]
 
-  const getSocialLinks = (size = 24) => [
+  const getSocialLinks = (discordUrl: string, size = 24) => [
     {
       icon: <XIcon size={size} />,
       href: 'https://x.com/beets_fi',
     },
     {
       icon: <DiscordIcon size={size} />,
-      href: 'https://beets.fi/discord',
+      href: discordUrl,
     },
     {
       icon: <MediumIcon size={size} />,

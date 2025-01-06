@@ -57,7 +57,7 @@ export function useLayerZeroTxLinks(syncTxHashes: Record<Address, SyncTxHashes>)
 
   useEffect(() => {
     const networks = Object.keys(syncTxHashes[userAddress] || {}) as GqlChain[]
-    let intervalId: NodeJS.Timer
+    let intervalId: NodeJS.Timeout
     if (networks.length > 0) {
       intervalId = getLayerZeroTxLinkOnInterval(networks)
     }

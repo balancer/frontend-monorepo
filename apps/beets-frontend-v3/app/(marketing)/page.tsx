@@ -1,12 +1,12 @@
 import { LandingPageLayout } from '@/lib/modules/landing-page/LandingPageLayout'
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { mins } from '@repo/lib/shared/utils/time'
 import {
   GetProtocolStatsDocument,
   GetProtocolStatsPerChainDocument,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export default async function Home() {
   const client = getApolloServerClient()
