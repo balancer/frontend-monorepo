@@ -18,7 +18,6 @@ import {
   useTokenBalances,
 } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { NetworkSwitchButton, useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -196,10 +195,25 @@ function ApproveButton({
 }
 
 export function LzBeetsMigrateModal() {
-  const { getTokensByChain } = useTokens()
+  // only need balance for this token
+  const lzBeetsToken = {
+    address: '0x1e5fe95fb90ac0530f581c617272cd0864626795',
+    name: 'Fantom lzBEETS',
+    symbol: 'lzBEETS',
+    decimals: 18,
+    chain: GqlChain.Sonic,
+    chainId: 146,
+    logoURI:
+      'https://assets.coingecko.com/coins/images/19158/standard/beets-icon-large.png?1696518608',
+    priority: 0,
+    tradable: true,
+    isErc4626: false,
+    isBufferAllowed: true,
+    coingeckoId: null,
+  }
 
   return (
-    <TokenBalancesProvider initTokens={getTokensByChain(GqlChain.Sonic)}>
+    <TokenBalancesProvider initTokens={[lzBeetsToken]}>
       <LzBeetsMigrateModalContent />
     </TokenBalancesProvider>
   )
