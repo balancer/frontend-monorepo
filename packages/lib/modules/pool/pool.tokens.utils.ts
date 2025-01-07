@@ -47,7 +47,7 @@ function getPoolTokens(pool: PoolCore | GqlNestedPool): PoolToken[] {
 }
 
 function sortBySymbol(tokens: PoolToken[]): PoolToken[] {
-  return sortBy(tokens, 'symbol')
+  return sortBy(tokens, 'index')
 }
 
 function excludeNestedBptTokens(tokens: PoolToken[], poolAddress: string): PoolToken[] {
