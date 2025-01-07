@@ -1,8 +1,8 @@
 import { Address, Hex } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { gnosis, mainnet, polygon, sepolia } from 'viem/chains'
+import { fantom, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
 
-const networksWithFork = [mainnet, polygon, sepolia, gnosis] as const
+const networksWithFork = [mainnet, polygon, sepolia, gnosis, fantom, sonic] as const
 export type NetworksWithFork = (typeof networksWithFork)[number]['name']
 
 export type NetworkSetup = {
@@ -41,7 +41,9 @@ const ANVIL_PORTS: Record<NetworksWithFork, number> = {
   Ethereum: 8645,
   Polygon: 8745,
   Sepolia: 8845,
+  Fantom: 8945,
   Gnosis: 9045,
+  Sonic: 9145,
 }
 
 export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
@@ -68,12 +70,23 @@ export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
     // For now we will use the last block until v3 deployments are final
     // forkBlockNumber: 6679621n,
   },
+  Fantom: {
+    networkName: 'Fantom',
+    fallBackRpc: 'https://gateway.tenderly.co/public/fantom',
+    port: ANVIL_PORTS.Fantom,
+    forkBlockNumber: 99471829n,
+  },
+  Sonic: {
+    networkName: 'Sonic',
+    fallBackRpc: 'https://gateway.tenderly.co/public/sonic',
+    port: ANVIL_PORTS.Sonic,
+    forkBlockNumber: 2687659n,
+  },
   Gnosis: {
     networkName: 'Gnosis',
     fallBackRpc: 'https://gnosis.drpc.org',
     port: ANVIL_PORTS.Gnosis,
-    // For now we will use the last block until v3 deployments are final
-    // forkBlockNumber: ,
+    forkBlockNumber: 37902207n,
   },
 }
 
@@ -112,6 +125,12 @@ export function getForkUrl(networkName: NetworksWithFork, verbose = false): stri
     }
     if (network.networkName === 'Sepolia') {
       return dRpcUrl('sepolia')
+    }
+    if (network.networkName === 'Fantom') {
+      return dRpcUrl('fantom')
+    }
+    if (network.networkName === 'Sonic') {
+      return dRpcUrl('sonic')
     }
     if (network.networkName === 'Gnosis') {
       return dRpcUrl('gnosis')
