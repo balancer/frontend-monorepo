@@ -18,12 +18,12 @@ const chainToRpcMap: Record<GqlChain, string | undefined> = {
   [GqlChain.Polygon]: dRpcUrl('polygon'),
   [GqlChain.Avalanche]: dRpcUrl('avalanche'),
   [GqlChain.Fantom]: dRpcUrl('fantom'),
-  [GqlChain.Sonic]: dRpcUrl('fantom'), //TODO: groninge will fix it in another PR
   [GqlChain.Sepolia]: dRpcUrl('sepolia'),
   [GqlChain.Fraxtal]: dRpcUrl('fraxtal'),
   [GqlChain.Gnosis]: dRpcUrl('gnosis'),
   [GqlChain.Mode]: dRpcUrl('mode'),
   [GqlChain.Zkevm]: dRpcUrl('polygon-zkevm'),
+  [GqlChain.Sonic]: dRpcUrl('sonic'),
 }
 
 function getRpcUrl(chain: string) {

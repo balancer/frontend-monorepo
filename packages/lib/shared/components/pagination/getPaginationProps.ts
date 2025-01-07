@@ -4,7 +4,8 @@ export function getPaginationProps(
   totalRowCount: number,
   pagination: PaginationState,
   setPagination: (pagination: PaginationState) => void,
-  changeSize = true
+  changeSize = true,
+  hideDropdown = false
 ) {
   const totalPageCount =
     totalRowCount % pagination.pageSize === 0
@@ -38,5 +39,6 @@ export function getPaginationProps(
     goToPreviousPage,
     setPageSize,
     changeSize,
+    hideDropdown,
   }
 }
