@@ -4,9 +4,9 @@ import { PropsWithChildren } from 'react'
 export const metadata: Metadata = {
   title: 'Beets DeFi Liquidity Pools',
   description: `
-    Explore DeFi liquidity pools or create your own.
-    Provide liquidity to accumulate yield from swap fees
-    while retaining your token exposure as prices move.
+    Fuel your liquidity.
+    Earn yield from swap fees, incentives, and more.
+    Create and customize pools tailored to your strategy.
   `,
 }
 

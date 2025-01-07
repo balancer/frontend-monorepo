@@ -7,9 +7,9 @@ import { Suspense } from 'react'
 // import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 // import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 // import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
-import { CowPromoBanner } from '@repo/lib/shared/components/promos/CowPromoBanner'
 import { PoolListDisplayType } from '@repo/lib/modules/pool/pool.types'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { BeetsPromoBanner } from '@/lib/components/promos/BeetsPromoBanner'
 
 export default async function PoolsPage() {
   // Featured pools set up
@@ -29,11 +29,11 @@ export default async function PoolsPage() {
 
   return (
     <>
-      <Box bg="background.level0" borderBottom="1px solid" borderColor="border.base">
+      <Box>
         <DefaultPageContainer pb={['xl', '2xl']} pt={['xl', '40px']}>
           <FadeInOnView animateOnce={false}>
             <Box>
-              <CowPromoBanner />
+              <BeetsPromoBanner />
             </Box>
           </FadeInOnView>
           {/* <FadeInOnView animateOnce={false}>
@@ -48,13 +48,13 @@ export default async function PoolsPage() {
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
             <PoolList
               displayType={PoolListDisplayType.Name}
-              hidePoolTags={['VE8020']}
+              hidePoolTags={['VE8020', 'BOOSTED']}
               hidePoolTypes={[
                 GqlPoolType.LiquidityBootstrapping,
                 GqlPoolType.CowAmm,
                 GqlPoolType.Fx,
               ]}
-              hideProtocolVersion={['cow']}
+              hideProtocolVersion={['cow', 'v3']}
             />
           </Suspense>
         </FadeInOnView>
