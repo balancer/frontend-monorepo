@@ -7,7 +7,7 @@ import { Address } from 'viem'
 import { sortBy } from 'lodash'
 
 export function getCompositionTokens(pool: PoolCore | GqlNestedPool): PoolToken[] {
-  return sortBySymbol(excludeNestedBptTokens(getPoolTokens(pool), pool.address))
+  return sortByIndex(excludeNestedBptTokens(getPoolTokens(pool), pool.address))
 }
 
 /*
@@ -16,7 +16,7 @@ export function getCompositionTokens(pool: PoolCore | GqlNestedPool): PoolToken[
 */
 export function getUserReferenceTokens(pool: PoolCore): PoolToken[] {
   if (isV3Pool(pool) && pool.hasErc4626 && pool.hasAnyAllowedBuffer) {
-    return sortBySymbol(
+    return sortByIndex(
       pool.poolTokens.map(token =>
         token.isErc4626 && token.isBufferAllowed
           ? ({ ...token, ...token.underlyingToken } as PoolToken)
@@ -25,7 +25,7 @@ export function getUserReferenceTokens(pool: PoolCore): PoolToken[] {
     )
   }
 
-  return sortBySymbol(getCompositionTokens(pool))
+  return sortByIndex(getCompositionTokens(pool))
 }
 
 function isPool(pool: any): pool is Pool {
@@ -46,7 +46,7 @@ function getPoolTokens(pool: PoolCore | GqlNestedPool): PoolToken[] {
   throw new Error('Invalid pool type: poolTokens or tokens must be defined')
 }
 
-function sortBySymbol(tokens: PoolToken[]): PoolToken[] {
+function sortByIndex(tokens: PoolToken[]): PoolToken[] {
   return sortBy(tokens, 'index')
 }
 

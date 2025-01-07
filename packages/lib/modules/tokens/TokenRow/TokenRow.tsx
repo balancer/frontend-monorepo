@@ -44,6 +44,7 @@ export type TokenInfoProps = {
   isNestedBpt?: boolean
   isNestedPoolToken?: boolean
   iconSize?: number
+  logoURI?: string
 }
 
 function TokenInfo({
@@ -59,6 +60,7 @@ function TokenInfo({
   isBpt = false,
   isNestedPoolToken = false,
   iconSize = 40,
+  logoURI,
 }: TokenInfoProps) {
   const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || poolToken?.symbol
   const tokenName = isBpt ? pool?.name : token?.name || poolToken?.name
@@ -81,7 +83,13 @@ function TokenInfo({
   return (
     <HStack spacing="sm">
       {!isBpt && (
-        <TokenIcon address={address} alt={token?.symbol || address} chain={chain} size={iconSize} />
+        <TokenIcon
+          address={address}
+          alt={token?.symbol || address}
+          chain={chain}
+          logoURI={logoURI}
+          size={iconSize}
+        />
       )}
       <VStack alignItems="flex-start" spacing="none">
         <HStack spacing="none">
@@ -126,6 +134,7 @@ export type TokenRowProps = {
   showZeroAmountAsDash?: boolean
   toggleTokenSelect?: () => void
   iconSize?: number
+  logoURI?: string
 }
 
 export default function TokenRow({
@@ -146,6 +155,7 @@ export default function TokenRow({
   showZeroAmountAsDash = false,
   toggleTokenSelect,
   iconSize,
+  logoURI,
 }: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
   const { toCurrency } = useCurrency()
@@ -166,6 +176,7 @@ export default function TokenRow({
     iconSize,
     isNestedPoolToken,
     symbol,
+    logoURI,
   }
 
   useEffect(() => {

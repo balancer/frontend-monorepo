@@ -13,6 +13,7 @@ import {
   veDelegationProxyAbi,
 } from './abi/generated'
 import { VeDelegationProxyL2Abi } from './abi/veDelegationProxyL2'
+import { sfcAbi, sonicStakingAbi } from './abi/beets/generated'
 
 export const AbiMap = {
   'balancer.vaultV2': balancerV2VaultAbi,
@@ -28,6 +29,8 @@ export const AbiMap = {
   'balancer.LiquidityGauge': LiquidityGaugeAbi,
   'balancer.omniVotingEscrowAbi': OmniVotingEscrowAbi,
   'balancer.gaugeControllerAbi': GaugeControllerAbi,
+  'beets.lstStaking': sonicStakingAbi,
+  'beets.sfc': sfcAbi,
 }
 
 export type AbiMapType = keyof typeof AbiMap | undefined

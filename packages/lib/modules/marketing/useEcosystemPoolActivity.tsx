@@ -78,11 +78,6 @@ export const gradientMap: Record<GqlChain, { from: string; to: string }> = {
     from: '#7D84FF',
     to: '#5468FF',
   },
-  [GqlChain.Sonic]: {
-    //TODO: groninge will fix it in another PR
-    from: '#7D84FF',
-    to: '#5468FF',
-  },
   [GqlChain.Fraxtal]: {
     from: '#E0E7FF',
     to: '#8C9EFF',
@@ -92,6 +87,10 @@ export const gradientMap: Record<GqlChain, { from: string; to: string }> = {
     to: '#FFB74D',
   },
   [GqlChain.Sepolia]: {
+    from: '#D1B3FF',
+    to: '#A384FF',
+  },
+  [GqlChain.Sonic]: {
     from: '#D1B3FF',
     to: '#A384FF',
   },
@@ -108,10 +107,10 @@ function getDefaultChainMeta() {
     [GqlChain.Gnosis]: [],
     [GqlChain.Avalanche]: [],
     [GqlChain.Fantom]: [],
-    [GqlChain.Sonic]: [],
     [GqlChain.Fraxtal]: [],
     [GqlChain.Mode]: [],
     [GqlChain.Sepolia]: [],
+    [GqlChain.Sonic]: [],
   }
 }
 
