@@ -13,8 +13,8 @@ export function FooterContainer() {
       linkSections={linkSections}
       logoType={<BeetsLogoType />}
       socialLinks={getSocialLinks()}
-      subTitle="Beets is a battle-tested toolkit for true AMM experimentation and innovation."
-      title="AMMs made easy"
+      subTitle="Beets is your ultimate destination for liquid-staked tokens, real yield, and AMM innovation."
+      title="The Hub for LSTs"
     />
   )
 }

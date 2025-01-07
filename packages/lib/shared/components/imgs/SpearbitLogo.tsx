@@ -1,5 +1,7 @@
+import { SVGProps } from 'react'
+
 /* eslint-disable max-len */
-export function SpearbitLogo() {
+export function SpearbitLogo({ ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
       fill="none"
@@ -7,6 +9,7 @@ export function SpearbitLogo() {
       viewBox="0 0 200 41"
       width="200"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <g clipPath="url(#clip0_2001_143)">
         <path
