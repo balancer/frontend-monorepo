@@ -203,6 +203,7 @@ export function getPoolHelpers(pool: Pool, chain: GqlChain) {
 }
 
 export function hasNestedPools(pool: Pool) {
+  if (!pool.poolTokens) return false
   // The following discriminator is needed because not all pools in GqlPoolQuery do have nestingType property
   // and the real TS discriminator is __typename which we don't want to use
   return (
