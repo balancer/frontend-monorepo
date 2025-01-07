@@ -1,11 +1,11 @@
-import { Box, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
+import { Badge, Box, Grid, GridItem, GridProps, HStack, Text, Image } from '@chakra-ui/react'
 import Link from 'next/link'
 import { getPoolPath } from '../../pool.utils'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { PoolListDisplayType, PoolListItem } from '../../pool.types'
+import { POOL_TAG_MAP, PoolListDisplayType, PoolListItem } from '../../pool.types'
 import { PoolListTokenPills } from '../PoolListTokenPills'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -17,6 +17,7 @@ import { usePoolMetadata } from '../../metadata/usePoolMetadata'
 interface Props extends GridProps {
   pool: PoolListItem
   keyValue: number
+  needsMarginForPoints?: boolean
 }
 
 const MemoizedMainAprTooltip = memo(MainAprTooltip)
@@ -45,14 +46,15 @@ function PoolName({ pool }: { pool: PoolListItem }) {
   )
 }
 
-export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
+export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest }: Props) {
   const {
     queryState: { userAddress },
     displayType,
   } = usePoolList()
   const { name } = usePoolMetadata(pool)
-
   const { toCurrency } = useCurrency()
+
+  const hasPoints = pool.tags?.some(tag => tag && POOL_TAG_MAP.POINTS.includes(tag))
 
   return (
     <FadeInOnView>
@@ -113,13 +115,30 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
               </Text>
             </GridItem>
             <GridItem justifySelf="end" pr={{ base: 'md', xl: '0' }}>
-              <MemoizedMainAprTooltip
-                aprItems={pool.dynamicData.aprItems}
-                height="auto"
-                pool={pool}
-                poolId={pool.id}
-                textProps={{ fontWeight: 'medium', textAlign: 'right' }}
-              />
+              <HStack gap="xxs" mr={needsMarginForPoints && !hasPoints ? '30px' : '0'}>
+                <MemoizedMainAprTooltip
+                  aprItems={pool.dynamicData.aprItems}
+                  height="auto"
+                  pool={pool}
+                  poolId={pool.id}
+                  textProps={{ fontWeight: 'medium', textAlign: 'right' }}
+                />
+                {hasPoints && (
+                  <Badge
+                    alignItems="center"
+                    bg="background.level2"
+                    // borderColor="border.base"
+                    borderRadius="full"
+                    // borderWidth={1}
+                    display="flex"
+                    p="xxs"
+                    shadow="sm"
+                    textTransform="none"
+                  >
+                    <Image alt="points" h="6" src="/images/icons/points.svg" w="6" />
+                  </Badge>
+                )}
+              </HStack>
             </GridItem>
           </Grid>
         </Link>

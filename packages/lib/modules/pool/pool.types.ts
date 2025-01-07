@@ -98,6 +98,7 @@ export const POOL_TAG_MAP: { [key in PoolTagType]: string[] } = {
     'POINTS_RENZO',
     'POINTS_SWELL',
     'POINTS_MODE',
+    'POINTS_RINGS',
   ],
   VE8020: ['VE8020'],
   BOOSTED: ['BOOSTED'],
