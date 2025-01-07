@@ -8,8 +8,8 @@
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3001\"",
     "dev:no-gen": "next dev -p 3001",
     "gen:wagmi": "pnpm wagmi generate",
-    "lint": "eslint . --cache",
-    "lint:fix": "eslint . --fix --max-warnings 0  --cache",
+    "lint": "eslint . --max-warnings 0 --cache",
+    "lint:fix": "eslint . --fix --max-warnings 0 --cache",
     "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
     "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
     "start": "next start",
@@ -64,8 +64,7 @@
     "eslint": "8.43.0",
     "happy-dom": "^15.10.2",
     "lokijs": "^1.5.12",
-    "sentry-testkit": "^5.0.9",
-    "typescript": "5.4.5"
+    "sentry-testkit": "^5.0.9"
   },
   "engines": {
     "node": ">=18.x"

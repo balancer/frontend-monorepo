@@ -30,7 +30,7 @@
     "stylelint-config-standard": "^36.0.1",
     "stylelint-prettier": "^5.0.2",
     "turbo": "^2.1.2",
-    "typescript": "^5.4.5"
+    "typescript": "5.7.2"
   },
   "packageManager": "pnpm@9.0.6",
   "engines": {
