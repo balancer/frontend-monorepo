@@ -9,6 +9,7 @@ import { gnosis, polygon } from 'viem/chains'
 import {
   useAddLiquidityReceipt,
   useLstStakeReceipt,
+  useLstWithdrawReceipt,
   useRemoveLiquidityReceipt,
   useSwapReceipt,
 } from './receipt.hooks'
@@ -73,6 +74,23 @@ async function testLstStakeReceipt(
 ) {
   const { result } = testHook(() => {
     return useLstStakeReceipt({
+      txHash,
+      userAddress,
+      chain,
+      protocolVersion,
+    })
+  })
+  return result
+}
+
+async function testLstWithdrawReceipt(
+  userAddress: Address,
+  txHash: Hash,
+  chain: GqlChain,
+  protocolVersion: ProtocolVersion = 3
+) {
+  const { result } = testHook(() => {
+    return useLstWithdrawReceipt({
       txHash,
       userAddress,
       chain,
@@ -286,23 +304,40 @@ describe('queries swap transaction', () => {
   })
 
   describe('queries Sonic stake TX', () => {
-    const sTsAddress = '0xe5da20f15420ad15de0fa650600afc998bbe3955' // Beets staked
+    const sTsAddress = '0xe5da20f15420ad15de0fa650600afc998bbe3955' // staked sonic
 
-    test('when staking 1 S to get stS', async () => {
-      const userAddress = '0x6B808e314d7f758076922297bcD2eCd56aFe7B19'
-      // https://sonicscan.org/tx/0x5f39420411e1ce1490e84ff8d639a4897a2a5cbd2d5f7ece53b26567d0d2dd50
-      const txHash = '0x5f39420411e1ce1490e84ff8d639a4897a2a5cbd2d5f7ece53b26567d0d2dd50'
+    test('when staking S to get stS', async () => {
+      const userAddress = '0x35f391873F5ecAc80f46a6A1080c4E4743c7aC7D'
+      // https://sonicscan.org/tx/0x75f34af99a5afc39412bc5305aee1d77da5bd4a963c11a2ac5d7ae9f564d2c77
+      const txHash = '0x75f34af99a5afc39412bc5305aee1d77da5bd4a963c11a2ac5d7ae9f564d2c77'
 
       const result = await testLstStakeReceipt(userAddress, txHash, GqlChain.Sonic)
 
       await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
-      expect(result.current.receivedToken).toEqual([
-        {
-          humanAmount: '0.01',
-          tokenAddress: sTsAddress,
-        },
-      ])
+      expect(result.current.receivedToken).toEqual({
+        humanAmount: '19.932125314218435816',
+        tokenAddress: sTsAddress,
+      })
+    })
+  })
+
+  describe('queries stS withdraw TX', () => {
+    const sonicAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' // Sonic
+
+    test('when withdrawing stS to get S', async () => {
+      const userAddress = '0xDb04eE8ec3946BAC366AD8711F2e7610f45c0c42'
+      // https://sonicscan.org/tx/0x70ffae9f3ed4eb134dbd60b550f4da01b808bc5e5538832a30bf2cd61fcc4a46
+      const txHash = '0x70ffae9f3ed4eb134dbd60b550f4da01b808bc5e5538832a30bf2cd61fcc4a46'
+
+      const result = await testLstWithdrawReceipt(userAddress, txHash, GqlChain.Sonic)
+
+      await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+      expect(result.current.receivedToken).toEqual({
+        humanAmount: '1385.824287592362834227',
+        tokenAddress: sonicAddress,
+      })
     })
   })
 })
