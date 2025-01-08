@@ -8,8 +8,8 @@ import { LzBeetsMigrateModal } from '@/lib/components/modals/LzBeetsMigrateModal
 
 export function BaseLayout({
   children,
-  isNotFound = false,
-}: PropsWithChildren & { isNotFound?: boolean }) {
+  renderLzBeetsModal = true,
+}: PropsWithChildren & { renderLzBeetsModal?: boolean }) {
   return (
     <div
       style={{
@@ -21,7 +21,7 @@ export function BaseLayout({
       <GlobalAlerts />
       <NavBarContainer />
       {children}
-      {!isNotFound && <LzBeetsMigrateModal />}
+      {renderLzBeetsModal && <LzBeetsMigrateModal />}
       <FooterContainer />
       <SpeedInsights />
     </div>

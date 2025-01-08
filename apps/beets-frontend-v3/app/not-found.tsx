@@ -21,7 +21,7 @@ export default async function NotFound() {
   const redirectText = isPoolPageNotFound ? 'View All Pools' : 'Return Home'
 
   return (
-    <BaseLayout isNotFound>
+    <BaseLayout renderLzBeetsModal={false}>
       <DefaultPageContainer minH="80vh">
         <VStack align="start" spacing="md">
           <Heading size="md">{title}</Heading>
