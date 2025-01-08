@@ -1,6 +1,6 @@
 import { test } from '@playwright/test'
 
-test('Landing page', async ({ page }) => {
+test('Balancer landing page', async ({ page }) => {
   await page.goto('http://localhost:3000/')
   await page.getByRole('link', { name: 'Launch app' }).click()
   // Finds a pool in the pool list
