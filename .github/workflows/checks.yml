@@ -76,7 +76,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: test-results
+          name: playwright-report
           path: |
             ./packages/e2e-tests/playwright-report/
           retention-days: 30
