@@ -18,7 +18,7 @@ import {
   SortingState,
 } from '../pool.types'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 
 export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
@@ -72,6 +72,12 @@ export function usePoolListQueryState() {
   const [minTvl, setMinTvl] = useQueryState('minTvl', poolListQueryStateParsers.minTvl)
 
   const [poolTags, setPoolTags] = useQueryState('poolTags', poolListQueryStateParsers.poolTags)
+
+  // on toggle always start at the beginning of the list
+  useEffect(() => {
+    if (skip) setSkip(0)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolTypes, networks, minTvl, poolTags])
 
   // Set internal checked state
   function toggleUserAddress(checked: boolean, address: string) {

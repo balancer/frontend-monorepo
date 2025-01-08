@@ -496,7 +496,7 @@ export function usePoolCharts() {
             width: 2,
           },
           itemStyle: {
-            color: activeTabOptions.color,
+            color: activeTabOptions.color as string | echarts.graphic.LinearGradient,
             borderRadius: 100,
           },
           emphasis: {
