@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
-    "@chakra-ui/styled-system": "^2.9.2",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
