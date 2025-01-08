@@ -21,7 +21,7 @@ import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useUserAccount } from './UserAccountProvider'
 import { useDisconnect } from 'wagmi'
 import NextLink from 'next/link'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG, isBalancerProject } from '@repo/lib/config/getProjectConfig'
 
 export function AcceptPoliciesModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -31,8 +31,6 @@ export function AcceptPoliciesModal() {
   const { disconnect } = useDisconnect()
 
   const isAddressInAcceptedPolicies = acceptedPolicies.includes(userAddress.toLowerCase())
-
-  const projectConfig = getProjectConfig()
 
   useEffect(() => {
     if (!isLoading && isConnected && !isAddressInAcceptedPolicies && !isBlocked) {
@@ -66,7 +64,7 @@ export function AcceptPoliciesModal() {
     <Modal isCentered isOpen={isOpen} onClose={handleOnClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{`Accept ${projectConfig.projectName} policies`}</ModalHeader>
+        <ModalHeader>{`Accept ${PROJECT_CONFIG.projectName} policies`}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack align="flex-start" gap="md">
@@ -76,32 +74,39 @@ export function AcceptPoliciesModal() {
               onChange={e => setIsChecked(e.target.checked)}
               size="lg"
             >
-              <Box color="font.primary" fontSize="md" mt="-3px">
-                By connecting my wallet, I agree to{' '}
-                {projectConfig.projectId === 'balancer'
-                  ? "Balancer Foundation's "
-                  : `${projectConfig.projectName} `}
-                <Link as={NextLink} href="/terms-of-use">
-                  Terms of Use
-                </Link>
-                ,{' '}
-                <Link as={NextLink} href="/risks">
-                  Risks
-                </Link>
-                ,{' '}
-                <Link as={NextLink} href="/cookies-policy">
-                  Cookies Policy
-                </Link>
-                , use of{' '}
-                <Link as={NextLink} href="/3rd-party-services">
-                  3rd party services
-                </Link>{' '}
-                and{' '}
-                <Link as={NextLink} href="/privacy-policy">
-                  Privacy Policy
-                </Link>
-                .
-              </Box>
+              {isBalancerProject ? (
+                <Box color="font.primary" fontSize="md" mt="-3px">
+                  By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
+                  <Link as={NextLink} href="/terms-of-use">
+                    Terms of Use
+                  </Link>
+                  ,{' '}
+                  <Link as={NextLink} href="/risks">
+                    Risks
+                  </Link>
+                  ,{' '}
+                  <Link as={NextLink} href="/cookies-policy">
+                    Cookies Policy
+                  </Link>
+                  , use of{' '}
+                  <Link as={NextLink} href="/3rd-party-services">
+                    3rd party services
+                  </Link>{' '}
+                  and{' '}
+                  <Link as={NextLink} href="/privacy-policy">
+                    Privacy Policy
+                  </Link>
+                  .
+                </Box>
+              ) : (
+                <Box color="font.primary" fontSize="md" mt="-3px">
+                  By connecting my wallet, I agree to Beets&apos;{' '}
+                  <Link as={NextLink} href="/terms-of-service">
+                    Terms of Service
+                  </Link>
+                  .
+                </Box>
+              )}
             </Checkbox>
           </VStack>
         </ModalBody>

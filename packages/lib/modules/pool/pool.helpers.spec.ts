@@ -1,9 +1,10 @@
 /* eslint-disable max-len */
 import { Pool } from './PoolProvider'
+import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { getPoolActionableTokens } from './pool.helpers'
 
-describe('getPoolTokens', () => {
-  it('when pool supports nested actions', () => {
+describe('getPoolActionableTokens', () => {
+  it('when nested pool supports nested actions (default behavior)', () => {
     const pool = {
       id: '0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053',
       address: '0x2086f52651837600180de173b09470f54ef74910',
@@ -54,52 +55,37 @@ describe('getPoolTokens', () => {
     const result = getPoolActionableTokens(pool)
     expect(result.map(t => t.symbol)).toEqual(['USDT', 'USDC', 'WXDAI', 'WETH', 'WBTC']) // contains 'staBAL3' nested tokens (USDT, USDC, WXDAI)
   })
-
-  it('when pool does not support nested actions', () => {
-    const pool = {
-      id: '0xdacf5fa19b1f720111609043ac67a9818262850c000000000000000000000635',
-      address: '0xdacf5fa19b1f720111609043ac67a9818262850c',
-      chain: 'MAINNET',
-      poolTokens: [
-        {
-          address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-          symbol: 'WETH',
-          hasNestedPool: false,
-          nestedPool: null,
-        },
-        {
-          address: '0xdacf5fa19b1f720111609043ac67a9818262850c',
-          symbol: 'osETH/wETH-BPT',
-          hasNestedPool: true,
-          nestedPool: {
-            address: '0xdacf5fa19b1f720111609043ac67a9818262850c',
-            symbol: 'osETH/wETH-BPT',
-            tokens: [
-              {
-                address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-                symbol: 'WETH',
-              },
-              {
-                address: '0xdacf5fa19b1f720111609043ac67a9818262850c',
-                symbol: 'osETH/wETH-BPT',
-              },
-              {
-                address: '0xf1c9acdc66974dfb6decb12aa385b9cd01190e38',
-                symbol: 'osETH',
-              },
-            ],
-          },
-        },
-        {
-          address: '0xf1c9acdc66974dfb6decb12aa385b9cd01190e38',
-          symbol: 'osETH',
-          hasNestedPool: false,
-          nestedPool: null,
-        },
-      ],
-    } as unknown as Pool
-
-    const result = getPoolActionableTokens(pool)
-    expect(result.map(t => t.symbol)).toEqual(['WETH', 'osETH']) // excludes 'osETH/wETH-BPT' bpt token
-  })
 })
+
+it('supportsNestedActions', () => {
+  const pool = {
+    id: '0x12345',
+  } as unknown as Pool
+
+  expect(supportsNestedActions(pool)).toBeFalsy()
+
+  expect(
+    supportsNestedActions(
+      // WETH / osETH Phantom composable stable
+      fakeNestedPool('0xdacf5fa19b1f720111609043ac67a9818262850c000000000000000000000635')
+    )
+  ).toBeTruthy()
+
+  expect(
+    supportsNestedActions(
+      // Balancer 80 BAL 20 WETH auraBAL',
+      fakeNestedPool('0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249')
+    )
+  ).toBeFalsy()
+})
+
+function fakeNestedPool(poolId: string): Pool {
+  return {
+    id: poolId, // Balancer 80 BAL 20 WETH auraBAL',
+    poolTokens: [
+      {
+        hasNestedPool: true,
+      },
+    ],
+  } as unknown as Pool
+}

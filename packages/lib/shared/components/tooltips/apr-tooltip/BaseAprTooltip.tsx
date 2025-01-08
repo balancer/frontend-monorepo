@@ -316,7 +316,7 @@ function BaseAprTooltip({
               fontWeight={500}
               pl={6}
               pt={3}
-              title="Max maBEETS APR"
+              title="Extra BEETS (max maturity boost)"
               tooltipText={maBeetsRewardTooltipText}
             />
             <TooltipAprItem
@@ -326,7 +326,7 @@ function BaseAprTooltip({
               fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
               fontWeight={500}
               pl={6}
-              title="Max Voting APR"
+              title="Extra Voting APR"
               tooltipText={maBeetsVotingRewardsTooltipText}
             />
             <Divider />
