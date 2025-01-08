@@ -64,7 +64,7 @@ jobs:
 
   E2E-Test:
       timeout-minutes: 60
-      runs-on: macos-14
+      runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@v4
       - name: Setup
