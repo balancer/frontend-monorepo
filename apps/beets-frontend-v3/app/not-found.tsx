@@ -21,14 +21,13 @@ export default async function NotFound() {
   const redirectText = isPoolPageNotFound ? 'View All Pools' : 'Return Home'
 
   return (
-    <BaseLayout>
+    <BaseLayout isNotFound>
       <DefaultPageContainer minH="80vh">
         <VStack align="start" spacing="md">
           <Heading size="md">{title}</Heading>
           <VStack align="start" spacing="xs">
             <Text>{description}</Text>
           </VStack>
-
           <Button as={Link} href={redirectUrl} size="sm">
             {redirectText}
           </Button>
