@@ -75,7 +75,7 @@ export function usePoolListQueryState() {
 
   // on toggle always start at the beginning of the list
   useEffect(() => {
-    setSkip(0)
+    if (skip) setSkip(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolTypes, networks, minTvl, poolTags])
 

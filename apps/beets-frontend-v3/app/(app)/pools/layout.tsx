@@ -1,3 +1,4 @@
+import { PoolsNetworkWatcher } from '@/lib/components/navs/PoolsNetworkWatcher'
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
@@ -11,5 +12,10 @@ export const metadata: Metadata = {
 }
 
 export default async function Pools({ children }: PropsWithChildren) {
-  return <>{children}</>
+  return (
+    <>
+      {children}
+      <PoolsNetworkWatcher />
+    </>
+  )
 }
