@@ -2,10 +2,10 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import { Button, Heading, VStack, Text } from '@chakra-ui/react'
 import { headers } from 'next/headers'
 import Link from 'next/link'
+import { BaseLayout } from './layouts/base-layout'
 
 export default async function NotFound() {
   const headersList = headers()
-
   const referer = await headersList.get('referer')
 
   const poolIdSegment = 6
@@ -21,17 +21,19 @@ export default async function NotFound() {
   const redirectText = isPoolPageNotFound ? 'View All Pools' : 'Return Home'
 
   return (
-    <DefaultPageContainer minH="80vh">
-      <VStack align="start" spacing="md">
-        <Heading size="md">{title}</Heading>
-        <VStack align="start" spacing="xs">
-          <Text>{description}</Text>
-        </VStack>
+    <BaseLayout>
+      <DefaultPageContainer minH="80vh">
+        <VStack align="start" spacing="md">
+          <Heading size="md">{title}</Heading>
+          <VStack align="start" spacing="xs">
+            <Text>{description}</Text>
+          </VStack>
 
-        <Button as={Link} href={redirectUrl} size="sm">
-          {redirectText}
-        </Button>
-      </VStack>
-    </DefaultPageContainer>
+          <Button as={Link} href={redirectUrl} size="sm">
+            {redirectText}
+          </Button>
+        </VStack>
+      </DefaultPageContainer>
+    </BaseLayout>
   )
 }
