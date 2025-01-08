@@ -15,7 +15,8 @@
     "SILENT_TESTS",
     "NEXT_PUBLIC_SENTRY_DSN",
     "NEXT_RUNTIME",
-    "NEXT_PRIVATE_ALCHEMY_KEY"
+    "NEXT_PRIVATE_ALCHEMY_KEY",
+    "CI"
   ],
   "tasks": {
     "dev": {

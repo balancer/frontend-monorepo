@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:e2e": "start-server-and-test 'cd ../../ && pnpm start' 'http://localhost:3000|http://localhost:3001' 'pnpm exec playwright test'",
-    "test:e2e:ui": "pnpm exec playwright test --ui"
+    "test:e2e": "start-server-and-test 'cd ../../ && pnpm start' 'http://localhost:3000|http://localhost:3001' 'pnpm exec playwright test ./tests/beets'",
+    "test:e2e:ui": "pnpm exec playwright test --ui",
+    "test:e2e:local": "pnpm exec playwright test"
   },
   "keywords": [],
   "author": "",
