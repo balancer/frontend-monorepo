@@ -319,6 +319,9 @@ importers:
       '@playwright/test':
         specifier: 1.49.1
         version: 1.49.1
+      '@repo/lib':
+        specifier: workspace:*
+        version: link:../lib
       '@types/node':
         specifier: 20.10.2
         version: 20.10.2
