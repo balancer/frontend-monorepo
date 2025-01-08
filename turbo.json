@@ -58,6 +58,9 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
+    "test:e2e:ui": {
+      "dependsOn": ["^transit"]
+    },
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
       "inputs": ["**/*.graphql"],

@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 
 test('test', async ({ page }) => {
-  await page.goto('https://beets.fi/');
+  await page.goto('http://localhost:3001');
   await page.getByRole('button', { name: 'Let me in' }).click();
   await page.getByRole('link', { name: 'Explore Pools', exact: true }).click();
   await page.getByRole('link', { name: 'Sonic wS stS Staked Sonic' }).click();

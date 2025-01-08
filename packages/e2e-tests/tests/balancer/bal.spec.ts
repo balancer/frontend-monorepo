@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('test', async ({ page }) => {
-  await page.goto('https://balancer.fi/pools');
+  await page.goto('http://localhost:3000/pools');
   await page.getByRole('link', { name: 'View pools' }).click();
   await page
     .getByRole('link', { name: 'Gnosis wstETH wstETH 50% GNO' })
