@@ -4,7 +4,6 @@ module.exports = {
   extends: ['@repo/eslint-config/next.js'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    // project: true,
+    project: true,
   },
 }
