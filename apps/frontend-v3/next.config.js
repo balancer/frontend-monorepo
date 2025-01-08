@@ -14,7 +14,6 @@ const nextConfig = {
     },
   },
   images: {
-    unoptimized: true, // Disable image optimization to boost build speed in GHA CI
     remotePatterns: [
       {
         protocol: 'https',
