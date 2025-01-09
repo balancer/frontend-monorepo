@@ -12,7 +12,7 @@
     "lint:fix": "eslint . --fix --max-warnings 0 --cache",
     "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
     "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn",
-    "start": "next start",
+    "start": "next start -p 3001",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
     "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/beets/beets.theme.ts",
     "postinstall": "npm run gen:theme-typings"
@@ -43,7 +43,6 @@
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
-    "@chakra-ui/styled-system": "^2.9.2",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
