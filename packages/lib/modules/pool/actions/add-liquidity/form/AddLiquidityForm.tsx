@@ -61,10 +61,12 @@ import { ApiToken } from '../../../pool.types'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
-  const { validTokens, slippage } = useAddLiquidity()
+  const { validTokens, slippage, wantsProportional } = useAddLiquidity()
+
+  const bufferPercentage = wantsProportional ? slippage : '0'
 
   return (
-    <TokenBalancesProvider bufferPercentage={slippage} extTokens={validTokens}>
+    <TokenBalancesProvider bufferPercentage={bufferPercentage} extTokens={validTokens}>
       <AddLiquidityMainForm />
     </TokenBalancesProvider>
   )
