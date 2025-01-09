@@ -29,7 +29,7 @@ import { getLeafTokens } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { isBeetsProject, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { TokenCore, PoolListItem, Pool } from './pool.types'
+import { TokenCore, PoolListItem, Pool, PoolToken } from './pool.types'
 import { ApiToken } from '../tokens/token.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 
