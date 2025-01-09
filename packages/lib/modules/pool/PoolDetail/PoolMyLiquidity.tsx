@@ -81,7 +81,6 @@ export default function PoolMyLiquidity() {
   const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Aura)
   const [redirectPartnerUrl, setRedirectPartnerUrl] = useState<string>()
 
-  const displayTokens = getPoolDisplayTokens(pool)
   const isVeBal = isVebalPool(pool.id)
   const tabs = useMemo(() => {
     const tabsArr = getTabs(isVeBal)
@@ -257,6 +256,8 @@ export default function PoolMyLiquidity() {
       router.push(`${pathname}/remove-liquidity`)
     }
   }
+
+  const displayTokens = getPoolDisplayTokens(pool)
 
   return (
     <Card h="fit-content" ref={myLiquiditySectionRef}>

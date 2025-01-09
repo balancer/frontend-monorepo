@@ -67,10 +67,10 @@ export function getChainSlug(chainSlug: ChainSlug): GqlChain {
   return chain
 }
 
-function getVariant(pool: Pool | PoolListItem): PoolVariant {
+function getVariant(type: GqlPoolType, protocolVersion: number | undefined): PoolVariant {
   // if a pool has certain properties return a custom variant
-  if (pool.type === GqlPoolType.CowAmm) return PartnerVariant.cow
-  if (pool.protocolVersion === 3) return BaseVariant.v3
+  if (type === GqlPoolType.CowAmm) return PartnerVariant.cow
+  if (protocolVersion === 3) return BaseVariant.v3
 
   // default variant
   return BaseVariant.v2
@@ -78,14 +78,21 @@ function getVariant(pool: Pool | PoolListItem): PoolVariant {
 
 /**
  * Constructs path to pool detail page.
- * @param {String} id Pool ID could be ID or address depending on variant.
- * @param {GqlChain} chain Chain enum.
- * @param {String} variant Pool variant, defaults to v2.
  * @returns {String} Path to pool detail page.
  */
-export function getPoolPath(pool: Pool | PoolListItem) {
-  const variant = getVariant(pool)
-  return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${pool.id}`
+export function getPoolPath({
+  id,
+  chain,
+  type,
+  protocolVersion,
+}: {
+  id: Pool['id']
+  chain: Pool['chain']
+  type: Pool['type']
+  protocolVersion: Pool['protocolVersion'] | undefined
+}) {
+  const variant = getVariant(type, protocolVersion)
+  return `/pools/${chainToSlugMap[chain]}/${variant}/${id}`
 }
 
 export function getNestedPoolPath({
@@ -95,7 +102,7 @@ export function getNestedPoolPath({
   pool: Pool | PoolListItem
   nestedPoolAddress: Address
 }) {
-  const variant = getVariant(pool)
+  const variant = getVariant(pool.type, pool.protocolVersion)
   return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${nestedPoolAddress}`
 }
 
@@ -307,7 +314,9 @@ export function shouldCallComputeDynamicSwapFee(pool: Pool) {
   return pool.hook && pool.hook.shouldCallComputeDynamicSwapFee
 }
 
-export function getPoolDisplayTokens(pool: Pool | PoolListItem) {
+export function getPoolDisplayTokens(
+  pool: Pick<Pool | PoolListItem, 'displayTokens' | 'poolTokens'>
+) {
   return pool.poolTokens.filter(token =>
     pool.displayTokens.find(
       (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address

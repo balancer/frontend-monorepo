@@ -14,9 +14,21 @@ export type ChainContractConfig = ContractFunctionParameters & {
   id: string
 }
 
-type Options = { enabled?: boolean }
+type Options = {
+  // react-query options
+  enabled?: boolean
+  refetchOnMount?: boolean
+  refetchOnReconnect?: boolean
+  refetchOnWindowFocus?: boolean
 
-export function useMulticall(multicallRequests: ChainContractConfig[], options: Options = {}) {
+  // multicall options
+  batchSize?: number
+}
+
+export function useMulticall(
+  multicallRequests: ChainContractConfig[],
+  { batchSize, ...options }: Options = {}
+) {
   const config = useConfig()
   // Want the results for each chainId to be independent of each other so we don't have
   // a large blob of queries that resolves at once, but have to option to have the results
@@ -36,6 +48,7 @@ export function useMulticall(multicallRequests: ChainContractConfig[], options: 
           const results = await multicall(config, {
             contracts: multicalls,
             chainId: Number(chain),
+            batchSize,
             ...(Number(chain) === getChainId(GqlChain.Sonic) && {
               multicallAddress: sonicNetworkConfig.contracts.multicall3,
             }),
