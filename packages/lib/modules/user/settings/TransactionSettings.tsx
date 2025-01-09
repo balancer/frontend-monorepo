@@ -75,6 +75,8 @@ export function ProportionalTransactionSettings({
 }: ProportionalTransactionSettingsProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const defaultProportionalSlippagePercentage = getDefaultProportionalSlippagePercentage(pool)
+
   return (
     <Popover isLazy isOpen={isOpen} onClose={onClose} placement="bottom-end">
       <PopoverTrigger>
@@ -108,12 +110,12 @@ export function ProportionalTransactionSettings({
                     <PopoverArrow />
                     <PopoverBody>
                       <Text fontSize="sm" fontWeight="500" lineHeight="18px" variant="secondary">
-                        Slippage is set to {getDefaultProportionalSlippagePercentage(pool)} by
-                        default for forced proportional actions to reduce dust left over. If you
-                        need to set slippage higher than 0 it will effectively lower the amount of
-                        tokens you can add in the form below. Then, if slippage occurs, the
-                        transaction can take the amount of tokens you specified + slippage from your
-                        token balance.
+                        Slippage is set to {defaultProportionalSlippagePercentage} by default for
+                        forced proportional actions to reduce dust left over. If you need to set
+                        slippage higher than {defaultProportionalSlippagePercentage} it will
+                        effectively lower the amount of tokens you can add in the form below. Then,
+                        if slippage occurs, the transaction can take the amount of tokens you
+                        specified + slippage from your token balance.
                       </Text>
                     </PopoverBody>
                   </PopoverContent>
