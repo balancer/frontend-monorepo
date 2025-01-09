@@ -64,7 +64,7 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       ...constructBaseBuildCallInput({
         humanAmountsIn,
         sdkQueryOutput: queryOutput.sdkQueryOutput,
-        slippagePercent: slippagePercent,
+        slippagePercent,
         pool: this.helpers.pool,
       }),
       protocolVersion: 3,
