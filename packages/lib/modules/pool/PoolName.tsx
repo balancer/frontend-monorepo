@@ -16,7 +16,8 @@ function isFeaturedPool(pool: PoolListItem | Pool | FeaturedPool): pool is Featu
 }
 
 export function PoolName({ pool, MemoizedMainAprTooltip, isCarousel, ...rest }: PoolNameProps) {
-  const displayTokens = getPoolDisplayTokens(pool).filter(token => token.address !== pool.address)
+  const _pool = pool as unknown as Pool //TODO: review in https://github.com/balancer/frontend-monorepo/pull/373
+  const displayTokens = getPoolDisplayTokens(_pool).filter(token => token.address !== pool.address)
 
   return (
     <HStack alignItems="center" gap="xxs" justify="start" px="sm" wrap="wrap">

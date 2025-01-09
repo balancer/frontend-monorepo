@@ -3,15 +3,7 @@ import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
-import {
-  Address,
-  Log,
-  erc20Abi,
-  formatUnits,
-  parseAbiItem,
-  parseEventLogs,
-  zeroAddress,
-} from 'viem'
+import { Address, Log, erc20Abi, formatUnits, parseAbiItem, parseEventLogs } from 'viem'
 import { HumanTokenAmount } from '../../../tokens/token.types'
 import { emptyAddress } from '../../../web3/contracts/wagmi-helpers'
 import { ApiToken, ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
@@ -30,6 +22,8 @@ export type ParseReceipt =
   | typeof parseAddLiquidityReceipt
   | typeof parseRemoveLiquidityReceipt
   | typeof parseSwapReceipt
+  | typeof parseLstStakeReceipt
+  | typeof parseLstWithdrawReceipt
 
 export function parseAddLiquidityReceipt({
   chain,
@@ -149,6 +143,20 @@ export function parseSwapReceipt({
   }
 }
 
+export function parseLstStakeReceipt({ receiptLogs, userAddress }: ParseProps) {
+  const amount = getIncomingLogsLstDeposited(receiptLogs, userAddress)
+
+  return {
+    receivedToken: _toHumanAmount('0xe5da20f15420ad15de0fa650600afc998bbe3955', amount, 18), // TODO: removed hardcoded address
+  }
+}
+
+export function parseLstWithdrawReceipt({ receiptLogs, userAddress, chain }: ParseProps) {
+  const amount = getIncomingLogsLstWithdrawn(receiptLogs, userAddress)
+  return {
+    receivedToken: _toHumanAmount(getNativeAssetAddress(chain), amount, 18),
+  }
+}
 /*
   rawValue and tokenDecimals should always be valid so we use default values to avoid complex error handling
 */
@@ -199,22 +207,37 @@ function getIncomingWithdrawals(
       ? networkConfig.contracts.balancer.batchRouter
       : networkConfig.contracts.balancer.vaultV2
 
-  // Fantom uses the Transfer event instead of Withdrawal
-  if (chain === GqlChain.Fantom) {
-    return parseEventLogs({
-      abi: [
-        parseAbiItem('event Transfer(address indexed from, address indexed to, uint256 value)'),
-      ],
-      args: { from: from, to: zeroAddress },
-      logs: logs,
-    })[0]?.args?.value
-  } else {
-    // Catches when the wNativeAsset is withdrawn from the vault, assumption is
-    // that his means the user is getting the same value in the native asset.
-    return parseEventLogs({
-      abi: [parseAbiItem('event Withdrawal(address indexed src, uint256 wad)')],
-      args: { src: from },
-      logs: logs,
-    })[0]?.args?.wad
-  }
+  // Catches when the wNativeAsset is withdrawn from the vault, assumption is
+  // that his means the user is getting the same value in the native asset.
+  return parseEventLogs({
+    abi: [parseAbiItem('event Withdrawal(address indexed src, uint256 wad)')],
+    args: { src: from },
+    logs: logs,
+  })[0]?.args?.wad
+}
+
+function getIncomingLogsLstDeposited(logs: Log[], userAddress?: Address) {
+  return parseEventLogs({
+    abi: [
+      parseAbiItem(
+        'event Deposited(address indexed user, uint256 amountAssets, uint256 amountShares)'
+      ),
+    ],
+    args: { user: userAddress },
+    logs,
+  })[0]?.args?.amountShares
+}
+
+function getIncomingLogsLstWithdrawn(logs: Log[], userAddress?: Address) {
+  const test = parseEventLogs({
+    abi: [
+      parseAbiItem(
+        'event Withdrawn(address indexed user, uint256 withdrawId, uint256 amountAssets, uint8 kind, bool emergency)'
+      ),
+    ],
+    args: { user: userAddress },
+    logs,
+  })
+
+  return test[0]?.args?.amountAssets
 }

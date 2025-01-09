@@ -28,7 +28,7 @@
     "@repo/lib": "workspace:*",
     "@sentry/nextjs": "^8.13.0",
     "@studio-freight/react-lenis": "^0.0.47",
-    "@vercel/speed-insights": "^1.0.1",
+    "@vercel/speed-insights": "1.1.0",
     "framer-motion": "^10.13.0",
     "lodash": "^4.17.21",
     "next": "14.2.15",
@@ -45,14 +45,13 @@
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
-    "@chakra-ui/styled-system": "^2.9.2",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@sentry/types": "^7.89.0",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.14.195",
-    "@types/node": "20.3.2",
+    "@types/node": "20.10.2",
     "@types/prismjs": "^1.26.5",
     "@types/react": "18.2.34",
     "@types/react-dom": "18.2.6",
@@ -66,8 +65,7 @@
     "eslint": "8.43.0",
     "happy-dom": "^15.10.2",
     "lokijs": "^1.5.12",
-    "sentry-testkit": "^5.0.9",
-    "typescript": "5.4.5"
+    "sentry-testkit": "^5.0.9"
   },
   "engines": {
     "node": ">=18.x"

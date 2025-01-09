@@ -2,7 +2,6 @@
 
 import { getChainId } from '@repo/lib/config/app.config'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
-import { getBlockExplorerTxUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ensureError } from '@repo/lib/shared/utils/errors'
@@ -16,10 +15,13 @@ import { useConfig, usePublicClient } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 import { getWaitForReceiptTimeout } from '../web3/contracts/wagmi-helpers'
 import { TransactionStatus as SafeTxStatus } from '@safe-global/safe-apps-sdk'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 export type RecentTransactionsResponse = ReturnType<typeof _useRecentTransactions>
 export const TransactionsContext = createContext<RecentTransactionsResponse | null>(null)
 const NUM_RECENT_TRANSACTIONS = 20
+const RECENT_TRANSACTIONS_KEY = `${PROJECT_CONFIG.projectId}.recentTransactions`
 
 // confirming = transaction has not been mined
 // confirmed = transaction has been mined and is present on chain
@@ -133,7 +135,7 @@ export function _useRecentTransactions() {
 
   // fetch recent transactions from local storage
   useEffect(() => {
-    const _recentTransactions = localStorage.getItem('balancer.recentTransactions')
+    const _recentTransactions = localStorage.getItem(RECENT_TRANSACTIONS_KEY)
     if (_recentTransactions) {
       const recentTransactions = JSON.parse(_recentTransactions)
       setTransactions(recentTransactions)
@@ -241,10 +243,7 @@ export function _useRecentTransactions() {
   }
 
   function updateLocalStorage(customUpdate?: Record<string, TrackedTransaction>) {
-    localStorage.setItem(
-      'balancer.recentTransactions',
-      JSON.stringify(customUpdate || transactions)
-    )
+    localStorage.setItem(RECENT_TRANSACTIONS_KEY, JSON.stringify(customUpdate || transactions))
   }
 
   function addTrackedTransaction(trackedTransaction: TrackedTransaction) {
