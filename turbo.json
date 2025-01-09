@@ -16,7 +16,9 @@
     "NEXT_PUBLIC_SENTRY_DSN",
     "NEXT_RUNTIME",
     "NEXT_PRIVATE_ALCHEMY_KEY",
-    "CI"
+    "CI",
+    "ALLOWED_ORIGIN",
+    "VERCEL_ENV"
   ],
   "tasks": {
     "dev": {
