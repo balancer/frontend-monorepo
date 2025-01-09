@@ -1,20 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { Button, useColorMode } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Moon, Sun } from 'react-feather'
 
 export default function DarkModeToggle() {
   const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
-  const { setColorMode } = useColorMode()
-
-  function toggleColorMode() {
-    setTheme(theme == 'light' ? 'dark' : 'light')
-  }
+  const { colorMode, toggleColorMode } = useColorMode()
 
   const animationSun = {
     initial: { rotate: 0, scale: 0, opacity: 0 },
@@ -32,10 +25,6 @@ export default function DarkModeToggle() {
     setMounted(true)
   }, [])
 
-  useEffect(() => {
-    setColorMode(theme)
-  }, [theme])
-
   if (!mounted) {
     return (
       <Button isDisabled p="0" variant="tertiary">
@@ -47,7 +36,7 @@ export default function DarkModeToggle() {
   return (
     <Button onClick={toggleColorMode} p="0" variant="tertiary">
       <AnimatePresence initial={false}>
-        {theme === 'light' ? (
+        {colorMode === 'dark' ? (
           <motion.i {...animationSun}>
             <Sun size={18} />
           </motion.i>

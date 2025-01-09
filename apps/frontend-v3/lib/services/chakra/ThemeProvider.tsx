@@ -1,6 +1,6 @@
 'use client'
 
-import { ChakraProvider, ThemeTypings } from '@chakra-ui/react'
+import { ChakraProvider, ColorModeScript, ThemeTypings } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { theme as balTheme } from './themes/bal/bal.theme'
 import { theme as cowTheme } from './themes/cow/cow.theme'
@@ -11,17 +11,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   function getTheme(): ThemeTypings {
     if (isCowPath || isCowVariant) return cowTheme
-
     return balTheme
   }
 
+  const theme = getTheme()
+
   return (
-    <ChakraProvider
-      cssVarsRoot="body"
-      theme={getTheme()}
-      toastOptions={{ defaultOptions: { position: 'bottom-left' } }}
-    >
-      {children}
-    </ChakraProvider>
+    <>
+      <ColorModeScript initialColorMode="light" />
+      <ChakraProvider
+        cssVarsRoot="body"
+        theme={theme}
+        toastOptions={{ defaultOptions: { position: 'bottom-left' } }}
+      >
+        {children}
+      </ChakraProvider>
+    </>
   )
 }

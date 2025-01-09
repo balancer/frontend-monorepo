@@ -3,8 +3,6 @@ import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
 import '@repo/lib/assets/css/global.css'
-import { DEFAULT_THEME_COLOR_MODE } from '@repo/lib/shared/services/chakra/themes/base/foundations'
-import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
 import { Providers } from '@repo/lib/shared/components/site/providers'
 
@@ -23,11 +21,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
         style={{ marginRight: '0px !important' }} // Required to prevent layout shift introduced by Rainbowkit
         suppressHydrationWarning
       >
-        <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
-          <ThemeProvider>
-            <Providers>{children}</Providers>
-          </ThemeProvider>
-        </ColorThemeProvider>
+        <ThemeProvider>
+          <Providers>{children}</Providers>
+        </ThemeProvider>
       </body>
     </html>
   )
