@@ -1,5 +1,4 @@
 import NextTopLoader from 'nextjs-toploader'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import { PropsWithChildren } from 'react'
 import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
 import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
@@ -23,7 +22,6 @@ export function BaseLayout({
       {children}
       {renderLzBeetsModal && <LzBeetsMigrateModal />}
       <FooterContainer />
-      <SpeedInsights />
     </div>
   )
 }
