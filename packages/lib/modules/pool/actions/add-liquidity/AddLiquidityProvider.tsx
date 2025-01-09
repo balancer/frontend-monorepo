@@ -33,7 +33,7 @@ import { getPoolActionableTokens, isV3NotSupportingWethIsEth } from '../../pool.
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { ApiToken } from '../../pool.types'
-import { defaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
+import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -54,7 +54,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   */
   const [wantsProportional, setWantsProportional] = useState(requiresProportionalInput(pool))
   const [proportionalSlippage, setProportionalSlippage] = useState<string>(
-    defaultProportionalSlippagePercentage
+    getDefaultProportionalSlippagePercentage(pool)
   )
 
   const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()

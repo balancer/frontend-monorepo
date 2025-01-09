@@ -193,6 +193,7 @@ function AddLiquidityMainForm() {
             <span>Add liquidity</span>
             {wantsProportional ? (
               <ProportionalTransactionSettings
+                pool={pool}
                 setSlippage={setProportionalSlippage}
                 size="sm"
                 slippage={slippage}

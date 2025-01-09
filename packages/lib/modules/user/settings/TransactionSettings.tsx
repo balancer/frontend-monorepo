@@ -20,7 +20,8 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { AlertTriangle, Settings } from 'react-feather'
 import { CurrencySelect } from './CurrencySelect'
 import { SlippageInput } from './UserSettings'
-import { defaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
+import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
+import { Pool } from '../../pool/PoolProvider'
 
 export function TransactionSettings(props: ButtonProps) {
   const { slippage, setSlippage } = useUserSettings()
@@ -63,11 +64,13 @@ export function TransactionSettings(props: ButtonProps) {
 interface ProportionalTransactionSettingsProps extends ButtonProps {
   slippage: string
   setSlippage: (value: string) => void
+  pool: Pool
 }
 
 export function ProportionalTransactionSettings({
   slippage,
   setSlippage,
+  pool,
   ...props
 }: ProportionalTransactionSettingsProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -105,11 +108,12 @@ export function ProportionalTransactionSettings({
                     <PopoverArrow />
                     <PopoverBody>
                       <Text fontSize="sm" fontWeight="500" lineHeight="18px" variant="secondary">
-                        Slippage is set to {defaultProportionalSlippagePercentage} by default for
-                        forced proportional actions to reduce dust left over. If you need to set
-                        slippage higher than 0 it will effectively lower the amount of tokens you
-                        can add in the form below. Then, if slippage occurs, the transaction can
-                        take the amount of tokens you specified + slippage from your token balance.
+                        Slippage is set to {getDefaultProportionalSlippagePercentage(pool)} by
+                        default for forced proportional actions to reduce dust left over. If you
+                        need to set slippage higher than 0 it will effectively lower the amount of
+                        tokens you can add in the form below. Then, if slippage occurs, the
+                        transaction can take the amount of tokens you specified + slippage from your
+                        token balance.
                       </Text>
                     </PopoverBody>
                   </PopoverContent>
