@@ -40,6 +40,7 @@ export enum ChainSlug {
   Sepolia = 'sepolia',
   Mode = 'mode',
   Fraxtal = 'fraxtal',
+  Sonic = 'sonic',
 }
 
 // Maps GraphQL chain enum to URL slug
@@ -49,7 +50,6 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
   [GqlChain.Polygon]: ChainSlug.Polygon,
   [GqlChain.Avalanche]: ChainSlug.Avalanche,
   [GqlChain.Fantom]: ChainSlug.Fantom,
-  [GqlChain.Sonic]: ChainSlug.Fantom, //TODO: groninge will fix it in another PR
   [GqlChain.Base]: ChainSlug.Base,
   [GqlChain.Optimism]: ChainSlug.Optimisim,
   [GqlChain.Zkevm]: ChainSlug.Zkevm,
@@ -57,6 +57,7 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
   [GqlChain.Sepolia]: ChainSlug.Sepolia,
   [GqlChain.Mode]: ChainSlug.Mode,
   [GqlChain.Fraxtal]: ChainSlug.Fraxtal,
+  [GqlChain.Sonic]: ChainSlug.Sonic,
 }
 
 export function getChainSlug(chainSlug: ChainSlug): GqlChain {
@@ -148,7 +149,8 @@ export function getTotalApr(
       }
 
       if (item.type === GqlPoolAprItemType.MabeetsEmissions) {
-        minTotal = bn(item.apr).plus(minTotal) // only add min here, max is already added thru staking boost
+        minTotal = bn(item.apr).plus(minTotal)
+        maxTotal = bn(item.apr).plus(maxTotal)
         return
       }
 

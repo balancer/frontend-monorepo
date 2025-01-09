@@ -71,7 +71,7 @@ const dataRangeToDaysMap: { [key in GqlPoolSnapshotDataRange]?: number } = {
   [GqlPoolSnapshotDataRange.OneHundredEightyDays]: 180,
 }
 
-const getDefaultPoolChartOptions = (
+export const getDefaultPoolChartOptions = (
   currencyFormatter: NumberFormatter,
   nextTheme: ColorMode = 'dark',
   theme: any // TODO: type this
@@ -496,7 +496,7 @@ export function usePoolCharts() {
             width: 2,
           },
           itemStyle: {
-            color: activeTabOptions.color,
+            color: activeTabOptions.color as string | echarts.graphic.LinearGradient,
             borderRadius: 100,
           },
           emphasis: {

@@ -21,7 +21,7 @@ export function useFooterData() {
         { label: 'Explore pools', href: '/pools' },
         { label: 'Swap tokens', href: '/swap' },
         { label: 'View portfolio', href: '/portfolio' },
-        { label: 'Get maBEETS', href: 'https://beets.fi/mabeets', isExternal: true },
+        { label: 'Get maBEETS', href: 'https://ma.beets.fi', isExternal: true },
       ],
     },
     {
@@ -34,16 +34,11 @@ export function useFooterData() {
           isExternal: true,
         },
         { label: 'Analytics', href: 'https://beets.defilytica.com', isExternal: true },
-        {
-          label: 'Brand assets',
-          href: 'https://brand.beets.fi/',
-          isExternal: true,
-        },
       ],
     },
   ]
 
-  const legalLinks = [{ label: 'Terms of use', href: '/terms-of-use' }]
+  const legalLinks = [{ label: 'Terms of service', href: '/terms-of-service' }]
 
   return { linkSections, legalLinks }
 }

@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
-import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import {
   GqlChain,
   GqlNestedPool,
@@ -31,6 +30,8 @@ import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem, ApiToken } from './pool.types'
 import { Pool } from './PoolProvider'
+import { isBeetsProject, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 /**
  * METHODS
@@ -202,6 +203,7 @@ export function getPoolHelpers(pool: Pool, chain: GqlChain) {
 }
 
 export function hasNestedPools(pool: Pool) {
+  if (!pool.poolTokens) return false
   // The following discriminator is needed because not all pools in GqlPoolQuery do have nestingType property
   // and the real TS discriminator is __typename which we don't want to use
   return (
@@ -258,12 +260,12 @@ export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
 }
 
 export function hasRateProvider(token: GqlPoolTokenDetail): boolean {
-  const isPriceRateProvider =
+  const hasNoPriceRateProvider =
     isNil(token.priceRateProvider) || // if null, we consider rate provider as zero address
     token.priceRateProvider === zeroAddress ||
     token.priceRateProvider === token.nestedPool?.address
 
-  return !isPriceRateProvider && !isNil(token.priceRateProviderData)
+  return !hasNoPriceRateProvider && !isNil(token.priceRateProviderData)
 }
 
 export function hasReviewedHook(hook: GqlHook): boolean {
@@ -290,6 +292,9 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
   // avoid blocking Sepolia pools
   if (pool.chain === GqlChain.Sepolia) return false
+
+  // don't add liquidity to the maBEETS pool thru the pool page
+  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) return true
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
@@ -338,6 +343,11 @@ export function getPoolAddBlockedReason(pool: Pool): string {
   if (isLBP(pool.type)) return 'LBP pool'
   if (pool.dynamicData.isPaused) return 'Paused pool'
   if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
+
+  // don't add liquidity to the maBEETS pool thru the pool page
+  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) {
+    return 'Please manage your liquidity on the maBEETS page.'
+  }
 
   if (pool.hook && !hasReviewedHook(pool.hook)) {
     return 'Unreviewed hook'
@@ -621,7 +631,7 @@ export function getBoostedGqlTokens(pool: Pool): ApiToken[] {
   const underlyingTokens = pool.poolTokens
     .flatMap(token =>
       shouldUseUnderlyingToken(token, pool)
-        ? [token.underlyingToken as ApiToken]
+        ? [{ ...token, ...token.underlyingToken } as ApiToken]
         : [token as ApiToken]
     )
     .filter((token): token is ApiToken => token !== undefined)

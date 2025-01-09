@@ -25,6 +25,21 @@ const nextConfig = {
 
   // Safe App setup
   headers: manifestHeaders,
+  redirects() {
+    return [
+      {
+        source: '/discord',
+        destination: 'https://discord.gg/kbPnYJjvwZ',
+        permanent: false,
+      },
+      // some cached apps are still trying to access this route
+      {
+        source: '/api/rpc/FANTOM/routes',
+        destination: 'https://ftm.beets.fi/api/rpc/FANTOM/routes',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 module.exports = withSentryConfig(nextConfig, sentryOptions)
