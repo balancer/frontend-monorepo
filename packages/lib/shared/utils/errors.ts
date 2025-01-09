@@ -149,11 +149,15 @@ function parseRequestError(error: Error, chainId: number): TransactionConfig | u
 }
 
 /**
- * Converts Error instance in JSON "plain" object
- *
- * @description Only plain objects are allowed as props within RSC
+ * Extracts message string from any Error
+ * @param error
  */
-export function errorToJson(err: unknown) {
-  if (err === undefined) return undefined
-  return JSON.parse(JSON.stringify(err, Object.getOwnPropertyNames(err)))
+export function parseError(error: unknown) {
+  if (typeof error === 'string') return error
+
+  if (error instanceof Error) {
+    return error.message
+  }
+
+  return undefined
 }

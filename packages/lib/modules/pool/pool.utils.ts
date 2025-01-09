@@ -80,13 +80,19 @@ function getVariant(type: GqlPoolType, protocolVersion: number | undefined): Poo
  * Constructs path to pool detail page.
  * @returns {String} Path to pool detail page.
  */
-export function getPoolPath(
-  params: Pick<Pool | PoolListItem, 'id' | 'chain' | 'type'> & {
-    protocolVersion: number | undefined
-  }
-) {
-  const variant = getVariant(params.type, params.protocolVersion)
-  return `/pools/${chainToSlugMap[params.chain]}/${variant}/${params.id}`
+export function getPoolPath({
+  id,
+  chain,
+  type,
+  protocolVersion,
+}: {
+  id: Pool['id']
+  chain: Pool['chain']
+  type: Pool['type']
+  protocolVersion: Pool['protocolVersion'] | undefined
+}) {
+  const variant = getVariant(type, protocolVersion)
+  return `/pools/${chainToSlugMap[chain]}/${variant}/${id}`
 }
 
 export function getNestedPoolPath({

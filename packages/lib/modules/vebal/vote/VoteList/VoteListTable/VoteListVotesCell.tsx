@@ -1,4 +1,5 @@
-import { VotingPoolWithData, getVotesState } from '@repo/lib/modules/vebal/vote/vote.types'
+import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
+import { getVotesState } from '@repo/lib/modules/vebal/vote/vote.helpers'
 import { HStack } from '@chakra-ui/react'
 import { VoteCapTooltip } from '@repo/lib/modules/vebal/vote/VoteCapTooltip'
 import { VoteRateTooltip } from '@repo/lib/modules/vebal/vote/VoteRateTooltip'

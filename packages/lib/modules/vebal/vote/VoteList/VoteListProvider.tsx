@@ -4,26 +4,24 @@ import { createContext, PropsWithChildren, useMemo } from 'react'
 import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { usePoolListQueryState } from '@repo/lib/modules/pool/PoolList/usePoolListQueryState'
-import { useGaugeVotes } from '@repo/lib/modules/vebal/vote/gauge/useGaugeVotes'
+import { useGaugeVotes } from '@repo/lib/modules/vebal/vote/useGaugeVotes'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { orderBy } from 'lodash'
-import { HiddenHandData } from '@repo/lib/modules/vebal/vote/hidden-hand/hidden-hand.types'
+import { HiddenHandData } from '@repo/lib/shared/services/hidden-hand/hidden-hand.types'
 
 export interface UseVoteListArgs {
   data: GetVeBalVotingListQuery | undefined
   voteListLoading?: boolean
-  error?: any
   votingIncentives?: HiddenHandData[]
   votingIncentivesLoading?: boolean
-  votingIncentivesError?: any
+  votingIncentivesErrorMessage?: string
 }
 
 export function _useVoteList({
   data,
   voteListLoading = false,
-  error,
   votingIncentives,
-  votingIncentivesError,
+  votingIncentivesErrorMessage,
   votingIncentivesLoading = false,
 }: UseVoteListArgs) {
   // todo: implement vote's sorting/filtering
@@ -66,9 +64,8 @@ export function _useVoteList({
     voteListLoading,
     loading: voteListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
     count: data?.veBalGetVotingList.length,
-    error,
     votingIncentivesLoading,
-    votingIncentivesError,
+    votingIncentivesErrorMessage, // todo: should be used in VoteListTable
     gaugeVotesIsLoading,
   }
 }

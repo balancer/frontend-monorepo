@@ -5,7 +5,7 @@ import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { Hex } from 'viem'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { onlyExplicitRefetch } from '../../../../shared/utils/queries'
+import { onlyExplicitRefetch } from '../../../shared/utils/queries'
 import { useReadContracts } from 'wagmi'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
