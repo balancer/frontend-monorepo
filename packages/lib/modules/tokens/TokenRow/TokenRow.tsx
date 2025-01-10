@@ -26,7 +26,6 @@ import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
-import { PoolCore } from '../../pool/pool.types'
 import { ApiToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
 
@@ -162,7 +161,7 @@ export default function TokenRow({
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
   const token = getToken(address, chain)
-  const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool as PoolCore) : []
+  const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
   const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
 
   // TokenRowTemplate default props

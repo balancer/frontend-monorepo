@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { FetchPoolProps, PoolCore } from '@repo/lib/modules/pool/pool.types'
+import { FetchPoolProps } from '@repo/lib/modules/pool/pool.types'
 import { ChainSlug, getChainSlug, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { PropsWithChildren, Suspense } from 'react'
 import { PoolDetailSkeleton } from '@repo/lib/modules/pool/PoolDetail/PoolDetailSkeleton'
@@ -44,7 +44,7 @@ export async function generateMetadata({
   const pool = data?.pool
   if (!pool) return {}
 
-  const displayTokens = getUserReferenceTokens(pool as PoolCore)
+  const displayTokens = getUserReferenceTokens(pool)
   const poolTokenString = arrayToSentence(displayTokens.map(token => token.symbol))
 
   return {

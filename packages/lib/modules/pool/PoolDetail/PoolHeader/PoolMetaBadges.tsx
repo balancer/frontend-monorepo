@@ -6,7 +6,6 @@ import Image from 'next/image'
 import { PoolVersionTag } from '../../PoolList/PoolListTable/PoolVersionTag'
 import { PoolListTokenPills } from '../../PoolList/PoolListTokenPills'
 import { usePool } from '../../PoolProvider'
-import { PoolCore } from '../../pool.types'
 import { shouldHideSwapFee } from '../../pool.utils'
 import { PoolHookTag } from '../PoolHookTag'
 import { PoolTypeTag } from '../PoolTypeTag'
@@ -34,7 +33,7 @@ export default function PoolMetaBadges() {
           width={20}
         />
       </Badge>
-      <PoolListTokenPills pool={pool as PoolCore} px="sm" py="2" />
+      <PoolListTokenPills pool={pool} px="sm" py="2" />
       <PoolVersionTag isSmall pool={pool} />
       <PoolTypeTag pool={pool} />
       <PoolHookTag pool={pool} />

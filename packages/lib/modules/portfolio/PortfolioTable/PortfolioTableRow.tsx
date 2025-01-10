@@ -14,7 +14,6 @@ import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Aur
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
 import { isBalancerProject, isBeetsProject } from '@repo/lib/config/getProjectConfig'
-import { PoolCore } from '../../pool/pool.types'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -69,7 +68,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
                 h={['32px', '36px']}
                 iconSize={20}
                 p={['xxs', 'sm']}
-                pool={pool as PoolCore}
+                pool={pool}
                 pr={[1.5, 'ms']}
               />
             </GridItem>

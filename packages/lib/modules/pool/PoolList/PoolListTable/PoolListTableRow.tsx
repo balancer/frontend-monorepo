@@ -8,7 +8,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import Link from 'next/link'
 import { memo } from 'react'
 import { usePoolMetadata } from '../../metadata/usePoolMetadata'
-import { PoolCore, PoolListDisplayType, PoolListItem } from '../../pool.types'
+import { PoolListDisplayType, PoolListItem } from '../../pool.types'
 import { getPoolPath } from '../../pool.utils'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import { usePoolList } from '../PoolListProvider'
@@ -24,7 +24,7 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
 function PoolName({ pool }: { pool: PoolListItem }) {
   const isFirstToken = (index: number) => index === 0
-  const displayTokens = getUserReferenceTokens(pool as PoolCore)
+  const displayTokens = getUserReferenceTokens(pool)
   const zIndices = Array.from({ length: displayTokens.length }, (_, index) => index).reverse()
 
   return (
@@ -80,7 +80,7 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
                   iconSize={name ? 24 : 20}
                   nameSize="sm"
                   p={['xxs', 'sm']}
-                  pool={pool as PoolCore}
+                  pool={pool}
                   pr={[1.5, 'ms']}
                 />
               )}

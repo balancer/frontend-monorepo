@@ -53,7 +53,6 @@ import {
   PartnerRedirectModal,
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
-import { PoolCore } from '../pool.types'
 import { getCompositionTokens } from '../pool-tokens.utils'
 
 function getTabs(isVeBalPool: boolean) {
@@ -258,7 +257,7 @@ export default function PoolMyLiquidity() {
     }
   }
 
-  const compositionTokens = getCompositionTokens(pool as PoolCore)
+  const compositionTokens = getCompositionTokens(pool)
 
   return (
     <Card h="fit-content" ref={myLiquiditySectionRef}>

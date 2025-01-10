@@ -16,7 +16,6 @@ import { capitalize } from 'lodash'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
 import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
-import { PoolCore } from '@repo/lib/modules/pool/pool.types'
 
 export default function NetworkClaim() {
   const { toCurrency } = useCurrency()
@@ -78,7 +77,7 @@ export default function NetworkClaim() {
                         <TokenIconStack
                           chain={pool.chain}
                           size={36}
-                          tokens={getUserReferenceTokens(pool as PoolCore)}
+                          tokens={getUserReferenceTokens(pool)}
                         />
                         {hasMultipleClaims && (
                           <Button

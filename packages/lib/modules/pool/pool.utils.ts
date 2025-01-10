@@ -20,9 +20,9 @@ import {
   FetchPoolProps,
   PartnerVariant,
   PoolAction,
-  PoolCore,
   PoolListItem,
   PoolVariant,
+  PoolCore,
 } from './pool.types'
 import { Pool } from './PoolProvider'
 
@@ -93,7 +93,7 @@ export function getNestedPoolPath({
   pool,
   nestedPoolAddress,
 }: {
-  pool: Pool | PoolCore
+  pool: PoolCore
   nestedPoolAddress: Address
 }) {
   const variant = getVariant(pool.type, pool.protocolVersion)

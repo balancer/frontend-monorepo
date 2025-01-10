@@ -1,24 +1,22 @@
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { PoolCore, PoolListItem } from './pool.types'
+import { PoolCore } from './pool.types'
 import { HStack, Text, TextProps, Box } from '@chakra-ui/react'
-import { FeaturedPool, Pool } from './PoolProvider'
+import { FeaturedPool } from './PoolProvider'
 import { getUserReferenceTokens } from './pool-tokens.utils'
 
 interface PoolNameProps extends TextProps {
-  pool: PoolListItem | Pool | FeaturedPool
+  pool: PoolCore
   MemoizedMainAprTooltip?: React.ComponentType<any>
   isCarousel?: boolean
 }
 
 // Type guard function to check if pool is FeaturedPool
-function isFeaturedPool(pool: PoolListItem | Pool | FeaturedPool): pool is FeaturedPool {
+function isFeaturedPool(pool: PoolCore | FeaturedPool): pool is FeaturedPool {
   return (pool as FeaturedPool).dynamicData !== undefined
 }
 
 export function PoolName({ pool, MemoizedMainAprTooltip, isCarousel, ...rest }: PoolNameProps) {
-  const tokens = getUserReferenceTokens(pool as PoolCore).filter(
-    token => token.address !== pool.address
-  )
+  const tokens = getUserReferenceTokens(pool).filter(token => token.address !== pool.address)
 
   return (
     <HStack alignItems="center" gap="xxs" justify="start" px="sm" wrap="wrap">

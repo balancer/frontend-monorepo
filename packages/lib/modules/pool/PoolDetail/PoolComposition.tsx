@@ -25,7 +25,7 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import { Address } from 'viem'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
 import { isBoosted } from '../pool.helpers'
-import { PoolToken, PoolCore } from '../pool.types'
+import { PoolToken } from '../pool.types'
 import { Pool, usePool } from '../PoolProvider'
 import { PoolTypeTag } from './PoolTypeTag'
 import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
@@ -123,7 +123,7 @@ export function PoolComposition() {
   const [height, setHeight] = useState(0)
   const { getErc4626Metadata } = usePoolsMetadata()
 
-  const compositionTokens = getCompositionTokens(pool as PoolCore)
+  const compositionTokens = getCompositionTokens(pool)
   const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
   const erc4626Metadata = getErc4626Metadata(pool)
 
@@ -182,7 +182,7 @@ export function PoolComposition() {
           ) : (
             <PoolWeightChart
               chain={chain}
-              displayTokens={getFlatCompositionTokens(pool as PoolCore)}
+              displayTokens={getFlatCompositionTokens(pool)}
               hasLegend
               totalLiquidity={totalLiquidity}
             />

@@ -17,6 +17,7 @@ import {
 } from 'nuqs'
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
+import { FeaturedPool } from './PoolProvider'
 export type Pool = GetPoolQuery['pool']
 
 export type PoolId = Hex
@@ -25,19 +26,24 @@ export type PoolList = GetPoolsQuery['pools']
 
 export type PoolListItem = PoolList[0]
 
-export type PoolCore = Pick<
-  PoolListItem,
-  | 'id'
-  | 'address'
-  | 'chain'
-  | 'type'
-  | 'name'
-  | 'symbol'
-  | 'protocolVersion'
-  | 'hasErc4626'
-  | 'hasAnyAllowedBuffer'
-  | 'tags'
-> & { poolTokens: ApiToken[] }
+// PoolCore defines the shared fields between PoolListItem, Pool that are required for pool related shared logic
+export type PoolCore =
+  | (Pick<
+      PoolListItem,
+      | 'id'
+      | 'address'
+      | 'chain'
+      | 'type'
+      | 'name'
+      | 'symbol'
+      | 'protocolVersion'
+      | 'hasErc4626'
+      | 'hasAnyAllowedBuffer'
+      | 'tags'
+    > & { poolTokens: ApiToken[] })
+  | Pool
+  | PoolListItem
+  | FeaturedPool
 
 export enum BaseVariant {
   v2 = 'v2',

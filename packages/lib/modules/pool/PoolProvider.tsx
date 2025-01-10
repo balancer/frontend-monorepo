@@ -9,7 +9,7 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { createContext, PropsWithChildren, useRef } from 'react'
 import { useQuery } from '@apollo/client'
-import { FetchPoolProps, PoolCore } from './pool.types'
+import { FetchPoolProps } from './pool.types'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getPoolHelpers } from './pool.helpers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -57,7 +57,7 @@ export function _usePool({
 
   const pool = poolWithOnchainUserBalances || poolWithOnChainData || data?.pool || initialData.pool
   const bptPrice = priceFor(pool.address, pool.chain)
-  const tvl = calcTotalUsdValue(getCompositionTokens(pool as PoolCore), pool.chain)
+  const tvl = calcTotalUsdValue(getCompositionTokens(pool), pool.chain)
   const isLoading = isLoadingOnchainData || isLoadingOnchainUserBalances
 
   const refetch = async () => {

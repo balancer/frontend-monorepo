@@ -58,12 +58,12 @@ function excludeNestedBptTokens(tokens: PoolToken[], poolAddress: string): PoolT
 
 // Returns user reference tokens with nested tokens flattened
 export function getFlatUserReferenceTokens(pool: PoolCore): PoolToken[] {
-  return flatNestedTokens(getUserReferenceTokens(pool as PoolCore)) as PoolToken[]
+  return flatNestedTokens(getUserReferenceTokens(pool)) as PoolToken[]
 }
 
 // Returns composition tokens with nested tokens flattened
 export function getFlatCompositionTokens(pool: PoolCore) {
-  return flatNestedTokens(getCompositionTokens(pool as PoolCore)) as PoolToken[]
+  return flatNestedTokens(getCompositionTokens(pool)) as PoolToken[]
 }
 
 // Returns the provided poolTokens, replacing any BPT with its nested pool tokens
