@@ -29,7 +29,7 @@ import { PoolToken, PoolCore } from '../pool.types'
 import { Pool, usePool } from '../PoolProvider'
 import { PoolTypeTag } from './PoolTypeTag'
 import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
-import { getCompositionTokens, getFlatCompositionTokens } from '../pool.tokens.utils'
+import { getCompositionTokens, getFlatCompositionTokens } from '../pool-tokens.utils'
 
 type CardContentProps = {
   totalLiquidity: string

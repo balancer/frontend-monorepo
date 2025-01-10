@@ -28,7 +28,7 @@ import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
 import { PoolCore } from '../../pool/pool.types'
 import { ApiToken } from '../token.types'
-import { getFlatUserReferenceTokens } from '../../pool/pool.tokens.utils'
+import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
 
 export type TokenInfoProps = {
   address: Address

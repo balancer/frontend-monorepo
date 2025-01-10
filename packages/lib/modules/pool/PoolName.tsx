@@ -2,7 +2,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { PoolCore, PoolListItem } from './pool.types'
 import { HStack, Text, TextProps, Box } from '@chakra-ui/react'
 import { FeaturedPool, Pool } from './PoolProvider'
-import { getUserReferenceTokens } from './pool.tokens.utils'
+import { getUserReferenceTokens } from './pool-tokens.utils'
 
 interface PoolNameProps extends TextProps {
   pool: PoolListItem | Pool | FeaturedPool

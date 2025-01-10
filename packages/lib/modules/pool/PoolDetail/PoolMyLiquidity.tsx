@@ -54,7 +54,7 @@ import {
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { PoolCore } from '../pool.types'
-import { getCompositionTokens } from '../pool.tokens.utils'
+import { getCompositionTokens } from '../pool-tokens.utils'
 
 function getTabs(isVeBalPool: boolean) {
   return [

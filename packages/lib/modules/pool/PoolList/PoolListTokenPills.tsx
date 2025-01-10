@@ -9,7 +9,7 @@ import { TokenIcon } from '../../tokens/TokenIcon'
 import { TokenIconStack } from '../../tokens/TokenIconStack'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { isStableLike, isWeightedLike } from '../pool.helpers'
-import { getUserReferenceTokens } from '../pool.tokens.utils'
+import { getUserReferenceTokens } from '../pool-tokens.utils'
 import { PoolToken, PoolCore } from '../pool.types'
 // import { VotingPoolWithData } from '../../vebal/vote/vote.types'
 

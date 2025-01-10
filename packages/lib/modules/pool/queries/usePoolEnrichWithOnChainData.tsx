@@ -16,7 +16,7 @@ import { isComposableStablePool } from '../pool.utils'
 import { cowAmmPoolAbi } from '../../web3/contracts/abi/cowAmmAbi'
 import { weightedPoolAbi_V3, vaultExtensionAbi_V3 } from '@balancer/sdk'
 import { PoolCore } from '../pool.types'
-import { getCompositionTokens } from '../pool.tokens.utils'
+import { getCompositionTokens } from '../pool-tokens.utils'
 
 export function usePoolEnrichWithOnChainData(pool: Pool) {
   const { priceFor } = useTokens()

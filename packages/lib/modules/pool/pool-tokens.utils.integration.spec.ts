@@ -20,7 +20,7 @@ import {
   getCompositionTokens,
   getUserReferenceTokens,
   getFlatUserReferenceTokens,
-} from './pool.tokens.utils'
+} from './pool-tokens.utils'
 import { ApiToken } from '../tokens/token.types'
 import { PoolToken } from './pool.types'
 

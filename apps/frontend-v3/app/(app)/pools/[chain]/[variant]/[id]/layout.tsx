@@ -10,7 +10,7 @@ import { PoolProvider } from '@repo/lib/modules/pool/PoolProvider'
 import { arrayToSentence } from '@repo/lib/shared/utils/strings'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { notFound } from 'next/navigation'
-import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool.tokens.utils'
+import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 
 type Props = PropsWithChildren<{
   params: Omit<FetchPoolProps, 'chain'> & { chain: ChainSlug }
