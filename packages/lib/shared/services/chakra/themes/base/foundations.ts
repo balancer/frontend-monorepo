@@ -1,6 +1,8 @@
+import { ThemeConfig } from '@chakra-ui/react'
+
 export const DEFAULT_THEME_COLOR_MODE = 'dark'
 
-export const config = {
+export const config: ThemeConfig = {
   initialColorMode: 'light',
   useSystemColorMode: false,
 }

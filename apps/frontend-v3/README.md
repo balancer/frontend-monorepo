@@ -38,6 +38,32 @@ pnpm dev:bal
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Experimental dev with turbopack
+
+Use this feature for better DX with faster compile times and faster HMR:
+
+```bash
+pnpm dev:turbopack
+```
+
+But notice that there are some issues that don`t happen with the normal (webpack based) dev mode:
+
+### Hydration errors
+
+There are some hydration errors due to our chakra version not being 100% compatible with turbopack.
+You just need to ignore those errors when using turbopack mode.
+
+### Sentry does not work with turbopack yet
+
+This is not a real issue as we don't normally use sentry in dev mode. The only downside is that you
+will see a sentry warning in the console when using turbopack mode.
+
+For build mode, we will always use webpack which works with Sentry as expected.
+
+Check
+[this link](https://github.com/getsentry/sentry-javascript/issues/8105#issuecomment-2577559235) for
+more context.
+
 ## Testing
 
 See [TESTING.md](./test/TESTING.md).
