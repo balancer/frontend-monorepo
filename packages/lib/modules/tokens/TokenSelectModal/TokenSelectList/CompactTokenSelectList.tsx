@@ -7,7 +7,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { Virtuoso } from 'react-virtuoso'
 import { useTokenBalances } from '../../TokenBalancesProvider'
 import { TokenSelectListRow } from './TokenSelectListRow'
-import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '../../token.types'
 
 type Props = {
   tokens: ApiToken[]

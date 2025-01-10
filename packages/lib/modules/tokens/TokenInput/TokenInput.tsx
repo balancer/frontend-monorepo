@@ -31,7 +31,7 @@ import { useEffect, useState } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
-import { ApiToken } from '../../pool/pool.types'
+import { ApiToken } from '../token.types'
 
 type TokenInputSelectorProps = {
   token: ApiToken | undefined

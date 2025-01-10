@@ -11,7 +11,7 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { daiAddress } from '@repo/lib/debug-helpers'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
-import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 export default function TokenInputPage() {
   const [currentValue, setCurrentValue] = useState('')

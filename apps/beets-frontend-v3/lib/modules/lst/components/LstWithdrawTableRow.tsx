@@ -5,7 +5,7 @@ import { useLst } from '../LstProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { UserWithdraw } from '../hooks/useGetUserWithdraws'
 import { formatUnits } from 'viem'
-import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 
 interface Props extends GridProps {

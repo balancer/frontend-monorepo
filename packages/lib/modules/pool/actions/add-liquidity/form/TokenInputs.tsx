@@ -5,7 +5,7 @@ import { useAddLiquidity } from '../AddLiquidityProvider'
 import { VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { hasNoLiquidity, shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
-import { ApiToken } from '../../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 type Props = {
   tokenSelectDisclosureOpen: () => void

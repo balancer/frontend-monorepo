@@ -10,6 +10,7 @@ import { PoolProvider } from '@repo/lib/modules/pool/PoolProvider'
 import { arrayToSentence } from '@repo/lib/shared/utils/strings'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { notFound } from 'next/navigation'
+import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 
 type Props = PropsWithChildren<{
   params: Omit<FetchPoolProps, 'chain'> & { chain: ChainSlug }
@@ -43,7 +44,8 @@ export async function generateMetadata({
   const pool = data?.pool
   if (!pool) return {}
 
-  const poolTokenString = arrayToSentence(pool.displayTokens.map(token => token.symbol))
+  const displayTokens = getUserReferenceTokens(pool)
+  const poolTokenString = arrayToSentence(displayTokens.map(token => token.symbol))
 
   return {
     title: `Liquidity Pool (${variant}): ${pool.name}`,
