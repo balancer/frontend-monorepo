@@ -22,7 +22,7 @@ import { useSkipInitialQuery } from '@repo/lib/shared/hooks/useSkipInitialQuery'
 import { getNativeAssetAddress, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
 import { mins } from '@repo/lib/shared/utils/time'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { ApiToken } from '../pool/pool.types'
+import { ApiToken } from './token.types'
 
 export type UseTokensResult = ReturnType<typeof _useTokens>
 export const TokensContext = createContext<UseTokensResult | null>(null)

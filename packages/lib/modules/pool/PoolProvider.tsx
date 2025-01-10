@@ -9,16 +9,17 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { createContext, PropsWithChildren, useRef } from 'react'
 import { useQuery } from '@apollo/client'
-import { FetchPoolProps } from './pool.types'
+import { FetchPoolProps, PoolCore } from './pool.types'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getPoolHelpers } from './pool.helpers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { usePoolEnrichWithOnChainData } from './queries/usePoolEnrichWithOnChainData'
 import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances'
 import { useInvalidVariantRedirect } from './pool.hooks'
-import { getPoolDisplayTokens } from './pool.utils'
 import { useTokens } from '../tokens/TokensProvider'
+import { getCompositionTokens } from './pool.tokens.utils'
 
+// export type Pool = PoolCore & GetPoolQuery['pool'] // TODO: replace by type in pool.types.ts in another PR
 export type Pool = GetPoolQuery['pool']
 export type FeaturedPool = GetFeaturedPoolsQuery['featuredPools'][0]['pool']
 export type UsePoolResponse = ReturnType<typeof _usePool> & {
@@ -56,7 +57,7 @@ export function _usePool({
 
   const pool = poolWithOnchainUserBalances || poolWithOnChainData || data?.pool || initialData.pool
   const bptPrice = priceFor(pool.address, pool.chain)
-  const tvl = calcTotalUsdValue(getPoolDisplayTokens(pool), pool.chain)
+  const tvl = calcTotalUsdValue(getCompositionTokens(pool as PoolCore), pool.chain)
   const isLoading = isLoadingOnchainData || isLoadingOnchainUserBalances
 
   const refetch = async () => {

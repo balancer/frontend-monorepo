@@ -15,6 +15,8 @@ import {
 import { isComposableStablePool } from '../pool.utils'
 import { cowAmmPoolAbi } from '../../web3/contracts/abi/cowAmmAbi'
 import { weightedPoolAbi_V3, vaultExtensionAbi_V3 } from '@balancer/sdk'
+import { PoolCore } from '../pool.types'
+import { getCompositionTokens } from '../pool.tokens.utils'
 
 export function usePoolEnrichWithOnChainData(pool: Pool) {
   const { priceFor } = useTokens()
@@ -209,9 +211,7 @@ function enrichPool({
 
   const clone = cloneDeep(pool)
 
-  const filteredTokens = clone.poolTokens.filter(token =>
-    pool.displayTokens.find(displayToken => token.address === displayToken.address)
-  )
+  const filteredTokens = getCompositionTokens(clone as PoolCore)
 
   clone.poolTokens.forEach((token, index) => {
     if (!poolTokenBalances) return

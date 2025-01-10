@@ -59,20 +59,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       isPhantomBpt
       isMainToken
     }
-    displayTokens {
-      id
-      address
-      name
-      weight
-      symbol
-      nestedTokens {
-        id
-        address
-        name
-        weight
-        symbol
-      }
-    }
     staking {
       id
       type

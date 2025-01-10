@@ -48,7 +48,7 @@ import {
   hasNestedPools,
 } from '../pool.helpers'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
-import { ApiToken } from '../pool.types'
+import { ApiToken } from '../../tokens/token.types'
 
 // Null object used to avoid conditional checks during hook loading state
 const NullPool: Pool = {
