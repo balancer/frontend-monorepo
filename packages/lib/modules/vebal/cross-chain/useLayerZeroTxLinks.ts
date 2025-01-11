@@ -63,7 +63,7 @@ export function useLayerZeroTxLinks(syncTxHashes: Record<Address, SyncTxHashes>)
     }
     return () => {
       if (intervalId) {
-        clearInterval(intervalId)
+        clearInterval(intervalId as unknown as number)
       }
     }
   }, [syncTxHashes, userAddress, getLayerZeroTxLinkOnInterval])
