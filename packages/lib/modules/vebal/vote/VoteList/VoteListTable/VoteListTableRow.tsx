@@ -7,10 +7,13 @@ import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { PoolListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { getPoolPath, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
-import React, { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
 import { VoteExpiredTooltip } from '@repo/lib/modules/vebal/vote/VoteExpiredTooltip'
+import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
+import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -18,33 +21,21 @@ interface Props extends GridProps {
 }
 
 export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
+  const { isConnected } = useUserAccount()
   const { toCurrency } = useCurrency()
+  const { hasAllVotingPowerTimeLocked, allowSelectVotingPools } = useVotes()
+  const { toggleVotingPool, isSelectedPool, isVotedPool } = useVotes()
 
-  const [selected, setSelected] = useState(false)
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const toggleSelection = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // todo: implement selection
-    setSelected(v => !v)
-  }
+  const selected = isSelectedPool(vote)
+  const voted = isVotedPool(vote)
 
   const { votingIncentivesLoading, gaugeVotesIsLoading } = useVoteList()
 
-  const pool = useMemo(
-    () => ({
-      displayTokens: vote.tokens.map(token => ({ ...token, name: token.symbol })), // fix: no name
-      type: vote.type,
-      chain: vote.chain,
-      poolTokens: [],
-      address: vote.address,
-      protocolVersion: 3, // fix: no data
-      hasAnyAllowedBuffer: false, // fix: no data
-      hasErc4626: false, // fix: no data
-    }),
-    [vote]
-  )
+  const pool = useMemo(() => voteToPool(vote), [vote])
 
   const isKilled = vote.gaugeVotes?.isKilled
+
+  const isDisabled = !isConnected || hasAllVotingPowerTimeLocked || !allowSelectVotingPools
 
   return (
     <FadeInOnView>
@@ -118,22 +109,24 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             )}
           </GridItem>
           <GridItem justifySelf="end">
-            {isKilled ? (
+            {isKilled || voted ? (
               <Button
                 color="font.secondary"
                 fontSize="sm"
                 fontWeight="700"
+                isDisabled
                 variant="outline"
                 w="80px"
               >
-                Expired
+                {isKilled ? 'Expired' : 'Voted'}
               </Button>
             ) : (
               <Button
                 color={selected ? 'font.secondary' : undefined}
                 fontSize="sm"
                 fontWeight="700"
-                onClick={toggleSelection}
+                isDisabled={isDisabled}
+                onClick={() => toggleVotingPool(vote)}
                 variant={selected ? 'outline' : 'secondary'}
                 w="80px"
               >

@@ -8,6 +8,8 @@ import { AbiMap } from '../web3/contracts/AbiMap'
 import { mainnet } from 'viem/chains'
 import { toJsTimestamp } from '@repo/lib/shared/utils/time'
 
+const MINIMUM_LOCK_TIME = 86_400_000 * 7
+
 interface MulticallLockInfoResponse {
   locked: {
     locked: {
@@ -99,6 +101,8 @@ export function useVebalLockInfo() {
     const hasExistingLock = bn(lockedAmount).gt(0)
     const lockedEndDateNormalised = toJsTimestamp(Number(lockedEndDate))
     const isExpired = hasExistingLock && Date.now() > lockedEndDateNormalised
+    const lockTooShort =
+      hasExistingLock && !isExpired && lockedEndDateNormalised < Date.now() + MINIMUM_LOCK_TIME
 
     return {
       lockedEndDate: lockedEndDateNormalised,
@@ -107,6 +111,7 @@ export function useVebalLockInfo() {
       epoch: String(epoch.result),
       hasExistingLock,
       isExpired,
+      lockTooShort,
     }
   }, [results])
 

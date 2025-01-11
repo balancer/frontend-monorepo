@@ -56,12 +56,11 @@ function useGaugeRelativeWeightsWrite(
   gaugeAddresses: UseGaugeVotesParams['gaugeAddresses'],
   timestamp: number
 ) {
-  const { isConnected } = useUserAccount()
   return useReadContracts({
     ...readContractsParams,
     query: {
       ...readContractsParams.query,
-      enabled: isConnected,
+      enabled: true,
     },
     contracts: gaugeAddresses.map(gaugeAddress => {
       return {
@@ -160,6 +159,12 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
     userVotesQuery.isLoading ||
     lastUserVotesQuery.isLoading
 
+  const isRefetching =
+    gaugeWeightThisPeriodQuery.isRefetching ||
+    gaugeWeightNextPeriodQuery.isRefetching ||
+    userVotesQuery.isRefetching ||
+    lastUserVotesQuery.isRefetching
+
   const gaugeVotes = useMemo(() => {
     if (isLoading) {
       return undefined
@@ -198,6 +203,6 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
   return {
     gaugeVotes,
     refetchAll,
-    isLoading,
+    isLoading: isLoading || isRefetching,
   }
 }

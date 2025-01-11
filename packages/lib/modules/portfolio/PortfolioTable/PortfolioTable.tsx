@@ -179,6 +179,7 @@ export function PortfolioTable() {
               noItemsFoundLabel="No pools found"
               paginationProps={null}
               position="relative"
+              pr={{ base: 'md' }}
               renderTableHeader={() => (
                 <PortfolioTableHeader
                   currentSortingObj={currentSortingObj}
@@ -186,7 +187,7 @@ export function PortfolioTable() {
                   {...rowProps}
                 />
               )}
-              renderTableRow={(item: ExpandedPoolInfo, index) => {
+              renderTableRow={({ item, index }) => {
                 return (
                   <PortfolioTableRow
                     keyValue={index}
@@ -196,7 +197,6 @@ export function PortfolioTable() {
                   />
                 )
               }}
-              pr={{ base: 'md' }}
               showPagination={false}
               w={{ base: '100vw', lg: 'full' }}
             />

@@ -46,6 +46,7 @@ export type StepType =
   | LockActionType
   | 'signPermit'
   | 'signPermit2'
+  | 'voteForManyGaugeWeights'
 
 export type TxActionId =
   | 'SignBatchRelayer'

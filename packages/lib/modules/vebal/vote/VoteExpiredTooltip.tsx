@@ -32,7 +32,13 @@ export function VoteExpiredTooltip({ usePortal }: Props) {
     <Popover trigger="hover">
       <>
         <PopoverTrigger>
-          <Badge background="red.400" color="font.dark" textTransform="unset">
+          <Badge
+            background="red.400"
+            color="font.dark"
+            fontSize="sm"
+            textTransform="unset"
+            userSelect="none"
+          >
             Expired
           </Badge>
         </PopoverTrigger>

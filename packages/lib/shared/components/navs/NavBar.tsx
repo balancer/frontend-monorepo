@@ -14,6 +14,7 @@ import { AppLink, useNav } from './useNav'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { clamp } from '@repo/lib/shared/utils/numbers'
 
 type Props = {
   mobileNav?: ReactNode
@@ -23,8 +24,6 @@ type Props = {
   rightSlot?: ReactNode
   disableBlur?: boolean
 }
-
-const clamp = (number: number, min: number, max: number) => Math.min(Math.max(number, min), max)
 
 function useBoundedScroll(threshold: number) {
   const { scrollY } = useScroll()

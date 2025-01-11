@@ -1,15 +1,15 @@
 'use client'
 
 import { createContext, PropsWithChildren, useMemo } from 'react'
-import { GetVeBalVotingListQuery, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useGaugeVotes } from '@repo/lib/modules/vebal/vote/gauge/useGaugeVotes'
 import { SortingBy, VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { orderBy } from 'lodash'
-import { HiddenHandData } from '@repo/lib/modules/vebal/vote/hidden-hand/hidden-hand.types'
 import { useVoteListFiltersState } from '@repo/lib/modules/vebal/vote/VoteList/useVoteListFiltersState'
 import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { PoolFilterType } from '@repo/lib/modules/pool/pool.types'
+import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 
 function sortVoteList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -76,26 +76,22 @@ function filterVoteList(
   return result
 }
 
-export interface UseVoteListArgs {
-  data: GetVeBalVotingListQuery | undefined
-  voteListLoading?: boolean
-  error?: any
-  votingIncentives?: HiddenHandData[]
-  votingIncentivesLoading?: boolean
-  votingIncentivesError?: any
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface UseVoteListArgs {}
 
-export function _useVoteList({
-  data,
-  voteListLoading = false,
-  error,
-  votingIncentives,
-  votingIncentivesError,
-  votingIncentivesLoading = false,
-}: UseVoteListArgs) {
+// eslint-disable-next-line no-empty-pattern
+export function _useVoteList({}: UseVoteListArgs) {
+  const {
+    votingPools,
+    error,
+    votingIncentives,
+    votingIncentivesError,
+    votingListLoading,
+    votingIncentivesLoading,
+  } = useVotes()
   const filtersState = useVoteListFiltersState()
 
-  const voteListData = useMemo(() => data?.veBalGetVotingList || [], [data?.veBalGetVotingList])
+  const voteListData = votingPools
 
   const gaugeAddresses = useMemo(() => voteListData.map(vote => vote.gauge.address), [voteListData])
 
@@ -141,8 +137,8 @@ export function _useVoteList({
   return {
     filtersState,
     sortedVoteList,
-    voteListLoading,
-    loading: voteListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
+    votingListLoading,
+    loading: votingListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
     count: filteredVoteList.length,
     error,
     votingIncentivesLoading,

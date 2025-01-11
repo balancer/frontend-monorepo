@@ -53,7 +53,7 @@ export function PoolListTable({ pools, count, loading }: Props) {
         noItemsFoundLabel="No pools found"
         paginationProps={paginationProps}
         renderTableHeader={() => <PoolListTableHeader {...rowProps} />}
-        renderTableRow={(item: PoolListItem, index) => {
+        renderTableRow={({ item, index }) => {
           return <PoolListTableRow keyValue={index} pool={item} {...rowProps} />
         }}
         showPagination={showPagination}
