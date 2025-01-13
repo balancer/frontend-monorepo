@@ -309,7 +309,7 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
   return poolTokens.some(token => {
     // if token is not allowed - we should block adding liquidity
-    if (!token.isAllowed && !isCowAmmPool(pool.type)) {
+    if (isV2Pool(pool) && !token.isAllowed) {
       return true
     }
 
@@ -359,7 +359,7 @@ export function getPoolAddBlockedReason(pool: Pool): string {
 
   for (const token of poolTokens) {
     // if token is not allowed - we should block adding liquidity
-    if (!token.isAllowed && !isCowAmmPool(pool.type)) {
+    if (isV2Pool(pool) && !token.isAllowed) {
       return `Token: ${token.symbol} is not allowed` // TODO: Add instructions and link to get it approved
     }
 
