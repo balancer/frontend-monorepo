@@ -25,11 +25,11 @@ import { getUserTotalBalanceInt } from './user-balance.helpers'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
-import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
+import { getLeafTokens } from '../tokens/token.helpers'
 import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
-import { TokenCore, PoolListItem, ApiToken } from './pool.types'
-import { Pool } from './PoolProvider'
+import { TokenCore, PoolListItem, Pool, PoolToken, PoolCore } from './pool.types'
+import { ApiToken } from '../tokens/token.types'
 import { isBeetsProject, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 
@@ -398,21 +398,17 @@ export function getVaultConfig(pool: Pool) {
   return { vaultAddress, balancerVaultAbi }
 }
 
-export function isV1Pool(
-  pool: Pick<Pool | PoolListItem | GqlPoolBase, 'protocolVersion'>
-): boolean {
+type PoolWithProtocolVersion = Pick<PoolCore, 'protocolVersion'>
+
+export function isV1Pool(pool: PoolWithProtocolVersion): boolean {
   return pool.protocolVersion === 1
 }
 
-export function isV2Pool(
-  pool: Pick<Pool | PoolListItem | GqlPoolBase, 'protocolVersion'>
-): boolean {
+export function isV2Pool(pool: PoolWithProtocolVersion): boolean {
   return pool.protocolVersion === 2
 }
 
-export function isV3Pool(
-  pool: Pick<Pool | PoolListItem | GqlPoolBase, 'protocolVersion'>
-): boolean {
+export function isV3Pool(pool: PoolWithProtocolVersion): boolean {
   return pool.protocolVersion === 3
 }
 
@@ -466,7 +462,7 @@ export function getPoolActionableTokens(pool: Pool): ApiToken[] {
   // TODO add exception for composable pools where we can allow adding
   // liquidity with nested tokens
   if (supportsNestedActions(pool)) {
-    return excludeNestedBptTokens(getLeafTokens(pool.poolTokens))
+    return excludeNestedBptTokens(getLeafTokens(pool.poolTokens as PoolToken[]))
   }
 
   if (isBoosted(pool)) {
@@ -574,7 +570,7 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
   const extractNestedUnderlyingTokens = (nestedPool?: GqlNestedPool): TokenCore[] => {
     if (!nestedPool) return []
     return nestedPool.tokens.flatMap(nestedToken =>
-      shouldUseUnderlyingToken(nestedToken, pool)
+      shouldUseUnderlyingToken(nestedToken as PoolToken, pool)
         ? ([
             nestedToken,
             { ...nestedToken.underlyingToken, index: nestedToken.index },
@@ -583,9 +579,11 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     )
   }
 
-  const underlyingTokens: TokenCore[] = pool.poolTokens.flatMap(extractUnderlyingTokens)
+  const poolTokens: PoolToken[] = pool.poolTokens as PoolToken[]
 
-  const nestedParentTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
+  const underlyingTokens: TokenCore[] = poolTokens.flatMap(extractUnderlyingTokens)
+
+  const nestedParentTokens: PoolToken[] = poolTokens.flatMap(token =>
     token.nestedPool ? token : []
   )
 
@@ -601,7 +599,7 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     return true
   }
 
-  const standardTopLevelTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
+  const standardTopLevelTokens: PoolToken[] = poolTokens.flatMap(token =>
     isTopLevelToken(token) ? token : []
   )
 
@@ -628,7 +626,8 @@ function shouldUseUnderlyingToken(token: PoolToken, pool: Pool | GqlPoolBase): b
 
 // Returns top level standard tokens + Erc4626 (only v3) underlying tokens
 export function getBoostedGqlTokens(pool: Pool): ApiToken[] {
-  const underlyingTokens = pool.poolTokens
+  const poolTokens = pool.poolTokens as PoolToken[]
+  const underlyingTokens = poolTokens
     .flatMap(token =>
       shouldUseUnderlyingToken(token, pool)
         ? [{ ...token, ...token.underlyingToken } as ApiToken]

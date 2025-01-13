@@ -1,19 +1,19 @@
 import { Box, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
-import Link from 'next/link'
-import { getPoolDisplayTokens, getPoolPath } from '../../pool.utils'
-import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { memo } from 'react'
-import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { PoolListDisplayType, PoolListItem } from '../../pool.types'
-import { PoolListTokenPills } from '../PoolListTokenPills'
-import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
-import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { usePoolList } from '../PoolListProvider'
-import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
+import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
+import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import Link from 'next/link'
+import { memo } from 'react'
 import { usePoolMetadata } from '../../metadata/usePoolMetadata'
-import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
+import { PoolListDisplayType, PoolListItem } from '../../pool.types'
+import { getPoolPath } from '../../pool.utils'
+import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
+import { usePoolList } from '../PoolListProvider'
+import { PoolListTokenPills } from '../PoolListTokenPills'
+import { getUserReferenceTokens } from '../../pool-tokens.utils'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -24,7 +24,7 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
 function PoolName({ pool }: { pool: PoolListItem }) {
   const isFirstToken = (index: number) => index === 0
-  const displayTokens = getPoolDisplayTokens(pool)
+  const displayTokens = getUserReferenceTokens(pool)
   const zIndices = Array.from({ length: displayTokens.length }, (_, index) => index).reverse()
 
   return (
@@ -80,16 +80,7 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
                   iconSize={name ? 24 : 20}
                   nameSize="sm"
                   p={['xxs', 'sm']}
-                  pool={{
-                    displayTokens: getPoolDisplayTokens(pool),
-                    type: pool.type,
-                    chain: pool.chain,
-                    poolTokens: pool.poolTokens as GqlPoolTokenDetail[], // fix: poolTokens are incompatible
-                    address: pool.address,
-                    hasErc4626: pool.hasErc4626,
-                    hasAnyAllowedBuffer: pool.hasAnyAllowedBuffer,
-                    protocolVersion: pool.protocolVersion,
-                  }}
+                  pool={pool}
                   pr={[1.5, 'ms']}
                 />
               )}

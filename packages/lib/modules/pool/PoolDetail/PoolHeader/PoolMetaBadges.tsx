@@ -1,16 +1,15 @@
 'use client'
 
 import { Badge, Flex } from '@chakra-ui/react'
-import { usePool } from '../../PoolProvider'
-import Image from 'next/image'
-import { PoolListTokenPills } from '../../PoolList/PoolListTokenPills'
-import { getPoolDisplayTokens, shouldHideSwapFee } from '../../pool.utils'
 import { getChainShortName } from '@repo/lib/config/app.config'
-import { PoolTypeTag } from '../PoolTypeTag'
+import Image from 'next/image'
 import { PoolVersionTag } from '../../PoolList/PoolListTable/PoolVersionTag'
+import { PoolListTokenPills } from '../../PoolList/PoolListTokenPills'
+import { usePool } from '../../PoolProvider'
+import { shouldHideSwapFee } from '../../pool.utils'
 import { PoolHookTag } from '../PoolHookTag'
+import { PoolTypeTag } from '../PoolTypeTag'
 import { PoolSwapFees } from './PoolSwapFees'
-import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 
 export default function PoolMetaBadges() {
   const { pool, chain } = usePool()
@@ -34,20 +33,7 @@ export default function PoolMetaBadges() {
           width={20}
         />
       </Badge>
-      <PoolListTokenPills
-        pool={{
-          displayTokens: getPoolDisplayTokens(pool),
-          type: pool.type,
-          chain: pool.chain,
-          poolTokens: pool.poolTokens as GqlPoolTokenDetail[], // fix: poolTokens are incompatible
-          address: pool.address,
-          hasErc4626: pool.hasErc4626,
-          hasAnyAllowedBuffer: pool.hasAnyAllowedBuffer,
-          protocolVersion: pool.protocolVersion,
-        }}
-        px="sm"
-        py="2"
-      />
+      <PoolListTokenPills pool={pool} px="sm" py="2" />
       <PoolVersionTag isSmall pool={pool} />
       <PoolTypeTag pool={pool} />
       <PoolHookTag pool={pool} />

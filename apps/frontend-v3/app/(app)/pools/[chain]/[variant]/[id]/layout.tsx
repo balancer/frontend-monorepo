@@ -1,11 +1,6 @@
 /* eslint-disable max-len */
 import { FetchPoolProps } from '@repo/lib/modules/pool/pool.types'
-import {
-  ChainSlug,
-  getChainSlug,
-  getPoolDisplayTokens,
-  getPoolTypeLabel,
-} from '@repo/lib/modules/pool/pool.utils'
+import { ChainSlug, getChainSlug, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { PropsWithChildren, Suspense } from 'react'
 import { PoolDetailSkeleton } from '@repo/lib/modules/pool/PoolDetail/PoolDetailSkeleton'
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
@@ -15,6 +10,7 @@ import { PoolProvider } from '@repo/lib/modules/pool/PoolProvider'
 import { arrayToSentence } from '@repo/lib/shared/utils/strings'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { notFound } from 'next/navigation'
+import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 
 type Props = PropsWithChildren<{
   params: Omit<FetchPoolProps, 'chain'> & { chain: ChainSlug }
@@ -48,7 +44,8 @@ export async function generateMetadata({
   const pool = data?.pool
   if (!pool) return {}
 
-  const displayTokens = getPoolDisplayTokens(pool)
+  const displayTokens = getUserReferenceTokens(pool)
+
   const poolTokenString = arrayToSentence(displayTokens.map(token => token.symbol))
 
   return {
