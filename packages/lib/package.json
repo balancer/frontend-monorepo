@@ -25,7 +25,7 @@
     "@chakra-ui/hooks": "^2.2.1",
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/next-js": "^2.2.0",
-    "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/react": "^3.3.1",
     "@chakra-ui/theme-tools": "^2.1.2",
     "@dicebear/collection": "^7.0.1",
     "@dicebear/core": "^7.0.1",
