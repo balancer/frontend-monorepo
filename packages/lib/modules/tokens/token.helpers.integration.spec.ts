@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { getLeafTokens } from './token.helpers'
+import { PoolToken } from '../pool/pool.types'
 
 const wethAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9'
 const usdcAaveAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // Sepolia underlying usdcAave faucet address (temporary until we have the real one)
@@ -13,7 +14,7 @@ const nestedPool = {} as GqlPoolElement
 // Unskip when sepolia V3 pools are available in production api
 describe.skip('When adding nested liquidity for a weighted pool', () => {
   test('has zero price impact', async () => {
-    const leafTokens = getLeafTokens(nestedPool.poolTokens)
+    const leafTokens = getLeafTokens(nestedPool.poolTokens as PoolToken[])
 
     expect(leafTokens).toMatchObject([
       {
