@@ -53,12 +53,10 @@ function useGaugeRelativeWeightsWrite(
   gaugeAddresses: UseGaugeVotesParams['gaugeAddresses'],
   timestamp: number
 ) {
-  const { isConnected } = useUserAccount()
   return useReadContracts({
     ...readContractsParams,
     query: {
       ...readContractsParams.query,
-      enabled: isConnected,
     },
     contracts: gaugeAddresses.map(gaugeAddress => {
       return {
