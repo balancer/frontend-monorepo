@@ -22,12 +22,11 @@ interface Props extends GridProps {
 const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
 export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
-  const { name } = usePoolMetadata(pool)
-  const { toCurrency } = useCurrency()
-
   const {
     queryState: { userAddress },
   } = usePoolList()
+  const { name } = usePoolMetadata(pool)
+  const { toCurrency } = useCurrency()
 
   return (
     <FadeInOnView>
