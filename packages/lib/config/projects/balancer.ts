@@ -37,13 +37,12 @@ export const ProjectConfigBalancer: ProjectConfig = {
     discordUrl: 'https://discord.balancer.fi/',
     poolComposerUrl: 'https://pool-creator.balancer.fi',
   },
-  // TODO: Remove this once config is moved to app folder
   options: {
-    displayType: PoolListDisplayType.Name,
-    hidePoolTags: ['VE8020', 'BOOSTED'],
-    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
-    hideProtocolVersion: ['cow', 'v3'],
-    showPoolName: true,
+    displayType: PoolListDisplayType.TokenPills,
+    hidePoolTags: [],
+    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.Fx],
+    hideProtocolVersion: [],
+    showPoolName: false,
     showVeBal: true,
     showMaBeets: false,
   },

@@ -17,7 +17,6 @@ export const ProjectConfigBeets: ProjectConfig = {
     discordUrl: 'https://beets.fi/discord',
     poolComposerUrl: 'https://ma.beets.fi/compose',
   },
-  // TODO: Remove this once config is moved to app folder
   options: {
     displayType: PoolListDisplayType.Name,
     hidePoolTags: ['VE8020', 'BOOSTED'],
