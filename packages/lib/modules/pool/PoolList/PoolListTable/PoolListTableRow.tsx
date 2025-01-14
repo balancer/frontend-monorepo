@@ -1,4 +1,4 @@
-import { Badge, Box, Grid, GridItem, GridProps, HStack, Text, Image } from '@chakra-ui/react'
+import { Box, Grid, GridItem, GridProps, HStack, Text, Image } from '@chakra-ui/react'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -117,7 +117,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
               </Text>
             </GridItem>
             <GridItem justifySelf="end" pr={{ base: 'md', xl: '0' }}>
-              <HStack gap="xxs" mr={needsMarginForPoints && !hasPoints ? '30px' : '0'}>
+              <HStack gap="xxs" mr={needsMarginForPoints && !hasPoints ? '12px' : '0'}>
                 <MemoizedMainAprTooltip
                   aprItems={pool.dynamicData.aprItems}
                   height="auto"
@@ -126,17 +126,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
                   textProps={{ fontWeight: 'medium', textAlign: 'right' }}
                 />
                 {hasPoints && (
-                  <Badge
-                    alignItems="center"
-                    bg="background.level2"
-                    borderRadius="full"
-                    display="flex"
-                    p="xxs"
-                    shadow="sm"
-                    textTransform="none"
-                  >
-                    <Image alt="points" h="6" src="/images/icons/pool-points.svg" w="6" />
-                  </Badge>
+                  <Image alt="points" h="15px" src="/images/icons/pool-points.svg" w="10px" />
                 )}
               </HStack>
             </GridItem>
