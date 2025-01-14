@@ -32,7 +32,7 @@ export const v2SepoliaStableWithERC4626: PoolExample = {
   poolId: '0x6c3966874f49a2f6a8f2f791f82f65b214e90ccb0000000000000000000001a6',
   poolChain: GqlChain.Sepolia,
   version: 2,
-  mockName: 'v2SepoliaStableWithERC4626',
+  mockName: 'v2SepoliaStableWithERC4626Mock',
 }
 
 export const flatPoolExamples = [

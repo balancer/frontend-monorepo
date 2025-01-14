@@ -19,7 +19,7 @@ function astToQueryString(ast: any): string {
   return print(ast)
 }
 
-export async function getPoolMock(
+export async function fetchPoolMock(
   poolId: Address = nested50WETH_50_3poolId,
   chain: GqlChain = GqlChain.Mainnet,
   userAddress?: Address
@@ -50,6 +50,6 @@ export async function getPoolMock(
   return getPoolQuery.pool as GqlPoolElement
 }
 
-export function getPoolForTest(poolExample: PoolExample): Promise<PoolCore> {
-  return getPoolMock(poolExample.poolId, poolExample.poolChain) as Promise<PoolCore>
+export function fetchPoolForTest(poolExample: PoolExample): Promise<PoolCore> {
+  return fetchPoolMock(poolExample.poolId, poolExample.poolChain) as Promise<PoolCore>
 }

@@ -5,19 +5,26 @@ import { boostedPoolExamples } from '@repo/lib/modules/pool/__mocks__/pool-examp
 import { flatPoolExamples } from '@repo/lib/modules/pool/__mocks__/pool-examples/flat'
 import { nestedPoolExamples } from '@repo/lib/modules/pool/__mocks__/pool-examples/nested'
 import { PoolExample } from '@repo/lib/modules/pool/__mocks__/pool-examples/pool-examples.types'
-import { savePoolMock } from '@repo/lib/modules/pool/__mocks__/savePoolMock'
+import {
+  saveAllPoolApiMocksFile,
+  savePoolMock,
+} from '@repo/lib/modules/pool/__mocks__/savePoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export default async function saveApiMocks() {
-  const allPoolExamples = [...flatPoolExamples, ...boostedPoolExamples, ...nestedPoolExamples]
+const allPoolExamples = [...flatPoolExamples, ...boostedPoolExamples, ...nestedPoolExamples]
 
+export default async function saveApiMocks() {
   const promises = allPoolExamples.map(example => {
-    if (shouldSkipMock(example)) return
+    if (shouldSkipMock(example)) {
+      return Promise.resolve(example.mockName)
+    }
 
     return savePoolMock(example.poolId, example.poolChain, example.mockName)
   })
 
-  await Promise.all(promises)
+  const mockFileNames: string[] = (await Promise.all(promises)).filter(f => f !== undefined)
+
+  await saveAllPoolApiMocksFile(mockFileNames)
 
   console.log(`✅ Updated mocks using api: ${process.env.NEXT_PUBLIC_BALANCER_API_URL} \n`)
 }
