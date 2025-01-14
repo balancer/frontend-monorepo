@@ -126,7 +126,13 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
                   textProps={{ fontWeight: 'medium', textAlign: 'right' }}
                 />
                 {hasPoints && (
-                  <Image alt="points" h="15px" src="/images/icons/pool-points.svg" w="10px" />
+                  <Image
+                    alt="points"
+                    h="15px"
+                    ml="0.5"
+                    src="/images/icons/pool-points.svg"
+                    w="10px"
+                  />
                 )}
               </HStack>
             </GridItem>
