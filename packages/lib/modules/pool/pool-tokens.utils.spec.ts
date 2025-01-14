@@ -116,7 +116,7 @@ describe('getDisplayTokens for flat pools', () => {
     expect(getFlatUserReferenceTokenSymbols(sDAIWeighted)).toEqual(['sDAI', 'wstETH'])
   })
 
-  it.skip('v2 stable with ERC4626 tokens (V2 so no boosted)', () => {
+  it('v2 stable with ERC4626 tokens (V2 so no boosted)', () => {
     expect(getCompositionTokenSymbols(v2SepoliaStableWithERC4626)).toEqual([
       'dai-aave',
       'usdc-aave',
