@@ -1,4 +1,3 @@
-import { fetchPoolForTest } from './__mocks__/fetchPoolMock'
 import { morphoStakeHouse, sDAIBoosted } from './__mocks__/pool-examples/boosted'
 import {
   balWeth8020,
@@ -69,10 +68,8 @@ function getCompositionTokensWeights(poolExample: PoolExample): (string | undefi
   return getCompositionTokens(pool).map(t => t.weight)
 }
 
-async function getCompositionTokensURIs(
-  poolExample: PoolExample
-): Promise<(string | null | undefined)[]> {
-  const pool = await fetchPoolForTest(poolExample)
+function getCompositionTokensURIs(poolExample: PoolExample): (string | null | undefined)[] {
+  const pool = getApiPoolMock(poolExample)
 
   return getCompositionTokens(pool).map(t => t.logoURI)
 }
@@ -180,7 +177,7 @@ describe('getDisplayTokens for BOOSTED pools', () => {
     expect(getFlatUserReferenceTokenSymbols(morphoStakeHouse)).toEqual(['USDC', 'wUSDL'])
   })
 
-  it.only('sDAI boosted', () => {
+  it('sDAI boosted', () => {
     expect(getCompositionTokenSymbols(sDAIBoosted)).toEqual(['sDAI', 'waGnoGNO'])
 
     expect(getUserReferenceTokenSymbols(sDAIBoosted)).toEqual(['GNO', 'sDAI'])
