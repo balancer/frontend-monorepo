@@ -138,7 +138,10 @@ const networkConfig: NetworkConfig = {
         '0xad0e5e0778cac28f1ff459602b31351871b5754a0002000000000000000003cD',
       ],
     },
-    disallowNestedActions: ['0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249'],
+    disallowNestedActions: [
+      '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249', // AuraBal
+      '0xc5c91aea7551095c3e1ff0f94f682c45b347ad730002000000000000000006c0', // 80BAL20WETH + WETH
+    ],
   }),
 } as const satisfies NetworkConfig
 
