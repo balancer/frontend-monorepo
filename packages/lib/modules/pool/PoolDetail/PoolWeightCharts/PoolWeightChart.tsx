@@ -1,6 +1,6 @@
 'use client'
 
-import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { Box, VStack, useTheme } from '@chakra-ui/react'
@@ -13,9 +13,10 @@ import ReactECharts from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
+import { PoolToken } from '../../pool.types'
 
 export interface PoolWeightChartProps {
-  displayTokens: GqlPoolTokenDetail[]
+  displayTokens: PoolToken[]
   chain: GqlChain
   totalLiquidity: string
   hasLegend?: boolean
@@ -30,7 +31,7 @@ export interface ChartSizeValues {
   haloTop: string
   haloLeft: string
   haloWidth: string
-  haloHeigth: string
+  haloHeight: string
 }
 
 export interface PoolWeightChartColorDef {
@@ -85,7 +86,7 @@ const smallSize: ChartSizeValues = {
   haloTop: '40%',
   haloLeft: '55px',
   haloWidth: '40px',
-  haloHeigth: '40px',
+  haloHeight: '40px',
 }
 
 const normalSize: ChartSizeValues = {
@@ -95,7 +96,7 @@ const normalSize: ChartSizeValues = {
   haloTop: '49%',
   haloLeft: '95px',
   haloWidth: '60px',
-  haloHeigth: '60px',
+  haloHeight: '60px',
 }
 
 function OuterSymbolCircle({ opacity, isSmall }: { opacity: string; isSmall: boolean }) {

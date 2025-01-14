@@ -2,15 +2,16 @@ import { Badge, BadgeProps, Box, Heading, HStack, Text, Wrap } from '@chakra-ui/
 import {
   GqlChain,
   GqlPoolTokenDetail,
-  GqlPoolTokenDisplay,
+  GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { PoolListItem } from '../pool.types'
-import { TokenIcon } from '../../tokens/TokenIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { isStableLike, isV3Pool, isWeightedLike } from '../pool.helpers'
-import { Pool } from '../PoolProvider'
-import { usePoolMetadata } from '../metadata/usePoolMetadata'
+import { TokenIcon } from '../../tokens/TokenIcon'
 import { TokenIconStack } from '../../tokens/TokenIconStack'
+import { usePoolMetadata } from '../metadata/usePoolMetadata'
+import { isStableLike, isWeightedLike } from '../pool.helpers'
+import { getUserReferenceTokens } from '../pool-tokens.utils'
+import { PoolToken, PoolCore } from '../pool.types'
+// import { VotingPoolWithData } from '../../vebal/vote/vote.types'
 
 function NestedTokenPill({
   nestedTokens,
@@ -46,7 +47,7 @@ function WeightedTokenPills({
   chain,
   iconSize = 24,
   ...badgeProps
-}: { tokens: GqlPoolTokenDetail[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
+}: { tokens: PoolToken[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
   return (
     <Wrap spacing="xs">
       {tokens.map(token => {
@@ -110,7 +111,7 @@ function StableTokenPills({
   chain,
   iconSize = 24,
   ...badgeProps
-}: { tokens: GqlPoolTokenDetail[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
+}: { tokens: PoolToken[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
   const isFirstToken = (index: number) => index === 0
   const zIndices = Array.from({ length: tokens.length }, (_, index) => index).reverse()
 
@@ -169,77 +170,94 @@ function StableTokenPills({
   )
 }
 
-type Props = {
-  pool: Pool | PoolListItem
+/**
+This will be updated in voting list PR:
+https://github.com/balancer/frontend-monorepo/pull/148
+
+type VotingListTokenPillsProps = {
+  vote: VotingPoolWithData
+  iconSize?: number
+} & BadgeProps
+export function VotingListTokenPills({ vote, ...props }: VotingListTokenPillsProps) {
+  const tokens = vote.tokens.map(
+
+   /*
+      TODO:
+      Tokens in veBalGetVotingList query have type GqlVotingGaugeToken which does not have all the properties of PoolToken
+      That means that token pills will be different for voting pools (unless we change the backend types or we query and map the pool list tokens):
+      - Showing symbol instead of name
+      - GqlVotingGaugeToken does not have nestedPool property so NestedTokenPills won't be displayed
+    *-/
+    token => ({ ...token, name: token.symbol }) as unknown as PoolToken
+  )
+
+  const { name } = usePoolMetadata({ chain: vote.chain, address: vote.address })
+  return (
+    <PoolTokenPills
+    chain={vote.chain}
+    poolName={name}
+    poolType={vote.type}
+    tokens={tokens}
+    {...props}
+    />
+  )
+}
+**/
+
+type PoolListTokenPillsProps = {
+  pool: PoolCore
   iconSize?: number
   nameSize?: string
+} & BadgeProps
+export function PoolListTokenPills({ pool, ...props }: PoolListTokenPillsProps) {
+  const { name } = usePoolMetadata(pool)
+  return (
+    <PoolTokenPills
+      chain={pool.chain}
+      poolName={name}
+      poolType={pool.type}
+      tokens={getUserReferenceTokens(pool)}
+      {...props}
+    />
+  )
 }
 
-export function PoolListTokenPills({
-  pool,
+type PoolTokenPillsProps = {
+  poolType: GqlPoolType
+  chain: GqlChain
+  tokens: PoolToken[]
+  poolName: string | undefined
+  iconSize?: number
+  nameSize?: string
+} & BadgeProps
+function PoolTokenPills({
+  chain,
+  poolType,
+  poolName,
+  tokens,
   iconSize = 24,
   nameSize = 'md',
   ...badgeProps
-}: Props & BadgeProps) {
-  const shouldUseWeightedPills = isWeightedLike(pool.type)
-  const shouldUseStablePills = isStableLike(pool.type)
-  const { name } = usePoolMetadata(pool)
+}: PoolTokenPillsProps) {
+  const shouldUseWeightedPills = isWeightedLike(poolType)
+  const shouldUseStablePills = isStableLike(poolType)
 
-  // TODO: fix difference between Pool and PoolListItem types
-  let poolTokens = pool.poolTokens.filter(
-    token => token.address !== pool.address
-  ) as GqlPoolTokenDetail[]
-
-  // TODO: Move this into a general 'displayTokens' helper function.
-  if (isV3Pool(pool) && pool.hasErc4626 && pool.hasAnyAllowedBuffer) {
-    poolTokens = poolTokens.map(token =>
-      token.isErc4626 && token.isBufferAllowed
-        ? ({ ...token, ...token.underlyingToken } as unknown as GqlPoolTokenDetail)
-        : token
-    )
-  }
-
-  if (name) {
+  if (poolName) {
     return (
       <HStack>
-        <TokenIconStack
-          chain={pool.chain}
-          size={iconSize}
-          tokens={poolTokens as unknown as GqlPoolTokenDisplay[]}
-        />
-        <Heading size={nameSize}>{name}</Heading>
+        <TokenIconStack chain={chain} size={iconSize} tokens={tokens} />
+        <Heading size={nameSize}>{poolName}</Heading>
       </HStack>
     )
   }
 
   if (shouldUseStablePills) {
-    return (
-      <StableTokenPills
-        chain={pool.chain}
-        iconSize={iconSize}
-        tokens={poolTokens}
-        {...badgeProps}
-      />
-    )
+    return <StableTokenPills chain={chain} iconSize={iconSize} tokens={tokens} {...badgeProps} />
   }
 
   if (shouldUseWeightedPills) {
-    return (
-      <WeightedTokenPills
-        chain={pool.chain}
-        iconSize={iconSize}
-        tokens={poolTokens}
-        {...badgeProps}
-      />
-    )
+    return <WeightedTokenPills chain={chain} iconSize={iconSize} tokens={tokens} {...badgeProps} />
   }
 
-  return (
-    <WeightedTokenPills
-      chain={pool.chain}
-      iconSize={iconSize}
-      tokens={poolTokens}
-      {...badgeProps}
-    />
-  )
+  return <WeightedTokenPills chain={chain} iconSize={iconSize} tokens={tokens} {...badgeProps} />
 }
