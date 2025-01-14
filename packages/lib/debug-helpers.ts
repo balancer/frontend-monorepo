@@ -11,9 +11,9 @@ export const wjAuraAddress = '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F' as con
 
 export const usdcDaiUsdtBptAddress = '0x79c58f70905f734641735bc61e45c19dd9ad60bc' as const //USDC-DAI-USDT
 export const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f' as const
-export const waUsdcAddress = '0xd4fa2d31b7968e448877f69a96de69f5de8cd23e' as const // Wrapped Aave Ethereum USDC
+export const waUsdcAddress = '0xd4fa2d31b7968e448877f69a96de69f5de8cd23e' as const // Wrapped Aave USDC
 export const usdcAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as const
-export const waUsdtAddress = '0x7bc3485026ac48b6cf9baf0a377477fff5703af8' as const // Wrapped Aave Ethereum USDT
+export const waUsdtAddress = '0x7bc3485026ac48b6cf9baf0a377477fff5703af8' as const // Wrapped Aave USDT
 export const usdtAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7' as const
 
 export const osEth_WETH_BptAddress = '0xdacf5fa19b1f720111609043ac67a9818262850c' as const
