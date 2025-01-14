@@ -29,7 +29,7 @@ export const osETH_wETH_BPTMock = {
   dynamicData: {
     poolId: '0xdacf5fa19b1f720111609043ac67a9818262850c000000000000000000000635',
     swapEnabled: true,
-    totalLiquidity: '57361755.28',
+    totalLiquidity: '57162947.26',
     totalShares: '17733.371327478520169549',
     fees24h: '11.43',
     surplus24h: '0.00',
@@ -42,7 +42,7 @@ export const osETH_wETH_BPTMock = {
       {
         id: '0xdacf5fa19b1f720111609043ac67a9818262850c000000000000000000000635-osETH-yield-apr',
         title: 'osETH APR',
-        apr: 0.01635440960174901,
+        apr: 0.01633864220456643,
         type: 'IB_YIELD',
         rewardTokenSymbol: 'osETH',
         rewardTokenAddress: '0xf1c9acdc66974dfb6decb12aa385b9cd01190e38',
@@ -50,7 +50,7 @@ export const osETH_wETH_BPTMock = {
       {
         id: '0xc592c33e51a764b94db0702d8baf4035ed577aed-0xba100000625a3754423978a60c9317c58a424e3d-balgauge-BAL-apr',
         title: 'BAL reward APR',
-        apr: 5.700349507982924e-7,
+        apr: 5.720174853226088e-7,
         type: 'VEBAL_EMISSIONS',
         rewardTokenSymbol: 'BAL',
         rewardTokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
@@ -58,7 +58,7 @@ export const osETH_wETH_BPTMock = {
       {
         id: '0xc592c33e51a764b94db0702d8baf4035ed577aed-0xba100000625a3754423978a60c9317c58a424e3d-balgauge-BAL-apr-boost',
         title: 'BAL reward APR',
-        apr: 8.550524261974385e-7,
+        apr: 8.580262279839133e-7,
         type: 'STAKING_BOOST',
         rewardTokenSymbol: 'BAL',
         rewardTokenAddress: '0xba100000625a3754423978a60c9317c58a424e3d',
@@ -74,7 +74,7 @@ export const osETH_wETH_BPTMock = {
       {
         id: '0xc592c33e51a764b94db0702d8baf4035ed577aed-0x48c3399719b582dd63eb5aadf12a40b4c3f52fa2-reward-SWISE-apr',
         title: 'SWISE reward APR',
-        apr: 0.01860830445429674,
+        apr: 0.01868475605313782,
         type: 'STAKING',
         rewardTokenSymbol: 'SWISE',
         rewardTokenAddress: '0x48c3399719b582dd63eb5aadf12a40b4c3f52fa2',
@@ -82,7 +82,7 @@ export const osETH_wETH_BPTMock = {
       {
         id: '0xdacf5fa19b1f720111609043ac67a9818262850c000000000000000000000635-swap-apr-24h',
         title: 'Swap fees APR (24h)',
-        apr: 0.00003636577936428322,
+        apr: 0.00003649225654430946,
         type: 'SWAP_FEE_24H',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -90,7 +90,7 @@ export const osETH_wETH_BPTMock = {
       {
         id: '0xdacf5fa19b1f720111609043ac67a9818262850c000000000000000000000635-swap-apr',
         title: 'Swap fees APR',
-        apr: 0.00003636577936428322,
+        apr: 0.00003649225654430946,
         type: 'SWAP_FEE',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -194,7 +194,7 @@ export const osETH_wETH_BPTMock = {
       isErc4626: false,
       index: 0,
       balance: '8146.636151737569',
-      balanceUSD: '25994693.96477182',
+      balanceUSD: '25934734.72269503',
       priceRate: '1.0',
       weight: null,
       hasNestedPool: false,
@@ -247,7 +247,7 @@ export const osETH_wETH_BPTMock = {
       isErc4626: false,
       index: 2,
       balance: '9523.235383276016',
-      balanceUSD: '31367061.31131154',
+      balanceUSD: '31228212.53942338',
       priceRate: '1.036319708891414826',
       weight: null,
       hasNestedPool: false,

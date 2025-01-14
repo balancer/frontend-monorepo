@@ -14,6 +14,10 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 const allPoolExamples = [...flatPoolExamples, ...boostedPoolExamples, ...nestedPoolExamples]
 
 export default async function saveApiMocks() {
+  if (process.env.NEXT_PUBLIC_UPDATE_API_MOCKS !== 'true') {
+    console.log('Skipping api mocks update\n')
+    return
+  }
   const promises = allPoolExamples.map(example => {
     if (shouldSkipMock(example)) {
       return Promise.resolve(example.mockName)

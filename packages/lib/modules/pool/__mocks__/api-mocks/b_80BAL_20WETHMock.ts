@@ -29,7 +29,7 @@ export const b_80BAL_20WETHMock = {
   dynamicData: {
     poolId: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014',
     swapEnabled: true,
-    totalLiquidity: '57257019.29',
+    totalLiquidity: '57230620.69',
     totalShares: '6654593.850371417996045272',
     fees24h: '4559.02',
     surplus24h: '0.00',
@@ -50,7 +50,7 @@ export const b_80BAL_20WETHMock = {
       {
         id: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014-swap-apr-24h',
         title: 'Swap fees APR (24h)',
-        apr: 0.0145313413338265,
+        apr: 0.01453804416235576,
         type: 'SWAP_FEE_24H',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -58,7 +58,7 @@ export const b_80BAL_20WETHMock = {
       {
         id: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014-swap-apr',
         title: 'Swap fees APR',
-        apr: 0.0145313413338265,
+        apr: 0.01453804416235576,
         type: 'SWAP_FEE',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -82,7 +82,7 @@ export const b_80BAL_20WETHMock = {
       {
         id: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014-protocol-apr',
         title: 'Protocol APR',
-        apr: 0.207054883090154,
+        apr: 0.2070693553483915,
         type: 'LOCKING',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -168,7 +168,7 @@ export const b_80BAL_20WETHMock = {
       isErc4626: false,
       index: 1,
       balance: '3586.766021929199',
-      balanceUSD: '11444832.36107278',
+      balanceUSD: '11418433.76315138',
       priceRate: '1.0',
       weight: '0.2',
       hasNestedPool: false,

@@ -42,7 +42,7 @@ export const aave_USDC_USDTMock = {
       {
         id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-waEthUSDT-yield-apr',
         title: 'waEthUSDT APR',
-        apr: 0.0487165795342475,
+        apr: 0.0487186065063021,
         type: 'IB_YIELD',
         rewardTokenSymbol: 'waEthUSDT',
         rewardTokenAddress: '0x7bc3485026ac48b6cf9baf0a377477fff5703af8',
@@ -58,7 +58,7 @@ export const aave_USDC_USDTMock = {
       {
         id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-waEthUSDC-yield-apr',
         title: 'waEthUSDC APR',
-        apr: 0.01616749808730534,
+        apr: 0.01612083526501809,
         type: 'IB_YIELD',
         rewardTokenSymbol: 'waEthUSDC',
         rewardTokenAddress: '0xd4fa2d31b7968e448877f69a96de69f5de8cd23e',
@@ -66,7 +66,7 @@ export const aave_USDC_USDTMock = {
       {
         id: '0xeec405b834c90b59122bcc2357f27110b2adb4b7-0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48-reward-USDC-apr',
         title: 'USDC reward APR',
-        apr: 0.135650945300846,
+        apr: 0.1356508096484085,
         type: 'STAKING',
         rewardTokenSymbol: 'USDC',
         rewardTokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',

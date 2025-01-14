@@ -29,7 +29,7 @@ export const b_csUSDL_steakUSDCMock = {
   dynamicData: {
     poolId: '0x5dd88b3aa3143173eb26552923922bdf33f50949',
     swapEnabled: true,
-    totalLiquidity: '119.51',
+    totalLiquidity: '119.54',
     totalShares: '118.908858017586541723',
     fees24h: '0.00',
     surplus24h: '0.00',
@@ -42,7 +42,7 @@ export const b_csUSDL_steakUSDCMock = {
       {
         id: '0x5dd88b3aa3143173eb26552923922bdf33f50949-morpho',
         title: 'MORPHO APR',
-        apr: 0.03352086766325431,
+        apr: 0.03352086766328337,
         type: 'IB_YIELD',
         rewardTokenSymbol: 'MORPHO',
         rewardTokenAddress: '0x58d97b57bb95320f9a05dc918aef65434969c2b2',
@@ -50,7 +50,7 @@ export const b_csUSDL_steakUSDCMock = {
       {
         id: '0x5dd88b3aa3143173eb26552923922bdf33f50949-csUSDL-yield-apr',
         title: 'csUSDL APR',
-        apr: 0.01405449373808493,
+        apr: 0.0140515497157453,
         type: 'IB_YIELD',
         rewardTokenSymbol: 'csUSDL',
         rewardTokenAddress: '0xbeefc01767ed5086f35decb6c00e6c12bc7476c1',
@@ -58,7 +58,7 @@ export const b_csUSDL_steakUSDCMock = {
       {
         id: '0x5dd88b3aa3143173eb26552923922bdf33f50949-steakUSDC-yield-apr',
         title: 'steakUSDC APR',
-        apr: 0.04495343771970355,
+        apr: 0.04861047933126661,
         type: 'IB_YIELD',
         rewardTokenSymbol: 'steakUSDC',
         rewardTokenAddress: '0xbeef01735c132ada46aa9aa4c54623caa92a64cb',
@@ -131,7 +131,7 @@ export const b_csUSDL_steakUSDCMock = {
       isErc4626: true,
       index: 0,
       balance: '65.31696118492115',
-      balanceUSD: '69.7088749796696',
+      balanceUSD: '69.7339142359339',
       priceRate: '1.062278389711774733',
       weight: null,
       hasNestedPool: false,
@@ -189,7 +189,7 @@ export const b_csUSDL_steakUSDCMock = {
       isErc4626: true,
       index: 1,
       balance: '49.32821670590632',
-      balanceUSD: '49.80121076035214',
+      balanceUSD: '49.80121076035594',
       priceRate: '1.009610996999246241',
       weight: null,
       hasNestedPool: false,

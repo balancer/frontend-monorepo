@@ -29,7 +29,7 @@ export const b_auraBAL_STABLEMock = {
   dynamicData: {
     poolId: '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249',
     swapEnabled: true,
-    totalLiquidity: '4358047.20',
+    totalLiquidity: '4338311.04',
     totalShares: '534314.030815982011725198',
     fees24h: '111.90',
     surplus24h: '0.00',
@@ -42,7 +42,7 @@ export const b_auraBAL_STABLEMock = {
       {
         id: '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249-swap-apr-24h',
         title: 'Swap fees APR (24h)',
-        apr: 0.004685986420047158,
+        apr: 0.004707304248619949,
         type: 'SWAP_FEE_24H',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -50,7 +50,7 @@ export const b_auraBAL_STABLEMock = {
       {
         id: '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249-swap-apr',
         title: 'Swap fees APR',
-        apr: 0.004685986420047158,
+        apr: 0.004707304248619949,
         type: 'SWAP_FEE',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -137,7 +137,7 @@ export const b_auraBAL_STABLEMock = {
     },
     aura: {
       id: '0x89d3d732da8bf0f88659cf3738e5e44e553f9ed7',
-      apr: 0.2061,
+      apr: 0.2027,
       auraPoolAddress: '0x89d3d732da8bf0f88659cf3738e5e44e553f9ed7',
       auraPoolId: '101',
       isShutdown: false,
@@ -181,7 +181,7 @@ export const b_auraBAL_STABLEMock = {
         bptPriceRate: '1.0',
         nestedPercentage: '0.010346279309430198',
         nestedShares: '68850.28666675923',
-        totalLiquidity: '57257019.29122038',
+        totalLiquidity: '57230620.69329898',
         totalShares: '6654593.850371418',
         tokens: [
           {
@@ -204,7 +204,7 @@ export const b_auraBAL_STABLEMock = {
             address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             decimals: 18,
             balance: '37.10968308045333',
-            balanceUSD: '118411.43225726447',
+            balanceUSD: '118138.30498979232',
             symbol: 'WETH',
             weight: '0.2',
             isErc4626: false,
@@ -234,7 +234,7 @@ export const b_auraBAL_STABLEMock = {
       isErc4626: false,
       index: 1,
       balance: '493403.96449862095',
-      balanceUSD: '3759738.209479492',
+      balanceUSD: '3740002.050899547',
       priceRate: '1.0',
       weight: null,
       hasNestedPool: false,
