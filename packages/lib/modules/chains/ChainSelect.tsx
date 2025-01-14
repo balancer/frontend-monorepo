@@ -24,6 +24,11 @@ interface ChainOption extends OptionBase {
   value: GqlChain
 }
 
+type Props = {
+  value: GqlChain
+  onChange(value: GqlChain): void
+}
+
 const networkOptions: ChainOption[] = PROJECT_CONFIG.supportedNetworks.map(network => ({
   label: (
     <HStack>
@@ -33,11 +38,6 @@ const networkOptions: ChainOption[] = PROJECT_CONFIG.supportedNetworks.map(netwo
   ),
   value: network,
 }))
-
-type Props = {
-  value: GqlChain
-  onChange(value: GqlChain): void
-}
 
 function DropdownIndicator({
   ...props
