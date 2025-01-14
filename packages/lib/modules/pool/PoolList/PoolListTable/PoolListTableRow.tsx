@@ -137,7 +137,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
                     shadow="sm"
                     textTransform="none"
                   >
-                    <Image alt="points" h="6" src="/images/icons/points.svg" w="6" />
+                    <Image alt="points" h="6" src="/images/icons/pool-points.svg" w="6" />
                   </Badge>
                 )}
               </HStack>
