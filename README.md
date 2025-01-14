@@ -50,6 +50,8 @@ To test all apps and packages, run:
 pnpm test:unit
 // or
 pnpm test:integration
+// or
+pnpm test:e2e
 ```
 
 ### Install a package

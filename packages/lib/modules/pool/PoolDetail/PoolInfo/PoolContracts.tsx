@@ -35,7 +35,7 @@ import { RateProviderInfoPopOver } from './RateProviderInfo'
 import { getWarnings, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
 import { Erc4626InfoPopOver } from './Erc4626Info'
-import { ApiToken } from '../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 type RateProvider = {
@@ -132,7 +132,7 @@ export function PoolContracts({ ...props }: CardProps) {
 
     if (hasGaugeAddress) {
       contracts.push({
-        label: 'veBAL gauge',
+        label: 'Incentives gauge',
         address: gaugeAddress,
         explorerLink: gaugeExplorerLink,
       })

@@ -45,9 +45,10 @@ import {
   isV3Pool,
   isV3NotSupportingWethIsEth,
   getActionableTokenSymbol,
+  hasNestedPools,
 } from '../pool.helpers'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
-import { ApiToken } from '../pool.types'
+import { ApiToken } from '../../tokens/token.types'
 
 // Null object used to avoid conditional checks during hook loading state
 const NullPool: Pool = {
@@ -269,9 +270,10 @@ It looks that you tried to call useBuildCallData before the last query finished 
 }
 
 export function supportsNestedActions(pool: Pool): boolean {
-  const allowNestedActions = getNetworkConfig(pool.chain).pools?.allowNestedActions ?? []
-  if (allowNestedActions.includes(pool.id)) return true
-  return false
+  if (!hasNestedPools(pool)) return false
+  const disallowNestedActions = getNetworkConfig(pool.chain).pools?.disallowNestedActions ?? []
+  if (disallowNestedActions.includes(pool.id)) return false
+  return true
 }
 
 export function shouldUseRecoveryRemoveLiquidity(pool: Pool): boolean {

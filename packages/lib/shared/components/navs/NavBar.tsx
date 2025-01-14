@@ -1,19 +1,18 @@
 'use client'
 
-import NextLink from 'next/link'
-import DarkModeToggle from '../btns/DarkModeToggle'
-import { Box, HStack, BoxProps, Link, Button } from '@chakra-ui/react'
-import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
-import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
-import RecentTransactions from '../other/RecentTransactions'
+import { Box, BoxProps, Button, HStack, Link } from '@chakra-ui/react'
 import { isDev, isStaging } from '@repo/lib/config/app.config'
-import { staggeredFadeIn, fadeIn } from '@repo/lib/shared/utils/animations'
-import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'framer-motion'
-import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
-import { AppLink, useNav } from './useNav'
-import { ReactNode, useEffect, useMemo, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
+import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { fadeIn, staggeredFadeIn } from '@repo/lib/shared/utils/animations'
+import { motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'framer-motion'
+import NextLink from 'next/link'
+import { usePathname } from 'next/navigation'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
+import DarkModeToggle from '../btns/DarkModeToggle'
+import RecentTransactions from '../other/RecentTransactions'
+import { AppLink, useNav } from './useNav'
 
 type Props = {
   mobileNav?: ReactNode
@@ -22,6 +21,7 @@ type Props = {
   leftSlot?: ReactNode
   rightSlot?: ReactNode
   disableBlur?: boolean
+  customLinks?: ReactNode
 }
 
 const clamp = (number: number, min: number, max: number) => Math.min(Math.max(number, min), max)
@@ -44,7 +44,14 @@ function useBoundedScroll(threshold: number) {
   return { scrollYBounded, scrollYBoundedProgress }
 }
 
-function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
+function NavLinks({
+  appLinks,
+  customLinks,
+  ...props
+}: BoxProps & {
+  appLinks: AppLink[]
+  customLinks?: ReactNode
+}) {
   const { linkColorFor } = useNav()
 
   return (
@@ -55,6 +62,7 @@ function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
             as={NextLink}
             color={linkColorFor(link.href)}
             href={link.href}
+            isExternal={link.isExternal}
             prefetch
             variant="nav"
           >
@@ -62,30 +70,38 @@ function NavLinks({ appLinks, ...props }: BoxProps & { appLinks: AppLink[] }) {
           </Link>
         </Box>
       ))}
-      <Box as={motion.div} variants={fadeIn}>
-        <VeBalLink />
-      </Box>
+      {customLinks}
       {(isDev || isStaging) && (
-        <Box as={motion.div} variants={fadeIn}>
-          {/* <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
-            Debug
-          </Link> */}
-          <Link
-            as={NextLink}
-            color={linkColorFor('/testooors')}
-            href="/testooors"
-            prefetch
-            variant="nav"
-          >
-            Test
-          </Link>
-        </Box>
+        <>
+          <Box as={motion.div} variants={fadeIn}>
+            <Link
+              as={NextLink}
+              color={linkColorFor('/debug/pools')}
+              href="/debug/pools"
+              prefetch
+              variant="nav"
+            >
+              Test-Pools
+            </Link>
+          </Box>
+          <Box as={motion.div} variants={fadeIn}>
+            <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
+              Debug
+            </Link>
+          </Box>
+        </>
       )}
     </HStack>
   )
 }
 
-function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
+export function NavActions({
+  mobileNav,
+  hideDarkModeToggle,
+}: {
+  mobileNav: ReactNode
+  hideDarkModeToggle?: boolean
+}) {
   const pathname = usePathname()
   const { isConnected } = useUserAccount()
 
@@ -93,7 +109,7 @@ function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
     if (pathname === '/') {
       return [
         {
-          el: <DarkModeToggle />,
+          el: hideDarkModeToggle ? null : <DarkModeToggle />,
           display: { base: 'none', lg: 'block' },
         },
         {
@@ -117,7 +133,7 @@ function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
         display: { base: 'none', lg: 'block' },
       },
       {
-        el: <DarkModeToggle />,
+        el: hideDarkModeToggle ? null : <DarkModeToggle />,
         display: { base: 'none', lg: 'block' },
       },
       {
@@ -146,12 +162,15 @@ function NavActions({ mobileNav }: { mobileNav: ReactNode }) {
 
   return (
     <>
-      {actions.map(({ el, display }, i) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <Box as={motion.div} display={display} key={i} variants={fadeIn}>
-          {el}
-        </Box>
-      ))}
+      {actions.map(
+        ({ el, display }, i) =>
+          el && (
+            // eslint-disable-next-line react/no-array-index-key
+            <Box as={motion.div} display={display} key={i} variants={fadeIn}>
+              {el}
+            </Box>
+          )
+      )}
     </>
   )
 }
@@ -163,6 +182,7 @@ export function NavBar({
   appLinks,
   navLogo,
   mobileNav,
+  customLinks,
   ...rest
 }: Props & BoxProps) {
   const [showShadow, setShowShadow] = useState(false)
@@ -230,7 +250,13 @@ export function NavBar({
           {leftSlot || (
             <>
               {navLogo}
-              {appLinks && <NavLinks appLinks={appLinks} display={{ base: 'none', lg: 'flex' }} />}
+              {appLinks && (
+                <NavLinks
+                  appLinks={appLinks}
+                  customLinks={customLinks}
+                  display={{ base: 'none', lg: 'flex' }}
+                />
+              )}
             </>
           )}
         </HStack>

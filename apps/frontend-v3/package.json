@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
-    "@chakra-ui/styled-system": "^2.9.2",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
@@ -66,8 +65,7 @@
     "eslint": "8.43.0",
     "happy-dom": "^15.10.2",
     "lokijs": "^1.5.12",
-    "sentry-testkit": "^5.0.9",
-    "typescript": "5.4.5"
+    "sentry-testkit": "^5.0.9"
   },
   "engines": {
     "node": ">=18.x"

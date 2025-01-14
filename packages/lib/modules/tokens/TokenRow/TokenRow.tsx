@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useTokens } from '../TokensProvider'
-import { GqlChain, GqlPoolTokenDisplay } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -26,14 +26,15 @@ import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
-import { ApiToken } from '../../pool/pool.types'
+import { ApiToken } from '../token.types'
+import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
 
 export type TokenInfoProps = {
   address: Address
   symbol?: string
   chain: GqlChain
   token?: ApiToken
-  displayToken?: GqlPoolTokenDisplay
+  poolToken?: ApiToken
   pool?: Pool
   disabled?: boolean
   showSelect?: boolean
@@ -42,13 +43,14 @@ export type TokenInfoProps = {
   isNestedBpt?: boolean
   isNestedPoolToken?: boolean
   iconSize?: number
+  logoURI?: string
 }
 
 function TokenInfo({
   address,
   chain,
   token,
-  displayToken,
+  poolToken,
   symbol,
   pool,
   disabled,
@@ -57,9 +59,10 @@ function TokenInfo({
   isBpt = false,
   isNestedPoolToken = false,
   iconSize = 40,
+  logoURI,
 }: TokenInfoProps) {
-  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || displayToken?.symbol
-  const tokenName = isBpt ? pool?.name : token?.name || displayToken?.name
+  const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || poolToken?.symbol
+  const tokenName = isBpt ? pool?.name : token?.name || poolToken?.name
 
   const headingProps = {
     as: 'h6' as const,
@@ -79,7 +82,13 @@ function TokenInfo({
   return (
     <HStack spacing="sm">
       {!isBpt && (
-        <TokenIcon address={address} alt={token?.symbol || address} chain={chain} size={iconSize} />
+        <TokenIcon
+          address={address}
+          alt={token?.symbol || address}
+          chain={chain}
+          logoURI={logoURI}
+          size={iconSize}
+        />
       )}
       <VStack alignItems="flex-start" spacing="none">
         <HStack spacing="none">
@@ -124,6 +133,7 @@ export type TokenRowProps = {
   showZeroAmountAsDash?: boolean
   toggleTokenSelect?: () => void
   iconSize?: number
+  logoURI?: string
 }
 
 export default function TokenRow({
@@ -144,25 +154,28 @@ export default function TokenRow({
   showZeroAmountAsDash = false,
   toggleTokenSelect,
   iconSize,
+  logoURI,
 }: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
   const token = getToken(address, chain)
-  const displayToken = pool?.displayTokens.find(t => isSameAddress(t.address, address))
+  const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
+  const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
 
   // TokenRowTemplate default props
   const props: TokenInfoProps = {
     address,
     chain,
     token,
-    displayToken,
+    poolToken,
     pool,
     disabled,
     iconSize,
     isNestedPoolToken,
     symbol,
+    logoURI,
   }
 
   useEffect(() => {

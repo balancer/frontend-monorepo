@@ -32,7 +32,7 @@ import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { getPoolActionableTokens, isV3NotSupportingWethIsEth } from '../../pool.helpers'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
-import { ApiToken } from '../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
