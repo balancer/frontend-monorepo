@@ -107,7 +107,7 @@ export function ActionModalFooter({
             transition={{ duration: 0.3 }}
           >
             <VStack w="full">
-              <RenderActionButton currentStep={currentStep} />
+              <RenderActionButton currentStep={currentStep} key={currentStep.id} />
             </VStack>
           </motion.div>
         )}

@@ -43,7 +43,7 @@ export function LstStakeSummary({
           label={shouldShowReceipt ? 'You received' : 'You receive'}
           tokenAddress={stakedAsset?.address || ''}
           tokenAmount={
-            shouldShowReceipt ? receivedToken[0].humanAmount : formatUnits(sharesAmount, 18)
+            shouldShowReceipt ? receivedToken.humanAmount : formatUnits(sharesAmount, 18)
           }
         />
       </Card>

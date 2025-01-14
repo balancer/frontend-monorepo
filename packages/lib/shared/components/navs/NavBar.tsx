@@ -21,8 +21,7 @@ type Props = {
   leftSlot?: ReactNode
   rightSlot?: ReactNode
   disableBlur?: boolean
-  customLinksBefore?: ReactNode
-  customLinksAfter?: ReactNode
+  customLinks?: ReactNode
 }
 
 const clamp = (number: number, min: number, max: number) => Math.min(Math.max(number, min), max)
@@ -47,19 +46,16 @@ function useBoundedScroll(threshold: number) {
 
 function NavLinks({
   appLinks,
-  customLinksBefore,
-  customLinksAfter,
+  customLinks,
   ...props
 }: BoxProps & {
   appLinks: AppLink[]
-  customLinksBefore?: ReactNode
-  customLinksAfter?: ReactNode
+  customLinks?: ReactNode
 }) {
   const { linkColorFor } = useNav()
 
   return (
     <HStack fontWeight="medium" spacing="lg" {...props}>
-      {customLinksBefore}
       {appLinks.map(link => (
         <Box as={motion.div} key={link.href} variants={fadeIn}>
           <Link
@@ -74,22 +70,26 @@ function NavLinks({
           </Link>
         </Box>
       ))}
-      {customLinksAfter}
+      {customLinks}
       {(isDev || isStaging) && (
-        <Box as={motion.div} variants={fadeIn}>
-          {/* <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
-            Debug
-          </Link> */}
-          <Link
-            as={NextLink}
-            color={linkColorFor('/testooors')}
-            href="/testooors"
-            prefetch
-            variant="nav"
-          >
-            Test
-          </Link>
-        </Box>
+        <>
+          <Box as={motion.div} variants={fadeIn}>
+            <Link
+              as={NextLink}
+              color={linkColorFor('/debug/pools')}
+              href="/debug/pools"
+              prefetch
+              variant="nav"
+            >
+              Test-Pools
+            </Link>
+          </Box>
+          <Box as={motion.div} variants={fadeIn}>
+            <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
+              Debug
+            </Link>
+          </Box>
+        </>
       )}
     </HStack>
   )
@@ -182,8 +182,7 @@ export function NavBar({
   appLinks,
   navLogo,
   mobileNav,
-  customLinksBefore,
-  customLinksAfter,
+  customLinks,
   ...rest
 }: Props & BoxProps) {
   const [showShadow, setShowShadow] = useState(false)
@@ -254,8 +253,7 @@ export function NavBar({
               {appLinks && (
                 <NavLinks
                   appLinks={appLinks}
-                  customLinksAfter={customLinksAfter}
-                  customLinksBefore={customLinksBefore}
+                  customLinks={customLinks}
                   display={{ base: 'none', lg: 'flex' }}
                 />
               )}

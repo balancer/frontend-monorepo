@@ -14,6 +14,10 @@ export function useNetworkConfig() {
     defaultNetwork = projectDefaultNetwork
   }
 
+  if (!chain) {
+    defaultNetwork = PROJECT_CONFIG.defaultNetwork
+  }
+
   useEffect(() => {
     setTag('walletNetwork', chain?.name)
   }, [chain])

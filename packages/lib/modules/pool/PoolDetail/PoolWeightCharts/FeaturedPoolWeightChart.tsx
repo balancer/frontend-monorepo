@@ -1,20 +1,20 @@
 'use client'
 
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
-import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { Box, VStack, useTheme } from '@chakra-ui/react'
-import EChartsReactCore from 'echarts-for-react/lib/core'
-import { motion } from 'framer-motion'
-import { useRef, useMemo } from 'react'
-import PoolWeightChartLegend from './PoolWeightChartLegend'
-import Image from 'next/image'
+import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import ReactECharts from 'echarts-for-react'
+import EChartsReactCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
+import { motion } from 'framer-motion'
+import Image from 'next/image'
+import { useMemo, useRef } from 'react'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import PoolWeightChartLegend from './PoolWeightChartLegend'
 
 interface PoolWeightChartProps {
-  displayTokens: GqlPoolTokenDetail[]
+  displayTokens: ApiToken[]
   chain: GqlChain
   hasLegend?: boolean
   isSmall?: boolean

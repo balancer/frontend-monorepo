@@ -15,7 +15,8 @@
     "SILENT_TESTS",
     "NEXT_PUBLIC_SENTRY_DSN",
     "NEXT_RUNTIME",
-    "NEXT_PRIVATE_ALCHEMY_KEY"
+    "NEXT_PRIVATE_ALCHEMY_KEY",
+    "CI"
   ],
   "tasks": {
     "dev": {
@@ -53,6 +54,13 @@
     "test:integration": {
       "dependsOn": ["^graphql:gen", "^test:integration"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test:e2e": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test:e2e:ui": {
+      "dependsOn": ["^transit"]
     },
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],

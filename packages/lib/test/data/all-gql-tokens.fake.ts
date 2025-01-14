@@ -1,4 +1,4 @@
-import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'

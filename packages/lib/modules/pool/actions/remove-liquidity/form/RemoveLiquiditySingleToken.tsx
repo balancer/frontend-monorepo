@@ -6,7 +6,7 @@ import { Box, HStack, Radio, RadioGroup, Text, VStack } from '@chakra-ui/react'
 import { Address } from 'viem'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { isNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
-import { ApiToken } from '../../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 interface RemoveLiquiditySingleTokenProps {
   tokens: (ApiToken | undefined)[]

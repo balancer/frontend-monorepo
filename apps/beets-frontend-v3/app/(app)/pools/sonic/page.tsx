@@ -18,7 +18,6 @@ export default function PoolsPage() {
           </FadeInOnView>
         </DefaultPageContainer>
       </Box>
-
       <DefaultPageContainer noVerticalPadding pb={['xl', '2xl']} pt={['lg', '54px']}>
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>

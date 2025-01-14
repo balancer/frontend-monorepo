@@ -29,6 +29,7 @@ export function LstWithdrawSummary({
           tokenAddress={nativeAsset?.address || ''}
           tokenAmount={formatUnits(amountWithdraw, nativeAsset?.decimals || 18).toString()}
         />
+        {/* TODO: add received amount */}
       </Card>
     </AnimateHeightChange>
   )

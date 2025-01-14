@@ -275,7 +275,7 @@ export default function PoolUserEvents({
                   chain={chain}
                   key={poolEvent.id}
                   poolEvent={poolEvent}
-                  txUrl={getBlockExplorerTxUrl(poolEvent.tx)}
+                  txUrl={getBlockExplorerTxUrl(poolEvent.tx, poolEvent.chain)}
                   usdValue={toCurrency(poolEvent.valueUSD)}
                 />
               ))

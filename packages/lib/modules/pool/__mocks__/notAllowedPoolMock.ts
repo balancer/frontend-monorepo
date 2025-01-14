@@ -61,26 +61,6 @@ export const notAllowedPoolMock: Pool = {
       __typename: 'GqlPoolTokenExpanded',
     },
   ],
-  displayTokens: [
-    {
-      id: '0x241df159b03a90455edee61625655fc0ea5fa3dd0002000000000000000003fc-0x2aeb3acbeb4c604451c560d89d88d95d54c2c2cc',
-      address: '0x2aeb3acbeb4c604451c560d89d88d95d54c2c2cc',
-      name: 'MetalStream',
-      weight: '0.5',
-      symbol: 'MTLSTR',
-      nestedTokens: null,
-      __typename: 'GqlPoolTokenDisplay',
-    },
-    {
-      id: '0x241df159b03a90455edee61625655fc0ea5fa3dd0002000000000000000003fc-0x8db0a6d1b06950b4e81c4f67d1289fc7b9359c7f',
-      address: '0x8db0a6d1b06950b4e81c4f67d1289fc7b9359c7f',
-      name: 'ENEGRA',
-      weight: '0.5',
-      symbol: 'EGX',
-      nestedTokens: null,
-      __typename: 'GqlPoolTokenDisplay',
-    },
-  ],
   staking: null,
   userBalance: {
     totalBalance: '0',

@@ -9,7 +9,7 @@ import { isNativeAsset, isNativeOrWrappedNative } from '@repo/lib/modules/tokens
 import { NativeAssetSelectModal } from '@repo/lib/modules/tokens/NativeAssetSelectModal'
 import { shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
 import { Pool } from '../../../PoolProvider'
-import { ApiToken } from '../../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 type Props = { tokens: ApiToken[]; pool: Pool }
 export function RemoveLiquidityProportional({ tokens, pool }: Props) {

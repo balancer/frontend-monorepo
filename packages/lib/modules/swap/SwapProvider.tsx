@@ -56,8 +56,9 @@ import {
   isStandardOrUnderlyingRootToken,
 } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
-import { ApiToken, ProtocolVersion } from '../pool/pool.types'
+import { ProtocolVersion } from '../pool/pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { ApiToken } from '../tokens/token.types'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)

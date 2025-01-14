@@ -9,24 +9,20 @@ export function getBlockExplorerName(chain?: GqlChain) {
   return getNetworkConfig(_chain).blockExplorer.name
 }
 
-export function getBlockExplorerTxUrl(txHash: string, chain?: GqlChain) {
-  const _chain = chain || defaultChain
-  return `${getBlockExplorerUrl(_chain)}/tx/${txHash}`
+export function getBlockExplorerTxUrl(txHash: string, chain: GqlChain) {
+  return `${getBlockExplorerUrl(chain)}/tx/${txHash}`
 }
 
-export function getBlockExplorerAddressUrl(address: string, chain?: GqlChain) {
-  const _chain = chain || defaultChain
-  return `${getBlockExplorerUrl(_chain)}/address/${address}`
+export function getBlockExplorerAddressUrl(address: string, chain: GqlChain) {
+  return `${getBlockExplorerUrl(chain)}/address/${address}`
 }
 
-export function getBlockExplorerTokenUrl(tokenAddress: string, chain?: GqlChain) {
-  const _chain = chain || defaultChain
-  return `${getBlockExplorerUrl(_chain)}/token/${tokenAddress}`
+export function getBlockExplorerTokenUrl(tokenAddress: string, chain: GqlChain) {
+  return `${getBlockExplorerUrl(chain)}/token/${tokenAddress}`
 }
 
-export function getBlockExplorerBlockUrl(block: number, chain?: GqlChain) {
-  const _chain = chain || defaultChain
-  return `${getBlockExplorerUrl(_chain)}/block/${block}`
+export function getBlockExplorerBlockUrl(block: number, chain: GqlChain) {
+  return `${getBlockExplorerUrl(chain)}/block/${block}`
 }
 
 function getBlockExplorerUrl(chain: GqlChain) {

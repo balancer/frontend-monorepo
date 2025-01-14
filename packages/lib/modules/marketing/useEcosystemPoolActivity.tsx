@@ -15,7 +15,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { usePoolEvents } from '../pool/usePoolEvents'
 import { getChainShortName } from '@repo/lib/config/app.config'
-import { ApiToken } from '../pool/pool.types'
+import { ApiToken } from '../tokens/token.types'
 import {
   getBlockExplorerAddressUrl,
   getBlockExplorerTxUrl,

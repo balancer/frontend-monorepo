@@ -3,29 +3,21 @@ import { AnimateHeightChange } from '@repo/lib/shared/components/animations/Anim
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useLst } from '../LstProvider'
-import { LstStakeReceiptResult } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { LstTokenRow } from './LstTokenRow'
 import { useGetConvertToAssets } from '../hooks/useGetConvertToAssets'
 import { formatUnits, parseUnits } from 'viem'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 
-export function LstUnstakeSummary({
-  isLoading: isLoadingReceipt,
-  receivedToken,
-}: LstStakeReceiptResult) {
+export function LstUnstakeSummary() {
   const { isMobile } = useBreakpoints()
 
   const { chain, stakeTransactionSteps, lstUnstakeTxHash, nativeAsset, stakedAsset, amountShares } =
     useLst()
 
-  const { assetsAmount, isLoading: isLoadingAssets } = useGetConvertToAssets(
-    parseUnits(amountShares, 18),
-    chain
-  )
+  const { assetsAmount, isLoading } = useGetConvertToAssets(parseUnits(amountShares, 18), chain)
 
-  const shouldShowReceipt = !!lstUnstakeTxHash && !isLoadingReceipt && !!receivedToken
-  const isLoading = isLoadingReceipt || isLoadingAssets
+  const shouldShowReceipt = !!lstUnstakeTxHash
 
   return (
     <AnimateHeightChange spacing="sm" w="full">

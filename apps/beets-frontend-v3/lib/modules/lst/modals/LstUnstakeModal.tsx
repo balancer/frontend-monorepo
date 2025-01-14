@@ -12,8 +12,6 @@ import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/trans
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { useOnUserAccountChanged } from '@repo/lib/modules/web3/useOnUserAccountChanged'
-import { useLstUnstakeReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
-import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useLst } from '../LstProvider'
 import { LstUnstakeSummary } from '../components/LstUnstakeSummary'
@@ -33,18 +31,10 @@ export function LstUnstakeModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
-  const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
   const { unstakeTransactionSteps, chain, lstUnstakeTxHash } = useLst()
 
   useResetStepIndexOnOpen(isOpen, unstakeTransactionSteps)
-
-  const lstUnstakeReceipt = useLstUnstakeReceipt({
-    txHash: lstUnstakeTxHash,
-    userAddress,
-    chain,
-    protocolVersion: 2, // TODO: make this optional
-  })
 
   useEffect(() => {
     if (isOpen) {
@@ -73,11 +63,11 @@ export function LstUnstakeModal({
         <TransactionModalHeader chain={chain} isReceiptLoading label="Review unstake" txHash="0x" />
         <ModalCloseButton />
         <ModalBody>
-          <LstUnstakeSummary {...lstUnstakeReceipt} />
+          <LstUnstakeSummary />
         </ModalBody>
         <ActionModalFooter
           currentStep={unstakeTransactionSteps.currentStep}
-          isSuccess={!!lstUnstakeTxHash && !lstUnstakeReceipt.isLoading}
+          isSuccess={!!lstUnstakeTxHash}
           returnAction={onClose}
           returnLabel="Unstake again"
         />

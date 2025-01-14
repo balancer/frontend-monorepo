@@ -15,8 +15,8 @@ import { useConfig, usePublicClient } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 import { getWaitForReceiptTimeout } from '../web3/contracts/wagmi-helpers'
 import { TransactionStatus as SafeTxStatus } from '@safe-global/safe-apps-sdk'
-import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 export type RecentTransactionsResponse = ReturnType<typeof _useRecentTransactions>
 export const TransactionsContext = createContext<RecentTransactionsResponse | null>(null)
