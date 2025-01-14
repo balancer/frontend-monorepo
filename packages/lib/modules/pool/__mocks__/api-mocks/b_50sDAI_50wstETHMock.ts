@@ -29,12 +29,12 @@ export const b_50sDAI_50wstETHMock = {
   dynamicData: {
     poolId: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063',
     swapEnabled: true,
-    totalLiquidity: '4195896.44',
-    totalShares: '62138.609444853344417588',
-    fees24h: '742.52',
+    totalLiquidity: '4183745.26',
+    totalShares: '62138.871331662921258586',
+    fees24h: '749.16',
     surplus24h: '0.00',
     swapFee: '0.003',
-    volume24h: '247506.08',
+    volume24h: '249720.30',
     holdersCount: '57',
     isInRecoveryMode: false,
     isPaused: false,
@@ -42,7 +42,7 @@ export const b_50sDAI_50wstETHMock = {
       {
         id: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063-swap-apr-24h',
         title: 'Swap fees APR (24h)',
-        apr: 0.03249354758494388,
+        apr: 0.03267935038172216,
         type: 'SWAP_FEE_24H',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -50,7 +50,7 @@ export const b_50sDAI_50wstETHMock = {
       {
         id: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063-swap-apr',
         title: 'Swap fees APR',
-        apr: 0.03249354758494388,
+        apr: 0.03267935038172216,
         type: 'SWAP_FEE',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -58,7 +58,7 @@ export const b_50sDAI_50wstETHMock = {
       {
         id: '0x4d13d387f372dbe5125b7d78e75094ac85b31edc-0x7ef541e2a22058048904fe5744f9c7e4c57af717-balgauge-BAL-apr',
         title: 'BAL reward APR',
-        apr: 0.04740880272542295,
+        apr: 0.04735970330193955,
         type: 'VEBAL_EMISSIONS',
         rewardTokenSymbol: 'BAL',
         rewardTokenAddress: '0x7ef541e2a22058048904fe5744f9c7e4c57af717',
@@ -66,7 +66,7 @@ export const b_50sDAI_50wstETHMock = {
       {
         id: '0x4d13d387f372dbe5125b7d78e75094ac85b31edc-0x7ef541e2a22058048904fe5744f9c7e4c57af717-balgauge-BAL-apr-boost',
         title: 'BAL reward APR',
-        apr: 0.07111320408813446,
+        apr: 0.07103955495290934,
         type: 'STAKING_BOOST',
         rewardTokenSymbol: 'BAL',
         rewardTokenAddress: '0x7ef541e2a22058048904fe5744f9c7e4c57af717',
@@ -74,7 +74,7 @@ export const b_50sDAI_50wstETHMock = {
       {
         id: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063-sDAI-yield-apr',
         title: 'sDAI APR',
-        apr: 0.06787407801392079,
+        apr: 0.06753162991949459,
         type: 'IB_YIELD',
         rewardTokenSymbol: 'sDAI',
         rewardTokenAddress: '0xaf204776c7245bf4147c2612bf6e5972ee483701',
@@ -82,7 +82,7 @@ export const b_50sDAI_50wstETHMock = {
       {
         id: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063-wstETH-yield-apr',
         title: 'wstETH APR',
-        apr: 0.01455539180609638,
+        apr: 0.01454437822580694,
         type: 'IB_YIELD',
         rewardTokenSymbol: 'wstETH',
         rewardTokenAddress: '0x6c76971f98945ae98dd7d4dfca8711ebea946ea6',
@@ -90,7 +90,7 @@ export const b_50sDAI_50wstETHMock = {
       {
         id: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063-swap-apr-7d',
         title: 'Swap fees APR (7d)',
-        apr: 2.985814575827809,
+        apr: 3.005567306668543,
         type: 'SWAP_FEE_7D',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -98,7 +98,7 @@ export const b_50sDAI_50wstETHMock = {
       {
         id: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063-swap-apr-30d',
         title: 'Swap fees APR (30d)',
-        apr: 0.6685163180824625,
+        apr: 0.6729389044683102,
         type: 'SWAP_FEE_30D',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -137,7 +137,7 @@ export const b_50sDAI_50wstETHMock = {
       gaugeAddress: '0x4d13d387f372dbe5125b7d78e75094ac85b31edc',
       version: 2,
       status: 'PREFERRED',
-      workingSupply: '7586.789127618900071221',
+      workingSupply: '7586.809276368785995284',
       otherGauges: [],
       rewards: [
         {
@@ -149,7 +149,7 @@ export const b_50sDAI_50wstETHMock = {
     },
     aura: {
       id: '0x49aadc30b5ccc57bddd55ac8bd7d8db7cf1f2b8b',
-      apr: 0.2166,
+      apr: 0.2157,
       auraPoolAddress: '0x49aadc30b5ccc57bddd55ac8bd7d8db7cf1f2b8b',
       auraPoolId: '19',
       isShutdown: false,
@@ -176,8 +176,8 @@ export const b_50sDAI_50wstETHMock = {
       tradable: true,
       isErc4626: false,
       index: 0,
-      balance: '550.5377259750435',
-      balanceUSD: '2089852.218555785',
+      balance: '551.6113190068028',
+      balanceUSD: '2082393.406495771',
       priceRate: '1.0',
       weight: '0.5',
       hasNestedPool: false,
@@ -202,8 +202,8 @@ export const b_50sDAI_50wstETHMock = {
       tradable: true,
       isErc4626: true,
       index: 1,
-      balance: '1831342.8038082793',
-      balanceUSD: '2106044.224379521',
+      balance: '1827809.29741237',
+      balanceUSD: '2101980.692024225',
       priceRate: '1.0',
       weight: '0.5',
       hasNestedPool: false,

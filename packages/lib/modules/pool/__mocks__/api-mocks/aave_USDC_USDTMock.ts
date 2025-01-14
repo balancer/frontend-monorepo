@@ -31,10 +31,10 @@ export const aave_USDC_USDTMock = {
     swapEnabled: true,
     totalLiquidity: '739042.70',
     totalShares: '733323.385439446972585178',
-    fees24h: '1.46',
+    fees24h: '1.01',
     surplus24h: '0.00',
     swapFee: '0.00001',
-    volume24h: '146171.01',
+    volume24h: '101288.53',
     holdersCount: '72',
     isInRecoveryMode: false,
     isPaused: false,
@@ -42,7 +42,7 @@ export const aave_USDC_USDTMock = {
       {
         id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-waEthUSDT-yield-apr',
         title: 'waEthUSDT APR',
-        apr: 0.04823606868728076,
+        apr: 0.0487165795342475,
         type: 'IB_YIELD',
         rewardTokenSymbol: 'waEthUSDT',
         rewardTokenAddress: '0x7bc3485026ac48b6cf9baf0a377477fff5703af8',
@@ -58,7 +58,7 @@ export const aave_USDC_USDTMock = {
       {
         id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-waEthUSDC-yield-apr',
         title: 'waEthUSDC APR',
-        apr: 0.01590779694908931,
+        apr: 0.01616749808730534,
         type: 'IB_YIELD',
         rewardTokenSymbol: 'waEthUSDC',
         rewardTokenAddress: '0xd4fa2d31b7968e448877f69a96de69f5de8cd23e',
@@ -74,7 +74,7 @@ export const aave_USDC_USDTMock = {
       {
         id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-swap-apr-24h',
         title: 'Swap fees APR (24h)',
-        apr: 0.0003609557459699957,
+        apr: 0.0002501226645821691,
         type: 'SWAP_FEE_24H',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
@@ -82,7 +82,7 @@ export const aave_USDC_USDTMock = {
       {
         id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-swap-apr',
         title: 'Swap fees APR',
-        apr: 0.0003609557459699957,
+        apr: 0.0002501226645821691,
         type: 'SWAP_FEE',
         rewardTokenSymbol: null,
         rewardTokenAddress: null,
