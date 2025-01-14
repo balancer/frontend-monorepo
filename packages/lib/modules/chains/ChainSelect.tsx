@@ -24,6 +24,16 @@ interface ChainOption extends OptionBase {
   value: GqlChain
 }
 
+const networkOptions: ChainOption[] = PROJECT_CONFIG.supportedNetworks.map(network => ({
+  label: (
+    <HStack>
+      <NetworkIcon chain={network} size={6} />
+      <Text>{getChainShortName(network)}</Text>
+    </HStack>
+  ),
+  value: network,
+}))
+
 type Props = {
   value: GqlChain
   onChange(value: GqlChain): void
@@ -46,16 +56,6 @@ export function ChainSelect({ value, onChange }: Props) {
   const [chainValue, setChainValue] = useState<ChainOption | undefined>(undefined)
 
   const chakraStyles = getSelectStyles<ChainOption>()
-
-  const networkOptions: ChainOption[] = PROJECT_CONFIG.supportedNetworks.map(network => ({
-    label: (
-      <HStack>
-        <NetworkIcon chain={network} size={6} />
-        <Text>{getChainShortName(network)}</Text>
-      </HStack>
-    ),
-    value: network,
-  }))
 
   function handleChange(newOption: SingleValue<ChainOption>) {
     if (newOption) onChange(newOption.value)
