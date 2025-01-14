@@ -18,7 +18,6 @@ export function getApiPoolMock(poolIdOrExample: string | PoolExample): Pool {
   const pool = allPoolApiMocks.find(pool => pool.id.toLowerCase() === poolId.toLowerCase())
 
   if (!pool) {
-    console.log('❌', { poolIdOrExample, poolId })
     throw new Error(
       `Api mock not found for poolId: ${poolId}
       Double check that savePoolMock is creating your pool and that allApiMocks includes the pool you're looking for.`

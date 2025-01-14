@@ -12,7 +12,7 @@ function testPoolEnrichWithOnChainData(pool: Pool) {
   return result
 }
 
-test.skip('enriches V3 pool with on-chain data', async () => {
+test('enriches V3 pool with on-chain data', async () => {
   const pool = getApiPoolMock(balWeth8020)
 
   // delete values to ensure that onchain data is used
@@ -27,8 +27,7 @@ test.skip('enriches V3 pool with on-chain data', async () => {
   expect(Number(result.current.pool.dynamicData.totalShares)).toBeGreaterThan(0)
 })
 
-test.skip('enriches V2 pool with on-chain data', async () => {
-  console.log('👀 getting balWeth8020', { balWeth8020, poolId: balWeth8020.poolId })
+test('enriches V2 pool with on-chain data', async () => {
   const pool = getApiPoolMock(balWeth8020)
 
   // delete values to ensure that onchain data is used
