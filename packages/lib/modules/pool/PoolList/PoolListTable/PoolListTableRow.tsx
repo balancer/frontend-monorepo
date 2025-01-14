@@ -129,9 +129,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
                   <Badge
                     alignItems="center"
                     bg="background.level2"
-                    // borderColor="border.base"
                     borderRadius="full"
-                    // borderWidth={1}
                     display="flex"
                     p="xxs"
                     shadow="sm"
