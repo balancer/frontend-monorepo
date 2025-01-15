@@ -1,7 +1,6 @@
 import { HumanAmount } from '@balancer/sdk'
 import { bn, fNum } from './numbers'
 import { Pool } from '@repo/lib/modules/pool/PoolProvider'
-import { isBoosted } from '@repo/lib/modules/pool/pool.helpers'
 
 export function getDefaultProportionalSlippagePercentage(pool: Pool) {
   /*
@@ -12,7 +11,7 @@ export function getDefaultProportionalSlippagePercentage(pool: Pool) {
   const defaultBoostedProportionalSlippagePercentage = '0.01'
   const defaultProportionalSlippagePercentage = '0'
 
-  return isBoosted(pool)
+  return pool.hasErc4626 || pool.hasNestedErc4626
     ? defaultBoostedProportionalSlippagePercentage
     : defaultProportionalSlippagePercentage
 }
