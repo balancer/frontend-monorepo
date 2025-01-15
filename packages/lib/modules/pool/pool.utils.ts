@@ -1,14 +1,20 @@
+import { TOTAL_APR_TYPES } from '@repo/lib/shared/hooks/useAprTooltip'
 import {
   GetPoolQuery,
   GqlChain,
+  GqlPoolAprItem,
+  GqlPoolAprItemType,
   GqlPoolComposableStableNested,
   GqlPoolTokenDetail,
   GqlPoolType,
-  GqlPoolAprItem,
-  GqlPoolTokenDisplay,
-  GqlPoolAprItemType,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
+import BigNumber from 'bignumber.js'
 import { invert } from 'lodash'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { Address, formatUnits, parseUnits } from 'viem'
+import { TokenAmountHumanReadable } from '../tokens/token.types'
+import { ClaimablePool } from './actions/claim/ClaimProvider'
 import {
   BaseVariant,
   FetchPoolProps,
@@ -16,15 +22,9 @@ import {
   PoolAction,
   PoolListItem,
   PoolVariant,
+  PoolCore,
 } from './pool.types'
-import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { TokenAmountHumanReadable } from '../tokens/token.types'
-import { Address, formatUnits, parseUnits } from 'viem'
-import { ClaimablePool } from './actions/claim/ClaimProvider'
 import { Pool } from './PoolProvider'
-import BigNumber from 'bignumber.js'
-import { TOTAL_APR_TYPES } from '@repo/lib/shared/hooks/useAprTooltip'
 
 // URL slug for each chain
 export enum ChainSlug {
@@ -67,10 +67,10 @@ export function getChainSlug(chainSlug: ChainSlug): GqlChain {
   return chain
 }
 
-function getVariant(pool: Pool | PoolListItem): PoolVariant {
+function getVariant(type: GqlPoolType, protocolVersion: number | undefined): PoolVariant {
   // if a pool has certain properties return a custom variant
-  if (pool.type === GqlPoolType.CowAmm) return PartnerVariant.cow
-  if (pool.protocolVersion === 3) return BaseVariant.v3
+  if (type === GqlPoolType.CowAmm) return PartnerVariant.cow
+  if (protocolVersion === 3) return BaseVariant.v3
 
   // default variant
   return BaseVariant.v2
@@ -78,24 +78,25 @@ function getVariant(pool: Pool | PoolListItem): PoolVariant {
 
 /**
  * Constructs path to pool detail page.
- * @param {String} id Pool ID could be ID or address depending on variant.
- * @param {GqlChain} chain Chain enum.
- * @param {String} variant Pool variant, defaults to v2.
  * @returns {String} Path to pool detail page.
  */
-export function getPoolPath(pool: Pool | PoolListItem) {
-  const variant = getVariant(pool)
-  return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${pool.id}`
+export function getPoolPath(
+  params: Pick<PoolCore, 'id' | 'chain' | 'type'> & {
+    protocolVersion: number | undefined
+  }
+) {
+  const variant = getVariant(params.type, params.protocolVersion)
+  return `/pools/${chainToSlugMap[params.chain]}/${variant}/${params.id}`
 }
 
 export function getNestedPoolPath({
   pool,
   nestedPoolAddress,
 }: {
-  pool: Pool | PoolListItem
+  pool: PoolCore
   nestedPoolAddress: Address
 }) {
-  const variant = getVariant(pool)
+  const variant = getVariant(pool.type, pool.protocolVersion)
   return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${nestedPoolAddress}`
 }
 
@@ -305,36 +306,4 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
 
 export function shouldCallComputeDynamicSwapFee(pool: Pool) {
   return pool.hook && pool.hook.shouldCallComputeDynamicSwapFee
-}
-
-export function getPoolDisplayTokens(pool: Pool | PoolListItem) {
-  return pool.poolTokens.filter(token =>
-    pool.displayTokens.find(
-      (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address
-    )
-  ) as GqlPoolTokenDetail[]
-}
-
-export function getPoolDisplayTokensWithPossibleNestedPools(pool: Pool) {
-  const displayTokens = getPoolDisplayTokens(pool)
-
-  const hasNestedPools = displayTokens.some(token => token.hasNestedPool)
-
-  if (hasNestedPools) {
-    const displayTokensWithNestedPools: GqlPoolTokenDetail[] = []
-
-    displayTokens.forEach(token => {
-      if (token.hasNestedPool) {
-        token.nestedPool?.tokens.forEach(nestedPoolToken => {
-          displayTokensWithNestedPools.push(nestedPoolToken)
-        })
-      } else {
-        displayTokensWithNestedPools.push(token)
-      }
-    })
-
-    return displayTokensWithNestedPools
-  }
-
-  return displayTokens
 }

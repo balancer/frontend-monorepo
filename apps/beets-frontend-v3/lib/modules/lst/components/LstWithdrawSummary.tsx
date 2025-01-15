@@ -25,11 +25,14 @@ export function LstWithdrawSummary({
         <LstTokenRow
           chain={chain}
           isLoading={isLoading}
-          label={shouldShowReceipt ? 'You withdrew' : 'You withdraw'}
+          label={shouldShowReceipt ? 'You received' : 'You will receive (estimated)'}
           tokenAddress={nativeAsset?.address || ''}
-          tokenAmount={formatUnits(amountWithdraw, nativeAsset?.decimals || 18).toString()}
+          tokenAmount={
+            shouldShowReceipt
+              ? receivedToken.humanAmount
+              : formatUnits(amountWithdraw, nativeAsset?.decimals || 18).toString()
+          }
         />
-        {/* TODO: add received amount */}
       </Card>
     </AnimateHeightChange>
   )

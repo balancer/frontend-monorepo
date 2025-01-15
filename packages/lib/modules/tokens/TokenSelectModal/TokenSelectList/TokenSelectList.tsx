@@ -15,7 +15,7 @@ import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { useTokens } from '../../TokensProvider'
 import { Address } from 'viem'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '../../token.types'
 
 type Props = {
   chain: GqlChain
