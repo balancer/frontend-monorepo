@@ -80,7 +80,7 @@ export function _useTokenBalances(
       enabled: !!userAddress && tokensExclNativeAsset.length > 0,
       gcTime: BALANCE_CACHE_TIME_MS,
     },
-    multicallAddress: networkConfig.contracts.multicall2,
+    multicallAddress: networkConfig.contracts.multicall3,
     batchSize: 0, // Remove limit
     allowFailure: true,
     contracts: balanceContractReads,
