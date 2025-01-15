@@ -101,7 +101,12 @@ export function VoteListFilters() {
                             Filters
                           </Text>
                           {totalFilterCount > 0 && (
-                            <Button onClick={_resetFilters} size="xs" variant="link">
+                            <Button
+                              h="fit-content"
+                              onClick={_resetFilters}
+                              size="xs"
+                              variant="link"
+                            >
                               Reset all
                             </Button>
                           )}
