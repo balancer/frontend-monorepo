@@ -416,8 +416,9 @@ export function isV3WithNestedActionsPool(pool: Pool): boolean {
   return supportsNestedActions(pool) && isV3Pool(pool)
 }
 
-export function isV3NotSupportingWethIsEth(pool: Pool): boolean {
-  return (supportsNestedActions(pool) || isBoosted(pool)) && isV3Pool(pool)
+export function isNotSupportingWethIsEth(): boolean {
+  // Currently all SDK handlers support wethIsEth
+  return false
 }
 
 export function requiresPermit2Approval(pool: Pool): boolean {
