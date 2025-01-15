@@ -1,10 +1,6 @@
-/*
-This will be updated in voting list PR:
-https://github.com/balancer/frontend-monorepo/pull/148
-
 import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
-import { VotesData } from '@repo/lib/modules/vebal/vote/gauge/useGaugeVotes'
-import { HiddenHandData } from '@repo/lib/modules/vebal/vote/hidden-hand/hidden-hand.types'
+import { VotesData } from './useGaugeVotes'
+import { HiddenHandData } from '@repo/lib/shared/services/hidden-hand/hidden-hand.types'
 
 export type VoteList = GetVeBalVotingListQuery['veBalGetVotingList']
 
@@ -31,4 +27,3 @@ export function getVotesState(relativeWeightCap: number, votesNextPeriod: number
   }
   return VotesState.Normal
 }
-  */

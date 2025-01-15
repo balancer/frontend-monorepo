@@ -10,8 +10,8 @@ import { TokenIconStack } from '../../tokens/TokenIconStack'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
 import { isStableLike, isWeightedLike } from '../pool.helpers'
 import { getUserReferenceTokens } from '../pool-tokens.utils'
-import { PoolToken, PoolCore } from '../pool.types'
-// import { VotingPoolWithData } from '../../vebal/vote/vote.types'
+import { PoolCore, PoolToken } from '../pool.types'
+import { VotingPoolWithData } from '../../vebal/vote/vote.types'
 
 function NestedTokenPill({
   nestedTokens,
@@ -170,39 +170,33 @@ function StableTokenPills({
   )
 }
 
-/**
-This will be updated in voting list PR:
-https://github.com/balancer/frontend-monorepo/pull/148
-
 type VotingListTokenPillsProps = {
   vote: VotingPoolWithData
   iconSize?: number
 } & BadgeProps
 export function VotingListTokenPills({ vote, ...props }: VotingListTokenPillsProps) {
   const tokens = vote.tokens.map(
-
-   /*
+    /*
       TODO:
       Tokens in veBalGetVotingList query have type GqlVotingGaugeToken which does not have all the properties of PoolToken
       That means that token pills will be different for voting pools (unless we change the backend types or we query and map the pool list tokens):
       - Showing symbol instead of name
       - GqlVotingGaugeToken does not have nestedPool property so NestedTokenPills won't be displayed
-    *-/
+    */
     token => ({ ...token, name: token.symbol }) as unknown as PoolToken
   )
 
   const { name } = usePoolMetadata({ chain: vote.chain, address: vote.address })
   return (
     <PoolTokenPills
-    chain={vote.chain}
-    poolName={name}
-    poolType={vote.type}
-    tokens={tokens}
-    {...props}
+      chain={vote.chain}
+      poolName={name}
+      poolType={vote.type}
+      tokens={tokens}
+      {...props}
     />
   )
 }
-**/
 
 type PoolListTokenPillsProps = {
   pool: PoolCore
