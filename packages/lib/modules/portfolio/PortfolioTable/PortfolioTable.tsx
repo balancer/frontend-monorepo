@@ -167,7 +167,8 @@ export function PortfolioTable() {
             left={{ base: '-4px', sm: '0' }}
             p={{ base: '0', sm: '0' }}
             position="relative"
-            pr={{ base: 'md' }}
+            // fixing right padding for horizontal scroll on mobile
+            pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
             w={{ base: '100vw', lg: 'full' }}
           >
             <PaginatedTable
@@ -179,7 +180,6 @@ export function PortfolioTable() {
               noItemsFoundLabel="No pools found"
               paginationProps={null}
               position="relative"
-              pr={{ base: 'md' }}
               renderTableHeader={() => (
                 <PortfolioTableHeader
                   currentSortingObj={currentSortingObj}
