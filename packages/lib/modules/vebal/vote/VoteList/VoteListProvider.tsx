@@ -37,8 +37,7 @@ function filterVoteList(
   textSearch: string,
   networks: GqlChain[],
   poolTypes: PoolFilterType[],
-  includeExpiredPools: boolean,
-  protocolVersion: number | null
+  includeExpiredPools: boolean
 ) {
   let result = voteList
 
@@ -66,11 +65,8 @@ function filterVoteList(
   }
 
   if (!includeExpiredPools) {
+    // fix: fixed in feat/my-votes
     result = result.filter(value => !value.gaugeVotes?.isKilled)
-  }
-
-  if (protocolVersion !== null) {
-    console.warn('todo: implement protocolVersion filtering when api is ready')
   }
 
   return result
@@ -115,8 +111,7 @@ export function _useVoteList({
       filtersState.searchText,
       filtersState.networks,
       filtersState.poolTypes,
-      filtersState.includeExpiredPools,
-      filtersState.protocolVersion
+      filtersState.includeExpiredPools
     )
   }, [
     votingPoolsList,
@@ -124,7 +119,6 @@ export function _useVoteList({
     filtersState.networks,
     filtersState.poolTypes,
     filtersState.includeExpiredPools,
-    filtersState.protocolVersion,
   ])
 
   const sortedVoteList = useMemo(() => {

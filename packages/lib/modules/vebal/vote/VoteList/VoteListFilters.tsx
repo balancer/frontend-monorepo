@@ -22,7 +22,6 @@ import {
   FilterButton,
   PoolNetworkFilters,
   PoolTypeFilters,
-  ProtocolVersionFilter,
 } from '@repo/lib/modules/pool/PoolList/PoolListFilters'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListSearch } from '@repo/lib/modules/vebal/vote/VoteList/VoteListSearch'
@@ -54,10 +53,6 @@ export function VoteListFilters() {
       setPoolTypes,
       includeExpiredPools,
       toggleIncludeExpiredPools,
-      activeProtocolVersionTab,
-      setActiveProtocolVersionTab,
-      protocolVersion,
-      setProtocolVersion,
     },
   } = useVoteList()
 
@@ -121,18 +116,6 @@ export function VoteListFilters() {
                           setNetworks={setNetworks}
                           toggleNetwork={toggleNetwork}
                           toggledNetworks={toggledNetworks}
-                        />
-                      </Box>
-                      <Box as={motion.div} variants={staggeredFadeInUp}>
-                        <Heading as="h3" mb="sm" size="sm">
-                          Protocol version
-                        </Heading>
-                        <ProtocolVersionFilter
-                          activeProtocolVersionTab={activeProtocolVersionTab}
-                          poolTypes={poolTypes}
-                          protocolVersion={protocolVersion}
-                          setActiveProtocolVersionTab={setActiveProtocolVersionTab}
-                          setProtocolVersion={setProtocolVersion}
                         />
                       </Box>
                       <Box as={motion.div} variants={staggeredFadeInUp}>
