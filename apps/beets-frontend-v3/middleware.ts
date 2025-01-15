@@ -4,8 +4,7 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/api/rpc')) {
     // Add logging for /api/rpc paths
-    console.log('Accessed Path:', request.url)
-    console.log('User Agent:', request.headers.get('user-agent'))
+    console.log('Referrer:', request.headers.get('referer'))
   }
 
   const blockedPaths = ['/api/rpc/FANTOM/routes', '/api/rpc/OPTIMISM/routes']
@@ -17,7 +16,7 @@ export function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 
-// Apply the middleware to all routes
+// Apply the middleware to /api/rpc/* routes
 export const config = {
-  matcher: ['*'],
+  matcher: ['/api/rpc/:path*'],
 }
