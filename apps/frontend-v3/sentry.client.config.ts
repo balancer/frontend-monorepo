@@ -86,7 +86,8 @@ function handleNonFatalError(event: Sentry.ErrorEvent): Sentry.ErrorEvent | null
   const firstValue = getFirstExceptionValue(event)
   if (firstValue && shouldIgnoreException(firstValue)) return null
   event.level = 'error'
-  return event
+
+  return addTags(event)
 }
 
 function handleFatalError(
@@ -108,7 +109,7 @@ function handleFatalError(
     event.exception.values[0] = firstValue
   }
 
-  return event
+  return addTags(event)
 }
 
 function uppercaseSegment(path: string): string {
@@ -130,4 +131,19 @@ function getFirstExceptionValue(event: Sentry.ErrorEvent) {
   if (event?.exception?.values?.length) {
     return event.exception.values[0]
   }
+}
+
+function addTags(event: Sentry.ErrorEvent) {
+  const errorMessage = getFirstExceptionValue(event)?.value || ''
+
+  /*
+   This is a known rainbow-kit/wagmi related issue that is randomly happening to many users.
+   We couldn't understand/reproduce it yet so we are tagging it as a known issue to track it better.
+   More context: https://github.com/rainbow-me/rainbowkit/issues/2238
+  */
+  if (errorMessage.includes('provider.disconnect is not a function')) {
+    event.tags = { ...event.tags, error_category: 'known_issue', error_type: 'provider_disconnect' }
+  }
+
+  return event
 }

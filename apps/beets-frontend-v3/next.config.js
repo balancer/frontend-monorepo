@@ -32,17 +32,6 @@ const nextConfig = {
         destination: 'https://discord.gg/kbPnYJjvwZ',
         permanent: false,
       },
-      // some cached apps are still trying to access these routes
-      {
-        source: '/api/rpc/FANTOM/routes',
-        destination: 'https://ftm.beets.fi/api/rpc/FANTOM/routes',
-        permanent: true,
-      },
-      {
-        source: '/api/rpc/OPTIMISM/routes',
-        destination: 'https://beets.fi/api/rpc/OPTIMISM',
-        permanent: true,
-      },
     ]
   },
 }

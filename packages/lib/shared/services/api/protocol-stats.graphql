@@ -16,8 +16,6 @@ query GetProtocolStatsPerChain($chain: GqlChain) {
     swapFee24h
     swapVolume24h
     totalLiquidity
-    totalSwapFee
-    totalSwapVolume
     yieldCapture24h
   }
 }

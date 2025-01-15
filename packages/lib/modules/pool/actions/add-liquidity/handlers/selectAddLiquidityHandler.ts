@@ -5,7 +5,7 @@ import { TwammAddLiquidityHandler } from './TwammAddLiquidity.handler'
 import { UnbalancedAddLiquidityV2Handler } from './UnbalancedAddLiquidityV2.handler'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
-import { requiresProportionalInput, supportsNestedActions } from '../../LiquidityActionHelpers'
+import { supportsNestedActions } from '../../LiquidityActionHelpers'
 import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.handler'
 import { isBoosted, isV3Pool } from '../../../pool.helpers'
 import { ProportionalAddLiquidityHandlerV3 } from './ProportionalAddLiquidityV3.handler'
@@ -41,7 +41,7 @@ export function selectAddLiquidityHandler(
     return new BoostedUnbalancedAddLiquidityV3Handler(pool)
   }
 
-  if (requiresProportionalInput(pool) || wantsProportional) {
+  if (wantsProportional) {
     if (isV3Pool(pool)) {
       return new ProportionalAddLiquidityHandlerV3(pool)
     }
