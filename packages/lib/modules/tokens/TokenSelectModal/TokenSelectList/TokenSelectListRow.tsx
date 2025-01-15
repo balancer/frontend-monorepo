@@ -8,7 +8,7 @@ import { useTokens } from '../../TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenInfoPopover } from '../../TokenInfoPopover'
-import { ApiToken } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '../../token.types'
 
 type Props = {
   token: ApiToken

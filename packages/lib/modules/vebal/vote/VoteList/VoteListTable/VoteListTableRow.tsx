@@ -4,7 +4,7 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
-import { PoolListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
+import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { getPoolPath, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
 import React, { useMemo, useState } from 'react'
@@ -30,20 +30,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
 
   const { votingIncentivesLoading, gaugeVotesIsLoading } = useVoteList()
 
-  const pool = useMemo(
-    () => ({
-      displayTokens: vote.tokens.map(token => ({ ...token, name: token.symbol })), // fix: no name
-      type: vote.type,
-      chain: vote.chain,
-      poolTokens: [],
-      address: vote.address,
-      protocolVersion: 3, // fix: no data
-      hasAnyAllowedBuffer: false, // fix: no data
-      hasErc4626: false, // fix: no data
-    }),
-    [vote]
-  )
-
+  // fix: fixed in feat/my-votes
   const isKilled = vote.gaugeVotes?.isKilled
 
   return (
@@ -73,12 +60,12 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
               target="_blank"
             >
               <HStack>
-                <PoolListTokenPills
+                <VotingListTokenPills
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
-                  pool={pool}
                   pr={[1.5, 'ms']}
+                  vote={vote}
                 />
                 {isKilled && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">

@@ -5,6 +5,9 @@ import { multicall } from 'wagmi/actions'
 import { useCallback } from 'react'
 import { useConfig } from 'wagmi'
 import { SupportedChainId } from '@repo/lib/config/config.types'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import sonicNetworkConfig from '@repo/lib/config/networks/sonic'
+import { getChainId } from '@repo/lib/config/app.config'
 
 export type ChainContractConfig = ContractFunctionParameters & {
   chainId: SupportedChainId
@@ -46,6 +49,9 @@ export function useMulticall(
             contracts: multicalls,
             chainId: Number(chain),
             batchSize,
+            ...(Number(chain) === getChainId(GqlChain.Sonic) && {
+              multicallAddress: sonicNetworkConfig.contracts.multicall3,
+            }),
           })
 
           // map the result to its id based on the call index

@@ -31,7 +31,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { getProjectConfig, isBeetsProject } from '@repo/lib/config/getProjectConfig'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
 import { PoolFilterType, poolTagFilters, PoolTagType, poolTypeFilters } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -547,6 +547,10 @@ export function PoolListFilters() {
     setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
   }
 
+  const poolCreatorUrl = isBeetsProject
+    ? 'https://ma.beets.fi/compose'
+    : `https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`
+
   return (
     <VStack w="full">
       <HStack gap="0" justify="end" spacing="none" w="full">
@@ -667,7 +671,7 @@ export function PoolListFilters() {
           as={Link}
           display="flex"
           gap="2"
-          href={`https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`}
+          href={poolCreatorUrl}
           ml="ms"
           rel=""
           target="_blank"

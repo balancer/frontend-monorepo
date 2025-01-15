@@ -7,3 +7,15 @@ query GetProtocolStats($chains: [GqlChain!]) {
     poolCount
   }
 }
+
+query GetProtocolStatsPerChain($chain: GqlChain) {
+  protocolMetricsChain(chain: $chain) {
+    chainId
+    numLiquidityProviders
+    poolCount
+    swapFee24h
+    swapVolume24h
+    totalLiquidity
+    yieldCapture24h
+  }
+}

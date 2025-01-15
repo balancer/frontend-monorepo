@@ -12,7 +12,7 @@ import {
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { getPoolMock } from '../__mocks__/getPoolMock'
-import { allPoolTokens } from '../pool.helpers'
+import { allPoolTokens, getPoolActionableTokens } from '../pool.helpers'
 import { LiquidityActionHelpers } from './LiquidityActionHelpers'
 import { Pool } from '../PoolProvider'
 
@@ -485,6 +485,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           "index": 0,
           "isBufferAllowed": true,
           "isErc4626": false,
+          "logoURI": "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0x9c58bacc331c9aa871afd802db6379a98e80cedb.png",
           "name": "Gnosis Token on xDai",
           "priority": 0,
           "symbol": "GNO",
@@ -674,6 +675,99 @@ describe('Liquidity helpers for GNOSIS V2 pool with isErc4626 tokens (v2 pools a
       ],
       totalShares: expect.any(String),
       type: 'Weighted',
+    })
+  })
+})
+
+describe('Liquidity helpers for V2 B-auraBAL-STABLE pool with BPT token in the actionable tokens', async () => {
+  const poolId = '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249' // Balancer 80 BAL 20 WETH auraBAL
+
+  const auraBalAddress = '0x616e8bfa43f920657b3497dbf40d6b1a02d4608d'
+  const balWeth8020BptAddress = '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56' // 80BAL-20WETH nested BPT that should be used for adds
+
+  const v2Pool = await getPoolMock(poolId, GqlChain.Mainnet)
+  const helpers = new LiquidityActionHelpers(v2Pool)
+
+  const humanAmountsIn: HumanTokenAmountWithAddress[] = [
+    { humanAmount: '0.1', tokenAddress: balWeth8020BptAddress, symbol: '80BAL-20WETH' },
+  ]
+
+  it('allPoolTokens includes 4 tokens: auraBAL, 80BAL-20WETH BTP and its nested tokens (BAL and WETH)', async () => {
+    // TODO: should nested tokens return all fields or just token core (I don't want balance balance USD)
+    expect(allPoolTokens(v2Pool)).toMatchObject([
+      {
+        address: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56',
+        decimals: 18,
+        index: 0,
+        name: 'Balancer 80 BAL 20 WETH',
+        symbol: 'B-80BAL-20WETH',
+      },
+      {
+        address: '0xba100000625a3754423978a60c9317c58a424e3d',
+        decimals: 18,
+        index: 0,
+        symbol: 'BAL',
+        weight: '0.8',
+      },
+      {
+        address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+        decimals: 18,
+        index: 1,
+        symbol: 'WETH',
+        weight: '0.2',
+      },
+      {
+        address: '0x616e8bfa43f920657b3497dbf40d6b1a02d4608d',
+        decimals: 18,
+        index: 1,
+        name: 'Aura BAL',
+        symbol: 'auraBAL',
+      },
+    ])
+  })
+
+  it('toInputAmounts', async () => {
+    expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
+      {
+        address: bal80Weth20Address,
+        decimals: 18,
+        rawAmount: 100000000000000000n,
+        symbol: 'B-80BAL-20WETH',
+      },
+    ])
+  })
+
+  it('poolActionable tokens are auraBal and nested BPT', async () => {
+    // TODO: merge pool helpers and LiquidityActionHelpers or split tests
+    const tokens = getPoolActionableTokens(v2Pool)
+      .map(t => t.address)
+      .sort()
+
+    expect(tokens).toEqual([bal80Weth20Address, auraBalAddress])
+  })
+
+  it('poolStateWithBalances', async () => {
+    const helpers = new LiquidityActionHelpers(v2Pool)
+    expect(helpers.poolStateWithBalances).toEqual({
+      id: poolId,
+      address: '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd',
+      protocolVersion: 2,
+      tokens: [
+        {
+          address: bal80Weth20Address,
+          balance: expect.any(String),
+          decimals: 18,
+          index: 0,
+        },
+        {
+          address: auraBalAddress,
+          balance: expect.any(String),
+          decimals: 18,
+          index: 1,
+        },
+      ],
+      totalShares: expect.any(String),
+      type: 'Stable',
     })
   })
 })

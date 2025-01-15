@@ -1,6 +1,6 @@
 import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
-import { VotesData } from '@repo/lib/modules/vebal/vote/gauge/useGaugeVotes'
-import { HiddenHandData } from '@repo/lib/modules/vebal/vote/hidden-hand/hidden-hand.types'
+import { VotesData } from './useGaugeVotes'
+import { HiddenHandData } from '@repo/lib/shared/services/hidden-hand/hidden-hand.types'
 
 export type VoteList = GetVeBalVotingListQuery['veBalGetVotingList']
 

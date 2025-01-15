@@ -1,5 +1,6 @@
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { ApiToken, BaseVariant, PoolVariant } from '../../pool.types'
+import { BaseVariant, PoolVariant } from '../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 export type PoolActivityTokens = {
   token?: ApiToken
