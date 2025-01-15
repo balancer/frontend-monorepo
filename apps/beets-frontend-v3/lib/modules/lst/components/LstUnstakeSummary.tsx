@@ -19,7 +19,6 @@ export function LstUnstakeSummary() {
       <Card variant="modalSubSection">
         <LstTokenRow
           chain={chain}
-          isLoading={false}
           label={shouldShowReceipt ? 'You unstaked' : 'You unstake'}
           tokenAddress={stakedAsset?.address || ''}
           tokenAmount={amountShares}

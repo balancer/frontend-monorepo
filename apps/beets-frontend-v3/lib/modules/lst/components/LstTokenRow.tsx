@@ -8,13 +8,13 @@ export function LstTokenRow({
   chain,
   tokenAmount,
   tokenAddress,
-  isLoading,
+  isLoading = false,
 }: {
   label: string
   chain: GqlChain
   tokenAmount: string
   tokenAddress: string
-  isLoading: boolean
+  isLoading?: boolean
 }) {
   return (
     <VStack align="start" spacing="md">
