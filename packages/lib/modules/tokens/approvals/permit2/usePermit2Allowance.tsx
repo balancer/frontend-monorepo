@@ -13,7 +13,7 @@ export type Permit2AllowanceResult = ReturnType<typeof usePermit2Allowance>
 
 type Params = {
   chainId: number
-  tokenAddresses?: Address[]
+  tokenAddresses: Address[]
   owner?: Address
   enabled: boolean
   spender: Address
@@ -37,33 +37,30 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, s
     contracts,
     allowFailure: false,
     query: {
-      enabled: enabled && tokenAddresses && tokenAddresses.length > 0 && !!owner && !!spender,
+      enabled: enabled && tokenAddresses.length > 0 && !!owner && !!spender,
     },
   })
 
-  const nonces: NoncesByTokenAddress | undefined =
-    tokenAddresses && data
-      ? zipObject(
-          tokenAddresses,
-          data.map(result => result[2])
-        )
-      : undefined
+  const nonces: NoncesByTokenAddress | undefined = data
+    ? zipObject(
+        tokenAddresses,
+        data.map(result => result[2])
+      )
+    : undefined
 
-  const expirations: ExpirationByTokenAddress | undefined =
-    tokenAddresses && data
-      ? zipObject(
-          tokenAddresses,
-          data.map(result => result[1])
-        )
-      : undefined
+  const expirations: ExpirationByTokenAddress | undefined = data
+    ? zipObject(
+        tokenAddresses,
+        data.map(result => result[1])
+      )
+    : undefined
 
-  const allowedAmounts: AllowedAmountsByTokenAddress | undefined =
-    tokenAddresses && data
-      ? zipObject(
-          tokenAddresses,
-          data.map(result => result[0])
-        )
-      : undefined
+  const allowedAmounts: AllowedAmountsByTokenAddress | undefined = data
+    ? zipObject(
+        tokenAddresses,
+        data.map(result => result[0])
+      )
+    : undefined
 
   return {
     isLoadingPermit2Allowances: isLoading,

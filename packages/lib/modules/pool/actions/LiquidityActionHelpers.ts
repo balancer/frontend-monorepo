@@ -43,7 +43,7 @@ import {
   isUnbalancedLiquidityDisabled,
   isV2Pool,
   isV3Pool,
-  isV3NotSupportingWethIsEth,
+  supportsWethIsEth,
   getActionableTokenSymbol,
   hasNestedPools,
 } from '../pool.helpers'
@@ -392,11 +392,7 @@ export function emptyTokenAmounts(pool: Pool): TokenAmount[] {
 }
 
 export function shouldShowNativeWrappedSelector(token: ApiToken, pool: Pool) {
-  return (
-    !isV3NotSupportingWethIsEth(pool) && // V3 boosted/nested actions don't support wethIsEth currently
-    !isCowAmmPool(pool.type) && // Cow AMM pools don't support wethIsEth
-    isNativeOrWrappedNative(token.address as Address, token.chain)
-  )
+  return supportsWethIsEth(pool) && isNativeOrWrappedNative(token.address as Address, token.chain)
 }
 
 export function replaceWrappedWithNativeAsset(

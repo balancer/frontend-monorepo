@@ -55,7 +55,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
 import { UnbalancedAddError } from '@repo/lib/shared/components/errors/UnbalancedAddError'
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
-import { isV3NotSupportingWethIsEth } from '../../../pool.helpers'
+import { supportsWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
@@ -147,7 +147,7 @@ function AddLiquidityMainForm() {
 
   // if native asset balance is higher set that asset as the 'default'
   useEffect(() => {
-    if (!isBalancesLoading && nativeAsset && wNativeAsset && !isV3NotSupportingWethIsEth(pool)) {
+    if (!isBalancesLoading && nativeAsset && wNativeAsset && supportsWethIsEth(pool)) {
       const nativeAssetBalance = balanceFor(nativeAsset.address)
       const wNativeAssetBalance = balanceFor(wNativeAsset.address)
       if (

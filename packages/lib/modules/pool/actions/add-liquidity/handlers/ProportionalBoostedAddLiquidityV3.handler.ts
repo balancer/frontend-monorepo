@@ -69,6 +69,7 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       }),
       protocolVersion: 3,
       userData: '0x' as Hex,
+      wethIsEth: this.helpers.isNativeAssetIn(humanAmountsIn),
     }
 
     const { callData, to, value } = permit2

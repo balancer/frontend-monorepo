@@ -29,7 +29,7 @@ import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { getPoolActionableTokens, isV3NotSupportingWethIsEth } from '../../pool.helpers'
+import { getPoolActionableTokens, supportsWethIsEth } from '../../pool.helpers'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
@@ -207,7 +207,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   return {
     transactionSteps,
     humanAmountsIn,
-    tokens: wethIsEth && !isV3NotSupportingWethIsEth(pool) ? tokensWithNativeAsset : tokens,
+    tokens: wethIsEth && supportsWethIsEth(pool) ? tokensWithNativeAsset : tokens,
     validTokens,
     totalUSDValue,
     simulationQuery,
