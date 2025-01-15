@@ -5,6 +5,9 @@ export function middleware(request: NextRequest) {
   const blockedPaths = ['/api/rpc/FANTOM/routes', '/api/rpc/OPTIMISM/routes']
 
   if (blockedPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
+    // Add some logging
+    console.log('Accessed Path:', request.url)
+    console.log('User Agent:', request.headers.get('user-agent'))
     return new NextResponse('This path is blocked.', { status: 403 })
   }
 
