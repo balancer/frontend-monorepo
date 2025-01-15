@@ -123,8 +123,16 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
     }
   }
 
+  const isSuccess = !!transactionHash
+
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onModalClose} preserveScrollBarGap>
+    <Modal
+      isCentered
+      isOpen={isOpen}
+      onClose={onModalClose}
+      preserveScrollBarGap
+      trapFocus={!isSuccess}
+    >
       <SuccessOverlay startAnimation={!!transactionHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -162,7 +170,7 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
         {showTransactionSteps ? (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
-            isSuccess={!!transactionHash}
+            isSuccess={isSuccess}
             returnAction={onClose}
             returnLabel="Return to vebal"
           />

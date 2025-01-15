@@ -70,6 +70,8 @@ export function ClaimModal({
 
   const noQuoteRewards = quoteRewards.length === 0
 
+  const isSuccess = !!claimTxHash
+
   return (
     <Modal
       isCentered
@@ -78,6 +80,7 @@ export function ClaimModal({
         onClose(!!claimTxHash)
       }}
       preserveScrollBarGap
+      trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!claimTxHash} />
@@ -108,9 +111,9 @@ export function ClaimModal({
 
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
-          isSuccess={!!claimTxHash}
+          isSuccess={isSuccess}
           returnAction={() => {
-            onClose(!!claimTxHash)
+            onClose(isSuccess)
             router.push('/portfolio')
           }}
           returnLabel="Return to portfolio"
