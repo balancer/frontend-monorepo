@@ -61,10 +61,12 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
-  const { validTokens, proportionalSlippage } = useAddLiquidity()
+  const { validTokens, slippage, wantsProportional } = useAddLiquidity()
+
+  const bufferPercentage = wantsProportional ? slippage : '0'
 
   return (
-    <TokenBalancesProvider bufferPercentage={proportionalSlippage} extTokens={validTokens}>
+    <TokenBalancesProvider bufferPercentage={bufferPercentage} extTokens={validTokens}>
       <AddLiquidityMainForm />
     </TokenBalancesProvider>
   )
@@ -87,7 +89,6 @@ function AddLiquidityMainForm() {
     nativeAsset,
     wNativeAsset,
     previewModalDisclosure,
-    proportionalSlippage,
     slippage,
     setProportionalSlippage,
     setWantsProportional,
@@ -192,11 +193,12 @@ function AddLiquidityMainForm() {
         <CardHeader>
           <HStack justify="space-between" w="full">
             <span>Add liquidity</span>
-            {requiresProportionalInput(pool) || wantsProportional ? (
+            {wantsProportional ? (
               <ProportionalTransactionSettings
+                pool={pool}
                 setSlippage={setProportionalSlippage}
                 size="sm"
-                slippage={proportionalSlippage}
+                slippage={slippage}
               />
             ) : (
               <TransactionSettings size="sm" />
