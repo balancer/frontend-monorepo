@@ -147,3 +147,17 @@ function parseRequestError(error: Error, chainId: number): TransactionConfig | u
 
   return
 }
+
+/**
+ * Extracts message string from any Error
+ * @param error
+ */
+export function parseError(error: unknown) {
+  if (typeof error === 'string') return error
+
+  if (error instanceof Error) {
+    return error.message
+  }
+
+  return undefined
+}
