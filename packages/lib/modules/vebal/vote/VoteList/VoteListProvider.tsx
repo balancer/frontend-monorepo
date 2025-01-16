@@ -4,28 +4,28 @@ import { createContext, PropsWithChildren, useMemo } from 'react'
 import { GetVeBalVotingListQuery, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useGaugeVotes } from '@repo/lib/modules/vebal/vote/useGaugeVotes'
-import { SortingBy, VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
+import { SortVotesBy, VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { orderBy } from 'lodash'
 import { HiddenHandData } from '@repo/lib/shared/services/hidden-hand/hidden-hand.types'
 import { useVoteListFiltersState } from '@repo/lib/modules/vebal/vote/VoteList/useVoteListFiltersState'
 import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { PoolFilterType } from '@repo/lib/modules/pool/pool.types'
 
-function sortVoteList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
+function sortVoteList(voteList: VotingPoolWithData[], sortBy: SortVotesBy, order: Sorting) {
   return orderBy(
     voteList,
     value => {
       switch (sortBy) {
-        case SortingBy.votes:
+        case SortVotesBy.votes:
           return value.gaugeVotes ? Number(value.gaugeVotes.votesNextPeriod) : -1
-        case SortingBy.bribes:
+        case SortVotesBy.bribes:
           return value.votingIncentive ? Number(value.votingIncentive.totalValue) : -1
-        case SortingBy.bribesPerVebal:
+        case SortVotesBy.bribesPerVebal:
           return value.votingIncentive ? Number(value.votingIncentive.valuePerVote) : -1
-        case SortingBy.type:
+        case SortVotesBy.type:
           return value.type
         default:
-          throw new Error(`Unsupported SortingBy value (${sortBy})`)
+          throw new Error(`Unsupported SortVotesBy value (${sortBy})`)
       }
     },
     order === Sorting.asc ? 'asc' : 'desc'
@@ -122,13 +122,17 @@ export function _useVoteList({
   ])
 
   const sortedVoteList = useMemo(() => {
-    const sortedList = sortVoteList(filteredVoteList, filtersState.sortingBy, filtersState.sorting)
+    const sortedList = sortVoteList(
+      filteredVoteList,
+      filtersState.sortVotesBy,
+      filtersState.sorting
+    )
 
     return sortedList.slice(
       filtersState.pagination.pageIndex * filtersState.pagination.pageSize,
       filtersState.pagination.pageSize * (filtersState.pagination.pageIndex + 1)
     )
-  }, [filteredVoteList, filtersState.pagination, filtersState.sorting, filtersState.sortingBy])
+  }, [filteredVoteList, filtersState.pagination, filtersState.sorting, filtersState.sortVotesBy])
 
   return {
     filtersState,

@@ -4,20 +4,21 @@ import { Grid, GridItem, Icon, PopoverContent, Text, VStack } from '@chakra-ui/r
 import { Globe } from 'react-feather'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
-import { orderByHash, SortingBy } from '@repo/lib/modules/vebal/vote/vote.types'
+import { SortVotesBy } from '@repo/lib/modules/vebal/vote/vote.types'
+import { orderByHash } from '../../vote.helpers'
 
-const orderBy = Object.values(SortingBy)
+const orderBy = Object.values(SortVotesBy)
 
 export function VoteListTableHeader({ ...rest }) {
   const {
-    filtersState: { sorting, setSorting, sortingBy, setSortingBy, toggleSorting },
+    filtersState: { sorting, setSorting, sortVotesBy, setSortVotesBy, toggleSorting },
   } = useVoteList()
 
-  const handleSort = (newSortingBy: SortingBy) => {
-    if (sortingBy === newSortingBy) {
+  const handleSort = (newSortVotesBy: SortVotesBy) => {
+    if (sortVotesBy === newSortVotesBy) {
       toggleSorting()
     } else {
-      setSortingBy(newSortingBy)
+      setSortVotesBy(newSortVotesBy)
       setSorting(Sorting.desc)
     }
   }
@@ -35,7 +36,7 @@ export function VoteListTableHeader({ ...rest }) {
       {orderBy.map(orderByItem => (
         <GridItem justifySelf="end" key={orderByItem} maxW="maxContent">
           <SortableHeader
-            isSorted={sortingBy === orderByItem}
+            isSorted={sortVotesBy === orderByItem}
             label={orderByHash[orderByItem].label}
             onSort={() => handleSort(orderByItem)}
             popoverContent={

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
-import { SortingBy } from '@repo/lib/modules/vebal/vote/vote.types'
+import { SortVotesBy } from '@repo/lib/modules/vebal/vote/vote.types'
 import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { uniq } from 'lodash'
@@ -10,7 +10,7 @@ const EMPTY_ARRAY: never[] = []
 
 export function useVoteListFiltersState() {
   const [sorting, setSorting] = useState<Sorting>(Sorting.desc)
-  const [sortingBy, setSortingBy] = useState<SortingBy>(SortingBy.votes)
+  const [sortVotesBy, setSortVotesBy] = useState<SortVotesBy>(SortVotesBy.votes)
 
   const [first, setFirst] = useState(20)
   const [skip, setSkip] = useState(0)
@@ -45,7 +45,7 @@ export function useVoteListFiltersState() {
 
     setPagination({ pageSize: 20, pageIndex: 0 })
     setSorting(Sorting.desc)
-    setSortingBy(SortingBy.votes)
+    setSortVotesBy(SortVotesBy.votes)
   }
 
   // Set internal checked state
@@ -84,8 +84,8 @@ export function useVoteListFiltersState() {
   return {
     sorting,
     setSorting,
-    sortingBy,
-    setSortingBy,
+    sortVotesBy,
+    setSortVotesBy,
     pagination,
     setPagination,
     toggleSorting,
