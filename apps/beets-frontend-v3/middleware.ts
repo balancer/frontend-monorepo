@@ -7,10 +7,10 @@ export function middleware(request: NextRequest) {
     console.log('Referer:', request.headers.get('referer'))
   }
 
-  const blockedPaths = ['/api/rpc/FANTOM/routes', '/api/rpc/OPTIMISM/routes']
+  const permanentlyRemovedPaths = ['/api/rpc/FANTOM/routes', '/api/rpc/OPTIMISM/routes']
 
-  if (blockedPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
-    return new NextResponse('This path is blocked.', { status: 403 })
+  if (permanentlyRemovedPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
+    return new NextResponse('Gone', { status: 410 })
   }
 
   return NextResponse.next()
