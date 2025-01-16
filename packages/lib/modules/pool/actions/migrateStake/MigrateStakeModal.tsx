@@ -39,6 +39,8 @@ export function MigrateStakeModal({
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
 
+  const isSuccess = !!restakeTxHash
+
   return (
     <Modal
       finalFocusRef={finalFocusRef}
@@ -47,6 +49,7 @@ export function MigrateStakeModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
+      trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!restakeTxHash} />
@@ -69,7 +72,7 @@ export function MigrateStakeModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
-          isSuccess={!!restakeTxHash}
+          isSuccess={isSuccess}
           returnAction={redirectToPoolPage}
           returnLabel="Return to pool"
         />

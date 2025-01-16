@@ -46,8 +46,17 @@ export function LstWithdrawModal({
     onClose()
   }
 
+  const isSuccess = !!lstWithdrawTxHash
+
   return (
-    <Modal isCentered isOpen={isOpen} onClose={handleOnClose} preserveScrollBarGap {...rest}>
+    <Modal
+      isCentered
+      isOpen={isOpen}
+      onClose={handleOnClose}
+      preserveScrollBarGap
+      trapFocus={!isSuccess}
+      {...rest}
+    >
       <SuccessOverlay startAnimation={!!lstWithdrawTxHash} />
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
         {isDesktop && (
@@ -60,7 +69,7 @@ export function LstWithdrawModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={withdrawTransactionSteps.currentStep}
-          isSuccess={!!lstWithdrawTxHash}
+          isSuccess={isSuccess}
           returnAction={handleOnClose}
           returnLabel="Return to withdraw"
         />

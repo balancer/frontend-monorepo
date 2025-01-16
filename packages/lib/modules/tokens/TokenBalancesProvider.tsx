@@ -11,7 +11,7 @@ import {
   refetchQueries,
 } from '@repo/lib/shared/utils/queries'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { PropsWithChildren, createContext, useState } from 'react'
+import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { exclNativeAssetFilter, nativeAssetFilter } from './token.helpers'
@@ -65,23 +65,26 @@ export function _useTokenBalances(
     },
   })
 
-  const tokenBalancesQuery = useReadContracts(
-    // This query key can potentially collide, but it will overflow the useQuery
-    // cache if this list of tokens is large.
-    {
-      query: {
-        enabled: !!userAddress && tokensExclNativeAsset.length > 0,
-        gcTime: BALANCE_CACHE_TIME_MS,
-      },
-      contracts: tokensExclNativeAsset.map(token => ({
-        chainId,
-        abi: erc20Abi,
-        address: token.address as Address,
-        functionName: 'balanceOf',
-        args: [(userAddress || '') as Address],
-      })),
-    }
-  )
+  const balanceContractReads = useMemo(() => {
+    return tokensExclNativeAsset.map(token => ({
+      chainId,
+      abi: erc20Abi,
+      address: token.address as Address,
+      functionName: 'balanceOf',
+      args: [(userAddress || '') as Address],
+    }))
+  }, [tokensExclNativeAsset, userAddress, chainId])
+
+  const tokenBalancesQuery = useReadContracts({
+    query: {
+      enabled: !!userAddress && tokensExclNativeAsset.length > 0,
+      gcTime: BALANCE_CACHE_TIME_MS,
+    },
+    multicallAddress: networkConfig.contracts.multicall3,
+    batchSize: 0, // Remove limit
+    allowFailure: true,
+    contracts: balanceContractReads,
+  })
 
   async function refetchBalances() {
     if (includesNativeAsset) return refetchQueries(tokenBalancesQuery, nativeBalanceQuery)

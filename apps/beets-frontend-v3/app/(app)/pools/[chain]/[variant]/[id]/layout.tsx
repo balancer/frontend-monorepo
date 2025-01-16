@@ -45,6 +45,7 @@ export async function generateMetadata({
   if (!pool) return {}
 
   const displayTokens = getUserReferenceTokens(pool)
+
   const poolTokenString = arrayToSentence(displayTokens.map(token => token.symbol))
 
   return {

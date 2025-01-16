@@ -80,6 +80,7 @@ function getVariant(type: GqlPoolType, protocolVersion: number | undefined): Poo
  * Constructs path to pool detail page.
  * @returns {String} Path to pool detail page.
  */
+
 export function getPoolPath(
   params: Pick<PoolCore, 'id' | 'chain' | 'type'> & {
     protocolVersion: number | undefined

@@ -309,7 +309,7 @@ export function shouldBlockAddLiquidity(pool: Pool) {
 
   return poolTokens.some(token => {
     // if token is not allowed - we should block adding liquidity
-    if (!token.isAllowed && !isCowAmmPool(pool.type)) {
+    if (isV2Pool(pool) && !token.isAllowed) {
       return true
     }
 
@@ -359,7 +359,7 @@ export function getPoolAddBlockedReason(pool: Pool): string {
 
   for (const token of poolTokens) {
     // if token is not allowed - we should block adding liquidity
-    if (!token.isAllowed && !isCowAmmPool(pool.type)) {
+    if (isV2Pool(pool) && !token.isAllowed) {
       return `Token: ${token.symbol} is not allowed` // TODO: Add instructions and link to get it approved
     }
 
@@ -416,8 +416,12 @@ export function isV3WithNestedActionsPool(pool: Pool): boolean {
   return supportsNestedActions(pool) && isV3Pool(pool)
 }
 
-export function isV3NotSupportingWethIsEth(pool: Pool): boolean {
-  return (supportsNestedActions(pool) || isBoosted(pool)) && isV3Pool(pool)
+export function supportsWethIsEth(pool: Pool): boolean {
+  /*
+    Currently all SDK handlers support wethIsEth
+    and Cow AMM pools is the only scenario that doesn't support wethIsEth
+  */
+  return !isCowAmmPool(pool.type)
 }
 
 export function requiresPermit2Approval(pool: Pool): boolean {

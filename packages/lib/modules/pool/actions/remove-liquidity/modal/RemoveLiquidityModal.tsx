@@ -68,6 +68,8 @@ export function RemoveLiquidityModal({
 
   useOnUserAccountChanged(redirectToPoolPage)
 
+  const isSuccess = !!removeLiquidityTxHash && !receiptProps.isLoading
+
   return (
     <Modal
       finalFocusRef={finalFocusRef}
@@ -76,6 +78,7 @@ export function RemoveLiquidityModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
+      trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!removeLiquidityTxHash && hasQuoteContext} />
@@ -99,7 +102,7 @@ export function RemoveLiquidityModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
-          isSuccess={!!removeLiquidityTxHash && !receiptProps.isLoading}
+          isSuccess={isSuccess}
           returnAction={redirectToPoolPage}
           returnLabel="Return to pool"
           urlTxHash={urlTxHash}
