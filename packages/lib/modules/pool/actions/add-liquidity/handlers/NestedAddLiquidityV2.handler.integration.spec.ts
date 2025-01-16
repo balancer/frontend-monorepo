@@ -2,7 +2,7 @@
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress, usdcAddress, usdtAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { mainnetTestPublicClient } from '@repo/lib/test/utils/wagmi/wagmi-test-clients'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'

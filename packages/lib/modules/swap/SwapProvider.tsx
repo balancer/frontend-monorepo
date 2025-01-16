@@ -49,7 +49,7 @@ import {
   isSupportedWrap,
   isWrapOrUnwrap,
 } from './wrap.helpers'
-import { Pool } from '../pool/PoolProvider'
+import { Pool } from '../pool/pool.types'
 import {
   getChildTokens,
   getStandardRootTokens,

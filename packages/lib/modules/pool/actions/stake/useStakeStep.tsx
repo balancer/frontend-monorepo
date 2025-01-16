@@ -8,7 +8,8 @@ import {
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useCallback, useMemo, useState } from 'react'
-import { Pool, usePool } from '../../PoolProvider'
+import { usePool } from '../../PoolProvider'
+import { Pool } from '../../pool.types'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 
 const stakeStepId = 'stake'

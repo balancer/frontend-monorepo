@@ -10,7 +10,7 @@ import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisable
 import { LABELS } from '@repo/lib/shared/labels'
 import { createContext, PropsWithChildren } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { Pool } from '../../PoolProvider'
+import { Pool } from '../../pool.types'
 
 export type ClaimablePool = Pool | PoolListItem
 

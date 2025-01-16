@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Pool } from '../../pool/PoolProvider'
+import { Pool } from '../../pool/pool.types'
 import { isVebalPool } from '../../pool/pool.helpers'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 

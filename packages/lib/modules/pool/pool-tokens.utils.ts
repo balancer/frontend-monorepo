@@ -1,5 +1,5 @@
 import { GqlNestedPool } from '@repo/lib/shared/services/api/generated/graphql'
-import { Pool } from './PoolProvider'
+import { Pool } from './pool.types'
 import { PoolToken, PoolCore } from './pool.types'
 import { isV3Pool } from './pool.helpers'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'

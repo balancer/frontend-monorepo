@@ -7,7 +7,7 @@ import {
   RemoveLiquidityRecoveryInput,
   Slippage,
 } from '@balancer/sdk'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import {
   QueryRemoveLiquidityInput,
   SdkBuildRemoveLiquidityInput,

@@ -8,7 +8,7 @@ import {
   InputAmount,
   Slippage,
 } from '@balancer/sdk'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'

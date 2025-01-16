@@ -1,7 +1,7 @@
 import { useVebalBoost } from '@repo/lib/modules/vebal/useVebalBoost'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useMemo } from 'react'
-import { Pool } from '../../PoolProvider'
+import { Pool } from '../../pool.types'
 import { Text } from '@chakra-ui/react'
 
 export interface BoostTextProps {

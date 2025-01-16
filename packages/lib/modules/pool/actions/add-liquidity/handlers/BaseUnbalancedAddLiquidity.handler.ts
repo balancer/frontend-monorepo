@@ -10,7 +10,7 @@ import {
   PriceImpact,
   PriceImpactAmount,
 } from '@balancer/sdk'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { LiquidityActionHelpers, areEmptyAmounts, getSender } from '../../LiquidityActionHelpers'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'

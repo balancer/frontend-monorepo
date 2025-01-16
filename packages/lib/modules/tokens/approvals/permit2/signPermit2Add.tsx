@@ -1,4 +1,4 @@
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { get24HoursFromNowInSecs } from '@repo/lib/shared/utils/time'
 import {

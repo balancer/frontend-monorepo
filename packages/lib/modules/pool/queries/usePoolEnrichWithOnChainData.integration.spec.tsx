@@ -1,7 +1,7 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import { fetchPoolMock } from '../__mocks__/fetchPoolMock'
 import { usePoolEnrichWithOnChainData } from './usePoolEnrichWithOnChainData'
 import { balWeth8020 } from '../__mocks__/pool-examples/flat'

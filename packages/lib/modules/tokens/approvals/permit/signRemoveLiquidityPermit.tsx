@@ -9,7 +9,7 @@ import {
 } from '@balancer/sdk'
 import { constructRemoveBaseBuildCallInput } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/add-liquidity.utils'
 import { isBoosted, isV3WithNestedActionsPool } from '@repo/lib/modules/pool/pool.helpers'
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 
 export interface PermitRemoveLiquidityInput {
