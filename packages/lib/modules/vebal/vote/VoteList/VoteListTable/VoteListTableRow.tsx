@@ -10,6 +10,7 @@ import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
 import React, { useState } from 'react'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
+import { VoteExpiredTooltip } from '@repo/lib/modules/vebal/vote/VoteExpiredTooltip'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -28,6 +29,9 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
   }
 
   const { votingIncentivesLoading, gaugeVotesIsLoading } = useVoteList()
+
+  // fix: fixed in feat/my-votes
+  const isKilled = vote.gaugeVotes?.isKilled
 
   return (
     <FadeInOnView>
@@ -63,6 +67,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                   pr={[1.5, 'ms']}
                   vote={vote}
                 />
+                {isKilled && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">
                   <ArrowUpIcon transform="rotate(90)" />
                 </Box>
@@ -100,16 +105,28 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             )}
           </GridItem>
           <GridItem justifySelf="end">
-            <Button
-              color={selected ? 'font.secondary' : undefined}
-              fontSize="sm"
-              fontWeight="700"
-              onClick={toggleSelection}
-              variant={selected ? 'outline' : 'secondary'}
-              w="80px"
-            >
-              {selected ? 'Selected' : 'Select'}
-            </Button>
+            {isKilled ? (
+              <Button
+                color="font.secondary"
+                fontSize="sm"
+                fontWeight="700"
+                variant="outline"
+                w="80px"
+              >
+                Expired
+              </Button>
+            ) : (
+              <Button
+                color={selected ? 'font.secondary' : undefined}
+                fontSize="sm"
+                fontWeight="700"
+                onClick={toggleSelection}
+                variant={selected ? 'outline' : 'secondary'}
+                w="80px"
+              >
+                {selected ? 'Selected' : 'Select'}
+              </Button>
+            )}
           </GridItem>
         </Grid>
       </Box>

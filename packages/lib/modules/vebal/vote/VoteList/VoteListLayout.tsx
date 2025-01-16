@@ -5,16 +5,29 @@ import { motion } from 'framer-motion'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ErrorBoundary } from 'react-error-boundary'
 import { BoundaryError } from '@repo/lib/shared/components/errors/ErrorBoundary'
-import {
-  FilterTags,
-  PoolListFilters,
-  useFilterTagsVisible,
-} from '@repo/lib/modules/pool/PoolList/PoolListFilters'
+import { FilterTags } from '@repo/lib/modules/pool/PoolList/PoolListFilters'
 import { VoteListTable } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListTable'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
+import {
+  useFilterTagsVisible,
+  VoteListFilters,
+} from '@repo/lib/modules/vebal/vote/VoteList/VoteListFilters'
+import { poolTypeLabel } from '@repo/lib/modules/pool/PoolList/usePoolListQueryState'
 
 export function VoteListLayout() {
-  const { sortedVoteList, loading, count } = useVoteList()
+  const {
+    sortedVoteList,
+    loading,
+    count,
+    filtersState: {
+      networks,
+      toggleNetwork,
+      poolTypes,
+      togglePoolType,
+      includeExpiredPools,
+      toggleIncludeExpiredPools,
+    },
+  } = useVoteList()
   const isFilterVisible = useFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
 
@@ -60,7 +73,15 @@ export function VoteListLayout() {
               </Box>
             </Box>
           </HStack>
-          <FilterTags />
+          <FilterTags
+            includeExpiredPools={includeExpiredPools}
+            networks={networks}
+            poolTypeLabel={poolTypeLabel}
+            poolTypes={poolTypes}
+            toggleIncludeExpiredPools={toggleIncludeExpiredPools}
+            toggleNetwork={toggleNetwork}
+            togglePoolType={togglePoolType}
+          />
         </VStack>
 
         <Stack
@@ -68,7 +89,7 @@ export function VoteListLayout() {
           direction="row"
           w={{ base: 'full', md: 'auto' }}
         >
-          <PoolListFilters />
+          <VoteListFilters />
         </Stack>
       </Stack>
       <ErrorBoundary FallbackComponent={BoundaryError}>

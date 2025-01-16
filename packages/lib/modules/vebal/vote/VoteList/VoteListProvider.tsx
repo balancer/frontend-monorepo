@@ -1,13 +1,76 @@
 'use client'
 
 import { createContext, PropsWithChildren, useMemo } from 'react'
-import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import { GetVeBalVotingListQuery, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { usePoolListQueryState } from '@repo/lib/modules/pool/PoolList/usePoolListQueryState'
 import { useGaugeVotes } from '@repo/lib/modules/vebal/vote/useGaugeVotes'
-import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
+import { SortVotesBy, VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { orderBy } from 'lodash'
 import { HiddenHandData } from '@repo/lib/shared/services/hidden-hand/hidden-hand.types'
+import { useVoteListFiltersState } from '@repo/lib/modules/vebal/vote/VoteList/useVoteListFiltersState'
+import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
+import { PoolFilterType } from '@repo/lib/modules/pool/pool.types'
+
+function sortVoteList(voteList: VotingPoolWithData[], sortBy: SortVotesBy, order: Sorting) {
+  return orderBy(
+    voteList,
+    value => {
+      switch (sortBy) {
+        case SortVotesBy.votes:
+          return value.gaugeVotes ? Number(value.gaugeVotes.votesNextPeriod) : -1
+        case SortVotesBy.bribes:
+          return value.votingIncentive ? Number(value.votingIncentive.totalValue) : -1
+        case SortVotesBy.bribesPerVebal:
+          return value.votingIncentive ? Number(value.votingIncentive.valuePerVote) : -1
+        case SortVotesBy.type:
+          return value.type
+        default:
+          throw new Error(`Unsupported SortVotesBy value (${sortBy})`)
+      }
+    },
+    order === Sorting.asc ? 'asc' : 'desc'
+  )
+}
+
+function filterVoteList(
+  voteList: VotingPoolWithData[],
+  textSearch: string,
+  networks: GqlChain[],
+  poolTypes: PoolFilterType[],
+  includeExpiredPools: boolean
+) {
+  let result = voteList
+
+  const _textSearch = textSearch.toLowerCase().trim()
+  if (_textSearch) {
+    result = result.filter(value => {
+      return (
+        value.id.toLowerCase().includes(_textSearch) ||
+        value.tokens.some(token => {
+          return (
+            token.symbol.toLowerCase().includes(_textSearch) ||
+            token.address.toLowerCase().includes(_textSearch)
+          )
+        })
+      )
+    })
+  }
+
+  if (networks.length > 0) {
+    result = result.filter(value => networks.includes(value.chain))
+  }
+
+  if (poolTypes.length > 0) {
+    result = result.filter(value => poolTypes.includes(value.type as PoolFilterType))
+  }
+
+  if (!includeExpiredPools) {
+    // fix: fixed in feat/my-votes
+    result = result.filter(value => !value.gaugeVotes?.isKilled)
+  }
+
+  return result
+}
 
 export interface UseVoteListArgs {
   data: GetVeBalVotingListQuery | undefined
@@ -24,12 +87,9 @@ export function _useVoteList({
   votingIncentivesErrorMessage,
   votingIncentivesLoading = false,
 }: UseVoteListArgs) {
-  // todo: implement vote's sorting/filtering
-  const queryState = usePoolListQueryState()
+  const filtersState = useVoteListFiltersState()
 
   const voteListData = useMemo(() => data?.veBalGetVotingList || [], [data?.veBalGetVotingList])
-
-  const pagination = queryState.pagination
 
   const gaugeAddresses = useMemo(() => voteListData.map(vote => vote.gauge.address), [voteListData])
 
@@ -45,25 +105,41 @@ export function _useVoteList({
     }))
   }, [voteListData, gaugeVotes, votingIncentives])
 
-  const sortedVoteList = useMemo(() => {
-    const sortedList = orderBy(
+  const filteredVoteList = useMemo(() => {
+    return filterVoteList(
       votingPoolsList,
-      v => (v.gaugeVotes ? Number(v.gaugeVotes.votesNextPeriod) : 0),
-      'desc'
+      filtersState.searchText,
+      filtersState.networks,
+      filtersState.poolTypes,
+      filtersState.includeExpiredPools
+    )
+  }, [
+    votingPoolsList,
+    filtersState.searchText,
+    filtersState.networks,
+    filtersState.poolTypes,
+    filtersState.includeExpiredPools,
+  ])
+
+  const sortedVoteList = useMemo(() => {
+    const sortedList = sortVoteList(
+      filteredVoteList,
+      filtersState.sortVotesBy,
+      filtersState.sorting
     )
 
     return sortedList.slice(
-      pagination.pageIndex * pagination.pageSize,
-      pagination.pageSize * (pagination.pageIndex + 1)
+      filtersState.pagination.pageIndex * filtersState.pagination.pageSize,
+      filtersState.pagination.pageSize * (filtersState.pagination.pageIndex + 1)
     )
-  }, [votingPoolsList, pagination])
+  }, [filteredVoteList, filtersState.pagination, filtersState.sorting, filtersState.sortVotesBy])
 
   return {
-    queryState,
+    filtersState,
     sortedVoteList,
     voteListLoading,
     loading: voteListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
-    count: data?.veBalGetVotingList.length,
+    count: filteredVoteList.length,
     votingIncentivesLoading,
     votingIncentivesErrorMessage, // todo: should be used in VoteListTable
     gaugeVotesIsLoading,
