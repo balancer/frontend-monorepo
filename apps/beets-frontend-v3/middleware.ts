@@ -7,12 +7,6 @@ export function middleware(request: NextRequest) {
     console.log('Referer:', request.headers.get('referer'))
   }
 
-  const permanentlyRemovedPaths = ['/api/rpc/FANTOM/routes', '/api/rpc/OPTIMISM/routes']
-
-  if (permanentlyRemovedPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
-    return new NextResponse('Gone', { status: 410 })
-  }
-
   return NextResponse.next()
 }
 
