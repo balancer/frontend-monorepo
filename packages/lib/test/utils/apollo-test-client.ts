@@ -8,8 +8,14 @@ loadErrorMessages()
 
 const cache = new InMemoryCache()
 
+const defaultHeaders = {
+  'x-graphql-client-name': 'FrontendClient',
+  'x-graphql-client-version': '1.0.0',
+}
+
 const link = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_BALANCER_API_URL, //Useful for returning real data before mocking the GQL operation
+  uri: process.env.NEXT_PUBLIC_BALANCER_API_URL,
+  headers: defaultHeaders,
 })
 
 // Disable cache in unit tests
