@@ -53,8 +53,8 @@ export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
     port: ANVIL_PORTS.Ethereum,
     // From time to time this block gets outdated having this kind of error in integration tests:
     // ContractFunctionExecutionError: The contract function "queryJoin" returned no data ("0x").
-    // forkBlockNumber: 20474895n,
-    forkBlockNumber: 20777062n,
+    // forkBlockNumber: 20777062n,
+    forkBlockNumber: 21624208n,
   },
   Polygon: {
     networkName: 'Polygon',

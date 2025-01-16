@@ -10,4 +10,5 @@ export type PoolExample = {
   poolAddress?: Address
   poolChain: GqlChain
   version: ProtocolVersion
+  mockName?: string // Some sepolia pools do not have symbol so we define the mock name here
 }
