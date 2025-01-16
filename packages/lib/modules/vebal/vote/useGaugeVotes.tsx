@@ -22,6 +22,7 @@ export interface RawVotesData {
   gaugeWeightNextPeriod?: { result?: bigint; status: string }
   userVotes?: { result?: UserVotesData; status: string }
   lastUserVoteTime?: { result?: bigint; status: string }
+  isKilled?: { result?: boolean; status: string }
 }
 
 export interface VotesData {
@@ -29,6 +30,7 @@ export interface VotesData {
   votesNextPeriod: string
   userVotes: string
   lastUserVoteTime: number
+  isKilled: boolean
 }
 
 function formatVotes(votesData: RawVotesData): VotesData {
@@ -40,6 +42,7 @@ function formatVotes(votesData: RawVotesData): VotesData {
     votesNextPeriod,
     userVotes: votesData?.userVotes?.result?.power.toString() || '0',
     lastUserVoteTime: Number(votesData?.lastUserVoteTime?.result) || 0,
+    isKilled: votesData?.isKilled?.result ?? false,
   }
 }
 

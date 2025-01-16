@@ -18,7 +18,7 @@ interface Props {
 export function VoteListTable({ voteList, count, loading }: Props) {
   const isMounted = useIsMounted()
   const {
-    queryState: { pagination, setPagination },
+    filtersState: { pagination, setPagination },
   } = useVoteList()
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination)
   const showPagination = !!voteList.length && !!count && count > pagination.pageSize
@@ -38,6 +38,8 @@ export function VoteListTable({ voteList, count, loading }: Props) {
       left={{ base: '-4px', sm: '0' }}
       p={{ base: '0', sm: '0' }}
       position="relative"
+      // fixing right padding for horizontal scroll on mobile
+      pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
       w={{ base: '100vw', lg: 'full' }}
     >
       <PaginatedTable
