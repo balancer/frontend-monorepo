@@ -90,11 +90,17 @@ export function filterTokensForPermit2({
   chain: GqlChain
 }): TokenAmountIn[] {
   if (!tokenAmountsIn) return []
+
   return (
     tokenAmountsIn
       // native asset does not require permit2 approval
       .filter(t => !isNativeAsset(t.address, chain))
-      // if wethIsEth the wrapped native asset token will be replaced with the native asset token so no required permit2 approval neither
-      .filter(t => wethIsEth && !isWrappedNativeAsset(t.address, chain))
+      .filter(t => {
+        if (wethIsEth) {
+          // if wethIsEth the wrapped native asset token will be replaced with the native asset token so no required permit2 approval neither
+          return !isWrappedNativeAsset(t.address, chain)
+        }
+        return true
+      })
   )
 }
