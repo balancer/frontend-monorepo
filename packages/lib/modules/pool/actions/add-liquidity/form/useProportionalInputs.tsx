@@ -8,7 +8,7 @@ import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { formatUnits } from 'viem'
-import { ApiToken } from '../../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { usePool } from '../../../PoolProvider'
 import { LiquidityActionHelpers, isEmptyHumanAmount } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'

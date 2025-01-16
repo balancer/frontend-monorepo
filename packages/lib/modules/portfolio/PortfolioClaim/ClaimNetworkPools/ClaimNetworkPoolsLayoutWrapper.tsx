@@ -14,6 +14,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { capitalize } from 'lodash'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
+import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 
 export default function ClaimNetworkPoolsLayoutWrapper() {
   const { toCurrency } = useCurrency()
@@ -71,7 +72,11 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
                       </Text>
                     </HStack>
                     <HStack w="full">
-                      <TokenIconStack chain={pool.chain} size={36} tokens={pool.displayTokens} />
+                      <TokenIconStack
+                        chain={pool.chain}
+                        size={36}
+                        tokens={getUserReferenceTokens(pool)}
+                      />
                       {hasMultipleClaims && (
                         <Button
                           minW="60px"

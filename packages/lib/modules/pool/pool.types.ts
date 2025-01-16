@@ -5,7 +5,8 @@ import {
   GqlPoolType,
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
-  GetTokensQuery,
+  GqlNestedPool,
+  GetPoolQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   parseAsArrayOf,
@@ -15,12 +16,34 @@ import {
   parseAsStringEnum,
 } from 'nuqs'
 import { Address, Hex } from 'viem'
+import { ApiToken } from '../tokens/token.types'
+import { FeaturedPool } from './PoolProvider'
+export type Pool = GetPoolQuery['pool']
 
 export type PoolId = Hex
 
 export type PoolList = GetPoolsQuery['pools']
 
 export type PoolListItem = PoolList[0]
+
+// PoolCore defines the shared fields between PoolListItem, Pool that are required for pool related shared logic
+export type PoolCore =
+  | (Pick<
+      PoolListItem,
+      | 'id'
+      | 'address'
+      | 'chain'
+      | 'type'
+      | 'name'
+      | 'symbol'
+      | 'protocolVersion'
+      | 'hasErc4626'
+      | 'hasAnyAllowedBuffer'
+      | 'tags'
+    > & { poolTokens: ApiToken[] })
+  | Pool
+  | PoolListItem
+  | FeaturedPool
 
 export enum BaseVariant {
   v2 = 'v2',
@@ -98,6 +121,7 @@ export const POOL_TAG_MAP: { [key in PoolTagType]: string[] } = {
     'POINTS_RENZO',
     'POINTS_SWELL',
     'POINTS_MODE',
+    'POINTS_RINGS',
   ],
   VE8020: ['VE8020'],
   BOOSTED: ['BOOSTED'],
@@ -146,7 +170,10 @@ export type TokenCore = {
   index: number
 }
 
-export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'>
+export type PoolToken = ApiToken &
+  Pool['poolTokens'][0] & {
+    nestedPool?: GqlNestedPool
+  }
 
 export enum PoolListDisplayType {
   Name = 'name',

@@ -23,7 +23,9 @@ export function _usePoolsMetadata(
     )
   }
 
-  function getPoolMetadata(pool: Pool | PoolListItem): PoolMetadata | undefined {
+  function getPoolMetadata(
+    pool: Pick<Pool | PoolListItem, 'chain' | 'address'>
+  ): PoolMetadata | undefined {
     if (!poolsMetadata) return undefined
 
     const poolChainId = getChainId(pool.chain)

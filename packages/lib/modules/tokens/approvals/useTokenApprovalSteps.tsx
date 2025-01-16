@@ -82,8 +82,18 @@ export function useTokenApprovalSteps({
       const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
       const token = getToken(tokenAddress, chain)
 
-      const symbol = approvalSymbol || (bptSymbol ?? (token && token?.symbol) ?? 'Unknown')
-      const labels = buildTokenApprovalLabels({ actionType, symbol, isPermit2, lpToken })
+      const getSymbol = () => {
+        if (approvalSymbol && approvalSymbol !== 'Unknown') return approvalSymbol
+        if (bptSymbol) return bptSymbol
+        return token?.symbol || 'Unknown'
+      }
+
+      const labels = buildTokenApprovalLabels({
+        actionType,
+        symbol: getSymbol(),
+        isPermit2,
+        lpToken,
+      })
 
       const isComplete = () => {
         const isAllowed = tokenAllowances.allowanceFor(tokenAddress) >= requiredRawAmount

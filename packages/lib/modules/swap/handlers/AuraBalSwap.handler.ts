@@ -12,7 +12,7 @@ import {
 import { getRpcUrl } from '../../web3/transports'
 import { isNativeAsset, isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { ApiToken } from '../../pool/pool.types'
+import { ApiToken } from '../../tokens/token.types'
 
 export class AuraBalSwapHandler implements SwapHandler {
   name = 'AuraBalSwapHandler'

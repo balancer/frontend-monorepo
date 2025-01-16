@@ -24,10 +24,10 @@ import {
   useRecentTransactions,
 } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
 import { isEmpty, orderBy } from 'lodash'
-import { useBlockExplorer } from '../../hooks/useBlockExplorer'
 import { Activity, ArrowUpRight, Check, Clock, X, XOctagon } from 'react-feather'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { formatDistanceToNow } from 'date-fns'
+import { getBlockExplorerTxUrl } from '../../utils/blockExplorer'
 
 function TransactionIcon({ status }: { status: TransactionStatus }) {
   switch (status) {
@@ -72,7 +72,6 @@ function TransactionIcon({ status }: { status: TransactionStatus }) {
 }
 
 function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
-  const { getBlockExplorerTxUrl } = useBlockExplorer(transaction.chain)
   // TODO? Add another description so it would always fit in the default width of 320px (ln 71) without truncation (ln 46)
   const label =
     transaction.description &&
@@ -97,7 +96,11 @@ function TransactionRow({ transaction }: { transaction: TrackedTransaction }) {
               addSuffix: true,
             })}
           </Text>
-          <Link color="grayText" href={getBlockExplorerTxUrl(transaction.hash)} target="_blank">
+          <Link
+            color="grayText"
+            href={getBlockExplorerTxUrl(transaction.hash, transaction.chain)}
+            target="_blank"
+          >
             <ArrowUpRight size={16} />
           </Link>
         </HStack>
