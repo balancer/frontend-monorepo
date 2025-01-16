@@ -365,6 +365,19 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
     return true
   }
 
+  /*
+    Error thrown from Metamask when:
+    1. The extension popup is ignored by the user
+    2. They close the RainbowKit "Connect a wallet" modal
+    3. They click "Connect wallet" and chose "Metamask" a second time
+
+    As the extension modal was still opened in the background, MM will throw this error, that can be safely ignored as the Rainbowkit modal clearly states:
+    "Confirm connection in the extension"
+   */
+  if (message.includes(`Request of type 'wallet_requestPermissions' already pending for origin`)) {
+    return true
+  }
+
   return false
 }
 
