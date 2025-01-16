@@ -58,8 +58,10 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
       humanAmount: reward.humanBalance,
     }))
 
+  const isSuccess = !!claimTxHash
+
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap>
+    <Modal isCentered isOpen={isOpen} onClose={onClose} preserveScrollBarGap trapFocus={!isSuccess}>
       <SuccessOverlay startAnimation={!!claimTxHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -90,7 +92,7 @@ export default function ClaimProtocolRevenueModal({ isOpen, onClose }: Props) {
         </ModalBody>
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
-          isSuccess={!!claimTxHash}
+          isSuccess={isSuccess}
           returnAction={onClose}
           returnLabel="Return to portfolio"
         />
