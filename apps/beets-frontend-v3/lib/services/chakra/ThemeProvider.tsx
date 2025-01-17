@@ -10,6 +10,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Avoid hydration error in turbopack mode
   if (!isMounted) return null
+
   return (
     <ChakraProvider
       cssVarsRoot="body"
