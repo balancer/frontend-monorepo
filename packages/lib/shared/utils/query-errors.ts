@@ -1,4 +1,8 @@
 import { captureException } from '@sentry/nextjs'
+/*
+  Types are deprecated but we are waiting for a guide for @sentry/nextjs
+  Context: https://github.com/getsentry/sentry-javascript/discussions/15042
+*/
 import {
   Extras,
   ScopeContext,
