@@ -1,5 +1,5 @@
 import { ProjectConfig } from '@repo/lib/config/config.types'
-import { PartnerVariant, PoolListDisplayType } from '@repo/lib/modules/pool/pool.types'
+import { PartnerVariant, PoolDisplayType } from '@repo/lib/modules/pool/pool.types'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isProd } from '@repo/lib/config/app.config'
 
@@ -38,7 +38,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
     poolComposerUrl: 'https://pool-creator.balancer.fi',
   },
   options: {
-    displayType: PoolListDisplayType.TokenPills,
+    poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: [],
     hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.Fx],
     hideProtocolVersion: [],

@@ -175,7 +175,7 @@ export type PoolToken = ApiToken &
     nestedPool?: GqlNestedPool
   }
 
-export enum PoolListDisplayType {
+export enum PoolDisplayType {
   Name = 'name',
   TokenPills = 'token-pills',
 }

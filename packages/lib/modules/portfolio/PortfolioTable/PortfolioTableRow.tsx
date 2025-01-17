@@ -67,7 +67,11 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
-              <PoolListPoolDisplay displayType={options.displayType} name={name} pool={pool} />
+              <PoolListPoolDisplay
+                name={name}
+                pool={pool}
+                poolDisplayType={options.poolDisplayType}
+              />
             </GridItem>
             <GridItem>
               <PollListTableDetailsCell pool={pool} />

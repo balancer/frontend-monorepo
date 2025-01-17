@@ -3,7 +3,7 @@ import { GqlChain, GqlPoolType } from '../shared/services/api/generated/graphql'
 import { chains } from '@repo/lib/modules/web3/ChainConfig'
 import { PoolIssue } from '../modules/pool/alerts/pool-issues/PoolIssue.type'
 import { SupportedWrapHandler } from '../modules/swap/swap.types'
-import { PartnerVariant, PoolListDisplayType } from '../modules/pool/pool.types'
+import { PartnerVariant, PoolDisplayType } from '../modules/pool/pool.types'
 
 export interface TokensConfig {
   addresses: {
@@ -123,7 +123,7 @@ interface ExternalUrls {
 }
 
 type OptionsConfig = {
-  displayType: PoolListDisplayType
+  poolDisplayType: PoolDisplayType
   hidePoolTags: string[]
   hidePoolTypes: GqlPoolType[]
   hideProtocolVersion: string[]

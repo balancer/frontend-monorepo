@@ -1,24 +1,24 @@
 import { ExpandedPoolInfo } from '../../portfolio/PortfolioTable/useExpandedPools'
-import { PoolListDisplayType, PoolListItem } from '../pool.types'
+import { PoolDisplayType, PoolListItem } from '../pool.types'
 import { PoolListPoolName } from './PoolListPoolName'
 import { PoolListTokenPills } from './PoolListTokenPills'
 
 export function PoolListPoolDisplay({
-  displayType,
+  poolDisplayType,
   pool,
   name,
 }: {
-  displayType: PoolListDisplayType | undefined
+  poolDisplayType: PoolDisplayType | undefined
   pool: PoolListItem | ExpandedPoolInfo
   name: string | undefined
 }) {
   let component
 
-  switch (displayType) {
-    case PoolListDisplayType.Name:
+  switch (poolDisplayType) {
+    case PoolDisplayType.Name:
       component = <PoolListPoolName pool={pool} />
       break
-    case PoolListDisplayType.TokenPills:
+    case PoolDisplayType.TokenPills:
     default:
       component = (
         <PoolListTokenPills

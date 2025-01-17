@@ -50,9 +50,9 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
             </GridItem>
             <GridItem>
               <PoolListPoolDisplay
-                displayType={PROJECT_CONFIG.options.displayType}
                 name={name}
                 pool={pool}
+                poolDisplayType={PROJECT_CONFIG.options.poolDisplayType}
               />
             </GridItem>
             <GridItem minW="32">
