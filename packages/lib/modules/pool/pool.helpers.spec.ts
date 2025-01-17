@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Pool } from './PoolProvider'
+import { Pool } from './pool.types'
 import { getApiPoolMock } from './__mocks__/api-mocks/api-mocks'
 import { v3SepoliaNestedBoostedMock } from './__mocks__/api-mocks/v3SepoliaNestedBoostedMock'
 import { auraBal, staBALv2Nested } from './__mocks__/pool-examples/nested'

@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { Repeat } from 'react-feather'
-import { Pool } from '../../PoolProvider'
+import { Pool } from '../../pool.types'
 import { shouldCallComputeDynamicSwapFee } from '../../pool.utils'
 import { FluidIcon } from '@repo/lib/shared/components/icons/FluidIcon'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'

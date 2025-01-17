@@ -1,6 +1,6 @@
 import { HumanAmount } from '@balancer/sdk'
 import { bn, fNum } from './numbers'
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 
 export function getDefaultProportionalSlippagePercentage(pool: Pool) {
   /*

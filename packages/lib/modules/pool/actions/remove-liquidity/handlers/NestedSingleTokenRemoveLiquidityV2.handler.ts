@@ -10,7 +10,7 @@ import {
   RemoveLiquidityNestedCallInputV2,
 } from '@balancer/sdk'
 import { Address, parseEther } from 'viem'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import {
   BuildRemoveLiquidityInput,

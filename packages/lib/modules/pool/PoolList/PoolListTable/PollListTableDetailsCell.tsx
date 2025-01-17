@@ -4,7 +4,7 @@ import { PoolVersionTag } from '@repo/lib/modules/pool/PoolList/PoolListTable/Po
 import { isBoosted } from '@repo/lib/modules/pool/pool.helpers'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import Image from 'next/image'
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { Pool } from '../../pool.types'
 import { PoolHookTag } from '@repo/lib/modules/pool/PoolDetail/PoolHookTag'
 import { usePoolsMetadata } from '../../metadata/PoolsMetadataProvider'
 

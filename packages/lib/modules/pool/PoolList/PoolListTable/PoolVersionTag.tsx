@@ -3,7 +3,7 @@ import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
 import { isCowAmmPool } from '../../pool.helpers'
 import { PoolListItem } from '../../pool.types'
-import { Pool } from '../../PoolProvider'
+import { Pool } from '../../pool.types'
 
 function getPoolVersionLabel(pool: PoolListItem | Pool) {
   if (isCowAmmPool(pool.type)) {

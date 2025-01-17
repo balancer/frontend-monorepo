@@ -1,5 +1,5 @@
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { Pool } from '../../PoolProvider'
+import { Pool } from '../../pool.types'
 import { useEffect, useMemo, useState } from 'react'
 import { useUnstakeFromNonPreferentialGaugeStep } from './useUnstakeFromNonPreferentialGaugeStep'
 import { useStakeSteps } from '../stake/useStakeSteps'

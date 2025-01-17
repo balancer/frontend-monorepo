@@ -1,7 +1,7 @@
 import { Address } from 'viem'
 import { fetchPoolMock } from './fetchPoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import fs from 'fs'
 import path from 'path'
 import { lowerFirst } from 'lodash'

@@ -1,5 +1,5 @@
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { requiresProportionalInput } from '../../LiquidityActionHelpers'
 import { AddLiquidityHandler } from '../handlers/AddLiquidity.handler'
 
