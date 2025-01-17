@@ -39,6 +39,8 @@ export function UnstakeModal({
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
 
+  const isSuccess = !!unstakeTxHash
+
   return (
     <Modal
       finalFocusRef={finalFocusRef}
@@ -47,6 +49,7 @@ export function UnstakeModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
+      trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!unstakeTxHash} />
@@ -69,7 +72,7 @@ export function UnstakeModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
-          isSuccess={!!unstakeTxHash}
+          isSuccess={isSuccess}
           returnAction={redirectToPoolPage}
           returnLabel="Return to pool"
         />

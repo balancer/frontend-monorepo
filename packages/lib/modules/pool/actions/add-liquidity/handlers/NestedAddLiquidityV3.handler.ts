@@ -73,6 +73,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
     slippagePercent,
     queryOutput,
     permit2,
+    humanAmountsIn,
   }: NestedBuildAddLiquidityInputV3): Promise<TransactionConfig> {
     const addLiquidity = new AddLiquidityNested()
 
@@ -80,6 +81,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
       ...queryOutput.sdkQueryOutput,
       slippage: Slippage.fromPercentage(`${Number(slippagePercent)}`),
       amountsIn: queryOutput.sdkQueryOutput.amountsIn,
+      wethIsEth: this.helpers.isNativeAssetIn(humanAmountsIn),
     }
 
     const { callData, to, value } = permit2

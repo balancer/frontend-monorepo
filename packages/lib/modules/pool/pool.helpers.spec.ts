@@ -1,59 +1,27 @@
 /* eslint-disable max-len */
 import { Pool } from './PoolProvider'
+import { getApiPoolMock } from './__mocks__/api-mocks/api-mocks'
+import { v3SepoliaNestedBoostedMock } from './__mocks__/api-mocks/v3SepoliaNestedBoostedMock'
+import { auraBal, staBALv2Nested } from './__mocks__/pool-examples/nested'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
-import { getPoolActionableTokens } from './pool.helpers'
+import {
+  getActionableTokenSymbol,
+  getPoolActionableTokens,
+  getStandardRootTokens,
+  isStandardOrUnderlyingRootToken,
+} from './pool.helpers'
 
 describe('getPoolActionableTokens', () => {
   it('when nested pool supports nested actions (default behavior)', () => {
-    const pool = {
-      id: '0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053',
-      address: '0x2086f52651837600180de173b09470f54ef74910',
-      chain: 'GNOSIS',
-      poolTokens: [
-        {
-          address: '0x2086f52651837600180de173b09470f54ef74910',
-          symbol: 'staBAL3',
-          hasNestedPool: true,
-          nestedPool: {
-            address: '0x2086f52651837600180de173b09470f54ef74910',
-            symbol: 'staBAL3',
-            tokens: [
-              {
-                address: '0x2086f52651837600180de173b09470f54ef74910',
-                symbol: 'staBAL3',
-              },
-              {
-                address: '0x4ecaba5870353805a9f068101a40e0f32ed605c6',
-                symbol: 'USDT',
-              },
-              {
-                address: '0xddafbb505ad214d7b80b1f830fccc89b60fb7a83',
-                symbol: 'USDC',
-              },
-              {
-                address: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d',
-                symbol: 'WXDAI',
-              },
-            ],
-          },
-        },
-        {
-          address: '0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1',
-          symbol: 'WETH',
-          hasNestedPool: false,
-          nestedPool: null,
-        },
-        {
-          address: '0x8e5bbbb09ed1ebde8674cda39a0c169401db4252',
-          symbol: 'WBTC',
-          hasNestedPool: false,
-          nestedPool: null,
-        },
-      ],
-    } as unknown as Pool
-
+    const pool = getApiPoolMock(staBALv2Nested)
     const result = getPoolActionableTokens(pool)
     expect(result.map(t => t.symbol)).toEqual(['USDT', 'USDC', 'WXDAI', 'WETH', 'WBTC']) // contains 'staBAL3' nested tokens (USDT, USDC, WXDAI)
+  })
+
+  it('when nested pool does not support nested actions (poolId in disallowNestedActions)', () => {
+    const pool = getApiPoolMock(auraBal)
+    const result = getPoolActionableTokens(pool)
+    expect(result.map(t => t.symbol)).toEqual(['B-80BAL-20WETH', 'auraBAL']) // BPTs should be used to add
   })
 })
 
@@ -89,3 +57,37 @@ function fakeNestedPool(poolId: string): Pool {
     ],
   } as unknown as Pool
 }
+
+describe('pool helper', async () => {
+  const pool = v3SepoliaNestedBoostedMock // Sepolia 50% WETH - 50% boosted USDC/USDT
+
+  const wethAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9' // root token
+  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // underlying token
+  const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0' // underlying token
+
+  it('poolActionableTokens', async () => {
+    const poolActionableTokens = getPoolActionableTokens(pool)
+    expect(poolActionableTokens.map(t => t.address).sort()).toEqual([
+      wethAddress,
+      usdcSepoliaAddress,
+      usdtSepoliaAddress,
+    ])
+  })
+
+  it('isStandardRootToken', async () => {
+    expect(isStandardOrUnderlyingRootToken(pool, wethAddress)).toBeTruthy()
+    expect(isStandardOrUnderlyingRootToken(pool, usdcSepoliaAddress)).toBeFalsy()
+    expect(isStandardOrUnderlyingRootToken(pool, usdtSepoliaAddress)).toBeFalsy()
+  })
+
+  it('getStandardRootTokens', async () => {
+    const poolActionableTokens = getPoolActionableTokens(pool)
+
+    const standardRootTokens = getStandardRootTokens(pool, poolActionableTokens)
+    expect(standardRootTokens.map(t => t.address).sort()).toEqual([wethAddress]) // only WETH is a standard root token
+  })
+
+  it('getActionableTokenSymbol ', async () => {
+    expect(getActionableTokenSymbol(wethAddress, pool)).toEqual('WETH')
+  })
+})

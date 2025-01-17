@@ -16,7 +16,8 @@
     "NEXT_PUBLIC_SENTRY_DSN",
     "NEXT_RUNTIME",
     "NEXT_PRIVATE_ALCHEMY_KEY",
-    "CI"
+    "CI",
+    "NEXT_PUBLIC_UPDATE_API_MOCKS"
   ],
   "tasks": {
     "dev": {
@@ -83,5 +84,8 @@
       "dependsOn": ["^stylelint:fix"],
       "cache": false
     }
+  },
+  "remoteCache": {
+    "enabled": true
   }
 }

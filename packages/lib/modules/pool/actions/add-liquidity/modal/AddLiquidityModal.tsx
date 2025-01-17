@@ -79,6 +79,8 @@ export function AddLiquidityModal({
     onClose()
   })
 
+  const isSuccess = !!addLiquidityTxHash && !receiptProps.isLoading
+
   return (
     <Modal
       finalFocusRef={finalFocusRef}
@@ -87,6 +89,7 @@ export function AddLiquidityModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
+      trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!addLiquidityTxHash && hasQuoteContext} />
@@ -113,7 +116,7 @@ export function AddLiquidityModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
-          isSuccess={!!addLiquidityTxHash && !receiptProps.isLoading}
+          isSuccess={isSuccess}
           returnAction={redirectToPoolPage}
           returnLabel="Return to pool"
           urlTxHash={urlTxHash}

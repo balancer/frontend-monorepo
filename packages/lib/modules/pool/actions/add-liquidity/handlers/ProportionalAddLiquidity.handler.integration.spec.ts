@@ -7,7 +7,7 @@ import { Pool } from '../../../PoolProvider'
 import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
-import { getPoolMock } from '../../../__mocks__/getPoolMock'
+import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { usdcAddress, wETHAddress } from '@repo/lib/debug-helpers'
 
@@ -19,7 +19,7 @@ function selectProportionalHandler(pool: Pool) {
 // Error: Unable to get pool state with balances for v2 pool.
 describe.skip('When adding proportional liquidity for a CoW AMM pool', async () => {
   const cowAMMPoolId = '0xf08d4dea369c456d26a3168ff0024b904f2d8b91'
-  const cowAmmPool = await getPoolMock(cowAMMPoolId, GqlChain.Mainnet) // USDC-WETH
+  const cowAmmPool = await fetchPoolMock(cowAMMPoolId, GqlChain.Mainnet) // USDC-WETH
 
   test('has zero price impact', async () => {
     const handler = selectProportionalHandler(cowAmmPool)

@@ -5,7 +5,6 @@ import { useRelayerMode } from '@repo/lib/modules/relayer/useRelayerMode'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { getSpenderForAddLiquidity } from '@repo/lib/modules/tokens/token.helpers'
 import { useSignRelayerStep } from '@repo/lib/modules/transactions/transaction-steps/useSignRelayerStep'
-import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { useMemo } from 'react'
 import { usePool } from '../../PoolProvider'
 import { requiresPermit2Approval } from '../../pool.helpers'
@@ -24,10 +23,10 @@ export function useAddLiquiditySteps({
   handler,
   humanAmountsIn,
   simulationQuery,
+  slippage,
 }: AddLiquidityStepsParams) {
   const { pool, chainId, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions(pool)
-  const { slippage } = useUserSettings()
   const relayerMode = useRelayerMode(pool)
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
 

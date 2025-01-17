@@ -8,6 +8,7 @@ import { useMemo } from 'react'
 
 import { useTokens } from '../../tokens/TokensProvider'
 import {
+  filterTokensForPermit2,
   getTokenAddressesForPermit2,
   getTokenSymbolsForPermit2,
   hasValidPermit2,
@@ -18,6 +19,7 @@ import { SignatureState } from '../../web3/signatures/signature.helpers'
 import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
 import { StepDetails, TransactionStep } from './lib'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
+import { getGqlChain } from '@repo/lib/config/app.config'
 
 /*
   Returns a transaction step to sign a permit2 for the token amounts in
@@ -31,17 +33,19 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
 
   const { isLoadingPermit2Allowances, nonces, expirations, allowedAmounts } = usePermit2Allowance({
     chainId,
-    tokenAddresses: getTokenAddressesForPermit2({
-      chainId,
-      tokenAmountsIn,
-      wethIsEth,
-    }),
+    tokenAddresses: getTokenAddressesForPermit2(tokenAmountsIn),
     owner: userAddress,
     enabled: isPermit2 && !!spender,
     spender: spender,
   })
 
-  const isValidPermit2 = hasValidPermit2(tokenAmountsIn, expirations, allowedAmounts)
+  const filteredTokenAmountsIn = filterTokensForPermit2({
+    chain: getGqlChain(chainId),
+    wethIsEth,
+    tokenAmountsIn,
+  })
+
+  const isValidPermit2 = hasValidPermit2(filteredTokenAmountsIn, expirations, allowedAmounts)
 
   const {
     signPermit2,

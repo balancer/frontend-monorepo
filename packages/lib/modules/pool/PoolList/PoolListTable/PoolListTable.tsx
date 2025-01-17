@@ -47,6 +47,8 @@ export function PoolListTable({ pools, count, loading }: Props) {
       left={{ base: '-4px', sm: '0' }}
       p={{ base: '0', sm: '0' }}
       position="relative"
+      // fixing right padding for horizontal scroll on mobile
+      pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
       w={{ base: '100vw', lg: 'full' }}
     >
       <PaginatedTable

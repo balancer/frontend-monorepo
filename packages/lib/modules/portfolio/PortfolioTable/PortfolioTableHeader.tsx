@@ -1,6 +1,6 @@
 import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
 import { Globe } from 'react-feather'
-import { SortableHeader } from '@repo/lib/shared/components/tables/SortableHeader'
+import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { PortfolioTableSortingId, PortfolioSortingData, portfolioOrderByFn } from './PortfolioTable'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
@@ -52,7 +52,7 @@ export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, 
               setCurrentSortingObj({ id: orderByItem.id, desc: false })
             }
           }}
-          sorting={currentSortingObj.desc ? 'desc' : 'asc'}
+          sorting={currentSortingObj.desc ? Sorting.desc : Sorting.asc}
         />
       ))}
     </Grid>
