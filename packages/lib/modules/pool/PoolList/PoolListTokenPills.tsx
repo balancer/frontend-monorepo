@@ -204,10 +204,11 @@ type PoolListTokenPillsProps = {
   nameSize?: string
 } & BadgeProps
 export function PoolListTokenPills({ pool, ...props }: PoolListTokenPillsProps) {
-  const { name } = usePoolMetadata(pool)
+  const { name, iconUrl } = usePoolMetadata(pool)
   return (
     <PoolTokenPills
       chain={pool.chain}
+      iconUrl={iconUrl}
       poolName={name}
       poolType={pool.type}
       tokens={getUserReferenceTokens(pool)}
@@ -221,6 +222,7 @@ type PoolTokenPillsProps = {
   chain: GqlChain
   tokens: PoolToken[]
   poolName: string | undefined
+  iconUrl?: string
   iconSize?: number
   nameSize?: string
 } & BadgeProps
@@ -230,6 +232,7 @@ function PoolTokenPills({
   poolName,
   tokens,
   iconSize = 24,
+  iconUrl,
   nameSize = 'md',
   ...badgeProps
 }: PoolTokenPillsProps) {
@@ -239,7 +242,11 @@ function PoolTokenPills({
   if (poolName) {
     return (
       <HStack>
-        <TokenIconStack chain={chain} size={iconSize} tokens={tokens} />
+        {iconUrl ? (
+          <TokenIcon alt={poolName} logoURI={iconUrl} size={iconSize} />
+        ) : (
+          <TokenIconStack chain={chain} size={iconSize} tokens={tokens} />
+        )}
         <Heading size={nameSize}>{poolName}</Heading>
       </HStack>
     )
