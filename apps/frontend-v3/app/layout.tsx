@@ -9,10 +9,11 @@ import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
 import { PropsWithChildren } from 'react'
 import { Providers } from '@repo/lib/shared/components/site/providers'
 import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
-import { FooterContainer } from '@/lib/components/footer/FooterContainer'
 import { DEFAULT_THEME_COLOR_MODE } from '@repo/lib/shared/services/chakra/themes/base/foundations'
 import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
+import { BalancerLogoType } from '@/lib/components/imgs/BalancerLogoType'
+import { Footer } from '@repo/lib/shared/components/navs/Footer'
 
 export const metadata: Metadata = {
   title: 'Balancer - DeFi Liquidity Pools',
@@ -54,7 +55,11 @@ export default function RootLayout({ children }: PropsWithChildren) {
               <GlobalAlerts />
               <NavBarContainer />
               {children}
-              <FooterContainer />
+              <Footer
+                logoType={<BalancerLogoType />}
+                subTitle="Balancer is a battle-tested toolkit for true AMM experimentation and innovation."
+                title="AMMs made easy"
+              />
               <SpeedInsights />
             </Providers>
           </ThemeProvider>

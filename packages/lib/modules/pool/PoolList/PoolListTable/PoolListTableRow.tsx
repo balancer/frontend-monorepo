@@ -1,6 +1,5 @@
 import { Box, Grid, GridItem, GridProps, HStack, Text, Image } from '@chakra-ui/react'
 import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
-import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
@@ -8,12 +7,11 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import Link from 'next/link'
 import { memo } from 'react'
 import { usePoolMetadata } from '../../metadata/usePoolMetadata'
-import { POOL_TAG_MAP, PoolListDisplayType, PoolListItem } from '../../pool.types'
+import { POOL_TAG_MAP, PoolListItem } from '../../pool.types'
 import { getPoolPath } from '../../pool.utils'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import { usePoolList } from '../PoolListProvider'
-import { PoolListTokenPills } from '../PoolListTokenPills'
-import { getUserReferenceTokens } from '../../pool-tokens.utils'
+import { PoolListPoolDisplay } from '../PoolListPoolDisplay'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -23,35 +21,9 @@ interface Props extends GridProps {
 
 const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
-function PoolName({ pool }: { pool: PoolListItem }) {
-  const isFirstToken = (index: number) => index === 0
-  const displayTokens = getUserReferenceTokens(pool)
-  const zIndices = Array.from({ length: displayTokens.length }, (_, index) => index).reverse()
-
-  return (
-    <HStack>
-      {displayTokens.map((token, i) => (
-        <Box key={token.address} ml={isFirstToken(i) ? 0 : -3} zIndex={zIndices[i]}>
-          <TokenIcon
-            address={token.address}
-            alt={token.symbol}
-            chain={pool.chain}
-            size={20}
-            weight={token.weight}
-          />
-        </Box>
-      ))}
-      <Text fontWeight="medium" textAlign="left">
-        {pool.name}
-      </Text>
-    </HStack>
-  )
-}
-
 export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest }: Props) {
   const {
     queryState: { userAddress },
-    displayType,
   } = usePoolList()
   const { name } = usePoolMetadata(pool)
   const { toCurrency } = useCurrency()
@@ -76,17 +48,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
-              {displayType === PoolListDisplayType.TokenPills && (
-                <PoolListTokenPills
-                  h={['32px', '36px']}
-                  iconSize={name ? 24 : 20}
-                  nameSize="sm"
-                  p={['xxs', 'sm']}
-                  pool={pool}
-                  pr={[1.5, 'ms']}
-                />
-              )}
-              {displayType === PoolListDisplayType.Name && <PoolName pool={pool} />}
+              <PoolListPoolDisplay name={name} pool={pool} />
             </GridItem>
             <GridItem minW="32">
               <PollListTableDetailsCell pool={pool} />
@@ -120,6 +82,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
               <HStack gap="xxs" mr={needsMarginForPoints && !hasPoints ? '12px' : '0'}>
                 <MemoizedMainAprTooltip
                   aprItems={pool.dynamicData.aprItems}
+                  chain={pool.chain}
                   height="auto"
                   pool={pool}
                   poolId={pool.id}

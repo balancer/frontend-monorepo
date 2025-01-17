@@ -2,7 +2,6 @@
 
 import { connectorsForWallets } from '@rainbow-me/rainbowkit'
 import { Config, createConfig } from 'wagmi'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import {
   coinbaseWallet,
   rabbyWallet,
@@ -14,8 +13,8 @@ import {
 } from '@rainbow-me/rainbowkit/wallets'
 import { chains } from './ChainConfig'
 import { transports } from './transports'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
-const appName = getProjectConfig().projectName
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID || ''
 
 const connectors = connectorsForWallets(
@@ -35,7 +34,7 @@ const connectors = connectorsForWallets(
     },
   ],
   {
-    appName,
+    appName: PROJECT_CONFIG.projectName,
     projectId,
     walletConnectParameters: {
       // Enforce wallet connect popup always on top

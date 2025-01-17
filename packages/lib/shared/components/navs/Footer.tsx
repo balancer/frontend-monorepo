@@ -9,6 +9,8 @@ import { ArrowUpRight } from 'react-feather'
 import { AppLink } from '../navs/useNav'
 import { LinkSection } from './footer.types'
 import { ReactNode } from 'react'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { SocialIcon } from './SocialIcon'
 
 type CardContentProps = {
   linkSections: LinkSection[]
@@ -86,7 +88,7 @@ function CardContent({ linkSections, logoType, title, subTitle }: CardContentPro
 function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
   return (
     <HStack spacing="ms" w={{ base: 'full', lg: 'auto' }}>
-      {socialLinks.map(({ href, icon }) => (
+      {socialLinks.map(({ href, iconType }) => (
         <IconButton
           aria-label="Social icon"
           as={Link}
@@ -100,7 +102,7 @@ function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
           variant="tertiary"
           w="44px"
         >
-          {icon}
+          <SocialIcon iconType={iconType} />
         </IconButton>
       ))}
     </HStack>
@@ -132,22 +134,17 @@ function LegalLinks({ legalLinks }: { legalLinks: AppLink[] }) {
 }
 
 type FooterProps = {
-  linkSections: LinkSection[]
-  socialLinks: AppLink[]
-  legalLinks: AppLink[]
   logoType: ReactNode
   title: string
   subTitle: string
 }
 
-export function Footer({
-  linkSections,
-  socialLinks,
-  legalLinks,
-  logoType,
-  title,
-  subTitle,
-}: FooterProps) {
+export function Footer({ logoType, title, subTitle }: FooterProps) {
+  const {
+    footer: { linkSections },
+    links: { socialLinks, legalLinks },
+  } = PROJECT_CONFIG
+
   return (
     <Box as="footer" background="background.level0" shadow="innerLg">
       <DefaultPageContainer py="xl">

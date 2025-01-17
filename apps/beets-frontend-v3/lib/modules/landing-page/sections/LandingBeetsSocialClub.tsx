@@ -1,14 +1,15 @@
 'use client'
 
-import { useNavData } from '@/lib/components/navs/useNavData'
 import { Box, Center, HStack, IconButton, Link, Text } from '@chakra-ui/react'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { SocialIcon } from '@repo/lib/shared/components/navs/SocialIcon'
 import { AppLink } from '@repo/lib/shared/components/navs/useNav'
 
 function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
   return (
     <HStack spacing="lg">
-      {socialLinks.map(({ href, icon }) => (
+      {socialLinks.map(({ href, iconType }) => (
         <IconButton
           aria-label="Social icon"
           as={Link}
@@ -22,7 +23,7 @@ function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
           variant="tertiary"
           w="72px"
         >
-          {icon}
+          <SocialIcon iconType={iconType} size={36} />
         </IconButton>
       ))}
     </HStack>
@@ -30,8 +31,9 @@ function SocialLinks({ socialLinks }: { socialLinks: AppLink[] }) {
 }
 
 export function LandingBeetsSocialClub() {
-  const { getSocialLinks } = useNavData()
-  const socialLinks = getSocialLinks(36)
+  const {
+    links: { socialLinks },
+  } = PROJECT_CONFIG
 
   return (
     <DefaultPageContainer noVerticalPadding pb="3xl">

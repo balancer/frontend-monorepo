@@ -3,13 +3,13 @@ import { bn, fNum } from '../utils/numbers'
 import { useAprTooltip } from './useAprTooltip'
 import { aprTooltipDataMock } from './_mocks_/aprTooltipDataMock'
 import BigNumber from 'bignumber.js'
-import { GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
+import { GqlPoolAprItem, GqlPoolAprItemType, GqlChain } from '../services/api/generated/graphql'
 
 const defaultNumberFormatter = (value: string) => bn(bn(value).toFixed(4, BigNumber.ROUND_HALF_UP))
 
 function testUseAprTooltip({ aprItems }: { aprItems: GqlPoolAprItem[] }) {
   const { result } = testHook(() =>
-    useAprTooltip({ aprItems, numberFormatter: defaultNumberFormatter })
+    useAprTooltip({ aprItems, numberFormatter: defaultNumberFormatter, chain: GqlChain.Mainnet })
   )
   return result
 }
@@ -56,7 +56,7 @@ it('When the pool has BAL staking incentives (outside the veBAL system)', () => 
       __typename: 'GqlPoolAprItem',
       id: '0xf08d4dea369c456d26a3168ff0024b904f2d8b91-surplus',
       title: 'Surplus APR',
-      type: GqlPoolAprItemType.Surplus,
+      type: GqlPoolAprItemType.Surplus_24H,
       apr: 0.05520228189828037,
     },
     // BAL incentives that are outside of the veBAL system

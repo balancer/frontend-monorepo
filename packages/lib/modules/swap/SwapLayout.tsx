@@ -10,7 +10,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { PropsWithChildren } from 'react'
 import { Permit2SignatureProvider } from '../tokens/approvals/permit2/Permit2SignatureProvider'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type Props = PropsWithChildren<{
   props: SwapProviderProps
@@ -18,9 +18,10 @@ type Props = PropsWithChildren<{
 
 // Layout shared by standard swap page (/swap) and pool swap page (/poolid/swap)
 export default function SwapLayout({ props, children }: Props) {
-  const chain = props.pathParams.chain
   const { getTokensByChain } = useTokens()
-  const initChain = chain ? getChainSlug(chain as ChainSlug) : getProjectConfig().defaultNetwork
+
+  const chain = props.pathParams.chain
+  const initChain = chain ? getChainSlug(chain as ChainSlug) : PROJECT_CONFIG.defaultNetwork
   const initTokens = props.poolActionableTokens || getTokensByChain(initChain)
 
   if (!initTokens) {

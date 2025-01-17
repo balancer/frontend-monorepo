@@ -30,7 +30,6 @@ import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
 import { TokenCore, PoolListItem, Pool, PoolToken, PoolCore } from './pool.types'
 import { ApiToken } from '../tokens/token.types'
-import { isBeetsProject, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 /**
@@ -122,6 +121,12 @@ export function isSwappingHaltable(poolType: GqlPoolType): boolean {
 export function isVebalPool(poolId: string): boolean {
   return (
     poolId.toLowerCase() === '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014'
+  )
+}
+
+export function isMaBeetsPool(poolId: string): boolean {
+  return (
+    poolId.toLowerCase() === '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005'
   )
 }
 
@@ -293,8 +298,8 @@ export function shouldBlockAddLiquidity(pool: Pool) {
   // avoid blocking Sepolia pools
   if (pool.chain === GqlChain.Sepolia) return false
 
-  // don't add liquidity to the maBEETS pool thru the pool page
-  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) return true
+  // block add liquidity for custom scenarios eg. maBEETS
+  if (isMaBeetsPool(pool.id)) return true
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
@@ -344,8 +349,8 @@ export function getPoolAddBlockedReason(pool: Pool): string {
   if (pool.dynamicData.isPaused) return 'Paused pool'
   if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
 
-  // don't add liquidity to the maBEETS pool thru the pool page
-  if (isBeetsProject && pool.id === PROJECT_CONFIG.corePoolId) {
+  // reason for blocking in custom scenarios eg. maBEETS
+  if (isMaBeetsPool(pool.id)) {
     return 'Please manage your liquidity on the maBEETS page.'
   }
 

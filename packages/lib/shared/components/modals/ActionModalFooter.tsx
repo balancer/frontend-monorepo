@@ -8,7 +8,8 @@ import Link from 'next/link'
 import { PropsWithChildren } from 'react'
 import { CornerDownLeft, MessageSquare, ThumbsUp } from 'react-feather'
 import { TransactionStep } from '../../../modules/transactions/transaction-steps/lib'
-import { PROJECT_CONFIG, isBalancerProject } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getDiscordLink } from '../../utils/links'
 
 export function SuccessActions({
   returnLabel,
@@ -18,6 +19,9 @@ export function SuccessActions({
   returnAction?: () => void
 }) {
   const { openNpsModal } = useAppzi()
+  const {
+    options: { showVeBal },
+  } = PROJECT_CONFIG
 
   return (
     <VStack w="full">
@@ -31,7 +35,7 @@ export function SuccessActions({
         >
           {returnLabel}
         </Button>
-        {isBalancerProject && (
+        {showVeBal && (
           <Button
             leftIcon={<ThumbsUp size="14" />}
             onClick={openNpsModal}
@@ -43,7 +47,7 @@ export function SuccessActions({
         )}
         <Button
           as={Link}
-          href={PROJECT_CONFIG.externalLinks.discordUrl}
+          href={getDiscordLink()}
           leftIcon={<MessageSquare size="14" />}
           size="xs"
           target="_blank"

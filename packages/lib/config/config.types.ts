@@ -1,9 +1,11 @@
 import { Address } from 'viem'
-import { GqlChain } from '../shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType } from '../shared/services/api/generated/graphql'
 import { chains } from '@repo/lib/modules/web3/ChainConfig'
 import { PoolIssue } from '../modules/pool/alerts/pool-issues/PoolIssue.type'
 import { SupportedWrapHandler } from '../modules/swap/swap.types'
-import { PartnerVariant } from '../modules/pool/pool.types'
+import { PartnerVariant, PoolDisplayType } from '../modules/pool/pool.types'
+import { AppLink } from '../shared/components/navs/useNav'
+import { LinkSection } from '../shared/components/navs/footer.types'
 
 export interface TokensConfig {
   addresses: {
@@ -119,7 +121,24 @@ type VariantConfig = {
 }
 
 interface ExternalUrls {
-  discordUrl: string
+  poolComposerUrl: string
+}
+
+type OptionsConfig = {
+  poolDisplayType: PoolDisplayType
+  hidePoolTags: string[]
+  hidePoolTypes: GqlPoolType[]
+  hideProtocolVersion: string[]
+  showPoolName: boolean
+  showVeBal: boolean
+  showMaBeets: boolean
+}
+
+type Links = {
+  appLinks: AppLink[]
+  ecosystemLinks: AppLink[]
+  socialLinks: AppLink[]
+  legalLinks: AppLink[]
 }
 
 export interface ProjectConfig {
@@ -132,4 +151,7 @@ export interface ProjectConfig {
   ensNetwork: GqlChain
   delegateOwner: Address
   externalLinks: ExternalUrls
+  options: OptionsConfig
+  links: Links
+  footer: { linkSections: LinkSection[] }
 }

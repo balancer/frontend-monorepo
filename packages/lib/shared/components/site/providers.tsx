@@ -4,7 +4,6 @@ import { ReactNode } from 'react'
 import { RecentTransactionsProvider } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
 import { ApolloGlobalDataProvider } from '@repo/lib/shared/services/api/apollo-global-data.provider'
 import { UserSettingsProvider } from '@repo/lib/modules/user/settings/UserSettingsProvider'
-
 import { wagmiConfig } from '@repo/lib/modules/web3/WagmiConfig'
 import { GlobalAlertsProvider } from '@repo/lib/shared/components/alerts/GlobalAlertsProvider'
 import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'

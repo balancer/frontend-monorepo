@@ -1,8 +1,12 @@
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { GqlChain } from '../services/api/generated/graphql'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
-export function getBlockExplorerName(chain: GqlChain) {
-  return getNetworkConfig(chain).blockExplorer.name
+const defaultChain = PROJECT_CONFIG.defaultNetwork
+
+export function getBlockExplorerName(chain?: GqlChain) {
+  const _chain = chain || defaultChain
+  return getNetworkConfig(_chain).blockExplorer.name
 }
 
 export function getBlockExplorerTxUrl(txHash: string, chain: GqlChain) {

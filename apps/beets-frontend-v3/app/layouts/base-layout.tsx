@@ -2,8 +2,9 @@ import NextTopLoader from 'nextjs-toploader'
 import { PropsWithChildren } from 'react'
 import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
 import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
-import { FooterContainer } from '@/lib/components/footer/FooterContainer'
 import { LzBeetsMigrateModal } from '@/lib/components/modals/LzBeetsMigrateModal'
+import { BeetsLogoType } from '@/lib/components/imgs/BeetsLogoType'
+import { Footer } from '@repo/lib/shared/components/navs/Footer'
 
 export function BaseLayout({
   children,
@@ -21,7 +22,11 @@ export function BaseLayout({
       <NavBarContainer />
       {children}
       {renderLzBeetsModal && <LzBeetsMigrateModal />}
-      <FooterContainer />
+      <Footer
+        logoType={<BeetsLogoType />}
+        subTitle="Beets is your ultimate destination for liquid-staked tokens, real yield, and AMM innovation."
+        title="The Hub for LSTs"
+      />
     </div>
   )
 }
