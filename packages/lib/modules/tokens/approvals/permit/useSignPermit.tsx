@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useSdkWalletClient } from '@repo/lib/modules/web3/useSdkViemClient'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'

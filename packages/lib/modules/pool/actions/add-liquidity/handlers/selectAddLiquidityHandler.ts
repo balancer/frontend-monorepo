@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { getChainId } from '@repo/lib/config/app.config'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { TwammAddLiquidityHandler } from './TwammAddLiquidity.handler'
 import { UnbalancedAddLiquidityV2Handler } from './UnbalancedAddLiquidityV2.handler'
 import { AddLiquidityHandler } from './AddLiquidity.handler'

@@ -5,7 +5,7 @@ import { isUndefined } from 'lodash'
 import { useGaugesSupplyAndBalance } from './useGaugesSupplyAndBalance'
 import { useGaugeTotalSupplyAndUserBalance } from './useGaugeTotalSupplyAndUserBalance'
 import { getChainId } from '@repo/lib/config/app.config'
-import { Pool } from '../pool/PoolProvider'
+import { Pool } from '../pool/pool.types'
 import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 export type VeBalLockData = {

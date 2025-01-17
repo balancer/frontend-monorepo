@@ -1,39 +1,33 @@
-/* eslint-disable max-len */
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
-import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
-// import { getPoolMock } from '../../../__mocks__/getPoolMock'
 import { BoostedUnbalancedAddLiquidityV3Handler } from './BoostedUnbalancedAddLiquidityV3.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
+import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
+import { usdcUsdtAaveBoosted } from '../../../__mocks__/pool-examples/boosted'
+import { usdcAddress, usdtAddress } from '@repo/lib/debug-helpers'
 
-// TODO: unskip this test when sepolia V3 pools are available in production api
-describe.skip('When adding unbalanced liquidity for a V3 BOOSTED pool', async () => {
-  // Sepolia
-  const poolId = '0x6dbdd7a36d900083a5b86a55583d90021e9f33e8' // Sepolia stataEthUSDC stataEthUSDT
-
-  const usdcAaveAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // Sepolia underlying usdcAave faucet address (temporary until we have the real one)
-  const usdtAaveAddress = '0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0' // Sepolia underlying usdcAave faucet address (temporary until we have the real one)
-  // const v3Pool = await getPoolMock(poolId, GqlChain.Sepolia)
-  const v3Pool = {} as GqlPoolElement
+describe('When adding unbalanced liquidity for a V3 BOOSTED pool', async () => {
+  const v3Pool = getApiPoolMock(usdcUsdtAaveBoosted)
 
   const handler = selectAddLiquidityHandler(v3Pool) as BoostedUnbalancedAddLiquidityV3Handler
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: usdcAaveAddress, symbol: 'USDC' },
-    { humanAmount: '0.1', tokenAddress: usdtAaveAddress, symbol: 'USDT' },
+    { humanAmount: '1', tokenAddress: usdcAddress, symbol: 'USDC' },
+    { humanAmount: '1', tokenAddress: usdtAddress, symbol: 'USDT' },
   ]
 
   it('calculates price impact', async () => {
     const priceImpact = await handler.getPriceImpact(humanAmountsIn)
-    expect(priceImpact).toBe(0)
+    expect(priceImpact).toBeGreaterThan(0)
   })
 
   it('queries bptOut', async () => {
     const result = await handler.simulate(humanAmountsIn)
 
     expect(result.bptOut.amount).toBeGreaterThan(100000000000000n)
-    expect(result.bptOut.token.address).toBe(poolId)
+    expect(result.bptOut.token.address).toBe(v3Pool.id)
   })
 
   it('builds Tx Config', async () => {
@@ -45,7 +39,7 @@ describe.skip('When adding unbalanced liquidity for a V3 BOOSTED pool', async ()
       slippagePercent: '0.2',
       queryOutput,
     })
-    const router = getNetworkConfig(GqlChain.Sepolia).contracts.balancer.compositeLiquidityRouter
+    const router = getNetworkConfig(GqlChain.Mainnet).contracts.balancer.compositeLiquidityRouter
     expect(result.to).toBe(router)
     expect(result.data).toBeDefined()
   })

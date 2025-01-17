@@ -2,7 +2,7 @@
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import { PoolTag } from './getPoolTags'
 
 export type UsePoolTagsResult = ReturnType<typeof _usePoolTags>

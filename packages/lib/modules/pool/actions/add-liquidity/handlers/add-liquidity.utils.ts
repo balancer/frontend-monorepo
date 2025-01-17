@@ -11,7 +11,7 @@ import {
   RemoveLiquidityQueryOutput,
   Slippage,
 } from '@balancer/sdk'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'

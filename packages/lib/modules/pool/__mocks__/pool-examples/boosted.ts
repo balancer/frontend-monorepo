@@ -7,6 +7,15 @@ export const v3SepoliaNestedBoosted: PoolExample = {
   poolId: '0x693cc6a39bbf35464f53d6a5dbf7d6c2fa93741c',
   poolChain: GqlChain.Sepolia,
   version: 2,
+  mockName: 'v3SepoliaNestedBoostedMock',
+}
+
+export const usdcUsdtAaveBoosted: PoolExample = {
+  name: 'usdcUsdtAaveBoosted',
+  description: 'Edge case: V3 100% Boosted (Aave  50% USDC 50% USDT)',
+  poolId: '0x89bb794097234e5e930446c0cec0ea66b35d7570',
+  poolChain: GqlChain.Mainnet,
+  version: 3,
 }
 
 export const morphoStakeHouse: PoolExample = {
@@ -26,4 +35,9 @@ export const sDAIBoosted: PoolExample = {
   version: 3,
 }
 
-export const boostedPoolExamples = [v3SepoliaNestedBoosted, morphoStakeHouse, sDAIBoosted]
+export const boostedPoolExamples = [
+  v3SepoliaNestedBoosted,
+  usdcUsdtAaveBoosted,
+  morphoStakeHouse,
+  sDAIBoosted,
+]

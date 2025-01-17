@@ -2,7 +2,7 @@
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import { Erc4626Metadata } from './getErc4626Metadata'
 import { PoolListItem } from '../pool.types'
 import { getChainId } from '@repo/lib/config/app.config'

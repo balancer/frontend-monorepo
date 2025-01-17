@@ -21,7 +21,7 @@ import { AlertTriangle, Settings } from 'react-feather'
 import { CurrencySelect } from './CurrencySelect'
 import { SlippageInput } from './UserSettings'
 import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
-import { Pool } from '../../pool/PoolProvider'
+import { Pool } from '../../pool/pool.types'
 
 export function TransactionSettings(props: ButtonProps) {
   const { slippage, setSlippage } = useUserSettings()

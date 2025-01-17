@@ -10,7 +10,7 @@ import {
   RemoveLiquiditySingleTokenExactInInput,
 } from '@balancer/sdk'
 import { Address, parseEther } from 'viem'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { BPT_DECIMALS } from '../../../pool.constants'
 import { LiquidityActionHelpers, getSender, isEmptyHumanAmount } from '../../LiquidityActionHelpers'
 import {

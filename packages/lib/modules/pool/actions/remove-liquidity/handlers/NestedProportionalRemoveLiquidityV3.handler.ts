@@ -10,7 +10,7 @@ import {
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Address, Hex, parseEther } from 'viem'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import {
   BuildRemoveLiquidityInput,

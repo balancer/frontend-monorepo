@@ -32,7 +32,7 @@ import {
   swapNativeWithWrapped,
 } from '../../tokens/token.helpers'
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import {
   allPoolTokens,
   isAffectedByCspIssue,

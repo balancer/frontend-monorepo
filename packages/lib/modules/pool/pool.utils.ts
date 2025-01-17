@@ -24,7 +24,7 @@ import {
   PoolVariant,
   PoolCore,
 } from './pool.types'
-import { Pool } from './PoolProvider'
+import { Pool } from './pool.types'
 
 // URL slug for each chain
 export enum ChainSlug {

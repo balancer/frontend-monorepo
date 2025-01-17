@@ -10,7 +10,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Address, Hex } from 'viem'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { LiquidityActionHelpers, areEmptyAmounts, getSender } from '../../LiquidityActionHelpers'
 import {
   NestedBuildAddLiquidityInputV3,

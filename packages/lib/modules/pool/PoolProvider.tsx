@@ -19,8 +19,6 @@ import { useInvalidVariantRedirect } from './pool.hooks'
 import { useTokens } from '../tokens/TokensProvider'
 import { getCompositionTokens } from './pool-tokens.utils'
 
-// TODO: replace all references to use Pool type in pool.types.ts in another PR
-export type Pool = GetPoolQuery['pool']
 export type FeaturedPool = GetFeaturedPoolsQuery['featuredPools'][0]['pool']
 export type UsePoolResponse = ReturnType<typeof _usePool> & {
   chain: GqlChain

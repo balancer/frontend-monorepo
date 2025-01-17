@@ -1,5 +1,6 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PoolExample } from './pool-examples.types'
+
 export const balWeth8020: PoolExample = {
   name: 'B-50BAL-50WETH',
   description: 'Weighted OG',
@@ -17,8 +18,6 @@ export const osETHPhantom: PoolExample = {
   version: 2,
 }
 
-// TODO: use it in actionable tests
-// THIS is A WRONG TEST CAUSE IT IS V2, we need V3
 export const sDAIWeighted: PoolExample = {
   name: 'B-50sDAI-50wstETH',
   description: 'Edge case: sDAI is ERC4626 but has isBufferAllowed is FALSE',
@@ -33,6 +32,7 @@ export const v2SepoliaStableWithERC4626: PoolExample = {
   poolId: '0x6c3966874f49a2f6a8f2f791f82f65b214e90ccb0000000000000000000001a6',
   poolChain: GqlChain.Sepolia,
   version: 2,
+  mockName: 'v2SepoliaStableWithERC4626Mock',
 }
 
 export const flatPoolExamples = [

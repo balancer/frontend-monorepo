@@ -6,24 +6,16 @@ import {
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support'
 
-/*const userMiddleware = new ApolloLink((operation, forward) => {
-  // add the user address to the headers
-  operation.setContext(({ headers = {} }) => {
-    return {
-      headers: {
-        ...headers,
-        // AccountAddress: SET ACCOUNT ADDRESS,
-        // ChainId: SET CHAIN ID,
-      },
-    }
-  })
-
-  return forward(operation)
-})*/
+const defaultHeaders = {
+  'x-graphql-client-name': 'FrontendClient',
+  'x-graphql-client-version': '1.0.0',
+}
 
 export function createApolloClient() {
-  //const keyArgs = ['where', ['poolIdIn']]
-  const httpLink = new HttpLink({ uri: config.apiUrl })
+  const httpLink = new HttpLink({
+    uri: config.apiUrl,
+    headers: defaultHeaders,
+  })
 
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
@@ -49,10 +41,6 @@ export function createApolloClient() {
         },
         Query: {
           fields: {
-            //poolGetJoinExits: concatPagination(keyArgs),
-            //poolGetSwaps: concatPagination(keyArgs),
-            //userGetSwaps: concatPagination(keyArgs),
-            //poolGetBatchSwaps: concatPagination(),
             userGetPoolBalances: {
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
               merge(existing = [], incoming: any[]) {

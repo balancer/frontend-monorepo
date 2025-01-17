@@ -18,6 +18,7 @@ import {
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
 import { FeaturedPool } from './PoolProvider'
+
 export type Pool = GetPoolQuery['pool']
 
 export type PoolId = Hex

@@ -1,12 +1,12 @@
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress } from '@repo/lib/debug-helpers'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 import { mainnetTestPublicClient } from '@repo/lib/test/utils/wagmi/wagmi-test-clients'
 import { NestedSingleTokenRemoveLiquidityV2Handler } from './NestedSingleTokenRemoveLiquidityV2.handler'
-import { getPoolMock } from '../../../__mocks__/getPoolMock'
+import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 function selectNestedSingleTokenHandler(pool: Pool): NestedSingleTokenRemoveLiquidityV2Handler {
@@ -24,7 +24,7 @@ const defaultQueryInput: QueryRemoveLiquidityInput = {
 
 const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0.2' }
 
-const nestedPool = await getPoolMock(
+const nestedPool = await fetchPoolMock(
   '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0',
   GqlChain.Mainnet
 )
