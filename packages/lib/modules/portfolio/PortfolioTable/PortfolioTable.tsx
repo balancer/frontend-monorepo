@@ -187,7 +187,7 @@ export function PortfolioTable() {
                   {...rowProps}
                 />
               )}
-              renderTableRow={(item: ExpandedPoolInfo, index) => {
+              renderTableRow={({ item, index }) => {
                 return (
                   <PortfolioTableRow
                     keyValue={index}
