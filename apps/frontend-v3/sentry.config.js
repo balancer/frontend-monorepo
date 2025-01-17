@@ -1,9 +1,14 @@
+const isProd = process.env.NEXT_PUBLIC_APP_ENV === 'prod'
+
+// Source map generation and upload makes the build much slower so we only enable it for vercel production builds from main branch
+const shouldEnableSourceMaps = isProd && process.env.VERCEL_GIT_COMMIT_REF === 'main'
+
 /** @type {import('@sentry/nextjs/build/types/config/types').SentryBuildOptions} */
 const sentryOptions = {
   // Suppresses source map uploading logs during build
   silent: true,
   org: 'balancer-labs',
-  project: 'frontend-v3',
+  project: isProd ? 'frontend-v3' : 'frontend-v3-develop',
 
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
@@ -28,9 +33,13 @@ const sentryOptions = {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
+
+  sourcemaps: {
+    disable: !shouldEnableSourceMaps,
+  },
+  telemetry: shouldEnableSourceMaps,
 }
 
-const isProd = process.env.NEXT_PUBLIC_APP_ENV === 'prod'
 const productionSentryDSN =
   'https://53df88eafd8f9a546b0e926b65553379@o574636.ingest.sentry.io/4506382607712256'
 const developmentSentryDSN =

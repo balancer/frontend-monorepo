@@ -17,7 +17,8 @@
     "NEXT_RUNTIME",
     "NEXT_PRIVATE_ALCHEMY_KEY",
     "CI",
-    "NEXT_PUBLIC_UPDATE_API_MOCKS"
+    "NEXT_PUBLIC_UPDATE_API_MOCKS",
+    "VERCEL_GIT_COMMIT_REF"
   ],
   "tasks": {
     "dev": {
