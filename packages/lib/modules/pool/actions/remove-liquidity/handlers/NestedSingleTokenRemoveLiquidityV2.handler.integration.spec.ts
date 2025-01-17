@@ -1,7 +1,7 @@
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress } from '@repo/lib/debug-helpers'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
 import { mainnetTestPublicClient } from '@repo/lib/test/utils/wagmi/wagmi-test-clients'

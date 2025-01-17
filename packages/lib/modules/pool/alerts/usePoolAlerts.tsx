@@ -4,7 +4,7 @@ import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertCont
 import { GqlChain, GqlPoolTokenDetail } from '@repo/lib/shared/services/api/generated/graphql'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import { migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import {
   hasRateProvider,

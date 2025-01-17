@@ -1,6 +1,6 @@
 'use client'
 import { PoolName } from '@repo/lib/modules/pool/PoolName'
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { ClaimModal } from '@repo/lib/modules/pool/actions/claim/ClaimModal'
 import { ClaimProvider } from '@repo/lib/modules/pool/actions/claim/ClaimProvider'
 import { ChainSlug, getChainSlug } from '@repo/lib/modules/pool/pool.utils'

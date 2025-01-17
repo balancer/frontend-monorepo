@@ -4,7 +4,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
 import { sepoliaTestPublicClient } from '@repo/lib/test/utils/wagmi/wagmi-test-clients'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 

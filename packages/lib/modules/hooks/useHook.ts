@@ -1,6 +1,6 @@
 import { useHooks } from './HooksProvider'
 import { getChainId } from '@repo/lib/config/app.config'
-import { Pool } from '../pool/PoolProvider'
+import { Pool } from '../pool/pool.types'
 import { PoolListItem } from '../pool/pool.types'
 
 export function useHook(pool: Pool | PoolListItem) {

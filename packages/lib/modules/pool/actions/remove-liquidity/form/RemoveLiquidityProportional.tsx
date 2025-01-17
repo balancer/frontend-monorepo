@@ -8,7 +8,7 @@ import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { isNativeAsset, isNativeOrWrappedNative } from '@repo/lib/modules/tokens/token.helpers'
 import { NativeAssetSelectModal } from '@repo/lib/modules/tokens/NativeAssetSelectModal'
 import { shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 type Props = { tokens: ApiToken[]; pool: Pool }

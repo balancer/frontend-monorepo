@@ -9,7 +9,7 @@ import { includesAddress, isSameAddress } from '@repo/lib/shared/utils/addresses
 import { Address } from 'viem'
 import { HumanTokenAmountWithAddress, TokenBase } from './token.types'
 import { InputAmount } from '@balancer/sdk'
-import { Pool } from '../pool/PoolProvider'
+import { Pool } from '../pool/pool.types'
 import { getVaultConfig, isCowAmmPool, isV3Pool } from '../pool/pool.helpers'
 import { PoolToken } from '../pool/pool.types'
 import { ApiToken } from './token.types'

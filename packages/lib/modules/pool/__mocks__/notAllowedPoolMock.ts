@@ -4,7 +4,7 @@ import {
   GqlPoolNestingType,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 
 export const notAllowedPoolMock: Pool = {
   id: '0x241df159b03a90455edee61625655fc0ea5fa3dd0002000000000000000003fc',

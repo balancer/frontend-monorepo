@@ -4,7 +4,7 @@ import { GetFeaturedPoolsQuery } from '@repo/lib/shared/services/api/generated/g
 import { useState } from 'react'
 import { Box, BoxProps, Card, Center, Text } from '@chakra-ui/react'
 import { FeaturePoolCard } from './FeaturePoolCard'
-import { Pool } from '../pool/PoolProvider'
+import { Pool } from '../pool/pool.types'
 import { useSwipeable } from 'react-swipeable'
 
 type Props = {

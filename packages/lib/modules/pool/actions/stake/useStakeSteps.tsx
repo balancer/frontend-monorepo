@@ -1,5 +1,5 @@
 import { Address, parseUnits } from 'viem'
-import { Pool } from '../../PoolProvider'
+import { Pool } from '../../pool.types'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { RawAmount } from '@repo/lib/modules/tokens/approvals/approval-rules'
 import { BPT_DECIMALS } from '../../pool.constants'

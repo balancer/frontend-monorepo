@@ -1,4 +1,4 @@
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import { PoolListItem } from '@repo/lib/modules/pool/pool.types'
 import { usePoolsMetadata } from './PoolsMetadataProvider'
 import { useMemo } from 'react'

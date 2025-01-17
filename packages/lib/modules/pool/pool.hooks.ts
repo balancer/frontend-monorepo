@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { getPoolPath } from './pool.utils'
-import { Pool } from './PoolProvider'
+import { Pool } from './pool.types'
 import { useParams } from 'next/navigation'
 import { PartnerVariant } from '@repo/lib/modules/pool/pool.types'
 import { getProjectConfig } from '@repo/lib/config/getProjectConfig'

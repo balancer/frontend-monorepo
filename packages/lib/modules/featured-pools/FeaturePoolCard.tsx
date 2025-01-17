@@ -1,7 +1,8 @@
 'use client'
 
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { FeaturedPool, Pool } from '../pool/PoolProvider'
+import { FeaturedPool } from '../pool/PoolProvider'
+import { Pool } from '../pool/pool.types'
 import { useRouter } from 'next/navigation'
 import { VStack, Text, Box, HStack, Image } from '@chakra-ui/react'
 import { poolClickHandler, poolMouseEnterHandler, getPoolTypeLabel } from '../pool/pool.utils'

@@ -11,7 +11,7 @@ import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useMan
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useCallback, useMemo } from 'react'
 import { parseUnits } from 'viem'
-import { Pool } from '../../PoolProvider'
+import { Pool } from '../../pool.types'
 import { BPT_DECIMALS } from '../../pool.constants'
 import { findFirstNonPreferentialStaking } from '../stake.helpers'
 

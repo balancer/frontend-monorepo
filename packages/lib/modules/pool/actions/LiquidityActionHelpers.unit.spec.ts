@@ -30,7 +30,7 @@ import { balWeth8020, osETHPhantom, sDAIWeighted } from '../__mocks__/pool-examp
 import { auraBal } from '../__mocks__/pool-examples/nested'
 import { recoveryPoolMock } from '../__mocks__/recoveryPoolMock'
 import { allPoolTokens, getPoolActionableTokens } from '../pool.helpers'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import {
   LiquidityActionHelpers,
   areEmptyAmounts,

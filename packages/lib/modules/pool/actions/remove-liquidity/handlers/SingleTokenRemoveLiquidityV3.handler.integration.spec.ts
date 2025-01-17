@@ -1,6 +1,6 @@
 import { sepoliaRouter } from '@repo/lib/debug-helpers'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { SingleTokenRemoveLiquidityV3Handler } from './SingleTokenRemoveLiquidityV3.handler'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
