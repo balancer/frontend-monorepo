@@ -9,6 +9,7 @@ import { PropsWithChildren } from 'react'
 import { CornerDownLeft, MessageSquare, ThumbsUp } from 'react-feather'
 import { TransactionStep } from '../../../modules/transactions/transaction-steps/lib'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getDiscordLink } from '../../utils/links'
 
 export function SuccessActions({
   returnLabel,
@@ -19,7 +20,6 @@ export function SuccessActions({
 }) {
   const { openNpsModal } = useAppzi()
   const {
-    externalLinks: { discordUrl },
     options: { showVeBal },
   } = PROJECT_CONFIG
 
@@ -47,7 +47,7 @@ export function SuccessActions({
         )}
         <Button
           as={Link}
-          href={discordUrl}
+          href={getDiscordLink()}
           leftIcon={<MessageSquare size="14" />}
           size="xs"
           target="_blank"

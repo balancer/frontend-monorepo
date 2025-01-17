@@ -1,7 +1,6 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { useNavData } from './useNavData'
 import { NavBar } from '@repo/lib/shared/components/navs/NavBar'
 import { NavLogo } from './NavLogo'
 import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
@@ -11,10 +10,22 @@ import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
 import { Box } from '@chakra-ui/react'
 import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isDev, isStaging } from '@repo/lib/config/app.config'
 
 export function NavBarContainer() {
-  const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
+  const {
+    links: { ecosystemLinks, socialLinks },
+  } = PROJECT_CONFIG
   const { defaultAppLinks } = useNav()
+
+  // TODO: move vebal link to config when live
+  const appLinks = []
+  if (isDev || isStaging) {
+    appLinks.push({
+      label: 'veBAL (wip)',
+      href: '/vebal',
+    })
+  }
 
   const allAppLinks = [...defaultAppLinks, ...appLinks]
 
@@ -38,7 +49,7 @@ export function NavBarContainer() {
               appLinks={allAppLinks}
               customLinks={<VeBalLink fontSize="xl" />}
               ecosystemLinks={ecosystemLinks}
-              socialLinks={getSocialLinks(PROJECT_CONFIG.externalLinks.discordUrl)}
+              socialLinks={socialLinks}
             />
           }
           navLogo={<NavLogo />}

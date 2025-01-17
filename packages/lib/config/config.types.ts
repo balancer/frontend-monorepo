@@ -4,6 +4,8 @@ import { chains } from '@repo/lib/modules/web3/ChainConfig'
 import { PoolIssue } from '../modules/pool/alerts/pool-issues/PoolIssue.type'
 import { SupportedWrapHandler } from '../modules/swap/swap.types'
 import { PartnerVariant, PoolDisplayType } from '../modules/pool/pool.types'
+import { AppLink } from '../shared/components/navs/useNav'
+import { LinkSection } from '../shared/components/navs/footer.types'
 
 export interface TokensConfig {
   addresses: {
@@ -119,7 +121,6 @@ type VariantConfig = {
 }
 
 interface ExternalUrls {
-  discordUrl: string
   poolComposerUrl: string
 }
 
@@ -133,6 +134,13 @@ type OptionsConfig = {
   showMaBeets: boolean
 }
 
+type Links = {
+  appLinks: AppLink[]
+  ecosystemLinks: AppLink[]
+  socialLinks: AppLink[]
+  legalLinks: AppLink[]
+}
+
 export interface ProjectConfig {
   projectId: 'beets' | 'balancer'
   projectName: string
@@ -144,4 +152,6 @@ export interface ProjectConfig {
   delegateOwner: Address
   externalLinks: ExternalUrls
   options: OptionsConfig
+  links: Links
+  footer: { linkSections: LinkSection[] }
 }

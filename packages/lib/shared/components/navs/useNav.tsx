@@ -1,12 +1,14 @@
 import { usePathname } from 'next/navigation'
 import { useParams } from 'next/navigation'
 import { ReactNode } from 'react'
+import { IconType } from './SocialIcon'
 
 export type AppLink = {
   href: string
   label?: string
   icon?: ReactNode
   isExternal?: boolean
+  iconType?: IconType
 }
 
 export function useNav() {

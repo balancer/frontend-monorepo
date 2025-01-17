@@ -14,7 +14,6 @@ export const ProjectConfigBeets: ProjectConfig = {
   ensNetwork: GqlChain.Sonic,
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b', // TODO update this for sonic & optimism,
   externalLinks: {
-    discordUrl: 'https://beets.fi/discord',
     poolComposerUrl: 'https://ma.beets.fi/compose',
   },
   options: {
@@ -25,5 +24,75 @@ export const ProjectConfigBeets: ProjectConfig = {
     showPoolName: true,
     showVeBal: false,
     showMaBeets: true,
+  },
+  links: {
+    appLinks: [
+      {
+        href: '/stake',
+        label: 'Stake $S',
+      },
+    ],
+    ecosystemLinks: [
+      { label: 'Docs', href: 'https://docs.beets.fi/' },
+      { label: 'Governance', href: 'https://snapshot.org/#/beets.eth' },
+      { label: 'Analytics', href: 'https://beets.defilytica.com/' },
+    ],
+    socialLinks: [
+      {
+        iconType: 'x',
+        href: 'https://x.com/beets_fi',
+      },
+      {
+        iconType: 'discord',
+        href: 'https://beets.fi/discord',
+      },
+      {
+        iconType: 'medium',
+        href: 'https://beethovenxio.medium.com/',
+      },
+      {
+        iconType: 'github',
+        href: 'https://github.com/beethovenxfi/',
+      },
+    ],
+    legalLinks: [{ label: 'Terms of service', href: '/terms-of-service' }],
+  },
+  footer: {
+    linkSections: [
+      {
+        title: 'Build on Beets',
+        links: [
+          { label: 'Home', href: '/' },
+
+          { label: 'Docs', href: 'https://docs.beets.fi', isExternal: true },
+          {
+            label: 'Prototype on v3',
+            href: 'https://github.com/balancer/scaffold-balancer-v3',
+            isExternal: true,
+          },
+        ],
+      },
+      {
+        title: 'Use Beets protocol',
+        links: [
+          { label: 'Explore pools', href: '/pools' },
+          { label: 'Swap tokens', href: '/swap' },
+          { label: 'View portfolio', href: '/portfolio' },
+          { label: 'Get maBEETS', href: 'https://ma.beets.fi', isExternal: true },
+        ],
+      },
+      {
+        title: 'Ecosystem',
+        links: [
+          { label: 'Governance', href: 'https://snapshot.org/#/beets.eth', isExternal: true },
+          {
+            label: 'Bug bounties',
+            href: 'https://immunefi.com/bug-bounty/balancer',
+            isExternal: true,
+          },
+          { label: 'Analytics', href: 'https://beets.defilytica.com', isExternal: true },
+        ],
+      },
+    ],
   },
 }

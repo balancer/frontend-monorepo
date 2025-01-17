@@ -11,7 +11,7 @@ import {
 } from '../../utils/error-filters'
 import { ensureError } from '../../utils/errors'
 import { BalAlertLink } from '../alerts/BalAlertLink'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getDiscordLink } from '../../utils/links'
 
 type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
 type Props = AlertProps & {
@@ -21,9 +21,7 @@ type Props = AlertProps & {
 }
 
 export function GenericError({ error: _error, customErrorName, skipError, ...rest }: Props) {
-  const {
-    externalLinks: { discordUrl },
-  } = PROJECT_CONFIG
+  const discordUrl = getDiscordLink()
 
   if (skipError) return
   const error = ensureError(_error)
