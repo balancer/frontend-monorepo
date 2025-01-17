@@ -281,8 +281,6 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     amount: string,
     { userTriggered = true }: { userTriggered?: boolean } = {}
   ) {
-    console.log('Voy a settear tronco: ', { tokenInInfo })
-
     const state = swapStateVar()
     const newState = {
       ...state,
