@@ -42,9 +42,7 @@ export function CrossChainBoost() {
 
   const [syncIsOpen, setSyncIsOpen] = useState(false)
 
-  const { data } = useVebalUserData()
-
-  const myVebalBalance = data?.veBalGetUser.balance
+  const { myVebalBalance } = useVebalUserData()
 
   return (
     <Stack h="full" height="300px" w="full">
@@ -85,7 +83,7 @@ export function CrossChainBoost() {
                               height={20}
                               key={chain}
                               src={`/images/chains/${chain}.svg`}
-                              title={`${chain} (${Number(myVebalBalance).toFixed(4)} - ${
+                              title={`${chain} (${Number(myVebalBalance ?? 0).toFixed(4)} - ${
                                 l2VeBalBalances[chain]
                               })`}
                               width={20}

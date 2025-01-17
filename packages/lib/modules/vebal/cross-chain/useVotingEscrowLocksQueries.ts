@@ -6,6 +6,10 @@ export interface VotingEscrowLock {
   slope: string
   bias: string
   timestamp: number
+  votingEscrowID: {
+    id: string
+  }
+  updatedAt: number
 }
 
 export interface VotingEscrowLockResponse {

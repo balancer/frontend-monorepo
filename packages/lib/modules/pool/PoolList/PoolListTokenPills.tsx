@@ -46,8 +46,9 @@ function WeightedTokenPills({
   tokens,
   chain,
   iconSize = 24,
+  nameSize,
   ...badgeProps
-}: { tokens: PoolToken[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
+}: { tokens: PoolToken[]; chain: GqlChain; iconSize?: number; nameSize?: string } & BadgeProps) {
   return (
     <Wrap spacing="xs">
       {tokens.map(token => {
@@ -75,7 +76,7 @@ function WeightedTokenPills({
                   />
                   <HStack gap={['xs', '1.5']}>
                     {tokens.length < 5 && (
-                      <Text fontWeight="bold" noOfLines={1}>
+                      <Text fontWeight="bold" noOfLines={1} size={nameSize}>
                         {token.symbol}
                       </Text>
                     )}
@@ -91,7 +92,7 @@ function WeightedTokenPills({
                     nestedTokens={token.nestedPool.tokens}
                   />
                   <HStack gap={['xs', '1.5']}>
-                    <Text fontWeight="bold" noOfLines={1}>
+                    <Text fontWeight="bold" noOfLines={1} size={nameSize}>
                       {token.name}
                     </Text>
                     <Text fontSize="xs">{fNum('weight', token.weight || '')}</Text>
@@ -110,8 +111,14 @@ function StableTokenPills({
   tokens,
   chain,
   iconSize = 24,
+  nameSize,
   ...badgeProps
-}: { tokens: PoolToken[]; chain: GqlChain; iconSize?: number } & BadgeProps) {
+}: {
+  tokens: PoolToken[]
+  chain: GqlChain
+  iconSize?: number
+  nameSize?: string
+} & BadgeProps) {
   const isFirstToken = (index: number) => index === 0
   const zIndices = Array.from({ length: tokens.length }, (_, index) => index).reverse()
 
@@ -144,7 +151,7 @@ function StableTokenPills({
                     size={iconSize}
                   />
                   {tokens.length < 5 && (
-                    <Text fontWeight="bold" noOfLines={1}>
+                    <Text fontWeight="bold" noOfLines={1} size={nameSize}>
                       {token.symbol}
                     </Text>
                   )}
@@ -157,7 +164,7 @@ function StableTokenPills({
                     iconSize={iconSize}
                     nestedTokens={token.nestedPool.tokens}
                   />
-                  <Text fontWeight="bold" noOfLines={1}>
+                  <Text fontWeight="bold" noOfLines={1} size={nameSize}>
                     {token.name}
                   </Text>
                 </>
@@ -173,6 +180,7 @@ function StableTokenPills({
 type VotingListTokenPillsProps = {
   vote: VotingPoolWithData
   iconSize?: number
+  nameSize?: string
 } & BadgeProps
 export function VotingListTokenPills({ vote, ...props }: VotingListTokenPillsProps) {
   const tokens = vote.tokens.map(

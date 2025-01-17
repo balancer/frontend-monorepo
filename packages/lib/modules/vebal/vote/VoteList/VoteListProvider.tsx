@@ -1,15 +1,15 @@
 'use client'
 
 import { createContext, PropsWithChildren, useMemo } from 'react'
-import { GetVeBalVotingListQuery, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useGaugeVotes } from '@repo/lib/modules/vebal/vote/useGaugeVotes'
 import { SortVotesBy, VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { orderBy } from 'lodash'
-import { HiddenHandData } from '@repo/lib/shared/services/hidden-hand/hidden-hand.types'
 import { useVoteListFiltersState } from '@repo/lib/modules/vebal/vote/VoteList/useVoteListFiltersState'
 import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { PoolFilterType } from '@repo/lib/modules/pool/pool.types'
+import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 
 function sortVoteList(voteList: VotingPoolWithData[], sortBy: SortVotesBy, order: Sorting) {
   return orderBy(
@@ -34,6 +34,7 @@ function sortVoteList(voteList: VotingPoolWithData[], sortBy: SortVotesBy, order
 
 function filterVoteList(
   voteList: VotingPoolWithData[],
+  isPoolGaugeExpired: (votingPool: VotingPoolWithData) => boolean,
   textSearch: string,
   networks: GqlChain[],
   poolTypes: PoolFilterType[],
@@ -65,31 +66,28 @@ function filterVoteList(
   }
 
   if (!includeExpiredPools) {
-    // fix: fixed in feat/my-votes
-    result = result.filter(value => !value.gaugeVotes?.isKilled)
+    result = result.filter(value => !isPoolGaugeExpired(value))
   }
 
   return result
 }
 
-export interface UseVoteListArgs {
-  data: GetVeBalVotingListQuery | undefined
-  voteListLoading?: boolean
-  votingIncentives?: HiddenHandData[]
-  votingIncentivesLoading?: boolean
-  votingIncentivesErrorMessage?: string
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface UseVoteListArgs {}
 
-export function _useVoteList({
-  data,
-  voteListLoading = false,
-  votingIncentives,
-  votingIncentivesErrorMessage,
-  votingIncentivesLoading = false,
-}: UseVoteListArgs) {
+// eslint-disable-next-line no-empty-pattern
+export function _useVoteList({}: UseVoteListArgs) {
+  const {
+    votingPools,
+    votingIncentives,
+    votingIncentivesErrorMessage,
+    votingListLoading,
+    votingIncentivesLoading = false,
+    isPoolGaugeExpired,
+  } = useVotes()
   const filtersState = useVoteListFiltersState()
 
-  const voteListData = useMemo(() => data?.veBalGetVotingList || [], [data?.veBalGetVotingList])
+  const voteListData = votingPools
 
   const gaugeAddresses = useMemo(() => voteListData.map(vote => vote.gauge.address), [voteListData])
 
@@ -108,6 +106,7 @@ export function _useVoteList({
   const filteredVoteList = useMemo(() => {
     return filterVoteList(
       votingPoolsList,
+      isPoolGaugeExpired,
       filtersState.searchText,
       filtersState.networks,
       filtersState.poolTypes,
@@ -115,6 +114,7 @@ export function _useVoteList({
     )
   }, [
     votingPoolsList,
+    isPoolGaugeExpired,
     filtersState.searchText,
     filtersState.networks,
     filtersState.poolTypes,
@@ -137,8 +137,8 @@ export function _useVoteList({
   return {
     filtersState,
     sortedVoteList,
-    voteListLoading,
-    loading: voteListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
+    votingListLoading,
+    loading: votingListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
     count: filteredVoteList.length,
     votingIncentivesLoading,
     votingIncentivesErrorMessage, // todo: should be used in VoteListTable

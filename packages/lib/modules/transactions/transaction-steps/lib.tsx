@@ -49,6 +49,7 @@ export type StepType =
   | 'stakeLst'
   | 'unstakeLst'
   | 'withdrawLst'
+  | 'voteForManyGaugeWeights'
 
 export type TxActionId =
   | 'SignBatchRelayer'
