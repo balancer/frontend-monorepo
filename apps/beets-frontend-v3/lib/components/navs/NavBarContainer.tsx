@@ -55,11 +55,6 @@ export function NavBarContainer() {
           </Box>
         </>
       }
-      /* customLinksBefore={
-        <Box as={motion.div} variants={fadeIn}>
-          <PoolsLink />
-        </Box>
-      } */
       navLogo={<NavLogo />}
       rightSlot={<NavActions hideDarkModeToggle mobileNav={mobileNav} />}
     />
