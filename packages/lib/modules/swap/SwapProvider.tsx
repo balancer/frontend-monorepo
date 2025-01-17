@@ -286,8 +286,12 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       ...state,
       tokenIn: {
         ...state.tokenIn,
-        amount,
-        scaledAmount: scaleTokenAmount(amount, tokenInInfo),
+        /*
+          When copy-pasting a swap URL with a token amount, the tokenInInfo can be undefined
+          so we set amount as zero instead of crashing the app
+        */
+        amount: tokenInInfo ? amount : '0',
+        scaledAmount: tokenInInfo ? scaleTokenAmount(amount, tokenInInfo) : 0n,
       },
     }
 
@@ -313,8 +317,12 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       ...state,
       tokenOut: {
         ...state.tokenOut,
-        amount,
-        scaledAmount: scaleTokenAmount(amount, tokenOutInfo),
+        /*
+          When copy-pasting a swap URL with a token amount, the tokenOutInfo can be undefined
+          so we set amount as zero instead of crashing the app
+        */
+        amount: tokenOutInfo ? amount : '0',
+        scaledAmount: tokenOutInfo ? scaleTokenAmount(amount, tokenOutInfo) : 0n,
       },
     }
 
@@ -398,9 +406,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     window.history.replaceState({}, '', newPath.join(''))
   }
 
-  function scaleTokenAmount(amount: string, token: ApiToken | undefined): bigint {
+  function scaleTokenAmount(amount: string, token: ApiToken): bigint {
     if (amount === '') return parseUnits('0', 18)
-    if (!token) throw new Error('Cant scale amount without token metadata')
     return parseUnits(amount, token.decimals)
   }
 
