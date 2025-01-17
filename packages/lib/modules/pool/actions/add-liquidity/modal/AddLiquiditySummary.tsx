@@ -97,25 +97,26 @@ export function AddLiquiditySummary({
 
       {shouldShowReceipt ? (
         <CardPopAnim key="staking-options">
-          {pool.staking && (
+          {pool.staking ? (
             <Card variant="modalSubSection" w="full">
               <StakingOptions />
             </Card>
-          )}
-          {isVebalPool(pool.id) && (
-            <Card variant="modalSubSection">
-              <VStack align="start" spacing="md" w="full">
-                <Text>Get extra incentives with veBAL</Text>
-                <Button onClick={vebalRedirectModal.onOpen} size="lg" variant="primary" w="full">
-                  Lock to get veBAL
-                </Button>
-              </VStack>
+          ) : (
+            isVebalPool(pool.id) && (
+              <Card variant="modalSubSection">
+                <VStack align="start" spacing="md" w="full">
+                  <Text>Get extra incentives with veBAL</Text>
+                  <Button onClick={vebalRedirectModal.onOpen} size="lg" variant="primary" w="full">
+                    Lock to get veBAL
+                  </Button>
+                </VStack>
 
-              <VebalRedirectModal
-                isOpen={vebalRedirectModal.isOpen}
-                onClose={vebalRedirectModal.onClose}
-              />
-            </Card>
+                <VebalRedirectModal
+                  isOpen={vebalRedirectModal.isOpen}
+                  onClose={vebalRedirectModal.onClose}
+                />
+              </Card>
+            )
           )}
         </CardPopAnim>
       ) : hasQuoteContext ? (
