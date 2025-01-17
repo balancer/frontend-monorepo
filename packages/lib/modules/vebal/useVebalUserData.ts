@@ -1,6 +1,7 @@
 import { GetVeBalUserDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { useQuery } from '@apollo/client'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function useVebalUserData() {
   const { userAddress, isConnected } = useUserAccount()
@@ -12,11 +13,22 @@ export function useVebalUserData() {
     },
   })
 
+  const myVebalBalance = data?.veBalGetUser.balance
+    ? bn(data.veBalGetUser.balance).toNumber()
+    : undefined
+
+  const hasVeBalBalance = myVebalBalance ? myVebalBalance > 0 : undefined
+
+  const noVeBalBalance = typeof myVebalBalance === 'number' ? myVebalBalance === 0 : undefined
+
   return {
     data,
     refetch,
     isConnected,
     loading,
     error,
+    myVebalBalance,
+    hasVeBalBalance,
+    noVeBalBalance,
   }
 }

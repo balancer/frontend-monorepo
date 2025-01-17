@@ -7,10 +7,11 @@ import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { getPoolPath, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
-import React, { useState } from 'react'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
 import { VoteExpiredTooltip } from '@repo/lib/modules/vebal/vote/VoteExpiredTooltip'
+import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -18,20 +19,19 @@ interface Props extends GridProps {
 }
 
 export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
+  const { isConnected } = useUserAccount()
   const { toCurrency } = useCurrency()
+  const { hasAllVotingPowerTimeLocked, allowSelectVotingPools } = useVotes()
+  const { toggleVotingPool, isSelectedPool, isVotedPool, isPoolGaugeExpired } = useVotes()
 
-  const [selected, setSelected] = useState(false)
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const toggleSelection = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // todo: implement selection
-    setSelected(v => !v)
-  }
+  const selected = isSelectedPool(vote)
+  const voted = isVotedPool(vote)
 
   const { votingIncentivesLoading, gaugeVotesIsLoading } = useVoteList()
 
-  // fix: fixed in feat/my-votes
-  const isKilled = vote.gaugeVotes?.isKilled
+  const isExpired = isPoolGaugeExpired(vote)
+
+  const isDisabled = !isConnected || hasAllVotingPowerTimeLocked || !allowSelectVotingPools
 
   return (
     <FadeInOnView>
@@ -67,7 +67,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                   pr={[1.5, 'ms']}
                   vote={vote}
                 />
-                {isKilled && <VoteExpiredTooltip usePortal />}
+                {isExpired && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">
                   <ArrowUpIcon transform="rotate(90)" />
                 </Box>
@@ -105,22 +105,24 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             )}
           </GridItem>
           <GridItem justifySelf="end">
-            {isKilled ? (
+            {isExpired || voted ? (
               <Button
                 color="font.secondary"
                 fontSize="sm"
                 fontWeight="700"
+                isDisabled
                 variant="outline"
                 w="80px"
               >
-                Expired
+                {isExpired ? 'Expired' : 'Voted'}
               </Button>
             ) : (
               <Button
                 color={selected ? 'font.secondary' : undefined}
                 fontSize="sm"
                 fontWeight="700"
-                onClick={toggleSelection}
+                isDisabled={isDisabled}
+                onClick={() => toggleVotingPool(vote)}
                 variant={selected ? 'outline' : 'secondary'}
                 w="80px"
               >
