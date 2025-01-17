@@ -18,10 +18,19 @@
     "NEXT_PRIVATE_ALCHEMY_KEY",
     "CI",
     "NEXT_PUBLIC_UPDATE_API_MOCKS",
-    "VERCEL_GIT_COMMIT_REF"
+    "VERCEL_GIT_COMMIT_REF",
+    "SENTRY_AUTH_TOKEN"
   ],
   "tasks": {
     "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:turbopack": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:beets:turbopack": {
       "cache": false,
       "persistent": true
     },

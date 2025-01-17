@@ -58,7 +58,7 @@ function EnsOrAddress({ userAddress, chain }: { userAddress: `0x${string}`; chai
           backgroundColor="background.level4"
           borderRadius="100%"
           height="24px"
-          src={ensAvatar || fallbackSVG.toDataUriSync()}
+          src={ensAvatar || fallbackSVG.toDataUri()}
           width="24px"
         />
         <HStack gap="0.5">

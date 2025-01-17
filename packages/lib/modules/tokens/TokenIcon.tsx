@@ -76,7 +76,7 @@ export function TokenIcon({
           borderRadius="100%"
           height={`${size}px`}
           onError={() => !hasError && setHasError(true)}
-          src={hasError || !iconSrc ? fallbackSVG.toDataUriSync() : iconSrc}
+          src={hasError || !iconSrc ? fallbackSVG.toDataUri() : iconSrc}
           width={`${size}px`}
           {...rest}
         />
