@@ -59,13 +59,14 @@ export function PoolHeader() {
         align={{ base: 'start', lg: 'end' }}
         direction={{ base: 'column', lg: 'row' }}
         justify="space-between"
+        mt="xs"
         spacing="md"
         w="full"
       >
         <VStack align="start" spacing="md">
           <PoolMetaBadges />
           {description && (
-            <Text maxW="xl" variant="secondary">
+            <Text fontSize="sm" maxW="xl" mb="xxs" sx={{ textWrap: 'pretty' }} variant="secondary">
               {description}
             </Text>
           )}
