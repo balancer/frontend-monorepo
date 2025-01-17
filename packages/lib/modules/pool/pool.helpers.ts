@@ -292,14 +292,14 @@ const shouldBlockV3PoolAdds = false
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
-export function shouldBlockAddLiquidity(pool: Pool, shouldBlockCustom = false) {
+export function shouldBlockAddLiquidity(pool: Pool) {
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
 
   // avoid blocking Sepolia pools
   if (pool.chain === GqlChain.Sepolia) return false
 
   // block add liquidity for custom scenarios eg. maBEETS
-  if (shouldBlockCustom) return true
+  if (isMaBeetsPool(pool.id)) return true
 
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
@@ -340,7 +340,7 @@ export function shouldBlockAddLiquidity(pool: Pool, shouldBlockCustom = false) {
 /**
  *  TODO: improve the implementation to display all the blocking reasons instead of just the first one
  */
-export function getPoolAddBlockedReason(pool: Pool, customReason?: string): string {
+export function getPoolAddBlockedReason(pool: Pool): string {
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return 'Adds are blocked for all V3 pools'
@@ -349,9 +349,9 @@ export function getPoolAddBlockedReason(pool: Pool, customReason?: string): stri
   if (pool.dynamicData.isPaused) return 'Paused pool'
   if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
 
-  // when a custom reason is provided return it eg. for maBEETS
-  if (customReason) {
-    return customReason
+  // reason for blocking in custom scenarios eg. maBEETS
+  if (isMaBeetsPool(pool.id)) {
+    return 'Please manage your liquidity on the maBEETS page.'
   }
 
   if (pool.hook && !hasReviewedHook(pool.hook)) {

@@ -5,7 +5,6 @@ import PoolMetaBadges from './PoolMetaBadges'
 import { usePool } from '../../PoolProvider'
 import {
   getPoolAddBlockedReason,
-  isMaBeetsPool,
   isCowAmmPool,
   isFx,
   shouldBlockAddLiquidity,
@@ -30,12 +29,7 @@ export function PoolHeader() {
   const partnerRedirectDisclosure = useDisclosure()
   const isCowPool = isCowAmmPool(pool.type)
 
-  const shouldBlockCustom = isMaBeetsPool(pool.id)
-  const customReason = shouldBlockCustom
-    ? 'Please manage your liquidity on the maBEETS page.'
-    : undefined
-
-  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, shouldBlockCustom)
+  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool)
 
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
@@ -70,9 +64,7 @@ export function PoolHeader() {
           <PoolTags />
           <HStack spacing="sm">
             {/* TODO: Add block reason alerts*/}
-            <Tooltip
-              label={isAddLiquidityBlocked ? getPoolAddBlockedReason(pool, customReason) : ''}
-            >
+            <Tooltip label={isAddLiquidityBlocked ? getPoolAddBlockedReason(pool) : ''}>
               <Button
                 isDisabled={isAddLiquidityBlocked}
                 onClick={handleClick}

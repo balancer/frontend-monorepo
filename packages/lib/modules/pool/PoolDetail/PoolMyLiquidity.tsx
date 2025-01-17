@@ -41,13 +41,7 @@ import {
   shouldMigrateStake,
   calcGaugeStakedBalance,
 } from '../user-balance.helpers'
-import {
-  isVebalPool,
-  shouldBlockAddLiquidity,
-  calcUserShareOfPool,
-  isFx,
-  isMaBeetsPool,
-} from '../pool.helpers'
+import { isVebalPool, shouldBlockAddLiquidity, calcUserShareOfPool, isFx } from '../pool.helpers'
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -113,9 +107,7 @@ export default function PoolMyLiquidity() {
   const pathname = usePathname()
   const [height, setHeight] = useState(0)
 
-  const shouldBlockCustom = isMaBeetsPool(pool.id)
-
-  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, shouldBlockCustom)
+  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool)
 
   useLayoutEffect(() => {
     if (myLiquiditySectionRef && myLiquiditySectionRef.current) {
