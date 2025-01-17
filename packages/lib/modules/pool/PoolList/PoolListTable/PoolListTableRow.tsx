@@ -12,7 +12,6 @@ import { getPoolPath } from '../../pool.utils'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import { usePoolList } from '../PoolListProvider'
 import { PoolListPoolDisplay } from '../PoolListPoolDisplay'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 interface Props extends GridProps {
   pool: PoolListItem
@@ -49,11 +48,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
-              <PoolListPoolDisplay
-                name={name}
-                pool={pool}
-                poolDisplayType={PROJECT_CONFIG.options.poolDisplayType}
-              />
+              <PoolListPoolDisplay name={name} pool={pool} />
             </GridItem>
             <GridItem minW="32">
               <PollListTableDetailsCell pool={pool} />
