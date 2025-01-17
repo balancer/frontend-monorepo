@@ -7,7 +7,7 @@ import {
   RemoveLiquidityProportionalInput,
 } from '@balancer/sdk'
 import { Address, parseEther } from 'viem'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { BPT_DECIMALS } from '../../../pool.constants'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import {

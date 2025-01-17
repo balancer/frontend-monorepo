@@ -1,6 +1,6 @@
 import { Hex } from 'viem'
 import { useBlockNumber } from 'wagmi'
-import { Pool } from '../pool/PoolProvider'
+import { Pool } from '../pool/pool.types'
 import { isCowAmmPool } from '../pool/pool.helpers'
 import { TransactionStep, TxBatch } from '../transactions/transaction-steps/lib'
 import {

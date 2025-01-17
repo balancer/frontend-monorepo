@@ -2,10 +2,10 @@
 
 import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
-import { PoolsColumnSort, orderByHash } from '../../pool.types'
+import { orderByHash, PoolsColumnSort } from '../../pool.types'
 import { usePoolOrderByState } from '../usePoolOrderByState'
 import { Globe } from 'react-feather'
-import { SortableHeader } from '@repo/lib/shared/components/tables/SortableHeader'
+import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { usePoolList } from '../PoolListProvider'
 
 const setIsDesc = (id: GqlPoolOrderBy, currentSortingObj: PoolsColumnSort) =>
@@ -48,7 +48,7 @@ export function PoolListTableHeader({ ...rest }) {
             isSorted={sortingObj.id === orderByItem}
             label={orderByHash[orderByItem]}
             onSort={() => handleSort(orderByItem)}
-            sorting={sortingObj.desc ? 'desc' : 'asc'}
+            sorting={sortingObj.desc ? Sorting.desc : Sorting.asc}
           />
         </GridItem>
       ))}

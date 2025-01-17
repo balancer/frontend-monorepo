@@ -11,7 +11,7 @@ import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { useHook } from '../../hooks/useHook'
 
 import { PoolListItem } from '../pool.types'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 
 type Props = {
   pool: Pool | PoolListItem

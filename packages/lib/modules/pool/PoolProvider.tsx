@@ -16,10 +16,9 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { usePoolEnrichWithOnChainData } from './queries/usePoolEnrichWithOnChainData'
 import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances'
 import { useInvalidVariantRedirect } from './pool.hooks'
-import { getPoolDisplayTokens } from './pool.utils'
 import { useTokens } from '../tokens/TokensProvider'
+import { getCompositionTokens } from './pool-tokens.utils'
 
-export type Pool = GetPoolQuery['pool']
 export type FeaturedPool = GetFeaturedPoolsQuery['featuredPools'][0]['pool']
 export type UsePoolResponse = ReturnType<typeof _usePool> & {
   chain: GqlChain
@@ -56,7 +55,7 @@ export function _usePool({
 
   const pool = poolWithOnchainUserBalances || poolWithOnChainData || data?.pool || initialData.pool
   const bptPrice = priceFor(pool.address, pool.chain)
-  const tvl = calcTotalUsdValue(getPoolDisplayTokens(pool), pool.chain)
+  const tvl = calcTotalUsdValue(getCompositionTokens(pool), pool.chain)
   const isLoading = isLoadingOnchainData || isLoadingOnchainUserBalances
 
   const refetch = async () => {

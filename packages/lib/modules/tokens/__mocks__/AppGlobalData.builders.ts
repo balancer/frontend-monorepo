@@ -15,10 +15,8 @@ export function anAppGlobalData(options?: Partial<GetAppGlobalPollingDataQuery>)
       __typename: 'GqlProtocolMetricsChain',
       swapFee24h: 'test fee',
       swapVolume24h: 'test volume 24h',
-      totalSwapVolume: 'test volume',
       poolCount: '24',
       totalLiquidity: 'test liquidity',
-      totalSwapFee: 'test fee',
     },
   }
   return Object.assign({}, defaultAppGlobalData, options)

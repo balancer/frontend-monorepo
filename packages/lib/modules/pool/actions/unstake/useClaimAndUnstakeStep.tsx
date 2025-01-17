@@ -5,7 +5,7 @@ import {
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { Address, parseUnits } from 'viem'
 import { BPT_DECIMALS } from '../../pool.constants'
-import { Pool } from '../../PoolProvider'
+import { Pool } from '../../pool.types'
 import { selectStakingService } from '@repo/lib/modules/staking/selectStakingService'
 import { useBuildUnstakeCallData } from './useBuildUnstakeCallData'
 import { getNetworkConfig } from '@repo/lib/config/app.config'

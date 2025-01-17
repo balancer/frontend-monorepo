@@ -1,4 +1,4 @@
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { isBoosted, isV3Pool } from '../../../pool.helpers'
 import {
   shouldUseRecoveryRemoveLiquidity,

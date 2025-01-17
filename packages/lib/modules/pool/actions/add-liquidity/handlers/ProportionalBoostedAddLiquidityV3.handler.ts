@@ -11,7 +11,7 @@ import {
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { constructBaseBuildCallInput } from './add-liquidity.utils'
@@ -64,11 +64,12 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       ...constructBaseBuildCallInput({
         humanAmountsIn,
         sdkQueryOutput: queryOutput.sdkQueryOutput,
-        slippagePercent: slippagePercent,
+        slippagePercent,
         pool: this.helpers.pool,
       }),
       protocolVersion: 3,
       userData: '0x' as Hex,
+      wethIsEth: this.helpers.isNativeAssetIn(humanAmountsIn),
     }
 
     const { callData, to, value } = permit2

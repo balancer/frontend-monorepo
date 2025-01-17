@@ -1,5 +1,5 @@
 import { gyroPoolMock } from '../../../__mocks__/gyroPoolMock'
-import { ApiToken } from '../../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { _calculateProportionalHumanAmountsIn } from './useProportionalInputs'
 

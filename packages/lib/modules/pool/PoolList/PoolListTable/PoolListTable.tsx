@@ -4,7 +4,7 @@ import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTabl
 import { PoolListTableHeader } from './PoolListTableHeader'
 import { PoolListTableRow } from './PoolListTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
-import { PoolListItem } from '../../pool.types'
+import { POOL_TAG_MAP, PoolListItem } from '../../pool.types'
 import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolList } from '../PoolListProvider'
@@ -37,12 +37,18 @@ export function PoolListTable({ pools, count, loading }: Props) {
 
   if (!isMounted) return <Skeleton height="500px" w="full" />
 
+  const needsMarginForPoints = pools.some(pool =>
+    pool.tags?.some(tag => tag && POOL_TAG_MAP.POINTS.includes(tag))
+  )
+
   return (
     <Card
       alignItems="flex-start"
       left={{ base: '-4px', sm: '0' }}
       p={{ base: '0', sm: '0' }}
       position="relative"
+      // fixing right padding for horizontal scroll on mobile
+      pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
       w={{ base: '100vw', lg: 'full' }}
     >
       <PaginatedTable
@@ -53,7 +59,14 @@ export function PoolListTable({ pools, count, loading }: Props) {
         paginationProps={paginationProps}
         renderTableHeader={() => <PoolListTableHeader {...rowProps} />}
         renderTableRow={(item: PoolListItem, index) => {
-          return <PoolListTableRow keyValue={index} pool={item} {...rowProps} />
+          return (
+            <PoolListTableRow
+              keyValue={index}
+              needsMarginForPoints={needsMarginForPoints}
+              pool={item}
+              {...rowProps}
+            />
+          )
         }}
         showPagination={showPagination}
       />

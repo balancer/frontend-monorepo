@@ -12,13 +12,12 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { nested50WETH_50_3poolId } from '@repo/lib/debug-helpers'
 import { Address } from 'viem'
-import { PoolExample } from './pool-examples/flat'
 
 function astToQueryString(ast: any): string {
   return print(ast)
 }
 
-export async function getPoolMock(
+export async function fetchPoolMock(
   poolId: Address = nested50WETH_50_3poolId,
   chain: GqlChain = GqlChain.Mainnet,
   userAddress?: Address
@@ -47,8 +46,4 @@ export async function getPoolMock(
   }
 
   return getPoolQuery.pool as GqlPoolElement
-}
-
-export function getPoolForTest(poolExample: PoolExample): Promise<GqlPoolElement> {
-  return getPoolMock(poolExample.poolId, poolExample.poolChain)
 }

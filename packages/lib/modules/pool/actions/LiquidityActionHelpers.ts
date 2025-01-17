@@ -32,7 +32,7 @@ import {
   swapNativeWithWrapped,
 } from '../../tokens/token.helpers'
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import {
   allPoolTokens,
   isAffectedByCspIssue,
@@ -43,12 +43,12 @@ import {
   isUnbalancedLiquidityDisabled,
   isV2Pool,
   isV3Pool,
-  isV3NotSupportingWethIsEth,
+  supportsWethIsEth,
   getActionableTokenSymbol,
   hasNestedPools,
 } from '../pool.helpers'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
-import { ApiToken } from '../pool.types'
+import { ApiToken } from '../../tokens/token.types'
 
 // Null object used to avoid conditional checks during hook loading state
 const NullPool: Pool = {
@@ -392,11 +392,7 @@ export function emptyTokenAmounts(pool: Pool): TokenAmount[] {
 }
 
 export function shouldShowNativeWrappedSelector(token: ApiToken, pool: Pool) {
-  return (
-    !isV3NotSupportingWethIsEth(pool) && // V3 boosted/nested actions don't support wethIsEth currently
-    !isCowAmmPool(pool.type) && // Cow AMM pools don't support wethIsEth
-    isNativeOrWrappedNative(token.address as Address, token.chain)
-  )
+  return supportsWethIsEth(pool) && isNativeOrWrappedNative(token.address as Address, token.chain)
 }
 
 export function replaceWrappedWithNativeAsset(

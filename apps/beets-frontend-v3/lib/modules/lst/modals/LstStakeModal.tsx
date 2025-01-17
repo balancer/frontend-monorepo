@@ -55,6 +55,8 @@ export function LstStakeModal({
 
   useOnUserAccountChanged(onClose)
 
+  const isSuccess = !!lstStakeTxHash && !lstStakeReceipt.isLoading
+
   return (
     <Modal
       finalFocusRef={finalFocusRef}
@@ -63,6 +65,7 @@ export function LstStakeModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
+      trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!lstStakeTxHash} />
@@ -75,7 +78,7 @@ export function LstStakeModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={stakeTransactionSteps.currentStep}
-          isSuccess={!!lstStakeTxHash && !lstStakeReceipt.isLoading}
+          isSuccess={isSuccess}
           returnAction={onClose}
           returnLabel="Stake again"
         />

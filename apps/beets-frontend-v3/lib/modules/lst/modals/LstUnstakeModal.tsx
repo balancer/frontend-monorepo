@@ -45,6 +45,8 @@ export function LstUnstakeModal({
 
   useOnUserAccountChanged(onClose)
 
+  const isSuccess = !!lstUnstakeTxHash
+
   return (
     <Modal
       finalFocusRef={finalFocusRef}
@@ -53,6 +55,7 @@ export function LstUnstakeModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
+      trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!lstUnstakeTxHash} />
@@ -67,7 +70,7 @@ export function LstUnstakeModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={unstakeTransactionSteps.currentStep}
-          isSuccess={!!lstUnstakeTxHash}
+          isSuccess={isSuccess}
           returnAction={onClose}
           returnLabel="Unstake again"
         />
