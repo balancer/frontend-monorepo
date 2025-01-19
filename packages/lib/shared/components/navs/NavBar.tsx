@@ -13,6 +13,7 @@ import { ReactNode, useEffect, useMemo, useState } from 'react'
 import DarkModeToggle from '../btns/DarkModeToggle'
 import RecentTransactions from '../other/RecentTransactions'
 import { AppLink, useNav } from './useNav'
+import { clamp } from 'lodash'
 
 type Props = {
   mobileNav?: ReactNode
@@ -23,8 +24,6 @@ type Props = {
   disableBlur?: boolean
   customLinks?: ReactNode
 }
-
-const clamp = (number: number, min: number, max: number) => Math.min(Math.max(number, min), max)
 
 function useBoundedScroll(threshold: number) {
   const { scrollY } = useScroll()
