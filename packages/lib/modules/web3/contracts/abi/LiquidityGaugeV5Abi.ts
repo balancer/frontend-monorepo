@@ -1013,4 +1013,4 @@ export const LiquidityGaugeV5Abi = [
       },
     ],
   },
-]
+] as const

@@ -1,5 +1,5 @@
-import { useTheme } from '@chakra-ui/react'
-import { SVGProps } from 'react'
+import { forwardRef, useTheme } from '@chakra-ui/react'
+import { LegacyRef, SVGProps } from 'react'
 
 interface Props extends SVGProps<SVGSVGElement> {
   gradFrom?: string
@@ -8,20 +8,17 @@ interface Props extends SVGProps<SVGSVGElement> {
   id?: string
 }
 
-function StarsIcon({
-  gradFrom = 'yellow',
-  gradTo = 'pink',
-  variant = 'gradient',
-  id,
-  ...rest
-}: Props) {
+function StarsIcon(
+  { gradFrom = 'yellow', gradTo = 'pink', variant = 'gradient', id, ...rest }: Props,
+  ref: LegacyRef<SVGSVGElement> | undefined
+) {
   const theme = useTheme()
   const gradientId = `stars-gradient-${gradFrom}-${gradTo}-${id}`
 
   const startColor = theme.colors[gradTo] ? theme.colors[gradTo]['500'] : gradTo
   const stopColor = theme.colors[gradFrom] ? theme.colors[gradFrom]['500'] : gradFrom
   return (
-    <svg fill="none" viewBox="0 0 24 25" xmlns="http://www.w3.org/2000/svg" {...rest}>
+    <svg fill="none" ref={ref} viewBox="0 0 24 25" xmlns="http://www.w3.org/2000/svg" {...rest}>
       <defs>
         <linearGradient
           gradientUnits="userSpaceOnUse"
@@ -46,4 +43,4 @@ function StarsIcon({
   )
 }
 
-export default StarsIcon
+export default forwardRef(StarsIcon)
