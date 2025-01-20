@@ -12,7 +12,7 @@ import { useMulticall } from '@repo/lib/modules/web3/contracts/useMulticall'
 import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 import { toJsTimestamp } from '@repo/lib/shared/utils/time'
 import { LockActionType } from '@repo/lib/modules/vebal/lock/steps/lock-steps.utils'
-import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type UseVebalLockDataResult = ReturnType<typeof _useVebalLockData>
 export const VebalLockDataContext = createContext<UseVebalLockDataResult | null>(null)
@@ -93,7 +93,7 @@ export function _useVebalLockData() {
   })
 
   const { results, refetchAll, isLoading } = useMulticall(lockDataRequests, {
-    enabled: isConnected && isBalancerProject, // Only Balancer project supports veBAL logic
+    enabled: isConnected && PROJECT_CONFIG.options.showVeBal,
   })
 
   const now = useCurrentDate()
