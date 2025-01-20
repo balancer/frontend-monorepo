@@ -137,7 +137,6 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const { setPriceImpact, setPriceImpactLevel } = usePriceImpact()
 
   const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
-  const networkConfig = getNetworkConfig(selectedChain)
   const previewModalDisclosure = useDisclosure()
 
   const client = useApolloClient()
@@ -387,6 +386,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   function replaceUrlPath() {
     if (isPoolSwapUrl) return // Avoid redirection when the swap is within a pool page
     const { selectedChain, tokenIn, tokenOut, swapType } = swapState
+    const networkConfig = getNetworkConfig(selectedChain)
     const { popularTokens } = networkConfig.tokens
     const chainSlug = chainToSlugMap[selectedChain]
     const newPath = ['/swap']
@@ -421,6 +421,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     }
   }
 
+  const networkConfig = getNetworkConfig(selectedChain)
   const wethIsEth =
     isSameAddress(swapState.tokenIn.address, networkConfig.tokens.nativeAsset.address) ||
     isSameAddress(swapState.tokenOut.address, networkConfig.tokens.nativeAsset.address)
@@ -468,7 +469,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const hasQuoteContext = !!simulationQuery.data
 
   function setInitialTokenIn(slugTokenIn?: string) {
-    const { popularTokens } = networkConfig.tokens
+    const { popularTokens } = getInitialNetworkConfig().tokens
     const symbolToAddressMap = invert(popularTokens || {}) as Record<string, Address>
     if (slugTokenIn) {
       if (isAddress(slugTokenIn)) {
@@ -480,7 +481,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   }
 
   function setInitialTokenOut(slugTokenOut?: string) {
-    const { popularTokens } = networkConfig.tokens
+    const { popularTokens } = getInitialNetworkConfig().tokens
     const symbolToAddressMap = invert(popularTokens || {}) as Record<string, Address>
     if (slugTokenOut) {
       if (isAddress(slugTokenOut)) setTokenOut(slugTokenOut as Address)
@@ -527,6 +528,12 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       setInitialTokenOut(poolActionableTokens?.[1]?.address)
     }
     resetSwapAmounts()
+  }
+
+  // Returns networkConfig to be used in the initial load
+  function getInitialNetworkConfig() {
+    const swapState = swapStateVar()
+    return getNetworkConfig(swapState.selectedChain)
   }
 
   // Set state on initial load
