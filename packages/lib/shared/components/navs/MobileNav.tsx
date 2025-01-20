@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
 import { ArrowUpRight, Menu } from 'react-feather'
 import { AppLink, useNav } from './useNav'
+import { SocialIcon } from './SocialIcon'
 
 type NavLinkProps = {
   appLinks: AppLink[]
@@ -92,9 +93,9 @@ function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
 function SocialLinks({ socialLinks }: SocialLinkProps) {
   return (
     <HStack justify="space-between" w="full">
-      {socialLinks.map(({ href, icon }) => (
+      {socialLinks.map(({ href, iconType }) => (
         <Button as={Link} href={href} isExternal key={href} variant="tertiary">
-          {icon}
+          <SocialIcon iconType={iconType} />
         </Button>
       ))}
     </HStack>

@@ -8,10 +8,9 @@ import { ReactNode, useEffect, useState } from 'react'
 import { ChevronDown } from 'react-feather'
 import { motion } from 'framer-motion'
 import { pulseOnceWithDelay } from '@repo/lib/shared/utils/animations'
-
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { supportedNetworks } from '@repo/lib/modules/web3/ChainConfig'
 import { gradientMap } from '@repo/lib/modules/marketing/useEcosystemPoolActivity'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 interface ChainOption extends OptionBase {
   label: ReactNode
@@ -32,7 +31,7 @@ const networkOptions: ChainOption[] = [
     ),
     value: 'all',
   },
-  ...supportedNetworks.map(network => ({
+  ...PROJECT_CONFIG.supportedNetworks.map(network => ({
     label: (
       <HStack>
         <Box

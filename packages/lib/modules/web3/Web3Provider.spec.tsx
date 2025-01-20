@@ -2,7 +2,7 @@ import { mainnet, optimism } from 'viem/chains'
 import { getDefaultRpcUrl, chains } from './ChainConfig'
 
 test('getRpcUrl by chain id', () => {
-  expect(getDefaultRpcUrl(mainnet.id)).toMatch('https://cloudflare-eth.com')
+  expect(getDefaultRpcUrl(mainnet.id)).toMatch('https://eth.merkle.io')
   expect(getDefaultRpcUrl(optimism.id)).toMatch('https://mainnet.optimism.io')
 })
 
@@ -42,7 +42,7 @@ test('Debug', () => {
       "rpcUrls": {
         "default": {
           "http": [
-            "https://cloudflare-eth.com",
+            "https://eth.merkle.io",
           ],
         },
       },
