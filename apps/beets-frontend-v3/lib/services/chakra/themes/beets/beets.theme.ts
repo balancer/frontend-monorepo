@@ -17,7 +17,10 @@ semanticTokens.colors.grayText._dark = '#BBBBBB'
 components.Button.variants.buttonGroupActive._dark.color = '#363636'
 
 export const beetsTheme = {
-  config,
+  config: {
+    ...config,
+    initialColorMode: 'dark',
+  },
   fonts,
   styles: {
     global: {
