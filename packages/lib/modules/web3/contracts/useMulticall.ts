@@ -26,7 +26,6 @@ export function useMulticall(
   multicallRequests: ChainContractConfig[],
   { batchSize, ...options }: Options = {}
 ) {
-  console.log('here!')
   const config = useConfig()
   // Want the results for each chainId to be independent of each other so we don't have
   // a large blob of queries that resolves at once, but have to option to have the results
