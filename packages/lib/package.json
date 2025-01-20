@@ -120,7 +120,7 @@
     "eslint": "8.43.0",
     "happy-dom": "^15.10.2",
     "lokijs": "^1.5.12",
-    "msw": "2.0.10",
+    "msw": "2.7.0",
     "sentry-testkit": "^5.0.9",
     "vitest": "2.1.8",
     "vitest-mock-extended": "2.0.2"
