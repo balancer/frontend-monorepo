@@ -163,8 +163,8 @@ importers:
         specifier: 8.43.0
         version: 8.43.0
       happy-dom:
-        specifier: ^15.10.2
-        version: 15.11.7
+        specifier: ^16.6.0
+        version: 16.6.0
       lokijs:
         specifier: ^1.5.12
         version: 1.5.12
@@ -296,8 +296,8 @@ importers:
         specifier: 8.43.0
         version: 8.43.0
       happy-dom:
-        specifier: ^15.10.2
-        version: 15.11.7
+        specifier: ^16.6.0
+        version: 16.6.0
       lokijs:
         specifier: ^1.5.12
         version: 1.5.12
@@ -637,7 +637,7 @@ importers:
         version: 4.3.1(vite@5.4.5(@types/node@20.10.2)(terser@5.37.0))
       '@vitest/coverage-v8':
         specifier: 2.1.8
-        version: 2.1.8(vitest@2.1.8(@types/node@20.10.2)(happy-dom@15.11.7)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0))
+        version: 2.1.8(vitest@2.1.8(@types/node@20.10.2)(happy-dom@16.6.0)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0))
       '@wagmi/cli':
         specifier: 2.1.22
         version: 2.1.22(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
@@ -654,8 +654,8 @@ importers:
         specifier: 8.43.0
         version: 8.43.0
       happy-dom:
-        specifier: ^15.10.2
-        version: 15.11.7
+        specifier: ^16.6.0
+        version: 16.6.0
       lokijs:
         specifier: ^1.5.12
         version: 1.5.12
@@ -667,10 +667,10 @@ importers:
         version: 5.0.9
       vitest:
         specifier: 2.1.8
-        version: 2.1.8(@types/node@20.10.2)(happy-dom@15.11.7)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0)
+        version: 2.1.8(@types/node@20.10.2)(happy-dom@16.6.0)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0)
       vitest-mock-extended:
         specifier: 2.0.2
-        version: 2.0.2(typescript@5.7.2)(vitest@2.1.8(@types/node@20.10.2)(happy-dom@15.11.7)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0))
+        version: 2.0.2(typescript@5.7.2)(vitest@2.1.8(@types/node@20.10.2)(happy-dom@16.6.0)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0))
 
   packages/prettier-config: {}
 
@@ -4272,8 +4272,8 @@ packages:
   '@types/lodash@4.17.7':
     resolution: {integrity: sha512-8wTvZawATi/lsmNu10/j2hk1KEP0IvjubqPE3cu1Xz7xfXXt5oCq3SNUz4fMIP4XGF9Ky+Ue2tBA3hcS7LSBlA==}
 
-  '@types/ms@0.7.34':
-    resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
+  '@types/ms@2.1.0':
+    resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
   '@types/mysql@2.15.26':
     resolution: {integrity: sha512-DSLCOXhkvfS5WNNPbfn2KdICAmk8lLc+/PNvnPnF7gOdMZCxopXduqv0OQ13y/yA/zXTSikZZqVgybUxOEg6YQ==}
@@ -5184,8 +5184,8 @@ packages:
   bluebird@3.7.2:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
 
-  bn.js@4.12.0:
-    resolution: {integrity: sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==}
+  bn.js@4.12.1:
+    resolution: {integrity: sha512-k8TVBiPkPJT9uHLdOKfFpqcfprwBFOAAXXozRubr7R7PfIuKvQlzcI4M0pALeqXN09vdaMbUdUj+pass+uULAg==}
 
   bn.js@5.2.1:
     resolution: {integrity: sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==}
@@ -6011,10 +6011,6 @@ packages:
     resolution: {integrity: sha512-0/r0MySGYG8YqlayBZ6MuCfECmHFdJ5qyPh8s8wa5Hnm6SaFLSK1VYCbj+NKp090Nm1caZhD+QTnmxO7esYGyQ==}
     engines: {node: '>=10.13.0'}
 
-  entities@4.5.0:
-    resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
-    engines: {node: '>=0.12'}
-
   env-paths@2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
@@ -6755,8 +6751,8 @@ packages:
   h3@1.12.0:
     resolution: {integrity: sha512-Zi/CcNeWBXDrFNlV0hUBJQR9F7a96RjMeAZweW/ZWkR9fuXrMcvKnSA63f/zZ9l0GgQOZDVHGvXivNN9PWOwhA==}
 
-  happy-dom@15.11.7:
-    resolution: {integrity: sha512-KyrFvnl+J9US63TEzwoiJOQzZBJY7KgBushJA8X61DMbNsH+2ONkDuLDnCnwUiPTF42tLoEmrPyoqbenVA5zrg==}
+  happy-dom@16.6.0:
+    resolution: {integrity: sha512-Zz5S9sog8a3p8XYZbO+eI1QMOAvCNnIoyrH8A8MLX+X2mJrzADTy+kdETmc4q+uD9AGAvQYGn96qBAn2RAciKw==}
     engines: {node: '>=18.0.0'}
 
   has-bigints@1.0.2:
@@ -14830,7 +14826,7 @@ snapshots:
 
   '@types/debug@4.1.12':
     dependencies:
-      '@types/ms': 0.7.34
+      '@types/ms': 2.1.0
 
   '@types/draco3d@1.4.10': {}
 
@@ -14883,7 +14879,7 @@ snapshots:
 
   '@types/lodash@4.17.7': {}
 
-  '@types/ms@0.7.34': {}
+  '@types/ms@2.1.0': {}
 
   '@types/mysql@2.15.26':
     dependencies:
@@ -15350,7 +15346,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/coverage-v8@2.1.8(vitest@2.1.8(@types/node@20.10.2)(happy-dom@15.11.7)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0))':
+  '@vitest/coverage-v8@2.1.8(vitest@2.1.8(@types/node@20.10.2)(happy-dom@16.6.0)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -15364,7 +15360,7 @@ snapshots:
       std-env: 3.8.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.1.8(@types/node@20.10.2)(happy-dom@15.11.7)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0)
+      vitest: 2.1.8(@types/node@20.10.2)(happy-dom@16.6.0)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -16305,7 +16301,7 @@ snapshots:
 
   bluebird@3.7.2: {}
 
-  bn.js@4.12.0: {}
+  bn.js@4.12.1: {}
 
   bn.js@5.2.1: {}
 
@@ -17105,7 +17101,7 @@ snapshots:
 
   elliptic@6.5.7:
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.12.1
       brorand: 1.1.0
       hash.js: 1.1.7
       hmac-drbg: 1.0.1
@@ -17150,8 +17146,6 @@ snapshots:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.2.1
-
-  entities@4.5.0: {}
 
   env-paths@2.2.1: {}
 
@@ -18216,9 +18210,8 @@ snapshots:
     transitivePeerDependencies:
       - uWebSockets.js
 
-  happy-dom@15.11.7:
+  happy-dom@16.6.0:
     dependencies:
-      entities: 4.5.0
       webidl-conversions: 7.0.0
       whatwg-mimetype: 3.0.0
 
@@ -21732,13 +21725,13 @@ snapshots:
       fsevents: 2.3.3
       terser: 5.37.0
 
-  vitest-mock-extended@2.0.2(typescript@5.7.2)(vitest@2.1.8(@types/node@20.10.2)(happy-dom@15.11.7)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0)):
+  vitest-mock-extended@2.0.2(typescript@5.7.2)(vitest@2.1.8(@types/node@20.10.2)(happy-dom@16.6.0)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0)):
     dependencies:
       ts-essentials: 10.0.2(typescript@5.7.2)
       typescript: 5.7.2
-      vitest: 2.1.8(@types/node@20.10.2)(happy-dom@15.11.7)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0)
+      vitest: 2.1.8(@types/node@20.10.2)(happy-dom@16.6.0)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0)
 
-  vitest@2.1.8(@types/node@20.10.2)(happy-dom@15.11.7)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0):
+  vitest@2.1.8(@types/node@20.10.2)(happy-dom@16.6.0)(msw@2.0.10(typescript@5.7.2))(terser@5.37.0):
     dependencies:
       '@vitest/expect': 2.1.8
       '@vitest/mocker': 2.1.8(msw@2.0.10(typescript@5.7.2))(vite@5.4.5(@types/node@20.10.2)(terser@5.37.0))
@@ -21762,7 +21755,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.10.2
-      happy-dom: 15.11.7
+      happy-dom: 16.6.0
     transitivePeerDependencies:
       - less
       - lightningcss
