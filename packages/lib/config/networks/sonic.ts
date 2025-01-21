@@ -1,8 +1,15 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
-import { zeroAddress } from 'viem'
+import { Address, zeroAddress } from 'viem'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
+import {
+  BALANCER_BATCH_ROUTER,
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  PERMIT2,
+  VAULT_V3,
+} from '@balancer/sdk'
+import { sonic } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
   chainId: 146,
@@ -40,8 +47,12 @@ const networkConfig: NetworkConfig = {
     multicall3: '0xcA11bde05977b3631167028862bE2a173976CA11',
     balancer: {
       vaultV2: '0xba12222222228d8ba445958a75a0704d566bf2c8',
+      vaultV3: VAULT_V3[sonic.id],
       relayerV6: '0x7b52D5ef006E59e3227629f97F182D6442380bb6',
       minter: zeroAddress,
+      router: '0xNotYetAvailable' as Address,
+      batchRouter: BALANCER_BATCH_ROUTER[sonic.id],
+      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[sonic.id],
     },
     veDelegationProxy: zeroAddress, // TODO: fix this dependency for Beets
     beets: {
@@ -51,6 +62,7 @@ const networkConfig: NetworkConfig = {
       sfc: '0x0aB8f3b709A52c096f33702fE8153776472305ed',
       lstWithdrawRequestHelper: '0x52b16e3d7d25ba64f242e59f9a74799ecc432d78',
     },
+    permit2: PERMIT2[sonic.id],
   },
   pools: convertHexToLowerCase({ issues: {} }),
 }

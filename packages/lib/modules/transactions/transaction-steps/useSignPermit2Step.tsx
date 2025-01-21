@@ -20,6 +20,7 @@ import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
 import { StepDetails, TransactionStep } from './lib'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 import { getGqlChain } from '@repo/lib/config/app.config'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 /*
   Returns a transaction step to sign a permit2 for the token amounts in
@@ -126,9 +127,9 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
 }
 
 function getTitle(details?: StepDetails): string {
-  if (!details?.batchApprovalTokens) return `Permit on Balancer`
+  if (!details?.batchApprovalTokens) return `Permit on ${PROJECT_CONFIG.projectName}`
   if (details.batchApprovalTokens.length === 1) {
-    return `${details.batchApprovalTokens[0]}: Permit on Balancer`
+    return `${details.batchApprovalTokens[0]}: Permit on ${PROJECT_CONFIG.projectName}`
   }
   return 'Sign token approvals'
 }

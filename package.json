@@ -31,7 +31,7 @@
     "lint-staged": "^13.2.3",
     "prettier": "^3.2.5",
     "sharp": "0.33.5",
-    "stylelint": "^16.10.0",
+    "stylelint": "^16.13.2",
     "stylelint-config-standard": "^36.0.1",
     "stylelint-prettier": "^5.0.2",
     "turbo": "^2.1.2",
