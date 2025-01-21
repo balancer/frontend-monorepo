@@ -4,6 +4,11 @@ import { GetSorSwapsDocument } from '@repo/lib/shared/services/api/generated/gra
 import { ProtocolVersion } from '../../pool/pool.types'
 import { SdkSimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
 import { BaseDefaultSwapHandler } from './BaseDefaultSwap.handler'
+import {
+  ensureError,
+  isFailedToFetchApolloError,
+  swapApolloNetworkErrorMessage,
+} from '@repo/lib/shared/utils/errors'
 
 export class DefaultSwapHandler extends BaseDefaultSwapHandler {
   name = 'DefaultSwapHandler'
@@ -13,12 +18,20 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
   }
 
   async simulate({ ...variables }: SimulateSwapInputs): Promise<SdkSimulateSwapResponse> {
-    const { data } = await this.apolloClient.query({
-      query: GetSorSwapsDocument,
-      variables,
-      fetchPolicy: 'no-cache',
-      notifyOnNetworkStatusChange: true,
-    })
+    const { data } = await this.apolloClient
+      .query({
+        query: GetSorSwapsDocument,
+        variables,
+        fetchPolicy: 'no-cache',
+        notifyOnNetworkStatusChange: true,
+      })
+      .catch(e => {
+        const error = ensureError(e)
+        if (isFailedToFetchApolloError(error)) {
+          throw new Error(swapApolloNetworkErrorMessage, { cause: error })
+        }
+        throw error
+      })
 
     const hopCount: number = data.swaps.routes[0]?.hops?.length || 0
     const paths = data.swaps.paths.map(

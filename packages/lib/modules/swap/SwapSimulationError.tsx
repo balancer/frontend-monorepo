@@ -5,6 +5,8 @@ import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
 import { buildCowSwapUrl } from '../cow/cow.utils'
 import { parseSwapError } from './swap.helpers'
 import { useSwap } from './SwapProvider'
+import { getDiscordLink } from '@repo/lib/shared/utils/links'
+import { swapApolloNetworkErrorMessage } from '@repo/lib/shared/utils/errors'
 
 type Props = {
   errorMessage?: string
@@ -26,6 +28,18 @@ export function SwapSimulationError({ errorMessage }: Props) {
         >
           CoW Swap.
         </BalAlertLink>
+      </ErrorAlert>
+    )
+  }
+
+  if (errorMessage === swapApolloNetworkErrorMessage) {
+    const discordUrl = getDiscordLink()
+
+    return (
+      <ErrorAlert title="Network error">
+        It looks like there was a network error while fetching the swap. Please check your internet
+        connection and try again. You can report the problem in{' '}
+        <BalAlertLink href={discordUrl}>our discord</BalAlertLink> if the issue persists.
       </ErrorAlert>
     )
   }
