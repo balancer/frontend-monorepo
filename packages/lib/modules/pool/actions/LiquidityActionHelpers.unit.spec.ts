@@ -29,7 +29,7 @@ import {
 import { balWeth8020, osETHPhantom, sDAIWeighted } from '../__mocks__/pool-examples/flat'
 import { auraBal } from '../__mocks__/pool-examples/nested'
 import { recoveryPoolMock } from '../__mocks__/recoveryPoolMock'
-import { allPoolTokens, getPoolActionableTokens } from '../pool.helpers'
+import { allPoolTokens } from '../pool-tokens.utils'
 import { Pool } from '../pool.types'
 import {
   LiquidityActionHelpers,
@@ -785,15 +785,6 @@ describe('Liquidity helpers for V2 B-auraBAL-STABLE pool with BPT token in the a
         symbol: 'B-80BAL-20WETH',
       },
     ])
-  })
-
-  it('poolActionable tokens are auraBal and nested BPT', async () => {
-    // TODO: merge pool helpers and LiquidityActionHelpers or split tests
-    const tokens = getPoolActionableTokens(v2Pool)
-      .map(t => t.address)
-      .sort()
-
-    expect(tokens).toEqual([bal80Weth20Address, auraBalAddress])
   })
 
   it('poolStateWithBalances', async () => {

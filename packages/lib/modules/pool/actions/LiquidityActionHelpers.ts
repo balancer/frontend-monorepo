@@ -34,7 +34,6 @@ import {
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 import { Pool } from '../pool.types'
 import {
-  allPoolTokens,
   isAffectedByCspIssue,
   isBoosted,
   isComposableStableV1,
@@ -44,9 +43,10 @@ import {
   isV2Pool,
   isV3Pool,
   supportsWethIsEth,
-  getActionableTokenSymbol,
   hasNestedPools,
 } from '../pool.helpers'
+import { getActionableTokenSymbol } from '../pool-tokens.utils'
+import { allPoolTokens } from '../pool-tokens.utils'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
 import { ApiToken } from '../../tokens/token.types'
 
