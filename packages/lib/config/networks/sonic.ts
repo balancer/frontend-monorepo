@@ -41,6 +41,13 @@ const networkConfig: NetworkConfig = {
     defaultSwapTokens: {
       tokenIn: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     },
+    popularTokens: {
+      '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38': 'wS',
+      '0xe5da20f15420ad15de0fa650600afc998bbe3955': 'stS',
+      '0x2d0e0814e62d80056181f5cd932274405966e4f0': 'BEETS',
+      '0x29219dd400f2bf60e5a23d13be72b486d4038894': 'USDC.e',
+      '0xd3dce716f3ef535c5ff8d041c1a41c3bd89b97ae': 'scUSD',
+    },
   },
   contracts: {
     multicall2: '0xc07500b9fe7bea9efd5b54341d0aa3658a33d39a',

@@ -35,9 +35,18 @@ export const v2SepoliaStableWithERC4626: PoolExample = {
   mockName: 'v2SepoliaStableWithERC4626Mock',
 }
 
+export const cowAmmPoolWethGno: PoolExample = {
+  name: 'BCoW-50WETH-50GNO',
+  description: 'CoW AMM pool',
+  poolId: '0x079d2094e16210c42457438195042898a3cff72d',
+  poolChain: GqlChain.Gnosis,
+  version: 1,
+}
+
 export const flatPoolExamples = [
   balWeth8020,
   osETHPhantom,
   sDAIWeighted,
   v2SepoliaStableWithERC4626,
+  cowAmmPoolWethGno,
 ]
