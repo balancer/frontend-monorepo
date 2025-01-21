@@ -14,9 +14,9 @@ export function SwapSimulationError({ errorMessage }: Props) {
 
   if (errorMessage?.includes('must contain at least 1 path')) {
     return (
-      <ErrorAlert title="Not enough liquidity">
-        There's not enough liquidity on {PROJECT_CONFIG.projectName} connecting these tokens to
-        route this swap. Please try with smaller amounts or go to{' '}
+      <ErrorAlert title={`Not enough liquidity on ${PROJECT_CONFIG.projectName}`}>
+        Your swap amount is too high to find a route through the available liquidity on
+        {PROJECT_CONFIG.projectName}. Try reducing your swap size or try{' '}
         <BalAlertLink
           href={buildCowSwapUrl({
             chain: selectedChain,
@@ -24,7 +24,7 @@ export function SwapSimulationError({ errorMessage }: Props) {
             tokenOutAddress: tokenOut.address,
           })}
         >
-          Cow Swap.
+          CoW Swap.
         </BalAlertLink>
       </ErrorAlert>
     )

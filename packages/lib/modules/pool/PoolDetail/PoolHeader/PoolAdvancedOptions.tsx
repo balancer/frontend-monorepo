@@ -69,7 +69,7 @@ export function PoolAdvancedOptions() {
                         target="_blank"
                         variant="nav"
                       >
-                        Swap pool tokens in CoW Swap
+                        Swap pool tokens on CoW Swap
                       </Link>
                     </HStack>
                   ) : (
