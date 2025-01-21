@@ -32,6 +32,7 @@ import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
 import { ApiToken } from '../token.types'
+import { useUserAccount } from '../../web3/UserAccountProvider'
 
 type TokenInputSelectorProps = {
   token: ApiToken | undefined
@@ -205,6 +206,7 @@ export const TokenInput = forwardRef(
     }: InputProps & Props,
     ref
   ) => {
+    const { userAddress } = useUserAccount()
     const { isBalancesLoading } = useTokenBalances()
 
     const [inputTitle, setInputTitle] = useState<string>('')
@@ -234,7 +236,7 @@ export const TokenInput = forwardRef(
         validateInput(value || '')
         setInputTitle(value || '')
       }
-    }, [value, token?.address, isBalancesLoading])
+    }, [value, token?.address, isBalancesLoading, userAddress])
 
     return (
       <Box

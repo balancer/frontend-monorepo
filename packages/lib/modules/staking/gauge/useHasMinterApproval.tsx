@@ -1,4 +1,4 @@
-import { isBalancerProject } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { balancerMinterAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -17,7 +17,7 @@ export function useHasMinterApproval() {
     account: userAddress,
     functionName: 'getMinterApproval',
     args: [contracts.balancer.relayerV6, userAddress],
-    query: { enabled: isConnected && isBalancerProject }, // Only Balancer project supports minter approval
+    query: { enabled: isConnected && PROJECT_CONFIG.options.showVeBal }, // Only vebal needs minter approval
   })
 
   return {

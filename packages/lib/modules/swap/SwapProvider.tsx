@@ -56,8 +56,8 @@ import {
   isStandardOrUnderlyingRootToken,
 } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { ProtocolVersion } from '../pool/pool.types'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ApiToken } from '../tokens/token.types'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
@@ -102,6 +102,7 @@ export type SwapProviderProps = {
 export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
   const isPoolSwapUrl = useIsPoolSwapUrl()
+
   const isPoolSwap = pool && poolActionableTokens // Hint to tell TS that pool and poolActionableTokens must be defined when poolSwap
   const shouldDiscardOldPersistedValue = isPoolSwapUrl
   const swapStateVar = useMakeVarPersisted<SwapState>(
@@ -117,7 +118,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
         scaledAmount: BigInt(0),
       },
       swapType: GqlSorSwapType.ExactIn,
-      selectedChain: isPoolSwap ? pool.chain : getProjectConfig().defaultNetwork,
+      selectedChain: isPoolSwap ? pool.chain : PROJECT_CONFIG.defaultNetwork,
     },
     'swapState',
     shouldDiscardOldPersistedValue
@@ -136,7 +137,6 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const { setPriceImpact, setPriceImpactLevel } = usePriceImpact()
 
   const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
-  const networkConfig = getNetworkConfig(selectedChain)
   const previewModalDisclosure = useDisclosure()
 
   const client = useApolloClient()
@@ -286,8 +286,12 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       ...state,
       tokenIn: {
         ...state.tokenIn,
-        amount,
-        scaledAmount: scaleTokenAmount(amount, tokenInInfo),
+        /*
+          When copy-pasting a swap URL with a token amount, the tokenInInfo can be undefined
+          so we set amount as zero instead of crashing the app
+        */
+        amount: tokenInInfo ? amount : '0',
+        scaledAmount: tokenInInfo ? scaleTokenAmount(amount, tokenInInfo) : 0n,
       },
     }
 
@@ -313,8 +317,12 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       ...state,
       tokenOut: {
         ...state.tokenOut,
-        amount,
-        scaledAmount: scaleTokenAmount(amount, tokenOutInfo),
+        /*
+          When copy-pasting a swap URL with a token amount, the tokenOutInfo can be undefined
+          so we set amount as zero instead of crashing the app
+        */
+        amount: tokenOutInfo ? amount : '0',
+        scaledAmount: tokenOutInfo ? scaleTokenAmount(amount, tokenOutInfo) : 0n,
       },
     }
 
@@ -378,6 +386,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   function replaceUrlPath() {
     if (isPoolSwapUrl) return // Avoid redirection when the swap is within a pool page
     const { selectedChain, tokenIn, tokenOut, swapType } = swapState
+    const networkConfig = getNetworkConfig(selectedChain)
     const { popularTokens } = networkConfig.tokens
     const chainSlug = chainToSlugMap[selectedChain]
     const newPath = ['/swap']
@@ -398,9 +407,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     window.history.replaceState({}, '', newPath.join(''))
   }
 
-  function scaleTokenAmount(amount: string, token: ApiToken | undefined): bigint {
+  function scaleTokenAmount(amount: string, token: ApiToken): bigint {
     if (amount === '') return parseUnits('0', 18)
-    if (!token) throw new Error('Cant scale amount without token metadata')
     return parseUnits(amount, token.decimals)
   }
 
@@ -413,6 +421,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     }
   }
 
+  const networkConfig = getNetworkConfig(selectedChain)
   const wethIsEth =
     isSameAddress(swapState.tokenIn.address, networkConfig.tokens.nativeAsset.address) ||
     isSameAddress(swapState.tokenOut.address, networkConfig.tokens.nativeAsset.address)
@@ -460,7 +469,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const hasQuoteContext = !!simulationQuery.data
 
   function setInitialTokenIn(slugTokenIn?: string) {
-    const { popularTokens } = networkConfig.tokens
+    const { popularTokens } = getInitialNetworkConfig().tokens
     const symbolToAddressMap = invert(popularTokens || {}) as Record<string, Address>
     if (slugTokenIn) {
       if (isAddress(slugTokenIn)) {
@@ -472,7 +481,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   }
 
   function setInitialTokenOut(slugTokenOut?: string) {
-    const { popularTokens } = networkConfig.tokens
+    const { popularTokens } = getInitialNetworkConfig().tokens
     const symbolToAddressMap = invert(popularTokens || {}) as Record<string, Address>
     if (slugTokenOut) {
       if (isAddress(slugTokenOut)) setTokenOut(slugTokenOut as Address)
@@ -519,6 +528,12 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       setInitialTokenOut(poolActionableTokens?.[1]?.address)
     }
     resetSwapAmounts()
+  }
+
+  // Returns networkConfig to be used in the initial load
+  function getInitialNetworkConfig() {
+    const swapState = swapStateVar()
+    return getNetworkConfig(swapState.selectedChain)
   }
 
   // Set state on initial load
