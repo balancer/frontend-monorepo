@@ -9,7 +9,7 @@ import {
   getPoolActionableTokens,
   getStandardRootTokens,
   isStandardOrUnderlyingRootToken,
-} from './pool.helpers'
+} from './pool-tokens.utils'
 
 describe('getPoolActionableTokens', () => {
   it('when nested pool supports nested actions (default behavior)', () => {

@@ -50,11 +50,8 @@ import {
   isWrapOrUnwrap,
 } from './wrap.helpers'
 import { Pool } from '../pool/pool.types'
-import {
-  getChildTokens,
-  getStandardRootTokens,
-  isStandardOrUnderlyingRootToken,
-} from '../pool/pool.helpers'
+import { getStandardRootTokens, isStandardOrUnderlyingRootToken } from '../pool/pool-tokens.utils'
+import { getChildTokens } from '../pool/pool-tokens.utils'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { ProtocolVersion } from '../pool/pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'

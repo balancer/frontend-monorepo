@@ -2,7 +2,7 @@
 
 import { Box } from '@chakra-ui/react'
 import { PoolActionsLayout } from '@repo/lib/modules/pool/actions/PoolActionsLayout'
-import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool.helpers'
+import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { usePoolRedirect } from '@repo/lib/modules/pool/pool.hooks'
 import { chainToSlugMap } from '@repo/lib/modules/pool/pool.utils'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
