@@ -87,7 +87,7 @@ function handleNonFatalError(event: Sentry.ErrorEvent): Sentry.ErrorEvent | null
   if (firstValue && shouldIgnoreException(firstValue)) return null
   event.level = 'error'
 
-  return addTags(event)
+  return customizeEvent(event)
 }
 
 function handleFatalError(
@@ -109,7 +109,7 @@ function handleFatalError(
     event.exception.values[0] = firstValue
   }
 
-  return addTags(event)
+  return customizeEvent(event)
 }
 
 function uppercaseSegment(path: string): string {
@@ -133,6 +133,11 @@ function getFirstExceptionValue(event: Sentry.ErrorEvent) {
   }
 }
 
+function customizeEvent(event: Sentry.ErrorEvent) {
+  return addFingerPrint(addTags(event))
+}
+
+// Add tags to better filter errors in sentry dashboards
 function addTags(event: Sentry.ErrorEvent) {
   const errorMessage = getFirstExceptionValue(event)?.value || ''
 
@@ -143,6 +148,33 @@ function addTags(event: Sentry.ErrorEvent) {
   */
   if (errorMessage.includes('provider.disconnect is not a function')) {
     event.tags = { ...event.tags, error_category: 'known_issue', error_type: 'provider_disconnect' }
+  }
+
+  return event
+}
+
+/*
+  Add custom fingerprints to group errors that have the same root cause that we couldn't fix yet.
+*/
+function addFingerPrint(event: Sentry.ErrorEvent) {
+  const errorMessage = getFirstExceptionValue(event)?.value || ''
+
+  /*
+    Some users have this error related with WalletConnect
+  */
+  if (errorMessage.includes(`Failed to execute 'transaction' on 'IDBDatabase'`)) {
+    event.fingerprint = ['IDBDatabaseError']
+  }
+
+  /*
+    Wagmi wallet related error
+  */
+  if (
+    errorMessage.includes(
+      `Cause: TypeError: Cannot read properties of undefined (reading 'address')`
+    )
+  ) {
+    event.fingerprint = ['UndefinedReadingAddress']
   }
 
   return event
