@@ -18,8 +18,8 @@ import { ExpandedPoolInfo, ExpandedPoolType, useExpandedPools } from './useExpan
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
-import { getProjectConfig, isBalancerProject } from '@repo/lib/config/getProjectConfig'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -27,15 +27,15 @@ export interface PortfolioSortingData {
   desc: boolean
 }
 
-export const portfolioOrderBy: {
+export const portfolioOrderByFn: (addExtraColumn: boolean) => {
   title: string
   id: PortfolioTableSortingId
-}[] = [
+}[] = (addExtraColumn: boolean) => [
   {
     title: 'Staking',
     id: 'staking',
   },
-  ...(isBalancerProject
+  ...(addExtraColumn
     ? [
         {
           title: 'veBAL boost',
@@ -53,14 +53,12 @@ export const portfolioOrderBy: {
   },
 ]
 
-const rowProps = {
+const rowProps = (addExtraColumn: boolean) => ({
   px: [0, 4],
-  gridTemplateColumns: `32px minmax(320px, 1fr) 180px 110px 110px ${
-    isBalancerProject ? '130px' : ''
-  } 170px`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) 180px 110px 110px ${addExtraColumn ? '130px' : ''} 170px`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
-}
+})
 
 const generateStakingWeightForSort = (pool: ExpandedPoolInfo) => {
   const canStake = getCanStake(pool)
@@ -84,6 +82,7 @@ export function PortfolioTable() {
   const [shouldFilterTinyBalances, setShouldFilterTinyBalances] = useState(true)
   const { portfolioData, isLoadingPortfolio } = usePortfolio()
   const { isConnected } = useUserAccount()
+  const { projectName, options } = PROJECT_CONFIG
 
   // Filter out pools with tiny balances (<0.01 USD)
   const minUsdBalance = 0.01
@@ -159,7 +158,7 @@ export function PortfolioTable() {
     <FadeInOnView>
       <Stack gap={5}>
         <HStack>
-          <Heading size="lg">{`${getProjectConfig().projectName} portfolio`}</Heading>
+          <Heading size="lg">{`${projectName} portfolio`}</Heading>
         </HStack>
         {isConnected ? (
           <Card
@@ -184,7 +183,7 @@ export function PortfolioTable() {
                 <PortfolioTableHeader
                   currentSortingObj={currentSortingObj}
                   setCurrentSortingObj={setCurrentSortingObj}
-                  {...rowProps}
+                  {...rowProps(options.showVeBal)}
                 />
               )}
               renderTableRow={(item: ExpandedPoolInfo, index) => {
@@ -193,7 +192,7 @@ export function PortfolioTable() {
                     keyValue={index}
                     pool={item}
                     veBalBoostMap={veBalBoostMap}
-                    {...rowProps}
+                    {...rowProps(options.showVeBal)}
                   />
                 )
               }}

@@ -1,4 +1,4 @@
-import { Stack, Button, VStack, useDisclosure, HStack, Tooltip } from '@chakra-ui/react'
+import { Stack, Button, VStack, useDisclosure, HStack, Tooltip, Text } from '@chakra-ui/react'
 import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 
@@ -19,6 +19,7 @@ import {
 import { useState } from 'react'
 import { getXavePoolLink } from '../../pool.utils'
 import { PoolAdvancedOptions } from './PoolAdvancedOptions'
+import { usePoolMetadata } from '../../metadata/usePoolMetadata'
 
 export function PoolHeader() {
   const pathname = usePathname()
@@ -28,6 +29,7 @@ export function PoolHeader() {
   const [redirectPartnerUrl, setRedirectPartnerUrl] = useState<string>()
   const partnerRedirectDisclosure = useDisclosure()
   const isCowPool = isCowAmmPool(pool.type)
+  const { description } = usePoolMetadata(pool)
 
   const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool)
 
@@ -54,12 +56,22 @@ export function PoolHeader() {
     <VStack align="start" spacing="md" w="full">
       <PoolBreadcrumbs />
       <Stack
-        direction={{ base: 'column', md: 'row' }}
+        align={{ base: 'start', lg: 'end' }}
+        direction={{ base: 'column', lg: 'row' }}
         justify="space-between"
+        mt="xs"
         spacing="md"
         w="full"
       >
-        <PoolMetaBadges />
+        <VStack align="start" spacing="md">
+          <PoolMetaBadges />
+          {description && (
+            <Text fontSize="sm" maxW="xl" mb="xxs" sx={{ textWrap: 'pretty' }} variant="secondary">
+              {description}
+            </Text>
+          )}
+        </VStack>
+
         <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
           <PoolTags />
           <HStack spacing="sm">

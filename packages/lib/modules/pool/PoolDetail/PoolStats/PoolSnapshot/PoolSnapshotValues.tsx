@@ -80,6 +80,7 @@ export function PoolSnapshotValues() {
         </Text>
         <MemoizedMainAprTooltip
           aprItems={pool.dynamicData.aprItems}
+          chain={pool.chain}
           height="28px"
           pool={pool}
           poolId={pool.id}

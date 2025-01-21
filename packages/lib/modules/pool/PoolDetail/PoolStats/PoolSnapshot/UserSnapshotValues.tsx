@@ -134,6 +134,7 @@ export function UserSnapshotValues() {
         {poolMyStatsValues && poolMyStatsValues.myLiquidity ? (
           <MemoizedMainAprTooltip
             aprItems={pool.dynamicData.aprItems}
+            chain={pool.chain}
             pool={pool}
             poolId={pool.id}
             textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}

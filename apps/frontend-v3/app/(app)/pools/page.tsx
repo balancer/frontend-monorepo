@@ -4,15 +4,13 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { Box, Skeleton } from '@chakra-ui/react'
 import { Suspense } from 'react'
 // import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
-// import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 // import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 // import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
 import { BoostedPoolsPromoBanner } from '@repo/lib/shared/components/promos/BoostedPoolsPromoBanner'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export default async function PoolsPage() {
   // Featured pools set up
-  // const { supportedNetworks } = getProjectConfig()
+  // const { supportedNetworks } = useProjectConfig()
 
   // const featuredPoolsQuery = await getApolloServerClient().query({
   //   query: GetFeaturedPoolsDocument,
@@ -45,7 +43,7 @@ export default async function PoolsPage() {
       <DefaultPageContainer noVerticalPadding pb={['xl', '2xl']} pt={['lg', '54px']}>
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
-            <PoolList hidePoolTypes={[GqlPoolType.CowAmm]} />
+            <PoolList />
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
