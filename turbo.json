@@ -65,11 +65,11 @@
     },
     "test:integration": {
       "dependsOn": ["^graphql:gen", "^test:integration"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "inputs": ["$TURBO_DEFAULT$"]
     },
     "test:e2e": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "inputs": ["$TURBO_DEFAULT$"]
     },
     "test:e2e:ui": {
       "dependsOn": ["^transit"]
