@@ -22,7 +22,7 @@
     "test:e2e:ui": "turbo test:e2e:ui --ui=stream --log-order=stream --",
     "test:integration": "turbo test:integration --ui=stream --log-order=stream --",
     "test:integration:watch": "turbo test:integration:watch --ui=stream --log-order=stream --",
-    "test:unit": "turbo test:unit --ui=stream --log-order=stream --",
+    "test:unit": "turbo test:unit --summarize --ui=stream --log-order=stream --",
     "test:unit:watch": "turbo test:unit:watch --ui=stream --log-order=stream --",
     "typecheck": "turbo typecheck",
     "prepare": "husky"

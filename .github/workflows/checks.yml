@@ -61,6 +61,12 @@ jobs:
         #   cache: false # Disable cache after foundry-toolchain upgrade
       - name: Run integration tests
         run: pnpm test:integration
+      - uses: actions/upload-artifact@v4
+        with:
+          name: turbo-summary
+          path: |
+            ./.turbo/runs/
+          retention-days: 30
 
   E2E-Test:
       timeout-minutes: 60
