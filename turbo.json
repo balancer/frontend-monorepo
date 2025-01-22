@@ -20,10 +20,9 @@
     "NEXT_RUNTIME",
     "VERCEL_GIT_COMMIT_REF",
     "TURBO_TOKEN",
-    "TURBO_TEAM",
-    "NEXT_PUBLIC_WALLET_CONNECT_ID"
+    "TURBO_TEAM"
   ],
-  "globalEnv": [],
+  "globalEnv": ["NEXT_PUBLIC_WALLET_CONNECT_ID"],
   "tasks": {
     "dev": {
       "cache": false,
