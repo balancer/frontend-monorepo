@@ -57,7 +57,7 @@
       "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"]
     },
     "typecheck": {
-      "dependsOn": ["^graphql:gen", "^transit"],
+      "dependsOn": ["^transit"],
       "inputs": ["shared/services/api/generated/**"],
       "outputs": ["node_modules/.cache/tsbuildinfo.json"]
     },
