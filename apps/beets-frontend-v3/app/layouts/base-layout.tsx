@@ -1,10 +1,9 @@
+import { BeetsLogoType } from '@/lib/components/imgs/BeetsLogoType'
+import { LzBeetsMigrateModal } from '@/lib/components/modals/LzBeetsMigrateModal'
+import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
+import { Footer } from '@repo/lib/shared/components/navs/Footer'
 import NextTopLoader from 'nextjs-toploader'
 import { PropsWithChildren } from 'react'
-import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
-import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
-import { LzBeetsMigrateModal } from '@/lib/components/modals/LzBeetsMigrateModal'
-import { BeetsLogoType } from '@/lib/components/imgs/BeetsLogoType'
-import { Footer } from '@repo/lib/shared/components/navs/Footer'
 
 export function BaseLayout({
   children,
@@ -18,7 +17,6 @@ export function BaseLayout({
       }}
     >
       <NextTopLoader color="#7f6ae8" showSpinner={false} />
-      <GlobalAlerts />
       <NavBarContainer />
       {children}
       {renderLzBeetsModal && <LzBeetsMigrateModal />}
