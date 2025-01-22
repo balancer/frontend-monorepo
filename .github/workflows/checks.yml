@@ -52,7 +52,7 @@ jobs:
         with:
           name: turbo-summary
           path: |
-            ./packages/e2e-tests/playwright-report/
+            ./.turbo/runs/
           retention-days: 30
 
   Integration-Test:
