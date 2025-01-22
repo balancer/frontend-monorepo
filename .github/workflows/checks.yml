@@ -48,6 +48,12 @@ jobs:
         run: pnpm typecheck
       - name: Run unit tests
         run: pnpm test:unit
+      - uses: actions/upload-artifact@v4
+        with:
+          name: turbo-summary
+          path: |
+            ./packages/e2e-tests/playwright-report/
+          retention-days: 30
 
   Integration-Test:
     runs-on: macos-14
@@ -61,12 +67,7 @@ jobs:
         #   cache: false # Disable cache after foundry-toolchain upgrade
       - name: Run integration tests
         run: pnpm test:integration
-      - uses: actions/upload-artifact@v4
-        with:
-          name: turbo-summary
-          path: |
-            ./.turbo/runs/
-          retention-days: 30
+
 
   E2E-Test:
       timeout-minutes: 60
