@@ -6,7 +6,7 @@ import { TransactionStateProvider } from '@repo/lib/modules/transactions/transac
 import { StakeProvider } from '@repo/lib/modules/pool/actions/stake/StakeProvider'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 
-export default function StakePage() {
+export function StakePage() {
   return (
     <DefaultPageContainer>
       <TransactionStateProvider>
