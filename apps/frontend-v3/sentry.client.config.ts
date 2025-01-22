@@ -177,5 +177,45 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['UndefinedReadingAddress']
   }
 
+  /*
+    Disconnection error that usually happens with MetaMask.
+    Context: https://github.com/balancer/frontend-monorepo/issues/61
+  */
+  if (errorMessage.includes(`Cannot read properties of undefined (reading 'listenerCount')`)) {
+    event.fingerprint = ['UndefinedListenerCount']
+  }
+
+  /*
+    Connectivity error in Apollo query from default swaps
+    Context: https://github.com/balancer/frontend-monorepo/pull/480
+  */
+  if (errorMessage.includes('Apollo network error in DefaultSwapHandler')) {
+    event.fingerprint = ['SwapApolloNetworkError']
+  }
+
+  /*
+    Wallet connect + Metamask error
+    Context: https://github.com/MetaMask/metamask-mobile/issues/11288
+  */
+  if (errorMessage.includes('Missing or invalid. Record was recently deleted')) {
+    event.fingerprint = ['WCRecordDeleted']
+  }
+
+  /*
+    Withdrawal error in Element protocol
+    Context: https://blog.delv.tech/withdrawing-funds-from-the-element-protocol-a-step-by-step-guide-using-etherscan/
+  */
+  if (errorMessage.includes('Unsupported pool type ELEMENT')) {
+    event.fingerprint = ['UnsupportedPoolTypeElement']
+  }
+
+  /*
+    When the Wagmi Config is out-of-sync with the connector's active chain ID. This is rare and likely an upstream wallet issue.
+    Context: https://wagmi.sh/react/api/errors#connectorchainmismatcherror
+  */
+  if (errorMessage.includes('ConnectorChainMismatchError')) {
+    event.fingerprint = ['ConnectorChainMismatchError']
+  }
+
   return event
 }
