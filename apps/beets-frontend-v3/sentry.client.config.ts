@@ -7,6 +7,8 @@ import { sentryDSN } from './sentry.config'
 import { isProd } from '@repo/lib/config/app.config'
 import { shouldIgnoreException } from '@repo/lib/shared/utils/query-errors'
 
+console.log({ isProd })
+
 Sentry.init({
   // Change this value only if you need to debug in development (we have a custom developmentSentryDSN for that)
   enabled: isProd,

@@ -36,7 +36,8 @@ const nextConfig = {
   },
 }
 
-module.exports = withSentryConfig(nextConfig, sentryOptions)
+// module.exports = isProd ? withSentryConfig(nextConfig, sentryOptions) : nextConfig
+module.exports = nextConfig
 
 /**
  * Add specific CORS headers to the manifest.json file

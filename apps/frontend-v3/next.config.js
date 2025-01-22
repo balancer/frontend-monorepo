@@ -27,7 +27,7 @@ const nextConfig = {
   headers: manifestHeaders,
 }
 
-module.exports = withSentryConfig(nextConfig, sentryOptions)
+module.exports = nextConfig
 
 /**
  * Add specific CORS headers to the manifest.json file
