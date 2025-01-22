@@ -1,11 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalPassThroughEnv": [
+  "globalPassThroughEnv": ["NEXT_PRIVATE_ALCHEMY_KEY", "CI"],
+  "globalEnv": [
     "NEXT_PUBLIC_APP_ENV",
-    "NEXT_PRIVATE_ALCHEMY_KEY",
     "NEXT_PUBLIC_UPDATE_API_MOCKS",
-    "CI",
     "SENTRY_AUTH_TOKEN",
     "NEXT_PUBLIC_PROJECT_ID",
     "PRIVATE_HYPERNATIVE_API_ID",
@@ -16,9 +15,7 @@
     "SILENT_TESTS",
     "NEXT_PUBLIC_SENTRY_DSN",
     "NEXT_RUNTIME",
-    "VERCEL_GIT_COMMIT_REF"
-  ],
-  "globalEnv": [
+    "VERCEL_GIT_COMMIT_REF",
     "NEXT_PUBLIC_BALANCER_API_URL",
     "NEXT_PUBLIC_WALLET_CONNECT_ID",
     "NEXT_PRIVATE_DRPC_KEY"
