@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize]
 
 env:
-#   NEXT_PUBLIC_BALANCER_API_URL: https://api-v3.balancer.fi/graphql
+    NEXT_PUBLIC_BALANCER_API_URL: https://api-v3.balancer.fi/graphql
     NEXT_PUBLIC_WALLET_CONNECT_ID: 1b6b722470b504a53cf011e1e629a9eb
 #   NEXT_PRIVATE_ALCHEMY_KEY: ${{ secrets.PRIVATE_ALCHEMY_KEY }}
 #   NEXT_PRIVATE_DRPC_KEY: ${{ secrets.PRIVATE_DRPC_KEY }}
