@@ -1,8 +1,8 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "ui": "stream",
-  "globalEnv": ["NEXT_PUBLIC_BALANCER_API_URL"],
-  "globalPassThroughEnv": [
+  "ui": "tui",
+  "globalEnv": [
+    "NEXT_PUBLIC_BALANCER_API_URL",
     "NEXT_PUBLIC_APP_ENV",
     "NEXT_PUBLIC_PROJECT_ID",
     "NEXT_PRIVATE_DRPC_KEY",
@@ -18,8 +18,10 @@
     "NEXT_PRIVATE_ALCHEMY_KEY",
     "CI",
     "NEXT_PUBLIC_UPDATE_API_MOCKS",
-    "VERCEL_GIT_COMMIT_REF"
+    "VERCEL_GIT_COMMIT_REF",
+    "SENTRY_AUTH_TOKEN"
   ],
+  "globalPassThroughEnv": [],
   "tasks": {
     "dev": {
       "cache": false,
@@ -59,7 +61,7 @@
       "outputs": ["node_modules/.cache/tsbuildinfo.json"]
     },
     "test:unit": {
-      "dependsOn": ["^test:unit"]
+      "dependsOn": ["^graphql:gen", "^test:unit"]
     },
     "test:unit:watch": {
       "cache": false,
