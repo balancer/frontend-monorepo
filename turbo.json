@@ -1,19 +1,23 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalPassThroughEnv": ["NEXT_PRIVATE_ALCHEMY_KEY", "CI", "NODE_ENV"],
-  "globalEnv": [
+  "globalPassThroughEnv": [
+    "NEXT_PRIVATE_ALCHEMY_KEY",
+    "CI",
+    "NODE_ENV",
+    "NEXT_RUNTIME",
     "NEXT_PUBLIC_APP_ENV",
     "NEXT_PUBLIC_UPDATE_API_MOCKS",
     "SENTRY_AUTH_TOKEN",
     "NEXT_PUBLIC_PROJECT_ID",
+    "VITEST_POOL_ID",
+    "SILENT_TESTS",
+    "NEXT_PUBLIC_SENTRY_DSN"
+  ],
+  "globalEnv": [
     "PRIVATE_HYPERNATIVE_API_ID",
     "PRIVATE_HYPERNATIVE_API_SECRET",
     "PRIVATE_CURRENCYAPI_KEY",
-    "VITEST_POOL_ID",
-    "SILENT_TESTS",
-    "NEXT_PUBLIC_SENTRY_DSN",
-    "NEXT_RUNTIME",
     "VERCEL_GIT_COMMIT_REF",
     "NEXT_PUBLIC_BALANCER_API_URL",
     "NEXT_PUBLIC_WALLET_CONNECT_ID",
