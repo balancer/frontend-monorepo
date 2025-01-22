@@ -4,7 +4,6 @@
   "globalPassThroughEnv": [
     "NEXT_PUBLIC_APP_ENV",
     "NEXT_PUBLIC_BALANCER_API_URL",
-    "NEXT_PUBLIC_WALLET_CONNECT_ID",
     "NEXT_PRIVATE_ALCHEMY_KEY",
     "NEXT_PUBLIC_UPDATE_API_MOCKS",
     "CI",
@@ -23,7 +22,7 @@
     "TURBO_TOKEN",
     "TURBO_TEAM"
   ],
-  "globalEnv": [],
+  "globalEnv": ["NEXT_PUBLIC_WALLET_CONNECT_ID"],
   "tasks": {
     "dev": {
       "cache": false,
