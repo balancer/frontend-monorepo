@@ -2,7 +2,7 @@
   "name": "@balancer/frontend-monorepo",
   "private": true,
   "scripts": {
-    "build": "turbo build --summarize",
+    "build": "NEXT_PUBLIC_WALLET_CONNECT_ID=1b6b722470b504a53cf011e1e629a9eb turbo build --summarize",
     "start": "turbo start",
     "dev": "pnpm run dev:bal",
     "dev:bal": "turbo dev --filter frontend-v3",
