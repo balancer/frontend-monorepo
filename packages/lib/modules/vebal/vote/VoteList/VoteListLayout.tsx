@@ -13,6 +13,10 @@ import {
   VoteListFilters,
 } from '@repo/lib/modules/vebal/vote/VoteList/VoteListFilters'
 import { poolTypeLabel } from '@repo/lib/modules/pool/PoolList/usePoolListQueryState'
+import { SelectedPoolsMenu } from '@repo/lib/modules/vebal/vote/VoteList/SelectedPoolsMenu'
+import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
+import { StaticToast } from '@repo/lib/shared/components/toasts/StaticToast'
+import { useMemo } from 'react'
 
 export function VoteListLayout() {
   const {
@@ -28,6 +32,7 @@ export function VoteListLayout() {
       toggleIncludeExpiredPools,
     },
   } = useVoteList()
+  const { selectedVotingPools, scrollToMyVotes } = useVotes()
   const isFilterVisible = useFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
 
@@ -39,6 +44,26 @@ export function VoteListLayout() {
       transform: 'translateY(0)',
     },
   }
+
+  const SelectedPoolsMenuRender = useMemo(() => {
+    return function SelectedPoolsRender() {
+      return (
+        <SelectedPoolsMenu
+          onAddVotesClick={scrollToMyVotes}
+          votingPools={selectedVotingPools.map(selectedVotingPool => ({
+            title: selectedVotingPool.tokens
+              .map(token => `${token.symbol} ${token.weight ?? 0}%`)
+              .join(' / '),
+            // fix: (votes) pool name is not available here...
+            description: selectedVotingPool.tokens
+              .map(token => `${token.symbol}-${token.weight ?? 0}`)
+              .join('-'),
+          }))}
+        />
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedVotingPools])
 
   return (
     <VStack align="start" minHeight="1000px" spacing="md" w="full">
@@ -95,6 +120,7 @@ export function VoteListLayout() {
       <ErrorBoundary FallbackComponent={BoundaryError}>
         <VoteListTable count={count || 0} loading={loading} voteList={sortedVoteList} />
       </ErrorBoundary>
+      <StaticToast isOpen={selectedVotingPools.length > 0}>{SelectedPoolsMenuRender}</StaticToast>
     </VStack>
   )
 }

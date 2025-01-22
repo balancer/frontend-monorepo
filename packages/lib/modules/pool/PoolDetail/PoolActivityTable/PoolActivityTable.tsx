@@ -7,7 +7,6 @@ import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPa
 import { Box, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
-import { PoolActivityEl } from '../PoolActivity/poolActivity.types'
 import { Pagination } from '@repo/lib/shared/components/pagination/Pagination'
 
 export function PoolActivityTable() {
@@ -43,7 +42,7 @@ export function PoolActivityTable() {
             paginationProps={paginationProps}
             position="relative"
             renderTableHeader={() => <PoolActivityTableHeader {...rowProps} />}
-            renderTableRow={(item: PoolActivityEl, index) => {
+            renderTableRow={({ item, index }) => {
               return <PoolActivityTableRow event={item} keyValue={index} {...rowProps} />
             }}
             showPagination={false}
