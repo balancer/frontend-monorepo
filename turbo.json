@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalPassThroughEnv": ["NEXT_PRIVATE_ALCHEMY_KEY", "CI"],
+  "globalPassThroughEnv": ["NEXT_PRIVATE_ALCHEMY_KEY", "CI", "NODE_ENV"],
   "globalEnv": [
     "NEXT_PUBLIC_APP_ENV",
     "NEXT_PUBLIC_UPDATE_API_MOCKS",
@@ -11,7 +11,6 @@
     "PRIVATE_HYPERNATIVE_API_SECRET",
     "PRIVATE_CURRENCYAPI_KEY",
     "VITEST_POOL_ID",
-    "NODE_ENV",
     "SILENT_TESTS",
     "NEXT_PUBLIC_SENTRY_DSN",
     "NEXT_RUNTIME",
