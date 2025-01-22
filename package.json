@@ -2,7 +2,7 @@
   "name": "@balancer/frontend-monorepo",
   "private": true,
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo build --summarize",
     "start": "turbo start",
     "dev": "pnpm run dev:bal",
     "dev:bal": "turbo dev --filter frontend-v3",
