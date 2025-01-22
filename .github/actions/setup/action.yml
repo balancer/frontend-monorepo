@@ -19,6 +19,6 @@ runs:
       shell: bash
       run: pnpm i --frozen-lockfile
 
-    - name: Generate api typings
-      shell: bash
-      run: pnpm graphql:gen
+    # - name: Generate api typings
+    #   shell: bash
+    #   run: pnpm graphql:gen
