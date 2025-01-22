@@ -11,8 +11,10 @@
     "stylelint": "stylelint '**/*.css'",
     "stylelint:fix": "stylelint '**/*.css' --fix",
     "test": "pnpm test:unit & pnpm run test:integration",
-    "test:integration": "vitest -c ./vitest.config.integration.ts",
-    "test:unit": "vitest",
+    "test:integration": "vitest run -c ./vitest.config.integration.ts",
+    "test:integration:watch": "vitest -c ./vitest.config.integration.ts",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
     "test:unit:coverage": "vitest --coverage",
     "test:unit:silent:coverage": "SILENT_TESTS=true vitest --coverage",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
