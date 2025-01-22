@@ -2,7 +2,7 @@
   "name": "@balancer/frontend-monorepo",
   "private": true,
   "scripts": {
-    "build": "turbo build --summarize",
+    "build": "turbo build",
     "start": "turbo start",
     "dev": "pnpm run dev:bal",
     "dev:bal": "turbo dev --filter frontend-v3",
@@ -22,7 +22,7 @@
     "test:e2e:ui": "turbo test:e2e:ui --ui=stream --log-order=stream --",
     "test:integration": "turbo test:integration --ui=stream --log-order=stream --",
     "test:integration:watch": "turbo test:integration:watch --ui=stream --log-order=stream --",
-    "test:unit": "turbo test:unit --summarize --ui=stream --log-order=stream --",
+    "test:unit": "turbo test:unit --ui=stream --log-order=stream --",
     "test:unit:watch": "turbo test:unit:watch --ui=stream --log-order=stream --",
     "typecheck": "turbo typecheck",
     "prepare": "husky"

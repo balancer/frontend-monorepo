@@ -90,8 +90,4 @@ describe('pool helper', async () => {
   it('getActionableTokenSymbol ', async () => {
     expect(getActionableTokenSymbol(wethAddress, pool)).toEqual('WETH')
   })
-
-  it('debug test to trigger turbo cache ', async () => {
-    expect(8).toEqual(8)
-  })
 })

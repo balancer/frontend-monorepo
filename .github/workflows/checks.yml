@@ -68,7 +68,6 @@ jobs:
       - name: Run integration tests
         run: pnpm test:integration
 
-
   E2E-Test:
       timeout-minutes: 60
       runs-on: ubuntu-latest
