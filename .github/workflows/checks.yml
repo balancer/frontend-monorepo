@@ -24,3 +24,9 @@ jobs:
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: pnpm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unit-turbo-summary
+          path: |
+            ./.turbo/runs/
+          retention-days: 30
