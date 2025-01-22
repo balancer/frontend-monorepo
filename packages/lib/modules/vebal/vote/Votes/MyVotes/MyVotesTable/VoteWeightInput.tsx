@@ -6,9 +6,10 @@ import {
   useBoolean,
   VStack,
 } from '@chakra-ui/react'
-import { blockInvalidNumberInput, bn, clamp } from '@repo/lib/shared/utils/numbers'
+import { blockInvalidNumberInput, bn } from '@repo/lib/shared/utils/numbers'
 import { Percent } from 'react-feather'
 import { useState } from 'react'
+import { clamp } from 'lodash'
 
 interface PercentageInputProps extends InputProps {
   percentage: string
