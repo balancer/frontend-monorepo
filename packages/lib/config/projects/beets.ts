@@ -20,7 +20,7 @@ export const ProjectConfigBeets: ProjectConfig = {
     poolDisplayType: PoolDisplayType.Name,
     hidePoolTags: ['VE8020'],
     hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
-    hideProtocolVersion: ['cow', 'v3'],
+    hideProtocolVersion: ['cow'],
     showPoolName: true,
     showVeBal: false,
     showMaBeets: true,
