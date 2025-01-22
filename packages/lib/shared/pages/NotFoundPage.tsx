@@ -12,8 +12,6 @@ export async function NotFoundPage() {
   const maybePoolId = referer?.split('/')[poolIdSegment]
   const isPoolPageNotFound = maybePoolId?.startsWith('0x')
 
-  console.log({ referer, maybePoolId, isPoolPageNotFound })
-
   const title = isPoolPageNotFound ? 'Pool Not Found' : 'Page Not Found'
   const description = isPoolPageNotFound
     ? `The pool you are looking for does not exist: ${maybePoolId}`
