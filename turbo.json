@@ -8,11 +8,9 @@
     "NEXT_PRIVATE_ALCHEMY_KEY",
     "NEXT_PUBLIC_UPDATE_API_MOCKS",
     "CI",
-    "SENTRY_AUTH_TOKEN"
-  ],
-  "globalEnv": [
-    "NEXT_PUBLIC_PROJECT_ID",
+    "SENTRY_AUTH_TOKEN",
     "NEXT_PRIVATE_DRPC_KEY",
+    "NEXT_PUBLIC_PROJECT_ID",
     "PRIVATE_HYPERNATIVE_API_ID",
     "PRIVATE_HYPERNATIVE_API_SECRET",
     "PRIVATE_CURRENCYAPI_KEY",
@@ -23,6 +21,7 @@
     "NEXT_RUNTIME",
     "VERCEL_GIT_COMMIT_REF"
   ],
+  "globalEnv": [],
   "tasks": {
     "dev": {
       "cache": false,
