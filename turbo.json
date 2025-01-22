@@ -3,7 +3,6 @@
   "ui": "tui",
   "globalPassThroughEnv": [
     "NEXT_PUBLIC_APP_ENV",
-    "NEXT_PUBLIC_BALANCER_API_URL",
     "NEXT_PRIVATE_ALCHEMY_KEY",
     "NEXT_PUBLIC_UPDATE_API_MOCKS",
     "CI",
