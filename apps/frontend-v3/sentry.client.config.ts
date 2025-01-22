@@ -238,5 +238,17 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['BAL401']
   }
 
+  /*
+    Could not reproduce yet.
+    BAL#509 CANNOT_SWAP_SAME_TOKEN
+  */
+  if (errorMessage.includes('Execution reverted with reason: BAL#509.')) {
+    event.fingerprint = ['BAL509']
+  }
+
+  if (errorMessage.includes('transfer amount exceeds balance')) {
+    event.fingerprint = ['TransferAmountExceedsBalance']
+  }
+
   return event
 }
