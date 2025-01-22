@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "next start",
-    "build": "pnpm --filter @repo/lib graphql:gen && next build",
+    "build": "next build",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev\"",
     "dev:turbopack": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev --turbo\"",
     "dev:no-gen": "next dev --turbo",
