@@ -74,14 +74,9 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
     const unstakeAmountAssets = (unstakeAmountShares * rate) / 10n ** 18n
 
     // choose the validator with the most amount delegated
-    const validator = amountDelegatedPerValidator.reduce(
-      (max, current) =>
-        unstakeAmountAssets < current.amountDelegated &&
-        current.amountDelegated > max.amountDelegated
-          ? current
-          : max,
-      amountDelegatedPerValidator[0]
-    )
+    const validator = amountDelegatedPerValidator
+      .filter(validator => unstakeAmountAssets < validator.amountDelegated)
+      .sort((a, b) => (b.amountDelegated > a.amountDelegated ? 1 : -1))[0]
 
     // TODO: we should split the unstake amount across several validators down the line
     return [
