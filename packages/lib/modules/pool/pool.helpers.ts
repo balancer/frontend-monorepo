@@ -281,6 +281,10 @@ export function hasHooks(pool: Pool): boolean {
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
 }
 
+export function hasReviewedErc4626(token: GqlPoolTokenDetail): boolean {
+  return token.isErc4626 && !!token.erc4626ReviewData
+}
+
 // Emergency flag to block adds for all V3 pools
 const shouldBlockV3PoolAdds = false
 
@@ -320,12 +324,13 @@ export function shouldBlockAddLiquidity(pool: Pool) {
     // if rateProvider is the nested pool address - we consider it as safe
     if (token.priceRateProvider === token.nestedPool?.address) return false
 
-    // if price rate provider is set but is not reviewed - we should block adding liquidity
-    if (!hasReviewedRateProvider(token)) {
+    // if price rate provider is set but is not reviewed or summary is not safe - we should block adding liquidity
+    if (!hasReviewedRateProvider(token) || token.priceRateProviderData?.summary !== 'safe') {
       return true
     }
 
-    if (token.priceRateProviderData?.summary !== 'safe') {
+    // if ERC4626 is not reviewed or summary is not safe - we should block adding liquidity
+    if (!hasReviewedErc4626(token) || token.erc4626ReviewData?.summary !== 'safe') {
       return true
     }
 
