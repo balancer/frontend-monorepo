@@ -216,6 +216,27 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
   if (errorMessage.includes('ConnectorChainMismatchError')) {
     event.fingerprint = ['ConnectorChainMismatchError']
   }
+  /*
+    Context: https://wagmi.sh/core/api/errors#connectoralreadyconnectederror
+  */
+  if (errorMessage.includes('ConnectorAlreadyConnectedError')) {
+    event.fingerprint = ['ConnectorAlreadyConnectedError']
+  }
+
+  /*
+    Context: https://wagmi.sh/react/api/errors#connectorchainmismatcherror
+  */
+  if (errorMessage.includes('TransactionNotFoundError: Transaction with hash')) {
+    event.fingerprint = ['TransactionNotFoundError']
+  }
+
+  /*
+    Could not reproduce yet.
+    BAL#401 SENDER_NOT_ALLOWED
+  */
+  if (errorMessage.includes('Execution reverted with reason: BAL#401.')) {
+    event.fingerprint = ['BAL401']
+  }
 
   return event
 }
