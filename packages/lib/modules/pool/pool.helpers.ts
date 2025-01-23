@@ -310,9 +310,6 @@ export function shouldBlockAddLiquidity(pool: Pool) {
     return true
   }
 
-  // when hasAnyAllowedBuffer is false any erc4626 tokens in the pool don't have to be checked for reviews
-  if (!pool.hasAnyAllowedBuffer) return false
-
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
 
   return poolTokens.some(token => {
@@ -332,6 +329,8 @@ export function shouldBlockAddLiquidity(pool: Pool) {
       return true
     }
 
+    // when hasAnyAllowedBuffer is false any erc4626 tokens in the pool don't have to be checked for reviews
+    if (!pool.hasAnyAllowedBuffer) return false
     // only for v3 pools, if ERC4626 is not reviewed or summary is not safe - we should block adding liquidity
     if (
       isV3Pool(pool) &&

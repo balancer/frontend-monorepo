@@ -10,6 +10,8 @@ import {
   getStandardRootTokens,
   isStandardOrUnderlyingRootToken,
 } from './pool-tokens.utils'
+import { sDAIWeighted } from './__mocks__/pool-examples/flat'
+import { getPoolAddBlockedReason, shouldBlockAddLiquidity } from './pool.helpers'
 
 describe('getPoolActionableTokens', () => {
   it('when nested pool supports nested actions (default behavior)', () => {
@@ -89,5 +91,20 @@ describe('pool helper', async () => {
 
   it('getActionableTokenSymbol ', async () => {
     expect(getActionableTokenSymbol(wethAddress, pool)).toEqual('WETH')
+  })
+})
+
+describe('shouldBlockAddLiquidity', () => {
+  it('v2 pool with ERC4626 token', () => {
+    const pool = getApiPoolMock(sDAIWeighted)
+
+    // Should block liquidity if one of the tokens is not allowed
+    pool.poolTokens[0].isAllowed = false
+    expect(shouldBlockAddLiquidity(pool)).toBe(true)
+    expect(getPoolAddBlockedReason(pool)).toBe('Token: wstETH is not allowed')
+
+    // Should not block liquidity if all tokens are allowed
+    pool.poolTokens[0].isAllowed = true
+    expect(shouldBlockAddLiquidity(pool)).toBe(false)
   })
 })
