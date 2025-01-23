@@ -367,6 +367,18 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['SwitchChainError']
   }
 
+  if (errorMessage.includes('TypeError: f is undefined')) {
+    event.fingerprint = ['FIsUndefined']
+  }
+
+  if (
+    errorMessage.includes(
+      `Cannot destructure property 'register' of 'undefined' as it is undefined.`
+    )
+  ) {
+    event.fingerprint = ['DestructureRegisterUndefined']
+  }
+
   /*
     Could not reproduce yet.
     BAL#001 SUB_OVERFLOW
