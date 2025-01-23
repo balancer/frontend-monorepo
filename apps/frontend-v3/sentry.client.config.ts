@@ -230,22 +230,6 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['TransactionNotFoundError']
   }
 
-  /*
-    Could not reproduce yet.
-    BAL#401 SENDER_NOT_ALLOWED
-  */
-  if (errorMessage.includes('Execution reverted with reason: BAL#401.')) {
-    event.fingerprint = ['BAL401']
-  }
-
-  /*
-    Could not reproduce yet.
-    BAL#509 CANNOT_SWAP_SAME_TOKEN
-  */
-  if (errorMessage.includes('Execution reverted with reason: BAL#509.')) {
-    event.fingerprint = ['BAL509']
-  }
-
   if (errorMessage.includes('transfer amount exceeds balance')) {
     event.fingerprint = ['TransferAmountExceedsBalance']
   }
@@ -365,6 +349,30 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
 
   if (errorMessage.includes('buildCallData query Cause: Address "" is invalid')) {
     event.fingerprint = ['BuildCallDataAddressInvalid']
+  }
+
+  /*
+    Could not reproduce yet.
+    BAL#001 SUB_OVERFLOW
+  */
+  if (errorMessage.includes('BAL#001.')) {
+    event.fingerprint = ['BAL001']
+  }
+
+  /*
+      Could not reproduce yet.
+      BAL#401 SENDER_NOT_ALLOWED
+    */
+  if (errorMessage.includes('BAL#401.')) {
+    event.fingerprint = ['BAL401']
+  }
+
+  /*
+      Could not reproduce yet.
+      BAL#509 CANNOT_SWAP_SAME_TOKEN
+    */
+  if (errorMessage.includes('BAL#509.')) {
+    event.fingerprint = ['BAL509']
   }
 
   return event
