@@ -6,6 +6,8 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useBatchedReadContract } from '@repo/lib/modules/web3/useBatchedReadContract'
 import { useMemo } from 'react'
 
+const CACHE_TTL = 5000 // 5 seconds
+
 export function useGetRate(chain: GqlChain) {
   const chainId = getChainId(chain)
   const config = getNetworkConfig(chainId)
@@ -19,6 +21,8 @@ export function useGetRate(chain: GqlChain) {
       args: [],
       query: {
         enabled: !!config.contracts.beets?.lstStakingProxy,
+        staleTime: CACHE_TTL,
+        gcTime: CACHE_TTL * 2,
       },
     }),
     [chainId, config.contracts.beets?.lstStakingProxy]

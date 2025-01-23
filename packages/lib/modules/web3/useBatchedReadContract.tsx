@@ -1,5 +1,5 @@
 import { useBatch } from './BatchProvider'
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { Address } from 'viem'
 
 export const useBatchedReadContract = (config: {
@@ -12,54 +12,89 @@ export const useBatchedReadContract = (config: {
   query?: {
     enabled?: boolean
     staleTime?: number
-    cacheTime?: number
+    gcTime?: number
     refetchInterval?: number
   }
 }) => {
   const { addRequest } = useBatch()
   const [state, setState] = useState({
     data: null as any,
-    isLoading: true,
+    isLoading: false,
     isError: false,
     error: null as Error | null,
     isSuccess: false,
     status: 'idle' as 'idle' | 'loading' | 'success' | 'error',
   })
 
-  const requestId = useMemo(
-    () => `${config.address}-${config.functionName}-${config.chainId || 'default'}`,
-    [config.address, config.functionName, config.chainId]
+  const { address, abi, functionName, args, chainId, account, query } = config
+  const enabled = query?.enabled ?? true
+
+  // Memoize the dependencies to prevent unnecessary re-renders
+  const dependencies = useMemo(
+    () => ({
+      address,
+      functionName,
+      chainId: chainId || 'default',
+      args: JSON.stringify(args),
+    }),
+    [address, functionName, chainId, args]
   )
 
+  // Create a stable reference to the request configuration
+  const requestConfig = useRef({
+    id: '',
+    type: 'single' as const,
+    call: {
+      address: '0x' as Address | undefined,
+      abi: null as any,
+      functionName: '',
+      args: [] as any[],
+      chainId: undefined as number | undefined,
+      account: undefined as Address | undefined,
+    },
+  })
+
+  // Update the request config when dependencies change
+  useEffect(() => {
+    requestConfig.current = {
+      id: `${dependencies.address}-${dependencies.functionName}-${dependencies.chainId}-${dependencies.args}`,
+      type: 'single',
+      call: {
+        address,
+        abi,
+        functionName,
+        args,
+        chainId,
+        account,
+      },
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dependencies, abi, account])
+
   const fetchData = useCallback(async () => {
-    if (config.query?.enabled === false || !config.address) {
-      setState(prev => ({ ...prev, isLoading: false }))
+    if (!enabled || !address) {
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        status: 'idle',
+      }))
       return
     }
 
     setState(prev => ({
       ...prev,
       isLoading: true,
-      isError: false,
-      error: null,
-      isSuccess: false,
       status: 'loading',
     }))
 
     try {
       const result = await addRequest({
-        id: requestId,
-        type: 'single',
+        ...requestConfig.current,
         call: {
-          address: config.address,
-          abi: config.abi,
-          functionName: config.functionName,
-          args: config.args,
-          chainId: config.chainId,
-          account: config.account,
+          ...requestConfig.current.call,
+          address: address as Address,
         },
       })
-
       setState({
         data: result?.result,
         isLoading: false,
@@ -78,21 +113,13 @@ export const useBatchedReadContract = (config: {
         status: 'error',
       })
     }
-  }, [
-    config.address,
-    config.abi,
-    config.functionName,
-    config.args,
-    config.chainId,
-    config.account,
-    config.query?.enabled,
-    addRequest,
-    requestId,
-  ])
+  }, [enabled, address, addRequest])
 
   useEffect(() => {
-    fetchData()
-  }, [fetchData])
+    if (enabled) {
+      fetchData()
+    }
+  }, [fetchData, enabled])
 
   const refetch = useCallback(() => {
     fetchData()

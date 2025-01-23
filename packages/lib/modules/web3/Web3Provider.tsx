@@ -99,9 +99,9 @@ export function Web3Provider({
   return (
     <ReactQueryClientProvider>
       <WagmiProvider config={wagmiConfig}>
-        <BatchProvider>
-          <RainbowKitProvider avatar={CustomAvatar} theme={customTheme}>
-            <UserAccountProvider>
+        <RainbowKitProvider avatar={CustomAvatar} theme={customTheme}>
+          <UserAccountProvider>
+            <BatchProvider>
               <UserSettingsProvider
                 initAcceptedPolicies={undefined}
                 initCurrency={undefined}
@@ -113,9 +113,9 @@ export function Web3Provider({
                 <BlockedAddressModal />
                 <AcceptPoliciesModal />
               </UserSettingsProvider>
-            </UserAccountProvider>
-          </RainbowKitProvider>
-        </BatchProvider>
+            </BatchProvider>
+          </UserAccountProvider>
+        </RainbowKitProvider>
       </WagmiProvider>
     </ReactQueryClientProvider>
   )

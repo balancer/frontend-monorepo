@@ -14,7 +14,7 @@ export const useBatchedReadContracts = (config: {
   query?: {
     enabled?: boolean
     staleTime?: number
-    cacheTime?: number
+    gcTime?: number
     refetchInterval?: number
   }
 }) => {
