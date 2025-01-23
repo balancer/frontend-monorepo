@@ -4,11 +4,10 @@ import { LstWithdrawTableRow } from './LstWithdrawTableRow'
 import { LstWithdrawTableHeader } from './LstWithdrawTableHeader'
 import { orderBy } from 'lodash'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { LstWithdrawModal } from '../modals/LstWithdrawModal'
 import { useDisclosure } from '@chakra-ui/react'
-import { useGetUserWithdraws, UserWithdraw } from '../hooks/useGetUserWithdraws'
+import { useGetUserWithdraws } from '../hooks/useGetUserWithdraws'
 import { useGetUserNumWithdraws } from '../hooks/useGetUserNumWithdraws'
 
 export function LstWithdraw() {
@@ -20,28 +19,28 @@ export function LstWithdraw() {
     isWithdrawTab
   )
 
-  const { data: withdrawalsData, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(
+  const { userWithdraws: withdrawalsData, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(
     chain,
     userNumWithdraws,
     isWithdrawTab
   )
 
   const isLoading = isWithdrawalsLoading || isUserNumWithdrawsLoading
-  const withdrawalsDataOrdered = orderBy(withdrawalsData, 'requestTimestamp', 'desc')
+
+  const withdrawalsDataOrdered = useMemo(
+    () => orderBy(withdrawalsData || [], 'requestTimestamp', 'desc'),
+    [withdrawalsData]
+  )
   const count = withdrawalsDataOrdered.length
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination, false, true)
   const showPagination = !!count && count > pagination.pageSize
 
-  const [withdrawalsView, setWithdrawalsView] = useState(withdrawalsDataOrdered.slice(skip, first))
-
-  useEffect(() => {
+  const withdrawalsView = useMemo(() => {
     if (withdrawalsDataOrdered.length < first) {
-      setWithdrawalsView(withdrawalsDataOrdered.slice(skip))
-    } else {
-      setWithdrawalsView(withdrawalsDataOrdered.slice(skip, first + skip))
+      return withdrawalsDataOrdered.slice(skip)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [skip, withdrawalsData])
+    return withdrawalsDataOrdered.slice(skip, first + skip)
+  }, [withdrawalsDataOrdered, skip, first])
 
   const rowProps = {
     px: { base: 'sm', sm: '0' },
@@ -54,9 +53,7 @@ export function LstWithdraw() {
     <>
       <PaginatedTable
         alignItems="flex-start"
-        getRowId={(withdrawal: UserWithdraw) =>
-          `${withdrawal.requestTimestamp}-${withdrawal.validatorId}`
-        }
+        getRowId={(withdrawal: any) => `${withdrawal.requestTimestamp}-${withdrawal.validatorId}`}
         items={withdrawalsView}
         loading={isLoading}
         noItemsFoundLabel="No requests found"
