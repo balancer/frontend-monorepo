@@ -422,8 +422,20 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['UndefinedReadingMap']
   }
 
+  if (errorMessage.includes(`Cannot read properties of null (reading 'type')`)) {
+    event.fingerprint = ['NullReadingType']
+  }
+
   if (errorMessage.includes('Error: not found method')) {
     event.fingerprint = ['NotFoundMethod']
+  }
+
+  if (errorMessage.includes('Error in swap simulation query Cause: Load failed')) {
+    event.fingerprint = ['SwapSimulationLoadFailed']
+  }
+
+  if (errorMessage.includes('UnhandledRejection: Object captured as promise rejection with keys')) {
+    event.fingerprint = ['UnhandledRejection']
   }
 
   /*
