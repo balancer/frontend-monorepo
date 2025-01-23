@@ -348,5 +348,10 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['AddGasEstimationError-TransferFromFailed']
   }
 
+  // Could have different causes but we group them together for now
+  if (errorMessage.includes('Error in managed transaction')) {
+    event.fingerprint = ['ManagedTransactionError']
+  }
+
   return event
 }
