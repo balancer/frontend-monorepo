@@ -3,9 +3,9 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useReadContract } from 'wagmi'
 import { sonicStakingWithdrawRequestHelperAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { useBatchedReadContract } from '@repo/lib/modules/web3/useBatchedReadContract'
 
 export type UserWithdraw = {
   id: bigint
@@ -28,7 +28,7 @@ export function useGetUserWithdraws(
   const { shouldChangeNetwork } = useChainSwitch(chainId)
   const config = getNetworkConfig(chainId)
 
-  const query = useReadContract({
+  const query = useBatchedReadContract({
     chainId,
     abi: sonicStakingWithdrawRequestHelperAbi,
     address: config.contracts.beets?.lstWithdrawRequestHelper,

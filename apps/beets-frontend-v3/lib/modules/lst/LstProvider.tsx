@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 'use client'
 
-import { useState, PropsWithChildren, createContext } from 'react'
+import { useState, PropsWithChildren, createContext, useMemo } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
@@ -70,36 +70,58 @@ export function _useLst() {
   const hasStakedAssetValidationError = hasValidationError(stakedAsset)
   const hasNativeAssetValidationError = hasValidationError(nativeAsset)
 
-  const disabledConditions: [boolean, string][] = [
-    [!isConnected, LABELS.walletNotConnected],
-    [isStakeTab && (!amountAssets || bn(amountAssets).lt(0.01)), 'Minimum amount to stake is 0.01'],
-    [
-      isUnstakeTab && (!amountShares || bn(amountShares).lte(0)),
-      'Please enter an amount to unstake',
-    ],
-    [isStakeTab && hasNativeAssetValidationError, getValidationError(nativeAsset)],
-    [isUnstakeTab && hasStakedAssetValidationError, getValidationError(stakedAsset)],
-  ]
-
-  const { isDisabled, disabledReason } = isDisabledWithReason(...disabledConditions)
-
   const { data: rate, isLoading: isRateLoading } = useGetRate(CHAIN)
 
-  function getAmountShares(amountAssets: string) {
-    if (amountAssets === '') return '0'
+  const getAmountShares = useMemo(() => {
+    return (amountAssets: string) => {
+      if (amountAssets === '' || !rate) return '0'
+      const amountShares = (parseUnits(amountAssets, 18) * 10n ** 18n) / rate
+      return formatUnits(amountShares, 18)
+    }
+  }, [rate])
 
-    const amountShares = (parseUnits(amountAssets, 18) * 10n ** 18n) / (rate || 1n)
+  const getAmountAssets = useMemo(() => {
+    return (amountShares: string) => {
+      if (amountShares === '' || !rate) return '0'
+      const amountAssets = (parseUnits(amountShares, 18) * rate) / 10n ** 18n
+      return formatUnits(amountAssets, 18)
+    }
+  }, [rate])
 
-    return formatUnits(amountShares, 18)
-  }
+  const disabledConditions = useMemo(
+    () =>
+      [
+        [!isConnected, LABELS.walletNotConnected],
+        [
+          isStakeTab && (!amountAssets || bn(amountAssets).lt(0.01)),
+          'Minimum amount to stake is 0.01',
+        ],
+        [
+          isUnstakeTab && (!amountShares || bn(amountShares).lte(0)),
+          'Please enter an amount to unstake',
+        ],
+        [isStakeTab && hasNativeAssetValidationError, getValidationError(nativeAsset)],
+        [isUnstakeTab && hasStakedAssetValidationError, getValidationError(stakedAsset)],
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      ] as [boolean, string][],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      isConnected,
+      isStakeTab,
+      isUnstakeTab,
+      amountAssets,
+      amountShares,
+      hasNativeAssetValidationError,
+      hasStakedAssetValidationError,
+      nativeAsset,
+      stakedAsset,
+    ]
+  )
 
-  function getAmountAssets(amountShares: string) {
-    if (amountShares === '') return '0'
-
-    const amountAssets = (parseUnits(amountShares, 18) * (rate || 1n)) / 10n ** 18n
-
-    return formatUnits(amountAssets, 18)
-  }
+  const { isDisabled, disabledReason } = useMemo(
+    () => isDisabledWithReason(...disabledConditions),
+    [disabledConditions]
+  )
 
   return {
     activeTab,

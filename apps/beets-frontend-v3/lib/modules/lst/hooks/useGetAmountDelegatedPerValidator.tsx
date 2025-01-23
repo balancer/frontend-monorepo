@@ -9,6 +9,7 @@ import { useGetStakedSonicData } from './useGetStakedSonicData'
 import { useMemo } from 'react'
 import { sfcAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { zeroAddress } from 'viem'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 type Result = {
   [key: string]: {
@@ -71,11 +72,11 @@ export function useGetAmountDelegatedPerValidator(chain: GqlChain) {
   }))
 
   function chooseValidatorsForUnstakeAmount(unstakeAmountShares: bigint) {
-    const unstakeAmountAssets = (unstakeAmountShares * rate) / 10n ** 18n
+    const unstakeAmountAssets = bn(unstakeAmountShares).times(rate)
 
     // choose the validator with the most amount delegated
     const validator = amountDelegatedPerValidator
-      .filter(validator => unstakeAmountAssets < validator.amountDelegated)
+      .filter(validator => unstakeAmountAssets.lt(bn(validator.amountDelegated)))
       .sort((a, b) => (b.amountDelegated > a.amountDelegated ? 1 : -1))[0]
 
     // TODO: we should split the unstake amount across several validators down the line

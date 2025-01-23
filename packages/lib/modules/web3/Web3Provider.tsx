@@ -15,6 +15,7 @@ import { UserAccountProvider } from './UserAccountProvider'
 import { PropsWithChildren } from 'react'
 import { WagmiConfig } from './WagmiConfig'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
+import { BatchProvider } from './BatchProvider'
 
 export function Web3Provider({
   children,
@@ -98,21 +99,23 @@ export function Web3Provider({
   return (
     <ReactQueryClientProvider>
       <WagmiProvider config={wagmiConfig}>
-        <RainbowKitProvider avatar={CustomAvatar} theme={customTheme}>
-          <UserAccountProvider>
-            <UserSettingsProvider
-              initAcceptedPolicies={undefined}
-              initCurrency={undefined}
-              initEnableSignatures={undefined}
-              initPoolListView={undefined}
-              initSlippage={undefined}
-            >
-              {children}
-              <BlockedAddressModal />
-              <AcceptPoliciesModal />
-            </UserSettingsProvider>
-          </UserAccountProvider>
-        </RainbowKitProvider>
+        <BatchProvider>
+          <RainbowKitProvider avatar={CustomAvatar} theme={customTheme}>
+            <UserAccountProvider>
+              <UserSettingsProvider
+                initAcceptedPolicies={undefined}
+                initCurrency={undefined}
+                initEnableSignatures={undefined}
+                initPoolListView={undefined}
+                initSlippage={undefined}
+              >
+                {children}
+                <BlockedAddressModal />
+                <AcceptPoliciesModal />
+              </UserSettingsProvider>
+            </UserAccountProvider>
+          </RainbowKitProvider>
+        </BatchProvider>
       </WagmiProvider>
     </ReactQueryClientProvider>
   )
