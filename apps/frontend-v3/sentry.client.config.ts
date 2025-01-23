@@ -363,5 +363,9 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['ChunkLoadError']
   }
 
+  if (errorMessage.includes('buildCallData query Cause: Address "" is invalid')) {
+    event.fingerprint = ['BuildCallDataAddressInvalid']
+  }
+
   return event
 }
