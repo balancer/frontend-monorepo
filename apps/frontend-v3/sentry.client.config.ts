@@ -250,6 +250,15 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['TransferAmountExceedsBalance']
   }
 
+  // Context: https://github.com/wevm/viem/discussions/472
+  if (
+    errorMessage.includes(
+      'The requested method and/or account has not been authorized by the user.'
+    )
+  ) {
+    event.fingerprint = ['RequestedMethodNotAuthorized']
+  }
+
   /*
     Error sending transaction errors with different causes
   */
