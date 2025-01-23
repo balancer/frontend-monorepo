@@ -21,7 +21,9 @@
     "test:e2e": "turbo test:e2e --ui=stream --log-order=stream --",
     "test:e2e:ui": "turbo test:e2e:ui --ui=stream --log-order=stream --",
     "test:integration": "turbo test:integration --ui=stream --log-order=stream --",
+    "test:integration:watch": "turbo test:integration:watch --ui=stream --log-order=stream --",
     "test:unit": "turbo test:unit --ui=stream --log-order=stream --",
+    "test:unit:watch": "turbo test:unit:watch --ui=stream --log-order=stream --",
     "typecheck": "turbo typecheck",
     "prepare": "husky"
   },
@@ -34,7 +36,7 @@
     "stylelint": "^16.13.2",
     "stylelint-config-standard": "^36.0.1",
     "stylelint-prettier": "^5.0.2",
-    "turbo": "^2.1.2",
+    "turbo": "2.3.3",
     "typescript": "5.7.2"
   },
   "packageManager": "pnpm@9.0.6",

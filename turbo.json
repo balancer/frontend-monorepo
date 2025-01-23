@@ -21,6 +21,7 @@
     "VERCEL_GIT_COMMIT_REF",
     "SENTRY_AUTH_TOKEN"
   ],
+  "globalPassThroughEnv": [],
   "tasks": {
     "dev": {
       "cache": false,
@@ -62,7 +63,18 @@
     "test:unit": {
       "dependsOn": ["^graphql:gen", "^test:unit"]
     },
+    "test:unit:watch": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^graphql:gen", "^test:unit"]
+    },
     "test:integration": {
+      "dependsOn": ["^graphql:gen", "^test:integration"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test:integration:watch": {
+      "cache": false,
+      "persistent": true,
       "dependsOn": ["^graphql:gen", "^test:integration"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
