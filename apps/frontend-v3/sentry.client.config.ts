@@ -298,5 +298,27 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['ErrorSendingTransaction-ChainMismatch']
   }
 
+  /*
+    Errors in swap gas estimation with different causes
+  */
+  if (
+    errorMessage.startsWith('Error in swap gas estimation') &&
+    errorMessage.includes('Execution reverted for an unknown reason')
+  ) {
+    event.fingerprint = ['SwapGasEstimationError-UnknownReason']
+  }
+  if (
+    errorMessage.startsWith('Error in swap gas estimation') &&
+    errorMessage.includes('transfer amount exceeds balance')
+  ) {
+    event.fingerprint = ['SwapGasEstimationError-TransferAmountExceedsBalance']
+  }
+  if (errorMessage.startsWith('Error in swap gas estimation') && errorMessage.includes('BAL#50')) {
+    event.fingerprint = ['SwapGasEstimationError-BAL50x']
+  }
+  if (errorMessage.startsWith('Error in swap gas estimation') && errorMessage.includes('GYR#357')) {
+    event.fingerprint = ['SwapGasEstimationError-GYR357']
+  }
+
   return event
 }
