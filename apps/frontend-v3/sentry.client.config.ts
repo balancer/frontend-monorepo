@@ -165,6 +165,9 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
   if (errorMessage.includes(`Failed to execute 'transaction' on 'IDBDatabase'`)) {
     event.fingerprint = ['IDBDatabaseError']
   }
+  if (errorMessage.includes(`'IDBDatabase': The database connection is closing.`)) {
+    event.fingerprint = ['IDBDatabaseClosing']
+  }
 
   /*
     Wagmi wallet related error
@@ -401,6 +404,22 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     */
   if (errorMessage.includes('BAL#509.')) {
     event.fingerprint = ['BAL509']
+  }
+
+  if (errorMessage.includes('removeChild')) {
+    event.fingerprint = ['RemoveChildError']
+  }
+
+  if (errorMessage.includes('RPC Request failed.')) {
+    event.fingerprint = ['RPCRequestFailed.']
+  }
+
+  if (errorMessage.includes('Maximum call stack size exceeded')) {
+    event.fingerprint = ['MaximumCallStackSizeExceeded']
+  }
+
+  if (errorMessage.includes(`Cannot read properties of undefined (reading 'map')`)) {
+    event.fingerprint = ['UndefinedReadingMap']
   }
 
   return event
