@@ -374,6 +374,10 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['FIsUndefined']
   }
 
+  if (errorMessage.includes('Invalid parameters were provided to the RPC method')) {
+    event.fingerprint = ['InvalidParametersRPC']
+  }
+
   if (
     errorMessage.includes(
       `Cannot destructure property 'register' of 'undefined' as it is undefined.`
