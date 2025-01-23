@@ -250,11 +250,23 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['TransferAmountExceedsBalance']
   }
 
+  /*
+    Error sending transaction errors with different causes
+  */
   if (
     errorMessage.includes('Error sending transaction') &&
     errorMessage.includes('An internal error was received.')
   ) {
     event.fingerprint = ['ErrorSendingTransaction-InternalError']
+  }
+  if (
+    errorMessage.includes('Error sending transaction') &&
+    errorMessage.includes('An unknown RPC error occurred')
+  ) {
+    event.fingerprint = ['ErrorSendingTransaction-RPCError']
+  }
+  if (errorMessage.includes('Error sending transaction') && errorMessage.includes('URL:')) {
+    event.fingerprint = ['ErrorSendingTransaction-URL']
   }
 
   return event
