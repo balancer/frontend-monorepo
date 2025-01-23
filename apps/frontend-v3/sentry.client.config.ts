@@ -341,6 +341,10 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['ProviderDisconnectError']
   }
 
+  if (errorMessage.includes('Requested resource not available')) {
+    event.fingerprint = ['RequestedResourceNotAvailable']
+  }
+
   // Walletconnect error
   if (errorMessage.includes('WebSocket connection failed for host')) {
     event.fingerprint = ['WCWebSocketConnectionFailed']
