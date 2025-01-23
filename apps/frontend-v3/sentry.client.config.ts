@@ -422,5 +422,12 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['UndefinedReadingMap']
   }
 
+  /*
+    This is one of the most common errors so we should split in more fingerprints as we find different sets.
+  */
+  if (errorMessage.includes('Execution reverted for an unknown reason')) {
+    event.fingerprint = ['ExecutionRevertedUnknownReason']
+  }
+
   return event
 }
