@@ -265,6 +265,12 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
   ) {
     event.fingerprint = ['ErrorSendingTransaction-RPCError']
   }
+  if (
+    errorMessage.includes('Error sending transaction') &&
+    errorMessage.includes('Requested resource not available')
+  ) {
+    event.fingerprint = ['ErrorSendingTransaction-ResourceNotAvailable']
+  }
   if (errorMessage.includes('Error sending transaction') && errorMessage.includes('URL:')) {
     event.fingerprint = ['ErrorSendingTransaction-URL']
   }
