@@ -24,6 +24,7 @@ export type Params = {
   bptSymbol?: string //Edge-case for approving
   lpToken?: string
   enabled?: boolean
+  wethIsEth?: boolean
 }
 
 /*
@@ -38,10 +39,14 @@ export function useTokenApprovalSteps({
   isPermit2 = false,
   enabled = true,
   lpToken,
+  wethIsEth,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
   const { getToken } = useTokens()
   const nativeAssetAddress = getNativeAssetAddress(chain)
+
+  // Unwraps of wrapped native assets do not require approval
+  const isUnwrappingNative = wethIsEth && actionType === 'Unwrapping'
 
   const _approvalAmounts = useMemo(
     () => approvalAmounts.filter(amount => !isSameAddress(amount.address, nativeAssetAddress)),
@@ -58,7 +63,8 @@ export function useTokenApprovalSteps({
     userAddress,
     spenderAddress,
     tokenAddresses: approvalTokenAddresses,
-    enabled: enabled && !areEmptyRawAmounts(_approvalAmounts) && !!spenderAddress,
+    enabled:
+      enabled && !areEmptyRawAmounts(_approvalAmounts) && !!spenderAddress && !isUnwrappingNative,
   })
 
   const tokenAmountsToApprove = getRequiredTokenApprovals({
@@ -66,6 +72,7 @@ export function useTokenApprovalSteps({
     rawAmounts: _approvalAmounts,
     allowanceFor: tokenAllowances.allowanceFor,
     isPermit2,
+    skipAllowanceCheck: isUnwrappingNative,
   })
 
   const steps = useMemo(() => {
