@@ -259,6 +259,14 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['RequestedMethodNotAuthorized']
   }
 
+  if (
+    errorMessage.includes(
+      'The fee cap (`maxFeePerGas` gwei) cannot be lower than the block base fee'
+    )
+  ) {
+    event.fingerprint = ['MaxFeePerGasLowerThanBaseFee']
+  }
+
   /*
     Error sending transaction errors with different causes
   */
@@ -282,6 +290,12 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
   }
   if (errorMessage.includes('Error sending transaction') && errorMessage.includes('URL:')) {
     event.fingerprint = ['ErrorSendingTransaction-URL']
+  }
+  if (
+    errorMessage.includes('Error sending transaction') &&
+    errorMessage.includes(`does not match the connection's chain`)
+  ) {
+    event.fingerprint = ['ErrorSendingTransaction-ChainMismatch']
   }
 
   return event
