@@ -337,6 +337,10 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['ManagedTransactionError']
   }
 
+  if (errorMessage.includes('this.provider.disconnect is not a function')) {
+    event.fingerprint = ['ProviderDisconnectError']
+  }
+
   // Walletconnect error
   if (errorMessage.includes('WebSocket connection failed for host')) {
     event.fingerprint = ['WCWebSocketConnectionFailed']
