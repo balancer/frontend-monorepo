@@ -320,5 +320,33 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['SwapGasEstimationError-GYR357']
   }
 
+  /*
+    Errors in Add liquidity gas estimation with different causes
+  */
+  if (
+    errorMessage.startsWith('Error in AddLiquidity gas estimation') &&
+    errorMessage.includes('Execution reverted for an unknown reason')
+  ) {
+    event.fingerprint = ['AddGasEstimationError-UnknownReason']
+  }
+  if (
+    errorMessage.startsWith('Error in AddLiquidity gas estimation') &&
+    errorMessage.includes('transfer amount exceeds balance')
+  ) {
+    event.fingerprint = ['AddGasEstimationError-TransferAmountExceedsBalance']
+  }
+  if (
+    errorMessage.startsWith('Error in AddLiquidity gas estimation') &&
+    errorMessage.includes('RPC Request failed')
+  ) {
+    event.fingerprint = ['AddGasEstimationError-RPCRequestFailed']
+  }
+  if (
+    errorMessage.startsWith('Error in AddLiquidity gas estimation') &&
+    errorMessage.includes('TRANSFER_FROM_FAILED')
+  ) {
+    event.fingerprint = ['AddGasEstimationError-TransferFromFailed']
+  }
+
   return event
 }
