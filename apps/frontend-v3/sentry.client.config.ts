@@ -345,6 +345,10 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['RequestedResourceNotAvailable']
   }
 
+  if (errorMessage.includes('No matching key. session topic')) {
+    event.fingerprint = ['NoMatchingKeySessionTopic']
+  }
+
   // Walletconnect error
   if (errorMessage.includes('WebSocket connection failed for host')) {
     event.fingerprint = ['WCWebSocketConnectionFailed']
