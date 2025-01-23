@@ -36,6 +36,7 @@ const nextConfig = {
   },
 }
 
+console.log('❗️', { CI: process.env.CI })
 // Avoid sentry setup in CI
 module.exports =
   process.env.CI === 'true' ? nextConfig : withSentryConfig(nextConfig, sentryOptions)
