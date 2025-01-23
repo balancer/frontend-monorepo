@@ -24,9 +24,15 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
-  const { userNumWithdraws, refetch: refetchUserNumWithdraws } = useGetUserNumWithdraws(chain)
-  const { refetch: refetchWithdrawals } = useGetUserWithdraws(chain, userNumWithdraws)
+
+  const { userNumWithdraws, refetch: refetchUserNumWithdraws } = useGetUserNumWithdraws(
+    chain,
+    enabled
+  )
+
+  const { refetch: refetchWithdrawals } = useGetUserWithdraws(chain, userNumWithdraws, enabled)
   const { chooseValidatorsForUnstakeAmount } = useGetAmountDelegatedPerValidator(chain)
+
   const validators = chooseValidatorsForUnstakeAmount(parseUnits(sharesAmount, 18))
 
   function onSuccess() {

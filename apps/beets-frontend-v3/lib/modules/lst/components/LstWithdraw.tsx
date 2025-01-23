@@ -12,13 +12,18 @@ import { useGetUserWithdraws, UserWithdraw } from '../hooks/useGetUserWithdraws'
 import { useGetUserNumWithdraws } from '../hooks/useGetUserNumWithdraws'
 
 export function LstWithdraw() {
-  const { stakedAsset, pagination, setPagination, first, skip, chain } = useLst()
+  const { stakedAsset, pagination, setPagination, first, skip, chain, isWithdrawTab } = useLst()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(chain)
+
+  const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(
+    chain,
+    isWithdrawTab
+  )
 
   const { data: withdrawalsData, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(
     chain,
-    userNumWithdraws
+    userNumWithdraws,
+    isWithdrawTab
   )
 
   console.log('withdraw')

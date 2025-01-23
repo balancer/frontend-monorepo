@@ -34,8 +34,6 @@ import { LstStake } from './components/LstStake'
 import { LstUnstake } from './components/LstUnstake'
 import { LstUnstakeModal } from './modals/LstUnstakeModal'
 import { LstWithdraw } from './components/LstWithdraw'
-import { useGetUserWithdraws, UserWithdraw } from './hooks/useGetUserWithdraws'
-import { useGetUserNumWithdraws } from './hooks/useGetUserNumWithdraws'
 import { useGetStakedSonicData } from './hooks/useGetStakedSonicData'
 import { bn, fNum, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
@@ -95,7 +93,6 @@ function LstForm() {
     isWithdrawTab,
     stakeTransactionSteps,
     unstakeTransactionSteps,
-    chain,
     nativeAsset,
     stakedAsset,
     getAmountShares,
@@ -103,14 +100,7 @@ function LstForm() {
     isRateLoading,
   } = useLst()
 
-  const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(chain)
-
-  const { data: UserWithdraws, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(
-    chain,
-    userNumWithdraws
-  )
-  const isLoading =
-    !isMounted || isBalancesLoading || isWithdrawalsLoading || isUserNumWithdrawsLoading
+  const isLoading = !isMounted || isBalancesLoading
 
   const loadingText = isLoading ? 'Loading...' : undefined
 
@@ -181,12 +171,7 @@ function LstForm() {
           </VStack>
           {isStakeTab && <LstStake />}
           {isUnstakeTab && <LstUnstake />}
-          {isWithdrawTab && !isWithdrawalsLoading && (
-            <LstWithdraw
-              isLoading={isWithdrawalsLoading || isUserNumWithdrawsLoading}
-              withdrawalsData={UserWithdraws as UserWithdraw[]}
-            />
-          )}
+          {isWithdrawTab && <LstWithdraw />}
         </Box>
         {/* <HStack>
           {isStakedSonicDataLoading ? (
