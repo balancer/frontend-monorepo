@@ -358,5 +358,10 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['WCWebSocketConnectionFailed']
   }
 
+  // Potential Next deployment errors
+  if (errorMessage.includes('ChunkLoadError: Loading chunk')) {
+    event.fingerprint = ['ChunkLoadError']
+  }
+
   return event
 }
