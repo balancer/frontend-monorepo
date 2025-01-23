@@ -22,19 +22,23 @@ export function BatchProvider({ children }: { children: React.ReactNode }) {
   const [queue, setQueue] = useState<BatchRequest[]>([])
   const processingRef = useRef(false)
   const timeoutRef = useRef<NodeJS.Timeout>()
+  const queueRef = useRef<BatchRequest[]>([])
+
+  useEffect(() => {
+    queueRef.current = queue
+  }, [queue])
 
   const processQueue = useCallback(async () => {
-    if (processingRef.current || queue.length === 0 || !publicClient) return
+    if (processingRef.current || queueRef.current.length === 0 || !publicClient) return
 
     processingRef.current = true
-    const currentQueue = [...queue]
+    const currentQueue = [...queueRef.current]
     setQueue([]) // Clear the queue
 
     try {
-      // Flatten all calls from the batch requests
       const allCalls = currentQueue
         .flatMap(req => (req.type === 'single' ? [req.call] : req.calls))
-        .filter(call => call?.address) // Filter out calls with undefined address
+        .filter(call => call?.address)
 
       if (allCalls.length === 0) {
         currentQueue.forEach(req => {
@@ -43,13 +47,11 @@ export function BatchProvider({ children }: { children: React.ReactNode }) {
         return
       }
 
-      // Execute the batched calls using multicall
       const results = await publicClient.multicall({
         contracts: allCalls,
         allowFailure: true,
       })
 
-      // Group results back into their original requests
       let resultIndex = 0
       currentQueue.forEach(req => {
         try {
@@ -72,39 +74,32 @@ export function BatchProvider({ children }: { children: React.ReactNode }) {
       })
     } catch (error) {
       console.error('Error in batch processing:', error)
-      // Resolve all requests with undefined on error
       currentQueue.forEach(req => {
         req.resolve({ result: undefined })
       })
     } finally {
       processingRef.current = false
-      // Process any new items that may have been added while we were processing
-      if (queue.length > 0) {
+      if (queueRef.current.length > 0) {
         processQueue()
       }
     }
-  }, [queue, publicClient])
+  }, [publicClient])
 
   const addRequest = useCallback(
     (request: Omit<BatchRequest, 'resolve' | 'reject'>) => {
       return new Promise((resolve, reject) => {
         setQueue(prev => [...prev, { ...request, resolve, reject }])
 
-        // Clear any existing timeout
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current)
         }
 
-        // Set a new timeout to process the queue
-        timeoutRef.current = setTimeout(() => {
-          processQueue()
-        }, 50) // 50ms debounce
+        timeoutRef.current = setTimeout(processQueue, 50)
       })
     },
     [processQueue]
   )
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {

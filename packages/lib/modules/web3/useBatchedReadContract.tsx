@@ -17,54 +17,78 @@ export const useBatchedReadContract = (config: {
   }
 }) => {
   const { addRequest } = useBatch()
-  const [data, setData] = useState<any>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isError, setIsError] = useState<boolean>(false)
-  const [error, setError] = useState<Error | null>(null)
-  const [isSuccess, setIsSuccess] = useState<boolean>(false)
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [state, setState] = useState({
+    data: null as any,
+    isLoading: true,
+    isError: false,
+    error: null as Error | null,
+    isSuccess: false,
+    status: 'idle' as 'idle' | 'loading' | 'success' | 'error',
+  })
 
-  const { address, abi, functionName, args, chainId, account, query } = config
-
-  // Memoize the request ID to avoid unnecessary re-renders
   const requestId = useMemo(
-    () => `${functionName}-${address}-${chainId || 'default'}`,
-    [functionName, address, chainId]
+    () => `${config.address}-${config.functionName}-${config.chainId || 'default'}`,
+    [config.address, config.functionName, config.chainId]
   )
 
   const fetchData = useCallback(async () => {
-    if (query?.enabled === false) return
+    if (config.query?.enabled === false || !config.address) {
+      setState(prev => ({ ...prev, isLoading: false }))
+      return
+    }
 
-    setIsLoading(true)
-    setIsError(false)
-    setError(null)
-    setIsSuccess(false)
-    setStatus('loading')
+    setState(prev => ({
+      ...prev,
+      isLoading: true,
+      isError: false,
+      error: null,
+      isSuccess: false,
+      status: 'loading',
+    }))
 
     try {
       const result = await addRequest({
         id: requestId,
         type: 'single',
         call: {
-          address,
-          abi,
-          functionName,
-          args,
-          chainId,
-          account,
+          address: config.address,
+          abi: config.abi,
+          functionName: config.functionName,
+          args: config.args,
+          chainId: config.chainId,
+          account: config.account,
         },
       })
-      setData(result)
-      setIsSuccess(true)
-      setStatus('success')
+
+      setState({
+        data: result?.result,
+        isLoading: false,
+        isError: false,
+        error: null,
+        isSuccess: true,
+        status: 'success',
+      })
     } catch (err) {
-      setIsError(true)
-      setError(err as Error)
-      setStatus('error')
-    } finally {
-      setIsLoading(false)
+      setState({
+        data: null,
+        isLoading: false,
+        isError: true,
+        error: err as Error,
+        isSuccess: false,
+        status: 'error',
+      })
     }
-  }, [address, abi, functionName, args, chainId, account, query?.enabled, addRequest, requestId])
+  }, [
+    config.address,
+    config.abi,
+    config.functionName,
+    config.args,
+    config.chainId,
+    config.account,
+    config.query?.enabled,
+    addRequest,
+    requestId,
+  ])
 
   useEffect(() => {
     fetchData()
@@ -75,12 +99,7 @@ export const useBatchedReadContract = (config: {
   }, [fetchData])
 
   return {
-    data,
-    isLoading,
-    isError,
-    error,
-    isSuccess,
-    status,
+    ...state,
     refetch,
   }
 }

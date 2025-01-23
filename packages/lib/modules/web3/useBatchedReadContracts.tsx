@@ -4,8 +4,8 @@ import { Address } from 'viem'
 
 export const useBatchedReadContracts = (config: {
   contracts: {
-    address: Address
-    abi: any[]
+    address: Address | undefined
+    abi: any
     functionName: string
     args: any[]
     chainId?: number
@@ -19,35 +19,54 @@ export const useBatchedReadContracts = (config: {
   }
 }) => {
   const { addRequest } = useBatch()
-  const [data, setData] = useState<any[] | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isError, setIsError] = useState<boolean>(false)
-  const [error, setError] = useState<Error | null>(null)
-  const [isSuccess, setIsSuccess] = useState<boolean>(false)
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [state, setState] = useState({
+    data: null as any[] | null,
+    isLoading: true,
+    isError: false,
+    error: null as Error | null,
+    isSuccess: false,
+    status: 'idle' as 'idle' | 'loading' | 'success' | 'error',
+  })
 
-  const { contracts, query } = config
-
-  // Memoize the request ID to avoid unnecessary re-renders
-  const requestId = useMemo(
-    () => `batch-${contracts.map(c => c.functionName).join('-')}`,
-    [contracts]
-  )
+  const requestId = useMemo(() => {
+    const validContracts = config.contracts.filter(c => c.address)
+    return `batch-${validContracts.map(c => `${c.address}-${c.functionName}`).join('-')}`
+  }, [config.contracts])
 
   const fetchData = useCallback(async () => {
-    if (query?.enabled === false) return
+    if (config.query?.enabled === false) {
+      setState(prev => ({ ...prev, isLoading: false }))
+      return
+    }
 
-    setIsLoading(true)
-    setIsError(false)
-    setError(null)
-    setIsSuccess(false)
-    setStatus('loading')
+    setState(prev => ({
+      ...prev,
+      isLoading: true,
+      isError: false,
+      error: null,
+      isSuccess: false,
+      status: 'loading' as const,
+    }))
 
     try {
+      // Filter out contracts with undefined addresses
+      const validContracts = config.contracts.filter(contract => contract.address)
+
+      if (validContracts.length === 0) {
+        setState(prev => ({
+          ...prev,
+          data: [],
+          isLoading: false,
+          isSuccess: true,
+          status: 'success' as const,
+        }))
+        return
+      }
+
       const result = await addRequest({
         id: requestId,
         type: 'multiple',
-        calls: contracts.map(call => ({
+        calls: validContracts.map(call => ({
           address: call.address,
           abi: call.abi,
           functionName: call.functionName,
@@ -56,17 +75,39 @@ export const useBatchedReadContracts = (config: {
           account: call.account,
         })),
       })
-      setData(result)
-      setIsSuccess(true)
-      setStatus('success')
+
+      // Map results back to original contract positions
+      const resultMap = new Map(
+        validContracts.map((contract, index) => [
+          `${contract.address}-${contract.functionName}`,
+          result?.[index]?.result,
+        ])
+      )
+
+      const finalResults = config.contracts.map(contract =>
+        contract.address ? resultMap.get(`${contract.address}-${contract.functionName}`) : undefined
+      )
+
+      setState({
+        data: finalResults,
+        isLoading: false,
+        isError: false,
+        error: null,
+        isSuccess: true,
+        status: 'success' as const,
+      })
     } catch (err) {
-      setIsError(true)
-      setError(err as Error)
-      setStatus('error')
-    } finally {
-      setIsLoading(false)
+      console.error('Error in batch contract read:', err)
+      setState({
+        data: config.contracts.map(() => undefined),
+        isLoading: false,
+        isError: true,
+        error: err as Error,
+        isSuccess: false,
+        status: 'error' as const,
+      })
     }
-  }, [contracts, query?.enabled, addRequest, requestId])
+  }, [config.contracts, config.query?.enabled, addRequest, requestId])
 
   useEffect(() => {
     fetchData()
@@ -77,12 +118,7 @@ export const useBatchedReadContracts = (config: {
   }, [fetchData])
 
   return {
-    data,
-    isLoading,
-    isError,
-    error,
-    isSuccess,
-    status,
+    ...state,
     refetch,
   }
 }
