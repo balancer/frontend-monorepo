@@ -351,6 +351,10 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['BuildCallDataAddressInvalid']
   }
 
+  if (errorMessage.includes('SwitchChainError')) {
+    event.fingerprint = ['SwitchChainError']
+  }
+
   /*
     Could not reproduce yet.
     BAL#001 SUB_OVERFLOW
