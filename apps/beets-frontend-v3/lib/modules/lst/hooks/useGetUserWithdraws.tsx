@@ -17,7 +17,11 @@ export type UserWithdraw = {
   validatorId: bigint
 }
 
-export function useGetUserWithdraws(chain: GqlChain, userNumWithdraws: bigint | undefined) {
+export function useGetUserWithdraws(
+  chain: GqlChain,
+  userNumWithdraws: bigint | undefined,
+  enabled: boolean
+) {
   const { isConnected, userAddress } = useUserAccount()
   const chainId = getChainId(chain)
 
@@ -30,7 +34,10 @@ export function useGetUserWithdraws(chain: GqlChain, userNumWithdraws: bigint | 
     address: config.contracts.beets?.lstWithdrawRequestHelper,
     functionName: 'getUserWithdraws',
     args: [userAddress, 0n, userNumWithdraws || 0n, false],
-    query: { enabled: isConnected && !shouldChangeNetwork && !!userAddress && !!userNumWithdraws },
+    query: {
+      enabled:
+        isConnected && !shouldChangeNetwork && !!userAddress && !!userNumWithdraws && !!enabled,
+    },
   })
 
   return {
