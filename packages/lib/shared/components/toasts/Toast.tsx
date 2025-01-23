@@ -21,7 +21,7 @@ type Props = ToastProps & {
   linkUrl?: string
 }
 
-export function Toast({ id, status, isClosable, title, description, linkUrl }: Props) {
+export function Toast({ id, status, isClosable, title, description, linkUrl, onClose }: Props) {
   const toast = useToast()
 
   const containerStyles: BoxProps = {
@@ -63,7 +63,10 @@ export function Toast({ id, status, isClosable, title, description, linkUrl }: P
   }
 
   function closeToast() {
-    if (id) toast.close(id)
+    if (id) {
+      toast.close(id)
+      onClose?.()
+    }
   }
 
   // Hach to make tooltip zIndex work in toast

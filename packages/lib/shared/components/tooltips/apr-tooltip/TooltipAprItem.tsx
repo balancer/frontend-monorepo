@@ -14,6 +14,7 @@ import { ReactNode } from 'react'
 interface PopoverAprItemProps extends BoxProps {
   fontWeight?: number
   fontColor?: string
+  valueFontColor?: string
 
   title: string
   apr: BigNumber
@@ -42,6 +43,7 @@ export function TooltipAprItem({
   fontColor,
   textVariant,
   tooltipText,
+  valueFontColor,
   ...props
 }: PopoverAprItemProps) {
   return (
@@ -62,7 +64,7 @@ export function TooltipAprItem({
             <PopoverTrigger>
               <Text
                 className="tooltip-dashed-underline"
-                color={fontColor}
+                color={valueFontColor ?? fontColor}
                 fontSize="sm"
                 fontWeight={fontWeight}
                 opacity={aprOpacity}
@@ -81,7 +83,7 @@ export function TooltipAprItem({
           </Popover>
         ) : (
           <Text
-            color={fontColor}
+            color={valueFontColor ?? fontColor}
             fontSize="sm"
             fontWeight={fontWeight}
             opacity={aprOpacity}
