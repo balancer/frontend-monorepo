@@ -250,5 +250,12 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['TransferAmountExceedsBalance']
   }
 
+  if (
+    errorMessage.includes('Error sending transaction') &&
+    errorMessage.includes('An internal error was received.')
+  ) {
+    event.fingerprint = ['ErrorSendingTransaction-InternalError']
+  }
+
   return event
 }
