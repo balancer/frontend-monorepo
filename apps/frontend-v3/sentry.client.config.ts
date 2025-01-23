@@ -390,7 +390,7 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     Could not reproduce yet.
     BAL#001 SUB_OVERFLOW
   */
-  if (errorMessage.includes('BAL#001.')) {
+  if (errorMessage.includes('BAL#001')) {
     event.fingerprint = ['BAL001']
   }
 
@@ -398,7 +398,7 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
       Could not reproduce yet.
       BAL#401 SENDER_NOT_ALLOWED
     */
-  if (errorMessage.includes('BAL#401.')) {
+  if (errorMessage.includes('BAL#401')) {
     event.fingerprint = ['BAL401']
   }
 
@@ -406,7 +406,7 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
       Could not reproduce yet.
       BAL#509 CANNOT_SWAP_SAME_TOKEN
     */
-  if (errorMessage.includes('BAL#509.')) {
+  if (errorMessage.includes('BAL#509')) {
     event.fingerprint = ['BAL509']
   }
 
