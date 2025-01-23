@@ -36,7 +36,9 @@ const nextConfig = {
   },
 }
 
-module.exports = withSentryConfig(nextConfig, sentryOptions)
+// Avoid sentry setup in CI
+module.exports =
+  process.env.CI === 'true' ? nextConfig : withSentryConfig(nextConfig, sentryOptions)
 
 /**
  * Add specific CORS headers to the manifest.json file
