@@ -26,8 +26,6 @@ export function LstWithdraw() {
     isWithdrawTab
   )
 
-  console.log('withdraw')
-
   const isLoading = isWithdrawalsLoading || isUserNumWithdrawsLoading
   const withdrawalsDataOrdered = orderBy(withdrawalsData, 'requestTimestamp', 'desc')
   const count = withdrawalsDataOrdered.length
