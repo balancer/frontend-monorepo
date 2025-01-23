@@ -422,6 +422,10 @@ function addFingerPrint(event: Sentry.ErrorEvent) {
     event.fingerprint = ['UndefinedReadingMap']
   }
 
+  if (errorMessage.includes('Error: not found method')) {
+    event.fingerprint = ['NotFoundMethod']
+  }
+
   /*
     This is one of the most common errors so we should split in more fingerprints as we find different sets.
   */
