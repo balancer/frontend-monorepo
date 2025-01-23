@@ -167,7 +167,10 @@ export function shouldUseUnderlyingToken(token: PoolToken, pool: Pool | GqlPoolB
     )
   }
   // Only v3 pools should underlying tokens
-  return isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !!token.underlyingToken
+  // return isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !!token.underlyingToken
+  // DEBUG: avoid isBufferAllowed check to add with underlying WXDAI instead of sDAI
+  // in pool https://balancer.fi/pools/gnosis/v3/0xd1d7fa8871d84d0e77020fc28b7cd5718c446522/add-liquidity
+  return isV3Pool(pool) && token.isErc4626 && !!token.underlyingToken
 }
 
 // Returns top level standard tokens + Erc4626 (only v3) underlying tokens
