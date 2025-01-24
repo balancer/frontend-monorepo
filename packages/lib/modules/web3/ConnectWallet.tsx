@@ -1,4 +1,4 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { ConnectButton, WalletButton } from '@rainbow-me/rainbowkit'
 import { Box, Button, ButtonProps, HStack, Img, Show } from '@chakra-ui/react'
 import { CustomAvatar } from './CustomAvatar'
 import { useUserAccount } from './UserAccountProvider'
@@ -28,16 +28,32 @@ export function ConnectWallet({ ...rest }: ButtonProps) {
 
         if (!isConnected) {
           return (
-            <Button
-              isDisabled={isLoading || !mounted}
-              loadingText="Connect wallet"
-              onClick={openConnectModal}
-              type="button"
-              variant="tertiary"
-              {...rest}
-            >
-              Connect wallet
-            </Button>
+            <HStack>
+              <Button
+                isDisabled={isLoading || !mounted}
+                loadingText="Connect wallet"
+                onClick={openConnectModal}
+                type="button"
+                variant="primary"
+                {...rest}
+              >
+                Connect
+              </Button>
+              <WalletButton.Custom wallet="coinbase">
+                {({ ready, connect }) => {
+                  return (
+                    <Button
+                      disabled={!ready || !mounted || isLoading}
+                      onClick={connect}
+                      type="button"
+                      variant="tertiary"
+                    >
+                      Create wallet
+                    </Button>
+                  )
+                }}
+              </WalletButton.Custom>
+            </HStack>
           )
         }
 
