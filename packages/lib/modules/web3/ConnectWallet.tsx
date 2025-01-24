@@ -32,7 +32,7 @@ export function ConnectWallet({
 
         if (!isConnected) {
           return (
-            <HStack>
+            <HStack width="full">
               {showCreateWalletButton && (
                 <WalletButton.Custom wallet="coinbase">
                   {({ ready, connect }) => {
