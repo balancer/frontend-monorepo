@@ -6,9 +6,9 @@ import { Hex, formatUnits } from 'viem'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { AbiMap } from '../web3/contracts/AbiMap'
 import { mainnet } from 'viem/chains'
-import { toJsTimestamp } from '@repo/lib/shared/utils/time'
+import { oneWeekInMs, toJsTimestamp } from '@repo/lib/shared/utils/time'
 
-const MINIMUM_LOCK_TIME = 86_400_000 * 7
+const MINIMUM_LOCK_TIME = oneWeekInMs
 
 interface MulticallLockInfoResponse {
   locked: {
