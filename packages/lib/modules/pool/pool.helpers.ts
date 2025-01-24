@@ -435,7 +435,7 @@ export function supportsWethIsEth(pool: Pool): boolean {
     Currently all SDK handlers support wethIsEth
     and Cow AMM pools is the only scenario that doesn't support wethIsEth
   */
-  return !isCowAmmPool(pool.type)
+  return !isCowAmmPool(pool.type) && !pool.hasErc4626 && !pool.hasNestedErc4626
 }
 
 export function requiresPermit2Approval(pool: Pool): boolean {
