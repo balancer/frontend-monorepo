@@ -517,7 +517,6 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
   const gnoAddress = '0x9c58bacc331c9aa871afd802db6379a98e80cedb'
 
   const sDaiAddress = '0xaf204776c7245bf4147c2612bf6e5972ee483701'
-  const wxDai = '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
 
   const helpers = new LiquidityActionHelpers(v3Pool)
 
@@ -619,13 +618,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           priceRateProvider: '0x89c80a4540a00b5270347e02e2e144c71da2eced',
           priceRateProviderData: expect.any(Object),
           symbol: 'sDAI',
-          underlyingToken: {
-            address: wxDai,
-            decimals: 18,
-            index: 1,
-            name: 'Wrapped XDAI',
-            symbol: 'WXDAI',
-          },
+          underlyingToken: null, // sDAI has isBufferAllowed false so boostedPoolState does not include underlying token
           weight: '0.5',
         },
       ],
@@ -647,7 +640,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           index: 0,
         },
         {
-          address: wxDai,
+          address: sDaiAddress,
           balance: expect.any(String),
           decimals: 18,
           index: 1,
