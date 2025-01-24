@@ -12,6 +12,7 @@ import {
 } from './pool-tokens.utils'
 import { sDAIWeighted } from './__mocks__/pool-examples/flat'
 import { getPoolAddBlockedReason, shouldBlockAddLiquidity } from './pool.helpers'
+import { usdcUsdtAaveBoosted } from './__mocks__/pool-examples/boosted'
 
 describe('getPoolActionableTokens', () => {
   it('when nested pool supports nested actions (default behavior)', () => {
@@ -106,5 +107,28 @@ describe('shouldBlockAddLiquidity', () => {
     // Should not block liquidity if all tokens are allowed
     pool.poolTokens[0].isAllowed = true
     expect(shouldBlockAddLiquidity(pool)).toBe(false)
+  })
+
+  it('v3 pool with ERC4626 tokens', () => {
+    const originalPool = getApiPoolMock(usdcUsdtAaveBoosted)
+
+    // Should block liquidity if the usdt tokenized vault is not reviewed
+    const pool1 = structuredClone(originalPool) as typeof originalPool
+    pool1.poolTokens[0].erc4626ReviewData = null
+    expect(shouldBlockAddLiquidity(pool1)).toBe(true)
+    expect(getPoolAddBlockedReason(pool1)).toBe(
+      'Tokenized vault for token waEthUSDT was not yet reviewed'
+    )
+
+    // Should block liquidity if the usdt tokenized vault is not reviewed as 'safe'
+    const pool2 = structuredClone(originalPool) as typeof originalPool
+    if (pool2.poolTokens[0].erc4626ReviewData) {
+      pool2.poolTokens[0].erc4626ReviewData.summary = 'unsafe'
+      expect(shouldBlockAddLiquidity(pool2)).toBe(true)
+      expect(getPoolAddBlockedReason(pool2)).toBe('Tokenized vault for token waEthUSDT is not safe')
+    }
+
+    // Should not block liquidity if the usdt tokenized vault is reviewed and 'safe'
+    expect(shouldBlockAddLiquidity(originalPool)).toBe(false)
   })
 })
