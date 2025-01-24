@@ -51,7 +51,7 @@ export function ConnectWallet({
               )}
               <Button
                 isDisabled={isLoading || !mounted}
-                loadingText="Connect wallet"
+                loadingText={connectLabel}
                 onClick={openConnectModal}
                 type="button"
                 variant="primary"
