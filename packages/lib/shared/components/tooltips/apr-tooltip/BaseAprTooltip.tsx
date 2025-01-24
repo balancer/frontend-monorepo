@@ -1,4 +1,8 @@
-import { GqlPoolAprItem, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlPoolAprItem,
+  GqlPoolType,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import {
   PlacementWithLogical,
   Popover,
@@ -42,6 +46,7 @@ interface Props {
   shouldDisplayMaxVeBalTooltip?: boolean
   usePortal?: boolean
   children?: ReactNode | (({ isOpen }: { isOpen: boolean }) => ReactNode)
+  chain: GqlChain
 }
 
 const balRewardGradient =
@@ -75,6 +80,7 @@ function BaseAprTooltip({
   shouldDisplayMaxVeBalTooltip,
   children,
   poolType,
+  chain,
   usePortal = true,
 }: Props) {
   const colorMode = useThemeColorMode()
@@ -117,6 +123,7 @@ function BaseAprTooltip({
     aprItems,
     vebalBoost: Number(vebalBoost),
     numberFormatter: usedNumberFormatter,
+    chain,
   })
 
   const isVebal = isVebalPool(poolId)

@@ -67,6 +67,7 @@ export function useSwapSteps({
       approvalAmounts: tokenInAmounts,
       actionType: approvalActionType,
       isPermit2,
+      wethIsEth,
       enabled: hasSimulationQuery,
     })
 

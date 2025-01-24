@@ -161,3 +161,17 @@ export function parseError(error: unknown) {
 
   return undefined
 }
+
+// Useful to distinguish this type of error in sentry and error alerts
+export const swapApolloNetworkErrorMessage = 'Apollo network error in DefaultSwapHandler'
+
+/*
+  This kind of error is thrown from apollo client when the request fails without a clear error code.
+  Causes could be:
+  - Connectivity issues
+  - Browser or extensions blocking the request
+  - CORS issues
+*/
+export function isFailedToFetchApolloError(error: Error): boolean {
+  return error.message === 'Failed to fetch'
+}

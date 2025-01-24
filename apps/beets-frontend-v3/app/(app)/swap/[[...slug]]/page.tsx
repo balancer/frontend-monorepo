@@ -4,7 +4,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Swap tokens on Beets',
-  description: `Swap tokens on networks like Fantom and Optimism via the Beets decentralized exchange`,
+  description: `Swap tokens on networks like Sonic and Optimism via the Beets decentralized exchange`,
 }
 
 export default function SwapPage() {

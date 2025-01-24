@@ -1,9 +1,9 @@
+import { BeetsLogoType } from '@/lib/components/imgs/BeetsLogoType'
+import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
+import { Footer } from '@repo/lib/shared/components/navs/Footer'
 import NextTopLoader from 'nextjs-toploader'
 import { PropsWithChildren } from 'react'
-import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
-import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
-import { FooterContainer } from '@/lib/components/footer/FooterContainer'
-import { LzBeetsMigrateModal } from '@/lib/components/modals/LzBeetsMigrateModal'
+import { LzBeetsMigrate } from '@/lib/modules/lzbeets-migrate/LzBeetsMigrate'
 
 export function BaseLayout({
   children,
@@ -17,11 +17,14 @@ export function BaseLayout({
       }}
     >
       <NextTopLoader color="#7f6ae8" showSpinner={false} />
-      <GlobalAlerts />
       <NavBarContainer />
       {children}
-      {renderLzBeetsModal && <LzBeetsMigrateModal />}
-      <FooterContainer />
+      {renderLzBeetsModal && <LzBeetsMigrate />}
+      <Footer
+        logoType={<BeetsLogoType />}
+        subTitle="Beets is your ultimate destination for liquid-staked tokens, real yield, and AMM innovation."
+        title="The Hub for LSTs"
+      />
     </div>
   )
 }

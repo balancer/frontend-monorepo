@@ -14,10 +14,11 @@ import { Repeat } from 'react-feather'
 import { Pool } from '../../pool.types'
 import { shouldCallComputeDynamicSwapFee } from '../../pool.utils'
 import { FluidIcon } from '@repo/lib/shared/components/icons/FluidIcon'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function PoolSwapFees({ pool }: { pool: Pool }) {
   const isDynamicSwapFee = shouldCallComputeDynamicSwapFee(pool)
+
   return (
     <Popover trigger="hover">
       {({ isOpen }) => (
@@ -61,7 +62,7 @@ export function PoolSwapFees({ pool }: { pool: Pool }) {
                 </Text>
               ) : (
                 <Text fontSize="sm" variant="secondary">
-                  {`This pool has a dynamic fee rate that may be updated through ${getProjectConfig().projectName} governance.`}
+                  {`This pool has a dynamic fee rate that may be updated through ${PROJECT_CONFIG.projectName} governance.`}
                 </Text>
               )}
             </VStack>

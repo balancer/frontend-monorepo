@@ -12,21 +12,12 @@ import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
-import { PoolListDisplayType } from '../pool.types'
 
 export function _usePoolList({
   fixedPoolTypes,
-  displayType = PoolListDisplayType.TokenPills,
-  hideProtocolVersion = [],
-  hidePoolTypes = [],
-  hidePoolTags = [],
   fixedChains,
 }: {
   fixedPoolTypes?: GqlPoolType[]
-  displayType?: PoolListDisplayType
-  hideProtocolVersion?: string[]
-  hidePoolTypes?: GqlPoolType[]
-  hidePoolTags?: string[]
   fixedChains?: GqlChain[]
 } = {}) {
   const queryState = usePoolListQueryState()
@@ -71,10 +62,6 @@ export function _usePoolList({
     networkStatus,
     isFixedPoolType,
     refetch,
-    displayType,
-    hideProtocolVersion,
-    hidePoolTypes,
-    hidePoolTags,
   }
 }
 
@@ -82,26 +69,14 @@ export const PoolListContext = createContext<ReturnType<typeof _usePoolList> | n
 
 export function PoolListProvider({
   fixedPoolTypes,
-  displayType,
-  hideProtocolVersion,
-  hidePoolTypes,
-  hidePoolTags,
   fixedChains,
   children,
 }: PropsWithChildren<{
   fixedPoolTypes?: GqlPoolType[]
-  displayType: PoolListDisplayType
-  hideProtocolVersion: string[]
-  hidePoolTypes: GqlPoolType[]
-  hidePoolTags: string[]
   fixedChains?: GqlChain[]
 }>) {
   const hook = _usePoolList({
     fixedPoolTypes,
-    displayType,
-    hideProtocolVersion,
-    hidePoolTypes,
-    hidePoolTags,
     fixedChains,
   })
 

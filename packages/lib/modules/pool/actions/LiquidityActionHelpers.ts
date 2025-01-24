@@ -34,7 +34,6 @@ import {
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 import { Pool } from '../pool.types'
 import {
-  allPoolTokens,
   isAffectedByCspIssue,
   isBoosted,
   isComposableStableV1,
@@ -44,9 +43,10 @@ import {
   isV2Pool,
   isV3Pool,
   supportsWethIsEth,
-  getActionableTokenSymbol,
   hasNestedPools,
 } from '../pool.helpers'
+import { getActionableTokenSymbol } from '../pool-tokens.utils'
+import { allPoolTokens } from '../pool-tokens.utils'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
 import { ApiToken } from '../../tokens/token.types'
 
@@ -93,14 +93,15 @@ export class LiquidityActionHelpers {
         ...token,
         address: token.address as Address,
         balance: token.balance as HumanAmount,
-        underlyingToken: token.underlyingToken?.address
-          ? {
-              ...token.underlyingToken,
-              address: token.underlyingToken?.address as Address,
-              decimals: token.underlyingToken?.decimals as number,
-              index: token.index, //TODO: review that this index is always the expected one
-            }
-          : null,
+        underlyingToken:
+          token.underlyingToken?.address && token.isBufferAllowed
+            ? {
+                ...token.underlyingToken,
+                address: token.underlyingToken?.address as Address,
+                decimals: token.underlyingToken?.decimals as number,
+                index: token.index, //TODO: review that this index is always the expected one
+              }
+            : null,
       })
     )
     const state: PoolStateWithUnderlyings & { totalShares: HumanAmount } = {
@@ -124,7 +125,7 @@ export class LiquidityActionHelpers {
   public get boostedPoolStateWithBalances(): PoolStateWithBalances {
     const underlyingTokensWithBalance: PoolTokenWithBalance[] = this.pool.poolTokens.map(
       (token, index) =>
-        token.underlyingToken
+        token.underlyingToken && token.isBufferAllowed
           ? {
               address: token.underlyingToken?.address as Address,
               decimals: token.underlyingToken?.decimals as number,
