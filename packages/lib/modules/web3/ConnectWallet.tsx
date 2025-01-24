@@ -3,7 +3,11 @@ import { Box, Button, ButtonProps, HStack, Img, Show } from '@chakra-ui/react'
 import { CustomAvatar } from './CustomAvatar'
 import { useUserAccount } from './UserAccountProvider'
 
-export function ConnectWallet({ ...rest }: ButtonProps) {
+export function ConnectWallet({
+  connectLabel = 'Connect wallet',
+  showCreateWalletButton = false,
+  ...rest
+}: { connectLabel?: string; showCreateWalletButton?: boolean } & ButtonProps) {
   const { isLoading: isLoadingAccount, isConnected: isConnectedAccount } = useUserAccount()
 
   return (
@@ -29,6 +33,22 @@ export function ConnectWallet({ ...rest }: ButtonProps) {
         if (!isConnected) {
           return (
             <HStack>
+              {showCreateWalletButton && (
+                <WalletButton.Custom wallet="coinbase">
+                  {({ ready, connect }) => {
+                    return (
+                      <Button
+                        disabled={!ready || !mounted || isLoading}
+                        onClick={connect}
+                        type="button"
+                        variant="tertiary"
+                      >
+                        Create wallet
+                      </Button>
+                    )
+                  }}
+                </WalletButton.Custom>
+              )}
               <Button
                 isDisabled={isLoading || !mounted}
                 loadingText="Connect wallet"
@@ -37,22 +57,8 @@ export function ConnectWallet({ ...rest }: ButtonProps) {
                 variant="primary"
                 {...rest}
               >
-                Connect
+                {connectLabel}
               </Button>
-              <WalletButton.Custom wallet="coinbase">
-                {({ ready, connect }) => {
-                  return (
-                    <Button
-                      disabled={!ready || !mounted || isLoading}
-                      onClick={connect}
-                      type="button"
-                      variant="tertiary"
-                    >
-                      Create wallet
-                    </Button>
-                  )
-                }}
-              </WalletButton.Custom>
             </HStack>
           )
         }

@@ -136,7 +136,7 @@ export function NavActions({
         display: { base: 'none', lg: 'block' },
       },
       {
-        el: <ConnectWallet />,
+        el: <ConnectWallet connectLabel="Connect" showCreateWalletButton />,
         display: { base: 'block', lg: 'block' },
       },
       {
