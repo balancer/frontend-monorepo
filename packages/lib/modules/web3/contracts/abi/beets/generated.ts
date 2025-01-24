@@ -3892,11 +3892,1013 @@ export const balancerV2WeightedPoolV4Config = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Reliquary
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x973670ce19594f857a7cd85ee834c7a74a941684)
+ */
+export const reliquaryAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: '_rewardToken', internalType: 'address', type: 'address' },
+      { name: '_emissionCurve', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'error', inputs: [], name: 'ArrayLengthMismatch' },
+  { type: 'error', inputs: [], name: 'BurningPrincipal' },
+  { type: 'error', inputs: [], name: 'BurningRewards' },
+  { type: 'error', inputs: [], name: 'DuplicateRelicIds' },
+  { type: 'error', inputs: [], name: 'EmptyArray' },
+  { type: 'error', inputs: [], name: 'MaxEmissionRateExceeded' },
+  { type: 'error', inputs: [], name: 'MergingEmptyRelics' },
+  { type: 'error', inputs: [], name: 'NonExistentPool' },
+  { type: 'error', inputs: [], name: 'NonExistentRelic' },
+  { type: 'error', inputs: [], name: 'NonZeroFirstMaturity' },
+  { type: 'error', inputs: [], name: 'NotApprovedOrOwner' },
+  { type: 'error', inputs: [], name: 'NotOwner' },
+  { type: 'error', inputs: [], name: 'RelicsNotOfSamePool' },
+  { type: 'error', inputs: [], name: 'RewardTokenAsPoolToken' },
+  { type: 'error', inputs: [], name: 'UnsortedMaturityLevels' },
+  { type: 'error', inputs: [], name: 'ZeroAmount' },
+  { type: 'error', inputs: [], name: 'ZeroTotalAllocPoint' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'approved',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'operator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      { name: 'approved', internalType: 'bool', type: 'bool', indexed: false },
+    ],
+    name: 'ApprovalForAll',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'pid', internalType: 'uint256', type: 'uint256', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'relicId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'CreateRelic',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'pid', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'relicId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Deposit',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'pid', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'relicId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'EmergencyWithdraw',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'pid', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'relicId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Harvest',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'relicId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'newLevel',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'LevelChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'pid', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'allocPoint',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'poolToken',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'rewarder',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'nftDescriptor',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'LogPoolAddition',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'pid', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'allocPoint',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'rewarder',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'nftDescriptor',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'LogPoolModified',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'emissionCurveAddress',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'LogSetEmissionCurve',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'pid', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'lastRewardTime',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'lpSupply',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'accRewardPerShare',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'LogUpdatePool',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'fromId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      { name: 'toId', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Merge',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'role', internalType: 'bytes32', type: 'bytes32', indexed: true },
+      {
+        name: 'previousAdminRole',
+        internalType: 'bytes32',
+        type: 'bytes32',
+        indexed: true,
+      },
+      {
+        name: 'newAdminRole',
+        internalType: 'bytes32',
+        type: 'bytes32',
+        indexed: true,
+      },
+    ],
+    name: 'RoleAdminChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'role', internalType: 'bytes32', type: 'bytes32', indexed: true },
+      {
+        name: 'account',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'sender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'RoleGranted',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'role', internalType: 'bytes32', type: 'bytes32', indexed: true },
+      {
+        name: 'account',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'sender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'RoleRevoked',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'fromId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      { name: 'toId', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Shift',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'fromId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      { name: 'toId', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Split',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'pid', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'relicId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Withdraw',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'DEFAULT_ADMIN_ROLE',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'allocPoint', internalType: 'uint256', type: 'uint256' },
+      { name: '_poolToken', internalType: 'address', type: 'address' },
+      { name: '_rewarder', internalType: 'address', type: 'address' },
+      {
+        name: 'requiredMaturities',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      {
+        name: 'levelMultipliers',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: '_nftDescriptor', internalType: 'address', type: 'address' },
+    ],
+    name: 'addPool',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'burn',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'pid', internalType: 'uint256', type: 'uint256' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'createRelicAndDeposit',
+    outputs: [{ name: 'id', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'relicId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'deposit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'relicId', internalType: 'uint256', type: 'uint256' }],
+    name: 'emergencyWithdraw',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'emissionCurve',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getApproved',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'pid', internalType: 'uint256', type: 'uint256' }],
+    name: 'getLevelInfo',
+    outputs: [
+      {
+        name: 'levelInfo',
+        internalType: 'struct LevelInfo',
+        type: 'tuple',
+        components: [
+          {
+            name: 'requiredMaturities',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'multipliers', internalType: 'uint256[]', type: 'uint256[]' },
+          { name: 'balance', internalType: 'uint256[]', type: 'uint256[]' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'pid', internalType: 'uint256', type: 'uint256' }],
+    name: 'getPoolInfo',
+    outputs: [
+      {
+        name: 'pool',
+        internalType: 'struct PoolInfo',
+        type: 'tuple',
+        components: [
+          {
+            name: 'accRewardPerShare',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'lastRewardTime', internalType: 'uint256', type: 'uint256' },
+          { name: 'allocPoint', internalType: 'uint256', type: 'uint256' },
+          { name: 'name', internalType: 'string', type: 'string' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'relicId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getPositionForId',
+    outputs: [
+      {
+        name: 'position',
+        internalType: 'struct PositionInfo',
+        type: 'tuple',
+        components: [
+          { name: 'amount', internalType: 'uint256', type: 'uint256' },
+          { name: 'rewardDebt', internalType: 'uint256', type: 'uint256' },
+          { name: 'rewardCredit', internalType: 'uint256', type: 'uint256' },
+          { name: 'entry', internalType: 'uint256', type: 'uint256' },
+          { name: 'poolId', internalType: 'uint256', type: 'uint256' },
+          { name: 'level', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'role', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'getRoleAdmin',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'role', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'index', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'getRoleMember',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'role', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'getRoleMemberCount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'role', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'account', internalType: 'address', type: 'address' },
+    ],
+    name: 'grantRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'relicId', internalType: 'uint256', type: 'uint256' },
+      { name: 'harvestTo', internalType: 'address', type: 'address' },
+    ],
+    name: 'harvest',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'role', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'account', internalType: 'address', type: 'address' },
+    ],
+    name: 'hasRole',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'operator', internalType: 'address', type: 'address' },
+    ],
+    name: 'isApprovedForAll',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'relicId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'isApprovedOrOwner',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'relicId', internalType: 'uint256', type: 'uint256' }],
+    name: 'levelOnUpdate',
+    outputs: [{ name: 'level', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'pids', internalType: 'uint256[]', type: 'uint256[]' }],
+    name: 'massUpdatePools',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'fromId', internalType: 'uint256', type: 'uint256' },
+      { name: 'toId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'merge',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'pid', internalType: 'uint256', type: 'uint256' },
+      { name: 'allocPoint', internalType: 'uint256', type: 'uint256' },
+      { name: '_rewarder', internalType: 'address', type: 'address' },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: '_nftDescriptor', internalType: 'address', type: 'address' },
+      { name: 'overwriteRewarder', internalType: 'bool', type: 'bool' },
+    ],
+    name: 'modifyPool',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'data', internalType: 'bytes[]', type: 'bytes[]' }],
+    name: 'multicall',
+    outputs: [{ name: 'results', internalType: 'bytes[]', type: 'bytes[]' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'nftDescriptor',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'ownerOf',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'relicId', internalType: 'uint256', type: 'uint256' }],
+    name: 'pendingReward',
+    outputs: [{ name: 'pending', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'pendingRewardsOfOwner',
+    outputs: [
+      {
+        name: 'pendingRewards',
+        internalType: 'struct PendingReward[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'relicId', internalType: 'uint256', type: 'uint256' },
+          { name: 'poolId', internalType: 'uint256', type: 'uint256' },
+          { name: 'pendingReward', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'poolLength',
+    outputs: [{ name: 'pools', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'poolToken',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'relicPositionsOfOwner',
+    outputs: [
+      { name: 'relicIds', internalType: 'uint256[]', type: 'uint256[]' },
+      {
+        name: 'positionInfos',
+        internalType: 'struct PositionInfo[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'amount', internalType: 'uint256', type: 'uint256' },
+          { name: 'rewardDebt', internalType: 'uint256', type: 'uint256' },
+          { name: 'rewardCredit', internalType: 'uint256', type: 'uint256' },
+          { name: 'entry', internalType: 'uint256', type: 'uint256' },
+          { name: 'poolId', internalType: 'uint256', type: 'uint256' },
+          { name: 'level', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'role', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'account', internalType: 'address', type: 'address' },
+    ],
+    name: 'renounceRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'role', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'account', internalType: 'address', type: 'address' },
+    ],
+    name: 'revokeRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'rewardToken',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'rewarder',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'operator', internalType: 'address', type: 'address' },
+      { name: 'approved', internalType: 'bool', type: 'bool' },
+    ],
+    name: 'setApprovalForAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_emissionCurve', internalType: 'address', type: 'address' }],
+    name: 'setEmissionCurve',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'fromId', internalType: 'uint256', type: 'uint256' },
+      { name: 'toId', internalType: 'uint256', type: 'uint256' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'shift',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'fromId', internalType: 'uint256', type: 'uint256' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'to', internalType: 'address', type: 'address' },
+    ],
+    name: 'split',
+    outputs: [{ name: 'newId', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'supportsInterface',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'index', internalType: 'uint256', type: 'uint256' }],
+    name: 'tokenByIndex',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'index', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'tokenOfOwnerByIndex',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'tokenURI',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalAllocPoint',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'pid', internalType: 'uint256', type: 'uint256' }],
+    name: 'updatePool',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'relicId', internalType: 'uint256', type: 'uint256' }],
+    name: 'updatePosition',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'relicId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'withdraw',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'relicId', internalType: 'uint256', type: 'uint256' },
+      { name: 'harvestTo', internalType: 'address', type: 'address' },
+    ],
+    name: 'withdrawAndHarvest',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+] as const
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x973670ce19594f857a7cd85ee834c7a74a941684)
+ */
+export const reliquaryAddress = {
+  146: '0x973670ce19594F857A7cD85EE834c7a74a941684',
+} as const
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x973670ce19594f857a7cd85ee834c7a74a941684)
+ */
+export const reliquaryConfig = {
+  address: reliquaryAddress,
+  abi: reliquaryAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SFC
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
  */
 export const sfcAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -4872,14 +5874,14 @@ export const sfcAbi = [
 ] as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
  */
 export const sfcAddress = {
   146: '0x0aB8f3b709A52c096f33702fE8153776472305ed',
 } as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x0aB8f3b709A52c096f33702fE8153776472305ed)
  */
 export const sfcConfig = { address: sfcAddress, abi: sfcAbi } as const
 
@@ -4888,7 +5890,7 @@ export const sfcConfig = { address: sfcAddress, abi: sfcAbi } as const
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
  */
 export const sonicStakingAbi = [
   { type: 'constructor', inputs: [], stateMutability: 'nonpayable' },
@@ -6160,14 +7162,14 @@ export const sonicStakingAbi = [
 ] as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
  */
 export const sonicStakingAddress = {
   146: '0xD5F7FC8ba92756a34693bAA386Edcc8Dd5B3F141',
 } as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0xd5f7fc8ba92756a34693baa386edcc8dd5b3f141)
  */
 export const sonicStakingConfig = {
   address: sonicStakingAddress,
@@ -6179,7 +7181,7 @@ export const sonicStakingConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
  */
 export const sonicStakingWithdrawRequestHelperAbi = [
   {
@@ -6277,14 +7279,14 @@ export const sonicStakingWithdrawRequestHelperAbi = [
 ] as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
  */
 export const sonicStakingWithdrawRequestHelperAddress = {
   146: '0x52B16e3D7d25bA64F242e59f9A74799ecC432d78',
 } as const
 
 /**
- * [__View Contract on Sonic Sonic Explorer__](https://explorer.soniclabs.com/address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x52b16e3d7d25ba64f242e59f9a74799ecc432d78)
  */
 export const sonicStakingWithdrawRequestHelperConfig = {
   address: sonicStakingWithdrawRequestHelperAddress,

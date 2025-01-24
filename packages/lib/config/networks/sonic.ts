@@ -68,6 +68,7 @@ const networkConfig: NetworkConfig = {
       sfcProxy: '0xFC00FACE00000000000000000000000000000000',
       sfc: '0x0aB8f3b709A52c096f33702fE8153776472305ed',
       lstWithdrawRequestHelper: '0x52b16e3d7d25ba64f242e59f9a74799ecc432d78',
+      reliquary: '0x973670ce19594f857a7cd85ee834c7a74a941684',
     },
     permit2: PERMIT2[sonic.id],
   },

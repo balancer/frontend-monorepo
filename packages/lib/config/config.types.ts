@@ -64,6 +64,7 @@ export interface ContractsConfig {
     sfcProxy?: Address
     sfc?: Address
     lstWithdrawRequestHelper?: Address
+    reliquary?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address

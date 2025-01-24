@@ -90,6 +90,10 @@ export default defineConfig(() => {
             name: 'SonicStakingWithdrawRequestHelper',
             address: sonicNetworkConfig.contracts.beets?.lstWithdrawRequestHelper,
           },
+          {
+            name: 'Reliquary',
+            address: sonicNetworkConfig.contracts.beets?.reliquary,
+          },
         ],
       }),
     ],
