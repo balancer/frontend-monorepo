@@ -50,6 +50,7 @@ export type StepType =
   | 'unstakeLst'
   | 'withdrawLst'
   | 'voteForManyGauges'
+  | 'levelUp'
 
 export type TxActionId =
   | 'SignBatchRelayer'
