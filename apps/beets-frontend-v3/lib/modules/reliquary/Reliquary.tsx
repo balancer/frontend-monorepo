@@ -4,16 +4,19 @@ import { VStack } from '@chakra-ui/react'
 import { useGetRelicPositionsOfOwner } from './hooks/useGetRelicPositionsOfOwner'
 import { Relic } from './components/Relic'
 import { useReliquary } from './ReliquaryProvider'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 export function Reliquary() {
   const { chain, setSelectedRelic } = useReliquary()
   const { relics } = useGetRelicPositionsOfOwner(chain)
+  const hasSetInitialRelic = useRef(false)
 
   useEffect(() => {
-    setSelectedRelic(relics[0])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    if (relics && relics.length > 0 && !hasSetInitialRelic.current) {
+      setSelectedRelic(relics[0])
+      hasSetInitialRelic.current = true
+    }
+  }, [relics, setSelectedRelic])
 
   return (
     <VStack align="start" h="full" w="full">
