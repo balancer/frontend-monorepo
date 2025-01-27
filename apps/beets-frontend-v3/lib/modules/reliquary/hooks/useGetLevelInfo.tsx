@@ -17,7 +17,7 @@ export function useGetLevelInfo(chain: GqlChain, poolId: string | undefined) {
     abi: reliquaryAbi,
     address: config.contracts.beets?.reliquary,
     functionName: 'getLevelInfo',
-    args: [BigInt(poolId || '0')],
+    args: [BigInt(poolId || 0)],
     query: { enabled: isConnected && !shouldChangeNetwork && !!userAddress && !!poolId },
   })
 

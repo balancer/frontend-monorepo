@@ -41,7 +41,7 @@ type RelicProps = {
 
 export function Relic({ chain, relic }: RelicProps) {
   const { amount: pendingReward } = useGetPendingReward(chain, relic.relicId)
-  const { maturityThresholds } = useGetLevelInfo(chain, relic.relicId)
+  const { maturityThresholds } = useGetLevelInfo(chain, relic.poolId)
 
   const { levelUpDate } = relicGetMaturityProgress(relic, maturityThresholds || [])
 
