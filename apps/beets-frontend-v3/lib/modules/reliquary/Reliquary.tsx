@@ -6,16 +6,18 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useGetPositionForId } from './hooks/useGetPositionForId'
 import { useGetLevelOnUpdate } from './hooks/useGetLevelOnUpdate'
 import { useGetLevelInfo } from './hooks/useGetLevelInfo'
+import { useGetDepositImpact } from './hooks/useGetDepositImpact'
 
 const CHAIN = GqlChain.Sonic
 
 export function Reliquary() {
   const { positions } = useGetRelicPositionsOfOwner(CHAIN)
-  const { data } = useGetPositionForId(CHAIN, '67')
-  const { levelOnUpdate } = useGetLevelOnUpdate(CHAIN, '67')
+  const { position } = useGetPositionForId(CHAIN, '16')
+  const { levelOnUpdate } = useGetLevelOnUpdate(CHAIN, '16')
   const { maturityThresholds } = useGetLevelInfo(CHAIN, '0')
+  const depositImpact = useGetDepositImpact(CHAIN, '1', '16')
 
-  console.log({ positions, data, levelOnUpdate, maturityThresholds })
+  console.log({ positions, position, levelOnUpdate, maturityThresholds, depositImpact })
 
   return (
     <Card rounded="xl" w="full">

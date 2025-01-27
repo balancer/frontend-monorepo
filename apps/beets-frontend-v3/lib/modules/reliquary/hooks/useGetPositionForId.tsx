@@ -23,7 +23,7 @@ export function useGetPositionForId(chain: GqlChain, relicId: string) {
 
   return {
     ...query,
-    data: {
+    position: {
       ...query.data,
       level: query.data?.level.toString(),
       poolId: query.data?.poolId.toString(),
