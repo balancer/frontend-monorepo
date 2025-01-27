@@ -62,10 +62,10 @@ export function LstWithdraw() {
         noItemsFoundLabel="No requests found"
         paginationProps={{ ...paginationProps, mt: 'auto' }}
         renderTableHeader={() => <LstWithdrawTableHeader {...rowProps} />}
-        renderTableRow={(withdrawal: any, index) => (
+        renderTableRow={({ item, index }) => (
           <LstWithdrawTableRow
             keyValue={index}
-            withdrawal={withdrawal}
+            withdrawal={item}
             {...rowProps}
             onOpen={onOpen}
             token={stakedAsset}

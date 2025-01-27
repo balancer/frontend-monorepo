@@ -1,4 +1,9 @@
-import { VotesState, SortVotesBy } from '@repo/lib/modules/vebal/vote/vote.types'
+import {
+  VotingPoolWithData,
+  VotesState,
+  SortVotesBy,
+} from '@repo/lib/modules/vebal/vote/vote.types'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 export function getVotesState(relativeWeightCap: number, votesNextPeriod: number) {
   if (relativeWeightCap === 0 || votesNextPeriod === 0) return VotesState.Normal
@@ -9,6 +14,28 @@ export function getVotesState(relativeWeightCap: number, votesNextPeriod: number
     return VotesState.Close
   }
   return VotesState.Normal
+}
+
+export function voteToPool(vote: VotingPoolWithData) {
+  return {
+    displayTokens: vote.tokens.map(token => ({ ...token, name: token.symbol })), // fix: (votes) no name
+    type: vote.type,
+    chain: vote.chain,
+    poolTokens: [],
+    address: vote.address,
+    protocolVersion: 3, // fix: (votes) no data
+    hasAnyAllowedBuffer: false, // fix: (votes) no data
+    hasErc4626: false, // fix: (votes) no data
+  }
+}
+
+export function isGaugeExpired(expiredGauges: string[] | undefined, gaugeAddress: string): boolean {
+  if (!expiredGauges) return false
+  return expiredGauges.some(item => isSameAddress(gaugeAddress, item))
+}
+
+export function isPoolExpired(pool: VotingPoolWithData) {
+  return pool.gauge.isKilled
 }
 
 export const orderByHash: Record<SortVotesBy, { label: string; title?: string }> = {

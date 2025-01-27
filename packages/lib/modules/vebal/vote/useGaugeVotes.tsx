@@ -22,7 +22,6 @@ export interface RawVotesData {
   gaugeWeightNextPeriod?: { result?: bigint; status: string }
   userVotes?: { result?: UserVotesData; status: string }
   lastUserVoteTime?: { result?: bigint; status: string }
-  isKilled?: { result?: boolean; status: string }
 }
 
 export interface VotesData {
@@ -30,7 +29,6 @@ export interface VotesData {
   votesNextPeriod: string
   userVotes: string
   lastUserVoteTime: number
-  isKilled: boolean
 }
 
 function formatVotes(votesData: RawVotesData): VotesData {
@@ -42,7 +40,6 @@ function formatVotes(votesData: RawVotesData): VotesData {
     votesNextPeriod,
     userVotes: votesData?.userVotes?.result?.power.toString() || '0',
     lastUserVoteTime: Number(votesData?.lastUserVoteTime?.result) || 0,
-    isKilled: votesData?.isKilled?.result ?? false,
   }
 }
 
@@ -60,6 +57,7 @@ function useGaugeRelativeWeightsWrite(
     ...readContractsParams,
     query: {
       ...readContractsParams.query,
+      enabled: true,
     },
     contracts: gaugeAddresses.map(gaugeAddress => {
       return {
@@ -158,6 +156,12 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
     userVotesQuery.isLoading ||
     lastUserVotesQuery.isLoading
 
+  const isRefetching =
+    gaugeWeightThisPeriodQuery.isRefetching ||
+    gaugeWeightNextPeriodQuery.isRefetching ||
+    userVotesQuery.isRefetching ||
+    lastUserVotesQuery.isRefetching
+
   const gaugeVotes = useMemo(() => {
     if (isLoading) {
       return undefined
@@ -196,6 +200,6 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
   return {
     gaugeVotes,
     refetchAll,
-    isLoading,
+    isLoading: isLoading || isRefetching,
   }
 }

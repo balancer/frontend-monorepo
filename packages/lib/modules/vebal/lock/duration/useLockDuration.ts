@@ -43,7 +43,7 @@ interface UseLockEndDateProps {
   lockedEndDate?: Date
 }
 
-function useLockEndDate({ lockedEndDate }: UseLockEndDateProps) {
+export function useLockEndDate({ lockedEndDate }: UseLockEndDateProps) {
   const today = useToday()
 
   const minLockEndDate = useMemo(() => {

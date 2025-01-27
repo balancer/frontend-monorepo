@@ -6,33 +6,35 @@ interface Props<T> extends BoxProps {
   items: T[]
   loading: boolean
   renderTableHeader: () => ReactNode
-  renderTableRow: (item: T, index: number) => ReactNode
+  renderTableRow: (props: { item: T; index: number }) => ReactNode
   showPagination: boolean
   paginationProps: any // TODO: type this
   noItemsFoundLabel: string
   getRowId: (item: T, index: number) => React.Key
+  loadingLength?: number
 }
 
 export function PaginatedTable<T>({
   items,
   loading,
-  renderTableRow,
-  renderTableHeader,
+  renderTableRow: TableRow,
+  renderTableHeader: TableHeader,
   showPagination,
   paginationProps,
   noItemsFoundLabel,
   getRowId,
+  loadingLength = 20,
 }: Props<T>) {
   return (
     <>
       <VStack className="hide-scrollbar" overflowX="scroll" w="full">
-        {renderTableHeader()}
+        <TableHeader />
         <Box position="relative" w="full">
           {items.length > 0 && (
             <VStack gap="0">
               {items.map((item, index) => (
                 <Box key={getRowId(item, index)} w="full">
-                  {renderTableRow(item, index)}
+                  <TableRow index={index} item={item} />
                 </Box>
               ))}
             </VStack>
@@ -44,7 +46,7 @@ export function PaginatedTable<T>({
           )}
           {loading &&
             items.length === 0 &&
-            Array.from({ length: 20 }).map((_, index) => (
+            Array.from({ length: loadingLength }).map((_, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <Box key={`table-row-skeleton-${index}`} px="xs" py="xs" w="full">
                 <Skeleton height="68px" w="full" />

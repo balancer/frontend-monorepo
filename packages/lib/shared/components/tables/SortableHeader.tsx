@@ -7,6 +7,7 @@ import {
   PopoverTrigger,
   Portal,
   Text,
+  GridItemProps,
 } from '@chakra-ui/react'
 import { SortableIcon } from '../icons/SortableIcon'
 import { ArrowDownIcon } from '../icons/ArrowDownIcon'
@@ -26,6 +27,7 @@ type SortableHeaderProps = {
   align?: 'left' | 'right'
   popoverContent?: ReactNode
   usePortal?: string
+  containerProps?: GridItemProps
 }
 
 export function SortableHeader({
@@ -36,6 +38,7 @@ export function SortableHeader({
   align = 'left',
   popoverContent,
   usePortal,
+  containerProps,
 }: SortableHeaderProps) {
   const renderSortIcon = () => {
     return !isSorted ? <SortableIcon /> : sorting === 'asc' ? <ArrowUpIcon /> : <ArrowDownIcon />
@@ -47,7 +50,12 @@ export function SortableHeader({
   const HeaderContent = (
     <Button onClick={() => onSort(label.toLowerCase())} size="sm" variant="ghost">
       <HStack alignItems="center" gap="0">
-        <Text color={color} fontWeight="bold">
+        <Text
+          color={color}
+          fontWeight="bold"
+          textDecoration={popoverContent ? 'underline' : undefined}
+          textDecorationStyle={popoverContent ? 'dotted' : undefined}
+        >
           {label}
         </Text>
         <Box color={color} fontSize="xs" ml="1">
@@ -59,7 +67,7 @@ export function SortableHeader({
 
   if (popoverContent) {
     return (
-      <GridItem justifySelf={justifySelf}>
+      <GridItem justifySelf={justifySelf} {...containerProps}>
         <Popover placement="top" trigger="hover">
           {() => (
             <>
@@ -73,5 +81,9 @@ export function SortableHeader({
     )
   }
 
-  return <GridItem justifySelf={justifySelf}>{HeaderContent}</GridItem>
+  return (
+    <GridItem justifySelf={justifySelf} {...containerProps}>
+      {HeaderContent}
+    </GridItem>
+  )
 }

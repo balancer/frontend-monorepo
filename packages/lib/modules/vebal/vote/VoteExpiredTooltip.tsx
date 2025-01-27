@@ -7,12 +7,13 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
+import { PropsWithChildren } from 'react'
 
 interface Props {
   usePortal?: boolean
 }
 
-export function VoteExpiredTooltip({ usePortal }: Props) {
+export function VoteExpiredTooltip({ usePortal, children }: PropsWithChildren<Props>) {
   const popoverContent = (
     <PopoverContent bg="background.level3" minWidth={['100px', '170px']} p="sm" shadow="3xl">
       <VStack alignItems="start" spacing="sm" width="full">
@@ -32,9 +33,17 @@ export function VoteExpiredTooltip({ usePortal }: Props) {
     <Popover trigger="hover">
       <>
         <PopoverTrigger>
-          <Badge background="red.400" color="font.dark" textTransform="unset">
-            Expired
-          </Badge>
+          {children ?? (
+            <Badge
+              background="red.400"
+              color="font.dark"
+              fontSize="sm"
+              textTransform="unset"
+              userSelect="none"
+            >
+              Expired
+            </Badge>
+          )}
         </PopoverTrigger>
 
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}

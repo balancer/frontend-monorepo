@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, PropsWithChildren, useState } from 'react'
+import { createContext, PropsWithChildren, useCallback, useState } from 'react'
 import { ManagedResult } from './lib'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { TransactionResult } from '../../web3/contracts/contract.types'
@@ -29,9 +29,12 @@ export function _useTransactionState() {
     setTransactionMap(new Map(transactionMap.set(k, v)))
   }
 
-  function getTransaction(id: string) {
-    return transactionMap.get(id)
-  }
+  const getTransaction = useCallback(
+    (id: string) => {
+      return transactionMap.get(id)
+    },
+    [transactionMap]
+  )
 
   function resetTransactionState() {
     setTransactionMap(new Map())

@@ -201,7 +201,7 @@ export const _useCrossChainSync = () => {
         void refetch()
       }, REFETCH_INTERVAL)
     }
-    return () => clearInterval(intervalId)
+    return () => clearInterval(intervalId as unknown as number)
   }, [networksBySyncState, refetch])
 
   function setSyncTxHashes(network: GqlChain, txHash: Hash) {
