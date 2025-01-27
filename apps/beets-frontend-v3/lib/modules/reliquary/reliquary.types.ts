@@ -1,9 +1,9 @@
-import { AmountHumanReadable } from '@repo/lib/modules/tokens/token.types'
+import { HumanAmount } from '@balancer/sdk'
 
 export type ReliquaryFarmPosition = {
   poolId: string
   relicId: string
-  amount: AmountHumanReadable
+  amount: HumanAmount
   entry: number
   level: number
 }
