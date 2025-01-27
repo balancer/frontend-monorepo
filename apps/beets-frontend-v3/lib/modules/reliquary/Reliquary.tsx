@@ -7,17 +7,22 @@ import { useGetPositionForId } from './hooks/useGetPositionForId'
 import { useGetLevelOnUpdate } from './hooks/useGetLevelOnUpdate'
 import { useGetLevelInfo } from './hooks/useGetLevelInfo'
 import { useGetDepositImpact } from './hooks/useGetDepositImpact'
+import { useGetReliquaryFarmSnapshots } from './hooks/useGetReliquaryFarmSnapshots'
 
 const CHAIN = GqlChain.Sonic
 
 export function Reliquary() {
+  // onchain
   const { positions } = useGetRelicPositionsOfOwner(CHAIN)
   const { position } = useGetPositionForId(CHAIN, '16')
   const { levelOnUpdate } = useGetLevelOnUpdate(CHAIN, '16')
   const { maturityThresholds } = useGetLevelInfo(CHAIN, '0')
   const depositImpact = useGetDepositImpact(CHAIN, '1', '16')
 
-  console.log({ positions, position, levelOnUpdate, maturityThresholds, depositImpact })
+  // api
+  const { query } = useGetReliquaryFarmSnapshots()
+
+  console.log({ positions, position, levelOnUpdate, maturityThresholds, depositImpact, query })
 
   return (
     <Card rounded="xl" w="full">
