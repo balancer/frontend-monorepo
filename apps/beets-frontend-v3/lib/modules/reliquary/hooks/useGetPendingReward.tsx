@@ -5,7 +5,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from 'wagmi'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetLevelInfo(chain: GqlChain, relicId: string) {
+export function useGetPendingReward(chain: GqlChain, relicId: string) {
   const { isConnected, userAddress } = useUserAccount()
   const chainId = getChainId(chain)
 

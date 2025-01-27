@@ -4,6 +4,8 @@ import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useReadContract } from 'wagmi'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { formatUnits } from 'viem'
+import { ReliquaryFarmPosition } from '../reliquary.types'
 
 export function useGetRelicPositionsOfOwner(chain: GqlChain) {
   const { isConnected, userAddress } = useUserAccount()
@@ -23,16 +25,17 @@ export function useGetRelicPositionsOfOwner(chain: GqlChain) {
 
   return {
     ...query,
-    positions: query.data
-      ? query.data[0].map((relicId, index) => ({
-          relicId: relicId.toString(),
-          positionInfos: {
-            ...query.data[1][index],
-            entry: Number(query.data[1][index].entry.toString()),
-            poolId: query.data[1][index].poolId.toString(),
-            level: query.data[1][index].level.toString(),
-          },
-        }))
+    relics: query.data
+      ? query.data[0].map(
+          (relicId, index) =>
+            ({
+              relicId: relicId.toString(),
+              amount: formatUnits(query.data[1][index].amount, 18),
+              entry: Number(query.data[1][index].entry.toString()),
+              poolId: query.data[1][index].poolId.toString(),
+              level: Number(query.data[1][index].level.toString()),
+            }) as ReliquaryFarmPosition
+        )
       : [],
   }
 }
