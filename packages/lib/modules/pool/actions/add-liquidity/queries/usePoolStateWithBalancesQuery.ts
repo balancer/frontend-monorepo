@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  getBoostedPoolStateWithBalancesV3,
   getPoolStateWithBalancesCowAmm,
   getPoolStateWithBalancesV2,
   getPoolStateWithBalancesV3,
@@ -10,7 +11,7 @@ import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import { useQuery } from '@tanstack/react-query'
 import { useBlockNumber } from 'wagmi'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
-import { isV2Pool, isV3Pool } from '../../../pool.helpers'
+import { isBoosted, isCowAmmPool, isV2Pool, isV3Pool } from '../../../pool.helpers'
 import { Pool } from '../../../pool.types'
 import { getChainId } from '@repo/lib/config/app.config'
 
@@ -25,7 +26,22 @@ export function usePoolStateWithBalancesQuery(pool: Pool) {
   const helpers = new LiquidityActionHelpers(pool)
 
   const queryFn = async () => {
-    return getSdkPoolStateFn(pool)(helpers.poolState, chainId, getRpcUrl(chainId))
+    const rpcUrl = getRpcUrl(chainId)
+    if (isV3Pool(pool)) {
+      return isBoosted(pool)
+        ? getBoostedPoolStateWithBalancesV3(helpers.boostedPoolState, chainId, rpcUrl)
+        : getPoolStateWithBalancesV3(helpers.poolState, chainId, rpcUrl)
+    }
+
+    if (isV2Pool(pool)) {
+      return getPoolStateWithBalancesV2(helpers.poolState, chainId, rpcUrl)
+    }
+
+    if (isCowAmmPool(pool.type)) {
+      return getPoolStateWithBalancesCowAmm(helpers.poolState, chainId, rpcUrl)
+    }
+
+    throw new Error(`Unsupported pool : ${pool.id} for pool state with balances query`)
   }
 
   return useQuery({
@@ -39,15 +55,4 @@ export function usePoolStateWithBalancesQuery(pool: Pool) {
     },
     ...onlyExplicitRefetch,
   })
-}
-
-// Returns the function to get the pool state with balances based on the pool version
-function getSdkPoolStateFn(pool: Pool) {
-  if (isV3Pool(pool)) {
-    return getPoolStateWithBalancesV3
-  } else if (isV2Pool(pool)) {
-    return getPoolStateWithBalancesV2
-  } else {
-    return getPoolStateWithBalancesCowAmm
-  }
 }

@@ -33,7 +33,6 @@ import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 import { Pool } from '../pool.types'
 import {
   isAffectedByCspIssue,
-  isBoosted,
   isComposableStableV1,
   isCowAmmPool,
   isGyro,
@@ -67,7 +66,7 @@ export class LiquidityActionHelpers {
 
   /* Used by default (non-nested) SDK handlers */
   public get poolState(): PoolState {
-    return isBoosted(this.pool) ? this.boostedPoolState : toPoolState(this.pool)
+    return toPoolState(this.pool)
   }
 
   /* Used by default nested SDK handlers */
