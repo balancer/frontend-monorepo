@@ -1,10 +1,7 @@
 import { addSeconds, fromUnixTime } from 'date-fns'
-import { ReliquaryFarmPosition } from './reliquary.types'
+import { ReliquaryPosition } from './reliquary.types'
 
-export function relicGetMaturityProgress(
-  relic: ReliquaryFarmPosition | null,
-  maturities: string[]
-) {
+export function relicGetMaturityProgress(relic: ReliquaryPosition | null, maturities: string[]) {
   if (!relic || !maturities.length) {
     return {
       canUpgrade: false,

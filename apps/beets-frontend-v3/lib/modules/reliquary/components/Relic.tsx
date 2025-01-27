@@ -16,7 +16,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { useGetPendingReward } from '../hooks/useGetPendingReward'
 import Countdown from 'react-countdown'
-import { ReliquaryFarmPosition } from '../reliquary.types'
+import { ReliquaryPosition } from '../reliquary.types'
 import { useGetLevelInfo } from '../hooks/useGetLevelInfo'
 import { relicGetMaturityProgress } from '../reliquary.helpers'
 
@@ -36,7 +36,7 @@ const RELIC_LEVEL_NAMES = [
 
 type RelicProps = {
   chain: GqlChain
-  relic: ReliquaryFarmPosition
+  relic: ReliquaryPosition
 }
 
 export function Relic({ chain, relic }: RelicProps) {

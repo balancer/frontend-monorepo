@@ -1,6 +1,6 @@
 import { HumanAmount } from '@balancer/sdk'
 
-export type ReliquaryFarmPosition = {
+export type ReliquaryPosition = {
   poolId: string
   relicId: string
   amount: HumanAmount
