@@ -254,31 +254,6 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
       type: 'Stable',
     })
   })
-
-  it('poolStateWithBalances (that calls boostedPoolStateWithBalances underneath)', async () => {
-    const helpers = new LiquidityActionHelpers(v3BoostedPool)
-    expect(helpers.poolStateWithBalances).toEqual({
-      address: v3BoostedPool.address,
-      id: v3BoostedPool.id,
-      protocolVersion: 3,
-      tokens: [
-        {
-          address: usdtAddress,
-          balance: expect.any(String),
-          decimals: 6,
-          index: 0,
-        },
-        {
-          address: usdcAddress,
-          balance: expect.any(String),
-          decimals: 6,
-          index: 1,
-        },
-      ],
-      totalShares: expect.any(String),
-      type: 'Stable',
-    })
-  })
 })
 
 describe('Liquidity helpers for V3 NESTED boosted pool', async () => {
@@ -625,37 +600,11 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
       type: 'Weighted',
     })
   })
-
-  it('poolStateWithBalances (that calls boostedPoolStateWithBalances underneath)', async () => {
-    const helpers = new LiquidityActionHelpers(v3Pool)
-    expect(helpers.poolStateWithBalances).toEqual({
-      address: v3Pool.address,
-      id: v3Pool.id,
-      protocolVersion: 3,
-      tokens: [
-        {
-          address: gnoAddress,
-          balance: expect.any(String),
-          decimals: 18,
-          index: 0,
-        },
-        {
-          address: sDaiAddress,
-          balance: expect.any(String),
-          decimals: 18,
-          index: 1,
-        },
-      ],
-      totalShares: expect.any(String),
-      type: 'Weighted',
-    })
-  })
 })
 
 describe('Liquidity helpers for GNOSIS V2 pool with isErc4626 tokens (v2 pools are not boosted so they should not use underlying tokens)', () => {
   const v2Pool = getApiPoolMock(sDAIWeighted) // Gnosis Balancer 50sDAI-50wstETHr
 
-  const wstETHAddress = '0x6c76971f98945ae98dd7d4dfca8711ebea946ea6'
   const sDaiAddress = '0xaf204776c7245bf4147c2612bf6e5972ee483701'
 
   const helpers = new LiquidityActionHelpers(v2Pool)
@@ -695,39 +644,11 @@ describe('Liquidity helpers for GNOSIS V2 pool with isErc4626 tokens (v2 pools a
       },
     ])
   })
-
-  it('poolStateWithBalances', async () => {
-    const helpers = new LiquidityActionHelpers(v2Pool)
-    expect(helpers.poolStateWithBalances).toEqual({
-      id: v2Pool.id,
-      address: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9',
-      protocolVersion: 2,
-      tokens: [
-        {
-          address: wstETHAddress,
-          balance: expect.any(String),
-          decimals: 18,
-          index: 0,
-        },
-        {
-          address: sDaiAddress,
-          balance: expect.any(String),
-          decimals: 18,
-          index: 1,
-        },
-      ],
-      totalShares: expect.any(String),
-      type: 'Weighted',
-    })
-  })
 })
 
 describe('Liquidity helpers for V2 B-auraBAL-STABLE pool with BPT token in the actionable tokens', () => {
-  const poolId = '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249'
-
   const v2Pool = getApiPoolMock(auraBal)
 
-  const auraBalAddress = '0x616e8bfa43f920657b3497dbf40d6b1a02d4608d'
   const balWeth8020BptAddress = '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56' // 80BAL-20WETH nested BPT that should be used for adds
 
   const helpers = new LiquidityActionHelpers(v2Pool)
@@ -778,31 +699,6 @@ describe('Liquidity helpers for V2 B-auraBAL-STABLE pool with BPT token in the a
         symbol: 'B-80BAL-20WETH',
       },
     ])
-  })
-
-  it('poolStateWithBalances', async () => {
-    const helpers = new LiquidityActionHelpers(v2Pool)
-    expect(helpers.poolStateWithBalances).toEqual({
-      id: poolId,
-      address: '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd',
-      protocolVersion: 2,
-      tokens: [
-        {
-          address: bal80Weth20Address,
-          balance: expect.any(String),
-          decimals: 18,
-          index: 0,
-        },
-        {
-          address: auraBalAddress,
-          balance: expect.any(String),
-          decimals: 18,
-          index: 1,
-        },
-      ],
-      totalShares: expect.any(String),
-      type: 'Stable',
-    })
   })
 })
 

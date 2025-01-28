@@ -23,6 +23,9 @@ export const sdBalAddress = '0xf24d8651578a55b0c119b9910759a351a3458895' as cons
 export const auraBalAddress = '0x616e8bfa43f920657b3497dbf40d6b1a02d4608d' as const
 export const bal80Weth20Address = '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56' as const
 
+export const wstEthAddress = '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0' as const
+export const rstEthAddress = '0x7a4effd87c2f3c55ca251080b1343b605f327e3a' as const
+
 export const ethAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' as const
 export const polAddress = '0x0000000000000000000000000000000000001010' as const
 
