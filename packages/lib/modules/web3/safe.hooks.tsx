@@ -1,5 +1,4 @@
 import { Hex } from 'viem'
-import { useBlockNumber } from 'wagmi'
 import { Pool } from '../pool/pool.types'
 import { isCowAmmPool } from '../pool/pool.helpers'
 import { TransactionStep, TxBatch } from '../transactions/transaction-steps/lib'
@@ -7,8 +6,9 @@ import {
   buildTxBatch,
   hasSomePendingNestedTxInBatch,
 } from '../transactions/transaction-steps/safe/safe.helpers'
-import { useSafeAppLogs } from '../transactions/transaction-steps/safe/useSafeAppLogs'
 import { useUserAccount } from './UserAccountProvider'
+import { useSafeTxQuery } from '../transactions/transaction-steps/safe/useSafeTxQuery'
+import { useWalletConnectMetadata } from './useWalletConnectMetadata'
 
 // Returns true if the user is connected with a Safe Account
 export function useIsSafeApp(): boolean {
@@ -41,6 +41,7 @@ export function useStepWithTxBatch(currentStep: TransactionStep): {
 } {
   const noBatchStep = { isStepWithTxBatch: false }
   const isSafeApp = useIsSafeApp()
+
   if (!isSafeApp) return noBatchStep
   if (!currentStep.isBatchEnd) return noBatchStep
 
@@ -63,31 +64,16 @@ type Props = {
   wagmiTxHash: Hex | undefined
 }
 
-export function useTxHash({ chainId, wagmiTxHash }: Props) {
-  // Maybe we need to cache the first block number
-  const { data: blockNumber } = useBlockNumber({ chainId })
-
-  /* TODO: implement WC edge case
-  const { isSafeAccountViaWalletConnect } = useWalletConnectMetadata()
-  if (isSafeAccountViaWalletConnect && wagmiTxHash) {
-    console.log({ safeTxHash: wagmiTxHash })
-    const safeAppsSdk = new SafeAppsSDK()
-    safeAppsSdk.txs.getBySafeTxHash(wagmiTxHash).then(tx => {
-      console.log('Safe tx via WC', tx)
-    })
-  }
-  */
-
+export function useTxHash({ wagmiTxHash }: Props) {
   const isSafeApp = useIsSafeApp()
+  const { isSafeAccountViaWalletConnect } = useWalletConnectMetadata()
 
-  const { safeTxHash } = useSafeAppLogs({
-    enabled: isSafeApp,
-    hash: wagmiTxHash,
-    chainId,
-    blockNumber: blockNumber,
+  const { isLoading: isSafeTxLoading, data: safeTxHash } = useSafeTxQuery({
+    enabled: isSafeApp || isSafeAccountViaWalletConnect,
+    wagmiTxHash,
   })
 
   const txHash = isSafeApp ? safeTxHash : wagmiTxHash
 
-  return { txHash, isSafeTxLoading: isSafeApp && !!wagmiTxHash && !safeTxHash }
+  return { txHash, isSafeTxLoading }
 }
