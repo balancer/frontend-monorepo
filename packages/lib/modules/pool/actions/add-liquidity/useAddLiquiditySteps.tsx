@@ -71,9 +71,10 @@ export function useAddLiquiditySteps({
     isPermit2 && signPermit2Step ? [signPermit2Step, addLiquidityStep] : [addLiquidityStep]
 
   addLiquidityStep.nestedSteps = tokenApprovalSteps
+  console.log({ shouldBatchTransactions, nestedSteps: addLiquidityStep.nestedSteps })
   const approveAndAddSteps =
     shouldBatchTransactions && hasSomePendingNestedTxInBatch(addLiquidityStep)
-      ? [addLiquidityStep] // Hide token approvals when batching
+      ? [...addSteps] // Hide token approvals when batching
       : [...tokenApprovalSteps, ...addSteps]
 
   const steps = useMemo<TransactionStep[]>(() => {
