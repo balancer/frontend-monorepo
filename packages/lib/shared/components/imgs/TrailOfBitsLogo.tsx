@@ -1,5 +1,7 @@
 /* eslint-disable max-len */
-export function TrailOfBitsLogo() {
+import { SVGProps } from 'react'
+
+export function TrailOfBitsLogo({ ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg
       fill="none"
@@ -7,6 +9,7 @@ export function TrailOfBitsLogo() {
       viewBox="0 0 110 67"
       width="110"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <g clipPath="url(#clip0_2001_149)">
         <path
