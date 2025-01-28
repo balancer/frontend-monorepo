@@ -26,7 +26,7 @@ export function useAddLiquiditySteps({
   slippage,
 }: AddLiquidityStepsParams) {
   const { pool, chainId, chain } = usePool()
-  const shouldBatchTransactions = useShouldBatchTransactions(pool)
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const relayerMode = useRelayerMode(pool)
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
 

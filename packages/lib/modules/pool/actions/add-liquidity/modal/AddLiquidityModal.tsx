@@ -46,7 +46,7 @@ export function AddLiquidityModal({
     setInitialHumanAmountsIn,
   } = useAddLiquidity()
   const { pool, chain } = usePool()
-  const shouldBatchTransactions = useShouldBatchTransactions(pool)
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()

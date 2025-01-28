@@ -1,6 +1,4 @@
 import { Hex } from 'viem'
-import { Pool } from '../pool/pool.types'
-import { isCowAmmPool } from '../pool/pool.helpers'
 import { TransactionStep, TxBatch } from '../transactions/transaction-steps/lib'
 import {
   buildTxBatch,
@@ -17,11 +15,12 @@ export function useIsSafeApp(): boolean {
   return connector?.id === 'safe'
 }
 
-// Returns true if the user is connected with a Safe Account
-export function useShouldBatchTransactions(pool: Pool): boolean {
-  const isSafeApp = useIsSafeApp()
-
-  return isSafeApp && isCowAmmPool(pool.type)
+/*
+  Returns true when running as a Safe App
+ (that excludes Safe accounts connected via WalletConnect)
+*/
+export function useShouldBatchTransactions(): boolean {
+  return useIsSafeApp()
 }
 
 export function useShouldRenderBatchTxButton(currentStep: TransactionStep): boolean {
