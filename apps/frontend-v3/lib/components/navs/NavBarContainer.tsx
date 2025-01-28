@@ -25,6 +25,10 @@ export function NavBarContainer() {
       label: 'veBAL (wip)',
       href: '/vebal',
     })
+    appLinks.push({
+      label: 'LBP',
+      href: '/lbp',
+    })
   }
 
   const allAppLinks = [...defaultAppLinks, ...appLinks]
