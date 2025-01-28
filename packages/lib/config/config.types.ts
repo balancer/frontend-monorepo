@@ -132,6 +132,7 @@ type OptionsConfig = {
   showPoolName: boolean
   showVeBal: boolean
   showMaBeets: boolean
+  allowCreateWallet: boolean
 }
 
 type Links = {

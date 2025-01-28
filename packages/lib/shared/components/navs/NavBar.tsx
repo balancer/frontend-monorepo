@@ -23,6 +23,7 @@ type Props = {
   rightSlot?: ReactNode
   disableBlur?: boolean
   customLinks?: ReactNode
+  allowCreateWallet?: boolean
 }
 
 function useBoundedScroll(threshold: number) {
@@ -97,9 +98,11 @@ function NavLinks({
 export function NavActions({
   mobileNav,
   hideDarkModeToggle,
+  allowCreateWallet,
 }: {
   mobileNav: ReactNode
   hideDarkModeToggle?: boolean
+  allowCreateWallet?: boolean
 }) {
   const pathname = usePathname()
   const { isConnected } = useUserAccount()
@@ -136,7 +139,7 @@ export function NavActions({
         display: { base: 'none', lg: 'block' },
       },
       {
-        el: <ConnectWallet connectLabel="Connect" showCreateWalletButton />,
+        el: <ConnectWallet connectLabel="Connect" showCreateWalletButton={allowCreateWallet} />,
         display: { base: 'block', lg: 'block' },
       },
       {
@@ -182,6 +185,7 @@ export function NavBar({
   navLogo,
   mobileNav,
   customLinks,
+  allowCreateWallet,
   ...rest
 }: Props & BoxProps) {
   const [showShadow, setShowShadow] = useState(false)
@@ -267,7 +271,7 @@ export function NavBar({
           order={{ md: '2' }}
           variants={staggeredFadeIn}
         >
-          {rightSlot || <NavActions mobileNav={mobileNav} />}
+          {rightSlot || <NavActions allowCreateWallet={allowCreateWallet} mobileNav={mobileNav} />}
         </HStack>
       </HStack>
     </Box>
