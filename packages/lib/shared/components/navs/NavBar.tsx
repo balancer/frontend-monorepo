@@ -141,7 +141,7 @@ export function NavActions({
       {
         el: (
           <ConnectWallet
-            connectLabel={allowCreateWallet ? 'Connect wallet' : 'Connect'}
+            connectLabel={allowCreateWallet ? 'Connect' : 'Connect wallet'}
             showCreateWalletButton={allowCreateWallet}
           />
         ),
