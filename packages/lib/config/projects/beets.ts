@@ -95,4 +95,5 @@ export const ProjectConfigBeets: ProjectConfig = {
       },
     ],
   },
+  cowSupportedNetworks: [],
 }
