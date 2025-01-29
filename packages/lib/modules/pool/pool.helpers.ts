@@ -385,6 +385,16 @@ export function getPoolAddBlockedReason(pool: Pool): string {
     if (token.priceRateProviderData?.summary !== 'safe') {
       return `Rate provider for token ${token.symbol} is not safe` // TODO: Add instructions and link to get it reviewed
     }
+
+    if (isV3Pool(pool) && pool.hasAnyAllowedBuffer && token.isErc4626 && token.isBufferAllowed) {
+      if (!hasReviewedErc4626(token)) {
+        return `Tokenized vault for token ${token.symbol} was not yet reviewed`
+      }
+
+      if (token.erc4626ReviewData?.summary !== 'safe') {
+        return `Tokenized vault for token ${token.symbol} is not safe`
+      }
+    }
   }
   return ''
 }

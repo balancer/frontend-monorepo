@@ -65,16 +65,15 @@
     "test:unit:watch": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^graphql:gen", "^test:unit"]
+      "dependsOn": ["^graphql:gen"]
     },
     "test:integration": {
-      "dependsOn": ["^graphql:gen", "^test:integration"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "dependsOn": ["^graphql:gen", "^test:integration"]
     },
     "test:integration:watch": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^graphql:gen", "^test:integration"],
+      "dependsOn": ["^graphql:gen"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "test:e2e": {
