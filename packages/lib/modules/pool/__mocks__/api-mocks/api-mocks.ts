@@ -23,6 +23,5 @@ export function getApiPoolMock(poolIdOrExample: string | PoolExample): Pool {
       Double check that savePoolMock is creating your pool and that allApiMocks includes the pool you're looking for.`
     )
   }
-
-  return pool
+  return structuredClone(pool) as Pool
 }
