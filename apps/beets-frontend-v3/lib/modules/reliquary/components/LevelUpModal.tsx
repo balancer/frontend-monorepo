@@ -20,7 +20,7 @@ import { useReliquary } from '../ReliquaryProvider'
 
 type Props = {
   isOpen: boolean
-  onClose(isSuccess: boolean): void
+  onClose(): void
   chain: GqlChain
   nextLevel: number
 }
@@ -33,9 +33,14 @@ export function LevelUpModal({
   ...rest
 }: Props & Omit<ModalProps, 'children' | 'onClose'>) {
   const { isDesktop, isMobile } = useBreakpoints()
-  const { levelUpTransactionSteps: transactionSteps, levelUpTxHash } = useReliquary()
+  const { levelUpTransactionSteps, levelUpTxHash } = useReliquary()
 
-  useResetStepIndexOnOpen(isOpen, transactionSteps)
+  useResetStepIndexOnOpen(isOpen, levelUpTransactionSteps)
+
+  function handleOnClose() {
+    levelUpTransactionSteps.resetTransactionSteps()
+    onClose()
+  }
 
   const isSuccess = !!levelUpTxHash
 
@@ -43,30 +48,30 @@ export function LevelUpModal({
     <Modal
       isCentered
       isOpen={isOpen}
-      onClose={() => {
-        onClose(!!levelUpTxHash)
-      }}
+      onClose={onClose}
       preserveScrollBarGap
       trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!levelUpTxHash} />
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
-        {isDesktop && <DesktopStepTracker chain={chain} transactionSteps={transactionSteps} />}
+        {isDesktop && (
+          <DesktopStepTracker chain={chain} transactionSteps={levelUpTransactionSteps} />
+        )}
         <TransactionModalHeader chain={chain} label="Level Up" txHash={levelUpTxHash} />
         <ModalCloseButton />
         <ModalBody>
           <AnimateHeightChange spacing="sm">
-            {isMobile && <MobileStepTracker chain={chain} transactionSteps={transactionSteps} />}
+            {isMobile && (
+              <MobileStepTracker chain={chain} transactionSteps={levelUpTransactionSteps} />
+            )}
             <Card variant="modalSubSection">The next level is {nextLevel}!</Card>
           </AnimateHeightChange>
         </ModalBody>
         <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
+          currentStep={levelUpTransactionSteps.currentStep}
           isSuccess={isSuccess}
-          returnAction={() => {
-            onClose(isSuccess)
-          }}
+          returnAction={handleOnClose}
           returnLabel="Return to maBEETS"
         />
       </ModalContent>
