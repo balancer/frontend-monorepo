@@ -85,7 +85,7 @@ export function Relic({ chain, relic }: RelicProps) {
             <HStack justify="space-between" w="full">
               <Text>Time to next level:</Text>
               <Text>
-                <Countdown date={levelUpDate} />
+                <Countdown date={levelUpDate} key={levelUpDate.getTime()} />
               </Text>
             </HStack>
             <Image alt={levelName} src={`/images/reliquary/${level}.png`} />
