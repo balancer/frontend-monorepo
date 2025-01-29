@@ -145,4 +145,5 @@ export const ProjectConfigBalancer: ProjectConfig = {
       },
     ],
   },
+  cowSupportedNetworks: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Gnosis],
 }
