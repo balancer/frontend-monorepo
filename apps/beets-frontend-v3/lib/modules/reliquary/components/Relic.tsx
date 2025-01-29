@@ -43,7 +43,7 @@ type RelicProps = {
 }
 
 export function Relic({ chain, relic }: RelicProps) {
-  const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState('')
   const { amount: pendingReward } = useGetPendingReward(chain, relic.relicId)
   const { maturityThresholds } = useGetLevelInfo(chain, relic.poolId)
 
@@ -53,6 +53,8 @@ export function Relic({ chain, relic }: RelicProps) {
   )
   const levelName = RELIC_LEVEL_NAMES[relic.level]
   const level = relic.level + 1
+
+  const isLevelUpModalOpen = isModalOpen === 'levelUp'
 
   return (
     <>
@@ -94,7 +96,7 @@ export function Relic({ chain, relic }: RelicProps) {
         <CardFooter>
           <HStack justify="space-between" w="full">
             <Button>Claim</Button>
-            <Button disabled={!canUpgrade} onClick={() => setIsLevelUpModalOpen(true)}>
+            <Button disabled={!canUpgrade} onClick={() => setIsModalOpen('levelUp')}>
               Level up
             </Button>
             <Button>Deposit</Button>
@@ -107,7 +109,7 @@ export function Relic({ chain, relic }: RelicProps) {
           chain={chain}
           isOpen={isLevelUpModalOpen}
           nextLevel={canUpgradeTo}
-          onClose={() => setIsLevelUpModalOpen(false)}
+          onClose={() => setIsModalOpen('')}
         />
       )}
     </>
