@@ -14,12 +14,12 @@ import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useMan
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { noop } from 'lodash'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { useGetRelicPositionsOfOwner } from '@/lib/modules/reliquary/hooks/useGetRelicPositionsOfOwner'
 
 export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
   const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
-  const { refetchBalances } = useTokenBalances()
+  const { refetch } = useGetRelicPositionsOfOwner(chain)
 
   const labels: TransactionLabels = {
     init: 'Level up',
@@ -57,7 +57,7 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
       isComplete,
       onActivated: noop,
       onDeactivated: noop,
-      onSuccess: () => refetchBalances(),
+      onSuccess: () => refetch(),
       renderAction: () => <ManagedTransactionButton id="levelUp" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
