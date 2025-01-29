@@ -15,6 +15,7 @@ import { isDev, isStaging } from '@repo/lib/config/app.config'
 export function NavBarContainer() {
   const {
     links: { ecosystemLinks, socialLinks },
+    options: { allowCreateWallet },
   } = PROJECT_CONFIG
   const { defaultAppLinks } = useNav()
 
@@ -41,6 +42,7 @@ export function NavBarContainer() {
         transition={{ duration: 0.5, ease: 'easeInOut' }}
       >
         <NavBar
+          allowCreateWallet={allowCreateWallet}
           appLinks={allAppLinks}
           customLinks={
             <Box as={motion.div} variants={fadeIn}>
