@@ -112,7 +112,11 @@ export const ProjectConfigBalancer: ProjectConfig = {
           { label: 'Explore pools', href: '/pools' },
           { label: 'Swap tokens', href: '/swap' },
           { label: 'View portfolio', href: '/portfolio' },
-          { label: 'Get veBAL', href: 'https://app.balancer.fi/#/vebal', isExternal: true },
+          {
+            label: 'Get veBAL',
+            href: 'https://app.balancer.fi/#/ethereum/vebal',
+            isExternal: true,
+          },
           {
             label: 'Create an LBP',
             href: 'https://www.fjordfoundry.com/?utm_source=balancer&utm_medium=website',
