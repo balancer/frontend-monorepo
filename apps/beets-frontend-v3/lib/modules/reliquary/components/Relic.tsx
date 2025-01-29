@@ -11,6 +11,7 @@ import {
   CardFooter,
   Button,
   Image,
+  Box,
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -86,9 +87,10 @@ export function Relic({ chain, relic }: RelicProps) {
             </HStack>
             <HStack justify="space-between" w="full">
               <Text>Time to next level:</Text>
-              <Text>
+              <Box fontFamily="mono">
+                {/* wrapped in monospace font for now to prevent jittering */}
                 <Countdown date={levelUpDate} key={levelUpDate.getTime()} />
-              </Text>
+              </Box>
             </HStack>
             <Image alt={levelName} src={`/images/reliquary/${level}.png`} />
           </VStack>
