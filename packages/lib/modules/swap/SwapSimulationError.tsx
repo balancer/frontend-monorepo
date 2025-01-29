@@ -14,20 +14,29 @@ type Props = {
 export function SwapSimulationError({ errorMessage }: Props) {
   const { tokenIn, tokenOut, selectedChain } = useSwap()
 
+  const showCowSwapLink = PROJECT_CONFIG.cowSupportedNetworks.includes(selectedChain)
+
   if (errorMessage?.includes('must contain at least 1 path')) {
     return (
       <ErrorAlert title={`Not enough liquidity on ${PROJECT_CONFIG.projectName}`}>
-        Your swap amount is too high to find a route through the available liquidity on
-        {PROJECT_CONFIG.projectName}. Try reducing your swap size or try{' '}
-        <BalAlertLink
-          href={buildCowSwapUrl({
-            chain: selectedChain,
-            tokenInAddress: tokenIn.address,
-            tokenOutAddress: tokenOut.address,
-          })}
-        >
-          CoW Swap.
-        </BalAlertLink>
+        Your swap amount is too high to find a route through the available liquidity on{' '}
+        {PROJECT_CONFIG.projectName}. Try reducing your swap size
+        {showCowSwapLink && (
+          <>
+            {' '}
+            or try{' '}
+            <BalAlertLink
+              href={buildCowSwapUrl({
+                chain: selectedChain,
+                tokenInAddress: tokenIn.address,
+                tokenOutAddress: tokenOut.address,
+              })}
+            >
+              CoW Swap
+            </BalAlertLink>
+          </>
+        )}
+        .
       </ErrorAlert>
     )
   }
