@@ -54,6 +54,7 @@ export function ClaimModal({
 
   function handleOnClose() {
     refetch()
+    transactionSteps.resetTransactionSteps()
     onClose()
   }
 
