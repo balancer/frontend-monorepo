@@ -8,11 +8,15 @@ import { gaugeActionsService } from '@repo/lib/shared/services/batch-relayer/ext
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
 import { Address } from 'viem'
 import { aGqlPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
+import { reliquaryActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/reliquary-actions.service'
+import { vaultActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/vault-actions.service'
 
 function testBuildUnstakeCallData(amount: bigint, userAddress: Address = defaultTestUserAccount) {
   const batchRelayerService = new BatchRelayerService(
     mainnetNetworkConfig.contracts.balancer.relayerV6,
-    gaugeActionsService
+    gaugeActionsService,
+    reliquaryActionsService,
+    vaultActionsService
   )
   const gaugeService = new GaugeService(batchRelayerService)
   const gauges = [aGqlPoolElementMock().staking?.id || ''] as Address[]
