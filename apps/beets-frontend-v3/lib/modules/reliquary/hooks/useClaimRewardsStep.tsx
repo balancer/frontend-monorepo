@@ -14,12 +14,10 @@ import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useMan
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { noop } from 'lodash'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { useGetPendingReward } from './useGetPendingReward'
 
 export function useClaimRewardsStep(chain: GqlChain, relicId: string | undefined) {
   const { getTransaction } = useTransactionState()
   const { isConnected, userAddress } = useUserAccount()
-  const { refetch } = useGetPendingReward(chain, relicId)
 
   const labels: TransactionLabels = {
     init: 'Claim incentives',
@@ -40,7 +38,7 @@ export function useClaimRewardsStep(chain: GqlChain, relicId: string | undefined
     contractId: 'beets.reliquary',
     contractAddress: networkConfigs[chain].contracts.beets?.reliquary as string,
     functionName: 'harvest',
-    args: [relicId || ''],
+    args: relicId && userAddress ? [BigInt(relicId), userAddress] : null,
     enabled: isConnected && !!relicId && !!userAddress,
     txSimulationMeta,
   }
@@ -57,7 +55,7 @@ export function useClaimRewardsStep(chain: GqlChain, relicId: string | undefined
       isComplete,
       onActivated: noop,
       onDeactivated: noop,
-      onSuccess: () => refetch(),
+      onSuccess: noop,
       renderAction: () => <ManagedTransactionButton id="claimRelicReward" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
