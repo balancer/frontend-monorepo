@@ -4,12 +4,11 @@ import { ReactNode } from 'react'
 import { RecentTransactionsProvider } from '@repo/lib/modules/transactions/RecentTransactionsProvider'
 import { ApolloGlobalDataProvider } from '@repo/lib/shared/services/api/apollo-global-data.provider'
 import { UserSettingsProvider } from '@repo/lib/modules/user/settings/UserSettingsProvider'
-import { wagmiConfig } from '@repo/lib/modules/web3/WagmiConfig'
 import { VebalLockDataProvider } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <Web3Provider wagmiConfig={wagmiConfig}>
+    <Web3Provider>
       <ApolloClientProvider>
         <ApolloGlobalDataProvider>
           <UserSettingsProvider>
