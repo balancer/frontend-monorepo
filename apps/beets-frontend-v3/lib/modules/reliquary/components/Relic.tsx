@@ -12,6 +12,7 @@ import {
   Button,
   Image,
   Box,
+  Skeleton,
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -46,7 +47,7 @@ type RelicProps = {
 
 export function Relic({ chain, relic }: RelicProps) {
   const [isModalOpen, setIsModalOpen] = useState('')
-  const { amount } = useGetPendingReward(chain, relic.relicId)
+  const { amount, isRefetching } = useGetPendingReward(chain, relic.relicId)
   const { maturityThresholds } = useGetLevelInfo(chain, relic.poolId)
 
   const { levelUpDate, canUpgrade, canUpgradeTo } = relicGetMaturityProgress(
@@ -85,7 +86,11 @@ export function Relic({ chain, relic }: RelicProps) {
             </HStack>
             <HStack justify="space-between" w="full">
               <Text>Pending rewards:</Text>
-              <Text>{`${fNum('token', formatUnits(amount || 0n, 18))} BEETS`}</Text>
+              {isRefetching ? (
+                <Skeleton h="20px" w="100px" />
+              ) : (
+                <Text>{`${fNum('token', formatUnits(amount || 0n, 18))} BEETS`}</Text>
+              )}
             </HStack>
             <HStack justify="space-between" w="full">
               <Text>Time to next level:</Text>
