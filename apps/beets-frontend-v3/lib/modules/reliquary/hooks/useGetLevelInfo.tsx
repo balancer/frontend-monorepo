@@ -6,7 +6,7 @@ import { useReadContract } from 'wagmi'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useGetLevelInfo(chain: GqlChain, poolId: string | undefined) {
-  const { isConnected, userAddress } = useUserAccount()
+  const { isConnected } = useUserAccount()
   const chainId = getChainId(chain)
 
   const { shouldChangeNetwork } = useChainSwitch(chainId)
@@ -17,8 +17,8 @@ export function useGetLevelInfo(chain: GqlChain, poolId: string | undefined) {
     abi: reliquaryAbi,
     address: config.contracts.beets?.reliquary,
     functionName: 'getLevelInfo',
-    args: [BigInt(poolId || 0)],
-    query: { enabled: isConnected && !shouldChangeNetwork && !!userAddress && !!poolId },
+    args: poolId ? [BigInt(poolId)] : undefined,
+    query: { enabled: isConnected && !shouldChangeNetwork && !!poolId },
   })
 
   return {

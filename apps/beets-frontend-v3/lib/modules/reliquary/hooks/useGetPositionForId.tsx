@@ -6,7 +6,7 @@ import { useReadContract } from 'wagmi'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useGetPositionForId(chain: GqlChain, relicId: string) {
-  const { isConnected, userAddress } = useUserAccount()
+  const { isConnected } = useUserAccount()
   const chainId = getChainId(chain)
 
   const { shouldChangeNetwork } = useChainSwitch(chainId)
@@ -18,7 +18,7 @@ export function useGetPositionForId(chain: GqlChain, relicId: string) {
     address: config.contracts.beets?.reliquary,
     functionName: 'getPositionForId',
     args: [BigInt(relicId)],
-    query: { enabled: isConnected && !shouldChangeNetwork && !!userAddress && !!relicId },
+    query: { enabled: isConnected && !shouldChangeNetwork && !!relicId },
   })
 
   return {

@@ -40,7 +40,7 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
     contractId: 'beets.reliquary',
     contractAddress: networkConfigs[chain].contracts.beets?.reliquary || '',
     functionName: 'updatePosition',
-    args: [relicId || ''],
+    args: relicId ? [relicId] : null,
     enabled: isConnected && !!relicId,
     txSimulationMeta,
   }

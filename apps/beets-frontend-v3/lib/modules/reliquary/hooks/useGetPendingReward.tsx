@@ -6,7 +6,7 @@ import { useReadContract } from 'wagmi'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useGetPendingReward(chain: GqlChain, relicId: string | undefined) {
-  const { isConnected, userAddress } = useUserAccount()
+  const { isConnected } = useUserAccount()
   const chainId = getChainId(chain)
 
   const { shouldChangeNetwork } = useChainSwitch(chainId)
@@ -17,8 +17,8 @@ export function useGetPendingReward(chain: GqlChain, relicId: string | undefined
     abi: reliquaryAbi,
     address: config.contracts.beets?.reliquary,
     functionName: 'pendingReward',
-    args: [BigInt(relicId || '0')],
-    query: { enabled: isConnected && !shouldChangeNetwork && !!userAddress && !!relicId },
+    args: relicId ? [BigInt(relicId)] : undefined,
+    query: { enabled: isConnected && !shouldChangeNetwork && !!relicId },
   })
 
   return {
