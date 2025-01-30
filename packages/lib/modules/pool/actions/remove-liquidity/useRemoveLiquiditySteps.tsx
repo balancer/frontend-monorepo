@@ -29,13 +29,12 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
     useApproveRelayerStep(chainId)
 
   const { wethIsEth, simulationQuery } = params
-  const simulationData = simulationQuery.data as SdkQueryRemoveLiquidityOutput
   // Only used to sign permit for v3 pools (standard permit is supported by all BPTs by contract)
   const signPermitStep = useSignPermitStep({
     pool,
     wethIsEth,
     slippagePercent: slippage,
-    queryOutput: simulationData,
+    queryOutput: simulationQuery.data as SdkQueryRemoveLiquidityOutput,
   })
 
   const isSafeAccount = useIsSafeAccount()
