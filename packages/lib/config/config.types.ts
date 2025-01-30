@@ -13,6 +13,7 @@ export interface TokensConfig {
     wNativeAsset: Address
     auraBal?: Address
     veBalBpt?: Address
+    beets?: Address
   }
   nativeAsset: {
     name: string

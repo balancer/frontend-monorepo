@@ -51,6 +51,8 @@ export type StepType =
   | 'withdrawLst'
   | 'voteForManyGaugeWeights'
   | 'levelUp'
+  | 'claimRelicReward'
+  | 'approveBatchRelayerForAllRelics'
 
 export type TxActionId =
   | 'SignBatchRelayer'

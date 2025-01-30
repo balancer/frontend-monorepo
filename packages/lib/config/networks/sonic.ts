@@ -24,6 +24,7 @@ const networkConfig: NetworkConfig = {
   tokens: {
     addresses: {
       bal: emptyAddress,
+      beets: '0x2d0e0814e62d80056181f5cd932274405966e4f0',
       wNativeAsset: '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38',
     },
     nativeAsset: {

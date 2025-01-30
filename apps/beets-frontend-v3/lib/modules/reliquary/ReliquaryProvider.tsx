@@ -11,6 +11,7 @@ import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsVa
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useLevelUpStep } from './hooks/useLevelUpStep'
 import { ReliquaryPosition } from './reliquary.types'
+import { useClaimRewardsSteps } from './hooks/useClaimRewardsSteps'
 
 const CHAIN = GqlChain.Sonic
 
@@ -28,6 +29,12 @@ export function _useReliquary() {
   const levelUpTxHash = levelUpTransactionSteps.lastTransaction?.result?.data?.transactionHash
   const levelUpTxConfirmed = levelUpTransactionSteps.lastTransactionConfirmed
 
+  const { steps: claimRewardsSteps } = useClaimRewardsSteps(CHAIN, selectedRelic?.relicId)
+  const claimRewardsTransactionSteps = useTransactionSteps(claimRewardsSteps, false)
+  const claimRewardsTxHash =
+    claimRewardsTransactionSteps.lastTransaction?.result?.data?.transactionHash
+  const claimRewardsTxConfirmed = claimRewardsTransactionSteps.lastTransactionConfirmed
+
   return {
     chain: CHAIN,
     isDisabled,
@@ -41,6 +48,9 @@ export function _useReliquary() {
     levelUpTransactionSteps,
     levelUpTxHash,
     levelUpTxConfirmed,
+    claimRewardsTransactionSteps,
+    claimRewardsTxHash,
+    claimRewardsTxConfirmed,
   }
 }
 

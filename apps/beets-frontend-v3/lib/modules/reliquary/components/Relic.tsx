@@ -23,6 +23,7 @@ import { useGetLevelInfo } from '../hooks/useGetLevelInfo'
 import { relicGetMaturityProgress } from '../reliquary.helpers'
 import { useState } from 'react'
 import { LevelUpModal } from './LevelUpModal'
+import { ClaimModal } from './ClaimModal'
 
 const RELIC_LEVEL_NAMES = [
   'The Initiate',
@@ -45,7 +46,7 @@ type RelicProps = {
 
 export function Relic({ chain, relic }: RelicProps) {
   const [isModalOpen, setIsModalOpen] = useState('')
-  const { amount: pendingReward } = useGetPendingReward(chain, relic.relicId)
+  const { amount } = useGetPendingReward(chain, relic.relicId)
   const { maturityThresholds } = useGetLevelInfo(chain, relic.poolId)
 
   const { levelUpDate, canUpgrade, canUpgradeTo } = relicGetMaturityProgress(
@@ -56,6 +57,7 @@ export function Relic({ chain, relic }: RelicProps) {
   const level = relic.level + 1
 
   const isLevelUpModalOpen = isModalOpen === 'levelUp'
+  const isClaimModalOpen = isModalOpen === 'claim'
 
   return (
     <>
@@ -83,7 +85,7 @@ export function Relic({ chain, relic }: RelicProps) {
             </HStack>
             <HStack justify="space-between" w="full">
               <Text>Pending rewards:</Text>
-              <Text>{`${fNum('token', formatUnits(pendingReward || 0n, 18))} BEETS`}</Text>
+              <Text>{`${fNum('token', formatUnits(amount || 0n, 18))} BEETS`}</Text>
             </HStack>
             <HStack justify="space-between" w="full">
               <Text>Time to next level:</Text>
@@ -97,7 +99,9 @@ export function Relic({ chain, relic }: RelicProps) {
         </CardBody>
         <CardFooter>
           <HStack justify="space-between" w="full">
-            <Button>Claim</Button>
+            <Button disabled={!amount} onClick={() => setIsModalOpen('claim')}>
+              Claim
+            </Button>
             <Button disabled={!canUpgrade} onClick={() => setIsModalOpen('levelUp')}>
               Level up
             </Button>
@@ -113,6 +117,9 @@ export function Relic({ chain, relic }: RelicProps) {
           nextLevel={canUpgradeTo}
           onClose={() => setIsModalOpen('')}
         />
+      )}
+      {isClaimModalOpen && (
+        <ClaimModal chain={chain} isOpen={isClaimModalOpen} onClose={() => setIsModalOpen('')} />
       )}
     </>
   )
