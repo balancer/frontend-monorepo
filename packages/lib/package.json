@@ -35,7 +35,7 @@
     "@emotion/styled": "11.14.0",
     "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
-    "@rainbow-me/rainbowkit": "2.2.1",
+    "@rainbow-me/rainbowkit": "2.2.3",
     "@react-three/drei": "^9.117.3",
     "@react-three/fiber": "^8.17.10",
     "@safe-global/safe-apps-sdk": "9.1.0",
