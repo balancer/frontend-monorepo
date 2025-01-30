@@ -3892,6 +3892,525 @@ export const balancerV2WeightedPoolV4Config = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BeetsV2BatchRelayerLibrary
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x1498437067d7bddc4c9427964f073ee1ab4f50fc)
+ */
+export const beetsV2BatchRelayerLibraryAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: 'vault', internalType: 'contract IVault', type: 'address' },
+      { name: 'wstETH', internalType: 'contract IERC20', type: 'address' },
+      {
+        name: 'minter',
+        internalType: 'contract IBalancerMinter',
+        type: 'address',
+      },
+      { name: 'canCallUserCheckpoint', internalType: 'bool', type: 'bool' },
+      { name: 'version', internalType: 'string', type: 'string' },
+      {
+        name: 'reliquary',
+        internalType: 'contract IReliquary',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'token', internalType: 'contract IERC20', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approveVault',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'kind', internalType: 'enum IVault.SwapKind', type: 'uint8' },
+      {
+        name: 'swaps',
+        internalType: 'struct IVault.BatchSwapStep[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'poolId', internalType: 'bytes32', type: 'bytes32' },
+          { name: 'assetInIndex', internalType: 'uint256', type: 'uint256' },
+          { name: 'assetOutIndex', internalType: 'uint256', type: 'uint256' },
+          { name: 'amount', internalType: 'uint256', type: 'uint256' },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+      { name: 'assets', internalType: 'contract IAsset[]', type: 'address[]' },
+      {
+        name: 'funds',
+        internalType: 'struct IVault.FundManagement',
+        type: 'tuple',
+        components: [
+          { name: 'sender', internalType: 'address', type: 'address' },
+          { name: 'fromInternalBalance', internalType: 'bool', type: 'bool' },
+          {
+            name: 'recipient',
+            internalType: 'address payable',
+            type: 'address',
+          },
+          { name: 'toInternalBalance', internalType: 'bool', type: 'bool' },
+        ],
+      },
+      { name: 'limits', internalType: 'int256[]', type: 'int256[]' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'outputReferences',
+        internalType: 'struct VaultActions.OutputReference[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'index', internalType: 'uint256', type: 'uint256' },
+          { name: 'key', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'batchSwap',
+    outputs: [{ name: 'results', internalType: 'int256[]', type: 'int256[]' }],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'canCallUserCheckpoint',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'poolId', internalType: 'bytes32', type: 'bytes32' },
+      {
+        name: 'kind',
+        internalType: 'enum VaultActions.PoolKind',
+        type: 'uint8',
+      },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address payable', type: 'address' },
+      {
+        name: 'request',
+        internalType: 'struct IVault.ExitPoolRequest',
+        type: 'tuple',
+        components: [
+          {
+            name: 'assets',
+            internalType: 'contract IAsset[]',
+            type: 'address[]',
+          },
+          {
+            name: 'minAmountsOut',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+          { name: 'toInternalBalance', internalType: 'bool', type: 'bool' },
+        ],
+      },
+      {
+        name: 'outputReferences',
+        internalType: 'struct VaultActions.OutputReference[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'index', internalType: 'uint256', type: 'uint256' },
+          { name: 'key', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'exitPool',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'user', internalType: 'address', type: 'address' },
+      {
+        name: 'gauges',
+        internalType: 'contract IStakingLiquidityGauge[]',
+        type: 'address[]',
+      },
+    ],
+    name: 'gaugeCheckpoint',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'gauges',
+        internalType: 'contract IStakingLiquidityGauge[]',
+        type: 'address[]',
+      },
+    ],
+    name: 'gaugeClaimRewards',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'gauge',
+        internalType: 'contract IStakingLiquidityGauge',
+        type: 'address',
+      },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'gaugeDeposit',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'gauges', internalType: 'address[]', type: 'address[]' },
+      { name: 'outputReference', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'gaugeMint',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'approval', internalType: 'bool', type: 'bool' },
+      { name: 'user', internalType: 'address', type: 'address' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'gaugeSetMinterApproval',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'gauge',
+        internalType: 'contract IStakingLiquidityGauge',
+        type: 'address',
+      },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'gaugeWithdraw',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getEntrypoint',
+    outputs: [{ name: '', internalType: 'contract IBalancerRelayer', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getVault',
+    outputs: [{ name: '', internalType: 'contract IVault', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'poolId', internalType: 'bytes32', type: 'bytes32' },
+      {
+        name: 'kind',
+        internalType: 'enum VaultActions.PoolKind',
+        type: 'uint8',
+      },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      {
+        name: 'request',
+        internalType: 'struct IVault.JoinPoolRequest',
+        type: 'tuple',
+        components: [
+          {
+            name: 'assets',
+            internalType: 'contract IAsset[]',
+            type: 'address[]',
+          },
+          {
+            name: 'maxAmountsIn',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+          { name: 'fromInternalBalance', internalType: 'bool', type: 'bool' },
+        ],
+      },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'outputReference', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'joinPool',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'ops',
+        internalType: 'struct IVault.UserBalanceOp[]',
+        type: 'tuple[]',
+        components: [
+          {
+            name: 'kind',
+            internalType: 'enum IVault.UserBalanceOpKind',
+            type: 'uint8',
+          },
+          { name: 'asset', internalType: 'contract IAsset', type: 'address' },
+          { name: 'amount', internalType: 'uint256', type: 'uint256' },
+          { name: 'sender', internalType: 'address', type: 'address' },
+          {
+            name: 'recipient',
+            internalType: 'address payable',
+            type: 'address',
+          },
+        ],
+      },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'outputReferences',
+        internalType: 'struct VaultActions.OutputReference[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'index', internalType: 'uint256', type: 'uint256' },
+          { name: 'key', internalType: 'uint256', type: 'uint256' },
+        ],
+      },
+    ],
+    name: 'manageUserBalance',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'ref', internalType: 'uint256', type: 'uint256' }],
+    name: 'peekChainedReferenceValue',
+    outputs: [{ name: 'value', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'token', internalType: 'contract IERC20', type: 'address' },
+      { name: 'poolId', internalType: 'uint256', type: 'uint256' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'outputReference', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'reliquaryCreateRelicAndDeposit',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'token', internalType: 'contract IERC20', type: 'address' },
+      { name: 'relicId', internalType: 'uint256', type: 'uint256' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'outputReference', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'reliquaryDeposit',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'relicIds', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+    ],
+    name: 'reliquaryHarvestAll',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'relicId', internalType: 'uint256', type: 'uint256' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'outputReference', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'reliquaryWithdrawAndHarvest',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'relayer', internalType: 'address', type: 'address' },
+      { name: 'approved', internalType: 'bool', type: 'bool' },
+      { name: 'authorisation', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'setRelayerApproval',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'outputReference', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'stakeETH',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'outputReference', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'stakeETHAndWrap',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'singleSwap',
+        internalType: 'struct IVault.SingleSwap',
+        type: 'tuple',
+        components: [
+          { name: 'poolId', internalType: 'bytes32', type: 'bytes32' },
+          { name: 'kind', internalType: 'enum IVault.SwapKind', type: 'uint8' },
+          { name: 'assetIn', internalType: 'contract IAsset', type: 'address' },
+          {
+            name: 'assetOut',
+            internalType: 'contract IAsset',
+            type: 'address',
+          },
+          { name: 'amount', internalType: 'uint256', type: 'uint256' },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+      {
+        name: 'funds',
+        internalType: 'struct IVault.FundManagement',
+        type: 'tuple',
+        components: [
+          { name: 'sender', internalType: 'address', type: 'address' },
+          { name: 'fromInternalBalance', internalType: 'bool', type: 'bool' },
+          {
+            name: 'recipient',
+            internalType: 'address payable',
+            type: 'address',
+          },
+          { name: 'toInternalBalance', internalType: 'bool', type: 'bool' },
+        ],
+      },
+      { name: 'limit', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'outputReference', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'swap',
+    outputs: [{ name: 'result', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'outputReference', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'unwrapWstETH',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'token', internalType: 'contract IERC20Permit', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'vaultPermit',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'token',
+        internalType: 'contract IERC20PermitDAI',
+        type: 'address',
+      },
+      { name: 'holder', internalType: 'address', type: 'address' },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'expiry', internalType: 'uint256', type: 'uint256' },
+      { name: 'allowed', internalType: 'bool', type: 'bool' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'vaultPermitDAI',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'outputReference', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'wrapStETH',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+] as const
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x1498437067d7bddc4c9427964f073ee1ab4f50fc)
+ */
+export const beetsV2BatchRelayerLibraryAddress = {
+  146: '0x1498437067d7bdDc4C9427964F073eE1AB4f50fC',
+} as const
+
+/**
+ * [__View Contract on Sonic Sonic Explorer__](https://sonicscan.org//address/0x1498437067d7bddc4c9427964f073ee1ab4f50fc)
+ */
+export const beetsV2BatchRelayerLibraryConfig = {
+  address: beetsV2BatchRelayerLibraryAddress,
+  abi: beetsV2BatchRelayerLibraryAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Reliquary
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
