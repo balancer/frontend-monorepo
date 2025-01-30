@@ -158,8 +158,6 @@ function parseRpcRequestFailedError(error: Error, chainId: number): TransactionC
 }
 
 function parseRawCallArgumentsError(error: Error, chainId: number): TransactionConfig | undefined {
-  // TODO: refactor and hadle errors like in the helper above
-
   const toMatch = error.message.match(/to:\s*([^\n]+)/)
   const dataMatch = error.message.match(/data:\s*([^\n]+)/)
 
