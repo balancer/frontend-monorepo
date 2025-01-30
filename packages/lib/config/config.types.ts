@@ -133,6 +133,7 @@ type OptionsConfig = {
   showPoolName: boolean
   showVeBal: boolean
   showMaBeets: boolean
+  allowCreateWallet: boolean
 }
 
 type Links = {
@@ -155,4 +156,5 @@ export interface ProjectConfig {
   options: OptionsConfig
   links: Links
   footer: { linkSections: LinkSection[] }
+  cowSupportedNetworks: GqlChain[]
 }

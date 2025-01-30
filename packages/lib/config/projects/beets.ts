@@ -18,12 +18,13 @@ export const ProjectConfigBeets: ProjectConfig = {
   },
   options: {
     poolDisplayType: PoolDisplayType.Name,
-    hidePoolTags: ['VE8020', 'BOOSTED'],
+    hidePoolTags: ['VE8020'],
     hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
-    hideProtocolVersion: ['cow', 'v3'],
+    hideProtocolVersion: ['cow'],
     showPoolName: true,
     showVeBal: false,
     showMaBeets: true,
+    allowCreateWallet: false,
   },
   links: {
     appLinks: [
@@ -95,4 +96,5 @@ export const ProjectConfigBeets: ProjectConfig = {
       },
     ],
   },
+  cowSupportedNetworks: [],
 }

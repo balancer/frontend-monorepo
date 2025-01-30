@@ -6,6 +6,7 @@ import { StakedSonicComposabilitySvg } from '../components/StakedSonicComposabil
 import { StakedSonicDecentralizationSvg } from '../components/StakedSonicDecentralizationSvg'
 import { StakedSonicStakingRewardsSvg } from '../components/StakedSonicStakingRewardsSvg'
 import { SpearbitLogo } from '@repo/lib/shared/components/imgs/SpearbitLogo'
+import { TrailOfBitsLogo } from '@repo/lib/shared/components/imgs/TrailOfBitsLogo'
 
 export function LandingBeetsStakedSonic() {
   return (
@@ -86,15 +87,22 @@ export function LandingBeetsStakedSonic() {
                   Protected by audited contracts and transparent governance, stS ensures your assets
                   remain secure and accessible.
                 </Text>
-                <Link
-                  href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beethoven-Sonic-Staking-Spearbit-Security-Review-December-2024.pdf"
-                  target="_blank"
-                >
-                  <HStack gap="md">
-                    <Heading fontSize="2xl">Audited by: </Heading>
+
+                <HStack gap="md">
+                  <Link
+                    href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beethoven-Sonic-Staking-Spearbit-Security-Review-December-2024.pdf"
+                    mr="md"
+                    target="_blank"
+                  >
                     <SpearbitLogo color="#25f2d0" height="36px" width="176px" />
-                  </HStack>
-                </Link>
+                  </Link>
+                  <Link
+                    href="https://github.com/trailofbits/publications/blob/master/reviews/2025-01-beethovenx-sonicstaking-securityreview.pdf"
+                    target="_blank"
+                  >
+                    <TrailOfBitsLogo color="#ffffff" height="67px" width="110px" />
+                  </Link>
+                </HStack>
               </Box>
             </Flex>
           </GridItem>

@@ -36,6 +36,22 @@ interface ExpectedVeBalArgs {
   maxLockEndDate: Date
   lockEndDate: Date
 }
+
+export function expectedTotalVeBal({
+  bpt,
+  lockEndDate,
+}: {
+  bpt: ExpectedVeBalArgs['bpt']
+  lockEndDate: ExpectedVeBalArgs['lockEndDate']
+}) {
+  const now = new Date()
+  const previousThursdayBeforeLockDate = getPreviousThursday(lockEndDate)
+
+  const lockTime = differenceInSeconds(previousThursdayBeforeLockDate, now)
+
+  return bn(bpt).times(lockTime).div(oneYearInSecs)
+}
+
 export function expectedVeBal({
   bpt,
   minLockEndDate,
@@ -48,14 +64,12 @@ export function expectedVeBal({
   totalExpectedVeBal: BigNumber
 } {
   const now = new Date()
-  const previousThursdayBeforeLockDate = getPreviousThursday(lockEndDate)
   const previousThursdayBeforeMinLockDate = getPreviousThursday(minLockEndDate)
 
-  const lockTime = differenceInSeconds(previousThursdayBeforeLockDate, now)
   const minLockTime = differenceInSeconds(previousThursdayBeforeMinLockDate, now)
   const maxLockTime = differenceInSeconds(maxLockEndDate, now)
 
-  const totalExpectedVeBal = bn(bpt).times(lockTime).div(oneYearInSecs)
+  const totalExpectedVeBal = expectedTotalVeBal({ bpt, lockEndDate })
 
   const minLockVeBal = bn(bpt).times(minLockTime).div(oneYearInSecs)
   const maxLockVeBal = bn(bpt).times(maxLockTime).div(oneYearInSecs)
