@@ -12,6 +12,12 @@ import { isV3Pool } from '../../pool.helpers'
 import { shouldUseRecoveryRemoveLiquidity } from '../LiquidityActionHelpers'
 import { SdkQueryRemoveLiquidityOutput } from './remove-liquidity.types'
 import { RemoveLiquidityStepParams, useRemoveLiquidityStep } from './useRemoveLiquidityStep'
+import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
+import { RawAmount } from '@repo/lib/modules/tokens/approvals/approval-rules'
+import { Address } from 'viem'
+import { RemoveLiquiditySimulationQueryResult } from './queries/useRemoveLiquiditySimulationQuery'
+import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
+import { Pool } from '../../pool.types'
 
 export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): TransactionStep[] {
   const { chainId, pool, chain } = usePool()
@@ -31,13 +37,30 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
     queryOutput: simulationQuery.data as SdkQueryRemoveLiquidityOutput,
   })
 
+  const isSafeAccount = useIsSafeAccount()
+
+  //Only used for v3 pools + Safe account scenario
+  const { isLoadingTokenApprovalSteps, tokenApprovalSteps } = useBptTokenApprovals(
+    pool,
+    simulationQuery
+  )
+
   const removeLiquidityStep = useRemoveLiquidityStep(params)
 
-  const removeLiquiditySteps = isV3Pool(pool)
-    ? // Standard Permit signature
-      [signPermitStep, removeLiquidityStep]
-    : // V2 and V1 (CoW AMM) pools use the Vault relayer so they do not require permit signatures
-      [removeLiquidityStep]
+  function getRemoveLiquiditySteps(): TransactionStep[] {
+    if (isV3Pool(pool)) {
+      if (isSafeAccount) {
+        // Standard permit signatures are not supported by Safe accounts (signer != owner) so we use an Approval BPT Tx step instead
+        return [...tokenApprovalSteps, removeLiquidityStep]
+      }
+      // Standard Permit signature
+      return [signPermitStep, removeLiquidityStep]
+    }
+    // V2 and V1 (CoW AMM) pools use the Vault relayer so they do not require permit signatures
+    return [removeLiquidityStep]
+  }
+
+  const removeLiquiditySteps = getRemoveLiquiditySteps()
 
   return useMemo(() => {
     if (relayerMode === 'approveRelayer') {
@@ -55,5 +78,41 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
     signRelayerStep,
     signPermitStep,
     isLoadingRelayerApproval,
+    isLoadingTokenApprovalSteps,
   ])
+}
+
+function useBptTokenApprovals(
+  pool: Pool,
+  simulationQuery: RemoveLiquiditySimulationQueryResult
+): { isLoadingTokenApprovalSteps: boolean; tokenApprovalSteps: TransactionStep[] } {
+  const { spenderAddress, rawAmount } = getSimulationQueryData(simulationQuery)
+
+  const bptAmount: RawAmount = {
+    rawAmount,
+    address: pool.address as Address,
+    symbol: pool.symbol,
+  }
+  //Only used for v3 pools + Safe account scenario
+  const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
+    useTokenApprovalSteps({
+      spenderAddress,
+      chain: pool.chain,
+      approvalAmounts: [bptAmount],
+      actionType: 'RemoveLiquidity',
+    })
+
+  return { isLoadingTokenApprovalSteps, tokenApprovalSteps }
+}
+
+function getSimulationQueryData(simulationQuery: RemoveLiquiditySimulationQueryResult): {
+  rawAmount: bigint
+  spenderAddress: Address
+} {
+  // Return default values if simulation query is not loaded
+  if (!simulationQuery.data) return { rawAmount: 0n, spenderAddress: '' as Address }
+  const simulationData = simulationQuery.data as SdkQueryRemoveLiquidityOutput
+  const rawAmount = simulationData.sdkQueryOutput.bptIn.amount
+  const spenderAddress = simulationData?.sdkQueryOutput.to
+  return { rawAmount, spenderAddress }
 }
