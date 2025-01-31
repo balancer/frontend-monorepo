@@ -18,12 +18,10 @@ import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/bat
 import { GaugeActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/gauge-actions.service'
 import { ReliquaryActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/reliquary-actions.service'
 import { VaultActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/vault-actions.service'
-import { PublicClient } from 'viem'
 
 export function selectAddLiquidityHandler(
   pool: Pool,
-  wantsProportional = false,
-  client: PublicClient | undefined = undefined
+  wantsProportional = false
 ): AddLiquidityHandler {
   // This is just an example to illustrate how edge-case handlers would receive different inputs but return a common contract
   if (pool.id === 'TWAMM-example') return new TwammAddLiquidityHandler(getChainId(pool.chain))
@@ -52,7 +50,7 @@ export function selectAddLiquidityHandler(
     if (isV3Pool(pool)) {
       return new ProportionalAddLiquidityHandlerV3(pool)
     }
-    if (isMaBeetsPool(pool.id) && client) {
+    if (isMaBeetsPool(pool.id)) {
       const networkConfig = getNetworkConfig(pool.chain)
       const gaugeActionsService = new GaugeActionsService()
       const reliquaryActionsService = new ReliquaryActionsService()
@@ -63,7 +61,7 @@ export function selectAddLiquidityHandler(
         reliquaryActionsService,
         vaultActionsService
       )
-      return new ReliquaryProportionalAddLiquidityHandler(pool, client, batchRelayerService)
+      return new ReliquaryProportionalAddLiquidityHandler(pool, batchRelayerService)
     }
     return new ProportionalAddLiquidityHandler(pool)
   }

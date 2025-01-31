@@ -3,7 +3,7 @@ import { AddLiquidity, HumanAmount, Slippage } from '@balancer/sdk'
 import { SdkBuildAddLiquidityInput } from '../add-liquidity.types'
 import { BaseProportionalAddLiquidityHandler } from './BaseProportionalAddLiquidity.handler'
 import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/batch-relayer.service'
-import { Address, encodeFunctionData, PublicClient } from 'viem'
+import { Address, encodeFunctionData } from 'viem'
 import networkConfig from '@repo/lib/config/networks/sonic'
 import { Pool } from '../../../pool.types'
 import { balancerV2BalancerRelayerV6Abi } from '@repo/lib/modules/web3/contracts/abi/generated'
@@ -11,7 +11,6 @@ import { balancerV2BalancerRelayerV6Abi } from '@repo/lib/modules/web3/contracts
 export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAddLiquidityHandler {
   constructor(
     pool: Pool,
-    private readonly client: PublicClient,
     private readonly batchRelayerService: BatchRelayerService
   ) {
     super(pool)
@@ -26,8 +25,9 @@ export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAd
   }: SdkBuildAddLiquidityInput & { relicId?: number }): Promise<TransactionConfig> {
     const addLiquidity = new AddLiquidity()
 
-    // First get join data with zero minimum BPT for simulation
-    const { callData: simulatedJoinCallData, value } = addLiquidity.buildCall({
+    console.log({ queryOutput })
+
+    const { callData: joinCallData, value } = addLiquidity.buildCall({
       ...queryOutput.sdkQueryOutput,
       slippage: Slippage.fromPercentage(slippagePercent as HumanAmount),
       sender: account,
@@ -42,31 +42,7 @@ export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAd
       amount: this.batchRelayerService.toPersistentChainedReference(0),
     })
 
-    // Encode peek reference to get actual BPT out
-    const peekJoinBptOut = this.batchRelayerService.encodePeekChainedReferenceValue(
-      this.batchRelayerService.toPersistentChainedReference(0)
-    )
-
-    // Simulate the join to get actual BPT out
-    const [, actualBptOut] = await this.batchRelayerService.simulateMulticall({
-      userAddress: account,
-      calls: [simulatedJoinCallData, peekJoinBptOut],
-      client: this.client,
-    })
-
-    // TODO: fix simulation
-    console.log({ actualBptOut })
-
-    // Now build the real join with proper slippage using the simulated BPT out
-    const { callData: joinCallData } = addLiquidity.buildCall({
-      ...queryOutput.sdkQueryOutput,
-      slippage: Slippage.fromPercentage(slippagePercent as HumanAmount),
-      sender: account,
-      recipient: networkConfig.contracts.balancer.relayerV6,
-      wethIsEth: this.helpers.isNativeAssetIn(humanAmountsIn),
-      //minimumBpt: actualBptOut, // Use the actual BPT out from simulation
-    })
-
+    console.log([joinCallData, relicDepositData])
     // Return multicall data
     return {
       account,
@@ -93,7 +69,7 @@ export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAd
     return relicId && typeof relicId !== undefined
       ? this.batchRelayerService.reliquaryEncodeDeposit({
           sender: networkConfig.contracts.balancer.relayerV6,
-          token: '0x10ac2F9DaE6539E77e372aDB14B1BF8fBD16b3e8', // TODO: add to config
+          token: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8', // TODO: add to config
           relicId: BigInt(relicId),
           amount,
           outputReference: 0n,
@@ -101,7 +77,7 @@ export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAd
       : this.batchRelayerService.reliquaryEncodeCreateRelicAndDeposit({
           sender: networkConfig.contracts.balancer.relayerV6,
           recipient: userAddress,
-          token: '0x10ac2F9DaE6539E77e372aDB14B1BF8fBD16b3e8', // TODO: add to config
+          token: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8', // TODO: add to config
           poolId: 0n, // TODO: add to config?
           amount,
           outputReference: 0n,
