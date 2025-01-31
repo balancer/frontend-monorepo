@@ -8,6 +8,8 @@ import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInp
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { ReliquaryProvider } from './ReliquaryProvider'
+import { RelayerSignatureProvider } from '@repo/lib/modules/relayer/RelayerSignatureProvider'
+import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 
 export default function ReliquaryProvidersLayout({ children }: PropsWithChildren) {
   const { tokens } = useTokens()
@@ -22,13 +24,17 @@ export default function ReliquaryProvidersLayout({ children }: PropsWithChildren
 
   return (
     <TransactionStateProvider>
-      <TokenBalancesProvider initTokens={poolTokens}>
-        <TokenInputsValidationProvider>
-          <ReliquaryProvider>
-            <PriceImpactProvider>{children}</PriceImpactProvider>
-          </ReliquaryProvider>
-        </TokenInputsValidationProvider>
-      </TokenBalancesProvider>
+      <RelayerSignatureProvider>
+        <Permit2SignatureProvider>
+          <TokenBalancesProvider initTokens={poolTokens}>
+            <TokenInputsValidationProvider>
+              <ReliquaryProvider>
+                <PriceImpactProvider>{children}</PriceImpactProvider>
+              </ReliquaryProvider>
+            </TokenInputsValidationProvider>
+          </TokenBalancesProvider>
+        </Permit2SignatureProvider>
+      </RelayerSignatureProvider>
     </TransactionStateProvider>
   )
 }

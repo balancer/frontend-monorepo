@@ -30,7 +30,6 @@ export class ReliquaryZapService {
 
     const joinNewFbeets = this.getReliquaryFbeetsJoinCallData({
       userAddress,
-      amountsIn: [stsAmountScaled, beetsAmountScaled],
       maxAmountsIn: [stsAmountScaled, beetsAmountScaled],
       //this is set to 0 for the peek
       minimumBpt: 0n,
@@ -58,7 +57,6 @@ export class ReliquaryZapService {
     return [
       this.getReliquaryFbeetsJoinCallData({
         userAddress,
-        amountsIn: [stsAmountScaled, beetsAmountScaled],
         maxAmountsIn: [stsAmountScaled, beetsAmountScaled],
         minimumBpt: BigInt(
           bn(newFbeetsBptAmountOut).minus(bn(newFbeetsBptAmountOut).times(slippage)).toFixed(0)
@@ -72,7 +70,6 @@ export class ReliquaryZapService {
 
   private getReliquaryFbeetsJoinCallData({
     userAddress,
-    amountsIn,
     maxAmountsIn,
     outputReference,
     fromInternalBalance,
@@ -80,14 +77,10 @@ export class ReliquaryZapService {
   }: {
     userAddress: Address
     outputReference: bigint
-    amountsIn: bigint[]
     maxAmountsIn: bigint[]
     fromInternalBalance: boolean
     minimumBpt: bigint
   }) {
-    // TODO: check everything
-    console.log({ amountsIn })
-
     return this.batchRelayerService.vaultEncodeJoinPool({
       poolId: PROJECT_CONFIG.corePoolId as Hex,
       poolKind: 0,

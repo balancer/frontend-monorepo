@@ -25,6 +25,7 @@ import { relicGetMaturityProgress } from '../reliquary.helpers'
 import { useState } from 'react'
 import { LevelUpModal } from './LevelUpModal'
 import { ClaimModal } from './ClaimModal'
+import { useRouter } from 'next/navigation'
 
 const RELIC_LEVEL_NAMES = [
   'The Initiate',
@@ -46,6 +47,7 @@ type RelicProps = {
 }
 
 export function Relic({ chain, relic }: RelicProps) {
+  const router = useRouter()
   const [isModalOpen, setIsModalOpen] = useState('')
   const { amount, isRefetching } = useGetPendingReward(chain, relic.relicId)
   const { maturityThresholds } = useGetLevelInfo(chain, relic.poolId)
@@ -110,7 +112,7 @@ export function Relic({ chain, relic }: RelicProps) {
             <Button disabled={!canUpgrade} onClick={() => setIsModalOpen('levelUp')}>
               Level up
             </Button>
-            <Button>Deposit</Button>
+            <Button onClick={() => router.push('/mabeets/add-liquidity')}>Deposit</Button>
             <Button>Withdraw</Button>
           </HStack>
         </CardFooter>
