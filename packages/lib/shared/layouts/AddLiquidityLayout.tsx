@@ -14,19 +14,23 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import { AddLiquidityProvider } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { usePathname } from 'next/navigation'
 
 type Props = PropsWithChildren<{
   txHash?: string[]
 }>
 
 export function AddLiquidityLayout({ txHash, children }: Props) {
+  const pathname = usePathname()
   const { pool } = usePool()
   const { redirectToPoolPage } = usePoolRedirect(pool)
 
   const maybeTxHash = txHash?.[0] || ''
   const urlTxHash = isHash(maybeTxHash) ? maybeTxHash : undefined
 
-  if (shouldBlockAddLiquidity(pool)) {
+  const isMabeetsAddLiquidity = pathname === '/mabeets/add-liquidity'
+
+  if (shouldBlockAddLiquidity(pool) && !isMabeetsAddLiquidity) {
     redirectToPoolPage()
     return null
   }
