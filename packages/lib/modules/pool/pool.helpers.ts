@@ -64,7 +64,7 @@ export function isFx(poolType: GqlPoolType | string): boolean {
 }
 
 export function isBoosted(pool: PoolListItem | Pool) {
-  return isV3Pool(pool) && pool.hasAnyAllowedBuffer // this means that the pool has at least one ERC4626 token with allowed buffer
+  return isV3Pool(pool) && pool.tags?.includes('BOOSTED')
 }
 
 export function isGyro(poolType: GqlPoolType) {
