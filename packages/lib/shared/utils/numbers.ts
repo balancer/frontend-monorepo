@@ -258,3 +258,12 @@ export function isNegative(amount: Numberish): boolean {
 export function isSmallUsd(value: Numberish): boolean {
   return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
 }
+
+/*
+  Small USD amounts crashes the the SDK remove queries,
+  so we set this threshold to disable removes
+ */
+export function isTooSmallToRemoveUsd(value: Numberish): boolean {
+  const USD_LOWER_THRESHOLD = 0.03
+  return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
+}
