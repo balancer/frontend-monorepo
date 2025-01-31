@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { getChainId } from '@repo/lib/config/app.config'
+import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { Pool } from '../../../pool.types'
 import { TwammAddLiquidityHandler } from './TwammAddLiquidity.handler'
 import { UnbalancedAddLiquidityV2Handler } from './UnbalancedAddLiquidityV2.handler'
@@ -7,16 +7,23 @@ import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
 import { supportsNestedActions } from '../../LiquidityActionHelpers'
 import { ProportionalAddLiquidityHandler } from './ProportionalAddLiquidity.handler'
-import { isBoosted, isV3Pool } from '../../../pool.helpers'
+import { isBoosted, isMaBeetsPool, isV3Pool } from '../../../pool.helpers'
 import { ProportionalAddLiquidityHandlerV3 } from './ProportionalAddLiquidityV3.handler'
 import { UnbalancedAddLiquidityV3Handler } from './UnbalancedAddLiquidityV3.handler'
 import { BoostedUnbalancedAddLiquidityV3Handler } from './BoostedUnbalancedAddLiquidityV3.handler'
 import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'
 import { ProportionalBoostedAddLiquidityV3 } from './ProportionalBoostedAddLiquidityV3.handler'
+import { ReliquaryProportionalAddLiquidityHandler } from './ReliquaryProportionalAddLiquidity.handler'
+import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/batch-relayer.service'
+import { GaugeActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/gauge-actions.service'
+import { ReliquaryActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/reliquary-actions.service'
+import { VaultActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/vault-actions.service'
+import { PublicClient } from 'viem'
 
 export function selectAddLiquidityHandler(
   pool: Pool,
-  wantsProportional = false
+  wantsProportional = false,
+  client: PublicClient | undefined = undefined
 ): AddLiquidityHandler {
   // This is just an example to illustrate how edge-case handlers would receive different inputs but return a common contract
   if (pool.id === 'TWAMM-example') return new TwammAddLiquidityHandler(getChainId(pool.chain))
@@ -44,6 +51,19 @@ export function selectAddLiquidityHandler(
   if (wantsProportional) {
     if (isV3Pool(pool)) {
       return new ProportionalAddLiquidityHandlerV3(pool)
+    }
+    if (isMaBeetsPool(pool.id) && client) {
+      const networkConfig = getNetworkConfig(pool.chain)
+      const gaugeActionsService = new GaugeActionsService()
+      const reliquaryActionsService = new ReliquaryActionsService()
+      const vaultActionsService = new VaultActionsService()
+      const batchRelayerService = new BatchRelayerService(
+        networkConfig.contracts.balancer.relayerV6,
+        gaugeActionsService,
+        reliquaryActionsService,
+        vaultActionsService
+      )
+      return new ReliquaryProportionalAddLiquidityHandler(pool, client, batchRelayerService)
     }
     return new ProportionalAddLiquidityHandler(pool)
   }
