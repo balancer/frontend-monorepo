@@ -24,7 +24,6 @@ const simulationQueryResult = {
       aTokenAmountMock(balAddress, balTokenOutUnits),
       aTokenAmountMock(wETHAddress, wEthTokenOutUnits),
     ],
-    sdkQueryOutput: { bptIn: { amount: 100000n } },
   },
 }
 // Mock query to avoid onchain SDK call from unit tests

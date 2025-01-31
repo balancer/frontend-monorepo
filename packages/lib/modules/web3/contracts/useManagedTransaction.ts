@@ -119,7 +119,7 @@ export function useManagedTransaction({
     }
 
     try {
-      return await writeQuery.writeContractAsync({
+      await writeQuery.writeContractAsync({
         ...simulateQuery.data.request,
         chainId: chainId,
       })

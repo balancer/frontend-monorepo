@@ -43,8 +43,7 @@ export function TransactionStepButton({ step }: Props) {
   async function handleOnClick() {
     setExecutionError(undefined)
     try {
-      if (!executeAsync) return
-      return await executeAsync()
+      await executeAsync?.()
     } catch (e: unknown) {
       setExecutionError(ensureError(e))
     }
