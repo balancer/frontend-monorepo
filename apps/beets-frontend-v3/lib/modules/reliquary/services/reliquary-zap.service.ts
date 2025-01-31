@@ -15,30 +15,27 @@ export class ReliquaryZapService {
   public async getReliquaryDepositContractCallData({
     userAddress,
     beetsAmount,
-    ftmAmount,
+    stsAmount,
     slippage,
-    isNativeFtm,
     relicId,
   }: {
     userAddress: Address
     beetsAmount: HumanAmount
-    ftmAmount: HumanAmount
-    slippage: HumanAmount
-    isNativeFtm: boolean
+    stsAmount: HumanAmount
+    slippage: string
     relicId?: number
   }): Promise<string[]> {
     const beetsAmountScaled = parseUnits(beetsAmount, 18)
-    const ftmAmountScaled = parseUnits(ftmAmount, 18)
+    const stsAmountScaled = parseUnits(stsAmount, 18)
 
     const joinNewFbeets = this.getReliquaryFbeetsJoinCallData({
       userAddress,
-      amountsIn: [ftmAmountScaled, beetsAmountScaled],
-      maxAmountsIn: [ftmAmountScaled, beetsAmountScaled],
+      amountsIn: [stsAmountScaled, beetsAmountScaled],
+      maxAmountsIn: [stsAmountScaled, beetsAmountScaled],
       //this is set to 0 for the peek
       minimumBpt: 0n,
       outputReference: this.batchRelayerService.toPersistentChainedReference(0),
       fromInternalBalance: false,
-      ethValue: isNativeFtm ? ftmAmountScaled : 0n,
     })
 
     const relicDepositOrCreateAndDeposit = this.getRelicDepositOrCreateAndDeposit({
@@ -61,14 +58,13 @@ export class ReliquaryZapService {
     return [
       this.getReliquaryFbeetsJoinCallData({
         userAddress,
-        amountsIn: [ftmAmountScaled, beetsAmountScaled],
-        maxAmountsIn: [ftmAmountScaled, beetsAmountScaled],
+        amountsIn: [stsAmountScaled, beetsAmountScaled],
+        maxAmountsIn: [stsAmountScaled, beetsAmountScaled],
         minimumBpt: BigInt(
           bn(newFbeetsBptAmountOut).minus(bn(newFbeetsBptAmountOut).times(slippage)).toFixed(0)
         ),
         outputReference: this.batchRelayerService.toPersistentChainedReference(0),
         fromInternalBalance: true,
-        ethValue: isNativeFtm ? ftmAmountScaled : 0n,
       }),
       relicDepositOrCreateAndDeposit,
     ]
@@ -80,7 +76,6 @@ export class ReliquaryZapService {
     maxAmountsIn,
     outputReference,
     fromInternalBalance,
-    ethValue,
     minimumBpt,
   }: {
     userAddress: Address
@@ -88,7 +83,6 @@ export class ReliquaryZapService {
     amountsIn: bigint[]
     maxAmountsIn: bigint[]
     fromInternalBalance: boolean
-    ethValue: bigint
     minimumBpt: bigint
   }) {
     // TODO: check everything
@@ -101,8 +95,8 @@ export class ReliquaryZapService {
       recipient: networkConfig.contracts.balancer.relayerV6,
       joinPoolRequest: {
         assets: [
-          networkConfig.tokens.stakedAsset?.address || '0x',
           networkConfig.tokens.addresses.beets || '0x',
+          networkConfig.tokens.stakedAsset?.address || '0x',
         ],
         userData: WeightedEncoder.encodeAddLiquidityUserData(AddLiquidityKind.Proportional, {
           maxAmountsIn,
@@ -113,7 +107,7 @@ export class ReliquaryZapService {
         maxAmountsIn,
         fromInternalBalance,
       },
-      value: ethValue,
+      value: 0n,
       outputReference,
     }) as Hex
   }
