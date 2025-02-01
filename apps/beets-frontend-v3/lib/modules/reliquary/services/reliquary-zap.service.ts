@@ -33,19 +33,17 @@ export class ReliquaryZapService {
       maxAmountsIn: [stsAmountScaled, beetsAmountScaled],
       //this is set to 0 for the peek
       minimumBpt: 0n,
-      outputReference: this.batchRelayerService.toPersistentChainedReference(0),
+      outputReference: 0n,
       fromInternalBalance: false,
     })
 
     const relicDepositOrCreateAndDeposit = this.getRelicDepositOrCreateAndDeposit({
       userAddress,
       relicId,
-      amount: this.batchRelayerService.toPersistentChainedReference(0),
+      amount: 0n,
     })
 
-    const peekJoinNewFbeetsBpt = this.batchRelayerService.encodePeekChainedReferenceValue(
-      this.batchRelayerService.toPersistentChainedReference(0)
-    )
+    const peekJoinNewFbeetsBpt = this.batchRelayerService.encodePeekChainedReferenceValue(0n)
 
     const [, newFbeetsBptAmountOut] = await this.batchRelayerService.simulateMulticall({
       userAddress,
@@ -61,7 +59,7 @@ export class ReliquaryZapService {
         minimumBpt: BigInt(
           bn(newFbeetsBptAmountOut).minus(bn(newFbeetsBptAmountOut).times(slippage)).toFixed(0)
         ),
-        outputReference: this.batchRelayerService.toPersistentChainedReference(0),
+        outputReference: 0n,
         fromInternalBalance: true,
       }),
       relicDepositOrCreateAndDeposit,
