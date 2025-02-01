@@ -13,8 +13,8 @@ import { BlockedAddressModal } from './BlockedAddressModal'
 import { CustomAvatar } from './CustomAvatar'
 import { UserAccountProvider } from './UserAccountProvider'
 import { PropsWithChildren } from 'react'
-import { wagmiConfig } from './WagmiConfig'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
+import { baseConfig } from './baseConfig'
 
 export function Web3Provider({ children }: PropsWithChildren) {
   const isMounted = useIsMounted()
@@ -94,7 +94,7 @@ export function Web3Provider({ children }: PropsWithChildren) {
 
   return (
     <ReactQueryClientProvider>
-      <WagmiProvider config={wagmiConfig}>
+      <WagmiProvider config={baseConfig}>
         <RainbowKitProvider avatar={CustomAvatar} theme={customTheme}>
           <UserAccountProvider>
             <UserSettingsProvider

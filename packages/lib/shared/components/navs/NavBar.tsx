@@ -14,6 +14,7 @@ import DarkModeToggle from '../btns/DarkModeToggle'
 import RecentTransactions from '../other/RecentTransactions'
 import { AppLink, useNav } from './useNav'
 import { clamp } from 'lodash'
+import { ConnectWallet2 } from '@repo/lib/modules/web3/baseConfig'
 
 type Props = {
   mobileNav?: ReactNode
@@ -98,7 +99,7 @@ function NavLinks({
 export function NavActions({
   mobileNav,
   hideDarkModeToggle,
-  allowCreateWallet,
+  // allowCreateWallet,
 }: {
   mobileNav: ReactNode
   hideDarkModeToggle?: boolean
@@ -135,16 +136,15 @@ export function NavActions({
         display: { base: 'none', lg: 'block' },
       },
       {
-        el: hideDarkModeToggle ? null : <DarkModeToggle />,
+        el: null,
         display: { base: 'none', lg: 'block' },
       },
       {
-        el: (
-          <ConnectWallet
-            connectLabel={allowCreateWallet ? 'Connect' : 'Connect wallet'}
-            showCreateWalletButton={allowCreateWallet}
-          />
-        ),
+        el: <ConnectWallet />,
+        display: { base: 'block', lg: 'block' },
+      },
+      {
+        el: <ConnectWallet2 />,
         display: { base: 'block', lg: 'block' },
       },
       {
