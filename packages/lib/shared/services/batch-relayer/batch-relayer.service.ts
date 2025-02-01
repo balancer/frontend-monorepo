@@ -30,10 +30,6 @@ export class BatchRelayerService {
     })
   }
 
-  public toPersistentChainedReference(id: number): bigint {
-    return BigInt(id) | (BigInt(1) << BigInt(255))
-  }
-
   public gaugeEncodeDeposit(params: EncodeGaugeDepositInput): Hex {
     return this.gaugeActionsService.encodeDeposit(params)
   }
