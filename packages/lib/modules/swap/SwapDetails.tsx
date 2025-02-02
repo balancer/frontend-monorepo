@@ -141,8 +141,11 @@ export function SwapDetails() {
             </PopoverTrigger>
             <PopoverContent p="sm">
               <Text fontSize="sm" variant="secondary">
-                This is the negative price impact of the swap based on the current market prices of
-                the token in vs token out.
+                This usually displays the negative price impact of the swap based on the current
+                market prices of the token in vs token out. However, for some reason, the price
+                impact currently can’t be calculated. This may be due to the pricing provider being
+                down or not knowing one of the tokens. Only proceed if you know exactly what you are
+                doing.
               </Text>
             </PopoverContent>
           </Popover>
