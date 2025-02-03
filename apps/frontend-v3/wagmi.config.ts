@@ -72,6 +72,10 @@ export default defineConfig(() => {
             name: 'veDelegationProxy',
             address: mainnetNetworkConfig.contracts.veDelegationProxy,
           },
+          {
+            name: 'VaultAdmin',
+            address: mainnetNetworkConfig.contracts.balancer.vaultAdmin,
+          },
         ],
       }),
     ],
