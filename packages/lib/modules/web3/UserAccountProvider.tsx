@@ -2,7 +2,7 @@
 
 /* eslint-disable react-hooks/exhaustive-deps */
 // eslint-disable-next-line no-restricted-imports
-import { useAccount, useDisconnect } from 'wagmi'
+import { useAccount, useAccountEffect, useDisconnect } from 'wagmi'
 import { emptyAddress } from './contracts/wagmi-helpers'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -86,6 +86,14 @@ export function _useUserAccount() {
     }
   }, [result.userAddress])
 
+  useAccountEffect({
+    onDisconnect: () => {
+      // When disconnecting from WC connector we need a full page reload to enforce a new WC connector instance created
+      console.log('Full reload o WC disconnection')
+      window.location.reload()
+    },
+  })
+
   function onNewUserAddress(result: UseUserAccountResponse) {
     // Set Sentry user
     setUser({
@@ -103,10 +111,7 @@ export function _useUserAccount() {
     setUser(null)
 
     if (isConnectedToWC) {
-      console.log('Full reload o WC disconnection')
       setIsConnectedToWC(false)
-      // When disconnecting from WC connector we need a full page reload to enforce a new WC connector instance created
-      window.location.reload()
     }
   }
 
