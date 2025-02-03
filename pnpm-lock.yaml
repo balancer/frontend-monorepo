@@ -177,6 +177,9 @@ importers:
 
   apps/frontend-v3:
     dependencies:
+      '@balancer/sdk':
+        specifier: 1.4.1
+        version: 1.4.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@18.2.0)
