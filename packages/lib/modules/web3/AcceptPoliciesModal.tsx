@@ -42,10 +42,11 @@ export function AcceptPoliciesModal() {
     }
   }, [acceptedPolicies, isBlocked, isLoading, isConnected, userAddress])
 
-  function handleOnClose() {
+  function handleOnClose(isProceeding = false) {
+    const shouldDisconnect = !isChecked || !acceptedPolicies.includes(userAddress.toLowerCase())
     //disconnect wallet if modal is closed without accepting & clicking 'Proceed'
-    if (!isChecked || !acceptedPolicies.includes(userAddress.toLowerCase())) {
-      disconnect()
+    if (!isProceeding && shouldDisconnect) {
+      if (isConnected) disconnect()
     }
     setIsChecked(false)
     onClose()
@@ -56,7 +57,7 @@ export function AcceptPoliciesModal() {
       setAcceptedPolicies([...acceptedPolicies, userAddress.toLowerCase()])
     }
 
-    handleOnClose()
+    handleOnClose(true)
   }
 
   return (
