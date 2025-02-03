@@ -5,7 +5,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { HumanAmount, isSameAddress } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
-import { Address, Hash } from 'viem'
+import { Address, formatUnits, Hash } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useAddLiquiditySimulationQuery } from './queries/useAddLiquiditySimulationQuery'
 import { useAddLiquidityPriceImpactQuery } from './queries/useAddLiquidityPriceImpactQuery'
@@ -30,11 +30,13 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { supportsWethIsEth } from '../../pool.helpers'
-import { getPoolActionableTokens } from '../../pool-tokens.utils'
+import { getPoolActionableTokens, getPriceRateForToken } from '../../pool-tokens.utils'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { useGetMinimumWrapAmount } from '@repo/lib/shared/hooks/useGetMinimumWrapAmount'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -137,6 +139,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     enabled: !urlTxHash,
     referenceAmountAddress,
   })
+
   const priceImpactQuery = useAddLiquidityPriceImpactQuery({
     handler,
     humanAmountsIn,
@@ -178,6 +181,27 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   useEffect(() => {
     setInitialHumanAmountsIn()
   }, [])
+
+  const { minimumWrapAmount } = useGetMinimumWrapAmount(chain)
+
+  const minimumDepositAmounts = useMemo(() => {
+    tokens.map(token => {
+      const minimumWrapAmountFormatted = formatUnits(minimumWrapAmount, token.decimals)
+      const humanAmountIn = humanAmountsIn.find(h => h.tokenAddress === token.address)?.humanAmount
+      const priceRate = getPriceRateForToken(token, pool)
+
+      return humanAmountIn && priceRate
+        ? {
+            tokenAddress: token.address,
+            isAboveMinimumDeposit: bn(bn(humanAmountIn).times(priceRate)).gt(
+              minimumWrapAmountFormatted
+            ),
+          }
+        : {}
+    })
+  }, [minimumWrapAmount])
+
+  console.log({ minimumWrapAmount, tokens, humanAmountsIn, minimumDepositAmounts })
 
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],

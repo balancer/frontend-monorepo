@@ -276,3 +276,8 @@ export function getStandardRootTokens(pool: Pool, poolActionableTokens?: ApiToke
     isStandardOrUnderlyingRootToken(pool, token.address as Address)
   )
 }
+
+export function getPriceRateForToken(token: ApiToken, pool: Pool) {
+  return pool.poolTokens.find(poolToken => poolToken.underlyingToken?.address === token.address)
+    ?.priceRate
+}
