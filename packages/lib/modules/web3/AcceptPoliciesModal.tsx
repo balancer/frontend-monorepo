@@ -19,7 +19,7 @@ import {
 import { useEffect, useState } from 'react'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useUserAccount } from './UserAccountProvider'
-// import { useDisconnect } from 'wagmi'
+import { useDisconnect } from 'wagmi'
 import NextLink from 'next/link'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
@@ -28,7 +28,7 @@ export function AcceptPoliciesModal() {
   const { acceptedPolicies, setAcceptedPolicies } = useUserSettings()
   const { isBlocked, isLoading, isConnected, userAddress } = useUserAccount()
   const [isChecked, setIsChecked] = useState(false)
-  // const { disconnect } = useDisconnect()
+  const { disconnect } = useDisconnect()
   const {
     projectName,
     options: { showVeBal },
@@ -46,8 +46,7 @@ export function AcceptPoliciesModal() {
     const shouldDisconnect = !isChecked || !acceptedPolicies.includes(userAddress.toLowerCase())
     //disconnect wallet if modal is closed without accepting & clicking 'Proceed'
     if (!isProceeding && shouldDisconnect) {
-      console.log('disconnecting on handleOnClose?', { isConnected })
-      // if (isConnected) disconnect()
+      if (isConnected) disconnect()
     }
     setIsChecked(false)
     onClose()

@@ -89,7 +89,7 @@ export function _useUserAccount() {
   useAccountEffect({
     onDisconnect: () => {
       // When disconnecting from WC connector we need a full page reload to enforce a new WC connector instance created
-      console.log('Full reload o WC disconnection')
+      console.log('Full page reload on WC disconnection')
       window.location.reload()
     },
   })

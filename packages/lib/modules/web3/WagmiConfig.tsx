@@ -48,14 +48,10 @@ const connectors = connectorsForWallets(
 if (!isConnectedToWC()) {
   const lastConnector = connectors[connectors.length - 1]
   console.log({ lastConnectorId: lastConnector({} as any).id })
-  if (lastConnector({} as any).id === 'walletConnect') {
-    console.log('Detected last connector is wallet connect')
-  } else {
-    console.log('Adding WC as last connector')
+  if (lastConnector({} as any).id !== 'walletConnect') {
     connectors.push(
       createWalletConnectConnector({ index: connectors.length, walletConnectProjectId })
     )
-    console.log({ lastConnectorId: connectors[connectors.length - 1]({} as any).id })
   }
 }
 
