@@ -9,6 +9,7 @@ import {
   BALANCER_BATCH_ROUTER,
   BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
   PERMIT2,
+  VAULT_ADMIN,
   VAULT_V3,
 } from '@balancer/sdk'
 import { mainnet } from 'viem/chains'
@@ -89,6 +90,7 @@ const networkConfig: NetworkConfig = {
       batchRouter: BALANCER_BATCH_ROUTER[mainnet.id],
       compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[mainnet.id],
       WeightedPool2TokensFactory: '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0',
+      vaultAdmin: VAULT_ADMIN[mainnet.id],
     },
     feeDistributor: '0xD3cf852898b21fc233251427c2DC93d3d604F3BB',
     veDelegationProxy: '0x6f5a2eE11E7a772AeB5114A20d0D7c0ff61EB8A0',

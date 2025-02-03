@@ -3,7 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
-import { PERMIT2, VAULT_V3 } from '@balancer/sdk'
+import { PERMIT2, VAULT_ADMIN, VAULT_V3 } from '@balancer/sdk'
 import { arbitrum } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -56,6 +56,7 @@ const networkConfig: NetworkConfig = {
       relayerV6: '0x9B892E515D2Ab8869F17488d64B3b918731cc70d',
       minter: '0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68',
       WeightedPool2TokensFactory: '0xCF0a32Bbef8F064969F21f7e02328FB577382018',
+      vaultAdmin: VAULT_ADMIN[arbitrum.id],
     },
     veDelegationProxy: '0x81cFAE226343B24BA12EC6521Db2C79E7aeeb310',
     permit2: PERMIT2[arbitrum.id],
