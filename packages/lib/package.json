@@ -110,7 +110,7 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "@types/three": "^0.172.0",
     "@types/tinycolor2": "^1.4.6",
-    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/eslint-plugin": "^8.22.0",
     "@typescript-eslint/parser": "^5.60.1",
     "@viem/anvil": "^0.0.10",
     "@vitejs/plugin-react": "^4.2.1",
