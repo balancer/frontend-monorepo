@@ -39,19 +39,14 @@ export function AcceptPoliciesModal() {
   useEffect(() => {
     if (!isLoading && isConnected && !isAddressInAcceptedPolicies && !isBlocked) {
       onOpen()
-    } else {
-      handleOnClose()
     }
   }, [acceptedPolicies, isBlocked, isLoading, isConnected, userAddress])
 
-  //disconnect wallet if modal is closed without accepting & clicking 'Proceed'
-  useEffect(() => {
-    if (!isOpen && !acceptedPolicies.includes(userAddress.toLowerCase())) {
+  function handleOnClose() {
+    //disconnect wallet if modal is closed without accepting & clicking 'Proceed'
+    if (!acceptedPolicies.includes(userAddress.toLowerCase())) {
       disconnect()
     }
-  }, [isOpen])
-
-  function handleOnClose() {
     setIsChecked(false)
     onClose()
   }
