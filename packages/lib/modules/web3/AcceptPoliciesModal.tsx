@@ -44,7 +44,7 @@ export function AcceptPoliciesModal() {
 
   function handleOnClose() {
     //disconnect wallet if modal is closed without accepting & clicking 'Proceed'
-    if (!acceptedPolicies.includes(userAddress.toLowerCase())) {
+    if (!isChecked || !acceptedPolicies.includes(userAddress.toLowerCase())) {
       disconnect()
     }
     setIsChecked(false)
