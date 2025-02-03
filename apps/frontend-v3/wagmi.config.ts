@@ -18,7 +18,7 @@ export default defineConfig(() => {
   })
 
   return {
-    out: 'lib/modules/web3/contracts/abi/generated.ts',
+    out: '../../packages/lib/modules/web3/contracts/abi/generated.ts',
     contracts: CONTRACTS,
     plugins: [
       etherscan({
