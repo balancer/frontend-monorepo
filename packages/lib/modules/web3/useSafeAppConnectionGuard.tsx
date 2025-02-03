@@ -7,6 +7,7 @@ import { useEffect } from 'react'
   this hook will ensure that the Safe App tab keeps connected to the Safe account.
 */
 export function useSafeAppConnectionGuard(newConnector?: Connector, chainId?: number) {
+  // DO WE NEED THIS NOW?
   const { connect, connectors } = useConnect()
   useEffect(() => {
     const safeConnector = connectors.find(c => c.id === 'safe')

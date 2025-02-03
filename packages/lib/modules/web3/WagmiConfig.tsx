@@ -46,9 +46,17 @@ const connectors = connectorsForWallets(
   https://github.com/rainbow-me/rainbowkit/issues/2232
 */
 if (!isConnectedToWC()) {
-  connectors.push(
-    createWalletConnectConnector({ index: connectors.length, walletConnectProjectId })
-  )
+  const lastConnector = connectors[connectors.length - 1]
+  console.log({ lastConnectorId: lastConnector({} as any).id })
+  if (lastConnector({} as any).id === 'walletConnect') {
+    console.log('Detected last connector is wallet connect')
+  } else {
+    console.log('Adding WC as last connector')
+    connectors.push(
+      createWalletConnectConnector({ index: connectors.length, walletConnectProjectId })
+    )
+    console.log({ lastConnectorId: connectors[connectors.length - 1]({} as any).id })
+  }
 }
 
 export const wagmiConfig = createConfig({
