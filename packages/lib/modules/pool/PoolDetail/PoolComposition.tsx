@@ -30,7 +30,11 @@ import { usePool } from '../PoolProvider'
 import { Pool } from '../pool.types'
 import { PoolTypeTag } from './PoolTypeTag'
 import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
-import { getCompositionTokens, getFlatCompositionTokens } from '../pool-tokens.utils'
+import {
+  getCompositionTokens,
+  getFlatCompositionTokens,
+  getNestedPoolTokens,
+} from '../pool-tokens.utils'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -85,7 +89,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
               />
               {poolToken.hasNestedPool && poolToken.nestedPool && (
                 <VStack pl="8" w="full">
-                  {poolToken.nestedPool.tokens.map(nestedPoolToken => {
+                  {getNestedPoolTokens(poolToken).map(nestedPoolToken => {
                     const calculatedWeight = bn(nestedPoolToken.balanceUSD).div(
                       bn(poolToken.balanceUSD)
                     )

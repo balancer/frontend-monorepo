@@ -58,7 +58,7 @@ export function RemoveLiquiditySingleToken({ tokens, chain }: RemoveLiquiditySin
                     <Radio value={token.address} />
                     <TokenRow
                       address={token.address as Address}
-                      chain={token.chain}
+                      chain={chain}
                       disabled={token.address !== singleTokenOutAddress}
                       isLoading={isLoading}
                       showZeroAmountAsDash

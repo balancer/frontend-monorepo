@@ -52,7 +52,7 @@ import {
   PartnerRedirectModal,
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
-import { getCompositionTokens } from '../pool-tokens.utils'
+import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -336,7 +336,7 @@ export default function PoolMyLiquidity() {
                     />
                     {poolToken.hasNestedPool && poolToken.nestedPool && (
                       <VStack pl="8" w="full">
-                        {poolToken.nestedPool.tokens.map(nestedPoolToken => {
+                        {getNestedPoolTokens(poolToken).map(nestedPoolToken => {
                           return (
                             <TokenRow
                               abbreviated={false}
