@@ -941,5 +941,31 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
     },
+    Stepper: {
+      baseStyle: {
+        _completed: {
+          indicator: {
+            background: 'red',
+            color: 'red',
+          },
+        },
+        indicator: {
+          "&[data-status='active']": {
+            background: 'purple.500',
+            borderColor: 'purple.500',
+            _dark: {
+              backgroundColor: 'purple.500',
+              borderColor: 'purple.500',
+            },
+          },
+          "&[data-status='complete']": {
+            background: 'green.500',
+            _dark: {
+              backgroundColor: 'green.500',
+            },
+          },
+        },
+      },
+    },
   }
 }
