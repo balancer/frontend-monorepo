@@ -18,6 +18,7 @@ import { Address } from 'viem'
 import { RemoveLiquiditySimulationQueryResult } from './queries/useRemoveLiquiditySimulationQuery'
 import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
 import { Pool } from '../../pool.types'
+import { NestedProportionalQueryRemoveLiquidityOutput } from './handlers/NestedProportionalRemoveLiquidity.handler'
 
 export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): TransactionStep[] {
   const { chainId, pool, chain } = usePool()
@@ -111,8 +112,35 @@ function getSimulationQueryData(simulationQuery: RemoveLiquiditySimulationQueryR
 } {
   // Return default values if simulation query is not loaded
   if (!simulationQuery.data) return { rawAmount: 0n, spenderAddress: '' as Address }
-  const simulationData = simulationQuery.data as SdkQueryRemoveLiquidityOutput
-  const rawAmount = simulationData.sdkQueryOutput.bptIn.amount
+  // TODO: Create a common interface for  all possible types (like NestedProportionalQueryRemoveLiquidityOutput)
+  const simulationData = simulationQuery.data as
+    | SdkQueryRemoveLiquidityOutput
+    | NestedProportionalQueryRemoveLiquidityOutput
+
+  const rawAmount = getRawAmount(simulationData)
+
   const spenderAddress = simulationData?.sdkQueryOutput.to
   return { rawAmount, spenderAddress }
+}
+
+function getRawAmount(
+  simulationData: SdkQueryRemoveLiquidityOutput | NestedProportionalQueryRemoveLiquidityOutput
+) {
+  if (isSdkQueryRemoveLiquidityOutput(simulationData)) {
+    return simulationData.sdkQueryOutput.bptIn.amount
+  }
+  if (isNestedProportionalQueryRemoveLiquidityOutput(simulationData)) {
+    return simulationData.sdkQueryOutput.bptAmountIn.amount
+  }
+  throw new Error(`Invalid simulation data: ${simulationData}`)
+}
+
+function isSdkQueryRemoveLiquidityOutput(data: any): data is SdkQueryRemoveLiquidityOutput {
+  return data && data.sdkQueryOutput.bptIn !== undefined
+}
+
+function isNestedProportionalQueryRemoveLiquidityOutput(
+  data: any
+): data is NestedProportionalQueryRemoveLiquidityOutput {
+  return data && data.sdkQueryOutput.bptAmountIn !== undefined
 }
