@@ -29,8 +29,8 @@ import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { supportsWethIsEth } from '../../pool.helpers'
-import { getPoolActionableTokens, getPriceRateForToken } from '../../pool-tokens.utils'
+import { isBoosted, supportsWethIsEth } from '../../pool.helpers'
+import { getCompositionTokens, getPoolActionableTokens } from '../../pool-tokens.utils'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
@@ -60,7 +60,15 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     getDefaultProportionalSlippagePercentage(pool)
   )
 
-  const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
+  const {
+    getNativeAssetToken,
+    getWrappedNativeAssetToken,
+    isLoadingTokenPrices,
+    usdValueForToken,
+    calcTotalUsdValue,
+    calcWeightForBalance,
+  } = useTokens()
+
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage: userSlippage } = useUserSettings()
@@ -130,20 +138,68 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     }
   }, [humanAmountsIn, isLoadingTokenPrices])
 
+  // BEGIN get minimum deposit for boosted pools
+
+  const { minimumWrapAmount } = useGetMinimumWrapAmount(chain)
+
+  const compositionTokens = getCompositionTokens(pool)
+  const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
+
+  const weights = compositionTokens.map(poolToken => {
+    return calcWeightForBalance(poolToken.address, poolToken.balance, totalLiquidity, chain)
+  })
+
+  const minBptUsd = compositionTokens
+    .map((token, index) => {
+      if (!token.underlyingToken) return { amount: '0', token }
+
+      const minimumWrapAmountFormatted = formatUnits(minimumWrapAmount, token.decimals)
+      const minimumDepositAmount = bn(minimumWrapAmountFormatted).times(token.priceRate).toString()
+      const minimumDepositAmountUsd = usdValueForToken(token, minimumDepositAmount)
+
+      return { amount: bn(minimumDepositAmountUsd).div(weights[index]).toString(), token }
+    })
+    .sort((a, b) => (bn(a.amount).lt(bn(b.amount)) ? -1 : bn(a.amount).gt(bn(b.amount)) ? 1 : 0))
+    .reverse()
+
+  const isMinimumDepositMet = useMemo(() => {
+    if (!isBoosted(pool)) return true
+
+    const amountsInValid = humanAmountsIn.map(amount => {
+      const token = compositionTokens.find(token => {
+        const address = token.underlyingToken ? token.underlyingToken.address : token.address
+        return isSameAddress(address as Address, amount.tokenAddress)
+      })
+
+      const minimumWrapAmountFormatted = formatUnits(minimumWrapAmount, token?.decimals || 18)
+      const minimumDepositAmount = bn(minimumWrapAmountFormatted)
+        .times(token?.priceRate || '1')
+        .toString()
+
+      return bn(amount.humanAmount).gte(minimumDepositAmount) || amount.humanAmount === ''
+    })
+
+    return bn(totalUSDValue).gt(bn(minBptUsd[0].amount)) && amountsInValid.every(Boolean)
+  }, [humanAmountsIn, totalUSDValue])
+
+  // END get minimum deposit for boosted pools
+
   /**
    * Queries
    */
+  const enabled = !urlTxHash && isMinimumDepositMet
+
   const simulationQuery = useAddLiquiditySimulationQuery({
     handler,
     humanAmountsIn,
-    enabled: !urlTxHash,
+    enabled,
     referenceAmountAddress,
   })
 
   const priceImpactQuery = useAddLiquidityPriceImpactQuery({
     handler,
     humanAmountsIn,
-    enabled: !urlTxHash,
+    enabled,
   })
 
   /**
@@ -182,30 +238,10 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     setInitialHumanAmountsIn()
   }, [])
 
-  const { minimumWrapAmount } = useGetMinimumWrapAmount(chain)
-
-  const minimumDepositAmounts = useMemo(() => {
-    tokens.map(token => {
-      const minimumWrapAmountFormatted = formatUnits(minimumWrapAmount, token.decimals)
-      const humanAmountIn = humanAmountsIn.find(h => h.tokenAddress === token.address)?.humanAmount
-      const priceRate = getPriceRateForToken(token, pool)
-
-      return humanAmountIn && priceRate
-        ? {
-            tokenAddress: token.address,
-            isAboveMinimumDeposit: bn(bn(humanAmountIn).times(priceRate)).gt(
-              minimumWrapAmountFormatted
-            ),
-          }
-        : {}
-    })
-  }, [minimumWrapAmount])
-
-  console.log({ minimumWrapAmount, tokens, humanAmountsIn, minimumDepositAmounts })
-
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
     [areEmptyAmounts(humanAmountsIn), 'You must specify one or more token amounts'],
+    [!isMinimumDepositMet, 'Minimum deposit not met'],
     [hasValidationErrors, 'Errors in token inputs'],
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [
