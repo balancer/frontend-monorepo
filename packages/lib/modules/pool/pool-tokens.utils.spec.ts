@@ -16,6 +16,7 @@ import {
   getUserReferenceTokens,
   getFlatUserReferenceTokens,
   getPoolActionableTokens,
+  getNestedPoolTokens,
 } from './pool-tokens.utils'
 import { ApiToken } from '../tokens/token.types'
 import { PoolToken } from './pool.types'
@@ -163,7 +164,6 @@ describe('getDisplayTokens for NESTED pools', () => {
       'WBTC',
       'WETH',
       'WXDAI',
-      'staBAL3',
     ])
 
     expect(getPoolActionableTokenSymbols(staBALv2Nested)).toEqual([
@@ -173,6 +173,16 @@ describe('getDisplayTokens for NESTED pools', () => {
       'WETH',
       'WBTC',
     ])
+
+    const pool = getApiPoolMock(staBALv2Nested)
+    const staBalBPT = pool.poolTokens.find(t => t.hasNestedPool)
+    expect(getNestedPoolTokens(staBalBPT as PoolToken).map(t => t.symbol)).toMatchInlineSnapshot(`
+      [
+        "USDT",
+        "USDC",
+        "WXDAI",
+      ]
+    `)
   })
 
   it('aura bal (Nested with supportsNestedActions false)', () => {
