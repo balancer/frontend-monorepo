@@ -1,9 +1,50 @@
-# fragment Hook on GqlHook {
-#   # TDB which fields are needed for hook display (first one will be stable surge hook)
-#   address
-#   name
-#   reviewData {
-#     summary
-#     warnings
-#   }
-# }
+fragment ExitFeeHookParams on ExitFeeHookParams {
+  exitFeePercentage
+}
+
+fragment FeeTakingHookParams on FeeTakingHookParams {
+  addLiquidityFeePercentage
+  removeLiquidityFeePercentage
+  swapFeePercentage
+}
+
+fragment StableSurgeHookParams on StableSurgeHookParams {
+  maxSurgeFeePercentage
+  surgeThresholdPercentage
+}
+
+fragment Hook on GqlHook {
+  address
+  config {
+    enableHookAdjustedAmounts
+    shouldCallAfterAddLiquidity
+    shouldCallAfterInitialize
+    shouldCallAfterRemoveLiquidity
+    shouldCallAfterSwap
+    shouldCallBeforeAddLiquidity
+    shouldCallBeforeInitialize
+    shouldCallBeforeRemoveLiquidity
+    shouldCallBeforeSwap
+    shouldCallComputeDynamicSwapFee
+  }
+  name
+  params {
+    ... on ExitFeeHookParams {
+      exitFeePercentage
+    }
+    ... on FeeTakingHookParams {
+      addLiquidityFeePercentage
+      removeLiquidityFeePercentage
+      swapFeePercentage
+    }
+    ... on StableSurgeHookParams {
+      maxSurgeFeePercentage
+      surgeThresholdPercentage
+    }
+  }
+  reviewData {
+    reviewFile
+    summary
+    warnings
+  }
+}

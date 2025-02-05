@@ -25,9 +25,9 @@ query GetPools(
     hasErc4626
     hasNestedErc4626
     hasAnyAllowedBuffer
-    # hook {
-    #   ...Hook
-    # }
+    hook {
+      ...Hook
+    }
     poolTokens {
       id
       address
