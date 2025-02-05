@@ -1,38 +1,37 @@
 fragment Hook on GqlHook {
-  # new fields, to be added once production API has them deployed
-  # address
-  # config {
-  #   enableHookAdjustedAmounts
-  #   shouldCallAfterAddLiquidity
-  #   shouldCallAfterInitialize
-  #   shouldCallAfterRemoveLiquidity
-  #   shouldCallAfterSwap
-  #   shouldCallBeforeAddLiquidity
-  #   shouldCallBeforeInitialize
-  #   shouldCallBeforeRemoveLiquidity
-  #   shouldCallBeforeSwap
-  #   shouldCallComputeDynamicSwapFee
-  # }
-  # name
-  # params {
-  #   ... on ExitFeeHookParams {
-  #     exitFeePercentage
-  #   }
-  #   ... on FeeTakingHookParams {
-  #     addLiquidityFeePercentage
-  #     removeLiquidityFeePercentage
-  #     swapFeePercentage
-  #   }
-  #   ... on StableSurgeHookParams {
-  #     maxSurgeFeePercentage
-  #     surgeThresholdPercentage
-  #   }
-  # }
-  # reviewData {
-  #   reviewFile
-  #   summary
-  #   warnings
-  # }
+  address
+  config {
+    enableHookAdjustedAmounts
+    shouldCallAfterAddLiquidity
+    shouldCallAfterInitialize
+    shouldCallAfterRemoveLiquidity
+    shouldCallAfterSwap
+    shouldCallBeforeAddLiquidity
+    shouldCallBeforeInitialize
+    shouldCallBeforeRemoveLiquidity
+    shouldCallBeforeSwap
+    shouldCallComputeDynamicSwapFee
+  }
+  name
+  params {
+    ... on ExitFeeHookParams {
+      exitFeePercentage
+    }
+    ... on FeeTakingHookParams {
+      addLiquidityFeePercentage
+      removeLiquidityFeePercentage
+      swapFeePercentage
+    }
+    ... on StableSurgeHookParams {
+      maxSurgeFeePercentage
+      surgeThresholdPercentage
+    }
+  }
+  reviewData {
+    reviewFile
+    summary
+    warnings
+  }
   # deprecated, to be removed once api & fe are updated
   shouldCallAfterAddLiquidity
   shouldCallAfterInitialize
