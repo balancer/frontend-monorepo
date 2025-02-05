@@ -149,6 +149,8 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     return calcWeightForBalance(poolToken.address, poolToken.balance, totalLiquidity, chain)
   })
 
+  // get the minimum bpt amount in usd for the minimum wrap amount and weights
+  // sorted so highest amount is first in the array
   const minBptUsd = compositionTokens
     .map((token, index) => {
       if (!token.underlyingToken) return { amount: '0', token }
@@ -165,6 +167,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const isMinimumDepositMet = useMemo(() => {
     if (!isBoosted(pool)) return true
 
+    // check if the amount is either higher than the minimum deposit amount or is empty
     const amountsValid = humanAmountsIn.map(amount => {
       const token = compositionTokens.find(token => {
         const address = token.underlyingToken ? token.underlyingToken.address : token.address
@@ -179,6 +182,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
       return bn(amount.humanAmount).gte(minimumDepositAmount) || amount.humanAmount === ''
     })
 
+    // check total deposit amounts in usd against the highest minimum bpt amount and all deposit amounts are valid
     return bn(totalUSDValue).gt(bn(minBptUsd[0].amount)) && amountsValid.every(Boolean)
   }, [humanAmountsIn, totalUSDValue])
 
