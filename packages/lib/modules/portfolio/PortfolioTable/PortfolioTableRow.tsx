@@ -11,7 +11,7 @@ import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
+import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
 import { usePoolMetadata } from '../../pool/metadata/usePoolMetadata'
 import { PoolListPoolDisplay } from '../../pool/PoolList/PoolListPoolDisplay'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -70,7 +70,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
               <PoolListPoolDisplay name={name} pool={pool} />
             </GridItem>
             <GridItem>
-              <PollListTableDetailsCell pool={pool} />
+              <PoolListTableDetailsCell pool={pool} />
             </GridItem>
             <GridItem display="flex" justifyContent="left" px="sm">
               <HStack>
