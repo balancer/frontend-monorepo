@@ -25,9 +25,10 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     liquidityManagement {
       disableUnbalancedLiquidity
     }
-    hook {
-      ...Hook
-    }
+    # Commented until we need it and we have the same schema in test and prod API
+    # hook {
+    #   ...Hook
+    # }
     dynamicData {
       poolId
       swapEnabled

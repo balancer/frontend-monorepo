@@ -1,25 +1,9 @@
 fragment Hook on GqlHook {
+  # TDB which fields are needed for hook display (first one will be stable surge hook)
   address
-  dynamicData {
-    addLiquidityFeePercentage
-    maxSurgeFeePercentage
-    removeLiquidityFeePercentage
-    surgeThresholdPercentage
-    swapFeePercentage
-  }
+  name
   reviewData {
     summary
     warnings
-    reviewFile
   }
-  shouldCallAfterAddLiquidity
-  shouldCallAfterInitialize
-  shouldCallAfterRemoveLiquidity
-  shouldCallAfterSwap
-  shouldCallBeforeAddLiquidity
-  shouldCallBeforeInitialize
-  shouldCallBeforeRemoveLiquidity
-  shouldCallBeforeSwap
-  shouldCallComputeDynamicSwapFee
-  enableHookAdjustedAmounts
 }
