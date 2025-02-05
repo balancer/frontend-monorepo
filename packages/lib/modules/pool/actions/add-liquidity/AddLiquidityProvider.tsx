@@ -165,7 +165,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const isMinimumDepositMet = useMemo(() => {
     if (!isBoosted(pool)) return true
 
-    const amountsInValid = humanAmountsIn.map(amount => {
+    const amountsValid = humanAmountsIn.map(amount => {
       const token = compositionTokens.find(token => {
         const address = token.underlyingToken ? token.underlyingToken.address : token.address
         return isSameAddress(address as Address, amount.tokenAddress)
@@ -179,7 +179,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
       return bn(amount.humanAmount).gte(minimumDepositAmount) || amount.humanAmount === ''
     })
 
-    return bn(totalUSDValue).gt(bn(minBptUsd[0].amount)) && amountsInValid.every(Boolean)
+    return bn(totalUSDValue).gt(bn(minBptUsd[0].amount)) && amountsValid.every(Boolean)
   }, [humanAmountsIn, totalUSDValue])
 
   // END get minimum deposit for boosted pools
