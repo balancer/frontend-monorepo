@@ -82,9 +82,9 @@ fragment PoolTokens on GqlPoolTokenDetail {
         ...Erc4626ReviewData
       }
     }
-    hook {
-      ...Hook
-    }
+    # hook {
+    #   ...Hook
+    # }
   }
   isErc4626
   isBufferAllowed
