@@ -1,18 +1,3 @@
-fragment ExitFeeHookParams on ExitFeeHookParams {
-  exitFeePercentage
-}
-
-fragment FeeTakingHookParams on FeeTakingHookParams {
-  addLiquidityFeePercentage
-  removeLiquidityFeePercentage
-  swapFeePercentage
-}
-
-fragment StableSurgeHookParams on StableSurgeHookParams {
-  maxSurgeFeePercentage
-  surgeThresholdPercentage
-}
-
 fragment Hook on GqlHook {
   address
   config {
