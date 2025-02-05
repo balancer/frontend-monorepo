@@ -1,9 +1,9 @@
-fragment Hook on GqlHook {
-  # TDB which fields are needed for hook display (first one will be stable surge hook)
-  address
-  name
-  reviewData {
-    summary
-    warnings
-  }
-}
+# fragment Hook on GqlHook {
+#   # TDB which fields are needed for hook display (first one will be stable surge hook)
+#   address
+#   name
+#   reviewData {
+#     summary
+#     warnings
+#   }
+# }
