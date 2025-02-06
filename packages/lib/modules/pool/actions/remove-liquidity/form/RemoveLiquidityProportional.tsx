@@ -42,7 +42,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
               token && (
                 <TokenRow
                   address={token.address as Address}
-                  chain={token.chain}
+                  chain={pool.chain}
                   isLoading={isLoading}
                   key={token.address}
                   toggleTokenSelect={

@@ -6,7 +6,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { bn, isSmallUsd, isZero, safeSum } from '@repo/lib/shared/utils/numbers'
+import { bn, isTooSmallToRemoveUsd, isZero, safeSum } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount, TokenAmount, isSameAddress } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
@@ -133,7 +133,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     !urlTxHash &&
     !!tokenOut &&
     !isSingleTokenBalanceMoreThat25Percent &&
-    !isSmallUsd(usdValueForHumanBptIn)
+    !isTooSmallToRemoveUsd(usdValueForHumanBptIn)
 
   const simulationQuery = useRemoveLiquiditySimulationQuery({
     handler,

@@ -1,7 +1,7 @@
 'use client'
 
 import { connectorsForWallets } from '@rainbow-me/rainbowkit'
-import { Config, createConfig } from 'wagmi'
+import { createConfig } from 'wagmi'
 import {
   coinbaseWallet,
   rabbyWallet,
@@ -15,7 +15,8 @@ import { chains } from './ChainConfig'
 import { transports } from './transports'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
-const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID || ''
+const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID
+if (!walletConnectProjectId) throw new Error('Missing NEXT_PUBLIC_WALLET_CONNECT_ID env')
 
 const connectors = connectorsForWallets(
   [
@@ -35,7 +36,7 @@ const connectors = connectorsForWallets(
   ],
   {
     appName: PROJECT_CONFIG.projectName,
-    projectId,
+    projectId: walletConnectProjectId,
     walletConnectParameters: {
       // Enforce wallet connect popup always on top
       // More info: https://github.com/wevm/wagmi/discussions/2775
@@ -48,8 +49,7 @@ const connectors = connectorsForWallets(
   }
 )
 
-export type WagmiConfig = ReturnType<typeof createConfig>
-export const wagmiConfig: Config = createConfig({
+export const wagmiConfig = createConfig({
   chains,
   transports,
   connectors,
