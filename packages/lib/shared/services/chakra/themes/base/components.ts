@@ -943,21 +943,42 @@ export function getComponents(tokens: any, primaryTextColor: string) {
     },
     Stepper: {
       baseStyle: {
-        _completed: {
-          indicator: {
-            background: 'red',
-            color: 'red',
+        title: {
+          color: 'font.secondary',
+          "&[data-status='active']": {
+            color: 'font.primary',
+            _dark: {
+              color: 'font.primary',
+            },
           },
         },
         indicator: {
+          color: 'font.secondary',
+          borderStyle: 'dashed',
           "&[data-status='active']": {
-            background: 'purple.500',
-            borderColor: 'purple.500',
+            background: 'transparent',
+            borderColor: 'font.primary',
+            color: 'font.primary',
+            borderStyle: 'solid',
             _dark: {
-              backgroundColor: 'purple.500',
-              borderColor: 'purple.500',
+              backgroundColor: 'transparent',
+              borderColor: 'font.primary',
+              color: 'font.primary',
             },
           },
+          "&[data-status='complete']": {
+            background: 'transparent',
+            borderColor: 'green.500',
+            border: '2px solid',
+            color: 'green.500',
+            _dark: {
+              backgroundColor: 'transparent',
+              borderColor: 'green.500',
+              color: 'green.500',
+            },
+          },
+        },
+        separator: {
           "&[data-status='complete']": {
             background: 'green.500',
             _dark: {
