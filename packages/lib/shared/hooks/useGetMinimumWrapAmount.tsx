@@ -12,7 +12,7 @@ export function useGetMinimumWrapAmount(chain: GqlChain) {
   const query = useReadContract({
     chainId,
     abi: vaultAdminAbi,
-    address: config.contracts.balancer.vaultAdmin,
+    address: config.contracts.balancer.vaultAdminV3,
     functionName: 'getMinimumWrapAmount',
   })
 

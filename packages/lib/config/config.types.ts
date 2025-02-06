@@ -46,7 +46,7 @@ export interface ContractsConfig {
     vaultV2: Address
     // TODO: make it required when v3 is deployed in all networks
     vaultV3?: Address
-    vaultAdmin?: Address
+    vaultAdminV3?: Address
     /*
       TODO: make it required when v3 is deployed in all networks
       IDEAL: remove this config completely and use the SDK build "to" to get the required router
