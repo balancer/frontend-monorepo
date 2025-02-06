@@ -18,6 +18,7 @@ import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.typ
 import { buildTenderlyUrl } from '@repo/lib/modules/web3/useTenderly'
 import { captureException } from '@sentry/nextjs'
 import { ScopeContext } from '@sentry/types'
+import { Address, Hex } from 'viem'
 
 // Wraps Sentry's captureException to allow for additional context or to use
 // where we don't want to throw an error.
@@ -116,7 +117,17 @@ export function getTenderlyUrlFromErrorMessage(
   When present, parses viem's exception message to extract the transaction config (build call data)
 */
 function parseRequestError(error: Error, chainId: number): TransactionConfig | undefined {
-  if (!error.message.startsWith('RPC Request failed')) return
+  if (error.message.startsWith('RPC Request failed')) {
+    return parseRpcRequestFailedError(error, chainId)
+  }
+
+  if (error.message.includes('Raw Call Arguments')) {
+    return parseRawCallArgumentsError(error, chainId)
+  }
+  return
+}
+
+function parseRpcRequestFailedError(error: Error, chainId: number): TransactionConfig | undefined {
   const requestBodyRegex = /Request body: ({.*})/
 
   const match = error?.stack?.match(requestBodyRegex)
@@ -144,8 +155,23 @@ function parseRequestError(error: Error, chainId: number): TransactionConfig | u
       return
     }
   }
+}
 
-  return
+function parseRawCallArgumentsError(error: Error, chainId: number): TransactionConfig | undefined {
+  const fromMatch = error.message.match(/from:\s*([^\n]+)/)
+  const toMatch = error.message.match(/to:\s*([^\n]+)/)
+  const dataMatch = error.message.match(/data:\s*([^\n]+)/)
+
+  const from = fromMatch?.[1].trim() ?? ''
+  const to = toMatch?.[1].trim() ?? ''
+  const data = dataMatch?.[1].trim() ?? ''
+
+  return {
+    data: data as Hex,
+    to: to as Address,
+    chainId,
+    account: (from as Address) || '0x0000000000000000000000000000000000000000',
+  }
 }
 
 /**
