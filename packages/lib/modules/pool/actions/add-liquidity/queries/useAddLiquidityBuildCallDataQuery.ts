@@ -21,6 +21,7 @@ export type AddLiquidityBuildQueryParams = {
   humanAmountsIn: HumanTokenAmountWithAddress[]
   simulationQuery: AddLiquiditySimulationQueryResult
   slippage: string
+  relicId?: string
 }
 
 // Uses the SDK to build a transaction config to be used by wagmi's useManagedSendTransaction
@@ -29,6 +30,7 @@ export function useAddLiquidityBuildCallDataQuery({
   humanAmountsIn,
   simulationQuery,
   slippage,
+  relicId,
   enabled,
 }: AddLiquidityBuildQueryParams & {
   enabled: boolean
@@ -49,6 +51,7 @@ export function useAddLiquidityBuildCallDataQuery({
     pool,
     humanAmountsIn: debouncedHumanAmountsIn,
     hasPermit2,
+    relicId,
   }
 
   const queryKey = addLiquidityKeys.buildCallData(params)
@@ -62,6 +65,7 @@ export function useAddLiquidityBuildCallDataQuery({
       queryOutput,
       relayerApprovalSignature, // only present in Add Nested Liquidity with sign relayer mode
       permit2, // only present in V3 pools
+      relicId, // only present in Reliquary
     })
     console.log('Call data built:', response)
     if (permit2) console.log('permit2 for call data:', permit2)

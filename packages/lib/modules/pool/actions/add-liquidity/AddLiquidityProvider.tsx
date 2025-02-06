@@ -39,7 +39,7 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
 
-export function _useAddLiquidity(urlTxHash?: Hash) {
+export function _useAddLiquidity(urlTxHash?: Hash, relicId?: string) {
   const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>([])
   // only used by Proportional handlers that require a referenceAmount
   const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
@@ -152,6 +152,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     humanAmountsIn,
     simulationQuery,
     slippage,
+    relicId,
   })
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
 
@@ -246,10 +247,11 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
 
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
+  relicId?: string
 }>
 
-export function AddLiquidityProvider({ urlTxHash, children }: Props) {
-  const hook = _useAddLiquidity(urlTxHash)
+export function AddLiquidityProvider({ urlTxHash, relicId, children }: Props) {
+  const hook = _useAddLiquidity(urlTxHash, relicId)
   return <AddLiquidityContext.Provider value={hook}>{children}</AddLiquidityContext.Provider>
 }
 

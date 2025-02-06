@@ -17,6 +17,7 @@ import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/tr
 
 type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
+  relicId?: string
 }
 export function useAddLiquiditySteps({
   helpers,
@@ -24,6 +25,7 @@ export function useAddLiquiditySteps({
   humanAmountsIn,
   simulationQuery,
   slippage,
+  relicId,
 }: AddLiquidityStepsParams) {
   const { pool, chainId, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions(pool)
@@ -65,6 +67,7 @@ export function useAddLiquiditySteps({
     humanAmountsIn,
     simulationQuery,
     slippage,
+    relicId,
   })
 
   const addSteps: TransactionStep[] =
