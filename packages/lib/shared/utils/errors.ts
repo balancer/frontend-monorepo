@@ -158,9 +158,11 @@ function parseRpcRequestFailedError(error: Error, chainId: number): TransactionC
 }
 
 function parseRawCallArgumentsError(error: Error, chainId: number): TransactionConfig | undefined {
+  const fromMatch = error.message.match(/from:\s*([^\n]+)/)
   const toMatch = error.message.match(/to:\s*([^\n]+)/)
   const dataMatch = error.message.match(/data:\s*([^\n]+)/)
 
+  const from = fromMatch?.[1].trim() ?? ''
   const to = toMatch?.[1].trim() ?? ''
   const data = dataMatch?.[1].trim() ?? ''
 
@@ -168,7 +170,7 @@ function parseRawCallArgumentsError(error: Error, chainId: number): TransactionC
     data: data as Hex,
     to: to as Address,
     chainId,
-    account: '0x0000000000000000000000000000000000000000',
+    account: (from as Address) || '0x0000000000000000000000000000000000000000',
   }
 }
 
