@@ -6,6 +6,8 @@ import { isProd } from '@repo/lib/config/app.config'
 export const ProjectConfigBalancer: ProjectConfig = {
   projectId: 'balancer',
   projectName: 'Balancer',
+  projectUrl: 'https://balancer.fi',
+  projectLogo: 'https://balancer.fi/images/icons/balancer.svg',
   supportedNetworks: [
     GqlChain.Mainnet,
     GqlChain.Arbitrum,

@@ -8,7 +8,7 @@ import {
 } from '../transactions/transaction-steps/safe/safe.helpers'
 import { useUserAccount } from './UserAccountProvider'
 import { useSafeTxQuery } from '../transactions/transaction-steps/safe/useSafeTxQuery'
-import { useWalletConnectMetadata } from './useWalletConnectMetadata'
+import { useWalletConnectMetadata } from './wallet-connect/useWalletConnectMetadata'
 
 // Returns true when using a Safe Smart account:
 // - app running as a Safe App

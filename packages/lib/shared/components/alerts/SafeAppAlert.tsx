@@ -2,7 +2,7 @@ import { HStack } from '@chakra-ui/react'
 import { BalAlert } from './BalAlert'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
 import { BalAlertContent } from './BalAlertContent'
-import { useWalletConnectMetadata } from '@repo/lib/modules/web3/useWalletConnectMetadata'
+import { useWalletConnectMetadata } from '@repo/lib/modules/web3/wallet-connect/useWalletConnectMetadata'
 import { useBreakpoints } from '../../hooks/useBreakpoints'
 
 export function SafeAppAlert() {

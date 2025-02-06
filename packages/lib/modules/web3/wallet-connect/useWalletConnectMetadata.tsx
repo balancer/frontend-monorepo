@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useUserAccount } from './UserAccountProvider'
+import { useUserAccount } from '../UserAccountProvider'
 
 export function useWalletConnectMetadata() {
   const [walletName, setWalletName] = useState('')
