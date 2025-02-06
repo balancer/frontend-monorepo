@@ -74,7 +74,7 @@ export default defineConfig(() => {
           },
           {
             name: 'VaultAdmin',
-            address: mainnetNetworkConfig.contracts.balancer.vaultAdmin,
+            address: mainnetNetworkConfig.contracts.balancer.vaultAdminV3,
           },
         ],
       }),
