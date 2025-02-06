@@ -117,13 +117,14 @@ export function useTokenApprovalSteps({
         return requiredRawAmount > 0n && isAllowed
       }
 
+      const isTxEnabled = !!spenderAddress && !tokenAllowances.isAllowancesLoading
       const props: ManagedErc20TransactionInput = {
         tokenAddress,
         functionName: 'approve',
         labels,
         chainId: getChainId(chain),
         args: [spenderAddress, requestedRawAmount],
-        enabled: !!spenderAddress && !tokenAllowances.isAllowancesLoading,
+        enabled: isTxEnabled,
         simulationMeta: sentryMetaForWagmiSimulation(
           'Error in wagmi tx simulation: Approving token',
           tokenAmountToApprove
@@ -138,7 +139,7 @@ export function useTokenApprovalSteps({
         labels,
         isComplete,
         renderAction: () => <ManagedErc20TransactionButton id={id} key={id} {...props} />,
-        batchableTxCall: buildBatchableTxCall({ tokenAddress, args }),
+        batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
         onSuccess: () => tokenAllowances.refetchAllowances(),
       } as const satisfies TransactionStep
     })

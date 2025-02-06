@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem, GridProps, HStack, Text, Image } from '@chakra-ui/react'
-import { PollListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PollListTableDetailsCell'
+import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
@@ -51,7 +51,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
               <PoolListPoolDisplay name={name} pool={pool} />
             </GridItem>
             <GridItem minW="32">
-              <PollListTableDetailsCell pool={pool} />
+              <PoolListTableDetailsCell pool={pool} />
             </GridItem>
             {userAddress ? (
               <GridItem>
