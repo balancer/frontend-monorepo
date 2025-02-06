@@ -189,7 +189,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
     [areEmptyAmounts(humanAmountsIn), 'You must specify one or more token amounts'],
-    [!isMinimumDepositMet, 'Minimum deposit not met'],
+    [!isMinimumDepositMet, 'Minimum deposit not met for a Boosted Pool'],
     [hasValidationErrors, 'Errors in token inputs'],
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [
