@@ -306,6 +306,5 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
 }
 
 export function shouldCallComputeDynamicSwapFee(pool: Pool) {
-  // TODO: replace by 'return pool.hook && pool.hook.config?.shouldCallComputeDynamicSwapFee' after api update
-  return pool.hook && pool.hook.shouldCallComputeDynamicSwapFee
+  return pool.hook && pool.hook.config?.shouldCallComputeDynamicSwapFee
 }
