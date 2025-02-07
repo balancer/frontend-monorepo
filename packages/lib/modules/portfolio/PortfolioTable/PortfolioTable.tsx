@@ -202,7 +202,9 @@ export function PortfolioTable() {
           </Card>
         ) : (
           <Center border="1px dashed" borderColor="border.base" h="400px" rounded="lg">
-            <ConnectWallet size="lg" variant="primary" />
+            <div>
+              <ConnectWallet size="lg" variant="primary" />
+            </div>
           </Center>
         )}
         {hasTinyBalances && (
