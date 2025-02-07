@@ -28,7 +28,7 @@ export function NavBarContainer() {
     })
     appLinks.push({
       label: 'LBP',
-      href: '/lbp',
+      href: '/lbp/create',
     })
   }
 
