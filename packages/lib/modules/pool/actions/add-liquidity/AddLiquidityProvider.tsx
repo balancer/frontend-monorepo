@@ -35,6 +35,7 @@ import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsPro
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -59,6 +60,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   )
 
   const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
+
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage: userSlippage } = useUserSettings()
@@ -128,19 +130,24 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     }
   }, [humanAmountsIn, isLoadingTokenPrices])
 
+  const isMinimumDepositMet = useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue })
+
   /**
    * Queries
    */
+  const enabled = !urlTxHash && isMinimumDepositMet
+
   const simulationQuery = useAddLiquiditySimulationQuery({
     handler,
     humanAmountsIn,
-    enabled: !urlTxHash,
+    enabled,
     referenceAmountAddress,
   })
+
   const priceImpactQuery = useAddLiquidityPriceImpactQuery({
     handler,
     humanAmountsIn,
-    enabled: !urlTxHash,
+    enabled,
   })
 
   /**
@@ -182,6 +189,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
     [areEmptyAmounts(humanAmountsIn), 'You must specify one or more token amounts'],
+    [!isMinimumDepositMet, 'Minimum deposit not met for a Boosted Pool'],
     [hasValidationErrors, 'Errors in token inputs'],
     [needsToAcceptHighPI, 'Accept high price impact first'],
     [
