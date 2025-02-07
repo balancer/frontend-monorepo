@@ -1,11 +1,11 @@
 import { PoolsPage } from '@repo/lib/shared/pages/PoolsPage'
 
-import { BoostedPoolsPromoBanner } from '@repo/lib/shared/components/promos/BoostedPoolsPromoBanner'
+import { MevCapturePromoBanner } from '@repo/lib/shared/components/promos/MevCapturePromoBanner'
 
 export default async function PoolsPageWrapper() {
   return (
     <PoolsPage>
-      <BoostedPoolsPromoBanner />
+      <MevCapturePromoBanner />
     </PoolsPage>
   )
 }

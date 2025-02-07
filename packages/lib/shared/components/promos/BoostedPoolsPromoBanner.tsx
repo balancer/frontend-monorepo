@@ -1,21 +1,27 @@
 'use client'
 
 import React from 'react'
-import { Button, Heading, Flex, Box, Center } from '@chakra-ui/react'
+import { Button, Heading, Flex, Box, Center, useColorMode } from '@chakra-ui/react'
 import NextLink from 'next/link'
 
 export function BoostedPoolsPromoBanner() {
+  const { colorMode } = useColorMode()
+
   return (
     <Box
-      background={`url('/images/promos/boosted-pools/bg.png') no-repeat center center`}
+      backgroundImage={
+        colorMode === 'dark'
+          ? 'url(/images/promos/boosted-pools/bg-dark.jpg)'
+          : 'url(/images/promos/boosted-pools/bg.jpg)'
+      }
       backgroundSize="cover"
-      boxShadow="lg"
       h={{ base: '200px', sm: '140px' }}
       height="140px"
       maxW="100%"
       overflow="hidden"
       position="relative"
       rounded="lg"
+      shadow="2xl"
       sx={{
         width: '100% !important',
         maxWidth: '100% !important',
@@ -38,7 +44,7 @@ export function BoostedPoolsPromoBanner() {
           >
             <Box>
               <Heading
-                color="#fff"
+                color={colorMode === 'dark' ? '#fff' : '#000'}
                 fontSize={{ base: 'xl', md: '3xl', lg: '4xl' }}
                 fontWeight="regular"
                 lineHeight="1"
@@ -48,7 +54,7 @@ export function BoostedPoolsPromoBanner() {
             </Box>
             <Box pl="sm" textAlign="center">
               <Heading
-                color="font.light"
+                color={colorMode === 'dark' ? 'font.light' : '#555'}
                 fontSize={{ base: 'xl', md: '3xl', lg: '4xl' }}
                 fontWeight="regular"
                 lineHeight="1"
