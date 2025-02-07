@@ -9,6 +9,7 @@
  */
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
 import {
+  GetProtocolStatsDocument,
   GetTokenPricesDocument,
   GetTokensDocument,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -25,6 +26,7 @@ import { getErc4626Metadata } from '@repo/lib/modules/pool/metadata/getErc4626Me
 import { PoolsMetadataProvider } from '@repo/lib/modules/pool/metadata/PoolsMetadataProvider'
 import { getPoolsMetadata } from '@repo/lib/modules/pool/metadata/getPoolsMetadata'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { ProtocolStatsProvider } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 
 export const revalidate = 60
 
@@ -57,6 +59,18 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
     },
   })
 
+  const { data: protocolData } = await client.query({
+    query: GetProtocolStatsDocument,
+    variables: {
+      chains: PROJECT_CONFIG.supportedNetworks,
+    },
+    context: {
+      fetchOptions: {
+        next: { revalidate: mins(10).toSecs() },
+      },
+    },
+  })
+
   const [exchangeRates, hooksMetadata, poolTags, erc4626Metadata, poolsMetadata] =
     await Promise.all([
       getFxRates(),
@@ -75,9 +89,14 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
       <FiatFxRatesProvider data={exchangeRates}>
         <PoolTagsProvider data={poolTags}>
           <HooksProvider data={hooksMetadata}>
-            <PoolsMetadataProvider erc4626Metadata={erc4626Metadata} poolsMetadata={poolsMetadata}>
-              {children}
-            </PoolsMetadataProvider>
+            <ProtocolStatsProvider data={protocolData}>
+              <PoolsMetadataProvider
+                erc4626Metadata={erc4626Metadata}
+                poolsMetadata={poolsMetadata}
+              >
+                {children}
+              </PoolsMetadataProvider>
+            </ProtocolStatsProvider>
           </HooksProvider>
         </PoolTagsProvider>
       </FiatFxRatesProvider>

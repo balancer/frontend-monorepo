@@ -5,29 +5,10 @@ import { Box, Skeleton, Flex, Heading, Text, HStack, Card, SimpleGrid } from '@c
 import { PropsWithChildren, Suspense } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
-import Stat from '@repo/lib/shared/components/other/Stat'
 import { PartnerCard } from '@repo/lib/shared/components/other/PartnerCard'
-
-// import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
-// import { GetFeaturedPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
-// import { FeaturedPools } from '@repo/lib/modules/featured-pools/FeaturedPools'
+import { PoolPageStats } from './PoolPageStats'
 
 export async function PoolsPage({ children }: PropsWithChildren) {
-  // Featured pools set up
-  // const { supportedNetworks } = useProjectConfig()
-
-  // const featuredPoolsQuery = await getApolloServerClient().query({
-  //   query: GetFeaturedPoolsDocument,
-  //   variables: { chains: supportedNetworks },
-  //   context: {
-  //     fetchOptions: {
-  //       next: { revalidate: 300 }, // 5 minutes
-  //     },
-  //   },
-  // })
-
-  // const featuredPools = featuredPoolsQuery.data.featuredPools || []
-
   return (
     <>
       <Box borderBottom="1px solid" borderColor="border.base">
@@ -102,9 +83,7 @@ export async function PoolsPage({ children }: PropsWithChildren) {
                   </Text>
                 </Box>
                 <HStack mt="3" spacing={{ base: '2', sm: '3' }}>
-                  <Stat label="TVL" value="$1.04b" />
-                  <Stat imageBackgroundSize="300%" label="Volume (24h)" value="$123.34m" />
-                  <Stat imageTransform="rotate(180deg)" label="Fees (24h)" value="$224.65k" />
+                  <PoolPageStats />
                 </HStack>
               </Flex>
             </FadeInOnView>

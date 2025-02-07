@@ -1,4 +1,4 @@
-import { PoolsPage } from '@repo/lib/shared/pages/PoolsPage'
+import { PoolsPage } from '@repo/lib/shared/pages/PoolsPage/PoolsPage'
 
 import { MevCapturePromoBanner } from '@repo/lib/shared/components/promos/MevCapturePromoBanner'
 
