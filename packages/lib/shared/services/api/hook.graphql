@@ -1,4 +1,4 @@
-fragment HookFragment on GqlHook {
+fragment Hook on GqlHook {
   address
   config {
     enableHookAdjustedAmounts

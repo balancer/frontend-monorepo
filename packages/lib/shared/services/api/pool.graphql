@@ -1,7 +1,7 @@
 #import "./pool-tokens.graphql"
 #import "./hook.graphql"
 
-fragment PoolFragment on GqlPoolBase {
+fragment Pool on GqlPoolBase {
   id
   address
   name
@@ -25,7 +25,7 @@ fragment PoolFragment on GqlPoolBase {
     disableUnbalancedLiquidity
   }
   hook {
-    ...HookFragment
+    ...Hook
   }
   dynamicData {
     poolId
@@ -185,7 +185,7 @@ fragment PoolFragment on GqlPoolBase {
 
 query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
   pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
-    ...PoolFragment
+    ...Pool
   }
 }
 

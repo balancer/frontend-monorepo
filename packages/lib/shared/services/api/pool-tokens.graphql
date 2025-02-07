@@ -83,7 +83,7 @@ fragment PoolTokens on GqlPoolTokenDetail {
       }
     }
     hook {
-      ...HookFragment
+      ...Hook
     }
   }
   isErc4626
