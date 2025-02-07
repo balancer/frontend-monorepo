@@ -8,7 +8,7 @@ import {
   GqlPoolStakingOtherGauge,
   GqlPoolTokenDetail,
   GqlPoolType,
-  GqlHook,
+  HookFragment,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -269,7 +269,7 @@ export function hasRateProvider(token: GqlPoolTokenDetail): boolean {
   return !hasNoPriceRateProvider && !isNil(token.priceRateProviderData)
 }
 
-export function hasReviewedHook(hook: GqlHook): boolean {
+export function hasReviewedHook(hook: HookFragment): boolean {
   return !!hook.reviewData
 }
 
