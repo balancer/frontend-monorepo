@@ -2,7 +2,7 @@ import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTabl
 import { usePortfolio } from '../PortfolioProvider'
 import { PortfolioTableHeader } from './PortfolioTableHeader'
 import { PortfolioTableRow } from './PortfolioTableRow'
-import { Card, Center, Checkbox, HStack, Heading, Stack, Text } from '@chakra-ui/react'
+import { Box, Card, Center, Checkbox, HStack, Heading, Stack, Text } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
@@ -202,7 +202,9 @@ export function PortfolioTable() {
           </Card>
         ) : (
           <Center border="1px dashed" borderColor="border.base" h="400px" rounded="lg">
-            <ConnectWallet size="lg" variant="primary" />
+            <Box>
+              <ConnectWallet size="lg" variant="primary" />
+            </Box>
           </Center>
         )}
         {hasTinyBalances && (
