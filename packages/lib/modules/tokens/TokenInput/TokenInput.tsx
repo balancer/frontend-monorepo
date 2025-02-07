@@ -187,7 +187,7 @@ type Props = {
   hideFooter?: boolean
   boxProps?: BoxProps
   onChange?: (event: { currentTarget: { value: string } }) => void
-  shouldShowToggle: boolean
+  shouldShowToggle?: boolean
   onToggleTokenClicked?: (token: ApiToken) => void
   hasPriceImpact?: boolean
   isLoadingPriceImpact?: boolean
