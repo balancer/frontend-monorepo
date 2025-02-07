@@ -1,4 +1,4 @@
-fragment Hook on GqlHook {
+fragment HookFragment on GqlHook {
   address
   config {
     enableHookAdjustedAmounts
@@ -31,23 +31,5 @@ fragment Hook on GqlHook {
     reviewFile
     summary
     warnings
-  }
-  # deprecated, to be removed once api & fe are updated
-  shouldCallAfterAddLiquidity
-  shouldCallAfterInitialize
-  shouldCallAfterRemoveLiquidity
-  shouldCallAfterSwap
-  shouldCallBeforeAddLiquidity
-  shouldCallBeforeInitialize
-  shouldCallBeforeRemoveLiquidity
-  shouldCallBeforeSwap
-  shouldCallComputeDynamicSwapFee
-  enableHookAdjustedAmounts
-  dynamicData {
-    addLiquidityFeePercentage
-    maxSurgeFeePercentage
-    removeLiquidityFeePercentage
-    surgeThresholdPercentage
-    swapFeePercentage
   }
 }
