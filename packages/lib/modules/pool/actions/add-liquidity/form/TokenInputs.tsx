@@ -6,17 +6,20 @@ import { VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { hasNoLiquidity, shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { Pool } from '../../../pool.types'
+import { shouldUseUnderlyingToken } from '../../../pool-tokens.utils'
 
 type Props = {
-  tokenSelectDisclosureOpen: () => void
   /*
     Optional callback to override the default setAmountIn function (i.e. from TokenInputsAddable)
     Default scenario: only updates one token input
     Proportional scenario: updates all the inputs using proportional amount calculations
    */
   customSetAmountIn?: (token: ApiToken, humanAmount: HumanAmount) => void
+
+  onToggleTokenClicked: (token: ApiToken) => void
 }
-export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Props) {
+export function TokenInputs({ onToggleTokenClicked, customSetAmountIn }: Props) {
   const { pool } = usePool()
   const { tokens, humanAmountsIn, setHumanAmountIn } = useAddLiquidity()
 
@@ -36,6 +39,13 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
     )
   }
 
+  function shouldShowToggle(token: ApiToken, pool: Pool) {
+    if (shouldShowNativeWrappedSelector(token, pool)) return true
+    // TODO: Will be enabled in incoming PRs
+    // if (shouldUseUnderlyingToken(token, pool)) return true
+    return false
+  }
+
   return (
     <VStack spacing="md" w="full">
       {tokens.map(token => {
@@ -49,9 +59,8 @@ export function TokenInputs({ tokenSelectDisclosureOpen, customSetAmountIn }: Pr
             isDisabled={hasNoLiquidity(pool)}
             key={token.address}
             onChange={e => setAmountIn(token, e.currentTarget.value as HumanAmount)}
-            toggleTokenSelect={
-              shouldShowNativeWrappedSelector(token, pool) ? tokenSelectDisclosureOpen : undefined
-            }
+            onToggleTokenClicked={onToggleTokenClicked}
+            shouldShowToggle={shouldShowToggle(token, pool)}
             value={currentValueFor(token.address as Address)}
             weight={weightFor(token.address)}
           />
