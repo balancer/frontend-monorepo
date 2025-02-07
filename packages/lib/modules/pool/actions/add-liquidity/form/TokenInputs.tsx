@@ -7,7 +7,6 @@ import { usePool } from '../../../PoolProvider'
 import { hasNoLiquidity, shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { Pool } from '../../../pool.types'
-import { shouldUseUnderlyingToken } from '../../../pool-tokens.utils'
 
 type Props = {
   /*
