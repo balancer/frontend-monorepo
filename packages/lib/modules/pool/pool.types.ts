@@ -6,7 +6,7 @@ import {
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
   GqlNestedPool,
-  PoolFragment,
+  GetPoolQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   parseAsArrayOf,
@@ -19,7 +19,7 @@ import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
 import { FeaturedPool } from './PoolProvider'
 
-export type Pool = PoolFragment
+export type Pool = GetPoolQuery['pool']
 
 export type PoolId = Hex
 
