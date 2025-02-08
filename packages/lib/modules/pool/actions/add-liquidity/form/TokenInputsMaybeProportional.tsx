@@ -70,7 +70,6 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
         return boostedTokenSelectDisclosure.onOpen()
       }
     }
-    console.error('Trying to toggle with incorrect token (no native, no boosted)', { token })
     return
   }
 
