@@ -37,8 +37,7 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 type TokenInputSelectorProps = {
   token: ApiToken | undefined
   weight?: string
-  shouldShowToggle: boolean
-  onToggleTokenClicked?: (token: ApiToken) => void
+  onToggleTokenClicked?: () => void
 }
 
 type TokenConfigProps = {
@@ -47,12 +46,7 @@ type TokenConfigProps = {
   showIcon: boolean
 }
 
-function TokenInputSelector({
-  token,
-  weight,
-  onToggleTokenClicked,
-  shouldShowToggle = false,
-}: TokenInputSelectorProps) {
+function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputSelectorProps) {
   const [tokenConfig, setTokenConfig] = useState<TokenConfigProps | undefined>(undefined)
 
   useEffect(() => {
@@ -65,8 +59,8 @@ function TokenInputSelector({
 
   return tokenConfig ? (
     <Button
-      cursor={shouldShowToggle ? 'pointer' : 'default'}
-      onClick={() => token && onToggleTokenClicked?.(token)}
+      cursor={onToggleTokenClicked ? 'pointer' : 'default'}
+      onClick={() => onToggleTokenClicked?.()}
       variant={tokenConfig.variant}
     >
       {tokenConfig && tokenConfig.showIcon && (
@@ -80,7 +74,7 @@ function TokenInputSelector({
           {fNum('weight', weight)}
         </Text>
       )}
-      {shouldShowToggle && (
+      {onToggleTokenClicked && (
         <Box ml="sm">
           <ChevronDown size={16} />
         </Box>
@@ -187,8 +181,7 @@ type Props = {
   hideFooter?: boolean
   boxProps?: BoxProps
   onChange?: (event: { currentTarget: { value: string } }) => void
-  shouldShowToggle?: boolean
-  onToggleTokenClicked?: (token: ApiToken) => void
+  onToggleTokenClicked?: () => void
   hasPriceImpact?: boolean
   isLoadingPriceImpact?: boolean
   disableBalanceValidation?: boolean
@@ -204,7 +197,6 @@ export const TokenInput = forwardRef(
       value,
       boxProps,
       onChange,
-      shouldShowToggle = false,
       onToggleTokenClicked,
       hideFooter = false,
       hasPriceImpact = false,
@@ -235,7 +227,6 @@ export const TokenInput = forwardRef(
     const tokenInputSelector = TokenInputSelector({
       token,
       weight,
-      shouldShowToggle,
       onToggleTokenClicked,
     })
     const footer = hideFooter

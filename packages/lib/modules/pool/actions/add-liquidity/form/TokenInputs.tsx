@@ -4,9 +4,8 @@ import { Address } from 'viem'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { VStack } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
-import { hasNoLiquidity, shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
+import { hasNoLiquidity } from '../../LiquidityActionHelpers'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import { Pool } from '../../../pool.types'
 
 type Props = {
   /*
@@ -16,9 +15,10 @@ type Props = {
    */
   customSetAmountIn?: (token: ApiToken, humanAmount: HumanAmount) => void
 
-  onToggleTokenClicked: (token: ApiToken) => void
+  // Given a token, returns a callback called when the token is toggled (or undefined if the token can't be toggled)
+  getToggleTokenCallback: (token: ApiToken) => (() => void) | undefined
 }
-export function TokenInputs({ onToggleTokenClicked, customSetAmountIn }: Props) {
+export function TokenInputs({ getToggleTokenCallback, customSetAmountIn }: Props) {
   const { pool } = usePool()
   const { tokens, humanAmountsIn, setHumanAmountIn } = useAddLiquidity()
 
@@ -38,13 +38,6 @@ export function TokenInputs({ onToggleTokenClicked, customSetAmountIn }: Props) 
     )
   }
 
-  function shouldShowToggle(token: ApiToken, pool: Pool) {
-    if (shouldShowNativeWrappedSelector(token, pool)) return true
-    // TODO: Will be enabled in incoming PRs
-    // if (shouldUseUnderlyingToken(token, pool)) return true
-    return false
-  }
-
   return (
     <VStack spacing="md" w="full">
       {tokens.map(token => {
@@ -58,8 +51,7 @@ export function TokenInputs({ onToggleTokenClicked, customSetAmountIn }: Props) 
             isDisabled={hasNoLiquidity(pool)}
             key={token.address}
             onChange={e => setAmountIn(token, e.currentTarget.value as HumanAmount)}
-            onToggleTokenClicked={onToggleTokenClicked}
-            shouldShowToggle={shouldShowToggle(token, pool)}
+            onToggleTokenClicked={getToggleTokenCallback(token)}
             value={currentValueFor(token.address as Address)}
             weight={weightFor(token.address)}
           />

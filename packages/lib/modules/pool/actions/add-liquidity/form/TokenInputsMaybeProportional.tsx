@@ -12,7 +12,6 @@ import { isNativeAsset, isNativeOrWrappedNative } from '@repo/lib/modules/tokens
 import { Address } from 'viem'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
-import { shouldUseUnderlyingToken } from '../../../pool-tokens.utils'
 
 type Props = {
   isProportional: boolean
@@ -31,7 +30,7 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
   // Triggers modal to select between native and wrapped tokens
   const nativeTokenSelectDisclosure = useDisclosure()
   // Triggers modal to select between wrapped or underlying tokens (only for boosted tokens)
-  const boostedTokenSelectDisclosure2 = useDisclosure()
+  const boostedTokenSelectDisclosure = useDisclosure()
 
   const [selectedBoostedToken, setSelectedBoostedToken] = useState<ApiToken | null>(null)
 
@@ -58,11 +57,18 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     })
   }
 
-  function onToggleTokenClicked(token: ApiToken) {
-    if (shouldShowNativeWrappedSelector(token, pool)) return nativeTokenSelectDisclosure.onOpen()
-    if (shouldUseUnderlyingToken(token, pool)) {
-      setSelectedBoostedToken(token)
-      return boostedTokenSelectDisclosure2.onOpen()
+  function getToggleTokenCallback(token: ApiToken) {
+    if (shouldShowNativeWrappedSelector(token, pool)) {
+      return () => nativeTokenSelectDisclosure.onOpen()
+    }
+    // Will be used in incoming PRs
+    // if (token.wrappedToken) {
+    // eslint-disable-next-line no-constant-condition
+    if (false) {
+      return () => {
+        setSelectedBoostedToken(token)
+        return boostedTokenSelectDisclosure.onOpen()
+      }
     }
     console.error('Trying to toggle with incorrect token (no native, no boosted)', { token })
     return
@@ -70,7 +76,10 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
 
   return (
     <VStack spacing="md" w="full">
-      <TokenInputs customSetAmountIn={setAmountIn} onToggleTokenClicked={onToggleTokenClicked} />
+      <TokenInputs
+        customSetAmountIn={setAmountIn}
+        getToggleTokenCallback={getToggleTokenCallback}
+      />
 
       {!!validTokens.length && (
         <NativeAssetSelectModal
@@ -85,9 +94,9 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
 
       <WrappedOrUnderlyingSelectModal
         chain={chain}
-        isOpen={boostedTokenSelectDisclosure2.isOpen}
-        onClose={boostedTokenSelectDisclosure2.onClose}
-        onOpen={boostedTokenSelectDisclosure2.onOpen}
+        isOpen={boostedTokenSelectDisclosure.isOpen}
+        onClose={boostedTokenSelectDisclosure.onClose}
+        onOpen={boostedTokenSelectDisclosure.onOpen}
         // TODO: in incoming PRs
         // AddLiquidityProvider ->
         onTokenSelect={token =>
