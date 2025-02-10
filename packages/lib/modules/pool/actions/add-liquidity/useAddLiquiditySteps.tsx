@@ -15,6 +15,7 @@ import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
 import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
+import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 
 type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
@@ -31,6 +32,7 @@ export function useAddLiquiditySteps({
   const shouldBatchTransactions = useShouldBatchTransactions(pool)
   const relayerMode = useRelayerMode(pool)
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
+  const { shouldUseSignatures } = useUserSettings()
 
   const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } =
     useApproveRelayerStep(chainId)
@@ -62,11 +64,12 @@ export function useAddLiquiditySteps({
 
   // If the user has selected to not use signatures, we allow them to do permit2
   // approvals with transactions.
-  const permit2ApprovalSteps = usePermit2ApprovalSteps({
-    chain: pool.chain,
-    approvalAmounts: inputAmounts,
-    actionType: 'AddLiquidity',
-  })
+  const { steps: permit2ApprovalSteps, isLoading: isLoadingPermit2ApprovalSteps } =
+    usePermit2ApprovalSteps({
+      chain: pool.chain,
+      approvalAmounts: inputAmounts,
+      actionType: 'AddLiquidity',
+    })
 
   const isSignPermit2Loading = isPermit2 && !signPermit2Step
 
@@ -77,8 +80,14 @@ export function useAddLiquiditySteps({
     slippage,
   })
 
-  const addSteps: TransactionStep[] =
-    isPermit2 && signPermit2Step ? [signPermit2Step, addLiquidityStep] : [addLiquidityStep]
+  const shouldUsePermit2Signatures = isPermit2 && shouldUseSignatures && signPermit2Step
+  const shouldUsePermit2Transactions = isPermit2 && !shouldUseSignatures && permit2ApprovalSteps
+
+  const addSteps: TransactionStep[] = shouldUsePermit2Signatures
+    ? [signPermit2Step, addLiquidityStep]
+    : shouldUsePermit2Transactions
+      ? [...permit2ApprovalSteps, addLiquidityStep]
+      : [addLiquidityStep]
 
   addLiquidityStep.nestedSteps = tokenApprovalSteps
   const approveAndAddSteps =
@@ -106,7 +115,11 @@ export function useAddLiquiditySteps({
   ])
 
   return {
-    isLoadingSteps: isLoadingTokenApprovalSteps || isLoadingRelayerApproval || isSignPermit2Loading,
+    isLoadingSteps:
+      isLoadingTokenApprovalSteps ||
+      isLoadingRelayerApproval ||
+      isLoadingPermit2ApprovalSteps ||
+      isSignPermit2Loading,
     steps,
   }
 }
