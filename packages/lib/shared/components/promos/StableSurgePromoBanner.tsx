@@ -9,8 +9,8 @@ export function StableSurgePromoBanner() {
     <Box
       backgroundImage="url(/images/promos/stablesurge/stablesurge.jpg)"
       backgroundSize="cover"
-      height={{ base: '100%', md: '100%' }}
-      maxW="100%"
+      h="full"
+      maxW="full"
       overflow="hidden"
       position="relative"
       rounded="lg"
@@ -19,14 +19,14 @@ export function StableSurgePromoBanner() {
         width: '100% !important',
         maxWidth: '100% !important',
       }}
-      width="full"
+      w="full"
     >
-      <Center className="copy" h="100%" zIndex="1">
+      <Center className="copy" h="full" zIndex="1">
         <Flex
           alignItems="space-between"
           borderRadius="xl"
           direction={{ base: 'column', md: 'row' }}
-          gap={{ base: 'md', lg: 'md' }}
+          gap="md"
           justifyContent="space-between"
           p={{ base: 'md', md: 'lg' }}
           w="full"
@@ -53,7 +53,6 @@ export function StableSurgePromoBanner() {
                   <HookIcon size={45} />
                 </Center>
               </Badge>
-
               <Box>
                 <Box>
                   <Heading
@@ -83,27 +82,23 @@ export function StableSurgePromoBanner() {
               </Box>
             </Stack>
           </Box>
-          <Flex gap="ms">
-            <Button
-              _hover={{ bg: '#fff', color: '#000' }}
-              as={NextLink}
-              bg="#fff"
-              color="black"
-              cursor="hand"
-              flex="1"
-              h={{ base: '32px', sm: '40px', lg: '48px' }}
-              href="https://medium.com/balancer-protocol/balancers-stablesurge-hook-09d2eb20f219"
-              maxW="120px"
-              py="sm"
-              rounded="full"
-              shadow="2xl"
-              size="md"
-              variant="outline"
-              w="120px"
-            >
-              Learn more
-            </Button>
-          </Flex>
+          <Button
+            as={NextLink}
+            bg="#fff"
+            color="black"
+            cursor="hand"
+            h={{ base: '32px', sm: '40px', lg: '48px' }}
+            href="https://medium.com/balancer-protocol/balancers-stablesurge-hook-09d2eb20f219"
+            maxW="120px"
+            py="sm"
+            rounded="full"
+            shadow="2xl"
+            size="md"
+            variant="outline"
+            w="120px"
+          >
+            Learn more
+          </Button>
         </Flex>
       </Center>
     </Box>
