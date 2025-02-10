@@ -1,30 +1,13 @@
 'use client'
 
-import React from 'react'
-import {
-  Button,
-  Badge,
-  Heading,
-  Flex,
-  Box,
-  Center,
-  Text,
-  useColorMode,
-  Stack,
-} from '@chakra-ui/react'
+import { Button, Badge, Heading, Flex, Box, Center, Text, Stack } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 
 export function StableSurgePromoBanner() {
-  const { colorMode } = useColorMode()
-
   return (
     <Box
-      backgroundImage={
-        colorMode === 'dark'
-          ? 'url(/images/promos/stablesurge/stablesurge.jpg)'
-          : 'url(/images/promos/stablesurge/stablesurge.jpg)'
-      }
+      backgroundImage="url(/images/promos/stablesurge/stablesurge.jpg)"
       backgroundSize="cover"
       height={{ base: '100%', md: '100%' }}
       maxW="100%"
@@ -74,7 +57,7 @@ export function StableSurgePromoBanner() {
               <Box>
                 <Box>
                   <Heading
-                    color={colorMode === 'dark' ? '#fff' : '#fff'}
+                    color="#fff"
                     fontSize={{ base: '20px', md: '22px', lg: '24px' }}
                     fontWeight="bold"
                     letterSpacing="-0.7px"
@@ -86,7 +69,7 @@ export function StableSurgePromoBanner() {
                 </Box>
                 <Box>
                   <Text
-                    color={colorMode === 'dark' ? '#fff' : '#fff'}
+                    color="#fff"
                     fontSize={{ base: 'md' }}
                     fontWeight="medium"
                     lineHeight="1.25"
