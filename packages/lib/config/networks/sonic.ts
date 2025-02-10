@@ -5,7 +5,7 @@ import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
 import {
   BALANCER_BATCH_ROUTER,
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
   PERMIT2,
   VAULT_ADMIN,
   VAULT_V3,
@@ -60,7 +60,7 @@ const networkConfig: NetworkConfig = {
       minter: zeroAddress,
       router: '0xNotYetAvailable' as Address,
       batchRouter: BALANCER_BATCH_ROUTER[sonic.id],
-      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[sonic.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[sonic.id],
       vaultAdminV3: VAULT_ADMIN[sonic.id],
     },
     veDelegationProxy: zeroAddress, // TODO: fix this dependency for Beets
