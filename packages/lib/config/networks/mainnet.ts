@@ -4,7 +4,6 @@ import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { NetworkConfig } from '../config.types'
 import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
 import { SupportedWrapHandler } from '@repo/lib/modules/swap/swap.types'
-import { Address } from 'viem'
 import {
   BALANCER_BATCH_ROUTER,
   BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
