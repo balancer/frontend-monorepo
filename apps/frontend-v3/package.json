@@ -42,8 +42,8 @@
     "react-feather": "^2.0.10",
     "react-use-measure": "^2.1.1",
     "tinycolor2": "^1.6.0",
-    "viem": "2.22.10",
-    "wagmi": "2.13.3"
+    "viem": "2.23.0",
+    "wagmi": "2.14.11"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.5.6",
