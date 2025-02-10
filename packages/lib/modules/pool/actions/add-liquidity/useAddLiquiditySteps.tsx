@@ -14,10 +14,12 @@ import { useSignPermit2AddStep } from './useSignPermit2AddStep'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
+import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
 
 type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
 }
+
 export function useAddLiquiditySteps({
   helpers,
   handler,
@@ -56,6 +58,14 @@ export function useAddLiquiditySteps({
     wethIsEth,
     humanAmountsIn,
     simulationQuery,
+  })
+
+  // If the user has selected to not use signatures, we allow them to do permit2
+  // approvals with transactions.
+  const permit2ApprovalSteps = usePermit2ApprovalSteps({
+    chain: pool.chain,
+    approvalAmounts: inputAmounts,
+    actionType: 'AddLiquidity',
   })
 
   const isSignPermit2Loading = isPermit2 && !signPermit2Step

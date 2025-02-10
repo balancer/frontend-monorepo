@@ -33,7 +33,7 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, s
       }) as const
   )
 
-  const { data, isLoading } = useReadContracts({
+  const { data, isLoading, refetch } = useReadContracts({
     contracts,
     allowFailure: false,
     query: {
@@ -62,10 +62,16 @@ export function usePermit2Allowance({ chainId, tokenAddresses, owner, enabled, s
       )
     : undefined
 
+  function allowanceFor(tokenAddress: Address) {
+    return allowedAmounts?.[tokenAddress] ?? 0n
+  }
+
   return {
     isLoadingPermit2Allowances: isLoading,
     nonces,
     expirations,
     allowedAmounts,
+    allowanceFor,
+    refetchPermit2Allowances: refetch,
   }
 }
