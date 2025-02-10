@@ -6,6 +6,7 @@ import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.t
 import {
   BALANCER_BATCH_ROUTER,
   BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_ROUTER,
   PERMIT2,
   VAULT_ADMIN,
   VAULT_V3,
@@ -62,6 +63,7 @@ const networkConfig: NetworkConfig = {
       vaultV3: VAULT_V3[gnosis.id],
       relayerV6: '0x2163c2FcD0940e84B8a68991bF926eDfB0Cd926C',
       minter: '0xA8920455934Da4D853faac1f94Fe7bEf72943eF1',
+      router: BALANCER_ROUTER[gnosis.id],
       batchRouter: BALANCER_BATCH_ROUTER[gnosis.id],
       compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[gnosis.id],
       vaultAdminV3: VAULT_ADMIN[gnosis.id],

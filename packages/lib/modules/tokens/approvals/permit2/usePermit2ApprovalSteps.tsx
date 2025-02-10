@@ -13,6 +13,7 @@ import { get24HoursFromNowInSecs } from '@repo/lib/shared/utils/time'
 import { usePermit2Allowance } from './usePermit2Allowance'
 import { useTokens } from '../../TokensProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { getMaxAmountForPermit2 } from './permit2.helpers'
 
 export type Params = {
   chain: GqlChain
@@ -100,6 +101,7 @@ export function usePermit2ApprovalSteps({
 
       const id = tokenAddress
       const token = getToken(tokenAddress, chain)
+      const amountToApprove = getMaxAmountForPermit2(requestedRawAmount)
       // Compute symbol using first defined value
       const symbol =
         approvalSymbol && approvalSymbol !== 'Unknown'
@@ -114,7 +116,7 @@ export function usePermit2ApprovalSteps({
 
       // Check if the token has been approved
       const isComplete = () => {
-        const isAllowed = allowanceFor(tokenAddress) >= requiredRawAmount
+        const isAllowed = allowanceFor(tokenAddress) >= amountToApprove
         return requiredRawAmount > 0n && isAllowed
       }
 
@@ -124,7 +126,7 @@ export function usePermit2ApprovalSteps({
         functionName: 'approve',
         labels,
         chainId,
-        args: [tokenAddress, spenderAddress, requestedRawAmount, permitExpiry],
+        args: [tokenAddress, spenderAddress, amountToApprove, permitExpiry],
         enabled: !isLoadingPermit2Allowances,
         txSimulationMeta: sentryMetaForWagmiSimulation(
           'Error in wagmi tx simulation: Approving token',

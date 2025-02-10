@@ -8,6 +8,7 @@ import { Address } from 'viem'
 import {
   BALANCER_BATCH_ROUTER,
   BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_ROUTER,
   PERMIT2,
   VAULT_ADMIN,
   VAULT_V3,
@@ -86,7 +87,7 @@ const networkConfig: NetworkConfig = {
       vaultV3: VAULT_V3[mainnet.id],
       relayerV6: '0x35Cea9e57A393ac66Aaa7E25C391D52C74B5648f',
       minter: '0x239e55F427D44C3cc793f49bFB507ebe76638a2b',
-      router: '0xNotYetAvailable' as Address,
+      router: BALANCER_ROUTER[mainnet.id],
       batchRouter: BALANCER_BATCH_ROUTER[mainnet.id],
       compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[mainnet.id],
       WeightedPool2TokensFactory: '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0',

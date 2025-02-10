@@ -6,6 +6,7 @@ import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
 import {
   BALANCER_BATCH_ROUTER,
   BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_ROUTER,
   PERMIT2,
   VAULT_ADMIN,
   VAULT_V3,
@@ -58,7 +59,7 @@ const networkConfig: NetworkConfig = {
       vaultV3: VAULT_V3[sonic.id],
       relayerV6: '0x7b52D5ef006E59e3227629f97F182D6442380bb6',
       minter: zeroAddress,
-      router: '0xNotYetAvailable' as Address,
+      router: BALANCER_ROUTER[sonic.id],
       batchRouter: BALANCER_BATCH_ROUTER[sonic.id],
       compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[sonic.id],
       vaultAdminV3: VAULT_ADMIN[sonic.id],
