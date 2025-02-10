@@ -4,7 +4,7 @@ import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 import { BALANCER_ROUTER } from '@balancer/sdk'
-import { avalanche } from 'viem/_types/chains/definitions/avalanche'
+import { avalanche } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
   chainId: 43114,
