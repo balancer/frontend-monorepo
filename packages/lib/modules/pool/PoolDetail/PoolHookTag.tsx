@@ -1,5 +1,6 @@
 import {
   Box,
+  Center,
   HStack,
   Link,
   Popover,
@@ -17,13 +18,14 @@ import { useHook } from '../../hooks/useHook'
 
 import { PoolListItem } from '../pool.types'
 import { Pool } from '../pool.types'
+import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
 
 type Props = {
   pool: Pool | PoolListItem
-  showName?: boolean
+  onlyShowIcon?: boolean
 }
 
-export function PoolHookTag({ pool, showName = false }: Props) {
+export function PoolHookTag({ pool, onlyShowIcon = false }: Props) {
   const { hooks } = useHook(pool)
 
   // TODO: add nested hook support when needed
@@ -31,7 +33,13 @@ export function PoolHookTag({ pool, showName = false }: Props) {
 
   if (!hook) return null
 
-  return (
+  return onlyShowIcon ? (
+    <BalBadge color="font.secondary" fontSize="xs" h={7} p="0" textTransform="lowercase" w={7}>
+      <Center color="font.secondary" h="full" w="full">
+        <HookIcon size={20} />
+      </Center>
+    </BalBadge>
+  ) : (
     <Popover trigger="hover">
       {({ isOpen }) => (
         <>
@@ -50,16 +58,14 @@ export function PoolHookTag({ pool, showName = false }: Props) {
               shadow="sm"
             >
               <HStack color={isOpen ? 'font.primary' : 'font.secondary'} gap="xs">
-                <HookIcon size={20} />
-                {showName && (
-                  <Text
-                    color={isOpen ? 'font.primary' : 'font.secondary'}
-                    fontSize="sm"
-                    variant="secondary"
-                  >
-                    {hook.name}
-                  </Text>
-                )}
+                <HookIcon size={18} />
+                <Text
+                  color={isOpen ? 'font.primary' : 'font.secondary'}
+                  fontSize="sm"
+                  variant="secondary"
+                >
+                  {hook.name}
+                </Text>
               </HStack>
             </Box>
           </PopoverTrigger>
