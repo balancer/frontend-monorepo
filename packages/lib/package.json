@@ -41,7 +41,7 @@
     "@safe-global/safe-apps-sdk": "9.1.0",
     "@sentry/nextjs": "8.50.0",
     "@studio-freight/react-lenis": "^0.0.47",
-    "@tanstack/react-query": "^5.56.2",
+    "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-query-devtools": "5.62.11",
     "@tanstack/react-table": "^8.9.3",
     "@vercel/speed-insights": "1.1.0",
@@ -124,7 +124,7 @@
     "lokijs": "^1.5.12",
     "msw": "2.7.0",
     "sentry-testkit": "^5.0.9",
-    "vitest": "2.1.8",
+    "vitest": "2.1.9",
     "vitest-mock-extended": "2.0.2"
   }
 }
