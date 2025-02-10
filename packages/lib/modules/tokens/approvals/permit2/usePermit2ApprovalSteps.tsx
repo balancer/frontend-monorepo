@@ -73,7 +73,6 @@ export function usePermit2ApprovalSteps({
     [filteredApprovalAmounts]
   )
 
-  // Destructure for clarity
   const { allowanceFor, isLoadingPermit2Allowances, refetchPermit2Allowances } =
     usePermit2Allowance({
       chainId,
