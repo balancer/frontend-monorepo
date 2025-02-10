@@ -6,7 +6,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { LABELS } from '@repo/lib/shared/labels'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
-import { bn, isSmallUsd, isZero, safeSum } from '@repo/lib/shared/utils/numbers'
+import { bn, isTooSmallToRemoveUsd, isZero, safeSum } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount, TokenAmount, isSameAddress } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
@@ -15,7 +15,8 @@ import { useRemoveLiquidityPriceImpactQuery } from './queries/useRemoveLiquidity
 import { RemoveLiquidityType } from './remove-liquidity.types'
 import { Address, formatUnits, Hash } from 'viem'
 import { emptyTokenAmounts, toHumanAmountWithAddress } from '../LiquidityActionHelpers'
-import { getPoolActionableTokens, isCowAmmPool } from '../../pool.helpers'
+import { isCowAmmPool } from '../../pool.helpers'
+import { getPoolActionableTokens } from '../../pool-tokens.utils'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
 import { useRemoveLiquiditySteps } from './useRemoveLiquiditySteps'
@@ -132,7 +133,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     !urlTxHash &&
     !!tokenOut &&
     !isSingleTokenBalanceMoreThat25Percent &&
-    !isSmallUsd(usdValueForHumanBptIn)
+    !isTooSmallToRemoveUsd(usdValueForHumanBptIn)
 
   const simulationQuery = useRemoveLiquiditySimulationQuery({
     handler,

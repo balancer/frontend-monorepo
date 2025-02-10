@@ -14,5 +14,5 @@ test('Balancer: can add liquidity to random pool', async ({ page }) => {
   await expect(page.getByText('Flexible')).toBeVisible()
   await page.getByPlaceholder('0.00').first().click()
   await page.getByPlaceholder('0.00').first().fill('1')
-  await page.getByRole('button', { name: 'Connect wallet' }).nth(2).click()
+  await page.getByRole('button', { name: 'Connect' }).nth(2).click()
 })

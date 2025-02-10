@@ -1,24 +1,36 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { Address, HumanAmount, InputAmount, calculateProportionalAmounts } from '@balancer/sdk'
+import {
+  Address,
+  HumanAmount,
+  InputAmount,
+  PoolStateWithBalances,
+  PoolStateWithUnderlyingBalances,
+  calculateProportionalAmounts,
+  calculateProportionalAmountsBoosted,
+} from '@balancer/sdk'
 import { swapWrappedWithNative } from '@repo/lib/modules/tokens/token.helpers'
-import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { ApiToken, HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { formatUnits } from 'viem'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { isBoosted } from '../../../pool.helpers'
 import { usePool } from '../../../PoolProvider'
 import { LiquidityActionHelpers, isEmptyHumanAmount } from '../../LiquidityActionHelpers'
 import { useAddLiquidity } from '../AddLiquidityProvider'
+import { usePoolStateWithBalancesQuery } from '../queries/usePoolStateWithBalancesQuery'
 
 export function useProportionalInputs() {
   const { isConnected } = useUserAccount()
   const { helpers, setHumanAmountsIn, clearAmountsIn, wethIsEth, setReferenceAmountAddress } =
     useAddLiquidity()
   const { balances, isBalancesLoading } = useTokenBalances()
-  const { isLoading: isPoolLoading } = usePool()
+  const { isLoading: isPoolLoading, pool } = usePool()
+
+  const { data: poolStateWithBalances, isLoading: isPoolStateWithBalancesLoading } =
+    usePoolStateWithBalancesQuery(pool)
 
   function handleProportionalHumanInputChange(token: ApiToken, humanAmount: HumanAmount) {
     const tokenAddress = token.address as Address
@@ -33,6 +45,7 @@ export function useProportionalInputs() {
       humanAmount,
       helpers,
       wethIsEth,
+      poolStateWithBalances,
     })
 
     const proportionalHumanAmountsInWithOriginalUserInput = proportionalHumanAmountsIn.map(
@@ -54,7 +67,11 @@ export function useProportionalInputs() {
     https://github.com/balancer/frontend-monorepo/blob/f68ad17b46f559e2e5556d972a193b3fa6e3706b/packages/lib/modules/pool/actions/add-liquidity/form/TokenInputsWithAddable.tsx#L122
   */
   const hasBalanceForAllTokens =
-    isConnected && !isBalancesLoading && !isPoolLoading && balances.length > 0
+    isConnected &&
+    !isBalancesLoading &&
+    !isPoolLoading &&
+    !isPoolStateWithBalancesLoading &&
+    balances.length > 0
 
   return {
     hasBalanceForAllTokens,
@@ -67,12 +84,14 @@ type Params = {
   humanAmount: HumanAmount
   helpers: LiquidityActionHelpers
   wethIsEth: boolean
+  poolStateWithBalances?: PoolStateWithUnderlyingBalances | PoolStateWithBalances
 }
 export function _calculateProportionalHumanAmountsIn({
   token,
   humanAmount,
   helpers,
   wethIsEth,
+  poolStateWithBalances,
 }: Params): HumanTokenAmountWithAddress[] {
   const tokenAddress = token.address as Address
   const symbol = token.symbol
@@ -80,11 +99,19 @@ export function _calculateProportionalHumanAmountsIn({
     { tokenAddress, humanAmount, symbol },
   ])[0]
 
-  const proportionalAmounts = calculateProportionalAmounts(
-    helpers.poolStateWithBalances,
-    referenceAmount
-  )
-    .tokenAmounts.map(({ address, rawAmount, decimals }) => {
+  if (!poolStateWithBalances) {
+    throw new Error('Cannot calculate proportional amounts without pool state')
+  }
+
+  const sdkProportionalAmounts = isBoosted(helpers.pool)
+    ? calculateProportionalAmountsBoosted(
+        poolStateWithBalances as PoolStateWithUnderlyingBalances,
+        referenceAmount
+      )
+    : calculateProportionalAmounts(poolStateWithBalances, referenceAmount)
+
+  const proportionalAmounts = sdkProportionalAmounts.tokenAmounts
+    .map(({ address, rawAmount, decimals }) => {
       // Use the humanAmount entered by the user to avoid displaying rounding updates from calculateProportionalAmounts
       if (address === tokenAddress) return { tokenAddress, humanAmount, symbol }
 

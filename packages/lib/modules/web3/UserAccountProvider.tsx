@@ -2,7 +2,7 @@
 
 /* eslint-disable react-hooks/exhaustive-deps */
 // eslint-disable-next-line no-restricted-imports
-import { useAccount, useDisconnect } from 'wagmi'
+import { useAccount, useAccountEffect, useDisconnect } from 'wagmi'
 import { emptyAddress } from './contracts/wagmi-helpers'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -12,6 +12,7 @@ import { config, isProd } from '@repo/lib/config/app.config'
 import { captureError, ensureError } from '@repo/lib/shared/utils/errors'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useSafeAppConnectionGuard } from './useSafeAppConnectionGuard'
+import { useWCConnectionLocalStorage } from './wallet-connect/useWCConnectionLocalStorage'
 
 async function isAuthorizedAddress(address: Address): Promise<boolean> {
   try {
@@ -70,20 +71,49 @@ export function _useUserAccount() {
     isConnected: isMounted && !!query.address && !checkingAuth,
     connector: isMounted ? query.connector : undefined,
     isBlocked,
+    isWCConnector: isMounted ? query.connector?.id === 'walletConnect' : false,
   }
 
   useSafeAppConnectionGuard(result.connector, result.chainId)
 
+  const { isConnectedToWC, setIsConnectedToWC } = useWCConnectionLocalStorage()
+
   useEffect(() => {
     if (result.userAddress) {
-      setUser({
-        id: result.userAddress,
-        username: result.userAddress,
-      })
+      onNewUserAddress(result)
     } else {
-      setUser(null)
+      onEmptyUserAddress()
     }
   }, [result.userAddress])
+
+  useAccountEffect({
+    onDisconnect: () => {
+      // When disconnecting from WC connector we need a full page reload to enforce a new WC connector instance created
+      console.log('Full page reload on WC disconnection')
+      window.location.reload()
+    },
+  })
+
+  function onNewUserAddress(result: UseUserAccountResponse) {
+    // Set Sentry user
+    setUser({
+      id: result.userAddress,
+      username: result.userAddress,
+    })
+
+    if (result.isWCConnector) {
+      setIsConnectedToWC(true)
+    }
+  }
+
+  function onEmptyUserAddress() {
+    // Clear Sentry user
+    setUser(null)
+
+    if (isConnectedToWC) {
+      setIsConnectedToWC(false)
+    }
+  }
 
   useEffect(() => {
     setTag('wallet', result.connector?.id)

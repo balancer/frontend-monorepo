@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react'
 import { Globe, Trash2 } from 'react-feather'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
-import { orderByHash, SortingBy } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.types'
+import { SortingBy } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.types'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
-
+import { orderByHash } from '../myVotes.helpers'
 const orderBy = Object.values(SortingBy)
 
 interface Props extends GridProps {

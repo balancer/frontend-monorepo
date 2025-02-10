@@ -35,9 +35,18 @@ export const sDAIBoosted: PoolExample = {
   version: 3,
 }
 
+export const partialBoosted: PoolExample = {
+  name: 'rstETH/LidowstETH',
+  description: 'Edge case: BOOSTED with 1 ERC4626 (waEthLidowstETH) and one non ERC4626 (rstETH)',
+  poolId: '0x121edb0badc036f5fc610d015ee14093c142313b',
+  poolChain: GqlChain.Mainnet,
+  version: 3,
+}
+
 export const boostedPoolExamples = [
   v3SepoliaNestedBoosted,
   usdcUsdtAaveBoosted,
   morphoStakeHouse,
   sDAIBoosted,
+  partialBoosted,
 ]

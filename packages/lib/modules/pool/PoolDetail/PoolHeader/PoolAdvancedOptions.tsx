@@ -20,15 +20,18 @@ import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { MoreVertical } from 'react-feather'
-import { shouldBlockAddLiquidity } from '../../pool.helpers'
+import { isCowAmmPool, shouldBlockAddLiquidity } from '../../pool.helpers'
 import { usePool } from '../../PoolProvider'
+import { buildCowSwapUrlFromPool } from '@repo/lib/modules/cow/cow.utils'
+import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
 
 export function PoolAdvancedOptions() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const pathname = usePathname()
   const { pool } = usePool()
 
-  const isPoolSwapDisabled = shouldBlockAddLiquidity(pool)
+  const isCowPool = isCowAmmPool(pool.type)
+  const isPoolSwapDisabled = shouldBlockAddLiquidity(pool) || isCowPool
 
   return (
     <Popover
@@ -57,18 +60,32 @@ export function PoolAdvancedOptions() {
                   spacing="xxs"
                   variants={staggeredFadeInUp}
                 >
-                  <HStack>
-                    <SwapIcon size={20} />
-                    {isPoolSwapDisabled ? (
-                      <Text color="font.button.disabled" cursor="not-allowed" opacity="0.3">
-                        Swap through pool
-                      </Text>
-                    ) : (
-                      <Link as={NextLink} href={`${pathname}/swap`} prefetch variant="nav">
-                        Swap through pool
+                  {isCowPool ? (
+                    <HStack>
+                      <CowIcon size={20} />
+                      <Link
+                        as={NextLink}
+                        href={buildCowSwapUrlFromPool(pool)}
+                        target="_blank"
+                        variant="nav"
+                      >
+                        Swap pool tokens on CoW Swap
                       </Link>
-                    )}
-                  </HStack>
+                    </HStack>
+                  ) : (
+                    <HStack>
+                      <SwapIcon size={20} />
+                      {isPoolSwapDisabled ? (
+                        <Text color="font.button.disabled" cursor="not-allowed" opacity="0.3">
+                          Swap through pool
+                        </Text>
+                      ) : (
+                        <Link as={NextLink} href={`${pathname}/swap`} prefetch variant="nav">
+                          Swap through pool
+                        </Link>
+                      )}
+                    </HStack>
+                  )}
                 </VStack>
               ) : null}
             </AnimatePresence>

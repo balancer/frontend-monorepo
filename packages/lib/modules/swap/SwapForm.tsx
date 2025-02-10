@@ -32,9 +32,7 @@ import { SwapDetails } from './SwapDetails'
 import { capitalize } from 'lodash'
 import { motion, easeOut } from 'framer-motion'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
-import { parseSwapError } from './swap.helpers'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { ConnectWallet } from '../web3/ConnectWallet'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
@@ -46,6 +44,7 @@ import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isPoolSwapAllowed } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { ApiToken } from '../tokens/token.types'
+import { SwapSimulationError } from './SwapSimulationError'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -268,9 +267,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
               )}
 
               {simulationQuery.isError ? (
-                <ErrorAlert title="Error fetching swap">
-                  {parseSwapError(simulationQuery.error?.message)}
-                </ErrorAlert>
+                <SwapSimulationError errorMessage={simulationQuery.error?.message} />
               ) : null}
             </VStack>
           </CardBody>

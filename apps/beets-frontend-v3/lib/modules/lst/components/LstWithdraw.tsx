@@ -8,18 +8,25 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { LstWithdrawModal } from '../modals/LstWithdrawModal'
 import { useDisclosure } from '@chakra-ui/react'
-import { UserWithdraw } from '../hooks/useGetUserWithdraws'
+import { useGetUserWithdraws, UserWithdraw } from '../hooks/useGetUserWithdraws'
+import { useGetUserNumWithdraws } from '../hooks/useGetUserNumWithdraws'
 
-export function LstWithdraw({
-  withdrawalsData,
-  isLoading,
-}: {
-  withdrawalsData: UserWithdraw[]
-  isLoading: boolean
-}) {
-  const { stakedAsset, pagination, setPagination, first, skip, chain } = useLst()
+export function LstWithdraw() {
+  const { stakedAsset, pagination, setPagination, first, skip, chain, isWithdrawTab } = useLst()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(
+    chain,
+    isWithdrawTab
+  )
+
+  const { data: withdrawalsData, isLoading: isWithdrawalsLoading } = useGetUserWithdraws(
+    chain,
+    userNumWithdraws,
+    isWithdrawTab
+  )
+
+  const isLoading = isWithdrawalsLoading || isUserNumWithdrawsLoading
   const withdrawalsDataOrdered = orderBy(withdrawalsData, 'requestTimestamp', 'desc')
   const count = withdrawalsDataOrdered.length
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination, false, true)

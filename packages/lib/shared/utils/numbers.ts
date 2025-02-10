@@ -259,6 +259,11 @@ export function isSmallUsd(value: Numberish): boolean {
   return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
 }
 
-export function clamp(number: number, min: number, max: number) {
-  return Math.min(Math.max(number, min), max)
+/*
+  Small USD amounts crashes the the SDK remove queries,
+  so we set this threshold to disable removes
+ */
+export function isTooSmallToRemoveUsd(value: Numberish): boolean {
+  const USD_LOWER_THRESHOLD = 0.03
+  return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
 }

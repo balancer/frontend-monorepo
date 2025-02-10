@@ -7,11 +7,12 @@ import { useReadContract } from 'wagmi'
 import { sonicStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function useGetUserNumWithdraws(chain: GqlChain) {
-  const { isConnected, userAddress } = useUserAccount()
+export function useGetUserNumWithdraws(chain: GqlChain, enabled: boolean) {
   const chainId = getChainId(chain)
 
+  const { isConnected, userAddress } = useUserAccount()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
+
   const config = getNetworkConfig(chainId)
 
   const query = useReadContract({
@@ -20,7 +21,7 @@ export function useGetUserNumWithdraws(chain: GqlChain) {
     address: config.contracts.beets?.lstStakingProxy,
     functionName: 'userNumWithdraws',
     args: [userAddress],
-    query: { enabled: isConnected && !shouldChangeNetwork && !!userAddress },
+    query: { enabled: isConnected && !shouldChangeNetwork && !!userAddress && !!enabled },
   })
 
   return {

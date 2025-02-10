@@ -21,28 +21,22 @@ enum RowType {
   Submit = 'Submit',
 }
 
+const rowProps = {
+  px: { base: 'sm', sm: '0' },
+  gridTemplateColumns: `32px minmax(320px, 1fr) 100px 120px 120px 120px 50px`,
+  alignItems: 'center',
+  gap: { base: 'xxs', xl: 'lg' },
+  // fix: (votes) implement nested cell paddings for Edit votes column
+  // gridTemplateColumns: `52px minmax(350px, 1fr) 130px 150px 150px 150px 52px`,
+}
+
+const cellProps = {
+  // fix: (votes) implement nested cell paddings for Edit votes column
+  // p: ['sm', 'md'],
+}
+
 export function MyVotesTable({ myVotes, loading }: Props) {
   const isMounted = useIsMounted()
-
-  const rowProps = useMemo(
-    () => ({
-      px: { base: 'sm', sm: '0' },
-      gridTemplateColumns: `32px minmax(320px, 1fr) 100px 120px 120px 120px 50px`,
-      alignItems: 'center',
-      gap: { base: 'xxs', xl: 'lg' },
-      // fix: (votes) implement nested cell paddings for Edit votes column
-      // gridTemplateColumns: `52px minmax(350px, 1fr) 130px 150px 150px 150px 52px`,
-    }),
-    []
-  )
-
-  const cellProps = useMemo(
-    () => ({
-      // fix: (votes) implement nested cell paddings for Edit votes column
-      // p: ['sm', 'md'],
-    }),
-    []
-  )
 
   const items = useMemo(() => {
     if (myVotes.length === 0) {
@@ -75,7 +69,7 @@ export function MyVotesTable({ myVotes, loading }: Props) {
     return function TableHeader() {
       return <MyVotesTableHeader cellProps={cellProps} {...rowProps} />
     }
-  }, [cellProps, rowProps])
+  }, [])
 
   // Memoize component's link to skip recreation
   const TableRow = useMemo(() => {
@@ -92,7 +86,7 @@ export function MyVotesTable({ myVotes, loading }: Props) {
         <MyVotesTableRow cellProps={cellProps} keyValue={item.id} vote={item.vote} {...rowProps} />
       )
     }
-  }, [cellProps, rowProps])
+  }, [])
 
   if (!isMounted) return <Skeleton height="500px" w="full" />
 

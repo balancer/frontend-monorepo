@@ -24,6 +24,7 @@ export type Params = {
   bptSymbol?: string //Edge-case for approving
   lpToken?: string
   enabled?: boolean
+  wethIsEth?: boolean
 }
 
 /*
@@ -38,10 +39,14 @@ export function useTokenApprovalSteps({
   isPermit2 = false,
   enabled = true,
   lpToken,
+  wethIsEth,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
   const { getToken } = useTokens()
   const nativeAssetAddress = getNativeAssetAddress(chain)
+
+  // Unwraps of wrapped native assets do not require approval
+  const isUnwrappingNative = wethIsEth && actionType === 'Unwrapping'
 
   const _approvalAmounts = useMemo(
     () => approvalAmounts.filter(amount => !isSameAddress(amount.address, nativeAssetAddress)),
@@ -58,7 +63,8 @@ export function useTokenApprovalSteps({
     userAddress,
     spenderAddress,
     tokenAddresses: approvalTokenAddresses,
-    enabled: enabled && !areEmptyRawAmounts(_approvalAmounts) && !!spenderAddress,
+    enabled:
+      enabled && !areEmptyRawAmounts(_approvalAmounts) && !!spenderAddress && !isUnwrappingNative,
   })
 
   const tokenAmountsToApprove = getRequiredTokenApprovals({
@@ -66,6 +72,7 @@ export function useTokenApprovalSteps({
     rawAmounts: _approvalAmounts,
     allowanceFor: tokenAllowances.allowanceFor,
     isPermit2,
+    skipAllowanceCheck: isUnwrappingNative,
   })
 
   const steps = useMemo(() => {
@@ -110,13 +117,14 @@ export function useTokenApprovalSteps({
         return requiredRawAmount > 0n && isAllowed
       }
 
+      const isTxEnabled = !!spenderAddress && !tokenAllowances.isAllowancesLoading
       const props: ManagedErc20TransactionInput = {
         tokenAddress,
         functionName: 'approve',
         labels,
         chainId: getChainId(chain),
         args: [spenderAddress, requestedRawAmount],
-        enabled: !!spenderAddress && !tokenAllowances.isAllowancesLoading,
+        enabled: isTxEnabled,
         simulationMeta: sentryMetaForWagmiSimulation(
           'Error in wagmi tx simulation: Approving token',
           tokenAmountToApprove
@@ -131,7 +139,7 @@ export function useTokenApprovalSteps({
         labels,
         isComplete,
         renderAction: () => <ManagedErc20TransactionButton id={id} key={id} {...props} />,
-        batchableTxCall: buildBatchableTxCall({ tokenAddress, args }),
+        batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
         onSuccess: () => tokenAllowances.refetchAllowances(),
       } as const satisfies TransactionStep
     })

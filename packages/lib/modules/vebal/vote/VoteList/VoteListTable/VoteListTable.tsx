@@ -16,6 +16,13 @@ interface Props {
   loading: boolean
 }
 
+const rowProps = {
+  px: { base: 'sm', sm: '0' },
+  gridTemplateColumns: `32px minmax(320px, 1fr) 120px 100px 120px 120px 100px`,
+  alignItems: 'center',
+  gap: { base: 'xxs', xl: 'lg' },
+}
+
 export function VoteListTable({ voteList, count, loading }: Props) {
   const isMounted = useIsMounted()
   const {
@@ -24,28 +31,18 @@ export function VoteListTable({ voteList, count, loading }: Props) {
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination)
   const showPagination = !!voteList.length && !!count && count > pagination.pageSize
 
-  const rowProps = useMemo(
-    () => ({
-      px: { base: 'sm', sm: '0' },
-      gridTemplateColumns: `32px minmax(320px, 1fr) 120px 100px 120px 120px 100px`,
-      alignItems: 'center',
-      gap: { base: 'xxs', xl: 'lg' },
-    }),
-    []
-  )
-
   const TableHeader = useMemo(() => {
     return function TableHeader() {
       return <VoteListTableHeader {...rowProps} />
     }
-  }, [rowProps])
+  }, [])
 
   // Memoize component's link to skip recreation
   const TableRow = useMemo(() => {
     return function TableRow({ item, index }: { item: VotingPoolWithData; index: number }) {
       return <VoteListTableRow keyValue={index} vote={item} {...rowProps} />
     }
-  }, [rowProps])
+  }, [])
 
   if (!isMounted) return <Skeleton height="500px" w="full" />
 

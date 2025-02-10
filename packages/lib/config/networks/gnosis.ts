@@ -7,6 +7,7 @@ import {
   BALANCER_BATCH_ROUTER,
   BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
   PERMIT2,
+  VAULT_ADMIN,
   VAULT_V3,
 } from '@balancer/sdk'
 import { gnosis } from 'viem/chains'
@@ -63,6 +64,7 @@ const networkConfig: NetworkConfig = {
       minter: '0xA8920455934Da4D853faac1f94Fe7bEf72943eF1',
       batchRouter: BALANCER_BATCH_ROUTER[gnosis.id],
       compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[gnosis.id],
+      vaultAdminV3: VAULT_ADMIN[gnosis.id],
     },
     veDelegationProxy: '0x7A2535f5fB47b8e44c02Ef5D9990588313fe8F05',
     permit2: PERMIT2[gnosis.id],

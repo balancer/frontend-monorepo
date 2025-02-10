@@ -13,13 +13,10 @@ import { BlockedAddressModal } from './BlockedAddressModal'
 import { CustomAvatar } from './CustomAvatar'
 import { UserAccountProvider } from './UserAccountProvider'
 import { PropsWithChildren } from 'react'
-import { WagmiConfig } from './WagmiConfig'
+import { wagmiConfig } from './WagmiConfig'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 
-export function Web3Provider({
-  children,
-  wagmiConfig,
-}: PropsWithChildren<{ wagmiConfig: WagmiConfig }>) {
+export function Web3Provider({ children }: PropsWithChildren) {
   const isMounted = useIsMounted()
 
   const { colors, radii, shadows, semanticTokens, fonts } = useTheme()

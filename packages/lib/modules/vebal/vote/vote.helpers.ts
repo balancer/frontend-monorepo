@@ -1,4 +1,8 @@
-import { VotingPoolWithData, VotesState, SortVotesBy } from '@repo/lib/modules/vebal/vote/vote.types'
+import {
+  VotingPoolWithData,
+  VotesState,
+  SortVotesBy,
+} from '@repo/lib/modules/vebal/vote/vote.types'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 export function getVotesState(relativeWeightCap: number, votesNextPeriod: number) {

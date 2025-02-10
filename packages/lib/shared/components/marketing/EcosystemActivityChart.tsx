@@ -16,15 +16,14 @@ import {
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { PropsWithChildren } from 'react'
 import { motion } from 'framer-motion'
-
 import { EcosystemChainSelect } from './EcosystemChainSelect'
 import { getChainShortName } from '@repo/lib/config/app.config'
-import { supportedNetworks } from '@repo/lib/modules/web3/ChainConfig'
 import {
   PoolActivityChartTypeTab,
   gradientMap,
   useEcosystemPoolActivityChart,
 } from '@repo/lib/modules/marketing/useEcosystemPoolActivity'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 function AnimateOpacity({ children }: PropsWithChildren) {
   return (
@@ -49,7 +48,7 @@ export function EcosystemActivityChart() {
     eChartsRef,
   } = useEcosystemPoolActivityChart()
 
-  const legendTabs = supportedNetworks.map(key => {
+  const legendTabs = PROJECT_CONFIG.supportedNetworks.map(key => {
     return {
       label: getChainShortName(key),
       color: `linear-gradient(to bottom, ${gradientMap[key].from}, ${gradientMap[key].to})`,

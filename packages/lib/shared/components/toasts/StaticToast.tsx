@@ -19,18 +19,17 @@ export function StaticToast({ children, isOpen, ...props }: StaticToastProps) {
 
   useEffect(() => {
     if (isOpen && !toastIdRef.current) {
-      // open
       toastIdRef.current = toast({ ...defaultProps, ...props, render: children })
     }
 
+    // close on isOpen change
     if (!isOpen && toastIdRef.current) {
-      // close on isOpen change
       toast.close(toastIdRef.current)
     }
 
     return () => {
+      // close on isOpen change
       if (!isOpen && toastIdRef.current) {
-        // close on isOpen change
         toast.close(toastIdRef.current)
         toastIdRef.current = undefined
       }

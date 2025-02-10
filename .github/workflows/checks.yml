@@ -48,6 +48,14 @@ jobs:
         run: pnpm typecheck
       - name: Run unit tests
         run: pnpm test:unit
+      #  Uncomment to debug turborepo summary when running with --summarize option
+      #  Context: https://turbo.build/repo/docs/crafting-your-repository/caching#using-run-summaries
+      # - uses: actions/upload-artifact@v4
+      #   with:
+      #     name: unit-turbo-summary
+      #     path: |
+      #       ./.turbo/runs/
+      #     retention-days: 30
 
   Integration-Test:
     runs-on: macos-14

@@ -15,6 +15,8 @@ import {
   getCompositionTokens,
   getUserReferenceTokens,
   getFlatUserReferenceTokens,
+  getPoolActionableTokens,
+  getNestedPoolTokens,
 } from './pool-tokens.utils'
 import { ApiToken } from '../tokens/token.types'
 import { PoolToken } from './pool.types'
@@ -74,6 +76,12 @@ function getCompositionTokensURIs(poolExample: PoolExample): (string | null | un
   return getCompositionTokens(pool).map(t => t.logoURI)
 }
 
+function getPoolActionableTokenSymbols(poolExample: PoolExample): string[] {
+  const pool = getApiPoolMock(poolExample)
+
+  return getPoolActionableTokens(pool).map(t => t.symbol)
+}
+
 describe('getDisplayTokens for flat pools', () => {
   it('BAL WETH 80 20', () => {
     expect(getCompositionTokenSymbols(balWeth8020)).toEqual(['BAL', 'WETH'])
@@ -98,6 +106,8 @@ describe('getDisplayTokens for flat pools', () => {
     `)
 
     expect(getFlatUserReferenceTokenSymbols(balWeth8020)).toEqual(['BAL', 'WETH'])
+
+    expect(getPoolActionableTokenSymbols(balWeth8020)).toEqual(['BAL', 'WETH'])
   })
 
   it('osETH Phantom Composable Stable', () => {
@@ -106,6 +116,8 @@ describe('getDisplayTokens for flat pools', () => {
     expect(getUserReferenceTokenSymbols(osETHPhantom)).toEqual(['WETH', 'osETH'])
 
     expect(getFlatUserReferenceTokenSymbols(osETHPhantom)).toEqual(['WETH', 'osETH'])
+
+    expect(getPoolActionableTokenSymbols(osETHPhantom)).toEqual(['WETH', 'osETH'])
   })
 
   it('sDAI weighted', () => {
@@ -114,6 +126,8 @@ describe('getDisplayTokens for flat pools', () => {
     expect(getUserReferenceTokenSymbols(sDAIWeighted)).toEqual(['sDAI', 'wstETH'])
 
     expect(getFlatUserReferenceTokenSymbols(sDAIWeighted)).toEqual(['sDAI', 'wstETH'])
+
+    expect(getPoolActionableTokenSymbols(sDAIWeighted)).toEqual(['wstETH', 'sDAI'])
   })
 
   it('v2 stable with ERC4626 tokens (V2 so no boosted)', () => {
@@ -130,6 +144,11 @@ describe('getDisplayTokens for flat pools', () => {
       'dai-aave',
       'usdc-aave',
     ])
+
+    expect(getPoolActionableTokenSymbols(v2SepoliaStableWithERC4626)).toEqual([
+      'usdc-aave',
+      'dai-aave',
+    ])
   })
 })
 
@@ -145,8 +164,25 @@ describe('getDisplayTokens for NESTED pools', () => {
       'WBTC',
       'WETH',
       'WXDAI',
-      'staBAL3',
     ])
+
+    expect(getPoolActionableTokenSymbols(staBALv2Nested)).toEqual([
+      'USDT',
+      'USDC',
+      'WXDAI',
+      'WETH',
+      'WBTC',
+    ])
+
+    const pool = getApiPoolMock(staBALv2Nested)
+    const staBalBPT = pool.poolTokens.find(t => t.hasNestedPool)
+    expect(getNestedPoolTokens(staBalBPT as PoolToken).map(t => t.symbol)).toMatchInlineSnapshot(`
+      [
+        "USDT",
+        "USDC",
+        "WXDAI",
+      ]
+    `)
   })
 
   it('aura bal (Nested with supportsNestedActions false)', () => {
@@ -155,14 +191,8 @@ describe('getDisplayTokens for NESTED pools', () => {
     expect(getUserReferenceTokenSymbols(auraBal)).toEqual(['B-80BAL-20WETH', 'auraBAL'])
 
     expect(getFlatUserReferenceTokenSymbols(auraBal)).toEqual(['BAL', 'WETH', 'auraBAL'])
-  })
 
-  it('aura bal (Nested with supportsNestedActions false)', () => {
-    expect(getCompositionTokenSymbols(auraBal)).toEqual(['B-80BAL-20WETH', 'auraBAL'])
-
-    expect(getUserReferenceTokenSymbols(auraBal)).toEqual(['B-80BAL-20WETH', 'auraBAL'])
-
-    expect(getFlatUserReferenceTokenSymbols(auraBal)).toEqual(['BAL', 'WETH', 'auraBAL'])
+    expect(getPoolActionableTokenSymbols(auraBal)).toEqual(['B-80BAL-20WETH', 'auraBAL'])
   })
 })
 
@@ -175,6 +205,8 @@ describe('getDisplayTokens for BOOSTED pools', () => {
     expect(getBoostedUnderlyingTokenSymbols(morphoStakeHouse)).toEqual(['USDC', 'wUSDL'])
 
     expect(getFlatUserReferenceTokenSymbols(morphoStakeHouse)).toEqual(['USDC', 'wUSDL'])
+
+    expect(getPoolActionableTokenSymbols(morphoStakeHouse)).toEqual(['USDC', 'wUSDL'])
   })
 
   it('sDAI boosted', () => {
@@ -183,5 +215,7 @@ describe('getDisplayTokens for BOOSTED pools', () => {
     expect(getUserReferenceTokenSymbols(sDAIBoosted)).toEqual(['GNO', 'sDAI'])
 
     expect(getFlatUserReferenceTokenSymbols(sDAIBoosted)).toEqual(['GNO', 'sDAI'])
+
+    expect(getPoolActionableTokenSymbols(sDAIBoosted)).toEqual(['GNO', 'sDAI'])
   })
 })

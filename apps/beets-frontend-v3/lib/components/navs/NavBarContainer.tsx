@@ -1,20 +1,23 @@
 'use client'
 
-import { useNavData } from './useNavData'
 import { NavBar, NavActions } from '@repo/lib/shared/components/navs/NavBar'
 import { NavLogo } from './NavLogo'
 import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BeetsLogoType } from '../imgs/BeetsLogoType'
 import { Box, HStack } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { MaBeetsNavLink } from './MaBeetsNavLink'
 import { SonicMigrationLink } from './SonicMigrationLink'
 import { FantomToSonicSvg } from '../imgs/FantomToSonicSvg'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function NavBarContainer() {
-  const { appLinks, ecosystemLinks, getSocialLinks } = useNavData()
+  const {
+    links: { appLinks, ecosystemLinks, socialLinks },
+    options: { allowCreateWallet },
+  } = PROJECT_CONFIG
   const { defaultAppLinks } = useNav()
   const allAppLinks = [...defaultAppLinks, ...appLinks]
 
@@ -37,25 +40,34 @@ export function NavBarContainer() {
         </>
       }
       ecosystemLinks={ecosystemLinks}
-      socialLinks={getSocialLinks()}
+      socialLinks={socialLinks}
     />
   )
 
   return (
-    <NavBar
-      appLinks={allAppLinks}
-      customLinks={
-        <>
-          <Box as={motion.div} variants={fadeIn}>
-            <MaBeetsNavLink />
-          </Box>
-          <Box as={motion.div} variants={fadeIn}>
-            <SonicMigrationLink />
-          </Box>
-        </>
-      }
-      navLogo={<NavLogo />}
-      rightSlot={<NavActions hideDarkModeToggle mobileNav={mobileNav} />}
-    />
+    <AnimatePresence>
+      <motion.div
+        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        transition={{ duration: 0.5, ease: 'easeInOut' }}
+      >
+        <NavBar
+          allowCreateWallet={allowCreateWallet}
+          appLinks={allAppLinks}
+          customLinks={
+            <>
+              <Box as={motion.div} variants={fadeIn}>
+                <MaBeetsNavLink />
+              </Box>
+              <Box as={motion.div} variants={fadeIn}>
+                <SonicMigrationLink />
+              </Box>
+            </>
+          }
+          navLogo={<NavLogo />}
+          rightSlot={<NavActions hideDarkModeToggle mobileNav={mobileNav} />}
+        />
+      </motion.div>
+    </AnimatePresence>
   )
 }

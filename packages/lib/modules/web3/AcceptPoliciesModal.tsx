@@ -21,7 +21,7 @@ import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useUserAccount } from './UserAccountProvider'
 import { useDisconnect } from 'wagmi'
 import NextLink from 'next/link'
-import { PROJECT_CONFIG, isBalancerProject } from '@repo/lib/config/getProjectConfig'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function AcceptPoliciesModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -29,25 +29,25 @@ export function AcceptPoliciesModal() {
   const { isBlocked, isLoading, isConnected, userAddress } = useUserAccount()
   const [isChecked, setIsChecked] = useState(false)
   const { disconnect } = useDisconnect()
+  const {
+    projectName,
+    options: { showVeBal },
+  } = PROJECT_CONFIG
 
   const isAddressInAcceptedPolicies = acceptedPolicies.includes(userAddress.toLowerCase())
 
   useEffect(() => {
     if (!isLoading && isConnected && !isAddressInAcceptedPolicies && !isBlocked) {
       onOpen()
-    } else {
-      handleOnClose()
     }
   }, [acceptedPolicies, isBlocked, isLoading, isConnected, userAddress])
 
-  //disconnect wallet if modal is closed without accepting & clicking 'Proceed'
-  useEffect(() => {
-    if (!isOpen && !acceptedPolicies.includes(userAddress.toLowerCase())) {
-      disconnect()
+  function handleOnClose(isProceeding = false) {
+    const shouldDisconnect = !isChecked || !acceptedPolicies.includes(userAddress.toLowerCase())
+    //disconnect wallet if modal is closed without accepting & clicking 'Proceed'
+    if (!isProceeding && shouldDisconnect) {
+      if (isConnected) disconnect()
     }
-  }, [isOpen])
-
-  function handleOnClose() {
     setIsChecked(false)
     onClose()
   }
@@ -57,14 +57,14 @@ export function AcceptPoliciesModal() {
       setAcceptedPolicies([...acceptedPolicies, userAddress.toLowerCase()])
     }
 
-    handleOnClose()
+    handleOnClose(true)
   }
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={handleOnClose} preserveScrollBarGap>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{`Accept ${PROJECT_CONFIG.projectName} policies`}</ModalHeader>
+        <ModalHeader>{`Accept ${projectName} policies`}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack align="flex-start" gap="md">
@@ -74,7 +74,7 @@ export function AcceptPoliciesModal() {
               onChange={e => setIsChecked(e.target.checked)}
               size="lg"
             >
-              {isBalancerProject ? (
+              {showVeBal ? (
                 <Box color="font.primary" fontSize="md" mt="-3px">
                   By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
                   <Link as={NextLink} href="/terms-of-use">

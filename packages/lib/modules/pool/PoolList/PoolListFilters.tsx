@@ -31,7 +31,6 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
-import { getProjectConfig, isBeetsProject } from '@repo/lib/config/getProjectConfig'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
 import { PoolFilterType, poolTagFilters, PoolTagType, poolTypeFilters } from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -53,6 +52,7 @@ import ButtonGroup, {
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
 import Link from 'next/link'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
@@ -97,10 +97,9 @@ function UserPoolFilter() {
   )
 }
 
-function PoolCategoryFilters() {
+function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
   const {
     queryState: { togglePoolTag, poolTags, setPoolTags, poolTagLabel },
-    hidePoolTags,
   } = usePoolList()
 
   // remove query param when empty
@@ -113,7 +112,7 @@ function PoolCategoryFilters() {
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
       {poolTagFilters
-        .filter(tag => !hidePoolTags.includes(tag))
+        .filter(tag => !hidePoolTags?.includes(tag))
         .map(tag => (
           <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
             <Checkbox
@@ -183,7 +182,7 @@ export function PoolNetworkFilters({
   toggleNetwork,
   setNetworks,
 }: PoolNetworkFiltersArgs) {
-  const { supportedNetworks } = getProjectConfig()
+  const { supportedNetworks } = PROJECT_CONFIG
 
   // Sort networks alphabetically after mainnet
   const sortedNetworks = [supportedNetworks[0], ...supportedNetworks.slice(1).sort()]
@@ -536,8 +535,6 @@ export function PoolListFilters() {
       protocolVersion,
       activeProtocolVersionTab,
     },
-    hidePoolTypes,
-    hideProtocolVersion,
   } = usePoolList()
   const { isCowPath } = useCow()
   const { isMobile } = useBreakpoints()
@@ -547,9 +544,9 @@ export function PoolListFilters() {
     setActiveProtocolVersionTab(PROTOCOL_VERSION_TABS[0])
   }
 
-  const poolCreatorUrl = isBeetsProject
-    ? 'https://ma.beets.fi/compose'
-    : `https://pool-creator.balancer.fi/${isCowPath ? 'cow' : 'v3'}`
+  const { options, externalLinks } = PROJECT_CONFIG
+  const subPath = !options.showVeBal ? '' : isCowPath ? 'cow' : 'v3'
+  const poolCreatorUrl = `${externalLinks.poolComposerUrl}/${subPath}`
 
   return (
     <VStack w="full">
@@ -629,7 +626,7 @@ export function PoolListFilters() {
                           </Heading>
                           <ProtocolVersionFilter
                             activeProtocolVersionTab={activeProtocolVersionTab}
-                            hideProtocolVersion={hideProtocolVersion}
+                            hideProtocolVersion={PROJECT_CONFIG.options.hideProtocolVersion}
                             poolTypes={poolTypes}
                             protocolVersion={protocolVersion}
                             setActiveProtocolVersionTab={setActiveProtocolVersionTab}
@@ -643,7 +640,7 @@ export function PoolListFilters() {
                             Pool types
                           </Heading>
                           <PoolTypeFilters
-                            hidePoolTypes={hidePoolTypes}
+                            hidePoolTypes={PROJECT_CONFIG.options.hidePoolTypes}
                             poolTypeLabel={poolTypeLabel}
                             poolTypes={poolTypes}
                             setPoolTypes={setPoolTypes}
@@ -655,7 +652,7 @@ export function PoolListFilters() {
                         <Heading as="h3" mb="sm" size="sm">
                           Pool categories
                         </Heading>
-                        <PoolCategoryFilters />
+                        <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
                       </Box>
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />

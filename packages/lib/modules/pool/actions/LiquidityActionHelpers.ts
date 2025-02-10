@@ -13,9 +13,7 @@ import {
   NestedPoolState,
   PoolGetPool,
   PoolState,
-  PoolStateWithBalances,
   PoolStateWithUnderlyings,
-  PoolTokenWithBalance,
   PoolTokenWithUnderlying,
   Token,
   TokenAmount,
@@ -34,9 +32,7 @@ import {
 import { HumanTokenAmountWithAddress } from '../../tokens/token.types'
 import { Pool } from '../pool.types'
 import {
-  allPoolTokens,
   isAffectedByCspIssue,
-  isBoosted,
   isComposableStableV1,
   isCowAmmPool,
   isGyro,
@@ -44,9 +40,10 @@ import {
   isV2Pool,
   isV3Pool,
   supportsWethIsEth,
-  getActionableTokenSymbol,
   hasNestedPools,
 } from '../pool.helpers'
+import { getActionableTokenSymbol } from '../pool-tokens.utils'
+import { allPoolTokens } from '../pool-tokens.utils'
 import { TokenAmountIn } from '../../tokens/approvals/permit2/useSignPermit2'
 import { ApiToken } from '../../tokens/token.types'
 
@@ -93,14 +90,15 @@ export class LiquidityActionHelpers {
         ...token,
         address: token.address as Address,
         balance: token.balance as HumanAmount,
-        underlyingToken: token.underlyingToken?.address
-          ? {
-              ...token.underlyingToken,
-              address: token.underlyingToken?.address as Address,
-              decimals: token.underlyingToken?.decimals as number,
-              index: token.index, //TODO: review that this index is always the expected one
-            }
-          : null,
+        underlyingToken:
+          token.underlyingToken?.address && token.isBufferAllowed
+            ? {
+                ...token.underlyingToken,
+                address: token.underlyingToken?.address as Address,
+                decimals: token.underlyingToken?.decimals as number,
+                index: token.index, //TODO: review that this index is always the expected one
+              }
+            : null,
       })
     )
     const state: PoolStateWithUnderlyings & { totalShares: HumanAmount } = {
@@ -109,41 +107,6 @@ export class LiquidityActionHelpers {
       protocolVersion: 3,
       type: mapPoolType(this.pool.type),
       tokens: poolTokensWithUnderlyings,
-      totalShares: this.pool.dynamicData.totalShares as HumanAmount,
-    }
-    return state
-  }
-
-  public get poolStateWithBalances(): PoolStateWithBalances {
-    return isBoosted(this.pool)
-      ? this.boostedPoolStateWithBalances
-      : toPoolStateWithBalances(this.pool)
-  }
-
-  /* Used by calculateProportionalAmounts for V3 boosted proportional adds */
-  public get boostedPoolStateWithBalances(): PoolStateWithBalances {
-    const underlyingTokensWithBalance: PoolTokenWithBalance[] = this.pool.poolTokens.map(
-      (token, index) =>
-        token.underlyingToken
-          ? {
-              address: token.underlyingToken?.address as Address,
-              decimals: token.underlyingToken?.decimals as number,
-              index,
-              balance: bn(token.balance).multipliedBy(bn(token.priceRate)).toFixed() as HumanAmount,
-            }
-          : {
-              address: token.address as Address,
-              decimals: token.decimals as number,
-              balance: token.balance as HumanAmount,
-              index,
-            }
-    )
-    const state: PoolStateWithBalances = {
-      id: this.pool.id as Hex,
-      address: this.pool.address as Address,
-      protocolVersion: 3,
-      type: mapPoolType(this.pool.type),
-      tokens: underlyingTokensWithBalance,
       totalShares: this.pool.dynamicData.totalShares as HumanAmount,
     }
     return state
@@ -332,22 +295,6 @@ export function toPoolState(pool: Pool): PoolState {
     // Destruct to avoid errors when the SDK tries to mutate the poolTokens (read-only from GraphQL)
     tokens: [...pool.poolTokens] as MinimalToken[],
     type: mapPoolType(pool.type),
-    protocolVersion: pool.protocolVersion as ProtocolVersion,
-  }
-}
-
-export function toPoolStateWithBalances(pool: Pool): PoolStateWithBalances {
-  return {
-    id: pool.id as Hex,
-    address: pool.address as Address,
-    type: mapPoolType(pool.type),
-    tokens: pool.poolTokens.map(t => ({
-      index: t.index,
-      address: t.address as Address,
-      balance: t.balance as HumanAmount,
-      decimals: t.decimals,
-    })),
-    totalShares: pool.dynamicData.totalShares as HumanAmount,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
   }
 }

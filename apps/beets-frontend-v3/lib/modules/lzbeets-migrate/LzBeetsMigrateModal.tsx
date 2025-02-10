@@ -13,10 +13,6 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import {
-  TokenBalancesProvider,
-  useTokenBalances,
-} from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { NetworkSwitchButton, useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
@@ -26,14 +22,13 @@ import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { QueryObserverResult } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Address, formatUnits } from 'viem'
 import { type BaseError, useBalance, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 
-const sonicChainId = 146
-const lzBeetsAddress = '0x1E5fe95fB90ac0530F581C617272cd0864626795'
+export const sonicChainId = 146
+export const lzBeetsAddress = '0x1E5fe95fB90ac0530F581C617272cd0864626795'
 const migratorAddress = '0x5f9a5CD0B77155AC1814EF6Cd9D82dA53d05E386'
 
 function MigrationButton({
@@ -43,7 +38,7 @@ function MigrationButton({
 }: {
   balance: bigint
   isBalancesRefetching: boolean
-  refetchBalances: () => Promise<QueryObserverResult<unknown, Error>[]>
+  refetchBalances: () => void
 }) {
   const { data: hash, writeContract, isPending, error } = useWriteContract()
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
@@ -195,37 +190,15 @@ function ApproveButton({
 }
 
 export function LzBeetsMigrateModal() {
-  // only need balance for this token
-  const lzBeetsToken = {
-    address: '0x1e5fe95fb90ac0530f581c617272cd0864626795',
-    name: 'Fantom lzBEETS',
-    symbol: 'lzBEETS',
-    decimals: 18,
-    chain: GqlChain.Sonic,
-    chainId: 146,
-    logoURI:
-      'https://assets.coingecko.com/coins/images/19158/standard/beets-icon-large.png?1696518608',
-    priority: 0,
-    tradable: true,
-    isErc4626: false,
-    isBufferAllowed: true,
-    coingeckoId: null,
-  }
-
-  return (
-    <TokenBalancesProvider initTokens={[lzBeetsToken]}>
-      <LzBeetsMigrateModalContent />
-    </TokenBalancesProvider>
-  )
-}
-
-export function LzBeetsMigrateModalContent() {
   const { shouldChangeNetwork } = useChainSwitch(sonicChainId)
   const [shouldShow, setShouldShow] = useState(true)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isConnected, userAddress } = useUserAccount()
-  const { refetchBalances, isBalancesRefetching } = useTokenBalances()
-  const { data: balanceData } = useBalance({
+  const {
+    data: balanceData,
+    refetch,
+    isRefetching,
+  } = useBalance({
     chainId: sonicChainId,
     address: userAddress,
     token: lzBeetsAddress,
@@ -278,7 +251,6 @@ export function LzBeetsMigrateModalContent() {
             bridging to Sonic. Claim your BEETS on Sonic now.
           </Text>
         </ModalBody>
-
         <ModalFooter alignItems="flex-start" flexDirection="column">
           {isConnected ? (
             shouldChangeNetwork ? (
@@ -286,8 +258,8 @@ export function LzBeetsMigrateModalContent() {
             ) : hasAllowance ? (
               <MigrationButton
                 balance={balanceData?.value || 0n}
-                isBalancesRefetching={isBalancesRefetching}
-                refetchBalances={refetchBalances}
+                isBalancesRefetching={isRefetching}
+                refetchBalances={refetch}
               />
             ) : (
               <ApproveButton

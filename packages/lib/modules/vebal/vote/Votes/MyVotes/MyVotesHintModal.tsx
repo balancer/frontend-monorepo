@@ -10,8 +10,8 @@ import {
   ModalHeader,
   VStack,
   Image,
+  UseDisclosureProps,
 } from '@chakra-ui/react'
-import { UseDisclosureProps } from '@chakra-ui/hooks/dist/use-disclosure'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function MyVotesHintModal({ isOpen = false, onClose = () => {} }: UseDisclosureProps) {
