@@ -18,7 +18,7 @@ export function PoolHookBanner() {
     } else {
       return (
         <Card key={hook.id}>
-          <HStack alignItems="center" direction="row" gap="4" key={hook.id} px={4} py={4}>
+          <HStack alignItems="center" direction="row" gap="4" px={4} py={4}>
             <Badge
               alignItems="center"
               background="background.level0"
