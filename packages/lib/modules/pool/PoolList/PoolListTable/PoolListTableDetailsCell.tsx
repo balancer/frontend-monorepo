@@ -32,7 +32,7 @@ export function PoolListTableDetailsCell({ pool }: Props) {
           width={20}
         />
       ))}
-      <PoolHookTag pool={pool} size="sm" />
+      <PoolHookTag pool={pool} /> {/* TODO: check once sepolia pools are shown again */}
     </HStack>
   )
 }

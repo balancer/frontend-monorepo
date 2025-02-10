@@ -1,8 +1,13 @@
 import {
-  Badge,
-  Center,
+  Box,
+  HStack,
+  Link,
   Popover,
+  PopoverArrow,
+  PopoverBody,
   PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
   PopoverTrigger,
   Portal,
   Text,
@@ -15,15 +20,10 @@ import { Pool } from '../pool.types'
 
 type Props = {
   pool: Pool | PoolListItem
-  size?: 'sm' | 'md'
+  showName?: boolean
 }
 
-const badgeSize = {
-  sm: { h: 7, w: 7, iconSize: 25 },
-  md: { h: 8, w: 8, iconSize: 32 },
-}
-
-export function PoolHookTag({ pool, size = 'md' }: Props) {
+export function PoolHookTag({ pool, showName = false }: Props) {
   const { hooks } = useHook(pool)
 
   // TODO: add nested hook support when needed
@@ -33,33 +33,60 @@ export function PoolHookTag({ pool, size = 'md' }: Props) {
 
   return (
     <Popover trigger="hover">
-      <PopoverTrigger>
-        <Badge
-          alignItems="center"
-          background="background.level2"
-          border="1px solid"
-          borderColor="border.base"
-          color="font.primary"
-          display="flex"
-          fontSize="xs"
-          fontWeight="normal"
-          h={badgeSize[size].h}
-          rounded="full"
-          shadow="sm"
-          w={badgeSize[size].w}
-        >
-          <Center h="full" w="full">
-            <HookIcon size={badgeSize[size].iconSize} />
-          </Center>
-        </Badge>
-      </PopoverTrigger>
-      <Portal>
-        <PopoverContent px="sm" py="sm" width="fit-content">
-          <Text fontSize="sm" variant="secondary">
-            {hook.name}
-          </Text>
-        </PopoverContent>
-      </Portal>
+      {({ isOpen }) => (
+        <>
+          <PopoverTrigger>
+            <Box
+              alignItems="center"
+              background="background.level2"
+              border="1px solid"
+              borderColor={isOpen ? 'font.primary' : 'border.base'}
+              display="flex"
+              fontWeight="normal"
+              h={{ base: '28px' }}
+              px="sm"
+              py="xs"
+              rounded="full"
+              shadow="sm"
+            >
+              <HStack color={isOpen ? 'font.primary' : 'font.secondary'} gap="xs">
+                <HookIcon size={20} />
+                {showName && (
+                  <Text
+                    color={isOpen ? 'font.primary' : 'font.secondary'}
+                    fontSize="sm"
+                    variant="secondary"
+                  >
+                    {hook.name}
+                  </Text>
+                )}
+              </HStack>
+            </Box>
+          </PopoverTrigger>
+          <Portal>
+            <PopoverContent px="sm" py="sm">
+              <PopoverArrow bg="background.level3" />
+              <PopoverHeader>
+                <Text color="font.secondary" fontWeight="bold" size="md">
+                  {hook.name} Hook
+                </Text>
+              </PopoverHeader>
+              <PopoverBody>
+                <Text fontSize="sm" variant="secondary">
+                  {hook.description}
+                </Text>
+              </PopoverBody>
+              {hook.learnMore && (
+                <PopoverFooter>
+                  <Link href={hook.learnMore} target="_blank">
+                    Learn more
+                  </Link>
+                </PopoverFooter>
+              )}
+            </PopoverContent>
+          </Portal>
+        </>
+      )}
     </Popover>
   )
 }
