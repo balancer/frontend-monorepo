@@ -156,8 +156,8 @@ importers:
         specifier: ^5.60.1
         version: 5.62.0(eslint@8.43.0)(typescript@5.7.2)
       '@wagmi/cli':
-        specifier: 2.1.22
-        version: 2.1.22(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 2.2.0
+        version: 2.2.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.20(postcss@8.5.1)
@@ -295,8 +295,8 @@ importers:
         specifier: ^5.60.1
         version: 5.62.0(eslint@8.43.0)(typescript@5.7.2)
       '@wagmi/cli':
-        specifier: 2.1.22
-        version: 2.1.22(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 2.2.0
+        version: 2.2.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.20(postcss@8.5.1)
@@ -653,8 +653,8 @@ importers:
         specifier: 2.1.8
         version: 2.1.8(vitest@2.1.9(@types/node@20.10.2)(happy-dom@16.6.0)(msw@2.7.0(@types/node@20.10.2)(typescript@5.7.2))(terser@5.37.0))
       '@wagmi/cli':
-        specifier: 2.1.22
-        version: 2.1.22(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 2.2.0
+        version: 2.2.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.20(postcss@8.5.1)
@@ -4850,8 +4850,8 @@ packages:
   '@vitest/utils@2.1.9':
     resolution: {integrity: sha512-v0psaMSkNJ3A2NMrUEHFRzJtDPFn+/VWZ5WxImB21T9fjucJRmS7xCS3ppEnARb9y11OAzaD+P2Ps+b+BGX5iQ==}
 
-  '@wagmi/cli@2.1.22':
-    resolution: {integrity: sha512-aRXwzNHuCIEKs/mceGiPlDBlhdHxXnndL9avYEXByzpGVw37ZChx5CW1potTA8oTFACJpsSs2aaE7cjrRsmzVA==}
+  '@wagmi/cli@2.2.0':
+    resolution: {integrity: sha512-24U9wgmeKjs+lbnswYcWjic6leuKV/JduK2T8hGXO1fxUWzcoZ3tDtb7KQq+DmgbnJm49uaa7iKcB4K7SxN4Ag==}
     hasBin: true
     peerDependencies:
       typescript: '>=5.0.4'
@@ -5065,17 +5065,6 @@ packages:
 
   '@zag-js/focus-visible@0.31.1':
     resolution: {integrity: sha512-dbLksz7FEwyFoANbpIlNnd3bVm0clQSUsnP8yUVQucStZPsuWjCrhL2jlAbGNrTrahX96ntUMXHb/sM68TibFg==}
-
-  abitype@1.0.7:
-    resolution: {integrity: sha512-ZfYYSktDQUwc2eduYu8C4wOs+RDPmnRYMh7zNfzeMtGGgb0U+6tLGjixUic6mXf5xKKCcgT5Qp6cv39tOARVFw==}
-    peerDependencies:
-      typescript: '>=5.0.4'
-      zod: ^3 >=3.22.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-      zod:
-        optional: true
 
   abitype@1.0.8:
     resolution: {integrity: sha512-ZeiI6h3GnW06uYDLx0etQtX/p8E24UaHHBj57RSjK7YBFe7iuVn07EDpOeP451D06sF27VOz9JJPlIKJmXgkEg==}
@@ -16301,9 +16290,9 @@ snapshots:
       loupe: 3.1.2
       tinyrainbow: 1.2.0
 
-  '@wagmi/cli@2.1.22(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)':
+  '@wagmi/cli@2.2.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)':
     dependencies:
-      abitype: 1.0.7(typescript@5.7.2)(zod@3.24.1)
+      abitype: 1.0.8(typescript@5.7.2)(zod@3.24.1)
       bundle-require: 4.2.1(esbuild@0.19.12)
       cac: 6.7.14
       change-case: 5.4.4
@@ -16837,11 +16826,6 @@ snapshots:
   '@zag-js/focus-visible@0.31.1':
     dependencies:
       '@zag-js/dom-query': 0.31.1
-
-  abitype@1.0.7(typescript@5.7.2)(zod@3.24.1):
-    optionalDependencies:
-      typescript: 5.7.2
-      zod: 3.24.1
 
   abitype@1.0.8(typescript@5.7.2)(zod@3.24.1):
     optionalDependencies:
