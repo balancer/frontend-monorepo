@@ -240,7 +240,6 @@ export function PoolContracts({ ...props }: CardProps) {
                   return (
                     hook && (
                       <HStack key={hook.address}>
-                        <Text variant="secondary">{getHookName(hook, pool, hooksMetadata)}:</Text>
                         <Link
                           href={getBlockExplorerAddressUrl(hook.address, chain)}
                           key={hook.address}
@@ -248,7 +247,10 @@ export function PoolContracts({ ...props }: CardProps) {
                           variant="link"
                         >
                           <HStack gap="xxs">
-                            <Text color="link">{abbreviateAddress(hook.address)}</Text>
+                            <Text color="link">
+                              {abbreviateAddress(hook.address)} (
+                              {getHookName(hook, pool, hooksMetadata)})
+                            </Text>
                             <ArrowUpRight size={12} />
                           </HStack>
                         </Link>
