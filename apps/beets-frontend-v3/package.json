@@ -57,7 +57,7 @@
     "@types/tinycolor2": "^1.4.6",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
-    "@wagmi/cli": "2.1.22",
+    "@wagmi/cli": "2.2.0",
     "autoprefixer": "^10.4.14",
     "concurrently": "^8.2.2",
     "cross-fetch": "^4.0.0",
