@@ -12,23 +12,30 @@ import {
   Box,
   Button,
   VStack,
+  HStack,
+  IconButton,
 } from '@chakra-ui/react'
 import { useLbpForm } from './LbpFormProvider'
+import { SaleStructureStep } from './steps/SaleStructureStep'
+import { ProjectInfoStep } from './steps/ProjectInfoStep'
+import { ReviewStep } from './steps/ReviewStep'
+import { ChevronLeftIcon } from '@chakra-ui/icons'
 
 export function LbpForm() {
-  const { steps, activeStep, setActiveStep, isLastStep } = useLbpForm()
+  const { steps, activeStepIndex, activeStep, setActiveStep, isLastStep, isFirstStep } =
+    useLbpForm()
 
   function handleSubmit() {
     if (isLastStep) {
       console.log('submit')
     } else {
-      setActiveStep(activeStep + 1)
+      setActiveStep(activeStepIndex + 1)
     }
   }
 
   return (
     <VStack spacing="lg" w="full">
-      <Stepper index={activeStep} w="full">
+      <Stepper index={activeStepIndex} w="full">
         {steps.map(step => (
           <Step key={step.id}>
             <StepIndicator>
@@ -47,9 +54,30 @@ export function LbpForm() {
           </Step>
         ))}
       </Stepper>
-      <Button onClick={handleSubmit} variant="primary" w="full">
-        {isLastStep ? 'Create LBP' : 'Next'}
-      </Button>
+
+      <Box w="full">
+        {activeStep.id === 'saleStructure' ? (
+          <SaleStructureStep />
+        ) : activeStep.id === 'projectInfo' ? (
+          <ProjectInfoStep />
+        ) : activeStep.id === 'review' ? (
+          <ReviewStep />
+        ) : null}
+      </Box>
+
+      <HStack spacing="md" w="full">
+        {!isFirstStep && (
+          <IconButton
+            aria-label="Back"
+            icon={<ChevronLeftIcon h="8" w="8" />}
+            onClick={() => setActiveStep(activeStepIndex - 1)}
+          />
+        )}
+
+        <Button onClick={handleSubmit} variant="primary" w="full">
+          {isLastStep ? 'Create LBP' : 'Next'}
+        </Button>
+      </HStack>
     </VStack>
   )
 }

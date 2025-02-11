@@ -8,24 +8,29 @@ export type UseLbpFormResult = ReturnType<typeof _useLbpForm>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
 
 const steps = [
-  { id: 'lbpStep1', title: 'Sale structure' },
-  { id: 'lbpStep2', title: 'Project info' },
-  { id: 'lbpStep3', title: 'Review' },
+  { id: 'saleStructure', title: 'Sale structure' },
+  { id: 'projectInfo', title: 'Project info' },
+  { id: 'review', title: 'Review' },
 ]
 
 export function _useLbpForm() {
-  const { activeStep, setActiveStep } = useSteps({
+  const { activeStep: activeStepIndex, setActiveStep } = useSteps({
     index: 0,
     count: steps.length,
   })
 
-  const isLastStep = activeStep === steps.length - 1
+  const isLastStep = activeStepIndex === steps.length - 1
+  const isFirstStep = activeStepIndex === 0
+
+  const activeStep = steps[activeStepIndex]
 
   return {
     steps,
-    activeStep,
+    activeStepIndex,
     setActiveStep,
     isLastStep,
+    activeStep,
+    isFirstStep,
   }
 }
 
