@@ -19,8 +19,8 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint . --max-warnings 0 --cache",
+    "lint:fix": "eslint . --fix --max-warnings 0 --cache",
     "prettier": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --check --cache --log-level=warn",
     "prettier:fix": "prettier '**/*.*(md|json|yaml|ts|js|tsx)' --write --cache --log-level=warn"
   }
