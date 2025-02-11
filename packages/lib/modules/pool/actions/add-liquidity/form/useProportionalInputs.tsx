@@ -33,7 +33,7 @@ export function useProportionalInputs() {
     setReferenceAmountAddress,
   } = useAddLiquidity()
 
-  const wrapUnderlying = [true, false] // TODO: uncomment line above
+  const wrapUnderlying = [false, true] // TODO: uncomment line above
   const { balances, isBalancesLoading } = useTokenBalances()
   const { isLoading: isPoolLoading, pool } = usePool()
 
