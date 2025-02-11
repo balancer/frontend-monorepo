@@ -59,12 +59,14 @@ const SLIDER_STEP_SIZE = 100000
 
 export function useFilterTagsVisible() {
   const {
-    queryState: { networks, poolTypes, minTvl, poolTags },
+    queryState: { networks, poolTypes, minTvl, poolTags, hasHook },
   } = usePoolList()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    setIsVisible(networks.length > 0 || poolTypes.length > 0 || minTvl > 0 || poolTags.length > 0)
+    setIsVisible(
+      networks.length > 0 || poolTypes.length > 0 || minTvl > 0 || poolTags.length > 0 || hasHook
+    )
   }, [networks, poolTypes, minTvl, poolTags])
 
   return isVisible
@@ -432,7 +434,7 @@ export function FilterTags({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 0 }}
             initial={{ opacity: 0, y: 40 }}
-            key="minTvl"
+            key="expiredPools"
             transition={{
               enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
               exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
