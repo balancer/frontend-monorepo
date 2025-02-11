@@ -45,7 +45,6 @@
     "@tanstack/react-query-devtools": "5.62.11",
     "@tanstack/react-table": "^8.9.3",
     "@vercel/speed-insights": "1.1.0",
-    "b-sdk": "link:../b-sdk",
     "bignumber.js": "^9.1.2",
     "chakra-react-select": "^4.7.6",
     "date-fns": "^2.30.0",
