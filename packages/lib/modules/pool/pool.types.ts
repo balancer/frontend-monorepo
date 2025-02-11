@@ -10,6 +10,7 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   parseAsArrayOf,
+  parseAsBoolean,
   parseAsFloat,
   parseAsInteger,
   parseAsString,
@@ -157,6 +158,7 @@ export const poolListQueryStateParsers = {
   poolTags: parseAsArrayOf(
     parseAsStringEnum<PoolTagType>(Object.values(poolTagFilters))
   ).withDefault([]),
+  hasHook: parseAsBoolean.withDefault(false),
 }
 
 /*

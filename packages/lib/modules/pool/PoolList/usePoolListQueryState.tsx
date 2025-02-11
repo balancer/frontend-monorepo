@@ -68,6 +68,7 @@ export function usePoolListQueryState() {
   const [networks, setNetworks] = useQueryState('networks', poolListQueryStateParsers.networks)
   const [minTvl, setMinTvl] = useQueryState('minTvl', poolListQueryStateParsers.minTvl)
   const [poolTags, setPoolTags] = useQueryState('poolTags', poolListQueryStateParsers.poolTags)
+  const [hasHook, setHasHook] = useQueryState('hasHook', poolListQueryStateParsers.hasHook)
 
   const [orderDirection, setOrderDirection] = useQueryState(
     'orderDirection',
@@ -93,7 +94,7 @@ export function usePoolListQueryState() {
   useEffect(() => {
     if (skip) setSkip(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolTypes, networks, minTvl, poolTags])
+  }, [poolTypes, networks, minTvl, poolTags, hasHook])
 
   // Set internal checked state
   function toggleUserAddress(checked: boolean, address: string) {
@@ -224,6 +225,7 @@ export function usePoolListQueryState() {
       tagIn: mappedPoolTags.length > 0 ? mappedPoolTags : null,
       tagNotIn: ['BLACK_LISTED'],
       protocolVersionIn: protocolVersion ? [protocolVersion] : undefined,
+      hasHook,
     },
     textSearch,
   }
@@ -243,6 +245,7 @@ export function usePoolListQueryState() {
     toggleNetwork,
     togglePoolType,
     togglePoolTag,
+    setHasHook,
     poolTypeLabel,
     setSorting,
     setPagination,
@@ -257,6 +260,7 @@ export function usePoolListQueryState() {
     setActiveProtocolVersionTab,
     activeProtocolVersionTab,
     poolTags,
+    hasHook,
     protocolVersion,
     minTvl,
     searchText: textSearch,
