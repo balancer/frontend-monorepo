@@ -707,12 +707,14 @@ export function PoolListFilters() {
                         </Heading>
                         <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
                       </Box>
-                      <Box as={motion.div} variants={staggeredFadeInUp}>
-                        <Heading as="h3" mb="sm" size="sm">
-                          Hooks
-                        </Heading>
-                        <PoolHookFilters />
-                      </Box>
+                      {options.showPoolHooksFilter && (
+                        <Box as={motion.div} variants={staggeredFadeInUp}>
+                          <Heading as="h3" mb="sm" size="sm">
+                            Hooks
+                          </Heading>
+                          <PoolHookFilters />
+                        </Box>
+                      )}
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />
                       </Box>
