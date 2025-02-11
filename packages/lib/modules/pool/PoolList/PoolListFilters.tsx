@@ -127,6 +127,29 @@ function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
   )
 }
 
+function PoolHookFilters() {
+  const {
+    queryState: { setHasHook, hasHook },
+  } = usePoolList()
+
+  // remove query param when empty
+  useEffect(() => {
+    if (!hasHook) {
+      setHasHook(null)
+    }
+  }, [hasHook])
+
+  return (
+    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+      <Box as={motion.div} key="hasHook" variants={staggeredFadeInUp}>
+        <Checkbox isChecked={hasHook} onChange={e => setHasHook(e.target.checked)}>
+          <Text fontSize="sm">All</Text>
+        </Checkbox>
+      </Box>
+    </Box>
+  )
+}
+
 export interface PoolTypeFiltersArgs {
   poolTypes: PoolFilterType[]
   poolTypeLabel: (poolType: PoolFilterType) => string
@@ -273,6 +296,8 @@ export interface FilterTagsPops {
   poolTagLabel?: (poolTag: PoolTagType) => string
   includeExpiredPools?: boolean
   toggleIncludeExpiredPools?: (checked: boolean) => void
+  hasHook?: boolean
+  setHasHook?: (value: boolean | null) => void
 }
 
 export function FilterTags({
@@ -288,6 +313,8 @@ export function FilterTags({
   poolTagLabel,
   includeExpiredPools,
   toggleIncludeExpiredPools,
+  hasHook,
+  setHasHook,
 }: FilterTagsPops) {
   const { toCurrency } = useCurrency()
 
@@ -297,7 +324,8 @@ export function FilterTags({
     poolTypes.length === 0 &&
     minTvl === 0 &&
     (poolTags ? poolTags.length === 0 : true) &&
-    !includeExpiredPools
+    !includeExpiredPools &&
+    !hasHook
   ) {
     return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
   }
@@ -419,6 +447,29 @@ export function FilterTags({
               <TagCloseButton
                 onClick={() => toggleIncludeExpiredPools && toggleIncludeExpiredPools(false)}
               />
+            </Tag>
+          </motion.div>
+        </AnimatePresence>
+      )}
+      {hasHook && (
+        <AnimatePresence>
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            key="hasHook"
+            transition={{
+              enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
+              exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
+            }}
+          >
+            <Tag size="lg">
+              <TagLabel>
+                <Text fontSize="sm" fontWeight="bold">
+                  All hooks
+                </Text>
+              </TagLabel>
+              <TagCloseButton onClick={() => setHasHook && setHasHook(null)} />
             </Tag>
           </motion.div>
         </AnimatePresence>
@@ -653,6 +704,12 @@ export function PoolListFilters() {
                           Pool categories
                         </Heading>
                         <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
+                      </Box>
+                      <Box as={motion.div} variants={staggeredFadeInUp}>
+                        <Heading as="h3" mb="sm" size="sm">
+                          Hooks
+                        </Heading>
+                        <PoolHookFilters />
                       </Box>
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />
