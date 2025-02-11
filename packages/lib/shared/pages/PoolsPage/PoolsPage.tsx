@@ -10,6 +10,8 @@ import { PoolPageStats } from './PoolPageStats'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export async function PoolsPage({ children }: PropsWithChildren) {
+  const partnerCards = PROJECT_CONFIG.partnerCards
+
   return (
     <>
       <Box borderBottom="1px solid" borderColor="border.base">
@@ -128,43 +130,19 @@ export async function PoolsPage({ children }: PropsWithChildren) {
                 width={1500}
               />
             </Box>
-            <FadeInOnView animateOnce={false}>
-              <Box p={{ base: 'sm', md: 'xl', lg: '2xl' }}>
-                <Box maxW="7xl" mx="auto">
-                  <SimpleGrid columns={[1, 2, 3]} spacing={4}>
-                    <PartnerCard
-                      backgroundImage="images/partners/cards/partner-cow-bg.png"
-                      bgColor="green.900"
-                      ctaText="View pools"
-                      ctaUrl="/pools/cow"
-                      description="The first MEV-capturing AMM. More returns, less risk with LVR protection."
-                      iconName="cow"
-                      title="CoW AMM"
-                    />
-                    <PartnerCard
-                      backgroundImage="images/partners/cards/partner-gyro-bg.png"
-                      bgColor="pink.600"
-                      ctaText="View pools on Gyro"
-                      ctaUrl="https://app.gyro.finance/pools/ethereum/"
-                      description="Concentrated Liquidity Pools on Balancer. Improves capital efficiency for LPs."
-                      externalLink
-                      iconName="gyro"
-                      title="Gyroscope"
-                    />
-                    <PartnerCard
-                      backgroundImage="images/partners/cards/partner-xave-bg.png"
-                      bgColor="blue.400"
-                      ctaText="View pools on Xave"
-                      ctaUrl="https://app.xave.co/pool"
-                      description="Foreign Exchange Liquidity Pools. Optimized for RWA and stablecoins."
-                      externalLink
-                      iconName="xave"
-                      title="Xave"
-                    />
-                  </SimpleGrid>
+            {partnerCards?.length && (
+              <FadeInOnView animateOnce={false}>
+                <Box p={{ base: 'sm', md: 'xl', lg: '2xl' }}>
+                  <Box maxW="7xl" mx="auto">
+                    <SimpleGrid columns={[1, 2, 3]} spacing={4}>
+                      {partnerCards.map(partnerCard => (
+                        <PartnerCard key={partnerCard.title} {...partnerCard} />
+                      ))}
+                    </SimpleGrid>
+                  </Box>
                 </Box>
-              </Box>
-            </FadeInOnView>
+              </FadeInOnView>
+            )}
           </Noise>
         </Card>
       </DefaultPageContainer>
