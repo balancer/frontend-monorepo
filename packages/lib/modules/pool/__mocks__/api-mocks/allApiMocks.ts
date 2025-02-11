@@ -9,21 +9,24 @@ import { aave_USDC_USDTMock } from './aave_USDC_USDTMock'
 import { b_csUSDL_steakUSDCMock } from './b_csUSDL_steakUSDCMock'
 import { aGNO_sDAIMock } from './aGNO_sDAIMock'
 import { rstETH_Lido_wstETHMock } from './rstETH_Lido_wstETHMock'
+import { partialBoostedSepoliaWethStataUsdtMock } from './partialBoostedSepoliaWethStataUsdtMock'
 import { staBAL3_WETH_WBTC_BPTMock } from './staBAL3_WETH_WBTC_BPTMock'
 import { b_auraBAL_STABLEMock } from './b_auraBAL_STABLEMock'
 import { Pool } from '../../pool.types'
 
 export const allApiMocks: Pool[] = [
-  b_80BAL_20WETHMock,
-  osETH_wETH_BPTMock,
-  b_50sDAI_50wstETHMock,
-  v2SepoliaStableWithERC4626Mock,
-  bCoW_50WETH_50GNOMock,
-  v3SepoliaNestedBoostedMock,
-  aave_USDC_USDTMock,
-  b_csUSDL_steakUSDCMock,
-  aGNO_sDAIMock,
-  rstETH_Lido_wstETHMock,
-  staBAL3_WETH_WBTC_BPTMock,
-  b_auraBAL_STABLEMock,
+  b_80BAL_20WETHMock
+  ,osETH_wETH_BPTMock
+  ,b_50sDAI_50wstETHMock
+  ,v2SepoliaStableWithERC4626Mock
+  ,bCoW_50WETH_50GNOMock
+  ,v3SepoliaNestedBoostedMock
+  ,aave_USDC_USDTMock
+  ,b_csUSDL_steakUSDCMock
+  ,aGNO_sDAIMock
+  ,rstETH_Lido_wstETHMock
+  ,partialBoostedSepoliaWethStataUsdtMock
+  ,staBAL3_WETH_WBTC_BPTMock
+  ,b_auraBAL_STABLEMock
 ]
+ 

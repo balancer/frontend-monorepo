@@ -19,7 +19,7 @@ export default async function saveApiMocks() {
     return
   }
   const promises = allPoolExamples.map(example => {
-    if (shouldSkipMock(example) || example.isFrozen) {
+    if (shouldSkipMock(example)) {
       return Promise.resolve(example.mockName)
     }
 
@@ -27,6 +27,7 @@ export default async function saveApiMocks() {
       poolId: example.poolId,
       chain: example.poolChain,
       fileName: example.mockName,
+      isFrozen: example.isFrozen,
     })
   })
 
