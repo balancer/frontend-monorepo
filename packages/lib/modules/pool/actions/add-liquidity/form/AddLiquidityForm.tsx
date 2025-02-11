@@ -52,6 +52,7 @@ import { UnbalancedAddError } from '@repo/lib/shared/components/errors/Unbalance
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { supportsWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
+import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -67,6 +68,9 @@ export function AddLiquidityForm() {
 }
 
 function AddLiquidityMainForm() {
+  const [tabIndex, setTabIndex] = useState(0)
+  const nextBtn = useRef(null)
+
   const {
     priceImpactQuery,
     simulationQuery,
@@ -87,14 +91,13 @@ function AddLiquidityMainForm() {
     wantsProportional,
   } = useAddLiquidity()
 
-  const nextBtn = useRef(null)
   const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { toCurrency } = useCurrency()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
-  const [tabIndex, setTabIndex] = useState(0)
+  const { shouldUseSignatures } = useUserSettings()
 
   const setFlexibleTab = () => {
     setTabIndex(0)
@@ -180,6 +183,13 @@ function AddLiquidityMainForm() {
         <VStack align="start" spacing="md" w="full">
           {hasNoLiquidity(pool) && (
             <BalAlert content="You cannot add because the pool has no liquidity" status="warning" />
+          )}
+          {!shouldUseSignatures && (
+            <BalAlert
+              content="All approvals will require gas transactions. You can enable signatures in your settings."
+              status="warning"
+              title="Signatures disabled"
+            />
           )}
           <SafeAppAlert />
           <AddLiquidityFormTabs

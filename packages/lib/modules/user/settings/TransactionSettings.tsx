@@ -14,12 +14,13 @@ import {
   Text,
   ButtonProps,
   useDisclosure,
+  Box,
 } from '@chakra-ui/react'
 import { useUserSettings } from './UserSettingsProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { AlertTriangle, Settings } from 'react-feather'
 import { CurrencySelect } from './CurrencySelect'
-import { SlippageInput } from './UserSettings'
+import { EnableSignaturesSelect, SlippageInput } from './UserSettings'
 import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
 import { Pool } from '../../pool/pool.types'
 
@@ -45,15 +46,25 @@ export function TransactionSettings(props: ButtonProps) {
           <Heading size="md">Transaction settings</Heading>
         </PopoverHeader>
         <PopoverBody p="md">
-          <VStack align="start" spacing="sm" w="full">
-            <VStack align="start" w="full">
-              <Heading size="sm">Slippage</Heading>
-              <SlippageInput setSlippage={setSlippage} slippage={slippage} />
-            </VStack>
+          <VStack align="start" spacing="lg" w="full">
             <VStack align="start" w="full">
               <Heading size="sm">Currency</Heading>
               <CurrencySelect id="transaction-settings-currency-select" />
             </VStack>
+            <VStack align="start" w="full">
+              <Heading size="sm">Slippage</Heading>
+              <SlippageInput setSlippage={setSlippage} slippage={slippage} />
+            </VStack>
+            <Box w="full">
+              <Heading pb="xs" size="sm">
+                Use Signatures
+              </Heading>
+              <Text color="font.secondary" fontSize="sm" pb="sm">
+                Signatures allow for gas-free transactions, where possible. If your wallet
+                doesn&apos;t support signatures, you can turn it off.
+              </Text>
+              <EnableSignaturesSelect />
+            </Box>
           </VStack>
         </PopoverBody>
       </PopoverContent>
@@ -97,7 +108,11 @@ export function ProportionalTransactionSettings({
           <Heading size="md">Transaction settings</Heading>
         </PopoverHeader>
         <PopoverBody p="md">
-          <VStack align="start" spacing="sm" w="full">
+          <VStack align="start" spacing="lg" w="full">
+            <VStack align="start" w="full">
+              <Heading size="sm">Currency</Heading>
+              <CurrencySelect id="transaction-settings-currency-select" />
+            </VStack>
             <VStack align="start" w="full">
               <HStack>
                 <Heading size="sm">Slippage</Heading>
@@ -123,10 +138,17 @@ export function ProportionalTransactionSettings({
               </HStack>
               <SlippageInput setSlippage={setSlippage} slippage={slippage} />
             </VStack>
-            <VStack align="start" w="full">
-              <Heading size="sm">Currency</Heading>
-              <CurrencySelect id="transaction-settings-currency-select" />
-            </VStack>
+
+            <Box w="full">
+              <Heading pb="xs" size="sm">
+                Use Signatures
+              </Heading>
+              <Text color="font.secondary" fontSize="sm" pb="sm">
+                Signatures allow for gas-free transactions, where possible. If your wallet
+                doesn&apos;t support signatures, you can turn it off.
+              </Text>
+              <EnableSignaturesSelect />
+            </Box>
           </VStack>
         </PopoverBody>
       </PopoverContent>

@@ -50,6 +50,7 @@ export function _useUserSettings({
     initEnableSignatures
   )
   const enableSignatures = isMounted ? _enableSignatures : initEnableSignatures
+  const shouldUseSignatures = enableSignatures === 'yes'
 
   const [_allowSounds, setAllowSounds] = useLocalStorage<YesNo>(
     LS_KEYS.UserSettings.AllowSounds,
@@ -73,6 +74,7 @@ export function _useUserSettings({
     slippageDecimal,
     slippageBps,
     enableSignatures,
+    shouldUseSignatures,
     acceptedPolicies,
     allowSounds,
     setCurrency,
