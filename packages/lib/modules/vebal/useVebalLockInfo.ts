@@ -10,8 +10,6 @@ import { oneWeekInMs, toJsTimestamp } from '@repo/lib/shared/utils/time'
 
 const MINIMUM_LOCK_TIME = oneWeekInMs
 
-const MINIMUM_LOCK_TIME = 86_400_000 * 7
-
 interface MulticallLockInfoResponse {
   locked: {
     locked: {

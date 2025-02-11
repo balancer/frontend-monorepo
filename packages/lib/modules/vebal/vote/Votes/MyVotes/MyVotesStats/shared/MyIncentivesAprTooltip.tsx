@@ -11,6 +11,7 @@ import {
   votingIncentivesTooltipText,
 } from '@repo/lib/shared/hooks/useAprTooltip'
 import BigNumber from 'bignumber.js'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 interface Props {
   totalWithVotesOptimized?: number
@@ -46,6 +47,7 @@ export function MyIncentivesAprTooltip({
   } = useAprTooltip({
     aprItems: [],
     numberFormatter: defaultNumberFormatter,
+    chain: GqlChain.Mainnet,
   })
 
   const usedDisplayValueFormatter = defaultDisplayValueFormatter
