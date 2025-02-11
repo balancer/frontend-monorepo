@@ -9,10 +9,9 @@ import {
 } from './relayer-types'
 import { GaugeActionsService } from './extensions/gauge-actions.service'
 import { balancerV2BatchRelayerLibraryAbi } from '@repo/lib/modules/web3/contracts/abi/generated'
-import { Address, encodeFunctionData, Hex, PublicClient } from 'viem'
+import { encodeFunctionData, Hex } from 'viem'
 import { ReliquaryActionsService } from './extensions/reliquary-actions.service'
 import { VaultActionsService } from './extensions/vault-actions.service'
-import { balancerV2BalancerRelayerV6Abi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 
 export class BatchRelayerService {
   constructor(
@@ -66,25 +65,5 @@ export class BatchRelayerService {
 
   public vaultEncodeJoinPool(params: EncodeJoinPoolInput): string {
     return this.vaultActionsService.encodeJoinPool(params)
-  }
-
-  public async simulateMulticall({
-    userAddress,
-    calls,
-    client,
-  }: {
-    userAddress: Address
-    calls: Hex[]
-    client: PublicClient
-  }): Promise<Hex[]> {
-    const { result } = await client.simulateContract({
-      address: this.batchRelayerAddress as Address,
-      abi: balancerV2BalancerRelayerV6Abi,
-      functionName: 'multicall',
-      args: [calls],
-      account: userAddress,
-    })
-
-    return [...result]
   }
 }

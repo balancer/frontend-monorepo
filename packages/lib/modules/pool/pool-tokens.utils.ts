@@ -168,7 +168,7 @@ function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
       }) as TokenCore
   )
 }
-export function shouldUseUnderlyingToken(token: PoolToken, pool: Pool | GqlPoolBase): boolean {
+export function shouldUseUnderlyingToken(token: ApiToken, pool: Pool | GqlPoolBase): boolean {
   if (isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !token.underlyingToken) {
     // This should never happen unless the API some some inconsistency
     throw new Error(
@@ -284,4 +284,9 @@ export function getStandardRootTokens(pool: Pool, poolActionableTokens?: ApiToke
   return poolActionableTokens.filter(token =>
     isStandardOrUnderlyingRootToken(pool, token.address as Address)
   )
+}
+
+export function getPriceRateForToken(token: ApiToken, pool: Pool) {
+  return pool.poolTokens.find(poolToken => poolToken.underlyingToken?.address === token.address)
+    ?.priceRate
 }

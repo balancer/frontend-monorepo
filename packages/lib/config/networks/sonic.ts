@@ -7,6 +7,7 @@ import {
   BALANCER_BATCH_ROUTER,
   BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
   PERMIT2,
+  VAULT_ADMIN,
   VAULT_V3,
 } from '@balancer/sdk'
 import { sonic } from 'viem/chains'
@@ -61,6 +62,7 @@ const networkConfig: NetworkConfig = {
       router: '0xNotYetAvailable' as Address,
       batchRouter: BALANCER_BATCH_ROUTER[sonic.id],
       compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[sonic.id],
+      vaultAdminV3: VAULT_ADMIN[sonic.id],
     },
     veDelegationProxy: zeroAddress, // TODO: fix this dependency for Beets
     beets: {

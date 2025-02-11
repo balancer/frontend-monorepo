@@ -21,6 +21,7 @@
     "postinstall": "npm run gen:theme-typings"
   },
   "dependencies": {
+    "@balancer/sdk": "1.4.3",
     "@chakra-ui/hooks": "2.4.2",
     "@chakra-ui/icons": "2.2.4",
     "@chakra-ui/react": "2.10.4",
@@ -41,8 +42,8 @@
     "react-feather": "^2.0.10",
     "react-use-measure": "^2.1.1",
     "tinycolor2": "^1.6.0",
-    "viem": "2.22.10",
-    "wagmi": "2.13.3"
+    "viem": "2.23.0",
+    "wagmi": "2.14.11"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.5.6",
@@ -59,7 +60,7 @@
     "@types/tinycolor2": "^1.4.6",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
-    "@wagmi/cli": "2.1.22",
+    "@wagmi/cli": "2.2.0",
     "autoprefixer": "^10.4.14",
     "concurrently": "^8.2.2",
     "cross-fetch": "^4.0.0",
@@ -69,7 +70,7 @@
     "sentry-testkit": "^5.0.9"
   },
   "engines": {
-    "node": ">=18.x"
+    "node": ">=20.x"
   },
   "engineStrict": true
 }

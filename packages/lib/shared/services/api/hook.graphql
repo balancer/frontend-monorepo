@@ -1,25 +1,35 @@
 fragment Hook on GqlHook {
   address
-  dynamicData {
-    addLiquidityFeePercentage
-    maxSurgeFeePercentage
-    removeLiquidityFeePercentage
-    surgeThresholdPercentage
-    swapFeePercentage
+  config {
+    enableHookAdjustedAmounts
+    shouldCallAfterAddLiquidity
+    shouldCallAfterInitialize
+    shouldCallAfterRemoveLiquidity
+    shouldCallAfterSwap
+    shouldCallBeforeAddLiquidity
+    shouldCallBeforeInitialize
+    shouldCallBeforeRemoveLiquidity
+    shouldCallBeforeSwap
+    shouldCallComputeDynamicSwapFee
+  }
+  name
+  params {
+    ... on ExitFeeHookParams {
+      exitFeePercentage
+    }
+    ... on FeeTakingHookParams {
+      addLiquidityFeePercentage
+      removeLiquidityFeePercentage
+      swapFeePercentage
+    }
+    ... on StableSurgeHookParams {
+      maxSurgeFeePercentage
+      surgeThresholdPercentage
+    }
   }
   reviewData {
+    reviewFile
     summary
     warnings
-    reviewFile
   }
-  shouldCallAfterAddLiquidity
-  shouldCallAfterInitialize
-  shouldCallAfterRemoveLiquidity
-  shouldCallAfterSwap
-  shouldCallBeforeAddLiquidity
-  shouldCallBeforeInitialize
-  shouldCallBeforeRemoveLiquidity
-  shouldCallBeforeSwap
-  shouldCallComputeDynamicSwapFee
-  enableHookAdjustedAmounts
 }

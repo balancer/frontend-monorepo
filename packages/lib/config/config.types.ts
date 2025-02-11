@@ -47,6 +47,7 @@ export interface ContractsConfig {
     vaultV2: Address
     // TODO: make it required when v3 is deployed in all networks
     vaultV3?: Address
+    vaultAdminV3?: Address
     /*
       TODO: make it required when v3 is deployed in all networks
       IDEAL: remove this config completely and use the SDK build "to" to get the required router
@@ -146,7 +147,9 @@ type Links = {
 
 export interface ProjectConfig {
   projectId: 'beets' | 'balancer'
+  projectUrl: string
   projectName: string
+  projectLogo: string
   supportedNetworks: GqlChain[]
   corePoolId: string // this prop is used to adjust the color of the SparklesIcon
   variantConfig?: VariantConfig

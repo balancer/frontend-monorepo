@@ -1,19 +1,20 @@
 'use client'
 
 import { connectorsForWallets } from '@rainbow-me/rainbowkit'
-import { createConfig } from 'wagmi'
 import {
   coinbaseWallet,
+  injectedWallet,
+  metaMaskWallet,
   rabbyWallet,
   rainbowWallet,
   safeWallet,
-  injectedWallet,
-  walletConnectWallet,
-  metaMaskWallet,
 } from '@rainbow-me/rainbowkit/wallets'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { createConfig } from 'wagmi'
 import { chains } from './ChainConfig'
 import { transports } from './transports'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { createWalletConnectConnector } from './wallet-connect/createWalletConnectConnector'
+import { isConnectedToWC } from './wallet-connect/useWCConnectionLocalStorage'
 
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID
 if (!walletConnectProjectId) throw new Error('Missing NEXT_PUBLIC_WALLET_CONNECT_ID env')
@@ -26,7 +27,6 @@ const connectors = connectorsForWallets(
         // metaMaskWallet must appear above injectedWallet to avoid random disconnection issues
         metaMaskWallet,
         safeWallet,
-        walletConnectWallet,
         rabbyWallet,
         coinbaseWallet,
         rainbowWallet,
@@ -37,17 +37,22 @@ const connectors = connectorsForWallets(
   {
     appName: PROJECT_CONFIG.projectName,
     projectId: walletConnectProjectId,
-    walletConnectParameters: {
-      // Enforce wallet connect popup always on top
-      // More info: https://github.com/wevm/wagmi/discussions/2775
-      qrModalOptions: {
-        themeVariables: {
-          '--wcm-z-index': '9999999',
-        },
-      },
-    },
   }
 )
+
+/*
+  Only adding a new WC Connector if the user is not already connected to WC
+  This fixes this rainbowkit issue:
+  https://github.com/rainbow-me/rainbowkit/issues/2232
+*/
+if (!isConnectedToWC()) {
+  const lastConnector = connectors[connectors.length - 1]
+  if (lastConnector({} as any).id !== 'walletConnect') {
+    connectors.push(
+      createWalletConnectConnector({ index: connectors.length, walletConnectProjectId })
+    )
+  }
+}
 
 export const wagmiConfig = createConfig({
   chains,
