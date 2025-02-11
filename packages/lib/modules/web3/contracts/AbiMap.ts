@@ -15,6 +15,7 @@ import {
 import { VeDelegationProxyL2Abi } from './abi/veDelegationProxyL2'
 import { sfcAbi, sonicStakingAbi, reliquaryAbi } from './abi/beets/generated'
 import { LiquidityGaugeV5Abi } from './abi/LiquidityGaugeV5Abi'
+import { permit2Abi } from '@balancer/sdk'
 
 export const AbiMap = {
   'balancer.vaultV2': balancerV2VaultAbi,
@@ -34,6 +35,7 @@ export const AbiMap = {
   'beets.lstStaking': sonicStakingAbi,
   'beets.sfc': sfcAbi,
   'beets.reliquary': reliquaryAbi,
+  permit2: permit2Abi,
 }
 
 export type AbiMapType = keyof typeof AbiMap | undefined

@@ -7,18 +7,21 @@ import { getSpenderForAddLiquidity } from '@repo/lib/modules/tokens/token.helper
 import { useSignRelayerStep } from '@repo/lib/modules/transactions/transaction-steps/useSignRelayerStep'
 import { useMemo } from 'react'
 import { usePool } from '../../PoolProvider'
-import { requiresPermit2Approval } from '../../pool.helpers'
+import { isBoosted, requiresPermit2Approval } from '../../pool.helpers'
 import { LiquidityActionHelpers } from '../LiquidityActionHelpers'
 import { AddLiquidityStepParams, useAddLiquidityStep } from './useAddLiquidityStep'
 import { useSignPermit2AddStep } from './useSignPermit2AddStep'
 import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { hasSomePendingNestedTxInBatch } from '@repo/lib/modules/transactions/transaction-steps/safe/safe.helpers'
+import { usePermit2ApprovalSteps } from '@repo/lib/modules/tokens/approvals/permit2/usePermit2ApprovalSteps'
+import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 
 type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
   relicId?: string
 }
+
 export function useAddLiquiditySteps({
   helpers,
   handler,
@@ -31,6 +34,7 @@ export function useAddLiquiditySteps({
   const shouldBatchTransactions = useShouldBatchTransactions(pool)
   const relayerMode = useRelayerMode(pool)
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
+  const { shouldUseSignatures } = useUserSettings()
 
   const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } =
     useApproveRelayerStep(chainId)
@@ -60,6 +64,17 @@ export function useAddLiquiditySteps({
     simulationQuery,
   })
 
+  // If the user has selected to not use signatures, we allow them to do permit2
+  // approvals with transactions.
+  const { steps: permit2ApprovalSteps, isLoading: isLoadingPermit2ApprovalSteps } =
+    usePermit2ApprovalSteps({
+      chain: pool.chain,
+      approvalAmounts: inputAmounts,
+      actionType: 'AddLiquidity',
+      enabled: isPermit2 && !shouldUseSignatures,
+      shouldUseCompositeLiquidityRouter: isBoosted(pool),
+    })
+
   const isSignPermit2Loading = isPermit2 && !signPermit2Step
 
   const addLiquidityStep = useAddLiquidityStep({
@@ -70,8 +85,14 @@ export function useAddLiquiditySteps({
     relicId,
   })
 
-  const addSteps: TransactionStep[] =
-    isPermit2 && signPermit2Step ? [signPermit2Step, addLiquidityStep] : [addLiquidityStep]
+  const shouldUsePermit2Signatures = isPermit2 && shouldUseSignatures && signPermit2Step
+  const shouldUsePermit2Transactions = isPermit2 && !shouldUseSignatures && permit2ApprovalSteps
+
+  const addSteps: TransactionStep[] = shouldUsePermit2Signatures
+    ? [signPermit2Step, addLiquidityStep]
+    : shouldUsePermit2Transactions
+      ? [...permit2ApprovalSteps, addLiquidityStep]
+      : [addLiquidityStep]
 
   addLiquidityStep.nestedSteps = tokenApprovalSteps
   const approveAndAddSteps =
@@ -99,7 +120,11 @@ export function useAddLiquiditySteps({
   ])
 
   return {
-    isLoadingSteps: isLoadingTokenApprovalSteps || isLoadingRelayerApproval || isSignPermit2Loading,
+    isLoadingSteps:
+      isLoadingTokenApprovalSteps ||
+      isLoadingRelayerApproval ||
+      isLoadingPermit2ApprovalSteps ||
+      isSignPermit2Loading,
     steps,
   }
 }
