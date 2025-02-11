@@ -6,14 +6,15 @@ import fs from 'fs'
 import path from 'path'
 import { lowerFirst } from 'lodash'
 
+type Params = {
+  poolId: Address
+  chain: GqlChain
+  fileName?: string
+}
 /**
  * Fetches a pool from the API and saves it as a mock file in the api-mocks directory.
  */
-export async function savePoolMock(
-  poolId: Address,
-  chain: GqlChain,
-  fileName?: string
-): Promise<string> {
+export async function savePoolMock({ poolId, chain, fileName }: Params): Promise<string> {
   const pool = (await fetchPoolMock(poolId, chain)) as Pool
   const poolJson = JSON.stringify(pool, null, 2)
 
