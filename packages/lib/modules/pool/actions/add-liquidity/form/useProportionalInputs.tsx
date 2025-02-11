@@ -24,8 +24,16 @@ import { usePoolStateWithBalancesQuery } from '../queries/usePoolStateWithBalanc
 
 export function useProportionalInputs() {
   const { isConnected } = useUserAccount()
-  const { helpers, setHumanAmountsIn, clearAmountsIn, wethIsEth, setReferenceAmountAddress } =
-    useAddLiquidity()
+  const {
+    helpers,
+    setHumanAmountsIn,
+    clearAmountsIn,
+    wethIsEth,
+    // wrapUnderlying,
+    setReferenceAmountAddress,
+  } = useAddLiquidity()
+
+  const wrapUnderlying = [true, false] // TODO: uncomment line above
   const { balances, isBalancesLoading } = useTokenBalances()
   const { isLoading: isPoolLoading, pool } = usePool()
 
@@ -47,6 +55,7 @@ export function useProportionalInputs() {
       humanAmount,
       helpers,
       wethIsEth,
+      wrapUnderlying,
       poolStateWithBalances,
     })
 
@@ -86,6 +95,7 @@ type Params = {
   humanAmount: HumanAmount
   helpers: LiquidityActionHelpers
   wethIsEth: boolean
+  wrapUnderlying: boolean[]
   poolStateWithBalances?: PoolStateWithUnderlyingBalances | PoolStateWithBalances
 }
 export function _calculateProportionalHumanAmountsIn({
@@ -93,6 +103,7 @@ export function _calculateProportionalHumanAmountsIn({
   humanAmount,
   helpers,
   wethIsEth,
+  wrapUnderlying,
   poolStateWithBalances,
 }: Params): HumanTokenAmountWithAddress[] {
   const tokenAddress = token.address as Address
@@ -105,10 +116,19 @@ export function _calculateProportionalHumanAmountsIn({
     throw new Error('Cannot calculate proportional amounts without pool state')
   }
 
+  console.log('calculateProportionalAmountsBoosted input:', {
+    tokenAddress: token.address,
+    tokenSymbol: token.symbol,
+    humanAmount,
+    wrapUnderlying,
+    poolStateWithBalances,
+  })
+
   const sdkProportionalAmounts = isBoosted(helpers.pool)
     ? calculateProportionalAmountsBoosted(
         poolStateWithBalances as PoolStateWithUnderlyingBalances,
-        referenceAmount
+        referenceAmount,
+        wrapUnderlying
       )
     : calculateProportionalAmounts(poolStateWithBalances, referenceAmount)
 
