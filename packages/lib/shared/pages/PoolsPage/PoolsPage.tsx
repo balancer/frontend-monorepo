@@ -1,7 +1,7 @@
 import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { Box, Skeleton, Flex, Heading, Text, HStack, Card, SimpleGrid } from '@chakra-ui/react'
+import { Box, Skeleton, Flex, Heading, Text, Card, SimpleGrid } from '@chakra-ui/react'
 import { PropsWithChildren, Suspense } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
@@ -83,9 +83,7 @@ export async function PoolsPage({ children }: PropsWithChildren) {
                     Join 240k+ Liquidity Providers in yield-bearing pools
                   </Text>
                 </Box>
-                <HStack mt="3" spacing={{ base: '2', sm: '3' }}>
-                  <PoolPageStats />
-                </HStack>
+                <PoolPageStats />
               </Flex>
             </FadeInOnView>
 
