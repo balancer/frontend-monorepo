@@ -24,6 +24,7 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
   const { chainId, pool, chain } = usePool()
   const { slippage } = useUserSettings()
   const relayerMode = useRelayerMode(pool)
+  const { shouldUseSignatures } = useUserSettings()
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
   const signRelayerStep = useSignRelayerStep(chain)
   const { step: approveRelayerStep, isLoading: isLoadingRelayerApproval } =
@@ -50,7 +51,7 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
 
   function getRemoveLiquiditySteps(): TransactionStep[] {
     if (isV3Pool(pool)) {
-      if (isSafeAccount) {
+      if (isSafeAccount || !shouldUseSignatures) {
         // Standard permit signatures are not supported by Safe accounts (signer != owner) so we use an Approval BPT Tx step instead
         return [...tokenApprovalSteps, removeLiquidityStep]
       }
