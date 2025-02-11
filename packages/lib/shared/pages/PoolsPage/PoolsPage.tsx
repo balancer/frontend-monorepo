@@ -7,6 +7,7 @@ import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { PartnerCard } from '@repo/lib/shared/components/other/PartnerCard'
 import { PoolPageStats } from './PoolPageStats'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export async function PoolsPage({ children }: PropsWithChildren) {
   return (
@@ -76,7 +77,7 @@ export async function PoolsPage({ children }: PropsWithChildren) {
               >
                 <Box>
                   <Heading mb="3" sx={{ textWrap: 'balance' }} variant="special">
-                    Earn passively on Balancer
+                    Earn passively on {PROJECT_CONFIG.projectName}
                   </Heading>
                   <Text sx={{ textWrap: 'balance' }} variant="secondary">
                     Join 240k+ Liquidity Providers in yield-bearing pools
