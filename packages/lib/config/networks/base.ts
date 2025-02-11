@@ -1,7 +1,13 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
-import { PERMIT2, VAULT_ADMIN, VAULT_V3 } from '@balancer/sdk'
+import {
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
+  BALANCER_ROUTER,
+  PERMIT2,
+  VAULT_ADMIN,
+  VAULT_V3,
+} from '@balancer/sdk'
 import { base } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -49,6 +55,8 @@ const networkConfig: NetworkConfig = {
       relayerV6: '0x7C3C773C878d2238a9b64d8CEE02377BF07ED06a',
       minter: '0x0c5538098EBe88175078972F514C9e101D325D4F',
       vaultAdminV3: VAULT_ADMIN[base.id],
+      router: BALANCER_ROUTER[base.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[base.id],
     },
     veDelegationProxy: '0xD87F44Df0159DC78029AB9CA7D7e57E7249F5ACD',
     permit2: PERMIT2[base.id],
