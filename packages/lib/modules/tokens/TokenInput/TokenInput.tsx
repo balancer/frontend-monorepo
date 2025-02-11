@@ -37,7 +37,7 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 type TokenInputSelectorProps = {
   token: ApiToken | undefined
   weight?: string
-  toggleTokenSelect?: () => void
+  onToggleTokenClicked?: () => void
 }
 
 type TokenConfigProps = {
@@ -46,21 +46,21 @@ type TokenConfigProps = {
   showIcon: boolean
 }
 
-function TokenInputSelector({ token, weight, toggleTokenSelect }: TokenInputSelectorProps) {
+function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputSelectorProps) {
   const [tokenConfig, setTokenConfig] = useState<TokenConfigProps | undefined>(undefined)
 
   useEffect(() => {
     if (token) {
       setTokenConfig({ label: token.symbol, variant: 'tertiary', showIcon: true })
-    } else if (toggleTokenSelect) {
+    } else if (onToggleTokenClicked) {
       setTokenConfig({ label: 'Select token', variant: 'secondary', showIcon: false })
     }
   }, [token])
 
   return tokenConfig ? (
     <Button
-      cursor={toggleTokenSelect ? 'pointer' : 'default'}
-      onClick={toggleTokenSelect}
+      cursor={onToggleTokenClicked ? 'pointer' : 'default'}
+      onClick={() => onToggleTokenClicked?.()}
       variant={tokenConfig.variant}
     >
       {tokenConfig && tokenConfig.showIcon && (
@@ -74,7 +74,7 @@ function TokenInputSelector({ token, weight, toggleTokenSelect }: TokenInputSele
           {fNum('weight', weight)}
         </Text>
       )}
-      {toggleTokenSelect && (
+      {onToggleTokenClicked && (
         <Box ml="sm">
           <ChevronDown size={16} />
         </Box>
@@ -181,7 +181,7 @@ type Props = {
   hideFooter?: boolean
   boxProps?: BoxProps
   onChange?: (event: { currentTarget: { value: string } }) => void
-  toggleTokenSelect?: () => void
+  onToggleTokenClicked?: () => void
   hasPriceImpact?: boolean
   isLoadingPriceImpact?: boolean
   disableBalanceValidation?: boolean
@@ -197,7 +197,7 @@ export const TokenInput = forwardRef(
       value,
       boxProps,
       onChange,
-      toggleTokenSelect,
+      onToggleTokenClicked,
       hideFooter = false,
       hasPriceImpact = false,
       isLoadingPriceImpact = false,
@@ -224,7 +224,11 @@ export const TokenInput = forwardRef(
       disableBalanceValidation,
     })
 
-    const tokenInputSelector = TokenInputSelector({ token, weight, toggleTokenSelect })
+    const tokenInputSelector = TokenInputSelector({
+      token,
+      weight,
+      onToggleTokenClicked,
+    })
     const footer = hideFooter
       ? undefined
       : TokenInputFooter({ token, value, updateValue, hasPriceImpact, isLoadingPriceImpact })

@@ -17,10 +17,8 @@ import {
   Text,
   Tooltip,
   VStack,
-  useDisclosure,
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
-import { Address } from 'viem'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -39,9 +37,6 @@ import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetai
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
-import { isNativeOrWrappedNative, isNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
-import { NativeAssetSelectModal } from '@repo/lib/modules/tokens/NativeAssetSelectModal'
-import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { PriceImpactError } from '../../../../price-impact/PriceImpactError'
 import AddLiquidityAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AddLiquidityAprTooltip'
@@ -57,7 +52,6 @@ import { UnbalancedAddError } from '@repo/lib/shared/components/errors/Unbalance
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { supportsWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 
 // small wrapper to prevent out of context error
@@ -78,8 +72,6 @@ function AddLiquidityMainForm() {
   const nextBtn = useRef(null)
 
   const {
-    setHumanAmountIn: setAmountIn,
-    validTokens,
     priceImpactQuery,
     simulationQuery,
     isDisabled,
@@ -102,8 +94,6 @@ function AddLiquidityMainForm() {
   const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { toCurrency } = useCurrency()
-  const tokenSelectDisclosure = useDisclosure()
-  const { setValidationError } = useTokenInputsValidation()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
@@ -144,10 +134,6 @@ function AddLiquidityMainForm() {
     }
   }
 
-  const nativeAssets = validTokens.filter(token =>
-    isNativeOrWrappedNative(token.address as Address, token.chain)
-  )
-
   // if native asset balance is higher set that asset as the 'default'
   useEffect(() => {
     if (!isBalancesLoading && nativeAsset && wNativeAsset && supportsWethIsEth(pool)) {
@@ -162,20 +148,6 @@ function AddLiquidityMainForm() {
       }
     }
   }, [isBalancesLoading])
-
-  function handleTokenSelect(token: ApiToken) {
-    if (isNativeAsset(token.address as Address, token.chain)) {
-      setWethIsEth(true)
-    } else {
-      setWethIsEth(false)
-    }
-    setAmountIn(token, '')
-
-    // reset any validation errors for native assets
-    nativeAssets.forEach(nativeAsset => {
-      setValidationError(nativeAsset.address as Address, '')
-    })
-  }
 
   function onModalClose() {
     // restart polling for token prices when modal is closed again
@@ -225,7 +197,6 @@ function AddLiquidityMainForm() {
             setFlexibleTab={setFlexibleTab}
             setProportionalTab={setProportionalTab}
             tabIndex={tabIndex}
-            tokenSelectDisclosure={tokenSelectDisclosure}
             totalUSDValue={totalUSDValue}
           />
           {!wantsProportional && shouldShowUnbalancedError && (
@@ -332,16 +303,6 @@ function AddLiquidityMainForm() {
         onClose={onModalClose}
         onOpen={previewModalDisclosure.onOpen}
       />
-      {!!validTokens.length && (
-        <NativeAssetSelectModal
-          chain={validTokens[0].chain}
-          isOpen={tokenSelectDisclosure.isOpen}
-          nativeAssets={nativeAssets}
-          onClose={tokenSelectDisclosure.onClose}
-          onOpen={tokenSelectDisclosure.onOpen}
-          onTokenSelect={handleTokenSelect}
-        />
-      )}
     </Box>
   )
 }
