@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react'
 import { getChainId, getNativeAssetAddress, getNetworkConfig } from '@repo/lib/config/app.config'
@@ -23,6 +24,7 @@ export type Params = {
   lpToken?: string
   enabled?: boolean
   wethIsEth?: boolean
+  shouldUseCompositeLiquidityRouter?: boolean
 }
 
 /**
@@ -36,6 +38,7 @@ export type Params = {
  * @param {string} [params.lpToken] - LP token address if applicable
  * @param {boolean} [params.enabled=true] - Whether the hook is enabled
  * @param {boolean} [params.wethIsEth] - Whether WETH should be treated as ETH
+ * @param {boolean} [params.shouldUseCompositeLiquidityRouter=false] - Whether to use the composite liquidity router
  * @returns {Object} Object containing loading state and transaction steps
  */
 export function usePermit2ApprovalSteps({
@@ -43,9 +46,10 @@ export function usePermit2ApprovalSteps({
   approvalAmounts,
   actionType,
   bptSymbol,
-  enabled = true,
+  enabled = false,
   lpToken,
   wethIsEth,
+  shouldUseCompositeLiquidityRouter = false,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
   const { getToken } = useTokens()
@@ -54,11 +58,11 @@ export function usePermit2ApprovalSteps({
   const chainId = getChainId(chain)
   const nativeAssetAddress = getNativeAssetAddress(chain)
   const networkConfig = getNetworkConfig(chain)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const permit2Address = networkConfig.contracts.permit2!
   const permitExpiry = get24HoursFromNowInSecs()
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const spenderAddress = networkConfig.contracts.balancer.router!
+  const spenderAddress = shouldUseCompositeLiquidityRouter
+    ? networkConfig.contracts.balancer.compositeLiquidityRouter!
+    : networkConfig.contracts.balancer.router!
 
   // Unwraps of wrapped native assets do not require approval
   const isUnwrappingNative = wethIsEth && actionType === 'Unwrapping'

@@ -7,7 +7,7 @@ import { getSpenderForAddLiquidity } from '@repo/lib/modules/tokens/token.helper
 import { useSignRelayerStep } from '@repo/lib/modules/transactions/transaction-steps/useSignRelayerStep'
 import { useMemo } from 'react'
 import { usePool } from '../../PoolProvider'
-import { requiresPermit2Approval } from '../../pool.helpers'
+import { isBoosted, requiresPermit2Approval } from '../../pool.helpers'
 import { LiquidityActionHelpers } from '../LiquidityActionHelpers'
 import { AddLiquidityStepParams, useAddLiquidityStep } from './useAddLiquidityStep'
 import { useSignPermit2AddStep } from './useSignPermit2AddStep'
@@ -69,6 +69,8 @@ export function useAddLiquiditySteps({
       chain: pool.chain,
       approvalAmounts: inputAmounts,
       actionType: 'AddLiquidity',
+      enabled: isPermit2 && !shouldUseSignatures,
+      shouldUseCompositeLiquidityRouter: isBoosted(pool),
     })
 
   const isSignPermit2Loading = isPermit2 && !signPermit2Step
