@@ -32,7 +32,14 @@ import {
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
-import { PoolFilterType, poolTagFilters, PoolTagType, poolTypeFilters } from '../pool.types'
+import {
+  PoolFilterType,
+  poolHookTagFilters,
+  PoolHookTagType,
+  poolTagFilters,
+  PoolTagType,
+  poolTypeFilters,
+} from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useEffect, useState } from 'react'
 import { Filter, Plus } from 'react-feather'
@@ -131,23 +138,28 @@ function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
 
 function PoolHookFilters() {
   const {
-    queryState: { setHasHook, hasHook },
+    queryState: { togglePoolHookTag, poolHookTags, setPoolHookTags, poolHookTagLabel },
   } = usePoolList()
 
   // remove query param when empty
   useEffect(() => {
-    if (!hasHook) {
-      setHasHook(null)
+    if (!poolHookTags.length) {
+      setPoolHookTags(null)
     }
-  }, [hasHook])
+  }, [poolHookTags])
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      <Box as={motion.div} key="hasHook" variants={staggeredFadeInUp}>
-        <Checkbox isChecked={hasHook} onChange={e => setHasHook(e.target.checked)}>
-          <Text fontSize="sm">All</Text>
-        </Checkbox>
-      </Box>
+      {poolHookTagFilters.map(tag => (
+        <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
+          <Checkbox
+            isChecked={!!poolHookTags.find(selected => selected === tag)}
+            onChange={e => togglePoolHookTag(e.target.checked, tag as PoolHookTagType)}
+          >
+            <Text fontSize="sm">{poolHookTagLabel(tag)}</Text>
+          </Checkbox>
+        </Box>
+      ))}
     </Box>
   )
 }

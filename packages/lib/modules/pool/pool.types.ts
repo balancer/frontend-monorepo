@@ -130,6 +130,7 @@ export const POOL_TAG_MAP: { [key in PoolTagType]: string[] } = {
 }
 
 export const poolHookTagFilters = ['HOOKS_STABLESURGE', 'HOOKS_EXITFEE', 'HOOKS_FEETAKING'] as const
+export type PoolHookTagType = (typeof poolHookTagFilters)[number]
 
 export type SortingState = PoolsColumnSort[]
 
@@ -161,6 +162,9 @@ export const poolListQueryStateParsers = {
     parseAsStringEnum<PoolTagType>(Object.values(poolTagFilters))
   ).withDefault([]),
   hasHook: parseAsBoolean.withDefault(false),
+  poolHookTags: parseAsArrayOf(
+    parseAsStringEnum<PoolHookTagType>(Object.values(poolHookTagFilters))
+  ).withDefault([]),
 }
 
 /*
