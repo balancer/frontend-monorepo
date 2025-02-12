@@ -89,7 +89,6 @@ const networkConfig: NetworkConfig = {
       router: BALANCER_ROUTER[mainnet.id],
       batchRouter: BALANCER_BATCH_ROUTER[mainnet.id],
       compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[mainnet.id],
-
       WeightedPool2TokensFactory: '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0',
       vaultAdminV3: VAULT_ADMIN[mainnet.id],
     },

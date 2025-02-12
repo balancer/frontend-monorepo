@@ -342,10 +342,9 @@ export function getWrappedAndUnderlyingTokenFn(
   }
 
   if (token.wrappedToken) {
+    const wrappedToken = token.wrappedToken
     return () => {
       const underlyingToken = token
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const wrappedToken = token.wrappedToken!
       return sortTokenPairByBalance([underlyingToken, wrappedToken], balanceFor)
     }
   }

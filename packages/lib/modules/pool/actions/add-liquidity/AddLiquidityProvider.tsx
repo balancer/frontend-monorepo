@@ -54,7 +54,6 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
 
   const [totalUSDValue, setTotalUSDValue] = useState('0')
   const { pool, refetch: refetchPool, isLoading } = usePool()
-
   const [wrapUnderlying, setWrapUnderlying] = useState<boolean[]>(getDefaultWrapUnderlying(pool))
 
   function setWrapUnderlyingByIndex(index: number, value: boolean) {

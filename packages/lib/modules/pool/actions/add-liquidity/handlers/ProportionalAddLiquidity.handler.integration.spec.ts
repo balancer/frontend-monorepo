@@ -12,7 +12,8 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { usdcAddress, wETHAddress } from '@repo/lib/debug-helpers'
 
 function selectProportionalHandler(pool: Pool) {
-  return selectAddLiquidityHandler(pool) as ProportionalAddLiquidityHandler
+  const wantsProportional = true
+  return selectAddLiquidityHandler(pool, wantsProportional) as ProportionalAddLiquidityHandler
 }
 
 // Skip until we find the root cause of this issue:

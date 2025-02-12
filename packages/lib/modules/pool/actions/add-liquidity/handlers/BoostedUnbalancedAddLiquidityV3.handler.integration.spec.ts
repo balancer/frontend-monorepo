@@ -8,8 +8,7 @@ import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
 import { usdcUsdtAaveBoosted } from '../../../__mocks__/pool-examples/boosted'
 import { usdcAddress, usdtAddress } from '@repo/lib/debug-helpers'
 
-// TODO: make it pass before merge
-describe.skip('When adding unbalanced liquidity for a V3 BOOSTED pool', async () => {
+describe('When adding unbalanced liquidity for a V3 BOOSTED pool', async () => {
   const v3Pool = getApiPoolMock(usdcUsdtAaveBoosted)
 
   const handler = selectAddLiquidityHandler(v3Pool) as BoostedUnbalancedAddLiquidityV3Handler

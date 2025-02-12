@@ -86,7 +86,7 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     }
 
     const oldWrapUnderlying = [...wrapUnderlying]
-    setWrapUnderlyingByIndex(token.index, token.wrappedToken ? true : false)
+    setWrapUnderlyingByIndex(token.index, !!token.wrappedToken)
 
     if (!isEqual(oldWrapUnderlying, wrapUnderlying)) {
       clearAmountsIn()
@@ -95,8 +95,6 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
 
   return (
     <VStack spacing="md" w="full">
-      {/* DELETE AFTER PREVIEW URL tests */}
-      <div>Debug wrapUnderlying: {JSON.stringify(wrapUnderlying)}</div>
       <TokenInputs
         customSetAmountIn={setAmountIn}
         getToggleTokenCallback={getToggleTokenCallback}
