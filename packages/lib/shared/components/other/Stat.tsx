@@ -36,18 +36,19 @@ function Stat({
         },
       }}
       flex={{ base: 'none', sm: '1' }}
-      minW={{ base: '110px', sm: '140px' }}
+      minW={{ base: 'max-content', md: '110px', xl: '134px' }}
       overflow="hidden"
       position="relative"
-      px="2.5"
+      px="2"
       py="2"
       rounded="md"
       shadow="md"
+      width={{ base: '100%', md: 'max-content' }}
     >
-      <Text fontSize="xs" mb="1" variant="secondary">
+      <Text fontSize="xs" mb="1.5" variant="secondary">
         {label}
       </Text>
-      <Text fontSize="lg" fontWeight="bold">
+      <Text fontSize="md" fontWeight="bold">
         {value}
       </Text>
     </Box>

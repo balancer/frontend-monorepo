@@ -1,6 +1,6 @@
 'use client'
 
-import { Grid, GridItem } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import Stat from '../../components/other/Stat'
 import { fNumCustom } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
@@ -9,43 +9,43 @@ export function PoolPageStats() {
   const { protocolData } = useProtocolStats()
 
   return (
-    <Grid
-      gap={{ base: 'lg', lg: 'sm' }}
+    <Flex
+      direction={{ base: 'row', sm: 'row' }}
+      flexWrap="wrap"
+      gap={{ base: 'sm', lg: 'sm' }}
       mt="3"
-      templateColumns={{ base: '1fr 1fr', lg: 'repeat(4, 1fr)' }}
-      templateRows={{ base: '1fr 1fr', lg: '1fr' }}
     >
-      <GridItem>
+      <Box flex={{ base: '1 1 40%', sm: '1' }}>
         <Stat
           label="TVL"
           value={fNumCustom(protocolData?.protocolMetricsAggregated.totalLiquidity ?? 0, '$0,0.0a')}
         />
-      </GridItem>
-      <GridItem>
+      </Box>
+      <Box flex={{ base: '1 1 40%', sm: '1' }}>
         <Stat
           imageBackgroundSize="300%"
           label="Volume (24h)"
           value={fNumCustom(protocolData?.protocolMetricsAggregated.swapVolume24h ?? 0, '$0,0.0a')}
         />
-      </GridItem>
-      <GridItem>
+      </Box>
+      <Box flex={{ base: '1 1 40%', sm: '1' }}>
         <Stat
           imageTransform="rotate(180deg)"
           label="Swap fees (24h)"
           value={fNumCustom(protocolData?.protocolMetricsAggregated.swapFee24h ?? 0, '$0,0.0a')}
         />
-      </GridItem>
-      <GridItem>
+      </Box>
+      <Box flex={{ base: '1 1 40%', sm: '1' }}>
         <Stat
           imageBackgroundSize="200%"
           imageTransform="rotate(180deg)"
-          label="Protocol Revenue (24h)"
+          label="Protocol revenue (24h)"
           value={fNumCustom(
             protocolData?.protocolMetricsAggregated.yieldCapture24h ?? 0,
             '$0,0.0a'
           )}
         />
-      </GridItem>
-    </Grid>
+      </Box>
+    </Flex>
   )
 }

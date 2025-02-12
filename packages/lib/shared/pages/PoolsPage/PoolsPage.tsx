@@ -72,7 +72,7 @@ export async function PoolsPage({ children }: PropsWithChildren) {
             <FadeInOnView animateOnce={false}>
               <Flex
                 align={{ base: 'start', md: 'start' }}
-                direction={{ base: 'column', md: 'row' }}
+                direction={{ base: 'column', lg: 'row' }}
                 gap="4"
                 justify={{ base: 'start', md: 'space-between' }}
                 mb="8"
