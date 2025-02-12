@@ -281,6 +281,15 @@ export function hasHooks(pool: Pool): boolean {
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
 }
 
+export function hasStableSurgeHook(pool: Pool): boolean {
+  const nestedHooks = pool.poolTokens.flatMap(token =>
+    token.nestedPool ? token.nestedPool.hook : []
+  )
+  const hooks = [...(pool.hook ? [pool.hook] : []), ...nestedHooks]
+
+  return hooks.some(hook => hook && hook.name === 'StableSurgeHook')
+}
+
 export function hasReviewedErc4626(token: GqlPoolTokenDetail): boolean {
   return token.isErc4626 && !!token.erc4626ReviewData
 }
