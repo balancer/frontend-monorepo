@@ -15,16 +15,15 @@ import { Pool } from '../../pool.types'
 
 export const allApiMocks: Pool[] = [
   b_80BAL_20WETHMock,
-osETH_wETH_BPTMock,
-b_50sDAI_50wstETHMock,
-v2SepoliaStableWithERC4626Mock,
-bCoW_50WETH_50GNOMock,
-v3SepoliaNestedBoostedMock,
-aave_USDC_USDTMock,
-b_csUSDL_steakUSDCMock,
-aGNO_sDAIMock,
-partialBoostedSepoliaWethStataUsdtMock,
-staBAL3_WETH_WBTC_BPTMock,
-b_auraBAL_STABLEMock
+  osETH_wETH_BPTMock,
+  b_50sDAI_50wstETHMock,
+  v2SepoliaStableWithERC4626Mock,
+  bCoW_50WETH_50GNOMock,
+  v3SepoliaNestedBoostedMock,
+  aave_USDC_USDTMock,
+  b_csUSDL_steakUSDCMock,
+  aGNO_sDAIMock,
+  partialBoostedSepoliaWethStataUsdtMock,
+  staBAL3_WETH_WBTC_BPTMock,
+  b_auraBAL_STABLEMock,
 ]
- 
