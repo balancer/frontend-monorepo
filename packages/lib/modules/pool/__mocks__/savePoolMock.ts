@@ -74,7 +74,7 @@ function createExportListFromTemplate(mockFileNames: string[]) {
 import { Pool } from '../../pool.types'
 
 export const allApiMocks: Pool[] = [
-  ${mockFileNames.join('\n  ,')}
+  ${mockFileNames.join(',\n')}
 ]
  `
 }
