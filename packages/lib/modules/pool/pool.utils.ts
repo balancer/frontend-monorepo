@@ -1,14 +1,20 @@
+import { TOTAL_APR_TYPES } from '@repo/lib/shared/hooks/useAprTooltip'
 import {
   GetPoolQuery,
   GqlChain,
+  GqlPoolAprItem,
+  GqlPoolAprItemType,
   GqlPoolComposableStableNested,
   GqlPoolTokenDetail,
   GqlPoolType,
-  GqlPoolAprItem,
-  GqlPoolTokenDisplay,
-  GqlPoolAprItemType,
 } from '@repo/lib/shared/services/api/generated/graphql'
+import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
+import BigNumber from 'bignumber.js'
 import { invert } from 'lodash'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { Address, formatUnits, parseUnits } from 'viem'
+import { TokenAmountHumanReadable } from '../tokens/token.types'
+import { ClaimablePool } from './actions/claim/ClaimProvider'
 import {
   BaseVariant,
   FetchPoolProps,
@@ -16,15 +22,9 @@ import {
   PoolAction,
   PoolListItem,
   PoolVariant,
+  PoolCore,
 } from './pool.types'
-import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { TokenAmountHumanReadable } from '../tokens/token.types'
-import { formatUnits, parseUnits } from 'viem'
-import { ClaimablePool } from './actions/claim/ClaimProvider'
-import { Pool } from './PoolProvider'
-import BigNumber from 'bignumber.js'
-import { TOTAL_APR_TYPES } from '@repo/lib/shared/hooks/useAprTooltip'
+import { Pool } from './pool.types'
 
 // URL slug for each chain
 export enum ChainSlug {
@@ -40,6 +40,7 @@ export enum ChainSlug {
   Sepolia = 'sepolia',
   Mode = 'mode',
   Fraxtal = 'fraxtal',
+  Sonic = 'sonic',
 }
 
 // Maps GraphQL chain enum to URL slug
@@ -56,13 +57,20 @@ export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
   [GqlChain.Sepolia]: ChainSlug.Sepolia,
   [GqlChain.Mode]: ChainSlug.Mode,
   [GqlChain.Fraxtal]: ChainSlug.Fraxtal,
+  [GqlChain.Sonic]: ChainSlug.Sonic,
 }
-export const slugToChainMap = invert(chainToSlugMap) as Record<ChainSlug, GqlChain>
 
-function getVariant(pool: Pool | PoolListItem): PoolVariant {
+export function getChainSlug(chainSlug: ChainSlug): GqlChain {
+  const slugToChainMap = invert(chainToSlugMap) as Record<ChainSlug, GqlChain>
+  const chain = slugToChainMap[chainSlug]
+  if (!chain) throw new Error(`Chain ${chainSlug} is not a valid chainName`)
+  return chain
+}
+
+function getVariant(type: GqlPoolType, protocolVersion: number | undefined): PoolVariant {
   // if a pool has certain properties return a custom variant
-  if (pool.type === GqlPoolType.CowAmm) return PartnerVariant.cow
-  if (pool.protocolVersion === 3) return BaseVariant.v3
+  if (type === GqlPoolType.CowAmm) return PartnerVariant.cow
+  if (protocolVersion === 3) return BaseVariant.v3
 
   // default variant
   return BaseVariant.v2
@@ -70,14 +78,27 @@ function getVariant(pool: Pool | PoolListItem): PoolVariant {
 
 /**
  * Constructs path to pool detail page.
- * @param {String} id Pool ID could be ID or address depending on variant.
- * @param {GqlChain} chain Chain enum.
- * @param {String} variant Pool variant, defaults to v2.
  * @returns {String} Path to pool detail page.
  */
-export function getPoolPath(pool: Pool | PoolListItem) {
-  const variant = getVariant(pool)
-  return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${pool.id}`
+
+export function getPoolPath(
+  params: Pick<PoolCore, 'id' | 'chain' | 'type'> & {
+    protocolVersion: number | undefined
+  }
+) {
+  const variant = getVariant(params.type, params.protocolVersion)
+  return `/pools/${chainToSlugMap[params.chain]}/${variant}/${params.id}`
+}
+
+export function getNestedPoolPath({
+  pool,
+  nestedPoolAddress,
+}: {
+  pool: PoolCore
+  nestedPoolAddress: Address
+}) {
+  const variant = getVariant(pool.type, pool.protocolVersion)
+  return `/pools/${chainToSlugMap[pool.chain]}/${variant}/${nestedPoolAddress}`
 }
 
 // TODO: the following 2 functions (getAprLabel & getTotalAprLabel) most likely need revisiting somewhere in the near future and refactored to just one
@@ -128,6 +149,12 @@ export function getTotalApr(
         return
       }
 
+      if (item.type === GqlPoolAprItemType.MabeetsEmissions) {
+        minTotal = bn(item.apr).plus(minTotal)
+        maxTotal = bn(item.apr).plus(maxTotal)
+        return
+      }
+
       minTotal = bn(item.apr).plus(minTotal)
       maxTotal = bn(item.apr).plus(maxTotal)
     })
@@ -172,7 +199,7 @@ const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.Unknown]: 'Unknown',
   [GqlPoolType.Fx]: 'FX',
   [GqlPoolType.ComposableStable]: 'Stable',
-  [GqlPoolType.CowAmm]: 'CoW AMM',
+  [GqlPoolType.CowAmm]: 'Weighted',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {
@@ -278,10 +305,6 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
   return poolType === GqlPoolType.CowAmm
 }
 
-export function getPoolDisplayTokens(pool: Pool) {
-  return pool.poolTokens.filter(token =>
-    pool.displayTokens.find(
-      (displayToken: GqlPoolTokenDisplay) => token.address === displayToken.address
-    )
-  ) as GqlPoolTokenDetail[]
+export function shouldCallComputeDynamicSwapFee(pool: Pool) {
+  return pool.hook && pool.hook.config?.shouldCallComputeDynamicSwapFee
 }

@@ -8,10 +8,11 @@ type Props = {
 export function DefaultPageContainer({
   children,
   noVerticalPadding,
+  bg,
   ...rest
 }: PropsWithChildren & ContainerProps & Props) {
   return (
-    <Box pt={noVerticalPadding ? '0px' : '72px'}>
+    <Box bg={bg} pt={noVerticalPadding ? '0px' : '72px'}>
       <Container
         maxW="maxContent"
         overflowX={{ base: 'hidden', md: 'visible' }}

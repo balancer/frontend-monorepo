@@ -95,6 +95,8 @@ export function VebalLockModal({
 
   const isUnlocking = lockMode === LockMode.Unlock && !extendExpired
 
+  const isSuccess = !!lockTxHash
+
   return (
     <Modal
       isCentered
@@ -103,6 +105,7 @@ export function VebalLockModal({
         onClose(!!lockTxHash)
       }}
       preserveScrollBarGap
+      trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!lockTxHash} />
@@ -193,9 +196,9 @@ export function VebalLockModal({
 
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
-          isSuccess={!!lockTxHash}
+          isSuccess={isSuccess}
           returnAction={() => {
-            onClose(!!lockTxHash)
+            onClose(isSuccess)
             router.push('/vebal/manage')
           }}
           returnLabel="Return to veBAL manage"

@@ -49,12 +49,14 @@ export function SwapPreviewModal({
     swapTxHash,
     urlTxHash,
     hasQuoteContext,
+    protocolVersion,
   } = useSwap()
 
   const swapReceipt = useSwapReceipt({
     txHash: swapTxHash,
     userAddress,
     chain: selectedChain,
+    protocolVersion,
   })
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
@@ -77,6 +79,8 @@ export function SwapPreviewModal({
 
   useOnUserAccountChanged(onClose)
 
+  const isSuccess = !!swapTxHash && !swapReceipt.isLoading
+
   return (
     <Modal
       finalFocusRef={finalFocusRef}
@@ -85,6 +89,7 @@ export function SwapPreviewModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
+      trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!swapTxHash && hasQuoteContext} />
@@ -106,7 +111,7 @@ export function SwapPreviewModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
-          isSuccess={!!swapTxHash && !swapReceipt.isLoading}
+          isSuccess={isSuccess}
           returnAction={onClose}
           returnLabel={isPoolSwapUrl ? 'Return to pool' : 'Swap again'}
           urlTxHash={urlTxHash}

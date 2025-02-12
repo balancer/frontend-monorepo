@@ -1,0 +1,35 @@
+fragment Hook on GqlHook {
+  address
+  config {
+    enableHookAdjustedAmounts
+    shouldCallAfterAddLiquidity
+    shouldCallAfterInitialize
+    shouldCallAfterRemoveLiquidity
+    shouldCallAfterSwap
+    shouldCallBeforeAddLiquidity
+    shouldCallBeforeInitialize
+    shouldCallBeforeRemoveLiquidity
+    shouldCallBeforeSwap
+    shouldCallComputeDynamicSwapFee
+  }
+  name
+  params {
+    ... on ExitFeeHookParams {
+      exitFeePercentage
+    }
+    ... on FeeTakingHookParams {
+      addLiquidityFeePercentage
+      removeLiquidityFeePercentage
+      swapFeePercentage
+    }
+    ... on StableSurgeHookParams {
+      maxSurgeFeePercentage
+      surgeThresholdPercentage
+    }
+  }
+  reviewData {
+    reviewFile
+    summary
+    warnings
+  }
+}

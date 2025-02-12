@@ -22,7 +22,6 @@ export function useChainSwitch(chainId: SupportedChainId) {
 
   return {
     shouldChangeNetwork,
-    NetworkSwitchButton,
     networkSwitchButtonProps,
   }
 }
@@ -34,7 +33,12 @@ export interface NetworkSwitchButtonProps {
   isPending: boolean
 }
 
-export function NetworkSwitchButton({ ...networkSwitchButtonProps }: NetworkSwitchButtonProps) {
+type Props = { chainId: SupportedChainId }
+export function NetworkSwitchButton({ chainId }: Props) {
+  const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
+
+  if (!shouldChangeNetwork) return
+
   return (
     <Button
       isLoading={networkSwitchButtonProps.isPending}

@@ -4,13 +4,19 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useCallback } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { SparklesIcon } from './MainAprTooltip'
 
 interface Props
   extends Omit<
     BaseAprTooltipProps,
-    'children' | 'totalBaseText' | 'totalBaseVeBalText' | 'maxVeBalText' | 'poolId' | 'poolType'
+    | 'children'
+    | 'totalBaseText'
+    | 'totalBaseVeBalText'
+    | 'maxVeBalText'
+    | 'poolId'
+    | 'poolType'
+    | 'chain'
   > {
   totalUsdValue: string
   weeklyYield: string
@@ -43,6 +49,7 @@ function AddLiquidityAprTooltip({ weeklyYield, totalUsdValue, pool, ...props }: 
   return (
     <BaseAprTooltip
       {...props}
+      chain={pool.chain}
       customPopoverContent={customPopoverContent}
       displayValueFormatter={displayValueFormatter}
       maxVeBalText="Total with max veBAL"

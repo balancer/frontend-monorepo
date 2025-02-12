@@ -1,7 +1,8 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client'
 
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { HumanAmount } from '@balancer/sdk'
 import {
   Card,
@@ -31,9 +32,7 @@ import { SwapDetails } from './SwapDetails'
 import { capitalize } from 'lodash'
 import { motion, easeOut } from 'framer-motion'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
-import { parseSwapError } from './swap.helpers'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { ConnectWallet } from '../web3/ConnectWallet'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
@@ -44,6 +43,8 @@ import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isPoolSwapAllowed } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
+import { ApiToken } from '../tokens/token.types'
+import { SwapSimulationError } from './SwapSimulationError'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -97,7 +98,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     setTimeout(() => setCopiedDeepLink(false), 2000)
   }
 
-  function handleTokenSelect(token: GqlToken) {
+  function handleTokenSelect(token: ApiToken) {
     if (!token) return
     if (tokenSelectKey === 'tokenIn') {
       setTokenIn(token.address as Address)
@@ -108,7 +109,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     }
   }
 
-  function handleTokenSelectForPoolSwap(token: GqlToken) {
+  function handleTokenSelectForPoolSwap(token: ApiToken) {
     const tokenAddress = token.address as Address
 
     if (
@@ -215,8 +216,8 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                   address={tokenIn.address}
                   chain={selectedChain}
                   onChange={e => setTokenInAmount(e.currentTarget.value as HumanAmount)}
+                  onToggleTokenClicked={() => openTokenSelectModal('tokenIn')}
                   ref={finalRefTokenIn}
-                  toggleTokenSelect={() => openTokenSelectModal('tokenIn')}
                   value={tokenIn.amount}
                 />
                 <Box border="red 1px solid" position="relative">
@@ -244,8 +245,8 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                     simulationQuery.isLoading || !simulationQuery.data || !tokenIn.amount
                   }
                   onChange={e => setTokenOutAmount(e.currentTarget.value as HumanAmount)}
+                  onToggleTokenClicked={() => openTokenSelectModal('tokenOut')}
                   ref={finalRefTokenOut}
-                  toggleTokenSelect={() => openTokenSelectModal('tokenOut')}
                   value={tokenOut.amount}
                 />
               </VStack>
@@ -266,9 +267,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
               )}
 
               {simulationQuery.isError ? (
-                <ErrorAlert title="Error fetching swap">
-                  {parseSwapError(simulationQuery.error?.message)}
-                </ErrorAlert>
+                <SwapSimulationError errorMessage={simulationQuery.error?.message} />
               ) : null}
             </VStack>
           </CardBody>

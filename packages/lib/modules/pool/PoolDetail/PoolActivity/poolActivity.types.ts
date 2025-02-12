@@ -1,8 +1,9 @@
-import { GqlPoolType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { BaseVariant, PoolVariant } from '../../pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 export type PoolActivityTokens = {
-  token?: GqlToken
+  token?: ApiToken
   amount: string
 }
 
@@ -12,6 +13,7 @@ export type PoolActivityMetaData = {
   tx: string
   usdValue: string
   action: 'swap' | 'add' | 'remove'
+  id: string
 }
 
 export type PoolActivityEl = [number, string, PoolActivityMetaData]
@@ -27,11 +29,6 @@ export enum SortingBy {
 export interface PoolActivityTypeTab {
   value: string
   label: string
-}
-
-export enum Sorting {
-  asc = 'asc',
-  desc = 'desc',
 }
 
 export function getPoolActivityTabsList({

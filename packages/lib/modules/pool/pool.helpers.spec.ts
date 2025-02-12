@@ -1,131 +1,134 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable max-len */
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
-import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { Pool } from './PoolProvider'
-import { getPoolActionableTokens } from './pool.helpers'
+import { Pool } from './pool.types'
+import { getApiPoolMock } from './__mocks__/api-mocks/api-mocks'
+import { v3SepoliaNestedBoostedMock } from './__mocks__/api-mocks/v3SepoliaNestedBoostedMock'
+import { auraBal, staBALv2Nested } from './__mocks__/pool-examples/nested'
+import { supportsNestedActions } from './actions/LiquidityActionHelpers'
+import {
+  getActionableTokenSymbol,
+  getPoolActionableTokens,
+  getStandardRootTokens,
+  isStandardOrUnderlyingRootToken,
+} from './pool-tokens.utils'
+import { sDAIWeighted } from './__mocks__/pool-examples/flat'
+import { getPoolAddBlockedReason, shouldBlockAddLiquidity } from './pool.helpers'
+import { usdcUsdtAaveBoosted } from './__mocks__/pool-examples/boosted'
 
-describe('getPoolTokens', () => {
-  it('when pool supports nested actions', () => {
-    const pool = {
-      id: '0x66888e4f35063ad8bb11506a6fde5024fb4f1db0000100000000000000000053',
-      address: '0x2086f52651837600180de173b09470f54ef74910',
-      chain: 'GNOSIS',
-      poolTokens: [
-        {
-          address: '0x2086f52651837600180de173b09470f54ef74910',
-          symbol: 'staBAL3',
-          hasNestedPool: true,
-          nestedPool: {
-            address: '0x2086f52651837600180de173b09470f54ef74910',
-            symbol: 'staBAL3',
-            tokens: [
-              {
-                address: '0x2086f52651837600180de173b09470f54ef74910',
-                symbol: 'staBAL3',
-              },
-              {
-                address: '0x4ecaba5870353805a9f068101a40e0f32ed605c6',
-                symbol: 'USDT',
-              },
-              {
-                address: '0xddafbb505ad214d7b80b1f830fccc89b60fb7a83',
-                symbol: 'USDC',
-              },
-              {
-                address: '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d',
-                symbol: 'WXDAI',
-              },
-            ],
-          },
-        },
-        {
-          address: '0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1',
-          symbol: 'WETH',
-          hasNestedPool: false,
-          nestedPool: null,
-        },
-        {
-          address: '0x8e5bbbb09ed1ebde8674cda39a0c169401db4252',
-          symbol: 'WBTC',
-          hasNestedPool: false,
-          nestedPool: null,
-        },
-      ],
-    } as unknown as Pool
-
-    const result = getPoolActionableTokens(pool, getTokenMock(pool))
+describe('getPoolActionableTokens', () => {
+  it('when nested pool supports nested actions (default behavior)', () => {
+    const pool = getApiPoolMock(staBALv2Nested)
+    const result = getPoolActionableTokens(pool)
     expect(result.map(t => t.symbol)).toEqual(['USDT', 'USDC', 'WXDAI', 'WETH', 'WBTC']) // contains 'staBAL3' nested tokens (USDT, USDC, WXDAI)
   })
 
-  it('when pool does not support nested actions', () => {
-    const pool = {
-      id: '0xdacf5fa19b1f720111609043ac67a9818262850c000000000000000000000635',
-      address: '0xdacf5fa19b1f720111609043ac67a9818262850c',
-      chain: 'MAINNET',
-      poolTokens: [
-        {
-          address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-          symbol: 'WETH',
-          hasNestedPool: false,
-          nestedPool: null,
-        },
-        {
-          address: '0xdacf5fa19b1f720111609043ac67a9818262850c',
-          symbol: 'osETH/wETH-BPT',
-          hasNestedPool: true,
-          nestedPool: {
-            address: '0xdacf5fa19b1f720111609043ac67a9818262850c',
-            symbol: 'osETH/wETH-BPT',
-            tokens: [
-              {
-                address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-                symbol: 'WETH',
-              },
-              {
-                address: '0xdacf5fa19b1f720111609043ac67a9818262850c',
-                symbol: 'osETH/wETH-BPT',
-              },
-              {
-                address: '0xf1c9acdc66974dfb6decb12aa385b9cd01190e38',
-                symbol: 'osETH',
-              },
-            ],
-          },
-        },
-        {
-          address: '0xf1c9acdc66974dfb6decb12aa385b9cd01190e38',
-          symbol: 'osETH',
-          hasNestedPool: false,
-          nestedPool: null,
-        },
-      ],
-    } as unknown as Pool
-
-    const result = getPoolActionableTokens(pool, getTokenMock(pool))
-    expect(result.map(t => t.symbol)).toEqual(['WETH', 'osETH']) // excludes 'osETH/wETH-BPT' bpt token
+  it('when nested pool does not support nested actions (poolId in disallowNestedActions)', () => {
+    const pool = getApiPoolMock(auraBal)
+    const result = getPoolActionableTokens(pool)
+    expect(result.map(t => t.symbol)).toEqual(['B-80BAL-20WETH', 'auraBAL']) // BPTs should be used to add
   })
 })
 
-function getTokenMock(pool: Pool) {
-  const getAllTokens = (pool: Pool): GqlToken[] => {
-    const tokens: GqlToken[] = []
+it('supportsNestedActions', () => {
+  const pool = {
+    id: '0x12345',
+  } as unknown as Pool
 
-    pool.poolTokens.forEach(poolToken => {
-      tokens.push({ address: poolToken.address, symbol: poolToken.symbol } as unknown as GqlToken)
+  expect(supportsNestedActions(pool)).toBeFalsy()
 
-      if (poolToken.hasNestedPool && poolToken.nestedPool) {
-        poolToken.nestedPool.tokens.forEach(nestedToken => {
-          tokens.push(nestedToken as unknown as GqlToken)
-        })
-      }
-    })
+  expect(
+    supportsNestedActions(
+      // WETH / osETH Phantom composable stable
+      fakeNestedPool('0xdacf5fa19b1f720111609043ac67a9818262850c000000000000000000000635')
+    )
+  ).toBeTruthy()
 
-    return tokens
-  }
-  // Returns a getToken mock function that looks for a token by address in the whole pool structure (including nested pools)
-  return function (address: string): GqlToken | undefined {
-    return getAllTokens(pool).find(token =>
-      isSameAddress(token.address, address)
-    ) as unknown as GqlToken
-  }
+  expect(
+    supportsNestedActions(
+      // Balancer 80 BAL 20 WETH auraBAL',
+      fakeNestedPool('0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249')
+    )
+  ).toBeFalsy()
+})
+
+function fakeNestedPool(poolId: string): Pool {
+  return {
+    id: poolId, // Balancer 80 BAL 20 WETH auraBAL',
+    poolTokens: [
+      {
+        hasNestedPool: true,
+      },
+    ],
+  } as unknown as Pool
 }
+
+describe('pool helper', async () => {
+  const pool = v3SepoliaNestedBoostedMock // Sepolia 50% WETH - 50% boosted USDC/USDT
+
+  const wethAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9' // root token
+  const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // underlying token
+  const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0' // underlying token
+
+  it('poolActionableTokens', async () => {
+    const poolActionableTokens = getPoolActionableTokens(pool)
+    expect(poolActionableTokens.map(t => t.address).sort()).toEqual([
+      wethAddress,
+      usdcSepoliaAddress,
+      usdtSepoliaAddress,
+    ])
+  })
+
+  it('isStandardRootToken', async () => {
+    expect(isStandardOrUnderlyingRootToken(pool, wethAddress)).toBeTruthy()
+    expect(isStandardOrUnderlyingRootToken(pool, usdcSepoliaAddress)).toBeFalsy()
+    expect(isStandardOrUnderlyingRootToken(pool, usdtSepoliaAddress)).toBeFalsy()
+  })
+
+  it('getStandardRootTokens', async () => {
+    const poolActionableTokens = getPoolActionableTokens(pool)
+
+    const standardRootTokens = getStandardRootTokens(pool, poolActionableTokens)
+    expect(standardRootTokens.map(t => t.address).sort()).toEqual([wethAddress]) // only WETH is a standard root token
+  })
+
+  it('getActionableTokenSymbol ', async () => {
+    expect(getActionableTokenSymbol(wethAddress, pool)).toEqual('WETH')
+  })
+})
+
+describe('shouldBlockAddLiquidity', () => {
+  it('v2 pool with ERC4626 token', () => {
+    const pool = getApiPoolMock(sDAIWeighted)
+
+    // Should block liquidity if one of the tokens is not allowed
+    pool.poolTokens[0].isAllowed = false
+    expect(shouldBlockAddLiquidity(pool)).toBe(true)
+    expect(getPoolAddBlockedReason(pool)).toBe('Token: wstETH is not allowed')
+
+    // Should not block liquidity if all tokens are allowed
+    pool.poolTokens[0].isAllowed = true
+    expect(shouldBlockAddLiquidity(pool)).toBe(false)
+  })
+
+  it('v3 pool with ERC4626 tokens', () => {
+    // Should not block liquidity if all tokenized vaults are reviewed and 'safe'
+    const pool1 = getApiPoolMock(usdcUsdtAaveBoosted)
+    expect(pool1.poolTokens[0].erc4626ReviewData?.summary).toBe('safe')
+    expect(pool1.poolTokens[1].erc4626ReviewData?.summary).toBe('safe')
+    expect(shouldBlockAddLiquidity(pool1)).toBe(false)
+
+    // Should block liquidity if the usdt tokenized vault is not reviewed
+    const pool2 = getApiPoolMock(usdcUsdtAaveBoosted)
+    pool2.poolTokens[0].erc4626ReviewData = null
+    expect(shouldBlockAddLiquidity(pool2)).toBe(true)
+    expect(getPoolAddBlockedReason(pool2)).toBe(
+      'Tokenized vault for token waEthUSDT was not yet reviewed'
+    )
+
+    // Should block liquidity if the usdt tokenized vault is not reviewed as 'safe'
+    const pool3 = getApiPoolMock(usdcUsdtAaveBoosted)
+    pool3.poolTokens[0].erc4626ReviewData!.summary = 'unsafe'
+    expect(shouldBlockAddLiquidity(pool3)).toBe(true)
+    expect(getPoolAddBlockedReason(pool3)).toBe('Tokenized vault for token waEthUSDT is not safe')
+  })
+})

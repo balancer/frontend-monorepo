@@ -3,13 +3,18 @@
 import {
   AddLiquidityBaseBuildCallInput,
   AddLiquidityBaseQueryOutput,
+  AddLiquidityKind,
+  AddLiquidityProportionalInput,
+  Address,
+  InputAmount,
   RemoveLiquidityBaseBuildCallInput,
   RemoveLiquidityQueryOutput,
   Slippage,
 } from '@balancer/sdk'
-import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
+import { Pool } from '../../../pool.types'
+import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
+import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 
 // For now only valid for unbalanced and proportional adds
 export function constructBaseBuildCallInput({
@@ -34,6 +39,20 @@ export function constructBaseBuildCallInput({
   //   amountIn => amountIn.amount > 0n
   // )
   return baseBuildCallParams
+}
+
+export function constructProportionalSdkAddInput(
+  chainId: number,
+  referenceAmount: InputAmount,
+  userAddress: Address
+): AddLiquidityProportionalInput {
+  return {
+    chainId,
+    rpcUrl: getRpcUrl(chainId),
+    referenceAmount,
+    kind: AddLiquidityKind.Proportional,
+    sender: getSender(userAddress),
+  }
 }
 
 // For now only valid for unbalanced removes

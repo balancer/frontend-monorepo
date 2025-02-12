@@ -5,8 +5,6 @@ query GetAppGlobalPollingData {
   }
   protocolMetricsChain {
     totalLiquidity
-    totalSwapVolume
-    totalSwapFee
     poolCount
     swapFee24h
     swapVolume24h
@@ -27,6 +25,7 @@ query GetTokens($chains: [GqlChain!]!) {
     priority
     tradable
     isErc4626
+    isBufferAllowed
     coingeckoId
   }
 }

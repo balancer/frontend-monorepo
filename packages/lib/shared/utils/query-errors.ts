@@ -1,4 +1,8 @@
 import { captureException } from '@sentry/nextjs'
+/*
+  Types are deprecated but we are waiting for a guide for @sentry/nextjs
+  Context: https://github.com/getsentry/sentry-javascript/discussions/15042
+*/
 import {
   Extras,
   ScopeContext,
@@ -7,6 +11,8 @@ import {
 } from '@sentry/types'
 import { SentryError, ensureError } from './errors'
 import {
+  isInvariantRatioPIErrorMessage,
+  isInvariantRatioSimulationErrorMessage,
   isNotEnoughGasErrorMessage,
   isPausedErrorMessage,
   isUserRejectedError,
@@ -354,6 +360,27 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
   }
 
   if (isPausedErrorMessage(message)) return true
+
+  /*
+    When hitting Invariant Ratio Above max error (only in v3 pools) we enforce proportional UX so we don't need sentry logs
+    Context: https://github.com/balancer/balancer-maths/blob/8aaf871acd9e138ba855f03be723cdfd630f4246/typescript/src/weighted/weightedMath.ts#L10
+    */
+  if (isInvariantRatioSimulationErrorMessage(message) || isInvariantRatioPIErrorMessage(message)) {
+    return true
+  }
+
+  /*
+    Error thrown from Metamask when:
+    1. The extension popup is ignored by the user
+    2. They close the RainbowKit "Connect a wallet" modal
+    3. They click "Connect wallet" and chose "Metamask" a second time
+
+    As the extension modal was still opened in the background, MM will throw this error, that can be safely ignored as the Rainbowkit modal clearly states:
+    "Confirm connection in the extension"
+   */
+  if (message.includes(`Request of type 'wallet_requestPermissions' already pending for origin`)) {
+    return true
+  }
 
   return false
 }

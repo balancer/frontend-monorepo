@@ -7,7 +7,7 @@ import {
   RemoveLiquidityRecoveryInput,
   Slippage,
 } from '@balancer/sdk'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import {
   QueryRemoveLiquidityInput,
   SdkBuildRemoveLiquidityInput,
@@ -16,7 +16,7 @@ import {
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { parseEther } from 'viem'
 import { BPT_DECIMALS } from '../../../pool.constants'
-import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
+import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 
 /*
@@ -40,12 +40,12 @@ export class RecoveryRemoveLiquidityHandler {
     userAddress,
   }: QueryRemoveLiquidityInput): Promise<SdkQueryRemoveLiquidityOutput> {
     const removeLiquidity = new RemoveLiquidity()
-    const removeLiquidityInput = this.constructSdkInput(bptIn, userAddress)
-
-    const sdkQueryOutput = await removeLiquidity.queryRemoveLiquidityRecovery(
-      removeLiquidityInput,
-      this.helpers.poolStateWithBalances
+    const removeLiquidityInput: RemoveLiquidityRecoveryInput = this.constructSdkInput(
+      bptIn,
+      userAddress
     )
+
+    const sdkQueryOutput = await removeLiquidity.query(removeLiquidityInput, this.helpers.poolState)
 
     return { amountsOut: sdkQueryOutput.amountsOut.filter(a => a.amount > 0n), sdkQueryOutput }
   }
@@ -92,7 +92,7 @@ export class RecoveryRemoveLiquidityHandler {
       rpcUrl: getRpcUrl(this.helpers.chainId),
       bptIn,
       kind: RemoveLiquidityKind.Recovery,
-      sender: userAddress,
+      sender: getSender(userAddress),
     }
   }
 }

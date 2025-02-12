@@ -25,9 +25,20 @@ const nextConfig = {
 
   // Safe App setup
   headers: manifestHeaders,
+  redirects() {
+    return [
+      {
+        source: '/discord',
+        destination: 'https://discord.gg/kbPnYJjvwZ',
+        permanent: false,
+      },
+    ]
+  },
 }
 
-module.exports = withSentryConfig(nextConfig, sentryOptions)
+// Avoid sentry setup in CI
+module.exports =
+  process.env.CI === 'true' ? nextConfig : withSentryConfig(nextConfig, sentryOptions)
 
 /**
  * Add specific CORS headers to the manifest.json file

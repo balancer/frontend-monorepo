@@ -399,19 +399,21 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           background: 'background.button.primary',
           backgroundPosition: '100% 0',
           backgroundSize: '100% 100%',
-          transition: '0.1s ease-in-out',
-          shadow: 'md',
+          transition: '0.3s ease-in-out',
+          boxShadow: '0 3px 20px hsla(245, 97%, 76%, 0.4)',
           _hover: {
             shadow: 'sm',
             backgroundSize: '120% 100%',
+            boxShadow: '0 3px 20px hsla(9, 85%, 71%, 0.4)',
           },
         },
         secondary: {
           color: 'font.dark',
           background: 'background.button.secondary',
-          shadow: 'md',
+          boxShadow: '0 3px 20px hsla(33, 58%, 76%, 0.4)',
           _hover: {
             shadow: 'sm',
+            boxShadow: '0 3px 20px hsla(32, 43%, 82%, 0.5)',
           },
         },
         tertiary: {
@@ -936,6 +938,53 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         softWarning: {
           bg: 'hsla(0, 0%, 100%, 0.5)',
           borderRadius: 'full',
+        },
+      },
+    },
+    Stepper: {
+      baseStyle: {
+        title: {
+          color: 'font.secondary',
+          "&[data-status='active']": {
+            color: 'font.primary',
+            _dark: {
+              color: 'font.primary',
+            },
+          },
+        },
+        indicator: {
+          color: 'font.secondary',
+          borderStyle: 'dashed',
+          "&[data-status='active']": {
+            background: 'transparent',
+            borderColor: 'font.primary',
+            color: 'font.primary',
+            borderStyle: 'solid',
+            _dark: {
+              backgroundColor: 'transparent',
+              borderColor: 'font.primary',
+              color: 'font.primary',
+            },
+          },
+          "&[data-status='complete']": {
+            background: 'transparent',
+            borderColor: 'green.500',
+            border: '2px solid',
+            color: 'green.500',
+            _dark: {
+              backgroundColor: 'transparent',
+              borderColor: 'green.500',
+              color: 'green.500',
+            },
+          },
+        },
+        separator: {
+          "&[data-status='complete']": {
+            background: 'green.500',
+            _dark: {
+              backgroundColor: 'green.500',
+            },
+          },
         },
       },
     },

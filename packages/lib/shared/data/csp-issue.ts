@@ -407,6 +407,7 @@ export const CSP_ISSUE_POOL_IDS: Record<GqlChain, PoolId[]> = {
   ],
   [GqlChain.Mode]: [],
   [GqlChain.Fraxtal]: [],
+  [GqlChain.Sonic]: [],
 }
 
 export const HIGH_RISK_POOL_IDS: string[] = [

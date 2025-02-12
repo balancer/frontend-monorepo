@@ -8,8 +8,7 @@ import { useCrossChainSync } from './CrossChainSyncProvider'
 
 export function CrossChainSyncRow({ network, current }: { network: GqlChain; current: boolean }) {
   const { l2VeBalBalances } = useCrossChainSync()
-  const { data } = useVebalUserData()
-  const myVebalBalance = data?.veBalGetUser.balance
+  const { myVebalBalance } = useVebalUserData()
 
   return (
     <VStack alignItems="unset" opacity={current ? 1 : 0.6}>
@@ -30,7 +29,7 @@ export function CrossChainSyncRow({ network, current }: { network: GqlChain; cur
         </VStack>
         <VStack alignItems="start">
           <Text>Post-sync balance</Text>
-          <Text fontWeight="bold">{Number(myVebalBalance).toFixed(4)}</Text>
+          <Text fontWeight="bold">{Number(myVebalBalance ?? 0).toFixed(4)}</Text>
         </VStack>
       </HStack>
     </VStack>

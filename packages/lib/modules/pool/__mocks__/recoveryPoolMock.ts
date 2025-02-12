@@ -16,6 +16,7 @@ export const recoveryPoolMock: GqlPoolElement = {
   type: 'WEIGHTED',
   chain: GqlChain.Mainnet,
   protocolVersion: 2,
+  poolTokens: [],
   dynamicData: {
     poolId: '0x4fd4687ec38220f805b6363c3c1e52d0df3b5023000200000000000000000473',
     swapEnabled: true,

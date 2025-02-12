@@ -23,8 +23,8 @@ test('calculates total USD for human amounts in', async () => {
   })
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { tokenAddress: balAddress, humanAmount: '100' },
-    { tokenAddress: wETHAddress, humanAmount: '50' },
+    { tokenAddress: balAddress, humanAmount: '100', symbol: 'BAL' },
+    { tokenAddress: wETHAddress, humanAmount: '50', symbol: 'WETH' },
   ]
 
   //Wait for price mocks to be loaded

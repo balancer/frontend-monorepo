@@ -118,7 +118,7 @@ export function useManagedErc20Transaction({
     if (!simulateQuery.data) return
 
     try {
-      await writeQuery.writeContractAsync(simulateQuery.data.request)
+      return await writeQuery.writeContractAsync(simulateQuery.data.request)
     } catch (e: unknown) {
       captureWagmiExecutionError(e, 'Error in ERC20 transaction execution', {
         chainId,

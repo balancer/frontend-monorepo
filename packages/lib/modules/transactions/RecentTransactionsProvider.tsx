@@ -2,7 +2,6 @@
 
 import { getChainId } from '@repo/lib/config/app.config'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
-import { getBlockExplorerTxUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { ensureError } from '@repo/lib/shared/utils/errors'
@@ -10,15 +9,19 @@ import { captureFatalError } from '@repo/lib/shared/utils/query-errors'
 import { secs } from '@repo/lib/shared/utils/time'
 import { AlertStatus, ToastId, useToast } from '@chakra-ui/react'
 import { keyBy, orderBy, take } from 'lodash'
-import React, { ReactNode, createContext, useCallback, useEffect, useState } from 'react'
+import { ReactNode, createContext, useCallback, useEffect, useState } from 'react'
 import { Hash } from 'viem'
 import { useConfig, usePublicClient } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 import { getWaitForReceiptTimeout } from '../web3/contracts/wagmi-helpers'
+import { TransactionStatus as SafeTxStatus } from '@safe-global/safe-apps-sdk'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 
 export type RecentTransactionsResponse = ReturnType<typeof _useRecentTransactions>
 export const TransactionsContext = createContext<RecentTransactionsResponse | null>(null)
 const NUM_RECENT_TRANSACTIONS = 20
+const RECENT_TRANSACTIONS_KEY = `${PROJECT_CONFIG.projectId}.recentTransactions`
 
 // confirming = transaction has not been mined
 // confirmed = transaction has been mined and is present on chain
@@ -33,6 +36,8 @@ export type TransactionStatus =
   | 'rejected'
   | 'timeout'
   | 'unknown'
+
+export type SafeTransactionStatus = SafeTxStatus
 
 export type TrackedTransaction = {
   hash: Hash
@@ -130,7 +135,7 @@ export function _useRecentTransactions() {
 
   // fetch recent transactions from local storage
   useEffect(() => {
-    const _recentTransactions = localStorage.getItem('balancer.recentTransactions')
+    const _recentTransactions = localStorage.getItem(RECENT_TRANSACTIONS_KEY)
     if (_recentTransactions) {
       const recentTransactions = JSON.parse(_recentTransactions)
       setTransactions(recentTransactions)
@@ -146,19 +151,23 @@ export function _useRecentTransactions() {
     // add a toast for this transaction, rather than emitting a new toast
     // on updates for the same transaction, we will modify the same toast
     // using updateTrackedTransaction.
-    const toastId = toast({
-      title: trackedTransaction.label,
-      description: trackedTransaction.description,
-      status: 'loading',
-      duration: trackedTransaction.duration ?? null,
-      isClosable: true,
-      render: ({ ...rest }) => (
-        <Toast
-          linkUrl={getBlockExplorerTxUrl(trackedTransaction.hash, trackedTransaction.chain)}
-          {...rest}
-        />
-      ),
-    })
+    let toastId: ToastId | undefined = undefined
+    // Edge case: if the transaction is confirmed we don't show the toast
+    if (trackedTransaction.status !== 'confirmed') {
+      toastId = toast({
+        title: trackedTransaction.label,
+        description: trackedTransaction.description,
+        status: 'loading',
+        duration: trackedTransaction.duration ?? null,
+        isClosable: true,
+        render: ({ ...rest }) => (
+          <Toast
+            linkUrl={getBlockExplorerTxUrl(trackedTransaction.hash, trackedTransaction.chain)}
+            {...rest}
+          />
+        ),
+      })
+    }
 
     if (!trackedTransaction.hash) {
       throw new Error('Attempted to add a transaction to the cache without a hash.')
@@ -187,10 +196,8 @@ export function _useRecentTransactions() {
     // attempt to find this transaction in the cache
     const cachedTransaction = transactions[hash]
 
-    // seems like we couldn't find this transaction in the cache
-    // TODO discuss behaviour around this
     if (!cachedTransaction) {
-      console.log({ hash, transactions })
+      console.log('Cannot update a cached tracked transaction', { hash, transactions })
       throw new Error('Cannot update a cached tracked transaction that does not exist.')
     }
 
@@ -236,10 +243,7 @@ export function _useRecentTransactions() {
   }
 
   function updateLocalStorage(customUpdate?: Record<string, TrackedTransaction>) {
-    localStorage.setItem(
-      'balancer.recentTransactions',
-      JSON.stringify(customUpdate || transactions)
-    )
+    localStorage.setItem(RECENT_TRANSACTIONS_KEY, JSON.stringify(customUpdate || transactions))
   }
 
   function addTrackedTransaction(trackedTransaction: TrackedTransaction) {

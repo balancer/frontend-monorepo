@@ -1,25 +1,25 @@
-'use client'
+import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
+import { LandingV3Layout } from './_lib/landing-v3/LandingV3Layout'
+import { GetProtocolStatsDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import { mins } from '@repo/lib/shared/utils/time'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
-import { ReactLenis } from '@studio-freight/react-lenis'
-import { Box } from '@chakra-ui/react'
-import { AnimatedSVG } from '@repo/lib/shared/components/marketing/AnimatedSVG'
-import { HomeHero } from '@repo/lib/shared/components/marketing/HomeHero'
-import { HomeBuilders } from '@repo/lib/shared/components/marketing/HomeBuilders'
-import { HomeProtocols } from '@repo/lib/shared/components/marketing/HomeProtocols'
-import { HomeActivity } from '@repo/lib/shared/components/marketing/HomeActivity'
+export default async function Home() {
+  const client = getApolloServerClient()
 
-export default function Home() {
-  return (
-    <ReactLenis options={{ lerp: 0.1, duration: 1.5 }} root>
-      <Box className="homepage" overflowX="hidden">
-        <HomeHero />
-        <Box height={{ base: '100px', md: '200px' }} position="relative" zIndex="-1">
-          <AnimatedSVG />
-        </Box>
-        <HomeBuilders />
-        <HomeProtocols />
-        <HomeActivity />
-      </Box>
-    </ReactLenis>
-  )
+  const variables = {
+    chains: PROJECT_CONFIG.supportedNetworks,
+  }
+
+  const { data: protocolData } = await client.query({
+    query: GetProtocolStatsDocument,
+    variables,
+    context: {
+      fetchOptions: {
+        next: { revalidate: mins(10).toSecs() },
+      },
+    },
+  })
+
+  return <LandingV3Layout protocolData={protocolData} />
 }

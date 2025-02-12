@@ -25,8 +25,8 @@ export function swapActionPastTense(action: SwapAction): string {
 
 const swapErrorPatterns = [
   {
-    pattern: /must contain at least 1 path/,
-    message: "There's not enough liquidity on Balancer connecting these tokens to route this swap.",
+    pattern: /WrapAmountTooSmall/,
+    message: 'Your input is too small, please try a bigger amount.',
   },
 ]
 

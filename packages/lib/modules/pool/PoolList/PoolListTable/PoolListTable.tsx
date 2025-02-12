@@ -4,10 +4,11 @@ import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTabl
 import { PoolListTableHeader } from './PoolListTableHeader'
 import { PoolListTableRow } from './PoolListTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
-import { PoolListItem } from '../../pool.types'
+import { POOL_TAG_MAP, PoolListItem } from '../../pool.types'
 import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolList } from '../PoolListProvider'
+import { useCallback, useMemo } from 'react'
 
 interface Props {
   pools: PoolListItem[]
@@ -23,17 +24,38 @@ export function PoolListTable({ pools, count, loading }: Props) {
   const paginationProps = getPaginationProps(count || 0, pagination, setPagination)
   const showPagination = !!pools.length && !!count && count > pagination.pageSize
 
-  const numberColumnWidth = userAddress ? '150px' : '175px'
+  const numberColumnWidth = userAddress ? '120px' : '175px'
   const furthestLeftColWidth = '120px'
 
-  const rowProps = {
-    px: { base: 'sm', sm: '0' },
-    gridTemplateColumns: `32px minmax(320px, 1fr) 100px ${
-      userAddress ? furthestLeftColWidth : ''
-    } ${userAddress ? numberColumnWidth : furthestLeftColWidth} ${numberColumnWidth} 200px`,
-    alignItems: 'center',
-    gap: { base: 'xxs', xl: 'lg' },
-  }
+  const rowProps = useMemo(
+    () => ({
+      px: { base: 'sm', sm: '0' },
+      gridTemplateColumns: `32px minmax(320px, 1fr) 180px ${
+        userAddress ? furthestLeftColWidth : ''
+      } ${userAddress ? numberColumnWidth : furthestLeftColWidth} ${numberColumnWidth} 200px`,
+      alignItems: 'center',
+      gap: { base: 'xxs', xl: 'lg' },
+    }),
+    [userAddress, furthestLeftColWidth, numberColumnWidth]
+  )
+
+  const needsMarginForPoints = pools.some(pool =>
+    pool.tags?.some(tag => tag && POOL_TAG_MAP.POINTS.includes(tag))
+  )
+
+  const renderTableRow = useCallback(
+    ({ item, index }: { item: PoolListItem; index: number }) => (
+      <PoolListTableRow
+        keyValue={index}
+        needsMarginForPoints={needsMarginForPoints}
+        pool={item}
+        {...rowProps}
+      />
+    ),
+    [needsMarginForPoints, rowProps]
+  )
+
+  const renderTableHeader = useCallback(() => <PoolListTableHeader {...rowProps} />, [rowProps])
 
   if (!isMounted) return <Skeleton height="500px" w="full" />
 
@@ -43,17 +65,18 @@ export function PoolListTable({ pools, count, loading }: Props) {
       left={{ base: '-4px', sm: '0' }}
       p={{ base: '0', sm: '0' }}
       position="relative"
+      // fixing right padding for horizontal scroll on mobile
+      pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
       w={{ base: '100vw', lg: 'full' }}
     >
       <PaginatedTable
+        getRowId={item => item.id}
         items={pools}
         loading={loading}
         noItemsFoundLabel="No pools found"
         paginationProps={paginationProps}
-        renderTableHeader={() => <PoolListTableHeader {...rowProps} />}
-        renderTableRow={(item: PoolListItem, index) => {
-          return <PoolListTableRow keyValue={index} pool={item} {...rowProps} />
-        }}
+        renderTableHeader={renderTableHeader}
+        renderTableRow={renderTableRow}
         showPagination={showPagination}
       />
     </Card>

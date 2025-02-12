@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import { ChartSizeValues } from './PoolWeightChart'
 import { useThemeColorMode } from '@repo/lib/shared/services/chakra/useThemeColorMode'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { Pool } from '../../PoolProvider'
+import { Pool } from '../../pool.types'
 import { calcTotalStakedBalanceUsd, getUserWalletBalanceUsd } from '../../user-balance.helpers'
 
 const smallSize: ChartSizeValues = {
@@ -18,7 +18,7 @@ const smallSize: ChartSizeValues = {
   haloTop: '40%',
   haloLeft: '55px',
   haloWidth: '40px',
-  haloHeigth: '40px',
+  haloHeight: '40px',
 }
 
 const normalSize: ChartSizeValues = {
@@ -28,7 +28,7 @@ const normalSize: ChartSizeValues = {
   haloTop: '49%',
   haloLeft: '95px',
   haloWidth: '60px',
-  haloHeigth: '60px',
+  haloHeight: '60px',
 }
 
 export default function StakedBalanceDistributionChart({

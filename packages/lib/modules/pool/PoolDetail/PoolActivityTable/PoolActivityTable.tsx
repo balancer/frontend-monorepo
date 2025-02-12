@@ -7,7 +7,6 @@ import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPa
 import { Box, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolActivity } from '../PoolActivity/usePoolActivity'
-import { PoolActivityEl } from '../PoolActivity/poolActivity.types'
 import { Pagination } from '@repo/lib/shared/components/pagination/Pagination'
 
 export function PoolActivityTable() {
@@ -15,8 +14,7 @@ export function PoolActivityTable() {
   const { sortedPoolEvents, pagination, setPagination, isLoading, count, showPagination } =
     usePoolActivity()
   const paginationProps = {
-    ...getPaginationProps(count, pagination, setPagination, false),
-    isSmall: true,
+    ...getPaginationProps(count, pagination, setPagination, true),
   }
 
   const rowProps = {
@@ -31,24 +29,20 @@ export function PoolActivityTable() {
 
   if (!isMounted) return <Skeleton height="500px" w="full" />
 
-  const items = sortedPoolEvents.map(item => ({
-    ...item,
-    id: item[0],
-  }))
-
   return (
     <>
       <Box className="hide-scrollbar" overflowX="auto" w="full">
         <Box minWidth="800px">
           <PaginatedTable
             alignItems="flex-start"
-            items={items}
+            getRowId={([, , poolActivityMetaData]) => poolActivityMetaData.id}
+            items={sortedPoolEvents}
             loading={isLoading}
             noItemsFoundLabel="No pool events found"
             paginationProps={paginationProps}
             position="relative"
             renderTableHeader={() => <PoolActivityTableHeader {...rowProps} />}
-            renderTableRow={(item: PoolActivityEl, index) => {
+            renderTableRow={({ item, index }) => {
               return <PoolActivityTableRow event={item} keyValue={index} {...rowProps} />
             }}
             showPagination={false}

@@ -1,4 +1,4 @@
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GetTokensQuery, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, HumanAmount } from '@balancer/sdk'
 
 export type TokenBase = Pick<GqlToken, 'address' | 'name' | 'symbol' | 'decimals' | 'chainId'>
@@ -16,9 +16,15 @@ export interface TokenAmountHumanReadable {
   amount: string
 }
 
+export type HumanTokenAmount = {
+  humanAmount: HumanAmount | ''
+  tokenAddress: Address
+}
+
 export type HumanTokenAmountWithAddress = {
   humanAmount: HumanAmount | ''
   tokenAddress: Address
+  symbol: string
 }
 
 export interface TokenAmountScaled {
@@ -37,4 +43,9 @@ export type BalanceMap = Map<string, AmountHumanReadable>
 
 export interface AmountHumanReadableMap {
   [address: string]: AmountHumanReadable
+}
+
+export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & {
+  underlyingToken?: ApiToken
+  weight?: string
 }

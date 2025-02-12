@@ -1,31 +1,52 @@
 'use client'
-import { HStack, Heading, VStack } from '@chakra-ui/react'
+import { HStack, Heading, VStack, Text } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { boostedPoolExamples } from '@repo/lib/modules/pool/__mocks__/pool-examples/boosted'
+import { flatPoolExamples } from '@repo/lib/modules/pool/__mocks__/pool-examples/flat'
+import { nestedPoolExamples } from '@repo/lib/modules/pool/__mocks__/pool-examples/nested'
+import { getPoolExampleUri } from '@repo/lib/modules/pool/__mocks__/pool-examples/pool-example-helpers'
+import { PoolExample } from '@repo/lib/modules/pool/__mocks__/pool-examples/pool-examples.types'
 
 export default function DebugPools() {
   return (
     <FadeInOnView>
-      <HStack align="start" mx="auto" spacing="24px" width="80%">
-        <VStack align="start" margin="lg" padding="lg">
-          <Heading size="md">Debug V3 pools</Heading>
-          <Link as={NextLink} href="/pools/sepolia/v3/0xce701deac1b660da4ee05f6f3f7cbafddb6a79fe">
+      <HStack align="start" margin="xs" mx="auto" spacing="24px" width="90%">
+        <VStack align="start" margin="xs" padding="0" width="40%">
+          <Heading size="md">Flat pool examples</Heading>
+          <PoolExampleLinks poolExamples={flatPoolExamples} />
+
+          <Heading size="md">Boosted examples</Heading>
+          <PoolExampleLinks poolExamples={boostedPoolExamples} />
+
+          <Heading size="md">Nested pool examples</Heading>
+          <PoolExampleLinks poolExamples={nestedPoolExamples} />
+        </VStack>
+        <VStack align="start" margin="xs" padding="0">
+          <Heading size="md">V3 reference pools</Heading>
+          <Link as={NextLink} href="/pools/sepolia/v3/0xe69b70a86a4e1fd33da95693a1ae12be1c26c8ea">
             Sepolia WEIGHTED (Balancer 50 BAL 50 DAI-aave)
           </Link>
-          <Link as={NextLink} href="/pools/sepolia/v3/0x75F49D54978d08E4E76a873dA6c78E8f6b2901C2">
+          <Link as={NextLink} href="/pools/sepolia/v3/0xa8c18ce5e987d7d82ccaccb93223e9bb5df4a3c0">
             Sepolia WEIGHTED with Proportional joins (Balancer 50 BAL 50 WETH -ExitFee Hook)
           </Link>
-          <Link as={NextLink} href="/pools/sepolia/v3/0x6dbdd7a36d900083a5b86a55583d90021e9f33e8">
+          <Link as={NextLink} href="/pools/sepolia/v3/0xd63db0b88dca565633fb8d70a70b9b8093d34a7e">
             Sepolia reference BOOSTED pool (Balancer USDC/USDT)
           </Link>
-          <Link as={NextLink} href="/pools/sepolia/v3/0x0270daf4ee12ccb1abc8aa365054eecb1b7f4f6b">
+          <Link as={NextLink} href="/pools/sepolia/v3/0xc9233cc69435591b193b50f702ac31e404a08b10">
             Sepolia reference NESTED pool (Balancer 50 WETH 50 USD)
+          </Link>
+          <Link as={NextLink} href="/pools/sepolia/v3/0x42de4fa875126fdbaf590b2fc3802adbca58acee">
+            Sepolia reference STABLE NESTED pool (Balancer DAI/USDC/USDT)
+          </Link>
+          <Link as={NextLink} href="/pools/sepolia/v3/0xe69b70a86a4e1fd33da95693a1ae12be1c26c8ea">
+            Sepolia reference STABLE NON-NESTED pool (Balancer 50 BAL 50 DAI)
           </Link>
         </VStack>
 
-        <VStack align="start" margin="lg" padding="lg">
-          <Heading size="md">Debug V2 pools</Heading>
+        <VStack align="start" margin="xs" padding="0">
+          <Heading size="md">V2 reference pools</Heading>
           <Link
             as={NextLink}
             href="/pools/ethereum/v2/0x68e3266c9c8bbd44ad9dca5afbfe629022aee9fe000200000000000000000512"
@@ -112,7 +133,7 @@ export default function DebugPools() {
           </Link>
         </VStack>
 
-        <VStack align="start" margin="lg" padding="lg">
+        <VStack align="start" margin="xs" padding="0">
           <Heading size="md">Debug CoW AMM (V1) pools</Heading>
           <Link as={NextLink} href="/pools/gnosis/cow/0x079d2094e16210c42457438195042898a3cff72d">
             Gnosis CoW AMM
@@ -121,4 +142,17 @@ export default function DebugPools() {
       </HStack>
     </FadeInOnView>
   )
+}
+
+function PoolExampleLinks({ poolExamples }: { poolExamples: PoolExample[] }) {
+  return poolExamples.map(pool => (
+    <Link as={NextLink} href={getPoolExampleUri(pool)} key={pool.poolId} margin="sm">
+      <Text align="start" w="full">
+        <Text color="font.highlight" fontSize="md" fontStyle="italic">
+          {pool.name}
+        </Text>
+        <Text fontSize="sm">{pool.description}</Text>
+      </Text>
+    </Link>
+  ))
 }

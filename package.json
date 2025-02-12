@@ -7,17 +7,23 @@
     "dev": "pnpm run dev:bal",
     "dev:bal": "turbo dev --filter frontend-v3",
     "dev:beets": "turbo dev --filter beets-frontend-v3",
+    "dev:turbopack": "turbo dev:turbopack --filter frontend-v3",
+    "dev:beets:turbopack": "turbo dev:turbopack --filter beets-frontend-v3",
     "graphql:gen": "turbo graphql:gen",
     "lint:all": "turbo run lint format --continue",
     "lint:all:fix": "turbo run lint:fix format:fix --continue --force",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
-    "format": "prettier '*.*(md|json|yaml|ts|js|tsx)' --check --cache --cache-location='node_modules/.cache/.prettiercache'",
-    "format:fix": "prettier '*.*(md|json|yaml|ts|js|tsx)' --write --cache --cache-location='node_modules/.cache/.prettiercache' --log-level=warn",
-    "stylelint": "stylelint '**/*.css'",
-    "stylelint:fix": "pnpm run stylelint -- --fix",
+    "prettier": "turbo prettier",
+    "prettier:fix": "turbo prettier:fix",
+    "stylelint": "turbo stylelint",
+    "stylelint:fix": "turbo stylelint:fix",
+    "test:e2e": "turbo test:e2e --ui=stream --log-order=stream --",
+    "test:e2e:ui": "turbo test:e2e:ui --ui=stream --log-order=stream --",
     "test:integration": "turbo test:integration --ui=stream --log-order=stream --",
+    "test:integration:watch": "turbo test:integration:watch --ui=stream --log-order=stream --",
     "test:unit": "turbo test:unit --ui=stream --log-order=stream --",
+    "test:unit:watch": "turbo test:unit:watch --ui=stream --log-order=stream --",
     "typecheck": "turbo typecheck",
     "prepare": "husky"
   },
@@ -26,15 +32,16 @@
     "husky": "^9.1.2",
     "lint-staged": "^13.2.3",
     "prettier": "^3.2.5",
-    "stylelint": "^16.10.0",
+    "sharp": "0.33.5",
+    "stylelint": "^16.13.2",
     "stylelint-config-standard": "^36.0.1",
-    "stylelint-prettier": "^5.0.2",
-    "turbo": "^2.1.2",
-    "typescript": "^5.4.5"
+    "stylelint-prettier": "^5.0.3",
+    "turbo": "2.3.3",
+    "typescript": "5.7.2"
   },
-  "packageManager": "pnpm@9.0.6",
+  "packageManager": "pnpm@9.8.0",
   "engines": {
-    "node": ">=18",
+    "node": ">=20.x",
     "pnpm": ">=8"
   },
   "pnpm": {
@@ -44,6 +51,9 @@
         "react": "^18.0.0",
         "react-dom": "^18.0.0"
       }
+    },
+    "patchedDependencies": {
+      "@rainbow-me/rainbowkit": "patches/@rainbow-me__rainbowkit.patch"
     }
   }
 }

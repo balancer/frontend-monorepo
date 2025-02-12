@@ -2,26 +2,23 @@
 'use client'
 
 import { createContext, PropsWithChildren, useEffect } from 'react'
-import { GetPoolsDocument, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GetPoolsDocument,
+  GqlChain,
+  GqlPoolType,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@apollo/client'
 import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
-import { PoolListDisplayType } from '../pool.types'
 
 export function _usePoolList({
   fixedPoolTypes,
-  displayType = PoolListDisplayType.TokenPills,
-  hideProtocolVersion = [],
-  hidePoolTypes = [],
-  hidePoolTags = [],
+  fixedChains,
 }: {
   fixedPoolTypes?: GqlPoolType[]
-  displayType?: PoolListDisplayType
-  hideProtocolVersion?: string[]
-  hidePoolTypes?: GqlPoolType[]
-  hidePoolTags?: string[]
+  fixedChains?: GqlChain[]
 } = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress } = useUserAccount()
@@ -33,6 +30,7 @@ export function _usePoolList({
     where: {
       ...queryVariables.where,
       poolTypeIn: fixedPoolTypes || queryVariables.where.poolTypeIn,
+      chainIn: fixedChains || queryVariables.where.chainIn,
     },
   }
 
@@ -64,10 +62,6 @@ export function _usePoolList({
     networkStatus,
     isFixedPoolType,
     refetch,
-    displayType,
-    hideProtocolVersion,
-    hidePoolTypes,
-    hidePoolTags,
   }
 }
 
@@ -75,24 +69,15 @@ export const PoolListContext = createContext<ReturnType<typeof _usePoolList> | n
 
 export function PoolListProvider({
   fixedPoolTypes,
-  displayType,
-  hideProtocolVersion,
-  hidePoolTypes,
-  hidePoolTags,
+  fixedChains,
   children,
 }: PropsWithChildren<{
   fixedPoolTypes?: GqlPoolType[]
-  displayType: PoolListDisplayType
-  hideProtocolVersion: string[]
-  hidePoolTypes: GqlPoolType[]
-  hidePoolTags: string[]
+  fixedChains?: GqlChain[]
 }>) {
   const hook = _usePoolList({
     fixedPoolTypes,
-    displayType,
-    hideProtocolVersion,
-    hidePoolTypes,
-    hidePoolTags,
+    fixedChains,
   })
 
   return <PoolListContext.Provider value={hook}>{children}</PoolListContext.Provider>

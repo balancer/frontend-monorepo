@@ -1,29 +1,16 @@
 import { PoolListProvider } from '@repo/lib/modules/pool/PoolList/PoolListProvider'
 import { PoolListLayout } from './PoolListLayout'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { PoolListDisplayType } from '../pool.types'
+import { GqlPoolType, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export async function PoolList({
   fixedPoolTypes,
-  displayType = PoolListDisplayType.TokenPills,
-  hideProtocolVersion = [],
-  hidePoolTypes = [],
-  hidePoolTags = [],
+  fixedChains,
 }: {
-  displayType?: PoolListDisplayType
   fixedPoolTypes?: GqlPoolType[]
-  hideProtocolVersion?: string[]
-  hidePoolTypes?: GqlPoolType[]
-  hidePoolTags?: string[]
+  fixedChains?: GqlChain[]
 }) {
   return (
-    <PoolListProvider
-      displayType={displayType}
-      fixedPoolTypes={fixedPoolTypes}
-      hidePoolTags={hidePoolTags}
-      hidePoolTypes={hidePoolTypes}
-      hideProtocolVersion={hideProtocolVersion}
-    >
+    <PoolListProvider fixedChains={fixedChains} fixedPoolTypes={fixedPoolTypes}>
       <PoolListLayout />
     </PoolListProvider>
   )

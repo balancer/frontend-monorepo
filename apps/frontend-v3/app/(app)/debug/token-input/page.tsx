@@ -3,7 +3,7 @@
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TokenInput } from '@repo/lib/modules/tokens/TokenInput/TokenInput'
 import { Button, Card, Heading, Text, VStack, useDisclosure } from '@chakra-ui/react'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useState } from 'react'
 import { TokenSelectModal } from '@repo/lib/modules/tokens/TokenSelectModal/TokenSelectModal'
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
@@ -11,16 +11,17 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { daiAddress } from '@repo/lib/debug-helpers'
 import { TokenInputsValidationProvider } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '@repo/lib/modules/price-impact/PriceImpactProvider'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 export default function TokenInputPage() {
   const [currentValue, setCurrentValue] = useState('')
   const { getToken, getTokensByChain } = useTokens()
   const tokenSelectDisclosure = useDisclosure()
-  const [token, setToken] = useState<GqlToken>(getToken(daiAddress, 1) as GqlToken)
+  const [token, setToken] = useState<ApiToken>(getToken(daiAddress, 1) as ApiToken)
 
   const tokens = getTokensByChain(1)
 
-  function handleTokenSelect(token: GqlToken) {
+  function handleTokenSelect(token: ApiToken) {
     setToken(token)
   }
 

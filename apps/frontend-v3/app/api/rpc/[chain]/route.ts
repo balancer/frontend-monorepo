@@ -19,10 +19,13 @@ const chainToRpcMap: Record<GqlChain, string | undefined> = {
   [GqlChain.Avalanche]: dRpcUrl('avalanche'),
   [GqlChain.Fantom]: dRpcUrl('fantom'),
   [GqlChain.Sepolia]: dRpcUrl('sepolia'),
+  // DEBUG:
+  // [GqlChain.Sepolia]: 'https://eth-sepolia.g.alchemy.com/v2/<KEY>',
   [GqlChain.Fraxtal]: dRpcUrl('fraxtal'),
   [GqlChain.Gnosis]: dRpcUrl('gnosis'),
   [GqlChain.Mode]: dRpcUrl('mode'),
   [GqlChain.Zkevm]: dRpcUrl('polygon-zkevm'),
+  [GqlChain.Sonic]: dRpcUrl('sonic'),
 }
 
 function getRpcUrl(chain: string) {

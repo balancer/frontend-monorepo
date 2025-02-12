@@ -3,7 +3,7 @@
 
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { HumanAmount } from '@balancer/sdk'
+import { HumanAmount, isSameAddress } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { Address, Hash } from 'viem'
 import { usePool } from '../../PoolProvider'
@@ -16,6 +16,7 @@ import {
   injectNativeAsset,
   replaceWrappedWithNativeAsset,
   requiresProportionalInput,
+  supportsNestedActions,
 } from '../LiquidityActionHelpers'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -28,29 +29,46 @@ import { useTotalUsdValue } from '@repo/lib/modules/tokens/useTotalUsdValue'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
-import { getPoolActionableTokens, isV3WithNestedActionsPool } from '../../pool.helpers'
+import { supportsWethIsEth } from '../../pool.helpers'
+import { getPoolActionableTokens } from '../../pool-tokens.utils'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
+import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
 
 export function _useAddLiquidity(urlTxHash?: Hash) {
   const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>([])
+  // only used by Proportional handlers that require a referenceAmount
+  const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
   const [totalUSDValue, setTotalUSDValue] = useState('0')
-  const [proportionalSlippage, setProportionalSlippage] = useState<string>('0')
-
   const { pool, refetch: refetchPool, isLoading } = usePool()
-  const { getToken, getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } =
-    useTokens()
+
+  /* wantsProportional is true when:
+    - the pool requires proportional input
+    - the user selected the proportional tab
+  */
+  const [wantsProportional, setWantsProportional] = useState(requiresProportionalInput(pool))
+  const [proportionalSlippage, setProportionalSlippage] = useState<string>(
+    getDefaultProportionalSlippagePercentage(pool)
+  )
+
+  const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
+
   const { isConnected } = useUserAccount()
   const { hasValidationErrors } = useTokenInputsValidation()
   const { slippage: userSlippage } = useUserSettings()
 
-  const handler = useMemo(() => selectAddLiquidityHandler(pool), [pool.id, isLoading])
+  const handler = useMemo(
+    () => selectAddLiquidityHandler(pool, wantsProportional),
+    [pool.id, isLoading, wantsProportional]
+  )
 
   /**
    * Helper functions & variables
@@ -60,9 +78,8 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const chain = pool.chain
   const nativeAsset = getNativeAssetToken(chain)
   const wNativeAsset = getWrappedNativeAssetToken(chain)
-  const isForcedProportionalAdd = requiresProportionalInput(pool)
-  const slippage = isForcedProportionalAdd ? proportionalSlippage : userSlippage
-  const tokens = getPoolActionableTokens(pool, getToken)
+  const slippage = wantsProportional ? proportionalSlippage : userSlippage
+  const tokens = getPoolActionableTokens(pool)
 
   function setInitialHumanAmountsIn() {
     const amountsIn = tokens.map(
@@ -75,15 +92,30 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     setHumanAmountsIn(amountsIn)
   }
 
-  function setHumanAmountIn(tokenAddress: Address, humanAmount: HumanAmount | '') {
+  function setHumanAmountIn(token: ApiToken, humanAmount: HumanAmount | '') {
+    const tokenAddress = token.address as Address
     const amountsIn = filterHumanAmountsIn(humanAmountsIn, tokenAddress, chain)
     setHumanAmountsIn([
       ...amountsIn,
       {
         tokenAddress,
         humanAmount,
+        symbol: token.symbol,
       },
     ])
+  }
+
+  function clearAmountsIn(changedAmount?: HumanTokenAmountWithAddress) {
+    setHumanAmountsIn(
+      humanAmountsIn.map(({ tokenAddress, symbol }) => {
+        // Keeps user inputs like '0' or '0.' instead of replacing them with ''
+        if (changedAmount && isSameAddress(changedAmount.tokenAddress, tokenAddress)) {
+          return changedAmount
+        }
+
+        return { tokenAddress, humanAmount: '', symbol }
+      })
+    )
   }
 
   const tokensWithNativeAsset = replaceWrappedWithNativeAsset(tokens, nativeAsset)
@@ -98,18 +130,24 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     }
   }, [humanAmountsIn, isLoadingTokenPrices])
 
+  const isMinimumDepositMet = useIsMinimumDepositMet({ humanAmountsIn, totalUSDValue })
+
   /**
    * Queries
    */
+  const enabled = !urlTxHash && isMinimumDepositMet
+
   const simulationQuery = useAddLiquiditySimulationQuery({
     handler,
     humanAmountsIn,
-    enabled: !urlTxHash,
+    enabled,
+    referenceAmountAddress,
   })
+
   const priceImpactQuery = useAddLiquidityPriceImpactQuery({
     handler,
     humanAmountsIn,
-    enabled: !urlTxHash,
+    enabled,
   })
 
   /**
@@ -132,7 +170,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const hasQuoteContext = !!simulationQuery.data
 
   async function refetchQuote() {
-    if (isForcedProportionalAdd) {
+    if (wantsProportional) {
       /*
       This is the only edge-case where the SDK needs pool onchain data from the frontend
       (calculateProportionalAmounts uses pool.dynamicData.totalShares in its parameters)
@@ -151,9 +189,13 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const disabledConditions: [boolean, string][] = [
     [!isConnected, LABELS.walletNotConnected],
     [areEmptyAmounts(humanAmountsIn), 'You must specify one or more token amounts'],
+    [!isMinimumDepositMet, 'Minimum deposit not met for a Boosted Pool'],
     [hasValidationErrors, 'Errors in token inputs'],
     [needsToAcceptHighPI, 'Accept high price impact first'],
-    [isUnbalancedAddErrorMessage(priceImpactQuery.error), 'Unbalanced join'],
+    [
+      isUnbalancedAddErrorMessage(priceImpactQuery.error) && !supportsNestedActions(pool),
+      'Unbalanced join',
+    ],
     [simulationQuery.isLoading, 'Fetching quote...'],
     [simulationQuery.isError, 'Error fetching quote'],
     [priceImpactQuery.isLoading, 'Fetching price impact...'],
@@ -174,7 +216,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   return {
     transactionSteps,
     humanAmountsIn,
-    tokens: wethIsEth && !isV3WithNestedActionsPool(pool) ? tokensWithNativeAsset : tokens,
+    tokens: wethIsEth && supportsWethIsEth(pool) ? tokensWithNativeAsset : tokens,
     validTokens,
     totalUSDValue,
     simulationQuery,
@@ -194,12 +236,15 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     hasQuoteContext,
     addLiquidityTxSuccess,
     slippage,
-    proportionalSlippage,
-    isForcedProportionalAdd,
+    wantsProportional,
+    referenceAmountAddress,
+    setWantsProportional,
     setProportionalSlippage,
     refetchQuote,
     setHumanAmountIn,
     setHumanAmountsIn,
+    clearAmountsIn,
+    setReferenceAmountAddress,
     setNeedsToAcceptHighPI,
     setAcceptPoolRisks,
     setWethIsEth,

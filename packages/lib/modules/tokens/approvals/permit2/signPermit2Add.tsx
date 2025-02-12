@@ -1,4 +1,4 @@
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { get24HoursFromNowInSecs } from '@repo/lib/shared/utils/time'
 import {
@@ -15,6 +15,7 @@ import { constructBaseBuildCallInput } from '@repo/lib/modules/pool/actions/add-
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isWrappedNativeAsset } from '../../token.helpers'
 import { isBoosted, isV3WithNestedActionsPool } from '@repo/lib/modules/pool/pool.helpers'
+import { maximizeAmountsInForPermit2 } from './permit2.helpers'
 
 type SignPermit2AddParams = {
   sdkClient?: PublicWalletClient
@@ -57,7 +58,7 @@ async function sign({
 
   const baseInput = constructBaseBuildCallInput({
     humanAmountsIn,
-    slippagePercent: slippagePercent,
+    slippagePercent,
     sdkQueryOutput,
     pool,
   })
@@ -85,27 +86,12 @@ async function sign({
     client: sdkClient,
     owner: account,
     nonces: filteredAmountsIn.map(a => nonces[a.token.address]),
-    amountsIn: maximizePositiveAmounts(filteredAmountsIn),
+    amountsIn: maximizeAmountsInForPermit2(filteredAmountsIn),
     // Permit2 allowance expires in 24H
     expirations: filteredAmountsIn.map(() => get24HoursFromNowInSecs()),
   })
 
   return signature
-}
-
-// Instead of MaxAllowanceTransferAmount(MaxUint160) we use MaxUint159 to avoid overflow issues
-const MaxUint159 = BigInt('0x7fffffffffffffffffffffffffffffffffffffff')
-const MaxAllowance = MaxUint159
-
-// Maximize amounts for permit2 approval for amounts > 0n
-function maximizePositiveAmounts(amountsIn: TokenAmount[]): TokenAmount[] {
-  return amountsIn.map(
-    item =>
-      ({
-        ...item,
-        amount: item.amount > 0n ? MaxAllowance : item.amount,
-      }) as TokenAmount
-  )
 }
 
 function filterWrappedNativeAsset({

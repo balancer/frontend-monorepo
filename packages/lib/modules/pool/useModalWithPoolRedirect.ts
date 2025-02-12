@@ -1,5 +1,5 @@
 import { useDisclosure } from '@chakra-ui/react'
-import { Pool } from './PoolProvider'
+import { Pool } from './pool.types'
 import { usePoolRedirect } from './pool.hooks'
 
 export function useModalWithPoolRedirect(pool: Pool, txHash: string | undefined) {

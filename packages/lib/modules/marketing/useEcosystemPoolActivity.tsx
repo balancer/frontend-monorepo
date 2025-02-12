@@ -4,30 +4,26 @@
 import * as echarts from 'echarts/core'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { format } from 'date-fns'
-import {
-  GqlChain,
-  GqlPoolEventType,
-  GqlToken,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolEventType } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
 import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-
-import {
-  getBlockExplorerAddressUrl,
-  getBlockExplorerTxUrl,
-} from '@repo/lib/shared/hooks/useBlockExplorer'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { usePoolEvents } from '../pool/usePoolEvents'
-import { supportedNetworks } from '../web3/ChainConfig'
 import { getChainShortName } from '@repo/lib/config/app.config'
+import { ApiToken } from '../tokens/token.types'
+import {
+  getBlockExplorerAddressUrl,
+  getBlockExplorerTxUrl,
+} from '@repo/lib/shared/utils/blockExplorer'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 type ChartInfoTokens = {
-  token?: GqlToken
+  token?: ApiToken
   amount: string
 }
 
@@ -93,6 +89,10 @@ export const gradientMap: Record<GqlChain, { from: string; to: string }> = {
     from: '#D1B3FF',
     to: '#A384FF',
   },
+  [GqlChain.Sonic]: {
+    from: '#D1B3FF',
+    to: '#A384FF',
+  },
 }
 
 function getDefaultChainMeta() {
@@ -109,6 +109,7 @@ function getDefaultChainMeta() {
     [GqlChain.Fraxtal]: [],
     [GqlChain.Mode]: [],
     [GqlChain.Sepolia]: [],
+    [GqlChain.Sonic]: [],
   }
 }
 
@@ -318,8 +319,9 @@ export function useEcosystemPoolActivityChart() {
   const { toCurrency } = useCurrency()
   const [activeTab, setActiveTab] = useState<PoolActivityChartTypeTab>(tabsList[0])
   const [activeNetwork, setActiveNetwork] = useState<GqlChain | 'all'>('all')
-
   const theme = useChakraTheme()
+
+  const { supportedNetworks } = PROJECT_CONFIG
 
   const { loading, data: response } = usePoolEvents({
     first: 500,

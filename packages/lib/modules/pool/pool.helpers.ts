@@ -1,22 +1,19 @@
 /* eslint-disable max-len */
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
-import { getBlockExplorerAddressUrl } from '@repo/lib/shared/hooks/useBlockExplorer'
 import {
-  GetPoolQuery,
   GqlChain,
-  GqlNestedPool,
   GqlPoolBase,
   GqlPoolNestingType,
   GqlPoolStakingGauge,
   GqlPoolStakingOtherGauge,
   GqlPoolTokenDetail,
   GqlPoolType,
-  GqlToken,
+  HookFragment,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { Numberish, bn } from '@repo/lib/shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
-import { isEmpty, isNil, uniqBy } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 import { Address, getAddress, parseUnits, zeroAddress } from 'viem'
 import { BPT_DECIMALS } from './pool.constants'
 import { isNotMainnet } from '../chains/chain.utils'
@@ -26,10 +23,10 @@ import { getUserTotalBalanceInt } from './user-balance.helpers'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
-import { getLeafTokens, PoolToken } from '../tokens/token.helpers'
-import { GetTokenFn } from '../tokens/TokensProvider'
 import { vaultV3Abi } from '@balancer/sdk'
-import { TokenCore, PoolListItem } from './pool.types'
+import { PoolListItem, Pool, PoolCore } from './pool.types'
+import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
+import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
 
 /**
  * METHODS
@@ -67,7 +64,7 @@ export function isFx(poolType: GqlPoolType | string): boolean {
 }
 
 export function isBoosted(pool: PoolListItem | Pool) {
-  return pool.hasErc4626 || pool.hasNestedErc4626
+  return isV3Pool(pool) && pool.hasAnyAllowedBuffer // this means that the pool has at least one ERC4626 token with allowed buffer
 }
 
 export function isGyro(poolType: GqlPoolType) {
@@ -123,6 +120,12 @@ export function isVebalPool(poolId: string): boolean {
   )
 }
 
+export function isMaBeetsPool(poolId: string): boolean {
+  return (
+    poolId.toLowerCase() === '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005'
+  )
+}
+
 export function isCowAmmPool(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.CowAmm
 }
@@ -138,18 +141,6 @@ export function noInitLiquidity(pool: GqlPoolBase): boolean {
 }
 export function preMintedBptIndex(pool: GqlPoolBase): number | void {
   return allPoolTokens(pool).findIndex(token => isSameAddress(token.address, pool.address))
-}
-
-export function calcBptPrice(totalLiquidity: string, totalShares: string): string {
-  return bn(totalLiquidity).div(totalShares).toString()
-}
-
-export function calcBptPriceFor(pool: GetPoolQuery['pool']): string {
-  return calcBptPrice(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares)
-}
-
-export function bptUsdValue(pool: GetPoolQuery['pool'], bptAmount: Numberish): string {
-  return bn(bptAmount).times(calcBptPriceFor(pool)).toString()
 }
 
 export function createdAfterTimestamp(pool: GqlPoolBase): boolean {
@@ -175,22 +166,32 @@ export function calcUserShareOfPool(pool: Pool) {
   return calcShareOfPool(pool, userBalance)
 }
 
-export function calcShareOfPool(pool: Pool, rawBalance: bigint) {
-  return bn(rawBalance).div(bn(parseUnits(pool.dynamicData.totalShares, BPT_DECIMALS)))
+export function calcFutureUserShareOfPool(pool: Pool, bptAmount: BigNumber) {
+  const userBalance = getUserTotalBalanceInt(pool)
+  const poolBalance = calcPoolBalance(pool)
+
+  const newUserBalance = bn(userBalance).plus(bn(bptAmount))
+  const newPoolBalance = poolBalance.plus(bn(bptAmount))
+  return bn(newUserBalance).div(newPoolBalance)
 }
 
-type Pool = GetPoolQuery['pool']
-export function usePoolHelpers(pool: Pool, chain: GqlChain) {
+export function calcShareOfPool(pool: Pool, rawBalance: bigint) {
+  const poolBalance = calcPoolBalance(pool)
+  return bn(rawBalance).div(bn(poolBalance))
+}
+
+export function calcPoolBalance(pool: Pool) {
+  return bn(parseUnits(pool.dynamicData.totalShares, BPT_DECIMALS))
+}
+
+export function getPoolHelpers(pool: Pool, chain: GqlChain) {
   const gaugeExplorerLink = getBlockExplorerAddressUrl(
     pool?.staking?.gauge?.gaugeAddress as Address,
     chain
   )
   const poolExplorerLink = getBlockExplorerAddressUrl(pool.address as Address, chain)
-
   const hasGaugeAddress = !!pool?.staking?.gauge?.gaugeAddress
-
   const gaugeAddress = pool?.staking?.gauge?.gaugeAddress || ''
-
   const chainId = getChainId(pool.chain)
 
   return {
@@ -203,9 +204,14 @@ export function usePoolHelpers(pool: Pool, chain: GqlChain) {
 }
 
 export function hasNestedPools(pool: Pool) {
+  if (!pool.poolTokens) return false
   // The following discriminator is needed because not all pools in GqlPoolQuery do have nestingType property
   // and the real TS discriminator is __typename which we don't want to use
-  return 'nestingType' in pool && pool.nestingType !== GqlPoolNestingType.NoNesting
+  return (
+    ('nestingType' in pool && pool.nestingType !== GqlPoolNestingType.NoNesting) ||
+    // stable pools don't have nestingType but they can have nested pools in v3
+    pool.poolTokens.some(token => token.hasNestedPool)
+  )
 }
 
 export function isNotSupported(pool: Pool) {
@@ -251,31 +257,66 @@ export function allClaimableGaugeAddressesFor(pool: ClaimablePool) {
 }
 
 export function hasReviewedRateProvider(token: GqlPoolTokenDetail): boolean {
-  return (
-    !!token.priceRateProvider &&
-    !!token.priceRateProviderData &&
-    token.priceRateProviderData.reviewed
-  )
+  return !!token.priceRateProvider && !!token.priceRateProviderData
 }
+
+export function hasRateProvider(token: GqlPoolTokenDetail): boolean {
+  const hasNoPriceRateProvider =
+    isNil(token.priceRateProvider) || // if null, we consider rate provider as zero address
+    token.priceRateProvider === zeroAddress ||
+    token.priceRateProvider === token.nestedPool?.address
+
+  return !hasNoPriceRateProvider && !isNil(token.priceRateProviderData)
+}
+
+export function hasReviewedHook(hook: HookFragment): boolean {
+  return !!hook.reviewData
+}
+
+export function hasHooks(pool: Pool): boolean {
+  const nestedHooks = pool.poolTokens
+    .filter(token => token.hasNestedPool)
+    .map(token => token.nestedPool?.hook)
+
+  return !![pool.hook, ...nestedHooks].filter(Boolean).length
+}
+
+export function hasReviewedErc4626(token: GqlPoolTokenDetail): boolean {
+  return token.isErc4626 && !!token.erc4626ReviewData
+}
+
+// Emergency flag to block adds for all V3 pools
+const shouldBlockV3PoolAdds = false
 
 /**
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
 export function shouldBlockAddLiquidity(pool: Pool) {
+  if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
+
   // avoid blocking Sepolia pools
   if (pool.chain === GqlChain.Sepolia) return false
 
-  const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
+  // block add liquidity for custom scenarios eg. maBEETS
+  if (isMaBeetsPool(pool.id)) return true
 
   // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
   if (isLBP(pool.type) || pool.dynamicData.isPaused || pool.dynamicData.isInRecoveryMode) {
     return true
   }
 
+  if (pool.hook && (!hasReviewedHook(pool.hook) || pool.hook?.reviewData?.summary === 'unsafe')) {
+    return true
+  }
+
+  const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
+
   return poolTokens.some(token => {
     // if token is not allowed - we should block adding liquidity
-    if (!token.isAllowed && !isCowAmmPool(pool.type)) return true
+    if (isV2Pool(pool) && !token.isAllowed) {
+      return true
+    }
 
     // if rateProvider is null - we consider it as zero address and not block adding liquidity
     if (isNil(token.priceRateProvider) || token.priceRateProvider === zeroAddress) return false
@@ -283,13 +324,79 @@ export function shouldBlockAddLiquidity(pool: Pool) {
     // if rateProvider is the nested pool address - we consider it as safe
     if (token.priceRateProvider === token.nestedPool?.address) return false
 
-    // if price rate provider is set but is not reviewed - we should block adding liquidity
-    if (!hasReviewedRateProvider(token)) return true
+    // if price rate provider is set but is not reviewed or summary is not safe - we should block adding liquidity
+    if (!hasReviewedRateProvider(token) || token.priceRateProviderData?.summary !== 'safe') {
+      return true
+    }
 
-    if (token.priceRateProviderData?.summary !== 'safe') return true
+    /* Only for actual v3 boosted pools (ERC4626 with allowed buffer):
+      if ERC4626 is not reviewed or summary is not safe - we should block adding liquidity
+    */
+    if (
+      isV3Pool(pool) &&
+      pool.hasAnyAllowedBuffer &&
+      token.isErc4626 &&
+      token.isBufferAllowed &&
+      (!hasReviewedErc4626(token) || token.erc4626ReviewData?.summary !== 'safe')
+    ) {
+      return true
+    }
 
     return false
   })
+}
+
+/**
+ *  TODO: improve the implementation to display all the blocking reasons instead of just the first one
+ */
+export function getPoolAddBlockedReason(pool: Pool): string {
+  const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
+
+  if (isV3Pool(pool) && shouldBlockV3PoolAdds) return 'Adds are blocked for all V3 pools'
+
+  if (isLBP(pool.type)) return 'LBP pool'
+  if (pool.dynamicData.isPaused) return 'Paused pool'
+  if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
+
+  // reason for blocking in custom scenarios eg. maBEETS
+  if (isMaBeetsPool(pool.id)) {
+    return 'Please manage your liquidity on the maBEETS page.'
+  }
+
+  if (pool.hook && !hasReviewedHook(pool.hook)) {
+    return 'Unreviewed hook'
+  }
+
+  if (pool.hook?.reviewData?.summary === 'unsafe') {
+    return 'Unsafe hook'
+  }
+
+  for (const token of poolTokens) {
+    // if token is not allowed - we should block adding liquidity
+    if (isV2Pool(pool) && !token.isAllowed) {
+      return `Token: ${token.symbol} is not allowed` // TODO: Add instructions and link to get it approved
+    }
+
+    // if price rate provider is set but is not reviewed - we should block adding liquidity
+    if (!hasReviewedRateProvider(token)) {
+      return `Rate provider for token ${token.symbol} was not yet reviewed` // TODO: Add instructions and link to get it reviewed
+    }
+
+    if (token.priceRateProviderData?.summary !== 'safe') {
+      return `Rate provider for token ${token.symbol} is not safe` // TODO: Add instructions and link to get it reviewed
+    }
+
+    if (isV3Pool(pool) && pool.hasAnyAllowedBuffer && token.isErc4626 && token.isBufferAllowed) {
+      if (!hasReviewedErc4626(token)) {
+        return `Tokenized vault for token ${token.symbol} was not yet reviewed`
+      }
+
+      if (token.erc4626ReviewData?.summary !== 'safe') {
+        return `Tokenized vault for token ${token.symbol} is not safe`
+      }
+    }
+  }
+  return ''
 }
 
 export function isAffectedByCspIssue(pool: Pool) {
@@ -305,7 +412,7 @@ function isAffectedBy(pool: Pool, poolIssue: PoolIssue) {
 export function getVaultConfig(pool: Pool) {
   const networkConfig = getNetworkConfig(pool.chain)
   const vaultAddress =
-    pool.protocolVersion === 3 && pool.chain === GqlChain.Sepolia
+    pool.protocolVersion === 3
       ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         networkConfig.contracts.balancer.vaultV3!
       : networkConfig.contracts.balancer.vaultV2
@@ -315,20 +422,30 @@ export function getVaultConfig(pool: Pool) {
   return { vaultAddress, balancerVaultAbi }
 }
 
-export function isV1Pool(pool: Pool): boolean {
+type PoolWithProtocolVersion = Pick<PoolCore, 'protocolVersion'>
+
+export function isV1Pool(pool: PoolWithProtocolVersion): boolean {
   return pool.protocolVersion === 1
 }
 
-export function isV2Pool(pool: Pool): boolean {
+export function isV2Pool(pool: PoolWithProtocolVersion): boolean {
   return pool.protocolVersion === 2
 }
 
-export function isV3Pool(pool: Pool): boolean {
+export function isV3Pool(pool: PoolWithProtocolVersion): boolean {
   return pool.protocolVersion === 3
 }
 
 export function isV3WithNestedActionsPool(pool: Pool): boolean {
   return supportsNestedActions(pool) && isV3Pool(pool)
+}
+
+export function supportsWethIsEth(pool: Pool): boolean {
+  /*
+    Currently all SDK handlers support wethIsEth
+    and Cow AMM pools is the only scenario that doesn't support wethIsEth
+  */
+  return !isCowAmmPool(pool.type) && !pool.hasErc4626 && !pool.hasNestedErc4626
 }
 
 export function requiresPermit2Approval(pool: Pool): boolean {
@@ -339,94 +456,8 @@ export function isUnbalancedLiquidityDisabled(pool: Pool): boolean {
   return !!pool.liquidityManagement?.disableUnbalancedLiquidity
 }
 
-export function getRateProviderWarnings(warnings: string[]) {
+export function getWarnings(warnings: string[]) {
   return warnings.filter(warning => !isEmpty(warning))
-}
-
-/*
-  Depending on the pool type, iterates pool.poolTokens and returns the list of GqlTokens that can be used in the pool's actions (add/remove/swap).
-
-  For instance:
-    If the pool supports nested actions, returns the leaf tokens.
-    If the pool is boosted, returns the underlying tokens instead of the ERC4626 tokens.
-*/
-export function getPoolActionableTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
-  type PoolToken = Pool['poolTokens'][0]
-  function toGqlTokens(tokens: PoolToken[] | TokenCore[]): GqlToken[] {
-    return tokens
-      .filter(token => !isSameAddress(token.address, pool.address)) // Exclude the BPT pool token itself
-      .map(token => getToken(token.address, pool.chain))
-      .filter((token): token is GqlToken => token !== undefined)
-  }
-
-  // TODO add exception for composable pools where we can allow adding
-  // liquidity with nested tokens
-  if (supportsNestedActions(pool)) {
-    return toGqlTokens(getLeafTokens(pool.poolTokens))
-  }
-
-  if (isBoosted(pool)) {
-    return getBoostedGqlTokens(pool, getToken)
-  }
-
-  return toGqlTokens(pool.poolTokens)
-}
-
-export function getNonBptTokens(pool: Pool) {
-  return pool.poolTokens.filter(token => !token.nestedPool)
-}
-
-export function getNestedBptTokens(poolTokens: PoolToken[]) {
-  return poolTokens.filter(token => token.nestedPool)
-}
-
-// Returns the parent BPT token whose nested tokens include the given child token address
-export function getNestedBptParentToken(poolTokens: PoolToken[], childTokenAddress: Address) {
-  const nestedBptToken = getNestedBptTokens(poolTokens).find(token =>
-    token.nestedPool?.tokens.some(nestedToken =>
-      isSameAddress(nestedToken.address, childTokenAddress)
-    )
-  )
-  if (!nestedBptToken) {
-    throw new Error(
-      `Provided nestedTokenAddress ${childTokenAddress} does not belong to any underlying token amongst the nested pool/s (${getNestedBptTokens(
-        poolTokens
-      )
-        .map(t => t.symbol)
-        .join(' ,')})`
-    )
-  }
-
-  return nestedBptToken
-}
-
-// Returns true if the given token address belongs to a top level token that is not a nestedBpt
-export function isStandardRootToken(pool?: Pool, tokenAddress?: Address): boolean {
-  if (!pool || !tokenAddress) return true
-  const token = pool.poolTokens.find(token => isSameAddress(token.address, tokenAddress))
-  return token?.hasNestedPool === false
-}
-
-// Returns the top level tokens that is not nestedBpt
-export function getStandardRootTokens(pool: Pool, poolActionableTokens?: GqlToken[]): GqlToken[] {
-  if (!poolActionableTokens) return []
-  return poolActionableTokens.filter(token => isStandardRootToken(pool, token.address as Address))
-}
-
-// Returns the child tokens (children of a parent nestedBpt)
-export function getChildTokens(pool: Pool, poolActionableTokens?: GqlToken[]): GqlToken[] {
-  if (!poolActionableTokens) return []
-  return poolActionableTokens.filter(token => !isStandardRootToken(pool, token.address as Address))
-}
-
-export function toGqlTokens(
-  poolTokens: PoolToken[],
-  getToken: GetTokenFn,
-  chain: GqlChain
-): GqlToken[] {
-  return poolTokens
-    .map(token => getToken(token.address, chain))
-    .filter((token): token is GqlToken => token !== undefined)
 }
 
 /*
@@ -438,77 +469,11 @@ export function toGqlTokens(
     1. From a nested child token to another nested child token
 */
 export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address): boolean {
-  if (isStandardRootToken(pool, token1) && isStandardRootToken(pool, token2)) return false
-  if (!isStandardRootToken(pool, token1) && !isStandardRootToken(pool, token2)) return false
+  if (
+    !isStandardOrUnderlyingRootToken(pool, token1) &&
+    !isStandardOrUnderlyingRootToken(pool, token2)
+  ) {
+    return false
+  }
   return true
-}
-
-/*
-  Returns all the tokens in the structure of the given pool:
-  top level tokens + children nested tokens + ERC4626 underlying tokens.
- */
-export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
-  const extractUnderlyingTokens = (token: PoolToken): TokenCore[] => {
-    if (token.isErc4626 && token.underlyingToken) {
-      return [{ ...token.underlyingToken, index: token.index } as TokenCore]
-    }
-    return []
-  }
-
-  const extractNestedUnderlyingTokens = (nestedPool?: GqlNestedPool): TokenCore[] => {
-    if (!nestedPool) return []
-    return nestedPool.tokens.flatMap((nestedToken, index) =>
-      nestedToken.isErc4626 && nestedToken.underlyingToken
-        ? ([nestedToken, { ...nestedToken.underlyingToken, index }] as TokenCore[]) // Is index is not relevant in this case?
-        : [nestedToken as TokenCore]
-    )
-  }
-
-  const underlyingTokens: TokenCore[] = pool.poolTokens.flatMap(extractUnderlyingTokens)
-
-  const nestedParentTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
-    token.nestedPool ? token : []
-  )
-
-  const nestedChildrenTokens: TokenCore[] = pool.poolTokens.flatMap(token =>
-    token.nestedPool ? extractNestedUnderlyingTokens(token.nestedPool as GqlNestedPool) : []
-  )
-
-  const standardTopLevelTokens: PoolToken[] = pool.poolTokens.flatMap(token =>
-    !token.hasNestedPool && !token.isErc4626 ? token : []
-  )
-
-  const allTokens = underlyingTokens.concat(
-    toTokenCores(nestedParentTokens),
-    nestedChildrenTokens,
-    toTokenCores(standardTopLevelTokens)
-  )
-
-  // Remove duplicates as phantom BPTs can be both in the top level and inside nested pools
-  return uniqBy(allTokens, 'address')
-}
-
-// Returns top level standard tokens + Erc4626 underlying tokens
-export function getBoostedGqlTokens(pool: Pool, getToken: GetTokenFn): GqlToken[] {
-  const underlyingTokens = pool.poolTokens
-    .flatMap(token =>
-      token.isErc4626
-        ? [getToken(token?.underlyingToken?.address as Address, pool.chain)]
-        : toGqlTokens([token], getToken, pool.chain)
-    )
-    .filter((token): token is GqlToken => token !== undefined)
-  return underlyingTokens
-}
-
-function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
-  return poolTokens.map(
-    t =>
-      ({
-        address: t.address as Address,
-        name: t.name,
-        symbol: t.symbol,
-        decimals: t.decimals,
-        index: t.index,
-      }) as TokenCore
-  )
 }

@@ -16,7 +16,7 @@ import {
   forwardRef,
   useTheme,
 } from '@chakra-ui/react'
-import { GqlChain, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '../TokensProvider'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInput } from './useTokenInput'
@@ -30,11 +30,14 @@ import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvid
 import { useEffect, useState } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
+import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
+import { ApiToken } from '../token.types'
+import { useUserAccount } from '../../web3/UserAccountProvider'
 
 type TokenInputSelectorProps = {
-  token: GqlToken | undefined
+  token: ApiToken | undefined
   weight?: string
-  toggleTokenSelect?: () => void
+  onToggleTokenClicked?: () => void
 }
 
 type TokenConfigProps = {
@@ -43,21 +46,21 @@ type TokenConfigProps = {
   showIcon: boolean
 }
 
-function TokenInputSelector({ token, weight, toggleTokenSelect }: TokenInputSelectorProps) {
+function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputSelectorProps) {
   const [tokenConfig, setTokenConfig] = useState<TokenConfigProps | undefined>(undefined)
 
   useEffect(() => {
     if (token) {
       setTokenConfig({ label: token.symbol, variant: 'tertiary', showIcon: true })
-    } else if (toggleTokenSelect) {
+    } else if (onToggleTokenClicked) {
       setTokenConfig({ label: 'Select token', variant: 'secondary', showIcon: false })
     }
   }, [token])
 
   return tokenConfig ? (
     <Button
-      cursor={toggleTokenSelect ? 'pointer' : 'default'}
-      onClick={toggleTokenSelect}
+      cursor={onToggleTokenClicked ? 'pointer' : 'default'}
+      onClick={() => onToggleTokenClicked?.()}
       variant={tokenConfig.variant}
     >
       {tokenConfig && tokenConfig.showIcon && (
@@ -71,7 +74,7 @@ function TokenInputSelector({ token, weight, toggleTokenSelect }: TokenInputSele
           {fNum('weight', weight)}
         </Text>
       )}
-      {toggleTokenSelect && (
+      {onToggleTokenClicked && (
         <Box ml="sm">
           <ChevronDown size={16} />
         </Box>
@@ -83,7 +86,7 @@ function TokenInputSelector({ token, weight, toggleTokenSelect }: TokenInputSele
 }
 
 type TokenInputFooterProps = {
-  token: GqlToken | undefined
+  token: ApiToken | undefined
   value?: string
   updateValue: (value: string) => void
   hasPriceImpact?: boolean
@@ -139,9 +142,7 @@ function TokenInputFooter({
           variant="secondary"
         >
           {toCurrency(usdValue, { abbreviated: false })}
-          {showPriceImpact &&
-            priceImpactLevel !== 'unknown' &&
-            ` (-${fNum('priceImpact', priceImpact)})`}
+          {showPriceImpact && priceImpactLevel !== 'unknown' && getPriceImpactLabel(priceImpact)}
         </Text>
       )}
       {isBalancesLoading || !isMounted ? (
@@ -173,13 +174,14 @@ function TokenInputFooter({
 
 type Props = {
   address?: string
+  apiToken?: ApiToken
   chain?: GqlChain | number
   weight?: string
   value?: string
   hideFooter?: boolean
   boxProps?: BoxProps
   onChange?: (event: { currentTarget: { value: string } }) => void
-  toggleTokenSelect?: () => void
+  onToggleTokenClicked?: () => void
   hasPriceImpact?: boolean
   isLoadingPriceImpact?: boolean
   disableBalanceValidation?: boolean
@@ -189,12 +191,13 @@ export const TokenInput = forwardRef(
   (
     {
       address,
+      apiToken,
       chain,
       weight,
       value,
       boxProps,
       onChange,
-      toggleTokenSelect,
+      onToggleTokenClicked,
       hideFooter = false,
       hasPriceImpact = false,
       isLoadingPriceImpact = false,
@@ -203,13 +206,16 @@ export const TokenInput = forwardRef(
     }: InputProps & Props,
     ref
   ) => {
+    const { userAddress } = useUserAccount()
     const { isBalancesLoading } = useTokenBalances()
 
     const [inputTitle, setInputTitle] = useState<string>('')
 
     const { colors } = useTheme()
     const { getToken } = useTokens()
-    const token = address && chain ? getToken(address, chain) : undefined
+    const tokenFromAddress = address && chain ? getToken(address, chain) : undefined
+
+    const token = apiToken || tokenFromAddress
     const { hasValidationError } = useTokenInputsValidation()
 
     const { handleOnChange, updateValue, validateInput } = useTokenInput({
@@ -218,7 +224,11 @@ export const TokenInput = forwardRef(
       disableBalanceValidation,
     })
 
-    const tokenInputSelector = TokenInputSelector({ token, weight, toggleTokenSelect })
+    const tokenInputSelector = TokenInputSelector({
+      token,
+      weight,
+      onToggleTokenClicked,
+    })
     const footer = hideFooter
       ? undefined
       : TokenInputFooter({ token, value, updateValue, hasPriceImpact, isLoadingPriceImpact })
@@ -230,7 +240,7 @@ export const TokenInput = forwardRef(
         validateInput(value || '')
         setInputTitle(value || '')
       }
-    }, [value, token?.address, isBalancesLoading])
+    }, [value, token?.address, isBalancesLoading, userAddress])
 
     return (
       <Box
@@ -263,9 +273,14 @@ export const TokenInput = forwardRef(
                 boxShadow="none"
                 fontSize="3xl"
                 fontWeight="medium"
+                isDisabled={!token}
                 min={0}
                 onChange={handleOnChange}
                 onKeyDown={blockInvalidNumberInput}
+                onWheel={e => {
+                  // Avoid changing the input value when scrolling
+                  return e.currentTarget.blur()
+                }}
                 outline="none"
                 p="0"
                 placeholder="0.00"
@@ -276,15 +291,17 @@ export const TokenInput = forwardRef(
                 value={value}
                 {...inputProps}
               />
-              <Box
-                bgGradient="linear(to-r, transparent, background.level0 70%)"
-                h="full"
-                position="absolute"
-                right={0}
-                top={0}
-                w="8"
-                zIndex={9999}
-              />
+              {token && (
+                <Box
+                  bgGradient="linear(to-r, transparent, background.level0 70%)"
+                  h="full"
+                  position="absolute"
+                  right={0}
+                  top={0}
+                  w="8"
+                  zIndex={9999}
+                />
+              )}
             </Box>
 
             {tokenInputSelector && (

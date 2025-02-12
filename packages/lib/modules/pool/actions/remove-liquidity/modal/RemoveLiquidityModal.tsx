@@ -19,6 +19,7 @@ import { RemoveLiquiditySummary } from './RemoveLiquiditySummary'
 import { useRemoveLiquidityReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { ProtocolVersion } from '../../../pool.types'
 
 type Props = {
   isOpen: boolean
@@ -46,6 +47,7 @@ export function RemoveLiquidityModal({
     chain,
     txHash: removeLiquidityTxHash,
     userAddress,
+    protocolVersion: pool.protocolVersion as ProtocolVersion,
   })
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
@@ -66,6 +68,8 @@ export function RemoveLiquidityModal({
 
   useOnUserAccountChanged(redirectToPoolPage)
 
+  const isSuccess = !!removeLiquidityTxHash && !receiptProps.isLoading
+
   return (
     <Modal
       finalFocusRef={finalFocusRef}
@@ -74,6 +78,7 @@ export function RemoveLiquidityModal({
       isOpen={isOpen}
       onClose={onClose}
       preserveScrollBarGap
+      trapFocus={!isSuccess}
       {...rest}
     >
       <SuccessOverlay startAnimation={!!removeLiquidityTxHash && hasQuoteContext} />
@@ -97,7 +102,7 @@ export function RemoveLiquidityModal({
         </ModalBody>
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
-          isSuccess={!!removeLiquidityTxHash && !receiptProps.isLoading}
+          isSuccess={isSuccess}
           returnAction={redirectToPoolPage}
           returnLabel="Return to pool"
           urlTxHash={urlTxHash}

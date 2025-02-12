@@ -1,6 +1,6 @@
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { isV3Pool } from '../pool/pool.helpers'
-import { Pool } from '../pool/PoolProvider'
+import { Pool } from '../pool/pool.types'
 import { useUserSettings } from '../user/settings/UserSettingsProvider'
 import { useUserAccount } from '../web3/UserAccountProvider'
 

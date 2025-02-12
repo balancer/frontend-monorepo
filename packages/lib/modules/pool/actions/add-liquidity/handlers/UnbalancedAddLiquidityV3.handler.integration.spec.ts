@@ -3,7 +3,7 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { UnbalancedAddLiquidityV3Handler } from './UnbalancedAddLiquidityV3.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
 
@@ -18,7 +18,7 @@ describe.skip('When adding unbalanced liquidity for a V3 pool', async () => {
   const handler = selectAddLiquidityHandler(v3Pool) as UnbalancedAddLiquidityV3Handler
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: balAddress },
+    { humanAmount: '0.1', tokenAddress: balAddress, symbol: 'BAL' },
   ]
 
   it('calculates price impact', async () => {

@@ -1,9 +1,9 @@
-import { Stack, Button, VStack, useDisclosure, HStack } from '@chakra-ui/react'
+import { Stack, Button, VStack, useDisclosure, HStack, Tooltip, Text } from '@chakra-ui/react'
 import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
 
 import { usePool } from '../../PoolProvider'
-import { isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
+import { getPoolAddBlockedReason, isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
 import { PoolTags } from '../../tags/PoolTags'
 import { PoolBreadcrumbs } from './PoolBreadcrumbs'
@@ -14,6 +14,7 @@ import {
 import { useState } from 'react'
 import { getXavePoolLink } from '../../pool.utils'
 import { PoolAdvancedOptions } from './PoolAdvancedOptions'
+import { usePoolMetadata } from '../../metadata/usePoolMetadata'
 
 export function PoolHeader() {
   const pathname = usePathname()
@@ -22,6 +23,7 @@ export function PoolHeader() {
   const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Xave)
   const [redirectPartnerUrl, setRedirectPartnerUrl] = useState<string>()
   const partnerRedirectDisclosure = useDisclosure()
+  const { description } = usePoolMetadata(pool)
 
   const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool)
 
@@ -48,25 +50,37 @@ export function PoolHeader() {
     <VStack align="start" spacing="md" w="full">
       <PoolBreadcrumbs />
       <Stack
-        direction={{ base: 'column', md: 'row' }}
+        align={{ base: 'start', lg: 'end' }}
+        direction={{ base: 'column', lg: 'row' }}
         justify="space-between"
+        mt="xs"
         spacing="md"
         w="full"
       >
-        <PoolMetaBadges />
+        <VStack align="start" spacing="md">
+          <PoolMetaBadges />
+          {description && (
+            <Text fontSize="sm" maxW="xl" mb="xxs" sx={{ textWrap: 'pretty' }} variant="secondary">
+              {description}
+            </Text>
+          )}
+        </VStack>
+
         <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
           <PoolTags />
           <HStack spacing="sm">
-            <Button
-              isDisabled={isAddLiquidityBlocked}
-              onClick={handleClick}
-              size="lg"
-              variant="primary"
-              w="full"
-            >
-              Add liquidity
-            </Button>
-
+            {/* TODO: Add block reason alerts*/}
+            <Tooltip label={isAddLiquidityBlocked ? getPoolAddBlockedReason(pool) : ''}>
+              <Button
+                isDisabled={isAddLiquidityBlocked}
+                onClick={handleClick}
+                size="lg"
+                variant="primary"
+                w="full"
+              >
+                Add liquidity
+              </Button>
+            </Tooltip>
             <PoolAdvancedOptions />
           </HStack>
           <PartnerRedirectModal

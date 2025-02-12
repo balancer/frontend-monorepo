@@ -7,14 +7,10 @@ import { useParams } from 'next/navigation'
 import { secondsToMilliseconds, differenceInDays, format } from 'date-fns'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import EChartsReactCore from 'echarts-for-react/lib/core'
-import { ChainSlug, slugToChainMap } from '../../pool.utils'
+import { ChainSlug, getChainSlug } from '../../pool.utils'
 import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
-import {
-  getBlockExplorerAddressUrl,
-  getBlockExplorerTxUrl,
-} from '@repo/lib/shared/hooks/useBlockExplorer'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
@@ -24,6 +20,10 @@ import {
   PoolActivityTokens,
   PoolActivityEl,
 } from '../PoolActivity/poolActivity.types'
+import {
+  getBlockExplorerAddressUrl,
+  getBlockExplorerTxUrl,
+} from '@repo/lib/shared/utils/blockExplorer'
 
 const getDefaultPoolActivityChartOptions = (
   nextTheme: ColorMode = 'dark',
@@ -258,7 +258,7 @@ export function usePoolActivityChart() {
   const theme = useChakraTheme()
   const { sortedPoolEvents, minDate, maxDate, maxYAxisValue, isExpanded, isLoading } =
     usePoolActivity()
-  const _chain = slugToChainMap[chain as ChainSlug]
+  const _chain = getChainSlug(chain as ChainSlug)
   const chartHeight = isExpanded ? 400 : 90
 
   return {

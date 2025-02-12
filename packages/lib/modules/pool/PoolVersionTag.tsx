@@ -5,7 +5,7 @@ import { isCowAmmPool } from './pool.helpers'
 import { PoolListItem } from './pool.types'
 import { Center } from '@chakra-ui/react'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
-import { Pool } from './PoolProvider'
+import { Pool } from './pool.types'
 
 export function PoolVersionTag({ pool, size = 8 }: { pool: PoolListItem | Pool; size?: number }) {
   if (isCowAmmPool(pool.type)) {
@@ -19,7 +19,7 @@ export function PoolVersionTag({ pool, size = 8 }: { pool: PoolListItem | Pool; 
         w={size}
       >
         <Center h="full" w="full">
-          <CowIcon height={18} width={18} />
+          <CowIcon size={18} />
         </Center>
       </BalBadge>
     )

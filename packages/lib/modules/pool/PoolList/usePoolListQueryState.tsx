@@ -7,7 +7,6 @@ import {
   GqlPoolOrderDirection,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { uniq } from 'lodash'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { useQueryState } from 'nuqs'
 import {
   POOL_TAG_MAP,
@@ -18,8 +17,9 @@ import {
   SortingState,
 } from '../pool.types'
 import { PaginationState } from '@repo/lib/shared/components/pagination/pagination.types'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ButtonGroupOption } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
   {
@@ -40,24 +40,44 @@ export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
   },
 ] as const
 
+export function poolTypeLabel(poolType: GqlPoolType) {
+  switch (poolType) {
+    case GqlPoolType.Weighted:
+      return 'Weighted'
+    case GqlPoolType.Stable:
+      return 'Stable'
+    case GqlPoolType.LiquidityBootstrapping:
+      return 'Liquidity Bootstrapping (LBP)'
+    case GqlPoolType.Gyro:
+      return 'Gyro CLP'
+    case GqlPoolType.CowAmm:
+      return 'CoW AMM'
+    case GqlPoolType.Fx:
+      return 'FX'
+    default:
+      return poolType.toLowerCase()
+  }
+}
+
 export function usePoolListQueryState() {
   const [first, setFirst] = useQueryState('first', poolListQueryStateParsers.first)
   const [skip, setSkip] = useQueryState('skip', poolListQueryStateParsers.skip)
   const [orderBy, setOrderBy] = useQueryState('orderBy', poolListQueryStateParsers.orderBy)
-
   const [activeProtocolVersionTab, setActiveProtocolVersionTab] = useState(PROTOCOL_VERSION_TABS[0])
+  const [poolTypes, setPoolTypes] = useQueryState('poolTypes', poolListQueryStateParsers.poolTypes)
+  const [networks, setNetworks] = useQueryState('networks', poolListQueryStateParsers.networks)
+  const [minTvl, setMinTvl] = useQueryState('minTvl', poolListQueryStateParsers.minTvl)
+  const [poolTags, setPoolTags] = useQueryState('poolTags', poolListQueryStateParsers.poolTags)
 
   const [orderDirection, setOrderDirection] = useQueryState(
     'orderDirection',
     poolListQueryStateParsers.orderDirection
   )
 
-  const [poolTypes, setPoolTypes] = useQueryState('poolTypes', poolListQueryStateParsers.poolTypes)
   const [protocolVersion, setProtocolVersion] = useQueryState(
     'protocolVersion',
     poolListQueryStateParsers.protocolVersion
   )
-  const [networks, setNetworks] = useQueryState('networks', poolListQueryStateParsers.networks)
 
   const [textSearch, setTextSearch] = useQueryState(
     'textSearch',
@@ -69,9 +89,11 @@ export function usePoolListQueryState() {
     poolListQueryStateParsers.userAddress
   )
 
-  const [minTvl, setMinTvl] = useQueryState('minTvl', poolListQueryStateParsers.minTvl)
-
-  const [poolTags, setPoolTags] = useQueryState('poolTags', poolListQueryStateParsers.poolTags)
+  // on toggle always start at the beginning of the list
+  useEffect(() => {
+    if (skip) setSkip(0)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolTypes, networks, minTvl, poolTags])
 
   // Set internal checked state
   function toggleUserAddress(checked: boolean, address: string) {
@@ -132,25 +154,6 @@ export function usePoolListQueryState() {
       setSkip(0)
     }
     setTextSearch(text)
-  }
-
-  function poolTypeLabel(poolType: GqlPoolType) {
-    switch (poolType) {
-      case GqlPoolType.Weighted:
-        return 'Weighted'
-      case GqlPoolType.Stable:
-        return 'Stable'
-      case GqlPoolType.LiquidityBootstrapping:
-        return 'Liquidity Bootstrapping (LBP)'
-      case GqlPoolType.Gyro:
-        return 'Gyro CLP'
-      case GqlPoolType.CowAmm:
-        return 'CoW AMM'
-      case GqlPoolType.Fx:
-        return 'FX'
-      default:
-        return poolType.toLowerCase()
-    }
   }
 
   function poolTagLabel(poolTag: PoolTagType) {
@@ -215,7 +218,7 @@ export function usePoolListQueryState() {
     orderDirection,
     where: {
       poolTypeIn: mappedPoolTypes,
-      chainIn: networks.length > 0 ? networks : getProjectConfig().supportedNetworks,
+      chainIn: networks.length > 0 ? networks : PROJECT_CONFIG.supportedNetworks,
       userAddress,
       minTvl,
       tagIn: mappedPoolTags.length > 0 ? mappedPoolTags : null,

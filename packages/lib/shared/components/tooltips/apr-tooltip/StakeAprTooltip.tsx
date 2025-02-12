@@ -4,7 +4,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useCallback } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { calcPotentialYieldFor } from '@repo/lib/modules/pool/pool.utils'
 import { SparklesIcon } from './MainAprTooltip'
 
@@ -31,6 +31,7 @@ function StakeAprTooltip({ pool, totalUsdValue }: Props) {
   return (
     <BaseAprTooltip
       aprItems={pool.dynamicData.aprItems}
+      chain={pool.chain}
       displayValueFormatter={displayValueFormatter}
       maxVeBalText="Total with max veBAL"
       numberFormatter={numberFormatter}

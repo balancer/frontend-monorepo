@@ -3,15 +3,15 @@
 import { Box, BoxProps, HStack, VStack, Text } from '@chakra-ui/react'
 import { TokenIcon } from '../../TokenIcon'
 import { TokenAmount } from '../../token.types'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '../../TokensProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenInfoPopover } from '../../TokenInfoPopover'
+import { ApiToken } from '../../token.types'
 
 type Props = {
-  token: GqlToken
+  token: ApiToken
   userBalance?: TokenAmount
   isBalancesLoading?: boolean
   active?: boolean
@@ -44,6 +44,8 @@ export function TokenSelectListRow({
     px: 'md',
     cursor: isCurrentToken ? 'not-allowed' : 'pointer',
     opacity: isCurrentToken ? 0.5 : 1,
+    rounded: 'md',
+    mb: 'sm',
     _hover: isCurrentToken
       ? {}
       : {

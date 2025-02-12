@@ -1,62 +1,34 @@
-import { Box, Grid, GridItem, GridProps, HStack, Text } from '@chakra-ui/react'
-import Link from 'next/link'
-import { getPoolPath, getPoolTypeLabel } from '../../pool.utils'
-import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
-import { memo } from 'react'
-import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { PoolListDisplayType, PoolListItem } from '../../pool.types'
-import { PoolListTokenPills } from '../PoolListTokenPills'
-import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
+import { Box, Grid, GridItem, GridProps, HStack, Text, Image } from '@chakra-ui/react'
+import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
+import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import Link from 'next/link'
+import { memo } from 'react'
+import { usePoolMetadata } from '../../metadata/usePoolMetadata'
+import { POOL_TAG_MAP, PoolListItem } from '../../pool.types'
+import { getPoolPath } from '../../pool.utils'
+import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import { usePoolList } from '../PoolListProvider'
-import { PoolVersionTag } from './PoolVersionTag'
-import { isBoosted } from '../../pool.helpers'
-import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { useErc4626Metadata } from '../../../erc4626/Erc4626MetadataProvider'
-import Image from 'next/image'
+import { PoolListPoolDisplay } from '../PoolListPoolDisplay'
 
 interface Props extends GridProps {
   pool: PoolListItem
   keyValue: number
+  needsMarginForPoints?: boolean
 }
 
 const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
-function PoolName({ pool }: { pool: PoolListItem }) {
-  const isFirstToken = (index: number) => index === 0
-  const zIndices = Array.from({ length: pool.displayTokens.length }, (_, index) => index).reverse()
-
-  return (
-    <HStack>
-      {pool.displayTokens.map((token, i) => (
-        <Box key={token.address} ml={isFirstToken(i) ? 0 : -3} zIndex={zIndices[i]}>
-          <TokenIcon
-            address={token.address}
-            alt={token.symbol}
-            chain={pool.chain}
-            size={20}
-            weight={token.weight}
-          />
-        </Box>
-      ))}
-      <Text fontWeight="medium" textAlign="left">
-        {pool.name}
-      </Text>
-    </HStack>
-  )
-}
-
-export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
+export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest }: Props) {
   const {
     queryState: { userAddress },
-    displayType,
   } = usePoolList()
-
+  const { name } = usePoolMetadata(pool)
   const { toCurrency } = useCurrency()
-  const { getErc4626Metadata } = useErc4626Metadata()
 
-  const erc4626Metadata = getErc4626Metadata(pool)
+  const hasPoints = pool.tags?.some(tag => tag && POOL_TAG_MAP.POINTS.includes(tag))
 
   return (
     <FadeInOnView>
@@ -76,33 +48,10 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
-              {displayType === PoolListDisplayType.TokenPills && (
-                <PoolListTokenPills
-                  h={['32px', '36px']}
-                  iconSize={20}
-                  p={['xxs', 'sm']}
-                  pool={pool}
-                  pr={[1.5, 'ms']}
-                />
-              )}
-              {displayType === PoolListDisplayType.Name && <PoolName pool={pool} />}
+              <PoolListPoolDisplay name={name} pool={pool} />
             </GridItem>
             <GridItem minW="32">
-              <HStack>
-                <PoolVersionTag pool={pool} />
-                <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
-                  {isBoosted(pool) ? 'Boosted' : getPoolTypeLabel(pool.type)}
-                </Text>
-                {erc4626Metadata.map(metadata => (
-                  <Image
-                    alt={metadata.name}
-                    height={20}
-                    key={metadata.name}
-                    src={metadata.iconUrl || ''}
-                    width={20}
-                  />
-                ))}
-              </HStack>
+              <PoolListTableDetailsCell pool={pool} />
             </GridItem>
             {userAddress ? (
               <GridItem>
@@ -130,13 +79,25 @@ export function PoolListTableRow({ pool, keyValue, ...rest }: Props) {
               </Text>
             </GridItem>
             <GridItem justifySelf="end" pr={{ base: 'md', xl: '0' }}>
-              <MemoizedMainAprTooltip
-                aprItems={pool.dynamicData.aprItems}
-                height="auto"
-                pool={pool}
-                poolId={pool.id}
-                textProps={{ fontWeight: 'medium', textAlign: 'right' }}
-              />
+              <HStack gap="xxs" mr={needsMarginForPoints && !hasPoints ? '12px' : '0'}>
+                <MemoizedMainAprTooltip
+                  aprItems={pool.dynamicData.aprItems}
+                  chain={pool.chain}
+                  height="auto"
+                  pool={pool}
+                  poolId={pool.id}
+                  textProps={{ fontWeight: 'medium', textAlign: 'right' }}
+                />
+                {hasPoints && (
+                  <Image
+                    alt="points"
+                    h="15px"
+                    ml="0.5"
+                    src="/images/icons/pool-points.svg"
+                    w="10px"
+                  />
+                )}
+              </HStack>
             </GridItem>
           </Grid>
         </Link>

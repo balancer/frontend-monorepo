@@ -13,7 +13,7 @@ interface Props {
   setPageSize: (page: number) => void
   pageSize: number
   changeSize?: boolean
-  isSmall?: boolean
+  hideDropdown?: boolean
 }
 
 export function Pagination({
@@ -28,11 +28,16 @@ export function Pagination({
   setPageSize,
   pageSize,
   changeSize = true,
-  isSmall = false, // set to true when table is NOT directly used in a card
+  hideDropdown = false,
   ...rest
 }: Props) {
   return (
-    <Stack direction={{ base: 'column', lg: 'row' }} justify="space-between" w="full" {...rest}>
+    <Stack
+      direction={{ base: 'column', lg: 'row' }}
+      justify={hideDropdown ? 'center' : 'space-between'}
+      w="full"
+      {...rest}
+    >
       <HStack>
         <IconButton
           aria-label="first page"
@@ -78,22 +83,24 @@ export function Pagination({
           size="sm"
         />
       </HStack>
-      <Select
-        disabled={!changeSize}
-        onChange={e => {
-          setPageSize(Number(e.target.value))
-        }}
-        size="sm"
-        value={pageSize}
-        variant="tertiary"
-        w="32"
-      >
-        {[10, 20, 30, 40, 50].map(pageSize => (
-          <option key={pageSize} value={pageSize}>
-            {`Show ${pageSize}`}
-          </option>
-        ))}
-      </Select>
+      {!hideDropdown && (
+        <Select
+          disabled={!changeSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value))
+          }}
+          size="sm"
+          value={pageSize}
+          variant="tertiary"
+          w="32"
+        >
+          {[10, 20, 30, 40, 50].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              {`Show ${pageSize}`}
+            </option>
+          ))}
+        </Select>
+      )}
     </Stack>
   )
 }

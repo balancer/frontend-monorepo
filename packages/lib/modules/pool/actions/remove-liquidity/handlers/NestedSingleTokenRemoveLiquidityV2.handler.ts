@@ -10,7 +10,7 @@ import {
   RemoveLiquidityNestedCallInputV2,
 } from '@balancer/sdk'
 import { Address, parseEther } from 'viem'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import {
   BuildRemoveLiquidityInput,
@@ -106,10 +106,6 @@ export class NestedSingleTokenRemoveLiquidityV2Handler implements RemoveLiquidit
     const result: RemoveLiquidityNestedSingleTokenInputV2 = {
       bptAmountIn: parseEther(humanBptIn),
       tokenOut,
-      // Ignore TS error until base chain is added to the SDK setup:
-      // https://github.com/balancer/b-sdk/issues/221
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
     }

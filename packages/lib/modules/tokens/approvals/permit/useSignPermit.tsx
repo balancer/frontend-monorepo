@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useSdkWalletClient } from '@repo/lib/modules/web3/useSdkViemClient'
 import { Toast } from '@repo/lib/shared/components/toasts/Toast'
@@ -33,10 +33,10 @@ export function useSignPermit({
 
   const [error, setError] = useState<string | undefined>()
 
-  const sdkClient = useSdkWalletClient()
+  const { sdkClient, isLoading } = useSdkWalletClient()
 
   useEffect(() => {
-    if (sdkClient === undefined) {
+    if (isLoading) {
       setSignPermitState(SignatureState.Preparing)
     } else {
       setSignPermitState(SignatureState.Ready)

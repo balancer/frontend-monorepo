@@ -8,6 +8,7 @@ import { useMemo } from 'react'
 
 import { useTokens } from '../../tokens/TokensProvider'
 import {
+  filterTokensForPermit2,
   getTokenAddressesForPermit2,
   getTokenSymbolsForPermit2,
   hasValidPermit2,
@@ -15,9 +16,11 @@ import {
 import { usePermit2Allowance } from '../../tokens/approvals/permit2/usePermit2Allowance'
 import { BasePermit2Params, useSignPermit2 } from '../../tokens/approvals/permit2/useSignPermit2'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
-import { useChainSwitch } from '../../web3/useChainSwitch'
+import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
 import { StepDetails, TransactionStep } from './lib'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
+import { getGqlChain } from '@repo/lib/config/app.config'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 /*
   Returns a transaction step to sign a permit2 for the token amounts in
@@ -31,17 +34,19 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
 
   const { isLoadingPermit2Allowances, nonces, expirations, allowedAmounts } = usePermit2Allowance({
     chainId,
-    tokenAddresses: getTokenAddressesForPermit2({
-      chainId,
-      tokenAmountsIn,
-      wethIsEth,
-    }),
+    tokenAddresses: getTokenAddressesForPermit2(tokenAmountsIn),
     owner: userAddress,
     enabled: isPermit2 && !!spender,
     spender: spender,
   })
 
-  const isValidPermit2 = hasValidPermit2(tokenAmountsIn, expirations, allowedAmounts)
+  const filteredTokenAmountsIn = filterTokensForPermit2({
+    chain: getGqlChain(chainId),
+    wethIsEth,
+    tokenAmountsIn,
+  })
+
+  const isValidPermit2 = hasValidPermit2(filteredTokenAmountsIn, expirations, allowedAmounts)
 
   const {
     signPermit2,
@@ -55,8 +60,7 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     nonces,
   })
 
-  const { shouldChangeNetwork, NetworkSwitchButton, networkSwitchButtonProps } =
-    useChainSwitch(chainId)
+  const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
 
   const isLoading =
     isLoadingSignature ||
@@ -118,14 +122,14 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signPermit2State, isLoading, isConnected, isValidPermit2]
+    [signPermit2State, isLoading, isConnected, isValidPermit2, shouldChangeNetwork]
   )
 }
 
 function getTitle(details?: StepDetails): string {
-  if (!details?.batchApprovalTokens) return `Permit on balancer`
+  if (!details?.batchApprovalTokens) return `Permit on ${PROJECT_CONFIG.projectName}`
   if (details.batchApprovalTokens.length === 1) {
-    return `${details.batchApprovalTokens[0]}: Permit on balancer`
+    return `${details.batchApprovalTokens[0]}: Permit on ${PROJECT_CONFIG.projectName}`
   }
   return 'Sign token approvals'
 }

@@ -1,33 +1,34 @@
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { PoolListItem } from './pool.types'
+import { PoolCore } from './pool.types'
 import { HStack, Text, TextProps, Box } from '@chakra-ui/react'
-import { FeaturedPool, Pool } from './PoolProvider'
+import { FeaturedPool } from './PoolProvider'
+import { getUserReferenceTokens } from './pool-tokens.utils'
 
 interface PoolNameProps extends TextProps {
-  pool: PoolListItem | Pool | FeaturedPool
+  pool: PoolCore
   MemoizedMainAprTooltip?: React.ComponentType<any>
   isCarousel?: boolean
 }
 
 // Type guard function to check if pool is FeaturedPool
-function isFeaturedPool(pool: PoolListItem | Pool | FeaturedPool): pool is FeaturedPool {
+function isFeaturedPool(pool: PoolCore | FeaturedPool): pool is FeaturedPool {
   return (pool as FeaturedPool).dynamicData !== undefined
 }
 
 export function PoolName({ pool, MemoizedMainAprTooltip, isCarousel, ...rest }: PoolNameProps) {
-  const displayTokens = pool.displayTokens
+  const tokens = getUserReferenceTokens(pool).filter(token => token.address !== pool.address)
 
   return (
     <HStack alignItems="center" gap="xxs" justify="start" px="sm" wrap="wrap">
-      {displayTokens.map((token, idx) => {
+      {tokens.map((token, idx) => {
         return (
           <HStack alignItems="center" gap="xxs" justify="center" key={token.address}>
             <Text as="span" fontWeight="bold" {...rest} fontSize="sm" lineHeight="1">
-              {token.nestedTokens ? token.name : token.symbol}
+              {token.nestedPool ? token.name : token.symbol}
               {token.weight && ` ${fNum('weight', token.weight || '')}`}
             </Text>
             <Text {...rest} lineHeight="1">
-              {idx <= displayTokens.length - 2 && '/'}
+              {idx <= tokens.length - 2 && '/'}
             </Text>
           </HStack>
         )

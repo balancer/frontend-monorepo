@@ -11,11 +11,20 @@ export const wjAuraAddress = '0x198d7387Fa97A73F05b8578CdEFf8F2A1f34Cd1F' as con
 
 export const usdcDaiUsdtBptAddress = '0x79c58f70905f734641735bc61e45c19dd9ad60bc' as const //USDC-DAI-USDT
 export const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f' as const
+export const waUsdcAddress = '0xd4fa2d31b7968e448877f69a96de69f5de8cd23e' as const // Wrapped Aave USDC
 export const usdcAddress = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48' as const
+export const waUsdtAddress = '0x7bc3485026ac48b6cf9baf0a377477fff5703af8' as const // Wrapped Aave USDT
 export const usdtAddress = '0xdac17f958d2ee523a2206206994597c13d831ec7' as const
 
+export const osEth_WETH_BptAddress = '0xdacf5fa19b1f720111609043ac67a9818262850c' as const
+export const osEthAddress = '0xf1c9acdc66974dfb6decb12aa385b9cd01190e38' as const
+
 export const sdBalAddress = '0xf24d8651578a55b0c119b9910759a351a3458895' as const
+export const auraBalAddress = '0x616e8bfa43f920657b3497dbf40d6b1a02d4608d' as const
 export const bal80Weth20Address = '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56' as const
+
+export const wstEthAddress = '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0' as const
+export const rstEthAddress = '0x7a4effd87c2f3c55ca251080b1343b605f327e3a' as const
 
 export const ethAddress = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' as const
 export const polAddress = '0x0000000000000000000000000000000000001010' as const

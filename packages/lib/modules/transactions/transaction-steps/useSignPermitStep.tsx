@@ -9,11 +9,12 @@ import {
   RemoveLiquidityPermitParams,
   useSignPermit as useSignPermit,
 } from '../../tokens/approvals/permit/useSignPermit'
-import { useChainSwitch } from '../../web3/useChainSwitch'
+import { NetworkSwitchButton, useChainSwitch } from '../../web3/useChainSwitch'
 import { TransactionStep } from './lib'
 import { getChainId } from '@repo/lib/config/app.config'
 import { SignatureState } from '../../web3/signatures/signature.helpers'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useSignPermitStep(params: RemoveLiquidityPermitParams): TransactionStep {
   const { isConnected } = useUserAccount()
@@ -21,7 +22,7 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
   const { signPermit, signPermitState, isLoading, isDisabled, buttonLabel, error } = useSignPermit({
     ...params,
   })
-  const { shouldChangeNetwork, NetworkSwitchButton, networkSwitchButtonProps } = useChainSwitch(
+  const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(
     getChainId(params.pool.chain)
   )
 
@@ -59,7 +60,7 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
       stepType: 'signPermit',
       details: { gasless: true },
       labels: {
-        title: `Permit pool token on Balancer`,
+        title: `Permit pool token on ${PROJECT_CONFIG.projectName}`,
         init: `Sign permit`,
         tooltip: 'Sign permit',
       },
@@ -67,6 +68,6 @@ export function useSignPermitStep(params: RemoveLiquidityPermitParams): Transact
       renderAction: () => <SignPermitButton />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signPermitState, isLoading, isConnected]
+    [signPermitState, isLoading, isConnected, shouldChangeNetwork]
   )
 }

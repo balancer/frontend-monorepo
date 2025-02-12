@@ -8,7 +8,6 @@ import {
   GetTokensQuery,
   GetTokensQueryVariables,
   GqlChain,
-  GqlPoolTokenDetail,
   GqlToken,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
@@ -22,11 +21,13 @@ import { useSkipInitialQuery } from '@repo/lib/shared/hooks/useSkipInitialQuery'
 import { getNativeAssetAddress, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
 import { mins } from '@repo/lib/shared/utils/time'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
+import { PoolToken } from '../pool/pool.types'
+import { ApiToken } from './token.types'
 
 export type UseTokensResult = ReturnType<typeof _useTokens>
 export const TokensContext = createContext<UseTokensResult | null>(null)
 
-export type GetTokenFn = (address: string, chain: GqlChain) => GqlToken | undefined
+export type GetTokenFn = (address: string, chain: GqlChain) => ApiToken | undefined
 
 export function _useTokens(
   initTokenData: GetTokensQuery,
@@ -63,7 +64,7 @@ export function _useTokens(
     It can return undefined when the token address belongs to a pool token (not included in the provided tokens)
     // TODO: should we avoid calling getToken with pool tokens?
    */
-  function getToken(address: string, chain: GqlChain | number): GqlToken | undefined {
+  function getToken(address: string, chain: GqlChain | number): ApiToken | undefined {
     const chainKey = typeof chain === 'number' ? 'chainId' : 'chain'
     return tokens.find(token => isSameAddress(token.address, address) && token[chainKey] === chain)
   }
@@ -101,7 +102,7 @@ export function _useTokens(
     )
   }
 
-  function priceForToken(token: GqlToken): number {
+  function priceForToken(token: ApiToken): number {
     const price = getPricesForChain(token.chain).find(price =>
       isSameAddress(price.address, token.address)
     )
@@ -110,17 +111,33 @@ export function _useTokens(
     return price.price
   }
 
-  function usdValueForToken(token: GqlToken | undefined, amount: Numberish) {
+  // this also fetches the price for a bpt
+  function priceForAddress(address: string, chain: GqlChain): number {
+    const price = getPricesForChain(chain).find(price => isSameAddress(price.address, address))
+    if (!price) return 0
+
+    return price.price
+  }
+
+  function usdValueForToken(token: ApiToken | undefined, amount: Numberish) {
     if (!token) return '0'
     if (amount === '') return '0'
     return bn(amount).times(priceForToken(token)).toFixed()
   }
 
+  function usdValueForBpt(address: string, chain: GqlChain, amount: Numberish) {
+    if (amount === '') return '0'
+    return bn(amount).times(priceFor(address, chain)).toFixed()
+  }
+
   function priceFor(address: string, chain: GqlChain): number {
     const token = getToken(address, chain)
-    if (!token) return 0
 
-    return priceForToken(token)
+    if (token) {
+      return priceForToken(token)
+    } else {
+      return priceForAddress(address, chain)
+    }
   }
 
   const calcWeightForBalance = useCallback(
@@ -137,8 +154,8 @@ export function _useTokens(
     []
   )
 
-  const calcTotalUsdValue = useCallback((displayTokens: GqlPoolTokenDetail[], chain: GqlChain) => {
-    return displayTokens
+  const calcTotalUsdValue = useCallback((poolTokens: PoolToken[], chain: GqlChain) => {
+    return poolTokens
       .reduce((total, token) => {
         return total.plus(bn(priceFor(token.address, chain)).times(token.balance))
       }, bn(0))
@@ -165,6 +182,8 @@ export function _useTokens(
     calcTotalUsdValue,
     startTokenPricePolling: () => startPolling(pollInterval),
     stopTokenPricePolling: stopPolling,
+    priceForAddress,
+    usdValueForBpt,
     vebalBptToken,
   }
 }

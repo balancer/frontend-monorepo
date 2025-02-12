@@ -41,8 +41,7 @@ type Props = {
 }
 
 function NetworksSelectionStep({ networks, selectedNetworks, toggleNetwork }: NetworkOptionsProps) {
-  const { data } = useVebalUserData()
-  const myVebalBalance = data?.veBalGetUser.balance
+  const { myVebalBalance } = useVebalUserData()
 
   return (
     <VStack gap="4">
@@ -55,7 +54,7 @@ function NetworksSelectionStep({ networks, selectedNetworks, toggleNetwork }: Ne
         <Heading>
           <HStack justifyContent="space-between" w="full">
             <Text>Ethereum</Text>
-            <Text> {Number(myVebalBalance).toFixed(4)} veBAL</Text>
+            <Text> {Number(myVebalBalance ?? 0).toFixed(4)} veBAL</Text>
           </HStack>
         </Heading>
         <NetworkOptions
@@ -123,8 +122,16 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
     }
   }
 
+  const isSuccess = !!transactionHash
+
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onModalClose} preserveScrollBarGap>
+    <Modal
+      isCentered
+      isOpen={isOpen}
+      onClose={onModalClose}
+      preserveScrollBarGap
+      trapFocus={!isSuccess}
+    >
       <SuccessOverlay startAnimation={!!transactionHash} />
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop)}>
@@ -162,7 +169,7 @@ export function CrossChainSyncModal({ isOpen, onClose, networks }: Props) {
         {showTransactionSteps ? (
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
-            isSuccess={!!transactionHash}
+            isSuccess={isSuccess}
             returnAction={onClose}
             returnLabel="Return to vebal"
           />

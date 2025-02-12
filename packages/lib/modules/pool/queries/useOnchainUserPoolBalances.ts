@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  GqlChain,
   GqlPoolUserBalance,
   GqlUserStakedBalance,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -8,19 +9,21 @@ import { bn, safeSum } from '@repo/lib/shared/utils/numbers'
 import { captureNonFatalError } from '@repo/lib/shared/utils/query-errors'
 import { HumanAmount } from '@balancer/sdk'
 import BigNumber from 'bignumber.js'
-import { useEffect } from 'react'
+import { useEffect, useMemo, useCallback } from 'react'
 import { ReadContractsErrorType } from 'wagmi/actions'
-import { Pool as OriginalPool } from '../PoolProvider'
-import { calcBptPriceFor } from '../pool.helpers'
+import { Pool as OriginalPool } from '../pool.types'
 import { calcNonOnChainFetchedStakedBalance } from '../user-balance.helpers'
 import { StakedBalancesByPoolId, useUserStakedBalance } from './useUserStakedBalance'
 import { UnstakedBalanceByPoolId, useUserUnstakedBalance } from './useUserUnstakedBalance'
+import { useTokens } from '../../tokens/TokensProvider'
 
 type Pool = OriginalPool & {
   nonGaugeStakedBalance?: BigNumber
 }
 
 export function useOnchainUserPoolBalances(pools: Pool[] = []) {
+  const { priceFor } = useTokens()
+
   const {
     unstakedBalanceByPoolId,
     isLoading: isLoadingUnstakedPoolBalances,
@@ -37,16 +40,18 @@ export function useOnchainUserPoolBalances(pools: Pool[] = []) {
     error: stakedPoolBalancesError,
   } = useUserStakedBalance(pools)
 
-  async function refetch() {
-    return Promise.all([refetchUnstakedBalances(), refetchedStakedBalances()])
-  }
-
   const isLoading = isLoadingUnstakedPoolBalances || isLoadingStakedPoolBalances
   const isFetching = isFetchingUnstakedPoolBalances || isFetchingStakedPoolBalances
 
-  const enrichedPools = isLoading
-    ? pools
-    : overwriteOnchainPoolBalanceData(pools, unstakedBalanceByPoolId, stakedBalancesByPoolId)
+  const enrichedPools = useMemo(() => {
+    if (isLoading) return pools
+    return overwriteOnchainPoolBalanceData(
+      pools,
+      unstakedBalanceByPoolId,
+      stakedBalancesByPoolId,
+      priceFor
+    )
+  }, [pools, unstakedBalanceByPoolId, stakedBalancesByPoolId, isLoading, priceFor])
 
   useEffect(() => {
     if (stakedPoolBalancesError) {
@@ -56,6 +61,10 @@ export function useOnchainUserPoolBalances(pools: Pool[] = []) {
       captureUnstakedMulticallError(unstakedPoolBalancesError)
     }
   }, [unstakedPoolBalancesError, stakedPoolBalancesError])
+
+  const refetch = useCallback(async () => {
+    return Promise.all([refetchUnstakedBalances(), refetchedStakedBalances()])
+  }, [refetchUnstakedBalances, refetchedStakedBalances])
 
   return {
     data: enrichedPools,
@@ -104,14 +113,15 @@ function captureUnstakedMulticallError(unstakedPoolBalancesError: ReadContractsE
 function overwriteOnchainPoolBalanceData(
   pools: Pool[],
   ocUnstakedBalances: UnstakedBalanceByPoolId,
-  stakedBalancesByPoolId: StakedBalancesByPoolId
+  stakedBalancesByPoolId: StakedBalancesByPoolId,
+  priceFor: (address: string, chain: GqlChain) => number
 ) {
   return pools.map(pool => {
     if (!Object.keys(ocUnstakedBalances).length || !Object.keys(stakedBalancesByPoolId).length) {
       return pool
     }
 
-    const bptPrice = calcBptPriceFor(pool)
+    const bptPrice = priceFor(pool.address, pool.chain)
 
     // Unstaked balances
     const onchainUnstakedBalances = ocUnstakedBalances[pool.id]

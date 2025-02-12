@@ -17,7 +17,7 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
-import React, { useMemo, useState, useLayoutEffect } from 'react'
+import { useMemo, useState, useLayoutEffect } from 'react'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
 import { usePathname, useRouter } from 'next/navigation'
@@ -42,7 +42,6 @@ import {
   calcGaugeStakedBalance,
 } from '../user-balance.helpers'
 import { isVebalPool, shouldBlockAddLiquidity, calcUserShareOfPool, isFx } from '../pool.helpers'
-
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -53,6 +52,7 @@ import {
   PartnerRedirectModal,
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
+import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -256,6 +256,8 @@ export default function PoolMyLiquidity() {
     }
   }
 
+  const compositionTokens = getCompositionTokens(pool)
+
   return (
     <Card h="fit-content" ref={myLiquiditySectionRef}>
       <VStack spacing="md" width="full">
@@ -319,16 +321,37 @@ export default function PoolMyLiquidity() {
                 </Button>
               </HStack>
             ) : (
-              pool.displayTokens.map(token => {
+              compositionTokens.map(poolToken => {
                 return (
-                  <TokenRow
-                    abbreviated={false}
-                    address={token.address as Address}
-                    chain={chain}
-                    isLoading={isLoadingOnchainUserBalances || isConnecting}
-                    key={`my-liquidity-token-${token.address}`}
-                    value={tokenBalanceFor(token.address)}
-                  />
+                  <VStack key={`pool-${poolToken.address}`} w="full">
+                    <TokenRow
+                      abbreviated={false}
+                      address={poolToken.address as Address}
+                      chain={chain}
+                      pool={pool}
+                      value={tokenBalanceFor(poolToken.address)}
+                      {...(poolToken.hasNestedPool && {
+                        isNestedBpt: true,
+                      })}
+                    />
+                    {poolToken.hasNestedPool && poolToken.nestedPool && (
+                      <VStack pl="8" w="full">
+                        {getNestedPoolTokens(poolToken).map(nestedPoolToken => {
+                          return (
+                            <TokenRow
+                              abbreviated={false}
+                              address={nestedPoolToken.address as Address}
+                              chain={chain}
+                              iconSize={35}
+                              isNestedPoolToken
+                              key={`nested-pool-${nestedPoolToken.address}`}
+                              value={bn(nestedPoolToken.balance).times(shareOfPool).toString()}
+                            />
+                          )
+                        })}
+                      </VStack>
+                    )}
+                  </VStack>
                 )
               })
             )}

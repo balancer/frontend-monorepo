@@ -17,10 +17,8 @@ import {
   Text,
   Tooltip,
   VStack,
-  useDisclosure,
 } from '@chakra-ui/react'
-import { useEffect, useRef } from 'react'
-import { Address } from 'viem'
+import { useEffect, useRef, useState } from 'react'
 import { AddLiquidityModal } from '../modal/AddLiquidityModal'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -28,8 +26,6 @@ import {
   ProportionalTransactionSettings,
   TransactionSettings,
 } from '@repo/lib/modules/user/settings/TransactionSettings'
-import { TokenInputs } from './TokenInputs'
-import { TokenInputsWithAddable } from './TokenInputsWithAddable'
 import { usePool } from '../../../PoolProvider'
 import {
   hasNoLiquidity,
@@ -41,10 +37,6 @@ import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetai
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
-import { isNativeOrWrappedNative, isNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
-import { NativeAssetSelectModal } from '@repo/lib/modules/tokens/NativeAssetSelectModal'
-import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { PriceImpactError } from '../../../../price-impact/PriceImpactError'
 import AddLiquidityAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AddLiquidityAprTooltip'
@@ -55,22 +47,31 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { AddLiquidityFormTabs } from './AddLiquidityFormTabs'
+import { UnbalancedAddError } from '@repo/lib/shared/components/errors/UnbalancedAddError'
+import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
+import { supportsWethIsEth } from '../../../pool.helpers'
+import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
+import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
-  const { validTokens, proportionalSlippage } = useAddLiquidity()
+  const { validTokens, slippage, wantsProportional } = useAddLiquidity()
+
+  const bufferPercentage = wantsProportional ? slippage : '0'
 
   return (
-    <TokenBalancesProvider bufferPercentage={proportionalSlippage} extTokens={validTokens}>
+    <TokenBalancesProvider bufferPercentage={bufferPercentage} extTokens={validTokens}>
       <AddLiquidityMainForm />
     </TokenBalancesProvider>
   )
 }
 
 function AddLiquidityMainForm() {
+  const [tabIndex, setTabIndex] = useState(0)
+  const nextBtn = useRef(null)
+
   const {
-    setHumanAmountIn: setAmountIn,
-    validTokens,
     priceImpactQuery,
     simulationQuery,
     isDisabled,
@@ -84,20 +85,28 @@ function AddLiquidityMainForm() {
     nativeAsset,
     wNativeAsset,
     previewModalDisclosure,
-    proportionalSlippage,
     slippage,
     setProportionalSlippage,
+    setWantsProportional,
+    wantsProportional,
   } = useAddLiquidity()
 
-  const nextBtn = useRef(null)
   const { pool } = usePool()
   const { priceImpactColor, priceImpact, setPriceImpact } = usePriceImpact()
   const { toCurrency } = useCurrency()
-  const tokenSelectDisclosure = useDisclosure()
-  const { setValidationError } = useTokenInputsValidation()
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
+  const { shouldUseSignatures } = useUserSettings()
+
+  const setFlexibleTab = () => {
+    setTabIndex(0)
+    setWantsProportional(false)
+  }
+  const setProportionalTab = () => {
+    setTabIndex(1)
+    setWantsProportional(true)
+  }
 
   useEffect(() => {
     setPriceImpact(priceImpactQuery.data)
@@ -106,9 +115,14 @@ function AddLiquidityMainForm() {
   const hasPriceImpact = priceImpact !== undefined && priceImpact !== null
   const priceImpactLabel = hasPriceImpact ? fNum('priceImpact', priceImpact) : '-'
 
+  const nestedAddLiquidityEnabled = supportsNestedActions(pool) // TODO && !userToggledEscapeHatch
+
+  const isUnbalancedError = isUnbalancedAddError(simulationQuery.error || priceImpactQuery.error)
+
+  const shouldShowUnbalancedError = isUnbalancedError && !nestedAddLiquidityEnabled
+
   const weeklyYield = calcPotentialYieldFor(pool, totalUSDValue)
 
-  const nestedAddLiquidityEnabled = supportsNestedActions(pool) // TODO && !userToggledEscapeHatch
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
   const isFetching = simulationQuery.isFetching || priceImpactQuery.isFetching
 
@@ -120,13 +134,9 @@ function AddLiquidityMainForm() {
     }
   }
 
-  const nativeAssets = validTokens.filter(token =>
-    isNativeOrWrappedNative(token.address as Address, token.chain)
-  )
-
   // if native asset balance is higher set that asset as the 'default'
   useEffect(() => {
-    if (!isBalancesLoading && nativeAsset && wNativeAsset) {
+    if (!isBalancesLoading && nativeAsset && wNativeAsset && supportsWethIsEth(pool)) {
       const nativeAssetBalance = balanceFor(nativeAsset.address)
       const wNativeAssetBalance = balanceFor(wNativeAsset.address)
       if (
@@ -138,20 +148,6 @@ function AddLiquidityMainForm() {
       }
     }
   }, [isBalancesLoading])
-
-  function handleTokenSelect(token: GqlToken) {
-    if (isNativeAsset(token.address as Address, token.chain)) {
-      setWethIsEth(true)
-    } else {
-      setWethIsEth(false)
-    }
-    setAmountIn(token.address as Address, '')
-
-    // reset any validation errors for native assets
-    nativeAssets.forEach(nativeAsset => {
-      setValidationError(nativeAsset.address as Address, '')
-    })
-  }
 
   function onModalClose() {
     // restart polling for token prices when modal is closed again
@@ -172,11 +168,12 @@ function AddLiquidityMainForm() {
         <CardHeader>
           <HStack justify="space-between" w="full">
             <span>Add liquidity</span>
-            {requiresProportionalInput(pool) ? (
+            {wantsProportional ? (
               <ProportionalTransactionSettings
+                pool={pool}
                 setSlippage={setProportionalSlippage}
                 size="sm"
-                slippage={proportionalSlippage}
+                slippage={slippage}
               />
             ) : (
               <TransactionSettings size="sm" />
@@ -187,15 +184,27 @@ function AddLiquidityMainForm() {
           {hasNoLiquidity(pool) && (
             <BalAlert content="You cannot add because the pool has no liquidity" status="warning" />
           )}
-          <SafeAppAlert />
-          {!nestedAddLiquidityEnabled ? (
-            <TokenInputsWithAddable
-              requiresProportionalInput={requiresProportionalInput(pool)}
-              tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}
-              totalUSDValue={totalUSDValue}
+          {!shouldUseSignatures && (
+            <BalAlert
+              content="All approvals will require gas transactions. You can enable signatures in your settings."
+              status="warning"
+              title="Signatures disabled"
             />
-          ) : (
-            <TokenInputs tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()} />
+          )}
+          <SafeAppAlert />
+          <AddLiquidityFormTabs
+            nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}
+            setFlexibleTab={setFlexibleTab}
+            setProportionalTab={setProportionalTab}
+            tabIndex={tabIndex}
+            totalUSDValue={totalUSDValue}
+          />
+          {!wantsProportional && shouldShowUnbalancedError && (
+            <UnbalancedAddError
+              error={(simulationQuery.error || priceImpactQuery.error) as Error}
+              goToProportionalAdds={setProportionalTab}
+              isProportionalSupported={!nestedAddLiquidityEnabled}
+            />
           )}
           <VStack align="start" spacing="sm" w="full">
             {!simulationQuery.isError && (
@@ -223,6 +232,7 @@ function AddLiquidityMainForm() {
                     totalUSDValue={totalUSDValue}
                   />
                 }
+                avoidPriceImpactAlert={shouldShowUnbalancedError}
                 cannotCalculatePriceImpact={cannotCalculatePriceImpactError(priceImpactQuery.error)}
                 isDisabled={!priceImpactQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
@@ -257,12 +267,17 @@ function AddLiquidityMainForm() {
           {!simulationQuery.isError && priceImpactQuery.isError && (
             <PriceImpactError priceImpactQuery={priceImpactQuery} />
           )}
-          {simulationQuery.isError && (
+          {simulationQuery.isError && nestedAddLiquidityEnabled && (
+            <UnbalancedNestedAddError error={simulationQuery.error} />
+          )}
+          {simulationQuery.isError && !nestedAddLiquidityEnabled && (
             <GenericError
               customErrorName="Error in query simulation"
               error={simulationQuery.error}
+              skipError={shouldShowUnbalancedError}
             />
           )}
+
           {isConnected ? (
             <Tooltip label={isDisabled ? disabledReason : ''}>
               <Button
@@ -288,16 +303,6 @@ function AddLiquidityMainForm() {
         onClose={onModalClose}
         onOpen={previewModalDisclosure.onOpen}
       />
-      {!!validTokens.length && (
-        <NativeAssetSelectModal
-          chain={validTokens[0].chain}
-          isOpen={tokenSelectDisclosure.isOpen}
-          nativeAssets={nativeAssets}
-          onClose={tokenSelectDisclosure.onClose}
-          onOpen={tokenSelectDisclosure.onOpen}
-          onTokenSelect={handleTokenSelect}
-        />
-      )}
     </Box>
   )
 }

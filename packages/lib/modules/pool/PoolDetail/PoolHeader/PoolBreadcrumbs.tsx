@@ -2,6 +2,7 @@ import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button } from '@chakra
 import { usePool } from '../../PoolProvider'
 import { ChevronRight, Home } from 'react-feather'
 import { isCowAmmPool } from '../../pool.helpers'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function PoolBreadcrumbs() {
   const { pool } = usePool()
@@ -31,7 +32,9 @@ export function PoolBreadcrumbs() {
         <BreadcrumbLink href={poolsHref}>{poolsLabel}</BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem isCurrentPage>
-        <BreadcrumbLink href="#">{pool.name}</BreadcrumbLink>
+        <BreadcrumbLink href="#">
+          {PROJECT_CONFIG.options.showPoolName ? pool.name : pool.symbol}
+        </BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>
   )

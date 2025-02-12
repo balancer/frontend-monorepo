@@ -8,8 +8,8 @@ import {
   InputAmount,
   Slippage,
 } from '@balancer/sdk'
-import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
+import { Pool } from '../../../pool.types'
+import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
@@ -33,6 +33,7 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
     humanAmountsIn: HumanTokenAmountWithAddress[],
     userAddress: Address
   ): Promise<SdkQueryAddLiquidityOutput> {
+    //TODO: instead of getting the zero index we should get the one that the user introduced
     const referenceAmount = this.helpers.toSdkInputAmounts(humanAmountsIn)[0]
 
     const addLiquidity = new AddLiquidity()
@@ -80,7 +81,7 @@ export abstract class BaseProportionalAddLiquidityHandler implements AddLiquidit
       rpcUrl: getRpcUrl(this.helpers.chainId),
       referenceAmount,
       kind: AddLiquidityKind.Proportional,
-      sender: userAddress,
+      sender: getSender(userAddress),
     }
   }
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { GetPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery as useApolloQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { useQuery } from '@apollo/client'
 import { createContext, PropsWithChildren, useCallback, useMemo } from 'react'
 import { useProtocolRewards } from './PortfolioClaim/useProtocolRewards'
 import { ClaimableReward, useClaimableBalances } from './PortfolioClaim/useClaimableBalances'
@@ -10,9 +10,8 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../web3/UserAccountProvider'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { useOnchainUserPoolBalances } from '../pool/queries/useOnchainUserPoolBalances'
-import { Pool } from '../pool/PoolProvider'
+import { Pool } from '../pool/pool.types'
 import { useRecentTransactions } from '../transactions/RecentTransactionsProvider'
 import { isAfter } from 'date-fns'
 import { compact, uniq, uniqBy } from 'lodash'
@@ -22,6 +21,7 @@ import {
   getUserTotalBalanceUsd,
 } from '../pool/user-balance.helpers'
 import { getTimestamp } from '@repo/lib/shared/utils/time'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export interface ClaimableBalanceResult {
   status: 'success' | 'error'
@@ -35,7 +35,6 @@ export type PoolRewardsData = Pool & {
 }
 
 export type PoolRewardsDataMap = Record<string, PoolRewardsData>
-
 export type UsePortfolio = ReturnType<typeof _usePortfolio>
 
 function _usePortfolio() {
@@ -43,7 +42,7 @@ function _usePortfolio() {
   const { transactions } = useRecentTransactions()
 
   const fiveMinutesAgo = getTimestamp().minsAgo(5)
-  const chainIn = getProjectConfig().supportedNetworks
+  const chainIn = PROJECT_CONFIG.supportedNetworks
 
   // filter in recent transactions that took place in the last 5 minutes
   const transactionsWithPoolIds = Object.values(transactions).filter(
@@ -53,7 +52,7 @@ function _usePortfolio() {
   const idIn = uniq(compact(transactionsWithPoolIds.map(tx => tx.poolId)))
 
   // fetch pools with a user balance
-  const { data: poolsUserAddressData, loading: isLoadingPoolsUserAddress } = useApolloQuery(
+  const { data: poolsUserAddressData, loading: isLoadingPoolsUserAddress } = useQuery(
     GetPoolsDocument,
     {
       variables: {
@@ -69,7 +68,7 @@ function _usePortfolio() {
   )
 
   // fetch pools with an id in recent transactions
-  const { data: poolsIdData, loading: isLoadingPoolsId } = useApolloQuery(GetPoolsDocument, {
+  const { data: poolsIdData, loading: isLoadingPoolsId } = useQuery(GetPoolsDocument, {
     variables: {
       where: {
         idIn,

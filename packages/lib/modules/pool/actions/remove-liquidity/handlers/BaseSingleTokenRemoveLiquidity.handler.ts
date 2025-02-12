@@ -10,9 +10,9 @@ import {
   RemoveLiquiditySingleTokenExactInInput,
 } from '@balancer/sdk'
 import { Address, parseEther } from 'viem'
-import { Pool } from '../../../PoolProvider'
+import { Pool } from '../../../pool.types'
 import { BPT_DECIMALS } from '../../../pool.constants'
-import { LiquidityActionHelpers, isEmptyHumanAmount } from '../../LiquidityActionHelpers'
+import { LiquidityActionHelpers, getSender, isEmptyHumanAmount } from '../../LiquidityActionHelpers'
 import {
   BuildRemoveLiquidityInput,
   QueryRemoveLiquidityInput,
@@ -86,7 +86,7 @@ export abstract class BaseSingleTokenRemoveLiquidityHandler implements RemoveLiq
       bptIn: bptInInputAmount,
       kind: RemoveLiquidityKind.SingleTokenExactIn,
       tokenOut,
-      sender: userAddress,
+      sender: getSender(userAddress),
     }
   }
 }

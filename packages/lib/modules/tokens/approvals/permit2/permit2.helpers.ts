@@ -5,7 +5,8 @@ import { GetTokenFn } from '../../TokensProvider'
 import { AllowedAmountsByTokenAddress, ExpirationByTokenAddress } from './usePermit2Allowance'
 import { TokenAmountIn } from './useSignPermit2'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { isWrappedNativeAsset } from '../../token.helpers'
+import { isNativeAsset, isWrappedNativeAsset } from '../../token.helpers'
+import { TokenAmount } from '@balancer/sdk'
 
 export function hasValidPermit2(
   tokenAmountsIn?: TokenAmountIn[],
@@ -49,30 +50,25 @@ export function getTokenSymbolsForPermit2({
   chainId,
 }: BasePermit2Params & { getToken: GetTokenFn }): string[] {
   if (!tokenAmountsIn) return []
+
   const chain = getGqlChain(chainId)
-  const tokenSymbols = filterWrappedNativeAsset({
+  const tokenSymbols = filterTokensForPermit2({
     wethIsEth,
     tokenAmountsIn,
     chain,
   })
     .filter(t => t.amount > 0n)
-    .map(t => getToken(t.address, chain)?.symbol ?? 'Unknown')
+    .map(t => {
+      if (t.symbol) return t.symbol
+      return getToken(t.address, chain)?.symbol ?? 'Unknown'
+    })
   return tokenSymbols
 }
 
 // Returns the token addresses that need to be approved for permit2
-export function getTokenAddressesForPermit2({
-  wethIsEth,
-  tokenAmountsIn,
-  chainId,
-}: BasePermit2Params): Address[] | undefined {
-  if (!tokenAmountsIn) return undefined
-  const chain = getGqlChain(chainId)
-  return filterWrappedNativeAsset({
-    wethIsEth,
-    chain,
-    tokenAmountsIn,
-  }).map(t => t.address)
+export function getTokenAddressesForPermit2(tokenAmountsIn?: TokenAmountIn[]): Address[] {
+  if (!tokenAmountsIn) return []
+  return tokenAmountsIn.map(t => t.address)
 }
 
 export function permit2Address(chain: GqlChain): Address {
@@ -80,7 +76,12 @@ export function permit2Address(chain: GqlChain): Address {
   return getNetworkConfig(chain).contracts.permit2 || ('' as Address)
 }
 
-function filterWrappedNativeAsset({
+/*
+  Returns the token amounts that need to be approved for permit2
+  Excludes the native asset
+  If wethIsEth, it excludes the wrapped native asset (as the user will use the native asset instead, which does not require approval)
+*/
+export function filterTokensForPermit2({
   tokenAmountsIn,
   wethIsEth,
   chain,
@@ -90,6 +91,35 @@ function filterWrappedNativeAsset({
   chain: GqlChain
 }): TokenAmountIn[] {
   if (!tokenAmountsIn) return []
-  if (!wethIsEth) return tokenAmountsIn
-  return tokenAmountsIn.filter(t => !isWrappedNativeAsset(t.address, chain))
+
+  return (
+    tokenAmountsIn
+      // native asset does not require permit2 approval
+      .filter(t => !isNativeAsset(t.address, chain))
+      .filter(t => {
+        if (wethIsEth) {
+          // if wethIsEth the wrapped native asset token will be replaced with the native asset token so no required permit2 approval neither
+          return !isWrappedNativeAsset(t.address, chain)
+        }
+        return true
+      })
+  )
+}
+
+// Instead of MaxAllowanceTransferAmount(MaxUint160) we use MaxUint159 to avoid overflow issues
+const MaxUint159 = BigInt('0x7fffffffffffffffffffffffffffffffffffffff')
+const MaxAllowance = MaxUint159
+
+export function getMaxAmountForPermit2(amount: bigint): bigint {
+  return amount > 0n ? MaxAllowance : amount
+}
+
+export function maximizeAmountsInForPermit2(amountsIn: TokenAmount[]): TokenAmount[] {
+  return amountsIn.map(
+    amountIn =>
+      ({
+        ...amountIn,
+        amount: getMaxAmountForPermit2(amountIn.amount),
+      }) as TokenAmount
+  )
 }

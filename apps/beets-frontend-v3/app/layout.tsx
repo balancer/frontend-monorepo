@@ -1,36 +1,18 @@
 /* eslint-disable max-len */
 import { Metadata } from 'next'
-import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
-import NextTopLoader from 'nextjs-toploader'
-import { SpeedInsights } from '@vercel/speed-insights/next'
-import '@repo/lib/assets/css/global.css'
-import { GlobalAlerts } from '@repo/lib/shared/components/navs/GlobalAlerts'
 import { PropsWithChildren } from 'react'
-import { Providers } from '@repo/lib/shared/components/site/providers'
-import { NavBarContainer } from '@/lib/components/navs/NavBarContainer'
-import { FooterContainer } from '@/lib/components/footer/FooterContainer'
+import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
+import '@repo/lib/assets/css/global.css'
 import { DEFAULT_THEME_COLOR_MODE } from '@repo/lib/shared/services/chakra/themes/base/foundations'
 import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@/lib/services/chakra/ThemeProvider'
+import { Providers } from '@repo/lib/shared/components/site/providers'
 
 export const metadata: Metadata = {
-  title: 'Beets DeFi Liquidity Pools',
-  description: `Explore DeFi liquidity pools and swap tokens. Provide liquidity to accumulate yield from swap fees while retaining your token exposure as prices move.`,
-  icons: [
-    { rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      url: '/favicon-light.png',
-      media: '(prefers-color-scheme: light)',
-    },
-    {
-      rel: 'icon',
-      type: 'image/png',
-      url: '/favicon-dark.png',
-      media: '(prefers-color-scheme: dark)',
-    },
-  ],
+  title: 'Beets',
+  description: `The Flagship LST Hub on Sonic. From seamless staking to earning real yield on LST-focused liquidity pools, beets is the ultimate destination for your liquid-staked tokens.`,
+  icons: [{ rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' }],
+  metadataBase: new URL('https://beets.fi'),
 }
 
 export default function RootLayout({ children }: PropsWithChildren) {
@@ -41,16 +23,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
         style={{ marginRight: '0px !important' }} // Required to prevent layout shift introduced by Rainbowkit
         suppressHydrationWarning
       >
-        <NextTopLoader color="#7f6ae8" showSpinner={false} />
         <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
           <ThemeProvider>
-            <Providers>
-              <GlobalAlerts />
-              <NavBarContainer />
-              {children}
-              <FooterContainer />
-              <SpeedInsights />
-            </Providers>
+            <Providers>{children}</Providers>
           </ThemeProvider>
         </ColorThemeProvider>
       </body>

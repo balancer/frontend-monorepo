@@ -36,6 +36,9 @@ describe('toCurrency', () => {
   test('not abbreviated', () => {
     expect(result.current.toCurrency('0.001', { abbreviated: false })).toBe('$0.001')
     expect(result.current.toCurrency('56789.12345678', { abbreviated: false })).toBe('$56,789.12')
+    expect(
+      result.current.toCurrency('56789.12345678', { abbreviated: false, noDecimals: true })
+    ).toBe('$56,789')
   })
 })
 

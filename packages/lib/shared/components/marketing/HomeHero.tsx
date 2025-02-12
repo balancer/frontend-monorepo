@@ -215,7 +215,7 @@ export function HomeHero() {
                                   _groupHover={{
                                     textDecoration: 'none',
                                   }}
-                                  href="https://docs-v3.balancer.fi/"
+                                  href="https://docs.balancer.fi/"
                                 >
                                   <Flex alignItems="center" gap="xxs">
                                     <Text

@@ -3,9 +3,8 @@
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertButton } from '@repo/lib/shared/components/alerts/BalAlertButton'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
-import { useGlobalAlerts } from '@repo/lib/shared/components/alerts/GlobalAlertsProvider'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
-import { Button, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 
 const exceptionName = 'Error fetching swap'
 const exceptionMessage = `Execution reverted for an unknown reason. Raw Call Arguments:
@@ -21,7 +20,6 @@ class TestError extends Error {
 }
 
 export default function Page() {
-  const { addAlert } = useGlobalAlerts()
   return (
     <VStack width="full">
       <BalAlert content={<TitleWithButton title="Info alert" />} status="info" />
@@ -50,19 +48,6 @@ export default function Page() {
       />
 
       <GenericError error={new TestError(exceptionName, exceptionMessage)} maxWidth="500" />
-
-      <Button
-        onClick={() =>
-          addAlert({
-            id: 'debugAlert',
-            title: 'Global warning alert:',
-            description: 'with global description',
-            status: 'warning',
-          })
-        }
-      >
-        Show global warning alert
-      </Button>
     </VStack>
   )
 }

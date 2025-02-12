@@ -14,12 +14,12 @@ import {
   polygon,
   polygonZkEvm,
   sepolia,
+  sonic,
 } from 'wagmi/chains'
-
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { keyBy } from 'lodash'
 import { getBaseUrl } from '@repo/lib/shared/utils/urls'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 /* If a request with the default rpc fails, it will fall back to the next one in the list.
   https://viem.sh/docs/clients/transports/fallback#fallback-transport
@@ -37,6 +37,7 @@ export const rpcFallbacks: Record<GqlChain, string | undefined> = {
   [GqlChain.Sepolia]: 'https://sepolia.gateway.tenderly.co',
   [GqlChain.Mode]: 'https://mode.drpc.org',
   [GqlChain.Fraxtal]: 'https://fraxtal.drpc.org',
+  [GqlChain.Sonic]: 'https://rpc.soniclabs.com',
 }
 
 const baseUrl = getBaseUrl()
@@ -55,6 +56,7 @@ export const rpcOverrides: Record<GqlChain, string | undefined> = {
   [GqlChain.Sepolia]: getPrivateRpcUrl(GqlChain.Sepolia),
   [GqlChain.Mode]: getPrivateRpcUrl(GqlChain.Mode),
   [GqlChain.Fraxtal]: getPrivateRpcUrl(GqlChain.Fraxtal),
+  [GqlChain.Sonic]: getPrivateRpcUrl(GqlChain.Sonic),
 }
 
 const gqlChainToWagmiChainMap = {
@@ -70,10 +72,11 @@ const gqlChainToWagmiChainMap = {
   [GqlChain.Sepolia]: { iconUrl: '/images/chains/SEPOLIA.svg', ...sepolia },
   [GqlChain.Mode]: { iconUrl: '/images/chains/MODE.svg', ...mode },
   [GqlChain.Fraxtal]: { iconUrl: '/images/chains/FRAXTAL.svg', ...fraxtal },
+  [GqlChain.Sonic]: { iconUrl: '/images/chains/SONIC.svg', ...sonic },
 } as const satisfies Record<GqlChain, Chain>
 
-export const supportedNetworks = getProjectConfig().supportedNetworks
-const chainToFilter = getProjectConfig().defaultNetwork
+export const supportedNetworks = PROJECT_CONFIG.supportedNetworks
+const chainToFilter = PROJECT_CONFIG.defaultNetwork
 const customChain = gqlChainToWagmiChainMap[chainToFilter]
 
 export const chains: readonly [Chain, ...Chain[]] = [

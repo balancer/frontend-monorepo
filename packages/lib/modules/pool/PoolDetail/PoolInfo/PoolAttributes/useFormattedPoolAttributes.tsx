@@ -3,24 +3,38 @@
 import { useMemo } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { format } from 'date-fns'
-import { DELEGATE_OWNER } from '@repo/lib/config/app.config'
 import { zeroAddress } from 'viem'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { bptUsdValue, isBoosted, isCowAmmPool, isStable } from '../../../pool.helpers'
+import { isBoosted, isCowAmmPool, isStable, isV2Pool, isV3Pool } from '../../../pool.helpers'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { compact } from 'lodash'
+import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+
+type FormattedPoolAttributes = {
+  title: string
+  value: string
+  link?: string
+}
 
 export function useFormattedPoolAttributes() {
   const { pool } = usePool()
   const { toCurrency } = useCurrency()
+  const { usdValueForBpt } = useTokens()
+
+  const isV2 = isV2Pool(pool)
+  const isV3 = isV3Pool(pool)
+  const delegateOwner = PROJECT_CONFIG.delegateOwner
 
   const poolOwnerData = useMemo(() => {
     if (!pool) return
-    const { owner } = pool
+    const { owner, swapFeeManager, chain } = pool
     if (!owner) return
 
-    if (owner === zeroAddress || isCowAmmPool(pool.type)) {
+    if ((owner === zeroAddress && isV2) || isCowAmmPool(pool.type)) {
       return {
         title: 'No owner',
         link: '',
@@ -29,9 +43,9 @@ export function useFormattedPoolAttributes() {
       }
     }
 
-    if (owner === DELEGATE_OWNER) {
+    if (owner === delegateOwner || (owner === zeroAddress && isV3)) {
       return {
-        title: 'Delegate owner',
+        title: `Delegate ${isV2 ? 'owner' : 'manager'}`,
         link: '',
         editableText: 'editable by governance',
         attributeImmutabilityText: isStable(pool.type)
@@ -40,21 +54,29 @@ export function useFormattedPoolAttributes() {
       }
     }
 
-    return {
-      title: abbreviateAddress(owner || ''),
-      link: '',
-      editableText: 'editable by pool owner',
-      attributeImmutabilityText: isStable(pool.type)
-        ? ' except for swap fees and AMP factor editable by the pool owner'
-        : ' except for swap fees editable by the pool owner',
-    }
-  }, [pool])
+    const editableBy = `editable by ${isV2 ? 'pool owner' : 'swap fee manager'}`
 
-  const formattedPoolAttributes = useMemo(() => {
+    const link = isV2
+      ? getBlockExplorerAddressUrl(owner, chain)
+      : swapFeeManager
+        ? getBlockExplorerAddressUrl(swapFeeManager, chain)
+        : ''
+
+    return {
+      title: abbreviateAddress((isV2 ? owner : swapFeeManager) || ''),
+      link,
+      editableText: editableBy,
+      attributeImmutabilityText: isStable(pool.type)
+        ? ` except for swap fees and AMP factor ${editableBy}`
+        : ` except for swap fees ${editableBy}`,
+    }
+  }, [pool, isV2, isV3, delegateOwner])
+
+  const formattedPoolAttributes = useMemo((): FormattedPoolAttributes[] => {
     if (!pool) return []
     const { name, symbol, createTime, dynamicData, type } = pool
 
-    const attributes = [
+    const attributes = compact([
       {
         title: 'Name',
         value: name,
@@ -83,8 +105,9 @@ export function useFormattedPoolAttributes() {
         : null,
       poolOwnerData
         ? {
-            title: 'Pool Owner',
+            title: isV2 ? 'Pool owner' : 'Swap fee manager',
             value: poolOwnerData.title,
+            link: poolOwnerData.link || undefined,
           }
         : null,
       {
@@ -97,9 +120,9 @@ export function useFormattedPoolAttributes() {
       },
       {
         title: 'LP token price',
-        value: toCurrency(bptUsdValue(pool, '1')),
+        value: toCurrency(usdValueForBpt(pool.address, pool.chain, '1')),
       },
-    ]
+    ])
     if (shouldHideSwapFee(pool?.type)) {
       return attributes.filter(a => a?.title !== 'Swap fees')
     }

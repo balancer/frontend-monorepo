@@ -4,7 +4,15 @@ import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { NetworkConfig } from '../config.types'
 import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
 import { SupportedWrapHandler } from '@repo/lib/modules/swap/swap.types'
-import { Address } from 'viem'
+import {
+  BALANCER_BATCH_ROUTER,
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_ROUTER,
+  PERMIT2,
+  VAULT_ADMIN,
+  VAULT_V3,
+} from '@balancer/sdk'
+import { mainnet } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
   chainId: 1,
@@ -75,14 +83,21 @@ const networkConfig: NetworkConfig = {
     multicall2: '0x5ba1e12693dc8f9c48aad8770482f4739beed696',
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      vaultV3: VAULT_V3[mainnet.id],
       relayerV6: '0x35Cea9e57A393ac66Aaa7E25C391D52C74B5648f',
       minter: '0x239e55F427D44C3cc793f49bFB507ebe76638a2b',
-      router: '0xNotYetAvailable' as Address,
+      router: BALANCER_ROUTER[mainnet.id],
+      batchRouter: BALANCER_BATCH_ROUTER[mainnet.id],
+      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[mainnet.id],
+      WeightedPool2TokensFactory: '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0',
+      vaultAdminV3: VAULT_ADMIN[mainnet.id],
     },
     feeDistributor: '0xD3cf852898b21fc233251427c2DC93d3d604F3BB',
     veDelegationProxy: '0x6f5a2eE11E7a772AeB5114A20d0D7c0ff61EB8A0',
     veBAL: '0xC128a9954e6c874eA3d62ce62B468bA073093F25',
     omniVotingEscrow: '0x96484f2aBF5e58b15176dbF1A799627B53F13B6d',
+    permit2: PERMIT2[mainnet.id],
+    gaugeController: '0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD',
   },
 
   pools: convertHexToLowerCase({
@@ -126,8 +141,10 @@ const networkConfig: NetworkConfig = {
         '0xad0e5e0778cac28f1ff459602b31351871b5754a0002000000000000000003cD',
       ],
     },
-    allowNestedActions: [
-      '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0', // B-80BAL-20WETH
+    disallowNestedActions: [
+      '0x3dd0843a028c86e0b760b1a76929d1c5ef93a2dd000200000000000000000249', // 80BAL20WETH + AuraBal
+      '0xc5c91aea7551095c3e1ff0f94f682c45b347ad730002000000000000000006c0', // 80BAL20WETH + WETH
+      '0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d', // 80BAL20WETH + SdBal
     ],
   }),
 } as const satisfies NetworkConfig

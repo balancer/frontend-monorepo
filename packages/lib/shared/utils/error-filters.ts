@@ -1,5 +1,10 @@
 export function isUserRejectedError(error: Error): boolean {
-  return error.message.startsWith('User rejected the request.')
+  return (
+    error.message.startsWith('User rejected the request.') ||
+    // This is the rejection message in special cases like:
+    // - when the user rejects a transaction in the Safe App when connected via WalletConnect
+    error.message.includes('Details: User rejected transaction')
+  )
 }
 
 /*
@@ -45,9 +50,16 @@ export function isPausedErrorMessage(errorMessage: string): boolean {
   return errorMessage.includes('reverted with the following reason:\nBAL#402\n')
 }
 
-export function isUnbalancedAddError(error?: Error | null): boolean {
+export function isUnbalancedAddError(error: Error | null): boolean {
   if (!error) return false
-  return isUnbalancedAddErrorMessage(error)
+  if (
+    isInvariantRatioSimulationErrorMessage(error?.message) ||
+    isInvariantRatioPIErrorMessage(error?.message) ||
+    isUnbalancedAddErrorMessage(error)
+  ) {
+    return true
+  }
+  return false
 }
 
 export function isUnbalancedAddErrorMessage(error: Error | null): boolean {
@@ -55,4 +67,36 @@ export function isUnbalancedAddErrorMessage(error: Error | null): boolean {
   const hasErrors = (errorString: string) => error?.message.includes(errorString)
 
   return errorStrings.some(hasErrors)
+}
+
+export function isInvariantRatioSimulationErrorMessage(errorMessage?: string): boolean {
+  return (
+    isInvariantRatioAboveMaxSimulationErrorMessage(errorMessage) ||
+    isInvariantRatioAboveMinSimulationErrorMessage(errorMessage)
+  )
+}
+
+export function isInvariantRatioAboveMaxSimulationErrorMessage(errorMessage?: string): boolean {
+  return !!errorMessage?.includes('InvariantRatioAboveMax')
+}
+export function isInvariantRatioAboveMinSimulationErrorMessage(errorMessage?: string): boolean {
+  return !!errorMessage?.includes('InvariantRatioBelowMin')
+}
+
+export function isInvariantRatioPIErrorMessage(errorMessage?: string): boolean {
+  if (!errorMessage) return false
+  if (
+    errorMessage.includes(
+      'addLiquidityUnbalanced operation will fail at SC level with user defined input.'
+    ) ||
+    errorMessage.includes('Arithmetic operation resulted in underflow or overflow.')
+  ) {
+    return true
+  }
+  return false
+}
+
+export function isWrapWithTooSmallAmount(errorMessage?: string): boolean {
+  if (!errorMessage) return false
+  return errorMessage?.includes('WrapAmountTooSmall')
 }

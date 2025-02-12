@@ -1,4 +1,8 @@
-import { GqlPoolAprItem, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlPoolAprItem,
+  GqlPoolType,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import {
   PlacementWithLogical,
   Popover,
@@ -42,6 +46,7 @@ interface Props {
   shouldDisplayMaxVeBalTooltip?: boolean
   usePortal?: boolean
   children?: ReactNode | (({ isOpen }: { isOpen: boolean }) => ReactNode)
+  chain: GqlChain
 }
 
 const balRewardGradient =
@@ -75,6 +80,7 @@ function BaseAprTooltip({
   shouldDisplayMaxVeBalTooltip,
   children,
   poolType,
+  chain,
   usePortal = true,
 }: Props) {
   const colorMode = useThemeColorMode()
@@ -106,10 +112,18 @@ function BaseAprTooltip({
     isVotingPresent,
     isLockingAprPresent,
     totalCombinedDisplayed,
+    isMaBeetsPresent,
+    maBeetsRewardsDisplayed,
+    maxMaBeetsRewardDisplayed,
+    maxMaBeetsVotingRewardDisplayed,
+    maBeetsVotingRewardsTooltipText,
+    maBeetsTotalAprDisplayed,
+    maBeetsRewardTooltipText,
   } = useAprTooltip({
     aprItems,
     vebalBoost: Number(vebalBoost),
     numberFormatter: usedNumberFormatter,
+    chain,
   })
 
   const isVebal = isVebalPool(poolId)
@@ -137,6 +151,14 @@ function BaseAprTooltip({
         title="Swap fees"
         tooltipText={swapFeesTooltipText}
       />
+      {isMaBeetsPresent && (
+        <TooltipAprItem
+          {...basePopoverAprItemProps}
+          apr={maBeetsRewardsDisplayed}
+          displayValueFormatter={usedDisplayValueFormatter}
+          title="Min maBEETS APR"
+        />
+      )}
       <TooltipAprItem
         {...basePopoverAprItemProps}
         apr={stakingIncentivesAprDisplayed}
@@ -233,7 +255,6 @@ function BaseAprTooltip({
               tooltipText={votingIncentivesTooltipText}
             />
             <Divider />
-
             <TooltipAprItem
               {...basePopoverAprItemProps}
               apr={totalCombinedDisplayed}
@@ -266,7 +287,6 @@ function BaseAprTooltip({
               tooltipText={extraBalTooltipText}
             />
             <Divider />
-
             <TooltipAprItem
               {...basePopoverAprItemProps}
               apr={maxVeBalDisplayed}
@@ -291,6 +311,49 @@ function BaseAprTooltip({
           </Stack>
         </>
       ) : null}
+      {isMaBeetsPresent && (
+        <>
+          <Divider />
+          <Stack gap={0} roundedBottom="md">
+            <TooltipAprItem
+              {...basePopoverAprItemProps}
+              apr={maxMaBeetsRewardDisplayed}
+              displayValueFormatter={usedDisplayValueFormatter}
+              fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
+              fontWeight={500}
+              pl={6}
+              pt={3}
+              title="Extra BEETS (max maturity boost)"
+              tooltipText={maBeetsRewardTooltipText}
+            />
+            <TooltipAprItem
+              {...basePopoverAprItemProps}
+              apr={maxMaBeetsVotingRewardDisplayed}
+              displayValueFormatter={usedDisplayValueFormatter}
+              fontColor={colorMode == 'light' ? 'gray.600' : 'gray.400'}
+              fontWeight={500}
+              pl={6}
+              title="Extra Voting APR"
+              tooltipText={maBeetsVotingRewardsTooltipText}
+            />
+            <Divider />
+            <TooltipAprItem
+              {...basePopoverAprItemProps}
+              apr={maBeetsTotalAprDisplayed}
+              backgroundColor="background.level3"
+              boxBackground={balRewardGradient}
+              displayValueFormatter={usedDisplayValueFormatter}
+              fontColor="font.special"
+              pl={2}
+              pt={3}
+              roundedBottom="md"
+              textBackground="background.special"
+              textBackgroundClip="text"
+              title="Max total APR"
+            />
+          </Stack>
+        </>
+      )}
     </PopoverContent>
   )
 

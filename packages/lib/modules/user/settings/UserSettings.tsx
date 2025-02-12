@@ -31,6 +31,13 @@ interface SlippageInputProps {
 export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
   const presetOpts = ['0.5', '1', '2']
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value
+    if (parseFloat(value) <= 50 || !value) {
+      setSlippage(value)
+    }
+  }
+
   return (
     <VStack align="start" w="full">
       <InputGroup>
@@ -38,8 +45,9 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
           autoComplete="off"
           autoCorrect="off"
           bg="background.level1"
+          // max={50}
           min={0}
-          onChange={e => setSlippage(e.currentTarget.value)}
+          onChange={handleChange}
           onKeyDown={blockInvalidNumberInput}
           type="number"
           value={slippage}
@@ -64,7 +72,7 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
   )
 }
 
-function EnableSignaturesSelect() {
+export function EnableSignaturesSelect() {
   const { enableSignatures, setEnableSignatures } = useUserSettings()
 
   const handleChange = () => {

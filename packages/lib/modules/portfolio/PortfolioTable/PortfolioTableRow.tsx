@@ -4,14 +4,17 @@ import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/Mai
 import { memo } from 'react'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { getPoolPath, getPoolTypeLabel } from '../../pool/pool.utils'
-import { PoolListTokenPills } from '../../pool/PoolList/PoolListTokenPills'
+import { getPoolPath } from '../../pool/pool.utils'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
 import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
+import { usePoolMetadata } from '../../pool/metadata/usePoolMetadata'
+import { PoolListPoolDisplay } from '../../pool/PoolList/PoolListPoolDisplay'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -39,6 +42,8 @@ function getStakingText(poolType: ExpandedPoolType) {
 
 export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Props) {
   const { toCurrency } = useCurrency()
+  const { name } = usePoolMetadata(pool)
+  const { options } = PROJECT_CONFIG
 
   const vebalBoostValue = veBalBoostMap?.[pool.id]
   const canStake = getCanStake(pool)
@@ -62,35 +67,28 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
-              <PoolListTokenPills
-                h={['32px', '36px']}
-                iconSize={20}
-                p={['xxs', 'sm']}
-                pool={pool}
-                pr={[1.5, 'ms']}
-              />
+              <PoolListPoolDisplay name={name} pool={pool} />
             </GridItem>
             <GridItem>
-              <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
-                {getPoolTypeLabel(pool.type)}
-              </Text>
+              <PoolListTableDetailsCell pool={pool} />
             </GridItem>
             <GridItem display="flex" justifyContent="left" px="sm">
               <HStack>
                 <Text fontWeight="medium">{stakingText} </Text>
-                <StakingIcons pool={pool} />
+                <StakingIcons pool={pool} showIcon={options.showVeBal} />
               </HStack>
             </GridItem>
-            {/* TO-DO vebal boost */}
-            <GridItem px="sm">
-              <Text
-                fontWeight="medium"
-                textAlign="right"
-                title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
-              >
-                {vebalBoostValue ? `${Number(vebalBoostValue).toFixed(2)}x` : '-'}
-              </Text>
-            </GridItem>
+            {options?.showVeBal && (
+              <GridItem px="sm">
+                <Text
+                  fontWeight="medium"
+                  textAlign="right"
+                  title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
+                >
+                  {vebalBoostValue ? `${Number(vebalBoostValue).toFixed(2)}x` : '-'}
+                </Text>
+              </GridItem>
+            )}
             <GridItem px="sm">
               <Text fontWeight="medium" textAlign="right">
                 {toCurrency(pool.poolPositionUsd, { abbreviated: false })}
@@ -106,6 +104,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
               ) : (
                 <MemoizedMainAprTooltip
                   aprItems={pool.dynamicData.aprItems}
+                  chain={pool.chain}
                   pool={pool}
                   poolId={pool.id}
                   textProps={{ fontWeight: 'medium' }}
@@ -120,12 +119,12 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
   )
 }
 
-function StakingIcons({ pool }: { pool: ExpandedPoolInfo }) {
+function StakingIcons({ pool, showIcon }: { pool: ExpandedPoolInfo; showIcon: boolean }) {
   const canStake = getCanStake(pool)
 
   const shouldHideIcon = pool.poolType === ExpandedPoolType.Unstaked || !canStake
 
-  if (shouldHideIcon) {
+  if (shouldHideIcon || !showIcon) {
     return null
   }
 

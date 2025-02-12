@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { getPoolPath } from './pool.utils'
-import { Pool } from './PoolProvider'
+import { Pool } from './pool.types'
 import { useParams } from 'next/navigation'
 import { PartnerVariant } from '@repo/lib/modules/pool/pool.types'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
 import { isCowAmmPool } from './pool.helpers'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
-import { Banners } from '@repo/lib/config/config.types'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function usePoolRedirect(pool: Pool) {
   const path = getPoolPath(pool)
@@ -16,15 +15,10 @@ export function usePoolRedirect(pool: Pool) {
   return { redirectToPoolPage }
 }
 
-export function getVariantConfig(variant: PartnerVariant): { banners?: Banners } {
-  const { variantConfig } = getProjectConfig()
-  return variantConfig?.[variant] || {}
-}
-
 export function usePoolVariant() {
   const { variant } = useParams<{ variant: PartnerVariant }>()
 
-  const config = getVariantConfig(variant)
+  const config = PROJECT_CONFIG.variantConfig?.[variant] || {}
 
   return {
     variant,

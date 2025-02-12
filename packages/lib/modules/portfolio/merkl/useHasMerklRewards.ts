@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { Pool } from '../../pool/PoolProvider'
+import { Pool } from '../../pool/pool.types'
 import { MerklRewardsSchema } from './merkl.types'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

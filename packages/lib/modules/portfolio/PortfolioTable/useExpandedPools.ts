@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Pool } from '../../pool/PoolProvider'
+import { Pool } from '../../pool/pool.types'
 import { isVebalPool } from '../../pool/pool.helpers'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 
@@ -15,6 +15,11 @@ export enum ExpandedPoolType {
 export type ExpandedPoolInfo = Pool & {
   poolType: ExpandedPoolType
   poolPositionUsd: number
+  uniqueKey: string
+}
+
+function generateUniqueKey(...args: string[]) {
+  return args.join(' - ')
 }
 
 export function useExpandedPools(pools: Pool[]) {
@@ -37,34 +42,42 @@ export function useExpandedPools(pools: Pool[]) {
       const walletBalanceUsd = pool.userBalance?.walletBalanceUsd || 0
 
       if (stakedBalancesBalUsd > 0) {
+        const poolType = isVeBal ? ExpandedPoolType.Locked : ExpandedPoolType.StakedBal
         expandedPools.push({
           ...pool,
-          poolType: isVeBal ? ExpandedPoolType.Locked : ExpandedPoolType.StakedBal,
+          poolType,
           poolPositionUsd: stakedBalancesBalUsd,
+          uniqueKey: generateUniqueKey(pool.id, poolType),
         })
       }
 
       if (stakedBalancesAuraUsd > 0) {
+        const poolType = ExpandedPoolType.StakedAura
         expandedPools.push({
           ...pool,
-          poolType: ExpandedPoolType.StakedAura,
+          poolType,
           poolPositionUsd: stakedBalancesAuraUsd,
+          uniqueKey: generateUniqueKey(pool.id, poolType),
         })
       }
 
       if (walletBalanceUsd > 0) {
+        const poolType = isVeBal ? ExpandedPoolType.Unlocked : ExpandedPoolType.Unstaked
         expandedPools.push({
           ...pool,
-          poolType: isVeBal ? ExpandedPoolType.Unlocked : ExpandedPoolType.Unstaked,
+          poolType,
           poolPositionUsd: walletBalanceUsd,
+          uniqueKey: generateUniqueKey(pool.id, poolType),
         })
       }
 
       if (stakedBalancesBalUsd === 0 && stakedBalancesAuraUsd === 0 && walletBalanceUsd === 0) {
+        const poolType = ExpandedPoolType.Default
         expandedPools.push({
           ...pool,
-          poolType: ExpandedPoolType.Default,
+          poolType,
           poolPositionUsd: 0,
+          uniqueKey: generateUniqueKey(pool.id, poolType),
         })
       }
     })

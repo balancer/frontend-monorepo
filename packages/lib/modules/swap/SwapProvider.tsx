@@ -9,7 +9,7 @@ import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useMakeVarPersisted } from '@repo/lib/shared/hooks/useMakeVarPersisted'
 import { useVault } from '@repo/lib/shared/hooks/useVault'
 import { LABELS } from '@repo/lib/shared/labels'
-import { GqlChain, GqlSorSwapType, GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
@@ -17,7 +17,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { invert } from 'lodash'
 import { PropsWithChildren, createContext, useEffect, useMemo, useState } from 'react'
 import { Address, Hash, isAddress, parseUnits } from 'viem'
-import { ChainSlug, chainToSlugMap, slugToChainMap } from '../pool/pool.utils'
+import { ChainSlug, chainToSlugMap, getChainSlug } from '../pool/pool.utils'
 import { calcMarketPriceImpact } from '../price-impact/price-impact.utils'
 import { usePriceImpact } from '../price-impact/PriceImpactProvider'
 import { useTokenBalances } from '../tokens/TokenBalancesProvider'
@@ -29,7 +29,6 @@ import { useUserAccount } from '../web3/UserAccountProvider'
 import { AuraBalSwapHandler } from './handlers/AuraBalSwap.handler'
 import { DefaultSwapHandler } from './handlers/DefaultSwap.handler'
 import { NativeWrapHandler } from './handlers/NativeWrap.handler'
-import { PoolSwapHandler } from './handlers/PoolSwap.handler'
 import { SwapHandler } from './handlers/Swap.handler'
 import { useSimulateSwapQuery } from './queries/useSimulateSwapQuery'
 import { isAuraBalSwap } from './swap.helpers'
@@ -50,10 +49,13 @@ import {
   isSupportedWrap,
   isWrapOrUnwrap,
 } from './wrap.helpers'
-import { Pool } from '../pool/PoolProvider'
-import { getChildTokens, getStandardRootTokens, isStandardRootToken } from '../pool/pool.helpers'
+import { Pool } from '../pool/pool.types'
+import { getStandardRootTokens, isStandardOrUnderlyingRootToken } from '../pool/pool-tokens.utils'
+import { getChildTokens } from '../pool/pool-tokens.utils'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
-import { getProjectConfig } from '@repo/lib/config/getProjectConfig'
+import { ProtocolVersion } from '../pool/pool.types'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { ApiToken } from '../tokens/token.types'
 
 export type UseSwapResponse = ReturnType<typeof _useSwap>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -74,9 +76,7 @@ function selectSwapHandler(
   chain: GqlChain,
   swapType: GqlSorSwapType,
   apolloClient: ApolloClient<object>,
-  tokens: GqlToken[],
-  pool?: Pool,
-  poolActionableTokens?: GqlToken[]
+  tokens: ApiToken[]
 ): SwapHandler {
   if (isNativeWrap(tokenInAddress, tokenOutAddress, chain)) {
     return new NativeWrapHandler(apolloClient)
@@ -87,10 +87,6 @@ function selectSwapHandler(
     return new AuraBalSwapHandler(tokens)
   }
 
-  if (pool && poolActionableTokens) {
-    return new PoolSwapHandler(pool, poolActionableTokens)
-  }
-
   return new DefaultSwapHandler(apolloClient)
 }
 
@@ -98,12 +94,14 @@ export type SwapProviderProps = {
   pathParams: PathParams
   // Only used by pool swap
   pool?: Pool
-  poolActionableTokens?: GqlToken[]
+  poolActionableTokens?: ApiToken[]
 }
 export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
-  const isPoolSwap = pool && poolActionableTokens
   const isPoolSwapUrl = useIsPoolSwapUrl()
+
+  const isPoolSwap = pool && poolActionableTokens // Hint to tell TS that pool and poolActionableTokens must be defined when poolSwap
+  const shouldDiscardOldPersistedValue = isPoolSwapUrl
   const swapStateVar = useMakeVarPersisted<SwapState>(
     {
       tokenIn: {
@@ -117,9 +115,10 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
         scaledAmount: BigInt(0),
       },
       swapType: GqlSorSwapType.ExactIn,
-      selectedChain: isPoolSwap ? pool.chain : getProjectConfig().defaultNetwork,
+      selectedChain: isPoolSwap ? pool.chain : PROJECT_CONFIG.defaultNetwork,
     },
-    'swapState'
+    'swapState',
+    shouldDiscardOldPersistedValue
   )
 
   const swapState = useReactiveVar(swapStateVar)
@@ -135,7 +134,6 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const { setPriceImpact, setPriceImpactLevel } = usePriceImpact()
 
   const selectedChain = isPoolSwap ? pool.chain : swapState.selectedChain
-  const networkConfig = getNetworkConfig(selectedChain)
   const previewModalDisclosure = useDisclosure()
 
   const client = useApolloClient()
@@ -146,9 +144,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       selectedChain,
       swapState.swapType,
       client,
-      tokens,
-      pool,
-      poolActionableTokens
+      tokens
     )
   }, [swapState.tokenIn.address, swapState.tokenOut.address, selectedChain])
 
@@ -191,6 +187,16 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     )
   }
 
+  function getPoolSwapPoolsIds(): string[] | undefined {
+    if (!isPoolSwap) return undefined
+
+    const tokensNestedPools = pool.poolTokens
+      .map(poolToken => poolToken.nestedPool?.id)
+      .filter(Boolean) as string[]
+
+    return [pool.id, ...tokensNestedPools]
+  }
+
   const simulationQuery = useSimulateSwapQuery({
     handler,
     swapInputs: {
@@ -199,6 +205,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       tokenOut: swapState.tokenOut.address,
       swapType: swapState.swapType,
       swapAmount: getSwapAmount(),
+      // We only use this field to filter by the specific pool swap path in pool swap flow
+      poolIds: getPoolSwapPoolsIds(),
     },
     enabled: shouldFetchSwap(swapState, urlTxHash),
   })
@@ -275,8 +283,12 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       ...state,
       tokenIn: {
         ...state.tokenIn,
-        amount,
-        scaledAmount: scaleTokenAmount(amount, tokenInInfo),
+        /*
+          When copy-pasting a swap URL with a token amount, the tokenInInfo can be undefined
+          so we set amount as zero instead of crashing the app
+        */
+        amount: tokenInInfo ? amount : '0',
+        scaledAmount: tokenInInfo ? scaleTokenAmount(amount, tokenInInfo) : 0n,
       },
     }
 
@@ -302,8 +314,12 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       ...state,
       tokenOut: {
         ...state.tokenOut,
-        amount,
-        scaledAmount: scaleTokenAmount(amount, tokenOutInfo),
+        /*
+          When copy-pasting a swap URL with a token amount, the tokenOutInfo can be undefined
+          so we set amount as zero instead of crashing the app
+        */
+        amount: tokenOutInfo ? amount : '0',
+        scaledAmount: tokenOutInfo ? scaleTokenAmount(amount, tokenOutInfo) : 0n,
       },
     }
 
@@ -367,6 +383,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   function replaceUrlPath() {
     if (isPoolSwapUrl) return // Avoid redirection when the swap is within a pool page
     const { selectedChain, tokenIn, tokenOut, swapType } = swapState
+    const networkConfig = getNetworkConfig(selectedChain)
     const { popularTokens } = networkConfig.tokens
     const chainSlug = chainToSlugMap[selectedChain]
     const newPath = ['/swap']
@@ -387,9 +404,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     window.history.replaceState({}, '', newPath.join(''))
   }
 
-  function scaleTokenAmount(amount: string, token: GqlToken | undefined): bigint {
+  function scaleTokenAmount(amount: string, token: ApiToken): bigint {
     if (amount === '') return parseUnits('0', 18)
-    if (!token) throw new Error('Cant scale amount without token metadata')
     return parseUnits(amount, token.decimals)
   }
 
@@ -402,12 +418,14 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     }
   }
 
+  const networkConfig = getNetworkConfig(selectedChain)
   const wethIsEth =
     isSameAddress(swapState.tokenIn.address, networkConfig.tokens.nativeAsset.address) ||
     isSameAddress(swapState.tokenOut.address, networkConfig.tokens.nativeAsset.address)
   const validAmountOut = bn(swapState.tokenOut.amount).gt(0)
 
-  const protocolVersion = (simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion || 2
+  const protocolVersion =
+    ((simulationQuery.data as SdkSimulateSwapResponse)?.protocolVersion as ProtocolVersion) || 2
   const { vaultAddress } = useVault(protocolVersion)
 
   const swapAction: SwapAction = useMemo(() => {
@@ -448,7 +466,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   const hasQuoteContext = !!simulationQuery.data
 
   function setInitialTokenIn(slugTokenIn?: string) {
-    const { popularTokens } = networkConfig.tokens
+    const { popularTokens } = getInitialNetworkConfig().tokens
     const symbolToAddressMap = invert(popularTokens || {}) as Record<string, Address>
     if (slugTokenIn) {
       if (isAddress(slugTokenIn)) {
@@ -460,7 +478,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   }
 
   function setInitialTokenOut(slugTokenOut?: string) {
-    const { popularTokens } = networkConfig.tokens
+    const { popularTokens } = getInitialNetworkConfig().tokens
     const symbolToAddressMap = invert(popularTokens || {}) as Record<string, Address>
     if (slugTokenOut) {
       if (isAddress(slugTokenOut)) setTokenOut(slugTokenOut as Address)
@@ -472,8 +490,8 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
 
   function setInitialChain(slugChain?: string) {
     const _chain =
-      slugChain && slugToChainMap[slugChain as ChainSlug]
-        ? slugToChainMap[slugChain as ChainSlug]
+      slugChain && getChainSlug(slugChain as ChainSlug)
+        ? getChainSlug(slugChain as ChainSlug)
         : walletChain
 
     setSelectedChain(_chain)
@@ -490,11 +508,13 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   // Sets initial swap state for pool swap edge-case
   function setInitialPoolSwapState(pool: Pool) {
     const { tokenIn } = pathParams
-    setInitialChain(pool.chain)
+    const slugChain = chainToSlugMap[pool.chain]
+    if (!slugChain) throw new Error(`Chain slug not found for chain ${pool.chain}`)
+    setInitialChain(slugChain)
 
     if (supportsNestedActions(pool)) {
       setInitialTokenIn(tokenIn)
-      if (isStandardRootToken(pool, tokenIn as Address)) {
+      if (isStandardOrUnderlyingRootToken(pool, tokenIn as Address)) {
         setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
       } else {
         setInitialTokenOut(getStandardRootTokens(pool, poolActionableTokens)[0].address)
@@ -505,6 +525,12 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       setInitialTokenOut(poolActionableTokens?.[1]?.address)
     }
     resetSwapAmounts()
+  }
+
+  // Returns networkConfig to be used in the initial load
+  function getInitialNetworkConfig() {
+    const swapState = swapStateVar()
+    return getNetworkConfig(swapState.selectedChain)
   }
 
   // Set state on initial load
@@ -621,6 +647,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
     isPoolSwap,
     pool,
     poolActionableTokens,
+    protocolVersion,
     replaceUrlPath,
     resetSwapAmounts,
     setTokenSelectKey,

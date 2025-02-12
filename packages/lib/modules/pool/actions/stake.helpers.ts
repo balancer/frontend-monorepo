@@ -1,5 +1,5 @@
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import { Address } from 'viem'
 import { HumanAmount } from '@balancer/sdk'
 import { isClaimableGauge } from '../pool.helpers'

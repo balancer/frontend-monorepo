@@ -1,0 +1,97 @@
+#import "./hook.graphql"
+
+fragment UnderlyingToken on GqlToken {
+  chain
+  chainId
+  address
+  decimals
+  name
+  symbol
+  priority
+  tradable
+  isErc4626
+  isBufferAllowed
+  logoURI
+}
+
+fragment Erc4626ReviewData on Erc4626ReviewData {
+  reviewFile
+  summary
+  warnings
+}
+
+fragment PoolTokens on GqlPoolTokenDetail {
+  id
+  # The following field match UnderlyingToken token fragment
+  chain
+  chainId
+  address
+  decimals
+  name
+  symbol
+  priority
+  tradable
+  isErc4626
+  index
+  balance
+  balanceUSD
+  priceRate
+  decimals
+  weight
+  hasNestedPool
+  isAllowed
+  priceRateProvider
+  logoURI
+  priceRateProviderData {
+    address
+    name
+    summary
+    reviewed
+    warnings
+    upgradeableComponents {
+      entryPoint
+      implementationReviewed
+    }
+    reviewFile
+    factory
+  }
+  nestedPool {
+    id
+    address
+    type
+    bptPriceRate
+    nestedPercentage
+    nestedShares
+    totalLiquidity
+    totalShares
+    tokens {
+      index
+      address
+      decimals
+      balance
+      balanceUSD
+      symbol
+      weight
+      isErc4626
+      isBufferAllowed
+      logoURI
+      underlyingToken {
+        ...UnderlyingToken
+      }
+      erc4626ReviewData {
+        ...Erc4626ReviewData
+      }
+    }
+    hook {
+      ...Hook
+    }
+  }
+  isErc4626
+  isBufferAllowed
+  underlyingToken {
+    ...UnderlyingToken
+  }
+  erc4626ReviewData {
+    ...Erc4626ReviewData
+  }
+}

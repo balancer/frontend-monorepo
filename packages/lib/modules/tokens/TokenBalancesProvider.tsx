@@ -11,12 +11,12 @@ import {
   refetchQueries,
 } from '@repo/lib/shared/utils/queries'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { PropsWithChildren, createContext, useState } from 'react'
+import { PropsWithChildren, createContext, useMemo, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { exclNativeAssetFilter, nativeAssetFilter } from './token.helpers'
 import { HumanAmount, Slippage } from '@balancer/sdk'
+import { ApiToken } from './token.types'
 
 const BALANCE_CACHE_TIME_MS = 30_000
 
@@ -32,15 +32,15 @@ export const TokenBalancesContext = createContext<UseTokenBalancesResponse | nul
  * case the buffer is set to the slippage percentage set by the user.
  */
 export function _useTokenBalances(
-  initTokens?: GqlToken[],
-  extTokens?: GqlToken[],
+  initTokens?: ApiToken[],
+  extTokens?: ApiToken[],
   bufferPercentage: HumanAmount | string = '0'
 ) {
   if (!initTokens && !extTokens) throw new Error('initTokens or tokens must be provided')
   if (initTokens && extTokens) throw new Error('initTokens and tokens cannot be provided together')
 
   // eslint-disable-next-line react/hook-use-state
-  const [_tokens, _setTokens] = useState<GqlToken[]>(initTokens || [])
+  const [_tokens, _setTokens] = useState<ApiToken[]>(initTokens || [])
 
   const { userAddress } = useUserAccount()
 
@@ -65,23 +65,26 @@ export function _useTokenBalances(
     },
   })
 
-  const tokenBalancesQuery = useReadContracts(
-    // This query key can potentially collide, but it will overflow the useQuery
-    // cache if this list of tokens is large.
-    {
-      query: {
-        enabled: !!userAddress && tokensExclNativeAsset.length > 0,
-        gcTime: BALANCE_CACHE_TIME_MS,
-      },
-      contracts: tokensExclNativeAsset.map(token => ({
-        chainId,
-        abi: erc20Abi,
-        address: token.address as Address,
-        functionName: 'balanceOf',
-        args: [(userAddress || '') as Address],
-      })),
-    }
-  )
+  const balanceContractReads = useMemo(() => {
+    return tokensExclNativeAsset.map(token => ({
+      chainId,
+      abi: erc20Abi,
+      address: token.address as Address,
+      functionName: 'balanceOf',
+      args: [(userAddress || '') as Address],
+    }))
+  }, [tokensExclNativeAsset, userAddress, chainId])
+
+  const tokenBalancesQuery = useReadContracts({
+    query: {
+      enabled: !!userAddress && tokensExclNativeAsset.length > 0,
+      gcTime: BALANCE_CACHE_TIME_MS,
+    },
+    multicallAddress: networkConfig.contracts.multicall3,
+    batchSize: 0, // Remove limit
+    allowFailure: true,
+    contracts: balanceContractReads,
+  })
 
   async function refetchBalances() {
     if (includesNativeAsset) return refetchQueries(tokenBalancesQuery, nativeBalanceQuery)
@@ -127,7 +130,7 @@ export function _useTokenBalances(
     return balances.find(balance => isSameAddress(balance.address, address))
   }
 
-  function setTokens(tokens: GqlToken[]) {
+  function setTokens(tokens: ApiToken[]) {
     if (extTokens) throw new Error('Cannot set tokens when using external tokens')
     _setTokens(tokens)
   }
@@ -144,8 +147,8 @@ export function _useTokenBalances(
 }
 
 type ProviderProps = PropsWithChildren<{
-  initTokens?: GqlToken[]
-  extTokens?: GqlToken[]
+  initTokens?: ApiToken[]
+  extTokens?: ApiToken[]
   bufferPercentage?: HumanAmount | string
 }>
 

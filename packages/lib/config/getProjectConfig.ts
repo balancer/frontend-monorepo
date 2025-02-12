@@ -7,10 +7,6 @@ export const allProjects: Record<string, ProjectConfig> = {
   [ProjectConfigBeets.projectId]: ProjectConfigBeets,
 }
 
-const PROJECT_CONFIG = process.env.NEXT_PUBLIC_PROJECT_ID
+export const PROJECT_CONFIG = process.env.NEXT_PUBLIC_PROJECT_ID
   ? allProjects[process.env.NEXT_PUBLIC_PROJECT_ID]
   : ProjectConfigBalancer
-
-export function getProjectConfig() {
-  return PROJECT_CONFIG
-}

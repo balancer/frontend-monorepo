@@ -10,8 +10,8 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { Address, Hex } from 'viem'
-import { Pool } from '../../../PoolProvider'
-import { LiquidityActionHelpers, areEmptyAmounts } from '../../LiquidityActionHelpers'
+import { Pool } from '../../../pool.types'
+import { LiquidityActionHelpers, areEmptyAmounts, getSender } from '../../LiquidityActionHelpers'
 import {
   NestedBuildAddLiquidityInputV3,
   NestedQueryAddLiquidityOutputV3,
@@ -31,6 +31,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
       return 0
     }
     const input = this.constructSdkInput(humanAmountsIn)
+
     const priceImpactABA = await PriceImpact.addLiquidityNested(
       input,
       this.helpers.nestedPoolStateV3
@@ -46,7 +47,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
 
     const addLiquidityInput: AddLiquidityNestedInputV3 = {
       ...this.constructSdkInput(humanAmountsIn),
-      sender: userAddress,
+      sender: getSender(userAddress),
     }
 
     const sdkQueryOutput = await addLiquidity.query(
@@ -72,6 +73,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
     slippagePercent,
     queryOutput,
     permit2,
+    humanAmountsIn,
   }: NestedBuildAddLiquidityInputV3): Promise<TransactionConfig> {
     const addLiquidity = new AddLiquidityNested()
 
@@ -79,6 +81,7 @@ export class NestedAddLiquidityV3Handler implements AddLiquidityHandler {
       ...queryOutput.sdkQueryOutput,
       slippage: Slippage.fromPercentage(`${Number(slippagePercent)}`),
       amountsIn: queryOutput.sdkQueryOutput.amountsIn,
+      wethIsEth: this.helpers.isNativeAssetIn(humanAmountsIn),
     }
 
     const { callData, to, value } = permit2

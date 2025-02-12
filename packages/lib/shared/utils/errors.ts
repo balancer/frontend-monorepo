@@ -17,7 +17,8 @@
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { buildTenderlyUrl } from '@repo/lib/modules/web3/useTenderly'
 import { captureException } from '@sentry/nextjs'
-import { ScopeContext } from '@sentry/types/types/scope'
+import { ScopeContext } from '@sentry/types'
+import { Address, Hex } from 'viem'
 
 // Wraps Sentry's captureException to allow for additional context or to use
 // where we don't want to throw an error.
@@ -116,7 +117,17 @@ export function getTenderlyUrlFromErrorMessage(
   When present, parses viem's exception message to extract the transaction config (build call data)
 */
 function parseRequestError(error: Error, chainId: number): TransactionConfig | undefined {
-  if (!error.message.startsWith('RPC Request failed')) return
+  if (error.message.startsWith('RPC Request failed')) {
+    return parseRpcRequestFailedError(error, chainId)
+  }
+
+  if (error.message.includes('Raw Call Arguments')) {
+    return parseRawCallArgumentsError(error, chainId)
+  }
+  return
+}
+
+function parseRpcRequestFailedError(error: Error, chainId: number): TransactionConfig | undefined {
   const requestBodyRegex = /Request body: ({.*})/
 
   const match = error?.stack?.match(requestBodyRegex)
@@ -144,6 +155,49 @@ function parseRequestError(error: Error, chainId: number): TransactionConfig | u
       return
     }
   }
+}
 
-  return
+function parseRawCallArgumentsError(error: Error, chainId: number): TransactionConfig | undefined {
+  const fromMatch = error.message.match(/from:\s*([^\n]+)/)
+  const toMatch = error.message.match(/to:\s*([^\n]+)/)
+  const dataMatch = error.message.match(/data:\s*([^\n]+)/)
+
+  const from = fromMatch?.[1].trim() ?? ''
+  const to = toMatch?.[1].trim() ?? ''
+  const data = dataMatch?.[1].trim() ?? ''
+
+  return {
+    data: data as Hex,
+    to: to as Address,
+    chainId,
+    account: (from as Address) || '0x0000000000000000000000000000000000000000',
+  }
+}
+
+/**
+ * Extracts message string from any Error
+ * @param error
+ */
+export function parseError(error: unknown) {
+  if (typeof error === 'string') return error
+
+  if (error instanceof Error) {
+    return error.message
+  }
+
+  return undefined
+}
+
+// Useful to distinguish this type of error in sentry and error alerts
+export const swapApolloNetworkErrorMessage = 'Apollo network error in DefaultSwapHandler'
+
+/*
+  This kind of error is thrown from apollo client when the request fails without a clear error code.
+  Causes could be:
+  - Connectivity issues
+  - Browser or extensions blocking the request
+  - CORS issues
+*/
+export function isFailedToFetchApolloError(error: Error): boolean {
+  return error.message === 'Failed to fetch'
 }

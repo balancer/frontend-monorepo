@@ -8,12 +8,16 @@ import {
   parseAddLiquidityReceipt,
   parseRemoveLiquidityReceipt,
   parseSwapReceipt,
+  parseLstStakeReceipt,
+  parseLstWithdrawReceipt,
 } from './receipt-parsers'
+import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 
 type BaseReceiptProps = {
   txHash?: Hex
   userAddress: Address
   chain: GqlChain
+  protocolVersion: ProtocolVersion
 }
 
 export type ReceiptProps = BaseReceiptProps & { parseReceipt: ParseReceipt }
@@ -58,7 +62,30 @@ export function useSwapReceipt(props: BaseReceiptProps) {
   }
 }
 
-function useTxReceipt({ txHash, chain, userAddress, parseReceipt }: ReceiptProps) {
+export type LstStakeReceiptResult = ReturnType<typeof useLstStakeReceipt>
+
+export function useLstStakeReceipt(props: BaseReceiptProps) {
+  const result = useTxReceipt({ ...props, parseReceipt: parseLstStakeReceipt })
+  const data = result.data as ReturnType<typeof parseLstStakeReceipt> | undefined
+
+  return {
+    ...result,
+    receivedToken: data?.receivedToken,
+  }
+}
+export type LstWithdrawReceiptResult = ReturnType<typeof useLstWithdrawReceipt>
+
+export function useLstWithdrawReceipt(props: BaseReceiptProps) {
+  const result = useTxReceipt({ ...props, parseReceipt: parseLstWithdrawReceipt })
+  const data = result.data as ReturnType<typeof parseLstWithdrawReceipt> | undefined
+
+  return {
+    ...result,
+    receivedToken: data?.receivedToken,
+  }
+}
+
+function useTxReceipt({ txHash, chain, userAddress, parseReceipt, protocolVersion }: ReceiptProps) {
   const { getToken, isLoadingTokenPrices } = useTokens()
   const chainId = getChainId(chain)
   // These queries will be cached if we are in the context of a transaction flow
@@ -89,6 +116,7 @@ function useTxReceipt({ txHash, chain, userAddress, parseReceipt }: ReceiptProps
           userAddress,
           txValue,
           getToken,
+          protocolVersion,
         })
       : undefined
 

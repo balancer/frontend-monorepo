@@ -1,3 +1,6 @@
+#import "./pool-tokens.graphql"
+#import "./hook.graphql"
+
 query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
   pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
     id
@@ -5,6 +8,9 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     name
     version
     owner
+    swapFeeManager
+    pauseManager
+    poolCreator
     decimals
     factory
     symbol
@@ -15,11 +21,12 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     tags
     hasErc4626
     hasNestedErc4626
+    hasAnyAllowedBuffer
     liquidityManagement {
       disableUnbalancedLiquidity
     }
     hook {
-      address
+      ...Hook
     }
     dynamicData {
       poolId
@@ -51,20 +58,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       isNested
       isPhantomBpt
       isMainToken
-    }
-    displayTokens {
-      id
-      address
-      name
-      weight
-      symbol
-      nestedTokens {
-        id
-        address
-        name
-        weight
-        symbol
-      }
     }
     staking {
       id
@@ -174,7 +167,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       v
       w
       z
-
       nestingType
       poolTokens {
         ...PoolTokens
@@ -190,59 +182,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
         ...PoolTokens
       }
     }
-  }
-}
-
-fragment PoolTokens on GqlPoolTokenDetail {
-  id
-  index
-  name
-  symbol
-  balance
-  balanceUSD
-  address
-  priceRate
-  decimals
-  weight
-  hasNestedPool
-  isAllowed
-  priceRateProvider
-  priceRateProviderData {
-    address
-    name
-    summary
-    reviewed
-    warnings
-    upgradeableComponents {
-      entryPoint
-      implementationReviewed
-    }
-    reviewFile
-    factory
-  }
-  nestedPool {
-    id
-    address
-    type
-    tokens {
-      index
-      address
-      decimals
-      isErc4626
-      underlyingToken {
-        address
-        decimals
-        name
-        symbol
-      }
-    }
-  }
-  isErc4626
-  underlyingToken {
-    address
-    decimals
-    name
-    symbol
   }
 }
 

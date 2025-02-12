@@ -1,29 +1,30 @@
 import { useDisclosure } from '@chakra-ui/hooks'
 import {
-  Button,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
-  VStack,
-  Link,
-  Divider,
   Box,
-  Text,
+  Button,
+  Divider,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
   HStack,
+  Link,
+  Text,
+  VStack,
 } from '@chakra-ui/react'
+import NextLink from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
 import { ArrowUpRight, Menu } from 'react-feather'
 import { AppLink, useNav } from './useNav'
-import NextLink from 'next/link'
-import { useRouter } from 'next/navigation'
-import { VeBalLink } from '@repo/lib/modules/vebal/VebalRedirectModal'
+import { SocialIcon } from './SocialIcon'
 
 type NavLinkProps = {
   appLinks: AppLink[]
+  customLinks?: React.ReactNode
   onClick?: () => void
 }
 
@@ -39,7 +40,7 @@ type MobileNavProps = NavLinkProps &
   EcosystemLinkProps &
   SocialLinkProps & { LogoType: React.FC<any> }
 
-function NavLinks({ appLinks, onClick }: NavLinkProps) {
+function NavLinks({ appLinks, onClick, customLinks }: NavLinkProps) {
   const { linkColorFor } = useNav()
 
   return (
@@ -58,7 +59,7 @@ function NavLinks({ appLinks, onClick }: NavLinkProps) {
           {link.label}
         </Link>
       ))}
-      <VeBalLink fontSize="xl" />
+      {customLinks}
     </VStack>
   )
 }
@@ -92,16 +93,22 @@ function EcosystemLinks({ ecosystemLinks }: EcosystemLinkProps) {
 function SocialLinks({ socialLinks }: SocialLinkProps) {
   return (
     <HStack justify="space-between" w="full">
-      {socialLinks.map(({ href, icon }) => (
+      {socialLinks.map(({ href, iconType }) => (
         <Button as={Link} href={href} isExternal key={href} variant="tertiary">
-          {icon}
+          <SocialIcon iconType={iconType} />
         </Button>
       ))}
     </HStack>
   )
 }
 
-export function MobileNav({ appLinks, ecosystemLinks, socialLinks, LogoType }: MobileNavProps) {
+export function MobileNav({
+  appLinks,
+  ecosystemLinks,
+  socialLinks,
+  LogoType,
+  customLinks,
+}: MobileNavProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = useRef(null)
   const router = useRouter()
@@ -124,7 +131,7 @@ export function MobileNav({ appLinks, ecosystemLinks, socialLinks, LogoType }: M
             <LogoType onClick={homeRedirect} width="106px" />
           </DrawerHeader>
           <DrawerBody>
-            <NavLinks appLinks={appLinks} onClick={onClose} />
+            <NavLinks appLinks={appLinks} customLinks={customLinks} onClick={onClose} />
             <Divider my={4} />
             <EcosystemLinks ecosystemLinks={ecosystemLinks} />
           </DrawerBody>

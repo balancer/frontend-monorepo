@@ -8,10 +8,29 @@
     "NEXT_PRIVATE_DRPC_KEY",
     "PRIVATE_HYPERNATIVE_API_ID",
     "PRIVATE_HYPERNATIVE_API_SECRET",
-    "NEXT_PUBLIC_WALLET_CONNECT_ID"
+    "NEXT_PUBLIC_WALLET_CONNECT_ID",
+    "PRIVATE_CURRENCYAPI_KEY",
+    "VITEST_POOL_ID",
+    "NODE_ENV",
+    "SILENT_TESTS",
+    "NEXT_PUBLIC_SENTRY_DSN",
+    "NEXT_RUNTIME",
+    "NEXT_PRIVATE_ALCHEMY_KEY",
+    "CI",
+    "NEXT_PUBLIC_UPDATE_API_MOCKS",
+    "VERCEL_GIT_COMMIT_REF"
   ],
+  "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN"],
   "tasks": {
     "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:turbopack": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:beets:turbopack": {
       "cache": false,
       "persistent": true
     },
@@ -43,30 +62,50 @@
     "test:unit": {
       "dependsOn": ["^graphql:gen", "^test:unit"]
     },
+    "test:unit:watch": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^graphql:gen"]
+    },
     "test:integration": {
-      "dependsOn": ["^graphql:gen", "^test:integration"],
+      "dependsOn": ["^graphql:gen", "^test:integration"]
+    },
+    "test:integration:watch": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^graphql:gen"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test:e2e": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test:e2e:ui": {
+      "dependsOn": ["^transit"]
     },
     "graphql:gen": {
       "dependsOn": ["^graphql:gen"],
       "inputs": ["**/*.graphql"],
       "outputs": ["shared/services/api/generated/**"]
     },
-    "//#format": {
-      "outputs": ["node_modules/.cache/.prettiercache"]
+    "prettier": {
+      "dependsOn": ["^prettier"],
+      "outputs": [".prettiercache"]
     },
-    "format": {
-      "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.prettiercache"]
-    },
-    "//#format:fix": {
-      "outputs": ["node_modules/.cache/.prettiercache"],
+    "prettier:fix": {
+      "dependsOn": ["^prettier:fix"],
+      "outputs": [".prettiercache"],
       "cache": false
     },
-    "format:fix": {
-      "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.prettiercache"],
+    "stylelint": {
+      "dependsOn": ["^stylelint"]
+    },
+    "stylelint:fix": {
+      "dependsOn": ["^stylelint:fix"],
       "cache": false
     }
+  },
+  "remoteCache": {
+    "enabled": true
   }
 }

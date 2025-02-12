@@ -1,5 +1,5 @@
 import { bn, safeSum } from '@repo/lib/shared/utils/numbers'
-import { Pool } from './PoolProvider'
+import { Pool } from './pool.types'
 import { PoolListItem } from './pool.types'
 import { parseUnits } from 'viem'
 import { BPT_DECIMALS } from './pool.constants'

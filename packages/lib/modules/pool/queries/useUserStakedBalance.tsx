@@ -9,10 +9,10 @@ import { Address, formatUnits } from 'viem'
 import { useReadContracts } from 'wagmi'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { balancerV2GaugeV5Abi } from '../../web3/contracts/abi/generated'
-import { Pool } from '../PoolProvider'
+import { Pool } from '../pool.types'
 import { BPT_DECIMALS } from '../pool.constants'
-import { calcBptPrice } from '../pool.helpers'
 import { useMemo } from 'react'
+import { useTokens } from '../../tokens/TokensProvider'
 
 export type StakedBalancesByPoolId = ReturnType<
   typeof useUserStakedBalance
@@ -20,6 +20,7 @@ export type StakedBalancesByPoolId = ReturnType<
 
 export function useUserStakedBalance(pools: Pool[] = []) {
   const { userAddress, isConnected } = useUserAccount()
+  const { priceFor } = useTokens()
   const poolByStaking = createPoolByStakingRecord(pools)
   const contracts = poolContracts(poolByStaking, userAddress)
 
@@ -46,7 +47,7 @@ export function useUserStakedBalance(pools: Pool[] = []) {
         const pool = poolByStaking[stakingAddress]
         if (!pool) return undefined
 
-        const bptPrice = calcBptPrice(pool.dynamicData.totalLiquidity, pool.dynamicData.totalShares)
+        const bptPrice = priceFor(pool.address, pool.chain)
         const humanStakedBalance = formatUnits(rawBalance || 0n, BPT_DECIMALS)
 
         const stakingType =

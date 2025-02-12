@@ -7,7 +7,7 @@ import {
   GqlPoolSnapshotDataRange,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
-import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr'
+import { useQuery } from '@apollo/client'
 import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { usePool } from '../../../PoolProvider'
@@ -71,7 +71,7 @@ const dataRangeToDaysMap: { [key in GqlPoolSnapshotDataRange]?: number } = {
   [GqlPoolSnapshotDataRange.OneHundredEightyDays]: 180,
 }
 
-const getDefaultPoolChartOptions = (
+export const getDefaultPoolChartOptions = (
   currencyFormatter: NumberFormatter,
   nextTheme: ColorMode = 'dark',
   theme: any // TODO: type this
@@ -496,7 +496,7 @@ export function usePoolCharts() {
             width: 2,
           },
           itemStyle: {
-            color: activeTabOptions.color,
+            color: activeTabOptions.color as string | echarts.graphic.LinearGradient,
             borderRadius: 100,
           },
           emphasis: {

@@ -11,7 +11,7 @@ const integrationTestOptions: Partial<InlineConfig> = {
   include: ['./**/*.integration.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
   // Avoid msw in integration tests
   setupFiles: [...setupFilesWithoutMswSetup(), 'test/vitest/setup-integration.ts'],
-  globalSetup: ['./test/anvil/anvil-global-setup.ts'],
+  globalSetup: ['test/vitest/saveApiMocks.ts', './test/anvil/anvil-global-setup.ts'],
   testTimeout: 30_000,
   // Consider disabling threads if we detect problems with anvil
   // poolOptions: {

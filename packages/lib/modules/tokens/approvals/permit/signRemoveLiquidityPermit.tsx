@@ -1,15 +1,16 @@
-// eslint-disable-next-line max-len
-import { constructRemoveBaseBuildCallInput } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/add-liquidity.utils'
-import { ensureError } from '@repo/lib/shared/utils/errors'
+/* eslint-disable max-len */
 import {
   Address,
   Permit,
   PermitHelper,
   PublicWalletClient,
+  RemoveLiquidityNestedQueryOutput,
   RemoveLiquidityQueryOutput,
 } from '@balancer/sdk'
-import { isBoosted } from '@repo/lib/modules/pool/pool.helpers'
-import { Pool } from '@repo/lib/modules/pool/PoolProvider'
+import { constructRemoveBaseBuildCallInput } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/add-liquidity.utils'
+import { isBoosted, isV3WithNestedActionsPool } from '@repo/lib/modules/pool/pool.helpers'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { ensureError } from '@repo/lib/shared/utils/errors'
 
 export interface PermitRemoveLiquidityInput {
   account: Address
@@ -50,15 +51,25 @@ async function signPermit({ permitInput, wethIsEth, sdkClient, pool }: Params): 
     sdkQueryOutput: permitInput.sdkQueryOutput as RemoveLiquidityQueryOutput,
   })
 
-  const signPermitFn = isBoosted(pool)
-    ? PermitHelper.signRemoveLiquidityBoostedApproval
-    : PermitHelper.signRemoveLiquidityApproval
-
-  const signature = await signPermitFn({
+  const baseParams = {
     ...baseInput,
     /* eslint-disable @typescript-eslint/no-non-null-assertion */
     client: sdkClient!,
     owner: permitInput.account,
-  })
-  return signature
+  }
+
+  if (isV3WithNestedActionsPool(pool)) {
+    // Cast to unknown to avoid type assertion as this concrete case has a very specific type
+    // that requires bptAmountIn (when others don't)
+    const nestedOutput = permitInput.sdkQueryOutput as unknown as RemoveLiquidityNestedQueryOutput
+
+    return PermitHelper.signRemoveLiquidityNestedApproval({
+      ...baseParams,
+      bptAmountIn: nestedOutput.bptAmountIn,
+    })
+  }
+
+  if (isBoosted(pool)) return PermitHelper.signRemoveLiquidityBoostedApproval(baseParams)
+
+  return PermitHelper.signRemoveLiquidityApproval(baseParams)
 }
