@@ -1120,7 +1120,7 @@ export default function Privacy() {
                       <span>Hooks</span>
                     </Link>{' '}
                     risk section and other{' '}
-                    <Link href="risks#hgeneral">
+                    <Link href="risks#general">
                       <span>General</span>
                     </Link>{' '}
                     risks.
