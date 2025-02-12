@@ -80,7 +80,6 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
   }
 
   function onBoostedTokenSelect(token: ApiToken) {
-    console.log('handling boosted token select in AddLiquidity Provider', token.index)
     if (token.index === undefined) {
       console.error('Token should have index', token)
       throw new Error(`Token index not found for token ${token.symbol}`)
@@ -88,7 +87,7 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
 
     const oldWrapUnderlying = [...wrapUnderlying]
     setWrapUnderlyingByIndex(token.index, token.wrappedToken ? true : false)
-    console.log({ oldWrapUnderlying, wrapUnderlying })
+
     if (!isEqual(oldWrapUnderlying, wrapUnderlying)) {
       clearAmountsIn()
     }
