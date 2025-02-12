@@ -50,13 +50,13 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     isNativeOrWrappedNative(token.address as Address, token.chain)
   )
 
-  function handleTokenSelect(token: ApiToken) {
+  function handleNativeTokenSelect(token: ApiToken) {
     if (isNativeAsset(token.address as Address, token.chain)) {
       setWethIsEth(true)
     } else {
       setWethIsEth(false)
     }
-    setAmountIn(token, '')
+    setAmountIn(token, '0')
 
     // reset any validation errors for native assets
     nativeAssets.forEach(nativeAsset => {
@@ -109,7 +109,7 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
           nativeAssets={nativeAssets}
           onClose={nativeTokenSelectDisclosure.onClose}
           onOpen={nativeTokenSelectDisclosure.onOpen}
-          onTokenSelect={handleTokenSelect}
+          onTokenSelect={handleNativeTokenSelect}
         />
       )}
 
