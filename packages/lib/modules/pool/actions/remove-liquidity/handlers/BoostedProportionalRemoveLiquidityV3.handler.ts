@@ -59,7 +59,7 @@ export class BoostedProportionalRemoveLiquidityV3Handler extends BaseProportiona
       protocolVersion: 3,
       userData: '0x',
       removeLiquidityKind: RemoveLiquidityKind.Proportional,
-      unwrapWrapped, // REVIEW: sort by index --> muy importante probar con edge-cases here. En principio viene del SDK
+      unwrapWrapped,
     }
 
     const { callData, to, value } = permit
