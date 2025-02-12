@@ -69,7 +69,6 @@ export function usePoolListQueryState() {
   const [networks, setNetworks] = useQueryState('networks', poolListQueryStateParsers.networks)
   const [minTvl, setMinTvl] = useQueryState('minTvl', poolListQueryStateParsers.minTvl)
   const [poolTags, setPoolTags] = useQueryState('poolTags', poolListQueryStateParsers.poolTags)
-  const [hasHook, setHasHook] = useQueryState('hasHook', poolListQueryStateParsers.hasHook)
   const [poolHookTags, setPoolHookTags] = useQueryState(
     'poolHookTags',
     poolListQueryStateParsers.poolHookTags
@@ -99,7 +98,7 @@ export function usePoolListQueryState() {
   useEffect(() => {
     if (skip) setSkip(0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [poolTypes, networks, minTvl, poolTags, hasHook])
+  }, [poolTypes, networks, minTvl, poolTags])
 
   // Set internal checked state
   function toggleUserAddress(checked: boolean, address: string) {
@@ -275,7 +274,6 @@ export function usePoolListQueryState() {
     togglePoolType,
     togglePoolTag,
     togglePoolHookTag,
-    setHasHook,
     poolTypeLabel,
     setSorting,
     setPagination,
@@ -292,7 +290,6 @@ export function usePoolListQueryState() {
     setActiveProtocolVersionTab,
     activeProtocolVersionTab,
     poolTags,
-    hasHook,
     protocolVersion,
     minTvl,
     searchText: textSearch,
