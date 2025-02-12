@@ -113,13 +113,10 @@ export function _calculateProportionalHumanAmountsIn({
     throw new Error('Cannot calculate proportional amounts without pool state')
   }
 
+  // DELETE AFTER testing in preview url
   console.log('calculateProportionalAmountsBoosted input:', {
     poolStateWithBalances,
     referenceAmount,
-    // tokenAddress: token.address,
-    // tokenSymbol: token.symbol,
-    // humanAmount,
-    // wrapUnderlying,
   })
 
   const sdkProportionalAmounts = isBoosted(helpers.pool)
