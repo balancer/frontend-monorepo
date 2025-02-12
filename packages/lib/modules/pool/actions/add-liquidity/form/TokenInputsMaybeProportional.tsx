@@ -95,7 +95,8 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
 
   return (
     <VStack spacing="md" w="full">
-      <div>wrapUnderlying: {JSON.stringify(wrapUnderlying)}</div>
+      {/* DELETE AFTER PREVIEW URL tests */}
+      <div>Debug wrapUnderlying: {JSON.stringify(wrapUnderlying)}</div>
       <TokenInputs
         customSetAmountIn={setAmountIn}
         getToggleTokenCallback={getToggleTokenCallback}
