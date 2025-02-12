@@ -129,6 +129,8 @@ export const POOL_TAG_MAP: { [key in PoolTagType]: string[] } = {
   BOOSTED: ['BOOSTED'],
 }
 
+export const poolHookTagFilters = ['HOOKS_STABLESURGE', 'HOOKS_EXITFEE', 'HOOKS_FEETAKING'] as const
+
 export type SortingState = PoolsColumnSort[]
 
 export const orderByHash: { [key: string]: string } = {
