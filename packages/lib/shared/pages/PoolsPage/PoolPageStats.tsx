@@ -31,7 +31,7 @@ export function PoolPageStats() {
       <GridItem>
         <Stat
           imageTransform="rotate(180deg)"
-          label="Fees (24h)"
+          label="Swap fees (24h)"
           value={fNumCustom(protocolData?.protocolMetricsAggregated.swapFee24h ?? 0, '$0,0.0a')}
         />
       </GridItem>

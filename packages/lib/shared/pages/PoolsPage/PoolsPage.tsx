@@ -82,7 +82,7 @@ export async function PoolsPage({ children }: PropsWithChildren) {
                     Earn passively on {PROJECT_CONFIG.projectName}
                   </Heading>
                   <Text sx={{ textWrap: 'balance' }} variant="secondary">
-                    Join 240k+ Liquidity Providers in yield-bearing pools
+                    Join 230k+ Liquidity Providers in yield-bearing pools
                   </Text>
                 </Box>
                 <PoolPageStats />
