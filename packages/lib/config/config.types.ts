@@ -143,6 +143,17 @@ type Links = {
   legalLinks: AppLink[]
 }
 
+type PartnerCard = {
+  backgroundImage: string
+  bgColor: string
+  ctaText: string
+  ctaUrl: string
+  description: string
+  iconName: string
+  title: string
+  externalLink?: boolean
+}
+
 export interface ProjectConfig {
   projectId: 'beets' | 'balancer'
   projectUrl: string
@@ -159,4 +170,6 @@ export interface ProjectConfig {
   links: Links
   footer: { linkSections: LinkSection[] }
   cowSupportedNetworks: GqlChain[]
+  networksForProtocolStats?: GqlChain[]
+  partnerCards?: PartnerCard[]
 }
