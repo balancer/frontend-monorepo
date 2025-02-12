@@ -269,6 +269,5 @@ export function isTooSmallToRemoveUsd(value: Numberish): boolean {
   return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
 }
 
-export const isValidNumber = (value: string): boolean => {
-  return isNumber(toNumber(value)) && !isNaN(toNumber(value))
-}
+export const isValidNumber = (value: string): boolean =>
+  isNumber(toNumber(value)) && !isNaN(toNumber(value))
