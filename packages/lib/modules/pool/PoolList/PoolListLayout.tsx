@@ -25,8 +25,9 @@ export function PoolListLayout() {
       poolTags,
       togglePoolTag,
       poolTagLabel,
-      hasHook,
-      setHasHook,
+      poolHookTags,
+      togglePoolHookTag,
+      poolHookTagLabel,
     },
   } = usePoolList()
   const isFilterVisible = useFilterTagsVisible()
@@ -75,16 +76,17 @@ export function PoolListLayout() {
             </Box>
           </HStack>
           <FilterTags
-            hasHook={hasHook}
             minTvl={minTvl}
             networks={networks}
+            poolHookTagLabel={poolHookTagLabel}
+            poolHookTags={poolHookTags}
             poolTagLabel={poolTagLabel}
             poolTags={poolTags}
             poolTypeLabel={poolTypeLabel}
             poolTypes={poolTypes}
-            setHasHook={setHasHook}
             setMinTvl={setMinTvl}
             toggleNetwork={toggleNetwork}
+            togglePoolHookTag={togglePoolHookTag}
             togglePoolTag={togglePoolTag}
             togglePoolType={togglePoolType}
           />
