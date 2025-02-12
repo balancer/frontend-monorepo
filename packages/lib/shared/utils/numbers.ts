@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js'
 import numeral from 'numeral'
 import { KeyboardEvent } from 'react'
 import { formatUnits } from 'viem'
+import { isNumber, toNumber } from 'lodash'
 
 // Allows calling JSON.stringify with bigints
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#use_within_json
@@ -266,4 +267,8 @@ export function isSmallUsd(value: Numberish): boolean {
 export function isTooSmallToRemoveUsd(value: Numberish): boolean {
   const USD_LOWER_THRESHOLD = 0.03
   return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
+}
+
+export const isValidNumber = (value: string): boolean => {
+  return isNumber(toNumber(value)) && !isNaN(toNumber(value))
 }
