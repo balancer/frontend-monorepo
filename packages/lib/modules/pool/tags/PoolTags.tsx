@@ -16,12 +16,12 @@ import {
 import { PoolTag } from './getPoolTags'
 import { usePool } from '../PoolProvider'
 import NextLink from 'next/link'
-import { isInteger, toNumber } from 'lodash'
+import { isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { usePoolTags } from './PoolTagsProvider'
 
 function TagValue({ tag }: { tag: PoolTag }) {
   if (tag.value) {
-    if (tag.id.includes('points') && isInteger(toNumber(tag.value))) {
+    if (tag.id.includes('points') && isValidNumber(tag.value)) {
       return <Text ml="xs" mr="xs">{`${tag.value}x`}</Text>
     }
   }
