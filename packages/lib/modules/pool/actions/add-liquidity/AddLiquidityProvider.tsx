@@ -30,7 +30,11 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { supportsWethIsEth } from '../../pool.helpers'
-import { getPoolActionableTokens } from '../../pool-tokens.utils'
+import {
+  getDefaultWrapUnderlying,
+  getPoolActionableTokens,
+  getWrappedBoostedTokens,
+} from '../../pool-tokens.utils'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
@@ -47,8 +51,15 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const [needsToAcceptHighPI, setNeedsToAcceptHighPI] = useState(false)
   const [acceptPoolRisks, setAcceptPoolRisks] = useState(false)
   const [wethIsEth, setWethIsEth] = useState(false)
+
   const [totalUSDValue, setTotalUSDValue] = useState('0')
   const { pool, refetch: refetchPool, isLoading } = usePool()
+
+  const [wrapUnderlying, setWrapUnderlying] = useState<boolean[]>(getDefaultWrapUnderlying(pool))
+
+  function setWrapUnderlyingByIndex(index: number, value: boolean) {
+    setWrapUnderlying(wrapUnderlying.map((v, i) => (i === index ? value : v)))
+  }
 
   /* wantsProportional is true when:
     - the pool requires proportional input
@@ -79,7 +90,18 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   const nativeAsset = getNativeAssetToken(chain)
   const wNativeAsset = getWrappedNativeAssetToken(chain)
   const slippage = wantsProportional ? proportionalSlippage : userSlippage
-  const tokens = getPoolActionableTokens(pool)
+
+  // Actionable tokens selected in the add form
+  const tokens = getPoolActionableTokens(pool, wrapUnderlying)
+
+  // All tokens that can be used in the pool form
+  // standard tokens + wrapped/native asset (when wrapped native asset is present) + wrapped/underlying tokens (when the token is boosted)
+  const validTokens = [
+    ...injectNativeAsset(getPoolActionableTokens(pool), nativeAsset, pool),
+    ...getWrappedBoostedTokens(pool),
+  ]
+
+  const { usdValueFor } = useTotalUsdValue(validTokens)
 
   function setInitialHumanAmountsIn() {
     const amountsIn = tokens.map(
@@ -119,10 +141,6 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
   }
 
   const tokensWithNativeAsset = replaceWrappedWithNativeAsset(tokens, nativeAsset)
-
-  const validTokens = injectNativeAsset(tokens, nativeAsset, pool)
-
-  const { usdValueFor } = useTotalUsdValue(validTokens)
 
   useEffect(() => {
     if (!isLoadingTokenPrices) {
@@ -248,6 +266,8 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     setNeedsToAcceptHighPI,
     setAcceptPoolRisks,
     setWethIsEth,
+    setWrapUnderlyingByIndex,
+    wrapUnderlying,
     setInitialHumanAmountsIn,
   }
 }

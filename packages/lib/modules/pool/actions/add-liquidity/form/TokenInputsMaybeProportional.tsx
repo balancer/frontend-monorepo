@@ -12,6 +12,9 @@ import { isNativeAsset, isNativeOrWrappedNative } from '@repo/lib/modules/tokens
 import { Address } from 'viem'
 import { useTokenInputsValidation } from '@repo/lib/modules/tokens/TokenInputsValidationProvider'
 import { shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
+import { getWrappedAndUnderlyingTokenFn } from '../../../pool-tokens.utils'
+import { isEqual } from 'lodash'
+import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 
 type Props = {
   isProportional: boolean
@@ -19,8 +22,16 @@ type Props = {
 }
 
 export function TokenInputsMaybeProportional({ isProportional }: Props) {
-  const { setHumanAmountIn, validTokens, setWethIsEth } = useAddLiquidity()
+  const {
+    setHumanAmountIn,
+    validTokens,
+    setWethIsEth,
+    setWrapUnderlyingByIndex,
+    wrapUnderlying,
+    clearAmountsIn,
+  } = useAddLiquidity()
   const { chain, pool } = usePool()
+  const { balanceFor } = useTokenBalances()
 
   const { handleProportionalHumanInputChange } = useProportionalInputs()
   const { setValidationError } = useTokenInputsValidation()
@@ -32,12 +43,8 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
   // Triggers modal to select between wrapped or underlying tokens (only for boosted tokens)
   const boostedTokenSelectDisclosure = useDisclosure()
 
-  const [selectedBoostedToken, setSelectedBoostedToken] = useState<ApiToken | null>(null)
-
-  const wrappedAndUnderlyingTokens =
-    selectedBoostedToken && selectedBoostedToken.underlyingToken
-      ? [selectedBoostedToken, selectedBoostedToken.underlyingToken]
-      : []
+  // Array with the underlying and wrapped tokens to be selected in WrappedOrUnderlyingSelectModal
+  const [wrappedAndUnderlying, setWrappedAndUnderlying] = useState<ApiToken[] | undefined>()
 
   const nativeAssets = validTokens.filter(token =>
     isNativeOrWrappedNative(token.address as Address, token.chain)
@@ -61,20 +68,35 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
     if (shouldShowNativeWrappedSelector(token, pool)) {
       return () => nativeTokenSelectDisclosure.onOpen()
     }
-    // Will be used in incoming PRs
-    // if (token.wrappedToken) {
-    // eslint-disable-next-line no-constant-condition
-    if (false) {
+
+    const wrappedAndUnderlying = getWrappedAndUnderlyingTokenFn(token, pool, balanceFor)()
+    if (wrappedAndUnderlying) {
       return () => {
-        setSelectedBoostedToken(token)
+        setWrappedAndUnderlying(wrappedAndUnderlying)
         return boostedTokenSelectDisclosure.onOpen()
       }
     }
-    return
+    return undefined
+  }
+
+  function onBoostedTokenSelect(token: ApiToken) {
+    console.log('handling boosted token select in AddLiquidity Provider', token.index)
+    if (token.index === undefined) {
+      console.error('Token should have index', token)
+      throw new Error(`Token index not found for token ${token.symbol}`)
+    }
+
+    const oldWrapUnderlying = [...wrapUnderlying]
+    setWrapUnderlyingByIndex(token.index, token.wrappedToken ? true : false)
+    console.log({ oldWrapUnderlying, wrapUnderlying })
+    if (!isEqual(oldWrapUnderlying, wrapUnderlying)) {
+      clearAmountsIn()
+    }
   }
 
   return (
     <VStack spacing="md" w="full">
+      <div>wrapUnderlying: {JSON.stringify(wrapUnderlying)}</div>
       <TokenInputs
         customSetAmountIn={setAmountIn}
         getToggleTokenCallback={getToggleTokenCallback}
@@ -93,15 +115,11 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
 
       <WrappedOrUnderlyingSelectModal
         chain={chain}
-        isOpen={boostedTokenSelectDisclosure.isOpen}
+        isOpen={boostedTokenSelectDisclosure.isOpen && !!wrappedAndUnderlying}
         onClose={boostedTokenSelectDisclosure.onClose}
         onOpen={boostedTokenSelectDisclosure.onOpen}
-        // TODO: in incoming PRs
-        // AddLiquidityProvider ->
-        onTokenSelect={token =>
-          console.log('TODO: handle boosted token select in AddLiquidity Provider', token)
-        }
-        tokens={wrappedAndUnderlyingTokens}
+        onTokenSelect={onBoostedTokenSelect}
+        tokens={wrappedAndUnderlying as ApiToken[]}
       />
     </VStack>
   )

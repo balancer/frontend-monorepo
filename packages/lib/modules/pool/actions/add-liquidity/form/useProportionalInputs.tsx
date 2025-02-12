@@ -29,11 +29,10 @@ export function useProportionalInputs() {
     setHumanAmountsIn,
     clearAmountsIn,
     wethIsEth,
-    // wrapUnderlying,
+    wrapUnderlying,
     setReferenceAmountAddress,
   } = useAddLiquidity()
 
-  const wrapUnderlying = [false, true] // TODO: uncomment line above
   const { balances, isBalancesLoading } = useTokenBalances()
   const { isLoading: isPoolLoading, pool } = usePool()
 

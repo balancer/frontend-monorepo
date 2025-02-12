@@ -8,13 +8,13 @@ import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { Address, Hex } from 'viem'
 import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
-import { sDAIBoosted } from '../../../__mocks__/pool-examples/boosted'
+import { partialBoosted } from '../../../__mocks__/pool-examples/boosted'
 import { isBoosted } from '../../../pool.helpers'
 import { Pool, ProtocolVersion } from '../../../pool.types'
 import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { _calculateProportionalHumanAmountsIn } from './useProportionalInputs'
 
-const pool = getApiPoolMock(sDAIBoosted)
+const pool = getApiPoolMock(partialBoosted)
 const helpers = new LiquidityActionHelpers(pool)
 
 function apiToken(address: string): ApiToken {
@@ -26,7 +26,6 @@ const waGnoGNOTokenAddress = '0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644' // wra
 
 const sDaiAddress = '0xaf204776c7245bf4147c2612bf6e5972ee483701' // non boosted token
 
-// ESTA MUY BIEN PERO HAY QUE EXPLICAR MEJOR el wrapUnderlying y que hace cada test
 describe('_calculateProportionalHumanAmountsIn', () => {
   it('when reference is first token: underlying GNO', () => {
     const humanAmountsIn = _calculateProportionalHumanAmountsIn({

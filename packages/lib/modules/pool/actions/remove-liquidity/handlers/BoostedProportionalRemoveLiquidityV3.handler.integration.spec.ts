@@ -1,4 +1,4 @@
-import { sepoliaCompositeRouter } from '@repo/lib/debug-helpers'
+import { sepoliaCompositeRouterBoosted } from '@repo/lib/debug-helpers'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
 import { connectWithDefaultUser } from '@repo/lib/test/utils/wagmi/wagmi-connections'
@@ -40,7 +40,7 @@ describe.skip('When proportionally removing liquidity for a BOOSTED v3 pool', as
 
     const result = await handler.simulate(defaultQueryInput)
 
-    expect(result.sdkQueryOutput.to).toBe(sepoliaCompositeRouter)
+    expect(result.sdkQueryOutput.to).toBe(sepoliaCompositeRouterBoosted)
 
     const [aUsdcTokenAmountOut, aUsdtTokenAmountOut] = result.amountsOut.sort()
 
@@ -61,7 +61,7 @@ describe.skip('When proportionally removing liquidity for a BOOSTED v3 pool', as
       queryOutput,
     })
 
-    expect(result.to).toBe(sepoliaCompositeRouter)
+    expect(result.to).toBe(sepoliaCompositeRouterBoosted)
     expect(result.data).toBeDefined()
   })
 })

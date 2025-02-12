@@ -26,6 +26,7 @@ export interface QueryRemoveLiquidityInput {
 
 export type QueryRemoveLiquidityOutput = {
   amountsOut: TokenAmount[]
+  unwrapWrapped?: boolean[]
 }
 
 export type BuildRemoveLiquidityInput = {
@@ -49,4 +50,5 @@ export interface SdkQueryRemoveLiquidityOutput extends QueryRemoveLiquidityOutpu
 
 export interface SdkBuildRemoveLiquidityInput extends BuildRemoveLiquidityInput {
   queryOutput: SdkQueryRemoveLiquidityOutput
+  unwrapWrapped?: boolean[]
 }

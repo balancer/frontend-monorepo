@@ -26,7 +26,7 @@ export const morphoStakeHouse: PoolExample = {
   version: 3,
 }
 
-export const sDAIBoosted: PoolExample = {
+export const partialBoosted: PoolExample = {
   name: 'aGNO/sDAI',
   description:
     'Edge case: BOOSTED with 2 ERC4626 tokens but one of them (sDAI) has isBufferAllowed == false',
@@ -35,15 +35,6 @@ export const sDAIBoosted: PoolExample = {
   version: 3,
   // Freeze pool to avoid breaking useProportionalInput tests
   isFrozen: true,
-}
-
-export const partialBoosted: PoolExample = {
-  name: 'rstETH/LidowstETH',
-  description:
-    'Edge case: PARTIAL BOOSTED with 1 ERC4626 (waEthLidowstETH) and one non ERC4626 (rstETH)',
-  poolId: '0x121edb0badc036f5fc610d015ee14093c142313b',
-  poolChain: GqlChain.Mainnet,
-  version: 3,
 }
 
 export const partialBoostedSepolia: PoolExample = {
@@ -60,7 +51,6 @@ export const boostedPoolExamples = [
   v3SepoliaNestedBoosted,
   usdcUsdtAaveBoosted,
   morphoStakeHouse,
-  sDAIBoosted,
   partialBoosted,
   partialBoostedSepolia,
 ]

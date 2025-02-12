@@ -22,7 +22,7 @@ import { mock } from 'vitest-mock-extended'
 import { getApiPoolMock } from '../__mocks__/api-mocks/api-mocks'
 import { nestedPoolMock } from '../__mocks__/nestedPoolMock'
 import {
-  sDAIBoosted,
+  partialBoosted,
   usdcUsdtAaveBoosted,
   v3SepoliaNestedBoosted,
 } from '../__mocks__/pool-examples/boosted'
@@ -486,7 +486,7 @@ test('boostedPoolState pool state for V3 BOOSTED POOL', async () => {
 })
 
 describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
-  const v3Pool = getApiPoolMock(sDAIBoosted) // // Gnosis Balancer aGNO/sDAI
+  const v3Pool = getApiPoolMock(partialBoosted) // Gnosis Balancer aGNO/sDAI
 
   const waGnoGNOAddress = '0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644'
   const gnoAddress = '0x9c58bacc331c9aa871afd802db6379a98e80cedb'
