@@ -8,7 +8,6 @@ import { v3SepoliaNestedBoostedMock } from './v3SepoliaNestedBoostedMock'
 import { aave_USDC_USDTMock } from './aave_USDC_USDTMock'
 import { b_csUSDL_steakUSDCMock } from './b_csUSDL_steakUSDCMock'
 import { aGNO_sDAIMock } from './aGNO_sDAIMock'
-import { rstETH_Lido_wstETHMock } from './rstETH_Lido_wstETHMock'
 import { partialBoostedSepoliaWethStataUsdtMock } from './partialBoostedSepoliaWethStataUsdtMock'
 import { staBAL3_WETH_WBTC_BPTMock } from './staBAL3_WETH_WBTC_BPTMock'
 import { b_auraBAL_STABLEMock } from './b_auraBAL_STABLEMock'
@@ -24,7 +23,6 @@ export const allApiMocks: Pool[] = [
   ,aave_USDC_USDTMock
   ,b_csUSDL_steakUSDCMock
   ,aGNO_sDAIMock
-  ,rstETH_Lido_wstETHMock
   ,partialBoostedSepoliaWethStataUsdtMock
   ,staBAL3_WETH_WBTC_BPTMock
   ,b_auraBAL_STABLEMock
