@@ -29,7 +29,7 @@ export function useAddLiquiditySteps({
   slippage,
 }: AddLiquidityStepsParams) {
   const { pool, chainId, chain } = usePool()
-  const shouldBatchTransactions = useShouldBatchTransactions(pool)
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const relayerMode = useRelayerMode(pool)
   const shouldSignRelayerApproval = useShouldSignRelayerApproval(chainId, relayerMode)
   const { shouldUseSignatures } = useUserSettings()
@@ -94,7 +94,7 @@ export function useAddLiquiditySteps({
   addLiquidityStep.nestedSteps = tokenApprovalSteps
   const approveAndAddSteps =
     shouldBatchTransactions && hasSomePendingNestedTxInBatch(addLiquidityStep)
-      ? [addLiquidityStep] // Hide token approvals when batching
+      ? [...addSteps] // Hide token approvals when batching
       : [...tokenApprovalSteps, ...addSteps]
 
   const steps = useMemo<TransactionStep[]>(() => {
