@@ -1150,7 +1150,7 @@ export default function Privacy() {
                       rate provider and oracle risks in the{' '}
                       <Link href="risks#composable-pools">
                         <span>Composable Stable Pools</span>
-                      </Link>
+                      </Link>{' '}
                       risk section.
                     </li>
                   </ul>
