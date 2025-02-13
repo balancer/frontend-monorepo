@@ -121,7 +121,7 @@ function getHookIcon(data: GqlHookReviewData | undefined | null) {
 }
 
 function getHookName(hook: HookFragment, pool: Pool, hooksMetadata: (HooksMetadata | undefined)[]) {
-  if (!hooksMetadata) return hook.name
+  if (!hooksMetadata) return hook.type
 
   const chainId = getChainId(pool.chain)
 
