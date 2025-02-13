@@ -12,7 +12,7 @@ export type PoolTag = {
   description: string
   value?: string
   url?: string
-  fileIcon?: string
+  icon?: string
   iconUrl?: string
   pools?: string[]
 }
@@ -27,7 +27,7 @@ export async function getPoolTags(): Promise<PoolTag[] | undefined> {
     return tags.map(tag => {
       return {
         ...tag,
-        iconUrl: tag.fileIcon ? `${POOL_TAGS_ICON_BASE_URL}/${tag.fileIcon}` : undefined,
+        iconUrl: tag.icon ? `${POOL_TAGS_ICON_BASE_URL}/${tag.icon}` : undefined,
       }
     })
   } catch (error) {
