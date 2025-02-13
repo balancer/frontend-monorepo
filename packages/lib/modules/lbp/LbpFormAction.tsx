@@ -17,7 +17,7 @@ export function LbpFormAction() {
         />
       )}
 
-      <Button type="submit" variant="primary" w="full">
+      <Button size="lg" type="submit" variant="primary" w="full">
         {isLastStep ? 'Create LBP' : 'Next'}
       </Button>
     </HStack>

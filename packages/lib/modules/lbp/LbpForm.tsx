@@ -10,10 +10,7 @@ import {
   StepTitle,
   StepSeparator,
   Box,
-  Button,
   VStack,
-  HStack,
-  IconButton,
 } from '@chakra-ui/react'
 import { useLbpForm } from './LbpFormProvider'
 import { SaleStructureStep } from './steps/SaleStructureStep'
@@ -21,16 +18,7 @@ import { ProjectInfoStep } from './steps/ProjectInfoStep'
 import { ReviewStep } from './steps/ReviewStep'
 
 export function LbpForm() {
-  const { steps, activeStepIndex, activeStep, setActiveStep, isLastStep, isFirstStep } =
-    useLbpForm()
-
-  function handleSubmit() {
-    if (isLastStep) {
-      console.log('submit')
-    } else {
-      setActiveStep(activeStepIndex + 1)
-    }
-  }
+  const { steps, activeStepIndex, activeStep } = useLbpForm()
 
   return (
     <VStack spacing="lg" w="full">
@@ -55,11 +43,11 @@ export function LbpForm() {
       </Stepper>
 
       <VStack spacing="lg" w="full">
-        {activeStep.id === 'saleStructure' ? (
+        {activeStep.id === 'step1' ? (
           <SaleStructureStep />
-        ) : activeStep.id === 'projectInfo' ? (
+        ) : activeStep.id === 'step2' ? (
           <ProjectInfoStep />
-        ) : activeStep.id === 'review' ? (
+        ) : activeStep.id === 'step3' ? (
           <ReviewStep />
         ) : null}
       </VStack>

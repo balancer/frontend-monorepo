@@ -78,3 +78,11 @@ export function abbreviateAddress(address: string | Address, segLength = 4) {
   const lastSegment = address.substring(address.length, address.length - segLength)
   return `${firstSegment}...${lastSegment}`
 }
+
+export function isAddressValidation(value: string): string | true {
+  if (!isAddress(value)) {
+    return 'Invalid token address'
+  }
+
+  return true
+}
