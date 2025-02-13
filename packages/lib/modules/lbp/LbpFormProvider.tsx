@@ -3,6 +3,8 @@
 import { useSteps } from '@chakra-ui/react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
+import { useForm } from 'react-hook-form'
+import { LbpFormStep1 } from './lbp.types'
 
 export type UseLbpFormResult = ReturnType<typeof _useLbpForm>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -14,6 +16,8 @@ const steps = [
 ]
 
 export function _useLbpForm() {
+  const formStep1 = useForm<LbpFormStep1>()
+
   const { activeStep: activeStepIndex, setActiveStep } = useSteps({
     index: 0,
     count: steps.length,
@@ -31,6 +35,7 @@ export function _useLbpForm() {
     isLastStep,
     activeStep,
     isFirstStep,
+    formStep1,
   }
 }
 

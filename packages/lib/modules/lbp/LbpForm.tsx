@@ -19,7 +19,6 @@ import { useLbpForm } from './LbpFormProvider'
 import { SaleStructureStep } from './steps/SaleStructureStep'
 import { ProjectInfoStep } from './steps/ProjectInfoStep'
 import { ReviewStep } from './steps/ReviewStep'
-import { ChevronLeftIcon } from '@chakra-ui/icons'
 
 export function LbpForm() {
   const { steps, activeStepIndex, activeStep, setActiveStep, isLastStep, isFirstStep } =
@@ -55,7 +54,7 @@ export function LbpForm() {
         ))}
       </Stepper>
 
-      <Box w="full">
+      <VStack spacing="lg" w="full">
         {activeStep.id === 'saleStructure' ? (
           <SaleStructureStep />
         ) : activeStep.id === 'projectInfo' ? (
@@ -63,21 +62,7 @@ export function LbpForm() {
         ) : activeStep.id === 'review' ? (
           <ReviewStep />
         ) : null}
-      </Box>
-
-      <HStack spacing="md" w="full">
-        {!isFirstStep && (
-          <IconButton
-            aria-label="Back"
-            icon={<ChevronLeftIcon h="8" w="8" />}
-            onClick={() => setActiveStep(activeStepIndex - 1)}
-          />
-        )}
-
-        <Button onClick={handleSubmit} variant="primary" w="full">
-          {isLastStep ? 'Create LBP' : 'Next'}
-        </Button>
-      </HStack>
+      </VStack>
     </VStack>
   )
 }
