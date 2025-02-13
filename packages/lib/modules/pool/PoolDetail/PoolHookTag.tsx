@@ -1,24 +1,10 @@
-import {
-  Box,
-  Center,
-  HStack,
-  Link,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverContent,
-  PopoverFooter,
-  PopoverHeader,
-  PopoverTrigger,
-  Portal,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Center, HStack, Popover, PopoverTrigger, Text } from '@chakra-ui/react'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { useHook } from '../../hooks/useHook'
-
 import { PoolListItem } from '../pool.types'
 import { Pool } from '../pool.types'
 import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
+import { PoolHeaderPopoverContent } from '@repo/lib/shared/components/popover/PoolHeaderPopoverContent'
 
 type Props = {
   pool: Pool | PoolListItem
@@ -69,28 +55,11 @@ export function PoolHookTag({ pool, onlyShowIcon = false }: Props) {
               </HStack>
             </Box>
           </PopoverTrigger>
-          <Portal>
-            <PopoverContent px="sm" py="sm">
-              <PopoverArrow bg="background.level3" />
-              <PopoverHeader>
-                <Text color="font.secondary" fontWeight="bold" size="md">
-                  {hook.name} Hook
-                </Text>
-              </PopoverHeader>
-              <PopoverBody>
-                <Text fontSize="sm" variant="secondary">
-                  {hook.description}
-                </Text>
-              </PopoverBody>
-              {hook.learnMore && (
-                <PopoverFooter>
-                  <Link href={hook.learnMore} target="_blank">
-                    Learn more
-                  </Link>
-                </PopoverFooter>
-              )}
-            </PopoverContent>
-          </Portal>
+          <PoolHeaderPopoverContent
+            bodyTxt={hook.description}
+            footerUrl={hook.learnMore}
+            headerTxt={`${hook.name} Hook`}
+          />
         </>
       )}
     </Popover>
