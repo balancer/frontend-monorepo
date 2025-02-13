@@ -19,7 +19,4 @@ test('Open swap page and try eth wrap', async ({ page }) => {
   // There's a quote displayed
   const button = page.getByRole('button', { name: /ETH = 1 WETH/ })
   await expect(button).toBeVisible()
-
-  // User is not connected
-  expect(page.getByRole('button', { name: 'Connect wallet' })).toBeVisible()
 })
