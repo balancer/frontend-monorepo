@@ -50,8 +50,6 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       this.helpers.boostedPoolState
     )
 
-    console.log({ addLiquidityInput })
-
     return {
       bptOut: sdkQueryOutput.bptOut,
       to: sdkQueryOutput.to,
