@@ -298,6 +298,11 @@ export function hasReviewedErc4626(token: GqlPoolTokenDetail): boolean {
 // Emergency flag to block adds for all V3 pools
 const shouldBlockV3PoolAdds = false
 
+// Workaround: delete once pool is correctly paused
+function isPausedById(poolId: string) {
+  return isSameAddress(poolId, '0xeb95d6bd67f613e7918a031d9f4a9a92766659ac')
+}
+
 /**
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
@@ -312,7 +317,12 @@ export function shouldBlockAddLiquidity(pool: Pool) {
   if (isMaBeetsPool(pool.id)) return true
 
   // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
-  if (isLBP(pool.type) || pool.dynamicData.isPaused || pool.dynamicData.isInRecoveryMode) {
+  if (
+    isLBP(pool.type) ||
+    pool.dynamicData.isPaused ||
+    pool.dynamicData.isInRecoveryMode ||
+    isPausedById(pool.id)
+  ) {
     return true
   }
 
@@ -367,6 +377,7 @@ export function getPoolAddBlockedReason(pool: Pool): string {
   if (isLBP(pool.type)) return 'LBP pool'
   if (pool.dynamicData.isPaused) return 'Paused pool'
   if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
+  if (isPausedById(pool.id)) return 'Paused pool'
 
   // reason for blocking in custom scenarios eg. maBEETS
   if (isMaBeetsPool(pool.id)) {
