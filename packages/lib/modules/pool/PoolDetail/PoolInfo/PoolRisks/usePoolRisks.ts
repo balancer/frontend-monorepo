@@ -1,4 +1,8 @@
-import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlHookType,
+  GqlPoolElement,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import {
   isMetaStable,
   isStable,
@@ -7,7 +11,7 @@ import {
   isBoosted,
   hasNestedPools,
   hasHooks,
-  hasStableSurgeHook,
+  hasHookType,
 } from '../../../pool.helpers'
 import { zeroAddress } from 'viem'
 
@@ -124,7 +128,7 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   if (pool.chain === GqlChain.Avalanche) result.push(avalancheRisks)
   if (hasNestedPools(pool)) result.push(nestedPoolRisks)
   if (hasHooks(pool)) result.push(hookRisks)
-  if (hasStableSurgeHook(pool)) result.push(stableSurgeHookRisks)
+  if (hasHookType(pool, GqlHookType.StableSurge)) result.push(stableSurgeHookRisks)
   if (hasOwner(pool)) result.push(mutableRisks)
 
   result.push(getLink(RiskKey.General))
