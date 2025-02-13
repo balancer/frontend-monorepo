@@ -1,10 +1,10 @@
-import { Box, Center, HStack, Popover, PopoverTrigger, Text } from '@chakra-ui/react'
+import { Box, Center, HStack, Text } from '@chakra-ui/react'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { useHook } from '../../hooks/useHook'
 import { PoolListItem } from '../pool.types'
 import { Pool } from '../pool.types'
 import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
-import { PoolHeaderPopoverContent } from '@repo/lib/shared/components/popover/PoolHeaderPopoverContent'
+import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
 
 type Props = {
   pool: Pool | PoolListItem
@@ -26,42 +26,39 @@ export function PoolHookTag({ pool, onlyShowIcon = false }: Props) {
       </Center>
     </BalBadge>
   ) : (
-    <Popover trigger="hover">
+    <CustomPopover
+      bodyText={hook.description}
+      footerUrl={hook.learnMore}
+      headerText={`${hook.name} Hook`}
+      trigger="hover"
+      useIsOpen
+    >
       {({ isOpen }) => (
-        <>
-          <PopoverTrigger>
-            <Box
-              alignItems="center"
-              background="background.level2"
-              border="1px solid"
-              borderColor={isOpen ? 'font.primary' : 'border.base'}
-              display="flex"
-              fontWeight="normal"
-              h={{ base: '28px' }}
-              px="sm"
-              py="xs"
-              rounded="full"
-              shadow="sm"
+        <Box
+          alignItems="center"
+          background="background.level2"
+          border="1px solid"
+          borderColor={isOpen ? 'font.primary' : 'border.base'}
+          display="flex"
+          fontWeight="normal"
+          h={{ base: '28px' }}
+          px="sm"
+          py="xs"
+          rounded="full"
+          shadow="sm"
+        >
+          <HStack color={isOpen ? 'font.primary' : 'font.secondary'} gap="xs">
+            <HookIcon size={18} />
+            <Text
+              color={isOpen ? 'font.primary' : 'font.secondary'}
+              fontSize="sm"
+              variant="secondary"
             >
-              <HStack color={isOpen ? 'font.primary' : 'font.secondary'} gap="xs">
-                <HookIcon size={18} />
-                <Text
-                  color={isOpen ? 'font.primary' : 'font.secondary'}
-                  fontSize="sm"
-                  variant="secondary"
-                >
-                  {hook.name}
-                </Text>
-              </HStack>
-            </Box>
-          </PopoverTrigger>
-          <PoolHeaderPopoverContent
-            bodyTxt={hook.description}
-            footerUrl={hook.learnMore}
-            headerTxt={`${hook.name} Hook`}
-          />
-        </>
+              {hook.name}
+            </Text>
+          </HStack>
+        </Box>
       )}
-    </Popover>
+    </CustomPopover>
   )
 }
