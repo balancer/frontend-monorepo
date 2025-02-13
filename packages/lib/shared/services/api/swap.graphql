@@ -1,4 +1,4 @@
-query GetSorSwaps(
+query SorGetSwapPaths(
   $tokenIn: String!
   $tokenOut: String!
   $swapType: GqlSorSwapType!

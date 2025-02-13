@@ -1,6 +1,6 @@
 import { ApolloClient } from '@apollo/client'
 import { Path } from '@balancer/sdk'
-import { GetSorSwapsDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import { SorGetSwapPathsDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProtocolVersion } from '../../pool/pool.types'
 import { SdkSimulateSwapResponse, SimulateSwapInputs } from '../swap.types'
 import { BaseDefaultSwapHandler } from './BaseDefaultSwap.handler'
@@ -20,8 +20,8 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
   async simulate({ ...variables }: SimulateSwapInputs): Promise<SdkSimulateSwapResponse> {
     const { data } = await this.apolloClient
       .query({
-        query: GetSorSwapsDocument,
-        variables,
+        query: SorGetSwapPathsDocument,
+        variables: { ...variables, considerPoolsWithHooks: true },
         fetchPolicy: 'no-cache',
         notifyOnNetworkStatusChange: true,
       })
