@@ -365,3 +365,7 @@ function sortTokenPairByBalance(
     return -1
   })
 }
+
+export function getActionableTokenAddresses(pool: Pool, wrapUnderlying?: boolean[]): Address[] {
+  return getPoolActionableTokens(pool, wrapUnderlying).map(token => token.address as Address)
+}

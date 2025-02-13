@@ -24,10 +24,12 @@ import {
   shouldUseUnderlyingToken,
   getPoolActionableTokens,
   getWrappedAndUnderlyingTokenFn,
+  getActionableTokenAddresses,
 } from './pool-tokens.utils'
 import { ApiToken, BalanceForFn, TokenAmount, TokenBase } from '../tokens/token.types'
 import { PoolToken } from './pool.types'
 import { getApiPoolMock } from './__mocks__/api-mocks/api-mocks'
+import { usdcAddress, usdtAddress, waUsdcAddress, waUsdtAddress } from '@repo/lib/debug-helpers'
 
 // Testing utils that can be kept in the test:
 function getCompositionTokenSymbols(poolExample: PoolExample): string[] {
@@ -356,4 +358,12 @@ describe('Given a fully boosted pool', () => {
     expect(shouldUseUnderlyingToken(second, pool)).toEqual(false)
     expect(second.wrappedToken?.symbol).toEqual('waEthUSDT')
   })
+})
+
+it('getActionableTokenAddresses', () => {
+  const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+  expect(getActionableTokenAddresses(pool)).toEqual([usdtAddress, usdcAddress])
+  expect(getActionableTokenAddresses(pool, [true, true])).toEqual([usdtAddress, usdcAddress])
+  expect(getActionableTokenAddresses(pool, [false, false])).toEqual([waUsdtAddress, waUsdcAddress])
+  expect(getActionableTokenAddresses(pool, [false, true])).toEqual([waUsdtAddress, usdcAddress])
 })

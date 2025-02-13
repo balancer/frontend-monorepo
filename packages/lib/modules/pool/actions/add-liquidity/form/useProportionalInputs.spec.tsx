@@ -81,7 +81,7 @@ describe('_calculateProportionalHumanAmountsIn', () => {
       wrapUnderlying: [true, false],
     })
 
-    // Sorts the results moving rstEthAddress human amount to the first position
+    // Sorts the results moving sDAI human amount to the first position
     expect(humanAmountsIn).toMatchObject([
       {
         tokenAddress: sDaiAddress,
@@ -104,7 +104,7 @@ describe('_calculateProportionalHumanAmountsIn', () => {
       wrapUnderlying: [false, false],
     })
 
-    // Sorts the results moving rstEthAddress human amount to the first position
+    // Sorts the results moving sDAI human amount to the first position
     expect(humanAmountsIn).toMatchObject([
       {
         tokenAddress: sDaiAddress,

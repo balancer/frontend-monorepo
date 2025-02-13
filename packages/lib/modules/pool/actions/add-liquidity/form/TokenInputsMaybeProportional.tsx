@@ -85,10 +85,9 @@ export function TokenInputsMaybeProportional({ isProportional }: Props) {
       throw new Error(`Token index not found for token ${token.symbol}`)
     }
 
-    const oldWrapUnderlying = [...wrapUnderlying]
-    setWrapUnderlyingByIndex(token.index, !!token.wrappedToken)
+    const newWrapUnderlying = setWrapUnderlyingByIndex(token.index, !!token.wrappedToken)
 
-    if (!isEqual(oldWrapUnderlying, wrapUnderlying)) {
+    if (!isEqual(wrapUnderlying, newWrapUnderlying)) {
       clearAmountsIn()
     }
   }

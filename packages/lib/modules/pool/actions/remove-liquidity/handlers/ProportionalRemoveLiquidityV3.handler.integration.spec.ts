@@ -84,6 +84,7 @@ describe.skip(`When proportionally removing liquidity using NON BOOSTED remove f
   const defaultQueryInput: QueryRemoveLiquidityInput = {
     humanBptIn: '0.01',
     tokenOut: emptyAddress, // We don't use in this scenario it but it is required to simplify TS interfaces
+    tokensOut: [],
     userAddress: defaultTestUserAccount,
   }
 

@@ -10,12 +10,24 @@ import { NativeAssetSelectModal } from '@repo/lib/modules/tokens/NativeAssetSele
 import { shouldShowNativeWrappedSelector } from '../../LiquidityActionHelpers'
 import { Pool } from '../../../pool.types'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { WrappedOrUnderlyingSelectModal } from '@repo/lib/modules/tokens/WrappedOrUnderlyingSelectModal'
+import { useState } from 'react'
+import { getWrappedAndUnderlyingTokenFn } from '../../../pool-tokens.utils'
 
 type Props = { tokens: ApiToken[]; pool: Pool }
 export function RemoveLiquidityProportional({ tokens, pool }: Props) {
-  const { amountOutForToken, validTokens, setWethIsEth, simulationQuery, priceImpactQuery } =
-    useRemoveLiquidity()
-  const tokenSelectDisclosure = useDisclosure()
+  const {
+    amountOutForToken,
+    validTokens,
+    setWethIsEth,
+    simulationQuery,
+    priceImpactQuery,
+    setWrapUnderlyingByIndex,
+  } = useRemoveLiquidity()
+  // Array with the underlying and wrapped tokens to be selected in WrappedOrUnderlyingSelectModal
+  const [wrappedAndUnderlying, setWrappedAndUnderlying] = useState<ApiToken[] | undefined>()
+  const nativeTokenSelectDisclosure = useDisclosure()
+  const boostedTokenSelectDisclosure = useDisclosure()
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
 
   const nativeAssets = validTokens.filter(token =>
@@ -28,6 +40,30 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
     } else {
       setWethIsEth(false)
     }
+  }
+
+  function onBoostedTokenSelect(token: ApiToken) {
+    if (token.index === undefined) {
+      console.error('Token should have index', token)
+      throw new Error(`Token index not found for token ${token.symbol}`)
+    }
+
+    setWrapUnderlyingByIndex(token.index, !!token.wrappedToken)
+  }
+
+  function getToggleTokenCallback(token: ApiToken) {
+    if (shouldShowNativeWrappedSelector(token, pool)) {
+      return () => nativeTokenSelectDisclosure.onOpen()
+    }
+
+    const wrappedAndUnderlying = getWrappedAndUnderlyingTokenFn(token, pool, () => undefined)()
+    if (wrappedAndUnderlying) {
+      return () => {
+        setWrappedAndUnderlying(wrappedAndUnderlying)
+        return boostedTokenSelectDisclosure.onOpen()
+      }
+    }
+    return undefined
   }
 
   return (
@@ -45,11 +81,7 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
                   chain={pool.chain}
                   isLoading={isLoading}
                   key={token.address}
-                  toggleTokenSelect={
-                    shouldShowNativeWrappedSelector(token, pool)
-                      ? () => tokenSelectDisclosure.onOpen()
-                      : undefined
-                  }
+                  toggleTokenSelect={getToggleTokenCallback(token)}
                   value={amountOutForToken(token.address as Address)}
                 />
               )
@@ -59,11 +91,22 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
       {!!validTokens.length && (
         <NativeAssetSelectModal
           chain={validTokens[0].chain}
-          isOpen={tokenSelectDisclosure.isOpen}
+          isOpen={nativeTokenSelectDisclosure.isOpen}
           nativeAssets={nativeAssets}
-          onClose={tokenSelectDisclosure.onClose}
-          onOpen={tokenSelectDisclosure.onOpen}
+          onClose={nativeTokenSelectDisclosure.onClose}
+          onOpen={nativeTokenSelectDisclosure.onOpen}
           onTokenSelect={handleTokenSelect}
+        />
+      )}
+
+      {!!validTokens.length && (
+        <WrappedOrUnderlyingSelectModal
+          chain={validTokens[0].chain}
+          isOpen={boostedTokenSelectDisclosure.isOpen && !!wrappedAndUnderlying}
+          onClose={boostedTokenSelectDisclosure.onClose}
+          onOpen={boostedTokenSelectDisclosure.onOpen}
+          onTokenSelect={onBoostedTokenSelect}
+          tokens={wrappedAndUnderlying as ApiToken[]}
         />
       )}
     </>

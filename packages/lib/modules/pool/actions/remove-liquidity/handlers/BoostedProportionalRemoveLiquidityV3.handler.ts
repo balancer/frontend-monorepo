@@ -1,5 +1,4 @@
 import {
-  Address,
   RemoveLiquidityBoostedBuildCallInput,
   RemoveLiquidityBoostedV3,
   RemoveLiquidityKind,
@@ -17,15 +16,10 @@ export class BoostedProportionalRemoveLiquidityV3Handler extends BaseProportiona
   public async simulate({
     humanBptIn: bptIn,
     userAddress,
-    // tokensOut,
+    tokensOut,
   }: QueryRemoveLiquidityInput): Promise<SdkQueryRemoveLiquidityOutput> {
-    // DEBUG: in sepolia pool
-    // const tokensOut = [
-    //   '0x7b79995e5f793a07bc00c21412e50ecae098e7f9' as Address, // WETH
-    //   '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0' as Address, // usdt Aave
-    // ]
-    const tokensOut: Address[] = []
     const removeLiquidity = new RemoveLiquidityBoostedV3()
+    if (!tokensOut) throw new Error('tokensOut is required for boosted remove liquidity')
     const removeLiquidityInput = { ...this.constructSdkInput(bptIn, userAddress), tokensOut }
 
     const sdkQueryOutput = await removeLiquidity.query(
@@ -45,11 +39,10 @@ export class BoostedProportionalRemoveLiquidityV3Handler extends BaseProportiona
     slippagePercent,
     queryOutput,
     permit,
-    unwrapWrapped,
   }: SdkBuildRemoveLiquidityInput): Promise<TransactionConfig> {
     const removeLiquidity = new RemoveLiquidityBoostedV3()
 
-    if (!unwrapWrapped) {
+    if (!queryOutput.unwrapWrapped) {
       throw new Error('unwrapWrapped is required for boosted remove liquidity')
     }
 
@@ -59,7 +52,7 @@ export class BoostedProportionalRemoveLiquidityV3Handler extends BaseProportiona
       protocolVersion: 3,
       userData: '0x',
       removeLiquidityKind: RemoveLiquidityKind.Proportional,
-      unwrapWrapped,
+      unwrapWrapped: queryOutput.unwrapWrapped,
     }
 
     const { callData, to, value } = permit

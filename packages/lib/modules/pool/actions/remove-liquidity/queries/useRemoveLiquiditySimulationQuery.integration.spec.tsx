@@ -24,6 +24,7 @@ async function testQuery(humanBptIn: HumanAmount) {
       poolId,
       humanBptIn,
       tokenOut: emptyTokenOut,
+      tokensOut: [],
       enabled: true,
     })
   )

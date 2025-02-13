@@ -30,16 +30,13 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { isUnhandledAddPriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { supportsWethIsEth } from '../../pool.helpers'
-import {
-  getDefaultWrapUnderlying,
-  getPoolActionableTokens,
-  getWrappedBoostedTokens,
-} from '../../pool-tokens.utils'
+import { getPoolActionableTokens, getWrappedBoostedTokens } from '../../pool-tokens.utils'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
+import { useWrapUnderlying } from '../useWrapUnderlying'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -54,12 +51,7 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
 
   const [totalUSDValue, setTotalUSDValue] = useState('0')
   const { pool, refetch: refetchPool, isLoading } = usePool()
-  const [wrapUnderlying, setWrapUnderlying] = useState<boolean[]>(getDefaultWrapUnderlying(pool))
-
-  function setWrapUnderlyingByIndex(index: number, value: boolean) {
-    setWrapUnderlying(wrapUnderlying.map((v, i) => (i === index ? value : v)))
-  }
-
+  const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
   /* wantsProportional is true when:
     - the pool requires proportional input
     - the user selected the proportional tab
