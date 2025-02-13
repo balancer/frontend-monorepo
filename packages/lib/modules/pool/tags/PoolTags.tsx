@@ -1,23 +1,9 @@
-import {
-  Badge,
-  HStack,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  Text,
-  PopoverTrigger,
-  VStack,
-  Image,
-  Button,
-  Link,
-} from '@chakra-ui/react'
+import { Badge, HStack, Popover, Text, PopoverTrigger, Image } from '@chakra-ui/react'
 import { PoolTag } from './getPoolTags'
 import { usePool } from '../PoolProvider'
-import NextLink from 'next/link'
 import { isValidNumber } from '@repo/lib/shared/utils/numbers'
 import { usePoolTags } from './PoolTagsProvider'
+import { PoolHeaderPopoverContent } from '@repo/lib/shared/components/popover/PoolHeaderPopoverContent'
 
 function TagValue({ tag }: { tag: PoolTag }) {
   if (tag.value) {
@@ -77,38 +63,11 @@ function PoolTagBadge({ tag }: { tag: PoolTag }) {
           </Badge>
         </HStack>
       </PopoverTrigger>
-      <PopoverContent>
-        <PopoverArrow bg="background.level3" />
-        <PopoverCloseButton />
-        <PopoverBody>
-          <VStack align="start" spacing="md">
-            <VStack align="start" spacing="xs">
-              <Text fontSize="lg" fontWeight="bold">
-                {tag.name}
-              </Text>
-              {tag.url && (
-                <Link color="grayText" fontSize="sm" href={tag.url} isExternal>
-                  {tag.url}
-                </Link>
-              )}
-            </VStack>
-            <Text>{tag.description}</Text>
-            {tag.url && (
-              <Button
-                as={NextLink}
-                href={tag.url}
-                rel="noreferrer"
-                size="sm"
-                target="_blank"
-                variant="secondary"
-                w="full"
-              >
-                Learn more
-              </Button>
-            )}
-          </VStack>
-        </PopoverBody>
-      </PopoverContent>
+      <PoolHeaderPopoverContent
+        bodyTxt={tag.description}
+        footerUrl={tag.url}
+        headerTxt={tag.name}
+      />
     </Popover>
   )
 }
