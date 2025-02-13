@@ -21,7 +21,7 @@ type Params = {
   chainId: number
   humanBptIn: HumanAmount
   tokenOut: Address // used by single removes
-  tokensOut: Address[] // used by boosted proportional removes
+  tokensOut?: Address[] // used by boosted proportional removes
   enabled?: boolean
 }
 
