@@ -32,6 +32,12 @@ const nextConfig = {
         destination: 'https://discord.gg/kbPnYJjvwZ',
         permanent: false,
       },
+      // temporary redirect for urls to OP pools from the old app (mainly for Aura)
+      {
+        source: '/pool/:path*',
+        destination: '/pools/optimism/v2/:path*',
+        permanent: false,
+      },
     ]
   },
 }
