@@ -35,14 +35,12 @@ function PoolWeightsInfo() {
             <ListItem color="font.black" fontWeight="medium">
               {compositionTokens
                 .map(
-                  token => `
-                  ${token.symbol}: 
-                  ${fNum('weight', poolTokensWithActualWeights[token.address], {
-                    abbreviated: false,
-                  })}
-                `
+                  token =>
+                    `${token.symbol}: ${fNum('weight', poolTokensWithActualWeights[token.address], {
+                      abbreviated: false,
+                    })}`
                 )
-                .join(',')}
+                .join(', ')}
             </ListItem>
           </UnorderedList>
         </BalAlertContent>
