@@ -10,11 +10,11 @@ test('Open swap page and try eth wrap', async ({ page }) => {
   await page.getByText('Wrapped Ether').click()
 
   // Fills 1 ETH token in
-  await page.getByPlaceholder('0.00').first().fill('1')
+  await page.getByLabel('TokenIn').fill('1')
+
+  await expect(page).toHaveURL('http://localhost:3000/swap/ethereum/ETH/WETH/1')
 
   // There's a quote displayed
   const button = page.getByRole('button', { name: /ETH = 1 WETH/ })
   await expect(button).toBeVisible()
-
-  await expect(page).toHaveURL('http://localhost:3000/swap/ethereum/ETH/WETH/1')
 })
