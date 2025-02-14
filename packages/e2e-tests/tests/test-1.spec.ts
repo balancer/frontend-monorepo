@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test('Open swap page and try eth wrap', async ({ page }) => {
+test('test', async ({ page }) => {
   await page.goto('http://localhost:3000/')
   await page.getByRole('link', { name: 'Swap', exact: true }).click()
 
