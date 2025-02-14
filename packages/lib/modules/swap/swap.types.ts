@@ -1,5 +1,5 @@
 import {
-  GetSorSwapsQuery,
+  SorGetSwapPathsQuery,
   GqlChain,
   GqlSorSwapType,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -35,7 +35,7 @@ export type SimulateSwapInputs = {
   poolIds?: string[]
 }
 
-type ApiSwapQuery = GetSorSwapsQuery['swaps']
+type ApiSwapQuery = SorGetSwapPathsQuery['swaps']
 
 export type SimulateSwapResponse = Pick<
   ApiSwapQuery,
