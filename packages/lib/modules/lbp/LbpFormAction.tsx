@@ -14,6 +14,7 @@ export function LbpFormAction() {
           aria-label="Back"
           icon={<ChevronLeftIcon h="8" w="8" />}
           onClick={() => setActiveStep(activeStepIndex - 1)}
+          size="lg"
         />
       )}
 
