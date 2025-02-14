@@ -21,5 +21,5 @@ export function useGetPoolTokensWithActualWeights() {
     ])
   ) as Record<string, string>
 
-  return { poolTokensWithActualWeights }
+  return { poolTokensWithActualWeights, compositionTokens }
 }
