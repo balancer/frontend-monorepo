@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, VStack, Text, Input } from '@chakra-ui/react'
+import { Heading, VStack, Text } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
 import { useLbpForm } from '../LbpFormProvider'
@@ -8,6 +8,7 @@ import { SaleStructureForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
 import { LbpFormAction } from '../LbpFormAction'
 import { isAddressValidation } from '@repo/lib/shared/utils/addresses'
+import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 
 export function SaleStructureStep() {
   const {
@@ -55,17 +56,13 @@ export function SaleStructureStep() {
               control={control}
               name="launchTokenAddress"
               render={({ field }) => (
-                <>
-                  <Input
-                    isInvalid={!!errors.launchTokenAddress}
-                    onChange={e => field.onChange(e.target.value)}
-                    placeholder="Enter token address"
-                    value={field.value}
-                  />
-                  <Text color="font.error" fontSize="sm">
-                    {errors.launchTokenAddress?.message}
-                  </Text>
-                </>
+                <InputWithError
+                  error={errors.launchTokenAddress?.message}
+                  isInvalid={!!errors.launchTokenAddress}
+                  onChange={e => field.onChange(e.target.value)}
+                  placeholder="Enter token address"
+                  value={field.value}
+                />
               )}
               rules={{
                 required: 'Token address is required',
