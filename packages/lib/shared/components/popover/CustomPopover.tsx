@@ -63,16 +63,18 @@ export function CustomPopover({
     </PopoverContent>
   )
 
+  const renderTrigger = (isOpen: boolean) => (
+    <PopoverTrigger>
+      {typeof children === 'function' ? children({ isOpen, content: popoverContent }) : children}
+    </PopoverTrigger>
+  )
+
   if (useIsOpen) {
     return (
       <Popover {...props}>
         {state => (
           <>
-            <PopoverTrigger>
-              {typeof children === 'function'
-                ? children({ isOpen: state.isOpen, content: popoverContent })
-                : children}
-            </PopoverTrigger>
+            {renderTrigger(state.isOpen)}
             {popoverContent}
           </>
         )}
@@ -82,11 +84,7 @@ export function CustomPopover({
 
   return (
     <Popover {...props}>
-      <PopoverTrigger>
-        {typeof children === 'function'
-          ? children({ isOpen: props.isOpen ?? false, content: popoverContent } as any)
-          : children}
-      </PopoverTrigger>
+      {renderTrigger(false)}
       {popoverContent}
     </Popover>
   )
