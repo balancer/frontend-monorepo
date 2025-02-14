@@ -5,7 +5,7 @@ test('Open swap page and try eth wrap', async ({ page }) => {
   await page.getByRole('link', { name: 'Swap', exact: true }).click()
 
   // Selects Wrapped Ether token out
-  await page.getByRole('button', { name: 'Select token' }).nth(1).click()
+  await page.getByRole('button', { name: 'Select token' }).first().click()
   await page.getByPlaceholder('Search by name, symbol or').fill('we')
   await page.getByRole('img', { name: 'WETH', exact: true }).click()
 
