@@ -1,11 +1,14 @@
 'use client'
 
-import { Heading, VStack, Text, Input, Textarea } from '@chakra-ui/react'
+import { Heading, VStack, Text } from '@chakra-ui/react'
 import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
 import { LbpFormAction } from '../LbpFormAction'
 import { isValidUrl } from '@repo/lib/shared/utils/urls'
+import { isValidTelegramHandle, isValidTwitterHandle } from '@repo/lib/shared/utils/strings'
+import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
+import { TextareaWithError } from '@repo/lib/shared/components/inputs/TextareaWithError'
 
 export function ProjectInfoStep() {
   const {
@@ -30,6 +33,9 @@ export function ProjectInfoStep() {
         <DescriptionInput />
         <TokenIconInput />
         <ProjectWebsiteUrlInput />
+        <ProjectXHandle />
+        <ProjectTelegramHandle />
+        <ProjectDiscordUrlInput />
 
         <LbpFormAction />
       </VStack>
@@ -52,16 +58,12 @@ function NameInput() {
         control={control}
         name="name"
         render={({ field }) => (
-          <>
-            <Input
-              isInvalid={!!errors.name}
-              onChange={e => field.onChange(e.target.value)}
-              value={field.value}
-            />
-            <Text color="font.error" fontSize="sm">
-              {errors.name?.message}
-            </Text>
-          </>
+          <InputWithError
+            error={errors.name?.message}
+            isInvalid={!!errors.name}
+            onChange={e => field.onChange(e.target.value)}
+            value={field.value}
+          />
         )}
         rules={{
           required: 'Project name is required',
@@ -86,17 +88,13 @@ function DescriptionInput() {
         control={control}
         name="description"
         render={({ field }) => (
-          <>
-            <Textarea
-              isInvalid={!!errors.description}
-              onChange={e => field.onChange(e.target.value)}
-              placeholder="A brief description of your project and what the token will be used for."
-              value={field.value}
-            />
-            <Text color="font.error" fontSize="sm">
-              {errors.description?.message}
-            </Text>
-          </>
+          <TextareaWithError
+            error={errors.description?.message}
+            isInvalid={!!errors.description}
+            onChange={e => field.onChange(e.target.value)}
+            placeholder="A brief description of your project and what the token will be used for."
+            value={field.value}
+          />
         )}
         rules={{
           required: 'Project description is required',
@@ -121,17 +119,13 @@ function TokenIconInput() {
         control={control}
         name="tokenIconUrl"
         render={({ field }) => (
-          <>
-            <Input
-              isInvalid={!!errors.tokenIconUrl}
-              onChange={e => field.onChange(e.target.value)}
-              placeholder="https://yourdomain.com/token-icon.svg"
-              value={field.value}
-            />
-            <Text color="font.error" fontSize="sm">
-              {errors.tokenIconUrl?.message}
-            </Text>
-          </>
+          <InputWithError
+            error={errors.tokenIconUrl?.message}
+            isInvalid={!!errors.tokenIconUrl}
+            onChange={e => field.onChange(e.target.value)}
+            placeholder="https://yourdomain.com/token-icon.svg"
+            value={field.value}
+          />
         )}
         rules={{
           required: 'Token icon URL is required',
@@ -157,20 +151,110 @@ function ProjectWebsiteUrlInput() {
         control={control}
         name="websiteUrl"
         render={({ field }) => (
-          <>
-            <Input
-              isInvalid={!!errors.websiteUrl}
-              onChange={e => field.onChange(e.target.value)}
-              placeholder="https://yourdomain.com"
-              value={field.value}
-            />
-            <Text color="font.error" fontSize="sm">
-              {errors.websiteUrl?.message}
-            </Text>
-          </>
+          <InputWithError
+            error={errors.websiteUrl?.message}
+            isInvalid={!!errors.websiteUrl}
+            onChange={e => field.onChange(e.target.value)}
+            placeholder="https://yourdomain.com"
+            value={field.value}
+          />
         )}
         rules={{
           required: 'Website URL is required',
+          validate: isValidUrl,
+        }}
+      />
+    </VStack>
+  )
+}
+
+function ProjectXHandle() {
+  const {
+    projectInfoForm: {
+      control,
+      formState: { errors },
+    },
+  } = useLbpForm()
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">X / Twitter handle</Text>
+      <Controller
+        control={control}
+        name="xHandle"
+        render={({ field }) => (
+          <InputWithError
+            error={errors.xHandle?.message}
+            isInvalid={!!errors.xHandle}
+            onChange={e => field.onChange(e.target.value)}
+            placeholder="@yourhandle"
+            value={field.value}
+          />
+        )}
+        rules={{
+          required: 'X / Twitter handle is required',
+          validate: isValidTwitterHandle,
+        }}
+      />
+    </VStack>
+  )
+}
+
+function ProjectTelegramHandle() {
+  const {
+    projectInfoForm: {
+      control,
+      formState: { errors },
+    },
+  } = useLbpForm()
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">Telegram handle (optional)</Text>
+      <Controller
+        control={control}
+        name="telegramHandle"
+        render={({ field }) => (
+          <InputWithError
+            error={errors.telegramHandle?.message}
+            isInvalid={!!errors.telegramHandle}
+            onChange={e => field.onChange(e.target.value)}
+            placeholder="@yourhandle"
+            value={field.value}
+          />
+        )}
+        rules={{
+          validate: isValidTelegramHandle,
+        }}
+      />
+    </VStack>
+  )
+}
+
+function ProjectDiscordUrlInput() {
+  const {
+    projectInfoForm: {
+      control,
+      formState: { errors },
+    },
+  } = useLbpForm()
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">Discord URL (optional)</Text>
+      <Controller
+        control={control}
+        name="discordUrl"
+        render={({ field }) => (
+          <InputWithError
+            error={errors.discordUrl?.message}
+            isInvalid={!!errors.discordUrl}
+            onChange={e => field.onChange(e.target.value)}
+            placeholder="https://yourdomain.com"
+            value={field.value}
+          />
+        )}
+        rules={{
           validate: isValidUrl,
         }}
       />

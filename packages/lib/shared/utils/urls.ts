@@ -11,7 +11,9 @@ export function getBaseUrl() {
   return `${protocol}//${hostname}${port ? ':' + port : ''}`
 }
 
-export function isValidUrl(maybeUrl: string): string | true {
+export function isValidUrl(maybeUrl?: string): string | true {
+  if (!maybeUrl) return true
+
   let url
 
   try {
