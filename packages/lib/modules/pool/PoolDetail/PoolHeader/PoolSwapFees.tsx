@@ -11,12 +11,17 @@ import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover
 export function PoolSwapFees({ pool }: { pool: Pool }) {
   const isDynamicSwapFee = shouldCallComputeDynamicSwapFee(pool)
 
-  const bodyTxt = isDynamicSwapFee
+  const bodyText = isDynamicSwapFee
     ? 'This pool has a dynamic fee rate that may change per swap based on custom logic.'
     : `This pool has a dynamic fee rate that may be updated through ${PROJECT_CONFIG.projectName} governance.`
 
   return (
-    <CustomPopover bodyText={bodyTxt} headerText="Dynamic fee percentage" trigger="hover" useIsOpen>
+    <CustomPopover
+      bodyText={bodyText}
+      headerText="Dynamic fee percentage"
+      trigger="hover"
+      useIsOpen
+    >
       {({ isOpen }) => (
         <Badge
           alignItems="center"
