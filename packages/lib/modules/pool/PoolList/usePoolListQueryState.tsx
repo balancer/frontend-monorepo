@@ -12,6 +12,7 @@ import {
   POOL_TAG_MAP,
   POOL_TYPE_MAP,
   PoolFilterType,
+  PoolHookTagType,
   poolListQueryStateParsers,
   PoolTagType,
   SortingState,
@@ -68,6 +69,10 @@ export function usePoolListQueryState() {
   const [networks, setNetworks] = useQueryState('networks', poolListQueryStateParsers.networks)
   const [minTvl, setMinTvl] = useQueryState('minTvl', poolListQueryStateParsers.minTvl)
   const [poolTags, setPoolTags] = useQueryState('poolTags', poolListQueryStateParsers.poolTags)
+  const [poolHookTags, setPoolHookTags] = useQueryState(
+    'poolHookTags',
+    poolListQueryStateParsers.poolHookTags
+  )
 
   const [orderDirection, setOrderDirection] = useQueryState(
     'orderDirection',
@@ -110,6 +115,15 @@ export function usePoolListQueryState() {
       setPoolTags(current => uniq([...current, poolTag]))
     } else {
       setPoolTags(current => current.filter(item => item !== poolTag))
+    }
+  }
+
+  // Set internal checked state
+  function togglePoolHookTag(checked: boolean, poolHookTag: PoolHookTagType) {
+    if (checked) {
+      setPoolHookTags(current => uniq([...current, poolHookTag]))
+    } else {
+      setPoolHookTags(current => current.filter(item => item !== poolHookTag))
     }
   }
 
@@ -169,6 +183,19 @@ export function usePoolListQueryState() {
     }
   }
 
+  function poolHookTagLabel(poolHookTag: PoolHookTagType) {
+    switch (poolHookTag) {
+      case 'HOOKS_STABLESURGE':
+        return 'StableSurge'
+      case 'HOOKS_EXITFEE':
+        return 'ExitFee'
+      case 'HOOKS_FEETAKING':
+        return 'FeeTaking'
+      default:
+        return (poolHookTag as string).toLowerCase().replace('_', ' ')
+    }
+  }
+
   function resetFilters() {
     setNetworks(null)
     setPoolTypes(null)
@@ -221,7 +248,10 @@ export function usePoolListQueryState() {
       chainIn: networks.length > 0 ? networks : PROJECT_CONFIG.supportedNetworks,
       userAddress,
       minTvl,
-      tagIn: mappedPoolTags.length > 0 ? mappedPoolTags : null,
+      tagIn:
+        mappedPoolTags.length > 0 || poolHookTags.length > 0
+          ? [...mappedPoolTags, ...(poolHookTags || [])]
+          : null,
       tagNotIn: ['BLACK_LISTED'],
       protocolVersionIn: protocolVersion ? [protocolVersion] : undefined,
     },
@@ -243,6 +273,7 @@ export function usePoolListQueryState() {
     toggleNetwork,
     togglePoolType,
     togglePoolTag,
+    togglePoolHookTag,
     poolTypeLabel,
     setSorting,
     setPagination,
@@ -250,8 +281,10 @@ export function usePoolListQueryState() {
     setMinTvl,
     setPoolTypes,
     setPoolTags,
+    setPoolHookTags,
     resetFilters,
     poolTagLabel,
+    poolHookTagLabel,
     setNetworks,
     setProtocolVersion,
     setActiveProtocolVersionTab,
@@ -268,5 +301,6 @@ export function usePoolListQueryState() {
     mappedPoolTypes,
     queryVariables,
     userAddress,
+    poolHookTags,
   }
 }

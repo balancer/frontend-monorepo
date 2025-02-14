@@ -12,7 +12,7 @@ fragment Hook on GqlHook {
     shouldCallBeforeSwap
     shouldCallComputeDynamicSwapFee
   }
-  name
+  type
   params {
     ... on ExitFeeHookParams {
       exitFeePercentage

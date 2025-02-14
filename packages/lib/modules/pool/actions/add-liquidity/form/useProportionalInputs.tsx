@@ -32,7 +32,9 @@ export function useProportionalInputs() {
   const { data: poolStateWithBalances, isLoading: isPoolStateWithBalancesLoading } =
     usePoolStateWithBalancesQuery(pool)
 
-  function handleProportionalHumanInputChange(token: ApiToken, humanAmount: HumanAmount) {
+  function handleProportionalHumanInputChange(token: ApiToken, humanAmount: HumanAmount | '') {
+    if (!humanAmount) return
+
     const tokenAddress = token.address as Address
     if (isEmptyHumanAmount(humanAmount)) {
       return clearAmountsIn({ tokenAddress, humanAmount, symbol: token.symbol })

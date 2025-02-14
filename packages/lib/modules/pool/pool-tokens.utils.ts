@@ -168,7 +168,7 @@ function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
       }) as TokenCore
   )
 }
-export function shouldUseUnderlyingToken(token: PoolToken, pool: Pool | GqlPoolBase): boolean {
+export function shouldUseUnderlyingToken(token: ApiToken, pool: Pool | GqlPoolBase): boolean {
   if (isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !token.underlyingToken) {
     // This should never happen unless the API some some inconsistency
     throw new Error(

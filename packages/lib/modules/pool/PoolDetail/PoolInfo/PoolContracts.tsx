@@ -25,6 +25,7 @@ import {
   GqlPriceRateProviderData,
   GqlHookReviewData,
   Erc4626ReviewData,
+  HookFragment,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -37,6 +38,10 @@ import { HookInfoPopOver } from './HookInfo'
 import { Erc4626InfoPopOver } from './Erc4626Info'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
+import { useHook } from '@repo/lib/modules/hooks/useHook'
+import { getChainId } from '@repo/lib/config/app.config'
+import { HooksMetadata } from '@repo/lib/modules/hooks/getHooksMetadata'
+import { Pool } from '../../pool.types'
 
 type RateProvider = {
   tokenAddress: Address
@@ -115,10 +120,19 @@ function getHookIcon(data: GqlHookReviewData | undefined | null) {
   )
 }
 
+function getHookName(hook: HookFragment, pool: Pool, hooksMetadata: (HooksMetadata | undefined)[]) {
+  if (!hooksMetadata) return hook.type
+
+  const chainId = getChainId(pool.chain)
+
+  return hooksMetadata.find(metadata => metadata?.addresses[chainId]?.includes(hook.address))?.name
+}
+
 export function PoolContracts({ ...props }: CardProps) {
   const { pool, chain, poolExplorerLink, hasGaugeAddress, gaugeAddress, gaugeExplorerLink } =
     usePool()
 
+  const { hooks: hooksMetadata } = useHook(pool)
   const { getToken } = useTokens()
 
   const contracts = useMemo(() => {
@@ -233,7 +247,10 @@ export function PoolContracts({ ...props }: CardProps) {
                           variant="link"
                         >
                           <HStack gap="xxs">
-                            <Text color="link">{abbreviateAddress(hook.address)}</Text>
+                            <Text color="link">
+                              {abbreviateAddress(hook.address)} (
+                              {getHookName(hook, pool, hooksMetadata)})
+                            </Text>
                             <ArrowUpRight size={12} />
                           </HStack>
                         </Link>

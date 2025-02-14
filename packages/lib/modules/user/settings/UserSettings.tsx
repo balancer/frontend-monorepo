@@ -72,7 +72,7 @@ export function SlippageInput({ slippage, setSlippage }: SlippageInputProps) {
   )
 }
 
-function EnableSignaturesSelect() {
+export function EnableSignaturesSelect() {
   const { enableSignatures, setEnableSignatures } = useUserSettings()
 
   const handleChange = () => {

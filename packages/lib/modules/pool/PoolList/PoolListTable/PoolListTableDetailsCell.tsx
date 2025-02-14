@@ -32,7 +32,7 @@ export function PoolListTableDetailsCell({ pool }: Props) {
           width={20}
         />
       ))}
-      <PoolHookTag pool={pool} size="sm" />
+      <PoolHookTag onlyShowIcon pool={pool} />
     </HStack>
   )
 }

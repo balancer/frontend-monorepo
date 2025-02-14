@@ -134,6 +134,7 @@ type OptionsConfig = {
   showVeBal: boolean
   showMaBeets: boolean
   allowCreateWallet: boolean
+  showPoolHooksFilter: boolean
 }
 
 type Links = {
