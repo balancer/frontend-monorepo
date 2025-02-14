@@ -5,14 +5,16 @@ test('Open swap page and try eth wrap', async ({ page }) => {
   await page.getByRole('link', { name: 'Swap', exact: true }).click()
 
   // Selects Wrapped Ether token out
-  await page.getByRole('button', { name: 'Select token' }).click()
-  await page.getByPlaceholder('Search by name, symbol or').click()
-  await page.getByPlaceholder('Search by name, symbol or').fill('we')
+  await page.getByRole('button', { name: 'Select token' }).first().click()
+  // Type we in the focused modal input
+  await page.keyboard.type('we')
+  // await page.getByPlaceholder('Search by name, symbol or').click()
+  // await page.getByPlaceholder('Search by name, symbol or').fill('we')
   await page.getByText('Wrapped Ether').click()
 
   // Fills 1 ETH token in
   await page.getByPlaceholder('0.00').first().click()
-  await page.getByPlaceholder('0.00').first().fill('1')
+  await page.keyboard.type('1')
 
   await expect(page).toHaveURL('http://localhost:3000/swap/ethereum/ETH/WETH/1')
 
