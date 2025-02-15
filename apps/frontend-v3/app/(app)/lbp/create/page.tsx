@@ -10,9 +10,7 @@ export default function LBPCreatePage() {
           <Text>Banner</Text>
         </Box>
         <HStack align="start" spacing="lg" w="full">
-          <Box border="1px solid red" h="4xl" w="full">
-            <LbpForm />
-          </Box>
+          <LbpForm />
           <Box border="1px solid red" display={{ base: 'none', md: 'block' }} h="lg" w="full">
             <Text>Preview</Text>
           </Box>
