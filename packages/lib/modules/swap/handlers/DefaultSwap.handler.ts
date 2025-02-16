@@ -21,7 +21,7 @@ export class DefaultSwapHandler extends BaseDefaultSwapHandler {
     const { data } = await this.apolloClient
       .query({
         query: SorGetSwapPathsDocument,
-        variables: { ...variables, considerPoolsWithHooks: true },
+        variables: { ...variables },
         fetchPolicy: 'no-cache',
         notifyOnNetworkStatusChange: true,
       })

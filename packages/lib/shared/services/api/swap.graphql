@@ -13,6 +13,7 @@ query SorGetSwapPaths(
     swapAmount: $swapAmount
     chain: $chain
     poolIds: $poolIds
+    considerPoolsWithHooks: true
   ) {
     effectivePrice
     effectivePriceReversed
