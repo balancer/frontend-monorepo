@@ -6,7 +6,7 @@ import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
 import { SupportedWrapHandler } from '@repo/lib/modules/swap/swap.types'
 import {
   BALANCER_BATCH_ROUTER,
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
   BALANCER_ROUTER,
   PERMIT2,
   VAULT_ADMIN,
@@ -88,7 +88,7 @@ const networkConfig: NetworkConfig = {
       minter: '0x239e55F427D44C3cc793f49bFB507ebe76638a2b',
       router: BALANCER_ROUTER[mainnet.id],
       batchRouter: BALANCER_BATCH_ROUTER[mainnet.id],
-      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[mainnet.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[mainnet.id],
       WeightedPool2TokensFactory: '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0',
       vaultAdminV3: VAULT_ADMIN[mainnet.id],
     },

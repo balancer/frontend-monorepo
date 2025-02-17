@@ -3,7 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
-import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER, BALANCER_ROUTER } from '@balancer/sdk'
+import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED, BALANCER_ROUTER } from '@balancer/sdk'
 import { avalanche } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -47,7 +47,7 @@ const networkConfig: NetworkConfig = {
       relayerV6: '0xA084c11cb55e67C9becf9607f1DBB20ec4D5E7b2',
       minter: '0x85a80afee867aDf27B50BdB7b76DA70f1E853062',
       router: BALANCER_ROUTER[avalanche.id],
-      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[avalanche.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[avalanche.id],
     },
     veDelegationProxy: '0x0c6052254551EAe3ECac77B01DFcf1025418828f',
   },

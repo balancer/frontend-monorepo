@@ -27,6 +27,7 @@ export const ProjectConfigBeets: ProjectConfig = {
     showVeBal: false,
     showMaBeets: true,
     allowCreateWallet: false,
+    showPoolHooksFilter: false,
   },
   links: {
     appLinks: [

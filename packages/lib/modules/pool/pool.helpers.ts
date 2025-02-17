@@ -2,6 +2,7 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   GqlChain,
+  GqlHookType,
   GqlPoolBase,
   GqlPoolNestingType,
   GqlPoolStakingGauge,
@@ -279,6 +280,15 @@ export function hasHooks(pool: Pool): boolean {
     .map(token => token.nestedPool?.hook)
 
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
+}
+
+export function hasHookType(pool: Pool, hookType: GqlHookType): boolean {
+  const nestedHooks = pool.poolTokens.flatMap(token =>
+    token.nestedPool ? token.nestedPool.hook : []
+  )
+  const hooks = [...(pool.hook ? [pool.hook] : []), ...nestedHooks]
+
+  return hooks.some(hook => hook && hook.type === hookType)
 }
 
 export function hasReviewedErc4626(token: GqlPoolTokenDetail): boolean {

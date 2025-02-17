@@ -5,7 +5,7 @@ import { isBoosted, isV3Pool } from './pool.helpers'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { Address } from 'viem'
 import { sortBy, uniqBy } from 'lodash'
-import { ApiToken } from '../tokens/token.types'
+import { ApiToken, BalanceForFn } from '../tokens/token.types'
 import { getLeafTokens } from '../tokens/token.helpers'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 
@@ -152,8 +152,10 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     toTokenCores(standardTopLevelTokens)
   )
 
+  const allTokensWithWrappedTokens = [...allTokens, ...getWrappedBoostedTokens(pool)] as TokenCore[]
+
   // Remove duplicates as phantom BPTs can be both in the top level and inside nested pools
-  return uniqBy(allTokens, 'address')
+  return uniqBy(allTokensWithWrappedTokens, 'address')
 }
 
 function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
@@ -168,6 +170,7 @@ function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
       }) as TokenCore
   )
 }
+
 export function shouldUseUnderlyingToken(token: ApiToken, pool: Pool | GqlPoolBase): boolean {
   if (isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !token.underlyingToken) {
     // This should never happen unless the API some some inconsistency
@@ -180,16 +183,22 @@ export function shouldUseUnderlyingToken(token: ApiToken, pool: Pool | GqlPoolBa
 }
 
 // Returns top level standard tokens + Erc4626 (only v3) underlying tokens
-export function getBoostedGqlTokens(pool: Pool): ApiToken[] {
+export function getBoostedActionableTokens(pool: Pool): ApiToken[] {
   const poolTokens = pool.poolTokens as PoolToken[]
-  const underlyingTokens = poolTokens
+  return poolTokens
     .flatMap(token =>
       shouldUseUnderlyingToken(token, pool)
-        ? [{ ...token, ...token.underlyingToken } as ApiToken]
+        ? [{ ...token, ...token.underlyingToken, wrappedToken: token } as ApiToken]
         : [token as ApiToken]
     )
     .filter((token): token is ApiToken => token !== undefined)
-  return underlyingTokens
+}
+
+// Returns wrapped boosted tokens
+export function getWrappedBoostedTokens(pool: Pool | GqlPoolBase): ApiToken[] {
+  return pool.poolTokens.filter(token =>
+    shouldUseUnderlyingToken(token as ApiToken, pool)
+  ) as ApiToken[]
 }
 
 // Returns the child tokens (children of a parent nestedBpt)
@@ -201,9 +210,7 @@ export function getChildTokens(pool: Pool, poolActionableTokens?: ApiToken[]): A
 } // TODO: refactor into a more generic function that looks for the symbol in any pool token
 
 export function getActionableTokenSymbol(tokenAddress: Address, pool: Pool): string {
-  const token = getPoolActionableTokens(pool).find(token =>
-    isSameAddress(token.address, tokenAddress)
-  )
+  const token = allPoolTokens(pool).find(token => isSameAddress(token.address, tokenAddress))
   if (!token) {
     console.log('Token symbol not found for address ', tokenAddress)
     return ''
@@ -217,9 +224,21 @@ export function getActionableTokenSymbol(tokenAddress: Address, pool: Pool): str
 
   For instance:
     If the pool supports nested actions, returns the leaf tokens.
-    If the pool is boosted, returns the underlying tokens instead of the ERC4626 tokens.
+    If the pool is boosted, returns wrapped/underlying tokens depending of the wrapUnderlying array.
 */
-export function getPoolActionableTokens(pool: Pool): ApiToken[] {
+export function getPoolActionableTokens(pool: Pool, wrapUnderlying?: boolean[]): ApiToken[] {
+  if (!wrapUnderlying) {
+    return getPoolActionableTokensWithoutWrapUnderlying(pool)
+  }
+  return getPoolActionableTokensWithoutWrapUnderlying(pool).map((token, index) => {
+    if (wrapUnderlying[index]) {
+      return token
+    }
+    return { ...token, ...token.wrappedToken }
+  })
+}
+
+function getPoolActionableTokensWithoutWrapUnderlying(pool: Pool): ApiToken[] {
   function excludeNestedBptTokens(tokens: ApiToken[]): ApiToken[] {
     return tokens
       .filter(token => !isSameAddress(token.address, pool.address)) // Exclude the BPT pool token itself
@@ -233,10 +252,18 @@ export function getPoolActionableTokens(pool: Pool): ApiToken[] {
   }
 
   if (isBoosted(pool)) {
-    return excludeNestedBptTokens(getBoostedGqlTokens(pool))
+    return excludeNestedBptTokens(getBoostedActionableTokens(pool))
   }
 
   return excludeNestedBptTokens(pool.poolTokens as ApiToken[])
+}
+
+export function getDefaultWrapUnderlying(pool: Pool): boolean[] {
+  /*
+    Boosted tokens (wrappedToken defined): wrapUnderlying true by default
+    No-Boosted tokens (wrappedToken undefined): wrapUnderlying always false
+   */
+  return getPoolActionableTokens(pool).map(t => (t.wrappedToken ? true : false))
 }
 
 export function getNonBptTokens(pool: Pool) {
@@ -289,4 +316,56 @@ export function getStandardRootTokens(pool: Pool, poolActionableTokens?: ApiToke
 export function getPriceRateForToken(token: ApiToken, pool: Pool) {
   return pool.poolTokens.find(poolToken => poolToken.underlyingToken?.address === token.address)
     ?.priceRate
+}
+
+/* Given a token (wrapped or underlying):
+  - If wrapped token: returns a function that returns the wrapped token with its corresponding underlying token
+  - If underlying token: returns a function that returns the underlying token with its corresponding wrapped token
+
+  Sorted by:
+  - token with more balance first
+  - underlying token first
+*/
+export function getWrappedAndUnderlyingTokenFn(
+  token: ApiToken,
+  pool: Pool,
+  balanceFor: BalanceForFn
+): () => [ApiToken, ApiToken] | void {
+  if (shouldUseUnderlyingToken(token, pool)) {
+    return () => {
+      // TODO: Review if we should exclude some info to avoid wrapped being shouldUseUnderlyingToken
+      const underlyingToken = { ...token, ...token.underlyingToken, wrappedToken: token }
+      const wrappedToken = token
+
+      return [underlyingToken, wrappedToken]
+    }
+  }
+
+  if (token.wrappedToken) {
+    const wrappedToken = token.wrappedToken
+    return () => {
+      const underlyingToken = token
+      return sortTokenPairByBalance([underlyingToken, wrappedToken], balanceFor)
+    }
+  }
+
+  return () => undefined
+}
+
+function sortTokenPairByBalance(
+  tokens: [ApiToken, ApiToken],
+  balanceFor: BalanceForFn
+): [ApiToken, ApiToken] {
+  return tokens.sort((a, b) => {
+    const balanceA = balanceFor(a)?.amount || 0n
+    const balanceB = balanceFor(b)?.amount || 0n
+
+    if (balanceA === balanceB) return 0
+    if (balanceA < balanceB) return 1
+    return -1
+  })
+}
+
+export function getActionableTokenAddresses(pool: Pool, wrapUnderlying?: boolean[]): Address[] {
+  return getPoolActionableTokens(pool, wrapUnderlying).map(token => token.address as Address)
 }

@@ -4,7 +4,7 @@ import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 import {
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
   BALANCER_ROUTER,
   PERMIT2,
   VAULT_ADMIN,
@@ -64,7 +64,7 @@ const networkConfig: NetworkConfig = {
       WeightedPool2TokensFactory: '0xCF0a32Bbef8F064969F21f7e02328FB577382018',
       vaultAdminV3: VAULT_ADMIN[arbitrum.id],
       router: BALANCER_ROUTER[arbitrum.id],
-      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[arbitrum.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[arbitrum.id],
     },
     veDelegationProxy: '0x81cFAE226343B24BA12EC6521Db2C79E7aeeb310',
     permit2: PERMIT2[arbitrum.id],

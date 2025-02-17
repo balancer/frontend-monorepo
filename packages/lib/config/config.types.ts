@@ -54,7 +54,8 @@ export interface ContractsConfig {
       */
     router?: Address
     batchRouter?: Address
-    compositeLiquidityRouter?: Address
+    compositeLiquidityRouterBoosted?: Address
+    compositeLiquidityRouterNested?: Address
     relayerV6: Address
     minter: Address
     WeightedPool2TokensFactory?: Address
@@ -136,6 +137,7 @@ type OptionsConfig = {
   showVeBal: boolean
   showMaBeets: boolean
   allowCreateWallet: boolean
+  showPoolHooksFilter: boolean
 }
 
 type Links = {

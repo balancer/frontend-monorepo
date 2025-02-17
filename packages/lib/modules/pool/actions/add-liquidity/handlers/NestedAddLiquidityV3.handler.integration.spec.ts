@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { sepoliaCompositeRouter } from '@repo/lib/debug-helpers'
+import { sepoliaCompositeRouterBoosted } from '@repo/lib/debug-helpers'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
@@ -75,7 +75,7 @@ describe.skip('When adding nested liquidity for a weighted pool', () => {
       queryOutput: queryOutput,
     })
 
-    expect(result.to).toBe(sepoliaCompositeRouter)
+    expect(result.to).toBe(sepoliaCompositeRouterBoosted)
     expect(result.data).toBeDefined()
     expect(result.account).toBe(defaultTestUserAccount)
 

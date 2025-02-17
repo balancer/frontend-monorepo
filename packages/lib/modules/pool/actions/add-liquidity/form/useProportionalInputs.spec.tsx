@@ -1,19 +1,18 @@
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
-import { _calculateProportionalHumanAmountsIn } from './useProportionalInputs'
 import {
   HumanAmount,
   mapPoolType,
   PoolStateWithBalances,
-  PoolTokenWithBalance,
+  PoolStateWithUnderlyingBalances,
 } from '@balancer/sdk'
-import { Pool, ProtocolVersion } from '../../../pool.types'
-import { isBoosted } from '../../../pool.helpers'
-import { Address, Hex } from 'viem'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { Address, Hex } from 'viem'
 import { getApiPoolMock } from '../../../__mocks__/api-mocks/api-mocks'
 import { partialBoosted } from '../../../__mocks__/pool-examples/boosted'
-import { rstEthAddress, wstEthAddress } from '@repo/lib/debug-helpers'
+import { isBoosted } from '../../../pool.helpers'
+import { Pool, ProtocolVersion } from '../../../pool.types'
+import { LiquidityActionHelpers } from '../../LiquidityActionHelpers'
+import { _calculateProportionalHumanAmountsIn } from './useProportionalInputs'
 
 const pool = getApiPoolMock(partialBoosted)
 const helpers = new LiquidityActionHelpers(pool)
@@ -22,46 +21,98 @@ function apiToken(address: string): ApiToken {
   return { address } as ApiToken
 }
 
-describe('calculates and sorts proportional human amounts in', () => {
-  it('given a new human amount for the first token (wstEth)', () => {
+const gnoTokenAddress = '0x9c58bacc331c9aa871afd802db6379a98e80cedb' // underlying
+const waGnoGNOTokenAddress = '0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644' // wrapped
+
+const sDaiAddress = '0xaf204776c7245bf4147c2612bf6e5972ee483701' // non boosted token
+
+describe('_calculateProportionalHumanAmountsIn', () => {
+  it('when reference is first token: underlying GNO', () => {
     const humanAmountsIn = _calculateProportionalHumanAmountsIn({
-      token: apiToken(wstEthAddress),
+      token: apiToken(gnoTokenAddress),
       humanAmount: '5',
       helpers,
       wethIsEth: false,
       poolStateWithBalances: mockPoolStateWithBalances(helpers.pool),
+      wrapUnderlying: [true, false],
     })
 
     expect(humanAmountsIn).toMatchObject([
       {
-        tokenAddress: wstEthAddress,
+        tokenAddress: gnoTokenAddress,
         humanAmount: '5',
       },
       {
-        tokenAddress: rstEthAddress,
-        humanAmount: '5.02111263920180991',
+        tokenAddress: sDaiAddress,
+        humanAmount: '1064.897928989574485893',
       },
     ])
   })
 
-  it('given a new human amount for the second token (rstEth)', () => {
+  it('when reference is first token: wrapped waGnoGNO', () => {
     const humanAmountsIn = _calculateProportionalHumanAmountsIn({
-      token: apiToken(rstEthAddress),
+      token: apiToken(waGnoGNOTokenAddress),
+      humanAmount: '5',
+      helpers,
+      wethIsEth: false,
+      poolStateWithBalances: mockPoolStateWithBalances(helpers.pool),
+      wrapUnderlying: [false, false],
+    })
+
+    expect(humanAmountsIn).toMatchObject([
+      {
+        tokenAddress: waGnoGNOTokenAddress,
+        humanAmount: '5',
+      },
+      {
+        tokenAddress: sDaiAddress,
+        humanAmount: '1064.897928989574485893',
+      },
+    ])
+  })
+
+  it('when reference is second token (no boosted sDAI) and the first token is in "underlying mode"', () => {
+    const humanAmountsIn = _calculateProportionalHumanAmountsIn({
+      token: apiToken(sDaiAddress),
       humanAmount: '50',
       helpers,
       wethIsEth: false,
       poolStateWithBalances: mockPoolStateWithBalances(helpers.pool),
+      wrapUnderlying: [true, false],
     })
 
-    // Sorts the results moving rstEthAddress human amount to the first position
+    // Sorts the results moving sDAI human amount to the first position
     expect(humanAmountsIn).toMatchObject([
       {
-        tokenAddress: rstEthAddress,
+        tokenAddress: sDaiAddress,
         humanAmount: '50',
       },
       {
-        tokenAddress: wstEthAddress,
-        humanAmount: '49.789761346549217016',
+        tokenAddress: gnoTokenAddress,
+        humanAmount: '0.23476428415745785',
+      },
+    ])
+  })
+
+  it('when reference is second token (no boosted sDAI) and the first token is in "wrapped mode"', () => {
+    const humanAmountsIn = _calculateProportionalHumanAmountsIn({
+      token: apiToken(sDaiAddress),
+      humanAmount: '50',
+      helpers,
+      wethIsEth: false,
+      poolStateWithBalances: mockPoolStateWithBalances(helpers.pool),
+      wrapUnderlying: [false, false],
+    })
+
+    // Sorts the results moving sDAI human amount to the first position
+    expect(humanAmountsIn).toMatchObject([
+      {
+        tokenAddress: sDaiAddress,
+        humanAmount: '50',
+      },
+      {
+        tokenAddress: waGnoGNOTokenAddress,
+        humanAmount: '0.23476428415745785',
       },
     ])
   })
@@ -69,10 +120,12 @@ describe('calculates and sorts proportional human amounts in', () => {
 
 // Mocks the pool state with balances that we get from usePoolStateWithBalancesQuery
 function mockPoolStateWithBalances(pool: Pool): PoolStateWithBalances {
-  return isBoosted(pool) ? toBoostedPoolStateWithBalances(pool) : toPoolStateWithBalances(pool)
+  return isBoosted(pool)
+    ? getMockedBoostedPoolStateWithBalancesV3(pool)
+    : getMockedPoolStateWithBalances(pool) // TODO: add tests cases for non boosted pools and fix this helper based on SDK implementation
 }
 
-function toPoolStateWithBalances(pool: Pool): PoolStateWithBalances {
+function getMockedPoolStateWithBalances(pool: Pool): PoolStateWithBalances {
   return {
     id: pool.id as Hex,
     address: pool.address as Address,
@@ -88,35 +141,28 @@ function toPoolStateWithBalances(pool: Pool): PoolStateWithBalances {
   }
 }
 
-function toBoostedPoolStateWithBalances(pool: Pool): PoolStateWithBalances {
-  const underlyingTokensWithBalance: PoolTokenWithBalance[] = pool.poolTokens.map((token, index) =>
-    token.underlyingToken && token.isBufferAllowed
-      ? {
-          address: token.underlyingToken?.address as Address,
-          decimals: token.underlyingToken?.decimals as number,
-          index,
-          /* For the mock, we simply use the wrapped token balance for the underlying token balance
+function getMockedBoostedPoolStateWithBalancesV3(pool: Pool): PoolStateWithUnderlyingBalances {
+  const sortedTokens = [...pool.poolTokens].sort((a, b) => a.index - b.index)
+  return {
+    ...helpers.poolState,
+    tokens: sortedTokens.map(token => ({
+      ...token,
+      /* For the mock, we simply use the wrapped token balance for the underlying token balance
           but when using usePoolStateWithBalancesQuery, the SDK would calculate proper underlying balance
           by using previewRedeem to get the erc4626 unwrapRate
           Context:
           https://github.com/balancer/b-sdk/blob/3554d0cb2dee7450c29f014269778c750ddcdd26/src/entities/utils/getPoolStateWithBalancesV3.ts#L111
-          */
-          balance: bn(token.balance).toFixed() as HumanAmount,
-        }
-      : {
-          address: token.address as Address,
-          decimals: token.decimals as number,
-          balance: token.balance as HumanAmount,
-          index,
-        }
-  )
-  const state: PoolStateWithBalances = {
-    id: pool.id as Hex,
-    address: pool.address as Address,
-    protocolVersion: 3,
-    type: mapPoolType(pool.type),
-    tokens: underlyingTokensWithBalance,
+      */
+      balance: bn(token.balance).toFixed() as HumanAmount,
+      underlyingToken:
+        token.underlyingToken === null
+          ? null
+          : {
+              ...token.underlyingToken,
+              // We use the same balance for the wrapped token balance above
+              balance: bn(token.balance).toFixed() as HumanAmount,
+            },
+    })),
     totalShares: pool.dynamicData.totalShares as HumanAmount,
-  }
-  return state
+  } as PoolStateWithUnderlyingBalances
 }

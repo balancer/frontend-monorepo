@@ -214,6 +214,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
               <VStack w="full">
                 <TokenInput
                   address={tokenIn.address}
+                  aria-label="TokenIn"
                   chain={selectedChain}
                   onChange={e => setTokenInAmount(e.currentTarget.value as HumanAmount)}
                   onToggleTokenClicked={() => openTokenSelectModal('tokenIn')}
@@ -238,6 +239,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                 </Box>
                 <TokenInput
                   address={tokenOut.address}
+                  aria-label="TokeOut"
                   chain={selectedChain}
                   disableBalanceValidation
                   hasPriceImpact
