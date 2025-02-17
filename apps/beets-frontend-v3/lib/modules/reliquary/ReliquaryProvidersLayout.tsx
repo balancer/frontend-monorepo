@@ -16,11 +16,11 @@ export default function ReliquaryProvidersLayout({ children }: PropsWithChildren
 
   const poolTokens = tokens.filter(
     t =>
-      t.address === '0x2d0e0814e62d80056181f5cd932274405966e4f0' || // BEETS
-      t.address === sonicNetworkConfig.tokens.stakedAsset?.address //stS
+      t.address === sonicNetworkConfig.tokens.addresses.beets ||
+      t.address === sonicNetworkConfig.tokens.stakedAsset?.address
   )
 
-  if (poolTokens.length === 0) throw new Error('Pool tokens not found')
+  if (poolTokens.length === 0) throw new Error('Reliquary tokens not found')
 
   return (
     <TransactionStateProvider>
