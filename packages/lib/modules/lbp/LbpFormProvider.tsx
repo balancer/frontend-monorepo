@@ -4,7 +4,7 @@ import { useSteps } from '@chakra-ui/react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
 import { useForm } from 'react-hook-form'
-import { LbpFormStep1 } from './lbp.types'
+import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type UseLbpFormResult = ReturnType<typeof _useLbpForm>
@@ -17,10 +17,22 @@ const steps = [
 ]
 
 export function _useLbpForm() {
-  const formStep1 = useForm<LbpFormStep1>({
+  const saleStructureForm = useForm<SaleStructureForm>({
     defaultValues: {
       selectedChain: PROJECT_CONFIG.defaultNetwork,
       launchTokenAddress: '',
+    },
+  })
+
+  const projectInfoForm = useForm<ProjectInfoForm>({
+    defaultValues: {
+      name: '',
+      description: '',
+      tokenIconUrl: '',
+      websiteUrl: '',
+      xHandle: '',
+      telegramHandle: '',
+      discordUrl: '',
     },
   })
 
@@ -39,7 +51,8 @@ export function _useLbpForm() {
     isLastStep,
     activeStep,
     isFirstStep,
-    formStep1,
+    saleStructureForm,
+    projectInfoForm,
   }
 }
 

@@ -42,7 +42,7 @@ export function LbpForm() {
         ))}
       </Stepper>
 
-      <VStack spacing="lg" w="full">
+      <VStack border="1px solid red" spacing="lg" w="full">
         {activeStep.id === 'step1' ? (
           <SaleStructureStep />
         ) : activeStep.id === 'step2' ? (
