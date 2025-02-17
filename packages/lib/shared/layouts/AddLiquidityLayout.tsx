@@ -14,19 +14,24 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import { AddLiquidityProvider } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { usePathname } from 'next/navigation'
 
 type Props = PropsWithChildren<{
   txHash?: string[]
+  relicId?: string
 }>
 
-export function AddLiquidityLayout({ txHash, children }: Props) {
+export function AddLiquidityLayout({ txHash, relicId, children }: Props) {
+  const pathname = usePathname()
   const { pool } = usePool()
   const { redirectToPoolPage } = usePoolRedirect(pool)
 
   const maybeTxHash = txHash?.[0] || ''
   const urlTxHash = isHash(maybeTxHash) ? maybeTxHash : undefined
 
-  if (shouldBlockAddLiquidity(pool)) {
+  const isMabeetsAddLiquidity = pathname === '/mabeets/add-liquidity'
+
+  if (shouldBlockAddLiquidity(pool) && !isMabeetsAddLiquidity) {
     redirectToPoolPage()
     return null
   }
@@ -45,7 +50,7 @@ export function AddLiquidityLayout({ txHash, children }: Props) {
         <RelayerSignatureProvider>
           <Permit2SignatureProvider>
             <TokenInputsValidationProvider>
-              <AddLiquidityProvider urlTxHash={urlTxHash}>
+              <AddLiquidityProvider relicId={relicId} urlTxHash={urlTxHash}>
                 <PriceImpactProvider>{children}</PriceImpactProvider>
               </AddLiquidityProvider>
             </TokenInputsValidationProvider>

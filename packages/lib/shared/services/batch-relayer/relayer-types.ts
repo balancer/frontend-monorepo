@@ -1,5 +1,4 @@
-import { ExitPoolRequest } from '@balancer/sdk'
-import { Numberish } from '../../utils/numbers'
+import { ExitPoolRequest, JoinPoolRequest } from '@balancer/sdk'
 import { Address, Hex } from 'viem'
 
 export type OutputReference = {
@@ -16,23 +15,17 @@ export interface EncodeExitPoolInput {
   exitPoolRequest: ExitPoolRequest
 }
 
+export interface EncodeJoinPoolInput {
+  poolId: Hex
+  poolKind: number
+  sender: Address
+  recipient: Address
+  joinPoolRequest: JoinPoolRequest
+  value: bigint
+  outputReference: bigint
+}
+
 export type ExitPoolData = ExitPoolRequest & Omit<EncodeExitPoolInput, 'exitPoolRequest'>
-
-export interface EncodeMasterChefDepositInput {
-  sender: string
-  recipient: string
-  token: string
-  pid: number
-  amount: Numberish
-  outputReference: Numberish
-}
-
-export interface EncodeMasterChefWithdrawInput {
-  recipient: string
-  pid: number
-  amount: Numberish
-  outputReference: Numberish
-}
 
 export interface EncodeGaugeDepositInput {
   gauge: Address
@@ -50,5 +43,22 @@ export interface EncodeGaugeClaimRewardsInput {
 
 export interface EncodeGaugeMintInput {
   gauges: Address[]
+  outputReference: bigint
+}
+
+export interface EncodeReliquaryCreateRelicAndDepositInput {
+  sender: Address
+  recipient: Address
+  token: Address
+  poolId: bigint
+  amount: bigint
+  outputReference: bigint
+}
+
+export interface EncodeReliquaryDepositInput {
+  sender: Address
+  token: Address
+  relicId: bigint
+  amount: bigint
   outputReference: bigint
 }

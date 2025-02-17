@@ -16,6 +16,7 @@ export type AddLiquidityParams = {
   slippage: string
   humanAmountsIn: HumanTokenAmountWithAddress[]
   hasPermit2?: boolean
+  relicId?: string
 }
 
 function liquidityParams({
