@@ -38,6 +38,12 @@ const nextConfig = {
         destination: '/pools/optimism/v2/:path*',
         permanent: false,
       },
+      // redirect for /mabeets in prod
+      process.env.NODE_ENV === 'production' && {
+        source: '/mabeets',
+        destination: 'https://ma.beets.fi/',
+        permanent: false,
+      },
     ]
   },
 }
