@@ -39,7 +39,7 @@ const nextConfig = {
         permanent: false,
       },
       // redirect for /mabeets in prod
-      process.env.NODE_ENV === 'production' && {
+      process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' && {
         source: '/mabeets',
         destination: 'https://ma.beets.fi/',
         permanent: false,
