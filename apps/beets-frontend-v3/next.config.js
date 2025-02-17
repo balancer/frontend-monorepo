@@ -44,7 +44,7 @@ const nextConfig = {
         destination: 'https://ma.beets.fi/',
         permanent: false,
       },
-    ]
+    ].filter(Boolean)
   },
 }
 
