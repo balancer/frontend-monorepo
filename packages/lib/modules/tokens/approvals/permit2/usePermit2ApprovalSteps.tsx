@@ -24,7 +24,7 @@ export type Params = {
   lpToken?: string
   enabled?: boolean
   wethIsEth?: boolean
-  shouldUseCompositeLiquidityRouter?: boolean
+  shouldUseCompositeLiquidityRouterBoosted?: boolean
 }
 
 /**
@@ -49,7 +49,7 @@ export function usePermit2ApprovalSteps({
   enabled = false,
   lpToken,
   wethIsEth,
-  shouldUseCompositeLiquidityRouter = false,
+  shouldUseCompositeLiquidityRouterBoosted = false,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
   const { getToken } = useTokens()
@@ -60,8 +60,8 @@ export function usePermit2ApprovalSteps({
   const networkConfig = getNetworkConfig(chain)
   const permit2Address = networkConfig.contracts.permit2!
   const permitExpiry = get24HoursFromNowInSecs()
-  const spenderAddress = shouldUseCompositeLiquidityRouter
-    ? networkConfig.contracts.balancer.compositeLiquidityRouter!
+  const spenderAddress = shouldUseCompositeLiquidityRouterBoosted
+    ? networkConfig.contracts.balancer.compositeLiquidityRouterBoosted!
     : networkConfig.contracts.balancer.router!
 
   // Unwraps of wrapped native assets do not require approval

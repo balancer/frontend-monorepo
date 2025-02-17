@@ -8,8 +8,6 @@ import { Pool } from '../../../pool.types'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { ProportionalRemoveLiquidityHandler } from './ProportionalRemoveLiquidity.handler'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
-// import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-// import { getPoolMock } from '../../../__mocks__/getPoolMock'
 
 const poolMock = aBalWethPoolElementMock() // 80BAL-20WETH
 

@@ -2,6 +2,7 @@
 
 import {
   Box,
+  Divider,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -9,10 +10,11 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps,
+  Text,
   VStack,
 } from '@chakra-ui/react'
-import { RefObject } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { RefObject } from 'react'
 import { CompactTokenSelectList } from './TokenSelectModal/TokenSelectList/CompactTokenSelectList'
 import { ApiToken } from './token.types'
 
@@ -53,11 +55,15 @@ export function WrappedOrUnderlyingSelectModal({
         <ModalHeader color="font.primary">Select a token</ModalHeader>
         <ModalCloseButton />
         <ModalBody p={0}>
-          <VStack align="start" spacing="md" w="full">
+          <VStack spacing="md" w="full">
             <Box px="md" w="full">
               <CompactTokenSelectList onTokenSelect={closeOnSelect} tokens={tokens} />
             </Box>
-            {/* <div color="font.primary">Wrapped or underlying</div> */}
+            <Divider w="90%" />
+            <Text color="font.secondary" p="md" pt="0">
+              This Boosted pool wraps the underlying token into yield bearing tokens. You can use
+              either token to enter or exit a pool.
+            </Text>
           </VStack>
         </ModalBody>
       </ModalContent>
