@@ -31,7 +31,7 @@ export function BalAlertContent({
 }: PropsWithChildren<AlertContentProps>) {
   return (
     <HStack flexWrap="wrap" justifyContent="space-between" w="full">
-      <HStack flexWrap="wrap" maxWidth={{ base: '100%', md: '80%' }}>
+      <HStack flexWrap="wrap" maxWidth={{ base: '100%', md: '50ch' }}>
         <Flex
           direction={forceColumnMode ? 'column' : { base: 'column', md: 'row' }}
           gap={forceColumnMode ? '0' : { base: '0', md: 'sm' }}
