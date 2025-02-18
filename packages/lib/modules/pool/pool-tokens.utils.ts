@@ -369,3 +369,7 @@ function sortTokenPairByBalance(
 export function getActionableTokenAddresses(pool: Pool, wrapUnderlying?: boolean[]): Address[] {
   return getPoolActionableTokens(pool, wrapUnderlying).map(token => token.address as Address)
 }
+
+export function hasTokenWith6Decimals(pool: Pool): boolean {
+  return allPoolTokens(pool).some(token => token.decimals === 6)
+}
