@@ -5,10 +5,7 @@ import { GqlChain, GqlPoolStakingType } from '@repo/lib/shared/services/api/gene
 
 export function selectStakingService(chain: GqlChain, stakingType: GqlPoolStakingType) {
   const networkConfig = getNetworkConfig(chain)
-  const batchRelayerService = BatchRelayerService.create(
-    networkConfig.contracts.balancer.relayerV6,
-    false
-  )
+  const batchRelayerService = BatchRelayerService.create(networkConfig.contracts.balancer.relayerV6)
 
   if (stakingType === 'GAUGE') {
     return new GaugeService(batchRelayerService)

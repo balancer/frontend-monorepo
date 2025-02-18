@@ -29,7 +29,7 @@ export class BatchRelayerService {
       batchRelayerAddress,
       gaugeActionsService,
       vaultActionsService,
-      includeReliquary ? reliquaryActionsService : undefined
+      includeReliquary ?? false ? reliquaryActionsService : undefined
     )
   }
 

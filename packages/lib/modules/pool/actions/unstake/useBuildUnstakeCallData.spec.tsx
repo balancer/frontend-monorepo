@@ -10,8 +10,7 @@ import { aGqlPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.
 
 function testBuildUnstakeCallData(amount: bigint, userAddress: Address = defaultTestUserAccount) {
   const batchRelayerService = BatchRelayerService.create(
-    mainnetNetworkConfig.contracts.balancer.relayerV6,
-    false
+    mainnetNetworkConfig.contracts.balancer.relayerV6
   )
 
   const gaugeService = new GaugeService(batchRelayerService)
