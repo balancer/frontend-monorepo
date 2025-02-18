@@ -15,9 +15,6 @@ import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'
 import { ProportionalBoostedAddLiquidityV3 } from './ProportionalBoostedAddLiquidityV3.handler'
 import { ReliquaryProportionalAddLiquidityHandler } from './ReliquaryProportionalAddLiquidity.handler'
 import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/batch-relayer.service'
-import { GaugeActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/gauge-actions.service'
-import { ReliquaryActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/reliquary-actions.service'
-import { VaultActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/vault-actions.service'
 
 export function selectAddLiquidityHandler(
   pool: Pool,
@@ -52,15 +49,11 @@ export function selectAddLiquidityHandler(
     }
     if (isMaBeetsPool(pool.id)) {
       const networkConfig = getNetworkConfig(pool.chain)
-      const gaugeActionsService = new GaugeActionsService()
-      const reliquaryActionsService = new ReliquaryActionsService()
-      const vaultActionsService = new VaultActionsService()
-      const batchRelayerService = new BatchRelayerService(
+      const batchRelayerService = BatchRelayerService.create(
         networkConfig.contracts.balancer.relayerV6,
-        gaugeActionsService,
-        reliquaryActionsService,
-        vaultActionsService
+        true // include reliquary service
       )
+
       return new ReliquaryProportionalAddLiquidityHandler(pool, batchRelayerService)
     }
     return new ProportionalAddLiquidityHandler(pool)
