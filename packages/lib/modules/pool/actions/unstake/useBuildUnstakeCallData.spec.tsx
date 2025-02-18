@@ -4,16 +4,15 @@ import { useBuildUnstakeCallData } from './useBuildUnstakeCallData'
 import { GaugeService } from '@repo/lib/shared/services/staking/gauge.service'
 import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/batch-relayer.service'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { gaugeActionsService } from '@repo/lib/shared/services/batch-relayer/extensions/gauge-actions.service'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
 import { Address } from 'viem'
 import { aGqlPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 
 function testBuildUnstakeCallData(amount: bigint, userAddress: Address = defaultTestUserAccount) {
-  const batchRelayerService = new BatchRelayerService(
-    mainnetNetworkConfig.contracts.balancer.relayerV6,
-    gaugeActionsService
+  const batchRelayerService = BatchRelayerService.create(
+    mainnetNetworkConfig.contracts.balancer.relayerV6
   )
+
   const gaugeService = new GaugeService(batchRelayerService)
   const gauges = [aGqlPoolElementMock().staking?.id || ''] as Address[]
   const { result } = testHook(() =>

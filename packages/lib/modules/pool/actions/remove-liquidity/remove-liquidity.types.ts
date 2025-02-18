@@ -21,11 +21,13 @@ export enum RemoveLiquidityType {
 export interface QueryRemoveLiquidityInput {
   humanBptIn: HumanAmount
   tokenOut: Address // Only SingleToken handler uses tokenOut but we define it here to simply optional type handling
+  tokensOut?: Address[] // Only Boosted handlers uses tokenOuts but we define it here to simply optional type handling
   userAddress: Address
 }
 
 export type QueryRemoveLiquidityOutput = {
   amountsOut: TokenAmount[]
+  unwrapWrapped?: boolean[]
 }
 
 export type BuildRemoveLiquidityInput = {
@@ -49,4 +51,5 @@ export interface SdkQueryRemoveLiquidityOutput extends QueryRemoveLiquidityOutpu
 
 export interface SdkBuildRemoveLiquidityInput extends BuildRemoveLiquidityInput {
   queryOutput: SdkQueryRemoveLiquidityOutput
+  unwrapWrapped?: boolean[]
 }

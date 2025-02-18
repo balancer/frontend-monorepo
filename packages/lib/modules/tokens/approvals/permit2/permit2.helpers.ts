@@ -6,6 +6,7 @@ import { AllowedAmountsByTokenAddress, ExpirationByTokenAddress } from './usePer
 import { TokenAmountIn } from './useSignPermit2'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isNativeAsset, isWrappedNativeAsset } from '../../token.helpers'
+import { TokenAmount } from '@balancer/sdk'
 
 export function hasValidPermit2(
   tokenAmountsIn?: TokenAmountIn[],
@@ -102,5 +103,23 @@ export function filterTokensForPermit2({
         }
         return true
       })
+  )
+}
+
+// Instead of MaxAllowanceTransferAmount(MaxUint160) we use MaxUint159 to avoid overflow issues
+const MaxUint159 = BigInt('0x7fffffffffffffffffffffffffffffffffffffff')
+const MaxAllowance = MaxUint159
+
+export function getMaxAmountForPermit2(amount: bigint): bigint {
+  return amount > 0n ? MaxAllowance : amount
+}
+
+export function maximizeAmountsInForPermit2(amountsIn: TokenAmount[]): TokenAmount[] {
+  return amountsIn.map(
+    amountIn =>
+      ({
+        ...amountIn,
+        amount: getMaxAmountForPermit2(amountIn.amount),
+      }) as TokenAmount
   )
 }

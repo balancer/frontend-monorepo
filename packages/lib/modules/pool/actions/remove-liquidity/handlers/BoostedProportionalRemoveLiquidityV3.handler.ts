@@ -16,16 +16,22 @@ export class BoostedProportionalRemoveLiquidityV3Handler extends BaseProportiona
   public async simulate({
     humanBptIn: bptIn,
     userAddress,
+    tokensOut,
   }: QueryRemoveLiquidityInput): Promise<SdkQueryRemoveLiquidityOutput> {
     const removeLiquidity = new RemoveLiquidityBoostedV3()
-    const removeLiquidityInput = this.constructSdkInput(bptIn, userAddress)
+    if (!tokensOut) throw new Error('tokensOut is required for boosted remove liquidity')
+    const removeLiquidityInput = { ...this.constructSdkInput(bptIn, userAddress), tokensOut }
 
     const sdkQueryOutput = await removeLiquidity.query(
       removeLiquidityInput,
       this.helpers.boostedPoolState
     )
 
-    return { amountsOut: sdkQueryOutput.amountsOut.filter(a => a.amount > 0n), sdkQueryOutput }
+    return {
+      amountsOut: sdkQueryOutput.amountsOut.filter(a => a.amount > 0n),
+      sdkQueryOutput,
+      unwrapWrapped: sdkQueryOutput.unwrapWrapped,
+    }
   }
 
   public async buildCallData({
@@ -36,12 +42,17 @@ export class BoostedProportionalRemoveLiquidityV3Handler extends BaseProportiona
   }: SdkBuildRemoveLiquidityInput): Promise<TransactionConfig> {
     const removeLiquidity = new RemoveLiquidityBoostedV3()
 
+    if (!queryOutput.unwrapWrapped) {
+      throw new Error('unwrapWrapped is required for boosted remove liquidity')
+    }
+
     const v3BuildCallParams: RemoveLiquidityBoostedBuildCallInput = {
       ...queryOutput.sdkQueryOutput,
       slippage: Slippage.fromPercentage(`${Number(slippagePercent)}`),
       protocolVersion: 3,
       userData: '0x',
       removeLiquidityKind: RemoveLiquidityKind.Proportional,
+      unwrapWrapped: queryOutput.unwrapWrapped,
     }
 
     const { callData, to, value } = permit

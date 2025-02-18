@@ -13,6 +13,7 @@ export interface TokensConfig {
     wNativeAsset: Address
     auraBal?: Address
     veBalBpt?: Address
+    beets?: Address
   }
   nativeAsset: {
     name: string
@@ -46,13 +47,15 @@ export interface ContractsConfig {
     vaultV2: Address
     // TODO: make it required when v3 is deployed in all networks
     vaultV3?: Address
+    vaultAdminV3?: Address
     /*
       TODO: make it required when v3 is deployed in all networks
       IDEAL: remove this config completely and use the SDK build "to" to get the required router
       */
     router?: Address
     batchRouter?: Address
-    compositeLiquidityRouter?: Address
+    compositeLiquidityRouterBoosted?: Address
+    compositeLiquidityRouterNested?: Address
     relayerV6: Address
     minter: Address
     WeightedPool2TokensFactory?: Address
@@ -64,6 +67,7 @@ export interface ContractsConfig {
     sfcProxy?: Address
     sfc?: Address
     lstWithdrawRequestHelper?: Address
+    reliquary?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address
@@ -132,6 +136,8 @@ type OptionsConfig = {
   showPoolName: boolean
   showVeBal: boolean
   showMaBeets: boolean
+  allowCreateWallet: boolean
+  showPoolHooksFilter: boolean
 }
 
 type Links = {
@@ -143,7 +149,9 @@ type Links = {
 
 export interface ProjectConfig {
   projectId: 'beets' | 'balancer'
+  projectUrl: string
   projectName: string
+  projectLogo: string
   supportedNetworks: GqlChain[]
   corePoolId: string // this prop is used to adjust the color of the SparklesIcon
   variantConfig?: VariantConfig
@@ -154,4 +162,5 @@ export interface ProjectConfig {
   options: OptionsConfig
   links: Links
   footer: { linkSections: LinkSection[] }
+  cowSupportedNetworks: GqlChain[]
 }

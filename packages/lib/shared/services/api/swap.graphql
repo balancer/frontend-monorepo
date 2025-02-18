@@ -1,4 +1,4 @@
-query GetSorSwaps(
+query SorGetSwapPaths(
   $tokenIn: String!
   $tokenOut: String!
   $swapType: GqlSorSwapType!
@@ -13,6 +13,7 @@ query GetSorSwaps(
     swapAmount: $swapAmount
     chain: $chain
     poolIds: $poolIds
+    considerPoolsWithHooks: true
   ) {
     effectivePrice
     effectivePriceReversed

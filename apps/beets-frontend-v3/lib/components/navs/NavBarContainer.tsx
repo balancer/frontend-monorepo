@@ -16,6 +16,7 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 export function NavBarContainer() {
   const {
     links: { appLinks, ecosystemLinks, socialLinks },
+    options: { allowCreateWallet },
   } = PROJECT_CONFIG
   const { defaultAppLinks } = useNav()
   const allAppLinks = [...defaultAppLinks, ...appLinks]
@@ -51,6 +52,7 @@ export function NavBarContainer() {
         transition={{ duration: 0.5, ease: 'easeInOut' }}
       >
         <NavBar
+          allowCreateWallet={allowCreateWallet}
           appLinks={allAppLinks}
           customLinks={
             <>

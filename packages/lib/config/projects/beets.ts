@@ -8,6 +8,8 @@ export const beetsSupportedNetworks = [GqlChain.Optimism, GqlChain.Sonic]
 export const ProjectConfigBeets: ProjectConfig = {
   projectId: 'beets',
   projectName: 'Beets',
+  projectUrl: 'https://beets.fi',
+  projectLogo: 'https://beets.fi/images/icons/beets.svg',
   supportedNetworks: beetsSupportedNetworks,
   corePoolId: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8000200000000000000000005', // maBEETS BEETS8020 (Fresh BEETS) pool on Sonic
   defaultNetwork: GqlChain.Sonic,
@@ -24,6 +26,8 @@ export const ProjectConfigBeets: ProjectConfig = {
     showPoolName: true,
     showVeBal: false,
     showMaBeets: true,
+    allowCreateWallet: false,
+    showPoolHooksFilter: false,
   },
   links: {
     appLinks: [
@@ -95,4 +99,5 @@ export const ProjectConfigBeets: ProjectConfig = {
       },
     ],
   },
+  cowSupportedNetworks: [],
 }

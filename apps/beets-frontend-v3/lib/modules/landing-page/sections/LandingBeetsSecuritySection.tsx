@@ -34,6 +34,11 @@ function Card({
 export function LandingBeetsSecuritySection() {
   return (
     <LandingSectionContainer
+      button={{
+        text: 'View audits',
+        href: 'https://docs.beets.fi/ecosystem/security#audits',
+        isExternal: true,
+      }}
       subtitle="Built with security at its core, beets prioritizes trust at every level. From rigorous audits to open-source transparency and continuous monitoring, our ecosystem ensures your assets remain safe, reliable, and accessible."
       title="Code you can trust"
     >

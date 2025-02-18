@@ -6,6 +6,8 @@ import { isProd } from '@repo/lib/config/app.config'
 export const ProjectConfigBalancer: ProjectConfig = {
   projectId: 'balancer',
   projectName: 'Balancer',
+  projectUrl: 'https://balancer.fi',
+  projectLogo: 'https://balancer.fi/images/icons/balancer.svg',
   supportedNetworks: [
     GqlChain.Mainnet,
     GqlChain.Arbitrum,
@@ -44,6 +46,8 @@ export const ProjectConfigBalancer: ProjectConfig = {
     showPoolName: false,
     showVeBal: true,
     showMaBeets: false,
+    allowCreateWallet: true,
+    showPoolHooksFilter: true,
   },
   links: {
     appLinks: [],
@@ -111,7 +115,11 @@ export const ProjectConfigBalancer: ProjectConfig = {
           { label: 'Explore pools', href: '/pools' },
           { label: 'Swap tokens', href: '/swap' },
           { label: 'View portfolio', href: '/portfolio' },
-          { label: 'Get veBAL', href: 'https://app.balancer.fi/#/vebal', isExternal: true },
+          {
+            label: 'Get veBAL',
+            href: 'https://app.balancer.fi/#/ethereum/vebal',
+            isExternal: true,
+          },
           {
             label: 'Create an LBP',
             href: 'https://www.fjordfoundry.com/?utm_source=balancer&utm_medium=website',
@@ -145,4 +153,5 @@ export const ProjectConfigBalancer: ProjectConfig = {
       },
     ],
   },
+  cowSupportedNetworks: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Gnosis],
 }

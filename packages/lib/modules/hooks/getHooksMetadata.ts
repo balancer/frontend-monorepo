@@ -7,6 +7,7 @@ export type HooksMetadata = {
   id: string
   name: string
   description: string
+  learnMore?: string
   addresses: Record<string, string[]> // chainId -> addresses[]
 }
 

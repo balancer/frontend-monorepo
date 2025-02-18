@@ -39,7 +39,8 @@ describe('When adding unbalanced liquidity for a V3 BOOSTED pool', async () => {
       slippagePercent: '0.2',
       queryOutput,
     })
-    const router = getNetworkConfig(GqlChain.Mainnet).contracts.balancer.compositeLiquidityRouter
+    const router = getNetworkConfig(GqlChain.Mainnet).contracts.balancer
+      .compositeLiquidityRouterBoosted
     expect(result.to).toBe(router)
     expect(result.data).toBeDefined()
   })

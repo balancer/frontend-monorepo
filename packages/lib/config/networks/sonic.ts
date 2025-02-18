@@ -1,12 +1,14 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
-import { Address, zeroAddress } from 'viem'
+import { zeroAddress } from 'viem'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
 import {
   BALANCER_BATCH_ROUTER,
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
+  BALANCER_ROUTER,
   PERMIT2,
+  VAULT_ADMIN,
   VAULT_V3,
 } from '@balancer/sdk'
 import { sonic } from 'viem/chains'
@@ -24,6 +26,7 @@ const networkConfig: NetworkConfig = {
   tokens: {
     addresses: {
       bal: emptyAddress,
+      beets: '0x2d0e0814e62d80056181f5cd932274405966e4f0',
       wNativeAsset: '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38',
     },
     nativeAsset: {
@@ -57,9 +60,10 @@ const networkConfig: NetworkConfig = {
       vaultV3: VAULT_V3[sonic.id],
       relayerV6: '0x7b52D5ef006E59e3227629f97F182D6442380bb6',
       minter: zeroAddress,
-      router: '0xNotYetAvailable' as Address,
+      router: BALANCER_ROUTER[sonic.id],
       batchRouter: BALANCER_BATCH_ROUTER[sonic.id],
-      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[sonic.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[sonic.id],
+      vaultAdminV3: VAULT_ADMIN[sonic.id],
     },
     veDelegationProxy: zeroAddress, // TODO: fix this dependency for Beets
     beets: {
@@ -68,6 +72,7 @@ const networkConfig: NetworkConfig = {
       sfcProxy: '0xFC00FACE00000000000000000000000000000000',
       sfc: '0x0aB8f3b709A52c096f33702fE8153776472305ed',
       lstWithdrawRequestHelper: '0x52b16e3d7d25ba64f242e59f9a74799ecc432d78',
+      reliquary: '0x973670ce19594f857a7cd85ee834c7a74a941684',
     },
     permit2: PERMIT2[sonic.id],
   },

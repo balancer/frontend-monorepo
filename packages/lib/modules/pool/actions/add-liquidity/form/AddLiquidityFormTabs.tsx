@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { UseDisclosureReturn, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -17,14 +17,12 @@ import { isV3Pool } from '../../../pool.helpers'
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
 export function AddLiquidityFormTabs({
-  tokenSelectDisclosure,
   totalUSDValue,
   nestedAddLiquidityEnabled,
   tabIndex,
   setFlexibleTab,
   setProportionalTab,
 }: {
-  tokenSelectDisclosure: UseDisclosureReturn
   totalUSDValue: string
   nestedAddLiquidityEnabled: boolean
   tabIndex: number
@@ -37,12 +35,6 @@ export function AddLiquidityFormTabs({
 
   const isDisabledProportionalTab =
     nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)
-  /* TODO: test nested unbalanced + proportional calculations
-  it does not work now due to "'Reference amount must be relative to a token in the pool or its BPT',"
-  cause tokensWithBpt does not contain leaf tokens inside BPT:
-  http://localhost:3000/pools/sepolia/v3/0xc9233cc69435591b193b50f702ac31e404a08b10
-  */
-  // const isDisabledProportionalTab = !supportsProportionalAddLiquidityKind(pool)
 
   const isBelowMinTvlThreshold =
     isV3Pool(pool) &&
@@ -104,11 +96,7 @@ export function AddLiquidityFormTabs({
         options={options}
         size="md"
       />
-      <TokenInputsMaybeProportional
-        isProportional={isProportional}
-        tokenSelectDisclosureOpen={() => tokenSelectDisclosure.onOpen()}
-        totalUSDValue={totalUSDValue}
-      />
+      <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>
   )
 }

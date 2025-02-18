@@ -3,6 +3,8 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
+import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED, BALANCER_ROUTER } from '@balancer/sdk'
+import { optimism } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
   chainId: 10,
@@ -51,6 +53,8 @@ const networkConfig: NetworkConfig = {
       relayerV6: '0x015ACA20a1422F3c729086c17f15F10e0CfbC75A',
       minter: '0x4fb47126Fa83A8734991E41B942Ac29A3266C968',
       WeightedPool2TokensFactory: '0x0F3e0c4218b7b0108a3643cFe9D3ec0d4F57c54e',
+      router: BALANCER_ROUTER[optimism.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[optimism.id],
     },
     veDelegationProxy: '0x9dA18982a33FD0c7051B19F0d7C76F2d5E7e017c',
   },

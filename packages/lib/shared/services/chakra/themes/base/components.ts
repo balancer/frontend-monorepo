@@ -555,6 +555,20 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           color: 'font.primary',
           rounded: 'full',
         },
+        footer: {
+          borderTopWidth: '0',
+        },
+        header: {
+          borderBottomWidth: '1px',
+          borderBottomColor: 'border.divider',
+          boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 1)',
+          _dark: {
+            boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.15)',
+          },
+          paddingInlineStart: 0,
+          paddingInlineEnd: 0,
+          marginInline: 3,
+        },
       },
       variants: {
         tooltip: {
@@ -938,6 +952,53 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         softWarning: {
           bg: 'hsla(0, 0%, 100%, 0.5)',
           borderRadius: 'full',
+        },
+      },
+    },
+    Stepper: {
+      baseStyle: {
+        title: {
+          color: 'font.secondary',
+          "&[data-status='active']": {
+            color: 'font.primary',
+            _dark: {
+              color: 'font.primary',
+            },
+          },
+        },
+        indicator: {
+          color: 'font.secondary',
+          borderStyle: 'dashed',
+          "&[data-status='active']": {
+            background: 'transparent',
+            borderColor: 'font.primary',
+            color: 'font.primary',
+            borderStyle: 'solid',
+            _dark: {
+              backgroundColor: 'transparent',
+              borderColor: 'font.primary',
+              color: 'font.primary',
+            },
+          },
+          "&[data-status='complete']": {
+            background: 'transparent',
+            borderColor: 'green.500',
+            border: '2px solid',
+            color: 'green.500',
+            _dark: {
+              backgroundColor: 'transparent',
+              borderColor: 'green.500',
+              color: 'green.500',
+            },
+          },
+        },
+        separator: {
+          "&[data-status='complete']": {
+            background: 'green.500',
+            _dark: {
+              backgroundColor: 'green.500',
+            },
+          },
         },
       },
     },

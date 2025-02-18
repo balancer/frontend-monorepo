@@ -5,8 +5,10 @@ import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import {
   BALANCER_BATCH_ROUTER,
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
+  BALANCER_ROUTER,
   PERMIT2,
+  VAULT_ADMIN,
   VAULT_V3,
 } from '@balancer/sdk'
 import { gnosis } from 'viem/chains'
@@ -61,8 +63,10 @@ const networkConfig: NetworkConfig = {
       vaultV3: VAULT_V3[gnosis.id],
       relayerV6: '0x2163c2FcD0940e84B8a68991bF926eDfB0Cd926C',
       minter: '0xA8920455934Da4D853faac1f94Fe7bEf72943eF1',
+      router: BALANCER_ROUTER[gnosis.id],
       batchRouter: BALANCER_BATCH_ROUTER[gnosis.id],
-      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[gnosis.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[gnosis.id],
+      vaultAdminV3: VAULT_ADMIN[gnosis.id],
     },
     veDelegationProxy: '0x7A2535f5fB47b8e44c02Ef5D9990588313fe8F05',
     permit2: PERMIT2[gnosis.id],

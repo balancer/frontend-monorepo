@@ -12,7 +12,7 @@ interface Props {
   pool: PoolListItem | Pool
 }
 
-export function PollListTableDetailsCell({ pool }: Props) {
+export function PoolListTableDetailsCell({ pool }: Props) {
   const { getErc4626Metadata } = usePoolsMetadata()
 
   const erc4626Metadata = getErc4626Metadata(pool)
@@ -32,7 +32,7 @@ export function PollListTableDetailsCell({ pool }: Props) {
           width={20}
         />
       ))}
-      <PoolHookTag pool={pool} size="sm" />
+      <PoolHookTag onlyShowIcon pool={pool} />
     </HStack>
   )
 }

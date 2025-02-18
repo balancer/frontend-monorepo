@@ -13,6 +13,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { useBlockNumber } from 'wagmi'
 import { usePermit2Signature } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { isV3Pool } from '../../../pool.helpers'
+import { useRelicId } from '../RelicIdProvider'
 
 export type AddLiquidityBuildQueryResponse = ReturnType<typeof useAddLiquidityBuildCallDataQuery>
 
@@ -39,6 +40,7 @@ export function useAddLiquidityBuildCallDataQuery({
   const { relayerApprovalSignature } = useRelayerSignature()
   const { permit2Signature: permit2 } = usePermit2Signature()
   const debouncedHumanAmountsIn = useDebounce(humanAmountsIn, defaultDebounceMs)[0]
+  const { relicId } = useRelicId()
 
   const hasPermit2 = isV3Pool(pool) && !!permit2
 
@@ -49,6 +51,7 @@ export function useAddLiquidityBuildCallDataQuery({
     pool,
     humanAmountsIn: debouncedHumanAmountsIn,
     hasPermit2,
+    relicId,
   }
 
   const queryKey = addLiquidityKeys.buildCallData(params)
@@ -62,6 +65,7 @@ export function useAddLiquidityBuildCallDataQuery({
       queryOutput,
       relayerApprovalSignature, // only present in Add Nested Liquidity with sign relayer mode
       permit2, // only present in V3 pools
+      relicId, // only present in Reliquary
     })
     console.log('Call data built:', response)
     if (permit2) console.log('permit2 for call data:', permit2)

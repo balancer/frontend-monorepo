@@ -2,13 +2,14 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   GqlChain,
+  GqlHookType,
   GqlPoolBase,
   GqlPoolNestingType,
   GqlPoolStakingGauge,
   GqlPoolStakingOtherGauge,
   GqlPoolTokenDetail,
   GqlPoolType,
-  GqlHook,
+  HookFragment,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -269,7 +270,7 @@ export function hasRateProvider(token: GqlPoolTokenDetail): boolean {
   return !hasNoPriceRateProvider && !isNil(token.priceRateProviderData)
 }
 
-export function hasReviewedHook(hook: GqlHook): boolean {
+export function hasReviewedHook(hook: HookFragment): boolean {
   return !!hook.reviewData
 }
 
@@ -279,6 +280,15 @@ export function hasHooks(pool: Pool): boolean {
     .map(token => token.nestedPool?.hook)
 
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
+}
+
+export function hasHookType(pool: Pool, hookType: GqlHookType): boolean {
+  const nestedHooks = pool.poolTokens.flatMap(token =>
+    token.nestedPool ? token.nestedPool.hook : []
+  )
+  const hooks = [...(pool.hook ? [pool.hook] : []), ...nestedHooks]
+
+  return hooks.some(hook => hook && hook.type === hookType)
 }
 
 export function hasReviewedErc4626(token: GqlPoolTokenDetail): boolean {
@@ -384,6 +394,16 @@ export function getPoolAddBlockedReason(pool: Pool): string {
 
     if (token.priceRateProviderData?.summary !== 'safe') {
       return `Rate provider for token ${token.symbol} is not safe` // TODO: Add instructions and link to get it reviewed
+    }
+
+    if (isV3Pool(pool) && pool.hasAnyAllowedBuffer && token.isErc4626 && token.isBufferAllowed) {
+      if (!hasReviewedErc4626(token)) {
+        return `Tokenized vault for token ${token.symbol} was not yet reviewed`
+      }
+
+      if (token.erc4626ReviewData?.summary !== 'safe') {
+        return `Tokenized vault for token ${token.symbol} is not safe`
+      }
     }
   }
   return ''

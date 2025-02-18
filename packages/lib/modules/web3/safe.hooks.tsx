@@ -6,9 +6,18 @@ import {
 } from '../transactions/transaction-steps/safe/safe.helpers'
 import { useUserAccount } from './UserAccountProvider'
 import { useSafeTxQuery } from '../transactions/transaction-steps/safe/useSafeTxQuery'
-import { useWalletConnectMetadata } from './useWalletConnectMetadata'
+import { useWalletConnectMetadata } from './wallet-connect/useWalletConnectMetadata'
 
-// Returns true if the user is connected with a Safe Account
+// Returns true when using a Safe Smart account:
+// - app running as a Safe App
+// - user connected via WalletConnect to a Safe Account
+export function useIsSafeAccount(): boolean {
+  const isSafeApp = useIsSafeApp()
+  const { isSafeAccountViaWalletConnect } = useWalletConnectMetadata()
+  return isSafeApp || isSafeAccountViaWalletConnect
+}
+
+// Returns true when app is running as a Safe App (it excludes Safe accounts connected via WalletConnect)
 export function useIsSafeApp(): boolean {
   const { connector } = useUserAccount()
 
@@ -64,11 +73,13 @@ type Props = {
 }
 
 export function useTxHash({ wagmiTxHash }: Props) {
+  /*
+  Only Safe Apps use Safe Tx Hash
+  Safe Accounts connected via WalletConnect use wagmiTxHash like a regular account
+  */
   const isSafeApp = useIsSafeApp()
-  const { isSafeAccountViaWalletConnect } = useWalletConnectMetadata()
-
   const { isLoading: isSafeTxLoading, data: safeTxHash } = useSafeTxQuery({
-    enabled: isSafeApp || isSafeAccountViaWalletConnect,
+    enabled: isSafeApp,
     wagmiTxHash,
   })
 

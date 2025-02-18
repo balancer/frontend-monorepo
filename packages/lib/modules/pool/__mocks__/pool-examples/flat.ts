@@ -43,10 +43,19 @@ export const cowAmmPoolWethGno: PoolExample = {
   version: 1,
 }
 
+export const v3StableNonBoosted: PoolExample = {
+  name: 'rsETH-hgETH',
+  description: 'v3 stable non-boosted',
+  poolId: '0x6649a010cbcf5742e7a13a657df358556b3e55cf',
+  poolChain: GqlChain.Mainnet,
+  version: 3,
+}
+
 export const flatPoolExamples = [
   balWeth8020,
   osETHPhantom,
   sDAIWeighted,
   v2SepoliaStableWithERC4626,
   cowAmmPoolWethGno,
+  v3StableNonBoosted,
 ]
