@@ -74,7 +74,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.NestedPool]: 'Nested pool risks',
   [RiskKey.Hook]: 'Hook risks',
   [RiskKey.StableSurgeHook]: 'StableSurge hook risks',
-  [RiskKey.MEVCaptureHook]: 'MEVCapture hook risks',
+  [RiskKey.MEVCaptureHook]: 'MEV Capture hook risks',
 }
 
 export type Risk = {
