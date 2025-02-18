@@ -21,7 +21,7 @@ export default defineConfig(() => {
     contracts: CONTRACTS,
     plugins: [
       etherscan({
-        apiKey: env.SONICSCAN_API_KEY,
+        apiKey: env.ETHERSCAN_API_KEY,
         chainId: 146,
         contracts: [
           {
@@ -35,6 +35,14 @@ export default defineConfig(() => {
           {
             name: 'SonicStakingWithdrawRequestHelper',
             address: sonicNetworkConfig.contracts.beets?.lstWithdrawRequestHelper,
+          },
+          {
+            name: 'Reliquary',
+            address: sonicNetworkConfig.contracts.beets?.reliquary,
+          },
+          {
+            name: 'BeetsV2BatchRelayerLibrary',
+            address: '0x1498437067d7bddc4c9427964f073ee1ab4f50fc',
           },
         ],
       }),

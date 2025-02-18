@@ -27,6 +27,7 @@ export interface BuildAddLiquidityInput {
   queryOutput: QueryAddLiquidityOutput
   relayerApprovalSignature?: Address //only used by Nested Add Liquidity in signRelayer mode
   permit2?: Permit2 //only used by v3 add liquidity
+  relicId?: string //only used by Reliquary add liquidity
 }
 
 /*

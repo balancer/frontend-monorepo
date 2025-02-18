@@ -17,3 +17,11 @@ export function useMandatoryContext<T>(context: Context<T>, providedResourceName
   }
   return cxt
 }
+
+/**
+ * Returns the context value if available, otherwise returns null
+ * @param context React context created with createContext function
+ */
+export function useOptionalContext<T>(context: Context<T | null>) {
+  return useContext(context)
+}
