@@ -136,7 +136,7 @@ export function _useVotes({
   const hasAllVotingPowerTimeLocked =
     votedPools.every(votedPool =>
       isVotingTimeLocked(votedPool.gaugeVotes?.lastUserVoteTime ?? 0)
-    ) && sharesToBps(1).eq(currentVotes)
+    ) && sharesToBps(100).eq(currentVotes)
 
   const { mainnetLockedInfo } = useVebalLockInfo()
   const vebalIsExpired = mainnetLockedInfo.isExpired

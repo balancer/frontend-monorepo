@@ -24,7 +24,7 @@ import { Trash2 } from 'react-feather'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { VoteWeightInput } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesTable/VoteWeightInput'
 import {
-  bpsToPercentage,
+  bpsToPercentage, inputPercentageWeightToBps,
   sharesToBps,
   votingTimeLockedEndDate,
 } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
@@ -32,6 +32,8 @@ import {
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
 import { isVotingTimeLocked } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import {bn} from "@repo/lib/shared/utils/numbers";
+import BigNumber from "bignumber.js";
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -138,7 +140,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
               percentage={editVotes.toString()}
               pr="32px"
               setPercentage={value =>
-                onEditVotesChange(vote.id, sharesToBps(value).dividedBy(100).toString())
+                onEditVotesChange(vote.id, inputPercentageWeightToBps(value).toString())
               }
               textAlign="right"
               width="100px"

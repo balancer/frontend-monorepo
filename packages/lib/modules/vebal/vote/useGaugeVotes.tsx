@@ -38,7 +38,7 @@ function formatVotes(votesData: RawVotesData): VotesData {
   return {
     votes,
     votesNextPeriod,
-    userVotes: votesData?.userVotes?.result?.power.toString() || '0',
+    userVotes: votesData?.userVotes?.result?.power.toString() || '0', // 6000n = 60.00%
     lastUserVoteTime: Number(votesData?.lastUserVoteTime?.result) || 0,
   }
 }

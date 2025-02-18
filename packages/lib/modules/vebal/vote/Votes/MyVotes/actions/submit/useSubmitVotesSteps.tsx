@@ -39,8 +39,7 @@ function getVotesForManyGauges(votes: SubmittingVote[]) {
   // If there's less than 8, fill the remaining with Zero Addresses
   const gaugeAddresses = votes.map(item => item.vote.gauge.address as Hex)
   const weights = votes.map(item => item.weight)
-  console.log('gaugeAddresses', gaugeAddresses)
-  console.log('weights', weights)
+
   const zeroAddresses: Hex[] = new Array(CHUNK_SIZE - gaugeAddresses.length).fill(
     '0x0000000000000000000000000000000000000000' // ZeroAddress
   )

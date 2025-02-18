@@ -120,7 +120,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     const editVotes = sumBy(infos, ({ editWeight }) => bn(editWeight).toNumber())
     const totalValue = sumBy(infos, ({ totalValue }) => bn(totalValue).toNumber())
     const valuePerVote = sumBy(infos, ({ valuePerVote }) => bn(valuePerVote).toNumber())
-    const unallocatedVotes = sharesToBps(1).minus(editVotes).toNumber()
+    const unallocatedVotes = sharesToBps(100).minus(editVotes).toNumber()
 
     return {
       currentVotes,

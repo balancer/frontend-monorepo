@@ -2,17 +2,22 @@ import { oneDayInMs, toJsTimestamp } from '@repo/lib/shared/utils/time'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { formatDistanceToNow } from 'date-fns'
 import { SortingBy } from './myVotes.types'
+import BigNumber from "bignumber.js";
 
 export const WEIGHT_VOTE_DELAY = 10 * oneDayInMs
 
 export const WEIGHT_MAX_VOTES = 100
 
-export function bpsToPercentage(weight: string | number) {
+export function bpsToPercentage(weight: string | number) { // 1556n -> 15.56%
   return bn(weight).shiftedBy(-4)
 }
 
-export function sharesToBps(weight: string | number) {
-  return bn(weight).shiftedBy(4)
+export function inputPercentageWeightToBps(weight: string | number) { // 15.557% -> 1556n
+  return sharesToBps(bn(weight).toFixed(2, BigNumber.ROUND_HALF_UP))
+}
+
+export function sharesToBps(weight: string | number) { // 15.55% -> 1555n
+  return bn(weight).shiftedBy(2)
 }
 
 export function isVotingTimeLocked(lastVoteTime: number) {
@@ -33,7 +38,7 @@ export function remainingVoteLockTime(lastVoteTime: number): string {
 export function getExceededWeight(weight: string | number) {
   return Math.max(
     bn(weight)
-      .minus(sharesToBps(WEIGHT_MAX_VOTES / 100))
+      .minus(sharesToBps(WEIGHT_MAX_VOTES))
       .toNumber(),
     0
   )
@@ -41,7 +46,7 @@ export function getExceededWeight(weight: string | number) {
 
 export function getUnallocatedWeight(weight: string | number) {
   return Math.max(
-    sharesToBps(WEIGHT_MAX_VOTES / 100)
+    sharesToBps(WEIGHT_MAX_VOTES)
       .minus(weight)
       .toNumber(),
     0
