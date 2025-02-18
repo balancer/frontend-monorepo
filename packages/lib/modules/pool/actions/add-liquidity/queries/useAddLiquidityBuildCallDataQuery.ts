@@ -13,6 +13,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { useBlockNumber } from 'wagmi'
 import { usePermit2Signature } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { isV3Pool } from '../../../pool.helpers'
+import { useRelicId } from '../RelicIdProvider'
 
 export type AddLiquidityBuildQueryResponse = ReturnType<typeof useAddLiquidityBuildCallDataQuery>
 
@@ -21,7 +22,6 @@ export type AddLiquidityBuildQueryParams = {
   humanAmountsIn: HumanTokenAmountWithAddress[]
   simulationQuery: AddLiquiditySimulationQueryResult
   slippage: string
-  relicId?: string
 }
 
 // Uses the SDK to build a transaction config to be used by wagmi's useManagedSendTransaction
@@ -30,7 +30,6 @@ export function useAddLiquidityBuildCallDataQuery({
   humanAmountsIn,
   simulationQuery,
   slippage,
-  relicId,
   enabled,
 }: AddLiquidityBuildQueryParams & {
   enabled: boolean
@@ -41,6 +40,7 @@ export function useAddLiquidityBuildCallDataQuery({
   const { relayerApprovalSignature } = useRelayerSignature()
   const { permit2Signature: permit2 } = usePermit2Signature()
   const debouncedHumanAmountsIn = useDebounce(humanAmountsIn, defaultDebounceMs)[0]
+  const { relicId } = useRelicId()
 
   const hasPermit2 = isV3Pool(pool) && !!permit2
 
@@ -53,6 +53,8 @@ export function useAddLiquidityBuildCallDataQuery({
     hasPermit2,
     relicId,
   }
+
+  console.log({ relicId })
 
   const queryKey = addLiquidityKeys.buildCallData(params)
 
