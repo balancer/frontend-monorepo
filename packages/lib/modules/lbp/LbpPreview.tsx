@@ -16,7 +16,6 @@ import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useLbpForm } from './LbpFormProvider'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
-import { useEffect } from 'react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { Image } from 'react-feather'
 
@@ -29,10 +28,6 @@ export function LbpPreview() {
   const tokenAddress = watch('launchTokenAddress')
 
   const tokenMetadata = useTokenMetadata(tokenAddress, chain)
-
-  useEffect(() => {
-    console.log(tokenMetadata)
-  }, [tokenMetadata])
 
   return (
     <NoisyCard
