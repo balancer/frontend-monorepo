@@ -22,6 +22,7 @@ import {
   votingIncentivesTooltipText,
   merklIncentivesTooltipText,
   surplusIncentivesTooltipText,
+  //mevCaptureFeesTooltipText,
 } from '@repo/lib/shared/hooks/useAprTooltip'
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
@@ -119,6 +120,8 @@ function BaseAprTooltip({
     maBeetsVotingRewardsTooltipText,
     maBeetsTotalAprDisplayed,
     maBeetsRewardTooltipText,
+    //hasMevCaptureFees,
+    //mevCaptureFeesDisplayed,
   } = useAprTooltip({
     aprItems,
     vebalBoost: Number(vebalBoost),
@@ -208,6 +211,15 @@ function BaseAprTooltip({
           tooltipText={merklIncentivesTooltipText}
         />
       ) : null}
+      {/* {hasMevCaptureFees ? (
+        <TooltipAprItem
+          {...basePopoverAprItemProps}
+          apr={mevCaptureFeesDisplayed}
+          displayValueFormatter={usedDisplayValueFormatter}
+          title="MEV Captured"
+          tooltipText={mevCaptureFeesTooltipText}
+        />
+      ) : null} */}
       {isCowAmmPool(poolType) && (
         <TooltipAprItem
           {...basePopoverAprItemProps}
