@@ -26,6 +26,7 @@ import { useState } from 'react'
 import { LevelUpModal } from './LevelUpModal'
 import { ClaimModal } from './ClaimModal'
 import { useRouter } from 'next/navigation'
+import { useReliquary } from '../ReliquaryProvider'
 
 const RELIC_LEVEL_NAMES = [
   'The Initiate',
@@ -51,6 +52,7 @@ export function Relic({ chain, relic }: RelicProps) {
   const [isModalOpen, setIsModalOpen] = useState('')
   const { amount, isRefetching } = useGetPendingReward(chain, relic.relicId)
   const { maturityThresholds } = useGetLevelInfo(chain, relic.poolId)
+  const { setSelectedRelic } = useReliquary()
 
   const { levelUpDate, canUpgrade, canUpgradeTo } = relicGetMaturityProgress(
     relic,
@@ -61,6 +63,18 @@ export function Relic({ chain, relic }: RelicProps) {
 
   const isLevelUpModalOpen = isModalOpen === 'levelUp'
   const isClaimModalOpen = isModalOpen === 'claim'
+
+  function handleAction(action: 'claim' | 'levelUp' | 'deposit' | 'withdraw') {
+    setSelectedRelic(relic)
+
+    if (action === 'deposit') {
+      router.push('/mabeets/add-liquidity')
+    } else if (action === 'withdraw') {
+      router.push('/mabeets/remove-liquidity')
+    } else {
+      setIsModalOpen(action)
+    }
+  }
 
   return (
     <>
@@ -106,14 +120,14 @@ export function Relic({ chain, relic }: RelicProps) {
         </CardBody>
         <CardFooter>
           <HStack justify="space-between" w="full">
-            <Button disabled={!amount} onClick={() => setIsModalOpen('claim')}>
+            <Button disabled={!amount} onClick={() => handleAction('claim')}>
               Claim
             </Button>
-            <Button disabled={!canUpgrade} onClick={() => setIsModalOpen('levelUp')}>
+            <Button disabled={!canUpgrade} onClick={() => handleAction('levelUp')}>
               Level up
             </Button>
-            <Button onClick={() => router.push('/mabeets/add-liquidity')}>Deposit</Button>
-            <Button>Withdraw</Button>
+            <Button onClick={() => handleAction('deposit')}>Deposit</Button>
+            <Button onClick={() => handleAction('withdraw')}>Withdraw</Button>
           </HStack>
         </CardFooter>
       </Card>
