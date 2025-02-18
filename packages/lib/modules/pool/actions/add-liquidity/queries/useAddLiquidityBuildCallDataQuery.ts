@@ -54,8 +54,6 @@ export function useAddLiquidityBuildCallDataQuery({
     relicId,
   }
 
-  console.log({ relicId })
-
   const queryKey = addLiquidityKeys.buildCallData(params)
 
   const queryFn = async () => {
