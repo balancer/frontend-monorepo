@@ -18,9 +18,7 @@ import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transa
 
 export const addLiquidityStepId = 'add-liquidity'
 
-export type AddLiquidityStepParams = AddLiquidityBuildQueryParams & {
-  relicId?: string
-}
+export type AddLiquidityStepParams = AddLiquidityBuildQueryParams
 
 export function useAddLiquidityStep(params: AddLiquidityStepParams): TransactionStep {
   const { pool, refetch: refetchPoolBalances, chainId } = usePool()

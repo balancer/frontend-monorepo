@@ -41,7 +41,7 @@ import { useWrapUnderlying } from '../useWrapUnderlying'
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
 
-export function _useAddLiquidity(urlTxHash?: Hash, relicId?: string) {
+export function _useAddLiquidity(urlTxHash?: Hash) {
   const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>([])
   // only used by Proportional handlers that require a referenceAmount
   const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
@@ -168,7 +168,6 @@ export function _useAddLiquidity(urlTxHash?: Hash, relicId?: string) {
     humanAmountsIn,
     simulationQuery,
     slippage,
-    relicId,
   })
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
 
@@ -266,11 +265,10 @@ export function _useAddLiquidity(urlTxHash?: Hash, relicId?: string) {
 
 type Props = PropsWithChildren<{
   urlTxHash?: Hash
-  relicId?: string
 }>
 
-export function AddLiquidityProvider({ urlTxHash, relicId, children }: Props) {
-  const hook = _useAddLiquidity(urlTxHash, relicId)
+export function AddLiquidityProvider({ urlTxHash, children }: Props) {
+  const hook = _useAddLiquidity(urlTxHash)
   return <AddLiquidityContext.Provider value={hook}>{children}</AddLiquidityContext.Provider>
 }
 

@@ -19,7 +19,6 @@ import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsPro
 
 type AddLiquidityStepsParams = AddLiquidityStepParams & {
   helpers: LiquidityActionHelpers
-  relicId?: string
 }
 
 export function useAddLiquiditySteps({
@@ -28,7 +27,6 @@ export function useAddLiquiditySteps({
   humanAmountsIn,
   simulationQuery,
   slippage,
-  relicId,
 }: AddLiquidityStepsParams) {
   const { pool, chainId, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions(pool)
@@ -82,7 +80,6 @@ export function useAddLiquiditySteps({
     humanAmountsIn,
     simulationQuery,
     slippage,
-    relicId,
   })
 
   const shouldUsePermit2Signatures = isPermit2 && shouldUseSignatures && signPermit2Step

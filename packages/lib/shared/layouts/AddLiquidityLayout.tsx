@@ -18,10 +18,9 @@ import { usePathname } from 'next/navigation'
 
 type Props = PropsWithChildren<{
   txHash?: string[]
-  relicId?: string
 }>
 
-export function AddLiquidityLayout({ txHash, relicId, children }: Props) {
+export function AddLiquidityLayout({ txHash, children }: Props) {
   const pathname = usePathname()
   const { pool } = usePool()
   const { redirectToPoolPage } = usePoolRedirect(pool)
@@ -50,7 +49,7 @@ export function AddLiquidityLayout({ txHash, relicId, children }: Props) {
         <RelayerSignatureProvider>
           <Permit2SignatureProvider>
             <TokenInputsValidationProvider>
-              <AddLiquidityProvider relicId={relicId} urlTxHash={urlTxHash}>
+              <AddLiquidityProvider urlTxHash={urlTxHash}>
                 <PriceImpactProvider>{children}</PriceImpactProvider>
               </AddLiquidityProvider>
             </TokenInputsValidationProvider>
