@@ -162,7 +162,9 @@ export function MyVotes() {
             <MyVotesTable loading={myVotesLoading} myVotes={sortedMyVotes} />
           ) : (
             <Center border="1px dashed" borderColor="border.base" h="150px" rounded="lg" w="full">
-              <ConnectWallet size="md" variant="primary" />
+              <VStack>
+                <ConnectWallet size="md" variant="primary" />
+              </VStack>
             </Center>
           )}
         </GridItem>
