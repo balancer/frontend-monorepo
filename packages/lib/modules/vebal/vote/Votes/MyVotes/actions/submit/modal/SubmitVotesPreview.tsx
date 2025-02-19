@@ -199,15 +199,17 @@ export function SubmitVotesPreview({
       </Card>
 
       <HStack alignItems="stretch" spacing="sm" w="full">
-        <Card flex="1" variant="subSection">
-          <Text variant="special">Potential incentives (1w)</Text>
-          <HStack spacing="xs">
-            <Text fontSize="lg" fontWeight={700} variant="special">
-              {toCurrency(optimizedRewardValue, { abbreviated: false })}
-            </Text>
-            <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} />
-          </HStack>
-        </Card>
+        {false && (
+          <Card flex="1" variant="subSection">
+            <Text variant="special">Potential incentives (1w)</Text>
+            <HStack spacing="xs">
+              <Text fontSize="lg" fontWeight={700} variant="special">
+                {toCurrency(optimizedRewardValue, { abbreviated: false })}
+              </Text>
+              <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} />
+            </HStack>
+          </Card>
+        )}
         <Card flex="1" variant="subSection">
           <Text>Ave. Reward (Bribes/veBAL)</Text>
           <Text fontSize="lg" fontWeight={700}>

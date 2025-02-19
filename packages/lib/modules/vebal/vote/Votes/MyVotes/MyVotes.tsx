@@ -68,9 +68,11 @@ export function MyVotes() {
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsMyIncentives loading={loading} myVebalBalance={myVebalBalance} />
         </GridItem>
-        <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-          <MyVotesStatsMyIncentivesOptimized loading={loading} myVebalBalance={myVebalBalance} />
-        </GridItem>
+        {false && (
+          <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+            <MyVotesStatsMyIncentivesOptimized loading={loading} myVebalBalance={myVebalBalance} />
+          </GridItem>
+        )}
         {hasAllVotingPowerTimeLocked && (
           <GridItem colSpan={4}>
             <Alert status="warning">
