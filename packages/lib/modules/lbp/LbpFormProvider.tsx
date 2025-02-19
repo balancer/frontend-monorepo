@@ -22,6 +22,7 @@ export function _useLbpForm() {
       selectedChain: PROJECT_CONFIG.defaultNetwork,
       launchTokenAddress: '',
     },
+    mode: 'all',
   })
 
   const projectInfoForm = useForm<ProjectInfoForm>({

@@ -15,7 +15,7 @@ export function SaleStructureStep() {
     saleStructureForm: {
       handleSubmit,
       control,
-      formState: { errors },
+      formState: { errors, isValid },
     },
     setActiveStep,
     activeStepIndex,
@@ -72,7 +72,7 @@ export function SaleStructureStep() {
           </VStack>
         </VStack>
 
-        <LbpFormAction />
+        <LbpFormAction disabled={!isValid} />
       </VStack>
     </form>
   )

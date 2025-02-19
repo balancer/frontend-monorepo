@@ -55,10 +55,10 @@ export function LbpPreview() {
                     <Image />
                   </Circle>
                   <VStack align="start" spacing="xs">
-                    <Text fontSize="2xl" fontWeight="bold">
-                      {tokenMetadata?.symbol}
+                    <Text fontSize="xl" fontWeight="bold">
+                      {tokenMetadata?.symbol ?? 'Token symbol'}
                     </Text>
-                    <Text>{tokenMetadata?.name}</Text>
+                    <Text>{tokenMetadata?.name ?? 'Token name'}</Text>
                   </VStack>
                 </HStack>
               </GridItem>
