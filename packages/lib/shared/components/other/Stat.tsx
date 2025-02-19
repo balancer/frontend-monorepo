@@ -18,8 +18,8 @@ function Stat({
 }: StatProps) {
   return (
     <Box
-      flex={{ base: 'none', sm: '1' }}
-      minW={{ base: 'max-content', md: '110px', xl: '134px' }}
+      flex="1"
+      minW={{ base: '100px', sm: '140px', lg: '140px' }}
       overflow="hidden"
       position="relative"
       rounded="md"
