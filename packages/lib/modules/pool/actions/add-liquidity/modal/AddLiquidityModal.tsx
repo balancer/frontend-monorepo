@@ -111,7 +111,7 @@ export function AddLiquidityModal({
         />
         <ModalCloseButton />
         <ModalBody>
-          {!isSuccess && <TxBatchAlert currentStep={transactionSteps.currentStep} mb="sm" />}
+          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
           <AddLiquiditySummary {...receiptProps} />
         </ModalBody>
         <ActionModalFooter

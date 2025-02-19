@@ -16,12 +16,14 @@ import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTok
 import { RawAmount } from '@repo/lib/modules/tokens/approvals/approval-rules'
 import { Address } from 'viem'
 import { RemoveLiquiditySimulationQueryResult } from './queries/useRemoveLiquiditySimulationQuery'
-import { useIsSafeAccount } from '@repo/lib/modules/web3/safe.hooks'
+import { useIsSafeAccount, useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
 import { Pool } from '../../pool.types'
 import { NestedProportionalQueryRemoveLiquidityOutput } from './handlers/NestedProportionalRemoveLiquidity.handler'
+import { useWalletConnectMetadata } from '@repo/lib/modules/web3/wallet-connect/useWalletConnectMetadata'
 
 export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): TransactionStep[] {
   const { chainId, pool, chain } = usePool()
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const { slippage } = useUserSettings()
   const relayerMode = useRelayerMode(pool)
   const { shouldUseSignatures } = useUserSettings()
@@ -39,21 +41,27 @@ export function useRemoveLiquiditySteps(params: RemoveLiquidityStepParams): Tran
     queryOutput: simulationQuery.data as SdkQueryRemoveLiquidityOutput,
   })
 
-  const isSafeAccount = useIsSafeAccount()
+  const { isSafeAccountViaWalletConnect } = useWalletConnectMetadata()
 
-  //Only used for v3 pools + Safe account scenario
+  // Only used for v3 pools + Safe account scenario
+  // Standard permit signatures are not supported by Safe accounts (signer != owner) so we use an Approval BPT Tx step instead
   const { isLoadingTokenApprovalSteps, tokenApprovalSteps } = useBptTokenApprovals(
     pool,
     simulationQuery
   )
 
   const removeLiquidityStep = useRemoveLiquidityStep(params)
+  removeLiquidityStep.nestedSteps = tokenApprovalSteps
 
+  // TODO: should we extract this to a tested hook useGetRemoveLiquiditySteps(params)?
   function getRemoveLiquiditySteps(): TransactionStep[] {
     if (isV3Pool(pool)) {
-      if (isSafeAccount || !shouldUseSignatures) {
-        // Standard permit signatures are not supported by Safe accounts (signer != owner) so we use an Approval BPT Tx step instead
+      if (isSafeAccountViaWalletConnect || !shouldUseSignatures) {
         return [...tokenApprovalSteps, removeLiquidityStep]
+      }
+      if (shouldBatchTransactions) {
+        // tokenApprovalSteps are hidden for Safe accounts (will be included in the tx batch)
+        return [removeLiquidityStep]
       }
       // Standard Permit signature
       return [signPermitStep, removeLiquidityStep]
@@ -88,6 +96,7 @@ function useBptTokenApprovals(
   pool: Pool,
   simulationQuery: RemoveLiquiditySimulationQueryResult
 ): { isLoadingTokenApprovalSteps: boolean; tokenApprovalSteps: TransactionStep[] } {
+  const isSafeAccount = useIsSafeAccount()
   const { spenderAddress, rawAmount } = getSimulationQueryData(simulationQuery)
 
   const bptAmount: RawAmount = {
@@ -102,6 +111,7 @@ function useBptTokenApprovals(
       chain: pool.chain,
       approvalAmounts: [bptAmount],
       actionType: 'RemoveLiquidity',
+      enabled: isSafeAccount,
     })
 
   return { isLoadingTokenApprovalSteps, tokenApprovalSteps }

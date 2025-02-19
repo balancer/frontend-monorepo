@@ -126,7 +126,7 @@ function TransactionBatchSteps({
       </Text>
 
       {nestedSteps &&
-        nestedSteps?.length > 1 &&
+        nestedSteps?.length >= 1 &&
         nestedSteps.map((step, index) => (
           <HStack key={step.id} mt={index === 0 ? '2' : '1'}>
             <SubStepIndicator color={color} label={indexToLetter(index)} />
