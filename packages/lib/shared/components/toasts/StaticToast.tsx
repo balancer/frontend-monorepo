@@ -46,7 +46,7 @@ export function StaticToast({ children, isOpen, ...props }: StaticToastProps) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   useEffect(() => {
     if (toastIdRef.current) {

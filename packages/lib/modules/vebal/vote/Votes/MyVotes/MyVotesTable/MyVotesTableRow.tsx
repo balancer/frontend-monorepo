@@ -24,16 +24,14 @@ import { Trash2 } from 'react-feather'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { VoteWeightInput } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesTable/VoteWeightInput'
 import {
-  bpsToPercentage, inputPercentageWeightToBps,
-  sharesToBps,
+  bpsToPercentage,
+  inputPercentageWeightToBps,
   votingTimeLockedEndDate,
 } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
 import { isVotingTimeLocked } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
-import {bn} from "@repo/lib/shared/utils/numbers";
-import BigNumber from "bignumber.js";
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
