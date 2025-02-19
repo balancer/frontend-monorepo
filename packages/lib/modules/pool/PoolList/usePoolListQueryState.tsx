@@ -178,6 +178,8 @@ export function usePoolListQueryState() {
         return 'Points'
       case 'BOOSTED':
         return 'Boosted'
+      case 'RWA':
+        return 'RWA'
       default:
         return (poolTag as string).toLowerCase().replace('_', ' ')
     }
