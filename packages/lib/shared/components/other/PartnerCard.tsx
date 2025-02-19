@@ -11,6 +11,7 @@ import {
   useColorMode,
 } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
+import { Picture } from './Picture'
 // import { ArrowRightIcon } from '@chakra-ui/icons'
 
 interface PartnerCardProps {
@@ -30,7 +31,6 @@ export function PartnerCard({
   description,
   icon,
   iconName,
-  backgroundImage,
   ctaText,
   ctaUrl,
   bgColor = 'gray.900',
@@ -46,39 +46,67 @@ export function PartnerCard({
         href={ctaUrl}
         role="group"
       >
-        <Box borderRadius="xl" height="100%" shadow="2xl">
+        <Box
+          _groupHover={{ shadow: 'none' }}
+          borderRadius="xl"
+          height="100%"
+          shadow="2xl"
+          transition="transform 0.5s var(--ease-out-cubic)"
+        >
           <Box
-            _before={{
-              content: `''`,
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: 'full',
-              height: 'full',
-              backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-              zIndex: 0,
+            _groupHover={{
               shadow:
                 colorMode === 'dark'
-                  ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.5) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.5) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.15) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
-                  : '-2px -2px 4px 0px rgba(0, 0, 0, 0.2) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.2) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.3) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.30) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.3) inset',
-
-              _groupHover: {
-                transform: 'scale(1.1)',
-              },
-              transition: 'transform 1s var(--ease-out-cubic)',
+                  ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.25) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.25) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.04) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.1) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.04) inset'
+                  : '-2px -2px 4px 0px rgba(0, 0, 0, 0.1) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.1) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.15) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.15) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.15) inset',
             }}
             backgroundPosition="center"
             backgroundSize="cover"
-            bgColor={bgColor}
             borderRadius="xl"
             height="full"
             overflow="hidden"
-            p={6}
             position="relative"
+            shadow={
+              colorMode === 'dark'
+                ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.5) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.5) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.15) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
+                : '-2px -2px 4px 0px rgba(0, 0, 0, 0.2) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.2) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.3) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.3) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.3) inset'
+            }
+            transition="all 0.3s var(--ease-out-cubic)"
+            width="full"
           >
-            <VStack align="flex-start" height="full" position="relative" spacing={4} zIndex={1}>
+            <Box height="100%" position="absolute" width="100%">
+              <Box
+                _groupHover={{
+                  transform: 'scale(1.01)',
+                }}
+                bgColor={bgColor}
+                height="100%"
+                position="absolute"
+                transform="scale(1.02)"
+                transition="transform 0.5s var(--ease-out-cubic)"
+                width="100%"
+                zIndex="-1"
+              >
+                <Picture
+                  altText="MEV Capture Promo Background"
+                  defaultImgType="png"
+                  directory="/images/partners/cards/"
+                  height="102%"
+                  imgAvif
+                  imgName={iconName || ''}
+                  imgPng
+                  width="102%"
+                />
+              </Box>
+            </Box>
+            <VStack
+              align="flex-start"
+              height="full"
+              p={{ base: 'lg', sm: 'md', md: 'lg' }}
+              position="relative"
+              spacing={4}
+              zIndex={1}
+            >
               <VStack align="flex-start" spacing={2}>
                 <Stack
                   align="start"
@@ -103,11 +131,14 @@ export function PartnerCard({
                   </Heading>
                 </Stack>
                 <Text
+                  _groupHover={{ opacity: '1' }}
                   color="white"
                   fontSize="sm"
                   fontWeight="bold"
                   lineHeight="relaxed"
+                  opacity="0.75"
                   sx={{ textWrap: 'balance' }}
+                  transition="transform 0.3s var(--ease-out-cubic)"
                 >
                   {description}
                 </Text>
@@ -129,12 +160,12 @@ export function PartnerCard({
                     transition="all 2s var(--ease-out-cubic)"
                   >
                     {ctaText}
+                    {externalLink && (
+                      <Box as="span" display="inline-block" ml="0.5">
+                        <ArrowUpRight size={12} />
+                      </Box>
+                    )}
                   </Text>
-                  {externalLink && (
-                    <Box ml="0.5">
-                      <ArrowUpRight size={12} />
-                    </Box>
-                  )}
                 </Box>
               )}
             </VStack>

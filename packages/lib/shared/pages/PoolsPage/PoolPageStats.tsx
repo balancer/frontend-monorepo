@@ -23,22 +23,22 @@ export function PoolPageStats() {
       </Box>
       <Box flex={{ base: '1 1 40%', sm: '1' }}>
         <Stat
-          imageBackgroundSize="300%"
+          imageTransform="rotate(180deg)"
           label="Volume (24h)"
           value={fNumCustom(protocolData?.protocolMetricsAggregated.swapVolume24h ?? 0, '$0,0.0a')}
         />
       </Box>
       <Box flex={{ base: '1 1 40%', sm: '1' }}>
         <Stat
-          imageTransform="rotate(180deg)"
+          imageTransform="scale(1.5)"
           label="Swap fees (24h)"
           value={fNumCustom(protocolData?.protocolMetricsAggregated.swapFee24h ?? 0, '$0,0.0a')}
         />
       </Box>
       <Box flex={{ base: '1 1 40%', sm: '1' }}>
         <Stat
-          imageBackgroundSize="200%"
-          imageTransform="rotate(180deg)"
+          imageBackgroundSize="400%"
+          imageTransform="rotate(180deg) scale(2)"
           label="Protocol revenue (24h)"
           value={fNumCustom(
             protocolData?.protocolMetricsAggregated.yieldCapture24h ?? 0,

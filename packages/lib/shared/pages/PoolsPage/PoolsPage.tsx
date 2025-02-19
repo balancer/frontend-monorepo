@@ -1,17 +1,15 @@
 import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { Box, Skeleton, Flex, Heading, Text, Card, SimpleGrid } from '@chakra-ui/react'
+import { Box, Skeleton, Flex, Heading, Text } from '@chakra-ui/react'
 import { PropsWithChildren, Suspense } from 'react'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
-import { PartnerCard } from '@repo/lib/shared/components/other/PartnerCard'
 import { PoolPageStats } from './PoolPageStats'
+import { FeaturedPartners } from './FeaturedPartners'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export async function PoolsPage({ children }: PropsWithChildren) {
-  const partnerCards = PROJECT_CONFIG.partnerCards
-
   return (
     <>
       <Box borderBottom="1px solid" borderColor="border.base">
@@ -103,7 +101,7 @@ export async function PoolsPage({ children }: PropsWithChildren) {
           </DefaultPageContainer>
         </Noise>
       </Box>
-      <DefaultPageContainer noVerticalPadding pb={['xl', '2xl']} pt={['lg', '54px']}>
+      <DefaultPageContainer noVerticalPadding pb="xl" pt={['lg', '54px']}>
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
             <PoolList />
@@ -111,40 +109,7 @@ export async function PoolsPage({ children }: PropsWithChildren) {
         </FadeInOnView>
       </DefaultPageContainer>
       <DefaultPageContainer mb="3xl" py="0" rounded="2xl">
-        <Card mb="md">
-          <Noise
-            backgroundColor="background.level0WithOpacity"
-            overflow="hidden"
-            position="relative"
-            shadow="innerBase"
-          >
-            <Box opacity="0.6">
-              <RadialPattern
-                circleCount={20}
-                height={1500}
-                innerHeight={150}
-                innerWidth={150}
-                left="calc(50% - 750px)"
-                position="absolute"
-                top="calc(50% - 750px)"
-                width={1500}
-              />
-            </Box>
-            {partnerCards?.length && (
-              <FadeInOnView animateOnce={false}>
-                <Box p={{ base: 'sm', md: 'xl', lg: '2xl' }}>
-                  <Box maxW="7xl" mx="auto">
-                    <SimpleGrid columns={[1, 2, 3]} spacing={4}>
-                      {partnerCards.map(partnerCard => (
-                        <PartnerCard key={partnerCard.title} {...partnerCard} />
-                      ))}
-                    </SimpleGrid>
-                  </Box>
-                </Box>
-              </FadeInOnView>
-            )}
-          </Noise>
-        </Card>
+        <FeaturedPartners />
       </DefaultPageContainer>
     </>
   )
