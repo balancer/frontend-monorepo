@@ -53,6 +53,7 @@ import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { supportsWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
+import { useGetPoolRewards } from '../../../useGetPoolRewards'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -98,6 +99,7 @@ function AddLiquidityMainForm() {
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
   const { shouldUseSignatures } = useUserSettings()
+  const { weeklyRewards } = useGetPoolRewards(pool)
 
   const setFlexibleTab = () => {
     setTabIndex(0)
@@ -121,7 +123,11 @@ function AddLiquidityMainForm() {
 
   const shouldShowUnbalancedError = isUnbalancedError && !nestedAddLiquidityEnabled
 
-  const weeklyYield = calcPotentialYieldFor(pool, totalUSDValue)
+  const potentialYield = calcPotentialYieldFor(pool, totalUSDValue)
+  const weeklyYield =
+    weeklyRewards && bn(potentialYield).gt(weeklyRewards)
+      ? weeklyRewards.toString()
+      : potentialYield
 
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
   const isFetching = simulationQuery.isFetching || priceImpactQuery.isFetching
