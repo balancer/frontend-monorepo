@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, Text } from '@chakra-ui/react'
+import { Button, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import React from 'react'
 import NextLink from 'next/link'
@@ -83,7 +83,9 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
         ) : isConnected ? (
           <Button as={NextLink} href="/vebal/manage/lock" size="sm" {...getButtonProps()} />
         ) : (
-          <ConnectWallet size="sm" variant="primary" />
+          <VStack>
+            <ConnectWallet size="sm" variant="primary" />
+          </VStack>
         )
       }
       variant={isExpired ? 'expired' : 'default'}

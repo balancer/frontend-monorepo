@@ -64,9 +64,9 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {votingIncentivesLoading ? (
               <Skeleton h="20px" w="60px" />
-            ) : totalInfo.valuePerVote ? (
+            ) : totalInfo.averageBribesValue ? (
               <Text color="font.maxContrast">
-                {toCurrency(totalInfo.valuePerVote, { abbreviated: false })}
+                {toCurrency(totalInfo.averageBribesValue, { abbreviated: false })}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>

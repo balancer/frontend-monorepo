@@ -14,7 +14,10 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useSubmitVotesAllSteps } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesAllSteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { sharesToBps } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import {
+  bpsToPercentage,
+  sharesToBps,
+} from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 import {
   getExceededWeight,
@@ -73,6 +76,11 @@ export function _useMyVotes({}: UseMyVotesArgs) {
 
   const hasVotes = myVotes.length > 0
 
+  const votedVotesWeights = useMemo<Record<string, string>>(
+    () => Object.fromEntries(votedPools.map(vote => [vote.id, vote.gaugeVotes?.userVotes || '0'])),
+    [votedPools]
+  )
+
   // Record<VoteId, Weight>
   const [editVotesWeights, setEditVotesWeights] = useState<Record<string, string>>(() => ({}))
 
@@ -104,12 +112,14 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   const totalInfo: MyVotesTotalInfo = useMemo(() => {
     const infos = availableMyVotes.map(myVote => {
       const currentWeight = myVote.gaugeVotes?.userVotes || 0
+      const votedWeight = votedVotesWeights[myVote.id] || 0
       const editWeight = editVotesWeights[myVote.id] || 0
       const totalValue = myVote.votingIncentive?.totalValue || 0
       const valuePerVote = myVote.votingIncentive?.valuePerVote || 0
 
       return {
         currentWeight,
+        votedWeight,
         editWeight,
         totalValue,
         valuePerVote,
@@ -119,17 +129,24 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     const currentVotes = sumBy(infos, ({ currentWeight }) => bn(currentWeight).toNumber())
     const editVotes = sumBy(infos, ({ editWeight }) => bn(editWeight).toNumber())
     const totalValue = sumBy(infos, ({ totalValue }) => bn(totalValue).toNumber())
-    const valuePerVote = sumBy(infos, ({ valuePerVote }) => bn(valuePerVote).toNumber())
+    const averageBribesValue = sumBy(infos, ({ valuePerVote, editWeight }) =>
+      bn(valuePerVote).multipliedBy(bpsToPercentage(editWeight)).toNumber()
+    )
+    const prevAverageBribesValue = sumBy(infos, ({ valuePerVote, votedWeight }) =>
+      bn(valuePerVote).multipliedBy(bpsToPercentage(votedWeight)).toNumber()
+    )
+
     const unallocatedVotes = sharesToBps(100).minus(editVotes).toNumber()
 
     return {
       currentVotes,
       editVotes,
       totalValue,
-      valuePerVote,
+      averageBribesValue,
+      averageBribesValueGain: averageBribesValue - prevAverageBribesValue,
       unallocatedVotes: Math.max(unallocatedVotes, 0),
     }
-  }, [availableMyVotes, editVotesWeights])
+  }, [availableMyVotes, votedVotesWeights, editVotesWeights])
 
   const hasChanges =
     selectedVotingPools.length > 0 ||
