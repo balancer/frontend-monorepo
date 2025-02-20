@@ -1,21 +1,11 @@
 'use client'
 
 import React from 'react'
-import {
-  Link,
-  Stack,
-  Button,
-  Heading,
-  Flex,
-  Box,
-  Center,
-  Text,
-  useColorMode,
-} from '@chakra-ui/react'
-import NextLink from 'next/link'
+import { Link, Stack, Heading, Flex, Box, Center, Text, useColorMode } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../../other/Picture'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
+import Stat from '../../other/Stat'
 
 export function MevCapturePoolDetailBanner() {
   const { colorMode } = useColorMode()
@@ -41,7 +31,7 @@ export function MevCapturePoolDetailBanner() {
       >
         <Box height="100%" position="absolute" width="100%" zIndex="-1">
           <Picture
-            altText="MEV Capture background rock texture"
+            altText="MEV rock texture"
             defaultImgType="jpg"
             directory="/images/promos/mev-capture/"
             height="100%"
@@ -67,8 +57,8 @@ export function MevCapturePoolDetailBanner() {
           >
             <Box>
               <Stack direction={{ base: 'column', md: 'row' }} gap="md">
-                <Box rounded="full" shadow="2xl">
-                  <Box rounded="full" shadow="md">
+                <Box h={14} rounded="full" shadow="2xl" w={14}>
+                  <Box h={14} rounded="full" shadow="md" w={14}>
                     <Box
                       alignItems="center"
                       color={colorMode === 'dark' ? 'font.light' : 'brown.300'}
@@ -94,15 +84,15 @@ export function MevCapturePoolDetailBanner() {
                         zIndex="-1"
                       >
                         <Picture
-                          altText="MEV Capture background rock texture"
+                          altText="Rock texture"
                           defaultImgType="jpg"
-                          directory="/images/promos/mev-capture/"
+                          directory="/images/homepage/"
                           height={14}
                           imgAvif
                           imgAvifDark
                           imgJpg
                           imgJpgDark
-                          imgName="bg"
+                          imgName="stone"
                           width={14}
                         />
                       </Box>
@@ -139,9 +129,11 @@ export function MevCapturePoolDetailBanner() {
                         href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295"
                         pl="1"
                       >
-                        Learn more
-                        <Box as="span" display="inline-block" pl="0.5">
-                          <ArrowUpRight size="14px" />
+                        <Box as="span" whiteSpace="nowrap">
+                          Learn more
+                          <Box as="span" display="inline-block" pl="0.5">
+                            <ArrowUpRight size="14px" />
+                          </Box>
                         </Box>
                       </Link>
                     </Text>
@@ -150,39 +142,12 @@ export function MevCapturePoolDetailBanner() {
               </Stack>
             </Box>
             <Flex alignItems="center" gap="ms" maxW="284px">
-              <Button
-                _hover={{
-                  bg: 'gradient.sandDark',
-                  color: '#000',
-                  borderColor: colorMode === 'dark' ? 'font.light' : 'font.light',
-                }}
-                as={NextLink}
-                borderColor="font.maxContrast"
-                color="font.maxContrast"
-                cursor="hand"
-                flex="1"
-                gap="xs"
-                h={{ base: '32px', sm: '40px', lg: '48px' }}
-                href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295"
-                py="sm"
-                role="group"
-                rounded="full"
-                size="md"
-                target="_blank"
-                variant="outline"
-                w="132px"
-              >
-                Learn more
-                <Box
-                  _groupHover={{
-                    transform: 'translateX(2px)',
-                  }}
-                  as="span"
-                  transition="transform 0.2s"
-                >
-                  <ArrowUpRight size="14px" />
-                </Box>
-              </Button>
+              <Box rounded="md" shadow="2xl">
+                <Stat label="MEV captured (24h)" value="$2.45k" />
+              </Box>
+              <Box rounded="md" shadow="2xl">
+                <Stat imageTransform="rotate(180deg)" label="Total MEV captured" value="$45.46k" />
+              </Box>
             </Flex>
           </Flex>
         </Center>
