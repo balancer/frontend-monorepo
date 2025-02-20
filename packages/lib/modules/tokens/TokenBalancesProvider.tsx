@@ -101,8 +101,8 @@ export function _useTokenBalances(
       let amount = balance.status === 'success' ? (balance.result as bigint) : 0n
       const slippage = Slippage.fromPercentage(bufferPercentage as HumanAmount)
       amount = slippage.applyTo(amount, -1)
-      if (!isZero(bufferPercentage) && token.decimals === 6) {
-        // Apply an extra buffer of 5n to avoid precision issues in tokens with 6 decimals
+      if (!isZero(bufferPercentage) && (token.decimals === 6 || token.decimals === 8)) {
+        // Apply an extra buffer of 5n to avoid precision issues in tokens with 6/8 decimals
         const extraBuffer = 5n
         amount = amount - extraBuffer
       }
