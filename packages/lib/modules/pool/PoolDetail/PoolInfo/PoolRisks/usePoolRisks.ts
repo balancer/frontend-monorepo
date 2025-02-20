@@ -132,7 +132,7 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   if (hasNestedPools(pool)) result.push(nestedPoolRisks)
   if (hasHooks(pool)) result.push(hookRisks)
   if (hasHookType(pool, GqlHookType.StableSurge)) result.push(stableSurgeHookRisks)
-  if (hasHookType(pool, GqlHookType.StableSurge)) result.push(mevCaptureHookRisks) // TODO: update type when available
+  if (hasHookType(pool, GqlHookType.MevTax)) result.push(mevCaptureHookRisks)
   if (hasOwner(pool)) result.push(mutableRisks)
 
   result.push(getLink(RiskKey.General))
