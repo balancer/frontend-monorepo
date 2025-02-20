@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, VStack, Text, Divider } from '@chakra-ui/react'
+import { Heading, VStack, Text, Divider, HStack } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
 import { useLbpForm } from '../LbpFormProvider'
@@ -9,11 +9,14 @@ import { Control, Controller, FieldErrors, SubmitHandler } from 'react-hook-form
 import { LbpFormAction } from '../LbpFormAction'
 import { isAddressValidation } from '@repo/lib/shared/utils/addresses'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { SelectInput } from '@repo/lib/shared/components/inputs/SelectInput'
+import { ArrowRight } from 'react-feather'
+import { useTokenMetadata } from '../../tokens/useTokenMetadata'
 
 export function SaleStructureStep() {
   const {
@@ -34,11 +37,8 @@ export function SaleStructureStep() {
 
   const selectedChain = watch('selectedChain')
   const launchTokenAddress = watch('launchTokenAddress')
-  const startTime = watch('startTime')
 
-  useEffect(() => {
-    console.log(startTime)
-  }, [startTime])
+  const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
 
   const validLaunchTokenAddress = useMemo(() => {
     return isAddress(launchTokenAddress)
@@ -90,6 +90,10 @@ export function SaleStructureStep() {
               LBP mechanism
             </Heading>
             <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
+            <WeightAdjustmentTypeInput
+              control={control}
+              launchTokenSymbol={launchTokenMetadata.symbol}
+            />
           </>
         )}
 
@@ -215,6 +219,75 @@ function CollateralTokenAddressInput({
               field.onChange(newValue as GqlChain)
             }}
             tokenAddresses={collateralTokens ?? []}
+            value={field.value}
+          />
+        )}
+      />
+    </VStack>
+  )
+}
+
+function WeightAdjustmentTypeInput({
+  control,
+  launchTokenSymbol,
+}: {
+  control: Control<SaleStructureForm>
+  launchTokenSymbol?: string
+}) {
+  const options = useMemo(
+    () => [
+      {
+        label: (
+          <HStack justify="space-between" w="full">
+            <Text>Standard Linear LBP</Text>
+            <HStack color="font.secondary">
+              <Text color="font.secondary" fontSize="sm">
+                {launchTokenSymbol} 90%
+              </Text>
+              <ArrowRight size={12} />
+              <Text color="font.secondary" fontSize="sm">
+                10%
+              </Text>
+            </HStack>
+          </HStack>
+        ),
+        value: 'linear_90_10',
+      },
+      {
+        label: (
+          <HStack justify="space-between" w="full">
+            <Text>Linear LBP to 50/50 pool</Text>
+            <HStack color="font.secondary">
+              <Text color="font.secondary" fontSize="sm">
+                {launchTokenSymbol} 90%
+              </Text>
+              <ArrowRight size={12} />
+              <Text color="font.secondary" fontSize="sm">
+                50%
+              </Text>
+            </HStack>
+          </HStack>
+        ),
+        value: 'linear_90_50',
+      },
+    ],
+    [launchTokenSymbol]
+  )
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">Dynamic token weight adjustments</Text>
+      <Controller
+        control={control}
+        name="weightAdjustmentType"
+        render={({ field }) => (
+          <SelectInput
+            defaultValue={options[0].value}
+            id="weight-adjustment-type"
+            onChange={newValue => {
+              field.onChange(newValue as GqlChain)
+            }}
+            options={options}
             value={field.value}
           />
         )}

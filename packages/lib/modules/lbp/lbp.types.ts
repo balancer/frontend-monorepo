@@ -6,6 +6,7 @@ export type SaleStructureForm = {
   startTime: string
   endTime: string
   collateralTokenAddress: string
+  weightAdjustmentType: 'linear_90_10' | 'linear_90_50'
 }
 
 export type ProjectInfoForm = {
