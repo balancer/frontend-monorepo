@@ -1,4 +1,4 @@
-import { HStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { BalAlert } from './BalAlert'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
 import { BalAlertContent } from './BalAlertContent'
@@ -40,12 +40,12 @@ function Content({
   content: { description: string; title: string; href: string; buttonLabel: string }
 }) {
   return (
-    <HStack flexWrap={{ base: 'wrap', md: 'nowrap' }}>
+    <VStack align="start">
       <BalAlertContent description={content.description} forceColumnMode title={content.title} />
       {/*
         It is not possible to link to custom pool pages within balancer.fi/pools as the Safe App will not recognize them as valid Safe Apps :(
       */}
       <BalAlertButtonLink href={content.href}>{content.buttonLabel}</BalAlertButtonLink>
-    </HStack>
+    </VStack>
   )
 }
