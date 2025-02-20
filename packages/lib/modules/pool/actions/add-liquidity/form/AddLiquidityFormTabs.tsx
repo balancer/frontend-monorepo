@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
-import { ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { useEffect } from 'react'
 import { usePool } from '../../../PoolProvider'
 import {
@@ -14,41 +14,39 @@ import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { isV3Pool } from '../../../pool.helpers'
-import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWithActualWeights'
-import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
-function PoolWeightsInfo() {
-  const { poolTokensWithActualWeights, compositionTokens } = useGetPoolTokensWithActualWeights()
+// TODO: figure out rules for when to show PoolWeightsInfo https://github.com/balancer/frontend-monorepo/issues/535
+// function PoolWeightsInfo() {
+//   const { poolTokensWithActualWeights, compositionTokens } = useGetPoolTokensWithActualWeights()
 
-  return (
-    <BalAlert
-      content={
-        <BalAlertContent
-          // eslint-disable-next-line max-len
-          description="Proportional adds avoid price impact by matching the current ratio of each token's USD value within the pool:"
-          forceColumnMode
-        >
-          <UnorderedList>
-            <ListItem color="font.black" fontWeight="medium">
-              {compositionTokens
-                .map(
-                  token =>
-                    `${token.symbol}: ${fNum('weight', poolTokensWithActualWeights[token.address], {
-                      abbreviated: false,
-                    })}`
-                )
-                .join(', ')}
-            </ListItem>
-          </UnorderedList>
-        </BalAlertContent>
-      }
-      status="info"
-    />
-  )
-}
+//   return (
+//     <BalAlert
+//       content={
+//         <BalAlertContent
+//           // eslint-disable-next-line max-len
+//           description="Proportional adds avoid price impact by matching the current ratio of each token's USD value within the pool:"
+//           forceColumnMode
+//         >
+//           <UnorderedList>
+//             <ListItem color="font.black" fontWeight="medium">
+//               {compositionTokens
+//                 .map(
+//                   token =>
+//                     `${token.symbol}: ${fNum('weight', poolTokensWithActualWeights[token.address], {
+//                       abbreviated: false,
+//                     })}`
+//                 )
+//                 .join(', ')}
+//             </ListItem>
+//           </UnorderedList>
+//         </BalAlertContent>
+//       }
+//       status="info"
+//     />
+//   )
+// }
 
 export function AddLiquidityFormTabs({
   totalUSDValue,
@@ -130,7 +128,7 @@ export function AddLiquidityFormTabs({
         options={options}
         size="md"
       />
-      {isProportional && <PoolWeightsInfo />}
+      {/* {isProportional && <PoolWeightsInfo />} */}
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>
   )
