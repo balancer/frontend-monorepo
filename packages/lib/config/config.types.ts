@@ -101,6 +101,9 @@ export interface NetworkConfig {
   pools: PoolsConfig
   layerZeroChainId?: number
   supportsVeBalSync?: boolean
+  lbps?: {
+    collateralTokens: string[]
+  }
 }
 
 export interface Config {

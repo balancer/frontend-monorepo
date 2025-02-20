@@ -3,6 +3,9 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 export type SaleStructureForm = {
   selectedChain: GqlChain
   launchTokenAddress: string
+  startTime: string
+  endTime: string
+  collateralTokenAddress: string
 }
 
 export type ProjectInfoForm = {

@@ -99,7 +99,6 @@ const networkConfig: NetworkConfig = {
     permit2: PERMIT2[mainnet.id],
     gaugeController: '0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD',
   },
-
   pools: convertHexToLowerCase({
     issues: {
       [PoolIssue.PoolProtocolFeeVulnWarning]: [
@@ -147,6 +146,13 @@ const networkConfig: NetworkConfig = {
       '0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d', // 80BAL20WETH + SdBal
     ],
   }),
+  lbps: {
+    collateralTokens: [
+      '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
+      '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
+      '0xdAC17F958D2ee523a2206206994597C13D831ec7', // USDT
+    ],
+  },
 } as const satisfies NetworkConfig
 
 export default networkConfig
