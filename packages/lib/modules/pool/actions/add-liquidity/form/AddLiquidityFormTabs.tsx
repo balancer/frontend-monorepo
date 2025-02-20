@@ -17,37 +17,6 @@ import { isV3Pool } from '../../../pool.helpers'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
-// TODO: figure out rules for when to show PoolWeightsInfo https://github.com/balancer/frontend-monorepo/issues/535
-// function PoolWeightsInfo() {
-//   const { poolTokensWithActualWeights, compositionTokens } = useGetPoolTokensWithActualWeights()
-
-//   return (
-//     <BalAlert
-//       content={
-//         <BalAlertContent
-//           // eslint-disable-next-line max-len
-//           description="Proportional adds avoid price impact by matching the current ratio of each token's USD value within the pool:"
-//           forceColumnMode
-//         >
-//           <UnorderedList>
-//             <ListItem color="font.black" fontWeight="medium">
-//               {compositionTokens
-//                 .map(
-//                   token =>
-//                     `${token.symbol}: ${fNum('weight', poolTokensWithActualWeights[token.address], {
-//                       abbreviated: false,
-//                     })}`
-//                 )
-//                 .join(', ')}
-//             </ListItem>
-//           </UnorderedList>
-//         </BalAlertContent>
-//       }
-//       status="info"
-//     />
-//   )
-// }
-
 export function AddLiquidityFormTabs({
   totalUSDValue,
   nestedAddLiquidityEnabled,
@@ -128,7 +97,6 @@ export function AddLiquidityFormTabs({
         options={options}
         size="md"
       />
-      {/* {isProportional && <PoolWeightsInfo />} */}
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>
   )
