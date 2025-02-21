@@ -5,6 +5,7 @@ import { HStack, Text } from '@chakra-ui/react'
 import { TokenIcon } from './TokenIcon'
 import { useTokens } from './TokensProvider'
 import { SelectInput } from '@repo/lib/shared/components/inputs/SelectInput'
+import { useEffect } from 'react'
 
 type Props = {
   value: string
@@ -31,6 +32,13 @@ export function TokenSelectInput({
     ),
     value: tokenAddress,
   }))
+
+  useEffect(() => {
+    if (defaultTokenAddress) {
+      onChange(defaultTokenAddress)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <SelectInput

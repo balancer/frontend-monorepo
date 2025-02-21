@@ -1,3 +1,4 @@
+import { HumanAmount } from '@balancer/sdk'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 export type SaleStructureForm = {
@@ -7,6 +8,9 @@ export type SaleStructureForm = {
   endTime: string
   collateralTokenAddress: string
   weightAdjustmentType: 'linear_90_10' | 'linear_90_50'
+  userActions: 'buy_and_sell' | 'buy_only'
+  saleTokenAmount: HumanAmount | ''
+  collateralTokenAmount: HumanAmount | ''
 }
 
 export type ProjectInfoForm = {

@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, VStack, Text, Divider, HStack } from '@chakra-ui/react'
+import { Heading, VStack, Text, Divider, HStack, Radio, Stack, RadioGroup } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
 import { useLbpForm } from '../LbpFormProvider'
@@ -17,6 +17,12 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { SelectInput } from '@repo/lib/shared/components/inputs/SelectInput'
 import { ArrowRight } from 'react-feather'
 import { useTokenMetadata } from '../../tokens/useTokenMetadata'
+import { TokenInput } from '../../tokens/TokenInput/TokenInput'
+import { TokenBalancesProvider } from '../../tokens/TokenBalancesProvider'
+import { useTokens } from '../../tokens/TokensProvider'
+import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
+import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
+import { isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
 
 export function SaleStructureStep() {
   const {
@@ -29,6 +35,7 @@ export function SaleStructureStep() {
     setActiveStep,
     activeStepIndex,
   } = useLbpForm()
+  const { getToken } = useTokens()
 
   const supportedChains = PROJECT_CONFIG.supportedNetworks.filter(chain => {
     const chainConfig = getNetworkConfig(chain)
@@ -37,6 +44,17 @@ export function SaleStructureStep() {
 
   const selectedChain = watch('selectedChain')
   const launchTokenAddress = watch('launchTokenAddress')
+  const collateralTokenAddress = watch('collateralTokenAddress')
+
+  const launchToken = getToken(launchTokenAddress, selectedChain)
+  const collateralToken = getToken(collateralTokenAddress, selectedChain)
+
+  const tokens = useMemo(() => {
+    const _tokens = []
+    if (launchToken) _tokens.push(launchToken)
+    if (collateralToken) _tokens.push(collateralToken)
+    return _tokens
+  }, [launchToken, collateralToken])
 
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
 
@@ -50,56 +68,87 @@ export function SaleStructureStep() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
-      <VStack align="start" spacing="lg" w="full">
-        <Heading color="font.maxContrast" size="md">
-          Launch token details
-        </Heading>
+    <TokenBalancesProvider initTokens={tokens}>
+      <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+        <VStack align="start" spacing="lg" w="full">
+          <Heading color="font.maxContrast" size="md">
+            Launch token details
+          </Heading>
 
-        <VStack align="start" spacing="md" w="full">
-          <NetworkSelectInput chains={supportedChains} control={control} />
-          <LaunchTokenAddressInput control={control} errors={errors} />
+          <VStack align="start" spacing="md" w="full">
+            <NetworkSelectInput chains={supportedChains} control={control} />
+            <LaunchTokenAddressInput control={control} errors={errors} />
+          </VStack>
+
+          {validLaunchTokenAddress && (
+            <>
+              <Divider />
+
+              <Heading color="font.maxContrast" size="md">
+                Sale period
+              </Heading>
+
+              <VStack align="start" spacing="sm" w="full">
+                <DateTimeInput
+                  control={control}
+                  errors={errors}
+                  label="Start date and time"
+                  name="startTime"
+                />
+                <DateTimeInput
+                  control={control}
+                  errors={errors}
+                  label="End date and time"
+                  name="endTime"
+                />
+              </VStack>
+
+              <Divider />
+
+              <Heading color="font.maxContrast" size="md">
+                LBP mechanism
+              </Heading>
+              <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
+              <WeightAdjustmentTypeInput
+                control={control}
+                launchTokenSymbol={launchTokenMetadata.symbol}
+              />
+              <UserActionsInput control={control} />
+
+              <Divider />
+
+              <VStack align="start" spacing="sm" w="full">
+                <Heading color="font.maxContrast" size="md">
+                  Seed initial pool liquidity
+                </Heading>
+                <Text color="font.secondary">
+                  The starting liquidity in the pool. The amounts and ratio will determine the
+                  starting price, projected market cap and price curve.
+                </Text>
+              </VStack>
+
+              <TokenInputsValidationProvider>
+                {/* TODO: Decouple PriceImpactProvider from Token input, it shouldn't be a dependency. */}
+                <PriceImpactProvider>
+                  <SaleTokenAmountInput
+                    control={control}
+                    launchTokenAddress={launchTokenAddress}
+                    selectedChain={selectedChain}
+                  />
+                  <CollateralTokenAmountInput
+                    collateralTokenAddress={collateralTokenAddress}
+                    control={control}
+                    selectedChain={selectedChain}
+                  />
+                </PriceImpactProvider>
+              </TokenInputsValidationProvider>
+            </>
+          )}
+
+          <LbpFormAction disabled={!isValid} />
         </VStack>
-
-        {validLaunchTokenAddress && (
-          <>
-            <Divider />
-
-            <Heading color="font.maxContrast" size="md">
-              Sale period
-            </Heading>
-
-            <VStack align="start" spacing="sm" w="full">
-              <DateTimeInput
-                control={control}
-                errors={errors}
-                label="Start date and time"
-                name="startTime"
-              />
-              <DateTimeInput
-                control={control}
-                errors={errors}
-                label="End date and time"
-                name="endTime"
-              />
-            </VStack>
-
-            <Divider />
-
-            <Heading color="font.maxContrast" size="md">
-              LBP mechanism
-            </Heading>
-            <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
-            <WeightAdjustmentTypeInput
-              control={control}
-              launchTokenSymbol={launchTokenMetadata.symbol}
-            />
-          </>
-        )}
-
-        <LbpFormAction disabled={!isValid} />
-      </VStack>
-    </form>
+      </form>
+    </TokenBalancesProvider>
   )
 }
 
@@ -291,6 +340,90 @@ function WeightAdjustmentTypeInput({
             value={field.value}
           />
         )}
+      />
+    </VStack>
+  )
+}
+
+function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) {
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">Available user actions</Text>
+      <Controller
+        control={control}
+        name="userActions"
+        render={({ field }) => (
+          <RadioGroup onChange={field.onChange} value={field.value}>
+            <Stack direction="row">
+              <Radio value="buy_and_sell">Buy & sell</Radio>
+              <Radio value="buy_only">Buy only</Radio>
+            </Stack>
+          </RadioGroup>
+        )}
+      />
+    </VStack>
+  )
+}
+
+function SaleTokenAmountInput({
+  control,
+  selectedChain,
+  launchTokenAddress,
+}: {
+  control: Control<SaleStructureForm>
+  selectedChain: GqlChain
+  launchTokenAddress: string
+}) {
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">Sale token</Text>
+      <Controller
+        control={control}
+        name="saleTokenAmount"
+        render={({ field }) => (
+          <TokenInput
+            address={launchTokenAddress}
+            chain={selectedChain}
+            onChange={e => field.onChange(e.currentTarget.value)}
+            value={field.value}
+          />
+        )}
+        rules={{
+          required: 'Sale token amount is required',
+          validate: isGreaterThanZeroValidation,
+        }}
+      />
+    </VStack>
+  )
+}
+
+function CollateralTokenAmountInput({
+  control,
+  selectedChain,
+  collateralTokenAddress,
+}: {
+  control: Control<SaleStructureForm>
+  selectedChain: GqlChain
+  collateralTokenAddress: string
+}) {
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">Collateral token</Text>
+      <Controller
+        control={control}
+        name="collateralTokenAmount"
+        render={({ field }) => (
+          <TokenInput
+            address={collateralTokenAddress}
+            chain={selectedChain}
+            onChange={e => field.onChange(e.currentTarget.value)}
+            value={field.value}
+          />
+        )}
+        rules={{
+          required: 'Sale token amount is required',
+          validate: isGreaterThanZeroValidation,
+        }}
       />
     </VStack>
   )
