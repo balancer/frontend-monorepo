@@ -1118,7 +1118,7 @@ export default function Privacy() {
                   </p>
                   <p>
                     Stable Surge hooks introduces dynamic swap fees designed to protect peg, but may
-                    also impact the risk profile of a pool. Please also refer to{' '}
+                    also impact the risk profile of a pool. Please also refer to the{' '}
                     <Link href="risks#hooks-risk">
                       <span>Hooks</span>
                     </Link>{' '}
@@ -1180,7 +1180,7 @@ export default function Privacy() {
                   </p>
                   <p>
                     This hook introduces a novel mechanism that may impact the risk profile of a
-                    pool. Please also refer to
+                    pool. Please also refer to the{' '}
                     <Link href="risks#hooks-risk">
                       <span>Hooks</span>
                     </Link>{' '}
