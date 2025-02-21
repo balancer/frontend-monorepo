@@ -12,8 +12,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // this fixes the theme which was set incorrectly but stored in localStorage awhile ago
   useEffect(() => {
-    if (typeof window !== 'undefined' && localStorage.getItem('theme')) {
-      localStorage.removeItem('theme')
+    if (typeof window !== 'undefined') {
+      if (localStorage.getItem('chakra-ui-color-mode') === 'light') {
+        localStorage.setItem('chakra-ui-color-mode', 'dark')
+      }
+
       setTheme('dark')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
