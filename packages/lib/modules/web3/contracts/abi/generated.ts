@@ -3892,6 +3892,895 @@ export const balancerV2WeightedPoolV4Config = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// GyroECLPPool
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x2191Df821C198600499aA1f0031b1a7514D7A7D9)
+ */
+export const gyroEclpPoolAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct GyroECLPPool.GyroParams',
+        type: 'tuple',
+        components: [
+          {
+            name: 'baseParams',
+            internalType: 'struct ExtensibleWeightedPool2Tokens.NewPoolParams',
+            type: 'tuple',
+            components: [
+              {
+                name: 'vault',
+                internalType: 'contract IVault',
+                type: 'address',
+              },
+              { name: 'name', internalType: 'string', type: 'string' },
+              { name: 'symbol', internalType: 'string', type: 'string' },
+              {
+                name: 'token0',
+                internalType: 'contract IERC20',
+                type: 'address',
+              },
+              {
+                name: 'token1',
+                internalType: 'contract IERC20',
+                type: 'address',
+              },
+              {
+                name: 'swapFeePercentage',
+                internalType: 'uint256',
+                type: 'uint256',
+              },
+              {
+                name: 'pauseWindowDuration',
+                internalType: 'uint256',
+                type: 'uint256',
+              },
+              {
+                name: 'bufferPeriodDuration',
+                internalType: 'uint256',
+                type: 'uint256',
+              },
+              { name: 'owner', internalType: 'address', type: 'address' },
+            ],
+          },
+          {
+            name: 'eclpParams',
+            internalType: 'struct GyroECLPMath.Params',
+            type: 'tuple',
+            components: [
+              { name: 'alpha', internalType: 'int256', type: 'int256' },
+              { name: 'beta', internalType: 'int256', type: 'int256' },
+              { name: 'c', internalType: 'int256', type: 'int256' },
+              { name: 's', internalType: 'int256', type: 'int256' },
+              { name: 'lambda', internalType: 'int256', type: 'int256' },
+            ],
+          },
+          {
+            name: 'derivedEclpParams',
+            internalType: 'struct GyroECLPMath.DerivedParams',
+            type: 'tuple',
+            components: [
+              {
+                name: 'tauAlpha',
+                internalType: 'struct GyroECLPMath.Vector2',
+                type: 'tuple',
+                components: [
+                  { name: 'x', internalType: 'int256', type: 'int256' },
+                  { name: 'y', internalType: 'int256', type: 'int256' },
+                ],
+              },
+              {
+                name: 'tauBeta',
+                internalType: 'struct GyroECLPMath.Vector2',
+                type: 'tuple',
+                components: [
+                  { name: 'x', internalType: 'int256', type: 'int256' },
+                  { name: 'y', internalType: 'int256', type: 'int256' },
+                ],
+              },
+              { name: 'u', internalType: 'int256', type: 'int256' },
+              { name: 'v', internalType: 'int256', type: 'int256' },
+              { name: 'w', internalType: 'int256', type: 'int256' },
+              { name: 'z', internalType: 'int256', type: 'int256' },
+              { name: 'dSq', internalType: 'int256', type: 'int256' },
+            ],
+          },
+          { name: 'rateProvider0', internalType: 'address', type: 'address' },
+          { name: 'rateProvider1', internalType: 'address', type: 'address' },
+          { name: 'capManager', internalType: 'address', type: 'address' },
+          {
+            name: 'capParams',
+            internalType: 'struct ICappedLiquidity.CapParams',
+            type: 'tuple',
+            components: [
+              { name: 'capEnabled', internalType: 'bool', type: 'bool' },
+              {
+                name: 'perAddressCap',
+                internalType: 'uint120',
+                type: 'uint120',
+              },
+              { name: 'globalCap', internalType: 'uint128', type: 'uint128' },
+            ],
+          },
+          { name: 'pauseManager', internalType: 'address', type: 'address' },
+        ],
+      },
+      { name: 'configAddress', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'capManager',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'CapManagerUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ICappedLiquidity.CapParams',
+        type: 'tuple',
+        components: [
+          { name: 'capEnabled', internalType: 'bool', type: 'bool' },
+          { name: 'perAddressCap', internalType: 'uint120', type: 'uint120' },
+          { name: 'globalCap', internalType: 'uint128', type: 'uint128' },
+        ],
+        indexed: false,
+      },
+    ],
+    name: 'CapParamsUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'derivedParamsValidated',
+        internalType: 'bool',
+        type: 'bool',
+        indexed: false,
+      },
+    ],
+    name: 'ECLPDerivedParamsValidated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'paramsValidated',
+        internalType: 'bool',
+        type: 'bool',
+        indexed: false,
+      },
+    ],
+    name: 'ECLPParamsValidated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'invariantAfterJoin',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'InvariantAterInitializeJoin',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'oldInvariant',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'newInvariant',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'InvariantOldAndNew',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'oldPauseManager',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'newPauseManager',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'PauseManagerChanged',
+  },
+  { type: 'event', anonymous: false, inputs: [], name: 'PausedLocally' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [{ name: 'paused', internalType: 'bool', type: 'bool', indexed: false }],
+    name: 'PausedStateChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'swapFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'SwapFeePercentageChanged',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'balances',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+        indexed: false,
+      },
+      {
+        name: 'invariant',
+        internalType: 'struct GyroECLPMath.Vector2',
+        type: 'tuple',
+        components: [
+          { name: 'x', internalType: 'int256', type: 'int256' },
+          { name: 'y', internalType: 'int256', type: 'int256' },
+        ],
+        indexed: false,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'SwapParams',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+  { type: 'event', anonymous: false, inputs: [], name: 'UnpausedLocally' },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'capManager',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'capParams',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct ICappedLiquidity.CapParams',
+        type: 'tuple',
+        components: [
+          { name: 'capEnabled', internalType: 'bool', type: 'bool' },
+          { name: 'perAddressCap', internalType: 'uint120', type: 'uint120' },
+          { name: 'globalCap', internalType: 'uint128', type: 'uint128' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_pauseManager', internalType: 'address', type: 'address' }],
+    name: 'changePauseManager',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'decreaseAllowance',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'selector', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'getActionId',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getActualSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getAuthorizer',
+    outputs: [{ name: '', internalType: 'contract IAuthorizer', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getECLPParams',
+    outputs: [
+      {
+        name: 'params',
+        internalType: 'struct GyroECLPMath.Params',
+        type: 'tuple',
+        components: [
+          { name: 'alpha', internalType: 'int256', type: 'int256' },
+          { name: 'beta', internalType: 'int256', type: 'int256' },
+          { name: 'c', internalType: 'int256', type: 'int256' },
+          { name: 's', internalType: 'int256', type: 'int256' },
+          { name: 'lambda', internalType: 'int256', type: 'int256' },
+        ],
+      },
+      {
+        name: 'd',
+        internalType: 'struct GyroECLPMath.DerivedParams',
+        type: 'tuple',
+        components: [
+          {
+            name: 'tauAlpha',
+            internalType: 'struct GyroECLPMath.Vector2',
+            type: 'tuple',
+            components: [
+              { name: 'x', internalType: 'int256', type: 'int256' },
+              { name: 'y', internalType: 'int256', type: 'int256' },
+            ],
+          },
+          {
+            name: 'tauBeta',
+            internalType: 'struct GyroECLPMath.Vector2',
+            type: 'tuple',
+            components: [
+              { name: 'x', internalType: 'int256', type: 'int256' },
+              { name: 'y', internalType: 'int256', type: 'int256' },
+            ],
+          },
+          { name: 'u', internalType: 'int256', type: 'int256' },
+          { name: 'v', internalType: 'int256', type: 'int256' },
+          { name: 'w', internalType: 'int256', type: 'int256' },
+          { name: 'z', internalType: 'int256', type: 'int256' },
+          { name: 'dSq', internalType: 'int256', type: 'int256' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getFeesMetadata',
+    outputs: [
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getInvariant',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getInvariantDivActualSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getLastInvariant',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMiscData',
+    outputs: [
+      { name: 'logInvariant', internalType: 'int256', type: 'int256' },
+      { name: 'logTotalSupply', internalType: 'int256', type: 'int256' },
+      {
+        name: 'oracleSampleCreationTimestamp',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      { name: 'oracleIndex', internalType: 'uint256', type: 'uint256' },
+      { name: 'oracleEnabled', internalType: 'bool', type: 'bool' },
+      { name: 'swapFeePercentage', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getNormalizedWeights',
+    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getOwner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getPausedState',
+    outputs: [
+      { name: 'paused', internalType: 'bool', type: 'bool' },
+      { name: 'pauseWindowEndTime', internalType: 'uint256', type: 'uint256' },
+      { name: 'bufferPeriodEndTime', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getPoolId',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getPrice',
+    outputs: [{ name: 'spotPrice', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getRate',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getSwapFeePercentage',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTokenRates',
+    outputs: [
+      { name: 'rate0', internalType: 'uint256', type: 'uint256' },
+      { name: 'rate1', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getVault',
+    outputs: [{ name: '', internalType: 'contract IVault', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'gyroConfig',
+    outputs: [{ name: '', internalType: 'contract IGyroConfig', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'addedValue', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'increaseAllowance',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'poolId', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'balances', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'lastChangeBlock', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'protocolSwapFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      { name: 'userData', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'onExitPool',
+    outputs: [
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'poolId', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'balances', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'lastChangeBlock', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'protocolSwapFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      { name: 'userData', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'onJoinPool',
+    outputs: [
+      { name: 'amountsIn', internalType: 'uint256[]', type: 'uint256[]' },
+      {
+        name: 'dueProtocolFeeAmounts',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'request',
+        internalType: 'struct IPoolSwapStructs.SwapRequest',
+        type: 'tuple',
+        components: [
+          { name: 'kind', internalType: 'enum IVault.SwapKind', type: 'uint8' },
+          { name: 'tokenIn', internalType: 'contract IERC20', type: 'address' },
+          {
+            name: 'tokenOut',
+            internalType: 'contract IERC20',
+            type: 'address',
+          },
+          { name: 'amount', internalType: 'uint256', type: 'uint256' },
+          { name: 'poolId', internalType: 'bytes32', type: 'bytes32' },
+          { name: 'lastChangeBlock', internalType: 'uint256', type: 'uint256' },
+          { name: 'from', internalType: 'address', type: 'address' },
+          { name: 'to', internalType: 'address', type: 'address' },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+      { name: 'balanceTokenIn', internalType: 'uint256', type: 'uint256' },
+      { name: 'balanceTokenOut', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'onSwap',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'pause',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'pauseManager',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'permit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'poolId', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'balances', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'lastChangeBlock', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'protocolSwapFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      { name: 'userData', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'queryExit',
+    outputs: [
+      { name: 'bptIn', internalType: 'uint256', type: 'uint256' },
+      { name: 'amountsOut', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'poolId', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'balances', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'lastChangeBlock', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'protocolSwapFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      { name: 'userData', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'queryJoin',
+    outputs: [
+      { name: 'bptOut', internalType: 'uint256', type: 'uint256' },
+      { name: 'amountsIn', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'rateProvider0',
+    outputs: [{ name: '', internalType: 'contract IRateProvider', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'rateProvider1',
+    outputs: [{ name: '', internalType: 'contract IRateProvider', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_capManager', internalType: 'address', type: 'address' }],
+    name: 'setCapManager',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ICappedLiquidity.CapParams',
+        type: 'tuple',
+        components: [
+          { name: 'capEnabled', internalType: 'bool', type: 'bool' },
+          { name: 'perAddressCap', internalType: 'uint120', type: 'uint120' },
+          { name: 'globalCap', internalType: 'uint128', type: 'uint128' },
+        ],
+      },
+    ],
+    name: 'setCapParams',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'paused', internalType: 'bool', type: 'bool' }],
+    name: 'setPaused',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'swapFeePercentage', internalType: 'uint256', type: 'uint256' }],
+    name: 'setSwapFeePercentage',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'sender', internalType: 'address', type: 'address' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'unpause',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+] as const
+
+/**
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x2191Df821C198600499aA1f0031b1a7514D7A7D9)
+ */
+export const gyroEclpPoolAddress = {
+  1: '0x2191Df821C198600499aA1f0031b1a7514D7A7D9',
+} as const
+
+/**
+ * [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x2191Df821C198600499aA1f0031b1a7514D7A7D9)
+ */
+export const gyroEclpPoolConfig = {
+  address: gyroEclpPoolAddress,
+  abi: gyroEclpPoolAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // VaultAdmin
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
