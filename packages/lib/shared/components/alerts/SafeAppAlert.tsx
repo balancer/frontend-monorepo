@@ -22,7 +22,7 @@ export function SafeAppAlert() {
         buttonLabel: 'Open app',
       }
     : {
-        description: `For a better experience, add ${PROJECT_CONFIG.projectName} as a custom Safe app in your Safe wallet. Use 'https://${PROJECT_CONFIG.projectId}.fi/pools' as the Safe App url when adding the custom app.`,
+        description: `For a better experience, add ${PROJECT_CONFIG.projectName} as a custom Safe app in your Safe wallet. Use 'https://${PROJECT_CONFIG.projectId}.fi/pools' as the Safe App URL when adding the custom app.`,
         title: `Consider adding ${PROJECT_CONFIG.projectName} as a custom Safe web app`,
         href: 'https://app.safe.global',
         buttonLabel: 'Go to Safe App',
