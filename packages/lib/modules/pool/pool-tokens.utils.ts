@@ -188,7 +188,15 @@ export function getBoostedActionableTokens(pool: Pool): ApiToken[] {
   return poolTokens
     .flatMap(token =>
       shouldUseUnderlyingToken(token, pool)
-        ? [{ ...token, ...token.underlyingToken, wrappedToken: token } as ApiToken]
+        ? [
+            {
+              ...token,
+              ...token.underlyingToken,
+              wrappedToken: token,
+              underlyingToken: undefined,
+              isErc4626: false, // TODO: delete this when we migrate to useWrappedForAddRemove/useUnderlyingForAddRemove
+            } as ApiToken,
+          ]
         : [token as ApiToken]
     )
     .filter((token): token is ApiToken => token !== undefined)
@@ -234,7 +242,7 @@ export function getPoolActionableTokens(pool: Pool, wrapUnderlying?: boolean[]):
     if (wrapUnderlying[index]) {
       return token
     }
-    return { ...token, ...token.wrappedToken }
+    return { ...token, ...token.wrappedToken, wrappedToken: undefined }
   })
 }
 
@@ -333,14 +341,13 @@ export function getWrappedAndUnderlyingTokenFn(
 ): () => [ApiToken, ApiToken] | void {
   if (shouldUseUnderlyingToken(token, pool)) {
     return () => {
-      // TODO: Review if we should exclude some info to avoid wrapped being shouldUseUnderlyingToken
+      token.wrappedToken = undefined
       const underlyingToken = { ...token, ...token.underlyingToken, wrappedToken: token }
       const wrappedToken = token
 
       return [underlyingToken, wrappedToken]
     }
   }
-
   if (token.wrappedToken) {
     const wrappedToken = token.wrappedToken
     return () => {

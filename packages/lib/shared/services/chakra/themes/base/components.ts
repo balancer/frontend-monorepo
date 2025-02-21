@@ -405,6 +405,9 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             shadow: 'sm',
             backgroundSize: '120% 100%',
             boxShadow: '0 3px 20px hsla(9, 85%, 71%, 0.4)',
+            _disabled: {
+              boxShadow: 'none',
+            },
           },
         },
         secondary: {
@@ -414,6 +417,9 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           _hover: {
             shadow: 'sm',
             boxShadow: '0 3px 20px hsla(32, 43%, 82%, 0.5)',
+            _disabled: {
+              boxShadow: 'none',
+            },
           },
         },
         tertiary: {

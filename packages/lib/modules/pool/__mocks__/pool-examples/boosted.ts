@@ -47,10 +47,19 @@ export const partialBoostedSepolia: PoolExample = {
   mockName: 'partialBoostedSepoliaWethStataUsdtMock',
 }
 
+export const boostedCoinshiftUsdcUsdl: PoolExample = {
+  name: 'csUSDC/csUSDL',
+  description: 'Full Boosted csUSDC-csUSDL',
+  poolId: '0x10a04efba5b880e169920fd4348527c64fb29d4d',
+  poolChain: GqlChain.Mainnet,
+  version: 3,
+}
+
 export const boostedPoolExamples = [
   v3SepoliaNestedBoosted,
   usdcUsdtAaveBoosted,
   morphoStakeHouse,
   partialBoosted,
   partialBoostedSepolia,
+  boostedCoinshiftUsdcUsdl,
 ]
