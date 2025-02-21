@@ -28,6 +28,7 @@ export const ProjectConfigBeets: ProjectConfig = {
     showMaBeets: true,
     allowCreateWallet: false,
     showPoolHooksFilter: false,
+    isOnSafeAppList: false,
   },
   links: {
     appLinks: [
