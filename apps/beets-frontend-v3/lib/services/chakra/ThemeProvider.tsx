@@ -5,22 +5,26 @@ import { ReactNode, useEffect } from 'react'
 import { theme } from './themes/beets/beets.theme'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useTheme } from 'next-themes'
+import { useColorMode } from '@chakra-ui/react'
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const isMounted = useIsMounted()
-  const { setTheme } = useTheme()
 
-  // this fixes the theme which was set incorrectly but stored in localStorage awhile ago
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if (localStorage.getItem('chakra-ui-color-mode') === 'light') {
-        localStorage.setItem('chakra-ui-color-mode', 'dark')
-      }
+  // this fixes the 'light' theme which was set incorrectly but stored in localStorage awhile ago
+  function SetDarkTheme() {
+    const { setTheme } = useTheme()
+    const { setColorMode } = useColorMode()
 
-      setTheme('dark')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    const theme = 'dark'
+
+    useEffect(() => {
+      setTheme(theme)
+      setColorMode(theme)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    return null
+  }
 
   // Avoid hydration error in turbopack mode
   if (!isMounted) return null
@@ -31,6 +35,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       theme={theme}
       toastOptions={{ defaultOptions: { position: 'bottom-left' } }}
     >
+      <SetDarkTheme />
       {children}
     </ChakraProvider>
   )
