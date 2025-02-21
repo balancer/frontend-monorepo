@@ -16,11 +16,7 @@ export function StableSurgePromoBanner() {
         overflow="hidden"
         position="relative"
         rounded="lg"
-        shadow={
-          colorMode === 'dark'
-            ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
-            : '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset'
-        }
+        shadow="innerRockShadow"
         sx={{
           width: '100% !important',
           maxWidth: '100% !important',
@@ -70,11 +66,7 @@ export function StableSurgePromoBanner() {
                       h={14}
                       overflow="hidden"
                       rounded="full"
-                      shadow={
-                        colorMode === 'dark'
-                          ? '-2px -2px 4px 0px rgba(0, 0, 0, 0.65) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.65) inset, 1px 1px 2px 0px rgba(255, 255, 255, 0.08) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.20) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.08) inset'
-                          : '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset'
-                      }
+                      shadow="innerRockShadow"
                       w={14}
                     >
                       <Box
@@ -138,9 +130,8 @@ export function StableSurgePromoBanner() {
             </Box>
             <Button
               _hover={{
-                bg: 'gradient.sandDark',
-                color: '#000',
-                borderColor: 'font.light',
+                bg: colorMode === 'dark' ? '#000' : '#fff',
+                color: colorMode === 'dark' ? '#fff' : '#000',
               }}
               as={NextLink}
               borderColor="font.maxContrast"
@@ -165,7 +156,7 @@ export function StableSurgePromoBanner() {
                   transform: 'translateX(2px)',
                 }}
                 as="span"
-                transition="transform 0.2s"
+                transition="all 0.3s var(--ease-out-cubic)"
               >
                 <ArrowUpRight size="14px" />
               </Box>
