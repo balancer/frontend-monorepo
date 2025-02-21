@@ -13,7 +13,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // this fixes the theme which was set incorrectly but stored in localStorage awhile ago
   useEffect(() => {
     if (typeof window !== 'undefined' && localStorage.getItem('theme')) {
-      localStorage.setItem('theme', 'dark')
+      localStorage.removeItem('theme')
       setTheme('dark')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
