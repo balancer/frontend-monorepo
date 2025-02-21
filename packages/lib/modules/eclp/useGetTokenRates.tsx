@@ -3,6 +3,7 @@ import { useReadContract } from 'wagmi'
 import { gyroEclpPoolAbi } from '../web3/contracts/abi/generated'
 import { Pool } from '../pool/pool.types'
 import { Address } from 'viem'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useGetTokenRates(pool: Pool) {
   const chainId = getChainId(pool.chain)
@@ -12,6 +13,7 @@ export function useGetTokenRates(pool: Pool) {
     abi: gyroEclpPoolAbi,
     address: pool.address as Address,
     functionName: 'getTokenRates',
+    query: { enabled: pool.type === GqlPoolType.Gyroe },
   })
 
   return {
