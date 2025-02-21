@@ -1201,7 +1201,7 @@ export default function Privacy() {
                       Ineffective capture: MEV capture hook is a novel implementation and there
                       is no guarantee it will be successful in capturing all or even a significant portion 
                       of MEV.  Sophisticated searchers might find ways to circumvent the fee, reducing its 
-                      effectiveness and the potential benefits for LPs. The mechanism's design may need 
+                      effectiveness and the potential benefits for LPs. The mechanism&apos;s design may need 
                       adjustments over time as MEV techniques evolve.
                     </li>
                     <li>
