@@ -6,7 +6,7 @@ import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
 import { useMemo } from 'react'
 
 const readContractsParams = {
-  batchSize: 25_000, // 25kb batch ~ 190kb payload
+  batchSize: 10_000, // 10kb batch ~ 75kb payload
   allowFailure: true,
   query: onlyExplicitRefetch,
 } as const

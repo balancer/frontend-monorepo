@@ -15,6 +15,10 @@ import {
 } from '@chakra-ui/react'
 import { MyVotesTable } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTable'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { MyVotesStatsMyVebal } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyVebal'
+import { MyVotesStatsAverageReward } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsAverageReward'
+import { MyVotesStatsMyIncentives } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyIncentives'
+import { MyVotesStatsMyIncentivesOptimized } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyIncentivesOptimized'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { MyVotesHintModal } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesHintModal'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -32,7 +36,9 @@ export function MyVotes() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isConnected } = useUserAccount()
 
-  const { noVeBalBalance } = useVebalUserData()
+  const { loading: vebalUserDataLoading, myVebalBalance, noVeBalBalance } = useVebalUserData()
+
+  const loading = myVotesLoading || vebalUserDataLoading
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -53,6 +59,20 @@ export function MyVotes() {
       <MyVotesHintModal isOpen={isOpen} onClose={onClose} />
 
       <Grid gap="md" templateColumns="repeat(4, 1fr)" templateRows="auto 1fr" w="full">
+        <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+          <MyVotesStatsMyVebal loading={loading} myVebalBalance={myVebalBalance} />
+        </GridItem>
+        <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+          <MyVotesStatsAverageReward loading={loading} myVebalBalance={myVebalBalance} />
+        </GridItem>
+        <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+          <MyVotesStatsMyIncentives loading={loading} myVebalBalance={myVebalBalance} />
+        </GridItem>
+        {false && (
+          <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+            <MyVotesStatsMyIncentivesOptimized loading={loading} myVebalBalance={myVebalBalance} />
+          </GridItem>
+        )}
         {hasAllVotingPowerTimeLocked && (
           <GridItem colSpan={4}>
             <Alert status="warning">
@@ -144,7 +164,9 @@ export function MyVotes() {
             <MyVotesTable loading={myVotesLoading} myVotes={sortedMyVotes} />
           ) : (
             <Center border="1px dashed" borderColor="border.base" h="150px" rounded="lg" w="full">
-              <ConnectWallet size="md" variant="primary" />
+              <VStack>
+                <ConnectWallet size="md" variant="primary" />
+              </VStack>
             </Center>
           )}
         </GridItem>

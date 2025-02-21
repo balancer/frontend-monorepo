@@ -38,13 +38,13 @@ function formatVotes(votesData: RawVotesData): VotesData {
   return {
     votes,
     votesNextPeriod,
-    userVotes: votesData?.userVotes?.result?.power.toString() || '0',
+    userVotes: votesData?.userVotes?.result?.power.toString() || '0', // 6000n = 60.00%
     lastUserVoteTime: Number(votesData?.lastUserVoteTime?.result) || 0,
   }
 }
 
 const readContractsParams = {
-  batchSize: 25_000, // 25kb batch ~ 190kb payload
+  batchSize: 10_000, // 10kb batch ~ 75kb payload
   allowFailure: true,
   query: onlyExplicitRefetch,
 } as const

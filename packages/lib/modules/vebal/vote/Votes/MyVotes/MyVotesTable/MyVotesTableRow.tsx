@@ -25,7 +25,7 @@ import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesPr
 import { VoteWeightInput } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesTable/VoteWeightInput'
 import {
   bpsToPercentage,
-  sharesToBps,
+  inputPercentageWeightToBps,
   votingTimeLockedEndDate,
 } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
@@ -138,7 +138,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
               percentage={editVotes.toString()}
               pr="32px"
               setPercentage={value =>
-                onEditVotesChange(vote.id, sharesToBps(value).dividedBy(100).toString())
+                onEditVotesChange(vote.id, inputPercentageWeightToBps(value).toString())
               }
               textAlign="right"
               width="100px"

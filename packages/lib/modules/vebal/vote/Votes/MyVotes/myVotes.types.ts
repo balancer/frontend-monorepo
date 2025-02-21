@@ -1,6 +1,7 @@
 export interface MyVotesTotalInfo {
   totalValue?: number
-  valuePerVote?: number
+  averageBribesValue?: number
+  averageBribesValueGain?: number
   currentVotes?: number
   editVotes?: number
   unallocatedVotes?: number
