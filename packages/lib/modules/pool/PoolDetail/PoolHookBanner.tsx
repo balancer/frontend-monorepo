@@ -15,6 +15,8 @@ export function PoolHookBanner() {
 
     if (hook.id === 'hooks_stablesurge') {
       return <StableSurgePromoBanner key={hook.id} />
+      // } else if (hook.id === 'hooks_mevcapture') {
+      //   return <MEVCapturePromoBanner key={hook.id} />
     } else {
       return (
         <Card key={hook.id}>
