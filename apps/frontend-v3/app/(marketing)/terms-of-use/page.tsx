@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Container } from '@chakra-ui/react'
+import { Box, Container } from '@chakra-ui/react'
 import { Prose } from '@nikolovlazar/chakra-ui-prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
@@ -11,23 +11,25 @@ export default function Terms() {
       <Prose>
         <FadeInOnView>
           <div className="subsection">
-            <h1>Balancer Terms of Use</h1>
-            <p>
-              <em>Last updated: August 2024</em>
-            </p>
-            <p>
-              <em className="font-semibold">
-                Do not access this site where such access is prohibited by applicable law. Please
-                carefully read these terms of use before using the site. These terms apply to any
-                person or entity accessing the site and by using the site you agree to be bound by
-                them. The terms of use contain a mandatory individual arbitration and class
-                action/jury trial waiver provision that requires the use of arbitration on an
-                individual basis to resolve disputes, rather than jury trials or class actions. If
-                you do not want to be bound by these terms of use, you should not access the site.
-                By using the site in any capacity, you agree that you have read, understood, and
-                agree to be subject to these terms of use.
-              </em>
-            </p>
+            <Box mt="3xl">
+              <h1>Balancer Terms of Use</h1>
+              <p>
+                <em>Last updated: August 2024</em>
+              </p>
+              <p>
+                <em className="font-semibold">
+                  Do not access this site where such access is prohibited by applicable law. Please
+                  carefully read these terms of use before using the site. These terms apply to any
+                  person or entity accessing the site and by using the site you agree to be bound by
+                  them. The terms of use contain a mandatory individual arbitration and class
+                  action/jury trial waiver provision that requires the use of arbitration on an
+                  individual basis to resolve disputes, rather than jury trials or class actions. If
+                  you do not want to be bound by these terms of use, you should not access the site.
+                  By using the site in any capacity, you agree that you have read, understood, and
+                  agree to be subject to these terms of use.
+                </em>
+              </p>
+            </Box>
           </div>
         </FadeInOnView>
         <FadeInOnView>
