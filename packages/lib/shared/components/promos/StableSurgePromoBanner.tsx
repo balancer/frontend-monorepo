@@ -140,7 +140,7 @@ export function StableSurgePromoBanner() {
               _hover={{
                 bg: 'gradient.sandDark',
                 color: '#000',
-                borderColor: colorMode === 'dark' ? 'font.light' : 'font.light',
+                borderColor: 'font.light',
               }}
               as={NextLink}
               borderColor="font.maxContrast"
