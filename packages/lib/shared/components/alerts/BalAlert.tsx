@@ -9,8 +9,9 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { MouseEventHandler, ReactNode } from 'react'
-import { AlertTriangle, Check, Info, Loader, XOctagon } from 'react-feather'
+import { AlertTriangle, Check, Loader, XOctagon } from 'react-feather'
 import { BalAlertButtonLink } from './BalAlertButtonLink'
+import { LightbulbIcon } from '../icons/LightbulbIcon'
 
 export type BalAlertProps = {
   content: ReactNode | string
@@ -80,7 +81,7 @@ export function BalAlert({
 function getAlertIcon(status: AlertStatus) {
   switch (status) {
     case 'info':
-      return Info
+      return LightbulbIcon
     case 'warning':
       return AlertTriangle
     case 'success':
@@ -90,6 +91,6 @@ function getAlertIcon(status: AlertStatus) {
     case 'loading':
       return Loader
     default:
-      return Info
+      return LightbulbIcon
   }
 }
