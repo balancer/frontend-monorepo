@@ -20,7 +20,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
   },
   "dependencies": {
-    "@apollo/client": "^3.11.8",
+    "@apollo/client": "^3.13.1",
     "@balancer/sdk": "2.1.3",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
