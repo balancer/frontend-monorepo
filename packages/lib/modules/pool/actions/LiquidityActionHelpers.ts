@@ -248,8 +248,9 @@ export function shouldUseRecoveryRemoveLiquidity(pool: Pool): boolean {
   // All composableStables V1 are in recovery mode and they should use recovery exit even if they are not paused
   if (isComposableStableV1(pool)) return true
 
-  if (pool.dynamicData.isInRecoveryMode && pool.dynamicData.isPaused) return true
+  if (pool.dynamicData.isInRecoveryMode) return true
 
+  if (pool.dynamicData.isInRecoveryMode && pool.dynamicData.isPaused) return true
   if (pool.dynamicData.isInRecoveryMode && isAffectedByCspIssue(pool)) return true
 
   return false
