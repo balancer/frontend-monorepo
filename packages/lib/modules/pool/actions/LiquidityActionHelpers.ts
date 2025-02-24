@@ -251,6 +251,7 @@ export function shouldUseRecoveryRemoveLiquidity(pool: Pool): boolean {
   if (pool.dynamicData.isInRecoveryMode) return true
 
   if (pool.dynamicData.isInRecoveryMode && pool.dynamicData.isPaused) return true
+
   if (pool.dynamicData.isInRecoveryMode && isAffectedByCspIssue(pool)) return true
 
   return false
