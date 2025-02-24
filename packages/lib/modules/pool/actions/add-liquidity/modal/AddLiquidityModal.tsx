@@ -46,7 +46,7 @@ export function AddLiquidityModal({
     setInitialHumanAmountsIn,
   } = useAddLiquidity()
   const { pool, chain } = usePool()
-  const shouldBatchTransactions = useShouldBatchTransactions(pool)
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
@@ -111,7 +111,7 @@ export function AddLiquidityModal({
         />
         <ModalCloseButton />
         <ModalBody>
-          <TxBatchAlert currentStep={transactionSteps.currentStep} mb="sm" />
+          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
           <AddLiquiditySummary {...receiptProps} />
         </ModalBody>
         <ActionModalFooter
