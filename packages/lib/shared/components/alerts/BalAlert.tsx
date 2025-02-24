@@ -35,9 +35,13 @@ export function BalAlert({
   onClose,
   ...rest
 }: BalAlertProps) {
+  const iconSize = {
+    h: '24px',
+    w: '24px',
+  }
   return (
     <Alert rounded={isNavAlert ? 'none' : 'default'} status={status} {...rest}>
-      {ssr ? <AlertIcon /> : <AlertIcon as={getAlertIcon(status)} />}
+      {ssr ? <AlertIcon {...iconSize} /> : <AlertIcon as={getAlertIcon(status)} {...iconSize} />}
 
       {title ? (
         <VStack align="start" w="full">
