@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Container } from '@chakra-ui/react'
+import { Box, Container } from '@chakra-ui/react'
 import { Prose } from '@nikolovlazar/chakra-ui-prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
@@ -12,10 +12,12 @@ export default function Cookies() {
         <div className="pb-4">
           <FadeInOnView>
             <div className="subsection">
-              <h1>Balancer Cookies&nbsp;Policy</h1>
-              <p>
-                <em>Last Updated: October 2023</em>
-              </p>
+              <Box mt="3xl">
+                <h1>Balancer Cookies&nbsp;Policy</h1>
+                <p>
+                  <em>Last Updated: October 2023</em>
+                </p>
+              </Box>
             </div>
           </FadeInOnView>
           <FadeInOnView>
