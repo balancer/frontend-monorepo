@@ -67,21 +67,21 @@ export function StaticCalendar({
   }
 
   return (
-    <Grid templateColumns="repeat(7, 1fr)" gridColumnGap="14px" gridRowGap="8px">
+    <Grid gridColumnGap="14px" gridRowGap="8px" templateColumns="repeat(7, 1fr)">
       {weekDays.map(weekDay => (
-        <GridItem py="2px" px="8px" textAlign="center" key={`weekday-${weekDay.getDay()}`}>
+        <GridItem key={`weekday-${weekDay.getDay()}`} px="8px" py="2px" textAlign="center">
           <Text variant="secondary">{format(weekDay, 'EE')}</Text>
         </GridItem>
       ))}
 
       {visibleDays.map(({ day, visible }) => (
-        <GridItem textAlign="center" key={`day-${day.getTime()}`}>
+        <GridItem key={`day-${day.getTime()}`} textAlign="center">
           {visible && (
             <Box
-              p="10px"
-              rounded="full"
               bg="background.level2"
               color="font.secondary"
+              p="10px"
+              rounded="full"
               sx={getDayStyles(day)}
             >
               <Text color="inherit" variant="secondary">

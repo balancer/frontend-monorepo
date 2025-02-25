@@ -35,11 +35,11 @@ export function VotingDeadlineCalendar() {
   return (
     <Card>
       <StaticCalendar
-        startDate={startDate}
         endDate={endDate}
-        isDayDisabled={isDayDisabled}
         isDayActive={isDayActive}
+        isDayDisabled={isDayDisabled}
         isDaySelected={isDaySelected}
+        startDate={startDate}
       />
     </Card>
   )

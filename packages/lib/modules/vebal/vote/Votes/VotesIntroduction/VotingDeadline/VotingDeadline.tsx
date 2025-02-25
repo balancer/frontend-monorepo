@@ -8,7 +8,7 @@ export function VotingDeadline() {
   return (
     <Box>
       <VStack>
-        <Text variant="secondary" fontWeight="700">
+        <Text fontWeight="700" variant="secondary">
           Weekly voting deadline
         </Text>
         <HStack>

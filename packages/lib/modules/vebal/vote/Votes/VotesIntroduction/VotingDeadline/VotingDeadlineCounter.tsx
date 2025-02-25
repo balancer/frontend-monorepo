@@ -42,7 +42,7 @@ export function VotingDeadlineCounter() {
         </HStack>
         <HStack>
           {counters.map(counter => (
-            <Box key={counter.title} flex="1">
+            <Box flex="1" key={counter.title}>
               <VStack>
                 <Text variant="secondary">{counter.title}</Text>
                 <Text>{String(counter.value).padStart(2, '0')}</Text>
