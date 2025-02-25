@@ -138,6 +138,7 @@ type OptionsConfig = {
   showMaBeets: boolean
   allowCreateWallet: boolean
   showPoolHooksFilter: boolean
+  isOnSafeAppList: boolean
 }
 
 type Links = {

@@ -28,6 +28,9 @@ export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL
 
 const stakingBalTooltipText = `LPs who stake earn extra ‘BAL’ liquidity mining incentives. The displayed APR is the base amount that all Stakers in this pool get (determined by weekly gauge voting). In addition, veBAL holders can get an extra boost of up to 2.5x.`
 
+export const mevCaptureFeesTooltipText =
+  'The MEV captured and shared to all LPs proportionately by the ‘MEV Capture’ hook used in this pool.'
+
 const maBeetsVotingRewardsTooltipText =
   'To receive Voting APR you must vote for incentivized pools in the bi-weekly gauge vote. APR is dependent on your vote distribution.'
 
@@ -129,6 +132,12 @@ export function useAprTooltip({
   // Surplus incentives
   const surplusIncentives = filterByType(aprItems, GqlPoolAprItemType.Surplus_24H)
   const surplusIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(surplusIncentives)
+
+  // MEV Capture fees
+  // TODO: enable when api is updated
+  // const mevCaptureFees = filterByType(aprItems, GqlPoolAprItemType.Surplus_24H)
+  // const hasMevCaptureFees = mevCaptureFees.length > 0
+  // const mevCaptureFeesAprDisplayed = numberFormatter(mevCaptureFees ? mevCaptureFees.apr.toString() : '0')
 
   // Bal Reward
   const balReward = aprItems.find(item => item.type === GqlPoolAprItemType.VebalEmissions)

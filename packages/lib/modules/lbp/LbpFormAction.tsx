@@ -4,7 +4,7 @@ import { Button, HStack, IconButton } from '@chakra-ui/react'
 import { ChevronLeftIcon } from '@chakra-ui/icons'
 import { useLbpForm } from './LbpFormProvider'
 
-export function LbpFormAction() {
+export function LbpFormAction({ disabled }: { disabled?: boolean }) {
   const { activeStepIndex, setActiveStep, isLastStep, isFirstStep } = useLbpForm()
 
   return (
@@ -18,7 +18,7 @@ export function LbpFormAction() {
         />
       )}
 
-      <Button size="lg" type="submit" variant="primary" w="full">
+      <Button disabled={disabled} size="lg" type="submit" variant="primary" w="full">
         {isLastStep ? 'Create LBP' : 'Next'}
       </Button>
     </HStack>
