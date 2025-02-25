@@ -3,6 +3,7 @@ import { useHook } from '../../hooks/useHook'
 import { usePool } from '../PoolProvider'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { StableSurgePromoBanner } from '@repo/lib/shared/components/promos/StableSurgePromoBanner'
+import { MevCapturePoolDetailBanner } from '@repo/lib/shared/components/promos/hooks/MevCapturePoolDetailBanner'
 
 export function PoolHookBanner() {
   const { pool } = usePool()
@@ -15,8 +16,8 @@ export function PoolHookBanner() {
 
     if (hook.id === 'hooks_stablesurge') {
       return <StableSurgePromoBanner key={hook.id} />
-      // } else if (hook.id === 'hooks_mevcapture') {
-      //   return <MEVCapturePromoBanner key={hook.id} />
+    } else if (hook.id === 'hooks_mevcapture') {
+      return <MevCapturePoolDetailBanner key={hook.id} />
     } else {
       return (
         <Card key={hook.id}>
