@@ -245,7 +245,7 @@ export function LandingBeetsData({
                 </Button>
               }
               chain={GqlChain.Sonic}
-              isSonic={true}
+              isSonic
               networkColor="orange"
               protocolData={chainData[getChainId(GqlChain.Sonic)]}
               stakedSonicData={stakedSonicData}
