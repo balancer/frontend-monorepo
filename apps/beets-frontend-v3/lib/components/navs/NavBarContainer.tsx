@@ -65,7 +65,7 @@ export function NavBarContainer() {
             </>
           }
           navLogo={<NavLogo />}
-          rightSlot={<NavActions hideDarkModeToggle mobileNav={mobileNav} />}
+          rightSlot={<NavActions mobileNav={mobileNav} />}
         />
       </motion.div>
     </AnimatePresence>
