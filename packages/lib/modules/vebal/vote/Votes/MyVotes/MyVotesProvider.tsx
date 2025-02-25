@@ -16,6 +16,7 @@ import { useSubmitVotesAllSteps } from '@repo/lib/modules/vebal/vote/Votes/MyVot
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import {
   bpsToPercentage,
+  calculateMyVoteRewardsValue,
   sharesToBps,
 } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
@@ -24,6 +25,7 @@ import {
   getUnallocatedWeight,
   isVotingTimeLocked,
 } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -56,6 +58,8 @@ export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern
 export function _useMyVotes({}: UseMyVotesArgs) {
+  const { myVebalBalance } = useVebalUserData()
+
   const {
     loading,
     votedPools,
@@ -123,16 +127,24 @@ export function _useMyVotes({}: UseMyVotesArgs) {
         editWeight,
         totalValue,
         valuePerVote,
+        vote: myVote,
       }
     })
 
     const currentVotes = sumBy(infos, ({ currentWeight }) => bn(currentWeight).toNumber())
     const editVotes = sumBy(infos, ({ editWeight }) => bn(editWeight).toNumber())
-    const totalValue = sumBy(infos, ({ totalValue }) => bn(totalValue).toNumber())
-    const averageBribesValue = sumBy(infos, ({ valuePerVote, editWeight }) =>
+
+    const totalRewardValue = sumBy(infos, ({ votedWeight, editWeight, vote }) =>
+      calculateMyVoteRewardsValue(votedWeight, editWeight, vote, myVebalBalance ?? 0)
+    )
+    const prevTotalRewardValue = sumBy(infos, ({ votedWeight, vote }) =>
+      calculateMyVoteRewardsValue(votedWeight, votedWeight, vote, myVebalBalance ?? 0)
+    )
+
+    const averageRewardPerVote = sumBy(infos, ({ valuePerVote, editWeight }) =>
       bn(valuePerVote).multipliedBy(bpsToPercentage(editWeight)).toNumber()
     )
-    const prevAverageBribesValue = sumBy(infos, ({ valuePerVote, votedWeight }) =>
+    const prevAverageRewardPerVote = sumBy(infos, ({ valuePerVote, votedWeight }) =>
       bn(valuePerVote).multipliedBy(bpsToPercentage(votedWeight)).toNumber()
     )
 
@@ -141,12 +153,14 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     return {
       currentVotes,
       editVotes,
-      totalValue,
-      averageBribesValue,
-      averageBribesValueGain: averageBribesValue - prevAverageBribesValue,
+      totalRewardValue,
+      prevTotalRewardValue,
+      totalRewardValueGain: totalRewardValue - prevTotalRewardValue,
+      averageRewardPerVote,
+      averageRewardPerVoteGain: averageRewardPerVote - prevAverageRewardPerVote,
       unallocatedVotes: Math.max(unallocatedVotes, 0),
     }
-  }, [availableMyVotes, votedVotesWeights, editVotesWeights])
+  }, [availableMyVotes, votedVotesWeights, editVotesWeights, myVebalBalance])
 
   const hasChanges =
     selectedVotingPools.length > 0 ||
@@ -209,6 +223,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     hasVotes,
     hasChanges,
     totalInfo,
+    votedVotesWeights,
     editVotesWeights,
     onEditVotesChange,
     clearAll,

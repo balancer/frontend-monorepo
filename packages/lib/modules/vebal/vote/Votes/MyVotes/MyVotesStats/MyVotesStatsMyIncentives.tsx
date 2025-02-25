@@ -4,6 +4,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { MyVotesStatsCard } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVotesStatsCard'
 import { GainBadge } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
 import { MyIncentivesAprTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesAprTooltip'
+import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 
 interface Props {
   myVebalBalance: number | undefined
@@ -12,11 +13,7 @@ interface Props {
 
 export function MyVotesStatsMyIncentives({ myVebalBalance, loading }: Props) {
   const { toCurrency } = useCurrency()
-
-  const gain = 0.034 // fix: (votes) provide real value
-  const rewardValue = 80.08 // fix: (votes) provide real value
-  const totalWithVoteEdits = 164.25 // fix: (votes) provide real value
-  const totalBeforeVoteEdits = 141 // fix: (votes) provide real value
+  const { totalInfo } = useMyVotes()
 
   return (
     <MyVotesStatsCard
@@ -24,15 +21,15 @@ export function MyVotesStatsMyIncentives({ myVebalBalance, loading }: Props) {
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
-        ) : myVebalBalance ? (
+        ) : myVebalBalance && totalInfo.totalRewardValue ? (
           <HStack spacing="xs">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
-              {toCurrency(rewardValue, { abbreviated: false })}
+              {toCurrency(totalInfo.totalRewardValue, { abbreviated: false })}
             </Text>
-            {gain && <GainBadge gain={gain} />}
+            {totalInfo.totalRewardValueGain && <GainBadge gain={totalInfo.totalRewardValueGain} />}
             <MyIncentivesAprTooltip
-              totalBeforeVoteEdits={totalBeforeVoteEdits}
-              totalWithVoteEdits={totalWithVoteEdits}
+              totalBeforeVoteEdits={totalInfo.prevTotalRewardValue}
+              totalWithVoteEdits={totalInfo.totalRewardValue}
             />
           </HStack>
         ) : undefined

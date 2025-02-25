@@ -53,9 +53,9 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {votingIncentivesLoading ? (
               <Skeleton h="20px" w="60px" />
-            ) : totalInfo.totalValue ? (
+            ) : totalInfo.totalRewardValue ? (
               <Text color="font.maxContrast">
-                {toCurrency(totalInfo.totalValue, { abbreviated: false })}
+                {toCurrency(totalInfo.totalRewardValue, { abbreviated: false })}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
@@ -64,9 +64,9 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {votingIncentivesLoading ? (
               <Skeleton h="20px" w="60px" />
-            ) : totalInfo.averageBribesValue ? (
+            ) : totalInfo.averageRewardPerVote ? (
               <Text color="font.maxContrast">
-                {toCurrency(totalInfo.averageBribesValue, { abbreviated: false })}
+                {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>

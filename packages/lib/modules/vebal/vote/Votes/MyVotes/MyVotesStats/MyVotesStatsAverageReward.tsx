@@ -20,13 +20,13 @@ export function MyVotesStatsAverageReward({ myVebalBalance, loading }: Props) {
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
-        ) : myVebalBalance && totalInfo.averageBribesValue ? (
+        ) : myVebalBalance && totalInfo.averageRewardPerVote ? (
           <HStack spacing="xs">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
-              {toCurrency(totalInfo.averageBribesValue, { abbreviated: false })}
+              {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
             </Text>
-            {totalInfo.averageBribesValueGain && (
-              <GainBadge gain={totalInfo.averageBribesValueGain} />
+            {totalInfo.averageRewardPerVoteGain && (
+              <GainBadge gain={totalInfo.averageRewardPerVoteGain} />
             )}
           </HStack>
         ) : undefined
