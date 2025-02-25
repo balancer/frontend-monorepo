@@ -68,12 +68,14 @@ function ChainStats({
 }) {
   const { toCurrency } = useCurrency()
 
-  let totalRevenue =
-    parseFloat(protocolData.protocolMetricsChain.swapFee24h) +
-    parseFloat(protocolData.protocolMetricsChain.yieldCapture24h)
+  let totalRevenue = bn(protocolData.protocolMetricsChain.swapFee24h)
+    .plus(bn(protocolData.protocolMetricsChain.yieldCapture24h))
+    .toString()
 
   if (isSonic) {
-    totalRevenue += parseFloat(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
+    totalRevenue = bn(totalRevenue)
+      .plus(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
+      .toString()
   }
 
   return (
@@ -196,10 +198,10 @@ export function LandingBeetsData({
   const protocolMetricsAggregated = protocolData.protocolMetricsAggregated
   const totalTvl = protocolMetricsAggregated.totalLiquidity
 
-  const totalRevenue =
-    parseFloat(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h) +
-    parseFloat(protocolMetricsAggregated.swapFee24h) +
-    parseFloat(protocolMetricsAggregated.yieldCapture24h)
+  const totalRevenue = bn(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
+    .plus(bn(protocolMetricsAggregated.swapFee24h))
+    .plus(bn(protocolMetricsAggregated.yieldCapture24h))
+    .toString()
 
   return (
     <DefaultPageContainer noVerticalPadding position="relative" py="3xl">
