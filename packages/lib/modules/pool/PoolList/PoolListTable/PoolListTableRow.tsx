@@ -7,7 +7,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import Link from 'next/link'
 import { memo } from 'react'
 import { usePoolMetadata } from '../../metadata/usePoolMetadata'
-import { POOL_TAG_MAP, PoolListItem } from '../../pool.types'
+import { PoolListItem } from '../../pool.types'
 import { getPoolPath } from '../../pool.utils'
 import { getUserTotalBalanceUsd } from '../../user-balance.helpers'
 import { usePoolList } from '../PoolListProvider'
@@ -28,7 +28,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
   const { name } = usePoolMetadata(pool)
   const { toCurrency } = useCurrency()
 
-  const hasPoints = pool.tags?.some(tag => tag && POOL_TAG_MAP.POINTS.includes(tag))
+  const hasPoints = pool.tags?.some(tag => tag === 'POINTS')
 
   return (
     <FadeInOnView>
