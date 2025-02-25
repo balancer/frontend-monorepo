@@ -14,6 +14,7 @@ import DarkModeToggle from '../btns/DarkModeToggle'
 import RecentTransactions from '../other/RecentTransactions'
 import { AppLink, useNav } from './useNav'
 import { clamp } from 'lodash'
+import { useThemeSettings } from '../../services/chakra/useThemeSettings'
 
 type Props = {
   mobileNav?: ReactNode
@@ -97,15 +98,14 @@ function NavLinks({
 
 export function NavActions({
   mobileNav,
-  hideDarkModeToggle,
   allowCreateWallet,
 }: {
   mobileNav: ReactNode
-  hideDarkModeToggle?: boolean
   allowCreateWallet?: boolean
 }) {
   const pathname = usePathname()
   const { isConnected } = useUserAccount()
+  const { hideDarkModeToggle } = useThemeSettings()
 
   const actions = useMemo(() => {
     if (pathname === '/') {
