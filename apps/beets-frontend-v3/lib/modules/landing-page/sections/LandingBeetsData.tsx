@@ -69,7 +69,7 @@ function ChainStats({
   const { toCurrency } = useCurrency()
 
   let totalRevenue = bn(protocolData.protocolMetricsChain.swapFee24h)
-    .plus(bn(protocolData.protocolMetricsChain.yieldCapture24h))
+    .plus(protocolData.protocolMetricsChain.yieldCapture24h)
     .toString()
 
   if (isSonic) {
@@ -88,7 +88,7 @@ function ChainStats({
         colorScheme="cyan"
         rounded="lg"
         value={bn(protocolData.protocolMetricsChain.totalLiquidity)
-          .div(bn(totalTvl))
+          .div(totalTvl)
           .times(100)
           .toNumber()}
         w="full"
@@ -199,8 +199,8 @@ export function LandingBeetsData({
   const totalTvl = protocolMetricsAggregated.totalLiquidity
 
   const totalRevenue = bn(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
-    .plus(bn(protocolMetricsAggregated.swapFee24h))
-    .plus(bn(protocolMetricsAggregated.yieldCapture24h))
+    .plus(protocolMetricsAggregated.swapFee24h)
+    .plus(protocolMetricsAggregated.yieldCapture24h)
     .toString()
 
   return (
