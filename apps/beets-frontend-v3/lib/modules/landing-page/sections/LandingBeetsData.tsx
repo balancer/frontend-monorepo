@@ -22,6 +22,7 @@ import { BeetsByTheNumbers } from '../components/BeetsByTheNumbers'
 import {
   GetProtocolStatsPerChainQuery,
   GetProtocolStatsQuery,
+  GetStakedSonicDataQuery,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { getChainId } from '@repo/lib/config/app.config'
@@ -55,13 +56,27 @@ import NextLink from 'next/link'
 // }
 
 function ChainStats({
+  isSonic,
   protocolData,
+  stakedSonicData,
   totalTvl,
 }: {
+  isSonic?: boolean
   protocolData: GetProtocolStatsPerChainQuery
+  stakedSonicData: GetStakedSonicDataQuery
   totalTvl: string
 }) {
   const { toCurrency } = useCurrency()
+
+  let totalRevenue = bn(protocolData.protocolMetricsChain.swapFee24h)
+    .plus(protocolData.protocolMetricsChain.yieldCapture24h)
+    .toString()
+
+  if (isSonic) {
+    totalRevenue = bn(totalRevenue)
+      .plus(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
+      .toString()
+  }
 
   return (
     <Box bg="rgba(0, 0, 0, 0.2)" display="flex" flexDir="column" height="300px" p="lg" w="full">
@@ -73,7 +88,7 @@ function ChainStats({
         colorScheme="cyan"
         rounded="lg"
         value={bn(protocolData.protocolMetricsChain.totalLiquidity)
-          .div(bn(totalTvl))
+          .div(totalTvl)
           .times(100)
           .toNumber()}
         w="full"
@@ -101,8 +116,8 @@ function ChainStats({
         </GridItem>
         <GridItem bg="rgba(255, 255, 255, 0.05)" p="lg" w="full">
           <VStack align="flex-start" spacing="sm">
-            <Text fontSize="lg">24h Fees</Text>
-            <Text fontSize="2xl">{toCurrency(protocolData.protocolMetricsChain.swapFee24h)}</Text>
+            <Text fontSize="lg">24h Revenue</Text>
+            <Text fontSize="2xl">{toCurrency(totalRevenue)}</Text>
           </VStack>
         </GridItem>
       </Grid>
@@ -116,12 +131,16 @@ function ChainDataCard({
   protocolData,
   totalTvl,
   button,
+  isSonic,
+  stakedSonicData,
 }: {
   chain: GqlChain
   networkColor: string
   protocolData: GetProtocolStatsPerChainQuery
   totalTvl: string
   button: React.ReactNode
+  isSonic?: boolean
+  stakedSonicData: GetStakedSonicDataQuery
 }) {
   return (
     <Box p="xl">
@@ -133,7 +152,12 @@ function ChainDataCard({
           </chakra.span>
         </Heading>
       </Box>
-      <ChainStats protocolData={protocolData} totalTvl={totalTvl} />
+      <ChainStats
+        isSonic={isSonic}
+        protocolData={protocolData}
+        stakedSonicData={stakedSonicData}
+        totalTvl={totalTvl}
+      />
       <Center mt="xl">{button}</Center>
     </Box>
   )
@@ -155,9 +179,11 @@ function GlobalStatsCard({ label, value }: { label: string; value: string }) {
 export function LandingBeetsData({
   protocolData,
   protocolDataPerChain,
+  stakedSonicData,
 }: {
   protocolData: GetProtocolStatsQuery
   protocolDataPerChain: GetProtocolStatsPerChainQuery[]
+  stakedSonicData: GetStakedSonicDataQuery
 }) {
   const { toCurrency } = useCurrency()
 
@@ -171,6 +197,11 @@ export function LandingBeetsData({
 
   const protocolMetricsAggregated = protocolData.protocolMetricsAggregated
   const totalTvl = protocolMetricsAggregated.totalLiquidity
+
+  const totalRevenue = bn(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
+    .plus(protocolMetricsAggregated.swapFee24h)
+    .plus(protocolMetricsAggregated.yieldCapture24h)
+    .toString()
 
   return (
     <DefaultPageContainer noVerticalPadding position="relative" py="3xl">
@@ -203,10 +234,7 @@ export function LandingBeetsData({
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
-              <GlobalStatsCard
-                label="24h Fees"
-                value={toCurrency(protocolMetricsAggregated.swapFee24h)}
-              />
+              <GlobalStatsCard label="24h Revenue" value={toCurrency(totalRevenue)} />
             </GridItem>
           </Grid>
         </Box>
@@ -219,8 +247,10 @@ export function LandingBeetsData({
                 </Button>
               }
               chain={GqlChain.Sonic}
+              isSonic
               networkColor="orange"
               protocolData={chainData[getChainId(GqlChain.Sonic)]}
+              stakedSonicData={stakedSonicData}
               totalTvl={totalTvl}
             />
           </GridItem>
@@ -234,6 +264,7 @@ export function LandingBeetsData({
               chain={GqlChain.Optimism}
               networkColor="red"
               protocolData={chainData[getChainId(GqlChain.Optimism)]}
+              stakedSonicData={stakedSonicData}
               totalTvl={totalTvl}
             />
           </GridItem>
@@ -252,6 +283,7 @@ export function LandingBeetsData({
               chain={GqlChain.Fantom}
               networkColor="deepskyblue"
               protocolData={chainData[getChainId(GqlChain.Fantom)]}
+              stakedSonicData={stakedSonicData}
               totalTvl={totalTvl}
             />
           </GridItem>
