@@ -87,15 +87,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
             <NetworkIcon chain={vote.chain} size={6} />
           </GridItem>
           <GridItem {...cellProps}>
-            <Link
-              href={getPoolPath({
-                id: vote.id,
-                chain: vote.chain,
-                type: vote.type,
-                protocolVersion: undefined,
-              })}
-              target="_blank"
-            >
+            <Link href={getPoolPath(vote)} target="_blank">
               <HStack>
                 <VotingListTokenPills
                   h={['32px', '36px']}

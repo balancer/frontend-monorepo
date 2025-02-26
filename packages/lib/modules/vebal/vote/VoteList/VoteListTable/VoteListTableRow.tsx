@@ -5,13 +5,16 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
-import { getPoolPath, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
+import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
 import { VoteExpiredTooltip } from '@repo/lib/modules/vebal/vote/VoteExpiredTooltip'
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
+import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -33,6 +36,8 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
 
   const isDisabled = !isConnected || hasAllVotingPowerTimeLocked || !allowSelectVotingPools
 
+  const { getToken } = useTokens()
+
   return (
     <FadeInOnView>
       <Box
@@ -50,15 +55,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             <NetworkIcon chain={vote.chain} size={6} />
           </GridItem>
           <GridItem>
-            <Link
-              href={getPoolPath({
-                id: vote.id,
-                chain: vote.chain,
-                type: vote.type,
-                protocolVersion: undefined,
-              })}
-              target="_blank"
-            >
+            <Link href={getPoolPath(vote)} target="_blank">
               <HStack>
                 <VotingListTokenPills
                   h={['32px', '36px']}
@@ -75,9 +72,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             </Link>
           </GridItem>
           <GridItem textAlign="right">
-            <Text fontWeight="medium" textAlign="right" textTransform="capitalize">
-              {getPoolTypeLabel(vote.type)}
-            </Text>
+            <PoolListTableDetailsCell pool={voteToPool(vote, getToken)} />
           </GridItem>
           <GridItem justifySelf="end" textAlign="right">
             {votingIncentivesLoading ? (

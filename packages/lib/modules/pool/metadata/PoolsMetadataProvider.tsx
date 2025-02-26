@@ -15,7 +15,7 @@ export function _usePoolsMetadata(
   erc4626Metadata: Erc4626Metadata[] | undefined,
   poolsMetadata: PoolsMetadata | undefined
 ) {
-  function getErc4626Metadata(pool: Pool | PoolListItem): Erc4626Metadata[] {
+  function getErc4626Metadata(pool: Pick<Pool | PoolListItem, 'tags'>): Erc4626Metadata[] {
     if (!erc4626Metadata) return []
 
     return erc4626Metadata.filter(_metadata =>

@@ -4,6 +4,9 @@ import {
   SortVotesBy,
 } from '@repo/lib/modules/vebal/vote/vote.types'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { PoolCoreMinimal } from '@repo/lib/modules/pool/pool.types'
+import { compact } from 'lodash'
+import { GetTokenFn } from '@repo/lib/modules/tokens/TokensProvider'
 
 export function getVotesState(relativeWeightCap: number, votesNextPeriod: number) {
   if (relativeWeightCap === 0 || votesNextPeriod === 0) return VotesState.Normal
@@ -16,16 +19,25 @@ export function getVotesState(relativeWeightCap: number, votesNextPeriod: number
   return VotesState.Normal
 }
 
-export function voteToPool(vote: VotingPoolWithData) {
+export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): PoolCoreMinimal {
   return {
-    displayTokens: vote.tokens.map(token => ({ ...token, name: token.symbol })), // fix: (votes) no name
+    id: vote.id,
     type: vote.type,
     chain: vote.chain,
-    poolTokens: [],
+    poolTokens: compact(
+      vote.tokens.map(token =>
+        token.underlyingTokenAddress
+          ? getToken(token.underlyingTokenAddress, vote.chain)
+          : undefined
+      )
+    ),
     address: vote.address,
-    protocolVersion: 3, // fix: (votes) no data
+    protocolVersion: vote.protocolVersion, // fix: (votes) no data
     hasAnyAllowedBuffer: false, // fix: (votes) no data
     hasErc4626: false, // fix: (votes) no data
+    name: '', // fix: (votes) no data
+    symbol: vote.symbol,
+    tags: [], // fix: (votes) no data
   }
 }
 
