@@ -15,6 +15,9 @@ import { chains } from './ChainConfig'
 import { transports } from './transports'
 import { createWalletConnectConnector } from './wallet-connect/createWalletConnectConnector'
 import { isConnectedToWC } from './wallet-connect/useWCConnectionLocalStorage'
+import { createMockConnector } from './wallet-connect/createMockConnector'
+import { Address } from 'viem'
+import { isProd } from '@repo/lib/config/app.config'
 
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID
 if (!walletConnectProjectId) throw new Error('Missing NEXT_PUBLIC_WALLET_CONNECT_ID env')
@@ -54,9 +57,25 @@ if (!isConnectedToWC()) {
   }
 }
 
+// Add mock connector for development/staging environments
+if (!isProd) connectors.push(createMockConnector({ index: connectors.length }))
+
 export const wagmiConfig = createConfig({
   chains,
   transports,
   connectors,
   ssr: true,
 })
+
+// Update the mock connector address to impersonate a different account
+export function updateMockConnectorAddress(address?: Address) {
+  connectors.pop()
+  connectors.push(createMockConnector({ index: connectors.length, address }))
+
+  return createConfig({
+    chains,
+    transports,
+    connectors,
+    ssr: true,
+  })
+}
