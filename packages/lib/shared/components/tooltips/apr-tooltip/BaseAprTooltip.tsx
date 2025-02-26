@@ -237,15 +237,6 @@ function BaseAprTooltip({
           tooltipText={merklIncentivesTooltipText}
         />
       ) : null}
-      {/* {hasMevCaptureFees ? (
-        <TooltipAprItem
-          {...basePopoverAprItemProps}
-          apr={mevCaptureFeesDisplayed}
-          displayValueFormatter={usedDisplayValueFormatter}
-          title="MEV Captured"
-          tooltipText={mevCaptureFeesTooltipText}
-        />
-      ) : null} */}
       {isCowAmmPool(poolType) && (
         <TooltipAprItem
           {...basePopoverAprItemProps}
