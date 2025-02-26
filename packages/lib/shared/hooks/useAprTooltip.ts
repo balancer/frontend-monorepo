@@ -213,7 +213,6 @@ export function useAprTooltip({
   )
 
   const isSwapFeePresent = !swapFeesDisplayed.isZero()
-  const isDynamicSwapFeePresent = !dynamicSwapFeesDisplayed.isZero()
   const isYieldPresent = !yieldBearingTokensAprDisplayed.isZero()
   const isStakingPresent = !stakingIncentivesAprDisplayed.isZero()
 
@@ -260,7 +259,6 @@ export function useAprTooltip({
     maxMaBeetsVotingRewardDisplayed,
     maBeetsVotingRewardsTooltipText,
     maBeetsTotalAprDisplayed,
-    isDynamicSwapFeePresent,
     dynamicSwapFeesDisplayed,
     dynamicSwapFeesTooltipText,
   }
