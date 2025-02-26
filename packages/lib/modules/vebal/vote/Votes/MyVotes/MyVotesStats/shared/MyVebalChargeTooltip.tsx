@@ -1,5 +1,6 @@
 import {
   Badge,
+  Box,
   Button,
   HStack,
   Popover,
@@ -82,19 +83,21 @@ export function MyVebalChargeTooltip({
     <Popover trigger="hover">
       <>
         <PopoverTrigger>
-          {isExpired ? (
-            <Badge
-              background="red.500"
-              color="font.maxContrast"
-              fontSize="sm"
-              textTransform="unset"
-              userSelect="none"
-            >
-              Expired
-            </Badge>
-          ) : (
-            <BatteryChargeIcon percentage={lockedEndDatePercentage} />
-          )}
+          <Box>
+            {isExpired ? (
+              <Badge
+                background="red.500"
+                color="font.maxContrast"
+                fontSize="sm"
+                textTransform="unset"
+                userSelect="none"
+              >
+                Expired
+              </Badge>
+            ) : (
+              <BatteryChargeIcon percentage={lockedEndDatePercentage} />
+            )}
+          </Box>
         </PopoverTrigger>
 
         {usePortal ? <Portal>{popoverContent}</Portal> : popoverContent}
