@@ -11,6 +11,7 @@ import {
   GridItem,
   Heading,
   HStack,
+  Text,
   VStack,
 } from '@chakra-ui/react'
 import { MyVotesTable } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTable'
@@ -28,6 +29,7 @@ import { oneDayInMs } from '@repo/lib/shared/utils/time'
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { AlertTriangle } from 'react-feather'
+import NextLink from 'next/link'
 
 export function MyVotes() {
   const { hasAllVotingPowerTimeLocked, vebalIsExpired, vebalLockTooShort, shouldResubmitVotes } =
@@ -87,15 +89,23 @@ export function MyVotes() {
             </Alert>
           </GridItem>
         )}
-        {/* fix: (votes) need design */}
         {vebalLockTooShort && (
           <GridItem colSpan={4}>
             <Alert status="warning">
               <AlertIcon as={AlertTriangle} />
               <HStack alignItems="baseline">
-                <AlertTitle>veBAL not locked for 7 days</AlertTitle>
+                <AlertTitle>You can't vote because your veBAL expires soon</AlertTitle>
                 <AlertDescription>
-                  You must have veBAL locked for more than 7 days to vote on gauges.
+                  Gauge voting requires your veBAL to be locked for 7+ days.{' '}
+                  <Text
+                    color="font.dark"
+                    textDecoration="underline"
+                    as={NextLink}
+                    href="/vebal/manage/lock"
+                  >
+                    Extend your lock
+                  </Text>{' '}
+                  to vote.
                 </AlertDescription>
               </HStack>
             </Alert>
