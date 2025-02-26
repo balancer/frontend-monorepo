@@ -101,18 +101,15 @@ export function MyVotes() {
             </Alert>
           </GridItem>
         )}
-        {/* fix: (votes) need design */}
         {shouldResubmitVotes && (
           <GridItem colSpan={4}>
-            <Alert status="warning">
+            <Alert status="info">
               <AlertIcon as={AlertTriangle} />
               <HStack alignItems="baseline">
                 <AlertTitle>Resubmit your votes to utilize your full voting power</AlertTitle>
                 <AlertDescription>
-                  Votes on pools are set at the time of the vote. Since you’ve added new veBAL since
-                  your original vote, you have additional voting power which is not being used. Use{' '}
-                  {/* eslint-disable-next-line react/no-unescaped-entities */}
-                  the 'Submit votes' button to resubmit your votes.
+                  Looks like you got more veBAL. Your old votes don't use it. Re-vote now to apply
+                  your full veBAL power.
                 </AlertDescription>
               </HStack>
             </Alert>
