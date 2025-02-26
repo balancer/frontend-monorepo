@@ -135,7 +135,7 @@ function StableTokenPills({
       {tokens.map((token, i) => {
         return (
           <Badge
-            key={token.address}
+            key={[token.address, token.chain].join('-')}
             {...badgeProps}
             alignItems="center"
             bg="background.level2"
