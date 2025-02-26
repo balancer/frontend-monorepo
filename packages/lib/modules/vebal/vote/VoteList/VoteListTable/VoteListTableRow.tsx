@@ -71,7 +71,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
               </HStack>
             </Link>
           </GridItem>
-          <GridItem textAlign="right">
+          <GridItem>
             <PoolListTableDetailsCell pool={voteToPool(vote, getToken)} />
           </GridItem>
           <GridItem justifySelf="end" textAlign="right">

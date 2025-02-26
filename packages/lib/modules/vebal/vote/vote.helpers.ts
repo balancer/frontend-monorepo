@@ -51,7 +51,7 @@ export function isPoolExpired(pool: VotingPoolWithData) {
 }
 
 export const orderByHash: Record<SortVotesBy, { label: string; title?: string }> = {
-  type: { label: 'Type' },
+  type: { label: 'Details' },
   bribes: {
     label: 'Bribes',
     title:

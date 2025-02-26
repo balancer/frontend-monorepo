@@ -34,7 +34,11 @@ export function VoteListTableHeader({ ...rest }) {
         <Text fontWeight="bold">Pool name</Text>
       </GridItem>
       {orderBy.map(orderByItem => (
-        <GridItem justifySelf="end" key={orderByItem} maxW="maxContent">
+        <GridItem
+          justifySelf={orderByItem === 'type' ? 'start' : 'end'}
+          key={orderByItem}
+          maxW="maxContent"
+        >
           <SortableHeader
             isSorted={sortVotesBy === orderByItem}
             label={orderByHash[orderByItem].label}
@@ -49,6 +53,7 @@ export function VoteListTableHeader({ ...rest }) {
               ) : undefined
             }
             sorting={sorting}
+            textProps={orderByItem === 'type' ? { textAlign: 'left' } : undefined}
           />
         </GridItem>
       ))}
