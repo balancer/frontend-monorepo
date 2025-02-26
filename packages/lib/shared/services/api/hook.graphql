@@ -26,6 +26,11 @@ fragment Hook on GqlHook {
       maxSurgeFeePercentage
       surgeThresholdPercentage
     }
+    ... on MevTaxHookParams {
+      mevTaxThreshold
+      mevTaxMultiplier
+      maxMevSwapFeePercentage
+    }
   }
   reviewData {
     reviewFile
