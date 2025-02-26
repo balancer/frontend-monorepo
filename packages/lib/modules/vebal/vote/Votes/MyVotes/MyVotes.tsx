@@ -94,14 +94,15 @@ export function MyVotes() {
             <Alert status="warning">
               <AlertIcon as={AlertTriangle} />
               <HStack alignItems="baseline">
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
                 <AlertTitle>You can't vote because your veBAL expires soon</AlertTitle>
                 <AlertDescription>
                   Gauge voting requires your veBAL to be locked for 7+ days.{' '}
                   <Text
-                    color="font.dark"
-                    textDecoration="underline"
                     as={NextLink}
+                    color="font.dark"
                     href="/vebal/manage/lock"
+                    textDecoration="underline"
                   >
                     Extend your lock
                   </Text>{' '}
@@ -118,6 +119,7 @@ export function MyVotes() {
               <HStack alignItems="baseline">
                 <AlertTitle>Resubmit your votes to utilize your full voting power</AlertTitle>
                 <AlertDescription>
+                  {/* eslint-disable-next-line react/no-unescaped-entities */}
                   Looks like you got more veBAL. Your old votes don't use it. Re-vote now to apply
                   your full veBAL power.
                 </AlertDescription>

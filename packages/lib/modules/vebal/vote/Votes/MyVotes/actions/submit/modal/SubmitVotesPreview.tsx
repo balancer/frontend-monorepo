@@ -70,13 +70,13 @@ export function SubmitVotesPreview({
                         <NetworkIcon chain={vote.chain} size={6} />
 
                         <VotingListTokenPills
+                          getToken={getToken}
                           h={['32px', '36px']}
                           iconSize={20}
                           nameSize="sm"
                           p={['xxs', 'sm']}
                           pr={[1.5, 'ms']}
                           vote={vote}
-                          getToken={getToken}
                         />
 
                         {isExpired && (
@@ -111,13 +111,13 @@ export function SubmitVotesPreview({
                         <NetworkIcon chain={vote.chain} size={6} />
 
                         <VotingListTokenPills
+                          getToken={getToken}
                           h={['32px', '36px']}
                           iconSize={20}
                           nameSize="sm"
                           p={['xxs', 'sm']}
                           pr={[1.5, 'ms']}
                           vote={vote}
-                          getToken={getToken}
                         />
                       </HStack>
                       <VoteWeight

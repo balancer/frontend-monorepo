@@ -93,12 +93,12 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
             <Link href={getPoolPath(vote)} target="_blank">
               <HStack>
                 <VotingListTokenPills
+                  getToken={getToken}
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
                   pr={[1.5, 'ms']}
                   vote={vote}
-                  getToken={getToken}
                 />
                 {isExpired && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">
@@ -145,12 +145,12 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
               isDisabled={isDisabled}
               max={100}
               min={0}
-              step={0.01}
               percentage={editVotes.toString()}
               pr="32px"
               setPercentage={value =>
                 onEditVotesChange(vote.id, inputPercentageWeightToBps(value).toString())
               }
+              step={0.01}
               textAlign="right"
               width="100px"
             />
@@ -159,7 +159,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
             <VStack align="center" w="full">
               <IconButton
                 aria-label="Remove"
-                icon={<Trash2 height="20px" color={fontSecondary} />}
+                icon={<Trash2 color={fontSecondary} height="20px" />}
                 isDisabled={!removable}
                 onClick={onRemove}
                 variant="ghost"

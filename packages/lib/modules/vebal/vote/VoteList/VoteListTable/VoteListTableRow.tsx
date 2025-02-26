@@ -26,7 +26,7 @@ import { VoteExpiredTooltip } from '@repo/lib/modules/vebal/vote/VoteExpiredTool
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
-import { orderByHash, voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
+import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 interface Props extends GridProps {
@@ -71,12 +71,12 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             <Link href={getPoolPath(vote)} target="_blank">
               <HStack>
                 <VotingListTokenPills
+                  getToken={getToken}
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
                   pr={[1.5, 'ms']}
                   vote={vote}
-                  getToken={getToken}
                 />
                 {isExpired && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">
@@ -102,7 +102,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                 </PopoverTrigger>
                 <Portal>
                   <PopoverContent maxW="300px" p="sm" w="auto">
-                    <Text fontSize="sm" variant="secondary" textAlign="left">
+                    <Text fontSize="sm" textAlign="left" variant="secondary">
                       There is currently no bribe data on this pool from Hidden Hand
                     </Text>
                   </PopoverContent>
@@ -122,7 +122,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                 </PopoverTrigger>
                 <Portal>
                   <PopoverContent maxW="300px" p="sm" w="auto">
-                    <Text fontSize="sm" variant="secondary" textAlign="left">
+                    <Text fontSize="sm" textAlign="left" variant="secondary">
                       There is currently no bribe data on this pool from Hidden Hand
                     </Text>
                   </PopoverContent>
