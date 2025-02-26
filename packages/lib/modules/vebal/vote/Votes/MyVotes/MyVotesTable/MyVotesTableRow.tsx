@@ -141,6 +141,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
               isDisabled={isDisabled}
               max={100}
               min={0}
+              step={0.01}
               percentage={editVotes.toString()}
               pr="32px"
               setPercentage={value =>
