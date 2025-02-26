@@ -18,7 +18,7 @@
     "stylelint:fix": "stylelint '**/*.css' --fix",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
     "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/bal/bal.theme.ts",
-    "postinstall": "npm run gen:theme-typings"
+    "postinstall": "pnpm run gen:theme-typings"
   },
   "dependencies": {
     "@balancer/sdk": "2.1.3",
