@@ -12,6 +12,9 @@ import { isStableLike, isWeightedLike } from '../pool.helpers'
 import { getUserReferenceTokens } from '../pool-tokens.utils'
 import { PoolCore, PoolToken } from '../pool.types'
 import { VotingPoolWithData } from '../../vebal/vote/vote.types'
+import { GetTokenFn } from '@repo/lib/modules/tokens/TokensProvider'
+import { compact } from 'lodash'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 function NestedTokenPill({
   nestedTokens,
@@ -48,7 +51,12 @@ function WeightedTokenPills({
   iconSize = 24,
   nameSize,
   ...badgeProps
-}: { tokens: PoolToken[]; chain: GqlChain; iconSize?: number; nameSize?: string } & BadgeProps) {
+}: {
+  tokens: (PoolToken | ApiToken)[]
+  chain: GqlChain
+  iconSize?: number
+  nameSize?: string
+} & BadgeProps) {
   return (
     <Wrap spacing="xs">
       {tokens.map(token => {
@@ -66,7 +74,7 @@ function WeightedTokenPills({
             textTransform="none"
           >
             <HStack gap={['xs', 'sm']}>
-              {!token.nestedPool && (
+              {!('nestedPool' in token) && (
                 <>
                   <TokenIcon
                     address={token.address}
@@ -84,7 +92,7 @@ function WeightedTokenPills({
                   </HStack>
                 </>
               )}
-              {token.nestedPool && (
+              {'nestedPool' in token && token.nestedPool && (
                 <>
                   <NestedTokenPill
                     chain={chain}
@@ -114,7 +122,7 @@ function StableTokenPills({
   nameSize,
   ...badgeProps
 }: {
-  tokens: PoolToken[]
+  tokens: (PoolToken | ApiToken)[]
   chain: GqlChain
   iconSize?: number
   nameSize?: string
@@ -142,7 +150,7 @@ function StableTokenPills({
             zIndex={zIndices[i]}
           >
             <HStack gap={['xs', '1.5']}>
-              {!token.nestedPool && (
+              {!('nestedPool' in token) && (
                 <>
                   <TokenIcon
                     address={token.address}
@@ -157,7 +165,7 @@ function StableTokenPills({
                   )}
                 </>
               )}
-              {token.nestedPool && (
+              {'nestedPool' in token && token.nestedPool && (
                 <>
                   <NestedTokenPill
                     chain={chain}
@@ -181,17 +189,24 @@ type VotingListTokenPillsProps = {
   vote: VotingPoolWithData
   iconSize?: number
   nameSize?: string
+  getToken: GetTokenFn
 } & BadgeProps
-export function VotingListTokenPills({ vote, ...props }: VotingListTokenPillsProps) {
-  const tokens = vote.tokens.map(
-    /*
+
+export function VotingListTokenPills({ vote, getToken, ...props }: VotingListTokenPillsProps) {
+  const tokens = compact(
+    vote.tokens.map(
+      /*
       TODO:
       Tokens in veBalGetVotingList query have type GqlVotingGaugeToken which does not have all the properties of PoolToken
       That means that token pills will be different for voting pools (unless we change the backend types or we query and map the pool list tokens):
       - Showing symbol instead of name
       - GqlVotingGaugeToken does not have nestedPool property so NestedTokenPills won't be displayed
     */
-    token => ({ ...token, name: token.symbol }) as unknown as PoolToken
+      token =>
+        token.underlyingTokenAddress
+          ? getToken(token.underlyingTokenAddress, vote.chain)
+          : ({ ...token, name: token.symbol } as unknown as PoolToken)
+    )
   )
 
   const { name } = usePoolMetadata({ chain: vote.chain, address: vote.address })
@@ -228,7 +243,7 @@ export function PoolListTokenPills({ pool, ...props }: PoolListTokenPillsProps) 
 type PoolTokenPillsProps = {
   poolType: GqlPoolType
   chain: GqlChain
-  tokens: PoolToken[]
+  tokens: (PoolToken | ApiToken)[]
   poolName: string | undefined
   iconUrl?: string
   iconSize?: number

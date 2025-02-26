@@ -34,6 +34,7 @@ import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
 import { isVotingTimeLocked } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -69,6 +70,8 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
 
   const { myVebalBalance } = useVebalUserData()
 
+  const { getToken } = useTokens()
+
   return (
     <FadeInOnView>
       <Box
@@ -95,6 +98,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
                   p={['xxs', 'sm']}
                   pr={[1.5, 'ms']}
                   vote={vote}
+                  getToken={getToken}
                 />
                 {isExpired && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">

@@ -76,6 +76,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                   p={['xxs', 'sm']}
                   pr={[1.5, 'ms']}
                   vote={vote}
+                  getToken={getToken}
                 />
                 {isExpired && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">

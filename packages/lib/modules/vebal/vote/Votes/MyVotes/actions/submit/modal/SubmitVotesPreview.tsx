@@ -16,6 +16,7 @@ import { VotesChunksAllocation } from '@repo/lib/modules/vebal/vote/Votes/MyVote
 import { AlertTriangle } from 'react-feather'
 import { CHUNK_SIZE } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesSteps'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 interface Props {
   submittingVotes: SubmittingVote[]
@@ -39,6 +40,8 @@ export function SubmitVotesPreview({
   const optimizedRewardValue = 86.65 // fix: (votes) provide real value
   const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
   const averageReward = 0.102 // fix: (votes) provide real value
+
+  const { getToken } = useTokens()
 
   return (
     <VStack spacing="md" w="full">
@@ -73,6 +76,7 @@ export function SubmitVotesPreview({
                           p={['xxs', 'sm']}
                           pr={[1.5, 'ms']}
                           vote={vote}
+                          getToken={getToken}
                         />
 
                         {isExpired && (
@@ -113,6 +117,7 @@ export function SubmitVotesPreview({
                           p={['xxs', 'sm']}
                           pr={[1.5, 'ms']}
                           vote={vote}
+                          getToken={getToken}
                         />
                       </HStack>
                       <VoteWeight
