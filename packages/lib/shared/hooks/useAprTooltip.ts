@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import { GqlChain, GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlHookType,
+  GqlPoolAprItem,
+  GqlPoolAprItemType,
+} from '../services/api/generated/graphql'
 import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'
 import BigNumber from 'bignumber.js'
@@ -28,13 +33,19 @@ export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL
 
 const stakingBalTooltipText = `LPs who stake earn extra ‘BAL’ liquidity mining incentives. The displayed APR is the base amount that all Stakers in this pool get (determined by weekly gauge voting). In addition, veBAL holders can get an extra boost of up to 2.5x.`
 
-export const mevCaptureFeesTooltipText =
-  'The MEV captured and shared to all LPs proportionately by the ‘MEV Capture’ hook used in this pool.'
-
 const maBeetsVotingRewardsTooltipText =
   'To receive Voting APR you must vote for incentivized pools in the bi-weekly gauge vote. APR is dependent on your vote distribution.'
 
 const maBeetsRewardTooltipText = 'This is the APR you will receive when a relic is fully matured.'
+
+// Only include the hook types we currently support irt dynamic swap fees
+export type SupportedHookType = Extract<GqlHookType, GqlHookType.MevTax | GqlHookType.StableSurge>
+
+export const dynamicSwapFeesTooltipText: Record<SupportedHookType, string> = {
+  [GqlHookType.MevTax]:
+    'The MEV captured and shared to all LPs proportionately by the ‘MEV Capture’ hook used in this pool.',
+  [GqlHookType.StableSurge]: 'to do: add label text',
+}
 
 // Types that must be added to the total base
 const TOTAL_BASE_APR_TYPES = [
@@ -251,6 +262,7 @@ export function useAprTooltip({
     maBeetsTotalAprDisplayed,
     isDynamicSwapFeePresent,
     dynamicSwapFeesDisplayed,
+    dynamicSwapFeesTooltipText,
   }
 }
 

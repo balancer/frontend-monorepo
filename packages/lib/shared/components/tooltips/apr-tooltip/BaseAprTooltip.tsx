@@ -23,6 +23,7 @@ import {
   votingIncentivesTooltipText,
   merklIncentivesTooltipText,
   surplusIncentivesTooltipText,
+  SupportedHookType,
   //mevCaptureFeesTooltipText,
 } from '@repo/lib/shared/hooks/useAprTooltip'
 import { TooltipAprItem } from './TooltipAprItem'
@@ -136,6 +137,7 @@ function BaseAprTooltip({
     maBeetsRewardTooltipText,
     isDynamicSwapFeePresent,
     dynamicSwapFeesDisplayed,
+    dynamicSwapFeesTooltipText,
   } = useAprTooltip({
     aprItems,
     vebalBoost: Number(vebalBoost),
@@ -175,7 +177,7 @@ function BaseAprTooltip({
           aprOpacity={isDynamicSwapFeePresent ? 1 : 0.5}
           displayValueFormatter={usedDisplayValueFormatter}
           title={getDynamicSwapFeesLabel(hookType)}
-          tooltipText={swapFeesTooltipText}
+          tooltipText={dynamicSwapFeesTooltipText[hookType as SupportedHookType]}
         />
       )}
       {isMaBeetsPresent && (
