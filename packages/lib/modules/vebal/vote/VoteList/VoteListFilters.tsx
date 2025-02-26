@@ -25,6 +25,8 @@ import {
 } from '@repo/lib/modules/pool/PoolList/PoolListFilters'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListSearch } from '@repo/lib/modules/vebal/vote/VoteList/VoteListSearch'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function useFilterTagsVisible() {
   const {
@@ -128,6 +130,7 @@ export function VoteListFilters() {
                           Pool types
                         </Heading>
                         <PoolTypeFilters
+                          hidePoolTypes={PROJECT_CONFIG.options.hidePoolTypes}
                           poolTypeLabel={poolTypeLabel}
                           poolTypes={poolTypes}
                           setPoolTypes={setPoolTypes}
