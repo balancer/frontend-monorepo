@@ -165,7 +165,8 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   const hasVotedBefore = votedPools.length > 0
 
   const hasChanges =
-    selectedVotingPools.length > 0 ||
+    (selectedVotingPools.length > 0 &&
+      selectedVotingPools.some(votingPool => bn(editVotesWeights[votingPool.id] ?? 0).gt(0))) ||
     votedPools.some(
       votedPool => !bn(votedPool.gaugeVotes?.userVotes ?? 0).eq(editVotesWeights[votedPool.id])
     )
