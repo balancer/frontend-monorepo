@@ -154,8 +154,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
             <VStack align="center" w="full">
               <IconButton
                 aria-label="Remove"
-                fontSize="12px"
-                icon={<Trash2 color={fontSecondary} />}
+                icon={<Trash2 height="20px" color={fontSecondary} />}
                 isDisabled={!removable}
                 onClick={onRemove}
                 variant="ghost"
