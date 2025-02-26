@@ -45,7 +45,7 @@ export function MyVebalChargeTooltip({
             veBAL charge
           </Text>
           <Text fontSize="sm" fontWeight={700}>
-            {fNum('apr', lockedEndDatePercentage)}
+            {fNum('apr', lockedEndDatePercentage / 100)}
           </Text>
         </HStack>
         <HStack justifyContent="space-between" w="full">
