@@ -1,11 +1,12 @@
 'use client'
 
 import React from 'react'
-import { Link, Stack, Heading, Flex, Box, Center, Text, useColorMode } from '@chakra-ui/react'
+import { Stack, Heading, Button, Flex, Box, Center, Text, useColorMode } from '@chakra-ui/react'
+import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { Picture } from '../../other/Picture'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
-import Stat from '../../other/Stat'
+// import Stat from '../../other/Stat'
 
 export function MevCapturePoolDetailBanner() {
   const { colorMode } = useColorMode()
@@ -125,30 +126,52 @@ export function MevCapturePoolDetailBanner() {
                       opacity="0.8"
                     >
                       A novel mechanism for pools to capture and share MEV with LPs.
-                      <Link
-                        href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295"
-                        pl="1"
-                      >
-                        <Box as="span" whiteSpace="nowrap">
-                          Learn more
-                          <Box as="span" display="inline-block" pl="0.5">
-                            <ArrowUpRight size="14px" />
-                          </Box>
-                        </Box>
-                      </Link>
                     </Text>
                   </Box>
                 </Box>
               </Stack>
             </Box>
-            <Flex alignItems="center" gap="ms" maxW="284px">
+            {/* <Flex alignItems="center" gap="ms" maxW="284px">
               <Box rounded="md" shadow="2xl">
                 <Stat label="MEV captured (24h)" value="$2.45k" />
               </Box>
               <Box rounded="md" shadow="2xl">
                 <Stat imageTransform="rotate(180deg)" label="Total MEV captured" value="$45.46k" />
               </Box>
-            </Flex>
+            </Flex> */}
+            <Button
+              _hover={{
+                bg: colorMode === 'dark' ? '#000' : '#fff',
+                color: colorMode === 'dark' ? '#fff' : '#000',
+              }}
+              as={NextLink}
+              borderColor="font.maxContrast"
+              color="font.maxContrast"
+              cursor="hand"
+              flex="1"
+              gap="xs"
+              h={{ base: '32px', sm: '40px', lg: '48px' }}
+              href="https://medium.com/balancer-protocol/mev-internalization-through-priority-fee-taxes-coming-to-balancer-v3-on-base-q1-2025-f20b3e1b7295"
+              maxW="132px"
+              py="sm"
+              role="group"
+              rounded="full"
+              size="md"
+              target="_blank"
+              variant="outline"
+              w="132px"
+            >
+              Learn more
+              <Box
+                _groupHover={{
+                  transform: 'translateX(2px)',
+                }}
+                as="span"
+                transition="all 0.3s var(--ease-out-cubic)"
+              >
+                <ArrowUpRight size="14px" />
+              </Box>
+            </Button>
           </Flex>
         </Center>
       </Box>
