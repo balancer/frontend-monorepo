@@ -31,7 +31,7 @@ export function getUserReferenceTokens(pool: PoolCore): PoolToken[] {
   return sortByIndex(getCompositionTokens(pool))
 }
 
-function isPool(pool: any): pool is Pool {
+export function isPool(pool: any): pool is Pool {
   return (pool as Pool).poolTokens !== undefined
 }
 
