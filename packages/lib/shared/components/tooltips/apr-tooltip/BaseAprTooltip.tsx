@@ -1,5 +1,6 @@
 import {
   GqlChain,
+  GqlHookType,
   GqlPoolAprItem,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -48,6 +49,7 @@ interface Props {
   usePortal?: boolean
   children?: ReactNode | (({ isOpen }: { isOpen: boolean }) => ReactNode)
   chain: GqlChain
+  hookType?: GqlHookType
 }
 
 const balRewardGradient =
@@ -64,6 +66,17 @@ const basePopoverAprItemProps = {
 
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
 const defaultNumberFormatter = (value: string) => bn(value)
+
+function getDynamicSwapFeesLabel(hookType: GqlHookType) {
+  switch (hookType) {
+    case GqlHookType.MevTax:
+      return 'MEV Capture hook'
+    case GqlHookType.StableSurge:
+      return 'Stable Surge hook'
+    default:
+      return 'Dynamic Swap Fees '
+  }
+}
 
 function BaseAprTooltip({
   aprItems,
@@ -83,6 +96,7 @@ function BaseAprTooltip({
   poolType,
   chain,
   usePortal = true,
+  hookType,
 }: Props) {
   const colorMode = useThemeColorMode()
 
@@ -120,8 +134,8 @@ function BaseAprTooltip({
     maBeetsVotingRewardsTooltipText,
     maBeetsTotalAprDisplayed,
     maBeetsRewardTooltipText,
-    //hasMevCaptureFees,
-    //mevCaptureFeesDisplayed,
+    isDynamicSwapFeePresent,
+    dynamicSwapFeesDisplayed,
   } = useAprTooltip({
     aprItems,
     vebalBoost: Number(vebalBoost),
@@ -154,6 +168,16 @@ function BaseAprTooltip({
         title="Swap fees"
         tooltipText={swapFeesTooltipText}
       />
+      {hookType && (
+        <TooltipAprItem
+          {...basePopoverAprItemProps}
+          apr={dynamicSwapFeesDisplayed}
+          aprOpacity={isDynamicSwapFeePresent ? 1 : 0.5}
+          displayValueFormatter={usedDisplayValueFormatter}
+          title={getDynamicSwapFeesLabel(hookType)}
+          tooltipText={swapFeesTooltipText}
+        />
+      )}
       {isMaBeetsPresent && (
         <TooltipAprItem
           {...basePopoverAprItemProps}

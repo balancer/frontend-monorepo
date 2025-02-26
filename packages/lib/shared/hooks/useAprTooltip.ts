@@ -92,6 +92,12 @@ export function useAprTooltip({
   const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
   const swapFeesDisplayed = numberFormatter(swapFee ? swapFee.apr.toString() : '0')
 
+  // Dynamic wap fees (MEV Capture, StableSurge)
+  const dynamicSwapFee = aprItems.find(item => item.type === GqlPoolAprItemType.DynamicSwapFee_24H)
+  const dynamicSwapFeesDisplayed = numberFormatter(
+    dynamicSwapFee ? dynamicSwapFee.apr.toString() : '0'
+  )
+
   // Yield bearing tokens
   const yieldBearingTokens = aprItems.filter(item => {
     return item.type === GqlPoolAprItemType.IbYield
@@ -132,12 +138,6 @@ export function useAprTooltip({
   // Surplus incentives
   const surplusIncentives = filterByType(aprItems, GqlPoolAprItemType.Surplus_24H)
   const surplusIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(surplusIncentives)
-
-  // MEV Capture fees
-  // TODO: enable when api is updated
-  // const mevCaptureFees = filterByType(aprItems, GqlPoolAprItemType.Surplus_24H)
-  // const hasMevCaptureFees = mevCaptureFees.length > 0
-  // const mevCaptureFeesAprDisplayed = numberFormatter(mevCaptureFees ? mevCaptureFees.apr.toString() : '0')
 
   // Bal Reward
   const balReward = aprItems.find(item => item.type === GqlPoolAprItemType.VebalEmissions)
@@ -202,6 +202,7 @@ export function useAprTooltip({
   )
 
   const isSwapFeePresent = !swapFeesDisplayed.isZero()
+  const isDynamicSwapFeePresent = !dynamicSwapFeesDisplayed.isZero()
   const isYieldPresent = !yieldBearingTokensAprDisplayed.isZero()
   const isStakingPresent = !stakingIncentivesAprDisplayed.isZero()
 
@@ -248,6 +249,8 @@ export function useAprTooltip({
     maxMaBeetsVotingRewardDisplayed,
     maBeetsVotingRewardsTooltipText,
     maBeetsTotalAprDisplayed,
+    isDynamicSwapFeePresent,
+    dynamicSwapFeesDisplayed,
   }
 }
 
