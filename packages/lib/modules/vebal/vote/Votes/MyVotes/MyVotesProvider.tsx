@@ -162,6 +162,8 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     }
   }, [availableMyVotes, votedVotesWeights, editVotesWeights, myVebalBalance])
 
+  const hasVotedBefore = votedPools.length > 0
+
   const hasChanges =
     selectedVotingPools.length > 0 ||
     votedPools.some(
@@ -221,6 +223,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     loading,
     filtersState,
     hasVotes,
+    hasVotedBefore,
     hasChanges,
     totalInfo,
     votedVotesWeights,
