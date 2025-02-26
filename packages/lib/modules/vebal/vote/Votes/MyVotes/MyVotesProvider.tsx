@@ -193,12 +193,15 @@ export function _useMyVotes({}: UseMyVotesArgs) {
         }
       }
 
-      return [
-        {
-          vote,
-          weight: state,
-        },
-      ]
+      // We should skip selected pools with empty weight
+      if (bn(state).isZero() && !votedVotesWeights[vote.id]) {
+        return []
+      }
+
+      return {
+        vote,
+        weight: state,
+      }
     })
   }, [myVotes, editVotesWeights, isPoolGaugeExpired])
 
