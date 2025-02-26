@@ -3,7 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import {
   BALANCER_BATCH_ROUTER,
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
   BALANCER_ROUTER,
   PERMIT2,
   VAULT_ADMIN,
@@ -43,7 +43,7 @@ const networkConfig: NetworkConfig = {
       vaultV3: VAULT_V3[sepolia.id],
       router: BALANCER_ROUTER[sepolia.id],
       batchRouter: BALANCER_BATCH_ROUTER[sepolia.id],
-      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[sepolia.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[sepolia.id],
       relayerV6: '0x7852fB9d0895e6e8b3EedA553c03F6e2F9124dF9',
       minter: '0x1783Cd84b3d01854A96B4eD5843753C2CcbD574A',
       vaultAdminV3: VAULT_ADMIN[sepolia.id],

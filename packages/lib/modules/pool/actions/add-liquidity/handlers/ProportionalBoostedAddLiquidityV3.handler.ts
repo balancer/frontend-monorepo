@@ -1,8 +1,8 @@
 import {
   AddLiquidityBoostedBuildCallInput,
+  AddLiquidityBoostedProportionalInput,
   AddLiquidityBoostedV3,
   AddLiquidityKind,
-  AddLiquidityProportionalInput,
   Address,
   Hex,
   InputAmount,
@@ -16,6 +16,7 @@ import { getSender, LiquidityActionHelpers } from '../../LiquidityActionHelpers'
 import { SdkBuildAddLiquidityInput, SdkQueryAddLiquidityOutput } from '../add-liquidity.types'
 import { constructBaseBuildCallInput } from './add-liquidity.utils'
 import { AddLiquidityHandler } from './AddLiquidity.handler'
+import { isEmpty } from 'lodash'
 
 export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
   protected helpers: LiquidityActionHelpers
@@ -42,13 +43,19 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
 
     const addLiquidity = new AddLiquidityBoostedV3()
 
-    const addLiquidityInput = this.constructSdkInput(referenceAmount, userAddress)
+    const addLiquidityInput = this.constructSdkInput(referenceAmount, humanAmountsIn, userAddress)
+
     const sdkQueryOutput = await addLiquidity.query(
       addLiquidityInput,
       this.helpers.boostedPoolState
     )
 
-    return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
+    return {
+      bptOut: sdkQueryOutput.bptOut,
+      to: sdkQueryOutput.to,
+      wrapUnderlying: sdkQueryOutput.wrapUnderlying,
+      sdkQueryOutput,
+    }
   }
 
   public async buildCallData({
@@ -60,6 +67,10 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
   }: SdkBuildAddLiquidityInput): Promise<TransactionConfig> {
     const addLiquidity = new AddLiquidityBoostedV3()
 
+    if (!queryOutput.wrapUnderlying) {
+      throw new Error('Boosted add liquidity requires defined wrapUnderlying')
+    }
+
     const buildCallParams: AddLiquidityBoostedBuildCallInput = {
       ...constructBaseBuildCallInput({
         humanAmountsIn,
@@ -70,6 +81,7 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
       protocolVersion: 3,
       userData: '0x' as Hex,
       wethIsEth: this.helpers.isNativeAssetIn(humanAmountsIn),
+      wrapUnderlying: queryOutput.wrapUnderlying,
     }
 
     const { callData, to, value } = permit2
@@ -90,14 +102,16 @@ export class ProportionalBoostedAddLiquidityV3 implements AddLiquidityHandler {
    */
   private constructSdkInput(
     referenceAmount: InputAmount,
+    humanAmountsIn: HumanTokenAmountWithAddress[],
     userAddress: Address
-  ): AddLiquidityProportionalInput {
+  ): AddLiquidityBoostedProportionalInput {
     return {
       chainId: this.helpers.chainId,
       rpcUrl: getRpcUrl(this.helpers.chainId),
       referenceAmount,
       kind: AddLiquidityKind.Proportional,
       sender: getSender(userAddress),
+      tokensIn: humanAmountsIn.filter(a => !isEmpty(a)).map(a => a.tokenAddress),
     }
   }
 }

@@ -35,6 +35,7 @@ import {
   getFlatCompositionTokens,
   getNestedPoolTokens,
 } from '../pool-tokens.utils'
+import { useGetPoolTokensWithActualWeights } from '../useGetPoolTokensWithActualWeights'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -45,7 +46,7 @@ type CardContentProps = {
 
 function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentProps) {
   const { toCurrency } = useCurrency()
-  const { calcWeightForBalance } = useTokens()
+  const { poolTokensWithActualWeights } = useGetPoolTokensWithActualWeights()
 
   return (
     <VStack spacing="md" width="full">
@@ -68,12 +69,8 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
       <Divider />
       <VStack spacing="md" width="full">
         {poolTokens.map(poolToken => {
-          const actualWeight = calcWeightForBalance(
-            poolToken.address,
-            poolToken.balance,
-            totalLiquidity,
-            chain
-          )
+          const actualWeight = poolTokensWithActualWeights[poolToken.address]
+
           return (
             <VStack key={`pool-${poolToken.address}`} w="full">
               <TokenRow

@@ -1,4 +1,5 @@
 import {
+  AddLiquidityBoostedQueryOutput,
   AddLiquidityNestedQueryOutputV2,
   AddLiquidityNestedQueryOutputV3,
   AddLiquidityQueryOutput,
@@ -16,6 +17,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 export interface QueryAddLiquidityOutput {
   bptOut: TokenAmount
   to: Address
+  wrapUnderlying?: boolean[] //only used by v3 boosted add liquidity
 }
 
 export interface BuildAddLiquidityInput {
@@ -25,6 +27,7 @@ export interface BuildAddLiquidityInput {
   queryOutput: QueryAddLiquidityOutput
   relayerApprovalSignature?: Address //only used by Nested Add Liquidity in signRelayer mode
   permit2?: Permit2 //only used by v3 add liquidity
+  relicId?: string //only used by Reliquary add liquidity
 }
 
 /*
@@ -34,7 +37,7 @@ export interface BuildAddLiquidityInput {
   which interact with the SDK to query and build the tx callData.
 */
 export interface SdkQueryAddLiquidityOutput extends QueryAddLiquidityOutput {
-  sdkQueryOutput: AddLiquidityQueryOutput
+  sdkQueryOutput: AddLiquidityQueryOutput | AddLiquidityBoostedQueryOutput
 }
 
 export interface NestedQueryAddLiquidityOutputV2 extends QueryAddLiquidityOutput {

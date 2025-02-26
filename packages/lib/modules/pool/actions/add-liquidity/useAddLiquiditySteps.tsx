@@ -70,7 +70,7 @@ export function useAddLiquiditySteps({
       approvalAmounts: inputAmounts,
       actionType: 'AddLiquidity',
       enabled: isPermit2 && !shouldUseSignatures,
-      shouldUseCompositeLiquidityRouter: isBoosted(pool),
+      shouldUseCompositeLiquidityRouterBoosted: isBoosted(pool),
     })
 
   const isSignPermit2Loading = isPermit2 && !signPermit2Step

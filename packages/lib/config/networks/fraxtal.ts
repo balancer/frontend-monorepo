@@ -3,7 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
-import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER, BALANCER_ROUTER } from '@balancer/sdk'
+import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED, BALANCER_ROUTER } from '@balancer/sdk'
 import { fraxtal } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -42,7 +42,7 @@ const networkConfig: NetworkConfig = {
       relayerV6: '0xb541765F540447646A9545E0A4800A0Bacf9E13D',
       minter: '0x9805dcfD25e6De36bad8fe9D3Fe2c9b44B764102',
       router: BALANCER_ROUTER[fraxtal.id],
-      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[fraxtal.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[fraxtal.id],
     },
     veDelegationProxy: '0xE3881627B8DeeBCCF9c23B291430a549Fc0bE5F7',
   },

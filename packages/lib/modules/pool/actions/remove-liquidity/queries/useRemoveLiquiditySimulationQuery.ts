@@ -20,7 +20,8 @@ type Params = {
   poolId: string
   chainId: number
   humanBptIn: HumanAmount
-  tokenOut: Address
+  tokenOut: Address // used by single removes
+  tokensOut?: Address[] // used by boosted proportional removes
   enabled?: boolean
 }
 
@@ -30,6 +31,7 @@ export function useRemoveLiquiditySimulationQuery({
   chainId,
   humanBptIn,
   tokenOut,
+  tokensOut,
   enabled = true,
 }: Params) {
   const { userAddress, isConnected } = useUserAccount()
@@ -43,6 +45,7 @@ export function useRemoveLiquiditySimulationQuery({
     poolId,
     humanBptIn: debouncedHumanBptIn,
     tokenOut,
+    tokensOut,
   }
   const queryKey = removeLiquidityKeys.preview(params)
 
@@ -50,6 +53,7 @@ export function useRemoveLiquiditySimulationQuery({
     handler.simulate({
       humanBptIn: debouncedHumanBptIn,
       tokenOut,
+      tokensOut,
       userAddress,
     })
 

@@ -13,6 +13,7 @@ export interface TokensConfig {
     wNativeAsset: Address
     auraBal?: Address
     veBalBpt?: Address
+    beets?: Address
   }
   nativeAsset: {
     name: string
@@ -53,7 +54,8 @@ export interface ContractsConfig {
       */
     router?: Address
     batchRouter?: Address
-    compositeLiquidityRouter?: Address
+    compositeLiquidityRouterBoosted?: Address
+    compositeLiquidityRouterNested?: Address
     relayerV6: Address
     minter: Address
     WeightedPool2TokensFactory?: Address
@@ -65,6 +67,7 @@ export interface ContractsConfig {
     sfcProxy?: Address
     sfc?: Address
     lstWithdrawRequestHelper?: Address
+    reliquary?: Address
   }
   feeDistributor?: Address
   veDelegationProxy?: Address
@@ -135,6 +138,7 @@ type OptionsConfig = {
   showMaBeets: boolean
   allowCreateWallet: boolean
   showPoolHooksFilter: boolean
+  isOnSafeAppList: boolean
 }
 
 type Links = {

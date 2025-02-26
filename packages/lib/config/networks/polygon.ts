@@ -3,7 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
-import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER, BALANCER_ROUTER } from '@balancer/sdk'
+import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED, BALANCER_ROUTER } from '@balancer/sdk'
 import { polygon } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -54,7 +54,7 @@ const networkConfig: NetworkConfig = {
       minter: '0x47B489bf5836f83ABD928C316F8e39bC0587B020',
       WeightedPool2TokensFactory: '0xA5bf2ddF098bb0Ef6d120C98217dD6B141c74EE0',
       router: BALANCER_ROUTER[polygon.id],
-      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[polygon.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[polygon.id],
     },
     veDelegationProxy: '0x0f08eEf2C785AA5e7539684aF04755dEC1347b7c',
   },
