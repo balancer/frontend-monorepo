@@ -38,7 +38,7 @@ function filterVoteList(
   textSearch: string,
   networks: GqlChain[],
   poolTypes: PoolFilterType[],
-  includeExpiredPools: boolean
+  expiredPoolsOnly: boolean
 ) {
   let result = voteList
 
@@ -65,8 +65,8 @@ function filterVoteList(
     result = result.filter(value => poolTypes.includes(value.type as PoolFilterType))
   }
 
-  if (!includeExpiredPools) {
-    result = result.filter(value => !isPoolGaugeExpired(value))
+  if (expiredPoolsOnly) {
+    result = result.filter(value => isPoolGaugeExpired(value))
   }
 
   return result

@@ -25,13 +25,15 @@ import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesPr
 import { VoteWeightInput } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesTable/VoteWeightInput'
 import {
   bpsToPercentage,
-  sharesToBps,
+  calculateMyVoteRewardsValue,
+  inputPercentageWeightToBps,
   votingTimeLockedEndDate,
 } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
 import { isVotingTimeLocked } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -40,7 +42,7 @@ interface Props extends GridProps {
 }
 
 export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
-  const { editVotesWeights, onEditVotesChange } = useMyVotes()
+  const { votedVotesWeights, editVotesWeights, onEditVotesChange } = useMyVotes()
   const { isSelectedPool, toggleVotingPool, allowChangeVotes, isPoolGaugeExpired } = useVotes()
   const { toCurrency } = useCurrency()
 
@@ -64,6 +66,8 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
   const isDisabled = timeLocked || !allowChangeVotes || isExpired
+
+  const { myVebalBalance } = useVebalUserData()
 
   return (
     <FadeInOnView>
@@ -108,8 +112,18 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
             </Link>
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
-            {vote.votingIncentive ? (
-              <Text>{toCurrency(vote.votingIncentive.totalValue, { abbreviated: false })}</Text>
+            {vote.votingIncentive && typeof myVebalBalance === 'number' ? (
+              <Text>
+                {toCurrency(
+                  calculateMyVoteRewardsValue(
+                    votedVotesWeights[vote.id] ?? 0,
+                    editVotesWeights[vote.id] ?? 0,
+                    vote,
+                    myVebalBalance
+                  ),
+                  { abbreviated: false }
+                )}
+              </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
             )}
@@ -138,7 +152,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
               percentage={editVotes.toString()}
               pr="32px"
               setPercentage={value =>
-                onEditVotesChange(vote.id, sharesToBps(value).dividedBy(100).toString())
+                onEditVotesChange(vote.id, inputPercentageWeightToBps(value).toString())
               }
               textAlign="right"
               width="100px"
