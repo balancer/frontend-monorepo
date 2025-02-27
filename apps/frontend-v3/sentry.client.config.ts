@@ -5,8 +5,12 @@
 import * as Sentry from '@sentry/nextjs'
 import { sentryDSN } from './sentry.config'
 import { isProd } from '@repo/lib/config/app.config'
-import { shouldIgnoreException } from '@repo/lib/shared/utils/query-errors'
-import { addFingerPrint, getFirstExceptionValue } from '@repo/lib/shared/utils/sentry.helpers'
+import {
+  addFingerPrint,
+  addTags,
+  getErrorTextFromTop3Frames,
+  shouldIgnoreException,
+} from '@repo/lib/shared/utils/sentry.helpers'
 
 Sentry.init({
   // Change this value only if you need to debug in development (we have a custom developmentSentryDSN for that)
@@ -84,8 +88,7 @@ Sentry.init({
 })
 
 function handleNonFatalError(event: Sentry.ErrorEvent): Sentry.ErrorEvent | null {
-  const firstValue = getFirstExceptionValue(event)
-  if (firstValue && shouldIgnoreException(firstValue)) return null
+  if (shouldIgnoreException(event)) return null
   event.level = 'error'
 
   return customizeEvent(event)
@@ -98,16 +101,17 @@ function handleFatalError(
   event.level = 'fatal'
 
   if (event?.exception?.values?.length) {
-    const firstValue = event.exception.values[0]
+    const lastIndex = event.exception.values.length - 1
+    const topValue = event.exception.values[lastIndex]
 
-    if (shouldIgnoreException(firstValue)) return null
+    if (shouldIgnoreException(event)) return null
 
     const flowType = uppercaseSegment(criticalFlowPath)
-    firstValue.value = `Unexpected error in ${flowType} flow.
-    Cause: ${firstValue.type}: ${firstValue.value}`
+    topValue.value = `Unexpected error in ${flowType} flow.
+    Cause: ${topValue.type}: ${topValue.value}`
 
-    firstValue.type = flowType + 'Error'
-    event.exception.values[0] = firstValue
+    topValue.type = flowType + 'Error'
+    event.exception.values[lastIndex] = topValue
   }
 
   return customizeEvent(event)
@@ -122,28 +126,12 @@ function uppercaseSegment(path: string): string {
 
 // Detect errors that are not considered fatal even if they happen in a critical path
 function isNonFatalError(event: Sentry.ErrorEvent) {
-  const firstValue = getFirstExceptionValue(event)
-  if (firstValue?.value === 'Invalid swap: must contain at least 1 path.') return true
+  const errorText = getErrorTextFromTop3Frames(event)
+  if (errorText.includes('Invalid swap: must contain at least 1 path.')) return true
 
   return false
 }
 
 function customizeEvent(event: Sentry.ErrorEvent) {
   return addFingerPrint(addTags(event))
-}
-
-// Add tags to better filter errors in sentry dashboards
-function addTags(event: Sentry.ErrorEvent) {
-  const errorMessage = getFirstExceptionValue(event)?.value || ''
-
-  /*
-   This is a known rainbow-kit/wagmi related issue that is randomly happening to many users.
-   We couldn't understand/reproduce it yet so we are tagging it as a known issue to track it better.
-   More context: https://github.com/rainbow-me/rainbowkit/issues/2238
-  */
-  if (errorMessage.includes('provider.disconnect is not a function')) {
-    event.tags = { ...event.tags, error_category: 'known_issue', error_type: 'provider_disconnect' }
-  }
-
-  return event
 }

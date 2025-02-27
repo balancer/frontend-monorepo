@@ -1,16 +1,33 @@
 import { ErrorEvent } from '@sentry/nextjs'
+import { shouldIgnore } from './query-errors'
+import { isProd } from '@repo/lib/config/app.config'
 
-export function getFirstExceptionValue(event: ErrorEvent) {
+/*
+  The stack trace goes in reverse order, so we take the last 3 frames to get the most relevant information.
+*/
+export function getErrorTextFromTop3Frames(event: ErrorEvent): string {
   if (event?.exception?.values?.length) {
-    return event.exception.values[0]
+    const last3Exceptions = event.exception.values.slice(-3)
+    return last3Exceptions.map(exception => `${exception.type}: ${exception.value}`).join(' | ')
   }
+  return ''
+}
+
+/*
+  Detects common errors that we don't want to capture in Sentry
+*/
+export function shouldIgnoreException(event: ErrorEvent) {
+  const errorMessage = getErrorTextFromTop3Frames(event)
+  const ignored = shouldIgnore(errorMessage)
+  if (ignored && !isProd) console.log('Ignoring error with message: ', errorMessage)
+  return ignored
 }
 
 /*
   Add custom fingerprints to group errors that have the same root cause that we couldn't fix yet.
 */
 export function addFingerPrint(event: ErrorEvent) {
-  const errorMessage = getFirstExceptionValue(event)?.value || ''
+  const errorMessage = getErrorTextFromTop3Frames(event)
 
   /*
     Some users have this error related with WalletConnect
@@ -300,6 +317,22 @@ export function addFingerPrint(event: ErrorEvent) {
   */
   if (errorMessage.includes('Execution reverted for an unknown reason')) {
     event.fingerprint = ['ExecutionRevertedUnknownReason']
+  }
+
+  return event
+}
+
+// Add tags to better filter errors in sentry dashboards
+export function addTags(event: ErrorEvent) {
+  const errorText = getErrorTextFromTop3Frames(event)
+
+  /*
+   This is a known rainbow-kit/wagmi related issue that is randomly happening to many users.
+   We couldn't understand/reproduce it yet so we are tagging it as a known issue to track it better.
+   More context: https://github.com/rainbow-me/rainbowkit/issues/2238
+  */
+  if (errorText.includes('provider.disconnect is not a function')) {
+    event.tags = { ...event.tags, error_category: 'known_issue', error_type: 'provider_disconnect' }
   }
 
   return event

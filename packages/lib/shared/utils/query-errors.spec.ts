@@ -4,9 +4,7 @@ import {
   sentryMetaForRemoveLiquidityHandler,
   captureSentryError,
   sentryMetaForWagmiSimulation,
-  shouldIgnoreException,
 } from '@repo/lib/shared/utils/query-errors'
-import { Exception as SentryException } from '@sentry/nextjs'
 import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
 import * as Sentry from '@sentry/nextjs'
 import { waitFor } from '@testing-library/react'
@@ -149,20 +147,3 @@ describe('Captures sentry error', () => {
     `)
   })
 })
-
-describe('shouldIgnoreError', () => {
-  it('Ignores errors', () => {
-    expect(
-      shouldIgnoreException(createSentryException('e.getAccounts is not a function'))
-    ).toBeTruthy()
-    expect(shouldIgnoreException(createSentryException('foo bar baz'))).toBeFalsy()
-  })
-
-  it('when error does not have message', () => {
-    expect(shouldIgnoreException(createSentryException(''))).toBeFalsy()
-  })
-})
-
-function createSentryException(errorMessage: string) {
-  return { value: errorMessage } as SentryException
-}
