@@ -8,7 +8,7 @@ import {
   getTenderlyUrl,
   shouldIgnore,
 } from '../utils/query-errors'
-import { ScopeContext } from '@sentry/types'
+import { ScopeContext } from '@sentry/core'
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ReactNode } from 'react'

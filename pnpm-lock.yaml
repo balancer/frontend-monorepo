@@ -595,6 +595,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@sentry/core':
+        specifier: 8.50.0
+        version: 8.50.0
       '@sentry/types':
         specifier: 8.50.0
         version: 8.50.0
