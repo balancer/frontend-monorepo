@@ -152,6 +152,7 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
           "chainId": 1,
           "decimals": 6,
           "index": 1,
+          "isBufferAllowed": true,
           "isErc4626": false,
           "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
           "name": "USD Coin",
