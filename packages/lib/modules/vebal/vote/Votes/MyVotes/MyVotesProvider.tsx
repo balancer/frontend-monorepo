@@ -180,29 +180,31 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   }
 
   const submittingVotes = useMemo<SubmittingVote[]>(() => {
-    return myVotes.flatMap(vote => {
-      const state = editVotesWeights[vote.id]
+    return myVotes
+      .filter(vote => !isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime ?? 0))
+      .flatMap(vote => {
+        const state = editVotesWeights[vote.id]
 
-      if (!state) return []
+        if (!state) return []
 
-      // To remove expired votes, we should submit them with '0' weight
-      if (isPoolGaugeExpired(vote)) {
+        // To remove expired votes, we should submit them with '0' weight
+        if (isPoolGaugeExpired(vote)) {
+          return {
+            vote,
+            weight: '0',
+          }
+        }
+
+        // We should skip selected pools with empty weight
+        if (bn(state).isZero() && !votedVotesWeights[vote.id]) {
+          return []
+        }
+
         return {
           vote,
-          weight: '0',
+          weight: state,
         }
-      }
-
-      // We should skip selected pools with empty weight
-      if (bn(state).isZero() && !votedVotesWeights[vote.id]) {
-        return []
-      }
-
-      return {
-        vote,
-        weight: state,
-      }
-    })
+      })
   }, [myVotes, editVotesWeights, isPoolGaugeExpired, votedVotesWeights])
 
   const timeLockedVotes: SubmittingVote[] = useMemo<SubmittingVote[]>(() => {
