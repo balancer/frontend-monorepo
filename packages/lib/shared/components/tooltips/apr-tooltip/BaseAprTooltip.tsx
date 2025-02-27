@@ -94,6 +94,7 @@ function BaseAprTooltip({
     yieldBearingTokensAprDisplayed,
     stakingIncentivesAprDisplayed,
     merklIncentivesAprDisplayed,
+    merklTokensDisplayed,
     hasMerklIncentives,
     surplusIncentivesAprDisplayed,
     swapFeesDisplayed,
@@ -205,8 +206,20 @@ function BaseAprTooltip({
           apr={merklIncentivesAprDisplayed}
           displayValueFormatter={usedDisplayValueFormatter}
           title="Merkl.xyz incentives"
-          tooltipText={merklIncentivesTooltipText}
-        />
+        >
+          {merklTokensDisplayed.map(item => {
+            return (
+              <TooltipAprItem
+                {...subitemPopoverAprItemProps}
+                apr={item.apr}
+                displayValueFormatter={usedDisplayValueFormatter}
+                key={`merkl-${item.title}-${item.apr}`}
+                title={item.title}
+                tooltipText={merklIncentivesTooltipText}
+              />
+            )
+          })}
+        </TooltipAprItem>
       ) : null}
       {isCowAmmPool(poolType) && (
         <TooltipAprItem
