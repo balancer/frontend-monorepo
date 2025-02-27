@@ -1,5 +1,3 @@
-# force cache miss
-
 fragment Hook on GqlHook {
   address
   config {
