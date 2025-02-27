@@ -21,6 +21,7 @@ import { CowFooter } from '@repo/lib/shared/components/navs/CowFooter'
 import { CowPoolBanner } from '@repo/lib/shared/components/navs/CowPoolBanner'
 import { PoolActivity } from './PoolActivity/PoolActivity'
 import { PoolHookBanner } from './PoolHookBanner'
+import { useGetECLPLiquidityProfile } from '../../eclp/useGetECLPLiquidityProfile'
 
 export function PoolDetail() {
   const { pool, chain } = usePool()
@@ -70,6 +71,10 @@ export function PoolDetail() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router])
+
+  const { data, poolSpotPrice } = useGetECLPLiquidityProfile(pool)
+
+  console.log({ data, poolSpotPrice })
 
   return (
     <>
