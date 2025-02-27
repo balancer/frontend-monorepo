@@ -13,8 +13,8 @@ import { getUserReferenceTokens } from '../pool-tokens.utils'
 import { PoolCore, PoolToken } from '../pool.types'
 import { VotingPoolWithData } from '../../vebal/vote/vote.types'
 import { GetTokenFn } from '@repo/lib/modules/tokens/TokensProvider'
-import { compact } from 'lodash'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
 
 function NestedTokenPill({
   nestedTokens,
@@ -60,6 +60,8 @@ function WeightedTokenPills({
   return (
     <Wrap spacing="xs">
       {tokens.map(token => {
+        const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
+
         return (
           <Badge
             key={token.address}
@@ -74,7 +76,7 @@ function WeightedTokenPills({
             textTransform="none"
           >
             <HStack gap={['xs', 'sm']}>
-              {!('nestedPool' in token) && (
+              {!nestedPool && (
                 <>
                   <TokenIcon
                     address={token.address}
@@ -92,12 +94,12 @@ function WeightedTokenPills({
                   </HStack>
                 </>
               )}
-              {'nestedPool' in token && token.nestedPool && (
+              {nestedPool && (
                 <>
                   <NestedTokenPill
                     chain={chain}
                     iconSize={iconSize}
-                    nestedTokens={token.nestedPool.tokens}
+                    nestedTokens={nestedPool.tokens}
                   />
                   <HStack gap={['xs', '1.5']}>
                     <Text fontWeight="bold" noOfLines={1} size={nameSize}>
@@ -133,6 +135,7 @@ function StableTokenPills({
   return (
     <HStack spacing={0}>
       {tokens.map((token, i) => {
+        const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
         return (
           <Badge
             key={[token.address, token.chain].join('-')}
@@ -150,7 +153,7 @@ function StableTokenPills({
             zIndex={zIndices[i]}
           >
             <HStack gap={['xs', '1.5']}>
-              {!('nestedPool' in token) && (
+              {!nestedPool && (
                 <>
                   <TokenIcon
                     address={token.address}
@@ -165,12 +168,12 @@ function StableTokenPills({
                   )}
                 </>
               )}
-              {'nestedPool' in token && token.nestedPool && (
+              {nestedPool && (
                 <>
                   <NestedTokenPill
                     chain={chain}
                     iconSize={iconSize}
-                    nestedTokens={token.nestedPool.tokens}
+                    nestedTokens={nestedPool.tokens}
                   />
                   <Text fontWeight="bold" noOfLines={1} size={nameSize}>
                     {token.name}
@@ -193,29 +196,15 @@ type VotingListTokenPillsProps = {
 } & BadgeProps
 
 export function VotingListTokenPills({ vote, getToken, ...props }: VotingListTokenPillsProps) {
-  const tokens = compact(
-    vote.tokens.map(
-      /*
-      TODO:
-      Tokens in veBalGetVotingList query have type GqlVotingGaugeToken which does not have all the properties of PoolToken
-      That means that token pills will be different for voting pools (unless we change the backend types or we query and map the pool list tokens):
-      - Showing symbol instead of name
-      - GqlVotingGaugeToken does not have nestedPool property so NestedTokenPills won't be displayed
-    */
-      token =>
-        token.underlyingTokenAddress
-          ? getToken(token.underlyingTokenAddress, vote.chain)
-          : ({ ...token, name: token.symbol } as unknown as PoolToken)
-    )
-  )
+  const pool = voteToPool(vote, getToken)
 
-  const { name } = usePoolMetadata({ chain: vote.chain, address: vote.address })
+  const { name } = usePoolMetadata(pool)
   return (
     <PoolTokenPills
-      chain={vote.chain}
+      chain={pool.chain}
       poolName={name}
-      poolType={vote.type}
-      tokens={tokens}
+      poolType={pool.type}
+      tokens={pool.poolTokens}
       {...props}
     />
   )

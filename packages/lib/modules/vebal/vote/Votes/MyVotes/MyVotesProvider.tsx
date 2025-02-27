@@ -203,7 +203,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
         weight: state,
       }
     })
-  }, [myVotes, editVotesWeights, isPoolGaugeExpired])
+  }, [myVotes, editVotesWeights, isPoolGaugeExpired, votedVotesWeights])
 
   const timeLockedVotes: SubmittingVote[] = useMemo<SubmittingVote[]>(() => {
     return votedPools

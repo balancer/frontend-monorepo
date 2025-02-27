@@ -4,7 +4,7 @@ import {
   SortVotesBy,
 } from '@repo/lib/modules/vebal/vote/vote.types'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { PoolCoreMinimal } from '@repo/lib/modules/pool/pool.types'
+import { PoolCoreMinimal, PoolToken } from '@repo/lib/modules/pool/pool.types'
 import { compact } from 'lodash'
 import { GetTokenFn } from '@repo/lib/modules/tokens/TokensProvider'
 
@@ -24,11 +24,18 @@ export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): Pool
     id: vote.id,
     type: vote.type,
     chain: vote.chain,
+    /*
+      TODO:
+      Tokens in veBalGetVotingList query have type GqlVotingGaugeToken which does not have all the properties of PoolToken
+      That means that token pills will be different for voting pools (unless we change the backend types or we query and map the pool list tokens):
+      - Showing symbol instead of name
+      - GqlVotingGaugeToken does not have nestedPool property so NestedTokenPills won't be displayed
+    */
     poolTokens: compact(
       vote.tokens.map(token =>
         token.underlyingTokenAddress
           ? getToken(token.underlyingTokenAddress, vote.chain)
-          : undefined
+          : ({ ...token, name: token.symbol } as unknown as PoolToken)
       )
     ),
     address: vote.address,
