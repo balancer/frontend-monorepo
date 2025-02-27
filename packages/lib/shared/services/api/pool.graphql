@@ -1,6 +1,3 @@
-#import "./pool-tokens.graphql"
-#import "./hook.graphql"
-
 query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
   pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
     id
