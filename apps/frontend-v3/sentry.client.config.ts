@@ -6,8 +6,7 @@ import * as Sentry from '@sentry/nextjs'
 import { sentryDSN } from './sentry.config'
 import { isProd } from '@repo/lib/config/app.config'
 import {
-  addFingerPrint,
-  addTags,
+  customizeEvent,
   getErrorTextFromTop3Frames,
   shouldIgnoreException,
 } from '@repo/lib/shared/utils/sentry.helpers'
@@ -130,8 +129,4 @@ function isNonFatalError(event: Sentry.ErrorEvent) {
   if (errorText.includes('Invalid swap: must contain at least 1 path.')) return true
 
   return false
-}
-
-function customizeEvent(event: Sentry.ErrorEvent) {
-  return addFingerPrint(addTags(event))
 }

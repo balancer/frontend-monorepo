@@ -23,6 +23,10 @@ export function shouldIgnoreException(event: ErrorEvent) {
   return ignored
 }
 
+export function customizeEvent(event: ErrorEvent) {
+  return addFingerPrint(addTags(event))
+}
+
 /*
   Add custom fingerprints to group errors that have the same root cause that we couldn't fix yet.
 */
