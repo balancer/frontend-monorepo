@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/nextjs'
 import { sentryDSN } from './sentry.config'
 import { isProd } from '@repo/lib/config/app.config'
 import { shouldIgnoreException } from '@repo/lib/shared/utils/query-errors'
-import { addFingerPrint, getFirstExceptionValue } from '@repo/lib/shared/utils/sentry-error.utils'
+import { addFingerPrint, getFirstExceptionValue } from '@repo/lib/shared/utils/sentry.helpers'
 
 Sentry.init({
   // Change this value only if you need to debug in development (we have a custom developmentSentryDSN for that)
