@@ -271,7 +271,7 @@ describe('Liquidity helpers for V3 NESTED boosted pool', async () => {
   const aaveUSDTAddress = '0x978206fae13faf5a8d293fb614326b237684b750'
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress, symbol: 'USDC' },
+    { humanAmount: '0.1', tokenAddress: usdtSepoliaAddress, symbol: 'USDT' },
   ]
 
   it('allPoolTokens', async () => {
@@ -283,7 +283,6 @@ describe('Liquidity helpers for V3 NESTED boosted pool', async () => {
       bb_a_Usd_Sepolia_BptAddress,
       wethAddress,
       aaveUSDCAddress,
-      usdcSepoliaAddress,
       aaveUSDTAddress,
       usdtSepoliaAddress,
     ])
@@ -292,10 +291,10 @@ describe('Liquidity helpers for V3 NESTED boosted pool', async () => {
   it('toInputAmounts', async () => {
     expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
       {
-        address: usdcSepoliaAddress,
+        address: usdtSepoliaAddress,
         decimals: 6,
         rawAmount: 100000n,
-        symbol: 'usdc-aave',
+        symbol: 'usdt-aave',
       },
     ])
   })
@@ -593,7 +592,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           priceRateProvider: '0x89c80a4540a00b5270347e02e2e144c71da2eced',
           priceRateProviderData: expect.any(Object),
           symbol: 'sDAI',
-          underlyingToken: null, // sDAI has isBufferAllowed false so boostedPoolState does not include underlying token
+          underlyingToken: null, // sDAI has useUnderlyingForAddRemove false so boostedPoolState does not include underlying token
           weight: '0.5',
         },
       ],

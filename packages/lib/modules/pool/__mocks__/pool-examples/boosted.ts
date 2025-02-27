@@ -29,7 +29,7 @@ export const morphoStakeHouse: PoolExample = {
 export const partialBoosted: PoolExample = {
   name: 'aGNO/sDAI',
   description:
-    'Edge case: BOOSTED with 2 ERC4626 tokens but one of them (sDAI) has isBufferAllowed == false',
+    'Edge case: BOOSTED with 2 ERC4626 tokens but one of them (sDAI) has useUnderlyingForAddRemove == false',
   poolId: '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522',
   poolChain: GqlChain.Gnosis,
   version: 3,

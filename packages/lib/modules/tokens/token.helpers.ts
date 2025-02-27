@@ -136,7 +136,7 @@ export function getLeafTokens(poolTokens: PoolToken[]) {
 }
 
 function getTokenOrUnderlying(token: PoolToken): ApiToken {
-  return token.isErc4626 && token.isBufferAllowed && token.underlyingToken
+  return token.isErc4626 && token.useUnderlyingForAddRemove && token.underlyingToken
     ? token.underlyingToken
     : token
 }

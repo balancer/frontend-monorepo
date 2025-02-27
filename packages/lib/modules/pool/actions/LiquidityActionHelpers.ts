@@ -91,12 +91,12 @@ export class LiquidityActionHelpers {
         address: token.address as Address,
         balance: token.balance as HumanAmount,
         underlyingToken:
-          token.underlyingToken?.address && token.isBufferAllowed
+          token.underlyingToken?.address && token.useUnderlyingForAddRemove
             ? {
                 ...token.underlyingToken,
                 address: token.underlyingToken?.address as Address,
                 decimals: token.underlyingToken?.decimals as number,
-                index: token.index, //TODO: review that this index is always the expected one
+                index: token.index,
               }
             : null,
       })
