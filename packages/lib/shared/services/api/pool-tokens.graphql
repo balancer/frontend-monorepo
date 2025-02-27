@@ -10,7 +10,6 @@ fragment UnderlyingToken on GqlToken {
   priority
   tradable
   isErc4626
-  isBufferAllowed
   logoURI
 }
 
@@ -31,7 +30,9 @@ fragment PoolTokens on GqlPoolTokenDetail {
   symbol
   priority
   tradable
-  isErc4626
+  canUseBufferForSwaps
+  useWrappedForAddRemove
+  useUnderlyingForAddRemove
   index
   balance
   balanceUSD
@@ -73,7 +74,9 @@ fragment PoolTokens on GqlPoolTokenDetail {
       symbol
       weight
       isErc4626
-      isBufferAllowed
+      canUseBufferForSwaps
+      useWrappedForAddRemove
+      useUnderlyingForAddRemove
       logoURI
       underlyingToken {
         ...UnderlyingToken
