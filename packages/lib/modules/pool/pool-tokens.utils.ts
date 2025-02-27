@@ -349,16 +349,15 @@ export function getWrappedAndUnderlyingTokenFn(
   pool: Pool,
   balanceFor: BalanceForFn
 ): () => [ApiToken, ApiToken] | void {
-  if (shouldUseUnderlyingToken(token, pool)) {
+  if (shouldUseUnderlyingToken(token, pool) && !!token.useWrappedForAddRemove) {
     return () => {
       token.wrappedToken = undefined
       const underlyingToken = { ...token, ...token.underlyingToken, wrappedToken: token }
       const wrappedToken = token
-
-      return [underlyingToken, wrappedToken]
+      return sortTokenPairByBalance([underlyingToken, wrappedToken], balanceFor)
     }
   }
-  if (token.wrappedToken) {
+  if (token.wrappedToken && !!token.wrappedToken.useWrappedForAddRemove) {
     const wrappedToken = token.wrappedToken
     return () => {
       const underlyingToken = token
