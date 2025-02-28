@@ -10,20 +10,27 @@ import { LandingMaBeetsSection } from './sections/LandingMaBeetsSection'
 import {
   GetProtocolStatsPerChainQuery,
   GetProtocolStatsQuery,
+  GetStakedSonicDataQuery,
 } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function LandingPageLayout({
   protocolData,
   protocolDataPerChain,
+  stakedSonicData,
 }: {
   protocolData: GetProtocolStatsQuery
   protocolDataPerChain: GetProtocolStatsPerChainQuery[]
+  stakedSonicData: GetStakedSonicDataQuery
 }) {
   return (
     <Box position="relative">
       <BeetsLandingHeroImg />
       <LandingBeetsHero />
-      <LandingBeetsData protocolData={protocolData} protocolDataPerChain={protocolDataPerChain} />
+      <LandingBeetsData
+        protocolData={protocolData}
+        protocolDataPerChain={protocolDataPerChain}
+        stakedSonicData={stakedSonicData}
+      />
       <Box mb="2xl" mt="2xl" pb="3xl">
         <LandingBeetsStakedSonic />
       </Box>

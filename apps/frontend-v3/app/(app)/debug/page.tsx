@@ -9,6 +9,9 @@ export default function Debug() {
     <FadeInOnView>
       <VStack margin="lg" padding="lg">
         <Heading size="md">Demos</Heading>
+        <Link as={NextLink} href="/debug/impersonate">
+          Impersonate
+        </Link>
         <Link as={NextLink} href="/debug/pools">
           Pools
         </Link>
