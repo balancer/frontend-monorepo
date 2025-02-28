@@ -3,6 +3,7 @@ import { calcSpotPrice0in1 } from './gyroECLPMath'
 import { divDownMagU, mulDownMagU } from './gyroSignedFixedPoint'
 import { _normalizeBalances } from './helpers'
 import { parseUnits } from 'viem'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 // Parses a fixed-point decimal string into a bigint
 // If we do not have enough decimals to express the number, we truncate it
@@ -92,10 +93,10 @@ export function destructureRequiredPoolParams(
   } as GyroEParams
 }
 
-export function calculateSpotPrice(poolType: string, params: GyroPoolParams): bigint {
+export function calculateSpotPrice(poolType: GqlPoolType, params: GyroPoolParams): bigint {
   let price = ZERO
 
-  if (poolType === 'Gyroe') {
+  if (poolType === GqlPoolType.Gyroe) {
     price = calculateGyroESpotPrice(params as GyroEParams)
   }
 
