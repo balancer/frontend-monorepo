@@ -1,4 +1,4 @@
-import { ONE_XP, SMALL } from './constants'
+import { ONE_XP, SMALL, ONE } from './constants'
 import {
   divDown,
   divUpMagU,
@@ -31,8 +31,6 @@ import {
   calcYGivenX,
   checkAssetBounds,
 } from './gyroEMathHelpers'
-
-const ONE = 10n ** 18n // Equivalent to WeiPerEther
 
 export function calculateNormalizedLiquidity(
   balances: bigint[],

@@ -9,9 +9,8 @@ import {
   SQRT_1E_NEG_13,
   SQRT_1E_NEG_15,
   SQRT_1E_NEG_17,
+  ONE,
 } from './constants'
-
-const ONE = BigInt(1e18)
 
 /////////
 /// ARITHMETIC HELPERS

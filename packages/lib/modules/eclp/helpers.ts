@@ -1,4 +1,4 @@
-const ONE = 10n ** 18n // Equivalent to WeiPerEther
+import { ONE } from './constants'
 
 ////////
 /// Normalize balances

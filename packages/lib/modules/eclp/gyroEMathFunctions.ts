@@ -1,4 +1,4 @@
-import { ONE_XP } from './constants'
+import { ONE_XP, ONE } from './constants'
 import {
   divDown,
   divDownMagU,
@@ -20,8 +20,6 @@ import {
   virtualOffset1,
   calcXpXpDivLambdaLambda,
 } from './gyroEMathHelpers'
-
-const ONE = 10n ** 18n // Equivalent to WeiPerEther
 
 /////////
 /// SPOT PRICE AFTER SWAP CALCULATIONS

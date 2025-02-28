@@ -15,6 +15,10 @@ export const SQRT_1E_NEG_17 = 3162277660n
 // High precision
 export const ONE_XP = 10n ** 38n // 38 decimal places
 
+export const ONE = 10n ** 18n
+export const ONE_19 = 10n ** 19n
+export const ZERO = 0n
+
 // Small number to prevent rounding errors
 export const SMALL = 10n ** 8n // 1e-10 in normal precision
 

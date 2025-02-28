@@ -1,5 +1,6 @@
-// Types
+import { ONE, ZERO, ONE_XP, ONE_19 } from './constants'
 
+// Types
 type GyroEParams = {
   alpha: bigint
   beta: bigint
@@ -43,10 +44,10 @@ export function calcSpotPrice0in1(
   }
 
   vec = mulA(params, vec)
-  const pc: Vector2 = { x: divDownMagU(vec.x, vec.y), y: ONE_BN }
+  const pc: Vector2 = { x: divDownMagU(vec.x, vec.y), y: ONE }
 
-  const pgx = scalarProd(pc, mulA(params, { x: ONE_BN, y: ZERO_BN }))
-  const px = divDownMag(pgx, scalarProd(pc, mulA(params, { x: ZERO_BN, y: ONE_BN })))
+  const pgx = scalarProd(pc, mulA(params, { x: ONE, y: ZERO }))
+  const px = divDownMag(pgx, scalarProd(pc, mulA(params, { x: ZERO, y: ONE })))
 
   return px
 }
@@ -86,16 +87,15 @@ function divXpU(a: bigint, b: bigint): bigint {
 }
 
 function mulDownMagU(a: bigint, b: bigint): bigint {
-  return (a * b) / ONE_BN
+  return (a * b) / ONE
 }
 
 function mulUpMagU(a: bigint, b: bigint): bigint {
   const product = a * b
-  return product >= 0n ? (product - 1n) / ONE_BN + 1n : (product + 1n) / ONE_BN - 1n
+  return product >= 0n ? (product - 1n) / ONE + 1n : (product + 1n) / ONE - 1n
 }
 
 function mulUpXpToNpU(a: bigint, b: bigint): bigint {
-  const ONE_19 = 10n ** 19n
   const b1 = b / ONE_19
   const b2 = b % ONE_19
 
@@ -107,18 +107,18 @@ function mulUpXpToNpU(a: bigint, b: bigint): bigint {
 
 function divDownMagU(a: bigint, b: bigint): bigint {
   if (b === 0n) throw new Error('Zero division')
-  return (a * ONE_BN) / b
+  return (a * ONE) / b
 }
 
 function divDownMag(a: bigint, b: bigint): bigint {
   if (b === 0n) throw new Error('Zero division')
   if (a === 0n) return 0n
-  const aInflated = a * ONE_BN
+  const aInflated = a * ONE
   return aInflated / b
 }
 
 function mulDownMag(a: bigint, b: bigint): bigint {
-  return (a * b) / ONE_BN
+  return (a * b) / ONE
 }
 
 function scalarProd(t1: Vector2, t2: Vector2): bigint {
@@ -133,8 +133,3 @@ function mulA(params: GyroEParams, tp: Vector2): Vector2 {
     y: mulDownMagU(params.s, tp.x) + mulDownMagU(params.c, tp.y),
   }
 }
-
-// Constants
-const ONE_BN = 10n ** 18n
-const ONE_XP = 10n ** 38n
-const ZERO_BN = 0n

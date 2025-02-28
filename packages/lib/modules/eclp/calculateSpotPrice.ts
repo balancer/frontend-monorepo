@@ -6,6 +6,7 @@ import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { safeParseFixedBigInt } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../pool/pool.types'
 import { isGyroEPool } from '../pool/pool.helpers'
+import { ZERO } from './constants'
 
 type GyroEParams = {
   balanceIn: bigint
@@ -38,8 +39,6 @@ type Vector2 = {
 }
 
 type GyroPoolParams = GyroEParams
-
-const ZERO = safeParseFixedBigInt('0', 18)
 
 export function destructureRequiredPoolParams(
   pool: Pool,
