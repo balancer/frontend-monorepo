@@ -22,7 +22,7 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
   const params = pool && pool.poolTokens ? destructureRequiredPoolParams(pool, tokenRates) : null
 
   const poolSpotPrice = params
-    ? fNum('boost', formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18))
+    ? fNum('token', formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18))
     : null
 
   return {
