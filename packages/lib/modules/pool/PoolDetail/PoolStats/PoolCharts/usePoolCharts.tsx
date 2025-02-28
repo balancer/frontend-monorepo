@@ -1,6 +1,5 @@
 import { ColorMode, theme as defaultTheme, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { differenceInDays, format } from 'date-fns'
-import * as echarts from 'echarts/core'
 import {
   GetPoolSnapshotsDocument,
   GqlPoolType,
@@ -12,10 +11,11 @@ import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { usePool } from '../../../PoolProvider'
 import { PoolVariant, BaseVariant } from '../../../pool.types'
-import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
+import { fNum, NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTheme as useNextTheme } from 'next-themes'
 import { isCowAmmPool } from '../../../pool.helpers'
+import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/useGetECLPLiquidityProfile'
 
 const MIN_DISPLAY_PERIOD_DAYS = 30
 
@@ -24,6 +24,7 @@ export enum PoolChartTab {
   TVL = 'tvl',
   FEES = 'fees',
   SURPLUS = 'surplus',
+  LIQUIDITY_PROFILE = 'liquidity_profile',
 }
 
 export type PoolChartPeriod = {
@@ -50,13 +51,29 @@ export const poolChartPeriods: PoolChartPeriod[] = [
   },
 ]
 
+// Define a simpler type for gradients
+type ChartColor =
+  | string
+  | {
+      type: 'linear'
+      x: number
+      y: number
+      x2: number
+      y2: number
+      colorStops: Array<{
+        offset: number
+        color: string
+      }>
+      global?: boolean
+    }
+
 export interface PoolChartTypeOptions {
   type: 'line' | 'bar'
-  color: string | echarts.graphic.LinearGradient
+  color: ChartColor
   hoverColor: string
   hoverBorderColor?: string
   areaStyle?: {
-    color: string | echarts.graphic.LinearGradient
+    color: ChartColor
   }
 }
 
@@ -174,6 +191,20 @@ export const getDefaultPoolChartOptions = (
   }
 }
 
+const BASE_TABS: PoolChartTypeTab[] = [
+  { value: PoolChartTab.VOLUME, label: 'Volume' },
+  { value: PoolChartTab.TVL, label: 'TVL' },
+]
+
+const POOL_SPECIFIC_TABS: Record<string, PoolChartTypeTab[]> = {
+  [GqlPoolType.CowAmm]: [...BASE_TABS, { value: PoolChartTab.SURPLUS, label: 'Surplus' }],
+  [GqlPoolType.Gyroe]: [
+    ...BASE_TABS,
+    { value: PoolChartTab.FEES, label: 'Fees' },
+    { value: PoolChartTab.LIQUIDITY_PROFILE, label: 'Liquidity Profile' },
+  ],
+}
+
 export function getPoolTabsList({
   variant,
   poolType,
@@ -181,50 +212,13 @@ export function getPoolTabsList({
   variant: PoolVariant
   poolType: GqlPoolType
 }): PoolChartTypeTab[] {
+  // LBP pools in v2 only show base tabs
   if (poolType === GqlPoolType.LiquidityBootstrapping && variant === BaseVariant.v2) {
-    return [
-      {
-        value: PoolChartTab.VOLUME,
-        label: 'Volume',
-      },
-      {
-        value: PoolChartTab.TVL,
-        label: 'TVL',
-      },
-    ]
+    return BASE_TABS
   }
 
-  if (poolType === GqlPoolType.CowAmm) {
-    return [
-      {
-        value: PoolChartTab.VOLUME,
-        label: 'Volume',
-      },
-      {
-        value: PoolChartTab.TVL,
-        label: 'TVL',
-      },
-      {
-        value: PoolChartTab.SURPLUS,
-        label: 'Surplus',
-      },
-    ]
-  }
-
-  return [
-    {
-      value: PoolChartTab.VOLUME,
-      label: 'Volume',
-    },
-    {
-      value: PoolChartTab.TVL,
-      label: 'TVL',
-    },
-    {
-      value: PoolChartTab.FEES,
-      label: 'Fees',
-    },
-  ]
+  // Return pool-specific tabs or default tabs
+  return POOL_SPECIFIC_TABS[poolType] || POOL_SPECIFIC_TABS.default
 }
 
 export function usePoolSnapshots(
@@ -271,6 +265,10 @@ export function usePoolCharts() {
     pool.chain,
     activePeriod.value
   )
+
+  const { data: eclpData, poolSpotPrice } = useGetECLPLiquidityProfile(pool)
+
+  console.log({ eclpData, poolSpotPrice })
 
   const isLoading = isLoadingSnapshots
 
@@ -433,20 +431,27 @@ export function usePoolCharts() {
   const poolChartTypeOptions: Record<PoolChartTab, PoolChartTypeOptions> = {
     [PoolChartTab.VOLUME]: {
       type: 'bar',
-      color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        {
-          offset: 0,
-          color: isCowPool
-            ? theme.semanticTokens.colors.chart.pool.bar.volume.cow.from
-            : theme.semanticTokens.colors.chart.pool.bar.volume.from,
-        },
-        {
-          offset: 1,
-          color: isCowPool
-            ? theme.semanticTokens.colors.chart.pool.bar.volume.cow.to
-            : theme.semanticTokens.colors.chart.pool.bar.volume.to,
-        },
-      ]),
+      color: {
+        type: 'linear',
+        x: 0,
+        y: 0,
+        x2: 0,
+        y2: 1,
+        colorStops: [
+          {
+            offset: 0,
+            color: isCowPool
+              ? theme.semanticTokens.colors.chart.pool.bar.volume.cow.from
+              : theme.semanticTokens.colors.chart.pool.bar.volume.from,
+          },
+          {
+            offset: 1,
+            color: isCowPool
+              ? theme.semanticTokens.colors.chart.pool.bar.volume.cow.to
+              : theme.semanticTokens.colors.chart.pool.bar.volume.to,
+          },
+        ],
+      },
       hoverColor: isCowPool
         ? theme.semanticTokens.colors.chart.pool.bar.volume.cow.hover
         : defaultTheme.colors.pink[500],
@@ -457,16 +462,23 @@ export function usePoolCharts() {
       hoverBorderColor: defaultTheme.colors.pink[500],
       hoverColor: defaultTheme.colors.gray[900],
       areaStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          {
-            offset: 0,
-            color: 'rgba(14, 165, 233, 0.08)',
-          },
-          {
-            offset: 1,
-            color: 'rgba(68, 9, 236, 0)',
-          },
-        ]),
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0,
+              color: 'rgba(14, 165, 233, 0.08)',
+            },
+            {
+              offset: 1,
+              color: 'rgba(68, 9, 236, 0)',
+            },
+          ],
+        },
       },
     },
     [PoolChartTab.FEES]: {
@@ -479,10 +491,127 @@ export function usePoolCharts() {
       color: defaultTheme.colors.yellow[400],
       hoverColor: defaultTheme.colors.pink[500],
     },
+    [PoolChartTab.LIQUIDITY_PROFILE]: {
+      type: 'line',
+      color: defaultTheme.colors.blue[500],
+      hoverColor: defaultTheme.colors.pink[500],
+      areaStyle: {
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0,
+              color: 'rgba(59, 130, 246, 0.5)',
+            },
+            {
+              offset: 1,
+              color: 'rgba(59, 130, 246, 0)',
+            },
+          ],
+        },
+      },
+    },
   }
 
   const options = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[activeTab.value]
+    const isLiquidityProfile = activeTab.value === PoolChartTab.LIQUIDITY_PROFILE
+
+    if (isLiquidityProfile && eclpData) {
+      return {
+        ...defaultChartOptions,
+        grid: {
+          left: '10%',
+          right: '10%',
+          top: '10%',
+          bottom: '10%',
+        },
+        tooltip: {
+          trigger: 'axis',
+          formatter: (params: any) => {
+            const [data] = params
+            return `Price: ${fNum('fiat', data.data[0])}\nLiquidity: ${fNum('token', data.data[1], { abbreviated: true })}`
+          },
+        },
+        xAxis: {
+          type: 'value',
+          name: 'Price',
+          nameLocation: 'middle',
+          nameGap: 30,
+          min: 'dataMin',
+          max: 'dataMax',
+          axisLabel: {
+            formatter: (value: number) => fNum('fiat', value),
+            color: defaultTheme.colors.gray[400],
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: defaultTheme.colors.gray[800],
+              width: 1,
+            },
+          },
+        },
+        yAxis: {
+          type: 'value',
+          name: 'Liquidity',
+          nameLocation: 'middle',
+          nameGap: 35,
+          min: 0,
+          axisLabel: {
+            formatter: (value: number) => fNum('token', value, { abbreviated: true }),
+            color: defaultTheme.colors.gray[400],
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: defaultTheme.colors.gray[800],
+              width: 1,
+            },
+          },
+        },
+        series: [
+          {
+            type: 'line',
+            data: eclpData,
+            smooth: false,
+            symbol: 'none',
+            sampling: 'lttb',
+            lineStyle: {
+              width: 2,
+              color: defaultTheme.colors.blue[400],
+            },
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(59, 130, 246, 0.3)',
+                  },
+                  {
+                    offset: 0.5,
+                    color: 'rgba(59, 130, 246, 0.1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(59, 130, 246, 0)',
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      }
+    }
 
     return {
       ...defaultChartOptions,
@@ -496,7 +625,7 @@ export function usePoolCharts() {
             width: 2,
           },
           itemStyle: {
-            color: activeTabOptions.color as string | echarts.graphic.LinearGradient,
+            color: activeTabOptions.color,
             borderRadius: 100,
           },
           emphasis: {
@@ -549,5 +678,6 @@ export function usePoolCharts() {
     chartData,
     tabsList,
     chartValueSum,
+    hasChartData: !!chartData.length || !!eclpData?.length,
   }
 }

@@ -74,12 +74,12 @@ export function PoolCharts({ ...props }: CardProps) {
     activePeriod,
     setActivePeriod,
     isLoading,
-    chartData,
     options,
     handleAxisMoved,
     handleMouseLeave,
     tabsList,
     chartValueSum,
+    hasChartData,
   } = usePoolCharts()
 
   function getActiveTabLabel() {
@@ -97,7 +97,7 @@ export function PoolCharts({ ...props }: CardProps) {
     <Card {...props}>
       <Stack h="full">
         {isLoading && <Skeleton h="full" minH="200px" w="full" />}
-        {!isLoading && chartData.length > 0 && (
+        {!isLoading && hasChartData ? (
           <NoisyCard
             cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
             contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
@@ -111,7 +111,6 @@ export function PoolCharts({ ...props }: CardProps) {
                     onChange={tab => setActiveTab(tab as PoolChartTypeTab)}
                     options={tabsList}
                     size="xxs"
-                    width="56px"
                   />
                   <PeriodSelect onChange={setActivePeriod} value={activePeriod} />
                 </HStack>
@@ -139,8 +138,7 @@ export function PoolCharts({ ...props }: CardProps) {
               </Box>
             </VStack>
           </NoisyCard>
-        )}
-        {!isLoading && chartData.length <= 0 && (
+        ) : (
           <Flex alignItems="center" h="full">
             <Text fontSize="2xl" p="lg" variant="secondary">
               Not enough data
