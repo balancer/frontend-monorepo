@@ -1,4 +1,4 @@
-import { Button, Card, HStack, VStack, Text, Box } from '@chakra-ui/react'
+import { HStack, VStack, Text, Box } from '@chakra-ui/react'
 import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
 import {
   differenceInDays,
@@ -9,6 +9,16 @@ import {
   nextThursday,
 } from 'date-fns'
 import { oneSecondInMs } from '@repo/lib/shared/utils/time'
+import { VotingDeadlineContainer } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineContainer'
+import { ReminderButton } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/ReminderButton'
+
+const countdownItemBoxShadowStyles = [
+  '0px 0px 0px 1px #00000005',
+  '1px 1px 1px -0.5px #0000000F',
+  '3px 3px 3px -1.5px #0000000F',
+  '6px 6px 6px -3px #0000001A',
+  '-0.5px -1px 0px 0px #FFFFFF26',
+].join(', ')
 
 export function VotingDeadlineCounter() {
   const now = useCurrentDate(oneSecondInMs)
@@ -34,23 +44,42 @@ export function VotingDeadlineCounter() {
   ]
 
   return (
-    <Card>
-      <VStack>
-        <HStack justifyContent="space-between">
-          <Text variant="secondary">{format(deadlineDate, 'EEEE, HHa')} EST</Text>
-          <Button>Set reminder</Button>
+    <VotingDeadlineContainer>
+      <VStack spacing="md">
+        <HStack justify="space-between" w="full">
+          <Text fontSize="14px" lineHeight="20px" color="font.secondary" alignSelf="start">
+            {format(deadlineDate, 'EEEE, HHa')} EST
+          </Text>
+          <ReminderButton>Set reminder</ReminderButton>
         </HStack>
-        <HStack>
+        <HStack spacing="sm" w="full">
           {counters.map(counter => (
             <Box flex="1" key={counter.title}>
-              <VStack>
-                <Text variant="secondary">{counter.title}</Text>
-                <Text>{String(counter.value).padStart(2, '0')}</Text>
+              <VStack
+                rounded="lg"
+                py="13px"
+                px="14px"
+                bg="background.level3"
+                boxShadow={countdownItemBoxShadowStyles}
+                spacing="sm"
+              >
+                <Text fontSize="16px" lineHeight="20px" fontWeight={500} color="font.secondary">
+                  {counter.title}
+                </Text>
+                <Text
+                  fontSize={{ base: '24px', lg: '32px' }}
+                  lineHeight="40px"
+                  fontWeight={500}
+                  w={{ base: '34px', lg: '56px' }}
+                  textAlign="center"
+                >
+                  {String(counter.value).padStart(2, '0')}
+                </Text>
               </VStack>
             </Box>
           ))}
         </HStack>
       </VStack>
-    </Card>
+    </VotingDeadlineContainer>
   )
 }

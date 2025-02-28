@@ -1,8 +1,8 @@
-import { Card } from '@chakra-ui/react'
 import { StaticCalendar } from '@repo/lib/shared/components/calendar/StaticCalendar'
 import { useToday } from '@repo/lib/shared/hooks/date.hooks'
 import { addWeeks, endOfWeek, isSameDay, nextThursday, startOfDay, startOfWeek } from 'date-fns'
 import { useCallback } from 'react'
+import { VotingDeadlineContainer } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineContainer'
 
 export function VotingDeadlineCalendar() {
   const today = useToday()
@@ -33,7 +33,7 @@ export function VotingDeadlineCalendar() {
   )
 
   return (
-    <Card>
+    <VotingDeadlineContainer>
       <StaticCalendar
         endDate={endDate}
         isDayActive={isDayActive}
@@ -41,6 +41,6 @@ export function VotingDeadlineCalendar() {
         isDaySelected={isDaySelected}
         startDate={startDate}
       />
-    </Card>
+    </VotingDeadlineContainer>
   )
 }
