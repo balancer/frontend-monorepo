@@ -107,7 +107,7 @@ export function HookInfoPopOver({ data, level, children }: HookInfoPopOverProps)
     <Popover trigger="hover">
       <PopoverTrigger>{children}</PopoverTrigger>
       <PopoverContent w="auto">
-        <PopoverArrow bg="background.level2" />
+        <PopoverArrow bg="background.level3" />
         <PopoverBody>
           <VStack alignItems="flex-start" spacing="ms" w="full">
             <HStack w="full">

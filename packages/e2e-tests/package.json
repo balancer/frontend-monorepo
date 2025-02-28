@@ -13,10 +13,10 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "1.49.1",
-    "@types/node": "20.10.2",
-    "frontend-v3": "workspace:*",
     "@repo/lib": "workspace:*",
+    "@types/node": "22.13.5",
     "beets-frontend-v3": "workspace:*",
+    "frontend-v3": "workspace:*",
     "start-server-and-test": "2.0.9"
   }
 }

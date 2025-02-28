@@ -15,6 +15,7 @@ import RecentTransactions from '../other/RecentTransactions'
 import { AppLink, useNav } from './useNav'
 import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
+import { ImpersonateAccount } from '@repo/lib/modules/web3/ImpersonateAccount'
 
 type Props = {
   mobileNav?: ReactNode
@@ -92,6 +93,8 @@ function NavLinks({
           </Box>
         </>
       )}
+      {/* Display impersonate form only for E2E tests (CI) */}
+      {process.env.CI && <ImpersonateAccount />}
     </HStack>
   )
 }
