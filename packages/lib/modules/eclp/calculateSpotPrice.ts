@@ -2,20 +2,8 @@ import { calculateInvariantWithError } from './gyroEMath'
 import { calcSpotPrice0in1 } from './gyroECLPMath'
 import { divDownMagU, mulDownMagU } from './gyroSignedFixedPoint'
 import { _normalizeBalances } from './helpers'
-import { parseUnits } from 'viem'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-
-// Parses a fixed-point decimal string into a bigint
-// If we do not have enough decimals to express the number, we truncate it
-export function safeParseFixedBigInt(value: string, decimals = 0): bigint {
-  value = value.split(',').join('')
-  const [integer, fraction] = value.split('.')
-  if (!fraction) {
-    return parseUnits(value, decimals)
-  }
-  const safeValue = integer + '.' + fraction.slice(0, decimals)
-  return parseUnits(safeValue, decimals)
-}
+import { safeParseFixedBigInt } from '@repo/lib/shared/utils/numbers'
 
 type GyroEParams = {
   balanceIn: bigint

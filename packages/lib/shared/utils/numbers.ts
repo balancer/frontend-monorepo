@@ -4,7 +4,7 @@ import { MAX_UINT256 } from '@balancer/sdk'
 import BigNumber from 'bignumber.js'
 import numeral from 'numeral'
 import { KeyboardEvent } from 'react'
-import { formatUnits } from 'viem'
+import { formatUnits, parseUnits } from 'viem'
 import { isNumber, toNumber } from 'lodash'
 
 // Allows calling JSON.stringify with bigints
@@ -271,3 +271,15 @@ export function isTooSmallToRemoveUsd(value: Numberish): boolean {
 
 export const isValidNumber = (value: string): boolean =>
   isNumber(toNumber(value)) && !isNaN(toNumber(value))
+
+// Parses a fixed-point decimal string into a bigint
+// If we do not have enough decimals to express the number, we truncate it
+export function safeParseFixedBigInt(value: string, decimals = 0): bigint {
+  value = value.split(',').join('')
+  const [integer, fraction] = value.split('.')
+  if (!fraction) {
+    return parseUnits(value, decimals)
+  }
+  const safeValue = integer + '.' + fraction.slice(0, decimals)
+  return parseUnits(safeValue, decimals)
+}
