@@ -3,12 +3,7 @@ import { captureException } from '@sentry/nextjs'
   Types are deprecated but we are waiting for a guide for @sentry/nextjs
   Context: https://github.com/getsentry/sentry-javascript/discussions/15042
 */
-import {
-  Extras,
-  ScopeContext,
-  Stacktrace as SentryStack,
-  Exception as SentryException,
-} from '@sentry/types'
+import { Extras, ScopeContext } from '@sentry/core'
 import { SentryError, ensureError } from './errors'
 import {
   isInvariantRatioPIErrorMessage,
@@ -23,7 +18,6 @@ import {
 } from '@repo/lib/modules/pool/actions/add-liquidity/queries/add-liquidity-keys'
 import { RemoveLiquidityParams } from '@repo/lib/modules/pool/actions/remove-liquidity/queries/remove-liquidity-keys'
 import { SimulateSwapParams } from '@repo/lib/modules/swap/queries/useSimulateSwapQuery'
-import { isProd } from '@repo/lib/config/app.config'
 import { SwapState } from '@repo/lib/modules/swap/swap.types'
 import { SwapHandler } from '@repo/lib/modules/swap/handlers/Swap.handler'
 
@@ -245,16 +239,6 @@ export function captureSentryError(
   captureException(sentryError, context)
 }
 
-/*
-  Detects common errors that we don't want to capture in Sentry
-*/
-export function shouldIgnoreException(sentryException: SentryException) {
-  const errorMessage = sentryException.value || ''
-  const ignored = shouldIgnore(errorMessage, sentryStackFramesToString(sentryException.stacktrace))
-  if (ignored && !isProd) console.log('Ignoring error with message: ', errorMessage)
-  return ignored
-}
-
 export function shouldIgnore(message: string, stackTrace = ''): boolean {
   if (isUserRejectedError(new Error(message))) return true
 
@@ -383,17 +367,6 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
   }
 
   return false
-}
-
-function sentryStackFramesToString(sentryStack?: SentryStack): string {
-  if (!sentryStack?.frames?.length) return ''
-  return (
-    sentryStack.frames
-      // We only check the last 4 frames (root of the error)
-      .slice(-4)
-      .map(frame => frame.filename || '')
-      .join()
-  )
 }
 
 export function getTenderlyUrl(sentryMetadata?: SentryMetadata) {

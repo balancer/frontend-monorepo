@@ -18,12 +18,12 @@ prevents this loss (also called LVR), thereby increasing LP returns.`
 export const extraBalTooltipText = `veBAL holders can get an extra boost of up to 2.5x on their staking yield.
 The more veBAL held, the higher the boost.`
 
-export const lockingIncentivesTooltipText = `The protocol revenue share for Liquidity Providers 
+export const lockingIncentivesTooltipText = `The protocol revenue share for Liquidity Providers
                                             with 1-year locked Balancer ve8020 tokens.`
 
-export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL holders who 
-                        participate in weekly gauge voting by third parties on platforms like Hidden Hand. 
-                        Your incentives are determined by your veBAL voting power compared to other voters. 
+export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL holders who
+                        participate in weekly gauge voting by third parties on platforms like Hidden Hand.
+                        Your incentives are determined by your veBAL voting power compared to other voters.
                         The listed APR represents an average rather than a guaranteed return for active participants.`
 
 const stakingBalTooltipText = `LPs who stake earn extra ‘BAL’ liquidity mining incentives. The displayed APR is the base amount that all Stakers in this pool get (determined by weekly gauge voting). In addition, veBAL holders can get an extra boost of up to 2.5x.`
@@ -126,6 +126,15 @@ export function useAprTooltip({
   const hasMerklIncentives = merklIncentives.length > 0
   const merklIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(merklIncentives)
 
+  const merklTokens = aprItems.filter(item => {
+    return item.type === GqlPoolAprItemType.Merkl
+  })
+
+  const merklTokensDisplayed = merklTokens.map(item => ({
+    title: item.rewardTokenSymbol || '',
+    apr: numberFormatter(item.apr.toString()),
+  }))
+
   // Surplus incentives
   const surplusIncentives = filterByType(aprItems, GqlPoolAprItemType.Surplus_24H)
   const surplusIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(surplusIncentives)
@@ -220,6 +229,7 @@ export function useAprTooltip({
     yieldBearingTokensDisplayed,
     stakingIncentivesDisplayed,
     merklIncentivesAprDisplayed,
+    merklTokensDisplayed,
     hasMerklIncentives,
     surplusIncentivesAprDisplayed,
     votingAprDisplayed,

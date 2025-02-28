@@ -360,6 +360,21 @@ describe('Given a fully boosted pool', () => {
     expect(shouldUseUnderlyingToken(second, pool)).toEqual(false)
     expect(second.wrappedToken?.symbol).toEqual('waEthUSDT')
   })
+
+  it(`when useWrappedForAddRemove is not true in the wrapped token
+    getWrappedAndUnderlyingTokenFn should return an empty function to avoid the wrapped/underlying selector the UI`, () => {
+    const tokens = getPoolActionableTokens(pool)
+    const firstUnderlyingToken = tokens[0]
+
+    // Set useWrappedForAddRemove to false as we don't have a real pool example with in this scenario yet
+    if (firstUnderlyingToken.wrappedToken?.useWrappedForAddRemove) {
+      firstUnderlyingToken.wrappedToken.useWrappedForAddRemove = false
+    }
+
+    const pair = getWrappedAndUnderlyingTokenFn(firstUnderlyingToken, pool, balanceForMock)?.()
+
+    expect(pair).toBeUndefined()
+  })
 })
 
 it('getActionableTokenAddresses', () => {
