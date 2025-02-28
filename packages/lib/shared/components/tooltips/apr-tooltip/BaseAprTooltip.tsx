@@ -24,7 +24,6 @@ import {
   merklIncentivesTooltipText,
   surplusIncentivesTooltipText,
   SupportedHookType,
-  //mevCaptureFeesTooltipText,
 } from '@repo/lib/shared/hooks/useAprTooltip'
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
