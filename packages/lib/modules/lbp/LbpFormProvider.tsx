@@ -21,6 +21,13 @@ export function _useLbpForm() {
     defaultValues: {
       selectedChain: PROJECT_CONFIG.defaultNetwork,
       launchTokenAddress: '',
+      userActions: 'buy_and_sell',
+      startTime: '',
+      endTime: '',
+      collateralTokenAddress: '',
+      weightAdjustmentType: 'linear_90_10',
+      saleTokenAmount: '',
+      collateralTokenAmount: '',
     },
     mode: 'all',
   })

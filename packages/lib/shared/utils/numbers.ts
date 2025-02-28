@@ -271,3 +271,6 @@ export function isTooSmallToRemoveUsd(value: Numberish): boolean {
 
 export const isValidNumber = (value: string): boolean =>
   isNumber(toNumber(value)) && !isNaN(toNumber(value))
+
+export const isGreaterThanZeroValidation = (value: string): string | true =>
+  isValidNumber(value) && !isZero(value) ? true : 'Amount must be greater than 0'
