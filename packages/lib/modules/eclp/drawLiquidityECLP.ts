@@ -1,11 +1,12 @@
-import { GqlPoolGyro, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool/pool.types'
+import { isGyroEPool } from '../pool/pool.helpers'
 
 export function drawLiquidityECLP(
   pool: Pool,
   tokenRateScalingFactorString?: string
 ): [number, number][] | null {
-  if (!(pool.type === GqlPoolType.Gyroe && tokenRateScalingFactorString)) {
+  if (!isGyroEPool(pool) && tokenRateScalingFactorString) {
     return null
   }
 

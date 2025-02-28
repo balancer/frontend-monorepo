@@ -4,6 +4,8 @@ import { divDownMagU, mulDownMagU } from './gyroSignedFixedPoint'
 import { _normalizeBalances } from './helpers'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { safeParseFixedBigInt } from '@repo/lib/shared/utils/numbers'
+import { Pool } from '../pool/pool.types'
+import { isGyroEPool } from '../pool/pool.helpers'
 
 type GyroEParams = {
   balanceIn: bigint
@@ -40,9 +42,11 @@ type GyroPoolParams = GyroEParams
 const ZERO = safeParseFixedBigInt('0', 18)
 
 export function destructureRequiredPoolParams(
-  pool: any,
+  pool: Pool,
   tokenRates?: readonly [bigint, bigint] | null
 ) {
+  if (!isGyroEPool(pool)) return null
+
   const tokens = pool.poolTokens
   if (!tokens[0].balance || !tokens[1].balance) return null
 

@@ -4,6 +4,7 @@ import {
   GqlChain,
   GqlHookType,
   GqlPoolBase,
+  GqlPoolGyro,
   GqlPoolNestingType,
   GqlPoolStakingGauge,
   GqlPoolStakingOtherGauge,
@@ -74,6 +75,10 @@ export function isGyro(poolType: GqlPoolType) {
 
 export function isClp(poolType: GqlPoolType) {
   return isGyro(poolType)
+}
+
+export function isGyroEPool(pool: Pool): pool is GqlPoolGyro {
+  return pool.type === GqlPoolType.Gyroe
 }
 
 export function isUnknownType(poolType: any): boolean {
