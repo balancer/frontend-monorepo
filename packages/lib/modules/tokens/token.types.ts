@@ -49,6 +49,8 @@ export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & {
   index?: number // Only used in add/remove to have access to the wrapped token from the underlying token
   wrappedToken?: ApiToken // Only used in add/remove to have access to the wrapped token from the underlying token
   underlyingToken?: ApiToken
+  useWrappedForAddRemove?: boolean
+  useUnderlyingForAddRemove?: boolean
   weight?: string
 }
 

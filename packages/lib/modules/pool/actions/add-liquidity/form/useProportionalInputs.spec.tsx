@@ -44,7 +44,7 @@ describe('_calculateProportionalHumanAmountsIn', () => {
       },
       {
         tokenAddress: sDaiAddress,
-        humanAmount: '1064.897928989574485893',
+        humanAmount: '681.631126139661118619',
       },
     ])
   })
@@ -66,7 +66,7 @@ describe('_calculateProportionalHumanAmountsIn', () => {
       },
       {
         tokenAddress: sDaiAddress,
-        humanAmount: '1064.897928989574485893',
+        humanAmount: '681.631126139661118619',
       },
     ])
   })
@@ -89,7 +89,7 @@ describe('_calculateProportionalHumanAmountsIn', () => {
       },
       {
         tokenAddress: gnoTokenAddress,
-        humanAmount: '0.23476428415745785',
+        humanAmount: '0.366767288659253153',
       },
     ])
   })
@@ -112,7 +112,7 @@ describe('_calculateProportionalHumanAmountsIn', () => {
       },
       {
         tokenAddress: waGnoGNOTokenAddress,
-        humanAmount: '0.23476428415745785',
+        humanAmount: '0.366767288659253153',
       },
     ])
   })

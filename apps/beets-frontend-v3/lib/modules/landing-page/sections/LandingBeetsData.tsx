@@ -68,12 +68,12 @@ function ChainStats({
 }) {
   const { toCurrency } = useCurrency()
 
-  let totalRevenue = bn(protocolData.protocolMetricsChain.swapFee24h)
+  let totalFees = bn(protocolData.protocolMetricsChain.swapFee24h)
     .plus(protocolData.protocolMetricsChain.yieldCapture24h)
     .toString()
 
   if (isSonic) {
-    totalRevenue = bn(totalRevenue)
+    totalFees = bn(totalFees)
       .plus(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
       .toString()
   }
@@ -116,8 +116,8 @@ function ChainStats({
         </GridItem>
         <GridItem bg="rgba(255, 255, 255, 0.05)" p="lg" w="full">
           <VStack align="flex-start" spacing="sm">
-            <Text fontSize="lg">24h Revenue</Text>
-            <Text fontSize="2xl">{toCurrency(totalRevenue)}</Text>
+            <Text fontSize="lg">24h Fees</Text>
+            <Text fontSize="2xl">{toCurrency(totalFees)}</Text>
           </VStack>
         </GridItem>
       </Grid>
@@ -198,7 +198,7 @@ export function LandingBeetsData({
   const protocolMetricsAggregated = protocolData.protocolMetricsAggregated
   const totalTvl = protocolMetricsAggregated.totalLiquidity
 
-  const totalRevenue = bn(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
+  const totalFees = bn(stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h)
     .plus(protocolMetricsAggregated.swapFee24h)
     .plus(protocolMetricsAggregated.yieldCapture24h)
     .toString()
@@ -234,7 +234,7 @@ export function LandingBeetsData({
               />
             </GridItem>
             <GridItem bg="rgba(0, 0, 0, 0.2)">
-              <GlobalStatsCard label="24h Revenue" value={toCurrency(totalRevenue)} />
+              <GlobalStatsCard label="24h Fees" value={toCurrency(totalFees)} />
             </GridItem>
           </Grid>
         </Box>

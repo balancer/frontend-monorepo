@@ -145,6 +145,11 @@ function PoolHookFilters() {
     queryState: { togglePoolHookTag, poolHookTags, setPoolHookTags, poolHookTagLabel },
   } = usePoolList()
 
+  // Exclude hooks that are not live
+  const livePoolHookTagFilters = poolHookTagFilters.filter(
+    tag => tag !== 'HOOKS_FEETAKING' && tag !== 'HOOKS_EXITFEE'
+  )
+
   // remove query param when empty
   useEffect(() => {
     if (!poolHookTags.length) {
@@ -154,7 +159,7 @@ function PoolHookFilters() {
 
   return (
     <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {poolHookTagFilters.map(tag => (
+      {livePoolHookTagFilters.map(tag => (
         <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
           <Checkbox
             isChecked={!!poolHookTags.find(selected => selected === tag)}
