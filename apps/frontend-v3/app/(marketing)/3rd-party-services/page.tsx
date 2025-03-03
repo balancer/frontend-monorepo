@@ -1,6 +1,6 @@
 'use client'
 
-import { Container, HStack, VStack, Image, Text } from '@chakra-ui/react'
+import { Box, Container, HStack, VStack, Image, Text } from '@chakra-ui/react'
 import { Prose } from '@nikolovlazar/chakra-ui-prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
@@ -56,16 +56,18 @@ export default function Cookies() {
         <div className="pb-4">
           <FadeInOnView>
             <div className="subsection">
-              <h1>Use of 3rd party services</h1>
-              <p>
-                <em>Last Updated: October 2023</em>
-              </p>
-              <p>
-                Balancer is an open source, permissionless, decentralized protocol. The smart
-                contracts that power the ecosystem may be used by anyone. This website is the
-                Balancer Foundation&apos;s front-end to the ecosystem and it is also open-source.
-                You are free to fork it on Github and modify it as you wish.
-              </p>
+              <Box mt="3xl" pb="sm">
+                <h1>Use of 3rd party services</h1>
+                <p>
+                  <em>Last Updated: October 2023</em>
+                </p>
+                <p>
+                  Balancer is an open source, permissionless, decentralized protocol. The smart
+                  contracts that power the ecosystem may be used by anyone. This website is the
+                  Balancer Foundation&apos;s front-end to the ecosystem and it is also open-source.
+                  You are free to fork it on Github and modify it as you wish.
+                </p>
+              </Box>
               <p>This website uses the following 3rd party services:</p>
               <VStack align="start" spacing="xl" w="full">
                 {services.map(service => (

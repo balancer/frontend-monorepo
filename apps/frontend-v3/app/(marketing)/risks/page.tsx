@@ -11,7 +11,7 @@ export default function Privacy() {
       <Prose>
         <div>
           <FadeInOnView>
-            <Box pb="md">
+            <Box mt="3xl" pb="md">
               <h1>Risks of using&nbsp;Balancer</h1>
               <p>
                 <em>Last Updated: May 2024</em>
