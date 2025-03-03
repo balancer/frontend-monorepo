@@ -67,7 +67,7 @@
     "eslint": "8.43.0",
     "happy-dom": "^16.6.0",
     "lokijs": "^1.5.12",
-    "sentry-testkit": "^5.0.9"
+    "sentry-testkit": "^5.0.10"
   },
   "engines": {
     "node": ">=20.x"
