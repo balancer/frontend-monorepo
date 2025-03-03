@@ -11,11 +11,11 @@ import { useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { usePool } from '../../../PoolProvider'
 import { PoolVariant, BaseVariant } from '../../../pool.types'
-import { fNum, NumberFormatter } from '@repo/lib/shared/utils/numbers'
+import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTheme as useNextTheme } from 'next-themes'
 import { isCowAmmPool } from '../../../pool.helpers'
-import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/useGetECLPLiquidityProfile'
+import { useEclpPoolChart } from './useEclpPoolChart'
 
 const MIN_DISPLAY_PERIOD_DAYS = 30
 
@@ -266,10 +266,6 @@ export function usePoolCharts() {
     activePeriod.value
   )
 
-  const { data: eclpData, poolSpotPrice } = useGetECLPLiquidityProfile(pool)
-
-  console.log({ eclpData, poolSpotPrice })
-
   const isLoading = isLoadingSnapshots
 
   const chartValueSum = useMemo(() => {
@@ -517,100 +513,14 @@ export function usePoolCharts() {
     },
   }
 
+  const { options: eclpChartOptions, hasChartData: hasEclpChartData } = useEclpPoolChart()
+
   const options = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[activeTab.value]
     const isLiquidityProfile = activeTab.value === PoolChartTab.LIQUIDITY_PROFILE
 
-    if (isLiquidityProfile && eclpData) {
-      return {
-        ...defaultChartOptions,
-        grid: {
-          left: '10%',
-          right: '10%',
-          top: '10%',
-          bottom: '10%',
-        },
-        tooltip: {
-          trigger: 'axis',
-          formatter: (params: any) => {
-            const [data] = params
-            return `Price: ${fNum('fiat', data.data[0])}\nLiquidity: ${fNum('token', data.data[1], { abbreviated: true })}`
-          },
-        },
-        xAxis: {
-          type: 'value',
-          name: 'Price',
-          nameLocation: 'middle',
-          nameGap: 30,
-          min: 'dataMin',
-          max: 'dataMax',
-          axisLabel: {
-            formatter: (value: number) => fNum('fiat', value),
-            color: defaultTheme.colors.gray[400],
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: defaultTheme.colors.gray[800],
-              width: 1,
-            },
-          },
-        },
-        yAxis: {
-          type: 'value',
-          name: 'Liquidity',
-          nameLocation: 'middle',
-          nameGap: 35,
-          min: 0,
-          axisLabel: {
-            formatter: (value: number) => fNum('token', value, { abbreviated: true }),
-            color: defaultTheme.colors.gray[400],
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: defaultTheme.colors.gray[800],
-              width: 1,
-            },
-          },
-        },
-        series: [
-          {
-            type: 'line',
-            data: eclpData,
-            smooth: false,
-            symbol: 'none',
-            sampling: 'lttb',
-            lineStyle: {
-              width: 2,
-              color: defaultTheme.colors.blue[400],
-            },
-            areaStyle: {
-              color: {
-                type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [
-                  {
-                    offset: 0,
-                    color: 'rgba(59, 130, 246, 0.3)',
-                  },
-                  {
-                    offset: 0.5,
-                    color: 'rgba(59, 130, 246, 0.1)',
-                  },
-                  {
-                    offset: 1,
-                    color: 'rgba(59, 130, 246, 0)',
-                  },
-                ],
-              },
-            },
-          },
-        ],
-      }
+    if (isLiquidityProfile) {
+      return eclpChartOptions
     }
 
     return {
@@ -678,6 +588,6 @@ export function usePoolCharts() {
     chartData,
     tabsList,
     chartValueSum,
-    hasChartData: !!chartData.length || !!eclpData?.length,
+    hasChartData: !!chartData.length || hasEclpChartData,
   }
 }
