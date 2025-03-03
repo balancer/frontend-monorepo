@@ -37,25 +37,24 @@ export function useEclpPoolChart() {
       grid: {
         left: '10%',
         right: '10%',
-        top: '10%',
+        top: '15%',
         bottom: '10%',
       },
       tooltip: {
         trigger: 'axis',
         formatter: (params: any) => {
           const [data] = params
-          return `Price: ${fNum('fiat', data.data[0])}\nLiquidity: ${fNum('fiat', data.data[1], { abbreviated: true })}`
+          return `Price: ${fNum('gyroPrice', data.data[0])}\nLiquidity: ${toCurrency(data.data[1], { abbreviated: true })}`
         },
       },
       xAxis: {
         type: 'value',
         name: 'Price',
-        nameLocation: 'middle',
-        nameGap: 25,
+        nameLocation: 'end',
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
         axisLabel: {
-          formatter: (value: number) => fNum('token', value),
+          formatter: (value: number) => fNum('gyroPrice', value),
           color: defaultTheme.colors.gray[400],
         },
         splitLine: {
@@ -65,14 +64,25 @@ export function useEclpPoolChart() {
       yAxis: {
         type: 'value',
         name: 'Liquidity',
-        nameLocation: 'middle',
-        nameGap: 50,
+        nameLocation: 'end',
+        nameGap: 5,
+        nameTextStyle: {
+          align: 'left',
+          verticalAlign: 'top',
+          padding: [-20, 0, 0, -60], // top, right, bottom, left
+        },
         min: 0,
         axisLabel: {
-          formatter: (value: number) => fNum('fiat', value, { abbreviated: true }),
+          formatter: (value: number) => toCurrency(value, { abbreviated: true }),
           color: defaultTheme.colors.gray[400],
         },
         splitLine: {
+          show: false,
+        },
+        axisLine: {
+          show: false,
+        },
+        axisTick: {
           show: false,
         },
       },
