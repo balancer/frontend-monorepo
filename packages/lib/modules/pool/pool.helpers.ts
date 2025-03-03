@@ -25,7 +25,7 @@ import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { vaultV3Abi } from '@balancer/sdk'
-import { Pool, PoolCore, PoolCoreMinimal } from './pool.types'
+import { Pool, PoolCore } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
 
@@ -64,7 +64,7 @@ export function isFx(poolType: GqlPoolType | string): boolean {
   return poolType === GqlPoolType.Fx
 }
 
-export function isBoosted(pool: Pick<PoolCoreMinimal, 'protocolVersion' | 'hasAnyAllowedBuffer'>) {
+export function isBoosted(pool: Pick<PoolCore, 'protocolVersion' | 'hasAnyAllowedBuffer'>) {
   return isV3Pool(pool) && pool.hasAnyAllowedBuffer // this means that the pool has at least one ERC4626 token with allowed buffer
 }
 

@@ -1,4 +1,4 @@
-import { Pool, PoolCoreMinimal, PoolListItem } from '@repo/lib/modules/pool/pool.types'
+import { PoolCore } from '@repo/lib/modules/pool/pool.types'
 import { HStack, Text } from '@chakra-ui/react'
 import { PoolVersionTag } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolVersionTag'
 import { isBoosted } from '@repo/lib/modules/pool/pool.helpers'
@@ -8,7 +8,7 @@ import { PoolHookTag } from '@repo/lib/modules/pool/PoolDetail/PoolHookTag'
 import { usePoolsMetadata } from '../../metadata/PoolsMetadataProvider'
 
 interface Props {
-  pool: Pool | PoolListItem | PoolCoreMinimal
+  pool: PoolCore
 }
 
 export function PoolListTableDetailsCell({ pool }: Props) {

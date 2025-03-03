@@ -4,7 +4,7 @@ import {
   SortVotesBy,
 } from '@repo/lib/modules/vebal/vote/vote.types'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { PoolCoreMinimal, PoolToken } from '@repo/lib/modules/pool/pool.types'
+import { VotingPool, PoolToken } from '@repo/lib/modules/pool/pool.types'
 import { compact } from 'lodash'
 import { GetTokenFn } from '@repo/lib/modules/tokens/TokensProvider'
 
@@ -19,17 +19,17 @@ export function getVotesState(relativeWeightCap: number, votesNextPeriod: number
   return VotesState.Normal
 }
 
-export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): PoolCoreMinimal {
+export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): VotingPool {
   return {
     id: vote.id,
     type: vote.type,
     chain: vote.chain,
     /*
-      TODO:
-      Tokens in veBalGetVotingList query have type GqlVotingGaugeToken which does not have all the properties of PoolToken
-      That means that token pills will be different for voting pools (unless we change the backend types or we query and map the pool list tokens):
-      - Showing symbol instead of name
-      - GqlVotingGaugeToken does not have nestedPool property so NestedTokenPills won't be displayed
+    TODO:
+    Tokens in veBalGetVotingList query have type GqlVotingGaugeToken which does not have all the properties of PoolToken
+    That means that token pills will be different for voting pools (unless we change the backend types or we query and map the pool list tokens):
+    - Showing symbol instead of name
+    - GqlVotingGaugeToken does not have nestedPool property so NestedTokenPills won't be displayed
     */
     poolTokens: compact(
       vote.tokens.map(token =>
@@ -40,10 +40,11 @@ export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): Pool
     ),
     address: vote.address,
     protocolVersion: vote.protocolVersion, // fix: (votes) no data
+    symbol: vote.symbol,
+    // TODO: API is not returning the following fields in GqlVotingPool yet
+    hook: undefined, // fix: (votes) no data
     hasAnyAllowedBuffer: false, // fix: (votes) no data
     hasErc4626: false, // fix: (votes) no data
-    name: '', // fix: (votes) no data
-    symbol: vote.symbol,
     tags: [], // fix: (votes) no data
   }
 }
