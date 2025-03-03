@@ -6,6 +6,7 @@ import { useTheme as useNextTheme } from 'next-themes'
 import { getDefaultPoolChartOptions } from './usePoolCharts'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMemo } from 'react'
+import { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useEclpPoolChart() {
   const { pool } = usePool()
@@ -15,6 +16,17 @@ export function useEclpPoolChart() {
   const { toCurrency } = useCurrency()
 
   const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
+
+  const tokens = useMemo(() => {
+    const poolTokens = pool.poolTokens.map(token => token.symbol)
+    const gyroPool = pool as GqlPoolGyro
+
+    if (bn(gyroPool.alpha).lt(gyroPool.beta)) {
+      return poolTokens.join('/')
+    } else {
+      return poolTokens.reverse().join('/')
+    }
+  }, [pool])
 
   const xMin = useMemo(() => (data ? Math.min(...data.map(([x]) => x)) : 0), [data])
   const xMax = useMemo(() => (data ? Math.max(...data.map(([x]) => x)) : 0), [data])
@@ -38,7 +50,7 @@ export function useEclpPoolChart() {
         left: '10%',
         right: '10%',
         top: '15%',
-        bottom: '10%',
+        bottom: '15%',
       },
       tooltip: {
         trigger: 'axis',
@@ -49,8 +61,14 @@ export function useEclpPoolChart() {
       },
       xAxis: {
         type: 'value',
-        name: 'Price',
+        name: `Price (${tokens})`,
         nameLocation: 'end',
+        nameGap: 5,
+        nameTextStyle: {
+          align: 'right',
+          verticalAlign: 'bottom',
+          padding: [0, 0, -40, 0], // top, right, bottom, left
+        },
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
         axisLabel: {
