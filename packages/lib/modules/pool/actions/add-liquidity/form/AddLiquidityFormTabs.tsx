@@ -12,7 +12,7 @@ import {
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { isV3Pool } from '../../../pool.helpers'
+import { isPoolSurging, isV3Pool } from '../../../pool.helpers'
 import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWithActualWeights'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
@@ -74,13 +74,21 @@ export function AddLiquidityFormTabs({
     !isDisabledProportionalTab &&
     bn(pool.dynamicData.totalLiquidity).lt(bn(MIN_LIQUIDITY_FOR_BALANCED_ADD))
 
-  const isDisabledFlexibleTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold
+  const isDisabledFlexibleTab =
+    requiresProportionalInput(pool) || isBelowMinTvlThreshold || isPoolSurging(pool)
 
-  const proportionalTabTooltipLabel = requiresProportionalInput(pool)
-    ? 'This pool requires liquidity to be added proportionally'
-    : isBelowMinTvlThreshold
-      ? `Liquidity must be added proportionally until the pool TVL is greater than ${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD, { abbreviated: false, noDecimals: true })}`
-      : undefined
+  function getFlexibleTabTooltipLabel(): string | undefined {
+    if (requiresProportionalInput(pool)) {
+      return 'This pool requires liquidity to be added proportionally'
+    }
+    if (isBelowMinTvlThreshold) {
+      return `Liquidity must be added proportionally until the pool TVL is greater than ${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD, { abbreviated: false, noDecimals: true })}`
+    }
+    if (isPoolSurging(pool)) {
+      return 'Liquidity must be added proportionally while the pool is surging'
+    }
+    return
+  }
 
   function handleTabChanged(option: ButtonGroupOption): void {
     if (tabIndex.toString() === option.value) return // Avoids handling click in the current tab
@@ -95,7 +103,7 @@ export function AddLiquidityFormTabs({
       disabled: isDisabledFlexibleTab,
       iconTooltipLabel:
         'Enter any amount for each token manually. Balances are independent, and no automatic adjustments will be made.',
-      tabTooltipLabel: proportionalTabTooltipLabel,
+      tabTooltipLabel: getFlexibleTabTooltipLabel(),
     },
     {
       value: '1',
