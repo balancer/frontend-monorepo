@@ -115,7 +115,6 @@ export function useEclpPoolChart() {
             width: 2,
             color: defaultTheme.colors.blue[400],
           },
-
           areaStyle: {
             color: {
               type: 'linear',
@@ -140,16 +139,33 @@ export function useEclpPoolChart() {
             },
           },
           markLine: {
+            silent: true,
+            symbol: ['none', 'none'],
+            lineStyle: {
+              color: defaultTheme.colors.blue[400],
+              width: 3,
+              type: 'solid',
+            },
             data: [
-              // spotPrice
-              [
-                {
-                  coord: [boundedSpotPrice, 0],
-                },
-                {
-                  coord: [boundedSpotPrice, yMax],
-                },
-              ],
+              // left enclosing line for area
+              [{ coord: [xMin, 0] }, { coord: [xMin, data?.[0]?.[1] || 0] }],
+              // right enclosing line for area
+              [{ coord: [xMax, 0] }, { coord: [xMax, data?.[data.length - 1]?.[1] || 0] }],
+            ],
+          },
+        },
+        {
+          type: 'line',
+          data: [],
+          symbol: 'none',
+          markLine: {
+            symbol: ['none', 'triangle'],
+            symbolSize: 10,
+            symbolRotate: 180,
+            lineStyle: {
+              color: defaultTheme.colors.gray[400],
+            },
+            data: [
               // min
               [
                 {
@@ -166,6 +182,30 @@ export function useEclpPoolChart() {
                 },
                 {
                   coord: [xMax, yMax],
+                },
+              ],
+            ],
+          },
+        },
+        {
+          type: 'line',
+          data: [],
+          symbol: 'none',
+          markLine: {
+            symbol: ['none', 'triangle'],
+            symbolSize: 10,
+            symbolRotate: 180,
+            lineStyle: {
+              color: defaultTheme.colors.green[400],
+            },
+            data: [
+              // spotPrice
+              [
+                {
+                  coord: [boundedSpotPrice, 0],
+                },
+                {
+                  coord: [boundedSpotPrice, yMax],
                 },
               ],
             ],
