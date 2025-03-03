@@ -48,9 +48,9 @@ export function useEclpPoolChart() {
       ...defaultChartOptions,
       grid: {
         left: '10%',
-        right: '10%',
+        right: '5%',
         top: '15%',
-        bottom: '15%',
+        bottom: '20%',
       },
       tooltip: {
         trigger: 'axis',
@@ -67,7 +67,7 @@ export function useEclpPoolChart() {
         nameTextStyle: {
           align: 'right',
           verticalAlign: 'bottom',
-          padding: [0, 0, -40, 0], // top, right, bottom, left
+          padding: [0, 0, -70, 0], // top, right, bottom, left
         },
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
@@ -170,6 +170,17 @@ export function useEclpPoolChart() {
               [
                 {
                   coord: [xMin, 0],
+                  label: {
+                    show: true,
+                    position: 'start',
+                    distance: 35,
+                    fontSize: 12,
+                    color: defaultTheme.colors.gray[400],
+                    backgroundColor: defaultTheme.colors.gray[800],
+                    padding: 4,
+                    borderRadius: 4,
+                    formatter: () => fNum('gyroPrice', xMin || '0'),
+                  },
                 },
                 {
                   coord: [xMin, yMax],
@@ -179,6 +190,17 @@ export function useEclpPoolChart() {
               [
                 {
                   coord: [xMax, 0],
+                  label: {
+                    show: true,
+                    position: 'start',
+                    distance: 35,
+                    fontSize: 12,
+                    color: defaultTheme.colors.gray[400],
+                    backgroundColor: defaultTheme.colors.gray[800],
+                    padding: 4,
+                    borderRadius: 4,
+                    formatter: () => fNum('gyroPrice', xMax || '0'),
+                  },
                 },
                 {
                   coord: [xMax, yMax],
@@ -198,11 +220,23 @@ export function useEclpPoolChart() {
             lineStyle: {
               color: defaultTheme.colors.green[400],
             },
+
             data: [
               // spotPrice
               [
                 {
                   coord: [boundedSpotPrice, 0],
+                  label: {
+                    show: true,
+                    position: 'start',
+                    distance: 20,
+                    fontSize: 12,
+                    color: defaultTheme.colors.green[400],
+                    backgroundColor: defaultTheme.colors.gray[800],
+                    padding: 4,
+                    borderRadius: 4,
+                    formatter: () => fNum('gyroPrice', boundedSpotPrice || '0'),
+                  },
                 },
                 {
                   coord: [boundedSpotPrice, yMax],
