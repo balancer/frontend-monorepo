@@ -50,7 +50,7 @@ export function useEclpPoolChart() {
         left: '10%',
         right: '5%',
         top: '15%',
-        bottom: '20%',
+        bottom: '30%',
       },
       tooltip: {
         trigger: 'axis',
@@ -67,7 +67,7 @@ export function useEclpPoolChart() {
         nameTextStyle: {
           align: 'right',
           verticalAlign: 'bottom',
-          padding: [0, 0, -70, 0], // top, right, bottom, left
+          padding: [0, 0, -100, 0],
         },
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
@@ -173,8 +173,8 @@ export function useEclpPoolChart() {
                   label: {
                     show: true,
                     position: 'start',
-                    distance: 35,
-                    fontSize: 12,
+                    distance: 60,
+                    fontSize: 10,
                     color: defaultTheme.colors.gray[400],
                     backgroundColor: defaultTheme.colors.gray[800],
                     padding: 4,
@@ -193,8 +193,8 @@ export function useEclpPoolChart() {
                   label: {
                     show: true,
                     position: 'start',
-                    distance: 35,
-                    fontSize: 12,
+                    distance: 60,
+                    fontSize: 10,
                     color: defaultTheme.colors.gray[400],
                     backgroundColor: defaultTheme.colors.gray[800],
                     padding: 4,
@@ -229,7 +229,7 @@ export function useEclpPoolChart() {
                   label: {
                     show: true,
                     position: 'start',
-                    distance: 20,
+                    distance: 30,
                     fontSize: 12,
                     color: defaultTheme.colors.green[400],
                     backgroundColor: defaultTheme.colors.gray[800],
