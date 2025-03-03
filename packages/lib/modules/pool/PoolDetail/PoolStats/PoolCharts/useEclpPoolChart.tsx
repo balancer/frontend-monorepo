@@ -18,8 +18,8 @@ export function useEclpPoolChart() {
 
   const xMin = useMemo(() => (data ? Math.min(...data.map(([x]) => x)) : 0), [data])
   const xMax = useMemo(() => (data ? Math.max(...data.map(([x]) => x)) : 0), [data])
-  //const yMin = useMemo(() => (data ? Math.min(...data.map(([_, y]) => y)) : 0), [data])
-  //const yMax = useMemo(() => (data ? Math.max(...data.map(([_, y]) => y)) : 0), [data])
+  //const yMin = useMemo(() => (data ? Math.min(...data.map(([, y]) => y)) : 0), [data])
+  const yMax = useMemo(() => (data ? Math.max(...data.map(([, y]) => y)) : 0), [data])
 
   const boundedSpotPrice = useMemo(() => {
     if (poolSpotPrice) {
@@ -29,10 +29,10 @@ export function useEclpPoolChart() {
     return poolSpotPrice
   }, [poolSpotPrice, xMax, xMin])
 
-  console.log({ boundedSpotPrice })
+  const options = useMemo(() => {
+    if (!data) return
 
-  return {
-    options: {
+    return {
       ...defaultChartOptions,
       grid: {
         left: '10%',
@@ -44,44 +44,36 @@ export function useEclpPoolChart() {
         trigger: 'axis',
         formatter: (params: any) => {
           const [data] = params
-          return `Price: ${fNum('fiat', data.data[0])}\nLiquidity: ${fNum('token', data.data[1], { abbreviated: true })}`
+          return `Price: ${fNum('fiat', data.data[0])}\nLiquidity: ${fNum('fiat', data.data[1], { abbreviated: true })}`
         },
       },
       xAxis: {
         type: 'value',
         name: 'Price',
         nameLocation: 'middle',
-        nameGap: 30,
+        nameGap: 25,
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
         axisLabel: {
-          formatter: (value: number) => fNum('fiat', value),
+          formatter: (value: number) => fNum('token', value),
           color: defaultTheme.colors.gray[400],
         },
         splitLine: {
-          show: true,
-          lineStyle: {
-            color: defaultTheme.colors.gray[800],
-            width: 1,
-          },
+          show: false,
         },
       },
       yAxis: {
         type: 'value',
         name: 'Liquidity',
         nameLocation: 'middle',
-        nameGap: 35,
+        nameGap: 50,
         min: 0,
         axisLabel: {
-          formatter: (value: number) => fNum('token', value, { abbreviated: true }),
+          formatter: (value: number) => fNum('fiat', value, { abbreviated: true }),
           color: defaultTheme.colors.gray[400],
         },
         splitLine: {
-          show: true,
-          lineStyle: {
-            color: defaultTheme.colors.gray[800],
-            width: 1,
-          },
+          show: false,
         },
       },
       series: [
@@ -121,14 +113,43 @@ export function useEclpPoolChart() {
           },
           markLine: {
             data: [
-              {
-                xAxis: Number(boundedSpotPrice),
-              },
+              // spotPrice
+              [
+                {
+                  coord: [boundedSpotPrice, 0],
+                },
+                {
+                  coord: [boundedSpotPrice, yMax],
+                },
+              ],
+              // min
+              [
+                {
+                  coord: [xMin, 0],
+                },
+                {
+                  coord: [xMin, yMax],
+                },
+              ],
+              // max
+              [
+                {
+                  coord: [xMax, 0],
+                },
+                {
+                  coord: [xMax, yMax],
+                },
+              ],
             ],
           },
         },
       ],
-    },
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, boundedSpotPrice])
+
+  return {
+    options,
     hasChartData: !!data,
   }
 }
