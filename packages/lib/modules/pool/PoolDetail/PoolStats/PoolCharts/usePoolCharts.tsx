@@ -199,9 +199,9 @@ const BASE_TABS: PoolChartTypeTab[] = [
 const POOL_SPECIFIC_TABS: Record<string, PoolChartTypeTab[]> = {
   [GqlPoolType.CowAmm]: [...BASE_TABS, { value: PoolChartTab.SURPLUS, label: 'Surplus' }],
   [GqlPoolType.Gyroe]: [
+    { value: PoolChartTab.LIQUIDITY_PROFILE, label: 'Liquidity Profile' },
     ...BASE_TABS,
     { value: PoolChartTab.FEES, label: 'Fees' },
-    { value: PoolChartTab.LIQUIDITY_PROFILE, label: 'Liquidity Profile' },
   ],
 }
 
