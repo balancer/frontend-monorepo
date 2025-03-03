@@ -47,7 +47,7 @@ export function VotingDeadlineCounter() {
     <VotingDeadlineContainer>
       <VStack spacing="md">
         <HStack justify="space-between" w="full">
-          <Text fontSize="14px" lineHeight="20px" color="font.secondary" alignSelf="start">
+          <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
             {format(deadlineDate, 'EEEE, HHa')} EST
           </Text>
           <ReminderButton>Set reminder</ReminderButton>
@@ -56,22 +56,22 @@ export function VotingDeadlineCounter() {
           {counters.map(counter => (
             <Box flex="1" key={counter.title}>
               <VStack
-                rounded="lg"
-                py="13px"
-                px="14px"
                 bg="background.level3"
                 boxShadow={countdownItemBoxShadowStyles}
+                px="14px"
+                py="13px"
+                rounded="lg"
                 spacing="sm"
               >
-                <Text fontSize="16px" lineHeight="20px" fontWeight={500} color="font.secondary">
+                <Text color="font.secondary" fontSize="16px" fontWeight={500} lineHeight="20px">
                   {counter.title}
                 </Text>
                 <Text
                   fontSize={{ base: '24px', lg: '32px' }}
-                  lineHeight="40px"
                   fontWeight={500}
-                  w={{ base: '34px', lg: '56px' }}
+                  lineHeight="40px"
                   textAlign="center"
+                  w={{ base: '34px', lg: '56px' }}
                 >
                   {String(counter.value).padStart(2, '0')}
                 </Text>

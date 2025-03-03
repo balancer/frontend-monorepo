@@ -6,19 +6,19 @@ import { VotingDeadlineCounter } from '@repo/lib/modules/vebal/vote/Votes/VotesI
 
 export function VotingDeadline() {
   return (
-    <VStack p={{ base: 'ms', lg: '20px' }} bg="background.level3" rounded="2xl" spacing="16px">
+    <VStack bg="background.level3" p={{ base: 'ms', lg: '20px' }} rounded="2xl" spacing="16px">
       <Text
-        fontSize="16px"
-        color="font.secondary"
-        fontWeight={700}
-        lineHeight="20px"
-        letterSpacing="-0.48px"
         alignSelf="start"
+        color="font.secondary"
+        fontSize="16px"
+        fontWeight={700}
+        letterSpacing="-0.48px"
+        lineHeight="20px"
         px="xs"
       >
         Weekly voting deadline
       </Text>
-      <HStack spacing="20px" flexDirection={{ base: 'column', lg: 'row' }}>
+      <HStack flexDirection={{ base: 'column', lg: 'row' }} spacing="20px">
         <VotingDeadlineCalendar />
         <VotingDeadlineCounter />
       </HStack>

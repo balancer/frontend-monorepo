@@ -16,9 +16,9 @@ export function VotingDeadlineContainer({
   return (
     <Card
       bg="background.level1"
+      boxShadow={wrapperBoxShadowStyles}
       p={{ base: 'ms', lg: '20px' }}
       rounded="xl"
-      boxShadow={wrapperBoxShadowStyles}
       {...stackProps}
     >
       {children}

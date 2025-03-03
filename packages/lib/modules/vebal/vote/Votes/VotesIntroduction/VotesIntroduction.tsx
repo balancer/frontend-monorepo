@@ -23,25 +23,25 @@ const linkStyles = {
 export function VotesIntroduction() {
   return (
     <HStack
-      w="full"
-      justifyContent={{ base: 'start', lg: 'space-between' }}
       flexDirection={{ base: 'column', lg: 'row' }}
+      justifyContent={{ base: 'start', lg: 'space-between' }}
       spacing={{ base: '40px', lg: undefined }}
+      w="full"
     >
       <VStack spacing="30px" w={{ base: 'full', lg: undefined }}>
         <Breadcrumb
-          spacing="xs"
           separator={
             <Box color="font.secondary">
               <ChevronRight size={16} />
             </Box>
           }
+          spacing="xs"
           w="full"
         >
           <BreadcrumbItem>
             <BreadcrumbLink href="/">
               <Button color="grayText" size="xs" variant="link">
-                <HomeIcon width="16px" height="16px" />
+                <HomeIcon height="16px" width="16px" />
               </Button>
             </BreadcrumbLink>
           </BreadcrumbItem>
@@ -57,11 +57,11 @@ export function VotesIntroduction() {
           </BreadcrumbItem>
         </Breadcrumb>
 
-        <VStack spacing="22px" maxW="351px" alignSelf={{ base: 'start', lg: undefined }}>
-          <Heading as="h2" size="lg" variant="special" alignSelf={{ base: 'start', lg: undefined }}>
+        <VStack alignSelf={{ base: 'start', lg: undefined }} maxW="351px" spacing="22px">
+          <Heading alignSelf={{ base: 'start', lg: undefined }} as="h2" size="lg" variant="special">
             Vote and&nbsp;earn external&nbsp;incentives
           </Heading>
-          <Text fontSize="16px" lineHeight="24px" letterSpacing="-0.38px" fontWeight={500}>
+          <Text fontSize="16px" fontWeight={500} letterSpacing="-0.38px" lineHeight="24px">
             Voting on pool gauges helps to direct weekly BAL liquidity mining incentives. Voters are
             also eligible to earn additional 3rd party voting incentives.
           </Text>

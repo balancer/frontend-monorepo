@@ -109,8 +109,8 @@ export function StaticCalendar({
 
   return (
     <Grid
-      gridRowGap="13px"
       gridColumnGap={{ base: '6px', lg: '8px' }}
+      gridRowGap="13px"
       templateColumns="repeat(7, 1fr)"
     >
       {weekDays.map(weekDay => (
@@ -122,8 +122,8 @@ export function StaticCalendar({
         >
           <Text
             fontSize={{ base: '12px', lg: '14px' }}
-            variant="secondary"
             lineHeight={{ base: undefined, lg: '20px' }}
+            variant="secondary"
           >
             {format(weekDay, 'EE')}
           </Text>
@@ -139,13 +139,13 @@ export function StaticCalendar({
                   {format(day, 'dd')}
                 </Box>
               ) : (
-                <Popover trigger={isMobile ? 'click' : 'hover'} placement="top">
+                <Popover placement="top" trigger={isMobile ? 'click' : 'hover'}>
                   <PopoverTrigger>
                     <Button
                       {...sharedStyles}
+                      _hover={{}}
                       minW={{ base: '32px', lg: '40px' }}
                       sx={getDayStyles(day)}
-                      _hover={{}}
                     >
                       {format(day, 'dd')}
                     </Button>
@@ -154,25 +154,25 @@ export function StaticCalendar({
                     <PopoverBody p="0">
                       <VStack
                         bg="background.level3"
-                        p="ms"
-                        spacing="sm"
-                        rounded="lg"
                         boxShadow={popoverBoxShadow}
+                        p="ms"
+                        rounded="lg"
+                        spacing="sm"
                       >
                         <Text
-                          fontSize="16px"
-                          lineHeight="20px"
-                          fontWeight={700}
-                          color="font.secondary"
                           alignSelf="start"
+                          color="font.secondary"
+                          fontSize="16px"
+                          fontWeight={700}
+                          lineHeight="20px"
                         >
                           {isDayActive?.(day) ? 'Next' : 'Following'} voting deadline
                         </Text>
                         <Text
+                          alignSelf="start"
+                          color="font.secondary"
                           fontSize="14px"
                           lineHeight="20px"
-                          color="font.secondary"
-                          alignSelf="start"
                         >
                           7pm EST, 5 October 2024
                         </Text>
