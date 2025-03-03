@@ -19,6 +19,7 @@
     "stylelint": "turbo stylelint",
     "stylelint:fix": "turbo stylelint:fix",
     "test:e2e": "turbo test:e2e --ui=stream --log-order=stream --",
+    "test:e2e:dev": "turbo test:e2e:dev --ui=stream --log-order=stream --",
     "test:e2e:ui": "turbo test:e2e:ui --ui=stream --log-order=stream --",
     "test:integration": "turbo test:integration --ui=stream --log-order=stream --",
     "test:integration:watch": "turbo test:integration:watch --ui=stream --log-order=stream --",

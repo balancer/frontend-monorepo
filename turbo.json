@@ -17,6 +17,7 @@
     "NEXT_RUNTIME",
     "NEXT_PRIVATE_ALCHEMY_KEY",
     "CI",
+    "E2E_DEV",
     "NEXT_PUBLIC_UPDATE_API_MOCKS",
     "VERCEL_GIT_COMMIT_REF"
   ],
@@ -78,6 +79,10 @@
     },
     "test:e2e": {
       "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test:e2e:dev": {
+      "dependsOn": ["^graphql:gen"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "test:e2e:ui": {
