@@ -49,8 +49,8 @@ export function useEclpPoolChart() {
       grid: {
         left: '10%',
         right: '5%',
-        top: '15%',
-        bottom: '30%',
+        top: '20%',
+        bottom: '25%',
       },
       tooltip: {
         trigger: 'axis',
@@ -67,7 +67,7 @@ export function useEclpPoolChart() {
         nameTextStyle: {
           align: 'right',
           verticalAlign: 'bottom',
-          padding: [0, 0, -100, 0],
+          padding: [0, 0, -75, 0],
         },
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
@@ -77,6 +77,16 @@ export function useEclpPoolChart() {
         },
         splitLine: {
           show: false,
+        },
+        axisTick: {
+          show: false,
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            type: 'dashed',
+            color: defaultTheme.colors.gray[400],
+          },
         },
       },
       yAxis: {
@@ -90,6 +100,7 @@ export function useEclpPoolChart() {
           padding: [-20, 0, 0, -60], // top, right, bottom, left
         },
         min: 0,
+        max: yMax * 1.25,
         axisLabel: {
           formatter: (value: number) => toCurrency(value, { abbreviated: true }),
           color: defaultTheme.colors.gray[400],
@@ -105,6 +116,167 @@ export function useEclpPoolChart() {
         },
       },
       series: [
+        // lower bound
+        {
+          type: 'line',
+          data: [],
+          symbol: 'none',
+          markLine: {
+            symbol: ['none', 'triangle'],
+            symbolSize: 10,
+            symbolRotate: 180,
+            silent: true,
+            label: {
+              show: true,
+              fontSize: 12,
+              color: defaultTheme.colors.gray[800],
+              backgroundColor: defaultTheme.colors.gray[400],
+              padding: 4,
+              borderRadius: 4,
+            },
+            lineStyle: {
+              color: defaultTheme.colors.gray[400],
+            },
+            data: [
+              [
+                {
+                  coord: [xMin, 0],
+                  label: {
+                    formatter: () => fNum('gyroPrice', xMin || '0'),
+                    position: 'start',
+                    distance: 30,
+                    backgroundColor: defaultTheme.colors.gray[400],
+                  },
+                },
+                {
+                  coord: [xMin, yMax * 1.05],
+                },
+              ],
+            ],
+          },
+        },
+        // upper bound
+        {
+          type: 'line',
+          data: [],
+          symbol: 'none',
+          markLine: {
+            symbol: ['none', 'triangle'],
+            symbolSize: 10,
+            symbolRotate: 180,
+            silent: true,
+            label: {
+              show: true,
+              fontSize: 12,
+              color: defaultTheme.colors.gray[800],
+              backgroundColor: defaultTheme.colors.gray[400],
+              padding: 4,
+              borderRadius: 4,
+            },
+            lineStyle: {
+              color: defaultTheme.colors.gray[400],
+            },
+            data: [
+              [
+                {
+                  coord: [xMax, 0],
+                  label: {
+                    formatter: () => fNum('gyroPrice', xMax || '0'),
+                    position: 'start',
+                    distance: 30,
+                    backgroundColor: defaultTheme.colors.gray[400],
+                  },
+                },
+                {
+                  coord: [xMax, yMax * 1.05],
+                },
+              ],
+            ],
+          },
+        },
+        // spot price
+        {
+          type: 'line',
+          data: [],
+          symbol: 'none',
+          markPoint: {
+            silent: true,
+            symbol: 'rect',
+            symbolSize: [60, 36],
+            itemStyle: {
+              color: 'transparent',
+              borderWidth: 0,
+            },
+            // but markpoints for all 3 lines are here
+            data: [
+              {
+                coord: [xMin, yMax * 1.2],
+                value: 'Lower\nbound',
+                label: {
+                  show: true,
+                  fontSize: 12,
+                  color: defaultTheme.colors.gray[400],
+                  padding: 4,
+                  borderRadius: 4,
+                },
+              },
+              {
+                coord: [xMax, yMax * 1.2],
+                value: 'Upper\nbound',
+                label: {
+                  show: true,
+                  fontSize: 12,
+                  color: defaultTheme.colors.gray[400],
+                  padding: 4,
+                  borderRadius: 4,
+                },
+              },
+              {
+                coord: [boundedSpotPrice, yMax * 1.25],
+                value: 'Current\nprice',
+                label: {
+                  show: true,
+                  fontSize: 12,
+                  color: defaultTheme.colors.green[400],
+                },
+              },
+            ],
+          },
+          markLine: {
+            symbol: ['none', 'circle'],
+            symbolSize: 10,
+            symbolRotate: 180,
+            silent: true,
+            label: {
+              show: true,
+              fontSize: 12,
+              color: defaultTheme.colors.gray[800],
+              backgroundColor: defaultTheme.colors.green[400],
+              padding: 4,
+              borderRadius: 4,
+            },
+            lineStyle: {
+              color: defaultTheme.colors.green[400],
+            },
+            data: [
+              [
+                {
+                  coord: [boundedSpotPrice, 0],
+                  label: {
+                    formatter: () => fNum('gyroPrice', boundedSpotPrice || '0'),
+                    position: 'start',
+                    distance: 30,
+                    backgroundColor: defaultTheme.colors.green[400],
+                  },
+                },
+                {
+                  coord: [boundedSpotPrice, yMax * 1.1],
+                },
+              ],
+            ],
+          },
+        },
+        // main chart
         {
           type: 'line',
           data,
@@ -115,6 +287,7 @@ export function useEclpPoolChart() {
             width: 2,
             color: defaultTheme.colors.blue[400],
           },
+          z: 1000,
           areaStyle: {
             color: {
               type: 'linear',
@@ -140,6 +313,7 @@ export function useEclpPoolChart() {
           },
           markLine: {
             silent: true,
+            z: 1000,
             symbol: ['none', 'none'],
             lineStyle: {
               color: defaultTheme.colors.blue[400],
@@ -151,97 +325,6 @@ export function useEclpPoolChart() {
               [{ coord: [xMin, 0] }, { coord: [xMin, data?.[0]?.[1] || 0] }],
               // right enclosing line for area
               [{ coord: [xMax, 0] }, { coord: [xMax, data?.[data.length - 1]?.[1] || 0] }],
-            ],
-          },
-        },
-        {
-          type: 'line',
-          data: [],
-          symbol: 'none',
-          markLine: {
-            symbol: ['none', 'triangle'],
-            symbolSize: 10,
-            symbolRotate: 180,
-            lineStyle: {
-              color: defaultTheme.colors.gray[400],
-            },
-            data: [
-              // min
-              [
-                {
-                  coord: [xMin, 0],
-                  label: {
-                    show: true,
-                    position: 'start',
-                    distance: 60,
-                    fontSize: 10,
-                    color: defaultTheme.colors.gray[400],
-                    backgroundColor: defaultTheme.colors.gray[800],
-                    padding: 4,
-                    borderRadius: 4,
-                    formatter: () => fNum('gyroPrice', xMin || '0'),
-                  },
-                },
-                {
-                  coord: [xMin, yMax],
-                },
-              ],
-              // max
-              [
-                {
-                  coord: [xMax, 0],
-                  label: {
-                    show: true,
-                    position: 'start',
-                    distance: 60,
-                    fontSize: 10,
-                    color: defaultTheme.colors.gray[400],
-                    backgroundColor: defaultTheme.colors.gray[800],
-                    padding: 4,
-                    borderRadius: 4,
-                    formatter: () => fNum('gyroPrice', xMax || '0'),
-                  },
-                },
-                {
-                  coord: [xMax, yMax],
-                },
-              ],
-            ],
-          },
-        },
-        {
-          type: 'line',
-          data: [],
-          symbol: 'none',
-          markLine: {
-            symbol: ['none', 'triangle'],
-            symbolSize: 10,
-            symbolRotate: 180,
-            lineStyle: {
-              color: defaultTheme.colors.green[400],
-            },
-
-            data: [
-              // spotPrice
-              [
-                {
-                  coord: [boundedSpotPrice, 0],
-                  label: {
-                    show: true,
-                    position: 'start',
-                    distance: 30,
-                    fontSize: 12,
-                    color: defaultTheme.colors.green[400],
-                    backgroundColor: defaultTheme.colors.gray[800],
-                    padding: 4,
-                    borderRadius: 4,
-                    formatter: () => fNum('gyroPrice', boundedSpotPrice || '0'),
-                  },
-                },
-                {
-                  coord: [boundedSpotPrice, yMax],
-                },
-              ],
             ],
           },
         },
