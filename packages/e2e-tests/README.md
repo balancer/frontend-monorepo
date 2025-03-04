@@ -30,6 +30,11 @@ Check this video for a detailed explanation: https://www.youtube.com/watch?v=bsE
 ### Dev E2E tests
 
 ```bash
+# This is run by GHA when running this tests in CI
+anvil --fork-url https://lb.drpc.org/ogrpc?network=ethereum&dkey=YOUR_LOCAL_NEXT_PRIVATE_DRPC_KEY --port 8545
+```
+
+```bash
 pnpm run test:e2e:dev
 ```
 
@@ -47,6 +52,7 @@ recommend the ui option:
 ```bash
 pnpm run test:e2e:build:ui
 # or
+# Remember to run the mainnet anvil fork locally before running dev E2E tests.
 pnpm run test:e2e:dev:ui
 ```
 

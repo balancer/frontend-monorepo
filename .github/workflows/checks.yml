@@ -13,17 +13,18 @@ env:
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
 jobs:
-  Build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/actions/setup
-      - name: Run build
-        env:
-          NODE_OPTIONS: "--max_old_space_size=4096"
-        run: pnpm run build
+  # Skip this job as it is already part of the E2E-Smoke-Test job
+  # Build:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Setup
+  #       uses: ./.github/actions/setup
+  #     - name: Run build
+  #       env:
+  #         NODE_OPTIONS: "--max_old_space_size=4096"
+  #       run: pnpm run build
 
   Lint:
     runs-on: macos-14
