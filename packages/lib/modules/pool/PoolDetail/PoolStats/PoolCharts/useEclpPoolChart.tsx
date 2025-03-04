@@ -285,7 +285,31 @@ export function useEclpPoolChart() {
           sampling: 'lttb',
           lineStyle: {
             width: 2,
-            color: defaultTheme.colors.blue[400],
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 1,
+              y2: 0,
+              colorStops: [
+                {
+                  offset: 0,
+                  color: 'rgb(179, 174, 245)',
+                },
+                {
+                  offset: 0.33,
+                  color: 'rgb(215, 203, 231)',
+                },
+                {
+                  offset: 0.66,
+                  color: 'rgb(229, 200, 200)',
+                },
+                {
+                  offset: 1,
+                  color: 'rgb(234, 168, 121)',
+                },
+              ],
+            },
           },
           z: 1000,
           areaStyle: {
@@ -293,20 +317,24 @@ export function useEclpPoolChart() {
               type: 'linear',
               x: 0,
               y: 0,
-              x2: 0,
-              y2: 1,
+              x2: 1,
+              y2: 0,
               colorStops: [
                 {
                   offset: 0,
-                  color: 'rgba(59, 130, 246, 0.3)',
+                  color: 'rgba(179, 174, 245, 1)',
                 },
                 {
-                  offset: 0.5,
-                  color: 'rgba(59, 130, 246, 0.1)',
+                  offset: 0.33,
+                  color: 'rgba(215, 203, 231, 0.33)',
+                },
+                {
+                  offset: 0.66,
+                  color: 'rgba(229, 200, 200, 0.66)',
                 },
                 {
                   offset: 1,
-                  color: 'rgba(59, 130, 246, 0)',
+                  color: 'rgba(234, 168, 121, 0)',
                 },
               ],
             },
@@ -315,16 +343,31 @@ export function useEclpPoolChart() {
             silent: true,
             z: 1000,
             symbol: ['none', 'none'],
-            lineStyle: {
-              color: defaultTheme.colors.blue[400],
-              width: 3,
-              type: 'solid',
-            },
             data: [
               // left enclosing line for area
-              [{ coord: [xMin, 0] }, { coord: [xMin, data?.[0]?.[1] || 0] }],
+              [
+                {
+                  coord: [xMin, 0],
+                  lineStyle: {
+                    color: 'rgb(179, 174, 245)',
+                    width: 2,
+                    type: 'solid',
+                  },
+                },
+                { coord: [xMin, data?.[0]?.[1] || 0] },
+              ],
               // right enclosing line for area
-              [{ coord: [xMax, 0] }, { coord: [xMax, data?.[data.length - 1]?.[1] || 0] }],
+              [
+                {
+                  coord: [xMax, 0],
+                  lineStyle: {
+                    color: 'rgb(234, 168, 121)',
+                    width: 2,
+                    type: 'solid',
+                  },
+                },
+                { coord: [xMax, data?.[data.length - 1]?.[1] || 0] },
+              ],
             ],
           },
         },
