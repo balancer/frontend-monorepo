@@ -2,6 +2,10 @@ import { defineConfig, devices } from '@playwright/test'
 
 const isDevE2E = !!process.env.NEXT_PUBLIC_E2E_DEV
 
+function minutes(min: number) {
+  return min * 60 * 1000
+}
+
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -33,8 +37,8 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
-  globalTimeout: isDevE2E ? 120000 : 30000,
-  timeout: isDevE2E ? 60000 : 10000,
+  globalTimeout: isDevE2E ? minutes(4) : minutes(0.5),
+  timeout: isDevE2E ? minutes(1) : 10000,
   /* Configure projects for major browsers */
   projects: [
     {
@@ -79,7 +83,7 @@ export default defineConfig({
       command: 'cd ../.. && pnpm dev:turbopack',
       url: 'http://127.0.0.1:3000',
       reuseExistingServer: true,
-      timeout: 120 * 1000,
+      timeout: minutes(2),
       stdout: 'pipe',
       stderr: 'pipe',
       // https://github.com/vercel/turborepo/issues/9666#issuecomment-2617743038
