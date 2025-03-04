@@ -8,7 +8,7 @@ test('Adds liquidity in balWeth8020', async ({ page }) => {
   // Impersonate with default anvil account
   await page.getByLabel('Mock address').fill(defaultAnvilAccount)
   await page.getByLabel('Impersonate').click()
-  await page.getByLabel('Accept policies').check()
+  await page.getByLabel('Accept policies').check({ force: true })
   await page.getByRole('button', { name: 'Proceed' }).click()
 
   // Fill form
