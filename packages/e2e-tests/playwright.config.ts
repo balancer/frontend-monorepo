@@ -34,7 +34,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   globalTimeout: isDevE2E ? 120000 : 30000,
-  timeout: 10000,
+  timeout: isDevE2E ? 60000 : 10000,
   /* Configure projects for major browsers */
   projects: [
     {
