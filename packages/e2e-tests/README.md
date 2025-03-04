@@ -12,10 +12,11 @@ We have two types of E2E tests: smoke tests and functional tests
 pnpm run test:e2e:build
 ```
 
-Our app is big and nextjs builds are slow (> 5 minutes) because they use webpack (turbopack is not
-yet ready for production builds). The safest way to E2E test is doing it against a real build but,
-until builds are faster, we will keep a very reduced amount of smoke tests to avoid long CI
-pipelines increasing the feedback loop.
+Our app is big and nextjs builds are slow (> 5 minutes) because they use webpack(turbopack is not
+yet ready for production builds). The safest way to E2E test is doing it against a real build cause
+they can catch issues that do not happen in dev but do happen after build. However, until builds are
+faster, we will keep a very reduced amount of smoke tests to avoid long CI pipelines increasing the
+feedback loop.
 
 In every PR we:
 
