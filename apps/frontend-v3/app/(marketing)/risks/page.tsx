@@ -1297,6 +1297,57 @@ export default function Privacy() {
                 </div>
               </FadeInOnView>
 
+              <FadeInOnView>
+                <div className="subsection">
+                  <h4 className="anchor" id="oracle-pools">
+                    Oracle Pools
+                  </h4>
+                  <p>
+                    Oracle pools typically utilize a StableSwap invariant coupled with a hook, such as
+                    the StableSurge hook, in order to implement directional fees. This is the case majority
+                    of the time, but not in every case. The StableSurge hook increases the pool fee as balances
+                    diverge from parity, acting as a mitigation for value leakage. 
+                    
+                    These pools are unique and experimental to Balancer due to their implementation of a price 
+                    oracle to defined the target price between assets. All other Balancer pools do not rely on 
+                    oracles for price, and this introduces several risks which liquidity providers need to be 
+                    aware of:
+                  </p>
+                  <ul>
+                    <li>
+                      <em>Oracle Front-running:</em> Arbitrageurs can exploit oracle latency by frontrunning oracle
+                      updates at direct expense to LP’s. In turn can give Blockchain miners/validators can theoretically 
+                      censor oracle updates at the expense of LP’s. Under certain conditions, this pool could leak near 
+                      infinite value.
+                    </li>
+                    <li>
+                      <em>AMM Path Dependency:</em> Unlike traditional CFMM based AMM’s, this pool type is path dependent, 
+                      meaning impermanent losses can become permanent. Total value locked (TVL) can be dramatically 
+                      impacted by certain price paths that can theoretically result in uncapped value leakage even in the 
+                      absence of malicious interference. Overall path dependency results in reduced predictability and 
+                      traceability of performance.
+                    </li>
+                    <li>
+                      <em>Limitations of Historical Returns:</em> Historical returns do not guarantee future economic outcomes
+                        This means the rapidly changing market conditions and volatility can severely affect pool performance. 
+                        Backward-looking metrics can create false sense of predictability and growth which may have accumulated 
+                        over time can be lost due to specific market changes and manipulation vectors described above.
+                    </li>
+                  </ul>
+                  <p>
+                    Other risks:
+                    <ul>
+                      <li>
+                      APR Calculation Inaccuarcies: 
+                        Reported Annual Percentage Rates (APR) frequently do not reflect true economic return due to value leakage. 
+                        APR does not account for losses resulting from the market making strategy. It is simply a measure of fees 
+                        earned over TVL on a 24h timeframe.
+                      </li>
+                    </ul>
+                  </p>
+                </div>
+              </FadeInOnView>
+
               <Divider />
               <FadeInOnView>
                 <div className="subsection">
