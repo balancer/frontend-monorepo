@@ -1,8 +1,8 @@
 export const DEFAULT_THEME_COLOR_MODE = 'dark'
 
 export const config = {
-  initialColorMode: 'light',
-  useSystemColorMode: false,
+  // https://v2.chakra-ui.com/getting-started/migration#breaking-changes
+  initialColorMode: 'system',
 }
 
 export const fonts = {

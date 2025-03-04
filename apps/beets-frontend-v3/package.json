@@ -16,7 +16,7 @@
     "start": "next start -p 3001",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
     "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/beets/beets.theme.ts",
-    "postinstall": "npm run gen:theme-typings"
+    "postinstall": "pnpm run gen:theme-typings"
   },
   "dependencies": {
     "@apollo/client": "^3.13.1",
