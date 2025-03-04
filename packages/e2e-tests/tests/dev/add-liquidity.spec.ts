@@ -1,3 +1,4 @@
+import { impersonate } from '@/helpers/e2e.helpers'
 import { test, expect } from '@playwright/test'
 import { balWeth8020 } from '@repo/lib/modules/pool/__mocks__/pool-examples/flat'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
@@ -5,12 +6,7 @@ import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 test('Adds liquidity in balWeth8020', async ({ page }) => {
   await page.goto(`http://localhost:3000/pools/ethereum/v2/${balWeth8020.poolId}`)
 
-  // Impersonate with default anvil account
-  await page.getByLabel('Mock address').fill(defaultAnvilAccount)
-  await page.getByLabel('Impersonate').click()
-  await expect(page.getByText('Accept Balancer policies')).toBeVisible()
-  await page.getByLabel('Accept policies').click()
-  await page.getByRole('button', { name: 'Proceed' }).click()
+  await impersonate(page, defaultAnvilAccount)
 
   // Fill form
   await page.getByRole('button', { name: 'Add liquidity' }).click()
