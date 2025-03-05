@@ -24,8 +24,26 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     ? formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18)
     : null
 
+  const xMin = useMemo(() => (data ? Math.min(...data.map(([x]) => x)) : 0), [data])
+  const xMax = useMemo(() => (data ? Math.max(...data.map(([x]) => x)) : 0), [data])
+  //const yMin = useMemo(() => (data ? Math.min(...data.map(([, y]) => y)) : 0), [data])
+  const yMax = useMemo(() => (data ? Math.max(...data.map(([, y]) => y)) : 0), [data])
+
+  const poolIsInRange = useMemo(() => {
+    const margin = 0.00000001 // if spot price is within the margin on both sides it's considered out of range
+
+    return (
+      bn(poolSpotPrice || 0).gt(xMin * (1 + margin)) &&
+      bn(poolSpotPrice || 0).lt(xMax * (1 - margin))
+    )
+  }, [xMin, xMax, poolSpotPrice])
+
   return {
     data,
     poolSpotPrice,
+    poolIsInRange,
+    xMin,
+    xMax,
+    yMax,
   }
 }
