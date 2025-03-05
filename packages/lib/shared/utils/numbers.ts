@@ -34,7 +34,6 @@ export const WEIGHT_FORMAT_TWO_DECIMALS = '(%0,0.00)'
 export const PRICE_IMPACT_FORMAT = '0.00%'
 export const INTEGER_PERCENTAGE_FORMAT = '0%'
 export const BOOST_FORMAT = '0.000'
-export const GYRO_PRICE_FORMAT = '0.0000'
 
 // Do not display APR values greater than this amount; they are likely to be nonsensical
 // These can arise from pools with extremely low balances (e.g., completed LBPs)
@@ -151,7 +150,10 @@ function boostFormat(val: Numberish): string {
 }
 
 function gyroPriceFormat(val: Numberish): string {
-  return numeral(val.toString()).format(GYRO_PRICE_FORMAT)
+  if (bn(val).lt(10)) return numeral(val.toString()).format('0.0000')
+  if (bn(val).lt(100)) return numeral(val.toString()).format('0.00')
+
+  return numeral(val.toString()).format('0')
 }
 
 // Sums an array of numbers safely using bignumber.js.
