@@ -70,6 +70,7 @@ export function useEclpPoolChart() {
           align: 'right',
           verticalAlign: 'bottom',
           padding: [0, 0, -54, 0],
+          color: theme.colors.gray[400],
         },
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
