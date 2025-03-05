@@ -368,15 +368,15 @@ export function useEclpPoolChart() {
                 },
                 {
                   offset: 0.6,
-                  color: 'rgba(222, 202, 216, 0.3)',
+                  color: 'rgba(222, 202, 216, 0.25)',
                 },
                 {
                   offset: 0.8,
-                  color: 'rgba(229, 185, 169, 0.2)',
+                  color: 'rgba(229, 185, 169, 0.15)',
                 },
                 {
                   offset: 1,
-                  color: 'rgba(234, 168, 121, 0.1)',
+                  color: 'rgba(234, 168, 121, 0)',
                 },
               ],
             },
