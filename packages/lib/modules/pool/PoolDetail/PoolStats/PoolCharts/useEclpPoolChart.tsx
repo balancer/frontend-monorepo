@@ -45,7 +45,7 @@ export function useEclpPoolChart() {
     return {
       ...defaultChartOptions,
       grid: {
-        left: '6.5%',
+        left: '1.5%',
         right: '1.5%',
         top: '15%',
         bottom: '18%',
@@ -101,15 +101,6 @@ export function useEclpPoolChart() {
       },
       yAxis: {
         type: 'value',
-        name: 'Liquidity',
-        nameLocation: 'end',
-        nameGap: 5,
-        nameTextStyle: {
-          align: 'left',
-          verticalAlign: 'top',
-          padding: [-20, 0, 0, -50],
-          color: theme.colors.gray[400],
-        },
         min: 0,
         max: yMax * 1.25,
         axisLabel: {
