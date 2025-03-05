@@ -323,12 +323,20 @@ export function useEclpPoolChart() {
                   color: 'rgb(179, 174, 245)',
                 },
                 {
-                  offset: 0.33,
+                  offset: 0.2,
+                  color: 'rgb(197, 189, 238)',
+                },
+                {
+                  offset: 0.4,
                   color: 'rgb(215, 203, 231)',
                 },
                 {
-                  offset: 0.66,
-                  color: 'rgb(229, 200, 200)',
+                  offset: 0.6,
+                  color: 'rgb(222, 202, 216)',
+                },
+                {
+                  offset: 0.8,
+                  color: 'rgb(229, 185, 169)',
                 },
                 {
                   offset: 1,
@@ -348,19 +356,27 @@ export function useEclpPoolChart() {
               colorStops: [
                 {
                   offset: 0,
-                  color: 'rgba(179, 174, 245, 1)',
+                  color: 'rgba(179, 174, 245, 0.8)',
                 },
                 {
-                  offset: 0.33,
-                  color: 'rgba(215, 203, 231, 0.33)',
+                  offset: 0.2,
+                  color: 'rgba(197, 189, 238, 0.6)',
                 },
                 {
-                  offset: 0.66,
-                  color: 'rgba(229, 200, 200, 0.66)',
+                  offset: 0.4,
+                  color: 'rgba(215, 203, 231, 0.4)',
+                },
+                {
+                  offset: 0.6,
+                  color: 'rgba(222, 202, 216, 0.3)',
+                },
+                {
+                  offset: 0.8,
+                  color: 'rgba(229, 185, 169, 0.2)',
                 },
                 {
                   offset: 1,
-                  color: 'rgba(234, 168, 121, 0)',
+                  color: 'rgba(234, 168, 121, 0.1)',
                 },
               ],
             },
