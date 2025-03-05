@@ -51,11 +51,7 @@ export function useEclpPoolChart() {
         bottom: '18%',
       },
       tooltip: {
-        trigger: 'axis',
-        formatter: (params: any) => {
-          const [data] = params
-          return `Price: ${fNum('gyroPrice', data.data[0])}\nLiquidity: ${toCurrency(data.data[1], { abbreviated: true })}`
-        },
+        show: false,
       },
       xAxis: {
         type: 'value',
@@ -117,12 +113,7 @@ export function useEclpPoolChart() {
         min: 0,
         max: yMax * 1.25,
         axisLabel: {
-          formatter: (value: number, index: number) =>
-            index % 2 === 1 ? '-' : toCurrency(value, { abbreviated: true }),
-          color: secondaryFontColor,
-          align: 'left',
-          margin: 48,
-          interval: 0,
+          show: false,
         },
         splitLine: {
           show: false,
@@ -308,6 +299,7 @@ export function useEclpPoolChart() {
           smooth: false,
           symbol: 'none',
           sampling: 'lttb',
+          silent: true,
           lineStyle: {
             width: 2,
             color: {
