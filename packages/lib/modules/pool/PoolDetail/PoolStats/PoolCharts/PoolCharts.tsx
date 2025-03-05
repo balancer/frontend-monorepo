@@ -24,6 +24,7 @@ import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGro
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { CLPBadge } from './CLPBadge'
 
 type PeriodOption = PoolChartPeriod & OptionBase
 
@@ -80,6 +81,7 @@ export function PoolCharts({ ...props }: CardProps) {
     tabsList,
     chartValueSum,
     hasChartData,
+    poolIsInRange,
   } = usePoolCharts()
 
   function getActiveTabLabel() {
@@ -113,19 +115,27 @@ export function PoolCharts({ ...props }: CardProps) {
                     options={tabsList}
                     size="xxs"
                   />
-                  <PeriodSelect onChange={setActivePeriod} value={activePeriod} />
+                  {activeTab.value !== PoolChartTab.LIQUIDITY_PROFILE && (
+                    <PeriodSelect onChange={setActivePeriod} value={activePeriod} />
+                  )}
                 </HStack>
                 <VStack
                   alignItems={{ base: undefined, md: 'flex-end' }}
                   ml={{ base: undefined, md: 'auto' }}
                   spacing="0"
                 >
-                  <Heading fontWeight="bold" size="h5">
-                    {chartValueSum}
-                  </Heading>
-                  <Text color="grayText" fontSize="sm">
-                    {getActiveTabLabel()}
-                  </Text>
+                  {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
+                    <CLPBadge poolIsInRange={poolIsInRange} />
+                  ) : (
+                    <>
+                      <Heading fontWeight="bold" size="h5">
+                        {chartValueSum}
+                      </Heading>
+                      <Text color="grayText" fontSize="sm">
+                        {getActiveTabLabel()}
+                      </Text>
+                    </>
+                  )}
                 </VStack>
               </Stack>
               <Box h="full" onMouseLeave={handleMouseLeave} w="full">

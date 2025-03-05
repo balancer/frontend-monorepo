@@ -513,7 +513,11 @@ export function usePoolCharts() {
     },
   }
 
-  const { options: eclpChartOptions, hasChartData: hasEclpChartData } = useEclpPoolChart()
+  const {
+    options: eclpChartOptions,
+    hasChartData: hasEclpChartData,
+    poolIsInRange,
+  } = useEclpPoolChart()
 
   const options = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[activeTab.value]
@@ -589,5 +593,6 @@ export function usePoolCharts() {
     tabsList,
     chartValueSum,
     hasChartData: !!chartData.length || hasEclpChartData,
+    poolIsInRange,
   }
 }

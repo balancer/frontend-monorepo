@@ -405,5 +405,6 @@ export function useEclpPoolChart() {
   return {
     options,
     hasChartData: !!data,
+    poolIsInRange,
   }
 }
