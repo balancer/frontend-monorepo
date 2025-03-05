@@ -33,15 +33,25 @@ export function useEclpPoolChart() {
   //const yMin = useMemo(() => (data ? Math.min(...data.map(([, y]) => y)) : 0), [data])
   const yMax = useMemo(() => (data ? Math.max(...data.map(([, y]) => y)) : 0), [data])
 
-  const boundedSpotPrice = useMemo(() => {
-    if (poolSpotPrice) {
-      if (bn(poolSpotPrice).gt(xMax)) return xMax
-      if (bn(poolSpotPrice).lt(xMin)) return xMin
-    }
-    return poolSpotPrice
-  }, [poolSpotPrice, xMax, xMin])
-
   const secondaryFontColor = theme.semanticTokens.colors.font.secondary.default
+
+  const poolIsInRange = useMemo(() => {
+    const margin = 0.00000001 // if spot price is within the margin on both sides it's considered out of range
+
+    return (
+      bn(poolSpotPrice || 0).gt(xMin * (1 + margin)) &&
+      bn(poolSpotPrice || 0).lt(xMax * (1 - margin))
+    )
+  }, [xMin, xMax, poolSpotPrice])
+
+  const markPointMargin = 0.05
+  const isSpotPriceNearLowerBound = useMemo(() => {
+    return bn(poolSpotPrice || 0).lt(xMin * (1 + markPointMargin))
+  }, [poolSpotPrice, xMin])
+
+  const isSpotPriceNearUpperBound = useMemo(() => {
+    return bn(poolSpotPrice || 0).gt(xMax * (1 - markPointMargin))
+  }, [poolSpotPrice, xMax])
 
   const options = useMemo(() => {
     if (!data) return
@@ -75,22 +85,23 @@ export function useEclpPoolChart() {
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
         axisLabel: {
-          formatter: (value: number) => {
-            const total = xMax - xMin
-            const margin = total * 0.1
+          formatter: (value: number) => fNum('gyroPrice', value),
+          // formatter: (value: number) => {
+          //   const total = xMax - xMin
+          //   const margin = total * 0.1
 
-            if (value >= xMax - margin) return ''
-            if (value <= xMin + margin) return ''
+          //   if (value >= xMax - margin) return ''
+          //   if (value <= xMin + margin) return ''
 
-            if (
-              bn(value).gt(bn(boundedSpotPrice || 0).minus(margin)) &&
-              bn(value).lt(bn(boundedSpotPrice || 0).plus(margin))
-            ) {
-              return ''
-            }
+          //   if (
+          //     bn(value).gt(bn(boundedSpotPrice || 0).minus(margin)) &&
+          //     bn(value).lt(bn(boundedSpotPrice || 0).plus(margin))
+          //   ) {
+          //     return ''
+          //   }
 
-            return fNum('gyroPrice', value)
-          },
+          //   return fNum('gyroPrice', value)
+          // },
           color: secondaryFontColor,
         },
         splitLine: {
@@ -115,7 +126,7 @@ export function useEclpPoolChart() {
         nameTextStyle: {
           align: 'left',
           verticalAlign: 'top',
-          padding: [-20, 0, 0, -50], // top, right, bottom, left
+          padding: [-20, 0, 0, -50],
           color: theme.colors.gray[400],
         },
         min: 0,
@@ -239,7 +250,7 @@ export function useEclpPoolChart() {
                 coord: [xMin, yMax * 1.22],
                 value: 'Lower\nbound',
                 label: {
-                  show: true,
+                  show: !isSpotPriceNearLowerBound || !poolIsInRange,
                   fontSize: 12,
                   color: secondaryFontColor,
                   padding: 4,
@@ -250,7 +261,7 @@ export function useEclpPoolChart() {
                 coord: [xMax, yMax * 1.22],
                 value: 'Upper\nbound',
                 label: {
-                  show: true,
+                  show: !isSpotPriceNearUpperBound || !poolIsInRange,
                   fontSize: 12,
                   color: secondaryFontColor,
                   padding: 4,
@@ -258,50 +269,52 @@ export function useEclpPoolChart() {
                 },
               },
               {
-                coord: [boundedSpotPrice, yMax * 1.22],
+                coord: [poolSpotPrice, yMax * 1.22],
                 value: 'Current\nprice',
                 label: {
-                  show: true,
+                  show: poolIsInRange,
                   fontSize: 12,
                   color: theme.colors.green[300],
                 },
               },
             ],
           },
-          markLine: {
-            symbol: ['none', 'circle'],
-            symbolSize: 6,
-            symbolRotate: 0,
-            silent: true,
-            label: {
-              show: true,
-              fontSize: 12,
-              color: theme.colors.gray[800],
-              backgroundColor: theme.colors.green[300],
-              padding: [2, 3, 2, 3],
-              borderRadius: 2,
-              fontWeight: 'bold',
-            },
-            lineStyle: {
-              color: theme.colors.green[300],
-            },
-            data: [
-              [
-                {
-                  coord: [boundedSpotPrice, 0],
-                  label: {
-                    formatter: () => fNum('gyroPrice', boundedSpotPrice || '0'),
-                    position: 'start',
-                    distance: 6,
-                    backgroundColor: theme.colors.green[300],
-                  },
+          markLine: poolIsInRange
+            ? {
+                symbol: ['none', 'circle'],
+                symbolSize: 6,
+                symbolRotate: 0,
+                silent: true,
+                label: {
+                  show: true,
+                  fontSize: 12,
+                  color: theme.colors.gray[800],
+                  backgroundColor: theme.colors.green[300],
+                  padding: [2, 3, 2, 3],
+                  borderRadius: 2,
+                  fontWeight: 'bold',
                 },
-                {
-                  coord: [boundedSpotPrice, yMax * 1.1],
+                lineStyle: {
+                  color: theme.colors.green[300],
                 },
-              ],
-            ],
-          },
+                data: [
+                  [
+                    {
+                      coord: [poolSpotPrice, 0],
+                      label: {
+                        formatter: () => fNum('gyroPrice', poolSpotPrice || '0'),
+                        position: 'start',
+                        distance: 6,
+                        backgroundColor: theme.colors.green[300],
+                      },
+                    },
+                    {
+                      coord: [poolSpotPrice, yMax * 1.1],
+                    },
+                  ],
+                ],
+              }
+            : undefined,
         },
         // main chart
         {
@@ -401,7 +414,7 @@ export function useEclpPoolChart() {
       ],
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, boundedSpotPrice])
+  }, [data, poolSpotPrice])
 
   return {
     options,
