@@ -71,23 +71,22 @@ export function useEclpPoolChart() {
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
         axisLabel: {
-          formatter: (value: number) => fNum('gyroPrice', value),
-          // formatter: (value: number) => {
-          //   const total = xMax - xMin
-          //   const margin = total * 0.1
+          formatter: (value: number) => {
+            const total = xMax - xMin
+            const margin = total * 0.1
 
-          //   if (value >= xMax - margin) return ''
-          //   if (value <= xMin + margin) return ''
+            if (value >= xMax - margin) return ''
+            if (value <= xMin + margin) return ''
 
-          //   if (
-          //     bn(value).gt(bn(boundedSpotPrice || 0).minus(margin)) &&
-          //     bn(value).lt(bn(boundedSpotPrice || 0).plus(margin))
-          //   ) {
-          //     return ''
-          //   }
+            if (
+              bn(value).gt(bn(poolSpotPrice || 0).minus(margin)) &&
+              bn(value).lt(bn(poolSpotPrice || 0).plus(margin))
+            ) {
+              return ''
+            }
 
-          //   return fNum('gyroPrice', value)
-          // },
+            return fNum('gyroPrice', value)
+          },
           color: secondaryFontColor,
         },
         splitLine: {
