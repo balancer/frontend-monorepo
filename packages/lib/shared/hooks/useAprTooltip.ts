@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import { GqlChain, GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlHookType,
+  GqlPoolAprItem,
+  GqlPoolAprItemType,
+} from '../services/api/generated/graphql'
 import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'
 import BigNumber from 'bignumber.js'
@@ -32,6 +37,16 @@ const maBeetsVotingRewardsTooltipText =
   'To receive Voting APR you must vote for incentivized pools in the bi-weekly gauge vote. APR is dependent on your vote distribution.'
 
 const maBeetsRewardTooltipText = 'This is the APR you will receive when a relic is fully matured.'
+
+// Only include the hook types we currently support irt dynamic swap fees
+export type SupportedHookType = Extract<GqlHookType, GqlHookType.MevTax | GqlHookType.StableSurge>
+
+export const dynamicSwapFeesTooltipText: Record<SupportedHookType, string> = {
+  [GqlHookType.MevTax]:
+    'The MEV captured and shared to all LPs proportionately by the ‘MEV Capture’ hook used in this pool.',
+  [GqlHookType.StableSurge]:
+    'Additional swap fees from the directional fee StableSurge hook that dynamically adjusts to protect stable-asset pegs during volatility. These fees auto-compound and are shared with LPs proportionately.',
+}
 
 // Types that must be added to the total base
 const TOTAL_BASE_APR_TYPES = [
@@ -88,6 +103,12 @@ export function useAprTooltip({
   // Swap fees
   const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
   const swapFeesDisplayed = numberFormatter(swapFee ? swapFee.apr.toString() : '0')
+
+  // Dynamic wap fees (MEV Capture, StableSurge)
+  const dynamicSwapFee = aprItems.find(item => item.type === GqlPoolAprItemType.DynamicSwapFee_24H)
+  const dynamicSwapFeesDisplayed = numberFormatter(
+    dynamicSwapFee ? dynamicSwapFee.apr.toString() : '0'
+  )
 
   // Yield bearing tokens
   const yieldBearingTokens = aprItems.filter(item => {
@@ -249,6 +270,8 @@ export function useAprTooltip({
     maxMaBeetsVotingRewardDisplayed,
     maBeetsVotingRewardsTooltipText,
     maBeetsTotalAprDisplayed,
+    dynamicSwapFeesDisplayed,
+    dynamicSwapFeesTooltipText,
   }
 }
 

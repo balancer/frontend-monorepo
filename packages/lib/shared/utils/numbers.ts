@@ -291,3 +291,6 @@ export function safeParseFixedBigInt(value: string, decimals = 0): bigint {
   const safeValue = integer + '.' + fraction.slice(0, decimals)
   return parseUnits(safeValue, decimals)
 }
+
+export const isGreaterThanZeroValidation = (value: string): string | true =>
+  isValidNumber(value) && !isZero(value) ? true : 'Amount must be greater than 0'

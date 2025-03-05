@@ -20,6 +20,7 @@ import { isLBP } from '@repo/lib/modules/pool/pool.helpers'
 import { GqlPoolAprItemType } from '@repo/lib/shared/services/api/generated/graphql'
 import StarIcon from '../../icons/StarIcon'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isPool } from '@repo/lib/modules/pool/pool-tokens.utils'
 
 interface Props
   extends Omit<
@@ -148,6 +149,7 @@ function MainAprTooltip({
       {...props}
       chain={pool.chain}
       customPopoverContent={customPopoverContent}
+      hookType={isPool(pool) ? pool.hook?.type : undefined}
       maxVeBalText="Total max veBAL APR"
       poolType={pool.type}
       totalBaseText={hasVeBalBoost => `Total ${hasVeBalBoost ? 'base' : ''} APR`}
