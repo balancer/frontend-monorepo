@@ -167,7 +167,7 @@ function _usePoolActivity() {
 
   function getDateCaption() {
     const diffInDays = differenceInCalendarDays(new Date(), minDate * 1000)
-    return diffInDays > 0 ? `in last ${diffInDays} days` : 'today'
+    return diffInDays > 1 ? `in last ${diffInDays} days` : 'today'
   }
 
   const sortPoolEvents = useCallback(
