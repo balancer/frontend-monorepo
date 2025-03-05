@@ -47,10 +47,10 @@ export function useEclpPoolChart() {
     return {
       ...defaultChartOptions,
       grid: {
-        left: '10%',
-        right: '5%',
-        top: '20%',
-        bottom: '25%',
+        left: '6.5%',
+        right: '1%',
+        top: '18%',
+        bottom: '18%',
       },
       tooltip: {
         trigger: 'axis',
@@ -67,7 +67,7 @@ export function useEclpPoolChart() {
         nameTextStyle: {
           align: 'right',
           verticalAlign: 'bottom',
-          padding: [0, 0, -75, 0],
+          padding: [0, 0, -54, 0],
         },
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
@@ -97,7 +97,7 @@ export function useEclpPoolChart() {
         nameTextStyle: {
           align: 'left',
           verticalAlign: 'top',
-          padding: [-20, 0, 0, -60], // top, right, bottom, left
+          padding: [-20, 0, 0, -50], // top, right, bottom, left
         },
         min: 0,
         max: yMax * 1.25,
@@ -131,8 +131,8 @@ export function useEclpPoolChart() {
               fontSize: 12,
               color: defaultTheme.colors.gray[800],
               backgroundColor: defaultTheme.colors.gray[400],
-              padding: 4,
-              borderRadius: 4,
+              padding: 2,
+              borderRadius: 2,
             },
             lineStyle: {
               color: defaultTheme.colors.gray[400],
@@ -144,7 +144,7 @@ export function useEclpPoolChart() {
                   label: {
                     formatter: () => fNum('gyroPrice', xMin || '0'),
                     position: 'start',
-                    distance: 30,
+                    distance: 4,
                     backgroundColor: defaultTheme.colors.gray[400],
                   },
                 },
@@ -183,7 +183,7 @@ export function useEclpPoolChart() {
                   label: {
                     formatter: () => fNum('gyroPrice', xMax || '0'),
                     position: 'start',
-                    distance: 30,
+                    distance: 4,
                     backgroundColor: defaultTheme.colors.gray[400],
                   },
                 },
@@ -226,7 +226,7 @@ export function useEclpPoolChart() {
                 label: {
                   show: true,
                   fontSize: 12,
-                  color: defaultTheme.colors.gray[400],
+                  color: theme.colors.gray[400],
                   padding: 4,
                   borderRadius: 4,
                 },
@@ -237,7 +237,7 @@ export function useEclpPoolChart() {
                 label: {
                   show: true,
                   fontSize: 12,
-                  color: defaultTheme.colors.green[400],
+                  color: theme.colors.green[300],
                 },
               },
             ],
@@ -250,13 +250,13 @@ export function useEclpPoolChart() {
             label: {
               show: true,
               fontSize: 12,
-              color: defaultTheme.colors.gray[800],
-              backgroundColor: defaultTheme.colors.green[400],
+              color: theme.colors.gray[800],
+              backgroundColor: theme.colors.green[300],
               padding: 4,
               borderRadius: 4,
             },
             lineStyle: {
-              color: defaultTheme.colors.green[400],
+              color: theme.colors.green[300],
             },
             data: [
               [
@@ -265,8 +265,8 @@ export function useEclpPoolChart() {
                   label: {
                     formatter: () => fNum('gyroPrice', boundedSpotPrice || '0'),
                     position: 'start',
-                    distance: 30,
-                    backgroundColor: defaultTheme.colors.green[400],
+                    distance: 4,
+                    backgroundColor: theme.colors.green[300],
                   },
                 },
                 {
