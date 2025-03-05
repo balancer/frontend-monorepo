@@ -105,8 +105,12 @@ export function useEclpPoolChart() {
         min: 0,
         max: yMax * 1.25,
         axisLabel: {
-          formatter: (value: number) => toCurrency(value, { abbreviated: true }),
+          formatter: (value: number, index: number) =>
+            index % 2 === 1 ? '-' : toCurrency(value, { abbreviated: true }),
           color: secondaryFontColor,
+          align: 'left',
+          margin: 48,
+          interval: 0,
         },
         splitLine: {
           show: false,
@@ -150,7 +154,7 @@ export function useEclpPoolChart() {
                     formatter: () => fNum('gyroPrice', xMin || '0'),
                     position: 'start',
                     distance: 5,
-                    backgroundColor: theme.colors.gray[400],
+                    backgroundColor: 'rgb(179, 174, 245)',
                   },
                 },
                 {
@@ -190,7 +194,7 @@ export function useEclpPoolChart() {
                     formatter: () => fNum('gyroPrice', xMax || '0'),
                     position: 'start',
                     distance: 5,
-                    backgroundColor: theme.colors.gray[400],
+                    backgroundColor: 'rgb(234, 168, 121)',
                   },
                 },
                 {
