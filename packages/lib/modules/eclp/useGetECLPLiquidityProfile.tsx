@@ -5,7 +5,6 @@ import { drawLiquidityECLP } from './drawLiquidityECLP'
 import { Pool } from '../pool/pool.types'
 import { calculateSpotPrice, destructureRequiredPoolParams } from './calculateSpotPrice'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { fNum } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 
 export function useGetECLPLiquidityProfile(pool: Pool) {
@@ -22,7 +21,7 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
   const params = pool && pool.poolTokens ? destructureRequiredPoolParams(pool, tokenRates) : null
 
   const poolSpotPrice = params
-    ? fNum('token', formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18))
+    ? formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18)
     : null
 
   return {
