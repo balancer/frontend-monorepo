@@ -123,7 +123,7 @@
     "happy-dom": "17.1.0",
     "lokijs": "^1.5.12",
     "msw": "2.7.0",
-    "sentry-testkit": "^5.0.9",
+    "sentry-testkit": "5.0.10",
     "vitest": "3.0.5",
     "vitest-mock-extended": "2.0.2"
   }
