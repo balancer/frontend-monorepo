@@ -39,7 +39,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { PriceImpactError } from '../../../../price-impact/PriceImpactError'
-import AddLiquidityAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AddLiquidityAprTooltip'
+import { AddLiquidityPotentialWeeklyYield } from '@repo/lib/modules/pool/actions/add-liquidity/form/AddLiquidityPotentialWeeklyYield'
 import { calcPotentialYieldFor } from '../../../pool.utils'
 import { cannotCalculatePriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -261,9 +261,7 @@ function AddLiquidityMainForm() {
               </Card>
             </GridItem>
             <GridItem>
-              <AddLiquidityAprTooltip
-                aprItems={pool.dynamicData.aprItems}
-                pool={pool}
+              <AddLiquidityPotentialWeeklyYield
                 totalUsdValue={totalUSDValue}
                 weeklyYield={weeklyYield}
               />
