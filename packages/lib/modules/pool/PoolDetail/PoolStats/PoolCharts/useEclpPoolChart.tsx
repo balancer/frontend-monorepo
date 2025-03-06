@@ -39,6 +39,12 @@ export function useEclpPoolChart() {
     return bn(poolSpotPrice || 0).gt(xMax * (1 - markPointMargin))
   }, [poolSpotPrice, xMax])
 
+  const toolTipTheme = {
+    heading: 'font-weight: bold; color: #E5D3BE',
+    container: `background: ${theme.colors.gray[800]};`,
+    text: theme.colors.gray[400],
+  }
+
   const options = useMemo(() => {
     if (!data) return
 
@@ -51,7 +57,23 @@ export function useEclpPoolChart() {
         bottom: '18%',
       },
       tooltip: {
-        show: false,
+        show: true,
+        showContent: true,
+        trigger: 'axis',
+        confine: true,
+        extraCssText: `padding-right:2rem;border: none;${toolTipTheme.container}`,
+        formatter: (params: any) => {
+          const data = Array.isArray(params) ? params[0] : params
+          return `
+            <div style="padding: none; display: flex; flex-direction: column; justify-content: center;${
+              toolTipTheme.container
+            }">
+              <div style="font-size: 14px; font-weight: 500; color: ${toolTipTheme.text};">
+                ${fNum('gyroPrice', data.data[0])}
+              </div>
+            </div>
+          `
+        },
       },
       xAxis: {
         type: 'value',
