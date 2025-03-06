@@ -282,6 +282,10 @@ export function hasHooks(pool: Pool): boolean {
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
 }
 
+export function hasStableSurgeHook(pool: Pool): boolean {
+  return hasHookType(pool, GqlHookType.StableSurge)
+}
+
 export function hasHookType(pool: Pool, hookType: GqlHookType): boolean {
   const nestedHooks = pool.poolTokens.flatMap(token =>
     token.nestedPool ? token.nestedPool.hook : []
@@ -491,9 +495,4 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
     return false
   }
   return true
-}
-
-export function isPoolSurging(pool: Pool): boolean {
-  //TODO: hardcode surging pool ids until SDK/API provides that information
-  return pool.id === '0x7ab124ec4029316c2a42f713828ddf2a192b36db'
 }

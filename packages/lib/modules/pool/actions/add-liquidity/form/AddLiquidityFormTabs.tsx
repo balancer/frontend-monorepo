@@ -12,7 +12,7 @@ import {
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { isPoolSurging, isV3Pool } from '../../../pool.helpers'
+import { isV3Pool } from '../../../pool.helpers'
 import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWithActualWeights'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
@@ -74,8 +74,7 @@ export function AddLiquidityFormTabs({
     !isDisabledProportionalTab &&
     bn(pool.dynamicData.totalLiquidity).lt(bn(MIN_LIQUIDITY_FOR_BALANCED_ADD))
 
-  const isDisabledFlexibleTab =
-    requiresProportionalInput(pool) || isBelowMinTvlThreshold || isPoolSurging(pool)
+  const isDisabledFlexibleTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold
 
   function getFlexibleTabTooltipLabel(): string | undefined {
     if (requiresProportionalInput(pool)) {
@@ -83,9 +82,6 @@ export function AddLiquidityFormTabs({
     }
     if (isBelowMinTvlThreshold) {
       return `Liquidity must be added proportionally until the pool TVL is greater than ${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD, { abbreviated: false, noDecimals: true })}`
-    }
-    if (isPoolSurging(pool)) {
-      return 'Liquidity must be added proportionally while the pool is surging'
     }
     return
   }
