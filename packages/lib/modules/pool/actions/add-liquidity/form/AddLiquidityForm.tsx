@@ -40,7 +40,6 @@ import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { PriceImpactError } from '../../../../price-impact/PriceImpactError'
 import { AddLiquidityPotentialWeeklyYield } from '@repo/lib/modules/pool/actions/add-liquidity/form/AddLiquidityPotentialWeeklyYield'
-import { calcPotentialYieldFor } from '../../../pool.utils'
 import { cannotCalculatePriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
@@ -99,7 +98,7 @@ function AddLiquidityMainForm() {
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
   const { shouldUseSignatures } = useUserSettings()
-  const { weeklyRewards } = useGetPoolRewards(pool)
+  const { calculatePotentialYield } = useGetPoolRewards(pool)
 
   const setFlexibleTab = () => {
     setTabIndex(0)
@@ -122,12 +121,6 @@ function AddLiquidityMainForm() {
   const isUnbalancedError = isUnbalancedAddError(simulationQuery.error || priceImpactQuery.error)
 
   const shouldShowUnbalancedError = isUnbalancedError && !nestedAddLiquidityEnabled
-
-  const potentialYield = calcPotentialYieldFor(pool, totalUSDValue)
-  const weeklyYield =
-    weeklyRewards && bn(potentialYield).gt(weeklyRewards)
-      ? weeklyRewards.toString()
-      : potentialYield
 
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
   const isFetching = simulationQuery.isFetching || priceImpactQuery.isFetching
@@ -263,7 +256,7 @@ function AddLiquidityMainForm() {
             <GridItem>
               <AddLiquidityPotentialWeeklyYield
                 totalUsdValue={totalUSDValue}
-                weeklyYield={weeklyYield}
+                weeklyYield={calculatePotentialYield(totalUSDValue)}
               />
             </GridItem>
           </Grid>

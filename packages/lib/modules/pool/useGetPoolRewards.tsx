@@ -3,7 +3,8 @@ import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { sumBy } from 'lodash'
 import { useTokens } from '../tokens/TokensProvider'
 import { SECONDS_IN_DAY } from '@repo/lib/test/utils/numbers'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
+import { calcPotentialYieldFor } from './pool.utils'
 
 export function useGetPoolRewards(pool: Pool) {
   const { priceFor, getToken } = useTokens()
@@ -27,8 +28,18 @@ export function useGetPoolRewards(pool: Pool) {
     reward => priceFor(reward.tokenAddress, pool.chain) * reward.rewardPerWeek
   )
 
+  function calculatePotentialYield(totalUSDValue: Numberish) {
+    const potentialYield = calcPotentialYieldFor(pool, totalUSDValue)
+    const weeklyYield =
+      weeklyRewards && bn(potentialYield).gt(weeklyRewards)
+        ? weeklyRewards.toString()
+        : potentialYield
+    return weeklyYield
+  }
+
   return {
     tokens,
     weeklyRewards,
+    calculatePotentialYield,
   }
 }
