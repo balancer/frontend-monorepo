@@ -21,7 +21,7 @@ interface Props extends GridProps {
 }
 
 export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
-  const { totalInfo, clearAll, hasChanges } = useMyVotes()
+  const { totalInfo, clearAll, hasChanges, hasVotedBefore } = useMyVotes()
   const { toCurrency } = useCurrency()
 
   const votingIncentivesLoading = false
@@ -53,9 +53,9 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {votingIncentivesLoading ? (
               <Skeleton h="20px" w="60px" />
-            ) : totalInfo.totalValue ? (
+            ) : totalInfo.totalRewardValue ? (
               <Text color="font.maxContrast">
-                {toCurrency(totalInfo.totalValue, { abbreviated: false })}
+                {toCurrency(totalInfo.totalRewardValue, { abbreviated: false })}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
@@ -64,9 +64,9 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {votingIncentivesLoading ? (
               <Skeleton h="20px" w="60px" />
-            ) : totalInfo.valuePerVote ? (
+            ) : totalInfo.averageRewardPerVote ? (
               <Text color="font.maxContrast">
-                {toCurrency(totalInfo.valuePerVote, { abbreviated: false })}
+                {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
@@ -76,7 +76,12 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
             {gaugeVotesIsLoading ? (
               <Skeleton h="20px" w="60px" />
             ) : (
-              <VoteWeight total variant="primary" weight={totalInfo.currentVotes ?? 0} />
+              <VoteWeight
+                skipTotalWarnings={!hasVotedBefore}
+                total
+                variant="primary"
+                weight={totalInfo.currentVotes ?? 0}
+              />
             )}
           </GridItem>
           <GridItem

@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react'
 import { Heading, HStack, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum, isSuperSmallAmount } from '@repo/lib/shared/utils/numbers'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { differenceInDays, format } from 'date-fns'
 import BigNumber from 'bignumber.js'
@@ -45,6 +45,11 @@ export function UserVebalStatsValues() {
     }
   }, [lockData.mainnetLockedInfo, vebalUserData.isConnected, vebalUserData.data])
 
+  const tooSmall =
+    typeof vebalUserStatsValues?.balance === 'string'
+      ? isSuperSmallAmount(vebalUserStatsValues.balance)
+      : false
+
   return (
     <>
       <VStack align="flex-start" spacing="0" w="full">
@@ -55,7 +60,7 @@ export function UserVebalStatsValues() {
           <Skeleton height="28px" w="100px" />
         ) : (
           <Heading size="h4">
-            {typeof vebalUserStatsValues?.balance === 'string' ? (
+            {typeof vebalUserStatsValues?.balance === 'string' && !tooSmall ? (
               fNum('token', vebalUserStatsValues.balance)
             ) : (
               <>&mdash;</>
@@ -71,7 +76,7 @@ export function UserVebalStatsValues() {
           <Skeleton height="28px" w="100px" />
         ) : (
           <Heading size="h4">
-            {vebalUserStatsValues && vebalUserStatsValues.rank ? (
+            {vebalUserStatsValues && vebalUserStatsValues.rank && !tooSmall ? (
               fNum('integer', vebalUserStatsValues.rank)
             ) : (
               <>&mdash;</>
@@ -88,7 +93,7 @@ export function UserVebalStatsValues() {
         ) : (
           <Heading size="h4">
             {vebalUserStatsValues?.percentOfAllSupply ? (
-              fNum('feePercent', vebalUserStatsValues.percentOfAllSupply)
+              fNum('feePercent', tooSmall ? 0 : vebalUserStatsValues.percentOfAllSupply)
             ) : (
               <>&mdash;</>
             )}

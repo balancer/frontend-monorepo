@@ -8,6 +8,7 @@ import {
   Portal,
   Text,
   GridItemProps,
+  TextProps,
 } from '@chakra-ui/react'
 import { SortableIcon } from '../icons/SortableIcon'
 import { ArrowDownIcon } from '../icons/ArrowDownIcon'
@@ -28,6 +29,7 @@ type SortableHeaderProps = {
   popoverContent?: ReactNode
   usePortal?: string
   containerProps?: GridItemProps
+  textProps?: TextProps
 }
 
 export function SortableHeader({
@@ -39,6 +41,7 @@ export function SortableHeader({
   popoverContent,
   usePortal,
   containerProps,
+  textProps,
 }: SortableHeaderProps) {
   const renderSortIcon = () => {
     return !isSorted ? <SortableIcon /> : sorting === 'asc' ? <ArrowUpIcon /> : <ArrowDownIcon />
@@ -55,6 +58,7 @@ export function SortableHeader({
           fontWeight="bold"
           textDecoration={popoverContent ? 'underline' : undefined}
           textDecorationStyle={popoverContent ? 'dotted' : undefined}
+          {...textProps}
         >
           {label}
         </Text>

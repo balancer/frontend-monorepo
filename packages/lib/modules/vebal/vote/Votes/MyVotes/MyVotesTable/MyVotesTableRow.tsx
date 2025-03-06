@@ -25,13 +25,16 @@ import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesPr
 import { VoteWeightInput } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesTable/VoteWeightInput'
 import {
   bpsToPercentage,
-  sharesToBps,
+  calculateMyVoteRewardsValue,
+  inputPercentageWeightToBps,
   votingTimeLockedEndDate,
 } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
 import { isVotingTimeLocked } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -40,7 +43,7 @@ interface Props extends GridProps {
 }
 
 export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
-  const { editVotesWeights, onEditVotesChange } = useMyVotes()
+  const { votedVotesWeights, editVotesWeights, onEditVotesChange } = useMyVotes()
   const { isSelectedPool, toggleVotingPool, allowChangeVotes, isPoolGaugeExpired } = useVotes()
   const { toCurrency } = useCurrency()
 
@@ -65,6 +68,10 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
 
   const isDisabled = timeLocked || !allowChangeVotes || isExpired
 
+  const { myVebalBalance } = useVebalUserData()
+
+  const { getToken } = useTokens()
+
   return (
     <FadeInOnView>
       <Box
@@ -83,17 +90,10 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
             <NetworkIcon chain={vote.chain} size={6} />
           </GridItem>
           <GridItem {...cellProps}>
-            <Link
-              href={getPoolPath({
-                id: vote.id,
-                chain: vote.chain,
-                type: vote.type,
-                protocolVersion: undefined,
-              })}
-              target="_blank"
-            >
+            <Link href={getPoolPath(vote)} target="_blank">
               <HStack>
                 <VotingListTokenPills
+                  getToken={getToken}
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
@@ -108,8 +108,18 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
             </Link>
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
-            {vote.votingIncentive ? (
-              <Text>{toCurrency(vote.votingIncentive.totalValue, { abbreviated: false })}</Text>
+            {vote.votingIncentive && typeof myVebalBalance === 'number' ? (
+              <Text>
+                {toCurrency(
+                  calculateMyVoteRewardsValue(
+                    votedVotesWeights[vote.id] ?? 0,
+                    editVotesWeights[vote.id] ?? 0,
+                    vote,
+                    myVebalBalance
+                  ),
+                  { abbreviated: false }
+                )}
+              </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
             )}
@@ -138,8 +148,9 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
               percentage={editVotes.toString()}
               pr="32px"
               setPercentage={value =>
-                onEditVotesChange(vote.id, sharesToBps(value).dividedBy(100).toString())
+                onEditVotesChange(vote.id, inputPercentageWeightToBps(value).toString())
               }
+              step={0.01}
               textAlign="right"
               width="100px"
             />
@@ -148,8 +159,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
             <VStack align="center" w="full">
               <IconButton
                 aria-label="Remove"
-                fontSize="12px"
-                icon={<Trash2 color={fontSecondary} />}
+                icon={<Trash2 color={fontSecondary} height="20px" />}
                 isDisabled={!removable}
                 onClick={onRemove}
                 variant="ghost"

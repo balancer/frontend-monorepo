@@ -75,7 +75,13 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
           popoverContent={
             orderByHash[orderByItem].title ? (
               <PopoverContent maxW="300px" p="sm" w="auto">
-                <Text fontSize="sm" variant="secondary">
+                <Text
+                  fontSize="sm"
+                  textAlign={
+                    ['bribes', 'bribesPerVebal'].includes(orderByItem) ? 'left' : undefined
+                  }
+                  variant="secondary"
+                >
                   {orderByHash[orderByItem].title}
                 </Text>
               </PopoverContent>

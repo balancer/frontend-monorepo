@@ -5,7 +5,7 @@ import { FeaturedPool } from './PoolProvider'
 import { getUserReferenceTokens } from './pool-tokens.utils'
 
 interface PoolNameProps extends TextProps {
-  pool: PoolCore
+  pool: PoolCore | FeaturedPool
   MemoizedMainAprTooltip?: React.ComponentType<any>
   isCarousel?: boolean
 }

@@ -136,7 +136,7 @@ export function _useVotes({
   const hasAllVotingPowerTimeLocked =
     votedPools.every(votedPool =>
       isVotingTimeLocked(votedPool.gaugeVotes?.lastUserVoteTime ?? 0)
-    ) && sharesToBps(1).eq(currentVotes)
+    ) && sharesToBps(100).eq(currentVotes)
 
   const { mainnetLockedInfo } = useVebalLockInfo()
   const vebalIsExpired = mainnetLockedInfo.isExpired
@@ -177,6 +177,7 @@ export function _useVotes({
           // Is voting currently not locked
           !isVotingTimeLocked(votingPool.gaugeVotes?.lastUserVoteTime ?? 0) &&
           // Is gauge not expired
+          // TODO: this should not be applied when Show Expired pool gauges filter is checked
           !isPoolGaugeExpired(votingPool)
         )
       }),

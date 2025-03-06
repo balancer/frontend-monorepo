@@ -38,6 +38,17 @@ export function StaticToast({ children, isOpen, ...props }: StaticToastProps) {
   }, [isOpen])
 
   useEffect(() => {
+    return () => {
+      // close on component destroy
+      if (toastIdRef.current) {
+        toast.close(toastIdRef.current)
+        toastIdRef.current = undefined
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
     if (toastIdRef.current) {
       // rerender
       toast.update(toastIdRef.current, { ...defaultProps, ...props, render: children })

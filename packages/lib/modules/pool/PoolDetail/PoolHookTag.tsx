@@ -1,13 +1,12 @@
 import { Box, Center, HStack, Text } from '@chakra-ui/react'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { useHook } from '../../hooks/useHook'
-import { PoolListItem } from '../pool.types'
-import { Pool } from '../pool.types'
+import { PoolCore } from '../pool.types'
 import { BalBadge } from '@repo/lib/shared/components/badges/BalBadge'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
 
 type Props = {
-  pool: Pool | PoolListItem
+  pool: PoolCore
   onlyShowIcon?: boolean
 }
 

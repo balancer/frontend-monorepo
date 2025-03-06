@@ -81,11 +81,7 @@ function getVariant(type: GqlPoolType, protocolVersion: number | undefined): Poo
  * @returns {String} Path to pool detail page.
  */
 
-export function getPoolPath(
-  params: Pick<PoolCore, 'id' | 'chain' | 'type'> & {
-    protocolVersion: number | undefined
-  }
-) {
+export function getPoolPath(params: Pick<PoolCore, 'id' | 'chain' | 'type' | 'protocolVersion'>) {
   const variant = getVariant(params.type, params.protocolVersion)
   return `/pools/${chainToSlugMap[params.chain]}/${variant}/${params.id}`
 }

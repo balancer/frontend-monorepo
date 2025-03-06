@@ -11,10 +11,15 @@ import {
   GridItem,
   Heading,
   HStack,
+  Text,
   VStack,
 } from '@chakra-ui/react'
 import { MyVotesTable } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTable'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { MyVotesStatsMyVebal } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyVebal'
+import { MyVotesStatsAverageReward } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsAverageReward'
+import { MyVotesStatsMyIncentives } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyIncentives'
+import { MyVotesStatsMyIncentivesOptimized } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyIncentivesOptimized'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { MyVotesHintModal } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesHintModal'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -24,6 +29,7 @@ import { oneDayInMs } from '@repo/lib/shared/utils/time'
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { AlertTriangle } from 'react-feather'
+import NextLink from 'next/link'
 
 export function MyVotes() {
   const { hasAllVotingPowerTimeLocked, vebalIsExpired, vebalLockTooShort, shouldResubmitVotes } =
@@ -32,7 +38,9 @@ export function MyVotes() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isConnected } = useUserAccount()
 
-  const { noVeBalBalance } = useVebalUserData()
+  const { loading: vebalUserDataLoading, myVebalBalance, noVeBalBalance } = useVebalUserData()
+
+  const loading = myVotesLoading || vebalUserDataLoading
 
   return (
     <VStack align="start" spacing="md" w="full">
@@ -53,6 +61,20 @@ export function MyVotes() {
       <MyVotesHintModal isOpen={isOpen} onClose={onClose} />
 
       <Grid gap="md" templateColumns="repeat(4, 1fr)" templateRows="auto 1fr" w="full">
+        <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+          <MyVotesStatsMyVebal loading={loading} myVebalBalance={myVebalBalance} />
+        </GridItem>
+        <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+          <MyVotesStatsAverageReward loading={loading} myVebalBalance={myVebalBalance} />
+        </GridItem>
+        <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+          <MyVotesStatsMyIncentives loading={loading} myVebalBalance={myVebalBalance} />
+        </GridItem>
+        {false && (
+          <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+            <MyVotesStatsMyIncentivesOptimized loading={loading} myVebalBalance={myVebalBalance} />
+          </GridItem>
+        )}
         {hasAllVotingPowerTimeLocked && (
           <GridItem colSpan={4}>
             <Alert status="warning">
@@ -67,32 +89,39 @@ export function MyVotes() {
             </Alert>
           </GridItem>
         )}
-        {/* fix: (votes) need design */}
         {vebalLockTooShort && (
           <GridItem colSpan={4}>
             <Alert status="warning">
               <AlertIcon as={AlertTriangle} />
               <HStack alignItems="baseline">
-                <AlertTitle>veBAL not locked for 7 days</AlertTitle>
+                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                <AlertTitle>You can't vote because your veBAL expires soon</AlertTitle>
                 <AlertDescription>
-                  You must have veBAL locked for more than 7 days to vote on gauges.
+                  Gauge voting requires your veBAL to be locked for 7+ days.{' '}
+                  <Text
+                    as={NextLink}
+                    color="font.dark"
+                    href="/vebal/manage/lock"
+                    textDecoration="underline"
+                  >
+                    Extend your lock
+                  </Text>{' '}
+                  to vote.
                 </AlertDescription>
               </HStack>
             </Alert>
           </GridItem>
         )}
-        {/* fix: (votes) need design */}
         {shouldResubmitVotes && (
           <GridItem colSpan={4}>
-            <Alert status="warning">
+            <Alert status="info">
               <AlertIcon as={AlertTriangle} />
               <HStack alignItems="baseline">
                 <AlertTitle>Resubmit your votes to utilize your full voting power</AlertTitle>
                 <AlertDescription>
-                  Votes on pools are set at the time of the vote. Since you’ve added new veBAL since
-                  your original vote, you have additional voting power which is not being used. Use{' '}
                   {/* eslint-disable-next-line react/no-unescaped-entities */}
-                  the 'Submit votes' button to resubmit your votes.
+                  Looks like you got more veBAL. Your old votes don't use it. Re-vote now to apply
+                  your full veBAL power.
                 </AlertDescription>
               </HStack>
             </Alert>
@@ -144,7 +173,9 @@ export function MyVotes() {
             <MyVotesTable loading={myVotesLoading} myVotes={sortedMyVotes} />
           ) : (
             <Center border="1px dashed" borderColor="border.base" h="150px" rounded="lg" w="full">
-              <ConnectWallet size="md" variant="primary" />
+              <VStack>
+                <ConnectWallet size="md" variant="primary" />
+              </VStack>
             </Center>
           )}
         </GridItem>

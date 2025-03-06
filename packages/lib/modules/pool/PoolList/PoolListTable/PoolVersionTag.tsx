@@ -5,7 +5,7 @@ import { isCowAmmPool } from '../../pool.helpers'
 import { PoolListItem } from '../../pool.types'
 import { Pool } from '../../pool.types'
 
-function getPoolVersionLabel(pool: PoolListItem | Pool) {
+function getPoolVersionLabel(pool: Pick<PoolListItem | Pool, 'type' | 'protocolVersion'>) {
   if (isCowAmmPool(pool.type)) {
     return <CowIcon size={18} />
   } else if (pool.protocolVersion === 3) {
@@ -36,7 +36,7 @@ export function PoolVersionTag({
   pool,
   isSmall,
 }: {
-  pool: PoolListItem | Pool
+  pool: Pick<PoolListItem | Pool, 'protocolVersion' | 'type'>
   isSmall?: boolean
 }) {
   const label = getPoolVersionLabel(pool)

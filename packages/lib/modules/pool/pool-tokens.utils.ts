@@ -8,8 +8,9 @@ import { sortBy, uniqBy } from 'lodash'
 import { ApiToken, BalanceForFn } from '../tokens/token.types'
 import { getLeafTokens } from '../tokens/token.helpers'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
+import { FeaturedPool } from './PoolProvider'
 
-export function getCompositionTokens(pool: PoolCore | GqlNestedPool): PoolToken[] {
+export function getCompositionTokens(pool: PoolCore | GqlNestedPool | FeaturedPool): PoolToken[] {
   return sortByIndex(excludeNestedBptTokens(getPoolTokens(pool), pool.address))
 }
 
@@ -17,7 +18,7 @@ export function getCompositionTokens(pool: PoolCore | GqlNestedPool): PoolToken[
   The set of tokens that are reference tokens for the user so that they know at a glance what can be added to the pool.
    Used in the pool header and in the pools list.
 */
-export function getUserReferenceTokens(pool: PoolCore): PoolToken[] {
+export function getUserReferenceTokens(pool: PoolCore | FeaturedPool): PoolToken[] {
   if (isV3Pool(pool) && pool.hasErc4626 && pool.hasAnyAllowedBuffer) {
     return sortByIndex(
       pool.poolTokens.map(token =>
@@ -39,7 +40,7 @@ function isGqlNestedPool(pool: any): pool is GqlNestedPool {
   return (pool as GqlNestedPool).tokens !== undefined
 }
 
-function getPoolTokens(pool: PoolCore | GqlNestedPool): PoolToken[] {
+function getPoolTokens(pool: PoolCore | GqlNestedPool | FeaturedPool): PoolToken[] {
   if (isPool(pool)) {
     return pool.poolTokens as PoolToken[]
   }
