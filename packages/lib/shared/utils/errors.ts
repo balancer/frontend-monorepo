@@ -17,7 +17,7 @@
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
 import { buildTenderlyUrl } from '@repo/lib/modules/web3/useTenderly'
 import { captureException } from '@sentry/nextjs'
-import { ScopeContext } from '@sentry/types'
+import { ScopeContext } from '@sentry/core'
 import { Address, Hex } from 'viem'
 
 // Wraps Sentry's captureException to allow for additional context or to use

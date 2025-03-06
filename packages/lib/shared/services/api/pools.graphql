@@ -34,6 +34,9 @@ query GetPools(
       symbol
       weight
       name
+      canUseBufferForSwaps
+      useWrappedForAddRemove
+      useUnderlyingForAddRemove
       nestedPool {
         id
         address
@@ -45,6 +48,9 @@ query GetPools(
           symbol
           weight
           name
+          canUseBufferForSwaps
+          useWrappedForAddRemove
+          useUnderlyingForAddRemove
         }
       }
     }

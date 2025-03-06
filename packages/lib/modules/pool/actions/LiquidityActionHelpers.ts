@@ -91,12 +91,12 @@ export class LiquidityActionHelpers {
         address: token.address as Address,
         balance: token.balance as HumanAmount,
         underlyingToken:
-          token.underlyingToken?.address && token.isBufferAllowed
+          token.underlyingToken?.address && token.useUnderlyingForAddRemove
             ? {
                 ...token.underlyingToken,
                 address: token.underlyingToken?.address as Address,
                 decimals: token.underlyingToken?.decimals as number,
-                index: token.index, //TODO: review that this index is always the expected one
+                index: token.index,
               }
             : null,
       })
@@ -247,6 +247,8 @@ export function shouldUseRecoveryRemoveLiquidity(pool: Pool): boolean {
 
   // All composableStables V1 are in recovery mode and they should use recovery exit even if they are not paused
   if (isComposableStableV1(pool)) return true
+
+  if (pool.dynamicData.isInRecoveryMode) return true
 
   if (pool.dynamicData.isInRecoveryMode && pool.dynamicData.isPaused) return true
 

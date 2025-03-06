@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
-import { GqlChain, GqlPoolAprItem, GqlPoolAprItemType } from '../services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlHookType,
+  GqlPoolAprItem,
+  GqlPoolAprItemType,
+} from '../services/api/generated/graphql'
 import { useThemeColorMode } from '../services/chakra/useThemeColorMode'
 import { bn } from '../utils/numbers'
 import BigNumber from 'bignumber.js'
@@ -18,12 +23,12 @@ prevents this loss (also called LVR), thereby increasing LP returns.`
 export const extraBalTooltipText = `veBAL holders can get an extra boost of up to 2.5x on their staking yield.
 The more veBAL held, the higher the boost.`
 
-export const lockingIncentivesTooltipText = `The protocol revenue share for Liquidity Providers 
+export const lockingIncentivesTooltipText = `The protocol revenue share for Liquidity Providers
                                             with 1-year locked Balancer ve8020 tokens.`
 
-export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL holders who 
-                        participate in weekly gauge voting by third parties on platforms like Hidden Hand. 
-                        Your incentives are determined by your veBAL voting power compared to other voters. 
+export const votingIncentivesTooltipText = `Vote incentives are offered to veBAL holders who
+                        participate in weekly gauge voting by third parties on platforms like Hidden Hand.
+                        Your incentives are determined by your veBAL voting power compared to other voters.
                         The listed APR represents an average rather than a guaranteed return for active participants.`
 
 const stakingBalTooltipText = `LPs who stake earn extra ‘BAL’ liquidity mining incentives. The displayed APR is the base amount that all Stakers in this pool get (determined by weekly gauge voting). In addition, veBAL holders can get an extra boost of up to 2.5x.`
@@ -32,6 +37,16 @@ const maBeetsVotingRewardsTooltipText =
   'To receive Voting APR you must vote for incentivized pools in the bi-weekly gauge vote. APR is dependent on your vote distribution.'
 
 const maBeetsRewardTooltipText = 'This is the APR you will receive when a relic is fully matured.'
+
+// Only include the hook types we currently support irt dynamic swap fees
+export type SupportedHookType = Extract<GqlHookType, GqlHookType.MevTax | GqlHookType.StableSurge>
+
+export const dynamicSwapFeesTooltipText: Record<SupportedHookType, string> = {
+  [GqlHookType.MevTax]:
+    'The MEV captured and shared to all LPs proportionately by the ‘MEV Capture’ hook used in this pool.',
+  [GqlHookType.StableSurge]:
+    'Additional swap fees from the directional fee StableSurge hook that dynamically adjusts to protect stable-asset pegs during volatility. These fees auto-compound and are shared with LPs proportionately.',
+}
 
 // Types that must be added to the total base
 const TOTAL_BASE_APR_TYPES = [
@@ -89,6 +104,12 @@ export function useAprTooltip({
   const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
   const swapFeesDisplayed = numberFormatter(swapFee ? swapFee.apr.toString() : '0')
 
+  // Dynamic wap fees (MEV Capture, StableSurge)
+  const dynamicSwapFee = aprItems.find(item => item.type === GqlPoolAprItemType.DynamicSwapFee_24H)
+  const dynamicSwapFeesDisplayed = numberFormatter(
+    dynamicSwapFee ? dynamicSwapFee.apr.toString() : '0'
+  )
+
   // Yield bearing tokens
   const yieldBearingTokens = aprItems.filter(item => {
     return item.type === GqlPoolAprItemType.IbYield
@@ -125,6 +146,15 @@ export function useAprTooltip({
   const merklIncentives = filterByType(aprItems, GqlPoolAprItemType.Merkl)
   const hasMerklIncentives = merklIncentives.length > 0
   const merklIncentivesAprDisplayed = calculateSingleIncentivesAprDisplayed(merklIncentives)
+
+  const merklTokens = aprItems.filter(item => {
+    return item.type === GqlPoolAprItemType.Merkl
+  })
+
+  const merklTokensDisplayed = merklTokens.map(item => ({
+    title: item.rewardTokenSymbol || '',
+    apr: numberFormatter(item.apr.toString()),
+  }))
 
   // Surplus incentives
   const surplusIncentives = filterByType(aprItems, GqlPoolAprItemType.Surplus_24H)
@@ -220,6 +250,7 @@ export function useAprTooltip({
     yieldBearingTokensDisplayed,
     stakingIncentivesDisplayed,
     merklIncentivesAprDisplayed,
+    merklTokensDisplayed,
     hasMerklIncentives,
     surplusIncentivesAprDisplayed,
     votingAprDisplayed,
@@ -239,6 +270,8 @@ export function useAprTooltip({
     maxMaBeetsVotingRewardDisplayed,
     maBeetsVotingRewardsTooltipText,
     maBeetsTotalAprDisplayed,
+    dynamicSwapFeesDisplayed,
+    dynamicSwapFeesTooltipText,
   }
 }
 

@@ -4,6 +4,8 @@ import { useAprTooltip } from './useAprTooltip'
 import { aprTooltipDataMock } from './_mocks_/aprTooltipDataMock'
 import BigNumber from 'bignumber.js'
 import { GqlPoolAprItem, GqlPoolAprItemType, GqlChain } from '../services/api/generated/graphql'
+import { getApiPoolMock } from '@repo/lib/modules/pool/__mocks__/api-mocks/api-mocks'
+import { boostedCoinshiftUsdcUsdl } from '@repo/lib/modules/pool/__mocks__/pool-examples/boosted'
 
 const defaultNumberFormatter = (value: string) => bn(bn(value).toFixed(4, BigNumber.ROUND_HALF_UP))
 
@@ -102,4 +104,49 @@ it('When the pool has BAL staking incentives (inside the veBAL system)', () => {
   const result = testUseAprTooltip({ aprItems })
 
   expect(result.current.hasVeBalBoost).toBeFalsy()
+})
+
+it('When the pool has multiple Yield bearing token APRs', () => {
+  const pool = getApiPoolMock(boostedCoinshiftUsdcUsdl)
+
+  const result = testUseAprTooltip({ aprItems: pool.dynamicData.aprItems })
+
+  /* APR should tooltip should display:
+    - Yield bearing tokens 3.72%
+                    csUSDL 1.72%
+                    csUSDC 2%
+  */
+  expect(result.current.yieldBearingTokensAprDisplayed).toMatchInlineSnapshot(`"0.0372"`)
+  expect(result.current.yieldBearingTokensDisplayed).toMatchInlineSnapshot(`
+    [
+      {
+        "apr": "0.0172",
+        "title": "csUSDL",
+      },
+      {
+        "apr": "0.02",
+        "title": "csUSDC",
+      },
+    ]
+  `)
+})
+
+it('When the pool has multiple MERKL token incentives', () => {
+  const pool = getApiPoolMock(boostedCoinshiftUsdcUsdl)
+
+  const result = testUseAprTooltip({ aprItems: pool.dynamicData.aprItems })
+
+  /* APR should tooltip should display
+    - Merkl.xyz incentives: 1.80%
+                     MORPHO 1.80%
+  */
+  expect(result.current.merklIncentivesAprDisplayed).toMatchInlineSnapshot(`"0.01778366853303084"`)
+  expect(result.current.merklTokensDisplayed).toMatchInlineSnapshot(`
+    [
+      {
+        "apr": "0.0178",
+        "title": "MORPHO",
+      },
+    ]
+  `)
 })

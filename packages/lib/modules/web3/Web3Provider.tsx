@@ -13,8 +13,8 @@ import { BlockedAddressModal } from './BlockedAddressModal'
 import { CustomAvatar } from './CustomAvatar'
 import { UserAccountProvider } from './UserAccountProvider'
 import { PropsWithChildren } from 'react'
-import { wagmiConfig } from './WagmiConfig'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
+import { useWagmiConfig } from './WagmiConfigProvider'
 
 export function Web3Provider({ children }: PropsWithChildren) {
   const isMounted = useIsMounted()
@@ -22,6 +22,8 @@ export function Web3Provider({ children }: PropsWithChildren) {
   const { colors, radii, shadows, semanticTokens, fonts } = useTheme()
   const colorMode = useThemeColorMode()
   const colorModeKey = colorMode === 'light' ? 'default' : '_dark'
+
+  const { wagmiConfig } = useWagmiConfig()
 
   /*
     Avoids warning (Warning: Prop `dangerouslySetInnerHTML` did not match. Server...)

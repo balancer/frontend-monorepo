@@ -21,7 +21,7 @@ export function getUserReferenceTokens(pool: PoolCore): PoolToken[] {
   if (isV3Pool(pool) && pool.hasErc4626 && pool.hasAnyAllowedBuffer) {
     return sortByIndex(
       pool.poolTokens.map(token =>
-        token.isErc4626 && token.isBufferAllowed
+        token.isErc4626 && token.useUnderlyingForAddRemove
           ? ({ ...token, ...token.underlyingToken } as PoolToken)
           : (token as PoolToken)
       )
@@ -31,7 +31,7 @@ export function getUserReferenceTokens(pool: PoolCore): PoolToken[] {
   return sortByIndex(getCompositionTokens(pool))
 }
 
-function isPool(pool: any): pool is Pool {
+export function isPool(pool: any): pool is Pool {
   return (pool as Pool).poolTokens !== undefined
 }
 
@@ -138,7 +138,7 @@ export function allPoolTokens(pool: Pool | GqlPoolBase): TokenCore[] {
     if (token.hasNestedPool) return false
     if (!isV3Pool(pool)) return true
     if (!token.isErc4626) return true
-    if (token.isErc4626 && !token.isBufferAllowed) return true
+    if (token.isErc4626 && !token.useUnderlyingForAddRemove) return true
     return true
   }
 
@@ -172,14 +172,24 @@ function toTokenCores(poolTokens: PoolToken[]): TokenCore[] {
 }
 
 export function shouldUseUnderlyingToken(token: ApiToken, pool: Pool | GqlPoolBase): boolean {
-  if (isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !token.underlyingToken) {
+  if (
+    isV3Pool(pool) &&
+    token.isErc4626 &&
+    token.useUnderlyingForAddRemove &&
+    !token.underlyingToken
+  ) {
     // This should never happen unless the API some some inconsistency
     throw new Error(
       `Underlying token is missing for ERC4626 token with address ${token.address} in chain ${pool.chain}`
     )
   }
   // Only v3 pools should underlying tokens
-  return isV3Pool(pool) && token.isErc4626 && token.isBufferAllowed && !!token.underlyingToken
+  return (
+    isV3Pool(pool) &&
+    token.isErc4626 &&
+    !!token.useUnderlyingForAddRemove &&
+    !!token.underlyingToken
+  )
 }
 
 // Returns top level standard tokens + Erc4626 (only v3) underlying tokens
@@ -188,7 +198,15 @@ export function getBoostedActionableTokens(pool: Pool): ApiToken[] {
   return poolTokens
     .flatMap(token =>
       shouldUseUnderlyingToken(token, pool)
-        ? [{ ...token, ...token.underlyingToken, wrappedToken: token } as ApiToken]
+        ? [
+            {
+              ...token,
+              ...token.underlyingToken,
+              wrappedToken: token,
+              underlyingToken: undefined,
+              isErc4626: false, // TODO: delete this when we migrate to useWrappedForAddRemove/useUnderlyingForAddRemove
+            } as ApiToken,
+          ]
         : [token as ApiToken]
     )
     .filter((token): token is ApiToken => token !== undefined)
@@ -234,7 +252,7 @@ export function getPoolActionableTokens(pool: Pool, wrapUnderlying?: boolean[]):
     if (wrapUnderlying[index]) {
       return token
     }
-    return { ...token, ...token.wrappedToken }
+    return { ...token, ...token.wrappedToken, wrappedToken: undefined }
   })
 }
 
@@ -331,17 +349,15 @@ export function getWrappedAndUnderlyingTokenFn(
   pool: Pool,
   balanceFor: BalanceForFn
 ): () => [ApiToken, ApiToken] | void {
-  if (shouldUseUnderlyingToken(token, pool)) {
+  if (shouldUseUnderlyingToken(token, pool) && !!token.useWrappedForAddRemove) {
     return () => {
-      // TODO: Review if we should exclude some info to avoid wrapped being shouldUseUnderlyingToken
+      token.wrappedToken = undefined
       const underlyingToken = { ...token, ...token.underlyingToken, wrappedToken: token }
       const wrappedToken = token
-
-      return [underlyingToken, wrappedToken]
+      return sortTokenPairByBalance([underlyingToken, wrappedToken], balanceFor)
     }
   }
-
-  if (token.wrappedToken) {
+  if (token.wrappedToken && !!token.wrappedToken.useWrappedForAddRemove) {
     const wrappedToken = token.wrappedToken
     return () => {
       const underlyingToken = token

@@ -339,14 +339,14 @@ export function shouldBlockAddLiquidity(pool: Pool) {
       return true
     }
 
-    /* Only for actual v3 boosted pools (ERC4626 with allowed buffer):
+    /* Only for actual v3 boosted pools (ERC4626 with useUnderlyingForAddRemove === true):
       if ERC4626 is not reviewed or summary is not safe - we should block adding liquidity
     */
     if (
       isV3Pool(pool) &&
       pool.hasAnyAllowedBuffer &&
       token.isErc4626 &&
-      token.isBufferAllowed &&
+      token.useUnderlyingForAddRemove &&
       (!hasReviewedErc4626(token) || token.erc4626ReviewData?.summary !== 'safe')
     ) {
       return true
@@ -396,7 +396,12 @@ export function getPoolAddBlockedReason(pool: Pool): string {
       return `Rate provider for token ${token.symbol} is not safe` // TODO: Add instructions and link to get it reviewed
     }
 
-    if (isV3Pool(pool) && pool.hasAnyAllowedBuffer && token.isErc4626 && token.isBufferAllowed) {
+    if (
+      isV3Pool(pool) &&
+      pool.hasAnyAllowedBuffer &&
+      token.isErc4626 &&
+      token.useUnderlyingForAddRemove
+    ) {
       if (!hasReviewedErc4626(token)) {
         return `Tokenized vault for token ${token.symbol} was not yet reviewed`
       }

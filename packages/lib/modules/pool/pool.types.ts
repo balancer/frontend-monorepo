@@ -111,22 +111,8 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
   [GqlPoolType.Fx]: [GqlPoolType.Fx],
 }
 
-export const poolTagFilters = ['INCENTIVIZED', 'VE8020', 'POINTS', 'BOOSTED'] as const
+export const poolTagFilters = ['INCENTIVIZED', 'VE8020', 'POINTS', 'BOOSTED', 'RWA'] as const
 export type PoolTagType = (typeof poolTagFilters)[number]
-export const POOL_TAG_MAP: { [key in PoolTagType]: string[] } = {
-  INCENTIVIZED: ['INCENTIVIZED'],
-  POINTS: [
-    'POINTS_EIGENLAYER',
-    'POINTS_GYRO',
-    'POINTS_KELP',
-    'POINTS_RENZO',
-    'POINTS_SWELL',
-    'POINTS_MODE',
-    'POINTS_RINGS',
-  ],
-  VE8020: ['VE8020'],
-  BOOSTED: ['BOOSTED'],
-}
 
 export const poolHookTagFilters = ['HOOKS_STABLESURGE', 'HOOKS_EXITFEE', 'HOOKS_FEETAKING'] as const
 export type PoolHookTagType = (typeof poolHookTagFilters)[number]

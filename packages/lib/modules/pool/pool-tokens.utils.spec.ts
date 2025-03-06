@@ -1,4 +1,5 @@
 import {
+  boostedCoinshiftUsdcUsdl,
   morphoStakeHouse,
   partialBoosted,
   usdcUsdtAaveBoosted,
@@ -25,6 +26,7 @@ import {
   getPoolActionableTokens,
   getWrappedAndUnderlyingTokenFn,
   getActionableTokenAddresses,
+  getBoostedActionableTokens,
 } from './pool-tokens.utils'
 import { ApiToken, BalanceForFn, TokenAmount, TokenBase } from '../tokens/token.types'
 import { PoolToken } from './pool.types'
@@ -358,6 +360,21 @@ describe('Given a fully boosted pool', () => {
     expect(shouldUseUnderlyingToken(second, pool)).toEqual(false)
     expect(second.wrappedToken?.symbol).toEqual('waEthUSDT')
   })
+
+  it(`when useWrappedForAddRemove is not true in the wrapped token
+    getWrappedAndUnderlyingTokenFn should return an empty function to avoid the wrapped/underlying selector the UI`, () => {
+    const tokens = getPoolActionableTokens(pool)
+    const firstUnderlyingToken = tokens[0]
+
+    // Set useWrappedForAddRemove to false as we don't have a real pool example with in this scenario yet
+    if (firstUnderlyingToken.wrappedToken?.useWrappedForAddRemove) {
+      firstUnderlyingToken.wrappedToken.useWrappedForAddRemove = false
+    }
+
+    const pair = getWrappedAndUnderlyingTokenFn(firstUnderlyingToken, pool, balanceForMock)?.()
+
+    expect(pair).toBeUndefined()
+  })
 })
 
 it('getActionableTokenAddresses', () => {
@@ -366,4 +383,28 @@ it('getActionableTokenAddresses', () => {
   expect(getActionableTokenAddresses(pool, [true, true])).toEqual([usdtAddress, usdcAddress])
   expect(getActionableTokenAddresses(pool, [false, false])).toEqual([waUsdtAddress, waUsdcAddress])
   expect(getActionableTokenAddresses(pool, [false, true])).toEqual([waUsdtAddress, usdcAddress])
+})
+
+describe('getBoostedActionableTokens', () => {
+  it('with two boosted tokens', () => {
+    const pool = getApiPoolMock(boostedCoinshiftUsdcUsdl)
+
+    const boostedTokens = getBoostedActionableTokens(pool)
+
+    const firstUnderlyingToken = boostedTokens[0]
+    expect(firstUnderlyingToken.symbol).toBe('USDC')
+    expect(firstUnderlyingToken.underlyingToken).toBeUndefined()
+
+    const firstWrappedToken = firstUnderlyingToken.wrappedToken
+    expect(firstWrappedToken?.symbol).toBe('csUSDC')
+    expect(firstWrappedToken?.underlyingToken?.symbol).toBe('USDC')
+
+    const secondUnderlyingToken = boostedTokens[1]
+    expect(secondUnderlyingToken.symbol).toBe('wUSDL')
+    expect(secondUnderlyingToken.underlyingToken).toBeUndefined()
+
+    const secondWrappedToken = secondUnderlyingToken.wrappedToken
+    expect(secondWrappedToken?.symbol).toBe('csUSDL')
+    expect(secondWrappedToken?.underlyingToken?.symbol).toBe('wUSDL')
+  })
 })

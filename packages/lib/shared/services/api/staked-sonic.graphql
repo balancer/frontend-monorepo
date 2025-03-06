@@ -9,5 +9,6 @@ query GetStakedSonicData {
     totalAssets
     totalAssetsDelegated
     totalAssetsPool
+    rewardsClaimed24h
   }
 }
