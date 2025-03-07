@@ -282,6 +282,10 @@ export function hasHooks(pool: Pool): boolean {
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
 }
 
+export function hasStableSurgeHook(pool: Pool): boolean {
+  return hasHookType(pool, GqlHookType.StableSurge)
+}
+
 export function hasHookType(pool: Pool, hookType: GqlHookType): boolean {
   const nestedHooks = pool.poolTokens.flatMap(token =>
     token.nestedPool ? token.nestedPool.hook : []

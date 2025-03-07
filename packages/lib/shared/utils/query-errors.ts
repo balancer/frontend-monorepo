@@ -32,7 +32,11 @@ export type SentryMetadata = {
   context?: Partial<ScopeContext>
 }
 
-type AddMetaParams = AddLiquidityParams & { chainId: number; blockNumber?: bigint }
+type AddMetaParams = AddLiquidityParams & {
+  chainId: number
+  blockNumber?: bigint
+  hasStableSurgeHook?: boolean
+}
 export function sentryMetaForAddLiquidityHandler(errorMessage: string, params: AddMetaParams) {
   return createAddHandlerMetadata('HandlerQueryError', errorMessage, params)
 }

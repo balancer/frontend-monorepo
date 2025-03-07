@@ -76,11 +76,15 @@ export function AddLiquidityFormTabs({
 
   const isDisabledFlexibleTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold
 
-  const proportionalTabTooltipLabel = requiresProportionalInput(pool)
-    ? 'This pool requires liquidity to be added proportionally'
-    : isBelowMinTvlThreshold
-      ? `Liquidity must be added proportionally until the pool TVL is greater than ${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD, { abbreviated: false, noDecimals: true })}`
-      : undefined
+  function getFlexibleTabTooltipLabel(): string | undefined {
+    if (requiresProportionalInput(pool)) {
+      return 'This pool requires liquidity to be added proportionally'
+    }
+    if (isBelowMinTvlThreshold) {
+      return `Liquidity must be added proportionally until the pool TVL is greater than ${toCurrency(MIN_LIQUIDITY_FOR_BALANCED_ADD, { abbreviated: false, noDecimals: true })}`
+    }
+    return
+  }
 
   function handleTabChanged(option: ButtonGroupOption): void {
     if (tabIndex.toString() === option.value) return // Avoids handling click in the current tab
@@ -95,7 +99,7 @@ export function AddLiquidityFormTabs({
       disabled: isDisabledFlexibleTab,
       iconTooltipLabel:
         'Enter any amount for each token manually. Balances are independent, and no automatic adjustments will be made.',
-      tabTooltipLabel: proportionalTabTooltipLabel,
+      tabTooltipLabel: getFlexibleTabTooltipLabel(),
     },
     {
       value: '1',

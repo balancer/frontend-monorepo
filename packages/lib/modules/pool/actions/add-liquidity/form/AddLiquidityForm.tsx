@@ -118,7 +118,10 @@ function AddLiquidityMainForm() {
 
   const nestedAddLiquidityEnabled = supportsNestedActions(pool) // TODO && !userToggledEscapeHatch
 
-  const isUnbalancedError = isUnbalancedAddError(simulationQuery.error || priceImpactQuery.error)
+  const isUnbalancedError = isUnbalancedAddError(
+    simulationQuery.error || priceImpactQuery.error,
+    pool
+  )
 
   const shouldShowUnbalancedError = isUnbalancedError && !nestedAddLiquidityEnabled
 
@@ -203,6 +206,7 @@ function AddLiquidityMainForm() {
               error={(simulationQuery.error || priceImpactQuery.error) as Error}
               goToProportionalAdds={setProportionalTab}
               isProportionalSupported={!nestedAddLiquidityEnabled}
+              pool={pool}
             />
           )}
           <VStack align="start" spacing="sm" w="full">
