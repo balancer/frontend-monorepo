@@ -23,14 +23,16 @@ import { isCowAmmPool, isMaBeetsPool, shouldBlockAddLiquidity } from '../../pool
 import { usePool } from '../../PoolProvider'
 import { buildCowSwapUrlFromPool } from '@repo/lib/modules/cow/cow.utils'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
+import { usePoolMetadata } from '../../metadata/usePoolMetadata'
 
 export function PoolAdvancedOptions() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const pathname = usePathname()
   const { pool } = usePool()
-
+  const poolMetadata = usePoolMetadata(pool)
   const isCowPool = isCowAmmPool(pool.type)
-  const isPoolSwapDisabled = !isMaBeetsPool(pool.id) && (shouldBlockAddLiquidity(pool) || isCowPool)
+  const isPoolSwapDisabled =
+    !isMaBeetsPool(pool.id) && (shouldBlockAddLiquidity(pool, poolMetadata) || isCowPool)
 
   const disabledLinkProps = isPoolSwapDisabled
     ? {

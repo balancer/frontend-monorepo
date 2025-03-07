@@ -15,6 +15,7 @@ import { AddLiquidityProvider } from '@repo/lib/modules/pool/actions/add-liquidi
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { usePathname } from 'next/navigation'
+import { usePoolMetadata } from '@repo/lib/modules/pool/metadata/usePoolMetadata'
 
 type Props = PropsWithChildren<{
   txHash?: string[]
@@ -29,8 +30,9 @@ export function AddLiquidityLayout({ txHash, children }: Props) {
   const urlTxHash = isHash(maybeTxHash) ? maybeTxHash : undefined
 
   const isMabeetsAddLiquidity = pathname === '/mabeets/add-liquidity'
+  const poolMetadata = usePoolMetadata(pool)
 
-  if (shouldBlockAddLiquidity(pool) && !isMabeetsAddLiquidity) {
+  if (shouldBlockAddLiquidity(pool, poolMetadata) && !isMabeetsAddLiquidity) {
     redirectToPoolPage()
     return null
   }
