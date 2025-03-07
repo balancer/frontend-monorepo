@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, BoxProps, Button, HStack, Link } from '@chakra-ui/react'
-import { isDev, isStaging } from '@repo/lib/config/app.config'
+import { isDev, isStaging, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { UserSettings } from '@repo/lib/modules/user/settings/UserSettings'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -15,7 +15,7 @@ import RecentTransactions from '../other/RecentTransactions'
 import { AppLink, useNav } from './useNav'
 import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
-import { ImpersonateAccount } from '@repo/lib/modules/web3/ImpersonateAccount'
+import { ImpersonateAccount } from '@repo/lib/modules/web3/impersonation/ImpersonateAccount'
 
 type Props = {
   mobileNav?: ReactNode
@@ -93,8 +93,8 @@ function NavLinks({
           </Box>
         </>
       )}
-      {/* Display impersonate form only for E2E tests (CI) */}
-      {process.env.CI && <ImpersonateAccount />}
+      {/* Display impersonate form only for E2E dev tests */}
+      {shouldUseAnvilFork && <ImpersonateAccount />}
     </HStack>
   )
 }

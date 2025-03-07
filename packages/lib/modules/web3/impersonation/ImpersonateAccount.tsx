@@ -1,24 +1,34 @@
 import { VStack, Text, Input, Button } from '@chakra-ui/react'
-import { useWagmiConfig } from './WagmiConfigProvider'
+import { useWagmiConfig } from '../WagmiConfigProvider'
 import { useState } from 'react'
 import { useConnect } from 'wagmi'
-import { isAddress } from 'viem'
-import { updateMockConnectorAddress } from './WagmiConfig'
+import { Address, isAddress } from 'viem'
+import { impersonateWagmiConfig } from '../WagmiConfig'
+import { forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 
 export function ImpersonateAccount() {
   const { setWagmiConfig } = useWagmiConfig()
-  const [isValidAddress, setIsValidAddress] = useState<boolean>(false)
+  const [impersonatedAddress, setImpersonatedAddress] = useState<Address | undefined>()
   const { connectors, connectAsync } = useConnect()
 
   function onAddressChange(address: string) {
     if (isAddress(address)) {
-      setIsValidAddress(true)
-      return setWagmiConfig(updateMockConnectorAddress(address))
+      setImpersonatedAddress(address)
+
+      return setWagmiConfig(impersonateWagmiConfig(address))
     }
-    setIsValidAddress(false)
+    setImpersonatedAddress(undefined)
   }
 
   async function connectMockAccount() {
+    if (!impersonatedAddress) return
+    // E2E dev tests impersonate account in the fork to be able to sign and run transactions against the anvil fork
+    if (shouldUseAnvilFork) {
+      await forkClient.impersonateAccount({
+        address: impersonatedAddress,
+      })
+    }
     await connectAsync({ connector: connectors[connectors.length - 1] })
   }
 
@@ -33,7 +43,7 @@ export function ImpersonateAccount() {
       />
       <Button
         aria-label="Impersonate"
-        disabled={!isValidAddress}
+        disabled={!impersonatedAddress}
         onClick={() => connectMockAccount()}
       >
         Connect
