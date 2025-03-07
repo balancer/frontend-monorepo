@@ -23,7 +23,7 @@ export const isStaging = process.env.NEXT_PUBLIC_APP_ENV === 'staging'
   Used by E2E dev tests to setup wagmi config to use an anvil fork
   It is also recommended to set NEXT_PUBLIC_E2E_DEV when using Rivet
 */
-export const shouldUseAnvilFork = process.env.NEXT_PUBLIC_E2E_DEV
+export const shouldUseAnvilFork = !!process.env.NEXT_PUBLIC_E2E_DEV
 
 const networksByChainId = keyBy(config.networks, 'chainId')
 
