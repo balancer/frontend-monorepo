@@ -15,9 +15,10 @@ import { chains } from './ChainConfig'
 import { transports } from './transports'
 import { createWalletConnectConnector } from './wallet-connect/createWalletConnectConnector'
 import { isConnectedToWC } from './wallet-connect/useWCConnectionLocalStorage'
-import { createMockConnector } from './wallet-connect/createMockConnector'
-import { Address } from 'viem'
-import { isProd } from '@repo/lib/config/app.config'
+import { createMockConnector } from './impersonation/createMockConnector'
+import { Address, fallback, http } from 'viem'
+import { isProd, shouldUseAnvilFork } from '@repo/lib/config/app.config'
+import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID
 if (!walletConnectProjectId) throw new Error('Missing NEXT_PUBLIC_WALLET_CONNECT_ID env')
@@ -67,14 +68,39 @@ export const wagmiConfig = createConfig({
   ssr: true,
 })
 
-// Update the mock connector address to impersonate a different account
-export function updateMockConnectorAddress(address?: Address) {
+/*
+  - Updates the mock connector address with the given impersonation address
+
+  - When shouldUseAnvilFork:
+    1. updates all chains to use the default Anvil fork RPC URL
+    2. updates all transports to use the default Anvil fork RPC URL
+
+  - Returns the updated wagmiConfig to be used for testing
+*/
+export function impersonateWagmiConfig(impersonationAddress?: Address) {
   connectors.pop()
-  connectors.push(createMockConnector({ index: connectors.length, address }))
+  connectors.push(createMockConnector({ index: connectors.length, impersonationAddress }))
+
+  let _transports = transports
+
+  if (shouldUseAnvilFork) {
+    /* All chains use the same RPC URL for the Anvil fork for local testing
+      For now, E2E dev tests will always run against MAINNET fork
+      If needed, this could be easily extended to use different RPC URLs for different chains
+     */
+    chains.map(chain => (chain.rpcUrls.default.http = [defaultAnvilForkRpcUrl]))
+    _transports = Object.fromEntries(
+      chains.map(chain => [chain.id, fallback([http(defaultAnvilForkRpcUrl)])])
+    )
+    console.log(
+      'All chains and transports updated to use default Anvil fork RPC URL: ',
+      defaultAnvilForkRpcUrl
+    )
+  }
 
   return createConfig({
     chains,
-    transports,
+    transports: _transports,
     connectors,
     ssr: true,
   })

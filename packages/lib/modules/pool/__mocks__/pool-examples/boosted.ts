@@ -53,7 +53,7 @@ export const boostedCoinshiftUsdcUsdl: PoolExample = {
   poolId: '0x10a04efba5b880e169920fd4348527c64fb29d4d',
   poolChain: GqlChain.Mainnet,
   version: 3,
-  // Freeze pool mock to avoid breaking useAprTooltip tests
+  // Freeze pool mock to avoid breaking useAprTooltip and useGetPoolRewards tests
   isFrozen: true,
 }
 

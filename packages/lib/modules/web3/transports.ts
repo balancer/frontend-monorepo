@@ -2,10 +2,11 @@
 
 import { Chain } from '@rainbow-me/rainbowkit'
 import { fallback, http } from 'wagmi'
-import { getGqlChain } from '@repo/lib/config/app.config'
+import { getGqlChain, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 
 import { chains, getDefaultRpcUrl, rpcFallbacks, rpcOverrides } from './ChainConfig'
+import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
 export function getTransports(chain: Chain) {
   const gqlChain = getGqlChain(chain.id as SupportedChainId)
   const overrideRpcUrl = rpcOverrides[gqlChain]
@@ -19,6 +20,8 @@ export const transports = Object.fromEntries(
 ) as Record<number, ReturnType<typeof getTransports>>
 
 export function getRpcUrl(chainId: number): string {
+  // Use anvil fork for E2E dev tests
+  if (shouldUseAnvilFork) return defaultAnvilForkRpcUrl
   const gqlChain = getGqlChain(chainId)
   return rpcOverrides[gqlChain] || rpcFallbacks[gqlChain] || getDefaultRpcUrl(chainId)
 }

@@ -75,7 +75,7 @@ export function AcceptPoliciesModal() {
               size="lg"
             >
               {showVeBal ? (
-                <Box color="font.primary" fontSize="md" mt="-3px">
+                <Box aria-label="Accept policies" color="font.primary" fontSize="md" mt="-3px">
                   By connecting my wallet, I agree to Balancer Foundation&apos;s{' '}
                   <Link as={NextLink} href="/terms-of-use">
                     Terms of Use
