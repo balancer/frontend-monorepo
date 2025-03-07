@@ -12,10 +12,11 @@ import {
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputsMaybeProportional } from './TokenInputsMaybeProportional'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { isV3Pool } from '../../../pool.helpers'
+import { isV3Pool, isGyroEPool } from '../../../pool.helpers'
 import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWithActualWeights'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
+import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/useGetECLPLiquidityProfile'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 
@@ -49,6 +50,20 @@ function PoolWeightsInfo() {
   )
 }
 
+function OutOfRangeWarning() {
+  return (
+    <BalAlert
+      content={
+        <BalAlertContent
+          title="This CLP is currently out of range"
+          tooltipLabel="No swap fees accrue when CLP is outside the price range. Fees resume automatically when prices return to the range."
+        />
+      }
+      status="warning"
+    />
+  )
+}
+
 export function AddLiquidityFormTabs({
   totalUSDValue,
   nestedAddLiquidityEnabled,
@@ -65,6 +80,7 @@ export function AddLiquidityFormTabs({
   const { clearAmountsIn } = useAddLiquidity()
   const { isLoading, pool } = usePool()
   const { toCurrency } = useCurrency()
+  const { poolIsInRange } = useGetECLPLiquidityProfile(pool)
 
   const isDisabledProportionalTab =
     nestedAddLiquidityEnabled || !supportsProportionalAddLiquidityKind(pool)
@@ -73,6 +89,8 @@ export function AddLiquidityFormTabs({
     isV3Pool(pool) &&
     !isDisabledProportionalTab &&
     bn(pool.dynamicData.totalLiquidity).lt(bn(MIN_LIQUIDITY_FOR_BALANCED_ADD))
+
+  const isOutOfRange = isGyroEPool(pool) && !poolIsInRange
 
   const isDisabledFlexibleTab = requiresProportionalInput(pool) || isBelowMinTvlThreshold
 
@@ -133,6 +151,7 @@ export function AddLiquidityFormTabs({
         options={options}
         size="md"
       />
+      {isOutOfRange && <OutOfRangeWarning />}
       {isProportional && <PoolWeightsInfo />}
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>
