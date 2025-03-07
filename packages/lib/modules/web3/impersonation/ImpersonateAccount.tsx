@@ -3,14 +3,18 @@ import { useWagmiConfig } from '../WagmiConfigProvider'
 import { useState } from 'react'
 import { useConnect } from 'wagmi'
 import { Address, isAddress } from 'viem'
-import { impersonateWagmiConfig } from '../WagmiConfig'
-import { forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { impersonateWagmiConfig, wagmiConfig } from '../WagmiConfig'
+import { forkClient, setTokenBalances } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
+import { useSetErc20Balance } from '@repo/lib/test/anvil/useSetErc20Balance'
+import { base } from 'viem/chains'
+import { defaultForkBalances } from '@repo/lib/test/utils/wagmi/default-fork-balances'
 
 export function ImpersonateAccount() {
   const { setWagmiConfig } = useWagmiConfig()
   const [impersonatedAddress, setImpersonatedAddress] = useState<Address | undefined>()
   const { connectors, connectAsync } = useConnect()
+  const setBalance = useSetErc20Balance()
 
   function onAddressChange(address: string) {
     if (isAddress(address)) {
@@ -28,8 +32,17 @@ export function ImpersonateAccount() {
       await forkClient.impersonateAccount({
         address: impersonatedAddress,
       })
+
+      await setTokenBalances({
+        impersonatedAddress,
+        wagmiConfig,
+        setBalance,
+        tokenBalances: defaultForkBalances,
+        chainId: base.id, // TODO: define way to limit this
+      })
+
+      await connectAsync({ connector: connectors[connectors.length - 1], chainId: base.id })
     }
-    await connectAsync({ connector: connectors[connectors.length - 1] })
   }
 
   return (

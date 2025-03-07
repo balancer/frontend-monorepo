@@ -1,5 +1,8 @@
-import { createTestClient, http } from 'viem'
+import { Address, createTestClient, http, parseUnits } from 'viem'
 import { mainnet } from 'viem/chains'
+import { SetBalanceMutation } from '../../anvil/useSetErc20Balance'
+import { TokenBalance, TokenBalancesByChain } from './default-fork-balances'
+import { createConfig } from 'wagmi'
 
 /*
   E2E dev tests use an anvil fork to impersonate and test with default anvil accounts
@@ -14,3 +17,42 @@ export const forkClient = createTestClient({
   mode: 'anvil',
   transport: http(defaultAnvilForkRpcUrl),
 })
+
+type WagmiConfig = ReturnType<typeof createConfig>
+
+type SetBalancesParams = {
+  impersonatedAddress: Address
+  wagmiConfig: WagmiConfig
+  setBalance: SetBalanceMutation
+  tokenBalances: TokenBalancesByChain
+  chainId?: number
+}
+export async function setTokenBalances({
+  setBalance,
+  tokenBalances,
+  chainId,
+  impersonatedAddress,
+  wagmiConfig,
+}: SetBalancesParams) {
+  async function setChainBalances(tokenBalances: TokenBalance[], chainId: number) {
+    for (const tokenBalance of tokenBalances) {
+      const value = parseUnits(tokenBalance.value, tokenBalance.decimals ?? 18)
+      await setBalance.mutateAsync({
+        ...tokenBalance,
+        value,
+        wagmiConfig,
+        address: impersonatedAddress,
+        chainId,
+      })
+    }
+  }
+
+  if (chainId) {
+    return setChainBalances(tokenBalances[chainId], chainId)
+  }
+
+  // Iterate over all chains
+  for (const chainId in tokenBalances) {
+    await setChainBalances(tokenBalances[chainId], Number(chainId))
+  }
+}
