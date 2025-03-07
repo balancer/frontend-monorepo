@@ -6,7 +6,7 @@ import { useTheme as useNextTheme } from 'next-themes'
 import { getDefaultPoolChartOptions } from './usePoolCharts'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMemo } from 'react'
-import { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolGyro, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useEclpPoolChart() {
   const { pool } = usePool()
@@ -18,6 +18,8 @@ export function useEclpPoolChart() {
   const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
 
   const tokens = useMemo(() => {
+    if (pool.type !== GqlPoolType.Gyroe) return ''
+
     const poolTokens = pool.poolTokens.map(token => token.symbol)
     const gyroPool = pool as GqlPoolGyro
 
