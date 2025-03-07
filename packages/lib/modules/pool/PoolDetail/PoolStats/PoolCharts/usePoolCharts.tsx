@@ -77,6 +77,12 @@ export interface PoolChartTypeOptions {
   }
 }
 
+type PoolTabsMap = {
+  [key in GqlPoolType]?: PoolChartTypeTab[]
+} & {
+  default: PoolChartTypeTab[] // Make default required
+}
+
 export interface PoolChartTypeTab {
   value: PoolChartTab
   label: string
@@ -196,13 +202,14 @@ const BASE_TABS: PoolChartTypeTab[] = [
   { value: PoolChartTab.TVL, label: 'TVL' },
 ]
 
-const POOL_SPECIFIC_TABS: Record<string, PoolChartTypeTab[]> = {
+const POOL_SPECIFIC_TABS: PoolTabsMap = {
   [GqlPoolType.CowAmm]: [...BASE_TABS, { value: PoolChartTab.SURPLUS, label: 'Surplus' }],
   [GqlPoolType.Gyroe]: [
     { value: PoolChartTab.LIQUIDITY_PROFILE, label: 'Liquidity Profile' },
     ...BASE_TABS,
     { value: PoolChartTab.FEES, label: 'Fees' },
   ],
+  default: [...BASE_TABS, { value: PoolChartTab.FEES, label: 'Fees' }],
 }
 
 export function getPoolTabsList({
