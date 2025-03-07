@@ -135,6 +135,6 @@ describe('shouldBlockAddLiquidity', () => {
 
   it('should not block add liquidity if the metadata explicitly allows it', () => {
     const pool = getApiPoolMock(usdcUsdtAaveBoosted)
-    expect(shouldBlockAddLiquidity(pool, { enableAddLiquidity: true })).toBe(false)
+    expect(shouldBlockAddLiquidity(pool, { allowAddLiquidity: true })).toBe(false)
   })
 })
