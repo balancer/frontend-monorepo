@@ -53,6 +53,7 @@ import {
   RedirectPartner,
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
+import { usePoolMetadata } from '../metadata/usePoolMetadata'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -106,8 +107,9 @@ export default function PoolMyLiquidity() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>(tabs[0])
   const pathname = usePathname()
   const [height, setHeight] = useState(0)
+  const poolMetadata = usePoolMetadata(pool)
 
-  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool)
+  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, poolMetadata)
 
   useLayoutEffect(() => {
     if (myLiquiditySectionRef && myLiquiditySectionRef.current) {
