@@ -1253,7 +1253,7 @@ export default function Privacy() {
                     </li>
                     <li>
                       <em>E-CLPs:</em> Also known as &lsquo;Elliptic-CLPs&rsquo; support asymmetric
-                      concentrated liqudity for two assets. They provide a new type of concentrated
+                      concentrated liquidity for two assets. They provide a new type of concentrated
                       liquidity that allows highly flexible and asymmetric liquidity profiles in a
                       single pool position. Learn more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/e-clps">
