@@ -3,6 +3,11 @@ name: Checks
 on:
   pull_request:
     types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request Number'
+        required: true
 
 env:
   NEXT_PUBLIC_BALANCER_API_URL: https://api-v3.balancer.fi/graphql
