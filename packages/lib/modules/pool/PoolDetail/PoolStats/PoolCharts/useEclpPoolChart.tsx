@@ -9,8 +9,17 @@ import { useMemo } from 'react'
 
 export function useEclpPoolChart() {
   const { pool } = usePool()
-  const { data, poolSpotPrice, poolIsInRange, xMin, xMax, yMax, isReversed, toggleIsReversed } =
-    useGetECLPLiquidityProfile(pool)
+  const {
+    data,
+    poolSpotPrice,
+    poolIsInRange,
+    xMin,
+    xMax,
+    yMax,
+    isReversed,
+    toggleIsReversed,
+    isLoading,
+  } = useGetECLPLiquidityProfile(pool)
   const { theme: nextTheme } = useNextTheme()
   const theme = useChakraTheme()
   const { toCurrency } = useCurrency()
@@ -426,5 +435,6 @@ export function useEclpPoolChart() {
     hasChartData: data?.length,
     poolIsInRange,
     toggleIsReversed,
+    isLoading,
   }
 }

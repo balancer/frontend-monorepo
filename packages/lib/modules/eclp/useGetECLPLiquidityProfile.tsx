@@ -8,7 +8,7 @@ import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { formatUnits } from 'viem'
 
 export function useGetECLPLiquidityProfile(pool: Pool) {
-  const { data: tokenRates } = useGetTokenRates(pool)
+  const { data: tokenRates, isLoading } = useGetTokenRates(pool)
   const [isReversed, setIsReversed] = useState(false)
 
   function toggleIsReversed() {
@@ -34,7 +34,7 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
 
   const poolSpotPrice = useMemo(() => {
     if (!originalPoolSpotPrice) return null
-    return isReversed ? String(1 / Number(originalPoolSpotPrice)) : originalPoolSpotPrice
+    return isReversed ? bn(1).div(bn(originalPoolSpotPrice)).toString() : originalPoolSpotPrice
   }, [originalPoolSpotPrice, isReversed])
 
   const data = useMemo(() => {
@@ -70,5 +70,6 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     yMax,
     isReversed,
     toggleIsReversed,
+    isLoading,
   }
 }
