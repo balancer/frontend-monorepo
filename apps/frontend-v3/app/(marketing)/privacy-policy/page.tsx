@@ -365,7 +365,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Additional Disclousures for Individuals in Europe</h2>
+              <h2>Additional Disclosures for Individuals in Europe</h2>
 
               <p>
                 If you are located in the European Economic Area (EEA), the United Kingdom, or
