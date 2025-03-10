@@ -303,6 +303,13 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
     return true
   }
 
+  if (
+    message.startsWith('Maximum call stack size exceeded') &&
+    stackTrace.includes('HTMLMediaElement.canPlayType')
+  ) {
+    return true
+  }
+
   /*
     com.okex.wallet injects code that causes this error
     Examples: https://balancer-labs.sentry.io/issues/5687846148/
