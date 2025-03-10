@@ -20,6 +20,7 @@ import { RemoveLiquidityParams } from '@repo/lib/modules/pool/actions/remove-liq
 import { SimulateSwapParams } from '@repo/lib/modules/swap/queries/useSimulateSwapQuery'
 import { SwapState } from '@repo/lib/modules/swap/swap.types'
 import { SwapHandler } from '@repo/lib/modules/swap/handlers/Swap.handler'
+import { cannotCalculatePriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 
 /**
  * Metadata to be added to the captured Sentry error
@@ -249,6 +250,19 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
   if (isNotEnoughGasErrorMessage(message)) return true
 
   /*
+    There are some edge cases where price impact calculation is not possible so we display "Unknown price impact".
+    We don't want to capture those errors in sentry as they are not actual issues.
+   */
+  if (cannotCalculatePriceImpactError(new Error(message))) return true
+
+  /*
+   This is a known rainbow-kit/wagmi related issue that is randomly happening to many users.
+   It does not crash the app so we are ignoring it.
+   More context: https://github.com/rainbow-me/rainbowkit/issues/2238
+  */
+  if (message.includes('provider.disconnect is not a function')) return true
+
+  /*
     Thrown from useWalletClient() when loading a pool page from scratch.
     It looks like is is caused by the useWalletClient call in AddTokenToWalletButton but it does not affect it's behavior.
   */
@@ -330,6 +344,9 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
   if (message.startsWith('WebSocket connection failed for host: wss://relay.walletconnect.com')) {
     return true
   }
+  if (message.startsWith('WebSocket connection closed abnormally with code: 3000')) {
+    return true
+  }
 
   /*
     Ignores issues with this kind of message:
@@ -343,7 +360,10 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
 
     Examples: https://balancer-labs.sentry.io/issues/5796181794
   */
-  if (message.startsWith('The source') && message.includes('has not been authorized yet')) {
+  if (
+    message.includes('The source https://balancer.fi') &&
+    message.includes('has not been authorized yet')
+  ) {
     return true
   }
 
