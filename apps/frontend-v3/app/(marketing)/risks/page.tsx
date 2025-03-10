@@ -213,7 +213,7 @@ export default function Privacy() {
             <div className="subsection anchor" id="economic-risk">
               <h4>Mechanism / Economic risk</h4>
               <p>
-                An mechanism or economic exploit of a DeFi protocol occurs when an attacker is able
+                A mechanism or economic exploit of a DeFi protocol occurs when an attacker is able
                 to manipulate the economic incentives of the protocol to their advantage, resulting
                 in a loss of funds for other participants. This can happen even when there are no
                 smart contract bugs or other unintended logic errors.
@@ -1253,7 +1253,7 @@ export default function Privacy() {
                     </li>
                     <li>
                       <em>E-CLPs:</em> Also known as &lsquo;Elliptic-CLPs&rsquo; support asymmetric
-                      concentrated liqudity for two assets. They provide a new type of concentrated
+                      concentrated liquidity for two assets. They provide a new type of concentrated
                       liquidity that allows highly flexible and asymmetric liquidity profiles in a
                       single pool position. Learn more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/e-clps">

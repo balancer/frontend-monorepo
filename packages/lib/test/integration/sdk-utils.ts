@@ -1,7 +1,7 @@
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import {
-  VAULT,
+  VAULT_V2,
   ChainId,
   HumanAmount,
   MAX_UINT256,
@@ -72,7 +72,7 @@ export async function getSdkTestUtils({
       address: token,
       abi: erc20Abi,
       functionName: 'approve',
-      args: [VAULT[client?.chain?.id || mainnet.id], amount],
+      args: [VAULT_V2[client?.chain?.id || mainnet.id], amount],
     })
 
     const txReceipt = await client.waitForTransactionReceipt({

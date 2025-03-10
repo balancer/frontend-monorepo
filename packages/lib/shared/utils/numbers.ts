@@ -4,7 +4,7 @@ import { MAX_UINT256 } from '@balancer/sdk'
 import BigNumber from 'bignumber.js'
 import numeral from 'numeral'
 import { KeyboardEvent } from 'react'
-import { formatUnits } from 'viem'
+import { formatUnits, parseUnits } from 'viem'
 import { isNumber, toNumber } from 'lodash'
 
 // Allows calling JSON.stringify with bigints
@@ -149,6 +149,13 @@ function boostFormat(val: Numberish): string {
   return numeral(val.toString()).format(BOOST_FORMAT)
 }
 
+function gyroPriceFormat(val: Numberish): string {
+  if (bn(val).lt(10)) return numeral(val.toString()).format('0.0000')
+  if (bn(val).lt(100)) return numeral(val.toString()).format('0.00')
+
+  return numeral(val.toString()).format('0')
+}
+
 // Sums an array of numbers safely using bignumber.js.
 export function safeSum(amounts: Numberish[]): string {
   return amounts.reduce((a, b) => bn(a).plus(b.toString()), bn(0)).toString()
@@ -172,6 +179,7 @@ type NumberFormat =
   | 'sharePercent'
   | 'stakedPercentage'
   | 'boost'
+  | 'gyroPrice'
 
 // General number formatting function.
 export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): string {
@@ -198,6 +206,8 @@ export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): s
       return slippageFormat(val)
     case 'boost':
       return boostFormat(val)
+    case 'gyroPrice':
+      return gyroPriceFormat(val)
     default:
       throw new Error(`Number format not implemented: ${format}`)
   }
@@ -271,6 +281,18 @@ export function isTooSmallToRemoveUsd(value: Numberish): boolean {
 
 export const isValidNumber = (value: string): boolean =>
   isNumber(toNumber(value)) && !isNaN(toNumber(value))
+
+// Parses a fixed-point decimal string into a bigint
+// If we do not have enough decimals to express the number, we truncate it
+export function safeParseFixedBigInt(value: string, decimals = 0): bigint {
+  value = value.split(',').join('')
+  const [integer, fraction] = value.split('.')
+  if (!fraction) {
+    return parseUnits(value, decimals)
+  }
+  const safeValue = integer + '.' + fraction.slice(0, decimals)
+  return parseUnits(safeValue, decimals)
+}
 
 export const isGreaterThanZeroValidation = (value: string): string | true =>
   isValidNumber(value) && !isZero(value) ? true : 'Amount must be greater than 0'
