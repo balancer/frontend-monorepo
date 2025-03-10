@@ -150,21 +150,23 @@ export function PoolCharts({ ...props }: CardProps) {
                   option={options}
                   style={{ height: '100%', width: '100%' }}
                 />
-                <Button
-                  bottom={0}
-                  fontSize="xs"
-                  fontWeight="medium"
-                  onClick={toggleIsReversed}
-                  position="absolute"
-                  px={2}
-                  py={1}
-                  right={2}
-                  size="xs"
-                  variant="primary"
-                  zIndex={1}
-                >
-                  <Icon as={Repeat} />
-                </Button>
+                {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE && (
+                  <Button
+                    bottom={0}
+                    fontSize="xs"
+                    fontWeight="medium"
+                    onClick={toggleIsReversed}
+                    position="absolute"
+                    px={2}
+                    py={1}
+                    right={2}
+                    size="xs"
+                    variant="primary"
+                    zIndex={1}
+                  >
+                    <Icon as={Repeat} />
+                  </Button>
+                )}
               </Box>
             </VStack>
           </NoisyCard>
