@@ -524,6 +524,7 @@ export function usePoolCharts() {
     options: eclpChartOptions,
     hasChartData: hasEclpChartData,
     poolIsInRange,
+    toggleIsReversed,
   } = useEclpPoolChart()
 
   const options = useMemo(() => {
@@ -601,5 +602,6 @@ export function usePoolCharts() {
     chartValueSum,
     hasChartData: !!chartData.length || hasEclpChartData,
     poolIsInRange,
+    toggleIsReversed,
   }
 }
