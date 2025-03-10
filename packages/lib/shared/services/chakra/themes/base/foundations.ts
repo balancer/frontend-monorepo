@@ -1,6 +1,9 @@
+import { type ThemeConfig } from '@chakra-ui/react'
+
 export const DEFAULT_THEME_COLOR_MODE = 'dark'
 
-export const config = {
+// Cannot me named config to avoid deprecation error in turbopack mode
+export const themeConfig: ThemeConfig = {
   initialColorMode: 'light',
   useSystemColorMode: false,
 }

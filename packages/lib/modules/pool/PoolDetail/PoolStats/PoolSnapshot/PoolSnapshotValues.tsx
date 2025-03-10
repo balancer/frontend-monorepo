@@ -2,16 +2,12 @@
 
 import { memo, useMemo } from 'react'
 import { HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { SECONDS_IN_DAY } from '@repo/lib/test/utils/numbers'
-import { sumBy } from 'lodash'
-import { useTokens } from '../../../../tokens/TokensProvider'
 import { usePool } from '../../../PoolProvider'
-import { bn } from '@repo/lib/shared/utils/numbers'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { isCowAmmPool } from '../../../pool.helpers'
+import { useGetPoolRewards } from '../../../useGetPoolRewards'
 
 type PoolStatsValues = {
   totalLiquidity: string
@@ -22,28 +18,10 @@ type PoolStatsValues = {
 export function PoolSnapshotValues() {
   const { pool, chain, tvl } = usePool()
   const { toCurrency } = useCurrency()
-  const { priceFor, getToken } = useTokens()
 
   const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
-  const currentRewards = pool.staking?.gauge?.rewards || []
-
-  const currentRewardsPerWeek = currentRewards.map(reward => {
-    return {
-      ...reward,
-      rewardPerWeek: parseFloat(reward.rewardPerSecond) * SECONDS_IN_DAY * 7,
-    }
-  })
-
-  // In case a reward token is undefined, it's icon in TokenIconStack will be a random one
-  const tokens = currentRewardsPerWeek
-    .filter(reward => bn(reward.rewardPerSecond).gt(0))
-    .map(reward => getToken(reward.tokenAddress, chain)) as GqlToken[]
-
-  const weeklyRewards = sumBy(
-    currentRewardsPerWeek,
-    reward => priceFor(reward.tokenAddress, chain) * reward.rewardPerWeek
-  )
+  const { tokens, weeklyRewards } = useGetPoolRewards(pool)
 
   const poolStatsValues: PoolStatsValues | undefined = useMemo(() => {
     if (pool) {

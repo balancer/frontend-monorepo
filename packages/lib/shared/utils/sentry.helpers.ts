@@ -328,16 +328,16 @@ export function addFingerPrint(event: ErrorEvent) {
 
 // Add tags to better filter errors in sentry dashboards
 export function addTags(event: ErrorEvent) {
+  /*
+  No active tags for now
+  Example of old tag code:
+
   const errorText = getErrorTextFromTop3Frames(event)
 
-  /*
-   This is a known rainbow-kit/wagmi related issue that is randomly happening to many users.
-   We couldn't understand/reproduce it yet so we are tagging it as a known issue to track it better.
-   More context: https://github.com/rainbow-me/rainbowkit/issues/2238
-  */
   if (errorText.includes('provider.disconnect is not a function')) {
     event.tags = { ...event.tags, error_category: 'known_issue', error_type: 'provider_disconnect' }
   }
+  */
 
   return event
 }

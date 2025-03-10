@@ -76,21 +76,6 @@ function _usePoolActivity() {
 
   const count = response?.poolEvents.length ?? 0
 
-  const minDate = useMemo(() => {
-    if (!response) return 0
-    return Math.min(...response.poolEvents.map(event => event.timestamp))
-  }, [response])
-
-  const maxDate = useMemo(() => {
-    if (!response) return 0
-    return Math.max(...response.poolEvents.map(event => event.timestamp))
-  }, [response])
-
-  const maxYAxisValue = useMemo(() => {
-    if (!response) return 0
-    return Math.max(...response.poolEvents.map(event => event.valueUSD))
-  }, [response])
-
   const poolActivityData = useMemo(() => {
     if (!response) return { adds: [], removes: [], swaps: [] }
     const { poolEvents: events } = response
@@ -200,6 +185,26 @@ function _usePoolActivity() {
       ...(isAllOrSwaps ? poolActivityData.swaps : []),
     ]
   }, [poolActivityData, isAllOrAdds, isAllOrRemoves, isAllOrSwaps])
+
+  const maxYAxisValue = useMemo(() => {
+    if (poolEvents.length === 0) return 0
+
+    return Math.max(
+      ...poolEvents.map(event => {
+        return parseFloat(event[2].usdValue)
+      })
+    )
+  }, [poolEvents])
+
+  const minDate = useMemo(() => {
+    if (poolEvents.length === 0) return 0
+    return Math.min(...poolEvents.map(event => event[0]))
+  }, [poolEvents])
+
+  const maxDate = useMemo(() => {
+    if (poolEvents.length === 0) return 0
+    return Math.max(...poolEvents.map(event => event[0]))
+  }, [poolEvents])
 
   const sortedPoolEvents = useMemo(() => {
     const sortedEvents = sortPoolEvents(poolEvents, sortingBy, sorting)

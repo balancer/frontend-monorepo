@@ -11,10 +11,13 @@ import { SparklesIcon } from './MainAprTooltip'
 interface Props {
   totalUsdValue: string
   pool: Pool
+  weeklyRewards?: number
 }
 
-function StakeAprTooltip({ pool, totalUsdValue }: Props) {
-  const weeklyYield = calcPotentialYieldFor(pool, totalUsdValue)
+function StakeAprTooltip({ pool, totalUsdValue, weeklyRewards }: Props) {
+  const potentialYield = calcPotentialYieldFor(pool, totalUsdValue)
+  const weeklyYield =
+    weeklyRewards && bn(potentialYield).gt(weeklyRewards) ? weeklyRewards : potentialYield
 
   const { toCurrency } = useCurrency()
 

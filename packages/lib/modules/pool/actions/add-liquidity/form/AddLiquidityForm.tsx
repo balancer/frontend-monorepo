@@ -39,8 +39,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { AddLiquidityFormCheckbox } from './AddLiquidityFormCheckbox'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { PriceImpactError } from '../../../../price-impact/PriceImpactError'
-import AddLiquidityAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AddLiquidityAprTooltip'
-import { calcPotentialYieldFor } from '../../../pool.utils'
+import { AddLiquidityPotentialWeeklyYield } from '@repo/lib/modules/pool/actions/add-liquidity/form/AddLiquidityPotentialWeeklyYield'
 import { cannotCalculatePriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
@@ -53,6 +52,7 @@ import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { supportsWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
+import { useGetPoolRewards } from '../../../useGetPoolRewards'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -98,6 +98,7 @@ function AddLiquidityMainForm() {
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
   const { shouldUseSignatures } = useUserSettings()
+  const { calculatePotentialYield } = useGetPoolRewards(pool)
 
   const setFlexibleTab = () => {
     setTabIndex(0)
@@ -117,11 +118,12 @@ function AddLiquidityMainForm() {
 
   const nestedAddLiquidityEnabled = supportsNestedActions(pool) // TODO && !userToggledEscapeHatch
 
-  const isUnbalancedError = isUnbalancedAddError(simulationQuery.error || priceImpactQuery.error)
+  const isUnbalancedError = isUnbalancedAddError(
+    simulationQuery.error || priceImpactQuery.error,
+    pool
+  )
 
   const shouldShowUnbalancedError = isUnbalancedError && !nestedAddLiquidityEnabled
-
-  const weeklyYield = calcPotentialYieldFor(pool, totalUSDValue)
 
   const isLoading = simulationQuery.isLoading || priceImpactQuery.isLoading
   const isFetching = simulationQuery.isFetching || priceImpactQuery.isFetching
@@ -204,6 +206,7 @@ function AddLiquidityMainForm() {
               error={(simulationQuery.error || priceImpactQuery.error) as Error}
               goToProportionalAdds={setProportionalTab}
               isProportionalSupported={!nestedAddLiquidityEnabled}
+              pool={pool}
             />
           )}
           <VStack align="start" spacing="sm" w="full">
@@ -255,11 +258,9 @@ function AddLiquidityMainForm() {
               </Card>
             </GridItem>
             <GridItem>
-              <AddLiquidityAprTooltip
-                aprItems={pool.dynamicData.aprItems}
-                pool={pool}
+              <AddLiquidityPotentialWeeklyYield
                 totalUsdValue={totalUSDValue}
-                weeklyYield={weeklyYield}
+                weeklyYield={calculatePotentialYield(totalUSDValue)}
               />
             </GridItem>
           </Grid>
