@@ -423,7 +423,7 @@ export function useEclpPoolChart() {
 
   return {
     options,
-    hasChartData: !!data,
+    hasChartData: data?.length,
     poolIsInRange,
     toggleIsReversed,
   }
