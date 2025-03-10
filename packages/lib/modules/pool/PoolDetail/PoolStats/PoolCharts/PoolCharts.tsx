@@ -171,7 +171,7 @@ export function PoolCharts({ ...props }: CardProps) {
             </VStack>
           </NoisyCard>
         ) : (
-          <Flex alignItems="center" h="full">
+          <Flex align="center" h="full" justify="center" w="full">
             <Text fontSize="2xl" p="lg" variant="secondary">
               Not enough data
             </Text>
