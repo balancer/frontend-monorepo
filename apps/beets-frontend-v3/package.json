@@ -5,9 +5,9 @@
   "license": "MIT",
   "scripts": {
     "build": "pnpm --filter @repo/lib graphql:gen && next build",
-    "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3001\"",
-    "dev:turbopack": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3001 --turbo\"",
-    "dev:no-gen": "next dev -p 3001",
+    "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3001 --turbo\"",
+    "dev:webpack": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3001\"",
+    "dev:no-gen": "next dev --turbo -p 3001",
     "gen:wagmi": "pnpm wagmi generate",
     "lint": "eslint . --max-warnings 0 --cache",
     "lint:fix": "eslint . --fix --max-warnings 0 --cache",

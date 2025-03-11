@@ -38,20 +38,13 @@ pnpm dev:beets
 
 Open [http://localhost:3001](http://localhost:3001) with your browser to see the result.
 
-## Experimental dev with turbopack
+## dev with turbopack
 
-Use this feature for better DX with faster compile times and faster HMR:
+By default, we use turbo mode for better DX with faster compile times and faster HMR:
 
 ```bash
-pnpm dev:beets:turbopack
+pnpm dev:beets
 ```
-
-But notice that there are some issues that don`t happen with the normal (webpack based) dev mode:
-
-### Hydration errors
-
-There are some hydration errors due to our chakra version not being 100% compatible with turbopack.
-You just need to ignore those errors when using turbopack mode.
 
 ### Sentry does not work with turbopack yet
 
@@ -61,6 +54,12 @@ will see a sentry warning in the console when using turbopack mode.
 For build mode, we will always use webpack which works with Sentry as expected.
 
 Context: https://github.com/getsentry/sentry-javascript/issues/8105#issuecomment-2577559235
+
+You can explicitly run with webpack mode with:
+
+```bash
+pnpm dev:beets:webpack
+```
 
 ## Testing
 
