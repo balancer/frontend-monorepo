@@ -1,6 +1,6 @@
 import { GqlPoolGyro } from '@repo/lib/shared/services/api/generated/graphql'
-import { Pool } from '../pool/pool.types'
-import { isGyroEPool } from '../pool/pool.helpers'
+import { Pool } from '../../pool/pool.types'
+import { isGyroEPool } from '../../pool/pool.helpers'
 
 export function drawLiquidityECLP(
   pool: Pool,

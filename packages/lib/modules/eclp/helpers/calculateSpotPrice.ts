@@ -4,8 +4,8 @@ import { divDownMagU, mulDownMagU } from './gyroSignedFixedPoint'
 import { _normalizeBalances } from './helpers'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { safeParseFixedBigInt } from '@repo/lib/shared/utils/numbers'
-import { Pool } from '../pool/pool.types'
-import { isGyroEPool } from '../pool/pool.helpers'
+import { Pool } from '../../pool/pool.types'
+import { isGyroEPool } from '../../pool/pool.helpers'
 import { ZERO } from './constants'
 
 type GyroEParams = {
