@@ -273,8 +273,6 @@ export function usePoolCharts() {
     activePeriod.value
   )
 
-  const isLoading = isLoadingSnapshots
-
   const chartValueSum = useMemo(() => {
     if (!data?.snapshots) return null
 
@@ -524,7 +522,11 @@ export function usePoolCharts() {
     options: eclpChartOptions,
     hasChartData: hasEclpChartData,
     poolIsInRange,
+    toggleIsReversed,
+    isLoading: isLoadingEclpData,
   } = useEclpPoolChart()
+
+  const isLoading = isLoadingSnapshots || isLoadingEclpData
 
   const options = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[activeTab.value]
@@ -601,5 +603,6 @@ export function usePoolCharts() {
     chartValueSum,
     hasChartData: !!chartData.length || hasEclpChartData,
     poolIsInRange,
+    toggleIsReversed,
   }
 }

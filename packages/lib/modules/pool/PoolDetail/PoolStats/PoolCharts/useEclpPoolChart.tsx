@@ -6,11 +6,20 @@ import { useTheme as useNextTheme } from 'next-themes'
 import { getDefaultPoolChartOptions } from './usePoolCharts'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMemo } from 'react'
-import { GqlPoolGyro, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 export function useEclpPoolChart() {
   const { pool } = usePool()
-  const { data, poolSpotPrice, poolIsInRange, xMin, xMax, yMax } = useGetECLPLiquidityProfile(pool)
+  const {
+    data,
+    poolSpotPrice,
+    poolIsInRange,
+    xMin,
+    xMax,
+    yMax,
+    isReversed,
+    toggleIsReversed,
+    isLoading,
+  } = useGetECLPLiquidityProfile(pool)
   const { theme: nextTheme } = useNextTheme()
   const theme = useChakraTheme()
   const { toCurrency } = useCurrency()
@@ -18,17 +27,14 @@ export function useEclpPoolChart() {
   const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
 
   const tokens = useMemo(() => {
-    if (pool.type !== GqlPoolType.Gyroe) return ''
-
     const poolTokens = pool.poolTokens.map(token => token.symbol)
-    const gyroPool = pool as GqlPoolGyro
 
-    if (bn(gyroPool.alpha).lt(gyroPool.beta)) {
-      return poolTokens.join('/')
-    } else {
+    if (isReversed) {
       return poolTokens.reverse().join('/')
+    } else {
+      return poolTokens.join('/')
     }
-  }, [pool])
+  }, [pool, isReversed])
 
   const secondaryFontColor = theme.semanticTokens.colors.font.secondary.default
 
@@ -85,7 +91,7 @@ export function useEclpPoolChart() {
         nameTextStyle: {
           align: 'right',
           verticalAlign: 'bottom',
-          padding: [0, 0, -54, 0],
+          padding: [0, 40, -54, 0],
           color: theme.colors.gray[400],
         },
         min: xMin - 0.1 * (xMax - xMin),
@@ -426,7 +432,9 @@ export function useEclpPoolChart() {
 
   return {
     options,
-    hasChartData: !!data,
+    hasChartData: data?.length,
     poolIsInRange,
+    toggleIsReversed,
+    isLoading,
   }
 }
