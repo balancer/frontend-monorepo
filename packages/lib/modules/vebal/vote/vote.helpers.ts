@@ -4,6 +4,9 @@ import {
   SortVotesBy,
 } from '@repo/lib/modules/vebal/vote/vote.types'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { VotingPool, PoolToken } from '@repo/lib/modules/pool/pool.types'
+import { compact } from 'lodash'
+import { GetTokenFn } from '@repo/lib/modules/tokens/TokensProvider'
 
 export function getVotesState(relativeWeightCap: number, votesNextPeriod: number) {
   if (relativeWeightCap === 0 || votesNextPeriod === 0) return VotesState.Normal
@@ -16,16 +19,33 @@ export function getVotesState(relativeWeightCap: number, votesNextPeriod: number
   return VotesState.Normal
 }
 
-export function voteToPool(vote: VotingPoolWithData) {
+export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): VotingPool {
   return {
-    displayTokens: vote.tokens.map(token => ({ ...token, name: token.symbol })), // fix: (votes) no name
+    id: vote.id,
     type: vote.type,
     chain: vote.chain,
-    poolTokens: [],
+    /*
+    TODO:
+    Tokens in veBalGetVotingList query have type GqlVotingGaugeToken which does not have all the properties of PoolToken
+    That means that token pills will be different for voting pools (unless we change the backend types or we query and map the pool list tokens):
+    - Showing symbol instead of name
+    - GqlVotingGaugeToken does not have nestedPool property so NestedTokenPills won't be displayed
+    */
+    poolTokens: compact(
+      vote.tokens.map(token =>
+        token.underlyingTokenAddress
+          ? getToken(token.underlyingTokenAddress, vote.chain)
+          : ({ ...token, name: token.symbol } as unknown as PoolToken)
+      )
+    ),
     address: vote.address,
-    protocolVersion: 3, // fix: (votes) no data
+    protocolVersion: vote.protocolVersion, // fix: (votes) no data
+    symbol: vote.symbol,
+    // TODO: API is not returning the following fields in GqlVotingPool yet
+    hook: undefined, // fix: (votes) no data
     hasAnyAllowedBuffer: false, // fix: (votes) no data
     hasErc4626: false, // fix: (votes) no data
+    tags: [], // fix: (votes) no data
   }
 }
 
@@ -39,7 +59,7 @@ export function isPoolExpired(pool: VotingPoolWithData) {
 }
 
 export const orderByHash: Record<SortVotesBy, { label: string; title?: string }> = {
-  type: { label: 'Type' },
+  type: { label: 'Details' },
   bribes: {
     label: 'Bribes',
     title:

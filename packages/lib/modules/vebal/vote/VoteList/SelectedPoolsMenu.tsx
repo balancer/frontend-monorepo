@@ -13,11 +13,12 @@ interface SelectedPoolsToastProps {
 
 export function SelectedPoolsMenu({ onAddVotesClick, votingPools }: SelectedPoolsToastProps) {
   const [expanded, setExpanded] = useState(false)
+  const sortedPools = votingPools.toReversed()
   const visiblePools = expanded
-    ? votingPools.slice(0, MAX_VISIBLE_POOLS_COUNT)
-    : votingPools.slice(0, MIN_VISIBLE_POOLS_COUNT)
+    ? sortedPools.slice(0, MAX_VISIBLE_POOLS_COUNT)
+    : sortedPools.slice(0, MIN_VISIBLE_POOLS_COUNT)
 
-  const moreCount = votingPools.length - visiblePools.length
+  const moreCount = sortedPools.length - visiblePools.length
 
   const [_bgColor] = useToken('colors', ['background.level0'])
   const bgColor = tinycolor(_bgColor).setAlpha(0.4).toRgbString()
@@ -27,7 +28,7 @@ export function SelectedPoolsMenu({ onAddVotesClick, votingPools }: SelectedPool
       <VStack alignItems="stretch" p="0" spacing="0" w="full">
         <HStack justifyContent="space-between" p="md">
           <Text color="font.maxContrast" flex="1" fontWeight="700">
-            Pool selection ({votingPools.length})
+            Pool selection ({sortedPools.length})
           </Text>
           <HStack>
             {onAddVotesClick && (
