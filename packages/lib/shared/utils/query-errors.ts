@@ -261,6 +261,7 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
    More context: https://github.com/rainbow-me/rainbowkit/issues/2238
   */
   if (message.includes('provider.disconnect is not a function')) return true
+  if (stackTrace.includes('provider.disconnect is not a function')) return true
 
   /*
     Thrown from useWalletClient() when loading a pool page from scratch.
