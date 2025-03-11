@@ -14,10 +14,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
-import {
-  PoolChartTypeTab,
-  usePoolCharts,
-} from '../../pool/PoolDetail/PoolStats/PoolCharts/usePoolCharts'
+import { PoolChartTypeTab } from '../../pool/PoolDetail/PoolStats/PoolCharts/usePoolCharts'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ClpBadge } from './ClpBadge'
@@ -47,7 +44,6 @@ interface EclpChartProps extends CardProps {
 }
 
 export function EclpChart({ activeTab, setActiveTab, tabsList, ...props }: EclpChartProps) {
-  const { handleMouseLeave } = usePoolCharts()
   const { hasChartData, poolIsInRange, isLoading, options, toggleIsReversed } = useEclpChart()
 
   return (
@@ -79,7 +75,7 @@ export function EclpChart({ activeTab, setActiveTab, tabsList, ...props }: EclpC
                   <ClpBadge poolIsInRange={poolIsInRange} />
                 </VStack>
               </Stack>
-              <Box h="full" onMouseLeave={handleMouseLeave} position="relative" w="full">
+              <Box h="full" position="relative" w="full">
                 <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
                 <Button
                   bottom={0}

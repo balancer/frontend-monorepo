@@ -567,14 +567,6 @@ export function usePoolCharts() {
     [chartData]
   )
 
-  const handleMouseLeave = useCallback(() => {
-    const lastChartData = chartData?.[chartData.length - 1]
-    if (!lastChartData) return
-
-    setChartValue(Number(lastChartData?.[1]))
-    setChartDate(format(new Date(Number(lastChartData?.[0]) * 1000), 'dd MMM yyyy'))
-  }, [chartData])
-
   return {
     isLoading,
     activeTab,
@@ -585,7 +577,6 @@ export function usePoolCharts() {
     chartDate,
     options,
     handleAxisMoved,
-    handleMouseLeave,
     chartData,
     tabsList,
     chartValueSum,

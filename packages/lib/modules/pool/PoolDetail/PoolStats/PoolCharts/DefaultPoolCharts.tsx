@@ -78,7 +78,6 @@ export function DefaultPoolCharts({
   isLoading,
   options,
   handleAxisMoved,
-  handleMouseLeave,
   chartValueSum,
   hasChartData,
   ...props
@@ -131,7 +130,7 @@ export function DefaultPoolCharts({
                   </Text>
                 </VStack>
               </Stack>
-              <Box h="full" onMouseLeave={handleMouseLeave} w="full">
+              <Box h="full" w="full">
                 <ReactECharts
                   onEvents={{
                     updateAxisPointer: handleAxisMoved,
