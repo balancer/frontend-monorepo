@@ -7,7 +7,7 @@ const OUT_OF_RANGE_TEXT =
 const IN_RANGE_TEXT =
   'The current price is between the liquidity upper and lower bounds for this Concentrated Liquidity Pool (CLP). In range pools earn high swap fees.'
 
-export function CLPBadge({ poolIsInRange }: { poolIsInRange: boolean }) {
+export function ClpBadge({ poolIsInRange }: { poolIsInRange: boolean }) {
   return (
     <CustomPopover
       bodyText={poolIsInRange ? IN_RANGE_TEXT : OUT_OF_RANGE_TEXT}

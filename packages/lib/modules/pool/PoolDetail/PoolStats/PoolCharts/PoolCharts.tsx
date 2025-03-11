@@ -26,7 +26,7 @@ import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGro
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { CLPBadge } from './CLPBadge'
+import { ClpBadge } from '../../../../eclp/components/ClpBadge'
 import { Repeat } from 'react-feather'
 
 type PeriodOption = PoolChartPeriod & OptionBase
@@ -129,7 +129,7 @@ export function PoolCharts({ ...props }: CardProps) {
                   spacing="0"
                 >
                   {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
-                    <CLPBadge poolIsInRange={poolIsInRange} />
+                    <ClpBadge poolIsInRange={poolIsInRange} />
                   ) : (
                     <>
                       <Heading fontWeight="bold" size="h5">
