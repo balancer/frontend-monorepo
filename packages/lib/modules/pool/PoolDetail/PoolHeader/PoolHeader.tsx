@@ -15,6 +15,7 @@ import { useState } from 'react'
 import { getXavePoolLink } from '../../pool.utils'
 import { PoolAdvancedOptions } from './PoolAdvancedOptions'
 import { usePoolMetadata } from '../../metadata/usePoolMetadata'
+import { formatTextListAsItems } from '@repo/lib/shared/utils/text-format'
 
 export function PoolHeader() {
   const pathname = usePathname()
@@ -26,6 +27,7 @@ export function PoolHeader() {
   const poolMetadata = usePoolMetadata(pool)
 
   const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, poolMetadata)
+  const blockingReasons = formatTextListAsItems(getPoolAddBlockedReason(pool))
 
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
@@ -69,8 +71,13 @@ export function PoolHeader() {
         <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
           <PoolTags />
           <HStack spacing="sm">
-            {/* TODO: Add block reason alerts*/}
-            <Tooltip label={isAddLiquidityBlocked ? getPoolAddBlockedReason(pool) : ''}>
+            <Tooltip
+              label={
+                <Text color="primaryTextColor" whiteSpace="pre-line">
+                  {blockingReasons}
+                </Text>
+              }
+            >
               <Button
                 isDisabled={isAddLiquidityBlocked}
                 onClick={handleClick}
