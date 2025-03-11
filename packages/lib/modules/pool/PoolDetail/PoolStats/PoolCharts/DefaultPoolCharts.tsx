@@ -32,22 +32,6 @@ type Props = {
   onChange(value: PeriodOption): void
 }
 
-const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
-  contentProps: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomLeftRadius: 'none',
-    borderTopLeftRadius: 'none',
-    borderBottomRightRadius: 'none',
-  },
-  cardProps: {
-    position: 'relative',
-    overflow: 'hidden',
-    height: 'full',
-  },
-}
-
 export function PeriodSelect({ value, onChange }: Props) {
   const chakraStyles = getSelectStyles<PeriodOption>()
 
@@ -67,7 +51,8 @@ export function PeriodSelect({ value, onChange }: Props) {
   )
 }
 
-type DefaultPoolChartsProps = CardProps & PoolChartsData
+type DefaultPoolChartsProps = CardProps &
+  PoolChartsData & { cardProps: BoxProps; contentProps: BoxProps }
 
 export function DefaultPoolCharts({
   activeTab,
@@ -80,6 +65,8 @@ export function DefaultPoolCharts({
   handleAxisMoved,
   chartValueSum,
   hasChartData,
+  cardProps,
+  contentProps,
   ...props
 }: DefaultPoolChartsProps) {
   function getActiveTabLabel() {
@@ -99,10 +86,7 @@ export function DefaultPoolCharts({
         {isLoading ? (
           <Skeleton h="full" minH="200px" w="full" />
         ) : hasChartData ? (
-          <NoisyCard
-            cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
-            contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
-          >
+          <NoisyCard cardProps={cardProps} contentProps={contentProps}>
             <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
               <Stack direction={{ base: 'column', md: 'row' }} w="full">
                 <HStack alignSelf="flex-start">

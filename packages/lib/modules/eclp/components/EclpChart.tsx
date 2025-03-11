@@ -21,29 +21,22 @@ import { ClpBadge } from './ClpBadge'
 import { useEclpChart } from '../hooks/useEclpChart'
 import { Repeat } from 'react-feather'
 
-const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
-  contentProps: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomLeftRadius: 'none',
-    borderTopLeftRadius: 'none',
-    borderBottomRightRadius: 'none',
-  },
-  cardProps: {
-    position: 'relative',
-    overflow: 'hidden',
-    height: 'full',
-  },
-}
-
 interface EclpChartProps extends CardProps {
   activeTab: PoolChartTypeTab
   setActiveTab: (tab: PoolChartTypeTab) => void
   tabsList: PoolChartTypeTab[]
+  cardProps: BoxProps
+  contentProps: BoxProps
 }
 
-export function EclpChart({ activeTab, setActiveTab, tabsList, ...props }: EclpChartProps) {
+export function EclpChart({
+  activeTab,
+  setActiveTab,
+  tabsList,
+  cardProps,
+  contentProps,
+  ...props
+}: EclpChartProps) {
   const { hasChartData, poolIsInRange, isLoading, options, toggleIsReversed } = useEclpChart()
 
   return (
@@ -52,10 +45,7 @@ export function EclpChart({ activeTab, setActiveTab, tabsList, ...props }: EclpC
         {isLoading ? (
           <Skeleton h="full" minH="200px" w="full" />
         ) : hasChartData ? (
-          <NoisyCard
-            cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
-            contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
-          >
+          <NoisyCard cardProps={cardProps} contentProps={contentProps}>
             <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
               <Stack direction={{ base: 'column', md: 'row' }} w="full">
                 <HStack alignSelf="flex-start">
