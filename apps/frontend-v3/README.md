@@ -60,7 +60,7 @@ more context.
 You can explicitly run with webpack mode with:
 
 ```bash
-pnpm dev:beets:webpack
+pnpm dev:webpack
 ```
 
 ## Testing
