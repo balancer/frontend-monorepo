@@ -132,4 +132,9 @@ describe('shouldBlockAddLiquidity', () => {
     expect(shouldBlockAddLiquidity(pool3)).toBe(true)
     expect(getPoolAddBlockedReason(pool3)).toBe('Tokenized vault for token waEthUSDT is not safe')
   })
+
+  it('should not block add liquidity if the metadata explicitly allows it', () => {
+    const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+    expect(shouldBlockAddLiquidity(pool, { allowAddLiquidity: true })).toBe(false)
+  })
 })

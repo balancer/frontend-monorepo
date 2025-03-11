@@ -29,6 +29,7 @@ import { vaultV3Abi } from '@balancer/sdk'
 import { PoolListItem, Pool, PoolCore } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
+import { PoolMetadata } from './metadata/getPoolsMetadata'
 
 /**
  * METHODS
@@ -311,7 +312,12 @@ const shouldBlockV3PoolAdds = false
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
-export function shouldBlockAddLiquidity(pool: Pool) {
+export function shouldBlockAddLiquidity(pool: Pool, poolMetadata?: PoolMetadata) {
+  // we allow the metadata to override the default behavior
+  if (poolMetadata?.allowAddLiquidity === true) {
+    return false
+  }
+
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
 
   // avoid blocking Sepolia pools

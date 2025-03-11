@@ -52,6 +52,7 @@ import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { supportsWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
+import { usePoolMetadata } from '../../../metadata/usePoolMetadata'
 import { useGetPoolRewards } from '../../../useGetPoolRewards'
 
 // small wrapper to prevent out of context error
@@ -98,6 +99,7 @@ function AddLiquidityMainForm() {
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
   const { shouldUseSignatures } = useUserSettings()
+  const poolMetadata = usePoolMetadata(pool)
   const { calculatePotentialYield } = useGetPoolRewards(pool)
 
   const setFlexibleTab = () => {
@@ -183,6 +185,12 @@ function AddLiquidityMainForm() {
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="md" w="full">
+          {poolMetadata?.addLiquidityWarning && (
+            <BalAlert
+              content={poolMetadata.addLiquidityWarning.text}
+              status={poolMetadata.addLiquidityWarning.type}
+            />
+          )}
           {hasNoLiquidity(pool) && (
             <BalAlert content="You cannot add because the pool has no liquidity" status="warning" />
           )}

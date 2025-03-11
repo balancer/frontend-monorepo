@@ -17,6 +17,7 @@ import { VulnerabilityDataMap } from './pool-issues/PoolIssue.labels'
 import { PoolIssue } from './pool-issues/PoolIssue.type'
 import { BalAlertProps } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useHook } from '../../hooks/useHook'
+import { usePoolMetadata } from '../metadata/usePoolMetadata'
 
 export type PoolAlert = {
   identifier: string
@@ -27,6 +28,7 @@ export function usePoolAlerts(pool: Pool) {
   const router = useRouter()
   const [poolAlerts, setPoolAlerts] = useState<PoolAlert[]>([])
   const { hooks } = useHook(pool)
+  const poolMetadata = usePoolMetadata(pool)
 
   const getNetworkPoolAlerts = (pool: Pool): PoolAlert[] => {
     const networkPoolsIssues = getNetworkConfig(pool.chain).pools?.issues
@@ -275,6 +277,14 @@ export function usePoolAlerts(pool: Pool) {
       })
     }
 
+    if (poolMetadata?.warning) {
+      alerts.push({
+        identifier: 'poolWarning',
+        content: poolMetadata.warning.text,
+        status: poolMetadata.warning.type,
+        isSoftWarning: false,
+      })
+    }
     return alerts
   }
 
