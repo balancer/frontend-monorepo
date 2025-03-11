@@ -17,16 +17,13 @@ import {
   PoolChartTab,
   PoolChartTypeTab,
   poolChartPeriods,
-  usePoolCharts,
   PoolChartPeriod,
+  PoolChartsData,
 } from './usePoolCharts'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { ClpBadge } from '../../../../eclp/components/ClpBadge'
-import { EclpChart } from '@repo/lib/modules/eclp/components/EclpChart'
-import { useEclpChart } from '@repo/lib/modules/eclp/hooks/useEclpChart'
 
 type PeriodOption = PoolChartPeriod & OptionBase
 
@@ -70,33 +67,22 @@ export function PeriodSelect({ value, onChange }: Props) {
   )
 }
 
-export function PoolCharts({ ...props }: CardProps) {
-  const {
-    activeTab,
-    setActiveTab,
-    activePeriod,
-    setActivePeriod,
-    isLoading: isLoadingPoolCharts,
-    options,
-    handleAxisMoved,
-    handleMouseLeave,
-    tabsList,
-    chartValueSum,
-    hasChartData: hasPoolChartData,
-  } = usePoolCharts()
+type DefaultPoolChartsProps = CardProps & PoolChartsData
 
-  const {
-    hasChartData: hasEclpChartData,
-    poolIsInRange,
-    isLoading: isLoadingEclpData,
-  } = useEclpChart()
-
-  const isLoading =
-    isLoadingPoolCharts || (activeTab.value === PoolChartTab.LIQUIDITY_PROFILE && isLoadingEclpData)
-
-  const hasChartData =
-    activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? hasEclpChartData : hasPoolChartData
-
+export function DefaultPoolCharts({
+  activeTab,
+  setActiveTab,
+  tabsList,
+  activePeriod,
+  setActivePeriod,
+  isLoading,
+  options,
+  handleAxisMoved,
+  handleMouseLeave,
+  chartValueSum,
+  hasChartData,
+  ...props
+}: DefaultPoolChartsProps) {
   function getActiveTabLabel() {
     switch (activeTab.value) {
       case PoolChartTab.TVL:
@@ -137,33 +123,22 @@ export function PoolCharts({ ...props }: CardProps) {
                   ml={{ base: undefined, md: 'auto' }}
                   spacing="0"
                 >
-                  {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
-                    <ClpBadge poolIsInRange={poolIsInRange} />
-                  ) : (
-                    <>
-                      <Heading fontWeight="bold" size="h5">
-                        {chartValueSum}
-                      </Heading>
-                      <Text color="grayText" fontSize="sm">
-                        {getActiveTabLabel()}
-                      </Text>
-                    </>
-                  )}
+                  <Heading fontWeight="bold" size="h5">
+                    {chartValueSum}
+                  </Heading>
+                  <Text color="grayText" fontSize="sm">
+                    {getActiveTabLabel()}
+                  </Text>
                 </VStack>
               </Stack>
-              {/* position="relative" is needed for <EclpChart /> */}
-              <Box h="full" onMouseLeave={handleMouseLeave} position="relative" w="full">
-                {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
-                  <EclpChart />
-                ) : (
-                  <ReactECharts
-                    onEvents={{
-                      updateAxisPointer: handleAxisMoved,
-                    }}
-                    option={options}
-                    style={{ height: '100%', width: '100%' }}
-                  />
-                )}
+              <Box h="full" onMouseLeave={handleMouseLeave} w="full">
+                <ReactECharts
+                  onEvents={{
+                    updateAxisPointer: handleAxisMoved,
+                  }}
+                  option={options}
+                  style={{ height: '100%', width: '100%' }}
+                />
               </Box>
             </VStack>
           </NoisyCard>
