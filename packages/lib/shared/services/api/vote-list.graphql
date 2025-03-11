@@ -1,10 +1,11 @@
-query GetVeBalVotingList {
-  veBalGetVotingList {
+query GetVeBalVotingList($includeKilled: Boolean) {
+  veBalGetVotingList(includeKilled: $includeKilled) {
     id
     symbol
     type
     address
     chain
+    protocolVersion
     gauge {
       addedTimestamp
       address
@@ -14,6 +15,7 @@ query GetVeBalVotingList {
       relativeWeightCap
     }
     tokens {
+      underlyingTokenAddress
       address
       logoURI
       symbol

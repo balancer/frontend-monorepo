@@ -27,11 +27,11 @@
       "cache": false,
       "persistent": true
     },
-    "dev:turbopack": {
+    "dev:webpack": {
       "cache": false,
       "persistent": true
     },
-    "dev:beets:turbopack": {
+    "dev:beets:webpack": {
       "cache": false,
       "persistent": true
     },
@@ -86,9 +86,13 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
     },
     "test:e2e:build:ui": {
+      "cache": false,
+      "persistent": true,
       "dependsOn": ["^transit"]
     },
     "test:e2e:dev:ui": {
+      "cache": false,
+      "persistent": true,
       "dependsOn": ["^transit"]
     },
     "graphql:gen": {

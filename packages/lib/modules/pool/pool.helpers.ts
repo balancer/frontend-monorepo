@@ -26,9 +26,10 @@ import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { vaultV3Abi } from '@balancer/sdk'
-import { PoolListItem, Pool, PoolCore } from './pool.types'
+import { Pool, PoolCore } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
+import { PoolMetadata } from './metadata/getPoolsMetadata'
 
 /**
  * METHODS
@@ -65,7 +66,7 @@ export function isFx(poolType: GqlPoolType | string): boolean {
   return poolType === GqlPoolType.Fx
 }
 
-export function isBoosted(pool: PoolListItem | Pool) {
+export function isBoosted(pool: Pick<PoolCore, 'protocolVersion' | 'hasAnyAllowedBuffer'>) {
   return isV3Pool(pool) && pool.hasAnyAllowedBuffer // this means that the pool has at least one ERC4626 token with allowed buffer
 }
 
@@ -311,7 +312,12 @@ const shouldBlockV3PoolAdds = false
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
-export function shouldBlockAddLiquidity(pool: Pool) {
+export function shouldBlockAddLiquidity(pool: Pool, poolMetadata?: PoolMetadata) {
+  // we allow the metadata to override the default behavior
+  if (poolMetadata?.allowAddLiquidity === true) {
+    return false
+  }
+
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
 
   // avoid blocking Sepolia pools

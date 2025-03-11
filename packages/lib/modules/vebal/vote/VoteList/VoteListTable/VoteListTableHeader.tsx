@@ -34,7 +34,11 @@ export function VoteListTableHeader({ ...rest }) {
         <Text fontWeight="bold">Pool name</Text>
       </GridItem>
       {orderBy.map(orderByItem => (
-        <GridItem justifySelf="end" key={orderByItem} maxW="maxContent">
+        <GridItem
+          justifySelf={orderByItem === 'type' ? 'start' : 'end'}
+          key={orderByItem}
+          maxW="maxContent"
+        >
           <SortableHeader
             isSorted={sortVotesBy === orderByItem}
             label={orderByHash[orderByItem].label}
@@ -42,13 +46,20 @@ export function VoteListTableHeader({ ...rest }) {
             popoverContent={
               orderByHash[orderByItem].title ? (
                 <PopoverContent maxW="300px" p="sm" w="auto">
-                  <Text fontSize="sm" variant="secondary">
+                  <Text
+                    fontSize="sm"
+                    textAlign={
+                      ['bribes', 'bribesPerVebal'].includes(orderByItem) ? 'left' : undefined
+                    }
+                    variant="secondary"
+                  >
                     {orderByHash[orderByItem].title}
                   </Text>
                 </PopoverContent>
               ) : undefined
             }
             sorting={sorting}
+            textProps={orderByItem === 'type' ? { textAlign: 'left' } : undefined}
           />
         </GridItem>
       ))}
