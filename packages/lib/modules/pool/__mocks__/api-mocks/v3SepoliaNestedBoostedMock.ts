@@ -21,7 +21,6 @@ export const v3SepoliaNestedBoostedMock = {
   tags: ['BOOSTED_AAVE', 'BOOSTED'],
   hasErc4626: true,
   hasNestedErc4626: true,
-  hasAnyAllowedBuffer: true,
   liquidityManagement: {
     disableUnbalancedLiquidity: false,
   },

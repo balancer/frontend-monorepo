@@ -21,7 +21,6 @@ export const b_50sDAI_50wstETHMock = {
   tags: ['INCENTIVIZED'],
   hasErc4626: true,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: false,
   liquidityManagement: {
     disableUnbalancedLiquidity: null,
   },

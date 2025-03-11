@@ -21,7 +21,6 @@ export const v2SepoliaStableWithERC4626Mock = {
   tags: [],
   hasErc4626: false,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: false,
   liquidityManagement: {
     disableUnbalancedLiquidity: null,
   },
