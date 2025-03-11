@@ -261,6 +261,20 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
    More context: https://github.com/rainbow-me/rainbowkit/issues/2238
   */
   if (message.includes('provider.disconnect is not a function')) return true
+  if (stackTrace.includes('provider.disconnect is not a function')) return true
+
+  /*
+    This error is caused by different wallet extensions (btc.js, solana.js, sui.js ) when trying to register.
+    It does not crash the app and it's not controlled by our app so the only thing we can do is ignore it.
+
+    Context: https://github.com/wallet-standard/wallet-standard/issues/96
+    Examples: https://balancer-labs.sentry.io/issues/6241233852/?project=4506382607712256
+   */
+  if (
+    message.includes(`Cannot destructure property 'register' of 'undefined' as it is undefined.`)
+  ) {
+    return true
+  }
 
   /*
     Thrown from useWalletClient() when loading a pool page from scratch.
@@ -299,6 +313,13 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
   if (
     message.startsWith('Maximum call stack size exceeded') &&
     stackTrace.includes('injectWalletGuard.js')
+  ) {
+    return true
+  }
+
+  if (
+    message.startsWith('Maximum call stack size exceeded') &&
+    stackTrace.includes('HTMLMediaElement.canPlayType')
   ) {
     return true
   }

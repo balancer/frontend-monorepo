@@ -1,5 +1,5 @@
 import { useGetTokenRates } from './useGetTokenRates'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { drawLiquidityECLP } from './drawLiquidityECLP'
 import { Pool } from '../pool/pool.types'
@@ -8,7 +8,12 @@ import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { formatUnits } from 'viem'
 
 export function useGetECLPLiquidityProfile(pool: Pool) {
-  const { data: tokenRates } = useGetTokenRates(pool)
+  const { data: tokenRates, isLoading } = useGetTokenRates(pool)
+  const [isReversed, setIsReversed] = useState(false)
+
+  function toggleIsReversed() {
+    setIsReversed(!isReversed)
+  }
 
   const tokenRateScalingFactorString = useMemo(() => {
     if (!tokenRates) return
@@ -16,13 +21,31 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     return bn(tokenRates[0]).div(bn(tokenRates[1])).toFixed(4)
   }, [tokenRates])
 
-  const data = drawLiquidityECLP(pool, tokenRateScalingFactorString)
+  const liquidityData = useMemo(
+    () => drawLiquidityECLP(pool, tokenRateScalingFactorString),
+    [pool, tokenRateScalingFactorString]
+  )
 
   const params = pool && pool.poolTokens ? destructureRequiredPoolParams(pool, tokenRates) : null
 
-  const poolSpotPrice = params
+  const originalPoolSpotPrice = params
     ? formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18)
     : null
+
+  const poolSpotPrice = useMemo(() => {
+    if (!originalPoolSpotPrice) return null
+    return isReversed ? bn(1).div(bn(originalPoolSpotPrice)).toString() : originalPoolSpotPrice
+  }, [originalPoolSpotPrice, isReversed])
+
+  const data = useMemo(() => {
+    if (!liquidityData) return null
+
+    const transformedData = liquidityData.map(([price, liquidity]) =>
+      isReversed ? [1 / price, liquidity] : [price, liquidity]
+    )
+
+    return transformedData.sort((a, b) => a[0] - b[0]) as [[number, number]]
+  }, [liquidityData, isReversed])
 
   const xMin = useMemo(() => (data ? Math.min(...data.map(([x]) => x)) : 0), [data])
   const xMax = useMemo(() => (data ? Math.max(...data.map(([x]) => x)) : 0), [data])
@@ -30,7 +53,7 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
   const yMax = useMemo(() => (data ? Math.max(...data.map(([, y]) => y)) : 0), [data])
 
   const poolIsInRange = useMemo(() => {
-    const margin = 0.00000001 // if spot price is within the margin on both sides it's considered out of range
+    const margin = 0.000001 // if spot price is within the margin on both sides it's considered out of range
 
     return (
       bn(poolSpotPrice || 0).gt(xMin * (1 + margin)) &&
@@ -45,5 +68,8 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     xMin,
     xMax,
     yMax,
+    isReversed,
+    toggleIsReversed,
+    isLoading,
   }
 }

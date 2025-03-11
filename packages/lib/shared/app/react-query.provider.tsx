@@ -20,6 +20,7 @@ export const queryClient = new QueryClient({
     onError: (error, query) => {
       const sentryMeta = query?.meta as SentryMetadata
       if (shouldIgnore(error.message, error.stack)) return
+      if (shouldIgnoreEdgeCaseError(error, sentryMeta)) return
       console.log('Sentry capturing query error', {
         meta: sentryMeta,
         error,
@@ -32,7 +33,6 @@ export const queryClient = new QueryClient({
       }
 
       if (sentryMeta) {
-        if (shouldIgnoreEdgeCaseError(error, sentryMeta)) return
         return captureSentryError(error, sentryMeta as SentryMetadata)
       }
 

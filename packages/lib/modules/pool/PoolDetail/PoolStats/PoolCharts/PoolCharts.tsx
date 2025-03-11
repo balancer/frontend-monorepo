@@ -2,11 +2,13 @@
 import {
   Box,
   BoxProps,
+  Button,
   Card,
   CardProps,
   Flex,
   HStack,
   Heading,
+  Icon,
   Skeleton,
   Stack,
   Text,
@@ -25,6 +27,7 @@ import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { CLPBadge } from './CLPBadge'
+import { Repeat } from 'react-feather'
 
 type PeriodOption = PoolChartPeriod & OptionBase
 
@@ -82,6 +85,7 @@ export function PoolCharts({ ...props }: CardProps) {
     chartValueSum,
     hasChartData,
     poolIsInRange,
+    toggleIsReversed,
   } = usePoolCharts()
 
   function getActiveTabLabel() {
@@ -138,7 +142,7 @@ export function PoolCharts({ ...props }: CardProps) {
                   )}
                 </VStack>
               </Stack>
-              <Box h="full" onMouseLeave={handleMouseLeave} w="full">
+              <Box h="full" onMouseLeave={handleMouseLeave} position="relative" w="full">
                 <ReactECharts
                   onEvents={{
                     updateAxisPointer: handleAxisMoved,
@@ -146,11 +150,28 @@ export function PoolCharts({ ...props }: CardProps) {
                   option={options}
                   style={{ height: '100%', width: '100%' }}
                 />
+                {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE && (
+                  <Button
+                    bottom={0}
+                    fontSize="xs"
+                    fontWeight="medium"
+                    onClick={toggleIsReversed}
+                    position="absolute"
+                    px={2}
+                    py={1}
+                    right={2}
+                    size="xs"
+                    variant="primary"
+                    zIndex={1}
+                  >
+                    <Icon as={Repeat} />
+                  </Button>
+                )}
               </Box>
             </VStack>
           </NoisyCard>
         ) : (
-          <Flex alignItems="center" h="full">
+          <Flex align="center" h="full" justify="center" w="full">
             <Text fontSize="2xl" p="lg" variant="secondary">
               Not enough data
             </Text>
