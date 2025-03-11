@@ -1,13 +1,13 @@
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { usePool } from '../../../PoolProvider'
+import { usePool } from '../../pool/PoolProvider'
 import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
-import { getDefaultPoolChartOptions } from './usePoolCharts'
+import { getDefaultPoolChartOptions } from '../../pool/PoolDetail/PoolStats/PoolCharts/usePoolCharts'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMemo } from 'react'
 
-export function useEclpPoolChart() {
+export function useEclpChart() {
   const { pool } = usePool()
   const {
     data,

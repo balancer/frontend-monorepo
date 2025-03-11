@@ -15,7 +15,6 @@ import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTheme as useNextTheme } from 'next-themes'
 import { isCowAmmPool } from '../../../pool.helpers'
-import { useEclpPoolChart } from './useEclpPoolChart'
 
 const MIN_DISPLAY_PERIOD_DAYS = 30
 
@@ -518,23 +517,10 @@ export function usePoolCharts() {
     },
   }
 
-  const {
-    options: eclpChartOptions,
-    hasChartData: hasEclpChartData,
-    poolIsInRange,
-    toggleIsReversed,
-    isLoading: isLoadingEclpData,
-  } = useEclpPoolChart()
-
-  const isLoading = isLoadingSnapshots || isLoadingEclpData
+  const isLoading = isLoadingSnapshots
 
   const options = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[activeTab.value]
-    const isLiquidityProfile = activeTab.value === PoolChartTab.LIQUIDITY_PROFILE
-
-    if (isLiquidityProfile) {
-      return eclpChartOptions
-    }
 
     return {
       ...defaultChartOptions,
@@ -601,8 +587,6 @@ export function usePoolCharts() {
     chartData,
     tabsList,
     chartValueSum,
-    hasChartData: !!chartData.length || hasEclpChartData,
-    poolIsInRange,
-    toggleIsReversed,
+    hasChartData: !!chartData.length,
   }
 }

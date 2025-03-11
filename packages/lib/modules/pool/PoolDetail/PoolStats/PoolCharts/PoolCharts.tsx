@@ -2,13 +2,11 @@
 import {
   Box,
   BoxProps,
-  Button,
   Card,
   CardProps,
   Flex,
   HStack,
   Heading,
-  Icon,
   Skeleton,
   Stack,
   Text,
@@ -27,7 +25,8 @@ import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ClpBadge } from '../../../../eclp/components/ClpBadge'
-import { Repeat } from 'react-feather'
+import { EclpChart } from '@repo/lib/modules/eclp/components/EclpChart'
+import { useEclpChart } from '@repo/lib/modules/eclp/hooks/useEclpChart'
 
 type PeriodOption = PoolChartPeriod & OptionBase
 
@@ -77,16 +76,26 @@ export function PoolCharts({ ...props }: CardProps) {
     setActiveTab,
     activePeriod,
     setActivePeriod,
-    isLoading,
+    isLoading: isLoadingPoolCharts,
     options,
     handleAxisMoved,
     handleMouseLeave,
     tabsList,
     chartValueSum,
-    hasChartData,
-    poolIsInRange,
-    toggleIsReversed,
+    hasChartData: hasPoolChartData,
   } = usePoolCharts()
+
+  const {
+    hasChartData: hasEclpChartData,
+    poolIsInRange,
+    isLoading: isLoadingEclpData,
+  } = useEclpChart()
+
+  const isLoading =
+    isLoadingPoolCharts || (activeTab.value === PoolChartTab.LIQUIDITY_PROFILE && isLoadingEclpData)
+
+  const hasChartData =
+    activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? hasEclpChartData : hasPoolChartData
 
   function getActiveTabLabel() {
     switch (activeTab.value) {
@@ -142,30 +151,18 @@ export function PoolCharts({ ...props }: CardProps) {
                   )}
                 </VStack>
               </Stack>
+              {/* position="relative" is needed for <EclpChart /> */}
               <Box h="full" onMouseLeave={handleMouseLeave} position="relative" w="full">
-                <ReactECharts
-                  onEvents={{
-                    updateAxisPointer: handleAxisMoved,
-                  }}
-                  option={options}
-                  style={{ height: '100%', width: '100%' }}
-                />
-                {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE && (
-                  <Button
-                    bottom={0}
-                    fontSize="xs"
-                    fontWeight="medium"
-                    onClick={toggleIsReversed}
-                    position="absolute"
-                    px={2}
-                    py={1}
-                    right={2}
-                    size="xs"
-                    variant="primary"
-                    zIndex={1}
-                  >
-                    <Icon as={Repeat} />
-                  </Button>
+                {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
+                  <EclpChart />
+                ) : (
+                  <ReactECharts
+                    onEvents={{
+                      updateAxisPointer: handleAxisMoved,
+                    }}
+                    option={options}
+                    style={{ height: '100%', width: '100%' }}
+                  />
                 )}
               </Box>
             </VStack>
