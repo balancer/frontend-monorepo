@@ -13,13 +13,18 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 const allPoolExamples = [...flatPoolExamples, ...boostedPoolExamples, ...nestedPoolExamples]
 
-export default async function saveApiMocks() {
-  if (process.env.NEXT_PUBLIC_UPDATE_API_MOCKS !== 'true') {
-    console.log('Skipping api mocks update\n')
-    return
-  }
+type Options = {
+  poolId?: string // Only save the mock for the given poolId
+  apiUrl?: string // Use a custom API URL
+}
+
+export default async function saveApiMocks({ poolId }: Options = {}) {
+  if (poolId) console.log('Saving mock for poolId:', { poolId })
+
+  return
+
   const promises = allPoolExamples.map(example => {
-    if (shouldSkipMock(example)) {
+    if (shouldSkipMock(example) || (poolId && example.poolId !== poolId)) {
       return Promise.resolve(example.mockName)
     }
 
