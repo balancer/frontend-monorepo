@@ -21,7 +21,6 @@ export const staBAL3_WETH_WBTC_BPTMock = {
   tags: [],
   hasErc4626: false,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: false,
   liquidityManagement: {
     disableUnbalancedLiquidity: null,
   },

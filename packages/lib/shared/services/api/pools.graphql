@@ -24,7 +24,6 @@ query GetPools(
     tags
     hasErc4626
     hasNestedErc4626
-    hasAnyAllowedBuffer
     hook {
       ...Hook
     }
@@ -175,7 +174,6 @@ query GetFeaturedPools($chains: [GqlChain!]!) {
       }
       hasErc4626
       hasNestedErc4626
-      hasAnyAllowedBuffer
     }
   }
 }

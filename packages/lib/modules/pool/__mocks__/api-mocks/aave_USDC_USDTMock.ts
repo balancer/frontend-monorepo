@@ -21,7 +21,6 @@ export const aave_USDC_USDTMock = {
   tags: ['BOOSTED_AAVE', 'BOOSTED', 'INCENTIVIZED'],
   hasErc4626: true,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: true,
   liquidityManagement: {
     disableUnbalancedLiquidity: false,
   },

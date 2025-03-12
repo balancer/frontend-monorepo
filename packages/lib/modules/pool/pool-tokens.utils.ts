@@ -19,7 +19,7 @@ export function getCompositionTokens(pool: PoolCore | GqlNestedPool | FeaturedPo
    Used in the pool header and in the pools list.
 */
 export function getUserReferenceTokens(pool: PoolCore | FeaturedPool): PoolToken[] {
-  if (isV3Pool(pool) && pool.hasErc4626 && pool.hasAnyAllowedBuffer) {
+  if (isBoosted(pool)) {
     return sortByIndex(
       pool.poolTokens.map(token =>
         token.isErc4626 && token.useUnderlyingForAddRemove

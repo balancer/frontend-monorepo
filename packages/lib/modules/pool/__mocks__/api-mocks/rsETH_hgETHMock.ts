@@ -21,7 +21,6 @@ export const rsETH_hgETHMock = {
   tags: [],
   hasErc4626: true,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: false,
   liquidityManagement: {
     disableUnbalancedLiquidity: false,
   },

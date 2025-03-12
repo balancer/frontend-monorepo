@@ -21,7 +21,6 @@ export const b_auraBAL_STABLEMock = {
   tags: [],
   hasErc4626: false,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: false,
   liquidityManagement: {
     disableUnbalancedLiquidity: null,
   },

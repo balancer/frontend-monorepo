@@ -42,7 +42,6 @@ export type VotingPool = Pick<
   // We need these fields to display boosted underlying tokens in pool token pills (shared by voting, portfolio and standard pool list)
   | 'protocolVersion'
   | 'hasErc4626'
-  | 'hasAnyAllowedBuffer'
   // We need tags to display erc4626Metadata in PoolListTableDetailsCell
   | 'tags'
   // We need hook to show when the pool has hooks in the voting list

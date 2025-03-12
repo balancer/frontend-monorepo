@@ -21,7 +21,6 @@ export const partialBoostedSepoliaWethStataUsdtMock = {
   tags: ['BOOSTED_AAVE', 'BOOSTED'],
   hasErc4626: true,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: true,
   liquidityManagement: {
     disableUnbalancedLiquidity: false,
   },
