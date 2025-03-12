@@ -76,7 +76,7 @@
       "dependsOn": ["^graphql:gen"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "test:run:scripts": {
+    "test:save-api-mocks": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["^graphql:gen"],

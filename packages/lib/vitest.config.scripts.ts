@@ -4,9 +4,11 @@ import vitestUnitConfig from './vitest.config'
 
 /*
   Instead of using tsx or ts-node, we follow a pragmatic approach by overriding the existing vitest setup to run scripts,
-  so files like foo.script.test.ts will be considered scripts
+  so files like foo.script.test.ts will be considered scripts.
 
-  Tun those scripts with 'pnpm run test:run:scripts'
+  For now we only use it for saving api mocks but more scripts could be added in the future.
+
+  Run it with: 'pnpm run test:save-api-mocks'
 */
 
 function setupFilesWithoutMswSetup() {
