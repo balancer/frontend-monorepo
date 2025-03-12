@@ -1,17 +1,33 @@
-import { Box, Button, Grid, GridItem, GridProps, HStack, Skeleton, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  GridProps,
+  HStack,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Portal,
+  Skeleton,
+  Text,
+} from '@chakra-ui/react'
 import Link from 'next/link'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
-import { getPoolPath, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
+import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListVotesCell } from '@repo/lib/modules/vebal/vote/VoteList/VoteListTable/VoteListVotesCell'
 import { VoteExpiredTooltip } from '@repo/lib/modules/vebal/vote/VoteExpiredTooltip'
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
+import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -33,6 +49,8 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
 
   const isDisabled = !isConnected || hasAllVotingPowerTimeLocked || !allowSelectVotingPools
 
+  const { getToken } = useTokens()
+
   return (
     <FadeInOnView>
       <Box
@@ -50,17 +68,10 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             <NetworkIcon chain={vote.chain} size={6} />
           </GridItem>
           <GridItem>
-            <Link
-              href={getPoolPath({
-                id: vote.id,
-                chain: vote.chain,
-                type: vote.type,
-                protocolVersion: undefined,
-              })}
-              target="_blank"
-            >
+            <Link href={getPoolPath(vote)} target="_blank">
               <HStack>
                 <VotingListTokenPills
+                  getToken={getToken}
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
@@ -74,10 +85,8 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
               </HStack>
             </Link>
           </GridItem>
-          <GridItem textAlign="right">
-            <Text fontWeight="medium" textAlign="right" textTransform="capitalize">
-              {getPoolTypeLabel(vote.type)}
-            </Text>
+          <GridItem>
+            <PoolListTableDetailsCell pool={voteToPool(vote, getToken)} />
           </GridItem>
           <GridItem justifySelf="end" textAlign="right">
             {votingIncentivesLoading ? (
@@ -85,7 +94,20 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             ) : vote.votingIncentive ? (
               <Text>{toCurrency(vote.votingIncentive.totalValue, { abbreviated: false })}</Text>
             ) : (
-              <Text color="red.400">&mdash;</Text>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <Text color="font.warning" zIndex={1}>
+                    &mdash;
+                  </Text>
+                </PopoverTrigger>
+                <Portal>
+                  <PopoverContent maxW="300px" p="sm" w="auto">
+                    <Text fontSize="sm" textAlign="left" variant="secondary">
+                      There is currently no bribe data on this pool from Hidden Hand
+                    </Text>
+                  </PopoverContent>
+                </Portal>
+              </Popover>
             )}
           </GridItem>
           <GridItem justifySelf="end" textAlign="right">
@@ -94,7 +116,18 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             ) : vote.votingIncentive ? (
               <Text>{toCurrency(vote.votingIncentive.valuePerVote, { abbreviated: false })}</Text>
             ) : (
-              <Text color="red.400">&mdash;</Text>
+              <Popover trigger="hover">
+                <PopoverTrigger>
+                  <Text color="font.warning">&mdash;</Text>
+                </PopoverTrigger>
+                <Portal>
+                  <PopoverContent maxW="300px" p="sm" w="auto">
+                    <Text fontSize="sm" textAlign="left" variant="secondary">
+                      There is currently no bribe data on this pool from Hidden Hand
+                    </Text>
+                  </PopoverContent>
+                </Portal>
+              </Popover>
             )}
           </GridItem>
           <GridItem justifySelf="end" textAlign="right">

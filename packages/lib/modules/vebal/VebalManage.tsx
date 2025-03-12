@@ -1,5 +1,5 @@
 import { useUserAccount } from '../web3/UserAccountProvider'
-import { Button, Center, Heading, Stack, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, Heading, Stack, VStack } from '@chakra-ui/react'
 import { VebalStatsLayout } from './VebalStats/VebalStatsLayout'
 import { VebalBreadcrumbs } from '@repo/lib/modules/vebal/VebalBreadcrumbs'
 import { ReactNode } from 'react'
@@ -55,7 +55,9 @@ export function VebalManage() {
             }
           />
           <Center border="1px dashed" borderColor="border.base" h="400px" rounded="lg">
-            <ConnectWallet size="lg" variant="primary" />
+            <Box>
+              <ConnectWallet size="lg" variant="primary" />
+            </Box>
           </Center>
         </Stack>
       </Stack>

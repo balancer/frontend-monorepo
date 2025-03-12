@@ -11,6 +11,7 @@ import { VStack } from '@chakra-ui/react'
 import { MyVotesProvider } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { getHiddenHandVotingIncentivesEither } from '@repo/lib/shared/services/hidden-hand/getHiddenHandVotingIncentives'
+import { VotesIntroductionLayout } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotesIntroductionLayout'
 
 export async function VotesContainer() {
   const client = getApolloServerClient()
@@ -37,6 +38,8 @@ export async function VotesContainer() {
       votingIncentivesLoading={false} /* RSC (SSR) mode, no loading needed */
     >
       <VStack spacing="3xl" w="full">
+        {/* todo: work in progress */}
+        {false && <VotesIntroductionLayout />}
         <TransactionStateProvider>
           <MyVotesProvider>
             <MyVotesLayout />
