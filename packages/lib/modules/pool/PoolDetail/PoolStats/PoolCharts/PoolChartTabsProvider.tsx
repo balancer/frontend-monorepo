@@ -1,9 +1,10 @@
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useParams } from 'next/navigation'
-import { createContext, PropsWithChildren, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react'
 import { PoolVariant, BaseVariant } from '../../../pool.types'
 import { usePool } from '../../../PoolProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { PoolChartPeriod } from './usePoolCharts'
 
 export enum PoolChartTab {
   VOLUME = 'volume',
@@ -62,6 +63,8 @@ export const PoolChartTabsContext = createContext<PoolChartTabsResponse | null>(
 export function _usePoolChartTabs() {
   const { pool } = usePool()
   const { variant } = useParams()
+  const previousIndexRef = useRef<number | null>(null)
+  const [direction, setDirection] = useState(1)
 
   const tabsList = useMemo(() => {
     const poolType = pool?.type
@@ -75,10 +78,32 @@ export function _usePoolChartTabs() {
 
   const [activeTab, setActiveTab] = useState(tabsList[0])
 
+  const activeIndex = tabsList.findIndex(tab => tab.value === activeTab.value)
+
+  useEffect(() => {
+    if (previousIndexRef.current !== null) {
+      setDirection(activeIndex > previousIndexRef.current ? 1 : -1)
+    }
+    previousIndexRef.current = activeIndex
+  }, [activeIndex])
+
+  function getActiveTabLabel(activePeriod: PoolChartPeriod) {
+    switch (activeTab.value) {
+      case PoolChartTab.TVL:
+        return 'Total value locked'
+      case PoolChartTab.FEES:
+        return `${activePeriod.label} fees`
+      case PoolChartTab.VOLUME:
+        return `${activePeriod.label} volume`
+    }
+  }
+
   return {
     tabsList,
     activeTab,
     setActiveTab,
+    getActiveTabLabel,
+    direction,
   }
 }
 

@@ -1,9 +1,32 @@
 'use client'
 
+import {
+  PoolChartTabsProvider,
+  PoolChartTab,
+  usePoolChartTabs,
+  PoolChartTypeTab,
+} from './PoolChartTabsProvider'
+import {
+  Box,
+  BoxProps,
+  Card,
+  Flex,
+  HStack,
+  Skeleton,
+  Stack,
+  VStack,
+  Text,
+  Heading,
+} from '@chakra-ui/react'
+import { ClpBadge } from '@repo/lib/modules/eclp/components/ClpBadge'
+import { useEclpChart } from '@repo/lib/modules/eclp/hooks/useEclpChart'
+import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { AnimatePresence, motion } from 'framer-motion'
+import { PeriodSelect } from './PeriodSelect'
+import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+import { usePoolCharts } from './usePoolCharts'
+import { EclpChart } from '@repo/lib/modules/eclp/components/EclpChart'
 import { DefaultPoolCharts } from './DefaultPoolCharts'
-import { EclpChart } from '../../../../eclp/components/EclpChart'
-import { PoolChartTabsProvider, PoolChartTab, usePoolChartTabs } from './PoolChartTabsProvider'
-import { BoxProps } from '@chakra-ui/react'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -29,14 +52,92 @@ export function PoolChartsContainer() {
   )
 }
 
-function PoolChartsContent() {
-  const { activeTab } = usePoolChartTabs()
+function PoolChartsContent({ ...props }: any) {
+  const { activeTab, setActiveTab, tabsList, getActiveTabLabel, direction } = usePoolChartTabs()
+  const { hasChartData: hasEclpChartData, isLoading: isLoadingEclpChartData } = useEclpChart()
 
-  const isLiquidityProfileTab = activeTab.value === PoolChartTab.LIQUIDITY_PROFILE
+  const {
+    hasChartData: hasPoolChartData,
+    isLoading: isLoadingPoolChartsData,
+    chartValueSum,
+    activePeriod,
+  } = usePoolCharts()
 
-  return isLiquidityProfileTab ? (
-    <EclpChart {...COMMON_NOISY_CARD_PROPS} />
-  ) : (
-    <DefaultPoolCharts {...COMMON_NOISY_CARD_PROPS} />
+  const isLoading = isLoadingEclpChartData || isLoadingPoolChartsData
+  const hasChartData = hasEclpChartData || hasPoolChartData
+
+  console.log({ containerDirection: direction })
+
+  return (
+    <Card {...props}>
+      <Stack h="full">
+        {isLoading ? (
+          <Skeleton h="full" minH="200px" w="full" />
+        ) : hasChartData ? (
+          <NoisyCard {...COMMON_NOISY_CARD_PROPS}>
+            <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
+              <Stack direction={{ base: 'column', md: 'row' }} w="full">
+                <HStack alignSelf="flex-start">
+                  <ButtonGroup
+                    currentOption={activeTab}
+                    groupId="chart"
+                    onChange={tab => setActiveTab(tab as PoolChartTypeTab)}
+                    options={tabsList}
+                    size="xxs"
+                  />
+                  {activeTab.value !== PoolChartTab.LIQUIDITY_PROFILE && <PeriodSelect />}
+                </HStack>
+                <VStack
+                  alignItems={{ base: undefined, md: 'flex-end' }}
+                  ml={{ base: undefined, md: 'auto' }}
+                  spacing="0"
+                >
+                  {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
+                    <ClpBadge />
+                  ) : (
+                    <>
+                      <Heading fontWeight="bold" size="h5">
+                        {chartValueSum}
+                      </Heading>
+                      <Text color="grayText" fontSize="sm">
+                        {getActiveTabLabel(activePeriod)}
+                      </Text>
+                    </>
+                  )}
+                </VStack>
+              </Stack>
+              <Box h="full" overflow="hidden" position="relative" w="full">
+                <AnimatePresence mode="wait">
+                  {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
+                    <motion.div
+                      animate={{ x: '0%' }}
+                      exit={{ x: direction > 0 ? '-100%' : '100%' }}
+                      initial={{ x: direction > 0 ? '100%' : '-100%' }}
+                      key={activeTab.value}
+                      style={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                      }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    >
+                      <EclpChart />
+                    </motion.div>
+                  ) : (
+                    <DefaultPoolCharts key={`default-chart-${activeTab.value}`} />
+                  )}
+                </AnimatePresence>
+              </Box>
+            </VStack>
+          </NoisyCard>
+        ) : (
+          <Flex align="center" h="full" justify="center" w="full">
+            <Text fontSize="2xl" p="lg" variant="secondary">
+              Not enough data
+            </Text>
+          </Flex>
+        )}
+      </Stack>
+    </Card>
   )
 }
