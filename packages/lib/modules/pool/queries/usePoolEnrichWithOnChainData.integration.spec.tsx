@@ -45,7 +45,7 @@ test('enriches V2 pool with on-chain data', async () => {
 test('enriches V1 Cow AMM pool with on-chain data', async () => {
   const cowPoolId = '0xf706c50513446d709f08d3e5126cd74fb6bfda19'
 
-  const pool = await fetchPoolMock(cowPoolId, GqlChain.Mainnet)
+  const pool = await fetchPoolMock({ poolId: cowPoolId, chain: GqlChain.Mainnet })
 
   // delete values to ensure that onchain data is used
   pool.dynamicData.totalLiquidity = '0'

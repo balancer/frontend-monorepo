@@ -20,6 +20,7 @@ export default defineConfig({
     include: [
       './**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
       '!./**/*.integration.{test,spec}.*', // Exclude integration tests
+      '!./**/*.script.{test,spec}.*', // Exclude script tests
     ],
     setupFiles: ['test/vitest/setup-vitest.tsx', 'test/vitest/setup-msw.ts'],
     // disable if parsing CSS is slow

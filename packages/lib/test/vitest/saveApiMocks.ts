@@ -10,27 +10,27 @@ import {
   savePoolMock,
 } from '@repo/lib/modules/pool/__mocks__/savePoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 
 const allPoolExamples = [...flatPoolExamples, ...boostedPoolExamples, ...nestedPoolExamples]
 
-type Options = {
+export type ApiMockOptions = {
+  apiUrl: string // We can generate mocks from test (includes sepolia pools) or production
   poolId?: string // Only save the mock for the given poolId
-  apiUrl?: string // Use a custom API URL
 }
 
-export default async function saveApiMocks({ poolId }: Options = {}) {
+export default async function saveApiMocks({ apiUrl, poolId }: ApiMockOptions) {
   if (poolId) console.log('Saving mock for poolId:', { poolId })
 
-  return
-
   const promises = allPoolExamples.map(example => {
-    if (shouldSkipMock(example) || (poolId && example.poolId !== poolId)) {
+    if (shouldSkipMock(apiUrl, example) || (poolId && !isSameAddress(example.poolId, poolId))) {
       return Promise.resolve(example.mockName)
     }
 
     return savePoolMock({
       poolId: example.poolId,
       chain: example.poolChain,
+      apiUrl,
       fileName: example.mockName,
       isFrozen: example.isFrozen,
     })
@@ -40,18 +40,15 @@ export default async function saveApiMocks({ poolId }: Options = {}) {
 
   await saveAllPoolApiMocksFile(mockFileNames)
 
-  console.log(`✅ Updated mocks using api: ${process.env.NEXT_PUBLIC_BALANCER_API_URL} \n`)
+  console.log(`✅ Updated mocks using api: ${apiUrl} \n`)
 }
 
-function shouldSkipMock(example: PoolExample) {
+function shouldSkipMock(apiUrl: string, example: PoolExample) {
   // Avoid saving mock in CI runs
   if (process.env.CI) return true
 
   // Skip Sepolia mock for non test-api
-  if (
-    !process.env.NEXT_PUBLIC_BALANCER_API_URL?.includes('test-api') &&
-    example.poolChain === GqlChain.Sepolia
-  ) {
+  if (!apiUrl?.includes('test-api') && example.poolChain === GqlChain.Sepolia) {
     return true
   }
   return false
