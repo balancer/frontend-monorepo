@@ -34,8 +34,6 @@ function PoolChartsContent() {
 
   const isLiquidityProfileTab = activeTab.value === PoolChartTab.LIQUIDITY_PROFILE
 
-  console.log({ isLiquidityProfileTab })
-
   return isLiquidityProfileTab ? (
     <EclpChart {...COMMON_NOISY_CARD_PROPS} />
   ) : (
