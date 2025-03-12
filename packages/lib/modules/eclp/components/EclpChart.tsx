@@ -14,30 +14,24 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
-import { PoolChartTypeTab } from '../../pool/PoolDetail/PoolStats/PoolCharts/usePoolCharts'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ClpBadge } from './ClpBadge'
 import { useEclpChart } from '../hooks/useEclpChart'
 import { Repeat } from 'react-feather'
+import {
+  usePoolChartTabs,
+  PoolChartTypeTab,
+} from '../../pool/PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 
 interface EclpChartProps extends CardProps {
-  activeTab: PoolChartTypeTab
-  setActiveTab: (tab: PoolChartTypeTab) => void
-  tabsList: PoolChartTypeTab[]
   cardProps: BoxProps
   contentProps: BoxProps
 }
 
-export function EclpChart({
-  activeTab,
-  setActiveTab,
-  tabsList,
-  cardProps,
-  contentProps,
-  ...props
-}: EclpChartProps) {
+export function EclpChart({ cardProps, contentProps, ...props }: EclpChartProps) {
   const { hasChartData, poolIsInRange, isLoading, options, toggleIsReversed } = useEclpChart()
+  const { activeTab, setActiveTab, tabsList } = usePoolChartTabs()
 
   return (
     <Card {...props}>

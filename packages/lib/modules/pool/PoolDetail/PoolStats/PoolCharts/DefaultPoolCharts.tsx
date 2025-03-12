@@ -13,17 +13,13 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
-import {
-  PoolChartTab,
-  PoolChartTypeTab,
-  poolChartPeriods,
-  PoolChartPeriod,
-  PoolChartsData,
-} from './usePoolCharts'
+import { poolChartPeriods, PoolChartPeriod } from './usePoolCharts'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { PoolChartTab, PoolChartTypeTab, usePoolChartTabs } from './PoolChartTabsProvider'
+import { usePoolCharts } from './usePoolCharts'
 
 type PeriodOption = PoolChartPeriod & OptionBase
 
@@ -51,24 +47,21 @@ export function PeriodSelect({ value, onChange }: Props) {
   )
 }
 
-type DefaultPoolChartsProps = CardProps &
-  PoolChartsData & { cardProps: BoxProps; contentProps: BoxProps }
+type DefaultPoolChartsProps = CardProps & { cardProps: BoxProps; contentProps: BoxProps }
 
-export function DefaultPoolCharts({
-  activeTab,
-  setActiveTab,
-  tabsList,
-  activePeriod,
-  setActivePeriod,
-  isLoading,
-  options,
-  handleAxisMoved,
-  chartValueSum,
-  hasChartData,
-  cardProps,
-  contentProps,
-  ...props
-}: DefaultPoolChartsProps) {
+export function DefaultPoolCharts({ cardProps, contentProps, ...props }: DefaultPoolChartsProps) {
+  const {
+    activePeriod,
+    setActivePeriod,
+    isLoading,
+    options,
+    handleAxisMoved,
+    chartValueSum,
+    hasChartData,
+  } = usePoolCharts()
+
+  const { activeTab, setActiveTab, tabsList } = usePoolChartTabs()
+
   function getActiveTabLabel() {
     switch (activeTab.value) {
       case PoolChartTab.TVL:

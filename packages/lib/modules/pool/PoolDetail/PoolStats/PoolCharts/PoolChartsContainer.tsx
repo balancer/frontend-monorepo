@@ -2,7 +2,7 @@
 
 import { DefaultPoolCharts } from './DefaultPoolCharts'
 import { EclpChart } from '../../../../eclp/components/EclpChart'
-import { PoolChartTab, usePoolCharts } from './usePoolCharts'
+import { PoolChartTabsProvider, PoolChartTab, usePoolChartTabs } from './PoolChartTabsProvider'
 import { BoxProps } from '@chakra-ui/react'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
@@ -22,22 +22,23 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
 }
 
 export function PoolChartsContainer() {
-  const poolChartsData = usePoolCharts()
-
-  const isLiquidityProfileTab = poolChartsData.activeTab.value === PoolChartTab.LIQUIDITY_PROFILE
-
   return (
-    <>
-      {isLiquidityProfileTab ? (
-        <EclpChart
-          activeTab={poolChartsData.activeTab}
-          setActiveTab={poolChartsData.setActiveTab}
-          tabsList={poolChartsData.tabsList}
-          {...COMMON_NOISY_CARD_PROPS}
-        />
-      ) : (
-        <DefaultPoolCharts {...poolChartsData} {...COMMON_NOISY_CARD_PROPS} />
-      )}
-    </>
+    <PoolChartTabsProvider>
+      <PoolChartsContent />
+    </PoolChartTabsProvider>
+  )
+}
+
+function PoolChartsContent() {
+  const { activeTab } = usePoolChartTabs()
+
+  const isLiquidityProfileTab = activeTab.value === PoolChartTab.LIQUIDITY_PROFILE
+
+  console.log({ isLiquidityProfileTab })
+
+  return isLiquidityProfileTab ? (
+    <EclpChart {...COMMON_NOISY_CARD_PROPS} />
+  ) : (
+    <DefaultPoolCharts {...COMMON_NOISY_CARD_PROPS} />
   )
 }
