@@ -6,7 +6,6 @@ import {
   Card,
   CardProps,
   Flex,
-  HStack,
   Icon,
   Skeleton,
   Stack,
@@ -14,15 +13,11 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
-import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { ClpBadge } from './ClpBadge'
 import { useEclpChart } from '../hooks/useEclpChart'
+import { PoolChartTabsContainer } from '../../pool/PoolDetail/PoolStats/PoolCharts/PoolChartTabsContainer'
 import { Repeat } from 'react-feather'
-import {
-  usePoolChartTabs,
-  PoolChartTypeTab,
-} from '../../pool/PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 
 interface EclpChartProps extends CardProps {
   cardProps: BoxProps
@@ -31,7 +26,6 @@ interface EclpChartProps extends CardProps {
 
 export function EclpChart({ cardProps, contentProps, ...props }: EclpChartProps) {
   const { hasChartData, poolIsInRange, isLoading, options, toggleIsReversed } = useEclpChart()
-  const { activeTab, setActiveTab, tabsList } = usePoolChartTabs()
 
   return (
     <Card {...props}>
@@ -42,22 +36,15 @@ export function EclpChart({ cardProps, contentProps, ...props }: EclpChartProps)
           <NoisyCard cardProps={cardProps} contentProps={contentProps}>
             <VStack h="full" p={{ base: 'sm', md: 'md' }} w="full">
               <Stack direction={{ base: 'column', md: 'row' }} w="full">
-                <HStack alignSelf="flex-start">
-                  <ButtonGroup
-                    currentOption={activeTab}
-                    groupId="eclp-chart"
-                    onChange={tab => setActiveTab(tab as PoolChartTypeTab)}
-                    options={tabsList}
-                    size="xxs"
-                  />
-                </HStack>
-                <VStack
-                  alignItems={{ base: undefined, md: 'flex-end' }}
-                  ml={{ base: undefined, md: 'auto' }}
-                  spacing="0"
-                >
-                  <ClpBadge poolIsInRange={poolIsInRange} />
-                </VStack>
+                <PoolChartTabsContainer>
+                  <VStack
+                    alignItems={{ base: undefined, md: 'flex-end' }}
+                    ml={{ base: undefined, md: 'auto' }}
+                    spacing="0"
+                  >
+                    <ClpBadge poolIsInRange={poolIsInRange} />
+                  </VStack>
+                </PoolChartTabsContainer>
               </Stack>
               <Box h="full" position="relative" w="full">
                 <ReactECharts option={options} style={{ height: '100%', width: '100%' }} />
