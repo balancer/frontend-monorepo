@@ -339,23 +339,19 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
   for (const token of poolTokens) {
     // if token is not allowed - we should block adding liquidity
-    // TODO: Add instructions and link to get it approved
     if (isV2Pool(pool) && !token.isAllowed) reasons.push(`Token: ${token.symbol} is not allowed`)
 
     if (
+      token.priceRateProvider &&
       // if rateProvider is null - we consider it as zero address and not block adding liquidity
-      !(isNil(token.priceRateProvider) || token.priceRateProvider === zeroAddress) &&
+      token.priceRateProvider !== zeroAddress &&
       // if rateProvider is the nested pool address - we consider it as safe
       token.priceRateProvider !== token.nestedPool?.address
     ) {
       // if price rate provider is set but is not reviewed - we should block adding liquidity
-      // TODO: Add instructions and link to get it reviewed
       if (!hasReviewedRateProvider(token)) {
         reasons.push(`Rate provider for token ${token.symbol} was not yet reviewed`)
-      }
-
-      // TODO: Add instructions and link to get it reviewed
-      if (token.priceRateProviderData?.summary !== 'safe') {
+      } else if (token.priceRateProviderData?.summary !== 'safe') {
         reasons.push(`Rate provider for token ${token.symbol} is not safe`)
       }
     }
@@ -363,9 +359,7 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
     if (isBoosted(pool) && token.isErc4626 && token.useUnderlyingForAddRemove) {
       if (!hasReviewedErc4626(token)) {
         reasons.push(`Tokenized vault for token ${token.symbol} was not yet reviewed`)
-      }
-
-      if (token.erc4626ReviewData?.summary !== 'safe') {
+      } else if (token.erc4626ReviewData?.summary !== 'safe') {
         reasons.push(`Tokenized vault for token ${token.symbol} is not safe`)
       }
     }
