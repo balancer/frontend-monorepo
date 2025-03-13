@@ -191,8 +191,6 @@ export function usePoolSnapshots(
   })
 }
 
-export type PoolChartsData = ReturnType<typeof usePoolCharts>
-
 export function usePoolCharts() {
   const { pool, tvl } = usePool()
   const { id: poolId } = useParams()
