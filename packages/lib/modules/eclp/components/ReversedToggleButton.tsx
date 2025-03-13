@@ -5,6 +5,7 @@ import { Repeat } from 'react-feather'
 
 export function ReversedToggleButton() {
   const { toggleIsReversed } = useEclpChart()
+
   return (
     <Button
       bottom={0}
