@@ -202,7 +202,7 @@ export function usePoolCharts() {
   const [activePeriod, setActivePeriod] = useState(poolChartPeriods[0])
   const { activeTab } = usePoolChartTabs()
 
-  const { data, loading: isLoadingSnapshots } = usePoolSnapshots(
+  const { data, loading: isLoading } = usePoolSnapshots(
     poolId as string,
     pool.chain,
     activePeriod.value
@@ -454,8 +454,6 @@ export function usePoolCharts() {
       },
     },
   }
-
-  const isLoading = isLoadingSnapshots
 
   const options = useMemo(() => {
     const activeTabOptions = poolChartTypeOptions[activeTab.value]
