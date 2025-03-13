@@ -26,6 +26,7 @@
     "test:integration:watch": "turbo test:integration:watch --ui=stream --log-order=stream --",
     "test:unit": "turbo test:unit --ui=stream --log-order=stream --",
     "test:unit:watch": "turbo test:unit:watch --ui=stream --log-order=stream --",
+    "test:save-api-mocks": "turbo test:save-api-mocks --ui=stream --log-order=stream --",
     "typecheck": "turbo typecheck",
     "prepare": "husky"
   },
