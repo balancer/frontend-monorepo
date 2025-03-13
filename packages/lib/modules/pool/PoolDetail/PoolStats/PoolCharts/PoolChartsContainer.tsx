@@ -26,7 +26,7 @@ import { PeriodSelect } from './PeriodSelect'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { usePoolCharts } from './usePoolCharts'
 import { EclpChart } from '@repo/lib/modules/eclp/components/EclpChart'
-import { DefaultPoolCharts } from './DefaultPoolCharts'
+import { PoolCharts } from './PoolCharts'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -122,7 +122,7 @@ function PoolChartsContent({ ...props }: any) {
                       <EclpChart />
                     </motion.div>
                   ) : (
-                    <DefaultPoolCharts key={`default-chart-${activeTab.value}`} />
+                    <PoolCharts key={`default-chart-${activeTab.value}`} />
                   )}
                 </AnimatePresence>
               </Box>

@@ -5,7 +5,7 @@ import { usePoolCharts } from './usePoolCharts'
 import { AnimatePresence, motion } from 'framer-motion'
 import { usePoolChartTabs } from './PoolChartTabsProvider'
 
-export function DefaultPoolCharts() {
+export function PoolCharts() {
   const { options, handleAxisMoved } = usePoolCharts()
   const { activeTab } = usePoolChartTabs()
 
