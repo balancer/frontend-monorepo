@@ -1,3 +1,5 @@
+'use client'
+
 import { PoolList } from '@repo/lib/modules/pool/PoolList/PoolList'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -8,11 +10,15 @@ import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { PoolPageStats } from './PoolPageStats'
 import { FeaturedPartners } from './FeaturedPartners'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { fNumCustom } from '../../utils/numbers'
+import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 
-export async function PoolsPage({
+export function PoolsPage({
   children,
   additionalFees,
 }: PropsWithChildren & { additionalFees?: string }) {
+  const { protocolData } = useProtocolStats()
+
   return (
     <>
       <Box borderBottom="1px solid" borderColor="border.base">
@@ -80,7 +86,7 @@ export async function PoolsPage({
                     Earn passively on {PROJECT_CONFIG.projectName}
                   </Heading>
                   <Text sx={{ textWrap: 'balance' }} variant="secondary">
-                    Join 230k+ Liquidity Providers in yield-bearing pools
+                    {`Join ${fNumCustom(protocolData?.protocolMetricsAggregated.numLiquidityProviders || '0', '0a')}+ Liquidity Providers in yield-bearing pools`}
                   </Text>
                 </Box>
                 <PoolPageStats additionalFees={additionalFees} />
