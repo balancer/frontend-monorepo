@@ -30,7 +30,7 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
       <Box flex="1">
         <Stat
           imageTransform="scale(1.5)"
-          label="Fees (24h)"
+          label={`${additionalFees ? 'Fees' : 'Swap fees'} (24h)`}
           value={fNumCustom(totalFees, '$0,0.0a')}
         />
       </Box>
