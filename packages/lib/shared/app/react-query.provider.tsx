@@ -8,10 +8,11 @@ import {
   getTenderlyUrl,
   shouldIgnore,
 } from '../utils/query-errors'
-import { ScopeContext } from '@sentry/types'
+import { ScopeContext } from '@sentry/core'
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ReactNode } from 'react'
+import { isPoolSurgingError } from '../utils/error-filters'
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -19,6 +20,7 @@ export const queryClient = new QueryClient({
     onError: (error, query) => {
       const sentryMeta = query?.meta as SentryMetadata
       if (shouldIgnore(error.message, error.stack)) return
+      if (shouldIgnoreEdgeCaseError(error, sentryMeta)) return
       console.log('Sentry capturing query error', {
         meta: sentryMeta,
         error,
@@ -30,7 +32,9 @@ export const queryClient = new QueryClient({
         sentryContext.extra.tenderlyUrl = getTenderlyUrlFromErrorMessage(error, sentryMeta)
       }
 
-      if (sentryMeta) return captureSentryError(error, sentryMeta as SentryMetadata)
+      if (sentryMeta) {
+        return captureSentryError(error, sentryMeta as SentryMetadata)
+      }
 
       // Unexpected error in query (as expected errors should have query.meta)
       captureError(error, { extra: { queryKey: query.queryKey } })
@@ -63,4 +67,14 @@ export function ReactQueryClientProvider({ children }: { children: ReactNode | R
       {isDev && shouldShowReactQueryDevtools && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   )
+}
+
+/*
+  There are some edge cases where we need to parse specific sentry metadata params
+ */
+function shouldIgnoreEdgeCaseError(error: Error, sentryMeta: SentryMetadata): boolean {
+  const metaParams = sentryMeta?.context?.extra?.params as Record<string, any>
+  const hasStableSurgeHook = metaParams?.hasStableSurgeHook
+  if (isPoolSurgingError(error.message, hasStableSurgeHook)) return true
+  return false
 }

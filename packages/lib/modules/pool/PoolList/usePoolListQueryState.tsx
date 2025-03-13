@@ -9,7 +9,6 @@ import {
 import { uniq } from 'lodash'
 import { useQueryState } from 'nuqs'
 import {
-  POOL_TAG_MAP,
   POOL_TYPE_MAP,
   PoolFilterType,
   PoolHookTagType,
@@ -178,6 +177,8 @@ export function usePoolListQueryState() {
         return 'Points'
       case 'BOOSTED':
         return 'Boosted'
+      case 'RWA':
+        return 'RWA'
       default:
         return (poolTag as string).toLowerCase().replace('_', ' ')
     }
@@ -232,11 +233,7 @@ export function usePoolListQueryState() {
       .flat()
   )
 
-  const mappedPoolTags = uniq(
-    (poolTags.length > 0 ? poolTags : [])
-      .map(poolTag => POOL_TAG_MAP[poolTag as keyof typeof POOL_TAG_MAP])
-      .flat()
-  )
+  const mappedPoolTags = poolTags.length > 0 ? poolTags : []
 
   const queryVariables = {
     first,

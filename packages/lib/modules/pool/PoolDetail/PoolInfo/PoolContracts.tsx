@@ -33,7 +33,7 @@ import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { AlertTriangle, XCircle } from 'react-feather'
 import Image from 'next/image'
 import { RateProviderInfoPopOver } from './RateProviderInfo'
-import { getWarnings, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
+import { getWarnings, isBoosted, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
 import { Erc4626InfoPopOver } from './Erc4626Info'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
@@ -178,12 +178,16 @@ export function PoolContracts({ ...props }: CardProps) {
   const erc4626Tokens = useMemo(() => {
     if (!isV3Pool(pool)) return []
     // Avoid showing tokenized vaults when no token has isBufferAllowed
-    if (isV3Pool(pool) && !pool.hasAnyAllowedBuffer) return []
+    if (!isBoosted(pool)) return []
 
-    const erc4626Tokens = pool.poolTokens.filter(token => token.isErc4626 && token.isBufferAllowed)
+    const erc4626Tokens = pool.poolTokens.filter(
+      token => token.isErc4626 && token.useUnderlyingForAddRemove
+    )
     const erc4626NestedTokens = pool.poolTokens.flatMap(token =>
       token.nestedPool
-        ? token.nestedPool.tokens.filter(token => token.isErc4626 && token.isBufferAllowed)
+        ? token.nestedPool.tokens.filter(
+            token => token.isErc4626 && token.useUnderlyingForAddRemove
+          )
         : []
     )
     return [...(erc4626Tokens ? erc4626Tokens : []), ...erc4626NestedTokens]

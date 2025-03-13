@@ -11,7 +11,7 @@ export default function Privacy() {
       <Prose>
         <div>
           <FadeInOnView>
-            <Box pb="md">
+            <Box mt="3xl" pb="md">
               <h1>Risks of using&nbsp;Balancer</h1>
               <p>
                 <em>Last Updated: May 2024</em>
@@ -98,6 +98,9 @@ export default function Privacy() {
                       </li>
                       <li>
                         <Link href="risks#stablesurge-hook">StableSurge Hook</Link>
+                      </li>
+                      <li>
+                        <Link href="risks#mevcapture-hook">MEV Capture Hook</Link>
                       </li>
                       <li>
                         <Link href="risks#concentrated-liquidity-pools">
@@ -210,7 +213,7 @@ export default function Privacy() {
             <div className="subsection anchor" id="economic-risk">
               <h4>Mechanism / Economic risk</h4>
               <p>
-                An mechanism or economic exploit of a DeFi protocol occurs when an attacker is able
+                A mechanism or economic exploit of a DeFi protocol occurs when an attacker is able
                 to manipulate the economic incentives of the protocol to their advantage, resulting
                 in a loss of funds for other participants. This can happen even when there are no
                 smart contract bugs or other unintended logic errors.
@@ -1115,7 +1118,7 @@ export default function Privacy() {
                   </p>
                   <p>
                     Stable Surge hooks introduces dynamic swap fees designed to protect peg, but may
-                    also impact the risk profile of a pool. Please also refer to{' '}
+                    also impact the risk profile of a pool. Please also refer to the{' '}
                     <Link href="risks#hooks-risk">
                       <span>Hooks</span>
                     </Link>{' '}
@@ -1159,6 +1162,63 @@ export default function Privacy() {
 
               <FadeInOnView>
                 <div className="subsection">
+                  <h4 className="anchor" id="mevcapture-hook">
+                    MEV Capture Hook
+                  </h4>
+                  <p>
+                    Maximal Extractable Value (MEV) refers to the profit that can be extracted by
+                    manipulating transaction order within a block. This hook aims to capture some of
+                    the MEV and redistribute it to liquidity providers (LPs).
+                  </p>
+                  <p>
+                    Basically, when MEV extraction occurs within one of these pools, a portion of
+                    the profit gained by the searcher (MEV extractor) is automatically collected as
+                    a fee. This fee is then distributed to the LPs who have provided liquidity to
+                    that pool. The intention is to compensate LPs for the potential negative impact
+                    of MEV on their returns and to create a more equitable distribution of value
+                    generated within the pool.
+                  </p>
+                  <p>
+                    This hook introduces a novel mechanism that may impact the risk profile of a
+                    pool. Please also refer to the{' '}
+                    <Link href="risks#hooks-risk">
+                      <span>Hooks</span>
+                    </Link>{' '}
+                    risk section and other{' '}
+                    <Link href="risks#general">
+                      <span>General</span>
+                    </Link>{' '}
+                    risks.
+                  </p>
+                  <ul>
+                    <li>
+                      Fee volatility: these fees are not fixed and can change significantly based on
+                      several factors, including but not limited to: pool imbalances, market
+                      volatility, and the specific configuration of the taxation parameters, like
+                      the multiplier and minimum threshold. The amount of MEV extracted and the
+                      resulting fee will vary depending on market conditions and the activity of
+                      searchers (MEV extractors).
+                    </li>
+                    <li>
+                      Ineffective capture: MEV capture hook is a novel implementation and there is
+                      no guarantee it will be successful in capturing all or even a significant
+                      portion of MEV. Sophisticated searchers might find ways to circumvent the fee,
+                      reducing its effectiveness and the potential benefits for LPs. The
+                      mechanism&apos;s design may need adjustments over time as MEV techniques
+                      evolve.
+                    </li>
+                    <li>
+                      To ensure precise and fair allocation, transactions subject to MEV Capture
+                      hook are restricted to single-hop trades. This is enforced by the router and
+                      allows us to definitively identify which pool should receive the collected
+                      fees.
+                    </li>
+                  </ul>
+                </div>
+              </FadeInOnView>
+
+              <FadeInOnView>
+                <div className="subsection">
                   <h4 className="anchor" id="concentrated-liquidity-pools">
                     Concentrated Liquidity Pools
                   </h4>
@@ -1193,7 +1253,7 @@ export default function Privacy() {
                     </li>
                     <li>
                       <em>E-CLPs:</em> Also known as &lsquo;Elliptic-CLPs&rsquo; support asymmetric
-                      concentrated liqudity for two assets. They provide a new type of concentrated
+                      concentrated liquidity for two assets. They provide a new type of concentrated
                       liquidity that allows highly flexible and asymmetric liquidity profiles in a
                       single pool position. Learn more about{' '}
                       <a href="https://docs.gyro.finance/gyroscope-protocol/concentrated-liquidity-pools/e-clps">

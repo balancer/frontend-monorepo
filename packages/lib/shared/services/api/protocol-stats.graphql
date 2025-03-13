@@ -5,6 +5,7 @@ query GetProtocolStats($chains: [GqlChain!]) {
     swapVolume24h
     swapFee24h
     poolCount
+    yieldCapture24h
   }
 }
 

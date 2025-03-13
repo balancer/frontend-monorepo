@@ -33,10 +33,10 @@ import { supportsWethIsEth } from '../../pool.helpers'
 import { getPoolActionableTokens, getWrappedBoostedTokens } from '../../pool-tokens.utils'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isUnbalancedAddErrorMessage } from '@repo/lib/shared/utils/error-filters'
-import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 import { useWrapUnderlying } from '../useWrapUnderlying'
+import { useProportionalSlippage } from './form/useProportionalSlippage'
 
 export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
@@ -57,9 +57,11 @@ export function _useAddLiquidity(urlTxHash?: Hash) {
     - the user selected the proportional tab
   */
   const [wantsProportional, setWantsProportional] = useState(requiresProportionalInput(pool))
-  const [proportionalSlippage, setProportionalSlippage] = useState<string>(
-    getDefaultProportionalSlippagePercentage(pool)
-  )
+  const { proportionalSlippage, setProportionalSlippage } = useProportionalSlippage({
+    pool,
+    clearAmountsIn,
+    wantsProportional,
+  })
 
   const { getNativeAssetToken, getWrappedNativeAssetToken, isLoadingTokenPrices } = useTokens()
 

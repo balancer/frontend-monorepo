@@ -10,11 +10,13 @@ import {
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { MyVotesTotalInfo } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.types'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
+import { MyIncentivesAprTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesAprTooltip'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { VotesChunksAllocation } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/useSubmittingVotes'
 import { AlertTriangle } from 'react-feather'
 import { CHUNK_SIZE } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesSteps'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 interface Props {
   submittingVotes: SubmittingVote[]
@@ -36,7 +38,10 @@ export function SubmitVotesPreview({
   const { toCurrency } = useCurrency()
 
   const optimizedRewardValue = 86.65 // fix: (votes) provide real value
+  const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
   const averageReward = 0.102 // fix: (votes) provide real value
+
+  const { getToken } = useTokens()
 
   return (
     <VStack spacing="md" w="full">
@@ -65,6 +70,7 @@ export function SubmitVotesPreview({
                         <NetworkIcon chain={vote.chain} size={6} />
 
                         <VotingListTokenPills
+                          getToken={getToken}
                           h={['32px', '36px']}
                           iconSize={20}
                           nameSize="sm"
@@ -105,6 +111,7 @@ export function SubmitVotesPreview({
                         <NetworkIcon chain={vote.chain} size={6} />
 
                         <VotingListTokenPills
+                          getToken={getToken}
                           h={['32px', '36px']}
                           iconSize={20}
                           nameSize="sm"
@@ -197,14 +204,17 @@ export function SubmitVotesPreview({
       </Card>
 
       <HStack alignItems="stretch" spacing="sm" w="full">
-        <Card flex="1" variant="subSection">
-          <Text variant="special">Potential incentives (1w)</Text>
-          <HStack spacing="xs">
-            <Text fontSize="lg" fontWeight={700} variant="special">
-              {toCurrency(optimizedRewardValue, { abbreviated: false })}
-            </Text>
-          </HStack>
-        </Card>
+        {false && (
+          <Card flex="1" variant="subSection">
+            <Text variant="special">Potential incentives (1w)</Text>
+            <HStack spacing="xs">
+              <Text fontSize="lg" fontWeight={700} variant="special">
+                {toCurrency(optimizedRewardValue, { abbreviated: false })}
+              </Text>
+              <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} />
+            </HStack>
+          </Card>
+        )}
         <Card flex="1" variant="subSection">
           <Text>Ave. Reward (Bribes/veBAL)</Text>
           <Text fontSize="lg" fontWeight={700}>

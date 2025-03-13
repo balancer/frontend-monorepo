@@ -24,7 +24,6 @@ query GetPools(
     tags
     hasErc4626
     hasNestedErc4626
-    hasAnyAllowedBuffer
     hook {
       ...Hook
     }
@@ -34,6 +33,9 @@ query GetPools(
       symbol
       weight
       name
+      canUseBufferForSwaps
+      useWrappedForAddRemove
+      useUnderlyingForAddRemove
       nestedPool {
         id
         address
@@ -45,6 +47,9 @@ query GetPools(
           symbol
           weight
           name
+          canUseBufferForSwaps
+          useWrappedForAddRemove
+          useUnderlyingForAddRemove
         }
       }
     }
@@ -169,7 +174,6 @@ query GetFeaturedPools($chains: [GqlChain!]!) {
       }
       hasErc4626
       hasNestedErc4626
-      hasAnyAllowedBuffer
     }
   }
 }

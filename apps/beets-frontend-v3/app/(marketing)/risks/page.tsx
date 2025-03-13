@@ -26,7 +26,7 @@ export default function Privacy() {
       <Prose>
         <div>
           <FadeInOnView>
-            <Box pb="md">
+            <Box mt="3xl" pb="md">
               <h1>Risks of using&nbsp;Beets</h1>
               <p>
                 <em>Last Updated: May 2024</em>
@@ -112,6 +112,9 @@ export default function Privacy() {
                       </li>
                       <li>
                         <Link href="risks#boosted-pools">Boosted Pools</Link>
+                      </li>
+                      <li>
+                        <Link href="risks#stablesurge-hook">StableSurge Hook</Link>
                       </li>
                       <li>
                         <Link href="risks#concentrated-liquidity-pools">
@@ -1105,6 +1108,70 @@ export default function Privacy() {
                     </Link>
                     , as described above.
                   </p>
+                </div>
+              </FadeInOnView>
+
+              <FadeInOnView>
+                <div className="subsection">
+                  <h4 className="anchor" id="stablesurge-hook">
+                    StableSurge Hook
+                  </h4>
+                  <p>
+                    If a pool is pushed beyond its threshold balance, a surge is initiated,
+                    resulting in an increasing tax on sellers who negatively impact the peg of the
+                    asset by continuing to push the pool out of balance. On the other hand, the
+                    liquidity providers who maintain the risk of being in the pool, earn an
+                    increased fee, resulting in higher returns on their position during times of
+                    volatility.
+                  </p>
+                  <p>
+                    The directional fee nature of the StableSurge hooks only charges the increased
+                    fee on those sellers who are driving the peg further from equilibrium, while
+                    those who are buying the underperforming asset are only charged the base fee.
+                    This aligns the incentives of the liquidity providers and the project entity,
+                    which inherently wants its token to stay as close to the peg as possible.
+                  </p>
+                  <p>
+                    Stable Surge hooks introduces dynamic swap fees designed to protect peg, but may
+                    also impact the risk profile of a pool. Please also refer to the{' '}
+                    <Link href="risks#hooks-risk">
+                      <span>Hooks</span>
+                    </Link>{' '}
+                    risk section and other{' '}
+                    <Link href="risks#general">
+                      <span>General</span>
+                    </Link>{' '}
+                    risks.
+                  </p>
+                  <ul>
+                    <li>
+                      Dynamic fee volatility: these fees are not fixed and can change significantly
+                      based on several factors, including but not limited to: pool imbalances,
+                      market volatility, and the specific configuration of the StableSurge
+                      parameters. You may encounter unexpectedly high fees, especially during
+                      periods of market stress or when the pool is significantly off-target. While
+                      the hook can lead to lower fees, there is no guarantee of consistency, and
+                      fees can rapidly increase.
+                    </li>
+                    <li>
+                      Parameter Sensitivity: The performance of the StableSurge hook is highly
+                      dependent on the correct configuration of its parameters. Incorrectly
+                      configured parameters could lead to unintended consequences, such as
+                      excessively high fees, ineffective rebalancing, or even instability in the
+                      pool. Changes to these parameters can also significantly alter the pool&apos;s
+                      behavior.
+                    </li>
+                    <li>
+                      Rate provider risk: inaccurate or manipulated oracle data could lead to
+                      unexpected fee adjustments and potential losses. Rate provider failures or
+                      manipulation are inherent risks in decentralized finance. Learn more about
+                      rate provider and oracle risks in the{' '}
+                      <Link href="risks#composable-pools">
+                        <span>Composable Stable Pools</span>
+                      </Link>{' '}
+                      risk section.
+                    </li>
+                  </ul>
                 </div>
               </FadeInOnView>
 

@@ -20,7 +20,7 @@ export const ProjectConfigBeets: ProjectConfig = {
   },
   options: {
     poolDisplayType: PoolDisplayType.Name,
-    hidePoolTags: ['VE8020'],
+    hidePoolTags: ['RWA', 'VE8020'],
     hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
     hideProtocolVersion: ['cow'],
     showPoolName: true,
@@ -28,6 +28,7 @@ export const ProjectConfigBeets: ProjectConfig = {
     showMaBeets: true,
     allowCreateWallet: false,
     showPoolHooksFilter: false,
+    isOnSafeAppList: false,
   },
   links: {
     appLinks: [

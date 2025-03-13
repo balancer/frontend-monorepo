@@ -76,6 +76,10 @@ export default defineConfig(() => {
             name: 'VaultAdmin',
             address: mainnetNetworkConfig.contracts.balancer.vaultAdminV3,
           },
+          {
+            name: 'GyroECLPPool',
+            address: '0x2191Df821C198600499aA1f0031b1a7514D7A7D9',
+          },
         ],
       }),
     ],

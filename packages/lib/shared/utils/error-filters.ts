@@ -1,3 +1,6 @@
+import { hasStableSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
+
 export function isUserRejectedError(error: Error): boolean {
   return (
     error.message.startsWith('User rejected the request.') ||
@@ -50,11 +53,12 @@ export function isPausedErrorMessage(errorMessage: string): boolean {
   return errorMessage.includes('reverted with the following reason:\nBAL#402\n')
 }
 
-export function isUnbalancedAddError(error: Error | null): boolean {
+export function isUnbalancedAddError(error: Error | null, pool: Pool): boolean {
   if (!error) return false
+  if (isPoolSurgingError(error.message, hasStableSurgeHook(pool))) return true
   if (
-    isInvariantRatioSimulationErrorMessage(error?.message) ||
-    isInvariantRatioPIErrorMessage(error?.message) ||
+    isInvariantRatioSimulationErrorMessage(error.message) ||
+    isInvariantRatioPIErrorMessage(error.message) ||
     isUnbalancedAddErrorMessage(error)
   ) {
     return true
@@ -98,5 +102,18 @@ export function isInvariantRatioPIErrorMessage(errorMessage?: string): boolean {
 
 export function isWrapWithTooSmallAmount(errorMessage?: string): boolean {
   if (!errorMessage) return false
-  return errorMessage?.includes('WrapAmountTooSmall')
+  return errorMessage.includes('WrapAmountTooSmall')
+}
+
+export function isPoolSurgingError(errorMessage: string, hasStableSurgeHook: boolean): boolean {
+  return hasStableSurgeHook && isAfterAddUnbalancedHookError(errorMessage)
+}
+
+function isAfterAddUnbalancedHookError(errorMessage: string): boolean {
+  if (!errorMessage) return false
+  return (
+    errorMessage.includes(
+      'The contract function "queryAddLiquidityUnbalancedToERC4626Pool" reverted'
+    ) && errorMessage.includes('AfterAddLiquidityHookFailed()')
+  )
 }

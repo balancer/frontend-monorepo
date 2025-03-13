@@ -103,6 +103,9 @@ export interface NetworkConfig {
   pools: PoolsConfig
   layerZeroChainId?: number
   supportsVeBalSync?: boolean
+  lbps?: {
+    collateralTokens: string[]
+  }
 }
 
 export interface Config {
@@ -138,6 +141,7 @@ type OptionsConfig = {
   showMaBeets: boolean
   allowCreateWallet: boolean
   showPoolHooksFilter: boolean
+  isOnSafeAppList: boolean
 }
 
 type Links = {

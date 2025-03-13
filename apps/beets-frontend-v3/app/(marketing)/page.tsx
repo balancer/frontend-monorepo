@@ -4,6 +4,7 @@ import { mins } from '@repo/lib/shared/utils/time'
 import {
   GetProtocolStatsDocument,
   GetProtocolStatsPerChainDocument,
+  GetStakedSonicDataDocument,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -46,10 +47,16 @@ export default async function Home() {
     },
   })
 
+  const { data: stakedSonicData } = await client.query({
+    query: GetStakedSonicDataDocument,
+    variables: {},
+  })
+
   return (
     <LandingPageLayout
       protocolData={protocolData}
       protocolDataPerChain={[protocolDataSonic, protocolDataOptimism, protocolDataFantom]}
+      stakedSonicData={stakedSonicData}
     />
   )
 }

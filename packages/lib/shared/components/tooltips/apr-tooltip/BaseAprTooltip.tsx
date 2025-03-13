@@ -1,5 +1,6 @@
 import {
   GqlChain,
+  GqlHookType,
   GqlPoolAprItem,
   GqlPoolType,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -22,6 +23,7 @@ import {
   votingIncentivesTooltipText,
   merklIncentivesTooltipText,
   surplusIncentivesTooltipText,
+  SupportedHookType,
 } from '@repo/lib/shared/hooks/useAprTooltip'
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
@@ -47,6 +49,7 @@ interface Props {
   usePortal?: boolean
   children?: ReactNode | (({ isOpen }: { isOpen: boolean }) => ReactNode)
   chain: GqlChain
+  hookType?: GqlHookType
 }
 
 const balRewardGradient =
@@ -63,6 +66,17 @@ const basePopoverAprItemProps = {
 
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
 const defaultNumberFormatter = (value: string) => bn(value)
+
+function getDynamicSwapFeesLabel(hookType: GqlHookType) {
+  switch (hookType) {
+    case GqlHookType.MevTax:
+      return 'MEV Capture hook'
+    case GqlHookType.StableSurge:
+      return 'Stable Surge hook'
+    default:
+      return 'Dynamic Swap Fees '
+  }
+}
 
 function BaseAprTooltip({
   aprItems,
@@ -82,6 +96,7 @@ function BaseAprTooltip({
   poolType,
   chain,
   usePortal = true,
+  hookType,
 }: Props) {
   const colorMode = useThemeColorMode()
 
@@ -94,6 +109,7 @@ function BaseAprTooltip({
     yieldBearingTokensAprDisplayed,
     stakingIncentivesAprDisplayed,
     merklIncentivesAprDisplayed,
+    merklTokensDisplayed,
     hasMerklIncentives,
     surplusIncentivesAprDisplayed,
     swapFeesDisplayed,
@@ -119,6 +135,8 @@ function BaseAprTooltip({
     maBeetsVotingRewardsTooltipText,
     maBeetsTotalAprDisplayed,
     maBeetsRewardTooltipText,
+    dynamicSwapFeesDisplayed,
+    dynamicSwapFeesTooltipText,
   } = useAprTooltip({
     aprItems,
     vebalBoost: Number(vebalBoost),
@@ -150,7 +168,26 @@ function BaseAprTooltip({
         pt={3}
         title="Swap fees"
         tooltipText={swapFeesTooltipText}
-      />
+      >
+        {hookType ? (
+          <>
+            <TooltipAprItem
+              {...subitemPopoverAprItemProps}
+              apr={bn(swapFeesDisplayed).minus(dynamicSwapFeesDisplayed)}
+              displayValueFormatter={usedDisplayValueFormatter}
+              title="Regular swap fees"
+            />
+            <TooltipAprItem
+              {...subitemPopoverAprItemProps}
+              apr={dynamicSwapFeesDisplayed}
+              displayValueFormatter={usedDisplayValueFormatter}
+              title={getDynamicSwapFeesLabel(hookType)}
+              tooltipText={dynamicSwapFeesTooltipText[hookType as SupportedHookType]}
+            />
+          </>
+        ) : null}
+      </TooltipAprItem>
+
       {isMaBeetsPresent && (
         <TooltipAprItem
           {...basePopoverAprItemProps}
@@ -205,8 +242,20 @@ function BaseAprTooltip({
           apr={merklIncentivesAprDisplayed}
           displayValueFormatter={usedDisplayValueFormatter}
           title="Merkl.xyz incentives"
-          tooltipText={merklIncentivesTooltipText}
-        />
+        >
+          {merklTokensDisplayed.map(item => {
+            return (
+              <TooltipAprItem
+                {...subitemPopoverAprItemProps}
+                apr={item.apr}
+                displayValueFormatter={usedDisplayValueFormatter}
+                key={`merkl-${item.title}-${item.apr}`}
+                title={item.title}
+                tooltipText={merklIncentivesTooltipText}
+              />
+            )
+          })}
+        </TooltipAprItem>
       ) : null}
       {isCowAmmPool(poolType) && (
         <TooltipAprItem

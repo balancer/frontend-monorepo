@@ -21,7 +21,6 @@ export const notAllowedPoolMock: Pool = {
   protocolVersion: 2,
   hasErc4626: false,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: false,
   dynamicData: {
     poolId: '0x241df159b03a90455edee61625655fc0ea5fa3dd0002000000000000000003fc',
     swapEnabled: true,

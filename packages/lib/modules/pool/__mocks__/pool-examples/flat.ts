@@ -20,7 +20,7 @@ export const osETHPhantom: PoolExample = {
 
 export const sDAIWeighted: PoolExample = {
   name: 'B-50sDAI-50wstETH',
-  description: 'Edge case: sDAI is ERC4626 but has isBufferAllowed is FALSE',
+  description: 'Edge case: sDAI is ERC4626 but has useUnderlyingForAddRemove FALSE',
   poolId: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063',
   poolChain: GqlChain.Gnosis,
   version: 2,

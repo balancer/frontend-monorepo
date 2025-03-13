@@ -14,6 +14,7 @@ import {
   Text,
   Link,
 } from '@chakra-ui/react'
+import { ArrowUpRight } from 'react-feather'
 
 const FAQ_ITEMS = [
   {
@@ -86,23 +87,53 @@ const FAQ_ITEMS = [
         To mitigate smart contract risks, the stS code has been thoroughly audited by leading
         security firms, including{' '}
         <Link
+          alignItems="center"
+          display="inline-flex"
           href="https://github.com/spearbit/portfolio/blob/master/pdfs/Beethoven-Sonic-Staking-Spearbit-Security-Review-December-2024.pdf"
           target="_blank"
         >
           <Box as="span" fontSize="lg" fontWeight="thin">
             Spearbit
           </Box>
+          <Box as="span" ml={1}>
+            <ArrowUpRight size={12} />
+          </Box>
         </Link>{' '}
         and{' '}
         <Link
+          alignItems="center"
+          display="inline-flex"
           href="https://github.com/trailofbits/publications/blob/master/reviews/2025-01-beethovenx-sonicstaking-securityreview.pdf"
           target="_blank"
         >
           <Box as="span" fontSize="lg" fontWeight="thin">
             Trail of Bits
           </Box>
+          <Box as="span" ml={1}>
+            <ArrowUpRight size={12} />
+          </Box>
         </Link>
-        .
+      </Text>
+    ),
+  },
+  {
+    question: 'What is the contract address for stS?',
+    answer: (
+      <Text color="font.primary" fontSize="lg" fontWeight="thin">
+        The contract address for stS is{' '}
+        <Link
+          alignItems="center"
+          display="inline-flex"
+          href="https://sonicscan.org/token/0xe5da20f15420ad15de0fa650600afc998bbe3955"
+          target="_blank"
+        >
+          <Box as="span" fontSize="lg" fontWeight="thin">
+            0xE5DA20F15420aD15DE0fa650600aFc998bbE3955
+          </Box>
+          <Box as="span" ml={1}>
+            <ArrowUpRight size={12} />
+          </Box>
+        </Link>
       </Text>
     ),
   },

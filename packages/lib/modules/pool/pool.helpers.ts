@@ -4,6 +4,7 @@ import {
   GqlChain,
   GqlHookType,
   GqlPoolBase,
+  GqlPoolGyro,
   GqlPoolNestingType,
   GqlPoolStakingGauge,
   GqlPoolStakingOtherGauge,
@@ -25,9 +26,10 @@ import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
 import { vaultV3Abi } from '@balancer/sdk'
-import { PoolListItem, Pool, PoolCore } from './pool.types'
+import { Pool, PoolCore } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
+import { PoolMetadata } from './metadata/getPoolsMetadata'
 
 /**
  * METHODS
@@ -64,8 +66,8 @@ export function isFx(poolType: GqlPoolType | string): boolean {
   return poolType === GqlPoolType.Fx
 }
 
-export function isBoosted(pool: PoolListItem | Pool) {
-  return isV3Pool(pool) && pool.hasAnyAllowedBuffer // this means that the pool has at least one ERC4626 token with allowed buffer
+export function isBoosted(pool: Pick<PoolCore, 'protocolVersion' | 'tags'>) {
+  return isV3Pool(pool) && pool.tags?.includes('BOOSTED')
 }
 
 export function isGyro(poolType: GqlPoolType) {
@@ -74,6 +76,10 @@ export function isGyro(poolType: GqlPoolType) {
 
 export function isClp(poolType: GqlPoolType) {
   return isGyro(poolType)
+}
+
+export function isGyroEPool(pool: Pool): pool is GqlPoolGyro {
+  return pool.type === GqlPoolType.Gyroe
 }
 
 export function isUnknownType(poolType: any): boolean {
@@ -282,6 +288,10 @@ export function hasHooks(pool: Pool): boolean {
   return !![pool.hook, ...nestedHooks].filter(Boolean).length
 }
 
+export function hasStableSurgeHook(pool: Pool): boolean {
+  return hasHookType(pool, GqlHookType.StableSurge)
+}
+
 export function hasHookType(pool: Pool, hookType: GqlHookType): boolean {
   const nestedHooks = pool.poolTokens.flatMap(token =>
     token.nestedPool ? token.nestedPool.hook : []
@@ -302,7 +312,12 @@ const shouldBlockV3PoolAdds = false
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
-export function shouldBlockAddLiquidity(pool: Pool) {
+export function shouldBlockAddLiquidity(pool: Pool, poolMetadata?: PoolMetadata) {
+  // we allow the metadata to override the default behavior
+  if (poolMetadata?.allowAddLiquidity === true) {
+    return false
+  }
+
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
 
   // avoid blocking Sepolia pools
@@ -339,14 +354,13 @@ export function shouldBlockAddLiquidity(pool: Pool) {
       return true
     }
 
-    /* Only for actual v3 boosted pools (ERC4626 with allowed buffer):
+    /* Only for actual v3 boosted pools (ERC4626 with useUnderlyingForAddRemove === true):
       if ERC4626 is not reviewed or summary is not safe - we should block adding liquidity
     */
     if (
-      isV3Pool(pool) &&
-      pool.hasAnyAllowedBuffer &&
+      isBoosted(pool) &&
       token.isErc4626 &&
-      token.isBufferAllowed &&
+      token.useUnderlyingForAddRemove &&
       (!hasReviewedErc4626(token) || token.erc4626ReviewData?.summary !== 'safe')
     ) {
       return true
@@ -396,7 +410,7 @@ export function getPoolAddBlockedReason(pool: Pool): string {
       return `Rate provider for token ${token.symbol} is not safe` // TODO: Add instructions and link to get it reviewed
     }
 
-    if (isV3Pool(pool) && pool.hasAnyAllowedBuffer && token.isErc4626 && token.isBufferAllowed) {
+    if (isBoosted(pool) && token.isErc4626 && token.useUnderlyingForAddRemove) {
       if (!hasReviewedErc4626(token)) {
         return `Tokenized vault for token ${token.symbol} was not yet reviewed`
       }

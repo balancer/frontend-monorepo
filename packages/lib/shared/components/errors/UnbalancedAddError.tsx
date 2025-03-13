@@ -7,21 +7,26 @@ import {
   isInvariantRatioPIErrorMessage,
   isUnbalancedAddError,
   isUnbalancedAddErrorMessage,
+  isPoolSurgingError,
 } from '../../utils/error-filters'
 import { BalAlertLink } from '../alerts/BalAlertLink'
 import { ErrorAlert } from './ErrorAlert'
 import { useAddLiquidity } from '@repo/lib/modules/pool/actions/add-liquidity/AddLiquidityProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { hasStableSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
 
 type Props = AlertProps & {
   error: Error
   goToProportionalAdds: () => void
   isProportionalSupported?: boolean
+  pool: Pool
 }
 
 export function UnbalancedAddError({
   error,
   goToProportionalAdds,
   isProportionalSupported = true,
+  pool,
 }: Props) {
   const { clearAmountsIn } = useAddLiquidity()
   const goToProportionalMode = () => {
@@ -29,9 +34,9 @@ export function UnbalancedAddError({
     goToProportionalAdds()
   }
 
-  if (!isUnbalancedAddError(error)) return null
+  if (!isUnbalancedAddError(error, pool)) return null
 
-  const errorLabels = getErrorLabels(isProportionalSupported, error)
+  const errorLabels = getErrorLabels(isProportionalSupported, error, pool)
 
   if (!errorLabels) return null
 
@@ -59,7 +64,8 @@ export type UnbalancedErrorLabels = {
 
 export function getErrorLabels(
   isProportionalSupported: boolean,
-  error: Error
+  error: Error,
+  pool?: Pool
 ): UnbalancedErrorLabels | undefined {
   if (!error) return
   let errorTitle = 'Token amounts error'
@@ -69,6 +75,9 @@ export function getErrorLabels(
   if (isInvariantRatioAboveMaxSimulationErrorMessage(error.message)) {
     errorTitle = 'Amount exceeds pool limits'
     errorMessage = 'Your input(s) would cause an invariant error in the vault.'
+  } else if (isPoolSurgingError(error.message, !!pool && hasStableSurgeHook(pool))) {
+    errorTitle = 'Pool is surging'
+    errorMessage = 'Flexible adds are disabled when a pool with stable surge hook is surging.'
   } else if (isInvariantRatioAboveMinSimulationErrorMessage(error.message)) {
     errorTitle = 'Amount is below pool limits'
   } else if (isInvariantRatioPIErrorMessage(error.message)) {
