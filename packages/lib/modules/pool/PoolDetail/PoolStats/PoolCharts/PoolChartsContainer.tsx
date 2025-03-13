@@ -53,7 +53,7 @@ export function PoolChartsContainer() {
 }
 
 function PoolChartsContent({ ...props }: any) {
-  const { activeTab, setActiveTab, tabsList, getActiveTabLabel, direction } = usePoolChartTabs()
+  const { activeTab, setActiveTab, tabsList, getActiveTabLabel } = usePoolChartTabs()
   const { hasChartData: hasEclpChartData, isLoading: isLoadingEclpChartData } = useEclpChart()
 
   const {
@@ -65,8 +65,6 @@ function PoolChartsContent({ ...props }: any) {
 
   const isLoading = isLoadingEclpChartData || isLoadingPoolChartsData
   const hasChartData = hasEclpChartData || hasPoolChartData
-
-  console.log({ containerDirection: direction })
 
   return (
     <Card {...props}>
@@ -111,8 +109,8 @@ function PoolChartsContent({ ...props }: any) {
                   {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
                     <motion.div
                       animate={{ x: '0%' }}
-                      exit={{ x: direction > 0 ? '-100%' : '100%' }}
-                      initial={{ x: direction > 0 ? '100%' : '-100%' }}
+                      exit={{ x: '-100%' }}
+                      initial={{ x: '100%' }}
                       key={activeTab.value}
                       style={{
                         position: 'absolute',

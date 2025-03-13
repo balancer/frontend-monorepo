@@ -7,17 +7,15 @@ import { usePoolChartTabs } from './PoolChartTabsProvider'
 
 export function DefaultPoolCharts() {
   const { options, handleAxisMoved } = usePoolCharts()
-  const { activeTab, direction } = usePoolChartTabs()
-
-  console.log({ defaultDirection: direction })
+  const { activeTab } = usePoolChartTabs()
 
   return (
     <Box h="full" overflow="hidden" position="relative" w="full">
       <AnimatePresence mode="wait">
         <motion.div
           animate={{ x: '0%' }}
-          exit={{ x: direction > 0 ? '-100%' : '100%' }}
-          initial={{ x: direction > 0 ? '100%' : '-100%' }}
+          exit={{ x: '-100%' }}
+          initial={{ x: '100%' }}
           key={activeTab.value}
           style={{
             position: 'absolute',
