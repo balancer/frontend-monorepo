@@ -9,7 +9,10 @@ import { PoolPageStats } from './PoolPageStats'
 import { FeaturedPartners } from './FeaturedPartners'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
-export async function PoolsPage({ children }: PropsWithChildren) {
+export async function PoolsPage({
+  children,
+  additionalFees,
+}: PropsWithChildren & { additionalFees?: string }) {
   return (
     <>
       <Box borderBottom="1px solid" borderColor="border.base">
@@ -44,7 +47,6 @@ export async function PoolsPage({ children }: PropsWithChildren) {
                 width={1000}
               />
             </Box>
-
             <RadialPattern
               circleCount={8}
               height={600}
@@ -55,7 +57,6 @@ export async function PoolsPage({ children }: PropsWithChildren) {
               top="-300px"
               width={600}
             />
-
             <RadialPattern
               circleCount={8}
               height={600}
@@ -66,7 +67,6 @@ export async function PoolsPage({ children }: PropsWithChildren) {
               top="300px"
               width={600}
             />
-
             <FadeInOnView animateOnce={false}>
               <Flex
                 align={{ base: 'start', md: 'start' }}
@@ -83,10 +83,9 @@ export async function PoolsPage({ children }: PropsWithChildren) {
                     Join 230k+ Liquidity Providers in yield-bearing pools
                   </Text>
                 </Box>
-                <PoolPageStats />
+                <PoolPageStats additionalFees={additionalFees} />
               </Flex>
             </FadeInOnView>
-
             <FadeInOnView animateOnce={false}>
               <Box pb="3">
                 {/* <BeetsPromoBanner /> */}

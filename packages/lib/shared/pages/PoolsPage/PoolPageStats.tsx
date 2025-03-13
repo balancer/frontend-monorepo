@@ -2,11 +2,15 @@
 
 import { Box, Flex } from '@chakra-ui/react'
 import Stat from '../../components/other/Stat'
-import { fNumCustom } from '../../utils/numbers'
+import { bn, fNumCustom } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 
-export function PoolPageStats() {
+export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
   const { protocolData } = useProtocolStats()
+
+  const totalFees = bn(protocolData?.protocolMetricsAggregated.swapFee24h || 0)
+    .plus(bn(additionalFees || 0))
+    .toString()
 
   return (
     <Flex direction="row" flexWrap="wrap" gap={{ base: 'sm', lg: 'sm' }} mt="3">
@@ -26,8 +30,8 @@ export function PoolPageStats() {
       <Box flex="1">
         <Stat
           imageTransform="scale(1.5)"
-          label="Swap fees (24h)"
-          value={fNumCustom(protocolData?.protocolMetricsAggregated.swapFee24h ?? 0, '$0,0.0a')}
+          label="Fees (24h)"
+          value={fNumCustom(totalFees, '$0,0.0a')}
         />
       </Box>
       {/* <Box flex={{ base: '1 1 40%', sm: '1' }}>
