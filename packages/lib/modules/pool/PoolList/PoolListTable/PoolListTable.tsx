@@ -4,7 +4,7 @@ import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTabl
 import { PoolListTableHeader } from './PoolListTableHeader'
 import { PoolListTableRow } from './PoolListTableRow'
 import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPaginationProps'
-import { POOL_TAG_MAP, PoolListItem } from '../../pool.types'
+import { PoolListItem } from '../../pool.types'
 import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolList } from '../PoolListProvider'
@@ -39,9 +39,7 @@ export function PoolListTable({ pools, count, loading }: Props) {
     [userAddress, furthestLeftColWidth, numberColumnWidth]
   )
 
-  const needsMarginForPoints = pools.some(pool =>
-    pool.tags?.some(tag => tag && POOL_TAG_MAP.POINTS.includes(tag))
-  )
+  const needsMarginForPoints = pools.some(pool => pool.tags?.some(tag => tag && tag === 'POINTS'))
 
   const renderTableRow = useCallback(
     ({ item, index }: { item: PoolListItem; index: number }) => (

@@ -10,5 +10,6 @@ export type PoolExample = {
   poolAddress?: Address
   poolChain: GqlChain
   version: ProtocolVersion
+  isFrozen?: boolean // Explicitly skip mock update to avoid breaking tests using this frozen pools
   mockName?: string // Some sepolia pools do not have symbol so we define the mock name here
 }

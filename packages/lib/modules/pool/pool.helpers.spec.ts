@@ -66,6 +66,7 @@ describe('pool helper', async () => {
   const pool = v3SepoliaNestedBoostedMock // Sepolia 50% WETH - 50% boosted USDC/USDT
 
   const wethAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9' // root token
+  const stataEthUSDCAddress = '0x8a88124522dbbf1e56352ba3de1d9f78c143751e' // Wrapping token with useUnderlyingForAddRemove == false
   const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // underlying token
   const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0' // underlying token
 
@@ -73,7 +74,7 @@ describe('pool helper', async () => {
     const poolActionableTokens = getPoolActionableTokens(pool)
     expect(poolActionableTokens.map(t => t.address).sort()).toEqual([
       wethAddress,
-      usdcSepoliaAddress,
+      stataEthUSDCAddress,
       usdtSepoliaAddress,
     ])
   })
@@ -130,5 +131,10 @@ describe('shouldBlockAddLiquidity', () => {
     pool3.poolTokens[0].erc4626ReviewData!.summary = 'unsafe'
     expect(shouldBlockAddLiquidity(pool3)).toBe(true)
     expect(getPoolAddBlockedReason(pool3)).toBe('Tokenized vault for token waEthUSDT is not safe')
+  })
+
+  it('should not block add liquidity if the metadata explicitly allows it', () => {
+    const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+    expect(shouldBlockAddLiquidity(pool, { allowAddLiquidity: true })).toBe(false)
   })
 })

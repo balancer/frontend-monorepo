@@ -13,17 +13,18 @@ env:
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
 jobs:
-  Build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/actions/setup
-      - name: Run build
-        env:
-          NODE_OPTIONS: "--max_old_space_size=4096"
-        run: pnpm run build
+  # Skip this job as it is already part of the E2E-Smoke-Test job
+  # Build:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Setup
+  #       uses: ./.github/actions/setup
+  #     - name: Run build
+  #       env:
+  #         NODE_OPTIONS: "--max_old_space_size=4096"
+  #       run: pnpm run build
 
   Lint:
     runs-on: macos-14
@@ -70,8 +71,8 @@ jobs:
       - name: Run integration tests
         run: pnpm test:integration
 
-  E2E-Test:
-      timeout-minutes: 60
+  E2E-Smoke-Test:
+      timeout-minutes: 15
       runs-on: ubuntu-latest
       steps:
       - uses: actions/checkout@v4
@@ -79,12 +80,35 @@ jobs:
         uses: ./.github/actions/setup
       - name: Install Playwright Browsers
         run: pnpm --filter=e2e-tests exec playwright install --with-deps chromium # CI only tests in chromium
-      - name: Run Playwright tests
-        run: pnpm test:e2e
+      - name: Run Playwright smoke tests
+        run: pnpm test:e2e:build
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: playwright-smoke-report
+          path: |
+            ./packages/e2e-tests/playwright-report/
+          retention-days: 30
+
+  E2E-Dev-Test:
+      timeout-minutes: 15
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Set up foundry (includes anvil)
+        uses: foundry-rs/foundry-toolchain@v1
+      - name: Start anvil fork in mainnet
+        run: anvil --fork-url "https://lb.drpc.org/ogrpc?network=ethereum&dkey=${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
+      - name: Install Playwright Browsers
+        run: pnpm --filter=e2e-tests exec playwright install --with-deps chromium # CI only tests in chromium
+      - name: Run Playwright dev tests
+        run: pnpm test:e2e:dev
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-dev-report
           path: |
             ./packages/e2e-tests/playwright-report/
           retention-days: 30

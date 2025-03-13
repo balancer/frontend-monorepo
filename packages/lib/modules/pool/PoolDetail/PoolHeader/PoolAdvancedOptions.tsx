@@ -10,7 +10,6 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
-  Text,
   VStack,
 } from '@chakra-ui/react'
 import { SwapIcon } from '@repo/lib/shared/components/icons/SwapIcon'
@@ -20,18 +19,29 @@ import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { MoreVertical } from 'react-feather'
-import { isCowAmmPool, shouldBlockAddLiquidity } from '../../pool.helpers'
+import { isCowAmmPool, isMaBeetsPool, shouldBlockAddLiquidity } from '../../pool.helpers'
 import { usePool } from '../../PoolProvider'
 import { buildCowSwapUrlFromPool } from '@repo/lib/modules/cow/cow.utils'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
+import { usePoolMetadata } from '../../metadata/usePoolMetadata'
 
 export function PoolAdvancedOptions() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const pathname = usePathname()
   const { pool } = usePool()
-
+  const poolMetadata = usePoolMetadata(pool)
   const isCowPool = isCowAmmPool(pool.type)
-  const isPoolSwapDisabled = shouldBlockAddLiquidity(pool) || isCowPool
+  const isPoolSwapDisabled =
+    !isMaBeetsPool(pool.id) && (shouldBlockAddLiquidity(pool, poolMetadata) || isCowPool)
+
+  const disabledLinkProps = isPoolSwapDisabled
+    ? {
+        color: 'font.button.disabled',
+        cursor: 'not-allowed',
+        opacity: 0.3,
+        pointerEvents: 'none' as const,
+      }
+    : {}
 
   return (
     <Popover
@@ -75,15 +85,15 @@ export function PoolAdvancedOptions() {
                   ) : (
                     <HStack>
                       <SwapIcon size={20} />
-                      {isPoolSwapDisabled ? (
-                        <Text color="font.button.disabled" cursor="not-allowed" opacity="0.3">
-                          Swap through pool
-                        </Text>
-                      ) : (
-                        <Link as={NextLink} href={`${pathname}/swap`} prefetch variant="nav">
-                          Swap through pool
-                        </Link>
-                      )}
+                      <Link
+                        as={NextLink}
+                        href={`${pathname}/swap`}
+                        prefetch
+                        variant="nav"
+                        {...disabledLinkProps}
+                      >
+                        Swap through pool
+                      </Link>
                     </HStack>
                   )}
                 </VStack>

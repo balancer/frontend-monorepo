@@ -32,7 +32,14 @@ import {
 } from '@chakra-ui/react'
 import { PoolListSearch } from './PoolListSearch'
 import { PROTOCOL_VERSION_TABS } from './usePoolListQueryState'
-import { PoolFilterType, poolTagFilters, PoolTagType, poolTypeFilters } from '../pool.types'
+import {
+  PoolFilterType,
+  poolHookTagFilters,
+  PoolHookTagType,
+  poolTagFilters,
+  PoolTagType,
+  poolTypeFilters,
+} from '../pool.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useEffect, useState } from 'react'
 import { Filter, Plus } from 'react-feather'
@@ -59,13 +66,19 @@ const SLIDER_STEP_SIZE = 100000
 
 export function useFilterTagsVisible() {
   const {
-    queryState: { networks, poolTypes, minTvl, poolTags },
+    queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags },
   } = usePoolList()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    setIsVisible(networks.length > 0 || poolTypes.length > 0 || minTvl > 0 || poolTags.length > 0)
-  }, [networks, poolTypes, minTvl, poolTags])
+    setIsVisible(
+      networks.length > 0 ||
+        poolTypes.length > 0 ||
+        minTvl > 0 ||
+        poolTags.length > 0 ||
+        poolHookTags.length > 0
+    )
+  }, [networks, poolTypes, minTvl, poolTags, poolHookTags])
 
   return isVisible
 }
@@ -123,6 +136,39 @@ function PoolCategoryFilters({ hidePoolTags }: { hidePoolTags: string[] }) {
             </Checkbox>
           </Box>
         ))}
+    </Box>
+  )
+}
+
+function PoolHookFilters() {
+  const {
+    queryState: { togglePoolHookTag, poolHookTags, setPoolHookTags, poolHookTagLabel },
+  } = usePoolList()
+
+  // Exclude hooks that are not live
+  const livePoolHookTagFilters = poolHookTagFilters.filter(
+    tag => tag !== 'HOOKS_FEETAKING' && tag !== 'HOOKS_EXITFEE'
+  )
+
+  // remove query param when empty
+  useEffect(() => {
+    if (!poolHookTags.length) {
+      setPoolHookTags(null)
+    }
+  }, [poolHookTags])
+
+  return (
+    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+      {livePoolHookTagFilters.map(tag => (
+        <Box as={motion.div} key={tag} variants={staggeredFadeInUp}>
+          <Checkbox
+            isChecked={!!poolHookTags.find(selected => selected === tag)}
+            onChange={e => togglePoolHookTag(e.target.checked, tag as PoolHookTagType)}
+          >
+            <Text fontSize="sm">{poolHookTagLabel(tag)}</Text>
+          </Checkbox>
+        </Box>
+      ))}
     </Box>
   )
 }
@@ -273,6 +319,9 @@ export interface FilterTagsPops {
   poolTagLabel?: (poolTag: PoolTagType) => string
   includeExpiredPools?: boolean
   toggleIncludeExpiredPools?: (checked: boolean) => void
+  poolHookTags?: PoolHookTagType[]
+  togglePoolHookTag?: (checked: boolean, value: PoolHookTagType) => void
+  poolHookTagLabel?: (poolHookTag: PoolHookTagType) => string
 }
 
 export function FilterTags({
@@ -288,6 +337,9 @@ export function FilterTags({
   poolTagLabel,
   includeExpiredPools,
   toggleIncludeExpiredPools,
+  poolHookTags,
+  togglePoolHookTag,
+  poolHookTagLabel,
 }: FilterTagsPops) {
   const { toCurrency } = useCurrency()
 
@@ -297,7 +349,8 @@ export function FilterTags({
     poolTypes.length === 0 &&
     minTvl === 0 &&
     (poolTags ? poolTags.length === 0 : true) &&
-    !includeExpiredPools
+    !includeExpiredPools &&
+    (poolHookTags ? poolHookTags.length === 0 : true)
   ) {
     return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
   }
@@ -404,7 +457,7 @@ export function FilterTags({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 0 }}
             initial={{ opacity: 0, y: 40 }}
-            key="minTvl"
+            key="expiredPools"
             transition={{
               enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
               exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
@@ -421,6 +474,33 @@ export function FilterTags({
               />
             </Tag>
           </motion.div>
+        </AnimatePresence>
+      )}
+      {poolHookTags && poolHookTagLabel && (
+        <AnimatePresence>
+          {poolHookTags.map(tag => (
+            <motion.div
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              key={tag}
+              transition={{
+                enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
+                exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
+              }}
+            >
+              <Tag size="lg">
+                <TagLabel>
+                  <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
+                    {poolHookTagLabel(tag)}
+                  </Text>
+                </TagLabel>
+                <TagCloseButton
+                  onClick={() => togglePoolHookTag && togglePoolHookTag(false, tag)}
+                />
+              </Tag>
+            </motion.div>
+          ))}
         </AnimatePresence>
       )}
     </HStack>
@@ -654,6 +734,14 @@ export function PoolListFilters() {
                         </Heading>
                         <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
                       </Box>
+                      {options.showPoolHooksFilter && (
+                        <Box as={motion.div} variants={staggeredFadeInUp}>
+                          <Heading as="h3" mb="sm" size="sm">
+                            Hooks
+                          </Heading>
+                          <PoolHookFilters />
+                        </Box>
+                      )}
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />
                       </Box>

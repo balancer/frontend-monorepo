@@ -23,9 +23,9 @@ export function PoolHeader() {
   const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Xave)
   const [redirectPartnerUrl, setRedirectPartnerUrl] = useState<string>()
   const partnerRedirectDisclosure = useDisclosure()
-  const { description } = usePoolMetadata(pool)
+  const poolMetadata = usePoolMetadata(pool)
 
-  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool)
+  const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, poolMetadata)
 
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
@@ -59,9 +59,9 @@ export function PoolHeader() {
       >
         <VStack align="start" spacing="md">
           <PoolMetaBadges />
-          {description && (
+          {poolMetadata?.description && (
             <Text fontSize="sm" maxW="xl" mb="xxs" sx={{ textWrap: 'pretty' }} variant="secondary">
-              {description}
+              {poolMetadata.description}
             </Text>
           )}
         </VStack>

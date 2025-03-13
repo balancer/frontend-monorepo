@@ -1,15 +1,14 @@
-import { PoolListItem } from '@repo/lib/modules/pool/pool.types'
+import { PoolCore } from '@repo/lib/modules/pool/pool.types'
 import { HStack, Text } from '@chakra-ui/react'
 import { PoolVersionTag } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolVersionTag'
 import { isBoosted } from '@repo/lib/modules/pool/pool.helpers'
 import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import Image from 'next/image'
-import { Pool } from '../../pool.types'
 import { PoolHookTag } from '@repo/lib/modules/pool/PoolDetail/PoolHookTag'
 import { usePoolsMetadata } from '../../metadata/PoolsMetadataProvider'
 
 interface Props {
-  pool: PoolListItem | Pool
+  pool: PoolCore
 }
 
 export function PoolListTableDetailsCell({ pool }: Props) {
@@ -32,7 +31,7 @@ export function PoolListTableDetailsCell({ pool }: Props) {
           width={20}
         />
       ))}
-      <PoolHookTag pool={pool} size="sm" />
+      <PoolHookTag onlyShowIcon pool={pool} />
     </HStack>
   )
 }

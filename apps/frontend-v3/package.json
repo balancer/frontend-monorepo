@@ -6,8 +6,8 @@
   "scripts": {
     "start": "next start",
     "build": "pnpm --filter @repo/lib graphql:gen && next build",
-    "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev\"",
-    "dev:turbopack": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev --turbo\"",
+    "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev --turbo\"",
+    "dev:webpack": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev\"",
     "dev:no-gen": "next dev --turbo",
     "gen:wagmi": "pnpm wagmi generate",
     "lint": "eslint . --max-warnings 0 --cache",
@@ -18,13 +18,13 @@
     "stylelint:fix": "stylelint '**/*.css' --fix",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
     "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/bal/bal.theme.ts",
-    "postinstall": "npm run gen:theme-typings"
+    "postinstall": "pnpm run gen:theme-typings"
   },
   "dependencies": {
-    "@balancer/sdk": "1.4.3",
+    "@balancer/sdk": "2.3.1",
     "@chakra-ui/hooks": "2.4.2",
     "@chakra-ui/icons": "2.2.4",
-    "@chakra-ui/react": "2.10.4",
+    "@chakra-ui/react": "2.10.6",
     "@chakra-ui/theme-tools": "2.2.6",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@repo/lib": "workspace:*",
@@ -33,7 +33,7 @@
     "@vercel/speed-insights": "1.1.0",
     "framer-motion": "10.18.0",
     "lodash": "^4.17.21",
-    "next": "14.2.23",
+    "next": "14.2.24",
     "next-themes": "0.4.4",
     "nextjs-toploader": "^1.6.4",
     "prismjs": "^1.29.0",
@@ -42,8 +42,8 @@
     "react-feather": "^2.0.10",
     "react-use-measure": "^2.1.1",
     "tinycolor2": "^1.6.0",
-    "viem": "2.22.10",
-    "wagmi": "2.13.3"
+    "viem": "2.23.0",
+    "wagmi": "2.14.11"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.5.6",
@@ -53,21 +53,20 @@
     "@repo/typescript-config": "workspace:*",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.14.195",
-    "@types/node": "20.10.2",
+    "@types/node": "22.13.5",
     "@types/prismjs": "^1.26.5",
     "@types/react": "18.2.34",
     "@types/react-dom": "18.2.6",
     "@types/tinycolor2": "^1.4.6",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
-    "@wagmi/cli": "2.1.22",
+    "@wagmi/cli": "2.2.0",
     "autoprefixer": "^10.4.14",
-    "concurrently": "^8.2.2",
-    "cross-fetch": "^4.0.0",
+    "concurrently": "9.1.2",
+    "cross-fetch": "4.1.0",
     "eslint": "8.43.0",
     "happy-dom": "^16.6.0",
-    "lokijs": "^1.5.12",
-    "sentry-testkit": "^5.0.9"
+    "lokijs": "^1.5.12"
   },
   "engines": {
     "node": ">=20.x"

@@ -51,15 +51,14 @@ describe('When adding nested liquidity for a weighted pool', () => {
     const leafTokens = getLeafTokens(v3SepoliaNestedBoostedMock.poolTokens as PoolToken[])
 
     const wethAddress = '0x7b79995e5f793a07bc00c21412e50ecae098e7f9' // root token
-    const usdcSepoliaAddress = '0x94a9d9ac8a22534e3faca9f4e7f2e2cf85d5e4c8' // underlying token
+    const stataEthUSDCAddress = '0x8a88124522dbbf1e56352ba3de1d9f78c143751e' // Wrapping token with useUnderlyingForAddRemove == false
     const usdtSepoliaAddress = '0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0' // underlying token
 
     expect(leafTokens).toMatchObject([
       {
-        address: usdcSepoliaAddress,
+        address: stataEthUSDCAddress,
         decimals: 6,
-        name: 'USDC (AAVE Faucet)',
-        symbol: 'usdc-aave',
+        symbol: 'stataEthUSDC',
       },
       {
         address: usdtSepoliaAddress,

@@ -1,4 +1,8 @@
-import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlHookType,
+  GqlPoolElement,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import {
   isMetaStable,
   isStable,
@@ -7,6 +11,7 @@ import {
   isBoosted,
   hasNestedPools,
   hasHooks,
+  hasHookType,
 } from '../../../pool.helpers'
 import { zeroAddress } from 'viem'
 
@@ -43,6 +48,8 @@ export enum RiskKey {
   RateProviderBridge = 'rate-provider-bridges',
   NestedPool = 'nested-pools',
   Hook = 'hooks-risk',
+  StableSurgeHook = 'stablesurge-hook',
+  MEVCaptureHook = 'mevcapture-hook',
 }
 
 export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
@@ -66,6 +73,8 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.RateProviderBridge]: 'Rate provider cross-chain bridge risks: Layer Zero',
   [RiskKey.NestedPool]: 'Nested pool risks',
   [RiskKey.Hook]: 'Hook risks',
+  [RiskKey.StableSurgeHook]: 'StableSurge hook risks',
+  [RiskKey.MEVCaptureHook]: 'MEV Capture hook risks',
 }
 
 export type Risk = {
@@ -101,6 +110,8 @@ const avalancheRisks = getLink(RiskKey.Avalanche)
 const mutableRisks = getLink(RiskKey.Mutable)
 const nestedPoolRisks = getLink(RiskKey.NestedPool)
 const hookRisks = getLink(RiskKey.Hook)
+const stableSurgeHookRisks = getLink(RiskKey.StableSurgeHook)
+const mevCaptureHookRisks = getLink(RiskKey.MEVCaptureHook)
 
 export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   const result: Risk[] = []
@@ -120,6 +131,8 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   if (pool.chain === GqlChain.Avalanche) result.push(avalancheRisks)
   if (hasNestedPools(pool)) result.push(nestedPoolRisks)
   if (hasHooks(pool)) result.push(hookRisks)
+  if (hasHookType(pool, GqlHookType.StableSurge)) result.push(stableSurgeHookRisks)
+  if (hasHookType(pool, GqlHookType.MevTax)) result.push(mevCaptureHookRisks)
   if (hasOwner(pool)) result.push(mutableRisks)
 
   result.push(getLink(RiskKey.General))

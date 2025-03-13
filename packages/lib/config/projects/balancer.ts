@@ -47,6 +47,8 @@ export const ProjectConfigBalancer: ProjectConfig = {
     showVeBal: true,
     showMaBeets: false,
     allowCreateWallet: true,
+    showPoolHooksFilter: true,
+    isOnSafeAppList: true,
   },
   links: {
     appLinks: [],

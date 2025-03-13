@@ -16,7 +16,7 @@ import { RemoveLiquidityType } from './remove-liquidity.types'
 import { Address, formatUnits, Hash } from 'viem'
 import { emptyTokenAmounts, toHumanAmountWithAddress } from '../LiquidityActionHelpers'
 import { isCowAmmPool } from '../../pool.helpers'
-import { getPoolActionableTokens } from '../../pool-tokens.utils'
+import { getActionableTokenAddresses, getPoolActionableTokens } from '../../pool-tokens.utils'
 import { isWrappedNativeAsset } from '@repo/lib/modules/tokens/token.helpers'
 import { useRemoveLiquiditySimulationQuery } from './queries/useRemoveLiquiditySimulationQuery'
 import { useRemoveLiquiditySteps } from './useRemoveLiquiditySteps'
@@ -25,6 +25,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { getUserWalletBalance } from '../../user-balance.helpers'
 import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { useWrapUnderlying } from '../useWrapUnderlying'
 
 export type UseRemoveLiquidityResponse = ReturnType<typeof _useRemoveLiquidity>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
@@ -53,13 +54,14 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     usdValueForBpt,
   } = useTokens()
   const { isConnected } = useUserAccount()
+  const { wrapUnderlying, setWrapUnderlyingByIndex } = useWrapUnderlying(pool)
 
   const maxHumanBptIn: HumanAmount = getUserWalletBalance(pool)
   const humanBptIn: HumanAmount = bn(maxHumanBptIn)
     .times(humanBptInPercent / 100)
     .toFixed() as HumanAmount
 
-  const tokens = getPoolActionableTokens(pool)
+  const tokens = getPoolActionableTokens(pool, wrapUnderlying)
 
   const chain = pool.chain
   const nativeAsset = getNativeAssetToken(chain)
@@ -141,6 +143,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     chainId,
     humanBptIn,
     tokenOut,
+    tokensOut: getActionableTokenAddresses(pool, wrapUnderlying),
     enabled,
   })
 
@@ -291,6 +294,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     previewModalDisclosure,
     handler,
     wethIsEth,
+    wrapUnderlying,
     urlTxHash,
     removeLiquidityTxHash,
     hasQuoteContext,
@@ -306,6 +310,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
     usdOutForToken,
     setNeedsToAcceptHighPI,
     setWethIsEth,
+    setWrapUnderlyingByIndex,
     updateQuoteState,
   }
 }

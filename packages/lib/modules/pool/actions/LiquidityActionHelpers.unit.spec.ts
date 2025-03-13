@@ -22,7 +22,7 @@ import { mock } from 'vitest-mock-extended'
 import { getApiPoolMock } from '../__mocks__/api-mocks/api-mocks'
 import { nestedPoolMock } from '../__mocks__/nestedPoolMock'
 import {
-  sDAIBoosted,
+  partialBoosted,
   usdcUsdtAaveBoosted,
   v3SepoliaNestedBoosted,
 } from '../__mocks__/pool-examples/boosted'
@@ -139,7 +139,6 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
           "chainId": 1,
           "decimals": 6,
           "index": 0,
-          "isBufferAllowed": true,
           "isErc4626": false,
           "logoURI": "https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png",
           "name": "Tether USD",
@@ -205,7 +204,6 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
           id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-0x7bc3485026ac48b6cf9baf0a377477fff5703af8',
           index: 0,
           isAllowed: true,
-          isBufferAllowed: true,
           isErc4626: true,
           name: 'Wrapped Aave Ethereum USDT',
           nestedPool: null,
@@ -216,7 +214,6 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
             chainId: 1,
             decimals: 6,
             index: 0,
-            isBufferAllowed: true,
             isErc4626: false,
             name: 'Tether USD',
             symbol: 'USDT',
@@ -232,7 +229,6 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
           id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-0xd4fa2d31b7968e448877f69a96de69f5de8cd23e',
           index: 1,
           isAllowed: true,
-          isBufferAllowed: true,
           isErc4626: true,
           name: 'Wrapped Aave Ethereum USDC',
           nestedPool: null,
@@ -243,7 +239,6 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
             chainId: 1,
             decimals: 6,
             index: 1,
-            isBufferAllowed: true,
             isErc4626: false,
             name: 'USD Coin',
             symbol: 'USDC',
@@ -271,7 +266,7 @@ describe('Liquidity helpers for V3 NESTED boosted pool', async () => {
   const aaveUSDTAddress = '0x978206fae13faf5a8d293fb614326b237684b750'
 
   const humanAmountsIn: HumanTokenAmountWithAddress[] = [
-    { humanAmount: '0.1', tokenAddress: usdcSepoliaAddress, symbol: 'USDC' },
+    { humanAmount: '0.1', tokenAddress: usdtSepoliaAddress, symbol: 'USDT' },
   ]
 
   it('allPoolTokens', async () => {
@@ -283,7 +278,6 @@ describe('Liquidity helpers for V3 NESTED boosted pool', async () => {
       bb_a_Usd_Sepolia_BptAddress,
       wethAddress,
       aaveUSDCAddress,
-      usdcSepoliaAddress,
       aaveUSDTAddress,
       usdtSepoliaAddress,
     ])
@@ -292,10 +286,10 @@ describe('Liquidity helpers for V3 NESTED boosted pool', async () => {
   it('toInputAmounts', async () => {
     expect(helpers.toInputAmounts(humanAmountsIn)).toEqual([
       {
-        address: usdcSepoliaAddress,
+        address: usdtSepoliaAddress,
         decimals: 6,
         rawAmount: 100000n,
-        symbol: 'usdc-aave',
+        symbol: 'usdt-aave',
       },
     ])
   })
@@ -419,7 +413,6 @@ test('boostedPoolState pool state for V3 BOOSTED POOL', async () => {
         id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-0x7bc3485026ac48b6cf9baf0a377477fff5703af8',
         index: 0,
         isAllowed: true,
-        isBufferAllowed: true,
         isErc4626: true,
         logoURI:
           'https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0x7bc3485026ac48b6cf9baf0a377477fff5703af8.png',
@@ -433,7 +426,6 @@ test('boostedPoolState pool state for V3 BOOSTED POOL', async () => {
           chainId: 1,
           decimals: 6,
           index: 0,
-          isBufferAllowed: true,
           isErc4626: false,
           logoURI:
             'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png',
@@ -455,7 +447,6 @@ test('boostedPoolState pool state for V3 BOOSTED POOL', async () => {
         id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-0xd4fa2d31b7968e448877f69a96de69f5de8cd23e',
         index: 1,
         isAllowed: true,
-        isBufferAllowed: true,
         isErc4626: true,
         logoURI:
           'https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0xd4fa2d31b7968e448877f69a96de69f5de8cd23e.png',
@@ -469,7 +460,6 @@ test('boostedPoolState pool state for V3 BOOSTED POOL', async () => {
           chainId: 1,
           decimals: 6,
           index: 1,
-          isBufferAllowed: true,
           isErc4626: false,
           logoURI:
             'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
@@ -486,7 +476,7 @@ test('boostedPoolState pool state for V3 BOOSTED POOL', async () => {
 })
 
 describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
-  const v3Pool = getApiPoolMock(sDAIBoosted) // // Gnosis Balancer aGNO/sDAI
+  const v3Pool = getApiPoolMock(partialBoosted) // Gnosis Balancer aGNO/sDAI
 
   const waGnoGNOAddress = '0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644'
   const gnoAddress = '0x9c58bacc331c9aa871afd802db6379a98e80cedb'
@@ -508,7 +498,6 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           "chainId": 100,
           "decimals": 18,
           "index": 0,
-          "isBufferAllowed": true,
           "isErc4626": false,
           "logoURI": "https://raw.githubusercontent.com/balancer/tokenlists/main/src/assets/images/tokens/0x9c58bacc331c9aa871afd802db6379a98e80cedb.png",
           "name": "Gnosis Token on xDai",
@@ -593,7 +582,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           priceRateProvider: '0x89c80a4540a00b5270347e02e2e144c71da2eced',
           priceRateProviderData: expect.any(Object),
           symbol: 'sDAI',
-          underlyingToken: null, // sDAI has isBufferAllowed false so boostedPoolState does not include underlying token
+          underlyingToken: null, // sDAI has useUnderlyingForAddRemove false so boostedPoolState does not include underlying token
           weight: '0.5',
         },
       ],

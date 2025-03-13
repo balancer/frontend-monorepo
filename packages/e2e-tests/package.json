@@ -4,19 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:e2e": "start-server-and-test 'cd ../../ && pnpm start' 'http://localhost:3000|http://localhost:3001' 'pnpm exec playwright test'",
-    "test:e2e:ui": "pnpm exec playwright test --ui",
-    "test:e2e:local": "pnpm exec playwright test"
+    "test:e2e:build": "start-server-and-test 'cd ../../ && pnpm start' 'http://localhost:3000|http://localhost:3001' 'pnpm exec playwright test tests/build'",
+    "test:e2e:build:ui": "pnpm exec playwright test tests/build --ui",
+    "test:e2e:dev": "NEXT_PUBLIC_E2E_DEV=1 pnpm exec playwright test tests/dev",
+    "test:e2e:dev:ui": "NEXT_PUBLIC_E2E_DEV=1 pnpm exec playwright test tests/dev --ui",
+    "test:e2e:local": "pnpm exec playwright test tests"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "1.49.1",
-    "@types/node": "20.10.2",
-    "frontend-v3": "workspace:*",
+    "@playwright/test": "1.50.1",
     "@repo/lib": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "22.13.5",
     "beets-frontend-v3": "workspace:*",
+    "frontend-v3": "workspace:*",
     "start-server-and-test": "2.0.9"
   }
 }

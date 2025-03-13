@@ -12,7 +12,7 @@ fragment Hook on GqlHook {
     shouldCallBeforeSwap
     shouldCallComputeDynamicSwapFee
   }
-  name
+  type
   params {
     ... on ExitFeeHookParams {
       exitFeePercentage
@@ -25,6 +25,11 @@ fragment Hook on GqlHook {
     ... on StableSurgeHookParams {
       maxSurgeFeePercentage
       surgeThresholdPercentage
+    }
+    ... on MevTaxHookParams {
+      mevTaxThreshold
+      mevTaxMultiplier
+      maxMevSwapFeePercentage
     }
   }
   reviewData {

@@ -14,6 +14,7 @@ import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.type
 import { useBlockNumber } from 'wagmi'
 import { isInvariantRatioSimulationErrorMessage } from '@repo/lib/shared/utils/error-filters'
 import { Address } from 'viem'
+import { hasStableSurgeHook } from '../../../pool.helpers'
 
 export type AddLiquiditySimulationQueryResult = ReturnType<typeof useAddLiquiditySimulationQuery>
 
@@ -67,6 +68,7 @@ export function useAddLiquiditySimulationQuery({
       ...params,
       chainId,
       blockNumber,
+      hasStableSurgeHook: hasStableSurgeHook(pool),
     }),
     ...onlyExplicitRefetch,
   })

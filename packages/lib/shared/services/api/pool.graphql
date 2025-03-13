@@ -1,6 +1,3 @@
-#import "./pool-tokens.graphql"
-#import "./hook.graphql"
-
 query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
   pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
     id
@@ -21,7 +18,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     tags
     hasErc4626
     hasNestedErc4626
-    hasAnyAllowedBuffer
     liquidityManagement {
       disableUnbalancedLiquidity
     }

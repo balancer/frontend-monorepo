@@ -20,6 +20,8 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { keyBy } from 'lodash'
 import { getBaseUrl } from '@repo/lib/shared/utils/urls'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
+import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 /* If a request with the default rpc fails, it will fall back to the next one in the list.
   https://viem.sh/docs/clients/transports/fallback#fallback-transport
@@ -41,7 +43,11 @@ export const rpcFallbacks: Record<GqlChain, string | undefined> = {
 }
 
 const baseUrl = getBaseUrl()
-const getPrivateRpcUrl = (chain: GqlChain) => `${baseUrl}/api/rpc/${chain}`
+const getPrivateRpcUrl = (chain: GqlChain) => {
+  // Use anvil fork for E2E dev tests
+  if (shouldUseAnvilFork) return defaultAnvilForkRpcUrl
+  return `${baseUrl}/api/rpc/${chain}`
+}
 
 export const rpcOverrides: Record<GqlChain, string | undefined> = {
   [GqlChain.Mainnet]: getPrivateRpcUrl(GqlChain.Mainnet),

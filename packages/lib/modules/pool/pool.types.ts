@@ -17,7 +17,6 @@ import {
 } from 'nuqs'
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
-import { FeaturedPool } from './PoolProvider'
 
 export type Pool = GetPoolQuery['pool']
 
@@ -27,24 +26,30 @@ export type PoolList = GetPoolsQuery['pools']
 
 export type PoolListItem = PoolList[0]
 
+/*
+  VotingPool type does not have nestedPool in the API schema so we create it as undefined to satisfy the type check
+  This would only affect to the edge case of a pool with no root hooks but hooks in a nested pool:
+  it wouldn't be displayed in the voting list
+*/
+type ApiTokenWithUndefinedNestedPool = ApiToken & { nestedPool?: undefined }
+export type VotingPool = Pick<
+  PoolListItem,
+  | 'id'
+  | 'address'
+  | 'chain'
+  | 'type'
+  | 'symbol'
+  // We need these fields to display boosted underlying tokens in pool token pills (shared by voting, portfolio and standard pool list)
+  | 'protocolVersion'
+  | 'hasErc4626'
+  // We need tags to display erc4626Metadata in PoolListTableDetailsCell
+  | 'tags'
+  // We need hook to show when the pool has hooks in the voting list
+  | 'hook'
+> & { poolTokens: ApiTokenWithUndefinedNestedPool[] }
+
 // PoolCore defines the shared fields between PoolListItem, Pool that are required for pool related shared logic
-export type PoolCore =
-  | (Pick<
-      PoolListItem,
-      | 'id'
-      | 'address'
-      | 'chain'
-      | 'type'
-      | 'name'
-      | 'symbol'
-      | 'protocolVersion'
-      | 'hasErc4626'
-      | 'hasAnyAllowedBuffer'
-      | 'tags'
-    > & { poolTokens: ApiToken[] })
-  | Pool
-  | PoolListItem
-  | FeaturedPool
+export type PoolCore = VotingPool | Pool | PoolListItem
 
 export enum BaseVariant {
   v2 = 'v2',
@@ -111,22 +116,11 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
   [GqlPoolType.Fx]: [GqlPoolType.Fx],
 }
 
-export const poolTagFilters = ['INCENTIVIZED', 'VE8020', 'POINTS', 'BOOSTED'] as const
+export const poolTagFilters = ['INCENTIVIZED', 'VE8020', 'POINTS', 'BOOSTED', 'RWA'] as const
 export type PoolTagType = (typeof poolTagFilters)[number]
-export const POOL_TAG_MAP: { [key in PoolTagType]: string[] } = {
-  INCENTIVIZED: ['INCENTIVIZED'],
-  POINTS: [
-    'POINTS_EIGENLAYER',
-    'POINTS_GYRO',
-    'POINTS_KELP',
-    'POINTS_RENZO',
-    'POINTS_SWELL',
-    'POINTS_MODE',
-    'POINTS_RINGS',
-  ],
-  VE8020: ['VE8020'],
-  BOOSTED: ['BOOSTED'],
-}
+
+export const poolHookTagFilters = ['HOOKS_STABLESURGE', 'HOOKS_EXITFEE', 'HOOKS_FEETAKING'] as const
+export type PoolHookTagType = (typeof poolHookTagFilters)[number]
 
 export type SortingState = PoolsColumnSort[]
 
@@ -156,6 +150,9 @@ export const poolListQueryStateParsers = {
   minTvl: parseAsFloat.withDefault(0),
   poolTags: parseAsArrayOf(
     parseAsStringEnum<PoolTagType>(Object.values(poolTagFilters))
+  ).withDefault([]),
+  poolHookTags: parseAsArrayOf(
+    parseAsStringEnum<PoolHookTagType>(Object.values(poolHookTagFilters))
   ).withDefault([]),
 }
 

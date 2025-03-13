@@ -15,13 +15,11 @@ import { PriceImpactLevel } from './PriceImpactProvider'
 export function isUnhandledAddPriceImpactError(error: Error | null): boolean {
   if (!error) return false
   if (cannotCalculatePriceImpactError(error)) return false
+  if (isAfterAddHookError(error)) return false
   return true
 }
 
 export function cannotCalculatePriceImpactError(error: Error | null): boolean {
-  // TODO: narrow unknown price impact errors when we have better knowledge about them
-  // const hasUnbalancedAddError = isUnbalancedAddErrorMessage(error)
-
   if (!error) return false
 
   // All ContractFunctionExecutionErrors are shown as unknown price impact
@@ -33,8 +31,16 @@ export function cannotCalculatePriceImpactError(error: Error | null): boolean {
   ) {
     return true
   }
+  // Edge case errors for stable surge hook (with non surging pool)
+  if (error.message.includes('addLiquidityUnbalancedBoosted PI at Delta add step')) {
+    return true
+  }
 
   return false
+}
+
+export function isAfterAddHookError(error: Error): boolean {
+  return error.message.includes('AfterAddLiquidityHookFailed')
 }
 
 /**

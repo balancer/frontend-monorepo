@@ -13,7 +13,9 @@ export function _usePoolTags(tags: PoolTag[] | undefined) {
 
   function getPoolTags(pool: Pool): PoolTag[] {
     if (!tags) return []
-    return tags.filter(_tag => pool.tags?.map(tag => tag?.toLowerCase()).includes(_tag.id))
+    return tags.filter(
+      _tag => pool.tags?.map(tag => tag?.toLowerCase()).includes(_tag.id) && _tag.id !== 'points' // remove 'points' tag as that is only used on the pool list page
+    )
   }
 
   function getTagIconSrc(category: PoolTag): string | undefined {

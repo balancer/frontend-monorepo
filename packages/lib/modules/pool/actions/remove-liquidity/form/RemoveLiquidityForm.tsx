@@ -40,9 +40,11 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isBoosted } from '../../../pool.helpers'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 export function RemoveLiquidityForm() {
   const { pool } = usePool()
+  const { shouldUseSignatures } = useUserSettings()
 
   const TABS: ButtonGroupOption[] = [
     {
@@ -141,6 +143,13 @@ export function RemoveLiquidityForm() {
           </CardHeader>
           <VStack align="start" spacing="md">
             <SafeAppAlert />
+            {!shouldUseSignatures && (
+              <BalAlert
+                content="All approvals will require gas transactions. You can enable signatures in your settings."
+                status="warning"
+                title="Signatures disabled"
+              />
+            )}
             {!requiresProportionalInput(pool) && (
               <HStack>
                 <ButtonGroup

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Container } from '@chakra-ui/react'
+import { Box, Container } from '@chakra-ui/react'
 import { Prose } from '@nikolovlazar/chakra-ui-prose'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
@@ -12,10 +12,12 @@ export default function Privacy() {
         <div className="pb-4">
           <FadeInOnView>
             <div className="subsection">
-              <h1>Balancer Privacy&nbsp;Policy</h1>
-              <p>
-                <em>Last Updated: October 2023</em>
-              </p>
+              <Box mt="3xl">
+                <h1>Balancer Privacy&nbsp;Policy</h1>
+                <p>
+                  <em>Last Updated: October 2023</em>
+                </p>
+              </Box>
               <p>
                 <em className="font-medium">
                   This Privacy Policy explains how the Balancer Foundation, its subsidiary, Balancer
@@ -363,7 +365,7 @@ export default function Privacy() {
           </FadeInOnView>
           <FadeInOnView>
             <div className="subsection">
-              <h2>Additional Disclousures for Individuals in Europe</h2>
+              <h2>Additional Disclosures for Individuals in Europe</h2>
 
               <p>
                 If you are located in the European Economic Area (EEA), the United Kingdom, or

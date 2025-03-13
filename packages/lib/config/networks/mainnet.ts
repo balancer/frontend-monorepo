@@ -4,10 +4,10 @@ import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { NetworkConfig } from '../config.types'
 import { CSP_ISSUE_POOL_IDS } from '../../shared/data/csp-issue'
 import { SupportedWrapHandler } from '@repo/lib/modules/swap/swap.types'
-import { Address } from 'viem'
 import {
   BALANCER_BATCH_ROUTER,
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER,
+  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
+  BALANCER_ROUTER,
   PERMIT2,
   VAULT_ADMIN,
   VAULT_V3,
@@ -86,9 +86,9 @@ const networkConfig: NetworkConfig = {
       vaultV3: VAULT_V3[mainnet.id],
       relayerV6: '0x35Cea9e57A393ac66Aaa7E25C391D52C74B5648f',
       minter: '0x239e55F427D44C3cc793f49bFB507ebe76638a2b',
-      router: '0xNotYetAvailable' as Address,
+      router: BALANCER_ROUTER[mainnet.id],
       batchRouter: BALANCER_BATCH_ROUTER[mainnet.id],
-      compositeLiquidityRouter: BALANCER_COMPOSITE_LIQUIDITY_ROUTER[mainnet.id],
+      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[mainnet.id],
       WeightedPool2TokensFactory: '0xa5bf2ddf098bb0ef6d120c98217dd6b141c74ee0',
       vaultAdminV3: VAULT_ADMIN[mainnet.id],
     },
@@ -99,7 +99,6 @@ const networkConfig: NetworkConfig = {
     permit2: PERMIT2[mainnet.id],
     gaugeController: '0xC128468b7Ce63eA702C1f104D55A2566b13D3ABD',
   },
-
   pools: convertHexToLowerCase({
     issues: {
       [PoolIssue.PoolProtocolFeeVulnWarning]: [
@@ -147,6 +146,13 @@ const networkConfig: NetworkConfig = {
       '0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d', // 80BAL20WETH + SdBal
     ],
   }),
+  lbps: {
+    collateralTokens: [
+      '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // WETH
+      '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
+      '0xdAC17F958D2ee523a2206206994597C13D831ec7', // USDT
+    ],
+  },
 } as const satisfies NetworkConfig
 
 export default networkConfig

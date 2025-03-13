@@ -23,7 +23,12 @@ export default async function saveApiMocks() {
       return Promise.resolve(example.mockName)
     }
 
-    return savePoolMock(example.poolId, example.poolChain, example.mockName)
+    return savePoolMock({
+      poolId: example.poolId,
+      chain: example.poolChain,
+      fileName: example.mockName,
+      isFrozen: example.isFrozen,
+    })
   })
 
   const mockFileNames: string[] = (await Promise.all(promises)).filter(f => f !== undefined)

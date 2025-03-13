@@ -16,6 +16,7 @@
     "NEXT_PUBLIC_SENTRY_DSN",
     "NEXT_RUNTIME",
     "NEXT_PRIVATE_ALCHEMY_KEY",
+    "NEXT_PUBLIC_E2E_DEV",
     "CI",
     "NEXT_PUBLIC_UPDATE_API_MOCKS",
     "VERCEL_GIT_COMMIT_REF"
@@ -26,11 +27,11 @@
       "cache": false,
       "persistent": true
     },
-    "dev:turbopack": {
+    "dev:webpack": {
       "cache": false,
       "persistent": true
     },
-    "dev:beets:turbopack": {
+    "dev:beets:webpack": {
       "cache": false,
       "persistent": true
     },
@@ -76,11 +77,22 @@
       "dependsOn": ["^graphql:gen"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "test:e2e": {
+    "test:e2e:build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "test:e2e:ui": {
+    "test:e2e:dev": {
+      "dependsOn": ["^graphql:gen"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
+    },
+    "test:e2e:build:ui": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^transit"]
+    },
+    "test:e2e:dev:ui": {
+      "cache": false,
+      "persistent": true,
       "dependsOn": ["^transit"]
     },
     "graphql:gen": {

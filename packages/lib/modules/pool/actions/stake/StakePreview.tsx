@@ -5,10 +5,12 @@ import { Address } from 'viem'
 import { usePool } from '../../PoolProvider'
 import { useStake } from './StakeProvider'
 import StakeAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/StakeAprTooltip'
+import { useGetPoolRewards } from '../../useGetPoolRewards'
 
 export function StakePreview() {
   const { pool } = usePool()
   const { stakeTxHash, quoteAmountIn, quoteAmountInUsd } = useStake()
+  const { weeklyRewards } = useGetPoolRewards(pool)
 
   return (
     <VStack spacing="sm" w="full">
@@ -30,7 +32,7 @@ export function StakePreview() {
         />
       </Card>
 
-      <StakeAprTooltip pool={pool} totalUsdValue={quoteAmountInUsd} />
+      <StakeAprTooltip pool={pool} totalUsdValue={quoteAmountInUsd} weeklyRewards={weeklyRewards} />
     </VStack>
   )
 }

@@ -214,10 +214,11 @@ export function SwapForm({ redirectToPoolPage }: Props) {
               <VStack w="full">
                 <TokenInput
                   address={tokenIn.address}
+                  aria-label="TokenIn"
                   chain={selectedChain}
                   onChange={e => setTokenInAmount(e.currentTarget.value as HumanAmount)}
+                  onToggleTokenClicked={() => openTokenSelectModal('tokenIn')}
                   ref={finalRefTokenIn}
-                  toggleTokenSelect={() => openTokenSelectModal('tokenIn')}
                   value={tokenIn.amount}
                 />
                 <Box border="red 1px solid" position="relative">
@@ -238,6 +239,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                 </Box>
                 <TokenInput
                   address={tokenOut.address}
+                  aria-label="TokeOut"
                   chain={selectedChain}
                   disableBalanceValidation
                   hasPriceImpact
@@ -245,8 +247,8 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                     simulationQuery.isLoading || !simulationQuery.data || !tokenIn.amount
                   }
                   onChange={e => setTokenOutAmount(e.currentTarget.value as HumanAmount)}
+                  onToggleTokenClicked={() => openTokenSelectModal('tokenOut')}
                   ref={finalRefTokenOut}
-                  toggleTokenSelect={() => openTokenSelectModal('tokenOut')}
                   value={tokenOut.amount}
                 />
               </VStack>

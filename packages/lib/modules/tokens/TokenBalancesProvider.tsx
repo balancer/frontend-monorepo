@@ -17,6 +17,7 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { exclNativeAssetFilter, nativeAssetFilter } from './token.helpers'
 import { HumanAmount, Slippage } from '@balancer/sdk'
 import { ApiToken } from './token.types'
+import { isZero } from '@repo/lib/shared/utils/numbers'
 
 const BALANCE_CACHE_TIME_MS = 30_000
 
@@ -100,6 +101,11 @@ export function _useTokenBalances(
       let amount = balance.status === 'success' ? (balance.result as bigint) : 0n
       const slippage = Slippage.fromPercentage(bufferPercentage as HumanAmount)
       amount = slippage.applyTo(amount, -1)
+      if (!isZero(bufferPercentage) && (token.decimals === 6 || token.decimals === 8)) {
+        // Apply an extra buffer of 5n to avoid precision issues in tokens with 6/8 decimals
+        const extraBuffer = 5n
+        amount = amount - extraBuffer
+      }
 
       return {
         chainId,

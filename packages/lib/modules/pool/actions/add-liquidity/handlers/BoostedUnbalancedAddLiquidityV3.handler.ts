@@ -41,7 +41,12 @@ export class BoostedUnbalancedAddLiquidityV3Handler extends BaseUnbalancedAddLiq
       this.helpers.boostedPoolState
     )
 
-    return { bptOut: sdkQueryOutput.bptOut, to: sdkQueryOutput.to, sdkQueryOutput }
+    return {
+      bptOut: sdkQueryOutput.bptOut,
+      to: sdkQueryOutput.to,
+      sdkQueryOutput,
+      wrapUnderlying: sdkQueryOutput.wrapUnderlying,
+    }
   }
 
   public async buildCallData({
@@ -53,6 +58,10 @@ export class BoostedUnbalancedAddLiquidityV3Handler extends BaseUnbalancedAddLiq
   }: SdkBuildAddLiquidityInput): Promise<TransactionConfig> {
     const addLiquidity = new AddLiquidityBoostedV3()
 
+    if (!queryOutput.wrapUnderlying) {
+      throw new Error('wrapUnderlying should be defined if v3 unbalanced boosted adds')
+    }
+
     const buildCallParams: AddLiquidityBoostedBuildCallInput = {
       ...constructBaseBuildCallInput({
         humanAmountsIn,
@@ -63,6 +72,7 @@ export class BoostedUnbalancedAddLiquidityV3Handler extends BaseUnbalancedAddLiq
       protocolVersion: 3,
       userData: '0x' as Hex,
       wethIsEth: this.helpers.isNativeAssetIn(humanAmountsIn),
+      wrapUnderlying: queryOutput.wrapUnderlying,
     }
 
     const { callData, to, value } = permit2

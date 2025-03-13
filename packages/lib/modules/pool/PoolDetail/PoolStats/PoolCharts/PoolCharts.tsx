@@ -2,11 +2,13 @@
 import {
   Box,
   BoxProps,
+  Button,
   Card,
   CardProps,
   Flex,
   HStack,
   Heading,
+  Icon,
   Skeleton,
   Stack,
   Text,
@@ -24,6 +26,8 @@ import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGro
 import { GroupBase, OptionBase, Select, SingleValue } from 'chakra-react-select'
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
+import { CLPBadge } from './CLPBadge'
+import { Repeat } from 'react-feather'
 
 type PeriodOption = PoolChartPeriod & OptionBase
 
@@ -74,12 +78,14 @@ export function PoolCharts({ ...props }: CardProps) {
     activePeriod,
     setActivePeriod,
     isLoading,
-    chartData,
     options,
     handleAxisMoved,
     handleMouseLeave,
     tabsList,
     chartValueSum,
+    hasChartData,
+    poolIsInRange,
+    toggleIsReversed,
   } = usePoolCharts()
 
   function getActiveTabLabel() {
@@ -96,8 +102,9 @@ export function PoolCharts({ ...props }: CardProps) {
   return (
     <Card {...props}>
       <Stack h="full">
-        {isLoading && <Skeleton h="full" minH="200px" w="full" />}
-        {!isLoading && chartData.length > 0 && (
+        {isLoading ? (
+          <Skeleton h="full" minH="200px" w="full" />
+        ) : hasChartData ? (
           <NoisyCard
             cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
             contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
@@ -111,24 +118,31 @@ export function PoolCharts({ ...props }: CardProps) {
                     onChange={tab => setActiveTab(tab as PoolChartTypeTab)}
                     options={tabsList}
                     size="xxs"
-                    width="56px"
                   />
-                  <PeriodSelect onChange={setActivePeriod} value={activePeriod} />
+                  {activeTab.value !== PoolChartTab.LIQUIDITY_PROFILE && (
+                    <PeriodSelect onChange={setActivePeriod} value={activePeriod} />
+                  )}
                 </HStack>
                 <VStack
                   alignItems={{ base: undefined, md: 'flex-end' }}
                   ml={{ base: undefined, md: 'auto' }}
                   spacing="0"
                 >
-                  <Heading fontWeight="bold" size="h5">
-                    {chartValueSum}
-                  </Heading>
-                  <Text color="grayText" fontSize="sm">
-                    {getActiveTabLabel()}
-                  </Text>
+                  {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
+                    <CLPBadge poolIsInRange={poolIsInRange} />
+                  ) : (
+                    <>
+                      <Heading fontWeight="bold" size="h5">
+                        {chartValueSum}
+                      </Heading>
+                      <Text color="grayText" fontSize="sm">
+                        {getActiveTabLabel()}
+                      </Text>
+                    </>
+                  )}
                 </VStack>
               </Stack>
-              <Box h="full" onMouseLeave={handleMouseLeave} w="full">
+              <Box h="full" onMouseLeave={handleMouseLeave} position="relative" w="full">
                 <ReactECharts
                   onEvents={{
                     updateAxisPointer: handleAxisMoved,
@@ -136,12 +150,28 @@ export function PoolCharts({ ...props }: CardProps) {
                   option={options}
                   style={{ height: '100%', width: '100%' }}
                 />
+                {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE && (
+                  <Button
+                    bottom={0}
+                    fontSize="xs"
+                    fontWeight="medium"
+                    onClick={toggleIsReversed}
+                    position="absolute"
+                    px={2}
+                    py={1}
+                    right={2}
+                    size="xs"
+                    variant="primary"
+                    zIndex={1}
+                  >
+                    <Icon as={Repeat} />
+                  </Button>
+                )}
               </Box>
             </VStack>
           </NoisyCard>
-        )}
-        {!isLoading && chartData.length <= 0 && (
-          <Flex alignItems="center" h="full">
+        ) : (
+          <Flex align="center" h="full" justify="center" w="full">
             <Text fontSize="2xl" p="lg" variant="secondary">
               Not enough data
             </Text>

@@ -1,7 +1,11 @@
 import { ThemeTypings, extendTheme } from '@chakra-ui/react'
 import { colors, primaryTextColor } from './colors'
 import { getComponents } from '@repo/lib/shared/services/chakra/themes/base/components'
-import { config, fonts, styles } from '@repo/lib/shared/services/chakra/themes/base/foundations'
+import {
+  fonts,
+  styles,
+  themeConfig,
+} from '@repo/lib/shared/services/chakra/themes/base/foundations'
 import { getSemanticTokens } from '@repo/lib/shared/services/chakra/themes/base/semantic-tokens'
 import { proseTheme } from '@repo/lib/shared/services/chakra/themes/base/prose'
 import { getBeetsTokens } from './tokens'
@@ -18,7 +22,7 @@ components.Button.variants.buttonGroupActive._dark.color = '#363636'
 
 export const beetsTheme = {
   config: {
-    ...config,
+    ...themeConfig,
     initialColorMode: 'dark',
   },
   fonts,

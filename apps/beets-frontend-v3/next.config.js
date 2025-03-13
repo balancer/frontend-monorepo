@@ -32,7 +32,19 @@ const nextConfig = {
         destination: 'https://discord.gg/kbPnYJjvwZ',
         permanent: false,
       },
-    ]
+      // temporary redirect for urls to OP pools from the old app (mainly for Aura)
+      {
+        source: '/pool/:path*',
+        destination: '/pools/optimism/v2/:path*',
+        permanent: false,
+      },
+      // redirect for /mabeets in prod
+      process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' && {
+        source: '/mabeets',
+        destination: 'https://ma.beets.fi/',
+        permanent: false,
+      },
+    ].filter(Boolean)
   },
 }
 
