@@ -1,9 +1,9 @@
 import { useGetTokenRates } from './useGetTokenRates'
 import { useMemo, useState } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { drawLiquidityECLP } from './drawLiquidityECLP'
-import { Pool } from '../pool/pool.types'
-import { calculateSpotPrice, destructureRequiredPoolParams } from './calculateSpotPrice'
+import { drawLiquidityECLP } from '../helpers/drawLiquidityECLP'
+import { Pool } from '../../pool/pool.types'
+import { calculateSpotPrice, destructureRequiredPoolParams } from '../helpers/calculateSpotPrice'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { formatUnits } from 'viem'
 

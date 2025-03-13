@@ -1,13 +1,10 @@
-import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/useGetECLPLiquidityProfile'
+import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { usePool } from '../../../PoolProvider'
-import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
-import { useTheme as useNextTheme } from 'next-themes'
-import { getDefaultPoolChartOptions } from './usePoolCharts'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { usePool } from '../../pool/PoolProvider'
+import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
-export function useEclpPoolChart() {
+export function useEclpChart() {
   const { pool } = usePool()
   const {
     data,
@@ -20,11 +17,7 @@ export function useEclpPoolChart() {
     toggleIsReversed,
     isLoading,
   } = useGetECLPLiquidityProfile(pool)
-  const { theme: nextTheme } = useNextTheme()
   const theme = useChakraTheme()
-  const { toCurrency } = useCurrency()
-
-  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
 
   const tokens = useMemo(() => {
     const poolTokens = pool.poolTokens.map(token => token.symbol)
@@ -57,7 +50,6 @@ export function useEclpPoolChart() {
     if (!data) return
 
     return {
-      ...defaultChartOptions,
       grid: {
         left: '1.5%',
         right: '1.5%',
