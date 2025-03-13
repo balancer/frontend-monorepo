@@ -20,6 +20,8 @@ import { useRemoveLiquidityReceipt } from '@repo/lib/modules/transactions/transa
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { ProtocolVersion } from '../../../pool.types'
+import { useShouldBatchTransactions } from '@repo/lib/modules/web3/safe.hooks'
+import { TxBatchAlert } from '@repo/lib/shared/components/alerts/TxBatchAlert'
 
 type Props = {
   isOpen: boolean
@@ -39,6 +41,7 @@ export function RemoveLiquidityModal({
   const { transactionSteps, removeLiquidityTxHash, urlTxHash, hasQuoteContext } =
     useRemoveLiquidity()
   const { pool, chain } = usePool()
+  const shouldBatchTransactions = useShouldBatchTransactions()
   const { redirectToPoolPage } = usePoolRedirect(pool)
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
@@ -85,7 +88,11 @@ export function RemoveLiquidityModal({
 
       <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
         {isDesktop && hasQuoteContext && (
-          <DesktopStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
+          <DesktopStepTracker
+            chain={pool.chain}
+            isTxBatch={shouldBatchTransactions}
+            transactionSteps={transactionSteps}
+          />
         )}
 
         <TransactionModalHeader
@@ -98,6 +105,7 @@ export function RemoveLiquidityModal({
 
         <ModalCloseButton />
         <ModalBody>
+          {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
           <RemoveLiquiditySummary {...receiptProps} />
         </ModalBody>
         <ActionModalFooter
