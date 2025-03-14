@@ -18,7 +18,9 @@
     "NEXT_PRIVATE_ALCHEMY_KEY",
     "NEXT_PUBLIC_E2E_DEV",
     "CI",
-    "VERCEL_GIT_COMMIT_REF"
+    "VERCEL_GIT_COMMIT_REF",
+    "NEXT_PRIVATE_ALLOWED_ORIGINS",
+    "VERCEL_BRANCH_URL"
   ],
   "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN"],
   "tasks": {

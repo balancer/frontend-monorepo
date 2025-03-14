@@ -57,6 +57,14 @@ export const boostedCoinshiftUsdcUsdl: PoolExample = {
   isFrozen: true,
 }
 
+export const stableSurgeBoosted: PoolExample = {
+  name: 'stableSurgeBoosted',
+  poolId: '0x7ab124ec4029316c2a42f713828ddf2a192b36db',
+  description: 'Boosted pool with stable surge pool',
+  poolChain: GqlChain.Base,
+  version: 3,
+}
+
 export const boostedPoolExamples = [
   v3SepoliaNestedBoosted,
   usdcUsdtAaveBoosted,
@@ -64,4 +72,5 @@ export const boostedPoolExamples = [
   partialBoosted,
   partialBoostedSepolia,
   boostedCoinshiftUsdcUsdl,
+  stableSurgeBoosted,
 ]
