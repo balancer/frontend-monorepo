@@ -14,8 +14,6 @@ const ALLOWED_ORIGINS = [
   process.env.VERCEL_BRANCH_URL ? `https://${process.env.VERCEL_BRANCH_URL}` : '',
 ].filter(Boolean)
 
-console.log({ VERCEL_BRANCH_URL: process.env.VERCEL_BRANCH_URL })
-
 const dRpcUrl = (chainName: string) =>
   `https://lb.drpc.org/ogrpc?network=${chainName}&dkey=${DRPC_KEY}`
 
@@ -48,8 +46,6 @@ function getRpcUrl(chain: string) {
 export async function POST(request: NextRequest, { params: { chain } }: Params) {
   const referer = request.headers.get('referer')
   const isAllowedOrigin = referer && ALLOWED_ORIGINS.some(origin => referer.startsWith(origin))
-
-  console.log({ referer })
 
   if (!isAllowedOrigin) {
     return new Response(
