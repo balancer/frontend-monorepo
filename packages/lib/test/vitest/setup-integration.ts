@@ -1,6 +1,6 @@
 import { connectWithDefaultUser, disconnectDefaultUser } from '../utils/wagmi/wagmi-connections'
 import * as transportsModule from '@repo/lib/modules/web3/transports'
-import { NetworksWithFork, getTestRpcSetup } from '../anvil/anvil-setup'
+import { ChainIdWithFork, getTestRpcSetup } from '../anvil/anvil-setup'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { createPublicClient, http } from 'viem'
 import { mainnetTest, polygonTest } from '../anvil/testWagmiConfig'
@@ -28,7 +28,7 @@ vi.mock('@repo/lib/modules/web3/transports', async importOriginal => {
   return {
     ...originalModule,
     getRpcUrl: (chainId: number) => {
-      const { rpcUrl } = getTestRpcSetup(chainsByKey[chainId].name as NetworksWithFork)
+      const { rpcUrl } = getTestRpcSetup(chainsByKey[chainId].id as ChainIdWithFork)
       return rpcUrl
     },
   }
