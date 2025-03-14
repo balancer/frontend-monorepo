@@ -339,7 +339,9 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
   const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
   for (const token of poolTokens) {
     // if token is not allowed - we should block adding liquidity
-    if (isV2Pool(pool) && !token.isAllowed) reasons.push(`Token: ${token.symbol} is not allowed`)
+    if (isV2Pool(pool) && !token.isAllowed) {
+      reasons.push(`Token: ${token.symbol} is not currently supported`)
+    }
 
     if (
       token.priceRateProvider &&
