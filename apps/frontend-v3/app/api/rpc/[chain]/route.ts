@@ -1,4 +1,6 @@
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { drpcUrl } from '@repo/lib/shared/utils/rpc'
 
 type Params = {
   params: {
@@ -7,36 +9,6 @@ type Params = {
 }
 
 const DRPC_KEY = process.env.NEXT_PRIVATE_DRPC_KEY || ''
-const dRpcUrl = (chainName: string) =>
-  `https://lb.drpc.org/ogrpc?network=${chainName}&dkey=${DRPC_KEY}`
-
-const chainToRpcMap: Record<GqlChain, string | undefined> = {
-  [GqlChain.Mainnet]: dRpcUrl('ethereum'),
-  [GqlChain.Arbitrum]: dRpcUrl('arbitrum'),
-  [GqlChain.Optimism]: dRpcUrl('optimism'),
-  [GqlChain.Base]: dRpcUrl('base'),
-  [GqlChain.Polygon]: dRpcUrl('polygon'),
-  [GqlChain.Avalanche]: dRpcUrl('avalanche'),
-  [GqlChain.Fantom]: dRpcUrl('fantom'),
-  [GqlChain.Sepolia]: dRpcUrl('sepolia'),
-  // DEBUG:
-  // [GqlChain.Sepolia]: 'https://eth-sepolia.g.alchemy.com/v2/<KEY>',
-  [GqlChain.Fraxtal]: dRpcUrl('fraxtal'),
-  [GqlChain.Gnosis]: dRpcUrl('gnosis'),
-  [GqlChain.Mode]: dRpcUrl('mode'),
-  [GqlChain.Zkevm]: dRpcUrl('polygon-zkevm'),
-  [GqlChain.Sonic]: dRpcUrl('sonic'),
-}
-
-function getRpcUrl(chain: string) {
-  try {
-    const rpc = chainToRpcMap[chain as GqlChain]
-    if (!rpc) throw new Error(`Invalid chain: ${chain}`)
-    return rpc
-  } catch (error) {
-    throw new Error(`Invalid chain: ${chain}`)
-  }
-}
 
 export async function POST(request: Request, { params: { chain } }: Params) {
   if (!DRPC_KEY) {
@@ -45,7 +17,13 @@ export async function POST(request: Request, { params: { chain } }: Params) {
     })
   }
 
-  const rpcUrl = getRpcUrl(chain)
+  if (!PROJECT_CONFIG.supportedNetworks.includes(chain as GqlChain)) {
+    return new Response(JSON.stringify({ error: `Chain ${chain} not supported in Balancer` }), {
+      status: 403,
+    })
+  }
+
+  const rpcUrl = drpcUrl(chain as GqlChain, DRPC_KEY)
   const rpcBody = await request.json()
 
   const rpcResponse = await fetch(rpcUrl, {
