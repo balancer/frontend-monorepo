@@ -1,7 +1,7 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import { useReadContract } from 'wagmi'
-import { gyroEclpPoolAbi } from '../web3/contracts/abi/generated'
-import { Pool } from '../pool/pool.types'
+import { gyroEclpPoolAbi } from '../../web3/contracts/abi/generated'
+import { Pool } from '../../pool/pool.types'
 import { Address } from 'viem'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 

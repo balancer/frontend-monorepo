@@ -21,7 +21,6 @@ export const b_csUSDL_steakUSDCMock = {
   tags: ['BOOSTED_MORPHO', 'BOOSTED', 'INCENTIVIZED'],
   hasErc4626: true,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: true,
   liquidityManagement: {
     disableUnbalancedLiquidity: false,
   },

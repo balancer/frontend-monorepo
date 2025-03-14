@@ -66,8 +66,8 @@ export function isFx(poolType: GqlPoolType | string): boolean {
   return poolType === GqlPoolType.Fx
 }
 
-export function isBoosted(pool: Pick<PoolCore, 'protocolVersion' | 'hasAnyAllowedBuffer'>) {
-  return isV3Pool(pool) && pool.hasAnyAllowedBuffer // this means that the pool has at least one ERC4626 token with allowed buffer
+export function isBoosted(pool: Pick<PoolCore, 'protocolVersion' | 'tags'>) {
+  return isV3Pool(pool) && pool.tags?.includes('BOOSTED')
 }
 
 export function isGyro(poolType: GqlPoolType) {
@@ -358,8 +358,7 @@ export function shouldBlockAddLiquidity(pool: Pool, poolMetadata?: PoolMetadata)
       if ERC4626 is not reviewed or summary is not safe - we should block adding liquidity
     */
     if (
-      isV3Pool(pool) &&
-      pool.hasAnyAllowedBuffer &&
+      isBoosted(pool) &&
       token.isErc4626 &&
       token.useUnderlyingForAddRemove &&
       (!hasReviewedErc4626(token) || token.erc4626ReviewData?.summary !== 'safe')
@@ -411,12 +410,7 @@ export function getPoolAddBlockedReason(pool: Pool): string {
       return `Rate provider for token ${token.symbol} is not safe` // TODO: Add instructions and link to get it reviewed
     }
 
-    if (
-      isV3Pool(pool) &&
-      pool.hasAnyAllowedBuffer &&
-      token.isErc4626 &&
-      token.useUnderlyingForAddRemove
-    ) {
+    if (isBoosted(pool) && token.isErc4626 && token.useUnderlyingForAddRemove) {
       if (!hasReviewedErc4626(token)) {
         return `Tokenized vault for token ${token.symbol} was not yet reviewed`
       }

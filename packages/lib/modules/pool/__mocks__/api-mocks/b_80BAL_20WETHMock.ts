@@ -21,7 +21,6 @@ export const b_80BAL_20WETHMock = {
   tags: ['VE8020', 'INCENTIVIZED'],
   hasErc4626: false,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: false,
   liquidityManagement: {
     disableUnbalancedLiquidity: null,
   },

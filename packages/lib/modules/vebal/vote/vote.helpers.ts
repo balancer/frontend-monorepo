@@ -43,7 +43,6 @@ export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): Voti
     symbol: vote.symbol,
     // TODO: API is not returning the following fields in GqlVotingPool yet
     hook: undefined, // fix: (votes) no data
-    hasAnyAllowedBuffer: false, // fix: (votes) no data
     hasErc4626: false, // fix: (votes) no data
     tags: [], // fix: (votes) no data
   }

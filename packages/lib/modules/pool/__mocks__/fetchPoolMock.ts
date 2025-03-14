@@ -17,11 +17,18 @@ function astToQueryString(ast: any): string {
   return print(ast)
 }
 
-export async function fetchPoolMock(
-  poolId: Address = nested50WETH_50_3poolId,
-  chain: GqlChain = GqlChain.Mainnet,
+type FetchPoolMockParams = {
+  poolId?: Address
+  chain?: GqlChain
+  apiUrl?: string
   userAddress?: Address
-): Promise<GqlPoolElement> {
+}
+export async function fetchPoolMock({
+  poolId = nested50WETH_50_3poolId,
+  chain = GqlChain.Mainnet,
+  apiUrl = process.env.NEXT_PUBLIC_BALANCER_API_URL as string,
+  userAddress,
+}: FetchPoolMockParams): Promise<GqlPoolElement> {
   const queryString = astToQueryString(visit(GetPoolDocument, {}))
 
   const variables: GetPoolQueryVariables = {
@@ -30,7 +37,7 @@ export async function fetchPoolMock(
     userAddress,
   }
 
-  const getPoolQuery = (await fetch(process.env.NEXT_PUBLIC_BALANCER_API_URL as string, {
+  const getPoolQuery = (await fetch(apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -41,7 +48,7 @@ export async function fetchPoolMock(
     .then(result => result.data)) as GetPoolQuery
 
   if (!getPoolQuery?.pool) {
-    const errorMessage = `Pool not found in api ${process.env.NEXT_PUBLIC_BALANCER_API_URL} network ${chain} poolId ${poolId}`
+    const errorMessage = `Pool not found in api ${apiUrl} network ${chain} poolId ${poolId}`
     throw new Error(errorMessage)
   }
 

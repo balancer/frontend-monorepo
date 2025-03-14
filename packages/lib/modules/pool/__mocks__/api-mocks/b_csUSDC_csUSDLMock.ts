@@ -21,7 +21,6 @@ export const b_csUSDC_csUSDLMock = {
   tags: ['POINTS_COINSHIFT', 'POINTS', 'BOOSTED_MORPHO', 'BOOSTED', 'INCENTIVIZED'],
   hasErc4626: true,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: true,
   liquidityManagement: {
     disableUnbalancedLiquidity: false,
   },

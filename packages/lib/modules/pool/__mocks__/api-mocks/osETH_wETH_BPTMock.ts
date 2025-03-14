@@ -21,7 +21,6 @@ export const osETH_wETH_BPTMock = {
   tags: ['INCENTIVIZED'],
   hasErc4626: false,
   hasNestedErc4626: false,
-  hasAnyAllowedBuffer: false,
   liquidityManagement: {
     disableUnbalancedLiquidity: null,
   },
