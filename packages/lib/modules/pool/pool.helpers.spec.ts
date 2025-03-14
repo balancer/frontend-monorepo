@@ -13,7 +13,13 @@ import {
 } from './pool-tokens.utils'
 import { sDAIWeighted } from './__mocks__/pool-examples/flat'
 import { getPoolAddBlockedReason, shouldBlockAddLiquidity } from './pool.helpers'
-import { usdcUsdtAaveBoosted } from './__mocks__/pool-examples/boosted'
+import {
+  stableSurgeBoosted,
+  usdcUsdtAaveBoosted,
+  v3SepoliaNestedBoosted,
+} from './__mocks__/pool-examples/boosted'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { zeroAddress } from 'viem'
 
 describe('getPoolActionableTokens', () => {
   it('when nested pool supports nested actions (default behavior)', () => {
@@ -98,39 +104,130 @@ describe('pool helper', async () => {
 })
 
 describe('shouldBlockAddLiquidity', () => {
-  it('v2 pool with ERC4626 token', () => {
-    const pool = getApiPoolMock(sDAIWeighted)
+  describe('v2 pool with ERC4626 token', () => {
+    it('should block liquidity if one of the tokens is not allowed', () => {
+      const pool = getApiPoolMock(sDAIWeighted)
 
-    // Should block liquidity if one of the tokens is not allowed
-    pool.poolTokens[0].isAllowed = false
-    expect(shouldBlockAddLiquidity(pool)).toBe(true)
-    expect(getPoolAddBlockedReason(pool)).toBe('Token: wstETH is not allowed')
+      pool.poolTokens[0].isAllowed = false
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
 
-    // Should not block liquidity if all tokens are allowed
-    pool.poolTokens[0].isAllowed = true
-    expect(shouldBlockAddLiquidity(pool)).toBe(false)
+    it('should not block liquidity if all tokens are allowed', () => {
+      const pool = getApiPoolMock(sDAIWeighted)
+
+      pool.poolTokens[0].isAllowed = true
+      expect(shouldBlockAddLiquidity(pool)).toBe(false)
+    })
   })
 
-  it('v3 pool with ERC4626 tokens', () => {
-    // Should not block liquidity if all tokenized vaults are reviewed and 'safe'
-    const pool1 = getApiPoolMock(usdcUsdtAaveBoosted)
-    expect(pool1.poolTokens[0].erc4626ReviewData?.summary).toBe('safe')
-    expect(pool1.poolTokens[1].erc4626ReviewData?.summary).toBe('safe')
-    expect(shouldBlockAddLiquidity(pool1)).toBe(false)
+  describe('v3 pool with ERC4626 tokens', () => {
+    it('Should not block liquidity if all tokenized vaults are reviewed and safe', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      expect(pool.poolTokens[0].erc4626ReviewData?.summary).toBe('safe')
+      expect(pool.poolTokens[1].erc4626ReviewData?.summary).toBe('safe')
+      expect(shouldBlockAddLiquidity(pool)).toBe(false)
+    })
 
-    // Should block liquidity if the usdt tokenized vault is not reviewed
-    const pool2 = getApiPoolMock(usdcUsdtAaveBoosted)
-    pool2.poolTokens[0].erc4626ReviewData = null
-    expect(shouldBlockAddLiquidity(pool2)).toBe(true)
-    expect(getPoolAddBlockedReason(pool2)).toBe(
-      'Tokenized vault for token waEthUSDT was not yet reviewed'
-    )
+    it('should block liquidity if the usdt tokenized vault is not reviewed', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.poolTokens[0].erc4626ReviewData = null
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
 
-    // Should block liquidity if the usdt tokenized vault is not reviewed as 'safe'
-    const pool3 = getApiPoolMock(usdcUsdtAaveBoosted)
-    pool3.poolTokens[0].erc4626ReviewData!.summary = 'unsafe'
-    expect(shouldBlockAddLiquidity(pool3)).toBe(true)
-    expect(getPoolAddBlockedReason(pool3)).toBe('Tokenized vault for token waEthUSDT is not safe')
+    it('Should block liquidity if the usdt tokenized vault is not reviewed as safe', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.poolTokens[0].erc4626ReviewData!.summary = 'unsafe'
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
+    it('should block if pool is LBP', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.type = GqlPoolType.LiquidityBootstrapping
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
+    it('should block if pool is paused', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.dynamicData.isPaused = true
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
+    it('should block if pool is in recovery mode', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.dynamicData.isInRecoveryMode = true
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
+    it('should block if pool has a hook that is not reviewed', () => {
+      const pool = getApiPoolMock(stableSurgeBoosted)
+      pool.hook!.reviewData = null
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
+    it('should block if pool has a hook that is unsafe', () => {
+      const pool = getApiPoolMock(stableSurgeBoosted)
+      pool.hook!.reviewData!.summary = 'unsafe'
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
+    it('should block if pool token is not reviewed', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.poolTokens[0].priceRateProviderData = null
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
+    it('should block if pool token is not safe', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.poolTokens[0].priceRateProviderData!.summary = 'unsafe'
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(true)
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(1)
+    })
+
+    it('should not block if no reviewer', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.poolTokens[0].priceRateProvider = null
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(false)
+    })
+
+    it('should not block if reviewer is zero address', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.poolTokens[0].priceRateProvider = zeroAddress
+      pool.poolTokens[0].priceRateProviderData!.summary = 'unsafe'
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(false)
+    })
+
+    it('should not block if reviewer is the nested pool', () => {
+      const pool = getApiPoolMock(v3SepoliaNestedBoosted)
+      pool.poolTokens[0].priceRateProvider = pool.poolTokens[0].nestedPool!.address
+      pool.poolTokens[0].priceRateProviderData = null
+
+      expect(shouldBlockAddLiquidity(pool)).toBe(false)
+    })
+
+    it('should return multiple reasons if present', () => {
+      const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+      pool.poolTokens[0].erc4626ReviewData!.summary = 'unsafe'
+      pool.poolTokens[1].erc4626ReviewData!.summary = 'unsafe'
+      expect(getPoolAddBlockedReason(pool)).toHaveLength(2)
+    })
   })
 
   it('should not block add liquidity if the metadata explicitly allows it', () => {

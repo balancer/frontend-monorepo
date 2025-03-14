@@ -13,6 +13,7 @@ import { partialBoostedSepoliaWethStataUsdtMock } from './partialBoostedSepoliaW
 import { b_csUSDC_csUSDLMock } from './b_csUSDC_csUSDLMock'
 import { staBAL3_WETH_WBTC_BPTMock } from './staBAL3_WETH_WBTC_BPTMock'
 import { b_auraBAL_STABLEMock } from './b_auraBAL_STABLEMock'
+import { aave_USDC_Aave_GHOMock } from './aave_USDC_Aave_GHOMock'
 import { Pool } from '../../pool.types'
 
 export const allApiMocks: Pool[] = [
@@ -30,4 +31,5 @@ export const allApiMocks: Pool[] = [
   b_csUSDC_csUSDLMock,
   staBAL3_WETH_WBTC_BPTMock,
   b_auraBAL_STABLEMock,
+  aave_USDC_Aave_GHOMock
 ]
