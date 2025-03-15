@@ -2,10 +2,16 @@ import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetE
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '../../pool/PoolProvider'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
-import { useMemo } from 'react'
+import { createContext, PropsWithChildren, useMemo } from 'react'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 
-export function useEclpChart() {
+type EclpChartContextType = ReturnType<typeof _useEclpChart>
+
+const EclpChartContext = createContext<EclpChartContextType | null>(null)
+
+function _useEclpChart() {
   const { pool } = usePool()
+
   const {
     data,
     poolSpotPrice,
@@ -22,11 +28,7 @@ export function useEclpChart() {
   const tokens = useMemo(() => {
     const poolTokens = pool.poolTokens.map(token => token.symbol)
 
-    if (isReversed) {
-      return poolTokens.reverse().join('/')
-    } else {
-      return poolTokens.join('/')
-    }
+    return isReversed ? poolTokens.reverse().join('/') : poolTokens.join('/')
   }, [pool, isReversed])
 
   const secondaryFontColor = theme.semanticTokens.colors.font.secondary.default
@@ -430,3 +432,11 @@ export function useEclpChart() {
     isLoading,
   }
 }
+
+export function EclpChartProvider({ children }: PropsWithChildren) {
+  const hook = _useEclpChart()
+  return <EclpChartContext.Provider value={hook}>{children}</EclpChartContext.Provider>
+}
+
+export const useEclpChart = (): EclpChartContextType =>
+  useMandatoryContext(EclpChartContext, 'EclpChart')

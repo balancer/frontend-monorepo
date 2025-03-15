@@ -1,7 +1,7 @@
 'use client'
 import { Box } from '@chakra-ui/react'
 import ReactECharts from 'echarts-for-react'
-import { useEclpChart } from '../hooks/useEclpChart'
+import { useEclpChart } from '../hooks/EclpChartProvider'
 import { ReversedToggleButton } from './ReversedToggleButton'
 
 export function EclpChart() {

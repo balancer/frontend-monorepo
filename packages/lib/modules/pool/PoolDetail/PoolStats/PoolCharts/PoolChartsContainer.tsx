@@ -19,7 +19,7 @@ import {
   Heading,
 } from '@chakra-ui/react'
 import { ClpBadge } from '@repo/lib/modules/eclp/components/ClpBadge'
-import { useEclpChart } from '@repo/lib/modules/eclp/hooks/useEclpChart'
+import { EclpChartProvider, useEclpChart } from '@repo/lib/modules/eclp/hooks/EclpChartProvider'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { AnimatePresence, motion } from 'framer-motion'
 import { PeriodSelect } from './PeriodSelect'
@@ -47,7 +47,9 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
 export function PoolChartsContainer() {
   return (
     <PoolChartTabsProvider>
-      <PoolChartsContent />
+      <EclpChartProvider>
+        <PoolChartsContent />
+      </EclpChartProvider>
     </PoolChartTabsProvider>
   )
 }
