@@ -24,6 +24,7 @@ export function ClpBadge() {
         borderRadius="sm"
         color="black"
         cursor="pointer"
+        mb={['6px', '4px', '0px']} // to prevent jittering on mobile
         p="2"
         zIndex="1"
       >

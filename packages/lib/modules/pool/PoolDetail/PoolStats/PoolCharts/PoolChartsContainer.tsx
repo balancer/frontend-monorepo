@@ -104,7 +104,7 @@ function PoolChartsContent({ ...props }: any) {
                   )}
                 </VStack>
               </Stack>
-              <Box h="full" overflow="hidden" position="relative" w="full">
+              <Box h={['300px', '400px', 'full']} overflow="hidden" position="relative" w="full">
                 <AnimatePresence mode="wait">
                   {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
                     <motion.div

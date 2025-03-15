@@ -10,7 +10,7 @@ export function PoolCharts() {
   const { activeTab } = usePoolChartTabs()
 
   return (
-    <Box h="full" overflow="hidden" position="relative" w="full">
+    <Box h={['300px', '400px', 'full']} overflow="hidden" position="relative" w="full">
       <AnimatePresence mode="wait">
         <motion.div
           animate={{ x: '0%' }}
