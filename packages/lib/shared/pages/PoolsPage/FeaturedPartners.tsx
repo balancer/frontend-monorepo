@@ -11,7 +11,7 @@ export function FeaturedPartners() {
   const partnerCards = PROJECT_CONFIG.partnerCards
   const { colorMode } = useColorMode()
 
-  return (
+  return partnerCards?.length ? (
     <Card mb="md">
       <Center>
         <Text
@@ -48,29 +48,27 @@ export function FeaturedPartners() {
             width={1500}
           />
         </Box>
-        {partnerCards?.length && (
-          <FadeInOnView animateOnce={false}>
-            <Box p={{ base: 'md', sm: 'lg', md: 'xl', lg: '2xl' }}>
-              <Box maxW="7xl" mx="auto">
-                <Flex flexWrap="wrap" gap={{ base: 4, md: 5 }}>
-                  {partnerCards.map((partnerCard, index) => (
-                    <Box
-                      flex={{
-                        base: '1 1 100%',
-                        sm: index === 0 ? '1 1 100%' : '1 1 calc(50% - 10px)',
-                        md: '1 1 30%',
-                      }}
-                      key={partnerCard.title}
-                    >
-                      <PartnerCard {...partnerCard} />
-                    </Box>
-                  ))}
-                </Flex>
-              </Box>
+        <FadeInOnView animateOnce={false}>
+          <Box p={{ base: 'md', sm: 'lg', md: 'xl', lg: '2xl' }}>
+            <Box maxW="7xl" mx="auto">
+              <Flex flexWrap="wrap" gap={{ base: 4, md: 5 }}>
+                {partnerCards.map((partnerCard, index) => (
+                  <Box
+                    flex={{
+                      base: '1 1 100%',
+                      sm: index === 0 ? '1 1 100%' : '1 1 calc(50% - 10px)',
+                      md: '1 1 30%',
+                    }}
+                    key={partnerCard.title}
+                  >
+                    <PartnerCard {...partnerCard} />
+                  </Box>
+                ))}
+              </Flex>
             </Box>
-          </FadeInOnView>
-        )}
+          </Box>
+        </FadeInOnView>
       </Noise>
     </Card>
-  )
+  ) : null
 }
