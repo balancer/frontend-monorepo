@@ -1,4 +1,3 @@
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { drpcUrl } from '@repo/lib/shared/utils/rpc'
 
@@ -38,12 +37,6 @@ export async function POST(request: Request, { params: { chain } }: Params) {
   if (!DRPC_KEY) {
     return new Response(JSON.stringify({ error: 'NEXT_PRIVATE_DRPC_KEY is missing' }), {
       status: 500,
-    })
-  }
-
-  if (!PROJECT_CONFIG.supportedNetworks.includes(chain as GqlChain)) {
-    return new Response(JSON.stringify({ error: `Chain ${chain} not supported in Balancer` }), {
-      status: 403,
     })
   }
 
