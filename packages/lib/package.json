@@ -17,6 +17,7 @@
     "test:unit:watch": "vitest",
     "test:unit:coverage": "vitest --coverage",
     "test:unit:silent:coverage": "SILENT_TESTS=true vitest --coverage",
+    "test:save-api-mocks": "vitest run -c ./vitest.config.scripts.ts",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
   },
   "dependencies": {

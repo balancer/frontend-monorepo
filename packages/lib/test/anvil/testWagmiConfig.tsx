@@ -1,4 +1,4 @@
-import { NetworksWithFork, getTestRpcSetup, testAccounts } from '@repo/lib/test/anvil/anvil-setup'
+import { ChainIdWithFork, getTestRpcSetup, testAccounts } from '@repo/lib/test/anvil/anvil-setup'
 import { Address, Chain, http } from 'viem'
 import { gnosis, mainnet, polygon, sepolia, fantom, sonic } from 'viem/chains'
 import { createConfig } from 'wagmi'
@@ -6,32 +6,32 @@ import { mock } from 'wagmi/connectors'
 
 export const mainnetTest = {
   ...mainnet,
-  ...getTestRpcUrls('Ethereum'),
+  ...getTestRpcUrls(mainnet.id),
 } as const satisfies Chain
 
 export const polygonTest = {
   ...polygon,
-  ...getTestRpcUrls('Polygon'),
+  ...getTestRpcUrls(polygon.id),
 } as const satisfies Chain
 
 export const sepoliaTest = {
   ...sepolia,
-  ...getTestRpcUrls('Sepolia'),
+  ...getTestRpcUrls(sepolia.id),
 } as const satisfies Chain
 
 export const fantomTest = {
   ...fantom,
-  ...getTestRpcUrls('Fantom'),
+  ...getTestRpcUrls(fantom.id),
 } as const satisfies Chain
 
 export const gnosisTest = {
   ...gnosis,
-  ...getTestRpcUrls('Gnosis'),
+  ...getTestRpcUrls(gnosis.id),
 } as const satisfies Chain
 
 export const sonicTest = {
   ...sonic,
-  ...getTestRpcUrls('Sonic'),
+  ...getTestRpcUrls(sonic.id),
 } as const satisfies Chain
 
 export const testChains = [
@@ -43,8 +43,8 @@ export const testChains = [
   sonicTest,
 ] as const
 
-function getTestRpcUrls(networkName: NetworksWithFork) {
-  const { port, rpcUrl } = getTestRpcSetup(networkName)
+function getTestRpcUrls(chainId: ChainIdWithFork) {
+  const { port, rpcUrl } = getTestRpcSetup(chainId)
   return {
     port,
     rpcUrls: {

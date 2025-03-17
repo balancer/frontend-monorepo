@@ -16,7 +16,7 @@ import { isV3Pool, isGyroEPool } from '../../../pool.helpers'
 import { useGetPoolTokensWithActualWeights } from '../../../useGetPoolTokensWithActualWeights'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertContent } from '@repo/lib/shared/components/alerts/BalAlertContent'
-import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/useGetECLPLiquidityProfile'
+import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 
 const MIN_LIQUIDITY_FOR_BALANCED_ADD = 50000
 

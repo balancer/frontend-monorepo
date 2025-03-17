@@ -1,14 +1,17 @@
-import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/useGetECLPLiquidityProfile'
+import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { usePool } from '../../../PoolProvider'
-import { ColorMode, useTheme as useChakraTheme } from '@chakra-ui/react'
-import { useTheme as useNextTheme } from 'next-themes'
-import { getDefaultPoolChartOptions } from './usePoolCharts'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { useMemo } from 'react'
+import { usePool } from '../../pool/PoolProvider'
+import { useTheme as useChakraTheme } from '@chakra-ui/react'
+import { createContext, PropsWithChildren, useMemo } from 'react'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 
-export function useEclpPoolChart() {
+type EclpChartContextType = ReturnType<typeof _useEclpChart>
+
+const EclpChartContext = createContext<EclpChartContextType | null>(null)
+
+function _useEclpChart() {
   const { pool } = usePool()
+
   const {
     data,
     poolSpotPrice,
@@ -20,20 +23,12 @@ export function useEclpPoolChart() {
     toggleIsReversed,
     isLoading,
   } = useGetECLPLiquidityProfile(pool)
-  const { theme: nextTheme } = useNextTheme()
   const theme = useChakraTheme()
-  const { toCurrency } = useCurrency()
-
-  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
 
   const tokens = useMemo(() => {
     const poolTokens = pool.poolTokens.map(token => token.symbol)
 
-    if (isReversed) {
-      return poolTokens.reverse().join('/')
-    } else {
-      return poolTokens.join('/')
-    }
+    return isReversed ? poolTokens.reverse().join('/') : poolTokens.join('/')
   }, [pool, isReversed])
 
   const secondaryFontColor = theme.semanticTokens.colors.font.secondary.default
@@ -57,7 +52,6 @@ export function useEclpPoolChart() {
     if (!data) return
 
     return {
-      ...defaultChartOptions,
       grid: {
         left: '1.5%',
         right: '1.5%',
@@ -438,3 +432,11 @@ export function useEclpPoolChart() {
     isLoading,
   }
 }
+
+export function EclpChartProvider({ children }: PropsWithChildren) {
+  const hook = _useEclpChart()
+  return <EclpChartContext.Provider value={hook}>{children}</EclpChartContext.Provider>
+}
+
+export const useEclpChart = (): EclpChartContextType =>
+  useMandatoryContext(EclpChartContext, 'EclpChart')

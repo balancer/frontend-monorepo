@@ -18,8 +18,9 @@
     "NEXT_PRIVATE_ALCHEMY_KEY",
     "NEXT_PUBLIC_E2E_DEV",
     "CI",
-    "NEXT_PUBLIC_UPDATE_API_MOCKS",
-    "VERCEL_GIT_COMMIT_REF"
+    "VERCEL_GIT_COMMIT_REF",
+    "NEXT_PRIVATE_ALLOWED_ORIGINS",
+    "VERCEL_BRANCH_URL"
   ],
   "globalPassThroughEnv": ["SENTRY_AUTH_TOKEN"],
   "tasks": {
@@ -72,6 +73,12 @@
       "dependsOn": ["^graphql:gen", "^test:integration"]
     },
     "test:integration:watch": {
+      "cache": false,
+      "persistent": true,
+      "dependsOn": ["^graphql:gen"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "test:save-api-mocks": {
       "cache": false,
       "persistent": true,
       "dependsOn": ["^graphql:gen"],

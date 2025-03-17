@@ -24,10 +24,10 @@ const defaultQueryInput: QueryRemoveLiquidityInput = {
 
 const defaultBuildInput = { account: defaultTestUserAccount, slippagePercent: '0.2' }
 
-const nestedPool = await fetchPoolMock(
-  '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0',
-  GqlChain.Mainnet
-)
+const nestedPool = await fetchPoolMock({
+  poolId: '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0',
+  chain: GqlChain.Mainnet,
+})
 
 describe('When removing liquidity with single token in a nested pool', () => {
   test('returns price impact', async () => {

@@ -16,7 +16,7 @@ function selectNestedHandler(pool: Pool) {
 
 // Balancer 50WETH-50-3pool
 const poolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0'
-const nestedPool = await fetchPoolMock(poolId, GqlChain.Mainnet)
+const nestedPool = await fetchPoolMock({ poolId, chain: GqlChain.Mainnet })
 
 describe('When adding nested liquidity for a weighted pool', () => {
   test('has zero price impact', async () => {

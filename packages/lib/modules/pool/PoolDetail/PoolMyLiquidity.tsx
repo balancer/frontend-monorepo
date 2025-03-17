@@ -41,7 +41,13 @@ import {
   shouldMigrateStake,
   calcGaugeStakedBalance,
 } from '../user-balance.helpers'
-import { isVebalPool, shouldBlockAddLiquidity, calcUserShareOfPool, isFx } from '../pool.helpers'
+import {
+  isVebalPool,
+  shouldBlockAddLiquidity,
+  getPoolAddBlockedReason,
+  calcUserShareOfPool,
+  isFx,
+} from '../pool.helpers'
 import { getCanStake, migrateStakeTooltipLabel } from '../actions/stake.helpers'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -54,6 +60,7 @@ import {
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
+import { formatTextListAsItems } from '@repo/lib/shared/utils/text-format'
 
 function getTabs(isVeBalPool: boolean) {
   return [
@@ -110,6 +117,7 @@ export default function PoolMyLiquidity() {
   const poolMetadata = usePoolMetadata(pool)
 
   const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, poolMetadata)
+  const blockingReasons = formatTextListAsItems(getPoolAddBlockedReason(pool))
 
   useLayoutEffect(() => {
     if (myLiquiditySectionRef && myLiquiditySectionRef.current) {
@@ -366,15 +374,23 @@ export default function PoolMyLiquidity() {
           </VStack>
           <Divider />
           <HStack justifyContent="flex-start" mt="md" width="full">
-            <Button
-              flex="1"
-              isDisabled={isAddLiquidityBlocked}
-              maxW="120px"
-              onClick={() => handleAddLiquidity()}
-              variant="primary"
+            <Tooltip
+              label={
+                <Text color="primaryTextColor" whiteSpace="pre-line">
+                  {blockingReasons}
+                </Text>
+              }
             >
-              Add
-            </Button>
+              <Button
+                flex="1"
+                isDisabled={isAddLiquidityBlocked}
+                maxW="120px"
+                onClick={() => handleAddLiquidity()}
+                variant="primary"
+              >
+                Add
+              </Button>
+            </Tooltip>
             <Button
               flex="1"
               isDisabled={!hasUnstakedBalance}
