@@ -10,7 +10,31 @@ type Params = {
 
 const DRPC_KEY = process.env.NEXT_PRIVATE_DRPC_KEY || ''
 
+const ALLOWED_ORIGINS = [
+  ...(process.env.NEXT_PRIVATE_ALLOWED_ORIGINS || '').split(','),
+  process.env.VERCEL_BRANCH_URL ? `https://${process.env.VERCEL_BRANCH_URL}` : '',
+].filter(Boolean)
+
 export async function POST(request: Request, { params: { chain } }: Params) {
+  const referer = request.headers.get('referer')
+  const isAllowedOrigin = referer && ALLOWED_ORIGINS.some(origin => referer.startsWith(origin))
+
+  if (!isAllowedOrigin) {
+    return new Response(
+      JSON.stringify({
+        error: 'Forbidden: Access denied',
+        code: -32000,
+        message: 'Access denied',
+      }),
+      {
+        status: 403,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+  }
+
   if (!DRPC_KEY) {
     return new Response(JSON.stringify({ error: 'NEXT_PRIVATE_DRPC_KEY is missing' }), {
       status: 500,
