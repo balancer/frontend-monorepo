@@ -79,7 +79,7 @@ export function PoolsPage({
                 direction={{ base: 'column', lg: 'row' }}
                 gap="4"
                 justify={{ base: 'start', md: 'space-between' }}
-                mb="lg"
+                mb="8"
               >
                 <Box>
                   <Heading mb="3" sx={{ textWrap: 'balance' }} variant="special">
@@ -92,6 +92,12 @@ export function PoolsPage({
                 <PoolPageStats additionalFees={additionalFees} />
               </Flex>
             </FadeInOnView>
+            <FadeInOnView animateOnce={false}>
+              <Box pb="3">
+                {/* <BeetsPromoBanner /> */}
+                {children}
+              </Box>
+            </FadeInOnView>
             {/* <FadeInOnView animateOnce={false}>
             <Box pt="20" pb="4">
               <FeaturedPools featuredPools={featuredPools} />
@@ -100,13 +106,7 @@ export function PoolsPage({
           </DefaultPageContainer>
         </Noise>
       </Box>
-      <DefaultPageContainer noVerticalPadding pb="xl" pt={['lg', '2xl']}>
-        <FadeInOnView animateOnce={false}>
-          <Box pb="24">
-            {/* <BeetsPromoBanner /> */}
-            {children}
-          </Box>
-        </FadeInOnView>
+      <DefaultPageContainer noVerticalPadding pb="xl" pt={['lg', '54px']}>
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
             <PoolList />
