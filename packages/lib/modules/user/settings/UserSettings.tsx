@@ -22,6 +22,7 @@ import { useUserSettings } from './UserSettingsProvider'
 import { blockInvalidNumberInput } from '@repo/lib/shared/utils/numbers'
 import { Percent, Settings } from 'react-feather'
 import { CurrencySelect } from './CurrencySelect'
+import { EnableTxBundleSetting } from './EnableTxBundlesSetting'
 
 interface SlippageInputProps {
   slippage: string
@@ -145,6 +146,7 @@ export function UserSettings() {
               </Text>
               <ToggleAllowSounds />
             </Box>
+            <EnableTxBundleSetting />
           </VStack>
         </PopoverBody>
       </PopoverContent>
