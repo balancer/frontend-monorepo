@@ -2,6 +2,7 @@ import { ConnectButton, WalletButton } from '@rainbow-me/rainbowkit'
 import { Box, Button, ButtonProps, HStack, Img, Show } from '@chakra-ui/react'
 import { CustomAvatar } from './CustomAvatar'
 import { useUserAccount } from './UserAccountProvider'
+import { useIsSafeApp } from './safe.hooks'
 
 export function ConnectWallet({
   connectLabel = 'Connect wallet',
@@ -9,6 +10,9 @@ export function ConnectWallet({
   ...rest
 }: { connectLabel?: string; showCreateWalletButton?: boolean } & ButtonProps) {
   const { isLoading: isLoadingAccount, isConnected: isConnectedAccount } = useUserAccount()
+  const isSafeApp = useIsSafeApp()
+
+  console.log({ isSafeApp })
 
   return (
     <ConnectButton.Custom>
@@ -76,6 +80,7 @@ export function ConnectWallet({
             <Button
               alignItems="center"
               display="flex"
+              isDisabled={isSafeApp}
               onClick={openChainModal}
               type="button"
               variant="tertiary"
