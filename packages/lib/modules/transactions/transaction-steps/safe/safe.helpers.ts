@@ -34,6 +34,10 @@ export function isMultisig(details: GatewayTransactionDetails): boolean {
   return details.detailedExecutionInfo?.type === 'MULTISIG'
 }
 
+export function getPendingNestedSteps(step: TransactionStep) {
+  return step?.nestedSteps?.filter(nestedStep => !nestedStep.isComplete())
+}
+
 export function hasSomePendingNestedTxInBatch(step: TransactionStep): boolean {
   return step?.nestedSteps?.some(nestedStep => !nestedStep.isComplete()) ?? false
 }
