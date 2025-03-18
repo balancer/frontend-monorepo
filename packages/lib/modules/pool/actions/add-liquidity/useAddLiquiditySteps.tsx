@@ -82,20 +82,15 @@ export function useAddLiquiditySteps({
     slippage,
   })
 
-  const shouldUsePermit2Signatures = isPermit2 && shouldUseSignatures && signPermit2Step
-  const shouldUsePermit2Transactions = isPermit2 && !shouldUseSignatures && permit2ApprovalSteps
-
-  const addSteps: TransactionStep[] = shouldUsePermit2Signatures
-    ? [signPermit2Step, addLiquidityStep]
-    : shouldUsePermit2Transactions
-      ? [...permit2ApprovalSteps, addLiquidityStep]
-      : [addLiquidityStep]
-
-  addLiquidityStep.nestedSteps = tokenApprovalSteps
-  const approveAndAddSteps =
-    shouldBatchTransactions && hasSomePendingNestedTxInBatch(addLiquidityStep)
-      ? [...addSteps] // Hide token approvals when batching
-      : [...tokenApprovalSteps, ...addSteps]
+  const approveAndAddSteps = getApprovalAndAddSteps({
+    isPermit2,
+    shouldUseSignatures,
+    shouldBatchTransactions,
+    permit2ApprovalSteps,
+    tokenApprovalSteps,
+    signPermit2Step,
+    addLiquidityStep,
+  })
 
   const steps = useMemo<TransactionStep[]>(() => {
     if (relayerMode === 'approveRelayer') {
@@ -124,4 +119,49 @@ export function useAddLiquiditySteps({
       isSignPermit2Loading,
     steps,
   }
+}
+
+export function getApprovalAndAddSteps({
+  isPermit2,
+  shouldUseSignatures,
+  shouldBatchTransactions,
+  permit2ApprovalSteps,
+  tokenApprovalSteps,
+  signPermit2Step,
+  addLiquidityStep,
+}: {
+  isPermit2: boolean
+  shouldUseSignatures: boolean
+  shouldBatchTransactions: boolean
+  permit2ApprovalSteps: TransactionStep[]
+  tokenApprovalSteps: TransactionStep[]
+  signPermit2Step?: TransactionStep
+  addLiquidityStep: TransactionStep
+}) {
+  const shouldUsePermit2Signatures = isPermit2 && shouldUseSignatures && !!signPermit2Step
+  const shouldUsePermit2Transactions = isPermit2 && !shouldUseSignatures && !!permit2ApprovalSteps
+
+  addLiquidityStep.nestedSteps = shouldUsePermit2Transactions
+    ? permit2ApprovalSteps
+    : tokenApprovalSteps
+
+  const shouldDisplayBatchTransactions =
+    shouldBatchTransactions && hasSomePendingNestedTxInBatch(addLiquidityStep)
+
+  if (shouldUsePermit2Signatures) {
+    return shouldDisplayBatchTransactions
+      ? [signPermit2Step, addLiquidityStep] // Hide token approvals when batching
+      : [...tokenApprovalSteps, signPermit2Step, addLiquidityStep]
+  }
+
+  if (shouldUsePermit2Transactions) {
+    return shouldDisplayBatchTransactions
+      ? [addLiquidityStep] // Hide permit2 transaction approvals when batching
+      : [...permit2ApprovalSteps, addLiquidityStep]
+  }
+
+  // Standard permit token approvals (for v1 and v2 pools)
+  return shouldDisplayBatchTransactions
+    ? [addLiquidityStep] // Hide token approvals when batching
+    : [...tokenApprovalSteps, addLiquidityStep]
 }
