@@ -7,6 +7,7 @@ import {
 import { useUserAccount } from './UserAccountProvider'
 import { useSafeTxQuery } from '../transactions/transaction-steps/safe/useSafeTxQuery'
 import { useWalletConnectMetadata } from './wallet-connect/useWalletConnectMetadata'
+import { useUserSettings } from '../user/settings/UserSettingsProvider'
 
 // Returns true when using a Safe Smart account:
 // - app running as a Safe App
@@ -20,22 +21,23 @@ export function useIsSafeAccount(): boolean {
 // Returns true when app is running as a Safe App (it excludes Safe accounts connected via WalletConnect)
 export function useIsSafeApp(): boolean {
   const { connector } = useUserAccount()
-
   return connector?.id === 'safe'
 }
 
 /*
-  Returns true when running as a Safe App
+ Returns true when running as a Safe App and settings allow batched tx
  (that excludes Safe accounts connected via WalletConnect)
 */
 export function useShouldBatchTransactions(): boolean {
-  return useIsSafeApp()
+  const settings = useUserSettings()
+  const isSafeApp = useIsSafeApp()
+  return settings.shouldUseTxBundling && isSafeApp
 }
 
 export function useShouldRenderBatchTxButton(currentStep: TransactionStep): boolean {
-  const isSafeApp = useIsSafeApp()
+  const shouldBatchTx = useShouldBatchTransactions()
   const txBatch: TxBatch = buildTxBatch(currentStep)
-  return isSafeApp && !!currentStep.isBatchEnd && !!txBatch
+  return shouldBatchTx && !!currentStep.isBatchEnd && !!txBatch
 }
 
 /* isStepWithTxBatch is true if:
@@ -48,9 +50,9 @@ export function useStepWithTxBatch(currentStep: TransactionStep): {
   txBatch?: TxBatch
 } {
   const noBatchStep = { isStepWithTxBatch: false }
-  const isSafeApp = useIsSafeApp()
+  const shouldBatchTx = useShouldBatchTransactions()
 
-  if (!isSafeApp) return noBatchStep
+  if (!shouldBatchTx) return noBatchStep
   if (!currentStep.isBatchEnd) return noBatchStep
 
   const txBatch: TxBatch = buildTxBatch(currentStep)
@@ -77,13 +79,13 @@ export function useTxHash({ wagmiTxHash }: Props) {
   Only Safe Apps use Safe Tx Hash
   Safe Accounts connected via WalletConnect use wagmiTxHash like a regular account
   */
-  const isSafeApp = useIsSafeApp()
+  const shouldBatchTx = useShouldBatchTransactions()
   const { isLoading: isSafeTxLoading, data: safeTxHash } = useSafeTxQuery({
-    enabled: isSafeApp,
+    enabled: shouldBatchTx,
     wagmiTxHash,
   })
 
-  const txHash = isSafeApp ? safeTxHash : wagmiTxHash
+  const txHash = shouldBatchTx ? safeTxHash : wagmiTxHash
 
   return { txHash, isSafeTxLoading }
 }
