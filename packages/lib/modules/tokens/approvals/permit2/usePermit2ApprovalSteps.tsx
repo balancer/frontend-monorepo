@@ -10,7 +10,7 @@ import { ApprovalAction, buildTokenApprovalLabels } from '../approval-labels'
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
-import { get24HoursFromNowInSecs } from '@repo/lib/shared/utils/time'
+import { get24HoursFromNowInSecs, getNowTimestampInSecs } from '@repo/lib/shared/utils/time'
 import { usePermit2Allowance } from './usePermit2Allowance'
 import { useTokens } from '../../TokensProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -59,7 +59,7 @@ export function usePermit2ApprovalSteps({
   const nativeAssetAddress = getNativeAssetAddress(chain)
   const networkConfig = getNetworkConfig(chain)
   const permit2Address = networkConfig.contracts.permit2!
-  const permitExpiry = get24HoursFromNowInSecs()
+  const permitExpiry = get24HoursFromNowInSecs() * 3 // extend expiry to 3 days cause this is a gas tx (when signatures are disabled)
   const spenderAddress = shouldUseCompositeLiquidityRouterBoosted
     ? networkConfig.contracts.balancer.compositeLiquidityRouterBoosted!
     : networkConfig.contracts.balancer.router!
@@ -78,7 +78,7 @@ export function usePermit2ApprovalSteps({
     [filteredApprovalAmounts]
   )
 
-  const { allowanceFor, isLoadingPermit2Allowances, refetchPermit2Allowances } =
+  const { allowanceFor, expirations, isLoadingPermit2Allowances, refetchPermit2Allowances } =
     usePermit2Allowance({
       chainId,
       owner: userAddress,
@@ -120,8 +120,9 @@ export function usePermit2ApprovalSteps({
 
       // Check if the token has been approved
       const isComplete = () => {
+        const isNotExpired = !!expirations && expirations[tokenAddress] > getNowTimestampInSecs()
         const isAllowed = allowanceFor(tokenAddress) >= amountToApprove
-        return requiredRawAmount > 0n && isAllowed
+        return requiredRawAmount > 0n && isAllowed && isNotExpired
       }
 
       const props: ManagedTransactionInput = {
