@@ -140,6 +140,7 @@ export function TransactionBatchButton({
     return getTransactionButtonLabel({
       transactionState: mapSafeTxStatusToBalancerTxState(safeTxStatus),
       labels,
+      isSmartAccount: true,
     })
   }
 

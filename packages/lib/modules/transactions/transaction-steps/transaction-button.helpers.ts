@@ -3,8 +3,13 @@ import { TransactionLabels, TransactionState } from './lib'
 type Props = {
   transactionState: TransactionState
   labels: TransactionLabels
+  isSmartAccount?: boolean
 }
-export function getTransactionButtonLabel({ transactionState, labels }: Props) {
+export function getTransactionButtonLabel({
+  transactionState,
+  labels,
+  isSmartAccount = false,
+}: Props) {
   // sensible defaults for loading / confirm if not provided
   const relevantLabel = labels[transactionState as keyof typeof labels]
   if (!relevantLabel) {
@@ -12,7 +17,7 @@ export function getTransactionButtonLabel({ transactionState, labels }: Props) {
       case TransactionState.Preparing:
         return 'Preparing'
       case TransactionState.Loading:
-        return 'Confirm in smart account wallet'
+        return isSmartAccount ? 'Confirm in smart account wallet' : 'Confirm in wallet'
       case TransactionState.Confirming:
         return 'Confirming transaction'
       case TransactionState.Error:
