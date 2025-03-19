@@ -87,6 +87,7 @@ function TokenInfo({
           alt={token?.symbol || address}
           chain={chain}
           logoURI={logoURI}
+          overflow="visible"
           size={iconSize}
         />
       )}
