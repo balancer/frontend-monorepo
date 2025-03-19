@@ -14,16 +14,16 @@ export function useGetTokenRates(pool: Pool) {
 
   const query = useReadContract({
     chainId,
-    address: isV3 ? VAULT_V3[chainId] : (pool.address as Address),
-    query: { enabled: pool.type === GqlPoolType.Gyroe },
     abi: isV3 ? vaultExtensionAbi_V3 : gyroEclpPoolAbi,
     functionName: isV3 ? 'getPoolTokenRates' : 'getTokenRates',
+    address: isV3 ? VAULT_V3[chainId] : (pool.address as Address),
+    query: { enabled: pool.type === GqlPoolType.Gyroe },
     args: isV3 ? [pool.address as Address] : [],
   })
 
   const data = useMemo(() => {
     if (!query.data) return null
-    return isV3 ? (query.data[1] as [bigint, bigint]) : (query.data as [bigint, bigint])
+    return (isV3 ? query.data[1] : query.data) as [bigint, bigint]
   }, [query.data, isV3])
 
   return {
