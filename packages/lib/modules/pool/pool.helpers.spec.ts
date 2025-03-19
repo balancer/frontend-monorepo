@@ -18,7 +18,7 @@ import {
   usdcUsdtAaveBoosted,
   v3SepoliaNestedBoosted,
 } from './__mocks__/pool-examples/boosted'
-import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { zeroAddress } from 'viem'
 
 describe('getPoolActionableTokens', () => {
@@ -216,6 +216,7 @@ describe('shouldBlockAddLiquidity', () => {
 
     it('should not block if reviewer is the nested pool', () => {
       const pool = getApiPoolMock(v3SepoliaNestedBoosted)
+      pool.chain = GqlChain.Mainnet // Sepolia pools are never blocked
       pool.poolTokens[0].priceRateProvider = pool.poolTokens[0].nestedPool!.address
       pool.poolTokens[0].priceRateProviderData = null
 
@@ -233,5 +234,14 @@ describe('shouldBlockAddLiquidity', () => {
   it('should not block add liquidity if the metadata explicitly allows it', () => {
     const pool = getApiPoolMock(usdcUsdtAaveBoosted)
     expect(shouldBlockAddLiquidity(pool, { allowAddLiquidity: true })).toBe(false)
+  })
+
+  it('should not block for Sepolia pools', () => {
+    const pool = getApiPoolMock(usdcUsdtAaveBoosted)
+    pool.dynamicData.isPaused = true
+    pool.chain = GqlChain.Sepolia
+
+    expect(shouldBlockAddLiquidity(pool)).toBe(false)
+    expect(getPoolAddBlockedReason(pool)).toHaveLength(0)
   })
 })
