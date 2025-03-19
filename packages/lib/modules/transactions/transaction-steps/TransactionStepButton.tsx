@@ -12,6 +12,7 @@ import { useState } from 'react'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 import { getTransactionButtonLabel } from './transaction-button.helpers'
+import { useIsSafeAccount } from '../../web3/safe.hooks'
 
 interface Props {
   step: { labels: TransactionLabels } & ManagedResult
@@ -21,6 +22,7 @@ export function TransactionStepButton({ step }: Props) {
   const { chainId, simulation, labels, executeAsync } = step
   const [executionError, setExecutionError] = useState<Error>()
   const { isConnected } = useUserAccount()
+  const isSafeAccount = useIsSafeAccount()
   const { shouldChangeNetwork } = useChainSwitch(chainId)
   const isTransactButtonVisible = isConnected
   const transactionState = getTransactionState(step)
@@ -52,7 +54,7 @@ export function TransactionStepButton({ step }: Props) {
 
   function getButtonLabel() {
     if (executionError) return labels.init
-    return getTransactionButtonLabel({ transactionState, labels })
+    return getTransactionButtonLabel({ transactionState, labels, isSmartAccount: isSafeAccount })
   }
 
   return (
