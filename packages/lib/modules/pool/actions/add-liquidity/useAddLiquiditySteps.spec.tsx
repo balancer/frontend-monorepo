@@ -77,7 +77,7 @@ describe('getApprovalAndAddSteps', () => {
         addLiquidityStep,
       })
 
-      expect(steps).toEqual([...permit2ApprovalSteps, addLiquidityStep])
+      expect(steps).toEqual([...tokenApprovalSteps, ...permit2ApprovalSteps, addLiquidityStep])
     })
 
     it('permit2 add with Safe tx batch', () => {
@@ -143,7 +143,7 @@ describe('getApprovalAndAddSteps', () => {
       })
 
       expect(steps).toEqual([addLiquidityStep])
-      expect(addLiquidityStep.nestedSteps).toEqual([...permit2ApprovalSteps])
+      expect(addLiquidityStep.nestedSteps).toEqual([...tokenApprovalSteps, ...permit2ApprovalSteps])
     })
   })
 })

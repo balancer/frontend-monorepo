@@ -142,7 +142,12 @@ export function getApprovalAndAddSteps({
   const shouldUsePermit2Transactions = isPermit2 && !shouldUseSignatures && !!permit2ApprovalSteps
 
   addLiquidityStep.nestedSteps = shouldUsePermit2Transactions
-    ? permit2ApprovalSteps
+    ? /*
+       Signatures are disabled so we need:
+       - Approve Permit2 as spender in tokenApprovalSteps
+       - Explicit Permit2 token approvals in permit2ApprovalSteps (as permit2 signatures are disabled)
+      */
+      [...tokenApprovalSteps, ...permit2ApprovalSteps]
     : tokenApprovalSteps
 
   const shouldDisplayBatchTransactions =
@@ -156,8 +161,8 @@ export function getApprovalAndAddSteps({
 
   if (shouldUsePermit2Transactions) {
     return shouldDisplayBatchTransactions
-      ? [addLiquidityStep] // Hide permit2 transaction approvals when batching
-      : [...permit2ApprovalSteps, addLiquidityStep]
+      ? [addLiquidityStep] // Hide all approvals when batching
+      : [...tokenApprovalSteps, ...permit2ApprovalSteps, addLiquidityStep]
   }
 
   // Standard permit token approvals (for v1 and v2 pools)
