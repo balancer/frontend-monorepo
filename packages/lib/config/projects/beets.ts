@@ -53,7 +53,7 @@ export const ProjectConfigBeets: ProjectConfig = {
       },
       {
         iconType: 'medium',
-        href: 'https://beethovenxio.medium.com/',
+        href: 'https://beetsfi.medium.com/',
       },
       {
         iconType: 'github',
