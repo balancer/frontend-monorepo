@@ -1,7 +1,7 @@
 import { HStack, Text, Icon, Box } from '@chakra-ui/react'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
 import { Info, ThumbsDown, ThumbsUp } from 'react-feather'
-import { useEclpChart } from '../hooks/useEclpChart'
+import { useEclpChart } from '../hooks/EclpChartProvider'
 
 const OUT_OF_RANGE_TEXT =
   'The current price is out of the set liquidity range for this Concentrated Liquidity Pool (CLP). When a CLP is not in range, liquidity is not routed through this pool and LPs do not earn swap fees.'
@@ -24,6 +24,7 @@ export function ClpBadge() {
         borderRadius="sm"
         color="black"
         cursor="pointer"
+        mb={['6px', '4px', '0px']} // to prevent jittering on mobile
         p="2"
         zIndex="1"
       >

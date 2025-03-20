@@ -321,6 +321,8 @@ export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): st
   // we allow the metadata to override the default behavior
   if (metadata?.allowAddLiquidity === true) return []
 
+  if (pool.chain === GqlChain.Sepolia) return []
+
   const reasons: string[] = []
 
   if (isV3Pool(pool) && shouldBlockV3PoolAdds) reasons.push('Adds are blocked for all V3 pools')

@@ -47,17 +47,8 @@ export function parseAddLiquidityReceipt({
   const receivedBptAmount = getIncomingLogs(receiptLogs, userAddress)?.[0]?.args?.value
   const receivedBptUnits = formatUnits(receivedBptAmount || 0n, BPT_DECIMALS)
 
-  // ERC-20: Monerium EURe (EURe)
-  const erc20EURe = '0x420ca0f9b9b604ce0fd9c18ef134c705e5fa3430'
-
   return {
-    /*
-      TODO:
-        properly implement this filter getting this info from LiquidityAdded/Removed event instead of Transfers
-        They use frontend (erc20) <> controller (upgradable proxy) setup - where calls to erc20 are forwarded to the controller.
-        Both emit events, which explains the duplicates.
-    */
-    sentTokens: sentTokens.filter(t => !isSameAddress(t.tokenAddress, erc20EURe)),
+    sentTokens: filterEdgeCases(sentTokens, chain),
     receivedBptUnits,
   }
 }
@@ -90,7 +81,7 @@ export function parseRemoveLiquidityReceipt({
   const sentBptUnits = formatUnits(sentBptAmount || 0n, BPT_DECIMALS)
 
   return {
-    receivedTokens,
+    receivedTokens: filterEdgeCases(receivedTokens, chain),
     sentBptUnits,
   }
 }
@@ -205,7 +196,10 @@ function getIncomingWithdrawals(
 
   const from =
     protocolVersion === 3
-      ? networkConfig.contracts.balancer.batchRouter
+      ? [
+          networkConfig.contracts.balancer.batchRouter,
+          networkConfig.contracts.balancer.router,
+        ].filter(address => address !== undefined)
       : networkConfig.contracts.balancer.vaultV2
 
   // Catches when the wNativeAsset is withdrawn from the vault, assumption is
@@ -241,4 +235,20 @@ function getIncomingLogsLstWithdrawn(logs: Log[], userAddress?: Address) {
   })
 
   return test[0]?.args?.amountAssets
+}
+
+function filterEdgeCases(tokens: HumanTokenAmount[], chain: GqlChain) {
+  // ERC-20: Monerium EURe (EURe)
+  const getERC20EUReAddress = () => {
+    if (chain === GqlChain.Gnosis) return '0x420ca0f9b9b604ce0fd9c18ef134c705e5fa3430'
+    if (chain === GqlChain.Polygon) return '0xE0aEa583266584DafBB3f9C3211d5588c73fEa8d'
+    return '0x39b8B6385416f4cA36a20319F70D28621895279D' // mainnet
+  }
+  /*
+      TODO:
+        properly implement this filter getting this info from LiquidityAdded/Removed event instead of Transfers
+        They use frontend (erc20) <> controller (upgradable proxy) setup - where calls to erc20 are forwarded to the controller.
+        Both emit events, which explains the duplicates.
+    */
+  return tokens.filter(t => !isSameAddress(t.tokenAddress, getERC20EUReAddress()))
 }

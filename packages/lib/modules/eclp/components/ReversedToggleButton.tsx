@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/react'
-import { useEclpChart } from '../hooks/useEclpChart'
+import { useEclpChart } from '../hooks/EclpChartProvider'
 import { Icon } from '@chakra-ui/react'
 import { Repeat } from 'react-feather'
 
