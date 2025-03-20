@@ -508,8 +508,8 @@ importers:
         specifier: ^2.0.10
         version: 2.0.10(react@18.2.0)
       react-hook-form:
-        specifier: ^7.47.0
-        version: 7.53.0(react@18.2.0)
+        specifier: 7.54.2
+        version: 7.54.2(react@18.2.0)
       react-hotkeys-hook:
         specifier: ^4.4.1
         version: 4.5.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -568,9 +568,6 @@ importers:
       '@graphql-codegen/typescript-document-nodes':
         specifier: ^4.0.1
         version: 4.0.9(graphql@16.10.0)
-      '@graphql-codegen/typescript-msw':
-        specifier: ^1.1.6
-        version: 1.1.6(graphql@16.10.0)
       '@graphql-typed-document-node/core':
         specifier: ^3.2.0
         version: 3.2.0(graphql@16.10.0)
@@ -642,7 +639,7 @@ importers:
         version: 4.3.1(vite@5.4.5(@types/node@22.13.5)(terser@5.39.0))
       '@vitest/coverage-v8':
         specifier: 3.0.5
-        version: 3.0.5(vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0))
+        version: 3.0.5(vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0))
       '@wagmi/cli':
         specifier: 2.2.0
         version: 2.2.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)
@@ -662,17 +659,17 @@ importers:
         specifier: ^1.5.12
         version: 1.5.12
       msw:
-        specifier: 2.7.0
-        version: 2.7.0(@types/node@22.13.5)(typescript@5.7.2)
+        specifier: 2.7.3
+        version: 2.7.3(@types/node@22.13.5)(typescript@5.7.2)
       sentry-testkit:
         specifier: 5.0.10
         version: 5.0.10
       vitest:
         specifier: 3.0.5
-        version: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)
+        version: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)
       vitest-mock-extended:
         specifier: 2.0.2
-        version: 2.0.2(typescript@5.7.2)(vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0))
+        version: 2.0.2(typescript@5.7.2)(vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0))
 
   packages/prettier-config: {}
 
@@ -2787,11 +2784,6 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
-  '@graphql-codegen/plugin-helpers@2.7.2':
-    resolution: {integrity: sha512-kln2AZ12uii6U59OQXdjLk5nOlh1pHis1R98cDZGFnfaiAbX9V3fxcZ1MMJkB7qFUymTALzyjZoXXdyVmPMfRg==}
-    peerDependencies:
-      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-
   '@graphql-codegen/plugin-helpers@5.0.4':
     resolution: {integrity: sha512-MOIuHFNWUnFnqVmiXtrI+4UziMTYrcquljaI5f/T/Bc7oO7sXcfkAvgkNWEEi9xWreYwvuer3VHCuPI/lAFWbw==}
     peerDependencies:
@@ -2812,11 +2804,6 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
-  '@graphql-codegen/typescript-msw@1.1.6':
-    resolution: {integrity: sha512-InB90+VMGLsBlSmK2Msmx52wuHqVy9tn8ZvhOU6aH71z6tY9CtbI8Ks6CwJLZtPlArCH/OQAM5+/Vj1AdeNhhA==}
-    peerDependencies:
-      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-
   '@graphql-codegen/typescript-operations@4.2.3':
     resolution: {integrity: sha512-6z7avSSOr03l5SyKbeDs7MzRyGwnQFSCqQm8Om5wIuoIgXVu2gXRmcJAY/I7SLdAy9xbF4Sho7XNqieFM2CAFQ==}
     peerDependencies:
@@ -2826,11 +2813,6 @@ packages:
     resolution: {integrity: sha512-0O35DMR4d/ctuHL1Zo6mRUUzp0BoszKfeWsa6sCm/g70+S98+hEfTwZNDkQHylLxapiyjssF9uw/F+sXqejqLw==}
     peerDependencies:
       graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
-
-  '@graphql-codegen/visitor-plugin-common@2.13.1':
-    resolution: {integrity: sha512-mD9ufZhDGhyrSaWQGrU1Q1c5f01TeWtSWy/cDwXYjJcHIj1Y/DG2x0tOflEfCvh5WcnmHNIw4lzDsg1W7iFJEg==}
-    peerDependencies:
-      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
   '@graphql-codegen/visitor-plugin-common@5.3.1':
     resolution: {integrity: sha512-MktoBdNZhSmugiDjmFl1z6rEUUaqyxtFJYWnDilE7onkPgyw//O0M+TuPBJPBWdyV6J2ond0Hdqtq+rkghgSIQ==}
@@ -2963,11 +2945,6 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  '@graphql-tools/optimize@1.4.0':
-    resolution: {integrity: sha512-dJs/2XvZp+wgHH8T5J2TqptT9/6uVzIYvA6uFACha+ufvdMBedkfR4b4GbT8jAKLRARiqRTxy3dctnwkTM2tdw==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-
   '@graphql-tools/optimize@2.0.0':
     resolution: {integrity: sha512-nhdT+CRGDZ+bk68ic+Jw1OZ99YCDIKYA5AlVAnBHJvMawSx9YQqQAIj4refNc1/LRieGiuWvhbG3jvPVYho0Dg==}
     engines: {node: '>=16.0.0'}
@@ -2977,11 +2954,6 @@ packages:
   '@graphql-tools/prisma-loader@8.0.4':
     resolution: {integrity: sha512-hqKPlw8bOu/GRqtYr0+dINAI13HinTVYBDqhwGAPIFmLr5s+qKskzgCiwbsckdrb5LWVFmVZc+UXn80OGiyBzg==}
     engines: {node: '>=16.0.0'}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-
-  '@graphql-tools/relay-operation-optimizer@6.5.18':
-    resolution: {integrity: sha512-mc5VPyTeV+LwiM+DNvoDQfPqwQYhPV/cl5jOBjTgSniyaq8/86aODfMkrE2OduhQ5E00hqrkuL2Fdrgk0w1QJg==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
@@ -3018,16 +2990,6 @@ packages:
   '@graphql-tools/utils@10.7.1':
     resolution: {integrity: sha512-mpHAA5EddtxvnkHIBEEon5++tvL5T+j3OeOP4CAXbguAK2RBRM9DVVsoc9U68vSPLJjBRGp+b5NjlRn04g9rMA==}
     engines: {node: '>=16.0.0'}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-
-  '@graphql-tools/utils@8.13.1':
-    resolution: {integrity: sha512-qIh9yYpdUFmctVqovwMdheVNJqFh+DQNWIhX87FJStfXYnmweBUDATok9fWPleKeFwxnW8IapKmY8m8toJEkAw==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-
-  '@graphql-tools/utils@9.2.1':
-    resolution: {integrity: sha512-WUw506Ql6xzmOORlriNrD6Ugx+HjVgYxt9KCXD9mHAak+eaXSwuGGPyE60hy9xaDEoXKBsG7SkG69ybitaVl6A==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
@@ -5605,9 +5567,6 @@ packages:
   chalk@5.3.0:
     resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
-
-  change-case-all@1.0.14:
-    resolution: {integrity: sha512-CWVm2uT7dmSHdO/z1CXT/n47mWonyypzBbuCy5tN7uMg22BsfkhwT6oHmFCAk+gL1LOOxhdbB9SZz3J1KTY3gA==}
 
   change-case-all@1.0.15:
     resolution: {integrity: sha512-3+GIFhk3sNuvFAJKU46o26OdzudQlPNBCu1ZQi3cMeMHhty1bhDxu2WrEilVNYaGvqUtR1VSigFcJOiS13dRhQ==}
@@ -8253,8 +8212,8 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  msw@2.7.0:
-    resolution: {integrity: sha512-BIodwZ19RWfCbYTxWTUfTXc+sg4OwjCAgxU1ZsgmggX/7S3LdUifsbUPJs61j0rWb19CZRGY5if77duhc0uXzw==}
+  msw@2.7.3:
+    resolution: {integrity: sha512-+mycXv8l2fEAjFZ5sjrtjJDmm2ceKGjrNbBr1durRg6VkU9fNUE/gsmQ51hWbHqs+l35W1iM+ZsmOD9Fd6lspw==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
@@ -9037,8 +8996,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-hook-form@7.53.0:
-    resolution: {integrity: sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==}
+  react-hook-form@7.54.2:
+    resolution: {integrity: sha512-eHpAUgUjWbZocoQYUHposymRb4ZP6d0uwUnooL2uOybA9/3tPUvoAKqEWK1WaSiTxxOfTpffNZP7QwlnM3/gEg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -13520,16 +13479,6 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-codegen/plugin-helpers@2.7.2(graphql@16.10.0)':
-    dependencies:
-      '@graphql-tools/utils': 8.13.1(graphql@16.10.0)
-      change-case-all: 1.0.14
-      common-tags: 1.8.2
-      graphql: 16.10.0
-      import-from: 4.0.0
-      lodash: 4.17.21
-      tslib: 2.4.1
-
   '@graphql-codegen/plugin-helpers@5.0.4(graphql@16.10.0)':
     dependencies:
       '@graphql-tools/utils': 10.5.4(graphql@16.10.0)
@@ -13570,18 +13519,6 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-codegen/typescript-msw@1.1.6(graphql@16.10.0)':
-    dependencies:
-      '@graphql-codegen/plugin-helpers': 2.7.2(graphql@16.10.0)
-      '@graphql-codegen/visitor-plugin-common': 2.13.1(graphql@16.10.0)
-      auto-bind: 4.0.0
-      change-case-all: 1.0.14
-      graphql: 16.10.0
-      tslib: 2.4.1
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-
   '@graphql-codegen/typescript-operations@4.2.3(graphql@16.10.0)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.10.0)
@@ -13602,23 +13539,6 @@ snapshots:
       auto-bind: 4.0.0
       graphql: 16.10.0
       tslib: 2.6.2
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-
-  '@graphql-codegen/visitor-plugin-common@2.13.1(graphql@16.10.0)':
-    dependencies:
-      '@graphql-codegen/plugin-helpers': 2.7.2(graphql@16.10.0)
-      '@graphql-tools/optimize': 1.4.0(graphql@16.10.0)
-      '@graphql-tools/relay-operation-optimizer': 6.5.18(graphql@16.10.0)
-      '@graphql-tools/utils': 8.13.1(graphql@16.10.0)
-      auto-bind: 4.0.0
-      change-case-all: 1.0.14
-      dependency-graph: 0.11.0
-      graphql: 16.10.0
-      graphql-tag: 2.12.6(graphql@16.10.0)
-      parse-filepath: 1.0.2
-      tslib: 2.4.1
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -13846,11 +13766,6 @@ snapshots:
       graphql: 16.10.0
       tslib: 2.7.0
 
-  '@graphql-tools/optimize@1.4.0(graphql@16.10.0)':
-    dependencies:
-      graphql: 16.10.0
-      tslib: 2.4.1
-
   '@graphql-tools/optimize@2.0.0(graphql@16.10.0)':
     dependencies:
       graphql: 16.10.0
@@ -13881,16 +13796,6 @@ snapshots:
       - encoding
       - supports-color
       - utf-8-validate
-
-  '@graphql-tools/relay-operation-optimizer@6.5.18(graphql@16.10.0)':
-    dependencies:
-      '@ardatan/relay-compiler': 12.0.0(graphql@16.10.0)
-      '@graphql-tools/utils': 9.2.1(graphql@16.10.0)
-      graphql: 16.10.0
-      tslib: 2.4.1
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
 
   '@graphql-tools/relay-operation-optimizer@7.0.1(graphql@16.10.0)':
     dependencies:
@@ -13955,17 +13860,6 @@ snapshots:
       dset: 3.1.4
       graphql: 16.10.0
       tslib: 2.8.1
-
-  '@graphql-tools/utils@8.13.1(graphql@16.10.0)':
-    dependencies:
-      graphql: 16.10.0
-      tslib: 2.4.1
-
-  '@graphql-tools/utils@9.2.1(graphql@16.10.0)':
-    dependencies:
-      '@graphql-typed-document-node/core': 3.2.0(graphql@16.10.0)
-      graphql: 16.10.0
-      tslib: 2.4.1
 
   '@graphql-tools/wrap@10.0.27(graphql@16.10.0)':
     dependencies:
@@ -16395,7 +16289,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/coverage-v8@3.0.5(vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0))':
+  '@vitest/coverage-v8@3.0.5(vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
@@ -16409,7 +16303,7 @@ snapshots:
       std-env: 3.8.0
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)
+      vitest: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -16420,13 +16314,13 @@ snapshots:
       chai: 5.1.2
       tinyrainbow: 2.0.0
 
-  '@vitest/mocker@3.0.5(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2))(vite@5.4.5(@types/node@22.13.5)(terser@5.39.0))':
+  '@vitest/mocker@3.0.5(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(vite@5.4.5(@types/node@22.13.5)(terser@5.39.0))':
     dependencies:
       '@vitest/spy': 3.0.5
       estree-walker: 3.0.3
       magic-string: 0.30.17
     optionalDependencies:
-      msw: 2.7.0(@types/node@22.13.5)(typescript@5.7.2)
+      msw: 2.7.3(@types/node@22.13.5)(typescript@5.7.2)
       vite: 5.4.5(@types/node@22.13.5)(terser@5.39.0)
 
   '@vitest/pretty-format@3.0.5':
@@ -17594,19 +17488,6 @@ snapshots:
       supports-color: 7.2.0
 
   chalk@5.3.0: {}
-
-  change-case-all@1.0.14:
-    dependencies:
-      change-case: 4.1.2
-      is-lower-case: 2.0.2
-      is-upper-case: 2.0.2
-      lower-case: 2.0.2
-      lower-case-first: 2.0.2
-      sponge-case: 1.0.1
-      swap-case: 2.0.2
-      title-case: 3.0.3
-      upper-case: 2.0.2
-      upper-case-first: 2.0.2
 
   change-case-all@1.0.15:
     dependencies:
@@ -20730,7 +20611,7 @@ snapshots:
 
   ms@2.1.3: {}
 
-  msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2):
+  msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2):
     dependencies:
       '@bundled-es-modules/cookie': 2.0.1
       '@bundled-es-modules/statuses': 1.0.1
@@ -21545,7 +21426,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.2.34
 
-  react-hook-form@7.53.0(react@18.2.0):
+  react-hook-form@7.54.2(react@18.2.0):
     dependencies:
       react: 18.2.0
 
@@ -23107,16 +22988,16 @@ snapshots:
       fsevents: 2.3.3
       terser: 5.39.0
 
-  vitest-mock-extended@2.0.2(typescript@5.7.2)(vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)):
+  vitest-mock-extended@2.0.2(typescript@5.7.2)(vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)):
     dependencies:
       ts-essentials: 10.0.2(typescript@5.7.2)
       typescript: 5.7.2
-      vitest: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)
+      vitest: 3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)
 
-  vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0):
+  vitest@3.0.5(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0):
     dependencies:
       '@vitest/expect': 3.0.5
-      '@vitest/mocker': 3.0.5(msw@2.7.0(@types/node@22.13.5)(typescript@5.7.2))(vite@5.4.5(@types/node@22.13.5)(terser@5.39.0))
+      '@vitest/mocker': 3.0.5(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(vite@5.4.5(@types/node@22.13.5)(terser@5.39.0))
       '@vitest/pretty-format': 3.0.5
       '@vitest/runner': 3.0.5
       '@vitest/snapshot': 3.0.5
