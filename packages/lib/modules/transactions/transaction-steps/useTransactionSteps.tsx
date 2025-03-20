@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { getTransactionState, TransactionState, TransactionStep } from './lib'
 import { useTransactionState } from './TransactionStateProvider'
 import { useTxSound } from './useTxSound'
+import { ensureError } from '@repo/lib/shared/utils/errors'
 
 export type TransactionStepsResponse = ReturnType<typeof useTransactionSteps>
 
@@ -52,9 +53,19 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
   // allowance has been given.
   useEffect(() => {
     if (!currentStep) return
-    if (!isOnSuccessCalled(currentStep.id) && currentTransaction?.result.isSuccess) {
-      currentStep?.onSuccess?.()
+    async function handleTransactionCompletion() {
+      try {
+        await currentStep?.onSuccess?.()
+      } catch (e) {
+        const error = ensureError(e)
+        // TODO: This should display error to user somehow and block further steps
+        console.log('Error inside onSuccess', error.message)
+        resetTransactionState()
+      }
       updateOnSuccessCalled(currentStep.id, true)
+    }
+    if (!isOnSuccessCalled(currentStep.id) && currentTransaction?.result.isSuccess) {
+      handleTransactionCompletion()
     }
   }, [currentTransaction?.result.isSuccess, currentStep?.onSuccess])
 

@@ -132,7 +132,7 @@ export type TransactionStep = {
   isComplete: () => boolean
   renderAction: () => ReactNode
   // All callbacks should be idempotent
-  onSuccess?: () => void
+  onSuccess?: () => any
   onActivated?: () => void
   onDeactivated?: () => void
 } & MaybeBatchableTx
