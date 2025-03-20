@@ -1,4 +1,4 @@
-import { testHook } from '@repo/lib/test/utils/custom-renderers'
+import { DefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
@@ -16,14 +16,18 @@ async function testQuery(humanBptIn: HumanAmount) {
     aWjAuraWethPoolElementMock(),
     RemoveLiquidityType.Proportional
   )
-  const { result } = testHook(() =>
-    useRemoveLiquidityPriceImpactQuery({
-      chainId: 1,
-      handler,
-      humanBptIn,
-      tokenOut: emptyTokenOut,
-      enabled: true,
-    })
+  const { result } = testHook(
+    () =>
+      useRemoveLiquidityPriceImpactQuery({
+        chainId: 1,
+        handler,
+        humanBptIn,
+        tokenOut: emptyTokenOut,
+        enabled: true,
+      }),
+    {
+      wrapper: DefaultPoolTestProvider,
+    }
   )
   return result
 }
