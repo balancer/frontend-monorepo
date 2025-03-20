@@ -32,12 +32,6 @@ export function useShouldBatchTransactions(): boolean {
   return useIsSafeApp()
 }
 
-export function useShouldRenderBatchTxButton(currentStep: TransactionStep): boolean {
-  const isSafeApp = useIsSafeApp()
-  const txBatch: TxBatch = buildTxBatch(currentStep)
-  return isSafeApp && !!currentStep.isBatchEnd && !!txBatch
-}
-
 /* isStepWithTxBatch is true if:
   1. running as a Safe App
   2. the current step has nested batchable transactions
