@@ -10,7 +10,6 @@ import { Address } from 'viem'
 import { connectWithDefaultUser } from '@repo/lib/test/utils/wagmi/wagmi-connections'
 
 const emptyTokenOut = '' as Address // We don't use it but it is required to simplify TS checks
-const poolMock = aWjAuraWethPoolElementMock()
 
 async function testQuery(humanBptIn: HumanAmount) {
   const handler = selectRemoveLiquidityHandler(
@@ -21,7 +20,6 @@ async function testQuery(humanBptIn: HumanAmount) {
     useRemoveLiquidityPriceImpactQuery({
       chainId: 1,
       handler,
-      poolId: poolMock.id,
       humanBptIn,
       tokenOut: emptyTokenOut,
       enabled: true,

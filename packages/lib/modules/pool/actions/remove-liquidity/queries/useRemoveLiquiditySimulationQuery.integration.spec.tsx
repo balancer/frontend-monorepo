@@ -1,4 +1,3 @@
-import { poolId } from '@repo/lib/debug-helpers'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 
@@ -21,7 +20,6 @@ async function testQuery(humanBptIn: HumanAmount) {
     useRemoveLiquiditySimulationQuery({
       chainId: 1,
       handler,
-      poolId,
       humanBptIn,
       tokenOut: emptyTokenOut,
       tokensOut: [],

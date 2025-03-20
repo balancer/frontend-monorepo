@@ -34,16 +34,23 @@ export type SentryMetadata = {
   context?: Partial<ScopeContext>
 }
 
+type EdgeCasePoolMetaParams = {
+  hasStableSurgeHook?: boolean
+}
+
 type AddMetaParams = AddLiquidityParams & {
   chainId: number
   blockNumber?: bigint
-  hasStableSurgeHook?: boolean
-}
+} & EdgeCasePoolMetaParams
+
 export function sentryMetaForAddLiquidityHandler(errorMessage: string, params: AddMetaParams) {
   return createAddHandlerMetadata('HandlerQueryError', errorMessage, params)
 }
 
-type RemoveMetaParams = RemoveLiquidityParams & { chainId: number; blockNumber?: bigint }
+type RemoveMetaParams = RemoveLiquidityParams & {
+  chainId: number
+  blockNumber?: bigint
+} & EdgeCasePoolMetaParams
 export function sentryMetaForRemoveLiquidityHandler(
   errorMessage: string,
   params: RemoveMetaParams
