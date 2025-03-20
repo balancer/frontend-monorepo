@@ -143,7 +143,7 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
                 circleCount: 6,
               }}
               stat={fNumCustom(protocolData.protocolMetricsAggregated.totalLiquidity, '$0,0.0a')}
-              statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
+              statProps={{ fontSize: '3xl', fontWeight: 'bold', marginEnd: 'xl' }}
               title="TVL"
               titleSize="2xl"
             />
