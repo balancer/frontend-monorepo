@@ -6,7 +6,7 @@ import {
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { useQuery } from '@apollo/client'
-import { useCallback, useMemo, useState } from 'react'
+import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { usePool } from '../../../PoolProvider'
 import { NumberFormatter } from '@repo/lib/shared/utils/numbers'
@@ -14,6 +14,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTheme as useNextTheme } from 'next-themes'
 import { isCowAmmPool } from '../../../pool.helpers'
 import { PoolChartTab, usePoolChartTabs } from './PoolChartTabsProvider'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 
 const MIN_DISPLAY_PERIOD_DAYS = 30
 
@@ -191,7 +192,11 @@ export function usePoolSnapshots(
   })
 }
 
-export function usePoolCharts() {
+type PoolChartsContextType = ReturnType<typeof _usePoolCharts>
+
+const PoolChartsContext = createContext<PoolChartsContextType | null>(null)
+
+export function _usePoolCharts() {
   const { pool, tvl } = usePool()
   const { id: poolId } = useParams()
   const { toCurrency } = useCurrency()
@@ -514,3 +519,11 @@ export function usePoolCharts() {
     hasChartData: !!chartData.length,
   }
 }
+
+export function PoolChartsProvider({ children }: PropsWithChildren) {
+  const hook = _usePoolCharts()
+  return <PoolChartsContext.Provider value={hook}>{children}</PoolChartsContext.Provider>
+}
+
+export const usePoolCharts = (): PoolChartsContextType =>
+  useMandatoryContext(PoolChartsContext, 'PoolCharts')

@@ -4,7 +4,7 @@ import { createContext, PropsWithChildren, useMemo, useState } from 'react'
 import { PoolVariant, BaseVariant } from '../../../pool.types'
 import { usePool } from '../../../PoolProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { PoolChartPeriod } from './usePoolCharts'
+import { PoolChartPeriod } from './PoolChartsProvider'
 
 export enum PoolChartTab {
   VOLUME = 'volume',

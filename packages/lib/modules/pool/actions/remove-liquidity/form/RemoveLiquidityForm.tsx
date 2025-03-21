@@ -33,7 +33,7 @@ import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpact
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { parseUnits } from 'viem'
-import { SimulationError } from '@repo/lib/shared/components/errors/SimulationError'
+import { RemoveSimulationError } from '@repo/lib/shared/components/errors/RemoveSimulationError'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -107,6 +107,10 @@ export function RemoveLiquidityForm() {
     if (option.value === 'single') {
       setSingleTokenType()
     }
+  }
+
+  function setProportionalTab() {
+    toggleTab(TABS[0])
   }
 
   const onModalClose = () => {
@@ -234,7 +238,10 @@ export function RemoveLiquidityForm() {
                 />
               )}
             </VStack>
-            <SimulationError simulationQuery={simulationQuery} />
+            <RemoveSimulationError
+              goToProportionalRemoves={setProportionalTab}
+              simulationQuery={simulationQuery}
+            />
             <TooltipWithTouch label={isDisabled ? disabledReason : ''}>
               <Button
                 isDisabled={isDisabled || isWarning}

@@ -21,6 +21,7 @@ import { SimulateSwapParams } from '@repo/lib/modules/swap/queries/useSimulateSw
 import { SwapState } from '@repo/lib/modules/swap/swap.types'
 import { SwapHandler } from '@repo/lib/modules/swap/handlers/Swap.handler'
 import { cannotCalculatePriceImpactError } from '@repo/lib/modules/price-impact/price-impact.utils'
+import { isDev } from '@repo/lib/config/app.config'
 
 /**
  * Metadata to be added to the captured Sentry error
@@ -33,16 +34,23 @@ export type SentryMetadata = {
   context?: Partial<ScopeContext>
 }
 
+type EdgeCasePoolMetaParams = {
+  hasStableSurgeHook?: boolean
+}
+
 type AddMetaParams = AddLiquidityParams & {
   chainId: number
   blockNumber?: bigint
-  hasStableSurgeHook?: boolean
-}
+} & EdgeCasePoolMetaParams
+
 export function sentryMetaForAddLiquidityHandler(errorMessage: string, params: AddMetaParams) {
   return createAddHandlerMetadata('HandlerQueryError', errorMessage, params)
 }
 
-type RemoveMetaParams = RemoveLiquidityParams & { chainId: number; blockNumber?: bigint }
+type RemoveMetaParams = RemoveLiquidityParams & {
+  chainId: number
+  blockNumber?: bigint
+} & EdgeCasePoolMetaParams
 export function sentryMetaForRemoveLiquidityHandler(
   errorMessage: string,
   params: RemoveMetaParams
@@ -408,6 +416,15 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
     "Confirm connection in the extension"
    */
   if (message.includes(`Request of type 'wallet_requestPermissions' already pending for origin`)) {
+    return true
+  }
+
+  // Ignore ensName lookup errors happening in development
+  if (
+    isDev &&
+    message.includes(`The contract does not have the function "reverse"`) &&
+    stackTrace.includes('getEnsName')
+  ) {
     return true
   }
 
