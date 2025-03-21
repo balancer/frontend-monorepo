@@ -11,10 +11,11 @@ import { HumanAmount } from '@balancer/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { sentryMetaForRemoveLiquidityHandler } from '@repo/lib/shared/utils/query-errors'
 import { useBlockNumber } from 'wagmi'
+import { usePool } from '../../../PoolProvider'
+import { hasStableSurgeHook } from '../../../pool.helpers'
 
 type Params = {
   handler: RemoveLiquidityHandler
-  poolId: string
   chainId: number
   humanBptIn: HumanAmount
   tokenOut: Address
@@ -23,13 +24,13 @@ type Params = {
 
 export function useRemoveLiquidityPriceImpactQuery({
   handler,
-  poolId,
   chainId,
   humanBptIn,
   tokenOut,
   enabled = true,
 }: Params) {
   const { userAddress, isConnected } = useUserAccount()
+  const { pool } = usePool()
   const { slippage } = useUserSettings()
   const { data: blockNumber } = useBlockNumber({ chainId })
   const debouncedBptIn = useDebounce(humanBptIn, defaultDebounceMs)[0]
@@ -38,7 +39,7 @@ export function useRemoveLiquidityPriceImpactQuery({
     handler,
     userAddress,
     slippage,
-    poolId,
+    poolId: pool.id,
     humanBptIn: debouncedBptIn,
     tokenOut,
   }
@@ -61,6 +62,7 @@ export function useRemoveLiquidityPriceImpactQuery({
       ...params,
       chainId,
       blockNumber,
+      hasStableSurgeHook: hasStableSurgeHook(pool),
     }),
     ...onlyExplicitRefetch,
   })
