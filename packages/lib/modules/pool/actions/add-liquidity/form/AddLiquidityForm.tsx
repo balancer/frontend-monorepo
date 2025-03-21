@@ -51,9 +51,9 @@ import { UnbalancedAddError } from '@repo/lib/shared/components/errors/Unbalance
 import { isUnbalancedAddError } from '@repo/lib/shared/utils/error-filters'
 import { supportsWethIsEth } from '../../../pool.helpers'
 import { UnbalancedNestedAddError } from '@repo/lib/shared/components/errors/UnbalancedNestedAddError'
-import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { usePoolMetadata } from '../../../metadata/usePoolMetadata'
 import { useGetPoolRewards } from '../../../useGetPoolRewards'
+import { SettingsAlert } from '../../../../user/settings/SettingsAlert'
 
 // small wrapper to prevent out of context error
 export function AddLiquidityForm() {
@@ -98,7 +98,6 @@ function AddLiquidityMainForm() {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { isConnected } = useUserAccount()
   const { startTokenPricePolling } = useTokens()
-  const { shouldUseSignatures } = useUserSettings()
   const poolMetadata = usePoolMetadata(pool)
   const { calculatePotentialYield } = useGetPoolRewards(pool)
 
@@ -194,13 +193,7 @@ function AddLiquidityMainForm() {
           {hasNoLiquidity(pool) && (
             <BalAlert content="You cannot add because the pool has no liquidity" status="warning" />
           )}
-          {!shouldUseSignatures && (
-            <BalAlert
-              content="All approvals will require gas transactions. You can enable signatures in your settings."
-              status="warning"
-              title="Signatures disabled"
-            />
-          )}
+          <SettingsAlert />
           <SafeAppAlert />
           <AddLiquidityFormTabs
             nestedAddLiquidityEnabled={nestedAddLiquidityEnabled}

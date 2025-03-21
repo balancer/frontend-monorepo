@@ -29,9 +29,9 @@ export function useIsSafeApp(): boolean {
  (that excludes Safe accounts connected via WalletConnect)
 */
 export function useShouldBatchTransactions(): boolean {
-  const settings = useUserSettings()
+  const { shouldUseTxBundling } = useUserSettings()
   const isSafeApp = useIsSafeApp()
-  return settings.shouldUseTxBundling && isSafeApp
+  return shouldUseTxBundling && isSafeApp
 }
 
 /* isStepWithTxBatch is true if:
