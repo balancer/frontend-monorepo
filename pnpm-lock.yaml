@@ -327,6 +327,9 @@ importers:
       beets-frontend-v3:
         specifier: workspace:*
         version: link:../../apps/beets-frontend-v3
+      dotenv:
+        specifier: 16.4.7
+        version: 16.4.7
       frontend-v3:
         specifier: workspace:*
         version: link:../../apps/frontend-v3
