@@ -1,6 +1,6 @@
 import { getSelectStyles } from '@repo/lib/shared/services/chakra/custom/chakra-react-select'
 import { SingleValue, GroupBase, OptionBase, Select } from 'chakra-react-select'
-import { PoolChartPeriod, poolChartPeriods, usePoolCharts } from './usePoolCharts'
+import { PoolChartPeriod, poolChartPeriods, usePoolCharts } from './PoolChartsProvider'
 
 type PeriodOption = PoolChartPeriod & OptionBase
 

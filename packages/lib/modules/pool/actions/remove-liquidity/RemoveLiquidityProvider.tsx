@@ -139,7 +139,6 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
 
   const simulationQuery = useRemoveLiquiditySimulationQuery({
     handler,
-    poolId: pool.id,
     chainId,
     humanBptIn,
     tokenOut,
@@ -149,7 +148,6 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
 
   const priceImpactQuery = useRemoveLiquidityPriceImpactQuery({
     handler,
-    poolId: pool.id,
     chainId,
     humanBptIn,
     tokenOut,

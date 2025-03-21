@@ -106,7 +106,10 @@ export function isWrapWithTooSmallAmount(errorMessage?: string): boolean {
 }
 
 export function isPoolSurgingError(errorMessage: string, hasStableSurgeHook: boolean): boolean {
-  return hasStableSurgeHook && isAfterAddUnbalancedHookError(errorMessage)
+  return (
+    hasStableSurgeHook &&
+    (isAfterAddUnbalancedHookError(errorMessage) || isSingleRemoveHookError(errorMessage))
+  )
 }
 
 function isAfterAddUnbalancedHookError(errorMessage: string): boolean {
@@ -115,5 +118,14 @@ function isAfterAddUnbalancedHookError(errorMessage: string): boolean {
     errorMessage.includes(
       'The contract function "queryAddLiquidityUnbalancedToERC4626Pool" reverted'
     ) && errorMessage.includes('AfterAddLiquidityHookFailed()')
+  )
+}
+
+function isSingleRemoveHookError(errorMessage: string): boolean {
+  if (!errorMessage) return false
+  return (
+    errorMessage.includes(
+      'The contract function "queryRemoveLiquiditySingleTokenExactIn" reverted'
+    ) && errorMessage.includes('AfterRemoveLiquidityHookFailed()')
   )
 }

@@ -1,7 +1,6 @@
 import { Stack, Button, VStack, useDisclosure, HStack, Tooltip, Text } from '@chakra-ui/react'
 import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
-
 import { usePool } from '../../PoolProvider'
 import { getPoolAddBlockedReason, isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
@@ -67,11 +66,11 @@ export function PoolHeader() {
             </Text>
           )}
         </VStack>
-
         <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
           <PoolTags />
           <HStack spacing="sm">
             <Tooltip
+              isDisabled={!blockingReasons}
               label={
                 <Text color="primaryTextColor" whiteSpace="pre-line">
                   {blockingReasons}
