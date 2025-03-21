@@ -24,7 +24,7 @@ import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { AnimatePresence, motion } from 'framer-motion'
 import { PeriodSelect } from './PeriodSelect'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { usePoolCharts } from './usePoolCharts'
+import { PoolChartsProvider, usePoolCharts } from './PoolChartsProvider'
 import { EclpChart } from '@repo/lib/modules/eclp/components/EclpChart'
 import { PoolCharts } from './PoolCharts'
 
@@ -47,9 +47,11 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
 export function PoolChartsContainer() {
   return (
     <PoolChartTabsProvider>
-      <EclpChartProvider>
-        <PoolChartsContent />
-      </EclpChartProvider>
+      <PoolChartsProvider>
+        <EclpChartProvider>
+          <PoolChartsContent />
+        </EclpChartProvider>
+      </PoolChartsProvider>
     </PoolChartTabsProvider>
   )
 }
