@@ -6,6 +6,8 @@ import { Button } from '@chakra-ui/react'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { useUserAccount } from './UserAccountProvider'
+import { useIsSafeApp } from './safe.hooks'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 export function useChainSwitch(chainId: SupportedChainId) {
   const { chain: connectedChain } = useUserAccount()
@@ -36,8 +38,11 @@ export interface NetworkSwitchButtonProps {
 type Props = { chainId: SupportedChainId }
 export function NetworkSwitchButton({ chainId }: Props) {
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
+  const isSafeApp = useIsSafeApp()
 
   if (!shouldChangeNetwork) return
+
+  if (isSafeApp) return <SwitchNetworkAlert chainName={getChainShortName(chainId)} />
 
   return (
     <Button
@@ -52,4 +57,10 @@ export function NetworkSwitchButton({ chainId }: Props) {
       Switch network to {networkSwitchButtonProps.name}
     </Button>
   )
+}
+
+// Show an alert to switch network as Safe App does not support programmatic network switch
+export function SwitchNetworkAlert({ chainName }: { chainName: string }) {
+  const content = `Please switch your Safe to ${chainName} network to continue`
+  return <BalAlert content={content} status="warning" />
 }
