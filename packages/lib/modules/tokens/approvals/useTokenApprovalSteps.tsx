@@ -102,16 +102,17 @@ export function useTokenApprovalSteps({
         lpToken,
       })
 
-      const isComplete = () => {
-        const isAllowed = tokenAllowances.allowanceFor(tokenAddress) >= requiredRawAmount
+      const isComplete = (tokenAllowanceAfterRefetch?: bigint) => {
+        const tokenAllowance =
+          tokenAllowanceAfterRefetch || tokenAllowances.allowanceFor(tokenAddress)
+        const isAllowed = tokenAllowance >= requiredRawAmount
         if (isApprovingZeroForDoubleApproval) {
           // Edge case USDT case is completed if:
           // - The allowance is 0n
           // - The allowance is greater than the required amount (of the next step)
           return (
-            tokenAllowances.allowanceFor(tokenAddress) === 0n ||
-            tokenAllowances.allowanceFor(tokenAddress) >=
-              tokenAmountsToApprove[index + 1].requiredRawAmount
+            tokenAllowance === 0n ||
+            tokenAllowance >= tokenAmountsToApprove[index + 1].requiredRawAmount
           )
         }
         return requiredRawAmount > 0n && isAllowed
@@ -140,7 +141,15 @@ export function useTokenApprovalSteps({
         isComplete,
         renderAction: () => <ManagedErc20TransactionButton id={id} key={id} {...props} />,
         batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
-        onSuccess: () => tokenAllowances.refetchAllowances(),
+        onSuccess: async () => {
+          const newTokenAllowances = await tokenAllowances.refetchAllowances()
+          if (!newTokenAllowances.data) throw new Error('Error refetching token allowances')
+          // Checking if the user manually set an insufficient allowance in their wallet
+          const tokenAllowanceAfterRefetch = newTokenAllowances.data[index]
+          if (!isComplete(tokenAllowanceAfterRefetch)) {
+            throw new Error('You approved less allowance than required')
+          }
+        },
       } as const satisfies TransactionStep
     })
   }, [tokenAllowances.allowances, userAddress, tokenAmountsToApprove])
