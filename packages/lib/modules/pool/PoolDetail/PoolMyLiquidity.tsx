@@ -375,6 +375,7 @@ export default function PoolMyLiquidity() {
           <Divider />
           <HStack justifyContent="flex-start" mt="md" width="full">
             <Tooltip
+              isDisabled={!blockingReasons}
               label={
                 <Text color="primaryTextColor" whiteSpace="pre-line">
                   {blockingReasons}

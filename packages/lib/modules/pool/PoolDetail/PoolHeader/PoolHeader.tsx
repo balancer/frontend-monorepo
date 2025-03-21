@@ -47,18 +47,6 @@ export function PoolHeader() {
     }
   }
 
-  const addLiquidityButton = (
-    <Button
-      isDisabled={isAddLiquidityBlocked}
-      onClick={handleClick}
-      size="lg"
-      variant="primary"
-      w="full"
-    >
-      Add liquidity
-    </Button>
-  )
-
   return (
     <VStack align="start" spacing="md" w="full">
       <PoolBreadcrumbs />
@@ -81,19 +69,24 @@ export function PoolHeader() {
         <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
           <PoolTags />
           <HStack spacing="sm">
-            {blockingReasons ? (
-              <Tooltip
-                label={
-                  <Text color="primaryTextColor" whiteSpace="pre-line">
-                    {blockingReasons}
-                  </Text>
-                }
+            <Tooltip
+              isDisabled={!blockingReasons}
+              label={
+                <Text color="primaryTextColor" whiteSpace="pre-line">
+                  {blockingReasons}
+                </Text>
+              }
+            >
+              <Button
+                isDisabled={isAddLiquidityBlocked}
+                onClick={handleClick}
+                size="lg"
+                variant="primary"
+                w="full"
               >
-                {addLiquidityButton}
-              </Tooltip>
-            ) : (
-              addLiquidityButton
-            )}
+                Add liquidity
+              </Button>
+            </Tooltip>
             <PoolAdvancedOptions />
           </HStack>
           <PartnerRedirectModal
