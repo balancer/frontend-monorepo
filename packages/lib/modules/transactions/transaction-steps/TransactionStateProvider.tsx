@@ -61,7 +61,8 @@ export function TransactionStateProvider({ children }: PropsWithChildren) {
 export const useTransactionState = (): TransactionStateResponse =>
   useMandatoryContext(TransactionStateContext, 'TransactionState')
 
-function resetTransaction(v: ManagedResult) {
+// FIXME: [JUANJO] extract this to a better place
+export function resetTransaction(v: ManagedResult) {
   // Resetting the execution transaction does not immediately reset execution and result statuses so we need to reset them manually
   v.execution.status = 'pending'
   v.result = { status: 'pending', isSuccess: false, data: undefined } as TransactionResult

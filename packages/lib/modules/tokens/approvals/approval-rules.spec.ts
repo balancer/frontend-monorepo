@@ -2,7 +2,7 @@ import { SupportedChainId } from '@repo/lib/config/config.types'
 import { usdtAddress, wETHAddress, wjAuraAddress } from '@repo/lib/debug-helpers'
 import { MAX_BIGINT } from '@repo/lib/shared/utils/numbers'
 import { testRawAmount } from '@repo/lib/test/utils/numbers'
-import { RawAmount, getRequiredTokenApprovals } from './approval-rules'
+import { RawAmount, getRequiredTokenApprovals, isTheApprovedAmountEnough } from './approval-rules'
 
 const chainId: SupportedChainId = 1
 
@@ -131,5 +131,98 @@ describe('getRequiredTokenApprovals', () => {
         symbol: 'Unknown',
       },
     ])
+  })
+})
+
+describe('Approved amounts', () => {
+  it('should be false when no required amount', () => {
+    const tokenAllowance = testRawAmount('10')
+    const requiredAmount = testRawAmount('0')
+    const doubleApproval = false
+
+    const result = isTheApprovedAmountEnough(tokenAllowance, requiredAmount, doubleApproval)
+
+    expect(result).toBe(false)
+  })
+
+  it('should be false when approved less than required', () => {
+    const tokenAllowance = testRawAmount('10')
+    const requiredAmount = testRawAmount('20')
+    const doubleApproval = false
+
+    const result = isTheApprovedAmountEnough(tokenAllowance, requiredAmount, doubleApproval)
+
+    expect(result).toBe(false)
+  })
+
+  it('should be true when enough amount approved', () => {
+    const tokenAllowance = testRawAmount('30')
+    const requiredAmount = testRawAmount('20')
+    const doubleApproval = false
+
+    const result = isTheApprovedAmountEnough(tokenAllowance, requiredAmount, doubleApproval)
+
+    expect(result).toBe(true)
+  })
+
+  it('[EDGE CASE] should be true when USDT and no amount is approved', () => {
+    const tokenAllowance = testRawAmount('0')
+    const requiredAmount = testRawAmount('10')
+    const doubleApproval = true
+    const nextToken = {
+      isPermit2: false,
+      tokenAddress: wETHAddress,
+      requiredRawAmount: testRawAmount('10'),
+      requestedRawAmount: testRawAmount('10'),
+      symbol: 'Unknown',
+    }
+
+    const result = isTheApprovedAmountEnough(tokenAllowance, requiredAmount, doubleApproval, nextToken)
+
+    expect(result).toBe(true)
+  })
+
+  it('[EDGE CASE] should be true when USDT and enough amount approved', () => {
+    const tokenAllowance = testRawAmount('20')
+    const requiredAmount = testRawAmount('0')
+    const doubleApproval = true
+    const nextToken = {
+      isPermit2: false,
+      tokenAddress: wETHAddress,
+      requiredRawAmount: testRawAmount('10'),
+      requestedRawAmount: testRawAmount('10'),
+      symbol: 'Unknown',
+    }
+
+    const result = isTheApprovedAmountEnough(
+      tokenAllowance,
+      requiredAmount,
+      doubleApproval,
+      nextToken
+    )
+
+    expect(result).toBe(true)
+  })
+
+  it('[EDGE CASE] should be false when USDT and not enough amount approved', () => {
+    const tokenAllowance = testRawAmount('20')
+    const requiredAmount = testRawAmount('0')
+    const doubleApproval = true
+    const nextToken = {
+      isPermit2: false,
+      tokenAddress: wETHAddress,
+      requiredRawAmount: testRawAmount('30'),
+      requestedRawAmount: testRawAmount('30'),
+      symbol: 'Unknown',
+    }
+
+    const result = isTheApprovedAmountEnough(
+      tokenAllowance,
+      requiredAmount,
+      doubleApproval,
+      nextToken
+    )
+
+    expect(result).toBe(false)
   })
 })
