@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
-import { FetchPoolProps, PoolVariant } from '@repo/lib/modules/pool/pool.types'
+import { FetchPoolProps } from '@repo/lib/modules/pool/pool.types'
 import { ChainSlug } from '@repo/lib/modules/pool/pool.utils'
 import { generatePoolMetadata, PoolLayout, PoolMetadata } from '@repo/lib/shared/layouts/PoolLayout'
+import { getBaseUrl } from '@repo/lib/shared/utils/urls'
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
@@ -12,18 +13,18 @@ export type Props = PropsWithChildren<{
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const poolMetadata: PoolMetadata = await generatePoolMetadata(props.params)
 
-  function getOpenGraphImage(variant?: PoolVariant) {
-    // We could use poolMetadata?.pool to have a more accurate image (by pool type, chain, etc)
-    if (variant && variant === 'cow') {
-      return `/images/opengraph/og-cow-pool.png`
-    }
-    return `/images/opengraph/og-balancer-pool.jpg`
+  function getOpenGraphImage() {
+    const baseUrl = getBaseUrl()
+    const params = new URLSearchParams({
+      name: poolMetadata?.pool?.name || 'Pool',
+    })
+    return `${baseUrl}/api/og?${params.toString()}`
   }
 
   return {
     ...poolMetadata.metadata,
     openGraph: {
-      images: getOpenGraphImage(props.params.variant),
+      images: [getOpenGraphImage()],
     },
   }
 }
