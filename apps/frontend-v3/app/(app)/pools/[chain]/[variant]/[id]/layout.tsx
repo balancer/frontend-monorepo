@@ -2,7 +2,6 @@
 import { FetchPoolProps } from '@repo/lib/modules/pool/pool.types'
 import { ChainSlug } from '@repo/lib/modules/pool/pool.utils'
 import { generatePoolMetadata, PoolLayout, PoolMetadata } from '@repo/lib/shared/layouts/PoolLayout'
-import { getBaseUrl } from '@repo/lib/shared/utils/urls'
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
@@ -14,7 +13,11 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const poolMetadata: PoolMetadata = await generatePoolMetadata(props.params)
 
   function getOpenGraphImage() {
-    const baseUrl = getBaseUrl()
+    const baseUrl =
+      //process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+      process.env.VERCEL_BRANCH_URL
+        ? `https://${process.env.VERCEL_BRANCH_URL}`
+        : 'https://localhost:3000'
     const params = new URLSearchParams({
       name: poolMetadata?.pool?.name || 'Pool',
     })
