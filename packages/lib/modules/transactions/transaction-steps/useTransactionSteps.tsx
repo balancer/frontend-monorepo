@@ -3,9 +3,10 @@
 
 import { useEffect, useState } from 'react'
 import { getTransactionState, TransactionState, TransactionStep } from './lib'
-import { useTransactionState } from './TransactionStateProvider'
+import { resetTransaction, useTransactionState } from './TransactionStateProvider'
 import { useTxSound } from './useTxSound'
-import { ensureError } from '@repo/lib/shared/utils/errors'
+import { ensureError, ErrorCause, ErrorWithCauses } from '@repo/lib/shared/utils/errors'
+import { useToast } from '@chakra-ui/react'
 
 export type TransactionStepsResponse = ReturnType<typeof useTransactionSteps>
 
@@ -51,18 +52,35 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
   // Trigger side effects on transaction completion. The step itself decides
   // when it's complete. e.g. so approvals can refetch to check correct
   // allowance has been given.
+  const toast = useToast()
   useEffect(() => {
     if (!currentStep) return
     async function handleTransactionCompletion() {
       try {
         await currentStep?.onSuccess?.()
+        updateOnSuccessCalled(currentStep.id, true)
       } catch (e) {
         const error = ensureError(e)
-        // TODO: This should display error to user somehow and block further steps
-        console.log('Error inside onSuccess', error.message)
-        resetTransactionState()
+        if (error instanceof ErrorWithCauses) {
+          error.causes.map((cause: ErrorCause) => {
+            if (!toast.isActive(cause.id)) {
+              toast({
+                id: cause.id,
+                title: cause.title,
+                description: cause.description,
+                status: 'error',
+                duration: 100000,
+                isClosable: true,
+              })
+            }
+          })
+
+          if (currentTransaction) resetTransaction(currentTransaction)
+        } else {
+          // FIXME: [JUANJO] what do we do here
+          console.log(`Error inside onSuccess: ${error.message}`)
+        }
       }
-      updateOnSuccessCalled(currentStep.id, true)
     }
     if (!isOnSuccessCalled(currentStep.id) && currentTransaction?.result.isSuccess) {
       handleTransactionCompletion()

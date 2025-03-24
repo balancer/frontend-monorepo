@@ -201,3 +201,18 @@ export const swapApolloNetworkErrorMessage = 'Apollo network error in DefaultSwa
 export function isFailedToFetchApolloError(error: Error): boolean {
   return error.message === 'Failed to fetch'
 }
+
+export type ErrorCause = {
+  id: string
+  title: string
+  description: string
+}
+
+export class ErrorWithCauses extends Error {
+  causes: ErrorCause[];
+  
+  constructor(message: string, causes: ErrorCause[]) {
+    super(message);
+    this.causes = causes
+  }
+}

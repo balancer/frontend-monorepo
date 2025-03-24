@@ -28,7 +28,7 @@ export function ManagedTransactionButton({
     updateTransaction(id, transaction)
   }, [id, transaction.execution.status, transaction.simulation.status, transaction.result.status])
 
-  return <TransactionStepButton step={{ labels: params.labels, ...transaction }} />
+  return <TransactionStepButton step={{ id, labels: params.labels, ...transaction }} />
 }
 
 export function ManagedSendTransactionButton({
@@ -42,7 +42,7 @@ export function ManagedSendTransactionButton({
     updateTransaction(id, transaction)
   }, [id, transaction.execution.status, transaction.simulation.status, transaction.result.status])
 
-  return <TransactionStepButton step={{ labels: params.labels, ...transaction }} />
+  return <TransactionStepButton step={{ id, labels: params.labels, ...transaction }} />
 }
 
 export function ManagedErc20TransactionButton({
@@ -56,5 +56,14 @@ export function ManagedErc20TransactionButton({
     updateTransaction(id, transaction)
   }, [id, transaction.execution.status, transaction.simulation.status, transaction.result.status])
 
-  return <TransactionStepButton step={{ labels: params.labels, ...transaction }} />
+  return (
+    <TransactionStepButton
+      step={{
+        id,
+        labels: params.labels,
+        isComplete: params.isComplete,
+        ...transaction,
+      }}
+    />
+  )
 }
