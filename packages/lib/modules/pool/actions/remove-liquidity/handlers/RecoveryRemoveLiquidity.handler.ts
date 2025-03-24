@@ -1,5 +1,6 @@
 import {
   Address,
+  Hex,
   HumanAmount,
   InputAmount,
   RemoveLiquidity,
@@ -56,14 +57,21 @@ export class RecoveryRemoveLiquidityHandler {
     queryOutput,
   }: SdkBuildRemoveLiquidityInput): Promise<TransactionConfig> {
     const removeLiquidity = new RemoveLiquidity()
+    const protocolVersion = queryOutput.sdkQueryOutput.protocolVersion
 
-    const { callData, to, value } = removeLiquidity.buildCall({
+    const buildCallParams = {
       ...queryOutput.sdkQueryOutput,
       slippage: Slippage.fromPercentage(`${Number(slippagePercent)}`),
-      sender: account,
       recipient: account,
       wethIsEth: false, // assuming we don't want to withdraw the native asset over the wrapped native asset for now.
-    })
+      protocolVersion,
+      userData: '0x' as Hex,
+    }
+
+    const { callData, to, value } = removeLiquidity.buildCall(
+      // sender should now be passed for V3 pools
+      protocolVersion !== 3 ? { ...buildCallParams, sender: account } : buildCallParams
+    )
 
     return {
       account,
