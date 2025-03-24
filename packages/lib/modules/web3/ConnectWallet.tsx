@@ -110,7 +110,7 @@ export function ConnectWallet({
               )}
               <Show above="sm">{chain.name}</Show>
             </Button>
-            <Button onClick={openAccountModal} variant="tertiary" {...rest}>
+            <Button onClick={openAccountModal} variant="tertiary" {...rest} isDisabled={isSafeApp}>
               <CustomAvatar
                 address={account.address}
                 alt="Avatar"
