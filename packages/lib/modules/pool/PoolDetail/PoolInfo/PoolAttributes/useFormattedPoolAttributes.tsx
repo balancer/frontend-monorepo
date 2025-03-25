@@ -6,18 +6,38 @@ import { format } from 'date-fns'
 import { zeroAddress } from 'viem'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { isBoosted, isCowAmmPool, isStable, isV2Pool, isV3Pool } from '../../../pool.helpers'
+import {
+  isBoosted,
+  isCowAmmPool,
+  isQuantAmmPool,
+  isStable,
+  isV2Pool,
+  isV3Pool,
+} from '../../../pool.helpers'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolTypeLabel, shouldHideSwapFee } from '../../../pool.utils'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { compact } from 'lodash'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { Pool } from '../../../pool.types'
 
 type FormattedPoolAttributes = {
   title: string
   value: string
   link?: string
+}
+
+function getPoolTypeText(pool: Pool) {
+  if (isBoosted(pool)) {
+    return 'Boosted'
+  }
+
+  if (isQuantAmmPool(pool.type)) {
+    return 'Blockchain Traded Fund (BTF)'
+  }
+
+  return getPoolTypeLabel(pool.type)
 }
 
 export function useFormattedPoolAttributes() {
@@ -87,7 +107,7 @@ export function useFormattedPoolAttributes() {
       },
       {
         title: 'Type',
-        value: isBoosted(pool) ? 'Boosted' : getPoolTypeLabel(type),
+        value: getPoolTypeText(pool),
       },
       {
         title: 'Protocol version',
@@ -112,7 +132,9 @@ export function useFormattedPoolAttributes() {
         : null,
       {
         title: 'Attribute immutability',
-        value: `Immutable${poolOwnerData?.attributeImmutabilityText}`,
+        value: isQuantAmmPool(type)
+          ? 'Immutable except for swap fees editable by governance, and dynamic weight shifts per smart contract.'
+          : `Immutable${poolOwnerData?.attributeImmutabilityText}`,
       },
       {
         title: 'Creation date',
