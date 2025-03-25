@@ -19,7 +19,7 @@ import {
   isTheApprovedAmountEnough,
 } from './approval-rules'
 import { requiresDoubleApproval } from '../token.helpers'
-import { sleep } from '@repo/lib/shared/utils/sleep'
+// import { sleep } from '@repo/lib/shared/utils/sleep'
 import { ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 
 export type Params = {
@@ -175,7 +175,7 @@ export function useTokenApprovalSteps({
         onSuccess: async () => {
           // HACK: There is a small hitch where sometimes refetchAllowances returns 0 before updating to the
           // correct amount and an error flashes, waiting for a small amount of time seems to solve it
-          await sleep(100)
+          // await sleep(100)
           const newTokenAllowances = await tokenAllowances.refetchAllowances()
           if (!newTokenAllowances.data) throw new Error('Error refetching token allowances')
 
