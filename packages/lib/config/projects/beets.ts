@@ -89,7 +89,7 @@ export const ProjectConfigBeets: ProjectConfig = {
       {
         title: 'Ecosystem',
         links: [
-          { label: 'Governance', href: 'https://snapshot.org/#/beets.eth', isExternal: true },
+          { label: 'Governance', href: 'https://snapshot.box/#/s:beets.eth', isExternal: true },
           {
             label: 'Bug bounties',
             href: 'https://immunefi.com/bug-bounty/balancer',
