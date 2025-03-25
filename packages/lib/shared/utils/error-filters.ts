@@ -114,18 +114,10 @@ export function isPoolSurgingError(errorMessage: string, hasStableSurgeHook: boo
 
 function isAfterAddUnbalancedHookError(errorMessage: string): boolean {
   if (!errorMessage) return false
-  return (
-    errorMessage.includes(
-      'The contract function "queryAddLiquidityUnbalancedToERC4626Pool" reverted'
-    ) && errorMessage.includes('AfterAddLiquidityHookFailed()')
-  )
+  return errorMessage.includes('AfterAddLiquidityHookFailed()')
 }
 
 function isSingleRemoveHookError(errorMessage: string): boolean {
   if (!errorMessage) return false
-  return (
-    errorMessage.includes(
-      'The contract function "queryRemoveLiquiditySingleTokenExactIn" reverted'
-    ) && errorMessage.includes('AfterRemoveLiquidityHookFailed()')
-  )
+  return errorMessage.includes('AfterRemoveLiquidityHookFailed()')
 }

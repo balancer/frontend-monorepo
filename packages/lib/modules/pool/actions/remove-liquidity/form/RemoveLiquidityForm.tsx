@@ -233,6 +233,7 @@ export function RemoveLiquidityForm() {
             </VStack>
             <RemoveSimulationError
               goToProportionalRemoves={setProportionalTab}
+              priceImpactQuery={priceImpactQuery}
               simulationQuery={simulationQuery}
             />
             <TooltipWithTouch label={isDisabled ? disabledReason : ''}>
