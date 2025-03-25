@@ -188,6 +188,8 @@ export function usePoolListQueryState() {
     switch (poolHookTag) {
       case 'HOOKS_STABLESURGE':
         return 'StableSurge'
+      case 'HOOKS_MEVCAPTURE':
+        return 'MEV Capture'
       case 'HOOKS_EXITFEE':
         return 'ExitFee'
       case 'HOOKS_FEETAKING':
