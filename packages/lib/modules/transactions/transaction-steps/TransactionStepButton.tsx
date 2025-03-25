@@ -16,7 +16,6 @@ import { useIsSafeAccount } from '../../web3/safe.hooks'
 
 interface Props {
   step: {
-    id: string
     labels: TransactionLabels
     isComplete?: () => boolean
   } & ManagedResult

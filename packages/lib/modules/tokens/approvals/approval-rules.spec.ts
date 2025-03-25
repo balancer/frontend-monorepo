@@ -177,7 +177,12 @@ describe('Approved amounts', () => {
       symbol: 'Unknown',
     }
 
-    const result = isTheApprovedAmountEnough(tokenAllowance, requiredAmount, doubleApproval, nextToken)
+    const result = isTheApprovedAmountEnough(
+      tokenAllowance,
+      requiredAmount,
+      doubleApproval,
+      nextToken
+    )
 
     expect(result).toBe(true)
   })

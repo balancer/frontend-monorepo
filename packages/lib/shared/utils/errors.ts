@@ -209,10 +209,10 @@ export type ErrorCause = {
 }
 
 export class ErrorWithCauses extends Error {
-  causes: ErrorCause[];
-  
+  causes: ErrorCause[]
+
   constructor(message: string, causes: ErrorCause[]) {
-    super(message);
+    super(message)
     this.causes = causes
   }
 }

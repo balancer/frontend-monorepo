@@ -3,10 +3,12 @@
 
 import { useEffect, useState } from 'react'
 import { getTransactionState, TransactionState, TransactionStep } from './lib'
-import { resetTransaction, useTransactionState } from './TransactionStateProvider'
+import { useTransactionState } from './TransactionStateProvider'
 import { useTxSound } from './useTxSound'
 import { ensureError, ErrorCause, ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 import { useToast } from '@chakra-ui/react'
+import { resetTransaction } from './transaction.helper'
+import { showErrorAsToast } from '@repo/lib/shared/components/toasts/toast.helper'
 
 export type TransactionStepsResponse = ReturnType<typeof useTransactionSteps>
 
@@ -63,23 +65,13 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
         const error = ensureError(e)
         if (error instanceof ErrorWithCauses) {
           error.causes.map((cause: ErrorCause) => {
-            if (!toast.isActive(cause.id)) {
-              toast({
-                id: cause.id,
-                title: cause.title,
-                description: cause.description,
-                status: 'error',
-                duration: 100000,
-                isClosable: true,
-              })
-            }
+            showErrorAsToast(toast, cause)
           })
-
-          if (currentTransaction) resetTransaction(currentTransaction)
         } else {
-          // FIXME: [JUANJO] what do we do here
-          console.log(`Error inside onSuccess: ${error.message}`)
+          const cause = { id: 'error-inside-onSuccess', title: 'Error', description: error.message }
+          showErrorAsToast(toast, cause)
         }
+        if (currentTransaction) resetTransaction(currentTransaction)
       }
     }
     if (!isOnSuccessCalled(currentStep.id) && currentTransaction?.result.isSuccess) {
