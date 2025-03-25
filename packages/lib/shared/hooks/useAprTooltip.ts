@@ -38,6 +38,9 @@ const maBeetsVotingRewardsTooltipText =
 
 const maBeetsRewardTooltipText = 'This is the APR you will receive when a relic is fully matured.'
 
+const quantAmmRewardsTooltipText =
+  'The extra token appreciation captured and shared to all LPs proportionately from the smart automatic pool weight adjustments from the operation of the BFT.'
+
 // Only include the hook types we currently support irt dynamic swap fees
 export type SupportedHookType = Extract<GqlHookType, GqlHookType.MevTax | GqlHookType.StableSurge>
 
@@ -197,6 +200,11 @@ export function useAprTooltip({
 
   const isMaBeetsPresent = !maBeetsRewardsDisplayed.isZero()
 
+  // QuantAMM
+  // TODO: update apr item type
+  const quantAmm = aprItems.find(item => item.type === GqlPoolAprItemType.Voting)
+  const quantAmmRewardsDisplayed = numberFormatter(quantAmm ? quantAmm.apr.toString() : '0')
+
   const totalBase = aprItems
     .filter(item => TOTAL_BASE_APR_TYPES.includes(item.type))
     .reduce((acc, item) => acc.plus(item.apr), bn(0))
@@ -225,6 +233,7 @@ export function useAprTooltip({
   const isSwapFeePresent = !swapFeesDisplayed.isZero()
   const isYieldPresent = !yieldBearingTokensAprDisplayed.isZero()
   const isStakingPresent = !stakingIncentivesAprDisplayed.isZero()
+  const isQuantAmmPresent = !quantAmmRewardsDisplayed.isZero()
 
   const isVotingPresent = !votingAprDisplayed.isZero()
   const isLockingAprPresent = !lockingAprDisplayed.isZero()
@@ -246,6 +255,7 @@ export function useAprTooltip({
     isSwapFeePresent,
     isYieldPresent,
     isStakingPresent,
+    isQuantAmmPresent,
     maxVeBalDisplayed,
     yieldBearingTokensDisplayed,
     stakingIncentivesDisplayed,
@@ -272,6 +282,8 @@ export function useAprTooltip({
     maBeetsTotalAprDisplayed,
     dynamicSwapFeesDisplayed,
     dynamicSwapFeesTooltipText,
+    quantAmmRewardsDisplayed,
+    quantAmmRewardsTooltipText,
   }
 }
 
