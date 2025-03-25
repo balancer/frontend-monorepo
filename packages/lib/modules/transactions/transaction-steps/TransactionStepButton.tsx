@@ -2,7 +2,7 @@
 
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, useToast, VStack } from '@chakra-ui/react'
 import { ManagedResult, TransactionLabels, TransactionState, getTransactionState } from './lib'
 import { NetworkSwitchButton, useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
@@ -15,7 +15,10 @@ import { getTransactionButtonLabel } from './transaction-button.helpers'
 import { useIsSafeAccount } from '../../web3/safe.hooks'
 
 interface Props {
-  step: { labels: TransactionLabels } & ManagedResult
+  step: {
+    labels: TransactionLabels
+    isComplete?: () => boolean
+  } & ManagedResult
 }
 
 export function TransactionStepButton({ step }: Props) {
@@ -32,7 +35,9 @@ export function TransactionStepButton({ step }: Props) {
     transactionState === TransactionState.Preparing ||
     step.isSafeTxLoading
 
-  const isComplete = transactionState === TransactionState.Completed
+  const isComplete = step.isComplete
+    ? step.isComplete()
+    : transactionState === TransactionState.Completed
   const hasSimulationError = simulation.isError
   const isIdle = isConnected && simulation.isStale && !simulation.data
   const isButtonDisabled =
@@ -42,8 +47,11 @@ export function TransactionStepButton({ step }: Props) {
     isComplete ||
     !executeAsync // no executeAsync is undefined while the txConfig is being built
 
+  const toast = useToast()
+
   async function handleOnClick() {
     setExecutionError(undefined)
+    toast.closeAll()
     try {
       if (!executeAsync) return
       return await executeAsync()
@@ -54,7 +62,12 @@ export function TransactionStepButton({ step }: Props) {
 
   function getButtonLabel() {
     if (executionError) return labels.init
-    return getTransactionButtonLabel({ transactionState, labels, isSmartAccount: isSafeAccount })
+    return getTransactionButtonLabel({
+      transactionState,
+      labels,
+      isStepComplete: step.isComplete,
+      isSmartAccount: isSafeAccount,
+    })
   }
 
   return (

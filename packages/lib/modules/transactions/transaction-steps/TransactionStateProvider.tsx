@@ -3,7 +3,7 @@
 import { createContext, PropsWithChildren, useCallback, useState } from 'react'
 import { ManagedResult } from './lib'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { TransactionResult } from '../../web3/contracts/contract.types'
+import { resetTransaction } from './transaction.helper'
 
 export function _useTransactionState() {
   const [transactionMap, setTransactionMap] = useState<Map<string, ManagedResult>>(new Map())
@@ -60,11 +60,3 @@ export function TransactionStateProvider({ children }: PropsWithChildren) {
 
 export const useTransactionState = (): TransactionStateResponse =>
   useMandatoryContext(TransactionStateContext, 'TransactionState')
-
-function resetTransaction(v: ManagedResult) {
-  // Resetting the execution transaction does not immediately reset execution and result statuses so we need to reset them manually
-  v.execution.status = 'pending'
-  v.result = { status: 'pending', isSuccess: false, data: undefined } as TransactionResult
-  v.execution.reset()
-  return v
-}
