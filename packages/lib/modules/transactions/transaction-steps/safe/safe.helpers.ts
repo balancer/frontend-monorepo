@@ -45,7 +45,7 @@ export function hasSomePendingNestedTxInBatch(step: TransactionStep): boolean {
 export function getSignConfirmationsLabel(details: GatewayTransactionDetails) {
   if (details.detailedExecutionInfo?.type !== 'MULTISIG') return null
 
-  return `Signatures: ${details.detailedExecutionInfo.confirmations.length} out of ${details.detailedExecutionInfo.signers.length}`
+  return `Signatures: ${details.detailedExecutionInfo.confirmations.length} out of ${details.detailedExecutionInfo.confirmationsRequired}`
 }
 
 export function getRemainingSignatures(details: GatewayTransactionDetails): number {
