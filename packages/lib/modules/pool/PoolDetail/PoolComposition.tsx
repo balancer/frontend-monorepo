@@ -4,6 +4,7 @@ import {
   Alert,
   AlertDescription,
   AlertIcon,
+  Box,
   Card,
   Divider,
   HStack,
@@ -12,6 +13,7 @@ import {
   Stack,
   Text,
   VStack,
+  Link,
 } from '@chakra-ui/react'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
@@ -24,7 +26,7 @@ import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Address } from 'viem'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
-import { isBoosted } from '../pool.helpers'
+import { isBoosted, isQuantAmmPool } from '../pool.helpers'
 import { PoolToken } from '../pool.types'
 import { usePool } from '../PoolProvider'
 import { Pool } from '../pool.types'
@@ -36,6 +38,7 @@ import {
   getNestedPoolTokens,
 } from '../pool-tokens.utils'
 import { useGetPoolTokensWithActualWeights } from '../useGetPoolTokensWithActualWeights'
+import { ArrowUpRight } from 'react-feather'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -158,6 +161,28 @@ export function PoolComposition() {
                 <AlertDescription>{metadata.description}</AlertDescription>
               </Alert>
             ))}
+          {isQuantAmmPool(pool.type) && (
+            <Alert status="info">
+              <AlertIcon />
+              <AlertDescription>
+                <Text color="black">
+                  Tokens in BTFs dynamically shift weights to capture appreciation.{' '}
+                  <Link
+                    alignItems="center"
+                    color="black"
+                    display="inline-flex"
+                    href="https://medium.com/@QuantAMM/quantamm-x-balancer-v3-046af77ddc81"
+                    target="_blank"
+                  >
+                    <Box as="span">Learn more</Box>
+                    <Box as="span" ml={1}>
+                      <ArrowUpRight size={12} />
+                    </Box>
+                  </Link>
+                </Text>
+              </AlertDescription>
+            </Alert>
+          )}
           <Divider />
           <CardContent
             chain={chain}
