@@ -5,6 +5,10 @@ import { useEffect, useState } from 'react'
 import { getTransactionState, TransactionState, TransactionStep } from './lib'
 import { useTransactionState } from './TransactionStateProvider'
 import { useTxSound } from './useTxSound'
+import { ensureError, ErrorCause, ErrorWithCauses } from '@repo/lib/shared/utils/errors'
+import { useToast } from '@chakra-ui/react'
+import { resetTransaction } from './transaction.helper'
+import { showErrorAsToast } from '@repo/lib/shared/components/toasts/toast.helper'
 
 export type TransactionStepsResponse = ReturnType<typeof useTransactionSteps>
 
@@ -50,11 +54,28 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
   // Trigger side effects on transaction completion. The step itself decides
   // when it's complete. e.g. so approvals can refetch to check correct
   // allowance has been given.
+  const toast = useToast()
   useEffect(() => {
     if (!currentStep) return
+    async function handleTransactionCompletion() {
+      try {
+        await currentStep?.onSuccess?.()
+        updateOnSuccessCalled(currentStep.id, true)
+      } catch (e) {
+        const error = ensureError(e)
+        if (error instanceof ErrorWithCauses) {
+          error.causes.map((cause: ErrorCause) => {
+            showErrorAsToast(toast, cause)
+          })
+        } else {
+          const cause = { id: 'error-inside-onSuccess', title: 'Error', description: error.message }
+          showErrorAsToast(toast, cause)
+        }
+        if (currentTransaction) resetTransaction(currentTransaction)
+      }
+    }
     if (!isOnSuccessCalled(currentStep.id) && currentTransaction?.result.isSuccess) {
-      currentStep?.onSuccess?.()
-      updateOnSuccessCalled(currentStep.id, true)
+      handleTransactionCompletion()
     }
   }, [currentTransaction?.result.isSuccess, currentStep?.onSuccess])
 
