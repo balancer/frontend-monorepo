@@ -83,7 +83,7 @@ export function buildTxBatch(transactionStep: TransactionStep): SafeAppTx[] {
 }
 
 function buildSafeTxCall(txCall: TxCall): SafeAppTx {
-  return { ...txCall, value: txCall.value ? txCall.value.toString() : '0' }
+  return { ...txCall, value: txCall?.value ? txCall.value.toString() : '0' }
 }
 
 export function isSafeTxSuccess(safeTxStatus?: SafeTransactionStatus): boolean {
