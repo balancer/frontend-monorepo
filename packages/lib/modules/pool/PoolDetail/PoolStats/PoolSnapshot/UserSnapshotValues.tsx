@@ -3,6 +3,7 @@
 import React, { memo, useMemo } from 'react'
 import { Button, HStack, Heading, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
+import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { SECONDS_IN_DAY } from '@repo/lib/test/utils/numbers'
@@ -12,7 +13,7 @@ import { useVebalBoost } from '../../../../vebal/useVebalBoost'
 import { useClaim } from '../../../actions/claim/ClaimProvider'
 import { getTotalAprRaw } from '../../../pool.utils'
 import { usePool } from '../../../PoolProvider'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, safeTokenFormat } from '@repo/lib/shared/utils/numbers'
 import { ClaimModal } from '../../../actions/claim/ClaimModal'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { calcTotalStakedBalanceUsd } from '../../../user-balance.helpers'
@@ -26,26 +27,32 @@ export type PoolMyStatsValues = {
 const POSSIBLE_STAKED_BALANCE_USD = 10000
 
 export function UserSnapshotValues() {
-  const { pool, chain, isLoading: isLoadingPool, myLiquiditySectionRef } = usePool()
+  const { chain, isLoading: isLoadingPool, myLiquiditySectionRef, pool } = usePool()
   const { toCurrency } = useCurrency()
-  const { veBalBoostMap } = useVebalBoost([pool])
   const { getToken } = useTokens()
+  const { veBalBoostMap } = useVebalBoost([pool])
 
   const {
-    isLoading: isLoadingClaiming,
-    hasNoRewards,
     balRewards,
+    disabledReason,
+    hasNoRewards,
+    isDisabled,
+    isLoading: isLoadingClaiming,
     nonBalRewards,
     previewModalDisclosure,
-    disabledReason,
-    isDisabled,
   } = useClaim()
 
   const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
-  // TODO: only uses Balancer rewards rn
-  const claimableRewards = [...balRewards, ...nonBalRewards]
-  const myClaimableRewards = sumBy(claimableRewards, reward => reward.fiatBalance.toNumber())
+  const claimableRewards = useMemo(
+    () => [...balRewards, ...nonBalRewards],
+    [balRewards, nonBalRewards]
+  )
+
+  const myClaimableRewards = useMemo(
+    () => sumBy(claimableRewards, reward => reward.fiatBalance.toNumber()),
+    [claimableRewards]
+  )
 
   const currentRewards = pool.staking?.gauge?.rewards || []
   const currentRewardsPerWeek = currentRewards.map(reward => {
@@ -55,9 +62,30 @@ export function UserSnapshotValues() {
     }
   })
 
-  const tokens = currentRewardsPerWeek
-    .filter(reward => bn(reward.rewardPerSecond).gt(0))
-    .map(reward => getToken(reward.tokenAddress, chain)) as GqlToken[]
+  const tokens = useMemo(
+    () =>
+      currentRewardsPerWeek
+        .filter(reward => bn(reward.rewardPerSecond).gt(0))
+        .map(reward => getToken(reward.tokenAddress, chain)) as GqlToken[],
+    [currentRewardsPerWeek, getToken, chain]
+  )
+
+  const tokenBalances = useMemo(() => {
+    if (!tokens.length) return {}
+
+    const balanceMap: Record<string, string> = {}
+
+    claimableRewards.forEach(reward => {
+      if (reward.tokenAddress) {
+        const token = tokens.find(t => t?.address === reward.tokenAddress)
+        const decimals = token?.decimals || 18
+
+        balanceMap[reward.tokenAddress] = safeTokenFormat(reward.balance, decimals)
+      }
+    })
+
+    return balanceMap
+  }, [claimableRewards, tokens])
 
   const boost = useMemo(() => {
     if (isEmpty(veBalBoostMap)) return
@@ -71,15 +99,12 @@ export function UserSnapshotValues() {
     if (pool && pool.userBalance && !isLoadingPool && !isLoadingClaiming) {
       const totalBalanceUsd = pool.userBalance.totalBalanceUsd
 
-      // TODO: only uses Balancer balances rn
       const stakedBalanceUsd = totalBalanceUsd
         ? calcTotalStakedBalanceUsd(pool)
         : POSSIBLE_STAKED_BALANCE_USD
 
       return {
-        // TODO: only uses Balancer balances rn
         myLiquidity: totalBalanceUsd,
-        // TODO: only uses Balancer balances rn
         myPotentialWeeklyYield: bn(stakedBalanceUsd)
           .times(bn(bn(myAprRaw).div(100)).div(52))
           .toFixed(2),
@@ -166,7 +191,9 @@ export function UserSnapshotValues() {
           ) : (
             <HStack>
               <Heading size="h4">{toCurrency(poolMyStatsValues.myClaimableRewards)}</Heading>
-              <TokenIconStack chain={chain} size={20} tokens={tokens} />
+              <TokenStackPopover chain={chain} tokenBalances={tokenBalances} tokens={tokens}>
+                <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
+              </TokenStackPopover>
               <Tooltip label={isDisabled ? disabledReason : ''}>
                 <Button
                   isDisabled={isDisabled}

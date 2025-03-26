@@ -44,6 +44,7 @@ export type TokenInfoProps = {
   isNestedPoolToken?: boolean
   iconSize?: number
   logoURI?: string
+  showCompactView?: boolean
 }
 
 function TokenInfo({
@@ -60,6 +61,7 @@ function TokenInfo({
   isNestedPoolToken = false,
   iconSize = 40,
   logoURI,
+  showCompactView = false,
 }: TokenInfoProps) {
   const tokenSymbol = isBpt ? 'LP token' : token?.symbol || symbol || poolToken?.symbol
   const tokenName = isBpt ? pool?.name : token?.name || poolToken?.name
@@ -106,7 +108,7 @@ function TokenInfo({
             <TokenInfoPopover chain={chain} isBpt={isBpt} tokenAddress={address} />
           )}
         </HStack>
-        <Text {...tokenNameProps}>{tokenName}</Text>
+        {!showCompactView && <Text {...tokenNameProps}>{tokenName}</Text>}
       </VStack>
       {showSelect && (
         <Box ml="sm">
@@ -137,6 +139,7 @@ export type TokenRowProps = {
   toggleTokenSelect?: () => void
   iconSize?: number
   logoURI?: string
+  showCompactView?: boolean
 }
 
 export default function TokenRow({
@@ -158,6 +161,7 @@ export default function TokenRow({
   toggleTokenSelect,
   iconSize,
   logoURI,
+  showCompactView = false,
 }: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
   const { toCurrency } = useCurrency()
@@ -179,6 +183,7 @@ export default function TokenRow({
     isNestedPoolToken,
     symbol,
     logoURI,
+    showCompactView,
   }
 
   useEffect(() => {

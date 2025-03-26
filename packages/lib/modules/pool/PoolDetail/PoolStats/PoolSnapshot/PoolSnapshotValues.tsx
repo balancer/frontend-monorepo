@@ -3,6 +3,7 @@
 import { memo, useMemo } from 'react'
 import { HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
+import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePool } from '../../../PoolProvider'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
@@ -16,12 +17,29 @@ type PoolStatsValues = {
 }
 
 export function PoolSnapshotValues() {
-  const { pool, chain, tvl } = usePool()
+  const { chain, pool, tvl } = usePool()
   const { toCurrency } = useCurrency()
 
   const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
   const { tokens, weeklyRewards } = useGetPoolRewards(pool)
+
+  const tokenBalances = useMemo(() => {
+    if (!pool || !tokens.length) return {}
+
+    const currentRewards = pool.staking?.gauge?.rewards || []
+    const rewardsMap = currentRewards.reduce(
+      (acc, reward) => {
+        acc[reward.tokenAddress] = reward.rewardPerSecond
+          ? (parseFloat(reward.rewardPerSecond) * 60 * 60 * 24 * 7).toString()
+          : '0'
+        return acc
+      },
+      {} as Record<string, string>
+    )
+
+    return rewardsMap
+  }, [pool, tokens])
 
   const poolStatsValues: PoolStatsValues | undefined = useMemo(() => {
     if (pool) {
@@ -63,8 +81,8 @@ export function PoolSnapshotValues() {
           pool={pool}
           poolId={pool.id}
           textProps={{
-            fontWeight: 'bold',
             fontSize: '2xl',
+            fontWeight: 'bold',
             lineHeight: '28px',
           }}
         />
@@ -88,7 +106,9 @@ export function PoolSnapshotValues() {
             <Heading size="h4">
               {poolStatsValues.weeklyRewards ? poolStatsValues.weeklyRewards : 'N/A'}
             </Heading>
-            <TokenIconStack chain={chain} size={20} tokens={tokens} />
+            <TokenStackPopover chain={chain} tokenBalances={tokenBalances} tokens={tokens}>
+              <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
+            </TokenStackPopover>
           </HStack>
         ) : (
           <Skeleton height="30px" w="100px" />
