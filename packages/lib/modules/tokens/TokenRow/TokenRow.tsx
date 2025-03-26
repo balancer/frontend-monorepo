@@ -87,8 +87,6 @@ function TokenInfo({
         <TokenIcon
           address={address}
           alt={token?.symbol || address}
-          bg="background.level2"
-          borderRadius="md"
           chain={chain}
           logoURI={logoURI}
           overflow="visible"
