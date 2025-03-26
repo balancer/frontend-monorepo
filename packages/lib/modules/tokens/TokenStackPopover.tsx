@@ -40,7 +40,21 @@ export function TokenStackPopover({
   return (
     <Popover placement="top" trigger="hover">
       <PopoverTrigger>
-        <Box display="inline-block">{children}</Box>
+        <Box
+          display="inline-block"
+          sx={{
+            '&:hover': {
+              '& > *': {
+                transform: 'scale(1.1)',
+              },
+            },
+            '& > *': {
+              transition: 'all 0.2s var(--ease-out-cubic)',
+            },
+          }}
+        >
+          {children}
+        </Box>
       </PopoverTrigger>
       <PopoverContent maxW={isMobile ? '100%' : '800px'} minW={{ base: '250px', md: '325px' }}>
         <PopoverArrow bg="background.level3" />
