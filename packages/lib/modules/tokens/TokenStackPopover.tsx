@@ -4,8 +4,10 @@ import {
   PopoverArrow,
   PopoverBody,
   PopoverContent,
+  PopoverHeader,
   PopoverTrigger,
   VStack,
+  Text,
 } from '@chakra-ui/react'
 import { ApiToken } from './token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -58,6 +60,9 @@ export function TokenStackPopover({
       </PopoverTrigger>
       <PopoverContent maxW={isMobile ? '100%' : '800px'} minW={{ base: '250px', md: '325px' }}>
         <PopoverArrow bg="background.level3" />
+        <PopoverHeader>
+          <Text variant="special">Weekly incentives for stakers</Text>
+        </PopoverHeader>
         <PopoverBody py="sm">
           <VStack align="flex-start" spacing="xs">
             {tokens.map(token => {
