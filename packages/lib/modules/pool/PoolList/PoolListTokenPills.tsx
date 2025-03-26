@@ -130,7 +130,7 @@ function StableTokenPills({
   nameSize?: string
 } & BadgeProps) {
   const isFirstToken = (index: number) => index === 0
-  const zIndices = Array.from({ length: tokens.length }, (_, index) => index).reverse()
+  const zIndices = Array.from({ length: tokens.length }, (_, index) => index + 1).reverse()
 
   return (
     <HStack spacing={0}>
