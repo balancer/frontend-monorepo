@@ -44,6 +44,10 @@ export function TokenIcon({
 
   const fallbackSVG = createAvatar(identicon, {
     seed: address || 'unknown',
+    backgroundColor: ['transparent'],
+    radius: 50,
+    backgroundType: ['solid'],
+    scale: 80,
   })
 
   function getIconSrc(): string | undefined {
