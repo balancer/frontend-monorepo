@@ -89,6 +89,7 @@ export type StepDetails = {
 export type TxCall = {
   to: Address
   data: Hash
+  value?: bigint
 }
 
 export type SafeAppTx = BaseTransaction
