@@ -151,6 +151,7 @@ export function ProportionalTransactionSettings({
               </Text>
               <EnableSignaturesSelect />
             </Box>
+            <EnableTxBundleSetting />
           </VStack>
         </PopoverBody>
       </PopoverContent>
