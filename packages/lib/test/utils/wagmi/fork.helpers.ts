@@ -1,8 +1,9 @@
 import { Address, createTestClient, http, parseUnits } from 'viem'
-import { mainnet } from 'viem/chains'
 import { SetBalanceMutation } from '../../anvil/useSetErc20Balance'
-import { TokenBalance, TokenBalancesByChain } from './default-fork-balances'
+import { TokenBalance, TokenBalancesByChain } from './fork-options'
 import { createConfig } from 'wagmi'
+import { mainnet } from 'viem/chains'
+import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
 
 /*
   E2E dev tests use an anvil fork to impersonate and test with default anvil accounts
@@ -12,8 +13,17 @@ import { createConfig } from 'wagmi'
 export const defaultAnvilAccount = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
 export const defaultAnvilForkRpcUrl = 'http://127.0.0.1:8545'
 
+export const mainnetTest = {
+  ...mainnet,
+  rpcUrls: {
+    default: {
+      http: [defaultAnvilForkRpcUrl],
+    },
+  },
+}
+
 export const forkClient = createTestClient({
-  chain: mainnet,
+  // chain: mainnetTest, // TODO: check when this could be useful
   mode: 'anvil',
   transport: http(defaultAnvilForkRpcUrl),
 })
@@ -55,4 +65,14 @@ export async function setTokenBalances({
   for (const chainId in tokenBalances) {
     await setChainBalances(tokenBalances[chainId], Number(chainId))
   }
+}
+
+export function resetFork(chainId: number = mainnet.id) {
+  const privateKey = process.env['NEXT_PRIVATE_DRPC_KEY']
+  if (!privateKey) {
+    throw new Error('NEXT_PRIVATE_DRPC_KEY is missing')
+  }
+  return forkClient.reset({
+    jsonRpcUrl: drpcUrlByChainId(chainId, privateKey),
+  })
 }
