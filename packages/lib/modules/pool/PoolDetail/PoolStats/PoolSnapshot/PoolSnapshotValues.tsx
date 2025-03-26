@@ -22,24 +22,7 @@ export function PoolSnapshotValues() {
 
   const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
-  const { tokens, weeklyRewards } = useGetPoolRewards(pool)
-
-  const tokenBalances = useMemo(() => {
-    if (!pool || !tokens.length) return {}
-
-    const currentRewards = pool.staking?.gauge?.rewards || []
-    const rewardsMap = currentRewards.reduce(
-      (acc, reward) => {
-        acc[reward.tokenAddress] = reward.rewardPerSecond
-          ? (parseFloat(reward.rewardPerSecond) * 60 * 60 * 24 * 7).toString()
-          : '0'
-        return acc
-      },
-      {} as Record<string, string>
-    )
-
-    return rewardsMap
-  }, [pool, tokens])
+  const { tokens, weeklyRewards, weeklyRewardsByToken } = useGetPoolRewards(pool)
 
   const poolStatsValues: PoolStatsValues | undefined = useMemo(() => {
     if (pool) {
@@ -50,11 +33,12 @@ export function PoolSnapshotValues() {
         income24h: isCowAmmPool(pool.type)
           ? toCurrency(pool.dynamicData.surplus24h)
           : toCurrency(pool.dynamicData.fees24h),
-        weeklyRewards: toCurrency(weeklyRewards),
+        weeklyRewards: weeklyRewards ? toCurrency(weeklyRewards.toString()) : 'N/A',
       }
     }
+    return undefined
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pool, tvl])
+  }, [pool, tvl, weeklyRewards])
 
   const incomeLabel = isCowAmmPool(pool.type) ? 'Surplus (24h)' : 'Fees (24h)'
 
@@ -106,7 +90,7 @@ export function PoolSnapshotValues() {
             <Heading size="h4">
               {poolStatsValues.weeklyRewards ? poolStatsValues.weeklyRewards : 'N/A'}
             </Heading>
-            <TokenStackPopover chain={chain} tokenBalances={tokenBalances} tokens={tokens}>
+            <TokenStackPopover chain={chain} tokenBalances={weeklyRewardsByToken} tokens={tokens}>
               <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
             </TokenStackPopover>
           </HStack>

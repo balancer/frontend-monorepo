@@ -5,6 +5,7 @@ import { useTokens } from '../tokens/TokensProvider'
 import { SECONDS_IN_DAY } from '@repo/lib/test/utils/numbers'
 import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
 import { calcPotentialYieldFor } from './pool.utils'
+import { oneWeekInSecs } from '@repo/lib/shared/utils/time'
 
 export function useGetPoolRewards(pool: Pool) {
   const { priceFor, getToken } = useTokens()
@@ -28,6 +29,17 @@ export function useGetPoolRewards(pool: Pool) {
     reward => priceFor(reward.tokenAddress, pool.chain) * reward.rewardPerWeek
   )
 
+  // Map of token addresses to their weekly reward amounts
+  const weeklyRewardsByToken = currentRewards.reduce(
+    (acc, reward) => {
+      acc[reward.tokenAddress] = reward.rewardPerSecond
+        ? (parseFloat(reward.rewardPerSecond) * oneWeekInSecs).toString()
+        : '0'
+      return acc
+    },
+    {} as Record<string, string>
+  )
+
   function calculatePotentialYield(totalUSDValue: Numberish) {
     const potentialYield = calcPotentialYieldFor(pool, totalUSDValue)
     const weeklyYield =
@@ -40,6 +52,7 @@ export function useGetPoolRewards(pool: Pool) {
   return {
     tokens,
     weeklyRewards,
+    weeklyRewardsByToken,
     calculatePotentialYield,
   }
 }
