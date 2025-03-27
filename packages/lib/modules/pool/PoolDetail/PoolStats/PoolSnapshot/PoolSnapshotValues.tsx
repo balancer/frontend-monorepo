@@ -90,7 +90,7 @@ export function PoolSnapshotValues() {
             <Heading size="h4">
               {poolStatsValues.weeklyRewards ? poolStatsValues.weeklyRewards : 'N/A'}
             </Heading>
-            <TokenStackPopover chain={chain} tokenBalances={weeklyRewardsByToken} tokens={tokens}>
+            <TokenStackPopover chain={chain} rewardsByToken={weeklyRewardsByToken} tokens={tokens}>
               <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
             </TokenStackPopover>
           </HStack>

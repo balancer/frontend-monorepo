@@ -16,21 +16,21 @@ import { Address } from 'viem'
 import { Numberish } from '@repo/lib/shared/utils/numbers'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
-type TokenBalances = {
+type RewardsByToken = {
   [address: string]: Numberish
 }
 
 type TokenStackPopoverProps = {
   chain: GqlChain
   children: React.ReactNode
-  tokenBalances?: TokenBalances
+  rewardsByToken?: RewardsByToken
   tokens: ApiToken[]
 }
 
 export function TokenStackPopover({
   chain,
   children,
-  tokenBalances = {},
+  rewardsByToken = {},
   tokens,
 }: TokenStackPopoverProps) {
   const { isMobile } = useBreakpoints()
@@ -67,7 +67,7 @@ export function TokenStackPopover({
           <VStack align="flex-start" spacing="xs">
             {tokens.map(token => {
               const tokenAddress = token?.address as Address
-              const balance = tokenBalances[tokenAddress] || '0'
+              const balance = rewardsByToken[tokenAddress] || '0'
 
               return (
                 <TokenRow
