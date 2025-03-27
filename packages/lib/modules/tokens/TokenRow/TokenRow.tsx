@@ -85,8 +85,6 @@ function TokenInfo({
         <TokenIcon
           address={address}
           alt={token?.symbol || address}
-          bg="background.level2"
-          borderRadius="md"
           chain={chain}
           logoURI={logoURI}
           overflow="visible"
@@ -220,7 +218,7 @@ export default function TokenRow({
           <TokenInfo {...props} isBpt={isBpt || isNestedBpt} />
         )}
         <HStack align="start" spacing="none">
-          <VStack alignItems="flex-end" spacing="xs" textAlign="right">
+          <VStack alignItems="flex-end" spacing="none" textAlign="right">
             {isLoading ? (
               <>
                 <Skeleton h="4" w="10" />
