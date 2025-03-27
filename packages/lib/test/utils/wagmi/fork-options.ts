@@ -7,6 +7,7 @@ import {
   mainnetTokenBalances,
   sonicTokenBalances,
 } from './fork-default-balances'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export type TokenBalance = {
   tokenAddress: Address
@@ -37,7 +38,8 @@ const defaultForkBalances: TokenBalancesByChain = {
   [sonic.id]: sonicTokenBalances,
 }
 
+const isBeets = PROJECT_CONFIG.projectId === 'beets'
 export const defaultManualForkOptions = {
-  chainId: mainnet.id, // Change this id for manual tests on different chains
+  chainId: isBeets ? sonic.id : mainnet.id, // Change this id for manual tests on different chains
   forkBalances: defaultForkBalances,
 }
