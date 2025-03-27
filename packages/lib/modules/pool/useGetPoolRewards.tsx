@@ -27,15 +27,12 @@ export function useGetPoolRewards(pool: Pool) {
     bn(priceFor(reward.tokenAddress, pool.chain)).times(reward.rewardPerWeek).toNumber()
   )
 
-  // Map of token addresses to their weekly reward amounts
-  const weeklyRewardsByToken = currentRewards.reduce(
-    (acc, reward) => {
-      acc[reward.tokenAddress] = reward.rewardPerSecond
-        ? bn(reward.rewardPerSecond).times(oneWeekInSecs).toString()
-        : '0'
-      return acc
-    },
-    {} as Record<string, string>
+  // Map token addresses to their weekly reward amounts
+  const weeklyRewardsByToken = Object.fromEntries(
+    currentRewards.map(reward => [
+      reward.tokenAddress,
+      reward.rewardPerSecond ? bn(reward.rewardPerSecond).times(oneWeekInSecs).toString() : '0',
+    ])
   )
 
   function calculatePotentialYield(totalUSDValue: Numberish) {
