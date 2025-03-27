@@ -2,7 +2,6 @@ import { Pool } from './pool.types'
 import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
 import { sumBy } from 'lodash'
 import { useTokens } from '../tokens/TokensProvider'
-import { SECONDS_IN_DAY } from '@repo/lib/test/utils/numbers'
 import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
 import { calcPotentialYieldFor } from './pool.utils'
 import { oneWeekInSecs } from '@repo/lib/shared/utils/time'
@@ -15,7 +14,7 @@ export function useGetPoolRewards(pool: Pool) {
   const currentRewardsPerWeek = currentRewards.map(reward => {
     return {
       ...reward,
-      rewardPerWeek: parseFloat(reward.rewardPerSecond) * SECONDS_IN_DAY * 7,
+      rewardPerWeek: bn(reward.rewardPerSecond).times(oneWeekInSecs),
     }
   })
 
@@ -24,16 +23,15 @@ export function useGetPoolRewards(pool: Pool) {
     .filter(reward => bn(reward.rewardPerSecond).gt(0))
     .map(reward => getToken(reward.tokenAddress, pool.chain)) as GqlToken[]
 
-  const weeklyRewards = sumBy(
-    currentRewardsPerWeek,
-    reward => priceFor(reward.tokenAddress, pool.chain) * reward.rewardPerWeek
+  const weeklyRewards = sumBy(currentRewardsPerWeek, reward =>
+    bn(priceFor(reward.tokenAddress, pool.chain)).times(reward.rewardPerWeek).toNumber()
   )
 
   // Map of token addresses to their weekly reward amounts
   const weeklyRewardsByToken = currentRewards.reduce(
     (acc, reward) => {
       acc[reward.tokenAddress] = reward.rewardPerSecond
-        ? (parseFloat(reward.rewardPerSecond) * oneWeekInSecs).toString()
+        ? bn(reward.rewardPerSecond).times(oneWeekInSecs).toString()
         : '0'
       return acc
     },

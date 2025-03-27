@@ -65,7 +65,7 @@ describe('useGetPoolRewards', () => {
       },
     ])
 
-    expect(result.current.weeklyRewards).toBe(627.6721349308702)
+    expect(result.current.weeklyRewards).toBe(627.6721349308701)
   })
 
   test('calculates potential weekly yield when', () => {
@@ -77,9 +77,9 @@ describe('useGetPoolRewards', () => {
     expect(result.current.calculatePotentialYield(totalUsdValueIn)).toBe('0.27144610061178742084')
 
     // When totalUsdValueIn is so large that calcPotentialYieldFor is bigger than total usd value of weeklyRewards
-    expect(result.current.calculatePotentialYield(10000000)).toBe('627.6721349308702')
-    expect(result.current.calculatePotentialYield(100000000)).toBe('627.6721349308702')
-    expect(result.current.calculatePotentialYield(1000000000)).toBe('627.6721349308702')
+    expect(result.current.calculatePotentialYield(10000000)).toBe('627.6721349308701')
+    expect(result.current.calculatePotentialYield(100000000)).toBe('627.6721349308701')
+    expect(result.current.calculatePotentialYield(1000000000)).toBe('627.6721349308701')
   })
 
   test('calculates weeklyRewardsByToken correctly', () => {
@@ -99,16 +99,14 @@ describe('useGetPoolRewards', () => {
 
     // Check that the weekly reward amounts are calculated correctly
     // BAL: 0.0001 * 60 * 60 * 24 * 7 = 60.48 tokens per week
-    const balRewards = parseFloat(
-      result.current.weeklyRewardsByToken['0xba100000625a3754423978a60c9317c58a424e3d']
+    expect(result.current.weeklyRewardsByToken['0xba100000625a3754423978a60c9317c58a424e3d']).toBe(
+      '60.48'
     )
-    expect(balRewards).toBeCloseTo(60.48, 2)
 
     // DAI: 0.001 * 60 * 60 * 24 * 7 = 604.8 tokens per week
-    const daiRewards = parseFloat(
-      result.current.weeklyRewardsByToken['0x6b175474e89094c44da98b954eedeac495271d0f']
+    expect(result.current.weeklyRewardsByToken['0x6b175474e89094c44da98b954eedeac495271d0f']).toBe(
+      '604.8'
     )
-    expect(daiRewards).toBeCloseTo(604.8, 2)
 
     // Zero rewards token should have '0'
     expect(result.current.weeklyRewardsByToken['0x0000000000000000000000000000000000000000']).toBe(
