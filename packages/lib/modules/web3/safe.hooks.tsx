@@ -73,13 +73,13 @@ export function useTxHash({ wagmiTxHash }: Props) {
   Only Safe Apps use Safe Tx Hash
   Safe Accounts connected via WalletConnect use wagmiTxHash like a regular account
   */
-  const shouldBatchTx = useShouldBatchTransactions()
+  const isSafeApp = useIsSafeApp()
   const { isLoading: isSafeTxLoading, data: safeTxHash } = useSafeTxQuery({
-    enabled: shouldBatchTx,
+    enabled: isSafeApp,
     wagmiTxHash,
   })
 
-  const txHash = shouldBatchTx ? safeTxHash : wagmiTxHash
+  const txHash = isSafeApp ? safeTxHash : wagmiTxHash
 
   return { txHash, isSafeTxLoading }
 }
