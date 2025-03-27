@@ -58,6 +58,10 @@ export const baseTokenBalances: TokenBalance[] = [
 
 export const gnosisTokenBalances: TokenBalance[] = [
   {
+    tokenAddress: '0x9c58bacc331c9aa871afd802db6379a98e80cedb', // GNO
+    value: '2000',
+  },
+  {
     tokenAddress: '0x177127622c4a00f3d409b75571e12cb3c8973d3c', // COW
     value: '5000',
   },
@@ -68,6 +72,26 @@ export const gnosisTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0x2a22f9c3b484c3629090feed35f17ff8f88f76f0', // USDC.e
     value: '300',
+    decimals: 6,
+  },
+]
+
+export const sonicTokenBalances: TokenBalance[] = [
+  {
+    tokenAddress: '0xe6cc4d855b4fd4a9d02f46b9adae4c5efb1764b5', // LUDWING
+    value: '10',
+  },
+  {
+    tokenAddress: '0x3bce5cb273f0f148010bbea2470e7b5df84c7812', // scETH
+    value: '0.01',
+  },
+  {
+    tokenAddress: '0xbb30e76d9bb2cc9631f7fc5eb8e87b5aff32bfbd', // scBTC
+    value: '0.01',
+  },
+  {
+    tokenAddress: '0x29219dd400f2bf60e5a23d13be72b486d4038894', // USDC.e
+    value: '5',
     decimals: 6,
   },
 ]

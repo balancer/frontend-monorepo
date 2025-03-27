@@ -31,13 +31,15 @@ export function useImpersonateAccount() {
       const forkBalances = window.forkOptions?.forkBalances ?? defaultManualForkOptions.forkBalances
       console.log('window.forkOptions', JSON.stringify(window.forkOptions, null, 2))
 
-      await setTokenBalances({
-        impersonatedAddress,
-        wagmiConfig,
-        setBalance,
-        tokenBalances: forkBalances,
-        chainId,
-      })
+      if (forkBalances[chainId]) {
+        await setTokenBalances({
+          impersonatedAddress,
+          wagmiConfig,
+          setBalance,
+          tokenBalances: forkBalances,
+          chainId,
+        })
+      }
 
       console.log('🥸 Impersonating with ', { impersonatedAddress, chainId })
 

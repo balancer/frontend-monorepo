@@ -1,10 +1,11 @@
 import { HumanAmount } from '@balancer/sdk'
 import { Address } from 'viem'
-import { base, gnosis, mainnet } from 'viem/chains'
+import { base, gnosis, mainnet, sonic } from 'viem/chains'
 import {
   baseTokenBalances,
   gnosisTokenBalances,
   mainnetTokenBalances,
+  sonicTokenBalances,
 } from './fork-default-balances'
 
 export type TokenBalance = {
@@ -33,6 +34,7 @@ const defaultForkBalances: TokenBalancesByChain = {
   [mainnet.id]: mainnetTokenBalances,
   [base.id]: baseTokenBalances,
   [gnosis.id]: gnosisTokenBalances,
+  [sonic.id]: sonicTokenBalances,
 }
 
 export const defaultManualForkOptions = {
