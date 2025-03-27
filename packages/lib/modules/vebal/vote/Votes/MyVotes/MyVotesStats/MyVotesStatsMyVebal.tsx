@@ -1,6 +1,5 @@
 import { Button, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import React from 'react'
 import NextLink from 'next/link'
 import { useVebalLockInfo } from '@repo/lib/modules/vebal/useVebalLockInfo'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -56,6 +55,8 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
     lockEndDate: maxLockEndDate,
   })
 
+  const balance = !isExpired ? fNum('token', myVebalBalance || 0) : '0'
+
   return (
     <MyVotesStatsCard
       headerText="My veBAL"
@@ -65,7 +66,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
         ) : myVebalBalance ? (
           <HStack spacing="xs">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
-              {fNum('token', myVebalBalance)}
+              {balance}
             </Text>
             {lockedEndDate && (
               <MyVebalChargeTooltip
