@@ -2,13 +2,23 @@
 
 import { useMemo } from 'react'
 import { sumBy } from 'lodash'
-import { useClaim } from './actions/claim/ClaimProvider'
 import { Pool } from './pool.types'
 import { safeTokenFormat } from '@repo/lib/shared/utils/numbers'
 import { useGetPoolRewards } from './useGetPoolRewards'
+import { BalTokenReward } from '../portfolio/PortfolioClaim/useBalRewards'
+import { ClaimableReward } from '../portfolio/PortfolioClaim/useClaimableBalances'
 
-export function useGetUserPoolRewards(pool: Pool) {
-  const { balRewards, nonBalRewards } = useClaim()
+export type GetUserPoolRewardsParams = {
+  pool: Pool
+  balRewards: BalTokenReward[]
+  nonBalRewards: ClaimableReward[]
+}
+
+export function useGetUserPoolRewards({
+  pool,
+  balRewards,
+  nonBalRewards,
+}: GetUserPoolRewardsParams) {
   const { tokens } = useGetPoolRewards(pool)
 
   const claimableRewards = useMemo(

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { memo, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { Button, HStack, Heading, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
 import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
@@ -35,9 +35,15 @@ export function UserSnapshotValues() {
     isDisabled,
     previewModalDisclosure,
     isLoading: isLoadingClaiming,
+    balRewards,
+    nonBalRewards,
   } = useClaim()
 
-  const { myClaimableRewards, tokens, rewardsByToken } = useGetUserPoolRewards(pool)
+  const { myClaimableRewards, tokens, rewardsByToken } = useGetUserPoolRewards({
+    pool,
+    balRewards,
+    nonBalRewards,
+  })
 
   const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
