@@ -24,7 +24,7 @@ export function useVebalUserData() {
   return {
     data,
     refetch,
-    isConnected,
+    isConnected, // FIXME: [JUANJO] we shouldn't return account data from here
     loading,
     error,
     myVebalBalance,
