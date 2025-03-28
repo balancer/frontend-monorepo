@@ -8,7 +8,7 @@ import { Address, encodeFunctionData, erc20Abi } from 'viem'
 import { ManagedErc20TransactionButton } from '../../transactions/transaction-steps/TransactionButton'
 import { TransactionStep, TxCall } from '../../transactions/transaction-steps/lib'
 import { ManagedErc20TransactionInput } from '../../web3/contracts/useManagedErc20Transaction'
-import { useTokenAllowances } from '../../web3/useTokenAllowances'
+import { REFETCHING_ALLOWANCES_BN, useTokenAllowances } from '../../web3/useTokenAllowances'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../TokensProvider'
 import { ApprovalAction, buildTokenApprovalLabels } from './approval-labels'
@@ -94,6 +94,15 @@ export function useTokenApprovalSteps({
       const isApprovingZeroForDoubleApproval =
         requiresDoubleApproval(chain, tokenAddress) && requiredRawAmount === 0n
       const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
+
+      console.log({
+        requiredRawAmount,
+        requestedRawAmount,
+        isApprovingZeroForDoubleApproval,
+        id,
+        allowanceFor: tokenAllowances.allowanceFor(tokenAddress),
+      })
+
       const token = getToken(tokenAddress, chain)
 
       const getSymbol = () => {
@@ -173,13 +182,10 @@ export function useTokenApprovalSteps({
         renderAction: () => <ManagedErc20TransactionButton id={id} key={id} {...props} />,
         batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
         onSuccess: async () => {
-          // HACK: There is a small hitch where sometimes refetchAllowances returns 0 before updating to the
-          // correct amount and an error flashes, waiting for a small amount of time seems to solve it
-          await sleep(100)
-          const newTokenAllowances = await tokenAllowances.refetchAllowances()
-          if (!newTokenAllowances.data) throw new Error('Error refetching token allowances')
-
-          const updatedTokenAllowance = newTokenAllowances.data[index]
+          const newAllowanceFor = await tokenAllowances.refetchAllowances()
+          const updatedTokenAllowance = newAllowanceFor(tokenAddress)
+          // Ignore check if allowances are refetching
+          if (updatedTokenAllowance === REFETCHING_ALLOWANCES_BN) return
           const errors = checkEdgeCaseErrors(updatedTokenAllowance)
           if (errors.length > 0) throw new ErrorWithCauses('Edge case errors', errors)
         },
