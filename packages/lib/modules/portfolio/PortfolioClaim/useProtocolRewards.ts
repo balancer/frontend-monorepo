@@ -32,7 +32,7 @@ export function useProtocolRewards() {
     functionName: 'claimTokens',
     args: [userAddress, claimableVeBalRewardsTokens],
     query: {
-      enabled: isConnected,
+      enabled: isConnected && process.env.NEXT_PUBLIC_PROJECT_ID === 'balancer',
       select: data => {
         return (data as bigint[]).map((clBalance, index) => {
           const tokenAddress = claimableVeBalRewardsTokens[index]
