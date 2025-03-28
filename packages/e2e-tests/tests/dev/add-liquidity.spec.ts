@@ -64,4 +64,7 @@ test('Adds liquidity in tri-boosted aave pool (Aave GHO/USDT/USDC)', async ({ pa
   // Run transaction and wait for confirmation
   await page.getByRole('button', { name: 'Add liquidity' }).click()
   await expect(page.getByText('Transaction confirmed')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Return to pool' }).click()
+  await page.getByRole('button', { name: 'Remove' }).click()
 })
