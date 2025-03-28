@@ -60,7 +60,7 @@ export function usePermit2ApprovalSteps({
   const chainId = getChainId(chain)
   const nativeAssetAddress = getNativeAssetAddress(chain)
   const networkConfig = getNetworkConfig(chain)
-  const permit2Address = networkConfig.contracts.permit2!
+  const permit2Address = networkConfig.contracts.permit2
   const permitExpiry = get24HoursFromNowInSecs() * 3 // extend expiry to 3 days cause this is a gas tx (when signatures are disabled)
   const spenderAddress = shouldUseCompositeLiquidityRouterBoosted
     ? networkConfig.contracts.balancer.compositeLiquidityRouterBoosted!
@@ -127,9 +127,9 @@ export function usePermit2ApprovalSteps({
         return requiredRawAmount > 0n && isAllowed && isNotExpired
       }
 
-      const isTxEnabled = !isLoadingPermit2Allowances
+      const isTxEnabled = !isLoadingPermit2Allowances && !!permit2Address
       const props: ManagedTransactionInput = {
-        contractAddress: permit2Address,
+        contractAddress: permit2Address || '',
         contractId: 'permit2',
         functionName: 'approve',
         labels,
