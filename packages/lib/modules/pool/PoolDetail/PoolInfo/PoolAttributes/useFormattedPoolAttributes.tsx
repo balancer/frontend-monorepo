@@ -33,10 +33,6 @@ function getPoolTypeText(pool: Pool) {
     return 'Boosted'
   }
 
-  if (isQuantAmmPool(pool.type)) {
-    return 'Blockchain Traded Fund (BTF)'
-  }
-
   return getPoolTypeLabel(pool.type)
 }
 
