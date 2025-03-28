@@ -245,7 +245,6 @@ function BaseAprTooltip({
           apr={quantAmmRewardsDisplayed}
           aprOpacity={isQuantAmmPresent ? 1 : 0.5}
           displayValueFormatter={usedDisplayValueFormatter}
-          pt={3}
           title="BTF token appreciation"
           tooltipText={quantAmmRewardsTooltipText}
         />
