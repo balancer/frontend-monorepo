@@ -19,7 +19,6 @@ import {
   isTheApprovedAmountEnough,
 } from './approval-rules'
 import { requiresDoubleApproval } from '../token.helpers'
-import { sleep } from '@repo/lib/shared/utils/sleep'
 import { ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 
 export type Params = {
@@ -94,14 +93,6 @@ export function useTokenApprovalSteps({
       const isApprovingZeroForDoubleApproval =
         requiresDoubleApproval(chain, tokenAddress) && requiredRawAmount === 0n
       const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
-
-      console.log({
-        requiredRawAmount,
-        requestedRawAmount,
-        isApprovingZeroForDoubleApproval,
-        id,
-        allowanceFor: tokenAllowances.allowanceFor(tokenAddress),
-      })
 
       const token = getToken(tokenAddress, chain)
 
