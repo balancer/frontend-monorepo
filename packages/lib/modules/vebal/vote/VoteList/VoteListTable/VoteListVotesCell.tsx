@@ -3,7 +3,6 @@ import { getVotesState } from '@repo/lib/modules/vebal/vote/vote.helpers'
 import { HStack } from '@chakra-ui/react'
 import { VoteCapTooltip } from '@repo/lib/modules/vebal/vote/VoteCapTooltip'
 import { VoteRateTooltip } from '@repo/lib/modules/vebal/vote/VoteRateTooltip'
-import React from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { isVebalPool } from '@repo/lib/modules/pool/pool.helpers'
 
