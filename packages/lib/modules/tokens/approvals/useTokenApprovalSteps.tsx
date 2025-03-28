@@ -174,9 +174,9 @@ export function useTokenApprovalSteps({
         batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
         onSuccess: async () => {
           const newAllowances = await tokenAllowances.refetchAllowances()
+          // Ignore check if allowances are refetching
           if (newAllowances.isRefetching) return
           const updatedTokenAllowance = newAllowances.allowanceFor(tokenAddress)
-          // Ignore check if allowances are refetching
           const errors = checkEdgeCaseErrors(updatedTokenAllowance)
           if (errors.length > 0) throw new ErrorWithCauses('Edge case errors', errors)
         },
