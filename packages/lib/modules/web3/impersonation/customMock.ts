@@ -2,6 +2,7 @@ import { MockParameters, mock } from 'wagmi/connectors'
 
 import { Address } from 'viem'
 import { CreateConnectorFn } from 'wagmi'
+import { impersonateWagmiConfig } from '../WagmiConfig'
 
 type CustomMockOptions = {
   impersonationAddress?: Address
@@ -18,6 +19,7 @@ export function customMock(
 
   return (config: any) => {
     const connector = originalMock(config)
+    const originalConnect = connector.connect.bind(connector)
 
     // Add impersonated address to the list of accounts to allow non default anvil accounts to approve and run transactions
     if (options.impersonationAddress) {
@@ -26,6 +28,11 @@ export function customMock(
         const originalAccounts = await originalGetAccounts()
         return [options.impersonationAddress, ...originalAccounts] as readonly Address[]
       }
+    }
+
+    connector.connect = params => {
+      impersonateWagmiConfig(options.impersonationAddress)
+      return originalConnect(params)
     }
 
     return connector

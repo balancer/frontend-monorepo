@@ -78,6 +78,7 @@ export const wagmiConfig = createConfig({
   - Returns the updated wagmiConfig to be used for testing
 */
 export function impersonateWagmiConfig(impersonationAddress?: Address) {
+  console.log('🛠️ Using anvil forks in wagmi chain setup')
   connectors.pop()
   connectors.push(createMockConnector({ index: connectors.length, impersonationAddress }))
 
