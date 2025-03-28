@@ -134,7 +134,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <VoteWeight
               isExpired={isExpired}
-              timeLocked={isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
+              timeLocked={timeLocked}
               timeLockedEndDate={votingTimeLockedEndDate(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
               variant="primary"
               weight={vote.gaugeVotes?.userVotes ?? '0'}
@@ -143,6 +143,8 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps} {...editVotesStyles}>
             <VoteWeightInput
               isDisabled={isDisabled}
+              isTimeLocked={timeLocked}
+              lastVoteTime={vote.gaugeVotes?.lastUserVoteTime}
               max={100}
               min={0}
               percentage={editVotes.toString()}
