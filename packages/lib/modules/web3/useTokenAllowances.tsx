@@ -20,8 +20,6 @@ type Props = {
 
 type AllowanceContracts = ReadContractParameters<Erc20Abi, 'allowance'> & { chainId: number }
 
-export const REFETCHING_ALLOWANCES_BN = -1n
-
 export function useTokenAllowances({
   chainId,
   userAddress,
@@ -66,14 +64,12 @@ export function useTokenAllowances({
     const allowances = await refetch()
     if (!allowances.data) throw new Error('Failed to refetch allowances')
 
-    if (allowances.isRefetching) {
-      // While the refetch is in progress, we return REFETCHING_ALLOWANCES (-1n) so that consumers are aware
-      return () => REFETCHING_ALLOWANCES_BN
-    }
-
     const allowancesByTokenAddress = zipObject(tokenAddresses, allowances.data)
-    return (tokenAddress: Address) => {
-      return allowancesByTokenAddress[tokenAddress] ?? 0n
+    return {
+      isRefetching: allowances.isRefetching,
+      allowanceFor: (tokenAddress: Address) => {
+        return allowancesByTokenAddress[tokenAddress] ?? 0n
+      },
     }
   }
 

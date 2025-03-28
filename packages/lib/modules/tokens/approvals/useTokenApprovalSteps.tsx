@@ -8,7 +8,7 @@ import { Address, encodeFunctionData, erc20Abi } from 'viem'
 import { ManagedErc20TransactionButton } from '../../transactions/transaction-steps/TransactionButton'
 import { TransactionStep, TxCall } from '../../transactions/transaction-steps/lib'
 import { ManagedErc20TransactionInput } from '../../web3/contracts/useManagedErc20Transaction'
-import { REFETCHING_ALLOWANCES_BN, useTokenAllowances } from '../../web3/useTokenAllowances'
+import { useTokenAllowances } from '../../web3/useTokenAllowances'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../TokensProvider'
 import { ApprovalAction, buildTokenApprovalLabels } from './approval-labels'
@@ -173,10 +173,10 @@ export function useTokenApprovalSteps({
         renderAction: () => <ManagedErc20TransactionButton id={id} key={id} {...props} />,
         batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
         onSuccess: async () => {
-          const newAllowanceFor = await tokenAllowances.refetchAllowances()
-          const updatedTokenAllowance = newAllowanceFor(tokenAddress)
+          const newAllowances = await tokenAllowances.refetchAllowances()
+          if (newAllowances.isRefetching) return
+          const updatedTokenAllowance = newAllowances.allowanceFor(tokenAddress)
           // Ignore check if allowances are refetching
-          if (updatedTokenAllowance === REFETCHING_ALLOWANCES_BN) return
           const errors = checkEdgeCaseErrors(updatedTokenAllowance)
           if (errors.length > 0) throw new ErrorWithCauses('Edge case errors', errors)
         },
