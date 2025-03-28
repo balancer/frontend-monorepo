@@ -79,7 +79,7 @@ export const gnosisTokenBalances: TokenBalance[] = [
 export const sonicTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0xe6cc4d855b4fd4a9d02f46b9adae4c5efb1764b5', // LUDWING
-    value: '10',
+    value: '20000',
   },
   {
     tokenAddress: '0x3bce5cb273f0f148010bbea2470e7b5df84c7812', // scETH
@@ -91,7 +91,18 @@ export const sonicTokenBalances: TokenBalance[] = [
   },
   {
     tokenAddress: '0x29219dd400f2bf60e5a23d13be72b486d4038894', // USDC.e
-    value: '5',
+    value: '50',
     decimals: 6,
+  },
+]
+
+export const polygonTokenBalances: TokenBalance[] = [
+  {
+    tokenAddress: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270', // wPOL
+    value: '20000',
+  },
+  {
+    tokenAddress: '0xfa68fb4628dff1028cfec22b4162fccd0d45efb6', // maticX
+    value: '30000',
   },
 ]
