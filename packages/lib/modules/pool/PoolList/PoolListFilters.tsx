@@ -66,7 +66,7 @@ const SLIDER_STEP_SIZE = 100000
 
 export function useFilterTagsVisible() {
   const {
-    queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags },
+    queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion },
   } = usePoolList()
   const [isVisible, setIsVisible] = useState(false)
 
@@ -76,9 +76,10 @@ export function useFilterTagsVisible() {
         poolTypes.length > 0 ||
         minTvl > 0 ||
         poolTags.length > 0 ||
-        poolHookTags.length > 0
+        poolHookTags.length > 0 ||
+        !!protocolVersion
     )
-  }, [networks, poolTypes, minTvl, poolTags, poolHookTags])
+  }, [networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion])
 
   return isVisible
 }
@@ -322,6 +323,8 @@ export interface FilterTagsPops {
   poolHookTags?: PoolHookTagType[]
   togglePoolHookTag?: (checked: boolean, value: PoolHookTagType) => void
   poolHookTagLabel?: (poolHookTag: PoolHookTagType) => string
+  protocolVersion?: number | null
+  setProtocolVersion?: (value: number | null) => void
 }
 
 export function FilterTags({
@@ -340,6 +343,8 @@ export function FilterTags({
   poolHookTags,
   togglePoolHookTag,
   poolHookTagLabel,
+  protocolVersion,
+  setProtocolVersion,
 }: FilterTagsPops) {
   const { toCurrency } = useCurrency()
 
@@ -350,13 +355,37 @@ export function FilterTags({
     minTvl === 0 &&
     (poolTags ? poolTags.length === 0 : true) &&
     !includeExpiredPools &&
-    (poolHookTags ? poolHookTags.length === 0 : true)
+    (poolHookTags ? poolHookTags.length === 0 : true) &&
+    !protocolVersion
   ) {
     return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
   }
 
   return (
     <HStack spacing="sm" wrap="wrap">
+      {protocolVersion && setProtocolVersion && (
+        <AnimatePresence>
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            key="protocolVersion"
+            transition={{
+              enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
+              exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
+            }}
+          >
+            <Tag size="lg">
+              <TagLabel>
+                <Text fontSize="sm" fontWeight="bold">
+                  {protocolVersion === 1 ? 'CoW' : `v${protocolVersion}`}
+                </Text>
+              </TagLabel>
+              <TagCloseButton onClick={() => setProtocolVersion(null)} />
+            </Tag>
+          </motion.div>
+        </AnimatePresence>
+      )}
       <AnimatePresence>
         {poolTypes.map(poolType => (
           <motion.div
