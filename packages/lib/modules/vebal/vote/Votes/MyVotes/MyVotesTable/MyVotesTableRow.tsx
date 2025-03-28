@@ -7,6 +7,7 @@ import {
   HStack,
   IconButton,
   Text,
+  Tooltip,
   useToken,
   VStack,
 } from '@chakra-ui/react'
@@ -156,13 +157,18 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           </GridItem>
           <GridItem {...cellProps}>
             <VStack align="center" w="full">
-              <IconButton
-                aria-label="Remove"
-                icon={<Trash2 color={fontSecondary} height="20px" />}
-                isDisabled={!removable}
-                onClick={onRemove}
-                variant="ghost"
-              />
+              <Tooltip
+                isDisabled={removable}
+                label="You have an existing vote, so this row cannot be removed from the table. Set it to 0% to reallocate your vote."
+              >
+                <IconButton
+                  aria-label="Remove"
+                  icon={<Trash2 color={fontSecondary} height="20px" />}
+                  isDisabled={!removable}
+                  onClick={onRemove}
+                  variant="ghost"
+                />
+              </Tooltip>
             </VStack>
           </GridItem>
         </Grid>
