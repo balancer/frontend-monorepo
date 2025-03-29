@@ -30,6 +30,7 @@
     "@repo/lib": "workspace:*",
     "@sentry/nextjs": "8.50.0",
     "@studio-freight/react-lenis": "^0.0.47",
+    "@vercel/og": "^0.6.5",
     "@vercel/speed-insights": "1.1.0",
     "framer-motion": "10.18.0",
     "lodash": "^4.17.21",
