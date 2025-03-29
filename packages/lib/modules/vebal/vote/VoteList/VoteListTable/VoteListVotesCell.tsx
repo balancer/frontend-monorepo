@@ -34,7 +34,11 @@ export function VoteListVotesCell({ vote }: Props) {
       {relativeWeightCap !== 0 ? (
         <VoteCapTooltip relativeWeightCap={relativeWeightCap} votesState={votesState} />
       ) : undefined}
-      <VoteRateTooltip votes={votes} votesNextPeriod={votesNextPeriod} votesState={votesState} />
+      <VoteRateTooltip
+        votesShare={votes}
+        votesShareNextWeek={votesNextPeriod}
+        votesState={votesState}
+      />
     </HStack>
   )
 }
