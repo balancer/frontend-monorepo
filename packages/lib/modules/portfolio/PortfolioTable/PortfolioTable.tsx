@@ -2,7 +2,7 @@ import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTabl
 import { usePortfolio } from '../PortfolioProvider'
 import { PortfolioTableHeader } from './PortfolioTableHeader'
 import { PortfolioTableRow } from './PortfolioTableRow'
-import { Box, Card, Center, Checkbox, HStack, Heading, Stack, Text } from '@chakra-ui/react'
+import { Box, Card, Center, Checkbox, Heading, Stack, Text, VStack } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
@@ -20,6 +20,7 @@ import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { PortfolioFilters } from './PortfolioFilters'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -156,10 +157,16 @@ export function PortfolioTable() {
 
   return (
     <FadeInOnView>
-      <Stack gap={5}>
-        <HStack>
-          <Heading size="lg">{`${projectName} portfolio`}</Heading>
-        </HStack>
+      <VStack align="start" spacing="md" w="full">
+        <Stack direction={{ base: 'column', md: 'row' }} justify="space-between" w="full">
+          <Heading
+            as="h2"
+            size="lg"
+            variant="special"
+            w="full"
+          >{`${projectName} portfolio`}</Heading>
+          <PortfolioFilters />
+        </Stack>
         {isConnected ? (
           <Card
             alignItems="flex-start"
@@ -220,7 +227,7 @@ export function PortfolioTable() {
             </Text>
           </Checkbox>
         )}
-      </Stack>
+      </VStack>
     </FadeInOnView>
   )
 }
