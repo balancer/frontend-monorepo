@@ -406,7 +406,7 @@ export function FilterTags({
         {networks.map(network => (
           <AnimatedTag
             key={network}
-            label={network.toLowerCase()}
+            label={getChainShortName(network)}
             onClose={() => toggleNetwork(false, network)}
           />
         ))}
