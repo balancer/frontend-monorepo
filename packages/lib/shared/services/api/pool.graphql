@@ -179,11 +179,7 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       }
     }
     ... on GqlPoolQuantAmmWeighted {
-      lastInterpolationTimePossible
-      lastUpdateIntervalTime
       hasAnyAllowedBuffer
-      weightBlockMultipliers
-      weightsAtLastUpdateInterval
       poolTokens {
         ...PoolTokens
       }
