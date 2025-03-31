@@ -47,8 +47,8 @@ importers:
         specifier: ^3.13.1
         version: 3.13.1(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.10.0))(graphql@16.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@balancer/sdk':
-        specifier: 2.3.1
-        version: 2.3.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 2.6.0
+        version: 2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@18.2.0)
@@ -177,8 +177,8 @@ importers:
   apps/frontend-v3:
     dependencies:
       '@balancer/sdk':
-        specifier: 2.3.1
-        version: 2.3.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 2.6.0
+        version: 2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@18.2.0)
@@ -373,8 +373,8 @@ importers:
         specifier: ^3.13.1
         version: 3.13.1(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.10.0))(graphql@16.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@balancer/sdk':
-        specifier: 2.3.1
-        version: 2.3.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 2.6.0
+        version: 2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/anatomy':
         specifier: ^2.2.2
         version: 2.2.2
@@ -1618,8 +1618,12 @@ packages:
     resolution: {integrity: sha512-H45s8fVLYjbhFH62dIJ3WtmJ6RSPt/3DRO0ZcT2SUiYiQyz3BLVb9ADEnLl91m74aQPS3AzzeajZHYOalWe3bg==}
     engines: {node: '>=6.9.0'}
 
-  '@balancer/sdk@2.3.1':
-    resolution: {integrity: sha512-Gim2pBEGwpO4Mjqjig4wzI3HhGlNUmwJ8lC4/Uu85SL0HryftCuYHr7KsMdIznQCy3DuYPsT7qiovAwctqN6Iw==}
+  '@balancer-labs/balancer-maths@0.0.24':
+    resolution: {integrity: sha512-M6iqcmLfR9CP1mw3R5w0FdtZkUk7M0vCJhloAfhE/xufbAZrCSoapFYlt/NMBKLDQoGNJ2FN5E4zpdLVsxhoow==}
+    engines: {node: '>=18.x'}
+
+  '@balancer/sdk@2.6.0':
+    resolution: {integrity: sha512-7vLtsFClB+iJuV10eSVaGFUB3Eb2WmuWruViIIYURrWhfvWQi8GsXW7JJ7/4hSMJUxr9+jzr4Nx/3vEzhUXWbw==}
     engines: {node: '>=18.x'}
 
   '@bcoe/v8-coverage@1.0.2':
@@ -4463,6 +4467,9 @@ packages:
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
 
+  '@types/big.js@6.2.2':
+    resolution: {integrity: sha512-e2cOW9YlVzFY2iScnGBBkplKsrn2CsObHQ2Hiw4V1sSyiGbgWL8IyqE3zFi1Pt5o1pdAtYkDAIsF3KKUPjdzaA==}
+
   '@types/connect@3.4.36':
     resolution: {integrity: sha512-P63Zd/JUGq+PdrM1lv0Wv5SBYeA2+CORvbrXbngriYY0jzLUWfQMQQxOhjONEz/wlHOAxOdY7CY65rgQdTjq2w==}
 
@@ -5443,6 +5450,9 @@ packages:
   big-integer@1.6.51:
     resolution: {integrity: sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==}
     engines: {node: '>=0.6'}
+
+  big.js@6.2.2:
+    resolution: {integrity: sha512-y/ie+Faknx7sZA5MfGA2xKlu0GDv8RWrXGsmlteyJQ2lvoKv9GBK/fpRMc2qlSoBAgNxrixICFCBefIq8WCQpQ==}
 
   bignumber.js@9.1.2:
     resolution: {integrity: sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==}
@@ -6854,8 +6864,8 @@ packages:
   flow-enums-runtime@0.0.6:
     resolution: {integrity: sha512-3PYnM29RFXwvAN6Pc/scUfkI7RwhQ/xqyLUyPNlXUp9S40zI8nup9tUSrTLSVnWGBN38FNiGWbwZOB6uR4OGdw==}
 
-  flow-parser@0.266.0:
-    resolution: {integrity: sha512-FK3Zlmnrp5lwNQZ8Ul+m0vVwnA4/Ww84+HzXKCgTmO/1aBoZcQS5f2PJfBMaGYKH2HYIm/l8qpNhw0Wxzb8x5g==}
+  flow-parser@0.266.1:
+    resolution: {integrity: sha512-dON6h+yO7FGa/FO5NQCZuZHN0o3I23Ev6VYOJf9d8LpdrArHPt39wE++LLmueNV/hNY5hgWGIIrgnrDkRcXkPg==}
     engines: {node: '>=0.4.0'}
 
   focus-lock@1.3.5:
@@ -12520,8 +12530,13 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@balancer/sdk@2.3.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
+  '@balancer-labs/balancer-maths@0.0.24': {}
+
+  '@balancer/sdk@2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
     dependencies:
+      '@balancer-labs/balancer-maths': 0.0.24
+      '@types/big.js': 6.2.2
+      big.js: 6.2.2
       decimal.js-light: 2.5.1
       lodash.clonedeep: 4.5.0
       viem: 2.23.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
@@ -15955,6 +15970,8 @@ snapshots:
     dependencies:
       '@babel/types': 7.26.5
 
+  '@types/big.js@6.2.2': {}
+
   '@types/connect@3.4.36':
     dependencies:
       '@types/node': 22.13.5
@@ -17448,6 +17465,8 @@ snapshots:
       require-from-string: 2.0.2
 
   big-integer@1.6.51: {}
+
+  big.js@6.2.2: {}
 
   bignumber.js@9.1.2: {}
 
@@ -19204,7 +19223,7 @@ snapshots:
   flow-enums-runtime@0.0.6:
     optional: true
 
-  flow-parser@0.266.0:
+  flow-parser@0.266.1:
     optional: true
 
   focus-lock@1.3.5:
@@ -20144,7 +20163,7 @@ snapshots:
       '@babel/register': 7.25.9(@babel/core@7.26.10)
       babel-core: 7.0.0-bridge.0(@babel/core@7.26.10)
       chalk: 4.1.2
-      flow-parser: 0.266.0
+      flow-parser: 0.266.1
       graceful-fs: 4.2.11
       micromatch: 4.0.8
       neo-async: 2.6.2
