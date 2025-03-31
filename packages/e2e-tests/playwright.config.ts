@@ -1,4 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
+import { config } from 'dotenv'
+import { resolve } from 'path'
 
 const isDevE2E = !!process.env.NEXT_PUBLIC_E2E_DEV
 
@@ -6,13 +8,7 @@ function minutes(min: number) {
   return min * 60 * 1000
 }
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+config({ path: resolve(__dirname, '.env.local') })
 
 /**
  * See https://playwright.dev/docs/test-configuration.
