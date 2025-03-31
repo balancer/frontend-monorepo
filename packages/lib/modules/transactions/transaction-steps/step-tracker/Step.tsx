@@ -11,7 +11,7 @@ import { Check } from 'react-feather'
 import { ManagedResult, StepDetails, TransactionStep } from '../lib'
 import { useTransactionState } from '../TransactionStateProvider'
 import { indexToLetter } from '@repo/lib/shared/labels'
-import { hasSomePendingNestedTxInBatch } from '../safe/safe.helpers'
+import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/safe.helpers'
 
 export function Step(props: StepProps) {
   const { getTransaction } = useTransactionState()
@@ -33,7 +33,7 @@ export function Step(props: StepProps) {
           <TransactionBatchSteps
             color={color}
             mainStepTitle={props.step.labels.title}
-            nestedSteps={props.step.nestedSteps}
+            nestedSteps={getPendingNestedSteps(props.step)}
           />
         )}
       </VStack>
@@ -126,7 +126,7 @@ function TransactionBatchSteps({
       </Text>
 
       {nestedSteps &&
-        nestedSteps?.length > 1 &&
+        nestedSteps?.length >= 1 &&
         nestedSteps.map((step, index) => (
           <HStack key={step.id} mt={index === 0 ? '2' : '1'}>
             <SubStepIndicator color={color} label={indexToLetter(index)} />

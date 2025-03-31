@@ -12,8 +12,14 @@ import { useTokenAllowances } from '../../web3/useTokenAllowances'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../TokensProvider'
 import { ApprovalAction, buildTokenApprovalLabels } from './approval-labels'
-import { RawAmount, areEmptyRawAmounts, getRequiredTokenApprovals } from './approval-rules'
+import {
+  RawAmount,
+  areEmptyRawAmounts,
+  getRequiredTokenApprovals,
+  isTheApprovedAmountEnough,
+} from './approval-rules'
 import { requiresDoubleApproval } from '../token.helpers'
+import { ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 
 export type Params = {
   spenderAddress: Address
@@ -87,6 +93,7 @@ export function useTokenApprovalSteps({
       const isApprovingZeroForDoubleApproval =
         requiresDoubleApproval(chain, tokenAddress) && requiredRawAmount === 0n
       const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
+
       const token = getToken(tokenAddress, chain)
 
       const getSymbol = () => {
@@ -102,19 +109,43 @@ export function useTokenApprovalSteps({
         lpToken,
       })
 
-      const isComplete = () => {
-        const isAllowed = tokenAllowances.allowanceFor(tokenAddress) >= requiredRawAmount
-        if (isApprovingZeroForDoubleApproval) {
-          // Edge case USDT case is completed if:
-          // - The allowance is 0n
-          // - The allowance is greater than the required amount (of the next step)
-          return (
-            tokenAllowances.allowanceFor(tokenAddress) === 0n ||
-            tokenAllowances.allowanceFor(tokenAddress) >=
-              tokenAmountsToApprove[index + 1].requiredRawAmount
+      const isComplete = (tokenAllowanceAfterRefetch?: bigint) => {
+        const tokenAllowance =
+          tokenAllowanceAfterRefetch || tokenAllowances.allowanceFor(tokenAddress)
+        const nextToken = isApprovingZeroForDoubleApproval
+          ? tokenAmountsToApprove[index + 1]
+          : undefined
+
+        return isTheApprovedAmountEnough(
+          tokenAllowance,
+          requiredRawAmount,
+          isApprovingZeroForDoubleApproval,
+          nextToken
+        )
+      }
+
+      const checkEdgeCaseErrors = (tokenAllowance: bigint) => {
+        const errors = []
+
+        const nextToken = isApprovingZeroForDoubleApproval
+          ? tokenAmountsToApprove[index + 1]
+          : undefined
+        if (
+          !isTheApprovedAmountEnough(
+            tokenAllowance,
+            requiredRawAmount,
+            isApprovingZeroForDoubleApproval,
+            nextToken
           )
+        ) {
+          errors.push({
+            id: 'not-enough-allowance',
+            title: 'Error on approval step',
+            description: 'The approved amount is not enough for the current transaction.',
+          })
         }
-        return requiredRawAmount > 0n && isAllowed
+
+        return errors
       }
 
       const isTxEnabled = !!spenderAddress && !tokenAllowances.isAllowancesLoading
@@ -122,6 +153,7 @@ export function useTokenApprovalSteps({
         tokenAddress,
         functionName: 'approve',
         labels,
+        isComplete,
         chainId: getChainId(chain),
         args: [spenderAddress, requestedRawAmount],
         enabled: isTxEnabled,
@@ -140,7 +172,14 @@ export function useTokenApprovalSteps({
         isComplete,
         renderAction: () => <ManagedErc20TransactionButton id={id} key={id} {...props} />,
         batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
-        onSuccess: () => tokenAllowances.refetchAllowances(),
+        onSuccess: async () => {
+          const newAllowances = await tokenAllowances.refetchAllowances()
+          // Ignore check if allowances are refetching
+          if (newAllowances.isRefetching) return
+          const updatedTokenAllowance = newAllowances.allowanceFor(tokenAddress)
+          const errors = checkEdgeCaseErrors(updatedTokenAllowance)
+          if (errors.length > 0) throw new ErrorWithCauses('Edge case errors', errors)
+        },
       } as const satisfies TransactionStep
     })
   }, [tokenAllowances.allowances, userAddress, tokenAmountsToApprove])

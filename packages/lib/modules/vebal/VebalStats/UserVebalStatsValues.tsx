@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Heading, HStack, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { bn, fNum, isSuperSmallAmount } from '@repo/lib/shared/utils/numbers'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'

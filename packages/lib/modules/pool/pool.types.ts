@@ -121,7 +121,12 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
 export const poolTagFilters = ['INCENTIVIZED', 'VE8020', 'POINTS', 'BOOSTED', 'RWA'] as const
 export type PoolTagType = (typeof poolTagFilters)[number]
 
-export const poolHookTagFilters = ['HOOKS_STABLESURGE', 'HOOKS_EXITFEE', 'HOOKS_FEETAKING'] as const
+export const poolHookTagFilters = [
+  'HOOKS_STABLESURGE',
+  'HOOKS_MEVCAPTURE',
+  'HOOKS_EXITFEE',
+  'HOOKS_FEETAKING',
+] as const
 export type PoolHookTagType = (typeof poolHookTagFilters)[number]
 
 export type SortingState = PoolsColumnSort[]

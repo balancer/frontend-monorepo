@@ -89,6 +89,7 @@ export type StepDetails = {
 export type TxCall = {
   to: Address
   data: Hash
+  value?: bigint
 }
 
 export type SafeAppTx = BaseTransaction
@@ -132,7 +133,7 @@ export type TransactionStep = {
   isComplete: () => boolean
   renderAction: () => ReactNode
   // All callbacks should be idempotent
-  onSuccess?: () => void
+  onSuccess?: () => any
   onActivated?: () => void
   onDeactivated?: () => void
 } & MaybeBatchableTx

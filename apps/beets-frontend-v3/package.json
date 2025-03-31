@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.13.1",
-    "@balancer/sdk": "2.3.1",
+    "@balancer/sdk": "2.6.0",
     "@chakra-ui/hooks": "2.4.2",
     "@chakra-ui/react": "2.10.6",
     "@chakra-ui/theme-tools": "2.2.6",
@@ -31,7 +31,7 @@
     "date-fns": "^2.30.0",
     "framer-motion": "^10.13.0",
     "lodash": "^4.17.21",
-    "next": "14.2.24",
+    "next": "14.2.25",
     "next-themes": "0.4.4",
     "nextjs-toploader": "^1.6.4",
     "react": "18.2.0",
