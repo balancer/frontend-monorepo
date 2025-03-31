@@ -79,8 +79,13 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
 
   const voteDiff = votesShare && votesShareNextWeek ? votesShareNextWeek - votesShare : undefined
   const voteDiffText = formatVotesAsPercent(voteDiff ? voteDiff : 0)
-  const diffIcon = !voteDiff ? undefined : voteDiff > 0 ? <ArrowUpIcon /> : <ArrowDownIcon />
-  const badgeColor = !voteDiff || voteDiff === 0 ? 'white' : voteDiff > 0 ? 'green' : 'red'
+  const diffIcon = !voteDiff ? <ArrowUpIcon /> : voteDiff > 0 ? <ArrowUpIcon /> : <ArrowDownIcon />
+  const badgeColorScheme =
+    !voteDiff || voteDiff === 0
+      ? { variant: 'outline', bg: 'font.secondary' }
+      : voteDiff > 0
+        ? { colorScheme: 'green', variant: 'solid' }
+        : { colorScheme: 'red', variant: 'solid' }
 
   const votesColor =
     votesState === 'normal' ? undefined : votesState === 'close' ? 'font.warning' : 'red.400'
@@ -109,7 +114,7 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
           }
           mt="sm"
           value={
-            <Badge colorScheme={badgeColor} variant="solid">
+            <Badge {...badgeColorScheme}>
               <HStack>
                 <Box color="font.dark" fontSize="xs" ml="1">
                   {diffIcon}
