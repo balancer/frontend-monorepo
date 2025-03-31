@@ -22,6 +22,7 @@ import { useUserAccount } from './UserAccountProvider'
 import { useDisconnect } from 'wagmi'
 import NextLink from 'next/link'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 
 export function AcceptPoliciesModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -34,7 +35,10 @@ export function AcceptPoliciesModal() {
     options: { showVeBal },
   } = PROJECT_CONFIG
 
-  const isAddressInAcceptedPolicies = acceptedPolicies.includes(userAddress.toLowerCase())
+  const isAddressInAcceptedPolicies =
+    acceptedPolicies.includes(userAddress.toLowerCase()) ||
+    // Avoid accepting policies on Anvil fork
+    shouldUseAnvilFork
 
   useEffect(() => {
     if (!isLoading && isConnected && !isAddressInAcceptedPolicies && !isBlocked) {

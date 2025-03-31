@@ -20,6 +20,7 @@ test('Adds liquidity in balWeth8020', async ({ page }) => {
   // Fill form
   await page.getByRole('button', { name: 'Add liquidity' }).click()
   // Fill 0.01 ETH (default anvil user will always have enough ETH)
+  await expect(page.getByRole('button', { name: 'ETH ETH' })).toBeVisible()
   await page.getByPlaceholder('0.00').nth(1).fill('0.01')
   await page.getByText('I accept the risks of').click({ timeout: 20000 })
   await page.getByRole('button', { name: 'Next' }).click()
