@@ -32,7 +32,7 @@ export function VoteWeightInput({
   lastVoteTime,
   min = 0,
   max = 100,
-  ...inputPros
+  ...inputProps
 }: PercentageInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseValue(e.currentTarget.value)
@@ -76,7 +76,7 @@ export function VoteWeightInput({
             onKeyDown={blockInvalidNumberInput}
             type="number"
             value={isEditing ? editingValue : parseFloat(percentage).toFixed(2)}
-            {...inputPros}
+            {...inputProps}
           />
           <InputRightElement pointerEvents="none">
             <Percent color="grayText" size="20px" />
