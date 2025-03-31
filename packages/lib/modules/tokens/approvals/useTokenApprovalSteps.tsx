@@ -19,7 +19,6 @@ import {
   isTheApprovedAmountEnough,
 } from './approval-rules'
 import { requiresDoubleApproval } from '../token.helpers'
-import { sleep } from '@repo/lib/shared/utils/sleep'
 import { ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 
 export type Params = {
@@ -94,6 +93,7 @@ export function useTokenApprovalSteps({
       const isApprovingZeroForDoubleApproval =
         requiresDoubleApproval(chain, tokenAddress) && requiredRawAmount === 0n
       const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
+
       const token = getToken(tokenAddress, chain)
 
       const getSymbol = () => {
@@ -173,13 +173,10 @@ export function useTokenApprovalSteps({
         renderAction: () => <ManagedErc20TransactionButton id={id} key={id} {...props} />,
         batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
         onSuccess: async () => {
-          // HACK: There is a small hitch where sometimes refetchAllowances returns 0 before updating to the
-          // correct amount and an error flashes, waiting for a small amount of time seems to solve it
-          await sleep(100)
-          const newTokenAllowances = await tokenAllowances.refetchAllowances()
-          if (!newTokenAllowances.data) throw new Error('Error refetching token allowances')
-
-          const updatedTokenAllowance = newTokenAllowances.data[index]
+          const newAllowances = await tokenAllowances.refetchAllowances()
+          // Ignore check if allowances are refetching
+          if (newAllowances.isRefetching) return
+          const updatedTokenAllowance = newAllowances.allowanceFor(tokenAddress)
           const errors = checkEdgeCaseErrors(updatedTokenAllowance)
           if (errors.length > 0) throw new ErrorWithCauses('Edge case errors', errors)
         },

@@ -60,12 +60,25 @@ export function useTokenAllowances({
     [allowancesByTokenAddress]
   )
 
+  async function refetchAllowances() {
+    const allowances = await refetch()
+    if (!allowances.data) throw new Error('Failed to refetch allowances')
+
+    const allowancesByTokenAddress = zipObject(tokenAddresses, allowances.data)
+    return {
+      isRefetching: allowances.isRefetching,
+      allowanceFor: (tokenAddress: Address) => {
+        return allowancesByTokenAddress[tokenAddress] ?? 0n
+      },
+    }
+  }
+
   return {
     isAllowancesLoading: isLoading,
     isAllowancesRefetching: isRefetching,
     allowances: allowancesByTokenAddress,
     spenderAddress,
-    refetchAllowances: refetch,
+    refetchAllowances,
     allowanceFor,
   }
 }
