@@ -14,6 +14,7 @@ import {
 } from './queries/useRemoveLiquidityBuildCallDataQuery'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
+import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
 
 export const removeLiquidityStepId = 'remove-liquidity'
 
@@ -82,6 +83,22 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
       onSuccess: () => refetchPoolUserBalances(),
+      // The following fields are only used within Safe App
+      renderBatchAction: (currentStep: TransactionStep) => {
+        return (
+          <TransactionBatchButton
+            chainId={chainId}
+            currentStep={currentStep}
+            id={removeLiquidityStepId}
+            labels={labels}
+          />
+        )
+      },
+      // Last step in smart account batch
+      isBatchEnd: true,
+      batchableTxCall: buildCallDataQuery.data
+        ? { data: buildCallDataQuery.data.data, to: buildCallDataQuery.data.to }
+        : undefined,
     }),
     [transaction, simulationQuery.data, buildCallDataQuery.data]
   )

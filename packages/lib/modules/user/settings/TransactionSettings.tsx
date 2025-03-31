@@ -23,6 +23,7 @@ import { CurrencySelect } from './CurrencySelect'
 import { EnableSignaturesSelect, SlippageInput } from './UserSettings'
 import { getDefaultProportionalSlippagePercentage } from '@repo/lib/shared/utils/slippage'
 import { Pool } from '../../pool/pool.types'
+import { EnableTxBundleSetting } from './EnableTxBundlesSetting'
 
 export function TransactionSettings(props: ButtonProps) {
   const { slippage, setSlippage } = useUserSettings()
@@ -65,6 +66,7 @@ export function TransactionSettings(props: ButtonProps) {
               </Text>
               <EnableSignaturesSelect />
             </Box>
+            <EnableTxBundleSetting />
           </VStack>
         </PopoverBody>
       </PopoverContent>
@@ -149,6 +151,7 @@ export function ProportionalTransactionSettings({
               </Text>
               <EnableSignaturesSelect />
             </Box>
+            <EnableTxBundleSetting />
           </VStack>
         </PopoverBody>
       </PopoverContent>

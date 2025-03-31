@@ -19,7 +19,7 @@ import { LockDurationSlider } from '@repo/lib/modules/vebal/lock/duration/LockDu
 import { VebalLockDetailsAccordion } from '@repo/lib/modules/vebal/lock/VebalLockDetailsAccordion'
 import { VebalLockDetails } from '@repo/lib/modules/vebal/lock/VebalLockDetails'
 import { LockMode, useVebalLock } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { VebalLockModal } from '@repo/lib/modules/vebal/lock/modal/VebalLockModal'
 import { useRouter } from 'next/navigation'
 import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
@@ -28,6 +28,8 @@ import { useEffect, useState } from 'react'
 import { ClickableText } from '@repo/lib/shared/components/typography/ClickableText'
 import { Address } from 'viem'
 import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
 
 export function VebalLockForm() {
   const { refetchAll } = useVebalLockData()
@@ -37,6 +39,7 @@ export function VebalLockForm() {
     setLpToken,
     resetLpToken,
     lockedAmount,
+    totalAmount,
     isDisabled,
     disabledReason,
     previewModalDisclosure,
@@ -87,6 +90,23 @@ export function VebalLockForm() {
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
+          {isZero(totalAmount) && (
+            <BalAlert
+              content={
+                <Text color="font.dark">
+                  {`You need to lock the LP token of the ve8020 BAL/WETH pool to get veBAL. Since you
+                    don't have this, you can't get veBAL.`}{' '}
+                  <br />
+                  Add liquidity to this pool to get the LP token and came back: <br />
+                  <BalAlertLink href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014">
+                    80% BAL / 20% WETH pool
+                  </BalAlertLink>
+                </Text>
+              }
+              status="info"
+            />
+          )}
+
           <VStack align="start" spacing="sm" w="full">
             <HStack justifyContent="space-between" w="full">
               {isLoading ? (
