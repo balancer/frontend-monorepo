@@ -54,7 +54,7 @@ export function VoteWeightInput({
   return (
     <VStack align="start" w="full">
       <Tooltip
-        isDisabled={isTimeLocked}
+        isDisabled={!isTimeLocked}
         label={`Your vote is timelocked. Once you vote on a pool, your vote is fixed for 10 days. No edits can be made until ${endOfLocking}`}
       >
         <InputGroup>
