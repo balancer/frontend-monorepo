@@ -14,6 +14,10 @@ type Params = {
 
 /*
   To be called from wallet-check nextjs API route (by balancer and beets apps)
+
+  Policy id - 8a7dfb26-8b50-416b-811e-77f3dede2319
+  created by hypernative  based on their understanding of the required rules (OFAC + Related to OFAC up to 3 hops away)
+
   Hypernative reputation docs:
   https://docs.hypernative.xyz/hypernative-product-docs/developers/hypernative-api/screener/address-reputation/get-address-reputation-1
 */
