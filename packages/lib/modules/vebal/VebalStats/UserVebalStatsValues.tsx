@@ -9,6 +9,7 @@ import BigNumber from 'bignumber.js'
 import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
+import { useUserAccount } from '../../web3/UserAccountProvider'
 
 export type VebalUserStatsValues = {
   balance: string
@@ -19,11 +20,12 @@ export type VebalUserStatsValues = {
 }
 
 export function UserVebalStatsValues() {
+  const { isConnected } = useUserAccount()
   const lockData = useVebalLockData()
   const vebalUserData = useVebalUserData()
 
   const userStats: VebalUserStatsValues | undefined = useMemo(() => {
-    if (vebalUserData.isConnected) {
+    if (isConnected) {
       const balance = vebalUserData.data ? vebalUserData.data.veBalGetUser.balance : '0'
       const rank = vebalUserData.data?.veBalGetUser.rank ? vebalUserData.data.veBalGetUser.rank : 0
       const percentOfAllSupply = vebalUserData.data
@@ -47,7 +49,7 @@ export function UserVebalStatsValues() {
         lockExpired,
       }
     }
-  }, [lockData.mainnetLockedInfo, vebalUserData.isConnected, vebalUserData.data])
+  }, [lockData.mainnetLockedInfo, isConnected, vebalUserData.data])
 
   return (
     <>

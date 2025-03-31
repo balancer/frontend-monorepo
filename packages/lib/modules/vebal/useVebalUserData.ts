@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function useVebalUserData() {
-  const { userAddress, isConnected } = useUserAccount()
+  const { userAddress } = useUserAccount()
 
   const { data, refetch, loading, error } = useQuery(GetVeBalUserDocument, {
     variables: {
@@ -24,7 +24,6 @@ export function useVebalUserData() {
   return {
     data,
     refetch,
-    isConnected, // FIXME: [JUANJO] we shouldn't return account data from here
     loading,
     error,
     myVebalBalance,
