@@ -146,6 +146,7 @@ export function _useVotes({
 
   const votingIsDisabled =
     vebalIsExpired || vebalLockTooShort || noVeBalBalance || hasAllVotingPowerTimeLocked
+
   const allowChangeVotes = !votingIsDisabled
   const allowSelectVotingPools = !votingIsDisabled
 

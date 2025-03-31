@@ -18,6 +18,9 @@ interface PercentageInputProps extends InputProps {
   percentage: string
   setPercentage: (value: string) => void
   isTimeLocked: boolean
+  isExpired: boolean | undefined
+  noBalance: boolean | undefined
+  isTooShort: boolean | undefined
   lastVoteTime: number | undefined
 }
 
@@ -29,6 +32,9 @@ export function VoteWeightInput({
   percentage,
   setPercentage,
   isTimeLocked,
+  isExpired,
+  noBalance,
+  isTooShort,
   lastVoteTime,
   min = 0,
   max = 100,
@@ -51,12 +57,27 @@ export function VoteWeightInput({
 
   const endOfLocking = dateTimeLabelFor(votingTimeLockedEndDate(lastVoteTime || 0))
 
+  let tooltipLabel = ''
+  if (isTimeLocked) {
+    tooltipLabel = `Your vote is timelocked.
+    Once you vote on a pool, your vote is fixed for 10 days.
+    No edits can be made until ${endOfLocking}`
+  } else if (isExpired) {
+    tooltipLabel =
+      "You can't vote because your lock has expired. Get new veBAL to vote by extending your lock."
+  } else if (noBalance) {
+    tooltipLabel = `You can't vote because you have no veBAL.
+    Extend your lock / get new veBAL to edit your votes`
+  } else if (isTooShort) {
+    tooltipLabel = `You can't vote because you have no veBAL.
+    Extend your lock / get new veBAL to edit your votes`
+  } else {
+    tooltipLabel = 'Unknown reason'
+  }
+
   return (
     <VStack align="start" w="full">
-      <Tooltip
-        isDisabled={!isTimeLocked}
-        label={`Your vote is timelocked. Once you vote on a pool, your vote is fixed for 10 days. No edits can be made until ${endOfLocking}`}
-      >
+      <Tooltip isDisabled={!inputProps.isDisabled} label={tooltipLabel}>
         <InputGroup>
           <Input
             autoComplete="off"

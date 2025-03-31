@@ -44,7 +44,14 @@ interface Props extends GridProps {
 
 export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   const { votedVotesWeights, editVotesWeights, onEditVotesChange } = useMyVotes()
-  const { isSelectedPool, toggleVotingPool, allowChangeVotes, isPoolGaugeExpired } = useVotes()
+  const {
+    isSelectedPool,
+    toggleVotingPool,
+    allowChangeVotes,
+    vebalLockTooShort,
+    isPoolGaugeExpired,
+    vebalIsExpired,
+  } = useVotes()
   const { toCurrency } = useCurrency()
 
   const isExpired = isPoolGaugeExpired(vote)
@@ -66,9 +73,9 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
 
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
-  const isDisabled = timeLocked || !allowChangeVotes || isExpired
+  const { myVebalBalance, noVeBalBalance } = useVebalUserData()
 
-  const { myVebalBalance } = useVebalUserData()
+  const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true)
 
   const { getToken } = useTokens()
 
@@ -143,10 +150,13 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps} {...editVotesStyles}>
             <VoteWeightInput
               isDisabled={isDisabled}
+              isExpired={vebalIsExpired}
               isTimeLocked={timeLocked}
+              isTooShort={vebalLockTooShort}
               lastVoteTime={vote.gaugeVotes?.lastUserVoteTime}
               max={100}
               min={0}
+              noBalance={noVeBalBalance}
               percentage={editVotes.toString()}
               pr="32px"
               setPercentage={value =>
