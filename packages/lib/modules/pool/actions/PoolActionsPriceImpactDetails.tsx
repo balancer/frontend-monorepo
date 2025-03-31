@@ -55,6 +55,11 @@ export function PoolActionsPriceImpactDetails({
     bn(bptAmount || 0n).multipliedBy(isAddLiquidity ? 1 : -1)
   )
 
+  const priceImpactTooltip =
+    priceImpactLevel === 'unknown'
+      ? 'The price impact cannot be calculated. This may be a temporary issue related to a pricing provider or unknown token. Only proceed if you understand and accept the risks.'
+      : 'In general, adding or removing liquidity in proportional amounts to the token  weights of the pool incur low price impact. Adding custom token amounts (non-proportionally) causes the internal prices of the pool to change, as if you were swapping tokens, which incurs a higher price impact.'
+
   return (
     <VStack align="start" fontSize="sm" spacing="sm" w="full">
       <HStack justify="space-between" w="full">
@@ -87,10 +92,7 @@ export function PoolActionsPriceImpactDetails({
             </PopoverTrigger>
             <PopoverContent maxW="300px" p="sm" w="auto">
               <Text fontSize="sm" variant="secondary">
-                In general, adding or removing liquidity in proportional amounts to the token
-                weights of the pool incur low price impact. Adding custom token amounts
-                (non-proportionally) causes the internal prices of the pool to change, as if you
-                were swapping tokens, which incurs a higher price impact.
+                {priceImpactTooltip}
               </Text>
             </PopoverContent>
           </Popover>
