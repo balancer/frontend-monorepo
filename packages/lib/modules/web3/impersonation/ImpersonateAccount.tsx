@@ -1,36 +1,33 @@
-import { VStack, Text, Input, Button } from '@chakra-ui/react'
-import { useWagmiConfig } from '../WagmiConfigProvider'
-import { useState } from 'react'
-import { useConnect } from 'wagmi'
+import { Button, Input, Text, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import { Address, isAddress } from 'viem'
-import { impersonateWagmiConfig } from '../WagmiConfig'
-import { forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { impersonateWagmiConfig, wagmiConfig } from '../WagmiConfig'
+import { useWagmiConfig } from '../WagmiConfigProvider'
+import { useImpersonateAccount } from './useImpersonateAccount'
+import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 
 export function ImpersonateAccount() {
   const { setWagmiConfig } = useWagmiConfig()
-  const [impersonatedAddress, setImpersonatedAddress] = useState<Address | undefined>()
-  const { connectors, connectAsync } = useConnect()
+  const [impersonatedAddress, setImpersonatedAddress] = useState<string | undefined>(
+    defaultAnvilAccount
+  )
+  const { impersonateAccount } = useImpersonateAccount()
 
   function onAddressChange(address: string) {
+    setImpersonatedAddress(address)
     if (isAddress(address)) {
-      setImpersonatedAddress(address)
-
       return setWagmiConfig(impersonateWagmiConfig(address))
     }
-    setImpersonatedAddress(undefined)
   }
 
-  async function connectMockAccount() {
-    if (!impersonatedAddress) return
-    // E2E dev tests impersonate account in the fork to be able to sign and run transactions against the anvil fork
+  useEffect(() => {
     if (shouldUseAnvilFork) {
-      await forkClient.impersonateAccount({
-        address: impersonatedAddress,
-      })
+      // Load default account
+      setWagmiConfig(impersonateWagmiConfig(defaultAnvilAccount))
     }
-    await connectAsync({ connector: connectors[connectors.length - 1] })
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <VStack>
@@ -39,12 +36,15 @@ export function ImpersonateAccount() {
         aria-label="Mock address"
         onChange={e => onAddressChange(e.target.value)}
         type="text"
-        width="40%"
+        value={impersonatedAddress ?? ''}
+        width="450px"
       />
       <Button
         aria-label="Impersonate"
-        disabled={!impersonatedAddress}
-        onClick={() => connectMockAccount()}
+        disabled={!isAddress(impersonatedAddress || '')}
+        onClick={() =>
+          impersonateAccount({ impersonatedAddress: impersonatedAddress as Address, wagmiConfig })
+        }
       >
         Connect
       </Button>

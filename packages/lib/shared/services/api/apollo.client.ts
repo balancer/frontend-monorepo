@@ -18,7 +18,6 @@ export function createApolloClient() {
   })
 
   return new ApolloClient({
-    ssrMode: typeof window === 'undefined',
     link:
       typeof window === 'undefined'
         ? ApolloLink.from([
