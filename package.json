@@ -31,6 +31,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "dependency-cruiser": "^16.10.0",
     "husky": "^9.1.2",
     "lint-staged": "^13.2.3",
     "prettier": "^3.2.5",
