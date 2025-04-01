@@ -16,7 +16,7 @@ export function SwapSimulationError({ errorMessage }: Props) {
 
   const showCowSwapLink = PROJECT_CONFIG.cowSupportedNetworks.includes(selectedChain)
 
-  if (errorMessage?.includes('must contain at least 1 path')) {
+  if (errorMessage?.includes('Must contain at least 1 path')) {
     return (
       <ErrorAlert title={`Not enough liquidity on ${PROJECT_CONFIG.projectName}`}>
         Your swap amount is too high to find a route through the available liquidity on{' '}
