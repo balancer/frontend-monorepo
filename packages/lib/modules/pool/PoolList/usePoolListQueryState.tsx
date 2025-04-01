@@ -210,6 +210,7 @@ export function usePoolListQueryState() {
     setOrderBy(null)
     setOrderDirection(null)
     setProtocolVersion(null)
+    setPoolHookTags(null)
   }
 
   const totalFilterCount =
@@ -218,7 +219,8 @@ export function usePoolListQueryState() {
     (userAddress ? 1 : 0) +
     (minTvl > 0 ? 1 : 0) +
     poolTags.length +
-    (protocolVersion ? 1 : 0)
+    (protocolVersion ? 1 : 0) +
+    poolHookTags.length
 
   const sorting: SortingState = orderBy
     ? [{ id: orderBy, desc: orderDirection === GqlPoolOrderDirection.Desc }]
