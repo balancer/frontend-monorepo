@@ -36,8 +36,8 @@ export function ImpersonateAccount() {
         aria-label="Mock address"
         onChange={e => onAddressChange(e.target.value)}
         type="text"
-        width="450px"
         value={impersonatedAddress ?? ''}
+        width="450px"
       />
       <Button
         aria-label="Impersonate"
