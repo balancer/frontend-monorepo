@@ -10,7 +10,8 @@ declare global {
 export async function impersonate(page: Page, impersonationAddress: string) {
   await page.getByLabel('Mock address').fill(impersonationAddress)
   await page.getByLabel('Impersonate').click()
-  await acceptPolicies(page)
+  // Currently AcceptPoliciesModal is not shown when shouldUseAnvilFork is true
+  // await acceptPolicies(page)
 }
 
 /*
