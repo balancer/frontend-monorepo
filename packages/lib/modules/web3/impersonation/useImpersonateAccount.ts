@@ -1,7 +1,11 @@
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { useSetErc20Balance } from '@repo/lib/test/anvil/useSetErc20Balance'
 import { defaultManualForkOptions } from '@repo/lib/test/utils/wagmi/fork-options'
-import { forkClient, setTokenBalances } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import {
+  forkClient,
+  setImpersonatedAddressLS,
+  setTokenBalances,
+} from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { Address } from 'viem'
 import { createConfig, useConnect } from 'wagmi'
 
@@ -45,6 +49,7 @@ export function useImpersonateAccount() {
 
       // if you don't pass chainId you will be prompted to switch chain (check if it uses mainnet by default)
       await connectAsync({ connector: connectors[connectors.length - 1], chainId })
+      setImpersonatedAddressLS(impersonatedAddress)
     }
   }
 }
