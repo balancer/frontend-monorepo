@@ -201,7 +201,7 @@ export function VebalLockForm() {
               </Card>
             </GridItem>
             <GridItem>
-              {/* TO-DO Potential min. weekly yield */}
+              {/* TO-DO (vebal) Potential min. weekly yield */}
               {/* <Card minHeight="full" variant="subSection" w="full" p={['sm', 'ms']}>
                 <VStack align="start" gap="sm">
                   <Text variant="special" fontSize="sm" lineHeight="16px" fontWeight="500">
