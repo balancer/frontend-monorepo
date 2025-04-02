@@ -33,6 +33,10 @@ export const mainnetTokenBalances: TokenBalance[] = [
     tokenAddress: '0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f', // GHO
     value: '6000',
   },
+  {
+    tokenAddress: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56', // B-80BAL-20WETH
+    value: '6000',
+  },
 ]
 
 export const baseTokenBalances: TokenBalance[] = [

@@ -30,6 +30,7 @@ import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { AlertTriangle } from 'react-feather'
 import NextLink from 'next/link'
+import { formatUnits } from 'viem'
 
 export function MyVotes() {
   const { hasAllVotingPowerTimeLocked, vebalIsExpired, vebalLockTooShort, shouldResubmitVotes } =
@@ -38,7 +39,10 @@ export function MyVotes() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isConnected } = useUserAccount()
 
-  const { loading: vebalUserDataLoading, myVebalBalance, noVeBalBalance } = useVebalUserData()
+  const { isLoading: vebalUserDataLoading, veBALBalance, noVeBALBalance } = useVebalUserData()
+
+  // FIXME: [JUANJO] everything needs a number here, but we should work with bigint
+  const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
   const loading = myVotesLoading || vebalUserDataLoading
 
@@ -144,7 +148,7 @@ export function MyVotes() {
           </GridItem>
         )}
         {/* fix: (votes) need design */}
-        {noVeBalBalance && (
+        {noVeBALBalance && (
           <GridItem colSpan={4}>
             <Alert status="warning">
               <AlertIcon as={AlertTriangle} />
