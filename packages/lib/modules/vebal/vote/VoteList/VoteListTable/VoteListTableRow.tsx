@@ -11,6 +11,7 @@ import {
   Portal,
   Skeleton,
   Text,
+  Tooltip,
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
@@ -48,6 +49,10 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
   const isExpired = isPoolGaugeExpired(vote)
 
   const isDisabled = !isConnected || hasAllVotingPowerTimeLocked || !allowSelectVotingPools
+
+  const disabledReason = isConnected
+    ? 'Get veBAL to select and vote on pool gauges'
+    : 'Connect your wallet to select and vote on pool gauges.'
 
   const { getToken } = useTokens()
 
@@ -150,17 +155,19 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                 {isExpired ? 'Expired' : 'Voted'}
               </Button>
             ) : (
-              <Button
-                color={selected ? 'font.secondary' : undefined}
-                fontSize="sm"
-                fontWeight="700"
-                isDisabled={isDisabled}
-                onClick={() => toggleVotingPool(vote)}
-                variant={selected ? 'outline' : 'secondary'}
-                w="80px"
-              >
-                {selected ? 'Selected' : 'Select'}
-              </Button>
+              <Tooltip isDisabled={!isDisabled} label={disabledReason}>
+                <Button
+                  color={selected ? 'font.secondary' : undefined}
+                  fontSize="sm"
+                  fontWeight="700"
+                  isDisabled={isDisabled}
+                  onClick={() => toggleVotingPool(vote)}
+                  variant={selected ? 'outline' : 'secondary'}
+                  w="80px"
+                >
+                  {selected ? 'Selected' : 'Select'}
+                </Button>
+              </Tooltip>
             )}
           </GridItem>
         </Grid>

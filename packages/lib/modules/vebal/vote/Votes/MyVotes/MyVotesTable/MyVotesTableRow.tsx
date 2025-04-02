@@ -7,6 +7,7 @@ import {
   HStack,
   IconButton,
   Text,
+  Tooltip,
   useToken,
   VStack,
 } from '@chakra-ui/react'
@@ -43,7 +44,14 @@ interface Props extends GridProps {
 
 export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   const { votedVotesWeights, editVotesWeights, onEditVotesChange } = useMyVotes()
-  const { isSelectedPool, toggleVotingPool, allowChangeVotes, isPoolGaugeExpired } = useVotes()
+  const {
+    isSelectedPool,
+    toggleVotingPool,
+    allowChangeVotes,
+    vebalLockTooShort,
+    isPoolGaugeExpired,
+    vebalIsExpired,
+  } = useVotes()
   const { toCurrency } = useCurrency()
 
   const isExpired = isPoolGaugeExpired(vote)
@@ -65,9 +73,9 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
 
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
-  const isDisabled = timeLocked || !allowChangeVotes || isExpired
+  const { myVebalBalance, noVeBalBalance } = useVebalUserData()
 
-  const { myVebalBalance } = useVebalUserData()
+  const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true)
 
   const { getToken } = useTokens()
 
@@ -133,7 +141,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <VoteWeight
               isExpired={isExpired}
-              timeLocked={isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
+              timeLocked={timeLocked}
               timeLockedEndDate={votingTimeLockedEndDate(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
               variant="primary"
               weight={vote.gaugeVotes?.userVotes ?? '0'}
@@ -142,8 +150,13 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps} {...editVotesStyles}>
             <VoteWeightInput
               isDisabled={isDisabled}
+              isExpired={vebalIsExpired}
+              isTimeLocked={timeLocked}
+              isTooShort={vebalLockTooShort}
+              lastVoteTime={vote.gaugeVotes?.lastUserVoteTime}
               max={100}
               min={0}
+              noBalance={noVeBalBalance}
               percentage={editVotes.toString()}
               pr="32px"
               setPercentage={value =>
@@ -156,13 +169,18 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           </GridItem>
           <GridItem {...cellProps}>
             <VStack align="center" w="full">
-              <IconButton
-                aria-label="Remove"
-                icon={<Trash2 color={fontSecondary} height="20px" />}
-                isDisabled={!removable}
-                onClick={onRemove}
-                variant="ghost"
-              />
+              <Tooltip
+                isDisabled={removable}
+                label="You have an existing vote, so this row cannot be removed from the table. Set it to 0% to reallocate your vote."
+              >
+                <IconButton
+                  aria-label="Remove"
+                  icon={<Trash2 color={fontSecondary} height="20px" />}
+                  isDisabled={!removable}
+                  onClick={onRemove}
+                  variant="ghost"
+                />
+              </Tooltip>
             </VStack>
           </GridItem>
         </Grid>
