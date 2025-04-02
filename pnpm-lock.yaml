@@ -668,8 +668,8 @@ importers:
         specifier: 3.0.9
         version: 3.0.9(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(jiti@1.21.6)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)(yaml@2.7.0)
       vitest-mock-extended:
-        specifier: 2.0.2
-        version: 2.0.2(typescript@5.7.2)(vitest@3.0.9(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(jiti@1.21.6)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)(yaml@2.7.0))
+        specifier: 3.0.1
+        version: 3.0.1(typescript@5.7.2)(vitest@3.0.9(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(jiti@1.21.6)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)(yaml@2.7.0))
 
   packages/prettier-config: {}
 
@@ -10085,8 +10085,8 @@ packages:
     peerDependencies:
       typescript: '>=4.2.0'
 
-  ts-essentials@10.0.2:
-    resolution: {integrity: sha512-Xwag0TULqriaugXqVdDiGZ5wuZpqABZlpwQ2Ho4GDyiu/R2Xjkp/9+zcFxL7uzeLl/QCPrflnvpVYyS3ouT7Zw==}
+  ts-essentials@10.0.4:
+    resolution: {integrity: sha512-lwYdz28+S4nicm+jFi6V58LaAIpxzhg9rLdgNC1VsdP/xiFBseGhF1M/shwCk6zMmwahBZdXcl34LVHrEang3A==}
     peerDependencies:
       typescript: '>=4.5.0'
     peerDependenciesMeta:
@@ -10557,11 +10557,11 @@ packages:
       yaml:
         optional: true
 
-  vitest-mock-extended@2.0.2:
-    resolution: {integrity: sha512-n3MBqVITKyclZ0n0y66hkT4UiiEYFQn9tteAnIxT0MPz1Z8nFcPUG3Cf0cZOyoPOj/cq6Ab1XFw2lM/qM5EDWQ==}
+  vitest-mock-extended@3.0.1:
+    resolution: {integrity: sha512-VI7CRRvIi+MbAsqdGTxp3K+eiY7BR1zrVflZ5DBrFUXPjRZRgxXajlYdNyIu3v1bb5ZfdLANXwZ9i/RfVMfS6A==}
     peerDependencies:
       typescript: 3.x || 4.x || 5.x
-      vitest: '>=2.0.0'
+      vitest: '>=3.0.0'
 
   vitest@3.0.9:
     resolution: {integrity: sha512-BbcFDqNyBlfSpATmTtXOAOj71RNKDDvjBM/uPfnxxVGrG+FSH2RQIwgeEngTaTkuU/h0ScFvf+tRcKfYXzBybQ==}
@@ -22867,7 +22867,7 @@ snapshots:
     dependencies:
       typescript: 5.7.2
 
-  ts-essentials@10.0.2(typescript@5.7.2):
+  ts-essentials@10.0.4(typescript@5.7.2):
     optionalDependencies:
       typescript: 5.7.2
 
@@ -23284,9 +23284,9 @@ snapshots:
       terser: 5.39.0
       yaml: 2.7.0
 
-  vitest-mock-extended@2.0.2(typescript@5.7.2)(vitest@3.0.9(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(jiti@1.21.6)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)(yaml@2.7.0)):
+  vitest-mock-extended@3.0.1(typescript@5.7.2)(vitest@3.0.9(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(jiti@1.21.6)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)(yaml@2.7.0)):
     dependencies:
-      ts-essentials: 10.0.2(typescript@5.7.2)
+      ts-essentials: 10.0.4(typescript@5.7.2)
       typescript: 5.7.2
       vitest: 3.0.9(@types/debug@4.1.12)(@types/node@22.13.5)(happy-dom@17.1.0)(jiti@1.21.6)(msw@2.7.3(@types/node@22.13.5)(typescript@5.7.2))(terser@5.39.0)(yaml@2.7.0)
 

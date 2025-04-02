@@ -122,6 +122,6 @@
     "msw": "2.7.3",
     "sentry-testkit": "5.0.10",
     "vitest": "3.0.9",
-    "vitest-mock-extended": "2.0.2"
+    "vitest-mock-extended": "3.0.1"
   }
 }
