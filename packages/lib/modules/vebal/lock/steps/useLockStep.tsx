@@ -20,7 +20,6 @@ import {
   getLockContractFunctionName,
 } from './lock-steps.utils'
 import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
-import { bn } from '@repo/lib/shared/utils/numbers'
 
 type UseLockStepArgs = {
   lockAmount: bigint
@@ -30,7 +29,6 @@ type UseLockStepArgs = {
 
 export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLockStepArgs) {
   const { userAddress } = useUserAccount()
-  const amount = lockAmount.toString()
   const labels: TransactionLabels = useMemo(
     () => ({
       init: getInitLabel(lockActionType),
@@ -61,7 +59,8 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
         case LockActionType.ExtendLock:
           return [parseDate(lockEndDate)]
         case LockActionType.IncreaseLock:
-          return [bn(amount)]
+          // FIXME: This should be amount to increase but we are passing current amount + amount to increase
+          return [lockAmount]
         default:
           return []
       }
@@ -77,7 +76,7 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
       args: getArgs() as any,
       txSimulationMeta,
     }
-  }, [lockAmount, lockEndDate, lockActionType, labels, txSimulationMeta, amount])
+  }, [lockAmount, lockEndDate, lockActionType, labels, txSimulationMeta])
 
   const onSuccess = useCallback(() => {
     // Handle success actions

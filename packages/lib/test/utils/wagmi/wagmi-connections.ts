@@ -1,9 +1,10 @@
-import { testAccountIndex } from '@repo/lib/test/anvil/anvil-setup'
+import { ChainIdWithFork, testAccountIndex } from '@repo/lib/test/anvil/anvil-setup'
 import { addTestUserAddress, testWagmiConfig } from '@repo/lib/test/anvil/testWagmiConfig'
 import { act } from '@testing-library/react'
 import { Address } from 'viem'
 import { Connector } from 'wagmi'
 import { connect, disconnect } from 'wagmi/actions'
+import { getTestClient } from './wagmi-test-clients'
 
 export async function connectWithDefaultUser() {
   const connector = testWagmiConfig.connectors[0]
@@ -27,6 +28,11 @@ export async function connectWith(testAccount: Address) {
   addTestUserAddress(testAccount)
   const connector = testWagmiConfig.connectors[testAccountIndex(testAccount)]
   await connectWithTestConnector(connector)
+}
+
+export async function connectAndImpersonate(testAccount: Address, chainId: ChainIdWithFork) {
+  await connectWith(testAccount)
+  await getTestClient(chainId).impersonateAccount({ address: testAccount })
 }
 
 export async function disconnectAlternativeUser() {

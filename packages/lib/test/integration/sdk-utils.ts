@@ -34,6 +34,7 @@ import { aWjAuraWethPoolElementMock } from '../msw/builders/gqlPoolElement.build
 import { defaultTestUserAccount } from '../anvil/anvil-setup'
 import { mainnet } from 'viem/chains'
 import { mainnetTestPublicClient } from '../utils/wagmi/wagmi-test-clients'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 /*
   Given chain, user account and pool
@@ -414,4 +415,41 @@ export async function approveToken({
     hash,
   })
   return txReceipt.status === 'success'
+}
+
+export async function resetBlock({
+  client,
+  chain,
+}: {
+  client: WalletClient & PublicActions & TestActions
+  chain: ChainId
+}) {
+  await client.reset({
+    jsonRpcUrl: getNetworkConfig(chain).rpcUrl,
+  })
+}
+
+export async function setNativeUserBalance({
+  client,
+  account,
+  humanAmount,
+}: {
+  client: WalletClient & PublicActions & TestActions
+  account: Address
+  humanAmount: HumanAmount
+}) {
+  await client.setBalance({
+    address: account,
+    value: parseUnits(humanAmount, 18),
+  })
+}
+
+export async function getNativeUserBalance({
+  client,
+  account,
+}: {
+  client: WalletClient & PublicActions & TestActions
+  account: Address
+}) {
+  return client.getBalance({ address: account })
 }

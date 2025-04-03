@@ -10,7 +10,7 @@ export function useVeBALBalance(accountAddress: `0x${string}`) {
     address: mainnetNetworkConfig.contracts.veBAL,
     functionName: 'balanceOf',
     args: [accountAddress],
-    query: { enabled: true },
+    query: { enabled: !!accountAddress },
   })
 
   return {
