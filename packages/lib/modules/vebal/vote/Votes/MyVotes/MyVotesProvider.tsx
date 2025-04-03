@@ -110,7 +110,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     }))
   }
 
-  const hasExpiredGauges = myVotes.some(votedPool => isPoolGaugeExpired(votedPool))
+  const hasExpiredGauges = myVotes.some(votedPool => votedPool.gauge.isKilled)
 
   const availableMyVotes = useMemo(() => {
     return myVotes.filter(myVote => !isPoolGaugeExpired(myVote))

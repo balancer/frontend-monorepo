@@ -39,14 +39,12 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
   const { isConnected } = useUserAccount()
   const { toCurrency } = useCurrency()
   const { hasAllVotingPowerTimeLocked, allowSelectVotingPools } = useVotes()
-  const { toggleVotingPool, isSelectedPool, isVotedPool, isPoolGaugeExpired } = useVotes()
+  const { toggleVotingPool, isSelectedPool, isVotedPool } = useVotes()
 
   const selected = isSelectedPool(vote)
   const voted = isVotedPool(vote)
 
   const { votingIncentivesLoading, gaugeVotesIsLoading } = useVoteList()
-
-  const isExpired = isPoolGaugeExpired(vote)
 
   const isDisabled = !isConnected || hasAllVotingPowerTimeLocked || !allowSelectVotingPools
 
@@ -83,7 +81,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                   pr={[1.5, 'ms']}
                   vote={vote}
                 />
-                {isExpired && <VoteExpiredTooltip usePortal />}
+                {vote.gauge.isKilled && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">
                   <ArrowUpIcon transform="rotate(90)" />
                 </Box>
@@ -143,7 +141,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             )}
           </GridItem>
           <GridItem justifySelf="end">
-            {isExpired || voted ? (
+            {vote.gauge.isKilled || voted ? (
               <Button
                 color="font.secondary"
                 fontSize="sm"
@@ -152,7 +150,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                 variant="outline"
                 w="80px"
               >
-                {isExpired ? 'Expired' : 'Voted'}
+                {vote.gauge.isKilled ? 'Expired' : 'Voted'}
               </Button>
             ) : (
               <Tooltip isDisabled={!isDisabled} label={disabledReason}>
