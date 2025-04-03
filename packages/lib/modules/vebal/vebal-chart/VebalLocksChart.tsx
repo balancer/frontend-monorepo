@@ -9,14 +9,11 @@ export function VebalLocksChart({
   lockSnapshots,
   ...props
 }: CardProps & UseVebalLocksChartParams) {
-  const { options, onChartReady, onEvents, insufficientData } = useVebalLocksChart({
-    mainnetLockedInfo,
-    lockSnapshots,
-  })
+  const chartInfo = useVebalLocksChart({ mainnetLockedInfo, lockSnapshots })
 
   return (
     <Card position="relative" {...props}>
-      {insufficientData ? (
+      {chartInfo.insufficientData ? (
         <VStack h="full" justifyContent="center">
           <Text variant="secondary">
             <ChartBubbleIcon size={16} />
@@ -27,9 +24,9 @@ export function VebalLocksChart({
         </VStack>
       ) : (
         <ReactECharts
-          onChartReady={onChartReady}
-          onEvents={onEvents}
-          option={options}
+          onChartReady={chartInfo.onChartReady}
+          onEvents={chartInfo.onEvents}
+          option={chartInfo.options}
           style={{ height: '100%', width: '100%' }}
         />
       )}

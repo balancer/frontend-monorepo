@@ -37,7 +37,9 @@ import {
   roundDecimals,
   shouldUseRecoveryRemoveLiquidity,
   supportsNestedActions,
+  toPoolState,
 } from './LiquidityActionHelpers'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 
 describe('Calculates toInputAmounts from allPoolTokens', () => {
   it('for v2 weighted pool with no nested tokens', () => {
@@ -246,7 +248,7 @@ describe('Liquidity helpers for V3 Boosted pools', async () => {
           weight: null,
         },
       ],
-      type: 'Stable',
+      type: 'STABLE',
     })
   })
 })
@@ -471,7 +473,7 @@ test('boostedPoolState pool state for V3 BOOSTED POOL', async () => {
         weight: null,
       },
     ],
-    type: 'Stable',
+    type: 'STABLE',
   })
 })
 
@@ -586,7 +588,7 @@ describe('Liquidity helpers for GNOSIS V3 Boosted pools', async () => {
           weight: '0.5',
         },
       ],
-      type: 'Weighted',
+      type: 'WEIGHTED',
     })
   })
 })
@@ -850,4 +852,14 @@ test('trimDecimals', () => {
       tokenAddress: wETHAddress,
     },
   ])
+})
+
+test('toPoolState keeps pool type when pool is V3 (it does not call mapPoolType)', () => {
+  // We don't need a real QuantAMM mock as changing the type is enough
+  const quantAMMPool = {
+    ...getApiPoolMock(usdcUsdtAaveBoosted),
+    type: GqlPoolType.QuantAmmWeighted,
+  }
+
+  expect(toPoolState(quantAMMPool).type).toEqual(GqlPoolType.QuantAmmWeighted)
 })

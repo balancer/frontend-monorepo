@@ -3,6 +3,7 @@ import {
   InputGroup,
   InputProps,
   InputRightElement,
+  Tooltip,
   useBoolean,
   VStack,
 } from '@chakra-ui/react'
@@ -10,10 +11,17 @@ import { blockInvalidNumberInput, bn } from '@repo/lib/shared/utils/numbers'
 import { Percent } from 'react-feather'
 import { useState } from 'react'
 import { clamp } from 'lodash'
+import { votingTimeLockedEndDate } from '../myVotes.helpers'
+import { dateTimeLabelFor } from '@repo/lib/shared/utils/time'
 
 interface PercentageInputProps extends InputProps {
   percentage: string
   setPercentage: (value: string) => void
+  isTimeLocked: boolean
+  isExpired: boolean | undefined
+  noBalance: boolean | undefined
+  isTooShort: boolean | undefined
+  lastVoteTime: number | undefined
 }
 
 function parseValue(value: string) {
@@ -23,9 +31,14 @@ function parseValue(value: string) {
 export function VoteWeightInput({
   percentage,
   setPercentage,
+  isTimeLocked,
+  isExpired,
+  noBalance,
+  isTooShort,
+  lastVoteTime,
   min = 0,
   max = 100,
-  ...inputPros
+  ...inputProps
 }: PercentageInputProps) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseValue(e.currentTarget.value)
@@ -42,33 +55,55 @@ export function VoteWeightInput({
   const [isEditing, { toggle }] = useBoolean(false)
   const [editingValue, setEditingValue] = useState(parseFloat(percentage).toFixed(2))
 
+  const endOfLocking = dateTimeLabelFor(votingTimeLockedEndDate(lastVoteTime || 0))
+
+  let tooltipLabel = ''
+  if (isTimeLocked) {
+    tooltipLabel = `Your vote is timelocked.
+    Once you vote on a pool, your vote is fixed for 10 days.
+    No edits can be made until ${endOfLocking}`
+  } else if (isExpired) {
+    tooltipLabel =
+      "You can't vote because your lock has expired. Get new veBAL to vote by extending your lock."
+  } else if (noBalance) {
+    tooltipLabel = `You can't vote because you have no veBAL.
+    Extend your lock / get new veBAL to edit your votes`
+  } else if (isTooShort) {
+    tooltipLabel = `You can't vote because you have no veBAL.
+    Extend your lock / get new veBAL to edit your votes`
+  } else {
+    tooltipLabel = 'Unknown reason'
+  }
+
   return (
     <VStack align="start" w="full">
-      <InputGroup>
-        <Input
-          autoComplete="off"
-          autoCorrect="off"
-          bg="background.level1"
-          max={max}
-          min={0}
-          onBlur={() => {
-            setEditingValue(parseFloat(percentage).toFixed(2))
-            toggle()
-          }}
-          onChange={handleChange}
-          onFocus={() => {
-            setEditingValue(parseFloat(percentage).toFixed(2))
-            toggle()
-          }}
-          onKeyDown={blockInvalidNumberInput}
-          type="number"
-          value={isEditing ? editingValue : parseFloat(percentage).toFixed(2)}
-          {...inputPros}
-        />
-        <InputRightElement pointerEvents="none">
-          <Percent color="grayText" size="20px" />
-        </InputRightElement>
-      </InputGroup>
+      <Tooltip isDisabled={!inputProps.isDisabled} label={tooltipLabel}>
+        <InputGroup>
+          <Input
+            autoComplete="off"
+            autoCorrect="off"
+            bg="background.level1"
+            max={max}
+            min={0}
+            onBlur={() => {
+              setEditingValue(parseFloat(percentage).toFixed(2))
+              toggle()
+            }}
+            onChange={handleChange}
+            onFocus={() => {
+              setEditingValue(parseFloat(percentage).toFixed(2))
+              toggle()
+            }}
+            onKeyDown={blockInvalidNumberInput}
+            type="number"
+            value={isEditing ? editingValue : parseFloat(percentage).toFixed(2)}
+            {...inputProps}
+          />
+          <InputRightElement pointerEvents="none">
+            <Percent color="grayText" size="20px" />
+          </InputRightElement>
+        </InputGroup>
+      </Tooltip>
     </VStack>
   )
 }

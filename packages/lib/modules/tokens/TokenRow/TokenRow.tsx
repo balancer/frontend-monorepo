@@ -185,6 +185,9 @@ export default function TokenRow({
         setUsdValue(usdValueForBpt(address, chain, value))
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))
+      } else if (poolToken) {
+        // For not allowed tokens, token is undefined so we fallback to poolToken
+        setUsdValue(usdValueForToken(poolToken, value))
       }
 
       setAmount(fNum('token', value, { abbreviated }))
