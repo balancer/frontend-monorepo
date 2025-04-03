@@ -211,7 +211,6 @@ export async function getSdkTestUtils({
       [BigInt((Math.random() * 10000).toFixed())]
     )
     for (let i = 0; i < 999; i++) {
-      console.log({ i })
       // encode probed slot
       const slotBytes = pad(toBytes(i))
       const accountAddressBytes = pad(toBytes(accountAddress))
@@ -224,8 +223,6 @@ export async function getSdkTestUtils({
 
       // remove padding for JSON RPC
       probedSlot = trim(probedSlot)
-
-      console.log({ probedSlot })
 
       // get storage value
       const prev = (await client.getStorageAt({
@@ -285,7 +282,6 @@ export async function getSdkTestUtils({
       _slots = await Promise.all(
         tokens.map(async (token, i) => findTokenBalanceSlot(account, token, isVyperMapping[i]))
       )
-      console.log(`slots: ${_slots}`)
     }
 
     for (let i = 0; i < tokens.length; i++) {
@@ -306,7 +302,6 @@ export async function getSdkTestUtils({
     let _slot: number
     if (slot) _slot = slot
     else _slot = await findTokenBalanceSlot(account, tokenAddress, isVyperMapping)
-    // console.log(`slot: ${_slot}`)
 
     // Set initial account balance for the token that will be used to join pool
     const balance = toEvmTokenBalance(humanBalance, tokenAddress)

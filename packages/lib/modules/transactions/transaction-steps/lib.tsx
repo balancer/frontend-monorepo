@@ -144,6 +144,7 @@ export type TransactionStep = {
   onSuccess?: () => any
   onActivated?: () => void
   onDeactivated?: () => void
+  // only used for integration testing
   _txInput?: TransactionInput
 } & MaybeBatchableTx
 
