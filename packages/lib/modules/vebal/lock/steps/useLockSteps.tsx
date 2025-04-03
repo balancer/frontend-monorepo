@@ -13,17 +13,27 @@ type UseLockStepsArgs = {
   lockActionTypes: LockActionType[]
 }
 
-export function useLockSteps({ lockAmount, lockEndDate, lockActionTypes }: UseLockStepsArgs) {
+export function useLockSteps({
+  lockAmount: lockRawAmount,
+  lockEndDate,
+  lockActionTypes,
+}: UseLockStepsArgs) {
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
       spenderAddress: mainnetNetworkConfig.contracts.veBAL as Hex,
       chain: mainnetNetworkConfig.chain,
-      approvalAmounts: [lockAmount],
+      approvalAmounts: [lockRawAmount],
       actionType: 'Locking',
       lpToken: 'token',
     })
 
-  const unlockStep = useLockStep({ lockAmount, lockEndDate, lockActionType: LockActionType.Unlock })
+  const lockAmount: bigint = lockRawAmount.rawAmount
+
+  const unlockStep = useLockStep({
+    lockAmount,
+    lockEndDate,
+    lockActionType: LockActionType.Unlock,
+  })
   const createLockStep = useLockStep({
     lockAmount,
     lockEndDate,

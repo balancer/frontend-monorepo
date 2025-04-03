@@ -31,7 +31,7 @@ export const testAccounts: Address[] = [
 
 export function testAccountIndex(account: Address) {
   const index = testAccounts.indexOf(account)
-  if (!index) {
+  if (index < 0) {
     throw Error(`Account ${account} not found in test accounts.`)
   }
   return index

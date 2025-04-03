@@ -162,3 +162,20 @@ export async function actSleep(ms: number) {
     await sleep(ms)
   })
 }
+
+export async function waitForSimulationSuccess(hookResult: {
+  current: { simulation: { isSuccess: boolean; error: Error | null } }
+}) {
+  let error: Error | null = null
+
+  await waitFor(() => {
+    error = hookResult.current.simulation.error
+    if (error) return true
+
+    expect(hookResult.current.simulation.isSuccess).toBeTruthy()
+  })
+
+  if (error) {
+    throw error
+  }
+}

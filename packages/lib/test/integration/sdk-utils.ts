@@ -17,8 +17,10 @@ import {
   TestActions,
   TransactionReceipt,
   WalletActions,
+  WalletClient,
   concat,
   encodeAbiParameters,
+  getAbiItem,
   hexToBigInt,
   keccak256,
   pad,
@@ -208,6 +210,7 @@ export async function getSdkTestUtils({
       [BigInt((Math.random() * 10000).toFixed())]
     )
     for (let i = 0; i < 999; i++) {
+      console.log({ i })
       // encode probed slot
       const slotBytes = pad(toBytes(i))
       const accountAddressBytes = pad(toBytes(accountAddress))
@@ -220,6 +223,8 @@ export async function getSdkTestUtils({
 
       // remove padding for JSON RPC
       probedSlot = trim(probedSlot)
+
+      console.log({ probedSlot })
 
       // get storage value
       const prev = (await client.getStorageAt({
@@ -325,4 +330,88 @@ export async function getSdkTestUtils({
   async function setUserPoolBalance(humanBalance: HumanAmount) {
     return await setupToken(humanBalance, pool.address as Address)
   }
+}
+
+type SetUserTokenBalanceParams = {
+  client: TestActions
+  account: Address
+  tokenAddress: Address
+  slot?: number
+  balance: bigint
+  isVyperMapping?: boolean
+}
+export async function setUserTokenBalance({
+  client,
+  account,
+  tokenAddress,
+  slot,
+  balance,
+  isVyperMapping = false,
+}: SetUserTokenBalanceParams): Promise<void> {
+  // Get storage slot index
+  const slotBytes = pad(toBytes(slot || 0))
+  const accountAddressBytes = pad(toBytes(account))
+
+  let index: Address
+  if (isVyperMapping) {
+    index = keccak256(concat([slotBytes, accountAddressBytes])) // slot, key
+  } else {
+    index = keccak256(concat([accountAddressBytes, slotBytes])) // key, slot
+  }
+
+  // Manipulate local balance (needs to be bytes32 string)
+  await client.setStorageAt({
+    address: tokenAddress,
+    index,
+    value: toHex(balance, { size: 32 }),
+  })
+}
+
+type GetUserBalanceParams = {
+  client: WalletClient & PublicActions
+  account: Address
+  tokenAddress: Address
+}
+export async function getTokenUserBalance({
+  client,
+  account,
+  tokenAddress,
+}: GetUserBalanceParams): Promise<bigint> {
+  return client.readContract({
+    account,
+    address: tokenAddress,
+    abi: [getAbiItem({ abi: erc20Abi, name: 'balanceOf' })],
+    functionName: 'balanceOf',
+    args: [account],
+  })
+}
+
+type ApproveTokenParams = {
+  client: WalletClient & PublicActions
+  account: Address
+  token: Address
+  spender: Address
+  amount?: bigint // approve max by default
+}
+
+export async function approveToken({
+  client,
+  account,
+  token,
+  spender,
+  amount = MAX_UINT256,
+}: ApproveTokenParams) {
+  const hash = await client.writeContract({
+    account,
+    chain: client.chain,
+    address: token,
+    abi: erc20Abi,
+    functionName: 'approve',
+    args: [spender, amount],
+  })
+
+  const txReceipt = await client.waitForTransactionReceipt({
+    hash,
+  })
+  return txReceipt.status === 'success'
 }
