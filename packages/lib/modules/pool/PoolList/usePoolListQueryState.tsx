@@ -54,6 +54,8 @@ export function poolTypeLabel(poolType: GqlPoolType) {
       return 'CoW AMM'
     case GqlPoolType.Fx:
       return 'FX'
+    case GqlPoolType.QuantAmmWeighted:
+      return 'BTF'
     default:
       return poolType.toLowerCase()
   }
