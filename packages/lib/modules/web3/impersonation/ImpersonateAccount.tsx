@@ -1,4 +1,4 @@
-import { Button, Input, Text, VStack } from '@chakra-ui/react'
+import { Button, HStack, Input, Text } from '@chakra-ui/react'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { useState } from 'react'
 import { Address, isAddress } from 'viem'
@@ -9,7 +9,7 @@ export function ImpersonateAccount() {
   const { impersonateAccount } = useImpersonateAccount()
 
   return (
-    <VStack>
+    <HStack>
       <Text>Impersonate Account</Text>
       <Input
         aria-label="Mock address"
@@ -25,6 +25,6 @@ export function ImpersonateAccount() {
       >
         Connect
       </Button>
-    </VStack>
+    </HStack>
   )
 }
