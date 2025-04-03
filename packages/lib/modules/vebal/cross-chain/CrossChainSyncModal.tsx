@@ -33,6 +33,7 @@ import { getChainShortName } from '@repo/lib/config/app.config'
 
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { useCrossChainSync } from './CrossChainSyncProvider'
+import { formatUnits } from 'viem'
 
 type Props = {
   isOpen: boolean
@@ -41,7 +42,7 @@ type Props = {
 }
 
 function NetworksSelectionStep({ networks, selectedNetworks, toggleNetwork }: NetworkOptionsProps) {
-  const { myVebalBalance } = useVebalUserData()
+  const { veBALBalance } = useVebalUserData()
 
   return (
     <VStack gap="4">
@@ -54,7 +55,7 @@ function NetworksSelectionStep({ networks, selectedNetworks, toggleNetwork }: Ne
         <Heading>
           <HStack justifyContent="space-between" w="full">
             <Text>Ethereum</Text>
-            <Text> {Number(myVebalBalance ?? 0).toFixed(4)} veBAL</Text>
+            <Text> {formatUnits(veBALBalance, 18)} veBAL</Text>
           </HStack>
         </Heading>
         <NetworkOptions

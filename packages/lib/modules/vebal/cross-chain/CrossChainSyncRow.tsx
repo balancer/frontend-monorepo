@@ -5,10 +5,11 @@ import { HStack, Text, VStack } from '@chakra-ui/react'
 import Image from 'next/image'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { useCrossChainSync } from './CrossChainSyncProvider'
+import { formatUnits } from 'viem'
 
 export function CrossChainSyncRow({ network, current }: { network: GqlChain; current: boolean }) {
   const { l2VeBalBalances } = useCrossChainSync()
-  const { myVebalBalance } = useVebalUserData()
+  const { veBALBalance } = useVebalUserData()
 
   return (
     <VStack alignItems="unset" opacity={current ? 1 : 0.6}>
@@ -29,7 +30,7 @@ export function CrossChainSyncRow({ network, current }: { network: GqlChain; cur
         </VStack>
         <VStack alignItems="start">
           <Text>Post-sync balance</Text>
-          <Text fontWeight="bold">{Number(myVebalBalance ?? 0).toFixed(4)}</Text>
+          <Text fontWeight="bold">{formatUnits(veBALBalance, 18)}</Text>
         </VStack>
       </HStack>
     </VStack>

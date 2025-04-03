@@ -4,6 +4,7 @@ import { LockMode } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { format } from 'date-fns'
 import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
+import { formatUnits } from 'viem'
 
 export enum LockActionType {
   CreateLock = 'createLock',
@@ -115,14 +116,16 @@ export function getConfirmedLabel(
   lockAmount: RawAmount,
   lockEndDate: string
 ) {
+  const formattedAmount = formatUnits(lockAmount.rawAmount, 18)
+
   switch (lockActionType) {
     case LockActionType.CreateLock:
       // eslint-disable-next-line max-len
-      return `Lock created for ${fNum('token', lockAmount.rawAmount)} tokens until ${format(new Date(lockEndDate), PRETTY_DATE_FORMAT)}`
+      return `Lock created for ${fNum('token', formattedAmount)} tokens until ${format(new Date(lockEndDate), PRETTY_DATE_FORMAT)}`
     case LockActionType.ExtendLock:
       return `Lock extended until ${format(new Date(lockEndDate), PRETTY_DATE_FORMAT)}`
     case LockActionType.IncreaseLock:
-      return `Lock amount increased by ${fNum('token', lockAmount.rawAmount)}`
+      return `Lock amount increased by ${fNum('token', formattedAmount)}`
     case LockActionType.Unlock:
       return 'Lock unlocked'
     default:

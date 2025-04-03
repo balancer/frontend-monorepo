@@ -25,6 +25,7 @@ import { CrossChainSyncModal } from '@repo/lib/modules/vebal/cross-chain/CrossCh
 import { useState } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { InfoOutlineIcon } from '@chakra-ui/icons'
+import { formatUnits } from 'viem'
 
 const tooltipLabel = `Sidechains & Layer 2 networks like Polygon and Arbitrum don't know 
                     your veBAL balance on Ethereum Mainnet, 
@@ -42,7 +43,7 @@ export function CrossChainBoost() {
 
   const [syncIsOpen, setSyncIsOpen] = useState(false)
 
-  const { myVebalBalance } = useVebalUserData()
+  const { veBALBalance } = useVebalUserData()
 
   return (
     <Stack h="full" height="300px" w="full">
@@ -83,7 +84,7 @@ export function CrossChainBoost() {
                               height={20}
                               key={chain}
                               src={`/images/chains/${chain}.svg`}
-                              title={`${chain} (${Number(myVebalBalance ?? 0).toFixed(4)} - ${
+                              title={`${chain} (${formatUnits(veBALBalance, 18)} - ${
                                 l2VeBalBalances[chain]
                               })`}
                               width={20}

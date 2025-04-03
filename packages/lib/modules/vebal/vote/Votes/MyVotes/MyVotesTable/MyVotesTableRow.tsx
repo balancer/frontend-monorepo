@@ -35,6 +35,7 @@ import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeigh
 import { isVotingTimeLocked } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { formatUnits } from 'viem'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -73,7 +74,9 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
 
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
-  const { myVebalBalance, noVeBalBalance } = useVebalUserData()
+  const { veBALBalance, noVeBALBalance } = useVebalUserData()
+  // FIXME: [JUANJO] calculations should be done with bigint
+  const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
   const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true)
 
@@ -156,7 +159,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
               lastVoteTime={vote.gaugeVotes?.lastUserVoteTime}
               max={100}
               min={0}
-              noBalance={noVeBalBalance}
+              noBalance={noVeBALBalance}
               percentage={editVotes.toString()}
               pr="32px"
               setPercentage={value =>

@@ -9,14 +9,14 @@ import { useMemo } from 'react'
 
 export function VebalStatsLayout() {
   const lockInfo = useVebalLockInfo()
-  const { loading, data } = useVebalUserData()
+  const { isLoading, snapshots } = useVebalUserData()
 
-  const lockSnapshots = useMemo(() => data?.veBalGetUser.lockSnapshots ?? [], [data])
+  const lockSnapshots = useMemo(() => snapshots || [], [snapshots])
 
   return (
     <Stack direction={{ base: 'column', md: 'row' }} justifyContent="stretch" spacing="md" w="full">
       <VebalStats w={{ base: 'full', md: 'md' }} />
-      {loading || lockInfo.isLoading ? (
+      {isLoading || lockInfo.isLoading ? (
         <Skeleton h={{ base: 'md', md: 'auto' }} w="full" />
       ) : (
         <VebalLocksChart

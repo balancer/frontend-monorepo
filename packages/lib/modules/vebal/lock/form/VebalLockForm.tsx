@@ -30,6 +30,7 @@ import { Address } from 'viem'
 import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
+import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 
 export function VebalLockForm() {
   const { refetchAll } = useVebalLockData()
@@ -39,7 +40,6 @@ export function VebalLockForm() {
     setLpToken,
     resetLpToken,
     lockedAmount,
-    totalAmount,
     isDisabled,
     disabledReason,
     previewModalDisclosure,
@@ -50,6 +50,9 @@ export function VebalLockForm() {
   } = useVebalLock()
 
   const router = useRouter()
+
+  const { balanceFor } = useTokenBalances()
+  const bptBalance = balanceFor(vebalBptToken.address)
 
   function onModalClose(isSuccess: boolean) {
     previewModalDisclosure.onClose()
@@ -90,12 +93,12 @@ export function VebalLockForm() {
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
-          {isZero(totalAmount) && (
+          {bptBalance !== undefined && isZero(bptBalance.amount) && (
             <BalAlert
               content={
                 <Text color="font.dark">
                   {`You need to lock the LP token of the ve8020 BAL/WETH pool to get veBAL. Since you
-                    don't have this, you can't get veBAL.`}{' '}
+                    don't have this, you can't get veBAL.`}
                   <br />
                   Add liquidity to this pool to get the LP token and came back: <br />
                   <BalAlertLink href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014">
