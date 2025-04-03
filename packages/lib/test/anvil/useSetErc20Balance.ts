@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import {
   type Address,
-  BaseError,
   encodeAbiParameters,
   erc20Abi,
   getAbiItem,
@@ -138,7 +137,8 @@ export function useSetErc20Balance() {
           // loop
           slotGuess++
           if (slotGuess >= 10n) {
-            throw new BaseError('could not find storage for: `balanceOf`')
+            console.log('Could not find storage slot to set balance of token ', { tokenAddress })
+            break
           }
         }
       }

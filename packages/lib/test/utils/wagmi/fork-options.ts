@@ -1,7 +1,8 @@
 import { HumanAmount } from '@balancer/sdk'
 import { Address } from 'viem'
-import { base, gnosis, mainnet, polygon, sonic } from 'viem/chains'
+import { avalanche, base, gnosis, mainnet, polygon, sonic } from 'viem/chains'
 import {
+  avalancheTokenBalances,
   baseTokenBalances,
   gnosisTokenBalances,
   mainnetTokenBalances,
@@ -38,6 +39,7 @@ const defaultForkBalances: TokenBalancesByChain = {
   [gnosis.id]: gnosisTokenBalances,
   [sonic.id]: sonicTokenBalances,
   [polygon.id]: polygonTokenBalances,
+  [avalanche.id]: avalancheTokenBalances,
 }
 
 const isBeets = PROJECT_CONFIG.projectId === 'beets'
