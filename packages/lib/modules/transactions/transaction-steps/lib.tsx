@@ -3,6 +3,9 @@ import { ReactNode } from 'react'
 import { LockActionType } from '../../vebal/lock/steps/lock-steps.utils'
 import { BaseTransaction } from '@safe-global/safe-apps-sdk'
 import { Address, Hash } from 'viem'
+import { ManagedTransactionInput } from '../../web3/contracts/useManagedTransaction'
+import { ManagedErc20TransactionInput } from '../../web3/contracts/useManagedErc20Transaction'
+import { ManagedSendTransactionInput } from '../../web3/contracts/useManagedSendTransaction'
 
 export enum TransactionState {
   Ready = 'init',
@@ -125,6 +128,11 @@ type MaybeBatchableTx = {
   nestedSteps?: TransactionStep[]
 }
 
+type TransactionInput =
+  | ManagedTransactionInput
+  | ManagedErc20TransactionInput
+  | ManagedSendTransactionInput
+
 export type TransactionStep = {
   id: string
   stepType: StepType
@@ -136,6 +144,8 @@ export type TransactionStep = {
   onSuccess?: () => any
   onActivated?: () => void
   onDeactivated?: () => void
+  // only used for integration testing
+  _txInput?: TransactionInput
 } & MaybeBatchableTx
 
 export function getTransactionState(transactionBundle?: TransactionBundle): TransactionState {

@@ -1,5 +1,4 @@
 import { toUtcTime } from '@repo/lib/shared/utils/time'
-import { RawAmount } from '../../../tokens/approvals/approval-rules'
 import { LockMode } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { format } from 'date-fns'
@@ -113,10 +112,10 @@ export function getConfirmingLabel(lockActionType: LockActionType) {
 
 export function getConfirmedLabel(
   lockActionType: LockActionType,
-  lockAmount: RawAmount,
+  lockAmount: bigint,
   lockEndDate: string
 ) {
-  const formattedAmount = formatUnits(lockAmount.rawAmount, 18)
+  const formattedAmount = formatUnits(lockAmount, 18)
 
   switch (lockActionType) {
     case LockActionType.CreateLock:
