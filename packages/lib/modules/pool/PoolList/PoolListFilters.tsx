@@ -60,6 +60,7 @@ import ButtonGroup, {
 import { useCow } from '../../cow/useCow'
 import Link from 'next/link'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { poolTypeLabel } from '../pool.helpers'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
@@ -553,7 +554,6 @@ export function PoolListFilters() {
       setNetworks,
       togglePoolType,
       poolTypes,
-      poolTypeLabel,
       setPoolTypes,
       setProtocolVersion,
       protocolVersion,
