@@ -1,14 +1,13 @@
 import { useMemo, useCallback, useState } from 'react'
 import { useUserAccount } from '../../../web3/UserAccountProvider'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { RawAmount } from '../../../tokens/approvals/approval-rules'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { Hex } from 'viem'
+import { Address } from 'viem'
 import { ManagedTransactionInput } from '../../../web3/contracts/useManagedTransaction'
 import {
   LockActionType,
@@ -21,18 +20,15 @@ import {
   getLockContractFunctionName,
 } from './lock-steps.utils'
 import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
-import { bn } from '@repo/lib/shared/utils/numbers'
 
 type UseLockStepArgs = {
-  lockAmount: RawAmount
+  lockAmount: bigint
   lockEndDate: string
   lockActionType: LockActionType
 }
 
 export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLockStepArgs) {
   const { userAddress } = useUserAccount()
-  const amount = lockAmount.rawAmount.toString()
-
   const labels: TransactionLabels = useMemo(
     () => ({
       init: getInitLabel(lockActionType),
@@ -46,10 +42,10 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
   )
 
   const txSimulationMeta = sentryMetaForWagmiSimulation(
-    'Error in wagmi tx simulation (Lock transaction)',
+    `Error in wagmi tx simulation (Lock transaction of type ${lockActionType})`,
     {
       userAddress,
-      lockAmount: lockAmount.rawAmount.toString(),
+      lockAmount: lockAmount.toString(),
       lockEndDate,
       lockActionType,
     }
@@ -59,27 +55,28 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
     function getArgs() {
       switch (lockActionType) {
         case LockActionType.CreateLock:
-          return [bn(amount), parseDate(lockEndDate)]
+          return [lockAmount, parseDate(lockEndDate)]
         case LockActionType.ExtendLock:
           return [parseDate(lockEndDate)]
         case LockActionType.IncreaseLock:
-          return [bn(amount)]
+          // FIXME: This should be amount to increase but we are passing current amount + amount to increase
+          return [lockAmount]
         default:
           return []
       }
     }
 
     return {
-      enabled: !!lockAmount.rawAmount && !!lockEndDate,
+      enabled: !!lockAmount && !!lockEndDate,
       labels,
       chainId: mainnetNetworkConfig.chainId,
+      contractAddress: mainnetNetworkConfig.contracts.veBAL as Address,
       contractId: 'balancer.veBAL',
-      contractAddress: mainnetNetworkConfig.contracts.veBAL as Hex,
       functionName: getLockContractFunctionName(lockActionType),
       args: getArgs() as any,
       txSimulationMeta,
     }
-  }, [lockAmount, lockEndDate, lockActionType, labels, txSimulationMeta, amount])
+  }, [lockAmount, lockEndDate, lockActionType, labels, txSimulationMeta])
 
   const onSuccess = useCallback(() => {
     // Handle success actions
@@ -102,6 +99,8 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
       renderAction: () => <ManagedTransactionButton id={lockActionType.toString()} {...props} />,
+      // only used for integration testing
+      _txInput: props,
     }),
     [lockActionType, labels, onSuccess, props, transaction, isStepActivated]
   )

@@ -2,14 +2,27 @@ import { Box, HStack, StackProps } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from './token.types'
 import { TokenIcon } from './TokenIcon'
+import { Numberish } from '@repo/lib/shared/utils/numbers'
 
-type Props = {
-  tokens: ApiToken[]
-  chain: GqlChain
-  size?: number
+type TokenBalances = {
+  [address: string]: Numberish
 }
 
-export function TokenIconStack({ tokens, chain, size = 64, ...rest }: Props & StackProps) {
+type Props = {
+  chain: GqlChain
+  disablePopover?: boolean
+  size?: number
+  tokenBalances?: TokenBalances
+  tokens: ApiToken[]
+}
+
+export function TokenIconStack({
+  chain,
+  disablePopover,
+  size = 64,
+  tokens,
+  ...rest
+}: Props & StackProps) {
   const getNestingMargin = () => {
     if (tokens.length > 4) return -10
     return -5
@@ -36,6 +49,7 @@ export function TokenIconStack({ tokens, chain, size = 64, ...rest }: Props & St
               address={tokenAddress}
               alt={token?.symbol || tokenAddress}
               chain={chain}
+              disablePopover={disablePopover}
               size={size}
             />
           </Box>

@@ -32,6 +32,9 @@ const networkConfig: NetworkConfig = {
       symbol: 'ETH',
       decimals: 18,
     },
+    doubleApprovalRequired: [
+      '0x6bf294b80c7d8dc72dee762af5d01260b756a051', // USDT
+    ],
     defaultSwapTokens: {
       tokenIn: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     },

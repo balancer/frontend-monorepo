@@ -8,17 +8,25 @@ import { ErrorAlert } from './ErrorAlert'
 import { GenericError } from './GenericError'
 
 type Props = {
+  priceImpactQuery: {
+    isError: boolean
+    error: unknown
+  }
   simulationQuery: {
     isError: boolean
     error: unknown
   }
   goToProportionalRemoves: () => void
 }
-export function RemoveSimulationError({ simulationQuery, goToProportionalRemoves }: Props) {
+export function RemoveSimulationError({
+  priceImpactQuery,
+  simulationQuery,
+  goToProportionalRemoves,
+}: Props) {
   const { pool } = usePool()
-  if (!simulationQuery.isError) return
+  if (!simulationQuery.isError && !priceImpactQuery.error) return
 
-  const error = ensureError(simulationQuery.error)
+  const error = ensureError(simulationQuery.error || priceImpactQuery.error)
 
   function goToProportionalMode() {
     goToProportionalRemoves()

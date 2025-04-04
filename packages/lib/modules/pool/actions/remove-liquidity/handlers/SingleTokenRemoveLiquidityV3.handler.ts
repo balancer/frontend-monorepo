@@ -1,5 +1,5 @@
 import { TransactionConfig } from '@repo/lib/modules/web3/contracts/contract.types'
-import { RemoveLiquidity, Slippage } from '@balancer/sdk'
+import { RemoveLiquidity, RemoveLiquidityV3BuildCallInput, Slippage } from '@balancer/sdk'
 import { SdkBuildRemoveLiquidityInput } from '../remove-liquidity.types'
 import { BaseSingleTokenRemoveLiquidityHandler } from './BaseSingleTokenRemoveLiquidity.handler'
 
@@ -13,10 +13,11 @@ export class SingleTokenRemoveLiquidityV3Handler extends BaseSingleTokenRemoveLi
   }: SdkBuildRemoveLiquidityInput): Promise<TransactionConfig> {
     const removeLiquidity = new RemoveLiquidity()
 
-    const v3BuildCallParams = {
+    const v3BuildCallParams: RemoveLiquidityV3BuildCallInput = {
       ...queryOutput.sdkQueryOutput,
       slippage: Slippage.fromPercentage(`${Number(slippagePercent)}`),
       wethIsEth,
+      userData: '0x',
     }
 
     const { callData, to, value } = permit

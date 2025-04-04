@@ -142,10 +142,11 @@ export function _useVotes({
   const vebalIsExpired = mainnetLockedInfo.isExpired
   const vebalLockTooShort = mainnetLockedInfo.lockTooShort
 
-  const { myVebalBalance, noVeBalBalance } = useVebalUserData()
+  const { veBALBalance, noVeBALBalance } = useVebalUserData()
 
   const votingIsDisabled =
-    vebalIsExpired || vebalLockTooShort || noVeBalBalance || hasAllVotingPowerTimeLocked
+    vebalIsExpired || vebalLockTooShort || noVeBALBalance || hasAllVotingPowerTimeLocked
+
   const allowChangeVotes = !votingIsDisabled
   const allowSelectVotingPools = !votingIsDisabled
 
@@ -184,8 +185,7 @@ export function _useVotes({
     [votingPools, lastReceivedVebal, isPoolGaugeExpired]
   )
 
-  const shouldResubmitVotes = // Does user have any veBAL
-    bn(myVebalBalance ?? 0).gt(0) && !!poolsUsingUnderUtilizedVotingPower.length
+  const shouldResubmitVotes = bn(veBALBalance).gt(0) && !!poolsUsingUnderUtilizedVotingPower.length // Does user have any veBAL
 
   const scrollToMyVotes = () => {
     document.body.scrollIntoView({ behavior: 'smooth' })

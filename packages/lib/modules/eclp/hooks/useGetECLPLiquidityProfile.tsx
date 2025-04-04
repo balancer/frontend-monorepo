@@ -53,7 +53,7 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
   const yMax = useMemo(() => (data ? Math.max(...data.map(([, y]) => y)) : 0), [data])
 
   const poolIsInRange = useMemo(() => {
-    const margin = 0.000001 // if spot price is within the margin on both sides it's considered out of range
+    const margin = 0.00001 // if spot price is within the margin on both sides it's considered out of range
 
     return (
       bn(poolSpotPrice || 0).gt(xMin * (1 + margin)) &&

@@ -126,7 +126,7 @@ function uppercaseSegment(path: string): string {
 // Detect errors that are not considered fatal even if they happen in a critical path
 function isNonFatalError(event: Sentry.ErrorEvent) {
   const errorText = getErrorTextFromTop3Frames(event)
-  if (errorText.includes('Invalid swap: must contain at least 1 path.')) return true
+  if (errorText.includes('Must contain at least 1 path.')) return true
 
   return false
 }

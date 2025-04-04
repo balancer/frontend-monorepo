@@ -1,34 +1,33 @@
 import { GetVeBalUserDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { useQuery } from '@apollo/client'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { useVeBALBalance } from './vote/useVeBALBalance'
 
 export function useVebalUserData() {
-  const { userAddress, isConnected } = useUserAccount()
+  const { userAddress } = useUserAccount()
 
-  const { data, refetch, loading, error } = useQuery(GetVeBalUserDocument, {
+  const apiResponse = useQuery(GetVeBalUserDocument, {
     variables: {
       address: userAddress.toLowerCase(),
       chain: GqlChain.Mainnet,
     },
   })
 
-  const myVebalBalance = data?.veBalGetUser.balance
-    ? bn(data.veBalGetUser.balance).toNumber()
-    : undefined
+  const balanceResponse = useVeBALBalance(userAddress)
+  const noVeBALBalance = balanceResponse.veBALBalance === 0n
 
-  const hasVeBalBalance = myVebalBalance ? myVebalBalance > 0 : undefined
-
-  const noVeBalBalance = typeof myVebalBalance === 'number' ? myVebalBalance === 0 : undefined
+  const isLoading = apiResponse.loading || balanceResponse.isLoading
+  const refetch = () => {
+    apiResponse.refetch()
+    balanceResponse.refetch()
+  }
 
   return {
-    data,
+    isLoading,
+    veBALBalance: balanceResponse.veBALBalance,
+    noVeBALBalance,
+    rank: apiResponse.data?.veBalGetUser.rank,
+    snapshots: apiResponse.data?.veBalGetUser.lockSnapshots,
     refetch,
-    isConnected,
-    loading,
-    error,
-    myVebalBalance,
-    hasVeBalBalance,
-    noVeBalBalance,
   }
 }

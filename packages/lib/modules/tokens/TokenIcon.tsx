@@ -18,6 +18,7 @@ type Props = {
   size?: number
   border?: string
   weight?: string | null
+  disablePopover?: boolean
 }
 
 export function TokenIcon({
@@ -28,6 +29,7 @@ export function TokenIcon({
   size = 36,
   border,
   weight,
+  disablePopover,
   ...rest
 }: Props & Omit<ImageProps, 'src'>) {
   const [hasError, setHasError] = useState(false)
@@ -42,6 +44,10 @@ export function TokenIcon({
 
   const fallbackSVG = createAvatar(identicon, {
     seed: address || 'unknown',
+    backgroundColor: ['transparent'],
+    radius: 50,
+    backgroundType: ['solid'],
+    scale: 80,
   })
 
   function getIconSrc(): string | undefined {
@@ -66,22 +72,27 @@ export function TokenIcon({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const iconSrc = useMemo(() => getIconSrc(), [logoURI, token])
 
+  const tokenImage = (
+    <Image
+      alt={alt}
+      backgroundColor="background.level4"
+      border={border}
+      borderRadius="100%"
+      height={`${size}px`}
+      onError={() => !hasError && setHasError(true)}
+      src={hasError || !iconSrc ? fallbackSVG.toDataUri() : iconSrc}
+      width={`${size}px`}
+      {...rest}
+    />
+  )
+
+  if (disablePopover) {
+    return tokenImage
+  }
+
   return (
     <Popover trigger="hover">
-      <PopoverTrigger>
-        <Image
-          alt={alt}
-          backgroundColor="background.level4"
-          border={border}
-          borderRadius="100%"
-          height={`${size}px`}
-          onError={() => !hasError && setHasError(true)}
-          src={hasError || !iconSrc ? fallbackSVG.toDataUri() : iconSrc}
-          width={`${size}px`}
-          {...rest}
-        />
-      </PopoverTrigger>
-
+      <PopoverTrigger>{tokenImage}</PopoverTrigger>
       <PopoverContent maxW="300px" p="sm" w="auto">
         <Text fontSize="sm" variant="secondary">
           {weight ? `${fNum('weight', weight)} ${alt}` : alt}

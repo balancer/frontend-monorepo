@@ -1,5 +1,4 @@
 import { HStack, Skeleton, Text } from '@chakra-ui/react'
-import React from 'react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { MyVotesStatsCard } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVotesStatsCard'
 import { GainBadge } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'

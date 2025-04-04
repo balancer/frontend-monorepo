@@ -1,5 +1,4 @@
 import { VStack, Card, HStack, Text, Divider, Box, Badge } from '@chakra-ui/react'
-import React from 'react'
 import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { SubmittingVote } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -17,6 +16,7 @@ import { AlertTriangle } from 'react-feather'
 import { CHUNK_SIZE } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesSteps'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { GainBadge } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
 
 interface Props {
   submittingVotes: SubmittingVote[]
@@ -37,8 +37,6 @@ export function SubmitVotesPreview({
 }: Props) {
   const { toCurrency } = useCurrency()
 
-  const optimizedRewardValue = 86.65 // fix: (votes) provide real value
-  const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
   const averageReward = 0.102 // fix: (votes) provide real value
 
   const { getToken } = useTokens()
@@ -204,17 +202,24 @@ export function SubmitVotesPreview({
       </Card>
 
       <HStack alignItems="stretch" spacing="sm" w="full">
-        {false && (
-          <Card flex="1" variant="subSection">
-            <Text variant="special">Potential incentives (1w)</Text>
-            <HStack spacing="xs">
-              <Text fontSize="lg" fontWeight={700} variant="special">
-                {toCurrency(optimizedRewardValue, { abbreviated: false })}
-              </Text>
-              <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} />
-            </HStack>
-          </Card>
-        )}
+        <Card flex="1" variant="subSection">
+          <Text variant="special">Potential incentives (1w)</Text>
+          <HStack spacing="xs">
+            <Text fontSize="lg" fontWeight={700} variant="special">
+              {totalInfo.totalRewardValue !== undefined ? (
+                toCurrency(totalInfo.totalRewardValue, { abbreviated: false })
+              ) : (
+                <>&mdash;</>
+              )}
+            </Text>
+            {totalInfo.totalRewardValueGain && <GainBadge gain={totalInfo.totalRewardValueGain} />}
+            <MyIncentivesAprTooltip
+              totalBeforeVoteEdits={totalInfo.prevTotalRewardValue}
+              totalWithVoteEdits={totalInfo.totalRewardValue}
+            />
+          </HStack>
+        </Card>
+
         <Card flex="1" variant="subSection">
           <Text>Ave. Reward (Bribes/veBAL)</Text>
           <Text fontSize="lg" fontWeight={700}>

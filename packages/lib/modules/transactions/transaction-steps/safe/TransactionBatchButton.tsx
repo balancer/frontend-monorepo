@@ -5,7 +5,6 @@ import { Button, VStack } from '@chakra-ui/react'
 import { getGqlChain } from '@repo/lib/config/app.config'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { getWaitForReceiptTimeout } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
-import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { GenericError } from '@repo/lib/shared/components/errors/GenericError'
 import { ensureError } from '@repo/lib/shared/utils/errors'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
@@ -17,7 +16,7 @@ import { Hex } from 'viem'
 import { useWaitForTransactionReceipt } from 'wagmi'
 import { TransactionExecution, TransactionSimulation } from '../../../web3/contracts/contract.types'
 import { useOnTransactionSubmission } from '../../../web3/contracts/useOnTransactionSubmission'
-import { useChainSwitch } from '../../../web3/useChainSwitch'
+import { SwitchNetworkAlert, useChainSwitch } from '../../../web3/useChainSwitch'
 import { ManagedResult, TransactionLabels, TransactionStep } from '../lib'
 import { getTransactionButtonLabel } from '../transaction-button.helpers'
 import { useTransactionState } from '../TransactionStateProvider'
@@ -178,10 +177,4 @@ type ErrorProps = { error: Error }
 export function TransactionError({ error }: ErrorProps) {
   if (error.message.includes('User rejected transaction')) return null
   return <GenericError error={error} />
-}
-
-// Show an alert to switch network as Safe App does not support programmatic network switch
-function SwitchNetworkAlert({ chainName }: { chainName: string }) {
-  const content = `Please switch your Safe to ${chainName} network to continue`
-  return <BalAlert content={content} status="warning" />
 }

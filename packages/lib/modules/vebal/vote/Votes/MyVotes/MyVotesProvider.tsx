@@ -26,6 +26,7 @@ import {
   isVotingTimeLocked,
 } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
+import { formatUnits } from 'viem'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -58,7 +59,9 @@ export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern
 export function _useMyVotes({}: UseMyVotesArgs) {
-  const { myVebalBalance } = useVebalUserData()
+  const { veBALBalance } = useVebalUserData()
+  // FIXME: [JUANJO] should use bigint for calculations
+  const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
   const {
     loading,
@@ -135,10 +138,10 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     const editVotes = sumBy(infos, ({ editWeight }) => bn(editWeight).toNumber())
 
     const totalRewardValue = sumBy(infos, ({ votedWeight, editWeight, vote }) =>
-      calculateMyVoteRewardsValue(votedWeight, editWeight, vote, myVebalBalance ?? 0)
+      calculateMyVoteRewardsValue(votedWeight, editWeight, vote, myVebalBalance)
     )
     const prevTotalRewardValue = sumBy(infos, ({ votedWeight, vote }) =>
-      calculateMyVoteRewardsValue(votedWeight, votedWeight, vote, myVebalBalance ?? 0)
+      calculateMyVoteRewardsValue(votedWeight, votedWeight, vote, myVebalBalance)
     )
 
     const averageRewardPerVote = sumBy(infos, ({ valuePerVote, editWeight }) =>

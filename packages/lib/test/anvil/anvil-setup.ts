@@ -31,7 +31,7 @@ export const testAccounts: Address[] = [
 
 export function testAccountIndex(account: Address) {
   const index = testAccounts.indexOf(account)
-  if (!index) {
+  if (index < 0) {
     throw Error(`Account ${account} not found in test accounts.`)
   }
   return index
@@ -54,8 +54,7 @@ export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
     port: ANVIL_PORTS[mainnet.id],
     // From time to time this block gets outdated having this kind of error in integration tests:
     // ContractFunctionExecutionError: The contract function "queryJoin" returned no data ("0x").
-    // forkBlockNumber: 21624208n,
-    forkBlockNumber: 21831471n,
+    // forkBlockNumber: 21831471n,
   },
   [polygon.id]: {
     chainId: polygon.id,

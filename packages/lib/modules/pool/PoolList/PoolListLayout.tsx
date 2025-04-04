@@ -28,6 +28,8 @@ export function PoolListLayout() {
       poolHookTags,
       togglePoolHookTag,
       poolHookTagLabel,
+      protocolVersion,
+      setProtocolVersion,
     },
   } = usePoolList()
   const isFilterVisible = useFilterTagsVisible()
@@ -84,7 +86,9 @@ export function PoolListLayout() {
             poolTags={poolTags}
             poolTypeLabel={poolTypeLabel}
             poolTypes={poolTypes}
+            protocolVersion={protocolVersion}
             setMinTvl={setMinTvl}
+            setProtocolVersion={setProtocolVersion}
             toggleNetwork={toggleNetwork}
             togglePoolHookTag={togglePoolHookTag}
             togglePoolTag={togglePoolTag}

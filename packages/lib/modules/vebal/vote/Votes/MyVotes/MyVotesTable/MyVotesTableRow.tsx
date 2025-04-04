@@ -7,6 +7,7 @@ import {
   HStack,
   IconButton,
   Text,
+  Tooltip,
   useToken,
   VStack,
 } from '@chakra-ui/react'
@@ -18,7 +19,6 @@ import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
-import React from 'react'
 import { VoteExpiredTooltip } from '@repo/lib/modules/vebal/vote/VoteExpiredTooltip'
 import { Trash2 } from 'react-feather'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
@@ -35,6 +35,7 @@ import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeigh
 import { isVotingTimeLocked } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { formatUnits } from 'viem'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -44,7 +45,14 @@ interface Props extends GridProps {
 
 export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   const { votedVotesWeights, editVotesWeights, onEditVotesChange } = useMyVotes()
-  const { isSelectedPool, toggleVotingPool, allowChangeVotes, isPoolGaugeExpired } = useVotes()
+  const {
+    isSelectedPool,
+    toggleVotingPool,
+    allowChangeVotes,
+    vebalLockTooShort,
+    isPoolGaugeExpired,
+    vebalIsExpired,
+  } = useVotes()
   const { toCurrency } = useCurrency()
 
   const isExpired = isPoolGaugeExpired(vote)
@@ -66,9 +74,11 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
 
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
-  const isDisabled = timeLocked || !allowChangeVotes || isExpired
+  const { veBALBalance, noVeBALBalance } = useVebalUserData()
+  // FIXME: [JUANJO] calculations should be done with bigint
+  const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
-  const { myVebalBalance } = useVebalUserData()
+  const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true)
 
   const { getToken } = useTokens()
 
@@ -134,7 +144,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <VoteWeight
               isExpired={isExpired}
-              timeLocked={isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
+              timeLocked={timeLocked}
               timeLockedEndDate={votingTimeLockedEndDate(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
               variant="primary"
               weight={vote.gaugeVotes?.userVotes ?? '0'}
@@ -143,8 +153,13 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps} {...editVotesStyles}>
             <VoteWeightInput
               isDisabled={isDisabled}
+              isExpired={vebalIsExpired}
+              isTimeLocked={timeLocked}
+              isTooShort={vebalLockTooShort}
+              lastVoteTime={vote.gaugeVotes?.lastUserVoteTime}
               max={100}
               min={0}
+              noBalance={noVeBALBalance}
               percentage={editVotes.toString()}
               pr="32px"
               setPercentage={value =>
@@ -157,13 +172,18 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           </GridItem>
           <GridItem {...cellProps}>
             <VStack align="center" w="full">
-              <IconButton
-                aria-label="Remove"
-                icon={<Trash2 color={fontSecondary} height="20px" />}
-                isDisabled={!removable}
-                onClick={onRemove}
-                variant="ghost"
-              />
+              <Tooltip
+                isDisabled={removable}
+                label="You have an existing vote, so this row cannot be removed from the table. Set it to 0% to reallocate your vote."
+              >
+                <IconButton
+                  aria-label="Remove"
+                  icon={<Trash2 color={fontSecondary} height="20px" />}
+                  isDisabled={!removable}
+                  onClick={onRemove}
+                  variant="ghost"
+                />
+              </Tooltip>
             </VStack>
           </GridItem>
         </Grid>

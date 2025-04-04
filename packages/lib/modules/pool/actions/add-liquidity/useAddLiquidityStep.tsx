@@ -98,7 +98,11 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
       // Last step in smart account batch
       isBatchEnd: true,
       batchableTxCall: buildCallDataQuery.data
-        ? { data: buildCallDataQuery.data.data, to: buildCallDataQuery.data.to }
+        ? {
+            data: buildCallDataQuery.data.data,
+            to: buildCallDataQuery.data.to,
+            value: buildCallDataQuery.data.value,
+          }
         : undefined,
     }),
     [transaction, simulationQuery.data, buildCallDataQuery.data]

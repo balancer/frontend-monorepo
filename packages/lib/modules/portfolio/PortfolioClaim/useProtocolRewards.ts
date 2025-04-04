@@ -6,6 +6,7 @@ import { formatUnits } from 'viem'
 import { useTokens } from '../../tokens/TokensProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { BPT_DECIMALS } from '../../pool/pool.constants'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
 export const claimableVeBalRewardsTokens: string[] = [
   '0x7B50775383d3D6f0215A8F290f2C9e2eEBBEceb2', // bb-a-USD v1
@@ -32,7 +33,7 @@ export function useProtocolRewards() {
     functionName: 'claimTokens',
     args: [userAddress, claimableVeBalRewardsTokens],
     query: {
-      enabled: isConnected,
+      enabled: isConnected && isBalancer, // protocol rewards are only available for balancer
       select: data => {
         return (data as bigint[]).map((clBalance, index) => {
           const tokenAddress = claimableVeBalRewardsTokens[index]

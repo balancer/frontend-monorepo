@@ -1,53 +1,30 @@
-import { VStack, Text, Input, Button } from '@chakra-ui/react'
-import { useWagmiConfig } from '../WagmiConfigProvider'
+import { Button, HStack, Input, Text } from '@chakra-ui/react'
+import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { useState } from 'react'
-import { useConnect } from 'wagmi'
 import { Address, isAddress } from 'viem'
-import { impersonateWagmiConfig } from '../WagmiConfig'
-import { forkClient } from '@repo/lib/test/utils/wagmi/fork.helpers'
-import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
+import { useImpersonateAccount } from './useImpersonateAccount'
 
 export function ImpersonateAccount() {
-  const { setWagmiConfig } = useWagmiConfig()
-  const [impersonatedAddress, setImpersonatedAddress] = useState<Address | undefined>()
-  const { connectors, connectAsync } = useConnect()
-
-  function onAddressChange(address: string) {
-    if (isAddress(address)) {
-      setImpersonatedAddress(address)
-
-      return setWagmiConfig(impersonateWagmiConfig(address))
-    }
-    setImpersonatedAddress(undefined)
-  }
-
-  async function connectMockAccount() {
-    if (!impersonatedAddress) return
-    // E2E dev tests impersonate account in the fork to be able to sign and run transactions against the anvil fork
-    if (shouldUseAnvilFork) {
-      await forkClient.impersonateAccount({
-        address: impersonatedAddress,
-      })
-    }
-    await connectAsync({ connector: connectors[connectors.length - 1] })
-  }
+  const [impersonatedAddress, setImpersonatedAddress] = useState<string>(defaultAnvilAccount)
+  const { impersonateAccount } = useImpersonateAccount()
 
   return (
-    <VStack>
+    <HStack>
       <Text>Impersonate Account</Text>
       <Input
         aria-label="Mock address"
-        onChange={e => onAddressChange(e.target.value)}
+        onChange={e => setImpersonatedAddress(e.target.value || '')}
         type="text"
-        width="40%"
+        value={impersonatedAddress ?? ''}
+        width="450px"
       />
       <Button
         aria-label="Impersonate"
-        disabled={!impersonatedAddress}
-        onClick={() => connectMockAccount()}
+        disabled={!isAddress(impersonatedAddress)}
+        onClick={() => impersonateAccount({ impersonatedAddress: impersonatedAddress as Address })}
       >
         Connect
       </Button>
-    </VStack>
+    </HStack>
   )
 }
