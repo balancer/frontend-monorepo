@@ -22,25 +22,19 @@ const countdownItemBoxShadowStyles = [
 
 export function VotingDeadlineCounter() {
   const now = useCurrentDate(oneSecondInMs)
-  const deadlineDate = nextThursday(now) // fixme: calculate exact time
+  const nowWithoutTime = new Date().setUTCHours(0, 0, 0, 0)
+  const deadline = nextThursday(nowWithoutTime)
+
+  const daysDiff = differenceInDays(deadline, now)
+  const hoursDiff = differenceInHours(deadline, now) - daysDiff * 24
+  const minutesDiff = differenceInMinutes(deadline, now) - differenceInHours(deadline, now) * 60
+  const secondsDiff = differenceInSeconds(deadline, now) - differenceInMinutes(deadline, now) * 60
 
   const counters = [
-    {
-      title: 'D',
-      value: differenceInDays(deadlineDate, now),
-    },
-    {
-      title: 'H',
-      value: differenceInHours(deadlineDate, now) % 24,
-    },
-    {
-      title: 'M',
-      value: differenceInMinutes(deadlineDate, now) % (24 * 60),
-    },
-    {
-      title: 'S',
-      value: differenceInSeconds(deadlineDate, now) % (24 * 60 * 60),
-    },
+    { title: 'D', value: daysDiff },
+    { title: 'H', value: hoursDiff },
+    { title: 'M', value: minutesDiff },
+    { title: 'S', value: secondsDiff },
   ]
 
   return (
@@ -48,7 +42,7 @@ export function VotingDeadlineCounter() {
       <VStack spacing="md">
         <HStack justify="space-between" w="full">
           <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
-            {format(deadlineDate, 'EEEE, HHa')} EST
+            {format(deadline, 'EEEE, Haaa zzzz')}
           </Text>
           <ReminderButton>Set reminder</ReminderButton>
         </HStack>
