@@ -128,24 +128,27 @@ export function PortfolioTable() {
 
   // Filter out pools with tiny balances (<0.01 USD)
   const minUsdBalance = 0.01
-  const filteredBalancePools = shouldFilterTinyBalances
-    ? portfolioData.pools.filter(pool => !hasTinyBalance(pool, minUsdBalance))
-    : portfolioData.pools
+
+  const filteredBalancePools = useMemo(
+    () =>
+      shouldFilterTinyBalances
+        ? portfolioData.pools.filter(pool => !hasTinyBalance(pool, minUsdBalance))
+        : portfolioData.pools,
+    [portfolioData.pools, shouldFilterTinyBalances]
+  )
 
   const expandedPools = useExpandedPools(filteredBalancePools)
 
-  const availableNetworks = useMemo(() => {
-    if (!portfolioData?.pools) return []
-    return [...new Set(portfolioData.pools.map(pool => pool.chain))]
-  }, [portfolioData?.pools])
+  const availableNetworks = useMemo(
+    () => [...new Set(filteredBalancePools.map(pool => pool.chain))],
+    [filteredBalancePools]
+  )
 
   useEffect(() => {
     setAvailableNetworks(availableNetworks)
-  }, [availableNetworks, setAvailableNetworks])
+  }, [availableNetworks])
 
   const availablePoolTypes = useMemo(() => {
-    if (!portfolioData?.pools) return []
-
     const gqlTypeToFilterKeyMap = new Map<GqlPoolType, PoolFilterType>()
 
     for (const key in POOL_TYPE_MAP) {
@@ -158,7 +161,7 @@ export function PortfolioTable() {
 
     const foundFilterKeys = new Set<PoolFilterType>()
 
-    portfolioData.pools.forEach(pool => {
+    filteredBalancePools.forEach(pool => {
       if (pool.type) {
         const filterKey = gqlTypeToFilterKeyMap.get(pool.type)
         if (filterKey) {
@@ -168,11 +171,11 @@ export function PortfolioTable() {
     })
 
     return Array.from(foundFilterKeys)
-  }, [portfolioData?.pools])
+  }, [filteredBalancePools])
 
   useEffect(() => {
     setAvailablePoolTypes(availablePoolTypes)
-  }, [availablePoolTypes, setAvailablePoolTypes])
+  }, [availablePoolTypes])
 
   const hasTinyBalances = portfolioData.pools.some(pool => hasTinyBalance(pool, minUsdBalance))
 
