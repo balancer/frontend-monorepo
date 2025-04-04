@@ -1,5 +1,4 @@
-import { Button, HStack, Skeleton, Text } from '@chakra-ui/react'
-import React from 'react'
+import { Button, HStack, Skeleton, Text, Stack } from '@chakra-ui/react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { MagicStickIcon } from '@repo/lib/shared/components/icons/MagicStickIcon'
@@ -51,9 +50,14 @@ export function MyVotesStatsMyIncentivesOptimized({ myVebalBalance, loading }: P
   const optimizedRewardValue = 86.65 // fix: (votes) provide real value
   const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
 
+  const headerText =
+    !isConnected || !myVebalBalance
+      ? 'Voting incentives APR (average)'
+      : 'My incentives with optimized votes (1w)'
+
   return (
     <MyVotesStatsCard
-      headerText="My potential incentives on $10k"
+      headerText={headerText}
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
@@ -72,7 +76,9 @@ export function MyVotesStatsMyIncentivesOptimized({ myVebalBalance, loading }: P
         ) : isConnected ? (
           <Button onClick={() => alert('@TODO')} size="sm" {...getButtonProps()} />
         ) : (
-          <ConnectWallet size="sm" variant="primary" />
+          <Stack>
+            <ConnectWallet size="sm" variant="primary" />
+          </Stack>
         )
       }
       variant="special"
