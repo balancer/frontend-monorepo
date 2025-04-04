@@ -48,6 +48,8 @@ export function VotingDeadlineCounter() {
     { title: 'S', value: secondsDiff },
   ]
 
+  const closeToDeadline = differenceInMinutes(deadline, now) < 30
+
   return (
     <VotingDeadlineContainer>
       <VStack spacing="md">
@@ -72,6 +74,7 @@ export function VotingDeadlineCounter() {
                   {counter.title}
                 </Text>
                 <Text
+                  color={closeToDeadline ? 'font.warning' : 'font.primary'}
                   fontSize={{ base: '24px', lg: '32px' }}
                   fontWeight={500}
                   lineHeight="40px"
