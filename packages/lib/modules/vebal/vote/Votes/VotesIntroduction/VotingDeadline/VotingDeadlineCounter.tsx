@@ -11,6 +11,7 @@ import {
 import { oneSecondInMs } from '@repo/lib/shared/utils/time'
 import { VotingDeadlineContainer } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineContainer'
 import { ReminderButton } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/ReminderButton'
+import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
 
 const countdownItemBoxShadowStyles = [
   '0px 0px 0px 1px #00000005',
@@ -19,6 +20,16 @@ const countdownItemBoxShadowStyles = [
   '6px 6px 6px -3px #0000001A',
   '-0.5px -1px 0px 0px #FFFFFF26',
 ].join(', ')
+
+function setCalendarEvent(deadline: Date) {
+  const event = {
+    title: 'veBAL voting deadline (Balancer)',
+    start: deadline,
+    url: 'https://balancer.fi/vebal/vote',
+  }
+
+  openIcalEvent({ event })
+}
 
 export function VotingDeadlineCounter() {
   const now = useCurrentDate(oneSecondInMs)
@@ -44,7 +55,7 @@ export function VotingDeadlineCounter() {
           <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
             {format(deadline, 'EEEE, Haaa zzzz')}
           </Text>
-          <ReminderButton>Set reminder</ReminderButton>
+          <ReminderButton onClick={() => setCalendarEvent(deadline)}>Set reminder</ReminderButton>
         </HStack>
         <HStack spacing="sm" w="full">
           {counters.map(counter => (

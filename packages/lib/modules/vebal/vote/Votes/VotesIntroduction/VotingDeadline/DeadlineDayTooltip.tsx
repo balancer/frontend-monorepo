@@ -12,6 +12,7 @@ import { ReminderButton } from './ReminderButton'
 import { format } from 'date-fns'
 import { ReactNode } from 'react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
 
 type Props = {
   children: ReactNode
@@ -32,6 +33,16 @@ const popoverBoxShadow = [
   '42px 42px 42px -24px #0000000F',
   '-0.5px -0.5px 0px 0px #FFFFFF26',
 ].join(', ')
+
+function setCalendarEvent(deadline: Date) {
+  const event = {
+    title: 'Weekly veBAL voting deadline (Balancer)',
+    start: deadline,
+    url: 'https://balancer.fi/vebal/vote',
+  }
+
+  openIcalEvent({ event, makeItWeekly: true })
+}
 
 export function DeadlineDayTooltip({
   children,
@@ -76,7 +87,10 @@ export function DeadlineDayTooltip({
             <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
               {format(day.setHours(deadline.getHours()), 'Haaa zzzz, d LLLL yyyy')}
             </Text>
-            <ReminderButton alignSelf="start">Set weekly reminder</ReminderButton>
+
+            <ReminderButton alignSelf="start" onClick={() => setCalendarEvent(day)}>
+              Set weekly reminder
+            </ReminderButton>
           </VStack>
         </PopoverBody>
       </PopoverContent>
