@@ -4,35 +4,52 @@ import { createContext, PropsWithChildren, useState } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { uniq } from 'lodash'
+import { PoolFilterType } from '../../pool/pool.types'
 
 export type UsePortfolioFiltersResult = ReturnType<typeof _usePortfolioFilters>
 
 function _usePortfolioFilters() {
-  const [networks, setNetworks] = useState<GqlChain[]>([])
+  const [selectedNetworks, setSelectedNetworks] = useState<GqlChain[]>([])
   const [availableNetworks, setAvailableNetworks] = useState<GqlChain[]>([])
+  const [selectedPoolTypes, setSelectedPoolTypes] = useState<PoolFilterType[]>([])
+  const [availablePoolTypes, setAvailablePoolTypes] = useState<PoolFilterType[]>([])
 
   function toggleNetwork(checked: boolean, network: GqlChain) {
     if (checked) {
-      setNetworks(current => uniq([...current, network]))
+      setSelectedNetworks(current => uniq([...current, network]))
     } else {
-      setNetworks(current => current.filter(chain => chain !== network))
+      setSelectedNetworks(current => current.filter(chain => chain !== network))
+    }
+  }
+
+  function togglePoolType(checked: boolean, poolType: PoolFilterType) {
+    if (checked) {
+      setSelectedPoolTypes(current => uniq([...current, poolType]))
+    } else {
+      setSelectedPoolTypes(current => current.filter(type => type !== poolType))
     }
   }
 
   function resetFilters() {
-    setNetworks([])
+    setSelectedNetworks([])
+    setSelectedPoolTypes([])
   }
 
-  const totalFilterCount = networks.length
+  const totalFilterCount = selectedNetworks.length + selectedPoolTypes.length
 
   return {
-    networks,
-    setNetworks,
+    selectedNetworks,
+    setSelectedNetworks,
     toggleNetwork,
     resetFilters,
     totalFilterCount,
     availableNetworks,
     setAvailableNetworks,
+    selectedPoolTypes,
+    setSelectedPoolTypes,
+    togglePoolType,
+    availablePoolTypes,
+    setAvailablePoolTypes,
   }
 }
 

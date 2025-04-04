@@ -18,6 +18,7 @@ import {
   PopoverTrigger,
   VStack,
   forwardRef,
+  Checkbox,
 } from '@chakra-ui/react'
 import { getChainShortName } from '@repo/lib/config/app.config'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
@@ -29,6 +30,8 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { Filter } from 'react-feather'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
+import { PoolFilterType } from '../../pool/pool.types'
+import { poolTypeLabel } from '../../pool/pool.helpers'
 
 export interface PortfolioNetworkFiltersArgs {
   toggledNetworks: GqlChain[]
@@ -66,6 +69,38 @@ export function PortfolioNetworkFilters({
   )
 }
 
+export interface PortfolioPoolTypeFiltersArgs {
+  poolTypes: PoolFilterType[]
+  poolTypeLabel: (poolType: PoolFilterType) => string
+  setPoolTypes: (poolTypes: PoolFilterType[]) => void
+  togglePoolType: (checked: boolean, value: PoolFilterType) => void
+  availablePoolTypes: PoolFilterType[]
+}
+
+export function PoolTypeFilters({
+  togglePoolType,
+  poolTypes,
+  poolTypeLabel,
+  availablePoolTypes,
+}: PortfolioPoolTypeFiltersArgs) {
+  return (
+    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+      {availablePoolTypes.map(poolType => (
+        <Box as={motion.div} key={poolType} variants={staggeredFadeInUp}>
+          <Checkbox
+            isChecked={!!poolTypes.find(selected => selected === poolType)}
+            onChange={e => togglePoolType(e.target.checked, poolType as PoolFilterType)}
+          >
+            <Text fontSize="sm" textTransform="capitalize">
+              {poolTypeLabel(poolType)}
+            </Text>
+          </Checkbox>
+        </Box>
+      ))}
+    </Box>
+  )
+}
+
 export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number }, 'button'>(
   ({ totalFilterCount, ...props }, ref) => {
     const { isMobile } = useBreakpoints()
@@ -99,12 +134,16 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
 export function PortfolioFilters() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const {
-    networks,
+    selectedNetworks,
+    setSelectedNetworks,
     toggleNetwork,
     totalFilterCount,
     resetFilters,
-    setNetworks,
     availableNetworks,
+    selectedPoolTypes,
+    setSelectedPoolTypes,
+    togglePoolType,
+    availablePoolTypes,
   } = usePortfolioFilters()
 
   return (
@@ -161,12 +200,25 @@ export function PortfolioFilters() {
                           </Heading>
                           <PortfolioNetworkFilters
                             networks={availableNetworks}
-                            setNetworks={setNetworks}
+                            setNetworks={setSelectedNetworks}
                             toggleNetwork={toggleNetwork}
-                            toggledNetworks={networks}
+                            toggledNetworks={selectedNetworks}
                           />
                         </Box>
                       )}
+
+                      <Box as={motion.div} variants={staggeredFadeInUp}>
+                        <Heading as="h3" mb="sm" size="sm">
+                          Pool types
+                        </Heading>
+                        <PoolTypeFilters
+                          availablePoolTypes={availablePoolTypes}
+                          poolTypeLabel={poolTypeLabel}
+                          poolTypes={selectedPoolTypes}
+                          setPoolTypes={setSelectedPoolTypes}
+                          togglePoolType={togglePoolType}
+                        />
+                      </Box>
                     </VStack>
                   ) : null}
                 </AnimatePresence>

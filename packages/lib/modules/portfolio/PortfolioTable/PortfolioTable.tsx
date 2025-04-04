@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
 import { usePortfolio } from '../PortfolioProvider'
 import { PortfolioTableHeader } from './PortfolioTableHeader'
 import { PortfolioTableRow } from './PortfolioTableRow'
 import { Box, Card, Center, Checkbox, Heading, Stack, Text, VStack } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
-import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolOrderBy, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import {
@@ -22,6 +23,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PortfolioFilters } from './PortfolioFilters'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
+import { POOL_TYPE_MAP, PoolFilterType } from '../../pool/pool.types'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -84,7 +86,8 @@ export function PortfolioTable() {
   const [shouldFilterTinyBalances, setShouldFilterTinyBalances] = useState(true)
   const { portfolioData, isLoadingPortfolio } = usePortfolio()
   const { isConnected } = useUserAccount()
-  const { setAvailableNetworks, networks: selectedNetworks } = usePortfolioFilters()
+  const { setAvailableNetworks, selectedNetworks, setAvailablePoolTypes, selectedPoolTypes } =
+    usePortfolioFilters()
 
   const { projectName, options } = PROJECT_CONFIG
 
@@ -105,6 +108,37 @@ export function PortfolioTable() {
     setAvailableNetworks(availableNetworks)
   }, [availableNetworks, setAvailableNetworks])
 
+  const availablePoolTypes = useMemo(() => {
+    if (!portfolioData?.pools) return []
+
+    const gqlTypeToFilterKeyMap = new Map<GqlPoolType, PoolFilterType>()
+
+    for (const key in POOL_TYPE_MAP) {
+      const filterTypeKey = key as PoolFilterType
+      const gqlTypes = POOL_TYPE_MAP[filterTypeKey]
+      gqlTypes.forEach(gqlType => {
+        gqlTypeToFilterKeyMap.set(gqlType, filterTypeKey)
+      })
+    }
+
+    const foundFilterKeys = new Set<PoolFilterType>()
+
+    portfolioData.pools.forEach(pool => {
+      if (pool.type) {
+        const filterKey = gqlTypeToFilterKeyMap.get(pool.type)
+        if (filterKey) {
+          foundFilterKeys.add(filterKey)
+        }
+      }
+    })
+
+    return Array.from(foundFilterKeys)
+  }, [portfolioData?.pools])
+
+  useEffect(() => {
+    setAvailablePoolTypes(availablePoolTypes)
+  }, [availablePoolTypes, setAvailablePoolTypes])
+
   const hasTinyBalances = portfolioData.pools.some(pool => hasTinyBalance(pool, minUsdBalance))
 
   const { veBalBoostMap } = useVebalBoost(portfolioData.stakedPools)
@@ -121,6 +155,17 @@ export function PortfolioTable() {
     // Filter by selected networks if any are selected
     if (selectedNetworks.length > 0) {
       arr = arr.filter(pool => selectedNetworks.includes(pool.chain))
+    }
+
+    // Filter by selected pool types if any are selected
+    if (selectedPoolTypes.length > 0) {
+      arr = arr.filter(pool =>
+        selectedPoolTypes.some(selectedFilterKey => {
+          const correspondingGqlTypes = POOL_TYPE_MAP[selectedFilterKey]
+
+          return correspondingGqlTypes && correspondingGqlTypes.includes(pool.type)
+        })
+      )
     }
 
     return arr.sort((a, b) => {
@@ -170,7 +215,6 @@ export function PortfolioTable() {
     currentSortingObj.id,
     currentSortingObj.desc,
     veBalBoostMap,
-    selectedNetworks,
   ])
 
   return (
