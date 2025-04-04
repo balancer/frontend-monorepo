@@ -196,7 +196,7 @@ const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.Fx]: 'FX',
   [GqlPoolType.ComposableStable]: 'Stable',
   [GqlPoolType.CowAmm]: 'Weighted',
-  [GqlPoolType.QuantAmmWeighted]: 'Blockchain Traded Fund (BTF)',
+  [GqlPoolType.QuantAmmWeighted]: 'BTF',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {

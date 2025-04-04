@@ -450,3 +450,24 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
   }
   return true
 }
+
+export function poolTypeLabel(poolType: GqlPoolType) {
+  switch (poolType) {
+    case GqlPoolType.Weighted:
+      return 'Weighted'
+    case GqlPoolType.Stable:
+      return 'Stable'
+    case GqlPoolType.LiquidityBootstrapping:
+      return 'Liquidity Bootstrapping (LBP)'
+    case GqlPoolType.Gyro:
+      return 'Gyro CLP'
+    case GqlPoolType.CowAmm:
+      return 'CoW AMM'
+    case GqlPoolType.Fx:
+      return 'FX'
+    case GqlPoolType.QuantAmmWeighted:
+      return 'BTF'
+    default:
+      return poolType.toLowerCase()
+  }
+}

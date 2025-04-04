@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { poolTypeLabel } from '@repo/lib/modules/pool/PoolList/usePoolListQueryState'
 import {
   Box,
   Button,
@@ -26,6 +25,7 @@ import {
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListSearch } from '@repo/lib/modules/vebal/vote/VoteList/VoteListSearch'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { poolTypeLabel } from '@repo/lib/modules/pool/pool.helpers'
 
 export function useFilterTagsVisible() {
   const {
