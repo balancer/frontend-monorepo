@@ -1,8 +1,9 @@
 import { StaticCalendar } from '@repo/lib/shared/components/calendar/StaticCalendar'
 import { useToday } from '@repo/lib/shared/hooks/date.hooks'
-import { addWeeks, endOfWeek, isSameDay, nextThursday, startOfDay, startOfWeek } from 'date-fns'
+import { addWeeks, endOfWeek, isSameDay, nextThursday, startOfWeek } from 'date-fns'
 import { useCallback } from 'react'
 import { VotingDeadlineContainer } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineContainer'
+import { startOfDayUtc } from '@repo/lib/shared/utils/time'
 
 export function VotingDeadlineCalendar() {
   const today = useToday()
@@ -13,7 +14,7 @@ export function VotingDeadlineCalendar() {
 
   const isDayDisabled = useCallback(
     (day: Date) => {
-      return day < startOfDay(today)
+      return day < startOfDayUtc(today)
     },
     [today]
   )

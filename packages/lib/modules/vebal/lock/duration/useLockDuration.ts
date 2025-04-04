@@ -1,59 +1,19 @@
+import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
+import { UseVebalLockDataResult } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { useToday } from '@repo/lib/shared/hooks/date.hooks'
-import { useEffect, useMemo, useState } from 'react'
 import {
-  addDays,
   addMonths,
   addWeeks,
   differenceInMonths,
   differenceInWeeks,
   format,
   isEqual,
-  isThursday,
-  nextThursday,
-  previousThursday,
-  startOfDay,
 } from 'date-fns'
 import { range } from 'lodash'
-import {
-  MAX_LOCK_PERIOD_IN_DAYS,
-  MIN_LOCK_PERIOD_IN_DAYS,
-  PRETTY_DATE_FORMAT,
-} from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
-import { UseVebalLockDataResult } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
-
-function getMinLockEndDate(date: Date) {
-  const minLockTimestamp = addDays(date, MIN_LOCK_PERIOD_IN_DAYS)
-
-  const timestamp = isThursday(minLockTimestamp) ? minLockTimestamp : nextThursday(minLockTimestamp)
-
-  return startOfDay(timestamp)
-}
-
-function getMaxLockEndDate(date: Date) {
-  const maxLockTimestamp = addDays(date, MAX_LOCK_PERIOD_IN_DAYS)
-
-  const timestamp = isThursday(maxLockTimestamp)
-    ? maxLockTimestamp
-    : previousThursday(maxLockTimestamp)
-
-  return startOfDay(timestamp)
-}
-
-interface UseLockEndDateProps {
-  lockedEndDate?: Date
-}
-
-export function useLockEndDate({ lockedEndDate }: UseLockEndDateProps) {
-  const today = useToday()
-
-  const minLockEndDate = useMemo(() => {
-    return getMinLockEndDate(lockedEndDate ?? today)
-  }, [lockedEndDate, today])
-
-  const maxLockEndDate = useMemo(() => getMaxLockEndDate(today), [today])
-
-  return { minLockEndDate, maxLockEndDate }
-}
+import { useEffect, useMemo, useState } from 'react'
+import { getMinLockEndDate } from '../lock-time.utils'
+import { useLockEndDate, UseLockEndDateProps } from './useLockEndDate'
+import { startOfDayUtc } from '@repo/lib/shared/utils/time'
 
 export interface UseLockDurationProps extends UseLockEndDateProps {
   initialValue?: number
@@ -102,7 +62,7 @@ export function useLockDuration({
   const stepSize = 1
 
   const lockEndDate = useMemo(() => {
-    const value = startOfDay(addWeeks(sliderMinDate, sliderValue))
+    const value = startOfDayUtc(addWeeks(sliderMinDate, sliderValue))
 
     if (value >= sliderMaxDate) {
       return sliderMaxDate
@@ -124,10 +84,9 @@ export function useLockDuration({
 
   const lockUntilDateFormatted = format(lockEndDate, PRETTY_DATE_FORMAT)
 
-  const isValidLockEndDate = useMemo(
-    () => lockEndDate >= minLockEndDate && lockEndDate <= maxLockEndDate,
-    [lockEndDate, maxLockEndDate, minLockEndDate]
-  )
+  const isValidLockEndDate = useMemo(() => {
+    return lockEndDate >= minLockEndDate && lockEndDate <= maxLockEndDate
+  }, [lockEndDate, maxLockEndDate, minLockEndDate])
 
   const isExtendedLockEndDate = useMemo(
     () => mainnetLockedInfo?.hasExistingLock && isValidLockEndDate,

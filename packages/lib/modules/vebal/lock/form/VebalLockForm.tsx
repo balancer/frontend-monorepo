@@ -136,7 +136,7 @@ export function VebalLockForm() {
                 address={vebalBptToken.address}
                 chain={vebalBptToken.chain}
                 onChange={e => setLpToken(e.currentTarget.value as HumanAmount)}
-                value={lpToken}
+                value={lpToken || ''}
               />
             )}
             {amountMode === 'show' && (
