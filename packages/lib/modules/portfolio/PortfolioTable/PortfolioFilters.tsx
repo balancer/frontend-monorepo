@@ -27,11 +27,12 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Filter } from 'react-feather'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { PoolFilterType } from '../../pool/pool.types'
 import { poolTypeLabel } from '../../pool/pool.helpers'
+import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 
 export interface PortfolioNetworkFiltersArgs {
   toggledNetworks: GqlChain[]
@@ -98,6 +99,59 @@ export function PoolTypeFilters({
         </Box>
       ))}
     </Box>
+  )
+}
+
+export function usePortfolioFilterTagsVisible() {
+  const { selectedNetworks, selectedPoolTypes } = usePortfolioFilters()
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    setIsVisible(selectedNetworks.length > 0 || selectedPoolTypes.length > 0)
+  }, [selectedNetworks, selectedPoolTypes])
+
+  return isVisible
+}
+
+export interface PortfolioFilterTagsPops {
+  networks: GqlChain[]
+  toggleNetwork: (checked: boolean, value: GqlChain) => void
+  poolTypes: PoolFilterType[]
+  togglePoolType: (checked: boolean, value: PoolFilterType) => void
+  poolTypeLabel: (poolType: PoolFilterType) => string
+}
+
+export function PortfolioFilterTags({
+  networks,
+  toggleNetwork,
+  poolTypes,
+  togglePoolType,
+  poolTypeLabel,
+}: PortfolioFilterTagsPops) {
+  // prevents layout shift in mobile view
+  if (networks.length === 0 && poolTypes.length === 0) {
+    return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
+  }
+
+  return (
+    <HStack spacing="sm" wrap="wrap">
+      <AnimatePresence>
+        {poolTypes.map(poolType => (
+          <AnimatedTag
+            key={poolType}
+            label={poolTypeLabel(poolType)}
+            onClose={() => togglePoolType(false, poolType)}
+          />
+        ))}
+        {networks.map(network => (
+          <AnimatedTag
+            key={network}
+            label={getChainShortName(network)}
+            onClose={() => toggleNetwork(false, network)}
+          />
+        ))}
+      </AnimatePresence>
+    </HStack>
   )
 }
 

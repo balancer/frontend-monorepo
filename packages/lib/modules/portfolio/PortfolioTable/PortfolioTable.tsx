@@ -3,7 +3,18 @@ import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTabl
 import { usePortfolio } from '../PortfolioProvider'
 import { PortfolioTableHeader } from './PortfolioTableHeader'
 import { PortfolioTableRow } from './PortfolioTableRow'
-import { Box, Card, Center, Checkbox, Heading, Stack, Text, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Card,
+  Center,
+  Checkbox,
+  Heading,
+  HStack,
+  Stack,
+  Text,
+  useBreakpointValue,
+  VStack,
+} from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
 import { GqlPoolOrderBy, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
@@ -21,9 +32,15 @@ import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { PortfolioFilters } from './PortfolioFilters'
+import {
+  PortfolioFilters,
+  PortfolioFilterTags,
+  usePortfolioFilterTagsVisible,
+} from './PortfolioFilters'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { POOL_TYPE_MAP, PoolFilterType } from '../../pool/pool.types'
+import { motion } from 'framer-motion'
+import { poolTypeLabel } from '../../pool/pool.helpers'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -86,10 +103,28 @@ export function PortfolioTable() {
   const [shouldFilterTinyBalances, setShouldFilterTinyBalances] = useState(true)
   const { portfolioData, isLoadingPortfolio } = usePortfolio()
   const { isConnected } = useUserAccount()
-  const { setAvailableNetworks, selectedNetworks, setAvailablePoolTypes, selectedPoolTypes } =
-    usePortfolioFilters()
+  const isFilterVisible = usePortfolioFilterTagsVisible()
+  const isMd = useBreakpointValue({ base: false, md: true })
+
+  const {
+    setAvailableNetworks,
+    selectedNetworks,
+    setAvailablePoolTypes,
+    selectedPoolTypes,
+    toggleNetwork,
+    togglePoolType,
+  } = usePortfolioFilters()
 
   const { projectName, options } = PROJECT_CONFIG
+
+  const variants = {
+    visible: {
+      transform: isMd ? 'translateY(-40px)' : 'translateY(0)',
+    },
+    hidden: {
+      transform: 'translateY(0)',
+    },
+  }
 
   // Filter out pools with tiny balances (<0.01 USD)
   const minUsdBalance = 0.01
@@ -219,15 +254,52 @@ export function PortfolioTable() {
 
   return (
     <FadeInOnView>
-      <VStack align="start" spacing="md" w="full">
-        <Stack direction={{ base: 'column', md: 'row' }} justify="space-between" w="full">
-          <Heading
-            as="h2"
-            size="lg"
-            variant="special"
-            w="full"
-          >{`${projectName} portfolio`}</Heading>
-          <PortfolioFilters />
+      <VStack align="start" minHeight="1000px" spacing="md" w="full">
+        <Stack
+          alignItems={isFilterVisible ? 'flex-end' : 'flex-start'}
+          direction={{ base: 'column', md: 'row' }}
+          justify="space-between"
+          w="full"
+        >
+          <VStack align="start" flex={1} pb={{ base: 'sm', md: '0' }} w="full">
+            <HStack w="full">
+              <Box position="relative" top="0">
+                <Box
+                  animate={isFilterVisible ? 'visible' : 'hidden'}
+                  as={motion.div}
+                  left="0"
+                  minW={{ base: 'auto', md: '270px' }}
+                  position={{ base: 'relative', md: 'absolute' }}
+                  top="0"
+                  transition="all 0.15s var(--ease-out-cubic)"
+                  variants={variants}
+                  willChange="transform"
+                >
+                  <Heading
+                    as="h2"
+                    size="lg"
+                    variant="special"
+                    w="full"
+                  >{`${projectName} portfolio`}</Heading>
+                </Box>
+              </Box>
+            </HStack>
+            <PortfolioFilterTags
+              networks={selectedNetworks}
+              poolTypeLabel={poolTypeLabel}
+              poolTypes={selectedPoolTypes}
+              toggleNetwork={toggleNetwork}
+              togglePoolType={togglePoolType}
+            />
+          </VStack>
+
+          <Stack
+            align={{ base: 'end', sm: 'center' }}
+            direction="row"
+            w={{ base: 'full', md: 'auto' }}
+          >
+            <PortfolioFilters />
+          </Stack>
         </Stack>
         {isConnected ? (
           <Card
@@ -270,7 +342,7 @@ export function PortfolioTable() {
             />
           </Card>
         ) : (
-          <Center border="1px dashed" borderColor="border.base" h="400px" rounded="lg">
+          <Center border="1px dashed" borderColor="border.base" h="400px" rounded="lg" w="full">
             <Box>
               <ConnectWallet size="lg" variant="primary" />
             </Box>
