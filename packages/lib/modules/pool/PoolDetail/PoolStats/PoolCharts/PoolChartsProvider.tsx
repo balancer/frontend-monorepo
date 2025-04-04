@@ -360,7 +360,13 @@ export function _usePoolCharts() {
       }
     }
 
-    return processedElements
+    // timestamps from chartData are UTC midnight, but echarts defaults to interpreting timestamp values in local timezone, so adjust by offset to display correct day on chart
+    return processedElements.map(([timestamp, value]) => {
+      const date = new Date(timestamp * 1000)
+      const timezoneOffset = date.getTimezoneOffset() * 60 // in seconds
+      const adjustedTimestamp = timestamp + timezoneOffset
+      return [adjustedTimestamp, value]
+    })
   }, [
     activePeriod.value,
     activeTab.value,
