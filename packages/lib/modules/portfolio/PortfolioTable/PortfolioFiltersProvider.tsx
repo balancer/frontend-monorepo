@@ -5,16 +5,11 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { uniq } from 'lodash'
 
-interface PortfolioFiltersState {
-  networks: GqlChain[]
-  setNetworks: (networks: GqlChain[]) => void
-  toggleNetwork: (checked: boolean, network: GqlChain) => void
-  resetFilters: () => void
-  totalFilterCount: number
-}
+export type UsePortfolioFiltersResult = ReturnType<typeof _usePortfolioFilters>
 
-function _usePortfolioFilters(): PortfolioFiltersState {
+function _usePortfolioFilters() {
   const [networks, setNetworks] = useState<GqlChain[]>([])
+  const [availableNetworks, setAvailableNetworks] = useState<GqlChain[]>([])
 
   function toggleNetwork(checked: boolean, network: GqlChain) {
     if (checked) {
@@ -36,10 +31,12 @@ function _usePortfolioFilters(): PortfolioFiltersState {
     toggleNetwork,
     resetFilters,
     totalFilterCount,
+    availableNetworks,
+    setAvailableNetworks,
   }
 }
 
-export const PortfolioFiltersContext = createContext<PortfolioFiltersState | null>(null)
+export const PortfolioFiltersContext = createContext<UsePortfolioFiltersResult | null>(null)
 
 export function PortfolioFiltersProvider({ children }: PropsWithChildren) {
   const value = _usePortfolioFilters()

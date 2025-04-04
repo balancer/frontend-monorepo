@@ -20,7 +20,6 @@ import {
   forwardRef,
 } from '@chakra-ui/react'
 import { getChainShortName } from '@repo/lib/config/app.config'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { MultiSelect } from '@repo/lib/shared/components/inputs/MultiSelect'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -29,25 +28,22 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
 import { useState } from 'react'
 import { Filter } from 'react-feather'
-import { PortfolioFiltersProvider, usePortfolioFilters } from './PortfolioFiltersProvider'
+import { usePortfolioFilters } from './PortfolioFiltersProvider'
 
 export interface PortfolioNetworkFiltersArgs {
   toggledNetworks: GqlChain[]
   toggleNetwork: (checked: boolean, value: GqlChain) => void
   setNetworks: (networks: GqlChain[]) => void
+  networks: GqlChain[]
 }
 
 export function PortfolioNetworkFilters({
   toggledNetworks,
   toggleNetwork,
   setNetworks,
+  networks,
 }: PortfolioNetworkFiltersArgs) {
-  const { supportedNetworks } = PROJECT_CONFIG
-
-  // Sort networks alphabetically after mainnet
-  const sortedNetworks = [supportedNetworks[0], ...supportedNetworks.slice(1).sort()]
-
-  const networkOptions = sortedNetworks.map(network => ({
+  const networkOptions = networks.map(network => ({
     label: getChainShortName(network),
     value: network,
     selectedLabel: (
@@ -101,17 +97,15 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
 )
 
 export function PortfolioFilters() {
-  return (
-    <PortfolioFiltersProvider>
-      <PortfolioFiltersContent />
-    </PortfolioFiltersProvider>
-  )
-}
-
-function PortfolioFiltersContent() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
-  const { networks, toggleNetwork, totalFilterCount, resetFilters, setNetworks } =
-    usePortfolioFilters()
+  const {
+    networks,
+    toggleNetwork,
+    totalFilterCount,
+    resetFilters,
+    setNetworks,
+    availableNetworks,
+  } = usePortfolioFilters()
 
   return (
     <VStack w="full">
@@ -160,16 +154,19 @@ function PortfolioFiltersContent() {
                           )}
                         </Flex>
                       </Box>
-                      <Box as={motion.div} variants={staggeredFadeInUp} w="full">
-                        <Heading as="h3" mb="sm" size="sm">
-                          Networks
-                        </Heading>
-                        <PortfolioNetworkFilters
-                          setNetworks={setNetworks}
-                          toggleNetwork={toggleNetwork}
-                          toggledNetworks={networks}
-                        />
-                      </Box>
+                      {availableNetworks.length > 1 && (
+                        <Box as={motion.div} variants={staggeredFadeInUp} w="full">
+                          <Heading as="h3" mb="sm" size="sm">
+                            Networks
+                          </Heading>
+                          <PortfolioNetworkFilters
+                            networks={availableNetworks}
+                            setNetworks={setNetworks}
+                            toggleNetwork={toggleNetwork}
+                            toggledNetworks={networks}
+                          />
+                        </Box>
+                      )}
                     </VStack>
                   ) : null}
                 </AnimatePresence>

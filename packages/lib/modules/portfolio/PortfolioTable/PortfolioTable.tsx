@@ -3,7 +3,7 @@ import { usePortfolio } from '../PortfolioProvider'
 import { PortfolioTableHeader } from './PortfolioTableHeader'
 import { PortfolioTableRow } from './PortfolioTableRow'
 import { Box, Card, Center, Checkbox, Heading, Stack, Text, VStack } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -21,6 +21,7 @@ import { getCanStake } from '../../pool/actions/stake.helpers'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { PortfolioFilters } from './PortfolioFilters'
+import { usePortfolioFilters } from './PortfolioFiltersProvider'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -83,6 +84,8 @@ export function PortfolioTable() {
   const [shouldFilterTinyBalances, setShouldFilterTinyBalances] = useState(true)
   const { portfolioData, isLoadingPortfolio } = usePortfolio()
   const { isConnected } = useUserAccount()
+  const { setAvailableNetworks, networks: selectedNetworks } = usePortfolioFilters()
+
   const { projectName, options } = PROJECT_CONFIG
 
   // Filter out pools with tiny balances (<0.01 USD)
@@ -92,6 +95,15 @@ export function PortfolioTable() {
     : portfolioData.pools
 
   const expandedPools = useExpandedPools(filteredBalancePools)
+
+  const availableNetworks = useMemo(() => {
+    if (!portfolioData?.pools) return []
+    return [...new Set(portfolioData.pools.map(pool => pool.chain))]
+  }, [portfolioData?.pools])
+
+  useEffect(() => {
+    setAvailableNetworks(availableNetworks)
+  }, [availableNetworks, setAvailableNetworks])
 
   const hasTinyBalances = portfolioData.pools.some(pool => hasTinyBalance(pool, minUsdBalance))
 
@@ -104,7 +116,12 @@ export function PortfolioTable() {
 
   const sortedPools = useMemo(() => {
     if (!portfolioData?.pools) return []
-    const arr = [...expandedPools]
+    let arr = [...expandedPools]
+
+    // Filter by selected networks if any are selected
+    if (selectedNetworks.length > 0) {
+      arr = arr.filter(pool => selectedNetworks.includes(pool.chain))
+    }
 
     return arr.sort((a, b) => {
       if (currentSortingObj.id === 'staking') {
@@ -153,6 +170,7 @@ export function PortfolioTable() {
     currentSortingObj.id,
     currentSortingObj.desc,
     veBalBoostMap,
+    selectedNetworks,
   ])
 
   return (
