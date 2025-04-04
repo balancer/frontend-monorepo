@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { oneMinInMs } from '@repo/lib/shared/utils/time'
-import { startOfDay } from 'date-fns'
+import { oneMinInMs, startOfDayUtc } from '@repo/lib/shared/utils/time'
 
 /**
  * Returns actual (autoupdated) new Date()
@@ -31,6 +30,6 @@ export function useCurrentDate(interval = oneMinInMs) {
  */
 export function useToday(interval = oneMinInMs) {
   const currentDate = useCurrentDate(interval)
-  const today = startOfDay(currentDate).getTime()
+  const today = startOfDayUtc(currentDate).getTime()
   return useMemo(() => new Date(today), [today])
 }

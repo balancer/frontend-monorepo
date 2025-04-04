@@ -61,6 +61,7 @@ if (!isConnectedToWC()) {
 // Add mock connector for development/staging environments
 if (!isProd) connectors.push(createMockConnector({ index: connectors.length }))
 
+export type WagmiConfig = ReturnType<typeof createConfig>
 export const wagmiConfig = createConfig({
   chains,
   transports,
