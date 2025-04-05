@@ -75,7 +75,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
   const { veBALBalance, noVeBALBalance } = useVebalUserData()
-  // FIXME: [JUANJO] calculations should be done with bigint
+  // FIXME: [JUANJO] (votes) calculations should be done with bigint
   const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
   const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true)

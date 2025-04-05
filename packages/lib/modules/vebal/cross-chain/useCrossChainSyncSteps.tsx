@@ -36,7 +36,7 @@ function ChainSyncButton({
   const { data, error, isLoading } = useEstimateSendUserBalance(omniVotingEscrow, layerZeroChainId)
   const { userAddress } = useUserAccount()
 
-  // FIXME - handle error
+  // FIXME: (votes) handle error
   if (error) {
     return <Button disabled>Failed: {error.message}</Button>
   }

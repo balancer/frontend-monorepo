@@ -41,7 +41,7 @@ export function MyVotes() {
 
   const { isLoading: vebalUserDataLoading, veBALBalance, noVeBALBalance } = useVebalUserData()
 
-  // FIXME: [JUANJO] everything needs a number here, but we should work with bigint
+  // FIXME: [JUANJO] (votes) everything needs a number here, but we should work with bigint
   const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
   const loading = myVotesLoading || vebalUserDataLoading

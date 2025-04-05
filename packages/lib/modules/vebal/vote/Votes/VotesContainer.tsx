@@ -38,7 +38,7 @@ export async function VotesContainer() {
       votingIncentivesLoading={false} /* RSC (SSR) mode, no loading needed */
     >
       <VStack spacing="3xl" w="full">
-        {/* todo: work in progress */}
+        {/* todo: (votes) work in progress */}
         {false && <VotesIntroductionLayout />}
         <TransactionStateProvider>
           <MyVotesProvider>
