@@ -57,10 +57,6 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
 
   const isExpired = isPoolGaugeExpired(vote)
 
-  const editVotesStyles = {
-    // fix: (votes) implement nested cell paddings for Edit votes column
-    // bg: 'background.level1',
-  }
   const editVotes = bpsToPercentage(editVotesWeights[vote.id] ?? 0).multipliedBy(100)
 
   const removable = isSelectedPool(vote)
@@ -88,7 +84,6 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           bg: 'background.level0',
         }}
         key={keyValue}
-        // fix: (votes) implement nested cell paddings for Edit votes column
         px={{ base: '0', sm: 'md' }}
         rounded="md"
         transition="all 0.2s ease-in-out"
@@ -149,7 +144,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
               weight={vote.gaugeVotes?.userVotes ?? '0'}
             />
           </GridItem>
-          <GridItem justifySelf="end" textAlign="right" {...cellProps} {...editVotesStyles}>
+          <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <VoteWeightInput
               isDisabled={isDisabled}
               isExpired={vebalIsExpired}

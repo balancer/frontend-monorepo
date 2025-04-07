@@ -26,13 +26,6 @@ const rowProps = {
   gridTemplateColumns: `32px minmax(320px, 1fr) 100px 120px 120px 120px 50px`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
-  // fix: (votes) implement nested cell paddings for Edit votes column
-  // gridTemplateColumns: `52px minmax(350px, 1fr) 130px 150px 150px 150px 52px`,
-}
-
-const cellProps = {
-  // fix: (votes) implement nested cell paddings for Edit votes column
-  // p: ['sm', 'md'],
 }
 
 export function MyVotesTable({ myVotes, loading }: Props) {
@@ -67,7 +60,7 @@ export function MyVotesTable({ myVotes, loading }: Props) {
 
   const TableHeader = useMemo(() => {
     return function TableHeader() {
-      return <MyVotesTableHeader cellProps={cellProps} {...rowProps} />
+      return <MyVotesTableHeader cellProps={{}} {...rowProps} />
     }
   }, [])
 
@@ -75,16 +68,14 @@ export function MyVotesTable({ myVotes, loading }: Props) {
   const TableRow = useMemo(() => {
     return function TableHeader({ item }: { item: (typeof items)[number]; index: number }) {
       if (item.type === RowType.Total) {
-        return <MyVotesTotalRow cellProps={cellProps} keyValue={item.id} {...rowProps} />
+        return <MyVotesTotalRow cellProps={{}} keyValue={item.id} {...rowProps} />
       }
 
       if (item.type === RowType.Submit) {
-        return <MyVotesSubmitRow cellProps={cellProps} keyValue={item.id} {...rowProps} />
+        return <MyVotesSubmitRow cellProps={{}} keyValue={item.id} {...rowProps} />
       }
 
-      return (
-        <MyVotesTableRow cellProps={cellProps} keyValue={item.id} vote={item.vote} {...rowProps} />
-      )
+      return <MyVotesTableRow cellProps={{}} keyValue={item.id} vote={item.vote} {...rowProps} />
     }
   }, [])
 
