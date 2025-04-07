@@ -143,7 +143,8 @@ export function PortfolioTable() {
   const expandedPools = useExpandedPools(filteredBalancePools)
 
   const availableNetworks = useMemo(
-    () => [...new Set(filteredBalancePools.map(pool => pool.chain))],
+    () =>
+      [...new Set(filteredBalancePools.map(pool => pool.chain))].sort((a, b) => a.localeCompare(b)),
     [filteredBalancePools]
   )
 
