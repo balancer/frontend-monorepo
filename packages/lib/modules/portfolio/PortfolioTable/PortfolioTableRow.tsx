@@ -15,6 +15,7 @@ import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolLi
 import { usePoolMetadata } from '../../pool/metadata/usePoolMetadata'
 import { PoolListPoolDisplay } from '../../pool/PoolList/PoolListPoolDisplay'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getStakingText } from '../portfolio.helpers'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -23,22 +24,6 @@ interface Props extends GridProps {
 }
 
 const MemoizedMainAprTooltip = memo(MainAprTooltip)
-
-function getStakingText(poolType: ExpandedPoolType) {
-  switch (poolType) {
-    case ExpandedPoolType.StakedBal:
-    case ExpandedPoolType.StakedAura:
-      return 'Staked'
-    case ExpandedPoolType.Unstaked:
-      return 'Unstaked'
-    case ExpandedPoolType.Locked:
-      return 'Locked'
-    case ExpandedPoolType.Unlocked:
-      return 'Unlocked'
-    default:
-      return 'N/A'
-  }
-}
 
 export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Props) {
   const { toCurrency } = useCurrency()
