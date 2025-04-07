@@ -33,3 +33,12 @@ export function useToday(interval = oneMinInMs) {
   const today = startOfDayUtc(currentDate).getTime()
   return useMemo(() => new Date(today), [today])
 }
+
+export function useFakeTime() {
+  const [isFakeTime, setIsFakeTime] = useState(false)
+
+  return {
+    isFakeTime,
+    setIsFakeTime,
+  }
+}
