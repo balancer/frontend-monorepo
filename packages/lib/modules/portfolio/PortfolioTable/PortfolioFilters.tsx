@@ -33,6 +33,8 @@ import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { PoolFilterType } from '../../pool/pool.types'
 import { poolTypeLabel } from '../../pool/pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
+import { ExpandedPoolType } from './useExpandedPools'
+import { getStakingText } from '../portfolio.helpers'
 
 export interface PortfolioNetworkFiltersArgs {
   toggledNetworks: GqlChain[]
@@ -102,13 +104,45 @@ export function PoolTypeFilters({
   )
 }
 
+export interface PortfolioStakingTypeFiltersArgs {
+  stakingTypes: ExpandedPoolType[]
+  setStakingTypes: (stakingTypes: ExpandedPoolType[]) => void
+  toggleStakingType: (checked: boolean, value: ExpandedPoolType) => void
+  availableStakingTypes: ExpandedPoolType[]
+}
+
+export function StakingTypeFilters({
+  toggleStakingType,
+  stakingTypes,
+  availableStakingTypes,
+}: PortfolioStakingTypeFiltersArgs) {
+  return (
+    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+      {availableStakingTypes.map(stakingType => (
+        <Box as={motion.div} key={stakingType} variants={staggeredFadeInUp}>
+          <Checkbox
+            isChecked={!!stakingTypes.find(selected => selected === stakingType)}
+            onChange={e => toggleStakingType(e.target.checked, stakingType)}
+          >
+            <Text fontSize="sm" textTransform="capitalize">
+              {getStakingText(stakingType)}
+            </Text>
+          </Checkbox>
+        </Box>
+      ))}
+    </Box>
+  )
+}
+
 export function usePortfolioFilterTagsVisible() {
-  const { selectedNetworks, selectedPoolTypes } = usePortfolioFilters()
+  const { selectedNetworks, selectedPoolTypes, selectedStakingTypes } = usePortfolioFilters()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    setIsVisible(selectedNetworks.length > 0 || selectedPoolTypes.length > 0)
-  }, [selectedNetworks, selectedPoolTypes])
+    setIsVisible(
+      selectedNetworks.length > 0 || selectedPoolTypes.length > 0 || selectedStakingTypes.length > 0
+    )
+  }, [selectedNetworks, selectedPoolTypes, selectedStakingTypes])
 
   return isVisible
 }
@@ -118,7 +152,8 @@ export interface PortfolioFilterTagsPops {
   toggleNetwork: (checked: boolean, value: GqlChain) => void
   poolTypes: PoolFilterType[]
   togglePoolType: (checked: boolean, value: PoolFilterType) => void
-  poolTypeLabel: (poolType: PoolFilterType) => string
+  stakingTypes: ExpandedPoolType[]
+  toggleStakingType: (checked: boolean, value: ExpandedPoolType) => void
 }
 
 export function PortfolioFilterTags({
@@ -126,10 +161,11 @@ export function PortfolioFilterTags({
   toggleNetwork,
   poolTypes,
   togglePoolType,
-  poolTypeLabel,
+  stakingTypes,
+  toggleStakingType,
 }: PortfolioFilterTagsPops) {
   // prevents layout shift in mobile view
-  if (networks.length === 0 && poolTypes.length === 0) {
+  if (networks.length === 0 && poolTypes.length === 0 && stakingTypes.length === 0) {
     return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
   }
 
@@ -148,6 +184,13 @@ export function PortfolioFilterTags({
             key={network}
             label={getChainShortName(network)}
             onClose={() => toggleNetwork(false, network)}
+          />
+        ))}
+        {stakingTypes.map(stakingType => (
+          <AnimatedTag
+            key={stakingType}
+            label={getStakingText(stakingType)}
+            onClose={() => toggleStakingType(false, stakingType)}
           />
         ))}
       </AnimatePresence>
@@ -198,6 +241,10 @@ export function PortfolioFilters() {
     setSelectedPoolTypes,
     togglePoolType,
     availablePoolTypes,
+    selectedStakingTypes,
+    setSelectedStakingTypes,
+    toggleStakingType,
+    availableStakingTypes,
   } = usePortfolioFilters()
 
   return (
@@ -260,7 +307,6 @@ export function PortfolioFilters() {
                           />
                         </Box>
                       )}
-
                       <Box as={motion.div} variants={staggeredFadeInUp}>
                         <Heading as="h3" mb="sm" size="sm">
                           Pool types
@@ -271,6 +317,17 @@ export function PortfolioFilters() {
                           poolTypes={selectedPoolTypes}
                           setPoolTypes={setSelectedPoolTypes}
                           togglePoolType={togglePoolType}
+                        />
+                      </Box>
+                      <Box as={motion.div} variants={staggeredFadeInUp}>
+                        <Heading as="h3" mb="sm" size="sm">
+                          Staking types
+                        </Heading>
+                        <StakingTypeFilters
+                          availableStakingTypes={availableStakingTypes}
+                          setStakingTypes={setSelectedStakingTypes}
+                          stakingTypes={selectedStakingTypes}
+                          toggleStakingType={toggleStakingType}
                         />
                       </Box>
                     </VStack>

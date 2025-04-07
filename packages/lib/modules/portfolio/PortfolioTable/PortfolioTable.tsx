@@ -40,7 +40,6 @@ import {
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { POOL_TYPE_MAP, PoolFilterType } from '../../pool/pool.types'
 import { motion } from 'framer-motion'
-import { poolTypeLabel } from '../../pool/pool.helpers'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -113,6 +112,9 @@ export function PortfolioTable() {
     selectedPoolTypes,
     toggleNetwork,
     togglePoolType,
+    toggleStakingType,
+    setAvailableStakingTypes,
+    selectedStakingTypes,
   } = usePortfolioFilters()
 
   const { projectName, options } = PROJECT_CONFIG
@@ -177,6 +179,22 @@ export function PortfolioTable() {
     setAvailablePoolTypes(availablePoolTypes)
   }, [availablePoolTypes])
 
+  const availableStakingTypes = useMemo(() => {
+    const foundFilterKeys = new Set<ExpandedPoolType>()
+
+    expandedPools.forEach(pool => {
+      if (pool.poolType) {
+        foundFilterKeys.add(pool.poolType)
+      }
+    })
+
+    return Array.from(foundFilterKeys)
+  }, [expandedPools])
+
+  useEffect(() => {
+    setAvailableStakingTypes(availableStakingTypes)
+  }, [availableStakingTypes])
+
   const hasTinyBalances = portfolioData.pools.some(pool => hasTinyBalance(pool, minUsdBalance))
 
   const { veBalBoostMap } = useVebalBoost(portfolioData.stakedPools)
@@ -204,6 +222,11 @@ export function PortfolioTable() {
           return correspondingGqlTypes && correspondingGqlTypes.includes(pool.type)
         })
       )
+    }
+
+    // Filter by selected staking types if any are selected
+    if (selectedStakingTypes.length > 0) {
+      arr = arr.filter(pool => selectedStakingTypes.includes(pool.poolType))
     }
 
     return arr.sort((a, b) => {
@@ -289,10 +312,11 @@ export function PortfolioTable() {
             </HStack>
             <PortfolioFilterTags
               networks={selectedNetworks}
-              poolTypeLabel={poolTypeLabel}
               poolTypes={selectedPoolTypes}
+              stakingTypes={selectedStakingTypes}
               toggleNetwork={toggleNetwork}
               togglePoolType={togglePoolType}
+              toggleStakingType={toggleStakingType}
             />
           </VStack>
 
