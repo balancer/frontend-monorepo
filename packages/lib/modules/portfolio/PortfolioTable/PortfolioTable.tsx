@@ -19,12 +19,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { GqlPoolOrderBy, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import {
-  getUserTotalBalanceUsd,
-  hasAuraStakedBalance,
-  hasBalancerStakedBalance,
-  hasTinyBalance,
-} from '../../pool/user-balance.helpers'
+import { getUserTotalBalanceUsd, hasTinyBalance } from '../../pool/user-balance.helpers'
 import { getTotalApr } from '../../pool/pool.utils'
 import { ExpandedPoolInfo, ExpandedPoolType, useExpandedPools } from './useExpandedPools'
 import { useUserAccount } from '../../web3/UserAccountProvider'
@@ -86,13 +81,10 @@ const generateStakingWeightForSort = (pool: ExpandedPoolInfo) => {
 
   if (canStake) {
     return (
-      Number(pool.poolType === ExpandedPoolType.Locked) * 100 +
       Number(pool.poolType === ExpandedPoolType.Unlocked) * 50 +
-      Number(pool.poolType === ExpandedPoolType.StakedAura) * 20 +
-      Number(pool.poolType === ExpandedPoolType.StakedBal) * 15 +
-      Number(pool.poolType === ExpandedPoolType.Unstaked) * 10 +
-      Number(hasAuraStakedBalance(pool)) * 2 +
-      Number(hasBalancerStakedBalance(pool))
+      Number(pool.poolType === ExpandedPoolType.StakedBal) * 20 +
+      Number(pool.poolType === ExpandedPoolType.StakedAura) * 15 +
+      Number(pool.poolType === ExpandedPoolType.Unstaked) * 10
     )
   } else {
     return 0 // send all pools without staking to the bottom of the table
@@ -250,12 +242,36 @@ export function PortfolioTable() {
 
     return arr.sort((a, b) => {
       if (currentSortingObj.id === 'staking') {
+        const isALocked = a.poolType === ExpandedPoolType.Locked
+        const isBLocked = b.poolType === ExpandedPoolType.Locked
+
+        // Prioritize Locked pools regardless of canStake status
+        if (currentSortingObj.desc) {
+          if (isALocked && !isBLocked) return -1 // A (Locked) comes before B
+          if (!isALocked && isBLocked) return 1 // B (Locked) comes before A
+        } else {
+          // Ascending sort (Locked comes last)
+          if (isALocked && !isBLocked) return 1 // A (Locked) comes after B
+          if (!isALocked && isBLocked) return -1 // B (Locked) comes after A
+        }
+
+        // If both are Locked or neither is Locked, use the weight function
         const aStakingWeight = generateStakingWeightForSort(a)
         const bStakingWeight = generateStakingWeightForSort(b)
 
-        return currentSortingObj.desc
+        const weightDiff = currentSortingObj.desc
           ? bStakingWeight - aStakingWeight
           : aStakingWeight - bStakingWeight
+
+        // If weights are equal, use veBAL boost as a tie-breaker (higher boost first)
+        if (weightDiff === 0) {
+          const aVebalBoost = Number(veBalBoostMap?.[a.id] || 0)
+          const bVebalBoost = Number(veBalBoostMap?.[b.id] || 0)
+          // Always sort by boost descending, regardless of primary sort direction
+          return bVebalBoost - aVebalBoost
+        }
+
+        return weightDiff
       }
 
       if (currentSortingObj.id === 'vebal') {
