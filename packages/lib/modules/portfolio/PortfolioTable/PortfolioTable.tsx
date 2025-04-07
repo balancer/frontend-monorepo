@@ -40,6 +40,7 @@ import {
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { POOL_TYPE_MAP, PoolFilterType } from '../../pool/pool.types'
 import { motion } from 'framer-motion'
+import { poolTypeLabel } from '../../pool/pool.helpers'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -172,7 +173,9 @@ export function PortfolioTable() {
       }
     })
 
-    return Array.from(foundFilterKeys)
+    return Array.from(foundFilterKeys).sort((a, b) =>
+      poolTypeLabel(a).localeCompare(poolTypeLabel(b))
+    )
   }, [filteredBalancePools])
 
   useEffect(() => {
