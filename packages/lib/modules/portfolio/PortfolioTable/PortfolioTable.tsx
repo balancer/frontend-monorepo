@@ -222,10 +222,8 @@ export function PortfolioTable() {
   }, [expandedPools, setAvailableStakingTypes]) // Add setAvailableStakingTypes dependency
 
   useEffect(() => {
-    setAvailableNetworks(availableNetworks)
-    setAvailablePoolTypes(availablePoolTypes)
     setAvailableStakingTypes(availableStakingTypes)
-  }, [availableNetworks, availablePoolTypes, availableStakingTypes])
+  }, [availableStakingTypes])
 
   const hasTinyBalances = portfolioData.pools.some(pool => hasTinyBalance(pool, minUsdBalance))
 
