@@ -72,9 +72,39 @@ export function PortfolioNetworkFilters({
   )
 }
 
+interface CheckboxFilterListProps<T> {
+  availableItems: T[]
+  selectedItems: T[]
+  toggleItem: (checked: boolean, value: T) => void
+  getItemLabel: (item: T) => string
+}
+
+function CheckboxFilterList<T>({
+  availableItems,
+  selectedItems,
+  toggleItem,
+  getItemLabel,
+}: CheckboxFilterListProps<T>) {
+  return (
+    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
+      {availableItems.map(item => (
+        <Box as={motion.div} key={String(item)} variants={staggeredFadeInUp}>
+          <Checkbox
+            isChecked={!!selectedItems.find(selected => selected === item)}
+            onChange={e => toggleItem(e.target.checked, item)}
+          >
+            <Text fontSize="sm" textTransform="capitalize">
+              {getItemLabel(item)}
+            </Text>
+          </Checkbox>
+        </Box>
+      ))}
+    </Box>
+  )
+}
+
 export interface PortfolioPoolTypeFiltersArgs {
   poolTypes: PoolFilterType[]
-  poolTypeLabel: (poolType: PoolFilterType) => string
   setPoolTypes: (poolTypes: PoolFilterType[]) => void
   togglePoolType: (checked: boolean, value: PoolFilterType) => void
   availablePoolTypes: PoolFilterType[]
@@ -83,24 +113,15 @@ export interface PortfolioPoolTypeFiltersArgs {
 export function PoolTypeFilters({
   togglePoolType,
   poolTypes,
-  poolTypeLabel,
   availablePoolTypes,
 }: PortfolioPoolTypeFiltersArgs) {
   return (
-    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {availablePoolTypes.map(poolType => (
-        <Box as={motion.div} key={poolType} variants={staggeredFadeInUp}>
-          <Checkbox
-            isChecked={!!poolTypes.find(selected => selected === poolType)}
-            onChange={e => togglePoolType(e.target.checked, poolType as PoolFilterType)}
-          >
-            <Text fontSize="sm" textTransform="capitalize">
-              {poolTypeLabel(poolType)}
-            </Text>
-          </Checkbox>
-        </Box>
-      ))}
-    </Box>
+    <CheckboxFilterList
+      availableItems={availablePoolTypes}
+      getItemLabel={poolTypeLabel}
+      selectedItems={poolTypes}
+      toggleItem={togglePoolType}
+    />
   )
 }
 
@@ -117,20 +138,12 @@ export function StakingTypeFilters({
   availableStakingTypes,
 }: PortfolioStakingTypeFiltersArgs) {
   return (
-    <Box animate="show" as={motion.div} exit="exit" initial="hidden" variants={staggeredFadeInUp}>
-      {availableStakingTypes.map(stakingType => (
-        <Box as={motion.div} key={stakingType} variants={staggeredFadeInUp}>
-          <Checkbox
-            isChecked={!!stakingTypes.find(selected => selected === stakingType)}
-            onChange={e => toggleStakingType(e.target.checked, stakingType)}
-          >
-            <Text fontSize="sm" textTransform="capitalize">
-              {getStakingText(stakingType)}
-            </Text>
-          </Checkbox>
-        </Box>
-      ))}
-    </Box>
+    <CheckboxFilterList
+      availableItems={availableStakingTypes}
+      getItemLabel={getStakingText}
+      selectedItems={stakingTypes}
+      toggleItem={toggleStakingType}
+    />
   )
 }
 
@@ -313,7 +326,6 @@ export function PortfolioFilters() {
                         </Heading>
                         <PoolTypeFilters
                           availablePoolTypes={availablePoolTypes}
-                          poolTypeLabel={poolTypeLabel}
                           poolTypes={selectedPoolTypes}
                           setPoolTypes={setSelectedPoolTypes}
                           togglePoolType={togglePoolType}
