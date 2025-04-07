@@ -99,10 +99,12 @@ export function impersonateWagmiConfig(impersonationAddress?: Address) {
     )
   }
 
-  return createConfig({
+  const impersonatedConfig = createConfig({
     chains,
     transports: _transports,
     connectors,
     ssr: true,
   })
+
+  return { connectors, updatedConfig: impersonatedConfig }
 }

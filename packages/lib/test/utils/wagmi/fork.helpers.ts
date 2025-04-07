@@ -1,4 +1,4 @@
-import { Address, createTestClient, http, parseUnits } from 'viem'
+import { Address, createTestClient, http, isAddress, parseUnits } from 'viem'
 import { SetBalanceMutation } from '../../anvil/useSetErc20Balance'
 import { TokenBalance, TokenBalancesByChain } from './fork-options'
 import { createConfig } from 'wagmi'
@@ -75,4 +75,26 @@ export function resetFork(chainId: number = mainnet.id) {
   return forkClient.reset({
     jsonRpcUrl: drpcUrlByChainId(chainId, privateKey),
   })
+}
+
+const storageKey = 'impersonated-address'
+
+export function setImpersonatedAddressLS(impersonatedAddress: string) {
+  if (!isLocalStorageAvailable()) return
+  localStorage.setItem(storageKey, impersonatedAddress)
+}
+
+export function getSavedImpersonatedAddressLS(): Address | undefined {
+  if (!isLocalStorageAvailable()) return undefined
+  const result = localStorage.getItem(storageKey)
+  return result && isAddress(result) ? result : undefined
+}
+
+export function clearWalletConnectConnected() {
+  if (!isLocalStorageAvailable()) return
+  localStorage.removeItem(storageKey)
+}
+
+function isLocalStorageAvailable() {
+  return typeof localStorage !== 'undefined'
 }

@@ -60,7 +60,6 @@
     "lodash": "^4.17.21",
     "next": "14.2.25",
     "next-themes": "0.4.4",
-    "nextjs-toploader": "^1.6.4",
     "numeral": "^2.0.6",
     "nuqs": "1.20.0",
     "pluralize": "^8.0.0",
@@ -68,7 +67,7 @@
     "react-dom": "18.2.0",
     "react-error-boundary": "5.0.0",
     "react-feather": "^2.0.10",
-    "react-hook-form": "7.54.2",
+    "react-hook-form": "7.55.0",
     "react-hotkeys-hook": "^4.4.1",
     "react-swipeable": "7.0.2",
     "react-syntax-highlighter": "^15.5.0",
@@ -86,7 +85,7 @@
     "@apollo/experimental-nextjs-app-support": "0.11.11",
     "@chakra-ui/cli": "^2.4.1",
     "@chakra-ui/styled-system": "2.12.0",
-    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/cli": "5.0.5",
     "@graphql-codegen/client-preset": "^4.1.0",
     "@graphql-codegen/schema-ast": "^4.0.0",
     "@graphql-codegen/typescript-document-nodes": "4.0.15",
@@ -123,6 +122,6 @@
     "msw": "2.7.3",
     "sentry-testkit": "5.0.10",
     "vitest": "3.0.9",
-    "vitest-mock-extended": "2.0.2"
+    "vitest-mock-extended": "3.0.1"
   }
 }
