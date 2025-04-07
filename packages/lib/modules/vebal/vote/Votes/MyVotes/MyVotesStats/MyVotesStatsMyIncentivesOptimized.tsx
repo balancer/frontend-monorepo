@@ -5,53 +5,35 @@ import { MagicStickIcon } from '@repo/lib/shared/components/icons/MagicStickIcon
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { MyVotesStatsCard } from './shared/MyVotesStatsCard'
 import { MyIncentivesAprTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesAprTooltip'
+import { useVeBALIncentives } from './useVeBALIncentives'
+import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import NextLink from 'next/link'
 
-interface Props {
-  myVebalBalance: number | undefined
-  loading: boolean
-}
-
-export function MyVotesStatsMyIncentivesOptimized({ myVebalBalance, loading }: Props) {
+export function MyVotesStatsMyIncentivesOptimized() {
   const { toCurrency } = useCurrency()
+  const { isConnected, userAddress } = useUserAccount()
+  const { isLoading: vebalUserDataLoading, noVeBALBalance } = useVebalUserData()
 
-  const { isConnected } = useUserAccount()
+  // fix: (votes) add new state when we are able to calculate optimized votes
+  // const isApplied = false
+  // if (isApplied) {
+  //   return {
+  //     variant: 'outline',
+  //     isDisabled: true,
+  //     children: 'Applied',
+  //   }
+  // }
 
-  const isApplied = false // fix: (votes) provide real value
+  const { incentives, incentivesAreLoading } = useVeBALIncentives(userAddress)
 
-  function getButtonProps() {
-    if (isApplied) {
-      return {
-        variant: 'outline',
-        isDisabled: true,
-        children: 'Applied',
-      }
-    }
+  const isLoading = incentivesAreLoading || vebalUserDataLoading
 
-    if (myVebalBalance) {
-      return {
-        variant: 'primary',
-        children: (
-          <HStack spacing="xs">
-            <MagicStickIcon />
-            <Text color="font.dark" fontSize="sm" fontWeight="700">
-              Apply
-            </Text>
-          </HStack>
-        ),
-      }
-    }
-
-    return {
-      variant: 'primary',
-      children: 'Get veBAL',
-    }
-  }
-
-  const optimizedRewardValue = 86.65 // fix: (votes) provide real value
+  const optimizedRewardValue: number | undefined = undefined // fix: (votes) provide real value
   const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
 
   const headerText =
-    !isConnected || !myVebalBalance
+    !isConnected || noVeBALBalance
       ? 'Voting incentives APR (average)'
       : 'My incentives with optimized votes (1w)'
 
@@ -59,22 +41,41 @@ export function MyVotesStatsMyIncentivesOptimized({ myVebalBalance, loading }: P
     <MyVotesStatsCard
       headerText={headerText}
       leftContent={
-        loading ? (
+        isLoading ? (
           <Skeleton height="28px" w="100px" />
+        ) : !isConnected || noVeBALBalance ? (
+          <Text fontSize="lg" fontWeight={700} variant="special">
+            {incentives.voting ? fNum('feePercent', incentives.voting) : <>&mdash;</>}
+          </Text>
         ) : (
           <HStack spacing="xs">
             <Text fontSize="lg" fontWeight={700} variant="special">
-              {toCurrency(optimizedRewardValue, { abbreviated: false })}
+              {optimizedRewardValue ? (
+                toCurrency(optimizedRewardValue, { abbreviated: false })
+              ) : (
+                <>&mdash;</>
+              )}
             </Text>
             <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} />
           </HStack>
         )
       }
       rightContent={
-        loading ? (
+        isLoading ? (
           <Skeleton height="28px" w="100px" />
+        ) : isConnected && noVeBALBalance ? (
+          <Button as={NextLink} href="/vebal/manage/lock" size="sm" variant="primary">
+            Get veBAL
+          </Button>
         ) : isConnected ? (
-          <Button onClick={() => alert('@TODO')} size="sm" {...getButtonProps()} />
+          <Button onClick={() => alert('@TODO (votes)')} size="sm" variant="primary">
+            <HStack spacing="xs">
+              <MagicStickIcon />
+              <Text color="font.dark" fontSize="sm" fontWeight="700">
+                Apply
+              </Text>
+            </HStack>
+          </Button>
         ) : (
           <Stack>
             <ConnectWallet size="sm" variant="primary" />

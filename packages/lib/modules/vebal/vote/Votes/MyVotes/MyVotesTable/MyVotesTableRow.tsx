@@ -63,7 +63,6 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   }
   const editVotes = bpsToPercentage(editVotesWeights[vote.id] ?? 0).multipliedBy(100)
 
-  // fix: (votes) should we allow remove expired votes? (isExpired)
   const removable = isSelectedPool(vote)
 
   const timeLocked = isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime ?? 0)

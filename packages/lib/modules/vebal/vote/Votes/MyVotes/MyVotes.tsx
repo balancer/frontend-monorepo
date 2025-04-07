@@ -75,7 +75,7 @@ export function MyVotes() {
           <MyVotesStatsMyIncentives loading={loading} myVebalBalance={myVebalBalance} />
         </GridItem>
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-          <MyVotesStatsMyIncentivesOptimized loading={loading} myVebalBalance={myVebalBalance} />
+          <MyVotesStatsMyIncentivesOptimized />
         </GridItem>
         {hasAllVotingPowerTimeLocked && (
           <GridItem colSpan={4}>
@@ -129,7 +129,7 @@ export function MyVotes() {
             </Alert>
           </GridItem>
         )}
-        {/* fix: (votes) need design */}
+
         {vebalIsExpired && (
           <GridItem colSpan={4}>
             <Alert status="warning">
@@ -145,7 +145,7 @@ export function MyVotes() {
             </Alert>
           </GridItem>
         )}
-        {/* fix: (votes) need design */}
+
         {noVeBALBalance && (
           <GridItem colSpan={4}>
             <Alert status="warning">
