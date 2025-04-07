@@ -188,7 +188,22 @@ export function PortfolioTable() {
       }
     })
 
-    return Array.from(foundFilterKeys)
+    // Sort the staking types alphabetically with 'Default' coming last
+    const defaultValue = ExpandedPoolType.Default
+
+    return Array.from(foundFilterKeys).sort((a, b) => {
+      if (a === defaultValue && b === defaultValue) {
+        return 0
+      }
+      if (a === defaultValue) {
+        return 1 // a is default, should come after b
+      }
+      if (b === defaultValue) {
+        return -1 // b is default, should come after a
+      }
+      // Neither is default, sort alphabetically
+      return a.localeCompare(b)
+    })
   }, [expandedPools])
 
   useEffect(() => {
