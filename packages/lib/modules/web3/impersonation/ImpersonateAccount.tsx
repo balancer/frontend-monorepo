@@ -25,7 +25,7 @@ export function ImpersonateAccount() {
       >
         Connect
       </Button>
-      <Button aria-label="Undo" disabled={!isAddress(impersonatedAddress)} onClick={() => reset()}>
+      <Button aria-label="Reset" disabled={!isAddress(impersonatedAddress)} onClick={() => reset()}>
         Reset
       </Button>
     </HStack>
