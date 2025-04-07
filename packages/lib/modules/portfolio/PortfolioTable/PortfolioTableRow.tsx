@@ -46,8 +46,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
   const { options } = PROJECT_CONFIG
 
   const vebalBoostValue = veBalBoostMap?.[pool.id]
-  const canStake = getCanStake(pool)
-  const stakingText = canStake ? getStakingText(pool.poolType) : 'N/A'
+  const stakingText = getStakingText(pool.poolType)
 
   return (
     <FadeInOnView>

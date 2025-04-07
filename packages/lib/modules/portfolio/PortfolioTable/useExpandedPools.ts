@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Pool } from '../../pool/pool.types'
 import { isVebalPool } from '../../pool/pool.helpers'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
+import { getCanStake } from '../../pool/actions/stake.helpers'
 
 export enum ExpandedPoolType {
   StakedBal = 'staked-bal',
@@ -62,7 +63,12 @@ export function useExpandedPools(pools: Pool[]) {
       }
 
       if (walletBalanceUsd > 0) {
-        const poolType = isVeBal ? ExpandedPoolType.Unlocked : ExpandedPoolType.Unstaked
+        const canStake = getCanStake(pool)
+        const poolType = canStake
+          ? isVeBal
+            ? ExpandedPoolType.Unlocked
+            : ExpandedPoolType.Unstaked
+          : ExpandedPoolType.Default
         expandedPools.push({
           ...pool,
           poolType,
