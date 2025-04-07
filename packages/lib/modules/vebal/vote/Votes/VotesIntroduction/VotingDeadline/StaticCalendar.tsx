@@ -5,7 +5,6 @@ import {
   startOfWeek,
   eachDayOfInterval,
   isWithinInterval,
-  startOfDay,
   isSameDay,
   addWeeks,
 } from 'date-fns'

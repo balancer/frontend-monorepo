@@ -1,13 +1,6 @@
 import { HStack, VStack, Text, Box } from '@chakra-ui/react'
-import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
-import {
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-  differenceInSeconds,
-  format,
-  nextThursday,
-} from 'date-fns'
+import { useCurrentDate, useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
+import { differenceInMinutes, format, nextThursday } from 'date-fns'
 import { oneSecondInMs } from '@repo/lib/shared/utils/time'
 import { VotingDeadlineContainer } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineContainer'
 import { ReminderButton } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/ReminderButton'
@@ -36,10 +29,7 @@ export function VotingDeadlineCounter() {
   const nowWithoutTime = new Date().setUTCHours(0, 0, 0, 0)
   const deadline = nextThursday(nowWithoutTime)
 
-  const daysDiff = differenceInDays(deadline, now)
-  const hoursDiff = differenceInHours(deadline, now) - daysDiff * 24
-  const minutesDiff = differenceInMinutes(deadline, now) - differenceInHours(deadline, now) * 60
-  const secondsDiff = differenceInSeconds(deadline, now) - differenceInMinutes(deadline, now) * 60
+  const { daysDiff, hoursDiff, minutesDiff, secondsDiff } = useDateCountdown(deadline)
 
   const counters = [
     { title: 'D', value: daysDiff },
