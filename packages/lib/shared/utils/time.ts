@@ -129,3 +129,16 @@ export function getTimestamp() {
 export function get24HoursFromNowInSecs() {
   return getTimestampInMinsFromNow(24 * 60)
 }
+
+/*
+  Get start of day in UTC timezone
+*/
+export function startOfDayUtc(dateUTC: Date) {
+  return new Date(
+    Date.UTC(dateUTC.getUTCFullYear(), dateUTC.getUTCMonth(), dateUTC.getUTCDate(), 0, 0, 0, 0)
+  )
+}
+
+export function toISOString(timestamp: number): string {
+  return new Date(timestamp).toISOString()
+}
