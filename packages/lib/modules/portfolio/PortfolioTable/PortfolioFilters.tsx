@@ -33,8 +33,7 @@ import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { PoolFilterType } from '../../pool/pool.types'
 import { poolTypeLabel } from '../../pool/pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
-import { ExpandedPoolType } from './useExpandedPools'
-import { getStakingText } from '../portfolio.helpers'
+import { StakingFilterKeyType, STAKING_LABEL_MAP } from './useExpandedPools'
 
 export interface PortfolioNetworkFiltersArgs {
   toggledNetworks: GqlChain[]
@@ -126,21 +125,20 @@ export function PoolTypeFilters({
 }
 
 export interface PortfolioStakingTypeFiltersArgs {
-  stakingTypes: ExpandedPoolType[]
-  setStakingTypes: (stakingTypes: ExpandedPoolType[]) => void
-  toggleStakingType: (checked: boolean, value: ExpandedPoolType) => void
-  availableStakingTypes: ExpandedPoolType[]
+  availableStakingTypes: StakingFilterKeyType[]
+  stakingTypes: StakingFilterKeyType[]
+  toggleStakingType: (checked: boolean, value: StakingFilterKeyType) => void
 }
 
 export function StakingTypeFilters({
-  toggleStakingType,
-  stakingTypes,
   availableStakingTypes,
+  stakingTypes,
+  toggleStakingType,
 }: PortfolioStakingTypeFiltersArgs) {
   return (
     <CheckboxFilterList
       availableItems={availableStakingTypes}
-      getItemLabel={getStakingText}
+      getItemLabel={item => STAKING_LABEL_MAP[item]}
       selectedItems={stakingTypes}
       toggleItem={toggleStakingType}
     />
@@ -165,8 +163,8 @@ export interface PortfolioFilterTagsPops {
   toggleNetwork: (checked: boolean, value: GqlChain) => void
   poolTypes: PoolFilterType[]
   togglePoolType: (checked: boolean, value: PoolFilterType) => void
-  stakingTypes: ExpandedPoolType[]
-  toggleStakingType: (checked: boolean, value: ExpandedPoolType) => void
+  stakingTypes: StakingFilterKeyType[]
+  toggleStakingType: (checked: boolean, value: StakingFilterKeyType) => void
 }
 
 export function PortfolioFilterTags({
@@ -199,11 +197,11 @@ export function PortfolioFilterTags({
             onClose={() => toggleNetwork(false, network)}
           />
         ))}
-        {stakingTypes.map(stakingType => (
+        {stakingTypes.map((stakingTypeKey: StakingFilterKeyType) => (
           <AnimatedTag
-            key={stakingType}
-            label={getStakingText(stakingType)}
-            onClose={() => toggleStakingType(false, stakingType)}
+            key={stakingTypeKey}
+            label={STAKING_LABEL_MAP[stakingTypeKey]}
+            onClose={() => toggleStakingType(false, stakingTypeKey)}
           />
         ))}
       </AnimatePresence>
@@ -255,7 +253,6 @@ export function PortfolioFilters() {
     togglePoolType,
     availablePoolTypes,
     selectedStakingTypes,
-    setSelectedStakingTypes,
     toggleStakingType,
     availableStakingTypes,
   } = usePortfolioFilters()
@@ -337,7 +334,6 @@ export function PortfolioFilters() {
                         </Heading>
                         <StakingTypeFilters
                           availableStakingTypes={availableStakingTypes}
-                          setStakingTypes={setSelectedStakingTypes}
                           stakingTypes={selectedStakingTypes}
                           toggleStakingType={toggleStakingType}
                         />

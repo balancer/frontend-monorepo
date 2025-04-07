@@ -36,6 +36,12 @@ import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { POOL_TYPE_MAP, PoolFilterType } from '../../pool/pool.types'
 import { motion } from 'framer-motion'
 import { poolTypeLabel } from '../../pool/pool.helpers'
+import {
+  StakingFilterKey,
+  StakingFilterKeyType,
+  STAKING_FILTER_MAP,
+  STAKING_LABEL_MAP,
+} from './useExpandedPools'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -176,16 +182,29 @@ export function PortfolioTable() {
   }, [availablePoolTypes])
 
   const availableStakingTypes = useMemo(() => {
-    const foundFilterKeys = new Set<ExpandedPoolType>()
+    const foundFilterKeys = new Set<StakingFilterKeyType>()
 
     expandedPools.forEach(pool => {
       if (pool.poolType) {
-        foundFilterKeys.add(pool.poolType)
+        if (
+          pool.poolType === ExpandedPoolType.StakedBal ||
+          pool.poolType === ExpandedPoolType.StakedAura
+        ) {
+          foundFilterKeys.add(StakingFilterKey.Staked)
+        } else if (pool.poolType === ExpandedPoolType.Locked) {
+          foundFilterKeys.add(StakingFilterKey.Locked)
+        } else if (pool.poolType === ExpandedPoolType.Unlocked) {
+          foundFilterKeys.add(StakingFilterKey.Unlocked)
+        } else if (pool.poolType === ExpandedPoolType.Unstaked) {
+          foundFilterKeys.add(StakingFilterKey.Unstaked)
+        } else if (pool.poolType === ExpandedPoolType.Default) {
+          foundFilterKeys.add(StakingFilterKey.Default)
+        }
       }
     })
 
     // Sort the staking types alphabetically with 'Default' coming last
-    const defaultValue = ExpandedPoolType.Default
+    const defaultValue = StakingFilterKey.Default
 
     return Array.from(foundFilterKeys).sort((a, b) => {
       if (a === defaultValue && b === defaultValue) {
@@ -197,14 +216,16 @@ export function PortfolioTable() {
       if (b === defaultValue) {
         return -1 // b is default, should come after a
       }
-      // Neither is default, sort alphabetically
-      return a.localeCompare(b)
+      // Neither is default, sort alphabetically by label
+      return STAKING_LABEL_MAP[a].localeCompare(STAKING_LABEL_MAP[b])
     })
-  }, [expandedPools])
+  }, [expandedPools, setAvailableStakingTypes]) // Add setAvailableStakingTypes dependency
 
   useEffect(() => {
+    setAvailableNetworks(availableNetworks)
+    setAvailablePoolTypes(availablePoolTypes)
     setAvailableStakingTypes(availableStakingTypes)
-  }, [availableStakingTypes])
+  }, [availableNetworks, availablePoolTypes, availableStakingTypes])
 
   const hasTinyBalances = portfolioData.pools.some(pool => hasTinyBalance(pool, minUsdBalance))
 
@@ -237,7 +258,9 @@ export function PortfolioTable() {
 
     // Filter by selected staking types if any are selected
     if (selectedStakingTypes.length > 0) {
-      arr = arr.filter(pool => selectedStakingTypes.includes(pool.poolType))
+      // Get all ExpandedPoolType values corresponding to the selected filter keys
+      const targetPoolTypes = selectedStakingTypes.flatMap(key => STAKING_FILTER_MAP[key])
+      arr = arr.filter(pool => targetPoolTypes.includes(pool.poolType))
     }
 
     return arr.sort((a, b) => {

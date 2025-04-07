@@ -7,7 +7,13 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { getPoolPath } from '../../pool/pool.utils'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
 import { Protocol } from '../../protocols/useProtocols'
-import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
+import {
+  ExpandedPoolInfo,
+  ExpandedPoolType,
+  StakingFilterKey,
+  StakingFilterKeyType,
+  STAKING_LABEL_MAP,
+} from './useExpandedPools'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import AuraAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/AuraAprTooltip'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -15,7 +21,6 @@ import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolLi
 import { usePoolMetadata } from '../../pool/metadata/usePoolMetadata'
 import { PoolListPoolDisplay } from '../../pool/PoolList/PoolListPoolDisplay'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { getStakingText } from '../portfolio.helpers'
 
 interface Props extends GridProps {
   pool: ExpandedPoolInfo
@@ -25,13 +30,32 @@ interface Props extends GridProps {
 
 const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
+// Helper to get the filter key from the pool type
+const getStakingFilterKey = (poolType: ExpandedPoolType): StakingFilterKeyType => {
+  switch (poolType) {
+    case ExpandedPoolType.StakedBal:
+    case ExpandedPoolType.StakedAura:
+      return StakingFilterKey.Staked
+    case ExpandedPoolType.Locked:
+      return StakingFilterKey.Locked
+    case ExpandedPoolType.Unlocked:
+      return StakingFilterKey.Unlocked
+    case ExpandedPoolType.Unstaked:
+      return StakingFilterKey.Unstaked
+    case ExpandedPoolType.Default:
+    default:
+      return StakingFilterKey.Default
+  }
+}
+
 export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Props) {
   const { toCurrency } = useCurrency()
   const { name } = usePoolMetadata(pool)
   const { options } = PROJECT_CONFIG
 
   const vebalBoostValue = veBalBoostMap?.[pool.id]
-  const stakingText = getStakingText(pool.poolType)
+  const filterKey = getStakingFilterKey(pool.poolType)
+  const stakingText = STAKING_LABEL_MAP[filterKey]
 
   return (
     <FadeInOnView>

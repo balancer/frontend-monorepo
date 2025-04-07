@@ -5,7 +5,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { uniq } from 'lodash'
 import { PoolFilterType } from '../../pool/pool.types'
-import { ExpandedPoolType } from './useExpandedPools'
+import { StakingFilterKeyType } from './useExpandedPools'
 
 export type UsePortfolioFiltersResult = ReturnType<typeof _usePortfolioFilters>
 
@@ -14,8 +14,8 @@ function _usePortfolioFilters() {
   const [availableNetworks, setAvailableNetworks] = useState<GqlChain[]>([])
   const [selectedPoolTypes, setSelectedPoolTypes] = useState<PoolFilterType[]>([])
   const [availablePoolTypes, setAvailablePoolTypes] = useState<PoolFilterType[]>([])
-  const [availableStakingTypes, setAvailableStakingTypes] = useState<ExpandedPoolType[]>([])
-  const [selectedStakingTypes, setSelectedStakingTypes] = useState<ExpandedPoolType[]>([])
+  const [availableStakingTypes, setAvailableStakingTypes] = useState<StakingFilterKeyType[]>([])
+  const [selectedStakingTypes, setSelectedStakingTypes] = useState<StakingFilterKeyType[]>([])
 
   function toggleNetwork(checked: boolean, network: GqlChain) {
     if (checked) {
@@ -33,11 +33,11 @@ function _usePortfolioFilters() {
     }
   }
 
-  function toggleStakingType(checked: boolean, stakingType: ExpandedPoolType) {
+  function toggleStakingType(checked: boolean, stakingTypeKey: StakingFilterKeyType) {
     if (checked) {
-      setSelectedStakingTypes(current => uniq([...current, stakingType]))
+      setSelectedStakingTypes(current => uniq([...current, stakingTypeKey]))
     } else {
-      setSelectedStakingTypes(current => current.filter(type => type !== stakingType))
+      setSelectedStakingTypes(current => current.filter(p => p !== stakingTypeKey))
     }
   }
 
