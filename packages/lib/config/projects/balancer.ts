@@ -38,6 +38,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
   externalLinks: {
     poolComposerUrl: 'https://pool-creator.balancer.fi',
   },
+  merklRewardsChains: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Mode],
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: [],

@@ -18,6 +18,7 @@ export const ProjectConfigBeets: ProjectConfig = {
   externalLinks: {
     poolComposerUrl: 'https://ma.beets.fi/compose',
   },
+  merklRewardsChains: [GqlChain.Sonic],
   options: {
     poolDisplayType: PoolDisplayType.Name,
     hidePoolTags: ['RWA', 'VE8020'],
