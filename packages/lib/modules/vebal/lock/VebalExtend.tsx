@@ -3,7 +3,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { Box, Center } from '@chakra-ui/react'
 
-export function VebalLock() {
+export function VebalExtend() {
   const { isConnected } = useUserAccount()
 
   if (!isConnected) {
@@ -16,5 +16,5 @@ export function VebalLock() {
     )
   }
 
-  return <VebalLockForm allowEditOnInit />
+  return <VebalLockForm allowEditOnInit={false} />
 }

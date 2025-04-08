@@ -74,7 +74,7 @@ export function VebalManage() {
               {!!lockData.mainnetLockedInfo.hasExistingLock && (
                 <Button
                   as={NextLink}
-                  href="/vebal/manage/lock"
+                  href="/vebal/manage/extend"
                   isLoading={lockData.isLoading}
                   size="lg"
                 >

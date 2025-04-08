@@ -105,7 +105,7 @@ export function MyVotes() {
                   <Text
                     as={NextLink}
                     color="font.dark"
-                    href="/vebal/manage/lock"
+                    href="/vebal/manage/extend"
                     textDecoration="underline"
                   >
                     Extend your lock
