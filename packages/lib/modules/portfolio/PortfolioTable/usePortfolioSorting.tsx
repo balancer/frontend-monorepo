@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react'
 import { getCanStake } from '../../pool/actions/stake.helpers'
 import { POOL_TYPE_MAP } from '../../pool/pool.types'
 import { getTotalApr } from '../../pool/pool.utils'
-import { getUserTotalBalanceUsd } from '../../pool/user-balance.helpers'
 import { ExpandedPoolInfo, ExpandedPoolType, STAKING_FILTER_MAP } from './useExpandedPools'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { usePortfolio } from '../PortfolioProvider'
@@ -138,8 +137,8 @@ export function usePortfolioSorting() {
       }
 
       if (currentSortingObj.id === 'liquidity') {
-        const aTotalBalance = getUserTotalBalanceUsd(a)
-        const bTotalBalance = getUserTotalBalanceUsd(b)
+        const aTotalBalance = a.poolPositionUsd
+        const bTotalBalance = b.poolPositionUsd
 
         return currentSortingObj.desc
           ? bTotalBalance - aTotalBalance
