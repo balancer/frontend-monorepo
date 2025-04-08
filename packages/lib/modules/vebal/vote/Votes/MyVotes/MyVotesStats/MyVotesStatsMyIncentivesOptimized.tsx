@@ -4,7 +4,6 @@ import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { MagicStickIcon } from '@repo/lib/shared/components/icons/MagicStickIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { MyVotesStatsCard } from './shared/MyVotesStatsCard'
-import { MyIncentivesAprTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesAprTooltip'
 import { useVeBALIncentives } from './useVeBALIncentives'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -30,7 +29,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const isLoading = incentivesAreLoading || vebalUserDataLoading
 
   const optimizedRewardValue: number | undefined = undefined // fix: (votes) provide real value
-  const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
+  // const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
 
   const headerText =
     !isConnected || noVeBALBalance
@@ -56,7 +55,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
                 <>&mdash;</>
               )}
             </Text>
-            <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} />
+            {/* TODO: (votes) show when algorithm in place <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} /> */}
           </HStack>
         )
       }
@@ -68,11 +67,11 @@ export function MyVotesStatsMyIncentivesOptimized() {
             Get veBAL
           </Button>
         ) : isConnected ? (
-          <Button onClick={() => alert('@TODO (votes)')} size="sm" variant="primary">
+          <Button size="sm" variant="primary">
             <HStack spacing="xs">
               <MagicStickIcon />
               <Text color="font.dark" fontSize="sm" fontWeight="700">
-                Apply
+                Coming soon
               </Text>
             </HStack>
           </Button>
