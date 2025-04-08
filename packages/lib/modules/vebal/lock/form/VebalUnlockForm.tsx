@@ -120,7 +120,7 @@ export function VebalUnlockForm() {
             {isLoading ? (
               <Skeleton h="100px" w="full" />
             ) : (
-              <Card as={NextLink} href="/vebal/manage/lock" variant="subSection">
+              <Card as={NextLink} href="/vebal/manage/extend" variant="subSection">
                 <Text color="font.light" fontWeight="700">
                   Extend lock
                 </Text>

@@ -25,27 +25,6 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
     ? mainnetLockedInfo.lockedAmount
     : undefined
 
-  function getButtonProps() {
-    if (isExpired) {
-      return {
-        variant: 'primary',
-        children: 'Manage',
-      }
-    }
-
-    if (myVebalBalance) {
-      return {
-        variant: 'tertiary',
-        children: 'Get veBAL',
-      }
-    }
-
-    return {
-      variant: 'primary',
-      children: 'Get veBAL',
-    }
-  }
-
   const { maxLockEndDate } = useLockEndDate({
     lockedEndDate: lockedEndDate ? new Date(lockedEndDate) : undefined,
   })
@@ -103,12 +82,22 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
       rightContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
-        ) : isConnected ? (
-          <Button as={NextLink} href="/vebal/manage/lock" size="sm" {...getButtonProps()} />
-        ) : (
+        ) : !isConnected ? (
           <VStack>
             <ConnectWallet size="sm" variant="primary" />
           </VStack>
+        ) : isExpired ? (
+          <Button as={NextLink} href="/vebal/manage/extend" size="sm" variant="primary">
+            Manage
+          </Button>
+        ) : myVebalBalance ? (
+          <Button as={NextLink} href="/vebal/manage/extend" size="sm" variant="tertiary">
+            Extend lock
+          </Button>
+        ) : (
+          <Button as={NextLink} href="/vebal/manage/lock" size="sm" variant="primary">
+            Get veBAL
+          </Button>
         )
       }
       variant={isExpired ? 'expired' : 'default'}

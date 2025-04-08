@@ -24,7 +24,7 @@ import { VebalLockModal } from '@repo/lib/modules/vebal/lock/modal/VebalLockModa
 import { useRouter } from 'next/navigation'
 import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { getModalLabel } from '@repo/lib/modules/vebal/lock/steps/lock-steps.utils'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ClickableText } from '@repo/lib/shared/components/typography/ClickableText'
 import { Address } from 'viem'
 import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'
@@ -32,7 +32,11 @@ import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 
-export function VebalLockForm() {
+type Props = {
+  allowEditOnInit?: boolean
+}
+
+export function VebalLockForm({ allowEditOnInit = false }: Props) {
   const { refetchAll } = useVebalLockData()
   const {
     vebalBptToken,
@@ -40,6 +44,7 @@ export function VebalLockForm() {
     setLpToken,
     resetLpToken,
     lockedAmount,
+    totalAmount,
     isDisabled,
     disabledReason,
     previewModalDisclosure,
@@ -62,7 +67,7 @@ export function VebalLockForm() {
     }
   }
 
-  const [isEditingAmount, setIsEditingAmount] = useState(false)
+  const [isEditingAmount, setIsEditingAmount] = useState(allowEditOnInit)
 
   const onEditAmountToggle = (value: boolean) => {
     setIsEditingAmount(value)
@@ -71,18 +76,9 @@ export function VebalLockForm() {
     }
   }
 
-  const isEditAmountDisabled = [LockMode.Extend, LockMode.Unlock].includes(lockMode)
+  const unlockingMode = LockMode.Unlock === lockMode
 
-  useEffect(() => {
-    onEditAmountToggle(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEditAmountDisabled])
-
-  const amountMode: 'edit' | 'show' = isEditAmountDisabled
-    ? isEditingAmount
-      ? 'edit'
-      : 'show'
-    : 'edit'
+  const amountMode: 'edit' | 'show' = unlockingMode ? 'show' : isEditingAmount ? 'edit' : 'show'
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
@@ -93,7 +89,7 @@ export function VebalLockForm() {
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
-          {bptBalance !== undefined && isZero(bptBalance.amount) && (
+          {bptBalance !== undefined && isZero(bptBalance.amount) && isZero(totalAmount) && (
             <BalAlert
               content={
                 <Text color="font.dark">
@@ -120,7 +116,7 @@ export function VebalLockForm() {
                 </Text>
               )}
 
-              {!isLoading && isEditAmountDisabled && (
+              {!isLoading && !unlockingMode && (
                 <ClickableText
                   fontSize="sm"
                   fontWeight="700"
@@ -131,6 +127,7 @@ export function VebalLockForm() {
                 </ClickableText>
               )}
             </HStack>
+
             {amountMode === 'edit' && (
               <TokenInput
                 address={vebalBptToken.address}
@@ -139,6 +136,7 @@ export function VebalLockForm() {
                 value={lpToken || ''}
               />
             )}
+
             {amountMode === 'show' && (
               <Card variant="level2">
                 <TokenRowWithDetails
@@ -163,6 +161,7 @@ export function VebalLockForm() {
               </Card>
             )}
           </VStack>
+
           <VStack align="start" spacing="sm" w="full">
             <HStack justifyContent="space-between" spacing="md" w="full">
               <Text fontSize="sm" fontWeight="700" lineHeight="18px">
