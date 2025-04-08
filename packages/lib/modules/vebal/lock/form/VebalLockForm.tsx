@@ -158,7 +158,6 @@ export function VebalLockForm() {
                         ]
                       : undefined
                   }
-                  key={vebalBptToken.address}
                   value={lockedAmount ?? ''}
                 />
               </Card>
