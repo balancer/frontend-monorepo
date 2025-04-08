@@ -110,12 +110,12 @@ export function usePortfolioSorting() {
           ? bStakingWeight - aStakingWeight
           : aStakingWeight - bStakingWeight
 
-        // If weights are equal, use veBAL boost as a tie-breaker (higher boost first)
+        // If weights are equal, use pool position USD as a tie-breaker (higher value first)
         if (weightDiff === 0) {
-          const aVebalBoost = Number(veBalBoostMap?.[a.id] || 0)
-          const bVebalBoost = Number(veBalBoostMap?.[b.id] || 0)
-          // Always sort by boost descending, regardless of primary sort direction
-          return bVebalBoost - aVebalBoost
+          const aPositionUsd = a.poolPositionUsd || 0
+          const bPositionUsd = b.poolPositionUsd || 0
+          // Always sort by position USD descending, regardless of primary sort direction
+          return bPositionUsd - aPositionUsd
         }
 
         return weightDiff

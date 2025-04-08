@@ -40,7 +40,6 @@ export function PortfolioTable() {
   const { isConnected } = useUserAccount()
   const isFilterVisible = usePortfolioFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
-
   const { sortedPools, setSorting, currentSortingObj, veBalBoostMap } = usePortfolioSorting()
 
   const {
