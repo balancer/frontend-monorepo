@@ -6,7 +6,7 @@ import { useImpersonateAccount } from './useImpersonateAccount'
 
 export function ImpersonateAccount() {
   const [impersonatedAddress, setImpersonatedAddress] = useState<string>(defaultAnvilAccount)
-  const { impersonateAccount } = useImpersonateAccount()
+  const { impersonateAccount, reset } = useImpersonateAccount()
 
   return (
     <HStack>
@@ -24,6 +24,9 @@ export function ImpersonateAccount() {
         onClick={() => impersonateAccount({ impersonatedAddress: impersonatedAddress as Address })}
       >
         Connect
+      </Button>
+      <Button aria-label="Reset" disabled={!isAddress(impersonatedAddress)} onClick={() => reset()}>
+        Reset
       </Button>
     </HStack>
   )
