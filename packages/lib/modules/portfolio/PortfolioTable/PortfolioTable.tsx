@@ -15,13 +15,13 @@ import {
   useBreakpointValue,
   VStack,
 } from '@chakra-ui/react'
-import { useEffect, useMemo, useState } from 'react'
-import { GqlPoolOrderBy, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { useMemo, useState } from 'react'
+import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { getUserTotalBalanceUsd, hasTinyBalance } from '../../pool/user-balance.helpers'
+import { getUserTotalBalanceUsd } from '../../pool/user-balance.helpers'
 import { getTotalApr } from '../../pool/pool.utils'
-import { ExpandedPoolInfo, ExpandedPoolType, useExpandedPools } from './useExpandedPools'
+import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { ConnectWallet } from '../../web3/ConnectWallet'
 import { getCanStake } from '../../pool/actions/stake.helpers'
@@ -33,15 +33,9 @@ import {
   usePortfolioFilterTagsVisible,
 } from './PortfolioFilters'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
-import { POOL_TYPE_MAP, PoolFilterType } from '../../pool/pool.types'
+import { POOL_TYPE_MAP } from '../../pool/pool.types'
 import { motion } from 'framer-motion'
-import { poolTypeLabel } from '../../pool/pool.helpers'
-import {
-  StakingFilterKey,
-  StakingFilterKeyType,
-  STAKING_FILTER_MAP,
-  STAKING_LABEL_MAP,
-} from './useExpandedPools'
+import { STAKING_FILTER_MAP } from './useExpandedPools'
 
 export type PortfolioTableSortingId = 'staking' | 'vebal' | 'liquidity' | 'apr'
 export interface PortfolioSortingData {
@@ -98,22 +92,22 @@ const generateStakingWeightForSort = (pool: ExpandedPoolInfo) => {
 }
 
 export function PortfolioTable() {
-  const [shouldFilterTinyBalances, setShouldFilterTinyBalances] = useState(true)
   const { portfolioData, isLoadingPortfolio } = usePortfolio()
   const { isConnected } = useUserAccount()
   const isFilterVisible = usePortfolioFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
 
   const {
-    setAvailableNetworks,
     selectedNetworks,
-    setAvailablePoolTypes,
     selectedPoolTypes,
     toggleNetwork,
     togglePoolType,
     toggleStakingType,
-    setAvailableStakingTypes,
     selectedStakingTypes,
+    expandedPools,
+    hasTinyBalances,
+    setShouldFilterTinyBalances,
+    shouldFilterTinyBalances,
   } = usePortfolioFilters()
 
   const { projectName, options } = PROJECT_CONFIG
@@ -126,106 +120,6 @@ export function PortfolioTable() {
       transform: 'translateY(0)',
     },
   }
-
-  // Filter out pools with tiny balances (<0.01 USD)
-  const minUsdBalance = 0.01
-
-  const filteredBalancePools = useMemo(
-    () =>
-      shouldFilterTinyBalances
-        ? portfolioData.pools.filter(pool => !hasTinyBalance(pool, minUsdBalance))
-        : portfolioData.pools,
-    [portfolioData.pools, shouldFilterTinyBalances]
-  )
-
-  const expandedPools = useExpandedPools(filteredBalancePools)
-
-  const availableNetworks = useMemo(
-    () =>
-      [...new Set(filteredBalancePools.map(pool => pool.chain))].sort((a, b) => a.localeCompare(b)),
-    [filteredBalancePools]
-  )
-
-  useEffect(() => {
-    setAvailableNetworks(availableNetworks)
-  }, [availableNetworks])
-
-  const availablePoolTypes = useMemo(() => {
-    const gqlTypeToFilterKeyMap = new Map<GqlPoolType, PoolFilterType>()
-
-    for (const key in POOL_TYPE_MAP) {
-      const filterTypeKey = key as PoolFilterType
-      const gqlTypes = POOL_TYPE_MAP[filterTypeKey]
-      gqlTypes.forEach(gqlType => {
-        gqlTypeToFilterKeyMap.set(gqlType, filterTypeKey)
-      })
-    }
-
-    const foundFilterKeys = new Set<PoolFilterType>()
-
-    filteredBalancePools.forEach(pool => {
-      if (pool.type) {
-        const filterKey = gqlTypeToFilterKeyMap.get(pool.type)
-        if (filterKey) {
-          foundFilterKeys.add(filterKey)
-        }
-      }
-    })
-
-    return Array.from(foundFilterKeys).sort((a, b) =>
-      poolTypeLabel(a).localeCompare(poolTypeLabel(b))
-    )
-  }, [filteredBalancePools])
-
-  useEffect(() => {
-    setAvailablePoolTypes(availablePoolTypes)
-  }, [availablePoolTypes])
-
-  const availableStakingTypes = useMemo(() => {
-    const foundFilterKeys = new Set<StakingFilterKeyType>()
-
-    expandedPools.forEach(pool => {
-      if (pool.poolType) {
-        if (
-          pool.poolType === ExpandedPoolType.StakedBal ||
-          pool.poolType === ExpandedPoolType.StakedAura
-        ) {
-          foundFilterKeys.add(StakingFilterKey.Staked)
-        } else if (pool.poolType === ExpandedPoolType.Locked) {
-          foundFilterKeys.add(StakingFilterKey.Locked)
-        } else if (pool.poolType === ExpandedPoolType.Unlocked) {
-          foundFilterKeys.add(StakingFilterKey.Unlocked)
-        } else if (pool.poolType === ExpandedPoolType.Unstaked) {
-          foundFilterKeys.add(StakingFilterKey.Unstaked)
-        } else if (pool.poolType === ExpandedPoolType.Default) {
-          foundFilterKeys.add(StakingFilterKey.Default)
-        }
-      }
-    })
-
-    // Sort the staking types alphabetically with 'Default' coming last
-    const defaultValue = StakingFilterKey.Default
-
-    return Array.from(foundFilterKeys).sort((a, b) => {
-      if (a === defaultValue && b === defaultValue) {
-        return 0
-      }
-      if (a === defaultValue) {
-        return 1 // a is default, should come after b
-      }
-      if (b === defaultValue) {
-        return -1 // b is default, should come after a
-      }
-      // Neither is default, sort alphabetically by label
-      return STAKING_LABEL_MAP[a].localeCompare(STAKING_LABEL_MAP[b])
-    })
-  }, [expandedPools, setAvailableStakingTypes]) // Add setAvailableStakingTypes dependency
-
-  useEffect(() => {
-    setAvailableStakingTypes(availableStakingTypes)
-  }, [availableStakingTypes])
-
-  const hasTinyBalances = portfolioData.pools.some(pool => hasTinyBalance(pool, minUsdBalance))
 
   const { veBalBoostMap } = useVebalBoost(portfolioData.stakedPools)
 
