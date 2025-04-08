@@ -3,10 +3,15 @@ import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { useState } from 'react'
 import { Address, isAddress } from 'viem'
 import { useImpersonateAccount } from './useImpersonateAccount'
+import { ImpersonatorSettings } from './ImpersonatorSettings'
+import { useCurrentDate, useFakeTime } from '@repo/lib/shared/hooks/date.hooks'
+import { oneSecondInMs } from '@repo/lib/shared/utils/time'
 
 export function ImpersonateAccount() {
   const [impersonatedAddress, setImpersonatedAddress] = useState<string>(defaultAnvilAccount)
-  const { impersonateAccount, reset } = useImpersonateAccount()
+  const { impersonateAccount } = useImpersonateAccount()
+  const currentDate = useCurrentDate(oneSecondInMs)
+  const { isFakeTime, setIsFakeTime } = useFakeTime()
 
   return (
     <HStack>
@@ -25,9 +30,13 @@ export function ImpersonateAccount() {
       >
         Connect
       </Button>
-      <Button aria-label="Reset" disabled={!isAddress(impersonatedAddress)} onClick={() => reset()}>
-        Reset
-      </Button>
+
+      <ImpersonatorSettings
+        impersonatedAddress={impersonatedAddress}
+        setIsFakeTime={setIsFakeTime}
+      />
+
+      <div>{isFakeTime && <div>Fake date: {currentDate.toLocaleDateString()}</div>}</div>
     </HStack>
   )
 }
