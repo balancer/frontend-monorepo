@@ -42,7 +42,7 @@ export function useImpersonateAccount() {
     }
   }, [storedImpersonatedAddress])
 
-  return { impersonateAccount, reset }
+  return { impersonateAccount, reset, mineBlockWithTimestamp }
 
   async function impersonateAccount({
     impersonatedAddress,
@@ -119,5 +119,12 @@ export function useImpersonateAccount() {
         chainId,
       })
     }
+  }
+
+  async function mineBlockWithTimestamp(timestamp: bigint) {
+    await forkClient.setNextBlockTimestamp({
+      timestamp,
+    })
+    await forkClient.mine({ blocks: 1 })
   }
 }
