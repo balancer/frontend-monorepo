@@ -47,8 +47,8 @@ importers:
         specifier: ^3.13.1
         version: 3.13.1(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.10.0))(graphql@16.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@balancer/sdk':
-        specifier: 2.6.0
-        version: 2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 2.7.1
+        version: 2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@18.2.0)
@@ -177,8 +177,8 @@ importers:
   apps/frontend-v3:
     dependencies:
       '@balancer/sdk':
-        specifier: 2.6.0
-        version: 2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 2.7.1
+        version: 2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@18.2.0)
@@ -373,8 +373,8 @@ importers:
         specifier: ^3.13.1
         version: 3.13.1(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.10.0))(graphql@16.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@balancer/sdk':
-        specifier: 2.6.0
-        version: 2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 2.7.1
+        version: 2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/anatomy':
         specifier: ^2.2.2
         version: 2.2.2
@@ -1619,8 +1619,8 @@ packages:
     resolution: {integrity: sha512-M6iqcmLfR9CP1mw3R5w0FdtZkUk7M0vCJhloAfhE/xufbAZrCSoapFYlt/NMBKLDQoGNJ2FN5E4zpdLVsxhoow==}
     engines: {node: '>=18.x'}
 
-  '@balancer/sdk@2.6.0':
-    resolution: {integrity: sha512-7vLtsFClB+iJuV10eSVaGFUB3Eb2WmuWruViIIYURrWhfvWQi8GsXW7JJ7/4hSMJUxr9+jzr4Nx/3vEzhUXWbw==}
+  '@balancer/sdk@2.7.1':
+    resolution: {integrity: sha512-0N0DF8N3sLtCXoVcGQlKokAHHvxNgRCOoJanmSWQVCt3T9zHfloJFXd9WaVc6GNG3A9FcBm560uHYpKYogcg+g==}
     engines: {node: '>=18.x'}
 
   '@bcoe/v8-coverage@1.0.2':
@@ -6329,8 +6329,8 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  electron-to-chromium@1.5.132:
-    resolution: {integrity: sha512-QgX9EBvWGmvSRa74zqfnG7+Eno0Ak0vftBll0Pt2/z5b3bEGYL6OUXLgKPtvx73dn3dvwrlyVkjPKRRlhLYTEg==}
+  electron-to-chromium@1.5.134:
+    resolution: {integrity: sha512-zSwzrLg3jNP3bwsLqWHmS5z2nIOQ5ngMnfMZOWWtXnqqQkPVyOipxK98w+1beLw1TB+EImPNcG8wVP/cLVs2Og==}
 
   electron-to-chromium@1.5.23:
     resolution: {integrity: sha512-mBhODedOXg4v5QWwl21DjM5amzjmI1zw9EPrPK/5Wx7C8jt33bpZNrC7OhHUG3pxRtbLpr3W2dXT+Ph1SsfRZA==}
@@ -12519,7 +12519,7 @@ snapshots:
 
   '@balancer-labs/balancer-maths@0.0.24': {}
 
-  '@balancer/sdk@2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
+  '@balancer/sdk@2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
     dependencies:
       '@balancer-labs/balancer-maths': 0.0.24
       '@types/big.js': 6.2.2
@@ -16513,9 +16513,9 @@ snapshots:
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.7.2))(eslint-plugin-import@2.29.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0))(eslint@8.43.0)
       eslint-plugin-eslint-comments: 3.2.0(eslint@8.43.0)
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.7.2))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.7.2))(eslint-plugin-import@2.29.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0))(eslint@8.43.0))(eslint@8.43.0)
-      eslint-plugin-jest: 27.6.0(@typescript-eslint/eslint-plugin@6.17.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2)
+      eslint-plugin-jest: 27.6.0(@typescript-eslint/eslint-plugin@7.1.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.43.0)
-      eslint-plugin-playwright: 0.16.0(eslint-plugin-jest@27.6.0(@typescript-eslint/eslint-plugin@7.1.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)
+      eslint-plugin-playwright: 0.16.0(eslint-plugin-jest@27.6.0(@typescript-eslint/eslint-plugin@6.17.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)
       eslint-plugin-react: 7.33.2(eslint@8.43.0)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.43.0)
       eslint-plugin-testing-library: 6.1.2(eslint@8.43.0)(typescript@5.7.2)
@@ -17604,7 +17604,7 @@ snapshots:
   browserslist@4.24.4:
     dependencies:
       caniuse-lite: 1.0.30001712
-      electron-to-chromium: 1.5.132
+      electron-to-chromium: 1.5.134
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.24.4)
 
@@ -18380,7 +18380,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  electron-to-chromium@1.5.132: {}
+  electron-to-chromium@1.5.134: {}
 
   electron-to-chromium@1.5.23: {}
 
@@ -18742,12 +18742,12 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-plugin-jest@27.6.0(@typescript-eslint/eslint-plugin@6.17.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2):
+  eslint-plugin-jest@27.6.0(@typescript-eslint/eslint-plugin@7.1.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2):
     dependencies:
       '@typescript-eslint/utils': 5.62.0(eslint@8.43.0)(typescript@5.7.2)
       eslint: 8.43.0
     optionalDependencies:
-      '@typescript-eslint/eslint-plugin': 6.17.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2)
+      '@typescript-eslint/eslint-plugin': 7.1.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -18774,11 +18774,11 @@ snapshots:
 
   eslint-plugin-only-warn@1.1.0: {}
 
-  eslint-plugin-playwright@0.16.0(eslint-plugin-jest@27.6.0(@typescript-eslint/eslint-plugin@7.1.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0):
+  eslint-plugin-playwright@0.16.0(eslint-plugin-jest@27.6.0(@typescript-eslint/eslint-plugin@6.17.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0):
     dependencies:
       eslint: 8.43.0
     optionalDependencies:
-      eslint-plugin-jest: 27.6.0(@typescript-eslint/eslint-plugin@6.17.0(@typescript-eslint/parser@6.17.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2)
+      eslint-plugin-jest: 27.6.0(@typescript-eslint/eslint-plugin@7.1.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2))(eslint@8.43.0)(typescript@5.7.2)
 
   eslint-plugin-react-hooks@4.6.0(eslint@8.43.0):
     dependencies:
