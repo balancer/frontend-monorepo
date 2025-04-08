@@ -239,16 +239,22 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
   }
 )
 
-export function PortfolioFilters() {
+export function PortfolioFilters({
+  selectedNetworks,
+  selectedPoolTypes,
+}: {
+  selectedNetworks?: GqlChain[]
+  selectedPoolTypes?: PoolFilterType[]
+}) {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const {
-    selectedNetworks,
+    selectedNetworks: hookSelectedNetworks,
     setSelectedNetworks,
     toggleNetwork,
     totalFilterCount,
     resetFilters,
     availableNetworks,
-    selectedPoolTypes,
+    selectedPoolTypes: hookSelectedPoolTypes,
     setSelectedPoolTypes,
     togglePoolType,
     availablePoolTypes,
@@ -256,6 +262,10 @@ export function PortfolioFilters() {
     toggleStakingType,
     availableStakingTypes,
   } = usePortfolioFilters()
+
+  // Use props if provided, otherwise use values from hook
+  const effectiveSelectedNetworks = selectedNetworks || hookSelectedNetworks
+  const effectiveSelectedPoolTypes = selectedPoolTypes || hookSelectedPoolTypes
 
   return (
     <VStack w="full">
@@ -313,7 +323,7 @@ export function PortfolioFilters() {
                             networks={availableNetworks}
                             setNetworks={setSelectedNetworks}
                             toggleNetwork={toggleNetwork}
-                            toggledNetworks={selectedNetworks}
+                            toggledNetworks={effectiveSelectedNetworks}
                           />
                         </Box>
                       )}
@@ -323,7 +333,7 @@ export function PortfolioFilters() {
                         </Heading>
                         <PoolTypeFilters
                           availablePoolTypes={availablePoolTypes}
-                          poolTypes={selectedPoolTypes}
+                          poolTypes={effectiveSelectedPoolTypes}
                           setPoolTypes={setSelectedPoolTypes}
                           togglePoolType={togglePoolType}
                         />

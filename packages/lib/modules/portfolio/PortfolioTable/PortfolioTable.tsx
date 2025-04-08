@@ -41,8 +41,7 @@ export function PortfolioTable() {
   const isFilterVisible = usePortfolioFilterTagsVisible()
   const isMd = useBreakpointValue({ base: false, md: true })
 
-  const { sortedPools, setCurrentSortingObj, currentSortingObj, veBalBoostMap } =
-    usePortfolioSorting()
+  const { sortedPools, setSorting, currentSortingObj, veBalBoostMap } = usePortfolioSorting()
 
   const {
     selectedNetworks,
@@ -114,7 +113,10 @@ export function PortfolioTable() {
             direction="row"
             w={{ base: 'full', md: 'auto' }}
           >
-            <PortfolioFilters />
+            <PortfolioFilters
+              selectedNetworks={selectedNetworks}
+              selectedPoolTypes={selectedPoolTypes}
+            />
           </Stack>
         </Stack>
         {isConnected ? (
@@ -139,7 +141,7 @@ export function PortfolioTable() {
               renderTableHeader={() => (
                 <PortfolioTableHeader
                   currentSortingObj={currentSortingObj}
-                  setCurrentSortingObj={setCurrentSortingObj}
+                  setCurrentSortingObj={setSorting}
                   {...rowProps(options.showVeBal)}
                 />
               )}

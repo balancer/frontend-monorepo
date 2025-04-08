@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, PropsWithChildren, useMemo, useState } from 'react'
+import { createContext, useMemo, useState } from 'react'
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { uniq } from 'lodash'
@@ -11,6 +11,7 @@ import {
   StakingFilterKey,
   StakingFilterKeyType,
   useExpandedPools,
+  STAKING_FILTER_MAP,
 } from './useExpandedPools'
 import { usePortfolio } from '../PortfolioProvider'
 import { poolTypeLabel } from '../../pool/pool.helpers'
@@ -58,7 +59,7 @@ function _usePortfolioFilters() {
     if (checked) {
       setSelectedStakingTypes(current => uniq([...current, stakingTypeKey]))
     } else {
-      setSelectedStakingTypes(current => current.filter(p => p !== stakingTypeKey))
+      setSelectedStakingTypes(current => current.filter(type => type !== stakingTypeKey))
     }
   }
 
@@ -146,35 +147,76 @@ function _usePortfolioFilters() {
 
   const hasTinyBalances = portfolioData.pools.some(pool => hasTinyBalance(pool, minUsdBalance))
 
+  // Calculate filtered pools based on all filters
+  const filteredExpandedPools = useMemo(() => {
+    let filtered = [...expandedPools]
+
+    // Filter by selected networks if any are selected
+    if (selectedNetworks.length > 0) {
+      filtered = filtered.filter(pool => selectedNetworks.includes(pool.chain))
+    }
+
+    // Filter by selected pool types if any are selected
+    if (selectedPoolTypes.length > 0) {
+      filtered = filtered.filter(pool =>
+        selectedPoolTypes.some(selectedFilterKey => {
+          const correspondingGqlTypes = POOL_TYPE_MAP[selectedFilterKey]
+
+          return correspondingGqlTypes && correspondingGqlTypes.includes(pool.type)
+        })
+      )
+    }
+
+    // Filter by selected staking types if any are selected
+    if (selectedStakingTypes.length > 0) {
+      // Get all ExpandedPoolType values corresponding to the selected filter keys
+      const targetPoolTypes = selectedStakingTypes.flatMap(key => STAKING_FILTER_MAP[key])
+      filtered = filtered.filter(pool => targetPoolTypes.includes(pool.poolType))
+    }
+
+    return filtered
+  }, [expandedPools, selectedNetworks, selectedPoolTypes, selectedStakingTypes])
+
   return {
     selectedNetworks,
     setSelectedNetworks,
     toggleNetwork,
-    resetFilters,
     totalFilterCount,
+    resetFilters,
     availableNetworks,
     selectedPoolTypes,
     setSelectedPoolTypes,
     togglePoolType,
     availablePoolTypes,
     selectedStakingTypes,
-    setSelectedStakingTypes,
     toggleStakingType,
     availableStakingTypes,
+    shouldFilterTinyBalances,
     setShouldFilterTinyBalances,
     hasTinyBalances,
-    shouldFilterTinyBalances,
     expandedPools,
+    filteredExpandedPools,
   }
 }
 
 export const PortfolioFiltersContext = createContext<UsePortfolioFiltersResult | null>(null)
 
-export function PortfolioFiltersProvider({ children }: PropsWithChildren) {
-  const value = _usePortfolioFilters()
+export function PortfolioFiltersProvider({
+  children,
+}: {
+  children: React.ReactNode | ((filters: UsePortfolioFiltersResult) => React.ReactNode)
+}) {
+  const filters = _usePortfolioFilters()
 
-  return (
-    <PortfolioFiltersContext.Provider value={value}>{children}</PortfolioFiltersContext.Provider>
+  // Support both render props pattern and context provider pattern
+  return typeof children === 'function' ? (
+    // Render props pattern
+    <PortfolioFiltersContext.Provider value={filters}>
+      {children(filters)}
+    </PortfolioFiltersContext.Provider>
+  ) : (
+    // Regular children pattern
+    <PortfolioFiltersContext.Provider value={filters}>{children}</PortfolioFiltersContext.Provider>
   )
 }
 

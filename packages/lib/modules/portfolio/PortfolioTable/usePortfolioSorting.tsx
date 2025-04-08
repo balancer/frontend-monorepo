@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { getCanStake } from '../../pool/actions/stake.helpers'
-import { POOL_TYPE_MAP } from '../../pool/pool.types'
 import { getTotalApr } from '../../pool/pool.utils'
-import { ExpandedPoolInfo, ExpandedPoolType, STAKING_FILTER_MAP } from './useExpandedPools'
+import { ExpandedPoolInfo, ExpandedPoolType } from './useExpandedPools'
 import { usePortfolioFilters } from './PortfolioFiltersProvider'
 import { usePortfolio } from '../PortfolioProvider'
 import { useVebalBoost } from '../../vebal/useVebalBoost'
@@ -58,7 +57,7 @@ const generateStakingWeightForSort = (pool: ExpandedPoolInfo) => {
 }
 
 export function usePortfolioSorting() {
-  const { selectedNetworks, selectedPoolTypes, selectedStakingTypes, expandedPools } =
+  const { filteredExpandedPools, selectedNetworks, selectedPoolTypes, selectedStakingTypes } =
     usePortfolioFilters()
 
   const { portfolioData } = usePortfolio()
@@ -69,32 +68,24 @@ export function usePortfolioSorting() {
     desc: true,
   })
 
+  const setSorting = useCallback((sorting: PortfolioSortingData) => {
+    setCurrentSortingObj(sorting)
+  }, [])
+
+  // set sorting to liquidity when any filter is applied
+  useEffect(() => {
+    if (
+      (selectedNetworks && selectedNetworks.length > 0) ||
+      (selectedPoolTypes && selectedPoolTypes.length > 0) ||
+      (selectedStakingTypes && selectedStakingTypes.length > 0)
+    ) {
+      setCurrentSortingObj({ id: 'liquidity', desc: true })
+    }
+  }, [selectedNetworks, selectedPoolTypes, selectedStakingTypes])
+
   const sortedPools = useMemo(() => {
-    if (!portfolioData?.pools) return []
-    let arr = [...expandedPools]
-
-    // Filter by selected networks if any are selected
-    if (selectedNetworks.length > 0) {
-      arr = arr.filter(pool => selectedNetworks.includes(pool.chain))
-    }
-
-    // Filter by selected pool types if any are selected
-    if (selectedPoolTypes.length > 0) {
-      arr = arr.filter(pool =>
-        selectedPoolTypes.some(selectedFilterKey => {
-          const correspondingGqlTypes = POOL_TYPE_MAP[selectedFilterKey]
-
-          return correspondingGqlTypes && correspondingGqlTypes.includes(pool.type)
-        })
-      )
-    }
-
-    // Filter by selected staking types if any are selected
-    if (selectedStakingTypes.length > 0) {
-      // Get all ExpandedPoolType values corresponding to the selected filter keys
-      const targetPoolTypes = selectedStakingTypes.flatMap(key => STAKING_FILTER_MAP[key])
-      arr = arr.filter(pool => targetPoolTypes.includes(pool.poolType))
-    }
+    if (!filteredExpandedPools?.length) return []
+    const arr = [...filteredExpandedPools]
 
     return arr.sort((a, b) => {
       if (currentSortingObj.id === 'staking') {
@@ -163,11 +154,11 @@ export function usePortfolioSorting() {
     })
   }, [
     portfolioData?.pools,
-    expandedPools,
+    filteredExpandedPools,
     currentSortingObj.id,
     currentSortingObj.desc,
     veBalBoostMap,
   ])
 
-  return { sortedPools, setCurrentSortingObj, currentSortingObj, veBalBoostMap }
+  return { sortedPools, setSorting, currentSortingObj, veBalBoostMap }
 }
