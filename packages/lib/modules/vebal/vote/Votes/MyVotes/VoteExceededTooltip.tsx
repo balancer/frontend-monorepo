@@ -27,7 +27,6 @@ export function VoteExceededTooltip({ usePortal, exceededWeight }: Props) {
           {fNum('apr', bpsToPercentage(exceededWeight))} votes exceeded
         </Text>
         <Text color="font.secondary" fontSize="sm">
-          {/* fix: (votes) need design */}
           Your votes can’t exceed {WEIGHT_MAX_VOTES}%
         </Text>
       </VStack>

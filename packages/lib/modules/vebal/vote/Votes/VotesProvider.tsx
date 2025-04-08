@@ -189,7 +189,7 @@ export function _useVotes({
           // Is voting currently not locked
           !isVotingTimeLocked(votingPool.gaugeVotes?.lastUserVoteTime ?? 0) &&
           // Is gauge not expired
-          // TODO: this should not be applied when Show Expired pool gauges filter is checked
+          // TODO: (votes) this should not be applied when Show Expired pool gauges filter is checked
           !isPoolGaugeExpired(votingPool)
         )
       }),

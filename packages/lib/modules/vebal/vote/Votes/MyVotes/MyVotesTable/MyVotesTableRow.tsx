@@ -57,13 +57,8 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
 
   const isExpired = isPoolGaugeExpired(vote)
 
-  const editVotesStyles = {
-    // fix: (votes) implement nested cell paddings for Edit votes column
-    // bg: 'background.level1',
-  }
   const editVotes = bpsToPercentage(editVotesWeights[vote.id] ?? 0).multipliedBy(100)
 
-  // fix: (votes) should we allow remove expired votes? (isExpired)
   const removable = isSelectedPool(vote)
 
   const timeLocked = isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime ?? 0)
@@ -75,7 +70,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
   const { veBALBalance, noVeBALBalance } = useVebalUserData()
-  // FIXME: [JUANJO] calculations should be done with bigint
+  // FIXME: [JUANJO] (votes) calculations should be done with bigint
   const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
   const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true)
@@ -89,7 +84,6 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           bg: 'background.level0',
         }}
         key={keyValue}
-        // fix: (votes) implement nested cell paddings for Edit votes column
         px={{ base: '0', sm: 'md' }}
         rounded="md"
         transition="all 0.2s ease-in-out"
@@ -150,7 +144,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
               weight={vote.gaugeVotes?.userVotes ?? '0'}
             />
           </GridItem>
-          <GridItem justifySelf="end" textAlign="right" {...cellProps} {...editVotesStyles}>
+          <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <VoteWeightInput
               isDisabled={isDisabled}
               isExpired={vebalIsExpired}
