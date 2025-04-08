@@ -1,4 +1,4 @@
-import { sub, millisecondsToSeconds } from 'date-fns'
+import { sub, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns'
 
 export const oneSecondInMs = 1000
 export const oneMinInMs = 60 * oneSecondInMs
@@ -141,4 +141,16 @@ export function startOfDayUtc(dateUTC: Date) {
 
 export function toISOString(timestamp: number): string {
   return new Date(timestamp).toISOString()
+}
+
+/**
+ * Align a UTC timestamp with the local day.
+ */
+
+export function alignUtcWithLocalDay(timestamp: number) {
+  const timezoneOffset = mins(new Date().getTimezoneOffset()).toSecs()
+  return (
+    timestamp -
+    (timezoneOffset < 0 ? Math.abs(timezoneOffset) + twentyFourHoursInSecs : timezoneOffset)
+  )
 }
