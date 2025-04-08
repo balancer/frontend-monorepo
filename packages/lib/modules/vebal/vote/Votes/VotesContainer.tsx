@@ -37,7 +37,7 @@ export async function VotesContainer() {
       votingIncentivesErrorMessage={parseError(votingIncentivesError)}
       votingIncentivesLoading={false} /* RSC (SSR) mode, no loading needed */
     >
-      <VStack spacing="3xl" w="full">
+      <VStack overflowX="auto" spacing="3xl" w="full">
         {/* todo: (votes) work in progress */}
         {false && <VotesIntroductionLayout />}
         <TransactionStateProvider>
