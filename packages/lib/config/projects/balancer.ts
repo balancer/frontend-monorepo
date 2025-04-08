@@ -126,11 +126,6 @@ export const ProjectConfigBalancer: ProjectConfig = {
             href: 'https://www.fjordfoundry.com/?utm_source=balancer&utm_medium=website',
             isExternal: true,
           },
-          {
-            label: 'Create an NFT drop',
-            href: 'https://fjordnfts.com/?utm_source=balancer&utm_medium=website',
-            isExternal: true,
-          },
         ],
       },
       {
