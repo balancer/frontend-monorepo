@@ -40,6 +40,7 @@ export function VebalLockForm() {
     setLpToken,
     resetLpToken,
     lockedAmount,
+    totalAmount,
     isDisabled,
     disabledReason,
     previewModalDisclosure,
@@ -93,7 +94,7 @@ export function VebalLockForm() {
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
-          {bptBalance !== undefined && isZero(bptBalance.amount) && (
+          {bptBalance !== undefined && isZero(bptBalance.amount) && isZero(totalAmount) && (
             <BalAlert
               content={
                 <Text color="font.dark">
