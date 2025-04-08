@@ -47,8 +47,8 @@ importers:
         specifier: ^3.13.1
         version: 3.13.1(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.10.0))(graphql@16.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@balancer/sdk':
-        specifier: 2.6.0
-        version: 2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 2.7.1
+        version: 2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@18.2.0)
@@ -177,8 +177,8 @@ importers:
   apps/frontend-v3:
     dependencies:
       '@balancer/sdk':
-        specifier: 2.6.0
-        version: 2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 2.7.1
+        version: 2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@18.2.0)
@@ -373,8 +373,8 @@ importers:
         specifier: ^3.13.1
         version: 3.13.1(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.10.0))(graphql@16.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@balancer/sdk':
-        specifier: 2.6.0
-        version: 2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 2.7.1
+        version: 2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/anatomy':
         specifier: ^2.2.2
         version: 2.2.2
@@ -1622,8 +1622,8 @@ packages:
     resolution: {integrity: sha512-M6iqcmLfR9CP1mw3R5w0FdtZkUk7M0vCJhloAfhE/xufbAZrCSoapFYlt/NMBKLDQoGNJ2FN5E4zpdLVsxhoow==}
     engines: {node: '>=18.x'}
 
-  '@balancer/sdk@2.6.0':
-    resolution: {integrity: sha512-7vLtsFClB+iJuV10eSVaGFUB3Eb2WmuWruViIIYURrWhfvWQi8GsXW7JJ7/4hSMJUxr9+jzr4Nx/3vEzhUXWbw==}
+  '@balancer/sdk@2.7.1':
+    resolution: {integrity: sha512-0N0DF8N3sLtCXoVcGQlKokAHHvxNgRCOoJanmSWQVCt3T9zHfloJFXd9WaVc6GNG3A9FcBm560uHYpKYogcg+g==}
     engines: {node: '>=18.x'}
 
   '@bcoe/v8-coverage@1.0.2':
@@ -7250,10 +7250,6 @@ packages:
   hash.js@1.1.7:
     resolution: {integrity: sha512-taOaskGt4z4SOANNseOviYDvjEJinIkRgmp7LbKP2YTTmVxWBl87s/uzK9r+44BclBSp2X7K1hqeNfz9JbBeXA==}
 
-  hasown@2.0.0:
-    resolution: {integrity: sha512-vUptKVTpIJhcczKBbgnS+RtcuYMB8+oNzPK2/Hp3hanz8JmpATdmmgLgSaadVREkDm+e2giHwY3ZRkyjSIDDFA==}
-    engines: {node: '>= 0.4'}
-
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
@@ -12600,7 +12596,7 @@ snapshots:
 
   '@balancer-labs/balancer-maths@0.0.24': {}
 
-  '@balancer/sdk@2.6.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
+  '@balancer/sdk@2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
     dependencies:
       '@balancer-labs/balancer-maths': 0.0.24
       '@types/big.js': 6.2.2
@@ -14587,7 +14583,7 @@ snapshots:
       '@types/debug': 4.1.12
       debug: 4.4.0
       pony-cause: 2.1.11
-      semver: 7.6.3
+      semver: 7.7.1
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
@@ -14601,7 +14597,7 @@ snapshots:
       '@types/debug': 4.1.12
       debug: 4.4.0
       pony-cause: 2.1.11
-      semver: 7.6.3
+      semver: 7.7.1
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
@@ -15021,7 +15017,7 @@ snapshots:
       '@types/shimmer': 1.2.0
       import-in-the-middle: 1.12.0
       require-in-the-middle: 7.4.0
-      semver: 7.6.3
+      semver: 7.7.1
       shimmer: 1.2.1
     transitivePeerDependencies:
       - supports-color
@@ -18878,7 +18874,7 @@ snapshots:
       eslint-import-resolver-node: 0.3.9
       eslint-module-utils: 2.8.0(@typescript-eslint/parser@7.1.0(eslint@8.43.0)(typescript@5.7.2))(eslint-import-resolver-node@0.3.9)(eslint@8.43.0)
       hasown: 2.0.2
-      is-core-module: 2.16.0
+      is-core-module: 2.16.1
       is-glob: 4.0.3
       minimatch: 3.1.2
       object.fromentries: 2.0.7
@@ -19494,7 +19490,7 @@ snapshots:
       function-bind: 1.1.2
       has-proto: 1.0.1
       has-symbols: 1.0.3
-      hasown: 2.0.0
+      hasown: 2.0.2
 
   get-nonce@1.0.1: {}
 
@@ -19730,10 +19726,6 @@ snapshots:
     dependencies:
       inherits: 2.0.4
       minimalistic-assert: 1.0.1
-
-  hasown@2.0.0:
-    dependencies:
-      function-bind: 1.1.2
 
   hasown@2.0.2:
     dependencies:
@@ -20679,7 +20671,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.6.3
+      semver: 7.7.1
 
   makeerror@1.0.12:
     dependencies:
@@ -21424,7 +21416,7 @@ snapshots:
       got: 12.6.1
       registry-auth-token: 5.0.3
       registry-url: 6.0.1
-      semver: 7.6.3
+      semver: 7.7.1
 
   param-case@3.0.4:
     dependencies:
