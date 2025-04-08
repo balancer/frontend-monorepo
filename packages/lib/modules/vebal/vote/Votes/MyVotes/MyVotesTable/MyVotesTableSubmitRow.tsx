@@ -8,7 +8,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { SubmitVotesModal } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/modal/SubmitVotesModal'
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
@@ -22,11 +22,6 @@ export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
   const { hasChanges, hasExceededWeight, refetchAll, transactionSteps, hasExpiredGauges } =
     useMyVotes()
   const { allowChangeVotes } = useVotes()
-
-  const editVotesStyles = {
-    // fix: (votes) implement nested cell paddings for Edit votes column
-    // bg: 'background.level1',
-  }
 
   const submitBtn = useRef(null)
 
@@ -50,7 +45,6 @@ export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
           bg: 'background.level0',
         }}
         key={keyValue}
-        // fix: (votes) implement nested cell paddings for Edit votes column
         px={{ base: '0', sm: 'md' }}
         rounded="md"
         transition="all 0.2s ease-in-out"
@@ -62,7 +56,7 @@ export function MyVotesSubmitRow({ keyValue, cellProps, ...rest }: Props) {
           <GridItem {...cellProps} />
           <GridItem {...cellProps} />
           <GridItem {...cellProps} />
-          <GridItem justifySelf="end" textAlign="right" {...cellProps} {...editVotesStyles}>
+          <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <Button isDisabled={isDisabled} onClick={onOpen} ref={submitBtn} variant="primary">
               Submit votes
             </Button>

@@ -41,7 +41,7 @@ export function MyVotes() {
 
   const { isLoading: vebalUserDataLoading, veBALBalance, noVeBALBalance } = useVebalUserData()
 
-  // FIXME: [JUANJO] everything needs a number here, but we should work with bigint
+  // FIXME: [JUANJO] (votes) everything needs a number here, but we should work with bigint
   const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
   const loading = myVotesLoading || vebalUserDataLoading
@@ -74,11 +74,9 @@ export function MyVotes() {
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsMyIncentives loading={loading} myVebalBalance={myVebalBalance} />
         </GridItem>
-        {false && (
-          <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-            <MyVotesStatsMyIncentivesOptimized loading={loading} myVebalBalance={myVebalBalance} />
-          </GridItem>
-        )}
+        <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
+          <MyVotesStatsMyIncentivesOptimized />
+        </GridItem>
         {hasAllVotingPowerTimeLocked && (
           <GridItem colSpan={4}>
             <Alert status="warning">
@@ -131,7 +129,7 @@ export function MyVotes() {
             </Alert>
           </GridItem>
         )}
-        {/* fix: (votes) need design */}
+
         {vebalIsExpired && (
           <GridItem colSpan={4}>
             <Alert status="warning">
@@ -147,7 +145,7 @@ export function MyVotes() {
             </Alert>
           </GridItem>
         )}
-        {/* fix: (votes) need design */}
+
         {noVeBALBalance && (
           <GridItem colSpan={4}>
             <Alert status="warning">
