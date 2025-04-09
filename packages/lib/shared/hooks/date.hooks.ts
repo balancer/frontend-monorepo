@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { oneMinInMs, startOfDayUtc } from '@repo/lib/shared/utils/time'
+import { oneMinInMs, oneSecondInMs, startOfDayUtc } from '@repo/lib/shared/utils/time'
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+  differenceInSeconds,
+} from 'date-fns'
 
 /**
  * Returns actual (autoupdated) new Date()
@@ -40,5 +46,25 @@ export function useFakeTime() {
   return {
     isFakeTime,
     setIsFakeTime,
+  }
+}
+
+/**
+ * Return the difference (in days, hours, mins and secs) to a given
+ * deadline. It will be autoupdated each second
+ */
+export function useDateCountdown(deadline: Date) {
+  const now = useCurrentDate(oneSecondInMs)
+
+  const daysDiff = differenceInDays(deadline, now)
+  const hoursDiff = differenceInHours(deadline, now) - daysDiff * 24
+  const minutesDiff = differenceInMinutes(deadline, now) - differenceInHours(deadline, now) * 60
+  const secondsDiff = differenceInSeconds(deadline, now) - differenceInMinutes(deadline, now) * 60
+
+  return {
+    daysDiff,
+    hoursDiff,
+    minutesDiff,
+    secondsDiff,
   }
 }
