@@ -313,6 +313,8 @@ export interface FilterTagsPops {
   poolTypes: PoolFilterType[]
   togglePoolType: (checked: boolean, value: PoolFilterType) => void
   poolTypeLabel: (poolType: PoolFilterType) => string
+  protocolVersion: number | null
+  setProtocolVersion: (value: number | null) => void
   minTvl?: number
   setMinTvl?: (value: number | null) => void
   poolTags?: PoolTagType[]
@@ -323,8 +325,6 @@ export interface FilterTagsPops {
   poolHookTags?: PoolHookTagType[]
   togglePoolHookTag?: (checked: boolean, value: PoolHookTagType) => void
   poolHookTagLabel?: (poolHookTag: PoolHookTagType) => string
-  protocolVersion?: number | null
-  setProtocolVersion?: (value: number | null) => void // TODO: check why this is not used in VoteListLayout
 }
 
 function AnimatedTag({ label, onClose }: { label: React.ReactNode; onClose: () => void }) {
@@ -482,7 +482,7 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
 )
 
 export interface ProtocolVersionFilterProps {
-  setProtocolVersion: React.Dispatch<React.SetStateAction<number | null>>
+  setProtocolVersion: (version: number | null) => any
   protocolVersion: number | null
   poolTypes: PoolFilterType[]
   activeProtocolVersionTab: ButtonGroupOption
