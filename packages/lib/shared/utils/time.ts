@@ -1,4 +1,4 @@
-import { sub, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns'
+import { sub, millisecondsToSeconds } from 'date-fns'
 
 export const oneSecondInMs = 1000
 export const oneMinInMs = 60 * oneSecondInMs
@@ -144,9 +144,8 @@ export function toISOString(timestamp: number): string {
 }
 
 /**
- * Align a UTC timestamp with the local day.
+ * Fixes date shown on pool charts
  */
-
 export function alignUtcWithLocalDay(timestamp: number) {
   const timezoneOffset = mins(new Date().getTimezoneOffset()).toSecs()
   return (
