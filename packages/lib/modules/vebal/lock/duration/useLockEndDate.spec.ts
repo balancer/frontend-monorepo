@@ -1,6 +1,14 @@
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { useLockEndDate } from './useLockEndDate'
 
+beforeAll(() => {
+  vi.useFakeTimers()
+})
+
+afterAll(() => {
+  vi.useRealTimers()
+})
+
 function testUseLockEndDate(lockedEndDate: Date | undefined) {
   const { result } = testHook(() =>
     useLockEndDate({
@@ -11,7 +19,9 @@ function testUseLockEndDate(lockedEndDate: Date | undefined) {
 }
 
 test('useLockEndDate with existing lock', () => {
+  vi.setSystemTime(new Date('2025-04-04T10:00:00.000Z')) // Today is Friday 4 April 2025 at 10 AM
   const lockedEndDate = new Date('2025-04-17:10:00.000Z') // Thursday 17 April 2025 at 10AM
+
   const result = testUseLockEndDate(lockedEndDate)
 
   expect(result.current).toEqual({
