@@ -104,38 +104,38 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
     })
   }, [compositionTokens, pool])
 
-  const xAxisLabels = useMemo(() => {
+  const { xAxisLabels, labelIndices } = useMemo(() => {
     if (!isQuantAmmPool(pool.type)) {
-      return []
+      return { xAxisLabels: [], labelIndices: [] }
     }
 
     const snapshots = (pool as any).weightSnapshots as QuantAmmWeightSnapshot[]
-    const dateMap = new Map<string, number>()
-
-    if (snapshots.length > 0) {
-      try {
-        const firstSnapshot = snapshots[0]
-        const firstDate = new Date(firstSnapshot.timestamp * 1000)
-        if (!isNaN(firstDate.getTime())) {
-          dateMap.set('first_timestamp', 0)
-          const dateString = firstDate.toISOString().split('T')[0]
-          dateMap.set(dateString, 0)
-        }
-      } catch (e) {
-        // Ignore invalid date
-      }
+    if (!snapshots || snapshots.length === 0) {
+      return { xAxisLabels: [], labelIndices: [] }
     }
 
-    snapshots.forEach((snapshot, index) => {
-      if (index === 0) return
+    const labels = Array(snapshots.length).fill('')
+    const indices: number[] = []
 
+    const seenDates = new Set<string>()
+
+    // Process all snapshots to find date changes
+    snapshots.forEach((snapshot, index) => {
       try {
         const date = new Date(snapshot.timestamp * 1000)
         if (!isNaN(date.getTime())) {
           const dateString = date.toISOString().split('T')[0]
 
-          if (!dateMap.has(dateString)) {
-            dateMap.set(dateString, index)
+          if (!seenDates.has(dateString)) {
+            seenDates.add(dateString)
+
+            const formattedDate = date.toLocaleString(undefined, {
+              month: 'short',
+              day: 'numeric',
+            })
+
+            labels[index] = formattedDate
+            indices.push(index)
           }
         }
       } catch (e) {
@@ -143,33 +143,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
       }
     })
 
-    const labels = Array(snapshots.length).fill('')
-
-    dateMap.forEach((index, dateString) => {
-      try {
-        if (dateString === 'first_timestamp') {
-          const firstSnapshot = snapshots[0]
-          const firstDate = new Date(firstSnapshot.timestamp * 1000)
-          labels[0] = firstDate.toLocaleString('en-US', {
-            month: 'short',
-            day: 'numeric',
-          })
-          return
-        }
-
-        const date = new Date(dateString)
-        const formattedDate = date.toLocaleString('en-US', {
-          month: 'short',
-          day: 'numeric',
-        })
-
-        labels[index] = formattedDate
-      } catch (e) {
-        // Ignore formatting errors
-      }
-    })
-
-    return labels
+    return { xAxisLabels: labels, labelIndices: indices }
   }, [pool])
 
   const option: EChartsOption = {
@@ -198,7 +172,11 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
           try {
             const date = new Date(snapshot.timestamp * 1000)
             if (!isNaN(date.getTime())) {
-              timeLabel = date.toLocaleString('en-US', {
+              // Set minutes and seconds to 0 to get top of the hour
+              date.setMinutes(0)
+              date.setSeconds(0)
+
+              timeLabel = date.toLocaleString(undefined, {
                 month: 'short',
                 day: 'numeric',
                 hour: '2-digit',
@@ -243,7 +221,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         type: 'category',
         boundaryGap: false,
         data: Array.from(
-          { length: ((pool as any).weightSnapshots as QuantAmmWeightSnapshot[]).length },
+          { length: ((pool as any).weightSnapshots as QuantAmmWeightSnapshot[])?.length || 0 },
           (_, i) => i
         ),
         axisLabel: {
@@ -259,7 +237,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
           show: true,
           alignWithLabel: true,
           interval: function (index: number) {
-            return xAxisLabels[index] !== ''
+            return labelIndices.includes(index)
           },
           lineStyle: {
             color: '#999999',
