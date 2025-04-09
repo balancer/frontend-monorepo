@@ -130,8 +130,21 @@ export function PoolComposition() {
     if (cardRef.current) {
       setHeight(cardRef.current.offsetHeight)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+
+    const resizeObserver = new ResizeObserver(entries => {
+      if (entries[0] && entries[0].target instanceof HTMLElement) {
+        setHeight(entries[0].target.offsetHeight)
+      }
+    })
+
+    if (cardRef.current) {
+      resizeObserver.observe(cardRef.current)
+    }
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [pool.id])
 
   return (
     <Card ref={cardRef}>
