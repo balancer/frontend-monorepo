@@ -17,8 +17,6 @@ import {
 } from '@chakra-ui/react'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -31,14 +29,10 @@ import { PoolToken } from '../pool.types'
 import { usePool } from '../PoolProvider'
 import { Pool } from '../pool.types'
 import { PoolTypeTag } from './PoolTypeTag'
-import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
-import {
-  getCompositionTokens,
-  getFlatCompositionTokens,
-  getNestedPoolTokens,
-} from '../pool-tokens.utils'
+import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { useGetPoolTokensWithActualWeights } from '../useGetPoolTokensWithActualWeights'
 import { ArrowUpRight } from 'react-feather'
+import { PoolCompositionChart } from './PoolCompositionChart'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -121,7 +115,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
 }
 
 export function PoolComposition() {
-  const { pool, chain, isLoading } = usePool()
+  const { pool, chain } = usePool()
   const { isMobile } = useBreakpoints()
   const { calcTotalUsdValue } = useTokens()
   const cardRef = useRef<HTMLDivElement | null>(null)
@@ -195,26 +189,7 @@ export function PoolComposition() {
             From {fNum('integer', pool.dynamicData.holdersCount)} Liquidity Providers
           </Text>
         </VStack>
-        <NoisyCard
-          cardProps={{
-            position: 'relative',
-            overflow: 'hidden',
-            height: ['300px', `${height - 35}px`],
-          }}
-          contentProps={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-        >
-          <PoolZenGarden poolType={pool.type} sizePx={isMobile ? '300px' : `${height - 35}px`} />
-          {isLoading ? (
-            <Skeleton h="full" w="full" />
-          ) : (
-            <PoolWeightChart
-              chain={chain}
-              displayTokens={getFlatCompositionTokens(pool)}
-              hasLegend
-              totalLiquidity={totalLiquidity}
-            />
-          )}
-        </NoisyCard>
+        <PoolCompositionChart height={height} isMobile={!!isMobile} />
       </Stack>
     </Card>
   )
