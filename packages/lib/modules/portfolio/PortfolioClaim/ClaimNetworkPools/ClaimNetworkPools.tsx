@@ -13,6 +13,8 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
 import { MerklAlert } from '../../merkl/MerklAlert'
 import { motion, easeOut } from 'framer-motion'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getChainId } from '@repo/lib/config/app.config'
 
 export function ClaimNetworkPools() {
   const {
@@ -30,7 +32,8 @@ export function ClaimNetworkPools() {
 
   const hasProtocolRewards = protocolRewardsBalance && protocolRewardsBalance.isGreaterThan(0)
 
-  const { hasMerklRewards } = useHasMerklRewards(poolsWithOnchainUserBalances)
+  const chainIds = PROJECT_CONFIG.merklRewardsChains.map(chain => getChainId(chain))
+  const { hasMerklRewards } = useHasMerklRewards(poolsWithOnchainUserBalances, chainIds)
 
   if (!isConnected) {
     return null
