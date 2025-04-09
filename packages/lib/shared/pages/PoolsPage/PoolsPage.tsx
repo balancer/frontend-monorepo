@@ -28,7 +28,7 @@ export function PoolsPage({
           position="relative"
           shadow="innerBase"
         >
-          <DefaultPageContainer pb={['xl', 'xl']} pt={['xl', '40px']}>
+          <DefaultPageContainer pb={['xl', 'xl', '10']} pt={['xl', '40px']}>
             <Box display={{ base: 'none', md: 'block' }}>
               <RadialPattern
                 circleCount={8}
@@ -79,7 +79,7 @@ export function PoolsPage({
                 direction={{ base: 'column', lg: 'row' }}
                 gap="4"
                 justify={{ base: 'start', md: 'space-between' }}
-                mb="8"
+                mb="10"
               >
                 <Box>
                   <Heading mb="3" sx={{ textWrap: 'balance' }} variant="special">

@@ -13,7 +13,7 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
     .toString()
 
   return (
-    <Flex direction="row" flexWrap="wrap" gap={{ base: 'sm', lg: 'sm' }} mt="3">
+    <Flex direction="row" flexWrap="wrap" gap={{ base: 'sm', lg: 'md' }} mt="3">
       <Box flex="1">
         <Stat
           label="TVL"
