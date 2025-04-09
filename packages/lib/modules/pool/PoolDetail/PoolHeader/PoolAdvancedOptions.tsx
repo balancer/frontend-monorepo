@@ -31,8 +31,7 @@ export function PoolAdvancedOptions() {
   const { pool } = usePool()
   const poolMetadata = usePoolMetadata(pool)
   const isCowPool = isCowAmmPool(pool.type)
-  const isPoolSwapDisabled =
-    !isMaBeetsPool(pool.id) && (shouldBlockAddLiquidity(pool, poolMetadata) || isCowPool)
+  const isPoolSwapDisabled = !isMaBeetsPool(pool.id) && isCowPool
 
   const disabledLinkProps = isPoolSwapDisabled
     ? {
