@@ -106,7 +106,6 @@ export function PortfolioTable() {
               toggleStakingType={toggleStakingType}
             />
           </VStack>
-
           <Stack
             align={{ base: 'end', sm: 'center' }}
             direction="row"
