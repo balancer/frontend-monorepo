@@ -3,7 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
-import { balancerV3Contracts } from '@balancer/sdk'
+import { balancerV3Contracts, PERMIT2 } from '@balancer/sdk'
 import { avalanche } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -50,6 +50,7 @@ const networkConfig: NetworkConfig = {
       compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[avalanche.id],
     },
     veDelegationProxy: '0x0c6052254551EAe3ECac77B01DFcf1025418828f',
+    permit2: PERMIT2[avalanche.id],
   },
   pools: convertHexToLowerCase({
     issues: {
