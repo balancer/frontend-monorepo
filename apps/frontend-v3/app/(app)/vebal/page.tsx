@@ -99,20 +99,7 @@ export default function VeBALPage() {
         </Noise>
       </Box>
 
-      <Section>
-        <Stack gap="lg" maxW="200px">
-          <Heading as="h2" size="lg" variant="special">
-            veBAL
-          </Heading>
-          <Button as={NextLink} href="/vebal/manage" size="lg" variant="primary">
-            Manage veBAL
-          </Button>
-
-          <Button as={NextLink} href="/vebal/vote" size="lg" variant="primary">
-            Vote
-          </Button>
-        </Stack>
-      </Section>
+      <Section />
       <Section>
         <Stack alignItems="center" gap="md">
           <Heading as="h2" pb="0" size="lg" textAlign="center" variant="special">
