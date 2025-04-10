@@ -29,14 +29,13 @@ interface PromoItem {
 const promoData: PromoItem[] = [
   {
     id: 0,
-    icon: <GyroIcon size={32} />,
-    title: 'Superliquidity, made simple',
-    description: 'Next-gen Gyroscope pools are now live on Balancer v3.',
+
+    icon: <BoostedPoolIcon size={40} />,
+    title: '100% Boosted Pools on Balancer v3',
+    description:
+      'A simple, capital efficient strategy to get boosted yield from partners like Aave and Morpho',
     buttonText: 'View pools',
-    buttonLink: '/pools?protocolVersion=3&poolTypes=GYRO',
-    linkText: 'Learn more',
-    linkURL: 'https://www.gyroscope.com/',
-    linkExternal: true,
+    buttonLink: '/pools?poolTags=BOOSTED',
     bgImage: {
       directory: '/images/promos/gyro/',
       imgName: 'bg',
@@ -57,11 +56,14 @@ const promoData: PromoItem[] = [
   },
   {
     id: 2,
-    icon: <BoostedPoolIcon size={40} />,
-    title: '100% Boosted Pools',
-    description: 'Boosted earnings, simplified strategy',
+    icon: <GyroIcon size={32} />,
+    title: 'Superliquidity, made simple',
+    description: 'Next-gen Gyroscope pools are now live on Balancer v3.',
     buttonText: 'View pools',
-    buttonLink: '/pools?poolTags=BOOSTED',
+    buttonLink: '/pools?protocolVersion=3&poolTypes=GYRO',
+    linkText: 'Learn more',
+    linkURL: 'https://www.gyroscope.com/',
+    linkExternal: true,
     bgImage: {
       directory: '/images/promos/gyro/',
       imgName: 'bg',
@@ -159,11 +161,7 @@ export function PromoBanners() {
                 h="100%"
                 opacity={isActive ? 1 : 0}
                 pointerEvents={isActive ? 'auto' : 'none'}
-                transform={
-                  isActive
-                    ? 'translateX(0)'
-                    : 'translateX(12px)'
-                }
+                transform={isActive ? 'translateX(0)' : 'translateX(12px)'}
                 transition="opacity 1s var(--ease-out-cubic), transform 0.5s var(--ease-out-cubic)"
                 w="full"
               >
