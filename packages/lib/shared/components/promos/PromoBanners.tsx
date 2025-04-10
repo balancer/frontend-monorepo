@@ -49,8 +49,6 @@ const promoData: PromoItem[] = [
     description: 'A perfect balances simplicity and flexibility to reshape the future of AMMs.',
     buttonText: 'View pools',
     buttonLink: 'pools?protocolVersion=3',
-    linkText: 'Learn more',
-    linkURL: 'https://www.gyroscope.com/',
 
     bgImage: {
       directory: '/images/promos/gyro/',
@@ -161,9 +159,13 @@ export function PromoBanners() {
                 h="100%"
                 opacity={isActive ? 1 : 0}
                 pointerEvents={isActive ? 'auto' : 'none'}
-                transform={isActive ? 'translateY(0)' : 'translateY(5px)'} // Slide in up slightly
-                transition="opacity 0.3s var(--ease-out-cubic), transform 0.3s var(--ease-out-cubic)"
-                w="100%"
+                transform={
+                  isActive
+                    ? 'translateX(0)'
+                    : 'translateX(12px)'
+                }
+                transition="opacity 1s var(--ease-out-cubic), transform 0.5s var(--ease-out-cubic)"
+                w="full"
               >
                 {isActive && (
                   <Flex
@@ -278,6 +280,7 @@ export function PromoBanners() {
                                 }
                               : { opacity: 0.9 }
                           }
+                          animation="fadeIn 0.3s var(--ease-out-cubic) 0.3s both"
                           as={NextLink}
                           bg="transparent"
                           border="1px solid"
@@ -292,7 +295,6 @@ export function PromoBanners() {
                           py="sm"
                           rounded="full"
                           size="md"
-                          transition="all 0.3s var(--ease-out-cubic)"
                           whiteSpace="nowrap"
                         >
                           {item.buttonText}
