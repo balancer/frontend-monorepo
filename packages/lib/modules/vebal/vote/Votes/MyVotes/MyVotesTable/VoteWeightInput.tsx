@@ -18,7 +18,8 @@ interface PercentageInputProps extends InputProps {
   percentage: string
   setPercentage: (value: string) => void
   isTimeLocked: boolean
-  isExpired: boolean | undefined
+  isLockExpired: boolean | undefined
+  isGaugeExpired: boolean | undefined
   noBalance: boolean | undefined
   isTooShort: boolean | undefined
   lastVoteTime: number | undefined
@@ -32,7 +33,8 @@ export function VoteWeightInput({
   percentage,
   setPercentage,
   isTimeLocked,
-  isExpired,
+  isLockExpired,
+  isGaugeExpired,
   noBalance,
   isTooShort,
   lastVoteTime,
@@ -62,9 +64,11 @@ export function VoteWeightInput({
     tooltipLabel = `Your vote is timelocked.
     Once you vote on a pool, your vote is fixed for 10 days.
     No edits can be made until ${endOfLocking}`
-  } else if (isExpired) {
+  } else if (isLockExpired) {
     tooltipLabel =
       "You can't vote because your lock has expired. Get new veBAL to vote by extending your lock."
+  } else if (isGaugeExpired) {
+    tooltipLabel = 'This pool gauge is expired. You must vote with 0% to reallocate these votes.'
   } else if (noBalance) {
     tooltipLabel = `You can't vote because you have no veBAL.
     Extend your lock / get new veBAL to edit your votes`
@@ -73,6 +77,11 @@ export function VoteWeightInput({
     Extend your lock / get new veBAL to edit your votes`
   } else {
     tooltipLabel = 'Unknown reason'
+  }
+
+  function getInputValue() {
+    if (isGaugeExpired) return '0.00'
+    return isEditing ? editingValue : parseFloat(percentage).toFixed(2)
   }
 
   return (
@@ -96,7 +105,7 @@ export function VoteWeightInput({
             }}
             onKeyDown={blockInvalidNumberInput}
             type="number"
-            value={isEditing ? editingValue : parseFloat(percentage).toFixed(2)}
+            value={getInputValue()}
             {...inputProps}
           />
           <InputRightElement pointerEvents="none">

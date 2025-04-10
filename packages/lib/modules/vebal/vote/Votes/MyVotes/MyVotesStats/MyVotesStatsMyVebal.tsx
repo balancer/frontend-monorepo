@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Badge, Button, HStack, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import NextLink from 'next/link'
 import { useVebalLockInfo } from '@repo/lib/modules/vebal/useVebalLockInfo'
@@ -25,27 +25,6 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
     ? mainnetLockedInfo.lockedAmount
     : undefined
 
-  function getButtonProps() {
-    if (isExpired) {
-      return {
-        variant: 'primary',
-        children: 'Manage',
-      }
-    }
-
-    if (myVebalBalance) {
-      return {
-        variant: 'tertiary',
-        children: 'Get veBAL',
-      }
-    }
-
-    return {
-      variant: 'primary',
-      children: 'Get veBAL',
-    }
-  }
-
   const { maxLockEndDate } = useLockEndDate({
     lockedEndDate: lockedEndDate ? new Date(lockedEndDate) : undefined,
   })
@@ -63,11 +42,33 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
-        ) : myVebalBalance ? (
+        ) : myVebalBalance === 0 ? (
+          <HStack spacing="xs">
+            <Text color="font.maxContrast">&mdash;</Text>
+            {isExpired && (
+              <Tooltip
+                label={
+                  "You can't vote because your lock has expired. Get new veBAL to vote by extending your lock."
+                }
+              >
+                <Badge
+                  background="red.400"
+                  color="font.dark"
+                  fontSize="sm"
+                  textTransform="unset"
+                  userSelect="none"
+                >
+                  Expired
+                </Badge>
+              </Tooltip>
+            )}
+          </HStack>
+        ) : myVebalBalance !== undefined ? (
           <HStack spacing="xs">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
               {balance}
             </Text>
+
             {lockedEndDate && (
               <MyVebalChargeTooltip
                 expectedVeBalAmount={expectedVeBalAmount.toNumber()}
@@ -81,12 +82,22 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
       rightContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
-        ) : isConnected ? (
-          <Button as={NextLink} href="/vebal/manage/lock" size="sm" {...getButtonProps()} />
-        ) : (
+        ) : !isConnected ? (
           <VStack>
             <ConnectWallet size="sm" variant="primary" />
           </VStack>
+        ) : isExpired ? (
+          <Button as={NextLink} href="/vebal/manage/extend" size="sm" variant="primary">
+            Manage
+          </Button>
+        ) : myVebalBalance ? (
+          <Button as={NextLink} href="/vebal/manage/extend" size="sm" variant="tertiary">
+            Extend lock
+          </Button>
+        ) : (
+          <Button as={NextLink} href="/vebal/manage/lock" size="sm" variant="primary">
+            Get veBAL
+          </Button>
         )
       }
       variant={isExpired ? 'expired' : 'default'}

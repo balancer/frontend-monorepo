@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.13.1",
-    "@balancer/sdk": "2.6.0",
+    "@balancer/sdk": "2.7.1",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "2.4.2",
@@ -58,7 +58,8 @@
     "graphql-request": "7.1.2",
     "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",
-    "next": "14.2.26",
+    "mockdate": "3.0.5",
+    "next": "14.2.25",
     "next-themes": "0.4.4",
     "numeral": "^2.0.6",
     "nuqs": "1.20.0",

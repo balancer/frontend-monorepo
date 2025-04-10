@@ -1,47 +1,17 @@
-import { StaticCalendar } from '@repo/lib/shared/components/calendar/StaticCalendar'
-import { useToday } from '@repo/lib/shared/hooks/date.hooks'
-import { addWeeks, endOfWeek, isSameDay, nextThursday, startOfWeek } from 'date-fns'
-import { useCallback } from 'react'
+import { addWeeks, endOfWeek, nextThursday, startOfWeek } from 'date-fns'
 import { VotingDeadlineContainer } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineContainer'
-import { startOfDayUtc } from '@repo/lib/shared/utils/time'
+import { StaticCalendar } from './StaticCalendar'
 
 export function VotingDeadlineCalendar() {
-  const today = useToday()
+  const nowWithoutTime = new Date().setUTCHours(0, 0, 0, 0)
+  const deadline = nextThursday(nowWithoutTime)
 
-  const startDate = startOfWeek(today)
-  const endDate = endOfWeek(addWeeks(today, 1))
-  const deadlineDate = nextThursday(today) // fixme: calculate exact time
-
-  const isDayDisabled = useCallback(
-    (day: Date) => {
-      return day < startOfDayUtc(today)
-    },
-    [today]
-  )
-
-  const isDayActive = useCallback(
-    (day: Date) => {
-      return isSameDay(day, deadlineDate)
-    },
-    [deadlineDate]
-  )
-
-  const isDaySelected = useCallback(
-    (day: Date) => {
-      return isSameDay(day, addWeeks(deadlineDate, 1))
-    },
-    [deadlineDate]
-  )
+  const startDate = startOfWeek(deadline)
+  const endDate = endOfWeek(addWeeks(deadline, 1))
 
   return (
     <VotingDeadlineContainer>
-      <StaticCalendar
-        endDate={endDate}
-        isDayActive={isDayActive}
-        isDayDisabled={isDayDisabled}
-        isDaySelected={isDaySelected}
-        startDate={startDate}
-      />
+      <StaticCalendar deadline={deadline} endDate={endDate} startDate={startDate} />
     </VotingDeadlineContainer>
   )
 }

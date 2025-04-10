@@ -66,7 +66,7 @@ export function MyVebalChargeTooltip({
           </Text>
         </HStack>
         <HStack mt="sm" spacing="sm">
-          <Button as={NextLink} href="/vebal/manage/lock" size="sm" variant="secondary">
+          <Button as={NextLink} href="/vebal/manage/extend" size="sm" variant="secondary">
             Extend lock
           </Button>
           {isExpired && (

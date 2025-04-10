@@ -20,6 +20,7 @@ import { useVotingEscrowLocksQueries } from '@repo/lib/modules/vebal/cross-chain
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { HiddenHandData } from '@repo/lib/shared/services/hidden-hand/hidden-hand.types'
+import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 
 export interface UseVotesArgs {
   data: GetVeBalVotingListQuery | undefined
@@ -40,7 +41,17 @@ export function _useVotes({
 }: UseVotesArgs) {
   const { userAddress, isConnected } = useUserAccount()
 
-  const votingList = useMemo(() => data?.veBalGetVotingList || [], [data?.veBalGetVotingList])
+  const votingList = useMemo(() => {
+    const votingPools = data?.veBalGetVotingList || []
+    return shouldUseAnvilFork
+      ? /*
+        FIXME:
+        The current implementation is making onchain requests for every row in the list. We must simplify this.
+        In the meantime, when running in anvil fork mode we limit the number of rows to 10 to avoid overloading the fork.
+        */
+        votingPools.slice(0, 10)
+      : votingPools
+  }, [data?.veBalGetVotingList])
 
   const gaugeAddresses = useMemo(() => votingList.map(vote => vote.gauge.address), [votingList])
 
@@ -178,7 +189,7 @@ export function _useVotes({
           // Is voting currently not locked
           !isVotingTimeLocked(votingPool.gaugeVotes?.lastUserVoteTime ?? 0) &&
           // Is gauge not expired
-          // TODO: this should not be applied when Show Expired pool gauges filter is checked
+          // TODO: (votes) this should not be applied when Show Expired pool gauges filter is checked
           !isPoolGaugeExpired(votingPool)
         )
       }),

@@ -1,16 +1,10 @@
 import { HStack, VStack, Text, Box } from '@chakra-ui/react'
-import { useCurrentDate } from '@repo/lib/shared/hooks/date.hooks'
-import {
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-  differenceInSeconds,
-  format,
-  nextThursday,
-} from 'date-fns'
+import { useCurrentDate, useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
+import { differenceInMinutes, format, nextThursday } from 'date-fns'
 import { oneSecondInMs } from '@repo/lib/shared/utils/time'
 import { VotingDeadlineContainer } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineContainer'
 import { ReminderButton } from '@repo/lib/modules/vebal/vote/Votes/VotesIntroduction/VotingDeadline/ReminderButton'
+import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
 
 const countdownItemBoxShadowStyles = [
   '0px 0px 0px 1px #00000005',
@@ -20,37 +14,40 @@ const countdownItemBoxShadowStyles = [
   '-0.5px -1px 0px 0px #FFFFFF26',
 ].join(', ')
 
+function setCalendarEvent(deadline: Date) {
+  const event = {
+    title: 'veBAL voting deadline (Balancer)',
+    start: deadline,
+    url: 'https://balancer.fi/vebal/vote',
+  }
+
+  openIcalEvent({ event })
+}
+
 export function VotingDeadlineCounter() {
   const now = useCurrentDate(oneSecondInMs)
-  const deadlineDate = nextThursday(now) // fixme: calculate exact time
+  const nowWithoutTime = new Date().setUTCHours(0, 0, 0, 0)
+  const deadline = nextThursday(nowWithoutTime)
+
+  const { daysDiff, hoursDiff, minutesDiff, secondsDiff } = useDateCountdown(deadline)
 
   const counters = [
-    {
-      title: 'D',
-      value: differenceInDays(deadlineDate, now),
-    },
-    {
-      title: 'H',
-      value: differenceInHours(deadlineDate, now) % 24,
-    },
-    {
-      title: 'M',
-      value: differenceInMinutes(deadlineDate, now) % (24 * 60),
-    },
-    {
-      title: 'S',
-      value: differenceInSeconds(deadlineDate, now) % (24 * 60 * 60),
-    },
+    { title: 'D', value: daysDiff },
+    { title: 'H', value: hoursDiff },
+    { title: 'M', value: minutesDiff },
+    { title: 'S', value: secondsDiff },
   ]
+
+  const closeToDeadline = differenceInMinutes(deadline, now) < 30
 
   return (
     <VotingDeadlineContainer>
       <VStack spacing="md">
         <HStack justify="space-between" w="full">
           <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
-            {format(deadlineDate, 'EEEE, HHa')} EST
+            {format(deadline, 'EEEE, Haaa zzzz')}
           </Text>
-          <ReminderButton>Set reminder</ReminderButton>
+          <ReminderButton onClick={() => setCalendarEvent(deadline)}>Set reminder</ReminderButton>
         </HStack>
         <HStack spacing="sm" w="full">
           {counters.map(counter => (
@@ -67,6 +64,7 @@ export function VotingDeadlineCounter() {
                   {counter.title}
                 </Text>
                 <Text
+                  color={closeToDeadline ? 'font.warning' : 'font.primary'}
                   fontSize={{ base: '24px', lg: '32px' }}
                   fontWeight={500}
                   lineHeight="40px"
