@@ -156,7 +156,7 @@ export function PromoBanners() {
               </Box>
             )}
 
-            <Center className="content-positioner" h="100%" position="relative" zIndex="1">
+            <Center h="100%" position="relative" zIndex="1">
               <Box
                 h="100%"
                 opacity={isActive ? 1 : 0}
@@ -302,25 +302,45 @@ export function PromoBanners() {
                   </Flex>
                 )}
               </Box>
-
-              {!isActive && (
-                <Flex
-                  align={{ base: 'start', md: 'center' }}
-                  color={colorMode === 'dark' ? 'gray.400' : 'gray.600'}
-                  direction="column"
-                  gap="sm"
-                  h="full"
-                  justifyContent="center"
-                  left={0}
-                  p="md"
-                  position="absolute"
-                  top={0}
-                  w="full"
-                >
-                  <Box color="inherit">{item.icon}</Box>
-                </Flex>
-              )}
             </Center>
+
+            {!isActive && (
+              <Box h="full" left="0" overflow="hidden" position="absolute" top="0" w="full">
+                {item.bgImage && (
+                  <Picture
+                    altText="Background texture"
+                    defaultImgType="png"
+                    directory={item.bgImage.directory}
+                    height="100%"
+                    imgAvif
+                    imgAvifDark
+                    imgAvifPortrait
+                    imgAvifPortraitDark
+                    imgName={item.bgImage.imgName}
+                    imgPng
+                    imgPngDark
+                    width="100%"
+                  />
+                )}
+                <Center>
+                  <Flex
+                    align={{ base: 'start', md: 'center' }}
+                    color={colorMode === 'dark' ? 'gray.400' : 'gray.600'}
+                    direction="column"
+                    gap="sm"
+                    h="full"
+                    justifyContent="center"
+                    left={0}
+                    p="md"
+                    position="absolute"
+                    top={0}
+                    w="full"
+                  >
+                    <Box color="inherit">{item.icon}</Box>
+                  </Flex>
+                </Center>
+              </Box>
+            )}
           </Box>
         )
       })}
