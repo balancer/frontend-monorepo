@@ -77,66 +77,13 @@ export function MyVotes() {
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsMyIncentivesOptimized />
         </GridItem>
-        {hasAllVotingPowerTimeLocked && (
-          <GridItem colSpan={4}>
-            <Alert status="warning">
-              <AlertIcon as={AlertTriangle} />
-              <HStack alignItems="baseline">
-                <AlertTitle>All your votes are timelocked</AlertTitle>
-                <AlertDescription>
-                  Once you vote on a pool, your vote is fixed for {WEIGHT_VOTE_DELAY / oneDayInMs}{' '}
-                  days.
-                </AlertDescription>
-              </HStack>
-            </Alert>
-          </GridItem>
-        )}
-        {vebalLockTooShort && (
-          <GridItem colSpan={4}>
-            <Alert status="warning">
-              <AlertIcon as={AlertTriangle} />
-              <HStack alignItems="baseline">
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
-                <AlertTitle>You can't vote because your veBAL expires soon</AlertTitle>
-                <AlertDescription>
-                  Gauge voting requires your veBAL to be locked for 7+ days.{' '}
-                  <Text
-                    as={NextLink}
-                    color="font.dark"
-                    href="/vebal/manage/extend"
-                    textDecoration="underline"
-                  >
-                    Extend your lock
-                  </Text>{' '}
-                  to vote.
-                </AlertDescription>
-              </HStack>
-            </Alert>
-          </GridItem>
-        )}
-        {shouldResubmitVotes && (
-          <GridItem colSpan={4}>
-            <Alert status="info">
-              <AlertIcon as={AlertTriangle} />
-              <HStack alignItems="baseline">
-                <AlertTitle>Resubmit your votes to utilize your full voting power</AlertTitle>
-                <AlertDescription>
-                  {/* eslint-disable-next-line react/no-unescaped-entities */}
-                  Looks like you got more veBAL. Your old votes don't use it. Re-vote now to apply
-                  your full veBAL power.
-                </AlertDescription>
-              </HStack>
-            </Alert>
-          </GridItem>
-        )}
 
-        {vebalIsExpired && (
+        {vebalIsExpired ? (
           <GridItem colSpan={4}>
             <Alert status="warning">
               <AlertIcon as={AlertTriangle} />
               <HStack alignItems="baseline">
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
-                <AlertTitle>You can't vote because your veBAL has expired</AlertTitle>
+                <AlertTitle>{`You can't vote because your veBAL has expired`}</AlertTitle>
                 <AlertDescription>
                   You need some veBAL to vote on gauges. Unlock and relock your B-80BAL-20-WETH to
                   get some veBAL.
@@ -144,9 +91,7 @@ export function MyVotes() {
               </HStack>
             </Alert>
           </GridItem>
-        )}
-
-        {noVeBALBalance && (
+        ) : noVeBALBalance ? (
           <GridItem colSpan={4}>
             <Alert status="warning">
               <AlertIcon as={AlertTriangle} />
@@ -158,18 +103,74 @@ export function MyVotes() {
               </HStack>
             </Alert>
           </GridItem>
+        ) : (
+          <>
+            {hasAllVotingPowerTimeLocked && (
+              <GridItem colSpan={4}>
+                <Alert status="warning">
+                  <AlertIcon as={AlertTriangle} />
+                  <HStack alignItems="baseline">
+                    <AlertTitle>All your votes are timelocked</AlertTitle>
+                    <AlertDescription>
+                      {`Once you vote on a pool, your vote is fixed for ${WEIGHT_VOTE_DELAY / oneDayInMs} days.`}
+                    </AlertDescription>
+                  </HStack>
+                </Alert>
+              </GridItem>
+            )}
+
+            {vebalLockTooShort && (
+              <GridItem colSpan={4}>
+                <Alert status="warning">
+                  <AlertIcon as={AlertTriangle} />
+                  <HStack alignItems="baseline">
+                    <AlertTitle>{`You can't vote because your veBAL expires soon`}</AlertTitle>
+                    <AlertDescription>
+                      Gauge voting requires your veBAL to be locked for 7+ days.{' '}
+                      <Text
+                        as={NextLink}
+                        color="font.dark"
+                        href="/vebal/manage/extend"
+                        textDecoration="underline"
+                      >
+                        Extend your lock
+                      </Text>{' '}
+                      to vote.
+                    </AlertDescription>
+                  </HStack>
+                </Alert>
+              </GridItem>
+            )}
+
+            {shouldResubmitVotes && (
+              <GridItem colSpan={4}>
+                <Alert status="info">
+                  <AlertIcon as={AlertTriangle} />
+                  <HStack alignItems="baseline">
+                    <AlertTitle>Resubmit your votes to utilize your full voting power</AlertTitle>
+                    <AlertDescription>
+                      {`Looks like you got more veBAL. Your old votes don't use it.
+                      Re-vote now to apply your full veBAL power.`}
+                    </AlertDescription>
+                  </HStack>
+                </Alert>
+              </GridItem>
+            )}
+
+            {hasExpiredGauges && (
+              <GridItem colSpan={4}>
+                <Alert status="warning">
+                  <AlertIcon as={AlertTriangle} />
+                  <HStack alignItems="baseline">
+                    <AlertTitle>You have votes on an expired pool gauge</AlertTitle>
+                    <AlertDescription>Reallocate these to avoid wasting votes</AlertDescription>
+                  </HStack>
+                </Alert>
+              </GridItem>
+            )}
+          </>
         )}
-        {hasExpiredGauges && (
-          <GridItem colSpan={4}>
-            <Alert status="warning">
-              <AlertIcon as={AlertTriangle} />
-              <HStack alignItems="baseline">
-                <AlertTitle>You have votes on an expired pool gauge</AlertTitle>
-                <AlertDescription>Reallocate these to avoid wasting votes</AlertDescription>
-              </HStack>
-            </Alert>
-          </GridItem>
-        )}
+
         <GridItem colSpan={4}>
           {isConnected ? (
             <MyVotesTable loading={myVotesLoading} myVotes={sortedMyVotes} />
