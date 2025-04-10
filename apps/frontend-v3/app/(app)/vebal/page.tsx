@@ -1,5 +1,16 @@
 'use client'
-import { Heading, Button, Stack, Box, Text, Flex, Center } from '@chakra-ui/react'
+import {
+  Heading,
+  Button,
+  Stack,
+  Box,
+  Text,
+  Flex,
+  Center,
+  Grid,
+  GridItem,
+  Card,
+} from '@chakra-ui/react'
 import Section from '@repo/lib/shared/components/layout/Section'
 
 import Noise from '@repo/lib/shared/components/layout/Noise'
@@ -103,16 +114,86 @@ export default function VeBALPage() {
         </Stack>
       </Section>
       <Section>
-        <Heading as="h2" size="lg" variant="special" />
-      </Section>
-      <Section>
-        <Heading as="h2" size="lg" variant="special">
-          Here’s how it works
-        </Heading>
-        <Text>
-          Add liquidity to the ve8020 BAL/WETH pool and lock it up. The longer you lock, the more
-          veBAL you get.
-        </Text>
+        <Stack alignItems="center" gap="md">
+          <Heading as="h2" pb="0" size="lg" textAlign="center" variant="special">
+            Here’s how it works
+          </Heading>
+          <Text color="font.secondary" maxWidth="38ch" pt="0" textAlign="center">
+            Add liquidity to the ve8020 BAL/WETH pool and lock it up. The longer you lock, the more
+            veBAL you get.
+          </Text>
+          <Grid
+            alignItems="stretch"
+            gap="lg"
+            maxW="container.lg"
+            pt="lg"
+            templateColumns={['1fr', '1fr', 'repeat(3, 1fr)']}
+          >
+            <GridItem height="100%">
+              <Card height="100%">
+                <Stack alignItems="center" gap="sm" textAlign="center">
+                  <Picture
+                    altText="veBAL token"
+                    defaultImgType="png"
+                    directory="/images/vebal/"
+                    imgAvif
+                    imgName="vebal"
+                    imgPng
+                  />
+                  <Heading as="h3" size="md">
+                    1. Add liquidity
+                  </Heading>
+                  <Text color="font.secondary" pb="ms">
+                    Join the ve8020 BAL/WETH protocol liquidity pool to get the B-80BAL-20WETH LP
+                    token.
+                  </Text>
+                </Stack>
+              </Card>
+            </GridItem>
+            <GridItem height="100%">
+              <Card height="100%">
+                <Stack alignItems="center" gap="sm" textAlign="center">
+                  <Picture
+                    altText="veBAL token"
+                    defaultImgType="png"
+                    directory="/images/vebal/"
+                    imgAvif
+                    imgName="vebal"
+                    imgPng
+                  />
+                  <Heading as="h3" size="md">
+                    2. Lock your LP tokens
+                  </Heading>
+                  <Text color="font.secondary" pb="ms">
+                    Lock your B-80BAL-20WETH LP tokens for a period to receive veBAL. The longer you
+                    lock, the more veBAL your get.
+                  </Text>
+                </Stack>
+              </Card>
+            </GridItem>
+            <GridItem height="100%">
+              <Card height="100%">
+                <Stack alignItems="center" gap="sm" textAlign="center">
+                  <Picture
+                    altText="veBAL token"
+                    defaultImgType="png"
+                    directory="/images/vebal/"
+                    imgAvif
+                    imgName="vebal"
+                    imgPng
+                  />
+                  <Heading as="h3" size="md">
+                    3. Get power + rewards
+                  </Heading>
+                  <Text color="font.secondary" pb="ms">
+                    Earn protocol revenue + weekly voting incentives, boost liquidity mining, gain
+                    governance power.
+                  </Text>
+                </Stack>
+              </Card>
+            </GridItem>
+          </Grid>
+        </Stack>
       </Section>
       <Box overflow="hidden" position="relative" py="100px">
         <Center>
