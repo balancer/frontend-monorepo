@@ -152,7 +152,7 @@ export function AddLiquidityFormTabs({
         size="md"
       />
       {isOutOfRange && <OutOfRangeWarning />}
-      {isProportional && <PoolWeightsInfo />}
+      <PoolWeightsInfo />
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>
   )

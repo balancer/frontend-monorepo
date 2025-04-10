@@ -180,6 +180,10 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     }
     ... on GqlPoolQuantAmmWeighted {
       hasAnyAllowedBuffer
+      weightSnapshots {
+        timestamp
+        weights
+      }
       poolTokens {
         ...PoolTokens
       }

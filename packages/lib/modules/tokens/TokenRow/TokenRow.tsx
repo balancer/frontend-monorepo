@@ -241,7 +241,7 @@ export default function TokenRow({
             )}
           </VStack>
           {actualWeight && (
-            <VStack alignItems="flex-end" spacing="xs" w="24">
+            <VStack alignItems="flex-end" spacing="none" w="24">
               {isLoading ? (
                 <>
                   <Skeleton h="4" w="10" />
