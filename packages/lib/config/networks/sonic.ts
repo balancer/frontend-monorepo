@@ -3,14 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { zeroAddress } from 'viem'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
-import {
-  BALANCER_BATCH_ROUTER,
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
-  BALANCER_ROUTER,
-  PERMIT2,
-  VAULT_ADMIN,
-  VAULT_V3,
-} from '@balancer/sdk'
+import { balancerV3Contracts, PERMIT2 } from '@balancer/sdk'
 import { sonic } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -57,13 +50,13 @@ const networkConfig: NetworkConfig = {
     multicall3: '0xcA11bde05977b3631167028862bE2a173976CA11',
     balancer: {
       vaultV2: '0xba12222222228d8ba445958a75a0704d566bf2c8',
-      vaultV3: VAULT_V3[sonic.id],
+      vaultV3: balancerV3Contracts.Vault[sonic.id],
       relayerV6: '0x7b52D5ef006E59e3227629f97F182D6442380bb6',
       minter: zeroAddress,
-      router: BALANCER_ROUTER[sonic.id],
-      batchRouter: BALANCER_BATCH_ROUTER[sonic.id],
-      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[sonic.id],
-      vaultAdminV3: VAULT_ADMIN[sonic.id],
+      router: balancerV3Contracts.Router[sonic.id],
+      batchRouter: balancerV3Contracts.BatchRouter[sonic.id],
+      compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[sonic.id],
+      vaultAdminV3: balancerV3Contracts.VaultAdmin[sonic.id],
     },
     veDelegationProxy: zeroAddress, // TODO: fix this dependency for Beets
     beets: {

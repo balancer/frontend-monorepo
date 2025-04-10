@@ -21,7 +21,7 @@
     "postinstall": "pnpm run gen:theme-typings"
   },
   "dependencies": {
-    "@balancer/sdk": "2.7.1",
+    "@balancer/sdk": "3.1.0",
     "@chakra-ui/hooks": "2.4.2",
     "@chakra-ui/icons": "2.2.4",
     "@chakra-ui/react": "2.10.6",
