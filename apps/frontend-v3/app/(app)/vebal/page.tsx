@@ -44,35 +44,35 @@ export default function VeBALPage() {
               height={2000}
               innerHeight={150}
               innerWidth={150}
-              left="calc(50% - 300px)"
+              left="calc(50% - 580px)"
               position="absolute"
-              top="-300px"
+              top="-480px"
               width={2000}
             />
 
             <FadeInOnView animateOnce={false}>
-              <Stack gap="md" maxWidth={400}>
-                <Heading as="h2" size="lg" variant="special">
-                  Lock-in for veBAL boosts
-                </Heading>
-                <Text color="font.secondary" mb="sm">
-                  veBAL is the Balancer protocol governance system that rewards long-term
-                  commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool. The
-                  longer you lock, the more veBAL you get.
-                </Text>
-                <Flex gap="md" maxWidth={320}>
-                  <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="primary">
-                    Manage veBAL
-                  </Button>
-
-                  <Button as={NextLink} flex={1} href="/vebal/vote" size="lg" variant="tertiary">
-                    Vote on gauges
-                  </Button>
-                </Flex>
-              </Stack>
-
               <Box position="relative">
-                <Box position="absolute">
+                <Stack gap="md" maxWidth={400}>
+                  <Heading as="h2" size="lg" variant="special">
+                    Lock-in for veBAL boosts
+                  </Heading>
+                  <Text color="font.secondary" mb="sm">
+                    veBAL is the Balancer protocol governance system that rewards long-term
+                    commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool. The
+                    longer you lock, the more veBAL you get.
+                  </Text>
+                  <Flex gap="md" maxWidth={320}>
+                    <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="primary">
+                      Manage veBAL
+                    </Button>
+
+                    <Button as={NextLink} flex={1} href="/vebal/vote" size="lg" variant="tertiary">
+                      Vote on gauges
+                    </Button>
+                  </Flex>
+                </Stack>
+
+                <Box position="absolute" right="-400px" top="-100px" width="1200px" zIndex="-1">
                   <Picture
                     altText="veBAL token"
                     defaultImgType="png"
