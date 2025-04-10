@@ -127,6 +127,7 @@ export function PromoBanners() {
             transition="flex-basis 0.15s var(--ease-out-cubic), flex-grow 0.15s var(--ease-out-cubic)"
             width={{ base: 'full', md: 'auto' }}
             {...borderRadiusProps}
+            role="group"
             shadow="2xl"
           >
             {item.bgImage && (
@@ -291,7 +292,13 @@ export function PromoBanners() {
                     top={0}
                     w="full"
                   >
-                    <Box color="inherit">{item.icon}</Box>
+                    <Box
+                      _groupHover={{ color: colorMode === 'dark' ? 'white' : 'black' }}
+                      color="inherit"
+                      transition="color 0.3s var(--ease-out-cubic)"
+                    >
+                      {item.icon}
+                    </Box>
                   </Flex>
                 </Center>
               </Box>
