@@ -1,5 +1,5 @@
 'use client'
-import { Heading, Button, Stack, Box, Text, Flex } from '@chakra-ui/react'
+import { Heading, Button, Stack, Box, Text, Flex, Center } from '@chakra-ui/react'
 import Section from '@repo/lib/shared/components/layout/Section'
 
 import Noise from '@repo/lib/shared/components/layout/Noise'
@@ -91,7 +91,7 @@ export default function VeBALPage() {
       <Section>
         <Stack gap="lg" maxW="200px">
           <Heading as="h2" size="lg" variant="special">
-            veBAL xxx
+            veBAL
           </Heading>
           <Button as={NextLink} href="/vebal/manage" size="lg" variant="primary">
             Manage veBAL
@@ -107,9 +107,61 @@ export default function VeBALPage() {
       </Section>
       <Section>
         <Heading as="h2" size="lg" variant="special">
-          How it works
+          Here’s how it works
         </Heading>
+        <Text>
+          Add liquidity to the ve8020 BAL/WETH pool and lock it up. The longer you lock, the more
+          veBAL you get.
+        </Text>
       </Section>
+      <Box overflow="hidden" position="relative" py="100px">
+        <Center>
+          <Flex direction="column" gap="lg" textAlign="center">
+            <Heading
+              as="h2"
+              display="flex"
+              justifyContent="center"
+              size="lg"
+              textAlign="center"
+              variant="special"
+              width="full"
+            >
+              Calling all BAL holders
+            </Heading>
+            <Text display="flex" justifyContent="center" textAlign="center" width="full">
+              Turn your BAL tokens into voting power and rewards.
+            </Text>
+            <Flex
+              display="flex"
+              gap="md"
+              justifyContent="center"
+              margin="0 auto"
+              maxWidth={320}
+              width="full"
+            >
+              <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="primary">
+                Manage veBAL
+              </Button>
+
+              <Button as={NextLink} flex={1} href="/vebal/vote" size="lg" variant="tertiary">
+                Vote on gauges
+              </Button>
+            </Flex>
+          </Flex>
+        </Center>
+        <Box zIndex="-1">
+          <RadialPattern
+            bottom="-800px"
+            circleCount={12}
+            height={1200}
+            innerHeight={150}
+            innerWidth={150}
+            left="calc(50% - 600px)"
+            position="absolute"
+            width={1200}
+          />
+        </Box>
+      </Box>
     </>
   )
 }
