@@ -201,21 +201,10 @@ function _usePortfolioFilters() {
 
 export const PortfolioFiltersContext = createContext<UsePortfolioFiltersResult | null>(null)
 
-export function PortfolioFiltersProvider({
-  children,
-}: {
-  children: React.ReactNode | ((filters: UsePortfolioFiltersResult) => React.ReactNode)
-}) {
+export function PortfolioFiltersProvider({ children }: { children: React.ReactNode }) {
   const filters = _usePortfolioFilters()
 
-  // Support both render props pattern and context provider pattern
-  return typeof children === 'function' ? (
-    // Render props pattern
-    <PortfolioFiltersContext.Provider value={filters}>
-      {children(filters)}
-    </PortfolioFiltersContext.Provider>
-  ) : (
-    // Regular children pattern
+  return (
     <PortfolioFiltersContext.Provider value={filters}>{children}</PortfolioFiltersContext.Provider>
   )
 }
