@@ -150,16 +150,13 @@ function _usePortfolioFilters() {
 
   const hasTinyBalances = portfolioData.pools.some(pool => hasTinyBalance(pool, minUsdBalance))
 
-  // Calculate filtered pools based on all filters
   const filteredExpandedPools = useMemo(() => {
     let filtered = [...expandedPools]
 
-    // Filter by selected networks if any are selected
     if (selectedNetworks.length > 0) {
       filtered = filtered.filter(pool => selectedNetworks.includes(pool.chain))
     }
 
-    // Filter by selected pool types if any are selected
     if (selectedPoolTypes.length > 0) {
       filtered = filtered.filter(pool =>
         selectedPoolTypes.some(selectedFilterKey => {
@@ -170,9 +167,7 @@ function _usePortfolioFilters() {
       )
     }
 
-    // Filter by selected staking types if any are selected
     if (selectedStakingTypes.length > 0) {
-      // Get all ExpandedPoolType values corresponding to the selected filter keys
       const targetPoolTypes = selectedStakingTypes.flatMap(key => STAKING_FILTER_MAP[key])
       filtered = filtered.filter(pool => targetPoolTypes.includes(pool.poolType))
     }
