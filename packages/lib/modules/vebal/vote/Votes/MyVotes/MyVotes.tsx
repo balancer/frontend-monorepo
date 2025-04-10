@@ -31,6 +31,7 @@ import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { AlertTriangle } from 'react-feather'
 import NextLink from 'next/link'
 import { formatUnits } from 'viem'
+import { getVeBalManagePath } from '../../../vebal-navigation'
 
 export function MyVotes() {
   const { hasAllVotingPowerTimeLocked, vebalIsExpired, vebalLockTooShort, shouldResubmitVotes } =
@@ -103,7 +104,7 @@ export function MyVotes() {
                   <Text
                     as={NextLink}
                     color="font.dark"
-                    href="/vebal/manage/extend"
+                    href={getVeBalManagePath('extend', 'vote')}
                     textDecoration="underline"
                   >
                     Extend your lock

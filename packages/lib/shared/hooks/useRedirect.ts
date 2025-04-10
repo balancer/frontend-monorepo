@@ -9,6 +9,7 @@ export function useRedirect(path: string) {
    * Redirects user to page and respects ctrl/cmd clicks to open in new tab.
    */
   function redirectToPage(event?: MouseEvent<HTMLElement>) {
+    console.log('COLEGA REDIRECTING TO PAGE', path)
     if (event && (event.ctrlKey || event.metaKey)) {
       window.open(path, '_blank')
     } else {

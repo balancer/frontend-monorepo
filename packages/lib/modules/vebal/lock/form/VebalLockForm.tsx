@@ -70,7 +70,7 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
     previewModalDisclosure.onClose()
     refetchAll()
     if (isSuccess) {
-      router.push('/vebal/manage')
+      router.push('/vebal/manage/')
     }
   }
 
