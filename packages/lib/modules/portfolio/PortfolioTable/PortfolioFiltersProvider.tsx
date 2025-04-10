@@ -134,12 +134,15 @@ function _usePortfolioFilters() {
       if (a === defaultValue && b === defaultValue) {
         return 0
       }
+
       if (a === defaultValue) {
         return 1 // a is default, should come after b
       }
+
       if (b === defaultValue) {
         return -1 // b is default, should come after a
       }
+
       // Neither is default, sort alphabetically by label
       return STAKING_LABEL_MAP[a].localeCompare(STAKING_LABEL_MAP[b])
     })
