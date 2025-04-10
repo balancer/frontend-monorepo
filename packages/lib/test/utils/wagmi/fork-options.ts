@@ -44,6 +44,6 @@ const defaultForkBalances: TokenBalancesByChain = {
 
 const isBeets = PROJECT_CONFIG.projectId === 'beets'
 export const defaultManualForkOptions = {
-  chainId: isBeets ? sonic.id : avalanche.id, // Change this id for manual tests on different chains
+  chainId: isBeets ? sonic.id : mainnet.id, // Change this id for manual tests on different chains
   forkBalances: defaultForkBalances,
 }
