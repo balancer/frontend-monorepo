@@ -92,7 +92,8 @@ export function PromoBanners() {
     <Flex
       direction={{ base: 'column', md: 'row' }}
       gap={{ base: 'xs', md: 'md' }}
-      h={{ base: 'auto', md: '132px' }}
+      h="auto"
+      minHeight="132px"
       w="full"
     >
       {promoData.map((item, index, arr) => {
@@ -110,13 +111,13 @@ export function PromoBanners() {
         return (
           <Box
             _hover={!isActive ? { bg: colorMode === 'dark' ? 'gray.750' : 'gray.50' } : {}}
-            bg={colorMode === 'dark' ? 'background.level1' : 'background.level1'}
+            bg={colorMode === 'dark' ? 'black' : 'white'}
             cursor={isActive ? 'default' : 'pointer'}
             display="block"
             flexBasis={isActive ? 'auto' : { base: 'auto', md: '132px' }}
             flexGrow={isActive ? 1 : 0}
-            flexShrink={0}
-            height={{ base: isActive ? '132px' : 'auto', md: '132px' }}
+            flexShrink={{ base: 0, md: isActive ? 1 : 0 }}
+            height={{ base: isActive ? '132px' : 'auto', md: 'auto' }}
             key={item.id}
             onClick={() => !isActive && setActiveIndex(index)}
             overflow="hidden"
@@ -177,72 +178,26 @@ export function PromoBanners() {
                   >
                     <Flex align="center" gap="md">
                       <Box flexShrink={0} h={14} w={14}>
-                        <Box h={14} rounded="full" shadow={index === 0 ? '2xl' : 'none'} w={14}>
-                          <Box
-                            alignItems="center"
-                            color={
-                              index === 0 && colorMode === 'dark'
-                                ? 'font.light'
-                                : index === 0
-                                  ? 'font.dark'
-                                  : 'inherit'
-                            }
-                            display="flex"
-                            fontSize="xs"
-                            fontWeight="normal"
-                            h={14}
-                            overflow="hidden"
-                            position="relative"
-                            rounded="full"
-                            shadow={index === 0 ? 'innerRockShadow' : 'none'}
-                            w={14}
-                          >
-                            {/* Icon Background (only for Gyro) */}
-                            {index === 0 && (
-                              <Box
-                                h={14}
-                                overflow="hidden"
-                                position="absolute"
-                                rounded="full"
-                                w={14}
-                                zIndex="-1"
-                              >
-                                <Picture
-                                  altText="Rock texture"
-                                  defaultImgType="jpg"
-                                  directory="/images/homepage/"
-                                  height={14}
-                                  imgAvif
-                                  imgAvifDark
-                                  imgJpg
-                                  imgJpgDark
-                                  imgName="stone"
-                                  width={14}
-                                />
-                              </Box>
-                            )}
-
-                            <Center h="full" w="full">
-                              {item.icon}
-                            </Center>
-                          </Box>
-                        </Box>
+                        <Center h="full" w="full">
+                          {item.icon}
+                        </Center>
                       </Box>
 
                       <Box>
                         <Heading
+                          as="h3"
                           color="font.maxContrast"
                           fontSize={{ base: 'lg', md: 'xl', lg: '2xl' }}
                           fontWeight="bold"
                           letterSpacing="-0.5px"
                           lineHeight="1.1"
-                          pb={{ base: 'xs', md: 'sm' }}
+                          pb="xs"
                         >
                           {item.title}
                         </Heading>
                         <Text
                           color="font.maxContrast"
-                          fontSize={{ base: 'sm', md: 'md' }}
+                          fontSize={{ base: 'sm', lg: 'md' }}
                           fontWeight="medium"
                           lineHeight="1.25"
                           maxW="600px"
@@ -256,7 +211,7 @@ export function PromoBanners() {
                             alignItems="center"
                             color="font.maxContrast"
                             display="inline-flex"
-                            fontSize="md"
+                            fontSize={{ base: 'sm', lg: 'md' }}
                             gap="xxs"
                             href={item.linkURL}
                             target={item.linkExternal ? '_blank' : '_self'}
