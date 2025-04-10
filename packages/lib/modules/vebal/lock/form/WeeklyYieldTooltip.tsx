@@ -22,10 +22,17 @@ interface Props
   > {
   totalUsdValue: string
   weeklyYield: string
+  currentWeeklyYield: string
   pool: Pool
 }
 
-export function WeeklyYieldTooltip({ weeklyYield, totalUsdValue, pool, ...props }: Props) {
+export function WeeklyYieldTooltip({
+  weeklyYield,
+  currentWeeklyYield,
+  totalUsdValue,
+  pool,
+  ...props
+}: Props) {
   const { toCurrency } = useCurrency()
 
   const numberFormatter = useCallback(
@@ -74,8 +81,14 @@ export function WeeklyYieldTooltip({ weeklyYield, totalUsdValue, pool, ...props 
               Potential weekly yield
             </Text>
             <HStack spacing="xs">
+              <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
+                {toCurrency(currentWeeklyYield, { abbreviated: false })}
+              </Text>
+              <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
+                ➔
+              </Text>
               <Text fontSize="md" fontWeight="700" lineHeight="16px" variant="special">
-                {weeklyYield ? toCurrency(weeklyYield, { abbreviated: false }) : '-'}
+                {toCurrency(weeklyYield, { abbreviated: false })}
               </Text>
               <SparklesIcon isOpen={false} pool={pool} />
             </HStack>
