@@ -263,9 +263,13 @@ export function PortfolioFilters({
     availableStakingTypes,
   } = usePortfolioFilters()
 
-  // Use props if provided, otherwise use values from hook
   const effectiveSelectedNetworks = selectedNetworks || hookSelectedNetworks
   const effectiveSelectedPoolTypes = selectedPoolTypes || hookSelectedPoolTypes
+
+  const isDisabled =
+    availableNetworks.length === 0 &&
+    availablePoolTypes.length === 0 &&
+    availableStakingTypes.length === 0
 
   return (
     <VStack w="full">
@@ -278,7 +282,7 @@ export function PortfolioFilters({
           placement="bottom-end"
         >
           <PopoverTrigger>
-            <FilterButton ml="ms" totalFilterCount={totalFilterCount} />
+            <FilterButton isDisabled={isDisabled} ml="ms" totalFilterCount={totalFilterCount} />
           </PopoverTrigger>
           <Box shadow="2xl" zIndex="popover">
             <PopoverContent>
