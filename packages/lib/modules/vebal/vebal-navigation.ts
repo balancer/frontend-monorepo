@@ -21,7 +21,7 @@ export function useVeBalRedirectPath() {
   let returnLabel = 'Return to veBAL page'
   if (from === 'manage') {
     redirectPath = '/vebal/manage'
-    returnLabel = 'Return to manage veBAL management'
+    returnLabel = 'Return to veBAL manage'
   } else if (from === 'vote') {
     redirectPath = '/vebal/vote'
     returnLabel = 'Return to veBal voting'
