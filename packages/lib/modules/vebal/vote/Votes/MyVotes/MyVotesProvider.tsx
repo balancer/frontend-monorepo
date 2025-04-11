@@ -60,7 +60,7 @@ export interface UseMyVotesArgs {}
 // eslint-disable-next-line no-empty-pattern
 export function _useMyVotes({}: UseMyVotesArgs) {
   const { veBALBalance } = useVebalUserData()
-  // FIXME: [JUANJO] should use bigint for calculations
+  // FIXME: [JUANJO] (votes) should use bigint for calculations
   const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
   const {

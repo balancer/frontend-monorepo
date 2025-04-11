@@ -24,7 +24,7 @@ function testUseLockStep() {
       const { _txInput } = useLockStep({
         lockActionType: LockActionType.CreateLock,
         lockAmount,
-        // TODO: calculate date from block timestamp (via new utils function)
+        // TODO: (votes) calculate date from block timestamp (via new utils function)
         lockEndDate: '2026-03-01',
       })
 

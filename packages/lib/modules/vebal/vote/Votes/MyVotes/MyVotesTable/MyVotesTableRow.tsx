@@ -55,15 +55,10 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   } = useVotes()
   const { toCurrency } = useCurrency()
 
-  const isExpired = isPoolGaugeExpired(vote)
+  const isGaugeExpired = isPoolGaugeExpired(vote)
 
-  const editVotesStyles = {
-    // fix: (votes) implement nested cell paddings for Edit votes column
-    // bg: 'background.level1',
-  }
   const editVotes = bpsToPercentage(editVotesWeights[vote.id] ?? 0).multipliedBy(100)
 
-  // fix: (votes) should we allow remove expired votes? (isExpired)
   const removable = isSelectedPool(vote)
 
   const timeLocked = isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime ?? 0)
@@ -75,10 +70,10 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
   const { veBALBalance, noVeBALBalance } = useVebalUserData()
-  // FIXME: [JUANJO] calculations should be done with bigint
+  // FIXME: [JUANJO] (votes) calculations should be done with bigint
   const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
-  const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true)
+  const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true) || isGaugeExpired
 
   const { getToken } = useTokens()
 
@@ -89,7 +84,6 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           bg: 'background.level0',
         }}
         key={keyValue}
-        // fix: (votes) implement nested cell paddings for Edit votes column
         px={{ base: '0', sm: 'md' }}
         rounded="md"
         transition="all 0.2s ease-in-out"
@@ -110,7 +104,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
                   pr={[1.5, 'ms']}
                   vote={vote}
                 />
-                {isExpired && <VoteExpiredTooltip usePortal />}
+                {isGaugeExpired && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">
                   <ArrowUpIcon transform="rotate(90)" />
                 </Box>
@@ -143,17 +137,18 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <VoteWeight
-              isExpired={isExpired}
+              isGaugeExpired={isGaugeExpired}
               timeLocked={timeLocked}
               timeLockedEndDate={votingTimeLockedEndDate(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
               variant="primary"
               weight={vote.gaugeVotes?.userVotes ?? '0'}
             />
           </GridItem>
-          <GridItem justifySelf="end" textAlign="right" {...cellProps} {...editVotesStyles}>
+          <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <VoteWeightInput
               isDisabled={isDisabled}
-              isExpired={vebalIsExpired}
+              isGaugeExpired={isGaugeExpired}
+              isLockExpired={vebalIsExpired}
               isTimeLocked={timeLocked}
               isTooShort={vebalLockTooShort}
               lastVoteTime={vote.gaugeVotes?.lastUserVoteTime}

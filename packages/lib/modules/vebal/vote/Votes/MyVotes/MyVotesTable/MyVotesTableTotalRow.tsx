@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import React from 'react'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
 
@@ -27,11 +26,6 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
   const votingIncentivesLoading = false
   const gaugeVotesIsLoading = false
 
-  const editVotesStyles = {
-    // fix: (votes) implement nested cell paddings for Edit votes column
-    // bg: 'background.level1',
-  }
-
   return (
     <FadeInOnView>
       <Box
@@ -39,7 +33,6 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
           bg: 'background.level0',
         }}
         key={keyValue}
-        // fix: (votes) implement nested cell paddings for Edit votes column
         px={{ base: '0', sm: 'md' }}
         rounded="md"
         transition="all 0.2s ease-in-out"
@@ -84,13 +77,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
               />
             )}
           </GridItem>
-          <GridItem
-            justifySelf="end"
-            pr="20px"
-            textAlign="right"
-            {...cellProps}
-            {...editVotesStyles}
-          >
+          <GridItem justifySelf="end" pr="20px" textAlign="right" {...cellProps}>
             <VoteWeight
               skipTotalWarnings={!hasChanges}
               total

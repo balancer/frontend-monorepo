@@ -177,7 +177,7 @@ export function PortfolioTable() {
               left={{ base: '-4px', sm: '0' }}
               loading={isLoadingPortfolio}
               noItemsFoundLabel="No pools found"
-              paginationProps={null}
+              paginationProps={undefined}
               position="relative"
               renderTableHeader={() => (
                 <PortfolioTableHeader

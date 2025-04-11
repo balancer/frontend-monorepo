@@ -338,7 +338,7 @@ describe('Liquidity helpers for V3 NESTED boosted pool', async () => {
               underlyingToken: null,
             },
           ],
-          type: 'Weighted',
+          type: 'WEIGHTED',
         },
         {
           address: bb_a_Usd_Sepolia_BptAddress,

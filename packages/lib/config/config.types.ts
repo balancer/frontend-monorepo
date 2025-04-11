@@ -167,4 +167,5 @@ export interface ProjectConfig {
   links: Links
   footer: { linkSections: LinkSection[] }
   cowSupportedNetworks: GqlChain[]
+  merklRewardsChains: GqlChain[]
 }

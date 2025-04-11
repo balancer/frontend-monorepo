@@ -19,7 +19,7 @@ interface Props {
   skipTotalWarnings?: boolean
   weight: string | number
   variant: 'primary' | 'secondary'
-  isExpired?: boolean
+  isGaugeExpired?: boolean
 }
 
 export function VoteWeight({
@@ -29,7 +29,7 @@ export function VoteWeight({
   total = false,
   skipTotalWarnings = false,
   timeLockedEndDate,
-  isExpired,
+  isGaugeExpired,
 }: Props) {
   const exceededWeight = getExceededWeight(weight)
   const unallocatedWeight = getUnallocatedWeight(weight)
@@ -48,7 +48,7 @@ export function VoteWeight({
       return 'font.maxContrast'
     }
 
-    if (isExpired) {
+    if (isGaugeExpired) {
       return 'font.warning'
     }
 
@@ -67,7 +67,7 @@ export function VoteWeight({
       {showUnallocatedWarning && (
         <VoteUnallocatedTooltip unallocatedWeight={unallocatedWeight} usePortal />
       )}
-      {isExpired && (
+      {isGaugeExpired && (
         <VoteExpiredTooltip usePortal>
           <HStack color="font.warning">
             <AlertIcon height="16px" width="16px" />

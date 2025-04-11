@@ -29,7 +29,9 @@ export function VoteListLayout() {
       poolTypes,
       togglePoolType,
       includeExpiredPools,
+      protocolVersion,
       toggleIncludeExpiredPools,
+      setProtocolVersion,
     },
   } = useVoteList()
   const { selectedVotingPools, scrollToMyVotes } = useVotes()
@@ -103,6 +105,8 @@ export function VoteListLayout() {
             networks={networks}
             poolTypeLabel={poolTypeLabel}
             poolTypes={poolTypes}
+            protocolVersion={protocolVersion}
+            setProtocolVersion={setProtocolVersion}
             toggleIncludeExpiredPools={toggleIncludeExpiredPools}
             toggleNetwork={toggleNetwork}
             togglePoolType={togglePoolType}

@@ -38,6 +38,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
   externalLinks: {
     poolComposerUrl: 'https://pool-creator.balancer.fi',
   },
+  merklRewardsChains: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Mode],
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: [],
@@ -124,11 +125,6 @@ export const ProjectConfigBalancer: ProjectConfig = {
           {
             label: 'Create an LBP',
             href: 'https://www.fjordfoundry.com/?utm_source=balancer&utm_medium=website',
-            isExternal: true,
-          },
-          {
-            label: 'Create an NFT drop',
-            href: 'https://fjordnfts.com/?utm_source=balancer&utm_medium=website',
             isExternal: true,
           },
         ],
