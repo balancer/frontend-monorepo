@@ -27,7 +27,6 @@ export function FocussedActionLayout({
   const { redirectToPage } = useRedirect(redirectPath)
 
   function goBack() {
-    console.log('GOING BACK!!!!!')
     router.back()
   }
 
