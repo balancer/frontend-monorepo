@@ -36,9 +36,6 @@ export function SubmitVotesPreview({
   isPoolGaugeExpired,
 }: Props) {
   const { toCurrency } = useCurrency()
-
-  const averageReward = 0.102 // fix: (votes) provide real value
-
   const { getToken } = useTokens()
 
   return (
@@ -217,12 +214,14 @@ export function SubmitVotesPreview({
           </HStack>
         </Card>
 
-        <Card flex="1" variant="subSection">
-          <Text>Ave. Reward (Bribes/veBAL)</Text>
-          <Text fontSize="lg" fontWeight={700}>
-            {toCurrency(averageReward, { abbreviated: false })}
-          </Text>
-        </Card>
+        {totalInfo.averageRewardPerVote !== undefined && (
+          <Card flex="1" variant="subSection">
+            <Text>Ave. Reward (Bribes/veBAL)</Text>
+            <Text fontSize="lg" fontWeight={700}>
+              {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
+            </Text>
+          </Card>
+        )}
       </HStack>
     </VStack>
   )
