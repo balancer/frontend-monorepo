@@ -8,6 +8,7 @@ import { usePoolList } from './PoolListProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { ErrorBoundary } from 'react-error-boundary'
 import { BoundaryError } from '@repo/lib/shared/components/errors/ErrorBoundary'
+import { poolTypeLabel } from '../pool.helpers'
 
 export function PoolListLayout() {
   const {
@@ -19,7 +20,6 @@ export function PoolListLayout() {
       toggleNetwork,
       poolTypes,
       togglePoolType,
-      poolTypeLabel,
       minTvl,
       setMinTvl,
       poolTags,
