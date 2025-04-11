@@ -1,4 +1,4 @@
-import { sub, millisecondsToSeconds } from 'date-fns'
+import { sub, millisecondsToSeconds, secondsToMilliseconds } from 'date-fns'
 
 export const oneSecondInMs = 1000
 export const oneMinInMs = 60 * oneSecondInMs
@@ -141,4 +141,16 @@ export function startOfDayUtc(dateUTC: Date) {
 
 export function toISOString(timestamp: number): string {
   return new Date(timestamp).toISOString()
+}
+
+/**
+ * Fixes date shown on pool charts
+ *
+ * @param {number} unixTimestamp - Unix timestamp from API uses seconds
+ * @returns {number} - Timestamp aligned with local day
+ */
+export function alignUtcWithLocalDay(unixTimestamp: number) {
+  const utcDate = new Date(secondsToMilliseconds(unixTimestamp))
+  const timezoneOffset = utcDate.getTimezoneOffset() * oneMinInSecs // convert getTimezoneOffset from minutes to seconds
+  return unixTimestamp + timezoneOffset
 }
