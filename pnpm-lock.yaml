@@ -47,8 +47,8 @@ importers:
         specifier: ^3.13.1
         version: 3.13.1(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.10.0))(graphql@16.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@balancer/sdk':
-        specifier: 2.7.1
-        version: 2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 3.1.0
+        version: 3.1.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@18.2.0)
@@ -177,8 +177,8 @@ importers:
   apps/frontend-v3:
     dependencies:
       '@balancer/sdk':
-        specifier: 2.7.1
-        version: 2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 3.1.0
+        version: 3.1.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/hooks':
         specifier: 2.4.2
         version: 2.4.2(react@18.2.0)
@@ -373,8 +373,8 @@ importers:
         specifier: ^3.13.1
         version: 3.13.1(@types/react@18.2.34)(graphql-ws@5.16.0(graphql@16.10.0))(graphql@16.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@balancer/sdk':
-        specifier: 2.7.1
-        version: 2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        specifier: 3.1.0
+        version: 3.1.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@chakra-ui/anatomy':
         specifier: ^2.2.2
         version: 2.2.2
@@ -1622,8 +1622,8 @@ packages:
     resolution: {integrity: sha512-M6iqcmLfR9CP1mw3R5w0FdtZkUk7M0vCJhloAfhE/xufbAZrCSoapFYlt/NMBKLDQoGNJ2FN5E4zpdLVsxhoow==}
     engines: {node: '>=18.x'}
 
-  '@balancer/sdk@2.7.1':
-    resolution: {integrity: sha512-0N0DF8N3sLtCXoVcGQlKokAHHvxNgRCOoJanmSWQVCt3T9zHfloJFXd9WaVc6GNG3A9FcBm560uHYpKYogcg+g==}
+  '@balancer/sdk@3.1.0':
+    resolution: {integrity: sha512-p6rswNTr8pIxAetDKpjFzpbOzYG690sViuhkZiQkEyv1bMCkdnGZlfJLwFXvauH3/ZhSXmfWYml7hYo456NH4g==}
     engines: {node: '>=18.x'}
 
   '@bcoe/v8-coverage@1.0.2':
@@ -12528,7 +12528,7 @@ snapshots:
 
   '@balancer-labs/balancer-maths@0.0.24': {}
 
-  '@balancer/sdk@2.7.1(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
+  '@balancer/sdk@3.1.0(bufferutil@4.0.8)(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
     dependencies:
       '@balancer-labs/balancer-maths': 0.0.24
       '@types/big.js': 6.2.2

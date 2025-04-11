@@ -110,3 +110,19 @@ export const polygonTokenBalances: TokenBalance[] = [
     value: '30000',
   },
 ]
+
+export const avalancheTokenBalances: TokenBalance[] = [
+  // tokens for v3 pool: pools/avalanche/v3/0x99a9a471dbe0dcc6855b4cd4bbabeccb1280f5e8
+  {
+    tokenAddress: '0x2b2c81e08f1af8835a78bb2a90ae924ace0ea4be', // sAVAX
+    value: '20000',
+  },
+  {
+    tokenAddress: '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7', // WAVAX
+    value: '30000',
+  },
+  {
+    tokenAddress: '0xa25eaf2906fa1a3a13edac9b9657108af7b703e3', // ggAVAX
+    value: '40000',
+  },
+]
