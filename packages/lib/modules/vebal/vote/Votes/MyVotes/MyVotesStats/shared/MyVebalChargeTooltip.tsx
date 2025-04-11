@@ -17,11 +17,12 @@ import React from 'react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
 import NextLink from 'next/link'
+import { getVeBalManagePath } from '@repo/lib/modules/vebal/vebal-navigation'
 
 interface Props {
   lockedEndDate: number
   expectedVeBalAmount: number
-  isExpired?: boolean
+  isLockExpired?: boolean
   usePortal?: boolean
 }
 
@@ -32,7 +33,7 @@ function getLockedEndDatePercentage(lockedEndDate: number) {
 
 export function MyVebalChargeTooltip({
   lockedEndDate,
-  isExpired,
+  isLockExpired,
   expectedVeBalAmount,
   usePortal,
 }: Props) {
@@ -66,11 +67,21 @@ export function MyVebalChargeTooltip({
           </Text>
         </HStack>
         <HStack mt="sm" spacing="sm">
-          <Button as={NextLink} href="/vebal/manage/extend" size="sm" variant="secondary">
+          <Button
+            as={NextLink}
+            href={getVeBalManagePath('extend', 'vote')}
+            size="sm"
+            variant="secondary"
+          >
             Extend lock
           </Button>
-          {isExpired && (
-            <Button as={NextLink} href="/vebal/manage/unlock" size="sm" variant="tertiary">
+          {isLockExpired && (
+            <Button
+              as={NextLink}
+              href={getVeBalManagePath('unlock', 'vote')}
+              size="sm"
+              variant="tertiary"
+            >
               Unlock
             </Button>
           )}
@@ -84,7 +95,7 @@ export function MyVebalChargeTooltip({
       <>
         <PopoverTrigger>
           <Box>
-            {isExpired ? (
+            {isLockExpired ? (
               <Badge
                 background="red.500"
                 color="font.maxContrast"

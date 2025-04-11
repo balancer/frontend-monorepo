@@ -8,6 +8,7 @@ import { useVeBALIncentives } from './useVeBALIncentives'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import NextLink from 'next/link'
+import { getVeBalManagePath } from '@repo/lib/modules/vebal/vebal-navigation'
 
 export function MyVotesStatsMyIncentivesOptimized() {
   const { toCurrency } = useCurrency()
@@ -63,7 +64,12 @@ export function MyVotesStatsMyIncentivesOptimized() {
         isLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : isConnected && noVeBALBalance ? (
-          <Button as={NextLink} href="/vebal/manage/lock" size="sm" variant="primary">
+          <Button
+            as={NextLink}
+            href={getVeBalManagePath('lock', 'vote')}
+            size="sm"
+            variant="primary"
+          >
             Get veBAL
           </Button>
         ) : isConnected ? (

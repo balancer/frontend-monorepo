@@ -66,11 +66,11 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
   const { balanceFor } = useTokenBalances()
   const bptBalance = balanceFor(vebalBptToken.address)
 
-  function onModalClose(isSuccess: boolean) {
+  function onModalClose(isSuccess: boolean, redirectPath: string) {
     previewModalDisclosure.onClose()
     refetchAll()
     if (isSuccess) {
-      router.push('/vebal/manage')
+      router.push(redirectPath)
     }
   }
 
