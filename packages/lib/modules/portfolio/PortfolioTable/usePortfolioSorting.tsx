@@ -72,14 +72,17 @@ export function usePortfolioSorting() {
     setCurrentSortingObj(sorting)
   }, [])
 
-  // set sorting to liquidity when any filter is applied
   useEffect(() => {
+    // set sorting to liquidity when any filter is applied
     if (
       (selectedNetworks && selectedNetworks.length > 0) ||
       (selectedPoolTypes && selectedPoolTypes.length > 0) ||
       (selectedStakingTypes && selectedStakingTypes.length > 0)
     ) {
       setCurrentSortingObj({ id: 'liquidity', desc: true })
+    } else {
+      // set sorting to staking when no filters are applied
+      setCurrentSortingObj({ id: 'staking', desc: true })
     }
   }, [selectedNetworks, selectedPoolTypes, selectedStakingTypes])
 
