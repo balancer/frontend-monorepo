@@ -9,7 +9,6 @@ import {
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { MyVotesTotalInfo } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.types'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
-import { MyIncentivesAprTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesAprTooltip'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { VotesChunksAllocation } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/useSubmittingVotes'
 import { AlertTriangle } from 'react-feather'
@@ -17,6 +16,7 @@ import { CHUNK_SIZE } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/s
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GainBadge } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
+import { MyIncentivesTooltip } from '../../../MyVotesStats/shared/MyIncentivesTooltip'
 
 interface Props {
   submittingVotes: SubmittingVote[]
@@ -213,10 +213,7 @@ export function SubmitVotesPreview({
               )}
             </Text>
             {totalInfo.totalRewardValueGain && <GainBadge gain={totalInfo.totalRewardValueGain} />}
-            <MyIncentivesAprTooltip
-              totalBeforeVoteEdits={totalInfo.prevTotalRewardValue}
-              totalWithVoteEdits={totalInfo.totalRewardValue}
-            />
+            <MyIncentivesTooltip />
           </HStack>
         </Card>
 
