@@ -21,6 +21,7 @@ import { useRecentTransactions } from '../../transactions/RecentTransactionsProv
 import { useTxHash } from '../safe.hooks'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 export type ManagedSendTransactionInput = {
   labels: TransactionLabels
@@ -38,7 +39,7 @@ export function useManagedSendTransaction({
   const { minConfirmations } = useNetworkConfig()
   const { updateTrackedTransaction } = useRecentTransactions()
 
-  const estimateGasQuery = useEstimateGas({
+  const estimateGasQueryOriginal = useEstimateGas({
     ...txConfig,
     query: {
       enabled: !!txConfig && !shouldChangeNetwork,
@@ -47,6 +48,21 @@ export function useManagedSendTransaction({
       ...onlyExplicitRefetch,
     },
   })
+
+  // make a copy here so we can adjust the data below
+  let estimateGasQuery
+  estimateGasQuery = estimateGasQueryOriginal
+
+  // increase gas limit here to make sure v3 boosted pool transactions have enough gas
+  if (estimateGasQueryOriginal.data) {
+    const originalGas = estimateGasQueryOriginal.data
+    const adjustedGas = BigInt(bn(originalGas).times(1.1).toFixed(0))
+
+    estimateGasQuery = {
+      ...estimateGasQueryOriginal,
+      data: adjustedGas,
+    }
+  }
 
   const writeMutation = useSendTransaction({
     mutation: {
