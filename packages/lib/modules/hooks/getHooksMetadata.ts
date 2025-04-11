@@ -17,9 +17,24 @@ export async function getHooksMetadata(): Promise<HooksMetadata[] | undefined> {
       next: { revalidate: mins(15).toSecs() },
     })
 
-    return (await res.json()) as HooksMetadata[]
+    const metadata = (await res.json()) as HooksMetadata[]
+
+    // lowercase addresses to match API address format
+    return _lowerCaseAddresses(metadata)
   } catch (error) {
     console.error('Unable to fetch pool hooks metadata', error)
     return undefined
   }
+}
+
+export function _lowerCaseAddresses(metadata: HooksMetadata[]) {
+  return metadata.map(hook => ({
+    ...hook,
+    addresses: Object.fromEntries(
+      Object.entries(hook.addresses).map(([chainId, addresses]) => [
+        chainId,
+        addresses.map(address => address.toLowerCase()),
+      ])
+    ),
+  }))
 }
