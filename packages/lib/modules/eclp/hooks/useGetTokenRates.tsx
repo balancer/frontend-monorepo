@@ -6,17 +6,21 @@ import { Address } from 'viem'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { isV3Pool } from '../../pool/pool.helpers'
 import { useMemo } from 'react'
-import { VAULT_V3, vaultExtensionAbi_V3 } from '@balancer/sdk'
+import { balancerV3Contracts, vaultExtensionAbi_V3 } from '@balancer/sdk'
 
 export function useGetTokenRates(pool: Pool) {
   const chainId = getChainId(pool.chain)
   const isV3 = isV3Pool(pool)
 
+  const v3Vault: Address =
+    balancerV3Contracts.Vault[chainId as keyof typeof balancerV3Contracts.Vault] || ('' as Address)
+  const contractAddress: Address = isV3 ? v3Vault : (pool.address as Address)
+
   const query = useReadContract({
     chainId,
     abi: isV3 ? vaultExtensionAbi_V3 : gyroEclpPoolAbi,
     functionName: isV3 ? 'getPoolTokenRates' : 'getTokenRates',
-    address: isV3 ? VAULT_V3[chainId] : (pool.address as Address),
+    address: contractAddress,
     query: { enabled: pool.type === GqlPoolType.Gyroe },
     args: isV3 ? [pool.address as Address] : [],
   })

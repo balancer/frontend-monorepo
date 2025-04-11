@@ -1,13 +1,7 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
-import {
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
-  BALANCER_ROUTER,
-  PERMIT2,
-  VAULT_ADMIN,
-  VAULT_V3,
-} from '@balancer/sdk'
+import { balancerV3Contracts, PERMIT2 } from '@balancer/sdk'
 import { base } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -51,12 +45,12 @@ const networkConfig: NetworkConfig = {
     multicall2: '0xca11bde05977b3631167028862be2a173976ca11',
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      vaultV3: VAULT_V3[base.id],
+      vaultV3: balancerV3Contracts.Vault[base.id],
       relayerV6: '0x7C3C773C878d2238a9b64d8CEE02377BF07ED06a',
       minter: '0x0c5538098EBe88175078972F514C9e101D325D4F',
-      vaultAdminV3: VAULT_ADMIN[base.id],
-      router: BALANCER_ROUTER[base.id],
-      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[base.id],
+      vaultAdminV3: balancerV3Contracts.VaultAdmin[base.id],
+      router: balancerV3Contracts.Router[base.id],
+      compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[base.id],
     },
     veDelegationProxy: '0xD87F44Df0159DC78029AB9CA7D7e57E7249F5ACD',
     permit2: PERMIT2[base.id],
