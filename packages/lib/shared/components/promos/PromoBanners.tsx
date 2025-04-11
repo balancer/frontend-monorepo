@@ -95,22 +95,14 @@ export function PromoBanners() {
       minHeight="132px"
       w="full"
     >
-      {promoData.map((item, index, arr) => {
+      {promoData.map((item, index) => {
         const isActive = activeIndex === index
-        const isFirst = index === 0
-        const isLast = index === arr.length - 1
-
-        const borderRadiusProps = {
-          borderTopLeftRadius: isFirst ? '2xl' : 'md',
-          borderBottomLeftRadius: isFirst ? '2xl' : 'md',
-          borderTopRightRadius: isLast ? '2xl' : 'md',
-          borderBottomRightRadius: isLast ? '2xl' : 'md',
-        }
 
         return (
           <Box
             _hover={!isActive ? { bg: colorMode === 'dark' ? 'gray.750' : 'gray.50' } : {}}
             bg={colorMode === 'dark' ? 'black' : 'white'}
+            borderRadius="lg"
             cursor={isActive ? 'default' : 'pointer'}
             display="block"
             flexBasis={isActive ? 'auto' : 'clamp(60px, calc(14.0625vw - 48px), 132px)'}
@@ -122,12 +114,11 @@ export function PromoBanners() {
             overflow="hidden"
             p={0}
             position="relative"
+            role="group"
+            shadow="2xl"
             textAlign="left"
             transition="flex-basis 0.15s var(--ease-out-cubic), flex-grow 0.15s var(--ease-out-cubic)"
             width={{ base: 'full', md: 'auto' }}
-            {...borderRadiusProps}
-            role="group"
-            shadow="2xl"
           >
             {item.bgImage && (
               <Box
@@ -222,11 +213,11 @@ export function PromoBanners() {
                             fontSize={{ base: 'sm', lg: 'md' }}
                             gap="xxs"
                             href={item.linkURL}
-                            target={item.linkExternal ? '_blank' : '_self'}
                             pb="2px"
+                            target={item.linkExternal ? '_blank' : '_self'}
                             textDecoration="underline"
-                            textDecorationStyle="dotted"
                             textDecorationColor="font.secondary"
+                            textDecorationStyle="dotted"
                           >
                             {item.linkText} {item.linkExternal && <ArrowUpRight size={12} />}
                           </Link>
