@@ -42,7 +42,7 @@ import { useVeBalRedirectPath } from '../../vebal-navigation'
 
 type Props = {
   isOpen: boolean
-  onClose(isSuccess: boolean): void
+  onClose(isSuccess: boolean, redirectPath: string): void
   extendExpired: boolean
 }
 
@@ -104,7 +104,7 @@ export function VebalLockModal({
       isCentered
       isOpen={isOpen}
       onClose={() => {
-        onClose(!!lockTxHash)
+        onClose(!!lockTxHash, redirectPath)
       }}
       preserveScrollBarGap
       trapFocus={!isSuccess}
@@ -200,7 +200,7 @@ export function VebalLockModal({
           currentStep={transactionSteps.currentStep}
           isSuccess={isSuccess}
           returnAction={() => {
-            onClose(isSuccess)
+            onClose(isSuccess, redirectPath)
             router.push(redirectPath)
           }}
           returnLabel={returnLabel}
