@@ -33,7 +33,7 @@
   "devDependencies": {
     "husky": "^9.1.2",
     "lint-staged": "^13.2.3",
-    "prettier": "^3.2.5",
+    "prettier": "3.5.3",
     "sharp": "0.33.5",
     "stylelint": "16.14.1",
     "stylelint-config-standard": "^36.0.1",
