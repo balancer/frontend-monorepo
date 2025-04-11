@@ -18,7 +18,11 @@ import { HumanAmount } from '@balancer/sdk'
 import { LockDurationSlider } from '@repo/lib/modules/vebal/lock/duration/LockDurationSlider'
 import { VebalLockDetailsAccordion } from '@repo/lib/modules/vebal/lock/VebalLockDetailsAccordion'
 import { VebalLockDetails } from '@repo/lib/modules/vebal/lock/VebalLockDetails'
-import { LockMode, useVebalLock } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
+import {
+  expectedTotalVeBal,
+  LockMode,
+  useVebalLock,
+} from '@repo/lib/modules/vebal/lock/VebalLockProvider'
 import { fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { VebalLockModal } from '@repo/lib/modules/vebal/lock/modal/VebalLockModal'
 import { useRouter } from 'next/navigation'
@@ -38,6 +42,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { GqlPoolAprItem } from '@repo/lib/shared/services/api/generated/graphql'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 type Props = {
   allowEditOnInit?: boolean
@@ -50,6 +55,7 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
     lpToken,
     setLpToken,
     resetLpToken,
+    previousLockEnd,
     lockedAmount,
     totalAmount,
     isDisabled,
@@ -92,6 +98,14 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
   const { calculatePotentialYield } = useGetPoolRewards(pool || ({} as Pool))
   const { usdValueForToken } = useTokens()
   const totalUsdValue = usdValueForToken(vebalBptToken, totalAmount)
+  const weeklyYield = !poolIsLoading ? calculatePotentialYield(totalUsdValue) : '0'
+
+  const hasLockedAmount = lockedAmount && Number(lockedAmount) > 0
+  const currentVeBALAmount = previousLockEnd
+    ? expectedTotalVeBal({ bpt: lockedAmount || '0', lockEndDate: previousLockEnd })
+    : bn(0)
+  const currentTotalUsdValue = usdValueForToken(vebalBptToken, lockedAmount || 0)
+  const currentWeeklyYield = !poolIsLoading ? calculatePotentialYield(currentTotalUsdValue) : '0'
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
@@ -125,7 +139,11 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
                 <Skeleton h="18px" w="100px" />
               ) : (
                 <Text fontSize="sm" fontWeight="700" lineHeight="18px">
-                  {amountMode === 'show' ? 'Locked amount' : 'Amount to lock'}
+                  {amountMode === 'show'
+                    ? 'Locked amount'
+                    : hasLockedAmount
+                      ? 'Amount to add to your existing lock'
+                      : 'Amount to lock'}
                 </Text>
               )}
 
@@ -207,11 +225,17 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
                   <Text fontSize="sm" fontWeight="500" lineHeight="16px">
                     Total veBAL
                   </Text>
-                  <Text fontSize="md" fontWeight="700" lineHeight="16px">
-                    {expectedVeBalAmount.totalExpectedVeBal.eq(0)
-                      ? '-'
-                      : fNum('token', expectedVeBalAmount.totalExpectedVeBal)}
-                  </Text>
+                  <HStack>
+                    <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
+                      {`${fNum('token', currentVeBALAmount)}`}
+                    </Text>
+                    <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
+                      ➔
+                    </Text>
+                    <Text fontSize="md" fontWeight="700" lineHeight="16px">
+                      {fNum('token', expectedVeBalAmount.totalExpectedVeBal)}
+                    </Text>
+                  </HStack>
                 </VStack>
               </Card>
             </GridItem>
@@ -221,9 +245,10 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
               ) : (
                 <WeeklyYieldTooltip
                   aprItems={pool?.dynamicData.aprItems as GqlPoolAprItem[]}
+                  currentWeeklyYield={currentWeeklyYield}
                   pool={pool as Pool}
                   totalUsdValue={totalUsdValue.toString()}
-                  weeklyYield={calculatePotentialYield(totalUsdValue)}
+                  weeklyYield={weeklyYield}
                 />
               )}
             </GridItem>
