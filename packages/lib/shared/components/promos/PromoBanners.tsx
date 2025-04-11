@@ -29,11 +29,10 @@ interface PromoItem {
 const promoData: PromoItem[] = [
   {
     id: 0,
-
     icon: <BoostedPoolIcon size={40} />,
     title: '100% Boosted Pools on Balancer v3',
     description:
-      'A simple, capital efficient strategy to get boosted yield from partners like Aave and Morpho',
+      'A simple, capital efficient strategy to get boosted yield from partners like Aave and Morpho.',
     buttonText: 'View pools',
     buttonLink: '/pools?poolTags=BOOSTED',
     bgImage: {
@@ -45,7 +44,7 @@ const promoData: PromoItem[] = [
     id: 1,
     icon: <VThreeIcon size={48} />,
     title: 'Balancer v3 is live!',
-    description: 'A perfect balances simplicity and flexibility to reshape the future of AMMs.',
+    description: 'Balancing simplicity and flexibility—to reshape the future of AMMs.',
     buttonText: 'View pools',
     buttonLink: 'pools?protocolVersion=3',
 
@@ -91,7 +90,7 @@ export function PromoBanners() {
   return (
     <Flex
       direction={{ base: 'column', md: 'row' }}
-      gap={{ base: 'xs', md: 'md' }}
+      gap={{ base: 'sm', md: 'md' }}
       h="auto"
       minHeight="132px"
       w="full"
@@ -114,10 +113,10 @@ export function PromoBanners() {
             bg={colorMode === 'dark' ? 'black' : 'white'}
             cursor={isActive ? 'default' : 'pointer'}
             display="block"
-            flexBasis={isActive ? 'auto' : { base: 'auto', md: '132px' }}
+            flexBasis={isActive ? 'auto' : 'clamp(60px, calc(14.0625vw - 48px), 132px)'}
             flexGrow={isActive ? 1 : 0}
             flexShrink={{ base: 0, md: isActive ? 1 : 0 }}
-            height={{ base: isActive ? '132px' : 'auto', md: 'auto' }}
+            height="auto"
             key={item.id}
             onClick={() => !isActive && setActiveIndex(index)}
             overflow="hidden"
@@ -177,7 +176,12 @@ export function PromoBanners() {
                     p={{ base: 'md', md: 'lg' }}
                     w="full"
                   >
-                    <Flex align="center" gap="md">
+                    <Flex
+                      align="center"
+                      alignItems={{ base: 'start', md: 'center' }}
+                      direction={{ base: 'column', md: 'row' }}
+                      gap="md"
+                    >
                       <Box flexShrink={0} h={14} w={14}>
                         <Center h="full" w="full">
                           {item.icon}
@@ -188,11 +192,14 @@ export function PromoBanners() {
                         <Heading
                           as="h3"
                           color="font.maxContrast"
-                          fontSize={{ base: 'lg', md: 'xl', lg: '2xl' }}
+                          fontSize={{ base: 'lg', md: 'lg', xl: '2xl' }}
                           fontWeight="bold"
                           letterSpacing="-0.5px"
                           lineHeight="1.1"
                           pb="xs"
+                          sx={{
+                            textWrap: 'balance',
+                          }}
                         >
                           {item.title}
                         </Heading>
@@ -216,6 +223,10 @@ export function PromoBanners() {
                             gap="xxs"
                             href={item.linkURL}
                             target={item.linkExternal ? '_blank' : '_self'}
+                            pb="2px"
+                            textDecoration="underline"
+                            textDecorationStyle="dotted"
+                            textDecorationColor="font.secondary"
                           >
                             {item.linkText} {item.linkExternal && <ArrowUpRight size={12} />}
                           </Link>
@@ -241,12 +252,11 @@ export function PromoBanners() {
                           borderColor="font.maxContrast"
                           color="font.maxContrast"
                           cursor="pointer"
-                          fontSize="sm"
-                          h={{ base: '32px', sm: '36px', lg: '40px' }}
+                          fontSize={{ base: 'xs', sm: 'sm' }}
+                          h={{ base: '32px', sm: '36px' }}
                           href={item.buttonLink}
                           onClick={e => e.stopPropagation()}
-                          px="md"
-                          py="sm"
+                          px="ms"
                           rounded="full"
                           size="md"
                           whiteSpace="nowrap"
