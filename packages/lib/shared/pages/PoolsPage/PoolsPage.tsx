@@ -82,7 +82,7 @@ export function PoolsPage({
                 mb="10"
               >
                 <Box>
-                  <Heading mb="3" sx={{ textWrap: 'balance' }} variant="special">
+                  <Heading pb="3" sx={{ textWrap: 'balance' }} variant="special">
                     Earn passively on {PROJECT_CONFIG.projectName}
                   </Heading>
                   <Text sx={{ textWrap: 'balance' }} variant="secondary">

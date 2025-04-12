@@ -4,11 +4,11 @@ import { useState } from 'react'
 import { Button, Heading, Flex, Box, Center, Text, useColorMode, Link } from '@chakra-ui/react'
 import { ArrowUpRight } from 'react-feather'
 import NextLink from 'next/link'
-import { GyroIcon } from '@repo/lib/shared/components/icons/GyroIcon'
 import { Picture } from '../other/Picture'
-import { BoostedPoolIcon } from '../icons/BoostedPoolIcon'
-import { VThreeIcon } from '../icons/VThreeIcon'
-import { HookIcon } from '../icons/HookIcon'
+import { PromoHookIcon } from '../icons/promos/PromoHookIcon'
+import { PromoGyroIcon } from '../icons/promos/PromoGyroIcon'
+import { PromoVThreeIcon } from '../icons/promos/PromoVThreeIcon'
+import { PromoBoostedIcon } from '../icons/promos/PromoBoostedIcon'
 
 interface PromoItem {
   id: number
@@ -29,7 +29,7 @@ interface PromoItem {
 const promoData: PromoItem[] = [
   {
     id: 0,
-    icon: <BoostedPoolIcon size={40} />,
+    icon: <PromoBoostedIcon size={44} />,
     title: '100% Boosted Pools on Balancer v3',
     description:
       'A simple, capital efficient strategy to get boosted yield from partners like Aave and Morpho.',
@@ -42,9 +42,9 @@ const promoData: PromoItem[] = [
   },
   {
     id: 1,
-    icon: <VThreeIcon size={48} />,
+    icon: <PromoVThreeIcon size={44} />,
     title: 'Balancer v3 is live!',
-    description: 'Balancing simplicity and flexibility—to reshape the future of AMMs.',
+    description: 'A simple, flexible, powerful platform to innovate upon and build the future of AMMs.',
     buttonText: 'View pools',
     buttonLink: 'pools?protocolVersion=3',
 
@@ -55,9 +55,9 @@ const promoData: PromoItem[] = [
   },
   {
     id: 2,
-    icon: <GyroIcon size={32} />,
+    icon: <PromoGyroIcon size={44} />,
     title: 'Superliquidity, made simple',
-    description: 'Next-gen Gyroscope pools are now live on Balancer v3.',
+    description: 'Next generation Gyroscope pools are now live on Balancer v3.',
     buttonText: 'View pools',
     buttonLink: '/pools?protocolVersion=3&poolTypes=GYRO',
     linkText: 'Learn more',
@@ -70,7 +70,7 @@ const promoData: PromoItem[] = [
   },
   {
     id: 3,
-    icon: <HookIcon size={48} />,
+    icon: <PromoHookIcon size={44} />,
     title: 'StableSurge Hook',
     description:
       'Applies a dynamic directional surge swap fee in times of volatility to help defend the peg. LPs get MEV protection and increased fees.',
@@ -175,7 +175,7 @@ export function PromoBanners() {
                     >
                       <Box flexShrink={0} h={14} w={14}>
                         <Center h="full" w="full">
-                          {item.icon}
+                          <Box color="font.maxContrast">{item.icon}</Box>
                         </Center>
                       </Box>
 
@@ -196,11 +196,11 @@ export function PromoBanners() {
                         </Heading>
                         <Text
                           color="font.maxContrast"
-                          fontSize={{ base: 'sm', lg: 'md' }}
+                          fontSize={{ base: 'xs', lg: 'md' }}
                           fontWeight="medium"
                           lineHeight="1.25"
-                          maxW="600px"
-                          opacity={colorMode === 'dark' ? '0.85' : '1'}
+                          maxW="46ch"
+                          opacity={colorMode === 'dark' ? '0.75' : '1'}
                           sx={{
                             textWrap: 'balance',
                           }}
@@ -282,7 +282,6 @@ export function PromoBanners() {
                 <Center>
                   <Flex
                     align={{ base: 'start', md: 'center' }}
-                    color={colorMode === 'dark' ? 'gray.400' : 'gray.600'}
                     direction="column"
                     gap="sm"
                     h="full"
@@ -294,9 +293,10 @@ export function PromoBanners() {
                     w="full"
                   >
                     <Box
-                      _groupHover={{ color: colorMode === 'dark' ? 'white' : 'black' }}
-                      color="inherit"
-                      transition="color 0.3s var(--ease-out-cubic)"
+                      _groupHover={{ color: 'font.maxContrast', opacity: 1 }}
+                      color={colorMode === 'dark' ? 'font.secondary' : 'brown.400' }
+                      opacity="0.8"
+                      transition="color 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic)"
                     >
                       {item.icon}
                     </Box>
