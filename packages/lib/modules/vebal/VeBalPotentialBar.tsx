@@ -12,8 +12,13 @@ export function VeBalPotentialBar() {
   const progressPercentage = calculateCurrentVeBalPercentage(veBalBalance)
 
   return (
-    <VStack spacing="md" w="full">
+    <VStack spacing="xs" w="full">
       <VeBalSectionHeader
+        after={
+          <Heading as="h3" size="md" variant="special">
+            {Math.round(progressPercentage)}%
+          </Heading>
+        }
         before={
           <Heading as="h3" size="md" variant="special">
             My veBAL potential
