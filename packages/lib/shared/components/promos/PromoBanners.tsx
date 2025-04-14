@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import {
   Box,
   Button,
@@ -126,6 +126,25 @@ export function PromoBanners() {
   const { colorMode } = useColorMode()
   const [activeIndex, setActiveIndex] = useState(0)
   const isSmallScreen = useBreakpointValue({ base: true, md: false }, { fallback: 'md' }) ?? false
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  const scrollToItem = (index: number) => {
+    if (isSmallScreen && scrollContainerRef.current) {
+      const itemWidth = window.innerWidth * 0.8 // 80vw
+      const gapWidth = 8 // 'sm' gap in pixels
+      const scrollPosition = index * (itemWidth + gapWidth)
+
+      scrollContainerRef.current.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth',
+      })
+    }
+  }
+
+  const handleItemClick = (index: number) => {
+    setActiveIndex(index)
+    scrollToItem(index)
+  }
 
   return (
     <Box
@@ -140,6 +159,7 @@ export function PromoBanners() {
       overflowX={{ base: 'scroll', md: 'visible' }}
       pb={{ base: 'md', md: 0 }}
       px={{ base: 'md', md: 0 }}
+      ref={scrollContainerRef}
       scrollSnapType={{ base: 'x mandatory', md: 'none' }}
     >
       <Flex
@@ -168,7 +188,7 @@ export function PromoBanners() {
               flexShrink={{ base: 0, md: isActive ? 1 : 0 }}
               height="auto"
               key={item.id}
-              onClick={() => setActiveIndex(index)}
+              onClick={() => handleItemClick(index)}
               overflow="hidden"
               p={0}
               position="relative"
@@ -275,7 +295,7 @@ export function PromoBanners() {
                           <Heading
                             as="h3"
                             color="font.maxContrast"
-                            fontSize={{ base: 'lg', md: 'lg', xl: '2xl' }}
+                            fontSize={{ base: 'md', md: 'lg', xl: '2xl' }}
                             fontWeight="bold"
                             letterSpacing="-0.5px"
                             lineHeight="1.1"
