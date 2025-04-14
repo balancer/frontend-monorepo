@@ -44,7 +44,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
           <HStack alignSelf="flex-start">
             <ButtonGroup
               currentOption={activeTab}
-              groupId="chart"
+              groupId="composition-chart"
               onChange={tab => setActiveTab(tab)}
               options={TABS_LIST}
               size="xxs"
