@@ -13,6 +13,7 @@ export const fakeTokenSymbols = [
   'aUSDC',
   'USDC',
   'USDC-DAI-USDT',
+  'B-80BAL-20WETH',
 ] as const
 export type FakeTokenSymbol = (typeof fakeTokenSymbols)[number]
 
@@ -294,6 +295,22 @@ export const allFakeGqlTokens: GqlToken[] = [
     address: '0x79c58f70905f734641735bc61e45c19dd9ad60bc',
     name: 'USDC-DAI-USDT',
     symbol: 'USDC-DAI-USDT',
+    decimals: 18,
+    chainId: 1,
+    chain: GqlChain.Mainnet,
+    logoURI:
+      'https://assets-cdn.trustwallet.com/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
+    priority: 0,
+    tradable: true,
+    isErc4626: false,
+    isBufferAllowed: true,
+  },
+  {
+    // Used in VeBal voting related tests
+    __typename: 'GqlToken',
+    address: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56',
+    name: 'B-80BAL-20WETH',
+    symbol: 'B-80BAL-20WETH',
     decimals: 18,
     chainId: 1,
     chain: GqlChain.Mainnet,

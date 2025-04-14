@@ -1,0 +1,32 @@
+import { Card, Heading, Progress, Stack, Text, VStack } from '@chakra-ui/react'
+import { VeBalSectionHeader } from './VeBalSectionHeader'
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import { formatUserVebal, useVebalUserStats } from './VebalStats/useVeBalUserStats'
+import { useMaxAmountOfVeBAL } from './useMaxAmountOfVeBal'
+
+export function VeBalPotentialBar() {
+  const { userStats } = useVebalUserStats()
+  const veBalBalance = userStats?.balance || 0n
+  const { maxAmount, calculateCurrentVeBalPercentage } = useMaxAmountOfVeBAL()
+
+  const progressPercentage = calculateCurrentVeBalPercentage(veBalBalance)
+
+  return (
+    <VStack spacing="md" w="full">
+      <VeBalSectionHeader
+        before={
+          <Heading as="h3" size="md" variant="special">
+            My veBAL potential
+          </Heading>
+        }
+      />
+      <Card m="md" p="lg" position="relative" w="full">
+        <Stack direction="row" justifyContent="space-between" mb={2} w="full">
+          <Text fontSize="sm">Current veBAL: {formatUserVebal(userStats)}</Text>
+          <Text fontSize="sm">Potential veBAL: {fNum('token', maxAmount)}</Text>
+        </Stack>
+        <Progress colorScheme="green" rounded="lg" size="sm" value={progressPercentage} w="full" />
+      </Card>
+    </VStack>
+  )
+}

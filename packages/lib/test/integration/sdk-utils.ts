@@ -34,6 +34,7 @@ import { aWjAuraWethPoolElementMock } from '../msw/builders/gqlPoolElement.build
 import { defaultTestUserAccount } from '../anvil/anvil-setup'
 import { mainnet } from 'viem/chains'
 import { mainnetTestPublicClient } from '../utils/wagmi/wagmi-test-clients'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 /*
@@ -447,4 +448,20 @@ export async function getNativeUserBalance({
   account: Address
 }) {
   return client.getBalance({ address: account })
+}
+
+type SetVeBalTokenBalanceParams = {
+  account: Address
+  balance: bigint
+}
+export async function setVeBalBptBalance({ account, balance }: SetVeBalTokenBalanceParams) {
+  const veBalBpt = mainnetNetworkConfig.tokens.addresses.veBalBpt as Address
+
+  await setUserTokenBalance({
+    client: mainnetTestPublicClient,
+    account,
+    tokenAddress: veBalBpt,
+    balance,
+    slot: 0,
+  })
 }

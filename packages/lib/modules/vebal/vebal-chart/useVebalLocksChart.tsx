@@ -9,11 +9,7 @@ import BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useTheme as useNextTheme } from 'next-themes'
-import { useTokens } from '../../tokens/TokensProvider'
-import { useTokenBalances } from '../../tokens/TokenBalancesProvider'
-import { useVebalLockData } from '../lock/VebalLockDataProvider'
-import { expectedTotalVeBal } from '../lock/VebalLockProvider'
-import { oneYearInSecs } from '@repo/lib/shared/utils/time'
+import { useMaxAmountOfVeBAL } from '../useMaxAmountOfVeBal'
 
 type ChartValueAcc = [string, number][]
 
@@ -79,30 +75,6 @@ function filterAndFlattenValues(valuesByDates: Record<string, number[]>) {
     })
     return acc
   }, [])
-}
-
-function useMaxAmountOfVeBAL() {
-  const { vebalBptToken } = useTokens()
-  const { balanceFor, isBalancesLoading } = useTokenBalances()
-  const { mainnetLockedInfo: lockedInfo, isLoading: isLockInfoLoading } = useVebalLockData()
-  const isLoading = isBalancesLoading || isLockInfoLoading
-
-  const lockedBPTAmount = lockedInfo.hasExistingLock ? lockedInfo.lockedAmount : 0
-  const bptAmount = vebalBptToken ? balanceFor(vebalBptToken.address)?.amount : 0n
-  const bptTotalAmount = bn(lockedBPTAmount).plus(bn(bptAmount || 0n))
-
-  const maxLockDate = new Date()
-  maxLockDate.setSeconds(maxLockDate.getSeconds() + oneYearInSecs)
-
-  const totalExpectedVeBal = expectedTotalVeBal({
-    bpt: bptTotalAmount.toString(),
-    lockEndDate: maxLockDate,
-  })
-
-  return {
-    isMaxAmountLoading: isLoading,
-    maxAmount: totalExpectedVeBal,
-  }
 }
 
 const MAIN_SERIES_ID = 'main-series'
