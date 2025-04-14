@@ -1,12 +1,14 @@
 'use client'
 
-import { Grid, GridItem, Icon, Text, HStack, VStack, Switch } from '@chakra-ui/react'
+import { Grid, GridItem, Icon, Text, VStack } from '@chakra-ui/react'
 import { GqlPoolOrderBy } from '@repo/lib/shared/services/api/generated/graphql'
-import { orderByHash, PoolDisplayType, PoolsColumnSort } from '../../pool.types'
+import { orderByHash, PoolsColumnSort } from '../../pool.types'
 import { usePoolOrderByState } from '../usePoolOrderByState'
 import { Globe } from 'react-feather'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { usePoolList } from '../PoolListProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { PoolListPoolNamesTokens } from './PoolListPoolNamesTokens'
 
 const setIsDesc = (id: GqlPoolOrderBy, currentSortingObj: PoolsColumnSort) =>
   currentSortingObj.id === id ? !currentSortingObj.desc : true
@@ -14,7 +16,6 @@ const setIsDesc = (id: GqlPoolOrderBy, currentSortingObj: PoolsColumnSort) =>
 export function PoolListTableHeader({ ...rest }) {
   const {
     queryState: { sorting, setSorting },
-    setPoolDisplayType,
   } = usePoolList()
   const { orderBy } = usePoolOrderByState()
   const sortingObj = sorting[0]
@@ -28,12 +29,6 @@ export function PoolListTableHeader({ ...rest }) {
     ])
   }
 
-  function togglePoolDisplayType() {
-    setPoolDisplayType(prev =>
-      prev === PoolDisplayType.Name ? PoolDisplayType.TokenPills : PoolDisplayType.Name
-    )
-  }
-
   return (
     <Grid {...rest} borderBottom="1px solid" borderColor="border.base" p={['sm', 'md']} w="full">
       <GridItem>
@@ -42,15 +37,7 @@ export function PoolListTableHeader({ ...rest }) {
         </VStack>
       </GridItem>
       <GridItem>
-        <HStack align="start" w="full">
-          <Text fontWeight="bold">Pool name</Text>
-          <HStack ml="auto" spacing="xs">
-            <Text fontSize="sm" variant="secondary">
-              Show tokens?
-            </Text>
-            <Switch onChange={togglePoolDisplayType} size="sm" />
-          </HStack>
-        </HStack>
+        {PROJECT_CONFIG.options.showPoolName ? <PoolListPoolNamesTokens /> : 'Pool name'}
       </GridItem>
       <GridItem justifySelf="start">
         <Text fontWeight="bold" textAlign="left">
