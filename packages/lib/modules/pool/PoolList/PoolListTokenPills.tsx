@@ -15,8 +15,9 @@ import { VotingPoolWithData } from '../../vebal/vote/vote.types'
 import { GetTokenFn } from '@repo/lib/modules/tokens/TokensProvider'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
+import { memo } from 'react'
 
-function NestedTokenPill({
+const NestedTokenPill = memo(function NestedTokenPill({
   nestedTokens,
   chain,
   iconSize = 24,
@@ -43,9 +44,9 @@ function NestedTokenPill({
       )
     )
   })
-}
+})
 
-function WeightedTokenPills({
+const WeightedTokenPills = memo(function WeightedTokenPills({
   tokens,
   chain,
   iconSize = 24,
@@ -115,9 +116,9 @@ function WeightedTokenPills({
       })}
     </Wrap>
   )
-}
+})
 
-function StableTokenPills({
+const StableTokenPills = memo(function StableTokenPills({
   tokens,
   chain,
   iconSize = 24,
@@ -186,7 +187,7 @@ function StableTokenPills({
       })}
     </HStack>
   )
-}
+})
 
 type VotingListTokenPillsProps = {
   vote: VotingPoolWithData
@@ -195,7 +196,11 @@ type VotingListTokenPillsProps = {
   getToken: GetTokenFn
 } & BadgeProps
 
-export function VotingListTokenPills({ vote, getToken, ...props }: VotingListTokenPillsProps) {
+export const VotingListTokenPills = memo(function VotingListTokenPills({
+  vote,
+  getToken,
+  ...props
+}: VotingListTokenPillsProps) {
   const pool = voteToPool(vote, getToken)
 
   const { name } = usePoolMetadata(pool)
@@ -208,26 +213,32 @@ export function VotingListTokenPills({ vote, getToken, ...props }: VotingListTok
       {...props}
     />
   )
-}
+})
 
 type PoolListTokenPillsProps = {
   pool: PoolCore
   iconSize?: number
   nameSize?: string
 } & BadgeProps
-export function PoolListTokenPills({ pool, ...props }: PoolListTokenPillsProps) {
+
+export const PoolListTokenPills = memo(function PoolListTokenPills({
+  pool,
+  ...props
+}: PoolListTokenPillsProps) {
   const { name, iconUrl } = usePoolMetadata(pool)
+  const tokens = getUserReferenceTokens(pool)
+
   return (
     <PoolTokenPills
       chain={pool.chain}
       iconUrl={iconUrl}
       poolName={name}
       poolType={pool.type}
-      tokens={getUserReferenceTokens(pool)}
+      tokens={tokens}
       {...props}
     />
   )
-}
+})
 
 type PoolTokenPillsProps = {
   poolType: GqlPoolType
@@ -238,7 +249,8 @@ type PoolTokenPillsProps = {
   iconSize?: number
   nameSize?: string
 } & BadgeProps
-function PoolTokenPills({
+
+export const PoolTokenPills = memo(function PoolTokenPills({
   chain,
   poolType,
   poolName,
@@ -248,8 +260,8 @@ function PoolTokenPills({
   nameSize = 'md',
   ...badgeProps
 }: PoolTokenPillsProps) {
-  const shouldUseWeightedPills = isWeightedLike(poolType)
   const shouldUseStablePills = isStableLike(poolType)
+  const shouldUseWeightedPills = isWeightedLike(poolType)
 
   if (poolName) {
     return (
@@ -273,4 +285,4 @@ function PoolTokenPills({
   }
 
   return <WeightedTokenPills chain={chain} iconSize={iconSize} tokens={tokens} {...badgeProps} />
-}
+})

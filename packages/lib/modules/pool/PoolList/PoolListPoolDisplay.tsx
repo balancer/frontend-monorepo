@@ -2,8 +2,9 @@ import { ExpandedPoolInfo } from '../../portfolio/PortfolioTable/useExpandedPool
 import { PoolDisplayType, PoolListItem } from '../pool.types'
 import { PoolListPoolName } from './PoolListPoolName'
 import { PoolListTokenPills } from './PoolListTokenPills'
+import { memo } from 'react'
 
-export function PoolListPoolDisplay({
+function PoolListPoolDisplayComponent({
   pool,
   name,
   poolDisplayType,
@@ -35,3 +36,6 @@ export function PoolListPoolDisplay({
 
   return component
 }
+
+// Memoize the component to prevent unnecessary re-renders when props haven't changed
+export const PoolListPoolDisplay = memo(PoolListPoolDisplayComponent)
