@@ -35,6 +35,9 @@ const promoData: PromoItem[] = [
       'A simple, capital efficient strategy for LPs to get boosted yield. Partnering with leading lending protocols like Aave and Morpho.',
     buttonText: 'View pools',
     buttonLink: '/pools?poolTags=BOOSTED',
+    linkText: 'Learn more',
+    linkURL: 'https://docs.balancer.fi/concepts/explore-available-balancer-pools/boosted-pool.html',
+    linkExternal: true,
     bgImage: {
       directory: '/images/promos/gyro/',
       imgName: 'bg',
@@ -48,7 +51,9 @@ const promoData: PromoItem[] = [
       'A simple, flexible, powerful platform to innovate upon and build the future of AMMs. Battle-tested in production since November.',
     buttonText: 'View pools',
     buttonLink: 'pools?protocolVersion=3',
-
+    linkText: 'Learn more',
+    linkURL: 'https://docs.balancer.fi/partner-onboarding/balancer-v3/v3-overview.html',
+    linkExternal: true,
     bgImage: {
       directory: '/images/promos/gyro/',
       imgName: 'bg',
@@ -62,7 +67,7 @@ const promoData: PromoItem[] = [
     buttonText: 'View pools',
     buttonLink: '/pools?protocolVersion=3&poolTypes=GYRO',
     linkText: 'Learn more',
-    linkURL: 'https://www.gyroscope.com/',
+    linkURL: 'https://www.gyro.finance/',
     linkExternal: true,
     bgImage: {
       directory: '/images/promos/gyro/',
@@ -74,9 +79,12 @@ const promoData: PromoItem[] = [
     icon: <PromoHookIcon size={44} />,
     title: 'StableSurge Hook',
     description:
-      'Applies a dynamic directional surge swap fee in times of volatility to help defend the peg. LPs get MEV protection and increased fees.',
+      'A dynamic directional surge swap fee in times of volatility to help defend the peg. LPs get MEV protection and increased fees.',
     buttonText: 'View pools',
     buttonLink: '/pools?poolHookTags=HOOKS_STABLESURGE',
+    linkText: 'Learn more',
+    linkURL: 'https://medium.com/balancer-protocol/balancers-stablesurge-hook-09d2eb20f219',
+    linkExternal: true,
     bgImage: {
       directory: '/images/promos/gyro/',
       imgName: 'bg',
@@ -205,7 +213,9 @@ export function PromoBanners() {
                     >
                       <Box flexShrink={0} h={14} w={14}>
                         <Center h="full" w="full">
-                          <Box color={colorMode === 'dark' ? 'font.maxContrast' : 'brown.500'}>{item.icon}</Box>
+                          <Box color={colorMode === 'dark' ? 'font.maxContrast' : 'brown.500'}>
+                            {item.icon}
+                          </Box>
                         </Center>
                       </Box>
 
@@ -340,7 +350,10 @@ export function PromoBanners() {
                     w="full"
                   >
                     <Box
-                      _groupHover={{ color: colorMode === 'dark' ? 'font.maxContrast' : 'brown.500', opacity: 1 }}
+                      _groupHover={{
+                        color: colorMode === 'dark' ? 'font.maxContrast' : 'brown.500',
+                        opacity: 1,
+                      }}
                       color={colorMode === 'dark' ? 'font.secondary' : 'brown.400'}
                       opacity="0.8"
                       transition="color 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic), box-shadow 0.15s var(--ease-out-cubic)"
