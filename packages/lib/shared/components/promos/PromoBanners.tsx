@@ -32,7 +32,7 @@ const promoData: PromoItem[] = [
     icon: <PromoBoostedIcon size={44} />,
     title: '100% Boosted Pools on Balancer v3',
     description:
-      'A simple, capital efficient strategy to get boosted yield from partners like Aave and Morpho.',
+      'A simple, capital efficient strategy for LPs to get boosted yield. Partnering with leading lending protocols like Aave and Morpho.',
     buttonText: 'View pools',
     buttonLink: '/pools?poolTags=BOOSTED',
     bgImage: {
@@ -43,8 +43,9 @@ const promoData: PromoItem[] = [
   {
     id: 1,
     icon: <PromoVThreeIcon size={44} />,
-    title: 'Balancer v3 is live!',
-    description: 'A simple, flexible, powerful platform to innovate upon and build the future of AMMs.',
+    title: 'Balancer v3 is live and thriving!',
+    description:
+      'A simple, flexible, powerful platform to innovate upon and build the future of AMMs. Battle-tested in production since November.',
     buttonText: 'View pools',
     buttonLink: 'pools?protocolVersion=3',
 
@@ -101,7 +102,7 @@ export function PromoBanners() {
         return (
           <Box
             _hover={!isActive ? { bg: colorMode === 'dark' ? 'gray.750' : 'gray.50' } : {}}
-            bg={colorMode === 'dark' ? 'black' : 'white'}
+            bg={colorMode === 'dark' ? 'black' : 'background.level2'}
             borderRadius="lg"
             cursor={isActive ? 'default' : 'pointer'}
             display="block"
@@ -117,11 +118,25 @@ export function PromoBanners() {
             role="group"
             shadow="2xl"
             textAlign="left"
-            transition="flex-basis 0.15s var(--ease-out-cubic), flex-grow 0.15s var(--ease-out-cubic)"
+            transition="flex-basis 0.2s var(--ease-out-cubic), flex-grow 0.2s var(--ease-out-cubic), box-shadow 0.1s var(--ease-out-cubic)"
             width={{ base: 'full', md: 'auto' }}
           >
             {item.bgImage && (
               <Box
+                _after={{
+                  // Added ::after styles
+                  bg: 'black',
+                  bottom: 0,
+                  content: '""',
+                  left: 0,
+                  opacity: 0,
+                  pointerEvents: 'none', // Prevent hover issues
+                  position: 'absolute',
+                  right: 0,
+                  top: 0,
+                  transition: 'opacity 0.2s var(--ease-out-cubic)',
+                  zIndex: 1, // Ensure it's above the Picture (zIndex 0)
+                }}
                 height="100%"
                 opacity={isActive ? 1 : 0}
                 position="absolute"
@@ -130,20 +145,34 @@ export function PromoBanners() {
                 zIndex="0"
               >
                 {isActive && (
-                  <Picture
-                    altText="Background texture"
-                    defaultImgType="png"
-                    directory={item.bgImage.directory}
-                    height="100%"
-                    imgAvif
-                    imgAvifDark
-                    imgAvifPortrait
-                    imgAvifPortraitDark
-                    imgName={item.bgImage.imgName}
-                    imgPng
-                    imgPngDark
-                    width="100%"
-                  />
+                  <>
+                    <Picture
+                      altText="Background texture"
+                      defaultImgType="png"
+                      directory={item.bgImage.directory}
+                      height="100%"
+                      imgAvif
+                      imgAvifDark
+                      imgAvifPortrait
+                      imgAvifPortraitDark
+                      imgName={item.bgImage.imgName}
+                      imgPng
+                      imgPngDark
+                      width="100%"
+                    />
+                    <Box
+                      _groupHover={{ opacity: 0.4 }}
+                      bg={colorMode === 'dark' ? '#000' : 'background.level3'}
+                      h="full"
+                      left="0"
+                      opacity={0}
+                      position="absolute"
+                      top="0"
+                      transition="opacity 0.2s var(--ease-out-cubic)"
+                      w="full"
+                      zIndex="0"
+                    />
+                  </>
                 )}
               </Box>
             )}
@@ -153,8 +182,9 @@ export function PromoBanners() {
                 h="100%"
                 opacity={isActive ? 1 : 0}
                 pointerEvents={isActive ? 'auto' : 'none'}
+                shadow={isActive ? 'innerRockShadow' : '0'}
                 transform={isActive ? 'translateX(0)' : 'translateX(12px)'}
-                transition="opacity 1s var(--ease-out-cubic), transform 0.5s var(--ease-out-cubic)"
+                transition="opacity 1s var(--ease-out-cubic), transform 0.2s var(--ease-out-cubic)"
                 w="full"
               >
                 {isActive && (
@@ -175,7 +205,7 @@ export function PromoBanners() {
                     >
                       <Box flexShrink={0} h={14} w={14}>
                         <Center h="full" w="full">
-                          <Box color="font.maxContrast">{item.icon}</Box>
+                          <Box color={colorMode === 'dark' ? 'font.maxContrast' : 'brown.500'}>{item.icon}</Box>
                         </Center>
                       </Box>
 
@@ -229,12 +259,12 @@ export function PromoBanners() {
                       <Flex alignItems="center" flexShrink={0} justifySelf="flex-end">
                         <Button
                           _hover={
-                            index === 0
+                            index === 2
                               ? {
                                   bg: 'linear-gradient(to right, rgb(240, 255, 155), rgb(255, 180, 255), rgb(145, 245, 245))',
                                   color: colorMode === 'dark' ? '#000' : '#000',
                                 }
-                              : { opacity: 0.9 }
+                              : { bg: 'white', color: 'font.dark', opacity: 0.9 }
                           }
                           animation="fadeIn 0.3s var(--ease-out-cubic) 0.3s both"
                           as={NextLink}
@@ -264,23 +294,38 @@ export function PromoBanners() {
             {!isActive && (
               <Box h="full" left="0" overflow="hidden" position="absolute" top="0" w="full">
                 {item.bgImage && (
-                  <Picture
-                    altText="Background texture"
-                    defaultImgType="png"
-                    directory={item.bgImage.directory}
-                    height="100%"
-                    imgAvif
-                    imgAvifDark
-                    imgAvifPortrait
-                    imgAvifPortraitDark
-                    imgName={item.bgImage.imgName}
-                    imgPng
-                    imgPngDark
-                    width="100%"
-                  />
+                  <>
+                    <Picture
+                      altText="Background texture"
+                      defaultImgType="png"
+                      directory={item.bgImage.directory}
+                      height="100%"
+                      imgAvif
+                      imgAvifDark
+                      imgAvifPortrait
+                      imgAvifPortraitDark
+                      imgName={item.bgImage.imgName}
+                      imgPng
+                      imgPngDark
+                      width="100%"
+                    />
+                    <Box
+                      _groupHover={{ opacity: 0.4 }}
+                      bg={colorMode === 'dark' ? '#000' : 'background.level2'}
+                      h="full"
+                      left="0"
+                      opacity={0}
+                      position="absolute"
+                      top="0"
+                      transition="opacity 0.2s var(--ease-out-cubic)"
+                      w="full"
+                      zIndex="0"
+                    />
+                  </>
                 )}
                 <Center>
                   <Flex
+                    _groupHover={{ shadow: '0' }}
                     align={{ base: 'start', md: 'center' }}
                     direction="column"
                     gap="sm"
@@ -289,14 +334,16 @@ export function PromoBanners() {
                     left={0}
                     p="md"
                     position="absolute"
+                    shadow="innerRockShadowSm"
                     top={0}
+                    transition="box-shadow 0.15s var(--ease-out-cubic) 1s"
                     w="full"
                   >
                     <Box
-                      _groupHover={{ color: 'font.maxContrast', opacity: 1 }}
-                      color={colorMode === 'dark' ? 'font.secondary' : 'brown.400' }
+                      _groupHover={{ color: colorMode === 'dark' ? 'font.maxContrast' : 'brown.500', opacity: 1 }}
+                      color={colorMode === 'dark' ? 'font.secondary' : 'brown.400'}
                       opacity="0.8"
-                      transition="color 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic)"
+                      transition="color 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic), box-shadow 0.15s var(--ease-out-cubic)"
                     >
                       {item.icon}
                     </Box>
