@@ -165,7 +165,7 @@ export function PromoBanners() {
                 md: isActive ? 'auto' : 'clamp(60px, calc(14.0625vw - 48px), 132px)',
               }}
               flexGrow={{ base: 0, md: isActive ? 1 : 0 }}
-              flexShrink={0}
+              flexShrink={{ base: 0, md: isActive ? 1 : 0 }}
               height="auto"
               key={item.id}
               onClick={() => setActiveIndex(index)}
@@ -261,7 +261,11 @@ export function PromoBanners() {
                       >
                         <Box flexShrink={0} h={14} w={14}>
                           <Center h="full" w="full">
-                            <Box color={colorMode === 'dark' ? 'font.maxContrast' : 'brown.500'}>
+                            <Box
+                              color={colorMode === 'dark' ? 'font.maxContrast' : 'brown.500'}
+                              left={{ base: '-10px', md: '0' }}
+                              position="relative"
+                            >
                               {item.icon}
                             </Box>
                           </Center>
@@ -275,7 +279,7 @@ export function PromoBanners() {
                             fontWeight="bold"
                             letterSpacing="-0.5px"
                             lineHeight="1.1"
-                            pb="xs"
+                            pb="sm"
                             sx={{
                               textWrap: 'balance',
                             }}
@@ -284,7 +288,7 @@ export function PromoBanners() {
                           </Heading>
                           <Text
                             color="font.maxContrast"
-                            fontSize={{ base: 'xs', lg: 'md' }}
+                            fontSize={{ base: 'xs', sm: 'sm', lg: 'md' }}
                             fontWeight="medium"
                             lineHeight="1.25"
                             maxW="46ch"
@@ -298,7 +302,7 @@ export function PromoBanners() {
                               alignItems="center"
                               color="font.maxContrast"
                               display="inline-flex"
-                              fontSize={{ base: 'sm', lg: 'md' }}
+                              fontSize={{ base: 'xs', sm: 'sm', lg: 'md' }}
                               gap="xxs"
                               href={item.linkURL}
                               pb="2px"
@@ -334,6 +338,7 @@ export function PromoBanners() {
                             fontSize={{ base: 'xs', sm: 'sm' }}
                             h={{ base: '32px', sm: '36px' }}
                             href={item.buttonLink}
+                            mb="sm"
                             onClick={e => e.stopPropagation()}
                             px="ms"
                             rounded="full"
@@ -353,12 +358,12 @@ export function PromoBanners() {
                 <Box
                   h="full"
                   left="0"
+                  opacity={{ base: 1, md: 1 }}
                   overflow="hidden"
+                  pointerEvents="none"
                   position="absolute"
                   top="0"
                   w="full"
-                  opacity={{ base: 1, md: 1 }}
-                  pointerEvents="none"
                 >
                   {item.bgImageInactive && (
                     <>
