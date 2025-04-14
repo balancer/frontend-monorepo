@@ -348,7 +348,7 @@ export function PromoBanners() {
                                   }
                                 : { bg: 'white', color: 'font.dark', opacity: 0.9 }
                             }
-                            animation="fadeIn 0.3s var(--ease-out-cubic) 0.3s both"
+                            animation="fade-in 0.3s var(--ease-out-cubic) 0.3s both"
                             as={NextLink}
                             bg="transparent"
                             border="1px solid"
