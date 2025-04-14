@@ -28,7 +28,11 @@ export function PoolsPage({
           position="relative"
           shadow="innerBase"
         >
-          <DefaultPageContainer pb={['xl', 'xl', '10']} pt={['xl', '40px']}>
+          <DefaultPageContainer
+            pb={['xl', 'xl', '10']}
+            pr={{ base: '0 !important', md: 'md !important' }}
+            pt={['xl', '40px']}
+          >
             <Box display={{ base: 'none', md: 'block' }}>
               <RadialPattern
                 circleCount={8}
