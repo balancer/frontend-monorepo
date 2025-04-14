@@ -15,7 +15,7 @@ export function ImpersonateAccount() {
 
   return (
     <HStack>
-      <Text>Impersonate Account</Text>
+      <Text>Impersonate</Text>
       <Input
         aria-label="Mock address"
         onChange={e => setImpersonatedAddress(e.target.value || '')}
