@@ -81,13 +81,9 @@ export interface UseVoteListArgs {}
 
 // eslint-disable-next-line no-empty-pattern
 export function _useVoteList({}: UseVoteListArgs) {
-  const {
-    votingPools,
-    votingIncentives,
-    votingIncentivesErrorMessage,
-    votingListLoading,
-    votingIncentivesLoading = false,
-  } = useVotes()
+  const { votingPools, incentives, incentivesError, incentivesAreLoading, votingListLoading } =
+    useVotes()
+
   const filtersState = useVoteListFiltersState()
 
   const voteListData = votingPools
@@ -100,11 +96,11 @@ export function _useVoteList({}: UseVoteListArgs) {
     return voteListData.map(vote => ({
       ...vote,
       gaugeVotes: gaugeVotes ? gaugeVotes[vote.gauge.address] : undefined,
-      votingIncentive: votingIncentives
-        ? votingIncentives.find(votingIncentive => votingIncentive.poolId === vote.id)
+      votingIncentive: incentives
+        ? incentives.find(incentive => incentive.poolId === vote.id)
         : undefined,
     }))
-  }, [voteListData, gaugeVotes, votingIncentives])
+  }, [voteListData, gaugeVotes, incentives])
 
   const filteredVoteList = useMemo(() => {
     return filterVoteList(
@@ -141,10 +137,10 @@ export function _useVoteList({}: UseVoteListArgs) {
     filtersState,
     sortedVoteList,
     votingListLoading,
-    loading: votingListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
+    loading: votingListLoading || incentivesAreLoading || gaugeVotesIsLoading,
     count: filteredVoteList.length,
-    votingIncentivesLoading,
-    votingIncentivesErrorMessage, // todo: (votes) should be used in VoteListTable
+    incentivesAreLoading,
+    incentivesError,
     gaugeVotesIsLoading,
   }
 }
