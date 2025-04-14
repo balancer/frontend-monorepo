@@ -13,6 +13,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
+import { useVoteList } from '../../../VoteList/VoteListProvider'
 
 interface Props extends GridProps {
   keyValue: string | number
@@ -23,8 +24,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
   const { totalInfo, clearAll, hasChanges, hasVotedBefore } = useMyVotes()
   const { toCurrency } = useCurrency()
 
-  const votingIncentivesLoading = false
-  const gaugeVotesIsLoading = false
+  const { incentivesAreLoading, gaugeVotesIsLoading } = useVoteList()
 
   return (
     <FadeInOnView>
@@ -44,7 +44,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
           </GridItem>
           <GridItem {...cellProps} />
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
-            {votingIncentivesLoading ? (
+            {incentivesAreLoading ? (
               <Skeleton h="20px" w="60px" />
             ) : totalInfo.totalRewardValue ? (
               <Text color="font.maxContrast">
@@ -54,8 +54,9 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
               <Text color="red.400">&mdash;</Text>
             )}
           </GridItem>
+
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
-            {votingIncentivesLoading ? (
+            {incentivesAreLoading ? (
               <Skeleton h="20px" w="60px" />
             ) : totalInfo.averageRewardPerVote ? (
               <Text color="font.maxContrast">
@@ -65,6 +66,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
               <Text color="red.400">&mdash;</Text>
             )}
           </GridItem>
+
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {gaugeVotesIsLoading ? (
               <Skeleton h="20px" w="60px" />
@@ -77,6 +79,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
               />
             )}
           </GridItem>
+
           <GridItem justifySelf="end" pr="20px" textAlign="right" {...cellProps}>
             <VoteWeight
               skipTotalWarnings={!hasChanges}
@@ -85,6 +88,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
               weight={totalInfo.editVotes ?? 0}
             />
           </GridItem>
+
           <GridItem mx="-2" {...cellProps}>
             <VStack align="center" w="full">
               <Button

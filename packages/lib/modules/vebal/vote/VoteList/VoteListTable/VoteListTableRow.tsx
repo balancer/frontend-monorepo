@@ -44,7 +44,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
   const selected = isSelectedPool(vote)
   const voted = isVotedPool(vote)
 
-  const { votingIncentivesLoading, gaugeVotesIsLoading } = useVoteList()
+  const { incentivesAreLoading, gaugeVotesIsLoading } = useVoteList()
 
   const isDisabled = !isConnected || hasAllVotingPowerTimeLocked || !allowSelectVotingPools
 
@@ -92,7 +92,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             <PoolListTableDetailsCell pool={voteToPool(vote, getToken)} />
           </GridItem>
           <GridItem justifySelf="end" textAlign="right">
-            {votingIncentivesLoading ? (
+            {incentivesAreLoading ? (
               <Skeleton h="20px" w="60px" />
             ) : vote.votingIncentive ? (
               <Text>{toCurrency(vote.votingIncentive.totalValue, { abbreviated: false })}</Text>
@@ -114,7 +114,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             )}
           </GridItem>
           <GridItem justifySelf="end" textAlign="right">
-            {votingIncentivesLoading ? (
+            {incentivesAreLoading ? (
               <Skeleton h="20px" w="60px" />
             ) : vote.votingIncentive ? (
               <Text>{toCurrency(vote.votingIncentive.valuePerVote, { abbreviated: false })}</Text>

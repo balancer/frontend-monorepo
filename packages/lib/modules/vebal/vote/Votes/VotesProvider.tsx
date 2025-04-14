@@ -19,26 +19,16 @@ import { isGaugeExpired } from '@repo/lib/modules/vebal/vote/vote.helpers'
 import { useVotingEscrowLocksQueries } from '@repo/lib/modules/vebal/cross-chain/useVotingEscrowLocksQueries'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { HiddenHandData } from '@repo/lib/shared/services/hidden-hand/hidden-hand.types'
 import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
+import { useHiddenHandVotingIncentives } from '@repo/lib/shared/services/hidden-hand/useHiddenHandVotingIncentives'
 
 export interface UseVotesArgs {
   data: GetVeBalVotingListQuery | undefined
   votingListLoading?: boolean
   error?: any
-  votingIncentives?: HiddenHandData[]
-  votingIncentivesLoading?: boolean
-  votingIncentivesErrorMessage?: string
 }
 
-export function _useVotes({
-  data,
-  votingListLoading = false,
-  error,
-  votingIncentives,
-  votingIncentivesErrorMessage,
-  votingIncentivesLoading = false,
-}: UseVotesArgs) {
+export function _useVotes({ data, votingListLoading = false, error }: UseVotesArgs) {
   const { userAddress, isConnected } = useUserAccount()
 
   const votingList = useMemo(() => {
@@ -63,15 +53,17 @@ export function _useVotes({
 
   const { expiredGauges } = useExpiredGauges({ gaugeAddresses })
 
+  const { incentives, incentivesError, incentivesAreLoading } = useHiddenHandVotingIncentives()
+
   const votingPools = useMemo<VotingPoolWithData[]>(() => {
     return votingList.map(vote => ({
       ...vote,
       gaugeVotes: gaugeVotes ? gaugeVotes[vote.gauge.address] : undefined,
-      votingIncentive: votingIncentives
-        ? votingIncentives.find(votingIncentive => votingIncentive.poolId === vote.id)
+      votingIncentive: incentives
+        ? incentives.find(incentive => incentive.poolId === vote.id)
         : undefined,
     }))
-  }, [votingList, gaugeVotes, votingIncentives])
+  }, [votingList, gaugeVotes, incentives])
 
   const votedPools = useMemo(
     () => votingPools.filter(vote => bn(vote.gaugeVotes?.userVotes || '0') > bn(0)),
@@ -189,7 +181,6 @@ export function _useVotes({
           // Is voting currently not locked
           !isVotingTimeLocked(votingPool.gaugeVotes?.lastUserVoteTime ?? 0) &&
           // Is gauge not expired
-          // TODO: (votes) this should not be applied when Show Expired pool gauges filter is checked
           !isPoolGaugeExpired(votingPool)
         )
       }),
@@ -205,12 +196,12 @@ export function _useVotes({
   return {
     votingPools,
     votingListLoading,
-    votingIncentives,
-    loading: votingListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
+    incentives,
+    incentivesError,
+    incentivesAreLoading,
+    loading: votingListLoading || incentivesAreLoading || gaugeVotesIsLoading,
     count: votingPools.length,
     error,
-    votingIncentivesLoading,
-    votingIncentivesErrorMessage,
     gaugeVotesIsLoading,
     votedPools,
     selectedVotingPools,
