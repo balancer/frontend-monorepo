@@ -125,4 +125,24 @@ export const avalancheTokenBalances: TokenBalance[] = [
     tokenAddress: '0xa25eaf2906fa1a3a13edac9b9657108af7b703e3', // ggAVAX
     value: '40000',
   },
+  // tokens for v3 pool: pools/avalanche/v3/0x31ae873544658654ce767bde179fd1bbcb84850b/add-liquidity
+  {
+    tokenAddress: '0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7', // USDT
+    value: '50000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e', // USDC
+    value: '50000',
+    decimals: 6,
+  },
+  /*
+    AUSD uses packed slots which is not supported by the current useSetErc20Balance implementation
+    Context: https://book.getfoundry.sh/reference/forge-std/enable_packed_slots
+    */
+  {
+    tokenAddress: '0x00000000efe302beaa2b3e6e1b18d08d69a9012a', // AUSD
+    value: '50000',
+    decimals: 6,
+  },
 ]
