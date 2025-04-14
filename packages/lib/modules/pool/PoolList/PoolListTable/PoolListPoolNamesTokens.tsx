@@ -34,6 +34,7 @@ function PoolListPoolNamesTokensComponent() {
       <ButtonGroupComponent
         currentOption={option}
         groupId="pool-display-type"
+        isGray
         onChange={handleOptionChange}
         options={OPTIONS}
         size="xxs"
