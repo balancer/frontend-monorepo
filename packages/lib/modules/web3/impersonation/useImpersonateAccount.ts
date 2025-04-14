@@ -5,6 +5,7 @@ import { defaultManualForkOptions } from '@repo/lib/test/utils/wagmi/fork-option
 import {
   forkClient,
   getSavedImpersonatedAddressLS,
+  publicForkClient,
   setImpersonatedAddressLS,
   setTokenBalances,
 } from '@repo/lib/test/utils/wagmi/fork.helpers'
@@ -61,7 +62,7 @@ export function useImpersonateAccount() {
         address: impersonatedAddress,
       })
 
-      const { chainId } = getOptions()
+      const { chainId } = await getOptions()
 
       console.log('🥸 Impersonating with ', {
         impersonatedAddress,
@@ -92,11 +93,16 @@ export function useImpersonateAccount() {
     queryClient.invalidateQueries()
   }
 
-  function getOptions() {
-    // TODO: Using window to globally set the fork options from E2E tests. Explore better ways to do this.
-    const chainId = window.forkOptions?.chainId ?? defaultManualForkOptions.chainId
+  async function getOptions() {
+    /*
+      Using window to globally set the fork options from E2E tests. Explore better ways to do this.
+      Getting chain id from the current running fork until we support multiple forks
+    */
+    const runningForkChain = await publicForkClient.getChainId()
+    // const chainId = window.forkOptions?.chainId ?? defaultManualForkOptions.chainId
+    const chainId = runningForkChain
     const forkBalances = window.forkOptions?.forkBalances ?? defaultManualForkOptions.forkBalances
-    console.log('window.forkOptions', JSON.stringify(window.forkOptions, null, 2))
+    // console.log('window.forkOptions', JSON.stringify(window.forkOptions, null, 2))
     return { chainId, forkBalances }
   }
 
@@ -109,7 +115,7 @@ export function useImpersonateAccount() {
     wagmiConfig: WagmiConfig
     isReconnecting?: boolean
   }) {
-    const { forkBalances, chainId } = getOptions()
+    const { forkBalances, chainId } = await getOptions()
     if (forkBalances[chainId] && !isReconnecting) {
       await setTokenBalances({
         impersonatedAddress,
