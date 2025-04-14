@@ -5,7 +5,6 @@ import ButtonGroupComponent, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 
-// Memoize options to prevent recreation on each render
 const OPTIONS = [
   { value: PoolDisplayType.Name, label: 'Pool name' },
   { value: PoolDisplayType.TokenPills, label: 'Pool tokens' },
@@ -40,5 +39,4 @@ function PoolListPoolNamesTokensComponent() {
   )
 }
 
-// Memoize the component to prevent unnecessary re-renders
 export const PoolListPoolNamesTokens = memo(PoolListPoolNamesTokensComponent)

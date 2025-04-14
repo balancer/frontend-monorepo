@@ -37,5 +37,4 @@ function PoolListPoolDisplayComponent({
   return component
 }
 
-// Memoize the component to prevent unnecessary re-renders when props haven't changed
 export const PoolListPoolDisplay = memo(PoolListPoolDisplayComponent)

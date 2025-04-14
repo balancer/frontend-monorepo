@@ -30,5 +30,4 @@ function PoolListPoolNameComponent({ pool }: { pool: PoolListItem | ExpandedPool
   )
 }
 
-// Memoize the component to prevent unnecessary re-renders
 export const PoolListPoolName = memo(PoolListPoolNameComponent)
