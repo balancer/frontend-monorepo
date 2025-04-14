@@ -37,6 +37,29 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     return isReversed ? bn(1).div(bn(originalPoolSpotPrice)).toString() : originalPoolSpotPrice
   }, [originalPoolSpotPrice, isReversed])
 
+  console.log({
+    params: params
+      ? {
+          balanceIn: params.balanceIn.toString(),
+          balanceOut: params.balanceOut.toString(),
+          decimalsIn: params.decimalsIn,
+          decimalsOut: params.decimalsOut,
+          gyroEParams: {
+            alpha: params.gyroEParams.alpha.toString(),
+            beta: params.gyroEParams.beta.toString(),
+            c: params.gyroEParams.c.toString(),
+            s: params.gyroEParams.s.toString(),
+            lambda: params.gyroEParams.lambda.toString(),
+          },
+          tokenRates: params.tokenRates
+            ? [params.tokenRates[0].toString(), params.tokenRates[1].toString()]
+            : null,
+        }
+      : 'No params available',
+  })
+
+  console.log({ poolSpotPrice: originalPoolSpotPrice })
+
   const data = useMemo(() => {
     if (!liquidityData) return null
 
