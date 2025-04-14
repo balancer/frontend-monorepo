@@ -4,6 +4,7 @@ import { PortfolioSummary } from './PortfolioSummary'
 import { PortfolioTable } from './PortfolioTable/PortfolioTable'
 import { ClaimNetworkPools } from './PortfolioClaim/ClaimNetworkPools/ClaimNetworkPools'
 import { TransactionStateProvider } from '../transactions/transaction-steps/TransactionStateProvider'
+import { PortfolioFiltersProvider } from './PortfolioTable/PortfolioFiltersProvider'
 
 export default function Portfolio() {
   return (
@@ -12,8 +13,9 @@ export default function Portfolio() {
       <TransactionStateProvider>
         <ClaimNetworkPools />
       </TransactionStateProvider>
-
-      <PortfolioTable />
+      <PortfolioFiltersProvider>
+        <PortfolioTable />
+      </PortfolioFiltersProvider>
     </Stack>
   )
 }

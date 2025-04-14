@@ -23,9 +23,6 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-  Tag,
-  TagCloseButton,
-  TagLabel,
   Text,
   useColorModeValue,
   VStack,
@@ -60,6 +57,8 @@ import ButtonGroup, {
 import { useCow } from '../../cow/useCow'
 import Link from 'next/link'
 import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { poolTypeLabel } from '../pool.helpers'
+import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
@@ -327,29 +326,6 @@ export interface FilterTagsPops {
   poolHookTagLabel?: (poolHookTag: PoolHookTagType) => string
 }
 
-function AnimatedTag({ label, onClose }: { label: React.ReactNode; onClose: () => void }) {
-  return (
-    <motion.div
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 0 }}
-      initial={{ opacity: 0, y: 40 }}
-      transition={{
-        enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
-        exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
-      }}
-    >
-      <Tag size="lg">
-        <TagLabel>
-          <Text fontSize="sm" fontWeight="bold">
-            {label}
-          </Text>
-        </TagLabel>
-        <TagCloseButton onClick={onClose} />
-      </Tag>
-    </motion.div>
-  )
-}
-
 export function FilterTags({
   networks,
   toggleNetwork,
@@ -553,7 +529,6 @@ export function PoolListFilters() {
       setNetworks,
       togglePoolType,
       poolTypes,
-      poolTypeLabel,
       setPoolTypes,
       setProtocolVersion,
       protocolVersion,
