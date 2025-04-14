@@ -6,7 +6,14 @@ export function PromoGyroIcon({
   ...props
 }: { size?: number } & SVGProps<SVGSVGElement>) {
   return (
-    <svg height={size} width={size} {...props} fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      height={size}
+      width={size}
+      {...props}
+      fill="none"
+      viewBox="0 0 48 48"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g clipPath="url(#a)">
         <path
           d="M25.011 4.51a19.49 19.49 0 0 0 0 38.979 19.49 19.49 0 0 0 16.361-8.931h.02V21.963h-5.736v10.713a13.808 13.808 0 0 1-10.645 5.132 13.808 13.808 0 0 1 0-27.616A13.808 13.808 0 0 1 36.483 16.4l4.754-3.164A19.488 19.488 0 0 0 25.01 4.51Zm7.577 17.447c-1.405 2.114-3.248 4.017-5.132 5.899h8.2v-5.893l-3.068-.006Z"
