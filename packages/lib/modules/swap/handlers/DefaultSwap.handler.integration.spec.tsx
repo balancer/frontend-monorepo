@@ -17,7 +17,7 @@ import { DefaultSwapHandler } from './DefaultSwap.handler'
 */
 describe.skip('Pool Swap handler with v2 nested pool', async () => {
   const mainnetNestedPoolId = '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0' // Balancer 50WETH-50-3pool
-  const pool = await fetchPoolMock(mainnetNestedPoolId, GqlChain.Mainnet)
+  const pool = await fetchPoolMock({ poolId: mainnetNestedPoolId, chain: GqlChain.Mainnet })
 
   const handler = new DefaultSwapHandler(apolloTestClient)
 

@@ -61,6 +61,7 @@ if (!isConnectedToWC()) {
 // Add mock connector for development/staging environments
 if (!isProd) connectors.push(createMockConnector({ index: connectors.length }))
 
+export type WagmiConfig = ReturnType<typeof createConfig>
 export const wagmiConfig = createConfig({
   chains,
   transports,
@@ -78,6 +79,7 @@ export const wagmiConfig = createConfig({
   - Returns the updated wagmiConfig to be used for testing
 */
 export function impersonateWagmiConfig(impersonationAddress?: Address) {
+  console.log('🛠️ Using anvil forks in wagmi chain setup')
   connectors.pop()
   connectors.push(createMockConnector({ index: connectors.length, impersonationAddress }))
 
@@ -98,10 +100,12 @@ export function impersonateWagmiConfig(impersonationAddress?: Address) {
     )
   }
 
-  return createConfig({
+  const impersonatedConfig = createConfig({
     chains,
     transports: _transports,
     connectors,
     ssr: true,
   })
+
+  return { connectors, updatedConfig: impersonatedConfig }
 }

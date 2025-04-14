@@ -13,8 +13,9 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { capitalize } from 'lodash'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
+import { isMaBeetsPool } from '@repo/lib/modules/pool/pool.helpers'
 
 export default function ClaimNetworkPoolsLayoutWrapper() {
   const { toCurrency } = useCurrency()
@@ -39,7 +40,12 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
 
   const [modalPools, setModalPools] = useState<Pool[]>([])
 
-  const hasMultipleClaims = pools ? pools.length > 1 : false
+  const hasMultipleClaims = useMemo(() => {
+    if (!pools) return false
+
+    // filter out mabeets pool so it doesn't count
+    return pools.filter(pool => !isMaBeetsPool(pool.id)).length > 1
+  }, [pools])
 
   return (
     <ClaimNetworkPoolsLayout backLink="/portfolio" title="Portfolio">

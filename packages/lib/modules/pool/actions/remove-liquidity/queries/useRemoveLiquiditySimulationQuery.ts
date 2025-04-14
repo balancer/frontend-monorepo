@@ -10,6 +10,8 @@ import { RemoveLiquidityHandler } from '../handlers/RemoveLiquidity.handler'
 import { RemoveLiquidityParams, removeLiquidityKeys } from './remove-liquidity-keys'
 import { sentryMetaForRemoveLiquidityHandler } from '@repo/lib/shared/utils/query-errors'
 import { Address } from 'viem'
+import { hasStableSurgeHook } from '../../../pool.helpers'
+import { usePool } from '../../../PoolProvider'
 
 export type RemoveLiquiditySimulationQueryResult = ReturnType<
   typeof useRemoveLiquiditySimulationQuery
@@ -17,7 +19,6 @@ export type RemoveLiquiditySimulationQueryResult = ReturnType<
 
 type Params = {
   handler: RemoveLiquidityHandler
-  poolId: string
   chainId: number
   humanBptIn: HumanAmount
   tokenOut: Address // used by single removes
@@ -27,7 +28,6 @@ type Params = {
 
 export function useRemoveLiquiditySimulationQuery({
   handler,
-  poolId,
   chainId,
   humanBptIn,
   tokenOut,
@@ -35,6 +35,7 @@ export function useRemoveLiquiditySimulationQuery({
   enabled = true,
 }: Params) {
   const { userAddress, isConnected } = useUserAccount()
+  const { pool } = usePool()
   const { slippage } = useUserSettings()
   const debouncedHumanBptIn = useDebounce(humanBptIn, defaultDebounceMs)[0]
 
@@ -42,7 +43,7 @@ export function useRemoveLiquiditySimulationQuery({
     handler,
     userAddress,
     slippage,
-    poolId,
+    poolId: pool.id,
     humanBptIn: debouncedHumanBptIn,
     tokenOut,
     tokensOut,
@@ -65,6 +66,7 @@ export function useRemoveLiquiditySimulationQuery({
     meta: sentryMetaForRemoveLiquidityHandler('Error in remove liquidity simulation query', {
       ...params,
       chainId,
+      hasStableSurgeHook: hasStableSurgeHook(pool),
     }),
     ...onlyExplicitRefetch,
   })

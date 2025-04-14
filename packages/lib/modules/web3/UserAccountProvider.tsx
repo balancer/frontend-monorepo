@@ -8,11 +8,12 @@ import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { Address, isAddress } from 'viem'
 import { setTag, setUser } from '@sentry/nextjs'
-import { config, isProd } from '@repo/lib/config/app.config'
+import { config, isProd, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { captureError, ensureError } from '@repo/lib/shared/utils/errors'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useSafeAppConnectionGuard } from './useSafeAppConnectionGuard'
 import { useWCConnectionLocalStorage } from './wallet-connect/useWCConnectionLocalStorage'
+import { clearWalletConnectConnected } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 async function isAuthorizedAddress(address: Address): Promise<boolean> {
   try {
@@ -88,9 +89,14 @@ export function _useUserAccount() {
 
   useAccountEffect({
     onDisconnect: () => {
-      // When disconnecting from WC connector we need a full page reload to enforce a new WC connector instance created
-      console.log('Full page reload on WC disconnection')
-      window.location.reload()
+      if (shouldUseAnvilFork) {
+        clearWalletConnectConnected()
+      }
+      if (isConnectedToWC) {
+        // When disconnecting from WC connector we need a full page reload to enforce a new WC connector instance created
+        console.log('Full page reload on WC disconnection')
+        window.location.reload()
+      }
     },
   })
 

@@ -3,24 +3,32 @@ import { AlertProps, HStack } from '@chakra-ui/react'
 import { useBreakpoints } from '../../hooks/useBreakpoints'
 import { BalAlert } from './BalAlert'
 import { BalAlertContent } from './BalAlertContent'
-import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { StepType, TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { useStepWithTxBatch } from '@repo/lib/modules/web3/safe.hooks'
 
-type Props = AlertProps & { currentStep: TransactionStep }
-export function TxBatchAlert({ currentStep, ...alertProps }: Props) {
+type Props = AlertProps & { steps: TransactionStep[] }
+export function TxBatchAlert({ steps, ...alertProps }: Props) {
   const { isMobile } = useBreakpoints()
-  const { isStepWithTxBatch } = useStepWithTxBatch(currentStep)
+  const lastStep = steps[steps.length - 1]
+  const { isStepWithTxBatch } = useStepWithTxBatch(lastStep)
   if (isStepWithTxBatch && !isMobile) {
-    return <BalAlert content={<Content />} status="info" {...alertProps} />
+    return (
+      <BalAlert content={<Content stepType={lastStep.stepType} />} status="info" {...alertProps} />
+    )
   }
   return null
 }
 
-function Content() {
+type ContentProps = {
+  stepType: StepType
+}
+function Content({ stepType }: ContentProps) {
+  const operationName = stepType === 'addLiquidity' ? 'add liquidity' : 'remove liquidity'
+  const description = `For a better experience, token approvals and ${operationName} operation will be bundled into a single transaction.`
   return (
     <HStack flexWrap={{ base: 'wrap', md: 'nowrap' }}>
       <BalAlertContent
-        description="For a better experience, token approvals and add liquidity operation will be bundled into a single transaction."
+        description={description}
         forceColumnMode
         title="Token approval bundling in Safe App"
       />

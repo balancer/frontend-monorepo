@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { poolTypeLabel } from '@repo/lib/modules/pool/PoolList/usePoolListQueryState'
 import {
   Box,
   Button,
@@ -22,20 +21,24 @@ import {
   FilterButton,
   PoolNetworkFilters,
   PoolTypeFilters,
+  ProtocolVersionFilter,
 } from '@repo/lib/modules/pool/PoolList/PoolListFilters'
 import { useVoteList } from '@repo/lib/modules/vebal/vote/VoteList/VoteListProvider'
 import { VoteListSearch } from '@repo/lib/modules/vebal/vote/VoteList/VoteListSearch'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { poolTypeLabel } from '@repo/lib/modules/pool/pool.helpers'
 
 export function useFilterTagsVisible() {
   const {
-    filtersState: { networks, poolTypes, includeExpiredPools },
+    filtersState: { networks, poolTypes, includeExpiredPools, protocolVersion },
   } = useVoteList()
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    setIsVisible(networks.length > 0 || poolTypes.length > 0 || includeExpiredPools)
-  }, [networks, poolTypes, includeExpiredPools])
+    setIsVisible(
+      networks.length > 0 || poolTypes.length > 0 || includeExpiredPools || !!protocolVersion
+    )
+  }, [networks, poolTypes, includeExpiredPools, protocolVersion])
 
   return isVisible
 }
@@ -54,6 +57,10 @@ export function VoteListFilters() {
       setPoolTypes,
       includeExpiredPools,
       toggleIncludeExpiredPools,
+      protocolVersion,
+      setProtocolVersion,
+      activeProtocolVersionTab,
+      setActiveProtocolVersionTab,
     },
   } = useVoteList()
 
@@ -122,6 +129,19 @@ export function VoteListFilters() {
                           setNetworks={setNetworks}
                           toggleNetwork={toggleNetwork}
                           toggledNetworks={toggledNetworks}
+                        />
+                      </Box>
+                      <Box as={motion.div} variants={staggeredFadeInUp}>
+                        <Heading as="h3" mb="sm" size="sm">
+                          Protocol version
+                        </Heading>
+                        <ProtocolVersionFilter
+                          activeProtocolVersionTab={activeProtocolVersionTab}
+                          hideProtocolVersion={PROJECT_CONFIG.options.hideProtocolVersion}
+                          poolTypes={poolTypes}
+                          protocolVersion={protocolVersion}
+                          setActiveProtocolVersionTab={setActiveProtocolVersionTab}
+                          setProtocolVersion={setProtocolVersion}
                         />
                       </Box>
                       <Box as={motion.div} variants={staggeredFadeInUp}>

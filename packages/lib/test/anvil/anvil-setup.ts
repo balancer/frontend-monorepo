@@ -1,12 +1,13 @@
 import { Address, Hex } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 import { fantom, gnosis, mainnet, polygon, sepolia, sonic } from 'viem/chains'
+import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
 
 const networksWithFork = [mainnet, polygon, sepolia, gnosis, fantom, sonic] as const
-export type NetworksWithFork = (typeof networksWithFork)[number]['name']
+export type ChainIdWithFork = (typeof networksWithFork)[number]['id']
 
 export type NetworkSetup = {
-  networkName: NetworksWithFork
+  chainId: ChainIdWithFork
   fallBackRpc: string | undefined
   port: number
   forkBlockNumber?: bigint
@@ -30,63 +31,62 @@ export const testAccounts: Address[] = [
 
 export function testAccountIndex(account: Address) {
   const index = testAccounts.indexOf(account)
-  if (!index) {
+  if (index < 0) {
     throw Error(`Account ${account} not found in test accounts.`)
   }
   return index
 }
 
-const ANVIL_PORTS: Record<NetworksWithFork, number> = {
+const ANVIL_PORTS: Record<ChainIdWithFork, number> = {
   //Ports separated by 100 to avoid port collision when running tests in parallel
-  Ethereum: 8645,
-  Polygon: 8745,
-  Sepolia: 8845,
-  Fantom: 8945,
-  Gnosis: 9045,
-  Sonic: 9145,
+  [mainnet.id]: 8645,
+  [polygon.id]: 8745,
+  [sepolia.id]: 8845,
+  [fantom.id]: 8945,
+  [gnosis.id]: 9045,
+  [sonic.id]: 9145,
 }
 
-export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
-  Ethereum: {
-    networkName: 'Ethereum',
+export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
+  [mainnet.id]: {
+    chainId: mainnet.id,
     fallBackRpc: 'https://cloudflare-eth.com',
-    port: ANVIL_PORTS.Ethereum,
+    port: ANVIL_PORTS[mainnet.id],
     // From time to time this block gets outdated having this kind of error in integration tests:
     // ContractFunctionExecutionError: The contract function "queryJoin" returned no data ("0x").
-    // forkBlockNumber: 21624208n,
-    forkBlockNumber: 21831471n,
+    // forkBlockNumber: 21831471n,
   },
-  Polygon: {
-    networkName: 'Polygon',
+  [polygon.id]: {
+    chainId: polygon.id,
     fallBackRpc: 'https://polygon-rpc.com',
-    port: ANVIL_PORTS.Polygon,
+    port: ANVIL_PORTS[polygon.id],
     // Note - this has to be >= highest blockNo used in tests
     // forkBlockNumber: 64747630n,
     forkBlockNumber: 67867894n,
   },
-  Sepolia: {
-    networkName: 'Sepolia',
+  [sepolia.id]: {
+    chainId: sepolia.id,
     fallBackRpc: 'https://gateway.tenderly.co/public/sepolia',
-    port: ANVIL_PORTS.Sepolia,
+    port: ANVIL_PORTS[sepolia.id],
     // For now we will use the last block until v3 deployments are final
     // forkBlockNumber: 6679621n,
   },
-  Fantom: {
-    networkName: 'Fantom',
+  [fantom.id]: {
+    chainId: fantom.id,
     fallBackRpc: 'https://gateway.tenderly.co/public/fantom',
-    port: ANVIL_PORTS.Fantom,
+    port: ANVIL_PORTS[fantom.id],
     forkBlockNumber: 99471829n,
   },
-  Sonic: {
-    networkName: 'Sonic',
+  [sonic.id]: {
+    chainId: sonic.id,
     fallBackRpc: 'https://gateway.tenderly.co/public/sonic',
-    port: ANVIL_PORTS.Sonic,
+    port: ANVIL_PORTS[sonic.id],
     forkBlockNumber: 2687659n,
   },
-  Gnosis: {
-    networkName: 'Gnosis',
+  [gnosis.id]: {
+    chainId: gnosis.id,
     fallBackRpc: 'https://gnosis.drpc.org',
-    port: ANVIL_PORTS.Gnosis,
+    port: ANVIL_PORTS[gnosis.id],
     forkBlockNumber: 37902207n,
   },
 }
@@ -98,7 +98,7 @@ export const ANVIL_NETWORKS: Record<NetworksWithFork, NetworkSetup> = {
 */
 export const pool = Number(process.env.VITEST_POOL_ID ?? 1)
 
-export function getTestRpcSetup(networkName: NetworksWithFork) {
+export function getTestRpcSetup(networkName: ChainIdWithFork) {
   const network = ANVIL_NETWORKS[networkName]
   const port = network.port
   const rpcUrl = `http://127.0.0.1:${port}/${pool}`
@@ -111,35 +111,20 @@ export function getTestRpcSetup(networkName: NetworksWithFork) {
  *     const privateAlchemyKey = process.env['NEXT_PRIVATE_ALCHEMY_KEY']
  *     return `https://polygon-mainnet.g.alchemy.com/v2/${privateAlchemyKey}`
  */
-export function getForkUrl(networkName: NetworksWithFork, verbose = false): string {
-  const network = ANVIL_NETWORKS[networkName]
+export function getForkUrl(chainId: ChainIdWithFork, verbose = false): string {
+  const network = ANVIL_NETWORKS[chainId]
   const privateKey = process.env['NEXT_PRIVATE_DRPC_KEY']
-  const dRpcUrl = (chainName: string) =>
-    `https://lb.drpc.org/ogrpc?network=${chainName}&dkey=${privateKey}`
+
+  if (!privateKey) {
+    throw Error(`Please set the NEXT_PRIVATE_DRPC_KEY environment variable.`)
+  }
 
   if (privateKey) {
-    if (network.networkName === 'Ethereum') {
-      return dRpcUrl('ethereum')
-    }
-    if (network.networkName === 'Polygon') {
-      return dRpcUrl('polygon')
-    }
-    if (network.networkName === 'Sepolia') {
-      return dRpcUrl('sepolia')
-    }
-    if (network.networkName === 'Fantom') {
-      return dRpcUrl('fantom')
-    }
-    if (network.networkName === 'Sonic') {
-      return dRpcUrl('sonic')
-    }
-    if (network.networkName === 'Gnosis') {
-      return dRpcUrl('gnosis')
-    }
+    return drpcUrlByChainId(chainId, privateKey)
   }
 
   if (!network.fallBackRpc) {
-    throw Error(`Please add a fallback RPC for ${network.networkName} network.`)
+    throw Error(`Please add a fallback RPC for ${network.chainId} network.`)
   }
 
   if (verbose) {

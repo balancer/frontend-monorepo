@@ -9,6 +9,7 @@ import { lowerFirst } from 'lodash'
 type Params = {
   poolId: Address
   chain: GqlChain
+  apiUrl: string
   fileName?: string
   isFrozen?: boolean
 }
@@ -18,10 +19,11 @@ type Params = {
 export async function savePoolMock({
   poolId,
   chain,
+  apiUrl,
   fileName,
   isFrozen = false,
 }: Params): Promise<string> {
-  const pool = (await fetchPoolMock(poolId, chain)) as Pool
+  const pool = (await fetchPoolMock({ poolId, chain, apiUrl })) as Pool
   const poolJson = JSON.stringify(pool, null, 2)
 
   const poolVarName = fileName || createPoolVarName(pool) + 'Mock'

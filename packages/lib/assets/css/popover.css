@@ -107,8 +107,9 @@
   height: anchor-size(height);
   border-color: var(--chakra-colors-background-base);
   overflow: hidden;
-  transition-property: display, overlay, height, width, border-radius, box-shadow, background-color,
-    border-color, color;
+  transition-property:
+    display, overlay, height, width, border-radius, box-shadow, background-color, border-color,
+    color;
   transition-behavior: allow-discrete;
   transition-duration: var(--speed);
   transition-timing-function: var(--ease);

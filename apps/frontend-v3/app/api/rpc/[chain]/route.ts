@@ -1,4 +1,5 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { drpcUrl } from '@repo/lib/shared/utils/rpc'
 
 type Params = {
   params: {
@@ -7,45 +8,39 @@ type Params = {
 }
 
 const DRPC_KEY = process.env.NEXT_PRIVATE_DRPC_KEY || ''
-const dRpcUrl = (chainName: string) =>
-  `https://lb.drpc.org/ogrpc?network=${chainName}&dkey=${DRPC_KEY}`
 
-const chainToRpcMap: Record<GqlChain, string | undefined> = {
-  [GqlChain.Mainnet]: dRpcUrl('ethereum'),
-  [GqlChain.Arbitrum]: dRpcUrl('arbitrum'),
-  [GqlChain.Optimism]: dRpcUrl('optimism'),
-  [GqlChain.Base]: dRpcUrl('base'),
-  [GqlChain.Polygon]: dRpcUrl('polygon'),
-  [GqlChain.Avalanche]: dRpcUrl('avalanche'),
-  [GqlChain.Fantom]: dRpcUrl('fantom'),
-  [GqlChain.Sepolia]: dRpcUrl('sepolia'),
-  // DEBUG:
-  // [GqlChain.Sepolia]: 'https://eth-sepolia.g.alchemy.com/v2/<KEY>',
-  [GqlChain.Fraxtal]: dRpcUrl('fraxtal'),
-  [GqlChain.Gnosis]: dRpcUrl('gnosis'),
-  [GqlChain.Mode]: dRpcUrl('mode'),
-  [GqlChain.Zkevm]: dRpcUrl('polygon-zkevm'),
-  [GqlChain.Sonic]: dRpcUrl('sonic'),
-}
-
-function getRpcUrl(chain: string) {
-  try {
-    const rpc = chainToRpcMap[chain as GqlChain]
-    if (!rpc) throw new Error(`Invalid chain: ${chain}`)
-    return rpc
-  } catch (error) {
-    throw new Error(`Invalid chain: ${chain}`)
-  }
-}
+const ALLOWED_ORIGINS = [
+  ...(process.env.NEXT_PRIVATE_ALLOWED_ORIGINS || '').split(','),
+  process.env.VERCEL_BRANCH_URL ? `https://${process.env.VERCEL_BRANCH_URL}` : '',
+].filter(Boolean)
 
 export async function POST(request: Request, { params: { chain } }: Params) {
+  const referer = request.headers.get('referer')
+  const isAllowedOrigin = referer && ALLOWED_ORIGINS.some(origin => referer.startsWith(origin))
+
+  if (!isAllowedOrigin) {
+    return new Response(
+      JSON.stringify({
+        error: 'Forbidden: Access denied',
+        code: -32000,
+        message: 'Access denied',
+      }),
+      {
+        status: 403,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+  }
+
   if (!DRPC_KEY) {
     return new Response(JSON.stringify({ error: 'NEXT_PRIVATE_DRPC_KEY is missing' }), {
       status: 500,
     })
   }
 
-  const rpcUrl = getRpcUrl(chain)
+  const rpcUrl = drpcUrl(chain as GqlChain, DRPC_KEY)
   const rpcBody = await request.json()
 
   const rpcResponse = await fetch(rpcUrl, {

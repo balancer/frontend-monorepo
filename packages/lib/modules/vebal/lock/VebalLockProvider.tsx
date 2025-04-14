@@ -109,10 +109,11 @@ export function _useVebalLock() {
     return lpTokenAmount
   }, [lpTokenAmount, lockedAmount])
 
+  const previousLockEnd = mainnetLockedInfo.lockedEndDate
+    ? new Date(mainnetLockedInfo.lockedEndDate)
+    : undefined
   const lockDuration = useLockDuration({
-    lockedEndDate: mainnetLockedInfo.lockedEndDate
-      ? new Date(mainnetLockedInfo.lockedEndDate)
-      : undefined,
+    lockedEndDate: previousLockEnd,
     mainnetLockedInfo,
   })
 
@@ -166,6 +167,7 @@ export function _useVebalLock() {
 
   return {
     lpToken,
+    previousLockEnd,
     setLpToken,
     resetLpToken,
     vebalBptToken,

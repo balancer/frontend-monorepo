@@ -1,7 +1,6 @@
 import { Badge, HStack } from '@chakra-ui/react'
 import { ArrowDownIcon } from '@repo/lib/shared/components/icons/ArrowDownIcon'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
-import React from 'react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 interface Props {

@@ -1,4 +1,4 @@
-import { testHook } from '@repo/lib/test/utils/custom-renderers'
+import { DefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
@@ -10,22 +10,24 @@ import { Address } from 'viem'
 import { connectWithDefaultUser } from '@repo/lib/test/utils/wagmi/wagmi-connections'
 
 const emptyTokenOut = '' as Address // We don't use it but it is required to simplify TS checks
-const poolMock = aWjAuraWethPoolElementMock()
 
 async function testQuery(humanBptIn: HumanAmount) {
   const handler = selectRemoveLiquidityHandler(
     aWjAuraWethPoolElementMock(),
     RemoveLiquidityType.Proportional
   )
-  const { result } = testHook(() =>
-    useRemoveLiquidityPriceImpactQuery({
-      chainId: 1,
-      handler,
-      poolId: poolMock.id,
-      humanBptIn,
-      tokenOut: emptyTokenOut,
-      enabled: true,
-    })
+  const { result } = testHook(
+    () =>
+      useRemoveLiquidityPriceImpactQuery({
+        chainId: 1,
+        handler,
+        humanBptIn,
+        tokenOut: emptyTokenOut,
+        enabled: true,
+      }),
+    {
+      wrapper: DefaultPoolTestProvider,
+    }
   )
   return result
 }

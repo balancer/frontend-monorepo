@@ -180,4 +180,5 @@ export interface ProjectConfig {
   cowSupportedNetworks: GqlChain[]
   networksForProtocolStats?: GqlChain[]
   partnerCards?: PartnerCard[]
+  merklRewardsChains: GqlChain[]
 }

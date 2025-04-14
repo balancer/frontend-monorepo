@@ -1,4 +1,4 @@
-import { PoolVariant } from '@repo/lib/modules/pool/pool.types'
+import { Pool, PoolVariant } from '@repo/lib/modules/pool/pool.types'
 import { ChainSlug, getChainSlug, getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 import { PropsWithChildren, Suspense } from 'react'
 import { PoolDetailSkeleton } from '@repo/lib/modules/pool/PoolDetail/PoolDetailSkeleton'
@@ -12,7 +12,7 @@ import { notFound } from 'next/navigation'
 import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
-export type Props = PropsWithChildren<{
+type PoolLayoutProps = PropsWithChildren<{
   chain: ChainSlug
   id: string
   variant?: PoolVariant
@@ -38,25 +38,36 @@ async function getPoolQuery(chain: ChainSlug, id: string) {
   }
 }
 
-export async function generateMetadata({ id, chain, variant }: Props): Promise<Metadata> {
+export type PoolMetadata = {
+  metadata: Metadata
+  pool?: Pool
+}
+export async function generatePoolMetadata({
+  id,
+  chain,
+  variant,
+}: PoolLayoutProps): Promise<PoolMetadata> {
   const { data } = await getPoolQuery(chain, id)
 
   const pool = data?.pool
-  if (!pool) return {}
+  if (!pool) return { metadata: {} }
 
   const displayTokens = getUserReferenceTokens(pool)
   const poolTokenString = arrayToSentence(displayTokens.map(token => token.symbol))
   const poolSymbol = PROJECT_CONFIG.options.showPoolName ? 'This' : pool.symbol // pool name is already shown in the title so we don't need to show it twice
 
   return {
-    title: `Liquidity Pool (${variant}): ${pool.name}`,
-    description: `${poolSymbol} is a Balancer ${variant} ${getPoolTypeLabel(
-      pool.type
-    )} liquidity pool which contains ${poolTokenString}.`,
+    metadata: {
+      title: `Liquidity Pool (${variant}): ${pool.name}`,
+      description: `${poolSymbol} is a Balancer ${variant} ${getPoolTypeLabel(
+        pool.type
+      )} liquidity pool which contains ${poolTokenString}.`,
+    },
+    pool,
   }
 }
 
-export async function PoolLayout({ id, chain, variant, children }: Props) {
+export async function PoolLayout({ id, chain, variant, children }: PoolLayoutProps) {
   const _chain = getChainSlug(chain)
 
   const { data, error } = await getPoolQuery(chain, id)

@@ -3,12 +3,17 @@
 import { CheckCircleIcon, CopyIcon } from '@chakra-ui/icons'
 import { IconButton, IconButtonProps, Tooltip } from '@chakra-ui/react'
 import { useState } from 'react'
+import { useIsSafeApp } from '../web3/safe.hooks'
 
 export function CopyTokenAddressButton({
   tokenAddress,
   ...rest
 }: { tokenAddress: string } & Omit<IconButtonProps, 'aria-label'>) {
   const [isCopied, setIsCopied] = useState(false)
+  const isSafeApp = useIsSafeApp()
+
+  // Copying to clipboard is not supported in Safe Apps due to iFrame security checks
+  if (isSafeApp) return null
 
   function copyToClipboard() {
     navigator.clipboard.writeText(tokenAddress)

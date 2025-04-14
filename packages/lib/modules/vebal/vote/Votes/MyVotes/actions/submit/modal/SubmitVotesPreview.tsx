@@ -1,5 +1,4 @@
 import { VStack, Card, HStack, Text, Divider, Box, Badge } from '@chakra-ui/react'
-import React from 'react'
 import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { SubmittingVote } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -10,13 +9,14 @@ import {
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { MyVotesTotalInfo } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.types'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
-import { MyIncentivesAprTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesAprTooltip'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { VotesChunksAllocation } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/useSubmittingVotes'
 import { AlertTriangle } from 'react-feather'
 import { CHUNK_SIZE } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesSteps'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { GainBadge } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
+import { MyIncentivesTooltip } from '../../../MyVotesStats/shared/MyIncentivesTooltip'
 
 interface Props {
   submittingVotes: SubmittingVote[]
@@ -36,11 +36,6 @@ export function SubmitVotesPreview({
   isPoolGaugeExpired,
 }: Props) {
   const { toCurrency } = useCurrency()
-
-  const optimizedRewardValue = 86.65 // fix: (votes) provide real value
-  const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
-  const averageReward = 0.102 // fix: (votes) provide real value
-
   const { getToken } = useTokens()
 
   return (
@@ -204,23 +199,29 @@ export function SubmitVotesPreview({
       </Card>
 
       <HStack alignItems="stretch" spacing="sm" w="full">
-        {false && (
+        <Card flex="1" variant="subSection">
+          <Text variant="special">Potential incentives (1w)</Text>
+          <HStack spacing="xs">
+            <Text fontSize="lg" fontWeight={700} variant="special">
+              {totalInfo.totalRewardValue !== undefined ? (
+                toCurrency(totalInfo.totalRewardValue, { abbreviated: false })
+              ) : (
+                <>&mdash;</>
+              )}
+            </Text>
+            {totalInfo.totalRewardValueGain && <GainBadge gain={totalInfo.totalRewardValueGain} />}
+            <MyIncentivesTooltip />
+          </HStack>
+        </Card>
+
+        {totalInfo.averageRewardPerVote !== undefined && (
           <Card flex="1" variant="subSection">
-            <Text variant="special">Potential incentives (1w)</Text>
-            <HStack spacing="xs">
-              <Text fontSize="lg" fontWeight={700} variant="special">
-                {toCurrency(optimizedRewardValue, { abbreviated: false })}
-              </Text>
-              <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} />
-            </HStack>
+            <Text>Ave. Reward (Bribes/veBAL)</Text>
+            <Text fontSize="lg" fontWeight={700}>
+              {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
+            </Text>
           </Card>
         )}
-        <Card flex="1" variant="subSection">
-          <Text>Ave. Reward (Bribes/veBAL)</Text>
-          <Text fontSize="lg" fontWeight={700}>
-            {toCurrency(averageReward, { abbreviated: false })}
-          </Text>
-        </Card>
       </HStack>
     </VStack>
   )

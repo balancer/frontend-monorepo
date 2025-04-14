@@ -9,6 +9,11 @@ import BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useTheme as useNextTheme } from 'next-themes'
+import { useTokens } from '../../tokens/TokensProvider'
+import { useTokenBalances } from '../../tokens/TokenBalancesProvider'
+import { useVebalLockData } from '../lock/VebalLockDataProvider'
+import { expectedTotalVeBal } from '../lock/VebalLockProvider'
+import { oneYearInSecs } from '@repo/lib/shared/utils/time'
 
 type ChartValueAcc = [string, number][]
 
@@ -76,6 +81,30 @@ function filterAndFlattenValues(valuesByDates: Record<string, number[]>) {
   }, [])
 }
 
+function useMaxAmountOfVeBAL() {
+  const { vebalBptToken } = useTokens()
+  const { balanceFor, isBalancesLoading } = useTokenBalances()
+  const { mainnetLockedInfo: lockedInfo, isLoading: isLockInfoLoading } = useVebalLockData()
+  const isLoading = isBalancesLoading || isLockInfoLoading
+
+  const lockedBPTAmount = lockedInfo.hasExistingLock ? lockedInfo.lockedAmount : 0
+  const bptAmount = vebalBptToken ? balanceFor(vebalBptToken.address)?.amount : 0n
+  const bptTotalAmount = bn(lockedBPTAmount).plus(bn(bptAmount || 0n))
+
+  const maxLockDate = new Date()
+  maxLockDate.setSeconds(maxLockDate.getSeconds() + oneYearInSecs)
+
+  const totalExpectedVeBal = expectedTotalVeBal({
+    bpt: bptTotalAmount.toString(),
+    lockEndDate: maxLockDate,
+  })
+
+  return {
+    isMaxAmountLoading: isLoading,
+    maxAmount: totalExpectedVeBal,
+  }
+}
+
 const MAIN_SERIES_ID = 'main-series'
 const FUTURE_SERIES_ID = 'future-series'
 
@@ -136,15 +165,13 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
   }, [chartValues, mainnetLockedInfo.lockedEndDate, hasExistingLock, isExpired])
 
   const showStaticTooltip = useCallback(() => {
-    if (!mouseoverRef.current) {
-      if (instanceRef.current) {
-        // Show tooltip on a specific data point when chart is loaded
-        instanceRef.current.dispatchAction({
-          type: 'showTip',
-          seriesIndex: 0, // Index of the series
-          dataIndex: chartValues.length - 1, // Index of the data point
-        })
-      }
+    if (!mouseoverRef.current && instanceRef.current) {
+      // Show tooltip on a specific data point when chart is loaded
+      instanceRef.current.dispatchAction({
+        type: 'showTip',
+        seriesIndex: 0, // Index of the series
+        dataIndex: chartValues.length - 1, // Index of the data point
+      })
     }
   }, [chartValues])
 
@@ -191,6 +218,8 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
     }
   }, [showStaticTooltip])
 
+  const { isMaxAmountLoading, maxAmount } = useMaxAmountOfVeBAL()
+
   const options = useMemo((): EChartsOption => {
     const toolTipTheme = {
       heading: 'font-weight: bold; color: #E5D3BE',
@@ -225,7 +254,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           },
         },
         extraCssText: `border: none;${toolTipTheme.container};max-width: 215px; z-index: 5`,
-        position: (point, params, dom, rect, size) => {
+        position: (point, _params, _dom, _rect, size) => {
           if (!mouseoverRef.current) {
             return [point[0] - size.contentSize[0] / 2, 0]
           }
@@ -239,17 +268,19 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           const secondPointValue = secondPoint ? (secondPoint.value as number[]) : null
 
           if (!mouseoverRef.current) {
-            if (firstPoint.seriesId === MAIN_SERIES_ID) {
-              if ([firstPoint.dataIndex, secondPoint?.dataIndex].includes(chartValues.length - 1)) {
+            if (!isMaxAmountLoading) {
+              if (
+                firstPoint.seriesId === MAIN_SERIES_ID &&
+                [firstPoint.dataIndex, secondPoint?.dataIndex].includes(chartValues.length - 1)
+              ) {
                 return `
                 <div style="padding: unset; display: flex; flex-direction: column; justify-content: center;
                   ${toolTipTheme.container}">
                   <div style="font-size: 0.85rem; font-weight: 500; white-space: normal; line-height: 20px;
                     color: ${toolTipTheme.text};">
-                    Increase your lock to 1 year to maximize your veBAL to 30.346 (mocked text)
+                    Increase your lock to 1 year to maximize your veBAL to ${maxAmount.toFixed(2)}
                   </div>
-                </div>
-              `
+                </div>`
               }
             }
           }
@@ -354,7 +385,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         futureLockChartData,
       ],
     }
-  }, [chartValues, futureLockChartData, theme, nextTheme])
+  }, [chartValues, futureLockChartData, theme, nextTheme, isMaxAmountLoading, maxAmount])
 
   return {
     lockedUntil,

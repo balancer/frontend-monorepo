@@ -25,7 +25,7 @@ import { getUserTotalBalanceInt } from './user-balance.helpers'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
-import { vaultV3Abi } from '@balancer/sdk'
+import { vaultAbi_V3 } from '@balancer/sdk'
 import { Pool, PoolCore } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
@@ -312,115 +312,64 @@ const shouldBlockV3PoolAdds = false
  * Returns true if we should block the user from adding liquidity to the pool.
  * @see https://github.com/balancer/frontend-v3/issues/613#issuecomment-2149443249
  */
-export function shouldBlockAddLiquidity(pool: Pool, poolMetadata?: PoolMetadata) {
-  // we allow the metadata to override the default behavior
-  if (poolMetadata?.allowAddLiquidity === true) {
-    return false
-  }
-
-  if (isV3Pool(pool) && shouldBlockV3PoolAdds) return true
-
-  // avoid blocking Sepolia pools
-  if (pool.chain === GqlChain.Sepolia) return false
-
-  // block add liquidity for custom scenarios eg. maBEETS
-  if (isMaBeetsPool(pool.id)) return true
-
-  // If pool is an LBP, paused or in recovery mode, we should block adding liquidity
-  if (isLBP(pool.type) || pool.dynamicData.isPaused || pool.dynamicData.isInRecoveryMode) {
-    return true
-  }
-
-  if (pool.hook && (!hasReviewedHook(pool.hook) || pool.hook?.reviewData?.summary === 'unsafe')) {
-    return true
-  }
-
-  const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
-
-  return poolTokens.some(token => {
-    // if token is not allowed - we should block adding liquidity
-    if (isV2Pool(pool) && !token.isAllowed) {
-      return true
-    }
-
-    // if rateProvider is null - we consider it as zero address and not block adding liquidity
-    if (isNil(token.priceRateProvider) || token.priceRateProvider === zeroAddress) return false
-
-    // if rateProvider is the nested pool address - we consider it as safe
-    if (token.priceRateProvider === token.nestedPool?.address) return false
-
-    // if price rate provider is set but is not reviewed or summary is not safe - we should block adding liquidity
-    if (!hasReviewedRateProvider(token) || token.priceRateProviderData?.summary !== 'safe') {
-      return true
-    }
-
-    /* Only for actual v3 boosted pools (ERC4626 with useUnderlyingForAddRemove === true):
-      if ERC4626 is not reviewed or summary is not safe - we should block adding liquidity
-    */
-    if (
-      isBoosted(pool) &&
-      token.isErc4626 &&
-      token.useUnderlyingForAddRemove &&
-      (!hasReviewedErc4626(token) || token.erc4626ReviewData?.summary !== 'safe')
-    ) {
-      return true
-    }
-
-    return false
-  })
+export function shouldBlockAddLiquidity(pool: Pool, metadata?: PoolMetadata) {
+  const reasons = getPoolAddBlockedReason(pool, metadata)
+  return reasons.length > 0
 }
 
-/**
- *  TODO: improve the implementation to display all the blocking reasons instead of just the first one
- */
-export function getPoolAddBlockedReason(pool: Pool): string {
-  const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
+export function getPoolAddBlockedReason(pool: Pool, metadata?: PoolMetadata): string[] {
+  // we allow the metadata to override the default behavior
+  if (metadata?.allowAddLiquidity === true) return []
 
-  if (isV3Pool(pool) && shouldBlockV3PoolAdds) return 'Adds are blocked for all V3 pools'
+  if (pool.chain === GqlChain.Sepolia) return []
 
-  if (isLBP(pool.type)) return 'LBP pool'
-  if (pool.dynamicData.isPaused) return 'Paused pool'
-  if (pool.dynamicData.isInRecoveryMode) return 'Pool in recovery'
+  const reasons: string[] = []
+
+  if (isV3Pool(pool) && shouldBlockV3PoolAdds) reasons.push('Adds are blocked for all V3 pools')
+
+  if (isLBP(pool.type)) reasons.push('LBP pool')
+  if (pool.dynamicData.isPaused) reasons.push('Paused pool')
+  if (pool.dynamicData.isInRecoveryMode) reasons.push('Pool in recovery')
 
   // reason for blocking in custom scenarios eg. maBEETS
-  if (isMaBeetsPool(pool.id)) {
-    return 'Please manage your liquidity on the maBEETS page.'
-  }
+  if (isMaBeetsPool(pool.id)) reasons.push('Please manage your liquidity on the maBEETS page')
 
-  if (pool.hook && !hasReviewedHook(pool.hook)) {
-    return 'Unreviewed hook'
-  }
+  if (pool.hook && !hasReviewedHook(pool.hook)) reasons.push('Unreviewed hook')
 
-  if (pool.hook?.reviewData?.summary === 'unsafe') {
-    return 'Unsafe hook'
-  }
+  if (pool.hook?.reviewData?.summary === 'unsafe') reasons.push('Unsafe hook')
 
+  const poolTokens = pool.poolTokens as GqlPoolTokenDetail[]
   for (const token of poolTokens) {
     // if token is not allowed - we should block adding liquidity
     if (isV2Pool(pool) && !token.isAllowed) {
-      return `Token: ${token.symbol} is not allowed` // TODO: Add instructions and link to get it approved
+      reasons.push(`Token: ${token.symbol} is not currently supported`)
     }
 
-    // if price rate provider is set but is not reviewed - we should block adding liquidity
-    if (!hasReviewedRateProvider(token)) {
-      return `Rate provider for token ${token.symbol} was not yet reviewed` // TODO: Add instructions and link to get it reviewed
-    }
-
-    if (token.priceRateProviderData?.summary !== 'safe') {
-      return `Rate provider for token ${token.symbol} is not safe` // TODO: Add instructions and link to get it reviewed
+    if (
+      token.priceRateProvider &&
+      // if rateProvider is null - we consider it as zero address and not block adding liquidity
+      token.priceRateProvider !== zeroAddress &&
+      // if rateProvider is the nested pool address - we consider it as safe
+      token.priceRateProvider !== token.nestedPool?.address
+    ) {
+      // if price rate provider is set but is not reviewed - we should block adding liquidity
+      if (!hasReviewedRateProvider(token)) {
+        reasons.push(`Rate provider for token ${token.symbol} was not yet reviewed`)
+      } else if (token.priceRateProviderData?.summary !== 'safe') {
+        reasons.push(`Rate provider for token ${token.symbol} is not safe`)
+      }
     }
 
     if (isBoosted(pool) && token.isErc4626 && token.useUnderlyingForAddRemove) {
       if (!hasReviewedErc4626(token)) {
-        return `Tokenized vault for token ${token.symbol} was not yet reviewed`
-      }
-
-      if (token.erc4626ReviewData?.summary !== 'safe') {
-        return `Tokenized vault for token ${token.symbol} is not safe`
+        reasons.push(`Tokenized vault for token ${token.symbol} was not yet reviewed`)
+      } else if (token.erc4626ReviewData?.summary !== 'safe') {
+        reasons.push(`Tokenized vault for token ${token.symbol} is not safe`)
       }
     }
   }
-  return ''
+
+  return reasons
 }
 
 export function isAffectedByCspIssue(pool: Pool) {
@@ -441,7 +390,7 @@ export function getVaultConfig(pool: Pool) {
         networkConfig.contracts.balancer.vaultV3!
       : networkConfig.contracts.balancer.vaultV2
 
-  const balancerVaultAbi = pool.protocolVersion === 3 ? vaultV3Abi : balancerV2VaultAbi
+  const balancerVaultAbi = pool.protocolVersion === 3 ? vaultAbi_V3 : balancerV2VaultAbi
 
   return { vaultAddress, balancerVaultAbi }
 }
@@ -500,4 +449,25 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
     return false
   }
   return true
+}
+
+export function poolTypeLabel(poolType: GqlPoolType) {
+  switch (poolType) {
+    case GqlPoolType.Weighted:
+      return 'Weighted'
+    case GqlPoolType.Stable:
+      return 'Stable'
+    case GqlPoolType.LiquidityBootstrapping:
+      return 'Liquidity Bootstrapping (LBP)'
+    case GqlPoolType.Gyro:
+      return 'Gyro CLP'
+    case GqlPoolType.CowAmm:
+      return 'CoW AMM'
+    case GqlPoolType.Fx:
+      return 'FX'
+    case GqlPoolType.QuantAmmWeighted:
+      return 'BTF'
+    default:
+      return poolType.toLowerCase()
+  }
 }

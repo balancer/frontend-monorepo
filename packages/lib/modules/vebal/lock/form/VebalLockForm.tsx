@@ -18,25 +18,46 @@ import { HumanAmount } from '@balancer/sdk'
 import { LockDurationSlider } from '@repo/lib/modules/vebal/lock/duration/LockDurationSlider'
 import { VebalLockDetailsAccordion } from '@repo/lib/modules/vebal/lock/VebalLockDetailsAccordion'
 import { VebalLockDetails } from '@repo/lib/modules/vebal/lock/VebalLockDetails'
-import { LockMode, useVebalLock } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import {
+  expectedTotalVeBal,
+  LockMode,
+  useVebalLock,
+} from '@repo/lib/modules/vebal/lock/VebalLockProvider'
+import { fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { VebalLockModal } from '@repo/lib/modules/vebal/lock/modal/VebalLockModal'
 import { useRouter } from 'next/navigation'
 import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { getModalLabel } from '@repo/lib/modules/vebal/lock/steps/lock-steps.utils'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ClickableText } from '@repo/lib/shared/components/typography/ClickableText'
 import { Address } from 'viem'
 import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
+import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
+import { WeeklyYieldTooltip } from './WeeklyYieldTooltip'
+import { useGetPoolRewards } from '@repo/lib/modules/pool/useGetPoolRewards'
+import { useVeBALPool } from '../../vote/Votes/MyVotes/MyVotesStats/useVeBALPool'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { GqlPoolAprItem } from '@repo/lib/shared/services/api/generated/graphql'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
-export function VebalLockForm() {
+type Props = {
+  allowEditOnInit?: boolean
+}
+
+export function VebalLockForm({ allowEditOnInit = false }: Props) {
   const { refetchAll } = useVebalLockData()
   const {
     vebalBptToken,
     lpToken,
     setLpToken,
     resetLpToken,
+    previousLockEnd,
     lockedAmount,
+    totalAmount,
     isDisabled,
     disabledReason,
     previewModalDisclosure,
@@ -48,15 +69,18 @@ export function VebalLockForm() {
 
   const router = useRouter()
 
-  function onModalClose(isSuccess: boolean) {
+  const { balanceFor } = useTokenBalances()
+  const bptBalance = balanceFor(vebalBptToken.address)
+
+  function onModalClose(isSuccess: boolean, redirectPath: string) {
     previewModalDisclosure.onClose()
     refetchAll()
     if (isSuccess) {
-      router.push('/vebal/manage')
+      router.push(redirectPath)
     }
   }
 
-  const [isEditingAmount, setIsEditingAmount] = useState(false)
+  const [isEditingAmount, setIsEditingAmount] = useState(allowEditOnInit)
 
   const onEditAmountToggle = (value: boolean) => {
     setIsEditingAmount(value)
@@ -65,18 +89,23 @@ export function VebalLockForm() {
     }
   }
 
-  const isEditAmountDisabled = [LockMode.Extend, LockMode.Unlock].includes(lockMode)
+  const unlockingMode = LockMode.Unlock === lockMode
 
-  useEffect(() => {
-    onEditAmountToggle(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEditAmountDisabled])
+  const amountMode: 'edit' | 'show' = unlockingMode ? 'show' : isEditingAmount ? 'edit' : 'show'
 
-  const amountMode: 'edit' | 'show' = isEditAmountDisabled
-    ? isEditingAmount
-      ? 'edit'
-      : 'show'
-    : 'edit'
+  const { userAddress } = useUserAccount()
+  const { pool, poolIsLoading } = useVeBALPool(userAddress)
+  const { calculatePotentialYield } = useGetPoolRewards(pool || ({} as Pool))
+  const { usdValueForToken } = useTokens()
+  const totalUsdValue = usdValueForToken(vebalBptToken, totalAmount)
+  const weeklyYield = !poolIsLoading ? calculatePotentialYield(totalUsdValue) : '0'
+
+  const hasLockedAmount = lockedAmount && Number(lockedAmount) > 0
+  const currentVeBALAmount = previousLockEnd
+    ? expectedTotalVeBal({ bpt: lockedAmount || '0', lockEndDate: previousLockEnd })
+    : bn(0)
+  const currentTotalUsdValue = usdValueForToken(vebalBptToken, lockedAmount || 0)
+  const currentWeeklyYield = !poolIsLoading ? calculatePotentialYield(currentTotalUsdValue) : '0'
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
@@ -87,17 +116,38 @@ export function VebalLockForm() {
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
+          {bptBalance !== undefined && isZero(bptBalance.amount) && isZero(totalAmount) && (
+            <BalAlert
+              content={
+                <Text color="font.dark">
+                  {`You need to lock the LP token of the ve8020 BAL/WETH pool to get veBAL. Since you
+                    don't have this, you can't get veBAL.`}
+                  <br />
+                  Add liquidity to this pool to get the LP token and came back: <br />
+                  <BalAlertLink href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014">
+                    80% BAL / 20% WETH pool
+                  </BalAlertLink>
+                </Text>
+              }
+              status="info"
+            />
+          )}
+
           <VStack align="start" spacing="sm" w="full">
             <HStack justifyContent="space-between" w="full">
               {isLoading ? (
                 <Skeleton h="18px" w="100px" />
               ) : (
                 <Text fontSize="sm" fontWeight="700" lineHeight="18px">
-                  {amountMode === 'show' ? 'Locked amount' : 'Amount to lock'}
+                  {amountMode === 'show'
+                    ? 'Locked amount'
+                    : hasLockedAmount
+                      ? 'Amount to add to your existing lock'
+                      : 'Amount to lock'}
                 </Text>
               )}
 
-              {!isLoading && isEditAmountDisabled && (
+              {!isLoading && !unlockingMode && (
                 <ClickableText
                   fontSize="sm"
                   fontWeight="700"
@@ -108,14 +158,16 @@ export function VebalLockForm() {
                 </ClickableText>
               )}
             </HStack>
+
             {amountMode === 'edit' && (
               <TokenInput
                 address={vebalBptToken.address}
                 chain={vebalBptToken.chain}
                 onChange={e => setLpToken(e.currentTarget.value as HumanAmount)}
-                value={lpToken}
+                value={lpToken || ''}
               />
             )}
+
             {amountMode === 'show' && (
               <Card variant="level2">
                 <TokenRowWithDetails
@@ -140,6 +192,7 @@ export function VebalLockForm() {
               </Card>
             )}
           </VStack>
+
           <VStack align="start" spacing="sm" w="full">
             <HStack justifyContent="space-between" spacing="md" w="full">
               <Text fontSize="sm" fontWeight="700" lineHeight="18px">
@@ -172,30 +225,32 @@ export function VebalLockForm() {
                   <Text fontSize="sm" fontWeight="500" lineHeight="16px">
                     Total veBAL
                   </Text>
-                  <Text fontSize="md" fontWeight="700" lineHeight="16px">
-                    {expectedVeBalAmount.totalExpectedVeBal.eq(0)
-                      ? '-'
-                      : fNum('token', expectedVeBalAmount.totalExpectedVeBal)}
-                  </Text>
+                  <HStack>
+                    <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
+                      {`${fNum('token', currentVeBALAmount)}`}
+                    </Text>
+                    <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
+                      ➔
+                    </Text>
+                    <Text fontSize="md" fontWeight="700" lineHeight="16px">
+                      {fNum('token', expectedVeBalAmount.totalExpectedVeBal)}
+                    </Text>
+                  </HStack>
                 </VStack>
               </Card>
             </GridItem>
             <GridItem>
-              {/* TO-DO Potential min. weekly yield */}
-              {/* <Card minHeight="full" variant="subSection" w="full" p={['sm', 'ms']}>
-                <VStack align="start" gap="sm">
-                  <Text variant="special" fontSize="sm" lineHeight="16px" fontWeight="500">
-                    Potential min. weekly yield
-                  </Text>
-                  <HStack spacing="xs">
-                    <Text variant="special" fontSize="md" lineHeight="16px" fontWeight="700">
-                      $15.56
-                    </Text>
-
-                    <Icon as={StarsIcon} gradFrom={rewardsGradFrom} gradTo={rewardsGradTo} />
-                  </HStack>
-                </VStack>
-              </Card> */}
+              {poolIsLoading ? (
+                <Skeleton h="18px" w="100px" />
+              ) : (
+                <WeeklyYieldTooltip
+                  aprItems={pool?.dynamicData.aprItems as GqlPoolAprItem[]}
+                  currentWeeklyYield={currentWeeklyYield}
+                  pool={pool as Pool}
+                  totalUsdValue={totalUsdValue.toString()}
+                  weeklyYield={weeklyYield}
+                />
+              )}
             </GridItem>
           </Grid>
           <Tooltip label={isDisabled ? disabledReason : undefined}>

@@ -414,7 +414,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
       setPriceImpact(calcMarketPriceImpact(tokenInUsd, tokenOutUsd))
     } else if (simulationQuery.data) {
       setPriceImpact(undefined)
-      setPriceImpactLevel('unknown')
+      setPriceImpactLevel('low')
     }
   }
 

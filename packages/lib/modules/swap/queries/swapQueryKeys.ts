@@ -2,8 +2,15 @@ import { BuildSwapInputs, SimulateSwapInputs } from '../swap.types'
 
 const baseKey = 'swap'
 
-function simulateInputKey({ swapAmount, swapType, tokenIn, tokenOut, chain }: SimulateSwapInputs) {
-  return `${swapAmount}:${swapType}:${tokenIn}:${tokenOut}:${chain}`
+function simulateInputKey({
+  swapAmount,
+  swapType,
+  tokenIn,
+  tokenOut,
+  chain,
+  poolIds,
+}: SimulateSwapInputs) {
+  return `${swapAmount}:${swapType}:${tokenIn}:${tokenOut}:${chain}:${JSON.stringify(poolIds)}`
 }
 
 type BuildKeyParams = Pick<

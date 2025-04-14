@@ -1,7 +1,6 @@
 import { Stack, Button, VStack, useDisclosure, HStack, Tooltip, Text } from '@chakra-ui/react'
 import { usePathname, useRouter } from 'next/navigation'
 import PoolMetaBadges from './PoolMetaBadges'
-
 import { usePool } from '../../PoolProvider'
 import { getPoolAddBlockedReason, isFx, shouldBlockAddLiquidity } from '../../pool.helpers'
 import { AnalyticsEvent, trackEvent } from '@repo/lib/shared/services/fathom/Fathom'
@@ -15,6 +14,7 @@ import { useState } from 'react'
 import { getXavePoolLink } from '../../pool.utils'
 import { PoolAdvancedOptions } from './PoolAdvancedOptions'
 import { usePoolMetadata } from '../../metadata/usePoolMetadata'
+import { formatTextListAsItems } from '@repo/lib/shared/utils/text-format'
 
 export function PoolHeader() {
   const pathname = usePathname()
@@ -26,6 +26,7 @@ export function PoolHeader() {
   const poolMetadata = usePoolMetadata(pool)
 
   const isAddLiquidityBlocked = shouldBlockAddLiquidity(pool, poolMetadata)
+  const blockingReasons = formatTextListAsItems(getPoolAddBlockedReason(pool))
 
   function openRedirectModal(partner: RedirectPartner) {
     setRedirectPartner(partner)
@@ -65,12 +66,17 @@ export function PoolHeader() {
             </Text>
           )}
         </VStack>
-
         <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
           <PoolTags />
           <HStack spacing="sm">
-            {/* TODO: Add block reason alerts*/}
-            <Tooltip label={isAddLiquidityBlocked ? getPoolAddBlockedReason(pool) : ''}>
+            <Tooltip
+              isDisabled={!blockingReasons}
+              label={
+                <Text color="primaryTextColor" whiteSpace="pre-line">
+                  {blockingReasons}
+                </Text>
+              }
+            >
               <Button
                 isDisabled={isAddLiquidityBlocked}
                 onClick={handleClick}

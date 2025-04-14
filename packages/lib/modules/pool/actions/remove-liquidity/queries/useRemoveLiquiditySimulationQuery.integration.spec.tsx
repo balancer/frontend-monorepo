@@ -1,5 +1,4 @@
-import { poolId } from '@repo/lib/debug-helpers'
-import { testHook } from '@repo/lib/test/utils/custom-renderers'
+import { DefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
@@ -17,16 +16,19 @@ async function testQuery(humanBptIn: HumanAmount) {
     RemoveLiquidityType.Proportional
   )
   const emptyTokenOut = '' as Address // We don't use it but it is required to simplify TS checks
-  const { result } = testHook(() =>
-    useRemoveLiquiditySimulationQuery({
-      chainId: 1,
-      handler,
-      poolId,
-      humanBptIn,
-      tokenOut: emptyTokenOut,
-      tokensOut: [],
-      enabled: true,
-    })
+  const { result } = testHook(
+    () =>
+      useRemoveLiquiditySimulationQuery({
+        chainId: 1,
+        handler,
+        humanBptIn,
+        tokenOut: emptyTokenOut,
+        tokensOut: [],
+        enabled: true,
+      }),
+    {
+      wrapper: DefaultPoolTestProvider,
+    }
   )
   return result
 }

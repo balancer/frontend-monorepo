@@ -178,6 +178,12 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
         ...PoolTokens
       }
     }
+    ... on GqlPoolQuantAmmWeighted {
+      hasAnyAllowedBuffer
+      poolTokens {
+        ...PoolTokens
+      }
+    }
   }
 }
 

@@ -33,18 +33,17 @@ import { PriceImpactAccordion } from '@repo/lib/modules/price-impact/PriceImpact
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { usePriceImpact } from '@repo/lib/modules/price-impact/PriceImpactProvider'
 import { parseUnits } from 'viem'
-import { SimulationError } from '@repo/lib/shared/components/errors/SimulationError'
+import { RemoveSimulationError } from '@repo/lib/shared/components/errors/RemoveSimulationError'
 import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { isBoosted } from '../../../pool.helpers'
-import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { SettingsAlert } from '@repo/lib/modules/user/settings/SettingsAlert'
 
 export function RemoveLiquidityForm() {
   const { pool } = usePool()
-  const { shouldUseSignatures } = useUserSettings()
 
   const TABS: ButtonGroupOption[] = [
     {
@@ -109,6 +108,10 @@ export function RemoveLiquidityForm() {
     }
   }
 
+  function setProportionalTab() {
+    toggleTab(TABS[0])
+  }
+
   const onModalClose = () => {
     // restart polling for token prices when modal is closed again
     startTokenPricePolling()
@@ -143,13 +146,7 @@ export function RemoveLiquidityForm() {
           </CardHeader>
           <VStack align="start" spacing="md">
             <SafeAppAlert />
-            {!shouldUseSignatures && (
-              <BalAlert
-                content="All approvals will require gas transactions. You can enable signatures in your settings."
-                status="warning"
-                title="Signatures disabled"
-              />
-            )}
+            <SettingsAlert />
             {!requiresProportionalInput(pool) && (
               <HStack>
                 <ButtonGroup
@@ -234,7 +231,11 @@ export function RemoveLiquidityForm() {
                 />
               )}
             </VStack>
-            <SimulationError simulationQuery={simulationQuery} />
+            <RemoveSimulationError
+              goToProportionalRemoves={setProportionalTab}
+              priceImpactQuery={priceImpactQuery}
+              simulationQuery={simulationQuery}
+            />
             <TooltipWithTouch label={isDisabled ? disabledReason : ''}>
               <Button
                 isDisabled={isDisabled || isWarning}

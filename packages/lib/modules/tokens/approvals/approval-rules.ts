@@ -93,3 +93,20 @@ function isDoubleApprovalRequired(
 export function areEmptyRawAmounts(amountsIn: RawAmount[]) {
   return !amountsIn || amountsIn.length === 0 || amountsIn.every(amount => amount.rawAmount === 0n)
 }
+
+export function isTheApprovedAmountEnough(
+  tokenAllowance: bigint,
+  requiredRawAmount: bigint,
+  isApprovingZeroForDoubleApproval: boolean,
+  nextTokenToApprove?: TokenAmountToApprove
+) {
+  if (isApprovingZeroForDoubleApproval && nextTokenToApprove) {
+    // Edge case USDT case is completed if:
+    // - The allowance is 0n
+    // - The allowance is greater than the required amount (of the next step)
+    return tokenAllowance === 0n || tokenAllowance >= nextTokenToApprove.requiredRawAmount
+  }
+
+  const isAllowed = tokenAllowance >= requiredRawAmount
+  return requiredRawAmount > 0n && isAllowed
+}

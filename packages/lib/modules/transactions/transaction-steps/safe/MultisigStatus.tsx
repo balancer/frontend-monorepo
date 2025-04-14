@@ -1,6 +1,6 @@
 import { Button, Card, HStack, Text, VStack } from '@chakra-ui/react'
 import { SupportedChainId } from '@repo/lib/config/config.types'
-import { GatewayTransactionDetails } from '@safe-global/safe-apps-sdk'
+import { GatewayTransactionDetails, TransactionStatus } from '@safe-global/safe-apps-sdk'
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
 import { Hex } from 'viem'
@@ -22,8 +22,10 @@ export function MultisigStatus({ chainId, safeTxHash, details, currentStep }: Mu
   if (details.detailedExecutionInfo?.type !== 'MULTISIG') return null
   const safeTxStatus = details.txStatus
 
-  const isAwaitingConfirmations = safeTxStatus === 'AWAITING_CONFIRMATIONS'
-  const isCancelled = safeTxStatus === 'CANCELLED'
+  const isSuccess = safeTxStatus === TransactionStatus.SUCCESS
+  const isAwaitingConfirmations = safeTxStatus === TransactionStatus.AWAITING_CONFIRMATIONS
+  const isCancelled = safeTxStatus === TransactionStatus.CANCELLED
+  const isFailed = safeTxStatus === TransactionStatus.FAILED
 
   const isTxBatch = hasSomePendingNestedTxInBatch(currentStep)
 
@@ -34,18 +36,19 @@ export function MultisigStatus({ chainId, safeTxHash, details, currentStep }: Mu
           {isTxBatch ? 'Transaction bundle status' : 'Multisig status'}
         </Text>
 
-        {isAwaitingConfirmations ? (
+        {isAwaitingConfirmations && (
           <HStack>
             <Text color="grayText">{getSignConfirmationsLabel(details)}</Text>
             <Text color="font.primary">{getRemainingSignaturesLabel(details)}</Text>
           </HStack>
-        ) : (
+        )}
+        {isSuccess && (
           <HStack>
             <Text color="grayText">{getSignConfirmationsLabel(details)}</Text>
             <Text color="font.primary">Enough signatures</Text>
           </HStack>
         )}
-
+        {isFailed && <Text color="grayText">Transaction failed</Text>}
         {isCancelled && <Text color="grayText">The transaction was cancelled</Text>}
       </VStack>
       <Button

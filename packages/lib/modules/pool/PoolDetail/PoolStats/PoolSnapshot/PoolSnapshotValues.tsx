@@ -3,6 +3,7 @@
 import { memo, useMemo } from 'react'
 import { HStack, Heading, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
+import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePool } from '../../../PoolProvider'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
@@ -16,12 +17,12 @@ type PoolStatsValues = {
 }
 
 export function PoolSnapshotValues() {
-  const { pool, chain, tvl } = usePool()
+  const { chain, pool, tvl } = usePool()
   const { toCurrency } = useCurrency()
 
   const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
-  const { tokens, weeklyRewards } = useGetPoolRewards(pool)
+  const { tokens, weeklyRewards, weeklyRewardsByToken } = useGetPoolRewards(pool)
 
   const poolStatsValues: PoolStatsValues | undefined = useMemo(() => {
     if (pool) {
@@ -32,11 +33,12 @@ export function PoolSnapshotValues() {
         income24h: isCowAmmPool(pool.type)
           ? toCurrency(pool.dynamicData.surplus24h)
           : toCurrency(pool.dynamicData.fees24h),
-        weeklyRewards: toCurrency(weeklyRewards),
+        weeklyRewards: weeklyRewards ? toCurrency(weeklyRewards.toString()) : 'N/A',
       }
     }
+    return undefined
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pool, tvl])
+  }, [pool, tvl, weeklyRewards])
 
   const incomeLabel = isCowAmmPool(pool.type) ? 'Surplus (24h)' : 'Fees (24h)'
 
@@ -63,8 +65,8 @@ export function PoolSnapshotValues() {
           pool={pool}
           poolId={pool.id}
           textProps={{
-            fontWeight: 'bold',
             fontSize: '2xl',
+            fontWeight: 'bold',
             lineHeight: '28px',
           }}
         />
@@ -88,7 +90,9 @@ export function PoolSnapshotValues() {
             <Heading size="h4">
               {poolStatsValues.weeklyRewards ? poolStatsValues.weeklyRewards : 'N/A'}
             </Heading>
-            <TokenIconStack chain={chain} size={20} tokens={tokens} />
+            <TokenStackPopover chain={chain} rewardsByToken={weeklyRewardsByToken} tokens={tokens}>
+              <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
+            </TokenStackPopover>
           </HStack>
         ) : (
           <Skeleton height="30px" w="100px" />

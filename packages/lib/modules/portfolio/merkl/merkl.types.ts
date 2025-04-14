@@ -1,31 +1,42 @@
 /* Types manually extracted from this api call example:
- https://api.merkl.xyz/v3/rewards?user=0x1B72Bac3772050FDCaF468CcE7e20deb3cB02d89
+ https://api.merkl.xyz/v4/users/0x1B72Bac3772050FDCaF468CcE7e20deb3cB02d89/rewards?chainId=8453
  */
 
-export type MerklRewardsSchema = {
-  [key: ChainId]: Campaign
-}
-
-type ChainId = number
-
-type Campaign = {
-  campaignData: {
-    [key: string]: CampaignData
+export type MerklRewardsResponse = Array<{
+  chain: {
+    id: number
+    name: string
+    icon: string
+    Explorer: Array<{
+      id: string
+      type: string
+      url: string
+      chainId: number
+    }>
   }
+  rewards: Array<MerklReward>
+}>
+
+export type MerklReward = {
+  root: string
+  recipient: string
+  amount: string
+  claimed: string
+  pending: string
+  proofs: string[]
+  token: {
+    address: string
+    chainId: number
+    symbol: string
+    decimals: number
+  }
+  breakdowns: Array<MerklRewardBreakdown>
 }
 
-type CampaignData = {
-  [key: string]: CampaignDataEntry
-}
-
-type CampaignDataEntry = {
-  accumulated: string
-  auxiliaryData1: string
-  auxiliaryData2: string
-  decimals: number
-  mainParameter: string
-  type: number
-  symbol: string
-  token: string
-  unclaimed: string
+export type MerklRewardBreakdown = {
+  reason: string
+  amount: string
+  claimed: string
+  pending: string
+  campaignId: string
 }

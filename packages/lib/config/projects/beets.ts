@@ -17,8 +17,9 @@ export const ProjectConfigBeets: ProjectConfig = {
   ensNetwork: GqlChain.Sonic,
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b', // TODO update this for sonic & optimism,
   externalLinks: {
-    poolComposerUrl: 'https://ma.beets.fi/compose',
+    poolComposerUrl: 'https://pool-creator.balancer.fi/beets',
   },
+  merklRewardsChains: [GqlChain.Sonic],
   options: {
     poolDisplayType: PoolDisplayType.Name,
     hidePoolTags: ['RWA', 'VE8020'],
@@ -54,7 +55,7 @@ export const ProjectConfigBeets: ProjectConfig = {
       },
       {
         iconType: 'medium',
-        href: 'https://beethovenxio.medium.com/',
+        href: 'https://beetsfi.medium.com/',
       },
       {
         iconType: 'github',
@@ -90,7 +91,7 @@ export const ProjectConfigBeets: ProjectConfig = {
       {
         title: 'Ecosystem',
         links: [
-          { label: 'Governance', href: 'https://snapshot.org/#/beets.eth', isExternal: true },
+          { label: 'Governance', href: 'https://snapshot.box/#/s:beets.eth', isExternal: true },
           {
             label: 'Bug bounties',
             href: 'https://immunefi.com/bug-bounty/balancer',

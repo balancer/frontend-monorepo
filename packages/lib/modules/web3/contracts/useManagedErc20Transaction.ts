@@ -28,6 +28,7 @@ export interface ManagedErc20TransactionInput {
   tokenAddress: Address
   functionName: ContractFunctionName<Erc20Abi, WriteAbiMutability>
   labels: TransactionLabels
+  isComplete?: () => boolean
   chainId: SupportedChainId
   args?: ContractFunctionArgs<Erc20Abi, WriteAbiMutability> | null
   enabled: boolean

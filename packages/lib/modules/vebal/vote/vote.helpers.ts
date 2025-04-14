@@ -25,7 +25,7 @@ export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): Voti
     type: vote.type,
     chain: vote.chain,
     /*
-    TODO:
+    TODO: (votes)
     Tokens in veBalGetVotingList query have type GqlVotingGaugeToken which does not have all the properties of PoolToken
     That means that token pills will be different for voting pools (unless we change the backend types or we query and map the pool list tokens):
     - Showing symbol instead of name
@@ -39,12 +39,12 @@ export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): Voti
       )
     ),
     address: vote.address,
-    protocolVersion: vote.protocolVersion, // fix: (votes) no data
+    protocolVersion: vote.protocolVersion,
     symbol: vote.symbol,
     // TODO: API is not returning the following fields in GqlVotingPool yet
-    hook: undefined, // fix: (votes) no data
-    hasErc4626: false, // fix: (votes) no data
-    tags: [], // fix: (votes) no data
+    hook: undefined,
+    hasErc4626: false,
+    tags: [],
   }
 }
 

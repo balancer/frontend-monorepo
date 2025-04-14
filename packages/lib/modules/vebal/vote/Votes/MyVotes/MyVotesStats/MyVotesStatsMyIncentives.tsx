@@ -1,9 +1,8 @@
 import { HStack, Skeleton, Text } from '@chakra-ui/react'
-import React from 'react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { MyVotesStatsCard } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVotesStatsCard'
 import { GainBadge } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
-import { MyIncentivesAprTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesAprTooltip'
+import { MyIncentivesTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesTooltip'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 
 interface Props {
@@ -17,7 +16,7 @@ export function MyVotesStatsMyIncentives({ myVebalBalance, loading }: Props) {
 
   return (
     <MyVotesStatsCard
-      headerText="My incentives (1w)"
+      headerText="My potential bribes (1w)"
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
@@ -27,10 +26,7 @@ export function MyVotesStatsMyIncentives({ myVebalBalance, loading }: Props) {
               {toCurrency(totalInfo.totalRewardValue, { abbreviated: false })}
             </Text>
             {totalInfo.totalRewardValueGain && <GainBadge gain={totalInfo.totalRewardValueGain} />}
-            <MyIncentivesAprTooltip
-              totalBeforeVoteEdits={totalInfo.prevTotalRewardValue}
-              totalWithVoteEdits={totalInfo.totalRewardValue}
-            />
+            <MyIncentivesTooltip />
           </HStack>
         ) : undefined
       }

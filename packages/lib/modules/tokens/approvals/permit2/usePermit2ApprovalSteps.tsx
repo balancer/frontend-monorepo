@@ -7,14 +7,16 @@ import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { getRequiredTokenApprovals, areEmptyRawAmounts, RawAmount } from '../approval-rules'
 import { ApprovalAction, buildTokenApprovalLabels } from '../approval-labels'
-import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { TransactionStep, TxCall } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
-import { get24HoursFromNowInSecs } from '@repo/lib/shared/utils/time'
+import { get24HoursFromNowInSecs, getNowTimestampInSecs } from '@repo/lib/shared/utils/time'
 import { usePermit2Allowance } from './usePermit2Allowance'
 import { useTokens } from '../../TokensProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { getMaxAmountForPermit2 } from './permit2.helpers'
+import { Address, encodeFunctionData } from 'viem'
+import { permit2Abi } from '@balancer/sdk'
 
 export type Params = {
   chain: GqlChain
@@ -28,7 +30,7 @@ export type Params = {
 }
 
 /**
- * Hook to generate transaction steps for Permit2 token approval transactions.
+ * Hook to generate transaction steps for Permit2 token approval transactions (when signatures are disabled)
  *
  * @param {Object} params - The parameters object
  * @param {GqlChain} params.chain - The chain ID where the transaction will occur
@@ -58,8 +60,8 @@ export function usePermit2ApprovalSteps({
   const chainId = getChainId(chain)
   const nativeAssetAddress = getNativeAssetAddress(chain)
   const networkConfig = getNetworkConfig(chain)
-  const permit2Address = networkConfig.contracts.permit2!
-  const permitExpiry = get24HoursFromNowInSecs()
+  const permit2Address = networkConfig.contracts.permit2
+  const permitExpiry = get24HoursFromNowInSecs() * 3 // extend expiry to 3 days cause this is a gas tx (when signatures are disabled)
   const spenderAddress = shouldUseCompositeLiquidityRouterBoosted
     ? networkConfig.contracts.balancer.compositeLiquidityRouterBoosted!
     : networkConfig.contracts.balancer.router!
@@ -78,7 +80,7 @@ export function usePermit2ApprovalSteps({
     [filteredApprovalAmounts]
   )
 
-  const { allowanceFor, isLoadingPermit2Allowances, refetchPermit2Allowances } =
+  const { allowanceFor, expirations, isLoadingPermit2Allowances, refetchPermit2Allowances } =
     usePermit2Allowance({
       chainId,
       owner: userAddress,
@@ -103,7 +105,7 @@ export function usePermit2ApprovalSteps({
         symbol: approvalSymbol,
       } = tokenAmountToApprove
 
-      const id = tokenAddress
+      const id = tokenAddress + '-permit2Approval' // To avoid key collisions with default token approvals
       const token = getToken(tokenAddress, chain)
       const amountToApprove = getMaxAmountForPermit2(requestedRawAmount)
       // Compute symbol using first defined value
@@ -120,23 +122,27 @@ export function usePermit2ApprovalSteps({
 
       // Check if the token has been approved
       const isComplete = () => {
+        const isNotExpired = !!expirations && expirations[tokenAddress] > getNowTimestampInSecs()
         const isAllowed = allowanceFor(tokenAddress) >= amountToApprove
-        return requiredRawAmount > 0n && isAllowed
+        return requiredRawAmount > 0n && isAllowed && isNotExpired
       }
 
+      const isTxEnabled = !isLoadingPermit2Allowances && !!permit2Address
       const props: ManagedTransactionInput = {
-        contractAddress: permit2Address,
+        contractAddress: permit2Address || '',
         contractId: 'permit2',
         functionName: 'approve',
         labels,
         chainId,
         args: [tokenAddress, spenderAddress, amountToApprove, permitExpiry],
-        enabled: !isLoadingPermit2Allowances,
+        enabled: isTxEnabled,
         txSimulationMeta: sentryMetaForWagmiSimulation(
           'Error in wagmi tx simulation: Approving token',
           tokenAmountToApprove
         ),
       }
+
+      const args = props.args as Permit2ApproveArgs
 
       return {
         id,
@@ -144,6 +150,7 @@ export function usePermit2ApprovalSteps({
         labels,
         isComplete,
         renderAction: () => <ManagedTransactionButton id={id} key={id} {...props} />,
+        batchableTxCall: isTxEnabled ? buildBatchableTxCall({ permit2Address, args }) : undefined,
         onSuccess: () => refetchPermit2Allowances(),
       } as const satisfies TransactionStep
     })
@@ -152,5 +159,25 @@ export function usePermit2ApprovalSteps({
   return {
     isLoading: isLoadingPermit2Allowances,
     steps,
+  }
+}
+
+type Permit2ApproveArgs = [Address, Address, bigint, number]
+// Only used when wallet supports atomic bath (smart accounts like Gnosis Safe)
+function buildBatchableTxCall({
+  permit2Address,
+  args,
+}: {
+  permit2Address: Address
+  args: Permit2ApproveArgs
+}): TxCall {
+  const data = encodeFunctionData({
+    abi: permit2Abi,
+    functionName: 'approve',
+    args,
+  })
+  return {
+    to: permit2Address,
+    data: data,
   }
 }

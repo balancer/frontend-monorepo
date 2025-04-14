@@ -124,14 +124,18 @@ export interface UseGaugeVotesParams {
 export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
   const { userAddress, isConnected } = useUserAccount()
 
-  const thisWeekTimestamp = toUnixTimestamp(Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs)
+  const thisWeek = Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs
+  const gaugeWeightThisPeriodQuery = useGaugeRelativeWeightsWrite(
+    gaugeAddresses,
+    toUnixTimestamp(thisWeek)
+  )
 
-  const nextWeekTimestamp = useMemo(() => {
-    return toUnixTimestamp(Math.floor((Date.now() + oneWeekInMs) / oneWeekInMs) * oneWeekInMs)
-  }, [])
+  const nextWeek = thisWeek + oneWeekInMs
+  const gaugeWeightNextPeriodQuery = useGaugeRelativeWeightsWrite(
+    gaugeAddresses,
+    toUnixTimestamp(nextWeek)
+  )
 
-  const gaugeWeightThisPeriodQuery = useGaugeRelativeWeightsWrite(gaugeAddresses, thisWeekTimestamp)
-  const gaugeWeightNextPeriodQuery = useGaugeRelativeWeightsWrite(gaugeAddresses, nextWeekTimestamp)
   const userVotesQuery = useVoteUserSlopes(isConnected ? gaugeAddresses : [], userAddress)
   const lastUserVotesQuery = useLastUserVotes(isConnected ? gaugeAddresses : [], userAddress)
 

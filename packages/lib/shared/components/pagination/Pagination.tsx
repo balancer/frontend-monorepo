@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, ArrowRightIcon } from '@chakra-ui/icons'
-import { HStack, IconButton, Select, Text, Center, Stack } from '@chakra-ui/react'
+import { HStack, IconButton, Select, Text, Center, Stack, StyleProps } from '@chakra-ui/react'
 
-interface Props {
+export interface PaginationProps {
   goToFirstPage: () => void
   goToLastPage: () => void
   goToNextPage: () => void
@@ -30,7 +30,7 @@ export function Pagination({
   changeSize = true,
   hideDropdown = false,
   ...rest
-}: Props) {
+}: PaginationProps & StyleProps) {
   return (
     <Stack
       direction={{ base: 'column', lg: 'row' }}
