@@ -56,7 +56,7 @@ import ButtonGroup, {
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
 import Link from 'next/link'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 
@@ -544,8 +544,11 @@ export function PoolListFilters() {
   }
 
   const { options, externalLinks } = PROJECT_CONFIG
-  const subPath = !options.showVeBal ? '' : isCowPath ? 'cow' : 'v3'
-  const poolCreatorUrl = `${externalLinks.poolComposerUrl}/${subPath}`
+  const subPath = isCowPath ? 'cow' : 'v3'
+
+  const poolCreatorUrl = isBalancer
+    ? `${externalLinks.poolComposerUrl}/${subPath}`
+    : externalLinks.poolComposerUrl
 
   return (
     <VStack w="full">
