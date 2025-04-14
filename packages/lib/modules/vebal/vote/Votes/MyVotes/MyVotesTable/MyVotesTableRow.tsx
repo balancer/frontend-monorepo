@@ -35,7 +35,7 @@ import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeigh
 import { isVotingTimeLocked } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { formatUnits } from 'viem'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -70,8 +70,6 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
   const { veBALBalance, noVeBALBalance } = useVebalUserData()
-  // FIXME: [JUANJO] (votes) calculations should be done with bigint
-  const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
   const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true) || isGaugeExpired
 
@@ -112,14 +110,14 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
             </Link>
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
-            {vote.votingIncentive && typeof myVebalBalance === 'number' ? (
+            {vote.votingIncentive ? (
               <Text>
                 {toCurrency(
                   calculateMyVoteRewardsValue(
                     votedVotesWeights[vote.id] ?? 0,
                     editVotesWeights[vote.id] ?? 0,
                     vote,
-                    myVebalBalance
+                    veBALBalance
                   ),
                   { abbreviated: false }
                 )}
@@ -141,7 +139,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
               timeLocked={timeLocked}
               timeLockedEndDate={votingTimeLockedEndDate(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
               variant="primary"
-              weight={vote.gaugeVotes?.userVotes ?? '0'}
+              weight={bn(vote.gaugeVotes?.userVotes || '0')}
             />
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>

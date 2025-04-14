@@ -13,7 +13,7 @@ import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 import { bpsToPercentage } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 interface Props {
-  unallocatedWeight: number
+  unallocatedWeight: BigNumber
   usePortal?: boolean
 }
 

@@ -1,4 +1,4 @@
-import { bn, fNum, safeTokenFormat, BN_LOWER_THRESHOLD } from './numbers'
+import { bn, fNum, safeTokenFormat, BN_LOWER_THRESHOLD, sum } from './numbers'
 
 test('Stringifies bigints', () => {
   expect(JSON.stringify(12345n)).toBe('"12345"')
@@ -159,4 +159,27 @@ test('all formats types do not break with super small inputs (AKA dust)', () => 
   expect(fNum('slippage', dust)).toBe('<0.01%')
   expect(fNum('token', dust)).toBe('< 0.00001')
   expect(fNum('weight', dust)).toBe('<0.01%')
+})
+
+describe('sum list of bignumbers', () => {
+  const identityFn = (n: any) => n
+
+  it('should sum an empty list', () => {
+    const result = sum([], identityFn)
+    expect(result.isEqualTo(bn(0))).toBe(true)
+  })
+
+  it('should sum non empty list', () => {
+    const result = sum([bn(1), bn(2)], identityFn)
+    expect(result.isEqualTo(bn(3))).toBe(true)
+  })
+
+  it('should apply extract function', () => {
+    const a = { value: bn(4) }
+    const b = { value: bn(5) }
+
+    const result = sum([a, b], x => x.value)
+
+    expect(result.isEqualTo(bn(9))).toBe(true)
+  })
 })

@@ -30,7 +30,6 @@ import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
 import { AlertTriangle } from 'react-feather'
 import NextLink from 'next/link'
-import { formatUnits } from 'viem'
 import { getVeBalManagePath } from '../../../vebal-navigation'
 
 export function MyVotes() {
@@ -41,9 +40,6 @@ export function MyVotes() {
   const { isConnected } = useUserAccount()
 
   const { isLoading: vebalUserDataLoading, veBALBalance, noVeBALBalance } = useVebalUserData()
-
-  // FIXME: [JUANJO] (votes) everything needs a number here, but we should work with bigint
-  const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
   const loading = myVotesLoading || vebalUserDataLoading
 
@@ -67,13 +63,13 @@ export function MyVotes() {
 
       <Grid gap="md" templateColumns="repeat(4, 1fr)" templateRows="auto 1fr" w="full">
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-          <MyVotesStatsMyVebal loading={loading} myVebalBalance={myVebalBalance} />
+          <MyVotesStatsMyVebal loading={loading} myVebalBalance={veBALBalance} />
         </GridItem>
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-          <MyVotesStatsAverageReward loading={loading} myVebalBalance={myVebalBalance} />
+          <MyVotesStatsAverageReward loading={loading} />
         </GridItem>
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-          <MyVotesStatsMyIncentives loading={loading} myVebalBalance={myVebalBalance} />
+          <MyVotesStatsMyIncentives loading={loading} />
         </GridItem>
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsMyIncentivesOptimized />

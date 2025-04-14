@@ -11,7 +11,7 @@ import { MyVebalChargeTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes
 import { getVeBalManagePath } from '@repo/lib/modules/vebal/vebal-navigation'
 
 interface Props {
-  myVebalBalance: number | undefined
+  myVebalBalance: bigint
   loading: boolean
 }
 
@@ -43,7 +43,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
-        ) : myVebalBalance === 0 ? (
+        ) : myVebalBalance === 0n ? (
           <HStack spacing="xs">
             <Text color="font.maxContrast">&mdash;</Text>
             {isLockExpired && (
@@ -64,7 +64,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
               </Tooltip>
             )}
           </HStack>
-        ) : myVebalBalance !== undefined ? (
+        ) : (
           <HStack spacing="xs">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
               {balance}
@@ -78,7 +78,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
               />
             )}
           </HStack>
-        ) : undefined
+        )
       }
       rightContent={
         loading ? (
