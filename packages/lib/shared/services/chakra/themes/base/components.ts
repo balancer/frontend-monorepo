@@ -511,7 +511,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             transform: 'none',
           },
           _dark: {
-            color: 'white',
+            color: 'background.level3',
           },
         },
         buttonGroupInactiveGray: {

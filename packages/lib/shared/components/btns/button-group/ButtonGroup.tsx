@@ -110,7 +110,7 @@ function GroupOptionButton({
       {isActive && (
         <Box
           as={motion.div}
-          bg={isGray ? 'background.level2' : 'background.button.secondary'}
+          bg="background.button.secondary"
           borderRadius="4px"
           inset="0"
           layoutId={`active-${groupId}`}
