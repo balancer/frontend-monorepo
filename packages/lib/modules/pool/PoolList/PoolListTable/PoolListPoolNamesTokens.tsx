@@ -4,6 +4,7 @@ import { useState, useCallback, memo, useMemo } from 'react'
 import ButtonGroupComponent, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
+import { Box } from '@chakra-ui/react'
 
 const OPTIONS = [
   { value: PoolDisplayType.Name, label: 'Pool name' },
@@ -29,13 +30,15 @@ function PoolListPoolNamesTokensComponent() {
   )
 
   return (
-    <ButtonGroupComponent
-      currentOption={option}
-      groupId="pool-display-type"
-      onChange={handleOptionChange}
-      options={OPTIONS}
-      size="xxs"
-    />
+    <Box w="fit-content">
+      <ButtonGroupComponent
+        currentOption={option}
+        groupId="pool-display-type"
+        onChange={handleOptionChange}
+        options={OPTIONS}
+        size="xxs"
+      />
+    </Box>
   )
 }
 
