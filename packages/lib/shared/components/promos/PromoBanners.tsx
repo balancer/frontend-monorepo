@@ -20,7 +20,11 @@ interface PromoItem {
   linkText?: string
   linkURL?: string
   linkExternal?: boolean
-  bgImage?: {
+  bgImageActive?: {
+    directory: string
+    imgName: string
+  }
+  bgImageInactive?: {
     directory: string
     imgName: string
   }
@@ -38,9 +42,13 @@ const promoData: PromoItem[] = [
     linkText: 'Learn more',
     linkURL: 'https://docs.balancer.fi/concepts/explore-available-balancer-pools/boosted-pool.html',
     linkExternal: true,
-    bgImage: {
-      directory: '/images/promos/gyro/',
-      imgName: 'bg',
+    bgImageActive: {
+      directory: '/images/promos/promo-banner/',
+      imgName: 'bg-active0',
+    },
+    bgImageInactive: {
+      directory: '/images/promos/promo-banner/',
+      imgName: 'bg-inactive0',
     },
   },
   {
@@ -48,15 +56,19 @@ const promoData: PromoItem[] = [
     icon: <PromoVThreeIcon size={44} />,
     title: 'Balancer v3 is live and thriving!',
     description:
-      'A simple, flexible, powerful platform to innovate upon and build the future of AMMs. Battle-tested in production since November.',
+      'A simple, flexible, powerful platform to innovate upon and build the future of AMMs. Battle-tested on-chain since November.',
     buttonText: 'View pools',
     buttonLink: 'pools?protocolVersion=3',
     linkText: 'Learn more',
     linkURL: 'https://docs.balancer.fi/partner-onboarding/balancer-v3/v3-overview.html',
     linkExternal: true,
-    bgImage: {
-      directory: '/images/promos/gyro/',
-      imgName: 'bg',
+    bgImageActive: {
+      directory: '/images/promos/promo-banner/',
+      imgName: 'bg-active1',
+    },
+    bgImageInactive: {
+      directory: '/images/promos/promo-banner/',
+      imgName: 'bg-inactive1',
     },
   },
   {
@@ -69,9 +81,13 @@ const promoData: PromoItem[] = [
     linkText: 'Learn more',
     linkURL: 'https://www.gyro.finance/',
     linkExternal: true,
-    bgImage: {
-      directory: '/images/promos/gyro/',
-      imgName: 'bg',
+    bgImageActive: {
+      directory: '/images/promos/promo-banner/',
+      imgName: 'bg-active2',
+    },
+    bgImageInactive: {
+      directory: '/images/promos/promo-banner/',
+      imgName: 'bg-inactive2',
     },
   },
   {
@@ -85,9 +101,13 @@ const promoData: PromoItem[] = [
     linkText: 'Learn more',
     linkURL: 'https://medium.com/balancer-protocol/balancers-stablesurge-hook-09d2eb20f219',
     linkExternal: true,
-    bgImage: {
-      directory: '/images/promos/gyro/',
-      imgName: 'bg',
+    bgImageActive: {
+      directory: '/images/promos/promo-banner/',
+      imgName: 'bg-active3',
+    },
+    bgImageInactive: {
+      directory: '/images/promos/promo-banner/',
+      imgName: 'bg-inactive3',
     },
   },
 ]
@@ -129,21 +149,20 @@ export function PromoBanners() {
             transition="flex-basis 0.2s var(--ease-out-cubic), flex-grow 0.2s var(--ease-out-cubic), box-shadow 0.1s var(--ease-out-cubic)"
             width={{ base: 'full', md: 'auto' }}
           >
-            {item.bgImage && (
+            {item.bgImageActive && (
               <Box
                 _after={{
-                  // Added ::after styles
                   bg: 'black',
                   bottom: 0,
                   content: '""',
                   left: 0,
                   opacity: 0,
-                  pointerEvents: 'none', // Prevent hover issues
+                  pointerEvents: 'none',
                   position: 'absolute',
                   right: 0,
                   top: 0,
                   transition: 'opacity 0.2s var(--ease-out-cubic)',
-                  zIndex: 1, // Ensure it's above the Picture (zIndex 0)
+                  zIndex: 1,
                 }}
                 height="100%"
                 opacity={isActive ? 1 : 0}
@@ -157,19 +176,18 @@ export function PromoBanners() {
                     <Picture
                       altText="Background texture"
                       defaultImgType="png"
-                      directory={item.bgImage.directory}
+                      directory={item.bgImageActive.directory}
                       height="100%"
                       imgAvif
                       imgAvifDark
                       imgAvifPortrait
                       imgAvifPortraitDark
-                      imgName={item.bgImage.imgName}
+                      imgName={item.bgImageActive.imgName}
                       imgPng
                       imgPngDark
                       width="100%"
                     />
                     <Box
-                      _groupHover={{ opacity: 0.4 }}
                       bg={colorMode === 'dark' ? '#000' : 'background.level3'}
                       h="full"
                       left="0"
@@ -303,18 +321,18 @@ export function PromoBanners() {
 
             {!isActive && (
               <Box h="full" left="0" overflow="hidden" position="absolute" top="0" w="full">
-                {item.bgImage && (
+                {item.bgImageInactive && (
                   <>
                     <Picture
                       altText="Background texture"
                       defaultImgType="png"
-                      directory={item.bgImage.directory}
+                      directory={item.bgImageInactive.directory}
                       height="100%"
                       imgAvif
                       imgAvifDark
                       imgAvifPortrait
                       imgAvifPortraitDark
-                      imgName={item.bgImage.imgName}
+                      imgName={item.bgImageInactive.imgName}
                       imgPng
                       imgPngDark
                       width="100%"
