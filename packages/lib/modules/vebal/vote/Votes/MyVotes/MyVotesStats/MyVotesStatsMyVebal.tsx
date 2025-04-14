@@ -8,6 +8,7 @@ import { useLockEndDate } from '@repo/lib/modules/vebal/lock/duration/useLockEnd
 import { expectedTotalVeBal } from '@repo/lib/modules/vebal/lock/VebalLockProvider'
 import { MyVotesStatsCard } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVotesStatsCard'
 import { MyVebalChargeTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVebalChargeTooltip'
+import { getVeBalManagePath } from '@repo/lib/modules/vebal/vebal-navigation'
 
 interface Props {
   myVebalBalance: number | undefined
@@ -19,7 +20,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
 
   const { mainnetLockedInfo } = useVebalLockInfo()
   const lockedEndDate = mainnetLockedInfo.lockedEndDate
-  const isExpired = mainnetLockedInfo.isExpired
+  const isLockExpired = mainnetLockedInfo.isExpired
 
   const lockedAmount = mainnetLockedInfo.hasExistingLock
     ? mainnetLockedInfo.lockedAmount
@@ -34,7 +35,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
     lockEndDate: maxLockEndDate,
   })
 
-  const balance = !isExpired ? fNum('token', myVebalBalance || 0) : '0'
+  const balance = !isLockExpired ? fNum('token', myVebalBalance || 0) : '0'
 
   return (
     <MyVotesStatsCard
@@ -45,7 +46,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
         ) : myVebalBalance === 0 ? (
           <HStack spacing="xs">
             <Text color="font.maxContrast">&mdash;</Text>
-            {isExpired && (
+            {isLockExpired && (
               <Tooltip
                 label={
                   "You can't vote because your lock has expired. Get new veBAL to vote by extending your lock."
@@ -72,7 +73,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
             {lockedEndDate && (
               <MyVebalChargeTooltip
                 expectedVeBalAmount={expectedVeBalAmount.toNumber()}
-                isExpired={isExpired}
+                isLockExpired={isLockExpired}
                 lockedEndDate={lockedEndDate}
               />
             )}
@@ -86,21 +87,36 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
           <VStack>
             <ConnectWallet size="sm" variant="primary" />
           </VStack>
-        ) : isExpired ? (
-          <Button as={NextLink} href="/vebal/manage/extend" size="sm" variant="primary">
+        ) : isLockExpired ? (
+          <Button
+            as={NextLink}
+            href={getVeBalManagePath('extend', 'vote')}
+            size="sm"
+            variant="primary"
+          >
             Manage
           </Button>
         ) : myVebalBalance ? (
-          <Button as={NextLink} href="/vebal/manage/extend" size="sm" variant="tertiary">
+          <Button
+            as={NextLink}
+            href={getVeBalManagePath('extend', 'vote')}
+            size="sm"
+            variant="tertiary"
+          >
             Extend lock
           </Button>
         ) : (
-          <Button as={NextLink} href="/vebal/manage/lock" size="sm" variant="primary">
+          <Button
+            as={NextLink}
+            href={getVeBalManagePath('lock', 'vote')}
+            size="sm"
+            variant="primary"
+          >
             Get veBAL
           </Button>
         )
       }
-      variant={isExpired ? 'expired' : 'default'}
+      variant={isLockExpired ? 'expired' : 'default'}
     />
   )
 }

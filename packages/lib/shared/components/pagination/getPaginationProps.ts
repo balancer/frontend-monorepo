@@ -1,3 +1,4 @@
+import { PaginationProps } from './Pagination'
 import { PaginationState } from './pagination.types'
 
 export function getPaginationProps(
@@ -6,7 +7,7 @@ export function getPaginationProps(
   setPagination: (pagination: PaginationState) => void,
   changeSize = true,
   hideDropdown = false
-) {
+): PaginationProps {
   const totalPageCount =
     totalRowCount % pagination.pageSize === 0
       ? totalRowCount / pagination.pageSize

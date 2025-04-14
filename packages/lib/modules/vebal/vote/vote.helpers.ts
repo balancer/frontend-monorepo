@@ -39,12 +39,12 @@ export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): Voti
       )
     ),
     address: vote.address,
-    protocolVersion: vote.protocolVersion, // fix: (votes) no data
+    protocolVersion: vote.protocolVersion,
     symbol: vote.symbol,
-    // TODO: (votes) API is not returning the following fields in GqlVotingPool yet
-    hook: undefined, // fix: (votes) no data
-    hasErc4626: false, // fix: (votes) no data
-    tags: [], // fix: (votes) no data
+    // TODO: API is not returning the following fields in GqlVotingPool yet
+    hook: undefined,
+    hasErc4626: false,
+    tags: [],
   }
 }
 

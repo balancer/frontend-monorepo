@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash'
-import { Address, formatUnits } from 'viem'
+import { Address, formatUnits, parseAbi } from 'viem'
 import { useReadContracts } from 'wagmi'
 import { useTokens } from '../../tokens/TokensProvider'
 import { Pool } from '../pool.types'
@@ -14,8 +14,10 @@ import {
 } from '../../web3/contracts/abi/generated'
 import { isComposableStablePool } from '../pool.utils'
 import { cowAmmPoolAbi } from '../../web3/contracts/abi/cowAmmAbi'
-import { weightedPoolAbi_V3, vaultExtensionAbi_V3 } from '@balancer/sdk'
+import { vaultExtensionAbi_V3 } from '@balancer/sdk'
 import { getCompositionTokens } from '../pool-tokens.utils'
+
+const totalSupplyAbi = parseAbi(['function totalSupply() view returns (uint256)'])
 
 export function usePoolEnrichWithOnChainData(pool: Pool) {
   const { priceFor } = useTokens()
@@ -70,7 +72,7 @@ function useV3PoolOnchainData(pool: Pool) {
       },
       {
         chainId,
-        abi: weightedPoolAbi_V3,
+        abi: totalSupplyAbi,
         address: pool.address as Address,
         functionName: 'totalSupply',
         args: [],
@@ -97,7 +99,7 @@ function useV3PoolOnchainData(pool: Pool) {
       // second half of nestedPoolData will be totalSupply
       ...nestedPoolTokens.map(token => ({
         chainId,
-        abi: weightedPoolAbi_V3,
+        abi: totalSupplyAbi,
         address: token.address as Address,
         functionName: 'totalSupply',
         args: [],

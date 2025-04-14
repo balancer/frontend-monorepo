@@ -55,7 +55,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   } = useVotes()
   const { toCurrency } = useCurrency()
 
-  const isExpired = isPoolGaugeExpired(vote)
+  const isGaugeExpired = isPoolGaugeExpired(vote)
 
   const editVotes = bpsToPercentage(editVotesWeights[vote.id] ?? 0).multipliedBy(100)
 
@@ -73,7 +73,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
   // FIXME: [JUANJO] (votes) calculations should be done with bigint
   const myVebalBalance = Number(formatUnits(veBALBalance, 18))
 
-  const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true)
+  const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true) || isGaugeExpired
 
   const { getToken } = useTokens()
 
@@ -104,7 +104,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
                   pr={[1.5, 'ms']}
                   vote={vote}
                 />
-                {isExpired && <VoteExpiredTooltip usePortal />}
+                {isGaugeExpired && <VoteExpiredTooltip usePortal />}
                 <Box color="font.secondary">
                   <ArrowUpIcon transform="rotate(90)" />
                 </Box>
@@ -137,7 +137,7 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <VoteWeight
-              isExpired={isExpired}
+              isGaugeExpired={isGaugeExpired}
               timeLocked={timeLocked}
               timeLockedEndDate={votingTimeLockedEndDate(vote.gaugeVotes?.lastUserVoteTime ?? 0)}
               variant="primary"
@@ -147,7 +147,8 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             <VoteWeightInput
               isDisabled={isDisabled}
-              isExpired={vebalIsExpired}
+              isGaugeExpired={isGaugeExpired}
+              isLockExpired={vebalIsExpired}
               isTimeLocked={timeLocked}
               isTooShort={vebalLockTooShort}
               lastVoteTime={vote.gaugeVotes?.lastUserVoteTime}

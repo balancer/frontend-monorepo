@@ -1,20 +1,21 @@
 import { useMutation } from '@tanstack/react-query'
 import {
   type Address,
-  BaseError,
   encodeAbiParameters,
   erc20Abi,
   getAbiItem,
+  Hex,
   keccak256,
   pad,
   parseAbiParameters,
   publicActions,
   testActions,
+  TestClient,
   toHex,
 } from 'viem'
 
 import { createConfig } from 'wagmi'
-import { getBalancerCustomSlot } from './customSlots'
+import { getBalancerCustomSlot, getPackedBalanceCustomSlot } from './customSlots'
 
 type WagmiConfig = ReturnType<typeof createConfig>
 type SetErcBalanceParameters = {
@@ -59,6 +60,7 @@ export function useSetErc20Balance() {
       // See https://github.com/paradigmxyz/rivet/pull/50#discussion_r1322267280
       let slotFound = false
       let slotGuess = getBalancerCustomSlot(tokenAddress)
+      const customPackedSlot = getPackedBalanceCustomSlot(tokenAddress)
 
       console.log('Setting balance for address', {
         address,
@@ -66,6 +68,18 @@ export function useSetErc20Balance() {
         slotGuess,
         chainId,
       })
+
+      if (customPackedSlot) {
+        console.log('Using custom packed slot for ', { tokenAddress, customPackedSlot })
+        await setPackedBalance({
+          client,
+          tokenAddress,
+          userAddress: address,
+          value,
+          storageSlot: customPackedSlot,
+        })
+        return
+      }
 
       while (slotFound !== true) {
         // if mapping, use keccak256(abi.encode(address(key), uint(slot)));
@@ -138,10 +152,47 @@ export function useSetErc20Balance() {
           // loop
           slotGuess++
           if (slotGuess >= 10n) {
-            throw new BaseError('could not find storage for: `balanceOf`')
+            console.log('Could not find storage slot to set balance of token ', { tokenAddress })
+            break
           }
         }
       }
     },
+  })
+}
+
+/**
+ * Set packed balance on a token with custom slot layout (e.g. AgoraDollar AUSD).
+ *
+ * The balance is packed after a `bool` (1 byte) into a `uint248` (31 bytes),
+ * inside a mapping(address => struct) that lives in a custom storage slot.
+ *
+ * Hardcoded mapping setup in getPackedBalanceCustomSlot
+ */
+export async function setPackedBalance({
+  client,
+  tokenAddress,
+  userAddress,
+  value,
+  storageSlot,
+}: {
+  client: TestClient
+  tokenAddress: Address
+  userAddress: Address
+  value: bigint
+  storageSlot: Hex // e.g. AgoraDollar's: '0x455730fe...'
+}) {
+  // Compute the mapping key: keccak256(pad(address) ++ storageSlot)
+  const encoded = pad(userAddress) + storageSlot.slice(2)
+  const slotKey = keccak256(encoded as Address)
+
+  // Build the packed value: 1 byte isFrozen (0x00) + 31-byte padded balance
+  const balance248 = toHex(value, { size: 31 }) // 31 bytes = 248 bits
+  const fullSlotValue = '0x' + '00' + balance248.slice(2) // 1 byte + 31 bytes
+
+  await client.setStorageAt({
+    address: tokenAddress,
+    index: slotKey,
+    value: fullSlotValue as Address,
   })
 }

@@ -59,7 +59,6 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
         case LockActionType.ExtendLock:
           return [parseDate(lockEndDate)]
         case LockActionType.IncreaseLock:
-          // FIXME: (votes) This should be amount to increase but we are passing current amount + amount to increase
           return [lockAmount]
         default:
           return []
