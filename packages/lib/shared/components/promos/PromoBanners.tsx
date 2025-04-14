@@ -157,7 +157,7 @@ export function PromoBanners() {
       }}
       mx={{ base: '-md', md: 0 }}
       overflowX={{ base: 'scroll', md: 'visible' }}
-      pb={{ base: 'md', md: 0 }}
+      pb={{ base: 'xl', md: 0 }}
       px={{ base: 'md', md: 0 }}
       ref={scrollContainerRef}
       scrollSnapType={{ base: 'x mandatory', md: 'none' }}
@@ -189,7 +189,7 @@ export function PromoBanners() {
               height="auto"
               key={item.id}
               onClick={() => handleItemClick(index)}
-              overflow="hidden"
+              overflowX="hidden"
               p={0}
               position="relative"
               role="group"

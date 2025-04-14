@@ -97,7 +97,7 @@ export function PoolsPage({
               </Flex>
             </FadeInOnView>
             <FadeInOnView animateOnce={false}>
-              <Box pb="3">
+              <Box pb={{ base: '0', md: '3' }}>
                 {/* <BeetsPromoBanner /> */}
                 {children}
               </Box>
