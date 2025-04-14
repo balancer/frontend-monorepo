@@ -21,6 +21,6 @@
     "@types/node": "22.13.5",
     "beets-frontend-v3": "workspace:*",
     "frontend-v3": "workspace:*",
-    "start-server-and-test": "2.0.9"
+    "start-server-and-test": "2.0.11"
   }
 }
