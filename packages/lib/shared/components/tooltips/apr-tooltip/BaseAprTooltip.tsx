@@ -155,6 +155,7 @@ function BaseAprTooltip({
   const popoverContent = customPopoverContent || (
     <PopoverContent
       minWidth={['100px', '300px']}
+      motionProps={{ animate: { scale: 1, opacity: 1 } }}
       overflow="hidden"
       p="0"
       shadow="3xl"
