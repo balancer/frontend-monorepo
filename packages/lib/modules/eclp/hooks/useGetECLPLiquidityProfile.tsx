@@ -26,7 +26,8 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     [pool, tokenRateScalingFactorString]
   )
 
-  const params = pool && pool.poolTokens ? destructureRequiredPoolParams(pool, tokenRates) : null
+  const params =
+    pool && pool.poolTokens && tokenRates ? destructureRequiredPoolParams(pool, tokenRates) : null
 
   const originalPoolSpotPrice = params
     ? formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18)
@@ -55,7 +56,7 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
             ? [params.tokenRates[0].toString(), params.tokenRates[1].toString()]
             : null,
         }
-      : 'No params available',
+      : null,
   })
 
   console.log({ poolSpotPrice: originalPoolSpotPrice })

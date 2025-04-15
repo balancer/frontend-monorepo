@@ -6,7 +6,7 @@ export function drawLiquidityECLP(
   pool: Pool,
   tokenRateScalingFactorString?: string
 ): [number, number][] | null {
-  if (!isGyroEPool(pool) && tokenRateScalingFactorString) {
+  if (!isGyroEPool(pool) || !tokenRateScalingFactorString) {
     return null
   }
 
