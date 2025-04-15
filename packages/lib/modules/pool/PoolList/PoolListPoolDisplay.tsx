@@ -2,9 +2,8 @@ import { ExpandedPoolInfo } from '../../portfolio/PortfolioTable/useExpandedPool
 import { PoolDisplayType, PoolListItem } from '../pool.types'
 import { PoolListPoolName } from './PoolListPoolName'
 import { PoolListTokenPills } from './PoolListTokenPills'
-import { memo } from 'react'
 
-function PoolListPoolDisplayComponent({
+export function PoolListPoolDisplay({
   pool,
   name,
   poolDisplayType,
@@ -36,5 +35,3 @@ function PoolListPoolDisplayComponent({
 
   return component
 }
-
-export const PoolListPoolDisplay = memo(PoolListPoolDisplayComponent)

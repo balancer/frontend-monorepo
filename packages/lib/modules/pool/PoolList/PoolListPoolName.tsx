@@ -3,9 +3,8 @@ import { TokenIcon } from '../../tokens/TokenIcon'
 import { PoolListItem } from '../pool.types'
 import { ExpandedPoolInfo } from '../../portfolio/PortfolioTable/useExpandedPools'
 import { getUserReferenceTokens } from '../pool-tokens.utils'
-import { memo } from 'react'
 
-function PoolListPoolNameComponent({ pool }: { pool: PoolListItem | ExpandedPoolInfo }) {
+export function PoolListPoolName({ pool }: { pool: PoolListItem | ExpandedPoolInfo }) {
   const isFirstToken = (index: number) => index === 0
   const displayTokens = getUserReferenceTokens(pool)
   const zIndices = Array.from({ length: displayTokens.length }, (_, index) => index).reverse()
@@ -29,5 +28,3 @@ function PoolListPoolNameComponent({ pool }: { pool: PoolListItem | ExpandedPool
     </HStack>
   )
 }
-
-export const PoolListPoolName = memo(PoolListPoolNameComponent)

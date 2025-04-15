@@ -1,22 +1,20 @@
 import { PoolDisplayType } from '../../pool.types'
-import { usePoolList } from '../PoolListProvider'
-import { useState, useCallback, memo, useMemo } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import ButtonGroupComponent, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { Box } from '@chakra-ui/react'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 const OPTIONS = [
   { value: PoolDisplayType.Name, label: 'Pool name' },
   { value: PoolDisplayType.TokenPills, label: 'Pool tokens' },
 ]
 
-function PoolListPoolNamesTokensComponent() {
-  const { poolDisplayType, setPoolDisplayType } = usePoolList()
-
+export function PoolListPoolNamesTokens() {
   const initialOption = useMemo(
-    () => OPTIONS.find(opt => opt.value === poolDisplayType) || OPTIONS[0],
-    [poolDisplayType]
+    () => OPTIONS.find(opt => opt.value === PROJECT_CONFIG.options.poolDisplayType) || OPTIONS[0],
+    []
   )
 
   const [option, setOption] = useState<ButtonGroupOption>(initialOption)
@@ -24,9 +22,8 @@ function PoolListPoolNamesTokensComponent() {
   const handleOptionChange = useCallback(
     (selectedOption: ButtonGroupOption) => {
       setOption(selectedOption)
-      setPoolDisplayType(selectedOption.value as PoolDisplayType)
     },
-    [setPoolDisplayType]
+    [setOption]
   )
 
   return (
@@ -42,5 +39,3 @@ function PoolListPoolNamesTokensComponent() {
     </Box>
   )
 }
-
-export const PoolListPoolNamesTokens = memo(PoolListPoolNamesTokensComponent)
