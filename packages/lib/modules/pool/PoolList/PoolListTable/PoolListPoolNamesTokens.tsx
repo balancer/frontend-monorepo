@@ -4,7 +4,7 @@ import ButtonGroupComponent, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { Box } from '@chakra-ui/react'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { usePoolList } from '../PoolListProvider'
 
 const OPTIONS = [
   { value: PoolDisplayType.Name, label: 'Pool name' },
@@ -12,9 +12,11 @@ const OPTIONS = [
 ]
 
 export function PoolListPoolNamesTokens() {
+  const { poolDisplayType, setPoolDisplayType } = usePoolList()
+
   const initialOption = useMemo(
-    () => OPTIONS.find(opt => opt.value === PROJECT_CONFIG.options.poolDisplayType) || OPTIONS[0],
-    []
+    () => OPTIONS.find(opt => opt.value === poolDisplayType) || OPTIONS[0],
+    [poolDisplayType]
   )
 
   const [option, setOption] = useState<ButtonGroupOption>(initialOption)
@@ -22,8 +24,9 @@ export function PoolListPoolNamesTokens() {
   const handleOptionChange = useCallback(
     (selectedOption: ButtonGroupOption) => {
       setOption(selectedOption)
+      setPoolDisplayType(selectedOption.value as PoolDisplayType)
     },
-    [setOption]
+    [setPoolDisplayType]
   )
 
   return (
