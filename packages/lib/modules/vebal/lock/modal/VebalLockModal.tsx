@@ -73,20 +73,24 @@ export function VebalLockModal({
   const [buildLockStepsArgs, setBuildLockStepsArgs] = useState<UseBuildLockStepsArgs>(() => ({
     extendExpired,
     totalAmount,
-    lockDuration: lockDuration,
-    isIncreasedLockAmount: isIncreasedLockAmount,
-    mainnetLockedInfo: mainnetLockedInfo,
+    lockDuration,
+    isIncreasedLockAmount,
+    mainnetLockedInfo,
   }))
 
+  /*
+    When lptoken: we are creating/increasing the lock amount
+    When no lptoken: we are unlocking/locking
+   */
+  const addedAmount = lpToken ? bn(lpToken) : totalAmount
   // "freeze" useBuildLockSteps args on modal open/close (update value only on userAddress change)
-  const addedAmount = lpToken ? bn(lpToken) : bn(0)
   useEffect(() => {
     setBuildLockStepsArgs({
       extendExpired,
       totalAmount: addedAmount,
-      lockDuration: lockDuration,
-      isIncreasedLockAmount: isIncreasedLockAmount,
-      mainnetLockedInfo: mainnetLockedInfo,
+      lockDuration,
+      isIncreasedLockAmount,
+      mainnetLockedInfo,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, userAddress])
