@@ -153,7 +153,7 @@ export function PromoBanners() {
           display: 'none',
         },
         scrollbarWidth: 'none',
-        '-ms-overflow-style': 'none',
+        msOverflowStyle: 'none',
       }}
       mx={{ base: '-md', md: 0 }}
       overflowX={{ base: 'scroll', md: 'visible' }}
