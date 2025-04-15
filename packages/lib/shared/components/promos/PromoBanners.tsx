@@ -85,7 +85,8 @@ const promoData: PromoItem[] = [
     id: 2,
     icon: <PromoGyroIcon size={44} />,
     title: 'Superliquidity, made simple',
-    description: 'Next generation Gyroscope pools are now live on Balancer v3.',
+    description:
+      'Next generation Gyroscope pools are now live on Balancer v3. Manage liquidity directly within the Balancer UI.',
     buttonText: 'View pools',
     buttonLink: '/pools?protocolVersion=3&poolTypes=GYRO',
     linkText: 'Learn more',
