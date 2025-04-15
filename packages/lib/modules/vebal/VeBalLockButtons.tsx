@@ -67,7 +67,7 @@ export function VeBalIncreaseButton({ variant = undefined, size = 'lg' }: Props)
       size={size}
       variant={variant}
     >
-      Increase veBal
+      Increase veBAL
     </Button>
   )
 }
