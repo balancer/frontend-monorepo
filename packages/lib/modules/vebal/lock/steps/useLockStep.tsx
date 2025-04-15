@@ -20,6 +20,8 @@ import {
   getLockContractFunctionName,
 } from './lock-steps.utils'
 import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { useVeBALBalance } from '../../vote/useVeBALBalance'
+import { queryClient } from '@repo/lib/shared/app/react-query.provider'
 
 type UseLockStepArgs = {
   lockAmount: bigint
@@ -29,6 +31,7 @@ type UseLockStepArgs = {
 
 export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLockStepArgs) {
   const { userAddress } = useUserAccount()
+  const { queryKey: veBALBalanceQueryKey } = useVeBALBalance(userAddress)
   const labels: TransactionLabels = useMemo(
     () => ({
       init: getInitLabel(lockActionType),
@@ -66,7 +69,7 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
     }
 
     return {
-      enabled: !!lockAmount && !!lockEndDate,
+      enabled: !!lockEndDate,
       labels,
       chainId: mainnetNetworkConfig.chainId,
       contractAddress: mainnetNetworkConfig.contracts.veBAL as Address,
@@ -77,9 +80,9 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
     }
   }, [lockAmount, lockEndDate, lockActionType, labels, txSimulationMeta])
 
-  const onSuccess = useCallback(() => {
-    // Handle success actions
-  }, [])
+  const onSuccess = useCallback(async () => {
+    queryClient.invalidateQueries(veBALBalanceQueryKey)
+  }, [veBALBalanceQueryKey])
 
   const { getTransaction } = useTransactionState()
 

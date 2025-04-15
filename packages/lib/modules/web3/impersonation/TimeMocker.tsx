@@ -28,6 +28,7 @@ function TimeMocker({ setIsFakeTime }: Props) {
   return (
     <HStack>
       <Button onClick={() => mockTime(1)}>+1 day</Button>
+      <Button onClick={() => mockTime(5)}>+5 days</Button>
       <Button onClick={() => resetTime()}>Reset time</Button>
     </HStack>
   )

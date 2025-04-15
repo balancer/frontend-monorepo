@@ -2,9 +2,10 @@ import { mainnet } from 'viem/chains'
 import { useReadContract } from 'wagmi'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { veBalAbi } from '../../web3/contracts/abi/generated'
+import { InvalidateQueryFilters } from '@tanstack/react-query'
 
 export function useVeBALBalance(accountAddress: `0x${string}`) {
-  const { data, isLoading, refetch } = useReadContract({
+  const { data, isLoading, refetch, queryKey } = useReadContract({
     chainId: mainnet.id,
     abi: veBalAbi,
     address: mainnetNetworkConfig.contracts.veBAL,
@@ -17,5 +18,6 @@ export function useVeBALBalance(accountAddress: `0x${string}`) {
     veBALBalance: data || 0n,
     isLoading,
     refetch,
+    queryKey: queryKey as InvalidateQueryFilters,
   }
 }
