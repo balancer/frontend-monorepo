@@ -138,8 +138,12 @@ export function usePoolListQueryState() {
   }
 
   function setPagination(pagination: PaginationState) {
-    setFirst(pagination.pageSize)
-    setSkip(pagination.pageIndex * pagination.pageSize)
+    setFirst(pagination.pageSize === 20 ? null : pagination.pageSize)
+    setSkip(
+      pagination.pageIndex * pagination.pageSize === 0
+        ? null
+        : pagination.pageIndex * pagination.pageSize
+    )
   }
 
   function setSearch(text: string) {

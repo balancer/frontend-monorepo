@@ -27,9 +27,9 @@ import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { FeatureCard } from './shared/FeatureCard'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
 import { FadeIn } from '@repo/lib/shared/components/animations/FadeIn'
-import { GetProtocolStatsQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { fNumCustom } from '@repo/lib/shared/utils/numbers'
 import { motion, useInView } from 'framer-motion'
+import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 
 const MotionGrid = motion(Grid)
 const MotionGridItem = motion(GridItem)
@@ -64,10 +64,11 @@ function PartnerButton({ icon, ...props }: { icon: ReactNode } & BoxProps) {
   )
 }
 
-export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) {
+export function Grow() {
   const [redirectPartner, setRedirectPartner] = useState<RedirectPartner>(RedirectPartner.Aura)
   const partnerRedirectDisclosure = useDisclosure()
   const { isMobile } = useBreakpoints()
+  const { protocolData } = useProtocolStats()
 
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
@@ -142,7 +143,10 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
                 width: 200,
                 circleCount: 6,
               }}
-              stat={fNumCustom(protocolData.protocolMetricsAggregated.totalLiquidity, '$0,0.0a')}
+              stat={fNumCustom(
+                protocolData?.protocolMetricsAggregated.totalLiquidity ?? 0,
+                '$0,0.0a'
+              )}
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="TVL"
               titleSize="2xl"
@@ -157,7 +161,7 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
                 width: 200,
                 circleCount: 6,
               }}
-              stat={fNumCustom(protocolData.protocolMetricsAggregated.poolCount, '0,0.0a')}
+              stat={fNumCustom(protocolData?.protocolMetricsAggregated.poolCount ?? 0, '0,0.0a')}
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="Pools"
               titleSize="2xl"
@@ -172,7 +176,7 @@ export function Grow({ protocolData }: { protocolData: GetProtocolStatsQuery }) 
                 width: 200,
                 circleCount: 6,
               }}
-              stat={fNumCustom(protocolData.protocolMetricsAggregated.swapVolume24h, '$0,0a')}
+              stat={fNumCustom(protocolData?.protocolMetricsAggregated.swapVolume24h ?? 0, '$0,0a')}
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
               title="24hr Volume"
               titleSize="2xl"
