@@ -6,6 +6,7 @@ import { ReactNode } from 'react'
 import NextLink from 'next/link'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
+import { getVeBalManagePath } from './vebal-navigation'
 
 interface HeaderProps {
   before?: ReactNode
@@ -74,7 +75,7 @@ export function VebalManage() {
               {!!lockData.mainnetLockedInfo.hasExistingLock && (
                 <Button
                   as={NextLink}
-                  href="/vebal/manage/lock"
+                  href={getVeBalManagePath('extend', 'manage')}
                   isLoading={lockData.isLoading}
                   size="lg"
                 >
@@ -85,8 +86,8 @@ export function VebalManage() {
                 as={NextLink}
                 href={
                   lockData.mainnetLockedInfo.isExpired
-                    ? '/vebal/manage/unlock'
-                    : '/vebal/manage/lock'
+                    ? getVeBalManagePath('unlock', 'manage')
+                    : getVeBalManagePath('lock', 'manage')
                 }
                 isLoading={lockData.isLoading}
                 size="lg"

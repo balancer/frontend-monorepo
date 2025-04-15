@@ -26,9 +26,7 @@ export function VoteTimeLockedTooltip({ timeLockedEndDate, usePortal }: Props) {
           Your vote is timelocked
         </Text>
         <Text color="font.secondary" fontSize="sm">
-          {/* fix: (votes) need design */}
-          Once you vote on a pool, your vote is fixed for {WEIGHT_VOTE_DELAY /
-            oneDayInMs} days.{' '}
+          Once you vote on a pool, your vote is fixed for {WEIGHT_VOTE_DELAY / oneDayInMs} days.{' '}
           {timeLockedEndDate &&
             `No edits can be made until ${format(timeLockedEndDate, PRETTY_DATE_FORMAT)}`}
         </Text>

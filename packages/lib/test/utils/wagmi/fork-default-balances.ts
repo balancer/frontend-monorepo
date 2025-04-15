@@ -6,6 +6,10 @@ import { TokenBalance } from './fork-options'
  */
 export const mainnetTokenBalances: TokenBalance[] = [
   {
+    tokenAddress: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56', // B-80BAL-20WETH
+    value: '6000',
+  },
+  {
     tokenAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', // WETH
     value: '5000',
   },
@@ -104,5 +108,41 @@ export const polygonTokenBalances: TokenBalance[] = [
   {
     tokenAddress: '0xfa68fb4628dff1028cfec22b4162fccd0d45efb6', // maticX
     value: '30000',
+  },
+]
+
+export const avalancheTokenBalances: TokenBalance[] = [
+  // tokens for v3 pool: pools/avalanche/v3/0x99a9a471dbe0dcc6855b4cd4bbabeccb1280f5e8
+  {
+    tokenAddress: '0x2b2c81e08f1af8835a78bb2a90ae924ace0ea4be', // sAVAX
+    value: '20000',
+  },
+  {
+    tokenAddress: '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7', // WAVAX
+    value: '30000',
+  },
+  {
+    tokenAddress: '0xa25eaf2906fa1a3a13edac9b9657108af7b703e3', // ggAVAX
+    value: '40000',
+  },
+  // tokens for v3 pool: pools/avalanche/v3/0x31ae873544658654ce767bde179fd1bbcb84850b/add-liquidity
+  {
+    tokenAddress: '0x9702230a8ea53601f5cd2dc00fdbc13d4df4a8c7', // USDT
+    value: '50000',
+    decimals: 6,
+  },
+  {
+    tokenAddress: '0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e', // USDC
+    value: '50000',
+    decimals: 6,
+  },
+  /*
+    AUSD uses packed slots which is not supported by the current useSetErc20Balance implementation
+    Context: https://book.getfoundry.sh/reference/forge-std/enable_packed_slots
+    */
+  {
+    tokenAddress: '0x00000000efe302beaa2b3e6e1b18d08d69a9012a', // AUSD
+    value: '50000',
+    decimals: 6,
   },
 ]

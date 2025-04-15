@@ -25,7 +25,7 @@ import { getUserTotalBalanceInt } from './user-balance.helpers'
 import { dateToUnixTimestamp } from '@repo/lib/shared/utils/time'
 import { balancerV2VaultAbi } from '../web3/contracts/abi/generated'
 import { supportsNestedActions } from './actions/LiquidityActionHelpers'
-import { vaultV3Abi } from '@balancer/sdk'
+import { vaultAbi_V3 } from '@balancer/sdk'
 import { Pool, PoolCore } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
@@ -394,7 +394,7 @@ export function getVaultConfig(pool: Pool) {
         networkConfig.contracts.balancer.vaultV3!
       : networkConfig.contracts.balancer.vaultV2
 
-  const balancerVaultAbi = pool.protocolVersion === 3 ? vaultV3Abi : balancerV2VaultAbi
+  const balancerVaultAbi = pool.protocolVersion === 3 ? vaultAbi_V3 : balancerV2VaultAbi
 
   return { vaultAddress, balancerVaultAbi }
 }
@@ -453,4 +453,25 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
     return false
   }
   return true
+}
+
+export function poolTypeLabel(poolType: GqlPoolType) {
+  switch (poolType) {
+    case GqlPoolType.Weighted:
+      return 'Weighted'
+    case GqlPoolType.Stable:
+      return 'Stable'
+    case GqlPoolType.LiquidityBootstrapping:
+      return 'Liquidity Bootstrapping (LBP)'
+    case GqlPoolType.Gyro:
+      return 'Gyro CLP'
+    case GqlPoolType.CowAmm:
+      return 'CoW AMM'
+    case GqlPoolType.Fx:
+      return 'FX'
+    case GqlPoolType.QuantAmmWeighted:
+      return 'BTF'
+    default:
+      return poolType.toLowerCase()
+  }
 }

@@ -12,11 +12,11 @@ import {
   useFilterTagsVisible,
   VoteListFilters,
 } from '@repo/lib/modules/vebal/vote/VoteList/VoteListFilters'
-import { poolTypeLabel } from '@repo/lib/modules/pool/PoolList/usePoolListQueryState'
 import { SelectedPoolsMenu } from '@repo/lib/modules/vebal/vote/VoteList/SelectedPoolsMenu'
 import { useVotes } from '@repo/lib/modules/vebal/vote/Votes/VotesProvider'
 import { StaticToast } from '@repo/lib/shared/components/toasts/StaticToast'
 import { useMemo } from 'react'
+import { poolTypeLabel } from '@repo/lib/modules/pool/pool.helpers'
 
 export function VoteListLayout() {
   const {
@@ -29,7 +29,9 @@ export function VoteListLayout() {
       poolTypes,
       togglePoolType,
       includeExpiredPools,
+      protocolVersion,
       toggleIncludeExpiredPools,
+      setProtocolVersion,
     },
   } = useVoteList()
   const { selectedVotingPools, scrollToMyVotes } = useVotes()
@@ -103,6 +105,8 @@ export function VoteListLayout() {
             networks={networks}
             poolTypeLabel={poolTypeLabel}
             poolTypes={poolTypes}
+            protocolVersion={protocolVersion}
+            setProtocolVersion={setProtocolVersion}
             toggleIncludeExpiredPools={toggleIncludeExpiredPools}
             toggleNetwork={toggleNetwork}
             togglePoolType={togglePoolType}

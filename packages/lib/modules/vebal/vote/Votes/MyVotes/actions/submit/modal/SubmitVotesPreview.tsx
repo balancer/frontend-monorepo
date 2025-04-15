@@ -1,7 +1,7 @@
 import { VStack, Card, HStack, Text, Divider, Box, Badge } from '@chakra-ui/react'
 import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { SubmittingVote } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { fNum, bn } from '@repo/lib/shared/utils/numbers'
 import {
   bpsToPercentage,
   votingTimeLockedEndDate,
@@ -9,7 +9,6 @@ import {
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { MyVotesTotalInfo } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.types'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
-import { MyIncentivesAprTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesAprTooltip'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { VotesChunksAllocation } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/useSubmittingVotes'
 import { AlertTriangle } from 'react-feather'
@@ -17,6 +16,7 @@ import { CHUNK_SIZE } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/s
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GainBadge } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
+import { MyIncentivesTooltip } from '../../../MyVotesStats/shared/MyIncentivesTooltip'
 
 interface Props {
   submittingVotes: SubmittingVote[]
@@ -36,10 +36,10 @@ export function SubmitVotesPreview({
   isPoolGaugeExpired,
 }: Props) {
   const { toCurrency } = useCurrency()
-
-  const averageReward = 0.102 // fix: (votes) provide real value
-
   const { getToken } = useTokens()
+
+  const unallocatedVotes = totalInfo.unallocatedVotes || bn(0)
+  const editVotes = totalInfo.editVotes || bn(0)
 
   return (
     <VStack spacing="md" w="full">
@@ -89,7 +89,7 @@ export function SubmitVotesPreview({
                           </Badge>
                         )}
                       </HStack>
-                      <VoteWeight variant="primary" weight={weight} />
+                      <VoteWeight variant="primary" weight={bn(weight)} />
                     </HStack>
                   )
                 })}
@@ -124,7 +124,7 @@ export function SubmitVotesPreview({
                           vote.gaugeVotes?.lastUserVoteTime ?? 0
                         )}
                         variant="secondary"
-                        weight={weight}
+                        weight={bn(weight)}
                       />
                     </HStack>
                   )
@@ -141,9 +141,7 @@ export function SubmitVotesPreview({
                 <Text fontSize="sm" fontWeight={700} variant="secondary">
                   Unallocated votes
                 </Text>
-                <Text variant="secondary">
-                  {fNum('apr', bpsToPercentage(totalInfo.unallocatedVotes ?? 0))}
-                </Text>
+                <Text variant="secondary">{fNum('apr', bpsToPercentage(unallocatedVotes))}</Text>
               </HStack>
             </>
           )}
@@ -196,7 +194,7 @@ export function SubmitVotesPreview({
 
           <HStack justifyContent="space-between" p="md" spacing="sm" w="full">
             <Text fontWeight={700}>Total</Text>
-            <Text fontWeight={700}>{fNum('apr', bpsToPercentage(totalInfo.editVotes ?? 0))}</Text>
+            <Text fontWeight={700}>{fNum('apr', bpsToPercentage(editVotes))}</Text>
           </HStack>
         </VStack>
       </Card>
@@ -213,19 +211,18 @@ export function SubmitVotesPreview({
               )}
             </Text>
             {totalInfo.totalRewardValueGain && <GainBadge gain={totalInfo.totalRewardValueGain} />}
-            <MyIncentivesAprTooltip
-              totalBeforeVoteEdits={totalInfo.prevTotalRewardValue}
-              totalWithVoteEdits={totalInfo.totalRewardValue}
-            />
+            <MyIncentivesTooltip />
           </HStack>
         </Card>
 
-        <Card flex="1" variant="subSection">
-          <Text>Ave. Reward (Bribes/veBAL)</Text>
-          <Text fontSize="lg" fontWeight={700}>
-            {toCurrency(averageReward, { abbreviated: false })}
-          </Text>
-        </Card>
+        {totalInfo.averageRewardPerVote !== undefined && (
+          <Card flex="1" variant="subSection">
+            <Text>Ave. Reward (Bribes/veBAL)</Text>
+            <Text fontSize="lg" fontWeight={700}>
+              {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
+            </Text>
+          </Card>
+        )}
       </HStack>
     </VStack>
   )

@@ -1,78 +1,90 @@
-import { Button, HStack, Skeleton, Text } from '@chakra-ui/react'
-import React from 'react'
+import { Button, HStack, Skeleton, Text, Stack } from '@chakra-ui/react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { MagicStickIcon } from '@repo/lib/shared/components/icons/MagicStickIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { MyVotesStatsCard } from './shared/MyVotesStatsCard'
-import { MyIncentivesAprTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesAprTooltip'
+import { useVeBALIncentives } from './useVeBALIncentives'
+import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import NextLink from 'next/link'
+import { getVeBalManagePath } from '@repo/lib/modules/vebal/vebal-navigation'
 
-interface Props {
-  myVebalBalance: number | undefined
-  loading: boolean
-}
-
-export function MyVotesStatsMyIncentivesOptimized({ myVebalBalance, loading }: Props) {
+export function MyVotesStatsMyIncentivesOptimized() {
   const { toCurrency } = useCurrency()
+  const { isConnected, userAddress } = useUserAccount()
+  const { isLoading: vebalUserDataLoading, noVeBALBalance } = useVebalUserData()
 
-  const { isConnected } = useUserAccount()
+  // fix: (votes) add new state when we are able to calculate optimized votes
+  // const isApplied = false
+  // if (isApplied) {
+  //   return {
+  //     variant: 'outline',
+  //     isDisabled: true,
+  //     children: 'Applied',
+  //   }
+  // }
 
-  const isApplied = false // fix: (votes) provide real value
+  const { incentives, incentivesAreLoading } = useVeBALIncentives(userAddress)
 
-  function getButtonProps() {
-    if (isApplied) {
-      return {
-        variant: 'outline',
-        isDisabled: true,
-        children: 'Applied',
-      }
-    }
+  const isLoading = incentivesAreLoading || vebalUserDataLoading
 
-    if (myVebalBalance) {
-      return {
-        variant: 'primary',
-        children: (
-          <HStack spacing="xs">
-            <MagicStickIcon />
-            <Text color="font.dark" fontSize="sm" fontWeight="700">
-              Apply
-            </Text>
-          </HStack>
-        ),
-      }
-    }
+  const optimizedRewardValue: number | undefined = undefined // fix: (votes) provide real value
+  // const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
 
-    return {
-      variant: 'primary',
-      children: 'Get veBAL',
-    }
-  }
-
-  const optimizedRewardValue = 86.65 // fix: (votes) provide real value
-  const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
+  const headerText =
+    !isConnected || noVeBALBalance
+      ? 'Voting incentives APR (average)'
+      : 'My incentives with optimized votes (1w)'
 
   return (
     <MyVotesStatsCard
-      headerText="My potential incentives on $10k"
+      headerText={headerText}
       leftContent={
-        loading ? (
+        isLoading ? (
           <Skeleton height="28px" w="100px" />
+        ) : !isConnected || noVeBALBalance ? (
+          <Text fontSize="lg" fontWeight={700} variant="special">
+            {incentives.voting ? fNum('feePercent', incentives.voting) : <>&mdash;</>}
+          </Text>
         ) : (
           <HStack spacing="xs">
             <Text fontSize="lg" fontWeight={700} variant="special">
-              {toCurrency(optimizedRewardValue, { abbreviated: false })}
+              {optimizedRewardValue ? (
+                toCurrency(optimizedRewardValue, { abbreviated: false })
+              ) : (
+                <>&mdash;</>
+              )}
             </Text>
-            <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} />
+            {/* TODO: (votes) show when algorithm in place <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} /> */}
           </HStack>
         )
       }
       rightContent={
-        loading ? (
+        isLoading ? (
           <Skeleton height="28px" w="100px" />
+        ) : isConnected && noVeBALBalance ? (
+          <Button
+            as={NextLink}
+            href={getVeBalManagePath('lock', 'vote')}
+            size="sm"
+            variant="primary"
+          >
+            Get veBAL
+          </Button>
         ) : isConnected ? (
-          <Button onClick={() => alert('@TODO')} size="sm" {...getButtonProps()} />
+          <Button size="sm" variant="primary">
+            <HStack spacing="xs">
+              <MagicStickIcon />
+              <Text color="font.dark" fontSize="sm" fontWeight="700">
+                Coming soon
+              </Text>
+            </HStack>
+          </Button>
         ) : (
-          <ConnectWallet size="sm" variant="primary" />
+          <Stack>
+            <ConnectWallet size="sm" variant="primary" />
+          </Stack>
         )
       }
       variant="special"

@@ -23,9 +23,6 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-  Tag,
-  TagCloseButton,
-  TagLabel,
   Text,
   useColorModeValue,
   VStack,
@@ -59,7 +56,9 @@ import ButtonGroup, {
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
 import Link from 'next/link'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { poolTypeLabel } from '../pool.helpers'
+import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
@@ -313,6 +312,8 @@ export interface FilterTagsPops {
   poolTypes: PoolFilterType[]
   togglePoolType: (checked: boolean, value: PoolFilterType) => void
   poolTypeLabel: (poolType: PoolFilterType) => string
+  protocolVersion: number | null
+  setProtocolVersion: (value: number | null) => void
   minTvl?: number
   setMinTvl?: (value: number | null) => void
   poolTags?: PoolTagType[]
@@ -323,31 +324,6 @@ export interface FilterTagsPops {
   poolHookTags?: PoolHookTagType[]
   togglePoolHookTag?: (checked: boolean, value: PoolHookTagType) => void
   poolHookTagLabel?: (poolHookTag: PoolHookTagType) => string
-  protocolVersion?: number | null
-  setProtocolVersion?: (value: number | null) => void // TODO: check why this is not used in VoteListLayout
-}
-
-function AnimatedTag({ label, onClose }: { label: React.ReactNode; onClose: () => void }) {
-  return (
-    <motion.div
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 0 }}
-      initial={{ opacity: 0, y: 40 }}
-      transition={{
-        enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
-        exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
-      }}
-    >
-      <Tag size="lg">
-        <TagLabel>
-          <Text fontSize="sm" fontWeight="bold">
-            {label}
-          </Text>
-        </TagLabel>
-        <TagCloseButton onClick={onClose} />
-      </Tag>
-    </motion.div>
-  )
 }
 
 export function FilterTags({
@@ -482,7 +458,7 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
 )
 
 export interface ProtocolVersionFilterProps {
-  setProtocolVersion: React.Dispatch<React.SetStateAction<number | null>>
+  setProtocolVersion: (version: number | null) => any
   protocolVersion: number | null
   poolTypes: PoolFilterType[]
   activeProtocolVersionTab: ButtonGroupOption
@@ -553,7 +529,6 @@ export function PoolListFilters() {
       setNetworks,
       togglePoolType,
       poolTypes,
-      poolTypeLabel,
       setPoolTypes,
       setProtocolVersion,
       protocolVersion,
@@ -569,8 +544,11 @@ export function PoolListFilters() {
   }
 
   const { options, externalLinks } = PROJECT_CONFIG
-  const subPath = !options.showVeBal ? '' : isCowPath ? 'cow' : 'v3'
-  const poolCreatorUrl = `${externalLinks.poolComposerUrl}/${subPath}`
+  const subPath = isCowPath ? 'cow' : 'v3'
+
+  const poolCreatorUrl = isBalancer
+    ? `${externalLinks.poolComposerUrl}/${subPath}`
+    : externalLinks.poolComposerUrl
 
   return (
     <VStack w="full">

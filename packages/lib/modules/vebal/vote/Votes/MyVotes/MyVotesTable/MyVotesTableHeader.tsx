@@ -24,7 +24,6 @@ interface Props extends GridProps {
 export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
   const {
     filtersState: { sorting, setSorting, sortingBy, setSortingBy, toggleSorting },
-    hasVotes,
   } = useMyVotes()
 
   const handleSort = (newSortingBy: SortingBy) => {
@@ -36,22 +35,8 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
     }
   }
 
-  const editVotesStyles = hasVotes
-    ? {
-        // fix: (votes) implement nested cell paddings for Edit votes column
-        // bg: 'background.level1',
-      }
-    : undefined
-
   return (
-    <Grid
-      {...rest}
-      borderBottom="1px solid"
-      borderColor="border.base"
-      // fix: (votes) implement nested cell paddings for Edit votes column
-      p={['sm', 'md']}
-      w="full"
-    >
+    <Grid {...rest} borderBottom="1px solid" borderColor="border.base" p={['sm', 'md']} w="full">
       <GridItem {...cellProps}>
         <VStack align="start" w="full">
           <Icon as={Globe} boxSize="5" color="font.primary" />
@@ -66,7 +51,6 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
             justifySelf: 'end',
             textAlign: 'right',
             ...cellProps,
-            ...(orderByItem === 'editVotes' ? editVotesStyles : undefined),
           }}
           isSorted={sortingBy === orderByItem}
           key={orderByItem}

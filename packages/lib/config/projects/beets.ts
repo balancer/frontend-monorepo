@@ -16,12 +16,18 @@ export const ProjectConfigBeets: ProjectConfig = {
   ensNetwork: GqlChain.Sonic,
   delegateOwner: '0xba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1ba1b', // TODO update this for sonic & optimism,
   externalLinks: {
-    poolComposerUrl: 'https://ma.beets.fi/compose',
+    poolComposerUrl: 'https://pool-creator.balancer.fi/beets',
   },
+  merklRewardsChains: [GqlChain.Sonic],
   options: {
     poolDisplayType: PoolDisplayType.Name,
     hidePoolTags: ['RWA', 'VE8020'],
-    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.CowAmm, GqlPoolType.Fx],
+    hidePoolTypes: [
+      GqlPoolType.LiquidityBootstrapping,
+      GqlPoolType.CowAmm,
+      GqlPoolType.Fx,
+      GqlPoolType.QuantAmmWeighted,
+    ],
     hideProtocolVersion: ['cow'],
     showPoolName: true,
     showVeBal: false,
@@ -40,7 +46,6 @@ export const ProjectConfigBeets: ProjectConfig = {
     ecosystemLinks: [
       { label: 'Docs', href: 'https://docs.beets.fi/' },
       { label: 'Governance', href: 'https://snapshot.org/#/beets.eth' },
-      { label: 'Analytics', href: 'https://beets.defilytica.com/' },
     ],
     socialLinks: [
       {
@@ -95,7 +100,6 @@ export const ProjectConfigBeets: ProjectConfig = {
             href: 'https://immunefi.com/bug-bounty/balancer',
             isExternal: true,
           },
-          { label: 'Analytics', href: 'https://beets.defilytica.com', isExternal: true },
         ],
       },
     ],

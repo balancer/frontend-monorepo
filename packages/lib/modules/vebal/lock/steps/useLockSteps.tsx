@@ -13,17 +13,27 @@ type UseLockStepsArgs = {
   lockActionTypes: LockActionType[]
 }
 
-export function useLockSteps({ lockAmount, lockEndDate, lockActionTypes }: UseLockStepsArgs) {
+export function useLockSteps({
+  lockAmount: lockRawAmount,
+  lockEndDate,
+  lockActionTypes,
+}: UseLockStepsArgs) {
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
       spenderAddress: mainnetNetworkConfig.contracts.veBAL as Hex,
       chain: mainnetNetworkConfig.chain,
-      approvalAmounts: [lockAmount],
+      approvalAmounts: [lockRawAmount],
       actionType: 'Locking',
       lpToken: 'token',
     })
 
-  const unlockStep = useLockStep({ lockAmount, lockEndDate, lockActionType: LockActionType.Unlock })
+  const lockAmount: bigint = lockRawAmount.rawAmount
+
+  const unlockStep = useLockStep({
+    lockAmount,
+    lockEndDate,
+    lockActionType: LockActionType.Unlock,
+  })
   const createLockStep = useLockStep({
     lockAmount,
     lockEndDate,
@@ -45,6 +55,13 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionTypes }: UseLo
     const selectedLockSteps = lockActionTypes
       .map(lockActionType => lockSteps.find(lockStep => lockStep.stepType === lockActionType))
       .filter(Boolean) as TransactionStep[]
+
+    const isOnlyExtending = lockActionTypes.includes(LockActionType.ExtendLock) && lockAmount === 0n
+    if (isOnlyExtending) {
+      // Avoid token approvals when extending lock date without increasing amount
+      return [...selectedLockSteps]
+    }
+
     return [...tokenApprovalSteps, ...selectedLockSteps]
   }, [
     tokenApprovalSteps,
@@ -53,6 +70,7 @@ export function useLockSteps({ lockAmount, lockEndDate, lockActionTypes }: UseLo
     extendLockStep,
     increaseLockStep,
     lockActionTypes,
+    lockAmount,
   ])
 
   return {

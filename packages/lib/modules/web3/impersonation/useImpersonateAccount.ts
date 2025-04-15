@@ -5,16 +5,20 @@ import { defaultManualForkOptions } from '@repo/lib/test/utils/wagmi/fork-option
 import {
   forkClient,
   getSavedImpersonatedAddressLS,
+  publicForkClient,
   setImpersonatedAddressLS,
   setTokenBalances,
 } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { useEffect, useRef } from 'react'
 import { Address } from 'viem'
 import { useConnect } from 'wagmi'
-import { impersonateWagmiConfig } from '../WagmiConfig'
+import { impersonateWagmiConfig, WagmiConfig } from '../WagmiConfig'
+import { useWagmiConfig } from '../WagmiConfigProvider'
+import { queryClient } from '@repo/lib/shared/app/react-query.provider'
 
 export function useImpersonateAccount() {
   const { connectAsync } = useConnect()
+  const { wagmiConfig } = useWagmiConfig()
   const setBalance = useSetErc20Balance()
 
   // Tracks current impersonated address stored in local storage (used to auto-reconnect)
@@ -39,7 +43,7 @@ export function useImpersonateAccount() {
     }
   }, [storedImpersonatedAddress])
 
-  return { impersonateAccount }
+  return { impersonateAccount, reset, mineBlockWithTimestamp }
 
   async function impersonateAccount({
     impersonatedAddress,
@@ -58,29 +62,75 @@ export function useImpersonateAccount() {
         address: impersonatedAddress,
       })
 
-      // TODO: Using window to globally set the fork options from E2E tests. Explore better ways to do this.
-      const chainId = window.forkOptions?.chainId ?? defaultManualForkOptions.chainId
-      const forkBalances = window.forkOptions?.forkBalances ?? defaultManualForkOptions.forkBalances
-      console.log('window.forkOptions', JSON.stringify(window.forkOptions, null, 2))
+      const { chainId } = await getOptions()
 
       console.log('🥸 Impersonating with ', {
         impersonatedAddress,
         chainId,
       })
 
-      if (forkBalances[chainId] && !isReconnecting) {
-        await setTokenBalances({
-          impersonatedAddress,
-          wagmiConfig: updatedConfig,
-          setBalance,
-          tokenBalances: forkBalances,
-          chainId,
-        })
-      }
+      await setForkBalances({
+        impersonatedAddress,
+        wagmiConfig: updatedConfig,
+        isReconnecting,
+      })
 
       // if you don't pass chainId you will be prompted to switch chain (check if it uses mainnet by default)
       await connectAsync({ connector: connectors[connectors.length - 1], chainId })
-      storedImpersonatedAddress.current = undefined
     }
+  }
+
+  async function reset() {
+    if (!storedImpersonatedAddress.current) {
+      return console.log('Cannot reset cause there is no stored impersonated address')
+    }
+    // We don't pass jsonrpcUrl so it will reset to the initial used state
+    await forkClient.reset()
+    await setForkBalances({
+      impersonatedAddress: storedImpersonatedAddress.current as Address,
+      wagmiConfig,
+    })
+    queryClient.invalidateQueries()
+  }
+
+  async function getOptions() {
+    /*
+      Using window to globally set the fork options from E2E tests. Explore better ways to do this.
+      Getting chain id from the current running fork until we support multiple forks
+    */
+    const runningForkChain = await publicForkClient.getChainId()
+    // const chainId = window.forkOptions?.chainId ?? defaultManualForkOptions.chainId
+    const chainId = runningForkChain
+    const forkBalances = window.forkOptions?.forkBalances ?? defaultManualForkOptions.forkBalances
+    // console.log('window.forkOptions', JSON.stringify(window.forkOptions, null, 2))
+    return { chainId, forkBalances }
+  }
+
+  async function setForkBalances({
+    impersonatedAddress,
+    wagmiConfig,
+    isReconnecting = false,
+  }: {
+    impersonatedAddress: Address
+    wagmiConfig: WagmiConfig
+    isReconnecting?: boolean
+  }) {
+    const { forkBalances, chainId } = await getOptions()
+    if (forkBalances[chainId] && !isReconnecting) {
+      await setTokenBalances({
+        impersonatedAddress,
+        wagmiConfig,
+        setBalance,
+        tokenBalances: forkBalances,
+        chainId,
+      })
+    }
+  }
+
+  async function mineBlockWithTimestamp(timestamp: bigint) {
+    await forkClient.setNextBlockTimestamp({
+      timestamp,
+    })
+    await forkClient.mine({ blocks: 1 })
   }
 }

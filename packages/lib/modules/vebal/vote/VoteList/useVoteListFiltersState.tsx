@@ -5,6 +5,7 @@ import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { uniq } from 'lodash'
 import { PoolFilterType } from '@repo/lib/modules/pool/pool.types'
+import { PROTOCOL_VERSION_TABS } from '@repo/lib/modules/pool/PoolList/usePoolListQueryState'
 
 const EMPTY_ARRAY: never[] = []
 
@@ -36,12 +37,16 @@ export function useVoteListFiltersState() {
   const [poolTypes, setPoolTypes] = useState<PoolFilterType[] | null>(null)
   const [includeExpiredPools, setIncludeExpiredPools] = useState(false)
 
+  const [activeProtocolVersionTab, setActiveProtocolVersionTab] = useState(PROTOCOL_VERSION_TABS[0])
+  const [protocolVersion, setProtocolVersion] = useState<number | null>(null)
+
   const [textSearch, setTextSearch] = useState('')
 
   function resetFilters() {
     setNetworks(null)
     setPoolTypes(null)
     setIncludeExpiredPools(false)
+    setProtocolVersion(null)
 
     setPagination({ pageSize: 20, pageIndex: 0 })
     setSorting(Sorting.desc)
@@ -96,10 +101,14 @@ export function useVoteListFiltersState() {
     networks: networks ?? EMPTY_ARRAY,
     poolTypes: poolTypes ?? EMPTY_ARRAY,
     includeExpiredPools,
+    protocolVersion,
+    activeProtocolVersionTab,
     toggleNetwork,
     togglePoolType,
     toggleIncludeExpiredPools,
     setNetworks,
     setPoolTypes,
+    setProtocolVersion,
+    setActiveProtocolVersionTab,
   }
 }

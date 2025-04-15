@@ -34,11 +34,11 @@ function sortVoteList(voteList: VotingPoolWithData[], sortBy: SortVotesBy, order
 
 function filterVoteList(
   voteList: VotingPoolWithData[],
-  isPoolGaugeExpired: (votingPool: VotingPoolWithData) => boolean,
   textSearch: string,
   networks: GqlChain[],
   poolTypes: PoolFilterType[],
-  expiredPoolsOnly: boolean
+  includeExpiredPools: boolean,
+  protocolVersion: number | null
 ) {
   let result = voteList
 
@@ -65,8 +65,12 @@ function filterVoteList(
     result = result.filter(value => poolTypes.includes(value.type as PoolFilterType))
   }
 
-  if (expiredPoolsOnly) {
-    result = result.filter(value => isPoolGaugeExpired(value))
+  if (!includeExpiredPools) {
+    result = result.filter(pool => !pool.gauge.isKilled)
+  }
+
+  if (protocolVersion) {
+    result = result.filter(pool => pool.protocolVersion === protocolVersion)
   }
 
   return result
@@ -77,14 +81,9 @@ export interface UseVoteListArgs {}
 
 // eslint-disable-next-line no-empty-pattern
 export function _useVoteList({}: UseVoteListArgs) {
-  const {
-    votingPools,
-    votingIncentives,
-    votingIncentivesErrorMessage,
-    votingListLoading,
-    votingIncentivesLoading = false,
-    isPoolGaugeExpired,
-  } = useVotes()
+  const { votingPools, incentives, incentivesError, incentivesAreLoading, votingListLoading } =
+    useVotes()
+
   const filtersState = useVoteListFiltersState()
 
   const voteListData = votingPools
@@ -97,28 +96,28 @@ export function _useVoteList({}: UseVoteListArgs) {
     return voteListData.map(vote => ({
       ...vote,
       gaugeVotes: gaugeVotes ? gaugeVotes[vote.gauge.address] : undefined,
-      votingIncentive: votingIncentives
-        ? votingIncentives.find(votingIncentive => votingIncentive.poolId === vote.id)
+      votingIncentive: incentives
+        ? incentives.find(incentive => incentive.poolId === vote.id)
         : undefined,
     }))
-  }, [voteListData, gaugeVotes, votingIncentives])
+  }, [voteListData, gaugeVotes, incentives])
 
   const filteredVoteList = useMemo(() => {
     return filterVoteList(
       votingPoolsList,
-      isPoolGaugeExpired,
       filtersState.searchText,
       filtersState.networks,
       filtersState.poolTypes,
-      filtersState.includeExpiredPools
+      filtersState.includeExpiredPools,
+      filtersState.protocolVersion
     )
   }, [
     votingPoolsList,
-    isPoolGaugeExpired,
     filtersState.searchText,
     filtersState.networks,
     filtersState.poolTypes,
     filtersState.includeExpiredPools,
+    filtersState.protocolVersion,
   ])
 
   const sortedVoteList = useMemo(() => {
@@ -138,10 +137,10 @@ export function _useVoteList({}: UseVoteListArgs) {
     filtersState,
     sortedVoteList,
     votingListLoading,
-    loading: votingListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
+    loading: votingListLoading || incentivesAreLoading || gaugeVotesIsLoading,
     count: filteredVoteList.length,
-    votingIncentivesLoading,
-    votingIncentivesErrorMessage, // todo: should be used in VoteListTable
+    incentivesAreLoading,
+    incentivesError,
     gaugeVotesIsLoading,
   }
 }

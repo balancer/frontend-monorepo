@@ -1,4 +1,4 @@
-import { Address, createTestClient, http, isAddress, parseUnits } from 'viem'
+import { Address, createPublicClient, createTestClient, http, isAddress, parseUnits } from 'viem'
 import { SetBalanceMutation } from '../../anvil/useSetErc20Balance'
 import { TokenBalance, TokenBalancesByChain } from './fork-options'
 import { createConfig } from 'wagmi'
@@ -25,6 +25,11 @@ export const mainnetTest = {
 export const forkClient = createTestClient({
   // chain: mainnetTest, // TODO: check when this could be useful
   mode: 'anvil',
+  transport: http(defaultAnvilForkRpcUrl),
+})
+
+// Only used to get the running fork chainId
+export const publicForkClient = createPublicClient({
   transport: http(defaultAnvilForkRpcUrl),
 })
 
@@ -90,7 +95,7 @@ export function getSavedImpersonatedAddressLS(): Address | undefined {
   return result && isAddress(result) ? result : undefined
 }
 
-export function clearWalletConnectConnected() {
+export function clearImpersonatedAddressLS() {
   if (!isLocalStorageAvailable()) return
   localStorage.removeItem(storageKey)
 }

@@ -10,9 +10,10 @@ import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProv
 import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 import { useUserAccount } from '../../web3/UserAccountProvider'
+import { formatUnits } from 'viem'
 
 export type VebalUserStatsValues = {
-  balance: string
+  balance: bigint
   rank: number
   percentOfAllSupply: BigNumber | undefined
   lockedUntil: string | undefined
@@ -21,35 +22,28 @@ export type VebalUserStatsValues = {
 
 export function UserVebalStatsValues() {
   const { isConnected } = useUserAccount()
-  const lockData = useVebalLockData()
-  const vebalUserData = useVebalUserData()
+  const { mainnetLockedInfo: lockedInfo, isLoading: lockedInfoIsLoading } = useVebalLockData()
+  const { isLoading: userDataIsLoading, veBALBalance, rank } = useVebalUserData()
 
   const userStats: VebalUserStatsValues | undefined = useMemo(() => {
     if (isConnected) {
-      const balance = vebalUserData.data ? vebalUserData.data.veBalGetUser.balance : '0'
-      const rank = vebalUserData.data?.veBalGetUser.rank ? vebalUserData.data.veBalGetUser.rank : 0
-      const percentOfAllSupply = vebalUserData.data
-        ? bn(vebalUserData.data.veBalGetUser.balance || 0).div(
-            lockData.mainnetLockedInfo.totalSupply || 0
-          )
-        : undefined
-      const lockedUntil = lockData.mainnetLockedInfo.lockedEndDate
-        ? format(lockData.mainnetLockedInfo.lockedEndDate, 'yyyy-MM-dd')
+      const percentOfAllSupply = bn(formatUnits(veBALBalance, 18)).div(lockedInfo.totalSupply || 0)
+
+      const lockedUntil = lockedInfo.lockedEndDate
+        ? format(lockedInfo.lockedEndDate, 'yyyy-MM-dd')
         : undefined
 
-      const lockExpired =
-        lockData.mainnetLockedInfo.isExpired === undefined ||
-        lockData.mainnetLockedInfo.isExpired === true
+      const lockExpired = lockedInfo.isExpired === undefined || lockedInfo.isExpired === true
 
       return {
-        balance,
-        rank,
+        balance: veBALBalance,
+        rank: rank || 0,
         percentOfAllSupply,
         lockedUntil,
         lockExpired,
       }
     }
-  }, [lockData.mainnetLockedInfo, isConnected, vebalUserData.data])
+  }, [lockedInfo, isConnected, veBALBalance, rank])
 
   return (
     <>
@@ -57,11 +51,13 @@ export function UserVebalStatsValues() {
         <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My veBAL
         </Text>
-        {vebalUserData.loading ? (
+        {userDataIsLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
           <Heading size="h4">
-            {userStats && !userStats.lockExpired ? fNum('token', userStats.balance) : 0}
+            {userStats && !userStats.lockExpired
+              ? fNum('token', formatUnits(userStats.balance, 18))
+              : 0}
           </Heading>
         )}
       </VStack>
@@ -69,7 +65,7 @@ export function UserVebalStatsValues() {
         <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My rank
         </Text>
-        {vebalUserData.loading ? (
+        {userDataIsLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
           <Heading size="h4">
@@ -81,7 +77,7 @@ export function UserVebalStatsValues() {
         <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           My share of veBAL
         </Text>
-        {vebalUserData.loading || lockData.isLoading ? (
+        {userDataIsLoading || lockedInfoIsLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
           <Heading size="h4">
@@ -97,7 +93,7 @@ export function UserVebalStatsValues() {
         <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
           {userStats && !userStats.lockExpired ? <>Expiry date</> : <>Expired on</>}
         </Text>
-        {lockData.isLoading ? (
+        {lockedInfoIsLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
           <Tooltip

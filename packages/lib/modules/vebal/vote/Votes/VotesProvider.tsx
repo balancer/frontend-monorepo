@@ -19,28 +19,29 @@ import { isGaugeExpired } from '@repo/lib/modules/vebal/vote/vote.helpers'
 import { useVotingEscrowLocksQueries } from '@repo/lib/modules/vebal/cross-chain/useVotingEscrowLocksQueries'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { HiddenHandData } from '@repo/lib/shared/services/hidden-hand/hidden-hand.types'
+import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
+import { useHiddenHandVotingIncentives } from '@repo/lib/shared/services/hidden-hand/useHiddenHandVotingIncentives'
 
 export interface UseVotesArgs {
   data: GetVeBalVotingListQuery | undefined
   votingListLoading?: boolean
   error?: any
-  votingIncentives?: HiddenHandData[]
-  votingIncentivesLoading?: boolean
-  votingIncentivesErrorMessage?: string
 }
 
-export function _useVotes({
-  data,
-  votingListLoading = false,
-  error,
-  votingIncentives,
-  votingIncentivesErrorMessage,
-  votingIncentivesLoading = false,
-}: UseVotesArgs) {
+export function _useVotes({ data, votingListLoading = false, error }: UseVotesArgs) {
   const { userAddress, isConnected } = useUserAccount()
 
-  const votingList = useMemo(() => data?.veBalGetVotingList || [], [data?.veBalGetVotingList])
+  const votingList = useMemo(() => {
+    const votingPools = data?.veBalGetVotingList || []
+    return shouldUseAnvilFork
+      ? /*
+        FIXME:
+        The current implementation is making onchain requests for every row in the list. We must simplify this.
+        In the meantime, when running in anvil fork mode we limit the number of rows to 10 to avoid overloading the fork.
+        */
+        votingPools.slice(0, 10)
+      : votingPools
+  }, [data?.veBalGetVotingList])
 
   const gaugeAddresses = useMemo(() => votingList.map(vote => vote.gauge.address), [votingList])
 
@@ -52,15 +53,17 @@ export function _useVotes({
 
   const { expiredGauges } = useExpiredGauges({ gaugeAddresses })
 
+  const { incentives, incentivesError, incentivesAreLoading } = useHiddenHandVotingIncentives()
+
   const votingPools = useMemo<VotingPoolWithData[]>(() => {
     return votingList.map(vote => ({
       ...vote,
       gaugeVotes: gaugeVotes ? gaugeVotes[vote.gauge.address] : undefined,
-      votingIncentive: votingIncentives
-        ? votingIncentives.find(votingIncentive => votingIncentive.poolId === vote.id)
+      votingIncentive: incentives
+        ? incentives.find(incentive => incentive.poolId === vote.id)
         : undefined,
     }))
-  }, [votingList, gaugeVotes, votingIncentives])
+  }, [votingList, gaugeVotes, incentives])
 
   const votedPools = useMemo(
     () => votingPools.filter(vote => bn(vote.gaugeVotes?.userVotes || '0') > bn(0)),
@@ -142,10 +145,10 @@ export function _useVotes({
   const vebalIsExpired = mainnetLockedInfo.isExpired
   const vebalLockTooShort = mainnetLockedInfo.lockTooShort
 
-  const { myVebalBalance, noVeBalBalance } = useVebalUserData()
+  const { veBALBalance, noVeBALBalance } = useVebalUserData()
 
   const votingIsDisabled =
-    vebalIsExpired || vebalLockTooShort || noVeBalBalance || hasAllVotingPowerTimeLocked
+    vebalIsExpired || vebalLockTooShort || noVeBALBalance || hasAllVotingPowerTimeLocked
 
   const allowChangeVotes = !votingIsDisabled
   const allowSelectVotingPools = !votingIsDisabled
@@ -178,15 +181,13 @@ export function _useVotes({
           // Is voting currently not locked
           !isVotingTimeLocked(votingPool.gaugeVotes?.lastUserVoteTime ?? 0) &&
           // Is gauge not expired
-          // TODO: this should not be applied when Show Expired pool gauges filter is checked
           !isPoolGaugeExpired(votingPool)
         )
       }),
     [votingPools, lastReceivedVebal, isPoolGaugeExpired]
   )
 
-  const shouldResubmitVotes = // Does user have any veBAL
-    bn(myVebalBalance ?? 0).gt(0) && !!poolsUsingUnderUtilizedVotingPower.length
+  const shouldResubmitVotes = bn(veBALBalance).gt(0) && !!poolsUsingUnderUtilizedVotingPower.length // Does user have any veBAL
 
   const scrollToMyVotes = () => {
     document.body.scrollIntoView({ behavior: 'smooth' })
@@ -195,12 +196,12 @@ export function _useVotes({
   return {
     votingPools,
     votingListLoading,
-    votingIncentives,
-    loading: votingListLoading || votingIncentivesLoading || gaugeVotesIsLoading,
+    incentives,
+    incentivesError,
+    incentivesAreLoading,
+    loading: votingListLoading || incentivesAreLoading || gaugeVotesIsLoading,
     count: votingPools.length,
     error,
-    votingIncentivesLoading,
-    votingIncentivesErrorMessage,
     gaugeVotesIsLoading,
     votedPools,
     selectedVotingPools,

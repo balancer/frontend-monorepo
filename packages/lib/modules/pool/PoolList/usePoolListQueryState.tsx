@@ -2,7 +2,6 @@
 
 import {
   GqlChain,
-  GqlPoolType,
   GqlPoolOrderBy,
   GqlPoolOrderDirection,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -39,27 +38,6 @@ export const PROTOCOL_VERSION_TABS: ButtonGroupOption[] = [
     label: 'CoW',
   },
 ] as const
-
-export function poolTypeLabel(poolType: GqlPoolType) {
-  switch (poolType) {
-    case GqlPoolType.Weighted:
-      return 'Weighted'
-    case GqlPoolType.Stable:
-      return 'Stable'
-    case GqlPoolType.LiquidityBootstrapping:
-      return 'Liquidity Bootstrapping (LBP)'
-    case GqlPoolType.Gyro:
-      return 'Gyro CLP'
-    case GqlPoolType.CowAmm:
-      return 'CoW AMM'
-    case GqlPoolType.Fx:
-      return 'FX'
-    case GqlPoolType.QuantAmmWeighted:
-      return 'BTF'
-    default:
-      return poolType.toLowerCase()
-  }
-}
 
 export function usePoolListQueryState() {
   const [first, setFirst] = useQueryState('first', poolListQueryStateParsers.first)
@@ -277,7 +255,6 @@ export function usePoolListQueryState() {
     togglePoolType,
     togglePoolTag,
     togglePoolHookTag,
-    poolTypeLabel,
     setSorting,
     setPagination,
     setSearch,

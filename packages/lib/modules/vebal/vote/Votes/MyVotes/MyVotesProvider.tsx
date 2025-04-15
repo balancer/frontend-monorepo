@@ -9,9 +9,9 @@ import {
   SortingBy,
 } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.types'
 import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
-import { orderBy, sumBy, uniqBy } from 'lodash'
+import { orderBy, uniqBy } from 'lodash'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, sum } from '@repo/lib/shared/utils/numbers'
 import { useSubmitVotesAllSteps } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesAllSteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import {
@@ -58,7 +58,7 @@ export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern
 export function _useMyVotes({}: UseMyVotesArgs) {
-  const { myVebalBalance } = useVebalUserData()
+  const { veBALBalance } = useVebalUserData()
 
   const {
     loading,
@@ -107,7 +107,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     }))
   }
 
-  const hasExpiredGauges = myVotes.some(votedPool => isPoolGaugeExpired(votedPool))
+  const hasExpiredGauges = myVotes.some(votedPool => votedPool.gauge.isKilled)
 
   const availableMyVotes = useMemo(() => {
     return myVotes.filter(myVote => !isPoolGaugeExpired(myVote))
@@ -131,36 +131,36 @@ export function _useMyVotes({}: UseMyVotesArgs) {
       }
     })
 
-    const currentVotes = sumBy(infos, ({ currentWeight }) => bn(currentWeight).toNumber())
-    const editVotes = sumBy(infos, ({ editWeight }) => bn(editWeight).toNumber())
+    const currentVotes = sum(infos, ({ currentWeight }) => bn(currentWeight))
+    const editVotes = sum(infos, ({ editWeight }) => bn(editWeight))
 
-    const totalRewardValue = sumBy(infos, ({ votedWeight, editWeight, vote }) =>
-      calculateMyVoteRewardsValue(votedWeight, editWeight, vote, myVebalBalance ?? 0)
+    const totalRewardValue = sum(infos, ({ votedWeight, editWeight, vote }) =>
+      calculateMyVoteRewardsValue(votedWeight, editWeight, vote, veBALBalance)
     )
-    const prevTotalRewardValue = sumBy(infos, ({ votedWeight, vote }) =>
-      calculateMyVoteRewardsValue(votedWeight, votedWeight, vote, myVebalBalance ?? 0)
-    )
-
-    const averageRewardPerVote = sumBy(infos, ({ valuePerVote, editWeight }) =>
-      bn(valuePerVote).multipliedBy(bpsToPercentage(editWeight)).toNumber()
-    )
-    const prevAverageRewardPerVote = sumBy(infos, ({ valuePerVote, votedWeight }) =>
-      bn(valuePerVote).multipliedBy(bpsToPercentage(votedWeight)).toNumber()
+    const prevTotalRewardValue = sum(infos, ({ votedWeight, vote }) =>
+      calculateMyVoteRewardsValue(votedWeight, votedWeight, vote, veBALBalance)
     )
 
-    const unallocatedVotes = sharesToBps(100).minus(editVotes).toNumber()
+    const averageRewardPerVote = sum(infos, ({ valuePerVote, editWeight }) =>
+      bn(valuePerVote).multipliedBy(bpsToPercentage(editWeight))
+    )
+    const prevAverageRewardPerVote = sum(infos, ({ valuePerVote, votedWeight }) =>
+      bn(valuePerVote).multipliedBy(bpsToPercentage(votedWeight))
+    )
+
+    const unallocatedVotes = sharesToBps(100).minus(editVotes)
 
     return {
       currentVotes,
       editVotes,
       totalRewardValue,
       prevTotalRewardValue,
-      totalRewardValueGain: totalRewardValue - prevTotalRewardValue,
+      totalRewardValueGain: totalRewardValue.minus(prevTotalRewardValue),
       averageRewardPerVote,
-      averageRewardPerVoteGain: averageRewardPerVote - prevAverageRewardPerVote,
-      unallocatedVotes: Math.max(unallocatedVotes, 0),
+      averageRewardPerVoteGain: averageRewardPerVote.minus(prevAverageRewardPerVote),
+      unallocatedVotes: BigNumber.max(unallocatedVotes, 0),
     }
-  }, [availableMyVotes, votedVotesWeights, editVotesWeights, myVebalBalance])
+  }, [availableMyVotes, votedVotesWeights, editVotesWeights, veBALBalance])
 
   const hasVotedBefore = votedPools.length > 0
 
@@ -171,8 +171,8 @@ export function _useMyVotes({}: UseMyVotesArgs) {
       votedPool => !bn(votedPool.gaugeVotes?.userVotes ?? 0).eq(editVotesWeights[votedPool.id])
     )
 
-  const hasExceededWeight = getExceededWeight(totalInfo.editVotes ?? 0) > 0
-  const hasUnallocatedWeight = getUnallocatedWeight(totalInfo.editVotes ?? 0) > 0
+  const hasExceededWeight = getExceededWeight(totalInfo.editVotes || bn(0)).gt(0)
+  const hasUnallocatedWeight = getUnallocatedWeight(totalInfo.editVotes || bn(0)).gt(0)
 
   const clearAll = () => {
     setEditVotesWeights({})

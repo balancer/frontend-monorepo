@@ -3,7 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
-import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED, BALANCER_ROUTER } from '@balancer/sdk'
+import { balancerV3Contracts, PERMIT2 } from '@balancer/sdk'
 import { avalanche } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -46,10 +46,11 @@ const networkConfig: NetworkConfig = {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
       relayerV6: '0xA084c11cb55e67C9becf9607f1DBB20ec4D5E7b2',
       minter: '0x85a80afee867aDf27B50BdB7b76DA70f1E853062',
-      router: BALANCER_ROUTER[avalanche.id],
-      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[avalanche.id],
+      router: balancerV3Contracts.Router[avalanche.id],
+      compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[avalanche.id],
     },
     veDelegationProxy: '0x0c6052254551EAe3ECac77B01DFcf1025418828f',
+    permit2: PERMIT2[avalanche.id],
   },
   pools: convertHexToLowerCase({
     issues: {

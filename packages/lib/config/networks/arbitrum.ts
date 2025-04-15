@@ -3,13 +3,7 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
-import {
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
-  BALANCER_ROUTER,
-  PERMIT2,
-  VAULT_ADMIN,
-  VAULT_V3,
-} from '@balancer/sdk'
+import { balancerV3Contracts, PERMIT2 } from '@balancer/sdk'
 import { arbitrum } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -58,13 +52,13 @@ const networkConfig: NetworkConfig = {
     multicall2: '0x80c7dd17b01855a6d2347444a0fcc36136a314de',
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      vaultV3: VAULT_V3[arbitrum.id],
+      vaultV3: balancerV3Contracts.Vault[arbitrum.id],
       relayerV6: '0x9B892E515D2Ab8869F17488d64B3b918731cc70d',
       minter: '0xc3ccacE87f6d3A81724075ADcb5ddd85a8A1bB68',
       WeightedPool2TokensFactory: '0xCF0a32Bbef8F064969F21f7e02328FB577382018',
-      vaultAdminV3: VAULT_ADMIN[arbitrum.id],
-      router: BALANCER_ROUTER[arbitrum.id],
-      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[arbitrum.id],
+      vaultAdminV3: balancerV3Contracts.VaultAdmin[arbitrum.id],
+      router: balancerV3Contracts.Router[arbitrum.id],
+      compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[arbitrum.id],
     },
     veDelegationProxy: '0x81cFAE226343B24BA12EC6521Db2C79E7aeeb310',
     permit2: PERMIT2[arbitrum.id],

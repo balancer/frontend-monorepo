@@ -1,7 +1,6 @@
 import { HStack, Text } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { bpsToPercentage } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
-import React from 'react'
 import {
   getExceededWeight,
   getUnallocatedWeight,
@@ -17,9 +16,9 @@ interface Props {
   timeLockedEndDate?: Date
   total?: boolean
   skipTotalWarnings?: boolean
-  weight: string | number
+  weight: BigNumber
   variant: 'primary' | 'secondary'
-  isExpired?: boolean
+  isGaugeExpired?: boolean
 }
 
 export function VoteWeight({
@@ -29,13 +28,13 @@ export function VoteWeight({
   total = false,
   skipTotalWarnings = false,
   timeLockedEndDate,
-  isExpired,
+  isGaugeExpired,
 }: Props) {
   const exceededWeight = getExceededWeight(weight)
   const unallocatedWeight = getUnallocatedWeight(weight)
 
-  const showExceededWarning = total && !skipTotalWarnings && exceededWeight > 0
-  const showUnallocatedWarning = total && !skipTotalWarnings && unallocatedWeight > 0
+  const showExceededWarning = total && !skipTotalWarnings && exceededWeight.gt(0)
+  const showUnallocatedWarning = total && !skipTotalWarnings && unallocatedWeight.gt(0)
 
   function getFontColor() {
     if (total) {
@@ -48,7 +47,7 @@ export function VoteWeight({
       return 'font.maxContrast'
     }
 
-    if (isExpired) {
+    if (isGaugeExpired) {
       return 'font.warning'
     }
 
@@ -67,7 +66,7 @@ export function VoteWeight({
       {showUnallocatedWarning && (
         <VoteUnallocatedTooltip unallocatedWeight={unallocatedWeight} usePortal />
       )}
-      {isExpired && (
+      {isGaugeExpired && (
         <VoteExpiredTooltip usePortal>
           <HStack color="font.warning">
             <AlertIcon height="16px" width="16px" />
