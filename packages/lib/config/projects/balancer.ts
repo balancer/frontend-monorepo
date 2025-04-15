@@ -42,7 +42,11 @@ export const ProjectConfigBalancer: ProjectConfig = {
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: [],
-    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.Fx],
+    hidePoolTypes: [
+      GqlPoolType.LiquidityBootstrapping,
+      GqlPoolType.Fx,
+      GqlPoolType.QuantAmmWeighted,
+    ],
     hideProtocolVersion: [],
     showPoolName: false,
     showVeBal: true,
