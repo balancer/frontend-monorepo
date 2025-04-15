@@ -1,7 +1,7 @@
 import { VStack, Card, HStack, Text, Divider, Box, Badge } from '@chakra-ui/react'
 import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { SubmittingVote } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { fNum, bn } from '@repo/lib/shared/utils/numbers'
 import {
   bpsToPercentage,
   votingTimeLockedEndDate,
@@ -37,6 +37,9 @@ export function SubmitVotesPreview({
 }: Props) {
   const { toCurrency } = useCurrency()
   const { getToken } = useTokens()
+
+  const unallocatedVotes = totalInfo.unallocatedVotes || bn(0)
+  const editVotes = totalInfo.editVotes || bn(0)
 
   return (
     <VStack spacing="md" w="full">
@@ -86,7 +89,7 @@ export function SubmitVotesPreview({
                           </Badge>
                         )}
                       </HStack>
-                      <VoteWeight variant="primary" weight={weight} />
+                      <VoteWeight variant="primary" weight={bn(weight)} />
                     </HStack>
                   )
                 })}
@@ -121,7 +124,7 @@ export function SubmitVotesPreview({
                           vote.gaugeVotes?.lastUserVoteTime ?? 0
                         )}
                         variant="secondary"
-                        weight={weight}
+                        weight={bn(weight)}
                       />
                     </HStack>
                   )
@@ -138,9 +141,7 @@ export function SubmitVotesPreview({
                 <Text fontSize="sm" fontWeight={700} variant="secondary">
                   Unallocated votes
                 </Text>
-                <Text variant="secondary">
-                  {fNum('apr', bpsToPercentage(totalInfo.unallocatedVotes ?? 0))}
-                </Text>
+                <Text variant="secondary">{fNum('apr', bpsToPercentage(unallocatedVotes))}</Text>
               </HStack>
             </>
           )}
@@ -193,7 +194,7 @@ export function SubmitVotesPreview({
 
           <HStack justifyContent="space-between" p="md" spacing="sm" w="full">
             <Text fontWeight={700}>Total</Text>
-            <Text fontWeight={700}>{fNum('apr', bpsToPercentage(totalInfo.editVotes ?? 0))}</Text>
+            <Text fontWeight={700}>{fNum('apr', bpsToPercentage(editVotes))}</Text>
           </HStack>
         </VStack>
       </Card>

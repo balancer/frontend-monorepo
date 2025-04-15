@@ -41,7 +41,6 @@ export const ProjectConfigBeets: ProjectConfig = {
     ecosystemLinks: [
       { label: 'Docs', href: 'https://docs.beets.fi/' },
       { label: 'Governance', href: 'https://snapshot.org/#/beets.eth' },
-      { label: 'Analytics', href: 'https://beets.defilytica.com/' },
     ],
     socialLinks: [
       {
@@ -96,7 +95,6 @@ export const ProjectConfigBeets: ProjectConfig = {
             href: 'https://immunefi.com/bug-bounty/balancer',
             isExternal: true,
           },
-          { label: 'Analytics', href: 'https://beets.defilytica.com', isExternal: true },
         ],
       },
     ],

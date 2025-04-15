@@ -1,12 +1,12 @@
 export interface MyVotesTotalInfo {
-  totalRewardValue?: number
-  prevTotalRewardValue?: number
-  totalRewardValueGain?: number
-  averageRewardPerVote?: number
-  averageRewardPerVoteGain?: number
-  currentVotes?: number
-  editVotes?: number
-  unallocatedVotes?: number
+  totalRewardValue?: BigNumber
+  prevTotalRewardValue?: BigNumber
+  totalRewardValueGain?: BigNumber
+  averageRewardPerVote?: BigNumber
+  averageRewardPerVoteGain?: BigNumber
+  currentVotes?: BigNumber
+  editVotes?: BigNumber
+  unallocatedVotes?: BigNumber
 }
 
 export enum SortingBy {

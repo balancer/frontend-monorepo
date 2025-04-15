@@ -20,6 +20,7 @@ import {
   getLockContractFunctionName,
 } from './lock-steps.utils'
 import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 
 type UseLockStepArgs = {
   lockAmount: bigint
@@ -29,6 +30,7 @@ type UseLockStepArgs = {
 
 export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLockStepArgs) {
   const { userAddress } = useUserAccount()
+  const { refetchBalances } = useTokenBalances()
   const labels: TransactionLabels = useMemo(
     () => ({
       init: getInitLabel(lockActionType),
@@ -66,7 +68,7 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
     }
 
     return {
-      enabled: !!lockAmount && !!lockEndDate,
+      enabled: !!lockEndDate,
       labels,
       chainId: mainnetNetworkConfig.chainId,
       contractAddress: mainnetNetworkConfig.contracts.veBAL as Address,
@@ -77,9 +79,10 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
     }
   }, [lockAmount, lockEndDate, lockActionType, labels, txSimulationMeta])
 
-  const onSuccess = useCallback(() => {
-    // Handle success actions
-  }, [])
+  const onSuccess = useCallback(async () => {
+    // Refetches veBAL BPT balance which also affects veBal balance queries
+    await refetchBalances()
+  }, [refetchBalances])
 
   const { getTransaction } = useTransactionState()
 

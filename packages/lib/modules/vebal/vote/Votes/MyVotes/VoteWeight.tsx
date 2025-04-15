@@ -1,7 +1,6 @@
 import { HStack, Text } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { bpsToPercentage } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
-import React from 'react'
 import {
   getExceededWeight,
   getUnallocatedWeight,
@@ -17,7 +16,7 @@ interface Props {
   timeLockedEndDate?: Date
   total?: boolean
   skipTotalWarnings?: boolean
-  weight: string | number
+  weight: BigNumber
   variant: 'primary' | 'secondary'
   isGaugeExpired?: boolean
 }
@@ -34,8 +33,8 @@ export function VoteWeight({
   const exceededWeight = getExceededWeight(weight)
   const unallocatedWeight = getUnallocatedWeight(weight)
 
-  const showExceededWarning = total && !skipTotalWarnings && exceededWeight > 0
-  const showUnallocatedWarning = total && !skipTotalWarnings && unallocatedWeight > 0
+  const showExceededWarning = total && !skipTotalWarnings && exceededWeight.gt(0)
+  const showUnallocatedWarning = total && !skipTotalWarnings && unallocatedWeight.gt(0)
 
   function getFontColor() {
     if (total) {

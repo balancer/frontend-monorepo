@@ -1,5 +1,5 @@
 import { oneDayInMs, toJsTimestamp } from '@repo/lib/shared/utils/time'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
 import { formatDistanceToNow } from 'date-fns'
 import { SortingBy } from './myVotes.types'
 import BigNumber from 'bignumber.js'
@@ -9,7 +9,7 @@ export const WEIGHT_VOTE_DELAY = 10 * oneDayInMs
 
 export const WEIGHT_MAX_VOTES = 100
 
-export function bpsToPercentage(weight: string | number) {
+export function bpsToPercentage(weight: Numberish) {
   // 1556n -> 15.56%
   return bn(weight).shiftedBy(-4)
 }
@@ -39,12 +39,12 @@ export function remainingVoteLockTime(lastVoteTime: number): string {
   return formatDistanceToNow(lastUserVoteTime + WEIGHT_VOTE_DELAY)
 }
 
-export function getExceededWeight(weight: string | number) {
-  return Math.max(bn(weight).minus(sharesToBps(WEIGHT_MAX_VOTES)).toNumber(), 0)
+export function getExceededWeight(weight: Numberish) {
+  return BigNumber.max(bn(weight).minus(sharesToBps(WEIGHT_MAX_VOTES)), 0)
 }
 
-export function getUnallocatedWeight(weight: string | number) {
-  return Math.max(sharesToBps(WEIGHT_MAX_VOTES).minus(weight).toNumber(), 0)
+export function getUnallocatedWeight(weight: Numberish) {
+  return BigNumber.max(sharesToBps(WEIGHT_MAX_VOTES).minus(weight), 0)
 }
 
 // Bribes for voted Vote (Same as defilytica - HH Rewards)
@@ -53,19 +53,19 @@ export function calculateMyVoteRewardsValue(
   oldWeight: string | number,
   newWeight: string | number,
   votingPool: VotingPoolWithData,
-  userVeBAL: number
+  userVeBAL: bigint
 ) {
-  const oldPercentage = bpsToPercentage(oldWeight).toNumber()
-  const newPercentage = bpsToPercentage(newWeight).toNumber()
+  const oldPercentage = bpsToPercentage(oldWeight)
+  const newPercentage = bpsToPercentage(newWeight)
 
   const voteCount = votingPool?.votingIncentive?.voteCount ?? 0
   const totalValue = votingPool?.votingIncentive?.totalValue ?? 0
 
-  const currentUserVoteAllocation = userVeBAL * oldPercentage
-  const newUserVoteAllocation = userVeBAL * newPercentage
-  const newVoteValue = voteCount - currentUserVoteAllocation + newUserVoteAllocation
-
-  const rewardInUSD = (totalValue / newVoteValue) * userVeBAL * newPercentage
+  const currentUserVoteAllocation = bn(userVeBAL).times(oldPercentage)
+  const newUserVoteAllocation = bn(userVeBAL).times(newPercentage)
+  const newVoteValue = bn(voteCount).minus(currentUserVoteAllocation).plus(newUserVoteAllocation)
+  const valueRatio = bn(totalValue).div(newVoteValue)
+  const rewardInUSD = valueRatio.times(userVeBAL).times(newPercentage)
 
   return rewardInUSD
 }
