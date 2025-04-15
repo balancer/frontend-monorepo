@@ -18,11 +18,12 @@ function TimeMocker({ setIsFakeTime }: Props) {
     queryClient.invalidateQueries()
   }
 
-  const resetTime = () => {
+  const resetTime = async () => {
     MockDate.reset()
     setIsFakeTime(false)
     // Anvil fork reset required as we cannot mine blocks with timestamps back in time
-    reset()
+    await reset()
+    window.location.reload()
   }
 
   return (
