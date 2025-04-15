@@ -6,11 +6,10 @@ import { MyIncentivesTooltip } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 
 interface Props {
-  myVebalBalance: number | undefined
   loading: boolean
 }
 
-export function MyVotesStatsMyIncentives({ myVebalBalance, loading }: Props) {
+export function MyVotesStatsMyIncentives({ loading }: Props) {
   const { toCurrency } = useCurrency()
   const { totalInfo } = useMyVotes()
 
@@ -20,7 +19,7 @@ export function MyVotesStatsMyIncentives({ myVebalBalance, loading }: Props) {
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
-        ) : myVebalBalance && totalInfo.totalRewardValue ? (
+        ) : totalInfo.totalRewardValue ? (
           <HStack spacing="xs">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
               {toCurrency(totalInfo.totalRewardValue, { abbreviated: false })}

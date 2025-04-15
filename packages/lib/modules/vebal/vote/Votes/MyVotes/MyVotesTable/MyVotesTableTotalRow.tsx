@@ -14,6 +14,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useMyVotes } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { VoteWeight } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/VoteWeight'
 import { useVoteList } from '../../../VoteList/VoteListProvider'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 interface Props extends GridProps {
   keyValue: string | number
@@ -75,7 +76,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
                 skipTotalWarnings={!hasVotedBefore}
                 total
                 variant="primary"
-                weight={totalInfo.currentVotes ?? 0}
+                weight={totalInfo.currentVotes || bn(0)}
               />
             )}
           </GridItem>
@@ -85,7 +86,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
               skipTotalWarnings={!hasChanges}
               total
               variant="primary"
-              weight={totalInfo.editVotes ?? 0}
+              weight={totalInfo.editVotes || bn(0)}
             />
           </GridItem>
 

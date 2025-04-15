@@ -15,7 +15,7 @@ import {
 } from '@repo/lib/modules/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 interface Props {
-  exceededWeight: number
+  exceededWeight: BigNumber
   usePortal?: boolean
 }
 

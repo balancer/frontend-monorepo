@@ -4,7 +4,7 @@ import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 interface Props {
-  gain: number
+  gain: BigNumber
 }
 
 export function GainBadge({ gain }: Props) {
@@ -12,21 +12,19 @@ export function GainBadge({ gain }: Props) {
 
   return (
     <Badge
-      background={gain ? (gain > 0 ? 'green.500' : 'red.400') : undefined}
+      background={gain ? (gain.gt(0) ? 'green.500' : 'red.400') : undefined}
       borderRadius="full"
       color="font.dark"
       pr="sm"
       userSelect="none"
     >
       <HStack spacing="0">
-        {gain ? (
-          gain < 0 ? (
-            <ArrowDownIcon height="12" width="12" />
-          ) : (
-            <ArrowUpIcon height="12" width="12" />
-          )
-        ) : undefined}
-        <>{toCurrency(Math.abs(gain), { abbreviated: false })}</>
+        {gain.lt(0) ? (
+          <ArrowDownIcon height="12" width="12" />
+        ) : (
+          <ArrowUpIcon height="12" width="12" />
+        )}
+        <>{toCurrency(gain.abs(), { abbreviated: false })}</>
       </HStack>
     </Badge>
   )
