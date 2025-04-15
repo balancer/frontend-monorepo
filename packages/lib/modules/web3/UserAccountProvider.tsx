@@ -13,7 +13,7 @@ import { captureError, ensureError } from '@repo/lib/shared/utils/errors'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useSafeAppConnectionGuard } from './useSafeAppConnectionGuard'
 import { useWCConnectionLocalStorage } from './wallet-connect/useWCConnectionLocalStorage'
-import { clearWalletConnectConnected } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { clearImpersonatedAddressLS } from '@repo/lib/test/utils/wagmi/fork.helpers'
 
 async function isAuthorizedAddress(address: Address): Promise<boolean> {
   try {
@@ -90,7 +90,7 @@ export function _useUserAccount() {
   useAccountEffect({
     onDisconnect: () => {
       if (shouldUseAnvilFork) {
-        clearWalletConnectConnected()
+        clearImpersonatedAddressLS()
       }
       if (isConnectedToWC) {
         // When disconnecting from WC connector we need a full page reload to enforce a new WC connector instance created

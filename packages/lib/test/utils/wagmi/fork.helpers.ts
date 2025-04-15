@@ -95,7 +95,7 @@ export function getSavedImpersonatedAddressLS(): Address | undefined {
   return result && isAddress(result) ? result : undefined
 }
 
-export function clearWalletConnectConnected() {
+export function clearImpersonatedAddressLS() {
   if (!isLocalStorageAvailable()) return
   localStorage.removeItem(storageKey)
 }

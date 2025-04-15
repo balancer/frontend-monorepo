@@ -13,10 +13,20 @@ import { mainnetTestPublicClient } from '@repo/lib/test/utils/wagmi/wagmi-test-c
 import { Address, parseUnits } from 'viem'
 import { LockActionType } from './lock-steps.utils'
 import { useLockStep } from './useLockStep'
+import { PropsWithChildren } from 'react'
+import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 
 const lockAmount: bigint = parseUnits('3000', 18)
 const veBalContractAddress = mainnetNetworkConfig.contracts.veBAL as Address
 const veBalBpt = mainnetNetworkConfig.tokens.addresses.veBalBpt as Address
+
+function Providers({ children }: PropsWithChildren) {
+  return (
+    <TransactionStateProvider>
+      <TokenBalancesProvider initTokens={[]}>{children}</TokenBalancesProvider>
+    </TransactionStateProvider>
+  )
+}
 
 function testUseLockStep() {
   const { result } = testHook(
@@ -30,7 +40,7 @@ function testUseLockStep() {
 
       return useManagedTransaction(_txInput as ManagedTransactionInput)
     },
-    { wrapper: TransactionStateProvider }
+    { wrapper: Providers }
   )
 
   return result

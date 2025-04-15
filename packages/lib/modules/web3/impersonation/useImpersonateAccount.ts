@@ -85,7 +85,7 @@ export function useImpersonateAccount() {
       return console.log('Cannot reset cause there is no stored impersonated address')
     }
     // We don't pass jsonrpcUrl so it will reset to the initial used state
-    forkClient.reset()
+    await forkClient.reset()
     await setForkBalances({
       impersonatedAddress: storedImpersonatedAddress.current as Address,
       wagmiConfig,
