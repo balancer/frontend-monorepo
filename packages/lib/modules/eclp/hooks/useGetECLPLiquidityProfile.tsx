@@ -26,7 +26,8 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     [pool, tokenRateScalingFactorString]
   )
 
-  const params = pool && pool.poolTokens ? destructureRequiredPoolParams(pool, tokenRates) : null
+  const params =
+    pool && pool.poolTokens && tokenRates ? destructureRequiredPoolParams(pool, tokenRates) : null
 
   const originalPoolSpotPrice = params
     ? formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18)
@@ -36,6 +37,29 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     if (!originalPoolSpotPrice) return null
     return isReversed ? bn(1).div(bn(originalPoolSpotPrice)).toString() : originalPoolSpotPrice
   }, [originalPoolSpotPrice, isReversed])
+
+  console.log({
+    params: params
+      ? {
+          balanceIn: params.balanceIn.toString(),
+          balanceOut: params.balanceOut.toString(),
+          decimalsIn: params.decimalsIn,
+          decimalsOut: params.decimalsOut,
+          gyroEParams: {
+            alpha: params.gyroEParams.alpha.toString(),
+            beta: params.gyroEParams.beta.toString(),
+            c: params.gyroEParams.c.toString(),
+            s: params.gyroEParams.s.toString(),
+            lambda: params.gyroEParams.lambda.toString(),
+          },
+          tokenRates: params.tokenRates
+            ? [params.tokenRates[0].toString(), params.tokenRates[1].toString()]
+            : null,
+        }
+      : null,
+  })
+
+  console.log({ poolSpotPrice: originalPoolSpotPrice })
 
   const data = useMemo(() => {
     if (!liquidityData) return null
