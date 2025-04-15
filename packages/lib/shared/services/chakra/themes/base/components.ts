@@ -497,6 +497,40 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             color: 'background.level3',
           },
         },
+        buttonGroupActiveGray: {
+          background: 'white',
+          height: 'fit-content',
+          width: 'fit-content',
+          px: '2',
+          py: '1.5',
+          fontSize: 'sm',
+          color: 'white',
+          fontWeight: '700',
+          borderRadius: '4px',
+          _hover: {
+            transform: 'none',
+          },
+          _dark: {
+            color: 'background.level3',
+          },
+        },
+        buttonGroupInactiveGray: {
+          background: 'white',
+          height: 'fit-content',
+          width: 'fit-content',
+          px: '2',
+          py: '1.5',
+          fontSize: 'sm',
+          color: 'gray.700',
+          fontWeight: '500',
+          borderRadius: '4px',
+          _hover: {
+            transform: 'none',
+          },
+          _dark: {
+            color: 'gray.400',
+          },
+        },
       },
     },
     Modal: {

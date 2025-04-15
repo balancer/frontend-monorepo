@@ -215,15 +215,18 @@ type PoolListTokenPillsProps = {
   iconSize?: number
   nameSize?: string
 } & BadgeProps
+
 export function PoolListTokenPills({ pool, ...props }: PoolListTokenPillsProps) {
   const { name, iconUrl } = usePoolMetadata(pool)
+  const tokens = getUserReferenceTokens(pool)
+
   return (
     <PoolTokenPills
       chain={pool.chain}
       iconUrl={iconUrl}
       poolName={name}
       poolType={pool.type}
-      tokens={getUserReferenceTokens(pool)}
+      tokens={tokens}
       {...props}
     />
   )
@@ -238,6 +241,7 @@ type PoolTokenPillsProps = {
   iconSize?: number
   nameSize?: string
 } & BadgeProps
+
 function PoolTokenPills({
   chain,
   poolType,
@@ -248,8 +252,8 @@ function PoolTokenPills({
   nameSize = 'md',
   ...badgeProps
 }: PoolTokenPillsProps) {
-  const shouldUseWeightedPills = isWeightedLike(poolType)
   const shouldUseStablePills = isStableLike(poolType)
+  const shouldUseWeightedPills = isWeightedLike(poolType)
 
   if (poolName) {
     return (

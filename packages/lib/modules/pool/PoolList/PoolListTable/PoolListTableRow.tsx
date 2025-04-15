@@ -24,6 +24,7 @@ const MemoizedMainAprTooltip = memo(MainAprTooltip)
 export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest }: Props) {
   const {
     queryState: { userAddress },
+    poolDisplayType,
   } = usePoolList()
   const { name } = usePoolMetadata(pool)
   const { toCurrency } = useCurrency()
@@ -48,7 +49,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
               <NetworkIcon chain={pool.chain} size={6} />
             </GridItem>
             <GridItem>
-              <PoolListPoolDisplay name={name} pool={pool} />
+              <PoolListPoolDisplay name={name} pool={pool} poolDisplayType={poolDisplayType} />
             </GridItem>
             <GridItem minW="32">
               <PoolListTableDetailsCell pool={pool} />
