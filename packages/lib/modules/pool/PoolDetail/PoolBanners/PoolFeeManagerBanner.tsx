@@ -10,5 +10,7 @@ export function PoolFeeManagerBanner() {
 
   if (feeManager?.id === 'fee_manager_ezkl') {
     return <EzklPromoBanner />
+  } else {
+    return null
   }
 }
