@@ -18,6 +18,7 @@ import { PoolIssue } from './pool-issues/PoolIssue.type'
 import { BalAlertProps } from '@repo/lib/shared/components/alerts/BalAlert'
 import { useHook } from '../../hooks/useHook'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
+import { Address } from 'viem'
 
 export type PoolAlert = {
   identifier: string
@@ -105,7 +106,9 @@ export function usePoolAlerts(pool: Pool) {
 
     if (hook) {
       const hookName = hooks.find(
-        hook => pool.hook && hook?.addresses[getChainId(pool.chain)]?.includes(pool.hook.address)
+        hook =>
+          pool.hook &&
+          hook?.addresses[getChainId(pool.chain)]?.includes(pool.hook.address as Address)
       )?.name
 
       if (!hasReviewedHook(hook)) {
@@ -152,7 +155,7 @@ export function usePoolAlerts(pool: Pool) {
           const hookName = hooks.find(
             hook =>
               nestedPool.hook &&
-              hook?.addresses[getChainId(pool.chain)]?.includes(nestedPool.hook.address)
+              hook?.addresses[getChainId(pool.chain)]?.includes(nestedPool.hook.address as Address)
           )?.name
 
           if (!hasReviewedHook(nestedPool.hook)) {

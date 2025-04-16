@@ -1,7 +1,8 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { _lowerCaseAddresses, HooksMetadata } from './getHooksMetadata'
+import { HooksMetadata } from '../../modules/hooks/getHooksMetadata'
+import { lowerCaseAddresses } from './fetchAndLowercaseAddresses'
 
-test('_lowerCaseAddresses converts uppercase addresses to lowercase', () => {
+test('lowerCaseAddresses converts uppercase addresses to lowercase', () => {
   const metadata: HooksMetadata[] = [
     {
       id: 'hook1',
@@ -10,7 +11,7 @@ test('_lowerCaseAddresses converts uppercase addresses to lowercase', () => {
       addresses: {
         [GqlChain.Mainnet]: [
           '0xabcdef1234567890ABCDEF1234567890ABCDEF12',
-          '0X1234567890ABCDEF1234567890ABCDEF12345678',
+          '0x1234567890ABCDEF1234567890ABCDEF12345678',
         ],
         [GqlChain.Arbitrum]: ['0xFEDCBA0987654321FEDCBA0987654321FEDCBA09'],
       },
@@ -25,7 +26,7 @@ test('_lowerCaseAddresses converts uppercase addresses to lowercase', () => {
     },
   ]
 
-  const result = _lowerCaseAddresses(metadata)
+  const result = lowerCaseAddresses(metadata)
 
   expect(result).toEqual([
     {

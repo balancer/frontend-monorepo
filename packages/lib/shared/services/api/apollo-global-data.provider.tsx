@@ -27,6 +27,8 @@ import { PoolsMetadataProvider } from '@repo/lib/modules/pool/metadata/PoolsMeta
 import { getPoolsMetadata } from '@repo/lib/modules/pool/metadata/getPoolsMetadata'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ProtocolStatsProvider } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
+import { FeeManagersProvider } from '@repo/lib/modules/fee-managers/FeeManagersProvider'
+import { getFeeManagersMetadata } from '@repo/lib/modules/fee-managers/getFeeManagersMetadata'
 
 export const revalidate = 60
 
@@ -71,14 +73,21 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
     },
   })
 
-  const [exchangeRates, hooksMetadata, poolTags, erc4626Metadata, poolsMetadata] =
-    await Promise.all([
-      getFxRates(),
-      getHooksMetadata(),
-      getPoolTags(),
-      getErc4626Metadata(),
-      getPoolsMetadata(),
-    ])
+  const [
+    exchangeRates,
+    hooksMetadata,
+    poolTags,
+    erc4626Metadata,
+    poolsMetadata,
+    feeManagersMetadata,
+  ] = await Promise.all([
+    getFxRates(),
+    getHooksMetadata(),
+    getPoolTags(),
+    getErc4626Metadata(),
+    getPoolsMetadata(),
+    getFeeManagersMetadata(),
+  ])
 
   return (
     <TokensProvider
@@ -89,14 +98,16 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
       <FiatFxRatesProvider data={exchangeRates}>
         <PoolTagsProvider data={poolTags}>
           <HooksProvider data={hooksMetadata}>
-            <ProtocolStatsProvider data={protocolData}>
-              <PoolsMetadataProvider
-                erc4626Metadata={erc4626Metadata}
-                poolsMetadata={poolsMetadata}
-              >
-                {children}
-              </PoolsMetadataProvider>
-            </ProtocolStatsProvider>
+            <FeeManagersProvider data={feeManagersMetadata}>
+              <ProtocolStatsProvider data={protocolData}>
+                <PoolsMetadataProvider
+                  erc4626Metadata={erc4626Metadata}
+                  poolsMetadata={poolsMetadata}
+                >
+                  {children}
+                </PoolsMetadataProvider>
+              </ProtocolStatsProvider>
+            </FeeManagersProvider>
           </HooksProvider>
         </PoolTagsProvider>
       </FiatFxRatesProvider>
