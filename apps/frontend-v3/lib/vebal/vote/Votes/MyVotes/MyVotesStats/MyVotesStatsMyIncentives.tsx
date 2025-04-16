@@ -4,14 +4,11 @@ import { MyVotesStatsCard } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesStats/sh
 import { GainBadge } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
 import { MyIncentivesTooltip } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyIncentivesTooltip'
 import { useMyVotes } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { isZero } from '@repo/lib/shared/utils/numbers'
 
-interface Props {
-  loading: boolean
-}
-
-export function MyVotesStatsMyIncentives({ loading }: Props) {
+export function MyVotesStatsMyIncentives() {
   const { toCurrency } = useCurrency()
-  const { totalInfo } = useMyVotes()
+  const { totalInfo, loading } = useMyVotes()
 
   return (
     <MyVotesStatsCard
@@ -19,7 +16,7 @@ export function MyVotesStatsMyIncentives({ loading }: Props) {
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
-        ) : totalInfo.totalRewardValue ? (
+        ) : !isZero(totalInfo.totalRewardValue) ? (
           <HStack spacing="xs">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
               {toCurrency(totalInfo.totalRewardValue, { abbreviated: false })}
@@ -27,7 +24,9 @@ export function MyVotesStatsMyIncentives({ loading }: Props) {
             {totalInfo.totalRewardValueGain && <GainBadge gain={totalInfo.totalRewardValueGain} />}
             <MyIncentivesTooltip />
           </HStack>
-        ) : undefined
+        ) : (
+          <>&mdash;</>
+        )
       }
     />
   )
