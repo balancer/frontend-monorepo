@@ -107,7 +107,7 @@ export function EzklPromoBanner() {
                 cursor="hand"
                 flex="1"
                 h={{ base: '32px', sm: '40px', lg: '48px' }}
-                href="https://blog.ezkl.xyz/post/defi3dot0/"
+                href="https://blog.ezkl.xyz/post/defi3dot0/#ezkl-balancer-bringing-dynamic-fees-to-defi-today"
                 py="sm"
                 rounded="full"
                 size="md"
