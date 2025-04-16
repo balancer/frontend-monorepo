@@ -125,7 +125,9 @@ function getHookName(hook: HookFragment, pool: Pool, hooksMetadata: (HooksMetada
 
   const chainId = getChainId(pool.chain)
 
-  return hooksMetadata.find(metadata => metadata?.addresses[chainId]?.includes(hook.address))?.name
+  return hooksMetadata.find(metadata =>
+    metadata?.addresses[chainId]?.includes(hook.address as Address)
+  )?.name
 }
 
 export function PoolContracts({ ...props }: CardProps) {

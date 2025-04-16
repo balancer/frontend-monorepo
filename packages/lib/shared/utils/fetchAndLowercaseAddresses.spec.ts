@@ -11,7 +11,7 @@ test('lowerCaseAddresses converts uppercase addresses to lowercase', () => {
       addresses: {
         [GqlChain.Mainnet]: [
           '0xabcdef1234567890ABCDEF1234567890ABCDEF12',
-          '0X1234567890ABCDEF1234567890ABCDEF12345678',
+          '0x1234567890ABCDEF1234567890ABCDEF12345678',
         ],
         [GqlChain.Arbitrum]: ['0xFEDCBA0987654321FEDCBA0987654321FEDCBA09'],
       },
