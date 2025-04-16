@@ -20,7 +20,7 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import { CowFooter } from '@repo/lib/shared/components/navs/CowFooter'
 import { CowPoolBanner } from '@repo/lib/shared/components/navs/CowPoolBanner'
 import { PoolActivity } from './PoolActivity/PoolActivity'
-import { PoolHookBanner } from './PoolHookBanner'
+import { PoolBanners } from './PoolBanners/PoolBanners'
 
 export function PoolDetail() {
   const { pool, chain } = usePool()
@@ -99,7 +99,7 @@ export function PoolDetail() {
             )}
             <PoolActivity />
             <PoolComposition />
-            <PoolHookBanner />
+            <PoolBanners />
             <PoolInfoLayout />
           </VStack>
         </ClaimProvider>
