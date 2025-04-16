@@ -19,7 +19,7 @@ function Stat({
   return (
     <Box
       flex="1"
-      minW={{ base: '100px', sm: '140px', lg: '140px' }}
+      minW={{ base: '100px', sm: '132px', lg: '132px' }}
       overflow="hidden"
       position="relative"
       rounded="md"

@@ -7,6 +7,8 @@ import { usePoolOrderByState } from '../usePoolOrderByState'
 import { Globe } from 'react-feather'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { usePoolList } from '../PoolListProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { PoolListPoolNamesTokens } from './PoolListPoolNamesTokens'
 
 const setIsDesc = (id: GqlPoolOrderBy, currentSortingObj: PoolsColumnSort) =>
   currentSortingObj.id === id ? !currentSortingObj.desc : true
@@ -35,7 +37,7 @@ export function PoolListTableHeader({ ...rest }) {
         </VStack>
       </GridItem>
       <GridItem>
-        <Text fontWeight="bold">Pool name</Text>
+        {PROJECT_CONFIG.options.showPoolName ? <PoolListPoolNamesTokens /> : 'Pool name'}
       </GridItem>
       <GridItem justifySelf="start">
         <Text fontWeight="bold" textAlign="left">

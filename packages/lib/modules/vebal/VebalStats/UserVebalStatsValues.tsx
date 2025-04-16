@@ -1,49 +1,16 @@
 'use client'
 
-import { useMemo } from 'react'
 import { Heading, HStack, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { useVebalUserData } from '@repo/lib/modules/vebal/useVebalUserData'
-import { differenceInDays, format } from 'date-fns'
-import BigNumber from 'bignumber.js'
-import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
 import { PRETTY_DATE_FORMAT } from '@repo/lib/modules/vebal/lock/duration/lock-duration.constants'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
-import { useUserAccount } from '../../web3/UserAccountProvider'
-import { formatUnits } from 'viem'
-
-export type VebalUserStatsValues = {
-  balance: bigint
-  rank: number
-  percentOfAllSupply: BigNumber | undefined
-  lockedUntil: string | undefined
-  lockExpired: boolean | undefined
-}
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import { differenceInDays, format } from 'date-fns'
+import { formatUserVebal, useVebalUserStats } from './useVeBalUserStats'
 
 export function UserVebalStatsValues() {
-  const { isConnected } = useUserAccount()
-  const { mainnetLockedInfo: lockedInfo, isLoading: lockedInfoIsLoading } = useVebalLockData()
-  const { isLoading: userDataIsLoading, veBALBalance, rank } = useVebalUserData()
+  const { lockedInfoIsLoading, userDataIsLoading, userStats } = useVebalUserStats()
 
-  const userStats: VebalUserStatsValues | undefined = useMemo(() => {
-    if (isConnected) {
-      const percentOfAllSupply = bn(formatUnits(veBALBalance, 18)).div(lockedInfo.totalSupply || 0)
-
-      const lockedUntil = lockedInfo.lockedEndDate
-        ? format(lockedInfo.lockedEndDate, 'yyyy-MM-dd')
-        : undefined
-
-      const lockExpired = lockedInfo.isExpired === undefined || lockedInfo.isExpired === true
-
-      return {
-        balance: veBALBalance,
-        rank: rank || 0,
-        percentOfAllSupply,
-        lockedUntil,
-        lockExpired,
-      }
-    }
-  }, [lockedInfo, isConnected, veBALBalance, rank])
+  const userVebal = formatUserVebal(userStats)
 
   return (
     <>
@@ -54,11 +21,7 @@ export function UserVebalStatsValues() {
         {userDataIsLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
-          <Heading size="h4">
-            {userStats && !userStats.lockExpired
-              ? fNum('token', formatUnits(userStats.balance, 18))
-              : 0}
-          </Heading>
+          <Heading size="h4">{userVebal}</Heading>
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
