@@ -1,6 +1,6 @@
 import { Badge, Card, Center, Heading, HStack, Stack, Text } from '@chakra-ui/react'
-import { useHook } from '../../hooks/useHook'
-import { usePool } from '../PoolProvider'
+import { useHook } from '../../../hooks/useHook'
+import { usePool } from '../../PoolProvider'
 import { HookIcon } from '@repo/lib/shared/components/icons/HookIcon'
 import { StableSurgePromoBanner } from '@repo/lib/shared/components/promos/StableSurgePromoBanner'
 import { MevCapturePoolDetailBanner } from '@repo/lib/shared/components/promos/hooks/MevCapturePoolDetailBanner'
