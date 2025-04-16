@@ -5,7 +5,7 @@ import NextLink from 'next/link'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
 
-export function QuantammPromoBanner() {
+export function QuantAMMPromoBanner() {
   const { colorMode } = useColorMode()
   return (
     <Box rounded="lg" shadow="2xl" w="full">
