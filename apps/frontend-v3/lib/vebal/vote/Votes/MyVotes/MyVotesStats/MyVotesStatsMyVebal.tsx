@@ -9,6 +9,7 @@ import { expectedTotalVeBal } from '@/lib/vebal/lock/VebalLockProvider'
 import { MyVotesStatsCard } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVotesStatsCard'
 import { MyVebalChargeTooltip } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVebalChargeTooltip'
 import { getVeBalManagePath } from '@/lib/vebal/vebal-navigation'
+import { formatUnits } from 'viem'
 
 interface Props {
   myVebalBalance: bigint
@@ -35,7 +36,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
     lockEndDate: maxLockEndDate,
   })
 
-  const balance = !isLockExpired ? fNum('token', myVebalBalance || 0) : '0'
+  const balance = !isLockExpired ? fNum('token', formatUnits(myVebalBalance || 0n, 18)) : '0'
 
   return (
     <MyVotesStatsCard
