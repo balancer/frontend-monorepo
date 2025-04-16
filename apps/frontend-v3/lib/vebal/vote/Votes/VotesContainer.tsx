@@ -29,19 +29,19 @@ export async function VotesContainer() {
 
   return (
     <VotesProvider data={voteListQueryData}>
-      <VStack spacing="3xl" w="full">
-        <VotesIntroductionLayout />
+      <VoteListProvider>
+        <VStack spacing="3xl" w="full">
+          <VotesIntroductionLayout />
 
-        <TransactionStateProvider>
-          <MyVotesProvider>
-            <MyVotesLayout />
-          </MyVotesProvider>
-        </TransactionStateProvider>
+          <TransactionStateProvider>
+            <MyVotesProvider>
+              <MyVotesLayout />
+            </MyVotesProvider>
+          </TransactionStateProvider>
 
-        <VoteListProvider>
           <VoteListLayout />
-        </VoteListProvider>
-      </VStack>
+        </VStack>
+      </VoteListProvider>
     </VotesProvider>
   )
 }
