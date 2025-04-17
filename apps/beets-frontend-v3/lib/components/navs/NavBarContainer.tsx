@@ -5,12 +5,10 @@ import { NavLogo } from './NavLogo'
 import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BeetsLogoType } from '../imgs/BeetsLogoType'
-import { Box, HStack } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { fadeIn } from '@repo/lib/shared/utils/animations'
 import { MaBeetsNavLink } from './MaBeetsNavLink'
-import { SonicMigrationLink } from './SonicMigrationLink'
-import { FantomToSonicSvg } from '../imgs/FantomToSonicSvg'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function NavBarContainer() {
@@ -25,20 +23,7 @@ export function NavBarContainer() {
     <MobileNav
       LogoType={BeetsLogoType}
       appLinks={allAppLinks}
-      customLinks={
-        <>
-          <MaBeetsNavLink fontSize="xl" />
-          <SonicMigrationLink
-            fontSize="xl"
-            triggerEl={
-              <HStack>
-                <Box>Migrate to Sonic</Box>
-                <FantomToSonicSvg height={24} />
-              </HStack>
-            }
-          />
-        </>
-      }
+      customLinks={<MaBeetsNavLink fontSize="xl" />}
       ecosystemLinks={ecosystemLinks}
       socialLinks={socialLinks}
     />
@@ -55,14 +40,9 @@ export function NavBarContainer() {
           allowCreateWallet={allowCreateWallet}
           appLinks={allAppLinks}
           customLinks={
-            <>
-              <Box as={motion.div} variants={fadeIn}>
-                <MaBeetsNavLink />
-              </Box>
-              <Box as={motion.div} variants={fadeIn}>
-                <SonicMigrationLink />
-              </Box>
-            </>
+            <Box as={motion.div} variants={fadeIn}>
+              <MaBeetsNavLink />
+            </Box>
           }
           navLogo={<NavLogo />}
           rightSlot={<NavActions mobileNav={mobileNav} />}
