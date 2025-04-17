@@ -72,7 +72,7 @@ function NavLinks({
             <HStack gap="xxs">
               <Box as="span">{link.label}</Box>
               {link.isExternal && (
-                <Box as="span" position="relative" top="-4px">
+                <Box as="span" color="grayText" position="relative" top="-4px">
                   <ArrowUpRight size={12} />
                 </Box>
               )}
