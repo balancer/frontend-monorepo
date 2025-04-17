@@ -67,7 +67,7 @@ export function PortfolioTable() {
 
   return (
     <FadeInOnView>
-      <VStack align="start" minHeight="1000px" spacing="md" w="full">
+      <VStack align="start" spacing="md" w="full">
         <Stack
           alignItems={isFilterVisible ? 'flex-end' : 'flex-start'}
           direction={{ base: 'column', md: 'row' }}

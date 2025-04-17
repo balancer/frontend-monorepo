@@ -43,6 +43,16 @@ export const ProjectConfigBeets: ProjectConfig = {
         href: '/stake',
         label: 'Stake $S',
       },
+      {
+        href: 'https://ma.beets.fi',
+        label: 'maBEETS',
+        isExternal: true,
+      },
+      {
+        href: 'https://www.spoints.fyi/gems',
+        label: 'Sonic Gems',
+        isExternal: true,
+      },
     ],
     ecosystemLinks: [
       { label: 'Docs', href: 'https://docs.beets.fi/' },

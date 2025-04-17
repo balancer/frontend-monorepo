@@ -16,6 +16,7 @@ import { AppLink, useNav } from './useNav'
 import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
 import { ImpersonateAccount } from '@repo/lib/modules/web3/impersonation/ImpersonateAccount'
+import { ArrowUpRight } from 'react-feather'
 
 type Props = {
   mobileNav?: ReactNode
@@ -68,7 +69,14 @@ function NavLinks({
             prefetch
             variant="nav"
           >
-            {link.label}
+            <HStack gap="xxs">
+              <Box as="span">{link.label}</Box>
+              {link.isExternal && (
+                <Box as="span" color="grayText" position="relative" top="-4px">
+                  <ArrowUpRight size={12} />
+                </Box>
+              )}
+            </HStack>
           </Link>
         </Box>
       ))}
