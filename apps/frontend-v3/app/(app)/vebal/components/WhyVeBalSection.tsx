@@ -30,7 +30,14 @@ export function WhyVeBalSection() {
   ]
 
   return (
-    <Stack alignItems="center" gap="md" margin="0 auto" maxWidth="container.lg" width="full">
+    <Stack
+      alignItems="center"
+      gap="md"
+      margin="0 auto"
+      maxWidth="container.lg"
+      px="md"
+      width="full"
+    >
       <Heading as="h2" pb="0" size="lg" textAlign="center" variant="special">
         Why get veBAL?
       </Heading>

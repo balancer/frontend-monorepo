@@ -46,7 +46,7 @@ export default function VeBALPage() {
         >
           <DefaultPageContainer
             className="default------page-----container"
-            h={{ base: '500px', md: '720px' }}
+            h={{ base: '500px', md: '800px' }}
             pb={['xl', 'xl', '10']}
             position="relative"
             pt={['xl', '40px']}
@@ -63,52 +63,72 @@ export default function VeBALPage() {
             />
 
             <FadeInOnView animateOnce={false}>
-              <Box position="relative">
-                <Stack
-                  alignItems={{ base: 'center', md: 'start' }}
-                  gap="md"
-                  justifyContent="center"
-                  margin={{ base: '0 auto', md: '0' }}
-                  maxWidth={400}
-                >
-                  <Stack alignItems={{ base: 'center', md: 'start' }}>
-                    <Heading as="h2" size="lg" variant="special">
-                      Lock-in for veBAL boosts
-                    </Heading>
-                    <Text color="font.secondary" mb="sm">
-                      veBAL is the Balancer protocol governance system that rewards long-term
-                      commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool.
-                    </Text>
+              <Grid
+                gap={{ base: '0', md: '4' }}
+                h="100%"
+                templateColumns={{ base: '1fr', md: '1fr 1fr' }}
+              >
+                {/* Content Column */}
+                <GridItem minW="400px">
+                  <Stack
+                    alignItems={{ base: 'center', md: 'start' }}
+                    gap="md"
+                    justifyContent="center"
+                    margin={{ base: '0 auto', md: '0' }}
+                    maxWidth={{ base: 400, md: 'full' }}
+                    position="relative"
+                    top={{ base: '0', md: '200px' }}
+                  >
+                    <Stack alignItems={{ base: 'center', md: 'start' }}>
+                      <Heading as="h2" size="lg" variant="special">
+                        Lock-in for veBAL boosts
+                      </Heading>
+                      <Text color="font.secondary" mb="sm">
+                        veBAL is the Balancer protocol governance system that rewards long-term
+                        commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool.
+                      </Text>
+                    </Stack>
+                    <Flex gap="md" maxWidth={320}>
+                      <Button
+                        as={NextLink}
+                        flex={1}
+                        href="/vebal/manage"
+                        size="lg"
+                        variant="primary"
+                      >
+                        Manage veBAL
+                      </Button>
+
+                      <Button
+                        as={NextLink}
+                        flex={1}
+                        href="/vebal/vote"
+                        size="lg"
+                        variant="tertiary"
+                      >
+                        Vote on gauges
+                      </Button>
+                    </Flex>
                   </Stack>
-                  <Flex gap="md" maxWidth={320}>
-                    <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="primary">
-                      Manage veBAL
-                    </Button>
+                </GridItem>
 
-                    <Button as={NextLink} flex={1} href="/vebal/vote" size="lg" variant="tertiary">
-                      Vote on gauges
-                    </Button>
-                  </Flex>
-                </Stack>
-
-                <Box
-                  margin={{ base: '32px auto', md: 'reset' }}
-                  position={{ base: 'relative', md: 'absolute' }}
-                  right={{ base: '0', md: '-30%' }}
-                  top={{ base: '0', md: '-100px' }}
-                  width={{ base: '95%', md: 'clamp(800px, 85vw, 1200px)' }}
-                  zIndex="-1"
-                >
-                  <Picture
-                    altText="veBAL token"
-                    defaultImgType="png"
-                    directory="/images/vebal/"
-                    imgAvif
-                    imgName="vebal"
-                    imgPng
-                  />
-                </Box>
-              </Box>
+                {/* Image Column */}
+                <GridItem display="flex" justifyContent={{ base: 'center', md: 'flex-start' }}>
+                  <Box
+                    margin={{ base: '32px auto', md: '0' }}
+                    width={{ base: '98%', md: 'clamp(800px, 85vw, 1200px)' }}
+                  >
+                    <Picture
+                      altText="veBAL token"
+                      defaultImgType="png"
+                      directory="/images/vebal/"
+                      imgAvif
+                      imgName="vebal"
+                      imgPng
+                    />
+                  </Box>
+                </GridItem>
+              </Grid>
             </FadeInOnView>
           </DefaultPageContainer>
         </Noise>
@@ -117,7 +137,7 @@ export default function VeBALPage() {
         <WhyVeBalSection />
       </Section>
       <Section>
-        <Stack alignItems="center" gap="md">
+        <Stack alignItems="center" gap="md" px="md">
           <Heading as="h2" pb="0" size="lg" textAlign="center" variant="special">
             Here’s how it works
           </Heading>
@@ -205,6 +225,18 @@ export default function VeBALPage() {
         </Stack>
       </Section>
       <Box overflow="hidden" position="relative" py="100px">
+        <Box zIndex="-1">
+          <RadialPattern
+            bottom="-800px"
+            circleCount={12}
+            height={1200}
+            innerHeight={150}
+            innerWidth={150}
+            left="calc(50% - 600px)"
+            position="absolute"
+            width={1200}
+          />
+        </Box>
         <Center>
           <Flex direction="column" gap="lg" textAlign="center">
             <Heading
@@ -239,18 +271,6 @@ export default function VeBALPage() {
             </Flex>
           </Flex>
         </Center>
-        <Box zIndex="-1">
-          <RadialPattern
-            bottom="-800px"
-            circleCount={12}
-            height={1200}
-            innerHeight={150}
-            innerWidth={150}
-            left="calc(50% - 600px)"
-            position="absolute"
-            width={1200}
-          />
-        </Box>
       </Box>
     </>
   )
