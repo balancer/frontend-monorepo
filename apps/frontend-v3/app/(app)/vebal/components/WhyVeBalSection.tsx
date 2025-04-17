@@ -1,7 +1,9 @@
-import { SimpleGrid, Flex, Box, Heading, Stack, Text } from '@chakra-ui/react'
+import { SimpleGrid, Flex, Box, Heading, Stack, Text, Center, useColorMode } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons' // Placeholder icons
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function WhyVeBalSection() {
+  const { colorMode } = useColorMode()
   const benefits = [
     {
       icon: <StarIcon />, // Placeholder
@@ -71,14 +73,53 @@ export function WhyVeBalSection() {
             <Flex alignItems="center" direction="row" gap={4} position="relative" zIndex={2}>
               <Flex
                 alignItems="center"
-                border="1px solid rgba(217, 217, 217, 0.2)"
                 borderRadius="full"
                 flexShrink={0}
                 h="60px"
                 justifyContent="center"
                 w="60px"
               >
-                {benefit.icon}
+                <Box h={16} rounded="full" shadow="2xl" w={16}>
+                  <Box h={16} rounded="full" shadow="md" w={16}>
+                    <Box
+                      alignItems="center"
+                      color={colorMode === 'dark' ? 'font.light' : 'brown.300'}
+                      display="flex"
+                      fontSize="xs"
+                      fontWeight="normal"
+                      h={16}
+                      overflow="hidden"
+                      rounded="full"
+                      shadow="innerRockShadow"
+                      w={16}
+                    >
+                      <Box
+                        h={16}
+                        overflow="hidden"
+                        position="absolute"
+                        rounded="full"
+                        w={16}
+                        zIndex="-1"
+                      >
+                        <Picture
+                          altText="Rock texture"
+                          defaultImgType="jpg"
+                          directory="/images/homepage/"
+                          height={16}
+                          imgAvif
+                          imgAvifDark
+                          imgJpg
+                          imgJpgDark
+                          imgName="stone"
+                          width={16}
+                        />
+                      </Box>
+                      <Center h="full" w="full">
+                        {benefit.icon}
+                      </Center>
+                    </Box>
+                  </Box>
+                </Box>
               </Flex>
               <Box>
                 <Heading as="h3" fontSize="xl" mb={2} sx={{ textWrap: 'balance' }}>
