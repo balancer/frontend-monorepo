@@ -21,6 +21,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import NextLink from 'next/link'
 import { RadialPattern } from '@/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
+import { WhyVeBalSection } from './components/WhyVeBalSection'
 
 export default function VeBALPage() {
   return (
@@ -28,14 +29,13 @@ export default function VeBALPage() {
       <Box
         borderBottom="1px solid"
         borderColor="border.base"
-        h="720px"
         left="50%"
-        marginLeft="-50vw" // Negative half viewport width
-        marginRight="-50vw" // Negative half viewport width
-        maxWidth="100vw" // Ensure it doesn't exceed viewport width
+        marginLeft="-50vw"
+        marginRight="-50vw"
+        maxWidth="100vw"
         position="relative"
         right="50%"
-        width="100vw" // Full viewport width
+        width="100vw"
       >
         <Noise
           backgroundColor="background.level0WithOpacity"
@@ -45,7 +45,8 @@ export default function VeBALPage() {
           shadow="innerBase"
         >
           <DefaultPageContainer
-            h="100%"
+            className="default------page-----container"
+            h={{ base: '500px', md: '720px' }}
             pb={['xl', 'xl', '10']}
             position="relative"
             pt={['xl', '40px']}
@@ -63,15 +64,22 @@ export default function VeBALPage() {
 
             <FadeInOnView animateOnce={false}>
               <Box position="relative">
-                <Stack gap="md" maxWidth={400}>
-                  <Heading as="h2" size="lg" variant="special">
-                    Lock-in for veBAL boosts
-                  </Heading>
-                  <Text color="font.secondary" mb="sm">
-                    veBAL is the Balancer protocol governance system that rewards long-term
-                    commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool. The
-                    longer you lock, the more veBAL you get.
-                  </Text>
+                <Stack
+                  alignItems={{ base: 'center', md: 'start' }}
+                  gap="md"
+                  justifyContent="center"
+                  margin={{ base: '0 auto', md: '0' }}
+                  maxWidth={400}
+                >
+                  <Stack alignItems={{ base: 'center', md: 'start' }}>
+                    <Heading as="h2" size="lg" variant="special">
+                      Lock-in for veBAL boosts
+                    </Heading>
+                    <Text color="font.secondary" mb="sm">
+                      veBAL is the Balancer protocol governance system that rewards long-term
+                      commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool.
+                    </Text>
+                  </Stack>
                   <Flex gap="md" maxWidth={320}>
                     <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="primary">
                       Manage veBAL
@@ -83,7 +91,14 @@ export default function VeBALPage() {
                   </Flex>
                 </Stack>
 
-                <Box position="absolute" right="-400px" top="-100px" width="1200px" zIndex="-1">
+                <Box
+                  margin={{ base: '32px auto', md: 'reset' }}
+                  position={{ base: 'relative', md: 'absolute' }}
+                  right={{ base: '0', md: '-30%' }}
+                  top={{ base: '0', md: '-100px' }}
+                  width={{ base: '95%', md: 'clamp(800px, 85vw, 1200px)' }}
+                  zIndex="-1"
+                >
                   <Picture
                     altText="veBAL token"
                     defaultImgType="png"
@@ -98,8 +113,9 @@ export default function VeBALPage() {
           </DefaultPageContainer>
         </Noise>
       </Box>
-
-      <Section />
+      <Section mt="40">
+        <WhyVeBalSection />
+      </Section>
       <Section>
         <Stack alignItems="center" gap="md">
           <Heading as="h2" pb="0" size="lg" textAlign="center" variant="special">
@@ -119,14 +135,16 @@ export default function VeBALPage() {
             <GridItem height="100%">
               <Card height="100%">
                 <Stack alignItems="center" gap="sm" textAlign="center">
-                  <Picture
-                    altText="veBAL token"
-                    defaultImgType="png"
-                    directory="/images/vebal/"
-                    imgAvif
-                    imgName="vebal"
-                    imgPng
-                  />
+                  <Box maxW={{ base: '200px', md: '100%' }}>
+                    <Picture
+                      altText="veBAL token"
+                      defaultImgType="png"
+                      directory="/images/vebal/"
+                      imgAvif
+                      imgName="tokens"
+                      imgPng
+                    />
+                  </Box>
                   <Heading as="h3" size="md">
                     1. Add liquidity
                   </Heading>
@@ -140,14 +158,16 @@ export default function VeBALPage() {
             <GridItem height="100%">
               <Card height="100%">
                 <Stack alignItems="center" gap="sm" textAlign="center">
-                  <Picture
-                    altText="veBAL token"
-                    defaultImgType="png"
-                    directory="/images/vebal/"
-                    imgAvif
-                    imgName="vebal"
-                    imgPng
-                  />
+                  <Box maxW={{ base: '200px', md: '100%' }}>
+                    <Picture
+                      altText="veBAL token"
+                      defaultImgType="png"
+                      directory="/images/vebal/"
+                      imgAvif
+                      imgName="lptoken"
+                      imgPng
+                    />
+                  </Box>
                   <Heading as="h3" size="md">
                     2. Lock your LP tokens
                   </Heading>
@@ -161,14 +181,16 @@ export default function VeBALPage() {
             <GridItem height="100%">
               <Card height="100%">
                 <Stack alignItems="center" gap="sm" textAlign="center">
-                  <Picture
-                    altText="veBAL token"
-                    defaultImgType="png"
-                    directory="/images/vebal/"
-                    imgAvif
-                    imgName="vebal"
-                    imgPng
-                  />
+                  <Box maxW={{ base: '200px', md: '100%' }}>
+                    <Picture
+                      altText="veBAL token"
+                      defaultImgType="png"
+                      directory="/images/vebal/"
+                      imgAvif
+                      imgName="vebal"
+                      imgPng
+                    />
+                  </Box>
                   <Heading as="h3" size="md">
                     3. Get power + rewards
                   </Heading>
