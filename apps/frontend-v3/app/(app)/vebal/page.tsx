@@ -22,6 +22,7 @@ import NextLink from 'next/link'
 import { RadialPattern } from '@/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { WhyVeBalSection } from './components/WhyVeBalSection'
+import { ParallaxImage } from '@repo/lib/shared/components/marketing/ParallaxImage'
 
 export default function VeBALPage() {
   return (
@@ -168,14 +169,22 @@ export default function VeBALPage() {
                   <Stack alignItems="center" gap="sm" textAlign="center">
                     <Box maxW={{ base: '200px', md: '100%' }}>
                       <FadeInOnView animateOnce={false}>
-                        <Picture
-                          altText="veBAL token"
-                          defaultImgType="png"
-                          directory="/images/vebal/"
-                          imgAvif
-                          imgName="tokens"
-                          imgPng
-                        />
+                        <ParallaxImage
+                          scaleEnd="110%"
+                          scaleStart="90%"
+                          transformOrigin="center"
+                          yEnd="0%"
+                          yStart="0%"
+                        >
+                          <Picture
+                            altText="veBAL token"
+                            defaultImgType="png"
+                            directory="/images/vebal/"
+                            imgAvif
+                            imgName="tokens"
+                            imgPng
+                          />
+                        </ParallaxImage>
                       </FadeInOnView>
                     </Box>
                     <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
@@ -195,14 +204,22 @@ export default function VeBALPage() {
                   <Stack alignItems="center" gap="sm" textAlign="center">
                     <Box maxW={{ base: '200px', md: '100%' }}>
                       <FadeInOnView animateOnce={false}>
-                        <Picture
-                          altText="veBAL token"
-                          defaultImgType="png"
-                          directory="/images/vebal/"
-                          imgAvif
-                          imgName="lptoken"
-                          imgPng
-                        />
+                        <ParallaxImage
+                          scaleEnd="110%"
+                          scaleStart="90%"
+                          transformOrigin="center"
+                          yEnd="0%"
+                          yStart="0%"
+                        >
+                          <Picture
+                            altText="veBAL token"
+                            defaultImgType="png"
+                            directory="/images/vebal/"
+                            imgAvif
+                            imgName="lptoken"
+                            imgPng
+                          />
+                        </ParallaxImage>
                       </FadeInOnView>
                     </Box>
                     <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
@@ -222,14 +239,22 @@ export default function VeBALPage() {
                   <Stack alignItems="center" gap="sm" textAlign="center">
                     <Box maxW={{ base: '200px', md: '100%' }}>
                       <FadeInOnView animateOnce={false}>
-                        <Picture
-                          altText="veBAL token"
-                          defaultImgType="png"
-                          directory="/images/vebal/"
-                          imgAvif
-                          imgName="vebal"
-                          imgPng
-                        />
+                        <ParallaxImage
+                          scaleEnd="110%"
+                          scaleStart="90%"
+                          transformOrigin="center"
+                          yEnd="0%"
+                          yStart="0%"
+                        >
+                          <Picture
+                            altText="veBAL token"
+                            defaultImgType="png"
+                            directory="/images/vebal/"
+                            imgAvif
+                            imgName="vebal"
+                            imgPng
+                          />
+                        </ParallaxImage>
                       </FadeInOnView>
                     </Box>
                     <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
