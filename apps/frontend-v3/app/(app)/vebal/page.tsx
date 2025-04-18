@@ -45,7 +45,6 @@ export default function VeBALPage() {
           shadow="innerBase"
         >
           <DefaultPageContainer
-            className="default------page-----container"
             h={{ base: '500px', md: '800px' }}
             pb={['xl', 'xl', '10']}
             position="relative"
@@ -62,14 +61,14 @@ export default function VeBALPage() {
               width={2000}
             />
 
-            <FadeInOnView animateOnce={false}>
-              <Grid
-                gap={{ base: '0', md: '4' }}
-                h="100%"
-                templateColumns={{ base: '1fr', md: '1fr 1fr' }}
-              >
-                {/* Content Column */}
-                <GridItem minW="400px">
+            <Grid
+              gap={{ base: '0', md: '4' }}
+              h="100%"
+              templateColumns={{ base: '1fr', md: '1fr 1fr' }}
+            >
+              {/* Content Column */}
+              <GridItem minW="400px">
+                <FadeInOnView animateOnce={false}>
                   <Stack
                     alignItems={{ base: 'center', md: 'start' }}
                     gap="md"
@@ -94,6 +93,7 @@ export default function VeBALPage() {
                         commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool.
                       </Text>
                     </Stack>
+
                     <Flex gap="ms" maxWidth={320}>
                       <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="gold">
                         Manage veBAL
@@ -114,10 +114,12 @@ export default function VeBALPage() {
                       </Box>
                     </Flex>
                   </Stack>
-                </GridItem>
+                </FadeInOnView>
+              </GridItem>
 
-                {/* Image Column */}
-                <GridItem display="flex" justifyContent={{ base: 'center', md: 'flex-start' }}>
+              {/* Image Column */}
+              <GridItem display="flex" justifyContent={{ base: 'center', md: 'flex-start' }}>
+                <FadeInOnView animateOnce={false}>
                   <Box
                     margin={{ base: '32px auto', md: '0' }}
                     width={{ base: '98%', md: 'clamp(800px, 85vw, 1200px)' }}
@@ -131,9 +133,9 @@ export default function VeBALPage() {
                       imgPng
                     />
                   </Box>
-                </GridItem>
-              </Grid>
-            </FadeInOnView>
+                </FadeInOnView>
+              </GridItem>
+            </Grid>
           </DefaultPageContainer>
         </Noise>
       </Box>
@@ -142,13 +144,17 @@ export default function VeBALPage() {
       </Section>
       <Section>
         <Stack alignItems="center" gap="md" px="md">
-          <Heading as="h2" backgroundClip="text" bg="background.gold" pb="0.5" size="lg">
-            Here’s how it works
-          </Heading>
-          <Text color="font.secondary" maxWidth="38ch" pt="0" textAlign="center">
-            Add liquidity to the ve8020 BAL/WETH pool and lock it up. The longer you lock, the more
-            veBAL you get.
-          </Text>
+          <FadeInOnView animateOnce={false}>
+            <Stack alignItems="center" gap="md" px="md">
+              <Heading as="h2" backgroundClip="text" bg="background.gold" pb="0.5" size="lg">
+                Here’s how it works
+              </Heading>
+              <Text color="font.secondary" maxWidth="38ch" pt="0" textAlign="center">
+                Add liquidity to the ve8020 BAL/WETH pool and lock it up. The longer you lock, the
+                more veBAL you get.
+              </Text>
+            </Stack>
+          </FadeInOnView>
           <Grid
             alignItems="stretch"
             gap="lg"
@@ -157,73 +163,85 @@ export default function VeBALPage() {
             templateColumns={['1fr', '1fr', 'repeat(3, 1fr)']}
           >
             <GridItem height="100%">
-              <Card height="100%">
-                <Stack alignItems="center" gap="sm" textAlign="center">
-                  <Box maxW={{ base: '200px', md: '100%' }}>
-                    <Picture
-                      altText="veBAL token"
-                      defaultImgType="png"
-                      directory="/images/vebal/"
-                      imgAvif
-                      imgName="tokens"
-                      imgPng
-                    />
-                  </Box>
-                  <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
-                    1. Add liquidity
-                  </Heading>
-                  <Text color="font.secondary" pb="ms">
-                    Join the ve8020 BAL/WETH protocol liquidity pool to get the B-80BAL-20WETH LP
-                    token.
-                  </Text>
-                </Stack>
-              </Card>
+              <FadeInOnView animateOnce={false}>
+                <Card height="100%">
+                  <Stack alignItems="center" gap="sm" textAlign="center">
+                    <Box maxW={{ base: '200px', md: '100%' }}>
+                      <FadeInOnView animateOnce={false}>
+                        <Picture
+                          altText="veBAL token"
+                          defaultImgType="png"
+                          directory="/images/vebal/"
+                          imgAvif
+                          imgName="tokens"
+                          imgPng
+                        />
+                      </FadeInOnView>
+                    </Box>
+                    <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
+                      1. Add liquidity
+                    </Heading>
+                    <Text color="font.secondary" pb="ms">
+                      Join the ve8020 BAL/WETH protocol liquidity pool to get the B-80BAL-20WETH LP
+                      token.
+                    </Text>
+                  </Stack>
+                </Card>
+              </FadeInOnView>
             </GridItem>
             <GridItem height="100%">
-              <Card height="100%">
-                <Stack alignItems="center" gap="sm" textAlign="center">
-                  <Box maxW={{ base: '200px', md: '100%' }}>
-                    <Picture
-                      altText="veBAL token"
-                      defaultImgType="png"
-                      directory="/images/vebal/"
-                      imgAvif
-                      imgName="lptoken"
-                      imgPng
-                    />
-                  </Box>
-                  <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
-                    2. Lock your LP tokens
-                  </Heading>
-                  <Text color="font.secondary" pb="ms">
-                    Lock your B-80BAL-20WETH LP tokens for a period to receive veBAL. The longer you
-                    lock, the more veBAL your get.
-                  </Text>
-                </Stack>
-              </Card>
+              <FadeInOnView animateOnce={false}>
+                <Card height="100%">
+                  <Stack alignItems="center" gap="sm" textAlign="center">
+                    <Box maxW={{ base: '200px', md: '100%' }}>
+                      <FadeInOnView animateOnce={false}>
+                        <Picture
+                          altText="veBAL token"
+                          defaultImgType="png"
+                          directory="/images/vebal/"
+                          imgAvif
+                          imgName="lptoken"
+                          imgPng
+                        />
+                      </FadeInOnView>
+                    </Box>
+                    <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
+                      2. Lock your LP tokens
+                    </Heading>
+                    <Text color="font.secondary" pb="ms">
+                      Lock your B-80BAL-20WETH LP tokens for a period to receive veBAL. The longer
+                      you lock, the more veBAL your get.
+                    </Text>
+                  </Stack>
+                </Card>
+              </FadeInOnView>
             </GridItem>
             <GridItem height="100%">
-              <Card height="100%">
-                <Stack alignItems="center" gap="sm" textAlign="center">
-                  <Box maxW={{ base: '200px', md: '100%' }}>
-                    <Picture
-                      altText="veBAL token"
-                      defaultImgType="png"
-                      directory="/images/vebal/"
-                      imgAvif
-                      imgName="vebal"
-                      imgPng
-                    />
-                  </Box>
-                  <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
-                    3. Get power + rewards
-                  </Heading>
-                  <Text color="font.secondary" pb="ms">
-                    Earn protocol revenue + weekly voting incentives, boost liquidity mining, gain
-                    governance power.
-                  </Text>
-                </Stack>
-              </Card>
+              <FadeInOnView animateOnce={false}>
+                <Card height="100%">
+                  <Stack alignItems="center" gap="sm" textAlign="center">
+                    <Box maxW={{ base: '200px', md: '100%' }}>
+                      <FadeInOnView animateOnce={false}>
+                        <Picture
+                          altText="veBAL token"
+                          defaultImgType="png"
+                          directory="/images/vebal/"
+                          imgAvif
+                          imgName="vebal"
+                          imgPng
+                        />
+                      </FadeInOnView>
+                    </Box>
+                    <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
+                      3. Get power + rewards
+                    </Heading>
+                    <Text color="font.secondary" pb="ms">
+                      Earn protocol revenue + weekly voting incentives, boost liquidity mining, gain
+                      governance power.
+                    </Text>
+                  </Stack>
+                </Card>
+              </FadeInOnView>
             </GridItem>
           </Grid>
         </Stack>
@@ -242,45 +260,47 @@ export default function VeBALPage() {
           />
         </Box>
         <Center>
-          <Flex direction="column" gap="lg" textAlign="center">
-            <Heading
-              as="h2"
-              backgroundClip="text"
-              bg="background.gold"
-              display="flex"
-              justifyContent="center"
-              pb="0.5"
-              size="lg"
-              width="full"
-            >
-              Calling all BAL holders
-            </Heading>
-            <Text
-              color="font.secondary"
-              display="flex"
-              justifyContent="center"
-              textAlign="center"
-              width="full"
-            >
-              Turn your BAL tokens into voting power and rewards.
-            </Text>
-            <Flex
-              display="flex"
-              gap="ms"
-              justifyContent="center"
-              margin="0 auto"
-              maxWidth={320}
-              width="full"
-            >
-              <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="gold">
-                Manage veBAL
-              </Button>
+          <FadeInOnView animateOnce={false}>
+            <Flex direction="column" gap="lg" textAlign="center">
+              <Heading
+                as="h2"
+                backgroundClip="text"
+                bg="background.gold"
+                display="flex"
+                justifyContent="center"
+                pb="0.5"
+                size="lg"
+                width="full"
+              >
+                Calling all BAL holders
+              </Heading>
+              <Text
+                color="font.secondary"
+                display="flex"
+                justifyContent="center"
+                textAlign="center"
+                width="full"
+              >
+                Turn your BAL tokens into voting power and rewards.
+              </Text>
+              <Flex
+                display="flex"
+                gap="ms"
+                justifyContent="center"
+                margin="0 auto"
+                maxWidth={320}
+                width="full"
+              >
+                <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="gold">
+                  Manage veBAL
+                </Button>
 
-              <Button as={NextLink} flex={1} href="/vebal/vote" size="lg" variant="tertiary">
-                Vote on gauges
-              </Button>
+                <Button as={NextLink} flex={1} href="/vebal/vote" size="lg" variant="tertiary">
+                  Vote on gauges
+                </Button>
+              </Flex>
             </Flex>
-          </Flex>
+          </FadeInOnView>
         </Center>
       </Box>
     </>
