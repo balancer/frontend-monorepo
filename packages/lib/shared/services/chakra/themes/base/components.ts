@@ -195,6 +195,10 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           bgGradient: 'linear(to-l, gradients.text.heading.from, gradients.text.heading.to)',
           bgClip: 'text',
         },
+        gold: () => ({
+          background: 'font.gold',
+          backgroundClip: 'text',
+        }),
         accordionHeading: {
           background: 'font.accordionHeading',
           backgroundClip: 'text',
@@ -434,6 +438,27 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             shadow: 'none',
           },
         },
+        gold: {
+          background: 'background.gold',
+          color: 'white',
+          shadow: '2xl',
+          _hover: {
+            shadow: 'sm',
+          },
+          _dark: {
+            color: 'font.dark',
+          },
+        },
+        goldSecondary: {
+          background: 'background.gold',
+          backgroundClip: 'text',
+          border: '1px solid transparent',
+          borderColor: 'red',
+          color: 'font.gold',
+          _dark: {
+            color: 'font.gold',
+          },
+        },        
         solid: {
           color: 'text-body',
           bg: 'background.level2',

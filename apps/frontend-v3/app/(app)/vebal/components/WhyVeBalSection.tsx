@@ -43,7 +43,7 @@ export function WhyVeBalSection() {
       px="md"
       width="full"
     >
-      <Heading as="h2" pb="0" size="lg" textAlign="center" variant="special">
+      <Heading as="h2" bg="background.gold" bgClip="text" pb="0.5" size="lg" textAlign="center">
         Why get veBAL?
       </Heading>
       <Text color="font.secondary" maxWidth="38ch" pt="0" textAlign="center">
@@ -126,7 +126,7 @@ export function WhyVeBalSection() {
                 </Box>
               </Flex>
               <Box>
-                <Heading as="h3" fontSize="xl" mb={2} sx={{ textWrap: 'balance' }}>
+                <Heading as="h3" bg="background.gold" bgClip="text" fontSize="xl" mb={2} pb="0.5" sx={{ textWrap: 'balance' }}>
                   {benefit.title}
                 </Heading>
                 <Text color="font.secondary" fontSize="md" sx={{ textWrap: 'balance' }}>

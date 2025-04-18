@@ -80,7 +80,13 @@ export default function VeBALPage() {
                     top={{ base: '0', md: '200px' }}
                   >
                     <Stack alignItems={{ base: 'center', md: 'start' }}>
-                      <Heading as="h2" size="lg" variant="special">
+                      <Heading
+                        as="h2"
+                        backgroundClip="text"
+                        bg="background.gold"
+                        pb="0.5"
+                        size="lg"
+                      >
                         Lock-in for veBAL boosts
                       </Heading>
                       <Text color="font.secondary" mb="sm">
@@ -88,26 +94,24 @@ export default function VeBALPage() {
                         commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool.
                       </Text>
                     </Stack>
-                    <Flex gap="md" maxWidth={320}>
-                      <Button
-                        as={NextLink}
-                        flex={1}
-                        href="/vebal/manage"
-                        size="lg"
-                        variant="primary"
-                      >
+                    <Flex gap="ms" maxWidth={320}>
+                      <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="gold">
                         Manage veBAL
                       </Button>
 
-                      <Button
-                        as={NextLink}
-                        flex={1}
-                        href="/vebal/vote"
-                        size="lg"
-                        variant="tertiary"
-                      >
-                        Vote on gauges
-                      </Button>
+                      <Box bg="background.level1">
+                        <Button
+                          as={NextLink}
+                          bg="background.gold"
+                          bgClip="text"
+                          flex={1}
+                          href="/vebal/vote"
+                          size="lg"
+                          variant="tertiary"
+                        >
+                          Vote on gauges
+                        </Button>
+                      </Box>
                     </Flex>
                   </Stack>
                 </GridItem>
@@ -138,7 +142,7 @@ export default function VeBALPage() {
       </Section>
       <Section>
         <Stack alignItems="center" gap="md" px="md">
-          <Heading as="h2" pb="0" size="lg" textAlign="center" variant="special">
+          <Heading as="h2" backgroundClip="text" bg="background.gold" pb="0.5" size="lg">
             Here’s how it works
           </Heading>
           <Text color="font.secondary" maxWidth="38ch" pt="0" textAlign="center">
@@ -165,7 +169,7 @@ export default function VeBALPage() {
                       imgPng
                     />
                   </Box>
-                  <Heading as="h3" size="md">
+                  <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
                     1. Add liquidity
                   </Heading>
                   <Text color="font.secondary" pb="ms">
@@ -188,7 +192,7 @@ export default function VeBALPage() {
                       imgPng
                     />
                   </Box>
-                  <Heading as="h3" size="md">
+                  <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
                     2. Lock your LP tokens
                   </Heading>
                   <Text color="font.secondary" pb="ms">
@@ -211,7 +215,7 @@ export default function VeBALPage() {
                       imgPng
                     />
                   </Box>
-                  <Heading as="h3" size="md">
+                  <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
                     3. Get power + rewards
                   </Heading>
                   <Text color="font.secondary" pb="ms">
@@ -241,27 +245,34 @@ export default function VeBALPage() {
           <Flex direction="column" gap="lg" textAlign="center">
             <Heading
               as="h2"
+              backgroundClip="text"
+              bg="background.gold"
               display="flex"
               justifyContent="center"
+              pb="0.5"
               size="lg"
-              textAlign="center"
-              variant="special"
               width="full"
             >
               Calling all BAL holders
             </Heading>
-            <Text display="flex" justifyContent="center" textAlign="center" width="full">
+            <Text
+              color="font.secondary"
+              display="flex"
+              justifyContent="center"
+              textAlign="center"
+              width="full"
+            >
               Turn your BAL tokens into voting power and rewards.
             </Text>
             <Flex
               display="flex"
-              gap="md"
+              gap="ms"
               justifyContent="center"
               margin="0 auto"
               maxWidth={320}
               width="full"
             >
-              <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="primary">
+              <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="gold">
                 Manage veBAL
               </Button>
 

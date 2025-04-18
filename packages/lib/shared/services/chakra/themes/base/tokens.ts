@@ -20,6 +20,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           specialAlpha15: colors.gradient.dawnLightAlpha15,
           specialSecondary: colors.gradient.sunsetLight,
           highlight: colors.green['600'],
+          gold: colors.gradient.goldLight,
         },
         border: {
           base: '#FFFFFF',
@@ -50,6 +51,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           secondaryGradient: 'linear-gradient(45deg, #728097 0%, #909BAD 100%)',
           special: colors.gradient.dawnLight,
           specialSecondary: colors.gradient.sunsetLight,
+          gold: colors.gradient.goldLight,
           link: colors.purple['500'],
           linkHover: colors.purple['700'],
           maxContrast: '#000',
@@ -104,6 +106,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           specialAlpha15: colors.gradient.dawnDarkAlpha15,
           specialSecondary: colors.gradient.sunsetDark,
           highlight: colors.green['500'],
+          gold: colors.gradient.goldDark,
         },
         // Border colors
         border: {
@@ -140,6 +143,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           secondaryGradient: 'linear-gradient(45deg, #909BAD 0%, #728097 100%)',
           special: 'linear-gradient(90deg, #B3AEF5 0%, #D7CBE7 25%, #E5C8C8 50%, #EAA879 100%)',
           specialSecondary: 'linear-gradient(180deg, #EA9A43 0%, #F06147 100%)',
+          gold: colors.gradient.goldDark,
           link: colors.purple['300'],
           linkHover: colors.purple['100'],
           maxContrast: '#fff',
