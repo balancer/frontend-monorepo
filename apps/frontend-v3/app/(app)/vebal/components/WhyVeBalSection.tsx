@@ -1,30 +1,33 @@
 import { SimpleGrid, Flex, Box, Heading, Stack, Text, Center, useColorMode } from '@chakra-ui/react'
-import { StarIcon } from '@chakra-ui/icons' // Placeholder icons
 import { Picture } from '@repo/lib/shared/components/other/Picture'
+import { VebalBenefitsVoteIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsVoteIcon'
+import { VebalBenefitsShareIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsShareIcon'
+import { VebalBenefitsBribesIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsBribesIcon'
+import { VebalBenefitsSparklesIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsSparklesIcon'
 
 export function WhyVeBalSection() {
   const { colorMode } = useColorMode()
   const benefits = [
     {
-      icon: <StarIcon />, // Placeholder
+      icon: <VebalBenefitsVoteIcon size={44} />,
       title: "Vote on Balancer's future",
       description:
         'veBAL holders govern the direction of the protocol including liquidity incentives.',
     },
     {
-      icon: <StarIcon />, // Placeholder
+      icon: <VebalBenefitsShareIcon size={44} />,
       title: 'Share protocol revenue',
       description:
         'veBAL holders earn a share of protocol revenue in proportion to their holdings.',
     },
     {
-      icon: <StarIcon />, // Placeholder
+      icon: <VebalBenefitsBribesIcon size={42} />,
       title: 'Earn weekly voting incentives',
       description:
         "veBAL holders can earn lucrative 'bribes' from 3rd parties for voting for their pools.",
     },
     {
-      icon: <StarIcon />, // Placeholder
+      icon: <VebalBenefitsSparklesIcon size={38} />,
       title: 'Boost liquidity mining yield',
       description:
         'Liquidity Providers with veBAL can get up to a 2.5x boost on BAL liquidity incentives.',
@@ -49,38 +52,39 @@ export function WhyVeBalSection() {
       <SimpleGrid columns={{ base: 1, md: 2 }} mt="lg" spacing={{ base: 'ms', md: 'md', lg: 'lg' }}>
         {benefits.map(benefit => (
           <Flex
-            _after={{
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              bg: 'background.level2',
-              zIndex: 1,
-            }}
-            alignItems="center"
-            backgroundImage="url('/dark-marble-swirls.png')"
-            backgroundPosition="center"
-            backgroundSize="cover"
             borderRadius="lg"
             key={benefit.title}
             overflow="hidden"
-            p={{ base: 'ms', md: 'md', lg: 'lg' }}
+            p={{ base: 'ms', sm: 'md', md: 'lg' }}
             position="relative"
             shadow="2xl"
           >
-            <Flex alignItems="center" direction="row" gap={4} position="relative" zIndex={2}>
-              <Flex
-                alignItems="center"
-                borderRadius="full"
-                flexShrink={0}
-                h="60px"
-                justifyContent="center"
-                w="60px"
-              >
-                <Box h={16} rounded="full" shadow="2xl" w={16}>
-                  <Box h={16} rounded="full" shadow="md" w={16}>
+            <Box bottom="0" left="0" position="absolute" right="0" top="0">
+              <Picture
+                altText="Background texture"
+                defaultImgType="png"
+                directory="/images/textures/"
+                height="100%"
+                imgAvif
+                imgAvifDark
+                imgAvifPortrait
+                imgAvifPortraitDark
+                imgName="rock-slate"
+                imgPng
+                imgPngDark
+                width="100%"
+              />
+            </Box>
+            <Flex
+              alignItems="center"
+              direction="row"
+              gap={{ base: 'ms', sm: 'md', md: 'md' }}
+              position="relative"
+              zIndex={2}
+            >
+              <Flex alignItems="center" borderRadius="full" flexShrink={0} justifyContent="center">
+                <Box rounded="full" shadow="2xl">
+                  <Box rounded="full" shadow="md">
                     <Box
                       alignItems="center"
                       color={colorMode === 'dark' ? 'font.light' : 'brown.300'}
