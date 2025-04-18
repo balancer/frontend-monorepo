@@ -6,7 +6,7 @@ import { useGaugesSupplyAndBalance } from './useGaugesSupplyAndBalance'
 import { useGaugeTotalSupplyAndUserBalance } from './useGaugeTotalSupplyAndUserBalance'
 import { getChainId } from '@repo/lib/config/app.config'
 import { Pool } from '../pool/pool.types'
-import { useVebalLockData } from '@repo/lib/modules/vebal/lock/VebalLockDataProvider'
+import { useVebalLockData } from './VebalLockDataProvider'
 
 export type VeBalLockData = {
   lockedEndDate: number

@@ -7,15 +7,10 @@ import { Hex } from 'viem'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { onlyExplicitRefetch } from '../../../shared/utils/queries'
 import { useReadContracts } from 'wagmi'
+import { UserVotesData } from '@repo/lib/modules/vebal/vote/vote.types'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const FIRST_WEEK_TIMESTAMP = 1648684800
-
-export interface UserVotesData {
-  end: bigint
-  power: bigint
-  slope: bigint
-}
 
 export interface RawVotesData {
   gaugeWeightThisPeriod?: { result?: bigint; status: string }

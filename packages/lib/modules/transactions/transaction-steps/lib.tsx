@@ -1,11 +1,11 @@
 import { TransactionBundle } from '@repo/lib/modules/web3/contracts/contract.types'
 import { ReactNode } from 'react'
-import { LockActionType } from '../../vebal/lock/steps/lock-steps.utils'
 import { BaseTransaction } from '@safe-global/safe-apps-sdk'
 import { Address, Hash } from 'viem'
 import { ManagedTransactionInput } from '../../web3/contracts/useManagedTransaction'
 import { ManagedErc20TransactionInput } from '../../web3/contracts/useManagedErc20Transaction'
 import { ManagedSendTransactionInput } from '../../web3/contracts/useManagedSendTransaction'
+import { LockActionType } from '../../vebal/vote/vote.types'
 
 export enum TransactionState {
   Ready = 'init',
