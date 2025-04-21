@@ -1,6 +1,6 @@
 import { ChainId } from '@balancer/sdk'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
-import { connectAndImpersonate } from '@repo/lib/test/utils/wagmi/wagmi-connections'
+import { connectAndImpersonate } from '@repo/test/utils/wagmi/wagmi-connections'
 import { waitFor } from '@testing-library/react'
 import { useVebalUserStats } from './useVeBalUserStats'
 import { TokenBalancesProviderMock } from '../__mocks__/provider-mocks'

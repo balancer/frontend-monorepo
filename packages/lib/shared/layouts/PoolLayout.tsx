@@ -11,6 +11,12 @@ import { ensureError } from '@repo/lib/shared/utils/errors'
 import { notFound } from 'next/navigation'
 import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { GetPoolQuery as OriginalGetPoolQuery } from '@repo/lib/shared/services/api/generated/graphql'
+
+// TODO: Remove Exclude when GqlPoolReClamm type is fixed in the API schema
+export type GetPoolQuery = Omit<OriginalGetPoolQuery, 'pool'> & {
+  pool: Pool
+}
 
 type PoolLayoutProps = PropsWithChildren<{
   chain: ChainSlug
@@ -32,7 +38,7 @@ async function getPoolQuery(chain: ChainSlug, id: string) {
         },
       },
     })
-    return { data: result.data, error: null }
+    return { data: result.data as GetPoolQuery, error: null }
   } catch (error: unknown) {
     return { data: null, error: ensureError(error) }
   }
@@ -49,7 +55,8 @@ export async function generatePoolMetadata({
 }: PoolLayoutProps): Promise<PoolMetadata> {
   const { data } = await getPoolQuery(chain, id)
 
-  const pool = data?.pool
+  // TODO: Remove "as Pool" type assertion when GqlPoolReClamm type is fixed in the API schema
+  const pool = data?.pool as Pool
   if (!pool) return { metadata: {} }
 
   const displayTokens = getUserReferenceTokens(pool)

@@ -2,7 +2,6 @@
   "name": "@repo/test",
   "version": "0.0.0",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
     "@apollo/client": "^3.13.1",
     "@repo/eslint-config": "workspace:*",

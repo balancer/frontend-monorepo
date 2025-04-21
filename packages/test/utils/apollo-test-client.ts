@@ -1,4 +1,4 @@
-import './silence-devtools'
+import '@repo/lib/test/utils/silence-devtools'
 import { ApolloClient, DefaultOptions, HttpLink, InMemoryCache } from '@apollo/client'
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 

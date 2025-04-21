@@ -11,7 +11,7 @@ import { useMemo } from 'react'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
-import { useEstimateSendUserBalance } from '@/lib/vebal/cross-chain/useEstimateSendUserBalance'
+import { useEstimateSendUserBalance } from '@bal/lib/vebal/cross-chain/useEstimateSendUserBalance'
 import { Button } from '@chakra-ui/react'
 import { getChainShortName, getNetworkConfig } from '@repo/lib/config/app.config'
 

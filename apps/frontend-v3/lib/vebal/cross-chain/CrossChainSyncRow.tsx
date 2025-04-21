@@ -1,6 +1,6 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-import { useVebalUserData } from '@/lib/vebal/useVebalUserData'
+import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { HStack, Text, VStack } from '@chakra-ui/react'
 import Image from 'next/image'
 import { getChainShortName } from '@repo/lib/config/app.config'

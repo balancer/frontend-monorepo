@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress, usdcAddress, usdtAddress, wETHAddress } from '@repo/lib/debug-helpers'
-import { mainnetTestPublicClient } from '@repo/lib/test/utils/wagmi/wagmi-test-clients'
+import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { Pool } from '../../../pool.types'
 import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'

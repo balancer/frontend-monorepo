@@ -11,7 +11,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
-import { SubmittingVote } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { SubmittingVote } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { chunk } from 'lodash'
 
 const submitVotesStepId = 'submit-votes'

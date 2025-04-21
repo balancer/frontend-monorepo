@@ -24,7 +24,7 @@ import { RenderHookOptions, act, renderHook, waitFor } from '@testing-library/re
 import { PropsWithChildren, ReactNode } from 'react'
 import { WagmiProvider } from 'wagmi'
 import { aGqlPoolElementMock } from '../msw/builders/gqlPoolElement.builders'
-import { apolloTestClient } from './apollo-test-client'
+import { apolloTestClient } from '../../../test/utils/apollo-test-client'
 import { AppRouterContextProviderMock } from './app-router-context-provider-mock'
 import { testQueryClient } from './react-query'
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
