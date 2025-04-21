@@ -4,7 +4,7 @@ import vitestUnitConfig from './vitest.config'
 
 function setupFilesWithoutMswSetup() {
   const setupFiles = vitestUnitConfig.test!.setupFiles! as string[]
-  return setupFiles.filter(file => file !== 'test/vitest/setup-msw.ts')
+  return setupFiles.filter(file => !file.includes('test/vitest/setup-msw.ts'))
 }
 
 const integrationTestOptions: Partial<InlineConfig> = {
