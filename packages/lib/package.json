@@ -38,7 +38,7 @@
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@rainbow-me/rainbowkit": "2.2.3",
     "@react-three/drei": "^9.117.3",
-    "@react-three/fiber": "^8.17.10",
+    "@react-three/fiber": "^9.1.2",
     "@safe-global/safe-apps-sdk": "9.1.0",
     "@sentry/nextjs": "8.50.0",
     "@studio-freight/react-lenis": "^0.0.47",
