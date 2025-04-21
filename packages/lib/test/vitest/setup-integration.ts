@@ -1,13 +1,13 @@
+import { chainsByKey } from '@repo/lib/modules/web3/ChainConfig'
+import * as transportsModule from '@repo/lib/modules/web3/transports'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { ChainIdWithFork, getTestRpcSetup } from '@repo/test/anvil/anvil-setup'
+import { mainnetTest, polygonTest } from '@repo/test/anvil/testWagmiConfig'
 import {
   connectWithDefaultUser,
   disconnectDefaultUser,
 } from '@repo/test/utils/wagmi/wagmi-connections'
-import * as transportsModule from '@repo/lib/modules/web3/transports'
-import { ChainIdWithFork, getTestRpcSetup } from '../anvil/anvil-setup'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { createPublicClient, http } from 'viem'
-import { chainsByKey } from '@repo/lib/modules/web3/ChainConfig'
-import { mainnetTest, polygonTest } from '@repo/test/anvil/testWagmiConfig'
 
 /*
   Specific setup for integration tests (that it is not needed in unit tests)

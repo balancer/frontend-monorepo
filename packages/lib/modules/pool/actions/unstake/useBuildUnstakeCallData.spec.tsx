@@ -4,7 +4,7 @@ import { useBuildUnstakeCallData } from './useBuildUnstakeCallData'
 import { GaugeService } from '@repo/lib/shared/services/staking/gauge.service'
 import { BatchRelayerService } from '@repo/lib/shared/services/batch-relayer/batch-relayer.service'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { Address } from 'viem'
 import { aGqlPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 

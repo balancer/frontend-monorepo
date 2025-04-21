@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import networkConfig from '@repo/lib/config/networks/mainnet'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { polygonTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { gyroPoolMock } from '../../../__mocks__/gyroPoolMock'
 import { Pool } from '../../../pool.types'

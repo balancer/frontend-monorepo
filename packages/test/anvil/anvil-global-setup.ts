@@ -2,9 +2,7 @@ import { startProxy } from '@viem/anvil'
 
 import { ANVIL_NETWORKS, getForkUrl } from './anvil-setup'
 import { testChains } from './testWagmiConfig'
-// import { sleep } from '@repo/lib/shared/utils/sleep'
 
-// FIXME: [JUANJO] duplicated
 async function sleep(time: number) {
   return new Promise(resolve => {
     setTimeout(resolve, time)

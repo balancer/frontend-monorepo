@@ -1,4 +1,4 @@
-import { ChainIdWithFork, getTestRpcSetup, testAccounts } from './anvil-setup'
+import { ChainIdWithFork, getTestRpcSetup, testAccounts } from '@repo/test/anvil/anvil-setup'
 import { Address, Chain, http } from 'viem'
 import { gnosis, mainnet, polygon, sepolia, fantom, sonic } from 'viem/chains'
 import { createConfig } from 'wagmi'

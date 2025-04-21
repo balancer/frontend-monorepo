@@ -1,7 +1,7 @@
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { wETHAddress } from '@repo/lib/debug-helpers'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { nestedPoolMock } from '../../../__mocks__/nestedPoolMock'
 import { Pool } from '../../../pool.types'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'

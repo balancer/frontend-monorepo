@@ -1,7 +1,7 @@
+import { ChainIdWithFork } from '@repo/test/anvil/anvil-setup'
 import { testWagmiConfig } from '@repo/test/anvil/testWagmiConfig'
 import { publicActions, testActions, walletActions } from 'viem'
-import { gnosis, mainnet, polygon, sepolia, fantom } from 'viem/chains'
-import { ChainIdWithFork } from '../../../lib/test/anvil/anvil-setup'
+import { fantom, gnosis, mainnet, polygon, sepolia } from 'viem/chains'
 
 export function createTestHttpClient(chainId: 1 | 137 | 11155111 | 100 | 250) {
   return testWagmiConfig

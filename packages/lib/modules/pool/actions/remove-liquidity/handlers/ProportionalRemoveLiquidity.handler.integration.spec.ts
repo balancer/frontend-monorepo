@@ -1,7 +1,7 @@
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { balAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
 import { Pool } from '../../../pool.types'

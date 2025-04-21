@@ -1,4 +1,4 @@
-import { alternativeTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { alternativeTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import {

@@ -5,6 +5,8 @@ import react from '@vitejs/plugin-react'
 export function createVitestConfig(monorepoRoot: string): ViteUserConfig {
   const resolveFromRoot = (relativePath: string) => resolve(monorepoRoot, relativePath)
 
+  console.log('resolveFromRoot(./packages', resolveFromRoot('./packages'))
+
   return {
     plugins: [react()],
     resolve: {

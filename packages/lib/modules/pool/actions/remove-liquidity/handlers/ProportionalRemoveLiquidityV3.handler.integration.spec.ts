@@ -1,6 +1,6 @@
 import { mainnetRouter } from '@repo/lib/debug-helpers'
 import { emptyAddress } from '@repo/lib/modules/web3/contracts/wagmi-helpers'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { Pool } from '../../../pool.types'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { ProportionalRemoveLiquidityV3Handler } from './ProportionalRemoveLiquidityV3.handler'

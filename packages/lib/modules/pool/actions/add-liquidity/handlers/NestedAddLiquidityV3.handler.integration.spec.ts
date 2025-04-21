@@ -2,7 +2,7 @@
 import { sepoliaCompositeRouterBoosted } from '@repo/lib/debug-helpers'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { sepoliaTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { Pool } from '../../../pool.types'
 import { NestedAddLiquidityV3Handler } from './NestedAddLiquidityV3.handler'

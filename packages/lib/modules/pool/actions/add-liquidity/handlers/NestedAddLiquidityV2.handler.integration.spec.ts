@@ -5,7 +5,7 @@ import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clien
 import { Pool } from '../../../pool.types'
 import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
