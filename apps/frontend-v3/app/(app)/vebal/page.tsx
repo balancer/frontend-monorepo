@@ -21,8 +21,7 @@ import NextLink from 'next/link'
 import { RadialPattern } from '@/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { WhyVeBalSection } from './components/WhyVeBalSection'
-import { ParallaxImage } from '@repo/lib/shared/components/marketing/ParallaxImage'
-import { ImageBorderCard } from './ImageBorderCard'
+import { VebalStepCard } from './VebalStepCard'
 
 export default function VeBALPage() {
   return (
@@ -118,7 +117,6 @@ export default function VeBALPage() {
                 </FadeInOnView>
               </GridItem>
 
-              {/* Image Column */}
               <GridItem display="flex" justifyContent={{ base: 'center', md: 'flex-start' }}>
                 <FadeInOnView animateOnce={false}>
                   <Box
@@ -165,107 +163,43 @@ export default function VeBALPage() {
           >
             <GridItem display="flex" height="100%">
               <FadeInOnView animateOnce={false}>
-                <ImageBorderCard display="flex" flexDirection="column" height="100%">
-                  <Stack alignItems="center" flex="1" gap="sm" textAlign="center">
-                    <Box maxW={{ base: '200px', md: '100%' }}>
-                      <FadeInOnView animateOnce={false}>
-                        <ParallaxImage
-                          scaleEnd="110%"
-                          scaleStart="90%"
-                          transformOrigin="center"
-                          yEnd="0%"
-                          yStart="0%"
-                        >
-                          <Picture
-                            altText="veBAL token"
-                            defaultImgType="png"
-                            directory="/images/vebal/"
-                            imgAvif
-                            imgName="tokens"
-                            imgPng
-                          />
-                        </ParallaxImage>
-                      </FadeInOnView>
-                    </Box>
-                    <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
-                      1. Add liquidity
-                    </Heading>
-                    <Text color="font.secondary" pb="ms" px="md" sx={{ textWrap: 'pretty' }}>
-                      Join the ve8020 BAL/WETH protocol liquidity pool to get the B-80BAL-20WETH LP
-                      token.
-                    </Text>
-                  </Stack>
-                </ImageBorderCard>
+                <VebalStepCard
+                  altText="veBAL token"
+                  description={
+                    <>Join ve8020 BAL/WETH—the Balancer protocol liquidity pool—to get the B-80BAL-20WETH LP token.</>
+                  }
+                  heading="Add liquidity"
+                  imgName="tokens"
+                  step="1."
+                />
               </FadeInOnView>
             </GridItem>
             <GridItem display="flex" height="100%">
               <FadeInOnView animateOnce={false}>
-                <ImageBorderCard display="flex" flexDirection="column" height="100%">
-                  <Stack alignItems="center" flex="1" gap="sm" textAlign="center">
-                    <Box maxW={{ base: '200px', md: '100%' }}>
-                      <FadeInOnView animateOnce={false}>
-                        <ParallaxImage
-                          scaleEnd="110%"
-                          scaleStart="90%"
-                          transformOrigin="center"
-                          yEnd="0%"
-                          yStart="0%"
-                        >
-                          <Picture
-                            altText="veBAL token"
-                            defaultImgType="png"
-                            directory="/images/vebal/"
-                            imgAvif
-                            imgName="lptoken"
-                            imgPng
-                          />
-                        </ParallaxImage>
-                      </FadeInOnView>
-                    </Box>
-                    <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
-                      2. Lock your LP tokens
-                    </Heading>
-                    <Text color="font.secondary" pb="ms" px="md" sx={{ textWrap: 'pretty' }}>
-                      Lock your B-80BAL-20WETH LP tokens for a period to receive veBAL. The longer
-                      you lock, the more veBAL your get.
-                    </Text>
-                  </Stack>
-                </ImageBorderCard>
+                <VebalStepCard
+                  altText="LP token"
+                  description={
+                    <>Lock your B-80BAL-20WETH LP tokens for a period to receive veBAL. The longer you lock, the
+                      more veBAL your get.</>
+                  }
+                  heading="Lock your LP tokens"
+                  imgName="lptoken"
+                  step="2."
+                />
               </FadeInOnView>
             </GridItem>
             <GridItem display="flex" height="100%">
               <FadeInOnView animateOnce={false}>
-                <ImageBorderCard display="flex" flexDirection="column" height="100%">
-                  <Stack alignItems="center" flex="1" gap="sm" textAlign="center">
-                    <Box maxW={{ base: '200px', md: '100%' }}>
-                      <FadeInOnView animateOnce={false}>
-                        <ParallaxImage
-                          scaleEnd="110%"
-                          scaleStart="90%"
-                          transformOrigin="center"
-                          yEnd="0%"
-                          yStart="0%"
-                        >
-                          <Picture
-                            altText="veBAL token"
-                            defaultImgType="png"
-                            directory="/images/vebal/"
-                            imgAvif
-                            imgName="vebal"
-                            imgPng
-                          />
-                        </ParallaxImage>
-                      </FadeInOnView>
-                    </Box>
-                    <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
-                      3. Get power + rewards
-                    </Heading>
-                    <Text color="font.secondary" pb="ms" px="md" sx={{ textWrap: 'pretty' }}>
-                      Earn protocol revenue + weekly voting incentives, boost liquidity mining, gain
-                      governance power.
-                    </Text>
-                  </Stack>
-                </ImageBorderCard>
+                <VebalStepCard
+                  altText="veBAL token"
+                  description={
+                    <>Earn protocol revenue + weekly voting incentives, boost liquidity mining, gain governance
+                      power.</>
+                  }
+                  heading="Get power + rewards"
+                  imgName="vebal"
+                  step="3."
+                />
               </FadeInOnView>
             </GridItem>
           </Grid>
