@@ -43,7 +43,11 @@ export function VebalBenefitsVoteIcon({
         </pattern>
         <image
           height="314"
-          href={colorMode === 'dark' ? '/images/textures/gold-texture-dark.jpg' : '/images/textures/gold-texture.jpg'}
+          href={
+            colorMode === 'dark'
+              ? '/images/textures/gold-texture-dark.jpg'
+              : '/images/textures/gold-texture.jpg'
+          }
           id="c"
           preserveAspectRatio="none"
           width="280"

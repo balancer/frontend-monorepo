@@ -39,6 +39,7 @@ export function VebalFooterSection() {
               color="font.secondary"
               display="flex"
               justifyContent="center"
+              lineHeight="1.4"
               maxWidth="40ch"
               textAlign="center"
               width="full"

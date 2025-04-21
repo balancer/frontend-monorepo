@@ -5,13 +5,14 @@ import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 export function ImageBorderCard({ children, ...props }: BoxProps) {
   const { colorMode } = useColorMode()
   // Use image-set for AVIF (preferred) and JPEG fallback
-  const borderImage = colorMode === 'dark'
-    ? `image-set(url('/images/textures/rock-slate-square-dark.avif') type('image/avif'), url('/images/textures/rock-slate-square-dark.png') type('image/png'))`
-    : `image-set(url('/images/textures/rock-slate-square.avif') type('image/avif'), url('/images/textures/rock-slate-square.jpg') type('image/jpg'))`;
+  const borderImage =
+    colorMode === 'dark'
+      ? `image-set(url('/images/textures/rock-slate-square-dark.avif') type('image/avif'), url('/images/textures/rock-slate-square-dark.png') type('image/png'))`
+      : `image-set(url('/images/textures/rock-slate-square.avif') type('image/avif'), url('/images/textures/rock-slate-square.jpg') type('image/jpg'))`
 
   return (
     <Box
-      borderRadius="16px"
+      borderRadius="xl"
       overflow="visible"
       p={4}
       position="relative"
@@ -21,7 +22,7 @@ export function ImageBorderCard({ children, ...props }: BoxProps) {
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           background: borderImage,
-          borderRadius: '16px',
+          borderRadius: 'xl',
           content: '""',
           inset: 0,
           pointerEvents: 'none',
@@ -34,7 +35,7 @@ export function ImageBorderCard({ children, ...props }: BoxProps) {
       <Box
         _dark={{ background: 'background.level0' }}
         background="background.level0"
-        borderRadius="ms"
+        borderRadius="xl"
         boxShadow="innerXl"
         display="flex"
         flex="1"

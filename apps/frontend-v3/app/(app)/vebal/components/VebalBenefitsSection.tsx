@@ -57,7 +57,7 @@ export function VebalBenefitsSection() {
           <Heading as="h2" bg="background.gold" bgClip="text" pb="0.5" size="lg" textAlign="center">
             Why get veBAL?
           </Heading>
-          <Text color="font.secondary" maxWidth="38ch" pt="0" textAlign="center">
+          <Text color="font.secondary" lineHeight="1.4" maxWidth="38ch" pt="0" textAlign="center">
             Turn your BAL tokens into voting power and rewards.
           </Text>
         </Stack>
@@ -66,7 +66,7 @@ export function VebalBenefitsSection() {
         {benefits.map(benefit => (
           <FadeInOnView animateOnce={false} key={benefit.title}>
             <Flex
-              borderRadius="lg"
+              borderRadius="xl"
               overflow="hidden"
               p={{ base: 'ms', sm: 'md', md: 'xl' }}
               position="relative"
@@ -116,24 +116,24 @@ export function VebalBenefitsSection() {
                         w={{ base: 16, lg: 20, xl: 24 }}
                       >
                         <Box
-                          h={16}
+                          h={{ base: 16, lg: 20, xl: 24 }}
                           overflow="hidden"
                           position="absolute"
                           rounded="full"
-                          w={16}
+                          w={{ base: 16, lg: 20, xl: 24 }}
                           zIndex="-1"
                         >
                           <Picture
                             altText="Rock texture"
                             defaultImgType="jpg"
                             directory="/images/homepage/"
-                            height={16}
+                            height={24}
                             imgAvif
                             imgAvifDark
                             imgJpg
                             imgJpgDark
                             imgName="stone"
-                            width={16}
+                            width={24}
                           />
                         </Box>
                         <Center h="full" w="full">
@@ -155,7 +155,12 @@ export function VebalBenefitsSection() {
                   >
                     {benefit.title}
                   </Heading>
-                  <Text color="font.secondary" fontSize="md" sx={{ textWrap: 'balance' }}>
+                  <Text
+                    color="font.secondary"
+                    fontSize="md"
+                    lineHeight="1.4"
+                    sx={{ textWrap: 'balance' }}
+                  >
                     {benefit.description}
                   </Text>
                 </Box>

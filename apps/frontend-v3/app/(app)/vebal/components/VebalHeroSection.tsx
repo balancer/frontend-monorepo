@@ -1,5 +1,15 @@
 'use client'
-import { Box, Button, Flex, Grid, GridItem, Heading, Stack, Text, useBreakpointValue } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Stack,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
@@ -61,7 +71,12 @@ export function VebalHeroSection() {
                     <Heading as="h2" backgroundClip="text" bg="background.gold" pb="0.5" size="lg">
                       Lock-in for veBAL boosts
                     </Heading>
-                    <Text color="font.secondary" mb="sm" sx={{ textWrap: 'pretty' }}>
+                    <Text
+                      color="font.secondary"
+                      lineHeight="1.4"
+                      mb="sm"
+                      sx={{ textWrap: 'pretty' }}
+                    >
                       veBAL is the Balancer protocol governance system that rewards long-term
                       commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool.
                     </Text>
@@ -90,7 +105,11 @@ export function VebalHeroSection() {
               </FadeInOnView>
             </GridItem>
 
-            <GridItem display="flex" justifyContent={{ base: 'center', md: 'flex-start' }} zIndex={0}>
+            <GridItem
+              display="flex"
+              justifyContent={{ base: 'center', md: 'flex-start' }}
+              zIndex={0}
+            >
               <FadeInOnView animateOnce={false}>
                 <Box
                   margin={{ base: '32px auto', md: '0' }}
