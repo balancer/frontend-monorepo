@@ -1,8 +1,8 @@
 'use client'
+import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 import { Box, Button, Center, Flex, Heading, Link, Text, HStack } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import NextLink from 'next/link'
-import { RadialPattern } from '@/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 import { ArrowUpRight } from 'react-feather'
 
 export function VebalFooterSection() {
