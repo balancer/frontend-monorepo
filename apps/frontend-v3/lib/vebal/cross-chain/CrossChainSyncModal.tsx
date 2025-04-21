@@ -22,7 +22,7 @@ import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModa
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useState } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { useCrossChainSyncSteps } from '@/lib/vebal/cross-chain/useCrossChainSyncSteps'
+import { useCrossChainSyncSteps } from '@bal/lib/vebal/cross-chain/useCrossChainSyncSteps'
 // eslint-disable-next-line max-len
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
@@ -30,7 +30,7 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { uniq } from 'lodash'
 import { getChainShortName } from '@repo/lib/config/app.config'
 
-import { useVebalUserData } from '@/lib/vebal/useVebalUserData'
+import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { useCrossChainSync } from './CrossChainSyncProvider'
 import { formatUnits } from 'viem'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'

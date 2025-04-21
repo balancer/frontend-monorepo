@@ -2,10 +2,8 @@
   "name": "@repo/test",
   "version": "0.0.0",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
     "@apollo/client": "^3.13.1",
-    "@repo/lib": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",

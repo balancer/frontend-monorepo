@@ -4,7 +4,7 @@ import { Address } from 'viem'
 import { Connector } from 'wagmi'
 import { connect, disconnect } from 'wagmi/actions'
 import { getTestClient } from './wagmi-test-clients'
-import { addTestUserAddress, testWagmiConfig } from '../../anvil/testWagmiConfig'
+import { addTestUserAddress, testWagmiConfig } from '../../../lib/test/anvil/testWagmiConfig'
 
 export async function connectWithDefaultUser() {
   const connector = testWagmiConfig.connectors[0]

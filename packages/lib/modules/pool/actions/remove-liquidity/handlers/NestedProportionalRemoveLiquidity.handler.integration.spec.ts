@@ -7,8 +7,8 @@ import { Pool } from '../../../pool.types'
 import { QueryRemoveLiquidityInput, RemoveLiquidityType } from '../remove-liquidity.types'
 import { NestedProportionalRemoveLiquidityHandler } from './NestedProportionalRemoveLiquidity.handler'
 import { selectRemoveLiquidityHandler } from './selectRemoveLiquidityHandler'
-import { mainnetTestPublicClient } from '@repo/lib/test/utils/wagmi/wagmi-test-clients'
-import { connectWithDefaultUser } from '@repo/lib/test/utils/wagmi/wagmi-connections'
+import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
+import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
 
 function selectNestedProportionalHandler(pool: Pool): NestedProportionalRemoveLiquidityHandler {
   return selectRemoveLiquidityHandler(

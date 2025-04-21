@@ -93,6 +93,7 @@
     "@graphql-typed-document-node/core": "^3.2.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
+    "@repo/test": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@sentry/core": "8.50.0",
     "@sentry/types": "8.50.0",

@@ -1,4 +1,7 @@
-import { connectWithDefaultUser, disconnectDefaultUser } from '../utils/wagmi/wagmi-connections'
+import {
+  connectWithDefaultUser,
+  disconnectDefaultUser,
+} from '@repo/test/utils/wagmi/wagmi-connections'
 import * as transportsModule from '@repo/lib/modules/web3/transports'
 import { ChainIdWithFork, getTestRpcSetup } from '../anvil/anvil-setup'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'

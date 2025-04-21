@@ -4,7 +4,7 @@ import { waitFor } from '@testing-library/react'
 import {
   connectWithAlternativeUser,
   disconnectAlternativeUser,
-} from '@repo/lib/test/utils/wagmi/wagmi-connections'
+} from '@repo/test/utils/wagmi/wagmi-connections'
 import { useUserAccount } from './UserAccountProvider'
 
 function testUseUserAccount() {
