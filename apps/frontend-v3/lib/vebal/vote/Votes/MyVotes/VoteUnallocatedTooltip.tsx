@@ -10,7 +10,7 @@ import {
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 
-import { bpsToPercentage } from '@/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import { bpsToPercentage } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 interface Props {
   unallocatedWeight: BigNumber

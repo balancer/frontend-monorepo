@@ -18,9 +18,9 @@ import {
 
 import { useCrossChainSync } from './CrossChainSyncProvider'
 import Image from 'next/image'
-import { useVebalUserData } from '@/lib/vebal/useVebalUserData'
+import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 
-import { CrossChainSyncModal } from '@/lib/vebal/cross-chain/CrossChainSyncModal'
+import { CrossChainSyncModal } from '@bal/lib/vebal/cross-chain/CrossChainSyncModal'
 import { useState } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { InfoOutlineIcon } from '@chakra-ui/icons'

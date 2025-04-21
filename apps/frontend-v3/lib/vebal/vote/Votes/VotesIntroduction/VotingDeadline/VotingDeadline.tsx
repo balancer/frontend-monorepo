@@ -1,8 +1,8 @@
 'use client'
 
 import { HStack, Text, VStack } from '@chakra-ui/react'
-import { VotingDeadlineCalendar } from '@/lib/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineCalendar'
-import { VotingDeadlineCounter } from '@/lib/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineCounter'
+import { VotingDeadlineCalendar } from './VotingDeadlineCalendar'
+import { VotingDeadlineCounter } from './VotingDeadlineCounter'
 
 export function VotingDeadline() {
   return (

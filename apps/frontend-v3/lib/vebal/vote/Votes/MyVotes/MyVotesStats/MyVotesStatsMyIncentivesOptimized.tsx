@@ -5,10 +5,10 @@ import { MagicStickIcon } from '@repo/lib/shared/components/icons/MagicStickIcon
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { MyVotesStatsCard } from './shared/MyVotesStatsCard'
 import { useVeBALIncentives } from './useVeBALIncentives'
-import { useVebalUserData } from '@/lib/vebal/useVebalUserData'
+import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import NextLink from 'next/link'
-import { getVeBalManagePath } from '@/lib/vebal/vebal-navigation'
+import { getVeBalManagePath } from '@bal/lib/vebal/vebal-navigation'
 
 export function MyVotesStatsMyIncentivesOptimized() {
   const { toCurrency } = useCurrency()

@@ -1,8 +1,8 @@
-import { SubmittingVote, useMyVotes } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { SubmittingVote, useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import {
   chunkVotes,
   getVotesTransactionsStepIndex,
-} from '@/lib/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesSteps'
+} from '@bal/lib/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesSteps'
 import { useMemo } from 'react'
 import { sumBy } from 'lodash'
 import { bn } from '@repo/lib/shared/utils/numbers'

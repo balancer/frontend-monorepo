@@ -1,14 +1,14 @@
 import { GetVeBalVotingListDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { mins } from '@repo/lib/shared/utils/time'
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
-import { VotesProvider } from '@/lib/vebal/vote/Votes/VotesProvider'
-import { VoteListLayout } from '@/lib/vebal/vote/VoteList/VoteListLayout'
-import { MyVotesLayout } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesLayout'
-import { VoteListProvider } from '@/lib/vebal/vote/VoteList/VoteListProvider'
+import { VotesProvider } from '@bal/lib/vebal/vote/Votes/VotesProvider'
+import { VoteListLayout } from '@bal/lib/vebal/vote/VoteList/VoteListLayout'
+import { MyVotesLayout } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesLayout'
+import { VoteListProvider } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
 import { VStack } from '@chakra-ui/react'
-import { MyVotesProvider } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { MyVotesProvider } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
-import { VotesIntroductionLayout } from '@/lib/vebal/vote/Votes/VotesIntroduction/VotesIntroductionLayout'
+import { VotesIntroductionLayout } from '@bal/lib/vebal/vote/Votes/VotesIntroduction/VotesIntroductionLayout'
 
 export async function VotesContainer() {
   const client = getApolloServerClient()

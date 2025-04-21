@@ -7,10 +7,10 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { WEIGHT_VOTE_DELAY } from '@/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import { WEIGHT_VOTE_DELAY } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { TimeLockIcon } from '@repo/lib/shared/components/icons/TimeLockIcon'
 import { oneDayInMs } from '@repo/lib/shared/utils/time'
-import { PRETTY_DATE_FORMAT } from '@/lib/vebal/lock/duration/lock-duration.constants'
+import { PRETTY_DATE_FORMAT } from '@bal/lib/vebal/lock/duration/lock-duration.constants'
 import { format } from 'date-fns'
 
 interface Props {

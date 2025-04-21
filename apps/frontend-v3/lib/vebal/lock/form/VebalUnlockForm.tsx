@@ -15,16 +15,16 @@ import {
   CardProps,
   Skeleton,
 } from '@chakra-ui/react'
-import { LockMode, useVebalLock } from '@/lib/vebal/lock/VebalLockProvider'
-import { VebalLockModal } from '@/lib/vebal/lock/modal/VebalLockModal'
+import { LockMode, useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
+import { VebalLockModal } from '@bal/lib/vebal/lock/modal/VebalLockModal'
 import NextLink from 'next/link'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRouter } from 'next/navigation'
 import { useClickable } from '@chakra-ui/clickable'
-import { getModalLabel } from '@/lib/vebal/lock/steps/lock-steps.utils'
+import { getModalLabel } from '@bal/lib/vebal/lock/steps/lock-steps.utils'
 import { format } from 'date-fns'
-import { PRETTY_DATE_FORMAT } from '@/lib/vebal/lock/duration/lock-duration.constants'
+import { PRETTY_DATE_FORMAT } from '@bal/lib/vebal/lock/duration/lock-duration.constants'
 import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 

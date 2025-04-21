@@ -1,8 +1,8 @@
 import { toUtcTime } from '@repo/lib/shared/utils/time'
-import { LockMode } from '@/lib/vebal/lock/VebalLockProvider'
+import { LockMode } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { format } from 'date-fns'
-import { PRETTY_DATE_FORMAT } from '@/lib/vebal/lock/duration/lock-duration.constants'
+import { PRETTY_DATE_FORMAT } from '@bal/lib/vebal/lock/duration/lock-duration.constants'
 import { formatUnits } from 'viem'
 import { LockActionType } from '@repo/lib/modules/vebal/vote/vote.types'
 

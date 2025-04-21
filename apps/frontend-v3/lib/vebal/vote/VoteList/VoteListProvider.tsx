@@ -6,10 +6,10 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useGaugeVotes } from '@repo/lib/modules/vebal/vote/useGaugeVotes'
 import { SortVotesBy, VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { orderBy } from 'lodash'
-import { useVoteListFiltersState } from '@/lib/vebal/vote/VoteList/useVoteListFiltersState'
+import { useVoteListFiltersState } from '@bal/lib/vebal/vote/VoteList/useVoteListFiltersState'
 import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { PoolFilterType } from '@repo/lib/modules/pool/pool.types'
-import { useVotes } from '@/lib/vebal/vote/Votes/VotesProvider'
+import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 
 function sortVoteList(voteList: VotingPoolWithData[], sortBy: SortVotesBy, order: Sorting) {
   return orderBy(

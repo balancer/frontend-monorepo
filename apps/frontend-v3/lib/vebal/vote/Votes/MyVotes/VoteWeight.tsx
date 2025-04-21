@@ -1,14 +1,14 @@
 import { HStack, Text } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { bpsToPercentage } from '@/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import { bpsToPercentage } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import {
   getExceededWeight,
   getUnallocatedWeight,
-} from '@/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
-import { VoteUnallocatedTooltip } from '@/lib/vebal/vote/Votes/MyVotes/VoteUnallocatedTooltip'
-import { VoteExceededTooltip } from '@/lib/vebal/vote/Votes/MyVotes/VoteExceededTooltip'
-import { VoteTimeLockedTooltip } from '@/lib/vebal/vote/Votes/MyVotes/VoteTimeLockedTooltip'
-import { VoteExpiredTooltip } from '@/lib/vebal/vote/VoteExpiredTooltip'
+} from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import { VoteUnallocatedTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteUnallocatedTooltip'
+import { VoteExceededTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteExceededTooltip'
+import { VoteTimeLockedTooltip } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteTimeLockedTooltip'
+import { VoteExpiredTooltip } from '@bal/lib/vebal/vote/VoteExpiredTooltip'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 
 interface Props {

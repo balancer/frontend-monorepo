@@ -9,7 +9,10 @@ import {
 } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
-import { bpsToPercentage, WEIGHT_MAX_VOTES } from '@/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import {
+  bpsToPercentage,
+  WEIGHT_MAX_VOTES,
+} from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 interface Props {
   exceededWeight: BigNumber

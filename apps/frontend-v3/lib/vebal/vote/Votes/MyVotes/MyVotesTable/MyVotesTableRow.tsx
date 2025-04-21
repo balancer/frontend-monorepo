@@ -19,21 +19,21 @@ import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { VotingListTokenPills } from '@repo/lib/modules/pool/PoolList/PoolListTokenPills'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { ArrowUpIcon } from '@repo/lib/shared/components/icons/ArrowUpIcon'
-import { VoteExpiredTooltip } from '@/lib/vebal/vote/VoteExpiredTooltip'
+import { VoteExpiredTooltip } from '@bal/lib/vebal/vote/VoteExpiredTooltip'
 import { Trash2 } from 'react-feather'
-import { useMyVotes } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
-import { VoteWeightInput } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesTable/VoteWeightInput'
+import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { VoteWeightInput } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/VoteWeightInput'
 import {
   bpsToPercentage,
   calculateMyVoteRewardsValue,
   inputPercentageWeightToBps,
   votingTimeLockedEndDate,
-} from '@/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+} from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
-import { useVotes } from '@/lib/vebal/vote/Votes/VotesProvider'
-import { VoteWeight } from '@/lib/vebal/vote/Votes/MyVotes/VoteWeight'
-import { isVotingTimeLocked } from '@/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
-import { useVebalUserData } from '@/lib/vebal/useVebalUserData'
+import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
+import { VoteWeight } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteWeight'
+import { isVotingTimeLocked } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 

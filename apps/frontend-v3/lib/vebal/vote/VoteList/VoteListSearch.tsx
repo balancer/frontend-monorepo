@@ -1,6 +1,6 @@
 import { FormControl, Box } from '@chakra-ui/react'
 import { SearchInput } from '@repo/lib/shared/components/inputs/SearchInput'
-import { useVoteList } from '@/lib/vebal/vote/VoteList/VoteListProvider'
+import { useVoteList } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
 
 export function VoteListSearch() {
   const {

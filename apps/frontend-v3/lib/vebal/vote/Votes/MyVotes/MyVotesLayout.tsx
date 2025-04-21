@@ -1,4 +1,4 @@
-import { MyVotes } from '@/lib/vebal/vote/Votes/MyVotes/MyVotes'
+import { MyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotes'
 
 export function MyVotesLayout() {
   return <MyVotes />

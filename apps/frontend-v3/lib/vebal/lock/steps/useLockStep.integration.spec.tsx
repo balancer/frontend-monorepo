@@ -5,7 +5,7 @@ import {
   ManagedTransactionInput,
   useManagedTransaction,
 } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { approveToken, resetBlock, setVeBalBptBalance } from '@repo/lib/test/integration/sdk-utils'
 import { testHook, waitForSimulationSuccess } from '@repo/lib/test/utils/custom-renderers'
 import { connectAndImpersonate } from '@repo/lib/test/utils/wagmi/wagmi-connections'

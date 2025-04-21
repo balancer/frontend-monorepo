@@ -11,8 +11,8 @@ import {
 } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-import { useMyVotes } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
-import { VoteWeight } from '@/lib/vebal/vote/Votes/MyVotes/VoteWeight'
+import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { VoteWeight } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteWeight'
 import { useVoteList } from '../../../VoteList/VoteListProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 

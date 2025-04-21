@@ -1,8 +1,8 @@
 import { HStack, Skeleton, Text } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { MyVotesStatsCard } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVotesStatsCard'
-import { GainBadge } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
-import { useMyVotes } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { MyVotesStatsCard } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/MyVotesStatsCard'
+import { GainBadge } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
+import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { isZero } from '@repo/lib/shared/utils/numbers'
 
 export function MyVotesStatsAverageReward() {

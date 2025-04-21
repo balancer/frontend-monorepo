@@ -22,14 +22,17 @@ import { TransactionModalHeader } from '@repo/lib/shared/components/modals/Trans
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { LockMode, useVebalLock } from '@/lib/vebal/lock/VebalLockProvider'
+import { LockMode, useVebalLock } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
 import { Address } from 'viem'
-import { VebalLockDetails } from '@/lib/vebal/lock/VebalLockDetails'
+import { VebalLockDetails } from '@bal/lib/vebal/lock/VebalLockDetails'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useRouter } from 'next/navigation'
-import { useBuildLockSteps, UseBuildLockStepsArgs } from '@/lib/vebal/lock/steps/useBuildLockSteps'
-import { getPreviewLabel } from '@/lib/vebal/lock/steps/lock-steps.utils'
+import {
+  useBuildLockSteps,
+  UseBuildLockStepsArgs,
+} from '@bal/lib/vebal/lock/steps/useBuildLockSteps'
+import { getPreviewLabel } from '@bal/lib/vebal/lock/steps/lock-steps.utils'
 import { useEffect, useState } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'

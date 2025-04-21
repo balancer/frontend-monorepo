@@ -9,9 +9,9 @@ import {
   BreadcrumbLink,
   Button,
 } from '@chakra-ui/react'
-import { VotingDeadline } from '@/lib/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadline'
+import { VotingDeadline } from '@bal/lib/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadline'
 import { ChevronRight } from 'react-feather'
-import { HomeIcon } from '@/lib/vebal/vote/Votes/VotesIntroduction/HomeIcon'
+import { HomeIcon } from '@bal/lib/vebal/vote/Votes/VotesIntroduction/HomeIcon'
 
 const linkStyles = {
   color: 'font.secondary',

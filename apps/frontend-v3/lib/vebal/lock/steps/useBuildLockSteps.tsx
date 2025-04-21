@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { useLockSteps } from '@/lib/vebal/lock/steps/useLockSteps'
+import { useLockSteps } from '@bal/lib/vebal/lock/steps/useLockSteps'
 import { Address, parseUnits } from 'viem'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
-import { useVebalLock, UseVebalLockResult } from '@/lib/vebal/lock/VebalLockProvider'
+import { useVebalLock, UseVebalLockResult } from '@bal/lib/vebal/lock/VebalLockProvider'
 import { UseVebalLockDataResult } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 import { LockActionType } from '@repo/lib/modules/vebal/vote/vote.types'
 

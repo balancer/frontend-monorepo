@@ -1,4 +1,4 @@
-import { PRETTY_DATE_FORMAT } from '@/lib/vebal/lock/duration/lock-duration.constants'
+import { PRETTY_DATE_FORMAT } from '@bal/lib/vebal/lock/duration/lock-duration.constants'
 import { useToday } from '@repo/lib/shared/hooks/date.hooks'
 import {
   addMonths,

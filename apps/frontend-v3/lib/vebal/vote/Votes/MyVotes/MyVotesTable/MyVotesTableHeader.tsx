@@ -12,8 +12,8 @@ import {
 } from '@chakra-ui/react'
 import { Globe, Trash2 } from 'react-feather'
 import { SortableHeader, Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
-import { SortingBy } from '@/lib/vebal/vote/Votes/MyVotes/myVotes.types'
-import { useMyVotes } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { SortingBy } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.types'
+import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { orderByHash } from '../myVotes.helpers'
 const orderBy = Object.values(SortingBy)
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { VebalManage } from '@/lib/vebal/VebalManage'
+import { VebalManage } from '@bal/lib/vebal/VebalManage'
 // import { CrossChainBoost } from '@/lib/vebal/cross-chain/CrossChainBoost'
 import { Stack } from '@chakra-ui/react'
 

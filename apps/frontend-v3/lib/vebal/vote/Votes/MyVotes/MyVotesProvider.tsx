@@ -1,28 +1,28 @@
 'use client'
 
-import { useVotes } from '@/lib/vebal/vote/Votes/VotesProvider'
+import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react'
-import { useMyVotesFiltersState } from '@/lib/vebal/vote/Votes/MyVotes/useMyVotesFiltersState'
+import { useMyVotesFiltersState } from '@bal/lib/vebal/vote/Votes/MyVotes/useMyVotesFiltersState'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
-import { MyVotesTotalInfo, SortingBy } from '@/lib/vebal/vote/Votes/MyVotes/myVotes.types'
+import { MyVotesTotalInfo, SortingBy } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.types'
 import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 import { orderBy, uniqBy } from 'lodash'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { bn, sum } from '@repo/lib/shared/utils/numbers'
-import { useSubmitVotesAllSteps } from '@/lib/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesAllSteps'
+import { useSubmitVotesAllSteps } from '@bal/lib/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesAllSteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import {
   bpsToPercentage,
   calculateMyVoteRewardsValue,
   sharesToBps,
-} from '@/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+} from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 
 import {
   getExceededWeight,
   getUnallocatedWeight,
   isVotingTimeLocked,
-} from '@/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
-import { useVebalUserData } from '@/lib/vebal/useVebalUserData'
+} from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
+import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import BigNumber from 'bignumber.js'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {

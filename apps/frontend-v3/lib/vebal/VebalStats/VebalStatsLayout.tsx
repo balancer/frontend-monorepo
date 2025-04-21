@@ -1,10 +1,10 @@
 'use client'
 
 import { Skeleton, Stack } from '@chakra-ui/react'
-import { VebalStats } from '@/lib/vebal/VebalStats/VebalStats'
-import { VebalLocksChart } from '@/lib/vebal/vebal-chart/VebalLocksChart'
-import { useVebalLockInfo } from '@/lib/vebal/useVebalLockInfo'
-import { useVebalUserData } from '@/lib/vebal/useVebalUserData'
+import { VebalStats } from '@bal/lib/vebal/VebalStats/VebalStats'
+import { VebalLocksChart } from '@bal/lib/vebal/vebal-chart/VebalLocksChart'
+import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
+import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { useMemo } from 'react'
 
 export function VebalStatsLayout() {

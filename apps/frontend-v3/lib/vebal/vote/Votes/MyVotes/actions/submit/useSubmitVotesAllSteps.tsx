@@ -1,6 +1,6 @@
-import { useSubmitVotesSteps } from '@/lib/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesSteps'
+import { useSubmitVotesSteps } from '@bal/lib/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesSteps'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { SubmittingVote } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { SubmittingVote } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 
 type Params = {
   votes: SubmittingVote[]

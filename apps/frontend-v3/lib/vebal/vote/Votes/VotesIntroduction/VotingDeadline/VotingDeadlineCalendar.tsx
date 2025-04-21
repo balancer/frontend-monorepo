@@ -1,5 +1,5 @@
 import { addWeeks, endOfWeek, nextThursday, startOfWeek } from 'date-fns'
-import { VotingDeadlineContainer } from '@/lib/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineContainer'
+import { VotingDeadlineContainer } from './VotingDeadlineContainer'
 import { StaticCalendar } from './StaticCalendar'
 
 export function VotingDeadlineCalendar() {

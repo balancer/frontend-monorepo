@@ -9,9 +9,9 @@ import {
 } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useRef } from 'react'
-import { useMyVotes } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
-import { SubmitVotesModal } from '@/lib/vebal/vote/Votes/MyVotes/actions/submit/modal/SubmitVotesModal'
-import { useVotes } from '@/lib/vebal/vote/Votes/VotesProvider'
+import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { SubmitVotesModal } from '@bal/lib/vebal/vote/Votes/MyVotes/actions/submit/modal/SubmitVotesModal'
+import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 
 interface Props extends GridProps {
   keyValue: string | number

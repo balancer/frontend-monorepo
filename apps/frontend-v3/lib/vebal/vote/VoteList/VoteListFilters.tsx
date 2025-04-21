@@ -23,8 +23,8 @@ import {
   PoolTypeFilters,
   ProtocolVersionFilter,
 } from '@repo/lib/modules/pool/PoolList/PoolListFilters'
-import { useVoteList } from '@/lib/vebal/vote/VoteList/VoteListProvider'
-import { VoteListSearch } from '@/lib/vebal/vote/VoteList/VoteListSearch'
+import { useVoteList } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
+import { VoteListSearch } from '@bal/lib/vebal/vote/VoteList/VoteListSearch'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '@repo/lib/modules/pool/pool.helpers'
 

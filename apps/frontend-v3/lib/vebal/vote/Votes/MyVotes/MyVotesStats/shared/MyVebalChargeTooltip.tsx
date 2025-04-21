@@ -15,9 +15,9 @@ import { oneYearInSecs } from '@repo/lib/shared/utils/time'
 import { BatteryChargeIcon } from '@repo/lib/shared/components/icons/BatteryChargeIcon'
 import React from 'react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { PRETTY_DATE_FORMAT } from '@/lib/vebal/lock/duration/lock-duration.constants'
+import { PRETTY_DATE_FORMAT } from '@bal/lib/vebal/lock/duration/lock-duration.constants'
 import NextLink from 'next/link'
-import { getVeBalManagePath } from '@/lib/vebal/vebal-navigation'
+import { getVeBalManagePath } from '@bal/lib/vebal/vebal-navigation'
 
 interface Props {
   lockedEndDate: number

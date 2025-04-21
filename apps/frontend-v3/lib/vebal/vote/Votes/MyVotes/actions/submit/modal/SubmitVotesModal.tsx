@@ -11,12 +11,12 @@ import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-st
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
-import { useMyVotes } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
+import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { SubmitVotesPreview } from '@/lib/vebal/vote/Votes/MyVotes/actions/submit/modal/SubmitVotesPreview'
+import { SubmitVotesPreview } from '@bal/lib/vebal/vote/Votes/MyVotes/actions/submit/modal/SubmitVotesPreview'
 import { useResetStepIndexOnOpen } from '@repo/lib/modules/pool/actions/useResetStepIndexOnOpen'
-import { useSubmittingVotes } from '@/lib/vebal/vote/Votes/MyVotes/actions/submit/useSubmittingVotes'
-import { useVotes } from '@/lib/vebal/vote/Votes/VotesProvider'
+import { useSubmittingVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/actions/submit/useSubmittingVotes'
+import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 
 type Props = {
   isOpen: boolean

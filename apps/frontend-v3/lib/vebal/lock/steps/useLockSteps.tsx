@@ -1,7 +1,7 @@
 import { RawAmount } from '@repo/lib/modules/tokens/approvals/approval-rules'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { useLockStep } from '@/lib/vebal/lock/steps/useLockStep'
+import { useLockStep } from '@bal/lib/vebal/lock/steps/useLockStep'
 import { useMemo } from 'react'
 import { Hex } from 'viem'
 import { LockActionType } from '@repo/lib/modules/vebal/vote/vote.types'

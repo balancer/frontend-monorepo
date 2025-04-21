@@ -7,8 +7,8 @@ import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useMemo } from 'react'
-import { MyVotesTotalRow } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableTotalRow'
-import { MyVotesSubmitRow } from '@/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableSubmitRow'
+import { MyVotesTotalRow } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableTotalRow'
+import { MyVotesSubmitRow } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableSubmitRow'
 
 interface Props {
   myVotes: VotingPoolWithData[]

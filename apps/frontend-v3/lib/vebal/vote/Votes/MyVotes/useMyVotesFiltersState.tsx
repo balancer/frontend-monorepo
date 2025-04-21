@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { SortingBy } from '@/lib/vebal/vote/Votes/MyVotes/myVotes.types'
+import { SortingBy } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.types'
 import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 
 export function useMyVotesFiltersState() {

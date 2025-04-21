@@ -2,8 +2,8 @@ import { HStack, VStack, Text, Box } from '@chakra-ui/react'
 import { useCurrentDate, useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
 import { differenceInMinutes, format, nextThursday } from 'date-fns'
 import { oneSecondInMs } from '@repo/lib/shared/utils/time'
-import { VotingDeadlineContainer } from '@/lib/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadlineContainer'
-import { ReminderButton } from '@/lib/vebal/vote/Votes/VotesIntroduction/VotingDeadline/ReminderButton'
+import { VotingDeadlineContainer } from './VotingDeadlineContainer'
+import { ReminderButton } from './ReminderButton'
 import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
 
 const countdownItemBoxShadowStyles = [

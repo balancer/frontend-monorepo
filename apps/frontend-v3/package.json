@@ -18,7 +18,10 @@
     "stylelint:fix": "stylelint '**/*.css' --fix",
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental",
     "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/bal/bal.theme.ts",
-    "postinstall": "pnpm run gen:theme-typings"
+    "postinstall": "pnpm run gen:theme-typings",
+    "test:unit": "vitest run",
+    "test:integration": "vitest run -c ./vitest.config.integration.ts",
+    "test:integration:watch": "vitest -c ./vitest.config.integration.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.13.1",
@@ -32,6 +35,7 @@
     "@layerzerolabs/scan-client": "^0.0.8",
     "@nikolovlazar/chakra-ui-prose": "^1.2.1",
     "@repo/lib": "workspace:*",
+    "@repo/test": "workspace:*",
     "@sentry/nextjs": "8.50.0",
     "@studio-freight/react-lenis": "^0.0.47",
     "@tanstack/react-query": "5.67.0",
@@ -71,6 +75,8 @@
     "@types/tinycolor2": "^1.4.6",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
+    "@viem/anvil": "^0.0.10",
+    "@vitejs/plugin-react": "^4.2.1",
     "@wagmi/cli": "2.2.0",
     "autoprefixer": "^10.4.14",
     "concurrently": "9.1.2",

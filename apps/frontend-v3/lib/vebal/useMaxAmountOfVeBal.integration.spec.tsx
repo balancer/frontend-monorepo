@@ -1,5 +1,5 @@
 import { ChainId } from '@balancer/sdk'
-import { alternativeTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { alternativeTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { setVeBalBptBalance } from '@repo/lib/test/integration/sdk-utils'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { connectAndImpersonate } from '@repo/lib/test/utils/wagmi/wagmi-connections'

@@ -7,7 +7,7 @@ import { getPaginationProps } from '@repo/lib/shared/components/pagination/getPa
 import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
-import { useVoteList } from '@/lib/vebal/vote/VoteList/VoteListProvider'
+import { useVoteList } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
 import { useMemo } from 'react'
 
 interface Props {
