@@ -10,7 +10,7 @@ export default function VeBALPage() {
   return (
     <>
       <VebalHeroSection />
-      <Section mt="40">
+      <Section>
         <VebalBenefitsSection />
       </Section>
       <Section>

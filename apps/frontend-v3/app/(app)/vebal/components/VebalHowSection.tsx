@@ -5,7 +5,7 @@ import { VebalStepCard } from './VebalStepCard'
 
 export function VebalHowSection() {
   return (
-    <Stack alignItems="center" gap="md" px="md">
+    <Stack alignItems="center" gap="md" pt={{ base: 'md', md: '0' }} px="md">
       <FadeInOnView animateOnce={false}>
         <Stack alignItems="center" gap="md" px="md">
           <Heading as="h2" backgroundClip="text" bg="background.gold" pb="0.5" size="lg">

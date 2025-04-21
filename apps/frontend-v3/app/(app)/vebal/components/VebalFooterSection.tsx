@@ -1,12 +1,13 @@
 'use client'
-import { Box, Button, Center, Flex, Heading, Text } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Heading, Link, Text, HStack } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import NextLink from 'next/link'
 import { RadialPattern } from '@/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
+import { ArrowUpRight } from 'react-feather'
 
 export function VebalFooterSection() {
   return (
-    <Box overflow="hidden" position="relative" py="100px">
+    <Box overflow="hidden" position="relative" py="64px">
       <Box zIndex="-1">
         <RadialPattern
           bottom="-800px"
@@ -38,10 +39,12 @@ export function VebalFooterSection() {
               color="font.secondary"
               display="flex"
               justifyContent="center"
+              maxWidth="40ch"
               textAlign="center"
               width="full"
             >
-              Turn your BAL tokens into voting power and rewards.
+              Turn your BAL into veBAL to join Balancer governance, be eligible for incentives, and
+              share in the success of the protocol.
             </Text>
             <Flex
               display="flex"
@@ -59,6 +62,25 @@ export function VebalFooterSection() {
                 Vote on gauges
               </Button>
             </Flex>
+            <Link
+              alignItems="center"
+              color="font.secondary"
+              display="inline-flex"
+              href="https://docs.balancer.fi/concepts/governance/veBAL/"
+              isExternal
+              justifyContent="center"
+              mt="sm"
+            >
+              <HStack gap="xxs">
+                <Text color="font.secondary" fontSize={{ base: 'sm', md: 'md' }}>
+                  View veBAL docs
+                </Text>
+
+                <Box color="grayText">
+                  <ArrowUpRight size={12} />
+                </Box>
+              </HStack>
+            </Link>
           </Flex>
         </FadeInOnView>
       </Center>

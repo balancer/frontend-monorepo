@@ -40,8 +40,9 @@ export function VebalBenefitsSection() {
       alignItems="center"
       gap="md"
       margin="0 auto"
-      maxWidth="container.lg"
-      px="md"
+      maxWidth="container.xl"
+      pt={{ base: '60px', md: '40' }}
+      px={{ base: 'md', '2xl': '0' }}
       width="full"
     >
       <FadeInOnView animateOnce={false}>
@@ -67,7 +68,7 @@ export function VebalBenefitsSection() {
             <Flex
               borderRadius="lg"
               overflow="hidden"
-              p={{ base: 'ms', sm: 'md', md: 'lg' }}
+              p={{ base: 'ms', sm: 'md', md: 'xl' }}
               position="relative"
               shadow="2xl"
             >
@@ -90,7 +91,7 @@ export function VebalBenefitsSection() {
               <Flex
                 alignItems="center"
                 direction="row"
-                gap={{ base: 'ms', sm: 'md', md: 'md' }}
+                gap={{ base: 'ms', sm: 'md', lg: 'lg' }}
                 position="relative"
                 zIndex={2}
               >
@@ -108,11 +109,11 @@ export function VebalBenefitsSection() {
                         display="flex"
                         fontSize="xs"
                         fontWeight="normal"
-                        h={16}
+                        h={{ base: 16, lg: 20, xl: 24 }}
                         overflow="hidden"
                         rounded="full"
                         shadow="innerRockShadow"
-                        w={16}
+                        w={{ base: 16, lg: 20, xl: 24 }}
                       >
                         <Box
                           h={16}

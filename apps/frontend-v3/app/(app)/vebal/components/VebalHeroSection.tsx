@@ -53,6 +53,7 @@ export function VebalHeroSection() {
                   justifyContent="center"
                   margin={{ base: '0 auto', md: '0' }}
                   maxWidth={{ base: 400, md: 'full' }}
+                  pl={{ md: 'md', '2xl': '0' }}
                   position="relative"
                   top={{ base: '0', md: '200px' }}
                 >
