@@ -1,32 +1,7 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { InlineConfig } from 'vitest/node'
-import vitestUnitConfig from './vitest.config'
+import { resolve } from 'path'
+import { defineConfig } from 'vitest/config'
+import { createIntegrationVitestConfig } from '../../packages/test/vitest/vitest.integration.base'
 
-function setupFilesWithoutMswSetup() {
-  const setupFiles = vitestUnitConfig.test!.setupFiles! as string[]
-  return setupFiles.filter(file => !file.includes('test/vitest/setup-msw.ts'))
-}
+const monorepoRoot = resolve(__dirname, '../..')
 
-const integrationTestOptions: Partial<InlineConfig> = {
-  include: ['./**/*.integration.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-  // Avoid msw in integration tests
-  setupFiles: [...setupFilesWithoutMswSetup(), '@repo/test/vitest/setup-integration.ts'],
-  globalSetup: ['@repo/test/anvil/anvil-global-setup.ts'],
-  testTimeout: 30_000,
-  // Consider disabling threads if we detect problems with anvil
-  // poolOptions: {
-  //   threads: { singleThread: true },
-  // },
-  retry: 1,
-  // Uncomment the next line to exclude test for debug reasons
-  // exclude: ['lib/modules/tokens/useTokenBalances.integration.spec.ts', 'node_modules', 'dist'],
-}
-
-const integrationConfig = vitestUnitConfig
-
-integrationConfig.test = {
-  ...integrationConfig.test,
-  ...integrationTestOptions,
-}
-
-export default integrationConfig
+export default defineConfig(createIntegrationVitestConfig(monorepoRoot))
