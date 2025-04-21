@@ -1,17 +1,22 @@
-import { Button, Stack } from '@chakra-ui/react'
+'use client'
+import Section from '@repo/lib/shared/components/layout/Section'
 
-import NextLink from 'next/link'
+import { VebalBenefitsSection } from './components/VebalBenefitsSection'
+import { VebalFooterSection } from './components/VebalFooterSection'
+import { VebalHowSection } from './components/VebalHowSection'
+import { VebalHeroSection } from './components/VebalHeroSection'
 
 export default function VeBALPage() {
   return (
-    <Stack gap="lg" maxW="200px">
-      <Button as={NextLink} href="/vebal/manage" size="lg" variant="primary">
-        Manage veBAL
-      </Button>
-
-      <Button as={NextLink} href="/vebal/vote" size="lg" variant="primary">
-        Vote
-      </Button>
-    </Stack>
+    <>
+      <VebalHeroSection />
+      <Section>
+        <VebalBenefitsSection />
+      </Section>
+      <Section>
+        <VebalHowSection />
+      </Section>
+      <VebalFooterSection />
+    </>
   )
 }
