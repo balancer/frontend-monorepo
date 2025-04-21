@@ -6,7 +6,7 @@ import { VebalBenefitsBribesIcon } from '@repo/lib/shared/components/icons/vebal
 import { VebalBenefitsSparklesIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsSparklesIcon'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
-export function WhyVeBalSection() {
+export function VebalBenefitsSection() {
   const { colorMode } = useColorMode()
   const benefits = [
     {

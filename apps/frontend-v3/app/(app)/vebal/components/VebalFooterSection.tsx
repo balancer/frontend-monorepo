@@ -1,0 +1,67 @@
+'use client'
+import { Box, Button, Center, Flex, Heading, Text } from '@chakra-ui/react'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import NextLink from 'next/link'
+import { RadialPattern } from '@/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
+
+export function VebalFooterSection() {
+  return (
+    <Box overflow="hidden" position="relative" py="100px">
+      <Box zIndex="-1">
+        <RadialPattern
+          bottom="-800px"
+          circleCount={12}
+          height={1200}
+          innerHeight={150}
+          innerWidth={150}
+          left="calc(50% - 600px)"
+          position="absolute"
+          width={1200}
+        />
+      </Box>
+      <Center>
+        <FadeInOnView animateOnce={false}>
+          <Flex direction="column" gap="lg" textAlign="center">
+            <Heading
+              as="h2"
+              backgroundClip="text"
+              bg="background.gold"
+              display="flex"
+              justifyContent="center"
+              pb="0.5"
+              size="lg"
+              width="full"
+            >
+              Calling all BAL holders
+            </Heading>
+            <Text
+              color="font.secondary"
+              display="flex"
+              justifyContent="center"
+              textAlign="center"
+              width="full"
+            >
+              Turn your BAL tokens into voting power and rewards.
+            </Text>
+            <Flex
+              display="flex"
+              gap="ms"
+              justifyContent="center"
+              margin="0 auto"
+              maxWidth={320}
+              width="full"
+            >
+              <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="gold">
+                Manage veBAL
+              </Button>
+
+              <Button as={NextLink} flex={1} href="/vebal/vote" size="lg" variant="tertiary">
+                Vote on gauges
+              </Button>
+            </Flex>
+          </Flex>
+        </FadeInOnView>
+      </Center>
+    </Box>
+  )
+}

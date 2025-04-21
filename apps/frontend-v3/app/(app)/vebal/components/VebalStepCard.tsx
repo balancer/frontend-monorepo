@@ -2,7 +2,7 @@ import { Box, Heading, Stack, Text } from '@chakra-ui/react';
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView';
 import { ParallaxImage } from '@repo/lib/shared/components/marketing/ParallaxImage';
 import { Picture } from '@repo/lib/shared/components/other/Picture';
-import { ImageBorderCard } from './ImageBorderCard';
+import { ImageBorderCard } from '../ImageBorderCard';
 import { ReactNode } from 'react';
 
 interface VebalStepCardProps {
