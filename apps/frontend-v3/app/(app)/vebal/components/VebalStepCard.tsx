@@ -37,6 +37,7 @@ export function VebalStepCard({
                 defaultImgType="png"
                 directory="/images/vebal/"
                 imgAvif
+                imgAvifDark
                 imgName={imgName}
                 imgPng
               />
