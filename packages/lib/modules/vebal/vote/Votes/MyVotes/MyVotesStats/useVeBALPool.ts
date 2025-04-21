@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { GetPoolDocument, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 const VEBAL_UNDERLYING_POOL = '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014'
@@ -12,7 +13,8 @@ export function useVeBALPool(userAddress: string) {
     },
   })
 
-  const pool = data?.pool
+  // TODO: Remove as Pool when GqlPoolReClamm type is fixed in the API schema
+  const pool = data?.pool as Pool
 
   return { pool, poolIsLoading: loading }
 }
