@@ -4,12 +4,12 @@
 import {
   GetFeaturedPoolsQuery,
   GetPoolDocument,
-  GetPoolQuery,
+  GetPoolQuery as OriginalGetPoolQuery,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { createContext, PropsWithChildren, useRef } from 'react'
 import { useQuery } from '@apollo/client'
-import { FetchPoolProps } from './pool.types'
+import { FetchPoolProps, Pool } from './pool.types'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getPoolHelpers } from './pool.helpers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -25,6 +25,11 @@ export type UsePoolResponse = ReturnType<typeof _usePool> & {
 }
 
 export const PoolContext = createContext<UsePoolResponse | null>(null)
+
+// TODO: Remove Exclude when GqlPoolReClamm type is fixed in the API schema
+export type GetPoolQuery = Omit<OriginalGetPoolQuery, 'pool'> & {
+  pool: Pool
+}
 
 export function _usePool({
   id,
@@ -45,7 +50,8 @@ export function _usePool({
     pool: poolWithOnChainData,
     refetch: refetchOnchainData,
     isLoading: isLoadingOnchainData,
-  } = usePoolEnrichWithOnChainData(data?.pool || initialData.pool)
+    // TODO: Remove "as Pool" type assertion when GqlPoolReClamm type is fixed in the API schema
+  } = usePoolEnrichWithOnChainData((data?.pool as Pool) || initialData.pool)
 
   const {
     data: [poolWithOnchainUserBalances],
