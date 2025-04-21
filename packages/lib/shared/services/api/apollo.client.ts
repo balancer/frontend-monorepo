@@ -1,10 +1,6 @@
 import { config } from '@repo/lib/config/app.config'
 import { ApolloLink, HttpLink } from '@apollo/client'
-import {
-  ApolloClient,
-  InMemoryCache,
-  SSRMultipartLink,
-} from '@apollo/experimental-nextjs-app-support'
+import { ApolloClient, InMemoryCache, SSRMultipartLink } from '@apollo/client-integration-nextjs'
 
 const defaultHeaders = {
   'x-graphql-client-name': 'FrontendClient',
