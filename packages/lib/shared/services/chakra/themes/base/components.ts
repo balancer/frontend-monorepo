@@ -458,7 +458,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           _dark: {
             color: 'font.gold',
           },
-        },        
+        },
         solid: {
           color: 'text-body',
           bg: 'background.level2',
