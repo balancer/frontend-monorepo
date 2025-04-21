@@ -1,5 +1,5 @@
 'use client'
-import { Box, Button, Flex, Grid, GridItem, Heading, Stack, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Grid, GridItem, Heading, Stack, Text, useBreakpointValue } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
@@ -8,6 +8,12 @@ import NextLink from 'next/link'
 import { RadialPattern } from '@/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 
 export function VebalHeroSection() {
+  const radialPatternProps = useBreakpointValue({
+    base: { circleCount: 10, height: 1000, width: 1000 },
+    md: { circleCount: 15, height: 1500, width: 1500 },
+    xl: { circleCount: 20, height: 2000, width: 2000 },
+  })
+
   return (
     <Box
       borderBottom="1px solid"
@@ -33,24 +39,13 @@ export function VebalHeroSection() {
           position="relative"
           pt={['xl', '40px']}
         >
-          <RadialPattern
-            circleCount={20}
-            height={2000}
-            innerHeight={150}
-            innerWidth={150}
-            left="calc(50% - 580px)"
-            position="absolute"
-            top="-480px"
-            width={2000}
-          />
-
           <Grid
             gap={{ base: '0', md: '4' }}
             h="100%"
             templateColumns={{ base: '1fr', md: '1fr 1fr' }}
           >
             {/* Content Column */}
-            <GridItem minW="400px">
+            <GridItem minW="400px" zIndex={1}>
               <FadeInOnView animateOnce={false}>
                 <Stack
                   alignItems={{ base: 'center', md: 'start' }}
@@ -94,12 +89,23 @@ export function VebalHeroSection() {
               </FadeInOnView>
             </GridItem>
 
-            <GridItem display="flex" justifyContent={{ base: 'center', md: 'flex-start' }}>
+            <GridItem display="flex" justifyContent={{ base: 'center', md: 'flex-start' }} zIndex={0}>
               <FadeInOnView animateOnce={false}>
                 <Box
                   margin={{ base: '32px auto', md: '0' }}
+                  position="relative"
                   width={{ base: '98%', md: 'clamp(800px, 85vw, 1200px)' }}
                 >
+                  <RadialPattern
+                    circleCount={radialPatternProps?.circleCount}
+                    height={radialPatternProps?.height}
+                    left="50%"
+                    position="absolute"
+                    top="50%"
+                    transform="translate(-50%, -50%)"
+                    width={radialPatternProps?.width}
+                    zIndex={-1}
+                  />
                   <Picture
                     altText="veBAL token"
                     defaultImgType="png"
