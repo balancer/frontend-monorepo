@@ -221,7 +221,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
           )} inset, 0 0 0 1px ${colors.red['500']}`,
         },
         innerXl:
-          '4px 4px 4px 0px rgba(0, 0, 0, 0.04) inset, 7px 6px 12px 0px rgba(0, 0, 0, 0.08) inset, 40px 40px 80px 0px rgba(0, 0, 0, 0.05) inset, 0px -1px 1px 0px rgba(255, 255, 255, 0.25) inset',
+          '4px 4px 4px 0px rgba(0, 0, 0, 0.02) inset, 7px 6px 12px 0px rgba(0, 0, 0, 0.06) inset, 40px 40px 80px 0px rgba(0, 0, 0, 0.03) inset, 0px -1px 1px 0px rgba(255, 255, 255, 0.25) inset',
         innerRockShadow:
           '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset',
         innerRockShadowSm:

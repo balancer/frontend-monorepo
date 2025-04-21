@@ -9,7 +9,6 @@ import {
   Center,
   Grid,
   GridItem,
-  Card,
 } from '@chakra-ui/react'
 import Section from '@repo/lib/shared/components/layout/Section'
 
@@ -23,6 +22,7 @@ import { RadialPattern } from '@/app/(marketing)/_lib/landing-v3/shared/RadialPa
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { WhyVeBalSection } from './components/WhyVeBalSection'
 import { ParallaxImage } from '@repo/lib/shared/components/marketing/ParallaxImage'
+import { ImageBorderCard } from './ImageBorderCard'
 
 export default function VeBALPage() {
   return (
@@ -89,7 +89,7 @@ export default function VeBALPage() {
                       >
                         Lock-in for veBAL boosts
                       </Heading>
-                      <Text color="font.secondary" mb="sm">
+                      <Text color="font.secondary" mb="sm" sx={{ textWrap: 'pretty' }}>
                         veBAL is the Balancer protocol governance system that rewards long-term
                         commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool.
                       </Text>
@@ -159,14 +159,14 @@ export default function VeBALPage() {
           <Grid
             alignItems="stretch"
             gap="lg"
-            maxW="container.lg"
+            maxW="container.xl"
             pt="lg"
             templateColumns={['1fr', '1fr', 'repeat(3, 1fr)']}
           >
-            <GridItem height="100%">
+            <GridItem display="flex" height="100%">
               <FadeInOnView animateOnce={false}>
-                <Card height="100%">
-                  <Stack alignItems="center" gap="sm" textAlign="center">
+                <ImageBorderCard display="flex" flexDirection="column" height="100%">
+                  <Stack alignItems="center" flex="1" gap="sm" textAlign="center">
                     <Box maxW={{ base: '200px', md: '100%' }}>
                       <FadeInOnView animateOnce={false}>
                         <ParallaxImage
@@ -190,18 +190,18 @@ export default function VeBALPage() {
                     <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
                       1. Add liquidity
                     </Heading>
-                    <Text color="font.secondary" pb="ms">
+                    <Text color="font.secondary" pb="ms" px="md" sx={{ textWrap: 'pretty' }}>
                       Join the ve8020 BAL/WETH protocol liquidity pool to get the B-80BAL-20WETH LP
                       token.
                     </Text>
                   </Stack>
-                </Card>
+                </ImageBorderCard>
               </FadeInOnView>
             </GridItem>
-            <GridItem height="100%">
+            <GridItem display="flex" height="100%">
               <FadeInOnView animateOnce={false}>
-                <Card height="100%">
-                  <Stack alignItems="center" gap="sm" textAlign="center">
+                <ImageBorderCard display="flex" flexDirection="column" height="100%">
+                  <Stack alignItems="center" flex="1" gap="sm" textAlign="center">
                     <Box maxW={{ base: '200px', md: '100%' }}>
                       <FadeInOnView animateOnce={false}>
                         <ParallaxImage
@@ -225,18 +225,18 @@ export default function VeBALPage() {
                     <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
                       2. Lock your LP tokens
                     </Heading>
-                    <Text color="font.secondary" pb="ms">
+                    <Text color="font.secondary" pb="ms" px="md" sx={{ textWrap: 'pretty' }}>
                       Lock your B-80BAL-20WETH LP tokens for a period to receive veBAL. The longer
                       you lock, the more veBAL your get.
                     </Text>
                   </Stack>
-                </Card>
+                </ImageBorderCard>
               </FadeInOnView>
             </GridItem>
-            <GridItem height="100%">
+            <GridItem display="flex" height="100%">
               <FadeInOnView animateOnce={false}>
-                <Card height="100%">
-                  <Stack alignItems="center" gap="sm" textAlign="center">
+                <ImageBorderCard display="flex" flexDirection="column" height="100%">
+                  <Stack alignItems="center" flex="1" gap="sm" textAlign="center">
                     <Box maxW={{ base: '200px', md: '100%' }}>
                       <FadeInOnView animateOnce={false}>
                         <ParallaxImage
@@ -260,12 +260,12 @@ export default function VeBALPage() {
                     <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
                       3. Get power + rewards
                     </Heading>
-                    <Text color="font.secondary" pb="ms">
+                    <Text color="font.secondary" pb="ms" px="md" sx={{ textWrap: 'pretty' }}>
                       Earn protocol revenue + weekly voting incentives, boost liquidity mining, gain
                       governance power.
                     </Text>
                   </Stack>
-                </Card>
+                </ImageBorderCard>
               </FadeInOnView>
             </GridItem>
           </Grid>
