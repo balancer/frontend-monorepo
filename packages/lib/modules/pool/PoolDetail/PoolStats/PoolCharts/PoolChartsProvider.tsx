@@ -15,6 +15,7 @@ import { useTheme as useNextTheme } from 'next-themes'
 import { isCowAmmPool } from '../../../pool.helpers'
 import { PoolChartTab, usePoolChartTabs } from './PoolChartTabsProvider'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { alignUtcWithLocalDay } from '@repo/lib/shared/utils/time'
 
 const MIN_DISPLAY_PERIOD_DAYS = 30
 
@@ -360,7 +361,9 @@ export function _usePoolCharts() {
       }
     }
 
-    return processedElements
+    // timestamps from chartData are UTC midnight, but echarts interprets timestamp using local timezone
+    // so we adjust by offset to display correct day on chart
+    return processedElements.map(([timestamp, value]) => [alignUtcWithLocalDay(timestamp), value])
   }, [
     activePeriod.value,
     activeTab.value,

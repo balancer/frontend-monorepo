@@ -4,7 +4,6 @@ import { Address } from 'viem'
 import { HumanAmount } from '@balancer/sdk'
 import { isClaimableGauge } from '../pool.helpers'
 import {
-  GqlPoolStakingGaugeStatus,
   GqlPoolStakingType,
   GqlUserStakedBalance,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -49,11 +48,7 @@ export function hasNonPreferentialStakedBalance(pool: Pool): boolean {
 }
 
 export function getCanStake(pool: Pool): boolean {
-  return (
-    !!pool.staking &&
-    pool.staking.gauge?.status === GqlPoolStakingGaugeStatus.Preferred &&
-    !hasNonPreferentialStakedBalance(pool)
-  )
+  return !!pool.staking && !hasNonPreferentialStakedBalance(pool)
 }
 
 export function findFirstNonPreferentialStakedWithBalance(
