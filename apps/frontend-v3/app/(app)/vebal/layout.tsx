@@ -1,6 +1,6 @@
-import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
+import { Box } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
 export default async function VeBALLayout({ children }: PropsWithChildren) {
-  return <DefaultPageContainer minH="100vh">{children}</DefaultPageContainer>
+  return <Box>{children}</Box>
 }
