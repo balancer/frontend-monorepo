@@ -1,4 +1,4 @@
-import { testWagmiConfig } from '@repo/lib/test/anvil/testWagmiConfig'
+import { testWagmiConfig } from '@repo/test/anvil/testWagmiConfig'
 import { publicActions, testActions, walletActions } from 'viem'
 import { gnosis, mainnet, polygon, sepolia, fantom } from 'viem/chains'
 import { ChainIdWithFork } from '../../../lib/test/anvil/anvil-setup'

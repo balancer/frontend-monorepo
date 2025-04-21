@@ -17,7 +17,7 @@ import { TransactionStateProvider } from '@repo/lib/modules/transactions/transac
 import { UserSettingsProvider } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { UserAccountProvider } from '@repo/lib/modules/web3/UserAccountProvider'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
-import { testWagmiConfig } from '@repo/lib/test/anvil/testWagmiConfig'
+import { testWagmiConfig } from '@repo/test/anvil/testWagmiConfig'
 import { ApolloProvider } from '@apollo/client'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { RenderHookOptions, act, renderHook, waitFor } from '@testing-library/react'

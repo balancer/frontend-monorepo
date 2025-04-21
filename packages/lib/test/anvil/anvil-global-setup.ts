@@ -1,8 +1,8 @@
 import { startProxy } from '@viem/anvil'
 
-import { ANVIL_NETWORKS, getForkUrl } from './anvil-setup'
-import { testChains } from './testWagmiConfig'
 import { sleep } from '@repo/lib/shared/utils/sleep'
+import { testChains } from '@repo/test/anvil/testWagmiConfig'
+import { ANVIL_NETWORKS, getForkUrl } from './anvil-setup'
 
 export async function setup() {
   const promises = []
