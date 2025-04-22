@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "playwright:install": "playwright install --with-deps",
+    "playwright:install:chromium": "playwright install --with-deps chromium",
     "test:e2e:build": "start-server-and-test 'cd ../../ && pnpm start' 'http://localhost:3000|http://localhost:3001' 'pnpm exec playwright test tests/build'",
     "test:e2e:build:ui": "pnpm exec playwright test tests/build --ui",
     "test:e2e:dev": "NEXT_PUBLIC_E2E_DEV=1 pnpm exec playwright test tests/dev",
