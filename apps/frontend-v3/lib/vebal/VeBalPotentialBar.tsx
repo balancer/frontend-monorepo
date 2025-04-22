@@ -8,7 +8,17 @@ import { VeBalIncreaseButton } from './VeBalLockButtons'
 export function VeBalPotentialBar() {
   const { userStats } = useVebalUserStats()
   const veBalBalance = userStats?.balance || 0n
-  const { maxAmount, calculateCurrentVeBalPercentage } = useMaxAmountOfVeBAL()
+  const { maxAmount, calculateCurrentVeBalPercentage, isSmallerThanCurrentBalance } =
+    useMaxAmountOfVeBAL()
+
+  /*
+    There are some edge cases (i.e. when the user just locked all their balance for the max duration)
+    when the calculated maxAmount can be slightly lower than the current veBAL balance.
+    We assume that the user is at 100% in those cases.
+  */
+  const formattedPotentialVeBal = isSmallerThanCurrentBalance(veBalBalance)
+    ? formatUserVebal(userStats)
+    : fNum('token', maxAmount)
 
   const progressPercentage = calculateCurrentVeBalPercentage(veBalBalance)
 
@@ -39,7 +49,7 @@ export function VeBalPotentialBar() {
       <Card m="md" p="lg" position="relative" w="full">
         <Stack direction="row" justifyContent="space-between" mb={2} w="full">
           <Text fontSize="sm">Current veBAL: {formatUserVebal(userStats)}</Text>
-          <Text fontSize="sm">Potential veBAL: {fNum('token', maxAmount)}</Text>
+          <Text fontSize="sm">Potential veBAL: {formattedPotentialVeBal}</Text>
         </Stack>
         <HStack>
           <Progress
