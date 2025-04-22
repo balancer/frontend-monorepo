@@ -59,9 +59,11 @@ export function ImageBorderCard({ children, ...props }: BoxProps) {
             innerWidth={150}
             left="calc(50% - 400px)"
             opacity={colorMode === 'dark' ? 0.35 : 0.75}
+            pointerEvents="none"
             position="absolute"
             top="-210px"
             width={800}
+            zIndex={0}
           />
           {children}
         </Noise>
