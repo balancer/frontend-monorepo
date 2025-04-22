@@ -28,7 +28,9 @@
     "test:unit:watch": "turbo test:unit:watch --ui=stream --log-order=stream --",
     "test:save-api-mocks": "turbo test:save-api-mocks --ui=stream --log-order=stream --",
     "typecheck": "turbo typecheck",
-    "prepare": "husky"
+    "prepare": "husky",
+    "playwright:install": "pnpm --filter=e2e-tests playwright:install",
+    "playwright:install:chromium": "pnpm --filter=e2e-tests playwright:install:chromium"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "4.3.1",
