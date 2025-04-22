@@ -131,9 +131,9 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
     case GqlPoolType.QuantAmmWeighted:
       return (
         <CustomPopover
-          bodyText="BTFs by QuantAMM dynamically adjust pool weights to capitalize on price movements. For example, a BTF pool can automatically increase its WBTC allocation when its value rises faster than ETH. This allows LPs to earn both trading fees and profits from underlying asset appreciation through continuous, responsive, fully on-chain TradFi-style strategies."
+          bodyText="BTFs by QuantAMM dynamically adjust pool weights to capitalize on price movements. For example, a BTF pool can automatically increase its WBTC allocation when the BTF strategy thinks the value will rise faster than ETH. This allows LPs to earn both trading fees and profits from underlying asset appreciation through continuous, responsive, fully on-chain TradFi-style strategies."
           footerUrl="https://medium.com/@QuantAMM/quantamm-x-balancer-v3-046af77ddc81"
-          headerText="Blockchain Traded Funds (BFTs)"
+          headerText="Blockchain Traded Funds (BTFs)"
           trigger="hover"
         >
           <Box {...tagWrapperProps}>
