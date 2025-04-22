@@ -40,9 +40,16 @@ export function useMaxAmountOfVeBAL() {
     return Math.min(percentage, 100)
   }
 
+  function isSmallerThanCurrentBalance(currentBalance: bigint): boolean {
+    const currentBalanceBN = bn(formatUnits(currentBalance, 18))
+
+    return maxAmount.isLessThan(currentBalanceBN)
+  }
+
   return {
     isMaxAmountLoading: isLoading,
     maxAmount,
     calculateCurrentVeBalPercentage,
+    isSmallerThanCurrentBalance,
   }
 }

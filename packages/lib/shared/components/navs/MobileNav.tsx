@@ -47,16 +47,25 @@ function NavLinks({ appLinks, onClick, customLinks }: NavLinkProps) {
     <VStack align="start" w="full">
       {appLinks.map(link => (
         <Link
+          alignItems="center"
           as={NextLink}
           color={linkColorFor(link.href)}
+          display="flex"
           fontSize="xl"
+          gap="xs"
           href={link.href}
+          isExternal
           key={link.href}
           onClick={onClick}
           prefetch
           variant="nav"
         >
           {link.label}
+          {link.isExternal && (
+            <Box color="grayText">
+              <ArrowUpRight size={14} />
+            </Box>
+          )}
         </Link>
       ))}
       {customLinks}

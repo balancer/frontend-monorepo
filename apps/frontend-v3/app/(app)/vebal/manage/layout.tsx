@@ -16,7 +16,7 @@ export default function VeBALManageLayout({ children }: PropsWithChildren) {
     <TokenBalancesProvider initTokens={[vebalBptToken]}>
       {/* <CrossChainSyncProvider> */}
       <TransactionStateProvider>
-        <DefaultPageContainer noVerticalPadding>{children}</DefaultPageContainer>
+        <DefaultPageContainer>{children}</DefaultPageContainer>
       </TransactionStateProvider>
       {/* </CrossChainSyncProvider> */}
     </TokenBalancesProvider>
