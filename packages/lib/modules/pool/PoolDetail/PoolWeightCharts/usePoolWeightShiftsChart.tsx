@@ -117,12 +117,25 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
       return { xAxisLabels: [], labelIndices: [] }
     }
 
-    const labels = Array(snapshots.length).fill('')
+    const labels: string[] = snapshots.map(snapshot => {
+      try {
+        const date = new Date(snapshot.timestamp * 1000)
+        if (!isNaN(date.getTime())) {
+          return date.toLocaleString(undefined, {
+            month: 'short',
+            day: 'numeric',
+          })
+        }
+        return ''
+      } catch (e) {
+        return ''
+      }
+    })
+
     const indices: number[] = []
-
     const seenDates = new Set<string>()
+    let isFirstDate = true
 
-    // Process all snapshots to find date changes
     snapshots.forEach((snapshot, index) => {
       try {
         const date = new Date(snapshot.timestamp * 1000)
@@ -132,13 +145,12 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
           if (!seenDates.has(dateString)) {
             seenDates.add(dateString)
 
-            const formattedDate = date.toLocaleString(undefined, {
-              month: 'short',
-              day: 'numeric',
-            })
-
-            labels[index] = formattedDate
-            indices.push(index)
+            // Skip the first date
+            if (isFirstDate) {
+              isFirstDate = false
+            } else {
+              indices.push(index)
+            }
           }
         }
       } catch (e) {
@@ -224,7 +236,10 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         type: 'category',
         boundaryGap: false,
         axisLabel: {
-          formatter: (value: string) => value,
+          show: true,
+          formatter: function (value: string, index: number) {
+            return labelIndices.includes(index) ? value : ''
+          },
           fontSize: 12,
           color: '#999999',
           margin: 12,
@@ -232,7 +247,9 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         axisTick: {
           show: true,
           alignWithLabel: true,
-          interval: (index: number) => labelIndices.includes(index),
+          interval: function (index: number) {
+            return labelIndices.includes(index)
+          },
           lineStyle: {
             color: '#999999',
           },
