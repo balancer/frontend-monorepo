@@ -162,7 +162,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
   }, [pool])
 
   const option: EChartsOption = {
-    color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
+    color: GRADIENTS.map(gradient => gradient.start),
     tooltip: {
       trigger: 'axis',
       axisPointer: {
