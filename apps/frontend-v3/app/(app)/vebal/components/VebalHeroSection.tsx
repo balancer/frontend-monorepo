@@ -1,4 +1,5 @@
 'use client'
+import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 import {
   Box,
   Button,
@@ -15,7 +16,6 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import NextLink from 'next/link'
-import { RadialPattern } from '@/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 
 export function VebalHeroSection() {
   const radialPatternProps = useBreakpointValue({

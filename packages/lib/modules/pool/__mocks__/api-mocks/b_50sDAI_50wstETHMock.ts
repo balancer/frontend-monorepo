@@ -104,28 +104,6 @@ export const b_50sDAI_50wstETHMock = {
       },
     ],
   },
-  allTokens: [
-    {
-      id: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063-0x6c76971f98945ae98dd7d4dfca8711ebea946ea6',
-      address: '0x6c76971f98945ae98dd7d4dfca8711ebea946ea6',
-      name: 'Wrapped liquid staked Ether 2.0 from Mainnet',
-      symbol: 'wstETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0xbc2acf5e821c5c9f8667a36bb1131dad26ed64f9000200000000000000000063-0xaf204776c7245bf4147c2612bf6e5972ee483701',
-      address: '0xaf204776c7245bf4147c2612bf6e5972ee483701',
-      name: 'Savings xDAI',
-      symbol: 'sDAI',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   staking: {
     id: '0x4d13d387f372dbe5125b7d78e75094ac85b31edc',
     type: 'GAUGE',

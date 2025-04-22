@@ -18,9 +18,7 @@ import {
 import { Address, Hex } from 'viem'
 import { ApiToken } from '../tokens/token.types'
 
-// TODO: Remove Exclude when GqlPoolReClamm type is fixed in the API schema
-export type PoolWithReclamm = GetPoolQuery['pool']
-export type Pool = Exclude<PoolWithReclamm, { __typename: 'GqlPoolReClamm' }>
+export type Pool = GetPoolQuery['pool']
 
 export type PoolId = Hex
 

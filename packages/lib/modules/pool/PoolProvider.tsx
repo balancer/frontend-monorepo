@@ -4,7 +4,7 @@
 import {
   GetFeaturedPoolsQuery,
   GetPoolDocument,
-  GetPoolQuery as OriginalGetPoolQuery,
+  GetPoolQuery,
   GqlChain,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { createContext, PropsWithChildren, useRef } from 'react'
@@ -26,11 +26,6 @@ export type UsePoolResponse = ReturnType<typeof _usePool> & {
 
 export const PoolContext = createContext<UsePoolResponse | null>(null)
 
-// TODO: Remove Exclude when GqlPoolReClamm type is fixed in the API schema
-export type GetPoolQuery = Omit<OriginalGetPoolQuery, 'pool'> & {
-  pool: Pool
-}
-
 export function _usePool({
   id,
   chain,
@@ -50,8 +45,7 @@ export function _usePool({
     pool: poolWithOnChainData,
     refetch: refetchOnchainData,
     isLoading: isLoadingOnchainData,
-    // TODO: Remove "as Pool" type assertion when GqlPoolReClamm type is fixed in the API schema
-  } = usePoolEnrichWithOnChainData((data?.pool as Pool) || initialData.pool)
+  } = usePoolEnrichWithOnChainData(data?.pool || initialData.pool)
 
   const {
     data: [poolWithOnchainUserBalances],
