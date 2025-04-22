@@ -408,7 +408,7 @@ function BaseAprTooltip({
   )
 
   return (
-    <Popover placement={placement} trigger="hover">
+    <Popover isLazy placement={placement} trigger="hover">
       {({ isOpen }) => (
         <>
           <PopoverTrigger>

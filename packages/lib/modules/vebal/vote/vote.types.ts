@@ -23,3 +23,16 @@ export enum SortVotesBy {
   bribesPerVebal = 'bribesPerVebal',
   votes = 'votes',
 }
+
+export enum LockActionType {
+  CreateLock = 'createLock',
+  IncreaseLock = 'increaseAmount',
+  ExtendLock = 'extendLock',
+  Unlock = 'unlock',
+}
+
+export interface UserVotesData {
+  end: bigint
+  power: bigint
+  slope: bigint
+}
