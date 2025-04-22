@@ -39,7 +39,7 @@ function TagWrapper({ children }: { children: React.ReactNode }) {
 
 function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Metadata[]) {
   const { tags, type } = pool
-  const textProps = { fontSize: 'sm', variant: 'secondary' }
+  const textProps = { fontSize: 'xs', variant: 'secondary' }
 
   if (isBoosted(pool) && erc4626Metadata.length) {
     return (
