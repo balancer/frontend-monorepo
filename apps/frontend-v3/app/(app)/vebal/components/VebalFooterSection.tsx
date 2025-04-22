@@ -45,8 +45,8 @@ export function VebalFooterSection() {
                 textAlign="center"
                 width="full"
               >
-                Turn your BAL into veBAL to join Balancer governance, be eligible for incentives,
-                and share in the success of the protocol.
+                Lock your BAL for veBAL to join Balancer governance, be eligible for incentives, and
+                share in the success of the protocol.
               </Text>
             </Stack>
             <Flex
