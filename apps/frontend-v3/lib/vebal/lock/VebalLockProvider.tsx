@@ -45,9 +45,7 @@ export function expectedTotalVeBal({
   lockEndDate: ExpectedVeBalArgs['lockEndDate']
 }) {
   const now = new Date()
-  const previousThursdayBeforeLockDate = getPreviousThursday(lockEndDate)
-
-  const lockTime = differenceInSeconds(previousThursdayBeforeLockDate, now)
+  const lockTime = differenceInSeconds(lockEndDate, now)
 
   return bn(bpt).times(lockTime).div(oneYearInSecs)
 }
