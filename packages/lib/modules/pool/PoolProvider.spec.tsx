@@ -1,21 +1,13 @@
-import {
-  GetPoolQuery as OriginalGetPoolQuery,
-  GqlChain,
-} from '@repo/lib/shared/services/api/generated/graphql'
+import { GetPoolQuery, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { defaultPoolMock, defaultPoolResponseMock } from '@repo/lib/test/msw/handlers/Pool.handlers'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
-import { BaseVariant, Pool } from './pool.types'
+import { BaseVariant } from './pool.types'
 import { _usePool } from './PoolProvider'
 import { defaultTestGaugeAddress } from '@repo/lib/test/msw/builders/gqlStaking.builders'
 
-// TODO: Remove Exclude when GqlPoolReClamm type is fixed in the API schema
-export type GetPoolQuery = Omit<OriginalGetPoolQuery, 'pool'> & {
-  pool: Pool
-}
-
 async function testUsePool({
-  initialData = defaultPoolResponseMock as GetPoolQuery,
+  initialData = defaultPoolResponseMock,
 }: {
   initialData?: GetPoolQuery
 } = {}) {
