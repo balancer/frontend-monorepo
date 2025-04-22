@@ -72,28 +72,6 @@ export const b_csUSDL_steakUSDCMock = {
       },
     ],
   },
-  allTokens: [
-    {
-      id: '0x5dd88b3aa3143173eb26552923922bdf33f50949-0xbeef01735c132ada46aa9aa4c54623caa92a64cb',
-      address: '0xbeef01735c132ada46aa9aa4c54623caa92a64cb',
-      name: 'Steakhouse USDC',
-      symbol: 'steakUSDC',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0x5dd88b3aa3143173eb26552923922bdf33f50949-0xbeefc01767ed5086f35decb6c00e6c12bc7476c1',
-      address: '0xbeefc01767ed5086f35decb6c00e6c12bc7476c1',
-      name: 'Coinshift USDL',
-      symbol: 'csUSDL',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   staking: {
     id: '0x23791083c29d41fac9c8a4e3ba5df257fc250aaa',
     type: 'GAUGE',

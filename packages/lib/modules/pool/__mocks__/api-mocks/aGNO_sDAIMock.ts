@@ -88,28 +88,6 @@ export const aGNO_sDAIMock = {
       },
     ],
   },
-  allTokens: [
-    {
-      id: '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522-0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644',
-      address: '0x7c16f0185a26db0ae7a9377f23bc18ea7ce5d644',
-      name: 'Wrapped Aave Gnosis GNO',
-      symbol: 'waGnoGNO',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0xd1d7fa8871d84d0e77020fc28b7cd5718c446522-0xaf204776c7245bf4147c2612bf6e5972ee483701',
-      address: '0xaf204776c7245bf4147c2612bf6e5972ee483701',
-      name: 'Savings xDAI',
-      symbol: 'sDAI',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   staking: {
     id: '0xa76ed5da09209d6f2198d8d793005393327b736e',
     type: 'GAUGE',
