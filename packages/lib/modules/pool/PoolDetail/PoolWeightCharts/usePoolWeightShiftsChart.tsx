@@ -4,8 +4,8 @@ import { useMemo } from 'react'
 import { usePool } from '../../PoolProvider'
 import { getCompositionTokens } from '../../pool-tokens.utils'
 import { isQuantAmmPool } from '../../pool.helpers'
-import { QuantAmmWeightSnapshot } from 'shared/services/api/generated/graphql'
-import { bn } from 'shared/utils/numbers'
+import { QuantAmmWeightSnapshot } from '@repo/lib/shared/services/api/generated/graphql'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 const GRADIENTS = [
   {
