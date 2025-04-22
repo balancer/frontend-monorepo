@@ -5,7 +5,7 @@ import {
   captureSentryError,
   sentryMetaForWagmiSimulation,
 } from '@repo/lib/shared/utils/query-errors'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import * as Sentry from '@sentry/nextjs'
 import { waitFor } from '@testing-library/react'
 import sentryTestkit from 'sentry-testkit'

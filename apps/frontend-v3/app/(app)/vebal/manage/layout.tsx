@@ -4,7 +4,7 @@ import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesPro
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { PropsWithChildren } from 'react'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-// import { CrossChainSyncProvider } from '@repo/lib/modules/vebal/cross-chain/CrossChainSyncProvider'
+// import { CrossChainSyncProvider } from '@bal/lib/vebal/cross-chain/CrossChainSyncProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 
 export default function VeBALManageLayout({ children }: PropsWithChildren) {

@@ -1,7 +1,7 @@
 import { Skeleton, VStack } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { Suspense } from 'react'
-import { VotesContainer } from '@repo/lib/modules/vebal/vote/Votes/VotesContainer'
+import { VotesContainer } from '@bal/lib/vebal/vote/Votes/VotesContainer'
 
 export default function VotePage() {
   return (

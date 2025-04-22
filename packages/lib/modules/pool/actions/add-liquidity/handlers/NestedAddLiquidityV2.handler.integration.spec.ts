@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress, usdcAddress, usdtAddress, wETHAddress } from '@repo/lib/debug-helpers'
-import { mainnetTestPublicClient } from '@repo/lib/test/utils/wagmi/wagmi-test-clients'
+import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
 import { Pool } from '../../../pool.types'
 import { NestedAddLiquidityV2Handler } from './NestedAddLiquidityV2.handler'
 import { selectAddLiquidityHandler } from './selectAddLiquidityHandler'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { fetchPoolMock } from '../../../__mocks__/fetchPoolMock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'

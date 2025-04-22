@@ -2,7 +2,7 @@
 import { gyroPoolMock } from '../../../__mocks__/gyroPoolMock'
 import { Pool } from '../../../pool.types'
 import { addLiquidityKeys } from './add-liquidity-keys'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { UnbalancedAddLiquidityV2Handler } from '../handlers/UnbalancedAddLiquidityV2.handler'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'

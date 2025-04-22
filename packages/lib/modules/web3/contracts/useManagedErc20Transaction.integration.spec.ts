@@ -1,6 +1,6 @@
 import { TransactionLabels } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
-import { connectWithDefaultUser } from '@repo/lib/test/utils/wagmi/wagmi-connections'
+import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
 import { waitFor } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import { Address, parseUnits } from 'viem'
