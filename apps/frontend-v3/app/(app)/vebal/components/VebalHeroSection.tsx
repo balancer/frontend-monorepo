@@ -55,27 +55,36 @@ export function VebalHeroSection() {
             templateColumns={{ base: '1fr', md: '1fr 1fr' }}
           >
             {/* Content Column */}
-            <GridItem minW="400px" zIndex={1}>
+            <GridItem minW={{ base: 'full', md: '420px' }} zIndex={1}>
               <FadeInOnView animateOnce={false}>
                 <Stack
                   alignItems={{ base: 'center', md: 'start' }}
                   gap="md"
                   justifyContent="center"
                   margin={{ base: '0 auto', md: '0' }}
-                  maxWidth={{ base: 400, md: 'full' }}
                   pl={{ md: 'md', '2xl': '0' }}
                   position="relative"
                   top={{ base: '0', md: '200px' }}
                 >
-                  <Stack alignItems={{ base: 'center', md: 'start' }}>
-                    <Heading as="h2" backgroundClip="text" bg="background.gold" pb="0.5" size="lg">
+                  <Stack alignItems={{ base: 'center', md: 'start' }} px="0">
+                    <Heading
+                      as="h2"
+                      backgroundClip="text"
+                      bg="background.gold"
+                      pb="sm"
+                      size="xl"
+                      sx={{ textWrap: 'pretty' }}
+                      textAlign={{ base: 'center', md: 'start' }}
+                    >
                       Lock-in for veBAL boosts
                     </Heading>
                     <Text
                       color="font.secondary"
                       lineHeight="1.4"
+                      maxW="36ch"
                       mb="sm"
                       sx={{ textWrap: 'pretty' }}
+                      textAlign={{ base: 'center', md: 'start' }}
                     >
                       veBAL is the Balancer protocol governance system that rewards long-term
                       commitment. Get veBAL by locking the LP tokens of the BAL/WETH 80/20 pool.

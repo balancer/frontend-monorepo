@@ -62,11 +62,20 @@ export function VebalBenefitsSection() {
           </Text>
         </Stack>
       </FadeInOnView>
-      <SimpleGrid columns={{ base: 1, md: 2 }} mt="lg" spacing={{ base: 'ms', md: 'md', lg: 'lg' }}>
+      <SimpleGrid
+        alignItems="stretch"
+        columns={{ base: 1, md: 2 }}
+        mt="lg"
+        spacing={{ base: 'ms', md: 'md', lg: 'lg' }}
+      >
         {benefits.map(benefit => (
           <FadeInOnView animateOnce={false} key={benefit.title}>
             <Flex
               borderRadius="xl"
+              flex="1"
+              flexDirection="column"
+              height="100%"
+              justifyContent="center"
               overflow="hidden"
               p={{ base: 'ms', sm: 'md', md: 'xl' }}
               position="relative"
