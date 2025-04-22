@@ -73,6 +73,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
           default: tokens.colors.light.background.highlight,
           _dark: tokens.colors.dark.background.highlight,
         },
+        gold: {
+          default: tokens.colors.light.background.gold,
+          _dark: tokens.colors.dark.background.gold,
+        },
         button: {
           primary: {
             default: tokens.colors.light.button.background.primary,

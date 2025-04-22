@@ -85,8 +85,9 @@ export function EzklPromoBanner() {
                         textWrap: 'balance',
                       }}
                     >
-                      Fees on this pool are controlled by a ZK strategy that adjusts the pool fee
-                      based on volatility. ZK infrastructure provided by EZKL.
+                      Fees on this pool are controlled by a strategy that adjusts fees based on
+                      volatility. Execution of the strategy is trustless using EZKL proofs of
+                      computation.
                     </Text>
                   </Box>
                 </Box>
@@ -106,7 +107,7 @@ export function EzklPromoBanner() {
                 cursor="hand"
                 flex="1"
                 h={{ base: '32px', sm: '40px', lg: '48px' }}
-                href="https://blog.ezkl.xyz/post/defi3dot0/"
+                href="https://blog.ezkl.xyz/post/defi3dot0/#ezkl-balancer-bringing-dynamic-fees-to-defi-today"
                 py="sm"
                 rounded="full"
                 size="md"

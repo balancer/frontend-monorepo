@@ -79,28 +79,6 @@ export const gyroEPoolMock: GqlPoolElement = {
       ],
     },
   },
-  allTokens: [
-    {
-      id: '0xf01b0684c98cd7ada480bfdf6e43876422fa1fc10002000000000000000005de-0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
-      address: '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
-      name: 'Wrapped liquid staked Ether 2.0',
-      symbol: 'wstETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0xf01b0684c98cd7ada480bfdf6e43876422fa1fc10002000000000000000005de-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      name: 'Wrapped Ether',
-      symbol: 'WETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   displayTokens: [
     {
       id: '0xf01b0684c98cd7ada480bfdf6e43876422fa1fc10002000000000000000005de-0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',

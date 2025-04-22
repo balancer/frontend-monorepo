@@ -1,10 +1,10 @@
-import { alternativeTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { alternativeTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import {
   connectWithAlternativeUser,
   disconnectAlternativeUser,
-} from '@repo/lib/test/utils/wagmi/wagmi-connections'
+} from '@repo/test/utils/wagmi/wagmi-connections'
 import { useUserAccount } from './UserAccountProvider'
 
 function testUseUserAccount() {

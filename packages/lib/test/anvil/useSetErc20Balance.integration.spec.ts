@@ -2,10 +2,10 @@ import { daiAddress } from '@repo/lib/debug-helpers'
 import { act, waitFor } from '@testing-library/react'
 import { erc20Abi } from 'viem'
 import { testHook } from '../utils/custom-renderers'
-import { mainnetTestPublicClient } from '../utils/wagmi/wagmi-test-clients'
-import { defaultTestUserAccount } from './anvil-setup'
-import { testWagmiConfig } from './testWagmiConfig'
 import { useSetErc20Balance } from './useSetErc20Balance'
+import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
+import { testWagmiConfig } from '@repo/test/anvil/testWagmiConfig'
 
 function testUseSetErc20Balance() {
   const { result } = testHook(() => useSetErc20Balance())

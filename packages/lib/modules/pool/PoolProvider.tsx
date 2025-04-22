@@ -9,7 +9,7 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { createContext, PropsWithChildren, useRef } from 'react'
 import { useQuery } from '@apollo/client'
-import { FetchPoolProps } from './pool.types'
+import { FetchPoolProps, Pool } from './pool.types'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getPoolHelpers } from './pool.helpers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'

@@ -77,28 +77,6 @@ export const metaStablePoolMock: GqlPoolElement = {
       ],
     },
   },
-  allTokens: [
-    {
-      id: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080-0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
-      address: '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',
-      name: 'Wrapped liquid staked Ether 2.0',
-      symbol: 'wstETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      name: 'Wrapped Ether',
-      symbol: 'WETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   displayTokens: [
     {
       id: '0x32296969ef14eb0c6d29669c550d4a0449130230000200000000000000000080-0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0',

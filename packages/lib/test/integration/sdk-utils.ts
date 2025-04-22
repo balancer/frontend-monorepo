@@ -31,11 +31,11 @@ import {
 } from 'viem'
 import { erc20Abi } from 'viem'
 import { aWjAuraWethPoolElementMock } from '../msw/builders/gqlPoolElement.builders'
-import { defaultTestUserAccount } from '../anvil/anvil-setup'
 import { mainnet } from 'viem/chains'
-import { mainnetTestPublicClient } from '../utils/wagmi/wagmi-test-clients'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 
 /*
   Given chain, user account and pool
