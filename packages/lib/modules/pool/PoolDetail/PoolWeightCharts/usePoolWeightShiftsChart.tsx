@@ -1,53 +1,48 @@
+import { EChartsOption } from 'echarts'
 import * as echarts from 'echarts/core'
 import { useMemo } from 'react'
-import { EChartsOption, LineSeriesOption } from 'echarts'
 import { usePool } from '../../PoolProvider'
 import { getCompositionTokens } from '../../pool-tokens.utils'
 import { isQuantAmmPool } from '../../pool.helpers'
-import { QuantAmmWeightSnapshot } from '@repo/lib/shared/services/api/generated/graphql'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { QuantAmmWeightSnapshot } from 'shared/services/api/generated/graphql'
+import { bn } from 'shared/utils/numbers'
 
-// Define 8 static gradient sets
 const GRADIENTS = [
-  // Blue gradient
   {
-    start: 'rgb(65, 105, 225)', // Royal Blue
-    end: 'rgb(30, 50, 100)', // Dark Blue
+    start: 'rgb(65, 105, 225)',
+    end: 'rgb(30, 50, 100)',
   },
-  // Green gradient
   {
-    start: 'rgb(50, 205, 50)', // Lime Green
-    end: 'rgb(25, 100, 25)', // Dark Green
+    start: 'rgb(50, 205, 50)',
+    end: 'rgb(25, 100, 25)',
   },
-  // Purple gradient
   {
-    start: 'rgb(147, 112, 219)', // Medium Purple
-    end: 'rgb(75, 50, 130)', // Dark Purple
+    start: 'rgb(147, 112, 219)',
+    end: 'rgb(75, 50, 130)',
   },
-  // Orange gradient
   {
-    start: 'rgb(255, 165, 0)', // Orange
-    end: 'rgb(180, 80, 0)', // Dark Orange
+    start: 'rgb(255, 165, 0)',
+    end: 'rgb(180, 80, 0)',
   },
-  // Teal gradient
   {
-    start: 'rgb(0, 128, 128)', // Teal
-    end: 'rgb(0, 64, 64)', // Dark Teal
+    start: 'rgb(0, 128, 128)',
+    end: 'rgb(0, 64, 64)',
   },
-  // Pink gradient
   {
-    start: 'rgb(255, 105, 180)', // Hot Pink
-    end: 'rgb(180, 50, 120)', // Dark Pink
+    start: 'rgb(255, 105, 180)',
+    end: 'rgb(180, 50, 120)',
   },
-  // Yellow gradient
   {
-    start: 'rgb(255, 215, 0)', // Gold
-    end: 'rgb(180, 150, 0)', // Dark Gold
+    start: 'rgb(255, 105, 180)',
+    end: 'rgb(180, 50, 120)',
   },
-  // Red gradient
   {
-    start: 'rgb(220, 20, 60)', // Crimson
-    end: 'rgb(139, 0, 0)', // Dark Red
+    start: 'rgb(255, 215, 0)',
+    end: 'rgb(180, 150, 0)',
+  },
+  {
+    start: 'rgb(220, 20, 60)',
+    end: 'rgb(139, 0, 0)',
   },
 ]
 
@@ -56,32 +51,30 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
 
   const compositionTokens = getCompositionTokens(pool)
 
-  const series = useMemo(() => {
+  const { option } = useMemo(() => {
     if (!isQuantAmmPool(pool.type)) {
-      return []
+      return { option: {} as EChartsOption }
     }
 
     const snapshots = (pool as any).weightSnapshots as QuantAmmWeightSnapshot[]
     if (!snapshots || snapshots.length === 0) {
-      return []
+      return { option: {} as EChartsOption }
     }
 
-    return compositionTokens.map((token, tokenIndex) => {
-      const data = snapshots.map((snapshot, index) => {
+    const colors = GRADIENTS
+
+    const series = compositionTokens.map((token, tokenIndex) => {
+      const data = snapshots.map(snapshot => {
         const weight = snapshot.weights?.[tokenIndex]
         const weightPercent = weight ? Number(bn(weight).times(100).toFixed(4)) : 0
-        return [index, weightPercent]
+        return [snapshot.timestamp * 1000, weightPercent]
       })
-
-      const gradientIndex = tokenIndex % GRADIENTS.length
-      const gradient = GRADIENTS[gradientIndex]
 
       return {
         name: token.symbol,
-        type: 'line',
-        stack: 'Total',
+        type: 'line' as const,
+        stack: 'weight',
         smooth: true,
-        symbolSize: 0,
         lineStyle: {
           width: 0,
         },
@@ -91,165 +84,86 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
-              color: gradient.start,
+              color: colors[tokenIndex % colors.length].start,
             },
             {
               offset: 1,
-              color: gradient.end,
+              color: colors[tokenIndex % colors.length].end,
             },
           ]),
         },
-        emphasis: {
-          focus: 'series',
-        },
-        data: data,
-      } as LineSeriesOption
+        data,
+      }
     })
-  }, [compositionTokens, pool])
 
-  const { xAxisLabels, labelIndices } = useMemo(() => {
-    if (!isQuantAmmPool(pool.type)) {
-      return { xAxisLabels: [], labelIndices: [] }
-    }
-
-    const snapshots = (pool as any).weightSnapshots as QuantAmmWeightSnapshot[]
-    if (!snapshots || snapshots.length === 0) {
-      return { xAxisLabels: [], labelIndices: [] }
-    }
-
-    const labels: string[] = snapshots.map(snapshot => {
-      try {
-        const date = new Date(snapshot.timestamp * 1000)
-        if (!isNaN(date.getTime())) {
-          return date.toLocaleString(undefined, {
+    const option: EChartsOption = {
+      color: colors.map(colorSet => colorSet.start),
+      tooltip: {
+        trigger: 'axis',
+        formatter: function (params: any) {
+          const date = new Date(params[0].value[0])
+          const formattedDate = date.toLocaleString(undefined, {
             month: 'short',
             day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
           })
-        }
-        return ''
-      } catch (e) {
-        return ''
-      }
-    })
 
-    const indices: number[] = []
-    const seenDates = new Set<string>()
-    let isFirstDate = true
+          let result = `<div style="font-weight: bold;">${formattedDate}</div>`
 
-    snapshots.forEach((snapshot, index) => {
-      try {
-        const date = new Date(snapshot.timestamp * 1000)
-        if (!isNaN(date.getTime())) {
-          const dateString = date.toISOString().split('T')[0]
+          const reversedParams = [...params].reverse()
 
-          if (!seenDates.has(dateString)) {
-            seenDates.add(dateString)
+          reversedParams.forEach((param: any) => {
+            const color = param.color
+            const seriesName = param.seriesName
+            const value = param.value[1].toFixed(2)
+            result += `<div style="display: flex; align-items: center; margin: 3px 0;">
+              <span style="display: inline-block; width: 10px; height: 10px; background-color: ${color}; border-radius: 50%; margin-right: 5px;"></span>
+              <span style="margin-right: 5px;">${seriesName}:</span>
+              <span style="font-weight: bold;">${value}%</span>
+            </div>`
+          })
 
-            // Skip the first date
-            if (isFirstDate) {
-              isFirstDate = false
-            } else {
-              indices.push(index)
-            }
-          }
-        }
-      } catch (e) {
-        // Ignore invalid dates
-      }
-    })
-
-    return { xAxisLabels: labels, labelIndices: indices }
-  }, [pool])
-
-  const option: EChartsOption = {
-    color: GRADIENTS.map(gradient => gradient.start),
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'line',
-        lineStyle: {
-          color: 'rgba(255, 255, 255, 0.5)',
-          width: 1,
-          type: 'dashed',
-        },
-        label: {
-          show: false,
+          return result
         },
       },
-      formatter: function (params: any) {
-        if (params.length === 0) return ''
-
-        const index = params[0].dataIndex
-        const snapshot = ((pool as any).weightSnapshots as QuantAmmWeightSnapshot[])[index]
-
-        let timeLabel = ''
-        if (snapshot) {
-          try {
-            const date = new Date(snapshot.timestamp * 1000)
-            if (!isNaN(date.getTime())) {
-              // Set minutes and seconds to 0 to get top of the hour
-              date.setMinutes(0)
-              date.setSeconds(0)
-
-              timeLabel = date.toLocaleString(undefined, {
+      legend: {
+        data: compositionTokens.map(token => token.symbol),
+        textStyle: {
+          color: '#999999',
+        },
+        left: 'left',
+        bottom: '0',
+        orient: 'horizontal',
+        padding: [5, 10, 0, 10],
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '15%',
+        top: '3%',
+        containLabel: true,
+      },
+      xAxis: {
+        type: 'time',
+        axisLabel: {
+          formatter: function (value: number) {
+            const date = new Date(value)
+            if (date.getHours() === 0 && date.getMinutes() === 0) {
+              return date.toLocaleString(undefined, {
                 month: 'short',
                 day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
               })
-            } else {
-              timeLabel = String(snapshot.timestamp)
             }
-          } catch (e) {
-            timeLabel = String(snapshot.timestamp)
-          }
-        }
-
-        let result = timeLabel + '<br/>'
-
-        params.forEach((param: any) => {
-          result += `${param.marker} ${param.seriesName}: ${param.value[1].toFixed(2)}%<br/>`
-        })
-
-        return result
-      },
-    },
-    legend: {
-      data: compositionTokens.map(token => token.symbol),
-      textStyle: {
-        color: '#999999',
-      },
-      left: 'left',
-      bottom: '0',
-      orient: 'horizontal',
-      padding: [5, 10, 0, 10],
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '15%',
-      top: '3%',
-      containLabel: true,
-    },
-    xAxis: [
-      {
-        type: 'category',
-        boundaryGap: false,
-        axisLabel: {
-          show: true,
-          formatter: function (value: string, index: number) {
-            return labelIndices.includes(index) ? value : ''
+            return ''
           },
           fontSize: 12,
           color: '#999999',
           margin: 12,
+          align: 'center',
         },
         axisTick: {
           show: true,
-          alignWithLabel: true,
-          interval: function (index: number) {
-            return labelIndices.includes(index)
-          },
           lineStyle: {
             color: '#999999',
           },
@@ -264,45 +178,41 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         splitLine: {
           show: false,
         },
-        data: xAxisLabels,
+        splitNumber: 10,
       },
-    ],
-    yAxis: [
-      {
-        type: 'value',
-        axisLabel: {
-          formatter: '{value}%',
-          fontSize: 12,
-          color: '#999999',
-          margin: 12,
-        },
-        axisTick: {
-          show: true,
-          lineStyle: {
+      yAxis: [
+        {
+          type: 'value',
+          name: 'Weight %',
+          nameTextStyle: {
             color: '#999999',
           },
-        },
-        axisLine: {
-          show: true,
-          lineStyle: {
+          min: 0,
+          max: 100,
+          interval: 20,
+          axisLabel: {
+            formatter: '{value}%',
             color: '#999999',
-            width: 1,
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: '#999999',
+            },
+          },
+          splitLine: {
+            lineStyle: {
+              color: ['#f5f5f5'],
+              type: 'dashed',
+            },
           },
         },
-        splitLine: {
-          show: true,
-          lineStyle: {
-            color: 'rgba(153, 153, 153, 0.2)',
-            type: 'dashed',
-            width: 1,
-          },
-        },
-        min: 0,
-        max: (value: { max: number }) => value.max,
-      },
-    ],
-    series,
-  }
+      ],
+      series,
+    }
+
+    return { option }
+  }, [pool, compositionTokens])
 
   return { option }
 }
