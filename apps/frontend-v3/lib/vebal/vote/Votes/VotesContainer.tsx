@@ -5,10 +5,10 @@ import { VotesProvider } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 import { VoteListLayout } from '@bal/lib/vebal/vote/VoteList/VoteListLayout'
 import { MyVotesLayout } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesLayout'
 import { VoteListProvider } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
-import { VStack } from '@chakra-ui/react'
 import { MyVotesProvider } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { VotesIntroductionLayout } from '@bal/lib/vebal/vote/Votes/VotesIntroduction/VotesIntroductionLayout'
+import { VStack } from '@chakra-ui/react'
 
 export async function VotesContainer() {
   const client = getApolloServerClient()
