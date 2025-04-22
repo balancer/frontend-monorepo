@@ -61,24 +61,27 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
       return []
     }
 
-    return compositionTokens.map((token, tokenIndex) => {
-      const data = ((pool as any).weightSnapshots as QuantAmmWeightSnapshot[]).map(
-        (snapshot, index) => {
-          const weight = snapshot.weights?.[tokenIndex]
-          const weightPercent = weight ? Number(bn(weight).times(100).toFixed(0)) : 0
+    const snapshots = (pool as any).weightSnapshots as QuantAmmWeightSnapshot[]
+    if (!snapshots || snapshots.length === 0) {
+      return []
+    }
 
-          return [index, weightPercent]
-        }
-      )
+    return compositionTokens.map((token, tokenIndex) => {
+      const data = snapshots.map((snapshot, index) => {
+        const weight = snapshot.weights?.[tokenIndex]
+        const weightPercent = weight ? Number(bn(weight).times(100).toFixed(4)) : 0
+        return [index, weightPercent]
+      })
 
       const gradientIndex = tokenIndex % GRADIENTS.length
       const gradient = GRADIENTS[gradientIndex]
 
       return {
         name: token.symbol,
-        type: 'line' as const,
+        type: 'line',
         stack: 'Total',
         smooth: true,
+        symbolSize: 0,
         lineStyle: {
           width: 0,
         },
@@ -220,15 +223,8 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
       {
         type: 'category',
         boundaryGap: false,
-        data: Array.from(
-          { length: ((pool as any).weightSnapshots as QuantAmmWeightSnapshot[])?.length || 0 },
-          (_, i) => i
-        ),
         axisLabel: {
-          formatter: function (value: any) {
-            const index = parseInt(value)
-            return xAxisLabels[index] || ''
-          },
+          formatter: (value: string) => value,
           fontSize: 12,
           color: '#999999',
           margin: 12,
@@ -236,9 +232,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         axisTick: {
           show: true,
           alignWithLabel: true,
-          interval: function (index: number) {
-            return labelIndices.includes(index)
-          },
+          interval: (index: number) => labelIndices.includes(index),
           lineStyle: {
             color: '#999999',
           },
@@ -253,6 +247,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         splitLine: {
           show: false,
         },
+        data: xAxisLabels,
       },
     ],
     yAxis: [
@@ -286,9 +281,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
           },
         },
         min: 0,
-        max: function (value: { max: number }) {
-          return value.max
-        },
+        max: (value: { max: number }) => value.max,
       },
     ],
     series,
