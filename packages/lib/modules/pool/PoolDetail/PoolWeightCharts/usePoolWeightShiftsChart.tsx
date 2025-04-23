@@ -184,10 +184,6 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
       yAxis: [
         {
           type: 'value',
-          name: 'Weight %',
-          nameTextStyle: {
-            color: '#999999',
-          },
           min: 0,
           max: 100,
           interval: 20,
