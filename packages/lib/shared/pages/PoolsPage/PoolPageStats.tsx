@@ -1,6 +1,14 @@
 'use client'
 
-import { Box, Flex } from '@chakra-ui/react'
+import {
+  Box,
+  Flex,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  Text,
+} from '@chakra-ui/react'
 import Stat from '../../components/other/Stat'
 import { bn } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
@@ -9,7 +17,8 @@ import { AnimatedNumber } from '../../components/other/AnimatedNumber'
 export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
   const { protocolData } = useProtocolStats()
 
-  const totalFees = bn(protocolData?.protocolMetricsAggregated.swapFee24h || 0)
+  const totalYield = bn(protocolData?.protocolMetricsAggregated.swapFee24h || 0)
+    .plus(bn(protocolData?.protocolMetricsAggregated.yieldCapture24h || 0))
     .plus(bn(additionalFees || 0))
     .toString()
 
@@ -45,26 +54,63 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
           }
         />
       </Box>
-      <Box flex="1">
-        <Stat
-          imageTransform="scale(1.5)"
-          label={`${additionalFees ? 'Fees' : 'Swap fees'} (24h)`}
-          value={<AnimatedNumber formatOptions={formatOptions} value={bn(totalFees).toNumber()} />}
-        />
+
+      <Box flex={{ base: '1 1 40%', sm: '1' }}>
+        <Popover
+          modifiers={[{ name: 'offset', options: { offset: [0, -5] } }]}
+          placement="top"
+          trigger="hover"
+        >
+          <PopoverTrigger>
+            <Box>
+              <Stat
+                imageBackgroundSize="400%"
+                imageTransform="rotate(180deg) scale(2)"
+                label="Yield (24h)"
+                value={
+                  <AnimatedNumber formatOptions={formatOptions} value={bn(totalYield).toNumber()} />
+                }
+              />
+            </Box>
+          </PopoverTrigger>
+          <PopoverContent
+            bg="background.level0"
+            borderRadius="md"
+            minW="190px"
+            p={2}
+            shadow="2xl"
+            w="auto"
+            zIndex={9999}
+          >
+            <PopoverBody p="0">
+              <Flex direction="column" gap={1}>
+                <Flex align="center" justify="space-between">
+                  <Text color="font.secondary" fontSize="xs">
+                    Swap fees
+                  </Text>
+                  <Text color="font.secondary" fontSize="xs">
+                    <AnimatedNumber
+                      formatOptions={formatOptions}
+                      value={safeToNumber(protocolData?.protocolMetricsAggregated.swapFee24h)}
+                    />
+                  </Text>
+                </Flex>
+                <Flex align="center" justify="space-between">
+                  <Text color="font.secondary" fontSize="xs">
+                    Yield-bearing tokens
+                  </Text>
+                  <Text color="font.secondary" fontSize="xs">
+                    <AnimatedNumber
+                      formatOptions={formatOptions}
+                      value={safeToNumber(protocolData?.protocolMetricsAggregated.yieldCapture24h)}
+                    />
+                  </Text>
+                </Flex>
+              </Flex>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
       </Box>
-      {/* <Box flex={{ base: '1 1 40%', sm: '1' }}>
-        <Stat
-          imageBackgroundSize="400%"
-          imageTransform="rotate(180deg) scale(2)"
-          label="Protocol revenue (24h)"
-          value={
-            <AnimatedNumber
-              formatOptions={'$0,0.0a'}
-              value={safeToNumber(protocolData?.protocolMetricsAggregated.yieldCapture24h)}
-            />
-          }
-        />
-      </Box> */}
     </Flex>
   )
 }

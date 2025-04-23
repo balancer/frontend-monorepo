@@ -58,7 +58,7 @@ function Stat({
         <Text fontSize="xs" mb="1.5" variant="secondary">
           {label}
         </Text>
-        <Text className="home-stats" fontSize="md" fontWeight="bold" letterSpacing="-0.5px">
+        <Text className="home-stats" fontSize="md" fontWeight="bold" letterSpacing="-0.6px">
           {value}
         </Text>
       </Box>
