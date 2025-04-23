@@ -151,7 +151,12 @@ export function UserSnapshotValues() {
           ) : (
             <HStack>
               <Heading size="h4">{toCurrency(poolMyStatsValues.myClaimableRewards)}</Heading>
-              <TokenStackPopover chain={chain} rewardsByToken={rewardsByToken} tokens={tokens}>
+              <TokenStackPopover
+                chain={chain}
+                headerText="My claimable rewards"
+                rewardsByToken={rewardsByToken}
+                tokens={tokens}
+              >
                 <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
               </TokenStackPopover>
               <Tooltip label={isDisabled ? disabledReason : ''}>
