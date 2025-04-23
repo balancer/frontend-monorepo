@@ -38,6 +38,9 @@ const maBeetsVotingRewardsTooltipText =
 
 const maBeetsRewardTooltipText = 'This is the APR you will receive when a relic is fully matured.'
 
+const quantAMMTooltipText =
+  'The extra token appreciation captured and shared to all LPs proportionately from the smart automatic pool weight adjustments from the operation of the BTF.'
+
 // Only include the hook types we currently support irt dynamic swap fees
 export type SupportedHookType = Extract<GqlHookType, GqlHookType.MevTax | GqlHookType.StableSurge>
 
@@ -57,6 +60,7 @@ const TOTAL_BASE_APR_TYPES = [
   GqlPoolAprItemType.Surplus_24H,
   GqlPoolAprItemType.VebalEmissions,
   GqlPoolAprItemType.MabeetsEmissions,
+  GqlPoolAprItemType.QuantAmmUplift,
 ]
 
 // Types that must be added to the total APR
@@ -104,11 +108,15 @@ export function useAprTooltip({
   const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)
   const swapFeesDisplayed = numberFormatter(swapFee ? swapFee.apr.toString() : '0')
 
-  // Dynamic wap fees (MEV Capture, StableSurge)
+  // Dynamic swap fees (MEV Capture, StableSurge)
   const dynamicSwapFee = aprItems.find(item => item.type === GqlPoolAprItemType.DynamicSwapFee_24H)
   const dynamicSwapFeesDisplayed = numberFormatter(
     dynamicSwapFee ? dynamicSwapFee.apr.toString() : '0'
   )
+
+  // QuantAMM fees
+  const quantAMMFee = aprItems.find(item => item.type === GqlPoolAprItemType.QuantAmmUplift)
+  const quantAMMFeesDisplayed = numberFormatter(quantAMMFee ? quantAMMFee.apr.toString() : '0')
 
   // Yield bearing tokens
   const yieldBearingTokens = aprItems.filter(item => {
@@ -272,6 +280,8 @@ export function useAprTooltip({
     maBeetsTotalAprDisplayed,
     dynamicSwapFeesDisplayed,
     dynamicSwapFeesTooltipText,
+    quantAMMTooltipText,
+    quantAMMFeesDisplayed,
   }
 }
 
