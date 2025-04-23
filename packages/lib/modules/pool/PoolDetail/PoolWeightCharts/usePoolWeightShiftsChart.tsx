@@ -117,7 +117,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
           reversedParams.forEach((param: any) => {
             const color = param.color
             const seriesName = param.seriesName
-            const value = param.value[1].toFixed(0) // no decimal places because of imprecise data from the backend
+            const value = param.value[1].toFixed(2)
             result += `<div style="display: flex; align-items: center; margin: 3px 0;">
               <span style="display: inline-block; width: 10px; height: 10px; background-color: ${color}; border-radius: 50%; margin-right: 5px;"></span>
               <span style="margin-right: 5px;">${seriesName}:</span>
