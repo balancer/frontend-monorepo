@@ -136,7 +136,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         left: 'left',
         bottom: '0',
         orient: 'horizontal',
-        padding: [5, 10, 0, 10],
+        padding: [0, 0, 5, 40],
       },
       grid: {
         left: '1%',
