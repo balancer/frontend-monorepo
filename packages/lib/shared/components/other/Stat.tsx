@@ -1,9 +1,10 @@
 import { Box, Text } from '@chakra-ui/react'
 import { Picture } from './Picture'
+import { ReactNode } from 'react'
 
 interface StatProps {
   label: string
-  value: string
+  value: ReactNode
   imageBackgroundSize?: string
   imageBackgroundPosition?: string
   imageTransform?: string
@@ -57,7 +58,7 @@ function Stat({
         <Text fontSize="xs" mb="1.5" variant="secondary">
           {label}
         </Text>
-        <Text fontSize="md" fontWeight="bold">
+        <Text className="home-stats" fontSize="md" fontWeight="bold" letterSpacing="-0.5px">
           {value}
         </Text>
       </Box>
