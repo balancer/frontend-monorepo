@@ -67,7 +67,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
     const series = compositionTokens.map((token, tokenIndex) => {
       const data = snapshots.map(snapshot => {
         const weight = snapshot.weights?.[tokenIndex]
-        const weightPercent = weight ? Number(bn(weight).times(100).toFixed(4)) : 0
+        const weightPercent = weight ? Number(bn(weight).times(100).toFixed(4)) : 0 // to smooth the chart areas
         return [secondsToMilliseconds(snapshot.timestamp), weightPercent]
       })
 
@@ -117,7 +117,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
           reversedParams.forEach((param: any) => {
             const color = param.color
             const seriesName = param.seriesName
-            const value = param.value[1].toFixed(2)
+            const value = param.value[1].toFixed(0) // no decimal places because of imprecise data from the backend
             result += `<div style="display: flex; align-items: center; margin: 3px 0;">
               <span style="display: inline-block; width: 10px; height: 10px; background-color: ${color}; border-radius: 50%; margin-right: 5px;"></span>
               <span style="margin-right: 5px;">${seriesName}:</span>
