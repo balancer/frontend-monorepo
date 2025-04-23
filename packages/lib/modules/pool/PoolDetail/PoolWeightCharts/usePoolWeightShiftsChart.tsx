@@ -1,5 +1,4 @@
 import { EChartsOption } from 'echarts'
-import * as echarts from 'echarts/core'
 import { useMemo } from 'react'
 import { usePool } from '../../PoolProvider'
 import { getCompositionTokens } from '../../pool-tokens.utils'
@@ -8,43 +7,15 @@ import { QuantAmmWeightSnapshot } from '@repo/lib/shared/services/api/generated/
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { secondsToMilliseconds } from 'date-fns'
 
-const GRADIENTS = [
-  {
-    start: 'rgb(65, 105, 225)',
-    end: 'rgb(30, 50, 100)',
-  },
-  {
-    start: 'rgb(50, 205, 50)',
-    end: 'rgb(25, 100, 25)',
-  },
-  {
-    start: 'rgb(147, 112, 219)',
-    end: 'rgb(75, 50, 130)',
-  },
-  {
-    start: 'rgb(255, 165, 0)',
-    end: 'rgb(180, 80, 0)',
-  },
-  {
-    start: 'rgb(0, 128, 128)',
-    end: 'rgb(0, 64, 64)',
-  },
-  {
-    start: 'rgb(255, 105, 180)',
-    end: 'rgb(180, 50, 120)',
-  },
-  {
-    start: 'rgb(255, 105, 180)',
-    end: 'rgb(180, 50, 120)',
-  },
-  {
-    start: 'rgb(255, 215, 0)',
-    end: 'rgb(180, 150, 0)',
-  },
-  {
-    start: 'rgb(220, 20, 60)',
-    end: 'rgb(139, 0, 0)',
-  },
+const COLORS = [
+  '#D81B60',
+  '#8E24AA',
+  '#5E35B1',
+  '#3949AB',
+  '#1E88E5',
+  '#039BE5',
+  '#00ACC1',
+  '#00897B',
 ]
 
 export function usePoolWeightShiftsChart(): { option: EChartsOption } {
@@ -62,7 +33,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
       return { option: {} as EChartsOption }
     }
 
-    const colors = GRADIENTS
+    const colors = COLORS
 
     const series = compositionTokens.map((token, tokenIndex) => {
       const data = snapshots.map(snapshot => {
@@ -77,28 +48,23 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         stack: 'weight',
         smooth: true,
         lineStyle: {
-          width: 0,
+          width: 0.5,
+          color: '#000000',
         },
         showSymbol: false,
         areaStyle: {
           opacity: 0.8,
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: colors[tokenIndex % colors.length].start,
-            },
-            {
-              offset: 1,
-              color: colors[tokenIndex % colors.length].end,
-            },
-          ]),
+          color: colors[tokenIndex % colors.length],
+        },
+        emphasis: {
+          focus: 'series' as const,
         },
         data,
       }
     })
 
     const option: EChartsOption = {
-      color: colors.map(colorSet => colorSet.start),
+      color: colors,
       tooltip: {
         trigger: 'axis',
         formatter: function (params: any) {
