@@ -169,7 +169,7 @@ function BaseAprTooltip({
           apr={quantAMMFeesDisplayed}
           displayValueFormatter={usedDisplayValueFormatter}
           pt={3}
-          title="Quant AMM fees"
+          title="Dynamic Strategy Uplift"
           tooltipText={quantAMMTooltipText}
         />
       ) : (
