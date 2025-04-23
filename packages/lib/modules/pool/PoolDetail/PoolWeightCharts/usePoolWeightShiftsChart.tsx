@@ -6,6 +6,7 @@ import { getCompositionTokens } from '../../pool-tokens.utils'
 import { isQuantAmmPool } from '../../pool.helpers'
 import { QuantAmmWeightSnapshot } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { secondsToMilliseconds } from 'date-fns'
 
 const GRADIENTS = [
   {
@@ -67,7 +68,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
       const data = snapshots.map(snapshot => {
         const weight = snapshot.weights?.[tokenIndex]
         const weightPercent = weight ? Number(bn(weight).times(100).toFixed(4)) : 0
-        return [snapshot.timestamp * 1000, weightPercent]
+        return [secondsToMilliseconds(snapshot.timestamp), weightPercent]
       })
 
       return {
