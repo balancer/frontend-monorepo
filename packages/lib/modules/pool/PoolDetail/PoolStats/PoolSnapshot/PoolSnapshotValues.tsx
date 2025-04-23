@@ -51,7 +51,7 @@ export function PoolSnapshotValues() {
         {poolStatsValues ? (
           <Heading size="h4">{poolStatsValues.totalLiquidity}</Heading>
         ) : (
-          <Skeleton height="30px" w="100px" />
+          <Skeleton height="28px" w="100px" />
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
@@ -78,7 +78,7 @@ export function PoolSnapshotValues() {
         {poolStatsValues ? (
           <Heading size="h4">{poolStatsValues.income24h}</Heading>
         ) : (
-          <Skeleton height="30px" w="100px" />
+          <Skeleton height="28px" w="100px" />
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
@@ -100,7 +100,7 @@ export function PoolSnapshotValues() {
             </TokenStackPopover>
           </HStack>
         ) : (
-          <Skeleton height="30px" w="100px" />
+          <Skeleton height="28px" w="100px" />
         )}
       </VStack>
     </>
