@@ -57,7 +57,7 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
 
       <Box flex={{ base: '1 1 40%', sm: '1' }}>
         <Popover
-          modifiers={[{ name: 'offset', options: { offset: [0, -5] } }]}
+          modifiers={[{ name: 'offset', options: { offset: [0, -3] } }]}
           placement="top"
           trigger="hover"
         >
@@ -88,7 +88,7 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
                   <Text color="font.secondary" fontSize="xs">
                     Swap fees
                   </Text>
-                  <Text color="font.secondary" fontSize="xs">
+                  <Text className="home-stats" color="font.secondary" fontSize="xs">
                     <AnimatedNumber
                       formatOptions={formatOptions}
                       value={safeToNumber(protocolData?.protocolMetricsAggregated.swapFee24h)}
@@ -99,7 +99,7 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
                   <Text color="font.secondary" fontSize="xs">
                     Yield-bearing tokens
                   </Text>
-                  <Text color="font.secondary" fontSize="xs">
+                  <Text className="home-stats" color="font.secondary" fontSize="xs">
                     <AnimatedNumber
                       formatOptions={formatOptions}
                       value={safeToNumber(protocolData?.protocolMetricsAggregated.yieldCapture24h)}
