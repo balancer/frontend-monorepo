@@ -139,10 +139,10 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         padding: [5, 10, 0, 10],
       },
       grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '15%',
-        top: '3%',
+        left: '1%',
+        right: '3%',
+        bottom: '10%',
+        top: '5%',
         containLabel: true,
       },
       xAxis: {
