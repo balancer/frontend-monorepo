@@ -25,6 +25,7 @@ type TokenStackPopoverProps = {
   children: React.ReactNode
   rewardsByToken?: RewardsByToken
   tokens: ApiToken[]
+  headerText: string
 }
 
 export function TokenStackPopover({
@@ -32,6 +33,7 @@ export function TokenStackPopover({
   children,
   rewardsByToken = {},
   tokens,
+  headerText,
 }: TokenStackPopoverProps) {
   const { isMobile } = useBreakpoints()
 
@@ -61,7 +63,7 @@ export function TokenStackPopover({
       <PopoverContent maxW={isMobile ? '100%' : '800px'} minW={{ base: '250px', md: '325px' }}>
         <PopoverArrow bg="background.level3" />
         <PopoverHeader>
-          <Text variant="special">Weekly incentives for stakers</Text>
+          <Text variant="special">{headerText}</Text>
         </PopoverHeader>
         <PopoverBody py="sm">
           <VStack align="flex-start" spacing="xs">
