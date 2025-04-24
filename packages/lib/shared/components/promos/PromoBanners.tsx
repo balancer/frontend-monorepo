@@ -21,6 +21,7 @@ import { PromoVThreeIcon } from '../icons/promos/PromoVThreeIcon'
 import { PromoBoostedIcon } from '../icons/promos/PromoBoostedIcon'
 import { PromoItem } from 'config/config.types'
 import { PROJECT_CONFIG } from 'config/getProjectConfig'
+import { getRandomInt } from '@repo/lib/shared/utils/numbers'
 
 function getIconElement(icon: string) {
   switch (icon) {
@@ -45,7 +46,7 @@ const promoData: (PromoItem & { iconElement: React.ReactNode })[] =
 
 export function PromoBanners() {
   const { colorMode } = useColorMode()
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(getRandomInt(0, promoData.length - 1))
   const isSmallScreen = useBreakpointValue({ base: true, md: false }, { fallback: 'md' }) ?? false
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 

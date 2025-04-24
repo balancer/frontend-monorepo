@@ -303,3 +303,9 @@ export function sum<T>(items: T[], extractFn: (item: T) => BigNumber): BigNumber
     return acc.plus(extractFn(item))
   }, bn(0))
 }
+
+export function getRandomInt(min: number, max: number): number {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
