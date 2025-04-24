@@ -16,5 +16,5 @@ export function VebalExtend() {
     )
   }
 
-  return <VebalLockForm allowEditOnInit={false} />
+  return <VebalLockForm editAlwaysOn={false} />
 }
