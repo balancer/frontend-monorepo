@@ -7,10 +7,12 @@ import { shouldCallComputeDynamicSwapFee } from '../../pool.utils'
 import { FluidIcon } from '@repo/lib/shared/components/icons/FluidIcon'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
-import { FeeManagersId } from '@repo/lib/modules/fee-managers/getFeeManagersMetadata'
+import {
+  FeeManagersId,
+  FeeManagersMetadata,
+} from '@repo/lib/modules/fee-managers/getFeeManagersMetadata'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
-import { useFeeManager } from 'modules/fee-managers/useFeeManager'
-import { FeeManagersMetadata } from 'modules/fee-managers/getFeeManagersMetadata'
+import { useFeeManager } from '@repo/lib/modules/fee-managers/useFeeManager'
 
 function getBodyText(
   isDynamicSwapFee: boolean | null | undefined,
