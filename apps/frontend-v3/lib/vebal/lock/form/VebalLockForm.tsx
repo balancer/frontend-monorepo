@@ -93,14 +93,14 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
   const { pool, poolIsLoading } = useVeBALPool(userAddress)
   const { calculatePotentialYield } = useGetPoolRewards(pool || ({} as Pool))
   const { usdValueForToken } = useTokens()
-  const totalUsdValue = usdValueForToken(vebalBptToken, totalAmount)
+  const totalUsdValue = usdValueForToken(vebalBptToken, expectedVeBalAmount.totalExpectedVeBal)
   const weeklyYield = !poolIsLoading ? calculatePotentialYield(totalUsdValue) : '0'
 
   const hasLockedAmount = lockedAmount && Number(lockedAmount) > 0
   const currentVeBALAmount = previousLockEnd
     ? expectedTotalVeBal({ bpt: lockedAmount || '0', lockEndDate: previousLockEnd })
     : bn(0)
-  const currentTotalUsdValue = usdValueForToken(vebalBptToken, lockedAmount || 0)
+  const currentTotalUsdValue = usdValueForToken(vebalBptToken, currentVeBALAmount || 0)
   const currentWeeklyYield = !poolIsLoading ? calculatePotentialYield(currentTotalUsdValue) : '0'
 
   return (
