@@ -41,10 +41,10 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 
 type Props = {
-  allowEditOnInit?: boolean
+  editAlwaysOn?: boolean
 }
 
-export function VebalLockForm({ allowEditOnInit = false }: Props) {
+export function VebalLockForm({ editAlwaysOn = false }: Props) {
   const { refetchAll } = useVebalLockData()
   const {
     vebalBptToken,
@@ -76,7 +76,7 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
     }
   }
 
-  const [isEditingAmount, setIsEditingAmount] = useState(allowEditOnInit)
+  const [isEditingAmount, setIsEditingAmount] = useState(editAlwaysOn)
 
   const onEditAmountToggle = (value: boolean) => {
     setIsEditingAmount(value)
@@ -108,7 +108,7 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <span>{getModalLabel(lockMode, true)}</span>
+            <span>{getModalLabel(lockMode, editAlwaysOn, true)}</span>
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
@@ -143,7 +143,7 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
                 </Text>
               )}
 
-              {!isLoading && !unlockingMode && (
+              {!isLoading && !unlockingMode && !editAlwaysOn && (
                 <ClickableText
                   fontSize="sm"
                   fontWeight="700"

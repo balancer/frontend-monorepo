@@ -60,7 +60,7 @@ export function VebalUnlockForm() {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <span>{getModalLabel(LockMode.Unlock, false)}</span>
+            <span>{getModalLabel(LockMode.Unlock, false, false)}</span>
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
