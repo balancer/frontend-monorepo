@@ -1,5 +1,5 @@
 import { PoolsPage } from '@repo/lib/shared/pages/PoolsPage/PoolsPage'
-import { BeetsPromoBanner } from '@/lib/components/promos/BeetsPromoBanner'
+import { PromoBanners } from '@repo/lib/shared/components/promos/PromoBanners'
 import {
   GetProtocolStatsDocument,
   GetStakedSonicDataDocument,
@@ -39,7 +39,7 @@ export default async function PoolsPageWrapper() {
 
   return (
     <PoolsPage additionalFees={additionalFees}>
-      <BeetsPromoBanner />
+      <PromoBanners />
     </PoolsPage>
   )
 }

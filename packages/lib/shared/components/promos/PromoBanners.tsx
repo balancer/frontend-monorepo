@@ -19,8 +19,8 @@ import { PromoHookIcon } from '../icons/promos/PromoHookIcon'
 import { PromoGyroIcon } from '../icons/promos/PromoGyroIcon'
 import { PromoVThreeIcon } from '../icons/promos/PromoVThreeIcon'
 import { PromoBoostedIcon } from '../icons/promos/PromoBoostedIcon'
-import { PromoItem } from 'config/config.types'
-import { PROJECT_CONFIG } from 'config/getProjectConfig'
+import { PromoItem } from '@repo/lib/config/config.types'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getRandomInt } from '@repo/lib/shared/utils/numbers'
 
 function getIconElement(icon: string) {
