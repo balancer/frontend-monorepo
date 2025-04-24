@@ -57,71 +57,87 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
       </Box>
 
       <Box flex={{ base: '1 1 40%', sm: '1' }}>
-        <Popover
-          modifiers={[{ name: 'offset', options: { offset: [0, -24] } }]}
-          placement="top"
-          trigger="hover"
-        >
-          <PopoverTrigger>
-            <Box>
-              <Stat
-                imageBackgroundSize="400%"
-                imageTransform="rotate(180deg) scale(2)"
-                label="Yield (24h)"
-                value={
-                  <AnimatedNumber formatOptions={formatOptions} value={bn(totalYield).toNumber()} />
-                }
-              />
-            </Box>
-          </PopoverTrigger>
-          <PopoverContent
-            bg="background.level0"
-            borderRadius="md"
-            minW="200px"
-            p={2}
-            shadow="2xl"
-            w="auto"
-            zIndex={9999}
+        {!additionalFees ? (
+          <Popover
+            modifiers={[{ name: 'offset', options: { offset: [0, -24] } }]}
+            placement="top"
+            trigger="hover"
           >
-            <PopoverBody p="0">
-              <Flex direction="column" gap={1}>
-                <Flex align="center" justify="space-between">
-                  <Text color="font.secondary" fontSize="xs">
-                    Swap fees
-                  </Text>
-                  <Text className="home-stats" color="font.secondary" fontSize="xs">
+            <PopoverTrigger>
+              <Box>
+                <Stat
+                  imageBackgroundSize="400%"
+                  imageTransform="rotate(180deg) scale(2)"
+                  label="Yield (24h)"
+                  value={
                     <AnimatedNumber
                       formatOptions={formatOptions}
-                      value={safeToNumber(protocolData?.protocolMetricsAggregated.swapFee24h)}
+                      value={safeToNumber(totalYield)}
                     />
-                  </Text>
+                  }
+                />
+              </Box>
+            </PopoverTrigger>
+            <PopoverContent
+              bg="background.level0"
+              borderRadius="md"
+              minW="200px"
+              p={2}
+              shadow="2xl"
+              w="auto"
+              zIndex={9999}
+            >
+              <PopoverBody p="0">
+                <Flex direction="column" gap={1}>
+                  <Flex align="center" justify="space-between">
+                    <Text color="font.secondary" fontSize="xs">
+                      Swap fees
+                    </Text>
+                    <Text className="home-stats" color="font.secondary" fontSize="xs">
+                      <AnimatedNumber
+                        formatOptions={formatOptions}
+                        value={safeToNumber(protocolData?.protocolMetricsAggregated.swapFee24h)}
+                      />
+                    </Text>
+                  </Flex>
+                  <Flex align="center" justify="space-between">
+                    <Text color="font.secondary" fontSize="xs">
+                      Yield-bearing tokens
+                    </Text>
+                    <Text className="home-stats" color="font.secondary" fontSize="xs">
+                      <AnimatedNumber
+                        formatOptions={formatOptions}
+                        value={safeToNumber(
+                          protocolData?.protocolMetricsAggregated.yieldCapture24h
+                        )}
+                      />
+                    </Text>
+                  </Flex>
+                  <Flex align="center" justify="space-between">
+                    <Text color="font.secondary" fontSize="xs">
+                      CoW AMM LVR surplus
+                    </Text>
+                    <Text className="home-stats" color="font.secondary" fontSize="xs">
+                      <AnimatedNumber
+                        formatOptions={formatOptions}
+                        value={safeToNumber(protocolData?.protocolMetricsAggregated.surplus24h)}
+                      />
+                    </Text>
+                  </Flex>
                 </Flex>
-                <Flex align="center" justify="space-between">
-                  <Text color="font.secondary" fontSize="xs">
-                    Yield-bearing tokens
-                  </Text>
-                  <Text className="home-stats" color="font.secondary" fontSize="xs">
-                    <AnimatedNumber
-                      formatOptions={formatOptions}
-                      value={safeToNumber(protocolData?.protocolMetricsAggregated.yieldCapture24h)}
-                    />
-                  </Text>
-                </Flex>
-                <Flex align="center" justify="space-between">
-                  <Text color="font.secondary" fontSize="xs">
-                    CoW AMM LVR surplus
-                  </Text>
-                  <Text className="home-stats" color="font.secondary" fontSize="xs">
-                    <AnimatedNumber
-                      formatOptions={formatOptions}
-                      value={safeToNumber(protocolData?.protocolMetricsAggregated.surplus24h)}
-                    />
-                  </Text>
-                </Flex>
-              </Flex>
-            </PopoverBody>
-          </PopoverContent>
-        </Popover>
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
+        ) : (
+          <Stat
+            imageBackgroundSize="400%"
+            imageTransform="rotate(180deg) scale(2)"
+            label="Fees (24h)"
+            value={
+              <AnimatedNumber formatOptions={formatOptions} value={safeToNumber(totalYield)} />
+            }
+          />
+        )}
       </Box>
     </Flex>
   )
