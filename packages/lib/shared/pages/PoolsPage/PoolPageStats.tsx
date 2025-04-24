@@ -13,14 +13,54 @@ import Stat from '../../components/other/Stat'
 import { bn } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 import { AnimatedNumber } from '../../components/other/AnimatedNumber'
+import { isBalancer } from '@repo/lib/config/getProjectConfig'
 
-export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
+type Fee = {
+  label: string
+  value?: string | number | undefined | null
+}
+
+type PoolPageStatsProps = {
+  rewardsClaimed24h?: string | number | undefined | null
+}
+
+export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
   const { protocolData } = useProtocolStats()
 
-  const totalYield = bn(protocolData?.protocolMetricsAggregated.swapFee24h || 0)
-    .plus(bn(protocolData?.protocolMetricsAggregated.yieldCapture24h || 0))
-    .plus(bn(protocolData?.protocolMetricsAggregated.surplus24h || 0))
-    .plus(bn(additionalFees || 0))
+  const surplus24h = protocolData?.protocolMetricsAggregated.surplus24h
+  const feeLabel = isBalancer ? 'Yield (24h)' : 'Fees (24h)'
+
+  const fees: Fee[] = [
+    {
+      label: 'Swap fees',
+      value: protocolData?.protocolMetricsAggregated.swapFee24h,
+    },
+    {
+      label: 'Yield-bearing tokens',
+      value: protocolData?.protocolMetricsAggregated.yieldCapture24h,
+    },
+  ]
+
+  if (rewardsClaimed24h) {
+    fees.push({
+      label: 'stS rewards',
+      value: rewardsClaimed24h,
+    })
+  }
+
+  if (surplus24h && surplus24h !== '0') {
+    fees.push({
+      label: 'CoW AMM LVR surplus',
+      value: surplus24h,
+    })
+  }
+
+  console.log({ fees })
+
+  const totalFees = fees
+    .reduce((sum, fee) => {
+      return sum.plus(bn(fee.value || 0))
+    }, bn(0))
     .toString()
 
   const formatOptions = '$0,0.00a'
@@ -55,89 +95,52 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
           }
         />
       </Box>
-
       <Box flex={{ base: '1 1 40%', sm: '1' }}>
-        {!additionalFees ? (
-          <Popover
-            modifiers={[{ name: 'offset', options: { offset: [0, -24] } }]}
-            placement="top"
-            trigger="hover"
+        <Popover
+          modifiers={[{ name: 'offset', options: { offset: [0, -24] } }]}
+          placement="top"
+          trigger="hover"
+        >
+          <PopoverTrigger>
+            <Box>
+              <Stat
+                imageBackgroundSize="400%"
+                imageTransform="rotate(180deg) scale(2)"
+                label={feeLabel}
+                value={
+                  <AnimatedNumber formatOptions={formatOptions} value={safeToNumber(totalFees)} />
+                }
+              />
+            </Box>
+          </PopoverTrigger>
+          <PopoverContent
+            bg="background.level0"
+            borderRadius="md"
+            minW="200px"
+            p={2}
+            shadow="2xl"
+            w="auto"
+            zIndex={9999}
           >
-            <PopoverTrigger>
-              <Box>
-                <Stat
-                  imageBackgroundSize="400%"
-                  imageTransform="rotate(180deg) scale(2)"
-                  label="Yield (24h)"
-                  value={
-                    <AnimatedNumber
-                      formatOptions={formatOptions}
-                      value={safeToNumber(totalYield)}
-                    />
-                  }
-                />
-              </Box>
-            </PopoverTrigger>
-            <PopoverContent
-              bg="background.level0"
-              borderRadius="md"
-              minW="200px"
-              p={2}
-              shadow="2xl"
-              w="auto"
-              zIndex={9999}
-            >
-              <PopoverBody p="0">
-                <Flex direction="column" gap={1}>
-                  <Flex align="center" justify="space-between">
+            <PopoverBody p="0">
+              <Flex direction="column" gap={1}>
+                {fees.map(fee => (
+                  <Flex align="center" justify="space-between" key={fee.label}>
                     <Text color="font.secondary" fontSize="xs">
-                      Swap fees
+                      {fee.label}
                     </Text>
                     <Text className="home-stats" color="font.secondary" fontSize="xs">
                       <AnimatedNumber
                         formatOptions={formatOptions}
-                        value={safeToNumber(protocolData?.protocolMetricsAggregated.swapFee24h)}
+                        value={safeToNumber(fee.value)}
                       />
                     </Text>
                   </Flex>
-                  <Flex align="center" justify="space-between">
-                    <Text color="font.secondary" fontSize="xs">
-                      Yield-bearing tokens
-                    </Text>
-                    <Text className="home-stats" color="font.secondary" fontSize="xs">
-                      <AnimatedNumber
-                        formatOptions={formatOptions}
-                        value={safeToNumber(
-                          protocolData?.protocolMetricsAggregated.yieldCapture24h
-                        )}
-                      />
-                    </Text>
-                  </Flex>
-                  <Flex align="center" justify="space-between">
-                    <Text color="font.secondary" fontSize="xs">
-                      CoW AMM LVR surplus
-                    </Text>
-                    <Text className="home-stats" color="font.secondary" fontSize="xs">
-                      <AnimatedNumber
-                        formatOptions={formatOptions}
-                        value={safeToNumber(protocolData?.protocolMetricsAggregated.surplus24h)}
-                      />
-                    </Text>
-                  </Flex>
-                </Flex>
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
-        ) : (
-          <Stat
-            imageBackgroundSize="400%"
-            imageTransform="rotate(180deg) scale(2)"
-            label="Fees (24h)"
-            value={
-              <AnimatedNumber formatOptions={formatOptions} value={safeToNumber(totalYield)} />
-            }
-          />
-        )}
+                ))}
+              </Flex>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
       </Box>
     </Flex>
   )
