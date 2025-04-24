@@ -57,7 +57,7 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
 
       <Box flex={{ base: '1 1 40%', sm: '1' }}>
         <Popover
-          modifiers={[{ name: 'offset', options: { offset: [0, -3] } }]}
+          modifiers={[{ name: 'offset', options: { offset: [0, -24] } }]}
           placement="top"
           trigger="hover"
         >
@@ -76,7 +76,7 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
           <PopoverContent
             bg="background.level0"
             borderRadius="md"
-            minW="190px"
+            minW="200px"
             p={2}
             shadow="2xl"
             w="auto"
@@ -103,6 +103,17 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
                     <AnimatedNumber
                       formatOptions={formatOptions}
                       value={safeToNumber(protocolData?.protocolMetricsAggregated.yieldCapture24h)}
+                    />
+                  </Text>
+                </Flex>
+                <Flex align="center" justify="space-between">
+                  <Text color="font.secondary" fontSize="xs">
+                    CoW AMM LVR surplus
+                  </Text>
+                  <Text className="home-stats" color="font.secondary" fontSize="xs">
+                    <AnimatedNumber
+                      formatOptions={formatOptions}
+                      value={safeToNumber(protocolData?.protocolMetricsAggregated.surplus24h)}
                     />
                   </Text>
                 </Flex>
