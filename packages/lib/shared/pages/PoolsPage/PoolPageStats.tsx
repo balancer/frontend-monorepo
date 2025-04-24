@@ -19,6 +19,7 @@ export function PoolPageStats({ additionalFees }: { additionalFees?: string }) {
 
   const totalYield = bn(protocolData?.protocolMetricsAggregated.swapFee24h || 0)
     .plus(bn(protocolData?.protocolMetricsAggregated.yieldCapture24h || 0))
+    .plus(bn(protocolData?.protocolMetricsAggregated.surplus24h || 0))
     .plus(bn(additionalFees || 0))
     .toString()
 
