@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import * as echarts from 'echarts/core'
 import { EChartsOption, ECharts } from 'echarts'
-import { format, differenceInDays } from 'date-fns'
+import { format, differenceInDays, addDays, isBefore } from 'date-fns'
 import BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -33,8 +33,11 @@ function groupValuesByDates(chartValues: ChartValueAcc) {
   }, {})
 }
 
-function calculatePoint2Balance(snapshot: LockSnapshot, slope: BigNumber, now: BigNumber) {
-  const point2V = bn(snapshot.bias).minus(slope.times(now.minus(snapshot.timestamp)))
+function forecastBalance(snapshot: LockSnapshot, now: BigNumber) {
+  const bias = bn(snapshot.bias)
+  const slope = bn(snapshot.slope)
+  const point2V = bias.minus(slope.times(now.minus(snapshot.timestamp)))
+
   return point2V.isLessThan(0) ? 0 : point2V.toNumber()
 }
 
@@ -42,20 +45,42 @@ function formatDate(timestamp: number) {
   return format(timestamp * 1000, 'yyyy/MM/dd')
 }
 
+function createInterpolatedPoints(firstDay: number, lastDay: number, snapshot: LockSnapshot) {
+  const daysDiff = differenceInDays(lastDay, firstDay)
+  const interpolatedPoints = []
+  if (daysDiff > 30) {
+    let currentDay = addDays(firstDay, 7)
+    while (isBefore(currentDay, lastDay)) {
+      interpolatedPoints.push([
+        format(currentDay, 'yyyy/MM/dd'),
+        forecastBalance(snapshot, bn(currentDay.getTime() / 1000)),
+      ] as [string, number])
+      currentDay = addDays(currentDay, 7)
+    }
+  }
+
+  return interpolatedPoints
+}
+
 function processLockSnapshots(lockSnapshots: LockSnapshot[]) {
   const currentDate = (Date.now() / 1000).toFixed(0)
 
   return lockSnapshots.reduce((acc: ChartValueAcc, snapshot, i) => {
-    const slope = bn(snapshot.slope)
-    const now = lockSnapshots[i + 1] ? bn(lockSnapshots[i + 1].timestamp) : bn(currentDate)
-
     const point1Balance = bn(snapshot.bias).toNumber()
     const point1Date = formatDate(snapshot.timestamp)
 
-    const point2Balance = calculatePoint2Balance(snapshot, slope, now)
-    const point2Date = formatDate(now.toNumber())
+    const point2Timestamp = lockSnapshots[i + 1]
+      ? bn(lockSnapshots[i + 1].timestamp)
+      : bn(currentDate)
+    const point2Balance = forecastBalance(snapshot, point2Timestamp)
+    const point2Date = formatDate(point2Timestamp.toNumber())
 
     acc.push([point1Date, point1Balance])
+
+    const firstDay = snapshot.timestamp * 1000
+    const lastDay = point2Timestamp.toNumber() * 1000
+    const interpolatedPoints = createInterpolatedPoints(firstDay, lastDay, snapshot)
+    acc.push(...interpolatedPoints)
 
     if (point1Balance.toFixed(2) !== point2Balance.toFixed(2)) {
       acc.push([point2Date, point2Balance])
@@ -107,18 +132,25 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
       }))
     )
     const valuesByDates = groupValuesByDates(processedValues)
+
     return filterAndFlattenValues(valuesByDates)
   }, [userHistoricalLocks])
 
   const futureLockChartData = useMemo(() => {
     if (hasExistingLock && !isExpired) {
+      const lastSnapshot = userHistoricalLocks[userHistoricalLocks.length - 1]
+      const firstDay = Date.now()
+      const lastDay = mainnetLockedInfo.lockedEndDate
+      const interpolatedPoints = createInterpolatedPoints(firstDay, lastDay, lastSnapshot)
+
       return {
         id: FUTURE_SERIES_ID,
         name: '',
         type: 'line' as const,
         data: [
           chartValues[chartValues.length - 1],
-          [format(new Date(mainnetLockedInfo.lockedEndDate).getTime(), 'yyyy/MM/dd'), 0],
+          ...interpolatedPoints,
+          [format(mainnetLockedInfo.lockedEndDate, 'yyyy/MM/dd'), 0],
         ],
         lineStyle: {
           type: [3, 15],
@@ -129,12 +161,19 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         showSymbol: false,
       }
     }
+
     return {
       name: '',
       type: 'line' as const,
       data: [],
     }
-  }, [chartValues, mainnetLockedInfo.lockedEndDate, hasExistingLock, isExpired])
+  }, [
+    chartValues,
+    mainnetLockedInfo.lockedEndDate,
+    hasExistingLock,
+    isExpired,
+    userHistoricalLocks,
+  ])
 
   const showStaticTooltip = useCallback(() => {
     if (!mouseoverRef.current && instanceRef.current) {
@@ -263,7 +302,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
             <div style="font-size: 14px; font-weight: 700; display: flex; flex-wrap: wrap;
               justify-content: start; gap: 0px; letter-spacing: -0.25px; padding-bottom: 2px;
               ${toolTipTheme.heading}; color: ${toolTipTheme.text};">
-              ${format(new Date(firstPointValue[0]), 'yyyy/MM/dd')}
+              ${format(new Date(firstPointValue[0]), 'dd/MM/yyyy')}
             </div>
             <div style="display: flex; flex-direction: column; font-size: 14px;
               line-height: 20px; font-weight: 500; color: ${toolTipTheme.text};">
