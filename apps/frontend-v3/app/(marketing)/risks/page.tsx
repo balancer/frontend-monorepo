@@ -14,7 +14,7 @@ export default function Privacy() {
             <Box mt="3xl" pb="md">
               <h1>Risks of using&nbsp;Balancer</h1>
               <p>
-                <em>Last Updated: May 2024</em>
+                <em>Last Updated: April 2025</em>
               </p>
               <p>
                 <em>
@@ -962,6 +962,7 @@ export default function Privacy() {
                     stablecoin tokens. In addition, there are risks associated with the involvement
                     of rate providers.
                   </p>
+
                   <div>
                     <h5 className="anchor" id="rate-provider-risk">
                       Rate provider risk
@@ -982,9 +983,24 @@ export default function Privacy() {
                     <p>
                       Oracles are data providers which supply external information to smart
                       contracts. Oracles, like Chainlink, may be used to source exchange rates
-                      between pool tokens for a rate provider in Balancer MetaStable pools. The
-                      risks of using Oracles to supply exchange rates include:
+                      between pool tokens for a rate provider in Balancer MetaStable pools.
                     </p>
+                    <p>
+                      Arbitrageurs can exploit oracle latency by frontrunning oracle updates at
+                      direct expense to liquidity providers. If an arbitrageur sees an oracle update
+                      in the mempool that will significantly change an asset’s price, they can
+                      anticipate the resulting market movements by buying/selling the asset before
+                      the update takes effect. Given there could be a slight delay between price
+                      feeds, there’s a potential window for arbitrage.
+                    </p>
+                    <p>
+                      In a similar risk, blockchain validators could censor updates, by choosing to
+                      exclude transactions that contain oracle updates from the blocks, preventing
+                      the update (censoring). In theory, if there’s a coordinated effort by a
+                      significant portion of validators, the update could be effectively stalled or
+                      blocked.
+                    </p>
+                    <p>The risks of using Oracles to supply exchange rates include:</p>
                     <ul>
                       <li>
                         Data accuracy: Oracles must provide accurate data for DeFi applications to
@@ -1033,6 +1049,37 @@ export default function Privacy() {
                       rate is received via the omnichain messaging service.
                     </p>
                   </div>
+                </div>
+
+                <div>
+                  <h6 className="anchor" id="path-dependency-risk">
+                    Path Dependency risk
+                  </h6>
+                  <p>
+                    Unlike traditional CFMM (Constant Function Market Makers) where “impermanent”
+                    loss can revert by the return of the asset to its original ratio, path-dependant
+                    pools are affected by the sequence of price change, meaning the losses incurred
+                    to the asset in one side of the pool during certain price fluctuations can
+                    become “permanent”.
+                  </p>
+                  <p>
+                    Given its nature, where the history of the price action affects the value of the
+                    pool, there is a reduced predictability of performance.
+                    <ul>
+                      <li>
+                        Past Performance Misconceptions: Historical returns do not guarantee future
+                        economic outcomes. Rapidly changing market conditions and volatility can
+                        severely affect pool performance and backward-looking metrics can create a
+                        false sense of predictability.
+                      </li>
+                      <li>
+                        APR Calculation Vulnerabilities: Reported Annual Percentage Rates (APR)
+                        frequently do not reflect true economic return. APR does not account for
+                        losses resulting from the market making strategy. It is simply a measure of
+                        fees earned over TVL on a 24h timeframe.
+                      </li>
+                    </ul>
+                  </p>
                 </div>
               </FadeInOnView>
               <FadeInOnView>
@@ -1127,6 +1174,17 @@ export default function Privacy() {
                       <span>General</span>
                     </Link>{' '}
                     risks.
+                  </p>
+                  <p>
+                    StableSurge pools with price oracles for volatile assets are a new design space
+                    currently being experimented. LPs are free to join at their own risk, but these
+                    pools can leak real value (permanent loss) and the APR shown in calculations is
+                    not an accurate reflection of the real return. Learn more about oracle and path
+                    dependency risks in the{' '}
+                    <Link href="risks#composable-pools">
+                      <span>Composable Stable Pools</span>
+                    </Link>{' '}
+                    risk section.
                   </p>
                   <ul>
                     <li>
