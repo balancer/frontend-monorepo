@@ -155,7 +155,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         lineStyle: {
           type: [3, 15],
           color: '#EAA879',
-          width: 5,
+          width: 3,
           cap: 'round' as const,
         },
         showSymbol: false,
@@ -395,7 +395,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
               { offset: 0.66, color: '#E5C8C8' },
               { offset: 1, color: '#EAA879' },
             ]),
-            width: 5,
+            width: 3,
             join: 'round' as const,
             cap: 'round' as const,
           },
