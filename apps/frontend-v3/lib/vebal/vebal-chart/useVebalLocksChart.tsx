@@ -243,7 +243,15 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         nextTheme === 'dark'
           ? theme.semanticTokens.colors.font.primary._dark
           : theme.semanticTokens.colors.font.primary.default,
+      secondaryText:
+        nextTheme === 'dark'
+          ? theme.semanticTokens.colors.font.secondary._dark
+          : theme.semanticTokens.colors.font.secondary.default,
     }
+
+    const badgeStyle =
+      'background: #f48975; color: #2D3748; border-radius: 0.25rem; padding-inline-start: 0.25rem; padding-inline-end: 0.25rem'
+
     return {
       grid: {
         left: '1.5%',
@@ -300,30 +308,30 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           <div style="padding: unset; display: flex; flex-direction: column;
             justify-content: center; ${toolTipTheme.container}">
             <div style="font-size: 14px; font-weight: 700; display: flex; flex-wrap: wrap;
-              justify-content: start; gap: 0px; letter-spacing: -0.25px; padding-bottom: 2px;
-              ${toolTipTheme.heading}; color: ${toolTipTheme.text};">
-              ${format(new Date(firstPointValue[0]), 'dd/MM/yyyy')}
+                justify-content: start; gap: 0px; letter-spacing: -0.25px; padding-bottom: 2px;
+                ${toolTipTheme.heading}; color: ${toolTipTheme.secondaryText};">
+              veBAL ${format(new Date(firstPointValue[0]), 'dd/MM/yyyy')}
             </div>
+            <hr class="chakra-divider" />
             <div style="display: flex; flex-direction: column; font-size: 14px;
-              line-height: 20px; font-weight: 500; color: ${toolTipTheme.text};">
+                line-height: 20px; font-weight: 500; color: ${toolTipTheme.text};">
               ${
                 secondPointValue
                   ? `
-                    <span>
-                      <span style="display: inline-block; margin-right: 4px; border-radius: 10px;
-                        width: 10px; height: 10px; background-color: #BCA25D;">
-                      </span>
-                      <span>${fNum('token', secondPointValue[1])} veBAL</span>
-                    </span>
-                  `
-                  : ''
+                  <span style="display: flex; flex-direction: row; justify-content: space-between">
+                    <span style="color: ${toolTipTheme.secondaryText};">Added</span>
+                    <span>${fNum('token', secondPointValue[1] - firstPointValue[1])}</span>
+                  </span>
+                  <span style="display: flex; flex-direction: row; justify-content: space-between">
+                    <span style="color: ${toolTipTheme.secondaryText};">Final</span>
+                    <span>${fNum('token', secondPointValue[1])}</span>
+                  </span>`
+                  : `
+                  <span>
+                    <span>${fNum('token', firstPointValue[1])}</span>
+                    ${firstPointValue[1] === 0 ? `<span style="${badgeStyle}">Expired</span>` : ''}
+                  </span>`
               }
-              <span>
-                <span style="display: inline-block; margin-right: 4px; border-radius: 10px;
-                  width: 10px; height: 10px; background-color: #BCA25D;">
-                </span>
-                <span>${fNum('token', firstPointValue[1])} veBAL</span>
-                </span>
             </div>
           </div>
         `
