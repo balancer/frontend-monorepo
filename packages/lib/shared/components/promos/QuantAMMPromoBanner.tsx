@@ -4,9 +4,17 @@ import { Button, Heading, Flex, Box, Center, Text, Stack, useColorMode } from '@
 import NextLink from 'next/link'
 import { Picture } from '../other/Picture'
 import { ArrowUpRight } from 'react-feather'
+import { usePool } from '../../../modules/pool/PoolProvider'
 
 export function QuantAMMPromoBanner() {
   const { colorMode } = useColorMode()
+  const { pool, chain } = usePool()
+
+  const analyticsUrl =
+    pool && chain
+      ? `https://app.quantamm.fi/product-explorer/${chain}/${pool.id}`
+      : 'https://app.quantamm.fi/product-explorer/'
+
   return (
     <Box rounded="lg" shadow="2xl" w="full">
       <Box
@@ -97,7 +105,7 @@ export function QuantAMMPromoBanner() {
                 </Box>
               </Stack>
             </Box>
-            <Flex alignItems="center" gap="ms" maxW="284px">
+            <Flex alignItems="center" gap="ms" maxW="300px">
               <Button
                 _hover={{
                   bg: '#fff',
@@ -116,9 +124,35 @@ export function QuantAMMPromoBanner() {
                 rounded="full"
                 size="md"
                 transition="all 0.3s var(--cubic)"
-                w="128px"
+                w="145px"
               >
                 Learn more{' '}
+                <Box pl="xxs">
+                  <ArrowUpRight size="14px" />
+                </Box>
+              </Button>
+              <Button
+                _hover={{
+                  bg: colorMode === 'dark' ? 'background.special' : '#fff',
+                  color: colorMode === 'dark' ? '#000' : '#000',
+                  borderColor: colorMode === 'dark' ? 'transparent' : '#000',
+                }}
+                as={NextLink}
+                bg={colorMode === 'dark' ? 'white' : '#000'}
+                border="1px solid"
+                borderColor={colorMode === 'dark' ? '#fff' : '#000'}
+                color={colorMode === 'dark' ? '#000' : '#fff'}
+                cursor="hand"
+                flex="1"
+                h={{ base: '32px', sm: '40px', lg: '48px' }}
+                href={analyticsUrl}
+                py="sm"
+                rounded="full"
+                size="md"
+                transition="all 0.3s var(--cubic)"
+                w="145px"
+              >
+                View analytics{' '}
                 <Box pl="xxs">
                   <ArrowUpRight size="14px" />
                 </Box>
