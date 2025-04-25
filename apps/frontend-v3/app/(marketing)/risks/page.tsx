@@ -107,6 +107,9 @@ export default function Privacy() {
                           Concentrated Liquidity Pools
                         </Link>
                       </li>
+                      <li>
+                        <Link href="risks#btf">Blockchain Traded Funds risks</Link>
+                      </li>
                     </ul>
                   </li>
                   <li>
@@ -1349,6 +1352,117 @@ export default function Privacy() {
                           risks of using GYD
                         </a>
                         .
+                      </li>
+                    </ul>
+                  </p>
+                </div>
+              </FadeInOnView>
+
+              <FadeInOnView>
+                <div className="subsection">
+                  <h4 className="anchor" id="btf">
+                    Blockchain Traded Funds risks
+                  </h4>
+
+                  <p>
+                    Blockchain Traded Fundas (or Temporal Function Market Making - TFMM) tackles
+                    impermanent loss in traditional AMMs by continuously adjusting weights within
+                    the pool, rather than relying on token allocations. This dynamic rebalancing
+                    process allows the protocol to respond more effectively to market conditions,
+                    thereby mitigating IL risk associated with market price fluctuations. These
+                    rules are programmed to respond to specific market conditions, allowing for
+                    real-time adjustments without requiring manual intervention, by analyzing market
+                    data and applying the appropriate parameters for capital allocation within the
+                    fund, thus enabling effective risk management and optimization of returns.
+                  </p>
+
+                  <p>
+                    The Balancer UI allows users to manage liquidity in certain QuantAMM pools
+                    (TFMM). This is not an endorsement of their products or the safety of their
+                    smart contracts. Users interacting with TFMM pools should be aware of the risks
+                    below. Please also refer to the General risks section.
+                  </p>
+
+                  <ul>
+                    <li>
+                      <b>Market volatility</b>: run directional strategies. These are not market
+                      neutral. The dynamic nature of the TFMM may not always respond adequately to
+                      extreme market volatility or adverse conditions, potentially leading to losses
+                      if market prices deviate significantly from expected trends.
+                    </li>
+                    <li>
+                      <b>MEV</b> - Change weights is equivalent to changing the price offered for
+                      swaps by the pool. This mechanism to expose a rebalance opportunity has been
+                      studied however there is an inherent multiblock MEV opportunity. This is
+                      mitigated by design choices (see mitigation section)
+                    </li>
+                    <li>
+                      <b>Strategy Automation</b> - Strategies require periodic triggering, if this
+                      triggering is not performed the strategy will not update weight trajectories
+                    </li>
+                    <li>
+                      <b>Strategy Parameterization</b> - It is expected behaviour that a periodic
+                      update will not occur if a variable in the strategy calculation means that the
+                      strategy is not mathematically possible to run. E.g. a divide by 0 situation.
+                    </li>
+                    <li>
+                      <b>Oracle risks</b>: reliance on oracles for price feeds introduces risk in
+                      terms of potential inaccuracies in data, which could adversely impact the
+                      rebalancing processes and overall fund performance. Additionally,
+                      infrastructure issues such as high gas costs could affect the efficiency of
+                      operations within the protocol. See more on oracle risks on the rate provider
+                      subsection.
+                    </li>
+                    <li>
+                      <b>Sub-optimal arbitrage</b> TFMM changes the weights within the TFMM pricing
+                      formula. At any one block TFMM is a standard CFMM pool. For actual NAV/Market
+                      value to be rebalanced to the target weights arbitrageurs have to take the
+                      immediate small arbitrage profit so that the holdings of the pool are inline
+                      with the weights. If there are no arbitrageurs, holdings will not be
+                      rebalanced. The more aggressive the arbitrage the more efficient the
+                      rebalancing.
+                    </li>
+                  </ul>
+
+                  <p>
+                    How Balancer mitigates these risks:
+                    <ul>
+                      <li>
+                        <b>Market Volatility</b> - given the nature of BTFs in so that they are not
+                        reliant trade volumes, back test simulations are provided to give visibility
+                        on simulated behaviour under different market conditions. Given the BTF
+                        strategies rely on “historical memory” of price changes, historical
+                        performance and simulations are not indicative of future performance.
+                      </li>
+                      <li>
+                        <b>Pool Tuning</b> - Strategy parameters are fixed on creation mitigating
+                        the possibility of parameter manipulation.
+                      </li>
+                      <li>
+                        <b>Strategy automation</b> - Chainlink automation is used to trigger
+                      </li>
+                      <li>
+                        Future updates to TFMM may include increased monitoring of performance
+                        metrics, enhanced simulation testing, or improved user interfaces to
+                        minimize the chance of errors in parameter settings.
+                      </li>
+                      <li>
+                        Chainlink oracles are primarily used to mitigate oracle risk and any
+                        additional pool creation requires approval from the protocol team.
+                      </li>
+                      <li>
+                        Implement necessary fixes once identified, updating smart contracts,
+                        adjusting parameters or improving risk disclosures.
+                      </li>
+                      <li>
+                        <b>Sub-optimal arbitrage</b> - This is a relatively small risk given at any
+                        one block arbitrageurs are faced with a standard balancer pool so they can
+                        price and take the arbitrage opportunity without any additional new
+                        invariant prediction work. Balancer has also integrated BTFs in the smart
+                        order router also increasing the likelihood of being exposed to traders.
+                        Work has already begun on DEX aggregator integration and when there is a
+                        minimal amount of TVL in the pool aggregators will expose the pool for
+                        further volumes.
                       </li>
                     </ul>
                   </p>
