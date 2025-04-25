@@ -36,9 +36,6 @@ query SorGetSwapPaths(
     returnAmount
     routes {
       hops {
-        pool {
-          symbol
-        }
         poolId
         tokenIn
         tokenInAmount
