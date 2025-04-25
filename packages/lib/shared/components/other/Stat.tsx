@@ -8,6 +8,7 @@ interface StatProps {
   imageBackgroundSize?: string
   imageBackgroundPosition?: string
   imageTransform?: string
+  popover?: boolean
 }
 
 function Stat({
@@ -16,6 +17,7 @@ function Stat({
   imageBackgroundSize = 'cover',
   imageBackgroundPosition = 'left',
   imageTransform = 'scale(1)',
+  popover = false,
 }: StatProps) {
   return (
     <Box
@@ -55,7 +57,30 @@ function Stat({
         </Box>
       </Box>
       <Box p="2">
-        <Text fontSize="xs" mb="1.5" variant="secondary">
+        <Text
+          fontSize="xs"
+          mb="1.5"
+          position="relative"
+          variant="secondary"
+          w="fit-content"
+          {...(popover
+            ? {
+                _after: {
+                  content: '""',
+                  display: 'block',
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  bottom: '-1.5px',
+                  height: '0px',
+                  borderBottom: '1px dotted',
+                  opacity: 0.5,
+                  width: '100%',
+                  pointerEvents: 'none',
+                },
+              }
+            : {})}
+        >
           {label}
         </Text>
         <Text className="home-stats" fontSize="md" fontWeight="bold" letterSpacing="-0.6px">

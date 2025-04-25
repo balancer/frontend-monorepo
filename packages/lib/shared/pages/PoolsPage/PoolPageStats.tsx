@@ -107,6 +107,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
                 imageBackgroundSize="400%"
                 imageTransform="rotate(180deg) scale(2)"
                 label={feeLabel}
+                popover
                 value={
                   <AnimatedNumber formatOptions={formatOptions} value={safeToNumber(totalFees)} />
                 }
