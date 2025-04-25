@@ -41,7 +41,7 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
     },
   ]
 
-  if (rewardsClaimed24h) {
+  if (rewardsClaimed24h && rewardsClaimed24h !== '0') {
     fees.push({
       label: 'stS rewards',
       value: rewardsClaimed24h,
