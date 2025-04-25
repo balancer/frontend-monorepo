@@ -10,7 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import Stat from '../../components/other/Stat'
-import { bn } from '../../utils/numbers'
+import { bn, safeToNumber } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 import { AnimatedNumber } from '../../components/other/AnimatedNumber'
 import { isBalancer } from '@repo/lib/config/getProjectConfig'
@@ -62,11 +62,6 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
     .toString()
 
   const formatOptions = '$0,0.00a'
-
-  const safeToNumber = (val: string | number | undefined | null): number => {
-    const num = Number(val)
-    return Number.isNaN(num) ? 0 : num
-  }
 
   return (
     <Flex direction="row" flexWrap="wrap" gap={{ base: 'sm', lg: 'ms' }} mt="3">
