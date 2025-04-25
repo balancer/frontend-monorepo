@@ -55,8 +55,6 @@ export function PoolPageStats({ rewardsClaimed24h }: PoolPageStatsProps) {
     })
   }
 
-  console.log({ fees })
-
   const totalFees = fees
     .reduce((sum, fee) => {
       return sum.plus(bn(fee.value || 0))
