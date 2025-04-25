@@ -7,14 +7,9 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 export default function Cookies() {
   const services = [
     {
-      name: 'Infura',
-      description: 'Used to fetch on-chain data and constructs contract calls with an Infura API.',
-      iconUrl: '/images/services/infura.svg',
-    },
-    {
-      name: 'Alchemy',
-      description: 'Used to fetch on-chain data and constructs contract calls with an Alchemy API.',
-      iconUrl: '/images/services/alchemy.svg',
+      name: 'dRPC',
+      description: 'Used to fetch on-chain data and constructs contract calls.',
+      iconUrl: '/images/services/drpc.svg',
     },
     {
       name: 'The Graph',
@@ -47,6 +42,21 @@ export default function Cookies() {
       description:
         'Used for a variety of infrastructure services, but primarily to fetch and cache blockchain data.',
       iconUrl: '/images/services/aws.svg',
+    },
+    {
+      name: 'OpenZeppelin',
+      description: 'Used for security and compliance monitoring.',
+      iconUrl: '/images/services/open-zeppelin.svg',
+    },
+    {
+      name: 'Vercel',
+      description: 'Used for deployment and hosting.',
+      iconUrl: '/images/services/vercel.svg',
+    },
+    {
+      name: 'Coingecko',
+      description: 'Used to fetch and display token information.',
+      iconUrl: '/images/services/coingecko.svg',
     },
   ]
 
