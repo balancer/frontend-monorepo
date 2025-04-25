@@ -1,146 +1,125 @@
 query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
   pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
-    id
     address
-    name
-    version
-    owner
-    swapFeeManager
-    pauseManager
-    poolCreator
-    decimals
-    factory
-    symbol
-    createTime
-    type
     chain
-    protocolVersion
-    tags
-    hasErc4626
-    hasNestedErc4626
-    liquidityManagement {
-      disableUnbalancedLiquidity
-    }
-    hook {
-      ...Hook
-    }
+    createTime
+    decimals
     dynamicData {
-      poolId
-      swapEnabled
-      totalLiquidity
-      totalShares
+      aprItems {
+        apr
+        id
+        rewardTokenAddress
+        rewardTokenSymbol
+        title
+        type
+      }
       fees24h
-      surplus24h
-      swapFee
-      volume24h
       holdersCount
       isInRecoveryMode
       isPaused
-      aprItems {
-        id
-        title
-        apr
-        type
-        rewardTokenSymbol
-        rewardTokenAddress
-      }
+      poolId
+      surplus24h
+      swapEnabled
+      swapFee
+      totalLiquidity
+      totalShares
+      volume24h
     }
+    factory
+    hasErc4626
+    hasNestedErc4626
+    hook {
+      ...Hook
+    }
+    id
+    liquidityManagement {
+      disableUnbalancedLiquidity
+    }
+    name
+    owner
+    pauseManager
+    poolCreator
+    poolTokens {
+      ...PoolTokens
+    }
+    protocolVersion
     staking {
-      id
-      type
-      chain
       address
-      gauge {
+      aura {
+        apr
+        auraPoolAddress
+        auraPoolId
         id
+        isShutdown
+      }
+      chain
+      gauge {
         gaugeAddress
-        version
-        status
-        workingSupply
+        id
         otherGauges {
           gaugeAddress
-          version
-          status
           id
           rewards {
             id
-            tokenAddress
             rewardPerSecond
+            tokenAddress
           }
+          status
+          version
         }
         rewards {
           id
           rewardPerSecond
           tokenAddress
         }
+        status
+        version
+        workingSupply
       }
-      aura {
-        id
-        apr
-        auraPoolAddress
-        auraPoolId
-        isShutdown
-      }
+      id
+      type
     }
+    swapFeeManager
+    symbol
+    tags
+    type
     userBalance {
+      stakedBalances {
+        balance
+        balanceUsd
+        stakingId
+        stakingType
+      }
       totalBalance
       totalBalanceUsd
       walletBalance
       walletBalanceUsd
-      stakedBalances {
-        balance
-        balanceUsd
-        stakingType
-        stakingId
-      }
     }
-    ... on GqlPoolWeighted {
-      nestingType
-      poolTokens {
-        ...PoolTokens
-      }
-    }
-    ... on GqlPoolStable {
-      amp
-      poolTokens {
-        ...PoolTokens
-      }
-    }
-    ... on GqlPoolMetaStable {
-      amp
-      poolTokens {
-        ...PoolTokens
-      }
-    }
-    ... on GqlPoolElement {
-      unitSeconds
-      principalToken
-      baseToken
-      poolTokens {
-        ...PoolTokens
-      }
-    }
+    version
     ... on GqlPoolComposableStable {
       amp
-      nestingType
       bptPriceRate
-      poolTokens {
-        ...PoolTokens
-      }
-    }
-    ... on GqlPoolLiquidityBootstrapping {
-      name
       nestingType
-      poolTokens {
-        ...PoolTokens
-      }
+    }
+    ... on GqlPoolElement {
+      baseToken
+      principalToken
+      unitSeconds
+    }
+    ... on GqlPoolFx {
+      alpha
+      beta
+      delta
+      epsilon
+      lambda
     }
     ... on GqlPoolGyro {
       alpha
       beta
-      type
       c
       dSq
       lambda
+      nestingType
       root3Alpha
       s
       sqrtAlpha
@@ -149,36 +128,38 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       tauAlphaY
       tauBetaX
       tauBetaY
+      type
       u
       v
       w
       z
-      nestingType
-      poolTokens {
-        ...PoolTokens
-      }
     }
-    ... on GqlPoolFx {
-      alpha
-      beta
-      delta
-      epsilon
-      lambda
-      poolTokens {
-        ...PoolTokens
-      }
+    ... on GqlPoolLiquidityBootstrapping {
+      nestingType
+    }
+    ... on GqlPoolMetaStable {
+      amp
     }
     ... on GqlPoolQuantAmmWeighted {
       hasAnyAllowedBuffer
-      poolTokens {
-        ...PoolTokens
-      }
     }
     ... on GqlPoolReClamm {
+      centerednessMargin
+      currentFourthRootPriceRatio
+      endFourthRootPriceRatio
       hasAnyAllowedBuffer
-      poolTokens {
-        ...PoolTokens
-      }
+      lastTimestamp
+      lastVirtualBalances
+      priceRatioUpdateEndTime
+      priceRatioUpdateStartTime
+      priceShiftRatePerSecond
+      startFourthRootPriceRatio
+    }
+    ... on GqlPoolStable {
+      amp
+    }
+    ... on GqlPoolWeighted {
+      nestingType
     }
   }
 }
