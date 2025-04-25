@@ -993,6 +993,7 @@ export default function Privacy() {
                       the update takes effect. Given there could be a slight delay between price feeds,
                       there’s a potential window for arbitrage.
                     </p>
+                    <p>
                       In a similar risk, blockchain validators could censor updates, by choosing to 
                       exclude transactions that contain oracle updates from the blocks, preventing the 
                       update (censoring). In theory, if there’s a coordinated effort by a significant 
