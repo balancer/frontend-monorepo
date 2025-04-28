@@ -47,6 +47,11 @@ export function useReclAmmChart() {
 
   console.log({ currentChartData })
 
+  // Formatter for axis labels: 0 decimals if >= 10, 1 decimal if < 10
+  const axisLabelFormatter = (value: number) => {
+    return value >= 10 ? Math.round(value).toString() : value.toFixed(1)
+  }
+
   const option = useMemo(() => {
     if (!currentChartData.length) return {}
 
@@ -55,17 +60,28 @@ export function useReclAmmChart() {
         type: 'value',
         min: currentChartData[0][0],
         max: currentChartData[currentChartData.length - 1][0],
+        axisLabel: {
+          formatter: axisLabelFormatter,
+        },
       },
       yAxis: {
         type: 'value',
         min: currentChartData[0][1],
         max: currentChartData[currentChartData.length - 1][1],
+        axisLabel: {
+          formatter: axisLabelFormatter,
+        },
       },
       series: [
         {
           data: currentChartData,
           type: 'line',
           smooth: true,
+          lineStyle: {
+            color: '#1976d2',
+            width: 3,
+          },
+          symbol: 'none',
         },
       ],
     }
