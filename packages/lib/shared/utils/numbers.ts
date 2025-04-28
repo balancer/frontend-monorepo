@@ -280,7 +280,7 @@ export function isTooSmallToRemoveUsd(value: Numberish): boolean {
   return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
 }
 
-export const isValidNumber = (value: string): boolean =>
+export const isValidNumber = (value: string | number | undefined | null): boolean =>
   isNumber(toNumber(value)) && !isNaN(toNumber(value))
 
 // Parses a fixed-point decimal string into a bigint
@@ -302,4 +302,8 @@ export function sum<T>(items: T[], extractFn: (item: T) => BigNumber): BigNumber
   return items.reduce((acc, item) => {
     return acc.plus(extractFn(item))
   }, bn(0))
+}
+
+export const safeToNumber = (val: string | number | undefined | null): number => {
+  return isValidNumber(val) ? toNumber(val) : 0
 }
