@@ -108,8 +108,9 @@ export function QuantAMMPromoBanner() {
             <Flex alignItems="center" gap="ms" maxW="300px">
               <Button
                 _hover={{
-                  bg: '#fff',
+                  bg: colorMode === 'dark' ? 'background.special' : '#fff',
                   color: colorMode === 'dark' ? '#000' : '#000',
+                  borderColor: colorMode === 'dark' ? 'transparent ' : '#000',
                 }}
                 as={NextLink}
                 bg={colorMode === 'dark' ? 'transparent' : 'transparent'}
