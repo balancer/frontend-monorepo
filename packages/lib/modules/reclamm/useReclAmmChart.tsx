@@ -26,6 +26,8 @@ export function useReclAmmChart() {
     const virtualBalanceB = formatUnits(virtualBalances.virtualBalanceB, 18)
     const invariant = formatUnits(invariantRaw, 18)
 
+    console.log({ virtualBalanceA, virtualBalanceB, invariant })
+
     const xForPointB = bn(invariant).div(virtualBalanceB)
 
     // Create regular curve points
