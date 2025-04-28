@@ -4,7 +4,14 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import * as echarts from 'echarts/core'
 import { EChartsOption, ECharts } from 'echarts'
-import { format, differenceInDays, addDays, isBefore } from 'date-fns'
+import {
+  format,
+  differenceInDays,
+  addDays,
+  isBefore,
+  secondsToMilliseconds,
+  millisecondsToSeconds,
+} from 'date-fns'
 import BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
@@ -42,7 +49,7 @@ function forecastBalance(snapshot: LockSnapshot, now: BigNumber) {
 }
 
 function formatDate(timestamp: number) {
-  return format(timestamp * 1000, 'yyyy/MM/dd')
+  return format(secondsToMilliseconds(timestamp), 'yyyy/MM/dd')
 }
 
 function createInterpolatedPoints(firstDay: number, lastDay: number, snapshot: LockSnapshot) {
@@ -53,7 +60,7 @@ function createInterpolatedPoints(firstDay: number, lastDay: number, snapshot: L
     while (isBefore(currentDay, lastDay)) {
       interpolatedPoints.push([
         format(currentDay, 'yyyy/MM/dd'),
-        forecastBalance(snapshot, bn(currentDay.getTime() / 1000)),
+        forecastBalance(snapshot, bn(millisecondsToSeconds(currentDay.getTime()))),
       ] as [string, number])
       currentDay = addDays(currentDay, 7)
     }
@@ -63,7 +70,7 @@ function createInterpolatedPoints(firstDay: number, lastDay: number, snapshot: L
 }
 
 function processLockSnapshots(lockSnapshots: LockSnapshot[]) {
-  const currentDate = (Date.now() / 1000).toFixed(0)
+  const currentDate = millisecondsToSeconds(Date.now()).toFixed(0)
 
   return lockSnapshots.reduce((acc: ChartValueAcc, snapshot, i) => {
     const point1Balance = bn(snapshot.bias).toNumber()
@@ -77,8 +84,8 @@ function processLockSnapshots(lockSnapshots: LockSnapshot[]) {
 
     acc.push([point1Date, point1Balance])
 
-    const firstDay = snapshot.timestamp * 1000
-    const lastDay = point2Timestamp.toNumber() * 1000
+    const firstDay = secondsToMilliseconds(snapshot.timestamp)
+    const lastDay = secondsToMilliseconds(point2Timestamp.toNumber())
     const interpolatedPoints = createInterpolatedPoints(firstDay, lastDay, snapshot)
     acc.push(...interpolatedPoints)
 
@@ -353,7 +360,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           type: 'line',
           label: {
             formatter: (params: any) => {
-              return format(new Date(params.value * 1000), 'MMM d')
+              return format(new Date(secondsToMilliseconds(params.value)), 'MMM d')
             },
           },
         },
