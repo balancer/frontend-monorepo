@@ -2,7 +2,7 @@ import { useComputeInvariant } from './useComputeInvariant'
 import { useComputeCurrentVirtualBalances } from './useComputeCurrentVirtualBalances'
 import { useGetReClammPoolDynamicData } from './useGetReClammPoolDynamicData'
 import { useMemo } from 'react'
-import { bn } from 'shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 
 export function useReclAmmChart() {

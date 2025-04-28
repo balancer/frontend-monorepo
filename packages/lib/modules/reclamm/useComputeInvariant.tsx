@@ -1,4 +1,4 @@
-import { getChainId } from 'config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { usePool } from '../pool/PoolProvider'
 import { reClammPoolAbi } from '../web3/contracts/abi/generated'
 import { Address } from 'viem'

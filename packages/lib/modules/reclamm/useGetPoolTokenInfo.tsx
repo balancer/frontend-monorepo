@@ -1,4 +1,4 @@
-import { getChainId } from 'config/app.config'
+import { getChainId } from '@repo/lib/config/app.config'
 import { usePool } from '../pool/PoolProvider'
 import { vaultExtensionAbi_V3 } from '@balancer/sdk'
 import { Address } from 'viem'
