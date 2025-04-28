@@ -82,6 +82,10 @@ export function isGyroEPool(pool: Pool): pool is GqlPoolGyro {
   return pool.type === GqlPoolType.Gyroe
 }
 
+export function isReclAmm(poolType: GqlPoolType): boolean {
+  return poolType === GqlPoolType.Reclamm
+}
+
 export function isUnknownType(poolType: any): boolean {
   return !Object.values(GqlPoolType).includes(poolType)
 }

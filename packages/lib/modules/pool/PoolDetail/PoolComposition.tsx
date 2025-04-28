@@ -24,7 +24,7 @@ import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Address } from 'viem'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
-import { isBoosted } from '../pool.helpers'
+import { isBoosted, isReclAmm } from '../pool.helpers'
 import { PoolToken } from '../pool.types'
 import { usePool } from '../PoolProvider'
 import { Pool } from '../pool.types'
@@ -36,6 +36,7 @@ import {
   getNestedPoolTokens,
 } from '../pool-tokens.utils'
 import { useGetPoolTokensWithActualWeights } from '../useGetPoolTokensWithActualWeights'
+import { ReclAmmChart } from 'modules/reclamm/ReclAmmChart'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -181,6 +182,8 @@ export function PoolComposition() {
           <PoolZenGarden poolType={pool.type} sizePx={isMobile ? '300px' : `${height - 35}px`} />
           {isLoading ? (
             <Skeleton h="full" w="full" />
+          ) : isReclAmm(pool.type) ? ( // temporarily added here for debugging
+            <ReclAmmChart />
           ) : (
             <PoolWeightChart
               chain={chain}
