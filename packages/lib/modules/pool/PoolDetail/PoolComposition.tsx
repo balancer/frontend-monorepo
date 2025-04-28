@@ -36,7 +36,7 @@ import {
   getNestedPoolTokens,
 } from '../pool-tokens.utils'
 import { useGetPoolTokensWithActualWeights } from '../useGetPoolTokensWithActualWeights'
-import { ReclAmmChart } from 'modules/reclamm/ReclAmmChart'
+import { ReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChart'
 
 type CardContentProps = {
   totalLiquidity: string
