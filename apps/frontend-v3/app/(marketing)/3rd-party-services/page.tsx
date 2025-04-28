@@ -8,7 +8,7 @@ export default function Cookies() {
   const services = [
     {
       name: 'dRPC',
-      description: 'Used to fetch on-chain data and constructs contract calls.',
+      description: 'Used to fech on-chain data and to construct contract calls.',
       iconUrl: '/images/services/drpc.svg',
     },
     {
@@ -23,7 +23,7 @@ export default function Cookies() {
     },
     {
       name: 'Appzi',
-      description: 'Used to capture and store user feedback from optional surveys',
+      description: 'Used to capture and store user feedback from optional surveys.',
       iconUrl: '/images/services/appzi.svg',
     },
     {
@@ -69,7 +69,7 @@ export default function Cookies() {
               <Box mt="3xl" pb="sm">
                 <h1>Use of 3rd party services</h1>
                 <p>
-                  <em>Last Updated: October 2023</em>
+                  <em>Last Updated: April 2025</em>
                 </p>
                 <p>
                   Balancer is an open source, permissionless, decentralized protocol. The smart
