@@ -59,15 +59,15 @@ export function calculateMyVoteRewardsValue(
   const oldPercentage = bpsToPercentage(oldWeight)
   const newPercentage = bpsToPercentage(newWeight)
 
-  const voteCount = votingPool?.votingIncentive?.voteCount ?? 0
-  const totalValue = votingPool?.votingIncentive?.totalValue ?? 0
+  const poolVoteCount = votingPool?.votingIncentive?.voteCount ?? 0
+  const totalIncentives = votingPool?.votingIncentive?.totalValue ?? 0
 
-  const currentUserVoteAllocation = bn(formatUnits(userVeBAL, 18)).times(oldPercentage)
-  const newUserVoteAllocation = bn(formatUnits(userVeBAL, 18)).times(newPercentage)
+  const currentUserVotes = bn(formatUnits(userVeBAL, 18)).times(oldPercentage)
+  const newUserVotes = bn(formatUnits(userVeBAL, 18)).times(newPercentage)
 
-  const newVoteValue = bn(voteCount).minus(currentUserVoteAllocation).plus(newUserVoteAllocation)
-  const valueRatio = bn(totalValue).div(newVoteValue)
-  const rewardInUSD = valueRatio.times(newUserVoteAllocation)
+  const newPoolVoteCount = bn(poolVoteCount).minus(currentUserVotes).plus(newUserVotes)
+  const valuePerVote = bn(totalIncentives).div(newPoolVoteCount)
+  const rewardInUSD = valuePerVote.times(newUserVotes)
 
   return rewardInUSD
 }

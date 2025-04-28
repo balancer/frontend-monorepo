@@ -128,7 +128,12 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {vote.votingIncentive ? (
-              <Text>{toCurrency(vote.votingIncentive.valuePerVote, { abbreviated: false })}</Text>
+              <Text>
+                {toCurrency(vote.votingIncentive.valuePerVote, {
+                  abbreviated: false,
+                  forceThreeDecimals: true,
+                })}
+              </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
             )}
