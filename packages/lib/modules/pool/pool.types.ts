@@ -103,6 +103,7 @@ export const poolTypeFilters = [
   GqlPoolType.CowAmm,
   GqlPoolType.Fx,
   GqlPoolType.QuantAmmWeighted,
+  GqlPoolType.Reclamm,
 ] as const
 
 export type PoolFilterType = (typeof poolTypeFilters)[number]
@@ -116,6 +117,7 @@ export const POOL_TYPE_MAP: { [key in PoolFilterType]: GqlPoolType[] } = {
   [GqlPoolType.CowAmm]: [GqlPoolType.CowAmm],
   [GqlPoolType.Fx]: [GqlPoolType.Fx],
   [GqlPoolType.QuantAmmWeighted]: [GqlPoolType.QuantAmmWeighted],
+  [GqlPoolType.Reclamm]: [GqlPoolType.Reclamm],
 }
 
 export const poolTagFilters = ['INCENTIVIZED', 'VE8020', 'POINTS', 'BOOSTED', 'RWA'] as const
