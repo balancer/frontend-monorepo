@@ -56,20 +56,34 @@ export function calculateMyVoteRewardsValue(
   votingPool: VotingPoolWithData,
   userVeBAL: bigint
 ) {
-  const oldPercentage = bpsToPercentage(oldWeight)
-  const newPercentage = bpsToPercentage(newWeight)
+  const currentUserVotes = calculateUserVotes(userVeBAL, oldWeight)
+  const newUserVotes = calculateUserVotes(userVeBAL, newWeight)
 
   const poolVoteCount = votingPool?.votingIncentive?.voteCount ?? 0
   const totalIncentives = votingPool?.votingIncentive?.totalValue ?? 0
-
-  const currentUserVotes = bn(formatUnits(userVeBAL, 18)).times(oldPercentage)
-  const newUserVotes = bn(formatUnits(userVeBAL, 18)).times(newPercentage)
 
   const newPoolVoteCount = bn(poolVoteCount).minus(currentUserVotes).plus(newUserVotes)
   const valuePerVote = bn(totalIncentives).div(newPoolVoteCount)
   const rewardInUSD = valuePerVote.times(newUserVotes)
 
   return rewardInUSD
+}
+
+export function calculateMyValuePerVote(
+  oldWeight: string | number,
+  newWeight: string | number,
+  votingPool: VotingPoolWithData,
+  userVeBAL: bigint
+) {
+  const newUserVotes = calculateUserVotes(userVeBAL, newWeight)
+  const myRewards = calculateMyVoteRewardsValue(oldWeight, newWeight, votingPool, userVeBAL)
+
+  return bn(myRewards).div(newUserVotes)
+}
+
+function calculateUserVotes(veBALAmount: bigint, weight: string | number) {
+  const percentage = bpsToPercentage(weight)
+  return bn(formatUnits(veBALAmount, 18)).times(percentage)
 }
 
 export const orderByHash: Record<SortingBy, { label: string; title?: string }> = {

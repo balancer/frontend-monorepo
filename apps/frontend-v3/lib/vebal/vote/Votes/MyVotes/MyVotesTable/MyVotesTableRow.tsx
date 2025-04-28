@@ -25,6 +25,7 @@ import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { VoteWeightInput } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/VoteWeightInput'
 import {
   bpsToPercentage,
+  calculateMyValuePerVote,
   calculateMyVoteRewardsValue,
   inputPercentageWeightToBps,
   votingTimeLockedEndDate,
@@ -129,10 +130,18 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {vote.votingIncentive ? (
               <Text>
-                {toCurrency(vote.votingIncentive.valuePerVote, {
-                  abbreviated: false,
-                  forceThreeDecimals: true,
-                })}
+                {toCurrency(
+                  calculateMyValuePerVote(
+                    votedVotesWeights[vote.id] ?? 0,
+                    editVotesWeights[vote.id] ?? 0,
+                    vote,
+                    veBALBalance
+                  ),
+                  {
+                    abbreviated: false,
+                    forceThreeDecimals: true,
+                  }
+                )}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
