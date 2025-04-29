@@ -24,6 +24,7 @@ import {
 } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import BigNumber from 'bignumber.js'
+import { useTotalVotes } from '../../useTotalVotes'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -59,7 +60,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   const { veBALBalance } = useVebalUserData()
 
   const {
-    loading,
+    loading: votesLoading,
     votedPools,
     selectedVotingPools,
     clearSelectedVotingPools,
@@ -111,6 +112,8 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     return myVotes.filter(myVote => !isPoolGaugeExpired(myVote))
   }, [myVotes, isPoolGaugeExpired])
 
+  const { totalVotes, totalVotesLoading } = useTotalVotes()
+
   const totalInfo: MyVotesTotalInfo = useMemo(() => {
     const infos = availableMyVotes.map(myVote => {
       const currentWeight = myVote.gaugeVotes?.userVotes || 0
@@ -133,10 +136,10 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     const editVotes = sum(infos, ({ editWeight }) => bn(editWeight))
 
     const totalRewardValue = sum(infos, ({ votedWeight, editWeight, vote }) =>
-      calculateMyVoteRewardsValue(votedWeight, editWeight, vote, veBALBalance)
+      calculateMyVoteRewardsValue(votedWeight, editWeight, vote, veBALBalance, totalVotes)
     )
     const prevTotalRewardValue = sum(infos, ({ votedWeight, vote }) =>
-      calculateMyVoteRewardsValue(votedWeight, votedWeight, vote, veBALBalance)
+      calculateMyVoteRewardsValue(votedWeight, votedWeight, vote, veBALBalance, totalVotes)
     )
 
     const averageRewardPerVote = sum(infos, ({ valuePerVote, editWeight }) =>
@@ -158,7 +161,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
       averageRewardPerVoteGain: averageRewardPerVote.minus(prevAverageRewardPerVote),
       unallocatedVotes: BigNumber.max(unallocatedVotes, 0),
     }
-  }, [availableMyVotes, votedVotesWeights, editVotesWeights, veBALBalance])
+  }, [availableMyVotes, votedVotesWeights, editVotesWeights, veBALBalance, totalVotes])
 
   const hasVotedBefore = votedPools.length > 0
 
@@ -224,7 +227,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   return {
     myVotes,
     sortedMyVotes,
-    loading,
+    loading: votesLoading || totalVotesLoading,
     filtersState,
     hasVotes,
     hasVotedBefore,

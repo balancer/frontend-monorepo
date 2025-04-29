@@ -54,22 +54,46 @@ export function calculateMyVoteRewardsValue(
   oldWeight: string | number,
   newWeight: string | number,
   votingPool: VotingPoolWithData,
-  userVeBAL: bigint
+  userVeBAL: bigint,
+  totalVotes: bigint
 ) {
-  const oldPercentage = bpsToPercentage(oldWeight)
-  const newPercentage = bpsToPercentage(newWeight)
+  const currentUserVotes = calculateUserVotes(userVeBAL, oldWeight)
+  const newUserVotes = calculateUserVotes(userVeBAL, newWeight)
 
-  const voteCount = votingPool?.votingIncentive?.voteCount ?? 0
-  const totalValue = votingPool?.votingIncentive?.totalValue ?? 0
+  const poolVoteCount = bn(formatUnits(totalVotes, 18)).times(
+    bn(votingPool.gaugeVotes?.votesNextPeriod || 0n).shiftedBy(-18)
+  )
+  const totalIncentives = votingPool?.votingIncentive?.totalValue ?? 0
 
-  const currentUserVoteAllocation = bn(formatUnits(userVeBAL, 18)).times(oldPercentage)
-  const newUserVoteAllocation = bn(formatUnits(userVeBAL, 18)).times(newPercentage)
-
-  const newVoteValue = bn(voteCount).minus(currentUserVoteAllocation).plus(newUserVoteAllocation)
-  const valueRatio = bn(totalValue).div(newVoteValue)
-  const rewardInUSD = valueRatio.times(newUserVoteAllocation)
+  const newPoolVoteCount = bn(poolVoteCount).minus(currentUserVotes).plus(newUserVotes)
+  const valuePerVote = bn(totalIncentives).div(newPoolVoteCount)
+  const rewardInUSD = valuePerVote.times(newUserVotes)
 
   return rewardInUSD
+}
+
+export function calculateMyValuePerVote(
+  oldWeight: string | number,
+  newWeight: string | number,
+  votingPool: VotingPoolWithData,
+  userVeBAL: bigint,
+  totalVotes: bigint
+) {
+  const newUserVotes = calculateUserVotes(userVeBAL, newWeight)
+  const myRewards = calculateMyVoteRewardsValue(
+    oldWeight,
+    newWeight,
+    votingPool,
+    userVeBAL,
+    totalVotes
+  )
+
+  return bn(myRewards).div(newUserVotes)
+}
+
+function calculateUserVotes(veBALAmount: bigint, weight: string | number) {
+  const percentage = bpsToPercentage(weight)
+  return bn(formatUnits(veBALAmount, 18)).times(percentage)
 }
 
 export const orderByHash: Record<SortingBy, { label: string; title?: string }> = {
