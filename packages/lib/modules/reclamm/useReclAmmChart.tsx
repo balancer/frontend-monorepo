@@ -69,56 +69,73 @@ export function useReclAmmChart() {
       return [x.toNumber(), y.toNumber()]
     })
 
-    // Current points
-    const currentMaxPrice = {
-      x: Number(virtualBalanceA),
-      y: Number(bn(invariant).div(virtualBalanceA)),
-    }
+    // Find the x values for our key points
+    const vBalanceA = Number(virtualBalanceA)
+    const vBalanceB = Number(virtualBalanceB)
+    const xForMinPrice = bn(invariant).div(virtualBalanceB).toNumber()
 
-    const currentXForPointB = bn(invariant).div(virtualBalanceB)
-    const currentMinPrice = {
-      x: currentXForPointB.toNumber(),
-      y: Number(virtualBalanceB),
-    }
-
-    const currentLowerMargin = calculateLowerMargin({
+    const lowerMargin = calculateLowerMargin({
       margin: Number(margin),
       invariant: invariant.toNumber(),
-      virtualBalanceA: Number(virtualBalanceA),
-      virtualBalanceB: Number(virtualBalanceB),
+      virtualBalanceA: vBalanceA,
+      virtualBalanceB: vBalanceB,
     })
 
-    const currentUpperMargin = calculateUpperMargin({
+    const upperMargin = calculateUpperMargin({
       margin: Number(margin),
       invariant: invariant.toNumber(),
-      virtualBalanceA: Number(virtualBalanceA),
-      virtualBalanceB: Number(virtualBalanceB),
+      virtualBalanceA: vBalanceA,
+      virtualBalanceB: vBalanceB,
     })
 
-    const currentLowerMarginPoint = {
-      x: currentLowerMargin,
-      y: bn(invariant).div(currentLowerMargin).toNumber(),
-    }
+    const currentBalance = bn(balanceA).plus(virtualBalanceA).toNumber()
 
-    const currentUpperMarginPoint = {
-      x: currentUpperMargin,
-      y: bn(invariant).div(currentUpperMargin).toNumber(),
-    }
+    // Find the closest points on the curve for our markPoints
+    const markPointCoordinates = [
+      { name: 'Max Price', x: vBalanceA },
+      { name: 'Min Price', x: xForMinPrice },
+      { name: 'Lower Margin', x: lowerMargin },
+      { name: 'Upper Margin', x: upperMargin },
+      { name: 'Current', x: currentBalance },
+    ].map(point => {
+      // Find the closest point on the curve
+      const closestPoint = curvePoints.reduce((closest, current) => {
+        return Math.abs(current[0] - point.x) < Math.abs(closest[0] - point.x) ? current : closest
+      }, curvePoints[0])
 
-    const currentBalances = {
-      x: bn(balanceA).plus(virtualBalanceA).toNumber(),
-      y: bn(balanceB).plus(virtualBalanceB).toNumber(),
-    }
+      return {
+        name: point.name,
+        coord: closestPoint,
+        value: point.name,
+        itemStyle: {
+          color: getColorForPoint(point.name),
+        },
+      }
+    })
 
     return {
       series: curvePoints,
-      currentMaxPrice,
-      currentMinPrice,
-      currentLowerMarginPoint,
-      currentUpperMarginPoint,
-      currentBalances,
+      markPointCoordinates,
     }
   }, [reclAmmData])
+
+  // Helper function to get different colors for each point type
+  function getColorForPoint(pointName: string) {
+    switch (pointName) {
+      case 'Max Price':
+        return '#FF4560'
+      case 'Min Price':
+        return '#FF4560'
+      case 'Lower Margin':
+        return '#008FFB'
+      case 'Upper Margin':
+        return '#008FFB'
+      case 'Current':
+        return '#00E396'
+      default:
+        return '#1976d2'
+    }
+  }
 
   console.log({ currentChartData })
 
@@ -131,19 +148,48 @@ export function useReclAmmChart() {
     const series = currentChartData.series
     if (!series) return {}
 
+    // Calculate padding to ensure markPoints are visible
+    const xValues = series.map(point => point[0])
+    const yValues = series.map(point => point[1])
+
+    const xMin = Math.min(...xValues)
+    const xMax = Math.max(...xValues)
+    const yMin = Math.min(...yValues)
+    const yMax = Math.max(...yValues)
+
+    // Add 10% padding to ensure points near edges are visible
+    const xPadding = (xMax - xMin) * 0.1
+    const yPadding = (yMax - yMin) * 0.1
+
     return {
+      tooltip: {
+        trigger: 'item',
+        formatter: function (params: any) {
+          if (params.componentType === 'markPoint') {
+            return `${params.name}: (${params.coord[0].toFixed(2)}, ${params.coord[1].toFixed(2)})`
+          }
+          return `(${params.value[0].toFixed(2)}, ${params.value[1].toFixed(2)})`
+        },
+      },
+      grid: {
+        left: '5%',
+        right: '5%',
+        bottom: '10%',
+        top: '10%',
+        containLabel: true,
+      },
       xAxis: {
         type: 'value',
-        min: series[0][0],
-        max: series[series.length - 1][0],
+        min: xMin - xPadding,
+        max: xMax + xPadding,
         axisLabel: {
           formatter: axisLabelFormatter,
         },
       },
       yAxis: {
         type: 'value',
-        min: series[0][1],
-        max: series[series.length - 1][1],
+        min: yMin - yPadding,
+        max: yMax + yPadding,
         axisLabel: {
           formatter: axisLabelFormatter,
         },
@@ -158,6 +204,14 @@ export function useReclAmmChart() {
             width: 3,
           },
           symbol: 'none',
+          markPoint: {
+            symbol: 'circle',
+            symbolSize: 10,
+            label: {
+              show: false,
+            },
+            data: currentChartData.markPointCoordinates || [],
+          },
         },
       ],
     }
