@@ -243,6 +243,15 @@ export function useReclAmmChart() {
         top: '10%',
         containLabel: true,
       },
+      tooltip: {
+        show: true,
+        trigger: 'item',
+        backgroundColor: 'black',
+        borderColor: '#333',
+        textStyle: {
+          color: '#fff',
+        },
+      },
       xAxis: {
         type: 'value',
         min: xMin - xPadding,
@@ -365,13 +374,24 @@ export function useReclAmmChart() {
           data: currentChartData.currentPoint ? [currentChartData.currentPoint.coord] : [],
           z: 10,
           tooltip: {
+            show: true,
+            trigger: 'item',
             formatter: function (params: any) {
               if (currentChartData.currentPoint && params.value) {
                 return `Current Balance: (${params.value[0].toFixed(2)}, ${params.value[1].toFixed(2)})`
               }
               return ''
             },
+            position: 'top',
+            backgroundColor: '#000000',
+            padding: [5, 10],
+            textStyle: {
+              color: '#fff',
+              fontSize: 12,
+            },
           },
+          silent: false,
+          cursor: 'pointer',
         },
       ],
     }
