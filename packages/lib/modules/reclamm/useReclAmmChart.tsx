@@ -316,13 +316,12 @@ export function useReclAmmChart() {
             data: currentChartData.otherPoints || [],
           },
         },
-        // Add a line segment that follows the curve between margin points
         {
           type: 'line',
           data: currentChartData.marginCurveSegment || [],
           smooth: true,
           lineStyle: {
-            color: '#7FFFD4', // Light green/aquamarine color
+            color: '#7FFFD4',
             width: 5,
             type: 'solid',
           },
@@ -330,15 +329,14 @@ export function useReclAmmChart() {
           silent: true,
           tooltip: { show: false },
           emphasis: { disabled: true },
-          z: 5, // Above the main line but below the points
+          z: 5,
         },
-        // Add a line segment that follows the curve between max price and upper margin
         {
           type: 'line',
           data: currentChartData.maxToUpperSegment || [],
           smooth: true,
           lineStyle: {
-            color: '#FFA500', // Orange color
+            color: '#FFA500',
             width: 5,
             type: 'solid',
           },
@@ -346,15 +344,14 @@ export function useReclAmmChart() {
           silent: true,
           tooltip: { show: false },
           emphasis: { disabled: true },
-          z: 5, // Same z-index as the other segment
+          z: 5,
         },
-        // Add a line segment that follows the curve between min price and upper margin
         {
           type: 'line',
           data: currentChartData.minToUpperSegment || [],
           smooth: true,
           lineStyle: {
-            color: '#FFA500', // Orange color
+            color: '#FFA500',
             width: 5,
             type: 'solid',
           },
@@ -362,7 +359,7 @@ export function useReclAmmChart() {
           silent: true,
           tooltip: { show: false },
           emphasis: { disabled: true },
-          z: 5, // Same z-index as the other segments
+          z: 5,
         },
         {
           type: 'scatter',
