@@ -67,7 +67,7 @@ export default function Cookies() {
           <FadeInOnView>
             <div className="subsection">
               <Box mt="3xl" pb="sm">
-                <h1>Use of 3rd party services</h1>
+                <h1>Use of third-party services</h1>
                 <p>
                   <em>Last Updated: April 2025</em>
                 </p>
