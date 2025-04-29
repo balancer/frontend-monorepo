@@ -18,7 +18,10 @@ export function MyVotesStatsAverageReward() {
         ) : !isZero(totalInfo.averageRewardPerVote) ? (
           <HStack spacing="xs">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
-              {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
+              {toCurrency(totalInfo.averageRewardPerVote, {
+                abbreviated: false,
+                forceThreeDecimals: true,
+              })}
             </Text>
             {totalInfo.averageRewardPerVoteGain && (
               <GainBadge gain={totalInfo.averageRewardPerVoteGain} />

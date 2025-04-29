@@ -15,7 +15,6 @@ import { useExpiredGauges } from '@bal/lib/vebal/vote/useExpiredGaugesQuery'
 import { useVotingEscrowLocksQueries } from '@bal/lib/vebal/cross-chain/useVotingEscrowLocksQueries'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { useHiddenHandVotingIncentives } from '@repo/lib/shared/services/hidden-hand/useHiddenHandVotingIncentives'
 import { isGaugeExpired } from '@repo/lib/modules/vebal/vote/vote.helpers'
 
@@ -30,14 +29,7 @@ export function _useVotes({ data, votingListLoading = false, error }: UseVotesAr
 
   const votingList = useMemo(() => {
     const votingPools = data?.veBalGetVotingList || []
-    return shouldUseAnvilFork
-      ? /*
-        FIXME:
-        The current implementation is making onchain requests for every row in the list. We must simplify this.
-        In the meantime, when running in anvil fork mode we limit the number of rows to 10 to avoid overloading the fork.
-        */
-        votingPools.slice(0, 10)
-      : votingPools
+    return votingPools
   }, [data?.veBalGetVotingList])
 
   const gaugeAddresses = useMemo(() => votingList.map(vote => vote.gauge.address), [votingList])

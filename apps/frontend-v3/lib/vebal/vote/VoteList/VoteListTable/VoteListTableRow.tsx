@@ -117,7 +117,12 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             {incentivesAreLoading ? (
               <Skeleton h="20px" w="60px" />
             ) : vote.votingIncentive ? (
-              <Text>{toCurrency(vote.votingIncentive.valuePerVote, { abbreviated: false })}</Text>
+              <Text>
+                {toCurrency(vote.votingIncentive.valuePerVote, {
+                  abbreviated: false,
+                  forceThreeDecimals: true,
+                })}
+              </Text>
             ) : (
               <Popover trigger="hover">
                 <PopoverTrigger>

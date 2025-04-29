@@ -1,6 +1,7 @@
 'use client'
+
+import { Box, Button, Center, Flex, Heading, Link, Text, HStack, Stack } from '@chakra-ui/react'
 import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
-import { Box, Button, Center, Flex, Heading, Link, Text, HStack } from '@chakra-ui/react'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import NextLink from 'next/link'
 import { ArrowUpRight } from 'react-feather'
@@ -23,30 +24,32 @@ export function VebalFooterSection() {
       <Center>
         <FadeInOnView animateOnce={false}>
           <Flex direction="column" gap="lg" textAlign="center">
-            <Heading
-              as="h2"
-              backgroundClip="text"
-              bg="background.gold"
-              display="flex"
-              justifyContent="center"
-              pb="0.5"
-              size="lg"
-              width="full"
-            >
-              Calling all BAL holders
-            </Heading>
-            <Text
-              color="font.secondary"
-              display="flex"
-              justifyContent="center"
-              lineHeight="1.4"
-              maxWidth="40ch"
-              textAlign="center"
-              width="full"
-            >
-              Turn your BAL into veBAL to join Balancer governance, be eligible for incentives, and
-              share in the success of the protocol.
-            </Text>
+            <Stack alignItems="center" gap="md" px="md" width="full">
+              <Heading
+                as="h2"
+                backgroundClip="text"
+                bg="background.gold"
+                display="flex"
+                justifyContent="center"
+                pb="0.5"
+                size="lg"
+                width="full"
+              >
+                Calling all BAL holders
+              </Heading>
+              <Text
+                color="font.secondary"
+                display="flex"
+                justifyContent="center"
+                lineHeight="1.4"
+                maxWidth="40ch"
+                textAlign="center"
+                width="full"
+              >
+                Lock your BAL for veBAL to join Balancer governance, be eligible for incentives, and
+                share in the success of the protocol.
+              </Text>
+            </Stack>
             <Flex
               display="flex"
               gap="ms"
@@ -58,8 +61,15 @@ export function VebalFooterSection() {
               <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="gold">
                 Manage veBAL
               </Button>
-
-              <Button as={NextLink} flex={1} href="/vebal/vote" size="lg" variant="tertiary">
+              <Button
+                as={NextLink}
+                bg="background.gold"
+                bgClip="text"
+                flex={1}
+                href="/vebal/vote"
+                size="lg"
+                variant="tertiary"
+              >
                 Vote on gauges
               </Button>
             </Flex>

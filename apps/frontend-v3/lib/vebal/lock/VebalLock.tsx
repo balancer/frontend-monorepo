@@ -16,5 +16,5 @@ export function VebalLock() {
     )
   }
 
-  return <VebalLockForm allowEditOnInit />
+  return <VebalLockForm editAlwaysOn />
 }

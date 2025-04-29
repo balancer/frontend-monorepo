@@ -79,7 +79,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Install Playwright Browsers
-        run: pnpm --filter=e2e-tests exec playwright install --with-deps chromium # CI only tests in chromium
+        run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright smoke tests
         run: pnpm test:e2e:build
       - uses: actions/upload-artifact@v4
@@ -102,7 +102,7 @@ jobs:
       - name: Start anvil fork in mainnet
         run: anvil --fork-url "https://lb.drpc.org/ogrpc?network=ethereum&dkey=${{ env.NEXT_PRIVATE_DRPC_KEY }}" --port 8545 &
       - name: Install Playwright Browsers
-        run: pnpm --filter=e2e-tests exec playwright install --with-deps chromium # CI only tests in chromium
+        run: pnpm playwright:install:chromium # CI only tests in chromium
       - name: Run Playwright dev tests
         run: pnpm test:e2e:dev
       - uses: actions/upload-artifact@v4

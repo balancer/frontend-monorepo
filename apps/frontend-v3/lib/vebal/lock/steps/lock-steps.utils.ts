@@ -27,11 +27,12 @@ export function parseDate(date: string) {
   return (toUtcTime(new Date(date)) / 1000).toString()
 }
 
-export function getModalLabel(mode: LockMode, extendExpired: boolean) {
+export function getModalLabel(mode: LockMode, editAlwaysOn: boolean, extendExpired: boolean) {
   switch (mode) {
     case LockMode.Lock:
       return 'Lock to get veBAL'
     case LockMode.Extend:
+      if (editAlwaysOn) return 'Lock to get veBAL'
       return 'Extend lock'
     case LockMode.Unlock:
       if (extendExpired) {

@@ -61,7 +61,10 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
               <Skeleton h="20px" w="60px" />
             ) : totalInfo.averageRewardPerVote ? (
               <Text color="font.maxContrast">
-                {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
+                {toCurrency(totalInfo.averageRewardPerVote, {
+                  abbreviated: false,
+                  forceThreeDecimals: true,
+                })}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>

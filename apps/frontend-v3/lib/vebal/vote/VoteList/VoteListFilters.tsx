@@ -73,6 +73,7 @@ export function VoteListFilters() {
       <HStack gap="0" justify="end" spacing="none" w="full">
         <VoteListSearch />
         <Popover
+          isLazy
           isOpen={isPopoverOpen}
           onClose={() => setIsPopoverOpen(false)}
           onOpen={() => setIsPopoverOpen(true)}
@@ -82,7 +83,7 @@ export function VoteListFilters() {
             <FilterButton ml="ms" totalFilterCount={totalFilterCount} />
           </PopoverTrigger>
           <Box shadow="2xl" zIndex="popover">
-            <PopoverContent>
+            <PopoverContent motionProps={{ animate: { scale: 1, opacity: 1 } }}>
               <PopoverArrow bg="background.level3" />
               <PopoverCloseButton top="sm" />
               <PopoverBody p="md">
