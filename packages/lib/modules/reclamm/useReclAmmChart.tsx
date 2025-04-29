@@ -93,12 +93,14 @@ export function useReclAmmChart() {
       },
     }
 
+    console.log({ lowerMargin, upperMargin })
+
     // other markpoint without interaction
     const otherPoints = [
       { name: 'Max Price', x: vBalanceA, color: '#FF4560' },
       { name: 'Min Price', x: xForMinPrice, color: '#FF4560' },
-      { name: 'Lower Margin', x: lowerMargin, color: '#008FFB' },
-      { name: 'Upper Margin', x: upperMargin, color: '#008FFB' },
+      { name: 'Lower Margin', x: lowerMargin, color: '#00E396' },
+      { name: 'Upper Margin', x: upperMargin, color: '#00E396' },
     ].map(point => {
       const closestPoint = curvePoints.reduce((closest, current) => {
         return Math.abs(current[0] - point.x) < Math.abs(closest[0] - point.x) ? current : closest
@@ -121,6 +123,92 @@ export function useReclAmmChart() {
       series: curvePoints,
       currentPoint,
       otherPoints,
+      marginCurveSegment: (() => {
+        const lowerMarginPoint = otherPoints.find(p => p.name === 'Lower Margin')
+        const upperMarginPoint = otherPoints.find(p => p.name === 'Upper Margin')
+
+        if (!lowerMarginPoint || !upperMarginPoint) return []
+
+        const lowerIndex = curvePoints.findIndex(
+          point => point[0] === lowerMarginPoint.coord[0] && point[1] === lowerMarginPoint.coord[1]
+        )
+        const upperIndex = curvePoints.findIndex(
+          point => point[0] === upperMarginPoint.coord[0] && point[1] === upperMarginPoint.coord[1]
+        )
+
+        const startIndex =
+          lowerIndex >= 0
+            ? lowerIndex
+            : curvePoints.findIndex(point => point[0] >= lowerMarginPoint.coord[0])
+        const endIndex =
+          upperIndex >= 0
+            ? upperIndex
+            : curvePoints.findIndex(point => point[0] >= upperMarginPoint.coord[0])
+
+        if (startIndex >= 0 && endIndex >= 0 && startIndex < endIndex) {
+          return curvePoints.slice(startIndex, endIndex + 1)
+        }
+        return []
+      })(),
+      maxToUpperSegment: (() => {
+        const maxPricePoint = otherPoints.find(p => p.name === 'Max Price')
+        const upperMarginPoint = otherPoints.find(p => p.name === 'Lower Margin')
+
+        if (!maxPricePoint || !upperMarginPoint) return []
+
+        const maxIndex = curvePoints.findIndex(
+          point => point[0] === maxPricePoint.coord[0] && point[1] === maxPricePoint.coord[1]
+        )
+        const upperIndex = curvePoints.findIndex(
+          point => point[0] === upperMarginPoint.coord[0] && point[1] === upperMarginPoint.coord[1]
+        )
+
+        const startIndex =
+          maxIndex >= 0
+            ? maxIndex
+            : curvePoints.findIndex(point => point[0] >= maxPricePoint.coord[0])
+        const endIndex =
+          upperIndex >= 0
+            ? upperIndex
+            : curvePoints.findIndex(point => point[0] >= upperMarginPoint.coord[0])
+
+        if (startIndex >= 0 && endIndex >= 0 && startIndex < endIndex) {
+          return curvePoints.slice(startIndex, endIndex + 1)
+        }
+        return []
+      })(),
+      minToUpperSegment: (() => {
+        const minPricePoint = otherPoints.find(p => p.name === 'Min Price')
+        const upperMarginPoint = otherPoints.find(p => p.name === 'Upper Margin')
+
+        if (!minPricePoint || !upperMarginPoint) return []
+
+        const firstPoint =
+          minPricePoint.coord[0] < upperMarginPoint.coord[0] ? minPricePoint : upperMarginPoint
+        const secondPoint =
+          minPricePoint.coord[0] < upperMarginPoint.coord[0] ? upperMarginPoint : minPricePoint
+
+        const firstIndex = curvePoints.findIndex(
+          point => point[0] === firstPoint.coord[0] && point[1] === firstPoint.coord[1]
+        )
+        const secondIndex = curvePoints.findIndex(
+          point => point[0] === secondPoint.coord[0] && point[1] === secondPoint.coord[1]
+        )
+
+        const startIndex =
+          firstIndex >= 0
+            ? firstIndex
+            : curvePoints.findIndex(point => point[0] >= firstPoint.coord[0])
+        const endIndex =
+          secondIndex >= 0
+            ? secondIndex
+            : curvePoints.findIndex(point => point[0] >= secondPoint.coord[0])
+
+        if (startIndex >= 0 && endIndex >= 0 && startIndex < endIndex) {
+          return curvePoints.slice(startIndex, endIndex + 1)
+        }
+        return []
+      })(),
     }
   }, [reclAmmData])
 
@@ -218,6 +306,54 @@ export function useReclAmmChart() {
             },
             data: currentChartData.otherPoints || [],
           },
+        },
+        // Add a line segment that follows the curve between margin points
+        {
+          type: 'line',
+          data: currentChartData.marginCurveSegment || [],
+          smooth: true,
+          lineStyle: {
+            color: '#7FFFD4', // Light green/aquamarine color
+            width: 5,
+            type: 'solid',
+          },
+          symbol: 'none',
+          silent: true,
+          tooltip: { show: false },
+          emphasis: { disabled: true },
+          z: 5, // Above the main line but below the points
+        },
+        // Add a line segment that follows the curve between max price and upper margin
+        {
+          type: 'line',
+          data: currentChartData.maxToUpperSegment || [],
+          smooth: true,
+          lineStyle: {
+            color: '#FFA500', // Orange color
+            width: 5,
+            type: 'solid',
+          },
+          symbol: 'none',
+          silent: true,
+          tooltip: { show: false },
+          emphasis: { disabled: true },
+          z: 5, // Same z-index as the other segment
+        },
+        // Add a line segment that follows the curve between min price and upper margin
+        {
+          type: 'line',
+          data: currentChartData.minToUpperSegment || [],
+          smooth: true,
+          lineStyle: {
+            color: '#FFA500', // Orange color
+            width: 5,
+            type: 'solid',
+          },
+          symbol: 'none',
+          silent: true,
+          tooltip: { show: false },
+          emphasis: { disabled: true },
+          z: 5, // Same z-index as the other segments
         },
         {
           type: 'scatter',
