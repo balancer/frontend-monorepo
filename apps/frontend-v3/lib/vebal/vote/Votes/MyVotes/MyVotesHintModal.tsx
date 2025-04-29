@@ -6,57 +6,91 @@ import {
   ModalContent,
   ModalCloseButton,
   ModalBody,
+  Link,
   Box,
   ModalHeader,
   VStack,
-  Image,
+  Text,
+  List,
+  ListItem,
   UseDisclosureProps,
 } from '@chakra-ui/react'
+import { useMemo } from 'react'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function MyVotesHintModal({ isOpen = false, onClose = () => {} }: UseDisclosureProps) {
+  const formattedUnlockDate = useMemo(() => {
+    const today = new Date()
+    const unlockDate = new Date(today)
+    unlockDate.setDate(today.getDate() + 10)
+    return unlockDate.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+  }, [])
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} size="lg">
       <SuccessOverlay />
       <ModalContent>
-        <ModalHeader>How it works</ModalHeader>
+        <ModalHeader>How veBAL voting works</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb="lg">
           <VStack gap="lg">
-            <Image
-              alt="How it works"
-              objectFit="cover"
-              rounded="md"
-              shadow="md"
-              src="/images/votes/how-it-works-bg.png"
-            />
-            <Box as="ul" color="font.primary" listStylePosition="outside" pl="lg">
-              <li>
-                Your vote directs liquidity mining emissions for the future periods starting next
-                Thursday at 0:00 UTC.
-              </li>
-              <li>
-                There are vote incentives offered by 3rd parties (also known as bribes). If you vote
-                on pools with bribes, you can claim these bribes on third party platforms like
-                Hidden Hand and Paladin.
-              </li>
-              <li>
-                You can vote on multiple pools in a single transaction. Simply add multiple pools to
-                your vote list.
-              </li>
-              <li>
-                Votes are timelocked for 10 days. If you vote now, no edits can be made until 8
-                September 2024.
-              </li>
-              <li>
-                Voting power is set at the time of a vote. If you get more veBAL later, resubmit
-                your vote to use your increased power.
-              </li>
-              <li>
-                After you get veBAL, it can be synced to supported L2 networks to boost BAL
-                liquidity incentives on eligible pools.
-              </li>
+            <Box overflow="hidden" rounded="md" shadow="2xl">
+              <Picture
+                altText="Voting icons"
+                defaultImgType="jpg"
+                directory="/images/vebal/"
+                height="240"
+                imgAvif
+                imgJpg
+                imgName="vebal-modal-banner"
+                width="800"
+              />
             </Box>
+
+            <List color="font.primary" listStylePosition="outside" listStyleType="disc" pl="md">
+              <ListItem mb="xs">
+                <Text>
+                  Your vote directs liquidity mining emissions for the future periods starting next
+                  Thursday at 0:00 UTC.
+                </Text>
+              </ListItem>
+              <ListItem mb="xs">
+                <Text>
+                  There are vote incentives offered by 3rd parties (also known as bribes). If you
+                  vote on pools with bribes, you can claim these bribes on third party platforms
+                  like Hidden Hand and Paladin.
+                </Text>
+              </ListItem>
+              <ListItem mb="xs">
+                <Text>
+                  You can vote on multiple pools in a single transaction. Simply add multiple pools
+                  to your vote list.
+                </Text>
+              </ListItem>
+              <ListItem mb="xs">
+                <Text>
+                  Votes are timelocked for 10 days. If you vote now, no edits can be made until{' '}
+                  {formattedUnlockDate}.
+                </Text>
+              </ListItem>
+              <ListItem mb="xs">
+                <Text>
+                  Voting power is set at the time of a vote. If you get more veBAL later, resubmit
+                  your vote to use your increased power.
+                </Text>
+              </ListItem>
+              <ListItem>
+                <Text>
+                  After you get veBAL, it can be synced to supported L2 networks to boost BAL
+                  liquidity incentives on eligible pools. Currently, this is only supported at{' '}
+                  <Link href="https://app.balancer.fi/#/">app.balancer.fi</Link>
+                </Text>
+              </ListItem>
+            </List>
           </VStack>
         </ModalBody>
       </ModalContent>
