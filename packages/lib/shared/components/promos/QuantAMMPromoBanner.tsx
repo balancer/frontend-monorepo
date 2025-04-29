@@ -10,10 +10,8 @@ export function QuantAMMPromoBanner() {
   const { colorMode } = useColorMode()
   const { pool, chain } = usePool()
 
-  const analyticsUrl =
-    pool && chain
-      ? `https://app.quantamm.fi/product-explorer/${chain}/${pool.id}`
-      : 'https://app.quantamm.fi/product-explorer/'
+  const baseUrl = 'https://quantamm.fi/product-explorer/'
+  const analyticsUrl = pool && chain ? `${baseUrl}${chain}/${pool.id}` : baseUrl
 
   return (
     <Box rounded="lg" shadow="2xl" w="full">
