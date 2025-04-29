@@ -92,12 +92,16 @@ export function _useMyVotes({}: UseMyVotesArgs) {
       const result: Record<string, string> = {}
 
       for (const vote of myVotes) {
-        result[vote.id] = current[vote.id] ? current[vote.id] : vote.gaugeVotes?.userVotes || '0'
+        if (isPoolGaugeExpired(vote)) {
+          result[vote.id] = '0'
+        } else {
+          result[vote.id] = current[vote.id] ? current[vote.id] : vote.gaugeVotes?.userVotes || '0'
+        }
       }
 
       return result
     })
-  }, [myVotes])
+  }, [myVotes, isPoolGaugeExpired])
 
   const onEditVotesChange = (id: string, value: string) => {
     setEditVotesWeights(current => ({
@@ -183,30 +187,20 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   const submittingVotes = useMemo<SubmittingVote[]>(() => {
     return myVotes
       .filter(vote => !isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime ?? 0))
-      .flatMap(vote => {
-        const state = editVotesWeights[vote.id]
-
-        if (!state) return []
-
-        // To remove expired votes, we should submit them with '0' weight
-        if (isPoolGaugeExpired(vote)) {
-          return {
-            vote,
-            weight: '0',
-          }
-        }
-
-        // We should skip selected pools with empty weight
-        if (bn(state).isZero() && !votedVotesWeights[vote.id]) {
-          return []
-        }
-
+      .filter(vote => {
+        const newVoteWeight = editVotesWeights[vote.id] || 0
+        const persistedVoteWeight = vote.gaugeVotes?.userVotes || 0
+        if (bn(newVoteWeight).isZero() && bn(persistedVoteWeight).isZero()) return false
+        return newVoteWeight !== persistedVoteWeight
+      })
+      .map(vote => {
+        const newVote = editVotesWeights[vote.id] || '0'
         return {
           vote,
-          weight: state,
+          weight: newVote,
         }
       })
-  }, [myVotes, editVotesWeights, isPoolGaugeExpired, votedVotesWeights])
+  }, [myVotes, editVotesWeights])
 
   const timeLockedVotes: SubmittingVote[] = useMemo<SubmittingVote[]>(() => {
     return votedPools
