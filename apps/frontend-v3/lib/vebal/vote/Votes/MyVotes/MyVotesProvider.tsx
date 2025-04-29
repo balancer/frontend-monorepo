@@ -13,6 +13,7 @@ import { useSubmitVotesAllSteps } from '@bal/lib/vebal/vote/Votes/MyVotes/action
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import {
   bpsToPercentage,
+  calculateMyValuePerVote,
   calculateMyVoteRewardsValue,
   sharesToBps,
 } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
@@ -124,7 +125,13 @@ export function _useMyVotes({}: UseMyVotesArgs) {
       const votedWeight = votedVotesWeights[myVote.id] || 0
       const editWeight = editVotesWeights[myVote.id] || 0
       const totalValue = myVote.votingIncentive?.totalValue || 0
-      const valuePerVote = myVote.votingIncentive?.valuePerVote || 0
+      const valuePerVote = calculateMyValuePerVote(
+        votedWeight,
+        editWeight,
+        myVote,
+        veBALBalance,
+        totalVotes
+      )
 
       return {
         currentWeight,
@@ -142,6 +149,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     const totalRewardValue = sum(infos, ({ votedWeight, editWeight, vote }) =>
       calculateMyVoteRewardsValue(votedWeight, editWeight, vote, veBALBalance, totalVotes)
     )
+
     const prevTotalRewardValue = sum(infos, ({ votedWeight, vote }) =>
       calculateMyVoteRewardsValue(votedWeight, votedWeight, vote, veBALBalance, totalVotes)
     )
