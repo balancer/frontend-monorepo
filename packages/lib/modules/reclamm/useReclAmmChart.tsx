@@ -162,6 +162,17 @@ export function useReclAmmChart() {
         axisLabel: {
           formatter: axisLabelFormatter,
         },
+        axisLine: {
+          lineStyle: {
+            color: '#666',
+          },
+        },
+        splitLine: {
+          lineStyle: {
+            color: '#666',
+            opacity: 0.2,
+          },
+        },
       },
       yAxis: {
         type: 'value',
@@ -169,6 +180,17 @@ export function useReclAmmChart() {
         max: yMax + yPadding,
         axisLabel: {
           formatter: axisLabelFormatter,
+        },
+        axisLine: {
+          lineStyle: {
+            color: '#666',
+          },
+        },
+        splitLine: {
+          lineStyle: {
+            color: '#666',
+            opacity: 0.2,
+          },
         },
       },
       series: [
