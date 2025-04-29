@@ -136,10 +136,13 @@ export function useReclAmmChart() {
     const xValues = series.map(point => point[0])
     const yValues = series.map(point => point[1])
 
-    const xMin = Math.min(...xValues)
-    const xMax = Math.max(...xValues)
-    const yMin = Math.min(...yValues)
-    const yMax = Math.max(...yValues)
+    const maxPricePoint = currentChartData.otherPoints?.find(p => p.name === 'Max Price')
+    const minPricePoint = currentChartData.otherPoints?.find(p => p.name === 'Min Price')
+
+    const xMin = maxPricePoint?.coord[0] || Math.min(...xValues)
+    const yMax = maxPricePoint?.coord[1] || Math.max(...yValues)
+    const xMax = minPricePoint?.coord[0] || Math.max(...xValues)
+    const yMin = minPricePoint?.coord[1] || Math.min(...yValues)
 
     const xPadding = (xMax - xMin) * 0.1
     const yPadding = (yMax - yMin) * 0.1
