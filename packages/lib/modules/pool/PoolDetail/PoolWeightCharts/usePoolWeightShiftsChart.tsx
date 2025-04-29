@@ -146,7 +146,6 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         splitLine: {
           show: false,
         },
-        //splitNumber: 10,
       },
       yAxis: [
         {
