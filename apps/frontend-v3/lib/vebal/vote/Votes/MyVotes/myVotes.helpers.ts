@@ -54,12 +54,15 @@ export function calculateMyVoteRewardsValue(
   oldWeight: string | number,
   newWeight: string | number,
   votingPool: VotingPoolWithData,
-  userVeBAL: bigint
+  userVeBAL: bigint,
+  totalVotes: bigint
 ) {
   const currentUserVotes = calculateUserVotes(userVeBAL, oldWeight)
   const newUserVotes = calculateUserVotes(userVeBAL, newWeight)
 
-  const poolVoteCount = votingPool?.votingIncentive?.voteCount ?? 0
+  const poolVoteCount = bn(formatUnits(totalVotes, 18)).times(
+    bn(votingPool.gaugeVotes?.votesNextPeriod || 0n).shiftedBy(-18)
+  )
   const totalIncentives = votingPool?.votingIncentive?.totalValue ?? 0
 
   const newPoolVoteCount = bn(poolVoteCount).minus(currentUserVotes).plus(newUserVotes)
@@ -73,10 +76,17 @@ export function calculateMyValuePerVote(
   oldWeight: string | number,
   newWeight: string | number,
   votingPool: VotingPoolWithData,
-  userVeBAL: bigint
+  userVeBAL: bigint,
+  totalVotes: bigint
 ) {
   const newUserVotes = calculateUserVotes(userVeBAL, newWeight)
-  const myRewards = calculateMyVoteRewardsValue(oldWeight, newWeight, votingPool, userVeBAL)
+  const myRewards = calculateMyVoteRewardsValue(
+    oldWeight,
+    newWeight,
+    votingPool,
+    userVeBAL,
+    totalVotes
+  )
 
   return bn(myRewards).div(newUserVotes)
 }
