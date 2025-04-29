@@ -65,6 +65,8 @@ const basePopoverAprItemProps = {
 }
 
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
+const defaultDisplayValueFormatterWithCanBeNegative = (value: BigNumber) =>
+  fNum('apr', value.toString(), { canBeNegative: true })
 const defaultNumberFormatter = (value: string) => bn(value)
 
 function getDynamicSwapFeesLabel(hookType: GqlHookType) {
@@ -100,7 +102,13 @@ function BaseAprTooltip({
 }: Props) {
   const colorMode = useThemeColorMode()
 
-  const usedDisplayValueFormatter = displayValueFormatter || defaultDisplayValueFormatter
+  const isVebal = isVebalPool(poolId)
+  const isQuantAmm = isQuantAmmPool(poolType)
+
+  const usedDisplayValueFormatter =
+    displayValueFormatter ||
+    (isQuantAmm ? defaultDisplayValueFormatterWithCanBeNegative : defaultDisplayValueFormatter)
+
   const usedNumberFormatter = numberFormatter || defaultNumberFormatter
 
   const {
@@ -146,8 +154,6 @@ function BaseAprTooltip({
     chain,
   })
 
-  const isVebal = isVebalPool(poolId)
-
   const totalBaseTitle = isVebal
     ? totalBaseVeBalText
     : typeof totalBaseText === 'function'
@@ -163,7 +169,7 @@ function BaseAprTooltip({
       shadow="3xl"
       w="fit-content"
     >
-      {isQuantAmmPool(poolType) ? (
+      {isQuantAmm ? (
         <TooltipAprItem
           {...basePopoverAprItemProps}
           apr={quantAMMFeesDisplayed}
