@@ -38,11 +38,7 @@ export function useReclAmmChart() {
       bn(balanceB).plus(virtualBalanceB)
     )
 
-    const targetPrice = bn(bn(balanceB).plus(virtualBalanceB)).div(
-      bn(balanceA).plus(virtualBalanceA)
-    )
-
-    console.log({ priceRatio, targetPrice })
+    console.log({ priceRatio })
 
     const xForPointB = bn(invariant).div(virtualBalanceB)
 
@@ -78,6 +74,24 @@ export function useReclAmmChart() {
     })
 
     const currentBalance = bn(balanceA).plus(virtualBalanceA).toNumber()
+
+    const minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
+    const maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
+
+    const lowerMarginValue = bn(invariant).div(bn(upperMargin).pow(2)).toNumber()
+    const upperMarginValue = bn(invariant).div(bn(lowerMargin).pow(2)).toNumber()
+
+    const currentPriceValue = bn(bn(balanceB).plus(virtualBalanceB))
+      .div(bn(balanceA).plus(virtualBalanceA))
+      .toNumber()
+
+    console.log({
+      minPriceValue,
+      maxPriceValue,
+      lowerMarginValue,
+      upperMarginValue,
+      currentPriceValue,
+    })
 
     // separate marktpoint with interaction
     const currentPoint = {
