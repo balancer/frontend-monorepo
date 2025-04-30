@@ -163,6 +163,46 @@ export function useReclAmmChart() {
         top: '10%',
         containLabel: true,
       },
+      visualMap: {
+        show: false,
+        dimension: 0,
+        min: currentChartData.min,
+        max: currentChartData.max,
+        inRange: {
+          color: ['#FF4560', '#FC7D02', '#FBDB0F', '#93CE07', '#FBDB0F', '#FC7D02', '#FF4560'],
+        },
+        controller: {
+          inRange: {
+            color: ['#FF4560', '#FC7D02', '#FBDB0F', '#93CE07', '#FBDB0F', '#FC7D02', '#FF4560'],
+          },
+        },
+        calculable: true,
+        pieces: [
+          {
+            lte: currentChartData.max,
+            color: '#FF4560',
+          },
+          {
+            gt: currentChartData.max,
+            lte: currentChartData.lowerMargin,
+            color: '#FC7D02',
+          },
+          {
+            gt: currentChartData.lowerMargin,
+            lte: currentChartData.upperMargin,
+            color: '#93CE07',
+          },
+          {
+            gt: currentChartData.upperMargin,
+            lte: currentChartData.min,
+            color: '#FC7D02',
+          },
+          {
+            gt: currentChartData.min,
+            color: '#FF4560',
+          },
+        ],
+      },
       xAxis: {
         type: 'value',
         min: xMin - xPadding,
@@ -226,7 +266,6 @@ export function useReclAmmChart() {
           type: 'line',
           smooth: true,
           lineStyle: {
-            color: '#1976d2',
             width: 3,
           },
           symbol: 'none',
