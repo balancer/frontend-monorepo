@@ -93,8 +93,6 @@ export function useReclAmmChart() {
       },
     }
 
-    console.log({ lowerMargin, upperMargin })
-
     // other markpoint without interaction
     const otherPoints = [
       { name: 'Max Price', x: vBalanceA, color: '#FF4560' },
