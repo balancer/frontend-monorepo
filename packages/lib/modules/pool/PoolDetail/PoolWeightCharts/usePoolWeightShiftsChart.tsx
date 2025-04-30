@@ -33,8 +33,6 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
       return { option: {} as EChartsOption }
     }
 
-    const colors = COLORS
-
     const series = compositionTokens.map((token, tokenIndex) => {
       const data = snapshots.map(snapshot => {
         const weight = snapshot.weights?.[tokenIndex]
@@ -54,7 +52,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
         showSymbol: false,
         areaStyle: {
           opacity: 0.8,
-          color: colors[tokenIndex % colors.length],
+          color: COLORS[tokenIndex % COLORS.length],
         },
         emphasis: {
           focus: 'series' as const,
@@ -64,7 +62,7 @@ export function usePoolWeightShiftsChart(): { option: EChartsOption } {
     })
 
     const option: EChartsOption = {
-      color: colors,
+      color: COLORS,
       tooltip: {
         trigger: 'axis',
         formatter: function (params: any) {
