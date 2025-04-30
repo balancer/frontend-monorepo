@@ -65,9 +65,10 @@ const basePopoverAprItemProps = {
 }
 
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
-const defaultDisplayValueFormatterWithCanBeNegative = (value: BigNumber) =>
-  fNum('apr', value.toString(), { canBeNegative: true })
 const defaultNumberFormatter = (value: string) => bn(value)
+
+export const defaultDisplayValueFormatterWithCanBeNegative = (value: BigNumber) =>
+  fNum('apr', value.toString(), { canBeNegative: true })
 
 function getDynamicSwapFeesLabel(hookType: GqlHookType) {
   switch (hookType) {

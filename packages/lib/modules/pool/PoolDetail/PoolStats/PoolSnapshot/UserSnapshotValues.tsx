@@ -15,6 +15,7 @@ import { ClaimModal } from '../../../actions/claim/ClaimModal'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { calcTotalStakedBalanceUsd } from '../../../user-balance.helpers'
 import { useGetUserPoolRewards } from '../../../useGetUserPoolRewards'
+import { isQuantAmmPool } from '../../../pool.helpers'
 
 export type PoolMyStatsValues = {
   myLiquidity: number
@@ -53,7 +54,8 @@ export function UserSnapshotValues() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [veBalBoostMap])
 
-  const myAprRaw = getTotalAprRaw(pool.dynamicData.aprItems, boost)
+  const canBeNegative = isQuantAmmPool(pool.type)
+  const myAprRaw = getTotalAprRaw(pool.dynamicData.aprItems, boost, canBeNegative)
 
   const poolMyStatsValues: PoolMyStatsValues | undefined = useMemo(() => {
     if (pool && pool.userBalance && !isLoadingPool && !isLoadingClaiming) {
