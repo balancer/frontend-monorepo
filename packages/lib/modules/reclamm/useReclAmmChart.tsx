@@ -166,17 +166,16 @@ export function useReclAmmChart() {
       visualMap: {
         show: false,
         dimension: 0,
-        min: currentChartData.min,
-        max: currentChartData.max,
+        min: currentChartData.max,
+        max: currentChartData.min,
         inRange: {
-          color: ['#FF4560', '#FC7D02', '#FBDB0F', '#93CE07', '#FBDB0F', '#FC7D02', '#FF4560'],
+          color: ['#FF4560', '#FC7D02', '#93CE07', '#FC7D02', '#FF4560'],
         },
         controller: {
           inRange: {
-            color: ['#FF4560', '#FC7D02', '#FBDB0F', '#93CE07', '#FBDB0F', '#FC7D02', '#FF4560'],
+            color: ['#FF4560', '#FC7D02', '#93CE07', '#FC7D02', '#FF4560'],
           },
         },
-        calculable: true,
         pieces: [
           {
             lte: currentChartData.max,
