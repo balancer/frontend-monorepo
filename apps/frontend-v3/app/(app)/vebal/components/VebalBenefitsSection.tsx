@@ -5,30 +5,47 @@ import { VebalBenefitsShareIcon } from '@repo/lib/shared/components/icons/vebal/
 import { VebalBenefitsBribesIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsBribesIcon'
 import { VebalBenefitsSparklesIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsSparklesIcon'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { SparkleIconWrapper } from '@repo/lib/shared/components/animations/SparkleIconWrapper'
 
 export function VebalBenefitsSection() {
   const { colorMode } = useColorMode()
   const benefits = [
     {
-      icon: <VebalBenefitsVoteIcon size={44} />,
+      icon: (
+        <SparkleIconWrapper size={47}>
+          <VebalBenefitsVoteIcon />
+        </SparkleIconWrapper>
+      ),
       title: "Vote on Balancer's future",
       description:
         'veBAL holders govern the direction of the protocol including liquidity incentives.',
     },
     {
-      icon: <VebalBenefitsShareIcon size={44} />,
+      icon: (
+        <SparkleIconWrapper size={45}>
+          <VebalBenefitsShareIcon />
+        </SparkleIconWrapper>
+      ),
       title: 'Share protocol revenue',
       description:
         'veBAL holders earn a share of protocol revenue in proportion to their holdings.',
     },
     {
-      icon: <VebalBenefitsBribesIcon size={42} />,
+      icon: (
+        <SparkleIconWrapper size={45}>
+          <VebalBenefitsBribesIcon />
+        </SparkleIconWrapper>
+      ),
       title: 'Earn weekly voting incentives',
       description:
         "veBAL holders can earn lucrative 'bribes' from 3rd parties for voting for their pools.",
     },
     {
-      icon: <VebalBenefitsSparklesIcon size={38} />,
+      icon: (
+        <SparkleIconWrapper size={41}>
+          <VebalBenefitsSparklesIcon />
+        </SparkleIconWrapper>
+      ),
       title: 'Boost liquidity mining yield',
       description:
         'Liquidity Providers with veBAL can get up to a 2.5x boost on BAL liquidity incentives.',
