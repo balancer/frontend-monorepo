@@ -6,14 +6,6 @@ import { VotingDeadlineContainer } from './VotingDeadlineContainer'
 import { ReminderButton } from './ReminderButton'
 import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
 
-const countdownItemBoxShadowStyles = [
-  '0px 0px 0px 1px #00000005',
-  '1px 1px 1px -0.5px #0000000F',
-  '3px 3px 3px -1.5px #0000000F',
-  '6px 6px 6px -3px #0000001A',
-  '-0.5px -1px 0px 0px #FFFFFF26',
-].join(', ')
-
 function setCalendarEvent(deadline: Date) {
   const event = {
     title: 'veBAL voting deadline (Balancer)',
@@ -53,11 +45,11 @@ export function VotingDeadlineCounter() {
           {counters.map(counter => (
             <Box flex="1" key={counter.title}>
               <VStack
-                bg="background.level3"
-                boxShadow={countdownItemBoxShadowStyles}
+                bg="background.level2"
                 px="14px"
                 py="13px"
                 rounded="lg"
+                shadow="md"
                 spacing="sm"
               >
                 <Text color="font.secondary" fontSize="16px" fontWeight={500} lineHeight="20px">
@@ -65,11 +57,11 @@ export function VotingDeadlineCounter() {
                 </Text>
                 <Text
                   color={closeToDeadline ? 'font.warning' : 'font.primary'}
-                  fontSize={{ base: '24px', lg: '32px' }}
+                  fontSize={{ base: '24px', xl: '32px' }}
                   fontWeight={500}
                   lineHeight="40px"
                   textAlign="center"
-                  w={{ base: '34px', lg: '56px' }}
+                  w={{ base: '34px', xl: '56px' }}
                 >
                   {String(counter.value).padStart(2, '0')}
                 </Text>

@@ -7,24 +7,21 @@ import { VotingDeadlineCounter } from './VotingDeadlineCounter'
 export function VotingDeadline() {
   return (
     <VStack
-      bg="background.level3"
+      bg="background.level0"
       p={{ base: 'ms', lg: '20px' }}
-      rounded="2xl"
+      rounded="lg"
+      shadow="2xl"
       spacing="16px"
       zIndex="1"
     >
-      <Text
-        alignSelf="start"
-        color="font.secondary"
-        fontSize="16px"
-        fontWeight={700}
-        letterSpacing="-0.48px"
-        lineHeight="20px"
-        px="xs"
-      >
+      <Text alignSelf="start" color="font.secondary" opacity={0.8} variant="eyebrow">
         Weekly voting deadline
       </Text>
-      <HStack flexDirection={{ base: 'column', lg: 'row' }} spacing="20px">
+      <HStack
+        align="stretch"
+        flexDirection={{ base: 'column', lg: 'row' }}
+        spacing={{ base: 'ms', md: 'md', xl: '20px' }}
+      >
         <VotingDeadlineCalendar />
         <VotingDeadlineCounter />
       </HStack>

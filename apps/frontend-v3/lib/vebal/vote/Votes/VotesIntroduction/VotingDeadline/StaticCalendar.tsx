@@ -40,10 +40,10 @@ const sharedStyles = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  w: { base: '36px', lg: '40px' },
-  h: { base: '36px', lg: '40px' },
-  fontSize: { base: '12px', lg: '14px' },
-  lineHeight: { base: undefined, lg: '20px' },
+  w: { base: '36px', xl: '40px' },
+  h: { base: '36px', xl: '40px' },
+  fontSize: { base: '12px', xl: '14px' },
+  lineHeight: { base: undefined, xl: '20px' },
   letterSpacing: '0',
   fontWeight: 500,
   bg: 'background.level2',
@@ -77,15 +77,15 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
 
     if (isActive) {
       return {
-        backgroundColor: 'green.400',
-        color: 'gray.700',
+        backgroundColor: 'font.highlight',
+        color: 'font.dark',
       }
     }
 
     if (isSelected) {
       return {
-        borderColor: 'green.400',
-        color: 'green.400',
+        borderColor: 'font.highlight',
+        color: 'font.highlight',
         borderWidth: '1px',
       }
     }
@@ -95,20 +95,20 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
 
   return (
     <Grid
-      gridColumnGap={{ base: '6px', lg: '8px' }}
+      gridColumnGap={{ base: '6px', xl: '8px' }}
       gridRowGap="13px"
       templateColumns="repeat(7, 1fr)"
     >
       {weekDays.map(weekDay => (
         <GridItem
           key={`weekday-${weekDay.getDay()}`}
-          px={{ base: '6px', lg: '8px' }}
+          px={{ base: '6px', xl: '8px' }}
           py="2px"
           textAlign="center"
         >
           <Text
-            fontSize={{ base: '12px', lg: '14px' }}
-            lineHeight={{ base: undefined, lg: '20px' }}
+            fontSize={{ base: '12px', xl: '14px' }}
+            lineHeight={{ base: undefined, xl: '20px' }}
             variant="secondary"
           >
             {format(weekDay, 'E')}

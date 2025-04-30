@@ -78,51 +78,51 @@ export function VotesIntroduction() {
             top="-270px"
             width={3000}
           />
+          <Breadcrumb
+            pb={{ base: 'lg', md: '0' }}
+            separator={
+              <Box color="font.secondary">
+                <ChevronRight size={16} />
+              </Box>
+            }
+            spacing="xs"
+            w="full"
+          >
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">
+                <Button color="grayText" size="xs" variant="link">
+                  <HomeIcon height="16px" width="16px" />
+                </Button>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/vebal" {...linkStyles}>
+                veBAL
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem isCurrentPage>
+              <BreadcrumbLink href="/vebal/vote" {...linkStyles}>
+                Vote
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </Breadcrumb>
           <HStack
-            flexDirection={{ base: 'column', lg: 'row' }}
+            alignItems={{ base: 'start', md: 'center' }}
+            flexDirection={{ base: 'column', md: 'row' }}
             justifyContent={{ base: 'start', lg: 'space-between' }}
             spacing={{ base: '40px', lg: undefined }}
             w="full"
           >
-            <VStack spacing="30px" w={{ base: 'full', lg: undefined }}>
-              <Breadcrumb
-                separator={
-                  <Box color="font.secondary">
-                    <ChevronRight size={16} />
-                  </Box>
-                }
-                spacing="xs"
-                w="full"
-              >
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/">
-                    <Button color="grayText" size="xs" variant="link">
-                      <HomeIcon height="16px" width="16px" />
-                    </Button>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/vebal" {...linkStyles}>
-                    veBAL
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href="/vebal/vote" {...linkStyles}>
-                    Vote
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </Breadcrumb>
-
+            <VStack pt="sm" spacing="30px" w={{ base: 'full', lg: undefined }}>
               <VStack alignItems="start" spacing="ms">
                 <Box maxW="290px">
                   <Heading as="h2" size="lg" sx={{ textWrap: 'pretty' }} variant="special">
                     Vote on pool gauges, earn extra incentives.
                   </Heading>
                 </Box>
-                <Text color="font.secondary">
-                  Voting on pool gauges helps to direct weekly BAL liquidity mining incentives and
-                  earns you additional voting incentives from third-party platforms like Hidden
-                  Hand.
+                <Text color="font.secondary" sx={{ textWrap: 'balance' }}>
+                  Voting on pool gauges helps to direct weekly BAL emissions and earns you
+                  additional voting incentives from third-party platforms like Hidden Hand.
                 </Text>
               </VStack>
             </VStack>
