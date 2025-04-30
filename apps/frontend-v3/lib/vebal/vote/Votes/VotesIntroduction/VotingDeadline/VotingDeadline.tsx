@@ -6,7 +6,13 @@ import { VotingDeadlineCounter } from './VotingDeadlineCounter'
 
 export function VotingDeadline() {
   return (
-    <VStack bg="background.level3" p={{ base: 'ms', lg: '20px' }} rounded="2xl" spacing="16px">
+    <VStack
+      bg="background.level3"
+      p={{ base: 'ms', lg: '20px' }}
+      rounded="2xl"
+      spacing="16px"
+      zIndex="1"
+    >
       <Text
         alignSelf="start"
         color="font.secondary"
