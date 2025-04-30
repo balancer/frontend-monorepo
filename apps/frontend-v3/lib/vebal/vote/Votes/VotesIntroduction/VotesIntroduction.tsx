@@ -17,10 +17,7 @@ import { ChevronRight } from 'react-feather'
 import { HomeIcon } from '@bal/lib/vebal/vote/Votes/VotesIntroduction/HomeIcon'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
-// import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
-// import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
-// import NextLink from 'next/link'
 
 const linkStyles = {
   color: 'font.secondary',
@@ -77,6 +74,7 @@ export function VotesIntroduction() {
             right={{ base: -800, lg: -2400, xl: -2000, '2xl': '-140%' }}
             top="-270px"
             width={3000}
+            zIndex={0}
           />
           <Breadcrumb
             pb={{ base: 'lg', md: '0' }}

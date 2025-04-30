@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react'
-import { Card, CardProps } from '@chakra-ui/react'
+import { Card, CardProps, Box } from '@chakra-ui/react'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function VotingDeadlineContainer({
   children,
@@ -7,13 +8,40 @@ export function VotingDeadlineContainer({
 }: PropsWithChildren & CardProps) {
   return (
     <Card
-      bg="background.level1"
+      bg="transparent"
       p={{ base: 'ms', md: 'md', lg: '20px' }}
+      position="relative"
       rounded="md"
       shadow="xl"
       {...stackProps}
     >
-      {children}
+      <Box inset={0} overflow="hidden" position="absolute" rounded="sm" zIndex={0}>
+        <Picture
+          altText="Background texture"
+          defaultImgType="png"
+          directory="/images/textures/"
+          height="100%"
+          imgAvif
+          imgAvifDark
+          imgAvifPortrait
+          imgAvifPortraitDark
+          imgName="rock-slate"
+          imgPng
+          imgPngDark
+          width="100%"
+        />
+      </Box>
+      <Box
+        bg="background.level1"
+        inset={0}
+        opacity={0.7}
+        pointerEvents="none"
+        position="absolute"
+        zIndex={1}
+      />
+      <Box position="relative" zIndex={2}>
+        {children}
+      </Box>
     </Card>
   )
 }

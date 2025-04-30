@@ -12,6 +12,7 @@ import { SystemStyleObject } from '@chakra-ui/styled-system'
 import { useCallback } from 'react'
 import { DeadlineDayTooltip } from './DeadlineDayTooltip'
 import { startOfDayUtc } from '@repo/lib/shared/utils/time'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 function getWeekDays() {
   const weekDays = eachDayOfInterval({ start: startOfWeek(new Date()), end: endOfWeek(new Date()) })
@@ -46,7 +47,7 @@ const sharedStyles = {
   lineHeight: { base: undefined, xl: '20px' },
   letterSpacing: '0',
   fontWeight: 500,
-  bg: 'background.level2',
+  shadow: '2xl',
   color: 'font.secondary',
 }
 
@@ -71,7 +72,8 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
 
     if (isDisabled) {
       return {
-        opacity: 0.2,
+        bg: 'background.level1',
+        shadow: 'sm',
       }
     }
 
@@ -79,6 +81,7 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
       return {
         backgroundColor: 'font.highlight',
         color: 'font.dark',
+        minWidth: '0 !important',
       }
     }
 
@@ -87,6 +90,7 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
         borderColor: 'font.highlight',
         color: 'font.highlight',
         borderWidth: '1px',
+        minWidth: '0 !important',
       }
     }
 
@@ -121,8 +125,43 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
           {visible && (
             <>
               {!isDayActive(day) && !isDaySelected(day) ? (
-                <Box {...sharedStyles} sx={getDayStyles(day)}>
-                  {format(day, 'd')}
+                <Box position="relative">
+                  <Box {...sharedStyles} sx={getDayStyles(day)}>
+                    <span style={{ opacity: isDayDisabled(day) ? 0.4 : 1 }}>
+                      {format(day, 'd')}
+                    </span>
+                  </Box>
+                  <Box
+                    h="full"
+                    inset={0}
+                    overflow="hidden"
+                    position="absolute"
+                    rounded="full"
+                    w="full"
+                    zIndex={-1}
+                  >
+                    <Picture
+                      altText="Marble texture"
+                      defaultImgType="jpg"
+                      directory="/images/textures/"
+                      height="100%"
+                      imgAvif
+                      imgAvifDark
+                      imgJpg
+                      imgJpgDark
+                      imgName="marble-square"
+                      width="100%"
+                    />
+                  </Box>
+                  <Box
+                    bg="background.level1"
+                    inset={0}
+                    opacity={0.4}
+                    overflow="hidden"
+                    position="absolute"
+                    rounded="lg"
+                    zIndex={-1}
+                  />
                 </Box>
               ) : (
                 <DeadlineDayTooltip

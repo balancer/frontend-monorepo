@@ -5,6 +5,7 @@ import { oneSecondInMs } from '@repo/lib/shared/utils/time'
 import { VotingDeadlineContainer } from './VotingDeadlineContainer'
 import { ReminderButton } from './ReminderButton'
 import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 function setCalendarEvent(deadline: Date) {
   const event = {
@@ -44,14 +45,38 @@ export function VotingDeadlineCounter() {
         <HStack spacing="sm" w="full">
           {counters.map(counter => (
             <Box flex="1" key={counter.title}>
-              <VStack
-                bg="background.level2"
-                px="14px"
-                py="13px"
-                rounded="lg"
-                shadow="md"
-                spacing="sm"
-              >
+              <VStack position="relative" px="ms" py="13px" rounded="lg" shadow="2xl" spacing="sm">
+                <Box
+                  h="full"
+                  inset={0}
+                  overflow="hidden"
+                  position="absolute"
+                  rounded="lg"
+                  w="full"
+                  zIndex={-1}
+                >
+                  <Picture
+                    altText="Marble texture"
+                    defaultImgType="jpg"
+                    directory="/images/textures/"
+                    height="100%"
+                    imgAvif
+                    imgAvifDark
+                    imgJpg
+                    imgJpgDark
+                    imgName="marble-square"
+                    width="100%"
+                  />
+                </Box>
+                <Box
+                  bg="background.level1"
+                  inset={0}
+                  opacity={0.4}
+                  overflow="hidden"
+                  position="absolute"
+                  rounded="lg"
+                  zIndex={-1}
+                />
                 <Text color="font.secondary" fontSize="16px" fontWeight={500} lineHeight="20px">
                   {counter.title}
                 </Text>
