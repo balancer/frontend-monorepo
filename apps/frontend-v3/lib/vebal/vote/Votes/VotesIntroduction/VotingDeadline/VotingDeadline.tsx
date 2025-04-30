@@ -25,7 +25,13 @@ export function VotingDeadline() {
         />
       </Box>
       <Box bg="background.level0" inset={0} opacity={0.75} position="absolute" rounded="lg" />
-      <Text alignSelf="start" color="font.secondary" opacity={0.8} variant="eyebrow">
+      <Text
+        alignSelf="start"
+        color="font.secondary"
+        fontSize="11px"
+        opacity={0.8}
+        variant="eyebrow"
+      >
         Weekly voting deadline
       </Text>
       <HStack
@@ -33,7 +39,9 @@ export function VotingDeadline() {
         flexDirection={{ base: 'column', lg: 'row' }}
         spacing={{ base: 'ms', md: 'md', xl: '20px' }}
       >
-        <VotingDeadlineCalendar />
+        <Box display={{ base: 'none', md: 'flex' }}>
+          <VotingDeadlineCalendar />
+        </Box>
         <VotingDeadlineCounter />
       </HStack>
     </VStack>
