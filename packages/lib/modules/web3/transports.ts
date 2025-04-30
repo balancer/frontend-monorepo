@@ -7,10 +7,12 @@ import { SupportedChainId } from '@repo/lib/config/config.types'
 
 import { chains, getDefaultRpcUrl, rpcFallbacks, rpcOverrides } from './ChainConfig'
 import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
+
 export function getTransports(chain: Chain) {
   const gqlChain = getGqlChain(chain.id as SupportedChainId)
   const overrideRpcUrl = rpcOverrides[gqlChain]
   const fallbackRpcUrl = rpcFallbacks[gqlChain]
+  if (shouldUseAnvilFork) return fallback([http(overrideRpcUrl)])
   if (overrideRpcUrl) return fallback([http(overrideRpcUrl), http(fallbackRpcUrl), http()])
   return fallback([http(), http(fallbackRpcUrl)])
 }
