@@ -24,10 +24,9 @@ export function useReclAmmChart() {
     const balanceA = formatUnits(reclAmmData.liveBalances.liveBalanceA, 18)
     const balanceB = formatUnits(reclAmmData.liveBalances.liveBalanceB, 18)
 
-    const maxPrice = formatUnits(reclAmmData.priceRange[0], 18)
-    const minPrice = formatUnits(reclAmmData.priceRange[1], 18)
-
-    const priceRatio = bn(maxPrice).div(minPrice)
+    //const maxPrice = formatUnits(reclAmmData.priceRange[0], 18)
+    //const minPrice = formatUnits(reclAmmData.priceRange[1], 18)
+    //const priceRatio = bn(maxPrice).div(minPrice)
 
     const margin = formatUnits(reclAmmData.centerednessMargin, 16)
 
@@ -37,8 +36,6 @@ export function useReclAmmChart() {
     const invariant = bn(bn(balanceA).plus(virtualBalanceA)).times(
       bn(balanceB).plus(virtualBalanceB)
     )
-
-    console.log({ priceRatio })
 
     const xForPointB = bn(invariant).div(virtualBalanceB)
 
