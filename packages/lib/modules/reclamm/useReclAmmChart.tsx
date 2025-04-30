@@ -195,8 +195,13 @@ export function useReclAmmChart() {
         max: yMax + yPadding,
         axisLabel: {
           show: true,
-          showMinLabel: false,
-          showMaxLabel: false,
+          // remove min and max labels instead of hiding them
+          formatter: function (value: number) {
+            if (value === yMin - yPadding || value === yMax + yPadding) {
+              return ''
+            }
+            return value
+          },
         },
         axisLine: {
           show: true,
