@@ -59,9 +59,9 @@ export function VotesIntroduction() {
           <RadialPattern
             circleCount={radialPatternProps?.circleCount}
             height={radialPatternProps?.height}
-            left="-20%"
+            left={{ base: '100%', md: '-20%' }}
             position="absolute"
-            top="100%"
+            top={{ base: '0%', md: '100%' }}
             transform="translate(-50%, -50%)"
             width={radialPatternProps?.width}
             zIndex={0}
