@@ -10,8 +10,30 @@ export function QuantAMMPromoBanner() {
   const { colorMode } = useColorMode()
   const { pool, chain } = usePool()
 
+  const isDarkMode = colorMode === 'dark'
   const baseUrl = 'https://quantamm.fi/product-explorer/'
   const analyticsUrl = pool && chain ? `${baseUrl}${chain}/${pool.id}` : baseUrl
+
+  const commonButtonProps = {
+    _hover: {
+      bg: isDarkMode ? 'background.special' : '#fff',
+      color: isDarkMode ? '#000' : '#000',
+      borderColor: isDarkMode ? 'transparent' : '#000',
+    },
+    as: NextLink,
+    border: '1px solid',
+    borderColor: isDarkMode ? '#fff' : '#000',
+    cursor: 'hand',
+    flex: '1',
+    h: { base: '32px', sm: '40px', lg: '48px' },
+    py: 'sm',
+    rel: 'noopener noreferrer',
+    rounded: 'full',
+    size: 'md',
+    target: '_blank',
+    transition: 'all 0.3s var(--cubic)',
+    w: '145px',
+  }
 
   return (
     <Box rounded="lg" shadow="2xl" w="full">
@@ -44,7 +66,6 @@ export function QuantAMMPromoBanner() {
             width="100%"
           />
         </Box>
-
         <Center className="copy" h="100%" zIndex="1">
           <Flex
             align={{ base: 'start', md: 'center' }}
@@ -90,7 +111,7 @@ export function QuantAMMPromoBanner() {
                       fontWeight="medium"
                       lineHeight="1.25"
                       maxW="600px"
-                      opacity={colorMode === 'dark' ? '0.9' : '1'}
+                      opacity={isDarkMode ? '0.9' : '1'}
                       sx={{
                         textWrap: 'balance',
                       }}
@@ -105,25 +126,10 @@ export function QuantAMMPromoBanner() {
             </Box>
             <Flex alignItems="center" gap="ms" maxW="300px">
               <Button
-                _hover={{
-                  bg: colorMode === 'dark' ? 'background.special' : '#fff',
-                  color: colorMode === 'dark' ? '#000' : '#000',
-                  borderColor: colorMode === 'dark' ? 'transparent ' : '#000',
-                }}
-                as={NextLink}
-                bg={colorMode === 'dark' ? 'transparent' : 'transparent'}
-                border="1px solid"
-                borderColor={colorMode === 'dark' ? '#fff' : '#000'}
-                color={colorMode === 'dark' ? '#fff' : '#000'}
-                cursor="hand"
-                flex="1"
-                h={{ base: '32px', sm: '40px', lg: '48px' }}
+                {...commonButtonProps}
+                bg={isDarkMode ? 'transparent' : 'transparent'}
+                color={isDarkMode ? '#fff' : '#000'}
                 href="https://www.quantamm.fi/"
-                py="sm"
-                rounded="full"
-                size="md"
-                transition="all 0.3s var(--cubic)"
-                w="145px"
               >
                 Learn more{' '}
                 <Box pl="xxs">
@@ -131,25 +137,10 @@ export function QuantAMMPromoBanner() {
                 </Box>
               </Button>
               <Button
-                _hover={{
-                  bg: colorMode === 'dark' ? 'background.special' : '#fff',
-                  color: colorMode === 'dark' ? '#000' : '#000',
-                  borderColor: colorMode === 'dark' ? 'transparent' : '#000',
-                }}
-                as={NextLink}
-                bg={colorMode === 'dark' ? 'white' : '#000'}
-                border="1px solid"
-                borderColor={colorMode === 'dark' ? '#fff' : '#000'}
-                color={colorMode === 'dark' ? '#000' : '#fff'}
-                cursor="hand"
-                flex="1"
-                h={{ base: '32px', sm: '40px', lg: '48px' }}
+                {...commonButtonProps}
+                bg={isDarkMode ? 'white' : '#000'}
+                color={isDarkMode ? '#000' : '#fff'}
                 href={analyticsUrl}
-                py="sm"
-                rounded="full"
-                size="md"
-                transition="all 0.3s var(--cubic)"
-                w="145px"
               >
                 View analytics{' '}
                 <Box pl="xxs">
