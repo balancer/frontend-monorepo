@@ -50,11 +50,11 @@ export function VoteListLayout() {
         <SelectedPoolsMenu
           onAddVotesClick={scrollToMyVotes}
           votingPools={selectedVotingPools.map(selectedVotingPool => ({
-            title: selectedVotingPool.tokens
+            title: selectedVotingPool.poolTokens
               .map(token => `${token.symbol} ${token.weight ?? 0}%`)
               .join(' / '),
             // fix: (votes) pool name is not available here...
-            description: selectedVotingPool.tokens
+            description: selectedVotingPool.poolTokens
               .map(token => `${token.symbol}-${token.weight ?? 0}`)
               .join('-'),
           }))}
