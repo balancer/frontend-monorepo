@@ -9,7 +9,7 @@ export function VotingDeadlineContainer({
   return (
     <Card
       bg="transparent"
-      p={{ base: 'ms', md: 'md', lg: '20px' }}
+      p={{ base: 'ms', xl: '20px' }}
       position="relative"
       rounded="md"
       shadow="xl"

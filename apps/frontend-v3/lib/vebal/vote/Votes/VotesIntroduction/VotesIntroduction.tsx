@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { VotingDeadline } from '@bal/lib/vebal/vote/Votes/VotesIntroduction/VotingDeadline/VotingDeadline'
 import { ChevronRight } from 'react-feather'
-import { HomeIcon } from '@bal/lib/vebal/vote/Votes/VotesIntroduction/HomeIcon'
+import { Home } from 'react-feather'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
@@ -57,6 +57,7 @@ export function VotesIntroduction() {
             circleCount={radialPatternProps?.circleCount}
             height={radialPatternProps?.height}
             left={{ base: '100%', md: '-20%' }}
+            pointerEvents="none"
             position="absolute"
             top={{ base: '0%', md: '100%' }}
             transform="translate(-50%, -50%)"
@@ -70,6 +71,7 @@ export function VotesIntroduction() {
             innerWidth={2100}
             opacity={{ base: 0, lg: 0.75 }}
             padding="15px"
+            pointerEvents="none"
             position="absolute"
             right={{ base: -800, lg: -2400, xl: -2000, '2xl': '-140%' }}
             top="-270px"
@@ -77,19 +79,22 @@ export function VotesIntroduction() {
             zIndex={0}
           />
           <Breadcrumb
+            left="-4px"
             pb={{ base: 'lg', md: '0' }}
+            position="relative"
             separator={
-              <Box color="font.secondary">
+              <Box color="font.secondary" opacity="0.5">
                 <ChevronRight size={16} />
               </Box>
             }
             spacing="xs"
             w="full"
+            zIndex="1"
           >
             <BreadcrumbItem>
               <BreadcrumbLink href="/">
                 <Button color="grayText" size="xs" variant="link">
-                  <HomeIcon height="16px" width="16px" />
+                  <Home size={16} />
                 </Button>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -104,6 +109,7 @@ export function VotesIntroduction() {
               </BreadcrumbLink>
             </BreadcrumbItem>
           </Breadcrumb>
+
           <HStack
             alignItems={{ base: 'start', md: 'center' }}
             flexDirection={{ base: 'column', md: 'row' }}
