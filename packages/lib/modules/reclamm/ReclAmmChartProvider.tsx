@@ -364,7 +364,7 @@ export function _useReclAmmChart() {
     option,
     hasChartData: !!currentChartData.series?.length,
     isLoading: reclAmmData.isLoading,
-    isPoolWithinTargetRange: reclAmmData.isPoolWithinTargetRange,
+    isPoolWithinTargetRange: !!reclAmmData.isPoolWithinTargetRange,
   }
 }
 

@@ -118,7 +118,7 @@ function PoolChartsContent({ ...props }: any) {
                   spacing="0"
                 >
                   {showLiquidityProfileChart || showReclammChart ? (
-                    <ClpBadge poolIsInRange={poolIsInRange || !!isPoolWithinTargetRange} />
+                    <ClpBadge poolIsInRange={poolIsInRange || isPoolWithinTargetRange} />
                   ) : (
                     <>
                       <Heading fontWeight="bold" size="h5">
