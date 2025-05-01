@@ -7,6 +7,8 @@ import { VebalStatsLayout } from './VebalStats/VebalStatsLayout'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { VebalBreadcrumbs } from './VebalBreadcrumbs'
 
+import { VeBalCrossChainSync } from './VeBalCrossChainSync'
+
 export function VebalManage() {
   const { isConnected } = useUserAccount()
 
@@ -28,6 +30,7 @@ export function VebalManage() {
             </Box>
           </Center>
         </Stack>
+        <VeBalCrossChainSync />
       </Stack>
     )
   }
@@ -45,6 +48,7 @@ export function VebalManage() {
         <VebalStatsLayout />
       </Stack>
       <VeBalPotentialBar />
+      <VeBalCrossChainSync />
     </Stack>
   )
 }
