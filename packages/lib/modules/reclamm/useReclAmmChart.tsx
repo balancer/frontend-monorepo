@@ -83,8 +83,8 @@ export function useReclAmmChart() {
     const minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
     const maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
 
-    const lowerMarginValue = bn(invariant).div(bn(upperMargin).pow(2)).toNumber()
-    const upperMarginValue = bn(invariant).div(bn(lowerMargin).pow(2)).toNumber()
+    const lowerMarginValue = bn(invariant).div(bn(lowerMargin).pow(2)).toNumber()
+    const upperMarginValue = bn(invariant).div(bn(upperMargin).pow(2)).toNumber()
 
     const currentPriceValue = bn(bn(balanceB).plus(virtualBalanceB))
       .div(bn(balanceA).plus(virtualBalanceA))
