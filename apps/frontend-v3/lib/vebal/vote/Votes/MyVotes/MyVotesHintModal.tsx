@@ -38,7 +38,7 @@ export function MyVotesHintModal({ isOpen = false, onClose = () => {} }: UseDisc
         <ModalCloseButton />
         <ModalBody pb="lg">
           <VStack gap="lg">
-            <Box overflow="hidden" rounded="md" shadow="2xl">
+            <Box overflow="hidden" rounded="md">
               <Picture
                 altText="Voting icons"
                 defaultImgType="jpg"
