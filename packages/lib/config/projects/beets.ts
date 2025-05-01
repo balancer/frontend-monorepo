@@ -28,6 +28,7 @@ export const ProjectConfigBeets: ProjectConfig = {
       GqlPoolType.CowAmm,
       GqlPoolType.Fx,
       GqlPoolType.QuantAmmWeighted,
+      GqlPoolType.Reclamm,
     ],
     hideProtocolVersion: ['cow'],
     showPoolName: true,

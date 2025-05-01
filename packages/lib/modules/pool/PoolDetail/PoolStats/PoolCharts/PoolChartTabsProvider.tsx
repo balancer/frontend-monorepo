@@ -12,6 +12,7 @@ export enum PoolChartTab {
   FEES = 'fees',
   SURPLUS = 'surplus',
   LIQUIDITY_PROFILE = 'liquidity_profile',
+  RECLAMM = 'reclamm',
 }
 
 export interface PoolChartTypeTab {
@@ -34,6 +35,11 @@ const POOL_SPECIFIC_TABS: PoolTabsMap = {
   [GqlPoolType.CowAmm]: [...BASE_TABS, { value: PoolChartTab.SURPLUS, label: 'Surplus' }],
   [GqlPoolType.Gyroe]: [
     { value: PoolChartTab.LIQUIDITY_PROFILE, label: 'Liquidity Profile' },
+    ...BASE_TABS,
+    { value: PoolChartTab.FEES, label: 'Fees' },
+  ],
+  [GqlPoolType.Reclamm]: [
+    { value: PoolChartTab.RECLAMM, label: 'Reclamm' },
     ...BASE_TABS,
     { value: PoolChartTab.FEES, label: 'Fees' },
   ],

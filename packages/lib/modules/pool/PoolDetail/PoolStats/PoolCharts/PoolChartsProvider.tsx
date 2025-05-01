@@ -374,7 +374,13 @@ export function _usePoolCharts() {
 
   const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
 
-  const poolChartTypeOptions: Record<PoolChartTab, PoolChartTypeOptions> = {
+  type SupportedPoolChartTab =
+    | PoolChartTab.VOLUME
+    | PoolChartTab.TVL
+    | PoolChartTab.FEES
+    | PoolChartTab.SURPLUS
+
+  const poolChartTypeOptions: Record<SupportedPoolChartTab, PoolChartTypeOptions> = {
     [PoolChartTab.VOLUME]: {
       type: 'bar',
       color: {
@@ -437,34 +443,14 @@ export function _usePoolCharts() {
       color: defaultTheme.colors.yellow[400],
       hoverColor: defaultTheme.colors.pink[500],
     },
-    [PoolChartTab.LIQUIDITY_PROFILE]: {
-      type: 'line',
-      color: defaultTheme.colors.blue[500],
-      hoverColor: defaultTheme.colors.pink[500],
-      areaStyle: {
-        color: {
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [
-            {
-              offset: 0,
-              color: 'rgba(59, 130, 246, 0.5)',
-            },
-            {
-              offset: 1,
-              color: 'rgba(59, 130, 246, 0)',
-            },
-          ],
-        },
-      },
-    },
   }
 
   const options = useMemo(() => {
-    const activeTabOptions = poolChartTypeOptions[activeTab.value]
+    const activeTabOptions = poolChartTypeOptions[activeTab.value as SupportedPoolChartTab] || {
+      type: 'line',
+      color: defaultTheme.colors.blue[500],
+      hoverColor: defaultTheme.colors.pink[500],
+    }
 
     return {
       ...defaultChartOptions,
