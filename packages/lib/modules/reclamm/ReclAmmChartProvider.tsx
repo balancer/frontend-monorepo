@@ -1,12 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useMemo } from 'react'
+import { createContext, PropsWithChildren, useMemo } from 'react'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
 import { calculateLowerMargin, calculateUpperMargin } from './reclAmmMath'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { useMandatoryContext } from 'shared/utils/contexts'
 
-export function useReclAmmChart() {
+type ReclAmmChartContextType = ReturnType<typeof _useReclAmmChart>
+
+const ReclAmmChartContext = createContext<ReclAmmChartContextType | null>(null)
+
+export function _useReclAmmChart() {
   const reclAmmData = useGetComputeReclAmmData()
   const { toCurrency } = useCurrency()
 
@@ -157,9 +162,9 @@ export function useReclAmmChart() {
 
     return {
       grid: {
-        left: '5%',
-        right: '30%',
-        bottom: '10%',
+        left: '3%',
+        right: '20%',
+        bottom: '5%',
         top: '10%',
         containLabel: true,
       },
@@ -324,5 +329,17 @@ export function useReclAmmChart() {
     }
   }, [currentChartData])
 
-  return { option }
+  return {
+    option,
+    hasChartData: !!currentChartData.series?.length,
+    isLoading: reclAmmData.isLoading,
+  }
 }
+
+export function ReclAmmChartProvider({ children }: PropsWithChildren) {
+  const hook = _useReclAmmChart()
+  return <ReclAmmChartContext.Provider value={hook}>{children}</ReclAmmChartContext.Provider>
+}
+
+export const useReclAmmChart = (): ReclAmmChartContextType =>
+  useMandatoryContext(ReclAmmChartContext, 'ReclAmmChart')

@@ -27,6 +27,11 @@ import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGro
 import { PoolChartsProvider, usePoolCharts } from './PoolChartsProvider'
 import { EclpChart } from '@repo/lib/modules/eclp/components/EclpChart'
 import { PoolCharts } from './PoolCharts'
+import {
+  ReclAmmChartProvider,
+  useReclAmmChart,
+} from '@repo/lib/modules/reclamm/ReclAmmChartProvider'
+import { ReclAmmChart } from '@repo/lib/modules/reclamm/ReclAmmChart'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -49,7 +54,9 @@ export function PoolChartsContainer() {
     <PoolChartTabsProvider>
       <PoolChartsProvider>
         <EclpChartProvider>
-          <PoolChartsContent />
+          <ReclAmmChartProvider>
+            <PoolChartsContent />
+          </ReclAmmChartProvider>
         </EclpChartProvider>
       </PoolChartsProvider>
     </PoolChartTabsProvider>
@@ -60,6 +67,9 @@ function PoolChartsContent({ ...props }: any) {
   const { activeTab, setActiveTab, tabsList, getActiveTabLabel } = usePoolChartTabs()
   const { hasChartData: hasEclpChartData, isLoading: isLoadingEclpChartData } = useEclpChart()
 
+  const { hasChartData: hasReclAmmChartData, isLoading: isLoadingReclAmmChartData } =
+    useReclAmmChart()
+
   const {
     hasChartData: hasPoolChartData,
     isLoading: isLoadingPoolChartsData,
@@ -67,8 +77,14 @@ function PoolChartsContent({ ...props }: any) {
     activePeriod,
   } = usePoolCharts()
 
-  const isLoading = isLoadingEclpChartData || isLoadingPoolChartsData
-  const hasChartData = hasEclpChartData || hasPoolChartData
+  const isLoading = isLoadingEclpChartData || isLoadingPoolChartsData || isLoadingReclAmmChartData
+  const hasChartData = hasEclpChartData || hasPoolChartData || hasReclAmmChartData
+
+  const showPoolCharts =
+    activeTab.value !== PoolChartTab.RECLAMM && activeTab.value !== PoolChartTab.LIQUIDITY_PROFILE
+
+  const showReclammChart = activeTab.value === PoolChartTab.RECLAMM
+  const showLiquidityProfileChart = activeTab.value === PoolChartTab.LIQUIDITY_PROFILE
 
   return (
     <Card {...props}>
@@ -87,15 +103,17 @@ function PoolChartsContent({ ...props }: any) {
                     options={tabsList}
                     size="xxs"
                   />
-                  {activeTab.value !== PoolChartTab.LIQUIDITY_PROFILE && <PeriodSelect />}
+                  {showPoolCharts && <PeriodSelect />}
                 </HStack>
                 <VStack
                   alignItems={{ base: undefined, md: 'flex-end' }}
                   ml={{ base: undefined, md: 'auto' }}
                   spacing="0"
                 >
-                  {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
+                  {showLiquidityProfileChart ? (
                     <ClpBadge />
+                  ) : showReclammChart ? (
+                    <Text>reclamm badge</Text>
                   ) : (
                     <>
                       <Heading fontWeight="bold" size="h5">
@@ -110,7 +128,7 @@ function PoolChartsContent({ ...props }: any) {
               </Stack>
               <Box h={['300px', '400px', 'full']} overflow="hidden" position="relative" w="full">
                 <AnimatePresence mode="wait">
-                  {activeTab.value === PoolChartTab.LIQUIDITY_PROFILE ? (
+                  {showLiquidityProfileChart && (
                     <motion.div
                       animate={{ x: '0%' }}
                       exit={{ x: '-100%' }}
@@ -125,9 +143,24 @@ function PoolChartsContent({ ...props }: any) {
                     >
                       <EclpChart />
                     </motion.div>
-                  ) : (
-                    <PoolCharts key={`default-chart-${activeTab.value}`} />
                   )}
+                  {showReclammChart && (
+                    <motion.div
+                      animate={{ x: '0%' }}
+                      exit={{ x: '-100%' }}
+                      initial={{ x: '100%' }}
+                      key={activeTab.value}
+                      style={{
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                      }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    >
+                      <ReclAmmChart />
+                    </motion.div>
+                  )}
+                  {showPoolCharts && <PoolCharts key={`default-chart-${activeTab.value}`} />}
                 </AnimatePresence>
               </Box>
             </VStack>

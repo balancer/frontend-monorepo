@@ -1,4 +1,4 @@
-import { useReclAmmChart } from './useReclAmmChart'
+import { useReclAmmChart } from './ReclAmmChartProvider'
 import ReactECharts from 'echarts-for-react'
 
 export function ReclAmmChart() {
