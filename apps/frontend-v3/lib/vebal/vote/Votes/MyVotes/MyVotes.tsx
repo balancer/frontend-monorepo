@@ -45,14 +45,16 @@ export function MyVotes() {
 
   return (
     <VStack align="start" spacing="md" w="full">
-      <HStack justifyContent="space-between" w="full">
-        <Heading as="h2" size="lg" variant="special">
+      <HStack alignItems="baseline" justifyContent="space-between" w="full">
+        <Heading as="h2" pb="0.5" size="lg" variant="special">
           My votes
         </Heading>
         <Button
           _hover={{ color: 'font.linkHover' }}
           color="font.link"
           onClick={onOpen}
+          position="relative"
+          top="4px"
           variant="ghost"
         >
           How it works?

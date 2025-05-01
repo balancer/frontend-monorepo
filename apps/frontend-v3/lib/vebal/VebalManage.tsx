@@ -17,7 +17,7 @@ export function VebalManage() {
           <VebalBreadcrumbs />
           <VeBalSectionHeader
             before={
-              <Heading as="h2" size="lg" variant="special">
+              <Heading as="h2" pb="0.5" size="lg" variant="special">
                 Manage veBAL
               </Heading>
             }
