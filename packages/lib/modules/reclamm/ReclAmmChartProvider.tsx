@@ -165,7 +165,7 @@ export function _useReclAmmChart() {
         left: '3%',
         right: '12%',
         bottom: '5%',
-        top: '10%',
+        top: '15%',
         containLabel: true,
       },
       visualMap: {
@@ -232,6 +232,15 @@ export function _useReclAmmChart() {
         axisTick: {
           show: true,
         },
+        name: reclAmmData.tokenA?.symbol || '',
+        nameLocation: 'end',
+        nameTextStyle: {
+          align: 'right',
+          verticalAlign: 'bottom',
+          padding: [0, 15, -20, 0],
+          fontSize: 12,
+          color: '#999',
+        },
       },
       yAxis: {
         type: 'value',
@@ -262,6 +271,15 @@ export function _useReclAmmChart() {
         },
         axisTick: {
           show: true,
+        },
+        name: reclAmmData.tokenB?.symbol || '',
+        nameLocation: 'end',
+        nameTextStyle: {
+          align: 'left',
+          verticalAlign: 'top',
+          padding: [-20, 0, 0, -40],
+          fontSize: 12,
+          color: '#999',
         },
       },
       series: [

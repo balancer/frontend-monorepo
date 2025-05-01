@@ -57,5 +57,7 @@ export function useGetComputeReclAmmData() {
     },
     centerednessMargin: results.data?.[3]?.result,
     isPoolWithinTargetRange: results.data?.[4]?.result,
+    tokenA: pool.poolTokens[0],
+    tokenB: pool.poolTokens[1],
   }
 }
