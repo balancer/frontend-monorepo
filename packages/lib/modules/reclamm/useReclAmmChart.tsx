@@ -91,13 +91,6 @@ export function useReclAmmChart() {
       .toNumber()
 
     const markPoints = [
-      {
-        name: 'current',
-        x: currentBalance,
-        priceValue: currentPriceValue,
-
-        color: '#00E396',
-      },
       { name: 'max', x: vBalanceA, color: '#FF4560', priceValue: maxPriceValue },
       { name: 'min', x: xForMinPrice, color: '#FF4560', priceValue: minPriceValue },
       {
@@ -111,6 +104,13 @@ export function useReclAmmChart() {
         x: upperMargin,
         color: '#E67E22',
         priceValue: upperMarginValue,
+      },
+      {
+        name: 'current',
+        x: currentBalance,
+        priceValue: currentPriceValue,
+
+        color: '#00E396',
       },
     ].map(point => {
       return {
