@@ -5,7 +5,7 @@ import { formatUnits } from 'viem'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
 import { calculateLowerMargin, calculateUpperMargin } from './reclAmmMath'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { useMandatoryContext } from 'shared/utils/contexts'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 
 type ReclAmmChartContextType = ReturnType<typeof _useReclAmmChart>
 
