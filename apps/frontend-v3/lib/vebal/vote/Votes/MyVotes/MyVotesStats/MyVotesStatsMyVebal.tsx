@@ -98,13 +98,8 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
             Manage
           </Button>
         ) : myVebalBalance ? (
-          <Button
-            as={NextLink}
-            href={getVeBalManagePath('extend', 'vote')}
-            size="sm"
-            variant="tertiary"
-          >
-            Extend lock
+          <Button as={NextLink} href="/vebal/manage" size="sm" variant="tertiary">
+            Manage
           </Button>
         ) : (
           <Button
