@@ -1,10 +1,9 @@
 'use client'
 
-import { Box, BoxProps, Card, CardProps, VStack } from '@chakra-ui/react'
-
+import { Box, BoxProps, Card, CardProps, VStack, useColorMode } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { ZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { UserVebalStatsValues } from './UserVebalStatsValues'
+import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/RadialPattern'
 
 const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } = {
   contentProps: {
@@ -22,6 +21,8 @@ const COMMON_NOISY_CARD_PROPS: { contentProps: BoxProps; cardProps: BoxProps } =
 }
 
 export function VebalStats({ ...props }: CardProps) {
+  const { colorMode } = useColorMode()
+
   return (
     <Card position="relative" {...props}>
       <NoisyCard
@@ -29,15 +30,26 @@ export function VebalStats({ ...props }: CardProps) {
         contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
       >
         <Box bottom={0} left={0} overflow="hidden" position="absolute" right={0} top={0}>
-          <ZenGarden sizePx="280px" subdued variant="circle" />
+          <RadialPattern
+            circleCount={8}
+            height={600}
+            innerHeight={60}
+            innerWidth={60}
+            left="calc(50% - 300px)"
+            opacity={colorMode === 'dark' ? 0.4 : 0.75}
+            pointerEvents="none"
+            position="absolute"
+            top="-120px"
+            width={600}
+            zIndex={0}
+          />
         </Box>
         <VStack
           align="flex-start"
           h="full"
           justify="flex-start"
           m="auto"
-          mb="8"
-          p={{ base: 'sm', md: 'md' }}
+          p={{ base: 'lg', md: 'lg' }}
           role="group"
           spacing="xl"
           w="full"
