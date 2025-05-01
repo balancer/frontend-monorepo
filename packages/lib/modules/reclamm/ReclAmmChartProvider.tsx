@@ -163,7 +163,7 @@ export function _useReclAmmChart() {
     return {
       grid: {
         left: '3%',
-        right: '20%',
+        right: '12%',
         bottom: '5%',
         top: '10%',
         containLabel: true,
@@ -294,21 +294,52 @@ export function _useReclAmmChart() {
             label: {
               show: true,
               position: 'end',
+              distance: 10,
               formatter: function (params: any) {
                 const pointName = params.name
 
                 const point = currentChartData.markPoints?.find(p => p.name === pointName)
                 if (point) {
-                  return `${toCurrency(point.priceValue, { abbreviated: false })} (${pointName})`
+                  return [
+                    '{value|' + toCurrency(point.priceValue, { abbreviated: false }) + '}',
+                    '{name|' + `(${pointName})` + '}',
+                  ].join('\n')
                 }
 
                 return ''
               },
-              backgroundColor: 'auto',
-              padding: [3, 6],
-              borderRadius: 3,
-              color: '#000',
-              fontSize: 12,
+              rich: {
+                value: {
+                  color: '#333333',
+                  fontWeight: 'bold',
+                  fontSize: 12,
+                  padding: [2, 0, 1, 0],
+                  align: 'center',
+                  width: 70,
+                  textShadow: 'none',
+                },
+                name: {
+                  color: '#333333',
+                  fontSize: 12,
+                  padding: [1, 0, 2, 0],
+                  align: 'center',
+                  width: 70,
+                  textShadow: 'none',
+                },
+              },
+              backgroundColor: function (params: any) {
+                const point = currentChartData.markPoints?.find(p => p.name === params.name)
+                const color = point?.itemStyle?.color || 'rgba(0, 0, 0, 0.75)'
+                return color
+              },
+              borderColor: 'rgba(255, 255, 255, 0.3)',
+              borderWidth: 1,
+              borderRadius: 4,
+              padding: [4, 8],
+              shadowBlur: 3,
+              shadowColor: 'rgba(0, 0, 0, 0.3)',
+              shadowOffsetX: 1,
+              shadowOffsetY: 1,
             },
             data: [
               ...(currentChartData.markPoints || []).map(point => ({
