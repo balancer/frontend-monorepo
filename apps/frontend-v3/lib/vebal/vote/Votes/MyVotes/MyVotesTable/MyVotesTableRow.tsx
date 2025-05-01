@@ -25,6 +25,7 @@ import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { VoteWeightInput } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/VoteWeightInput'
 import {
   bpsToPercentage,
+  calculateMyValuePerVote,
   calculateMyVoteRewardsValue,
   inputPercentageWeightToBps,
   votingTimeLockedEndDate,
@@ -39,11 +40,12 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
+  totalVotes: bigint
   keyValue: string | number
   cellProps: GridItemProps
 }
 
-export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
+export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest }: Props) {
   const { votedVotesWeights, editVotesWeights, onEditVotesChange } = useMyVotes()
   const {
     isSelectedPool,
@@ -117,7 +119,8 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
                     votedVotesWeights[vote.id] ?? 0,
                     editVotesWeights[vote.id] ?? 0,
                     vote,
-                    veBALBalance
+                    veBALBalance,
+                    totalVotes
                   ),
                   { abbreviated: false }
                 )}
@@ -128,7 +131,21 @@ export function MyVotesTableRow({ vote, keyValue, cellProps, ...rest }: Props) {
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {vote.votingIncentive ? (
-              <Text>{toCurrency(vote.votingIncentive.valuePerVote, { abbreviated: false })}</Text>
+              <Text>
+                {toCurrency(
+                  calculateMyValuePerVote(
+                    votedVotesWeights[vote.id] ?? 0,
+                    editVotesWeights[vote.id] ?? 0,
+                    vote,
+                    veBALBalance,
+                    totalVotes
+                  ),
+                  {
+                    abbreviated: false,
+                    forceThreeDecimals: true,
+                  }
+                )}
+              </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
             )}

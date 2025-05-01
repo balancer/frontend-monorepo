@@ -48,7 +48,7 @@ export function MultiSelect<Value = string>({
   const hasSelectedOptions = selectedOptions.length > 0
 
   return (
-    <Popover placement="bottom-start" preventOverflow variant="multiSelect">
+    <Popover isLazy placement="bottom-start" preventOverflow variant="multiSelect">
       <PopoverTrigger>
         <Button h="auto" py="sm" ref={ref} variant="tertiary" w="full" {...buttonProps}>
           <HStack justify="space-between" w="full">
@@ -69,7 +69,7 @@ export function MultiSelect<Value = string>({
           </HStack>
         </Button>
       </PopoverTrigger>
-      <PopoverContent w={contentWidth}>
+      <PopoverContent motionProps={{ animate: { scale: 1, opacity: 1 } }} w={contentWidth}>
         <PopoverBody>
           <VStack align="start" spacing="sm" w="full">
             {!!toggleAll && (

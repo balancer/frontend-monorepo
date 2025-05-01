@@ -37,7 +37,7 @@ export function useLockDuration({
   const minSliderValue = useMemo(() => {
     if (!lockedEndDate) return undefined
     return lockedEndDate > sliderMinDate
-      ? differenceInWeeks(lockedEndDate, sliderMinDate)
+      ? differenceInWeeks(lockedEndDate, sliderMinDate) + 1
       : undefined
   }, [lockedEndDate, sliderMinDate])
 

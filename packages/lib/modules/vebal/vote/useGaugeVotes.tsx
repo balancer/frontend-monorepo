@@ -9,9 +9,6 @@ import { onlyExplicitRefetch } from '../../../shared/utils/queries'
 import { useReadContracts } from 'wagmi'
 import { UserVotesData } from '@repo/lib/modules/vebal/vote/vote.types'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FIRST_WEEK_TIMESTAMP = 1648684800
-
 export interface RawVotesData {
   gaugeWeightThisPeriod?: { result?: bigint; status: string }
   gaugeWeightNextPeriod?: { result?: bigint; status: string }
@@ -119,6 +116,7 @@ export interface UseGaugeVotesParams {
 export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
   const { userAddress, isConnected } = useUserAccount()
 
+  // FIXME: [JUANJO] should this be calculated on thursday?
   const thisWeek = Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs
   const gaugeWeightThisPeriodQuery = useGaugeRelativeWeightsWrite(
     gaugeAddresses,
