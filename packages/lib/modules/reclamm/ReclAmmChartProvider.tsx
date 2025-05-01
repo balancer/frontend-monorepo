@@ -96,16 +96,16 @@ export function _useReclAmmChart() {
       .toNumber()
 
     const markPoints = [
-      { name: 'max', x: vBalanceA, color: '#FF4560', priceValue: maxPriceValue },
-      { name: 'min', x: xForMinPrice, color: '#FF4560', priceValue: minPriceValue },
+      { name: 'upper limit', x: vBalanceA, color: '#FF4560', priceValue: maxPriceValue },
+      { name: 'lower limit', x: xForMinPrice, color: '#FF4560', priceValue: minPriceValue },
       {
-        name: 'lower margin',
+        name: 'higher target',
         x: lowerMargin,
         color: '#E67E22',
         priceValue: lowerMarginValue,
       },
       {
-        name: 'upper margin',
+        name: 'lower target',
         x: upperMargin,
         color: '#E67E22',
         priceValue: upperMarginValue,
@@ -149,8 +149,8 @@ export function _useReclAmmChart() {
     const xValues = series.map(point => point[0])
     const yValues = series.map(point => point[1])
 
-    const maxPricePoint = currentChartData.markPoints?.find(p => p.name === 'max')
-    const minPricePoint = currentChartData.markPoints?.find(p => p.name === 'min')
+    const maxPricePoint = currentChartData.markPoints?.find(p => p.name === 'upper limit')
+    const minPricePoint = currentChartData.markPoints?.find(p => p.name === 'lower limit')
 
     const xMin = maxPricePoint?.coord[0] || Math.min(...xValues)
     const yMax = maxPricePoint?.coord[1] || Math.max(...yValues)
