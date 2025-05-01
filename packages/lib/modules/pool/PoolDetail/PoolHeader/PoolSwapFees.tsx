@@ -13,6 +13,7 @@ import {
 } from '@repo/lib/modules/fee-managers/getFeeManagersMetadata'
 import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
 import { useFeeManager } from '@repo/lib/modules/fee-managers/useFeeManager'
+import { zeroAddress } from 'viem'
 
 function getBodyText(
   isDynamicSwapFee: boolean | null | undefined,
@@ -28,11 +29,14 @@ function getBodyText(
   }
 
   if (swapFeeManager) {
-    if (swapFeeManager === PROJECT_CONFIG.delegateOwner) {
-      return `This pool has a dynamic fee rate that may be updated through ${PROJECT_CONFIG.projectName} governance.`
+    switch (swapFeeManager) {
+      case PROJECT_CONFIG.delegateOwner:
+        return `This pool has a dynamic fee rate that may be updated through ${PROJECT_CONFIG.projectName} governance.`
+      case zeroAddress:
+        return 'This pool has a static swap fee that cannot be updated by anyone.'
+      default:
+        return `This pool has a dynamic fee rate that may be updated by a 3rd party Swap Fee Manager: ${abbreviateAddress(swapFeeManager)}`
     }
-
-    return `This pool has a dynamic fee rate that may be updated by a 3rd party Swap Fee Manager: ${abbreviateAddress(swapFeeManager)}`
   }
 }
 
@@ -40,11 +44,12 @@ export function PoolSwapFees({ pool }: { pool: Pool }) {
   const { feeManager } = useFeeManager(pool)
 
   const isDynamicSwapFee = shouldCallComputeDynamicSwapFee(pool)
+  const feeTypeText = pool.swapFeeManager === zeroAddress ? 'Fixed' : 'Dynamic'
 
   return (
     <CustomPopover
       bodyText={getBodyText(isDynamicSwapFee, pool.swapFeeManager, feeManager)}
-      headerText="Dynamic fee percentage"
+      headerText={`${feeTypeText} fee percentage`}
       trigger="hover"
       useIsOpen
     >
