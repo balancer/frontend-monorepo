@@ -146,13 +146,13 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     ... on GqlPoolReClamm {
       centerednessMargin
       currentFourthRootPriceRatio
+      dailyPriceShiftBase
       endFourthRootPriceRatio
       hasAnyAllowedBuffer
       lastTimestamp
       lastVirtualBalances
       priceRatioUpdateEndTime
       priceRatioUpdateStartTime
-      priceShiftRatePerSecond
       startFourthRootPriceRatio
     }
     ... on GqlPoolStable {
