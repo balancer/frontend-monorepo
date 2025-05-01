@@ -65,10 +65,17 @@ export function PoolChartsContainer() {
 
 function PoolChartsContent({ ...props }: any) {
   const { activeTab, setActiveTab, tabsList, getActiveTabLabel } = usePoolChartTabs()
-  const { hasChartData: hasEclpChartData, isLoading: isLoadingEclpChartData } = useEclpChart()
+  const {
+    hasChartData: hasEclpChartData,
+    isLoading: isLoadingEclpChartData,
+    poolIsInRange,
+  } = useEclpChart()
 
-  const { hasChartData: hasReclAmmChartData, isLoading: isLoadingReclAmmChartData } =
-    useReclAmmChart()
+  const {
+    hasChartData: hasReclAmmChartData,
+    isLoading: isLoadingReclAmmChartData,
+    isPoolWithinTargetRange,
+  } = useReclAmmChart()
 
   const {
     hasChartData: hasPoolChartData,
@@ -110,10 +117,8 @@ function PoolChartsContent({ ...props }: any) {
                   ml={{ base: undefined, md: 'auto' }}
                   spacing="0"
                 >
-                  {showLiquidityProfileChart ? (
-                    <ClpBadge />
-                  ) : showReclammChart ? (
-                    <Text>reclamm badge</Text>
+                  {showLiquidityProfileChart || showReclammChart ? (
+                    <ClpBadge poolIsInRange={poolIsInRange || !!isPoolWithinTargetRange} />
                   ) : (
                     <>
                       <Heading fontWeight="bold" size="h5">

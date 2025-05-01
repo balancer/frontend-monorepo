@@ -37,6 +37,10 @@ export function useGetComputeReclAmmData() {
         ...reclAmmPoolContract,
         functionName: 'getCenterednessMargin',
       },
+      {
+        ...reclAmmPoolContract,
+        functionName: 'isPoolWithinTargetRange',
+      },
     ],
   })
 
@@ -52,5 +56,6 @@ export function useGetComputeReclAmmData() {
       liveBalanceB: results.data?.[2]?.result?.[1],
     },
     centerednessMargin: results.data?.[3]?.result,
+    isPoolWithinTargetRange: results.data?.[4]?.result,
   }
 }
