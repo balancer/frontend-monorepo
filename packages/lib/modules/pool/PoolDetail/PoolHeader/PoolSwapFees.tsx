@@ -7,18 +7,49 @@ import { shouldCallComputeDynamicSwapFee } from '../../pool.utils'
 import { FluidIcon } from '@repo/lib/shared/components/icons/FluidIcon'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover'
+import {
+  FeeManagersId,
+  FeeManagersMetadata,
+} from '@repo/lib/modules/fee-managers/getFeeManagersMetadata'
+import { abbreviateAddress } from '@repo/lib/shared/utils/addresses'
+import { useFeeManager } from '@repo/lib/modules/fee-managers/useFeeManager'
+import { zeroAddress } from 'viem'
+
+function getBodyText(
+  isDynamicSwapFee: boolean | null | undefined,
+  swapFeeManager: string | null | undefined,
+  feeManager: FeeManagersMetadata | null | undefined
+) {
+  if (isDynamicSwapFee) {
+    return 'This pool has a dynamic fee rate that may change per swap based on custom logic.'
+  }
+
+  if (feeManager?.id === FeeManagersId.EZKL) {
+    return 'This pool has volatility adjusted dynamic fees managed by EZKL through a verifiable computation system that combines off-chain statistical modeling with on-chain zk proof verification.'
+  }
+
+  if (swapFeeManager) {
+    switch (swapFeeManager) {
+      case PROJECT_CONFIG.delegateOwner:
+        return `This pool has a dynamic fee rate that may be updated through ${PROJECT_CONFIG.projectName} governance.`
+      case zeroAddress:
+        return 'This pool has a static swap fee that cannot be updated by anyone.'
+      default:
+        return `This pool has a dynamic fee rate that may be updated by a 3rd party Swap Fee Manager: ${abbreviateAddress(swapFeeManager)}`
+    }
+  }
+}
 
 export function PoolSwapFees({ pool }: { pool: Pool }) {
-  const isDynamicSwapFee = shouldCallComputeDynamicSwapFee(pool)
+  const { feeManager } = useFeeManager(pool)
 
-  const bodyText = isDynamicSwapFee
-    ? 'This pool has a dynamic fee rate that may change per swap based on custom logic.'
-    : `This pool has a dynamic fee rate that may be updated through ${PROJECT_CONFIG.projectName} governance.`
+  const isDynamicSwapFee = shouldCallComputeDynamicSwapFee(pool)
+  const feeTypeText = pool.swapFeeManager === zeroAddress ? 'Fixed' : 'Dynamic'
 
   return (
     <CustomPopover
-      bodyText={bodyText}
-      headerText="Dynamic fee percentage"
+      bodyText={getBodyText(isDynamicSwapFee, pool.swapFeeManager, feeManager)}
+      headerText={`${feeTypeText} fee percentage`}
       trigger="hover"
       useIsOpen
     >
