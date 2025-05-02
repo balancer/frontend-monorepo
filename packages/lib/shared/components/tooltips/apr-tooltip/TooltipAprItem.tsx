@@ -63,11 +63,21 @@ export function TooltipAprItem({
           <Popover trigger="hover">
             <PopoverTrigger>
               <Text
-                className="tooltip-dashed-underline"
+                _after={{
+                  borderBottom: '1px dotted',
+                  borderColor: 'currentColor',
+                  bottom: '-2px',
+                  content: '""',
+                  left: 0,
+                  opacity: 0.5,
+                  position: 'absolute',
+                  width: '100%',
+                }}
                 color={valueFontColor ?? fontColor}
                 fontSize="sm"
                 fontWeight={fontWeight}
                 opacity={aprOpacity}
+                position="relative"
                 variant={textVariant}
               >
                 {displayValueFormatter(apr)}
