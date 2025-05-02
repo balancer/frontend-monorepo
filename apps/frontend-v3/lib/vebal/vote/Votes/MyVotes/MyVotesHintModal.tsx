@@ -17,18 +17,13 @@ import {
 } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
+import { addDays, format } from 'date-fns'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function MyVotesHintModal({ isOpen = false, onClose = () => {} }: UseDisclosureProps) {
   const formattedUnlockDate = useMemo(() => {
     const today = new Date()
-    const unlockDate = new Date(today)
-    unlockDate.setDate(today.getDate() + 10)
-    return unlockDate.toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    })
+    return format(addDays(today, 10), 'dd MMM yyyy')
   }, [])
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} size="lg">
