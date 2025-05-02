@@ -119,7 +119,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
                   {`You need to lock the LP token of the ve8020 BAL/WETH pool to get veBAL. Since you
                     don't have this, you can't get veBAL.`}
                   <br />
-                  Add liquidity to this pool to get the LP token and came back: <br />
+                  Add liquidity to this pool to get the LP token and come back: <br />
                   <BalAlertLink href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014">
                     80% BAL / 20% WETH pool
                   </BalAlertLink>
