@@ -86,7 +86,6 @@ export function PoolVersionTag({
       <Center h="full" w="full">
         <Text
           _groupHover={{
-            // color: isV3 ? 'font.specialSecondary' : 'font.maxContrast',
             fontWeight: isV3 ? 'bold' : 'medium',
             background: isCow ? 'auto' : isV3 ? 'background.special' : 'font.maxContrast',
             color: isCow ? 'font.maxContrast' : 'auto',
@@ -95,7 +94,7 @@ export function PoolVersionTag({
           background={isCow ? 'auto' : isV3 ? 'font.special' : 'font.secondary'}
           backgroundClip={isCow ? 'unset' : 'text'}
           fontSize="xs"
-          fontWeight={isV3 ? 'medium' : 'medium'}
+          fontWeight="medium"
           transition="all 0.2s var(--ease-out-cubic)"
           zIndex={1}
         >
