@@ -243,6 +243,7 @@ function BaseAprTooltip({
           apr={merklIncentivesAprDisplayed}
           displayValueFormatter={usedDisplayValueFormatter}
           title="Merkl.xyz incentives"
+          tooltipText={merklIncentivesTooltipText}
         >
           {merklTokensDisplayed
             .filter(item => item.title !== '') // filter out rewards where the token symbol empty
@@ -253,7 +254,6 @@ function BaseAprTooltip({
                 displayValueFormatter={usedDisplayValueFormatter}
                 key={`merkl-${item.title}-${item.apr}`}
                 title={item.title}
-                tooltipText={merklIncentivesTooltipText}
               />
             ))}
         </TooltipAprItem>
