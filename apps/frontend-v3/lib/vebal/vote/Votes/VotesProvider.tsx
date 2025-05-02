@@ -192,6 +192,7 @@ export function _useVotes({ data, votingListLoading = false, error }: UseVotesAr
     count: votingPools.length,
     error,
     gaugeVotesIsLoading,
+    gaugeVotes,
     votedPools,
     selectedVotingPools,
     clearSelectedVotingPools,

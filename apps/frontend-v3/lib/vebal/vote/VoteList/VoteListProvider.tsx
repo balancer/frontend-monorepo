@@ -3,7 +3,6 @@
 import { createContext, PropsWithChildren, useMemo } from 'react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { useGaugeVotes } from '@repo/lib/modules/vebal/vote/useGaugeVotes'
 import { SortVotesBy, VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { orderBy } from 'lodash'
 import { useVoteListFiltersState } from '@bal/lib/vebal/vote/VoteList/useVoteListFiltersState'
@@ -81,16 +80,19 @@ export interface UseVoteListArgs {}
 
 // eslint-disable-next-line no-empty-pattern
 export function _useVoteList({}: UseVoteListArgs) {
-  const { votingPools, incentives, incentivesError, incentivesAreLoading, votingListLoading } =
-    useVotes()
+  const {
+    votingPools,
+    incentives,
+    incentivesError,
+    incentivesAreLoading,
+    votingListLoading,
+    gaugeVotesIsLoading,
+    gaugeVotes,
+  } = useVotes()
 
   const filtersState = useVoteListFiltersState()
 
   const voteListData = votingPools
-
-  const gaugeAddresses = useMemo(() => voteListData.map(vote => vote.gauge.address), [voteListData])
-
-  const { gaugeVotes, isLoading: gaugeVotesIsLoading } = useGaugeVotes({ gaugeAddresses })
 
   const votingPoolsList = useMemo<VotingPoolWithData[]>(() => {
     return voteListData.map(vote => ({
