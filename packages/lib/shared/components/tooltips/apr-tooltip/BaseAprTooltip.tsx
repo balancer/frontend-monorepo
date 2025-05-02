@@ -244,8 +244,9 @@ function BaseAprTooltip({
           displayValueFormatter={usedDisplayValueFormatter}
           title="Merkl.xyz incentives"
         >
-          {merklTokensDisplayed.map(item => {
-            return (
+          {merklTokensDisplayed
+            .filter(item => item.title !== '') // filter out rewards where the token symbol empty
+            .map(item => (
               <TooltipAprItem
                 {...subitemPopoverAprItemProps}
                 apr={item.apr}
@@ -254,8 +255,7 @@ function BaseAprTooltip({
                 title={item.title}
                 tooltipText={merklIncentivesTooltipText}
               />
-            )
-          })}
+            ))}
         </TooltipAprItem>
       ) : null}
       {isCowAmmPool(poolType) && (
