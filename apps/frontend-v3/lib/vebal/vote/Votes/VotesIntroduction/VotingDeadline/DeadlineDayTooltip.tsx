@@ -10,9 +10,9 @@ import {
 } from '@chakra-ui/react'
 import { ReminderButton } from './ReminderButton'
 import { format } from 'date-fns'
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
+import { CalendarReminderModal } from '../../MyVotes/CalendarReminderModal'
 
 type Props = {
   children: ReactNode
@@ -34,16 +34,6 @@ const popoverBoxShadow = [
   '-0.5px -0.5px 0px 0px #FFFFFF26',
 ].join(', ')
 
-function setCalendarEvent(deadline: Date) {
-  const event = {
-    title: 'Weekly veBAL voting deadline (Balancer)',
-    start: deadline,
-    url: 'https://balancer.fi/vebal/vote',
-  }
-
-  openIcalEvent({ event, makeItWeekly: true })
-}
-
 export function DeadlineDayTooltip({
   children,
   title,
@@ -53,6 +43,8 @@ export function DeadlineDayTooltip({
   getDayStyles,
 }: Props) {
   const { isMobile } = useBreakpoints()
+
+  const [isCalendarReminderOpen, setIsCalendarReminderOpen] = useState(false)
 
   return (
     <Popover placement="top" trigger={isMobile ? 'click' : 'hover'}>
@@ -88,9 +80,16 @@ export function DeadlineDayTooltip({
               {format(day.setHours(deadline.getHours()), 'Haaa zzzz, d LLLL yyyy')}
             </Text>
 
-            <ReminderButton alignSelf="start" onClick={() => setCalendarEvent(day)}>
+            <ReminderButton alignSelf="start" onClick={() => setIsCalendarReminderOpen(true)}>
               Set weekly reminder
             </ReminderButton>
+
+            <CalendarReminderModal
+              deadline={day}
+              isOpen={isCalendarReminderOpen}
+              makeItWeekly
+              onClose={() => setIsCalendarReminderOpen(false)}
+            />
           </VStack>
         </PopoverBody>
       </PopoverContent>

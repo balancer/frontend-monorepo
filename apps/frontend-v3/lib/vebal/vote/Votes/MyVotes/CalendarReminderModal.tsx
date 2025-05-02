@@ -16,11 +16,34 @@ import {
   UseDisclosureProps,
 } from '@chakra-ui/react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
+import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
+
+function setCalendarEvent(deadline: Date, makeItWeekly: boolean) {
+  const event = {
+    title: 'veBAL voting deadline (Balancer)',
+    start: deadline,
+    url: 'https://balancer.fi/vebal/vote',
+  }
+
+  openIcalEvent({ event, makeItWeekly })
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export function CalendarReminderModal({ isOpen = false, onClose = () => {} }: UseDisclosureProps) {
+export function CalendarReminderModal({
+  isOpen = false,
+  onClose,
+  deadline,
+  makeItWeekly,
+}: UseDisclosureProps & { deadline: Date; makeItWeekly: boolean }) {
+  const closeModal = () => onClose && onClose()
+
+  function setReminder() {
+    setCalendarEvent(deadline, makeItWeekly)
+    closeModal()
+  }
+
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} size="lg">
+    <Modal isCentered isOpen={isOpen} onClose={closeModal} size="lg">
       <SuccessOverlay />
       <ModalContent>
         <ModalHeader>Set a calendar reminder</ModalHeader>
@@ -62,7 +85,7 @@ export function CalendarReminderModal({ isOpen = false, onClose = () => {} }: Us
                 </Text>
               </ListItem>
             </List>
-            <Button variant="secondary" w="full">
+            <Button onClick={setReminder} variant="secondary" w="full">
               Download .ics file
             </Button>
           </VStack>
