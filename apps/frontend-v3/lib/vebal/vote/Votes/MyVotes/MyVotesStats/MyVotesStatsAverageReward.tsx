@@ -16,7 +16,7 @@ export function MyVotesStatsAverageReward() {
         loading ? (
           <Skeleton height="28px" w="100px" />
         ) : !isZero(totalInfo.averageRewardPerVote) ? (
-          <HStack spacing="xs">
+          <HStack spacing="sm">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
               {toCurrency(totalInfo.averageRewardPerVote, {
                 abbreviated: false,
