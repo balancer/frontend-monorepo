@@ -14,16 +14,6 @@ export function aGqlPoolMinimalMock(...options: Partial<GqlPoolMinimal>[]): GqlP
 
   const defaultPool1: DeepPartial<GqlPoolMinimal> = {
     address: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56',
-    allTokens: [
-      {
-        address: '0xba100000625a3754423978a60c9317c58a424e3d',
-        weight: '0.8',
-      },
-      {
-        address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-        weight: '0.2',
-      },
-    ],
     chain: GqlChain.Mainnet,
     createTime: 1620153071,
     decimals: 18,

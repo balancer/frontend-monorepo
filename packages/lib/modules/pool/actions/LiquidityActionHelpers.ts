@@ -105,7 +105,7 @@ export class LiquidityActionHelpers {
       id: this.pool.id as Hex,
       address: this.pool.address as Address,
       protocolVersion: 3,
-      type: mapPoolType(this.pool.type),
+      type: this.pool.type,
       tokens: poolTokensWithUnderlyings,
       totalShares: this.pool.dynamicData.totalShares as HumanAmount,
     }
@@ -296,7 +296,8 @@ export function toPoolState(pool: Pool): PoolState {
     address: pool.address as Address,
     // Destruct to avoid errors when the SDK tries to mutate the poolTokens (read-only from GraphQL)
     tokens: [...pool.poolTokens] as MinimalToken[],
-    type: mapPoolType(pool.type),
+    // v3 pools do not require pool type mapping
+    type: isV3Pool(pool) ? pool.type : mapPoolType(pool.type),
     protocolVersion: pool.protocolVersion as ProtocolVersion,
   }
 }

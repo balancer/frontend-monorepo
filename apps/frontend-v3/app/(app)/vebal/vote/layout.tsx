@@ -10,5 +10,5 @@ export const metadata: Metadata = {
 }
 
 export default async function Pools({ children }: PropsWithChildren) {
-  return <>{children}</>
+  return <div>{children}</div>
 }

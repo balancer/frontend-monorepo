@@ -5,7 +5,7 @@ import { waitFor } from '@testing-library/react'
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { selectAddLiquidityHandler } from '../handlers/selectAddLiquidityHandler'
 import { useAddLiquidityPriceImpactQuery } from './useAddLiquidityPriceImpactQuery'
-import { connectWithDefaultUser } from '@repo/lib/test/utils/wagmi/wagmi-connections'
+import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 
 async function testQuery(humanAmountsIn: HumanTokenAmountWithAddress[]) {

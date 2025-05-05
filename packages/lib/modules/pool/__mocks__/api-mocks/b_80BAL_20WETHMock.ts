@@ -88,28 +88,6 @@ export const b_80BAL_20WETHMock = {
       },
     ],
   },
-  allTokens: [
-    {
-      id: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014-0xba100000625a3754423978a60c9317c58a424e3d',
-      address: '0xba100000625a3754423978a60c9317c58a424e3d',
-      name: 'Balancer',
-      symbol: 'BAL',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      name: 'Wrapped Ether',
-      symbol: 'WETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   staking: {
     id: '0xc128a9954e6c874ea3d62ce62b468ba073093f25',
     type: 'VEBAL',

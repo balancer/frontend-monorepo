@@ -104,28 +104,6 @@ export const aave_USDC_USDTMock = {
       },
     ],
   },
-  allTokens: [
-    {
-      id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-0x7bc3485026ac48b6cf9baf0a377477fff5703af8',
-      address: '0x7bc3485026ac48b6cf9baf0a377477fff5703af8',
-      name: 'Wrapped Aave Ethereum USDT',
-      symbol: 'waEthUSDT',
-      decimals: 6,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0x89bb794097234e5e930446c0cec0ea66b35d7570-0xd4fa2d31b7968e448877f69a96de69f5de8cd23e',
-      address: '0xd4fa2d31b7968e448877f69a96de69f5de8cd23e',
-      name: 'Wrapped Aave Ethereum USDC',
-      symbol: 'waEthUSDC',
-      decimals: 6,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   staking: {
     id: '0xeec405b834c90b59122bcc2357f27110b2adb4b7',
     type: 'GAUGE',

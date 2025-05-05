@@ -29,6 +29,33 @@ const v3BadgeStyles = {
     WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
     WebkitMaskComposite: 'xor',
     maskComposite: 'exclude',
+    transition: 'all 0.2s var(--ease-out-cubic)',
+    zIndex: '0',
+  },
+  '[role="group"]:hover &::before': {
+    transition: 'all 0.2s var(--ease-out-cubic)',
+    padding: '1.5px',
+    animation: 'rotateMaskedBg 1s ease-in-out infinite',
+  },
+  '@keyframes rotateMaskedBg': {
+    '0%': {
+      transform: 'rotate(0deg)',
+      background: 'background.special',
+    },
+    '25%': {
+      background: 'background.special',
+    },
+    '50%': {
+      transform: 'rotate(180deg)',
+      background: 'background.special',
+    },
+    '75%': {
+      background: 'background.special',
+    },
+    '100%': {
+      transform: 'rotate(360deg)',
+      background: 'background.special',
+    },
   },
 }
 
@@ -42,8 +69,9 @@ export function PoolVersionTag({
   const label = getPoolVersionLabel(pool)
   if (!label) return null
 
-  const size = isSmall ? '7' : '8'
+  const size = isSmall ? '6' : '7'
   const isV3 = pool.protocolVersion === 3
+  const isCow = isCowAmmPool(pool.type)
 
   return (
     <BalBadge
@@ -56,7 +84,20 @@ export function PoolVersionTag({
       w={size}
     >
       <Center h="full" w="full">
-        <Text fontSize="xs" variant={isV3 ? 'special' : 'secondary'}>
+        <Text
+          _groupHover={{
+            fontWeight: isV3 ? 'bold' : 'medium',
+            background: isCow ? 'auto' : isV3 ? 'background.special' : 'font.maxContrast',
+            color: isCow ? 'font.maxContrast' : 'auto',
+            backgroundClip: isCow ? 'unset' : 'text',
+          }}
+          background={isCow ? 'auto' : isV3 ? 'font.special' : 'font.secondary'}
+          backgroundClip={isCow ? 'unset' : 'text'}
+          fontSize="xs"
+          fontWeight="medium"
+          transition="all 0.2s var(--ease-out-cubic)"
+          zIndex={1}
+        >
           {label}
         </Text>
       </Center>

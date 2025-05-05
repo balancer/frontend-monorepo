@@ -1,7 +1,7 @@
 import { allFakeGqlTokens, fakeTokenBySymbol } from '@repo/lib/test/data/all-gql-tokens.fake'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { act, waitFor } from '@testing-library/react'
-import { connectWithDefaultUser } from '@repo/lib/test/utils/wagmi/wagmi-connections'
+import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
 import { _useTokenBalances } from './TokenBalancesProvider'
 
 await connectWithDefaultUser()

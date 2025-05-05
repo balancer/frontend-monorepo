@@ -129,28 +129,6 @@ export const aave_USDC_Aave_GHOMock = {
       },
     ],
   },
-  allTokens: [
-    {
-      id: '0x7ab124ec4029316c2a42f713828ddf2a192b36db-0x88b1cd4b430d95b406e382c3cdbae54697a0286e',
-      address: '0x88b1cd4b430d95b406e382c3cdbae54697a0286e',
-      name: 'Wrapped Aave Base GHO',
-      symbol: 'waBasGHO',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0x7ab124ec4029316c2a42f713828ddf2a192b36db-0xc768c589647798a6ee01a91fde98ef2ed046dbd6',
-      address: '0xc768c589647798a6ee01a91fde98ef2ed046dbd6',
-      name: 'Wrapped Aave Base USDC',
-      symbol: 'waBasUSDC',
-      decimals: 6,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   staking: {
     id: '0x70db188e5953f67a4b16979a2cea26248b315401',
     type: 'GAUGE',

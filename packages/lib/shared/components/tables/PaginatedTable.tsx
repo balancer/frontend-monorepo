@@ -1,6 +1,16 @@
-import { ReactNode } from 'react'
-import { Box, BoxProps, Center, Text, Spinner, VStack, Skeleton } from '@chakra-ui/react'
-import { Pagination } from '@repo/lib/shared/components/pagination/Pagination'
+import { ReactNode, useEffect, useState } from 'react'
+import {
+  Box,
+  BoxProps,
+  Center,
+  Divider,
+  Text,
+  Spinner,
+  VStack,
+  Skeleton,
+  StyleProps,
+} from '@chakra-ui/react'
+import { Pagination, PaginationProps } from '@repo/lib/shared/components/pagination/Pagination'
 
 interface Props<T> extends BoxProps {
   items: T[]
@@ -8,10 +18,11 @@ interface Props<T> extends BoxProps {
   renderTableHeader: () => ReactNode
   renderTableRow: (props: { item: T; index: number }) => ReactNode
   showPagination: boolean
-  paginationProps: any // TODO: type this
+  paginationProps: PaginationProps | undefined
   noItemsFoundLabel: string
   getRowId: (item: T, index: number) => React.Key
   loadingLength?: number
+  paginationStyles?: StyleProps
 }
 
 export function PaginatedTable<T>({
@@ -24,11 +35,25 @@ export function PaginatedTable<T>({
   noItemsFoundLabel,
   getRowId,
   loadingLength = 20,
+  paginationStyles,
 }: Props<T>) {
+  const [previousPageCount, setPreviousPageCount] = useState(0)
+
+  useEffect(() => {
+    // When the number of pages changes (eg. new filter) we have to go back to
+    // the first page because the current page could not exist anymore or could
+    // be a different page and that can be confusing to the user
+    if (paginationProps && paginationProps.totalPageCount !== previousPageCount) {
+      setPreviousPageCount(paginationProps.totalPageCount)
+      paginationProps.goToFirstPage()
+    }
+  }, [paginationProps, previousPageCount])
+
   return (
     <>
-      <VStack className="hide-scrollbar" overflowX="scroll" w="full">
+      <VStack className="hide-scrollbar" gap="0" overflowX="scroll" w="full">
         <TableHeader />
+        <Divider />
         <Box position="relative" w="full">
           {items.length > 0 && (
             <VStack gap="0">
@@ -77,7 +102,12 @@ export function PaginatedTable<T>({
           )}
         </Box>
       </VStack>
-      {showPagination && <Pagination p="md" {...paginationProps} />}
+      {showPagination && paginationProps && (
+        <>
+          <Divider />
+          <Pagination p="md" {...paginationProps} {...paginationStyles} />
+        </>
+      )}
     </>
   )
 }

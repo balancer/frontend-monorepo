@@ -8,7 +8,7 @@ import { selectRemoveLiquidityHandler } from '../handlers/selectRemoveLiquidityH
 import { RemoveLiquidityType } from '../remove-liquidity.types'
 import { useRemoveLiquiditySimulationQuery } from './useRemoveLiquiditySimulationQuery'
 import { Address } from 'viem'
-import { connectWithDefaultUser } from '@repo/lib/test/utils/wagmi/wagmi-connections'
+import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
 
 async function testQuery(humanBptIn: HumanAmount) {
   const handler = selectRemoveLiquidityHandler(

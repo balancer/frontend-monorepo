@@ -195,6 +195,10 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           bgGradient: 'linear(to-l, gradients.text.heading.from, gradients.text.heading.to)',
           bgClip: 'text',
         },
+        gold: () => ({
+          background: 'font.gold',
+          backgroundClip: 'text',
+        }),
         accordionHeading: {
           background: 'font.accordionHeading',
           backgroundClip: 'text',
@@ -434,6 +438,27 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             shadow: 'none',
           },
         },
+        gold: {
+          background: 'background.gold',
+          color: 'white',
+          shadow: '2xl',
+          _hover: {
+            shadow: 'sm',
+          },
+          _dark: {
+            color: 'font.dark',
+          },
+        },
+        goldSecondary: {
+          background: 'background.gold',
+          backgroundClip: 'text',
+          border: '1px solid transparent',
+          borderColor: 'red',
+          color: 'font.gold',
+          _dark: {
+            color: 'font.gold',
+          },
+        },
         solid: {
           color: 'text-body',
           bg: 'background.level2',
@@ -495,6 +520,40 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           },
           _dark: {
             color: 'background.level3',
+          },
+        },
+        buttonGroupActiveGray: {
+          background: 'white',
+          height: 'fit-content',
+          width: 'fit-content',
+          px: '2',
+          py: '1.5',
+          fontSize: 'sm',
+          color: 'white',
+          fontWeight: '700',
+          borderRadius: '4px',
+          _hover: {
+            transform: 'none',
+          },
+          _dark: {
+            color: 'background.level3',
+          },
+        },
+        buttonGroupInactiveGray: {
+          background: 'white',
+          height: 'fit-content',
+          width: 'fit-content',
+          px: '2',
+          py: '1.5',
+          fontSize: 'sm',
+          color: 'gray.700',
+          fontWeight: '500',
+          borderRadius: '4px',
+          _hover: {
+            transform: 'none',
+          },
+          _dark: {
+            color: 'gray.400',
           },
         },
       },

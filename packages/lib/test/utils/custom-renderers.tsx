@@ -17,18 +17,19 @@ import { TransactionStateProvider } from '@repo/lib/modules/transactions/transac
 import { UserSettingsProvider } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { UserAccountProvider } from '@repo/lib/modules/web3/UserAccountProvider'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
-import { testWagmiConfig } from '@repo/lib/test/anvil/testWagmiConfig'
+import { testWagmiConfig } from '@repo/test/anvil/testWagmiConfig'
 import { ApolloProvider } from '@apollo/client'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { RenderHookOptions, renderHook, waitFor } from '@testing-library/react'
+import { RenderHookOptions, act, renderHook, waitFor } from '@testing-library/react'
 import { PropsWithChildren, ReactNode } from 'react'
 import { WagmiProvider } from 'wagmi'
 import { aGqlPoolElementMock } from '../msw/builders/gqlPoolElement.builders'
-import { apolloTestClient } from './apollo-test-client'
+import { apolloTestClient } from '../../../test/utils/apollo-test-client'
 import { AppRouterContextProviderMock } from './app-router-context-provider-mock'
 import { testQueryClient } from './react-query'
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { PermitSignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/PermitSignatureProvider'
+import { sleep } from '@repo/lib/shared/utils/sleep'
 
 export type Wrapper = ({ children }: PropsWithChildren) => ReactNode
 
@@ -154,3 +155,27 @@ export const buildDefaultPoolTestProvider = (pool: GqlPoolElement = aGqlPoolElem
   }
 
 export const DefaultPoolTestProvider = buildDefaultPoolTestProvider(aGqlPoolElementMock())
+
+// Awaits in the context of a react hook test
+export async function actSleep(ms: number) {
+  return act(async () => {
+    await sleep(ms)
+  })
+}
+
+export async function waitForSimulationSuccess(hookResult: {
+  current: { simulation: { isSuccess: boolean; error: Error | null } }
+}) {
+  let error: Error | null = null
+
+  await waitFor(() => {
+    error = hookResult.current.simulation.error
+    if (error) return true
+
+    expect(hookResult.current.simulation.isSuccess).toBeTruthy()
+  })
+
+  if (error) {
+    throw error
+  }
+}

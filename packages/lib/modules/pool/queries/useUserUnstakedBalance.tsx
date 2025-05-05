@@ -1,10 +1,9 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { compact, keyBy } from 'lodash'
-import { Address, formatUnits } from 'viem'
+import { Address, formatUnits, parseAbi } from 'viem'
 import { useReadContracts } from 'wagmi'
 import { useUserAccount } from '../../web3/UserAccountProvider'
-import { balancerV2WeightedPoolV4Abi } from '../../web3/contracts/abi/generated'
 import { Pool } from '../pool.types'
 import { BPT_DECIMALS } from '../pool.constants'
 import { useMemo } from 'react'
@@ -18,8 +17,8 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
   const { userAddress, isConnected } = useUserAccount()
   const { priceFor } = useTokens()
 
-  // All pools should implement balanceOf so we take this abi that should work for v2 and v3 pools
-  const poolAbi = balancerV2WeightedPoolV4Abi
+  // All pool version will implement balanceOf the same ABI function is shared
+  const balanceOfAbi = parseAbi(['function balanceOf(address account) view returns (uint256)'])
 
   const {
     data: unstakedPoolBalances = [],
@@ -35,7 +34,7 @@ export function useUserUnstakedBalance(pools: Pool[] = []) {
     contracts: pools.map(
       pool =>
         ({
-          abi: poolAbi,
+          abi: balanceOfAbi,
           address: pool.address as Address,
           functionName: 'balanceOf',
           args: [userAddress as Address],

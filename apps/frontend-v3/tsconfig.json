@@ -3,13 +3,14 @@
   "compilerOptions": {
     "module": "esnext",
     "baseUrl": ".",
+    "types": ["vitest/globals"],
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./*"],
+      "@bal/*": ["./*"],
       "@repo/*": ["../../packages/*"]
     },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"

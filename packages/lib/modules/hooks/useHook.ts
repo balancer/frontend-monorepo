@@ -3,7 +3,7 @@ import { getChainId } from '@repo/lib/config/app.config'
 import { PoolCore } from '../pool/pool.types'
 
 export function useHook(pool: PoolCore) {
-  const { metadata } = useHooks()
+  const { metadata: hooksMetadata } = useHooks()
   const hasHook = !!pool.hook?.address
   const hasNestedHook = pool.poolTokens.map(token => token.nestedPool?.hook).some(Boolean)
 
@@ -16,7 +16,7 @@ export function useHook(pool: PoolCore) {
 
   const hooks = hookAddresses
     .map(hookAddress =>
-      metadata?.find(metadata => {
+      hooksMetadata?.find(metadata => {
         const metadataAddresses = metadata.addresses[chainId.toString()]?.map(address =>
           address.toLowerCase()
         )

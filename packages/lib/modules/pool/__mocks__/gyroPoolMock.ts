@@ -65,28 +65,6 @@ export const gyroPoolMock: GqlPoolElement = {
       ],
     },
   },
-  allTokens: [
-    {
-      id: '0xdac42eeb17758daa38caf9a3540c808247527ae3000200000000000000000a2b-0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-      address: '0x2791bca1f2de4661ed88a30c99a7a9449aa84174',
-      name: 'USD Coin (PoS)',
-      symbol: 'USDC',
-      decimals: 6,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0xdac42eeb17758daa38caf9a3540c808247527ae3000200000000000000000a2b-0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
-      address: '0x8f3cf7ad23cd3cadbd9735aff958023239c6a063',
-      name: '(PoS) Dai Stablecoin',
-      symbol: 'DAI',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   displayTokens: [
     {
       id: '0xdac42eeb17758daa38caf9a3540c808247527ae3000200000000000000000a2b-0x2791bca1f2de4661ed88a30c99a7a9449aa84174',

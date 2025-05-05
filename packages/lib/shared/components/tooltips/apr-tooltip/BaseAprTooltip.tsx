@@ -155,6 +155,7 @@ function BaseAprTooltip({
   const popoverContent = customPopoverContent || (
     <PopoverContent
       minWidth={['100px', '300px']}
+      motionProps={{ animate: { scale: 1, opacity: 1 } }}
       overflow="hidden"
       p="0"
       shadow="3xl"
@@ -242,19 +243,19 @@ function BaseAprTooltip({
           apr={merklIncentivesAprDisplayed}
           displayValueFormatter={usedDisplayValueFormatter}
           title="Merkl.xyz incentives"
+          tooltipText={merklIncentivesTooltipText}
         >
-          {merklTokensDisplayed.map(item => {
-            return (
+          {merklTokensDisplayed
+            .filter(item => item.title !== '') // filter out rewards where the token symbol empty
+            .map(item => (
               <TooltipAprItem
                 {...subitemPopoverAprItemProps}
                 apr={item.apr}
                 displayValueFormatter={usedDisplayValueFormatter}
                 key={`merkl-${item.title}-${item.apr}`}
                 title={item.title}
-                tooltipText={merklIncentivesTooltipText}
               />
-            )
-          })}
+            ))}
         </TooltipAprItem>
       ) : null}
       {isCowAmmPool(poolType) && (
@@ -407,7 +408,7 @@ function BaseAprTooltip({
   )
 
   return (
-    <Popover placement={placement} trigger="hover">
+    <Popover isLazy placement={placement} trigger="hover">
       {({ isOpen }) => (
         <>
           <PopoverTrigger>

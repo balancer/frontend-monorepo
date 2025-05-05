@@ -88,28 +88,6 @@ export const bCoW_50WETH_50GNOMock = {
       },
     ],
   },
-  allTokens: [
-    {
-      id: '0x079d2094e16210c42457438195042898a3cff72d-0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1',
-      address: '0x6a023ccd1ff6f2045c3309768ead9e68f978f6e1',
-      name: 'Wrapped Ether on xDai',
-      symbol: 'WETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0x079d2094e16210c42457438195042898a3cff72d-0x9c58bacc331c9aa871afd802db6379a98e80cedb',
-      address: '0x9c58bacc331c9aa871afd802db6379a98e80cedb',
-      name: 'Gnosis Token on xDai',
-      symbol: 'GNO',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   staking: null,
   userBalance: {
     totalBalance: '0',

@@ -19,7 +19,7 @@ export function NavBarContainer() {
   } = PROJECT_CONFIG
   const { defaultAppLinks } = useNav()
 
-  // TODO: move vebal link to config when live
+  // TODO: (votes) move vebal link to config when live
   const appLinks = []
   if (isDev || isStaging) {
     appLinks.push({

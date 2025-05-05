@@ -1,4 +1,3 @@
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ExpandedPoolInfo } from '../../portfolio/PortfolioTable/useExpandedPools'
 import { PoolDisplayType, PoolListItem } from '../pool.types'
 import { PoolListPoolName } from './PoolListPoolName'
@@ -7,13 +6,15 @@ import { PoolListTokenPills } from './PoolListTokenPills'
 export function PoolListPoolDisplay({
   pool,
   name,
+  poolDisplayType,
 }: {
   pool: PoolListItem | ExpandedPoolInfo
   name: string | undefined
+  poolDisplayType: PoolDisplayType
 }) {
   let component
 
-  switch (PROJECT_CONFIG.options.poolDisplayType) {
+  switch (poolDisplayType) {
     case PoolDisplayType.Name:
       component = <PoolListPoolName pool={pool} />
       break

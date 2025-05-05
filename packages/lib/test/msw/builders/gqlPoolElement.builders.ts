@@ -8,14 +8,12 @@ import {
 import {
   aTokenExpandedMock,
   someGqlTokenMocks,
-  someTokenExpandedMock,
 } from '@repo/lib/modules/tokens/__mocks__/token.builders'
 import {
   GqlChain,
   GqlPoolElement,
   GqlPoolNestingType,
   GqlPoolTokenDetail,
-  GqlPoolTokenExpanded,
   GqlPoolType,
   GqlPoolWeighted,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -28,12 +26,10 @@ import { Address, Hex } from 'viem'
 export function aBalWethPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlPoolElement {
   const poolId = '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014' // 80BAL-20WETH
   const tokens = someGqlTokenMocks(['BAL', 'WETH'])
-  const allTokens = someTokenExpandedMock(tokens.map(t => t.address as Address))
 
   const options2: Partial<GqlPoolElement> = {
     id: poolId,
     address: getPoolAddress(poolId),
-    allTokens,
     poolTokens: tokens as unknown as GqlPoolTokenDetail[],
     protocolVersion: 2,
     ...options,
@@ -51,7 +47,6 @@ export function aWjAuraWethPoolElementMock(...options: Partial<GqlPoolElement>[]
   const options2 = {
     id: poolId,
     address: getPoolAddress(poolId),
-    allTokens: tokens,
     poolTokens: tokens as unknown as GqlPoolTokenDetail[],
     protocolVersion: 2,
     ...options,
@@ -77,16 +72,6 @@ export function aGqlPoolElementMock(...options: Partial<GqlPoolElement>[]): GqlP
     protocolVersion: 2,
     address: '0x5c6ee304399dbdb9c8ef030ab642b10820db8f56',
     poolTokens: someGqlTokenMocks(['BAL', 'WETH']),
-    allTokens: [
-      {
-        address: balAddress,
-        weight: '0.8',
-      },
-      {
-        address: wETHAddress,
-        weight: '0.2',
-      },
-    ],
     chain: GqlChain.Mainnet,
     createTime: 1620153071,
     decimals: 18,
@@ -133,19 +118,11 @@ export function aNested50Weth503Pool(...options: Partial<GqlPoolElement>[]): Gql
     aTokenExpandedMock({ symbol: 'WETH', isMainToken: true }),
   ]
 
-  const allTokens = [
-    ...tokens,
-    aTokenExpandedMock({ symbol: 'DAI', isMainToken: true }),
-    aTokenExpandedMock({ symbol: 'USDC', isMainToken: true }),
-    aTokenExpandedMock({ symbol: 'USDT', isMainToken: true }),
-  ]
-
   const defaultOptions: Partial<GqlPoolElement> = {
     id: '0x08775ccb6674d6bdceb0797c364c2653ed84f3840002000000000000000004f0' as Address,
     address: '0x08775ccb6674d6bdceb0797c364c2653ed84f384',
     type: GqlPoolType.Weighted,
     poolTokens: tokens as unknown as GqlPoolTokenDetail[],
-    allTokens,
   }
 
   return Object.assign({}, aGqlPoolElementMock(defaultOptions), options)
@@ -186,7 +163,6 @@ export function aPhantomStablePoolMock(): GqlPoolElement {
     id: poolId,
     address: poolAddress,
     poolTokens: tokens as unknown as GqlPoolTokenDetail[],
-    allTokens: tokens as unknown as GqlPoolTokenExpanded[],
     type: GqlPoolType.ComposableStable,
     protocolVersion: 2,
   })

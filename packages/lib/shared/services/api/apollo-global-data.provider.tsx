@@ -9,6 +9,7 @@
  */
 import { getApolloServerClient } from '@repo/lib/shared/services/api/apollo-server.client'
 import {
+  GetProtocolStatsDocument,
   GetTokenPricesDocument,
   GetTokensDocument,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -25,6 +26,9 @@ import { getErc4626Metadata } from '@repo/lib/modules/pool/metadata/getErc4626Me
 import { PoolsMetadataProvider } from '@repo/lib/modules/pool/metadata/PoolsMetadataProvider'
 import { getPoolsMetadata } from '@repo/lib/modules/pool/metadata/getPoolsMetadata'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { ProtocolStatsProvider } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
+import { FeeManagersProvider } from '@repo/lib/modules/fee-managers/FeeManagersProvider'
+import { getFeeManagersMetadata } from '@repo/lib/modules/fee-managers/getFeeManagersMetadata'
 
 export const revalidate = 60
 
@@ -57,14 +61,33 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
     },
   })
 
-  const [exchangeRates, hooksMetadata, poolTags, erc4626Metadata, poolsMetadata] =
-    await Promise.all([
-      getFxRates(),
-      getHooksMetadata(),
-      getPoolTags(),
-      getErc4626Metadata(),
-      getPoolsMetadata(),
-    ])
+  const { data: protocolData } = await client.query({
+    query: GetProtocolStatsDocument,
+    variables: {
+      chains: PROJECT_CONFIG.networksForProtocolStats || PROJECT_CONFIG.supportedNetworks,
+    },
+    context: {
+      fetchOptions: {
+        next: { revalidate: mins(10).toSecs() },
+      },
+    },
+  })
+
+  const [
+    exchangeRates,
+    hooksMetadata,
+    poolTags,
+    erc4626Metadata,
+    poolsMetadata,
+    feeManagersMetadata,
+  ] = await Promise.all([
+    getFxRates(),
+    getHooksMetadata(),
+    getPoolTags(),
+    getErc4626Metadata(),
+    getPoolsMetadata(),
+    getFeeManagersMetadata(),
+  ])
 
   return (
     <TokensProvider
@@ -75,9 +98,16 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
       <FiatFxRatesProvider data={exchangeRates}>
         <PoolTagsProvider data={poolTags}>
           <HooksProvider data={hooksMetadata}>
-            <PoolsMetadataProvider erc4626Metadata={erc4626Metadata} poolsMetadata={poolsMetadata}>
-              {children}
-            </PoolsMetadataProvider>
+            <FeeManagersProvider data={feeManagersMetadata}>
+              <ProtocolStatsProvider data={protocolData}>
+                <PoolsMetadataProvider
+                  erc4626Metadata={erc4626Metadata}
+                  poolsMetadata={poolsMetadata}
+                >
+                  {children}
+                </PoolsMetadataProvider>
+              </ProtocolStatsProvider>
+            </FeeManagersProvider>
           </HooksProvider>
         </PoolTagsProvider>
       </FiatFxRatesProvider>

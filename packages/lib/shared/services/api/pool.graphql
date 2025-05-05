@@ -45,16 +45,6 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
         rewardTokenAddress
       }
     }
-    allTokens {
-      id
-      address
-      name
-      symbol
-      decimals
-      isNested
-      isPhantomBpt
-      isMainToken
-    }
     staking {
       id
       type
@@ -174,6 +164,18 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       delta
       epsilon
       lambda
+      poolTokens {
+        ...PoolTokens
+      }
+    }
+    ... on GqlPoolQuantAmmWeighted {
+      hasAnyAllowedBuffer
+      poolTokens {
+        ...PoolTokens
+      }
+    }
+    ... on GqlPoolReClamm {
+      hasAnyAllowedBuffer
       poolTokens {
         ...PoolTokens
       }

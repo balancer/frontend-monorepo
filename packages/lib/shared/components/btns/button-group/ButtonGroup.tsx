@@ -31,14 +31,16 @@ type Props = {
   width?: ButtonProps['width']
   isFullWidth?: boolean
   hasLargeTextLabel?: boolean
+  isGray?: boolean
 }
 
 export default function ButtonGroup(props: Props) {
-  const { groupId, options, currentOption, isFullWidth } = props
+  const { groupId, options, currentOption, isFullWidth, isGray } = props
+
   return (
     <LayoutGroup id={groupId}>
       <HStack
-        background="level0"
+        background={isGray ? 'gray.600' : 'level0'}
         p="1"
         pt="3px" // TODO: maybe there a better way to align the buttons
         rounded="md"
@@ -81,8 +83,13 @@ function GroupOptionButton({
   width,
   groupId,
   hasLargeTextLabel,
+  isGray,
   onChange,
 }: { option: ButtonGroupOption; isActive: boolean } & Props) {
+  const variant = isActive ? 'buttonGroupActive' : 'buttonGroupInactive'
+  const variantGray = isActive ? 'buttonGroupActiveGray' : 'buttonGroupInactiveGray'
+  const variantToUse = isGray ? variantGray : variant
+
   return (
     <Button
       bg="transparent"
@@ -97,7 +104,7 @@ function GroupOptionButton({
       }
       role="group"
       size={size}
-      variant={isActive ? 'buttonGroupActive' : 'buttonGroupInactive'}
+      variant={variantToUse}
       width={width || 'full'}
     >
       {isActive && (

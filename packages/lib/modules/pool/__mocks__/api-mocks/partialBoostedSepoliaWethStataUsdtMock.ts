@@ -48,28 +48,6 @@ export const partialBoostedSepoliaWethStataUsdtMock = {
       },
     ],
   },
-  allTokens: [
-    {
-      id: '0x445a49d1ad280b68026629fe029ed0fbef549a94-0x7b79995e5f793a07bc00c21412e50ecae098e7f9',
-      address: '0x7b79995e5f793a07bc00c21412e50ecae098e7f9',
-      name: 'Wrapped Ether',
-      symbol: 'WETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0x445a49d1ad280b68026629fe029ed0fbef549a94-0x978206fae13faf5a8d293fb614326b237684b750',
-      address: '0x978206fae13faf5a8d293fb614326b237684b750',
-      name: 'Static Aave Ethereum USDT',
-      symbol: 'stataEthUSDT',
-      decimals: 6,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   staking: null,
   userBalance: {
     totalBalance: '0',

@@ -23,9 +23,6 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-  Tag,
-  TagCloseButton,
-  TagLabel,
   Text,
   useColorModeValue,
   VStack,
@@ -59,14 +56,16 @@ import ButtonGroup, {
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useCow } from '../../cow/useCow'
 import Link from 'next/link'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { poolTypeLabel } from '../pool.helpers'
+import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
 
 const SLIDER_MAX_VALUE = 10000000
 const SLIDER_STEP_SIZE = 100000
 
 export function useFilterTagsVisible() {
   const {
-    queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags },
+    queryState: { networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion },
   } = usePoolList()
   const [isVisible, setIsVisible] = useState(false)
 
@@ -76,9 +75,10 @@ export function useFilterTagsVisible() {
         poolTypes.length > 0 ||
         minTvl > 0 ||
         poolTags.length > 0 ||
-        poolHookTags.length > 0
+        poolHookTags.length > 0 ||
+        !!protocolVersion
     )
-  }, [networks, poolTypes, minTvl, poolTags, poolHookTags])
+  }, [networks, poolTypes, minTvl, poolTags, poolHookTags, protocolVersion])
 
   return isVisible
 }
@@ -312,6 +312,8 @@ export interface FilterTagsPops {
   poolTypes: PoolFilterType[]
   togglePoolType: (checked: boolean, value: PoolFilterType) => void
   poolTypeLabel: (poolType: PoolFilterType) => string
+  protocolVersion: number | null
+  setProtocolVersion: (value: number | null) => void
   minTvl?: number
   setMinTvl?: (value: number | null) => void
   poolTags?: PoolTagType[]
@@ -340,6 +342,8 @@ export function FilterTags({
   poolHookTags,
   togglePoolHookTag,
   poolHookTagLabel,
+  protocolVersion,
+  setProtocolVersion,
 }: FilterTagsPops) {
   const { toCurrency } = useCurrency()
 
@@ -350,7 +354,8 @@ export function FilterTags({
     minTvl === 0 &&
     (poolTags ? poolTags.length === 0 : true) &&
     !includeExpiredPools &&
-    (poolHookTags ? poolHookTags.length === 0 : true)
+    (poolHookTags ? poolHookTags.length === 0 : true) &&
+    !protocolVersion
   ) {
     return <Box display={{ base: 'flex', md: 'none' }} minHeight="32px" />
   }
@@ -358,151 +363,66 @@ export function FilterTags({
   return (
     <HStack spacing="sm" wrap="wrap">
       <AnimatePresence>
+        {protocolVersion && setProtocolVersion && (
+          <AnimatedTag
+            key="protocolVersion"
+            label={protocolVersion === 1 ? 'CoW' : `v${protocolVersion}`}
+            onClose={() => setProtocolVersion(null)}
+          />
+        )}
+
         {poolTypes.map(poolType => (
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 0 }}
-            initial={{ opacity: 0, y: 40 }}
+          <AnimatedTag
             key={poolType}
-            transition={{
-              enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
-              exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
-            }}
-          >
-            <Tag size="lg">
-              <TagLabel>
-                <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
-                  {poolTypeLabel(poolType)}
-                </Text>
-              </TagLabel>
-              <TagCloseButton onClick={() => togglePoolType(false, poolType)} />
-            </Tag>
-          </motion.div>
+            label={poolTypeLabel(poolType)}
+            onClose={() => togglePoolType(false, poolType)}
+          />
         ))}
-      </AnimatePresence>
-      <AnimatePresence>
+
         {networks.map(network => (
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 0 }}
-            initial={{ opacity: 0, y: 40 }}
+          <AnimatedTag
             key={network}
-            transition={{
-              enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
-              exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
-            }}
-          >
-            <Tag size="lg">
-              <TagLabel>
-                <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
-                  {network.toLowerCase()}
-                </Text>
-              </TagLabel>
-              <TagCloseButton onClick={() => toggleNetwork(false, network)} />
-            </Tag>
-          </motion.div>
+            label={getChainShortName(network)}
+            onClose={() => toggleNetwork(false, network)}
+          />
         ))}
-      </AnimatePresence>
-      {minTvl && minTvl > 0 && (
-        <AnimatePresence>
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 0 }}
-            initial={{ opacity: 0, y: 40 }}
+
+        {minTvl && minTvl > 0 && (
+          <AnimatedTag
             key="minTvl"
-            transition={{
-              enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
-              exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
-            }}
-          >
-            <Tag size="lg">
-              <TagLabel>
-                <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
-                  {`TVL > ${toCurrency(minTvl)}`}
-                </Text>
-              </TagLabel>
-              <TagCloseButton onClick={() => setMinTvl && setMinTvl(0)} />
-            </Tag>
-          </motion.div>
-        </AnimatePresence>
-      )}
-      {poolTags && poolTagLabel && (
-        <AnimatePresence>
-          {poolTags.map(tag => (
-            <motion.div
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 0 }}
-              initial={{ opacity: 0, y: 40 }}
+            label={`TVL > ${toCurrency(minTvl)}`}
+            onClose={() => setMinTvl && setMinTvl(0)}
+          />
+        )}
+
+        {poolTags &&
+          poolTagLabel &&
+          poolTags.map(tag => (
+            <AnimatedTag
               key={tag}
-              transition={{
-                enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
-                exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
-              }}
-            >
-              <Tag size="lg">
-                <TagLabel>
-                  <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
-                    {poolTagLabel(tag)}
-                  </Text>
-                </TagLabel>
-                <TagCloseButton onClick={() => togglePoolTag && togglePoolTag(false, tag)} />
-              </Tag>
-            </motion.div>
+              label={poolTagLabel(tag)}
+              onClose={() => togglePoolTag && togglePoolTag(false, tag)}
+            />
           ))}
-        </AnimatePresence>
-      )}
-      {includeExpiredPools && (
-        <AnimatePresence>
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 0 }}
-            initial={{ opacity: 0, y: 40 }}
+
+        {includeExpiredPools && (
+          <AnimatedTag
             key="expiredPools"
-            transition={{
-              enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
-              exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
-            }}
-          >
-            <Tag size="lg">
-              <TagLabel>
-                <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
-                  Expired
-                </Text>
-              </TagLabel>
-              <TagCloseButton
-                onClick={() => toggleIncludeExpiredPools && toggleIncludeExpiredPools(false)}
-              />
-            </Tag>
-          </motion.div>
-        </AnimatePresence>
-      )}
-      {poolHookTags && poolHookTagLabel && (
-        <AnimatePresence>
-          {poolHookTags.map(tag => (
-            <motion.div
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 0 }}
-              initial={{ opacity: 0, y: 40 }}
+            label="Expired"
+            onClose={() => toggleIncludeExpiredPools && toggleIncludeExpiredPools(false)}
+          />
+        )}
+
+        {poolHookTags &&
+          poolHookTagLabel &&
+          poolHookTags.map(tag => (
+            <AnimatedTag
               key={tag}
-              transition={{
-                enter: { ease: 'easeOut', duration: 0.15, delay: 0.05 },
-                exit: { ease: 'easeIn', duration: 0.05, delay: 0 },
-              }}
-            >
-              <Tag size="lg">
-                <TagLabel>
-                  <Text fontSize="sm" fontWeight="bold" textTransform="capitalize">
-                    {poolHookTagLabel(tag)}
-                  </Text>
-                </TagLabel>
-                <TagCloseButton
-                  onClick={() => togglePoolHookTag && togglePoolHookTag(false, tag)}
-                />
-              </Tag>
-            </motion.div>
+              label={poolHookTagLabel(tag)}
+              onClose={() => togglePoolHookTag && togglePoolHookTag(false, tag)}
+            />
           ))}
-        </AnimatePresence>
-      )}
+      </AnimatePresence>
     </HStack>
   )
 }
@@ -538,7 +458,7 @@ export const FilterButton = forwardRef<ButtonProps & { totalFilterCount: number 
 )
 
 export interface ProtocolVersionFilterProps {
-  setProtocolVersion: React.Dispatch<React.SetStateAction<number | null>>
+  setProtocolVersion: (version: number | null) => any
   protocolVersion: number | null
   poolTypes: PoolFilterType[]
   activeProtocolVersionTab: ButtonGroupOption
@@ -609,7 +529,6 @@ export function PoolListFilters() {
       setNetworks,
       togglePoolType,
       poolTypes,
-      poolTypeLabel,
       setPoolTypes,
       setProtocolVersion,
       protocolVersion,
@@ -625,14 +544,18 @@ export function PoolListFilters() {
   }
 
   const { options, externalLinks } = PROJECT_CONFIG
-  const subPath = !options.showVeBal ? '' : isCowPath ? 'cow' : 'v3'
-  const poolCreatorUrl = `${externalLinks.poolComposerUrl}/${subPath}`
+  const subPath = isCowPath ? 'cow' : 'v3'
+
+  const poolCreatorUrl = isBalancer
+    ? `${externalLinks.poolComposerUrl}/${subPath}`
+    : externalLinks.poolComposerUrl
 
   return (
     <VStack w="full">
       <HStack gap="0" justify="end" spacing="none" w="full">
         <PoolListSearch />
         <Popover
+          isLazy
           isOpen={isPopoverOpen}
           onClose={() => setIsPopoverOpen(false)}
           onOpen={() => setIsPopoverOpen(true)}
@@ -642,7 +565,7 @@ export function PoolListFilters() {
             <FilterButton ml="ms" totalFilterCount={totalFilterCount} />
           </PopoverTrigger>
           <Box shadow="2xl" zIndex="popover">
-            <PopoverContent>
+            <PopoverContent motionProps={{ animate: { scale: 1, opacity: 1 } }}>
               <PopoverArrow bg="background.level3" />
               <PopoverCloseButton top="sm" />
               <PopoverBody p="md">
@@ -763,7 +686,7 @@ export function PoolListFilters() {
           variant="tertiary"
         >
           <Icon as={Plus} boxSize={4} />
-          {!isMobile && 'Create a pool'}
+          {!isMobile && 'Create pool'}
         </Button>
       </HStack>
     </VStack>

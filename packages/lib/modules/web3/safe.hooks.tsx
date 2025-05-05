@@ -1,6 +1,4 @@
 import { Hex } from 'viem'
-import { Pool } from '../pool/pool.types'
-import { isCowAmmPool } from '../pool/pool.helpers'
 import { TransactionStep, TxBatch } from '../transactions/transaction-steps/lib'
 import {
   buildTxBatch,
@@ -9,6 +7,7 @@ import {
 import { useUserAccount } from './UserAccountProvider'
 import { useSafeTxQuery } from '../transactions/transaction-steps/safe/useSafeTxQuery'
 import { useWalletConnectMetadata } from './wallet-connect/useWalletConnectMetadata'
+import { useUserSettings } from '../user/settings/UserSettingsProvider'
 
 // Returns true when using a Safe Smart account:
 // - app running as a Safe App
@@ -22,21 +21,17 @@ export function useIsSafeAccount(): boolean {
 // Returns true when app is running as a Safe App (it excludes Safe accounts connected via WalletConnect)
 export function useIsSafeApp(): boolean {
   const { connector } = useUserAccount()
-
   return connector?.id === 'safe'
 }
 
-// Returns true if the user is connected with a Safe Account
-export function useShouldBatchTransactions(pool: Pool): boolean {
+/*
+ Returns true when running as a Safe App and settings allow batched tx
+ (that excludes Safe accounts connected via WalletConnect)
+*/
+export function useShouldBatchTransactions(): boolean {
+  const { shouldUseTxBundling } = useUserSettings()
   const isSafeApp = useIsSafeApp()
-
-  return isSafeApp && isCowAmmPool(pool.type)
-}
-
-export function useShouldRenderBatchTxButton(currentStep: TransactionStep): boolean {
-  const isSafeApp = useIsSafeApp()
-  const txBatch: TxBatch = buildTxBatch(currentStep)
-  return isSafeApp && !!currentStep.isBatchEnd && !!txBatch
+  return shouldUseTxBundling && isSafeApp
 }
 
 /* isStepWithTxBatch is true if:
@@ -49,9 +44,9 @@ export function useStepWithTxBatch(currentStep: TransactionStep): {
   txBatch?: TxBatch
 } {
   const noBatchStep = { isStepWithTxBatch: false }
-  const isSafeApp = useIsSafeApp()
+  const shouldBatchTx = useShouldBatchTransactions()
 
-  if (!isSafeApp) return noBatchStep
+  if (!shouldBatchTx) return noBatchStep
   if (!currentStep.isBatchEnd) return noBatchStep
 
   const txBatch: TxBatch = buildTxBatch(currentStep)

@@ -38,10 +38,15 @@ export const ProjectConfigBalancer: ProjectConfig = {
   externalLinks: {
     poolComposerUrl: 'https://pool-creator.balancer.fi',
   },
+  merklRewardsChains: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Mode],
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: [],
-    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.Fx],
+    hidePoolTypes: [
+      GqlPoolType.LiquidityBootstrapping,
+      GqlPoolType.Fx,
+      GqlPoolType.QuantAmmWeighted,
+    ],
     hideProtocolVersion: [],
     showPoolName: false,
     showVeBal: true,
@@ -126,11 +131,6 @@ export const ProjectConfigBalancer: ProjectConfig = {
             href: 'https://www.fjordfoundry.com/?utm_source=balancer&utm_medium=website',
             isExternal: true,
           },
-          {
-            label: 'Create an NFT drop',
-            href: 'https://fjordnfts.com/?utm_source=balancer&utm_medium=website',
-            isExternal: true,
-          },
         ],
       },
       {
@@ -155,4 +155,35 @@ export const ProjectConfigBalancer: ProjectConfig = {
     ],
   },
   cowSupportedNetworks: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Gnosis],
+  partnerCards: [
+    {
+      backgroundImage: 'images/partners/cards/partner-cow-bg.png',
+      bgColor: 'green.900',
+      ctaText: 'View pools',
+      ctaUrl: '/pools/cow',
+      description: 'The first MEV-capturing AMM. More returns, less risk with LVR protection.',
+      iconName: 'cow',
+      title: 'CoW AMM',
+    },
+    {
+      backgroundImage: 'images/partners/cards/partner-gyro-bg.png',
+      bgColor: 'pink.600',
+      ctaText: 'View pools on Gyro',
+      ctaUrl: 'https://app.gyro.finance/pools/ethereum/',
+      description: 'Concentrated Liquidity Pools on Balancer. Improves capital efficiency for LPs.',
+      externalLink: true,
+      iconName: 'gyro',
+      title: 'Gyroscope',
+    },
+    {
+      backgroundImage: 'images/partners/cards/partner-xave-bg.png',
+      bgColor: 'blue.400',
+      ctaText: 'View pools on Xave',
+      ctaUrl: 'https://app.xave.co/pool',
+      description: 'Foreign Exchange Liquidity Pools. Optimized for RWA and stablecoins.',
+      externalLink: true,
+      iconName: 'xave',
+      title: 'Xave',
+    },
+  ],
 }

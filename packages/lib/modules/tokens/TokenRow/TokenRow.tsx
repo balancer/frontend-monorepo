@@ -85,8 +85,6 @@ function TokenInfo({
         <TokenIcon
           address={address}
           alt={token?.symbol || address}
-          bg="background.level2"
-          borderRadius="md"
           chain={chain}
           logoURI={logoURI}
           overflow="visible"
@@ -187,6 +185,9 @@ export default function TokenRow({
         setUsdValue(usdValueForBpt(address, chain, value))
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))
+      } else if (poolToken) {
+        // For not allowed tokens, token is undefined so we fallback to poolToken
+        setUsdValue(usdValueForToken(poolToken, value))
       }
 
       setAmount(fNum('token', value, { abbreviated }))
@@ -220,7 +221,7 @@ export default function TokenRow({
           <TokenInfo {...props} isBpt={isBpt || isNestedBpt} />
         )}
         <HStack align="start" spacing="none">
-          <VStack alignItems="flex-end" spacing="xs" textAlign="right">
+          <VStack alignItems="flex-end" spacing="none" textAlign="right">
             {isLoading ? (
               <>
                 <Skeleton h="4" w="10" />

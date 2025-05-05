@@ -2,6 +2,7 @@ import { ConnectButton, WalletButton } from '@rainbow-me/rainbowkit'
 import { Box, Button, ButtonProps, HStack, Img, Show } from '@chakra-ui/react'
 import { CustomAvatar } from './CustomAvatar'
 import { useUserAccount } from './UserAccountProvider'
+import { useIsSafeApp } from './safe.hooks'
 
 export function ConnectWallet({
   connectLabel = 'Connect wallet',
@@ -9,6 +10,7 @@ export function ConnectWallet({
   ...rest
 }: { connectLabel?: string; showCreateWalletButton?: boolean } & ButtonProps) {
   const { isLoading: isLoadingAccount, isConnected: isConnectedAccount } = useUserAccount()
+  const isSafeApp = useIsSafeApp()
 
   return (
     <ConnectButton.Custom>
@@ -65,7 +67,13 @@ export function ConnectWallet({
 
         if (chain.unsupported) {
           return (
-            <Button onClick={openChainModal} type="button" variant="tertiary" {...rest}>
+            <Button
+              onClick={openChainModal}
+              type="button"
+              variant="tertiary"
+              {...rest}
+              isDisabled={isSafeApp}
+            >
               Unsupported network
             </Button>
           )
@@ -76,6 +84,7 @@ export function ConnectWallet({
             <Button
               alignItems="center"
               display="flex"
+              isDisabled={isSafeApp}
               onClick={openChainModal}
               type="button"
               variant="tertiary"
@@ -101,7 +110,7 @@ export function ConnectWallet({
               )}
               <Show above="sm">{chain.name}</Show>
             </Button>
-            <Button onClick={openAccountModal} variant="tertiary" {...rest}>
+            <Button onClick={openAccountModal} variant="tertiary" {...rest} isDisabled={isSafeApp}>
               <CustomAvatar
                 address={account.address}
                 alt="Avatar"

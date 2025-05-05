@@ -73,6 +73,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
           default: tokens.colors.light.background.highlight,
           _dark: tokens.colors.dark.background.highlight,
         },
+        gold: {
+          default: tokens.colors.light.background.gold,
+          _dark: tokens.colors.dark.background.gold,
+        },
         button: {
           primary: {
             default: tokens.colors.light.button.background.primary,
@@ -396,6 +400,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
       innerRockShadow: {
         default: tokens.shadows.light.innerRockShadow,
         _dark: tokens.shadows.dark.innerRockShadow,
+      },
+      innerRockShadowSm: {
+        default: tokens.shadows.light.innerRockShadowSm,
+        _dark: tokens.shadows.dark.innerRockShadowSm,
       },
       chartIconInner: {
         default: tokens.shadows.light.chartIconInner,

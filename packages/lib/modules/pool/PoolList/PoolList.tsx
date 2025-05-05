@@ -1,8 +1,10 @@
+'use client'
+
 import { PoolListProvider } from '@repo/lib/modules/pool/PoolList/PoolListProvider'
 import { PoolListLayout } from './PoolListLayout'
 import { GqlPoolType, GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-export async function PoolList({
+export function PoolList({
   fixedPoolTypes,
   fixedChains,
 }: {

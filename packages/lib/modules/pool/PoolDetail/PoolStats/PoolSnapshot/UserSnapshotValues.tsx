@@ -1,13 +1,11 @@
 'use client'
 
-import React, { memo, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { Button, HStack, Heading, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
 import { TokenIconStack } from '../../../../tokens/TokenIconStack'
-import { GqlToken } from '@repo/lib/shared/services/api/generated/graphql'
+import { TokenStackPopover } from '../../../../tokens/TokenStackPopover'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { SECONDS_IN_DAY } from '@repo/lib/test/utils/numbers'
-import { sumBy, isEmpty } from 'lodash'
-import { useTokens } from '../../../../tokens/TokensProvider'
+import { isEmpty } from 'lodash'
 import { useVebalBoost } from '../../../../vebal/useVebalBoost'
 import { useClaim } from '../../../actions/claim/ClaimProvider'
 import { getTotalAprRaw } from '../../../pool.utils'
@@ -16,6 +14,7 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { ClaimModal } from '../../../actions/claim/ClaimModal'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { calcTotalStakedBalanceUsd } from '../../../user-balance.helpers'
+import { useGetUserPoolRewards } from '../../../useGetUserPoolRewards'
 
 export type PoolMyStatsValues = {
   myLiquidity: number
@@ -26,38 +25,27 @@ export type PoolMyStatsValues = {
 const POSSIBLE_STAKED_BALANCE_USD = 10000
 
 export function UserSnapshotValues() {
-  const { pool, chain, isLoading: isLoadingPool, myLiquiditySectionRef } = usePool()
+  const { chain, isLoading: isLoadingPool, myLiquiditySectionRef, pool } = usePool()
   const { toCurrency } = useCurrency()
   const { veBalBoostMap } = useVebalBoost([pool])
-  const { getToken } = useTokens()
 
   const {
-    isLoading: isLoadingClaiming,
+    disabledReason,
     hasNoRewards,
+    isDisabled,
+    previewModalDisclosure,
+    isLoading: isLoadingClaiming,
     balRewards,
     nonBalRewards,
-    previewModalDisclosure,
-    disabledReason,
-    isDisabled,
   } = useClaim()
 
-  const MemoizedMainAprTooltip = memo(MainAprTooltip)
-
-  // TODO: only uses Balancer rewards rn
-  const claimableRewards = [...balRewards, ...nonBalRewards]
-  const myClaimableRewards = sumBy(claimableRewards, reward => reward.fiatBalance.toNumber())
-
-  const currentRewards = pool.staking?.gauge?.rewards || []
-  const currentRewardsPerWeek = currentRewards.map(reward => {
-    return {
-      ...reward,
-      rewardPerWeek: parseFloat(reward.rewardPerSecond) * SECONDS_IN_DAY * 7,
-    }
+  const { myClaimableRewards, tokens, rewardsByToken } = useGetUserPoolRewards({
+    pool,
+    balRewards,
+    nonBalRewards,
   })
 
-  const tokens = currentRewardsPerWeek
-    .filter(reward => bn(reward.rewardPerSecond).gt(0))
-    .map(reward => getToken(reward.tokenAddress, chain)) as GqlToken[]
+  const MemoizedMainAprTooltip = memo(MainAprTooltip)
 
   const boost = useMemo(() => {
     if (isEmpty(veBalBoostMap)) return
@@ -71,15 +59,12 @@ export function UserSnapshotValues() {
     if (pool && pool.userBalance && !isLoadingPool && !isLoadingClaiming) {
       const totalBalanceUsd = pool.userBalance.totalBalanceUsd
 
-      // TODO: only uses Balancer balances rn
       const stakedBalanceUsd = totalBalanceUsd
         ? calcTotalStakedBalanceUsd(pool)
         : POSSIBLE_STAKED_BALANCE_USD
 
       return {
-        // TODO: only uses Balancer balances rn
         myLiquidity: totalBalanceUsd,
-        // TODO: only uses Balancer balances rn
         myPotentialWeeklyYield: bn(stakedBalanceUsd)
           .times(bn(bn(myAprRaw).div(100)).div(52))
           .toFixed(2),
@@ -135,6 +120,7 @@ export function UserSnapshotValues() {
           <MemoizedMainAprTooltip
             aprItems={pool.dynamicData.aprItems}
             chain={pool.chain}
+            height="28px"
             pool={pool}
             poolId={pool.id}
             textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
@@ -166,7 +152,14 @@ export function UserSnapshotValues() {
           ) : (
             <HStack>
               <Heading size="h4">{toCurrency(poolMyStatsValues.myClaimableRewards)}</Heading>
-              <TokenIconStack chain={chain} size={20} tokens={tokens} />
+              <TokenStackPopover
+                chain={chain}
+                headerText="My claimable rewards"
+                rewardsByToken={rewardsByToken}
+                tokens={tokens}
+              >
+                <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
+              </TokenStackPopover>
               <Tooltip label={isDisabled ? disabledReason : ''}>
                 <Button
                   isDisabled={isDisabled}

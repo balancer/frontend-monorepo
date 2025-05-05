@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Pool } from '../../pool/pool.types'
 import { isVebalPool } from '../../pool/pool.helpers'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
+import { getCanStake } from '../../pool/actions/stake.helpers'
 
 export enum ExpandedPoolType {
   StakedBal = 'staked-bal',
@@ -20,6 +21,34 @@ export type ExpandedPoolInfo = Pool & {
 
 function generateUniqueKey(...args: string[]) {
   return args.join(' - ')
+}
+
+export const StakingFilterKey = {
+  Staked: 'Staked',
+  Locked: 'Locked',
+  Unlocked: 'Unlocked',
+  Unstaked: 'Unstaked',
+  Default: 'Default',
+} as const
+
+export type StakingFilterKeyType = (typeof StakingFilterKey)[keyof typeof StakingFilterKey]
+
+// Maps UI filter keys to the actual pool types they represent
+export const STAKING_FILTER_MAP: Record<StakingFilterKeyType, ExpandedPoolType[]> = {
+  [StakingFilterKey.Staked]: [ExpandedPoolType.StakedBal, ExpandedPoolType.StakedAura],
+  [StakingFilterKey.Locked]: [ExpandedPoolType.Locked],
+  [StakingFilterKey.Unlocked]: [ExpandedPoolType.Unlocked],
+  [StakingFilterKey.Unstaked]: [ExpandedPoolType.Unstaked],
+  [StakingFilterKey.Default]: [ExpandedPoolType.Default],
+}
+
+// Maps UI filter keys to their display labels
+export const STAKING_LABEL_MAP: Record<StakingFilterKeyType, string> = {
+  [StakingFilterKey.Staked]: 'Staked',
+  [StakingFilterKey.Locked]: 'Locked',
+  [StakingFilterKey.Unlocked]: 'Unlocked',
+  [StakingFilterKey.Unstaked]: 'Unstaked',
+  [StakingFilterKey.Default]: 'N/A',
 }
 
 export function useExpandedPools(pools: Pool[]) {
@@ -62,7 +91,12 @@ export function useExpandedPools(pools: Pool[]) {
       }
 
       if (walletBalanceUsd > 0) {
-        const poolType = isVeBal ? ExpandedPoolType.Unlocked : ExpandedPoolType.Unstaked
+        const canStake = getCanStake(pool)
+        const poolType = canStake
+          ? isVeBal
+            ? ExpandedPoolType.Unlocked
+            : ExpandedPoolType.Unstaked
+          : ExpandedPoolType.Default
         expandedPools.push({
           ...pool,
           poolType,

@@ -40,9 +40,9 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
   const data = useMemo(() => {
     if (!liquidityData) return null
 
-    const transformedData = liquidityData.map(([price, liquidity]) =>
-      isReversed ? [1 / price, liquidity] : [price, liquidity]
-    )
+    const transformedData = liquidityData
+      .filter(([price]) => price !== 0) // filter out zero price to prevent infinity on reverse
+      .map(([price, liquidity]) => (isReversed ? [1 / price, liquidity] : [price, liquidity]))
 
     return transformedData.sort((a, b) => a[0] - b[0]) as [[number, number]]
   }, [liquidityData, isReversed])
@@ -53,7 +53,7 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
   const yMax = useMemo(() => (data ? Math.max(...data.map(([, y]) => y)) : 0), [data])
 
   const poolIsInRange = useMemo(() => {
-    const margin = 0.000001 // if spot price is within the margin on both sides it's considered out of range
+    const margin = 0.00001 // if spot price is within the margin on both sides it's considered out of range
 
     return (
       bn(poolSpotPrice || 0).gt(xMin * (1 + margin)) &&

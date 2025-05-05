@@ -56,28 +56,6 @@ export const rsETH_hgETHMock = {
       },
     ],
   },
-  allTokens: [
-    {
-      id: '0x6649a010cbcf5742e7a13a657df358556b3e55cf-0xa1290d69c65a6fe4df752f95823fae25cb99e5a7',
-      address: '0xa1290d69c65a6fe4df752f95823fae25cb99e5a7',
-      name: 'rsETH',
-      symbol: 'rsETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0x6649a010cbcf5742e7a13a657df358556b3e55cf-0xc824a08db624942c5e5f330d56530cd1598859fd',
-      address: '0xc824a08db624942c5e5f330d56530cd1598859fd',
-      name: 'High Growth ETH',
-      symbol: 'hgETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   staking: {
     id: '0xcbc0a61e99fe3adba90bead3738446952bcb8002',
     type: 'GAUGE',

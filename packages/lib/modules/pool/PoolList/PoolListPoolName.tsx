@@ -10,7 +10,7 @@ export function PoolListPoolName({ pool }: { pool: PoolListItem | ExpandedPoolIn
   const zIndices = Array.from({ length: displayTokens.length }, (_, index) => index).reverse()
 
   return (
-    <HStack>
+    <HStack alignItems="center" h={['32px', '36px']} my="0" p={['xxs', 'sm']} pr={[1.5, 'ms']}>
       {displayTokens.map((token, i) => (
         <Box key={token.address} ml={isFirstToken(i) ? 0 : -3} zIndex={zIndices[i]}>
           <TokenIcon

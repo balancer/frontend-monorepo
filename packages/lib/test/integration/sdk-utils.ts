@@ -17,8 +17,10 @@ import {
   TestActions,
   TransactionReceipt,
   WalletActions,
+  WalletClient,
   concat,
   encodeAbiParameters,
+  getAbiItem,
   hexToBigInt,
   keccak256,
   pad,
@@ -29,9 +31,11 @@ import {
 } from 'viem'
 import { erc20Abi } from 'viem'
 import { aWjAuraWethPoolElementMock } from '../msw/builders/gqlPoolElement.builders'
-import { defaultTestUserAccount } from '../anvil/anvil-setup'
 import { mainnet } from 'viem/chains'
-import { mainnetTestPublicClient } from '../utils/wagmi/wagmi-test-clients'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
+import { getNetworkConfig } from '@repo/lib/config/app.config'
+import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 
 /*
   Given chain, user account and pool
@@ -279,7 +283,6 @@ export async function getSdkTestUtils({
       _slots = await Promise.all(
         tokens.map(async (token, i) => findTokenBalanceSlot(account, token, isVyperMapping[i]))
       )
-      console.log(`slots: ${_slots}`)
     }
 
     for (let i = 0; i < tokens.length; i++) {
@@ -300,7 +303,6 @@ export async function getSdkTestUtils({
     let _slot: number
     if (slot) _slot = slot
     else _slot = await findTokenBalanceSlot(account, tokenAddress, isVyperMapping)
-    // console.log(`slot: ${_slot}`)
 
     // Set initial account balance for the token that will be used to join pool
     const balance = toEvmTokenBalance(humanBalance, tokenAddress)
@@ -325,4 +327,141 @@ export async function getSdkTestUtils({
   async function setUserPoolBalance(humanBalance: HumanAmount) {
     return await setupToken(humanBalance, pool.address as Address)
   }
+}
+
+type SetUserTokenBalanceParams = {
+  client: TestActions
+  account: Address
+  tokenAddress: Address
+  slot?: number
+  balance: bigint
+  isVyperMapping?: boolean
+}
+export async function setUserTokenBalance({
+  client,
+  account,
+  tokenAddress,
+  slot,
+  balance,
+  isVyperMapping = false,
+}: SetUserTokenBalanceParams): Promise<void> {
+  // Get storage slot index
+  const slotBytes = pad(toBytes(slot || 0))
+  const accountAddressBytes = pad(toBytes(account))
+
+  let index: Address
+  if (isVyperMapping) {
+    index = keccak256(concat([slotBytes, accountAddressBytes])) // slot, key
+  } else {
+    index = keccak256(concat([accountAddressBytes, slotBytes])) // key, slot
+  }
+
+  // Manipulate local balance (needs to be bytes32 string)
+  await client.setStorageAt({
+    address: tokenAddress,
+    index,
+    value: toHex(balance, { size: 32 }),
+  })
+}
+
+type GetUserBalanceParams = {
+  client: WalletClient & PublicActions
+  account: Address
+  tokenAddress: Address
+}
+export async function getTokenUserBalance({
+  client,
+  account,
+  tokenAddress,
+}: GetUserBalanceParams): Promise<bigint> {
+  return client.readContract({
+    account,
+    address: tokenAddress,
+    abi: [getAbiItem({ abi: erc20Abi, name: 'balanceOf' })],
+    functionName: 'balanceOf',
+    args: [account],
+  })
+}
+
+type ApproveTokenParams = {
+  client: WalletClient & PublicActions
+  account: Address
+  token: Address
+  spender: Address
+  amount?: bigint // approve max by default
+}
+
+export async function approveToken({
+  client,
+  account,
+  token,
+  spender,
+  amount = MAX_UINT256,
+}: ApproveTokenParams) {
+  const hash = await client.writeContract({
+    account,
+    chain: client.chain,
+    address: token,
+    abi: erc20Abi,
+    functionName: 'approve',
+    args: [spender, amount],
+  })
+
+  const txReceipt = await client.waitForTransactionReceipt({
+    hash,
+  })
+  return txReceipt.status === 'success'
+}
+
+export async function resetBlock({
+  client,
+  chain,
+}: {
+  client: WalletClient & PublicActions & TestActions
+  chain: ChainId
+}) {
+  await client.reset({
+    jsonRpcUrl: getNetworkConfig(chain).rpcUrl,
+  })
+}
+
+export async function setNativeUserBalance({
+  client,
+  account,
+  humanAmount,
+}: {
+  client: WalletClient & PublicActions & TestActions
+  account: Address
+  humanAmount: HumanAmount
+}) {
+  await client.setBalance({
+    address: account,
+    value: parseUnits(humanAmount, 18),
+  })
+}
+
+export async function getNativeUserBalance({
+  client,
+  account,
+}: {
+  client: WalletClient & PublicActions & TestActions
+  account: Address
+}) {
+  return client.getBalance({ address: account })
+}
+
+type SetVeBalTokenBalanceParams = {
+  account: Address
+  balance: bigint
+}
+export async function setVeBalBptBalance({ account, balance }: SetVeBalTokenBalanceParams) {
+  const veBalBpt = mainnetNetworkConfig.tokens.addresses.veBalBpt as Address
+
+  await setUserTokenBalance({
+    client: mainnetTestPublicClient,
+    account,
+    tokenAddress: veBalBpt,
+    balance,
+    slot: 0,
+  })
 }

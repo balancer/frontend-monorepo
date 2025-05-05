@@ -96,6 +96,16 @@ body {
   }
 }
 
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 /* AppZi styles */
 div[id^='bkln'] {
   background-color: rgb(0 0 0 / 90%) !important;

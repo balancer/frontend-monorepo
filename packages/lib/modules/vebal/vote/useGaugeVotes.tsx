@@ -7,15 +7,7 @@ import { Hex } from 'viem'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { onlyExplicitRefetch } from '../../../shared/utils/queries'
 import { useReadContracts } from 'wagmi'
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const FIRST_WEEK_TIMESTAMP = 1648684800
-
-export interface UserVotesData {
-  end: bigint
-  power: bigint
-  slope: bigint
-}
+import { UserVotesData } from '@repo/lib/modules/vebal/vote/vote.types'
 
 export interface RawVotesData {
   gaugeWeightThisPeriod?: { result?: bigint; status: string }
@@ -124,14 +116,19 @@ export interface UseGaugeVotesParams {
 export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
   const { userAddress, isConnected } = useUserAccount()
 
-  const thisWeekTimestamp = toUnixTimestamp(Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs)
+  // FIXME: [JUANJO] should this be calculated on thursday?
+  const thisWeek = Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs
+  const gaugeWeightThisPeriodQuery = useGaugeRelativeWeightsWrite(
+    gaugeAddresses,
+    toUnixTimestamp(thisWeek)
+  )
 
-  const nextWeekTimestamp = useMemo(() => {
-    return toUnixTimestamp(Math.floor((Date.now() + oneWeekInMs) / oneWeekInMs) * oneWeekInMs)
-  }, [])
+  const nextWeek = thisWeek + oneWeekInMs
+  const gaugeWeightNextPeriodQuery = useGaugeRelativeWeightsWrite(
+    gaugeAddresses,
+    toUnixTimestamp(nextWeek)
+  )
 
-  const gaugeWeightThisPeriodQuery = useGaugeRelativeWeightsWrite(gaugeAddresses, thisWeekTimestamp)
-  const gaugeWeightNextPeriodQuery = useGaugeRelativeWeightsWrite(gaugeAddresses, nextWeekTimestamp)
   const userVotesQuery = useVoteUserSlopes(isConnected ? gaugeAddresses : [], userAddress)
   const lastUserVotesQuery = useLastUserVotes(isConnected ? gaugeAddresses : [], userAddress)
 

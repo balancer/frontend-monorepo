@@ -47,6 +47,14 @@ transaction flows (using wagmi connector mock to avoid playwright interacting wi
 
 ## Local E2E tests
 
+### Install playwright locally
+
+```bash
+  pnpm playwright:install:chromium
+  # or
+  pnpm playwright:install # if you want to test with non-chromium browsers locally
+```
+
 You can also run `pnpm test:e2e:build` or `pnpm test:e2e:dev` but, when implementing new tests, we
 recommend the ui option:
 

@@ -1,6 +1,6 @@
 import { vaultV2Address, wETHAddress, wjAuraAddress } from '@repo/lib/debug-helpers'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { act, waitFor } from '@testing-library/react'
 import { Address } from 'viem'
 import { useTokenAllowances } from './useTokenAllowances'

@@ -3,8 +3,6 @@ import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
 import { PoolIssue } from '@repo/lib/modules/pool/alerts/pool-issues/PoolIssue.type'
 import { CSP_ISSUE_POOL_IDS } from '@repo/lib/shared/data/csp-issue'
-import { BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED, BALANCER_ROUTER } from '@balancer/sdk'
-import { polygonZkEvm } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
   chainId: 1101,
@@ -50,8 +48,6 @@ const networkConfig: NetworkConfig = {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
       relayerV6: '0x8e620FfCa2580ed87241D7e10F85EE75d0a906F5',
       minter: '0x475D18169BE8a89357A9ee3Ab00ca386d20fA229',
-      router: BALANCER_ROUTER[polygonZkEvm.id],
-      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[polygonZkEvm.id],
     },
     veDelegationProxy: '0xc7E5ED1054A24Ef31D827E6F86caA58B3Bc168d7',
   },

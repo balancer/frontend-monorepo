@@ -4,13 +4,13 @@ import {
   toGqlWeighedPoolMock,
 } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
-import { mainnetTestPublicClient } from '@repo/lib/test/utils/wagmi/wagmi-test-clients'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'
+import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { ChainId } from '@balancer/sdk'
 import { waitFor } from '@testing-library/react'
 import { useOnchainUserPoolBalances } from './useOnchainUserPoolBalances'
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
-import { connectWithDefaultUser } from '@repo/lib/test/utils/wagmi/wagmi-connections'
 
 async function testUseChainPoolBalances(pool: GqlPoolElement) {
   const weightedPoolMock = toGqlWeighedPoolMock(pool)

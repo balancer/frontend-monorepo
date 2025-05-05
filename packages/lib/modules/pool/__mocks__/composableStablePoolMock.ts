@@ -68,38 +68,6 @@ export const composableStablePoolMock: Pool = {
       ],
     },
   },
-  allTokens: [
-    {
-      id: '0x156c02f3f7fef64a3a9d80ccf7085f23cce91d76000000000000000000000570-0x156c02f3f7fef64a3a9d80ccf7085f23cce91d76',
-      address: '0x156c02f3f7fef64a3a9d80ccf7085f23cce91d76',
-      name: 'Balancer vETH/WETH StablePool',
-      symbol: 'vETH/WETH BPT',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: true,
-      isMainToken: false,
-    },
-    {
-      id: '0x156c02f3f7fef64a3a9d80ccf7085f23cce91d76000000000000000000000570-0x4bc3263eb5bb2ef7ad9ab6fb68be80e43b43801f',
-      address: '0x4bc3263eb5bb2ef7ad9ab6fb68be80e43b43801f',
-      name: 'Voucher Ethereum 2.0',
-      symbol: 'vETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0x156c02f3f7fef64a3a9d80ccf7085f23cce91d76000000000000000000000570-0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-      name: 'Wrapped Ether',
-      symbol: 'WETH',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   displayTokens: [
     {
       id: '0x156c02f3f7fef64a3a9d80ccf7085f23cce91d76000000000000000000000570-0x4bc3263eb5bb2ef7ad9ab6fb68be80e43b43801f',

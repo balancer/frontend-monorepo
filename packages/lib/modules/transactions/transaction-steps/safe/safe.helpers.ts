@@ -34,6 +34,10 @@ export function isMultisig(details: GatewayTransactionDetails): boolean {
   return details.detailedExecutionInfo?.type === 'MULTISIG'
 }
 
+export function getPendingNestedSteps(step: TransactionStep) {
+  return step?.nestedSteps?.filter(nestedStep => !nestedStep.isComplete())
+}
+
 export function hasSomePendingNestedTxInBatch(step: TransactionStep): boolean {
   return step?.nestedSteps?.some(nestedStep => !nestedStep.isComplete()) ?? false
 }
@@ -41,7 +45,7 @@ export function hasSomePendingNestedTxInBatch(step: TransactionStep): boolean {
 export function getSignConfirmationsLabel(details: GatewayTransactionDetails) {
   if (details.detailedExecutionInfo?.type !== 'MULTISIG') return null
 
-  return `Signatures: ${details.detailedExecutionInfo.confirmations.length} out of ${details.detailedExecutionInfo.signers.length}`
+  return `Signatures: ${details.detailedExecutionInfo.confirmations.length} out of ${details.detailedExecutionInfo.confirmationsRequired}`
 }
 
 export function getRemainingSignatures(details: GatewayTransactionDetails): number {
@@ -79,7 +83,7 @@ export function buildTxBatch(transactionStep: TransactionStep): SafeAppTx[] {
 }
 
 function buildSafeTxCall(txCall: TxCall): SafeAppTx {
-  return { ...txCall, value: '0' }
+  return { ...txCall, value: txCall?.value ? txCall.value.toString() : '0' }
 }
 
 export function isSafeTxSuccess(safeTxStatus?: SafeTransactionStatus): boolean {

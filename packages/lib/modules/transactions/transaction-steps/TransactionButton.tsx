@@ -56,5 +56,13 @@ export function ManagedErc20TransactionButton({
     updateTransaction(id, transaction)
   }, [id, transaction.execution.status, transaction.simulation.status, transaction.result.status])
 
-  return <TransactionStepButton step={{ labels: params.labels, ...transaction }} />
+  return (
+    <TransactionStepButton
+      step={{
+        labels: params.labels,
+        isComplete: params.isComplete,
+        ...transaction,
+      }}
+    />
+  )
 }

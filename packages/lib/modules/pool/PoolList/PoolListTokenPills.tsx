@@ -130,7 +130,7 @@ function StableTokenPills({
   nameSize?: string
 } & BadgeProps) {
   const isFirstToken = (index: number) => index === 0
-  const zIndices = Array.from({ length: tokens.length }, (_, index) => index).reverse()
+  const zIndices = Array.from({ length: tokens.length }, (_, index) => index + 1).reverse()
 
   return (
     <HStack spacing={0}>
@@ -138,7 +138,7 @@ function StableTokenPills({
         const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
         return (
           <Badge
-            key={[token.address, token.chain].join('-')}
+            key={[token.address, token.chain, i].join('-')}
             {...badgeProps}
             alignItems="center"
             bg="background.level2"
@@ -215,15 +215,18 @@ type PoolListTokenPillsProps = {
   iconSize?: number
   nameSize?: string
 } & BadgeProps
+
 export function PoolListTokenPills({ pool, ...props }: PoolListTokenPillsProps) {
   const { name, iconUrl } = usePoolMetadata(pool)
+  const tokens = getUserReferenceTokens(pool)
+
   return (
     <PoolTokenPills
       chain={pool.chain}
       iconUrl={iconUrl}
       poolName={name}
       poolType={pool.type}
-      tokens={getUserReferenceTokens(pool)}
+      tokens={tokens}
       {...props}
     />
   )
@@ -238,6 +241,7 @@ type PoolTokenPillsProps = {
   iconSize?: number
   nameSize?: string
 } & BadgeProps
+
 function PoolTokenPills({
   chain,
   poolType,
@@ -248,8 +252,8 @@ function PoolTokenPills({
   nameSize = 'md',
   ...badgeProps
 }: PoolTokenPillsProps) {
-  const shouldUseWeightedPills = isWeightedLike(poolType)
   const shouldUseStablePills = isStableLike(poolType)
+  const shouldUseWeightedPills = isWeightedLike(poolType)
 
   if (poolName) {
     return (

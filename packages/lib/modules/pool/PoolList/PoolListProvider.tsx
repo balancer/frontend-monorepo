@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { createContext, PropsWithChildren, useEffect } from 'react'
+import { createContext, PropsWithChildren, useEffect, useState } from 'react'
 import {
   GetPoolsDocument,
   GqlChain,
@@ -12,6 +12,8 @@ import { usePoolListQueryState } from './usePoolListQueryState'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
+import { PoolDisplayType } from '../pool.types'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
 export function _usePoolList({
   fixedPoolTypes,
@@ -22,6 +24,9 @@ export function _usePoolList({
 } = {}) {
   const queryState = usePoolListQueryState()
   const { userAddress } = useUserAccount()
+  const [poolDisplayType, setPoolDisplayType] = useState<PoolDisplayType>(
+    PROJECT_CONFIG.options.poolDisplayType
+  )
 
   const { queryVariables, toggleUserAddress } = queryState
 
@@ -62,6 +67,8 @@ export function _usePoolList({
     networkStatus,
     isFixedPoolType,
     refetch,
+    poolDisplayType,
+    setPoolDisplayType,
   }
 }
 

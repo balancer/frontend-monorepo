@@ -5,6 +5,9 @@ import { ApiToken } from '../token.types'
 import { HumanTokenAmount } from '../token.types'
 import { useTotalUsdValue } from '../useTotalUsdValue'
 import TokenRow from './TokenRow'
+import { useMemo } from 'react'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import { HumanAmount } from '@balancer/sdk'
 
 type HumanTokenAmountWithSymbol = HumanTokenAmount & { symbol?: string }
 
@@ -25,11 +28,35 @@ export function TokenRowGroup({
 }) {
   const { toCurrency } = useCurrency()
   const { usdValueFor } = useTotalUsdValue(tokens)
-  const _totalUSDValue = usdValueFor(amounts)
 
+  const _totalUSDValue = usdValueFor(amounts)
   const usdValue = totalUSDValue || _totalUSDValue
 
-  const hasMultipleAmounts = amounts.length > 1
+  // Aggregate amounts by tokenAddress
+  const aggregatedAmounts = useMemo(() => {
+    const amountMap: Record<string, HumanTokenAmountWithSymbol> = {}
+
+    amounts.forEach(amount => {
+      if (!amount.tokenAddress) return
+
+      const key = amount.tokenAddress
+
+      if (amountMap[key]) {
+        amountMap[key] = {
+          ...amountMap[key],
+          humanAmount: bn(amountMap[key].humanAmount)
+            .plus(bn(amount.humanAmount))
+            .toString() as HumanAmount,
+        }
+      } else {
+        amountMap[key] = { ...amount }
+      }
+    })
+
+    return Object.values(amountMap)
+  }, [amounts])
+
+  const hasMultipleAmounts = aggregatedAmounts.length > 1
 
   return (
     <VStack align="start" spacing="md">
@@ -41,7 +68,7 @@ export function TokenRowGroup({
           hasMultipleAmounts && <Text>{toCurrency(usdValue, { abbreviated: false })}</Text>
         )}
       </HStack>
-      {amounts.map(amount => {
+      {aggregatedAmounts.map(amount => {
         if (!amount.tokenAddress) return <div key={JSON.stringify(amount)}>Missing token</div>
 
         return (
@@ -50,7 +77,7 @@ export function TokenRowGroup({
             address={amount.tokenAddress}
             chain={chain}
             isLoading={isLoading}
-            key={`${amount.tokenAddress}-${amount.humanAmount}`}
+            key={amount.tokenAddress}
             symbol={amount?.symbol}
             value={amount.humanAmount}
           />

@@ -1,14 +1,7 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { NetworkConfig } from '../config.types'
 import { convertHexToLowerCase } from '@repo/lib/shared/utils/objects'
-import {
-  BALANCER_BATCH_ROUTER,
-  BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED,
-  BALANCER_ROUTER,
-  PERMIT2,
-  VAULT_ADMIN,
-  VAULT_V3,
-} from '@balancer/sdk'
+import { balancerV3Contracts, PERMIT2 } from '@balancer/sdk'
 import { sepolia } from 'viem/chains'
 
 const networkConfig: NetworkConfig = {
@@ -32,6 +25,9 @@ const networkConfig: NetworkConfig = {
       symbol: 'ETH',
       decimals: 18,
     },
+    doubleApprovalRequired: [
+      '0x6bf294b80c7d8dc72dee762af5d01260b756a051', // USDT
+    ],
     defaultSwapTokens: {
       tokenIn: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     },
@@ -40,13 +36,13 @@ const networkConfig: NetworkConfig = {
     multicall2: '0xca11bde05977b3631167028862be2a173976ca11',
     balancer: {
       vaultV2: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
-      vaultV3: VAULT_V3[sepolia.id],
-      router: BALANCER_ROUTER[sepolia.id],
-      batchRouter: BALANCER_BATCH_ROUTER[sepolia.id],
-      compositeLiquidityRouterBoosted: BALANCER_COMPOSITE_LIQUIDITY_ROUTER_BOOSTED[sepolia.id],
+      vaultV3: balancerV3Contracts.Vault[sepolia.id],
+      router: balancerV3Contracts.Router[sepolia.id],
+      batchRouter: balancerV3Contracts.BatchRouter[sepolia.id],
+      compositeLiquidityRouterBoosted: balancerV3Contracts.CompositeLiquidityRouter[sepolia.id],
       relayerV6: '0x7852fB9d0895e6e8b3EedA553c03F6e2F9124dF9',
       minter: '0x1783Cd84b3d01854A96B4eD5843753C2CcbD574A',
-      vaultAdminV3: VAULT_ADMIN[sepolia.id],
+      vaultAdminV3: balancerV3Contracts.VaultAdmin[sepolia.id],
     },
     veBAL: '0x150A72e4D4d81BbF045565E232c50Ed0931ad795',
     permit2: PERMIT2[sepolia.id],

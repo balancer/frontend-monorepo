@@ -1,6 +1,6 @@
 import { config } from '@repo/lib/config/app.config'
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
-import { registerApolloClient } from '@apollo/experimental-nextjs-app-support'
+import { registerApolloClient } from '@apollo/client-integration-nextjs'
 
 const defaultHeaders = {
   'x-graphql-client-name': 'FrontendClient',
@@ -9,7 +9,13 @@ const defaultHeaders = {
 
 export const { getClient: getApolloServerClient } = registerApolloClient(() => {
   return new ApolloClient({
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        GqlVotingPool: {
+          keyFields: ['id', 'gauge', ['address']],
+        },
+      },
+    }),
     link: new HttpLink({
       uri: config.apiUrl,
       headers: defaultHeaders,

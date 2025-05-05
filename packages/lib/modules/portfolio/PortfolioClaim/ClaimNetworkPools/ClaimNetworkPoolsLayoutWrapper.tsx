@@ -13,8 +13,9 @@ import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { capitalize } from 'lodash'
 import { useParams } from 'next/navigation'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { getUserReferenceTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
+import { isMaBeetsPool } from '@repo/lib/modules/pool/pool.helpers'
 
 export default function ClaimNetworkPoolsLayoutWrapper() {
   const { toCurrency } = useCurrency()
@@ -39,7 +40,17 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
 
   const [modalPools, setModalPools] = useState<Pool[]>([])
 
-  const hasMultipleClaims = pools ? pools.length > 1 : false
+  const poolsWithClaims = useMemo(() => {
+    if (!pools) return []
+
+    return pools.filter(
+      pool =>
+        // filter out mabeets pool so it doesn't count and also filter out pools with no claims
+        !isMaBeetsPool(pool.id) && poolRewardsMap[pool.id]?.totalFiatClaimBalance?.isGreaterThan(0)
+    )
+  }, [pools, poolRewardsMap])
+
+  const hasMultipleClaims = useMemo(() => poolsWithClaims.length > 1, [poolsWithClaims])
 
   return (
     <ClaimNetworkPoolsLayout backLink="/portfolio" title="Portfolio">
@@ -57,55 +68,50 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
       <Stack gap="md" py="4">
         {isLoadingRewards ? (
           <Skeleton height="126px" />
-        ) : pools && pools.length > 0 ? (
-          pools?.map(
-            pool =>
-              poolRewardsMap[pool.id]?.totalFiatClaimBalance?.isGreaterThan(0) && (
-                <Card key={pool.id} variant="subSection">
-                  <VStack align="start">
-                    <HStack w="full">
-                      <PoolName fontSize="lg" fontWeight="bold" pool={pool} />
-                      <Text fontWeight="bold" ml="auto" variant="special">
-                        {toCurrency(
-                          poolRewardsMap[pool.id]?.totalFiatClaimBalance?.toNumber() || 0
-                        )}
-                      </Text>
-                    </HStack>
-                    <HStack w="full">
-                      <TokenIconStack
-                        chain={pool.chain}
-                        size={36}
-                        tokens={getUserReferenceTokens(pool)}
-                      />
-                      {hasMultipleClaims && (
-                        <Button
-                          minW="60px"
-                          ml="auto"
-                          onClick={() => {
-                            setModalPools([pool])
-                          }}
-                          size="sm"
-                          variant="secondary"
-                        >
-                          Claim
-                        </Button>
-                      )}
-                    </HStack>
-                  </VStack>
-                </Card>
-              )
-          )
+        ) : poolsWithClaims.length > 0 ? (
+          poolsWithClaims.map(pool => (
+            <Card key={pool.id} variant="subSection">
+              <VStack align="start">
+                <HStack w="full">
+                  <PoolName fontSize="lg" fontWeight="bold" pool={pool} />
+                  <Text fontWeight="bold" ml="auto" variant="special">
+                    {toCurrency(poolRewardsMap[pool.id]?.totalFiatClaimBalance?.toNumber() || 0)}
+                  </Text>
+                </HStack>
+                <HStack w="full">
+                  <TokenIconStack
+                    chain={pool.chain}
+                    size={36}
+                    tokens={getUserReferenceTokens(pool)}
+                  />
+                  {hasMultipleClaims && (
+                    <Button
+                      minW="60px"
+                      ml="auto"
+                      onClick={() => {
+                        setModalPools([pool])
+                      }}
+                      size="sm"
+                      variant="secondary"
+                    >
+                      Claim
+                    </Button>
+                  )}
+                </HStack>
+              </VStack>
+            </Card>
+          ))
         ) : (
           <Text p="10" textAlign="center" variant="secondary">
             You have no liquidity incentives to claim
           </Text>
         )}
       </Stack>
-      {pools && pools.length > 0 && (
+      {poolsWithClaims.length > 0 && (
         <Button
           isDisabled={isClaimAllDisabled}
           onClick={() => {
-            setModalPools(pools)
+            setModalPools(poolsWithClaims)
           }}
           size="lg"
           variant="secondary"

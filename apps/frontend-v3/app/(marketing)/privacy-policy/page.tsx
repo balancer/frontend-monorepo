@@ -13,9 +13,9 @@ export default function Privacy() {
           <FadeInOnView>
             <div className="subsection">
               <Box mt="3xl">
-                <h1>Balancer Privacy&nbsp;Policy</h1>
+                <h1>Balancer Foundation Privacy&nbsp;Policy</h1>
                 <p>
-                  <em>Last Updated: October 2023</em>
+                  <em>Last Updated: April 2025</em>
                 </p>
               </Box>
               <p>
@@ -53,8 +53,9 @@ export default function Privacy() {
                 <li>
                   Balancer does not and has not stored personal information from users of the UI.
                   However, Balancer uses third party services including, without limitation,
-                  Cloudflare, Fathom Analytics, Appzi and others who collect and store certain user
-                  information only for use in the provision of their services.
+                  Cloudflare, Hypernative, Sentry, Fathom Analytics, RainbowKit, OpenZeppelin,
+                  Amazon Web Services, Vercel, Coingecko, Appzi and others who collect and store
+                  certain user information only for use in the provision of their services.
                 </li>
                 <li>
                   Balancer does not set any cookies. However, we use third party service providers
@@ -78,9 +79,9 @@ export default function Privacy() {
               <p>
                 Balancer is not directed to children under the age of 16. If a parent or guardian
                 becomes aware that his or her child has provided us with personal information
-                without your consent, please contact us at
-                <a className="link" href="mailto:privacypolicy@balancer.finance">
-                  privacypolicy@balancer.finance
+                without your consent, please contact us at&nbsp;
+                <a className="link" href="mailto:admin@balancer.finance">
+                  admin@balancer.finance
                 </a>
                 . If we become aware that a child under the age of 16 has provided us with personal
                 information, we will take reasonable efforts to delete such personal information.
@@ -333,9 +334,9 @@ export default function Privacy() {
                 disclose, and sell, (2) request deletion of your personal information, (3) opt out
                 of any “sales” of your personal information that may be occurring, and (4) not be
                 discriminated against for exercising these rights. You may make these requests by
-                emailing us at
-                <a className="link" href="mailto:privacypolicy@balancer.finance">
-                  privacypolicy@balancer.finance
+                emailing us at{' '}
+                <a className="link" href="mailto:admin@balancer.fi">
+                  admin@balancer.fi
                 </a>
                 . If we receive your request from an authorized agent, we may ask for evidence that
                 you have provided such agent with a power of attorney or that the agent otherwise
@@ -414,11 +415,14 @@ export default function Privacy() {
 
               <p>
                 If you have any questions about this Privacy Policy, please contact us at{' '}
-                <a className="link" href="mailto:privacypolicy@balancer.finance">
-                  privacypolicy@balancer.finance
+                <a className="link" href="mailto:admin@balancer.fi">
+                  admin@balancer.fi
                 </a>
                 .
               </p>
+              <div className="subsection">
+                <em className="font-semibold">Last updated: April 2025</em>
+              </div>
             </div>
           </FadeInOnView>
         </div>

@@ -19,20 +19,17 @@ import NextLink from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { MoreVertical } from 'react-feather'
-import { isCowAmmPool, isMaBeetsPool, shouldBlockAddLiquidity } from '../../pool.helpers'
+import { isCowAmmPool, isMaBeetsPool } from '../../pool.helpers'
 import { usePool } from '../../PoolProvider'
 import { buildCowSwapUrlFromPool } from '@repo/lib/modules/cow/cow.utils'
 import { CowIcon } from '@repo/lib/shared/components/icons/logos/CowIcon'
-import { usePoolMetadata } from '../../metadata/usePoolMetadata'
 
 export function PoolAdvancedOptions() {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const pathname = usePathname()
   const { pool } = usePool()
-  const poolMetadata = usePoolMetadata(pool)
   const isCowPool = isCowAmmPool(pool.type)
-  const isPoolSwapDisabled =
-    !isMaBeetsPool(pool.id) && (shouldBlockAddLiquidity(pool, poolMetadata) || isCowPool)
+  const isPoolSwapDisabled = !isMaBeetsPool(pool.id) && isCowPool
 
   const disabledLinkProps = isPoolSwapDisabled
     ? {

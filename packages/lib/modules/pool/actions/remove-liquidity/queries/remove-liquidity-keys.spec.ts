@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { poolId } from '@repo/lib/debug-helpers'
-import { defaultTestUserAccount } from '@repo/lib/test/anvil/anvil-setup'
+import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { removeLiquidityKeys } from './remove-liquidity-keys'
 import { ProportionalRemoveLiquidityHandler } from '../handlers/ProportionalRemoveLiquidity.handler'
 import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'

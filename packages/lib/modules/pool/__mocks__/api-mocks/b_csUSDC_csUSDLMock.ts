@@ -112,28 +112,6 @@ export const b_csUSDC_csUSDLMock = {
       },
     ],
   },
-  allTokens: [
-    {
-      id: '0x10a04efba5b880e169920fd4348527c64fb29d4d-0x7204b7dbf9412567835633b6f00c3edc3a8d6330',
-      address: '0x7204b7dbf9412567835633b6f00c3edc3a8d6330',
-      name: 'Coinshift USDC',
-      symbol: 'csUSDC',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-    {
-      id: '0x10a04efba5b880e169920fd4348527c64fb29d4d-0xbeefc011e94f43b8b7b455ebab290c7ab4e216f1',
-      address: '0xbeefc011e94f43b8b7b455ebab290c7ab4e216f1',
-      name: 'Coinshift USDL',
-      symbol: 'csUSDL',
-      decimals: 18,
-      isNested: false,
-      isPhantomBpt: false,
-      isMainToken: true,
-    },
-  ],
   staking: {
     id: '0x5bbaed1fadc08c5fb3e4ae3c8848777e2da77103',
     type: 'GAUGE',
