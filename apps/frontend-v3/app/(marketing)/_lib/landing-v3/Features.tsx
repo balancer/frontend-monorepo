@@ -143,7 +143,7 @@ function FeatureText({
         {title}
       </Heading>
       <Box position="relative">
-        <Text color="font.secondary" whiteSpace="pre-line">
+        <Text color="font.secondary" sx={{ textWrap: 'balance' }} whiteSpace="pre-line">
           {shortDescription}
           {description && (
             <Link ml="sm" onClick={() => setIsExpanded(!isExpanded)}>
@@ -293,7 +293,7 @@ export function Features() {
                 text="Technical highlights"
               />
               <FadeIn delay={0.2} direction="up" duration={0.6}>
-                <Text color="font.secondary" fontSize="lg">
+                <Text color="font.secondary" fontSize="lg" sx={{ textWrap: 'pretty' }}>
                   Balancer v3 introduces a series of technical enhancements that streamline the
                   development and deployment of custom pools, while maintaining the flexibility and
                   interoperability that have made Balancer a leader in the DeFi space.
