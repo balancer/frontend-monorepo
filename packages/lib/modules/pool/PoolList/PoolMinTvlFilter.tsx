@@ -3,7 +3,6 @@ import {
   VStack,
   HStack,
   Heading,
-  Text,
   Slider,
   SliderTrack,
   SliderFilledTrack,
@@ -11,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePoolList } from './PoolListProvider'
+import { NumberText } from 'shared/components/typography/NumberText'
 
 // --- TVL value <-> slider value mapping ---
 const SLIDER_Q1_VALUE = 100_000
@@ -119,9 +119,9 @@ export function PoolMinTvlFilter() {
         <Heading as="h3" mb="xs" mt="sm" size="sm">
           Minimum TVL
         </Heading>
-        <Text fontSize="sm" ml="auto">
+        <NumberText fontSize="sm" ml="auto">
           {toCurrency(tvlValue)}
-        </Text>
+        </NumberText>
       </HStack>
       <Slider
         aria-label="slider-min-tvl"
