@@ -26,10 +26,14 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     [pool, tokenRateScalingFactorString]
   )
 
+  const priceRate = bn(pool.poolTokens[0].priceRate).div(bn(pool.poolTokens[1].priceRate))
+
   const params = pool && pool.poolTokens ? destructureRequiredPoolParams(pool, tokenRates) : null
 
   const originalPoolSpotPrice = params
-    ? formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18)
+    ? bn(formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18))
+        .div(priceRate)
+        .toNumber()
     : null
 
   const poolSpotPrice = useMemo(() => {
@@ -42,10 +46,13 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
 
     const transformedData = liquidityData
       .filter(([price]) => price !== 0) // filter out zero price to prevent infinity on reverse
-      .map(([price, liquidity]) => (isReversed ? [1 / price, liquidity] : [price, liquidity]))
+      .map(([price, liquidity]) => {
+        const displayedPrice = bn(price).div(priceRate).toNumber()
+        return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
+      })
 
     return transformedData.sort((a, b) => a[0] - b[0]) as [[number, number]]
-  }, [liquidityData, isReversed])
+  }, [liquidityData, isReversed, priceRate])
 
   const xMin = useMemo(() => (data ? Math.min(...data.map(([x]) => x)) : 0), [data])
   const xMax = useMemo(() => (data ? Math.max(...data.map(([x]) => x)) : 0), [data])
