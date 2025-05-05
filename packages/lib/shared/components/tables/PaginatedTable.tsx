@@ -3,6 +3,7 @@ import {
   Box,
   BoxProps,
   Center,
+  Divider,
   Text,
   Spinner,
   VStack,
@@ -52,6 +53,7 @@ export function PaginatedTable<T>({
     <>
       <VStack className="hide-scrollbar" gap="0" overflowX="scroll" w="full">
         <TableHeader />
+        <Divider />
         <Box position="relative" w="full">
           {items.length > 0 && (
             <VStack gap="0">
@@ -101,7 +103,10 @@ export function PaginatedTable<T>({
         </Box>
       </VStack>
       {showPagination && paginationProps && (
-        <Pagination p="md" {...paginationProps} {...paginationStyles} />
+        <>
+          <Divider />
+          <Pagination p="md" {...paginationProps} {...paginationStyles} />
+        </>
       )}
     </>
   )

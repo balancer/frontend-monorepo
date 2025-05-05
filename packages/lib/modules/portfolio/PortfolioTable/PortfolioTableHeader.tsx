@@ -15,14 +15,7 @@ export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, 
   const portfolioOrderBy = portfolioOrderByFn(PROJECT_CONFIG.options.showVeBal)
 
   return (
-    <Grid
-      {...rest}
-      borderBottom="1px solid"
-      borderColor="border.base"
-      p={['ms', 'md']}
-      px="xs"
-      w="full"
-    >
+    <Grid {...rest} p={['ms', 'md']} px="xs" w="full">
       <GridItem>
         <VStack align="start" w="full">
           <Icon as={Globe} boxSize="5" color="font.primary" ml="1" />

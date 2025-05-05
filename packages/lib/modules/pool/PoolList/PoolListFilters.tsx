@@ -686,7 +686,7 @@ export function PoolListFilters() {
           variant="tertiary"
         >
           <Icon as={Plus} boxSize={4} />
-          {!isMobile && 'Create a pool'}
+          {!isMobile && 'Create pool'}
         </Button>
       </HStack>
     </VStack>
