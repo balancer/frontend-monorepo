@@ -8,6 +8,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { onlyExplicitRefetch } from '../../../shared/utils/queries'
 import { useReadContracts } from 'wagmi'
 import { UserVotesData } from '@repo/lib/modules/vebal/vote/vote.types'
+// import { shouldUseAnvilFork } from 'config/app.config'
 
 export interface RawVotesData {
   gaugeWeightThisPeriod?: { result?: bigint; status: string }
@@ -49,6 +50,8 @@ function useGaugeRelativeWeightsWrite(
     ...readContractsParams,
     query: {
       ...readContractsParams.query,
+      // Uncomment to enable faster anvil voting list
+      // enabled: !shouldUseAnvilFork,
       enabled: true,
     },
     contracts: gaugeAddresses.map(gaugeAddress => {

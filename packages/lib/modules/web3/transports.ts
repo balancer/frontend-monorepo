@@ -15,10 +15,9 @@ export function getTransports(chain: Chain) {
   if (shouldUseAnvilFork) {
     return fallback([
       /*
-        Enable JSON-RPC batching:
-        https://viem.sh/docs/clients/transports/http.html#batch-optional
+        Custom anvil fork setup (big timeouts for slow anvil responses)
       */
-      http(overrideRpcUrl, { batch: { batchSize: 1000, wait: 2 }, timeout: 50_000, retryCount: 1 }),
+      http(overrideRpcUrl, { timeout: 20_000 }),
     ])
   }
   if (overrideRpcUrl) return fallback([http(overrideRpcUrl), http(fallbackRpcUrl), http()])
