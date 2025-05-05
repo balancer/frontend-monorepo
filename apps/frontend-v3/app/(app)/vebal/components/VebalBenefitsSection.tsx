@@ -74,7 +74,14 @@ export function VebalBenefitsSection() {
           <Heading as="h2" bg="background.gold" bgClip="text" pb="0.5" size="lg" textAlign="center">
             Why get veBAL?
           </Heading>
-          <Text color="font.secondary" lineHeight="1.4" maxWidth="38ch" pt="0" textAlign="center">
+          <Text
+            color="font.secondary"
+            lineHeight="1.4"
+            maxWidth="38ch"
+            pt="0"
+            sx={{ textWrap: 'pretty' }}
+            textAlign="center"
+          >
             Turn your BAL tokens into voting power and rewards.
           </Text>
         </Stack>
@@ -138,7 +145,7 @@ export function VebalBenefitsSection() {
                         h={{ base: 16, lg: 20, xl: 24 }}
                         overflow="hidden"
                         rounded="full"
-                        shadow="innerRockShadow"
+                        shadow="innerRockShadowSm"
                         w={{ base: 16, lg: 20, xl: 24 }}
                       >
                         <Box
@@ -174,8 +181,8 @@ export function VebalBenefitsSection() {
                     as="h3"
                     bg="background.gold"
                     bgClip="text"
-                    fontSize="xl"
-                    mb={2}
+                    fontSize={{ base: 'lg', md: 'xl' }}
+                    mb={{ base: 'xxs', md: '2' }}
                     pb="0.5"
                     sx={{ textWrap: 'balance' }}
                   >
@@ -183,8 +190,9 @@ export function VebalBenefitsSection() {
                   </Heading>
                   <Text
                     color="font.secondary"
-                    fontSize="md"
+                    fontSize={{ base: 'sm', md: 'md' }}
                     lineHeight="1.4"
+                    pb="0.5"
                     sx={{ textWrap: 'balance' }}
                   >
                     {benefit.description}

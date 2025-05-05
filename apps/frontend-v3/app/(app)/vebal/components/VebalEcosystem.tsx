@@ -126,74 +126,78 @@ function AppIcon({
   const width = useSpring(widthSync, { mass: 2, stiffness: 100, damping: 30 })
 
   return (
-    <Box
-      _dark={{
-        bg: 'background.level2',
-        color: 'font.secondary',
-        _hover: {
-          color: 'font.maxContrast',
+    <FadeInOnView animateOnce={false}>
+      <Box
+        _dark={{
+          bg: 'background.level2',
+          color: 'font.secondary',
+          _hover: {
+            color: 'font.maxContrast',
+            bg: 'background.level4',
+            boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
+          },
+        }}
+        _hover={{
           bg: 'background.level4',
-          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.2)',
-        },
-      }}
-      _hover={{
-        bg: 'background.level4',
-        color: 'brown.500',
-        boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
-      }}
-      alignItems="center"
-      as={motion.div}
-      aspectRatio={1}
-      bg="background.level2"
-      borderRadius="full"
-      color="brown.300"
-      cursor="pointer"
-      display="flex"
-      justifyContent="center"
-      position="relative"
-      ref={ref}
-      shadow="sm"
-      style={{ width }}
-      title={name}
-      transition="color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out"
-      willChange="box-shadow, background-color"
-      {...rest}
-    >
-      <Box
-        borderRadius="full"
-        inset={0}
-        overflow="hidden"
-        position="absolute"
-        shadow="2xl"
-        zIndex={0}
-      >
-        <Picture
-          altText="Background texture"
-          defaultImgType="png"
-          directory="/images/textures/"
-          height="100%"
-          imgAvif
-          imgAvifDark
-          imgAvifPortrait
-          imgAvifPortraitDark
-          imgName="rock-slate"
-          imgPng
-          imgPngDark
-          width="100%"
-        />
-      </Box>
-      <Box
+          color: 'brown.500',
+          boxShadow: '10px 10px 20px rgba(0, 0, 0, 0.1)',
+        }}
         alignItems="center"
+        as={motion.div}
+        aspectRatio={1}
+        bg="background.level2"
+        borderRadius="full"
+        color="brown.300"
+        cursor="pointer"
         display="flex"
-        h="full"
         justifyContent="center"
         position="relative"
-        w="full"
-        zIndex={1}
+        ref={ref}
+        shadow="sm"
+        style={{ width }}
+        title={name}
+        transition="color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out"
+        willChange="box-shadow, background-color"
+        {...rest}
       >
-        {Icon}
+        <Box
+          borderRadius="full"
+          inset={0}
+          overflow="hidden"
+          position="absolute"
+          shadow="2xl"
+          zIndex={0}
+        >
+          <Picture
+            altText="Background texture"
+            defaultImgType="png"
+            directory="/images/textures/"
+            height="100%"
+            imgAvif
+            imgAvifDark
+            imgAvifPortrait
+            imgAvifPortraitDark
+            imgName="rock-slate"
+            imgPng
+            imgPngDark
+            width="100%"
+          />
+        </Box>
+        <Box
+          alignItems="center"
+          display="flex"
+          h="full"
+          justifyContent="center"
+          position="relative"
+          rounded="full"
+          shadow="innerRockShadowSm"
+          w="full"
+          zIndex={1}
+        >
+          {Icon}
+        </Box>
       </Box>
-    </Box>
+    </FadeInOnView>
   )
 }
 
@@ -225,10 +229,10 @@ function SmallIcon({ Icon, name, ...rest }: { Icon: ReactNode; name: string } & 
       display="flex"
       justifyContent="center"
       position="relative"
-      shadow="sm"
+      shadow="2xl"
       title={name}
       transition="color 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out, transform 0.3s ease-out"
-      w="60px"
+      w="clamp(72px, 15vw, 120px)"
       willChange="box-shadow, background-color"
       {...rest}
     >
@@ -254,6 +258,8 @@ function SmallIcon({ Icon, name, ...rest }: { Icon: ReactNode; name: string } & 
         h="full"
         justifyContent="center"
         position="relative"
+        rounded="full"
+        shadow="innerRockShadowSm"
         w="full"
         zIndex={1}
       >

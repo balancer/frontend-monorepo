@@ -43,6 +43,7 @@ export function VebalFooterSection() {
                 justifyContent="center"
                 lineHeight="1.4"
                 maxWidth="40ch"
+                sx={{ textWrap: 'pretty' }}
                 textAlign="center"
                 width="full"
               >
