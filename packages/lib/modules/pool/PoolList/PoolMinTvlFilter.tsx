@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { usePoolList } from './PoolListProvider'
-import { NumberText } from 'shared/components/typography/NumberText'
+import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
 
 // --- TVL value <-> slider value mapping ---
 const SLIDER_Q1_VALUE = 100_000
