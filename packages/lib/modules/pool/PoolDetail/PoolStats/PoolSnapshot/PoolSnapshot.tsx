@@ -53,7 +53,7 @@ export function PoolSnapshot({ ...props }: CardProps) {
   }, [pool])
 
   return (
-    <Card h={{ base: '475px', md: '525px' }} position="relative" {...props}>
+    <Card h={{ base: '464px', md: '484px' }} position="relative" {...props}>
       <NoisyCard
         cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
         contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
@@ -63,11 +63,12 @@ export function PoolSnapshot({ ...props }: CardProps) {
         </Box>
         <VStack
           align="flex-start"
+          gap="lg"
           h="full"
           justify="flex-start"
           m="auto"
-          mb="8"
-          p={{ base: 'sm', md: 'md' }}
+          mb="sm"
+          p="md"
           role="group"
           spacing="xl"
           w="full"

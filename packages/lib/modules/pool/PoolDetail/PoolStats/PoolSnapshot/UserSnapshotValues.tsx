@@ -15,6 +15,7 @@ import { ClaimModal } from '../../../actions/claim/ClaimModal'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { calcTotalStakedBalanceUsd } from '../../../user-balance.helpers'
 import { useGetUserPoolRewards } from '../../../useGetUserPoolRewards'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 export type PoolMyStatsValues = {
   myLiquidity: number
@@ -84,99 +85,107 @@ export function UserSnapshotValues() {
 
   return (
     <>
-      <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          My liquidity
-        </Text>
-        {poolMyStatsValues ? (
-          poolMyStatsValues.myLiquidity ? (
-            <HStack onClick={handleClick}>
-              <Heading cursor="pointer" size="h4">
-                {toCurrency(poolMyStatsValues.myLiquidity)}
-              </Heading>
-              <Text
-                _groupHover={{ opacity: '1' }}
-                color="font.link"
-                cursor="pointer"
-                fontSize="sm"
-                opacity="0"
-                transition="opacity 0.2s var(--ease-out-cubic)"
-              >
-                Manage
-              </Text>
-            </HStack>
-          ) : (
-            <Heading size="h4">&mdash;</Heading>
-          )
-        ) : (
-          <Skeleton height="28px" w="100px" />
-        )}
-      </VStack>
-      <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          My APR
-        </Text>
-        {poolMyStatsValues && poolMyStatsValues.myLiquidity ? (
-          <MemoizedMainAprTooltip
-            aprItems={pool.dynamicData.aprItems}
-            chain={pool.chain}
-            height="28px"
-            pool={pool}
-            poolId={pool.id}
-            textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
-            vebalBoost={boost || '1'}
-          />
-        ) : (
-          <Heading size="h4">&mdash;</Heading>
-        )}
-      </VStack>
-      <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          {`My potential weekly yield${
-            poolMyStatsValues && !poolMyStatsValues.myLiquidity ? ' on $10k' : ''
-          }`}
-        </Text>
-        {poolMyStatsValues ? (
-          <Heading size="h4">{toCurrency(poolMyStatsValues.myPotentialWeeklyYield)}</Heading>
-        ) : (
-          <Skeleton height="28px" w="100px" />
-        )}
-      </VStack>
-      <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          My claimable rewards
-        </Text>
-        {poolMyStatsValues ? (
-          hasNoRewards ? (
-            <Heading size="h4">&mdash;</Heading>
-          ) : (
-            <HStack>
-              <Heading size="h4">{toCurrency(poolMyStatsValues.myClaimableRewards)}</Heading>
-              <TokenStackPopover
-                chain={chain}
-                headerText="My claimable rewards"
-                rewardsByToken={rewardsByToken}
-                tokens={tokens}
-              >
-                <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
-              </TokenStackPopover>
-              <Tooltip label={isDisabled ? disabledReason : ''}>
-                <Button
-                  isDisabled={isDisabled}
-                  onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
-                  size="xxs"
-                  variant="primary"
-                  w="full"
+      <FadeInOnView>
+        <VStack align="flex-start" spacing="xxs" w="full">
+          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+            My liquidity
+          </Text>
+          {poolMyStatsValues ? (
+            poolMyStatsValues.myLiquidity ? (
+              <HStack onClick={handleClick}>
+                <Heading cursor="pointer" size="h4">
+                  {toCurrency(poolMyStatsValues.myLiquidity)}
+                </Heading>
+                <Text
+                  _groupHover={{ opacity: '1' }}
+                  color="font.link"
+                  cursor="pointer"
+                  fontSize="sm"
+                  opacity="0"
+                  transition="opacity 0.2s var(--ease-out-cubic)"
                 >
-                  Claim
-                </Button>
-              </Tooltip>
-            </HStack>
-          )
-        ) : (
-          <Skeleton height="28px" w="100px" />
-        )}
-      </VStack>
+                  Manage
+                </Text>
+              </HStack>
+            ) : (
+              <Heading size="h4">&mdash;</Heading>
+            )
+          ) : (
+            <Skeleton height="28px" w="100px" />
+          )}
+        </VStack>
+      </FadeInOnView>
+      <FadeInOnView>
+        <VStack align="flex-start" spacing="xxs" w="full">
+          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+            My APR
+          </Text>
+          {poolMyStatsValues && poolMyStatsValues.myLiquidity ? (
+            <MemoizedMainAprTooltip
+              aprItems={pool.dynamicData.aprItems}
+              chain={pool.chain}
+              height="28px"
+              pool={pool}
+              poolId={pool.id}
+              textProps={{ fontWeight: 'bold', fontSize: '2xl', lineHeight: '28px' }}
+              vebalBoost={boost || '1'}
+            />
+          ) : (
+            <Heading size="h4">&mdash;</Heading>
+          )}
+        </VStack>
+      </FadeInOnView>
+      <FadeInOnView>
+        <VStack align="flex-start" spacing="xxs" w="full">
+          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+            {`My potential weekly yield${
+              poolMyStatsValues && !poolMyStatsValues.myLiquidity ? ' on $10k' : ''
+            }`}
+          </Text>
+          {poolMyStatsValues ? (
+            <Heading size="h4">{toCurrency(poolMyStatsValues.myPotentialWeeklyYield)}</Heading>
+          ) : (
+            <Skeleton height="28px" w="100px" />
+          )}
+        </VStack>
+      </FadeInOnView>
+      <FadeInOnView>
+        <VStack align="flex-start" spacing="xxs" w="full">
+          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+            My claimable rewards
+          </Text>
+          {poolMyStatsValues ? (
+            hasNoRewards ? (
+              <Heading size="h4">&mdash;</Heading>
+            ) : (
+              <HStack>
+                <Heading size="h4">{toCurrency(poolMyStatsValues.myClaimableRewards)}</Heading>
+                <TokenStackPopover
+                  chain={chain}
+                  headerText="My claimable rewards"
+                  rewardsByToken={rewardsByToken}
+                  tokens={tokens}
+                >
+                  <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
+                </TokenStackPopover>
+                <Tooltip label={isDisabled ? disabledReason : ''}>
+                  <Button
+                    isDisabled={isDisabled}
+                    onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
+                    size="xxs"
+                    variant="primary"
+                    w="full"
+                  >
+                    Claim
+                  </Button>
+                </Tooltip>
+              </HStack>
+            )
+          ) : (
+            <Skeleton height="28px" w="100px" />
+          )}
+        </VStack>
+      </FadeInOnView>
       <ClaimModal
         chain={pool.chain}
         isOpen={previewModalDisclosure.isOpen}

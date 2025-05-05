@@ -9,6 +9,7 @@ import { usePool } from '../../../PoolProvider'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { isCowAmmPool } from '../../../pool.helpers'
 import { useGetPoolRewards } from '../../../useGetPoolRewards'
+import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 type PoolStatsValues = {
   totalLiquidity: string
@@ -48,75 +49,85 @@ export function PoolSnapshotValues() {
 
   return (
     <>
-      <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          TVL
-        </Text>
-        {poolStatsValues ? (
-          <Heading size="h4">{poolStatsValues.totalLiquidity}</Heading>
-        ) : (
-          <Skeleton height="28px" w="100px" />
-        )}
-      </VStack>
-      <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          Swap vol (24h)
-        </Text>
-        {poolStatsValues ? (
-          <Heading size="h4">{poolStatsValues.volume24h}</Heading>
-        ) : (
-          <Skeleton height="28px" w="100px" />
-        )}
-      </VStack>
-      <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          APR for LPs
-        </Text>
-        <MemoizedMainAprTooltip
-          aprItems={pool.dynamicData.aprItems}
-          chain={pool.chain}
-          height="28px"
-          pool={pool}
-          poolId={pool.id}
-          textProps={{
-            fontSize: '2xl',
-            fontWeight: 'bold',
-            lineHeight: '28px',
-          }}
-        />
-      </VStack>
-      <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          {incomeLabel}
-        </Text>
-        {poolStatsValues ? (
-          <Heading size="h4">{poolStatsValues.income24h}</Heading>
-        ) : (
-          <Skeleton height="28px" w="100px" />
-        )}
-      </VStack>
-      <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          Weekly incentives
-        </Text>
-        {poolStatsValues ? (
-          <HStack>
-            <Heading size="h4">
-              {poolStatsValues.weeklyRewards ? poolStatsValues.weeklyRewards : 'N/A'}
-            </Heading>
-            <TokenStackPopover
-              chain={chain}
-              headerText="Weekly incentives for stakers"
-              rewardsByToken={weeklyRewardsByToken}
-              tokens={tokens}
-            >
-              <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
-            </TokenStackPopover>
-          </HStack>
-        ) : (
-          <Skeleton height="28px" w="100px" />
-        )}
-      </VStack>
+      <FadeInOnView>
+        <VStack align="flex-start" spacing="xxs" w="full">
+          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+            TVL
+          </Text>
+          {poolStatsValues ? (
+            <Heading size="h4">{poolStatsValues.totalLiquidity}</Heading>
+          ) : (
+            <Skeleton height="28px" w="100px" />
+          )}
+        </VStack>
+      </FadeInOnView>
+      <FadeInOnView>
+        <VStack align="flex-start" spacing="xxs" w="full">
+          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+            Swap vol (24h)
+          </Text>
+          {poolStatsValues ? (
+            <Heading size="h4">{poolStatsValues.volume24h}</Heading>
+          ) : (
+            <Skeleton height="28px" w="100px" />
+          )}
+        </VStack>
+      </FadeInOnView>
+      <FadeInOnView>
+        <VStack align="flex-start" spacing="xxs" w="full">
+          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+            APR for LPs
+          </Text>
+          <MemoizedMainAprTooltip
+            aprItems={pool.dynamicData.aprItems}
+            chain={pool.chain}
+            height="28px"
+            pool={pool}
+            poolId={pool.id}
+            textProps={{
+              fontSize: '2xl',
+              fontWeight: 'bold',
+              lineHeight: '28px',
+            }}
+          />
+        </VStack>
+      </FadeInOnView>
+      <FadeInOnView>
+        <VStack align="flex-start" spacing="xxs" w="full">
+          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+            {incomeLabel}
+          </Text>
+          {poolStatsValues ? (
+            <Heading size="h4">{poolStatsValues.income24h}</Heading>
+          ) : (
+            <Skeleton height="28px" w="100px" />
+          )}
+        </VStack>
+      </FadeInOnView>
+      <FadeInOnView>
+        <VStack align="flex-start" spacing="xxs" w="full">
+          <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+            Weekly incentives
+          </Text>
+          {poolStatsValues ? (
+            <HStack>
+              <Heading size="h4">
+                {poolStatsValues.weeklyRewards ? poolStatsValues.weeklyRewards : 'N/A'}
+              </Heading>
+              <TokenStackPopover
+                chain={chain}
+                headerText="Weekly incentives for stakers"
+                rewardsByToken={weeklyRewardsByToken}
+                tokens={tokens}
+              >
+                <TokenIconStack chain={chain} disablePopover size={20} tokens={tokens} />
+              </TokenStackPopover>
+            </HStack>
+          ) : (
+            <Skeleton height="28px" w="100px" />
+          )}
+        </VStack>
+      </FadeInOnView>
     </>
   )
 }
