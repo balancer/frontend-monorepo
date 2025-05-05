@@ -53,7 +53,7 @@ export function PoolSnapshot({ ...props }: CardProps) {
   }, [pool])
 
   return (
-    <Card position="relative" {...props}>
+    <Card h={{ base: '475px', md: '525px' }} position="relative" {...props}>
       <NoisyCard
         cardProps={COMMON_NOISY_CARD_PROPS.cardProps}
         contentProps={COMMON_NOISY_CARD_PROPS.contentProps}
