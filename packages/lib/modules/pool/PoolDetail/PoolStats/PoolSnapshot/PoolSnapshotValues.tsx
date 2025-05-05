@@ -36,8 +36,8 @@ export function PoolSnapshotValues() {
           abbreviated: false,
         }),
         income24h: isCowAmmPool(pool.type)
-          ? toCurrency(pool.dynamicData.surplus24h)
-          : toCurrency(pool.dynamicData.fees24h),
+          ? toCurrency(pool.dynamicData.surplus24h, { abbreviated: false, noDecimals: true })
+          : toCurrency(pool.dynamicData.fees24h, { abbreviated: false, noDecimals: true }),
         weeklyRewards: weeklyRewards ? toCurrency(weeklyRewards.toString()) : 'N/A',
       }
     }
