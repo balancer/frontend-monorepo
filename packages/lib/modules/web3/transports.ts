@@ -12,7 +12,15 @@ export function getTransports(chain: Chain) {
   const gqlChain = getGqlChain(chain.id as SupportedChainId)
   const overrideRpcUrl = rpcOverrides[gqlChain]
   const fallbackRpcUrl = rpcFallbacks[gqlChain]
-  if (shouldUseAnvilFork) return fallback([http(overrideRpcUrl)])
+  if (shouldUseAnvilFork) {
+    return fallback([
+      /*
+        Enable JSON-RPC batching:
+        https://viem.sh/docs/clients/transports/http.html#batch-optional
+      */
+      http(overrideRpcUrl, { batch: { batchSize: 1000, wait: 2 }, timeout: 50_000, retryCount: 1 }),
+    ])
+  }
   if (overrideRpcUrl) return fallback([http(overrideRpcUrl), http(fallbackRpcUrl), http()])
   return fallback([http(), http(fallbackRpcUrl)])
 }
