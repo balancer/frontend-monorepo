@@ -19,10 +19,6 @@ import {
   PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
   Text,
   useColorModeValue,
   VStack,
@@ -57,82 +53,7 @@ import Link from 'next/link'
 import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
-
-// --- Slider value <-> percent mapping ---
-const SLIDER_Q1_VALUE = 100_000
-const SLIDER_MID_VALUE = 1_000_000
-const SLIDER_PERCENT_MAX = 1000
-
-/**
- * Map slider percent (0-1000) to TVL value.
- * 0–250: linear from 0 to 100,000
- * 250–500: linear from 100,000 to 1,000,000
- * 500–1000: exponential from 1,000,000 to 100,000,000
- */
-function sliderPercentToValue(percent: number): number {
-  if (percent <= 250) {
-    // Linear: 0–250 → 0–100,000
-    return Math.round((percent / 250) * SLIDER_Q1_VALUE)
-  } else if (percent <= 500) {
-    // Linear: 250–500 → 100,000–1,000,000
-    const t = (percent - 250) / 250
-    return Math.round(SLIDER_Q1_VALUE + t * (SLIDER_MID_VALUE - SLIDER_Q1_VALUE))
-  } else {
-    // Exponential: 500–1000 → 1,000,000–100,000,000
-    const minLog = 6
-    const maxLog = 8
-    const expPercent = (percent - 500) / 500
-    const logValue = minLog + (maxLog - minLog) * expPercent
-    return Math.round(Math.pow(10, logValue))
-  }
-}
-
-/**
- * Map TVL value to slider percent (0-1000)
- */
-function valueToSliderPercent(value: number): number {
-  if (value <= SLIDER_Q1_VALUE) {
-    // Linear: 0–100,000 → 0–250
-    return (value / SLIDER_Q1_VALUE) * 250
-  } else if (value <= SLIDER_MID_VALUE) {
-    // Linear: 100,000–1,000,000 → 250–500
-    const t = (value - SLIDER_Q1_VALUE) / (SLIDER_MID_VALUE - SLIDER_Q1_VALUE)
-    return 250 + t * 250
-  } else {
-    // Exponential: 1,000,000–100,000,000 → 500–1000
-    const minLog = 6
-    const maxLog = 8
-    const valueLog = Math.log10(value)
-    const expPercent = (valueLog - minLog) / (maxLog - minLog)
-    return 500 + expPercent * 500
-  }
-}
-
-const SLIDER_STEP_CONFIG: { until: number; step: number }[] = [
-  { until: 10000, step: 1000 },
-  { until: 50000, step: 2500 },
-  { until: 100000, step: 5000 },
-  { until: 500000, step: 25000 },
-  { until: 1000000, step: 50000 },
-  { until: 10000000, step: 100000 },
-  { until: 100000000, step: 1000000 },
-]
-
-function snapToStep(value: number): number {
-  let prevUntil = 0
-  for (const { until, step } of SLIDER_STEP_CONFIG) {
-    if (value <= until) {
-      const base = prevUntil
-      const snapped = Math.round((value - base) / step) * step + base
-      return Math.max(base, Math.min(snapped, until))
-    }
-    prevUntil = until
-  }
-  const { until, step } = SLIDER_STEP_CONFIG[SLIDER_STEP_CONFIG.length - 1]
-  const base = SLIDER_STEP_CONFIG[SLIDER_STEP_CONFIG.length - 2].until
-  const snapped = Math.round((value - base) / step) * step + base
-  return Math.max(base, Math.min(snapped, until))
-}
+import { PoolMinTvlFilter } from './PoolMinTvlFilter'
 
 export function useFilterTagsVisible() {
   const {
@@ -324,66 +245,6 @@ export function PoolNetworkFilters({
       toggleAll={() => setNetworks(null)}
       toggleOption={toggleNetwork}
     />
-  )
-}
-
-function PoolMinTvlFilter() {
-  const { toCurrency } = useCurrency()
-  const {
-    queryState: { minTvl, setMinTvl },
-  } = usePoolList()
-  // State is now slider percent (0–1000)
-  const [sliderPercent, setSliderPercent] = useState(() => valueToSliderPercent(minTvl))
-
-  // Compute TVL value from percent
-  const sliderValue = sliderPercentToValue(sliderPercent)
-
-  // Sync slider percent with minTvl
-  useEffect(() => {
-    setSliderPercent(valueToSliderPercent(minTvl))
-  }, [minTvl])
-
-  // Snap to step on slider move
-  const handleSliderChange = (percent: number) => {
-    // Map percent to value, snap, then map back to percent
-    const rawValue = sliderPercentToValue(percent)
-    const snappedValue = snapToStep(rawValue)
-    setSliderPercent(valueToSliderPercent(snappedValue))
-  }
-
-  // Only update filter (API) when user releases mouse
-  const handleSliderChangeEnd = (percent: number) => {
-    const rawValue = sliderPercentToValue(percent)
-    const snappedValue = snapToStep(rawValue)
-    setMinTvl(snappedValue > 0 ? snappedValue : null)
-  }
-
-  return (
-    <VStack w="full">
-      <HStack w="full">
-        <Heading as="h3" mb="xs" mt="sm" size="sm">
-          Minimum TVL
-        </Heading>
-        <Text fontSize="sm" ml="auto">
-          {toCurrency(sliderValue)}
-        </Text>
-      </HStack>
-      <Slider
-        aria-label="slider-min-tvl"
-        max={SLIDER_PERCENT_MAX}
-        min={0}
-        ml="sm"
-        onChange={handleSliderChange}
-        onChangeEnd={handleSliderChangeEnd}
-        step={1}
-        value={sliderPercent}
-      >
-        <SliderTrack>
-          <SliderFilledTrack />
-        </SliderTrack>
-        <SliderThumb />
-      </Slider>
-    </VStack>
   )
 }
 
