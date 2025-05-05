@@ -72,7 +72,7 @@
     "react-swipeable": "7.0.2",
     "react-syntax-highlighter": "^15.5.0",
     "react-use-measure": "^2.1.1",
-    "react-virtuoso": "4.12.5",
+    "react-virtuoso": "4.12.7",
     "three": "0.175.0",
     "tinycolor2": "^1.6.0",
     "use-debounce": "^10.0.0",
