@@ -7,6 +7,7 @@ import {
   GridProps,
   Skeleton,
   Text,
+  Divider,
   VStack,
 } from '@chakra-ui/react'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
@@ -29,13 +30,13 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
 
   return (
     <FadeInOnView>
+      <Divider />
       <Box
         _hover={{
           bg: 'background.level0',
         }}
         key={keyValue}
         px={{ base: '0', sm: 'md' }}
-        rounded="md"
         transition="all 0.2s ease-in-out"
         w="full"
       >
@@ -61,7 +62,10 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
               <Skeleton h="20px" w="60px" />
             ) : totalInfo.averageRewardPerVote ? (
               <Text color="font.maxContrast">
-                {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
+                {toCurrency(totalInfo.averageRewardPerVote, {
+                  abbreviated: false,
+                  forceThreeDecimals: true,
+                })}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
@@ -106,6 +110,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
           </GridItem>
         </Grid>
       </Box>
+      <Divider />
     </FadeInOnView>
   )
 }

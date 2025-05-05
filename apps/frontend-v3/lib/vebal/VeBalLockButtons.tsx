@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@chakra-ui/react'
+import { Flex, Button, ButtonProps } from '@chakra-ui/react'
 import { getVeBalManagePath } from './vebal-navigation'
 import NextLink from 'next/link'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
@@ -10,14 +10,14 @@ type Props = {
 
 export function VeBalLockButtons(props: Props) {
   return (
-    <>
-      <VeBalExtendLockButton {...props} />
-      <VeBalGetOrUnLockButton {...props} />
-    </>
+    <Flex gap="ms">
+      <VeBalExtendLockButton {...props} size="md" />
+      <VeBalGetOrUnLockButton {...props} size="md" />
+    </Flex>
   )
 }
 
-function VeBalExtendLockButton({ variant = undefined, size = 'lg' }: Props) {
+function VeBalExtendLockButton({ size = 'lg' }: Props) {
   const lockData = useVebalLockData()
 
   if (!lockData.mainnetLockedInfo.hasExistingLock) return null
@@ -27,8 +27,9 @@ function VeBalExtendLockButton({ variant = undefined, size = 'lg' }: Props) {
       as={NextLink}
       href={getVeBalManagePath('extend', 'manage')}
       isLoading={lockData.isLoading}
+      minWidth={{ base: '94px', md: '110px' }}
       size={size}
-      variant={variant}
+      variant="tertiary"
     >
       Extend lock
     </Button>
@@ -46,6 +47,7 @@ function VeBalGetOrUnLockButton({ size = 'lg' }: Props) {
           : getVeBalManagePath('lock', 'manage')
       }
       isLoading={lockData.isLoading}
+      minWidth={{ base: '94px', md: '110px' }}
       size={size}
       variant="primary"
     >
@@ -64,10 +66,11 @@ export function VeBalIncreaseButton({ variant = undefined, size = 'lg' }: Props)
       as={NextLink}
       href={getVeBalManagePath('lock', 'manage')}
       isLoading={lockData.isLoading}
+      minWidth={{ base: '94px', md: '110px' }}
       size={size}
       variant={variant}
     >
-      Increase veBAL
+      Extend lock
     </Button>
   )
 }

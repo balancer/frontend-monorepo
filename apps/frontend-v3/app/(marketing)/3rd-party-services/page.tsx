@@ -7,14 +7,9 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 export default function Cookies() {
   const services = [
     {
-      name: 'Infura',
-      description: 'Used to fetch on-chain data and constructs contract calls with an Infura API.',
-      iconUrl: '/images/services/infura.svg',
-    },
-    {
-      name: 'Alchemy',
-      description: 'Used to fetch on-chain data and constructs contract calls with an Alchemy API.',
-      iconUrl: '/images/services/alchemy.svg',
+      name: 'dRPC',
+      description: 'Used to fech on-chain data and to construct contract calls.',
+      iconUrl: '/images/services/drpc.svg',
     },
     {
       name: 'The Graph',
@@ -28,7 +23,7 @@ export default function Cookies() {
     },
     {
       name: 'Appzi',
-      description: 'Used to capture and store user feedback from optional surveys',
+      description: 'Used to capture and store user feedback from optional surveys.',
       iconUrl: '/images/services/appzi.svg',
     },
     {
@@ -48,6 +43,21 @@ export default function Cookies() {
         'Used for a variety of infrastructure services, but primarily to fetch and cache blockchain data.',
       iconUrl: '/images/services/aws.svg',
     },
+    {
+      name: 'OpenZeppelin',
+      description: 'Used for security and compliance monitoring.',
+      iconUrl: '/images/services/open-zeppelin.svg',
+    },
+    {
+      name: 'Vercel',
+      description: 'Used for deployment and hosting.',
+      iconUrl: '/images/services/vercel.svg',
+    },
+    {
+      name: 'Coingecko',
+      description: 'Used to fetch and display token information.',
+      iconUrl: '/images/services/coingecko.svg',
+    },
   ]
 
   return (
@@ -57,9 +67,9 @@ export default function Cookies() {
           <FadeInOnView>
             <div className="subsection">
               <Box mt="3xl" pb="sm">
-                <h1>Use of 3rd party services</h1>
+                <h1>Use of third-party services</h1>
                 <p>
-                  <em>Last Updated: October 2023</em>
+                  <em>Last Updated: April 2025</em>
                 </p>
                 <p>
                   Balancer is an open source, permissionless, decentralized protocol. The smart

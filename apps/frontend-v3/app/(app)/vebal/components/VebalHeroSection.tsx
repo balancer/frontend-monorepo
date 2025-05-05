@@ -45,13 +45,15 @@ export function VebalHeroSection() {
       >
         <DefaultPageContainer
           h={{ base: '500px', md: '800px' }}
-          pb={['xl', 'xl', '10']}
+          pb={['0', '0', '10']}
           position="relative"
           pt={['xl', '40px']}
+          px="0"
         >
           <Grid
             gap={{ base: '0', md: '4' }}
             h="100%"
+            overflow={{ base: 'hidden', md: 'visible' }}
             templateColumns={{ base: '1fr', md: '1fr 1fr' }}
           >
             {/* Content Column */}
@@ -123,6 +125,13 @@ export function VebalHeroSection() {
                 <Box
                   margin={{ base: '32px auto', md: '0' }}
                   position="relative"
+                  sx={{
+                    '@keyframes scaleUpFadeIn': {
+                      from: { opacity: 0, transform: 'scale(0.8)' },
+                      to: { opacity: 1, transform: 'scale(1)' },
+                    },
+                    animation: `scaleUpFadeIn 1s ease-out forwards`,
+                  }}
                   width={{ base: '98%', md: 'clamp(800px, 85vw, 1200px)' }}
                 >
                   <RadialPattern

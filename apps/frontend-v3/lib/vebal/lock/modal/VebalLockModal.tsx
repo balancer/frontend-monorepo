@@ -36,9 +36,14 @@ import { getPreviewLabel } from '@bal/lib/vebal/lock/steps/lock-steps.utils'
 import { useEffect, useState } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn } from '@repo/lib/shared/utils/numbers'
 import { useVeBalRedirectPath } from '../../vebal-navigation'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
+import { useVeBALPool } from '../../vote/Votes/MyVotes/MyVotesStats/useVeBALPool'
+import { useGetPoolRewards } from '@repo/lib/modules/pool/useGetPoolRewards'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 type Props = {
   isOpen: boolean
@@ -56,6 +61,7 @@ export function VebalLockModal({
   const { redirectPath, returnLabel } = useVeBalRedirectPath()
 
   const { userAddress, isLoading: userAccountIsLoading } = useUserAccount()
+  const { toCurrency } = useCurrency()
   const { isDesktop, isMobile } = useBreakpoints()
   const {
     vebalBptToken,
@@ -65,7 +71,6 @@ export function VebalLockModal({
     lockMode,
     isIncreasedLockAmount,
     isLoading: vebalLockIsLoading,
-    expectedVeBalAmount,
   } = useVebalLock()
   const { mainnetLockedInfo, isLoading: vebalLockDataIsLoading } = useVebalLockData()
 
@@ -104,6 +109,12 @@ export function VebalLockModal({
   const isUnlocking = lockMode === LockMode.Unlock && !extendExpired
 
   const isSuccess = !!lockTxHash
+
+  const { pool, poolIsLoading } = useVeBALPool(userAddress)
+  const { calculatePotentialYield } = useGetPoolRewards(pool || ({} as Pool))
+  const { usdValueForToken } = useTokens()
+  const totalUsdValue = usdValueForToken(vebalBptToken, totalAmount)
+  const weeklyYield = !poolIsLoading ? calculatePotentialYield(totalUsdValue) : '0'
 
   return (
     <Modal
@@ -152,15 +163,8 @@ export function VebalLockModal({
                     <VStack alignItems="start" spacing="none">
                       <AlertTitle>Reconsider unlocking?</AlertTitle>
                       <AlertDescription>
-                        {/* fix: what should we calculate here? */}
-                        Extending your lock to 1 year could generate{' '}
-                        {fNum(
-                          'token',
-                          expectedVeBalAmount.maxLockVeBal
-                            .minus(expectedVeBalAmount.totalExpectedVeBal)
-                            .toNumber()
-                        )}{' '}
-                        veBAL from voting incentives, protocol revenue and swap fees.
+                        {`Extending your lock to 1 year could generate ${toCurrency(weeklyYield, { abbreviated: false })}
+                        in yield next week from voting incentives, protocol revenue and swap fees.`}
                       </AlertDescription>
                     </VStack>
                   </Alert>

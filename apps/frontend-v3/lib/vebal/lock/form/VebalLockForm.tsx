@@ -41,10 +41,10 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 
 type Props = {
-  allowEditOnInit?: boolean
+  editAlwaysOn?: boolean
 }
 
-export function VebalLockForm({ allowEditOnInit = false }: Props) {
+export function VebalLockForm({ editAlwaysOn = false }: Props) {
   const { refetchAll } = useVebalLockData()
   const {
     vebalBptToken,
@@ -76,7 +76,7 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
     }
   }
 
-  const [isEditingAmount, setIsEditingAmount] = useState(allowEditOnInit)
+  const [isEditingAmount, setIsEditingAmount] = useState(editAlwaysOn)
 
   const onEditAmountToggle = (value: boolean) => {
     setIsEditingAmount(value)
@@ -93,14 +93,14 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
   const { pool, poolIsLoading } = useVeBALPool(userAddress)
   const { calculatePotentialYield } = useGetPoolRewards(pool || ({} as Pool))
   const { usdValueForToken } = useTokens()
-  const totalUsdValue = usdValueForToken(vebalBptToken, totalAmount)
+  const totalUsdValue = usdValueForToken(vebalBptToken, expectedVeBalAmount.totalExpectedVeBal)
   const weeklyYield = !poolIsLoading ? calculatePotentialYield(totalUsdValue) : '0'
 
   const hasLockedAmount = lockedAmount && Number(lockedAmount) > 0
   const currentVeBALAmount = previousLockEnd
     ? expectedTotalVeBal({ bpt: lockedAmount || '0', lockEndDate: previousLockEnd })
     : bn(0)
-  const currentTotalUsdValue = usdValueForToken(vebalBptToken, lockedAmount || 0)
+  const currentTotalUsdValue = usdValueForToken(vebalBptToken, currentVeBALAmount || 0)
   const currentWeeklyYield = !poolIsLoading ? calculatePotentialYield(currentTotalUsdValue) : '0'
 
   return (
@@ -108,7 +108,7 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <span>{getModalLabel(lockMode, true)}</span>
+            <span>{getModalLabel(lockMode, editAlwaysOn, true)}</span>
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
@@ -143,7 +143,7 @@ export function VebalLockForm({ allowEditOnInit = false }: Props) {
                 </Text>
               )}
 
-              {!isLoading && !unlockingMode && (
+              {!isLoading && !unlockingMode && !editAlwaysOn && (
                 <ClickableText
                   fontSize="sm"
                   fontWeight="700"

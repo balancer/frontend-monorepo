@@ -31,6 +31,11 @@ describe('fiatFormat', () => {
     expect(fNum('fiat', '56789.12345678', { abbreviated: false })).toBe('56,789.12')
   })
 
+  test('Forcing 3 decimals', () => {
+    expect(fNum('fiat', '0.555')).toBe('0.56')
+    expect(fNum('fiat', '0.555', { forceThreeDecimals: true })).toBe('0.555')
+  })
+
   test('Hide cents when value >= 100k', () => {
     expect(fNum('fiat', '123456789.12345678', { abbreviated: false })).toBe('123,456,789')
   })

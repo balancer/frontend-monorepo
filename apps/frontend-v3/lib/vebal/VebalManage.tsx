@@ -1,4 +1,4 @@
-import { Box, Center, Heading, Stack } from '@chakra-ui/react'
+import { Flex, Box, Center, Heading, Stack } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { VeBalLockButtons } from './VeBalLockButtons'
 import { VeBalPotentialBar } from './VeBalPotentialBar'
@@ -6,6 +6,8 @@ import { VeBalSectionHeader } from './VeBalSectionHeader'
 import { VebalStatsLayout } from './VebalStats/VebalStatsLayout'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { VebalBreadcrumbs } from './VebalBreadcrumbs'
+
+import { VeBalCrossChainSync } from './VeBalCrossChainSync'
 
 export function VebalManage() {
   const { isConnected } = useUserAccount()
@@ -17,7 +19,7 @@ export function VebalManage() {
           <VebalBreadcrumbs />
           <VeBalSectionHeader
             before={
-              <Heading as="h2" size="lg" variant="special">
+              <Heading as="h2" pb="0.5" size="lg" variant="special">
                 Manage veBAL
               </Heading>
             }
@@ -28,6 +30,7 @@ export function VebalManage() {
             </Box>
           </Center>
         </Stack>
+        <VeBalCrossChainSync />
       </Stack>
     )
   }
@@ -36,17 +39,16 @@ export function VebalManage() {
     <Stack spacing="2xl">
       <Stack spacing="lg">
         <VebalBreadcrumbs />
-        <VeBalSectionHeader
-          after={<VeBalLockButtons />}
-          before={
-            <Heading as="h2" size="lg" variant="special">
-              Manage veBAL
-            </Heading>
-          }
-        />
+        <Flex alignItems="end" justifyContent="space-between" w="full">
+          <Heading as="h2" pb="0.5" size="lg" variant="special">
+            Manage veBAL
+          </Heading>
+          <VeBalLockButtons />
+        </Flex>
         <VebalStatsLayout />
       </Stack>
       <VeBalPotentialBar />
+      <VeBalCrossChainSync />
     </Stack>
   )
 }

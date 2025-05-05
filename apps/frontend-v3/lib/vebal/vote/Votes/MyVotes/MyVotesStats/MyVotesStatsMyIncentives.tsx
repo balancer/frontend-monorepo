@@ -17,7 +17,7 @@ export function MyVotesStatsMyIncentives() {
         loading ? (
           <Skeleton height="28px" w="100px" />
         ) : !isZero(totalInfo.totalRewardValue) ? (
-          <HStack spacing="xs">
+          <HStack spacing="sm">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
               {toCurrency(totalInfo.totalRewardValue, { abbreviated: false })}
             </Text>

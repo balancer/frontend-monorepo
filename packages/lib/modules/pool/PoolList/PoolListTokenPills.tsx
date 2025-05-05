@@ -138,7 +138,7 @@ function StableTokenPills({
         const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
         return (
           <Badge
-            key={[token.address, token.chain].join('-')}
+            key={[token.address, token.chain, i].join('-')}
             {...badgeProps}
             alignItems="center"
             bg="background.level2"

@@ -15,7 +15,7 @@ export default function Privacy() {
               <Box mt="3xl">
                 <h1>Balancer Foundation Privacy&nbsp;Policy</h1>
                 <p>
-                  <em>Last Updated: October 2023</em>
+                  <em>Last Updated: April 2025</em>
                 </p>
               </Box>
               <p>
@@ -53,9 +53,9 @@ export default function Privacy() {
                 <li>
                   Balancer does not and has not stored personal information from users of the UI.
                   However, Balancer uses third party services including, without limitation,
-                  Cloudflare, Hypernative, Infura, Alchemy, Sentry, Fathom Analytics, RainbowKit,
-                  Appzi and others who collect and store certain user information only for use in
-                  the provision of their services.
+                  Cloudflare, Hypernative, Sentry, Fathom Analytics, RainbowKit, OpenZeppelin,
+                  Amazon Web Services, Vercel, Coingecko, Appzi and others who collect and store
+                  certain user information only for use in the provision of their services.
                 </li>
                 <li>
                   Balancer does not set any cookies. However, we use third party service providers

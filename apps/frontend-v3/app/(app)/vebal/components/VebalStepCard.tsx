@@ -44,7 +44,14 @@ export function VebalStepCard({
             </ParallaxImage>
           </FadeInOnView>
         </Box>
-        <Heading as="h3" bg="background.gold" bgClip="text" pb="0.5" size="md">
+        <Heading
+          as="h3"
+          bg="background.gold"
+          bgClip="text"
+          fontSize={{ base: 'lg', md: 'xl' }}
+          pb="0.5"
+          size="md"
+        >
           {step} {heading}
         </Heading>
         <Text color="font.secondary" lineHeight="1.4" pb="ms" px="md" sx={{ textWrap: 'pretty' }}>

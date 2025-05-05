@@ -8,6 +8,7 @@ import {
   Icon,
   PopoverContent,
   Text,
+  Divider,
   VStack,
 } from '@chakra-ui/react'
 import { Globe, Trash2 } from 'react-feather'
@@ -36,49 +37,52 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
   }
 
   return (
-    <Grid {...rest} borderBottom="1px solid" borderColor="border.base" p={['sm', 'md']} w="full">
-      <GridItem {...cellProps}>
-        <VStack align="start" w="full">
-          <Icon as={Globe} boxSize="5" color="font.primary" />
-        </VStack>
-      </GridItem>
-      <GridItem {...cellProps}>
-        <Text fontWeight="bold">Pool name</Text>
-      </GridItem>
-      {orderBy.map(orderByItem => (
-        <SortableHeader
-          containerProps={{
-            justifySelf: 'end',
-            textAlign: 'right',
-            ...cellProps,
-          }}
-          isSorted={sortingBy === orderByItem}
-          key={orderByItem}
-          label={orderByHash[orderByItem].label}
-          onSort={() => handleSort(orderByItem)}
-          popoverContent={
-            orderByHash[orderByItem].title ? (
-              <PopoverContent maxW="300px" p="sm" w="auto">
-                <Text
-                  fontSize="sm"
-                  textAlign={
-                    ['bribes', 'bribesPerVebal'].includes(orderByItem) ? 'left' : undefined
-                  }
-                  variant="secondary"
-                >
-                  {orderByHash[orderByItem].title}
-                </Text>
-              </PopoverContent>
-            ) : undefined
-          }
-          sorting={sorting}
-        />
-      ))}
-      <GridItem {...cellProps}>
-        <VStack align="center" w="full">
-          <Icon as={Trash2} boxSize="5" color="font.primary" />
-        </VStack>
-      </GridItem>
-    </Grid>
+    <>
+      <Grid {...rest} p={['sm', 'md']} w="full">
+        <GridItem {...cellProps}>
+          <VStack align="start" w="full">
+            <Icon as={Globe} boxSize="5" color="font.primary" />
+          </VStack>
+        </GridItem>
+        <GridItem {...cellProps}>
+          <Text fontWeight="bold">Pool name</Text>
+        </GridItem>
+        {orderBy.map(orderByItem => (
+          <SortableHeader
+            containerProps={{
+              justifySelf: 'end',
+              textAlign: 'right',
+              ...cellProps,
+            }}
+            isSorted={sortingBy === orderByItem}
+            key={orderByItem}
+            label={orderByHash[orderByItem].label}
+            onSort={() => handleSort(orderByItem)}
+            popoverContent={
+              orderByHash[orderByItem].title ? (
+                <PopoverContent maxW="300px" p="sm" w="auto">
+                  <Text
+                    fontSize="sm"
+                    textAlign={
+                      ['bribes', 'bribesPerVebal'].includes(orderByItem) ? 'left' : undefined
+                    }
+                    variant="secondary"
+                  >
+                    {orderByHash[orderByItem].title}
+                  </Text>
+                </PopoverContent>
+              ) : undefined
+            }
+            sorting={sorting}
+          />
+        ))}
+        <GridItem {...cellProps}>
+          <VStack align="center" w="full">
+            <Icon as={Trash2} boxSize="5" color="font.primary" />
+          </VStack>
+        </GridItem>
+      </Grid>
+      <Divider />
+    </>
   )
 }

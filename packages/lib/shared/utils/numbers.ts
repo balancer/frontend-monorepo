@@ -64,7 +64,7 @@ export function bn(val: Numberish): BigNumber {
   return new BigNumber(val.toString())
 }
 
-type FormatOpts = { abbreviated?: boolean }
+type FormatOpts = { abbreviated?: boolean; forceThreeDecimals?: boolean }
 
 /**
  * Converts a number to a string format within the decimal limit that numeral
@@ -82,9 +82,12 @@ function integerFormat(val: Numberish): string {
 }
 
 // Formats a fiat value.
-function fiatFormat(val: Numberish, { abbreviated = true }: FormatOpts = {}): string {
+function fiatFormat(
+  val: Numberish,
+  { abbreviated = true, forceThreeDecimals = false }: FormatOpts = {}
+): string {
   if (isSmallAmount(val)) return SMALL_AMOUNT_LABEL
-  if (requiresThreeDecimals(val)) return formatWith3Decimals(val)
+  if (forceThreeDecimals || requiresThreeDecimals(val)) return formatWith3Decimals(val)
   const format = abbreviated
     ? FIAT_FORMAT_A
     : isMoreThanOrEqualToAmount(val, FIAT_CENTS_THRESHOLD)
@@ -220,7 +223,7 @@ export function fNumCustom(val: Numberish, format: string): string {
 
 // Edge case where we need to display 3 decimals for small amounts between 0.001 and 0.01
 function requiresThreeDecimals(value: Numberish): boolean {
-  return !isZero(value) && bn(value).gte(0.001) && bn(value).lte(0.009)
+  return !isZero(value) && bn(value).gte(0.001) && bn(value).lt(0.01)
 }
 
 function formatWith3Decimals(value: Numberish): string {
@@ -280,7 +283,7 @@ export function isTooSmallToRemoveUsd(value: Numberish): boolean {
   return !isZero(value) && bn(value).lt(USD_LOWER_THRESHOLD)
 }
 
-export const isValidNumber = (value: string): boolean =>
+export const isValidNumber = (value: string | number | undefined | null): boolean =>
   isNumber(toNumber(value)) && !isNaN(toNumber(value))
 
 // Parses a fixed-point decimal string into a bigint
@@ -308,4 +311,8 @@ export function getRandomInt(min: number, max: number): number {
   min = Math.ceil(min)
   max = Math.floor(max)
   return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+export const safeToNumber = (val: string | number | undefined | null): number => {
+  return isValidNumber(val) ? toNumber(val) : 0
 }
