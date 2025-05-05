@@ -102,12 +102,6 @@ export function impersonateWagmiConfig(impersonationAddress?: Address) {
 
   const impersonatedConfig = createConfig({
     chains,
-    /*
-      anvil forks are not compatible with multicall so we disable it
-      to use Batch JSON-RPC instead, which must be configured in transports:
-      https://viem.sh/docs/clients/transports/http.html#batch-optional
-    */
-    batch: { multicall: false },
     transports: _transports,
     connectors,
     ssr: true,
