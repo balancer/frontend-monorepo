@@ -7,7 +7,6 @@ import {
   AlertIcon,
   AlertTitle,
   Button,
-  Center,
   Grid,
   GridItem,
   Heading,
@@ -25,7 +24,6 @@ import { MyVotesStatsMyIncentivesOptimized } from '@bal/lib/vebal/vote/Votes/MyV
 import { useDisclosure } from '@chakra-ui/hooks'
 import { MyVotesHintModal } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesHintModal'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { WEIGHT_VOTE_DELAY } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { oneDayInMs } from '@repo/lib/shared/utils/time'
 import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
@@ -227,15 +225,11 @@ export function MyVotes() {
         )}
 
         <GridItem colSpan={4}>
-          {isConnected ? (
-            <MyVotesTable loading={myVotesLoading} myVotes={sortedMyVotes} />
-          ) : (
-            <Center border="1px dashed" borderColor="border.base" h="150px" rounded="lg" w="full">
-              <VStack>
-                <ConnectWallet size="md" variant="primary" />
-              </VStack>
-            </Center>
-          )}
+          <MyVotesTable
+            loading={myVotesLoading}
+            myVotes={sortedMyVotes}
+            noVeBALBalance={noVeBALBalance}
+          />
         </GridItem>
       </Grid>
     </VStack>

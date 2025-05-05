@@ -10,10 +10,12 @@ import { useMemo } from 'react'
 import { MyVotesTotalRow } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableTotalRow'
 import { MyVotesSubmitRow } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableSubmitRow'
 import { useTotalVotes } from '../../../useTotalVotes'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 interface Props {
   myVotes: VotingPoolWithData[]
   loading: boolean
+  noVeBALBalance: boolean
 }
 
 enum RowType {
@@ -29,9 +31,10 @@ const rowProps = {
   gap: { base: 'xxs', xl: 'lg' },
 }
 
-export function MyVotesTable({ myVotes, loading }: Props) {
+export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
   const isMounted = useIsMounted()
   const { totalVotes, totalVotesLoading } = useTotalVotes()
+  const { isConnected } = useUserAccount()
 
   const items = useMemo(() => {
     if (myVotes.length === 0) {
@@ -105,7 +108,13 @@ export function MyVotesTable({ myVotes, loading }: Props) {
         items={items}
         loading={loading || totalVotesLoading}
         loadingLength={3}
-        noItemsFoundLabel="You don’t have any active or proposed votes. Add some votes from the table below."
+        noItemsFoundLabel={
+          !isConnected
+            ? 'Connect your wallet to see and edit your votes'
+            : noVeBALBalance
+              ? 'You don’t have any votes. Get some veBAL to start voting.'
+              : 'You don’t have any votes. Start by selecting some pool gauges from the table below.'
+        }
         paginationProps={undefined}
         renderTableHeader={TableHeader}
         renderTableRow={TableRow}
