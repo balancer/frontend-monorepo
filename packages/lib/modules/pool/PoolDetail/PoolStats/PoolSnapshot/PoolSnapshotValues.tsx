@@ -12,6 +12,7 @@ import { useGetPoolRewards } from '../../../useGetPoolRewards'
 
 type PoolStatsValues = {
   totalLiquidity: string
+  volume24h: string
   income24h: string
   weeklyRewards: string
 }
@@ -28,6 +29,9 @@ export function PoolSnapshotValues() {
     if (pool) {
       return {
         totalLiquidity: toCurrency(tvl, {
+          abbreviated: false,
+        }),
+        volume24h: toCurrency(pool.dynamicData.volume24h, {
           abbreviated: false,
         }),
         income24h: isCowAmmPool(pool.type)
@@ -50,6 +54,16 @@ export function PoolSnapshotValues() {
         </Text>
         {poolStatsValues ? (
           <Heading size="h4">{poolStatsValues.totalLiquidity}</Heading>
+        ) : (
+          <Skeleton height="28px" w="100px" />
+        )}
+      </VStack>
+      <VStack align="flex-start" spacing="0" w="full">
+        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+          Swap vol (24h)
+        </Text>
+        {poolStatsValues ? (
+          <Heading size="h4">{poolStatsValues.volume24h}</Heading>
         ) : (
           <Skeleton height="28px" w="100px" />
         )}
