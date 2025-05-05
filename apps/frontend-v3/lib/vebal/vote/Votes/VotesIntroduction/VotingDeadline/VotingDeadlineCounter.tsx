@@ -4,18 +4,9 @@ import { differenceInMinutes, format, nextThursday } from 'date-fns'
 import { oneSecondInMs } from '@repo/lib/shared/utils/time'
 import { VotingDeadlineContainer } from './VotingDeadlineContainer'
 import { ReminderButton } from './ReminderButton'
-import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
-
-function setCalendarEvent(deadline: Date) {
-  const event = {
-    title: 'veBAL voting deadline (Balancer)',
-    start: deadline,
-    url: 'https://balancer.fi/vebal/vote',
-  }
-
-  openIcalEvent({ event })
-}
+import { CalendarReminderModal } from '../../MyVotes/CalendarReminderModal'
+import { useState } from 'react'
 
 export function VotingDeadlineCounter() {
   const now = useCurrentDate(oneSecondInMs)
@@ -33,6 +24,8 @@ export function VotingDeadlineCounter() {
 
   const closeToDeadline = differenceInMinutes(deadline, now) < 30
 
+  const [isCalendarReminderOpen, setIsCalendarReminderOpen] = useState(false)
+
   return (
     <VotingDeadlineContainer>
       <VStack spacing="md">
@@ -40,7 +33,14 @@ export function VotingDeadlineCounter() {
           <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">
             {format(deadline, 'EEEE, Haaa zzzz')}
           </Text>
-          <ReminderButton onClick={() => setCalendarEvent(deadline)}>Set reminder</ReminderButton>
+          <ReminderButton onClick={() => setIsCalendarReminderOpen(true)}>
+            Get reminders
+          </ReminderButton>
+          <CalendarReminderModal
+            deadline={deadline}
+            isOpen={isCalendarReminderOpen}
+            onClose={() => setIsCalendarReminderOpen(false)}
+          />
         </HStack>
         <HStack spacing="sm" w="full">
           {counters.map(counter => (
