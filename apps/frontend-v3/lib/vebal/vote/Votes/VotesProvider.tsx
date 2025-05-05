@@ -40,7 +40,7 @@ export function _useVotes({ data, votingListLoading = false, error }: UseVotesAr
     refetchAll,
   } = useGaugeVotes({ gaugeAddresses })
 
-  const { expiredGauges } = useExpiredGauges({ gaugeAddresses })
+  const { expiredGauges, isLoading: isExpiredGaugesLoading } = useExpiredGauges({ gaugeAddresses })
 
   const { incentives, incentivesError, incentivesAreLoading } = useHiddenHandVotingIncentives()
 
@@ -188,7 +188,9 @@ export function _useVotes({ data, votingListLoading = false, error }: UseVotesAr
     incentives,
     incentivesError,
     incentivesAreLoading,
-    loading: votingListLoading || incentivesAreLoading || gaugeVotesIsLoading,
+    loading:
+      votingListLoading || incentivesAreLoading || gaugeVotesIsLoading || isExpiredGaugesLoading,
+    isExpiredGaugesLoading,
     count: votingPools.length,
     error,
     gaugeVotesIsLoading,
