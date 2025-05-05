@@ -34,12 +34,11 @@ export function VotingDeadlineCounter() {
             {format(deadline, 'EEEE, Haaa zzzz')}
           </Text>
           <ReminderButton onClick={() => setIsCalendarReminderOpen(true)}>
-            Set reminder
+            Get reminders
           </ReminderButton>
           <CalendarReminderModal
             deadline={deadline}
             isOpen={isCalendarReminderOpen}
-            makeItWeekly={false}
             onClose={() => setIsCalendarReminderOpen(false)}
           />
         </HStack>

@@ -87,7 +87,6 @@ export function DeadlineDayTooltip({
             <CalendarReminderModal
               deadline={day}
               isOpen={isCalendarReminderOpen}
-              makeItWeekly
               onClose={() => setIsCalendarReminderOpen(false)}
             />
           </VStack>

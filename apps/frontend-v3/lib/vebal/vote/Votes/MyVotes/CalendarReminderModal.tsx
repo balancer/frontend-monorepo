@@ -18,27 +18,25 @@ import {
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { openIcalEvent } from '@repo/lib/shared/utils/calendar'
 
-function setCalendarEvent(deadline: Date, makeItWeekly: boolean) {
+function setCalendarEvent(deadline: Date) {
   const event = {
     title: 'veBAL voting deadline (Balancer)',
     start: deadline,
     url: 'https://balancer.fi/vebal/vote',
   }
 
-  openIcalEvent({ event, makeItWeekly })
+  openIcalEvent({ event, makeItWeekly: true })
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function CalendarReminderModal({
   isOpen = false,
   onClose,
   deadline,
-  makeItWeekly,
-}: UseDisclosureProps & { deadline: Date; makeItWeekly: boolean }) {
+}: UseDisclosureProps & { deadline: Date }) {
   const closeModal = () => onClose && onClose()
 
   function setReminder() {
-    setCalendarEvent(deadline, makeItWeekly)
+    setCalendarEvent(deadline)
     closeModal()
   }
 
@@ -46,7 +44,7 @@ export function CalendarReminderModal({
     <Modal isCentered isOpen={isOpen} onClose={closeModal} size="lg">
       <SuccessOverlay />
       <ModalContent>
-        <ModalHeader>Set a calendar reminder</ModalHeader>
+        <ModalHeader>Get calendar reminders</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb="lg">
           <VStack gap="lg">
@@ -86,7 +84,7 @@ export function CalendarReminderModal({
               </ListItem>
             </List>
             <Button onClick={setReminder} variant="secondary" w="full">
-              Download .ics file
+              Download .ics calendar reminders
             </Button>
           </VStack>
         </ModalBody>
