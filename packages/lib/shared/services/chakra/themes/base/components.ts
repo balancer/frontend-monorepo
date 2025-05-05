@@ -933,10 +933,11 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
         icon: {
           color: 'font.dark',
+          alignSelf: 'start',
         },
         container: {
           rounded: 'md',
-          alignItems: 'start',
+          alignItems: 'center',
           "&[data-status='info']": {
             background: 'var(--chakra-colors-purple-200)',
             _dark: {
@@ -963,11 +964,12 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           },
         },
         title: {
-          letterSpacing: '-0.25px',
+          letterSpacing: '-0.35px',
           fontSize: ['sm', 'md'],
           lineHeight: '1.3',
           color: 'font.dark',
           mr: '0',
+          pb: 'xxs',
           button: {
             height: '28px',
             fontSize: 'sm',
@@ -996,9 +998,20 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           letterSpacing: '-0.25px',
           fontWeight: 'medium',
           color: 'font.dark',
+          lineHeight: '1.2',
+          textWrap: 'pretty',
         },
       },
-      variants: {},
+      variants: {
+        WideOnDesktop: {
+          title: {
+            pb: { base: 'xxs', lg: '0' },
+          },
+          description: {
+            fontSize: { base: 'sm', lg: 'md' },
+          },
+        },
+      },
     },
     Badge: {
       variants: {
