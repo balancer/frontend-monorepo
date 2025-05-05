@@ -4,7 +4,7 @@ import { usePool } from '../../pool/PoolProvider'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { createContext, PropsWithChildren, useMemo } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { allPoolTokens } from 'modules/pool/pool-tokens.utils'
+import { allPoolTokens } from '../../pool/pool-tokens.utils'
 
 type EclpChartContextType = ReturnType<typeof _useEclpChart>
 
