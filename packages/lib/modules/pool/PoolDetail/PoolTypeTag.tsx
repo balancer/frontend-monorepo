@@ -116,6 +116,9 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
         </>
       )
 
+    case GqlPoolType.Reclamm:
+      return <Text {...textProps}>Reclamm</Text>
+
     default:
       return null
   }
