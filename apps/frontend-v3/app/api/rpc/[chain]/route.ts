@@ -1,37 +1,31 @@
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { NextResponse } from 'next/server'
 import { drpcUrl } from '@repo/lib/shared/utils/rpc'
-
-type Params = {
-  params: {
-    chain: string
-  }
-}
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
 const DRPC_KEY = process.env.NEXT_PRIVATE_DRPC_KEY || ''
 
 const ALLOWED_ORIGINS = [
-  ...(process.env.NEXT_PRIVATE_ALLOWED_ORIGINS || '').split(','),
+  'http://localhost:3000',
+  'http://localhost:3001',
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '',
   process.env.VERCEL_BRANCH_URL ? `https://${process.env.VERCEL_BRANCH_URL}` : '',
 ].filter(Boolean)
 
-export async function POST(request: Request, { params: { chain } }: Params) {
+export async function POST(request: Request, context: { params: { chain: string } }) {
+  const { chain } = context.params
   const referer = request.headers.get('referer')
   const isAllowedOrigin = referer && ALLOWED_ORIGINS.some(origin => referer.startsWith(origin))
 
   if (!isAllowedOrigin) {
-    return new Response(
-      JSON.stringify({
-        error: 'Forbidden: Access denied',
-        code: -32000,
-        message: 'Access denied',
-      }),
-      {
-        status: 403,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
+    return new Response('Unauthorized', {
+      status: 401,
+    })
+  }
+
+  if (!chain) {
+    return new Response('Chain parameter is required', {
+      status: 400,
+    })
   }
 
   if (!DRPC_KEY) {
@@ -45,13 +39,13 @@ export async function POST(request: Request, { params: { chain } }: Params) {
 
   const rpcResponse = await fetch(rpcUrl, {
     method: 'POST',
-    body: JSON.stringify(rpcBody),
-    next: {
-      revalidate: 0,
+    headers: {
+      'Content-Type': 'application/json',
     },
+    body: JSON.stringify(rpcBody),
   })
 
-  const rpcResponseJson = await rpcResponse.json()
+  const rpcData = await rpcResponse.json()
 
-  return Response.json(rpcResponseJson)
+  return NextResponse.json(rpcData)
 }
