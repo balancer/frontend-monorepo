@@ -173,6 +173,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         background: 'font.primary',
         backgroundClip: 'text',
         letterSpacing: '-0.04rem',
+        textWrap: 'balance',
       },
       variants: {
         secondary: {
@@ -247,6 +248,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         letterSpacing: '-0.25px',
         lineHeight: '1.3',
         fontSize: ['sm', 'md'],
+        textWrap: 'pretty',
       },
       fontSizes: {
         xs: {

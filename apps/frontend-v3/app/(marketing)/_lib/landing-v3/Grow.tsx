@@ -178,7 +178,7 @@ export function Grow() {
               }}
               stat={fNumCustom(protocolData?.protocolMetricsAggregated.swapVolume24h ?? 0, '$0,0a')}
               statProps={{ fontSize: '3xl', fontWeight: 'bold' }}
-              title="24hr Volume"
+              title="24hr volume"
               titleSize="2xl"
             />
           </MotionGridItem>
