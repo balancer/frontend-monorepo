@@ -14,12 +14,9 @@ query GetVeBalVotingList($includeKilled: Boolean) {
       relativeWeight
       relativeWeightCap
     }
-    tokens {
-      underlyingTokenAddress
-      address
-      logoURI
-      symbol
-      weight
+    poolTokens {
+      ...PoolTokens
     }
+    tags
   }
 }

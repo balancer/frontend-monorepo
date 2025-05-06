@@ -4,9 +4,9 @@ import {
   SortVotesBy,
 } from '@repo/lib/modules/vebal/vote/vote.types'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { VotingPool, PoolToken } from '@repo/lib/modules/pool/pool.types'
-import { compact } from 'lodash'
-import { GetTokenFn } from '@repo/lib/modules/tokens/TokensProvider'
+import { VotingPool } from '@repo/lib/modules/pool/pool.types'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { getChainId } from '@repo/lib/config/app.config'
 
 export function getVotesState(relativeWeightCap: number, votesNextPeriod: number) {
   if (relativeWeightCap === 0 || votesNextPeriod === 0) return VotesState.Normal
@@ -19,32 +19,28 @@ export function getVotesState(relativeWeightCap: number, votesNextPeriod: number
   return VotesState.Normal
 }
 
-export function voteToPool(vote: VotingPoolWithData, getToken: GetTokenFn): VotingPool {
+export function voteToPool(vote: VotingPoolWithData): VotingPool {
   return {
     id: vote.id,
     type: vote.type,
     chain: vote.chain,
-    /*
-    TODO: (votes)
-    Tokens in veBalGetVotingList query have type GqlVotingGaugeToken which does not have all the properties of PoolToken
-    That means that token pills will be different for voting pools (unless we change the backend types or we query and map the pool list tokens):
-    - Showing symbol instead of name
-    - GqlVotingGaugeToken does not have nestedPool property so NestedTokenPills won't be displayed
-    */
-    poolTokens: compact(
-      vote.tokens.map(token =>
-        token.underlyingTokenAddress
-          ? getToken(token.underlyingTokenAddress, vote.chain)
-          : ({ ...token, name: token.symbol } as unknown as PoolToken)
-      )
+    poolTokens: vote.poolTokens.map(
+      token =>
+        ({
+          ...token,
+          // FIXME: API returns null chain for some hardcoded pools (pending API fix)
+          // Use the token's chain if it exists, otherwise default to the vote's chain
+          chain: token.chain || vote.chain,
+          chainId: token.chainId || getChainId(vote.chain),
+        }) as ApiToken
     ),
     address: vote.address,
     protocolVersion: vote.protocolVersion,
     symbol: vote.symbol,
+    tags: vote.tags,
     // TODO: API is not returning the following fields in GqlVotingPool yet
     hook: undefined,
     hasErc4626: false,
-    tags: [],
   }
 }
 
