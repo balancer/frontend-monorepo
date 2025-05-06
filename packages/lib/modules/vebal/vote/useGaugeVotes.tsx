@@ -8,6 +8,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { onlyExplicitRefetch } from '../../../shared/utils/queries'
 import { useReadContracts } from 'wagmi'
 import { UserVotesData } from '@repo/lib/modules/vebal/vote/vote.types'
+import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 
 export interface RawVotesData {
   gaugeWeightThisPeriod?: { result?: bigint; status: string }
@@ -56,7 +57,8 @@ function useGaugeRelativeWeightsWrite(
         chainId: mainnet.id,
         abi: AbiMap['balancer.gaugeControllerAbi'],
         address: mainnetNetworkConfig.contracts.gaugeController as Hex,
-        functionName: 'gauge_relative_weight_write',
+        // Write function is avoided in anvil fork mode cause it is very slow
+        functionName: shouldUseAnvilFork ? 'gauge_relative_weight' : 'gauge_relative_weight_write',
         args: [gaugeAddress, timestamp],
       } as const
     }),

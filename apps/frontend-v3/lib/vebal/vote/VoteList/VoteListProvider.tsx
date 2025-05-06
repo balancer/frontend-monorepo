@@ -87,6 +87,7 @@ export function _useVoteList({}: UseVoteListArgs) {
     incentivesAreLoading,
     votingListLoading,
     gaugeVotesIsLoading,
+    isExpiredGaugesLoading,
     gaugeVotes,
   } = useVotes()
 
@@ -139,7 +140,8 @@ export function _useVoteList({}: UseVoteListArgs) {
     filtersState,
     sortedVoteList,
     votingListLoading,
-    loading: votingListLoading || incentivesAreLoading || gaugeVotesIsLoading,
+    loading:
+      votingListLoading || incentivesAreLoading || gaugeVotesIsLoading || isExpiredGaugesLoading,
     count: filteredVoteList.length,
     incentivesAreLoading,
     incentivesError,
