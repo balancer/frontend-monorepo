@@ -3,9 +3,14 @@ import { defaultPoolListMock, mockPoolList } from '@repo/lib/test/msw/handlers/P
 import { aGqlPoolMinimalMock } from '@repo/lib/test/msw/builders/gqlPoolMinimal.builders'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { _usePoolList } from './PoolListProvider'
+import { NuqsTestingAdapter } from 'nuqs/adapters/testing'
+
+function TestWrapper({ children }: { children: React.ReactNode }) {
+  return <NuqsTestingAdapter>{children}</NuqsTestingAdapter>
+}
 
 async function renderUsePoolsList() {
-  const { result, waitForLoadedUseQuery } = testHook(() => _usePoolList())
+  const { result, waitForLoadedUseQuery } = testHook(() => _usePoolList(), { wrapper: TestWrapper })
   await waitForLoadedUseQuery(result)
   return result
 }
