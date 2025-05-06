@@ -16,6 +16,8 @@ import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { VoteWeight } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteWeight'
 import { useVoteList } from '../../../VoteList/VoteListProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { canReceiveIncentives } from '../incentivesBlacklist'
 
 interface Props extends GridProps {
   keyValue: string | number
@@ -23,6 +25,7 @@ interface Props extends GridProps {
 }
 
 export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
+  const { userAddress } = useUserAccount()
   const { totalInfo, clearAll, hasChanges, hasVotedBefore } = useMyVotes()
   const { toCurrency } = useCurrency()
 
@@ -48,7 +51,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {incentivesAreLoading ? (
               <Skeleton h="20px" w="60px" />
-            ) : totalInfo.totalRewardValue ? (
+            ) : totalInfo.totalRewardValue && canReceiveIncentives(userAddress) ? (
               <Text color="font.maxContrast">
                 {toCurrency(totalInfo.totalRewardValue, { abbreviated: false })}
               </Text>
@@ -60,7 +63,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {incentivesAreLoading ? (
               <Skeleton h="20px" w="60px" />
-            ) : totalInfo.averageRewardPerVote ? (
+            ) : totalInfo.averageRewardPerVote && canReceiveIncentives(userAddress) ? (
               <Text color="font.maxContrast">
                 {toCurrency(totalInfo.averageRewardPerVote, {
                   abbreviated: false,
