@@ -19,113 +19,34 @@ import { PromoHookIcon } from '../icons/promos/PromoHookIcon'
 import { PromoGyroIcon } from '../icons/promos/PromoGyroIcon'
 import { PromoVThreeIcon } from '../icons/promos/PromoVThreeIcon'
 import { PromoBoostedIcon } from '../icons/promos/PromoBoostedIcon'
+import { PromoItem } from '@repo/lib/config/config.types'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { getRandomInt } from '@repo/lib/shared/utils/numbers'
 
-interface PromoItem {
-  id: number
-  icon: React.ReactElement
-  title: string
-  description: string
-  buttonText?: string
-  buttonLink?: string
-  linkText?: string
-  linkURL?: string
-  linkExternal?: boolean
-  bgImageActive?: {
-    directory: string
-    imgName: string
-  }
-  bgImageInactive?: {
-    directory: string
-    imgName: string
+function getIconElement(icon: string) {
+  switch (icon) {
+    case 'boosted':
+      return <PromoBoostedIcon size={44} />
+    case 'v3':
+      return <PromoVThreeIcon size={44} />
+    case 'gyro':
+      return <PromoGyroIcon size={44} />
+    case 'hook':
+      return <PromoHookIcon size={44} />
+    default:
+      return null
   }
 }
 
-const promoData: PromoItem[] = [
-  {
-    id: 0,
-    icon: <PromoBoostedIcon size={44} />,
-    title: '100% Boosted Pools on Balancer v3',
-    description:
-      'A simple, capital efficient strategy for LPs to get boosted yield. Partnering with leading lending protocols like Aave and Morpho.',
-    buttonText: 'View pools',
-    buttonLink: '/pools?poolTags=BOOSTED',
-    linkText: 'Learn more',
-    linkURL: 'https://docs.balancer.fi/concepts/explore-available-balancer-pools/boosted-pool.html',
-    linkExternal: true,
-    bgImageActive: {
-      directory: '/images/promos/promo-banner/',
-      imgName: 'bg-active0',
-    },
-    bgImageInactive: {
-      directory: '/images/promos/promo-banner/',
-      imgName: 'bg-inactive0',
-    },
-  },
-  {
-    id: 1,
-    icon: <PromoVThreeIcon size={44} />,
-    title: 'Balancer v3 is live and thriving!',
-    description:
-      'A simple, flexible, powerful platform to innovate upon and build the future of AMMs. Battle-tested on-chain since November.',
-    buttonText: 'View pools',
-    buttonLink: 'pools?protocolVersion=3',
-    linkText: 'Learn more',
-    linkURL: 'https://docs.balancer.fi/partner-onboarding/balancer-v3/v3-overview.html',
-    linkExternal: true,
-    bgImageActive: {
-      directory: '/images/promos/promo-banner/',
-      imgName: 'bg-active1',
-    },
-    bgImageInactive: {
-      directory: '/images/promos/promo-banner/',
-      imgName: 'bg-inactive1',
-    },
-  },
-  {
-    id: 2,
-    icon: <PromoGyroIcon size={44} />,
-    title: 'Superliquidity, made simple',
-    description:
-      'Next generation Gyroscope pools are now live on Balancer v3. Manage liquidity directly within the Balancer UI.',
-    buttonText: 'View pools',
-    buttonLink: '/pools?protocolVersion=3&poolTypes=GYRO',
-    linkText: 'Learn more',
-    linkURL: 'https://www.gyro.finance/',
-    linkExternal: true,
-    bgImageActive: {
-      directory: '/images/promos/promo-banner/',
-      imgName: 'bg-active2',
-    },
-    bgImageInactive: {
-      directory: '/images/promos/promo-banner/',
-      imgName: 'bg-inactive2',
-    },
-  },
-  {
-    id: 3,
-    icon: <PromoHookIcon size={44} />,
-    title: 'StableSurge Hook',
-    description:
-      'A dynamic directional surge swap fee in times of volatility to help defend the peg. LPs get MEV protection and increased fees.',
-    buttonText: 'View pools',
-    buttonLink: '/pools?poolHookTags=HOOKS_STABLESURGE',
-    linkText: 'Learn more',
-    linkURL: 'https://medium.com/balancer-protocol/balancers-stablesurge-hook-09d2eb20f219',
-    linkExternal: true,
-    bgImageActive: {
-      directory: '/images/promos/promo-banner/',
-      imgName: 'bg-active3',
-    },
-    bgImageInactive: {
-      directory: '/images/promos/promo-banner/',
-      imgName: 'bg-inactive3',
-    },
-  },
-]
+const promoData: (PromoItem & { iconElement: React.ReactNode })[] =
+  PROJECT_CONFIG.promoItems?.map(item => ({
+    ...item,
+    iconElement: getIconElement(item.icon),
+  })) ?? []
 
 export function PromoBanners() {
   const { colorMode } = useColorMode()
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(getRandomInt(0, promoData.length - 1))
   const isSmallScreen = useBreakpointValue({ base: true, md: false }, { fallback: 'md' }) ?? false
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -253,7 +174,6 @@ export function PromoBanners() {
                   )}
                 </Box>
               )}
-
               <Center h="100%" position="relative" zIndex="1">
                 <Box
                   h="100%"
@@ -287,11 +207,10 @@ export function PromoBanners() {
                               left={{ base: '-10px', md: '0' }}
                               position="relative"
                             >
-                              {item.icon}
+                              {item.iconElement}
                             </Box>
                           </Center>
                         </Box>
-
                         <Box>
                           <Heading
                             as="h3"
@@ -337,7 +256,6 @@ export function PromoBanners() {
                           </Text>
                         </Box>
                       </Flex>
-
                       {item.buttonText && item.buttonLink && (
                         <Flex alignItems="center" flexShrink={0} justifySelf="flex-end">
                           <Button
@@ -374,7 +292,6 @@ export function PromoBanners() {
                   )}
                 </Box>
               </Center>
-
               {!shouldShowAsActive && !isSmallScreen && (
                 <Box
                   h="full"
@@ -442,7 +359,7 @@ export function PromoBanners() {
                         opacity="0.8"
                         transition="color 0.3s var(--ease-out-cubic), opacity 0.3s var(--ease-out-cubic), box-shadow 0.15s var(--ease-out-cubic)"
                       >
-                        {item.icon}
+                        {item.iconElement}
                       </Box>
                     </Flex>
                   </Center>

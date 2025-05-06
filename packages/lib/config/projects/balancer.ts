@@ -186,4 +186,87 @@ export const ProjectConfigBalancer: ProjectConfig = {
       title: 'Xave',
     },
   ],
+  promoItems: [
+    {
+      id: 0,
+      icon: 'boosted',
+      title: '100% Boosted Pools on Balancer v3',
+      description:
+        'A simple, capital efficient strategy for LPs to get boosted yield. Partnering with leading lending protocols like Aave and Morpho.',
+      buttonText: 'View pools',
+      buttonLink: '/pools?poolTags=BOOSTED',
+      linkText: 'Learn more',
+      linkURL:
+        'https://docs.balancer.fi/concepts/explore-available-balancer-pools/boosted-pool.html',
+      linkExternal: true,
+      bgImageActive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-active0',
+      },
+      bgImageInactive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-inactive0',
+      },
+    },
+    {
+      id: 1,
+      icon: 'v3',
+      title: 'Balancer v3 is live and thriving!',
+      description:
+        'A simple, flexible, powerful platform to innovate upon and build the future of AMMs. Battle-tested on-chain since November.',
+      buttonText: 'View pools',
+      buttonLink: 'pools?protocolVersion=3',
+      linkText: 'Learn more',
+      linkURL: 'https://docs.balancer.fi/partner-onboarding/balancer-v3/v3-overview.html',
+      linkExternal: true,
+      bgImageActive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-active1',
+      },
+      bgImageInactive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-inactive1',
+      },
+    },
+    {
+      id: 2,
+      icon: 'gyro',
+      title: 'Superliquidity, made simple',
+      description:
+        'Next generation Gyroscope pools are now live on Balancer v3. Manage liquidity directly within the Balancer UI.',
+      buttonText: 'View pools',
+      buttonLink: '/pools?protocolVersion=3&poolTypes=GYRO',
+      linkText: 'Learn more',
+      linkURL: 'https://www.gyro.finance/',
+      linkExternal: true,
+      bgImageActive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-active2',
+      },
+      bgImageInactive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-inactive2',
+      },
+    },
+    {
+      id: 3,
+      icon: 'hook',
+      title: 'StableSurge Hook',
+      description:
+        'A dynamic directional surge swap fee in times of volatility to help defend the peg. LPs get MEV protection and increased fees.',
+      buttonText: 'View pools',
+      buttonLink: '/pools?poolHookTags=HOOKS_STABLESURGE',
+      linkText: 'Learn more',
+      linkURL: 'https://medium.com/balancer-protocol/balancers-stablesurge-hook-09d2eb20f219',
+      linkExternal: true,
+      bgImageActive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-active3',
+      },
+      bgImageInactive: {
+        directory: '/images/promos/promo-banner/',
+        imgName: 'bg-inactive3',
+      },
+    },
+  ],
 }
