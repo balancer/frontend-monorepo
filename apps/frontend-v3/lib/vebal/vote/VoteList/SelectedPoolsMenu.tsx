@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { Box, Button, Divider, HStack, Text, useToken, VStack } from '@chakra-ui/react'
+import { Box, Button, Divider, HStack, Text, VStack, useColorMode } from '@chakra-ui/react'
 import { Maximize2, Minimize2 } from 'react-feather'
-import tinycolor from 'tinycolor2'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 const MIN_VISIBLE_POOLS_COUNT = 0
@@ -20,13 +19,30 @@ export function SelectedPoolsMenu({ onAddVotesClick, votingPools }: SelectedPool
     : sortedPools.slice(0, MIN_VISIBLE_POOLS_COUNT)
 
   const moreCount = sortedPools.length - visiblePools.length
-
-  const [_bgColor] = useToken('colors', ['background.level0'])
-  const bgColor = tinycolor(_bgColor).setAlpha(0.4).toRgbString()
+  const { colorMode } = useColorMode()
+  const bgBase = colorMode === 'dark' ? '#000' : '#fff'
 
   return (
-    <Box backdropFilter="blur(12px)" bg={bgColor} rounded="xl" shadow="2xl" w="320px">
-      <VStack alignItems="stretch" p="0" spacing="0" w="full">
+    <Box
+      backdropFilter="blur(8px)"
+      position="relative"
+      rounded="xl"
+      shadow="2xl"
+      sx={{
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          borderRadius: 'inherit',
+          backgroundColor: bgBase,
+          opacity: 0.5,
+          zIndex: -1,
+          pointerEvents: 'none',
+        },
+      }}
+      w="320px"
+    >
+      <VStack alignItems="stretch" p="0" rounded="xl" shadow="2xl" spacing="0" w="full">
         <HStack justifyContent="space-between" p="md">
           <Text color="font.maxContrast" flex="1" fontWeight="700">
             Pool selection ({sortedPools.length})
