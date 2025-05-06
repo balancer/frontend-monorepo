@@ -85,7 +85,7 @@ export function UserSnapshotValues() {
 
   return (
     <>
-      <FadeInOnView>
+      <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             My liquidity
@@ -115,7 +115,7 @@ export function UserSnapshotValues() {
           )}
         </VStack>
       </FadeInOnView>
-      <FadeInOnView>
+      <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             My APR
@@ -135,7 +135,7 @@ export function UserSnapshotValues() {
           )}
         </VStack>
       </FadeInOnView>
-      <FadeInOnView>
+      <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             {`My potential weekly yield${
@@ -149,7 +149,7 @@ export function UserSnapshotValues() {
           )}
         </VStack>
       </FadeInOnView>
-      <FadeInOnView>
+      <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             My claimable rewards

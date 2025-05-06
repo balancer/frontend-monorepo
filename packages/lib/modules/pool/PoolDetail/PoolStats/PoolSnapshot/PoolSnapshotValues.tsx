@@ -49,7 +49,7 @@ export function PoolSnapshotValues() {
 
   return (
     <>
-      <FadeInOnView>
+      <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             TVL
@@ -61,7 +61,7 @@ export function PoolSnapshotValues() {
           )}
         </VStack>
       </FadeInOnView>
-      <FadeInOnView>
+      <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             Swap vol (24h)
@@ -73,7 +73,7 @@ export function PoolSnapshotValues() {
           )}
         </VStack>
       </FadeInOnView>
-      <FadeInOnView>
+      <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             APR for LPs
@@ -92,7 +92,7 @@ export function PoolSnapshotValues() {
           />
         </VStack>
       </FadeInOnView>
-      <FadeInOnView>
+      <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             {incomeLabel}
@@ -104,7 +104,7 @@ export function PoolSnapshotValues() {
           )}
         </VStack>
       </FadeInOnView>
-      <FadeInOnView>
+      <FadeInOnView scaleUp={false}>
         <VStack align="flex-start" spacing="xxs" w="full">
           <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
             Weekly incentives
