@@ -8,7 +8,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { onlyExplicitRefetch } from '../../../shared/utils/queries'
 import { useReadContracts } from 'wagmi'
 import { UserVotesData } from '@repo/lib/modules/vebal/vote/vote.types'
-import { shouldUseAnvilFork } from 'config/app.config'
+import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 
 export interface RawVotesData {
   gaugeWeightThisPeriod?: { result?: bigint; status: string }
