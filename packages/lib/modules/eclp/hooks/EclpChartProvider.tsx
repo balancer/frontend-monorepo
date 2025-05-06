@@ -28,7 +28,6 @@ function _useEclpChart() {
 
   const tokens = useMemo(() => {
     const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
-    console.log({ poolTokens })
 
     return isReversed ? poolTokens.join('/') : poolTokens.reverse().join('/')
   }, [pool, isReversed])
