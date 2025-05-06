@@ -109,6 +109,8 @@ export const orderByHash: Record<SortingBy, { label: string; title?: string }> =
   },
   currentVotes: {
     label: 'Current votes',
+    title:
+      'Your previously confirmed votes. Your confirmed votes are timelocked for 10 days and cannot be changed during this period.',
   },
   editVotes: {
     label: 'Edit votes',

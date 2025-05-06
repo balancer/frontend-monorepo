@@ -26,7 +26,7 @@ enum RowType {
 
 const rowProps = {
   px: { base: 'sm', sm: '0' },
-  gridTemplateColumns: `32px minmax(320px, 1fr) 100px 120px 120px 120px 50px`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(100px, max-content) minmax(120px, max-content) minmax(140px, max-content) minmax(120px, max-content) 50px`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 }
