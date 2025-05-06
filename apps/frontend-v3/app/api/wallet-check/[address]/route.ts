@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server'
 
 type Params = {
-  params: {
+  params: Promise<{
     address: string
-  }
+  }>
 }
 
 export async function GET(request: Request, { params }: Params) {
-  const address = params.address
+  const resolvedParams = await params
+  const address = resolvedParams.address
+
   const hypernativeApiId = process.env.PRIVATE_HYPERNATIVE_API_ID
   const hypernativeApiSecret = process.env.PRIVATE_HYPERNATIVE_API_SECRET
   if (!hypernativeApiId || !hypernativeApiSecret) {
