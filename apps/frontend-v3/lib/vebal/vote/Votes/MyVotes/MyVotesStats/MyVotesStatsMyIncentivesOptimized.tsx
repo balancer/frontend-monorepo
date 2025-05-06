@@ -35,7 +35,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const headerText =
     !isConnected || noVeBALBalance
       ? 'Voting incentives APR (average)'
-      : 'My incentives with optimized votes (1w)'
+      : 'My optimized vote incentives (1w)'
 
   return (
     <MyVotesStatsCard
