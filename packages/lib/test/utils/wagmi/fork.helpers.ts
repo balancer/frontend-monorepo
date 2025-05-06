@@ -115,10 +115,10 @@ export function filterVotingPoolsForAnvilFork(votingPools: VotingPools) {
     '0xcf5938ca6d9f19c73010c7493e19c02acfa8d24d', // gauge of tetuBal pool
   ]
   // Order by isKilled first
-  return orderBy(votingPools, ['gauge.isKilled'], ['desc'])
-    .filter(vote => {
-      // Filter not killed gauges with only specific killed ones
-      return !vote.gauge.isKilled || killedGaugesToInclude.includes(vote.gauge.address)
-    })
-    .slice(0, 10)
+  return orderBy(votingPools, ['gauge.isKilled'], ['desc']).filter(vote => {
+    // Filter not killed gauges with only specific killed ones
+    return !vote.gauge.isKilled || killedGaugesToInclude.includes(vote.gauge.address)
+  })
+  // Uncomment to enable faster anvil voting list (with a subset of gauges)
+  // .slice(0, 50)
 }
