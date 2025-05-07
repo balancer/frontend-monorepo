@@ -379,21 +379,12 @@ importers:
       '@types/node':
         specifier: 22.14.1
         version: 22.14.1
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^7.3.1
-        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3))(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3)
-      '@typescript-eslint/parser':
-        specifier: ^7.3.1
-        version: 7.18.0(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3)
       beets-frontend-v3:
         specifier: workspace:*
         version: link:../../apps/beets-frontend-v3
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
-      eslint:
-        specifier: ^9.0.0
-        version: 9.26.0(jiti@1.21.6)
       frontend-v3:
         specifier: workspace:*
         version: link:../../apps/frontend-v3
