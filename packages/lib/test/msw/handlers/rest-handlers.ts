@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
+ 
 import { http } from 'msw'
 
 export const defaultPostMswHandlers = [

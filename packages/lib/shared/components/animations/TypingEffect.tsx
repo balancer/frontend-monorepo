@@ -27,7 +27,7 @@ export function TypingEffect({
         <MotionSpan
           animate={isInView ? { opacity: 1 } : {}}
           initial={{ opacity: 0 }}
-          // eslint-disable-next-line react/no-array-index-key
+           
           key={index}
           transition={{ duration, delay: initDelay + index * delay }}
         >

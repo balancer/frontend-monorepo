@@ -15,7 +15,7 @@ import { getTokenSymbolsForPermit2 } from './permit2.helpers'
 import { NoncesByTokenAddress } from './usePermit2Allowance'
 import { Address } from 'viem'
 
-// eslint-disable-next-line no-unused-vars
+ 
 export type SignPermit2Fn = (
   sdkClient: PublicWalletClient,
   nonces: NoncesByTokenAddress

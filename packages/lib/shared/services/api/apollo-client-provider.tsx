@@ -1,6 +1,6 @@
 'use client'
 
-// eslint-disable-next-line max-len
+ 
 import { ApolloNextAppProvider } from '@apollo/client-integration-nextjs'
 import { createApolloClient } from '@repo/lib/shared/services/api/apollo.client'
 

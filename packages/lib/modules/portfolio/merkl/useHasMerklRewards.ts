@@ -3,7 +3,7 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { Pool } from '../../pool/pool.types'
 import { MerklRewardsResponse } from './merkl.types'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export function useHasMerklRewards(poolsWithOnchainUserBalances: Pool[], chainIds: number[]) {
   const { userAddress, isConnected } = useUserAccount()
 

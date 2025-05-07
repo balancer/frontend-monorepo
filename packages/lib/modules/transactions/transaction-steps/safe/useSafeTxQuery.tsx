@@ -32,7 +32,7 @@ export function useSafeTxQuery({ enabled, wagmiTxHash }: Props) {
 }
 
 export async function pollSafeTxStatus(sdk: SafeAppsSDK, txHash: Address): Promise<Address> {
-  // eslint-disable-next-line no-constant-condition
+   
   while (true) {
     console.log('Polling safe transaction status...')
     const safeTxDetails = await sdk.txs.getBySafeTxHash(txHash)

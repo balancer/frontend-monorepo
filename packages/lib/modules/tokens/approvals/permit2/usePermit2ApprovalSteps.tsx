@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+ 
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react'
 import { getChainId, getNativeAssetAddress, getNetworkConfig } from '@repo/lib/config/app.config'

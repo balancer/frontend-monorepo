@@ -16,7 +16,7 @@ export function Steps({ transactionSteps, isTxBatch }: Props) {
     <VStack align="start" spacing="ms">
       {steps &&
         steps.map((step, index) => (
-          // eslint-disable-next-line react/no-array-index-key
+           
           <div key={step.id + index}>
             <Step
               colorMode={colorMode}

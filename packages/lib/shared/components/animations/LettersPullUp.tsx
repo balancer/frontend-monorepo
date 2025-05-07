@@ -48,7 +48,7 @@ export function LettersPullUp({
           animate={isInView ? 'animate' : ''}
           custom={i}
           initial="initial"
-          // eslint-disable-next-line react/no-array-index-key
+           
           key={`${i}-${letter}`}
           layout
           ref={ref}

@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import { useDisclosure, VStack } from '@chakra-ui/react'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { TokenInputs } from './TokenInputs'

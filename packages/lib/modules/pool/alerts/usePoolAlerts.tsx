@@ -86,7 +86,7 @@ export function usePoolAlerts(pool: Pool) {
       if (!hasReviewedRateProvider(token)) {
         alerts.push({
           identifier: `PriceProviderNotReviewed-${token.symbol}`,
-          // eslint-disable-next-line max-len
+           
           content: `The rate provider for ${token.symbol} has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
           status: 'error',
           isSoftWarning: true,
@@ -96,7 +96,7 @@ export function usePoolAlerts(pool: Pool) {
       if (token.priceRateProviderData && token.priceRateProviderData?.summary !== 'safe') {
         alerts.push({
           identifier: `UnsafePriceProvider-${token.symbol}`,
-          // eslint-disable-next-line max-len
+           
           content: `The rate provider for ${token.symbol} has been reviewed as 'unsafe'. For your safety, you can't interact with this pool on this UI.`,
           status: 'error',
           isSoftWarning: true,
@@ -114,7 +114,7 @@ export function usePoolAlerts(pool: Pool) {
       if (!hasReviewedHook(hook)) {
         alerts.push({
           identifier: `PoolHookNotReviewed`,
-          // eslint-disable-next-line max-len
+           
           content: `This pool contains a hook called ${hookName} which has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
           status: 'error',
           isSoftWarning: true,
@@ -124,7 +124,7 @@ export function usePoolAlerts(pool: Pool) {
       if (hook.reviewData?.summary === 'unsafe') {
         alerts.push({
           identifier: `PoolHookReviewedUnsafe`,
-          // eslint-disable-next-line max-len
+           
           content: `This pool contains a hook called ${hookName} which has been reviewed as 'unsafe'. For your safety, you can’t interact with this pool on this UI.`,
           status: 'error',
           isSoftWarning: true,
@@ -134,7 +134,7 @@ export function usePoolAlerts(pool: Pool) {
       if (hook.reviewData?.summary === 'safe' && hook.reviewData?.warnings.length > 0) {
         alerts.push({
           identifier: `PoolHookReviewedSafeWithWarnings`,
-          // eslint-disable-next-line max-len
+           
           content: `This pool contains a a hook called ${hookName} which has been reviewed as ‘safe’ but with warnings. Please review it in the Pool contracts section.`,
           status: 'error',
           isSoftWarning: true,
@@ -161,7 +161,7 @@ export function usePoolAlerts(pool: Pool) {
           if (!hasReviewedHook(nestedPool.hook)) {
             alerts.push({
               identifier: `NestedPoolHookNotReviewed`,
-              // eslint-disable-next-line max-len
+               
               content: `This pool contains a nested pool with a hook called ${hookName} which has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
               status: 'error',
               isSoftWarning: true,
@@ -171,7 +171,7 @@ export function usePoolAlerts(pool: Pool) {
           if (nestedPool.hook?.reviewData?.summary === 'unsafe') {
             alerts.push({
               identifier: `NestedPoolHookReviewedUnsafe`,
-              // eslint-disable-next-line max-len
+               
               content: `This pool contains a nested pool with a hook called ${hookName} which has been reviewed as 'unsafe'. For your safety, you can’t interact with this pool on this UI.`,
               status: 'error',
               isSoftWarning: true,
@@ -184,7 +184,7 @@ export function usePoolAlerts(pool: Pool) {
           ) {
             alerts.push({
               identifier: `NestedPoolHookReviewedSafeWithWarnings`,
-              // eslint-disable-next-line max-len
+               
               content: `This pool contains a a hook called ${hookName} which has been reviewed as ‘safe’ but with warnings. Please review it in the Pool contracts section.`,
               status: 'error',
               isSoftWarning: true,
@@ -200,7 +200,7 @@ export function usePoolAlerts(pool: Pool) {
           if (!hasReviewedRateProvider(nestedToken)) {
             alerts.push({
               identifier: `NestedPriceProviderNotReviewed-${nestedToken.symbol}`,
-              // eslint-disable-next-line max-len
+               
               content: `The rate provider for ${nestedToken.symbol} in a nested pool has not been reviewed. For your safety, you can’t interact with this pool on this UI.`,
               status: 'error',
               isSoftWarning: true,
@@ -213,7 +213,7 @@ export function usePoolAlerts(pool: Pool) {
           ) {
             alerts.push({
               identifier: `UnsafeNestedPriceProvider-${nestedToken.symbol}`,
-              // eslint-disable-next-line max-len
+               
               content: `The rate provider for ${nestedToken.symbol} in a nested pool has been reviewed as 'unsafe'. For your safety, you can't interact with this pool on this UI.`,
               status: 'error',
               isSoftWarning: true,

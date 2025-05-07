@@ -15,7 +15,7 @@ export function TokenRowWithDetails({ details, ...props }: TokenRowWithDetailsPr
           <Divider mb="sm" ml="-4" mt="sm" width="calc(100% + 2 * var(--chakra-space-4))" />
 
           {details.map(([left, right], index) => (
-            // eslint-disable-next-line react/no-array-index-key
+             
             <HStack justifyContent="space-between" key={`detail#${index}`} w="full">
               {left}
               {right}

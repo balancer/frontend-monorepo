@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import {
   Address,
   Permit,
@@ -53,7 +53,7 @@ async function signPermit({ permitInput, wethIsEth, sdkClient, pool }: Params): 
 
   const baseParams = {
     ...baseInput,
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
+     
     client: sdkClient!,
     owner: permitInput.account,
   }

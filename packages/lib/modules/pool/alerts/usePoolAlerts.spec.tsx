@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { notAllowedPoolMock } from '../__mocks__/notAllowedPoolMock'
 import { usePoolAlerts } from './usePoolAlerts'

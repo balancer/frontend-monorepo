@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 
 // FeaturedPool1SVG.tsx
 export function FeaturedPool1SVG() {

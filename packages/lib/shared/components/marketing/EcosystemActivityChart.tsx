@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 'use client'
 import ReactECharts from 'echarts-for-react'
 import {

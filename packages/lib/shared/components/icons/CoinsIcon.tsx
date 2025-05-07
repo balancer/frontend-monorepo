@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 export function CoinsIcon({ size = 24 }: { size?: number }) {
   return (
     <svg

@@ -34,7 +34,7 @@ export interface EncodeGaugeDepositInput {
   amount: bigint
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+ 
 export interface EncodeGaugeWithdrawInput extends EncodeGaugeDepositInput {}
 
 export interface EncodeGaugeClaimRewardsInput {

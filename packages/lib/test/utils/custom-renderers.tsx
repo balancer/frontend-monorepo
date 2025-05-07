@@ -131,7 +131,7 @@ export function DefaultRemoveLiquidityTestProvider({ children }: PropsWithChildr
 
 /* Builds a PoolProvider that injects the provided pool data*/
 export const buildDefaultPoolTestProvider = (pool: GqlPoolElement = aGqlPoolElementMock()) =>
-  // eslint-disable-next-line react/display-name
+   
   function ({ children }: PropsWithChildren) {
     return (
       <TransactionStateProvider>

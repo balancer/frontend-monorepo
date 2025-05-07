@@ -146,7 +146,7 @@ export function _useRecentTransactions() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   function handleTransactionAdded(trackedTransaction: TrackedTransaction) {
     // add a toast for this transaction, rather than emitting a new toast
     // on updates for the same transaction, we will modify the same toast
@@ -191,7 +191,7 @@ export function _useRecentTransactions() {
     updateLocalStorage(updatedTrackedTransactions)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   function updateTrackedTransaction(hash: Hash, updatePayload: UpdateTrackedTransaction) {
     // attempt to find this transaction in the cache
     const cachedTransaction = transactions[hash]

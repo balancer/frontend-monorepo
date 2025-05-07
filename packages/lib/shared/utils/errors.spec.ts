@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import { getTenderlyUrlFromErrorMessage } from './errors'
 
 describe('getTenderlyUrlFromError', () => {

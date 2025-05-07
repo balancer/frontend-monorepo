@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { getGqlChain } from '@repo/lib/config/app.config'

@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 

@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 export function FjordIcon({ size = 38 }: { size?: number }) {
   return (
     <svg

@@ -1,6 +1,6 @@
 import { SVGProps } from 'react'
 
-/* eslint-disable max-len */
+ 
 export function PromoGyroIcon({
   size = 24,
   ...props

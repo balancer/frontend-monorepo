@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { daiAddress, usdcAddress, usdtAddress, wETHAddress } from '@repo/lib/debug-helpers'
 import { mainnetTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'

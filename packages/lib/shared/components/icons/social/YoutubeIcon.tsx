@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 export function YoutubeIcon({ size = 24 }: { size?: number }) {
   return (
     <svg

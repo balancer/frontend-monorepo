@@ -1,6 +1,6 @@
 import { SVGProps } from 'react'
 
-/* eslint-disable max-len */
+ 
 export function PromoVThreeIcon({
   size = 24,
   ...props

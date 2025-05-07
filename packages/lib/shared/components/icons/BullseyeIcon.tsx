@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 export function BullseyeIcon() {
   return (
     <svg

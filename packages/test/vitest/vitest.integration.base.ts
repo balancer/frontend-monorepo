@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { InlineConfig } from 'vitest/node'
 import { resolve } from 'path'
 import { createVitestConfig } from './vitest.config.base'

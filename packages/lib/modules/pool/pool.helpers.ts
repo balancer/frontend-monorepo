@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   GqlChain,
@@ -386,7 +386,7 @@ export function getVaultConfig(pool: Pool) {
   const networkConfig = getNetworkConfig(pool.chain)
   const vaultAddress =
     pool.protocolVersion === 3
-      ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      ?  
         networkConfig.contracts.balancer.vaultV3!
       : networkConfig.contracts.balancer.vaultV2
 

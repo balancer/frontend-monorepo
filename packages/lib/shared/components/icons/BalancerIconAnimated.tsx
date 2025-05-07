@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 'use client'
 
 import { useColorModeValue } from '@chakra-ui/react'

@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+ 
 
 export function QuantAmmIcon({ size = 38 }: { size?: number }) {
   return (

@@ -91,7 +91,7 @@ export function ZenGarden({
 
   return [...Array(repetitions).keys()].map((_, i) => (
     <Box
-      // eslint-disable-next-line react/no-array-index-key
+       
       key={`zen-garden-${variant}-${i}`}
       zIndex={0}
       {...shapeProps}
