@@ -22,6 +22,12 @@ const nextConfig = {
     ],
   },
   transpilePackages: ['@repo/lib'],
+  serverExternalPackages: [
+    // Filter out the problematic packages
+    ...['import-in-the-middle', 'require-in-the-middle'].filter(
+      pkg => !['import-in-the-middle', 'require-in-the-middle'].includes(pkg)
+    ),
+  ],
 
   // Safe App setup
   headers: manifestHeaders,
