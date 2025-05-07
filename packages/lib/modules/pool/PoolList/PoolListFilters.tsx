@@ -19,10 +19,6 @@ import {
   PopoverCloseButton,
   PopoverContent,
   PopoverTrigger,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
   Text,
   useColorModeValue,
   VStack,
@@ -42,8 +38,6 @@ import { useEffect, useState } from 'react'
 import { Filter, Plus } from 'react-feather'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { useDebouncedCallback } from 'use-debounce'
-import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
 import { motion, AnimatePresence } from 'framer-motion'
 import { staggeredFadeInUp } from '@repo/lib/shared/utils/animations'
 import { getChainShortName } from '@repo/lib/config/app.config'
@@ -59,9 +53,7 @@ import Link from 'next/link'
 import { isBalancer, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { poolTypeLabel } from '../pool.helpers'
 import { AnimatedTag } from '@repo/lib/shared/components/other/AnimatedTag'
-
-const SLIDER_MAX_VALUE = 10000000
-const SLIDER_STEP_SIZE = 100000
+import { PoolMinTvlFilter } from './PoolMinTvlFilter'
 
 export function useFilterTagsVisible() {
   const {
@@ -252,56 +244,6 @@ export function PoolNetworkFilters({
       toggleAll={() => setNetworks(null)}
       toggleOption={toggleNetwork}
     />
-  )
-}
-
-function PoolMinTvlFilter() {
-  const { toCurrency } = useCurrency()
-  const {
-    queryState: { minTvl, setMinTvl },
-  } = usePoolList()
-  const [sliderValue, setSliderValue] = useState(minTvl)
-
-  const debounced = useDebouncedCallback((val: number) => {
-    const minTvl = val > 0 ? val : null
-    setMinTvl(minTvl)
-  }, defaultDebounceMs)
-
-  // set min tvl value here to keep slider performant
-  useEffect(() => {
-    debounced(sliderValue)
-  }, [sliderValue])
-
-  // sync slider value with minTvl value
-  useEffect(() => {
-    setSliderValue(minTvl)
-  }, [minTvl])
-
-  return (
-    <VStack w="full">
-      <HStack w="full">
-        <Heading as="h3" mb="xs" mt="sm" size="sm">
-          Minimum TVL
-        </Heading>
-        <Text fontSize="sm" ml="auto">
-          {toCurrency(sliderValue)}
-        </Text>
-      </HStack>
-      <Slider
-        aria-label="slider-min-tvl"
-        max={SLIDER_MAX_VALUE}
-        min={0}
-        ml="sm"
-        onChange={val => setSliderValue(val)}
-        step={SLIDER_STEP_SIZE}
-        value={sliderValue}
-      >
-        <SliderTrack>
-          <SliderFilledTrack />
-        </SliderTrack>
-        <SliderThumb />
-      </Slider>
-    </VStack>
   )
 }
 

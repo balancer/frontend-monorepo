@@ -64,9 +64,9 @@ export function MyVotes() {
       <MyVotesHintModal isOpen={isOpen} onClose={onClose} />
 
       {isConnected && (
-        <Box w="full ">
+        <>
           {vebalIsExpired ? (
-            <GridItem colSpan={4}>
+            <GridItem w="full">
               <Alert status="error" variant="WideOnDesktop">
                 <AlertIcon as={AlertTriangle} />
                 <Stack
@@ -91,7 +91,7 @@ export function MyVotes() {
               </Alert>
             </GridItem>
           ) : noVeBALBalance ? (
-            <GridItem colSpan={4}>
+            <GridItem w="full">
               <Alert status="warning" variant="WideOnDesktop">
                 <AlertIcon as={AlertTriangle} />
                 <Stack
@@ -117,7 +117,7 @@ export function MyVotes() {
               </Alert>
             </GridItem>
           ) : null}
-        </Box>
+        </>
       )}
 
       <Grid gap="md" templateColumns="repeat(4, 1fr)" templateRows="auto 1fr" w="full">
@@ -139,7 +139,7 @@ export function MyVotes() {
             {!vebalIsExpired && !noVeBALBalance && (
               <>
                 {hasAllVotingPowerTimeLocked && (
-                  <GridItem colSpan={4} mt="md">
+                  <GridItem colSpan={4} mt="md" w="full">
                     <Alert status="warning" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack
@@ -157,7 +157,7 @@ export function MyVotes() {
                 )}
 
                 {vebalLockTooShort && (
-                  <GridItem colSpan={4} mt="md">
+                  <GridItem colSpan={4} mt="md" w="full">
                     <Alert status="warning" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack
@@ -184,7 +184,7 @@ export function MyVotes() {
                 )}
 
                 {shouldResubmitVotes && (
-                  <GridItem colSpan={4} mt="md">
+                  <GridItem colSpan={4} mt="md" w="full">
                     <Alert status="info" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack
@@ -205,7 +205,7 @@ export function MyVotes() {
                 )}
 
                 {hasExpiredGauges && (
-                  <GridItem colSpan={4} mt="md">
+                  <GridItem colSpan={4} mt="md" w="full">
                     <Alert status="warning" variant="WideOnDesktop">
                       <AlertIcon as={AlertTriangle} />
                       <Stack

@@ -144,7 +144,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
   }, [userHistoricalLocks])
 
   const futureLockChartData = useMemo(() => {
-    if (hasExistingLock && !isExpired) {
+    if (hasExistingLock && !isExpired && userHistoricalLocks.length > 0) {
       const lastSnapshot = userHistoricalLocks[userHistoricalLocks.length - 1]
       const firstDay = Date.now()
       const lastDay = mainnetLockedInfo.lockedEndDate

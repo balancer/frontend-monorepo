@@ -118,7 +118,6 @@ export interface UseGaugeVotesParams {
 export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
   const { userAddress, isConnected } = useUserAccount()
 
-  // FIXME: [JUANJO] should this be calculated on thursday?
   const thisWeek = Math.floor(Date.now() / oneWeekInMs) * oneWeekInMs
   const gaugeWeightThisPeriodQuery = useGaugeRelativeWeightsWrite(
     gaugeAddresses,
