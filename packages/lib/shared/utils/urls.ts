@@ -18,7 +18,7 @@ export function isValidUrl(maybeUrl?: string): string | true {
 
   try {
     url = new URL(maybeUrl)
-  } catch (_) {
+  } catch {
     return 'Invalid URL'
   }
 

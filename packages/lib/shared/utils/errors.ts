@@ -150,7 +150,7 @@ function parseRpcRequestFailedError(error: Error, chainId: number): TransactionC
         }
         return txConfig
       }
-    } catch (error) {
+    } catch {
       // Ignore errors when parsing
       return
     }

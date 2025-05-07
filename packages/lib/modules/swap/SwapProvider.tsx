@@ -162,7 +162,7 @@ export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProvide
   ) {
     try {
       setDefaultTokens()
-    } catch (error) {
+    } catch {
       throw new Error('Token metadata not found')
     }
   }
