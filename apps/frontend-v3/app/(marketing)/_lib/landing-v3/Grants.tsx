@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 'use client'
 
 import { VStack, Button, Heading, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'

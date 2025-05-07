@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
 import { useState, PropsWithChildren, createContext } from 'react'

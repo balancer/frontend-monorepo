@@ -23,7 +23,7 @@ import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverla
 import { useState } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useCrossChainSyncSteps } from '@bal/lib/vebal/cross-chain/useCrossChainSyncSteps'
-// eslint-disable-next-line max-len
+
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'

@@ -1,7 +1,5 @@
 import React from 'react'
 
-/* eslint-disable max-len */
-
 export function SecurityOpenSourceSvg() {
   return (
     <svg fill="none" height="80" viewBox="0 0 90 80" width="90" xmlns="http://www.w3.org/2000/svg">

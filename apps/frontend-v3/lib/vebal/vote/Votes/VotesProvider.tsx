@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
 import { createContext, PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react'
@@ -153,7 +154,6 @@ export function _useVotes({ data, votingListLoading = false, error }: UseVotesAr
     )
     return (
       votingEscrowLocks.find(item =>
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         isSameAddress(item.votingEscrowID.id, mainnetNetworkConfig.contracts.veBAL!)
       )?.updatedAt || 0
     )
