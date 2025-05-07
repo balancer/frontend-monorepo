@@ -109,7 +109,9 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <span>{getModalLabel(lockMode, editAlwaysOn, true)}</span>
+            <Text as="span" fontSize="2xl" fontWeight="700" letterSpacing="-0.35px">
+              {getModalLabel(lockMode, editAlwaysOn, true)}
+            </Text>
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
@@ -202,15 +204,23 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
             <HStack justifyContent="space-between" spacing="md" w="full">
               <TooltipWithTouch label="The minimum lock period is to the Thursday of the following week. The maximum lock period is to the closest Thursday to the end of a 1 year period. Once locked, you cannot redeem your LP tokens until lock expiry. You can extend your lock period later at any time.">
                 <Text
+                  _after={{
+                    content: '""',
+                    position: 'absolute',
+                    left: 0,
+                    bottom: 0,
+                    width: 'full',
+                    borderBottom: '1px dotted',
+                    opacity: 0.8,
+                    pointerEvents: 'none',
+                  }}
+                  cursor="pointer"
+                  display="inline-block"
                   fontSize="sm"
                   fontWeight="700"
                   lineHeight="18px"
-                  sx={{
-                    textDecoration: 'underline dotted',
-                    textUnderlineOffset: '4px',
-                    textUnderlineThickness: '0.5px',
-                    cursor: 'pointer',
-                  }}
+                  pb="2px"
+                  position="relative"
                 >
                   Lock duration
                 </Text>
