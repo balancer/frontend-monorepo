@@ -115,14 +115,22 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
           {bptBalance !== undefined && isZero(bptBalance.amount) && isZero(totalAmount) && (
             <BalAlert
               content={
-                <Text color="font.dark">
-                  {`You need to lock the LP token of the ve8020 BAL/WETH pool to get veBAL. Since you
-                    don't have this, you can't get veBAL.`}
-                  <br />
-                  Add liquidity to this pool to get the LP token and come back: <br />
-                  <BalAlertLink href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014">
+                <Text color="font.dark" fontSize="sm">
+                  {`You need to lock the LP token of the `}
+                  <BalAlertLink
+                    fontSize="sm"
+                    href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014"
+                  >
                     80% BAL / 20% WETH pool
                   </BalAlertLink>
+                  {` to get veBAL. This is the special Balancer protocol liquidity pool. Come back to this step once you have acquired some of these LP tokens by adding liquidity to the `}
+                  <BalAlertLink
+                    fontSize="sm"
+                    href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014"
+                  >
+                    pool
+                  </BalAlertLink>
+                  .
                 </Text>
               }
               status="info"

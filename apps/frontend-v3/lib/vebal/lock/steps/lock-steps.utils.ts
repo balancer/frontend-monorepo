@@ -32,7 +32,7 @@ export function getModalLabel(mode: LockMode, editAlwaysOn: boolean, extendExpir
     case LockMode.Lock:
       return 'Lock to get veBAL'
     case LockMode.Extend:
-      if (editAlwaysOn) return 'Lock to get veBAL'
+      if (editAlwaysOn) return 'Lock to get more veBAL'
       return 'Extend lock'
     case LockMode.Unlock:
       if (extendExpired) {
