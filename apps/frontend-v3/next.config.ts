@@ -1,8 +1,9 @@
-const { withSentryConfig } = require('@sentry/nextjs')
-const { sentryOptions } = require('./sentry.config')
+import { withSentryConfig } from '@sentry/nextjs'
+import { sentryOptions } from './sentry.config'
+import type { NextConfig } from 'next'
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   webpack: config => {
     config.resolve.fallback = { fs: false, net: false, tls: false }
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
@@ -31,32 +32,12 @@ const nextConfig = {
 
   // Safe App setup
   headers: manifestHeaders,
-  redirects() {
-    return [
-      {
-        source: '/discord',
-        destination: 'https://discord.gg/kbPnYJjvwZ',
-        permanent: false,
-      },
-      // temporary redirect for urls to OP pools from the old app (mainly for Aura)
-      {
-        source: '/pool/:path*',
-        destination: '/pools/optimism/v2/:path*',
-        permanent: false,
-      },
-      // redirect for /mabeets in prod
-      process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' && {
-        source: '/mabeets',
-        destination: 'https://ma.beets.fi/',
-        permanent: false,
-      },
-    ].filter(Boolean)
-  },
 }
 
 // Avoid sentry setup in CI
-module.exports =
-  process.env.CI === 'true' ? nextConfig : withSentryConfig(nextConfig, sentryOptions)
+const config = process.env.CI === 'true' ? nextConfig : withSentryConfig(nextConfig, sentryOptions)
+
+export default config
 
 /**
  * Add specific CORS headers to the manifest.json file
