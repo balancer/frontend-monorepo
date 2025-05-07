@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "playwright:install": "playwright install --with-deps",
     "playwright:install:chromium": "playwright install --with-deps chromium",
@@ -21,7 +22,10 @@
     "@repo/lib": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "22.14.1",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
     "beets-frontend-v3": "workspace:*",
+    "eslint": "^9.0.0",
     "frontend-v3": "workspace:*",
     "start-server-and-test": "2.0.11"
   }
