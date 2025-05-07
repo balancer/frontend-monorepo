@@ -55,8 +55,10 @@ export function MyVotesStatsCard({
   const cardProps = getCardProps(variant)
   return (
     <Card h="full" w="full" {...cardProps}>
-      <VStack align="start" h="full" justifyContent="space-between" spacing="sm" w="full">
-        <Text variant="secondary">{headerText}</Text>
+      <VStack align="start" h="full" justifyContent="space-between" spacing="ms" w="full">
+        <Text fontSize="sm" variant="secondary">
+          {headerText}
+        </Text>
         <HStack
           alignItems="center"
           justifyContent="space-between"

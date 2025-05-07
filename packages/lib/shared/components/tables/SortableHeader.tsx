@@ -58,6 +58,8 @@ export function SortableHeader({
           fontWeight="bold"
           textDecoration={popoverContent ? 'underline' : undefined}
           textDecorationStyle={popoverContent ? 'dotted' : undefined}
+          textDecorationThickness="1px"
+          textUnderlineOffset="4px"
           {...textProps}
         >
           {label}

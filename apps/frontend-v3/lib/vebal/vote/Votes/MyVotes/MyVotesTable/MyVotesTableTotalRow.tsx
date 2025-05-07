@@ -75,7 +75,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
             )}
           </GridItem>
 
-          <GridItem justifySelf="end" textAlign="right" {...cellProps}>
+          <GridItem justifySelf="end" mr="0" textAlign="right" {...cellProps}>
             {gaugeVotesIsLoading ? (
               <Skeleton h="20px" w="60px" />
             ) : (
@@ -88,7 +88,7 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
             )}
           </GridItem>
 
-          <GridItem justifySelf="end" pr="20px" textAlign="right" {...cellProps}>
+          <GridItem justifySelf="end" mr="5px" textAlign="right" {...cellProps}>
             <VoteWeight
               skipTotalWarnings={!hasChanges}
               total
@@ -101,10 +101,10 @@ export function MyVotesTotalRow({ keyValue, cellProps, ...rest }: Props) {
             <VStack align="center" w="full">
               <Button
                 color="font.secondary"
-                fontSize="sm"
+                fontSize="xs"
                 isDisabled={!hasChanges}
                 onClick={clearAll}
-                size="sm"
+                size="xs"
                 variant="ghost"
               >
                 Clear all

@@ -69,5 +69,9 @@ export const orderByHash: Record<SortVotesBy, { label: string; title?: string }>
     title:
       'This shows the ratio of 3rd party voting incentives (known as Bribes) to veBAL. The higher this ratio, the more profitable it is to currently vote on this pool. Note this ratio could change up till the voting deadline.',
   },
-  votes: { label: 'veBAL votes' },
+  votes: {
+    label: 'veBAL votes',
+    title:
+      'The percentage of votes for each pool for the next period. This is based on voting by veBAL holders based on their collective voting power.',
+  },
 }
