@@ -4,6 +4,10 @@
     "paths": {
       "@/*": ["./*"],
       "@repo/*": ["../../packages/*"]
-    }
+    },
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "esModuleInterop": true
   }
 }

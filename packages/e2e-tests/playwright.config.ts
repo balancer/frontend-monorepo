@@ -1,12 +1,17 @@
 import { defineConfig, devices } from '@playwright/test'
 import { config } from 'dotenv'
-import { resolve } from 'path'
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
 
 const isDevE2E = !!process.env.NEXT_PUBLIC_E2E_DEV
 
 function minutes(min: number) {
   return min * 60 * 1000
 }
+
+// Get the directory name in ES module context
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 config({ path: resolve(__dirname, '.env.local') })
 
