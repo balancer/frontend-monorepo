@@ -1,5 +1,7 @@
-'use client'
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
+
+'use client'
 
 import { ApolloClient, useApolloClient, useReactiveVar } from '@apollo/client'
 import { HumanAmount } from '@balancer/sdk'

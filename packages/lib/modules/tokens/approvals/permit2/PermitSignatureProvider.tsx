@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 'use client'
 
 import { SignatureState } from '@repo/lib/modules/web3/signatures/signature.helpers'

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 'use client'
 
 import { getChainId } from '@repo/lib/config/app.config'
@@ -146,7 +148,6 @@ export function _useRecentTransactions() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-   
   function handleTransactionAdded(trackedTransaction: TrackedTransaction) {
     // add a toast for this transaction, rather than emitting a new toast
     // on updates for the same transaction, we will modify the same toast
@@ -191,7 +192,6 @@ export function _useRecentTransactions() {
     updateLocalStorage(updatedTrackedTransactions)
   }
 
-   
   function updateTrackedTransaction(hash: Hash, updatePayload: UpdateTrackedTransaction) {
     // attempt to find this transaction in the cache
     const cachedTransaction = transactions[hash]

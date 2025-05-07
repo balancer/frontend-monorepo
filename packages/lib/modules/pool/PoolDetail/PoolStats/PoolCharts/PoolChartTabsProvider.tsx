@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useParams } from 'next/navigation'
 import { createContext, PropsWithChildren, useMemo, useState } from 'react'

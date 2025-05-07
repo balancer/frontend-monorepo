@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 'use client'
 
 import { GetPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'

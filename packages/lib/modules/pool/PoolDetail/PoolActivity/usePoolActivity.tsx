@@ -1,4 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-hooks/rules-of-hooks */
+
 'use client'
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'

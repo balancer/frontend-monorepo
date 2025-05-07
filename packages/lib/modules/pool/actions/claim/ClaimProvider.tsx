@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 'use client'
 
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'

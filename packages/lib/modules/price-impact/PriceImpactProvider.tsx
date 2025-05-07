@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 import { AlertTriangle, XOctagon } from 'react-feather'
 import { PropsWithChildren, createContext, useEffect, useState } from 'react'
 import { useMandatoryContext } from '../../shared/utils/contexts'

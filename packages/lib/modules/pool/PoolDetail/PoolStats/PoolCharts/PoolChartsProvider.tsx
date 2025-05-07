@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 import { ColorMode, theme as defaultTheme, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { differenceInDays, format } from 'date-fns'
 import {

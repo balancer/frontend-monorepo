@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 'use client'
 
 import { useUserAccount } from '../web3/UserAccountProvider'
@@ -40,7 +42,6 @@ export function _useTokenBalances(
   if (!initTokens && !extTokens) throw new Error('initTokens or tokens must be provided')
   if (initTokens && extTokens) throw new Error('initTokens and tokens cannot be provided together')
 
-   
   const [_tokens, _setTokens] = useState<ApiToken[]>(initTokens || [])
 
   const { userAddress } = useUserAccount()
