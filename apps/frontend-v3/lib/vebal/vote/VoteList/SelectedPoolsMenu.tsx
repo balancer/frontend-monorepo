@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Box, Button, Divider, HStack, Text, VStack, useColorMode } from '@chakra-ui/react'
 import { Maximize2, Minimize2 } from 'react-feather'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -14,7 +14,6 @@ interface SelectedPoolsToastProps {
 
 export function SelectedPoolsMenu({ onAddVotesClick, votingPools }: SelectedPoolsToastProps) {
   const [expanded, setExpanded] = useState(false)
-  const [shouldScrollTop, setShouldScrollTop] = useState(false)
   const sortedPools = votingPools.toReversed()
   const visiblePools = expanded
     ? sortedPools.slice(0, MAX_VISIBLE_POOLS_COUNT)
@@ -25,24 +24,12 @@ export function SelectedPoolsMenu({ onAddVotesClick, votingPools }: SelectedPool
   const bgBase = colorMode === 'dark' ? '#000' : '#fff'
 
   const handleGoToVote = () => {
-    if (expanded) {
-      setExpanded(false)
-      setShouldScrollTop(true)
-    } else {
+    setExpanded(false)
+    setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+    })
     onAddVotesClick?.()
   }
-
-  useEffect(() => {
-    if (shouldScrollTop && !expanded) {
-      const timer = setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        setShouldScrollTop(false)
-      }, 320)
-      return () => clearTimeout(timer)
-    }
-  }, [expanded, shouldScrollTop])
 
   return (
     <Box
@@ -66,7 +53,7 @@ export function SelectedPoolsMenu({ onAddVotesClick, votingPools }: SelectedPool
         },
       }}
       // @ts-expect-error Framer Motion handles this transition prop for layout animations
-      transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }} // var(--ease-out-cubic) equivalent
+      transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
       w="320px"
     >
       <VStack alignItems="stretch" p="0" rounded="xl" shadow="2xl" spacing="0" w="full">
