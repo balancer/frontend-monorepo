@@ -39,6 +39,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
+import { ArrowRight } from 'react-feather'
 
 type Props = {
   editAlwaysOn?: boolean
@@ -234,7 +235,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
                       {`${fNum('token', currentVeBALAmount)}`}
                     </Text>
                     <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
-                      ➔
+                      <ArrowRight size={14} />
                     </Text>
                     <Text fontSize="md" fontWeight="700" lineHeight="16px">
                       {fNum('token', expectedVeBalAmount.totalExpectedVeBal)}
