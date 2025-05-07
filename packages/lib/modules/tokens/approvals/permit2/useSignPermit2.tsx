@@ -15,7 +15,6 @@ import { getTokenSymbolsForPermit2 } from './permit2.helpers'
 import { NoncesByTokenAddress } from './usePermit2Allowance'
 import { Address } from 'viem'
 
- 
 export type SignPermit2Fn = (
   sdkClient: PublicWalletClient,
   nonces: NoncesByTokenAddress

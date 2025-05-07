@@ -1,4 +1,3 @@
- 
 export function SwapIcon({ size = 24 }: { size?: number }) {
   return (
     <svg

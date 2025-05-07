@@ -183,7 +183,6 @@ export function NavActions({
       {actions.map(
         ({ el, display }, i) =>
           el && (
-             
             <Box as={motion.div} display={display} key={i} variants={fadeIn}>
               {el}
             </Box>

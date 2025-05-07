@@ -1,6 +1,5 @@
 import { SVGProps } from 'react'
 
- 
 export function PromoBoostedIcon({
   size = 24,
   ...props

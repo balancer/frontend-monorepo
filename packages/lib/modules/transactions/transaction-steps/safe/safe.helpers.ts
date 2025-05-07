@@ -1,5 +1,3 @@
- 
- 
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import {
   GatewayTransactionDetails,

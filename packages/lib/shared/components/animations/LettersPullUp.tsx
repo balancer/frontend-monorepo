@@ -48,7 +48,6 @@ export function LettersPullUp({
           animate={isInView ? 'animate' : ''}
           custom={i}
           initial="initial"
-           
           key={`${i}-${letter}`}
           layout
           ref={ref}

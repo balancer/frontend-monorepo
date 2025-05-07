@@ -1,4 +1,3 @@
- 
 export function CoinsIcon({ size = 24 }: { size?: number }) {
   return (
     <svg

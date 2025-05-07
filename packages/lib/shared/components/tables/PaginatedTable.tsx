@@ -72,7 +72,6 @@ export function PaginatedTable<T>({
           {loading &&
             items.length === 0 &&
             Array.from({ length: loadingLength }).map((_, index) => (
-               
               <Box key={`table-row-skeleton-${index}`} px="xs" py="xs" w="full">
                 <Skeleton height="68px" w="full" />
               </Box>

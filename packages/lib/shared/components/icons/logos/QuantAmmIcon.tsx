@@ -1,5 +1,3 @@
- 
-
 export function QuantAmmIcon({ size = 38 }: { size?: number }) {
   return (
     <svg

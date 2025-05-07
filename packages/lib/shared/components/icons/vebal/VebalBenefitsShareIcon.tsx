@@ -1,7 +1,6 @@
 import { SVGProps, forwardRef } from 'react'
 import { useColorMode } from '@chakra-ui/react'
 
- 
 interface VebalBenefitsShareIconProps extends SVGProps<SVGSVGElement> {
   size?: number
 }

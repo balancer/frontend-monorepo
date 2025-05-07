@@ -1,4 +1,3 @@
- 
 'use client'
 import ReactECharts from 'echarts-for-react'
 import {

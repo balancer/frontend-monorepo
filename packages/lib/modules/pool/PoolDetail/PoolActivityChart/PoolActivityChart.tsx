@@ -1,4 +1,3 @@
- 
 'use client'
 
 import ReactECharts from 'echarts-for-react'
@@ -68,7 +67,6 @@ export function PoolActivityChart() {
         <AnimateOpacity>
           <HStack px={['1', '2']} spacing="4">
             {legendTabs.map((tab, index) => (
-               
               <HStack alignItems="center" gap="2" key={index}>
                 <Box
                   backgroundImage={tab.color}

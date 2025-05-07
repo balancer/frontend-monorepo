@@ -4,7 +4,7 @@ import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { ClaimModal } from '@repo/lib/modules/pool/actions/claim/ClaimModal'
 import { ClaimProvider } from '@repo/lib/modules/pool/actions/claim/ClaimProvider'
 import { ChainSlug, getChainSlug } from '@repo/lib/modules/pool/pool.utils'
- 
+
 import { Button, Card, HStack, Heading, Skeleton, Stack, Text, VStack } from '@chakra-ui/react'
 import { ClaimNetworkPoolsLayout } from '@repo/lib/modules/portfolio/PortfolioClaim/ClaimNetworkPools/ClaimNetworkPoolsLayout'
 import { usePortfolio } from '@repo/lib/modules/portfolio/PortfolioProvider'

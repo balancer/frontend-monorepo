@@ -1,5 +1,5 @@
 import { Image, ImageProps } from '@chakra-ui/react'
- 
+
 import { AvatarComponentProps } from '@rainbow-me/rainbowkit/dist/components/RainbowKitProvider/AvatarContext'
 
 export function CustomAvatar({

@@ -1,4 +1,3 @@
- 
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   GqlChain,
@@ -386,8 +385,7 @@ export function getVaultConfig(pool: Pool) {
   const networkConfig = getNetworkConfig(pool.chain)
   const vaultAddress =
     pool.protocolVersion === 3
-      ?  
-        networkConfig.contracts.balancer.vaultV3!
+      ? networkConfig.contracts.balancer.vaultV3!
       : networkConfig.contracts.balancer.vaultV2
 
   const balancerVaultAbi = pool.protocolVersion === 3 ? vaultAbi_V3 : balancerV2VaultAbi

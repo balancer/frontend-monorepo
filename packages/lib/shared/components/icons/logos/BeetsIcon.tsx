@@ -1,4 +1,3 @@
- 
 export function BeetsIcon({ size = 32 }: { size?: number }) {
   return (
     <svg

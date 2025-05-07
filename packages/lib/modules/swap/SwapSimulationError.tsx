@@ -1,4 +1,3 @@
- 
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { BalAlertLink } from '@repo/lib/shared/components/alerts/BalAlertLink'
 import { ErrorAlert } from '@repo/lib/shared/components/errors/ErrorAlert'

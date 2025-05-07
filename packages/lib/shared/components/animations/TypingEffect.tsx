@@ -27,7 +27,6 @@ export function TypingEffect({
         <MotionSpan
           animate={isInView ? { opacity: 1 } : {}}
           initial={{ opacity: 0 }}
-           
           key={index}
           transition={{ duration, delay: initDelay + index * delay }}
         >

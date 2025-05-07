@@ -58,12 +58,7 @@ export function WordsPullUp({
         } as any
 
         return (
-          <MotionBox
-             
-            key={i}
-            ref={i === 0 ? ref : undefined}
-            {...motionProps}
-          >
+          <MotionBox key={i} ref={i === 0 ? ref : undefined} {...motionProps}>
             {current === '' ? <span>&nbsp;</span> : current}
           </MotionBox>
         )

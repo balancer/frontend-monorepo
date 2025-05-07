@@ -9,7 +9,6 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { getStakedBalance } from '../user-balance.helpers'
 
- 
 export const migrateStakeTooltipLabel = `veBAL gauges are the mechanism to distribute BAL liquidity incentives following community voting.
 The gauge where you have staked your LP tokens has been deprecated.
 So it's likely best for you to migrate to the new gauge in order to get future BAL liquidity incentives.`

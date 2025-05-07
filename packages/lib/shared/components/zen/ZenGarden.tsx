@@ -91,7 +91,6 @@ export function ZenGarden({
 
   return [...Array(repetitions).keys()].map((_, i) => (
     <Box
-       
       key={`zen-garden-${variant}-${i}`}
       zIndex={0}
       {...shapeProps}

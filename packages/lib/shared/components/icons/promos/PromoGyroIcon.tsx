@@ -1,6 +1,5 @@
 import { SVGProps } from 'react'
 
- 
 export function PromoGyroIcon({
   size = 24,
   ...props

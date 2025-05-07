@@ -1,6 +1,5 @@
 import { SVGProps } from 'react'
 
- 
 export function StarsIconPlain({
   size = 24,
   ...props

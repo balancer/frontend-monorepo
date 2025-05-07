@@ -1,4 +1,3 @@
- 
 export function CronIcon({ size = 30 }: { size?: number }) {
   return (
     <svg

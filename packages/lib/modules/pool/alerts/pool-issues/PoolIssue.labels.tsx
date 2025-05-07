@@ -1,5 +1,3 @@
- 
- 
 import { Link } from '@chakra-ui/react'
 import { PoolIssue } from './PoolIssue.type'
 import { ReactNode } from 'react'

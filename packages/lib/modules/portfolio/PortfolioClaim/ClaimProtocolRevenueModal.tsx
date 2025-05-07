@@ -9,7 +9,7 @@ import { DesktopStepTracker } from '../../transactions/transaction-steps/step-tr
 import { MobileStepTracker } from '../../transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useTransactionSteps } from '../../transactions/transaction-steps/useTransactionSteps'
 import { bn } from '@repo/lib/shared/utils/numbers'
- 
+
 import { getStylesForModalContentWithStepTracker } from '../../transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { TokenRowGroup } from '../../tokens/TokenRow/TokenRowGroup'

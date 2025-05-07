@@ -1,5 +1,3 @@
- 
-
 import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
 

@@ -34,7 +34,7 @@ function getRandomTransactionHash() {
 
 export function useMockedTxHash() {
   // simulate transaction success using existing transaction (dev only)
-   
+
   const [mockedTxHash, _setMockedTxHash] = useState<Hash | undefined>(undefined)
 
   return {

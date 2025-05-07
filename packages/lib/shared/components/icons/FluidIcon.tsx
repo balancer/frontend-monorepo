@@ -1,4 +1,3 @@
- 
 export function FluidIcon({ size = 20 }: { size?: number }) {
   return (
     <svg

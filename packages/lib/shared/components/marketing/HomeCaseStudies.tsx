@@ -1,5 +1,3 @@
- 
-
 import { MotionValue, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ReactNode, useRef, useState } from 'react'
 import { Box, BoxProps, Flex, Text, useDisclosure, VStack } from '@chakra-ui/react'

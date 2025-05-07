@@ -1,4 +1,3 @@
- 
 import { SVGProps } from 'react'
 
 export function TimeLockIcon(props: SVGProps<SVGSVGElement>) {

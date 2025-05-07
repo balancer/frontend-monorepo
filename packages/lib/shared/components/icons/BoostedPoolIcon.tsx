@@ -1,6 +1,5 @@
 import { SVGProps } from 'react'
 
- 
 export function BoostedPoolIcon({
   size = 24,
   ...props

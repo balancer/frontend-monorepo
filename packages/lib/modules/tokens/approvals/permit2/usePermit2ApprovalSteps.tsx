@@ -1,4 +1,3 @@
- 
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react'
 import { getChainId, getNativeAssetAddress, getNetworkConfig } from '@repo/lib/config/app.config'

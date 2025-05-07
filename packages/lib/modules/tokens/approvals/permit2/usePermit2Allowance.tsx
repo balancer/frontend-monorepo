@@ -1,4 +1,3 @@
- 
 import { getGqlChain, getNetworkConfig } from '@repo/lib/config/app.config'
 import { permit2Abi } from '@balancer/sdk'
 import { zipObject } from 'lodash'

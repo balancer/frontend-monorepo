@@ -1,4 +1,3 @@
- 
 export function PaladinIcon({ size = 36 }: { size?: number }) {
   return (
     <svg

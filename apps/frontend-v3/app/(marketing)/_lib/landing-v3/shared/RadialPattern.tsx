@@ -145,7 +145,6 @@ export function RadialPattern({
       <AnimatePresence>
         {circles.map((circle, i) => (
           <Circle
-             
             key={i}
             progress={progress}
             shadowBlackOpacity={shadowBlackOpacity}

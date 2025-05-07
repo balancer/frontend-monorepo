@@ -1,5 +1,3 @@
- 
-
 import { GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 
 export const gyroPoolMock: GqlPoolElement = {

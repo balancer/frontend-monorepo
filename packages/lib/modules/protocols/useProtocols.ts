@@ -1,4 +1,3 @@
- 
 export enum Protocol {
   Aave = 'aave',
   Aura = 'aura',

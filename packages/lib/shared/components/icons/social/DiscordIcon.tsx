@@ -1,4 +1,3 @@
- 
 export function DiscordIcon({ size = 24 }: { size?: number }) {
   return (
     <svg

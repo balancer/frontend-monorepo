@@ -1,4 +1,3 @@
- 
 export function ChartBubbleIcon({ size = 24 }: { size?: number }) {
   return (
     <svg

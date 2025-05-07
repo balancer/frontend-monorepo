@@ -1,6 +1,5 @@
 import { SVGProps } from 'react'
 
- 
 export function CoingeckoIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg

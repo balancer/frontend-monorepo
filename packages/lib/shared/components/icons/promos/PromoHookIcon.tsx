@@ -1,6 +1,5 @@
 import { SVGProps } from 'react'
 
- 
 export function PromoHookIcon({
   size = 24,
   ...props

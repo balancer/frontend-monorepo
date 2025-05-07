@@ -1,6 +1,5 @@
 import { SVGProps } from 'react'
 
- 
 export function VThreeIcon({ size = 24, ...props }: { size?: number } & SVGProps<SVGSVGElement>) {
   return (
     <svg

@@ -226,7 +226,7 @@ function _usePoolActivity() {
     const diffInDays = differenceInCalendarDays(new Date(), minDate * 1000)
     return diffInDays > 0 ? `in last ${diffInDays} days` : 'today'
   }, [minDate])
-  
+
   const transactionsLabel = useMemo(() => {
     return `${fNum('integer', poolEvents.length)} ${getTitle()} ${getDateCaption()}`
   }, [poolEvents, getTitle, getDateCaption])

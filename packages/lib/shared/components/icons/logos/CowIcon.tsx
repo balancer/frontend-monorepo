@@ -1,4 +1,3 @@
- 
 export function CowIcon({ size = 36 }: { size?: number }) {
   return (
     <svg

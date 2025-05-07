@@ -27,7 +27,6 @@ function PoolWeightsInfo() {
     <BalAlert
       content={
         <BalAlertContent
-           
           description="Proportional adds avoid price impact by matching the current ratio of each token's USD value within the pool:"
           forceColumnMode
         >

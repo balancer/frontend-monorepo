@@ -1,4 +1,3 @@
- 
 import { getTenderlyUrlFromErrorMessage } from './errors'
 
 describe('getTenderlyUrlFromError', () => {

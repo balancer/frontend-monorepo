@@ -16,7 +16,6 @@ export function Steps({ transactionSteps, isTxBatch }: Props) {
     <VStack align="start" spacing="ms">
       {steps &&
         steps.map((step, index) => (
-           
           <div key={step.id + index}>
             <Step
               colorMode={colorMode}
