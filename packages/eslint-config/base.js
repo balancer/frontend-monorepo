@@ -14,7 +14,7 @@ const project = resolve(process.cwd(), 'tsconfig.json')
  * A shared ESLint configuration for the repository.
  * Based on the original library.js configuration, adapted for ESLint v9 flat config.
  *
- * @type {import("eslint").Linter.FlatConfig[]}
+ * @type {import("eslint").Linter.Config}
  */
 const baseConfig = [
   js.configs.recommended,
