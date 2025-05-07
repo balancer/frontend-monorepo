@@ -4,6 +4,7 @@ import turboPlugin from 'eslint-plugin-turbo'
 import tseslint from 'typescript-eslint'
 import onlyWarn from 'eslint-plugin-only-warn'
 import reactPlugin from 'eslint-plugin-react'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import { resolve } from 'node:path'
 
@@ -44,6 +45,7 @@ const baseConfig = [
       'only-warn': onlyWarn,
       turbo: turboPlugin,
       react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
     },
     settings: {
       'import/resolver': {
@@ -57,6 +59,7 @@ const baseConfig = [
     },
     rules: {
       'turbo/no-undeclared-env-vars': 'warn',
+      ...reactHooksPlugin.configs.recommended.rules,
     },
   },
 ]
