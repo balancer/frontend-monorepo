@@ -2,14 +2,12 @@
 import { DependencyList, useEffect, useRef } from 'react'
 
 export function useEffectOnce(effect: () => void) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(effect, [])
 }
 
 export function useAsyncEffectOnce(effect: () => Promise<void>, onError?: (error: Error) => void) {
   useEffect(() => {
     effect().catch(onError || (() => null))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
 
@@ -22,7 +20,6 @@ export function useAsyncEffect(
     effect()
 
     return cleanup
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
 }
 
@@ -33,7 +30,6 @@ export function useTimeout(effect: () => void, duration: number) {
   useEffect(() => {
     const timeout = setTimeout(effect, duration)
     return () => clearTimeout(timeout)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
 

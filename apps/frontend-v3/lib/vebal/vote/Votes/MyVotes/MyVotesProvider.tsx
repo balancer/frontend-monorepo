@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 'use client'
 
 import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
@@ -53,7 +55,7 @@ export interface SubmittingVote {
   weight: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern

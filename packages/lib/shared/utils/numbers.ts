@@ -167,7 +167,9 @@ export function safeSum(amounts: Numberish[]): string {
 
 // Prevents invalid characters from being entered into a number input.
 export function blockInvalidNumberInput(event: KeyboardEvent<HTMLInputElement>): void {
-  ;['e', 'E', '+', '-'].includes(event.key) && event.preventDefault()
+  if (['e', 'E', '+', '-'].includes(event.key)) {
+    event.preventDefault()
+  }
 }
 
 type NumberFormat =

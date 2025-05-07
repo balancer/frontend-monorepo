@@ -60,13 +60,13 @@ function _usePoolActivity() {
   const isAllOrAdds = activeTab?.value === 'all' || activeTab?.value === 'adds'
   const isAllOrRemoves = activeTab?.value === 'all' || activeTab?.value === 'removes'
 
-  function getTitle() {
+  const getTitle = useCallback(() => {
     if (activeTab?.value === 'all') {
       return 'transactions'
     }
 
     return activeTab?.value ?? ''
-  }
+  }, [activeTab?.value])
 
   const { loading, data: response } = usePoolEvents({
     poolIdIn: [poolId] as string[],
@@ -151,11 +151,6 @@ function _usePoolActivity() {
     setSkip(newPagination.pageIndex * newPagination.pageSize)
   }
 
-  function getDateCaption() {
-    const diffInDays = differenceInCalendarDays(new Date(), minDate * 1000)
-    return diffInDays > 0 ? `in last ${diffInDays} days` : 'today'
-  }
-
   const sortPoolEvents = useCallback(
     (events: PoolActivityEl[], sortBy: SortingBy, order: Sorting) => {
       return [...events].sort((a, b) => {
@@ -226,6 +221,12 @@ function _usePoolActivity() {
     return !!poolEvents.length && poolEvents.length > pagination.pageSize
   }, [poolEvents, pagination])
 
+  // Create getDateCaption function after minDate is defined
+  const getDateCaption = useCallback(() => {
+    const diffInDays = differenceInCalendarDays(new Date(), minDate * 1000)
+    return diffInDays > 0 ? `in last ${diffInDays} days` : 'today'
+  }, [minDate])
+  
   const transactionsLabel = useMemo(() => {
     return `${fNum('integer', poolEvents.length)} ${getTitle()} ${getDateCaption()}`
   }, [poolEvents, getTitle, getDateCaption])

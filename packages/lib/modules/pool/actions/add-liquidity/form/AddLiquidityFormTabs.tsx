@@ -107,7 +107,11 @@ export function AddLiquidityFormTabs({
   function handleTabChanged(option: ButtonGroupOption): void {
     if (tabIndex.toString() === option.value) return // Avoids handling click in the current tab
     clearAmountsIn()
-    option.value === '0' ? setFlexibleTab() : setProportionalTab()
+    if (option.value === '0') {
+      setFlexibleTab()
+    } else {
+      setProportionalTab()
+    }
   }
 
   const options: ButtonGroupOption[] = [

@@ -17,7 +17,6 @@ test('calcMarketPriceImpact', () => {
 })
 
 test('getPriceImpactLabel', () => {
-  getPriceImpactLabel
   expect(getPriceImpactLabel(undefined)).toBe('')
   expect(getPriceImpactLabel(-1)).toBe(' (-<0.01%)')
   expect(getPriceImpactLabel(0)).toBe('')

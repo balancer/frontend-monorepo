@@ -7,7 +7,11 @@ export function silenceConsoleLog(vi: typeof vitest, silenceRulesCallback: (s: s
   return vi.spyOn(console, 'log').mockImplementation((message, optionalParams) => {
     if (isString(message) && silenceRulesCallback(message)) return
 
-    optionalParams ? originalConsoleLog(message, optionalParams) : originalConsoleLog(message)
+    if (optionalParams) {
+      originalConsoleLog(message, optionalParams)
+    } else {
+      originalConsoleLog(message)
+    }
   })
 }
 

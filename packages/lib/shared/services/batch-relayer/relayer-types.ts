@@ -34,8 +34,7 @@ export interface EncodeGaugeDepositInput {
   amount: bigint
 }
 
- 
-export interface EncodeGaugeWithdrawInput extends EncodeGaugeDepositInput {}
+export type EncodeGaugeWithdrawInput = EncodeGaugeDepositInput
 
 export interface EncodeGaugeClaimRewardsInput {
   gauges: Address[]

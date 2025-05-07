@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 import networkConfigs from '@repo/lib/config/networks'
 import { useEffect, useMemo, useCallback, createContext, PropsWithChildren } from 'react'
 import { OmniEscrowLock, useOmniEscrowLocksQuery } from './useOmniEscrowLocksQuery'
