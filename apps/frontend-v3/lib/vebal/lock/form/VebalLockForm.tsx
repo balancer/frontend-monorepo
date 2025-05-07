@@ -1,5 +1,5 @@
 'use client'
-
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import {
   Box,
   Button,
@@ -200,14 +200,28 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
 
           <VStack align="start" spacing="sm" w="full">
             <HStack justifyContent="space-between" spacing="md" w="full">
-              <Text fontSize="sm" fontWeight="700" lineHeight="18px">
-                Lock duration
-              </Text>
-              <Tooltip label={lockDuration.lockUntilDateFormatted}>
-                <Text fontSize="sm" fontWeight="700" lineHeight="18px">
-                  {lockDuration.lockUntilDateDuration}
+              <TooltipWithTouch label="The minimum lock period is to the Thursday of the following week. The maximum lock period is to the closest Thursday to the end of a 1 year period. Once locked, you cannot redeem your LP tokens until lock expiry. You can extend your lock period later at any time.">
+                <Text
+                  fontSize="sm"
+                  fontWeight="700"
+                  lineHeight="18px"
+                  sx={{
+                    textDecoration: 'underline dotted',
+                    textUnderlineOffset: '4px',
+                    textUnderlineThickness: '0.5px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  Lock duration
                 </Text>
-              </Tooltip>
+              </TooltipWithTouch>
+              <Box textAlign="right" w="100px">
+                <Tooltip label={lockDuration.lockUntilDateFormatted}>
+                  <Text fontSize="sm" fontWeight="700" lineHeight="18px">
+                    {lockDuration.lockUntilDateDuration}
+                  </Text>
+                </Tooltip>
+              </Box>
             </HStack>
             <LockDurationSlider
               max={lockDuration.maxStep}
