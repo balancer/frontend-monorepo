@@ -28,6 +28,8 @@ const nextJsConfig = [
       ...pluginNext.configs.recommended.rules,
       ...pluginNext.configs['core-web-vitals'].rules,
       ...pluginReactHooks.configs.recommended.rules,
+      // Disable the no-html-link-for-pages rule or configure it with the correct pages path
+      '@next/next/no-html-link-for-pages': 'off',
       // React scope no longer necessary with new JSX transform.
       'react/react-in-jsx-scope': 'off',
       // Custom rules from the original next.js config
