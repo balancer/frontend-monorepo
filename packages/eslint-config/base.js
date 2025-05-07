@@ -29,6 +29,11 @@ const baseConfig = [
       'dist/**',
       '**/generated/*.ts',
       'theme.ts',
+      '.next/**',
+      '.turbo/**',
+      'v8-compile-cache-0/**',
+      'next-env.d.ts',
+      'next.config.js',
     ],
     languageOptions: {
       globals: {
@@ -64,5 +69,4 @@ const baseConfig = [
   },
 ]
 
-export { baseConfig }
 export default baseConfig

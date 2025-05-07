@@ -69,5 +69,4 @@ const nextJsConfig = [
   },
 ]
 
-export { nextJsConfig }
 export default nextJsConfig

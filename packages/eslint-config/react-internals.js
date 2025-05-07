@@ -29,5 +29,4 @@ const reactInternalConfig = [
   },
 ]
 
-export { reactInternalConfig }
 export default reactInternalConfig
