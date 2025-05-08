@@ -52,7 +52,6 @@ async function signPermit({ permitInput, wethIsEth, sdkClient, pool }: Params): 
 
   const baseParams = {
     ...baseInput,
-
     client: sdkClient!,
     owner: permitInput.account,
   }
