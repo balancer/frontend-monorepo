@@ -104,7 +104,7 @@ export function Audits() {
             <Button
               as={NextLink}
               href="https://github.com/balancer/balancer-v3-monorepo/tree/main/audits"
-              rightIcon={<ArrowUpRight size="20px" />}
+              rightIcon={<ArrowUpRight size="16px" />}
               variant="secondary"
             >
               View reports

@@ -24,7 +24,7 @@ export function VoteListTableHeader({ ...rest }) {
   }
 
   return (
-    <Grid {...rest} borderBottom="1px solid" borderColor="border.base" p={['sm', 'md']} w="full">
+    <Grid {...rest} p={['sm', 'md']} w="full">
       <GridItem>
         <VStack align="start" w="full">
           <Icon as={Globe} boxSize="5" color="font.primary" />

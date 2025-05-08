@@ -17,15 +17,17 @@ function getPoolDisplayTypeLabel(pool: PoolCore, erc4626Metadata: Erc4626Metadat
         <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
           Boosted
         </Text>
-        {erc4626Metadata.map(metadata => (
-          <Image
-            alt={metadata.name}
-            height={20}
-            key={metadata.name}
-            src={metadata.iconUrl || ''}
-            width={20}
-          />
-        ))}
+        <HStack gap="0.375rem">
+          {erc4626Metadata.map(metadata => (
+            <Image
+              alt={metadata.name}
+              height={20}
+              key={metadata.name}
+              src={metadata.iconUrl || ''}
+              width={20}
+            />
+          ))}
+        </HStack>
       </>
     )
   }

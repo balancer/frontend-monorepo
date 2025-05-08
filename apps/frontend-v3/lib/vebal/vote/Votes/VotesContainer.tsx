@@ -8,7 +8,8 @@ import { VoteListProvider } from '@bal/lib/vebal/vote/VoteList/VoteListProvider'
 import { MyVotesProvider } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { TransactionStateProvider } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { VotesIntroductionLayout } from '@bal/lib/vebal/vote/Votes/VotesIntroduction/VotesIntroductionLayout'
-import { VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
+import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 
 export async function VotesContainer() {
   const client = getApolloServerClient()
@@ -28,20 +29,22 @@ export async function VotesContainer() {
   const { data: voteListQueryData } = await getVebalVotingList()
 
   return (
-    <VotesProvider data={voteListQueryData}>
-      <VoteListProvider>
-        <VStack spacing="3xl" w="full">
-          <VotesIntroductionLayout />
-
-          <TransactionStateProvider>
-            <MyVotesProvider>
-              <MyVotesLayout />
-            </MyVotesProvider>
-          </TransactionStateProvider>
-
-          <VoteListLayout />
-        </VStack>
-      </VoteListProvider>
-    </VotesProvider>
+    <Box>
+      <VotesIntroductionLayout />
+      <DefaultPageContainer pt="md !important">
+        <VotesProvider data={voteListQueryData}>
+          <VoteListProvider>
+            <VStack spacing="3xl" w="full">
+              <TransactionStateProvider>
+                <MyVotesProvider>
+                  <MyVotesLayout />
+                </MyVotesProvider>
+              </TransactionStateProvider>
+              <VoteListLayout />
+            </VStack>
+          </VoteListProvider>
+        </VotesProvider>
+      </DefaultPageContainer>
+    </Box>
   )
 }

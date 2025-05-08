@@ -5,30 +5,47 @@ import { VebalBenefitsShareIcon } from '@repo/lib/shared/components/icons/vebal/
 import { VebalBenefitsBribesIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsBribesIcon'
 import { VebalBenefitsSparklesIcon } from '@repo/lib/shared/components/icons/vebal/VebalBenefitsSparklesIcon'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
+import { SparkleIconWrapper } from '@repo/lib/shared/components/animations/SparkleIconWrapper'
 
 export function VebalBenefitsSection() {
   const { colorMode } = useColorMode()
   const benefits = [
     {
-      icon: <VebalBenefitsVoteIcon size={44} />,
+      icon: (
+        <SparkleIconWrapper size={47}>
+          <VebalBenefitsVoteIcon />
+        </SparkleIconWrapper>
+      ),
       title: "Vote on Balancer's future",
       description:
         'veBAL holders govern the direction of the protocol including liquidity incentives.',
     },
     {
-      icon: <VebalBenefitsShareIcon size={44} />,
+      icon: (
+        <SparkleIconWrapper size={45}>
+          <VebalBenefitsShareIcon />
+        </SparkleIconWrapper>
+      ),
       title: 'Share protocol revenue',
       description:
         'veBAL holders earn a share of protocol revenue in proportion to their holdings.',
     },
     {
-      icon: <VebalBenefitsBribesIcon size={42} />,
+      icon: (
+        <SparkleIconWrapper size={45}>
+          <VebalBenefitsBribesIcon />
+        </SparkleIconWrapper>
+      ),
       title: 'Earn weekly voting incentives',
       description:
         "veBAL holders can earn lucrative 'bribes' from 3rd parties for voting for their pools.",
     },
     {
-      icon: <VebalBenefitsSparklesIcon size={38} />,
+      icon: (
+        <SparkleIconWrapper size={41}>
+          <VebalBenefitsSparklesIcon />
+        </SparkleIconWrapper>
+      ),
       title: 'Boost liquidity mining yield',
       description:
         'Liquidity Providers with veBAL can get up to a 2.5x boost on BAL liquidity incentives.',
@@ -57,7 +74,14 @@ export function VebalBenefitsSection() {
           <Heading as="h2" bg="background.gold" bgClip="text" pb="0.5" size="lg" textAlign="center">
             Why get veBAL?
           </Heading>
-          <Text color="font.secondary" lineHeight="1.4" maxWidth="38ch" pt="0" textAlign="center">
+          <Text
+            color="font.secondary"
+            lineHeight="1.4"
+            maxWidth="38ch"
+            pt="0"
+            sx={{ textWrap: 'pretty' }}
+            textAlign="center"
+          >
             Turn your BAL tokens into voting power and rewards.
           </Text>
         </Stack>
@@ -121,7 +145,7 @@ export function VebalBenefitsSection() {
                         h={{ base: 16, lg: 20, xl: 24 }}
                         overflow="hidden"
                         rounded="full"
-                        shadow="innerRockShadow"
+                        shadow="innerRockShadowSm"
                         w={{ base: 16, lg: 20, xl: 24 }}
                       >
                         <Box
@@ -157,8 +181,8 @@ export function VebalBenefitsSection() {
                     as="h3"
                     bg="background.gold"
                     bgClip="text"
-                    fontSize="xl"
-                    mb={2}
+                    fontSize={{ base: 'lg', md: 'xl' }}
+                    mb={{ base: 'xxs', md: '2' }}
                     pb="0.5"
                     sx={{ textWrap: 'balance' }}
                   >
@@ -166,8 +190,9 @@ export function VebalBenefitsSection() {
                   </Heading>
                   <Text
                     color="font.secondary"
-                    fontSize="md"
+                    fontSize={{ base: 'sm', md: 'md' }}
                     lineHeight="1.4"
+                    pb="0.5"
                     sx={{ textWrap: 'balance' }}
                   >
                     {benefit.description}

@@ -13,6 +13,7 @@ export default async function PoolsPageWrapper() {
 
   return (
     <PoolsPage rewardsClaimed24h={stakedSonicData.stsGetGqlStakedSonicData.rewardsClaimed24h}>
+      {/* TODO: add <PromoBanners /> at a later date */}
       <BeetsPromoBanner />
     </PoolsPage>
   )

@@ -4,6 +4,8 @@ import { TokenBalance, TokenBalancesByChain } from './fork-options'
 import { createConfig } from 'wagmi'
 import { mainnet } from 'viem/chains'
 import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
+import { orderBy } from 'lodash'
+import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
 
 /*
   E2E dev tests use an anvil fork to impersonate and test with default anvil accounts
@@ -102,4 +104,21 @@ export function clearImpersonatedAddressLS() {
 
 function isLocalStorageAvailable() {
   return typeof localStorage !== 'undefined'
+}
+
+type VotingPools = GetVeBalVotingListQuery['veBalGetVotingList']
+/*
+The anvil fork will be too slow when used with > 700 gauges so we filter the list to allow faster tests
+*/
+export function filterVotingPoolsForAnvilFork(votingPools: VotingPools) {
+  const killedGaugesToInclude = [
+    '0xcf5938ca6d9f19c73010c7493e19c02acfa8d24d', // gauge of tetuBal pool
+  ]
+  // Order by isKilled first
+  return orderBy(votingPools, ['gauge.isKilled'], ['desc']).filter(vote => {
+    // Filter not killed gauges with only specific killed ones
+    return !vote.gauge.isKilled || killedGaugesToInclude.includes(vote.gauge.address)
+  })
+  // Uncomment to enable faster anvil voting list (with a subset of gauges)
+  // .slice(0, 50)
 }

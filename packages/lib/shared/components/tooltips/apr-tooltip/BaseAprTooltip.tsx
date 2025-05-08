@@ -262,19 +262,19 @@ function BaseAprTooltip({
           apr={merklIncentivesAprDisplayed}
           displayValueFormatter={usedDisplayValueFormatter}
           title="Merkl.xyz incentives"
+          tooltipText={merklIncentivesTooltipText}
         >
-          {merklTokensDisplayed.map(item => {
-            return (
+          {merklTokensDisplayed
+            .filter(item => item.title !== '') // filter out rewards where the token symbol empty
+            .map(item => (
               <TooltipAprItem
                 {...subitemPopoverAprItemProps}
                 apr={item.apr}
                 displayValueFormatter={usedDisplayValueFormatter}
                 key={`merkl-${item.title}-${item.apr}`}
                 title={item.title}
-                tooltipText={merklIncentivesTooltipText}
               />
-            )
-          })}
+            ))}
         </TooltipAprItem>
       ) : null}
       {isCowAmmPool(poolType) && (

@@ -13,6 +13,7 @@ import { useSubmitVotesAllSteps } from '@bal/lib/vebal/vote/Votes/MyVotes/action
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import {
   bpsToPercentage,
+  calculateMyValuePerVote,
   calculateMyVoteRewardsValue,
   sharesToBps,
 } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
@@ -22,9 +23,12 @@ import {
   getUnallocatedWeight,
   isVotingTimeLocked,
 } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
-import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import BigNumber from 'bignumber.js'
 import { useTotalVotes } from '../../useTotalVotes'
+import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
+import { useBlacklistedVotes } from './incentivesBlacklist'
+import { useLastUserSlope } from '../../useVeBALBalance'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -57,10 +61,9 @@ export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern
 export function _useMyVotes({}: UseMyVotesArgs) {
-  const { veBALBalance } = useVebalUserData()
-
   const {
     loading: votesLoading,
+    votingPools,
     votedPools,
     selectedVotingPools,
     clearSelectedVotingPools,
@@ -117,6 +120,11 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   }, [myVotes, isPoolGaugeExpired])
 
   const { totalVotes, totalVotesLoading } = useTotalVotes()
+  const { mainnetLockedInfo, isLoading: lockInfoLoading } = useVebalLockInfo()
+  const lockEnd = mainnetLockedInfo.lockedEndDate
+  const { blacklistedVotes, isLoading: blacklistedLoading } = useBlacklistedVotes(votingPools)
+  const { userAddress, isLoading: userAccountLoading } = useUserAccount()
+  const { slope, isLoading: slopeLoading } = useLastUserSlope(userAddress)
 
   const totalInfo: MyVotesTotalInfo = useMemo(() => {
     const infos = availableMyVotes.map(myVote => {
@@ -124,7 +132,14 @@ export function _useMyVotes({}: UseMyVotesArgs) {
       const votedWeight = votedVotesWeights[myVote.id] || 0
       const editWeight = editVotesWeights[myVote.id] || 0
       const totalValue = myVote.votingIncentive?.totalValue || 0
-      const valuePerVote = myVote.votingIncentive?.valuePerVote || 0
+      const valuePerVote = calculateMyValuePerVote(
+        editWeight,
+        myVote,
+        slope,
+        lockEnd,
+        totalVotes,
+        blacklistedVotes[myVote.gauge.address]
+      )
 
       return {
         currentWeight,
@@ -139,11 +154,26 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     const currentVotes = sum(infos, ({ currentWeight }) => bn(currentWeight))
     const editVotes = sum(infos, ({ editWeight }) => bn(editWeight))
 
-    const totalRewardValue = sum(infos, ({ votedWeight, editWeight, vote }) =>
-      calculateMyVoteRewardsValue(votedWeight, editWeight, vote, veBALBalance, totalVotes)
+    const totalRewardValue = sum(infos, ({ editWeight, vote }) =>
+      calculateMyVoteRewardsValue(
+        editWeight,
+        vote,
+        slope,
+        lockEnd,
+        totalVotes,
+        blacklistedVotes[vote.gauge.address]
+      )
     )
+
     const prevTotalRewardValue = sum(infos, ({ votedWeight, vote }) =>
-      calculateMyVoteRewardsValue(votedWeight, votedWeight, vote, veBALBalance, totalVotes)
+      calculateMyVoteRewardsValue(
+        votedWeight,
+        vote,
+        slope,
+        lockEnd,
+        totalVotes,
+        blacklistedVotes[vote.gauge.address]
+      )
     )
 
     const averageRewardPerVote = sum(infos, ({ valuePerVote, editWeight }) =>
@@ -165,7 +195,15 @@ export function _useMyVotes({}: UseMyVotesArgs) {
       averageRewardPerVoteGain: averageRewardPerVote.minus(prevAverageRewardPerVote),
       unallocatedVotes: BigNumber.max(unallocatedVotes, 0),
     }
-  }, [availableMyVotes, votedVotesWeights, editVotesWeights, veBALBalance, totalVotes])
+  }, [
+    availableMyVotes,
+    votedVotesWeights,
+    editVotesWeights,
+    totalVotes,
+    slope,
+    blacklistedVotes,
+    lockEnd,
+  ])
 
   const hasVotedBefore = votedPools.length > 0
 
@@ -221,7 +259,13 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   return {
     myVotes,
     sortedMyVotes,
-    loading: votesLoading || totalVotesLoading,
+    loading:
+      votesLoading ||
+      totalVotesLoading ||
+      blacklistedLoading ||
+      lockInfoLoading ||
+      slopeLoading ||
+      userAccountLoading,
     filtersState,
     hasVotes,
     hasVotedBefore,

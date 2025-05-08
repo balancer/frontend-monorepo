@@ -18,7 +18,7 @@ interface Props {
 
 const rowProps = {
   px: { base: 'sm', sm: '0' },
-  gridTemplateColumns: `32px minmax(320px, 1fr) 120px 100px 120px 120px 100px`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(120px, max-content) minmax(100px, max-content) minmax(140px, max-content) minmax(120px, max-content) minmax(96px, max-content)`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 }

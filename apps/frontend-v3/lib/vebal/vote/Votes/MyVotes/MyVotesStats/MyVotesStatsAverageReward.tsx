@@ -4,8 +4,11 @@ import { MyVotesStatsCard } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats
 import { GainBadge } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
 import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { isZero } from '@repo/lib/shared/utils/numbers'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { canReceiveIncentives } from '../incentivesBlacklist'
 
 export function MyVotesStatsAverageReward() {
+  const { userAddress } = useUserAccount()
   const { toCurrency } = useCurrency()
   const { totalInfo, loading } = useMyVotes()
 
@@ -15,8 +18,8 @@ export function MyVotesStatsAverageReward() {
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />
-        ) : !isZero(totalInfo.averageRewardPerVote) ? (
-          <HStack spacing="xs">
+        ) : !isZero(totalInfo.averageRewardPerVote) && canReceiveIncentives(userAddress) ? (
+          <HStack spacing="sm">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
               {toCurrency(totalInfo.averageRewardPerVote, {
                 abbreviated: false,

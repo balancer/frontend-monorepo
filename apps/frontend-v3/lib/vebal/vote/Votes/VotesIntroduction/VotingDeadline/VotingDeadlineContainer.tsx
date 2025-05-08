@@ -1,13 +1,6 @@
 import { PropsWithChildren } from 'react'
-import { Card, CardProps } from '@chakra-ui/react'
-
-const wrapperBoxShadowStyles = [
-  '0px 0px 0px 1px rgba(0, 0, 0, 0.05)',
-  '1px 1px 1px -0.5px rgba(0, 0, 0, 0.15)',
-  '3px 3px 3px -1.5px rgba(0, 0, 0, 0.15)',
-  '6px 6px 6px -3px rgba(0, 0, 0, 0.26)',
-  '-0.5px -1px 0px 0px rgba(255, 255, 255, 0.38)',
-].join(', ')
+import { Card, CardProps, Box } from '@chakra-ui/react'
+import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 export function VotingDeadlineContainer({
   children,
@@ -15,13 +8,40 @@ export function VotingDeadlineContainer({
 }: PropsWithChildren & CardProps) {
   return (
     <Card
-      bg="background.level1"
-      boxShadow={wrapperBoxShadowStyles}
-      p={{ base: 'ms', lg: '20px' }}
-      rounded="xl"
+      bg="transparent"
+      p={{ base: 'ms', xl: '20px' }}
+      position="relative"
+      rounded="md"
+      shadow="xl"
       {...stackProps}
     >
-      {children}
+      <Box inset={0} overflow="hidden" position="absolute" rounded="sm" zIndex={0}>
+        <Picture
+          altText="Background texture"
+          defaultImgType="png"
+          directory="/images/textures/"
+          height="100%"
+          imgAvif
+          imgAvifDark
+          imgAvifPortrait
+          imgAvifPortraitDark
+          imgName="rock-slate"
+          imgPng
+          imgPngDark
+          width="100%"
+        />
+      </Box>
+      <Box
+        bg="background.level1"
+        inset={0}
+        opacity={0.7}
+        pointerEvents="none"
+        position="absolute"
+        zIndex={1}
+      />
+      <Box position="relative" zIndex={2}>
+        {children}
+      </Box>
     </Card>
   )
 }
