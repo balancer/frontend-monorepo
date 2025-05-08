@@ -1,6 +1,10 @@
 import { Image, ImageProps } from '@chakra-ui/react'
-// eslint-disable-next-line max-len
-import { AvatarComponentProps } from '@rainbow-me/rainbowkit/dist/components/RainbowKitProvider/AvatarContext'
+
+type AvatarComponentProps = {
+  address: string
+  ensImage?: string | null
+  size: number
+}
 
 export function CustomAvatar({
   address,

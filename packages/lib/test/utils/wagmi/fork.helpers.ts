@@ -1,11 +1,11 @@
 import { Address, createPublicClient, createTestClient, http, isAddress, parseUnits } from 'viem'
 import { SetBalanceMutation } from '../../anvil/useSetErc20Balance'
 import { TokenBalance, TokenBalancesByChain } from './fork-options'
-import { createConfig } from 'wagmi'
 import { mainnet } from 'viem/chains'
 import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
 import { orderBy } from 'lodash'
 import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
+import { type WagmiConfig } from '@repo/lib/modules/web3/wagmi.types'
 
 /*
   E2E dev tests use an anvil fork to impersonate and test with default anvil accounts
@@ -34,9 +34,6 @@ export const forkClient = createTestClient({
 export const publicForkClient = createPublicClient({
   transport: http(defaultAnvilForkRpcUrl),
 })
-
-type WagmiConfig = ReturnType<typeof createConfig>
-
 type SetBalancesParams = {
   impersonatedAddress: Address
   wagmiConfig: WagmiConfig

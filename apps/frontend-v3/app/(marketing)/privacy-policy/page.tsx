@@ -53,7 +53,7 @@ export default function Privacy() {
                 <li>
                   Balancer does not and has not stored personal information from users of the UI.
                   However, Balancer uses third party services including, without limitation,
-                  Cloudflare, Hypernative, Sentry, Fathom Analytics, RainbowKit, OpenZeppelin,
+                  Cloudflare, Hypernative, Sentry, Fathom Analytics, Reown Appkit, OpenZeppelin,
                   Amazon Web Services, Vercel, Coingecko, Appzi and others who collect and store
                   certain user information only for use in the provision of their services.
                 </li>

@@ -2,6 +2,7 @@ import { getNativeAssetAddress, getWrappedNativeAssetAddress } from '@repo/lib/c
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { Address, checksumAddress, isAddress } from 'viem'
 import { GqlChain } from '../services/api/generated/graphql'
+import type { GetEnsNameReturnType } from 'viem'
 
 export function isSameAddress(address1: string, address2: string): boolean {
   if (!address1 || !address2) return false
@@ -85,4 +86,26 @@ export function isAddressValidation(value: string): string | true {
   }
 
   return true
+}
+
+export function formatAddress(address: string): string {
+  const leadingChars = 4
+  const trailingChars = 4
+
+  return address.length < leadingChars + trailingChars
+    ? address
+    : `${address.substring(0, leadingChars)}\u2026${address.substring(
+        address.length - trailingChars
+      )}`
+}
+
+export function formatENS(name: GetEnsNameReturnType): string {
+  if (!name) return ''
+
+  const parts = name.split('.')
+  const last = parts.pop()
+  if (parts.join('.').length > 24) {
+    return `${parts.join('.').substring(0, 24)}...`
+  }
+  return `${parts.join('.')}.${last}`
 }
