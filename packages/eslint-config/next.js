@@ -45,7 +45,6 @@ const nextJsConfig = [
           ignoreStrings: true,
         },
       ],
-      '@typescript-eslint/no-explicit-any': ['off'],
       'no-restricted-imports': [
         'error',
         {
