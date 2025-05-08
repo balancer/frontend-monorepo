@@ -1,6 +1,6 @@
-const { defineConfig, devices } = require('@playwright/test')
-const { config } = require('dotenv')
-const { resolve } = require('path')
+import { defineConfig, devices } from '@playwright/test'
+import { config } from 'dotenv'
+import { resolve } from 'path'
 
 const isDevE2E = !!process.env.NEXT_PUBLIC_E2E_DEV
 
@@ -13,7 +13,7 @@ config({ path: resolve(__dirname, '.env.local') })
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-module.exports = defineConfig({
+export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
