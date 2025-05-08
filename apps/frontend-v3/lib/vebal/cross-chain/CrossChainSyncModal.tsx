@@ -23,13 +23,11 @@ import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverla
 import { useState } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { useCrossChainSyncSteps } from '@bal/lib/vebal/cross-chain/useCrossChainSyncSteps'
-
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { uniq } from 'lodash'
 import { getChainShortName } from '@repo/lib/config/app.config'
-
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { useCrossChainSync } from './CrossChainSyncProvider'
 import { formatUnits } from 'viem'
