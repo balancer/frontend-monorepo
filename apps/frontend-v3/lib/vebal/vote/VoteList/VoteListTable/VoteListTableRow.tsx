@@ -165,8 +165,10 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                   fontWeight="700"
                   isDisabled={isDisabled}
                   onClick={() => toggleVotingPool(vote)}
+                  rounded="md"
+                  size="xs"
                   variant={selected ? 'outline' : 'secondary'}
-                  w="80px"
+                  w="74px"
                 >
                   {selected ? 'Selected' : 'Select'}
                 </Button>

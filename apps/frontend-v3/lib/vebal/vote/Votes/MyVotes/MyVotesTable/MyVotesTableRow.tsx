@@ -37,6 +37,10 @@ import { isVotingTimeLocked } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.he
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { canReceiveIncentives, useBlacklistedVotes } from '../incentivesBlacklist'
+import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { useLastUserSlope } from '../../../useVeBALBalance'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -46,8 +50,11 @@ interface Props extends GridProps {
 }
 
 export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest }: Props) {
-  const { votedVotesWeights, editVotesWeights, onEditVotesChange } = useMyVotes()
+  const { userAddress } = useUserAccount()
+
+  const { editVotesWeights, onEditVotesChange } = useMyVotes()
   const {
+    votingPools,
     isSelectedPool,
     toggleVotingPool,
     allowChangeVotes,
@@ -71,11 +78,32 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
 
   const [fontSecondary] = useToken('colors', ['font.secondary'])
 
-  const { veBALBalance, noVeBALBalance } = useVebalUserData()
+  const { noVeBALBalance } = useVebalUserData()
+  const { slope } = useLastUserSlope(userAddress)
 
   const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true) || isGaugeExpired
 
   const { getToken } = useTokens()
+
+  const { mainnetLockedInfo } = useVebalLockInfo()
+  const lockEnd = mainnetLockedInfo.lockedEndDate
+  const { blacklistedVotes } = useBlacklistedVotes(votingPools)
+  const rewards = calculateMyVoteRewardsValue(
+    editVotesWeights[vote.id] ?? 0,
+    vote,
+    slope,
+    lockEnd,
+    totalVotes,
+    blacklistedVotes[vote.gauge.address]
+  )
+  const averageRewards = calculateMyValuePerVote(
+    editVotesWeights[vote.id] ?? 0,
+    vote,
+    slope,
+    lockEnd,
+    totalVotes,
+    blacklistedVotes[vote.gauge.address]
+  )
 
   return (
     <FadeInOnView>
@@ -112,19 +140,8 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
             </Link>
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
-            {vote.votingIncentive ? (
-              <Text>
-                {toCurrency(
-                  calculateMyVoteRewardsValue(
-                    votedVotesWeights[vote.id] ?? 0,
-                    editVotesWeights[vote.id] ?? 0,
-                    vote,
-                    veBALBalance,
-                    totalVotes
-                  ),
-                  { abbreviated: false }
-                )}
-              </Text>
+            {vote.votingIncentive && canReceiveIncentives(userAddress) ? (
+              <Text>{toCurrency(rewards, { abbreviated: false })}</Text>
             ) : (
               <Text color="red.400">&mdash;</Text>
             )}
@@ -132,19 +149,10 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
             {vote.votingIncentive ? (
               <Text>
-                {toCurrency(
-                  calculateMyValuePerVote(
-                    votedVotesWeights[vote.id] ?? 0,
-                    editVotesWeights[vote.id] ?? 0,
-                    vote,
-                    veBALBalance,
-                    totalVotes
-                  ),
-                  {
-                    abbreviated: false,
-                    forceThreeDecimals: true,
-                  }
-                )}
+                {toCurrency(averageRewards, {
+                  abbreviated: false,
+                  forceThreeDecimals: true,
+                })}
               </Text>
             ) : (
               <Text color="red.400">&mdash;</Text>

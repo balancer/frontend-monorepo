@@ -1,6 +1,6 @@
-import { oneDayInMs, toJsTimestamp } from '@repo/lib/shared/utils/time'
+import { oneDayInMs, startOfDayUtc, toJsTimestamp } from '@repo/lib/shared/utils/time'
 import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
-import { formatDistanceToNow } from 'date-fns'
+import { formatDistanceToNow, millisecondsToSeconds, nextThursday } from 'date-fns'
 import { SortingBy } from './myVotes.types'
 import BigNumber from 'bignumber.js'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
@@ -48,52 +48,66 @@ export function getUnallocatedWeight(weight: Numberish) {
   return BigNumber.max(sharesToBps(WEIGHT_MAX_VOTES).minus(weight), 0)
 }
 
-// Bribes for voted Vote (Same as defilytica - HH Rewards)
+// Bribes for voted Vote (based on defilytica - HH Rewards)
 // see: https://github.com/defilytica/balancer-tools-v2/blob/63b035b09efbe452eb2bd4fd9e2e0fc920745765/src/pages/VeBALVoter/index.tsx#L394
 export function calculateMyVoteRewardsValue(
-  oldWeight: string | number,
   newWeight: string | number,
   votingPool: VotingPoolWithData,
-  userVeBAL: bigint,
-  totalVotes: bigint
+  slope: bigint,
+  lockEnd: number | undefined,
+  totalVotes: bigint,
+  blacklistedVotes: BigNumber
 ) {
-  const currentUserVotes = calculateUserVotes(userVeBAL, oldWeight)
-  const newUserVotes = calculateUserVotes(userVeBAL, newWeight)
+  const votingPower = calculateVotingPower(slope, lockEnd)
+  const oldWeight = votingPool.gaugeVotes?.userVotes || '0'
+  const currentUserVotes = votingPower.times(bpsToPercentage(oldWeight))
+  const newUserVotes = votingPower.times(bpsToPercentage(newWeight))
 
-  const poolVoteCount = bn(formatUnits(totalVotes, 18)).times(
-    bn(votingPool.gaugeVotes?.votesNextPeriod || 0n).shiftedBy(-18)
-  )
+  const poolVoteCount = bn(formatUnits(totalVotes, 18))
+    .times(bn(votingPool.gaugeVotes?.votesNextPeriod || 0n).shiftedBy(-18))
+    .minus(blacklistedVotes.shiftedBy(-18))
+
   const totalIncentives = votingPool?.votingIncentive?.totalValue ?? 0
 
   const newPoolVoteCount = bn(poolVoteCount).minus(currentUserVotes).plus(newUserVotes)
   const valuePerVote = bn(totalIncentives).div(newPoolVoteCount)
+
   const rewardInUSD = valuePerVote.times(newUserVotes)
 
   return rewardInUSD
 }
 
 export function calculateMyValuePerVote(
-  oldWeight: string | number,
   newWeight: string | number,
   votingPool: VotingPoolWithData,
-  userVeBAL: bigint,
-  totalVotes: bigint
+  slope: bigint,
+  lockEnd: number | undefined,
+  totalVotes: bigint,
+  blacklistedVotes: BigNumber
 ) {
-  const newUserVotes = calculateUserVotes(userVeBAL, newWeight)
+  const votingPower = calculateVotingPower(slope, lockEnd)
+  const newUserVotes = votingPower.times(bpsToPercentage(newWeight))
   const myRewards = calculateMyVoteRewardsValue(
-    oldWeight,
     newWeight,
     votingPool,
-    userVeBAL,
-    totalVotes
+    slope,
+    lockEnd,
+    totalVotes,
+    blacklistedVotes
   )
 
   return bn(myRewards).div(newUserVotes)
 }
 
-function calculateUserVotes(veBALAmount: bigint, weight: string | number) {
-  const percentage = bpsToPercentage(weight)
-  return bn(formatUnits(veBALAmount, 18)).times(percentage)
+function calculateVotingPower(slope: bigint, lockEnd: number | undefined) {
+  if (!lockEnd) return bn(0)
+
+  const nextVoteTimestamp = millisecondsToSeconds(startOfDayUtc(nextThursday(new Date())).getTime())
+  const lockEndInSeconds = millisecondsToSeconds(lockEnd)
+
+  return bn(slope)
+    .shiftedBy(-18)
+    .times(lockEndInSeconds - nextVoteTimestamp)
 }
 
 export const orderByHash: Record<SortingBy, { label: string; title?: string }> = {
@@ -109,6 +123,8 @@ export const orderByHash: Record<SortingBy, { label: string; title?: string }> =
   },
   currentVotes: {
     label: 'Current votes',
+    title:
+      'Your previously confirmed votes. Your confirmed votes are timelocked for 10 days and cannot be changed during this period.',
   },
   editVotes: {
     label: 'Edit votes',
