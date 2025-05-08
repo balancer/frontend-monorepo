@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useTokenSelectList } from './useTokenSelectList'
 import { GroupedVirtuoso, GroupedVirtuosoHandle } from 'react-virtuoso'
-import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { useAppKit } from '@reown/appkit/react'
 import { CoinsIcon } from '@repo/lib/shared/components/icons/CoinsIcon'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { useTokens } from '../../TokensProvider'
@@ -176,7 +176,7 @@ export function TokenSelectList({
     pinNativeAsset,
     searchTerm
   )
-  const { openConnectModal } = useConnectModal()
+  const { open } = useAppKit()
 
   const tokensWithBalance = isConnected
     ? orderedTokens.filter(token => balanceFor(token)?.amount)
@@ -192,7 +192,7 @@ export function TokenSelectList({
       hasNoTokensInWallet={!tokensWithBalance.length}
       isConnected={isConnected}
       key="in-your-wallet"
-      openConnectModal={openConnectModal}
+      openConnectModal={open}
     />,
     <OtherTokens key="other-tokens" />,
   ]

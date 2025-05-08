@@ -60,9 +60,6 @@
         "react": "^18.0.0",
         "react-dom": "^18.0.0"
       }
-    },
-    "patchedDependencies": {
-      "@rainbow-me/rainbowkit": "patches/@rainbow-me__rainbowkit.patch"
     }
   }
 }

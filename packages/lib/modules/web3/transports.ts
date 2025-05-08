@@ -1,14 +1,13 @@
 'use client'
 
-import { Chain } from '@rainbow-me/rainbowkit'
-import { fallback, http } from 'wagmi'
+import { AppKitNetwork } from '@reown/appkit/networks'
 import { getGqlChain, shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { SupportedChainId } from '@repo/lib/config/config.types'
-
-import { chains, getDefaultRpcUrl, rpcFallbacks, rpcOverrides } from './ChainConfig'
 import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { fallback, http } from 'wagmi'
+import { chains, getDefaultRpcUrl, rpcFallbacks, rpcOverrides } from './ChainConfig'
 
-export function getTransports(chain: Chain) {
+export function getTransports(chain: AppKitNetwork) {
   const gqlChain = getGqlChain(chain.id as SupportedChainId)
   const overrideRpcUrl = rpcOverrides[gqlChain]
   const fallbackRpcUrl = rpcFallbacks[gqlChain]

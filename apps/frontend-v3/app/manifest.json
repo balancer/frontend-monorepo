@@ -17,5 +17,8 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "iconPath": "/images/icons/balancer.svg",
+  "safe_apps_permissions": [],
+  "categories": ["finance", "defi"]
 }

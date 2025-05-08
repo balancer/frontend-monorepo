@@ -150,12 +150,7 @@ export function NavActions({
         display: { base: 'none', lg: 'block' },
       },
       {
-        el: (
-          <ConnectWallet
-            connectLabel={allowCreateWallet ? 'Connect' : 'Connect wallet'}
-            showCreateWalletButton={allowCreateWallet}
-          />
-        ),
+        el: <ConnectWallet connectLabel={allowCreateWallet ? 'Connect' : 'Connect wallet'} />,
         display: { base: 'block', lg: 'block' },
       },
       {

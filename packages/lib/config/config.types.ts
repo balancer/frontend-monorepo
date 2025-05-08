@@ -1,6 +1,5 @@
 import { Address } from 'viem'
 import { GqlChain, GqlPoolType } from '../shared/services/api/generated/graphql'
-import { chains } from '@repo/lib/modules/web3/ChainConfig'
 import { PoolIssue } from '../modules/pool/alerts/pool-issues/PoolIssue.type'
 import { SupportedWrapHandler } from '../modules/swap/swap.types'
 import { PartnerVariant, PoolDisplayType } from '../modules/pool/pool.types'
@@ -87,7 +86,8 @@ export interface BlockExplorerConfig {
   name: string
 }
 
-export type SupportedChainId = (typeof chains)[number]['id']
+// TODO: does it really add anything?
+export type SupportedChainId = number
 
 export interface NetworkConfig {
   chainId: SupportedChainId

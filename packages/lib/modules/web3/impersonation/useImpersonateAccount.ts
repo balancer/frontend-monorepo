@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
+import { queryClient } from '@repo/lib/shared/app/react-query.provider'
 import { useSetErc20Balance } from '@repo/lib/test/anvil/useSetErc20Balance'
 import { defaultManualForkOptions } from '@repo/lib/test/utils/wagmi/fork-options'
 import {
@@ -12,13 +13,12 @@ import {
 import { useEffect, useRef } from 'react'
 import { Address } from 'viem'
 import { useConnect } from 'wagmi'
-import { impersonateWagmiConfig, WagmiConfig } from '../WagmiConfig'
-import { useWagmiConfig } from '../WagmiConfigProvider'
-import { queryClient } from '@repo/lib/shared/app/react-query.provider'
+import { impersonateWagmiConfig } from '../WagmiSetup'
+import { useWagmiSetup } from '../WagmiSetupProvider'
 
 export function useImpersonateAccount() {
   const { connectAsync } = useConnect()
-  const { wagmiConfig } = useWagmiConfig()
+  const { wagmiSetup: wagmiAdapter } = useWagmiSetup()
   const setBalance = useSetErc20Balance()
 
   // Tracks current impersonated address stored in local storage (used to auto-reconnect)
@@ -57,27 +57,25 @@ export function useImpersonateAccount() {
     setImpersonatedAddressLS(impersonatedAddress)
 
     // E2E dev tests impersonate account in the fork to be able to sign and run transactions against the anvil fork
-    if (shouldUseAnvilFork) {
-      await forkClient.impersonateAccount({
-        address: impersonatedAddress,
-      })
+    await forkClient.impersonateAccount({
+      address: impersonatedAddress,
+    })
 
-      const { chainId } = await getOptions()
+    const { chainId } = await getOptions()
 
-      console.log('🥸 Impersonating with ', {
-        impersonatedAddress,
-        chainId,
-      })
+    console.log('🥸 Impersonating with ', {
+      impersonatedAddress,
+      chainId,
+    })
 
-      await setForkBalances({
-        impersonatedAddress,
-        wagmiConfig: updatedConfig,
-        isReconnecting,
-      })
+    await setForkBalances({
+      impersonatedAddress,
+      wagmiAdapter: updatedConfig,
+      isReconnecting,
+    })
 
-      // if you don't pass chainId you will be prompted to switch chain (check if it uses mainnet by default)
-      await connectAsync({ connector: connectors[connectors.length - 1], chainId })
-    }
+    // if you don't pass chainId you will be prompted to switch chain (check if it uses mainnet by default)
+    await connectAsync({ connector: connectors[connectors.length - 1], chainId })
   }
 
   async function reset() {
@@ -88,7 +86,7 @@ export function useImpersonateAccount() {
     await forkClient.reset()
     await setForkBalances({
       impersonatedAddress: storedImpersonatedAddress.current as Address,
-      wagmiConfig,
+      wagmiAdapter,
     })
     queryClient.invalidateQueries()
   }
@@ -108,18 +106,18 @@ export function useImpersonateAccount() {
 
   async function setForkBalances({
     impersonatedAddress,
-    wagmiConfig,
+    wagmiAdapter,
     isReconnecting = false,
   }: {
     impersonatedAddress: Address
-    wagmiConfig: WagmiConfig
+    wagmiAdapter: WagmiAdapter
     isReconnecting?: boolean
   }) {
     const { forkBalances, chainId } = await getOptions()
     if (forkBalances[chainId] && !isReconnecting) {
       await setTokenBalances({
         impersonatedAddress,
-        wagmiConfig,
+        wagmiConfig: wagmiAdapter.wagmiConfig,
         setBalance,
         tokenBalances: forkBalances,
         chainId,
