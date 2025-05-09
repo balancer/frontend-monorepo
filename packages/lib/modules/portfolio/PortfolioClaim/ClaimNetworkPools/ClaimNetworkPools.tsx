@@ -39,9 +39,7 @@ export function ClaimNetworkPools() {
     return null
   }
 
-  const poolsWithChain = Object.entries(poolsByChainMap)
-
-  poolsWithChain.sort(
+  const poolsWithChain = Object.entries(poolsByChainMap).sort(
     (a, b) =>
       (totalFiatClaimableBalanceByChain[b[0]]?.toNumber() || 0) -
       (totalFiatClaimableBalanceByChain[a[0]]?.toNumber() || 0)
