@@ -57,7 +57,7 @@ import { ProtocolVersion } from '../pool/pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ApiToken } from '../tokens/token.types'
 
-export type UseSwapResponse = ReturnType<typeof _useSwap>
+export type UseSwapResponse = ReturnType<typeof useSwapLogic>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
 
 export type PathParams = {
@@ -96,7 +96,7 @@ export type SwapProviderProps = {
   pool?: Pool
   poolActionableTokens?: ApiToken[]
 }
-export function _useSwap({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
+export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
   const isPoolSwapUrl = useIsPoolSwapUrl()
 
@@ -666,7 +666,7 @@ type Props = PropsWithChildren<{
 }>
 
 export function SwapProvider({ params, children }: Props) {
-  const hook = _useSwap(params)
+  const hook = useSwapLogic(params)
   return <SwapContext.Provider value={hook}>{children}</SwapContext.Provider>
 }
 

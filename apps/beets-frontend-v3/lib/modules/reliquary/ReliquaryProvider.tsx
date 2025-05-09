@@ -14,7 +14,7 @@ import { useClaimRewardsSteps } from './hooks/useClaimRewardsSteps'
 
 const CHAIN = GqlChain.Sonic
 
-export function _useReliquary() {
+export function useReliquaryLogic() {
   const { isConnected } = useUserAccount()
   const { hasValidationError, getValidationError } = useTokenInputsValidation()
   const [range, setRange] = useState<GqlPoolSnapshotDataRange>(GqlPoolSnapshotDataRange.ThirtyDays)
@@ -53,11 +53,11 @@ export function _useReliquary() {
   }
 }
 
-export type Result = ReturnType<typeof _useReliquary>
+export type Result = ReturnType<typeof useReliquaryLogic>
 export const ReliquaryContext = createContext<Result | null>(null)
 
 export function ReliquaryProvider({ children }: PropsWithChildren) {
-  const Reliquary = _useReliquary()
+  const Reliquary = useReliquaryLogic()
 
   return <ReliquaryContext.Provider value={Reliquary}>{children}</ReliquaryContext.Provider>
 }

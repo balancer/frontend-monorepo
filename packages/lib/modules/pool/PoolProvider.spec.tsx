@@ -3,7 +3,7 @@ import { defaultPoolMock, defaultPoolResponseMock } from '@repo/lib/test/msw/han
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
 import { BaseVariant } from './pool.types'
-import { _usePool } from './PoolProvider'
+import { usePoolLogic } from './PoolProvider'
 import { defaultTestGaugeAddress } from '@repo/lib/test/msw/builders/gqlStaking.builders'
 
 async function testUsePool({
@@ -12,7 +12,7 @@ async function testUsePool({
   initialData?: GetPoolQuery
 } = {}) {
   const { result } = testHook(() => {
-    return _usePool({
+    return usePoolLogic({
       id: poolId,
       chain: GqlChain.Mainnet,
       variant: BaseVariant.v2,
