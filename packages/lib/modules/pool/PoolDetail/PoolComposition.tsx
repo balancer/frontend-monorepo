@@ -133,7 +133,6 @@ export function PoolComposition() {
     if (cardRef.current) {
       setHeight(cardRef.current.offsetHeight)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

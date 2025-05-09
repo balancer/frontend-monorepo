@@ -2,6 +2,7 @@
   "name": "@repo/test",
   "version": "0.0.0",
   "license": "MIT",
+  "type": "module",
   "devDependencies": {
     "@apollo/client": "^3.13.1",
     "@repo/eslint-config": "workspace:*",
@@ -10,8 +11,11 @@
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.3.0",
     "@types/node": "22.13.5",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
     "@viem/anvil": "^0.0.10",
     "cross-fetch": "4.1.0",
+    "eslint": "^9.0.0",
     "viem": "2.29.0",
     "wagmi": "2.15.1"
   },

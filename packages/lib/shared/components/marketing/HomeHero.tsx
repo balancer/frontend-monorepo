@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unknown-property */
 'use client'
 
 import { Button, Heading, Text, VStack, Flex, Box, useToken } from '@chakra-ui/react'

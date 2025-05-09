@@ -45,8 +45,6 @@ export function useExpiredGauges({ gaugeAddresses }: UseExpiredGaugesParams) {
       const isKilled = (expiredGaugesQuery.data ?? [])[index]
       return isKilled.result
     })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expiredGaugesQuery.data, expiredGaugesQuery.isLoading, gaugeAddresses])
 
   return {

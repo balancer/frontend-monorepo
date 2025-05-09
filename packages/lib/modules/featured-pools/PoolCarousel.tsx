@@ -1,7 +1,7 @@
 'use client'
 
 import { GetFeaturedPoolsQuery } from '@repo/lib/shared/services/api/generated/graphql'
-import { useState } from 'react'
+import { useState, type JSX } from 'react'
 import { Box, BoxProps, Card, Center, Text } from '@chakra-ui/react'
 import { FeaturePoolCard } from './FeaturePoolCard'
 import { Pool } from '../pool/pool.types'

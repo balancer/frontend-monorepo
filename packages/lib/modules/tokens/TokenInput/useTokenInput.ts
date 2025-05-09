@@ -31,7 +31,9 @@ export function useTokenInput({
 
   function updateValue(value: string) {
     const safeValue = overflowProtected(value, token?.decimals || 18)
-    parentOnChange && parentOnChange({ currentTarget: { value: safeValue } })
+    if (parentOnChange) {
+      parentOnChange({ currentTarget: { value: safeValue } })
+    }
   }
 
   function validateInput(value: string) {

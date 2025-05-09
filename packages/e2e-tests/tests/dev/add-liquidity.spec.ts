@@ -23,7 +23,7 @@ test('Adds liquidity in balWeth8020', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'ETH ETH' })).toBeVisible({ timeout: 20000 })
   await page.getByPlaceholder('0.00').nth(1).fill('0.01')
   await page.getByText('I accept the risks of').click({ timeout: 20000 })
-  await page.getByRole('button', { name: 'Next' }).click()
+  await page.getByRole('button', { name: 'Next', exact: true }).click()
 
   // Run transaction and wait for confirmation
   await page.getByRole('button', { name: 'Add liquidity' }).click()
@@ -57,7 +57,7 @@ test('Adds liquidity in tri-boosted aave pool (Aave GHO/USDT/USDC)', async ({ pa
   // Fill 100 GHO
   await page.getByPlaceholder('0.00').nth(1).fill('100')
   await page.getByText('I accept the risks of').click({ timeout: 20000 })
-  await page.getByRole('button', { name: 'Next' }).click()
+  await page.getByRole('button', { name: 'Next', exact: true }).click()
 
   await page.getByRole('button', { name: 'GHO: Approve Permit' }).click()
   await page.getByRole('button', { name: 'Sign permit: GHO' }).click()

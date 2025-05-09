@@ -117,7 +117,7 @@ export class ReliquaryProportionalAddLiquidityHandler extends BaseProportionalAd
     relicId?: number
     amount: bigint
   }) {
-    return relicId && typeof relicId !== undefined
+    return relicId !== undefined && relicId !== null
       ? this.batchRelayerService.reliquaryEncodeDeposit({
           sender: networkConfig.contracts.balancer.relayerV6,
           token: '0x10ac2f9dae6539e77e372adb14b1bf8fbd16b3e8', // TODO: add to config

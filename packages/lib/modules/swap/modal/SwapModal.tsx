@@ -11,7 +11,6 @@ import { capitalize } from 'lodash'
 import { ActionModalFooter } from '../../../shared/components/modals/ActionModalFooter'
 import { TransactionModalHeader } from '../../../shared/components/modals/TransactionModalHeader'
 import { chainToSlugMap } from '../../pool/pool.utils'
-// eslint-disable-next-line max-len
 import { getStylesForModalContentWithStepTracker } from '../../transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useResetStepIndexOnOpen } from '../../pool/actions/useResetStepIndexOnOpen'
@@ -26,7 +25,7 @@ type Props = {
   isOpen: boolean
   onClose(): void
   onOpen(): void
-  finalFocusRef?: RefObject<HTMLInputElement>
+  finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function SwapPreviewModal({

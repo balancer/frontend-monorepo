@@ -9,9 +9,7 @@ import * as Sentry from '@sentry/nextjs'
 import { waitFor } from '@testing-library/react'
 import sentryTestkit from 'sentry-testkit'
 import { recoveryPoolMock } from '../../modules/pool/__mocks__/recoveryPoolMock'
-// eslint-disable-next-line max-len
 import { Extras } from '@sentry/types'
-// eslint-disable-next-line max-len
 import { RecoveryRemoveLiquidityHandler } from '../../modules/pool/actions/remove-liquidity/handlers/RecoveryRemoveLiquidity.handler'
 import { UnbalancedAddLiquidityV2Handler } from '@repo/lib/modules/pool/actions/add-liquidity/handlers/UnbalancedAddLiquidityV2.handler'
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'

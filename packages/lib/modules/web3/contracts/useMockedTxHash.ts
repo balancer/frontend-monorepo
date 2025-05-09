@@ -34,7 +34,6 @@ function getRandomTransactionHash() {
 
 export function useMockedTxHash() {
   // simulate transaction success using existing transaction (dev only)
-  // eslint-disable-next-line react/hook-use-state
   const [mockedTxHash, _setMockedTxHash] = useState<Hash | undefined>(undefined)
 
   return {

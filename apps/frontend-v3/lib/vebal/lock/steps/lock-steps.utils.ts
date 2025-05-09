@@ -114,7 +114,6 @@ export function getConfirmedLabel(
 
   switch (lockActionType) {
     case LockActionType.CreateLock:
-      // eslint-disable-next-line max-len
       return `Lock created for ${fNum('token', formattedAmount)} tokens until ${format(new Date(lockEndDate), PRETTY_DATE_FORMAT)}`
     case LockActionType.ExtendLock:
       return `Lock extended until ${format(new Date(lockEndDate), PRETTY_DATE_FORMAT)}`

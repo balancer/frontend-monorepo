@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
 import { Pool } from './pool.types'
 import { getApiPoolMock } from './__mocks__/api-mocks/api-mocks'
 import { v3SepoliaNestedBoostedMock } from './__mocks__/api-mocks/v3SepoliaNestedBoostedMock'

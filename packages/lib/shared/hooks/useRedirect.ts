@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from 'next/navigation'
 import { MouseEvent } from 'react'
 
