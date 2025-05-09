@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export function DiscordIcon({ size = 24 }: { size?: number }) {
   return (
     <svg
