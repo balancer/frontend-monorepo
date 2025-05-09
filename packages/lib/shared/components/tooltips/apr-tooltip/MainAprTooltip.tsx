@@ -16,7 +16,7 @@ import StarsIcon from '../../icons/StarsIcon'
 import { PoolListItem } from '@repo/lib/modules/pool/pool.types'
 import { FeaturedPool } from '@repo/lib/modules/pool/PoolProvider'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
-import { isLBP } from '@repo/lib/modules/pool/pool.helpers'
+import { isLBP, isQuantAmmPool } from '@repo/lib/modules/pool/pool.helpers'
 import { GqlPoolAprItemType } from '@repo/lib/shared/services/api/generated/graphql'
 import StarIcon from '../../icons/StarIcon'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -133,7 +133,8 @@ function MainAprTooltip({
   id,
   ...props
 }: Props) {
-  const aprToShow = apr || getTotalAprLabel(pool.dynamicData.aprItems, vebalBoost)
+  const canBeNegative = isQuantAmmPool(pool.type)
+  const aprToShow = apr || getTotalAprLabel(pool.dynamicData.aprItems, vebalBoost, canBeNegative)
   const hoverColor = isLBP(pool.type) ? 'inherit' : 'font.highlight'
 
   const customPopoverContent = isLBP(pool.type) ? (

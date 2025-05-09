@@ -14,11 +14,13 @@ import {
 } from '@repo/lib/shared/components/modals/PartnerRedirectModal'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isQuantAmmPool } from '../../../pool.helpers'
 
 export function StakingOptions() {
   const { chain, pool } = usePool()
 
   const { projectName, projectId } = PROJECT_CONFIG
+  const canBeNegative = isQuantAmmPool(pool.type)
 
   const canStake = !!pool.staking
   const stakePath = getPoolActionPath({
@@ -40,7 +42,8 @@ export function StakingOptions() {
               <Text color="font.primary" fontSize="md" fontWeight="bold">
                 {/* SHOULD WE USE MAX APR instead of the range?? */}
                 {/* {fNum('apr', totalApr)} */}
-                {getTotalAprLabel(pool.dynamicData.aprItems)}
+                {/* skip vebal boost here */}
+                {getTotalAprLabel(pool.dynamicData.aprItems, undefined, canBeNegative)}
               </Text>
               <Icon as={StarsIcon} height="20px" width="20px" />
             </HStack>

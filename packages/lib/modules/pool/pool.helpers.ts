@@ -136,6 +136,10 @@ export function isCowAmmPool(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.CowAmm
 }
 
+export function isQuantAmmPool(poolType: GqlPoolType): boolean {
+  return poolType === GqlPoolType.QuantAmmWeighted
+}
+
 export function noInitLiquidity(pool: GqlPoolBase): boolean {
   // Uncomment to DEBUG
   // if (
