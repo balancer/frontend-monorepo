@@ -16,10 +16,10 @@ import { useClaimsData } from '../claim/useClaimsData'
 import { useClaimAndUnstakeSteps } from './useClaimAndUnstakeSteps'
 import { getUnstakeQuote } from '../stake.helpers'
 
-export type UseUnstakeResponse = ReturnType<typeof _useUnstake>
+export type UseUnstakeResponse = ReturnType<typeof useUnstakeLogic>
 export const UnstakeContext = createContext<UseUnstakeResponse | null>(null)
 
-export function _useUnstake() {
+export function useUnstakeLogic() {
   // State so that we can maintain the amounts in the modal after confirmation.
   const [quoteAmountOut, setQuoteAmountOut] = useState<HumanAmount>('0')
   const [quoteRewardAmounts, setQuoteRewardAmounts] = useState<HumanTokenAmount[]>([])
@@ -97,7 +97,7 @@ export function _useUnstake() {
 }
 
 export function UnstakeProvider({ children }: PropsWithChildren) {
-  const hook = _useUnstake()
+  const hook = useUnstakeLogic()
   return <UnstakeContext.Provider value={hook}>{children}</UnstakeContext.Provider>
 }
 

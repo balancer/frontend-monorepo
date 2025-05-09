@@ -4,10 +4,10 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
 import { HooksMetadata } from './getHooksMetadata'
 
-export type UseHooksResult = ReturnType<typeof _useHooks>
+export type UseHooksResult = ReturnType<typeof useHooksLogic>
 export const HooksContext = createContext<UseHooksResult | null>(null)
 
-export function _useHooks(metadata: HooksMetadata[] | undefined) {
+export function useHooksLogic(metadata: HooksMetadata[] | undefined) {
   return { metadata }
 }
 
@@ -15,7 +15,7 @@ export function HooksProvider({
   children,
   data,
 }: PropsWithChildren & { data: HooksMetadata[] | undefined }) {
-  const hook = _useHooks(data)
+  const hook = useHooksLogic(data)
   return <HooksContext.Provider value={hook}>{children}</HooksContext.Provider>
 }
 

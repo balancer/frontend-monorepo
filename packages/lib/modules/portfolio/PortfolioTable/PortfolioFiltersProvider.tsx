@@ -17,9 +17,9 @@ import { usePortfolio } from '../PortfolioProvider'
 import { poolTypeLabel } from '../../pool/pool.helpers'
 import { hasTinyBalance } from '../../pool/user-balance.helpers'
 
-export type UsePortfolioFiltersResult = ReturnType<typeof _usePortfolioFilters>
+export type UsePortfolioFiltersResult = ReturnType<typeof usePortfolioFiltersLogic>
 
-function _usePortfolioFilters() {
+export function usePortfolioFiltersLogic() {
   const [selectedNetworks, setSelectedNetworks] = useState<GqlChain[]>([])
   const [selectedPoolTypes, setSelectedPoolTypes] = useState<PoolFilterType[]>([])
   const [selectedStakingTypes, setSelectedStakingTypes] = useState<StakingFilterKeyType[]>([])
@@ -200,7 +200,7 @@ function _usePortfolioFilters() {
 export const PortfolioFiltersContext = createContext<UsePortfolioFiltersResult | null>(null)
 
 export function PortfolioFiltersProvider({ children }: { children: React.ReactNode }) {
-  const filters = _usePortfolioFilters()
+  const filters = usePortfolioFiltersLogic()
 
   return (
     <PortfolioFiltersContext.Provider value={filters}>{children}</PortfolioFiltersContext.Provider>

@@ -101,7 +101,7 @@ function GlobalProviders({ children }: PropsWithChildren) {
  * @param hookResult is the result of calling renderHookWithDefaultProviders
  *
  *  Example:
- *    const { result, waitForLoadedUseQuery } = testHook(() => _useMyHookUnderTest())
+ *    const { result, waitForLoadedUseQuery } = testHook(() => useMyHookUnderTestLogic())
  *    await waitForLoadedUseQuery(result)
  *
  */

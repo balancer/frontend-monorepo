@@ -24,12 +24,12 @@ import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { PoolToken } from '../pool/pool.types'
 import { ApiToken } from './token.types'
 
-export type UseTokensResult = ReturnType<typeof _useTokens>
+export type UseTokensResult = ReturnType<typeof useTokensLogic>
 export const TokensContext = createContext<UseTokensResult | null>(null)
 
 export type GetTokenFn = (address: string, chain: GqlChain) => ApiToken | undefined
 
-export function _useTokens(
+export function useTokensLogic(
   initTokenData: GetTokensQuery,
   initTokenPricesData: GetTokenPricesQuery,
   variables: GetTokensQueryVariables
@@ -198,7 +198,7 @@ export function TokensProvider({
   tokenPricesData: GetTokenPricesQuery
   variables: GetTokensQueryVariables
 }) {
-  const tokens = _useTokens(tokensData, tokenPricesData, variables)
+  const tokens = useTokensLogic(tokensData, tokenPricesData, variables)
 
   return <TokensContext.Provider value={tokens}>{children}</TokensContext.Provider>
 }
