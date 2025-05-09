@@ -5,57 +5,76 @@ import { GqlChain, GqlPoolType } from '@repo/lib/shared/services/api/generated/g
 import { millisecondsToSeconds, subDays } from 'date-fns'
 import { Address } from 'viem'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { testHook } from '@repo/lib/test/utils/custom-renderers'
+import { waitFor } from '@testing-library/react'
 
 const one_month_ago = subDays(new Date(), 30)
+
+function renderHook(
+  votingPools: VotingPoolWithData[],
+  myVotes: VotingPoolWithData[],
+  userVotingPower: BigNumber,
+  totalVotes: BigNumber,
+  blacklistedVotes: Record<Address, BigNumber>,
+  inputsLoading: boolean
+) {
+  const { result } = testHook(() =>
+    useIncentivesOptimized(
+      votingPools,
+      myVotes,
+      userVotingPower,
+      totalVotes,
+      blacklistedVotes,
+      inputsLoading
+    )
+  )
+
+  return result
+}
 
 describe('Incentives optimization', () => {
   it('should return loading when input votes and pools still loading', () => {
     const inputLoading = true
 
-    const result = useIncentivesOptimized([], [], bn(1), bn(100), {}, inputLoading)
+    const result = renderHook([], [], bn(1), bn(100), {}, inputLoading)
 
-    expect(result.isLoading).toBe(true)
+    expect(result.current.isLoading).toBe(true)
   })
 
-  it('should filter out time locked votes', () => {
+  it('should filter out time locked votes', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
     pool2.votingIncentive = incentivesWithAmount(10)
     const timelockedVote = timelock(vote(pool1, 0.05, new Date()))
 
-    const result = useIncentivesOptimized(
-      [pool1, pool2],
-      [timelockedVote],
-      bn(1),
-      bn(100),
-      {},
-      false
-    )
-    const vote1 = getVote(result, pool1.gauge.address as Address)
-    const vote2 = getVote(result, pool2.gauge.address as Address)
+    const result = renderHook([pool1, pool2], [timelockedVote], bn(1), bn(100), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    const vote1 = getVote(result.current, pool1.gauge.address as Address)
+    const vote2 = getVote(result.current, pool2.gauge.address as Address)
 
-    expect(result.votes.length).toBe(2)
+    expect(result.current.votes.length).toBe(2)
     expect(vote1?.votePrct).toBe(0.0)
     expect(vote2?.votePrct).toBe(0.95)
   })
 
-  it('should zero out killed pools', () => {
+  it('should zero out killed pools', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     const killedPool = kill(pool1)
     const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
     pool2.votingIncentive = incentivesWithAmount(10)
     const vote1 = vote(pool1, 0.05, one_month_ago)
 
-    const result = useIncentivesOptimized([killedPool, pool2], [vote1], bn(1), bn(100), {}, false)
-    const killedPoolVote = getVote(result, killedPool.gauge.address as Address)
-    const vote2 = getVote(result, pool2.gauge.address as Address)
+    const result = renderHook([killedPool, pool2], [vote1], bn(1), bn(100), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    const killedPoolVote = getVote(result.current, killedPool.gauge.address as Address)
+    const vote2 = getVote(result.current, pool2.gauge.address as Address)
 
-    expect(result.votes.length).toBe(2)
+    expect(result.current.votes.length).toBe(2)
     expect(killedPoolVote?.votePrct).toBe(0.0)
     expect(vote2?.votePrct).toBe(1.0)
   })
 
-  it('should distribute votes to the pool with biggest reward / vote', () => {
+  it('should distribute votes to the pool with biggest reward / vote', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     setPoolVotes(pool1, 0.5)
     pool1.votingIncentive = incentivesWithAmount(10)
@@ -63,14 +82,15 @@ describe('Incentives optimization', () => {
     setPoolVotes(pool2, 0.5)
     pool2.votingIncentive = incentivesWithAmount(100)
 
-    const result = useIncentivesOptimized([pool1, pool2], [], bn(1), bn(100), {}, false)
-    const vote2 = getVote(result, pool2.gauge.address as Address)
+    const result = renderHook([pool1, pool2], [], bn(1), bn(100), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    const vote2 = getVote(result.current, pool2.gauge.address as Address)
 
-    expect(result.votes.length).toBe(1)
+    expect(result.current.votes.length).toBe(1)
     expect(vote2?.votePrct).toBe(1.0)
   })
 
-  it('should remove old votes from gauges total', () => {
+  it('should remove old votes from gauges total', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     setPoolVotes(pool1, 0.5)
     pool1.votingIncentive = incentivesWithAmount(100)
@@ -79,14 +99,15 @@ describe('Incentives optimization', () => {
     pool2.votingIncentive = incentivesWithAmount(100)
     const vote1 = vote(pool1, 1.0, one_month_ago)
 
-    const result = useIncentivesOptimized([pool1, pool2], [vote1], bn(1), bn(100), {}, false)
-    const vote1Updated = getVote(result, pool1.gauge.address as Address)
+    const result = renderHook([pool1, pool2], [vote1], bn(1), bn(100), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    const vote1Updated = getVote(result.current, pool1.gauge.address as Address)
 
-    expect(result.votes.length).toBe(1)
+    expect(result.current.votes.length).toBe(1)
     expect(vote1Updated?.votePrct).toBe(1.0)
   })
 
-  it('should remove blacklisted votes from gauges total', () => {
+  it('should remove blacklisted votes from gauges total', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     setPoolVotes(pool1, 0.5)
     pool1.votingIncentive = incentivesWithAmount(100)
@@ -95,27 +116,22 @@ describe('Incentives optimization', () => {
     pool2.votingIncentive = incentivesWithAmount(100)
     const blacklistedVotes = { '0xd75026f8723b94d9a360a282080492d905c6a559': bn(1) }
 
-    const result = useIncentivesOptimized(
-      [pool1, pool2],
-      [],
-      bn(1),
-      bn(100),
-      blacklistedVotes,
-      false
-    )
-    const vote2 = getVote(result, pool2.gauge.address as Address)
+    const result = renderHook([pool1, pool2], [], bn(1), bn(100), blacklistedVotes, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    const vote2 = getVote(result.current, pool2.gauge.address as Address)
 
-    expect(result.votes.length).toBe(1)
+    expect(result.current.votes.length).toBe(1)
     expect(vote2?.votePrct).toBe(1.0)
   })
 
-  it('should calculate the amount of incentives', () => {
+  it('should calculate the amount of incentives', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     setPoolVotes(pool1, 0.0)
     pool1.votingIncentive = incentivesWithAmount(100)
 
-    const result = useIncentivesOptimized([pool1], [], bn(1), bn(0), {}, false)
-    const vote1 = getVote(result, pool1.gauge.address as Address)
+    const result = renderHook([pool1], [], bn(1), bn(0), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+    const vote1 = getVote(result.current, pool1.gauge.address as Address)
 
     expect(vote1?.incentivesAmount).toBe(100)
   })

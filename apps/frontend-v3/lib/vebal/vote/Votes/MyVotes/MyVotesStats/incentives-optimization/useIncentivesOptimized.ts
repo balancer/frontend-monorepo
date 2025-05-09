@@ -3,6 +3,7 @@ import { Address } from 'viem'
 import { isVotingTimeLocked } from '../../myVotes.helpers'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { Element, heap, push, pop, Heap } from './heap'
+import { useQuery } from '@tanstack/react-query'
 
 type OptimizedVote = {
   gaugeAddress: Address
@@ -32,8 +33,31 @@ export function useIncentivesOptimized(
   blacklistedVotes: Record<Address, BigNumber>,
   inputsLoading: boolean
 ): OptimizedVotes {
-  if (inputsLoading) return { votes: [], isLoading: true }
+  const { data, isPending } = useQuery({
+    queryKey: ['optimized-incentives'],
+    queryFn: () =>
+      calculateIncentivesOptimized(
+        votingPools,
+        myVotes,
+        userVotingPower,
+        totalVotes,
+        blacklistedVotes
+      ),
+    enabled: !inputsLoading,
+  })
 
+  const votes = data || []
+
+  return { votes, isLoading: isPending }
+}
+
+export function calculateIncentivesOptimized(
+  votingPools: VotingPoolWithData[],
+  myVotes: VotingPoolWithData[],
+  userVotingPower: BigNumber,
+  totalVotes: BigNumber,
+  blacklistedVotes: Record<Address, BigNumber>
+): OptimizedVote[] {
   const [timelockedVotes, timelockedPrct] = filterTimelockedVotes(myVotes)
 
   let prctToDistribute = bn(1).minus(timelockedPrct)
@@ -64,7 +88,7 @@ export function useIncentivesOptimized(
 
   const votes = mergeOptimizedVotes(resetVotes(myVotes), prioritizedPools, userVotingPower)
 
-  return { votes, isLoading: false }
+  return votes
 }
 
 function findByGaugeAddress(voteOrPools: VotingPoolWithData[], gaugeAddress: Address) {
