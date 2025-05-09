@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react-hooks/rules-of-hooks */
 
 'use client'
 
@@ -40,10 +39,10 @@ import { useIsMinimumDepositMet } from './useIsMinimumDepositMet'
 import { useWrapUnderlying } from '../useWrapUnderlying'
 import { useProportionalSlippage } from './form/useProportionalSlippage'
 
-export type UseAddLiquidityResponse = ReturnType<typeof _useAddLiquidity>
+export type UseAddLiquidityResponse = ReturnType<typeof useAddLiquidityLogic>
 export const AddLiquidityContext = createContext<UseAddLiquidityResponse | null>(null)
 
-export function _useAddLiquidity(urlTxHash?: Hash) {
+export function useAddLiquidityLogic(urlTxHash?: Hash) {
   const [humanAmountsIn, setHumanAmountsIn] = useState<HumanTokenAmountWithAddress[]>([])
   // only used by Proportional handlers that require a referenceAmount
   const [referenceAmountAddress, setReferenceAmountAddress] = useState<Address | undefined>()
@@ -272,7 +271,7 @@ type Props = PropsWithChildren<{
 }>
 
 export function AddLiquidityProvider({ urlTxHash, children }: Props) {
-  const hook = _useAddLiquidity(urlTxHash)
+  const hook = useAddLiquidityLogic(urlTxHash)
   return <AddLiquidityContext.Provider value={hook}>{children}</AddLiquidityContext.Provider>
 }
 

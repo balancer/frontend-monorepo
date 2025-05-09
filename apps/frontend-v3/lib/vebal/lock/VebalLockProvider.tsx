@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -16,7 +14,7 @@ import { getPreviousThursday, oneYearInSecs } from '@repo/lib/shared/utils/time'
 import BigNumber from 'bignumber.js'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
 
-export type UseVebalLockResult = ReturnType<typeof _useVebalLock>
+export type UseVebalLockResult = ReturnType<typeof useVebalLockLogic>
 export const VebalLockContext = createContext<UseVebalLockResult | null>(null)
 
 export enum LockMode {
@@ -83,7 +81,7 @@ export function expectedVeBal({
   }
 }
 
-export function _useVebalLock() {
+export function useVebalLockLogic() {
   const { vebalBptToken } = useTokens()
   if (!vebalBptToken) throw new Error('vebalBptToken not found')
 
@@ -186,7 +184,7 @@ export function _useVebalLock() {
 }
 
 export function VebalLockProvider({ children }: PropsWithChildren) {
-  const vebalLock = _useVebalLock()
+  const vebalLock = useVebalLockLogic()
 
   return <VebalLockContext.Provider value={vebalLock}>{children}</VebalLockContext.Provider>
 }

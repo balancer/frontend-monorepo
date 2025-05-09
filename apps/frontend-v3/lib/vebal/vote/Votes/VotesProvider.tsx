@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
 import { createContext, PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react'
@@ -27,7 +26,7 @@ export interface UseVotesArgs {
   error?: any
 }
 
-export function _useVotes({ data, votingListLoading = false, error }: UseVotesArgs) {
+export function useVotesLogic({ data, votingListLoading = false, error }: UseVotesArgs) {
   const { userAddress, isConnected } = useUserAccount()
 
   const votingList = useMemo(() => {
@@ -217,10 +216,10 @@ export function _useVotes({ data, votingListLoading = false, error }: UseVotesAr
   }
 }
 
-export const VotesContext = createContext<ReturnType<typeof _useVotes> | null>(null)
+export const VotesContext = createContext<ReturnType<typeof useVotesLogic> | null>(null)
 
 export function VotesProvider({ children, ...props }: PropsWithChildren<UseVotesArgs>) {
-  const hook = _useVotes(props)
+  const hook = useVotesLogic(props)
 
   return <VotesContext.Provider value={hook}>{children}</VotesContext.Provider>
 }

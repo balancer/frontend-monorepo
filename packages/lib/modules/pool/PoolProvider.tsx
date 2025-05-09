@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/rules-of-hooks */
 
 'use client'
 
@@ -22,13 +21,13 @@ import { useTokens } from '../tokens/TokensProvider'
 import { getCompositionTokens } from './pool-tokens.utils'
 
 export type FeaturedPool = GetFeaturedPoolsQuery['featuredPools'][0]['pool']
-export type UsePoolResponse = ReturnType<typeof _usePool> & {
+export type UsePoolResponse = ReturnType<typeof usePoolLogic> & {
   chain: GqlChain
 }
 
 export const PoolContext = createContext<UsePoolResponse | null>(null)
 
-export function _usePool({
+export function usePoolLogic({
   id,
   chain,
   initialData,
@@ -86,7 +85,7 @@ export function PoolProvider({
   children,
   data,
 }: PropsWithChildren<FetchPoolProps> & { data: GetPoolQuery }) {
-  const hook = _usePool({ id, chain, variant, initialData: data })
+  const hook = usePoolLogic({ id, chain, variant, initialData: data })
   return <PoolContext.Provider value={{ ...hook, chain }}>{children}</PoolContext.Provider>
 }
 

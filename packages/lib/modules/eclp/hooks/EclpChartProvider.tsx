@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetECLPLiquidityProfile'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '../../pool/PoolProvider'
@@ -7,11 +5,11 @@ import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { createContext, PropsWithChildren, useMemo } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 
-type EclpChartContextType = ReturnType<typeof _useEclpChart>
+type EclpChartContextType = ReturnType<typeof useEclpChartLogic>
 
 const EclpChartContext = createContext<EclpChartContextType | null>(null)
 
-function _useEclpChart() {
+export function useEclpChartLogic() {
   const { pool } = usePool()
 
   const {
@@ -436,7 +434,7 @@ function _useEclpChart() {
 }
 
 export function EclpChartProvider({ children }: PropsWithChildren) {
-  const hook = _useEclpChart()
+  const hook = useEclpChartLogic()
   return <EclpChartContext.Provider value={hook}>{children}</EclpChartContext.Provider>
 }
 

@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { getChainId } from '@repo/lib/config/app.config'
@@ -20,7 +18,7 @@ import { TransactionStatus as SafeTxStatus } from '@safe-global/safe-apps-sdk'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 
-export type RecentTransactionsResponse = ReturnType<typeof _useRecentTransactions>
+export type RecentTransactionsResponse = ReturnType<typeof useRecentTransactionsLogic>
 export const TransactionsContext = createContext<RecentTransactionsResponse | null>(null)
 const NUM_RECENT_TRANSACTIONS = 20
 const RECENT_TRANSACTIONS_KEY = `${PROJECT_CONFIG.projectId}.recentTransactions`
@@ -68,7 +66,7 @@ const TransactionStatusToastStatusMapping: Record<TransactionStatus, AlertStatus
   unknown: 'warning',
 }
 
-export function _useRecentTransactions() {
+export function useRecentTransactionsLogic() {
   const [transactions, setTransactions] = useState<Record<string, TrackedTransaction>>({})
   const toast = useToast()
   const publicClient = usePublicClient()
@@ -259,7 +257,7 @@ export function _useRecentTransactions() {
 }
 
 export function RecentTransactionsProvider({ children }: { children: ReactNode }) {
-  const transactions = _useRecentTransactions()
+  const transactions = useRecentTransactionsLogic()
   return (
     <TransactionsContext.Provider value={transactions}>{children}</TransactionsContext.Provider>
   )

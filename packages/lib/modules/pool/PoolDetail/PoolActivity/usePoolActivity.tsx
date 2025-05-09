@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -26,12 +24,12 @@ import { usePoolActivityViewType } from '../PoolActivityViewType/usePoolActivity
 import { sortAlphabetically } from '@repo/lib/shared/utils/sorting'
 import { Sorting } from '@repo/lib/shared/components/tables/SortableHeader'
 
-export type PoolActivityResponse = ReturnType<typeof _usePoolActivity>
+export type PoolActivityResponse = ReturnType<typeof usePoolActivityLogic>
 export const PoolActivityContext = createContext<PoolActivityResponse | null>(null)
 
 const MAX_EVENTS = 500
 
-function _usePoolActivity() {
+function usePoolActivityLogic() {
   const { id: poolId, variant, chain } = useParams()
   const { pool } = usePool()
   const { getToken } = useTokens()
@@ -264,7 +262,7 @@ function _usePoolActivity() {
 }
 
 export function PoolActivityProvider({ children }: PropsWithChildren) {
-  const hook = _usePoolActivity()
+  const hook = usePoolActivityLogic()
   return <PoolActivityContext.Provider value={hook}>{children}</PoolActivityContext.Provider>
 }
 

@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { createContext, PropsWithChildren, useCallback, useState } from 'react'
@@ -7,7 +5,7 @@ import { ManagedResult } from './lib'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { resetTransaction } from './transaction.helper'
 
-export function _useTransactionState() {
+export function useTransactionStateLogic() {
   const [transactionMap, setTransactionMap] = useState<Map<string, ManagedResult>>(new Map())
 
   function updateTransaction(k: string, v: ManagedResult) {
@@ -49,11 +47,11 @@ export function _useTransactionState() {
   }
 }
 
-export type TransactionStateResponse = ReturnType<typeof _useTransactionState>
+export type TransactionStateResponse = ReturnType<typeof useTransactionStateLogic>
 export const TransactionStateContext = createContext<TransactionStateResponse | null>(null)
 
 export function TransactionStateProvider({ children }: PropsWithChildren) {
-  const hook = _useTransactionState()
+  const hook = useTransactionStateLogic()
 
   return (
     <TransactionStateContext.Provider value={hook}>{children}</TransactionStateContext.Provider>

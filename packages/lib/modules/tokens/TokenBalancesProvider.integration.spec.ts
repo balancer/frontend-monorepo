@@ -2,13 +2,13 @@ import { allFakeGqlTokens, fakeTokenBySymbol } from '@repo/lib/test/data/all-gql
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { act, waitFor } from '@testing-library/react'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
-import { _useTokenBalances } from './TokenBalancesProvider'
+import { useTokenBalancesLogic } from './TokenBalancesProvider'
 
 await connectWithDefaultUser()
 
 test('fetches balance for native asset token', async () => {
   const nativeAssetBasicToken = fakeTokenBySymbol('ETH')
-  const { result } = testHook(() => _useTokenBalances([nativeAssetBasicToken]))
+  const { result } = testHook(() => useTokenBalancesLogic([nativeAssetBasicToken]))
 
   await waitFor(() => expect(result.current.balances.length).toBe(1))
 
@@ -26,7 +26,7 @@ test('fetches balance for native asset token', async () => {
 test('fetches token balance', async () => {
   const balBasicToken = fakeTokenBySymbol('BAL')
 
-  const { result } = testHook(() => _useTokenBalances([balBasicToken]))
+  const { result } = testHook(() => useTokenBalancesLogic([balBasicToken]))
 
   expect(result.current.balances).toEqual([])
 
@@ -50,7 +50,7 @@ test('fetches token balance', async () => {
 test('refetches balances', async () => {
   const balBasicToken = fakeTokenBySymbol('BAL')
 
-  const { result } = testHook(() => _useTokenBalances([balBasicToken]))
+  const { result } = testHook(() => useTokenBalancesLogic([balBasicToken]))
 
   await waitFor(() => expect(result.current.isBalancesLoading).toBeFalsy())
   await waitFor(() => expect(result.current.balances.length).toBe(1))
@@ -79,7 +79,7 @@ test('Should not return balances when user is not connected (account is empty) '
   const balBasicToken = fakeTokenBySymbol('BAL')
   const nativeAssetToken = fakeTokenBySymbol('ETH')
 
-  const { result } = testHook(() => _useTokenBalances([balBasicToken, nativeAssetToken]))
+  const { result } = testHook(() => useTokenBalancesLogic([balBasicToken, nativeAssetToken]))
 
   await waitFor(() => expect(result.current.balances.length).toBe(2))
   expect(result.current.isBalancesLoading).toBeFalsy()
@@ -100,7 +100,9 @@ test('Should not return balances when user is not connected (account is empty) '
 
 test.skip('Debug: should return balances of 50 tokens', async () => {
   const numberOfTokens = 50
-  const { result } = testHook(() => _useTokenBalances(allFakeGqlTokens.slice(0, numberOfTokens)))
+  const { result } = testHook(() =>
+    useTokenBalancesLogic(allFakeGqlTokens.slice(0, numberOfTokens))
+  )
 
   await waitFor(() => expect(result.current.isBalancesLoading).toBeFalsy())
   expect(result.current.balances).toHaveLength(numberOfTokens)

@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
@@ -62,7 +60,7 @@ export interface SubmittingVote {
 export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern
-export function _useMyVotes({}: UseMyVotesArgs) {
+export function useMyVotesLogic({}: UseMyVotesArgs) {
   const {
     loading: votesLoading,
     votingPools,
@@ -288,10 +286,10 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   }
 }
 
-export const MyVotesContext = createContext<ReturnType<typeof _useMyVotes> | null>(null)
+export const MyVotesContext = createContext<ReturnType<typeof useMyVotesLogic> | null>(null)
 
 export function MyVotesProvider({ children, ...props }: PropsWithChildren<UseMyVotesArgs>) {
-  const hook = _useMyVotes(props)
+  const hook = useMyVotesLogic(props)
 
   return <MyVotesContext.Provider value={hook}>{children}</MyVotesContext.Provider>
 }

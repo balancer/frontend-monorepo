@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -16,7 +14,7 @@ import { toJsTimestamp } from '@repo/lib/shared/utils/time'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LockActionType } from './vote/vote.types'
 
-export type UseVebalLockDataResult = ReturnType<typeof _useVebalLockData>
+export type UseVebalLockDataResult = ReturnType<typeof useVebalLockDataLogic>
 export const VebalLockDataContext = createContext<UseVebalLockDataResult | null>(null)
 
 function getAvailableLockActions(
@@ -63,7 +61,7 @@ interface MulticallLockDataResponse {
   }
 }
 
-export function _useVebalLockData() {
+export function useVebalLockDataLogic() {
   const { userAddress, isConnected } = useUserAccount()
 
   const lockDataRequestsData = [
@@ -149,7 +147,7 @@ export function _useVebalLockData() {
 }
 
 export function VebalLockDataProvider({ children }: PropsWithChildren) {
-  const vebalLockData = _useVebalLockData()
+  const vebalLockData = useVebalLockDataLogic()
 
   return (
     <VebalLockDataContext.Provider value={vebalLockData}>{children}</VebalLockDataContext.Provider>

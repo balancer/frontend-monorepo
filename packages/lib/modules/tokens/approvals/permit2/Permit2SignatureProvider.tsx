@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { SignatureState } from '@repo/lib/modules/web3/signatures/signature.helpers'
@@ -7,10 +5,10 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { Permit2 } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useState } from 'react'
 
-export type UsePermit2SignatureResponse = ReturnType<typeof _usePermit2Signature>
+export type UsePermit2SignatureResponse = ReturnType<typeof usePermit2SignatureLogic>
 export const Permit2SignatureContext = createContext<UsePermit2SignatureResponse | null>(null)
 
-export function _usePermit2Signature() {
+export function usePermit2SignatureLogic() {
   const [permit2Signature, setPermit2Signature] = useState<Permit2 | undefined>()
 
   const [signPermit2State, setSignPermit2State] = useState<SignatureState>(SignatureState.Preparing)
@@ -24,7 +22,7 @@ export function _usePermit2Signature() {
 }
 
 export function Permit2SignatureProvider({ children }: PropsWithChildren) {
-  const hook = _usePermit2Signature()
+  const hook = usePermit2SignatureLogic()
   return (
     <Permit2SignatureContext.Provider value={hook}>{children}</Permit2SignatureContext.Provider>
   )

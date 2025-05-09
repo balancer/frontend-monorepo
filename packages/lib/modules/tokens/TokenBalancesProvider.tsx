@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { useUserAccount } from '../web3/UserAccountProvider'
@@ -23,7 +21,7 @@ import { isZero } from '@repo/lib/shared/utils/numbers'
 
 const BALANCE_CACHE_TIME_MS = 30_000
 
-export type UseTokenBalancesResponse = ReturnType<typeof _useTokenBalances>
+export type UseTokenBalancesResponse = ReturnType<typeof useTokenBalancesLogic>
 export const TokenBalancesContext = createContext<UseTokenBalancesResponse | null>(null)
 
 /**
@@ -34,7 +32,7 @@ export const TokenBalancesContext = createContext<UseTokenBalancesResponse | nul
  * an amount of the user's tokens to ensure the add is successful. In this
  * case the buffer is set to the slippage percentage set by the user.
  */
-export function _useTokenBalances(
+export function useTokenBalancesLogic(
   initTokens?: ApiToken[],
   extTokens?: ApiToken[],
   bufferPercentage: HumanAmount | string = '0'
@@ -165,7 +163,7 @@ export function TokenBalancesProvider({
   bufferPercentage,
   children,
 }: ProviderProps) {
-  const hook = _useTokenBalances(initTokens, extTokens, bufferPercentage)
+  const hook = useTokenBalancesLogic(initTokens, extTokens, bufferPercentage)
   return <TokenBalancesContext.Provider value={hook}>{children}</TokenBalancesContext.Provider>
 }
 

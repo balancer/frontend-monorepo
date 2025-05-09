@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { GetPoolsDocument } from '@repo/lib/shared/services/api/generated/graphql'
@@ -37,9 +35,9 @@ export type PoolRewardsData = Pool & {
 }
 
 export type PoolRewardsDataMap = Record<string, PoolRewardsData>
-export type UsePortfolio = ReturnType<typeof _usePortfolio>
+export type UsePortfolio = ReturnType<typeof usePortfolioLogic>
 
-function _usePortfolio() {
+export function usePortfolioLogic() {
   const { userAddress, isConnected } = useUserAccount()
   const { transactions } = useRecentTransactions()
 
@@ -254,7 +252,7 @@ function _usePortfolio() {
 export const PortfolioContext = createContext<UsePortfolio | null>(null)
 
 export function PortfolioProvider({ children }: PropsWithChildren) {
-  const hook = _usePortfolio()
+  const hook = usePortfolioLogic()
   return <PortfolioContext.Provider value={hook}>{children}</PortfolioContext.Provider>
 }
 

@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { useSteps } from '@chakra-ui/react'
@@ -9,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
-export type UseLbpFormResult = ReturnType<typeof _useLbpForm>
+export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
 
 const steps = [
@@ -18,7 +16,7 @@ const steps = [
   { id: 'step3', title: 'Review' },
 ]
 
-export function _useLbpForm() {
+export function useLbpFormLogic() {
   const saleStructureForm = useForm<SaleStructureForm>({
     defaultValues: {
       selectedChain: PROJECT_CONFIG.defaultNetwork,
@@ -67,7 +65,7 @@ export function _useLbpForm() {
 }
 
 export function LbpFormProvider({ children }: PropsWithChildren) {
-  const hook = _useLbpForm()
+  const hook = useLbpFormLogic()
   return <LbpFormContext.Provider value={hook}>{children}</LbpFormContext.Provider>
 }
 

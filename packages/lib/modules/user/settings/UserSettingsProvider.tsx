@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 'use client'
 
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
@@ -19,10 +17,10 @@ const DEFAULT_ACCEPTED_POLICIES: string[] = []
 const DEFAULT_ALLOW_SOUNDS: YesNo = 'yes'
 const DEFAULT_ENABLE_TX_BUNDLING: YesNo = 'yes'
 
-export type UseUserSettingsResult = ReturnType<typeof _useUserSettings>
+export type UseUserSettingsResult = ReturnType<typeof useUserSettingsLogic>
 export const UserSettingsContext = createContext<UseUserSettingsResult | null>(null)
 
-export function _useUserSettings({
+export function useUserSettingsLogic({
   initCurrency,
   initSlippage,
   initEnableSignatures,
@@ -126,7 +124,7 @@ export function UserSettingsProvider({
   const _initAllowSounds = (initAllowSounds as YesNo) || DEFAULT_ALLOW_SOUNDS
   const _initEnableTxBundling = (initEnableTxBundling as YesNo) || DEFAULT_ENABLE_TX_BUNDLING
 
-  const hook = _useUserSettings({
+  const hook = useUserSettingsLogic({
     initCurrency: _initCurrency,
     initSlippage: _initSlippage,
     initEnableSignatures: _initEnableSignatures,

@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren, useMemo, useState } from 'react'
 
@@ -8,7 +6,7 @@ export enum PoolActivityView {
   List = 'list',
 }
 
-export function _usePoolActivityViewType() {
+export function usePoolActivityViewTypeLogic() {
   const [poolActivityView, setPoolActivityView] = useState<PoolActivityView>(PoolActivityView.Chart)
 
   const isListView = useMemo(() => poolActivityView === PoolActivityView.List, [poolActivityView])
@@ -21,11 +19,11 @@ export function _usePoolActivityViewType() {
   }
 }
 
-export type UsePoolActivityViewTypeResult = ReturnType<typeof _usePoolActivityViewType>
+export type UsePoolActivityViewTypeResult = ReturnType<typeof usePoolActivityViewTypeLogic>
 export const PoolActivityViewTypeContext = createContext<UsePoolActivityViewTypeResult | null>(null)
 
 export function PoolActivityViewTypeProvider({ children }: PropsWithChildren) {
-  const poolActivityViewType = _usePoolActivityViewType()
+  const poolActivityViewType = usePoolActivityViewTypeLogic()
 
   return (
     <PoolActivityViewTypeContext.Provider value={poolActivityViewType}>
