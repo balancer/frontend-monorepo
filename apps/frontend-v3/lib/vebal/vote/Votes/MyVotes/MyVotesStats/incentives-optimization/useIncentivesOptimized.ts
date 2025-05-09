@@ -1,7 +1,7 @@
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { Address } from 'viem'
 import { isVotingTimeLocked } from '../../myVotes.helpers'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, sum } from '@repo/lib/shared/utils/numbers'
 import { Element, heap, push, pop, Heap } from './heap'
 import { useQuery } from '@tanstack/react-query'
 
@@ -13,6 +13,7 @@ type OptimizedVote = {
 
 export type OptimizedVotes = {
   votes: OptimizedVote[]
+  totalIncentives: number
   isLoading: boolean
 }
 
@@ -21,6 +22,7 @@ type PoolInfo = {
   votes: BigNumber
   incentivesAmount: number
   userVotes: BigNumber
+  userPrct: BigNumber
 }
 
 const PERCENT_STEP = bn(0.0001)
@@ -47,8 +49,10 @@ export function useIncentivesOptimized(
   })
 
   const votes = data || []
+  const [timelockedVotes] = filterTimelockedVotes(myVotes)
+  const totalIncentives = sumTotalIncentives(votes, timelockedVotes, userVotingPower, totalVotes)
 
-  return { votes, isLoading: isPending }
+  return { votes, totalIncentives, isLoading: isPending }
 }
 
 export function calculateIncentivesOptimized(
@@ -81,12 +85,16 @@ export function calculateIncentivesOptimized(
     if (bestPool) {
       bestPool.votes = bestPool.votes.plus(stepVoteAmount)
       bestPool.userVotes = bestPool.userVotes.plus(stepVoteAmount)
+      bestPool.userPrct = bestPool.userPrct.plus(PERCENT_STEP)
     }
     push(prioritizedPools, bestPool)
     prctToDistribute = prctToDistribute.minus(PERCENT_STEP)
   }
 
-  const votes = mergeOptimizedVotes(resetVotes(myVotes), prioritizedPools, userVotingPower)
+  const votesToReset = myVotes.filter(
+    pool => !findByGaugeAddress(timelockedVotes, pool.gauge.address as Address)
+  )
+  const votes = mergeOptimizedVotes(resetVotes(votesToReset), prioritizedPools)
 
   return votes
 }
@@ -108,6 +116,7 @@ function extractVoteAmountAndIncentives(
         votes: voteAmount,
         incentivesAmount: pool.votingIncentive?.totalValue || 0,
         userVotes: bn(0),
+        userPrct: bn(0),
       }
     })
     .filter(poolInfo => poolInfo.incentivesAmount !== 0)
@@ -132,7 +141,7 @@ function buildPoolsWithPriorities(
 
 function incentivePerVote(pool: Element<PoolInfo>) {
   if (!pool) return 0
-  return bn(pool.incentivesAmount).div(pool.votes).toNumber()
+  return bn(pool.incentivesAmount).div(pool.votes.shiftedBy(-18)).toNumber()
 }
 
 function removeCurrentVotesFromGauges(
@@ -142,7 +151,7 @@ function removeCurrentVotesFromGauges(
 ) {
   return votingPools.map(pool => {
     const oldVote = findOldVote(myVotes, pool.gaugeAddress)
-    const oldVotePrct = bn(oldVote?.gaugeVotes?.userVotes || 0).div(1000)
+    const oldVotePrct = bn(oldVote?.gaugeVotes?.userVotes || 0).div(10000)
     const oldVotesAmount = userVotingPower.times(oldVotePrct)
     pool.votes = pool.votes.minus(oldVotesAmount)
 
@@ -166,7 +175,7 @@ function filterTimelockedVotes(myVotes: VotingPoolWithData[]): [VotingPoolWithDa
   )
 
   const timelockedPrct = timelockedVotes.reduce((acc, vote) => {
-    const userVotes = bn(vote.gaugeVotes?.userVotes || 0).div(1000)
+    const userVotes = bn(vote.gaugeVotes?.userVotes || 0).div(10000)
     return acc.plus(userVotes)
   }, bn(0))
 
@@ -185,23 +194,20 @@ function resetVotes(myVotes: VotingPoolWithData[]) {
   }, [] as OptimizedVote[])
 }
 
-function mergeOptimizedVotes(
-  votes: OptimizedVote[],
-  poolVotes: Heap<Element<PoolInfo>>,
-  userVotingPower: BigNumber
-) {
+function mergeOptimizedVotes(votes: OptimizedVote[], poolVotes: Heap<Element<PoolInfo>>) {
   return poolVotes.elements.reduce((acc, pool) => {
     if (pool && bn(pool.userVotes).gt(0)) {
+      const incentives = pool.userVotes.shiftedBy(-18).times(incentivePerVote(pool))
+
       const vote = findVote(votes, pool.gaugeAddress)
-      const incentives = userVotingPower.times(pool.userVotes).times(incentivePerVote(pool))
       if (!vote) {
         acc.push({
           gaugeAddress: pool.gaugeAddress,
-          votePrct: pool.userVotes.toNumber(),
+          votePrct: pool.userPrct.toNumber(),
           incentivesAmount: incentives.toNumber(),
         })
       } else {
-        vote.votePrct = pool.userVotes.toNumber()
+        vote.votePrct = pool.userPrct.toNumber()
         vote.incentivesAmount = incentives.toNumber()
       }
     }
@@ -216,4 +222,26 @@ function findVote(votes: OptimizedVote[], gaugeAddress: Address) {
 
 function findOldVote(votes: VotingPoolWithData[], gaugeAddress: Address) {
   return votes.find(vote => vote.gauge.address === gaugeAddress)
+}
+
+function sumTotalIncentives(
+  optimizedVotes: OptimizedVote[],
+  timelockedVotes: VotingPoolWithData[],
+  userVotingPower: BigNumber,
+  totalVotes: BigNumber
+) {
+  const optimizedVotesAmount = sum(optimizedVotes, vote => bn(vote.incentivesAmount))
+
+  const timelockedVotesAmount = timelockedVotes.reduce((acc, vote) => {
+    const poolVotes = totalVotes.times(bn(vote.gaugeVotes?.votesNextPeriod || 0).shiftedBy(-18))
+
+    const incentivePerVote = bn(vote.votingIncentive?.totalValue || 0).div(poolVotes.shiftedBy(-18))
+    const userPoolVotes = userVotingPower
+      .times(bn(vote.gaugeVotes?.userVotes || 0).div(10000))
+      .shiftedBy(-18)
+
+    return acc.plus(userPoolVotes.times(incentivePerVote))
+  }, bn(0))
+
+  return optimizedVotesAmount.plus(timelockedVotesAmount).toNumber()
 }

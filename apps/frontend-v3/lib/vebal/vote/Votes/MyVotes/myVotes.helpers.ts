@@ -99,7 +99,7 @@ export function calculateMyValuePerVote(
   return bn(myRewards).div(newUserVotes)
 }
 
-function calculateVotingPower(slope: bigint, lockEnd: number | undefined) {
+export function calculateVotingPower(slope: bigint, lockEnd: number | undefined) {
   if (!lockEnd) return bn(0)
 
   const nextVoteTimestamp = millisecondsToSeconds(startOfDayUtc(nextThursday(new Date())).getTime())

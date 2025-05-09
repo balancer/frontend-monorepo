@@ -36,7 +36,7 @@ describe('Incentives optimization', () => {
   it('should return loading when input votes and pools still loading', () => {
     const inputLoading = true
 
-    const result = renderHook([], [], bn(1), bn(100), {}, inputLoading)
+    const result = renderHook([], [], total(1), total(100), {}, inputLoading)
 
     expect(result.current.isLoading).toBe(true)
   })
@@ -47,13 +47,11 @@ describe('Incentives optimization', () => {
     pool2.votingIncentive = incentivesWithAmount(10)
     const timelockedVote = timelock(vote(pool1, 0.05, new Date()))
 
-    const result = renderHook([pool1, pool2], [timelockedVote], bn(1), bn(100), {}, false)
+    const result = renderHook([pool1, pool2], [timelockedVote], total(1), total(100), {}, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
-    const vote1 = getVote(result.current, pool1.gauge.address as Address)
     const vote2 = getVote(result.current, pool2.gauge.address as Address)
 
-    expect(result.current.votes.length).toBe(2)
-    expect(vote1?.votePrct).toBe(0.0)
+    expect(result.current.votes.length).toBe(1)
     expect(vote2?.votePrct).toBe(0.95)
   })
 
@@ -64,7 +62,7 @@ describe('Incentives optimization', () => {
     pool2.votingIncentive = incentivesWithAmount(10)
     const vote1 = vote(pool1, 0.05, one_month_ago)
 
-    const result = renderHook([killedPool, pool2], [vote1], bn(1), bn(100), {}, false)
+    const result = renderHook([killedPool, pool2], [vote1], total(1), total(100), {}, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
     const killedPoolVote = getVote(result.current, killedPool.gauge.address as Address)
     const vote2 = getVote(result.current, pool2.gauge.address as Address)
@@ -82,7 +80,7 @@ describe('Incentives optimization', () => {
     setPoolVotes(pool2, 0.5)
     pool2.votingIncentive = incentivesWithAmount(100)
 
-    const result = renderHook([pool1, pool2], [], bn(1), bn(100), {}, false)
+    const result = renderHook([pool1, pool2], [], total(5), total(100), {}, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
     const vote2 = getVote(result.current, pool2.gauge.address as Address)
 
@@ -99,7 +97,7 @@ describe('Incentives optimization', () => {
     pool2.votingIncentive = incentivesWithAmount(100)
     const vote1 = vote(pool1, 1.0, one_month_ago)
 
-    const result = renderHook([pool1, pool2], [vote1], bn(1), bn(100), {}, false)
+    const result = renderHook([pool1, pool2], [vote1], total(1), total(100), {}, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
     const vote1Updated = getVote(result.current, pool1.gauge.address as Address)
 
@@ -114,9 +112,9 @@ describe('Incentives optimization', () => {
     const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
     setPoolVotes(pool2, 0.5)
     pool2.votingIncentive = incentivesWithAmount(100)
-    const blacklistedVotes = { '0xd75026f8723b94d9a360a282080492d905c6a559': bn(1) }
+    const blacklistedVotes = { '0xd75026f8723b94d9a360a282080492d905c6a559': total(1) }
 
-    const result = renderHook([pool1, pool2], [], bn(1), bn(100), blacklistedVotes, false)
+    const result = renderHook([pool1, pool2], [], total(1), total(100), blacklistedVotes, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
     const vote2 = getVote(result.current, pool2.gauge.address as Address)
 
@@ -129,11 +127,26 @@ describe('Incentives optimization', () => {
     setPoolVotes(pool1, 0.0)
     pool1.votingIncentive = incentivesWithAmount(100)
 
-    const result = renderHook([pool1], [], bn(1), bn(0), {}, false)
+    const result = renderHook([pool1], [], total(1), total(0), {}, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
     const vote1 = getVote(result.current, pool1.gauge.address as Address)
 
     expect(vote1?.incentivesAmount).toBe(100)
+  })
+
+  it('should return the total number of incentives (timelocked + optimized)', async () => {
+    const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
+    pool1.votingIncentive = incentivesWithAmount(100)
+    setPoolVotes(pool1, 0.0)
+    const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
+    pool2.votingIncentive = incentivesWithAmount(100)
+    setPoolVotes(pool2, 0.05)
+    const timelockedVote = timelock(vote(pool2, 0.05, new Date()))
+
+    const result = renderHook([pool1, pool2], [timelockedVote], total(100), total(100), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+    expect(result.current.totalIncentives).toBe(200)
   })
 })
 
@@ -169,7 +182,7 @@ function votingPool(gaugeAddress: Address, symbol: string): VotingPoolWithData {
 
 function vote(votingPool: VotingPoolWithData, votesPrct: number, voteTimestamp: Date) {
   if (votingPool.gaugeVotes) {
-    votingPool.gaugeVotes.userVotes = (votesPrct * 1000).toString()
+    votingPool.gaugeVotes.userVotes = (votesPrct * 10000).toString()
     votingPool.gaugeVotes.lastUserVoteTime = millisecondsToSeconds(voteTimestamp.getTime())
   }
 
@@ -213,4 +226,8 @@ function timelock(vote: VotingPoolWithData) {
   }
 
   return vote
+}
+
+function total(value: number) {
+  return bn(value).shiftedBy(18)
 }

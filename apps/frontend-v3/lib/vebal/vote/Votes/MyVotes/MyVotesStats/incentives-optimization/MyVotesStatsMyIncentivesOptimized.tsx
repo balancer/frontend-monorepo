@@ -6,9 +6,17 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { MyVotesStatsCard } from '../shared/MyVotesStatsCard'
 import { useVeBALIncentives } from '../useVeBALIncentives'
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import NextLink from 'next/link'
 import { getVeBalManagePath } from '@bal/lib/vebal/vebal-navigation'
+import { useIncentivesOptimized } from './useIncentivesOptimized'
+import { useBlacklistedVotes } from '../../incentivesBlacklist'
+import { useVotes } from '../../../VotesProvider'
+import { useMyVotes } from '../../MyVotesProvider'
+import { useTotalVotes } from '@bal/lib/vebal/vote/useTotalVotes'
+import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
+import { useLastUserSlope } from '@bal/lib/vebal/vote/useVeBALBalance'
+import { calculateVotingPower } from '../../myVotes.helpers'
 
 export function MyVotesStatsMyIncentivesOptimized() {
   const { toCurrency } = useCurrency()
@@ -27,15 +35,37 @@ export function MyVotesStatsMyIncentivesOptimized() {
 
   const { incentives, incentivesAreLoading } = useVeBALIncentives(userAddress)
 
-  const isLoading = incentivesAreLoading || vebalUserDataLoading
+  const { totalVotes, totalVotesLoading } = useTotalVotes()
+  const { mainnetLockedInfo, isLoading: lockInfoLoading } = useVebalLockInfo()
+  const lockEnd = mainnetLockedInfo.lockedEndDate
+  const { slope, isLoading: slopeLoading } = useLastUserSlope(userAddress)
+  const { loading: votesLoading, votingPools } = useVotes()
+  const { loading: myVotesLoading, myVotes } = useMyVotes()
+  const { isLoading: blacklistedVotesLoading, blacklistedVotes } = useBlacklistedVotes(votingPools)
+  const inputsLoading =
+    totalVotesLoading ||
+    lockInfoLoading ||
+    slopeLoading ||
+    votesLoading ||
+    myVotesLoading ||
+    blacklistedVotesLoading
 
-  const optimizedRewardValue: number | undefined = undefined // fix: (votes) provide real value
-  // const totalWithVotesOptimized = 154.25 // fix: (votes) provide real value
+  const { isLoading: optimizationLoading, totalIncentives } = useIncentivesOptimized(
+    votingPools,
+    myVotes,
+    calculateVotingPower(slope, lockEnd).shiftedBy(18),
+    bn(totalVotes),
+    blacklistedVotes,
+    inputsLoading
+  )
+  const optimizedRewardValue = totalIncentives
 
   const headerText =
     !isConnected || noVeBALBalance
       ? 'Voting incentives APR (average)'
       : 'My optimized vote incentives (1w)'
+
+  const isLoading = incentivesAreLoading || vebalUserDataLoading || optimizationLoading
 
   return (
     <MyVotesStatsCard
