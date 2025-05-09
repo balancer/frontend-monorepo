@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 'use client'
 
 import { useState, PropsWithChildren, createContext } from 'react'

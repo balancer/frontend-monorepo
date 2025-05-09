@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export const colors = {
   primary: {
     '50': '#eaf6ff',

@@ -1,7 +1,5 @@
 import React from 'react'
 
-/* eslint-disable max-len */
-
 export function BalancerV3CustomPoolsSvg() {
   return (
     <svg

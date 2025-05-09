@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { aWjAuraWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 import {
   DefaultRemoveLiquidityTestProvider,

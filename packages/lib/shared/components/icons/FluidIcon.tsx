@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export function FluidIcon({ size = 20 }: { size?: number }) {
   return (
     <svg
