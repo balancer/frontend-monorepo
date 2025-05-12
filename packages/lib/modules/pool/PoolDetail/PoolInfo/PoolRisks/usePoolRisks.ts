@@ -51,7 +51,7 @@ export enum RiskKey {
   Hook = 'hooks-risk',
   StableSurgeHook = 'stablesurge-hook',
   MEVCaptureHook = 'mevcapture-hook',
-  QuantAmmWeighted = 'quant-amm-weighted',
+  QuantAmmWeighted = 'btf',
 }
 
 export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
