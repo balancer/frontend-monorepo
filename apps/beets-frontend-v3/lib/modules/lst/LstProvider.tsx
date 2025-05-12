@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 'use client'
 
 import { useState, PropsWithChildren, createContext } from 'react'
@@ -23,7 +22,7 @@ import { useGetRate } from './hooks/useGetRate'
 const CHAIN = GqlChain.Sonic
 const WITHDRAW_DELAY = 1209600 // 14 days in seconds
 
-export function _useLst() {
+export function useLstLogic() {
   const [activeTab, setActiveTab] = useState<ButtonGroupOption>()
   const [amountAssets, setAmountAssets] = useState('')
   const [amountShares, setAmountShares] = useState('')
@@ -140,11 +139,11 @@ export function _useLst() {
   }
 }
 
-export type Result = ReturnType<typeof _useLst>
+export type Result = ReturnType<typeof useLstLogic>
 export const LstContext = createContext<Result | null>(null)
 
 export function LstProvider({ children }: PropsWithChildren) {
-  const Lst = _useLst()
+  const Lst = useLstLogic()
 
   return <LstContext.Provider value={Lst}>{children}</LstContext.Provider>
 }

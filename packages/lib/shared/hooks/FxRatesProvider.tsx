@@ -4,10 +4,10 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
 import { FxRates, SupportedCurrency } from '../utils/currencies'
 
-export type UseFxRatesResult = ReturnType<typeof _useFxRates>
+export type UseFxRatesResult = ReturnType<typeof useFxRatesLogic>
 export const FxRatesContext = createContext<UseFxRatesResult | null>(null)
 
-export function _useFxRates(rates: FxRates | undefined) {
+export function useFxRatesLogic(rates: FxRates | undefined) {
   const hasFxRates = !!rates
 
   function getFxRate(currency: SupportedCurrency): number {
@@ -22,7 +22,7 @@ export function FiatFxRatesProvider({
   children,
   data,
 }: PropsWithChildren & { data: FxRates | undefined }) {
-  const hook = _useFxRates(data)
+  const hook = useFxRatesLogic(data)
   return <FxRatesContext.Provider value={hook}>{children}</FxRatesContext.Provider>
 }
 

@@ -10,7 +10,7 @@ import { act } from 'react-dom/test-utils'
 import { mock } from 'vitest-mock-extended'
 import { aTokenAmountMock } from '../__mocks__/liquidity.builders'
 import { RemoveLiquiditySimulationQueryResult } from './queries/useRemoveLiquiditySimulationQuery'
-import { _useRemoveLiquidity } from './RemoveLiquidityProvider'
+import { useRemoveLiquidityLogic } from './RemoveLiquidityProvider'
 import { aSuccessfulQueryResultMock } from '@repo/lib/test/utils/react-query'
 
 const balTokenOutUnits = '1'
@@ -44,7 +44,7 @@ poolMock.dynamicData.totalShares = '100'
 // bptPrice = 1000/100 = 10
 
 async function testUseRemoveLiquidity(pool: GqlPoolElement = poolMock) {
-  const { result } = testHook(() => _useRemoveLiquidity(), {
+  const { result } = testHook(() => useRemoveLiquidityLogic(), {
     wrapper: buildDefaultPoolTestProvider(pool),
   })
   return result

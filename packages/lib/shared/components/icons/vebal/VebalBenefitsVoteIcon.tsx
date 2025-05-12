@@ -1,7 +1,6 @@
 import { SVGProps, forwardRef } from 'react'
 import { useColorMode } from '@chakra-ui/react'
 
-/* eslint-disable max-len */
 export interface VebalBenefitsVoteIconProps extends SVGProps<SVGSVGElement> {
   size?: number
 }

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export function ChartBubbleIcon({ size = 24 }: { size?: number }) {
   return (
     <svg

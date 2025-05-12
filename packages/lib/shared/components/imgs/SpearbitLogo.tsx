@@ -1,6 +1,5 @@
 import { SVGProps } from 'react'
 
-/* eslint-disable max-len */
 export function SpearbitLogo({ ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg

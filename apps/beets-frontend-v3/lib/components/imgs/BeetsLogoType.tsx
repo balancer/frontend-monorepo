@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { SVGProps } from 'react'
 
 export function BeetsLogoType(props: SVGProps<SVGSVGElement>) {

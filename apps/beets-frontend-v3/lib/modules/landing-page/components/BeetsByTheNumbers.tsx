@@ -1,6 +1,5 @@
 import React from 'react'
 
-/* eslint-disable max-len */
 export function BeetsByTheNumbers() {
   return (
     <svg

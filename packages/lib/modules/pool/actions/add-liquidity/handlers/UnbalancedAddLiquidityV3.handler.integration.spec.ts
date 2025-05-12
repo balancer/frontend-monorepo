@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'

@@ -15,7 +15,7 @@ import { isAddress } from 'viem'
 import { PoolDisplayType } from '../pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 
-export function _usePoolList({
+export function usePoolListLogic({
   fixedPoolTypes,
   fixedChains,
 }: {
@@ -72,7 +72,7 @@ export function _usePoolList({
   }
 }
 
-export const PoolListContext = createContext<ReturnType<typeof _usePoolList> | null>(null)
+export const PoolListContext = createContext<ReturnType<typeof usePoolListLogic> | null>(null)
 
 export function PoolListProvider({
   fixedPoolTypes,
@@ -82,7 +82,7 @@ export function PoolListProvider({
   fixedPoolTypes?: GqlPoolType[]
   fixedChains?: GqlChain[]
 }>) {
-  const hook = _usePoolList({
+  const hook = usePoolListLogic({
     fixedPoolTypes,
     fixedChains,
   })

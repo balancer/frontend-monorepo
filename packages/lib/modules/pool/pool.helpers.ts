@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   GqlChain,

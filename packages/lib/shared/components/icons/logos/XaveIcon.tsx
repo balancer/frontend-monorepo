@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export function XaveIcon({ size = 26 }: { size?: number }) {
   return (
     <svg
