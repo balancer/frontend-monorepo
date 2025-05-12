@@ -11,8 +11,9 @@ export function QuantAMMPromoBanner() {
   const { pool, chain } = usePool()
 
   const isDarkMode = colorMode === 'dark'
-  const baseUrl = 'https://quantamm.fi/product-explorer/'
-  const analyticsUrl = pool && chain ? `${baseUrl}${chain}/${pool.id}` : baseUrl
+  const baseUrl = 'https://quantamm.fi'
+  const analyticsUrl = pool && chain ? `${baseUrl}/product-explorer/${chain}/${pool.id}` : baseUrl
+  const learnMoreUrl = pool && chain ? `${baseUrl}/factsheet/${pool.id}` : baseUrl
 
   const commonButtonProps = {
     _hover: {
@@ -129,7 +130,7 @@ export function QuantAMMPromoBanner() {
                 {...commonButtonProps}
                 bg={isDarkMode ? 'transparent' : 'transparent'}
                 color={isDarkMode ? '#fff' : '#000'}
-                href="https://www.quantamm.fi/factsheet/0x6b61d8680c4f9e560c8306807908553f95c749c5"
+                href={learnMoreUrl}
               >
                 Learn more{' '}
                 <Box pl="xxs">
