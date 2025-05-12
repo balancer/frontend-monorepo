@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { balAddress, wETHAddress, wjAuraAddress } from '@repo/lib/debug-helpers'
 import { HumanTokenAmountWithAddress } from '@repo/lib/modules/tokens/token.types'

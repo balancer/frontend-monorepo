@@ -44,6 +44,7 @@ body {
 .hidden {
   opacity: var(--start-opacity);
   transform: translateY(5px) scale(var(--start-scale));
+  transform-origin: top center;
 }
 
 .balanced {
@@ -91,107 +92,103 @@ body {
     --start-opacity: 0;
   }
 
-  .fade-in-scale {
-    --start-scale: 0.98;
-  }
-}
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
 
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-/* AppZi styles */
-div[id^='bkln'] {
-  background-color: rgb(0 0 0 / 90%) !important;
-}
-
-/* Success screen ripple animation */
-
-@keyframes ripple {
-  0% {
-    transform: scale(0);
-    opacity: 0.4;
+    100% {
+      opacity: 1;
+    }
   }
 
-  100% {
-    transform: scale(4);
-    opacity: 0;
-  }
-}
-
-.ripple {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: ripple 4s ease-in-out 3 both;
-  will-change: transform, opacity;
-}
-
-.ripple-1 {
-  background-color: rgb(255 255 255 / 15%);
-  animation-delay: 0s;
-}
-
-.ripple-2 {
-  background-color: rgb(255 255 255 / 10%);
-  animation-delay: 1s;
-}
-
-.ripple-3 {
-  background-color: rgb(255 255 255 / 5%);
-  animation-delay: 2s;
-}
-
-/* Featured pools animation */
-
-@keyframes rotate-path {
-  0% {
-    transform: rotate(0deg) translate(0) scale(0.5);
-    opacity: 0;
+  /* AppZi styles */
+  div[id^='bkln'] {
+    background-color: rgb(0 0 0 / 90%) !important;
   }
 
-  100% {
-    transform: rotate(360deg) translate(0, 0) scale(1);
-    opacity: 1;
+  /* Success screen ripple animation */
+
+  @keyframes ripple {
+    0% {
+      transform: scale(0);
+      opacity: 0.4;
+    }
+
+    100% {
+      transform: scale(4);
+      opacity: 0;
+    }
   }
-}
 
-.path1,
-.path2,
-.path3 {
-  transform-origin: center;
-  animation: rotate-path 1s var(--ease-out-cubic) both 0.15s;
-  filter: drop-shadow(var(--chakra-shadows-2xl));
-}
+  .ripple {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: ripple 4s ease-in-out 3 both;
+    will-change: transform, opacity;
+  }
 
-.path2 {
-  animation-delay: 0.15s;
-}
+  .ripple-1 {
+    background-color: rgb(255 255 255 / 15%);
+    animation-delay: 0s;
+  }
 
-.path3 {
-  animation-delay: 0.3s;
-}
+  .ripple-2 {
+    background-color: rgb(255 255 255 / 10%);
+    animation-delay: 1s;
+  }
 
-.featured-pool-svg {
-  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 20%));
-}
+  .ripple-3 {
+    background-color: rgb(255 255 255 / 5%);
+    animation-delay: 2s;
+  }
 
-.chakra-ui-dark .featured-pool-svg {
-  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 40%));
-}
+  /* Featured pools animation */
 
-.anchor::before {
-  content: '';
-  display: block;
-  height: 75px;
-  margin-top: -75px;
-  visibility: hidden;
+  @keyframes rotate-path {
+    0% {
+      transform: rotate(0deg) translate(0) scale(0.5);
+      opacity: 0;
+    }
+
+    100% {
+      transform: rotate(360deg) translate(0, 0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .path1,
+  .path2,
+  .path3 {
+    transform-origin: center;
+    animation: rotate-path 1s var(--ease-out-cubic) both 0.15s;
+    filter: drop-shadow(var(--chakra-shadows-2xl));
+  }
+
+  .path2 {
+    animation-delay: 0.15s;
+  }
+
+  .path3 {
+    animation-delay: 0.3s;
+  }
+
+  .featured-pool-svg {
+    filter: drop-shadow(0 4px 6px rgb(0 0 0 / 20%));
+  }
+
+  .chakra-ui-dark .featured-pool-svg {
+    filter: drop-shadow(0 4px 6px rgb(0 0 0 / 40%));
+  }
+
+  .anchor::before {
+    content: '';
+    display: block;
+    height: 75px;
+    margin-top: -75px;
+    visibility: hidden;
+  }
 }

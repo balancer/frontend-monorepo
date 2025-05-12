@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export function WalletIcon({ size = 24 }: { size?: number }) {
   return (
     <svg

@@ -65,7 +65,7 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
             borderRadius="full"
             height="8px"
             key={step}
-            top="4px"
+            top="3px"
             value={step}
             width="8px"
             zIndex="1"

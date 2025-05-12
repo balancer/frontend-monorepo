@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { SwapForm } from '@repo/lib/modules/swap/SwapForm'
 import { Metadata } from 'next'
 

@@ -160,10 +160,10 @@ function TokenInputFooter({
               {getValidationError(token)}
             </Text>
           )}
-          <Text color="inherit" fontSize="sm">
+          <Text color={noBalance ? 'font.error' : 'inherit'} fontSize="sm">
             {fNum('token', userBalance, { abbreviated: false })}
           </Text>
-          <Box>
+          <Box color={noBalance ? 'font.error' : undefined}>
             <WalletIcon size={16} />
           </Box>
         </HStack>

@@ -11,6 +11,7 @@ interface SearchInputProps {
   placeholder: string
   ariaLabel: string
   isLoading?: boolean
+  autoFocus?: boolean
 }
 
 const SEARCH = 'search'
@@ -21,6 +22,7 @@ export function SearchInput({
   placeholder,
   ariaLabel,
   isLoading,
+  autoFocus = true,
   ...rest
 }: SearchInputProps & InputProps) {
   const { register, setValue, getFieldState, setFocus } = useForm()
@@ -32,9 +34,9 @@ export function SearchInput({
   const debouncedChangeHandler = useDebounce(changeHandler, defaultDebounceMs)
 
   useEffect(() => {
-    setFocus(SEARCH)
+    if (autoFocus) setFocus(SEARCH)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [autoFocus])
 
   return (
     <InputGroup size="md">

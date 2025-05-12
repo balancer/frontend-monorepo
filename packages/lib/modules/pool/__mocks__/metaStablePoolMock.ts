@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 import {
   GqlChain,
   GqlPoolElement,

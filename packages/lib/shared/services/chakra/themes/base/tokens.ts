@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import tinycolor from 'tinycolor2'
 import { createBackgroundOpacity } from '../../theme-helpers'
 

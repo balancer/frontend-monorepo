@@ -4,10 +4,10 @@ import { GetProtocolStatsQuery } from '@repo/lib/shared/services/api/generated/g
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren } from 'react'
 
-export type UseProtocolStatsResult = ReturnType<typeof _useProtocolStats>
+export type UseProtocolStatsResult = ReturnType<typeof useProtocolStatsLogic>
 export const ProtocolStatsContext = createContext<UseProtocolStatsResult | null>(null)
 
-export function _useProtocolStats(data: GetProtocolStatsQuery | undefined) {
+export function useProtocolStatsLogic(data: GetProtocolStatsQuery | undefined) {
   return { protocolData: data }
 }
 
@@ -15,7 +15,7 @@ export function ProtocolStatsProvider({
   children,
   data,
 }: PropsWithChildren & { data: GetProtocolStatsQuery | undefined }) {
-  const hook = _useProtocolStats(data)
+  const hook = useProtocolStatsLogic(data)
   return <ProtocolStatsContext.Provider value={hook}>{children}</ProtocolStatsContext.Provider>
 }
 

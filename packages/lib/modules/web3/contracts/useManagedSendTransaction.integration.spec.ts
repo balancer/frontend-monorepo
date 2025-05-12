@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars*/
-/* eslint-disable max-len */
+
 import { describe, expect, test } from 'vitest'
 
 import { getSdkTestUtils } from '@repo/lib/test/integration/sdk-utils'

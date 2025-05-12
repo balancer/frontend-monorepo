@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 import { GqlChain, GqlPoolElement } from '@repo/lib/shared/services/api/generated/graphql'
 
 // TODO: remove linear (nested) pools

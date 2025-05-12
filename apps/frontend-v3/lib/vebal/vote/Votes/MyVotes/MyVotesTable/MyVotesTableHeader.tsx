@@ -36,7 +36,7 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
   }
 
   return (
-    <Grid {...rest} borderBottom="1px solid" borderColor="border.base" p={['sm', 'md']} w="full">
+    <Grid {...rest} p={['sm', 'md']} w="full">
       <GridItem {...cellProps}>
         <VStack align="start" w="full">
           <Icon as={Globe} boxSize="5" color="font.primary" />
@@ -62,7 +62,9 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
                 <Text
                   fontSize="sm"
                   textAlign={
-                    ['bribes', 'bribesPerVebal'].includes(orderByItem) ? 'left' : undefined
+                    ['bribes', 'bribesPerVebal', 'currentVotes'].includes(orderByItem)
+                      ? 'left'
+                      : undefined
                   }
                   variant="secondary"
                 >

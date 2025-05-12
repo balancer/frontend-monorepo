@@ -22,16 +22,18 @@ export function PoolListTableDetailsCell({ pool }: Props) {
       <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
         {isBoosted(pool) ? 'Boosted' : getPoolTypeLabel(pool.type)}
       </Text>
-      {erc4626Metadata.map(metadata => (
-        <Image
-          alt={metadata.name}
-          height={20}
-          key={metadata.name}
-          src={metadata.iconUrl || ''}
-          width={20}
-        />
-      ))}
-      <PoolHookTag onlyShowIcon pool={pool} />
+      <HStack gap="0.375rem">
+        {erc4626Metadata.map(metadata => (
+          <Image
+            alt={metadata.name}
+            height={20}
+            key={metadata.name}
+            src={metadata.iconUrl || ''}
+            width={20}
+          />
+        ))}
+        <PoolHookTag onlyShowIcon pool={pool} />
+      </HStack>
     </HStack>
   )
 }

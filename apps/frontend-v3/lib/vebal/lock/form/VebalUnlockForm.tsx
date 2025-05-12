@@ -6,6 +6,7 @@ import {
   CardHeader,
   HStack,
   VStack,
+  Flex,
   Text,
   Alert,
   AlertIcon,
@@ -27,6 +28,7 @@ import { format } from 'date-fns'
 import { PRETTY_DATE_FORMAT } from '@bal/lib/vebal/lock/duration/lock-duration.constants'
 import { TokenRowWithDetails } from '@repo/lib/modules/tokens/TokenRow/TokenRowWithDetails'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
+import { ArrowRight } from 'react-feather'
 
 export interface ClickableCardProps extends CardProps {
   color?: string
@@ -114,34 +116,84 @@ export function VebalUnlockForm() {
           <VStack align="start" spacing="md" w="full">
             <HStack justifyContent="space-between" spacing="md" w="full">
               <Text fontSize="sm" fontWeight="700" lineHeight="18px">
-                Your options
+                Your options:
               </Text>
             </HStack>
             {isLoading ? (
               <Skeleton h="100px" w="full" />
             ) : (
-              <Card as={NextLink} href="/vebal/manage/extend" variant="subSection">
-                <Text color="font.light" fontWeight="700">
-                  Extend lock
-                </Text>
-                <CardBody color="font.secondary">
-                  Regain your veBAL benefits: Voting incentives, protocol revenue, voting power and
-                  boosted LP yield
-                </CardBody>
+              <Card
+                _hover={{ shadow: 'sm' }}
+                as={NextLink}
+                href="/vebal/manage/extend"
+                role="group"
+                shadow="2xl"
+                variant="subSection"
+              >
+                <Flex
+                  alignItems="center"
+                  gap={{ base: 'lg', md: '2xl' }}
+                  justifyContent="space-between"
+                >
+                  <Box>
+                    <Text _groupHover={{ color: 'font.highlight' }} fontWeight="700" mb="xs">
+                      Extend lock
+                    </Text>
+                    <CardBody color="font.secondary">
+                      <Text
+                        _groupHover={{ color: 'font.maxContrast' }}
+                        fontSize="sm"
+                        sx={{ textWrap: 'balanced' }}
+                        variant="secondary"
+                      >
+                        Regain your veBAL benefits: Voting incentives, protocol revenue, voting
+                        power and boosted LP yield
+                      </Text>
+                    </CardBody>
+                  </Box>
+                  <Box _groupHover={{ color: 'font.highlight' }} color="font.link">
+                    <ArrowRight size="16" />
+                  </Box>
+                </Flex>
               </Card>
             )}
             {isLoading ? (
               <Skeleton h="100px" w="full" />
             ) : (
-              <ClickableCard onClick={previewModalDisclosure.onOpen} variant="subSection">
-                <Text color="font.light" fontWeight="700">
-                  Unlock & Withdraw tokens
-                </Text>
-                <CardBody color="font.secondary">
-                  Unlock tokens first and then be free to withdraw the underlying BAL / WETH / ETH
-                  tokens back into your wallet.
-                </CardBody>
-              </ClickableCard>
+              <Box role="group">
+                <ClickableCard
+                  _hover={{ shadow: 'sm' }}
+                  onClick={previewModalDisclosure.onOpen}
+                  shadow="2xl"
+                  variant="subSection"
+                >
+                  <Flex
+                    alignItems="center"
+                    gap={{ base: 'lg', md: '2xl' }}
+                    justifyContent="space-between"
+                  >
+                    <Box>
+                      <Text _groupHover={{ color: 'font.highlight' }} fontWeight="700" mb="xs">
+                        Unlock & Withdraw tokens
+                      </Text>
+                      <CardBody color="font.secondary">
+                        <Text
+                          _groupHover={{ color: 'font.maxContrast' }}
+                          fontSize="sm"
+                          sx={{ textWrap: 'balanced' }}
+                          variant="secondary"
+                        >
+                          Unlock tokens first and then be free to withdraw the underlying BAL / WETH
+                          / ETH tokens back into your wallet.
+                        </Text>
+                      </CardBody>
+                    </Box>
+                    <Box _groupHover={{ color: 'font.highlight' }} color="font.link">
+                      <ArrowRight size="16" />
+                    </Box>
+                  </Flex>
+                </ClickableCard>
+              </Box>
             )}
           </VStack>
         </VStack>

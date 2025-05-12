@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable max-len */
+
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import {
   GatewayTransactionDetails,

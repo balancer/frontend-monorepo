@@ -5,10 +5,10 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { Permit } from '@balancer/sdk'
 import { PropsWithChildren, createContext, useState } from 'react'
 
-export type UsePermitSignatureResponse = ReturnType<typeof _usePermitSignature>
+export type UsePermitSignatureResponse = ReturnType<typeof usePermitSignatureLogic>
 export const PermitSignatureContext = createContext<UsePermitSignatureResponse | null>(null)
 
-export function _usePermitSignature() {
+export function usePermitSignatureLogic() {
   const [permitSignature, setPermitSignature] = useState<Permit | undefined>()
 
   const [signPermitState, setSignPermitState] = useState<SignatureState>(SignatureState.Preparing)
@@ -22,7 +22,7 @@ export function _usePermitSignature() {
 }
 
 export function PermitSignatureProvider({ children }: PropsWithChildren) {
-  const hook = _usePermitSignature()
+  const hook = usePermitSignatureLogic()
   return <PermitSignatureContext.Provider value={hook}>{children}</PermitSignatureContext.Provider>
 }
 

@@ -1,6 +1,7 @@
 import { useFeeManager } from '@repo/lib/modules/fee-managers/useFeeManager'
 import { usePool } from '../../PoolProvider'
 import { EzklPromoBanner } from '@repo/lib/shared/components/promos/EzklPromoBanner'
+import { FeeManagersId } from '@repo/lib/modules/fee-managers/getFeeManagersMetadata'
 
 export function PoolFeeManagerBanner() {
   const { pool } = usePool()
@@ -8,7 +9,7 @@ export function PoolFeeManagerBanner() {
 
   if (!hasFeeManager) return null
 
-  if (feeManager?.id === 'fee_manager_ezkl') {
+  if (feeManager?.id === FeeManagersId.EZKL) {
     return <EzklPromoBanner />
   } else {
     return null

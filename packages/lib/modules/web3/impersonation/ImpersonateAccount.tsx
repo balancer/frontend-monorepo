@@ -1,4 +1,4 @@
-import { Button, HStack, Input, Text } from '@chakra-ui/react'
+import { Button, HStack, VStack, Input } from '@chakra-ui/react'
 import { defaultAnvilAccount } from '@repo/lib/test/utils/wagmi/fork.helpers'
 import { useState } from 'react'
 import { Address, isAddress } from 'viem'
@@ -14,29 +14,32 @@ export function ImpersonateAccount() {
   const { isFakeTime, setIsFakeTime } = useFakeTime()
 
   return (
-    <HStack>
-      <Text>Impersonate</Text>
+    <VStack>
       <Input
         aria-label="Mock address"
         onChange={e => setImpersonatedAddress(e.target.value || '')}
         type="text"
         value={impersonatedAddress ?? ''}
-        width="450px"
+        width="400px"
       />
-      <Button
-        aria-label="Impersonate"
-        disabled={!isAddress(impersonatedAddress)}
-        onClick={() => impersonateAccount({ impersonatedAddress: impersonatedAddress as Address })}
-      >
-        Connect
-      </Button>
+      <HStack>
+        <Button
+          aria-label="Impersonate"
+          disabled={!isAddress(impersonatedAddress)}
+          onClick={() =>
+            impersonateAccount({ impersonatedAddress: impersonatedAddress as Address })
+          }
+        >
+          Connect
+        </Button>
 
-      <ImpersonatorSettings
-        impersonatedAddress={impersonatedAddress}
-        setIsFakeTime={setIsFakeTime}
-      />
+        <ImpersonatorSettings
+          impersonatedAddress={impersonatedAddress}
+          setIsFakeTime={setIsFakeTime}
+        />
 
-      <div>{isFakeTime && <div>Fake date: {currentDate.toLocaleDateString()}</div>}</div>
-    </HStack>
+        <div>{isFakeTime && <div>Fake date: {currentDate.toLocaleDateString()}</div>}</div>
+      </HStack>
+    </VStack>
   )
 }

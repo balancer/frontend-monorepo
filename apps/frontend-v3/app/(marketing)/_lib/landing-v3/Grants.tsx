@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 'use client'
 
 import { VStack, Button, Heading, Text, GridItem, Grid, Box, Stack } from '@chakra-ui/react'
@@ -78,7 +77,7 @@ export function Grants() {
             <Button
               as={NextLink}
               href="https://grants.balancer.community/"
-              rightIcon={<ArrowUpRight size="20px" />}
+              rightIcon={<ArrowUpRight size="16px" />}
               variant="secondary"
             >
               Get a grant

@@ -162,6 +162,26 @@ type PartnerCard = {
   externalLink?: boolean
 }
 
+export type PromoItem = {
+  id: number
+  icon: string
+  title: string
+  description: string
+  buttonText?: string
+  buttonLink?: string
+  linkText?: string
+  linkURL?: string
+  linkExternal?: boolean
+  bgImageActive?: {
+    directory: string
+    imgName: string
+  }
+  bgImageInactive?: {
+    directory: string
+    imgName: string
+  }
+}
+
 export interface ProjectConfig {
   projectId: 'beets' | 'balancer'
   projectUrl: string
@@ -181,4 +201,5 @@ export interface ProjectConfig {
   networksForProtocolStats?: GqlChain[]
   partnerCards?: PartnerCard[]
   merklRewardsChains: GqlChain[]
+  promoItems?: PromoItem[]
 }
