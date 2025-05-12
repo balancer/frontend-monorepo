@@ -129,7 +129,7 @@ export function QuantAMMPromoBanner() {
                 {...commonButtonProps}
                 bg={isDarkMode ? 'transparent' : 'transparent'}
                 color={isDarkMode ? '#fff' : '#000'}
-                href="https://www.quantamm.fi/"
+                href="https://www.quantamm.fi/factsheet/0x6b61d8680c4f9e560c8306807908553f95c749c5"
               >
                 Learn more{' '}
                 <Box pl="xxs">
