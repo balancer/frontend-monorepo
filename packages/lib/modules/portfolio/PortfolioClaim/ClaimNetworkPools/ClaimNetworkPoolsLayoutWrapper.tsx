@@ -42,11 +42,19 @@ export default function ClaimNetworkPoolsLayoutWrapper() {
   const poolsWithClaims = useMemo(() => {
     if (!pools) return []
 
-    return pools.filter(
-      pool =>
-        // filter out mabeets pool so it doesn't count and also filter out pools with no claims
-        !isMaBeetsPool(pool.id) && poolRewardsMap[pool.id]?.totalFiatClaimBalance?.isGreaterThan(0)
-    )
+    return pools
+      .filter(
+        pool =>
+          // filter out mabeets pool so it doesn't count and also filter out pools with no claims
+          !isMaBeetsPool(pool.id) &&
+          poolRewardsMap[pool.id]?.totalFiatClaimBalance?.isGreaterThan(0)
+      )
+      .sort(
+        (a, b) =>
+          // sort the pools according to pending fiat claim amount
+          (poolRewardsMap[b.id]?.totalFiatClaimBalance?.toNumber() || 0) -
+          (poolRewardsMap[a.id]?.totalFiatClaimBalance?.toNumber() || 0)
+      )
   }, [pools, poolRewardsMap])
 
   const hasMultipleClaims = useMemo(() => poolsWithClaims.length > 1, [poolsWithClaims])
