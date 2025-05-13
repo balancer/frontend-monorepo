@@ -46,7 +46,7 @@ function filterVoteList(
     result = result.filter(value => {
       return (
         value.id.toLowerCase().includes(_textSearch) ||
-        value.tokens.some(token => {
+        value.poolTokens.some(token => {
           return (
             token.symbol.toLowerCase().includes(_textSearch) ||
             token.address.toLowerCase().includes(_textSearch)

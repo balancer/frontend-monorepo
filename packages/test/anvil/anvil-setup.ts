@@ -96,9 +96,14 @@ export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
     chainId: mainnet.id,
     fallBackRpc: 'https://cloudflare-eth.com',
     port: ANVIL_PORTS[mainnet.id],
-    // From time to time this block gets outdated having this kind of error in integration tests:
-    // ContractFunctionExecutionError: The contract function "queryJoin" returned no data ("0x").
-    // forkBlockNumber: 21831471n,
+    /* From time to time this block gets outdated having this kind of error in integration tests:
+     ContractFunctionExecutionError: The contract function "queryJoin" returned no data ("0x").
+     forkBlockNumber: 21831471n,
+    */
+    // block number from 6 May 2025 (1 day before pectra launch)
+    // delete when foundry fixes issue affecting signing with permit2
+    // reproduction repo: https://github.com/agualis/boosted-add-demo
+    forkBlockNumber: 22426500n,
   },
   [polygon.id]: {
     chainId: polygon.id,
