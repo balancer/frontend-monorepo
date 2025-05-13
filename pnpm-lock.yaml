@@ -91,7 +91,7 @@ importers:
         version: link:../../packages/lib
       '@sentry/nextjs':
         specifier: 8.50.0
-        version: 8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.1(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0(esbuild@0.19.12))
+        version: 8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.1(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0)
       date-fns:
         specifier: ^2.30.0
         version: 2.30.0
@@ -168,12 +168,6 @@ importers:
       '@types/tinycolor2':
         specifier: ^1.4.6
         version: 1.4.6
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^7.3.1
-        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3))(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3)
-      '@typescript-eslint/parser':
-        specifier: ^7.3.1
-        version: 7.18.0(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3)
       '@wagmi/cli':
         specifier: 2.2.0
         version: 2.2.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)
@@ -233,7 +227,7 @@ importers:
         version: link:../../packages/test
       '@sentry/nextjs':
         specifier: 8.50.0
-        version: 8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.1(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0)
+        version: 8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.1(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0(esbuild@0.19.12))
       '@tanstack/react-query':
         specifier: 5.67.0
         version: 5.67.0(react@19.1.0)
@@ -337,12 +331,6 @@ importers:
       '@types/tinycolor2':
         specifier: ^1.4.6
         version: 1.4.6
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^7.3.1
-        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3))(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3)
-      '@typescript-eslint/parser':
-        specifier: ^7.3.1
-        version: 7.18.0(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3)
       '@viem/anvil':
         specifier: ^0.0.10
         version: 0.0.10(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -498,7 +486,7 @@ importers:
         version: 9.1.0(bufferutil@4.0.9)(typescript@5.8.3)(utf-8-validate@5.0.10)(zod@3.24.4)
       '@sentry/nextjs':
         specifier: 8.50.0
-        version: 8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.1(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0)
+        version: 8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.1(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0)
       '@tanstack/react-query':
         specifier: 5.67.0
         version: 5.67.0(react@19.1.0)
@@ -695,12 +683,6 @@ importers:
       '@types/tinycolor2':
         specifier: ^1.4.6
         version: 1.4.6
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^7.3.1
-        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3))(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3)
-      '@typescript-eslint/parser':
-        specifier: ^7.3.1
-        version: 7.18.0(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3)
       '@viem/anvil':
         specifier: ^0.0.10
         version: 0.0.10(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -757,12 +739,6 @@ importers:
       '@types/node':
         specifier: 22.13.5
         version: 22.13.5
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^7.3.1
-        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3))(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3)
-      '@typescript-eslint/parser':
-        specifier: ^7.3.1
-        version: 7.18.0(eslint@9.26.0(jiti@1.21.6))(typescript@5.8.3)
       '@viem/anvil':
         specifier: ^0.0.10
         version: 0.0.10(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -15194,7 +15170,7 @@ snapshots:
 
   '@sentry/core@8.50.0': {}
 
-  '@sentry/nextjs@8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.1(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0)':
+  '@sentry/nextjs@8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.1(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0(esbuild@0.19.12))':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/semantic-conventions': 1.28.0
@@ -15205,7 +15181,7 @@ snapshots:
       '@sentry/opentelemetry': 8.50.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.28.0)
       '@sentry/react': 8.50.0(react@19.1.0)
       '@sentry/vercel-edge': 8.50.0
-      '@sentry/webpack-plugin': 2.22.7(webpack@5.94.0)
+      '@sentry/webpack-plugin': 2.22.7(webpack@5.94.0(esbuild@0.19.12))
       chalk: 3.0.0
       next: 15.3.1(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       resolve: 1.22.8
@@ -15220,7 +15196,7 @@ snapshots:
       - supports-color
       - webpack
 
-  '@sentry/nextjs@8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.1(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0(esbuild@0.19.12))':
+  '@sentry/nextjs@8.50.0(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(next@15.3.1(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.94.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/semantic-conventions': 1.28.0
@@ -15231,7 +15207,7 @@ snapshots:
       '@sentry/opentelemetry': 8.50.0(@opentelemetry/api@1.9.0)(@opentelemetry/core@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.0(@opentelemetry/api@1.9.0))(@opentelemetry/semantic-conventions@1.28.0)
       '@sentry/react': 8.50.0(react@19.1.0)
       '@sentry/vercel-edge': 8.50.0
-      '@sentry/webpack-plugin': 2.22.7(webpack@5.94.0(esbuild@0.19.12))
+      '@sentry/webpack-plugin': 2.22.7(webpack@5.94.0)
       chalk: 3.0.0
       next: 15.3.1(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       resolve: 1.22.8
