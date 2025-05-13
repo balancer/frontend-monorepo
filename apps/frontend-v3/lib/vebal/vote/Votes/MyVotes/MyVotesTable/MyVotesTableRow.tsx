@@ -35,7 +35,6 @@ import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 import { VoteWeight } from '@bal/lib/vebal/vote/Votes/MyVotes/VoteWeight'
 import { isVotingTimeLocked } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { canReceiveIncentives, useBlacklistedVotes } from '../incentivesBlacklist'
 import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
@@ -83,8 +82,6 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
 
   const isDisabled = timeLocked || !allowChangeVotes || (vebalIsExpired ?? true) || isGaugeExpired
 
-  const { getToken } = useTokens()
-
   const { mainnetLockedInfo } = useVebalLockInfo()
   const lockEnd = mainnetLockedInfo.lockedEndDate
   const { blacklistedVotes } = useBlacklistedVotes(votingPools)
@@ -125,7 +122,6 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
             <Link href={getPoolPath(vote)} target="_blank">
               <HStack>
                 <VotingListTokenPills
-                  getToken={getToken}
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
