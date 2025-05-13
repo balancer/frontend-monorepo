@@ -45,7 +45,7 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
         loading ? (
           <Skeleton height="28px" w="100px" />
         ) : myVebalBalance === 0n ? (
-          <HStack spacing="xs">
+          <HStack spacing="ms">
             <Text color="font.maxContrast">&mdash;</Text>
             {isLockExpired && (
               <Tooltip
@@ -88,23 +88,9 @@ export function MyVotesStatsMyVebal({ myVebalBalance, loading }: Props) {
           <VStack>
             <ConnectWallet size="sm" variant="primary" />
           </VStack>
-        ) : isLockExpired ? (
-          <Button
-            as={NextLink}
-            href={getVeBalManagePath('extend', 'vote')}
-            size="sm"
-            variant="primary"
-          >
+        ) : isLockExpired || myVebalBalance ? (
+          <Button as={NextLink} href="/vebal/manage" size="sm" variant="tertiary">
             Manage
-          </Button>
-        ) : myVebalBalance ? (
-          <Button
-            as={NextLink}
-            href={getVeBalManagePath('extend', 'vote')}
-            size="sm"
-            variant="tertiary"
-          >
-            Extend lock
           </Button>
         ) : (
           <Button

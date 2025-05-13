@@ -115,12 +115,12 @@ export function FooterCta() {
               as={NextLink}
               href="https://docs.balancer.fi"
               initial={{ opacity: 0 }}
-              rightIcon={<ArrowUpRight size="20px" />}
+              rightIcon={<ArrowUpRight size="16px" />}
               size={{ base: 'md', lg: 'lg' }}
               target="_blank"
               transition={{ duration: 0.5, delay: 0.4, ease: 'easeInOut' }}
               variant="primary"
-              w={{ base: '150px', lg: '190px' }}
+              w={{ base: '150px', lg: '180px' }}
             >
               View v3 docs
             </MotionButton>
@@ -129,12 +129,12 @@ export function FooterCta() {
               as={NextLink}
               href="https://github.com/balancer/scaffold-balancer-v3"
               initial={{ opacity: 0 }}
-              rightIcon={<ArrowUpRight size="20px" />}
+              rightIcon={<ArrowUpRight size="16px" />}
               size={{ base: 'md', lg: 'lg' }}
               target="_blank"
               transition={{ duration: 0.5, delay: 0.4, ease: 'easeInOut' }}
               variant="secondary"
-              w={{ base: '150px', lg: '190px' }}
+              w={{ base: '150px', lg: '180px' }}
             >
               Prototype on v3
             </MotionButton>

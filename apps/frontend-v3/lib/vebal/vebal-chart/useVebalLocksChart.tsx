@@ -144,7 +144,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
   }, [userHistoricalLocks])
 
   const futureLockChartData = useMemo(() => {
-    if (hasExistingLock && !isExpired) {
+    if (hasExistingLock && !isExpired && userHistoricalLocks.length > 0) {
       const lastSnapshot = userHistoricalLocks[userHistoricalLocks.length - 1]
       const firstDay = Date.now()
       const lastDay = mainnetLockedInfo.lockedEndDate
@@ -302,9 +302,9 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
                 return `
                 <div style="padding: unset; display: flex; flex-direction: column; justify-content: center;
                   ${toolTipTheme.container}">
-                  <div style="font-size: 0.85rem; font-weight: 500; white-space: normal; line-height: 20px;
+                  <div style="font-size: 0.85rem; font-weight: 500; white-space: normal; line-height: 20px; max-width: 150px;
                     color: ${toolTipTheme.text};">
-                    Increase your lock to 1 year to maximize your veBAL to ${maxAmount.toFixed(2)}
+                    Get ${maxAmount.toFixed(4)} veBAL by max extending your lock
                   </div>
                 </div>`
               }

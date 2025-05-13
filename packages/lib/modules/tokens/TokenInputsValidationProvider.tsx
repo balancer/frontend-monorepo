@@ -5,7 +5,7 @@ import { PropsWithChildren, createContext, useState } from 'react'
 import { Address } from 'viem'
 import { ApiToken } from './token.types'
 
-export function _useTokenInputsValidation() {
+export function useTokenInputsValidationLogic() {
   type ValidationErrorsByToken = Record<Address, string>
   const [validationErrors, setValidationErrors] = useState<ValidationErrorsByToken>({})
 
@@ -40,11 +40,11 @@ export function _useTokenInputsValidation() {
   }
 }
 
-export type Result = ReturnType<typeof _useTokenInputsValidation>
+export type Result = ReturnType<typeof useTokenInputsValidationLogic>
 export const TokenValidationContext = createContext<Result | null>(null)
 
 export function TokenInputsValidationProvider({ children }: PropsWithChildren) {
-  const validation = _useTokenInputsValidation()
+  const validation = useTokenInputsValidationLogic()
 
   return (
     <TokenValidationContext.Provider value={validation}>{children}</TokenValidationContext.Provider>

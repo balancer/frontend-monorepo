@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 'use client'
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
@@ -136,7 +135,7 @@ function ContractCard({
             )}
           </HStack>
 
-          <Text color="font.secondary" w="80%">
+          <Text color="font.secondary" sx={{ textWrap: 'balance' }} w="80%">
             {contract.shortDescription}
           </Text>
           {isExpanded && (

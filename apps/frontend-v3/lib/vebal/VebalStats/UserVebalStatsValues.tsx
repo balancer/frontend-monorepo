@@ -1,11 +1,12 @@
 'use client'
 
-import { Heading, HStack, Skeleton, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { Heading, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { differenceInDays, format } from 'date-fns'
 import { formatUserVebal, useVebalUserStats } from './useVeBalUserStats'
 import { PRETTY_DATE_FORMAT } from '../lock/duration/lock-duration.constants'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function UserVebalStatsValues() {
   const { lockedInfoIsLoading, userDataIsLoading, userStats } = useVebalUserStats()
@@ -15,7 +16,7 @@ export function UserVebalStatsValues() {
   return (
     <>
       <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+        <Text fontSize="sm" fontWeight="semibold" mb="sm" mt="xxs" variant="secondary">
           My veBAL
         </Text>
         {userDataIsLoading ? (
@@ -25,9 +26,20 @@ export function UserVebalStatsValues() {
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          My rank
-        </Text>
+        <TooltipWithTouch label="Your rank does not include all other veBAL holders using 3rd party platforms like Aura and StakeDAO.">
+          <Text
+            fontSize="sm"
+            fontWeight="semibold"
+            mb="sm"
+            mt="xxs"
+            textDecoration="underline"
+            textDecorationStyle="dotted"
+            textDecorationThickness="1px"
+            variant="secondary"
+          >
+            My rank
+          </Text>
+        </TooltipWithTouch>
         {userDataIsLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
@@ -37,7 +49,7 @@ export function UserVebalStatsValues() {
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
+        <Text fontSize="sm" fontWeight="semibold" mb="sm" mt="xxs" variant="secondary">
           My share of veBAL
         </Text>
         {userDataIsLoading || lockedInfoIsLoading ? (
@@ -53,13 +65,19 @@ export function UserVebalStatsValues() {
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mt="xxs" variant="secondary">
-          {userStats && !userStats.lockExpired ? <>Expiry date</> : <>Expired on</>}
+        <Text fontSize="sm" fontWeight="semibold" mb="sm" mt="xxs" variant="secondary">
+          {userStats && !userStats.lockExpired ? (
+            <>Lock expiry date</>
+          ) : (
+            <Text color="font.error" fontSize="sm" fontWeight="semibold">
+              Your lock expired on
+            </Text>
+          )}
         </Text>
         {lockedInfoIsLoading ? (
           <Skeleton height="28px" w="100px" />
         ) : (
-          <Tooltip
+          <TooltipWithTouch
             label={
               userStats?.lockExpired
                 ? 'You are no longer receiving veBAL benefits like voting incentives and a share of protocol revenue.'
@@ -80,7 +98,7 @@ export function UserVebalStatsValues() {
                 `${differenceInDays(new Date(userStats.lockedUntil), new Date())} days`
               )}
             </Heading>
-          </Tooltip>
+          </TooltipWithTouch>
         )}
       </VStack>
     </>

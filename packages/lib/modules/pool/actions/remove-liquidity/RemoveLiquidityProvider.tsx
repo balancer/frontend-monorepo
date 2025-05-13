@@ -27,10 +27,10 @@ import { useModalWithPoolRedirect } from '../../useModalWithPoolRedirect'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { useWrapUnderlying } from '../useWrapUnderlying'
 
-export type UseRemoveLiquidityResponse = ReturnType<typeof _useRemoveLiquidity>
+export type UseRemoveLiquidityResponse = ReturnType<typeof useRemoveLiquidityLogic>
 export const RemoveLiquidityContext = createContext<UseRemoveLiquidityResponse | null>(null)
 
-export function _useRemoveLiquidity(urlTxHash?: Hash) {
+export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
   const [singleTokenAddress, setSingleTokenAddress] = useState<Address | undefined>(undefined)
   const [humanBptInPercent, setHumanBptInPercent] = useState<number>(100)
   const [wethIsEth, setWethIsEth] = useState(false)
@@ -316,7 +316,7 @@ export function _useRemoveLiquidity(urlTxHash?: Hash) {
 type Props = PropsWithChildren<{ urlTxHash?: Hash }>
 
 export function RemoveLiquidityProvider({ urlTxHash, children }: Props) {
-  const hook = _useRemoveLiquidity(urlTxHash)
+  const hook = useRemoveLiquidityLogic(urlTxHash)
   return <RemoveLiquidityContext.Provider value={hook}>{children}</RemoveLiquidityContext.Provider>
 }
 

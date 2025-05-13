@@ -19,9 +19,17 @@ export function PoolHookTag({ pool, onlyShowIcon = false }: Props) {
   if (!hook) return null
 
   return onlyShowIcon ? (
-    <BalBadge color="font.secondary" fontSize="xs" h={7} p="0" textTransform="lowercase" w={7}>
+    <BalBadge
+      bg="background.level3"
+      color="font.secondary"
+      fontSize="xs"
+      h="22px"
+      p="0"
+      textTransform="lowercase"
+      w="22px"
+    >
       <Center color="font.secondary" h="full" w="full">
-        <HookIcon size={20} />
+        <HookIcon size={16} />
       </Center>
     </BalBadge>
   ) : (

@@ -1,5 +1,4 @@
-import { Card, Heading, HStack, Progress, Stack, Text, VStack } from '@chakra-ui/react'
-import { VeBalSectionHeader } from './VeBalSectionHeader'
+import { Card, Flex, Heading, HStack, Progress, Stack, Text, VStack } from '@chakra-ui/react'
 import { fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { formatUserVebal, useVebalUserStats } from './VebalStats/useVeBalUserStats'
 import { useMaxAmountOfVeBAL } from './useMaxAmountOfVeBal'
@@ -34,24 +33,24 @@ export function VeBalPotentialBar() {
 
   return (
     <VStack spacing="xs" w="full">
-      <VeBalSectionHeader
-        after={
-          <Heading as="h3" size="md" variant="special">
-            {formatPercentage(progressPercentage)}%
-          </Heading>
-        }
-        before={
-          <Heading as="h3" size="md" variant="special">
-            My veBAL potential
-          </Heading>
-        }
-      />
-      <Card m="md" p="lg" position="relative" w="full">
-        <Stack direction="row" justifyContent="space-between" mb={2} w="full">
-          <Text fontSize="sm">Current veBAL: {formatUserVebal(userStats)}</Text>
-          <Text fontSize="sm">Potential veBAL: {formattedPotentialVeBal}</Text>
+      <Flex justifyContent="space-between" w="full">
+        <Heading as="h3" pb="0.5" size="md" variant="special">
+          Max lock percentage
+        </Heading>
+        <Heading as="h3" size="md" variant="special">
+          {formatPercentage(progressPercentage)}%
+        </Heading>
+      </Flex>
+      <Card m="ms" p={{ base: 'ms', sm: 'md', md: 'lg' }} position="relative" w="full">
+        <Stack direction="row" justifyContent="space-between" mb={5} w="full">
+          <Text fontSize={{ base: 'xs', md: 'sm' }}>
+            Current veBAL: {formatUserVebal(userStats)}
+          </Text>
+          <Text fontSize={{ base: 'xs', md: 'sm' }} variant="special">
+            veBAL with 1 year lock: {formattedPotentialVeBal}
+          </Text>
         </Stack>
-        <HStack>
+        <HStack gap={{ base: 'md', md: 'lg' }}>
           <Progress
             colorScheme="green"
             rounded="lg"

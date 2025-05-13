@@ -12,7 +12,7 @@ import {
   testHook,
 } from '@repo/lib/test/utils/custom-renderers'
 import { PropsWithChildren } from 'react'
-import { _useAddLiquidity } from './AddLiquidityProvider'
+import { useAddLiquidityLogic } from './AddLiquidityProvider'
 import { nestedPoolMock } from '../../__mocks__/nestedPoolMock'
 import { aBalWethPoolElementMock } from '@repo/lib/test/msw/builders/gqlPoolElement.builders'
 
@@ -26,7 +26,7 @@ async function testUseAddLiquidity(pool: GqlPoolElement = aBalWethPoolElementMoc
       </PoolProvider>
     )
   }
-  const { result } = testHook(() => _useAddLiquidity(), {
+  const { result } = testHook(() => useAddLiquidityLogic(), {
     wrapper: Providers,
   })
   return result

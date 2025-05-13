@@ -8,10 +8,10 @@ import { PoolListItem } from '../pool.types'
 import { getChainId } from '@repo/lib/config/app.config'
 import { PoolMetadata, PoolsMetadata } from './getPoolsMetadata'
 
-export type UsePoolsMetadataResult = ReturnType<typeof _usePoolsMetadata>
+export type UsePoolsMetadataResult = ReturnType<typeof usePoolsMetadataLogic>
 export const PoolsMetadataContext = createContext<UsePoolsMetadataResult | null>(null)
 
-export function _usePoolsMetadata(
+export function usePoolsMetadataLogic(
   erc4626Metadata: Erc4626Metadata[] | undefined,
   poolsMetadata: PoolsMetadata | undefined
 ) {
@@ -44,7 +44,7 @@ export function PoolsMetadataProvider({
   erc4626Metadata: Erc4626Metadata[] | undefined
   poolsMetadata: PoolsMetadata | undefined
 }) {
-  const hook = _usePoolsMetadata(erc4626Metadata, poolsMetadata)
+  const hook = usePoolsMetadataLogic(erc4626Metadata, poolsMetadata)
   return <PoolsMetadataContext.Provider value={hook}>{children}</PoolsMetadataContext.Provider>
 }
 

@@ -39,7 +39,7 @@ export function FeatureCard({
         height={180}
         padding="15px"
         position="absolute"
-        right={-50}
+        right="-20px"
         top={-50}
         width={180}
         {...radialPatternProps}

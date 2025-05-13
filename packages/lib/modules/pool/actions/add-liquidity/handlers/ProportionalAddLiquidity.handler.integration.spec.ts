@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import networkConfig from '@repo/lib/config/networks/mainnet'
 import { defaultTestUserAccount } from '@repo/test/anvil/anvil-setup'
 import { polygonTestPublicClient } from '@repo/test/utils/wagmi/wagmi-test-clients'

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export function AuraIcon({ size = 36 }: { size?: number }) {
   return (
     <svg

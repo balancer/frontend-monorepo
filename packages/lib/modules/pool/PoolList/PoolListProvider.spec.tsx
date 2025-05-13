@@ -2,10 +2,10 @@ import { PoolList as PoolListType } from '@repo/lib/modules/pool/pool.types'
 import { defaultPoolListMock, mockPoolList } from '@repo/lib/test/msw/handlers/PoolList.handlers'
 import { aGqlPoolMinimalMock } from '@repo/lib/test/msw/builders/gqlPoolMinimal.builders'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
-import { _usePoolList } from './PoolListProvider'
+import { usePoolListLogic } from './PoolListProvider'
 
 async function renderUsePoolsList() {
-  const { result, waitForLoadedUseQuery } = testHook(() => _usePoolList())
+  const { result, waitForLoadedUseQuery } = testHook(() => usePoolListLogic())
   await waitForLoadedUseQuery(result)
   return result
 }

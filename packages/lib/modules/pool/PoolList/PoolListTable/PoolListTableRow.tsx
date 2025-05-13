@@ -43,7 +43,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
         transition="all 0.2s ease-in-out"
         w="full"
       >
-        <Link href={getPoolPath(pool)} prefetch>
+        <Link href={getPoolPath(pool)} prefetch role="group">
           <Grid {...rest} pr="4" py={{ base: 'ms', md: 'md' }}>
             <GridItem>
               <NetworkIcon chain={pool.chain} size={6} />

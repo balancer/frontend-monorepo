@@ -11,7 +11,7 @@ const EMPTY_ARRAY: never[] = []
 
 export function useVoteListFiltersState() {
   const [sorting, setSorting] = useState<Sorting>(Sorting.desc)
-  const [sortVotesBy, setSortVotesBy] = useState<SortVotesBy>(SortVotesBy.votes)
+  const [sortVotesBy, setSortVotesBy] = useState<SortVotesBy>(SortVotesBy.bribesPerVebal)
 
   const [first, setFirst] = useState(20)
   const [skip, setSkip] = useState(0)

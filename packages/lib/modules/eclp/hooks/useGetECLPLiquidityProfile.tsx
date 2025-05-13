@@ -40,9 +40,9 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
   const data = useMemo(() => {
     if (!liquidityData) return null
 
-    const transformedData = liquidityData.map(([price, liquidity]) =>
-      isReversed ? [1 / price, liquidity] : [price, liquidity]
-    )
+    const transformedData = liquidityData
+      .filter(([price]) => price !== 0) // filter out zero price to prevent infinity on reverse
+      .map(([price, liquidity]) => (isReversed ? [1 / price, liquidity] : [price, liquidity]))
 
     return transformedData.sort((a, b) => a[0] - b[0]) as [[number, number]]
   }, [liquidityData, isReversed])
