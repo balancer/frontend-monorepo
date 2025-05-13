@@ -119,13 +119,14 @@ export function Erc4626InfoPopOver({ token, data, level, children }: Erc4626Info
               <Heading fontSize="1.125rem" variant="h4">
                 {token.symbol} tokenized vault
               </Heading>
-              <TokenIcon
-                address={token.address}
-                alt={token.symbol}
-                chain={token.chain}
-                ml="auto"
-                size={24}
-              />
+              <Box ml="auto">
+                <TokenIcon
+                  address={token.address}
+                  alt={token.symbol}
+                  chain={token.chain}
+                  size={24}
+                />
+              </Box>
             </HStack>
             {body}
           </VStack>

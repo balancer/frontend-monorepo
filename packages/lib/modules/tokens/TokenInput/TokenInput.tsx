@@ -65,7 +65,7 @@ function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputS
     >
       {tokenConfig && tokenConfig.showIcon && (
         <Box mr="sm">
-          <TokenIcon alt={tokenConfig.label} loading="lazy" logoURI={token?.logoURI} size={22} />
+          <TokenIcon alt={tokenConfig.label} logoURI={token?.logoURI} size={22} />
         </Box>
       )}
       {tokenConfig && tokenConfig.label}
