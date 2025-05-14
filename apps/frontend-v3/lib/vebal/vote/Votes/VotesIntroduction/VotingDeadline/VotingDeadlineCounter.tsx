@@ -10,8 +10,7 @@ import { useState } from 'react'
 
 export function VotingDeadlineCounter() {
   const now = useCurrentDate(oneSecondInMs)
-  const nowWithoutTime = new Date().setUTCHours(0, 0, 0, 0)
-  const deadline = nextThursday(nowWithoutTime)
+  const deadline = new Date(nextThursday(new Date()).setUTCHours(0, 0, 0, 0))
 
   const { daysDiff, hoursDiff, minutesDiff, secondsDiff } = useDateCountdown(deadline)
 
