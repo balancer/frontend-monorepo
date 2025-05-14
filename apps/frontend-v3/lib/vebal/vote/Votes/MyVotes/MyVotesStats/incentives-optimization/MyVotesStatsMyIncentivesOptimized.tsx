@@ -18,6 +18,14 @@ import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
 import { useLastUserSlope } from '@bal/lib/vebal/vote/useVeBALBalance'
 import { calculateVotingPower } from '../../myVotes.helpers'
 import { IncentivesOptimizedTooltip } from './IncentivesOptimizedTooltip'
+import { useVeBALPool } from '../useVeBALPool'
+import {
+  GqlPoolAprItem,
+  GqlPoolAprItemType,
+  GqlPoolStakingType,
+} from '@repo/lib/shared/services/api/generated/graphql'
+import { getStakedBalance } from '@repo/lib/modules/pool/user-balance.helpers'
+import { Pool } from '@repo/lib/modules/pool/pool.types'
 
 export function MyVotesStatsMyIncentivesOptimized() {
   const { toCurrency } = useCurrency()
@@ -34,6 +42,12 @@ export function MyVotesStatsMyIncentivesOptimized() {
   //     children: 'Applied',
   //   }
   // }
+
+  const { pool, poolIsLoading } = useVeBALPool(userAddress)
+  const aprItems = pool?.dynamicData.aprItems as GqlPoolAprItem[]
+  const lockingApr = aprItems?.find(item => item.type === GqlPoolAprItemType.Locking)?.apr || 0
+  const balance = pool ? getStakedBalance(pool as Pool, GqlPoolStakingType.Vebal) : undefined
+  const protocolRevenueShare = balance ? balance.balanceUsd * lockingApr : 0
 
   const { incentives, incentivesAreLoading } = useVeBALIncentives(userAddress)
 
@@ -67,7 +81,8 @@ export function MyVotesStatsMyIncentivesOptimized() {
       ? 'Voting incentives APR (average)'
       : 'My optimized vote incentives (1w)'
 
-  const isLoading = incentivesAreLoading || vebalUserDataLoading || optimizationLoading
+  const isLoading =
+    incentivesAreLoading || vebalUserDataLoading || optimizationLoading || poolIsLoading
 
   return (
     <MyVotesStatsCard
@@ -89,7 +104,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
               )}
             </Text>
             <IncentivesOptimizedTooltip
-              protocolRevenueShare={0}
+              protocolRevenueShare={protocolRevenueShare}
               totalIncentives={optimizedRewardValue}
             />
           </HStack>
