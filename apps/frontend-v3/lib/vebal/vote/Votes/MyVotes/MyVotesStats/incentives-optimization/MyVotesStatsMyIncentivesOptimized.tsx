@@ -10,13 +10,14 @@ import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import NextLink from 'next/link'
 import { getVeBalManagePath } from '@bal/lib/vebal/vebal-navigation'
 import { useIncentivesOptimized } from './useIncentivesOptimized'
-import { useBlacklistedVotes } from '../../incentivesBlacklist'
+import { canReceiveIncentives, useBlacklistedVotes } from '../../incentivesBlacklist'
 import { useVotes } from '../../../VotesProvider'
 import { useMyVotes } from '../../MyVotesProvider'
 import { useTotalVotes } from '@bal/lib/vebal/vote/useTotalVotes'
 import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
 import { useLastUserSlope } from '@bal/lib/vebal/vote/useVeBALBalance'
 import { calculateVotingPower } from '../../myVotes.helpers'
+import { IncentivesOptimizedTooltip } from './IncentivesOptimizedTooltip'
 
 export function MyVotesStatsMyIncentivesOptimized() {
   const { toCurrency } = useCurrency()
@@ -24,6 +25,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const { isLoading: vebalUserDataLoading, noVeBALBalance } = useVebalUserData()
 
   // fix: (votes) add new state when we are able to calculate optimized votes
+
   // const isApplied = false
   // if (isApplied) {
   //   return {
@@ -50,18 +52,18 @@ export function MyVotesStatsMyIncentivesOptimized() {
     myVotesLoading ||
     blacklistedVotesLoading
 
-  const { isLoading: optimizationLoading, totalIncentives } = useIncentivesOptimized(
-    votingPools,
-    myVotes,
-    calculateVotingPower(slope, lockEnd).shiftedBy(18),
-    bn(totalVotes),
-    blacklistedVotes,
-    inputsLoading
-  )
-  const optimizedRewardValue = totalIncentives
+  const { isLoading: optimizationLoading, totalIncentives: optimizedRewardValue } =
+    useIncentivesOptimized(
+      votingPools,
+      myVotes,
+      calculateVotingPower(slope, lockEnd).shiftedBy(18),
+      bn(totalVotes),
+      blacklistedVotes,
+      inputsLoading
+    )
 
   const headerText =
-    !isConnected || noVeBALBalance
+    !isConnected || noVeBALBalance || !canReceiveIncentives(userAddress)
       ? 'Voting incentives APR (average)'
       : 'My optimized vote incentives (1w)'
 
@@ -73,7 +75,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
       leftContent={
         isLoading ? (
           <Skeleton height="28px" w="100px" />
-        ) : !isConnected || noVeBALBalance ? (
+        ) : !isConnected || noVeBALBalance || !canReceiveIncentives(userAddress) ? (
           <Text fontSize="lg" fontWeight={700} variant="special">
             {incentives.voting ? fNum('feePercent', incentives.voting) : <>&mdash;</>}
           </Text>
@@ -86,7 +88,10 @@ export function MyVotesStatsMyIncentivesOptimized() {
                 <>&mdash;</>
               )}
             </Text>
-            {/* TODO: (votes) show when algorithm in place <MyIncentivesAprTooltip totalWithVotesOptimized={totalWithVotesOptimized} /> */}
+            <IncentivesOptimizedTooltip
+              protocolRevenueShare={0}
+              totalIncentives={optimizedRewardValue}
+            />
           </HStack>
         )
       }

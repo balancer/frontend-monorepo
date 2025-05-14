@@ -163,7 +163,7 @@ function votingPool(gaugeAddress: Address, symbol: string): VotingPoolWithData {
     chain: GqlChain.Base,
     type: GqlPoolType.ComposableStable,
     protocolVersion: 2,
-    tokens: [{ __typename: 'GqlVotingGaugeToken', address: '', logoURI: '', symbol: '' }],
+    poolTokens: [],
     gauge: {
       __typename: 'GqlVotingGauge',
       address: gaugeAddress,
