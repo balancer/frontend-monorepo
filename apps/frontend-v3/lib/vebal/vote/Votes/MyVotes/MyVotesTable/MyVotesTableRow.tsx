@@ -143,7 +143,7 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
             )}
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
-            {vote.votingIncentive ? (
+            {vote.votingIncentive && canReceiveIncentives(userAddress) ? (
               <Text>
                 {toCurrency(averageRewards, {
                   abbreviated: false,
