@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.13.1",
-    "@balancer/sdk": "3.1.0",
+    "@balancer/sdk": "4.0.3",
     "@chakra-ui/hooks": "2.4.2",
     "@chakra-ui/react": "2.10.6",
     "@chakra-ui/theme-tools": "2.2.6",
@@ -40,8 +40,8 @@
     "react-feather": "^2.0.10",
     "react-use-measure": "^2.1.1",
     "tinycolor2": "^1.6.0",
-    "viem": "2.23.0",
-    "wagmi": "2.14.11"
+    "viem": "2.29.0",
+    "wagmi": "2.15.1"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.5.6",
@@ -58,7 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "@wagmi/cli": "2.2.0",
-    "autoprefixer": "^10.4.14",
+    "autoprefixer": "10.4.21",
     "concurrently": "9.1.2",
     "cross-fetch": "4.1.0",
     "eslint": "8.43.0",

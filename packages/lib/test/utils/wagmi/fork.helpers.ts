@@ -4,13 +4,20 @@ import { TokenBalance, TokenBalancesByChain } from './fork-options'
 import { createConfig } from 'wagmi'
 import { mainnet } from 'viem/chains'
 import { drpcUrlByChainId } from '@repo/lib/shared/utils/rpc'
+import { orderBy } from 'lodash'
+import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated/graphql'
 
 /*
   E2E dev tests use an anvil fork to impersonate and test with default anvil accounts
   This is a helper file to provide related constants and helpers
 */
 
-export const defaultAnvilAccount = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+/*
+  This is the 4th anvil account and we chose this one explicitly as it does not have authlist7702
+  https://etherscan.io/address/0x90F79bf6EB2c4f870365E785982E1f101E93b906#authlist7702 -> does not open 7702 tab
+  Which is important for permit2 signatures working with anvil forks after pectra upgrade
+*/
+export const defaultAnvilAccount = '0x90F79bf6EB2c4f870365E785982E1f101E93b906'
 export const defaultAnvilForkRpcUrl = 'http://127.0.0.1:8545'
 
 export const mainnetTest = {
@@ -102,4 +109,21 @@ export function clearImpersonatedAddressLS() {
 
 function isLocalStorageAvailable() {
   return typeof localStorage !== 'undefined'
+}
+
+type VotingPools = GetVeBalVotingListQuery['veBalGetVotingList']
+/*
+The anvil fork will be too slow when used with > 700 gauges so we filter the list to allow faster tests
+*/
+export function filterVotingPoolsForAnvilFork(votingPools: VotingPools) {
+  const killedGaugesToInclude = [
+    '0xcf5938ca6d9f19c73010c7493e19c02acfa8d24d', // gauge of tetuBal pool
+  ]
+  // Order by isKilled first
+  return orderBy(votingPools, ['gauge.isKilled'], ['desc']).filter(vote => {
+    // Filter not killed gauges with only specific killed ones
+    return !vote.gauge.isKilled || killedGaugesToInclude.includes(vote.gauge.address)
+  })
+  // Uncomment to enable faster anvil voting list (with a subset of gauges)
+  // .slice(0, 50)
 }

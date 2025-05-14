@@ -9,7 +9,13 @@ const defaultHeaders = {
 
 export const { getClient: getApolloServerClient } = registerApolloClient(() => {
   return new ApolloClient({
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        GqlVotingPool: {
+          keyFields: ['id', 'gauge', ['address']],
+        },
+      },
+    }),
     link: new HttpLink({
       uri: config.apiUrl,
       headers: defaultHeaders,

@@ -8,14 +8,14 @@ import {
   defaultGetTokensQueryVariablesMock,
   defaultTokenListMock,
 } from './__mocks__/token.builders'
-import { _useTokens } from './TokensProvider'
+import { useTokensLogic } from './TokensProvider'
 
 const initTokensData = defaultGetTokensQueryMock
 const initTokenPricesData = defaultGetTokenPricesQueryMock
 
 function testUseTokens() {
   const variables = defaultGetTokensQueryVariablesMock
-  const { result } = testHook(() => _useTokens(initTokensData, initTokenPricesData, variables))
+  const { result } = testHook(() => useTokensLogic(initTokensData, initTokenPricesData, variables))
   return result
 }
 

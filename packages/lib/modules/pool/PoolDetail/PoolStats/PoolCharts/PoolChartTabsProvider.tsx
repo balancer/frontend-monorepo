@@ -62,11 +62,11 @@ export function getPoolTabsList({
   return POOL_SPECIFIC_TABS[poolType] || POOL_SPECIFIC_TABS.default
 }
 
-export type PoolChartTabsResponse = ReturnType<typeof _usePoolChartTabs>
+export type PoolChartTabsResponse = ReturnType<typeof usePoolChartTabsLogic>
 
 export const PoolChartTabsContext = createContext<PoolChartTabsResponse | null>(null)
 
-export function _usePoolChartTabs() {
+export function usePoolChartTabsLogic() {
   const { pool } = usePool()
   const { variant } = useParams()
 
@@ -102,7 +102,7 @@ export function _usePoolChartTabs() {
 }
 
 export function PoolChartTabsProvider({ children }: PropsWithChildren) {
-  const hook = _usePoolChartTabs()
+  const hook = usePoolChartTabsLogic()
   return <PoolChartTabsContext.Provider value={hook}>{children}</PoolChartTabsContext.Provider>
 }
 

@@ -193,11 +193,11 @@ export function usePoolSnapshots(
   })
 }
 
-type PoolChartsContextType = ReturnType<typeof _usePoolCharts>
+type PoolChartsContextType = ReturnType<typeof usePoolChartsLogic>
 
 const PoolChartsContext = createContext<PoolChartsContextType | null>(null)
 
-export function _usePoolCharts() {
+export function usePoolChartsLogic() {
   const { pool, tvl } = usePool()
   const { id: poolId } = useParams()
   const { toCurrency } = useCurrency()
@@ -510,7 +510,7 @@ export function _usePoolCharts() {
 }
 
 export function PoolChartsProvider({ children }: PropsWithChildren) {
-  const hook = _usePoolCharts()
+  const hook = usePoolChartsLogic()
   return <PoolChartsContext.Provider value={hook}>{children}</PoolChartsContext.Provider>
 }
 

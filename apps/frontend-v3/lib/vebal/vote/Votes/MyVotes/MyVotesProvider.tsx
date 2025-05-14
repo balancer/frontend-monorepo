@@ -13,6 +13,7 @@ import { useSubmitVotesAllSteps } from '@bal/lib/vebal/vote/Votes/MyVotes/action
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import {
   bpsToPercentage,
+  calculateMyValuePerVote,
   calculateMyVoteRewardsValue,
   sharesToBps,
 } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
@@ -22,8 +23,12 @@ import {
   getUnallocatedWeight,
   isVotingTimeLocked,
 } from '@bal/lib/vebal/vote/Votes/MyVotes/myVotes.helpers'
-import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import BigNumber from 'bignumber.js'
+import { useTotalVotes } from '../../useTotalVotes'
+import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
+import { useBlacklistedVotes } from './incentivesBlacklist'
+import { useLastUserSlope } from '../../useVeBALBalance'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -55,11 +60,10 @@ export interface SubmittingVote {
 export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern
-export function _useMyVotes({}: UseMyVotesArgs) {
-  const { veBALBalance } = useVebalUserData()
-
+export function useMyVotesLogic({}: UseMyVotesArgs) {
   const {
-    loading,
+    loading: votesLoading,
+    votingPools,
     votedPools,
     selectedVotingPools,
     clearSelectedVotingPools,
@@ -91,12 +95,16 @@ export function _useMyVotes({}: UseMyVotesArgs) {
       const result: Record<string, string> = {}
 
       for (const vote of myVotes) {
-        result[vote.id] = current[vote.id] ? current[vote.id] : vote.gaugeVotes?.userVotes || '0'
+        if (isPoolGaugeExpired(vote)) {
+          result[vote.id] = '0'
+        } else {
+          result[vote.id] = current[vote.id] ? current[vote.id] : vote.gaugeVotes?.userVotes || '0'
+        }
       }
 
       return result
     })
-  }, [myVotes])
+  }, [myVotes, isPoolGaugeExpired])
 
   const onEditVotesChange = (id: string, value: string) => {
     setEditVotesWeights(current => ({
@@ -111,13 +119,27 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     return myVotes.filter(myVote => !isPoolGaugeExpired(myVote))
   }, [myVotes, isPoolGaugeExpired])
 
+  const { totalVotes, totalVotesLoading } = useTotalVotes()
+  const { mainnetLockedInfo, isLoading: lockInfoLoading } = useVebalLockInfo()
+  const lockEnd = mainnetLockedInfo.lockedEndDate
+  const { blacklistedVotes, isLoading: blacklistedLoading } = useBlacklistedVotes(votingPools)
+  const { userAddress, isLoading: userAccountLoading } = useUserAccount()
+  const { slope, isLoading: slopeLoading } = useLastUserSlope(userAddress)
+
   const totalInfo: MyVotesTotalInfo = useMemo(() => {
     const infos = availableMyVotes.map(myVote => {
       const currentWeight = myVote.gaugeVotes?.userVotes || 0
       const votedWeight = votedVotesWeights[myVote.id] || 0
       const editWeight = editVotesWeights[myVote.id] || 0
       const totalValue = myVote.votingIncentive?.totalValue || 0
-      const valuePerVote = myVote.votingIncentive?.valuePerVote || 0
+      const valuePerVote = calculateMyValuePerVote(
+        editWeight,
+        myVote,
+        slope,
+        lockEnd,
+        totalVotes,
+        blacklistedVotes[myVote.gauge.address]
+      )
 
       return {
         currentWeight,
@@ -132,11 +154,26 @@ export function _useMyVotes({}: UseMyVotesArgs) {
     const currentVotes = sum(infos, ({ currentWeight }) => bn(currentWeight))
     const editVotes = sum(infos, ({ editWeight }) => bn(editWeight))
 
-    const totalRewardValue = sum(infos, ({ votedWeight, editWeight, vote }) =>
-      calculateMyVoteRewardsValue(votedWeight, editWeight, vote, veBALBalance)
+    const totalRewardValue = sum(infos, ({ editWeight, vote }) =>
+      calculateMyVoteRewardsValue(
+        editWeight,
+        vote,
+        slope,
+        lockEnd,
+        totalVotes,
+        blacklistedVotes[vote.gauge.address]
+      )
     )
+
     const prevTotalRewardValue = sum(infos, ({ votedWeight, vote }) =>
-      calculateMyVoteRewardsValue(votedWeight, votedWeight, vote, veBALBalance)
+      calculateMyVoteRewardsValue(
+        votedWeight,
+        vote,
+        slope,
+        lockEnd,
+        totalVotes,
+        blacklistedVotes[vote.gauge.address]
+      )
     )
 
     const averageRewardPerVote = sum(infos, ({ valuePerVote, editWeight }) =>
@@ -158,7 +195,15 @@ export function _useMyVotes({}: UseMyVotesArgs) {
       averageRewardPerVoteGain: averageRewardPerVote.minus(prevAverageRewardPerVote),
       unallocatedVotes: BigNumber.max(unallocatedVotes, 0),
     }
-  }, [availableMyVotes, votedVotesWeights, editVotesWeights, veBALBalance])
+  }, [
+    availableMyVotes,
+    votedVotesWeights,
+    editVotesWeights,
+    totalVotes,
+    slope,
+    blacklistedVotes,
+    lockEnd,
+  ])
 
   const hasVotedBefore = votedPools.length > 0
 
@@ -180,30 +225,20 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   const submittingVotes = useMemo<SubmittingVote[]>(() => {
     return myVotes
       .filter(vote => !isVotingTimeLocked(vote.gaugeVotes?.lastUserVoteTime ?? 0))
-      .flatMap(vote => {
-        const state = editVotesWeights[vote.id]
-
-        if (!state) return []
-
-        // To remove expired votes, we should submit them with '0' weight
-        if (isPoolGaugeExpired(vote)) {
-          return {
-            vote,
-            weight: '0',
-          }
-        }
-
-        // We should skip selected pools with empty weight
-        if (bn(state).isZero() && !votedVotesWeights[vote.id]) {
-          return []
-        }
-
+      .filter(vote => {
+        const newVoteWeight = editVotesWeights[vote.id] || 0
+        const persistedVoteWeight = vote.gaugeVotes?.userVotes || 0
+        if (bn(newVoteWeight).isZero() && bn(persistedVoteWeight).isZero()) return false
+        return newVoteWeight !== persistedVoteWeight
+      })
+      .map(vote => {
+        const newVote = editVotesWeights[vote.id] || '0'
         return {
           vote,
-          weight: state,
+          weight: newVote,
         }
       })
-  }, [myVotes, editVotesWeights, isPoolGaugeExpired, votedVotesWeights])
+  }, [myVotes, editVotesWeights])
 
   const timeLockedVotes: SubmittingVote[] = useMemo<SubmittingVote[]>(() => {
     return votedPools
@@ -224,7 +259,13 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   return {
     myVotes,
     sortedMyVotes,
-    loading,
+    loading:
+      votesLoading ||
+      totalVotesLoading ||
+      blacklistedLoading ||
+      lockInfoLoading ||
+      slopeLoading ||
+      userAccountLoading,
     filtersState,
     hasVotes,
     hasVotedBefore,
@@ -245,10 +286,10 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   }
 }
 
-export const MyVotesContext = createContext<ReturnType<typeof _useMyVotes> | null>(null)
+export const MyVotesContext = createContext<ReturnType<typeof useMyVotesLogic> | null>(null)
 
 export function MyVotesProvider({ children, ...props }: PropsWithChildren<UseMyVotesArgs>) {
-  const hook = _useMyVotes(props)
+  const hook = useMyVotesLogic(props)
 
   return <MyVotesContext.Provider value={hook}>{children}</MyVotesContext.Provider>
 }

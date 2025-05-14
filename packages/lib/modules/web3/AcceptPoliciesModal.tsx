@@ -94,7 +94,7 @@ export function AcceptPoliciesModal() {
                   </Link>
                   , use of{' '}
                   <Link as={NextLink} href="/3rd-party-services">
-                    3rd party services
+                    Third-party services
                   </Link>{' '}
                   and{' '}
                   <Link as={NextLink} href="/privacy-policy">

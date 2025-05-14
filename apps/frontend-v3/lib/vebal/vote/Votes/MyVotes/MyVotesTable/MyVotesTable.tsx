@@ -9,10 +9,13 @@ import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useMemo } from 'react'
 import { MyVotesTotalRow } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableTotalRow'
 import { MyVotesSubmitRow } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableSubmitRow'
+import { useTotalVotes } from '../../../useTotalVotes'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 interface Props {
   myVotes: VotingPoolWithData[]
   loading: boolean
+  noVeBALBalance: boolean
 }
 
 enum RowType {
@@ -23,13 +26,15 @@ enum RowType {
 
 const rowProps = {
   px: { base: 'sm', sm: '0' },
-  gridTemplateColumns: `32px minmax(320px, 1fr) 100px 120px 120px 120px 50px`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(100px, max-content) minmax(120px, max-content) minmax(140px, max-content) minmax(120px, max-content) 50px`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 }
 
-export function MyVotesTable({ myVotes, loading }: Props) {
+export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
   const isMounted = useIsMounted()
+  const { totalVotes, totalVotesLoading } = useTotalVotes()
+  const { isConnected } = useUserAccount()
 
   const items = useMemo(() => {
     if (myVotes.length === 0) {
@@ -75,9 +80,17 @@ export function MyVotesTable({ myVotes, loading }: Props) {
         return <MyVotesSubmitRow cellProps={{}} keyValue={item.id} {...rowProps} />
       }
 
-      return <MyVotesTableRow cellProps={{}} keyValue={item.id} vote={item.vote} {...rowProps} />
+      return (
+        <MyVotesTableRow
+          cellProps={{}}
+          keyValue={item.id}
+          totalVotes={totalVotes}
+          vote={item.vote}
+          {...rowProps}
+        />
+      )
     }
-  }, [])
+  }, [totalVotes])
 
   if (!isMounted) return <Skeleton height="500px" w="full" />
 
@@ -93,9 +106,15 @@ export function MyVotesTable({ myVotes, loading }: Props) {
       <PaginatedTable
         getRowId={item => item.id}
         items={items}
-        loading={loading}
+        loading={loading || totalVotesLoading}
         loadingLength={3}
-        noItemsFoundLabel="You don’t have any active or proposed votes. Add some votes from the table below."
+        noItemsFoundLabel={
+          !isConnected
+            ? 'Connect your wallet to see and edit your votes'
+            : noVeBALBalance
+              ? 'You don’t have any votes. Get some veBAL to start voting.'
+              : 'You don’t have any votes. Start by selecting some pool gauges from the table below.'
+        }
         paginationProps={undefined}
         renderTableHeader={TableHeader}
         renderTableRow={TableRow}

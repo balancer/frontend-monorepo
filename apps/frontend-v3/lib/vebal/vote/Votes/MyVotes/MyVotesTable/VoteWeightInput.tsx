@@ -80,7 +80,6 @@ export function VoteWeightInput({
   }
 
   function getInputValue() {
-    if (isGaugeExpired) return '0.00'
     return isEditing ? editingValue : parseFloat(percentage).toFixed(2)
   }
 

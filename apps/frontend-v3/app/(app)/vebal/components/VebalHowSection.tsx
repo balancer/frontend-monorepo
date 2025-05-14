@@ -12,7 +12,14 @@ export function VebalHowSection() {
           <Heading as="h2" backgroundClip="text" bg="background.gold" pb="0.5" size="lg">
             Here’s how it works
           </Heading>
-          <Text color="font.secondary" lineHeight="1.4" maxWidth="38ch" pt="0" textAlign="center">
+          <Text
+            color="font.secondary"
+            lineHeight="1.4"
+            maxWidth="38ch"
+            pt="0"
+            sx={{ textWrap: 'pretty' }}
+            textAlign="center"
+          >
             Add liquidity to the ve8020 BAL/WETH pool and lock it up. The longer you lock, the more
             veBAL you get.
           </Text>
@@ -71,8 +78,7 @@ export function VebalHowSection() {
                     Lock
                   </Link>{' '}
                   your <chakra.span style={{ whiteSpace: 'nowrap' }}>B-80BAL-20WETH</chakra.span> LP
-                  tokens for a period to receive veBAL. The longer you lock, the more veBAL your
-                  get.
+                  tokens for a period to receive veBAL. The longer you lock, the more veBAL you get.
                 </>
               }
               heading="Lock your LP tokens"

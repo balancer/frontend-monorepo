@@ -1,6 +1,5 @@
 import { SVGProps } from 'react'
 
-/* eslint-disable max-len */
 export function PromoHookIcon({
   size = 24,
   ...props

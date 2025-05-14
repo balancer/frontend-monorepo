@@ -15,9 +15,10 @@ import { useExpiredGauges } from '@bal/lib/vebal/vote/useExpiredGaugesQuery'
 import { useVotingEscrowLocksQueries } from '@bal/lib/vebal/cross-chain/useVotingEscrowLocksQueries'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
-import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 import { useHiddenHandVotingIncentives } from '@repo/lib/shared/services/hidden-hand/useHiddenHandVotingIncentives'
 import { isGaugeExpired } from '@repo/lib/modules/vebal/vote/vote.helpers'
+import { filterVotingPoolsForAnvilFork } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
 
 export interface UseVotesArgs {
   data: GetVeBalVotingListQuery | undefined
@@ -25,19 +26,12 @@ export interface UseVotesArgs {
   error?: any
 }
 
-export function _useVotes({ data, votingListLoading = false, error }: UseVotesArgs) {
+export function useVotesLogic({ data, votingListLoading = false, error }: UseVotesArgs) {
   const { userAddress, isConnected } = useUserAccount()
 
   const votingList = useMemo(() => {
     const votingPools = data?.veBalGetVotingList || []
-    return shouldUseAnvilFork
-      ? /*
-        FIXME:
-        The current implementation is making onchain requests for every row in the list. We must simplify this.
-        In the meantime, when running in anvil fork mode we limit the number of rows to 10 to avoid overloading the fork.
-        */
-        votingPools.slice(0, 10)
-      : votingPools
+    return shouldUseAnvilFork ? filterVotingPoolsForAnvilFork(votingPools) : votingPools
   }, [data?.veBalGetVotingList])
 
   const gaugeAddresses = useMemo(() => votingList.map(vote => vote.gauge.address), [votingList])
@@ -48,7 +42,7 @@ export function _useVotes({ data, votingListLoading = false, error }: UseVotesAr
     refetchAll,
   } = useGaugeVotes({ gaugeAddresses })
 
-  const { expiredGauges } = useExpiredGauges({ gaugeAddresses })
+  const { expiredGauges, isLoading: isExpiredGaugesLoading } = useExpiredGauges({ gaugeAddresses })
 
   const { incentives, incentivesError, incentivesAreLoading } = useHiddenHandVotingIncentives()
 
@@ -196,10 +190,13 @@ export function _useVotes({ data, votingListLoading = false, error }: UseVotesAr
     incentives,
     incentivesError,
     incentivesAreLoading,
-    loading: votingListLoading || incentivesAreLoading || gaugeVotesIsLoading,
+    loading:
+      votingListLoading || incentivesAreLoading || gaugeVotesIsLoading || isExpiredGaugesLoading,
+    isExpiredGaugesLoading,
     count: votingPools.length,
     error,
     gaugeVotesIsLoading,
+    gaugeVotes,
     votedPools,
     selectedVotingPools,
     clearSelectedVotingPools,
@@ -220,10 +217,10 @@ export function _useVotes({ data, votingListLoading = false, error }: UseVotesAr
   }
 }
 
-export const VotesContext = createContext<ReturnType<typeof _useVotes> | null>(null)
+export const VotesContext = createContext<ReturnType<typeof useVotesLogic> | null>(null)
 
 export function VotesProvider({ children, ...props }: PropsWithChildren<UseVotesArgs>) {
-  const hook = _useVotes(props)
+  const hook = useVotesLogic(props)
 
   return <VotesContext.Provider value={hook}>{children}</VotesContext.Provider>
 }

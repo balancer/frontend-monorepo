@@ -13,10 +13,11 @@ import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { fNumCustom } from '../../utils/numbers'
 import { useProtocolStats } from '@repo/lib/modules/protocol/ProtocolStatsProvider'
 
-export function PoolsPage({
-  children,
-  additionalFees,
-}: PropsWithChildren & { additionalFees?: string }) {
+type PoolsPageProps = PropsWithChildren & {
+  rewardsClaimed24h?: string
+}
+
+export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
   const { protocolData } = useProtocolStats()
 
   return (
@@ -93,7 +94,7 @@ export function PoolsPage({
                     {`Join ${fNumCustom(protocolData?.protocolMetricsAggregated.numLiquidityProviders || '0', '0a')}+ Liquidity Providers in yield-bearing pools`}
                   </Text>
                 </Box>
-                <PoolPageStats additionalFees={additionalFees} />
+                <PoolPageStats rewardsClaimed24h={rewardsClaimed24h} />
               </Flex>
             </FadeInOnView>
             <FadeInOnView animateOnce={false}>

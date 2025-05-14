@@ -1,5 +1,5 @@
 'use client'
-
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import {
   Box,
   Button,
@@ -39,6 +39,7 @@ import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { useVebalLockData } from '@repo/lib/modules/vebal/VebalLockDataProvider'
+import { ArrowRight } from 'react-feather'
 
 type Props = {
   editAlwaysOn?: boolean
@@ -108,21 +109,31 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
       <Card>
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <span>{getModalLabel(lockMode, editAlwaysOn, true)}</span>
+            <Text as="span" fontSize="2xl" fontWeight="700" letterSpacing="-0.35px">
+              {getModalLabel(lockMode, editAlwaysOn, true)}
+            </Text>
           </HStack>
         </CardHeader>
         <VStack align="start" spacing="lg" w="full">
           {bptBalance !== undefined && isZero(bptBalance.amount) && isZero(totalAmount) && (
             <BalAlert
               content={
-                <Text color="font.dark">
-                  {`You need to lock the LP token of the ve8020 BAL/WETH pool to get veBAL. Since you
-                    don't have this, you can't get veBAL.`}
-                  <br />
-                  Add liquidity to this pool to get the LP token and came back: <br />
-                  <BalAlertLink href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014">
+                <Text color="font.dark" fontSize="sm">
+                  {`You need to lock the LP token of the `}
+                  <BalAlertLink
+                    fontSize="sm"
+                    href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014"
+                  >
                     80% BAL / 20% WETH pool
                   </BalAlertLink>
+                  {` to get veBAL. This is the special Balancer protocol liquidity pool. Come back to this step once you have acquired some of these LP tokens by adding liquidity to the `}
+                  <BalAlertLink
+                    fontSize="sm"
+                    href="/pools/ethereum/v2/0x5c6ee304399dbdb9c8ef030ab642b10820db8f56000200000000000000000014"
+                  >
+                    pool
+                  </BalAlertLink>
+                  .
                 </Text>
               }
               status="info"
@@ -191,14 +202,36 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
 
           <VStack align="start" spacing="sm" w="full">
             <HStack justifyContent="space-between" spacing="md" w="full">
-              <Text fontSize="sm" fontWeight="700" lineHeight="18px">
-                Lock duration
-              </Text>
-              <Tooltip label={lockDuration.lockUntilDateFormatted}>
-                <Text fontSize="sm" fontWeight="700" lineHeight="18px">
-                  {lockDuration.lockUntilDateDuration}
+              <TooltipWithTouch label="The minimum lock period is to the Thursday of the following week. The maximum lock period is to the closest Thursday to the end of a 1 year period. Once locked, you cannot redeem your LP tokens until lock expiry. You can extend your lock period later at any time.">
+                <Text
+                  _after={{
+                    content: '""',
+                    position: 'absolute',
+                    left: 0,
+                    bottom: 0,
+                    width: 'full',
+                    borderBottom: '1px dotted',
+                    opacity: 0.8,
+                    pointerEvents: 'none',
+                  }}
+                  cursor="pointer"
+                  display="inline-block"
+                  fontSize="sm"
+                  fontWeight="700"
+                  lineHeight="18px"
+                  pb="2px"
+                  position="relative"
+                >
+                  Lock duration
                 </Text>
-              </Tooltip>
+              </TooltipWithTouch>
+              <Box textAlign="right" w="100px">
+                <Tooltip label={lockDuration.lockUntilDateFormatted}>
+                  <Text fontSize="sm" fontWeight="700" lineHeight="18px">
+                    {lockDuration.lockUntilDateDuration}
+                  </Text>
+                </Tooltip>
+              </Box>
             </HStack>
             <LockDurationSlider
               max={lockDuration.maxStep}
@@ -226,7 +259,7 @@ export function VebalLockForm({ editAlwaysOn = false }: Props) {
                       {`${fNum('token', currentVeBALAmount)}`}
                     </Text>
                     <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
-                      ➔
+                      <ArrowRight size={14} />
                     </Text>
                     <Text fontSize="md" fontWeight="700" lineHeight="16px">
                       {fNum('token', expectedVeBalAmount.totalExpectedVeBal)}

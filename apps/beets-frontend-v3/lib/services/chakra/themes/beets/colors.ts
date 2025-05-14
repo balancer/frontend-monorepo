@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { colors as baseColors } from '@repo/lib/shared/services/chakra/themes/base/colors'
 
 export const colors = {

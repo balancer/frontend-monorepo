@@ -14,7 +14,6 @@ import { VotesChunksAllocation } from '@bal/lib/vebal/vote/Votes/MyVotes/actions
 import { AlertTriangle } from 'react-feather'
 import { CHUNK_SIZE } from '@bal/lib/vebal/vote/Votes/MyVotes/actions/submit/useSubmitVotesSteps'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GainBadge } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/shared/GainBadge'
 import { MyIncentivesTooltip } from '../../../MyVotesStats/shared/MyIncentivesTooltip'
 
@@ -36,7 +35,6 @@ export function SubmitVotesPreview({
   isPoolGaugeExpired,
 }: Props) {
   const { toCurrency } = useCurrency()
-  const { getToken } = useTokens()
 
   const unallocatedVotes = totalInfo.unallocatedVotes || bn(0)
   const editVotes = totalInfo.editVotes || bn(0)
@@ -68,7 +66,6 @@ export function SubmitVotesPreview({
                         <NetworkIcon chain={vote.chain} size={6} />
 
                         <VotingListTokenPills
-                          getToken={getToken}
                           h={['32px', '36px']}
                           iconSize={20}
                           nameSize="sm"
@@ -109,7 +106,6 @@ export function SubmitVotesPreview({
                         <NetworkIcon chain={vote.chain} size={6} />
 
                         <VotingListTokenPills
-                          getToken={getToken}
                           h={['32px', '36px']}
                           iconSize={20}
                           nameSize="sm"

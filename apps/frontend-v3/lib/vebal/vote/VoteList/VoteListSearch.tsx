@@ -14,8 +14,10 @@ export function VoteListSearch() {
         <FormControl w="full">
           <SearchInput
             ariaLabel="search for a voting pool"
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus={false}
             isLoading={loading}
-            placeholder="Search..."
+            placeholder="Search by token..."
             search={searchText}
             setSearch={setSearch}
           />

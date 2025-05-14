@@ -163,7 +163,7 @@ export function Videos() {
             <Button
               as={NextLink}
               href="https://github.com/balancer/scaffold-balancer-v3"
-              rightIcon={<ArrowUpRight size="20px" />}
+              rightIcon={<ArrowUpRight size="16px" />}
               variant="secondary"
             >
               Prototype on v3

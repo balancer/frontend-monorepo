@@ -1,4 +1,3 @@
-import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
 
@@ -11,5 +10,5 @@ export const metadata: Metadata = {
 }
 
 export default async function Pools({ children }: PropsWithChildren) {
-  return <DefaultPageContainer>{children}</DefaultPageContainer>
+  return <div>{children}</div>
 }

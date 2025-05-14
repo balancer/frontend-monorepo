@@ -26,12 +26,7 @@ export type PoolList = GetPoolsQuery['pools']
 
 export type PoolListItem = PoolList[0]
 
-/*
-  VotingPool type does not have nestedPool in the API schema so we create it as undefined to satisfy the type check
-  This would only affect to the edge case of a pool with no root hooks but hooks in a nested pool:
-  it wouldn't be displayed in the voting list
-*/
-type ApiTokenWithUndefinedNestedPool = ApiToken & { nestedPool?: undefined }
+type ApiTokenWithNestedPool = ApiToken & { nestedPool?: GqlNestedPool }
 export type VotingPool = Pick<
   PoolListItem,
   | 'id'
@@ -46,7 +41,7 @@ export type VotingPool = Pick<
   | 'tags'
   // We need hook to show when the pool has hooks in the voting list
   | 'hook'
-> & { poolTokens: ApiTokenWithUndefinedNestedPool[] }
+> & { poolTokens: ApiTokenWithNestedPool[] }
 
 // PoolCore defines the shared fields between PoolListItem, Pool that are required for pool related shared logic
 export type PoolCore = VotingPool | Pool | PoolListItem

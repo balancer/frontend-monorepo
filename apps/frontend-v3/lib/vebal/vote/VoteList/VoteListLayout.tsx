@@ -50,11 +50,11 @@ export function VoteListLayout() {
         <SelectedPoolsMenu
           onAddVotesClick={scrollToMyVotes}
           votingPools={selectedVotingPools.map(selectedVotingPool => ({
-            title: selectedVotingPool.tokens
+            title: selectedVotingPool.poolTokens
               .map(token => `${token.symbol} ${token.weight ?? 0}%`)
               .join(' / '),
             // fix: (votes) pool name is not available here...
-            description: selectedVotingPool.tokens
+            description: selectedVotingPool.poolTokens
               .map(token => `${token.symbol}-${token.weight ?? 0}`)
               .join('-'),
           }))}
@@ -87,7 +87,7 @@ export function VoteListLayout() {
                 willChange="transform"
               >
                 <HStack w="full">
-                  <Heading as="h2" size="lg" variant="special">
+                  <Heading as="h2" pb="0.5" size="lg" variant="special">
                     Pool gauge vote list
                   </Heading>
                   <Heading mt="1" size="md" variant="secondary">

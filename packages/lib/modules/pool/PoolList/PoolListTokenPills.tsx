@@ -12,7 +12,6 @@ import { isStableLike, isWeightedLike } from '../pool.helpers'
 import { getUserReferenceTokens } from '../pool-tokens.utils'
 import { PoolCore, PoolToken } from '../pool.types'
 import { VotingPoolWithData } from '../../vebal/vote/vote.types'
-import { GetTokenFn } from '@repo/lib/modules/tokens/TokensProvider'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
 
@@ -138,7 +137,7 @@ function StableTokenPills({
         const nestedPool = 'nestedPool' in token ? token.nestedPool : undefined
         return (
           <Badge
-            key={[token.address, token.chain].join('-')}
+            key={[token.address, token.chain, i].join('-')}
             {...badgeProps}
             alignItems="center"
             bg="background.level2"
@@ -192,19 +191,19 @@ type VotingListTokenPillsProps = {
   vote: VotingPoolWithData
   iconSize?: number
   nameSize?: string
-  getToken: GetTokenFn
 } & BadgeProps
 
-export function VotingListTokenPills({ vote, getToken, ...props }: VotingListTokenPillsProps) {
-  const pool = voteToPool(vote, getToken)
-
+export function VotingListTokenPills({ vote, ...props }: VotingListTokenPillsProps) {
+  const pool = voteToPool(vote)
   const { name } = usePoolMetadata(pool)
+  const tokens = getUserReferenceTokens(pool)
+
   return (
     <PoolTokenPills
       chain={pool.chain}
       poolName={name}
       poolType={pool.type}
-      tokens={pool.poolTokens}
+      tokens={tokens}
       {...props}
     />
   )
