@@ -9,6 +9,7 @@ import {
   balancerV2GaugeV5Abi,
   balancerV2VaultAbi,
   feeDistributorAbi,
+  reClammPoolAbi,
   veBalAbi,
   veDelegationProxyAbi,
 } from './abi/generated'
@@ -32,6 +33,7 @@ export const AbiMap = {
   'balancer.omniVotingEscrowAbi': OmniVotingEscrowAbi,
   'balancer.gaugeControllerAbi': GaugeControllerAbi,
   'balancer.liquidityGaugeV5Abi': LiquidityGaugeV5Abi,
+  'balancer.reclammPool': reClammPoolAbi,
   'beets.lstStaking': sonicStakingAbi,
   'beets.sfc': sfcAbi,
   'beets.reliquary': reliquaryAbi,
