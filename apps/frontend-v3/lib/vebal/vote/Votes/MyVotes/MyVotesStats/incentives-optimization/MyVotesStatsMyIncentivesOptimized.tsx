@@ -55,8 +55,8 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const { mainnetLockedInfo, isLoading: lockInfoLoading } = useVebalLockInfo()
   const lockEnd = mainnetLockedInfo.lockedEndDate
   const { slope, isLoading: slopeLoading } = useLastUserSlope(userAddress)
-  const { loading: votesLoading, votingPools } = useVotes()
-  const { loading: myVotesLoading, myVotes } = useMyVotes()
+  const { loading: votesLoading, votingPools, toggleVotingPool, isVotedPool } = useVotes()
+  const { loading: myVotesLoading, myVotes, onEditVotesChange } = useMyVotes()
   const { isLoading: blacklistedVotesLoading, blacklistedVotes } = useBlacklistedVotes(votingPools)
   const inputsLoading =
     totalVotesLoading ||
@@ -66,15 +66,18 @@ export function MyVotesStatsMyIncentivesOptimized() {
     myVotesLoading ||
     blacklistedVotesLoading
 
-  const { isLoading: optimizationLoading, totalIncentives: optimizedRewardValue } =
-    useIncentivesOptimized(
-      votingPools,
-      myVotes,
-      calculateVotingPower(slope, lockEnd).shiftedBy(18),
-      bn(totalVotes),
-      blacklistedVotes,
-      inputsLoading
-    )
+  const {
+    isLoading: optimizationLoading,
+    totalIncentives: optimizedRewardValue,
+    votes: optimizedVotes,
+  } = useIncentivesOptimized(
+    votingPools,
+    myVotes,
+    calculateVotingPower(slope, lockEnd).shiftedBy(18),
+    bn(totalVotes),
+    blacklistedVotes,
+    inputsLoading
+  )
 
   const headerText =
     !isConnected || noVeBALBalance || !canReceiveIncentives(userAddress)
@@ -83,6 +86,20 @@ export function MyVotesStatsMyIncentivesOptimized() {
 
   const isLoading =
     incentivesAreLoading || vebalUserDataLoading || optimizationLoading || poolIsLoading
+
+  const applyOptimizedVotes = () => {
+    optimizedVotes.forEach(optimizedVote => {
+      const vote = votingPools.find(vote => vote.gauge.address === optimizedVote.gaugeAddress)
+      if (vote) {
+        if (!isVotedPool(vote)) toggleVotingPool(vote)
+        console.log({
+          address: optimizedVote.gaugeAddress,
+          perct: (optimizedVote.votePrct * 10000).toString(),
+        })
+        onEditVotesChange(vote.id, (optimizedVote.votePrct * 10000).toString())
+      }
+    })
+  }
 
   return (
     <MyVotesStatsCard
@@ -123,11 +140,11 @@ export function MyVotesStatsMyIncentivesOptimized() {
             Get veBAL
           </Button>
         ) : isConnected ? (
-          <Button size="sm" variant="primary">
+          <Button onClick={() => applyOptimizedVotes()} size="sm" variant="primary">
             <HStack spacing="xs">
               <MagicStickIcon />
               <Text color="font.dark" fontSize="sm" fontWeight="700">
-                Coming soon
+                Apply
               </Text>
             </HStack>
           </Button>

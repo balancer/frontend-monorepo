@@ -32,7 +32,7 @@ export function useIncentivesOptimized(
   myVotes: VotingPoolWithData[],
   userVotingPower: BigNumber,
   totalVotes: BigNumber,
-  blacklistedVotes: Record<Address, BigNumber>,
+  blacklistedVotes: Record<Address, BigNumber | undefined>,
   inputsLoading: boolean
 ): OptimizedVotes {
   const { data, isPending } = useQuery({
@@ -50,7 +50,13 @@ export function useIncentivesOptimized(
 
   const votes = data || []
   const [timelockedVotes] = filterTimelockedVotes(myVotes)
-  const totalIncentives = sumTotalIncentives(votes, timelockedVotes, userVotingPower, totalVotes)
+  const totalIncentives = sumTotalIncentives(
+    votes,
+    timelockedVotes,
+    userVotingPower,
+    totalVotes,
+    blacklistedVotes
+  )
 
   return { votes, totalIncentives, isLoading: isPending }
 }
@@ -60,7 +66,7 @@ export function calculateIncentivesOptimized(
   myVotes: VotingPoolWithData[],
   userVotingPower: BigNumber,
   totalVotes: BigNumber,
-  blacklistedVotes: Record<Address, BigNumber>
+  blacklistedVotes: Record<Address, BigNumber | undefined>
 ): OptimizedVote[] {
   const [timelockedVotes, timelockedPrct] = filterTimelockedVotes(myVotes)
 
@@ -94,6 +100,7 @@ export function calculateIncentivesOptimized(
   const votesToReset = myVotes.filter(
     pool => !findByGaugeAddress(timelockedVotes, pool.gauge.address as Address)
   )
+
   const votes = mergeOptimizedVotes(resetVotes(votesToReset), prioritizedPools)
 
   return votes
@@ -127,7 +134,7 @@ function buildPoolsWithPriorities(
   myVotes: VotingPoolWithData[],
   userVotingPower: BigNumber,
   totalVotes: BigNumber,
-  blacklistedVotes: Record<Address, BigNumber>
+  blacklistedVotes: Record<Address, BigNumber | undefined>
 ) {
   const votesAndIncentives = extractVoteAmountAndIncentives(votingPools, totalVotes)
   removeCurrentVotesFromGauges(votesAndIncentives, myVotes, userVotingPower)
@@ -161,7 +168,7 @@ function removeCurrentVotesFromGauges(
 
 function removeBlacklistedVotes(
   votingPools: PoolInfo[],
-  blacklistedVotes: Record<Address, BigNumber>
+  blacklistedVotes: Record<Address, BigNumber | undefined>
 ) {
   return votingPools.map(pool => {
     const blacklistedVotesAmount = blacklistedVotes[pool.gaugeAddress] || 0
@@ -228,13 +235,16 @@ function sumTotalIncentives(
   optimizedVotes: OptimizedVote[],
   timelockedVotes: VotingPoolWithData[],
   userVotingPower: BigNumber,
-  totalVotes: BigNumber
+  totalVotes: BigNumber,
+  blacklistedVotes: Record<Address, BigNumber | undefined>
 ) {
   const optimizedVotesAmount = sum(optimizedVotes, vote => bn(vote.incentivesAmount))
 
   const timelockedVotesAmount = timelockedVotes.reduce((acc, vote) => {
-    const poolVotes = totalVotes.times(bn(vote.gaugeVotes?.votesNextPeriod || 0).shiftedBy(-18))
-
+    const poolBlacklistedVotes = blacklistedVotes[vote.gauge.address as `0x${string}`] || bn(0)
+    const poolVotes = totalVotes
+      .times(bn(vote.gaugeVotes?.votesNextPeriod || 0).shiftedBy(-18))
+      .minus(poolBlacklistedVotes)
     const incentivePerVote = bn(vote.votingIncentive?.totalValue || 0).div(poolVotes.shiftedBy(-18))
     const userPoolVotes = userVotingPower
       .times(bn(vote.gaugeVotes?.userVotes || 0).div(10000))
