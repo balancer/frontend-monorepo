@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { FetchPoolProps, PoolVariant } from '@repo/lib/modules/pool/pool.types'
 import { ChainSlug } from '@repo/lib/modules/pool/pool.utils'
 import { generatePoolMetadata, PoolLayout, PoolMetadata } from '@repo/lib/shared/layouts/PoolLayout'

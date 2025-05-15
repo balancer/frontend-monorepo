@@ -149,6 +149,8 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
               textAlign="right"
               textDecoration="underline"
               textDecorationStyle="dotted"
+              textDecorationThickness="1px"
+              textUnderlineOffset="4px"
             >
               {votesShareNextWeekText ?? <>&mdash;</>}
             </Text>

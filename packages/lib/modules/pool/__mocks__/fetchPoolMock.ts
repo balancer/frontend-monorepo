@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import fetch from 'cross-fetch'
 
 import { visit } from 'graphql/language/visitor'

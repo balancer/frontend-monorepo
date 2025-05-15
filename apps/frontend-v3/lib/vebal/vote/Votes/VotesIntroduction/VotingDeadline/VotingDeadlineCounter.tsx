@@ -1,17 +1,17 @@
 import { HStack, VStack, Text, Box } from '@chakra-ui/react'
 import { useCurrentDate, useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
-import { differenceInMinutes, format, nextThursday } from 'date-fns'
+import { differenceInMinutes, format } from 'date-fns'
 import { oneSecondInMs } from '@repo/lib/shared/utils/time'
 import { VotingDeadlineContainer } from './VotingDeadlineContainer'
 import { ReminderButton } from './ReminderButton'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { CalendarReminderModal } from '../../MyVotes/CalendarReminderModal'
 import { useState } from 'react'
+import { nextVotingDeadline } from './deadline'
 
 export function VotingDeadlineCounter() {
   const now = useCurrentDate(oneSecondInMs)
-  const nowWithoutTime = new Date().setUTCHours(0, 0, 0, 0)
-  const deadline = nextThursday(nowWithoutTime)
+  const deadline = nextVotingDeadline()
 
   const { daysDiff, hoursDiff, minutesDiff, secondsDiff } = useDateCountdown(deadline)
 

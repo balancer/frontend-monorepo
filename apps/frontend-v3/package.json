@@ -20,12 +20,13 @@
     "gen:theme-typings": "chakra-cli tokens ./lib/services/chakra/themes/bal/bal.theme.ts",
     "postinstall": "pnpm run gen:theme-typings",
     "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
     "test:integration": "vitest run -c ./vitest.config.integration.ts",
     "test:integration:watch": "vitest -c ./vitest.config.integration.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.13.1",
-    "@balancer/sdk": "4.0.2",
+    "@balancer/sdk": "4.0.3",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "2.4.2",
     "@chakra-ui/icons": "2.2.4",

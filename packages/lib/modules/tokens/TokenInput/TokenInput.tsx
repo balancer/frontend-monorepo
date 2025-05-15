@@ -65,7 +65,7 @@ function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputS
     >
       {tokenConfig && tokenConfig.showIcon && (
         <Box mr="sm">
-          <TokenIcon alt={tokenConfig.label} loading="lazy" logoURI={token?.logoURI} size={22} />
+          <TokenIcon alt={tokenConfig.label} logoURI={token?.logoURI} size={22} />
         </Box>
       )}
       {tokenConfig && tokenConfig.label}
@@ -160,10 +160,10 @@ function TokenInputFooter({
               {getValidationError(token)}
             </Text>
           )}
-          <Text color="inherit" fontSize="sm">
+          <Text color={noBalance ? 'font.error' : 'inherit'} fontSize="sm">
             {fNum('token', userBalance, { abbreviated: false })}
           </Text>
-          <Box>
+          <Box color={noBalance ? 'font.error' : undefined}>
             <WalletIcon size={16} />
           </Box>
         </HStack>

@@ -14,7 +14,7 @@ import { Pool } from '../../pool.types'
 
 export type ClaimablePool = Pool | PoolListItem
 
-export function _useClaim(pools: ClaimablePool[]) {
+export function useClaimLogic(pools: ClaimablePool[]) {
   const { isConnected } = useUserAccount()
   const previewModalDisclosure = useDisclosure()
   const { isDisabled, disabledReason } = isDisabledWithReason([
@@ -51,7 +51,7 @@ export function _useClaim(pools: ClaimablePool[]) {
   }
 }
 
-export type UseClaimProviderResponse = ReturnType<typeof _useClaim>
+export type UseClaimProviderResponse = ReturnType<typeof useClaimLogic>
 export const ClaimProviderContext = createContext<UseClaimProviderResponse | null>(null)
 
 type Props = PropsWithChildren<{
@@ -59,7 +59,7 @@ type Props = PropsWithChildren<{
 }>
 
 export function ClaimProvider({ pools, children }: Props) {
-  const hook = _useClaim(pools)
+  const hook = useClaimLogic(pools)
   return <ClaimProviderContext.Provider value={hook}>{children}</ClaimProviderContext.Provider>
 }
 

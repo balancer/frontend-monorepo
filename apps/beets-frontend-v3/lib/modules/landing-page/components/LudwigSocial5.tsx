@@ -1,6 +1,5 @@
 import React from 'react'
 
-/* eslint-disable max-len */
 export function LudwigSocial5() {
   return (
     <svg

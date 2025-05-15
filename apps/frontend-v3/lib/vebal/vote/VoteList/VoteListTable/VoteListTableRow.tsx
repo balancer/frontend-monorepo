@@ -28,7 +28,6 @@ import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { PoolListTableDetailsCell } from '@repo/lib/modules/pool/PoolList/PoolListTable/PoolListTableDetailsCell'
 import { voteToPool } from '@repo/lib/modules/vebal/vote/vote.helpers'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -52,8 +51,6 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
     ? 'Get veBAL to select and vote on pool gauges'
     : 'Connect your wallet to select and vote on pool gauges.'
 
-  const { getToken } = useTokens()
-
   return (
     <FadeInOnView>
       <Box
@@ -74,7 +71,6 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             <Link href={getPoolPath(vote)} target="_blank">
               <HStack>
                 <VotingListTokenPills
-                  getToken={getToken}
                   h={['32px', '36px']}
                   iconSize={20}
                   p={['xxs', 'sm']}
@@ -89,7 +85,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             </Link>
           </GridItem>
           <GridItem>
-            <PoolListTableDetailsCell pool={voteToPool(vote, getToken)} />
+            <PoolListTableDetailsCell pool={voteToPool(vote)} />
           </GridItem>
           <GridItem justifySelf="end" textAlign="right">
             {incentivesAreLoading ? (
@@ -165,8 +161,10 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                   fontWeight="700"
                   isDisabled={isDisabled}
                   onClick={() => toggleVotingPool(vote)}
+                  rounded="md"
+                  size="xs"
                   variant={selected ? 'outline' : 'secondary'}
-                  w="80px"
+                  w="74px"
                 >
                   {selected ? 'Selected' : 'Select'}
                 </Button>

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export enum Protocol {
   Aave = 'aave',
   Aura = 'aura',
@@ -20,6 +19,7 @@ export enum Protocol {
   CowAmm = 'cow-amm',
   Xave = 'xave',
   Fjord = 'fjord',
+  QuantAmm = 'quant-amm',
 }
 
 export const protocolIconPaths: Record<Protocol, string> = {
@@ -30,6 +30,7 @@ export const protocolIconPaths: Record<Protocol, string> = {
   [Protocol.CowAmm]: '/images/protocols/cowamm.png',
   [Protocol.Xave]: '/images/protocols/xave.png',
   [Protocol.Aave]: '/images/protocols/aave.svg',
+  [Protocol.QuantAmm]: '/images/protocols/quantamm.png',
   /* Icons below are yet unused */
   [Protocol.Agave]: '/images/protocols/agave.png',
   [Protocol.Beefy]: '/images/protocols/beefy.svg',

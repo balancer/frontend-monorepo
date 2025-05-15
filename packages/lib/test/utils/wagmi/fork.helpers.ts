@@ -12,7 +12,12 @@ import { GetVeBalVotingListQuery } from '@repo/lib/shared/services/api/generated
   This is a helper file to provide related constants and helpers
 */
 
-export const defaultAnvilAccount = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+/*
+  This is the 4th anvil account and we chose this one explicitly as it does not have authlist7702
+  https://etherscan.io/address/0x90F79bf6EB2c4f870365E785982E1f101E93b906#authlist7702 -> does not open 7702 tab
+  Which is important for permit2 signatures working with anvil forks after pectra upgrade
+*/
+export const defaultAnvilAccount = '0x90F79bf6EB2c4f870365E785982E1f101E93b906'
 export const defaultAnvilForkRpcUrl = 'http://127.0.0.1:8545'
 
 export const mainnetTest = {

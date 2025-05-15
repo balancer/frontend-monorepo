@@ -8,6 +8,7 @@ import BaseAprTooltip, {
   BaseAprTooltipProps,
 } from '@repo/lib/shared/components/tooltips/apr-tooltip/BaseAprTooltip'
 import { SparklesIcon } from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
+import { ArrowRight } from 'react-feather'
 
 interface Props
   extends Omit<
@@ -85,7 +86,7 @@ export function WeeklyYieldTooltip({
                 {toCurrency(currentWeeklyYield, { abbreviated: false })}
               </Text>
               <Text color="font.secondary" fontSize="md" fontWeight="700" lineHeight="16px">
-                ➔
+                <ArrowRight size={14} />
               </Text>
               <Text fontSize="md" fontWeight="700" lineHeight="16px" variant="special">
                 {toCurrency(weeklyYield, { abbreviated: false })}
