@@ -23,12 +23,7 @@ const nextConfig: NextConfig = {
     ],
   },
   transpilePackages: ['@repo/lib'],
-  serverExternalPackages: [
-    // Filter out the problematic packages
-    ...['import-in-the-middle', 'require-in-the-middle'].filter(
-      pkg => !['import-in-the-middle', 'require-in-the-middle'].includes(pkg)
-    ),
-  ],
+
   async redirects() {
     return [
       {
