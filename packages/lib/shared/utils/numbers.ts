@@ -112,8 +112,15 @@ function tokenFormat(val: Numberish, { abbreviated = true }: FormatOpts = {}): s
 
 // Formats an APR value as a percentage.
 function aprFormat(apr: Numberish, { canBeNegative = false }: FormatOpts = {}): string {
-  if (bn(apr).gt(APR_UPPER_THRESHOLD)) return '-'
+  const aprBn = bn(apr)
+
+  if (aprBn.gt(APR_UPPER_THRESHOLD)) return '-'
   if (isSmallPercentage(apr) && !canBeNegative) return SMALL_PERCENTAGE_LABEL
+
+  // If absolute APR is > 1000% (i.e., apr value > 10), format without decimals.
+  if (aprBn.abs().gt(10)) {
+    return numeral(apr.toString()).format('0,0%')
+  }
 
   return numeral(apr.toString()).format(APR_FORMAT)
 }
