@@ -165,18 +165,26 @@ export function getTotalApr(
  * @param {string} [vebalBoost] - An optional boost value for calculation.
  * @returns {string} The formatted total APR label.
  */
-export function getTotalAprLabel(aprItems: GqlPoolAprItem[], vebalBoost?: string): string {
+export function getTotalAprLabel(
+  aprItems: GqlPoolAprItem[],
+  vebalBoost?: string,
+  canBeNegative = false
+): string {
   const [minTotal, maxTotal] = getTotalApr(aprItems, vebalBoost)
 
   if (minTotal.eq(maxTotal) || vebalBoost) {
-    return fNum('apr', minTotal.toString())
+    return fNum('apr', minTotal.toString(), { canBeNegative }) // only a single apr could be negative?
   } else {
     return `${fNum('apr', minTotal.toString())} - ${fNum('apr', maxTotal.toString())}`
   }
 }
 
-export function getTotalAprRaw(aprItems: GqlPoolAprItem[], vebalBoost?: string): string {
-  const apr = getTotalAprLabel(aprItems, vebalBoost)
+export function getTotalAprRaw(
+  aprItems: GqlPoolAprItem[],
+  vebalBoost?: string,
+  canBeNegative = false
+): string {
+  const apr = getTotalAprLabel(aprItems, vebalBoost, canBeNegative)
   return apr.substring(0, apr.length - 1)
 }
 
