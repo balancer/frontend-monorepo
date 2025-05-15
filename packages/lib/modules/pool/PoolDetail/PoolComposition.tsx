@@ -179,6 +179,7 @@ export function PoolComposition() {
                     color="black"
                     display="inline-flex"
                     href="https://medium.com/@QuantAMM/quantamm-x-balancer-v3-046af77ddc81"
+                    rel="noopener noreferrer"
                     target="_blank"
                   >
                     <Box as="span">Learn more</Box>

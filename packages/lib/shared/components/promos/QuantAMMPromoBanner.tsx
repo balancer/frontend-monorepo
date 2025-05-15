@@ -24,7 +24,7 @@ export function QuantAMMPromoBanner() {
     as: NextLink,
     border: '1px solid',
     borderColor: isDarkMode ? '#fff' : '#000',
-    cursor: 'hand',
+    cursor: 'pointer',
     flex: '1',
     h: { base: '32px', sm: '40px', lg: '48px' },
     py: 'sm',
