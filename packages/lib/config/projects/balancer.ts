@@ -42,11 +42,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: [],
-    hidePoolTypes: [
-      GqlPoolType.LiquidityBootstrapping,
-      GqlPoolType.Fx,
-      GqlPoolType.QuantAmmWeighted,
-    ],
+    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.Fx],
     hideProtocolVersion: [],
     showPoolName: false,
     showVeBal: true,
@@ -157,6 +153,17 @@ export const ProjectConfigBalancer: ProjectConfig = {
   cowSupportedNetworks: [GqlChain.Mainnet, GqlChain.Arbitrum, GqlChain.Base, GqlChain.Gnosis],
   partnerCards: [
     {
+      backgroundImage: 'images/partners/cards/partner-xave-bg.png',
+      bgColor: 'blue.400',
+      ctaText: 'View pools',
+      ctaUrl: 'pools?poolTypes=QUANT_AMM_WEIGHTED',
+      description:
+        'Auto-rebalancing pools designed to capture additional yield from price volatility.',
+      externalLink: false,
+      iconName: 'quantamm',
+      title: 'QuantAMM',
+    },
+    {
       backgroundImage: 'images/partners/cards/partner-cow-bg.png',
       bgColor: 'green.900',
       ctaText: 'View pools',
@@ -168,22 +175,12 @@ export const ProjectConfigBalancer: ProjectConfig = {
     {
       backgroundImage: 'images/partners/cards/partner-gyro-bg.png',
       bgColor: 'pink.600',
-      ctaText: 'View pools on Gyro',
-      ctaUrl: 'https://app.gyro.finance/pools/ethereum/',
+      ctaText: 'View pools',
+      ctaUrl: 'pools?poolTypes=GYRO',
       description: 'Concentrated Liquidity Pools on Balancer. Improves capital efficiency for LPs.',
-      externalLink: true,
+      externalLink: false,
       iconName: 'gyro',
       title: 'Gyroscope',
-    },
-    {
-      backgroundImage: 'images/partners/cards/partner-xave-bg.png',
-      bgColor: 'blue.400',
-      ctaText: 'View pools on Xave',
-      ctaUrl: 'https://app.xave.co/pool',
-      description: 'Foreign Exchange Liquidity Pools. Optimized for RWA and stablecoins.',
-      externalLink: true,
-      iconName: 'xave',
-      title: 'Xave',
     },
   ],
   promoItems: [

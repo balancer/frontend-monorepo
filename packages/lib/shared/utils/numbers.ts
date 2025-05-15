@@ -64,7 +64,7 @@ export function bn(val: Numberish): BigNumber {
   return new BigNumber(val.toString())
 }
 
-type FormatOpts = { abbreviated?: boolean; forceThreeDecimals?: boolean }
+type FormatOpts = { abbreviated?: boolean; forceThreeDecimals?: boolean; canBeNegative?: boolean }
 
 /**
  * Converts a number to a string format within the decimal limit that numeral
@@ -111,9 +111,9 @@ function tokenFormat(val: Numberish, { abbreviated = true }: FormatOpts = {}): s
 }
 
 // Formats an APR value as a percentage.
-function aprFormat(apr: Numberish): string {
+function aprFormat(apr: Numberish, { canBeNegative = false }: FormatOpts = {}): string {
   if (bn(apr).gt(APR_UPPER_THRESHOLD)) return '-'
-  if (isSmallPercentage(apr)) return SMALL_PERCENTAGE_LABEL
+  if (isSmallPercentage(apr) && !canBeNegative) return SMALL_PERCENTAGE_LABEL
 
   return numeral(apr.toString()).format(APR_FORMAT)
 }
@@ -197,7 +197,7 @@ export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): s
     case 'token':
       return tokenFormat(val, opts)
     case 'apr':
-      return aprFormat(val)
+      return aprFormat(val, opts)
     case 'feePercent':
     case 'sharePercent':
       return feePercentFormat(val)

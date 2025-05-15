@@ -140,13 +140,14 @@ export function RateProviderInfoPopOver({
               <Heading fontSize="1.125rem" variant="h4">
                 {token.symbol} rate provider
               </Heading>
-              <TokenIcon
-                address={token.address}
-                alt={token.address}
-                chain={token.chain}
-                ml="auto"
-                size={24}
-              />
+              <Box ml="auto">
+                <TokenIcon
+                  address={token.address}
+                  alt={token.address}
+                  chain={token.chain}
+                  size={24}
+                />
+              </Box>
             </HStack>
             {body}
           </VStack>

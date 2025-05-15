@@ -6,8 +6,9 @@ import { createAvatar } from '@dicebear/core'
 import { identicon } from '@dicebear/collection'
 import { Address } from 'viem'
 import { useTokens } from './TokensProvider'
-import { Image, ImageProps, Text, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react'
+import { Text, Popover, PopoverTrigger, PopoverContent } from '@chakra-ui/react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
+import Image from 'next/image'
 
 type Props = {
   address?: Address | string
@@ -19,6 +20,7 @@ type Props = {
   border?: string
   weight?: string | null
   disablePopover?: boolean
+  overflow?: string
 }
 
 export function TokenIcon({
@@ -30,8 +32,9 @@ export function TokenIcon({
   border,
   weight,
   disablePopover,
+  overflow = 'hidden',
   ...rest
-}: Props & Omit<ImageProps, 'src'>) {
+}: Props) {
   const [hasError, setHasError] = useState(false)
   const { getToken } = useTokens()
 
@@ -73,17 +76,23 @@ export function TokenIcon({
   const iconSrc = useMemo(() => getIconSrc(), [logoURI, token])
 
   const tokenImage = (
-    <Image
-      alt={alt}
-      backgroundColor="background.level4"
-      border={border}
-      borderRadius="100%"
-      height={`${size}px`}
-      onError={() => !hasError && setHasError(true)}
-      src={hasError || !iconSrc ? fallbackSVG.toDataUri() : iconSrc}
-      width={`${size}px`}
-      {...rest}
-    />
+    <div style={{ position: 'relative', width: size, height: size, overflow }}>
+      <Image
+        alt={alt}
+        height={size}
+        onError={() => !hasError && setHasError(true)}
+        src={hasError || !iconSrc ? fallbackSVG.toDataUri() : iconSrc}
+        style={{
+          backgroundColor: 'var(--chakra-colors-background-level4)',
+          border: border,
+          borderRadius: '100%',
+          objectFit: 'cover',
+          overflow,
+        }}
+        width={size}
+        {...rest}
+      />
+    </div>
   )
 
   if (disablePopover) {
