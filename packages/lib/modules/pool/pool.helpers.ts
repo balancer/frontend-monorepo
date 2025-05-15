@@ -469,7 +469,7 @@ export function poolTypeLabel(poolType: GqlPoolType) {
     case GqlPoolType.Fx:
       return 'FX'
     case GqlPoolType.QuantAmmWeighted:
-      return 'BTF'
+      return 'QuantAMM BTF'
     default:
       return poolType.toLowerCase()
   }
