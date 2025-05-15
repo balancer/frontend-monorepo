@@ -14,7 +14,7 @@ export default function Privacy() {
             <Box mt="3xl" pb="md">
               <h1>Risks of using&nbsp;Balancer</h1>
               <p>
-                <em>Last Updated: April 2025</em>
+                <em>Last Updated: May 2025</em>
               </p>
               <p>
                 <em>
