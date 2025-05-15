@@ -49,7 +49,11 @@ export function SparklesIcon({
 
   const hasRewardApr =
     pool.dynamicData.aprItems.filter(item =>
-      [GqlPoolAprItemType.Staking, GqlPoolAprItemType.VebalEmissions].includes(item.type)
+      [
+        GqlPoolAprItemType.Staking,
+        GqlPoolAprItemType.VebalEmissions,
+        GqlPoolAprItemType.Merkl,
+      ].includes(item.type)
     ).length > 0
 
   const hasOnlySwapApr =
