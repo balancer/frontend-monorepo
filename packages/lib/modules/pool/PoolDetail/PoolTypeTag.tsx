@@ -43,7 +43,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
 
   if (isBoosted(pool) && erc4626Metadata.length) {
     return (
-      <>
+      <TagWrapper>
         {erc4626Metadata.map(metadata => (
           <Image
             alt={metadata.name}
@@ -54,7 +54,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
           />
         ))}
         <Text {...textProps}>Boosted</Text>
-      </>
+      </TagWrapper>
     )
   }
 
