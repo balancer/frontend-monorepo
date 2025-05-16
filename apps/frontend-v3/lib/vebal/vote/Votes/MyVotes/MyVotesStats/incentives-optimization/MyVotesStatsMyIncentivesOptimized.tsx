@@ -81,7 +81,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
       const vote = votingPools.find(vote => vote.gauge.address === optimizedVote.gaugeAddress)
       if (vote) {
         if (!isVotedPool(vote)) toggleVotingPool(vote)
-        onEditVotesChange(vote.id, (optimizedVote.votePrct * 10000).toString())
+        onEditVotesChange(vote.id, bn(optimizedVote.votePrct).times(10000).toString())
       }
     })
   }
