@@ -16,7 +16,11 @@ export function useTxSound() {
 
   const playTxSound = (stepType: StepType) => {
     if (allowSounds === 'no') return
-    stepType === 'removeLiquidity' ? playRemoveSound() : playSuccessSound()
+    if (stepType === 'removeLiquidity') {
+      playRemoveSound()
+    } else {
+      playSuccessSound()
+    }
   }
 
   return { playTxSound }

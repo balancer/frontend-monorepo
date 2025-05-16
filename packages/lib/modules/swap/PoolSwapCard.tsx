@@ -11,7 +11,6 @@ export function PoolSwapCard() {
       <BalAlert
         content={
           <BalAlertContent
-            // eslint-disable-next-line max-len
             description="This swap routes through a single pool only. Better rates are usually available through the standard swap UI."
             forceColumnMode
             title="Direct single pool swap (expert option)"

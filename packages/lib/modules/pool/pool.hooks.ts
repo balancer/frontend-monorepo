@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { getPoolPath } from './pool.utils'
 import { Pool } from './pool.types'
 import { useParams } from 'next/navigation'

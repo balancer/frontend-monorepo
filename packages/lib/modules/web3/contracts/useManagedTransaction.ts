@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
 import { getGqlChain } from '@repo/lib/config/app.config'

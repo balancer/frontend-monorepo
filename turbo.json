@@ -51,7 +51,11 @@
     },
     "lint": {
       "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"]
+      "outputs": [
+        "node_modules/.cache/.eslintcache",
+        ".next/cache/eslint",
+        ".eslintcache"
+      ]
     },
     "lint:fix": {
       "dependsOn": ["^transit"],

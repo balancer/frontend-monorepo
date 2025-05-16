@@ -1,5 +1,6 @@
-'use client'
 /* eslint-disable react-hooks/exhaustive-deps */
+
+'use client'
 
 import { ApolloClient, useApolloClient, useReactiveVar } from '@apollo/client'
 import { HumanAmount } from '@balancer/sdk'
@@ -160,7 +161,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   ) {
     try {
       setDefaultTokens()
-    } catch (error) {
+    } catch {
       throw new Error('Token metadata not found')
     }
   }

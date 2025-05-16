@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
 import { Box, Card, Center, Stack, Text, VStack } from '@chakra-ui/react'

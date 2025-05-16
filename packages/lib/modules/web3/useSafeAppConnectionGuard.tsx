@@ -23,7 +23,7 @@ export function useSafeAppConnectionGuard(newConnector?: Connector, chainId?: nu
 function isSafeApp() {
   try {
     return window.location.ancestorOrigins[0] === 'https://app.safe.global'
-  } catch (e) {
+  } catch {
     return false
   }
 }

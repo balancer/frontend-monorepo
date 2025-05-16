@@ -1,7 +1,7 @@
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { addDays, addHours, addMinutes, addSeconds } from 'date-fns'
 import { useDateCountdown } from './date.hooks'
-import { act } from 'react-dom/test-utils'
+import { act } from 'react'
 
 describe('Countdown hook', () => {
   beforeAll(() => {

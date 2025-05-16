@@ -24,9 +24,7 @@ export function Title({ ...rest }: BoxProps) {
     if (measureRef.current) {
       const newWidths: Record<string, number> = {}
       words.forEach(({ word }) => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         measureRef.current!.textContent = word
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         newWidths[word] = measureRef.current!.offsetWidth + 20
       })
       setWidths(newWidths)
@@ -40,7 +38,6 @@ export function Title({ ...rest }: BoxProps) {
     }, 5000)
 
     return () => clearInterval(wordInterval)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentWordIndex])
 
   return (

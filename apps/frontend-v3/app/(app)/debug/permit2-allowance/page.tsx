@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 'use client'
 
 import { BPT_DECIMALS } from '@repo/lib/modules/pool/pool.constants'
