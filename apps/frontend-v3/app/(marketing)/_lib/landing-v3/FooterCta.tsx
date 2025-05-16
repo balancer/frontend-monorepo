@@ -11,8 +11,9 @@ import { useRef } from 'react'
 import { useState } from 'react'
 import { ArrowUpRight } from 'react-feather'
 import { BalancerLogoAnimated } from '@repo/lib/shared/components/icons/BalancerIconAnimated'
+import { MotionButtonProps } from './types'
 
-const MotionButton = motion(Button)
+const MotionButton = motion(Button) as React.FC<MotionButtonProps>
 
 export function FooterCta() {
   const [shouldAnimate, setShouldAnimate] = useState(false)

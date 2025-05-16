@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, type JSX } from 'react'
 import { Box, useToken } from '@chakra-ui/react'
 import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
 

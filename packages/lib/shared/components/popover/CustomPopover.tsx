@@ -12,7 +12,7 @@ import {
   HStack,
   Link,
 } from '@chakra-ui/react'
-import { ReactNode } from 'react'
+import { ReactNode, type JSX } from 'react'
 import { ArrowUpRight } from 'react-feather'
 
 interface CustomPopoverProps extends Omit<PopoverProps, 'children'> {

@@ -4,8 +4,7 @@ import {
   testHook,
 } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
-import { PropsWithChildren } from 'react'
-import { act } from 'react-dom/test-utils'
+import { PropsWithChildren, act } from 'react'
 import { useSignRelayerApproval } from './signRelayerApproval.hooks'
 import { useRelayerSignature } from './RelayerSignatureProvider'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'

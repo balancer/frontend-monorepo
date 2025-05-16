@@ -22,7 +22,7 @@ type Props = {
   isOpen: boolean
   onClose(anySuccess: boolean): void
   onOpen(): void
-  finalFocusRef?: RefObject<HTMLInputElement>
+  finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function SubmitVotesModal({
