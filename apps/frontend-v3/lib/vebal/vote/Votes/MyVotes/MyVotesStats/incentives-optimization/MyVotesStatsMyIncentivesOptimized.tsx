@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, Text, Stack } from '@chakra-ui/react'
+import { Button, HStack, Skeleton, Text, Stack, Tooltip } from '@chakra-ui/react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { MagicStickIcon } from '@repo/lib/shared/components/icons/MagicStickIcon'
@@ -9,7 +9,7 @@ import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import NextLink from 'next/link'
 import { getVeBalManagePath } from '@bal/lib/vebal/vebal-navigation'
-import { useIncentivesOptimized } from './useIncentivesOptimized'
+import { areAllVotesTimelocked, useIncentivesOptimized } from './useIncentivesOptimized'
 import { canReceiveIncentives, useBlacklistedVotes } from '../../incentivesBlacklist'
 import { useVotes } from '../../../VotesProvider'
 import { useMyVotes } from '../../MyVotesProvider'
@@ -32,17 +32,6 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const { isConnected, userAddress } = useUserAccount()
   const { isLoading: vebalUserDataLoading, noVeBALBalance } = useVebalUserData()
 
-  // fix: (votes) add new state when we are able to calculate optimized votes
-
-  // const isApplied = false
-  // if (isApplied) {
-  //   return {
-  //     variant: 'outline',
-  //     isDisabled: true,
-  //     children: 'Applied',
-  //   }
-  // }
-
   const { pool, poolIsLoading } = useVeBALPool(userAddress)
   const aprItems = pool?.dynamicData.aprItems as GqlPoolAprItem[]
   const lockingApr = aprItems?.find(item => item.type === GqlPoolAprItemType.Locking)?.apr || 0
@@ -56,7 +45,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const lockEnd = mainnetLockedInfo.lockedEndDate
   const { slope, isLoading: slopeLoading } = useLastUserSlope(userAddress)
   const { loading: votesLoading, votingPools, toggleVotingPool, isVotedPool } = useVotes()
-  const { loading: myVotesLoading, myVotes, onEditVotesChange } = useMyVotes()
+  const { loading: myVotesLoading, myVotes, onEditVotesChange, totalInfo } = useMyVotes()
   const { isLoading: blacklistedVotesLoading, blacklistedVotes } = useBlacklistedVotes(votingPools)
   const inputsLoading =
     totalVotesLoading ||
@@ -92,14 +81,14 @@ export function MyVotesStatsMyIncentivesOptimized() {
       const vote = votingPools.find(vote => vote.gauge.address === optimizedVote.gaugeAddress)
       if (vote) {
         if (!isVotedPool(vote)) toggleVotingPool(vote)
-        console.log({
-          address: optimizedVote.gaugeAddress,
-          perct: (optimizedVote.votePrct * 10000).toString(),
-        })
         onEditVotesChange(vote.id, (optimizedVote.votePrct * 10000).toString())
       }
     })
   }
+
+  const allVotesTimelocked = areAllVotesTimelocked(myVotes)
+  const votesAlreadyOptimized = totalInfo.totalRewardValue.toNumber() === optimizedRewardValue
+  const disabledButton = !canReceiveIncentives(userAddress) || votesAlreadyOptimized
 
   return (
     <MyVotesStatsCard
@@ -140,14 +129,28 @@ export function MyVotesStatsMyIncentivesOptimized() {
             Get veBAL
           </Button>
         ) : isConnected ? (
-          <Button onClick={() => applyOptimizedVotes()} size="sm" variant="primary">
-            <HStack spacing="xs">
-              <MagicStickIcon />
-              <Text color="font.dark" fontSize="sm" fontWeight="700">
-                Apply
-              </Text>
-            </HStack>
-          </Button>
+          <Tooltip
+            bg="background.base"
+            color="font.secondary"
+            isDisabled={!allVotesTimelocked}
+            label="All your votes are timelocked, so you can't apply any new vote combinations"
+          >
+            <Stack>
+              <Button
+                disabled={disabledButton}
+                onClick={() => applyOptimizedVotes()}
+                size="sm"
+                variant={disabledButton ? 'outline' : 'primary'}
+              >
+                <HStack spacing="xs">
+                  <MagicStickIcon />
+                  <Text color="font.dark" fontSize="sm" fontWeight="700">
+                    {votesAlreadyOptimized && !allVotesTimelocked ? 'Applied' : 'Apply'}
+                  </Text>
+                </HStack>
+              </Button>
+            </Stack>
+          </Tooltip>
         ) : (
           <Stack>
             <ConnectWallet size="sm" variant="primary" />

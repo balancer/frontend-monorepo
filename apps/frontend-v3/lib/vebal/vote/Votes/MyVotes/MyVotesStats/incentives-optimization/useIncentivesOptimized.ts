@@ -189,6 +189,11 @@ function filterTimelockedVotes(myVotes: VotingPoolWithData[]): [VotingPoolWithDa
   return [timelockedVotes, timelockedPrct]
 }
 
+export function areAllVotesTimelocked(myVotes: VotingPoolWithData[]) {
+  const [, prct] = filterTimelockedVotes(myVotes)
+  return prct.isEqualTo(1)
+}
+
 function resetVotes(myVotes: VotingPoolWithData[]) {
   return myVotes.reduce((acc, vote) => {
     acc.push({
