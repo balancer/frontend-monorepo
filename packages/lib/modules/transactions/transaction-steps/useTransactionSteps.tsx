@@ -2,7 +2,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getTransactionState, TransactionState, TransactionStep } from './lib'
+import { getTransactionState, ManagedResult, TransactionState, TransactionStep } from './lib'
 import { useTransactionState } from './TransactionStateProvider'
 import { useTxSound } from './useTxSound'
 import { ensureError, ErrorCause, ErrorWithCauses } from '@repo/lib/shared/utils/errors'
@@ -29,7 +29,16 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
   const { playTxSound } = useTxSound()
 
   const currentStep = steps[currentStepIndex]
-  const currentTransaction = currentStep ? getTransaction(currentStep.id) : undefined
+
+  let currentTransaction: ManagedResult | undefined
+  if (currentStep) {
+    if (currentStep?.transaction2) {
+      console.log('transaction2 in useTransactionSteps')
+    }
+    currentTransaction = currentStep?.transaction2 ?? getTransaction(currentStep.id)
+  }
+
+  // const currentTransaction = currentStep ? getTransaction(currentStep.id) : undefined
   const isCurrentStepComplete = currentStep?.isComplete() || false
   const lastStepIndex = steps?.length ? steps.length - 1 : 0
   const lastStep = steps?.[lastStepIndex]

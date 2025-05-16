@@ -1,0 +1,10 @@
+- Decide naming before starting with the first PR
+- We can merge this refactor in baby steps.
+- Once all steps are using the new callback we can remove the optional field
+- Now TransactionStateProvider can be easily merged with RecentTransactionsProvider
+- Another potential refactor: we could try to
+
+Second phase:
+- Once Next15 is migrated
+- Add reference test for steps array with viem TestStepsRunner instead of wagmi hooks
+- We can probably avoid useEffect and manage useWaitForReceipt in another place?? Evaluate tradeoffs

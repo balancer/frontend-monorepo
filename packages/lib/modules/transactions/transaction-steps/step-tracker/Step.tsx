@@ -15,7 +15,12 @@ import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/sa
 
 export function Step(props: StepProps) {
   const { getTransaction } = useTransactionState()
-  const transaction = getTransaction(props.step.id)
+
+  if (props.step.transaction2) {
+    console.log('transaction2 in Step settings')
+  }
+
+  const transaction = props.step.transaction2 || getTransaction(props.step.id)
   const { color, isActive, title } = getStepSettings(props, transaction)
 
   const shouldDisplayAsTxBatch =

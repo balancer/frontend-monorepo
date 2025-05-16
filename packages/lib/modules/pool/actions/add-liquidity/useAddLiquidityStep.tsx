@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
@@ -23,8 +23,8 @@ export type AddLiquidityStepParams = AddLiquidityBuildQueryParams
 export function useAddLiquidityStep(params: AddLiquidityStepParams): TransactionStep {
   const { pool, refetch: refetchPoolBalances, chainId } = usePool()
   const [isStepActivated, setIsStepActivated] = useState(false)
-  const { getTransaction } = useTransactionState()
   const { buildTenderlyUrl } = useTenderly({ chainId })
+  const [transaction2, setTransaction2] = useState<ManagedResult | undefined>()
 
   const { simulationQuery } = params
 
@@ -49,9 +49,7 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
 
-  const transaction = getTransaction(addLiquidityStepId)
-
-  const isComplete = () => transaction?.result.isSuccess || false
+  const isComplete = () => transaction2?.result.isSuccess || false
 
   useEffect(() => {
     // simulationQuery is refetched every 30 seconds by AddLiquidityTimeout
@@ -63,6 +61,10 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
   const onSuccess = useCallback(() => {
     refetchPoolBalances()
   }, [])
+
+  const onTransactionChange = (transaction: ManagedResult) => {
+    setTransaction2(transaction)
+  }
 
   return useMemo(
     () => ({
@@ -80,6 +82,7 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
             gasEstimationMeta={gasEstimationMeta}
             id={addLiquidityStepId}
             labels={labels}
+            onTransactionChange={onTransactionChange}
             txConfig={buildCallDataQuery.data}
           />
         )
@@ -104,7 +107,8 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
             value: buildCallDataQuery.data.value,
           }
         : undefined,
+      transaction2,
     }),
-    [transaction, simulationQuery.data, buildCallDataQuery.data]
+    [transaction2, simulationQuery.data, buildCallDataQuery.data]
   )
 }

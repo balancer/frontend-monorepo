@@ -146,6 +146,7 @@ export type TransactionStep = {
   onDeactivated?: () => void
   // only used for integration testing
   _txInput?: TransactionInput
+  transaction2?: ManagedResult
 } & MaybeBatchableTx
 
 export function getTransactionState(transactionBundle?: TransactionBundle): TransactionState {

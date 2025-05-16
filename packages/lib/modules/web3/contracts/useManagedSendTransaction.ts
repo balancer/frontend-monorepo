@@ -27,6 +27,7 @@ export type ManagedSendTransactionInput = {
   labels: TransactionLabels
   txConfig: TransactionConfig
   gasEstimationMeta?: Record<string, unknown>
+  onTransactionChange?: (transaction: ManagedResult) => void
 }
 
 export function useManagedSendTransaction({
