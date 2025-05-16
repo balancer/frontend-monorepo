@@ -26,7 +26,11 @@ export function SelectedPoolsMenu({ onAddVotesClick, votingPools }: SelectedPool
   const handleGoToVote = () => {
     setExpanded(false)
     setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      const target = document.getElementById('my-votes')
+      if (target) {
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset
+        window.scrollTo({ top: targetPosition - 100, behavior: 'smooth' })
+      }
     })
     onAddVotesClick?.()
   }
