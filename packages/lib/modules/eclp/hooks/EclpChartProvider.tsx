@@ -29,7 +29,7 @@ function _useEclpChart() {
   const tokens = useMemo(() => {
     const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
 
-    return isReversed ? poolTokens.join('/') : poolTokens.reverse().join('/')
+    return isReversed ? poolTokens.reverse().join('/') : poolTokens.join('/')
   }, [pool, isReversed])
 
   const secondaryFontColor = theme.semanticTokens.colors.font.secondary.default
