@@ -79,6 +79,9 @@ describe('aprFormat', () => {
     expect(fNum('apr', '0.00001')).toBe('<0.01%')
     expect(fNum('apr', '0.00009')).toBe('<0.01%')
     expect(fNum('apr', '0.000007595846919227514')).toBe('<0.01%')
+    expect(fNum('apr', '1.3456789')).toBe('134.57%')
+    // Big percentages > 1000%
+    expect(fNum('apr', '12.3456789')).toBe('1,235%')
   })
 })
 
