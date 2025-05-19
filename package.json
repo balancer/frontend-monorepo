@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "build:turbo": "turbo build:turbo",
     "start": "turbo start",
     "dev": "pnpm run dev:bal",
     "dev:bal": "turbo dev --filter frontend-v3",
@@ -20,7 +21,7 @@
     "stylelint:fix": "turbo stylelint:fix",
     "test:e2e:build": "turbo test:e2e:build --ui=stream --log-order=stream --",
     "test:e2e:build:ui": "turbo test:e2e:build:ui --ui=stream --log-order=stream --",
-    "test:e2e:dev": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev --ui=stream --log-order=stream --",
+    "test:e2e:dev": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:build:turbo --ui=stream --log-order=stream --",
     "test:e2e:dev:ui": "NEXT_PUBLIC_E2E_DEV=1 turbo test:e2e:dev:ui --ui=stream --log-order=stream --",
     "test:integration": "turbo test:integration --ui=stream --log-order=stream --",
     "test:integration:watch": "turbo test:integration:watch --ui=stream --log-order=stream --",

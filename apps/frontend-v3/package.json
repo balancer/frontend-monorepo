@@ -6,6 +6,7 @@
   "scripts": {
     "start": "next start",
     "build": "pnpm --filter @repo/lib graphql:gen && next build",
+    "build:turbo": "pnpm --filter @repo/lib graphql:gen && next build --turbo",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev --turbopack\"",
     "dev:webpack": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev\"",
     "dev:no-gen": "next dev --turbo",
@@ -45,7 +46,7 @@
     "echarts-for-react": "3.0.2",
     "framer-motion": "12.9.7",
     "lodash": "^4.17.21",
-    "next": "15.3.1",
+    "next": "15.3.2",
     "next-themes": "0.4.6",
     "nextjs-toploader": "3.8.16",
     "prismjs": "1.30.0",

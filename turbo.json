@@ -42,6 +42,11 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
+    "build:turbo": {
+      "dependsOn": ["^build:turbo"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
     "start": {
       "dependsOn": ["^start"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
@@ -89,8 +94,8 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "test:e2e:dev": {
-      "dependsOn": ["^graphql:gen"],
+    "test:e2e:build:turbo": {
+      "dependsOn": ["^build:turbo"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
     },
     "test:e2e:build:ui": {
