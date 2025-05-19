@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 import { MotionValue, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ReactNode, useRef, useState } from 'react'
 import { Box, BoxProps, Flex, Text, useDisclosure, VStack, Stack, Heading } from '@chakra-ui/react'

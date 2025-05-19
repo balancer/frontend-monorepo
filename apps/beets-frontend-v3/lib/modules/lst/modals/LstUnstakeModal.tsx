@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
@@ -20,7 +19,7 @@ type Props = {
   isOpen: boolean
   onClose(): void
   onOpen(): void
-  finalFocusRef?: RefObject<HTMLInputElement>
+  finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function LstUnstakeModal({

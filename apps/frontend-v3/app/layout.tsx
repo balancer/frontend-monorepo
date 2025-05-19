@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { Metadata } from 'next'
 import { satoshiFont } from '@repo/lib/assets/fonts/satoshi/satoshi'
 import NextTopLoader from 'nextjs-toploader'

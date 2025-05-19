@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
@@ -12,10 +11,10 @@ import { usePool } from '../../PoolProvider'
 import { useUnstake } from '../unstake/UnstakeProvider'
 import { useMigrateStakeSteps } from './useMigrateStakeSteps'
 
-export type UseMigrateStakeResponse = ReturnType<typeof _useMigrateStake>
+export type UseMigrateStakeResponse = ReturnType<typeof useMigrateStakeLogic>
 export const MigrateStakeContext = createContext<UseMigrateStakeResponse | null>(null)
 
-export function _useMigrateStake() {
+export function useMigrateStakeLogic() {
   const { quoteAmountOut: migratedAmount } = useUnstake()
 
   const { pool, refetch: refetchPoolBalances, isLoading: isLoadingPool } = usePool()
@@ -47,7 +46,7 @@ export function _useMigrateStake() {
 }
 
 export function MigrateStakeProvider({ children }: PropsWithChildren) {
-  const hook = _useMigrateStake()
+  const hook = useMigrateStakeLogic()
   return <MigrateStakeContext.Provider value={hook}>{children}</MigrateStakeContext.Provider>
 }
 

@@ -1,5 +1,7 @@
 # Balancer frontend V3
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/balancer/frontend-monorepo)
+
 ## Getting Started
 
 _This project uses `pnpm`, if you haven't already installed it you can find the documentation here:

@@ -6,11 +6,11 @@ import { aUserPoolBalance } from '@repo/lib/test/msw/builders/gqlUserBalance.bui
 import { mockTokenPricesList } from '@repo/lib/test/msw/handlers/Tokens.handlers'
 import { buildDefaultPoolTestProvider, testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
-import { act } from 'react-dom/test-utils'
+import { act } from 'react'
 import { mock } from 'vitest-mock-extended'
 import { aTokenAmountMock } from '../__mocks__/liquidity.builders'
 import { RemoveLiquiditySimulationQueryResult } from './queries/useRemoveLiquiditySimulationQuery'
-import { _useRemoveLiquidity } from './RemoveLiquidityProvider'
+import { useRemoveLiquidityLogic } from './RemoveLiquidityProvider'
 import { aSuccessfulQueryResultMock } from '@repo/lib/test/utils/react-query'
 
 const balTokenOutUnits = '1'
@@ -44,7 +44,7 @@ poolMock.dynamicData.totalShares = '100'
 // bptPrice = 1000/100 = 10
 
 async function testUseRemoveLiquidity(pool: GqlPoolElement = poolMock) {
-  const { result } = testHook(() => _useRemoveLiquidity(), {
+  const { result } = testHook(() => useRemoveLiquidityLogic(), {
     wrapper: buildDefaultPoolTestProvider(pool),
   })
   return result

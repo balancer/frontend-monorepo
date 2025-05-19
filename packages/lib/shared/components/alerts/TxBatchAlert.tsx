@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { AlertProps, HStack } from '@chakra-ui/react'
 import { useBreakpoints } from '../../hooks/useBreakpoints'
 import { BalAlert } from './BalAlert'

@@ -23,7 +23,7 @@ const veBalSyncSupportedNetworks: GqlChain[] = Object.keys(networkConfigs)
 
 const REFETCH_INTERVAL = secs(30).toMs()
 
-export type CrossChainSyncResult = ReturnType<typeof _useCrossChainSync>
+export type CrossChainSyncResult = ReturnType<typeof useCrossChainSyncLogic>
 export const CrossChainSyncContext = createContext<CrossChainSyncResult | null>(null)
 
 interface CheckIfNetworkSyncingArgs {
@@ -55,7 +55,7 @@ export type SyncTxHashes = Record<GqlChain, Hash>
 const initialTempSyncingNetworks: Record<Address, TempSyncingNetworks> = {}
 const initialSyncTxHashes: Record<Address, SyncTxHashes> = {}
 
-export const _useCrossChainSync = () => {
+export const useCrossChainSyncLogic = () => {
   const { userAddress } = useUserAccount()
 
   const {
@@ -256,7 +256,7 @@ export const _useCrossChainSync = () => {
 }
 
 export function CrossChainSyncProvider({ children }: PropsWithChildren) {
-  const hook = _useCrossChainSync()
+  const hook = useCrossChainSyncLogic()
   return <CrossChainSyncContext.Provider value={hook}>{children}</CrossChainSyncContext.Provider>
 }
 

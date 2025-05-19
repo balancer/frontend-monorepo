@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export function TableIcon({ size = 16 }: { size?: number }) {
   return (
     <svg

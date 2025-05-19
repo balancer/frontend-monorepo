@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export function AaveIcon({ size = 44 }: { size?: number }) {
   return (
     <svg

@@ -29,6 +29,7 @@ import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
 import { useBlacklistedVotes } from './incentivesBlacklist'
 import { useLastUserSlope } from '../../useVeBALBalance'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { Address } from 'viem'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -60,7 +61,7 @@ export interface SubmittingVote {
 export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern
-export function _useMyVotes({}: UseMyVotesArgs) {
+export function useMyVotesLogic({}: UseMyVotesArgs) {
   const {
     loading: votesLoading,
     votingPools,
@@ -138,7 +139,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[myVote.gauge.address]
+        blacklistedVotes[myVote.gauge.address as Address]
       )
 
       return {
@@ -161,7 +162,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[vote.gauge.address]
+        blacklistedVotes[vote.gauge.address as Address]
       )
     )
 
@@ -172,7 +173,7 @@ export function _useMyVotes({}: UseMyVotesArgs) {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[vote.gauge.address]
+        blacklistedVotes[vote.gauge.address as Address]
       )
     )
 
@@ -286,10 +287,10 @@ export function _useMyVotes({}: UseMyVotesArgs) {
   }
 }
 
-export const MyVotesContext = createContext<ReturnType<typeof _useMyVotes> | null>(null)
+export const MyVotesContext = createContext<ReturnType<typeof useMyVotesLogic> | null>(null)
 
 export function MyVotesProvider({ children, ...props }: PropsWithChildren<UseMyVotesArgs>) {
-  const hook = _useMyVotes(props)
+  const hook = useMyVotesLogic(props)
 
   return <MyVotesContext.Provider value={hook}>{children}</MyVotesContext.Provider>
 }

@@ -5,10 +5,10 @@ import { createContext, PropsWithChildren } from 'react'
 import { Pool } from '../pool.types'
 import { PoolTag } from './getPoolTags'
 
-export type UsePoolTagsResult = ReturnType<typeof _usePoolTags>
+export type UsePoolTagsResult = ReturnType<typeof usePoolTagsLogic>
 export const PoolTagsContext = createContext<UsePoolTagsResult | null>(null)
 
-export function _usePoolTags(tags: PoolTag[] | undefined) {
+export function usePoolTagsLogic(tags: PoolTag[] | undefined) {
   const hasTags = !!tags
 
   function getPoolTags(pool: Pool): PoolTag[] {
@@ -32,7 +32,7 @@ export function PoolTagsProvider({
   children,
   data,
 }: PropsWithChildren & { data: PoolTag[] | undefined }) {
-  const hook = _usePoolTags(data)
+  const hook = usePoolTagsLogic(data)
   return <PoolTagsContext.Provider value={hook}>{children}</PoolTagsContext.Provider>
 }
 

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { SVGProps } from 'react'
 
 export function BalancerLogo(props: SVGProps<SVGSVGElement>) {

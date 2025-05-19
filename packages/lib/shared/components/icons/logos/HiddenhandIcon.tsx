@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export function HiddenhandIcon({ size = 36 }: { size?: number }) {
   return (
     <svg

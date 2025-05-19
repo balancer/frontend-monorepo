@@ -1,10 +1,11 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { drpcUrl } from '@repo/lib/shared/utils/rpc'
+import type { NextRequest } from 'next/server'
 
 type Params = {
-  params: {
+  params: Promise<{
     chain: string
-  }
+  }>
 }
 
 const DRPC_KEY = process.env.NEXT_PRIVATE_DRPC_KEY || ''
@@ -14,7 +15,9 @@ const ALLOWED_ORIGINS = [
   process.env.VERCEL_BRANCH_URL ? `https://${process.env.VERCEL_BRANCH_URL}` : '',
 ].filter(Boolean)
 
-export async function POST(request: Request, { params: { chain } }: Params) {
+export async function POST(request: NextRequest, props: Params) {
+  const params = await props.params
+  const { chain } = params
   const referer = request.headers.get('referer')
   const isAllowedOrigin = referer && ALLOWED_ORIGINS.some(origin => referer.startsWith(origin))
 

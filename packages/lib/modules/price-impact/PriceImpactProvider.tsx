@@ -6,7 +6,7 @@ import { getPriceImpactColor, getPriceImpactLevel } from './price-impact.utils'
 
 export type PriceImpactLevel = 'low' | 'medium' | 'high' | 'max' | 'unknown'
 
-export function _usePriceImpact() {
+export function usePriceImpactLogic() {
   const [priceImpactLevel, setPriceImpactLevel] = useState<PriceImpactLevel>('low')
   const [priceImpactColor, setPriceImpactColor] = useState('green.400')
   const [acceptPriceImpactRisk, setAcceptPriceImpactRisk] = useState(false)
@@ -80,11 +80,11 @@ export function _usePriceImpact() {
   }
 }
 
-export type Result = ReturnType<typeof _usePriceImpact>
+export type Result = ReturnType<typeof usePriceImpactLogic>
 export const PriceImpactContext = createContext<Result | null>(null)
 
 export function PriceImpactProvider({ children }: PropsWithChildren) {
-  const priceImpact = _usePriceImpact()
+  const priceImpact = usePriceImpactLogic()
 
   return <PriceImpactContext.Provider value={priceImpact}>{children}</PriceImpactContext.Provider>
 }

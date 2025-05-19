@@ -89,9 +89,10 @@ export const ANVIL_NETWORKS: Record<ChainIdWithFork, NetworkSetup> = {
     chainId: mainnet.id,
     fallBackRpc: 'https://cloudflare-eth.com',
     port: ANVIL_PORTS[mainnet.id],
-    // From time to time this block gets outdated having this kind of error in integration tests:
-    // ContractFunctionExecutionError: The contract function "queryJoin" returned no data ("0x").
-    // forkBlockNumber: 21831471n,
+    /* From time to time this block gets outdated having this kind of error in integration tests:
+     ContractFunctionExecutionError: The contract function "queryJoin" returned no data ("0x").
+     forkBlockNumber: 22426500n, // block number from 6 May 2025 (1 day before pectra launch)
+    */
   },
   [polygon.id]: {
     chainId: polygon.id,

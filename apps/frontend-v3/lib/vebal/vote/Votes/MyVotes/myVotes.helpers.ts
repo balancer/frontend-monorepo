@@ -56,7 +56,7 @@ export function calculateMyVoteRewardsValue(
   slope: bigint,
   lockEnd: number | undefined,
   totalVotes: bigint,
-  blacklistedVotes: BigNumber
+  blacklistedVotes: BigNumber = bn(0)
 ) {
   const votingPower = calculateVotingPower(slope, lockEnd)
   const oldWeight = votingPool.gaugeVotes?.userVotes || '0'
@@ -83,7 +83,7 @@ export function calculateMyValuePerVote(
   slope: bigint,
   lockEnd: number | undefined,
   totalVotes: bigint,
-  blacklistedVotes: BigNumber
+  blacklistedVotes: BigNumber = bn(0)
 ) {
   const votingPower = calculateVotingPower(slope, lockEnd)
   const newUserVotes = votingPower.times(bpsToPercentage(newWeight))
@@ -99,7 +99,7 @@ export function calculateMyValuePerVote(
   return bn(myRewards).div(newUserVotes)
 }
 
-function calculateVotingPower(slope: bigint, lockEnd: number | undefined) {
+export function calculateVotingPower(slope: bigint, lockEnd: number | undefined) {
   if (!lockEnd) return bn(0)
 
   const nextVoteTimestamp = millisecondsToSeconds(startOfDayUtc(nextThursday(new Date())).getTime())

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 export function StakedaoIcon({ size = 36 }: { size?: number }) {
   return (
     <svg

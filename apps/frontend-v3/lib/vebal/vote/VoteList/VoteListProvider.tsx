@@ -46,7 +46,7 @@ function filterVoteList(
     result = result.filter(value => {
       return (
         value.id.toLowerCase().includes(_textSearch) ||
-        value.tokens.some(token => {
+        value.poolTokens.some(token => {
           return (
             token.symbol.toLowerCase().includes(_textSearch) ||
             token.address.toLowerCase().includes(_textSearch)
@@ -79,7 +79,7 @@ function filterVoteList(
 export interface UseVoteListArgs {}
 
 // eslint-disable-next-line no-empty-pattern
-export function _useVoteList({}: UseVoteListArgs) {
+export function useVoteListLogic({}: UseVoteListArgs) {
   const {
     votingPools,
     incentives,
@@ -149,10 +149,10 @@ export function _useVoteList({}: UseVoteListArgs) {
   }
 }
 
-export const VoteListContext = createContext<ReturnType<typeof _useVoteList> | null>(null)
+export const VoteListContext = createContext<ReturnType<typeof useVoteListLogic> | null>(null)
 
 export function VoteListProvider({ children, ...props }: PropsWithChildren<UseVoteListArgs>) {
-  const hook = _useVoteList(props)
+  const hook = useVoteListLogic(props)
 
   return <VoteListContext.Provider value={hook}>{children}</VoteListContext.Provider>
 }

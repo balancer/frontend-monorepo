@@ -15,10 +15,10 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import { HumanAmount } from '@balancer/sdk'
 import { getUserWalletBalance, getUserWalletBalanceUsd } from '../../user-balance.helpers'
 
-export type UseStakeResponse = ReturnType<typeof _useStake>
+export type UseStakeResponse = ReturnType<typeof useStakeLogic>
 export const StakeContext = createContext<UseStakeResponse | null>(null)
 
-export function _useStake() {
+export function useStakeLogic() {
   const { userAddress, isConnected } = useUserAccount()
   const { pool, chainId, isLoadingOnchainUserBalances } = usePool()
   const { isDisabled, disabledReason } = isDisabledWithReason([
@@ -72,7 +72,7 @@ export function _useStake() {
 }
 
 export function StakeProvider({ children }: PropsWithChildren) {
-  const hook = _useStake()
+  const hook = useStakeLogic()
   return <StakeContext.Provider value={hook}>{children}</StakeContext.Provider>
 }
 

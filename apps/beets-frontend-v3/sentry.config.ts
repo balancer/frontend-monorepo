@@ -1,5 +1,7 @@
+import type { SentryBuildOptions } from '@sentry/nextjs/build/types/config/types'
+
 /** @type {import('@sentry/nextjs/build/types/config/types').SentryBuildOptions} */
-const sentryOptions = {
+export const sentryOptions: SentryBuildOptions = {
   // Suppresses source map uploading logs during build
   silent: true,
   org: 'skloon',
@@ -10,9 +12,6 @@ const sentryOptions = {
 
   // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,
-
-  // Transpiles SDK to be compatible with IE11 (increases bundle size)
-  transpileClientSDK: true,
 
   // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
   tunnelRoute: '/monitoring',
@@ -30,7 +29,4 @@ const sentryOptions = {
   automaticVercelMonitors: true,
 }
 
-module.exports = {
-  sentryOptions,
-  sentryDSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
-}
+export const sentryDSN = process.env.NEXT_PUBLIC_SENTRY_DSN

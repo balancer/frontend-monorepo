@@ -26,10 +26,10 @@ async function isAuthorizedAddress(address: Address): Promise<boolean> {
   }
 }
 
-export type UseUserAccountResponse = ReturnType<typeof _useUserAccount>
+export type UseUserAccountResponse = ReturnType<typeof useUserAccountLogic>
 export const UserAccountContext = createContext<UseUserAccountResponse | null>(null)
 
-export function _useUserAccount() {
+export function useUserAccountLogic() {
   const isMounted = useIsMounted()
   const query = useAccount()
   const { disconnect } = useDisconnect()
@@ -104,7 +104,7 @@ export function _useUserAccount() {
 }
 
 export function UserAccountProvider({ children }: PropsWithChildren) {
-  const hook = _useUserAccount()
+  const hook = useUserAccountLogic()
   return <UserAccountContext.Provider value={hook}>{children}</UserAccountContext.Provider>
 }
 

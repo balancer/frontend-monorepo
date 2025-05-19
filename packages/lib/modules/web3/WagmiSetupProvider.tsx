@@ -4,10 +4,10 @@ import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext, PropsWithChildren, useState } from 'react'
 import { wagmiAdapter } from './WagmiSetup'
 
-export type UseWagmiSetupResult = ReturnType<typeof _useWagmiSetup>
+export type UseWagmiSetupResult = ReturnType<typeof useWagmiSetupLogic>
 export const WagmiSetupContext = createContext<UseWagmiSetupResult | null>(null)
 
-export function _useWagmiSetup() {
+export function useWagmiSetupLogic() {
   const [wagmiSetup, setWagmiSetup] = useState(wagmiAdapter)
 
   return { wagmiSetup, setWagmiSetup }
@@ -18,7 +18,7 @@ export function _useWagmiSetup() {
   Useful for manual and E2E testing
 */
 export function WagmiSetupProvider({ children }: PropsWithChildren) {
-  const config = _useWagmiSetup()
+  const config = useWagmiSetupLogic()
 
   return <WagmiSetupContext.Provider value={config}>{children}</WagmiSetupContext.Provider>
 }

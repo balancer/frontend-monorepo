@@ -48,7 +48,7 @@ export function useBlacklistedVotes(votingPools: VoteListItem[]) {
 
   return {
     isLoading: votesAreLoading || endLockTimestampsLoading,
-    blacklistedVotes: blacklistedVotesGroupedByGauge,
+    blacklistedVotes: blacklistedVotesGroupedByGauge as Record<Address, BigNumber | undefined>,
   }
 }
 

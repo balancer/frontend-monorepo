@@ -14,7 +14,7 @@ export default function Privacy() {
             <Box mt="3xl" pb="md">
               <h1>Risks of using&nbsp;Balancer</h1>
               <p>
-                <em>Last Updated: April 2025</em>
+                <em>Last Updated: May 2025</em>
               </p>
               <p>
                 <em>
@@ -108,7 +108,7 @@ export default function Privacy() {
                         </Link>
                       </li>
                       <li>
-                        <Link href="risks#btf">Blockchain Traded Funds risks</Link>
+                        <Link href="risks#btf">Blockchain Traded Funds</Link>
                       </li>
                     </ul>
                   </li>
@@ -1361,11 +1361,11 @@ export default function Privacy() {
               <FadeInOnView>
                 <div className="subsection">
                   <h4 className="anchor" id="btf">
-                    Blockchain Traded Funds risks
+                    Blockchain Traded Funds
                   </h4>
 
                   <p>
-                    Blockchain Traded Fundas (or Temporal Function Market Making - TFMM) tackles
+                    Blockchain Traded Funds (or Temporal Function Market Making - TFMM) tackles
                     impermanent loss in traditional AMMs by continuously adjusting weights within
                     the pool, rather than relying on token allocations. This dynamic rebalancing
                     process allows the protocol to respond more effectively to market conditions,
@@ -1425,7 +1425,7 @@ export default function Privacy() {
                   </ul>
 
                   <p>
-                    How Balancer mitigates these risks:
+                    How QuantAMM mitigates these risks:
                     <ul>
                       <li>
                         <b>Market Volatility</b> - given the nature of BTFs in so that they are not
@@ -1465,6 +1465,11 @@ export default function Privacy() {
                         further volumes.
                       </li>
                     </ul>
+                  </p>
+                  <p>
+                    Before interacting with any QuantAMM Blockchain Traded Funds, users must read
+                    and accept QuantAMM&rsquo;s{' '}
+                    <a href="https://www.quantamm.fi/tos">Terms of Service</a>.
                   </p>
                 </div>
               </FadeInOnView>

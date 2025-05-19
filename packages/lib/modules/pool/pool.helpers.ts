@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import {
   GqlChain,
@@ -135,6 +134,10 @@ export function isMaBeetsPool(poolId: string): boolean {
 
 export function isCowAmmPool(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.CowAmm
+}
+
+export function isQuantAmmPool(poolType: GqlPoolType): boolean {
+  return poolType === GqlPoolType.QuantAmmWeighted
 }
 
 export function noInitLiquidity(pool: GqlPoolBase): boolean {
@@ -466,7 +469,7 @@ export function poolTypeLabel(poolType: GqlPoolType) {
     case GqlPoolType.Fx:
       return 'FX'
     case GqlPoolType.QuantAmmWeighted:
-      return 'BTF'
+      return 'QuantAMM BTF'
     default:
       return poolType.toLowerCase()
   }
