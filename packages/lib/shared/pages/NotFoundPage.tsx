@@ -4,9 +4,8 @@ import { headers } from 'next/headers'
 import Link from 'next/link'
 
 export async function NotFoundPage() {
-  const headersList = headers()
-
-  const referer = await headersList.get('referer')
+  const headersList = await headers()
+  const referer = headersList.get('referer')
 
   const poolIdSegment = 6
   const maybePoolId = referer?.split('/')[poolIdSegment]
