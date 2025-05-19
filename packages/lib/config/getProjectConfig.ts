@@ -9,6 +9,11 @@ export const allProjects: Record<string, ProjectConfig> = {
 
 export const isBalancer = process.env.NEXT_PUBLIC_PROJECT_ID === ProjectConfigBalancer.projectId
 
-export const PROJECT_CONFIG = process.env.NEXT_PUBLIC_PROJECT_ID
-  ? allProjects[process.env.NEXT_PUBLIC_PROJECT_ID]
-  : ProjectConfigBalancer
+const projectId = process.env.NEXT_PUBLIC_PROJECT_ID
+const config = projectId ? allProjects[projectId] : ProjectConfigBalancer
+
+if (!config) {
+  throw new Error(`Invalid NEXT_PUBLIC_PROJECT_ID: "${projectId}".`)
+}
+
+export const PROJECT_CONFIG = config
