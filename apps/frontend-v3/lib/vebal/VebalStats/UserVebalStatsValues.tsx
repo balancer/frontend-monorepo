@@ -58,7 +58,7 @@ export function UserVebalStatsValues() {
           <Heading size="h4">
             {userStats && !userStats.lockExpired && userStats.percentOfAllSupply
               ? fNum('feePercent', userStats.percentOfAllSupply)
-              : '0%'}
+              : fNum('feePercent', 0)}
           </Heading>
         )}
       </VStack>
