@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Box, Heading, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { differenceInDays, format } from 'date-fns'
@@ -56,22 +56,20 @@ export function UserVebalStatsValues() {
           <Skeleton height="28px" w="100px" />
         ) : (
           <Heading size="h4">
-            {userStats && !userStats.lockExpired && userStats.percentOfAllSupply ? (
-              fNum('feePercent', userStats.percentOfAllSupply)
-            ) : (
-              <>0%</>
-            )}
+            {userStats && !userStats.lockExpired && userStats.percentOfAllSupply
+              ? fNum('feePercent', userStats.percentOfAllSupply)
+              : '0%'}
           </Heading>
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
         <Text fontSize="sm" fontWeight="semibold" mb="sm" mt="xxs" variant="secondary">
           {userStats && !userStats.lockExpired ? (
-            <>Lock expiry date</>
+            'Lock expiry date'
           ) : (
-            <Text color="font.error" fontSize="sm" fontWeight="semibold">
+            <Box as="span" color="font.error">
               Your lock expired on
-            </Text>
+            </Box>
           )}
         </Text>
         {lockedInfoIsLoading ? (
