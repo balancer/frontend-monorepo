@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Heading, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
+import { Heading, HStack, Skeleton, Text, VStack } from '@chakra-ui/react'
 import { AlertIcon } from '@repo/lib/shared/components/icons/AlertIcon'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { differenceInDays, format } from 'date-fns'
@@ -67,9 +67,9 @@ export function UserVebalStatsValues() {
           {userStats && !userStats.lockExpired ? (
             'Lock expiry date'
           ) : (
-            <Box as="span" color="font.error">
+            <Text as="span" color="font.error">
               Your lock expired on
-            </Box>
+            </Text>
           )}
         </Text>
         {lockedInfoIsLoading ? (
