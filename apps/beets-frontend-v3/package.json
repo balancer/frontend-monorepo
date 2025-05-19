@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "pnpm --filter @repo/lib graphql:gen && next build",
+    "build:turbo": "pnpm --filter @repo/lib graphql:gen && next build --turbo",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3001 --turbopack\"",
     "dev:webpack": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev -p 3001\"",
     "dev:no-gen": "next dev --turbo -p 3001",
@@ -30,7 +31,7 @@
     "date-fns": "^2.30.0",
     "framer-motion": "12.9.7",
     "lodash": "^4.17.21",
-    "next": "15.3.1",
+    "next": "15.3.2",
     "next-themes": "0.4.6",
     "nextjs-toploader": "3.8.16",
     "react": "19.1.0",
