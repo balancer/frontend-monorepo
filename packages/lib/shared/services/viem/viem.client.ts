@@ -8,7 +8,8 @@ import { getTransports } from '@repo/lib/modules/web3/transports'
 function getViemChain(chainId: number): Chain {
   const chain = chains.find(chain => chain.id === chainId)
   if (!chain) throw new Error('Chain not supported')
-  return chain
+  // TODO: are AppKit Chain and Chain types compatible?
+  return chain as Chain
 }
 
 export function getViemClient(chain: GqlChain) {

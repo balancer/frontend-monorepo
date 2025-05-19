@@ -1,6 +1,5 @@
 'use client'
 
-import { Chain } from '@rainbow-me/rainbowkit'
 import {
   arbitrum,
   avalanche,
@@ -15,13 +14,14 @@ import {
   polygonZkEvm,
   sepolia,
   sonic,
-} from 'wagmi/chains'
+} from '@reown/appkit/networks'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { keyBy } from 'lodash'
 import { getBaseUrl } from '@repo/lib/shared/utils/urls'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { shouldUseAnvilFork } from '@repo/lib/config/app.config'
+import { shouldUseAnvilFork, getChainId } from '@repo/lib/config/app.config'
 import { defaultAnvilForkRpcUrl } from '@repo/lib/test/utils/wagmi/fork.helpers'
+import { AppKitNetwork } from '@reown/appkit/networks'
 
 /* If a request with the default rpc fails, it will fall back to the next one in the list.
   https://viem.sh/docs/clients/transports/fallback#fallback-transport
@@ -66,26 +66,50 @@ export const rpcOverrides: Record<GqlChain, string | undefined> = {
 }
 
 const gqlChainToWagmiChainMap = {
-  [GqlChain.Mainnet]: { iconUrl: '/images/chains/MAINNET.svg', ...mainnet },
-  [GqlChain.Arbitrum]: { iconUrl: '/images/chains/ARBITRUM.svg', ...arbitrum },
-  [GqlChain.Base]: { iconUrl: '/images/chains/BASE.svg', ...base },
-  [GqlChain.Avalanche]: { iconUrl: '/images/chains/AVALANCHE.svg', ...avalanche },
-  [GqlChain.Fantom]: { iconUrl: '/images/chains/FANTOM.svg', ...fantom },
-  [GqlChain.Gnosis]: { iconUrl: '/images/chains/GNOSIS.svg', ...gnosis },
-  [GqlChain.Optimism]: { iconUrl: '/images/chains/OPTIMISM.svg', ...optimism },
-  [GqlChain.Polygon]: { iconUrl: '/images/chains/POLYGON.svg', ...polygon },
-  [GqlChain.Zkevm]: { iconUrl: '/images/chains/ZKEVM.svg', ...polygonZkEvm },
-  [GqlChain.Sepolia]: { iconUrl: '/images/chains/SEPOLIA.svg', ...sepolia },
-  [GqlChain.Mode]: { iconUrl: '/images/chains/MODE.svg', ...mode },
-  [GqlChain.Fraxtal]: { iconUrl: '/images/chains/FRAXTAL.svg', ...fraxtal },
-  [GqlChain.Sonic]: { iconUrl: '/images/chains/SONIC.svg', ...sonic },
-} as const satisfies Record<GqlChain, Chain>
+  [GqlChain.Mainnet]: mainnet,
+  [GqlChain.Arbitrum]: arbitrum,
+  [GqlChain.Base]: base,
+  [GqlChain.Avalanche]: avalanche,
+  [GqlChain.Fantom]: fantom,
+  [GqlChain.Gnosis]: gnosis,
+  [GqlChain.Optimism]: optimism,
+  [GqlChain.Polygon]: polygon,
+  [GqlChain.Zkevm]: polygonZkEvm,
+  [GqlChain.Sepolia]: sepolia,
+  [GqlChain.Mode]: mode,
+  [GqlChain.Fraxtal]: fraxtal,
+  [GqlChain.Sonic]: sonic,
+} as const satisfies Record<GqlChain, AppKitNetwork>
+
+const gqlChainIdToCustomIcon = {
+  [GqlChain.Mainnet]: '/images/chains/MAINNET.svg',
+  [GqlChain.Arbitrum]: '/images/chains/ARBITRUM.svg',
+  [GqlChain.Base]: '/images/chains/BASE.svg',
+  [GqlChain.Avalanche]: '/images/chains/AVALANCHE.svg',
+  [GqlChain.Fantom]: '/images/chains/FANTOM.svg',
+  [GqlChain.Gnosis]: '/images/chains/GNOSIS.svg',
+  [GqlChain.Optimism]: '/images/chains/OPTIMISM.svg',
+  [GqlChain.Polygon]: '/images/chains/POLYGON.svg',
+  [GqlChain.Zkevm]: '/images/chains/ZKEVM.svg',
+  [GqlChain.Sepolia]: '/images/chains/SEPOLIA.svg',
+  [GqlChain.Mode]: '/images/chains/MODE.svg',
+  [GqlChain.Fraxtal]: '/images/chains/FRAXTAL.svg',
+  [GqlChain.Sonic]: '/images/chains/SONIC.svg',
+} as const satisfies Record<GqlChain, string>
+
+export const chainImagesById = Object.entries(gqlChainIdToCustomIcon).reduce(
+  (acc, [gqlChain, iconUrl]) => {
+    acc[getChainId(gqlChain as GqlChain)] = iconUrl
+    return acc
+  },
+  {} as Record<string, string>
+)
 
 export const supportedNetworks = PROJECT_CONFIG.supportedNetworks
 const chainToFilter = PROJECT_CONFIG.defaultNetwork
 const customChain = gqlChainToWagmiChainMap[chainToFilter]
 
-export const chains: readonly [Chain, ...Chain[]] = [
+export const chains: [AppKitNetwork, ...AppKitNetwork[]] = [
   customChain,
   ...supportedNetworks
     .filter(chain => chain !== chainToFilter)
