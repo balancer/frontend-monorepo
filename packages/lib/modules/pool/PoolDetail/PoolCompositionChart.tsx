@@ -73,7 +73,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
   return (
     <NoisyCard
       cardProps={{
-        height: ['300px', `${heightPx}px`],
+        height: [isQuantAmm ? '395px' : '300px', `${heightPx}px`],
         overflow: 'hidden',
         position: 'relative',
       }}
