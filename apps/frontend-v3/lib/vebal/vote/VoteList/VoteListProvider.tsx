@@ -13,21 +13,24 @@ import { useVotes } from '@bal/lib/vebal/vote/Votes/VotesProvider'
 function sortVoteList(voteList: VotingPoolWithData[], sortBy: SortVotesBy, order: Sorting) {
   return orderBy(
     voteList,
-    value => {
-      switch (sortBy) {
-        case SortVotesBy.votes:
-          return value.gaugeVotes ? Number(value.gaugeVotes.votesNextPeriod) : -1
-        case SortVotesBy.bribes:
-          return value.votingIncentive ? Number(value.votingIncentive.totalValue) : -1
-        case SortVotesBy.bribesPerVebal:
-          return value.votingIncentive ? Number(value.votingIncentive.valuePerVote) : -1
-        case SortVotesBy.type:
-          return value.type
-        default:
-          throw new Error(`Unsupported SortVotesBy value (${sortBy})`)
-      }
-    },
-    order === Sorting.asc ? 'asc' : 'desc'
+    [
+      value => {
+        switch (sortBy) {
+          case SortVotesBy.votes:
+            return value.gaugeVotes ? Number(value.gaugeVotes.votesNextPeriod) : -1
+          case SortVotesBy.bribes:
+            return value.votingIncentive ? Number(value.votingIncentive.totalValue) : -1
+          case SortVotesBy.bribesPerVebal:
+            return value.votingIncentive ? Number(value.votingIncentive.valuePerVote) : -1
+          case SortVotesBy.type:
+            return value.type
+          default:
+            throw new Error(`Unsupported SortVotesBy value (${sortBy})`)
+        }
+      },
+      value => (value.gaugeVotes ? Number(value.gaugeVotes.votesNextPeriod) : -1),
+    ],
+    [order === Sorting.asc ? 'asc' : 'desc', 'desc']
   )
 }
 
