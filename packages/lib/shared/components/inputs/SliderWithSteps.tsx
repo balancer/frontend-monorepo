@@ -102,9 +102,11 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
           hasArrow
           isOpen={filledTrackFocused && !disabledTooltip}
           label="You have an existing lock and can't reduce the lock period. You can only slide right to extend the lock period"
+          placement="top-start"
         >
           <SliderFilledTrack
             background={filledTrackBackground}
+            cursor={filledTrackFocused && !disabledTooltip ? 'not-allowed' : 'pointer'}
             onMouseEnter={() => setFilledTrackFocused(true)}
             onMouseOut={() => setFilledTrackFocused(false)}
             ref={filledTrack}
