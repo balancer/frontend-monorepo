@@ -57,8 +57,8 @@
     "react-use-measure": "^2.1.1",
     "tinycolor2": "^1.6.0",
     "usehooks-ts": "3.1.1",
-    "viem": "2.29.0",
-    "wagmi": "2.15.1"
+    "viem": "2.30.0",
+    "wagmi": "2.15.4"
   },
   "devDependencies": {
     "@chakra-ui/cli": "2.5.8",

@@ -77,8 +77,8 @@
     "use-debounce": "^10.0.0",
     "use-sound": "^4.0.1",
     "usehooks-ts": "3.1.1",
-    "viem": "2.29.0",
-    "wagmi": "2.15.1"
+    "viem": "2.30.0",
+    "wagmi": "2.15.4"
   },
   "devDependencies": {
     "@apollo/client-integration-nextjs": "0.12.2",

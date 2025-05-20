@@ -88,7 +88,6 @@ jobs:
           name: playwright-smoke-report
           path: |
             ./packages/e2e-tests/playwright-report/
-            ./packages/e2e-tests/test-results/
           retention-days: 30
 
   E2E-Dev-Test:
