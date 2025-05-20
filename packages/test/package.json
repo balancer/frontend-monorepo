@@ -13,7 +13,7 @@
     "@types/node": "22.13.5",
     "@viem/anvil": "^0.0.10",
     "cross-fetch": "4.1.0",
-    "eslint": "^9.0.0",
+    "eslint": "9.27.0",
     "viem": "2.29.0",
     "wagmi": "2.15.1"
   },
