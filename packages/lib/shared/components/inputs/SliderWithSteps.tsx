@@ -5,9 +5,10 @@ import {
   SliderThumb,
   SliderTrack,
   SliderProps,
+  Tooltip,
   useToken,
 } from '@chakra-ui/react'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export interface SliderWithStepsProps extends SliderProps {
   steps: number[]
@@ -54,6 +55,31 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
     [value, minValue]
   )
 
+  const slider = useRef<HTMLDivElement>(null)
+  const filledTrack = useRef<HTMLDivElement>(null)
+  const [disabledTooltip, setDisabledTooltip] = useState(false)
+  const [filledTrackFocused, setFilledTrackFocused] = useState(false)
+  useEffect(() => {
+    const sliderRef = slider.current
+    const filledTrackRef = filledTrack.current
+    if (sliderRef && filledTrackRef) {
+      const sliderWidthInPixels =
+        sliderRef.getBoundingClientRect().right - sliderRef.getBoundingClientRect().left
+      const minPercentage = (minValue || 0) / ((props.max || 0) - (props.min || 0))
+      const minInPixels =
+        sliderRef.getBoundingClientRect().left +
+        window.pageXOffset +
+        sliderWidthInPixels * minPercentage
+
+      const onMoveHandler = (event: MouseEvent) => setDisabledTooltip(event.pageX > minInPixels)
+      filledTrackRef.addEventListener('mousemove', onMoveHandler)
+
+      return () => {
+        filledTrackRef.removeEventListener('mousemove', onMoveHandler)
+      }
+    }
+  }, [minValue, props.max, props.min])
+
   return (
     <Slider {...props} onChange={onChange} value={value}>
       {steps &&
@@ -71,8 +97,19 @@ export function SliderWithSteps({ steps, minValue, ...props }: SliderWithStepsPr
             zIndex="1"
           />
         ))}
-      <SliderTrack>
-        <SliderFilledTrack background={filledTrackBackground} />
+      <SliderTrack ref={slider}>
+        <Tooltip
+          hasArrow
+          isOpen={filledTrackFocused && !disabledTooltip}
+          label="You have an existing lock and can't reduce the lock period. You can only slide right to extend the lock period"
+        >
+          <SliderFilledTrack
+            background={filledTrackBackground}
+            onMouseEnter={() => setFilledTrackFocused(true)}
+            onMouseOut={() => setFilledTrackFocused(false)}
+            ref={filledTrack}
+          />
+        </Tooltip>
       </SliderTrack>
       <SliderThumb />
     </Slider>
