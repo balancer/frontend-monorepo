@@ -31,7 +31,7 @@ const nextJsConfig = [
       'react/react-in-jsx-scope': 'off',
       // Custom rules from the original next.js config
       curly: ['error', 'multi-line'],
-      'no-console': ['off'],
+      'no-console': 'off',
       'max-len': [
         'warn',
         {
