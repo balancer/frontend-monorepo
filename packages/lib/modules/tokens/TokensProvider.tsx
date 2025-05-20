@@ -1,6 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 'use client'
+
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import {
   GetTokenPricesDocument,
