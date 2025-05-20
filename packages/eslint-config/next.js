@@ -59,8 +59,8 @@ const nextJsConfig = [
               message: 'Invalid import: remove dist from import path',
             },
             {
-              group: ['act'],
-              importNames: ['react-dom/test-utils'],
+              group: ['react-dom/test-utils'],
+              importNames: ['act'],
               message: "Invalid import: import from '@testing-library/react' instead",
             },
           ],
