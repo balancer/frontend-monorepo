@@ -5,7 +5,7 @@ import baseConfig from './base.js'
 /**
  * A custom ESLint configuration for libraries that use React.
  *
- * @type {import("eslint").Linter.Config}
+ * @type {import('@typescript-eslint/utils').TSESLint.FlatConfig.ConfigFile}
  */
 const reactInternalConfig = [
   ...baseConfig,

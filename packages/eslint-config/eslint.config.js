@@ -6,7 +6,7 @@ import reactInternalConfig from './react-internals.js'
  * Main ESLint configuration file that exports all configurations
  * for use in different parts of the monorepo.
  *
- * @type {import("eslint").Linter.Config}
+ * @type {import('@typescript-eslint/utils').TSESLint.FlatConfig.ConfigFile}
  */
 export { baseConfig, nextJsConfig, reactInternalConfig }
 
