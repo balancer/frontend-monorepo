@@ -40,6 +40,7 @@ import { canReceiveIncentives, useBlacklistedVotes } from '../incentivesBlacklis
 import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useLastUserSlope } from '../../../useVeBALBalance'
+import { Address } from 'viem'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -91,7 +92,7 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
     slope,
     lockEnd,
     totalVotes,
-    blacklistedVotes[vote.gauge.address]
+    blacklistedVotes[vote.gauge.address as Address]
   )
   const averageRewards = calculateMyValuePerVote(
     editVotesWeights[vote.id] ?? 0,
@@ -99,7 +100,7 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
     slope,
     lockEnd,
     totalVotes,
-    blacklistedVotes[vote.gauge.address]
+    blacklistedVotes[vote.gauge.address as Address]
   )
 
   return (
@@ -143,7 +144,7 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
             )}
           </GridItem>
           <GridItem justifySelf="end" textAlign="right" {...cellProps}>
-            {vote.votingIncentive ? (
+            {vote.votingIncentive && canReceiveIncentives(userAddress) ? (
               <Text>
                 {toCurrency(averageRewards, {
                   abbreviated: false,

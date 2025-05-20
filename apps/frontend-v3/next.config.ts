@@ -23,12 +23,6 @@ const nextConfig: NextConfig = {
     ],
   },
   transpilePackages: ['@repo/lib'],
-  serverExternalPackages: [
-    // Filter out the problematic packages for opentelemetry
-    ...['import-in-the-middle', 'require-in-the-middle'].filter(
-      pkg => !['import-in-the-middle', 'require-in-the-middle'].includes(pkg)
-    ),
-  ],
 
   // Safe App setup
   headers: manifestHeaders,

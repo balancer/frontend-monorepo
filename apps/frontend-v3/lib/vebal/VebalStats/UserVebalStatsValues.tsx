@@ -56,20 +56,18 @@ export function UserVebalStatsValues() {
           <Skeleton height="28px" w="100px" />
         ) : (
           <Heading size="h4">
-            {userStats && !userStats.lockExpired && userStats.percentOfAllSupply ? (
-              fNum('feePercent', userStats.percentOfAllSupply)
-            ) : (
-              <>0%</>
-            )}
+            {userStats && !userStats.lockExpired && userStats.percentOfAllSupply
+              ? fNum('feePercent', userStats.percentOfAllSupply)
+              : fNum('feePercent', 0)}
           </Heading>
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
         <Text fontSize="sm" fontWeight="semibold" mb="sm" mt="xxs" variant="secondary">
           {userStats && !userStats.lockExpired ? (
-            <>Lock expiry date</>
+            'Lock expiry date'
           ) : (
-            <Text color="font.error" fontSize="sm" fontWeight="semibold">
+            <Text as="span" color="font.error">
               Your lock expired on
             </Text>
           )}

@@ -7,6 +7,8 @@ _The monorepo uses [pnpm workspaces](https://pnpm.io/workspaces) along with Turb
 build orchestration, to learn more about Turborepo please see the
 [docs](https://turbo.build/repo/docs)._
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/balancer/frontend-monorepo)
+
 ## What's inside?
 
 This monorepo includes the following apps & packages:

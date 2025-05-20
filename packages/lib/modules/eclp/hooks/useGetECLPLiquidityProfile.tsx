@@ -6,6 +6,7 @@ import { Pool } from '../../pool/pool.types'
 import { calculateSpotPrice, destructureRequiredPoolParams } from '../helpers/calculateSpotPrice'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { formatUnits } from 'viem'
+import { getPriceRateRatio } from '../../pool/pool-tokens.utils'
 
 export function useGetECLPLiquidityProfile(pool: Pool) {
   const { data: tokenRates, isLoading } = useGetTokenRates(pool)
@@ -26,10 +27,14 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     [pool, tokenRateScalingFactorString]
   )
 
+  const priceRateRatio = getPriceRateRatio(pool)
+
   const params = pool && pool.poolTokens ? destructureRequiredPoolParams(pool, tokenRates) : null
 
   const originalPoolSpotPrice = params
-    ? formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18)
+    ? bn(formatUnits(calculateSpotPrice(pool.type as GqlPoolType.Gyroe, params), 18))
+        .div(priceRateRatio)
+        .toNumber()
     : null
 
   const poolSpotPrice = useMemo(() => {
@@ -42,10 +47,13 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
 
     const transformedData = liquidityData
       .filter(([price]) => price !== 0) // filter out zero price to prevent infinity on reverse
-      .map(([price, liquidity]) => (isReversed ? [1 / price, liquidity] : [price, liquidity]))
+      .map(([price, liquidity]) => {
+        const displayedPrice = bn(price).div(priceRateRatio).toNumber()
+        return isReversed ? [1 / displayedPrice, liquidity] : [displayedPrice, liquidity]
+      })
 
     return transformedData.sort((a, b) => a[0] - b[0]) as [[number, number]]
-  }, [liquidityData, isReversed])
+  }, [liquidityData, isReversed, priceRateRatio])
 
   const xMin = useMemo(() => (data ? Math.min(...data.map(([x]) => x)) : 0), [data])
   const xMax = useMemo(() => (data ? Math.max(...data.map(([x]) => x)) : 0), [data])

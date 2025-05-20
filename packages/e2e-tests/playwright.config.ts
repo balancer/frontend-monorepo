@@ -72,18 +72,4 @@ export default defineConfig({
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
   ],
-
-  /* Run your local dev server before starting the tests*/
-  webServer: isDevE2E && [
-    {
-      command: 'cd ../.. && pnpm dev',
-      url: 'http://127.0.0.1:3000',
-      reuseExistingServer: true,
-      timeout: minutes(2),
-      stdout: 'pipe',
-      stderr: 'pipe',
-      // https://github.com/vercel/turborepo/issues/9666#issuecomment-2617743038
-      gracefulShutdown: { signal: 'SIGINT', timeout: 5000 },
-    },
-  ],
 })

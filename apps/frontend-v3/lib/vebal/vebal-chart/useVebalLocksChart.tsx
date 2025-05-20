@@ -121,7 +121,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
   const theme = useChakraTheme()
   const { theme: nextTheme } = useNextTheme()
 
-  const instanceRef = useRef<ECharts>(undefined)
+  const instanceRef = useRef<ECharts | undefined>(undefined)
 
   const userHistoricalLocks = [...lockSnapshots].sort((a, b) => a.timestamp - b.timestamp)
 
