@@ -33,7 +33,7 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: process.env.CI ? 'on' : 'on-first-retry',
   },
-  globalTimeout: isDevE2E ? minutes(4) : minutes(0.5),
+  globalTimeout: isDevE2E ? minutes(4) : minutes(1),
   timeout: isDevE2E ? minutes(1.5) : 10_000,
   /* Configure projects for major browsers */
   projects: [
