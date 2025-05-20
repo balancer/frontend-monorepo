@@ -1,4 +1,3 @@
-import pluginReactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import pluginNext from '@next/eslint-plugin-next'
 import baseConfig from './base.js'
@@ -19,7 +18,6 @@ const nextJsConfig = [
     },
     plugins: {
       '@next/next': pluginNext,
-      'react-hooks': pluginReactHooks,
     },
     settings: {
       react: { version: 'detect' },
@@ -27,7 +25,6 @@ const nextJsConfig = [
     rules: {
       ...pluginNext.configs.recommended.rules,
       ...pluginNext.configs['core-web-vitals'].rules,
-      ...pluginReactHooks.configs.recommended.rules,
       // Disable the no-html-link-for-pages rule or configure it with the correct pages path
       '@next/next/no-html-link-for-pages': 'off',
       // React scope no longer necessary with new JSX transform.
