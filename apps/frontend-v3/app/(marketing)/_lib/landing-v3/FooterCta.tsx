@@ -29,7 +29,6 @@ export function FooterCta() {
       interval = setInterval(() => {
         setPatternProgress(prev => {
           if (prev >= 100) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             clearInterval(interval!)
             return 100
           }

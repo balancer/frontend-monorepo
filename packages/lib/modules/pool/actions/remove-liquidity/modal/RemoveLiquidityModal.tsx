@@ -5,7 +5,6 @@ import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { RemoveLiquidityTimeout } from './RemoveLiquidityTimeout'
-// eslint-disable-next-line max-len
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'

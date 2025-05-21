@@ -67,7 +67,7 @@ export function TokenIcon({
     try {
       new URL(src)
       return src
-    } catch (error) {
+    } catch {
       return undefined
     }
   }

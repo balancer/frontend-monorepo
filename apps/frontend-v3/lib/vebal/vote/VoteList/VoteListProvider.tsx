@@ -78,7 +78,7 @@ function filterVoteList(
   return result
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface UseVoteListArgs {}
 
 // eslint-disable-next-line no-empty-pattern

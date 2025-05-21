@@ -57,7 +57,7 @@ export interface SubmittingVote {
   weight: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern

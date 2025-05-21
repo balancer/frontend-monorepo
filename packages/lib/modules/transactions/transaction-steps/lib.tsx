@@ -77,7 +77,7 @@ export type ManagedResult = TransactionBundle & Executable & { isSafeTxLoading: 
   executeAsync is the union of writeAsync and sendTransactionAsync functions
 */
 type Executable = {
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   executeAsync?: Function
   setTxConfig?: any
 }

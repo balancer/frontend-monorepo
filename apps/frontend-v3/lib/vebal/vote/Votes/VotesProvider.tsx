@@ -153,7 +153,6 @@ export function useVotesLogic({ data, votingListLoading = false, error }: UseVot
     )
     return (
       votingEscrowLocks.find(item =>
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         isSameAddress(item.votingEscrowID.id, mainnetNetworkConfig.contracts.veBAL!)
       )?.updatedAt || 0
     )

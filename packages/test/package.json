@@ -2,6 +2,7 @@
   "name": "@repo/test",
   "version": "0.0.0",
   "license": "MIT",
+  "type": "module",
   "devDependencies": {
     "@apollo/client": "^3.13.1",
     "@repo/eslint-config": "workspace:*",
@@ -12,6 +13,7 @@
     "@types/node": "22.15.19",
     "@viem/anvil": "^0.0.10",
     "cross-fetch": "4.1.0",
+    "eslint": "9.27.0",
     "viem": "2.30.0",
     "wagmi": "2.15.4"
   },

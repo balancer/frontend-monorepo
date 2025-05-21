@@ -389,8 +389,7 @@ export function getVaultConfig(pool: Pool) {
   const networkConfig = getNetworkConfig(pool.chain)
   const vaultAddress =
     pool.protocolVersion === 3
-      ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        networkConfig.contracts.balancer.vaultV3!
+      ? networkConfig.contracts.balancer.vaultV3!
       : networkConfig.contracts.balancer.vaultV2
 
   const balancerVaultAbi = pool.protocolVersion === 3 ? vaultAbi_V3 : balancerV2VaultAbi
