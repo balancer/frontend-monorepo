@@ -145,8 +145,6 @@ function BaseAprTooltip({
     maBeetsRewardTooltipText,
     dynamicSwapFeesDisplayed,
     dynamicSwapFeesTooltipText,
-    quantAMMFeesDisplayed,
-    quantAMMTooltipText,
   } = useAprTooltip({
     aprItems,
     vebalBoost: Number(vebalBoost),
@@ -169,44 +167,33 @@ function BaseAprTooltip({
       shadow="3xl"
       w="fit-content"
     >
-      {isQuantAmm ? (
-        <TooltipAprItem
-          {...basePopoverAprItemProps}
-          apr={quantAMMFeesDisplayed}
-          displayValueFormatter={usedDisplayValueFormatter}
-          pt={3}
-          title="Dynamic Strategy Uplift"
-          tooltipText={quantAMMTooltipText}
-        />
-      ) : (
-        <TooltipAprItem
-          {...basePopoverAprItemProps}
-          apr={swapFeesDisplayed}
-          aprOpacity={isSwapFeePresent ? 1 : 0.5}
-          displayValueFormatter={usedDisplayValueFormatter}
-          pt={3}
-          title="Swap fees"
-          tooltipText={swapFeesTooltipText}
-        >
-          {hookType ? (
-            <>
-              <TooltipAprItem
-                {...subitemPopoverAprItemProps}
-                apr={bn(swapFeesDisplayed).minus(dynamicSwapFeesDisplayed)}
-                displayValueFormatter={usedDisplayValueFormatter}
-                title="Regular swap fees"
-              />
-              <TooltipAprItem
-                {...subitemPopoverAprItemProps}
-                apr={dynamicSwapFeesDisplayed}
-                displayValueFormatter={usedDisplayValueFormatter}
-                title={getDynamicSwapFeesLabel(hookType)}
-                tooltipText={dynamicSwapFeesTooltipText[hookType as SupportedHookType]}
-              />
-            </>
-          ) : null}
-        </TooltipAprItem>
-      )}
+      <TooltipAprItem
+        {...basePopoverAprItemProps}
+        apr={swapFeesDisplayed}
+        aprOpacity={isSwapFeePresent ? 1 : 0.5}
+        displayValueFormatter={usedDisplayValueFormatter}
+        pt={3}
+        title="Swap fees"
+        tooltipText={swapFeesTooltipText}
+      >
+        {hookType ? (
+          <>
+            <TooltipAprItem
+              {...subitemPopoverAprItemProps}
+              apr={bn(swapFeesDisplayed).minus(dynamicSwapFeesDisplayed)}
+              displayValueFormatter={usedDisplayValueFormatter}
+              title="Regular swap fees"
+            />
+            <TooltipAprItem
+              {...subitemPopoverAprItemProps}
+              apr={dynamicSwapFeesDisplayed}
+              displayValueFormatter={usedDisplayValueFormatter}
+              title={getDynamicSwapFeesLabel(hookType)}
+              tooltipText={dynamicSwapFeesTooltipText[hookType as SupportedHookType]}
+            />
+          </>
+        ) : null}
+      </TooltipAprItem>
       {isMaBeetsPresent && (
         <TooltipAprItem
           {...basePopoverAprItemProps}
