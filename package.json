@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "build:no-lint": "turbo build:no-lint",
     "build:turbo": "turbo build:turbo",
     "start": "turbo start",
     "dev": "pnpm run dev:bal",
