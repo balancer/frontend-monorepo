@@ -185,7 +185,6 @@ export function useGaugeVotes({ gaugeAddresses }: UseGaugeVotesParams) {
     )
 
     return result
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     gaugeWeightThisPeriodQuery.data,
     gaugeWeightNextPeriodQuery.data,

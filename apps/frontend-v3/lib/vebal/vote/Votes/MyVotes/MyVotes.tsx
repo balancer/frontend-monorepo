@@ -20,7 +20,7 @@ import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { MyVotesStatsMyVebal } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyVebal'
 import { MyVotesStatsAverageReward } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsAverageReward'
 import { MyVotesStatsMyIncentives } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyIncentives'
-import { MyVotesStatsMyIncentivesOptimized } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/MyVotesStatsMyIncentivesOptimized'
+import { MyVotesStatsMyIncentivesOptimized } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesStats/incentives-optimization/MyVotesStatsMyIncentivesOptimized'
 import { useDisclosure } from '@chakra-ui/hooks'
 import { MyVotesHintModal } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesHintModal'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -46,7 +46,7 @@ export function MyVotes() {
   return (
     <VStack align="start" spacing="md" w="full">
       <HStack alignItems="baseline" justifyContent="space-between" w="full">
-        <Heading as="h2" pb="0.5" size="lg" variant="special">
+        <Heading as="h2" id="my-votes" pb="0.5" size="lg" variant="special">
           My votes
         </Heading>
         <Button

@@ -145,7 +145,6 @@ export function RadialPattern({
       <AnimatePresence>
         {circles.map((circle, i) => (
           <Circle
-            // eslint-disable-next-line react/no-array-index-key
             key={i}
             progress={progress}
             shadowBlackOpacity={shadowBlackOpacity}

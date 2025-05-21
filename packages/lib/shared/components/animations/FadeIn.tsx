@@ -1,10 +1,10 @@
 'use client'
 
 import { Box, BoxProps } from '@chakra-ui/react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, HTMLMotionProps } from 'framer-motion'
 import { Children, isValidElement, ReactNode, useRef } from 'react'
 
-const MotionBox = motion(Box)
+const MotionBox = motion<BoxProps>(Box)
 
 export function FadeIn({
   direction,
@@ -22,7 +22,7 @@ export function FadeIn({
   delayChildren?: number
   delay?: number
   duration?: number
-} & BoxProps) {
+} & Omit<BoxProps, 'transition'>) {
   const FADE_DOWN = {
     show: {
       opacity: 1,
@@ -35,23 +35,23 @@ export function FadeIn({
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
 
-  return (
-    <MotionBox
-      animate={isInView ? 'show' : ''}
-      initial="hidden"
-      ref={ref}
-      variants={{
-        hidden: {},
-        show: {
-          transition: {
-            staggerChildren,
-            delayChildren,
-            delay,
-          },
+  const motionProps: HTMLMotionProps<'div'> = {
+    animate: isInView ? 'show' : '',
+    initial: 'hidden',
+    variants: {
+      hidden: {},
+      show: {
+        transition: {
+          staggerChildren,
+          delayChildren,
+          delay,
         },
-      }}
-      {...rest}
-    >
+      },
+    },
+  }
+
+  return (
+    <MotionBox ref={ref} {...motionProps} {...(rest as any)}>
       {Children.map(children, child =>
         isValidElement(child) ? <MotionBox variants={FADE_DOWN}>{child}</MotionBox> : child
       )}

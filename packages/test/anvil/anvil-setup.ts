@@ -40,8 +40,15 @@ export function drpcUrlByChainId(chainId: number, privateKey: string) {
   return `https://lb.drpc.org/ogrpc?network=${chainSlug}&dkey=${privateKey}`
 }
 
-const networksWithFork = [mainnet, polygon, sepolia, gnosis, fantom, sonic] as const
-export type ChainIdWithFork = (typeof networksWithFork)[number]['id']
+type NetworksWithFork = readonly [
+  typeof mainnet,
+  typeof polygon,
+  typeof sepolia,
+  typeof gnosis,
+  typeof fantom,
+  typeof sonic,
+]
+export type ChainIdWithFork = NetworksWithFork[number]['id']
 
 export type NetworkSetup = {
   chainId: ChainIdWithFork

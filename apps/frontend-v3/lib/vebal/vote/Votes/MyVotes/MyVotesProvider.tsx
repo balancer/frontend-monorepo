@@ -29,6 +29,7 @@ import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
 import { useBlacklistedVotes } from './incentivesBlacklist'
 import { useLastUserSlope } from '../../useVeBALBalance'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { Address } from 'viem'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -56,7 +57,7 @@ export interface SubmittingVote {
   weight: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern
@@ -138,7 +139,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[myVote.gauge.address]
+        blacklistedVotes[myVote.gauge.address as Address]
       )
 
       return {
@@ -161,7 +162,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[vote.gauge.address]
+        blacklistedVotes[vote.gauge.address as Address]
       )
     )
 
@@ -172,7 +173,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[vote.gauge.address]
+        blacklistedVotes[vote.gauge.address as Address]
       )
     )
 

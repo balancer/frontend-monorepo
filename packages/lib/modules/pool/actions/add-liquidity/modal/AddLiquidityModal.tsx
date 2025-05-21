@@ -5,7 +5,6 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@c
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-// eslint-disable-next-line max-len
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { AddLiquidityTimeout } from './AddLiquidityTimeout'
@@ -27,7 +26,7 @@ type Props = {
   isOpen: boolean
   onClose(): void
   onOpen(): void
-  finalFocusRef?: RefObject<HTMLInputElement>
+  finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function AddLiquidityModal({

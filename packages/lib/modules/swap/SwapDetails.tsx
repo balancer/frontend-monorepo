@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'

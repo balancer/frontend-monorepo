@@ -1,5 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
+
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 import { useTokenAllowances } from '@repo/lib/modules/web3/useTokenAllowances'
