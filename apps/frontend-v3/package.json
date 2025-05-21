@@ -7,6 +7,7 @@
   "scripts": {
     "start": "next start",
     "build": "pnpm --filter @repo/lib graphql:gen && next build",
+    "build:no-lint": "pnpm --filter @repo/lib graphql:gen && next build --no-lint",
     "build:turbo": "pnpm --filter @repo/lib graphql:gen && next build --turbo",
     "dev": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev --turbopack\"",
     "dev:webpack": "concurrently \"pnpm --filter @repo/lib graphql:gen --watch\" \"next dev\"",
