@@ -12,7 +12,7 @@ export function useUserBalance({
   address: Address
   token: Address
 }) {
-  const { data } = useBalance({
+  const { data, isLoading, isError, error } = useBalance({
     chainId,
     address,
     token,
@@ -20,5 +20,8 @@ export function useUserBalance({
 
   return {
     balanceData: data,
+    isLoading,
+    isError,
+    error,
   }
 }
