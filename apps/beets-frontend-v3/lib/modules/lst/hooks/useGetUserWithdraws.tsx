@@ -3,7 +3,7 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useReadContract } from '@repo/lib/shared/hooks/useReadContractHelper'
+import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { sonicStakingWithdrawRequestHelperAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
@@ -28,22 +28,12 @@ export function useGetUserWithdraws(
   const { shouldChangeNetwork } = useChainSwitch(chainId)
   const config = getNetworkConfig(chainId)
 
-  console.log({
-    isConnected,
-    shouldChangeNetwork,
-    userAddress,
-    userNumWithdraws,
-    enabled,
-    finalEnabled:
-      isConnected && !shouldChangeNetwork && !!userAddress && !!userNumWithdraws && enabled,
-  })
-
   const query = useReadContract({
     chainId,
     abi: sonicStakingWithdrawRequestHelperAbi,
     address: config.contracts.beets?.lstWithdrawRequestHelper,
     functionName: 'getUserWithdraws',
-    args: [userAddress, 0n, userNumWithdraws, false],
+    args: [userAddress, 0n, userNumWithdraws ?? 0n, false],
     query: {
       enabled:
         isConnected && !shouldChangeNetwork && !!userAddress && !!userNumWithdraws && enabled,
