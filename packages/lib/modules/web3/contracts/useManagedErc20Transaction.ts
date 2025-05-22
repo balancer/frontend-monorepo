@@ -28,6 +28,8 @@ export interface ManagedErc20TransactionInput {
   functionName: ContractFunctionName<Erc20Abi, WriteAbiMutability>
   labels: TransactionLabels
   isComplete?: () => boolean
+  // TODO(transaction-refactor): make it non-optional once all steps are migrated to use onTransactionChange
+  onTransactionChange?: (transaction: ManagedResult) => void
   chainId: SupportedChainId
   args?: ContractFunctionArgs<Erc20Abi, WriteAbiMutability> | null
   enabled: boolean

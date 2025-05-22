@@ -8,3 +8,7 @@ export function resetTransaction(v: ManagedResult) {
   v.execution.reset()
   return v
 }
+
+export function isTransactionSuccess(transaction?: ManagedResult) {
+  return transaction?.result.isSuccess || false
+}
