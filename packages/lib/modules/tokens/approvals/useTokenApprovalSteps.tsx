@@ -18,7 +18,7 @@ import {
   getRequiredTokenApprovals,
   isTheApprovedAmountEnough,
 } from './approval-rules'
-import { requiresDoubleApproval } from '../token.helpers'
+import { isVeBalBtpAddress, requiresDoubleApproval } from '../token.helpers'
 import { ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 
 export type Params = {
@@ -151,7 +151,7 @@ export function useTokenApprovalSteps({
       const isTxEnabled = !!spenderAddress && !tokenAllowances.isAllowancesLoading
       const props: ManagedErc20TransactionInput = {
         tokenAddress,
-        functionName: 'approve',
+        functionName: isVeBalBtpAddress(tokenAddress) ? 'increaseApproval' : 'approve',
         labels,
         isComplete,
         chainId: getChainId(chain),
