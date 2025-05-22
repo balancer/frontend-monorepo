@@ -3,7 +3,7 @@
 import { getChainId, getNetworkConfig } from '@repo/lib/config/app.config'
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useReadContract } from 'wagmi'
+import { useReadContract } from '@repo/lib/shared/hooks/useReadContractHelper'
 import { sonicStakingAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
@@ -20,7 +20,9 @@ export function useGetConvertToShares(assetAmount: bigint, chain: GqlChain) {
     address: config.contracts.beets?.lstStakingProxy,
     functionName: 'convertToShares',
     args: [assetAmount],
-    query: { enabled: isConnected && !shouldChangeNetwork && !!assetAmount },
+    query: {
+      enabled: isConnected && !shouldChangeNetwork && !!assetAmount,
+    },
   })
 
   return {
