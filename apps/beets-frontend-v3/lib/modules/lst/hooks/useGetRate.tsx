@@ -15,15 +15,11 @@ export function useGetRate(chain: GqlChain) {
     address: config.contracts.beets?.lstStakingProxy,
     functionName: 'getRate',
     args: [],
-    query: {
-      enabled: true,
-    },
+    query: { enabled: true },
   })
-
-  const rate = query.data ? BigInt(query.data as unknown as string | number | bigint) : 10n ** 18n
 
   return {
     ...query,
-    rate,
-  } as const
+    rate: query.data ?? 10n ** 18n,
+  }
 }
