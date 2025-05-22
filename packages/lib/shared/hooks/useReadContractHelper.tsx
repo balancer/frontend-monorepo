@@ -1,3 +1,5 @@
+// this helper is used to avoid wagmi provider issues that occur when using useReadContract directly from wagmi in the apps
+
 import { Abi, ContractFunctionName, ContractFunctionArgs, ContractFunctionReturnType } from 'viem'
 import { useReadContract as useReadContractWagmi } from 'wagmi'
 
@@ -21,11 +23,9 @@ export function useReadContract<
   functionName: TFunctionName
   args?: ContractFunctionArgs<TAbi, TFunctionName>
   chainId?: number
-  enabled?: boolean
-  // watch?: boolean
-  // scopeKey?: string
-  // blockNumber?: bigint
-  // blockTag?: 'latest' | 'earliest' | 'pending' | bigint
+  query?: {
+    enabled?: boolean
+  }
 }) {
   // Cast to any to avoid TS overload issues in wagmi
   const result = useReadContractWagmi(params as any)

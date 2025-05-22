@@ -22,7 +22,9 @@ export function useGetUserNumWithdraws(chain: GqlChain, enabled: boolean) {
     address: config.contracts.beets?.lstStakingProxy,
     functionName: 'userNumWithdraws',
     args: [userAddress],
-    enabled: isConnected && !shouldChangeNetwork && !isUserAddressEmpty && !!enabled,
+    query: {
+      enabled: isConnected && !shouldChangeNetwork && !isUserAddressEmpty && enabled,
+    },
   })
 
   return {

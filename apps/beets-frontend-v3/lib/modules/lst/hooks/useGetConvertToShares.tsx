@@ -20,7 +20,9 @@ export function useGetConvertToShares(assetAmount: bigint, chain: GqlChain) {
     address: config.contracts.beets?.lstStakingProxy,
     functionName: 'convertToShares',
     args: [assetAmount],
-    enabled: isConnected && !shouldChangeNetwork && !!assetAmount,
+    query: {
+      enabled: isConnected && !shouldChangeNetwork && !!assetAmount,
+    },
   })
 
   return {

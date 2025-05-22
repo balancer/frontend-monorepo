@@ -28,14 +28,26 @@ export function useGetUserWithdraws(
   const { shouldChangeNetwork } = useChainSwitch(chainId)
   const config = getNetworkConfig(chainId)
 
+  console.log({
+    isConnected,
+    shouldChangeNetwork,
+    userAddress,
+    userNumWithdraws,
+    enabled,
+    finalEnabled:
+      isConnected && !shouldChangeNetwork && !!userAddress && !!userNumWithdraws && enabled,
+  })
+
   const query = useReadContract({
     chainId,
     abi: sonicStakingWithdrawRequestHelperAbi,
     address: config.contracts.beets?.lstWithdrawRequestHelper,
     functionName: 'getUserWithdraws',
     args: [userAddress, 0n, userNumWithdraws, false],
-    enabled:
-      isConnected && !shouldChangeNetwork && !!userAddress && !!userNumWithdraws && !!enabled,
+    query: {
+      enabled:
+        isConnected && !shouldChangeNetwork && !!userAddress && !!userNumWithdraws && enabled,
+    },
   })
 
   return {
