@@ -1,5 +1,5 @@
 import { oneDayInMs, startOfDayUtc, toJsTimestamp } from '@repo/lib/shared/utils/time'
-import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
+import { bn, MAX_BIGNUMBER, Numberish } from '@repo/lib/shared/utils/numbers'
 import { formatDistanceToNow, millisecondsToSeconds, nextThursday } from 'date-fns'
 import { SortingBy } from './myVotes.types'
 import BigNumber from 'bignumber.js'
@@ -81,16 +81,12 @@ export function calculateMyVoteRewardsValue(
   const newPoolVoteCount = bn(poolVoteCount).minus(currentUserVotes).plus(newUserVotes)
   const maxValuePerVote = incentiveTokenPrice.times(incentivesInfo.maxTokensPerVote)
   const expectedValuePerVote = bn(totalIncentives).div(newPoolVoteCount)
-  const valuePerVote = BigNumber.min(maxValuePerVote, expectedValuePerVote)
+  const valuePerVote = BigNumber.min(
+    maxValuePerVote.isZero() ? MAX_BIGNUMBER : maxValuePerVote,
+    expectedValuePerVote
+  )
 
   const rewardInUSD = valuePerVote.times(newUserVotes)
-
-  if (votingPool.gauge.address === '0x0312aa8d0ba4a1969fddb382235870bf55f7f242') {
-    console.log({
-      maxValuePerVote: maxValuePerVote.toString(),
-      expectedValuePerVote: expectedValuePerVote.toString(),
-    })
-  }
 
   return rewardInUSD
 }
