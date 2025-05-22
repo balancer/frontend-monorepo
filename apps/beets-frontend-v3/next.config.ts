@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       {
-        source: '/pools/optimism',
+        source: '/pools/optimism/:path*',
         destination: '/pools/optimism/v2/:path*',
         permanent: false,
       },
