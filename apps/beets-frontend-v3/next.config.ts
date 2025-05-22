@@ -24,29 +24,36 @@ const nextConfig: NextConfig = {
   },
   transpilePackages: ['@repo/lib'],
 
+  // Safe App setup
+  headers: manifestHeaders,
+
   async redirects() {
-    return [
+    const redirects: Array<{
+      source: string
+      destination: string
+      permanent: boolean
+    }> = [
       {
-        source: '/pool/:id',
-        destination: '/pool/:id/detail',
+        source: '/discord',
+        destination: 'https://discord.gg/kbPnYJjvwZ',
         permanent: false,
       },
       {
-        source: '/pool/:id/add',
-        destination: '/pool/:id/add-liquidity',
+        source: '/pools/optimism',
+        destination: '/pools/optimism/v2/:path*',
         permanent: false,
       },
-      {
-        source: '/pool/:id/remove',
-        destination: '/pool/:id/remove-liquidity',
+    ]
+
+    if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') {
+      redirects.push({
+        source: '/mabeets',
+        destination: 'https://ma.beets.fi/',
         permanent: false,
-      },
-      {
-        source: '/pool/:id/stake',
-        destination: '/pool/:id/stake-liquidity',
-        permanent: false,
-      },
-    ].filter(Boolean)
+      })
+    }
+
+    return redirects
   },
 }
 
@@ -60,7 +67,7 @@ export default config
  * This is required to allow the Safe Browser to fetch the manifest file
  * More info: https://help.safe.global/en/articles/40859-add-a-custom-safe-app
  */
-export function manifestHeaders() {
+export async function manifestHeaders() {
   return [
     {
       source: '/manifest.json',
