@@ -14,7 +14,6 @@ export function useGetUserNumWithdraws(chain: GqlChain, enabled: boolean) {
   const { shouldChangeNetwork } = useChainSwitch(chainId)
 
   const config = getNetworkConfig(chainId)
-  const isUserAddressEmpty = (userAddress as string) === ''
 
   const query = useReadContract({
     chainId,
@@ -22,7 +21,7 @@ export function useGetUserNumWithdraws(chain: GqlChain, enabled: boolean) {
     address: config.contracts.beets?.lstStakingProxy,
     functionName: 'userNumWithdraws',
     args: [userAddress],
-    query: { enabled: isConnected && !shouldChangeNetwork && !isUserAddressEmpty && enabled },
+    query: { enabled: isConnected && !shouldChangeNetwork && !!userAddress && !!enabled },
   })
 
   return {
