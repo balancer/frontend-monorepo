@@ -1,16 +1,16 @@
-import { useMemo } from 'react'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import networkConfigs from '@repo/lib/config/networks'
-import { OmniEscrowLock } from './useOmniEscrowLocksQuery'
 import {
-  useVotingEscrowLocksQueries,
-  VotingEscrowLock,
-  VotingEscrowLockResponse,
-} from './useVotingEscrowLocksQueries'
-import { bn } from '@repo/lib/shared/utils/numbers'
-import { allEqual } from '@repo/lib/shared/utils/array'
-import { UseQueryResult } from '@tanstack/react-query'
+  useVotingEscrowLocksQuery,
+  VotingEscrowLocksQueryResponse,
+} from '@bal/lib/vebal/cross-chain/useVotingEscrowLocksQuery'
+import networkConfigs from '@repo/lib/config/networks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { allEqual } from '@repo/lib/shared/utils/array'
+import { bn } from '@repo/lib/shared/utils/numbers'
+import { useMemo } from 'react'
+import { Address } from 'viem'
+import { OmniEscrowLock } from './useOmniEscrowLocksQuery'
+import { VotingEscrowLock } from './useVotingEscrowLocksQueries'
 
 export enum NetworkSyncState {
   Unsynced = 'Unsynced',
@@ -63,31 +63,6 @@ export function getNetworkSyncState({
   return NetworkSyncState.Unsynced
 }
 
-function formatVotingEscrowData(
-  votingEscrowResponses: UseQueryResult<VotingEscrowLockResponse, Error>[],
-  chainIds: GqlChain[]
-) {
-  return votingEscrowResponses.map(
-    ({ data: votingEscrowResponse, refetch, isError, isLoading: isInitialLoading }, index) => {
-      const chainId = chainIds[index]
-
-      if (!chainId) {
-        throw new Error(`formatVotingEscrowData - ${chainId} not found in ${chainIds}`)
-      }
-
-      const votingEscrowLocks = votingEscrowResponse?.votingEscrowLocks[0]
-
-      return {
-        chainId,
-        votingEscrowLocks,
-        refetch,
-        isLoading: isInitialLoading,
-        isError,
-      }
-    }
-  )
-}
-
 // Calculate veBAL balance using bias, slope, and timestamp values
 export function calculateVeBAlBalance(votingEscrowLocks: VotingEscrowLock | null) {
   const { bias, slope, timestamp } = votingEscrowLocks || {}
@@ -103,6 +78,8 @@ export function calculateVeBAlBalance(votingEscrowLocks: VotingEscrowLock | null
 
   return balance.toFixed(4).toString()
 }
+
+export type CrossChainNetworkResponse = ReturnType<typeof useCrossChainNetworks>
 
 export function useCrossChainNetworks(
   chainIds: GqlChain[],
@@ -124,7 +101,33 @@ export function useCrossChainNetworks(
     })
   }, [chainIds, userAddress, omniEscrowMap])
 
-  const votingEscrowResponses = useVotingEscrowLocksQueries(remoteUsers)
+  const votingEscrowResponses = useVotingEscrowLocksQuery(remoteUsers[0] as Address)
 
-  return formatVotingEscrowData(votingEscrowResponses, chainIds)
+  return formatVotingEscrowData([votingEscrowResponses], chainIds)
+}
+
+function formatVotingEscrowData(
+  votingEscrowResponses: VotingEscrowLocksQueryResponse[],
+  chainIds: GqlChain[]
+) {
+  return votingEscrowResponses.map(
+    ({ data: votingEscrowResponse, refetch, isLoading: isInitialLoading }, index) => {
+      const chainId = chainIds[index]
+
+      if (!chainId) {
+        throw new Error(`formatVotingEscrowData - ${chainId} not found in ${chainIds}`)
+      }
+
+      const votingEscrowLocks = votingEscrowResponse?.votingEscrowLocks[0]
+
+      return {
+        chainId,
+        votingEscrowLocks,
+        refetch,
+        isLoading: isInitialLoading,
+        // TODO: Handle error state
+        isError: false,
+      }
+    }
+  )
 }
