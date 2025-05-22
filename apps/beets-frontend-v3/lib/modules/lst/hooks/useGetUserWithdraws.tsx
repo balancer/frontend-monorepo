@@ -33,15 +33,15 @@ export function useGetUserWithdraws(
     abi: sonicStakingWithdrawRequestHelperAbi,
     address: config.contracts.beets?.lstWithdrawRequestHelper,
     functionName: 'getUserWithdraws',
-    args: [userAddress, 0n, userNumWithdraws ?? 0n, false],
+    args: [userAddress, 0n, userNumWithdraws || 0n, false],
     query: {
       enabled:
-        isConnected && !shouldChangeNetwork && !!userAddress && !!userNumWithdraws && enabled,
+        isConnected && !shouldChangeNetwork && !!userAddress && !!userNumWithdraws && !!enabled,
     },
   })
 
   return {
     ...query,
-    data: (query.data ?? []) as UserWithdraw[],
+    userWithdraws: (query.data as UserWithdraw[]) ?? [],
   }
 }
