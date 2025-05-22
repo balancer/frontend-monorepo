@@ -36,7 +36,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const aprItems = pool?.dynamicData.aprItems as GqlPoolAprItem[]
   const lockingApr = aprItems?.find(item => item.type === GqlPoolAprItemType.Locking)?.apr || 0
   const balance = pool ? getStakedBalance(pool as Pool, GqlPoolStakingType.Vebal) : undefined
-  const protocolRevenueShare = balance ? balance.balanceUsd * lockingApr : 0
+  const protocolRevenueShare = balance ? (balance.balanceUsd * lockingApr) / 52 : 0
 
   const { incentives, incentivesAreLoading } = useVeBALIncentives(userAddress)
 
