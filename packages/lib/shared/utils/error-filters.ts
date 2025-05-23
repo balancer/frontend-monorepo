@@ -1,5 +1,6 @@
 import { hasStableSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { ErrorWithOptionalShortMessage } from '../components/errors/GenericError'
 
 export function isUserRejectedError(error: Error): boolean {
   return (
@@ -120,4 +121,22 @@ function isAfterAddUnbalancedHookError(errorMessage: string): boolean {
 function isSingleRemoveHookError(errorMessage: string): boolean {
   if (!errorMessage) return false
   return errorMessage.includes('AfterRemoveLiquidityHookFailed()')
+}
+
+export function isLedgerUnknownError(error?: ErrorWithOptionalShortMessage | null): boolean {
+  /* Some users reported errors when using Ledger
+
+  Example in veBal BPT approvals: https://discord.com/channels/638460494168064021/1356279093045498029/1356279506733895811
+
+  The root cause can be:
+  - Ledger not being updated
+  - Ledger + Metamask or other wallets not working properly in edge case scenarios like v2 BPT approvals
+    (using increaseApproval instead of approve could be a workaround for that specific case)
+  - Users reported that using Frame wallet also workarounds those issues
+  */
+  if (!error) return false
+  const hasErrorInMessage = error.message?.includes('Ledger: Unknown error') ?? false
+  const hasErrorInShortMessage = error.shortMessage?.includes('Ledger: Unknown error') ?? false
+
+  return hasErrorInMessage || hasErrorInShortMessage
 }

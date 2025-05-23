@@ -7,3 +7,5 @@ export function getDiscordLink() {
 
   return socialLinks.find(link => link.iconType === 'discord')?.href
 }
+
+export const frameDownloadUrl = 'https://frame.sh/'
