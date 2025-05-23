@@ -1,7 +1,7 @@
 import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
 import { Hex } from 'viem'
 import { mainnet } from 'viem/chains'
-import { useReadContract } from 'wagmi'
+import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 
 export function useTotalVotes() {

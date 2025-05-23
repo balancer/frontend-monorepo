@@ -1,5 +1,5 @@
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useReadContract } from 'wagmi'
+import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { OmniVotingEscrowAbi } from '@repo/lib/modules/web3/contracts/abi/OmniVotingEscrowAbi'
 import { Address } from 'viem'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
