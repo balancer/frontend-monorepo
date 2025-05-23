@@ -38,11 +38,6 @@ const nextConfig: NextConfig = {
         destination: 'https://discord.gg/kbPnYJjvwZ',
         permanent: false,
       },
-      {
-        source: '/pools/optimism/:path*',
-        destination: '/pools/optimism/v2/:path*',
-        permanent: false,
-      },
     ]
 
     if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') {
