@@ -2,6 +2,7 @@ import { useMemo, useCallback, useState } from 'react'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
@@ -16,11 +17,11 @@ import {
   parseDate,
   getLockContractFunctionName,
 } from './lock-steps.utils'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { LockActionType } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 type UseLockStepArgs = {
   lockAmount: bigint
@@ -29,6 +30,7 @@ type UseLockStepArgs = {
 }
 
 export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLockStepArgs) {
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const { userAddress } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
   const labels: TransactionLabels = useMemo(
@@ -76,6 +78,7 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
       functionName: getLockContractFunctionName(lockActionType),
       args: getArgs() as any,
       txSimulationMeta,
+      onTransactionChange: setTransaction,
     }
   }, [lockAmount, lockEndDate, lockActionType, labels, txSimulationMeta])
 
@@ -83,10 +86,6 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
     // Refetches veBAL BPT balance which also affects veBal balance queries
     await refetchBalances()
   }, [refetchBalances])
-
-  const { getTransaction } = useTransactionState()
-
-  const transaction = getTransaction(lockActionType)
 
   const [isStepActivated, setIsStepActivated] = useState(false)
 
@@ -96,7 +95,7 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
       id: lockActionType,
       stepType: lockActionType,
       labels,
-      isComplete: () => transaction?.result.isSuccess || false,
+      isComplete: () => isTransactionSuccess(transaction),
       onSuccess,
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
