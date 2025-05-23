@@ -13,6 +13,7 @@ import { Pool } from '../pool/pool.types'
 import { getVaultConfig, isCowAmmPool, isV3Pool } from '../pool/pool.helpers'
 import { PoolToken } from '../pool/pool.types'
 import { ApiToken } from './token.types'
+import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 
 export function isNativeAsset(token: TokenBase | string, chain: GqlChain | SupportedChainId) {
   return nativeAssetFilter(chain)(token)
@@ -152,4 +153,10 @@ export function getSpenderForAddLiquidity(pool: Pool): Address {
   }
   const { vaultAddress } = getVaultConfig(pool)
   return vaultAddress
+}
+
+export const veBalBptAddress = mainnetNetworkConfig.tokens.addresses.veBalBpt as Address
+
+export function isVeBalBtpAddress(tokenAddress: Address) {
+  return isSameAddress(tokenAddress, veBalBptAddress)
 }
