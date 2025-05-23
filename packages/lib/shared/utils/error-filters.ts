@@ -1,5 +1,6 @@
 import { hasStableSurgeHook } from '@repo/lib/modules/pool/pool.helpers'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { ErrorWithOptionalShortMessage } from '../components/errors/GenericError'
 
 export function isUserRejectedError(error: Error): boolean {
   return (
@@ -122,7 +123,7 @@ function isSingleRemoveHookError(errorMessage: string): boolean {
   return errorMessage.includes('AfterRemoveLiquidityHookFailed()')
 }
 
-export function isLedgerUnknownError(error?: Error | null): boolean {
+export function isLedgerUnknownError(error?: ErrorWithOptionalShortMessage | null): boolean {
   /* Some users reported errors when using Ledger
 
   Example in veBal BPT approvals: https://discord.com/channels/638460494168064021/1356279093045498029/1356279506733895811
@@ -133,7 +134,9 @@ export function isLedgerUnknownError(error?: Error | null): boolean {
     (using increaseApproval instead of approve could be a workaround for that specific case)
   - Users reported that using Frame wallet also workarounds those issues
   */
-  if (error?.name !== 'LedgerError') return false
   if (!error) return false
-  return error.message.includes('Ledger: Unknown error')
+  const hasErrorInMessage = error.message?.includes('Ledger: Unknown error') ?? false
+  const hasErrorInShortMessage = error.shortMessage?.includes('Ledger: Unknown error') ?? false
+
+  return hasErrorInMessage || hasErrorInShortMessage
 }

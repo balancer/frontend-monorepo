@@ -14,7 +14,8 @@ import { ensureError } from '../../utils/errors'
 import { BalAlertLink } from '../alerts/BalAlertLink'
 import { frameDownloadUrl, getDiscordLink } from '../../utils/links'
 
-type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
+export type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
+
 type Props = AlertProps & {
   error: ErrorWithOptionalShortMessage
   customErrorName?: string
