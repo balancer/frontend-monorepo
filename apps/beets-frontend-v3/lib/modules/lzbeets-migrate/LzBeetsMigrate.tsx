@@ -3,12 +3,15 @@
 import { TokenBalancesProvider } from '@repo/lib/modules/tokens/TokenBalancesProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { lzBeetsAddress, LzBeetsMigrateModal, sonicChainId } from './LzBeetsMigrateModal'
-import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { useBalance } from '@repo/lib/shared/utils/wagmi'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
 export function LzBeetsMigrate() {
-  const { balanceData } = useUserBalance({
+  const { userAddress } = useUserAccount()
+  const { data: balanceData } = useBalance({
     chainId: sonicChainId,
+    address: userAddress,
     token: lzBeetsAddress,
   })
 

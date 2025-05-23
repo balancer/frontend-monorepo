@@ -16,6 +16,24 @@ export default [
   },
   ...nextJsConfig,
   {
-    // App-specific overrides can be added here
+    rules: {
+      // App-specific overrides can be added here
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            // Disable direct wagmi imports from balancer and beets apps to avoid WagmiProvider useConfig error (introduced by eslint 9 + nextjs 15)
+            {
+              name: 'wagmi',
+              message: 'Import from @repo/lib/shared/utils/wagmi instead',
+            },
+            {
+              name: 'wagmi/*',
+              message: 'Import from @repo/lib/shared/utils/wagmi instead',
+            },
+          ],
+        },
+      ],
+    },
   },
 ]
