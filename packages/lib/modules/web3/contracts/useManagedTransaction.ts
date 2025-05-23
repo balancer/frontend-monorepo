@@ -39,6 +39,8 @@ export interface ManagedTransactionInput {
   txSimulationMeta?: Record<string, unknown>
   enabled: boolean
   value?: bigint
+  // TODO(transaction-refactor): make it non-optional once all steps are migrated to use onTransactionChange
+  onTransactionChange?: (transaction: ManagedResult) => void
 }
 
 export function useManagedTransaction({

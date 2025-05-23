@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -23,8 +24,8 @@ export type AddLiquidityStepParams = AddLiquidityBuildQueryParams
 export function useAddLiquidityStep(params: AddLiquidityStepParams): TransactionStep {
   const { pool, refetch: refetchPoolBalances, chainId } = usePool()
   const [isStepActivated, setIsStepActivated] = useState(false)
-  const { getTransaction } = useTransactionState()
   const { buildTenderlyUrl } = useTenderly({ chainId })
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const { simulationQuery } = params
 
@@ -49,10 +50,7 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
 
-  const transaction = getTransaction(addLiquidityStepId)
-
-  const isComplete = () => transaction?.result.isSuccess || false
-
+  const isComplete = () => isTransactionSuccess(transaction)
   useEffect(() => {
     // simulationQuery is refetched every 30 seconds by AddLiquidityTimeout
     if (simulationQuery.data && isStepActivated) {
@@ -81,6 +79,7 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
             id={addLiquidityStepId}
             labels={labels}
             txConfig={buildCallDataQuery.data}
+            onTransactionChange={setTransaction}
           />
         )
       },

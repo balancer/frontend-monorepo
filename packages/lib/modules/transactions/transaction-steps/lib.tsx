@@ -140,6 +140,8 @@ export type TransactionStep = {
   labels: TransactionLabels
   isComplete: () => boolean
   renderAction: () => ReactNode
+  // TODO(transaction-refactor): make it non-optional once all steps are migrated to use onTransactionChange
+  transaction?: ManagedResult
   // All callbacks should be idempotent
   onSuccess?: () => any
   onActivated?: () => void
