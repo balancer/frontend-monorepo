@@ -17,9 +17,9 @@ function StarIcon({
 }: Props) {
   const theme = useTheme()
   const gradientId = `stars-gradient-${gradFrom}-${gradTo}-${id}`
+  const startColor = theme.colors[gradTo] ? theme.colors[gradTo]['600'] : gradTo
+  const stopColor = theme.colors[gradFrom] ? theme.colors[gradFrom]['600'] : gradFrom
 
-  const startColor = theme.colors[gradTo] ? theme.colors[gradTo]['500'] : gradTo
-  const stopColor = theme.colors[gradFrom] ? theme.colors[gradFrom]['500'] : gradFrom
   return (
     <svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" {...rest}>
       <defs>
