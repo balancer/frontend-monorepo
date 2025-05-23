@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
@@ -11,6 +11,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { usePool } from '../../PoolProvider'
 import { Pool } from '../../pool.types'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 const stakeStepId = 'stake'
 
@@ -18,8 +19,8 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
   const [isStakeEnabled, setIsStakeEnabled] = useState(false)
 
   const { refetch: refetchPool, chainId } = usePool()
-  const { getTransaction } = useTransactionState()
   const { userAddress } = useUserAccount()
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const labels: TransactionLabels = useMemo(
     () => ({
@@ -43,8 +44,6 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
     }
   )
 
-  const transaction = getTransaction(stakeStepId)
-
   const props: ManagedTransactionInput = useMemo(
     () => ({
       enabled: (isStakeEnabled && !!pool.staking) || !!rawDepositAmount,
@@ -55,8 +54,9 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
       functionName: 'deposit',
       args: [rawDepositAmount || 0n],
       txSimulationMeta,
+      onTransactionChange: setTransaction,
     }),
-    [chainId, isStakeEnabled, labels, pool.staking, rawDepositAmount, txSimulationMeta]
+    [chainId, isStakeEnabled, labels, pool.staking, rawDepositAmount, txSimulationMeta, transaction]
   )
 
   const onSuccess = useCallback(() => {
@@ -68,7 +68,7 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
       id: stakeStepId,
       stepType: 'stakingDeposit',
       labels,
-      isComplete: () => transaction?.result.isSuccess || false,
+      isComplete: () => isTransactionSuccess(transaction),
       onActivated: () => setIsStakeEnabled(true),
       onDeactivated: () => setIsStakeEnabled(false),
       onSuccess,
