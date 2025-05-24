@@ -185,7 +185,7 @@ export function getTotalAprRaw(
   canBeNegative = false
 ): string {
   const apr = getTotalAprLabel(aprItems, vebalBoost, canBeNegative)
-  return apr.substring(0, apr.length - 1)
+  return apr.substring(0, apr.length - 1).replace(/,/g, '')
 }
 
 // Maps GraphQL pool type enum to human readable label for UI.
