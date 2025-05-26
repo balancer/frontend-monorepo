@@ -60,7 +60,6 @@ export function useSubmitVotesSteps(
   steps: TransactionStep[]
 } {
   const { userAddress, isConnected } = useUserAccount()
-
   const { getTransaction, setTransactionFn } = useStepsTransactionState()
 
   const gaugeControllerAddress = mainnetNetworkConfig.contracts.gaugeController as Hex
