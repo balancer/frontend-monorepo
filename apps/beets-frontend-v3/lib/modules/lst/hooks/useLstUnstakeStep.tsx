@@ -85,7 +85,7 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
       renderAction: () => <ManagedTransactionButton id="unstakeLst" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction]
+    [transaction, props]
   )
   return { step }
 }
