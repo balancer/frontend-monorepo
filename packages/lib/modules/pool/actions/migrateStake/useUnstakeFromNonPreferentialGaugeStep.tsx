@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { parseUnits } from 'viem'
 import { Pool } from '../../pool.types'
 import { BPT_DECIMALS } from '../../pool.constants'
 import { findFirstNonPreferentialStaking } from '../stake.helpers'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 const unstakeStepId = 'unstake-non-preferential-gauge'
 /*
@@ -26,7 +27,8 @@ export function useUnstakeFromNonPreferentialGaugeStep(
   refetchPoolBalances: () => void
 ) {
   const { userAddress } = useUserAccount()
-  const { getTransaction } = useTransactionState()
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+
   const { chainId } = getNetworkConfig(pool.chain)
 
   const { nonPreferentialGaugeAddress, nonPreferentialStakedBalance } =
@@ -61,11 +63,8 @@ export function useUnstakeFromNonPreferentialGaugeStep(
     args: [amount],
     enabled: !!pool && !!userAddress,
     txSimulationMeta,
+    onTransactionChange: setTransaction,
   }
-
-  const transaction = getTransaction(unstakeStepId)
-
-  const isComplete = () => transaction?.result.isSuccess || false
 
   const onSuccess = useCallback(() => {
     refetchPoolBalances()
@@ -76,7 +75,7 @@ export function useUnstakeFromNonPreferentialGaugeStep(
       id: unstakeStepId,
       stepType: 'unstake',
       labels,
-      isComplete,
+      isComplete: () => isTransactionSuccess(transaction),
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={unstakeStepId} {...props} />,
     }),
