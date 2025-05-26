@@ -9,7 +9,7 @@ import {
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { parseUnits } from 'viem'
@@ -72,19 +72,16 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
 
   const isComplete = () => isConnected && isTransactionSuccess(transaction)
 
-  const step = useMemo(
-    (): TransactionStep => ({
-      id: 'unstakeLst',
-      labels,
-      stepType: 'unstakeLst',
-      isComplete,
-      onActivated: noop,
-      onDeactivated: noop,
-      onSuccess,
-      renderAction: () => <ManagedTransactionButton id="unstakeLst" {...props} />,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction, props]
-  )
+  const step: TransactionStep = {
+    id: 'unstakeLst',
+    labels,
+    stepType: 'unstakeLst',
+    isComplete,
+    onActivated: noop,
+    onDeactivated: noop,
+    onSuccess,
+    renderAction: () => <ManagedTransactionButton id="unstakeLst" {...props} />,
+  }
+
   return { step }
 }

@@ -9,7 +9,7 @@ import {
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { noop } from 'lodash'
@@ -68,19 +68,16 @@ export function useLstWithdrawStep(
     refetchWithdrawals()
   }
 
-  const step = useMemo(
-    (): TransactionStep => ({
-      id: 'withdrawLst',
-      labels,
-      stepType: 'withdrawLst',
-      isComplete,
-      onActivated: noop,
-      onDeactivated: noop,
-      onSuccess,
-      renderAction: () => <ManagedTransactionButton id="withdrawLst" {...props} />,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction, props]
-  )
+  const step: TransactionStep = {
+    id: 'withdrawLst',
+    labels,
+    stepType: 'withdrawLst',
+    isComplete,
+    onActivated: noop,
+    onDeactivated: noop,
+    onSuccess,
+    renderAction: () => <ManagedTransactionButton id="withdrawLst" {...props} />,
+  }
+
   return { step }
 }
