@@ -15,7 +15,6 @@ import { ClaimModal } from '../../../actions/claim/ClaimModal'
 import MainAprTooltip from '@repo/lib/shared/components/tooltips/apr-tooltip/MainAprTooltip'
 import { calcTotalStakedBalanceUsd } from '../../../user-balance.helpers'
 import { useGetUserPoolRewards } from '../../../useGetUserPoolRewards'
-import { isQuantAmmPool } from '../../../pool.helpers'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 
 export type PoolMyStatsValues = {
@@ -55,8 +54,7 @@ export function UserSnapshotValues() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [veBalBoostMap])
 
-  const canBeNegative = isQuantAmmPool(pool.type)
-  const myAprRaw = getTotalAprRaw(pool.dynamicData.aprItems, boost, canBeNegative)
+  const myAprRaw = getTotalAprRaw(pool.dynamicData.aprItems, boost)
 
   const poolMyStatsValues: PoolMyStatsValues | undefined = useMemo(() => {
     if (pool && pool.userBalance && !isLoadingPool && !isLoadingClaiming) {
@@ -68,9 +66,7 @@ export function UserSnapshotValues() {
 
       return {
         myLiquidity: totalBalanceUsd,
-        myPotentialWeeklyYield: bn(stakedBalanceUsd)
-          .times(bn(bn(myAprRaw).div(100)).div(52))
-          .toFixed(2),
+        myPotentialWeeklyYield: bn(stakedBalanceUsd).times(bn(myAprRaw).div(52)).toFixed(2),
         myClaimableRewards: myClaimableRewards,
       }
     }

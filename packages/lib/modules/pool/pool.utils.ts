@@ -179,13 +179,9 @@ export function getTotalAprLabel(
   }
 }
 
-export function getTotalAprRaw(
-  aprItems: GqlPoolAprItem[],
-  vebalBoost?: string,
-  canBeNegative = false
-): string {
-  const apr = getTotalAprLabel(aprItems, vebalBoost, canBeNegative)
-  return apr.substring(0, apr.length - 1)
+export function getTotalAprRaw(aprItems: GqlPoolAprItem[], vebalBoost?: string): string {
+  const [minTotal] = getTotalApr(aprItems, vebalBoost)
+  return minTotal.toString()
 }
 
 // Maps GraphQL pool type enum to human readable label for UI.
