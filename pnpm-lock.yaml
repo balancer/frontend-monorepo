@@ -180,9 +180,6 @@ importers:
       eslint:
         specifier: 9.27.0
         version: 9.27.0(jiti@1.21.6)
-      happy-dom:
-        specifier: ^17.4.7
-        version: 17.4.7
       lokijs:
         specifier: ^1.5.12
         version: 1.5.12
@@ -695,9 +692,6 @@ importers:
       eslint:
         specifier: 9.27.0
         version: 9.27.0(jiti@1.21.6)
-      happy-dom:
-        specifier: 17.4.7
-        version: 17.4.7
       lokijs:
         specifier: ^1.5.12
         version: 1.5.12
