@@ -61,7 +61,6 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
     contractId: 'beets.lstStaking',
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
     functionName: 'undelegateMany',
-    //args: [[BigInt(1)], [parseUnits(sharesAmount, 18)]], // TODO: make dynamic
     args: [
       validators.map(validator => BigInt(validator.validatorId)),
       validators.map(validator => validator.unstakeAmountShares),
