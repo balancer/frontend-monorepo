@@ -2,8 +2,8 @@ import { getChainId } from '@repo/lib/config/app.config'
 import networkConfigs from '@repo/lib/config/networks'
 import { selectStakingService } from '@repo/lib/modules/staking/selectStakingService'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
@@ -17,6 +17,7 @@ import { BalTokenRewardsResult } from '@repo/lib/modules/portfolio/PortfolioClai
 import { ClaimableBalancesResult } from '@repo/lib/modules/portfolio/PortfolioClaim/useClaimableBalances'
 import { ClaimablePool } from './ClaimProvider'
 import { Address } from 'viem'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 const claimAllRewardsStepId = 'claim-all-rewards'
 
@@ -32,8 +33,8 @@ export function useClaimAllRewardsStep({
   balTokenRewardsQuery,
 }: ClaimAllRewardsStepParams) {
   const [isClaimQueryEnabled, setIsClaimQueryEnabled] = useState(false)
-  const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const { claimableRewards: nonBalRewards, refetchClaimableRewards } = claimableBalancesQuery
   const { balRewardsData: balRewards, refetchBalRewards } = balTokenRewardsQuery
 
@@ -88,11 +89,10 @@ export function useClaimAllRewardsStep({
     args: [claimData],
     enabled: allRewardGauges.length > 0 && claimData && claimData.length > 0,
     txSimulationMeta,
+    onTransactionChange: setTransaction,
   }
 
-  const transaction = getTransaction(claimAllRewardsStepId)
-
-  const isComplete = () => isConnected && !!transaction?.result.isSuccess
+  const isComplete = () => isConnected && isTransactionSuccess(transaction)
 
   const step = useMemo(
     (): TransactionStep => ({
