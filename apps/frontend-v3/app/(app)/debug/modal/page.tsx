@@ -15,13 +15,11 @@ import {
 } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
-import useMeasure from 'react-use-measure'
 import { Hex } from 'viem'
 
 export default function ModalPage() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [txHash, setTxHash] = useState<Hex | undefined>(undefined)
-  const [ref, { height }] = useMeasure()
 
   function toggleSuccess() {
     setTxHash(txHash ? undefined : '0x123')
@@ -36,9 +34,9 @@ export default function ModalPage() {
         <ModalContent>
           <TransactionModalHeader chain={GqlChain.Mainnet} label="Add liquidity" txHash={txHash} />
           <ModalCloseButton />
-          <motion.div animate={{ height: height || 'auto ' }}>
+          <motion.div animate={{ height: 'auto' }}>
             <AnimatePresence initial={false}>
-              <ModalBody ref={ref}>
+              <ModalBody>
                 <AnimatePresence initial={false} mode="wait">
                   {txHash ? (
                     <motion.div
