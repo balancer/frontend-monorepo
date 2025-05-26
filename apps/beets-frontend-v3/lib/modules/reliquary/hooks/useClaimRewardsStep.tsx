@@ -45,12 +45,14 @@ export function useClaimRewardsStep(chain: GqlChain, relicId: string | undefined
     onTransactionChange: setTransaction,
   }
 
+  const isComplete = () => isConnected && isTransactionSuccess(transaction)
+
   const step = useMemo(
     (): TransactionStep => ({
       id: 'claimRelicReward',
       labels,
       stepType: 'claimRelicReward',
-      isComplete: () => isConnected && isTransactionSuccess(transaction),
+      isComplete,
       onActivated: noop,
       onDeactivated: noop,
       onSuccess: noop,
