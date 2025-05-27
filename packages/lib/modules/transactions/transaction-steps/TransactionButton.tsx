@@ -25,6 +25,7 @@ export function ManagedTransactionButton({
   const { updateTransaction } = useTransactionState()
 
   useEffect(() => {
+    if (params.onTransactionChange) params.onTransactionChange(transaction)
     // TODO(transaction-refactor): remove if and updateTransaction once all steps are migrated to use onTransactionChange
     updateTransaction(id, transaction)
   }, [id, transaction.execution.status, transaction.simulation.status, transaction.result.status])
