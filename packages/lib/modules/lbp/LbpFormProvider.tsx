@@ -7,6 +7,8 @@ import { usePersistentForm } from '@repo/lib/shared/hooks/usePeristedForm'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
+import { useLocalStorage } from 'usehooks-ts'
+import { useEffect } from 'react'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -44,13 +46,21 @@ export function useLbpFormLogic() {
     discordUrl: '',
   })
 
+  const [persistedStepIndex, setPersistedStepIndex] = useLocalStorage(
+    LS_KEYS.LbpConfig.StepIndex,
+    0
+  )
   const { activeStep: activeStepIndex, setActiveStep } = useSteps({
-    index: 0,
+    index: persistedStepIndex,
     count: steps.length,
   })
   const isLastStep = activeStepIndex === steps.length - 1
   const isFirstStep = activeStepIndex === 0
   const activeStep = steps[activeStepIndex]
+
+  useEffect(() => {
+    setPersistedStepIndex(activeStepIndex)
+  }, [activeStepIndex, setPersistedStepIndex])
 
   return {
     steps,

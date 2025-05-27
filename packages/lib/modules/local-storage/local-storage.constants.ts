@@ -17,5 +17,6 @@ export const LS_KEYS = {
   LbpConfig: {
     SaleStructure: 'lbpConfig.saleStructure',
     ProjectInfo: 'lbpConfig.projectInfo',
+    StepIndex: 'lbpConfig.stepIndex',
   },
 }
