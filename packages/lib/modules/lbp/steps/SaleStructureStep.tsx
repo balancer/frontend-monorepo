@@ -1,11 +1,23 @@
 'use client'
 
-import { Heading, VStack, Text, Divider, HStack, Radio, Stack, RadioGroup } from '@chakra-ui/react'
+import {
+  Heading,
+  VStack,
+  Text,
+  Divider,
+  HStack,
+  Radio,
+  Stack,
+  RadioGroup,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+} from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
 import { useLbpForm } from '../LbpFormProvider'
 import { SaleStructureForm } from '../lbp.types'
-import { Control, Controller, FieldErrors, SubmitHandler } from 'react-hook-form'
+import { Control, Controller, FieldErrors, SubmitHandler, UseFormSetValue } from 'react-hook-form'
 import { LbpFormAction } from '../LbpFormAction'
 import { isAddressValidation } from '@repo/lib/shared/utils/addresses'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
@@ -15,7 +27,7 @@ import { TokenSelectInput } from '../../tokens/TokenSelectInput'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { SelectInput } from '@repo/lib/shared/components/inputs/SelectInput'
-import { ArrowRight } from 'react-feather'
+import { ArrowRight, Clipboard } from 'react-feather'
 import { useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
 import { TokenBalancesProvider } from '../../tokens/TokenBalancesProvider'
@@ -31,6 +43,7 @@ export function SaleStructureStep() {
       control,
       formState: { errors, isValid },
       watch,
+      setValue,
     },
     setActiveStep,
     activeStepIndex,
@@ -77,7 +90,7 @@ export function SaleStructureStep() {
 
           <VStack align="start" spacing="md" w="full">
             <NetworkSelectInput chains={supportedChains} control={control} />
-            <LaunchTokenAddressInput control={control} errors={errors} />
+            <LaunchTokenAddressInput control={control} errors={errors} setFormValue={setValue} />
           </VStack>
 
           {validLaunchTokenAddress && (
@@ -182,30 +195,49 @@ function NetworkSelectInput({
 function LaunchTokenAddressInput({
   control,
   errors,
+  setFormValue,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
+  setFormValue: UseFormSetValue<SaleStructureForm>
 }) {
+  async function paste() {
+    const clipboardText = await navigator.clipboard.readText()
+    setFormValue('launchTokenAddress', clipboardText)
+  }
+
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Contract address of launch token</Text>
-      <Controller
-        control={control}
-        name="launchTokenAddress"
-        render={({ field }) => (
-          <InputWithError
-            error={errors.launchTokenAddress?.message}
-            isInvalid={!!errors.launchTokenAddress}
-            onChange={e => field.onChange(e.target.value)}
-            placeholder="Enter token address"
-            value={field.value}
+      <InputGroup>
+        <Controller
+          control={control}
+          name="launchTokenAddress"
+          render={({ field }) => (
+            <InputWithError
+              error={errors.launchTokenAddress?.message}
+              isInvalid={!!errors.launchTokenAddress}
+              onChange={e => field.onChange(e.target.value)}
+              placeholder="Enter token address"
+              value={field.value}
+            />
+          )}
+          rules={{
+            required: 'Token address is required',
+            validate: isAddressValidation,
+          }}
+        />
+
+        <InputRightElement>
+          <IconButton
+            size="xs"
+            variant="link"
+            aria-label="paste"
+            icon={<Clipboard />}
+            onClick={paste}
           />
-        )}
-        rules={{
-          required: 'Token address is required',
-          validate: isAddressValidation,
-        }}
-      />
+        </InputRightElement>
+      </InputGroup>
     </VStack>
   )
 }

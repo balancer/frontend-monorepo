@@ -11,6 +11,7 @@ import {
   StepSeparator,
   Box,
   VStack,
+  Divider,
 } from '@chakra-ui/react'
 import { useLbpForm } from './LbpFormProvider'
 import { SaleStructureStep } from './steps/SaleStructureStep'
@@ -41,6 +42,8 @@ export function LbpForm() {
           </Step>
         ))}
       </Stepper>
+
+      <Divider />
 
       <VStack spacing="lg" w="full">
         {activeStep.id === 'step1' ? (
