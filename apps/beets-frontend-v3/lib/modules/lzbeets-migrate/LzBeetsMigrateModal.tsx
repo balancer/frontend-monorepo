@@ -25,7 +25,12 @@ import { bn } from '@repo/lib/shared/utils/numbers'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Address, formatUnits } from 'viem'
-import { type BaseError, useBalance, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import {
+  type BaseError,
+  useBalance,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from '@repo/lib/shared/utils/wagmi'
 
 export const sonicChainId = 146
 export const lzBeetsAddress = '0x1E5fe95fB90ac0530F581C617272cd0864626795'

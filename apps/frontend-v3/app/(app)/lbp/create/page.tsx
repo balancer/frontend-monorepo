@@ -1,14 +1,17 @@
-import { VStack, Box, Text, HStack } from '@chakra-ui/react'
-import { LbpFormProvider } from '@repo/lib/modules/lbp/LbpFormProvider'
+'use client'
+
+import { HStack, VStack } from '@chakra-ui/react'
 import { LbpForm } from '@repo/lib/modules/lbp/LbpForm'
+import { LbpFormProvider } from '@repo/lib/modules/lbp/LbpFormProvider'
 import { LbpPreview } from '@repo/lib/modules/lbp/LbpPreview'
+import { HeaderBanner } from '@repo/lib/modules/lbp/header/HeaderBanner'
+
 export default function LBPCreatePage() {
   return (
     <LbpFormProvider>
       <VStack spacing="lg">
-        <Box border="1px solid red" w="full">
-          <Text>Banner</Text>
-        </Box>
+        <HeaderBanner />
+
         <HStack align="start" spacing="lg" w="full">
           <LbpForm />
           <LbpPreview />

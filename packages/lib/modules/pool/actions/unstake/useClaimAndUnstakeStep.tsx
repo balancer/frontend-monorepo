@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
@@ -13,9 +14,9 @@ import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useMan
 import { useBalTokenRewards } from '@repo/lib/modules/portfolio/PortfolioClaim/useBalRewards'
 import { useClaimableBalances } from '@repo/lib/modules/portfolio/PortfolioClaim/useClaimableBalances'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { useHasApprovedRelayer } from '@repo/lib/modules/relayer/useHasApprovedRelayer'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { HumanAmount } from '@balancer/sdk'
@@ -39,7 +40,8 @@ export function useClaimAndUnstakeStep({
   hasUnclaimedBalRewards: boolean
 } {
   const { userAddress } = useUserAccount()
-  const { getTransaction } = useTransactionState()
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+
   const { contracts, chainId } = getNetworkConfig(pool.chain)
 
   const { claimableRewards: nonBalrewards } = useClaimableBalances([pool])
@@ -89,11 +91,8 @@ export function useClaimAndUnstakeStep({
     args: [data],
     enabled: !!pool && !isLoadingRelayerApproval && hasApprovedRelayer && data.length > 0,
     txSimulationMeta,
+    onTransactionChange: setTransaction,
   }
-
-  const transaction = getTransaction(claimAndUnstakeStepId)
-
-  const isComplete = () => transaction?.result.isSuccess || false
 
   const onSuccess = useCallback(() => {
     refetchPoolBalances()
@@ -104,7 +103,7 @@ export function useClaimAndUnstakeStep({
       id: claimAndUnstakeStepId,
       stepType: 'claimAndUnstake',
       labels,
-      isComplete,
+      isComplete: () => isTransactionSuccess(transaction),
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={claimAndUnstakeStepId} {...props} />,
     }),

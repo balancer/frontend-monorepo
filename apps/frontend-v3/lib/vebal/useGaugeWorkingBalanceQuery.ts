@@ -1,4 +1,4 @@
-import { useReadContract } from 'wagmi'
+import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { Address } from '@balancer/sdk'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { GaugeWorkingBalanceHelperAbi } from '@repo/lib/modules/web3/contracts/abi/GaugeWorkingBalanceHelperAbi'

@@ -22,7 +22,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit --incremental"
   },
   "dependencies": {
-    "@apollo/client": "^3.13.1",
+    "@apollo/client": "3.13.8",
     "@balancer/sdk": "4.0.3",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
@@ -78,7 +78,7 @@
     "use-debounce": "^10.0.0",
     "use-sound": "^4.0.1",
     "usehooks-ts": "3.1.1",
-    "viem": "2.30.0",
+    "viem": "2.30.1",
     "wagmi": "2.15.4"
   },
   "devDependencies": {
@@ -115,9 +115,8 @@
     "autoprefixer": "10.4.21",
     "cross-fetch": "4.1.0",
     "eslint": "9.27.0",
-    "happy-dom": "17.1.0",
     "lokijs": "^1.5.12",
-    "msw": "2.7.3",
+    "msw": "2.8.4",
     "sentry-testkit": "5.0.10"
   }
 }

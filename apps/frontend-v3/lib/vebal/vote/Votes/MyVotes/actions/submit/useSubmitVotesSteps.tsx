@@ -7,12 +7,13 @@ import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { SubmittingVote } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { chunk } from 'lodash'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 const submitVotesStepId = 'submit-votes'
 
@@ -59,12 +60,11 @@ export function useSubmitVotesSteps(
   steps: TransactionStep[]
 } {
   const { userAddress, isConnected } = useUserAccount()
+  const { getTransaction, setTransactionFn } = useStepsTransactionState()
 
   const gaugeControllerAddress = mainnetNetworkConfig.contracts.gaugeController as Hex
 
   const isLoading = false
-
-  const { getTransaction } = useTransactionState()
 
   const steps = useMemo(
     (): TransactionStep[] => {
@@ -94,6 +94,9 @@ export function useSubmitVotesSteps(
           }
         )
 
+        const stepId = getStepId(idx)
+        const transaction = getTransaction(stepId)
+
         const props: ManagedTransactionInput = {
           contractAddress: gaugeControllerAddress,
           contractId: 'balancer.gaugeControllerAbi',
@@ -103,23 +106,20 @@ export function useSubmitVotesSteps(
           args: [gaugeAddresses, weights],
           enabled: !!userAddress && !isLoading,
           txSimulationMeta,
+          onTransactionChange: setTransactionFn(stepId),
         }
-
-        const stepId = getStepId(idx)
-
-        const transaction = getTransaction(stepId)
 
         return {
           id: stepId,
           stepType: 'voteForManyGaugeWeights',
           labels,
-          isComplete: () => (isConnected && transaction?.result.isSuccess) || false,
+          isComplete: () => isConnected && isTransactionSuccess(transaction),
           renderAction: () => <ManagedTransactionButton id={stepId} {...props} />,
         }
       })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isConnected, isLoading, votes, getTransaction]
+    [isConnected, isLoading, votes]
   )
 
   return {

@@ -1,6 +1,6 @@
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
@@ -14,6 +14,8 @@ import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useEstimateSendUserBalance } from '@bal/lib/vebal/cross-chain/useEstimateSendUserBalance'
 import { Button } from '@chakra-ui/react'
 import { getChainShortName, getNetworkConfig } from '@repo/lib/config/app.config'
+import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 export const crossChainSyncStepPrefix = 'cross-chain-sync'
 
@@ -26,11 +28,13 @@ function ChainSyncButton({
   layerZeroChainId,
   stepId,
   network,
+  onTransactionChange,
 }: {
   omniVotingEscrow: Address
   layerZeroChainId: number
   stepId: string
   network: GqlChain
+  onTransactionChange: (transaction: ManagedResult) => void
 }) {
   const { chainId } = useNetworkConfig()
   const { data, error, isLoading } = useEstimateSendUserBalance(omniVotingEscrow, layerZeroChainId)
@@ -76,6 +80,7 @@ function ChainSyncButton({
     txSimulationMeta,
     args: [userAddress, layerZeroChainId, userAddress],
     labels,
+    onTransactionChange,
   }
 
   return <ManagedTransactionButton id={stepId} {...props} />
@@ -83,7 +88,7 @@ function ChainSyncButton({
 
 export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): TransactionStep[] {
   const { userAddress } = useUserAccount()
-  const { getTransaction } = useTransactionState()
+  const { getTransaction, setTransactionFn } = useStepsTransactionState()
 
   const { contracts } = getNetworkConfig(GqlChain.Mainnet)
 
@@ -99,7 +104,7 @@ export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): 
 
           const transaction = getTransaction(stepId)
 
-          const isComplete = () => userAddress && !!transaction?.result.isSuccess
+          const isComplete = () => userAddress && isTransactionSuccess(transaction)
 
           const networkConfig = getNetworkConfig(network)
 
@@ -131,6 +136,7 @@ export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): 
               network={network}
               omniVotingEscrow={omniVotingEscrow}
               stepId={stepId}
+              onTransactionChange={setTransactionFn(stepId)}
             />
           )
 
@@ -142,6 +148,6 @@ export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): 
             renderAction,
           }
         }),
-    [networks, getTransaction, userAddress, contracts.omniVotingEscrow]
+    [networks, getTransaction, userAddress, contracts.omniVotingEscrow, setTransactionFn]
   )
 }

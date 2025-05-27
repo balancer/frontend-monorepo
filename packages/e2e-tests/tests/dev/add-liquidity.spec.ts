@@ -32,7 +32,15 @@ test('Adds liquidity in balWeth8020', async ({ page }) => {
   // await page.waitForTimeout(500)
 })
 
-test('Adds liquidity in tri-boosted aave pool (Aave GHO/USDT/USDC)', async ({ page }) => {
+/*
+  Skip until permit2 signatures can be tested again.
+  The blocker is that all foundry default anvil accounts now have 7702 lists so, instead of using ECDSA.recover,
+  the permit2 SignatureChecker lib will use 1271 signature verification first, breaking signature flow.
+
+  The foundry team confirmed that they will implement a feature to reset the default anvil when forking, so they do not have
+  7702 authorization lists by default. We have to skip this test until that feature is implemented.
+*/
+test.skip('Adds liquidity in tri-boosted aave pool (Aave GHO/USDT/USDC)', async ({ page }) => {
   // Must go before loading the page
   await setForkBalances(page, {
     chainId: 1,
