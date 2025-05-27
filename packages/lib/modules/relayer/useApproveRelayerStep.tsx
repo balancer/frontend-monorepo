@@ -1,12 +1,16 @@
 import { SupportedChainId } from '@repo/lib/config/config.types'
-import { TransactionLabels, TransactionStep } from '../transactions/transaction-steps/lib'
+import {
+  ManagedResult,
+  TransactionLabels,
+  TransactionStep,
+} from '../transactions/transaction-steps/lib'
 import { ManagedTransactionButton } from '../transactions/transaction-steps/TransactionButton'
 import { ManagedTransactionInput } from '../web3/contracts/useManagedTransaction'
 import { useUserAccount } from '../web3/UserAccountProvider'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useHasApprovedRelayer } from './useHasApprovedRelayer'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo } from 'react'
+import { useState } from 'react'
 
 const approveRelayerStepId = 'approve-relayer'
 
@@ -15,6 +19,8 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
   step: TransactionStep
 } {
   const { userAddress, isConnected } = useUserAccount()
+  const [, setTransaction] = useState<ManagedResult | undefined>()
+
   const config = getNetworkConfig(chainId)
 
   const relayerAddress = config.contracts.balancer.relayerV6
@@ -50,20 +56,17 @@ export function useApproveRelayerStep(chainId: SupportedChainId): {
     args: [userAddress, relayerAddress, true],
     enabled: !!userAddress && !isLoading,
     txSimulationMeta,
+    onTransactionChange: setTransaction,
   }
 
-  const step = useMemo(
-    (): TransactionStep => ({
-      id: approveRelayerStepId,
-      stepType: 'approveBatchRelayer',
-      labels,
-      isComplete: () => isConnected && hasApprovedRelayer,
-      renderAction: () => <ManagedTransactionButton id={approveRelayerStepId} {...props} />,
-      onSuccess: () => refetch(),
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hasApprovedRelayer, isConnected, isLoading]
-  )
+  const step: TransactionStep = {
+    id: approveRelayerStepId,
+    stepType: 'approveBatchRelayer',
+    labels,
+    isComplete: () => isConnected && hasApprovedRelayer,
+    renderAction: () => <ManagedTransactionButton id={approveRelayerStepId} {...props} />,
+    onSuccess: () => refetch(),
+  }
 
   return {
     isLoading,

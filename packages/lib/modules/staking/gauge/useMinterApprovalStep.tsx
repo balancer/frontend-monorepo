@@ -1,11 +1,12 @@
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useHasMinterApproval } from './useHasMinterApproval'
-import { useMemo } from 'react'
+import { useState } from 'react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
@@ -17,6 +18,8 @@ export function useApproveMinterStep(chain: GqlChain): {
   step: TransactionStep
 } {
   const { isConnected } = useUserAccount()
+  const [, setTransaction] = useState<ManagedResult | undefined>()
+
   const { contracts, chainId } = getNetworkConfig(chain)
 
   const { hasMinterApproval, isLoading, refetch } = useHasMinterApproval()
@@ -46,20 +49,17 @@ export function useApproveMinterStep(chain: GqlChain): {
     args: [contracts.balancer.relayerV6, true],
     enabled: !isLoading && isConnected && !hasMinterApproval,
     txSimulationMeta,
+    onTransactionChange: setTransaction,
   }
 
-  const step = useMemo(
-    (): TransactionStep => ({
-      id: approveMinterStepId,
-      stepType: 'minterApproval',
-      labels,
-      isComplete: () => isConnected && hasMinterApproval,
-      renderAction: () => <ManagedTransactionButton id={approveMinterStepId} {...props} />,
-      onSuccess: () => refetch(),
-    }),
-    /* eslint-disable react-hooks/exhaustive-deps */
-    [hasMinterApproval, isConnected, isLoading]
-  )
+  const step: TransactionStep = {
+    id: approveMinterStepId,
+    stepType: 'minterApproval',
+    labels,
+    isComplete: () => isConnected && hasMinterApproval,
+    renderAction: () => <ManagedTransactionButton id={approveMinterStepId} {...props} />,
+    onSuccess: () => refetch(),
+  }
 
   return {
     isLoading,

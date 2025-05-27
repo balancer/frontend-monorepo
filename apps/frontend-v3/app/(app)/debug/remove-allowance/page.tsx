@@ -31,6 +31,7 @@ export default function Page() {
     simulationMeta: sentryMetaForWagmiSimulation('Error in wagmi tx simulation: Approving token', {
       tokenAmountToApprove: 0n,
     }),
+    onTransactionChange: () => {},
   }
 
   const transaction = useManagedErc20Transaction(props)

@@ -16,6 +16,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { getMaxAmountForPermit2 } from './permit2.helpers'
 import { Address, encodeFunctionData } from 'viem'
 import { permit2Abi } from '@balancer/sdk'
+import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 
 export type Params = {
   chain: GqlChain
@@ -53,6 +54,8 @@ export function usePermit2ApprovalSteps({
   shouldUseCompositeLiquidityRouterBoosted = false,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
+  const { setTransactionFn } = useStepsTransactionState()
+
   const { getToken } = useTokens()
 
   // Precompute common values
@@ -139,6 +142,7 @@ export function usePermit2ApprovalSteps({
           'Error in wagmi tx simulation: Approving token',
           tokenAmountToApprove
         ),
+        onTransactionChange: () => setTransactionFn(id),
       }
 
       const args = props.args as Permit2ApproveArgs
@@ -153,7 +157,7 @@ export function usePermit2ApprovalSteps({
         onSuccess: () => refetchPermit2Allowances(),
       } as const satisfies TransactionStep
     })
-  }, [tokenAmountsToApprove, chain, isLoadingPermit2Allowances, userAddress])
+  }, [tokenAmountsToApprove, chain, isLoadingPermit2Allowances, userAddress, setTransactionFn])
 
   return {
     isLoading: isLoadingPermit2Allowances,

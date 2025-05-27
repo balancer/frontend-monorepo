@@ -35,6 +35,7 @@ export default function Page() {
     args: [userAddress, relayerAddress, false],
     enabled: !!userAddress,
     txSimulationMeta: {},
+    onTransactionChange: () => {},
   }
 
   const transaction = useManagedTransaction(props)

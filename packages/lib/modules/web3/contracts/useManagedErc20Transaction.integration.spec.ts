@@ -23,6 +23,7 @@ test('token approval transaction (wETH)', async () => {
       enabled: true,
       simulationMeta: {},
       labels: {} as TransactionLabels,
+      onTransactionChange: () => {},
     })
   )
 

@@ -20,6 +20,7 @@ import {
 } from './approval-rules'
 import { isVeBalBtpAddress, requiresDoubleApproval } from '../token.helpers'
 import { ErrorWithCauses } from '@repo/lib/shared/utils/errors'
+import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 
 export type Params = {
   spenderAddress: Address
@@ -48,6 +49,8 @@ export function useTokenApprovalSteps({
   wethIsEth,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
+  const { setTransactionFn } = useStepsTransactionState()
+
   const { getToken } = useTokens()
   const nativeAssetAddress = getNativeAssetAddress(chain)
 
@@ -161,6 +164,7 @@ export function useTokenApprovalSteps({
           'Error in wagmi tx simulation: Approving token',
           tokenAmountToApprove
         ),
+        onTransactionChange: () => setTransactionFn(id),
       }
 
       const args = props.args as [Address, bigint]
@@ -182,7 +186,7 @@ export function useTokenApprovalSteps({
         },
       } as const satisfies TransactionStep
     })
-  }, [tokenAllowances.allowances, userAddress, tokenAmountsToApprove])
+  }, [tokenAllowances.allowances, userAddress, tokenAmountsToApprove, setTransactionFn])
 
   return {
     isLoading: tokenAllowances.isAllowancesLoading,
