@@ -31,7 +31,9 @@ type PoolInfo = {
   userPrct: BigNumber
 }
 
-const PERCENT_STEP = bn(0.0001)
+// The smallest step that could be voted for is 0.01%, but in the past this has caused
+// problems with the transactions. For now, we will set the step to 1%
+const PERCENT_STEP = bn(0.01)
 
 export function useIncentivesOptimized(
   votingPools: VotingPoolWithData[],
