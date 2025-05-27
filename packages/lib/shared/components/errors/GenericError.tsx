@@ -3,6 +3,7 @@
 import { AlertProps, Text } from '@chakra-ui/react'
 import { ErrorAlert } from './ErrorAlert'
 import {
+  isLedgerUnknownError,
   isNotEnoughGasError,
   isPausedError,
   isTooManyRequestsError,
@@ -13,7 +14,8 @@ import { ensureError } from '../../utils/errors'
 import { BalAlertLink } from '../alerts/BalAlertLink'
 import { getDiscordLink } from '../../utils/links'
 
-type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
+export type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
+
 type Props = AlertProps & {
   error: ErrorWithOptionalShortMessage
   customErrorName?: string
@@ -35,6 +37,19 @@ export function GenericError({ error: _error, customErrorName, skipError, ...res
           It looks like there was a network issue. Check your connection and try again. You can
           report the problem in <BalAlertLink href={discordUrl}>our discord</BalAlertLink> if the
           issue persists.
+        </Text>
+      </ErrorAlert>
+    )
+  }
+
+  if (isLedgerUnknownError(_error)) {
+    return (
+      <ErrorAlert title={customErrorName} {...rest}>
+        <Text color="black" variant="secondary">
+          There was an issue related with your Ledger and wallet connection setup. Make sure that
+          your Ledger is updated. We also recommend trying with more modern wallets that work better
+          with Ledger. You can report the problem in{' '}
+          <BalAlertLink href={discordUrl}>our discord</BalAlertLink> if the issue persists.
         </Text>
       </ErrorAlert>
     )
