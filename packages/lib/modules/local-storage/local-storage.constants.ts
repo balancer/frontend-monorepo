@@ -14,4 +14,8 @@ export const LS_KEYS = {
     TempSyncingNetworks: 'сrossChainSync.tempSyncingNetworks',
     SyncTxHashes: 'сrossChainSync.syncTxHashes',
   },
+  LbpConfig: {
+    SaleStructure: 'lbpConfig.saleStructure',
+    ProjectInfo: 'lbpConfig.projectInfo',
+  },
 }
