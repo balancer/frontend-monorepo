@@ -61,7 +61,7 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
       renderAction: () => <ManagedTransactionButton id="levelUp" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction]
+    [transaction, props]
   )
   return { step }
 }
