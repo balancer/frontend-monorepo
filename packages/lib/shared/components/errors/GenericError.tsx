@@ -12,7 +12,7 @@ import {
 } from '../../utils/error-filters'
 import { ensureError } from '../../utils/errors'
 import { BalAlertLink } from '../alerts/BalAlertLink'
-import { frameDownloadUrl, getDiscordLink } from '../../utils/links'
+import { getDiscordLink } from '../../utils/links'
 
 export type ErrorWithOptionalShortMessage = Error & { shortMessage?: string }
 
@@ -47,9 +47,8 @@ export function GenericError({ error: _error, customErrorName, skipError, ...res
       <ErrorAlert title={customErrorName} {...rest}>
         <Text color="black" variant="secondary">
           There was an issue related with your Ledger and wallet connection setup. Make sure that
-          your Ledger is updated. Modern wallets like{' '}
-          <BalAlertLink href={frameDownloadUrl}>Frame</BalAlertLink> are recommended as they work
-          better with Ledger. You can report the problem in{' '}
+          your Ledger is updated. We also recommend trying with more modern wallets that work better
+          with Ledger. You can report the problem in{' '}
           <BalAlertLink href={discordUrl}>our discord</BalAlertLink> if the issue persists.
         </Text>
       </ErrorAlert>
