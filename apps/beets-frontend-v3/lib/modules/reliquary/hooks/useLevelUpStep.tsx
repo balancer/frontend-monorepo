@@ -3,13 +3,14 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import networkConfigs from '@repo/lib/config/networks'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { noop } from 'lodash'
@@ -17,9 +18,9 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useGetRelicPositionsOfOwner } from '@/lib/modules/reliquary/hooks/useGetRelicPositionsOfOwner'
 
 export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
-  const { getTransaction } = useTransactionState()
   const { isConnected } = useUserAccount()
   const { refetch } = useGetRelicPositionsOfOwner(chain)
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const labels: TransactionLabels = {
     init: 'Level up',
@@ -43,11 +44,10 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
     args: relicId ? [relicId] : null,
     enabled: isConnected && !!relicId,
     txSimulationMeta,
+    onTransactionChange: setTransaction,
   }
 
-  const transaction = getTransaction('levelUp')
-
-  const isComplete = () => isConnected && !!transaction?.result.isSuccess
+  const isComplete = () => isConnected && isTransactionSuccess(transaction)
 
   const step = useMemo(
     (): TransactionStep => ({
@@ -61,7 +61,7 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
       renderAction: () => <ManagedTransactionButton id="levelUp" {...props} />,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction]
+    [transaction, props]
   )
   return { step }
 }
