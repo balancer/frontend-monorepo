@@ -10,7 +10,7 @@ import {
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { captureWagmiExecutionError } from '@repo/lib/shared/utils/query-errors'
 import { useEffect, useState } from 'react'
-import { Address, ContractFunctionArgs, ContractFunctionName, erc20Abi } from 'viem'
+import { Address, ContractFunctionArgs, ContractFunctionName } from 'viem'
 import { useSimulateContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { useTxHash } from '../safe.hooks'
 import { useChainSwitch } from '../useChainSwitch'
@@ -20,18 +20,21 @@ import { useOnTransactionConfirmation } from './useOnTransactionConfirmation'
 import { useOnTransactionSubmission } from './useOnTransactionSubmission'
 import { getWaitForReceiptTimeout } from './wagmi-helpers'
 import { onlyExplicitRefetch } from '@repo/lib/shared/utils/queries'
+import { erc20AbiWithIncreaseApproval } from '@repo/lib/modules/web3/contracts/abi/vebalAbi'
 
-type Erc20Abi = typeof erc20Abi
+type Erc20AbiWithIncreaseApproval = typeof erc20AbiWithIncreaseApproval
 
 export interface ManagedErc20TransactionInput {
   tokenAddress: Address
-  functionName: ContractFunctionName<Erc20Abi, WriteAbiMutability>
+  functionName:
+    | ContractFunctionName<Erc20AbiWithIncreaseApproval, WriteAbiMutability>
+    | 'increaseApproval' // Edge-case for veBalBpt approval
   labels: TransactionLabels
   isComplete?: () => boolean
   // TODO(transaction-refactor): make it non-optional once all steps are migrated to use onTransactionChange
   onTransactionChange?: (transaction: ManagedResult) => void
   chainId: SupportedChainId
-  args?: ContractFunctionArgs<Erc20Abi, WriteAbiMutability> | null
+  args?: ContractFunctionArgs<Erc20AbiWithIncreaseApproval, WriteAbiMutability> | null
   enabled: boolean
   simulationMeta: Record<string, unknown>
 }
@@ -57,7 +60,7 @@ export function useManagedErc20Transaction({
       USDTs ABI does not exactly follow the erc20ABI so we need its explicit ABI to avoid errors (e.g. calling approve)
       More info: https://github.com/wevm/wagmi/issues/2749#issuecomment-1638200817
     */
-    abi: isUsdt ? usdtAbi : erc20Abi,
+    abi: isUsdt ? usdtAbi : erc20AbiWithIncreaseApproval,
     address: tokenAddress,
     functionName: functionName as ContractFunctionName<any, WriteAbiMutability>,
     // This any is 'safe'. The type provided to any is the same type for args that is inferred via the functionName
@@ -113,7 +116,9 @@ export function useManagedErc20Transaction({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(args)])
 
-  const managedWriteAsync = async (args?: ContractFunctionArgs<Erc20Abi, WriteAbiMutability>) => {
+  const managedWriteAsync = async (
+    args?: ContractFunctionArgs<Erc20AbiWithIncreaseApproval, WriteAbiMutability>
+  ) => {
     if (args) {
       setWriteArgs(args)
     }
