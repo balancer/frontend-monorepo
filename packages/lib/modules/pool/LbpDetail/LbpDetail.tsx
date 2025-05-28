@@ -28,7 +28,7 @@ export function LbpDetail() {
             w="full"
           ></Stack>
         )}
-        <PoolActivity />
+        <PoolActivity showTabs={false} />
         <PoolComposition />
         <PoolInfoLayout />
       </VStack>
