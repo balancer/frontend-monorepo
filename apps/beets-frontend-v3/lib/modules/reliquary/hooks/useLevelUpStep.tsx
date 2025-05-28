@@ -13,7 +13,6 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { noop } from 'lodash'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useGetRelicPositionsOfOwner } from '@/lib/modules/reliquary/hooks/useGetRelicPositionsOfOwner'
 
@@ -54,8 +53,6 @@ export function useLevelUpStep(chain: GqlChain, relicId: string | undefined) {
     labels,
     stepType: 'levelUp',
     isComplete,
-    onActivated: noop,
-    onDeactivated: noop,
     onSuccess: () => refetch(),
     renderAction: () => <ManagedTransactionButton id="levelUp" {...props} />,
   }

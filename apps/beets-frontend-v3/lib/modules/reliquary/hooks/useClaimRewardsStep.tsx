@@ -12,7 +12,6 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { noop } from 'lodash'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
@@ -52,9 +51,6 @@ export function useClaimRewardsStep(chain: GqlChain, relicId: string | undefined
     labels,
     stepType: 'claimRelicReward',
     isComplete,
-    onActivated: noop,
-    onDeactivated: noop,
-    onSuccess: noop,
     renderAction: () => <ManagedTransactionButton id="claimRelicReward" {...props} />,
   }
 
