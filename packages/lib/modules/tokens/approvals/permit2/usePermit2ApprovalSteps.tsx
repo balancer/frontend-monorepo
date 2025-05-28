@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react'
 import { getChainId, getNativeAssetAddress, getNetworkConfig } from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -16,6 +15,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { getMaxAmountForPermit2 } from './permit2.helpers'
 import { Address, encodeFunctionData } from 'viem'
 import { permit2Abi } from '@balancer/sdk'
+import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 
 export type Params = {
   chain: GqlChain
@@ -53,6 +53,8 @@ export function usePermit2ApprovalSteps({
   shouldUseCompositeLiquidityRouterBoosted = false,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
+  const { setTransactionFn } = useStepsTransactionState()
+
   const { getToken } = useTokens()
 
   // Precompute common values
@@ -95,65 +97,64 @@ export function usePermit2ApprovalSteps({
     skipAllowanceCheck: isUnwrappingNative,
   })
 
-  const steps = useMemo(() => {
-    return tokenAmountsToApprove.map(tokenAmountToApprove => {
-      const {
-        tokenAddress,
-        requiredRawAmount,
-        requestedRawAmount,
-        symbol: approvalSymbol,
-      } = tokenAmountToApprove
+  const steps: TransactionStep[] = tokenAmountsToApprove.map(tokenAmountToApprove => {
+    const {
+      tokenAddress,
+      requiredRawAmount,
+      requestedRawAmount,
+      symbol: approvalSymbol,
+    } = tokenAmountToApprove
 
-      const id = tokenAddress + '-permit2Approval' // To avoid key collisions with default token approvals
-      const token = getToken(tokenAddress, chain)
-      const amountToApprove = getMaxAmountForPermit2(requestedRawAmount)
-      // Compute symbol using first defined value
-      const symbol =
-        approvalSymbol && approvalSymbol !== 'Unknown'
-          ? approvalSymbol
-          : bptSymbol || token?.symbol || 'Unknown'
+    const id = tokenAddress + '-permit2Approval' // To avoid key collisions with default token approvals
+    const token = getToken(tokenAddress, chain)
+    const amountToApprove = getMaxAmountForPermit2(requestedRawAmount)
+    // Compute symbol using first defined value
+    const symbol =
+      approvalSymbol && approvalSymbol !== 'Unknown'
+        ? approvalSymbol
+        : bptSymbol || token?.symbol || 'Unknown'
 
-      const labels = buildTokenApprovalLabels({
-        actionType,
-        symbol,
-        lpToken,
-      })
-
-      // Check if the token has been approved
-      const isComplete = () => {
-        const isNotExpired = !!expirations && expirations[tokenAddress] > getNowTimestampInSecs()
-        const isAllowed = allowanceFor(tokenAddress) >= amountToApprove
-        return requiredRawAmount > 0n && isAllowed && isNotExpired
-      }
-
-      const isTxEnabled = !isLoadingPermit2Allowances && !!permit2Address
-      const props: ManagedTransactionInput = {
-        contractAddress: permit2Address || '',
-        contractId: 'permit2',
-        functionName: 'approve',
-        labels,
-        chainId,
-        args: [tokenAddress, spenderAddress, amountToApprove, permitExpiry],
-        enabled: isTxEnabled,
-        txSimulationMeta: sentryMetaForWagmiSimulation(
-          'Error in wagmi tx simulation: Approving token',
-          tokenAmountToApprove
-        ),
-      }
-
-      const args = props.args as Permit2ApproveArgs
-
-      return {
-        id,
-        stepType: 'tokenApproval',
-        labels,
-        isComplete,
-        renderAction: () => <ManagedTransactionButton id={id} key={id} {...props} />,
-        batchableTxCall: isTxEnabled ? buildBatchableTxCall({ permit2Address, args }) : undefined,
-        onSuccess: () => refetchPermit2Allowances(),
-      } as const satisfies TransactionStep
+    const labels = buildTokenApprovalLabels({
+      actionType,
+      symbol,
+      lpToken,
     })
-  }, [tokenAmountsToApprove, chain, isLoadingPermit2Allowances, userAddress])
+
+    // Check if the token has been approved
+    const isComplete = () => {
+      const isNotExpired = !!expirations && expirations[tokenAddress] > getNowTimestampInSecs()
+      const isAllowed = allowanceFor(tokenAddress) >= amountToApprove
+      return requiredRawAmount > 0n && isAllowed && isNotExpired
+    }
+
+    const isTxEnabled = !isLoadingPermit2Allowances && !!permit2Address
+    const props: ManagedTransactionInput = {
+      contractAddress: permit2Address || '',
+      contractId: 'permit2',
+      functionName: 'approve',
+      labels,
+      chainId,
+      args: [tokenAddress, spenderAddress, amountToApprove, permitExpiry],
+      enabled: isTxEnabled,
+      txSimulationMeta: sentryMetaForWagmiSimulation(
+        'Error in wagmi tx simulation: Approving token',
+        tokenAmountToApprove
+      ),
+      onTransactionChange: () => setTransactionFn(id),
+    }
+
+    const args = props.args as Permit2ApproveArgs
+
+    return {
+      id,
+      stepType: 'tokenApproval',
+      labels,
+      isComplete,
+      renderAction: () => <ManagedTransactionButton id={id} key={id} {...props} />,
+      batchableTxCall: isTxEnabled ? buildBatchableTxCall({ permit2Address, args }) : undefined,
+      onSuccess: () => refetchPermit2Allowances(),
+    } as const satisfies TransactionStep
+  })
 
   return {
     isLoading: isLoadingPermit2Allowances,

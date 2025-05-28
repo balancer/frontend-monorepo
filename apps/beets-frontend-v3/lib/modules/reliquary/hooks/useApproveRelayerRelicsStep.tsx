@@ -2,9 +2,11 @@ import { SupportedChainId } from '@repo/lib/config/config.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useHasApprovedRelayerForAllRelics } from './useHasApprovedRelayerForAllRelics'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
+import { useState } from 'react'
 import {
   TransactionStep,
   TransactionLabels,
+  ManagedResult,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
@@ -17,6 +19,8 @@ export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
   step: TransactionStep
 } {
   const { userAddress, isConnected } = useUserAccount()
+  const [, setTransaction] = useState<ManagedResult | undefined>()
+
   const config = getNetworkConfig(chainId)
 
   const relayerAddress = config.contracts.balancer.relayerV6
@@ -53,6 +57,7 @@ export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
     args: [relayerAddress, true],
     enabled: !!userAddress && !isLoading,
     txSimulationMeta,
+    onTransactionChange: setTransaction,
   }
 
   const step: TransactionStep = {

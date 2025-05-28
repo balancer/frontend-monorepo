@@ -25,8 +25,8 @@ export function ManagedTransactionButton({
   const { updateTransaction } = useTransactionState()
 
   useEffect(() => {
-    if (params.onTransactionChange) params.onTransactionChange(transaction)
-    // TODO(transaction-refactor): remove if and updateTransaction once all steps are migrated to use onTransactionChange
+    params.onTransactionChange(transaction)
+    // TODO(transaction-refactor): remove updateTransaction once TransactionStateProvider is removed
     updateTransaction(id, transaction)
   }, [id, transaction.execution.status, transaction.simulation.status, transaction.result.status])
 
@@ -41,8 +41,8 @@ export function ManagedSendTransactionButton({
   const { updateTransaction } = useTransactionState()
 
   useEffect(() => {
-    // TODO(transaction-refactor): remove if and updateTransaction once all steps are migrated to use onTransactionChange    if (params.onTransactionChange) params.onTransactionChange(transaction)
-    if (params.onTransactionChange) params.onTransactionChange(transaction)
+    params.onTransactionChange(transaction)
+    // TODO(transaction-refactor): remove updateTransaction once TransactionStateProvider is removed
     updateTransaction(id, transaction)
   }, [id, transaction.execution.status, transaction.simulation.status, transaction.result.status])
 
@@ -57,8 +57,8 @@ export function ManagedErc20TransactionButton({
   const { updateTransaction } = useTransactionState()
 
   useEffect(() => {
-    // TODO(transaction-refactor): remove if and updateTransaction once all steps are migrated to use onTransactionChange
-    if (params.onTransactionChange) params.onTransactionChange(transaction)
+    params.onTransactionChange(transaction)
+    // TODO(transaction-refactor): remove updateTransaction once TransactionStateProvider is removed
     updateTransaction(id, transaction)
   }, [id, transaction.execution.status, transaction.simulation.status, transaction.result.status])
 

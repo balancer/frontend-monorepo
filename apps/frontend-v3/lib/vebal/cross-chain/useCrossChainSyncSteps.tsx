@@ -7,7 +7,6 @@ import {
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo } from 'react'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
@@ -92,62 +91,58 @@ export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): 
 
   const { contracts } = getNetworkConfig(GqlChain.Mainnet)
 
-  return useMemo(
-    () =>
-      networks
-        .filter(network => {
-          const networkConfig = getNetworkConfig(network)
-          return Boolean(networkConfig.layerZeroChainId)
-        })
-        .map(network => {
-          const stepId = `${crossChainSyncStepPrefix}-${network}`
+  return networks
+    .filter(network => {
+      const networkConfig = getNetworkConfig(network)
+      return Boolean(networkConfig.layerZeroChainId)
+    })
+    .map(network => {
+      const stepId = `${crossChainSyncStepPrefix}-${network}`
 
-          const transaction = getTransaction(stepId)
+      const transaction = getTransaction(stepId)
 
-          const isComplete = () => userAddress && isTransactionSuccess(transaction)
+      const isComplete = () => userAddress && isTransactionSuccess(transaction)
 
-          const networkConfig = getNetworkConfig(network)
+      const networkConfig = getNetworkConfig(network)
 
-          // FIX: actual labels
-          const labels: TransactionLabels = {
-            init: 'Sync',
-            title: `Sync veBAL to ${getChainShortName(network)}`,
-            description: 'description - Cross Chain Sync.',
-            confirming: 'confirming - Cross Chain Sync...',
-            confirmed: 'confirmed - Cross Chain Sync!',
-            tooltip: 'tooltip - Cross Chain Sync',
-          }
-          const layerZeroChainId = networkConfig.layerZeroChainId
+      // FIX: actual labels
+      const labels: TransactionLabels = {
+        init: 'Sync',
+        title: `Sync veBAL to ${getChainShortName(network)}`,
+        description: 'description - Cross Chain Sync.',
+        confirming: 'confirming - Cross Chain Sync...',
+        confirmed: 'confirmed - Cross Chain Sync!',
+        tooltip: 'tooltip - Cross Chain Sync',
+      }
+      const layerZeroChainId = networkConfig.layerZeroChainId
 
-          if (!layerZeroChainId) {
-            throw new Error('layerZeroChainId is not defined')
-          }
+      if (!layerZeroChainId) {
+        throw new Error('layerZeroChainId is not defined')
+      }
 
-          const omniVotingEscrow = contracts.omniVotingEscrow
+      const omniVotingEscrow = contracts.omniVotingEscrow
 
-          if (!omniVotingEscrow) {
-            throw new Error('omniVotingEscrow contract address is not defined')
-          }
+      if (!omniVotingEscrow) {
+        throw new Error('omniVotingEscrow contract address is not defined')
+      }
 
-          const renderAction = () => (
-            <ChainSyncButton
-              key={stepId}
-              layerZeroChainId={layerZeroChainId}
-              network={network}
-              omniVotingEscrow={omniVotingEscrow}
-              stepId={stepId}
-              onTransactionChange={setTransactionFn(stepId)}
-            />
-          )
+      const renderAction = () => (
+        <ChainSyncButton
+          key={stepId}
+          layerZeroChainId={layerZeroChainId}
+          network={network}
+          omniVotingEscrow={omniVotingEscrow}
+          stepId={stepId}
+          onTransactionChange={setTransactionFn(stepId)}
+        />
+      )
 
-          return {
-            id: stepId,
-            stepType: 'crossChainSync',
-            labels,
-            isComplete,
-            renderAction,
-          }
-        }),
-    [networks, getTransaction, userAddress, contracts.omniVotingEscrow, setTransactionFn]
-  )
+      return {
+        id: stepId,
+        stepType: 'crossChainSync',
+        labels,
+        isComplete,
+        renderAction,
+      }
+    })
 }

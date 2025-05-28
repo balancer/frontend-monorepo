@@ -31,8 +31,7 @@ export interface ManagedErc20TransactionInput {
     | 'increaseApproval' // Edge-case for veBalBpt approval
   labels: TransactionLabels
   isComplete?: () => boolean
-  // TODO(transaction-refactor): make it non-optional once all steps are migrated to use onTransactionChange
-  onTransactionChange?: (transaction: ManagedResult) => void
+  onTransactionChange: (transaction: ManagedResult) => void
   chainId: SupportedChainId
   args?: ContractFunctionArgs<Erc20AbiWithIncreaseApproval, WriteAbiMutability> | null
   enabled: boolean

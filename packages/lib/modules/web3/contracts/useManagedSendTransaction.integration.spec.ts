@@ -56,6 +56,7 @@ describe('weighted add flow', () => {
       return useManagedSendTransaction({
         labels: { init: 'foo', tooltip: 'bar' },
         txConfig,
+        onTransactionChange: () => {},
       })
     })
 
