@@ -213,7 +213,7 @@ export function SubmitVotesPreview({
 
         {totalInfo.averageRewardPerVote !== undefined && (
           <Card flex="1" variant="subSection">
-            <Text>Ave. Reward (Bribes/veBAL)</Text>
+            <Text>Avg. Reward (Bribes/veBAL)</Text>
             <Text fontSize="lg" fontWeight={700}>
               {toCurrency(totalInfo.averageRewardPerVote, { abbreviated: false })}
             </Text>
