@@ -1,6 +1,6 @@
 'use client'
 
-import { Stack, VStack } from '@chakra-ui/react'
+import { Stack, VStack, Card } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { PoolActivity } from '../PoolDetail/PoolActivity/PoolActivity'
 import { PoolComposition } from '../PoolDetail/PoolComposition'
@@ -20,8 +20,21 @@ export function LbpDetail() {
   return (
     <>
       <LbpHeader />
-      <DefaultPageContainer>
-        <VStack spacing="2xl" w="full">
+      <DefaultPageContainer noVerticalPadding>
+        <VStack spacing="2xl" w="full" mt="2xl">
+          <Stack
+            direction={{ base: 'column', md: 'row' }}
+            justifyContent="stretch"
+            spacing="md"
+            w="full"
+          >
+            <Card w="75%" h="250px">
+              Charts
+            </Card>
+            <Card w="25%" h="250px">
+              Swap
+            </Card>
+          </Stack>
           {userHasPoolEvents && (
             <Stack
               direction={{ base: 'column', xl: 'row' }}
