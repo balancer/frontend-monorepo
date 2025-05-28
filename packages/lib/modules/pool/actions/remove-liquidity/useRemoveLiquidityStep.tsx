@@ -17,7 +17,7 @@ import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transa
 import { TransactionBatchButton } from '@repo/lib/modules/transactions/transaction-steps/safe/TransactionBatchButton'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
-export const removeLiquidityStepId = 'remove-liquidity'
+const removeLiquidityStepId = 'remove-liquidity'
 
 export type RemoveLiquidityStepParams = RemoveLiquidityBuildQueryParams
 
@@ -91,6 +91,7 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
             currentStep={currentStep}
             id={removeLiquidityStepId}
             labels={labels}
+            onTransactionChange={setTransaction}
           />
         )
       },

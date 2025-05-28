@@ -20,7 +20,7 @@ import { DisabledTransactionButton } from '../transactions/transaction-steps/Tra
 import { ApiToken } from '../tokens/token.types'
 import { isTransactionSuccess } from '../transactions/transaction-steps/transaction.helper'
 
-export const swapStepId = 'swap'
+const swapStepId = 'swap'
 
 export type SwapStepParams = BuildSwapQueryParams & {
   swapAction: SwapAction

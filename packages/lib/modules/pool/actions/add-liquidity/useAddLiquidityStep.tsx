@@ -17,7 +17,7 @@ import {
 } from './queries/useAddLiquidityBuildCallDataQuery'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 
-export const addLiquidityStepId = 'add-liquidity'
+const addLiquidityStepId = 'add-liquidity'
 
 export type AddLiquidityStepParams = AddLiquidityBuildQueryParams
 
@@ -91,6 +91,7 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
             currentStep={currentStep}
             id={addLiquidityStepId}
             labels={labels}
+            onTransactionChange={setTransaction}
           />
         )
       },

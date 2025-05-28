@@ -1,11 +1,7 @@
-import { useTransactionState } from './TransactionStateProvider'
-import { getTransactionState, TransactionState } from './lib'
+import { getTransactionState, ManagedResult, TransactionState } from './lib'
 
-export function useShouldFreezeQuote(stepId: string) {
-  const { getTransaction } = useTransactionState()
-
-  const transaction = getTransaction(stepId)
-  const transactionState = getTransactionState(transaction)
+export function useShouldFreezeQuote(lastTransaction: ManagedResult | undefined) {
+  const transactionState = getTransactionState(lastTransaction)
 
   const isConfirming = transactionState === TransactionState.Confirming
   const isAwaitingUserConfirmation = transactionState === TransactionState.Loading
