@@ -20,17 +20,17 @@ import {
   usePoolActivityViewType,
 } from '../PoolActivityViewType/usePoolActivityViewType'
 
-export function PoolActivity() {
+export function PoolActivity({ showTabs = true }: { showTabs?: boolean }) {
   return (
     <PoolActivityViewTypeProvider>
       <PoolActivityProvider>
-        <Content />
+        <Content showTabs={showTabs} />
       </PoolActivityProvider>
     </PoolActivityViewTypeProvider>
   )
 }
 
-function Content() {
+function Content({ showTabs }: { showTabs?: boolean }) {
   const {
     transactionsLabel,
     activeTab,
@@ -93,15 +93,17 @@ function Content() {
             ))}
         </VStack>
         <HStack>
-          <ButtonGroup
-            currentOption={activeTab}
-            groupId="pool-activity"
-            onChange={option => {
-              setActiveTab(option)
-            }}
-            options={tabsList}
-            size="xxs"
-          />
+          {showTabs && (
+            <ButtonGroup
+              currentOption={activeTab}
+              groupId="pool-activity"
+              onChange={option => {
+                setActiveTab(option)
+              }}
+              options={tabsList}
+              size="xxs"
+            />
+          )}
           <PoolActivityViewType />
           <Box borderRadius="full" h="34px" shadow={isChartView ? '2xl' : 'none'} w="34px">
             <IconButton
