@@ -57,11 +57,6 @@ export function ManagedErc20TransactionButton({
   const { updateTransaction } = useTransactionState()
 
   useEffect(() => {
-    console.log({
-      onTransactionChange: params.onTransactionChange,
-      id,
-      functionName: params.functionName,
-    })
     params.onTransactionChange(transaction)
     // TODO(transaction-refactor): remove updateTransaction once TransactionStateProvider is removed
     updateTransaction(id, transaction)
