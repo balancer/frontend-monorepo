@@ -3,7 +3,7 @@
 import { useSteps } from '@chakra-ui/react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
-import { usePersistentForm } from '@repo/lib/shared/hooks/usePeristedForm'
+import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
