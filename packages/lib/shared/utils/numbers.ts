@@ -16,6 +16,7 @@ BigInt.prototype.toJSON = function () {
 }
 
 export const MAX_BIGINT = BigInt(MAX_UINT256)
+export const MAX_BIGNUMBER = bn(MAX_UINT256)
 
 export const INTEGER_FORMAT = '0,0'
 export const FIAT_FORMAT_A = '0,0.00a'
