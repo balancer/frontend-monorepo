@@ -9,7 +9,7 @@ import {
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { noop } from 'lodash'
@@ -47,19 +47,16 @@ export function useClaimRewardsStep(chain: GqlChain, relicId: string | undefined
 
   const isComplete = () => isConnected && isTransactionSuccess(transaction)
 
-  const step = useMemo(
-    (): TransactionStep => ({
-      id: 'claimRelicReward',
-      labels,
-      stepType: 'claimRelicReward',
-      isComplete,
-      onActivated: noop,
-      onDeactivated: noop,
-      onSuccess: noop,
-      renderAction: () => <ManagedTransactionButton id="claimRelicReward" {...props} />,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction]
-  )
+  const step: TransactionStep = {
+    id: 'claimRelicReward',
+    labels,
+    stepType: 'claimRelicReward',
+    isComplete,
+    onActivated: noop,
+    onDeactivated: noop,
+    onSuccess: noop,
+    renderAction: () => <ManagedTransactionButton id="claimRelicReward" {...props} />,
+  }
+
   return { step }
 }
