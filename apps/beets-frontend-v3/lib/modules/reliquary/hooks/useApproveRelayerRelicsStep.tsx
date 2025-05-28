@@ -2,7 +2,6 @@ import { SupportedChainId } from '@repo/lib/config/config.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useHasApprovedRelayerForAllRelics } from './useHasApprovedRelayerForAllRelics'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo } from 'react'
 import {
   TransactionStep,
   TransactionLabels,
@@ -56,18 +55,14 @@ export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
     txSimulationMeta,
   }
 
-  const step = useMemo(
-    (): TransactionStep => ({
-      id: approveRelayerRelicsStepId,
-      stepType: 'approveBatchRelayerForAllRelics',
-      labels,
-      isComplete: () => isConnected && hasApprovedRelayerForAllRelics,
-      renderAction: () => <ManagedTransactionButton id={approveRelayerRelicsStepId} {...props} />,
-      onSuccess: () => refetch(),
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hasApprovedRelayerForAllRelics, isConnected, isLoading]
-  )
+  const step: TransactionStep = {
+    id: approveRelayerRelicsStepId,
+    stepType: 'approveBatchRelayerForAllRelics',
+    labels,
+    isComplete: () => isConnected && hasApprovedRelayerForAllRelics,
+    renderAction: () => <ManagedTransactionButton id={approveRelayerRelicsStepId} {...props} />,
+    onSuccess: () => refetch(),
+  }
 
   return {
     isLoading,
