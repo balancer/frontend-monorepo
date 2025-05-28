@@ -56,6 +56,21 @@ export function dateTimeLabelFor(date: Date): string {
   })
 }
 
+export function formatDateTimeShort(date: Date): string {
+  const time = date.toLocaleString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+    timeZoneName: 'short',
+  })
+  const dateStr = date.toLocaleString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: '2-digit',
+  })
+  return `${time}, ${dateStr}`
+}
+
 export function toJsTimestamp(unixTimestamp: number): number {
   return unixTimestamp * oneSecondInMs
 }
