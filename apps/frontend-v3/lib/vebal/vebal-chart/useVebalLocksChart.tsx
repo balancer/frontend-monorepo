@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import * as echarts from 'echarts/core'
 import { EChartsOption, ECharts } from 'echarts'
@@ -16,7 +16,6 @@ import BigNumber from 'bignumber.js'
 import { UseVebalLockInfoResult } from '../../vebal/useVebalLockInfo'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useTheme as useNextTheme } from 'next-themes'
-import { useMaxAmountOfVeBAL } from '../useMaxAmountOfVeBal'
 
 type ChartValueAcc = [string, number][]
 
@@ -182,61 +181,9 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
     userHistoricalLocks,
   ])
 
-  const showStaticTooltip = useCallback(() => {
-    if (!mouseoverRef.current && instanceRef.current) {
-      // Show tooltip on a specific data point when chart is loaded
-      instanceRef.current.dispatchAction({
-        type: 'showTip',
-        seriesIndex: 0, // Index of the series
-        dataIndex: chartValues.length - 1, // Index of the data point
-      })
-    }
-  }, [chartValues])
-
   const onChartReady = useCallback((instance: ECharts) => {
     instanceRef.current = instance
   }, [])
-
-  // detect if "static" tooltip is showing
-  const mouseoverRef = useRef<boolean | undefined>(undefined)
-
-  useEffect(() => {
-    if (instanceRef.current) {
-      const handler = () => {
-        mouseoverRef.current = true
-      }
-      const element = instanceRef.current.getDom()
-
-      // using "addEventListener" instead of "onEvents.mouseover" since "onEvents.mouseover" emits only when cursor crosses the line, not the entire chart...
-      element.addEventListener('mouseover', handler)
-
-      return () => {
-        element.removeEventListener('mouseover', handler)
-      }
-    }
-  }, [])
-
-  const onEvents = useMemo((): Partial<
-    Record<
-      echarts.ElementEvent['type'] | 'highlight' | 'finished',
-      (event: echarts.ElementEvent | any, instance: ECharts) => boolean | void
-    >
-  > => {
-    return {
-      click: () => {
-        mouseoverRef.current = true
-      },
-      globalout: () => {
-        mouseoverRef.current = false
-        showStaticTooltip()
-      },
-      finished: () => {
-        showStaticTooltip()
-      },
-    }
-  }, [showStaticTooltip])
-
-  const { isMaxAmountLoading, maxAmount } = useMaxAmountOfVeBAL()
 
   const options = useMemo((): EChartsOption => {
     const toolTipTheme = {
@@ -280,10 +227,7 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           },
         },
         extraCssText: `border: none;${toolTipTheme.container};max-width: 215px; z-index: 5`,
-        position: (point, _params, _dom, _rect, size) => {
-          if (!mouseoverRef.current) {
-            return [point[0] - size.contentSize[0] / 2, 0]
-          }
+        position: point => {
           return [point[0] + 15, point[1] + 15]
         },
         formatter: params => {
@@ -292,24 +236,6 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
 
           const firstPointValue = firstPoint.value as number[]
           const secondPointValue = secondPoint ? (secondPoint.value as number[]) : null
-
-          if (!mouseoverRef.current) {
-            if (!isMaxAmountLoading) {
-              if (
-                firstPoint.seriesId === MAIN_SERIES_ID &&
-                [firstPoint.dataIndex, secondPoint?.dataIndex].includes(chartValues.length - 1)
-              ) {
-                return `
-                <div style="padding: unset; display: flex; flex-direction: column; justify-content: center;
-                  ${toolTipTheme.container}">
-                  <div style="font-size: 0.85rem; font-weight: 500; white-space: normal; line-height: 20px; max-width: 150px;
-                    color: ${toolTipTheme.text};">
-                    Get ${maxAmount.toFixed(4)} veBAL by max extending your lock
-                  </div>
-                </div>`
-              }
-            }
-          }
 
           return `
           <div style="padding: unset; display: flex; flex-direction: column;
@@ -411,14 +337,13 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         futureLockChartData,
       ],
     }
-  }, [chartValues, futureLockChartData, theme, nextTheme, isMaxAmountLoading, maxAmount])
+  }, [chartValues, futureLockChartData, theme, nextTheme])
 
   return {
     lockedUntil,
     chartData: options,
     options,
     onChartReady,
-    onEvents,
     insufficientData: chartValues.length < MIN_CHART_VALUES,
   }
 }

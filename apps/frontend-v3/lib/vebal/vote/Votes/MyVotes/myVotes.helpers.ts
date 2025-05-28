@@ -1,10 +1,12 @@
 import { oneDayInMs, startOfDayUtc, toJsTimestamp } from '@repo/lib/shared/utils/time'
-import { bn, Numberish } from '@repo/lib/shared/utils/numbers'
+import { bn, MAX_BIGNUMBER, Numberish } from '@repo/lib/shared/utils/numbers'
 import { formatDistanceToNow, millisecondsToSeconds, nextThursday } from 'date-fns'
 import { SortingBy } from './myVotes.types'
 import BigNumber from 'bignumber.js'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { formatUnits } from 'viem'
+import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { getGqlChain } from '@repo/lib/config/app.config'
 
 export const WEIGHT_VOTE_DELAY = 10 * oneDayInMs
 
@@ -56,7 +58,8 @@ export function calculateMyVoteRewardsValue(
   slope: bigint,
   lockEnd: number | undefined,
   totalVotes: bigint,
-  blacklistedVotes: BigNumber = bn(0)
+  blacklistedVotes: BigNumber = bn(0),
+  priceFor: (address: string, chain: GqlChain) => number
 ) {
   const votingPower = calculateVotingPower(slope, lockEnd)
   const oldWeight = votingPool.gaugeVotes?.userVotes || '0'
@@ -67,10 +70,21 @@ export function calculateMyVoteRewardsValue(
     .times(bn(votingPool.gaugeVotes?.votesNextPeriod || 0n).shiftedBy(-18))
     .minus(blacklistedVotes.shiftedBy(-18))
 
-  const totalIncentives = votingPool?.votingIncentive?.totalValue ?? 0
+  const incentivesInfo = votingPool?.votingIncentive?.bribes[0]
+  if (!incentivesInfo) return bn(0)
+
+  const incentiveTokenPrice = bn(
+    priceFor(incentivesInfo.token, getGqlChain(incentivesInfo.chainId))
+  )
+  const totalIncentives = incentiveTokenPrice.times(incentivesInfo.amount)
 
   const newPoolVoteCount = bn(poolVoteCount).minus(currentUserVotes).plus(newUserVotes)
-  const valuePerVote = bn(totalIncentives).div(newPoolVoteCount)
+  const maxValuePerVote = incentiveTokenPrice.times(incentivesInfo.maxTokensPerVote)
+  const expectedValuePerVote = bn(totalIncentives).div(newPoolVoteCount)
+  const valuePerVote = BigNumber.min(
+    maxValuePerVote.isZero() ? MAX_BIGNUMBER : maxValuePerVote,
+    expectedValuePerVote
+  )
 
   const rewardInUSD = valuePerVote.times(newUserVotes)
 
@@ -83,7 +97,8 @@ export function calculateMyValuePerVote(
   slope: bigint,
   lockEnd: number | undefined,
   totalVotes: bigint,
-  blacklistedVotes: BigNumber = bn(0)
+  blacklistedVotes: BigNumber = bn(0),
+  priceFor: (address: string, chain: GqlChain) => number
 ) {
   const votingPower = calculateVotingPower(slope, lockEnd)
   const newUserVotes = votingPower.times(bpsToPercentage(newWeight))
@@ -93,7 +108,8 @@ export function calculateMyValuePerVote(
     slope,
     lockEnd,
     totalVotes,
-    blacklistedVotes
+    blacklistedVotes,
+    priceFor
   )
 
   return bn(myRewards).div(newUserVotes)

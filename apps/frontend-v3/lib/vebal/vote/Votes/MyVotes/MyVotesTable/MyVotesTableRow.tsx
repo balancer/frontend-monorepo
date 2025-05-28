@@ -41,6 +41,7 @@ import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { useLastUserSlope } from '../../../useVeBALBalance'
 import { Address } from 'viem'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 interface Props extends GridProps {
   vote: VotingPoolWithData
@@ -86,13 +87,15 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
   const { mainnetLockedInfo } = useVebalLockInfo()
   const lockEnd = mainnetLockedInfo.lockedEndDate
   const { blacklistedVotes } = useBlacklistedVotes(votingPools)
+  const { priceFor } = useTokens()
   const rewards = calculateMyVoteRewardsValue(
     editVotesWeights[vote.id] ?? 0,
     vote,
     slope,
     lockEnd,
     totalVotes,
-    blacklistedVotes[vote.gauge.address as Address]
+    blacklistedVotes[vote.gauge.address as Address],
+    priceFor
   )
   const averageRewards = calculateMyValuePerVote(
     editVotesWeights[vote.id] ?? 0,
@@ -100,7 +103,8 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
     slope,
     lockEnd,
     totalVotes,
-    blacklistedVotes[vote.gauge.address as Address]
+    blacklistedVotes[vote.gauge.address as Address],
+    priceFor
   )
 
   return (

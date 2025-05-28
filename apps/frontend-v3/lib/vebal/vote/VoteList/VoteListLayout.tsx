@@ -2,7 +2,7 @@
 
 import { Box, Heading, Stack, HStack, VStack, useBreakpointValue } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
-import { fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { ErrorBoundary } from 'react-error-boundary'
 import { BoundaryError } from '@repo/lib/shared/components/errors/ErrorBoundary'
 import { FilterTags } from '@repo/lib/modules/pool/PoolList/PoolListFilters'
@@ -51,12 +51,11 @@ export function VoteListLayout() {
           onAddVotesClick={scrollToMyVotes}
           votingPools={selectedVotingPools.map(selectedVotingPool => ({
             title: selectedVotingPool.poolTokens
-              .map(token => `${token.symbol} ${token.weight ?? 0}%`)
+              .map(
+                token => `${token.symbol} ${token.weight ? `${bn(token.weight).times(100)}%` : ''}`
+              )
               .join(' / '),
-            // fix: (votes) pool name is not available here...
-            description: selectedVotingPool.poolTokens
-              .map(token => `${token.symbol}-${token.weight ?? 0}`)
-              .join('-'),
+            description: selectedVotingPool.symbol,
           }))}
         />
       )

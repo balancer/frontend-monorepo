@@ -66,8 +66,8 @@ function GlobalProviders({ children }: PropsWithChildren) {
   const defaultRouterOptions = {}
 
   return (
-    <WagmiProvider config={testWagmiConfig} reconnectOnMount={false}>
-      <QueryClientProvider client={testQueryClient}>
+    <QueryClientProvider client={testQueryClient()}>
+      <WagmiProvider config={testWagmiConfig} reconnectOnMount={false}>
         <AppRouterContextProviderMock router={defaultRouterOptions}>
           <ApolloProvider client={apolloTestClient}>
             <UserAccountProvider>
@@ -89,8 +89,8 @@ function GlobalProviders({ children }: PropsWithChildren) {
             </UserAccountProvider>
           </ApolloProvider>
         </AppRouterContextProviderMock>
-      </QueryClientProvider>
-    </WagmiProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
   )
 }
 

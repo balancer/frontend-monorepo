@@ -7,8 +7,11 @@ import { Address } from 'viem'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { testHook } from '@repo/lib/test/utils/custom-renderers'
 import { waitFor } from '@testing-library/react'
+import { mockTokenPricesList } from '@repo/lib/test/msw/handlers/Tokens.handlers'
+import { aTokenPriceMock } from '@repo/lib/modules/tokens/__mocks__/token.builders'
 
 const one_month_ago = subDays(new Date(), 30)
+const BAL = '0xba100000625a3754423978a60c9317c58a424e3d'
 
 function renderHook(
   votingPools: VotingPoolWithData[],
@@ -33,6 +36,10 @@ function renderHook(
 }
 
 describe('Incentives optimization', () => {
+  beforeEach(() => {
+    mockTokenPricesList([aTokenPriceMock({ address: BAL, price: 1 })])
+  })
+
   it('should return loading when input votes and pools still loading', () => {
     const inputLoading = true
 
@@ -44,7 +51,7 @@ describe('Incentives optimization', () => {
   it('should filter out time locked votes', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
-    pool2.votingIncentive = incentivesWithAmount(10)
+    pool2.votingIncentive = incentivesWithAmount(10, 0)
     const timelockedVote = timelock(vote(pool1, 0.05, new Date()))
 
     const result = renderHook([pool1, pool2], [timelockedVote], total(1), total(100), {}, false)
@@ -59,7 +66,7 @@ describe('Incentives optimization', () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     const killedPool = kill(pool1)
     const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
-    pool2.votingIncentive = incentivesWithAmount(10)
+    pool2.votingIncentive = incentivesWithAmount(10, 0)
     const vote1 = vote(pool1, 0.05, one_month_ago)
 
     const result = renderHook([killedPool, pool2], [vote1], total(1), total(100), {}, false)
@@ -75,10 +82,10 @@ describe('Incentives optimization', () => {
   it('should distribute votes to the pool with biggest reward / vote', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     setPoolVotes(pool1, 0.5)
-    pool1.votingIncentive = incentivesWithAmount(10)
+    pool1.votingIncentive = incentivesWithAmount(10, 0)
     const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
     setPoolVotes(pool2, 0.5)
-    pool2.votingIncentive = incentivesWithAmount(100)
+    pool2.votingIncentive = incentivesWithAmount(100, 0)
 
     const result = renderHook([pool1, pool2], [], total(5), total(100), {}, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
@@ -91,10 +98,10 @@ describe('Incentives optimization', () => {
   it('should remove old votes from gauges total', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     setPoolVotes(pool1, 0.5)
-    pool1.votingIncentive = incentivesWithAmount(100)
+    pool1.votingIncentive = incentivesWithAmount(100, 0)
     const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
     setPoolVotes(pool2, 0.5)
-    pool2.votingIncentive = incentivesWithAmount(100)
+    pool2.votingIncentive = incentivesWithAmount(100, 0)
     const vote1 = vote(pool1, 1.0, one_month_ago)
 
     const result = renderHook([pool1, pool2], [vote1], total(1), total(100), {}, false)
@@ -108,10 +115,10 @@ describe('Incentives optimization', () => {
   it('should remove blacklisted votes from gauges total', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     setPoolVotes(pool1, 0.5)
-    pool1.votingIncentive = incentivesWithAmount(100)
+    pool1.votingIncentive = incentivesWithAmount(100, 0)
     const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
     setPoolVotes(pool2, 0.5)
-    pool2.votingIncentive = incentivesWithAmount(100)
+    pool2.votingIncentive = incentivesWithAmount(100, 0)
     const blacklistedVotes = { '0xd75026f8723b94d9a360a282080492d905c6a559': total(1) }
 
     const result = renderHook([pool1, pool2], [], total(1), total(100), blacklistedVotes, false)
@@ -125,7 +132,7 @@ describe('Incentives optimization', () => {
   it('should calculate the amount of incentives', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
     setPoolVotes(pool1, 0.0)
-    pool1.votingIncentive = incentivesWithAmount(100)
+    pool1.votingIncentive = incentivesWithAmount(100, 0)
 
     const result = renderHook([pool1], [], total(1), total(0), {}, false)
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
@@ -136,10 +143,10 @@ describe('Incentives optimization', () => {
 
   it('should return the total number of incentives (timelocked + optimized)', async () => {
     const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
-    pool1.votingIncentive = incentivesWithAmount(100)
+    pool1.votingIncentive = incentivesWithAmount(100, 0)
     setPoolVotes(pool1, 0.0)
     const pool2 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a559', 'pool2')
-    pool2.votingIncentive = incentivesWithAmount(100)
+    pool2.votingIncentive = incentivesWithAmount(100, 0)
     setPoolVotes(pool2, 0.05)
     const timelockedVote = timelock(vote(pool2, 0.05, new Date()))
 
@@ -147,6 +154,17 @@ describe('Incentives optimization', () => {
     await waitFor(() => expect(result.current.isLoading).toBeFalsy())
 
     expect(result.current.totalIncentives).toBe(200)
+  })
+
+  it('should cap incentives on maxTokensPerVote', async () => {
+    const pool1 = votingPool('0xd75026f8723b94d9a360a282080492d905c6a558', 'pool1')
+    pool1.votingIncentive = incentivesWithAmount(100, 0.5)
+    mockTokenPricesList([aTokenPriceMock({ address: BAL, price: 0.5 })])
+
+    const result = renderHook([pool1], [], total(100), total(100), {}, false)
+    await waitFor(() => expect(result.current.isLoading).toBeFalsy())
+
+    expect(result.current.totalIncentives).toBe(25)
   })
 })
 
@@ -176,7 +194,7 @@ function votingPool(gaugeAddress: Address, symbol: string): VotingPoolWithData {
       userVotes: '', // '500' = 5%
       lastUserVoteTime: 0,
     },
-    votingIncentive: incentivesWithAmount(0),
+    votingIncentive: incentivesWithAmount(0, 0),
   }
 }
 
@@ -197,18 +215,33 @@ function setPoolVotes(votingPool: VotingPoolWithData, votesPrct: number) {
   return votingPool
 }
 
-function incentivesWithAmount(amount: number): HiddenHandData {
+function incentivesWithAmount(amount: number, maxTokensPerVote: number): HiddenHandData {
   return {
     proposal: '',
     proposalHash: '',
     title: '',
     proposalDeadline: 0,
-    totalValue: amount,
-    maxTotalValue: amount,
+    totalValue: 0,
+    maxTotalValue: 0,
     voteCount: -1,
     maxValuePerVote: -1,
     valuePerVote: -1,
-    bribes: [],
+    bribes: [
+      {
+        symbol: 'BAL',
+        token: '0xba100000625a3754423978a60c9317c58a424e3d',
+        amount: amount,
+        chainId: 1,
+        value: 0,
+        decimals: 18,
+        maxValue: 0,
+        maxTokensPerVote: maxTokensPerVote,
+        briber: '',
+        periodIndex: 1,
+        refunds: 0,
+        periodCount: 1,
+      },
+    ],
     efficiency: 0,
     poolId: '',
   }
