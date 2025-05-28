@@ -141,6 +141,7 @@ export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): 
         id: stepId,
         stepType: 'crossChainSync',
         labels,
+        transaction,
         isComplete,
         renderAction,
       }

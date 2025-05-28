@@ -84,6 +84,7 @@ export function useSwapStep({
       id: swapStepId,
       stepType: 'swap',
       labels,
+      transaction,
       isComplete,
       onActivated: () => setIsBuildQueryEnabled(true),
       onDeactivated: () => setIsBuildQueryEnabled(false),

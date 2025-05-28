@@ -67,6 +67,7 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
       id: addLiquidityStepId,
       stepType: 'addLiquidity',
       labels,
+      transaction,
       isComplete,
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),

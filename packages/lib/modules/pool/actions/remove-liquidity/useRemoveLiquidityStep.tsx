@@ -67,6 +67,7 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
       id: removeLiquidityStepId,
       stepType: 'removeLiquidity',
       labels,
+      transaction,
       isComplete,
       renderAction: () => {
         if (!buildCallDataQuery.data) return <DisabledTransactionButton />

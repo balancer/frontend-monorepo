@@ -95,6 +95,7 @@ export function useLockStep({ lockAmount, lockEndDate, lockActionType }: UseLock
       id: lockActionType,
       stepType: lockActionType,
       labels,
+      transaction,
       isComplete: () => isTransactionSuccess(transaction),
       onSuccess,
       onActivated: () => setIsStepActivated(true),

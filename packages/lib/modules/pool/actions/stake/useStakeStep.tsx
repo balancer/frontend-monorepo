@@ -68,6 +68,7 @@ export function useStakeStep(pool: Pool, rawDepositAmount: bigint): TransactionS
       id: stakeStepId,
       stepType: 'stakingDeposit',
       labels,
+      transaction,
       isComplete: () => isTransactionSuccess(transaction),
       onActivated: () => setIsStakeEnabled(true),
       onDeactivated: () => setIsStakeEnabled(false),
