@@ -3,9 +3,12 @@
 import { useSteps } from '@chakra-ui/react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext } from 'react'
-import { useForm } from 'react-hook-form'
+import { usePersistentForm } from '@repo/lib/shared/hooks/usePersistentForm'
 import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
+import { useLocalStorage } from 'usehooks-ts'
+import { useEffect } from 'react'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -17,8 +20,9 @@ const steps = [
 ]
 
 export function useLbpFormLogic() {
-  const saleStructureForm = useForm<SaleStructureForm>({
-    defaultValues: {
+  const saleStructureForm = usePersistentForm<SaleStructureForm>(
+    LS_KEYS.LbpConfig.SaleStructure,
+    {
       selectedChain: PROJECT_CONFIG.defaultNetwork,
       launchTokenAddress: '',
       userActions: 'buy_and_sell',
@@ -29,28 +33,34 @@ export function useLbpFormLogic() {
       saleTokenAmount: '',
       collateralTokenAmount: '',
     },
-    mode: 'all',
+    { mode: 'all' }
+  )
+
+  const projectInfoForm = usePersistentForm<ProjectInfoForm>(LS_KEYS.LbpConfig.ProjectInfo, {
+    name: '',
+    description: '',
+    tokenIconUrl: '',
+    websiteUrl: '',
+    xHandle: '',
+    telegramHandle: '',
+    discordUrl: '',
   })
 
-  const projectInfoForm = useForm<ProjectInfoForm>({
-    defaultValues: {
-      name: '',
-      description: '',
-      tokenIconUrl: '',
-      websiteUrl: '',
-      xHandle: '',
-      telegramHandle: '',
-      discordUrl: '',
-    },
-  })
-
+  const [persistedStepIndex, setPersistedStepIndex] = useLocalStorage(
+    LS_KEYS.LbpConfig.StepIndex,
+    0
+  )
   const { activeStep: activeStepIndex, setActiveStep } = useSteps({
-    index: 0,
+    index: persistedStepIndex,
     count: steps.length,
   })
   const isLastStep = activeStepIndex === steps.length - 1
   const isFirstStep = activeStepIndex === 0
   const activeStep = steps[activeStepIndex]
+
+  useEffect(() => {
+    setPersistedStepIndex(activeStepIndex)
+  }, [activeStepIndex, setPersistedStepIndex])
 
   return {
     steps,

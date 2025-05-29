@@ -56,7 +56,10 @@ export function useLockSteps({
       .map(lockActionType => lockSteps.find(lockStep => lockStep.stepType === lockActionType))
       .filter(Boolean) as TransactionStep[]
 
-    if (!lockActionTypes.includes(LockActionType.IncreaseLock)) {
+    if (
+      !lockActionTypes.includes(LockActionType.CreateLock) &&
+      !lockActionTypes.includes(LockActionType.IncreaseLock)
+    ) {
       // Avoid token approvals when extending lock date without increasing amount
       return [...selectedLockSteps]
     }
