@@ -111,9 +111,8 @@ export function useTokenApprovalSteps({
       lpToken,
     })
 
-    const isComplete = (tokenAllowanceAfterRefetch?: bigint) => {
-      const tokenAllowance =
-        tokenAllowanceAfterRefetch || tokenAllowances.allowanceFor(tokenAddress)
+    const isComplete = () => {
+      const tokenAllowance = tokenAllowances.allowanceFor(tokenAddress)
       const nextToken = isApprovingZeroForDoubleApproval
         ? tokenAmountsToApprove[index + 1]
         : undefined

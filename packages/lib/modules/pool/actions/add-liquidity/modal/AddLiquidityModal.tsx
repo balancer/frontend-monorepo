@@ -39,6 +39,7 @@ export function AddLiquidityModal({
   const initialFocusRef = useRef(null)
   const {
     transactionSteps,
+    lastTransaction,
     addLiquidityTxHash,
     hasQuoteContext,
     urlTxHash,
@@ -50,11 +51,14 @@ export function AddLiquidityModal({
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
 
+  const txReceipt = lastTransaction?.result
+
   const receiptProps = useAddLiquidityReceipt({
     chain,
     txHash: addLiquidityTxHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
+    txReceipt,
   })
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
@@ -78,7 +82,7 @@ export function AddLiquidityModal({
     onClose()
   })
 
-  const isSuccess = !!addLiquidityTxHash && !receiptProps.isLoading
+  const isSuccess = !!addLiquidityTxHash && receiptProps.hasReceipt
 
   return (
     <Modal
