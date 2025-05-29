@@ -227,6 +227,7 @@ export function useAddLiquidityLogic(urlTxHash?: Hash) {
 
   return {
     transactionSteps,
+    lastTransaction: transactionSteps.lastTransaction,
     humanAmountsIn,
     tokens: wethIsEth && supportsWethIsEth(pool) ? tokensWithNativeAsset : tokens,
     validTokens,

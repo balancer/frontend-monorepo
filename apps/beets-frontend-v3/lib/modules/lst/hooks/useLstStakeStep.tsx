@@ -57,6 +57,7 @@ export function useLstStakeStep(humanAmount: string, chain: GqlChain, enabled: b
     id: 'stakeLst',
     labels,
     stepType: 'stakeLst',
+    transaction,
     isComplete,
     onActivated: noop,
     onDeactivated: noop,

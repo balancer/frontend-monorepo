@@ -2,8 +2,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getTransactionState, ManagedResult, TransactionState, TransactionStep } from './lib'
-import { useTransactionState } from './TransactionStateProvider'
+import { getTransactionState, TransactionState, TransactionStep } from './lib'
 import { useTxSound } from './useTxSound'
 import { ensureError, ErrorCause, ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 import { useToast } from '@chakra-ui/react'
@@ -25,21 +24,16 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
 
   const isOnSuccessCalled = (stepId: string) => !!onSuccessCalled[stepId]
 
-  const { getTransaction, resetTransactionState } = useTransactionState()
   const { playTxSound } = useTxSound()
 
   const currentStep = steps[currentStepIndex]
 
-  let currentTransaction: ManagedResult | undefined
-  if (currentStep) {
-    // TODO(transaction-refactor): remove getTransaction once all steps have been migrated
-    currentTransaction = currentStep?.transaction ?? getTransaction(currentStep.id)
-  }
+  const currentTransaction = currentStep?.transaction
 
   const isCurrentStepComplete = currentStep?.isComplete() || false
   const lastStepIndex = steps?.length ? steps.length - 1 : 0
   const lastStep = steps?.[lastStepIndex]
-  const lastTransaction = lastStep ? getTransaction(lastStep.id) : undefined
+  const lastTransaction = lastStep?.transaction
 
   const lastTransactionState = getTransactionState(lastTransaction)
   const lastTransactionConfirmingOrConfirmed =
@@ -54,7 +48,6 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
   function resetTransactionSteps() {
     setCurrentStepIndex(0)
     setOnSuccessCalled({})
-    resetTransactionState()
   }
 
   // Trigger side effects on transaction completion. The step itself decides

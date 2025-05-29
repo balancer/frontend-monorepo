@@ -275,6 +275,7 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
 
   return {
     transactionSteps,
+    lastTransaction: transactionSteps.lastTransaction,
     tokens: tokensToShow(),
     validTokens,
     singleTokenOutAddress,

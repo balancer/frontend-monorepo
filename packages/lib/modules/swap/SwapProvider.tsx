@@ -629,6 +629,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     ...swapState,
     selectedChain,
     transactionSteps,
+    lastTransaction: transactionSteps.lastTransaction,
     tokens,
     tokenInInfo,
     tokenOutInfo,

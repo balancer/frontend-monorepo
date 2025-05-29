@@ -5,7 +5,6 @@ import { useCountdown } from 'usehooks-ts'
 import { useAddLiquidity } from '../AddLiquidityProvider'
 import { useShouldFreezeQuote } from '@repo/lib/modules/transactions/transaction-steps/useShouldFreezeQuote'
 import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
-import { addLiquidityStepId } from '../useAddLiquidityStep'
 
 function useAddLiquidityTimeout() {
   // This countdown needs to be nested here and not at a higher level, like in
@@ -16,12 +15,12 @@ function useAddLiquidityTimeout() {
     intervalMs: 1000,
   })
 
-  const { previewModalDisclosure, refetchQuote } = useAddLiquidity()
+  const { previewModalDisclosure, refetchQuote, lastTransaction } = useAddLiquidity()
 
   // Disable query refetches:
   // if the flow is complete
   // if the add liquidity transaction is confirming
-  const { shouldFreezeQuote } = useShouldFreezeQuote(addLiquidityStepId)
+  const { shouldFreezeQuote } = useShouldFreezeQuote(lastTransaction)
 
   // When the countdown timer reaches 0, refetch all add liquidity queries.
   useEffect(() => {

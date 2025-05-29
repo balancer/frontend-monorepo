@@ -34,7 +34,7 @@ export function LstStakeModal({
   const initialFocusRef = useRef(null)
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
-  const { stakeTransactionSteps, chain, lstStakeTxHash } = useLst()
+  const { stakeTransactionSteps, chain, lstStakeTxHash, lastTransaction } = useLst()
 
   useResetStepIndexOnOpen(isOpen, stakeTransactionSteps)
 
@@ -43,6 +43,7 @@ export function LstStakeModal({
     userAddress,
     chain,
     protocolVersion: 2, // TODO: make this optional
+    txReceipt: lastTransaction?.result,
   })
 
   useEffect(() => {
@@ -54,7 +55,7 @@ export function LstStakeModal({
 
   useOnUserAccountChanged(onClose)
 
-  const isSuccess = !!lstStakeTxHash && !lstStakeReceipt.isLoading
+  const isSuccess = !!lstStakeTxHash && lstStakeReceipt.hasReceipt
 
   return (
     <Modal

@@ -99,6 +99,7 @@ export function useClaimAllRewardsStep({
       id: claimAllRewardsStepId,
       labels,
       stepType: 'claim',
+      transaction,
       isComplete,
       onActivated: () => setIsClaimQueryEnabled(true),
       onDeactivated: () => setIsClaimQueryEnabled(false),

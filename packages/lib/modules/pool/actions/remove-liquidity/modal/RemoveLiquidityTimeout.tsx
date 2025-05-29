@@ -5,7 +5,6 @@ import { useCountdown } from 'usehooks-ts'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { useShouldFreezeQuote } from '@repo/lib/modules/transactions/transaction-steps/useShouldFreezeQuote'
 import { NumberText } from '@repo/lib/shared/components/typography/NumberText'
-import { removeLiquidityStepId } from '../useRemoveLiquidityStep'
 
 function useRemoveLiquidityTimeout() {
   // This countdown needs to be nested here and not at a higher level, like in
@@ -16,12 +15,13 @@ function useRemoveLiquidityTimeout() {
     intervalMs: 1000,
   })
 
-  const { simulationQuery, priceImpactQuery, previewModalDisclosure } = useRemoveLiquidity()
+  const { simulationQuery, priceImpactQuery, previewModalDisclosure, lastTransaction } =
+    useRemoveLiquidity()
 
   // Disable query refetches:
   // if the flow is complete
   // if the remove liquidity transaction is confirming
-  const { shouldFreezeQuote } = useShouldFreezeQuote(removeLiquidityStepId)
+  const { shouldFreezeQuote } = useShouldFreezeQuote(lastTransaction)
 
   // When the countdown timer reaches 0, refetch all remove liquidity queries.
   useEffect(() => {

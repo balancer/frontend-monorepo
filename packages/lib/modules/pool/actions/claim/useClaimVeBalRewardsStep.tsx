@@ -59,6 +59,7 @@ export function useClaimVeBalRewardsStep({
       id: claimVeBalRewardsStepId,
       stepType: 'claim',
       labels,
+      transaction,
       isComplete,
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={claimVeBalRewardsStepId} {...props} />,

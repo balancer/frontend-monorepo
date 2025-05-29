@@ -76,6 +76,7 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
     id: 'unstakeLst',
     labels,
     stepType: 'unstakeLst',
+    transaction,
     isComplete,
     onActivated: noop,
     onDeactivated: noop,

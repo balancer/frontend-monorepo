@@ -53,7 +53,7 @@ export function usePermit2ApprovalSteps({
   shouldUseCompositeLiquidityRouterBoosted = false,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
-  const { setTransactionFn } = useStepsTransactionState()
+  const { getTransaction, setTransactionFn } = useStepsTransactionState()
 
   const { getToken } = useTokens()
 
@@ -140,7 +140,7 @@ export function usePermit2ApprovalSteps({
         'Error in wagmi tx simulation: Approving token',
         tokenAmountToApprove
       ),
-      onTransactionChange: () => setTransactionFn(id),
+      onTransactionChange: setTransactionFn(id),
     }
 
     const args = props.args as Permit2ApproveArgs
@@ -149,6 +149,7 @@ export function usePermit2ApprovalSteps({
       id,
       stepType: 'tokenApproval',
       labels,
+      transaction: getTransaction(id),
       isComplete,
       renderAction: () => <ManagedTransactionButton id={id} key={id} {...props} />,
       batchableTxCall: isTxEnabled ? buildBatchableTxCall({ permit2Address, args }) : undefined,

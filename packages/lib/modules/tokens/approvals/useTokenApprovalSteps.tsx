@@ -49,7 +49,7 @@ export function useTokenApprovalSteps({
   wethIsEth,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
-  const { setTransactionFn } = useStepsTransactionState()
+  const { getTransaction, setTransactionFn } = useStepsTransactionState()
 
   const { getToken } = useTokens()
   const nativeAssetAddress = getNativeAssetAddress(chain)
@@ -111,9 +111,8 @@ export function useTokenApprovalSteps({
       lpToken,
     })
 
-    const isComplete = (tokenAllowanceAfterRefetch?: bigint) => {
-      const tokenAllowance =
-        tokenAllowanceAfterRefetch || tokenAllowances.allowanceFor(tokenAddress)
+    const isComplete = () => {
+      const tokenAllowance = tokenAllowances.allowanceFor(tokenAddress)
       const nextToken = isApprovingZeroForDoubleApproval
         ? tokenAmountsToApprove[index + 1]
         : undefined
@@ -163,7 +162,7 @@ export function useTokenApprovalSteps({
         'Error in wagmi tx simulation: Approving token',
         tokenAmountToApprove
       ),
-      onTransactionChange: () => setTransactionFn(id),
+      onTransactionChange: setTransactionFn(id),
     }
 
     const args = props.args as [Address, bigint]
@@ -173,6 +172,7 @@ export function useTokenApprovalSteps({
       stepType: 'tokenApproval',
       labels,
       isComplete,
+      transaction: getTransaction(id),
       renderAction: () => <ManagedErc20TransactionButton id={id} key={id} {...props} />,
       batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
       onSuccess: async () => {
