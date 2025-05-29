@@ -1,18 +1,17 @@
 'use client'
 
-import { Box, Input, InputProps, Text } from '@chakra-ui/react'
+import { Input, InputProps, Text, VStack } from '@chakra-ui/react'
 
 export function InputWithError({ error, ...props }: { error?: string } & InputProps) {
   return (
-    <>
+    <VStack w="full">
       <Input {...props} />
-      <Box height="10px">
-        {error && (
-          <Text color="font.error" fontSize="sm">
-            {error}
-          </Text>
-        )}
-      </Box>
-    </>
+
+      {error && (
+        <Text color="font.error" fontSize="sm" textAlign="start" w="full">
+          {error}
+        </Text>
+      )}
+    </VStack>
   )
 }

@@ -35,6 +35,7 @@ import { useTokens } from '../../tokens/TokensProvider'
 import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
 import { isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
+import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
 
 export function SaleStructureStep() {
   const {
@@ -58,6 +59,11 @@ export function SaleStructureStep() {
   const selectedChain = watch('selectedChain')
   const launchTokenAddress = watch('launchTokenAddress')
   const collateralTokenAddress = watch('collateralTokenAddress')
+
+  const saleStart = watch('startTime')
+  const saleEnd = watch('endTime')
+  const daysDiff = differenceInDays(parseISO(saleEnd), parseISO(saleStart))
+  const hoursDiff = differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
 
   const launchToken = getToken(launchTokenAddress, selectedChain)
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
@@ -114,6 +120,11 @@ export function SaleStructureStep() {
                   label="End date and time"
                   name="endTime"
                 />
+                <Text color="font.secondary" fontSize="xs">
+                  {saleStart && saleEnd
+                    ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
+                    : 'Suggested sale period: 5 days'}
+                </Text>
               </VStack>
 
               <Divider />
