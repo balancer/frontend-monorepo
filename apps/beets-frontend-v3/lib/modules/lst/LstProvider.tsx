@@ -104,6 +104,7 @@ export function useLstLogic() {
     activeTab,
     setActiveTab,
     stakeTransactionSteps,
+    lastTransaction: stakeTransactionSteps.lastTransaction,
     amountAssets,
     setAmountAssets,
     amountShares,

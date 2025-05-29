@@ -103,6 +103,7 @@ export function useClaimAndUnstakeStep({
       id: claimAndUnstakeStepId,
       stepType: 'claimAndUnstake',
       labels,
+      transaction,
       isComplete: () => isTransactionSuccess(transaction),
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={claimAndUnstakeStepId} {...props} />,

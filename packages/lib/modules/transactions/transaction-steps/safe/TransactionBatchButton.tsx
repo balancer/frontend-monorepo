@@ -19,7 +19,6 @@ import { useOnTransactionSubmission } from '../../../web3/contracts/useOnTransac
 import { SwitchNetworkAlert, useChainSwitch } from '../../../web3/useChainSwitch'
 import { ManagedResult, TransactionLabels, TransactionStep } from '../lib'
 import { getTransactionButtonLabel } from '../transaction-button.helpers'
-import { useTransactionState } from '../TransactionStateProvider'
 import { MultisigStatus } from './MultisigStatus'
 import {
   buildTxBatch,
@@ -34,6 +33,7 @@ type Props = {
   labels: TransactionLabels
   chainId: number
   currentStep: TransactionStep
+  onTransactionChange: (transaction: ManagedResult) => void
 }
 
 export function TransactionBatchButton({
@@ -41,6 +41,7 @@ export function TransactionBatchButton({
   labels,
   chainId,
   currentStep,
+  onTransactionChange,
 }: { id: string } & Props) {
   const { shouldChangeNetwork, networkSwitchButtonProps } = useChainSwitch(chainId)
   const [safeTxHash, setSafeTxHash] = useState<Hex | undefined>()
@@ -67,7 +68,6 @@ export function TransactionBatchButton({
     },
   })
 
-  const { updateTransaction } = useTransactionState()
   useEffect(() => {
     if (!chainId) return
     if (!transactionStatusQuery.isSuccess) return
@@ -85,7 +85,7 @@ export function TransactionBatchButton({
       executeAsync: noop,
       isSafeTxLoading: false,
     }
-    updateTransaction(id, successFullTransaction)
+    onTransactionChange(successFullTransaction)
   }, [id, transactionStatusQuery])
 
   const txBatch = buildTxBatch(currentStep)

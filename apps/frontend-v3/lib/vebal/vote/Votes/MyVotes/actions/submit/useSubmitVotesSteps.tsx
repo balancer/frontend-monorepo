@@ -110,6 +110,7 @@ export function useSubmitVotesSteps(
       id: stepId,
       stepType: 'voteForManyGaugeWeights',
       labels,
+      transaction,
       isComplete: () => isConnected && isTransactionSuccess(transaction),
       renderAction: () => <ManagedTransactionButton id={stepId} {...props} />,
     }

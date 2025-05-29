@@ -42,6 +42,7 @@ export function SwapPreviewModal({
 
   const {
     transactionSteps,
+    lastTransaction,
     swapAction,
     isWrap,
     selectedChain,
@@ -56,6 +57,7 @@ export function SwapPreviewModal({
     userAddress,
     chain: selectedChain,
     protocolVersion,
+    txReceipt: lastTransaction?.result,
   })
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
@@ -78,7 +80,7 @@ export function SwapPreviewModal({
 
   useOnUserAccountChanged(onClose)
 
-  const isSuccess = !!swapTxHash && !swapReceipt.isLoading
+  const isSuccess = !!swapTxHash && swapReceipt.hasReceipt
 
   return (
     <Modal

@@ -12,12 +12,18 @@ import {
   parseLstWithdrawReceipt,
 } from './receipt-parsers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
+import { TransactionResult } from '@repo/lib/modules/web3/contracts/contract.types'
 
 type BaseReceiptProps = {
   txHash?: Hex
   userAddress: Address
   chain: GqlChain
   protocolVersion: ProtocolVersion
+  /*
+    If the user is querying a transaction receipt from history, this receipt is undefined (must be queried with useWaitForTransactionReceipt)
+    If the user is inside a transaction flow, this will be the receipt of the last transaction step (lastTransaction.step.result)
+  */
+  txReceipt?: TransactionResult
 }
 
 export type ReceiptProps = BaseReceiptProps & { parseReceipt: ParseReceipt }
@@ -85,14 +91,24 @@ export function useLstWithdrawReceipt(props: BaseReceiptProps) {
   }
 }
 
-function useTxReceipt({ txHash, chain, userAddress, parseReceipt, protocolVersion }: ReceiptProps) {
+function useTxReceipt({
+  txHash,
+  chain,
+  userAddress,
+  parseReceipt,
+  protocolVersion,
+  txReceipt,
+}: ReceiptProps) {
   const { getToken, isLoadingTokenPrices } = useTokens()
   const chainId = getChainId(chain)
-  // These queries will be cached if we are in the context of a transaction flow
-  // or will be fetched if the user is visiting an historic transaction receipt
-  const receiptQuery = useWaitForTransactionReceipt({
+  // These query will be skipped if we are in the context of a transaction flow (where txReceipt is defined)
+  // or will be fetched if the user is visiting an historic transaction receipt (where txReceipt is undefined)
+  const historicReceiptQuery = useWaitForTransactionReceipt({
     chainId,
     hash: txHash,
+    query: {
+      enabled: !!txHash && !txReceipt,
+    },
   })
   const transactionQuery = useTransaction({
     chainId,
@@ -102,11 +118,12 @@ function useTxReceipt({ txHash, chain, userAddress, parseReceipt, protocolVersio
     },
   })
 
-  const receiptLogs = receiptQuery.data?.logs || []
+  const receiptLogs = txReceipt?.data?.logs || historicReceiptQuery.data?.logs || []
   const txValue = transactionQuery.data?.value || 0n
 
-  const isLoading = isLoadingTokenPrices || receiptQuery.isLoading || transactionQuery.isLoading
-  const error = receiptQuery.error || transactionQuery.error
+  const isLoading =
+    isLoadingTokenPrices || historicReceiptQuery.isLoading || transactionQuery.isLoading
+  const error = historicReceiptQuery.error || transactionQuery.error
 
   const data =
     !isLoading && !error
@@ -124,5 +141,6 @@ function useTxReceipt({ txHash, chain, userAddress, parseReceipt, protocolVersio
     isLoading,
     error,
     data,
+    hasReceipt: !!data,
   }
 }

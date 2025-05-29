@@ -9,13 +9,11 @@ import {
 import { StepProps, getStepSettings } from './getStepSettings'
 import { Check } from 'react-feather'
 import { ManagedResult, StepDetails, TransactionStep } from '../lib'
-import { useTransactionState } from '../TransactionStateProvider'
 import { indexToLetter } from '@repo/lib/shared/labels'
 import { getPendingNestedSteps, hasSomePendingNestedTxInBatch } from '../safe/safe.helpers'
 
 export function Step(props: StepProps) {
-  const { getTransaction } = useTransactionState()
-  const transaction = getTransaction(props.step.id)
+  const transaction = props.step.transaction
   const { color, isActive, title } = getStepSettings(props, transaction)
 
   const shouldDisplayAsTxBatch =

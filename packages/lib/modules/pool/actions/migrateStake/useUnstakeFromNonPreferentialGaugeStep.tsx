@@ -75,6 +75,7 @@ export function useUnstakeFromNonPreferentialGaugeStep(
       id: unstakeStepId,
       stepType: 'unstake',
       labels,
+      transaction,
       isComplete: () => isTransactionSuccess(transaction),
       onSuccess,
       renderAction: () => <ManagedTransactionButton id={unstakeStepId} {...props} />,
