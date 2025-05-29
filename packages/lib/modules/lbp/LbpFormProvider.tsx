@@ -30,6 +30,8 @@ export function useLbpFormLogic() {
       endTime: '',
       collateralTokenAddress: '',
       weightAdjustmentType: 'linear_90_10',
+      customStartWeight: 90,
+      customEndWeight: 10,
       saleTokenAmount: '',
       collateralTokenAmount: '',
     },
