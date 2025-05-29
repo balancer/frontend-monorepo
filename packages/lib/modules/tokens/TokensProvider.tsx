@@ -19,7 +19,11 @@ import { Dictionary, zipObject } from 'lodash'
 import { createContext, PropsWithChildren, useCallback } from 'react'
 import { Address } from 'viem'
 import { useSkipInitialQuery } from '@repo/lib/shared/hooks/useSkipInitialQuery'
-import { getNativeAssetAddress, getWrappedNativeAssetAddress } from '@repo/lib/config/app.config'
+import {
+  getNativeAssetAddress,
+  getWrappedNativeAssetAddress,
+  isDev,
+} from '@repo/lib/config/app.config'
 import { mins } from '@repo/lib/shared/utils/time'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { PoolToken } from '../pool/pool.types'
@@ -52,7 +56,15 @@ export function useTokensLogic(
     variables,
     // The server provides us with an initial data set, but we immediately reload the potentially
     // stale data to ensure the prices we show are up to date. Every 3 mins, we requery token prices
-    initialFetchPolicy: 'no-cache',
+    /*
+      FIXME: if we use initialFetchPolicy: no-cache in development, the query never finishes (isLoadingTokenPrices is always true)
+
+      This started happening after @apollo/client v3.13.6
+      https://github.com/apollographql/apollo-client/blob/main/CHANGELOG.md#3136
+
+      Using undefined is a workaround to avoid the issue in development, but it should be understood and fixed properly
+    */
+    initialFetchPolicy: isDev ? undefined : 'no-cache',
     nextFetchPolicy: 'cache-and-network',
     pollInterval,
     notifyOnNetworkStatusChange: true,
