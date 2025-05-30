@@ -23,6 +23,7 @@ import {
   getNativeAssetAddress,
   getWrappedNativeAssetAddress,
   isDev,
+  shouldUseAnvilFork,
 } from '@repo/lib/config/app.config'
 import { mins } from '@repo/lib/shared/utils/time'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
@@ -93,7 +94,9 @@ export function useTokensLogic(
   const getTokensByChain = useCallback(
     (chain: number | GqlChain): GqlToken[] => {
       const chainKey = typeof chain === 'number' ? 'chainId' : 'chain'
-      return tokens.filter(token => token[chainKey] === chain)
+      const result = tokens.filter(token => token[chainKey] === chain)
+      // Limit to 10 tokens in Anvil fork to avoid Swap performance issues
+      return shouldUseAnvilFork ? result.slice(0, 10) : result
     },
     [tokens]
   )
