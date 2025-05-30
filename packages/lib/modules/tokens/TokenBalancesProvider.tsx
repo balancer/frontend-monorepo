@@ -37,7 +37,6 @@ export function useTokenBalancesLogic(
   extTokens?: ApiToken[],
   bufferPercentage: HumanAmount | string = '0'
 ) {
-  console.log({ extTokens, initTokens })
   if (!initTokens && !extTokens) throw new Error('initTokens or tokens must be provided')
   if (initTokens && extTokens) throw new Error('initTokens and tokens cannot be provided together')
 
@@ -137,7 +136,6 @@ export function useTokenBalancesLogic(
   }
 
   function setTokens(tokens: ApiToken[]) {
-    console.log('setting tokens Co', { tokens })
     if (extTokens) throw new Error('Cannot set tokens when using external tokens')
     _setTokens(tokens)
   }
