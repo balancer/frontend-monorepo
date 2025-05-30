@@ -3,7 +3,7 @@
 import { PaginatedTable } from '@repo/lib/shared/components/tables/PaginatedTable'
 import { MyVotesTableHeader } from './MyVotesTableHeader'
 import { MyVotesTableRow } from './MyVotesTableRow'
-import { Card, Skeleton } from '@chakra-ui/react'
+import { Button, Card, Skeleton, VStack } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { VotingPoolWithData } from '@repo/lib/modules/vebal/vote/vote.types'
 import { useMemo } from 'react'
@@ -11,6 +11,7 @@ import { MyVotesTotalRow } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/
 import { MyVotesSubmitRow } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesTable/MyVotesTableSubmitRow'
 import { useTotalVotes } from '../../../useTotalVotes'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 
 interface Props {
   myVotes: VotingPoolWithData[]
@@ -35,6 +36,7 @@ export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
   const isMounted = useIsMounted()
   const { totalVotes, totalVotesLoading } = useTotalVotes()
   const { isConnected } = useUserAccount()
+  const { loadDebugVotes } = useMyVotes()
 
   const items = useMemo(() => {
     if (myVotes.length === 0) {
@@ -103,23 +105,28 @@ export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
       pr={{ base: 'md' }}
       w={{ base: '100vw', lg: 'full' }}
     >
-      <PaginatedTable
-        getRowId={item => item.id}
-        items={items}
-        loading={loading || totalVotesLoading}
-        loadingLength={3}
-        noItemsFoundLabel={
-          !isConnected
-            ? 'Connect your wallet to see and edit your votes'
-            : noVeBALBalance
-              ? 'You don’t have any votes. Get some veBAL to start voting.'
-              : 'You don’t have any votes. Start by selecting some pool gauges from the table below.'
-        }
-        paginationProps={undefined}
-        renderTableHeader={TableHeader}
-        renderTableRow={TableRow}
-        showPagination={false}
-      />
+      <VStack>
+        <Button onClick={loadDebugVotes} variant="primary">
+          Load debug votes
+        </Button>
+        <PaginatedTable
+          getRowId={item => item.id}
+          items={items}
+          loading={loading || totalVotesLoading}
+          loadingLength={3}
+          noItemsFoundLabel={
+            !isConnected
+              ? 'Connect your wallet to see and edit your votes'
+              : noVeBALBalance
+                ? 'You don’t have any votes. Get some veBAL to start voting.'
+                : 'You don’t have any votes. Start by selecting some pool gauges from the table below.'
+          }
+          paginationProps={undefined}
+          renderTableHeader={TableHeader}
+          renderTableRow={TableRow}
+          showPagination={false}
+        />
+      </VStack>
     </Card>
   )
 }

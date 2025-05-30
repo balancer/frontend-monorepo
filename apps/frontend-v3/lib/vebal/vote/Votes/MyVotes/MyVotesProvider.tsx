@@ -71,6 +71,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
     clearSelectedVotingPools,
     refetchAll,
     isPoolGaugeExpired,
+    toggleVotingPool,
   } = useVotes()
   const filtersState = useMyVotesFiltersState()
 
@@ -113,6 +114,27 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
       ...current,
       [id]: value,
     }))
+  }
+
+  function loadDebugVotes() {
+    const selectedGauges = [
+      '0x8e486dbacb74c00dd31e489da93d99bbebe36cd5',
+      '0x84f7F5cD2218f31B750E7009Bb6fD34e0b945DaC',
+      '0xf697535848B535900c76f70F1e36EC3985D27862',
+      '0x0B9Ea598757c7D03FB1937cc16bdD2C9D416ff80',
+      '0x8135d6AbFd42707A87A7b94c5CFA3529f9b432AD',
+      '0x4B891340b51889f438a03DC0e8aAAFB0Bc89e7A6',
+      '0xA00DB7d9c465e95e4AA814A9340B9A161364470a',
+      '0x1e916950A659Da9813EE34479BFf04C732E03deb',
+      '0xbf65b3fa6c208762ed74e82d4aefcddfd0323648',
+    ].map(address => address.toLowerCase())
+    votingPools
+      .filter(votingPool => selectedGauges.includes(votingPool.gauge.address.toLowerCase()))
+      .forEach(votingPool => {
+        toggleVotingPool(votingPool)
+        // Inits all votes to 5%
+        onEditVotesChange(votingPool.id, '500')
+      })
   }
 
   const hasExpiredGauges = myVotes.some(votedPool => votedPool.gauge.isKilled)
@@ -290,6 +312,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
     hasUnallocatedWeight,
     refetchAll,
     hasExpiredGauges,
+    loadDebugVotes,
   }
 }
 
