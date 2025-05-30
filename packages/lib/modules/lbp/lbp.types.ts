@@ -7,7 +7,9 @@ export type SaleStructureForm = {
   startTime: string
   endTime: string
   collateralTokenAddress: string
-  weightAdjustmentType: 'linear_90_10' | 'linear_90_50'
+  weightAdjustmentType: 'linear_90_10' | 'linear_90_50' | 'custom'
+  customStartWeight: number
+  customEndWeight: number
   userActions: 'buy_and_sell' | 'buy_only'
   saleTokenAmount: HumanAmount | ''
   collateralTokenAmount: HumanAmount | ''
