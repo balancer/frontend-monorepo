@@ -22,6 +22,7 @@ import {
   PopoverHeader,
   PopoverBody,
   PopoverArrow,
+  Divider,
 } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
@@ -32,9 +33,13 @@ import { Plus } from 'react-feather'
 import { LearnMoreModal } from './header/LearnMoreModal'
 import { Controller } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
+import { WeightsChart } from './steps/sale-structure/WeightsChart'
+import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
+import { useTokens } from '../tokens/TokensProvider'
 
 export function LbpPreview() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { getToken } = useTokens()
 
   const {
     saleStructureForm: { watch },
@@ -49,11 +54,26 @@ export function LbpPreview() {
   } = useLbpForm()
 
   const chain = watch('selectedChain')
-  const tokenAddress = watch('launchTokenAddress')
-
-  const tokenMetadata = useTokenMetadata(tokenAddress, chain)
-
+  const launchTokenAddress = watch('launchTokenAddress')
+  const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
   const tokenIconURL = watchInfo('tokenIconUrl')
+  const collateralTokenAddress = watch('collateralTokenAddress')
+  const collateralToken = getToken(collateralTokenAddress, chain)
+
+  const weightAdjustmentType = watch('weightAdjustmentType')
+  const startWeight = ['linear_90_10', 'linear_90_50'].includes(weightAdjustmentType)
+    ? 90
+    : watch('customStartWeight')
+  const endWeight =
+    weightAdjustmentType === 'linear_90_10'
+      ? 10
+      : weightAdjustmentType === 'linear_90_50'
+        ? 50
+        : watch('customEndWeight')
+  const startTime = watch('startTime')
+  const endTime = watch('endTime')
+  const daysDiff = differenceInDays(parseISO(endTime), parseISO(startTime))
+  const hoursDiff = differenceInHours(parseISO(endTime), parseISO(startTime)) - daysDiff * 24
 
   return (
     <>
@@ -134,9 +154,9 @@ export function LbpPreview() {
                     </Popover>
                     <VStack align="start" spacing="xs">
                       <Text fontSize="xl" fontWeight="bold">
-                        {tokenMetadata?.symbol ?? 'Token symbol'}
+                        {launchTokenMetadata?.symbol ?? 'Token symbol'}
                       </Text>
-                      <Text>{tokenMetadata?.name ?? 'Token name'}</Text>
+                      <Text>{launchTokenMetadata?.name ?? 'Token name'}</Text>
                     </VStack>
                   </HStack>
                 </GridItem>
@@ -154,8 +174,8 @@ export function LbpPreview() {
                       <VStack align="start">
                         <Text>???</Text>
                         <Text>
-                          {tokenMetadata?.totalSupply
-                            ? fNum('token', tokenMetadata?.totalSupply)
+                          {launchTokenMetadata?.totalSupply
+                            ? fNum('token', launchTokenMetadata?.totalSupply)
                             : '-'}
                         </Text>
                         <Text>???</Text>
@@ -165,6 +185,45 @@ export function LbpPreview() {
                   </Grid>
                 </GridItem>
               </Grid>
+            </CardBody>
+          </Card>
+
+          <Card h="450px">
+            <CardHeader>
+              <HStack>
+                <Heading size="sm">LBP pool weight shifts</Heading>
+                <Spacer />
+                <Text color="font.secondary" fontWeight="bold">
+                  Standard linear
+                </Text>
+              </HStack>
+            </CardHeader>
+            <CardBody>
+              <WeightsChart
+                startWeight={startWeight}
+                endWeight={endWeight}
+                startDate={parseISO(startTime)}
+                endDate={parseISO(endTime)}
+              />
+
+              <Divider />
+
+              <HStack mt="2">
+                <Text color="font.special" fontWeight="extrabold">
+                  &mdash;
+                </Text>
+                <Text>{launchTokenMetadata.symbol}</Text>
+                <Text color="#93C6FF" fontWeight="extrabold">
+                  &mdash;
+                </Text>
+                <Text>{collateralToken?.symbol}</Text>
+                <Spacer />
+                <Text color="font.secondary" fontSize="sm">
+                  {startTime && endTime
+                    ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
+                    : ''}
+                </Text>
+              </HStack>
             </CardBody>
           </Card>
         </VStack>
