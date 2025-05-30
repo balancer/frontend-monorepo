@@ -2,7 +2,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getTransactionState, RetryOnSuccess, TransactionState, TransactionStep } from './lib'
+import { getTransactionState, Retry, TransactionState, TransactionStep } from './lib'
 import { useTxSound } from './useTxSound'
 import { ensureError, ErrorCause, ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 import { useToast } from '@chakra-ui/react'
@@ -51,7 +51,7 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
     async function handleTransactionCompletion() {
       try {
         const onSuccessResult = await currentStep?.onSuccess?.()
-        if (onSuccessResult !== RetryOnSuccess) {
+        if (onSuccessResult !== Retry) {
           updateOnSuccessCalled(currentStep, true)
         }
       } catch (e) {

@@ -134,7 +134,7 @@ type TransactionInput =
   | ManagedSendTransactionInput
 
 // In some cases, the onSuccess callback must be retried, for instance, when the refetchApprovals has not finished yet
-export const RetryOnSuccess = 'retry'
+export const Retry = 'retry'
 
 export type TransactionStep = {
   id: string
@@ -145,7 +145,7 @@ export type TransactionStep = {
   isComplete: () => boolean
   renderAction: () => ReactNode
   // All callbacks should be idempotent
-  onSuccess?: () => any | typeof RetryOnSuccess
+  onSuccess?: () => any | typeof Retry
   onActivated?: () => void
   onDeactivated?: () => void
   // only used for integration testing
