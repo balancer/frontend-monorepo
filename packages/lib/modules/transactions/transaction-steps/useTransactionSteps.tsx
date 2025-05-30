@@ -2,27 +2,19 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getTransactionState, TransactionState, TransactionStep } from './lib'
+import { getTransactionState, Retry, TransactionState, TransactionStep } from './lib'
 import { useTxSound } from './useTxSound'
 import { ensureError, ErrorCause, ErrorWithCauses } from '@repo/lib/shared/utils/errors'
 import { useToast } from '@chakra-ui/react'
 import { resetTransaction } from './transaction.helper'
 import { showErrorAsToast } from '@repo/lib/shared/components/toasts/toast.helper'
+import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 
 export type TransactionStepsResponse = ReturnType<typeof useTransactionSteps>
 
 export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = false) {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0)
-  const [onSuccessCalled, setOnSuccessCalled] = useState<{ [stepId: string]: boolean }>({})
-
-  const updateOnSuccessCalled = (stepId: string, value: boolean) => {
-    setOnSuccessCalled(prevState => ({
-      ...prevState,
-      [stepId]: value,
-    }))
-  }
-
-  const isOnSuccessCalled = (stepId: string) => !!onSuccessCalled[stepId]
+  const { isOnSuccessCalled, updateOnSuccessCalled, setOnSuccessCalled } = useTransactionState()
 
   const { playTxSound } = useTxSound()
 
@@ -58,8 +50,10 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
     if (!currentStep) return
     async function handleTransactionCompletion() {
       try {
-        await currentStep?.onSuccess?.()
-        updateOnSuccessCalled(currentStep.id, true)
+        const onSuccessResult = await currentStep?.onSuccess?.()
+        if (onSuccessResult !== Retry) {
+          updateOnSuccessCalled(currentStep, true)
+        }
       } catch (e) {
         const error = ensureError(e)
         if (error instanceof ErrorWithCauses) {
@@ -73,7 +67,7 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
         if (currentTransaction) resetTransaction(currentTransaction)
       }
     }
-    if (!isOnSuccessCalled(currentStep.id) && currentTransaction?.result.isSuccess) {
+    if (!isOnSuccessCalled(currentStep) && currentTransaction?.result.isSuccess) {
       handleTransactionCompletion()
     }
   }, [currentTransaction?.result.isSuccess, currentStep?.onSuccess])
