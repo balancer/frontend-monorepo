@@ -6,7 +6,7 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { useMemo } from 'react'
 import { Address, encodeFunctionData, erc20Abi } from 'viem'
 import { ManagedErc20TransactionButton } from '../../transactions/transaction-steps/TransactionButton'
-import { TransactionStep, TxCall } from '../../transactions/transaction-steps/lib'
+import { RetryOnSuccess, TransactionStep, TxCall } from '../../transactions/transaction-steps/lib'
 import { ManagedErc20TransactionInput } from '../../web3/contracts/useManagedErc20Transaction'
 import { useTokenAllowances } from '../../web3/useTokenAllowances'
 import { useUserAccount } from '../../web3/UserAccountProvider'
@@ -178,7 +178,7 @@ export function useTokenApprovalSteps({
       onSuccess: async () => {
         const newAllowances = await tokenAllowances.refetchAllowances()
         // Ignore check if allowances are refetching
-        if (newAllowances.isRefetching) return
+        if (newAllowances.isRefetching) return RetryOnSuccess
         const updatedTokenAllowance = newAllowances.allowanceFor(tokenAddress)
         const errors = checkEdgeCaseErrors(updatedTokenAllowance)
         if (errors.length > 0) throw new ErrorWithCauses('Edge case errors', errors)

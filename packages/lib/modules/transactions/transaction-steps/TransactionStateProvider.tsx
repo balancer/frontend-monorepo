@@ -1,49 +1,43 @@
 'use client'
 
-import { createContext, PropsWithChildren, useCallback, useState } from 'react'
-import { ManagedResult } from './lib'
+import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { resetTransaction } from './transaction.helper'
+import { createContext, PropsWithChildren, useState } from 'react'
+import { Hex } from 'viem'
 
 export function useTransactionStateLogic() {
-  const [transactionMap, setTransactionMap] = useState<Map<string, ManagedResult>>(new Map())
+  /* Globally track whether the `onSuccess` callback has been called for each transaction step.
+     This is useful for ensuring that the `onSuccess` callback is not called in every render as it is normally a heavy operation (refetch data, etc.).
+   */
+  const [onSuccessCalled, setOnSuccessCalled] = useState<{ [txHash: Hex]: boolean }>({})
 
-  function updateTransaction(k: string, v: ManagedResult) {
-    // if creating transaction
-    if (!transactionMap.has(k)) {
-      // Safe App edge case when the transaction is created with success status
-      if (v.result.status === 'success') {
-        setTransactionMap(new Map(transactionMap.set(k, v)))
-      } else {
-        /*
-      When there was a previous transaction useWriteContract() will return the execution hash from that previous transaction,
-      So we need to reset it to avoid issues with multiple "managedTransaction" steps running in sequence.
-      More info: https://wagmi.sh/react/api/hooks/useWriteContract#data
-      */
-        v = resetTransaction(v)
-      }
-    }
-
-    // Avoid updating transaction if it's already successful (avoids unnecessary re-renders and side-effects)
-    if (getTransaction(k)?.result.status === 'success') return
-    setTransactionMap(new Map(transactionMap.set(k, v)))
+  function getTransactionHash(step: TransactionStep): Hex | undefined {
+    const txHash = step.transaction?.result.data?.transactionHash
+    if (!txHash) return
+    return txHash
   }
 
-  const getTransaction = useCallback(
-    (id: string) => {
-      return transactionMap.get(id)
-    },
-    [transactionMap]
-  )
+  const updateOnSuccessCalled = (step: TransactionStep, value: boolean) => {
+    const txHash = getTransactionHash(step)
+    if (!txHash)
+      throw new Error(`Transaction hash is required to get transaction hash from step ${step}`)
 
-  function resetTransactionState() {
-    setTransactionMap(new Map())
+    setOnSuccessCalled(prevState => ({
+      ...prevState,
+      [txHash]: value,
+    }))
+  }
+
+  const isOnSuccessCalled = (step: TransactionStep) => {
+    const txHash = getTransactionHash(step)
+    if (!txHash) return false
+    return !!onSuccessCalled[txHash]
   }
 
   return {
-    getTransaction,
-    updateTransaction,
-    resetTransactionState,
+    updateOnSuccessCalled,
+    isOnSuccessCalled,
+    setOnSuccessCalled,
   }
 }
 
