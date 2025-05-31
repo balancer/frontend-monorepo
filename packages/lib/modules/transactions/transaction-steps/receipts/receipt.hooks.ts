@@ -10,6 +10,7 @@ import {
   parseSwapReceipt,
   parseLstStakeReceipt,
   parseLstWithdrawReceipt,
+  parsePoolCreationReceipt,
 } from './receipt-parsers'
 import { ProtocolVersion } from '@repo/lib/modules/pool/pool.types'
 import { TransactionResult } from '@repo/lib/modules/web3/contracts/contract.types'
@@ -88,6 +89,17 @@ export function useLstWithdrawReceipt(props: BaseReceiptProps) {
   return {
     ...result,
     receivedToken: data?.receivedToken,
+  }
+}
+
+export function usePoolCreationReceipt(props: BaseReceiptProps) {
+  const result = useTxReceipt({ ...props, parseReceipt: parsePoolCreationReceipt })
+  console.log('result', result)
+  const data = result.data as ReturnType<typeof parsePoolCreationReceipt> | undefined
+  console.log('data', data)
+  return {
+    ...result,
+    poolAddress: data?.poolAddress,
   }
 }
 
