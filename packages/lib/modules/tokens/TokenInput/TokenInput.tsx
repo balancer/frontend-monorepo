@@ -288,6 +288,7 @@ export const TokenInput = forwardRef(
                 shadow="none"
                 title={inputTitle}
                 type="number"
+                step="any" // is this okay? if not, user forced to integer input for lpb creation
                 value={value}
                 {...inputProps}
               />
