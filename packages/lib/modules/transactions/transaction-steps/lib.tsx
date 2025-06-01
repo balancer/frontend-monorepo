@@ -57,6 +57,7 @@ export type StepType =
   | 'claimRelicReward'
   | 'approveBatchRelayerForAllRelics'
   | 'createLbp'
+  | 'sendLbpMetadata'
 
 export type TxActionId =
   | 'SignBatchRelayer'

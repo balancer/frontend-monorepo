@@ -29,9 +29,8 @@ export function useCreateLbpStep(): TransactionStep {
   const labels: TransactionLabels = {
     init: 'Create LBP',
     title: 'Create LBP',
-    description: 'Create a new Liquidity Bootstrapping Pool',
-    confirming: 'Creating a new Liquidity Bootstrapping Pool',
-    confirmed: 'Created a new Liquidity Bootstrapping Pool',
+    confirming: 'Creating a new LBP',
+    confirmed: 'Created a new LBP',
     tooltip: 'Create a new LBP',
   }
 
