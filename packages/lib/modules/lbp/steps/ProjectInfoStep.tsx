@@ -123,7 +123,7 @@ function TokenIconInput() {
             error={errors.tokenIconUrl?.message}
             isInvalid={!!errors.tokenIconUrl}
             onChange={e => field.onChange(e.target.value)}
-            placeholder="https://yourdomain.com/token-icon.svg"
+            placeholder="https://yourdomain.com/token-icon.png"
             value={field.value}
           />
         )}

@@ -8,7 +8,6 @@ import {
   HStack,
   GridItem,
   Grid,
-  Image,
   CardBody,
   Text,
   Circle,
@@ -32,6 +31,7 @@ import { Plus } from 'react-feather'
 import { LearnMoreModal } from './header/LearnMoreModal'
 import { Controller } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
+import Image from 'next/image'
 
 export function LbpPreview() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -99,10 +99,11 @@ export function LbpPreview() {
                           shadow="lg"
                           size={24}
                           role="button"
+                          position="relative"
                         >
                           <VStack>
                             {tokenIconURL ? (
-                              <Image src={tokenIconURL} borderRadius="full" />
+                              <Image src={tokenIconURL} alt="Token icon" fill />
                             ) : (
                               <Plus />
                             )}
@@ -121,13 +122,13 @@ export function LbpPreview() {
                                 error={errors.tokenIconUrl?.message}
                                 isInvalid={!!errors.tokenIconUrl}
                                 onChange={e => field.onChange(e.target.value)}
-                                placeholder="https://yourdomain.com/token-icon.svg"
+                                placeholder="https://yourdomain.com/token-icon.png"
                                 value={field.value}
                               />
                             )}
                           />
                           <Text color="font.secondary" fontSize="sm">
-                            Ideally SVG (or PNG / JPG)
+                            PNG or JPG files only
                           </Text>
                         </PopoverBody>
                       </PopoverContent>
