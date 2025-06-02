@@ -128,11 +128,13 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       }
     }
     ... on GqlPoolLiquidityBootstrapping {
+      endTime
       name
       nestingType
       poolTokens {
         ...PoolTokens
       }
+      startTime
     }
     ... on GqlPoolGyro {
       alpha
