@@ -1,7 +1,8 @@
-import { addHours, differenceInDays } from 'date-fns'
+import { addHours, differenceInDays, hoursToMilliseconds } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { buildMarkline } from '@repo/lib/shared/utils/chart.helper'
 
 export function WeightsChart({
   startWeight,
@@ -26,7 +27,7 @@ export function WeightsChart({
       axisTick: { show: false },
       min: startDate.getTime(),
       max: endDate.getTime(),
-      interval: 24 * 60 * 60 * 1000,
+      interval: hoursToMilliseconds(24),
       axisLabel: {
         formatter: (value: number) => {
           const daysDiff = differenceInDays(new Date(value), startDate)
@@ -72,38 +73,8 @@ export function WeightsChart({
       },
     },
     series: [
-      {
-        id: 'top-markline',
-        type: 'line',
-        data: [
-          [startDate, startWeight],
-          [endDate, startWeight],
-        ],
-        lineStyle: {
-          color: 'grey',
-          type: 'dashed',
-          width: 1,
-          cap: 'round' as const,
-          join: 'round' as const,
-        },
-        showSymbol: false,
-      },
-      {
-        id: 'bottom-markline',
-        type: 'line',
-        data: [
-          [startDate, 100 - startWeight],
-          [endDate, 100 - startWeight],
-        ],
-        lineStyle: {
-          color: 'grey',
-          type: 'dashed',
-          width: 1,
-          cap: 'round' as const,
-          join: 'round' as const,
-        },
-        showSymbol: false,
-      },
+      buildMarkline('top-markline', startDate, endDate, startWeight),
+      buildMarkline('bottom-markline', startDate, endDate, 100 - startWeight),
       {
         id: 'collateral-token-weight',
         name: '',

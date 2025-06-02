@@ -2,6 +2,7 @@ import { addHours, differenceInDays } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
+import { buildMarkline } from '@repo/lib/shared/utils/chart.helper'
 
 export function ProjectedPriceChart({
   startWeight,
@@ -66,54 +67,9 @@ export function ProjectedPriceChart({
       },
     },
     series: [
-      {
-        id: 'top-markline',
-        type: 'line',
-        data: [
-          [startDate, priceRange.max],
-          [endDate, priceRange.max],
-        ],
-        lineStyle: {
-          color: 'grey',
-          type: 'dashed',
-          width: 1,
-          cap: 'round' as const,
-          join: 'round' as const,
-        },
-        showSymbol: false,
-      },
-      {
-        id: 'middle-markline',
-        type: 'line',
-        data: [
-          [startDate, (priceRange.max - 0) / 2],
-          [endDate, (priceRange.max - 0) / 2],
-        ],
-        lineStyle: {
-          color: 'grey',
-          type: 'dashed',
-          width: 1,
-          cap: 'round' as const,
-          join: 'round' as const,
-        },
-        showSymbol: false,
-      },
-      {
-        id: 'bottom-markline',
-        type: 'line',
-        data: [
-          [startDate, 0],
-          [endDate, 0],
-        ],
-        lineStyle: {
-          color: 'grey',
-          type: 'dashed',
-          width: 1,
-          cap: 'round' as const,
-          join: 'round' as const,
-        },
-        showSymbol: false,
-      },
+      buildMarkline('top-markline', startDate, endDate, priceRange.max),
+      buildMarkline('middle-markline', startDate, endDate, priceRange.max / 2),
+      buildMarkline('bottom-markline', startDate, endDate, 0),
       {
         id: 'launch-token-price',
         name: '',
