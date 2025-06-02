@@ -68,7 +68,7 @@ export function LbpHeader() {
           <FadeInOnView animateOnce={false}>
             <VStack align="start" w="full">
               <PoolBreadcrumbs />
-              <Grid templateColumns={{ base: '1fr', md: '2fr 1fr' }} gap="4" w="full">
+              <Grid templateColumns={{ base: '1fr', md: '3fr 2fr' }} gap="4" w="full">
                 <GridItem p="md">
                   <LbpHeaderTitleDescription />
                 </GridItem>
