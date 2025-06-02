@@ -3,19 +3,38 @@ import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
 
-export function WeightsChart({
+export function ProjectedPriceChart({
   startWeight,
   endWeight,
   startDate,
   endDate,
+  launchTokenSeed,
+  collateralTokenSeed,
+  collateralTokenPrice,
+  onPriceChange,
 }: {
   startWeight: number
   endWeight: number
   startDate: Date
   endDate: Date
+  launchTokenSeed: number
+  collateralTokenSeed: number
+  collateralTokenPrice: number
+  onPriceChange: (prices: number[][]) => void
 }) {
-  const launchTokenData = interpolateData(startWeight, endWeight, startDate, endDate)
-  const collateralTokenData = invertData(launchTokenData)
+  const priceData = interpolateData(
+    startWeight,
+    endWeight,
+    startDate,
+    endDate,
+    launchTokenSeed,
+    collateralTokenSeed,
+    collateralTokenPrice
+  )
+
+  setTimeout(() => onPriceChange(priceData))
+
+  const priceRange = range(priceData.map(point => point[1]))
 
   const chartInfo: EChartsOption = {
     xAxis: {
@@ -40,34 +59,9 @@ export function WeightsChart({
       axisLine: { show: false },
       splitLine: { show: false },
       axisTick: { show: false },
-      min: 0,
-      max: 100,
-      interval: 1,
       axisLabel: {
         formatter: (value: number) => {
-          if (value === 100 - startWeight) return `{collateral|${value}%}`
-          if (value === startWeight) return `{launch|${value}%}`
-
-          return [0, 50, 100].includes(value) ? `${value}%` : [25, 75].includes(value) ? '-' : ''
-        },
-        rich: {
-          launch: {
-            backgroundColor: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-              { offset: 0, color: '#B3AEF5' },
-              { offset: 0.33, color: '#D7CBE7' },
-              { offset: 0.66, color: '#E5C8C8' },
-              { offset: 1, color: '#EAA879' },
-            ]),
-            color: 'black',
-            padding: 2,
-            borderRadius: 2,
-          },
-          collateral: {
-            backgroundColor: '#93C6FF',
-            color: 'black',
-            padding: 2,
-            borderRadius: 2,
-          },
+          return `$${value}`
         },
       },
     },
@@ -76,8 +70,24 @@ export function WeightsChart({
         id: 'top-markline',
         type: 'line',
         data: [
-          [startDate, startWeight],
-          [endDate, startWeight],
+          [startDate, priceRange.max],
+          [endDate, priceRange.max],
+        ],
+        lineStyle: {
+          color: 'grey',
+          type: 'dashed',
+          width: 1,
+          cap: 'round' as const,
+          join: 'round' as const,
+        },
+        showSymbol: false,
+      },
+      {
+        id: 'middle-markline',
+        type: 'line',
+        data: [
+          [startDate, (priceRange.max - 0) / 2],
+          [endDate, (priceRange.max - 0) / 2],
         ],
         lineStyle: {
           color: 'grey',
@@ -92,8 +102,8 @@ export function WeightsChart({
         id: 'bottom-markline',
         type: 'line',
         data: [
-          [startDate, 100 - startWeight],
-          [endDate, 100 - startWeight],
+          [startDate, 0],
+          [endDate, 0],
         ],
         lineStyle: {
           color: 'grey',
@@ -105,31 +115,19 @@ export function WeightsChart({
         showSymbol: false,
       },
       {
-        id: 'collateral-token-weight',
+        id: 'launch-token-price',
         name: '',
         type: 'line' as const,
-        data: collateralTokenData,
+        data: priceData,
         lineStyle: {
-          color: '#93C6FF',
-          width: 3,
-          join: 'round' as const,
-          cap: 'round' as const,
-        },
-        showSymbol: false,
-      },
-      {
-        id: 'launch-token-weight',
-        name: '',
-        type: 'line' as const,
-        data: launchTokenData,
-        lineStyle: {
+          type: [2, 3],
           color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
             { offset: 0, color: '#B3AEF5' },
             { offset: 0.33, color: '#D7CBE7' },
             { offset: 0.66, color: '#E5C8C8' },
             { offset: 1, color: '#EAA879' },
           ]),
-          width: 3,
+          width: 2,
           join: 'round' as const,
           cap: 'round' as const,
         },
@@ -141,29 +139,50 @@ export function WeightsChart({
   return <ReactECharts option={chartInfo} style={{ height: '350px', width: '100%' }} />
 }
 
-function interpolateData(startWeight: number, endWeight: number, startDate: Date, endDate: Date) {
+function interpolateData(
+  startWeight: number,
+  endWeight: number,
+  startDate: Date,
+  endDate: Date,
+  launchTokenSeed: number,
+  collateralTokenSeed: number,
+  collateralTokenPrice: number
+) {
   const startTimestamp = bn(startDate.getTime())
   const endTimestamp = bn(endDate.getTime())
   const slope = bn(endWeight).minus(startWeight).div(endTimestamp.minus(startTimestamp))
-  const interpolate = (timestamp: BigNumber) =>
+  const interpolateLaunchTokenWeight = (timestamp: BigNumber) =>
     bn(startWeight)
       .plus(slope.times(timestamp.minus(startTimestamp)))
       .toNumber()
+
+  const interpolatePrice = (timestamp: BigNumber) => {
+    const launchTokenWeight = interpolateLaunchTokenWeight(timestamp)
+    const collateralTokenWeight = 100 - launchTokenWeight
+    const spotPrice = bn(collateralTokenSeed)
+      .div(collateralTokenWeight)
+      .div(bn(launchTokenSeed).div(launchTokenWeight))
+
+    return spotPrice.times(collateralTokenPrice).toNumber()
+  }
 
   const data = []
 
   let currentPoint = startDate
   while (addHours(currentPoint, 1) < endDate) {
     const currentTimestamp = bn(currentPoint.getTime())
-    data.push([currentPoint.getTime(), interpolate(currentTimestamp)])
+    data.push([currentPoint.getTime(), interpolatePrice(currentTimestamp)])
     currentPoint = addHours(currentPoint, 1)
   }
 
-  data.push([endDate.getTime(), interpolate(endTimestamp)])
+  data.push([endDate.getTime(), interpolatePrice(endTimestamp)])
 
   return data
 }
 
-function invertData(data: number[][]) {
-  return data.map(point => [point[0], 100 - (point[1] as number)])
+function range(values: number[]) {
+  return {
+    min: Math.min(...values),
+    max: Math.max(...values),
+  }
 }

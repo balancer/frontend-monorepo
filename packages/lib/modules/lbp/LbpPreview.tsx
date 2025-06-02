@@ -36,10 +36,12 @@ import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithErro
 import { WeightsChart } from './steps/sale-structure/WeightsChart'
 import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
 import { useTokens } from '../tokens/TokensProvider'
+import { ProjectedPriceChart } from './steps/sale-structure/ProjectedPriceChart'
+import { useState } from 'react'
 
 export function LbpPreview() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { getToken } = useTokens()
+  const { getToken, priceFor } = useTokens()
 
   const {
     saleStructureForm: { watch },
@@ -56,9 +58,12 @@ export function LbpPreview() {
   const chain = watch('selectedChain')
   const launchTokenAddress = watch('launchTokenAddress')
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
+  const launchTokenSeed = watch('saleTokenAmount')
   const tokenIconURL = watchInfo('tokenIconUrl')
+
   const collateralTokenAddress = watch('collateralTokenAddress')
   const collateralToken = getToken(collateralTokenAddress, chain)
+  const collateralTokenSeed = watch('collateralTokenAmount')
 
   const weightAdjustmentType = watch('weightAdjustmentType')
   const startWeight = ['linear_90_10', 'linear_90_50'].includes(weightAdjustmentType)
@@ -70,10 +75,21 @@ export function LbpPreview() {
       : weightAdjustmentType === 'linear_90_50'
         ? 50
         : watch('customEndWeight')
+
   const startTime = watch('startTime')
   const endTime = watch('endTime')
   const daysDiff = differenceInDays(parseISO(endTime), parseISO(startTime))
   const hoursDiff = differenceInHours(parseISO(endTime), parseISO(startTime)) - daysDiff * 24
+  const salePeriodText =
+    startTime && endTime
+      ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
+      : ''
+
+  const [maxPrice, setMaxPrice] = useState('')
+  const updateMaxPrice = (prices: number[][]) => {
+    const maxPrice = Math.max(...prices.map(point => point[1]))
+    setMaxPrice(fNum('fiat', maxPrice))
+  }
 
   return (
     <>
@@ -219,9 +235,48 @@ export function LbpPreview() {
                 <Text>{collateralToken?.symbol}</Text>
                 <Spacer />
                 <Text color="font.secondary" fontSize="sm">
-                  {startTime && endTime
-                    ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
-                    : ''}
+                  {salePeriodText}
+                </Text>
+              </HStack>
+            </CardBody>
+          </Card>
+
+          <Card h="450px">
+            <CardHeader>
+              <HStack>
+                <Heading size="sm">Projected price</Heading>
+                <Spacer />
+                <Text color="font.secondary" fontWeight="bold">
+                  {`Starting price: $${maxPrice}`}
+                </Text>
+              </HStack>
+            </CardHeader>
+            <CardBody>
+              <ProjectedPriceChart
+                startWeight={startWeight}
+                endWeight={endWeight}
+                startDate={parseISO(startTime)}
+                endDate={parseISO(endTime)}
+                launchTokenSeed={Number(launchTokenSeed || 0)}
+                collateralTokenSeed={Number(collateralTokenSeed || 0)}
+                collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
+                onPriceChange={updateMaxPrice}
+              />
+
+              <Divider />
+
+              <HStack mt="2">
+                <hr
+                  style={{
+                    width: '15px',
+                    border: '1px dashed',
+                    borderColor: 'linear-gradient(90deg, #194D05 0%, #30940A 100%)',
+                  }}
+                />
+                <Text>{`${launchTokenMetadata.symbol} projected price (if no demand)`}</Text>
+                <Spacer />
+                <Text color="font.secondary" fontSize="sm">
+                  {salePeriodText}
                 </Text>
               </HStack>
             </CardBody>
