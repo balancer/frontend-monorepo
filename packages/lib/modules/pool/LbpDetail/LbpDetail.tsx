@@ -6,7 +6,7 @@ import { PoolActivity } from '../PoolDetail/PoolActivity/PoolActivity'
 import { PoolComposition } from '../PoolDetail/PoolComposition'
 import { PoolInfoLayout } from '../PoolDetail/PoolInfo/PoolInfoLayout'
 import { useUserPoolEvents } from '../useUserPoolEvents'
-import { LbpHeader } from './LbpHeader'
+import { LbpHeader } from './LbpHeader/LbpHeader'
 
 export function LbpDetail() {
   const userEvents = useUserPoolEvents()
