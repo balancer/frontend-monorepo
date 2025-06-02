@@ -1,10 +1,11 @@
-import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react'
-import { PoolBreadcrumbs } from '../PoolDetail/PoolHeader/PoolBreadcrumbs'
+import { Box, Grid, GridItem, VStack } from '@chakra-ui/react'
+import { PoolBreadcrumbs } from '../../PoolDetail/PoolHeader/PoolBreadcrumbs'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { PoolPageStats } from '@repo/lib/shared/pages/PoolsPage/PoolPageStats'
+import { LbpHero } from './LbpHero'
 
 export function LbpHeader() {
   return (
@@ -67,24 +68,14 @@ export function LbpHeader() {
           <FadeInOnView animateOnce={false}>
             <VStack align="start" w="full">
               <PoolBreadcrumbs />
-              <Flex
-                align={{ base: 'start', md: 'start' }}
-                direction={{ base: 'column', lg: 'row' }}
-                gap="4"
-                justify={{ base: 'start', md: 'space-between' }}
-                mb="10"
-                w="full"
-              >
-                <Box>
-                  <Heading pb="3" sx={{ textWrap: 'balance' }} variant="special">
-                    LBP
-                  </Heading>
-                  <Text sx={{ textWrap: 'balance' }} variant="secondary">
-                    Description
-                  </Text>
-                </Box>
-                <PoolPageStats rewardsClaimed24h={'1000'} />
-              </Flex>
+              <Grid templateColumns={{ base: '1fr', md: '2fr 1fr' }} gap="4" w="full">
+                <GridItem p="md">
+                  <LbpHero />
+                </GridItem>
+                <GridItem p="md">
+                  <PoolPageStats rewardsClaimed24h={'1000'} />
+                </GridItem>
+              </Grid>
             </VStack>
           </FadeInOnView>
         </DefaultPageContainer>
