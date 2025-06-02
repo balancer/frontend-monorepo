@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react'
-import { PoolBreadcrumbs } from '../PoolDetail/PoolHeader/PoolBreadcrumbs'
+import { PoolBreadcrumbs } from '../../PoolDetail/PoolHeader/PoolBreadcrumbs'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
