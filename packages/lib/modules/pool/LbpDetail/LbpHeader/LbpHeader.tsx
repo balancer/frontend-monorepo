@@ -1,10 +1,11 @@
-import { Box, Flex, Heading, Text, VStack } from '@chakra-ui/react'
+import { Box, Flex, VStack } from '@chakra-ui/react'
 import { PoolBreadcrumbs } from '../../PoolDetail/PoolHeader/PoolBreadcrumbs'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { PoolPageStats } from '@repo/lib/shared/pages/PoolsPage/PoolPageStats'
+import { LbpHero } from './LbpHero'
 
 export function LbpHeader() {
   return (
@@ -72,17 +73,9 @@ export function LbpHeader() {
                 direction={{ base: 'column', lg: 'row' }}
                 gap="4"
                 justify={{ base: 'start', md: 'space-between' }}
-                mb="10"
                 w="full"
               >
-                <Box>
-                  <Heading pb="3" sx={{ textWrap: 'balance' }} variant="special">
-                    LBP
-                  </Heading>
-                  <Text sx={{ textWrap: 'balance' }} variant="secondary">
-                    Description
-                  </Text>
-                </Box>
+                <LbpHero />
                 <PoolPageStats rewardsClaimed24h={'1000'} />
               </Flex>
             </VStack>
