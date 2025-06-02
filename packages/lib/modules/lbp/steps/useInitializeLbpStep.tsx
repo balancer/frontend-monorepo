@@ -6,37 +6,47 @@ import {
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useCreateLbpBuildCall } from './useCreateLbpBuildCall'
 import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
-import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useLbpForm } from './LbpFormProvider'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
+import { useInitializePoolBuildCall } from '@repo/lib/modules/pool/actions/initialize/useInitializePoolBuildCall'
+import { useLocalStorage } from 'usehooks-ts'
+import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
+import { type Address } from 'viem'
+import { PoolType, InitPoolInputV3 } from '@balancer/sdk'
+import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 
-export const createLbpStepId = 'create-lbp'
+export const initializeLbpStepId = 'initialize-lbp'
 
-export function useCreateLbpStep(): TransactionStep {
-  const { saleStructureForm } = useLbpForm()
-  const saleStructure = saleStructureForm.getValues()
+const labels: TransactionLabels = {
+  init: 'Initialize LBP',
+  title: 'Initialize LBP',
+  confirming: 'Initializing a new LBP',
+  confirmed: 'Initialized a new LBP',
+  tooltip: 'Initialize a new LBP',
+}
 
+export function useInitializeLbpStep({
+  initPoolInput,
+}: {
+  initPoolInput: InitPoolInputV3
+}): TransactionStep {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const [isStepActivated, setIsStepActivated] = useState(false)
+  const [poolAddress] = useLocalStorage(LS_KEYS.LbpConfig.Address, '')
 
-  const chainId = getNetworkConfig(saleStructure.selectedChain).chainId
+  const rpcUrl = getRpcUrl(initPoolInput.chainId)
+  const { buildTenderlyUrl } = useTenderly({ chainId: initPoolInput.chainId })
 
-  const { buildTenderlyUrl } = useTenderly({ chainId })
+  const buildCallDataQuery = useInitializePoolBuildCall({
+    rpcUrl,
+    poolAddress: poolAddress as Address,
+    poolType: PoolType.LiquidityBootstrapping,
+    enabled: isStepActivated,
+    initPoolInput,
+  })
 
-  const labels: TransactionLabels = {
-    init: 'Create LBP',
-    title: 'Create LBP',
-    confirming: 'Creating a new LBP',
-    confirmed: 'Created a new LBP',
-    tooltip: 'Create a new LBP',
-  }
-
-  const buildCallDataQuery = useCreateLbpBuildCall({ enabled: isStepActivated })
-
-  const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in create LBP gas estimation', {
+  const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in initialze LBP gas estimation', {
     buildCallQueryData: buildCallDataQuery.data,
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
@@ -45,8 +55,8 @@ export function useCreateLbpStep(): TransactionStep {
 
   return useMemo(
     () => ({
-      id: createLbpStepId,
-      stepType: 'createLbp',
+      id: initializeLbpStepId,
+      stepType: 'initializePool',
       labels,
       transaction,
       isComplete,
@@ -58,7 +68,7 @@ export function useCreateLbpStep(): TransactionStep {
         return (
           <ManagedSendTransactionButton
             gasEstimationMeta={gasEstimationMeta}
-            id={createLbpStepId}
+            id={initializeLbpStepId}
             labels={labels}
             txConfig={buildCallDataQuery.data}
             onTransactionChange={setTransaction}

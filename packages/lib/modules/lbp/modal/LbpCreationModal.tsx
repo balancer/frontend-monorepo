@@ -93,7 +93,7 @@ export function LbpCreationModal({
           currentStep={transactionSteps.currentStep}
           isSuccess={isSuccess}
           returnAction={() => console.log('TODO: navigate to pool page')}
-          returnLabel="View pool page" // ???
+          returnLabel="View pool page" // TODO
           urlTxHash={urlTxHash}
         />
       </ModalContent>
