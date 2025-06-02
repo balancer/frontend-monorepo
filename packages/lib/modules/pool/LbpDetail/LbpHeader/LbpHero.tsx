@@ -4,6 +4,7 @@ import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { SocialIcon } from '@repo/lib/shared/components/navs/SocialIcon'
 import { AppLink } from '@repo/lib/shared/components/navs/useNav'
 import { ArrowUpRight } from 'react-feather'
+import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 
 // TODO: replace with real data from api
 const lbp = {
@@ -45,11 +46,14 @@ export function LbpHero() {
           disablePopover
         />
         <VStack align="start" spacing="sm">
-          <Heading
-            fontSize="4xl"
-            lineHeight="36px"
-            variant="special"
-          >{`${lbp.symbol} token launch`}</Heading>
+          <HStack spacing="md">
+            <Heading
+              fontSize="4xl"
+              lineHeight="36px"
+              variant="special"
+            >{`${lbp.symbol} token launch`}</Heading>
+            <NetworkIcon chain={lbp.chain} size={8} />
+          </HStack>
           <Text fontSize="md" variant="secondary">
             {lbp.name}
           </Text>
