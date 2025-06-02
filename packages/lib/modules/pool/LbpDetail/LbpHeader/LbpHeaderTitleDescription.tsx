@@ -62,7 +62,7 @@ export function LbpHeaderTitleDescription() {
       <Text fontSize="md" lineHeight="24px" variant="secondary">
         {lbp.description}
       </Text>
-      <HStack>
+      <HStack mt="auto">
         <Button
           as="a"
           href={lbp.projectLink}
