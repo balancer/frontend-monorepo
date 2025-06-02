@@ -5,6 +5,7 @@ import { SocialIcon } from '@repo/lib/shared/components/navs/SocialIcon'
 import { AppLink } from '@repo/lib/shared/components/navs/useNav'
 import { ArrowUpRight } from 'react-feather'
 
+// TODO: replace with real data from api
 const lbp = {
   address: '0x123',
   chain: GqlChain.Mainnet,
@@ -76,7 +77,7 @@ export function LbpHero() {
         <HStack spacing="ms" w={{ base: 'full', lg: 'auto' }}>
           {lbp.socialLinks.map(({ href, iconType }) => (
             <IconButton
-              aria-label="Social icon"
+              aria-label={`Visit us on ${iconType}`}
               as={Link}
               bg="background.level2"
               href={href}
