@@ -20,8 +20,8 @@ export function LbpDetail() {
   return (
     <>
       <LbpHeader />
-      <DefaultPageContainer noVerticalPadding>
-        <VStack spacing="2xl" w="full" mt="2xl">
+      <DefaultPageContainer noVerticalPadding pb="xl" pt={['lg', '40px']}>
+        <VStack spacing="2xl" w="full">
           <Stack
             direction={{ base: 'column', md: 'row' }}
             justifyContent="stretch"
