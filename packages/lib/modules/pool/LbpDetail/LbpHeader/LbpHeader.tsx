@@ -1,4 +1,4 @@
-import { Box, Flex, VStack } from '@chakra-ui/react'
+import { Box, Grid, GridItem, VStack } from '@chakra-ui/react'
 import { PoolBreadcrumbs } from '../../PoolDetail/PoolHeader/PoolBreadcrumbs'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
@@ -68,16 +68,14 @@ export function LbpHeader() {
           <FadeInOnView animateOnce={false}>
             <VStack align="start" w="full">
               <PoolBreadcrumbs />
-              <Flex
-                align={{ base: 'start', md: 'start' }}
-                direction={{ base: 'column', lg: 'row' }}
-                gap="4"
-                justify={{ base: 'start', md: 'space-between' }}
-                w="full"
-              >
-                <LbpHero />
-                <PoolPageStats rewardsClaimed24h={'1000'} />
-              </Flex>
+              <Grid templateColumns={{ base: '1fr', md: '2fr 1fr' }} gap="4" w="full">
+                <GridItem p="md">
+                  <LbpHero />
+                </GridItem>
+                <GridItem p="md">
+                  <PoolPageStats rewardsClaimed24h={'1000'} />
+                </GridItem>
+              </Grid>
             </VStack>
           </FadeInOnView>
         </DefaultPageContainer>
