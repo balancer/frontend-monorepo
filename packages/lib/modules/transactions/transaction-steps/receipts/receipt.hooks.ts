@@ -94,9 +94,7 @@ export function useLstWithdrawReceipt(props: BaseReceiptProps) {
 
 export function usePoolCreationReceipt(props: BaseReceiptProps) {
   const result = useTxReceipt({ ...props, parseReceipt: parsePoolCreationReceipt })
-  console.log('result', result)
   const data = result.data as ReturnType<typeof parsePoolCreationReceipt> | undefined
-  console.log('data', data)
   return {
     ...result,
     poolAddress: data?.poolAddress,

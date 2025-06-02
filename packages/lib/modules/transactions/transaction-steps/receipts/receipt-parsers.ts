@@ -156,9 +156,7 @@ export function parsePoolCreationReceipt({ receiptLogs }: ParseProps) {
     abi: [parseAbiItem('event PoolCreated(address indexed pool)')],
     logs: receiptLogs,
   })
-  console.log('poolCreatedLog', logs)
   const poolAddress = logs[0]?.args?.pool
-  console.log('poolAddress', poolAddress)
   return {
     poolAddress,
   }

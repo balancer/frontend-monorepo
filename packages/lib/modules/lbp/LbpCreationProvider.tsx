@@ -1,7 +1,7 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { createContext } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
-import { useCreateLbpSteps } from './useCreateLbpSteps'
+import { useCreateLbpSteps } from './steps/useCreateLbpSteps'
 import { useTransactionSteps } from '@repo/lib/modules/transactions/transaction-steps/useTransactionSteps'
 
 export type UseLbpCreationResponse = ReturnType<typeof useLbpCreationLogic>
