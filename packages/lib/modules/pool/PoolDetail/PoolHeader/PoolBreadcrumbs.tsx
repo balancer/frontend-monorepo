@@ -14,6 +14,7 @@ export function PoolBreadcrumbs() {
     <Breadcrumb
       color="grayText"
       fontSize="sm"
+      pb="ms"
       separator={
         <Box color="border.base">
           <ChevronRight size={16} />
@@ -29,7 +30,9 @@ export function PoolBreadcrumbs() {
         </BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem>
-        <BreadcrumbLink href={poolsHref}>{poolsLabel}</BreadcrumbLink>
+        <BreadcrumbLink href={poolsHref} fontWeight="medium">
+          {poolsLabel}
+        </BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem isCurrentPage>
         <BreadcrumbLink href="#">
