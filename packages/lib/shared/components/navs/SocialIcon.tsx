@@ -4,8 +4,9 @@ import { MediumIcon } from '../icons/social/MediumIcon'
 import { GithubIcon } from '../icons/social/GithubIcon'
 import { YoutubeIcon } from '../icons/social/YoutubeIcon'
 import { TelegramIcon } from '../icons/social/TelegramIcon'
+import { WebsiteIcon } from '../icons/social/WebsiteIcon'
 
-export type IconType = 'x' | 'discord' | 'medium' | 'github' | 'youtube' | 'tg'
+export type IconType = 'x' | 'discord' | 'medium' | 'github' | 'youtube' | 'tg' | 'website'
 
 export function SocialIcon({
   iconType,
@@ -27,6 +28,8 @@ export function SocialIcon({
       return <YoutubeIcon size={size} />
     case 'tg':
       return <TelegramIcon size={size} />
+    case 'website':
+      return <WebsiteIcon size={size} />
     default:
       return null
   }

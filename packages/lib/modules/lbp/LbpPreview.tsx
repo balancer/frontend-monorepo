@@ -1,6 +1,4 @@
-'use client'
-
-import { VStack, Heading, Button, Flex, Spacer, useDisclosure } from '@chakra-ui/react'
+import { VStack, Heading, Button, Flex, Spacer, useDisclosure, HStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useLbpForm } from './LbpFormProvider'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
@@ -9,6 +7,9 @@ import { useTokens } from '../tokens/TokensProvider'
 import { TokenSummary } from './steps/preview/TokenSummary'
 import { PoolWeights } from './steps/preview/PoolWeights'
 import { ProjectedPrice } from './steps/preview/ProjectedPrice'
+import { SimpleInfoCard } from './steps/SimpleInfoCard'
+import { useState } from 'react'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 
 export function LbpPreview() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -18,7 +19,7 @@ export function LbpPreview() {
     saleStructureForm: { watch },
   } = useLbpForm()
 
-  const { projectInfoForm } = useLbpForm()
+  const { isLastStep, projectInfoForm } = useLbpForm()
 
   const chain = watch('selectedChain')
   const launchTokenAddress = watch('launchTokenAddress')
@@ -44,6 +45,21 @@ export function LbpPreview() {
   const startTime = watch('startTime')
   const endTime = watch('endTime')
 
+  const [maxPrice, setMaxPrice] = useState(0)
+  const [saleMarketCap, setSaleMarketCap] = useState('')
+  const [fdvMarketCap, setFdvMarketCap] = useState('')
+  const updateStats = (prices: number[][]) => {
+    const minPrice = Math.min(...prices.map(point => point[1]))
+    const maxPrice = Math.max(...prices.map(point => point[1]))
+    const minSaleMarketCap = minPrice * launchTokenSeed
+    const maxSaleMarketCap = maxPrice * launchTokenSeed
+    const minFdvMarketCap = minPrice * Number(launchTokenMetadata.totalSupply || 0)
+    const maxFdvMarketCap = maxPrice * Number(launchTokenMetadata.totalSupply || 0)
+    setMaxPrice(maxPrice)
+    setSaleMarketCap(`$${fNum('fiat', minSaleMarketCap)} - $${fNum('fiat', maxSaleMarketCap)}`)
+    setFdvMarketCap(`$${fNum('fiat', minFdvMarketCap)} - $${fNum('fiat', maxFdvMarketCap)}`)
+  }
+
   return (
     <>
       <NoisyCard
@@ -53,30 +69,43 @@ export function LbpPreview() {
         }}
       >
         <VStack align="start" p="lg" spacing="lg" w="full">
-          <Flex w="full">
-            <Heading color="font.maxContrast" size="md">
-              LBP Preview
-            </Heading>
+          {!isLastStep && (
+            <>
+              <Flex w="full">
+                <Heading color="font.maxContrast" size="md">
+                  LBP Preview
+                </Heading>
 
-            <Spacer />
+                <Spacer />
 
-            <Button
-              _hover={{ color: 'font.linkHover' }}
-              color="font.link"
-              position="relative"
-              top="4px"
-              variant="ghost"
-              onClick={onOpen}
-            >
-              Get help
-            </Button>
-          </Flex>
+                <Button
+                  _hover={{ color: 'font.linkHover' }}
+                  color="font.link"
+                  position="relative"
+                  top="4px"
+                  variant="ghost"
+                  onClick={onOpen}
+                >
+                  Get help
+                </Button>
+              </Flex>
 
-          <TokenSummary
-            chain={chain}
-            projectInfoForm={projectInfoForm}
-            launchTokenMetadata={launchTokenMetadata}
-          />
+              <TokenSummary
+                chain={chain}
+                projectInfoForm={projectInfoForm}
+                launchTokenMetadata={launchTokenMetadata}
+              />
+            </>
+          )}
+
+          <HStack w="full">
+            <SimpleInfoCard
+              title={`${launchTokenMetadata.symbol} start price`}
+              info={`$${fNum('fiat', maxPrice)}`}
+            />
+            <SimpleInfoCard title="Sale market cap" info={saleMarketCap} />
+            <SimpleInfoCard title="FDV market cap" info={fdvMarketCap} />
+          </HStack>
 
           <PoolWeights
             startTime={startTime}
@@ -96,6 +125,7 @@ export function LbpPreview() {
             launchTokenSymbol={launchTokenMetadata?.symbol || ''}
             collateralTokenSeed={collateralTokenSeed}
             collateralTokenPrice={collateralTokenPrice}
+            onPriceChange={updateStats}
           />
         </VStack>
       </NoisyCard>
