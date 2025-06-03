@@ -21,7 +21,7 @@ export function OtherSaleDetails({ launchTokenSymbol }: { launchTokenSymbol: str
           >
             <ListItem>Cancel sale (before start)</ListItem>
             <ListItem>Pause sale (during LBP)</ListItem>
-            <ListItem>Unpause salse (during LBP)</ListItem>
+            <ListItem>Unpause sale (during LBP)</ListItem>
             <ListItem>
               Non-editable metadata (before and during sale): Token address, sale liquidity
             </ListItem>
@@ -40,7 +40,7 @@ export function OtherSaleDetails({ launchTokenSymbol }: { launchTokenSymbol: str
             w="full"
           >
             <ListItem>{`Ability to buy and sell ${launchTokenSymbol} during the LBP`}</ListItem>
-            <ListItem>{`Inmediate access to ${launchTokenSymbol} on swap (no claiming delay or vesting)`}</ListItem>
+            <ListItem>{`Immediate access to ${launchTokenSymbol} on swap (no claiming delay or vesting)`}</ListItem>
           </List>
         </VStack>
 

@@ -23,27 +23,22 @@ import { OtherSaleDetails } from './OtherSaleDetails'
 export function ReviewStep() {
   const { getToken, priceFor } = useTokens()
   const { projectInfoForm, saleStructureForm } = useLbpForm()
+  const projectInfoData = projectInfoForm.watch()
+  const saleStructureData = saleStructureForm.watch()
 
-  const chain = saleStructureForm.watch('selectedChain')
-  const launchTokenAddress = saleStructureForm.watch('launchTokenAddress')
+  const chain = saleStructureData.selectedChain
+  const launchTokenAddress = saleStructureData.launchTokenAddress
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
-  const launchTokenSeed = saleStructureForm.watch('saleTokenAmount')
-  const collateralTokenAddress = saleStructureForm.watch('collateralTokenAddress')
+  const launchTokenSeed = saleStructureData.saleTokenAmount
+  const collateralTokenAddress = saleStructureData.collateralTokenAddress
   const collateralToken = getToken(collateralTokenAddress, chain)
-  const collateralTokenSeed = saleStructureForm.watch('collateralTokenAmount')
+  const collateralTokenSeed = saleStructureData.collateralTokenAmount
   const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
-  const startTime = saleStructureForm.watch('startTime')
-  const endTime = saleStructureForm.watch('endTime')
-  const daysDiff = differenceInDays(parseISO(endTime), parseISO(startTime))
-  const hoursDiff = differenceInHours(parseISO(endTime), parseISO(startTime)) - daysDiff * 24
-
-  const tokenIconURL = projectInfoForm.watch('tokenIconUrl')
-  const projectName = projectInfoForm.watch('name')
-  const projectDescription = projectInfoForm.watch('description')
-  const projectWebsite = projectInfoForm.watch('websiteUrl')
-  const projectTwitter = projectInfoForm.watch('xHandle')
-  const projectDiscord = projectInfoForm.watch('discordUrl')
-  const launchTokenIcon = projectInfoForm.watch('tokenIconUrl')
+  const saleStartTime = saleStructureData.startTime
+  const saleEndTime = saleStructureData.endTime
+  const daysDiff = differenceInDays(parseISO(saleEndTime), parseISO(saleStartTime))
+  const hoursDiff =
+    differenceInHours(parseISO(saleEndTime), parseISO(saleStartTime)) - daysDiff * 24
 
   return (
     <VStack align="start" w="full">
@@ -52,7 +47,7 @@ export function ReviewStep() {
           <HStack spacing="5">
             <Circle bg="background.level4" color="font.secondary" shadow="lg" size={24}>
               <VStack>
-                <Image src={tokenIconURL} borderRadius="full" />
+                <Image src={projectInfoData.tokenIconUrl} borderRadius="full" />
               </VStack>
             </Circle>
             <VStack alignItems="start">
@@ -64,21 +59,29 @@ export function ReviewStep() {
           </HStack>
 
           <VStack>
-            <Text w="full" fontWeight="bold">{`Project name: ${projectName}`}</Text>
+            <Text w="full" fontWeight="bold">{`Project name: ${projectInfoData.name}`}</Text>
             <Text w="full" variant="secondary">{`Network: ${getChainName(chain)}`}</Text>
           </VStack>
 
-          <Text variant="secondary">{projectDescription}</Text>
+          <Text variant="secondary">{projectInfoData.description}</Text>
 
           <HStack spacing="4" w={{ base: 'full', lg: 'auto' }}>
-            <SocialLink title={projectWebsite} socialNetwork="website" href={projectWebsite} />
             <SocialLink
-              title={projectTwitter}
-              socialNetwork="x"
-              href={`https://twitter.com/${projectTwitter}`}
+              title={projectInfoData.websiteUrl}
+              socialNetwork="website"
+              href={projectInfoData.websiteUrl}
             />
-            {projectDiscord && (
-              <SocialLink title={projectDiscord} socialNetwork="discord" href={projectDiscord} />
+            <SocialLink
+              title={projectInfoData.xHandle}
+              socialNetwork="x"
+              href={`https://twitter.com/${projectInfoData.xHandle}`}
+            />
+            {projectInfoData.discordUrl && (
+              <SocialLink
+                title={projectInfoData.discordUrl}
+                socialNetwork="discord"
+                href={projectInfoData.discordUrl}
+              />
             )}
           </HStack>
         </VStack>
@@ -90,11 +93,11 @@ export function ReviewStep() {
         }
         <SimpleInfoCard
           title="LBP start time"
-          info={format(parseISO(startTime), 'dd/MM/yyyy h:mmaaa')}
+          info={format(parseISO(saleStartTime), 'dd/MM/yyyy h:mmaaa')}
         />
         <SimpleInfoCard
           title="LBP end time"
-          info={format(parseISO(endTime), 'dd/MM/yyyy h:mmaaa')}
+          info={format(parseISO(saleEndTime), 'dd/MM/yyyy h:mmaaa')}
         />
         <SimpleInfoCard
           title="Sale period"
@@ -109,7 +112,7 @@ export function ReviewStep() {
         <CardBody>
           <VStack w="full">
             <TokenInfo
-              iconURL={launchTokenIcon}
+              iconURL={projectInfoData.tokenIconUrl}
               symbol={launchTokenMetadata.symbol || ''}
               name={launchTokenMetadata.name || ''}
               amount={Number(launchTokenSeed || 0)}

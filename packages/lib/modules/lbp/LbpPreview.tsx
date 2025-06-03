@@ -18,32 +18,27 @@ export function LbpPreview() {
   const {
     saleStructureForm: { watch },
   } = useLbpForm()
+  const saleStructureData = watch()
 
   const { isLastStep, projectInfoForm } = useLbpForm()
 
-  const chain = watch('selectedChain')
-  const launchTokenAddress = watch('launchTokenAddress')
+  const chain = saleStructureData.selectedChain
+  const launchTokenAddress = saleStructureData.launchTokenAddress
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
-  const launchTokenSeed = Number(watch('saleTokenAmount') || 0)
+  const launchTokenSeed = Number(saleStructureData.saleTokenAmount || 0)
 
-  const collateralTokenAddress = watch('collateralTokenAddress')
-  const collateralToken = getToken(collateralTokenAddress, chain)
-  const collateralTokenSeed = Number(watch('collateralTokenAmount') || 0)
-  const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
+  const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
-  const weightAdjustmentType = watch('weightAdjustmentType')
+  const weightAdjustmentType = saleStructureData.weightAdjustmentType
   const startWeight = ['linear_90_10', 'linear_90_50'].includes(weightAdjustmentType)
     ? 90
-    : watch('customStartWeight')
+    : saleStructureData.customStartWeight
   const endWeight =
     weightAdjustmentType === 'linear_90_10'
       ? 10
       : weightAdjustmentType === 'linear_90_50'
         ? 50
-        : watch('customEndWeight')
-
-  const startTime = watch('startTime')
-  const endTime = watch('endTime')
+        : saleStructureData.customEndWeight
 
   const [maxPrice, setMaxPrice] = useState(0)
   const [saleMarketCap, setSaleMarketCap] = useState('')
@@ -108,23 +103,23 @@ export function LbpPreview() {
           </HStack>
 
           <PoolWeights
-            startTime={startTime}
-            endTime={endTime}
+            startTime={saleStructureData.startTime}
+            endTime={saleStructureData.endTime}
             startWeight={startWeight}
             endWeight={endWeight}
             launchTokenMetadata={launchTokenMetadata}
-            collateralToken={collateralToken}
+            collateralToken={getToken(collateralTokenAddress, chain)}
           />
 
           <ProjectedPrice
-            startTime={startTime}
-            endTime={endTime}
+            startTime={saleStructureData.startTime}
+            endTime={saleStructureData.endTime}
             startWeight={startWeight}
             endWeight={endWeight}
             launchTokenSeed={launchTokenSeed}
             launchTokenSymbol={launchTokenMetadata?.symbol || ''}
-            collateralTokenSeed={collateralTokenSeed}
-            collateralTokenPrice={collateralTokenPrice}
+            collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
+            collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
             onPriceChange={updateStats}
           />
         </VStack>
