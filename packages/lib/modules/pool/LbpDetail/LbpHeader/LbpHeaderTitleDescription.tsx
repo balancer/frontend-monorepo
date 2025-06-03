@@ -32,7 +32,7 @@ const lbp = {
   projectLink: 'https://example.com/project',
 }
 
-export function LbpHero() {
+export function LbpHeaderTitleDescription() {
   return (
     <VStack align="start" spacing="xl">
       <HStack spacing="sm">
@@ -62,7 +62,7 @@ export function LbpHero() {
       <Text fontSize="md" lineHeight="24px" variant="secondary">
         {lbp.description}
       </Text>
-      <HStack>
+      <HStack mt="auto">
         <Button
           as="a"
           href={lbp.projectLink}

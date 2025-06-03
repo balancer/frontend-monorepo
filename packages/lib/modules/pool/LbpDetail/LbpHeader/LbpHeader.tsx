@@ -5,7 +5,8 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
 import { PoolPageStats } from '@repo/lib/shared/pages/PoolsPage/PoolPageStats'
-import { LbpHero } from './LbpHero'
+import { LbpHeaderTitleDescription } from './LbpHeaderTitleDescription'
+import { LbpHeaderTimeInfo } from '@repo/lib/modules/pool/LbpDetail/LbpHeader/LbpHeaderTimeInfo'
 
 export function LbpHeader() {
   return (
@@ -68,12 +69,17 @@ export function LbpHeader() {
           <FadeInOnView animateOnce={false}>
             <VStack align="start" w="full">
               <PoolBreadcrumbs />
-              <Grid templateColumns={{ base: '1fr', md: '2fr 1fr' }} gap="4" w="full">
-                <GridItem p="md">
-                  <LbpHero />
+              <Grid templateColumns={{ base: '1fr', md: '3fr 2fr' }} gap="4" w="full">
+                <GridItem pr="2">
+                  <LbpHeaderTitleDescription />
                 </GridItem>
-                <GridItem p="md">
-                  <PoolPageStats rewardsClaimed24h={'1000'} />
+                <GridItem>
+                  <VStack align="start" h="full">
+                    <LbpHeaderTimeInfo />
+                    <Box mt="auto">
+                      <PoolPageStats />
+                    </Box>
+                  </VStack>
                 </GridItem>
               </Grid>
             </VStack>
