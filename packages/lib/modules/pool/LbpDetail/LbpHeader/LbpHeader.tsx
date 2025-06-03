@@ -70,10 +70,10 @@ export function LbpHeader() {
             <VStack align="start" w="full">
               <PoolBreadcrumbs />
               <Grid templateColumns={{ base: '1fr', md: '3fr 2fr' }} gap="4" w="full">
-                <GridItem p="md">
+                <GridItem pr="2">
                   <LbpHeaderTitleDescription />
                 </GridItem>
-                <GridItem p="md">
+                <GridItem>
                   <VStack align="start" h="full">
                     <LbpHeaderTimeInfo />
                     <Box mt="auto">
