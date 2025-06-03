@@ -698,11 +698,6 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
       variants: {
-        noPadding: {
-          container: {
-            padding: '0',
-          },
-        },
         subSection: {
           container: {
             background: 'background.level3',
