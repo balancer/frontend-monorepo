@@ -39,16 +39,11 @@ export function useInitializePoolBuildCall({
       protocolVersion
     )
 
-    console.log('poolState', poolState)
-
     const { callData, to } = initPool.buildCallWithPermit2(
       initPoolInput,
       poolState,
       permit2Signature
     )
-
-    console.log('callData', callData)
-    console.log('to', to)
 
     return {
       chainId: initPoolInput.chainId,

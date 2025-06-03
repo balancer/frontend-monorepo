@@ -3,13 +3,51 @@ import { useState } from 'react'
 import { VStack, Button } from '@chakra-ui/react'
 import { LabelWithIcon } from '@repo/lib/shared/components/btns/button-group/LabelWithIcon'
 import { useLbpForm } from '@repo/lib/modules/lbp/LbpFormProvider'
+import { useMutation } from '@apollo/client'
+import { CreateLbpDocument } from '@repo/lib/shared/services/api/generated/graphql'
+import { useLocalStorage } from 'usehooks-ts'
+import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 
 export function useSendMetadataStep(): TransactionStep {
   const [, setIsStepActivated] = useState(false)
-  const [isComplete, setIsComplete] = useState(false)
+  const [createLbp] = useMutation(CreateLbpDocument)
+  const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
+    LS_KEYS.LbpConfig.Address,
+    undefined
+  )
+  const [isComplete, setIsComplete] = useLocalStorage<boolean>(
+    LS_KEYS.LbpConfig.IsMetadataSent,
+    false
+  )
+  const { saleStructureForm } = useLbpForm()
+  const { selectedChain } = saleStructureForm.getValues()
 
   const { projectInfoForm } = useLbpForm()
-  const projectInfo = projectInfoForm.getValues()
+  const { name, description, websiteUrl, tokenIconUrl, telegramHandle, xHandle, discordUrl } =
+    projectInfoForm.getValues()
+
+  const handleSendMetadata = async () => {
+    const { data } = await createLbp({
+      variables: {
+        input: {
+          poolContract: {
+            address: poolAddress as `0x${string}`,
+            chain: selectedChain,
+          },
+          metadata: {
+            lbpName: name,
+            description,
+            website: websiteUrl,
+            tokenLogo: tokenIconUrl,
+            telegram: telegramHandle,
+            discord: discordUrl,
+            x: xHandle,
+          },
+        },
+      },
+    })
+    if (data?.createLBP) setIsComplete(true)
+  }
 
   return {
     id: 'send-lbp-metadata',
@@ -17,11 +55,11 @@ export function useSendMetadataStep(): TransactionStep {
     labels: {
       init: 'Send LBP metadata',
       title: 'Send LBP metadata',
-      description: 'Send LBP metadata to the pool',
-      tooltip: 'Send LBP metadata to the pool',
-      confirmed: 'LBP metadata sent to the pool',
-      error: 'Error sending LBP metadata to the pool',
-      preparing: 'Preparing to send LBP metadata to the pool',
+      description: 'Send LBP metadata to balancer DB',
+      tooltip: 'Send LBP metadata to balancer DB',
+      confirmed: 'LBP metadata sent to balancer DB',
+      error: 'Error sending LBP metadata to balancer DB',
+      preparing: 'Preparing to send LBP metadata to balancer DB',
     },
     onActivated: () => setIsStepActivated(true),
     onDeactivated: () => setIsStepActivated(false),
@@ -33,10 +71,7 @@ export function useSendMetadataStep(): TransactionStep {
             isDisabled={false}
             isLoading={false}
             loadingText={'loading...'}
-            onClick={() => {
-              console.log('sending metadata...', projectInfo)
-              setIsComplete(true)
-            }}
+            onClick={handleSendMetadata}
             size="lg"
             variant="primary"
             w="full"
