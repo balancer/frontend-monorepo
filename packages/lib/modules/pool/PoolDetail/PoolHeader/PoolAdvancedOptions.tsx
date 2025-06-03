@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Box,
   Button,
   HStack,
   Link,
@@ -48,57 +47,55 @@ export function PoolAdvancedOptions() {
       placement="bottom-end"
     >
       <PopoverTrigger>
-        <Button color="grayText" size="lg" variant="tertiary">
+        <Button color="grayText" size="md" variant="tertiary">
           <MoreVertical size={16} />
         </Button>
       </PopoverTrigger>
-      <Box shadow="2xl" width="max" zIndex="popover">
-        <PopoverContent>
-          <PopoverArrow bg="background.level3" />
-          <PopoverBody px="md" py="lg">
-            <AnimatePresence>
-              {isPopoverOpen ? (
-                <VStack
-                  align="start"
-                  animate="show"
-                  as={motion.div}
-                  exit="exit"
-                  initial="hidden"
-                  spacing="xxs"
-                  variants={staggeredFadeInUp}
-                >
-                  {isCowPool ? (
-                    <HStack>
-                      <CowIcon size={20} />
-                      <Link
-                        as={NextLink}
-                        href={buildCowSwapUrlFromPool(pool)}
-                        target="_blank"
-                        variant="nav"
-                      >
-                        Swap pool tokens on CoW Swap
-                      </Link>
-                    </HStack>
-                  ) : (
-                    <HStack>
-                      <SwapIcon size={20} />
-                      <Link
-                        as={NextLink}
-                        href={`${pathname}/swap`}
-                        prefetch
-                        variant="nav"
-                        {...disabledLinkProps}
-                      >
-                        Swap through pool
-                      </Link>
-                    </HStack>
-                  )}
-                </VStack>
-              ) : null}
-            </AnimatePresence>
-          </PopoverBody>
-        </PopoverContent>
-      </Box>
+      <PopoverContent shadow="2xl" width="max-content" zIndex="popover">
+        <PopoverArrow bg="background.level3" />
+        <PopoverBody px="md" py="lg">
+          <AnimatePresence>
+            {isPopoverOpen ? (
+              <VStack
+                align="start"
+                animate="show"
+                as={motion.div}
+                exit="exit"
+                initial="hidden"
+                spacing="xxs"
+                variants={staggeredFadeInUp}
+              >
+                {isCowPool ? (
+                  <HStack>
+                    <CowIcon size={20} />
+                    <Link
+                      as={NextLink}
+                      href={buildCowSwapUrlFromPool(pool)}
+                      target="_blank"
+                      variant="nav"
+                    >
+                      Swap pool tokens on CoW Swap
+                    </Link>
+                  </HStack>
+                ) : (
+                  <HStack>
+                    <SwapIcon size={20} />
+                    <Link
+                      as={NextLink}
+                      href={`${pathname}/swap`}
+                      prefetch
+                      variant="nav"
+                      {...disabledLinkProps}
+                    >
+                      Swap through pool
+                    </Link>
+                  </HStack>
+                )}
+              </VStack>
+            ) : null}
+          </AnimatePresence>
+        </PopoverBody>
+      </PopoverContent>
     </Popover>
   )
 }
