@@ -1,5 +1,4 @@
 import { HStack, Icon, Text, Card, VStack, Grid, GridItem } from '@chakra-ui/react'
-import { isLBP } from '@repo/lib/modules/pool/pool.helpers'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { GqlPoolLiquidityBootstrapping } from '@repo/lib/shared/services/api/generated/graphql'
 import { format, secondsToMilliseconds } from 'date-fns'
@@ -8,8 +7,7 @@ import { Clock } from 'react-feather'
 export function LbpHeaderTimeInfo() {
   const { pool } = usePool()
 
-  if (!isLBP(pool.type)) return null
-
+  // this will only be rendered for LBPs so we can be sure it is a liquidity bootstrapping pool
   const lbpPool = pool as GqlPoolLiquidityBootstrapping
   const endTimeFormatted = format(secondsToMilliseconds(lbpPool.endTime), 'haaa MM/dd/yy')
 
