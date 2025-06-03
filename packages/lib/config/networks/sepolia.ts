@@ -55,8 +55,8 @@ const networkConfig: NetworkConfig = {
   lbps: {
     collateralTokens: [
       '0x7b79995e5f793a07bc00c21412e50ecae098e7f9', // WETH
-      '0x80d6d3946ed8a1da4e226aa21ccddc32bd127d1a', // USDC
       '0x6bf294b80c7d8dc72dee762af5d01260b756a051', // USDT
+      '0x80d6d3946ed8a1da4e226aa21ccddc32bd127d1a', // USDC
     ],
   },
 }

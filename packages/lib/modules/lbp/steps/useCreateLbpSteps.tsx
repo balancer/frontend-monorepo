@@ -28,8 +28,10 @@ export function useCreateLbpSteps() {
       isPermit2: true,
     })
 
+  console.log('tokenApprovalSteps', tokenApprovalSteps)
+
   const initPoolInput = {
-    minBptAmountOut: 0n, // TODO: how to calculate this?
+    minBptAmountOut: 0n,
     chainId,
     amountsIn: initAmounts,
     wethIsEth: undefined, // TODO

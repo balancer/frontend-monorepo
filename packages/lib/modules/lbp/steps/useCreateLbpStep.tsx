@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import {
   ManagedResult,
   TransactionLabels,
@@ -15,6 +15,9 @@ import { useCreatePoolBuildCall } from '@repo/lib/modules/pool/actions/create/us
 import { parseUnits } from 'viem'
 import { PoolType, type CreatePoolLiquidityBootstrappingInput } from '@balancer/sdk'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { usePoolCreationReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
+import { useLocalStorage } from 'usehooks-ts'
+import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 
 export const createLbpStepId = 'create-lbp'
 
@@ -27,7 +30,13 @@ const labels: TransactionLabels = {
 }
 
 export function useCreateLbpStep(): TransactionStep {
+  const [poolAddress, setPoolAddress] = useLocalStorage<`0x${string}` | undefined>(
+    LS_KEYS.LbpConfig.Address,
+    undefined
+  )
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+  console.log('transaction', transaction)
+
   const [isStepActivated, setIsStepActivated] = useState(false)
 
   const { userAddress } = useUserAccount()
@@ -41,7 +50,22 @@ export function useCreateLbpStep(): TransactionStep {
     startTime,
     endTime,
     selectedChain,
+    userActions,
   } = saleStructureForm.watch()
+
+  const receiptProps = usePoolCreationReceipt({
+    txHash: transaction?.execution?.data,
+    chain: selectedChain,
+    userAddress: userAddress,
+    protocolVersion: 3 as const,
+    // txReceipt, // TODO?
+  })
+
+  console.log('receiptProps', receiptProps)
+
+  useEffect(() => {
+    if (receiptProps.poolAddress) setPoolAddress(receiptProps.poolAddress)
+  }, [receiptProps.poolAddress, setPoolAddress])
 
   const chainId = getNetworkConfig(selectedChain).chainId
   const { buildTenderlyUrl } = useTenderly({ chainId })
@@ -51,6 +75,8 @@ export function useCreateLbpStep(): TransactionStep {
     linear_90_50: { start: 90, end: 50 },
     custom: { start: customStartWeight, end: customEndWeight },
   }
+
+  const blockProjectTokenSwapsIn = userActions === 'buy_only' ? true : false
 
   const projectTokenStartWeight = weightConfig[weightAdjustmentType]?.start ?? 90
   const reserveTokenStartWeight = 100 - (weightConfig[weightAdjustmentType]?.start ?? 90)
@@ -64,7 +90,7 @@ export function useCreateLbpStep(): TransactionStep {
 
     return {
       owner: userAddress,
-      blockProjectTokenSwapsIn: true,
+      blockProjectTokenSwapsIn,
       projectToken: launchTokenAddress as `0x${string}`,
       reserveToken: collateralTokenAddress as `0x${string}`,
       projectTokenStartWeight: parseUnits((projectTokenStartWeight / 100).toString(), 18),
@@ -84,6 +110,7 @@ export function useCreateLbpStep(): TransactionStep {
     reserveTokenEndWeight,
     startTime,
     endTime,
+    blockProjectTokenSwapsIn,
   ])
 
   const createPoolInput = useMemo(() => {
@@ -110,13 +137,15 @@ export function useCreateLbpStep(): TransactionStep {
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
 
+  // const poolAddress = localStorage.getItem(LS_KEYS.LbpConfig.Address)
+
   return useMemo(
     () => ({
       id: createLbpStepId,
       stepType: 'createPool',
       labels,
       transaction,
-      isComplete: () => isTransactionSuccess(transaction),
+      isComplete: () => isTransactionSuccess(transaction) || !!poolAddress,
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
       renderAction: () => {
@@ -132,6 +161,6 @@ export function useCreateLbpStep(): TransactionStep {
         )
       },
     }),
-    [transaction, buildCallDataQuery.data, gasEstimationMeta]
+    [transaction, buildCallDataQuery.data, gasEstimationMeta, poolAddress]
   )
 }

@@ -13,13 +13,15 @@ export function useLbpCreationLogic() {
   const { steps, isLoadingSteps } = useCreateLbpSteps()
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
 
-  const createLbpTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
+  // TODO: "lastTransaction" refers to the last step NOT the most recent transaction
+  // TODO: figure out how to pass createLbpTxHash (first step) to the useReceipt parser helper
+  const initLbpTxHash = transactionSteps.lastTransaction?.result?.data?.transactionHash
 
   return {
     previewModalDisclosure,
     transactionSteps,
     lastTransaction: transactionSteps.lastTransaction,
-    createLbpTxHash,
+    initLbpTxHash,
     urlTxHash: undefined, // TODO: figure out how to get this?
   }
 }

@@ -25,11 +25,12 @@ export function useInitializePoolBuildCall({
   const initPool = new InitPool()
 
   const queryFn = async (): Promise<TransactionConfig> => {
+    if (!poolAddress) {
+      throw new Error('Pool address is required but not available')
+    }
     if (!permit2Signature) {
       throw new Error('Permit2 signature is required but not available')
     }
-
-    console.log('permit2Signature', permit2Signature)
 
     const initPoolDataProvider = new InitPoolDataProvider(initPoolInput.chainId, rpcUrl)
     const poolState = await initPoolDataProvider.getInitPoolData(

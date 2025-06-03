@@ -10,11 +10,11 @@ import { useTenderly } from '@repo/lib/modules/web3/useTenderly'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { useInitializePoolBuildCall } from '@repo/lib/modules/pool/actions/initialize/useInitializePoolBuildCall'
-import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { type Address } from 'viem'
 import { PoolType, InitPoolInputV3 } from '@balancer/sdk'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
+import { useLocalStorage } from 'usehooks-ts'
 
 export const initializeLbpStepId = 'initialize-lbp'
 
@@ -33,8 +33,10 @@ export function useInitializeLbpStep({
 }): TransactionStep {
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const [isStepActivated, setIsStepActivated] = useState(false)
-  const [poolAddress] = useLocalStorage(LS_KEYS.LbpConfig.Address, '')
-
+  const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
+    LS_KEYS.LbpConfig.Address,
+    undefined
+  )
   const rpcUrl = getRpcUrl(initPoolInput.chainId)
   const { buildTenderlyUrl } = useTenderly({ chainId: initPoolInput.chainId })
 
