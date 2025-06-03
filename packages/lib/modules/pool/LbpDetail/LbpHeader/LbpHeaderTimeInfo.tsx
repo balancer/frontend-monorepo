@@ -11,10 +11,11 @@ export function LbpHeaderTimeInfo() {
 
   // this will only be rendered for LBPs so we can be sure it is a liquidity bootstrapping pool
   const lbpPool = pool as GqlPoolLiquidityBootstrapping
-  const endTimeFormatted = format(secondsToMilliseconds(lbpPool.endTime), 'haaa MM/dd/yy')
+  const endTime = lbpPool.endTime ?? 0
+  const endTimeFormatted = format(secondsToMilliseconds(endTime), 'haaa MM/dd/yy')
 
   const { daysDiff, hoursDiff, minutesDiff, secondsDiff } = useDateCountdown(
-    new Date(secondsToMilliseconds(lbpPool.endTime))
+    new Date(secondsToMilliseconds(endTime))
   )
 
   const counters = [
