@@ -20,29 +20,25 @@ export function LbpPreview() {
 
   const { projectInfoForm } = useLbpForm()
 
-  const chain = watch('selectedChain')
-  const launchTokenAddress = watch('launchTokenAddress')
+  const saleStructureForm = watch()
+  const chain = saleStructureForm.selectedChain
+  const launchTokenAddress = saleStructureForm.launchTokenAddress
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
-  const launchTokenSeed = Number(watch('saleTokenAmount') || 0)
-
-  const collateralTokenAddress = watch('collateralTokenAddress')
+  const collateralTokenAddress = saleStructureForm.collateralTokenAddress
   const collateralToken = getToken(collateralTokenAddress, chain)
-  const collateralTokenSeed = Number(watch('collateralTokenAmount') || 0)
   const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
+  const weightAdjustmentType = saleStructureForm.weightAdjustmentType
 
-  const weightAdjustmentType = watch('weightAdjustmentType')
   const startWeight = ['linear_90_10', 'linear_90_50'].includes(weightAdjustmentType)
     ? 90
-    : watch('customStartWeight')
+    : saleStructureForm.customStartWeight
+
   const endWeight =
     weightAdjustmentType === 'linear_90_10'
       ? 10
       : weightAdjustmentType === 'linear_90_50'
         ? 50
-        : watch('customEndWeight')
-
-  const startTime = watch('startTime')
-  const endTime = watch('endTime')
+        : saleStructureForm.customEndWeight
 
   return (
     <>
@@ -79,8 +75,8 @@ export function LbpPreview() {
           />
 
           <PoolWeights
-            startTime={startTime}
-            endTime={endTime}
+            startTime={saleStructureForm.startTime}
+            endTime={saleStructureForm.endTime}
             startWeight={startWeight}
             endWeight={endWeight}
             launchTokenMetadata={launchTokenMetadata}
@@ -88,13 +84,13 @@ export function LbpPreview() {
           />
 
           <ProjectedPrice
-            startTime={startTime}
-            endTime={endTime}
+            startTime={saleStructureForm.startTime}
+            endTime={saleStructureForm.endTime}
             startWeight={startWeight}
             endWeight={endWeight}
-            launchTokenSeed={launchTokenSeed}
+            launchTokenSeed={Number(saleStructureForm.saleTokenAmount)}
             launchTokenSymbol={launchTokenMetadata?.symbol || ''}
-            collateralTokenSeed={collateralTokenSeed}
+            collateralTokenSeed={Number(saleStructureForm.collateralTokenAmount)}
             collateralTokenPrice={collateralTokenPrice}
           />
         </VStack>
