@@ -10,6 +10,12 @@ import { useLbpCreation } from '../LbpCreationProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { usePoolCreationReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { VStack, Button, HStack, Text } from '@chakra-ui/react'
+import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
+import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
+import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
+import { useLocalStorage } from 'usehooks-ts'
+import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 
 type Props = {
   isOpen: boolean
@@ -30,6 +36,10 @@ export function LbpCreationModal({
   const { selectedChain } = saleStructureForm.getValues()
   const { userAddress } = useUserAccount()
   const { transactionSteps, lastTransaction, initLbpTxHash, urlTxHash } = useLbpCreation()
+  const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
+    LS_KEYS.LbpConfig.Address,
+    undefined
+  )
 
   const txReceipt = lastTransaction?.result
 
@@ -43,6 +53,14 @@ export function LbpCreationModal({
   })
 
   const isSuccess = !!initLbpTxHash
+  const path = getPoolPath({
+    id: poolAddress as `0x${string}`, // TODO: is type assertion okay?
+    chain: selectedChain,
+    type: GqlPoolType.LiquidityBootstrapping,
+    protocolVersion: 3 as const,
+  })
+
+  const { redirectToPage: redirectToPoolPage } = useRedirect(path)
 
   return (
     <Modal
@@ -76,13 +94,34 @@ export function LbpCreationModal({
         <ModalCloseButton />
         <ModalBody>
           <LbpSummary />
+
+          {isSuccess && (
+            <VStack width="full">
+              <Button
+                isDisabled={false}
+                isLoading={false}
+                onClick={redirectToPoolPage}
+                size="lg"
+                variant="secondary"
+                w="full"
+                width="full"
+                marginTop="4"
+              >
+                <HStack justifyContent="center" spacing="sm" width="100%">
+                  <Text color="font.primaryGradient" fontWeight="bold">
+                    View LBP page
+                  </Text>
+                </HStack>
+              </Button>
+            </VStack>
+          )}
         </ModalBody>
 
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
           isSuccess={isSuccess}
-          returnAction={() => console.log('TODO: navigate to pool page')}
-          returnLabel="View pool page" // TODO
+          returnAction={redirectToPoolPage}
+          returnLabel="View pool page"
           urlTxHash={urlTxHash}
         />
       </ModalContent>

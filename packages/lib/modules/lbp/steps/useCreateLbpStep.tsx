@@ -35,8 +35,6 @@ export function useCreateLbpStep(): TransactionStep {
     undefined
   )
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
-  console.log('transaction', transaction)
-
   const [isStepActivated, setIsStepActivated] = useState(false)
 
   const { userAddress } = useUserAccount()
@@ -60,8 +58,6 @@ export function useCreateLbpStep(): TransactionStep {
     protocolVersion: 3 as const,
     // txReceipt, // TODO?
   })
-
-  console.log('receiptProps', receiptProps)
 
   useEffect(() => {
     if (receiptProps.poolAddress) setPoolAddress(receiptProps.poolAddress)
