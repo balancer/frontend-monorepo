@@ -78,6 +78,7 @@
     "@viem/anvil": "^0.0.10",
     "@wagmi/cli": "2.2.0",
     "autoprefixer": "10.4.21",
+    "babel-plugin-react-compiler": "19.1.0-rc.2",
     "concurrently": "9.1.2",
     "cross-fetch": "4.1.0",
     "eslint": "9.27.0",
