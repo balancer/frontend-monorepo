@@ -1,59 +1,48 @@
 'use client'
 
-import {
-  VStack,
-  Heading,
-  Card,
-  CardHeader,
-  HStack,
-  GridItem,
-  Grid,
-  Image,
-  CardBody,
-  Text,
-  Circle,
-  Button,
-  Flex,
-  Spacer,
-  useDisclosure,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-} from '@chakra-ui/react'
+import { VStack, Heading, Button, Flex, Spacer, useDisclosure } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { useLbpForm } from './LbpFormProvider'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
-import { fNum } from '@repo/lib/shared/utils/numbers'
-import { Plus } from 'react-feather'
 import { LearnMoreModal } from './header/LearnMoreModal'
-import { Controller } from 'react-hook-form'
-import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
+import { useTokens } from '../tokens/TokensProvider'
+import { TokenSummary } from './steps/preview/TokenSummary'
+import { PoolWeights } from './steps/preview/PoolWeights'
+import { ProjectedPrice } from './steps/preview/ProjectedPrice'
 
 export function LbpPreview() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { getToken, priceFor } = useTokens()
 
   const {
     saleStructureForm: { watch },
   } = useLbpForm()
 
-  const {
-    projectInfoForm: {
-      control,
-      formState: { errors },
-      watch: watchInfo,
-    },
-  } = useLbpForm()
+  const { projectInfoForm } = useLbpForm()
 
   const chain = watch('selectedChain')
-  const tokenAddress = watch('launchTokenAddress')
+  const launchTokenAddress = watch('launchTokenAddress')
+  const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
+  const launchTokenSeed = Number(watch('saleTokenAmount') || 0)
 
-  const tokenMetadata = useTokenMetadata(tokenAddress, chain)
+  const collateralTokenAddress = watch('collateralTokenAddress')
+  const collateralToken = getToken(collateralTokenAddress, chain)
+  const collateralTokenSeed = Number(watch('collateralTokenAmount') || 0)
+  const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
 
-  const tokenIconURL = watchInfo('tokenIconUrl')
+  const weightAdjustmentType = watch('weightAdjustmentType')
+  const startWeight = ['linear_90_10', 'linear_90_50'].includes(weightAdjustmentType)
+    ? 90
+    : watch('customStartWeight')
+  const endWeight =
+    weightAdjustmentType === 'linear_90_10'
+      ? 10
+      : weightAdjustmentType === 'linear_90_50'
+        ? 50
+        : watch('customEndWeight')
+
+  const startTime = watch('startTime')
+  const endTime = watch('endTime')
 
   return (
     <>
@@ -68,7 +57,9 @@ export function LbpPreview() {
             <Heading color="font.maxContrast" size="md">
               LBP Preview
             </Heading>
+
             <Spacer />
+
             <Button
               _hover={{ color: 'font.linkHover' }}
               color="font.link"
@@ -80,93 +71,32 @@ export function LbpPreview() {
               Get help
             </Button>
           </Flex>
-          <Card>
-            <CardHeader>
-              <HStack justify="space-between" w="full">
-                <Heading size="sm">Token summary</Heading>
-                <NetworkIcon bg="background.level4" chain={chain} shadow="lg" size={8} />
-              </HStack>
-            </CardHeader>
-            <CardBody>
-              <Grid gap={0} templateColumns="1fr 1fr">
-                <GridItem borderRightColor="background.level0" borderRightWidth="1px" pr="md">
-                  <HStack spacing="md">
-                    <Popover placement="top" trigger="click">
-                      <PopoverTrigger>
-                        <Circle
-                          bg="background.level4"
-                          color="font.secondary"
-                          shadow="lg"
-                          size={24}
-                          role="button"
-                        >
-                          <VStack>
-                            {tokenIconURL ? (
-                              <Image src={tokenIconURL} borderRadius="full" />
-                            ) : (
-                              <Plus />
-                            )}
-                          </VStack>
-                        </Circle>
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <PopoverArrow bg="background.level3" />
-                        <PopoverHeader color="font.primary">Token logo URL</PopoverHeader>
-                        <PopoverBody>
-                          <Controller
-                            control={control}
-                            name="tokenIconUrl"
-                            render={({ field }) => (
-                              <InputWithError
-                                error={errors.tokenIconUrl?.message}
-                                isInvalid={!!errors.tokenIconUrl}
-                                onChange={e => field.onChange(e.target.value)}
-                                placeholder="https://yourdomain.com/token-icon.svg"
-                                value={field.value}
-                              />
-                            )}
-                          />
-                          <Text color="font.secondary" fontSize="sm">
-                            Ideally SVG (or PNG / JPG)
-                          </Text>
-                        </PopoverBody>
-                      </PopoverContent>
-                    </Popover>
-                    <VStack align="start" spacing="xs">
-                      <Text fontSize="xl" fontWeight="bold">
-                        {tokenMetadata?.symbol ?? 'Token symbol'}
-                      </Text>
-                      <Text>{tokenMetadata?.name ?? 'Token name'}</Text>
-                    </VStack>
-                  </HStack>
-                </GridItem>
-                <GridItem borderLeftColor="background.level4" borderLeftWidth="1px" pl="md">
-                  <Grid templateColumns="1fr 1fr">
-                    <GridItem>
-                      <VStack align="start">
-                        <Text color="font.secondary">Holders:</Text>
-                        <Text color="font.secondary">Total supply:</Text>
-                        <Text color="font.secondary">Creation date:</Text>
-                        <Text color="font.secondary">Creation wallet:</Text>
-                      </VStack>
-                    </GridItem>
-                    <GridItem>
-                      <VStack align="start">
-                        <Text>???</Text>
-                        <Text>
-                          {tokenMetadata?.totalSupply
-                            ? fNum('token', tokenMetadata?.totalSupply)
-                            : '-'}
-                        </Text>
-                        <Text>???</Text>
-                        <Text>???</Text>
-                      </VStack>
-                    </GridItem>
-                  </Grid>
-                </GridItem>
-              </Grid>
-            </CardBody>
-          </Card>
+
+          <TokenSummary
+            chain={chain}
+            projectInfoForm={projectInfoForm}
+            launchTokenMetadata={launchTokenMetadata}
+          />
+
+          <PoolWeights
+            startTime={startTime}
+            endTime={endTime}
+            startWeight={startWeight}
+            endWeight={endWeight}
+            launchTokenMetadata={launchTokenMetadata}
+            collateralToken={collateralToken}
+          />
+
+          <ProjectedPrice
+            startTime={startTime}
+            endTime={endTime}
+            startWeight={startWeight}
+            endWeight={endWeight}
+            launchTokenSeed={launchTokenSeed}
+            launchTokenSymbol={launchTokenMetadata?.symbol || ''}
+            collateralTokenSeed={collateralTokenSeed}
+            collateralTokenPrice={collateralTokenPrice}
+          />
         </VStack>
       </NoisyCard>
 
