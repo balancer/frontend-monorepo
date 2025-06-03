@@ -22,8 +22,7 @@ export function LbpPreview() {
 
   const saleStructureForm = watch()
   const chain = saleStructureForm.selectedChain
-  const launchTokenAddress = saleStructureForm.launchTokenAddress
-  const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
+  const launchTokenMetadata = useTokenMetadata(saleStructureForm.launchTokenAddress, chain)
   const collateralTokenAddress = saleStructureForm.collateralTokenAddress
   const collateralToken = getToken(collateralTokenAddress, chain)
   const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
