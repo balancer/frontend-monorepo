@@ -40,10 +40,11 @@ import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
 import { CompactTokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectList/CompactTokenSelectModal'
 import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { isPoolSwapAllowed } from '../pool/pool.helpers'
+import { isPoolSwapAllowed, isV3Pool, isLBP } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { ApiToken } from '../tokens/token.types'
 import { SwapSimulationError } from './SwapSimulationError'
+import { LbpSwapCard } from '@repo/lib/modules/swap/LbpSwapCard'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -78,6 +79,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     resetSwapAmounts,
     replaceUrlPath,
   } = useSwap()
+
   const [copiedDeepLink, setCopiedDeepLink] = useState(false)
   const tokenSelectDisclosure = useDisclosure()
   const nextBtn = useRef(null)
@@ -90,6 +92,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
   const isLoadingSwaps = simulationQuery.isLoading
   const isLoading = isLoadingSwaps || !isMounted
   const loadingText = isLoading ? 'Fetching swap...' : undefined
+  const isLbpSwap = pool && isV3Pool(pool) && isLBP(pool.type)
 
   function copyDeepLink() {
     navigator.clipboard.writeText(window.location.href)
@@ -186,20 +189,28 @@ export function SwapForm({ redirectToPoolPage }: Props) {
       >
         <Card rounded="xl">
           <CardHeader as={HStack} justify="space-between" w="full" zIndex={11}>
-            <span>{isPoolSwap ? 'Single pool swap' : capitalize(swapAction)}</span>
+            <span>
+              {isLbpSwap
+                ? 'Swap for $XXYZ'
+                : isPoolSwap
+                  ? 'Single pool swap'
+                  : capitalize(swapAction)}
+            </span>
             <HStack>
-              <Tooltip label={copiedDeepLink ? 'Copied!' : 'Copy swap link'}>
-                <Button color="grayText" onClick={copyDeepLink} size="sm" variant="tertiary">
-                  {copiedDeepLink ? <CheckCircle size={16} /> : <Link size={16} />}
-                </Button>
-              </Tooltip>
-
+              {!isLbpSwap && (
+                <Tooltip label={copiedDeepLink ? 'Copied!' : 'Copy swap link'}>
+                  <Button color="grayText" onClick={copyDeepLink} size="sm" variant="tertiary">
+                    {copiedDeepLink ? <CheckCircle size={16} /> : <Link size={16} />}
+                  </Button>
+                </Tooltip>
+              )}
               <TransactionSettings size="sm" />
             </HStack>
           </CardHeader>
           <CardBody align="start" as={VStack}>
             <VStack spacing="md" w="full">
-              {isPoolSwap && <PoolSwapCard />}
+              {isLbpSwap && <LbpSwapCard />}
+              {isPoolSwap && !isLbpSwap && <PoolSwapCard />}
               <SafeAppAlert />
               {!isPoolSwap && (
                 <ChainSelect

@@ -7,6 +7,7 @@ import { PoolComposition } from '../PoolDetail/PoolComposition'
 import { PoolInfoLayout } from '../PoolDetail/PoolInfo/PoolInfoLayout'
 import { useUserPoolEvents } from '../useUserPoolEvents'
 import { LbpHeader } from './LbpHeader/LbpHeader'
+import { LbpSwap } from './LbpSwap'
 
 export function LbpDetail() {
   const userEvents = useUserPoolEvents()
@@ -24,10 +25,10 @@ export function LbpDetail() {
         <VStack spacing="2xl" w="full">
           <Grid templateColumns={{ base: '1fr', md: '3fr 2fr' }} gap="4" w="full">
             <GridItem>
-              <Card h="250px">Charts</Card>
+              <Card h="full">Charts</Card>
             </GridItem>
             <GridItem>
-              <Card h="250px">Swap</Card>
+              <LbpSwap />
             </GridItem>
           </Grid>
           {userHasPoolEvents && (
