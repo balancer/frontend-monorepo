@@ -30,12 +30,13 @@ const labels: TransactionLabels = {
 }
 
 export function useCreateLbpStep(): TransactionStep {
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+  const [isStepActivated, setIsStepActivated] = useState(false)
+
   const [poolAddress, setPoolAddress] = useLocalStorage<`0x${string}` | undefined>(
     LS_KEYS.LbpConfig.Address,
     undefined
   )
-  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
-  const [isStepActivated, setIsStepActivated] = useState(false)
 
   const { userAddress } = useUserAccount()
   const { saleStructureForm } = useLbpForm()
@@ -66,25 +67,25 @@ export function useCreateLbpStep(): TransactionStep {
   const chainId = getNetworkConfig(selectedChain).chainId
   const { buildTenderlyUrl } = useTenderly({ chainId })
 
-  const weightConfig = {
+  const lbpWeightConfig = {
     linear_90_10: { start: 90, end: 10 },
     linear_90_50: { start: 90, end: 50 },
     custom: { start: customStartWeight, end: customEndWeight },
   }
 
+  const projectTokenStartWeight = lbpWeightConfig[weightAdjustmentType].start
+  const reserveTokenStartWeight = 100 - lbpWeightConfig[weightAdjustmentType].start
+  const projectTokenEndWeight = lbpWeightConfig[weightAdjustmentType].end
+  const reserveTokenEndWeight = 100 - lbpWeightConfig[weightAdjustmentType].end
+
   const blockProjectTokenSwapsIn = userActions === 'buy_only' ? true : false
 
-  const projectTokenStartWeight = weightConfig[weightAdjustmentType]?.start ?? 90
-  const reserveTokenStartWeight = 100 - (weightConfig[weightAdjustmentType]?.start ?? 90)
-  const projectTokenEndWeight = weightConfig[weightAdjustmentType]?.end ?? 10
-  const reserveTokenEndWeight = 100 - (weightConfig[weightAdjustmentType]?.end ?? 10)
-
-  const lbpParams = useMemo(() => {
+  const createPoolInput = useMemo(() => {
     if (!launchTokenAddress || !collateralTokenAddress || !startTime || !endTime) {
       return null
     }
 
-    return {
+    const lbpParams = {
       owner: userAddress,
       blockProjectTokenSwapsIn,
       projectToken: launchTokenAddress as `0x${string}`,
@@ -96,7 +97,18 @@ export function useCreateLbpStep(): TransactionStep {
       startTime: BigInt(Math.floor(new Date(startTime).getTime() / 1000)),
       endTime: BigInt(Math.floor(new Date(endTime).getTime() / 1000)),
     }
+
+    return {
+      protocolVersion: 3 as const,
+      poolType: PoolType.LiquidityBootstrapping,
+      symbol: 'LBP', // TODO: update when design ready
+      name: 'Liquidity Bootstrapping Pool', // TODO: update when design ready
+      swapFeePercentage: parseUnits('0.01', 18), // TODO: update when design ready
+      chainId,
+      lbpParams,
+    }
   }, [
+    chainId,
     userAddress,
     launchTokenAddress,
     collateralTokenAddress,
@@ -109,20 +121,6 @@ export function useCreateLbpStep(): TransactionStep {
     blockProjectTokenSwapsIn,
   ])
 
-  const createPoolInput = useMemo(() => {
-    if (!lbpParams) return null
-
-    return {
-      protocolVersion: 3 as const,
-      poolType: PoolType.LiquidityBootstrapping,
-      symbol: 'LBP',
-      name: 'Liquidity Bootstrapping Pool',
-      swapFeePercentage: parseUnits('0.01', 18),
-      chainId,
-      lbpParams,
-    }
-  }, [lbpParams, chainId])
-
   const buildCallDataQuery = useCreatePoolBuildCall({
     createPoolInput: createPoolInput as CreatePoolLiquidityBootstrappingInput,
     enabled: isStepActivated && !!createPoolInput,
@@ -132,8 +130,6 @@ export function useCreateLbpStep(): TransactionStep {
     buildCallQueryData: buildCallDataQuery.data,
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
-
-  // const poolAddress = localStorage.getItem(LS_KEYS.LbpConfig.Address)
 
   return useMemo(
     () => ({
