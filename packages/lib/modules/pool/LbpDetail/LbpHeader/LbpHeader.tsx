@@ -4,9 +4,9 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
-import { PoolPageStats } from '@repo/lib/shared/pages/PoolsPage/PoolPageStats'
 import { LbpHeaderTitleDescription } from './LbpHeaderTitleDescription'
-import { LbpHeaderTimeInfo } from '@repo/lib/modules/pool/LbpDetail/LbpHeader/LbpHeaderTimeInfo'
+import { LbpHeaderTimeInfo } from './LbpHeaderTimeInfo'
+import { LbpHeaderStats } from './LbpHeaderStats'
 
 export function LbpHeader() {
   return (
@@ -77,7 +77,7 @@ export function LbpHeader() {
                   <VStack align="start" h="full">
                     <LbpHeaderTimeInfo />
                     <Box mt="auto">
-                      <PoolPageStats />
+                      <LbpHeaderStats />
                     </Box>
                   </VStack>
                 </GridItem>
