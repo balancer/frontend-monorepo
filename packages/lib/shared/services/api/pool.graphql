@@ -128,9 +128,15 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       }
     }
     ... on GqlPoolLiquidityBootstrapping {
-      endTime
       name
       nestingType
+      poolTokens {
+        ...PoolTokens
+      }
+    }
+    ... on GqlPoolLiquidityBootstrappingV3 {
+      endTime
+      name
       poolTokens {
         ...PoolTokens
       }
