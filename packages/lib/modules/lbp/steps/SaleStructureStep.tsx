@@ -1,37 +1,45 @@
 import {
-  Heading,
   VStack,
   Text,
-  Divider,
   Radio,
   Stack,
   RadioGroup,
   InputGroup,
   InputRightElement,
   IconButton,
+  Heading,
+  Divider,
 } from '@chakra-ui/react'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ChainSelect } from '../../chains/ChainSelect'
-import { useLbpForm } from '../LbpFormProvider'
 import { SaleStructureForm } from '../lbp.types'
-import { Control, Controller, FieldErrors, SubmitHandler, UseFormSetValue } from 'react-hook-form'
-import { LbpFormAction } from '../LbpFormAction'
-import { isAddressValidation } from '@repo/lib/shared/utils/addresses'
+import {
+  Control,
+  Controller,
+  FieldErrors,
+  SubmitHandler,
+  UseFormReset,
+  UseFormSetValue,
+  UseFormTrigger,
+} from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { getNetworkConfig } from '@repo/lib/config/app.config'
-import { Clipboard } from 'react-feather'
-import { useTokenMetadata } from '../../tokens/useTokenMetadata'
+import { getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
+import { Clipboard, Edit } from 'react-feather'
+import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
-import { TokenBalancesProvider } from '../../tokens/TokenBalancesProvider'
+import { isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
+import { useEffect } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
+import { useLbpForm } from '../LbpFormProvider'
+import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
+import { TokenBalancesProvider } from '../../tokens/TokenBalancesProvider'
+import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
-import { isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
-import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
-import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
+import { LbpFormAction } from '../LbpFormAction'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -43,6 +51,8 @@ export function SaleStructureStep() {
       formState: { errors, isValid },
       watch,
       setValue,
+      trigger,
+      reset,
     },
     setActiveStep,
     activeStepIndex,
@@ -68,6 +78,7 @@ export function SaleStructureStep() {
   const tokens = [launchToken, collateralToken].filter(item => item != undefined)
 
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
+  const launchTokenIsValid = isAddress(launchTokenAddress) && !!launchTokenMetadata.symbol
 
   const onSubmit: SubmitHandler<SaleStructureForm> = () => {
     setActiveStep(activeStepIndex + 1)
@@ -83,10 +94,19 @@ export function SaleStructureStep() {
 
           <VStack align="start" spacing="md" w="full">
             <NetworkSelectInput chains={supportedChains} control={control} />
-            <LaunchTokenAddressInput control={control} errors={errors} setFormValue={setValue} />
+            <LaunchTokenAddressInput
+              triggerValidation={trigger}
+              resetForm={reset}
+              control={control}
+              errors={errors}
+              setFormValue={setValue}
+              value={launchTokenAddress}
+              metadata={launchTokenMetadata}
+              chainId={selectedChain}
+            />
           </VStack>
 
-          {isAddress(launchTokenAddress) && (
+          {launchTokenIsValid && (
             <>
               <Divider />
 
@@ -197,15 +217,31 @@ function LaunchTokenAddressInput({
   control,
   errors,
   setFormValue,
+  value,
+  metadata,
+  chainId,
+  triggerValidation,
+  resetForm,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   setFormValue: UseFormSetValue<SaleStructureForm>
+  value: string
+  metadata: TokenMetadata
+  chainId: GqlChain
+  triggerValidation: UseFormTrigger<SaleStructureForm>
+  resetForm: UseFormReset<SaleStructureForm>
 }) {
   async function paste() {
     const clipboardText = await navigator.clipboard.readText()
     setFormValue('launchTokenAddress', clipboardText)
   }
+
+  const locked = !!value && !errors.launchTokenAddress
+
+  useEffect(() => {
+    if (value) triggerValidation('launchTokenAddress')
+  }, [metadata.symbol, value, triggerValidation])
 
   return (
     <VStack align="start" w="full">
@@ -216,6 +252,7 @@ function LaunchTokenAddressInput({
           name="launchTokenAddress"
           render={({ field }) => (
             <InputWithError
+              isDisabled={locked}
               error={errors.launchTokenAddress?.message}
               isInvalid={!!errors.launchTokenAddress}
               onChange={e => field.onChange(e.target.value)}
@@ -225,18 +262,35 @@ function LaunchTokenAddressInput({
           )}
           rules={{
             required: 'Token address is required',
-            validate: isAddressValidation,
+            validate: (value: string) => {
+              if (!isAddress(value)) return 'This is an invalid token address format'
+              if (!metadata.isLoading && !metadata.symbol) {
+                return `This is not a valid token address on ${getChainName(chainId)}`
+              }
+
+              return true
+            },
           }}
         />
 
         <InputRightElement>
-          <IconButton
-            size="xs"
-            variant="link"
-            aria-label="paste"
-            icon={<Clipboard />}
-            onClick={paste}
-          />
+          {!locked ? (
+            <IconButton
+              size="xs"
+              variant="link"
+              aria-label="paste"
+              icon={<Clipboard />}
+              onClick={paste}
+            />
+          ) : (
+            <IconButton
+              size="xs"
+              variant="link"
+              aria-label="edit"
+              icon={<Edit />}
+              onClick={() => resetForm()}
+            />
+          )}
         </InputRightElement>
       </InputGroup>
     </VStack>

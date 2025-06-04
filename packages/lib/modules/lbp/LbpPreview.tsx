@@ -48,8 +48,8 @@ export function LbpPreview() {
     const maxPrice = Math.max(...prices.map(point => point[1]))
     const minSaleMarketCap = minPrice * launchTokenSeed
     const maxSaleMarketCap = maxPrice * launchTokenSeed
-    const minFdvMarketCap = minPrice * Number(launchTokenMetadata.totalSupply || 0)
-    const maxFdvMarketCap = maxPrice * Number(launchTokenMetadata.totalSupply || 0)
+    const minFdvMarketCap = minPrice * (launchTokenMetadata.totalSupply || 0)
+    const maxFdvMarketCap = maxPrice * (launchTokenMetadata.totalSupply || 0)
     setMaxPrice(maxPrice)
     setSaleMarketCap(`$${fNum('fiat', minSaleMarketCap)} - $${fNum('fiat', maxSaleMarketCap)}`)
     setFdvMarketCap(`$${fNum('fiat', minFdvMarketCap)} - $${fNum('fiat', maxFdvMarketCap)}`)
