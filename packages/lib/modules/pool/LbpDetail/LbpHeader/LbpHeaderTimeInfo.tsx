@@ -26,10 +26,10 @@ export function LbpHeaderTimeInfo() {
   ]
 
   return (
-    <HStack w="full" alignItems="start">
+    <HStack w="full" spacing="2">
       <HStack
+        flex="1"
         h="full"
-        w="full"
         justifyContent="start"
         alignItems="center"
         bg="green.400"
@@ -40,7 +40,7 @@ export function LbpHeaderTimeInfo() {
         <Icon as={Clock} />
         <Text color="black">{`LBP is live! Ends ${endTimeFormatted}`}</Text>
       </HStack>
-      <HStack spacing="xs" w="full" h="48px">
+      <HStack spacing="xs" h="48px" flexShrink="0">
         {counters.map(counter => {
           const displayValue =
             counter.title === 'S' ? String(counter.value).padStart(2, '0') : String(counter.value)
@@ -56,7 +56,7 @@ export function LbpHeaderTimeInfo() {
               alignItems="center"
               justifyContent="center"
               minH="100%"
-              w="full"
+              w="35px"
             >
               <Box
                 h="full"
