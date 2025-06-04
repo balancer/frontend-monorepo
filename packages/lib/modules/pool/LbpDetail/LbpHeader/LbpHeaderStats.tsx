@@ -51,7 +51,7 @@ export function LbpHeaderStats() {
       {stats.map((stat, index) => (
         <Box key={index}>
           <Stat
-            imageTransform={IMAGE_TRANSFORM_ARRAY[index]}
+            imageTransform={IMAGE_TRANSFORM_ARRAY[index % IMAGE_TRANSFORM_ARRAY.length]}
             label={stat.label}
             value={
               <AnimatedNumber formatOptions={formatOptions} value={safeToNumber(stat.value)} />
