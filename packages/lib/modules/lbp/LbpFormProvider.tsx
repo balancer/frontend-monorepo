@@ -38,15 +38,19 @@ export function useLbpFormLogic() {
     { mode: 'all' }
   )
 
-  const projectInfoForm = usePersistentForm<ProjectInfoForm>(LS_KEYS.LbpConfig.ProjectInfo, {
-    name: '',
-    description: '',
-    tokenIconUrl: '',
-    websiteUrl: '',
-    xHandle: '',
-    telegramHandle: '',
-    discordUrl: '',
-  })
+  const projectInfoForm = usePersistentForm<ProjectInfoForm>(
+    LS_KEYS.LbpConfig.ProjectInfo,
+    {
+      name: '',
+      description: '',
+      tokenIconUrl: '',
+      websiteUrl: '',
+      xHandle: '',
+      telegramHandle: '',
+      discordUrl: '',
+    },
+    { mode: 'all' }
+  )
 
   const [persistedStepIndex, setPersistedStepIndex] = useLocalStorage(
     LS_KEYS.LbpConfig.StepIndex,

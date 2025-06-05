@@ -485,7 +485,7 @@ function CollateralTokenAmountInput({
     if (isBalancesLoading) return true
 
     if (!balance || balance.amount === 0n) {
-      return `Your wallet has no ${collateralTokenSymbol}. You need some to seed this pool.\nSuggested seed liquidity amount: $2k-$5k`
+      return `Your wallet has no ${collateralTokenSymbol}. You need some to seed this pool.\nSuggested seed liquidity amount: $5k+`
     }
 
     if (bn(balance.amount).shiftedBy(balance.decimals).lt(value)) {
