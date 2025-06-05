@@ -5,7 +5,6 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@c
 import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useAddLiquidity } from '../AddLiquidityProvider'
-// eslint-disable-next-line max-len
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { AddLiquidityTimeout } from './AddLiquidityTimeout'
@@ -27,7 +26,7 @@ type Props = {
   isOpen: boolean
   onClose(): void
   onOpen(): void
-  finalFocusRef?: RefObject<HTMLInputElement>
+  finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function AddLiquidityModal({
@@ -40,6 +39,7 @@ export function AddLiquidityModal({
   const initialFocusRef = useRef(null)
   const {
     transactionSteps,
+    lastTransaction,
     addLiquidityTxHash,
     hasQuoteContext,
     urlTxHash,
@@ -51,11 +51,14 @@ export function AddLiquidityModal({
   const { userAddress } = useUserAccount()
   const { stopTokenPricePolling } = useTokens()
 
+  const txReceipt = lastTransaction?.result
+
   const receiptProps = useAddLiquidityReceipt({
     chain,
     txHash: addLiquidityTxHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
+    txReceipt,
   })
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
@@ -79,7 +82,7 @@ export function AddLiquidityModal({
     onClose()
   })
 
-  const isSuccess = !!addLiquidityTxHash && !receiptProps.isLoading
+  const isSuccess = !!addLiquidityTxHash && receiptProps.hasReceipt
 
   return (
     <Modal

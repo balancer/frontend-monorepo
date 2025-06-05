@@ -5,7 +5,8 @@
     "types": ["vitest/globals"],
     "baseUrl": ".",
     "paths": {
-      "@repo/*": ["../*"]
+      "@repo/lib/*": ["../../packages/lib/*"],
+      "@repo/test/*": ["../../packages/test/*"]
     },
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },

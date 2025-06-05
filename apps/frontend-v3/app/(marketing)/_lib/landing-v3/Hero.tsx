@@ -18,11 +18,12 @@ import { PlayVideoButton } from '@repo/lib/shared/components/btns/PlayVideoButto
 import { SandBg } from './shared/SandBg'
 import { useEffect, useRef, useState } from 'react'
 import { WordsPullUp } from '@repo/lib/shared/components/animations/WordsPullUp'
+import { MotionButtonProps, MotionBoxProps } from './types'
 
 const MotionText = motion(Text)
 const MotionHeading = motion(Heading)
-const MotionButton = motion(Button)
-const MotionBox = motion(Box)
+const MotionButton = motion(Button) as React.FC<MotionButtonProps>
+const MotionBox = motion(Box) as React.FC<MotionBoxProps>
 
 export function Hero() {
   const isDarkMode = useIsDarkMode()

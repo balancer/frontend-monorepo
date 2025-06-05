@@ -3,7 +3,7 @@ import { SupportedChainId } from '@repo/lib/config/config.types'
 import { reliquaryAbi } from '@repo/lib/modules/web3/contracts/abi/beets/generated'
 import { useChainSwitch } from '@repo/lib/modules/web3/useChainSwitch'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useReadContract } from 'wagmi'
+import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 
 export function useHasApprovedRelayerForAllRelics(chainId: SupportedChainId) {
   const { isConnected, userAddress } = useUserAccount()

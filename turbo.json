@@ -42,6 +42,16 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
+    "build:no-lint": {
+      "dependsOn": ["^build:no-lint"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "build:turbo": {
+      "dependsOn": ["^build:turbo"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
     "start": {
       "dependsOn": ["^start"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
@@ -51,7 +61,11 @@
     },
     "lint": {
       "dependsOn": ["^transit"],
-      "outputs": ["node_modules/.cache/.eslintcache", ".next/cache/eslint"]
+      "outputs": [
+        "node_modules/.cache/.eslintcache",
+        ".next/cache/eslint",
+        ".eslintcache"
+      ]
     },
     "lint:fix": {
       "dependsOn": ["^transit"],
@@ -89,8 +103,8 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "test:e2e:dev": {
-      "dependsOn": ["^graphql:gen"],
+    "test:e2e:build:turbo": {
+      "dependsOn": ["^build:turbo"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "NEXT_E2E_DEV"]
     },
     "test:e2e:build:ui": {

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
 import {
@@ -27,6 +26,7 @@ export type ManagedSendTransactionInput = {
   labels: TransactionLabels
   txConfig: TransactionConfig
   gasEstimationMeta?: Record<string, unknown>
+  onTransactionChange: (transaction: ManagedResult) => void
 }
 
 export function useManagedSendTransaction({

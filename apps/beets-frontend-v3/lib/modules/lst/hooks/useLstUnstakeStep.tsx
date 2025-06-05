@@ -3,13 +3,13 @@
 import { getChainId } from '@repo/lib/config/app.config'
 import networkConfigs from '@repo/lib/config/networks'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo } from 'react'
+import { useState } from 'react'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { parseUnits } from 'viem'
@@ -19,9 +19,10 @@ import { useTokenBalances } from '@repo/lib/modules/tokens/TokenBalancesProvider
 import { useGetUserWithdraws } from './useGetUserWithdraws'
 import { useGetUserNumWithdraws } from './useGetUserNumWithdraws'
 import { useGetAmountDelegatedPerValidator } from './useGetAmountDelegatedPerValidator'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled: boolean) {
-  const { getTransaction } = useTransactionState()
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const { isConnected } = useUserAccount()
   const { refetchBalances } = useTokenBalances()
 
@@ -60,32 +61,28 @@ export function useLstUnstakeStep(sharesAmount: string, chain: GqlChain, enabled
     contractId: 'beets.lstStaking',
     contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
     functionName: 'undelegateMany',
-    //args: [[BigInt(1)], [parseUnits(sharesAmount, 18)]], // TODO: make dynamic
     args: [
       validators.map(validator => BigInt(validator.validatorId)),
       validators.map(validator => validator.unstakeAmountShares),
     ],
     enabled: isConnected && !!sharesAmount && enabled,
     txSimulationMeta,
+    onTransactionChange: setTransaction,
   }
 
-  const transaction = getTransaction('unstakeLst')
+  const isComplete = () => isConnected && isTransactionSuccess(transaction)
 
-  const isComplete = () => isConnected && !!transaction?.result.isSuccess
+  const step: TransactionStep = {
+    id: 'unstakeLst',
+    labels,
+    stepType: 'unstakeLst',
+    transaction,
+    isComplete,
+    onActivated: noop,
+    onDeactivated: noop,
+    onSuccess,
+    renderAction: () => <ManagedTransactionButton id="unstakeLst" {...props} />,
+  }
 
-  const step = useMemo(
-    (): TransactionStep => ({
-      id: 'unstakeLst',
-      labels,
-      stepType: 'unstakeLst',
-      isComplete,
-      onActivated: noop,
-      onDeactivated: noop,
-      onSuccess,
-      renderAction: () => <ManagedTransactionButton id="unstakeLst" {...props} />,
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [transaction]
-  )
   return { step }
 }

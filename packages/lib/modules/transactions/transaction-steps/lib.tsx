@@ -77,7 +77,7 @@ export type ManagedResult = TransactionBundle & Executable & { isSafeTxLoading: 
   executeAsync is the union of writeAsync and sendTransactionAsync functions
 */
 type Executable = {
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   executeAsync?: Function
   setTxConfig?: any
 }
@@ -133,15 +133,19 @@ type TransactionInput =
   | ManagedErc20TransactionInput
   | ManagedSendTransactionInput
 
+// In some cases, the onSuccess callback must be retried, for instance, when the refetchApprovals has not finished yet
+export const Retry = 'retry'
+
 export type TransactionStep = {
   id: string
   stepType: StepType
   details?: StepDetails
   labels: TransactionLabels
+  transaction?: ManagedResult
   isComplete: () => boolean
   renderAction: () => ReactNode
   // All callbacks should be idempotent
-  onSuccess?: () => any
+  onSuccess?: () => any | typeof Retry
   onActivated?: () => void
   onDeactivated?: () => void
   // only used for integration testing

@@ -25,7 +25,6 @@ export function VebalLocksChart({
       ) : (
         <ReactECharts
           onChartReady={chartInfo.onChartReady}
-          onEvents={chartInfo.onEvents}
           option={chartInfo.options}
           style={{ height: '100%', width: '100%' }}
         />

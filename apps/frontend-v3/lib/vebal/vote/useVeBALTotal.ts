@@ -1,5 +1,5 @@
 import { mainnet } from 'viem/chains'
-import { useReadContract } from 'wagmi'
+import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { Hex } from 'viem'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { toUnixTimestamp } from '@repo/lib/shared/utils/time'

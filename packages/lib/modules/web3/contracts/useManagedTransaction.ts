@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 'use client'
 
 import { getGqlChain } from '@repo/lib/config/app.config'
@@ -40,6 +39,7 @@ export interface ManagedTransactionInput {
   txSimulationMeta?: Record<string, unknown>
   enabled: boolean
   value?: bigint
+  onTransactionChange: (transaction: ManagedResult) => void
 }
 
 export function useManagedTransaction({

@@ -36,9 +36,7 @@ test('allows refetching allowances', async () => {
 
   await waitFor(() => expect(result.current.isAllowancesLoading).toBeFalsy())
 
-  act(() => {
-    result.current.refetchAllowances()
-  })
+  await act(() => result.current.refetchAllowances())
 
   expect(result.current.isAllowancesRefetching).toBeTruthy()
   await waitFor(() => expect(result.current.isAllowancesRefetching).toBeFalsy())

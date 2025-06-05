@@ -66,9 +66,7 @@ export function UserSnapshotValues() {
 
       return {
         myLiquidity: totalBalanceUsd,
-        myPotentialWeeklyYield: bn(stakedBalanceUsd)
-          .times(bn(bn(myAprRaw).div(100)).div(52))
-          .toFixed(2),
+        myPotentialWeeklyYield: bn(stakedBalanceUsd).times(bn(myAprRaw).div(52)).toFixed(2),
         myClaimableRewards: myClaimableRewards,
       }
     }

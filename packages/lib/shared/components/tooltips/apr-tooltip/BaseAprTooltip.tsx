@@ -28,7 +28,7 @@ import {
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
-import { isCowAmmPool, isVebalPool } from '@repo/lib/modules/pool/pool.helpers'
+import { isCowAmmPool, isQuantAmmPool, isVebalPool } from '@repo/lib/modules/pool/pool.helpers'
 import { ReactNode } from 'react'
 
 interface Props {
@@ -53,7 +53,6 @@ interface Props {
 }
 
 const balRewardGradient =
-  // eslint-disable-next-line max-len
   'linear-gradient(90deg, rgba(179, 174, 245, 0.5) 0%, rgba(215, 203, 231, 0.5) 25%, rgba(229, 200, 200, 0.5) 50%, rgba(234, 168, 121, 0.5) 100%)'
 
 const basePopoverAprItemProps = {
@@ -66,6 +65,9 @@ const basePopoverAprItemProps = {
 
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
 const defaultNumberFormatter = (value: string) => bn(value)
+
+export const defaultDisplayValueFormatterWithCanBeNegative = (value: BigNumber) =>
+  fNum('apr', value.toString(), { canBeNegative: true })
 
 function getDynamicSwapFeesLabel(hookType: GqlHookType) {
   switch (hookType) {
@@ -100,7 +102,13 @@ function BaseAprTooltip({
 }: Props) {
   const colorMode = useThemeColorMode()
 
-  const usedDisplayValueFormatter = displayValueFormatter || defaultDisplayValueFormatter
+  const isVebal = isVebalPool(poolId)
+  const isQuantAmm = isQuantAmmPool(poolType)
+
+  const usedDisplayValueFormatter =
+    displayValueFormatter ||
+    (isQuantAmm ? defaultDisplayValueFormatterWithCanBeNegative : defaultDisplayValueFormatter)
+
   const usedNumberFormatter = numberFormatter || defaultNumberFormatter
 
   const {
@@ -144,8 +152,6 @@ function BaseAprTooltip({
     chain,
   })
 
-  const isVebal = isVebalPool(poolId)
-
   const totalBaseTitle = isVebal
     ? totalBaseVeBalText
     : typeof totalBaseText === 'function'
@@ -188,7 +194,6 @@ function BaseAprTooltip({
           </>
         ) : null}
       </TooltipAprItem>
-
       {isMaBeetsPresent && (
         <TooltipAprItem
           {...basePopoverAprItemProps}

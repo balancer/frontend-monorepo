@@ -1,5 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
+
+/* eslint-disable react-hooks/exhaustive-deps */
 
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -274,6 +275,7 @@ export function useRemoveLiquidityLogic(urlTxHash?: Hash) {
 
   return {
     transactionSteps,
+    lastTransaction: transactionSteps.lastTransaction,
     tokens: tokensToShow(),
     validTokens,
     singleTokenOutAddress,

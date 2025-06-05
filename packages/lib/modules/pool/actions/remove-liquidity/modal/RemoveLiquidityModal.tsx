@@ -5,7 +5,6 @@ import { RefObject, useEffect, useRef } from 'react'
 import { usePool } from '../../../PoolProvider'
 import { useRemoveLiquidity } from '../RemoveLiquidityProvider'
 import { RemoveLiquidityTimeout } from './RemoveLiquidityTimeout'
-// eslint-disable-next-line max-len
 import { getStylesForModalContentWithStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/step-tracker.utils'
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
@@ -27,7 +26,7 @@ type Props = {
   isOpen: boolean
   onClose(): void
   onOpen(): void
-  finalFocusRef?: RefObject<HTMLInputElement>
+  finalFocusRef?: RefObject<HTMLInputElement | null>
 }
 
 export function RemoveLiquidityModal({
@@ -38,7 +37,7 @@ export function RemoveLiquidityModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const { isDesktop } = useBreakpoints()
   const initialFocusRef = useRef(null)
-  const { transactionSteps, removeLiquidityTxHash, urlTxHash, hasQuoteContext } =
+  const { transactionSteps, removeLiquidityTxHash, urlTxHash, hasQuoteContext, lastTransaction } =
     useRemoveLiquidity()
   const { pool, chain } = usePool()
   const shouldBatchTransactions = useShouldBatchTransactions()
@@ -51,6 +50,7 @@ export function RemoveLiquidityModal({
     txHash: removeLiquidityTxHash,
     userAddress,
     protocolVersion: pool.protocolVersion as ProtocolVersion,
+    txReceipt: lastTransaction?.result,
   })
 
   useResetStepIndexOnOpen(isOpen, transactionSteps)
@@ -71,7 +71,7 @@ export function RemoveLiquidityModal({
 
   useOnUserAccountChanged(redirectToPoolPage)
 
-  const isSuccess = !!removeLiquidityTxHash && !receiptProps.isLoading
+  const isSuccess = !!removeLiquidityTxHash && receiptProps.hasReceipt
 
   return (
     <Modal

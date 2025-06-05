@@ -140,6 +140,10 @@ export function isCowAmmPool(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.CowAmm
 }
 
+export function isQuantAmmPool(poolType: GqlPoolType): boolean {
+  return poolType === GqlPoolType.QuantAmmWeighted
+}
+
 export function noInitLiquidity(pool: GqlPoolBase): boolean {
   // Uncomment to DEBUG
   // if (
@@ -389,8 +393,7 @@ export function getVaultConfig(pool: Pool) {
   const networkConfig = getNetworkConfig(pool.chain)
   const vaultAddress =
     pool.protocolVersion === 3
-      ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        networkConfig.contracts.balancer.vaultV3!
+      ? networkConfig.contracts.balancer.vaultV3!
       : networkConfig.contracts.balancer.vaultV2
 
   const balancerVaultAbi = pool.protocolVersion === 3 ? vaultAbi_V3 : balancerV2VaultAbi
@@ -469,7 +472,7 @@ export function poolTypeLabel(poolType: GqlPoolType) {
     case GqlPoolType.Fx:
       return 'FX'
     case GqlPoolType.QuantAmmWeighted:
-      return 'BTF'
+      return 'QuantAMM BTF'
     default:
       return poolType.toLowerCase()
   }

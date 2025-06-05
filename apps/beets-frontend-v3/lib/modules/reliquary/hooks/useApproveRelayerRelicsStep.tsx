@@ -2,10 +2,11 @@ import { SupportedChainId } from '@repo/lib/config/config.types'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
 import { useHasApprovedRelayerForAllRelics } from './useHasApprovedRelayerForAllRelics'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo } from 'react'
+import { useState } from 'react'
 import {
   TransactionStep,
   TransactionLabels,
+  ManagedResult,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
@@ -18,6 +19,8 @@ export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
   step: TransactionStep
 } {
   const { userAddress, isConnected } = useUserAccount()
+  const [, setTransaction] = useState<ManagedResult | undefined>()
+
   const config = getNetworkConfig(chainId)
 
   const relayerAddress = config.contracts.balancer.relayerV6
@@ -54,20 +57,17 @@ export function useApproveRelayerRelicsStep(chainId: SupportedChainId): {
     args: [relayerAddress, true],
     enabled: !!userAddress && !isLoading,
     txSimulationMeta,
+    onTransactionChange: setTransaction,
   }
 
-  const step = useMemo(
-    (): TransactionStep => ({
-      id: approveRelayerRelicsStepId,
-      stepType: 'approveBatchRelayerForAllRelics',
-      labels,
-      isComplete: () => isConnected && hasApprovedRelayerForAllRelics,
-      renderAction: () => <ManagedTransactionButton id={approveRelayerRelicsStepId} {...props} />,
-      onSuccess: () => refetch(),
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hasApprovedRelayerForAllRelics, isConnected, isLoading]
-  )
+  const step: TransactionStep = {
+    id: approveRelayerRelicsStepId,
+    stepType: 'approveBatchRelayerForAllRelics',
+    labels,
+    isComplete: () => isConnected && hasApprovedRelayerForAllRelics,
+    renderAction: () => <ManagedTransactionButton id={approveRelayerRelicsStepId} {...props} />,
+    onSuccess: () => refetch(),
+  }
 
   return {
     isLoading,

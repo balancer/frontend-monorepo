@@ -29,6 +29,8 @@ import { useVebalLockInfo } from '@bal/lib/vebal/useVebalLockInfo'
 import { useBlacklistedVotes } from './incentivesBlacklist'
 import { useLastUserSlope } from '../../useVeBALBalance'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { Address } from 'viem'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 function sortMyVotesList(voteList: VotingPoolWithData[], sortBy: SortingBy, order: Sorting) {
   return orderBy(
@@ -56,7 +58,7 @@ export interface SubmittingVote {
   weight: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface UseMyVotesArgs {}
 
 // eslint-disable-next-line no-empty-pattern
@@ -125,6 +127,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
   const { blacklistedVotes, isLoading: blacklistedLoading } = useBlacklistedVotes(votingPools)
   const { userAddress, isLoading: userAccountLoading } = useUserAccount()
   const { slope, isLoading: slopeLoading } = useLastUserSlope(userAddress)
+  const { priceFor } = useTokens()
 
   const totalInfo: MyVotesTotalInfo = useMemo(() => {
     const infos = availableMyVotes.map(myVote => {
@@ -138,7 +141,8 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[myVote.gauge.address]
+        blacklistedVotes[myVote.gauge.address as Address],
+        priceFor
       )
 
       return {
@@ -161,7 +165,8 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[vote.gauge.address]
+        blacklistedVotes[vote.gauge.address as Address],
+        priceFor
       )
     )
 
@@ -172,7 +177,8 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
         slope,
         lockEnd,
         totalVotes,
-        blacklistedVotes[vote.gauge.address]
+        blacklistedVotes[vote.gauge.address as Address],
+        priceFor
       )
     )
 
@@ -203,6 +209,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
     slope,
     blacklistedVotes,
     lockEnd,
+    priceFor,
   ])
 
   const hasVotedBefore = votedPools.length > 0

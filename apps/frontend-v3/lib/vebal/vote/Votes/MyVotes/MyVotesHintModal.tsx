@@ -19,7 +19,6 @@ import { useMemo } from 'react'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { addDays, format } from 'date-fns'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function MyVotesHintModal({ isOpen = false, onClose = () => {} }: UseDisclosureProps) {
   const formattedUnlockDate = useMemo(() => {
     const today = new Date()

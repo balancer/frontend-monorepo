@@ -1,19 +1,20 @@
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo } from 'react'
 import { Address } from 'viem'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useEstimateSendUserBalance } from '@bal/lib/vebal/cross-chain/useEstimateSendUserBalance'
 import { Button } from '@chakra-ui/react'
 import { getChainShortName, getNetworkConfig } from '@repo/lib/config/app.config'
+import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 export const crossChainSyncStepPrefix = 'cross-chain-sync'
 
@@ -26,11 +27,13 @@ function ChainSyncButton({
   layerZeroChainId,
   stepId,
   network,
+  onTransactionChange,
 }: {
   omniVotingEscrow: Address
   layerZeroChainId: number
   stepId: string
   network: GqlChain
+  onTransactionChange: (transaction: ManagedResult) => void
 }) {
   const { chainId } = useNetworkConfig()
   const { data, error, isLoading } = useEstimateSendUserBalance(omniVotingEscrow, layerZeroChainId)
@@ -76,6 +79,7 @@ function ChainSyncButton({
     txSimulationMeta,
     args: [userAddress, layerZeroChainId, userAddress],
     labels,
+    onTransactionChange,
   }
 
   return <ManagedTransactionButton id={stepId} {...props} />
@@ -83,65 +87,63 @@ function ChainSyncButton({
 
 export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): TransactionStep[] {
   const { userAddress } = useUserAccount()
-  const { getTransaction } = useTransactionState()
+  const { getTransaction, setTransactionFn } = useStepsTransactionState()
 
   const { contracts } = getNetworkConfig(GqlChain.Mainnet)
 
-  return useMemo(
-    () =>
-      networks
-        .filter(network => {
-          const networkConfig = getNetworkConfig(network)
-          return Boolean(networkConfig.layerZeroChainId)
-        })
-        .map(network => {
-          const stepId = `${crossChainSyncStepPrefix}-${network}`
+  return networks
+    .filter(network => {
+      const networkConfig = getNetworkConfig(network)
+      return Boolean(networkConfig.layerZeroChainId)
+    })
+    .map(network => {
+      const stepId = `${crossChainSyncStepPrefix}-${network}`
 
-          const transaction = getTransaction(stepId)
+      const transaction = getTransaction(stepId)
 
-          const isComplete = () => userAddress && !!transaction?.result.isSuccess
+      const isComplete = () => userAddress && isTransactionSuccess(transaction)
 
-          const networkConfig = getNetworkConfig(network)
+      const networkConfig = getNetworkConfig(network)
 
-          // FIX: actual labels
-          const labels: TransactionLabels = {
-            init: 'Sync',
-            title: `Sync veBAL to ${getChainShortName(network)}`,
-            description: 'description - Cross Chain Sync.',
-            confirming: 'confirming - Cross Chain Sync...',
-            confirmed: 'confirmed - Cross Chain Sync!',
-            tooltip: 'tooltip - Cross Chain Sync',
-          }
-          const layerZeroChainId = networkConfig.layerZeroChainId
+      // FIX: actual labels
+      const labels: TransactionLabels = {
+        init: 'Sync',
+        title: `Sync veBAL to ${getChainShortName(network)}`,
+        description: 'description - Cross Chain Sync.',
+        confirming: 'confirming - Cross Chain Sync...',
+        confirmed: 'confirmed - Cross Chain Sync!',
+        tooltip: 'tooltip - Cross Chain Sync',
+      }
+      const layerZeroChainId = networkConfig.layerZeroChainId
 
-          if (!layerZeroChainId) {
-            throw new Error('layerZeroChainId is not defined')
-          }
+      if (!layerZeroChainId) {
+        throw new Error('layerZeroChainId is not defined')
+      }
 
-          const omniVotingEscrow = contracts.omniVotingEscrow
+      const omniVotingEscrow = contracts.omniVotingEscrow
 
-          if (!omniVotingEscrow) {
-            throw new Error('omniVotingEscrow contract address is not defined')
-          }
+      if (!omniVotingEscrow) {
+        throw new Error('omniVotingEscrow contract address is not defined')
+      }
 
-          const renderAction = () => (
-            <ChainSyncButton
-              key={stepId}
-              layerZeroChainId={layerZeroChainId}
-              network={network}
-              omniVotingEscrow={omniVotingEscrow}
-              stepId={stepId}
-            />
-          )
+      const renderAction = () => (
+        <ChainSyncButton
+          key={stepId}
+          layerZeroChainId={layerZeroChainId}
+          network={network}
+          omniVotingEscrow={omniVotingEscrow}
+          stepId={stepId}
+          onTransactionChange={setTransactionFn(stepId)}
+        />
+      )
 
-          return {
-            id: stepId,
-            stepType: 'crossChainSync',
-            labels,
-            isComplete,
-            renderAction,
-          }
-        }),
-    [networks, getTransaction, userAddress, contracts.omniVotingEscrow]
-  )
+      return {
+        id: stepId,
+        stepType: 'crossChainSync',
+        labels,
+        transaction,
+        isComplete,
+        renderAction,
+      }
+    })
 }

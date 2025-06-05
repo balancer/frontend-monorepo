@@ -66,8 +66,8 @@ function GlobalProviders({ children }: PropsWithChildren) {
   const defaultRouterOptions = {}
 
   return (
-    <WagmiProvider config={testWagmiConfig} reconnectOnMount={false}>
-      <QueryClientProvider client={testQueryClient}>
+    <QueryClientProvider client={testQueryClient()}>
+      <WagmiProvider config={testWagmiConfig} reconnectOnMount={false}>
         <AppRouterContextProviderMock router={defaultRouterOptions}>
           <ApolloProvider client={apolloTestClient}>
             <UserAccountProvider>
@@ -89,8 +89,8 @@ function GlobalProviders({ children }: PropsWithChildren) {
             </UserAccountProvider>
           </ApolloProvider>
         </AppRouterContextProviderMock>
-      </QueryClientProvider>
-    </WagmiProvider>
+      </WagmiProvider>
+    </QueryClientProvider>
   )
 }
 
@@ -131,7 +131,6 @@ export function DefaultRemoveLiquidityTestProvider({ children }: PropsWithChildr
 
 /* Builds a PoolProvider that injects the provided pool data*/
 export const buildDefaultPoolTestProvider = (pool: GqlPoolElement = aGqlPoolElementMock()) =>
-  // eslint-disable-next-line react/display-name
   function ({ children }: PropsWithChildren) {
     return (
       <TransactionStateProvider>

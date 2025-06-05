@@ -16,6 +16,7 @@ BigInt.prototype.toJSON = function () {
 }
 
 export const MAX_BIGINT = BigInt(MAX_UINT256)
+export const MAX_BIGNUMBER = bn(MAX_UINT256)
 
 export const INTEGER_FORMAT = '0,0'
 export const FIAT_FORMAT_A = '0,0.00a'
@@ -27,6 +28,7 @@ export const TOKEN_FORMAT_A = '0,0.[0000]a'
 export const TOKEN_FORMAT_A_BIG = '0,0.[00]a'
 export const TOKEN_FORMAT = '0,0.[0000]'
 export const APR_FORMAT = '0,0.00%'
+export const APR_FORMAT_WITHOUT_DECIMALS = '0,0%'
 export const SLIPPAGE_FORMAT = '0.00%'
 export const FEE_FORMAT = '0.[0000]%'
 export const WEIGHT_FORMAT = '(%0,0)'
@@ -64,7 +66,7 @@ export function bn(val: Numberish): BigNumber {
   return new BigNumber(val.toString())
 }
 
-type FormatOpts = { abbreviated?: boolean; forceThreeDecimals?: boolean }
+type FormatOpts = { abbreviated?: boolean; forceThreeDecimals?: boolean; canBeNegative?: boolean }
 
 /**
  * Converts a number to a string format within the decimal limit that numeral
@@ -111,9 +113,16 @@ function tokenFormat(val: Numberish, { abbreviated = true }: FormatOpts = {}): s
 }
 
 // Formats an APR value as a percentage.
-function aprFormat(apr: Numberish): string {
-  if (bn(apr).gt(APR_UPPER_THRESHOLD)) return '-'
-  if (isSmallPercentage(apr)) return SMALL_PERCENTAGE_LABEL
+function aprFormat(apr: Numberish, { canBeNegative = false }: FormatOpts = {}): string {
+  const aprBn = bn(apr)
+
+  if (aprBn.gt(APR_UPPER_THRESHOLD)) return '-'
+  if (isSmallPercentage(apr) && !canBeNegative) return SMALL_PERCENTAGE_LABEL
+
+  // If absolute APR is > 1000% (i.e., apr value > 10), format without decimals.
+  if (aprBn.abs().gt(10)) {
+    return numeral(apr.toString()).format(APR_FORMAT_WITHOUT_DECIMALS)
+  }
 
   return numeral(apr.toString()).format(APR_FORMAT)
 }
@@ -167,7 +176,9 @@ export function safeSum(amounts: Numberish[]): string {
 
 // Prevents invalid characters from being entered into a number input.
 export function blockInvalidNumberInput(event: KeyboardEvent<HTMLInputElement>): void {
-  ;['e', 'E', '+', '-'].includes(event.key) && event.preventDefault()
+  if (['e', 'E', '+', '-'].includes(event.key)) {
+    event.preventDefault()
+  }
 }
 
 type NumberFormat =
@@ -195,7 +206,7 @@ export function fNum(format: NumberFormat, val: Numberish, opts?: FormatOpts): s
     case 'token':
       return tokenFormat(val, opts)
     case 'apr':
-      return aprFormat(val)
+      return aprFormat(val, opts)
     case 'feePercent':
     case 'sharePercent':
       return feePercentFormat(val)

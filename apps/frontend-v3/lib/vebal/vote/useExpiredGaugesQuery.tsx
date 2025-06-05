@@ -1,4 +1,4 @@
-import { useReadContracts } from 'wagmi'
+import { useReadContracts } from '@repo/lib/shared/utils/wagmi'
 import { mainnet } from 'viem/chains'
 import { AbiMap } from '@repo/lib/modules/web3/contracts/AbiMap'
 import { Hex } from 'viem'
@@ -45,8 +45,6 @@ export function useExpiredGauges({ gaugeAddresses }: UseExpiredGaugesParams) {
       const isKilled = (expiredGaugesQuery.data ?? [])[index]
       return isKilled.result
     })
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expiredGaugesQuery.data, expiredGaugesQuery.isLoading, gaugeAddresses])
 
   return {

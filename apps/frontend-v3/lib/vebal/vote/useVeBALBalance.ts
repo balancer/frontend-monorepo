@@ -1,5 +1,5 @@
 import { mainnet } from 'viem/chains'
-import { useReadContract } from 'wagmi'
+import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { InvalidateQueryFilters } from '@tanstack/react-query'
 import { veBalAbi } from '@repo/lib/modules/web3/contracts/abi/generated'

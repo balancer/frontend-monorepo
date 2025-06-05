@@ -1,18 +1,18 @@
 import { SupportedChainId } from '@repo/lib/config/config.types'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
-import { useMemo } from 'react'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { Hex } from 'viem'
 import {
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
+import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ManagedTransactionInput } from '@repo/lib/modules/web3/contracts/useManagedTransaction'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
-import { useTransactionState } from '@repo/lib/modules/transactions/transaction-steps/TransactionStateProvider'
 import { SubmittingVote } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { chunk } from 'lodash'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
 
 const submitVotesStepId = 'submit-votes'
 
@@ -59,68 +59,62 @@ export function useSubmitVotesSteps(
   steps: TransactionStep[]
 } {
   const { userAddress, isConnected } = useUserAccount()
+  const { getTransaction, setTransactionFn } = useStepsTransactionState()
 
   const gaugeControllerAddress = mainnetNetworkConfig.contracts.gaugeController as Hex
 
   const isLoading = false
 
-  const { getTransaction } = useTransactionState()
+  const chunks = chunkVotes(votes)
 
-  const steps = useMemo(
-    (): TransactionStep[] => {
-      const chunks = chunkVotes(votes)
+  const steps: TransactionStep[] = chunks.map((votesChunk, idx) => {
+    const labels: TransactionLabels = {
+      title: `Vote for ${votesChunk.length} pool gauges`,
+      description: 'Confirming votes',
+      init: 'Confirm votes',
+      confirming: 'Confirming votes...',
+      confirmed: 'Votes confirmed',
+      tooltip: 'Confirm votes',
+    }
 
-      return chunks.map((votesChunk, idx) => {
-        const labels: TransactionLabels = {
-          title: `Vote for ${votesChunk.length} pool gauges`,
-          description: 'Confirming votes',
-          init: 'Confirm votes',
-          confirming: 'Confirming votes...',
-          confirmed: 'Votes confirmed',
-          tooltip: 'Confirm votes',
-        }
+    const { gaugeAddresses, weights } = getVotesForManyGauges(votesChunk)
 
-        const { gaugeAddresses, weights } = getVotesForManyGauges(votesChunk)
+    const txSimulationMeta = sentryMetaForWagmiSimulation(
+      'Error in wagmi tx simulation: Submit votes',
+      {
+        idx,
+        gaugeControllerAddress,
+        gaugeAddresses,
+        weights,
+        userAddress,
+        chainId,
+      }
+    )
 
-        const txSimulationMeta = sentryMetaForWagmiSimulation(
-          'Error in wagmi tx simulation: Submit votes',
-          {
-            idx,
-            gaugeControllerAddress,
-            gaugeAddresses,
-            weights,
-            userAddress,
-            chainId,
-          }
-        )
+    const stepId = getStepId(idx)
+    const transaction = getTransaction(stepId)
 
-        const props: ManagedTransactionInput = {
-          contractAddress: gaugeControllerAddress,
-          contractId: 'balancer.gaugeControllerAbi',
-          functionName: 'vote_for_many_gauge_weights', // test tx: 0xf57f05f6f75040faaf2fdbf783c314e84907fa82a3a36312a34ec90c7b5d9e95
-          labels,
-          chainId,
-          args: [gaugeAddresses, weights],
-          enabled: !!userAddress && !isLoading,
-          txSimulationMeta,
-        }
+    const props: ManagedTransactionInput = {
+      contractAddress: gaugeControllerAddress,
+      contractId: 'balancer.gaugeControllerAbi',
+      functionName: 'vote_for_many_gauge_weights', // test tx: 0xf57f05f6f75040faaf2fdbf783c314e84907fa82a3a36312a34ec90c7b5d9e95
+      labels,
+      chainId,
+      args: [gaugeAddresses, weights],
+      enabled: !!userAddress && !isLoading,
+      txSimulationMeta,
+      onTransactionChange: setTransactionFn(stepId),
+    }
 
-        const stepId = getStepId(idx)
-
-        const transaction = getTransaction(stepId)
-
-        return {
-          id: stepId,
-          stepType: 'voteForManyGaugeWeights',
-          labels,
-          isComplete: () => (isConnected && transaction?.result.isSuccess) || false,
-          renderAction: () => <ManagedTransactionButton id={stepId} {...props} />,
-        }
-      })
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isConnected, isLoading, votes, getTransaction]
-  )
+    return {
+      id: stepId,
+      stepType: 'voteForManyGaugeWeights',
+      labels,
+      transaction,
+      isComplete: () => isConnected && isTransactionSuccess(transaction),
+      renderAction: () => <ManagedTransactionButton id={stepId} {...props} />,
+    }
+  })
 
   return {
     isLoading,

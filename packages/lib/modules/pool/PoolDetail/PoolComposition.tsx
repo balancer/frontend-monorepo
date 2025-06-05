@@ -4,6 +4,7 @@ import {
   Alert,
   AlertDescription,
   AlertIcon,
+  Box,
   Card,
   Divider,
   HStack,
@@ -12,11 +13,10 @@ import {
   Stack,
   Text,
   VStack,
+  Link,
 } from '@chakra-ui/react'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
-import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -24,18 +24,15 @@ import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { Address } from 'viem'
 import { usePoolsMetadata } from '../metadata/PoolsMetadataProvider'
-import { isBoosted } from '../pool.helpers'
+import { isBoosted, isQuantAmmPool } from '../pool.helpers'
 import { PoolToken } from '../pool.types'
 import { usePool } from '../PoolProvider'
 import { Pool } from '../pool.types'
 import { PoolTypeTag } from './PoolTypeTag'
-import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
-import {
-  getCompositionTokens,
-  getFlatCompositionTokens,
-  getNestedPoolTokens,
-} from '../pool-tokens.utils'
+import { getCompositionTokens, getNestedPoolTokens } from '../pool-tokens.utils'
 import { useGetPoolTokensWithActualWeights } from '../useGetPoolTokensWithActualWeights'
+import { ArrowUpRight } from 'react-feather'
+import { PoolCompositionChart } from './PoolCompositionChart'
 
 type CardContentProps = {
   totalLiquidity: string
@@ -118,7 +115,7 @@ function CardContent({ totalLiquidity, poolTokens, chain, pool }: CardContentPro
 }
 
 export function PoolComposition() {
-  const { pool, chain, isLoading } = usePool()
+  const { pool, chain } = usePool()
   const { isMobile } = useBreakpoints()
   const { calcTotalUsdValue } = useTokens()
   const cardRef = useRef<HTMLDivElement | null>(null)
@@ -133,8 +130,21 @@ export function PoolComposition() {
     if (cardRef.current) {
       setHeight(cardRef.current.offsetHeight)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+
+    const resizeObserver = new ResizeObserver(entries => {
+      if (entries[0] && entries[0].target instanceof HTMLElement) {
+        setHeight(entries[0].target.offsetHeight)
+      }
+    })
+
+    if (cardRef.current) {
+      resizeObserver.observe(cardRef.current)
+    }
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [pool.id])
 
   return (
     <Card ref={cardRef}>
@@ -158,6 +168,29 @@ export function PoolComposition() {
                 <AlertDescription>{metadata.description}</AlertDescription>
               </Alert>
             ))}
+          {isQuantAmmPool(pool.type) && (
+            <Alert status="info">
+              <AlertIcon />
+              <AlertDescription>
+                <Text color="black">
+                  Tokens in BTFs dynamically shift weights to capture appreciation.{' '}
+                  <Link
+                    alignItems="center"
+                    color="black"
+                    display="inline-flex"
+                    href="https://medium.com/@QuantAMM/quantamm-x-balancer-v3-046af77ddc81"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <Box as="span">Learn more</Box>
+                    <Box as="span" ml={1}>
+                      <ArrowUpRight size={12} />
+                    </Box>
+                  </Link>
+                </Text>
+              </AlertDescription>
+            </Alert>
+          )}
           <Divider />
           <CardContent
             chain={chain}
@@ -170,26 +203,7 @@ export function PoolComposition() {
             From {fNum('integer', pool.dynamicData.holdersCount)} Liquidity Providers
           </Text>
         </VStack>
-        <NoisyCard
-          cardProps={{
-            position: 'relative',
-            overflow: 'hidden',
-            height: ['300px', `${height - 35}px`],
-          }}
-          contentProps={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-        >
-          <PoolZenGarden poolType={pool.type} sizePx={isMobile ? '300px' : `${height - 35}px`} />
-          {isLoading ? (
-            <Skeleton h="full" w="full" />
-          ) : (
-            <PoolWeightChart
-              chain={chain}
-              displayTokens={getFlatCompositionTokens(pool)}
-              hasLegend
-              totalLiquidity={totalLiquidity}
-            />
-          )}
-        </NoisyCard>
+        <PoolCompositionChart height={height} isMobile={!!isMobile} />
       </Stack>
     </Card>
   )

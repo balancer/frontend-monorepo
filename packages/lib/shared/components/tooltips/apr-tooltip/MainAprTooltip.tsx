@@ -16,11 +16,12 @@ import StarsIcon from '../../icons/StarsIcon'
 import { PoolListItem } from '@repo/lib/modules/pool/pool.types'
 import { FeaturedPool } from '@repo/lib/modules/pool/PoolProvider'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
-import { isLBP } from '@repo/lib/modules/pool/pool.helpers'
+import { isLBP, isQuantAmmPool } from '@repo/lib/modules/pool/pool.helpers'
 import { GqlPoolAprItemType } from '@repo/lib/shared/services/api/generated/graphql'
 import StarIcon from '../../icons/StarIcon'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isPool } from '@repo/lib/modules/pool/pool-tokens.utils'
+import { bn } from '@repo/lib/shared/utils/numbers'
 
 interface Props
   extends Omit<
@@ -40,16 +41,20 @@ export function SparklesIcon({
   isOpen,
   pool,
   id,
+  hoverColor,
 }: {
   isOpen: boolean
   pool: Pool | PoolListItem | FeaturedPool
   id?: string
+  hoverColor?: string
 }) {
-  const hoverColor = isLBP(pool.type) ? 'inherit' : 'font.highlight'
-
   const hasRewardApr =
     pool.dynamicData.aprItems.filter(item =>
-      [GqlPoolAprItemType.Staking, GqlPoolAprItemType.VebalEmissions].includes(item.type)
+      [
+        GqlPoolAprItemType.Staking,
+        GqlPoolAprItemType.VebalEmissions,
+        GqlPoolAprItemType.Merkl,
+      ].includes(item.type)
     ).length > 0
 
   const hasOnlySwapApr =
@@ -100,20 +105,20 @@ export function SparklesIcon({
     <Box h="auto" minW="16px" w="16px">
       <Center w="16px">
         {isLBP(pool.type) ? (
-          <Icon as={Info} boxSize={4} color={isOpen ? hoverColor : 'gray.400'} />
+          <Icon as={Info} boxSize={4} color={isOpen ? 'inherit' : 'gray.400'} />
         ) : hasOnlySwapApr ? (
           <Icon
             as={StarIcon}
             boxSize={4}
-            gradFrom={isOpen ? 'green' : defaultGradFrom}
-            gradTo={isOpen ? 'green' : defaultGradTo}
+            gradFrom={isOpen ? hoverColor : defaultGradFrom}
+            gradTo={isOpen ? hoverColor : defaultGradTo}
             id={id || ''}
           />
         ) : (
           <Icon
             as={StarsIcon}
-            gradFrom={isOpen ? 'green' : gradFromColor}
-            gradTo={isOpen ? 'green' : gradToColor}
+            gradFrom={isOpen ? hoverColor : gradFromColor}
+            gradTo={isOpen ? hoverColor : gradToColor}
             id={id || ''}
           />
         )}
@@ -133,8 +138,12 @@ function MainAprTooltip({
   id,
   ...props
 }: Props) {
-  const aprToShow = apr || getTotalAprLabel(pool.dynamicData.aprItems, vebalBoost)
-  const hoverColor = isLBP(pool.type) ? 'inherit' : 'font.highlight'
+  const canBeNegative = isQuantAmmPool(pool.type)
+  const aprToShow = apr || getTotalAprLabel(pool.dynamicData.aprItems, vebalBoost, canBeNegative)
+  const isAprNegative = bn(aprToShow).lt(0)
+
+  // hoverColor here is used for the text and therefore can use a semantic token
+  const hoverColor = isLBP(pool.type) ? 'inherit' : isAprNegative ? 'font.error' : 'font.highlight'
 
   const customPopoverContent = isLBP(pool.type) ? (
     <PopoverContent p="md">
@@ -174,11 +183,17 @@ function MainAprTooltip({
                   whiteSpace="pre-wrap"
                   {...textProps}
                 >
-                  {apr || aprToShow}
+                  {aprToShow}
                   {aprLabel ? ' APR' : ''}
                 </Text>
               )}
-              <SparklesIcon id={id} isOpen={isOpen} pool={pool} />
+              <SparklesIcon
+                id={id}
+                isOpen={isOpen}
+                pool={pool}
+                // hoverColor here is used for the icon and therefore needs to be a color
+                hoverColor={isAprNegative ? 'red' : 'green'}
+              />
             </HStack>
           </Button>
         </HStack>

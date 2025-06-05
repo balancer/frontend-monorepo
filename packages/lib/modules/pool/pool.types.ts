@@ -1,3 +1,5 @@
+'use client'
+
 import {
   GetPoolsQuery,
   GetPoolsQueryVariables,
@@ -7,6 +9,7 @@ import {
   GqlPoolOrderDirection,
   GqlNestedPool,
   GetPoolQuery,
+  QuantAmmWeightSnapshot,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   parseAsArrayOf,
@@ -181,3 +184,5 @@ export enum PoolDisplayType {
   Name = 'name',
   TokenPills = 'token-pills',
 }
+
+export type PoolWithWeightSnapshots = Pool & { weightSnapshots?: QuantAmmWeightSnapshot[] }

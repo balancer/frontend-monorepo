@@ -6,7 +6,7 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { useMemo } from 'react'
 import { Address, encodeFunctionData, erc20Abi } from 'viem'
 import { ManagedErc20TransactionButton } from '../../transactions/transaction-steps/TransactionButton'
-import { TransactionStep, TxCall } from '../../transactions/transaction-steps/lib'
+import { Retry, TransactionStep, TxCall } from '../../transactions/transaction-steps/lib'
 import { ManagedErc20TransactionInput } from '../../web3/contracts/useManagedErc20Transaction'
 import { useTokenAllowances } from '../../web3/useTokenAllowances'
 import { useUserAccount } from '../../web3/UserAccountProvider'
@@ -18,8 +18,9 @@ import {
   getRequiredTokenApprovals,
   isTheApprovedAmountEnough,
 } from './approval-rules'
-import { requiresDoubleApproval } from '../token.helpers'
+import { isVeBalBtpAddress, requiresDoubleApproval } from '../token.helpers'
 import { ErrorWithCauses } from '@repo/lib/shared/utils/errors'
+import { useStepsTransactionState } from '@repo/lib/modules/transactions/transaction-steps/useStepsTransactionState'
 
 export type Params = {
   spenderAddress: Address
@@ -48,6 +49,8 @@ export function useTokenApprovalSteps({
   wethIsEth,
 }: Params): { isLoading: boolean; steps: TransactionStep[] } {
   const { userAddress } = useUserAccount()
+  const { getTransaction, setTransactionFn } = useStepsTransactionState()
+
   const { getToken } = useTokens()
   const nativeAssetAddress = getNativeAssetAddress(chain)
 
@@ -81,108 +84,107 @@ export function useTokenApprovalSteps({
     skipAllowanceCheck: isUnwrappingNative,
   })
 
-  const steps = useMemo(() => {
-    return tokenAmountsToApprove.map((tokenAmountToApprove, index) => {
-      const {
-        tokenAddress,
+  const steps: TransactionStep[] = tokenAmountsToApprove.map((tokenAmountToApprove, index) => {
+    const {
+      tokenAddress,
+      requiredRawAmount,
+      requestedRawAmount,
+      symbol: approvalSymbol,
+    } = tokenAmountToApprove
+    // USDT edge-case: requires setting approval to 0n before adjusting the value up again
+    const isApprovingZeroForDoubleApproval =
+      requiresDoubleApproval(chain, tokenAddress) && requiredRawAmount === 0n
+    const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
+
+    const token = getToken(tokenAddress, chain)
+
+    const getSymbol = () => {
+      if (approvalSymbol && approvalSymbol !== 'Unknown') return approvalSymbol
+      if (bptSymbol) return bptSymbol
+      return token?.symbol || 'Unknown'
+    }
+
+    const labels = buildTokenApprovalLabels({
+      actionType,
+      symbol: getSymbol(),
+      isPermit2,
+      lpToken,
+    })
+
+    const isComplete = () => {
+      const tokenAllowance = tokenAllowances.allowanceFor(tokenAddress)
+      const nextToken = isApprovingZeroForDoubleApproval
+        ? tokenAmountsToApprove[index + 1]
+        : undefined
+
+      return isTheApprovedAmountEnough(
+        tokenAllowance,
         requiredRawAmount,
-        requestedRawAmount,
-        symbol: approvalSymbol,
-      } = tokenAmountToApprove
-      // USDT edge-case: requires setting approval to 0n before adjusting the value up again
-      const isApprovingZeroForDoubleApproval =
-        requiresDoubleApproval(chain, tokenAddress) && requiredRawAmount === 0n
-      const id = isApprovingZeroForDoubleApproval ? `${tokenAddress}-0` : tokenAddress
+        isApprovingZeroForDoubleApproval,
+        nextToken
+      )
+    }
 
-      const token = getToken(tokenAddress, chain)
+    const checkEdgeCaseErrors = (tokenAllowance: bigint) => {
+      const errors = []
 
-      const getSymbol = () => {
-        if (approvalSymbol && approvalSymbol !== 'Unknown') return approvalSymbol
-        if (bptSymbol) return bptSymbol
-        return token?.symbol || 'Unknown'
-      }
-
-      const labels = buildTokenApprovalLabels({
-        actionType,
-        symbol: getSymbol(),
-        isPermit2,
-        lpToken,
-      })
-
-      const isComplete = (tokenAllowanceAfterRefetch?: bigint) => {
-        const tokenAllowance =
-          tokenAllowanceAfterRefetch || tokenAllowances.allowanceFor(tokenAddress)
-        const nextToken = isApprovingZeroForDoubleApproval
-          ? tokenAmountsToApprove[index + 1]
-          : undefined
-
-        return isTheApprovedAmountEnough(
+      const nextToken = isApprovingZeroForDoubleApproval
+        ? tokenAmountsToApprove[index + 1]
+        : undefined
+      if (
+        !isTheApprovedAmountEnough(
           tokenAllowance,
           requiredRawAmount,
           isApprovingZeroForDoubleApproval,
           nextToken
         )
+      ) {
+        errors.push({
+          id: 'not-enough-allowance',
+          title: 'Error on approval step',
+          description: 'The approved amount is not enough for the current transaction.',
+        })
       }
 
-      const checkEdgeCaseErrors = (tokenAllowance: bigint) => {
-        const errors = []
+      return errors
+    }
 
-        const nextToken = isApprovingZeroForDoubleApproval
-          ? tokenAmountsToApprove[index + 1]
-          : undefined
-        if (
-          !isTheApprovedAmountEnough(
-            tokenAllowance,
-            requiredRawAmount,
-            isApprovingZeroForDoubleApproval,
-            nextToken
-          )
-        ) {
-          errors.push({
-            id: 'not-enough-allowance',
-            title: 'Error on approval step',
-            description: 'The approved amount is not enough for the current transaction.',
-          })
-        }
+    const isTxEnabled = !!spenderAddress && !tokenAllowances.isAllowancesLoading
+    const props: ManagedErc20TransactionInput = {
+      tokenAddress,
+      functionName: isVeBalBtpAddress(tokenAddress) ? 'increaseApproval' : 'approve',
+      labels,
+      isComplete,
+      chainId: getChainId(chain),
+      args: [spenderAddress, requestedRawAmount],
+      enabled: isTxEnabled,
+      simulationMeta: sentryMetaForWagmiSimulation(
+        'Error in wagmi tx simulation: Approving token',
+        tokenAmountToApprove
+      ),
+      onTransactionChange: setTransactionFn(id),
+    }
 
-        return errors
-      }
+    const args = props.args as [Address, bigint]
 
-      const isTxEnabled = !!spenderAddress && !tokenAllowances.isAllowancesLoading
-      const props: ManagedErc20TransactionInput = {
-        tokenAddress,
-        functionName: 'approve',
-        labels,
-        isComplete,
-        chainId: getChainId(chain),
-        args: [spenderAddress, requestedRawAmount],
-        enabled: isTxEnabled,
-        simulationMeta: sentryMetaForWagmiSimulation(
-          'Error in wagmi tx simulation: Approving token',
-          tokenAmountToApprove
-        ),
-      }
-
-      const args = props.args as [Address, bigint]
-
-      return {
-        id,
-        stepType: 'tokenApproval',
-        labels,
-        isComplete,
-        renderAction: () => <ManagedErc20TransactionButton id={id} key={id} {...props} />,
-        batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
-        onSuccess: async () => {
-          const newAllowances = await tokenAllowances.refetchAllowances()
-          // Ignore check if allowances are refetching
-          if (newAllowances.isRefetching) return
-          const updatedTokenAllowance = newAllowances.allowanceFor(tokenAddress)
-          const errors = checkEdgeCaseErrors(updatedTokenAllowance)
-          if (errors.length > 0) throw new ErrorWithCauses('Edge case errors', errors)
-        },
-      } as const satisfies TransactionStep
-    })
-  }, [tokenAllowances.allowances, userAddress, tokenAmountsToApprove])
+    return {
+      id,
+      stepType: 'tokenApproval',
+      labels,
+      isComplete,
+      transaction: getTransaction(id),
+      renderAction: () => <ManagedErc20TransactionButton id={id} key={id} {...props} />,
+      batchableTxCall: isTxEnabled ? buildBatchableTxCall({ tokenAddress, args }) : undefined,
+      onSuccess: async () => {
+        const newAllowances = await tokenAllowances.refetchAllowances()
+        // Ignore check and retry while allowances are refetching
+        if (newAllowances.isRefetching) return Retry
+        const updatedTokenAllowance = newAllowances.allowanceFor(tokenAddress)
+        const errors = checkEdgeCaseErrors(updatedTokenAllowance)
+        if (errors.length > 0) throw new ErrorWithCauses('Edge case errors', errors)
+      },
+    } as const satisfies TransactionStep
+  })
 
   return {
     isLoading: tokenAllowances.isAllowancesLoading,

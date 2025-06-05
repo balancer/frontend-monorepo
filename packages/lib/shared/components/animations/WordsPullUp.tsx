@@ -11,9 +11,12 @@ export function WordsPullUp({
   text,
   delay = 0,
   pr = '0.9',
-  animateMargin = '-50px',
   ...rest
-}: { text: string; delay?: number; pr?: BoxProps['pr']; animateMargin?: string } & BoxProps) {
+}: {
+  text: string
+  delay?: number
+  pr?: BoxProps['pr']
+} & Omit<BoxProps, 'transition'>) {
   const splittedText = text.split(' ')
   const [shouldAnimate, setShouldAnimate] = useState(false)
 
@@ -31,7 +34,11 @@ export function WordsPullUp({
   }
 
   const ref = React.useRef(null)
-  const isInView = useInView(ref, { once: true, margin: animateMargin })
+
+  const isInView = useInView(ref, {
+    once: true,
+    amount: 0.3,
+  })
 
   useEffect(() => {
     if (isInView && !shouldAnimate) {
@@ -41,20 +48,21 @@ export function WordsPullUp({
 
   return (
     <HStack justify="center" {...rest}>
-      {splittedText.map((current, i) => (
-        <MotionBox
-          animate={shouldAnimate ? 'animate' : ''}
-          custom={i}
-          initial="initial"
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
-          pr={pr}
-          ref={ref}
-          variants={pullupVariant}
-        >
-          {current == '' ? <span>&nbsp;</span> : current}
-        </MotionBox>
-      ))}
+      {splittedText.map((current, i) => {
+        const motionProps = {
+          animate: shouldAnimate ? 'animate' : '',
+          custom: i,
+          initial: 'initial',
+          variants: pullupVariant,
+          pr,
+        } as any
+
+        return (
+          <MotionBox key={i} ref={i === 0 ? ref : undefined} {...motionProps}>
+            {current === '' ? <span>&nbsp;</span> : current}
+          </MotionBox>
+        )
+      })}
     </HStack>
   )
 }

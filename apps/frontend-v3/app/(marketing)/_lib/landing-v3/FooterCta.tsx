@@ -11,8 +11,9 @@ import { useRef } from 'react'
 import { useState } from 'react'
 import { ArrowUpRight } from 'react-feather'
 import { BalancerLogoAnimated } from '@repo/lib/shared/components/icons/BalancerIconAnimated'
+import { MotionButtonProps } from './types'
 
-const MotionButton = motion(Button)
+const MotionButton = motion(Button) as React.FC<MotionButtonProps>
 
 export function FooterCta() {
   const [shouldAnimate, setShouldAnimate] = useState(false)
@@ -28,7 +29,6 @@ export function FooterCta() {
       interval = setInterval(() => {
         setPatternProgress(prev => {
           if (prev >= 100) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             clearInterval(interval!)
             return 100
           }

@@ -1,5 +1,4 @@
 import { TransactionStep } from '@repo/lib/modules/transactions/transaction-steps/lib'
-import { useMemo } from 'react'
 import { useClaimRewardsStep } from './useClaimRewardsStep'
 import { getChainId } from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -10,11 +9,7 @@ export function useClaimRewardsSteps(chain: GqlChain, relicId: string | undefine
   const { step: relayerApprovalRelicsStep, isLoading } = useApproveRelayerRelicsStep(chainId)
   const { step: claimRewardsStep } = useClaimRewardsStep(chain, relicId)
 
-  const steps = useMemo((): TransactionStep[] => {
-    const steps = [relayerApprovalRelicsStep, claimRewardsStep]
-
-    return steps
-  }, [relayerApprovalRelicsStep, claimRewardsStep])
+  const steps: TransactionStep[] = [relayerApprovalRelicsStep, claimRewardsStep]
 
   return {
     isLoading,

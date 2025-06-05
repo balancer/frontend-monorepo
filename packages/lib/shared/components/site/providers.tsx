@@ -6,6 +6,7 @@ import { ApolloGlobalDataProvider } from '@repo/lib/shared/services/api/apollo-g
 import { UserSettingsProvider } from '@repo/lib/modules/user/settings/UserSettingsProvider'
 import { WagmiConfigProvider } from '@repo/lib/modules/web3/WagmiConfigProvider'
 import { VebalLockDataProvider } from '@repo/lib/modules/vebal/VebalLockDataProvider'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -15,7 +16,9 @@ export function Providers({ children }: { children: ReactNode }) {
           <ApolloGlobalDataProvider>
             <UserSettingsProvider>
               <VebalLockDataProvider>
-                <RecentTransactionsProvider>{children}</RecentTransactionsProvider>
+                <RecentTransactionsProvider>
+                  <NuqsAdapter>{children}</NuqsAdapter>
+                </RecentTransactionsProvider>
               </VebalLockDataProvider>
             </UserSettingsProvider>
           </ApolloGlobalDataProvider>

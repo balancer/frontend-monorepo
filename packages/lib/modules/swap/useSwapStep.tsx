@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ManagedSendTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
+  ManagedResult,
   TransactionLabels,
   TransactionStep,
 } from '@repo/lib/modules/transactions/transaction-steps/lib'
@@ -8,7 +9,6 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { VStack } from '@chakra-ui/react'
 import { capitalize } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
-import { useTransactionState } from '../transactions/transaction-steps/TransactionStateProvider'
 import { BuildSwapQueryParams, useBuildSwapQuery } from './queries/useBuildSwapQuery'
 import { swapActionPastTense } from './swap.helpers'
 import { SwapAction } from './swap.types'
@@ -18,8 +18,9 @@ import { useTenderly } from '../web3/useTenderly'
 import { getChainId } from '@repo/lib/config/app.config'
 import { DisabledTransactionButton } from '../transactions/transaction-steps/TransactionStepButton'
 import { ApiToken } from '../tokens/token.types'
+import { isTransactionSuccess } from '../transactions/transaction-steps/transaction.helper'
 
-export const swapStepId = 'swap'
+const swapStepId = 'swap'
 
 export type SwapStepParams = BuildSwapQueryParams & {
   swapAction: SwapAction
@@ -38,11 +39,11 @@ export function useSwapStep({
 }: SwapStepParams): TransactionStep {
   const { isConnected } = useUserAccount()
   const [isBuildQueryEnabled, setIsBuildQueryEnabled] = useState(false)
-  const { getTransaction } = useTransactionState()
   const { refetchBalances } = useTokenBalances()
   const { buildTenderlyUrl } = useTenderly({
     chainId: getChainId(swapState.selectedChain),
   })
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
 
   const buildSwapQuery = useBuildSwapQuery({
     handler,
@@ -76,15 +77,14 @@ export function useSwapStep({
     tenderlyUrl: buildTenderlyUrl(buildSwapQuery.data),
   })
 
-  const transaction = getTransaction(swapStepId)
-
-  const isComplete = () => transaction?.result.isSuccess || false
+  const isComplete = () => isTransactionSuccess(transaction)
 
   return useMemo(
     () => ({
       id: swapStepId,
       stepType: 'swap',
       labels,
+      transaction,
       isComplete,
       onActivated: () => setIsBuildQueryEnabled(true),
       onDeactivated: () => setIsBuildQueryEnabled(false),
@@ -98,6 +98,7 @@ export function useSwapStep({
               id={swapStepId}
               labels={labels}
               txConfig={buildSwapQuery.data}
+              onTransactionChange={setTransaction}
             />
           </VStack>
         )

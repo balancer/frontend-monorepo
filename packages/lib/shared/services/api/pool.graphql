@@ -113,6 +113,14 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       epsilon
       lambda
     }
+    ... on GqlPoolLiquidityBootstrappingV3 {
+      endTime
+      name
+      poolTokens {
+        ...PoolTokens
+      }
+      startTime
+    }
     ... on GqlPoolGyro {
       alpha
       beta
@@ -142,6 +150,13 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     }
     ... on GqlPoolQuantAmmWeighted {
       hasAnyAllowedBuffer
+      weightSnapshots {
+        timestamp
+        weights
+      }
+      poolTokens {
+        ...PoolTokens
+      }
     }
     ... on GqlPoolReClamm {
       centerednessMargin

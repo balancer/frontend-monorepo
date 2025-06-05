@@ -39,8 +39,9 @@ anvil --fork-url https://lb.drpc.org/ogrpc?network=ethereum&dkey=YOUR_LOCAL_NEXT
 pnpm run test:e2e:dev
 ```
 
-Running the dev server in turbopack mode is much faster than building the app, so we run functional
-E2E tests against a local dev server.
+Running the build in turbopack mode is much faster than building it in webpack. turbopack build is
+still experimental so we will only use it in these tests, while production build and smoke tests
+will keep using webpack builds.
 
 Additionally, this tests use an anvil fork so that we can impersonate accounts and run complete
 transaction flows (using wagmi connector mock to avoid playwright interacting with a real wallet).

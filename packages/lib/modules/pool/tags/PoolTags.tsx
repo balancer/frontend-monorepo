@@ -8,15 +8,24 @@ import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover
 function TagValue({ tag }: { tag: PoolTag }) {
   if (tag.value) {
     if (tag.id.includes('points') && isValidNumber(tag.value)) {
-      return <Text ml="xs" mr="xs">{`${tag.value}x`}</Text>
+      return <Text ml="xs" mr="xs" fontSize="xs" fontWeight="bold">{`${tag.value}x`}</Text>
     }
   }
   return null
 }
 
-function PoolTagBadge({ tag }: { tag: PoolTag }) {
+interface PoolTagBadgeProps {
+  tag: PoolTag
+  size?: 'sm' | 'md'
+}
+
+function PoolTagBadge({ tag, size = 'md' }: PoolTagBadgeProps) {
   const { getTagIconSrc } = usePoolTags()
   const tagIconSrc = getTagIconSrc(tag)
+  const imageDim = size === 'sm' ? 4 : 6
+  const badgeMinH = size === 'sm' ? '26px' : '34px'
+  const badgeMl = size === 'sm' && tagIconSrc ? -6 : tagIconSrc ? -9 : 0
+  const badgePl = size === 'sm' && tagIconSrc ? 5 : tagIconSrc ? 8 : undefined
 
   return (
     <CustomPopover
@@ -39,7 +48,7 @@ function PoolTagBadge({ tag }: { tag: PoolTag }) {
             textTransform="none"
             zIndex={2}
           >
-            <Image alt={tag.name} h={6} src={tagIconSrc} w={6} />
+            <Image alt={tag.name} h={imageDim} src={tagIconSrc} w={imageDim} />
           </Badge>
         )}
         <Badge
@@ -49,15 +58,15 @@ function PoolTagBadge({ tag }: { tag: PoolTag }) {
           borderRadius="full"
           borderWidth={1}
           display="flex"
-          minH="34px"
-          ml={tagIconSrc ? -9 : 0}
+          minH={badgeMinH}
+          ml={badgeMl}
           p="xs"
-          pl={tagIconSrc ? 8 : undefined}
+          pl={badgePl}
           shadow="sm"
           textTransform="none"
         >
           {tag.iconUrl ? (
-            <Image alt={tag.name} h={6} rounded="full" src={tag.iconUrl} w={6} />
+            <Image alt={tag.name} h={imageDim} rounded="full" src={tag.iconUrl} w={imageDim} />
           ) : (
             <Text fontSize="xs" fontWeight="bold" px="sm" textTransform="uppercase">
               {tag.name}
@@ -77,9 +86,9 @@ export function PoolTags() {
   const poolTags = getPoolTags(pool)
 
   return (
-    <HStack>
+    <HStack wrap="wrap" justifyContent="end" gap="6px">
       {poolTags.map(tag => (
-        <PoolTagBadge key={tag.id} tag={tag} />
+        <PoolTagBadge key={tag.id} tag={tag} size={poolTags.length > 3 ? 'sm' : undefined} />
       ))}
     </HStack>
   )
