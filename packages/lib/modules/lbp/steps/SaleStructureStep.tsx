@@ -29,17 +29,19 @@ import { getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
 import { Clipboard, Edit } from 'react-feather'
 import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
-import { isGreaterThanZeroValidation } from '@repo/lib/shared/utils/numbers'
+import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
 import { useEffect } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useLbpForm } from '../LbpFormProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
-import { TokenBalancesProvider } from '../../tokens/TokenBalancesProvider'
+import { TokenBalancesProvider, useTokenBalances } from '../../tokens/TokenBalancesProvider'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
 import { LbpFormAction } from '../LbpFormAction'
+import { CustomToken } from '../../tokens/token.types'
+import { Address } from 'viem'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -54,6 +56,7 @@ export function SaleStructureStep() {
       trigger,
       reset,
     },
+    projectInfoForm,
     setActiveStep,
     activeStepIndex,
   } = useLbpForm()
@@ -168,11 +171,17 @@ export function SaleStructureStep() {
                     control={control}
                     launchTokenAddress={launchTokenAddress}
                     selectedChain={selectedChain}
+                    customIcon={projectInfoForm.watch('tokenIconUrl')}
+                    metadata={launchTokenMetadata}
+                    errors={errors}
                   />
+
                   <CollateralTokenAmountInput
-                    collateralTokenAddress={collateralTokenAddress}
                     control={control}
+                    errors={errors}
+                    collateralTokenAddress={collateralTokenAddress}
                     selectedChain={selectedChain}
+                    collateralTokenSymbol={collateralToken?.symbol || ''}
                   />
                 </PriceImpactProvider>
               </TokenInputsValidationProvider>
@@ -385,13 +394,44 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
 
 function SaleTokenAmountInput({
   control,
+  errors,
   selectedChain,
   launchTokenAddress,
+  customIcon,
+  metadata,
 }: {
   control: Control<SaleStructureForm>
+  errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
   launchTokenAddress: string
+  customIcon?: string
+  metadata: TokenMetadata
 }) {
+  const { balanceFor, isBalancesLoading } = useTokenBalances()
+  const balance = balanceFor(launchTokenAddress)
+
+  const customToken: CustomToken = {
+    chain: selectedChain,
+    address: launchTokenAddress as Address,
+    symbol: metadata.symbol || '',
+    logoURI: customIcon || '',
+    decimals: metadata.decimals || 0,
+  }
+
+  const haveEnoughAmount = (value: string) => {
+    if (isBalancesLoading) return true
+
+    if (!balance || balance.amount === 0n) {
+      return `Your wallet has no ${metadata.symbol}. You will need some to seed this pool and sell it during the LBP`
+    }
+
+    if (bn(balance.amount).shiftedBy(balance.decimals).lt(value)) {
+      return `Your wallet does not have enough ${metadata.symbol}`
+    }
+
+    return true
+  }
+
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Sale token</Text>
@@ -404,26 +444,54 @@ function SaleTokenAmountInput({
             chain={selectedChain}
             onChange={e => field.onChange(e.currentTarget.value)}
             value={field.value}
+            priceMessage="Price: N/A"
+            apiToken={customToken}
           />
         )}
         rules={{
           required: 'Sale token amount is required',
-          validate: isGreaterThanZeroValidation,
+          validate: { isGreaterThanZeroValidation, haveEnoughAmount },
         }}
       />
+      {errors.saleTokenAmount && (
+        <Text color="font.error" fontSize="sm" textAlign="start" w="full">
+          {errors.saleTokenAmount.message}
+        </Text>
+      )}
     </VStack>
   )
 }
 
 function CollateralTokenAmountInput({
   control,
+  errors,
   selectedChain,
   collateralTokenAddress,
+  collateralTokenSymbol,
 }: {
   control: Control<SaleStructureForm>
+  errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
   collateralTokenAddress: string
+  collateralTokenSymbol: string
 }) {
+  const { balanceFor, isBalancesLoading } = useTokenBalances()
+  const balance = balanceFor(collateralTokenAddress)
+
+  const haveEnoughAmount = (value: string) => {
+    if (isBalancesLoading) return true
+
+    if (!balance || balance.amount === 0n) {
+      return `Your wallet has no ${collateralTokenSymbol}. You need some to seed this pool.\nSuggested seed liquidity amount: $2k-$5k`
+    }
+
+    if (bn(balance.amount).shiftedBy(balance.decimals).lt(value)) {
+      return `Your wallet does not have enough ${collateralTokenSymbol}`
+    }
+
+    return true
+  }
+
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Collateral token</Text>
@@ -439,10 +507,15 @@ function CollateralTokenAmountInput({
           />
         )}
         rules={{
-          required: 'Sale token amount is required',
-          validate: isGreaterThanZeroValidation,
+          required: 'Collateral token amount is required',
+          validate: { isGreaterThanZeroValidation, haveEnoughAmount },
         }}
       />
+      {errors.collateralTokenAmount && (
+        <Text color="font.error" fontSize="sm" textAlign="start" w="full" whiteSpace="pre-wrap">
+          {errors.collateralTokenAmount.message}
+        </Text>
+      )}
     </VStack>
   )
 }

@@ -9,6 +9,7 @@ export type TokenMetadata = {
   name: string | undefined
   symbol: string | undefined
   totalSupply: number | undefined
+  decimals: number | undefined
   isLoading: boolean
 }
 
@@ -60,6 +61,7 @@ export function useTokenMetadata(maybeAddress: string, chain: GqlChain): TokenMe
   return {
     name: name?.result,
     symbol: symbol?.result,
+    decimals: decimals?.result,
     totalSupply:
       totalSupply?.result && decimals?.result
         ? bn(totalSupply.result).shiftedBy(-decimals.result).toNumber()

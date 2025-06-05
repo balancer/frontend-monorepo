@@ -12,7 +12,10 @@ import { TextareaWithError } from '@repo/lib/shared/components/inputs/TextareaWi
 
 export function ProjectInfoStep() {
   const {
-    projectInfoForm: { handleSubmit },
+    projectInfoForm: {
+      handleSubmit,
+      formState: { isValid },
+    },
     setActiveStep,
     activeStepIndex,
   } = useLbpForm()
@@ -36,7 +39,7 @@ export function ProjectInfoStep() {
         <ProjectTelegramHandle />
         <ProjectDiscordUrlInput />
 
-        <LbpFormAction />
+        <LbpFormAction disabled={!isValid} />
       </VStack>
     </form>
   )
