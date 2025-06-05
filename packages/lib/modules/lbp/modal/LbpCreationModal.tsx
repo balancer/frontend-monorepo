@@ -1,6 +1,6 @@
 import { DesktopStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/DesktopStepTracker'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalProps } from '@chakra-ui/react'
-import { RefObject, useRef } from 'react'
+import { RefObject, useRef, useEffect } from 'react'
 import { TransactionModalHeader } from '@repo/lib/shared/components/modals/TransactionModalHeader'
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useLbpForm } from '../LbpFormProvider'
@@ -16,6 +16,7 @@ import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
+import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
 
 type Props = {
   isOpen: boolean
@@ -35,11 +36,25 @@ export function LbpCreationModal({
   const { saleStructureForm } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const { userAddress } = useUserAccount()
-  const { transactionSteps, lastTransaction, initLbpTxHash, urlTxHash } = useLbpCreation()
+  const { transactionSteps, lastTransaction, initLbpTxHash, urlTxHash, previewModalDisclosure } =
+    useLbpCreation()
+
+  const [, setStepIndex] = useLocalStorage(LS_KEYS.LbpConfig.StepIndex, 0)
   const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
     LS_KEYS.LbpConfig.Address,
     undefined
   )
+  const handleReset = () => {
+    localStorage.removeItem(LS_KEYS.LbpConfig.SaleStructure)
+    localStorage.removeItem(LS_KEYS.LbpConfig.ProjectInfo)
+    localStorage.removeItem(LS_KEYS.LbpConfig.Address)
+    localStorage.removeItem(LS_KEYS.LbpConfig.IsMetadataSent)
+    setStepIndex(0)
+    if (initLbpTxHash) {
+      window.history.replaceState({}, '', './create')
+    }
+    onClose()
+  }
 
   const txReceipt = lastTransaction?.result
 
@@ -54,13 +69,25 @@ export function LbpCreationModal({
 
   const isSuccess = !!initLbpTxHash
   const path = getPoolPath({
-    id: poolAddress as `0x${string}`, // TODO: is type assertion okay?
+    id: poolAddress as `0x${string}`,
     chain: selectedChain,
     type: GqlPoolType.LiquidityBootstrapping,
     protocolVersion: 3 as const,
   })
 
   const { redirectToPage: redirectToPoolPage } = useRedirect(path)
+
+  useEffect(() => {
+    // trigger modal open if user refresh page after pool init step
+    if (initLbpTxHash || urlTxHash) previewModalDisclosure.onOpen()
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }, [initLbpTxHash, urlTxHash])
+
+  useEffect(() => {
+    if (initLbpTxHash && !window.location.pathname.includes(initLbpTxHash)) {
+      window.history.replaceState({}, '', `./create/${initLbpTxHash}`)
+    }
+  }, [initLbpTxHash])
 
   return (
     <Modal
@@ -95,26 +122,32 @@ export function LbpCreationModal({
         <ModalBody>
           <LbpSummary />
 
-          {isSuccess && (
-            <VStack width="full">
-              <Button
-                isDisabled={false}
-                isLoading={false}
-                onClick={redirectToPoolPage}
-                size="lg"
-                variant="secondary"
-                w="full"
-                width="full"
-                marginTop="4"
-              >
-                <HStack justifyContent="center" spacing="sm" width="100%">
-                  <Text color="font.primaryGradient" fontWeight="bold">
-                    View LBP page
-                  </Text>
-                </HStack>
-              </Button>
-            </VStack>
-          )}
+          {isSuccess ||
+            (!!urlTxHash && (
+              <VStack width="full">
+                <Button
+                  isDisabled={false}
+                  isLoading={false}
+                  onClick={() => {
+                    // TODO: i dont think this works because redirect will interupt flow so reset never happens?
+                    // but cant reset first cus redirect relies on pool address from local storage?
+                    redirectToPoolPage()
+                    handleReset()
+                  }}
+                  size="lg"
+                  variant="secondary"
+                  w="full"
+                  width="full"
+                  marginTop="4"
+                >
+                  <HStack justifyContent="center" spacing="sm" width="100%">
+                    <Text color="font.primaryGradient" fontWeight="bold">
+                      View LBP page
+                    </Text>
+                  </HStack>
+                </Button>
+              </VStack>
+            ))}
         </ModalBody>
 
         <ActionModalFooter
@@ -124,6 +157,7 @@ export function LbpCreationModal({
           returnLabel="View pool page"
           urlTxHash={urlTxHash}
         />
+        {!urlTxHash && <PoolCreationModalFooter onReset={handleReset} />}
       </ModalContent>
     </Modal>
   )

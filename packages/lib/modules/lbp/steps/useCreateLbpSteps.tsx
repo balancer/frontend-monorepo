@@ -35,8 +35,6 @@ export function useCreateLbpSteps() {
     wethIsEth: undefined, // TODO
   }
 
-  console.log('initPoolInput', initPoolInput) // TODO: why does adding this console.log trigger both token signatures being fixed? (stepper starts w/ only one token sig w/o this)
-
   const signPermit2Step = useSignPermit2InitializeStep({ initPoolInput, chain: selectedChain })
   const initLbpStep = useInitializeLbpStep({ initPoolInput })
 
