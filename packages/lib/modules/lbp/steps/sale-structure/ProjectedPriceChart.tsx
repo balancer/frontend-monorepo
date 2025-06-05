@@ -4,13 +4,13 @@ import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { buildMarkline } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
+import { useLbpPriceStats } from '../../useLbpPriceStats'
 
 export function ProjectedPriceChart({
   startWeight,
   endWeight,
   startDate,
   endDate,
-  launchTokenSeed,
   collateralTokenSeed,
   collateralTokenPrice,
   onPriceChange,
@@ -19,11 +19,12 @@ export function ProjectedPriceChart({
   endWeight: number
   startDate: Date
   endDate: Date
-  launchTokenSeed: number
   collateralTokenSeed: number
   collateralTokenPrice: number
   onPriceChange: (prices: number[][]) => void
 }) {
+  const { launchTokenSeed } = useLbpPriceStats()
+
   const priceData = interpolateData(
     startWeight,
     endWeight,

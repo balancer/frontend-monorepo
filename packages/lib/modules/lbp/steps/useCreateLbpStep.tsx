@@ -18,6 +18,7 @@ import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { usePoolCreationReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
+import { useLbpWeights } from '../useLbpWeights'
 
 export const createLbpStepId = 'create-lbp'
 
@@ -43,9 +44,6 @@ export function useCreateLbpStep(): TransactionStep {
   const {
     launchTokenAddress,
     collateralTokenAddress,
-    weightAdjustmentType,
-    customStartWeight,
-    customEndWeight,
     startTime,
     endTime,
     selectedChain,
@@ -67,16 +65,12 @@ export function useCreateLbpStep(): TransactionStep {
   const chainId = getNetworkConfig(selectedChain).chainId
   const { buildTenderlyUrl } = useTenderly({ chainId })
 
-  const lbpWeightConfig = {
-    linear_90_10: { start: 90, end: 10 },
-    linear_90_50: { start: 90, end: 50 },
-    custom: { start: customStartWeight, end: customEndWeight },
-  }
-
-  const projectTokenStartWeight = lbpWeightConfig[weightAdjustmentType].start
-  const reserveTokenStartWeight = 100 - lbpWeightConfig[weightAdjustmentType].start
-  const projectTokenEndWeight = lbpWeightConfig[weightAdjustmentType].end
-  const reserveTokenEndWeight = 100 - lbpWeightConfig[weightAdjustmentType].end
+  const {
+    projectTokenStartWeight,
+    reserveTokenStartWeight,
+    projectTokenEndWeight,
+    reserveTokenEndWeight,
+  } = useLbpWeights()
 
   const blockProjectTokenSwapsIn = userActions === 'buy_only' ? true : false
 

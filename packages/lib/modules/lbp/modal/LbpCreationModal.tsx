@@ -5,7 +5,6 @@ import { TransactionModalHeader } from '@repo/lib/shared/components/modals/Trans
 import { SuccessOverlay } from '@repo/lib/shared/components/modals/SuccessOverlay'
 import { useLbpForm } from '../LbpFormProvider'
 import { LbpSummary } from './LbpSummary'
-import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { useLbpCreation } from '../LbpCreationProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { usePoolCreationReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
@@ -17,6 +16,7 @@ import { useRedirect } from '@repo/lib/shared/hooks/useRedirect'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
+import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 
 type Props = {
   isOpen: boolean
@@ -44,24 +44,23 @@ export function LbpCreationModal({
     LS_KEYS.LbpConfig.Address,
     undefined
   )
-  const handleReset = () => {
-    // dump local storage
+  const handleReset = async () => {
+    // clear local storage
     localStorage.removeItem(LS_KEYS.LbpConfig.SaleStructure)
     localStorage.removeItem(LS_KEYS.LbpConfig.ProjectInfo)
     localStorage.removeItem(LS_KEYS.LbpConfig.Address)
     localStorage.removeItem(LS_KEYS.LbpConfig.IsMetadataSent)
     setStepIndex(0)
 
-    // dump temp state
+    // clear temp state
     saleStructureForm.reset()
     projectInfoForm.reset()
     setActiveStep(0)
 
-    // dump tx hash from path
-    if (initLbpTxHash) {
-      window.history.replaceState({}, '', './create')
-    }
-    onClose()
+    // clear path
+    if (initLbpTxHash) window.history.replaceState({}, '', '/')
+
+    onClose() // close modal
   }
 
   const txReceipt = lastTransaction?.result
@@ -97,6 +96,8 @@ export function LbpCreationModal({
     }
   }, [initLbpTxHash])
 
+  console.log('initLbpTxHash', initLbpTxHash)
+
   return (
     <Modal
       finalFocusRef={finalFocusRef}
@@ -118,14 +119,12 @@ export function LbpCreationModal({
             transactionSteps={transactionSteps}
           />
         )}
-
         <TransactionModalHeader
           chain={selectedChain}
           isReceiptLoading={receiptProps.isLoading}
           label={'Preview: Create an LBP'}
           txHash={initLbpTxHash}
         />
-
         <ModalCloseButton />
         <ModalBody>
           <LbpSummary />
@@ -137,10 +136,11 @@ export function LbpCreationModal({
                 isLoading={false}
                 onClick={() => {
                   redirectToPoolPage()
-                  // setTimeout callback managed by browser event loop so will run after redirect
-                  setTimeout(() => {
-                    handleReset()
-                  }, 5000)
+                  // TODO: fix form reset
+                  // setTimeout callback managed by browser event loop so will run after redirect?
+                  // setTimeout(() => {
+                  //   handleReset()
+                  // }, 5000)
                 }}
                 size="lg"
                 variant="secondary"
@@ -157,7 +157,6 @@ export function LbpCreationModal({
             </VStack>
           )}
         </ModalBody>
-
         <ActionModalFooter
           currentStep={transactionSteps.currentStep}
           isSuccess={isSuccess}
@@ -165,6 +164,7 @@ export function LbpCreationModal({
           returnLabel="View pool page"
           urlTxHash={urlTxHash}
         />
+        {/* TODO: fix form reset */}
         {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
       </ModalContent>
     </Modal>

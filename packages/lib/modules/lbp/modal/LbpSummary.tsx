@@ -4,6 +4,7 @@ import { useLbpForm } from '../LbpFormProvider'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { Address } from 'viem'
 import { formatDateTimeShort } from '@repo/lib/shared/utils/time'
+import { useLbpPriceStats } from '../useLbpPriceStats'
 
 export function LbpSummary() {
   const { saleStructureForm } = useLbpForm()
@@ -18,6 +19,8 @@ export function LbpSummary() {
     weightAdjustmentType,
     userActions,
   } = saleStructureForm.getValues()
+
+  const { saleMarketCap } = useLbpPriceStats()
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
@@ -61,7 +64,7 @@ export function LbpSummary() {
           </HStack>
           <HStack justify="space-between" w="full">
             <Text color="grayText">Sale Market Cap Range</Text>
-            <Text color="grayText">???</Text>
+            <Text color="grayText">{saleMarketCap}</Text>
           </HStack>
         </VStack>
       </Card>

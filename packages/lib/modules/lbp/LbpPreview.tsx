@@ -8,8 +8,9 @@ import { TokenSummary } from './steps/preview/TokenSummary'
 import { PoolWeights } from './steps/preview/PoolWeights'
 import { ProjectedPrice } from './steps/preview/ProjectedPrice'
 import { SimpleInfoCard } from './steps/SimpleInfoCard'
-import { useState } from 'react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
+import { useLbpPriceStats } from './useLbpPriceStats'
+import { useLbpWeights } from './useLbpWeights'
 
 export function LbpPreview() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -25,35 +26,12 @@ export function LbpPreview() {
   const chain = saleStructureData.selectedChain
   const launchTokenAddress = saleStructureData.launchTokenAddress
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
-  const launchTokenSeed = Number(saleStructureData.saleTokenAmount || 0)
 
   const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
-  const weightAdjustmentType = saleStructureData.weightAdjustmentType
-  const startWeight = ['linear_90_10', 'linear_90_50'].includes(weightAdjustmentType)
-    ? 90
-    : saleStructureData.customStartWeight
-  const endWeight =
-    weightAdjustmentType === 'linear_90_10'
-      ? 10
-      : weightAdjustmentType === 'linear_90_50'
-        ? 50
-        : saleStructureData.customEndWeight
+  const { projectTokenStartWeight: startWeight, projectTokenEndWeight: endWeight } = useLbpWeights()
 
-  const [maxPrice, setMaxPrice] = useState(0)
-  const [saleMarketCap, setSaleMarketCap] = useState('') // TODO: create hook to share this value with tx stepper
-  const [fdvMarketCap, setFdvMarketCap] = useState('')
-  const updateStats = (prices: number[][]) => {
-    const minPrice = Math.min(...prices.map(point => point[1]))
-    const maxPrice = Math.max(...prices.map(point => point[1]))
-    const minSaleMarketCap = minPrice * launchTokenSeed
-    const maxSaleMarketCap = maxPrice * launchTokenSeed
-    const minFdvMarketCap = minPrice * (launchTokenMetadata.totalSupply || 0)
-    const maxFdvMarketCap = maxPrice * (launchTokenMetadata.totalSupply || 0)
-    setMaxPrice(maxPrice)
-    setSaleMarketCap(`$${fNum('fiat', minSaleMarketCap)} - $${fNum('fiat', maxSaleMarketCap)}`)
-    setFdvMarketCap(`$${fNum('fiat', minFdvMarketCap)} - $${fNum('fiat', maxFdvMarketCap)}`)
-  }
+  const { maxPrice, saleMarketCap, fdvMarketCap, updateStats } = useLbpPriceStats()
 
   return (
     <>
@@ -116,7 +94,6 @@ export function LbpPreview() {
             endTime={saleStructureData.endTime}
             startWeight={startWeight}
             endWeight={endWeight}
-            launchTokenSeed={launchTokenSeed}
             launchTokenSymbol={launchTokenMetadata?.symbol || ''}
             collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
             collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
