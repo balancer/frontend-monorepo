@@ -13,17 +13,19 @@ export function useClaimAndUnstakeSteps(unstakeParams: UnstakeParams): {
   const pool = unstakeParams.pool
   const chainId = getChainId(pool.chain)
 
-  const { step: relayerApprovalStep, isLoading: isLoadingRelayerApprovalStep } =
-    useApproveRelayerStep(chainId)
-  const { step: minterApprovalStep, isLoading: isLoadingMinterApprovalStep } = useApproveMinterStep(
-    pool.chain
-  )
-
   const {
     step: claimAndUnstakeStep,
     isLoading: isLoadingClaimAndUnstakeStep,
     hasUnclaimedBalRewards,
   } = useClaimAndUnstakeStep(unstakeParams)
+
+  const { step: relayerApprovalStep, isLoading: isLoadingRelayerApprovalStep } =
+    useApproveRelayerStep(chainId)
+
+  const { step: minterApprovalStep, isLoading: isLoadingMinterApprovalStep } = useApproveMinterStep(
+    pool.chain,
+    hasUnclaimedBalRewards
+  )
 
   const steps = useMemo((): TransactionStep[] => {
     const steps = [relayerApprovalStep, claimAndUnstakeStep]

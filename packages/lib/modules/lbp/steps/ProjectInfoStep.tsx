@@ -17,8 +17,7 @@ export function ProjectInfoStep() {
     activeStepIndex,
   } = useLbpForm()
 
-  const onSubmit: SubmitHandler<ProjectInfoForm> = data => {
-    console.log(data)
+  const onSubmit: SubmitHandler<ProjectInfoForm> = () => {
     setActiveStep(activeStepIndex + 1)
   }
 
