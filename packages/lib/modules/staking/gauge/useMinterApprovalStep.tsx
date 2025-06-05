@@ -13,7 +13,10 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { ManagedTransactionButton } from '../../transactions/transaction-steps/TransactionButton'
 
 const approveMinterStepId = 'approve-minter'
-export function useApproveMinterStep(chain: GqlChain): {
+export function useApproveMinterStep(
+  chain: GqlChain,
+  hasUnclaimedBalRewards: boolean
+): {
   isLoading: boolean
   step: TransactionStep
 } {
@@ -22,7 +25,7 @@ export function useApproveMinterStep(chain: GqlChain): {
 
   const { contracts, chainId } = getNetworkConfig(chain)
 
-  const { hasMinterApproval, isLoading, refetch } = useHasMinterApproval()
+  const { hasMinterApproval, isLoading, refetch } = useHasMinterApproval(hasUnclaimedBalRewards)
 
   const labels: TransactionLabels = {
     init: 'Approve relayer as minter',
