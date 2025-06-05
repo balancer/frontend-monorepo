@@ -7,6 +7,7 @@ import {
   Card,
   Center,
   Checkbox,
+  Divider,
   Heading,
   HStack,
   Stack,
@@ -29,7 +30,7 @@ import { usePortfolioSorting } from './usePortfolioSorting'
 
 const rowProps = (addExtraColumn: boolean) => ({
   px: [0, 4],
-  gridTemplateColumns: `32px minmax(320px, 1fr) 180px 110px 110px ${addExtraColumn ? '130px' : ''} 170px`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(140px, max-content) minmax(100px, max-content) 126px ${addExtraColumn ? '120px' : ''} minmax(100px, max-content)`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 })
@@ -69,11 +70,12 @@ export function PortfolioTable() {
       <VStack align="start" spacing="md" w="full">
         <Stack
           alignItems={isFilterVisible ? 'flex-end' : 'flex-start'}
-          direction={{ base: 'column', md: 'row' }}
+          direction="row"
           justify="space-between"
           w="full"
+          minW="max-content"
         >
-          <VStack align="start" flex={1} pb={{ base: 'sm', md: '0' }} w="full">
+          <VStack align="start" flex={1} pb={{ base: '0', md: '0' }} minW="max-content">
             <HStack w="full">
               <Box position="relative" top="0">
                 <Box
@@ -96,14 +98,16 @@ export function PortfolioTable() {
                 </Box>
               </Box>
             </HStack>
-            <PortfolioFilterTags
-              networks={selectedNetworks}
-              poolTypes={selectedPoolTypes}
-              stakingTypes={selectedStakingTypes}
-              toggleNetwork={toggleNetwork}
-              togglePoolType={togglePoolType}
-              toggleStakingType={toggleStakingType}
-            />
+            {isFilterVisible && (
+              <PortfolioFilterTags
+                networks={selectedNetworks}
+                poolTypes={selectedPoolTypes}
+                stakingTypes={selectedStakingTypes}
+                toggleNetwork={toggleNetwork}
+                togglePoolType={togglePoolType}
+                toggleStakingType={toggleStakingType}
+              />
+            )}
           </VStack>
           <Stack
             align={{ base: 'end', sm: 'center' }}
@@ -132,7 +136,7 @@ export function PortfolioTable() {
               items={sortedPools}
               left={{ base: '-4px', sm: '0' }}
               loading={isLoadingPortfolio}
-              noItemsFoundLabel="No pools found"
+              noItemsFoundLabel="You have no current positions"
               paginationProps={undefined}
               position="relative"
               renderTableHeader={() => (
@@ -157,11 +161,27 @@ export function PortfolioTable() {
             />
           </Card>
         ) : (
-          <Center border="1px dashed" borderColor="border.base" h="400px" rounded="lg" w="full">
-            <Box>
-              <ConnectWallet size="lg" variant="primary" />
-            </Box>
-          </Center>
+          <Card
+            alignItems="flex-start"
+            left={{ base: '-4px', sm: '0' }}
+            p={{ base: '0', sm: '0' }}
+            position="relative"
+            // fixing right padding for horizontal scroll on mobile
+            pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
+            w={{ base: '100vw', lg: 'full' }}
+          >
+            <PortfolioTableHeader
+              currentSortingObj={currentSortingObj}
+              setCurrentSortingObj={setSorting}
+              {...rowProps(options.showVeBal)}
+            />
+            <Divider />
+            <Center h="160px" rounded="lg" w="full">
+              <Box>
+                <ConnectWallet size="lg" variant="primary" />
+              </Box>
+            </Center>
+          </Card>
         )}
         {hasTinyBalances && (
           <Checkbox
