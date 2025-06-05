@@ -33,7 +33,7 @@ export function LbpCreationModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
-  const { saleStructureForm } = useLbpForm()
+  const { saleStructureForm, projectInfoForm, setActiveStep } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const { userAddress } = useUserAccount()
   const { transactionSteps, lastTransaction, initLbpTxHash, urlTxHash, previewModalDisclosure } =
@@ -45,11 +45,19 @@ export function LbpCreationModal({
     undefined
   )
   const handleReset = () => {
+    // dump local storage
     localStorage.removeItem(LS_KEYS.LbpConfig.SaleStructure)
     localStorage.removeItem(LS_KEYS.LbpConfig.ProjectInfo)
     localStorage.removeItem(LS_KEYS.LbpConfig.Address)
     localStorage.removeItem(LS_KEYS.LbpConfig.IsMetadataSent)
     setStepIndex(0)
+
+    // dump temp state
+    saleStructureForm.reset()
+    projectInfoForm.reset()
+    setActiveStep(0)
+
+    // dump tx hash from path
     if (initLbpTxHash) {
       window.history.replaceState({}, '', './create')
     }
@@ -67,7 +75,7 @@ export function LbpCreationModal({
     txReceipt,
   })
 
-  const isSuccess = !!initLbpTxHash
+  const isSuccess = !!initLbpTxHash || !!urlTxHash
   const path = getPoolPath({
     id: poolAddress as `0x${string}`,
     chain: selectedChain,
@@ -78,10 +86,10 @@ export function LbpCreationModal({
   const { redirectToPage: redirectToPoolPage } = useRedirect(path)
 
   useEffect(() => {
-    // trigger modal open if user refresh page after pool init step
-    if (initLbpTxHash || urlTxHash) previewModalDisclosure.onOpen()
-    /* eslint-disable react-hooks/exhaustive-deps */
-  }, [initLbpTxHash, urlTxHash])
+    // trigger modal open if user has begun pool creation process
+    if (poolAddress) previewModalDisclosure.onOpen()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [poolAddress])
 
   useEffect(() => {
     if (initLbpTxHash && !window.location.pathname.includes(initLbpTxHash)) {
@@ -122,32 +130,32 @@ export function LbpCreationModal({
         <ModalBody>
           <LbpSummary />
 
-          {isSuccess ||
-            (!!urlTxHash && (
-              <VStack width="full">
-                <Button
-                  isDisabled={false}
-                  isLoading={false}
-                  onClick={() => {
-                    // TODO: i dont think this works because redirect will interupt flow so reset never happens?
-                    // but cant reset first cus redirect relies on pool address from local storage?
-                    redirectToPoolPage()
+          {isSuccess && (
+            <VStack width="full">
+              <Button
+                isDisabled={false}
+                isLoading={false}
+                onClick={() => {
+                  redirectToPoolPage()
+                  // setTimeout callback managed by browser event loop so will run after redirect
+                  setTimeout(() => {
                     handleReset()
-                  }}
-                  size="lg"
-                  variant="secondary"
-                  w="full"
-                  width="full"
-                  marginTop="4"
-                >
-                  <HStack justifyContent="center" spacing="sm" width="100%">
-                    <Text color="font.primaryGradient" fontWeight="bold">
-                      View LBP page
-                    </Text>
-                  </HStack>
-                </Button>
-              </VStack>
-            ))}
+                  }, 5000)
+                }}
+                size="lg"
+                variant="secondary"
+                w="full"
+                width="full"
+                marginTop="4"
+              >
+                <HStack justifyContent="center" spacing="sm" width="100%">
+                  <Text color="font.primaryGradient" fontWeight="bold">
+                    View LBP page
+                  </Text>
+                </HStack>
+              </Button>
+            </VStack>
+          )}
         </ModalBody>
 
         <ActionModalFooter
@@ -157,7 +165,7 @@ export function LbpCreationModal({
           returnLabel="View pool page"
           urlTxHash={urlTxHash}
         />
-        {!urlTxHash && <PoolCreationModalFooter onReset={handleReset} />}
+        {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
       </ModalContent>
     </Modal>
   )

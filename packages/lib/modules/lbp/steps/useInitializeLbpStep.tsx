@@ -15,6 +15,7 @@ import { type Address } from 'viem'
 import { PoolType, InitPoolInputV3 } from '@balancer/sdk'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { useLocalStorage } from 'usehooks-ts'
+import { useParams } from 'next/navigation'
 
 export const initializeLbpStepId = 'initialize-lbp'
 
@@ -47,13 +48,15 @@ export function useInitializeLbpStep({
     enabled: isStepActivated,
     initPoolInput,
   })
+  const params = useParams()
+  const initTxHash = params?.txHash?.[0]
 
   const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in initialze LBP gas estimation', {
     buildCallQueryData: buildCallDataQuery.data,
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
 
-  const isComplete = () => isTransactionSuccess(transaction)
+  const isComplete = () => isTransactionSuccess(transaction) || !!initTxHash
 
   return useMemo(
     () => ({

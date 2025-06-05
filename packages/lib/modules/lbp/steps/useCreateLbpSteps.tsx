@@ -63,29 +63,48 @@ export function useLbpInitAmounts() {
     saleTokenAmount,
   } = saleStructureForm.watch()
 
-  const collateralTokenMetadata = useTokenMetadata(collateralTokenAddress, chain)
-  const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
+  const {
+    decimals: collateralTokenDecimals,
+    symbol: collateralTokenSymbol,
+    isLoading: isLoadingCollateralToken,
+  } = useTokenMetadata(collateralTokenAddress, chain)
+  const {
+    decimals: launchTokenDecimals,
+    symbol: launchTokenSymbol,
+    isLoading: isLoadingLaunchToken,
+  } = useTokenMetadata(launchTokenAddress, chain)
 
   return useMemo(() => {
-    if (!collateralTokenMetadata.decimals || !launchTokenMetadata.decimals) return []
+    if (
+      !collateralTokenDecimals ||
+      !launchTokenDecimals ||
+      isLoadingCollateralToken ||
+      isLoadingLaunchToken
+    )
+      return []
 
-    return [
-      {
-        address: collateralTokenAddress as Address,
-        decimals: collateralTokenMetadata.decimals,
-        rawAmount: parseUnits(collateralTokenAmount, collateralTokenMetadata.decimals),
-        symbol: collateralTokenMetadata.symbol,
-      },
-      {
-        address: launchTokenAddress as Address,
-        decimals: launchTokenMetadata.decimals,
-        rawAmount: parseUnits(saleTokenAmount, launchTokenMetadata.decimals),
-        symbol: launchTokenMetadata.symbol,
-      },
-    ]
+    const collateralTokenAmountIn = {
+      address: collateralTokenAddress as Address,
+      decimals: collateralTokenDecimals,
+      rawAmount: parseUnits(collateralTokenAmount, collateralTokenDecimals),
+      symbol: collateralTokenSymbol,
+    }
+
+    const launchTokenAmountIn = {
+      address: launchTokenAddress as Address,
+      decimals: launchTokenDecimals,
+      rawAmount: parseUnits(saleTokenAmount, launchTokenDecimals),
+      symbol: launchTokenSymbol,
+    }
+
+    return [collateralTokenAmountIn, launchTokenAmountIn]
   }, [
-    collateralTokenMetadata,
-    launchTokenMetadata,
+    isLoadingCollateralToken,
+    isLoadingLaunchToken,
+    collateralTokenDecimals,
+    launchTokenDecimals,
+    collateralTokenSymbol,
+    launchTokenSymbol,
     collateralTokenAmount,
     saleTokenAmount,
     collateralTokenAddress,

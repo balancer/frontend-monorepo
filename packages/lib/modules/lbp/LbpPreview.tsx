@@ -41,7 +41,7 @@ export function LbpPreview() {
         : saleStructureData.customEndWeight
 
   const [maxPrice, setMaxPrice] = useState(0)
-  const [saleMarketCap, setSaleMarketCap] = useState('')
+  const [saleMarketCap, setSaleMarketCap] = useState('') // TODO: create hook to share this value with tx stepper
   const [fdvMarketCap, setFdvMarketCap] = useState('')
   const updateStats = (prices: number[][]) => {
     const minPrice = Math.min(...prices.map(point => point[1]))
