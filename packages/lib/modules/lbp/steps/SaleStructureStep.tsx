@@ -34,7 +34,7 @@ import { useEffect } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useLbpForm } from '../LbpFormProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
+import { differenceInDays, differenceInHours, format, parseISO } from 'date-fns'
 import { TokenBalancesProvider, useTokenBalances } from '../../tokens/TokenBalancesProvider'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
@@ -317,6 +317,8 @@ function DateTimeInput({
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
 }) {
+  const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
+
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">{label}</Text>
@@ -330,6 +332,7 @@ function DateTimeInput({
             onChange={e => field.onChange(e.target.value)}
             type="datetime-local"
             value={field.value}
+            min={today}
           />
         )}
         rules={{
