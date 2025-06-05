@@ -16,7 +16,7 @@ import {
 import { useLbpForm } from './LbpFormProvider'
 import { SaleStructureStep } from './steps/SaleStructureStep'
 import { ProjectInfoStep } from './steps/ProjectInfoStep'
-import { ReviewStep } from './steps/ReviewStep'
+import { ReviewStep } from './steps/review/ReviewStep'
 
 export function LbpForm() {
   const { steps, activeStepIndex, activeStep } = useLbpForm()

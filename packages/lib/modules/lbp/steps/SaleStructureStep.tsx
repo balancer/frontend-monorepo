@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Heading,
   VStack,
@@ -20,7 +18,6 @@ import { Control, Controller, FieldErrors, SubmitHandler, UseFormSetValue } from
 import { LbpFormAction } from '../LbpFormAction'
 import { isAddressValidation } from '@repo/lib/shared/utils/addresses'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { useMemo } from 'react'
 import { isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -37,6 +34,8 @@ import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
 import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 
 export function SaleStructureStep() {
+  const { getToken } = useTokens()
+
   const {
     saleStructureForm: {
       handleSubmit,
@@ -48,37 +47,27 @@ export function SaleStructureStep() {
     setActiveStep,
     activeStepIndex,
   } = useLbpForm()
-  const { getToken } = useTokens()
+  const saleStructureData = watch()
 
   const supportedChains = PROJECT_CONFIG.supportedNetworks.filter(chain => {
     const chainConfig = getNetworkConfig(chain)
     return typeof chainConfig?.lbps !== 'undefined'
   })
 
-  const selectedChain = watch('selectedChain')
-  const launchTokenAddress = watch('launchTokenAddress')
-  const collateralTokenAddress = watch('collateralTokenAddress')
+  const selectedChain = saleStructureData.selectedChain
+  const launchTokenAddress = saleStructureData.launchTokenAddress
+  const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
-  const saleStart = watch('startTime')
-  const saleEnd = watch('endTime')
+  const saleStart = saleStructureData.startTime
+  const saleEnd = saleStructureData.endTime
   const daysDiff = differenceInDays(parseISO(saleEnd), parseISO(saleStart))
   const hoursDiff = differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
 
   const launchToken = getToken(launchTokenAddress, selectedChain)
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
-
-  const tokens = useMemo(() => {
-    const _tokens = []
-    if (launchToken) _tokens.push(launchToken)
-    if (collateralToken) _tokens.push(collateralToken)
-    return _tokens
-  }, [launchToken, collateralToken])
+  const tokens = [launchToken, collateralToken].filter(item => item != undefined)
 
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
-
-  const validLaunchTokenAddress = useMemo(() => {
-    return isAddress(launchTokenAddress)
-  }, [launchTokenAddress])
 
   const onSubmit: SubmitHandler<SaleStructureForm> = () => {
     setActiveStep(activeStepIndex + 1)
@@ -97,7 +86,7 @@ export function SaleStructureStep() {
             <LaunchTokenAddressInput control={control} errors={errors} setFormValue={setValue} />
           </VStack>
 
-          {validLaunchTokenAddress && (
+          {isAddress(launchTokenAddress) && (
             <>
               <Divider />
 
