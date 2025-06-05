@@ -152,66 +152,62 @@ export function useReclAmmChartLogic() {
   }, [reclAmmData])
 
   const option = useMemo(() => {
-    const leftGreyBars = ['AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ']
-    const rightGreyBars = ['EA', 'EB', 'EC', 'ED', 'EE', 'EF', 'EG', 'EH', 'EI', 'EJ']
-    const leftOrangeBars = ['BA', 'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH']
-    const rightOrangeBars = ['DA', 'DB', 'DC', 'DD', 'DE', 'DF', 'DG', 'DH']
-    const greenBars = [
-      'CAA',
-      'CAB',
-      'CAC',
-      'CAD',
-      'CAE',
-      'CAF',
-      'CAG',
-      'CAH',
-      'CAI',
-      'CAJ',
-      'CAK',
-      'CAL',
-      'CAM',
-      'CAN',
-      'CAO',
-      'CAP',
-      'CAQ',
-      'CAR',
-      'CAS',
-      'CAT',
-      'CAU',
-      'CAV',
-      'CAW',
-      'CAX',
-      'CAY',
-      'CAZ',
-      'CBA',
-      'CBB',
-      'CBC',
-      'CBD',
-      'CBE',
-      'CBF',
-      'CBG',
-      'CBH',
-      'CBI',
-      'CBJ',
-      'CBK',
-      'CBL',
-      'CBM',
-      'CBN',
-      'CBO',
-      'CBP',
+    const baseGreyBarConfig = {
+      count: 10,
+      value: 3,
+      gradientColors: ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)'],
+      borderRadius: 20,
+    }
+    const baseOrangeBarConfig = {
+      count: 8,
+      value: 100,
+      gradientColors: ['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)'],
+      borderRadius: 20,
+    }
+    const greenBarConfig = {
+      name: 'Green',
+      count: 42,
+      value: 100,
+      gradientColors: ['rgb(99, 242, 190)', 'rgba(57, 140, 110, 0.5)'],
+      borderRadius: 20,
+    }
+
+    const barSegmentsConfig = [
+      { ...baseGreyBarConfig, name: 'Left Grey' },
+      { ...baseOrangeBarConfig, name: 'Left Orange' },
+      greenBarConfig,
+      { ...baseOrangeBarConfig, name: 'Right Orange' },
+      { ...baseGreyBarConfig, name: 'Right Grey' },
     ]
+
+    const allCategories: string[] = []
+    const seriesData: any[] = []
+    let categoryNumber = 1
+
+    barSegmentsConfig.forEach(segment => {
+      const segmentCategories: string[] = []
+      for (let i = 0; i < segment.count; i++) {
+        segmentCategories.push(String(categoryNumber++))
+      }
+      allCategories.push(...segmentCategories)
+
+      const segmentSeriesData = Array(segment.count)
+        .fill(null)
+        .map(() => ({
+          value: segment.value,
+          itemStyle: {
+            color: getGradientColor(segment.gradientColors),
+            borderRadius: segment.borderRadius,
+          },
+        }))
+      seriesData.push(...segmentSeriesData)
+    })
 
     return {
       xAxis: {
         show: false,
         type: 'category',
-        data: [
-          ...leftGreyBars,
-          ...leftOrangeBars,
-          ...greenBars,
-          ...rightOrangeBars,
-          ...rightGreyBars,
-        ],
+        data: allCategories,
       },
       yAxis: {
         show: false,
@@ -219,56 +215,10 @@ export function useReclAmmChartLogic() {
       },
       series: [
         {
-          data: [
-            ...Array(10)
-              .fill(4)
-              .map(value => ({
-                value,
-                itemStyle: {
-                  color: getGradientColor(['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)']),
-                  borderRadius: 20,
-                },
-              })),
-            ...Array(8)
-              .fill(100)
-              .map(value => ({
-                value,
-                itemStyle: {
-                  color: getGradientColor(['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)']),
-                  borderRadius: 20,
-                },
-              })),
-            ...Array(42)
-              .fill(100)
-              .map(value => ({
-                value,
-                itemStyle: {
-                  color: getGradientColor(['rgb(99, 242, 190)', 'rgba(57, 140, 110, 0.5)']),
-                  borderRadius: 20,
-                },
-              })),
-            ...Array(8)
-              .fill(100)
-              .map(value => ({
-                value,
-                itemStyle: {
-                  color: getGradientColor(['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)']),
-                  borderRadius: 20,
-                },
-              })),
-            ...Array(10)
-              .fill(4)
-              .map(value => ({
-                value,
-                itemStyle: {
-                  color: getGradientColor(['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)']),
-                  borderRadius: 20,
-                },
-              })),
-          ],
+          data: seriesData,
           type: 'bar',
           barWidth: '90%',
-          barCategoryGap: '25%', // Adds space between bars
+          barCategoryGap: '25%',
         },
       ],
     }
