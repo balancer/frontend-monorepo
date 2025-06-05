@@ -28,7 +28,7 @@ import {
 import { mins } from '@repo/lib/shared/utils/time'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { PoolToken } from '../pool/pool.types'
-import { ApiToken } from './token.types'
+import { ApiToken, CustomToken } from './token.types'
 
 export type UseTokensResult = ReturnType<typeof useTokensLogic>
 export const TokensContext = createContext<UseTokensResult | null>(null)
@@ -118,7 +118,7 @@ export function useTokensLogic(
     )
   }
 
-  function priceForToken(token: ApiToken): number {
+  function priceForToken(token: ApiToken | CustomToken): number {
     const price = getPricesForChain(token.chain).find(price =>
       isSameAddress(price.address, token.address)
     )
@@ -135,7 +135,7 @@ export function useTokensLogic(
     return price.price
   }
 
-  function usdValueForToken(token: ApiToken | undefined, amount: Numberish) {
+  function usdValueForToken(token: ApiToken | CustomToken | undefined, amount: Numberish) {
     if (!token) return '0'
     if (amount === '') return '0'
     return bn(amount).times(priceForToken(token)).toFixed()

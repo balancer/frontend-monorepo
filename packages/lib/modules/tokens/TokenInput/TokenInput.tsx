@@ -31,11 +31,11 @@ import { useEffect, useState } from 'react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { isNativeAsset } from '@repo/lib/shared/utils/addresses'
 import { getPriceImpactLabel } from '../../price-impact/price-impact.utils'
-import { ApiToken } from '../token.types'
+import { ApiToken, CustomToken } from '../token.types'
 import { useUserAccount } from '../../web3/UserAccountProvider'
 
 type TokenInputSelectorProps = {
-  token: ApiToken | undefined
+  token: ApiToken | CustomToken | undefined
   weight?: string
   onToggleTokenClicked?: () => void
 }
@@ -86,11 +86,12 @@ function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputS
 }
 
 type TokenInputFooterProps = {
-  token: ApiToken | undefined
+  token: ApiToken | CustomToken | undefined
   value?: string
   updateValue: (value: string) => void
   hasPriceImpact?: boolean
   isLoadingPriceImpact?: boolean
+  priceMessage?: string
 }
 
 function TokenInputFooter({
@@ -99,6 +100,7 @@ function TokenInputFooter({
   updateValue,
   hasPriceImpact,
   isLoadingPriceImpact,
+  priceMessage,
 }: TokenInputFooterProps) {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { usdValueForToken } = useTokens()
@@ -141,7 +143,7 @@ function TokenInputFooter({
           fontSize="sm"
           variant="secondary"
         >
-          {toCurrency(usdValue, { abbreviated: false })}
+          {priceMessage ? priceMessage : toCurrency(usdValue, { abbreviated: false })}
           {showPriceImpact && priceImpactLevel !== 'unknown' && getPriceImpactLabel(priceImpact)}
         </Text>
       )}
@@ -174,16 +176,16 @@ function TokenInputFooter({
 
 type Props = {
   address?: string
-  apiToken?: ApiToken
+  apiToken?: ApiToken | CustomToken
   chain?: GqlChain | number
   weight?: string
   value?: string
-  hideFooter?: boolean
   boxProps?: BoxProps
   onChange?: (event: { currentTarget: { value: string } }) => void
   onToggleTokenClicked?: () => void
   hasPriceImpact?: boolean
   isLoadingPriceImpact?: boolean
+  priceMessage?: string
   disableBalanceValidation?: boolean
 }
 
@@ -198,9 +200,9 @@ export const TokenInput = forwardRef(
       boxProps,
       onChange,
       onToggleTokenClicked,
-      hideFooter = false,
       hasPriceImpact = false,
       isLoadingPriceImpact = false,
+      priceMessage,
       disableBalanceValidation = false,
       ...inputProps
     }: InputProps & Props,
@@ -216,6 +218,7 @@ export const TokenInput = forwardRef(
     const tokenFromAddress = address && chain ? getToken(address, chain) : undefined
 
     const token = apiToken || tokenFromAddress
+
     const { hasValidationError } = useTokenInputsValidation()
 
     const { handleOnChange, updateValue, validateInput } = useTokenInput({
@@ -223,15 +226,6 @@ export const TokenInput = forwardRef(
       onChange,
       disableBalanceValidation,
     })
-
-    const tokenInputSelector = TokenInputSelector({
-      token,
-      weight,
-      onToggleTokenClicked,
-    })
-    const footer = hideFooter
-      ? undefined
-      : TokenInputFooter({ token, value, updateValue, hasPriceImpact, isLoadingPriceImpact })
 
     const boxShadow = hasValidationError(token) ? `0 0 0 1px ${colors.red[500]}` : undefined
 
@@ -304,13 +298,23 @@ export const TokenInput = forwardRef(
               )}
             </Box>
 
-            {tokenInputSelector && (
-              <InputRightAddon bg="transparent" border="none" p="0" pl="1">
-                {tokenInputSelector}
-              </InputRightAddon>
-            )}
+            <InputRightAddon bg="transparent" border="none" p="0" pl="1">
+              <TokenInputSelector
+                token={token}
+                weight={weight}
+                onToggleTokenClicked={onToggleTokenClicked}
+              />
+            </InputRightAddon>
           </InputGroup>
-          {footer && footer}
+
+          <TokenInputFooter
+            token={token}
+            value={value}
+            updateValue={updateValue}
+            hasPriceImpact={hasPriceImpact}
+            isLoadingPriceImpact={isLoadingPriceImpact}
+            priceMessage={priceMessage}
+          />
         </VStack>
       </Box>
     )
