@@ -48,6 +48,7 @@ export function useLbpFormLogic() {
       xHandle: '',
       telegramHandle: '',
       discordUrl: '',
+      disclaimerAccepted: false,
     },
     { mode: 'all' }
   )
