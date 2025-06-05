@@ -5,6 +5,7 @@ import { formatUnits } from 'viem'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
 import { calculateLowerMargin, calculateUpperMargin } from './reclAmmMath'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
@@ -22,6 +23,7 @@ function getGradientColor(colorStops: string[]) {
 }
 
 export function useReclAmmChartLogic() {
+  const { toCurrency } = useCurrency()
   const reclAmmData = useGetComputeReclAmmData()
 
   const currentChartData = useMemo(() => {
@@ -92,7 +94,7 @@ export function useReclAmmChartLogic() {
       virtualBalanceB: vBalanceB,
     })
 
-    const currentBalance = bn(balanceA).plus(virtualBalanceA).toNumber()
+    // const currentBalance = bn(balanceA).plus(virtualBalanceA).toNumber()
 
     const minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
     const maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
@@ -104,54 +106,23 @@ export function useReclAmmChartLogic() {
       .div(bn(balanceA).plus(virtualBalanceA))
       .toNumber()
 
-    const markPoints = [
-      { name: 'upper limit', x: vBalanceA, color: '#FF4560', priceValue: maxPriceValue },
-      { name: 'lower limit', x: xForMinPrice, color: '#FF4560', priceValue: minPriceValue },
-      {
-        name: 'higher target',
-        x: lowerMargin,
-        color: '#E67E22',
-        priceValue: lowerMarginValue,
-      },
-      {
-        name: 'lower target',
-        x: upperMargin,
-        color: '#E67E22',
-        priceValue: upperMarginValue,
-      },
-      {
-        name: 'current',
-        x: currentBalance,
-        priceValue: currentPriceValue,
-
-        color: '#00E396',
-      },
-    ].map(point => {
-      return {
-        name: point.name,
-        coord: [point.x, curveFunction(point.x)],
-        itemStyle: {
-          color: point.color,
-        },
-        emphasis: {
-          disabled: true,
-        },
-        silent: true,
-        priceValue: point.priceValue,
-      }
-    })
-
     return {
       series: curvePoints,
-      markPoints,
       min: xForMinPrice,
       max: vBalanceA,
       lowerMargin,
       upperMargin,
+      maxPriceValue,
+      minPriceValue,
+      lowerMarginValue,
+      upperMarginValue,
+      currentPriceValue,
     }
   }, [reclAmmData])
 
   const option = useMemo(() => {
+    const { maxPriceValue, minPriceValue, lowerMarginValue, upperMarginValue } = currentChartData
+
     const baseGreyBarConfig = {
       count: 10,
       value: 3,
@@ -204,10 +175,28 @@ export function useReclAmmChartLogic() {
     })
 
     return {
+      tooltip: { show: false },
+      grid: {
+        left: '-3%',
+        right: '1%',
+        top: '10%',
+        bottom: '8%',
+        containLabel: true,
+      },
       xAxis: {
-        show: false,
+        show: true,
         type: 'category',
         data: allCategories,
+        position: 'bottom',
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: {
+          show: true,
+          interval: 0,
+          formatter: () => '',
+          color: '#666',
+          fontSize: 12,
+        },
       },
       yAxis: {
         show: false,
@@ -219,6 +208,89 @@ export function useReclAmmChartLogic() {
           type: 'bar',
           barWidth: '90%',
           barCategoryGap: '25%',
+          silent: true,
+        },
+      ],
+      graphic: [
+        {
+          type: 'text',
+          silent: true,
+          left: '10.08%',
+          bottom: 0,
+          style: {
+            text: `{triangle|▲}\n{labelText|Min price}\n{priceValue|${minPriceValue !== undefined ? toCurrency(minPriceValue, { abbreviated: false }) : 'N/A'}}`,
+            textAlign: 'center',
+            fill: '#666',
+            rich: {
+              triangle: { color: '#718096', fontSize: 10, lineHeight: 12 },
+              labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13 },
+              priceValue: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
+            },
+          },
+        },
+        {
+          type: 'text',
+          silent: true,
+          left: '19.7%',
+          bottom: 0,
+          style: {
+            text: `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? toCurrency(upperMarginValue, { abbreviated: false }) : 'N/A'}}`,
+            textAlign: 'center',
+            fill: '#666',
+            rich: {
+              triangle: { color: '#718096', fontSize: 10, lineHeight: 12 },
+              labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13 },
+              priceValue: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
+            },
+          },
+        },
+        {
+          type: 'text',
+          silent: true,
+          left: '47.5%',
+          bottom: 0,
+          style: {
+            text: '{triangle|▲}\n{labelText|Center}',
+            textAlign: 'center',
+            fill: '#666',
+            rich: {
+              triangle: { color: '#718096', fontSize: 10, lineHeight: 12 },
+              labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13 },
+              //priceValue: { color: '#777', fontSize: 10, lineHeight: 12, align: 'center' },
+            },
+          },
+        },
+        {
+          type: 'text',
+          silent: true,
+          left: '72.8%',
+          bottom: 0,
+          style: {
+            text: `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? toCurrency(lowerMarginValue, { abbreviated: false }) : 'N/A'}}`,
+            textAlign: 'center',
+            fill: '#666',
+            rich: {
+              triangle: { color: '#718096', fontSize: 10, lineHeight: 12 },
+              labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13 },
+              priceValue: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
+            },
+          },
+        },
+        {
+          type: 'text',
+          silent: true,
+          left: '83.3%',
+          bottom: 0,
+          style: {
+            text: `{triangle|▲}\n{labelText|Max price}\n{priceValue|${maxPriceValue !== undefined ? toCurrency(maxPriceValue, { abbreviated: false }) : 'N/A'}}`,
+            textAlign: 'center',
+            fill: '#666',
+            rich: {
+              triangle: { color: '#718096', fontSize: 10, lineHeight: 12, align: 'center' },
+              labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
+              priceValue: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
+            },
+          },
         },
       ],
     }
