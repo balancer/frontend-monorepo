@@ -7,11 +7,11 @@ import { calculateLowerMargin, calculateUpperMargin } from './reclAmmMath'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 
-type ReclAmmChartContextType = ReturnType<typeof _useReclAmmChart>
+type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
 const ReclAmmChartContext = createContext<ReclAmmChartContextType | null>(null)
 
-export function _useReclAmmChart() {
+export function useReclAmmChartLogic() {
   const reclAmmData = useGetComputeReclAmmData()
   const { toCurrency } = useCurrency()
 
@@ -387,7 +387,7 @@ export function _useReclAmmChart() {
 }
 
 export function ReclAmmChartProvider({ children }: PropsWithChildren) {
-  const hook = _useReclAmmChart()
+  const hook = useReclAmmChartLogic()
   return <ReclAmmChartContext.Provider value={hook}>{children}</ReclAmmChartContext.Provider>
 }
 
