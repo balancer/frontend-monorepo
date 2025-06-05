@@ -91,7 +91,7 @@ export function PortfolioTable() {
                 >
                   <Heading
                     as="h2"
-                    size="lg"
+                    size="h4"
                     variant="special"
                     w="full"
                   >{`${projectName} portfolio`}</Heading>

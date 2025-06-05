@@ -65,7 +65,7 @@ export function ClaimNetworkPools() {
   return (
     <FadeInOnView>
       <Stack gap={5}>
-        <Heading size="lg">Claimable incentives</Heading>
+        <Heading size="h4">Claimable incentives</Heading>
 
         {isLoadingRewards || isLoadingPortfolio ? (
           <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: 3 }} spacing="md">
