@@ -129,6 +129,7 @@ export function SaleStructureStep() {
                   errors={errors}
                   label="End date and time"
                   name="endTime"
+                  min={saleStart}
                 />
                 <Text color="font.secondary" fontSize="xs">
                   {saleStart && saleEnd
@@ -311,11 +312,13 @@ function DateTimeInput({
   label,
   control,
   errors,
+  min,
 }: {
   name: keyof SaleStructureForm
   label: string
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
+  min?: string
 }) {
   const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
 
@@ -332,7 +335,7 @@ function DateTimeInput({
             onChange={e => field.onChange(e.target.value)}
             type="datetime-local"
             value={field.value}
-            min={today}
+            min={min || today}
           />
         )}
         rules={{
