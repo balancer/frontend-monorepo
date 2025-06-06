@@ -84,7 +84,7 @@ export function PortfolioTable() {
                   left="0"
                   minW={{ base: 'auto', md: '270px' }}
                   position={{ base: 'relative', md: 'absolute' }}
-                  top="0"
+                  top="8px"
                   transition="all 0.15s var(--ease-out-cubic)"
                   variants={variants}
                   willChange="transform"

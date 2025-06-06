@@ -77,10 +77,10 @@ export function ClaimNetworkPools() {
           <ConnectButton.Custom>
             {({ openConnectModal }) => (
               <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="md">
-                <Card flex="1" p={['sm', 'md']} shadow="xl" variant="level1" w="full">
+                <Card flex="1" p={['sm', 'md']} shadow="innerLg" variant="level1" w="full">
                   <Flex alignItems="center" justifyContent="space-between">
                     <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Mainnet} size={iconSize} />
+                      <NetworkIcon chain={GqlChain.Mainnet} size={iconSize} shadow="md" />
 
                       <Stack gap={1}>
                         <Heading size="sm" textTransform="capitalize">
@@ -100,14 +100,14 @@ export function ClaimNetworkPools() {
                 <Card
                   flex="1"
                   p={['sm', 'md']}
-                  shadow="xl"
+                  shadow="innerLg"
                   variant="level1"
                   w="full"
                   display={{ base: 'none', md: 'block', lg: 'block', xl: 'block' }}
                 >
                   <Flex alignItems="center" justifyContent="space-between">
                     <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Arbitrum} size={iconSize} />
+                      <NetworkIcon chain={GqlChain.Arbitrum} size={iconSize} shadow="md" />
 
                       <Stack gap={1}>
                         <Heading size="sm" textTransform="capitalize">
@@ -127,14 +127,14 @@ export function ClaimNetworkPools() {
                 <Card
                   flex="1"
                   p={['sm', 'md']}
-                  shadow="xl"
+                  shadow="innerLg"
                   variant="level1"
                   w="full"
                   display={{ base: 'none', md: 'none', lg: 'block', xl: 'block' }}
                 >
                   <Flex alignItems="center" justifyContent="space-between">
                     <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Base} size={iconSize} />
+                      <NetworkIcon chain={GqlChain.Base} size={iconSize} shadow="md" />
 
                       <Stack gap={1}>
                         <Heading size="sm" textTransform="capitalize">
@@ -159,18 +159,10 @@ export function ClaimNetworkPools() {
             {hasMerklRewards && <MerklAlert />}
             {noRewards && (
               <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="md">
-                <Card
-                  flex="1"
-                  p={['sm', 'md']}
-                  shadow="sm"
-                  variant="level1"
-                  w="full"
-                  border="1px dashed"
-                  borderColor="border.base"
-                >
+                <Card flex="1" p={['sm', 'md']} shadow="innerLg" variant="level1" w="full">
                   <Flex alignItems="center" justifyContent="space-between">
                     <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Mainnet} size={iconSize} />
+                      <NetworkIcon chain={GqlChain.Mainnet} size={iconSize} shadow="md" />
                       <Stack gap={1}>
                         <Heading size="sm" textTransform="capitalize">
                           Ethereum
@@ -185,16 +177,14 @@ export function ClaimNetworkPools() {
                 <Card
                   flex="1"
                   p={['sm', 'md']}
-                  shadow="sm"
+                  shadow="innerLg"
                   variant="level1"
                   w="full"
                   display={{ base: 'none', md: 'block', lg: 'block', xl: 'block' }}
-                  border="1px dashed"
-                  borderColor="border.base"
                 >
                   <Flex alignItems="center" justifyContent="space-between">
                     <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Arbitrum} size={iconSize} />
+                      <NetworkIcon chain={GqlChain.Arbitrum} size={iconSize} shadow="md" />
                       <Stack gap={1}>
                         <Heading size="sm" textTransform="capitalize">
                           Arbitrum
@@ -209,16 +199,14 @@ export function ClaimNetworkPools() {
                 <Card
                   flex="1"
                   p={['sm', 'md']}
-                  shadow="sm"
+                  shadow="innerLg"
                   variant="level1"
                   w="full"
                   display={{ base: 'none', md: 'none', lg: 'block', xl: 'block' }}
-                  border="1px dashed"
-                  borderColor="border.base"
                 >
                   <Flex alignItems="center" justifyContent="space-between">
                     <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Base} size={iconSize} />
+                      <NetworkIcon chain={GqlChain.Base} size={iconSize} shadow="md" />
                       <Stack gap={1}>
                         <Heading size="sm" textTransform="capitalize">
                           Base
@@ -241,7 +229,7 @@ export function ClaimNetworkPools() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       key={chain}
                       style={{ transformOrigin: 'top' }}
-                      transition={{ duration: 0.3, delay: index * 0.12, ease: easeOut }}
+                      transition={{ duration: 0.3, delay: index * 0.08, ease: easeOut }}
                     >
                       <ClaimNetworkBlock
                         chain={pools[0].chain}
@@ -259,7 +247,7 @@ export function ClaimNetworkPools() {
                   animate={{ opacity: 1, scale: 1 }}
                   initial={{ opacity: 0, scale: 0.95 }}
                   style={{ transformOrigin: 'top' }}
-                  transition={{ duration: 0.3, delay: poolsWithChain.length * 0.12, ease: easeOut }}
+                  transition={{ duration: 0.3, delay: poolsWithChain.length * 0.08, ease: easeOut }}
                 >
                   <ClaimNetworkBlock
                     chain={GqlChain.Mainnet}
