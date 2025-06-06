@@ -138,6 +138,49 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
       },
     },
+    Textarea: {
+      baseStyle: {
+        shadow: 'input.innerBase',
+        border: '1px solid',
+        color: 'input.fontDefault',
+        fontWeight: 'medium',
+        px: '3',
+        // caretColor: 'input.caret', // Not working
+        '::placeholder': {
+          color: 'input.fontPlaceholder',
+        },
+        _hover: {
+          bg: 'input.bgHover',
+          borderColor: 'input.borderHover',
+        },
+        _focus: {
+          border: '1px solid',
+          bg: 'input.bgFocus',
+          borderColor: 'input.borderFocus',
+          color: 'white',
+        },
+        _focusVisible: {
+          color: 'input.fontFocus',
+          border: '1px solid',
+          borderColor: 'input.borderFocus',
+          shadow: 'input.innerFocus',
+        },
+        _invalid: {
+          border: '1px solid',
+          borderColor: 'input.borderError', // Not working
+          bg: 'input.bgError', // Working
+          shadow: 'input.innerError', // Not working
+          color: 'input.fontError',
+        },
+        _disabled: {
+          shadow: 'none',
+          _hover: {
+            bg: 'input.bgHoverDisabled',
+            border: 'input.borderDefault',
+          },
+        },
+      },
+    },
     FormLabel: {
       baseStyle: {
         background: 'font.primary',

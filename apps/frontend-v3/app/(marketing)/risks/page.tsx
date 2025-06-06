@@ -1068,21 +1068,21 @@ export default function Privacy() {
                   <p>
                     Given its nature, where the history of the price action affects the value of the
                     pool, there is a reduced predictability of performance.
-                    <ul>
-                      <li>
-                        Past Performance Misconceptions: Historical returns do not guarantee future
-                        economic outcomes. Rapidly changing market conditions and volatility can
-                        severely affect pool performance and backward-looking metrics can create a
-                        false sense of predictability.
-                      </li>
-                      <li>
-                        APR Calculation Vulnerabilities: Reported Annual Percentage Rates (APR)
-                        frequently do not reflect true economic return. APR does not account for
-                        losses resulting from the market making strategy. It is simply a measure of
-                        fees earned over TVL on a 24h timeframe.
-                      </li>
-                    </ul>
                   </p>
+                  <ul>
+                    <li>
+                      Past Performance Misconceptions: Historical returns do not guarantee future
+                      economic outcomes. Rapidly changing market conditions and volatility can
+                      severely affect pool performance and backward-looking metrics can create a
+                      false sense of predictability.
+                    </li>
+                    <li>
+                      APR Calculation Vulnerabilities: Reported Annual Percentage Rates (APR)
+                      frequently do not reflect true economic return. APR does not account for
+                      losses resulting from the market making strategy. It is simply a measure of
+                      fees earned over TVL on a 24h timeframe.
+                    </li>
+                  </ul>
                 </div>
               </FadeInOnView>
               <FadeInOnView>
@@ -1332,29 +1332,27 @@ export default function Privacy() {
                       .
                     </li>
                   </ul>
-                  <p>
-                    Other risks:
-                    <ul>
-                      <li>
-                        The Balancer UI allows people to manage their liquidity in certain Gyroscope
-                        pools. This is not an endorsement of their products or of the the safety of
-                        their smart contracts. The Gyroscope GYD system and E-CLPs have been audited
-                        several times. You can review the{' '}
-                        <a href="https://docs.gyro.finance/gyroscope-protocol/audit-reports">
-                          audit reports here
-                        </a>
-                        .
-                      </li>
-                      <li>
-                        Some concentrated liquidity pools also contain Gyroscope&rsquo;s Gyro
-                        Dollars (GYD). Here are some of the{' '}
-                        <a href="https://docs.gyro.finance/gyroscope-protocol/risks">
-                          risks of using GYD
-                        </a>
-                        .
-                      </li>
-                    </ul>
-                  </p>
+                  <p>Other risks:</p>
+                  <ul>
+                    <li>
+                      The Balancer UI allows people to manage their liquidity in certain Gyroscope
+                      pools. This is not an endorsement of their products or of the the safety of
+                      their smart contracts. The Gyroscope GYD system and E-CLPs have been audited
+                      several times. You can review the{' '}
+                      <a href="https://docs.gyro.finance/gyroscope-protocol/audit-reports">
+                        audit reports here
+                      </a>
+                      .
+                    </li>
+                    <li>
+                      Some concentrated liquidity pools also contain Gyroscope&rsquo;s Gyro Dollars
+                      (GYD). Here are some of the{' '}
+                      <a href="https://docs.gyro.finance/gyroscope-protocol/risks">
+                        risks of using GYD
+                      </a>
+                      .
+                    </li>
+                  </ul>
                 </div>
               </FadeInOnView>
 
@@ -1424,48 +1422,45 @@ export default function Privacy() {
                     </li>
                   </ul>
 
-                  <p>
-                    How QuantAMM mitigates these risks:
-                    <ul>
-                      <li>
-                        <b>Market Volatility</b> - given the nature of BTFs in so that they are not
-                        reliant trade volumes, back test simulations are provided to give visibility
-                        on simulated behaviour under different market conditions. Given the BTF
-                        strategies rely on “historical memory” of price changes, historical
-                        performance and simulations are not indicative of future performance.
-                      </li>
-                      <li>
-                        <b>Pool Tuning</b> - Strategy parameters are fixed on creation mitigating
-                        the possibility of parameter manipulation.
-                      </li>
-                      <li>
-                        <b>Strategy automation</b> - Chainlink automation is used to trigger
-                      </li>
-                      <li>
-                        Future updates to TFMM may include increased monitoring of performance
-                        metrics, enhanced simulation testing, or improved user interfaces to
-                        minimize the chance of errors in parameter settings.
-                      </li>
-                      <li>
-                        Chainlink oracles are primarily used to mitigate oracle risk and any
-                        additional pool creation requires approval from the protocol team.
-                      </li>
-                      <li>
-                        Implement necessary fixes once identified, updating smart contracts,
-                        adjusting parameters or improving risk disclosures.
-                      </li>
-                      <li>
-                        <b>Sub-optimal arbitrage</b> - This is a relatively small risk given at any
-                        one block arbitrageurs are faced with a standard balancer pool so they can
-                        price and take the arbitrage opportunity without any additional new
-                        invariant prediction work. Balancer has also integrated BTFs in the smart
-                        order router also increasing the likelihood of being exposed to traders.
-                        Work has already begun on DEX aggregator integration and when there is a
-                        minimal amount of TVL in the pool aggregators will expose the pool for
-                        further volumes.
-                      </li>
-                    </ul>
-                  </p>
+                  <p>How QuantAMM mitigates these risks:</p>
+                  <ul>
+                    <li>
+                      <b>Market Volatility</b> - given the nature of BTFs in so that they are not
+                      reliant trade volumes, back test simulations are provided to give visibility
+                      on simulated behaviour under different market conditions. Given the BTF
+                      strategies rely on “historical memory” of price changes, historical
+                      performance and simulations are not indicative of future performance.
+                    </li>
+                    <li>
+                      <b>Pool Tuning</b> - Strategy parameters are fixed on creation mitigating the
+                      possibility of parameter manipulation.
+                    </li>
+                    <li>
+                      <b>Strategy automation</b> - Chainlink automation is used to trigger
+                    </li>
+                    <li>
+                      Future updates to TFMM may include increased monitoring of performance
+                      metrics, enhanced simulation testing, or improved user interfaces to minimize
+                      the chance of errors in parameter settings.
+                    </li>
+                    <li>
+                      Chainlink oracles are primarily used to mitigate oracle risk and any
+                      additional pool creation requires approval from the protocol team.
+                    </li>
+                    <li>
+                      Implement necessary fixes once identified, updating smart contracts, adjusting
+                      parameters or improving risk disclosures.
+                    </li>
+                    <li>
+                      <b>Sub-optimal arbitrage</b> - This is a relatively small risk given at any
+                      one block arbitrageurs are faced with a standard balancer pool so they can
+                      price and take the arbitrage opportunity without any additional new invariant
+                      prediction work. Balancer has also integrated BTFs in the smart order router
+                      also increasing the likelihood of being exposed to traders. Work has already
+                      begun on DEX aggregator integration and when there is a minimal amount of TVL
+                      in the pool aggregators will expose the pool for further volumes.
+                    </li>
+                  </ul>
                   <p>
                     Before interacting with any QuantAMM Blockchain Traded Funds, users must read
                     and accept QuantAMM&rsquo;s{' '}

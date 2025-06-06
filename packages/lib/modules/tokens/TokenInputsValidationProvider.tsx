@@ -3,7 +3,7 @@
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { PropsWithChildren, createContext, useState } from 'react'
 import { Address } from 'viem'
-import { ApiToken } from './token.types'
+import { ApiToken, CustomToken } from './token.types'
 
 export function useTokenInputsValidationLogic() {
   type ValidationErrorsByToken = Record<Address, string>
@@ -14,11 +14,11 @@ export function useTokenInputsValidationLogic() {
     setValidationErrors({ ...validationErrors })
   }
 
-  function hasValidationError(token: ApiToken | undefined) {
+  function hasValidationError(token: ApiToken | CustomToken | undefined) {
     return !!getValidationError(token)
   }
 
-  function getValidationError(token: ApiToken | undefined): string {
+  function getValidationError(token: ApiToken | CustomToken | undefined): string {
     if (!token) return ''
     const error = validationErrors[token.address as Address]
     if (!error) return ''
