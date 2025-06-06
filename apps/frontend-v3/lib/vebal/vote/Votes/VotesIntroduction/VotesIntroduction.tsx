@@ -99,7 +99,7 @@ export function VotesIntroduction() {
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/vebal" {...linkStyles}>
+              <BreadcrumbLink href="/vebal" {...linkStyles} fontWeight="bold">
                 veBAL
               </BreadcrumbLink>
             </BreadcrumbItem>
