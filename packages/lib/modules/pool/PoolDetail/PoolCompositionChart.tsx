@@ -1,18 +1,23 @@
 import { getCompositionTokens, getFlatCompositionTokens } from '../pool-tokens.utils'
 import { usePool } from '../PoolProvider'
 import { PoolWeightChart } from './PoolWeightCharts/PoolWeightChart'
-import { PoolWeightShiftsChart } from './PoolWeightCharts/PoolWeightShiftsChart'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlPoolLiquidityBootstrappingV3,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
 import { VStack, Skeleton, Box } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useState } from 'react'
-import { isQuantAmmPool } from '../pool.helpers'
+import { isLBP, isQuantAmmPool } from '../pool.helpers'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
+import { PoolWeightShiftsChart } from './PoolWeightCharts/quantamm/PoolWeightShiftsChart'
+import { WeightsChart } from '../../lbp/steps/sale-structure/WeightsChart'
+import { secondsToMilliseconds } from 'date-fns'
 
 const TABS_LIST: ButtonGroupOption[] = [
   { value: 'weight-shifts', label: 'Weight shifts' },
@@ -56,7 +61,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
   const { calcTotalUsdValue } = useTokens()
 
   const isQuantAmm = isQuantAmmPool(pool.type)
-  const [activeTab, setActiveTab] = useState(TABS_LIST[isQuantAmm ? 0 : 1])
+  const [activeTab, setActiveTab] = useState(TABS_LIST[isQuantAmm || isLBP(pool.type) ? 0 : 1])
 
   const compositionTokens = getCompositionTokens(pool)
   const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
@@ -81,7 +86,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
     >
       {isLoading ? (
         <Skeleton h="full" w="full" />
-      ) : isQuantAmm ? (
+      ) : isQuantAmm || isLBP(pool.type) ? (
         <VStack h="full" p={{ base: 'sm', md: 'md' }} spacing="md" w="full">
           <Box alignSelf="flex-start">
             <ButtonGroup
@@ -92,8 +97,10 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
               size="xxs"
             />
           </Box>
-          {activeTab.value === 'weight-shifts' ? (
+          {activeTab.value === 'weight-shifts' && isQuantAmm ? (
             <PoolWeightShiftsChart />
+          ) : activeTab.value === 'weight-shifts' && isLBP(pool.type) ? (
+            <LBPWeightsChart pool={pool} />
           ) : (
             <CompositionView {...compositionViewProps} />
           )}
@@ -102,5 +109,24 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
         <CompositionView {...compositionViewProps} />
       )}
     </NoisyCard>
+  )
+}
+
+function LBPWeightsChart({ pool }: { pool: Pool }) {
+  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const startTime = new Date(secondsToMilliseconds(lbpPool.startTime))
+  const endTime = new Date(secondsToMilliseconds(lbpPool.endTime))
+  const startWeight = lbpPool.projectTokenStartWeight * 100
+  const endWeight = lbpPool.projectTokenEndWeight * 100
+  const now = new Date()
+
+  return (
+    <WeightsChart
+      startWeight={startWeight}
+      endWeight={endWeight}
+      startDate={startTime}
+      endDate={endTime}
+      cutTime={now}
+    />
   )
 }
