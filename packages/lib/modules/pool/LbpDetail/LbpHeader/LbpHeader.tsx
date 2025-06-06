@@ -4,9 +4,9 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import Noise from '@repo/lib/shared/components/layout/Noise'
 import { RadialPattern } from '@repo/lib/shared/components/zen/RadialPattern'
-import { PoolPageStats } from '@repo/lib/shared/pages/PoolsPage/PoolPageStats'
 import { LbpHeaderTitleDescription } from './LbpHeaderTitleDescription'
-import { LbpHeaderTimeInfo } from '@repo/lib/modules/pool/LbpDetail/LbpHeader/LbpHeaderTimeInfo'
+import { LbpHeaderTimeInfo } from './LbpHeaderTimeInfo'
+import { LbpHeaderStats } from './LbpHeaderStats'
 
 export function LbpHeader() {
   return (
@@ -69,7 +69,7 @@ export function LbpHeader() {
           <FadeInOnView animateOnce={false}>
             <VStack align="start" w="full">
               <PoolBreadcrumbs />
-              <Grid templateColumns={{ base: '1fr', md: '3fr 2fr' }} gap="4" w="full">
+              <Grid templateColumns={{ base: '1fr', md: '2fr 1fr' }} gap="4" w="full">
                 <GridItem pr="2">
                   <LbpHeaderTitleDescription />
                 </GridItem>
@@ -77,7 +77,7 @@ export function LbpHeader() {
                   <VStack align="start" h="full">
                     <LbpHeaderTimeInfo />
                     <Box mt="auto">
-                      <PoolPageStats />
+                      <LbpHeaderStats />
                     </Box>
                   </VStack>
                 </GridItem>
