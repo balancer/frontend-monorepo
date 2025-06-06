@@ -271,8 +271,8 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           lineHeight: { base: '1.75rem', md: '2.25rem' },
         },
         h4: {
-          fontSize: { base: '1.25rem', md: '1.5rem' },
-          lineHeight: { base: '1.5rem', md: '1.75rem' },
+          fontSize: { base: '1.25rem', md: '1.625rem' },
+          lineHeight: { base: '1.5rem', md: '2rem' },
         },
         h5: {
           fontSize: { base: '1.0625rem', md: '1.25rem' },
