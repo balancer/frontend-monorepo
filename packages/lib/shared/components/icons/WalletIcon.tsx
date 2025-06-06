@@ -1,4 +1,10 @@
-export function WalletIcon({ size = 24 }: { size?: number }) {
+export function WalletIcon({
+  size = 24,
+  strokeWidth = 1.5,
+}: {
+  size?: number
+  strokeWidth?: number
+}) {
   return (
     <svg
       fill="none"
@@ -6,7 +12,7 @@ export function WalletIcon({ size = 24 }: { size?: number }) {
       stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth="1.5"
+      strokeWidth={strokeWidth}
       viewBox="0 0 24 24"
       width={size}
       xmlns="http://www.w3.org/2000/svg"

@@ -219,8 +219,10 @@ export function getTokens(colors: any, primaryTextColor: string) {
             0.1
           )} inset, 0 0 0 1px ${colors.red['500']}`,
         },
+        innerLg:
+          '1px 1px 2px 0px rgba(0, 0, 0, 0.05) inset, 2px 2px 4px 0px rgba(0, 0, 0, 0.06) inset, 10px 10px 20px 0px rgba(0, 0, 0, 0.03) inset, -0.75px -1px 1px 0px rgba(255, 255, 255, 1) inset',
         innerXl:
-          '4px 4px 4px 0px rgba(0, 0, 0, 0.02) inset, 7px 6px 12px 0px rgba(0, 0, 0, 0.06) inset, 40px 40px 80px 0px rgba(0, 0, 0, 0.03) inset, 0px -1px 1px 0px rgba(255, 255, 255, 0.25) inset',
+          '4px 4px 4px 0px rgba(0, 0, 0, 0.02) inset, 7px 6px 12px 0px rgba(0, 0, 0, 0.06) inset, 40px 40px 80px 0px rgba(0, 0, 0, 0.03) inset, -0.75px -1px 1px 0px rgba(255, 255, 255, 1) inset',
         innerRockShadow:
           '-2px -2px 4px 0px rgba(0, 0, 0, 0.08) inset, -4px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 1px 1px 2px 0px rgba(255, 255, 255, 1) inset, 4px 4px 8px 0px rgba(255, 255, 255, 0.80) inset, 2px 2px 4px 0px rgba(255, 255, 255, 0.80) inset',
         innerRockShadowSm:
@@ -235,7 +237,7 @@ export function getTokens(colors: any, primaryTextColor: string) {
       },
       dark: {
         sm: '0px 0px 0px 1px #00000005, 1px 1px 1px -0.5px #0000000F, 3px 3px 3px -1.5px #0000000F',
-        md: '0px 0px 0px 1px #00000005, 1px 1px 1px -0.5px #0000000F, 3px 3px 3px -1.5px #0000000F, 6px 6px 6px -3px #0000001A, -0.5px -1px 0px 0px #FFFFFF33',
+        md: '0px 0px 0px 1px #00000005, 1px 1px 1px -0.5px #0000000F, 3px 3px 3px -1.5px #0000000F, 6px 6px 6px -3px #0000001A, -0.5px -1px 0px 0px #FFFFFF25',
         lg: '0px 0px 0px 1px #00000005, 1px 1px 1px -0.5px #0000000F, 3px 3px 3px -1.5px #0000000F, 6px 6px 6px -3px #0000000F, 12px 12px 12px -6px #0000001A, 0px -1px 0px 0px #FFFFFF26',
         xl: '0px 0px 0px 1px #00000005, 1px 1px 1px -0.5px #0000000F, 3px 3px 3px -1.5px #0000000F, 6px 6px 6px -3px #0000000F, 12px 12px 12px -6px #0000000F, 24px 24px 24px -12px #0000001A, -0.5px -1px 0px 0px #FFFFFF26',
         '2xl':
@@ -267,6 +269,8 @@ export function getTokens(colors: any, primaryTextColor: string) {
             0.2
           )} inset, 0 0 0 1px ${colors.red['500']}`,
         },
+        innerLg:
+          '10px 10px 20px 0px rgba(0, 0, 0, 0.08) inset, 5px 5px 10px 0px rgba(0, 0, 0, 0.08) inset, 2px 2px 4px 0px rgba(0, 0, 0, 0.08) inset, -0.5px -1px 1px 0px rgba(255, 255, 255, 0.15) inset',
         innerXl:
           '20px 20px 50px 0px rgba(0, 0, 0, 0.25) inset, 10px 10px 25px 0px rgba(0, 0, 0, 0.18) inset, 2px 2px 11px 0px rgba(0, 0, 0, 0.19) inset, 0px -1px 1px 0px #FFFFFF40 inset',
         innerRockShadow:

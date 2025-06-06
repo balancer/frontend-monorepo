@@ -44,7 +44,13 @@ export function SortableHeader({
   textProps,
 }: SortableHeaderProps) {
   const renderSortIcon = () => {
-    return !isSorted ? <SortableIcon /> : sorting === 'asc' ? <ArrowUpIcon /> : <ArrowDownIcon />
+    return !isSorted ? (
+      <SortableIcon />
+    ) : sorting === 'asc' ? (
+      <ArrowUpIcon width="14px" height="14px" />
+    ) : (
+      <ArrowDownIcon width="14px" height="14px" />
+    )
   }
 
   const color = isSorted ? 'font.highlight' : 'font.primary'
