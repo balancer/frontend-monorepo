@@ -46,7 +46,15 @@ export function MyVotes() {
   return (
     <VStack align="start" spacing="md" w="full">
       <HStack alignItems="baseline" justifyContent="space-between" w="full">
-        <Heading as="h2" id="my-votes" pb="0.5" size="lg" variant="special">
+        <Heading
+          as="h2"
+          id="my-votes"
+          pb="0.5"
+          position="relative"
+          size="h4"
+          variant="special"
+          top="6px"
+        >
           My votes
         </Heading>
         <Button

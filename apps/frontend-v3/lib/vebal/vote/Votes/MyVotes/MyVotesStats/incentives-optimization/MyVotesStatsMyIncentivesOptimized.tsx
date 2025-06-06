@@ -180,7 +180,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
             isDisabled={!allVotesTimelocked}
             label="All your votes are timelocked, so you can't apply any new vote combinations"
           >
-            <Stack>
+            <Stack alignItems="end">
               <Button
                 disabled={disabledButton}
                 onClick={() => applyOptimizedVotes()}

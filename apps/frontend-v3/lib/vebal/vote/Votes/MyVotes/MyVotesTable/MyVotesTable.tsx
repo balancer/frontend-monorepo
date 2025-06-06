@@ -112,8 +112,8 @@ export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
           !isConnected
             ? 'Connect your wallet to see and edit your votes'
             : noVeBALBalance
-              ? 'You don’t have any votes. Get some veBAL to start voting.'
-              : 'You don’t have any votes. Start by selecting some pool gauges from the table below.'
+              ? 'You have no active votes. Get some veBAL to start voting.'
+              : 'You have no active votes. Start by selecting some pool gauges from the table below.'
         }
         paginationProps={undefined}
         renderTableHeader={TableHeader}
