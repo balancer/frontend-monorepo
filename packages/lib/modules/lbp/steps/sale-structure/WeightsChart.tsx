@@ -1,23 +1,43 @@
-import { addHours, differenceInDays, hoursToMilliseconds, isValid } from 'date-fns'
+import {
+  addHours,
+  differenceInDays,
+  format,
+  hoursToMilliseconds,
+  isBefore,
+  isValid,
+} from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { buildMarkline } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
 
+type LabelFormatterParams = {
+  data: any[]
+}
+
 export function WeightsChart({
   startWeight,
   endWeight,
   startDate,
   endDate,
+  cutTime,
 }: {
   startWeight: number
   endWeight: number
   startDate: Date
   endDate: Date
+  cutTime?: Date
 }) {
-  const launchTokenData = interpolateData(startWeight, endWeight, startDate, endDate)
+  const { data: launchTokenData, dataAfterCutTime: launchTokenDataAfterCutTime } = interpolateData(
+    startWeight,
+    endWeight,
+    startDate,
+    endDate,
+    cutTime
+  )
   const collateralTokenData = invertData(launchTokenData)
+  const collateralTokenDataAfterCutTime = invertData(launchTokenDataAfterCutTime)
 
   const chartInfo: EChartsOption = {
     xAxis: {
@@ -42,8 +62,8 @@ export function WeightsChart({
       axisLine: { show: false },
       splitLine: { show: false },
       axisTick: { show: false },
-      min: 0,
-      max: 100,
+      min: -1,
+      max: 101,
       interval: 1,
       axisLabel: {
         formatter: (value: number) => {
@@ -90,6 +110,20 @@ export function WeightsChart({
         showSymbol: false,
       },
       {
+        id: 'collateral-token-weight-after-cut-time',
+        name: '',
+        type: 'line' as const,
+        data: collateralTokenDataAfterCutTime,
+        lineStyle: {
+          type: [3, 4],
+          color: '#93C6FF',
+          width: 2,
+          join: 'round' as const,
+          cap: 'round' as const,
+        },
+        showSymbol: false,
+      },
+      {
         id: 'launch-token-weight',
         name: '',
         type: 'line' as const,
@@ -107,7 +141,62 @@ export function WeightsChart({
         },
         showSymbol: false,
       },
+      {
+        id: 'launch-token-weight-after-cut-time',
+        name: '',
+        type: 'line' as const,
+        data: launchTokenDataAfterCutTime,
+        lineStyle: {
+          type: [3, 4],
+          color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+            { offset: 0, color: '#B3AEF5' },
+            { offset: 0.33, color: '#D7CBE7' },
+            { offset: 0.66, color: '#E5C8C8' },
+            { offset: 1, color: '#EAA879' },
+          ]),
+          width: 2,
+          join: 'round' as const,
+          cap: 'round' as const,
+        },
+        showSymbol: false,
+      },
     ],
+  }
+
+  if (cutTime) {
+    chartInfo.series.push({
+      id: 'cut-time',
+      type: 'line',
+      data: [
+        [cutTime, 0],
+        [cutTime, 100],
+      ],
+      lineStyle: {
+        color: 'grey',
+        type: 'dashed',
+        width: 1,
+        cap: 'round' as const,
+        join: 'round' as const,
+      },
+      label: {
+        show: true,
+        position: 'right',
+        formatter: (value: LabelFormatterParams) => {
+          if (value.data[1] === 100)
+            return `{labelFormat|${format(cutTime, 'h:mmaaa, dd/MM/yyyy')}}`
+          else return ''
+        },
+        rich: {
+          labelFormat: {
+            backgroundColor: '#3F4650',
+            color: '#A0AEC0',
+            padding: 4,
+            borderRadius: 2,
+          },
+        },
+      },
+      showSymbol: true,
+    })
   }
 
   const enoughData = startWeight && endWeight && isValid(startDate) && isValid(endDate)
@@ -121,7 +210,13 @@ export function WeightsChart({
   )
 }
 
-function interpolateData(startWeight: number, endWeight: number, startDate: Date, endDate: Date) {
+function interpolateData(
+  startWeight: number,
+  endWeight: number,
+  startDate: Date,
+  endDate: Date,
+  cutTime?: Date
+) {
   const startTimestamp = bn(startDate.getTime())
   const endTimestamp = bn(endDate.getTime())
   const slope = bn(endWeight).minus(startWeight).div(endTimestamp.minus(startTimestamp))
@@ -131,17 +226,26 @@ function interpolateData(startWeight: number, endWeight: number, startDate: Date
       .toNumber()
 
   const data = []
+  const dataAfterCutTime = []
 
   let currentPoint = startDate
   while (addHours(currentPoint, 1) < endDate) {
     const currentTimestamp = bn(currentPoint.getTime())
-    data.push([currentPoint.getTime(), interpolate(currentTimestamp)])
+    if (!cutTime || isBefore(currentPoint, cutTime)) {
+      data.push([currentPoint.getTime(), interpolate(currentTimestamp)])
+    } else {
+      dataAfterCutTime.push([currentPoint.getTime(), interpolate(currentTimestamp)])
+    }
     currentPoint = addHours(currentPoint, 1)
   }
 
-  data.push([endDate.getTime(), interpolate(endTimestamp)])
+  if (!cutTime || isBefore(currentPoint, cutTime)) {
+    data.push([endDate.getTime(), interpolate(endTimestamp)])
+  } else {
+    dataAfterCutTime.push([endDate.getTime(), interpolate(endTimestamp)])
+  }
 
-  return data
+  return { data, dataAfterCutTime }
 }
 
 function invertData(data: number[][]) {
