@@ -1,5 +1,3 @@
-'use client'
-
 import { ModalFooter, Text, HStack } from '@chakra-ui/react'
 
 export function PoolCreationModalFooter({ onReset }: { onReset: () => void }) {

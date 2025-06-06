@@ -32,7 +32,7 @@ export function useCreateLbpSteps() {
     minBptAmountOut: 0n,
     chainId,
     amountsIn: initAmounts,
-    wethIsEth: undefined, // TODO
+    wethIsEth: false, // TODO
   }
 
   const signPermit2Step = useSignPermit2InitializeStep({ initPoolInput, chain: selectedChain })
@@ -53,7 +53,7 @@ export function useCreateLbpSteps() {
   }
 }
 
-export function useLbpInitAmounts() {
+function useLbpInitAmounts() {
   const { saleStructureForm } = useLbpForm()
   const {
     selectedChain: chain,

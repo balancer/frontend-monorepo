@@ -17,6 +17,8 @@ import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
+import { Address } from 'viem'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   isOpen: boolean
@@ -31,24 +33,25 @@ export function LbpCreationModal({
   finalFocusRef,
   ...rest
 }: Props & Omit<ModalProps, 'children'>) {
+  const router = useRouter()
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
-  const { saleStructureForm, projectInfoForm, setActiveStep } = useLbpForm()
+  const { saleStructureForm, projectInfoForm, setActiveStep, isLastStep } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const { userAddress } = useUserAccount()
   const { transactionSteps, lastTransaction, initLbpTxHash, urlTxHash, previewModalDisclosure } =
     useLbpCreation()
 
   const [, setStepIndex] = useLocalStorage(LS_KEYS.LbpConfig.StepIndex, 0)
-  const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
-    LS_KEYS.LbpConfig.Address,
+  const [poolAddress] = useLocalStorage<Address | undefined>(
+    LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
   const handleReset = async () => {
     // clear local storage
     localStorage.removeItem(LS_KEYS.LbpConfig.SaleStructure)
     localStorage.removeItem(LS_KEYS.LbpConfig.ProjectInfo)
-    localStorage.removeItem(LS_KEYS.LbpConfig.Address)
+    localStorage.removeItem(LS_KEYS.LbpConfig.PoolAddress)
     localStorage.removeItem(LS_KEYS.LbpConfig.IsMetadataSent)
     setStepIndex(0)
 
@@ -58,7 +61,7 @@ export function LbpCreationModal({
     setActiveStep(0)
 
     // clear path
-    if (initLbpTxHash) window.history.replaceState({}, '', '/')
+    if (initLbpTxHash) router.replace('/')
 
     onClose() // close modal
   }
@@ -86,7 +89,7 @@ export function LbpCreationModal({
 
   useEffect(() => {
     // trigger modal open if user has begun pool creation process
-    if (poolAddress) previewModalDisclosure.onOpen()
+    if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolAddress])
 
@@ -95,8 +98,6 @@ export function LbpCreationModal({
       window.history.replaceState({}, '', `./create/${initLbpTxHash}`)
     }
   }, [initLbpTxHash])
-
-  console.log('initLbpTxHash', initLbpTxHash)
 
   return (
     <Modal

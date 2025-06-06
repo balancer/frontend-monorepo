@@ -12,7 +12,7 @@ export function useSendMetadataStep(): TransactionStep {
   const [, setIsStepActivated] = useState(false)
   const [createLbp] = useMutation(CreateLbpDocument)
   const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
-    LS_KEYS.LbpConfig.Address,
+    LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
   const [isComplete, setIsComplete] = useLocalStorage<boolean>(

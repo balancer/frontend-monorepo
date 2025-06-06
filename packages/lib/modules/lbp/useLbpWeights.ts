@@ -1,4 +1,3 @@
-// hooks/useLbpWeights.ts
 import { useLbpForm } from './LbpFormProvider'
 
 type LbpWeights = {

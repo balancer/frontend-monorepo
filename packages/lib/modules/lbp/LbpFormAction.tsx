@@ -28,9 +28,14 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
 
       <Button
         disabled={disabled}
-        onClick={() => isLastStep && previewModalDisclosure.onOpen()}
+        onClick={() => {
+          if (isLastStep) {
+            previewModalDisclosure.onOpen()
+          } else {
+            setActiveStep(activeStepIndex + 1)
+          }
+        }}
         size="lg"
-        type="submit"
         variant="primary"
         w="full"
       >

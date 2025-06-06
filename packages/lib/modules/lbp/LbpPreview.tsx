@@ -9,7 +9,6 @@ import { PoolWeights } from './steps/preview/PoolWeights'
 import { ProjectedPrice } from './steps/preview/ProjectedPrice'
 import { SimpleInfoCard } from './steps/SimpleInfoCard'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { useLbpPriceStats } from './useLbpPriceStats'
 import { useLbpWeights } from './useLbpWeights'
 
 export function LbpPreview() {
@@ -21,7 +20,8 @@ export function LbpPreview() {
   } = useLbpForm()
   const saleStructureData = watch()
 
-  const { isLastStep, projectInfoForm } = useLbpForm()
+  const { isLastStep, projectInfoForm, updatePriceStats, maxPrice, saleMarketCap, fdvMarketCap } =
+    useLbpForm()
 
   const chain = saleStructureData.selectedChain
   const launchTokenAddress = saleStructureData.launchTokenAddress
@@ -30,8 +30,6 @@ export function LbpPreview() {
   const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
   const { projectTokenStartWeight: startWeight, projectTokenEndWeight: endWeight } = useLbpWeights()
-
-  const { maxPrice, saleMarketCap, fdvMarketCap, updateStats } = useLbpPriceStats()
 
   return (
     <>
@@ -97,7 +95,7 @@ export function LbpPreview() {
             launchTokenSymbol={launchTokenMetadata?.symbol || ''}
             collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
             collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
-            onPriceChange={updateStats}
+            onPriceChange={updatePriceStats}
           />
         </VStack>
       </NoisyCard>

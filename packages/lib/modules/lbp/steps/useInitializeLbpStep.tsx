@@ -35,7 +35,7 @@ export function useInitializeLbpStep({
   const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const [isStepActivated, setIsStepActivated] = useState(false)
   const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
-    LS_KEYS.LbpConfig.Address,
+    LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
   const rpcUrl = getRpcUrl(initPoolInput.chainId)

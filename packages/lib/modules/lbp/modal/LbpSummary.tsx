@@ -4,10 +4,11 @@ import { useLbpForm } from '../LbpFormProvider'
 import TokenRow from '@repo/lib/modules/tokens/TokenRow/TokenRow'
 import { Address } from 'viem'
 import { formatDateTimeShort } from '@repo/lib/shared/utils/time'
-import { useLbpPriceStats } from '../useLbpPriceStats'
+import { ArrowRight } from 'react-feather'
+import { ReactNode } from 'react'
 
 export function LbpSummary() {
-  const { saleStructureForm } = useLbpForm()
+  const { saleStructureForm, saleMarketCap } = useLbpForm()
   const {
     collateralTokenAddress,
     collateralTokenAmount,
@@ -19,8 +20,6 @@ export function LbpSummary() {
     weightAdjustmentType,
     userActions,
   } = saleStructureForm.getValues()
-
-  const { saleMarketCap } = useLbpPriceStats()
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
@@ -56,11 +55,11 @@ export function LbpSummary() {
           </HStack>
           <HStack justify="space-between" w="full">
             <Text color="grayText">Dynamic weight shifts</Text>
-            <Text color="grayText">{weightAdjustmentType}</Text>
+            {humanWeightShifts[weightAdjustmentType]}
           </HStack>
           <HStack justify="space-between" w="full">
             <Text color="grayText">Sale Type</Text>
-            <Text color="grayText">{userActions}</Text>
+            <Text color="grayText">{humanUserActions[userActions]}</Text>
           </HStack>
           <HStack justify="space-between" w="full">
             <Text color="grayText">Sale Market Cap Range</Text>
@@ -70,4 +69,27 @@ export function LbpSummary() {
       </Card>
     </AnimateHeightChange>
   )
+}
+
+const humanWeightShifts: Record<string, ReactNode> = {
+  linear_90_10: (
+    <HStack spacing={1}>
+      <Text color="grayText">Standard linear: 90</Text>
+      <ArrowRight color="grayText" size={16} />
+      <Text color="grayText">10</Text>
+    </HStack>
+  ),
+  linear_90_50: (
+    <HStack spacing={1}>
+      <Text color="grayText">Standard linear: 90</Text>
+      <ArrowRight color="grayText" size={16} />
+      <Text color="grayText">50</Text>
+    </HStack>
+  ),
+  custom: 'Custom',
+}
+
+const humanUserActions: Record<string, ReactNode> = {
+  buy_only: 'Users can Buy Only',
+  buy_and_sell: 'Users can Buy & Sell',
 }

@@ -35,7 +35,7 @@ export function useCreateLbpStep(): TransactionStep {
   const [isStepActivated, setIsStepActivated] = useState(false)
 
   const [poolAddress, setPoolAddress] = useLocalStorage<`0x${string}` | undefined>(
-    LS_KEYS.LbpConfig.Address,
+    LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
 
@@ -74,46 +74,28 @@ export function useCreateLbpStep(): TransactionStep {
 
   const blockProjectTokenSwapsIn = userActions === 'buy_only' ? true : false
 
-  const createPoolInput = useMemo(() => {
-    if (!launchTokenAddress || !collateralTokenAddress || !startTime || !endTime) {
-      return null
-    }
-
-    const lbpParams = {
+  const createPoolInput = {
+    protocolVersion: 3 as const,
+    poolType: PoolType.LiquidityBootstrapping,
+    symbol: 'LBP',
+    name: 'Liquidity Bootstrapping Pool',
+    swapFeePercentage: parseUnits('0.01', 18),
+    chainId,
+    lbpParams: {
       owner: userAddress,
       blockProjectTokenSwapsIn,
       projectToken: launchTokenAddress as `0x${string}`,
       reserveToken: collateralTokenAddress as `0x${string}`,
-      projectTokenStartWeight: parseUnits((projectTokenStartWeight / 100).toString(), 18),
-      reserveTokenStartWeight: parseUnits((reserveTokenStartWeight / 100).toString(), 18),
-      projectTokenEndWeight: parseUnits((projectTokenEndWeight / 100).toString(), 18),
-      reserveTokenEndWeight: parseUnits((reserveTokenEndWeight / 100).toString(), 18),
-      startTime: BigInt(Math.floor(new Date(startTime).getTime() / 1000)),
-      endTime: BigInt(Math.floor(new Date(endTime).getTime() / 1000)),
-    }
-
-    return {
-      protocolVersion: 3 as const,
-      poolType: PoolType.LiquidityBootstrapping,
-      symbol: 'LBP', // TODO: update when design ready
-      name: 'Liquidity Bootstrapping Pool', // TODO: update when design ready
-      swapFeePercentage: parseUnits('0.01', 18), // TODO: update when design ready
-      chainId,
-      lbpParams,
-    }
-  }, [
-    chainId,
-    userAddress,
-    launchTokenAddress,
-    collateralTokenAddress,
-    projectTokenStartWeight,
-    reserveTokenStartWeight,
-    projectTokenEndWeight,
-    reserveTokenEndWeight,
-    startTime,
-    endTime,
-    blockProjectTokenSwapsIn,
-  ])
+      projectTokenStartWeight: parseUnits(((projectTokenStartWeight || 0) / 100).toString(), 18),
+      reserveTokenStartWeight: parseUnits(((reserveTokenStartWeight || 0) / 100).toString(), 18),
+      projectTokenEndWeight: parseUnits(((projectTokenEndWeight || 0) / 100).toString(), 18),
+      reserveTokenEndWeight: parseUnits(((reserveTokenEndWeight || 0) / 100).toString(), 18),
+      startTime: BigInt(Math.floor(new Date(startTime || Date.now()).getTime() / 1000)),
+      endTime: BigInt(
+        Math.floor(new Date(endTime || Date.now() + 1000 * 60 * 60 * 24).getTime() / 1000)
+      ), // added day because sentry capture query error if default start / end at same time
+    },
+  }
 
   const buildCallDataQuery = useCreatePoolBuildCall({
     createPoolInput: createPoolInput as CreatePoolLiquidityBootstrappingInput,
