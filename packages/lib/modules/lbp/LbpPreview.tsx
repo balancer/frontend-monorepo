@@ -55,6 +55,8 @@ export function LbpPreview() {
     setFdvMarketCap(`$${fNum('fiat', minFdvMarketCap)} - $${fNum('fiat', maxFdvMarketCap)}`)
   }
 
+  const tokenLoaded = !launchTokenMetadata.isLoading && !!launchTokenMetadata.symbol
+
   return (
     <>
       <NoisyCard
@@ -93,35 +95,39 @@ export function LbpPreview() {
             </>
           )}
 
-          <HStack w="full">
-            <SimpleInfoCard
-              title={`${launchTokenMetadata.symbol} start price`}
-              info={`$${fNum('fiat', maxPrice)}`}
-            />
-            <SimpleInfoCard title="Sale market cap" info={saleMarketCap} />
-            <SimpleInfoCard title="FDV market cap" info={fdvMarketCap} />
-          </HStack>
+          {tokenLoaded && (
+            <>
+              <HStack w="full">
+                <SimpleInfoCard
+                  title={`${launchTokenMetadata.symbol} start price`}
+                  info={`$${fNum('fiat', maxPrice)}`}
+                />
+                <SimpleInfoCard title="Sale market cap" info={saleMarketCap} />
+                <SimpleInfoCard title="FDV market cap" info={fdvMarketCap} />
+              </HStack>
 
-          <PoolWeights
-            startTime={saleStructureData.startTime}
-            endTime={saleStructureData.endTime}
-            startWeight={startWeight}
-            endWeight={endWeight}
-            launchTokenMetadata={launchTokenMetadata}
-            collateralToken={getToken(collateralTokenAddress, chain)}
-          />
+              <PoolWeights
+                startTime={saleStructureData.startTime}
+                endTime={saleStructureData.endTime}
+                startWeight={startWeight}
+                endWeight={endWeight}
+                launchTokenMetadata={launchTokenMetadata}
+                collateralToken={getToken(collateralTokenAddress, chain)}
+              />
 
-          <ProjectedPrice
-            startTime={saleStructureData.startTime}
-            endTime={saleStructureData.endTime}
-            startWeight={startWeight}
-            endWeight={endWeight}
-            launchTokenSeed={launchTokenSeed}
-            launchTokenSymbol={launchTokenMetadata?.symbol || ''}
-            collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
-            collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
-            onPriceChange={updateStats}
-          />
+              <ProjectedPrice
+                startTime={saleStructureData.startTime}
+                endTime={saleStructureData.endTime}
+                startWeight={startWeight}
+                endWeight={endWeight}
+                launchTokenSeed={launchTokenSeed}
+                launchTokenSymbol={launchTokenMetadata?.symbol || ''}
+                collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
+                collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
+                onPriceChange={updateStats}
+              />
+            </>
+          )}
         </VStack>
       </NoisyCard>
 
