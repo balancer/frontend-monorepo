@@ -1,5 +1,3 @@
-'use client'
-
 import ReactECharts from 'echarts-for-react'
 import { usePoolWeightShiftsChart } from './usePoolWeightShiftsChart'
 import { Flex, Text } from '@chakra-ui/react'

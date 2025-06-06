@@ -104,7 +104,6 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
     case GqlPoolType.LiquidityBootstrapping:
       return (
         <TagWrapper>
-          <ProtocolIcon protocol={Protocol.Fjord} />
           <Text {...textProps}>LBP</Text>
         </TagWrapper>
       )
