@@ -13,6 +13,7 @@ import {
   Box,
   useToken,
   Center,
+  Divider,
 } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -79,12 +80,18 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
 
   const voteDiff = votesShare && votesShareNextWeek ? votesShareNextWeek - votesShare : undefined
   const voteDiffText = formatVotesAsPercent(voteDiff ? voteDiff : 0)
-  const diffIcon = !voteDiff ? <ArrowUpIcon /> : voteDiff > 0 ? <ArrowUpIcon /> : <ArrowDownIcon />
+  const diffIcon = !voteDiff ? (
+    <ArrowUpIcon height="14px" width="14px" />
+  ) : voteDiff > 0 ? (
+    <ArrowUpIcon />
+  ) : (
+    <ArrowDownIcon />
+  )
   const badgeColorScheme =
     !voteDiff || voteDiff === 0
       ? { variant: 'outline', bg: 'font.secondary' }
       : voteDiff > 0
-        ? { colorScheme: 'green', variant: 'solid' }
+        ? { bg: 'font.highlight', variant: 'solid', color: 'white' }
         : { colorScheme: 'red', variant: 'solid' }
 
   const votesColor =
@@ -104,22 +111,22 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
       : undefined
 
   const popoverContent = (
-    <PopoverContent bg="background.base" minWidth={['100px', '300px']} p="sm" shadow="3xl">
-      <VStack alignItems="stretch" spacing="sm" width="full">
+    <PopoverContent bg="background.base" minWidth={['100px', '300px']} p="ms" shadow="3xl">
+      <VStack alignItems="stretch" spacing="xs" width="full">
         <TooltipItem
           label={
-            <Text as="b" fontSize="lg">
+            <Text as="b" fontWeight="bold">
               veBAL votes
             </Text>
           }
-          mt="sm"
+          mb="xs"
           value={
-            <Badge {...badgeColorScheme}>
-              <HStack>
-                <Box color="font.dark" fontSize="xs" ml="1">
+            <Badge {...badgeColorScheme} rounded="full">
+              <HStack gap="xxs" p="xxs" pl="0">
+                <Box color="font.dark" fontSize="xs">
                   {diffIcon}
                 </Box>
-                <Text color="font.dark" fontSize="sm">
+                <Text color="font.dark" fontSize="sm" fontWeight="bold">
                   {voteDiffText}
                 </Text>
               </HStack>
@@ -127,13 +134,25 @@ export function VoteRateTooltip({ votesState, votesShare, votesShareNextWeek }: 
           }
         />
 
-        <hr />
+        <Divider />
 
         <TooltipItem label="Current period" mt="sm" value={votesShareText ?? <>&mdash;</>} />
-        <TooltipItem color="grey" label="veBAL votes" value={votesThisWeek ?? <>&mdash;</>} />
+        <TooltipItem
+          color="font.secondary"
+          label="veBAL votes"
+          value={votesThisWeek ?? <>&mdash;</>}
+        />
 
-        <TooltipItem label="Next period" mt="md" value={votesShareNextWeekText ?? <>&mdash;</>} />
-        <TooltipItem color="grey" label="veBAL votes" value={votesNextWeek ?? <>&mdash;</>} />
+        <TooltipItem
+          label="For next period"
+          mt="sm"
+          value={votesShareNextWeekText ?? <>&mdash;</>}
+        />
+        <TooltipItem
+          color="font.secondary"
+          label="veBAL votes"
+          value={votesNextWeek ?? <>&mdash;</>}
+        />
       </VStack>
     </PopoverContent>
   )
