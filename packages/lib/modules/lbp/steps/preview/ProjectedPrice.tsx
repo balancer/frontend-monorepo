@@ -19,6 +19,7 @@ type Props = {
   startWeight: number
   endWeight: number
   launchTokenSymbol: string
+  launchTokenSeed: number
   collateralTokenSeed: number
   collateralTokenPrice: number
   onPriceChange: (prices: number[][]) => void
@@ -30,6 +31,7 @@ export function ProjectedPrice({
   startWeight,
   endWeight,
   launchTokenSymbol,
+  launchTokenSeed,
   collateralTokenSeed,
   collateralTokenPrice,
   onPriceChange,
@@ -64,6 +66,7 @@ export function ProjectedPrice({
           endWeight={endWeight}
           startDate={parseISO(startTime)}
           endDate={parseISO(endTime)}
+          launchTokenSeed={launchTokenSeed}
           collateralTokenSeed={collateralTokenSeed}
           collateralTokenPrice={collateralTokenPrice}
           onPriceChange={prices => {
