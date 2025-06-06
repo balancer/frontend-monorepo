@@ -1,12 +1,12 @@
 import { EChartsOption } from 'echarts'
 import { useMemo } from 'react'
-import { usePool } from '../../PoolProvider'
-import { getCompositionTokens } from '../../pool-tokens.utils'
-import { isQuantAmmPool } from '../../pool.helpers'
 import { QuantAmmWeightSnapshot } from '@repo/lib/shared/services/api/generated/graphql'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { secondsToMilliseconds } from 'date-fns'
-import { PoolWithWeightSnapshots } from '../../pool.types'
+import { usePool } from '../../../PoolProvider'
+import { getCompositionTokens } from '../../../pool-tokens.utils'
+import { isQuantAmmPool } from '../../../pool.helpers'
+import { PoolWithWeightSnapshots } from '../../../pool.types'
 
 const COLORS = [
   '#D81B60',
