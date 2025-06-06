@@ -1,4 +1,4 @@
-import { Button, HStack, Skeleton, Text, Stack, Tooltip } from '@chakra-ui/react'
+import { Button, HStack, Skeleton, Text, Stack } from '@chakra-ui/react'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { MagicStickIcon } from '@repo/lib/shared/components/icons/MagicStickIcon'
@@ -6,7 +6,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { MyVotesStatsCard } from '../shared/MyVotesStatsCard'
 import { useVeBALIncentives } from '../useVeBALIncentives'
 import { useVebalUserData } from '@bal/lib/vebal/useVebalUserData'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { bn, fNumCustom } from '@repo/lib/shared/utils/numbers'
 import NextLink from 'next/link'
 import { getVeBalManagePath } from '@bal/lib/vebal/vebal-navigation'
 import { areAllVotesTimelocked, useIncentivesOptimized } from './useIncentivesOptimized'
@@ -26,6 +26,7 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { getStakedBalance } from '@repo/lib/modules/pool/user-balance.helpers'
 import { Pool } from '@repo/lib/modules/pool/pool.types'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function MyVotesStatsMyIncentivesOptimized() {
   const { toCurrency } = useCurrency()
@@ -69,9 +70,53 @@ export function MyVotesStatsMyIncentivesOptimized() {
   )
 
   const headerText =
-    !isConnected || noVeBALBalance || !canReceiveIncentives(userAddress)
-      ? 'Voting incentives APR (average)'
-      : 'My optimized vote incentives (1w)'
+    !isConnected || noVeBALBalance || !canReceiveIncentives(userAddress) ? (
+      <TooltipWithTouch
+        label="The average APR veBAL holders may get from 3rd party bribes on Hidden Hand for voting on eligible pool gauges. Hidden Hand is an unaffiliated 3rd party vote market."
+        placement="top"
+      >
+        <Text
+          fontSize="sm"
+          position="relative"
+          variant="secondary"
+          _after={{
+            borderBottom: '1px dotted',
+            borderColor: 'currentColor',
+            bottom: '-2px',
+            content: '""',
+            left: 0,
+            opacity: 0.5,
+            position: 'absolute',
+            width: '100%',
+          }}
+        >
+          Average APR of vote incentives
+        </Text>
+      </TooltipWithTouch>
+    ) : (
+      <TooltipWithTouch
+        label="The potential amount you can earn from 3rd party bribes on Hidden Hand by tapping 'Apply' to optimize your votes for maximum returns. Hidden Hand is an unaffiliated 3rd party vote market."
+        placement="top"
+      >
+        <Text
+          fontSize="sm"
+          position="relative"
+          variant="secondary"
+          _after={{
+            borderBottom: '1px dotted',
+            borderColor: 'currentColor',
+            bottom: '-2px',
+            content: '""',
+            left: 0,
+            opacity: 0.5,
+            position: 'absolute',
+            width: '100%',
+          }}
+        >
+          My optimized vote incentives (1w)
+        </Text>
+      </TooltipWithTouch>
+    )
 
   const isLoading =
     incentivesAreLoading || vebalUserDataLoading || optimizationLoading || poolIsLoading
@@ -98,7 +143,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
           <Skeleton height="28px" w="100px" />
         ) : !isConnected || noVeBALBalance || !canReceiveIncentives(userAddress) ? (
           <Text fontSize="lg" fontWeight={700} variant="special">
-            {incentives.voting ? fNum('feePercent', incentives.voting) : <>&mdash;</>}
+            {incentives.voting ? fNumCustom(incentives.voting, '0.00%') : '—'}
           </Text>
         ) : (
           <HStack spacing="xs">
@@ -129,7 +174,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
             Get veBAL
           </Button>
         ) : isConnected ? (
-          <Tooltip
+          <TooltipWithTouch
             bg="background.base"
             color="font.secondary"
             isDisabled={!allVotesTimelocked}
@@ -150,7 +195,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
                 </HStack>
               </Button>
             </Stack>
-          </Tooltip>
+          </TooltipWithTouch>
         ) : (
           <Stack>
             <ConnectWallet size="sm" variant="primary" />

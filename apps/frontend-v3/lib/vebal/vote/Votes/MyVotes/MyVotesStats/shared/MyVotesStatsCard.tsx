@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 interface HeaderCardProps {
   variant?: 'default' | 'special' | 'expired'
-  headerText: string
+  headerText: ReactNode
   leftContent?: ReactNode
   rightContent?: ReactNode
 }

@@ -125,10 +125,10 @@ export function MyVotes() {
           <MyVotesStatsMyVebal loading={loading} myVebalBalance={veBALBalance} />
         </GridItem>
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-          <MyVotesStatsAverageReward />
+          <MyVotesStatsMyIncentives />
         </GridItem>
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
-          <MyVotesStatsMyIncentives />
+          <MyVotesStatsAverageReward />
         </GridItem>
         <GridItem colSpan={{ base: 4, md: 2, lg: 1 }}>
           <MyVotesStatsMyIncentivesOptimized />
