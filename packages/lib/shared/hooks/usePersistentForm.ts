@@ -13,24 +13,23 @@ import { useEffect } from 'react'
  */
 export function usePersistentForm<TFieldValues extends FieldValues = FieldValues>(
   storageKey: string,
-  initialDefaultValues: TFieldValues,
+  initialDefaultValues: DefaultValues<TFieldValues>,
   formOptions?: Omit<UseFormProps<TFieldValues>, 'defaultValues'>
 ): UseFormReturn<TFieldValues> {
-  const [persistedValues, setPersistedValues] = useLocalStorage<TFieldValues>(
+  const [persistedValues, setPersistedValues] = useLocalStorage<DefaultValues<TFieldValues>>(
     storageKey,
     initialDefaultValues
   )
 
   const form = useForm<TFieldValues>({
     ...(formOptions || {}),
-    defaultValues: persistedValues as DefaultValues<TFieldValues>,
+    defaultValues: persistedValues,
   })
 
   const { watch } = form
 
   useEffect(() => {
-    // On change, update the local storage
-    const subscription = watch(value => setPersistedValues(value as TFieldValues))
+    const subscription = watch(value => setPersistedValues(value as DefaultValues<TFieldValues>))
     return () => subscription.unsubscribe()
   }, [watch, setPersistedValues])
 

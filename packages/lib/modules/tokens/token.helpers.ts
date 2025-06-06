@@ -155,6 +155,14 @@ export function getSpenderForAddLiquidity(pool: Pool): Address {
   return vaultAddress
 }
 
+export function getSpenderForCreatePool(chain: GqlChain): Address {
+  const permit2Address = getNetworkConfig(chain).contracts.permit2
+  if (!permit2Address) {
+    throw new Error(`Permit2 feature is not yet available for this chain (${chain}) `)
+  }
+  return permit2Address
+}
+
 export const veBalBptAddress = mainnetNetworkConfig.tokens.addresses.veBalBpt as Address
 
 export function isVeBalBtpAddress(tokenAddress: Address) {

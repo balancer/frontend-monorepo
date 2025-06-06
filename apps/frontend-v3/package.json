@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.13.8",
-    "@balancer/sdk": "4.0.3",
+    "@balancer/sdk": "4.1.0",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "2.4.2",
     "@chakra-ui/icons": "2.2.4",

@@ -8,7 +8,9 @@ import { ProjectInfoForm, SaleStructureForm } from './lbp.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLocalStorage } from 'usehooks-ts'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useTokenMetadata } from '../tokens/useTokenMetadata'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -69,6 +71,31 @@ export function useLbpFormLogic() {
     setPersistedStepIndex(activeStepIndex)
   }, [activeStepIndex, setPersistedStepIndex])
 
+  const { saleTokenAmount, launchTokenAddress, selectedChain } = saleStructureForm.watch()
+
+  const launchTokenSeed = Number(saleTokenAmount || 0)
+  const { totalSupply: launchTokenTotalSupply } = useTokenMetadata(
+    launchTokenAddress,
+    selectedChain
+  )
+
+  const [maxPrice, setMaxPrice] = useState(0)
+  const [saleMarketCap, setSaleMarketCap] = useState('')
+  const [fdvMarketCap, setFdvMarketCap] = useState('')
+
+  const updatePriceStats = (prices: number[][]) => {
+    const minPrice = Math.min(...prices.map(point => point[1]))
+    const maxPrice = Math.max(...prices.map(point => point[1]))
+    const minSaleMarketCap = minPrice * launchTokenSeed
+    const maxSaleMarketCap = maxPrice * launchTokenSeed
+    const minFdvMarketCap = minPrice * (launchTokenTotalSupply || 0)
+    const maxFdvMarketCap = maxPrice * (launchTokenTotalSupply || 0)
+
+    setMaxPrice(maxPrice)
+    setSaleMarketCap(`$${fNum('fiat', minSaleMarketCap)} - $${fNum('fiat', maxSaleMarketCap)}`)
+    setFdvMarketCap(`$${fNum('fiat', minFdvMarketCap)} - $${fNum('fiat', maxFdvMarketCap)}`)
+  }
+
   return {
     steps,
     activeStepIndex,
@@ -78,6 +105,11 @@ export function useLbpFormLogic() {
     isFirstStep,
     saleStructureForm,
     projectInfoForm,
+    maxPrice,
+    saleMarketCap,
+    fdvMarketCap,
+    updatePriceStats,
+    launchTokenSeed,
   }
 }
 
