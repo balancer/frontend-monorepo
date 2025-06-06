@@ -3,6 +3,7 @@ import {
   differenceInDays,
   format,
   hoursToMilliseconds,
+  isAfter,
   isBefore,
   isValid,
 } from 'date-fns'
@@ -40,6 +41,10 @@ export function WeightsChart({
   const collateralTokenDataAfterCutTime = invertData(launchTokenDataAfterCutTime)
 
   const chartInfo: EChartsOption = {
+    grid: {
+      top: '5%',
+      bottom: '10%',
+    },
     xAxis: {
       show: true,
       type: 'value',
@@ -163,7 +168,7 @@ export function WeightsChart({
     ],
   }
 
-  if (cutTime) {
+  if (cutTime && isAfter(cutTime, startDate) && isBefore(cutTime, endDate)) {
     chartInfo.series.push({
       id: 'cut-time',
       type: 'line',

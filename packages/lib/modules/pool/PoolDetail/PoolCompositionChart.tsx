@@ -7,7 +7,7 @@ import {
   GqlPoolLiquidityBootstrappingV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Pool } from '../pool.types'
-import { VStack, Skeleton, Box } from '@chakra-ui/react'
+import { VStack, Skeleton, Box, Divider, HStack, Text, Spacer } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -17,7 +17,13 @@ import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { PoolWeightShiftsChart } from './PoolWeightCharts/quantamm/PoolWeightShiftsChart'
 import { WeightsChart } from '../../lbp/steps/sale-structure/WeightsChart'
-import { secondsToMilliseconds } from 'date-fns'
+import {
+  differenceInDays,
+  differenceInHours,
+  isAfter,
+  isBefore,
+  secondsToMilliseconds,
+} from 'date-fns'
 
 const TABS_LIST: ButtonGroupOption[] = [
   { value: 'weight-shifts', label: 'Weight shifts' },
@@ -112,6 +118,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
   )
 }
 
+// FIXME: [JUANJO] we can maybe merge this one with the one on the pool creation page
 function LBPWeightsChart({ pool }: { pool: Pool }) {
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
   const startTime = new Date(secondsToMilliseconds(lbpPool.startTime))
@@ -119,14 +126,39 @@ function LBPWeightsChart({ pool }: { pool: Pool }) {
   const startWeight = lbpPool.projectTokenStartWeight * 100
   const endWeight = lbpPool.projectTokenEndWeight * 100
   const now = new Date()
+  const isSaleOngoing = isAfter(now, startTime) && isBefore(now, endTime)
+  const daysDiff = differenceInDays(endTime, isSaleOngoing ? now : startTime)
+  const hoursDiff = differenceInHours(endTime, isSaleOngoing ? now : startTime) - daysDiff * 24
+  const salePeriodText = isSaleOngoing
+    ? `Sale: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} remaining`
+    : `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
 
   return (
-    <WeightsChart
-      startWeight={startWeight}
-      endWeight={endWeight}
-      startDate={startTime}
-      endDate={endTime}
-      cutTime={now}
-    />
+    <>
+      <WeightsChart
+        startWeight={startWeight}
+        endWeight={endWeight}
+        startDate={startTime}
+        endDate={endTime}
+        cutTime={now}
+      />
+
+      <Divider />
+
+      <HStack mt="2" w="full">
+        <Text color="font.special" fontWeight="extrabold">
+          &mdash;
+        </Text>
+        <Text>{lbpPool.poolTokens[0].symbol}</Text>
+        <Text color="#93C6FF" fontWeight="extrabold">
+          &mdash;
+        </Text>
+        <Text>{lbpPool.poolTokens[1].symbol}</Text>
+        <Spacer />
+        <Text color="font.secondary" fontSize="sm">
+          {salePeriodText}
+        </Text>
+      </HStack>
+    </>
   )
 }
