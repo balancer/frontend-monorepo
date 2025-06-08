@@ -26,14 +26,12 @@ export function canReceiveIncentives(address: Address) {
 }
 
 export function useBlacklistedVotes(votingPools: VoteListItem[]) {
-  const { endLockTimestamps, isLoading: endLockTimestampsLoading } = useEndLockInfo()
   const activeVotingPools = votingPools.filter(pool => !pool.gauge.isKilled)
 
   const { blacklistedVotes, isLoading: votesAreLoading } = useVotes(activeVotingPools)
   const blacklistedVotesGroupedByGauge = blacklistedVotes
     .map(vote => {
-      const lockEnd = endLockTimestamps[vote.accountAddress]
-      const votes = calculateCurrentUserVotes(vote, lockEnd)
+      const votes = calculateCurrentUserVotes(vote)
 
       return { gaugeAddress: vote.gaugeAddress, votes }
     })
@@ -47,45 +45,9 @@ export function useBlacklistedVotes(votingPools: VoteListItem[]) {
     )
 
   return {
-    isLoading: votesAreLoading || endLockTimestampsLoading,
+    isLoading: votesAreLoading,
     blacklistedVotes: blacklistedVotesGroupedByGauge as Record<Address, BigNumber | undefined>,
   }
-}
-
-function useEndLockInfo() {
-  const calls = BLACKLISTED_ADDRESSES.map(
-    blacklistedAddress =>
-      ({
-        chainId: mainnet.id,
-        abi: AbiMap['balancer.veBAL'],
-        address: mainnetNetworkConfig.contracts.veBAL as Hex,
-        functionName: 'locked',
-        args: [blacklistedAddress],
-      }) as const
-  )
-
-  const { data, isLoading } = useReadContracts({
-    batchSize: 10_000, // 10kb batch ~ 75kb payload
-    allowFailure: false,
-    query: {
-      ...onlyExplicitRefetch,
-      enabled: true,
-    },
-    contracts: calls,
-  })
-
-  const info = data || []
-
-  const endLockTimestamps = info.reduce(
-    (acc, accountEndLockInfo, i) => {
-      const accountAddress = calls[i].args[0]
-      acc[accountAddress] = accountEndLockInfo.end
-      return acc
-    },
-    {} as Record<string, bigint>
-  )
-
-  return { endLockTimestamps, isLoading }
 }
 
 function useVotes(votingPools: VoteListItem[]) {
@@ -124,10 +86,10 @@ function useVotes(votingPools: VoteListItem[]) {
   return { blacklistedVotes, isLoading }
 }
 
-function calculateCurrentUserVotes(vote: VoteInfo, lockEnd: bigint) {
+function calculateCurrentUserVotes(vote: VoteInfo) {
   const slope = bn(vote.slope)
   const nextVoteTimestamp = millisecondsToSeconds(startOfDayUtc(nextThursday(new Date())).getTime())
-  const lockEndInSeconds = Number(lockEnd)
+  const lockEndInSeconds = Number(vote.end)
 
   return slope.times(lockEndInSeconds - nextVoteTimestamp)
 }
