@@ -10,12 +10,8 @@ import {
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { buildMarkline } from '@repo/lib/shared/utils/chart.helper'
+import { buildMarkline, LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
-
-type LabelFormatterParams = {
-  data: any[]
-}
 
 export function WeightsChart({
   startWeight,
