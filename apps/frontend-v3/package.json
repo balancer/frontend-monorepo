@@ -69,7 +69,7 @@
     "@repo/typescript-config": "workspace:*",
     "@testing-library/react": "16.3.0",
     "@types/js-cookie": "^3.0.6",
-    "@types/lodash": "^4.14.195",
+    "@types/lodash": "^4.17.17",
     "@types/node": "22.15.19",
     "@types/prismjs": "^1.26.5",
     "@types/react": "19.1.3",
