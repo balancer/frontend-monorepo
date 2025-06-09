@@ -18,5 +18,7 @@ export const LS_KEYS = {
     SaleStructure: 'lbpConfig.saleStructure',
     ProjectInfo: 'lbpConfig.projectInfo',
     StepIndex: 'lbpConfig.stepIndex',
+    PoolAddress: 'lbpConfig.poolAddress',
+    IsMetadataSent: 'lbpConfig.isMetadataSent',
   },
 }

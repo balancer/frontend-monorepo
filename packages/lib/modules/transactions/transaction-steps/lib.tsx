@@ -56,6 +56,9 @@ export type StepType =
   | 'levelUp'
   | 'claimRelicReward'
   | 'approveBatchRelayerForAllRelics'
+  | 'createPool'
+  | 'sendLbpMetadata'
+  | 'initializePool'
 
 export type TxActionId =
   | 'SignBatchRelayer'

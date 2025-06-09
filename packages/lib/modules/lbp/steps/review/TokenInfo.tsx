@@ -18,7 +18,7 @@ export function TokenInfo({
     <HStack w="full" spacing="5">
       <Circle bg="background.level4" color="font.secondary" shadow="lg" size={16}>
         <VStack>
-          <Image src={iconURL} borderRadius="full" />
+          <Image src={iconURL || undefined} borderRadius="full" />
         </VStack>
       </Circle>
       <VStack w="full">

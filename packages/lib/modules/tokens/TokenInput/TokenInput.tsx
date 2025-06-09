@@ -282,6 +282,7 @@ export const TokenInput = forwardRef(
                 shadow="none"
                 title={inputTitle}
                 type="number"
+                step="any"
                 value={value}
                 {...inputProps}
               />
