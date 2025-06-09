@@ -24,11 +24,41 @@ import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
 import { MerklAlert } from '../../merkl/MerklAlert'
 import { motion, easeOut } from 'framer-motion'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
 import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+
+interface NetworkConfig {
+  chain: GqlChain
+  name: string
+  displayProps?: Record<string, any>
+}
+
+const balancerNetworksConfig: NetworkConfig[] = [
+  { chain: GqlChain.Mainnet, name: 'Ethereum', displayProps: {} },
+  {
+    chain: GqlChain.Arbitrum,
+    name: 'Arbitrum',
+    displayProps: { display: { base: 'none', md: 'block' } },
+  },
+  {
+    chain: GqlChain.Base,
+    name: 'Base',
+    displayProps: { display: { base: 'none', md: 'none', lg: 'block' } },
+  },
+]
+
+const beetsNetworksConfig: NetworkConfig[] = [
+  { chain: GqlChain.Sonic, name: 'Sonic', displayProps: {} },
+  {
+    chain: GqlChain.Optimism,
+    name: 'Optimism',
+    displayProps: { display: { base: 'none', md: 'block' } },
+  },
+]
 
 export function ClaimNetworkPools() {
   const {
@@ -51,6 +81,11 @@ export function ClaimNetworkPools() {
 
   const { isDesktop } = useBreakpoints()
   const iconSize = isDesktop ? 12 : 8
+
+  const currentNetworks =
+    PROJECT_CONFIG.projectId === ProjectConfigBeets.projectId
+      ? beetsNetworksConfig
+      : balancerNetworksConfig
 
   const poolsWithChain = Object.entries(poolsByChainMap).sort(
     (a, b) =>
@@ -76,81 +111,43 @@ export function ClaimNetworkPools() {
         ) : !isConnected ? (
           <ConnectButton.Custom>
             {({ openConnectModal }) => (
-              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="md">
-                <Card flex="1" p={['sm', 'md']} shadow="innerLg" variant="level1" w="full">
-                  <Flex alignItems="center" justifyContent="space-between">
-                    <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Mainnet} size={iconSize} shadow="md" />
-
-                      <Stack gap={1}>
-                        <Heading size="sm" textTransform="capitalize">
-                          Ethereum
-                        </Heading>
-                        <Heading size="md" color="font.secondary">
-                          –
-                        </Heading>
-                      </Stack>
-                    </HStack>
-                    <Button variant="tertiary" gap="xs" onClick={openConnectModal}>
-                      <WalletIcon size={20} strokeWidth={2} />
-                      Connect
-                    </Button>
-                  </Flex>
-                </Card>
-                <Card
-                  flex="1"
-                  p={['sm', 'md']}
-                  shadow="innerLg"
-                  variant="level1"
-                  w="full"
-                  display={{ base: 'none', md: 'block', lg: 'block', xl: 'block' }}
-                >
-                  <Flex alignItems="center" justifyContent="space-between">
-                    <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Arbitrum} size={iconSize} shadow="md" />
-
-                      <Stack gap={1}>
-                        <Heading size="sm" textTransform="capitalize">
-                          Arbitrum
-                        </Heading>
-                        <Heading size="md" color="font.secondary">
-                          –
-                        </Heading>
-                      </Stack>
-                    </HStack>
-                    <Button variant="tertiary" gap="xs" onClick={openConnectModal}>
-                      <WalletIcon size={20} strokeWidth={2} />
-                      Connect
-                    </Button>
-                  </Flex>
-                </Card>
-                <Card
-                  flex="1"
-                  p={['sm', 'md']}
-                  shadow="innerLg"
-                  variant="level1"
-                  w="full"
-                  display={{ base: 'none', md: 'none', lg: 'block', xl: 'block' }}
-                >
-                  <Flex alignItems="center" justifyContent="space-between">
-                    <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Base} size={iconSize} shadow="md" />
-
-                      <Stack gap={1}>
-                        <Heading size="sm" textTransform="capitalize">
-                          Base
-                        </Heading>
-                        <Heading size="md" color="font.secondary">
-                          –
-                        </Heading>
-                      </Stack>
-                    </HStack>
-                    <Button variant="tertiary" gap="xs" onClick={openConnectModal}>
-                      <WalletIcon size={20} strokeWidth={2} />
-                      Connect
-                    </Button>
-                  </Flex>
-                </Card>
+              <SimpleGrid
+                columns={{
+                  base: 1,
+                  md: 2,
+                  lg: PROJECT_CONFIG.projectId === ProjectConfigBeets.projectId ? 2 : 3,
+                }}
+                spacing="md"
+              >
+                {currentNetworks.map(network => (
+                  <Card
+                    key={network.name}
+                    flex="1"
+                    p={['sm', 'md']}
+                    shadow="innerLg"
+                    variant="level1"
+                    w="full"
+                    {...network.displayProps}
+                  >
+                    <Flex alignItems="center" justifyContent="space-between">
+                      <HStack gap="ms">
+                        <NetworkIcon chain={network.chain} size={iconSize} shadow="md" />
+                        <Stack gap={1}>
+                          <Heading size="sm" textTransform="capitalize">
+                            {network.name}
+                          </Heading>
+                          <Heading size="md" color="font.secondary">
+                            –
+                          </Heading>
+                        </Stack>
+                      </HStack>
+                      <Button variant="tertiary" gap="xs" onClick={openConnectModal}>
+                        <WalletIcon size={20} strokeWidth={2} />
+                        Connect
+                      </Button>
+                    </Flex>
+                  </Card>
+                ))}
               </SimpleGrid>
             )}
           </ConnectButton.Custom>
@@ -158,69 +155,49 @@ export function ClaimNetworkPools() {
           <>
             {hasMerklRewards && <MerklAlert />}
             {noRewards && (
-              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing="md">
-                <Card flex="1" p={['sm', 'md']} shadow="innerLg" variant="level1" w="full">
-                  <Flex alignItems="center" justifyContent="space-between">
-                    <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Mainnet} size={iconSize} shadow="md" />
-                      <Stack gap={1}>
-                        <Heading size="sm" textTransform="capitalize">
-                          Ethereum
-                        </Heading>
-                      </Stack>
-                    </HStack>
-                    <Text variant="secondary" fontSize="sm">
-                      Nothing to claim
-                    </Text>
-                  </Flex>
-                </Card>
-                <Card
-                  flex="1"
-                  p={['sm', 'md']}
-                  shadow="innerLg"
-                  variant="level1"
-                  w="full"
-                  display={{ base: 'none', md: 'block', lg: 'block', xl: 'block' }}
-                >
-                  <Flex alignItems="center" justifyContent="space-between">
-                    <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Arbitrum} size={iconSize} shadow="md" />
-                      <Stack gap={1}>
-                        <Heading size="sm" textTransform="capitalize">
-                          Arbitrum
-                        </Heading>
-                      </Stack>
-                    </HStack>
-                    <Text variant="secondary" fontSize="sm">
-                      Nothing to claim
-                    </Text>
-                  </Flex>
-                </Card>
-                <Card
-                  flex="1"
-                  p={['sm', 'md']}
-                  shadow="innerLg"
-                  variant="level1"
-                  w="full"
-                  display={{ base: 'none', md: 'none', lg: 'block', xl: 'block' }}
-                >
-                  <Flex alignItems="center" justifyContent="space-between">
-                    <HStack gap="ms">
-                      <NetworkIcon chain={GqlChain.Base} size={iconSize} shadow="md" />
-                      <Stack gap={1}>
-                        <Heading size="sm" textTransform="capitalize">
-                          Base
-                        </Heading>
-                      </Stack>
-                    </HStack>
-                    <Text variant="secondary" fontSize="sm">
-                      Nothing to claim
-                    </Text>
-                  </Flex>
-                </Card>
+              <SimpleGrid
+                columns={{
+                  base: 1,
+                  md: 2,
+                  lg: PROJECT_CONFIG.projectId === ProjectConfigBeets.projectId ? 2 : 3,
+                }}
+                spacing="md"
+              >
+                {currentNetworks.map(network => (
+                  <Card
+                    key={network.name}
+                    flex="1"
+                    p={['sm', 'md']}
+                    shadow="innerLg"
+                    variant="level1"
+                    w="full"
+                    {...network.displayProps}
+                  >
+                    <Flex alignItems="center" justifyContent="space-between">
+                      <HStack gap="ms">
+                        <NetworkIcon chain={network.chain} size={iconSize} shadow="md" />
+                        <Stack gap={1}>
+                          <Heading size="sm" textTransform="capitalize">
+                            {network.name}
+                          </Heading>
+                        </Stack>
+                      </HStack>
+                      <Text variant="secondary" fontSize="sm">
+                        Nothing to claim
+                      </Text>
+                    </Flex>
+                  </Card>
+                ))}
               </SimpleGrid>
             )}
-            <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: 3 }} spacing="md">
+            <SimpleGrid
+              columns={{
+                base: 1,
+                md: 1,
+                lg: PROJECT_CONFIG.projectId === ProjectConfigBeets.projectId ? 2 : 3,
+              }}
+              spacing="md"
+            >
               {poolsWithChain.map(
                 ([chain, pools], index) =>
                   pools[0] && (
