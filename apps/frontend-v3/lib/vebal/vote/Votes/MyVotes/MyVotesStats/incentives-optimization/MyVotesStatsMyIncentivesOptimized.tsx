@@ -142,7 +142,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
     tooltipLabelText = 'Your optimized votes have already been applied'
   } else {
     tooltipLabelText =
-      'This adds pool gauges and applies the optimal vote combinations to maximize your rewards from the Hidden Hand vote market.'
+      'This selects pool gauges and applies the optimal vote combinations to maximize your rewards from the Hidden Hand vote market.'
   }
 
   return (
