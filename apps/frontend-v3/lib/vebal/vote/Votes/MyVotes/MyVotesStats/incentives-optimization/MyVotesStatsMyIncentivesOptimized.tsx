@@ -135,6 +135,16 @@ export function MyVotesStatsMyIncentivesOptimized() {
   const votesAlreadyOptimized = totalInfo.totalRewardValue.toNumber() === optimizedRewardValue
   const disabledButton = !canReceiveIncentives(userAddress) || votesAlreadyOptimized
 
+  let tooltipLabelText: string
+  if (allVotesTimelocked) {
+    tooltipLabelText = "All your votes are timelocked, so you can't apply any new vote combinations"
+  } else if (votesAlreadyOptimized && !allVotesTimelocked) {
+    tooltipLabelText = 'Your optimized votes have already been applied'
+  } else {
+    tooltipLabelText =
+      'This adds pool gauges and applies the optimal vote combinations to maximize your rewards from the Hidden Hand vote market.'
+  }
+
   return (
     <MyVotesStatsCard
       headerText={headerText}
@@ -178,7 +188,7 @@ export function MyVotesStatsMyIncentivesOptimized() {
             bg="background.base"
             color="font.secondary"
             isDisabled={!allVotesTimelocked}
-            label="All your votes are timelocked, so you can't apply any new vote combinations"
+            label={tooltipLabelText}
           >
             <Stack alignItems="end">
               <Button
