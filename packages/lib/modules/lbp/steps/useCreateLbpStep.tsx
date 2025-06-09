@@ -19,6 +19,7 @@ import { usePoolCreationReceipt } from '@repo/lib/modules/transactions/transacti
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLbpWeights } from '../useLbpWeights'
+import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 
 export const createLbpStepId = 'create-lbp'
 
@@ -40,7 +41,7 @@ export function useCreateLbpStep(): TransactionStep {
   )
 
   const { userAddress } = useUserAccount()
-  const { saleStructureForm } = useLbpForm()
+  const { saleStructureForm, projectInfoForm } = useLbpForm()
   const {
     launchTokenAddress,
     collateralTokenAddress,
@@ -50,12 +51,13 @@ export function useCreateLbpStep(): TransactionStep {
     userActions,
   } = saleStructureForm.watch()
 
+  const { name } = projectInfoForm.watch()
+
   const receiptProps = usePoolCreationReceipt({
     txHash: transaction?.execution?.data,
     chain: selectedChain,
     userAddress: userAddress,
     protocolVersion: 3 as const,
-    // txReceipt, // TODO?
   })
 
   useEffect(() => {
@@ -74,11 +76,14 @@ export function useCreateLbpStep(): TransactionStep {
 
   const blockProjectTokenSwapsIn = userActions === 'buy_only' ? true : false
 
+  const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress, selectedChain)
+  const { symbol: collateralTokenSymbol } = useTokenMetadata(collateralTokenAddress, selectedChain)
+
   const createPoolInput = {
     protocolVersion: 3 as const,
     poolType: PoolType.LiquidityBootstrapping,
-    symbol: 'LBP',
-    name: 'Liquidity Bootstrapping Pool',
+    symbol: `${launchTokenSymbol}-${collateralTokenSymbol}-LBP`,
+    name: `${name} Liquidity Bootstrapping Pool`,
     swapFeePercentage: parseUnits('0.01', 18),
     chainId,
     lbpParams: {

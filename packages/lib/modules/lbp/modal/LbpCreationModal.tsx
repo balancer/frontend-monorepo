@@ -7,8 +7,6 @@ import { useLbpForm } from '../LbpFormProvider'
 import { LbpSummary } from './LbpSummary'
 import { useLbpCreation } from '../LbpCreationProvider'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { usePoolCreationReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
-import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { VStack, Button, HStack, Text } from '@chakra-ui/react'
 import { getPoolPath } from '@repo/lib/modules/pool/pool.utils'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
@@ -36,11 +34,14 @@ export function LbpCreationModal({
   const router = useRouter()
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
-  const { saleStructureForm, projectInfoForm, setActiveStep, isLastStep } = useLbpForm()
+  const {
+    saleStructureForm,
+    projectInfoForm,
+    setActiveStep,
+    isLastStep: isLastConfigStep,
+  } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
-  const { userAddress } = useUserAccount()
-  const { transactionSteps, lastTransaction, initLbpTxHash, urlTxHash, previewModalDisclosure } =
-    useLbpCreation()
+  const { transactionSteps, initLbpTxHash, urlTxHash, previewModalDisclosure } = useLbpCreation()
 
   const [, setStepIndex] = useLocalStorage(LS_KEYS.LbpConfig.StepIndex, 0)
   const [poolAddress] = useLocalStorage<Address | undefined>(
@@ -60,24 +61,15 @@ export function LbpCreationModal({
     projectInfoForm.reset()
     setActiveStep(0)
 
+    // clear tx steps
+    transactionSteps.resetTransactionSteps()
+
     // clear path
     if (initLbpTxHash) router.replace('/')
 
     onClose() // close modal
   }
 
-  const txReceipt = lastTransaction?.result
-
-  // TODO: change to usePoolInitializationReceipt
-  const receiptProps = usePoolCreationReceipt({
-    txHash: initLbpTxHash,
-    chain: selectedChain,
-    userAddress: userAddress,
-    protocolVersion: 3 as const,
-    txReceipt,
-  })
-
-  const isSuccess = !!initLbpTxHash || !!urlTxHash
   const path = getPoolPath({
     id: poolAddress as `0x${string}`,
     chain: selectedChain,
@@ -89,15 +81,11 @@ export function LbpCreationModal({
 
   useEffect(() => {
     // trigger modal open if user has begun pool creation process
-    if (poolAddress && isLastStep) previewModalDisclosure.onOpen()
+    if (poolAddress && isLastConfigStep) previewModalDisclosure.onOpen()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolAddress])
 
-  useEffect(() => {
-    if (initLbpTxHash && !window.location.pathname.includes(initLbpTxHash)) {
-      window.history.replaceState({}, '', `./create/${initLbpTxHash}`)
-    }
-  }, [initLbpTxHash])
+  const isSuccess = !!initLbpTxHash || !!urlTxHash
 
   return (
     <Modal
@@ -122,7 +110,6 @@ export function LbpCreationModal({
         )}
         <TransactionModalHeader
           chain={selectedChain}
-          isReceiptLoading={receiptProps.isLoading}
           label={'Preview: Create an LBP'}
           txHash={initLbpTxHash}
         />
@@ -137,11 +124,6 @@ export function LbpCreationModal({
                 isLoading={false}
                 onClick={() => {
                   redirectToPoolPage()
-                  // TODO: fix form reset
-                  // setTimeout callback managed by browser event loop so will run after redirect?
-                  // setTimeout(() => {
-                  //   handleReset()
-                  // }, 5000)
                 }}
                 size="lg"
                 variant="secondary"
@@ -165,7 +147,6 @@ export function LbpCreationModal({
           returnLabel="View pool page"
           urlTxHash={urlTxHash}
         />
-        {/* TODO: fix form reset */}
         {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
       </ModalContent>
     </Modal>

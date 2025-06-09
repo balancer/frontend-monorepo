@@ -1,46 +1,47 @@
 import { PublicWalletClient, type InitPoolInputV3, balancerV3Contracts } from '@balancer/sdk'
-import { signPermit2Init } from '@repo/lib/modules/tokens/approvals/permit2/signPermit2Init'
+import { signPermit2Initialization } from '@repo/lib/modules/tokens/approvals/permit2/signPermit2Initialization'
 import { SignPermit2Fn as SignPermit2Fn } from '@repo/lib/modules/tokens/approvals/permit2/useSignPermit2'
 import { useSignPermit2Step } from '@repo/lib/modules/transactions/transaction-steps/useSignPermit2Step'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
-import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
-import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 
-type Props = {
-  initPoolInput: InitPoolInputV3
-  chain: GqlChain
+type TokenAmountWithSymbol = InitPoolInputV3['amountsIn'][number] & { symbol: string }
+
+type ExtendedInitPoolInputV3 = InitPoolInputV3 & {
+  amountsIn: Array<TokenAmountWithSymbol>
 }
 
-export function useSignPermit2InitializeStep({ initPoolInput, chain }: Props) {
+export function useSignPermit2InitializeStep({
+  initPoolInput,
+}: {
+  initPoolInput: ExtendedInitPoolInputV3
+}) {
   const { wethIsEth, amountsIn, chainId } = initPoolInput
 
   const { userAddress } = useUserAccount()
 
   const signPermit2Fn: SignPermit2Fn = (sdkClient: PublicWalletClient) => {
-    return signPermit2Init({
+    return signPermit2Initialization({
       sdkClient,
       account: userAddress,
       initPoolInput,
     })
   }
 
-  // TODO: figure out better way to get token symbols lol
-  const { symbol: symbolToken0 } = useTokenMetadata(amountsIn?.[0]?.address, chain)
-  const { symbol: symbolToken1 } = useTokenMetadata(amountsIn?.[1]?.address, chain)
-  const tokenAmountsIn = amountsIn?.map((amount, index) => ({
+  // TypeScript struggles to infer 'symbol' on destructured 'amountsIn' within the map
+  const tokenAmountsIn = (amountsIn as Array<TokenAmountWithSymbol>)?.map(amount => ({
     amount: amount.rawAmount,
     address: amount.address,
-    symbol: index === 0 ? (symbolToken0 ?? 'SYMBOL_0') : (symbolToken1 ?? 'SYMBOL_1'),
+    symbol: amount.symbol,
   }))
 
   const signPermit2Step = useSignPermit2Step({
     chainId,
     signPermit2Fn,
-    wethIsEth: wethIsEth ?? false, // TODO?
+    wethIsEth: wethIsEth ?? false,
     tokenAmountsIn,
     isPermit2: true,
-    isSimulationReady: true, // TODO?
-    spender: balancerV3Contracts.Router[chainId as keyof typeof balancerV3Contracts.Router], // TODO: update with new SDK AddressProvider class
+    isSimulationReady: true,
+    spender: balancerV3Contracts.Router[chainId as keyof typeof balancerV3Contracts.Router],
   })
 
   return signPermit2Step

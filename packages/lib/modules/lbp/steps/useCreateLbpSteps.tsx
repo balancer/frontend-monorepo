@@ -5,7 +5,6 @@ import { useLbpForm } from '../LbpFormProvider'
 import { getSpenderForCreatePool } from '@repo/lib/modules/tokens/token.helpers'
 import { Address, parseUnits } from 'viem'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
-import { useMemo } from 'react'
 import { useInitializeLbpStep } from './useInitializeLbpStep'
 import { useSignPermit2InitializeStep } from '@repo/lib/modules/pool/actions/initialize/useSignPermit2InitializeStep'
 import { getNetworkConfig } from '@repo/lib/config/app.config'
@@ -35,7 +34,7 @@ export function useCreateLbpSteps() {
     wethIsEth: false, // TODO
   }
 
-  const signPermit2Step = useSignPermit2InitializeStep({ initPoolInput, chain: selectedChain })
+  const signPermit2Step = useSignPermit2InitializeStep({ initPoolInput })
   const initLbpStep = useInitializeLbpStep({ initPoolInput })
 
   const isSignPermit2Loading = !signPermit2Step
@@ -74,40 +73,29 @@ function useLbpInitAmounts() {
     isLoading: isLoadingLaunchToken,
   } = useTokenMetadata(launchTokenAddress, chain)
 
-  return useMemo(() => {
-    if (
-      !collateralTokenDecimals ||
-      !launchTokenDecimals ||
-      isLoadingCollateralToken ||
-      isLoadingLaunchToken
-    )
-      return []
+  if (
+    !collateralTokenDecimals ||
+    !launchTokenDecimals ||
+    isLoadingCollateralToken ||
+    isLoadingLaunchToken ||
+    !collateralTokenSymbol ||
+    !launchTokenSymbol
+  )
+    return []
 
-    const collateralTokenAmountIn = {
-      address: collateralTokenAddress as Address,
-      decimals: collateralTokenDecimals,
-      rawAmount: parseUnits(collateralTokenAmount, collateralTokenDecimals),
-      symbol: collateralTokenSymbol,
-    }
+  const collateralTokenAmountIn = {
+    address: collateralTokenAddress as Address,
+    decimals: collateralTokenDecimals,
+    rawAmount: parseUnits(collateralTokenAmount, collateralTokenDecimals),
+    symbol: collateralTokenSymbol,
+  }
 
-    const launchTokenAmountIn = {
-      address: launchTokenAddress as Address,
-      decimals: launchTokenDecimals,
-      rawAmount: parseUnits(saleTokenAmount, launchTokenDecimals),
-      symbol: launchTokenSymbol,
-    }
+  const launchTokenAmountIn = {
+    address: launchTokenAddress as Address,
+    decimals: launchTokenDecimals,
+    rawAmount: parseUnits(saleTokenAmount, launchTokenDecimals),
+    symbol: launchTokenSymbol,
+  }
 
-    return [collateralTokenAmountIn, launchTokenAmountIn]
-  }, [
-    isLoadingCollateralToken,
-    isLoadingLaunchToken,
-    collateralTokenDecimals,
-    launchTokenDecimals,
-    collateralTokenSymbol,
-    launchTokenSymbol,
-    collateralTokenAmount,
-    saleTokenAmount,
-    collateralTokenAddress,
-    launchTokenAddress,
-  ])
+  return [collateralTokenAmountIn, launchTokenAmountIn]
 }

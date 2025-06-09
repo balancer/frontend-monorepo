@@ -7,7 +7,9 @@ type SignPermit2InitParams = {
   initPoolInput: InitPoolInputV3
 }
 
-export async function signPermit2Init(params: SignPermit2InitParams): Promise<Permit2 | undefined> {
+export async function signPermit2Initialization(
+  params: SignPermit2InitParams
+): Promise<Permit2 | undefined> {
   try {
     const signature = await sign(params)
     return signature
