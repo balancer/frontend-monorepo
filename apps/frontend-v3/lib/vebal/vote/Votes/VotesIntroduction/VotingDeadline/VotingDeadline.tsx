@@ -10,17 +10,15 @@ export function VotingDeadline() {
     <VStack p={{ base: 'ms', lg: '20px' }} position="relative" spacing="16px" zIndex="1">
       <Box inset={0} overflow="hidden" position="absolute" rounded="lg" shadow="2xl">
         <Picture
-          altText="Background texture"
+          altText="Slate background texture"
           defaultImgType="png"
           directory="/images/textures/"
           height="100%"
           imgAvif
           imgAvifDark
-          imgAvifPortrait
-          imgAvifPortraitDark
           imgName="rock-slate"
-          imgPng
-          imgPngDark
+          imgJpg
+          imgJpgDark
           width="100%"
         />
       </Box>
