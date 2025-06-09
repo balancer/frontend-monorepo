@@ -2,6 +2,7 @@ import {
   Input,
   InputGroup,
   InputProps,
+  Box,
   InputRightElement,
   Tooltip,
   useBoolean,
@@ -107,8 +108,10 @@ export function VoteWeightInput({
             value={getInputValue()}
             {...inputProps}
           />
-          <InputRightElement pointerEvents="none">
-            <Percent color="grayText" size="20px" />
+          <InputRightElement pointerEvents="none" color="font.primary">
+            <Box bg="background.level2" p="3px" rounded="sm" shadow="sm">
+              <Percent color="currentColor" size="13px" />
+            </Box>
           </InputRightElement>
         </InputGroup>
       </Tooltip>

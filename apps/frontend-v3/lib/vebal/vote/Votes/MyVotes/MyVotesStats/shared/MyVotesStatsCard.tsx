@@ -1,9 +1,9 @@
-import { Card, HStack, Text, VStack } from '@chakra-ui/react'
+import { Card, HStack, Text, Box, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 interface HeaderCardProps {
   variant?: 'default' | 'special' | 'expired'
-  headerText: string
+  headerText: ReactNode
   leftContent?: ReactNode
   rightContent?: ReactNode
 }
@@ -56,9 +56,9 @@ export function MyVotesStatsCard({
   return (
     <Card h="full" w="full" {...cardProps}>
       <VStack align="start" h="full" justifyContent="space-between" spacing="ms" w="full">
-        <Text fontSize="sm" variant="secondary">
+        <Box as="span" fontSize="sm" color="font.secondary" fontWeight="medium">
           {headerText}
-        </Text>
+        </Box>
         <HStack
           alignItems="center"
           justifyContent="space-between"

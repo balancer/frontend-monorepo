@@ -16,11 +16,11 @@ export function UserVebalStatsValues() {
   return (
     <>
       <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mb="sm" mt="xxs" variant="secondary">
+        <Text fontSize="sm" fontWeight="semibold" mb="xs" mt="xxs" variant="secondary">
           My veBAL
         </Text>
         {userDataIsLoading ? (
-          <Skeleton height="28px" w="100px" />
+          <Skeleton height="32px" w="100px" />
         ) : (
           <Heading size="h4">{userVebal}</Heading>
         )}
@@ -30,7 +30,7 @@ export function UserVebalStatsValues() {
           <Text
             fontSize="sm"
             fontWeight="semibold"
-            mb="sm"
+            mb="xs"
             mt="xxs"
             textDecoration="underline"
             textDecorationStyle="dotted"
@@ -41,7 +41,7 @@ export function UserVebalStatsValues() {
           </Text>
         </TooltipWithTouch>
         {userDataIsLoading ? (
-          <Skeleton height="28px" w="100px" />
+          <Skeleton height="32px" w="100px" />
         ) : (
           <Heading size="h4">
             {userStats && !userStats.lockExpired ? fNum('integer', userStats.rank) : <>&mdash;</>}
@@ -49,11 +49,11 @@ export function UserVebalStatsValues() {
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mb="sm" mt="xxs" variant="secondary">
+        <Text fontSize="sm" fontWeight="semibold" mb="xs" mt="xxs" variant="secondary">
           My share of veBAL
         </Text>
         {userDataIsLoading || lockedInfoIsLoading ? (
-          <Skeleton height="28px" w="100px" />
+          <Skeleton height="32px" w="100px" />
         ) : (
           <Heading size="h4">
             {userStats && !userStats.lockExpired && userStats.percentOfAllSupply
@@ -63,17 +63,17 @@ export function UserVebalStatsValues() {
         )}
       </VStack>
       <VStack align="flex-start" spacing="0" w="full">
-        <Text fontSize="sm" fontWeight="semibold" mb="sm" mt="xxs" variant="secondary">
-          {userStats && !userStats.lockExpired ? (
+        <Text fontSize="sm" fontWeight="bold" mb="xs" mt="xxs" variant="secondary">
+          {lockedInfoIsLoading || (userStats && !userStats.lockExpired) ? (
             'Lock expiry date'
           ) : (
-            <Text as="span" color="font.error">
+            <Text as="span" fontSize="sm" color="font.error" fontWeight="bold">
               Your lock expired on
             </Text>
           )}
         </Text>
         {lockedInfoIsLoading ? (
-          <Skeleton height="28px" w="100px" />
+          <Skeleton height="32px" w="100px" />
         ) : (
           <TooltipWithTouch
             label={
