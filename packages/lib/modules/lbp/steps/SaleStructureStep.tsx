@@ -88,7 +88,7 @@ export function SaleStructureStep() {
   }
 
   return (
-    <TokenBalancesProvider initTokens={tokens}>
+    <TokenBalancesProvider extTokens={tokens}>
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
         <VStack align="start" spacing="lg" w="full">
           <Heading color="font.maxContrast" size="md">
