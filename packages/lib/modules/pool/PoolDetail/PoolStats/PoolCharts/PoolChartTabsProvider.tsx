@@ -39,7 +39,7 @@ const POOL_SPECIFIC_TABS: PoolTabsMap = {
     { value: PoolChartTab.FEES, label: 'Fees' },
   ],
   [GqlPoolType.Reclamm]: [
-    { value: PoolChartTab.RECLAMM, label: 'Reclamm' },
+    { value: PoolChartTab.RECLAMM, label: 'reCLAMM' },
     ...BASE_TABS,
     { value: PoolChartTab.FEES, label: 'Fees' },
   ],
