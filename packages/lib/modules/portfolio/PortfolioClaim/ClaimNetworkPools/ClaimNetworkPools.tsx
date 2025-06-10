@@ -23,8 +23,7 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
 import { MerklAlert } from '../../merkl/MerklAlert'
 import { motion, easeOut } from 'framer-motion'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { ProjectConfigBeets } from '@repo/lib/config/projects/beets'
+import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getChainId } from '@repo/lib/config/app.config'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
@@ -82,10 +81,7 @@ export function ClaimNetworkPools() {
   const { isDesktop } = useBreakpoints()
   const iconSize = isDesktop ? 12 : 8
 
-  const currentNetworks =
-    PROJECT_CONFIG.projectId === ProjectConfigBeets.projectId
-      ? beetsNetworksConfig
-      : balancerNetworksConfig
+  const currentNetworks = isBeets ? beetsNetworksConfig : balancerNetworksConfig
 
   const poolsWithChain = Object.entries(poolsByChainMap).sort(
     (a, b) =>
@@ -105,10 +101,10 @@ export function ClaimNetworkPools() {
         </Heading>
 
         {isLoadingRewards || isLoadingPortfolio ? (
-          <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: 3 }} spacing="md">
+          <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: isBeets ? 2 : 3 }} spacing="md">
             <Skeleton height="85px" w="full" />
             <Skeleton height="85px" w="full" />
-            <Skeleton height="85px" w="full" />
+            {!isBeets && <Skeleton height="85px" w="full" />}
           </SimpleGrid>
         ) : !isConnected ? (
           <ConnectButton.Custom>
@@ -117,7 +113,7 @@ export function ClaimNetworkPools() {
                 columns={{
                   base: 1,
                   md: 2,
-                  lg: PROJECT_CONFIG.projectId === ProjectConfigBeets.projectId ? 2 : 3,
+                  lg: isBeets ? 2 : 3,
                 }}
                 spacing="md"
               >
@@ -161,7 +157,7 @@ export function ClaimNetworkPools() {
                 columns={{
                   base: 1,
                   md: 2,
-                  lg: PROJECT_CONFIG.projectId === ProjectConfigBeets.projectId ? 2 : 3,
+                  lg: isBeets ? 2 : 3,
                 }}
                 spacing="md"
               >
@@ -196,7 +192,7 @@ export function ClaimNetworkPools() {
               columns={{
                 base: 1,
                 md: 1,
-                lg: PROJECT_CONFIG.projectId === ProjectConfigBeets.projectId ? 2 : 3,
+                lg: isBeets ? 2 : 3,
               }}
               spacing="md"
             >
