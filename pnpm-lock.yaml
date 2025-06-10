@@ -151,8 +151,8 @@ importers:
         specifier: ^3.0.6
         version: 3.0.6
       '@types/lodash':
-        specifier: ^4.14.195
-        version: 4.17.7
+        specifier: ^4.17.17
+        version: 4.17.17
       '@types/node':
         specifier: 22.15.19
         version: 22.15.19
@@ -305,8 +305,8 @@ importers:
         specifier: ^3.0.6
         version: 3.0.6
       '@types/lodash':
-        specifier: ^4.14.195
-        version: 4.17.7
+        specifier: ^4.17.17
+        version: 4.17.17
       '@types/node':
         specifier: 22.15.19
         version: 22.15.19
@@ -368,14 +368,14 @@ importers:
         specifier: workspace:*
         version: link:../../apps/frontend-v3
       start-server-and-test:
-        specifier: 2.0.11
-        version: 2.0.11
+        specifier: 2.0.12
+        version: 2.0.12
 
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
-        specifier: ^9.0.0
-        version: 9.26.0
+        specifier: ^9.28.0
+        version: 9.28.0
       '@next/eslint-plugin-next':
         specifier: ^15.3.0
         version: 15.3.2
@@ -645,8 +645,8 @@ importers:
         specifier: ^3.0.6
         version: 3.0.6
       '@types/lodash':
-        specifier: ^4.14.195
-        version: 4.17.7
+        specifier: ^4.17.17
+        version: 4.17.17
       '@types/node':
         specifier: 22.15.19
         version: 22.15.19
@@ -2487,12 +2487,12 @@ packages:
     resolution: {integrity: sha512-gtF186CXhIl1p4pJNGZw8Yc6RlshoePRvE0X91oPGb3vZ8pM3qOS9W9NGPat9LziaBV7XrJWGylNQXkGcnM3IQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@eslint/js@9.26.0':
-    resolution: {integrity: sha512-I9XlJawFdSMvWjDt6wksMCrgns5ggLNfFwFvnShsleWruvXM514Qxk8V246efTw+eo9JABvVz+u3q2RiAowKxQ==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
   '@eslint/js@9.27.0':
     resolution: {integrity: sha512-G5JD9Tu5HJEu4z2Uo4aHY2sLV64B7CDMXxFzqzjl3NKd6RVzSXNoE80jk7Y0lJkTTkjiIhBAqmlYwjuBY3tvpA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@eslint/js@9.28.0':
+    resolution: {integrity: sha512-fnqSjGWd/CoIp4EXIxWVK/sHA6DOHN4+8Ix2cX5ycOY7LG0UY8nHCU5pIp2eaE1Mc7Qd8kHspYNzYXT2ojPLzg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/object-schema@2.1.6':
@@ -4298,9 +4298,6 @@ packages:
 
   '@types/lodash@4.17.17':
     resolution: {integrity: sha512-RRVJ+J3J+WmyOTqnz3PiBLA501eKwXl2noseKOrNo/6+XEHjTAxO4xHvxQB6QuNm+s4WRbn6rSiap8+EA+ykFQ==}
-
-  '@types/lodash@4.17.7':
-    resolution: {integrity: sha512-8wTvZawATi/lsmNu10/j2hk1KEP0IvjubqPE3cu1Xz7xfXXt5oCq3SNUz4fMIP4XGF9Ky+Ue2tBA3hcS7LSBlA==}
 
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
@@ -9084,8 +9081,8 @@ packages:
     resolution: {integrity: sha512-WjlahMgHmCJpqzU8bIBy4qtsZdU9lRlcZE3Lvyej6t4tuOuv1vk57OW3MBrj6hXBFx/nNoC9MPMTcr5YA7NQbg==}
     engines: {node: '>=6'}
 
-  start-server-and-test@2.0.11:
-    resolution: {integrity: sha512-TN39gLzPhHAflxyOkE/oMfQGj+pj3JgF6qVicFH/JrXt7xXktidKXwqfRga+ve7lVA8+RgPZVc25VrEPRScaDw==}
+  start-server-and-test@2.0.12:
+    resolution: {integrity: sha512-U6QiS5qsz+DN5RfJJrkAXdooxMDnLZ+n5nR8kaX//ZH19SilF6b58Z3zM9zTfrNIkJepzauHo4RceSgvgUSX9w==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -10443,7 +10440,7 @@ snapshots:
       '@babel/traverse': 7.27.0
       '@babel/types': 7.27.0
       convert-source-map: 2.0.0
-      debug: 4.4.0
+      debug: 4.4.1
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -12401,9 +12398,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint/js@9.26.0': {}
-
   '@eslint/js@9.27.0': {}
+
+  '@eslint/js@9.28.0': {}
 
   '@eslint/object-schema@2.1.6': {}
 
@@ -12860,7 +12857,7 @@ snapshots:
       '@types/js-yaml': 4.0.9
       '@whatwg-node/fetch': 0.9.23
       chalk: 4.1.2
-      debug: 4.4.0
+      debug: 4.4.1
       dotenv: 16.4.7
       graphql: 16.10.0
       graphql-request: 6.1.0(graphql@16.10.0)
@@ -13258,7 +13255,7 @@ snapshots:
 
   '@layerzerolabs/scan-client@0.0.8(axios@1.8.4)':
     dependencies:
-      axios: 1.8.4(debug@4.4.0)
+      axios: 1.8.4(debug@4.4.1)
 
   '@lit-labs/ssr-dom-shim@1.3.0': {}
 
@@ -15025,11 +15022,9 @@ snapshots:
 
   '@types/lodash.mergewith@4.6.9':
     dependencies:
-      '@types/lodash': 4.17.7
+      '@types/lodash': 4.17.17
 
   '@types/lodash@4.17.17': {}
-
-  '@types/lodash@4.17.7': {}
 
   '@types/ms@2.1.0': {}
 
@@ -16355,9 +16350,9 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  axios@1.8.4(debug@4.4.0):
+  axios@1.8.4(debug@4.4.1):
     dependencies:
-      follow-redirects: 1.15.9(debug@4.4.0)
+      follow-redirects: 1.15.9(debug@4.4.1)
       form-data: 4.0.1
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -18034,9 +18029,9 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  follow-redirects@1.15.9(debug@4.4.0):
+  follow-redirects@1.15.9(debug@4.4.1):
     optionalDependencies:
-      debug: 4.4.0
+      debug: 4.4.1
 
   for-each@0.3.3:
     dependencies:
@@ -18426,7 +18421,7 @@ snapshots:
   http-proxy@1.18.1:
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.9(debug@4.4.0)
+      follow-redirects: 1.15.9(debug@4.4.1)
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -21258,16 +21253,16 @@ snapshots:
       type-fest: 0.7.1
     optional: true
 
-  start-server-and-test@2.0.11:
+  start-server-and-test@2.0.12:
     dependencies:
       arg: 5.0.2
       bluebird: 3.7.2
       check-more-types: 2.24.0
-      debug: 4.4.0
+      debug: 4.4.1
       execa: 5.1.1
       lazy-ass: 1.6.0
       ps-tree: 1.2.0
-      wait-on: 8.0.3(debug@4.4.0)
+      wait-on: 8.0.3(debug@4.4.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -22264,9 +22259,9 @@ snapshots:
       - utf-8-validate
       - zod
 
-  wait-on@8.0.3(debug@4.4.0):
+  wait-on@8.0.3(debug@4.4.1):
     dependencies:
-      axios: 1.8.4(debug@4.4.0)
+      axios: 1.8.4(debug@4.4.1)
       joi: 17.13.3
       lodash: 4.17.21
       minimist: 1.2.8
