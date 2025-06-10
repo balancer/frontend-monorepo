@@ -98,7 +98,7 @@ export function MyVotes() {
                 </Stack>
               </Alert>
             </GridItem>
-          ) : noVeBALBalance ? (
+          ) : !loading && noVeBALBalance ? (
             <GridItem w="full">
               <Alert status="warning" variant="WideOnDesktop">
                 <AlertIcon as={AlertTriangle} />
