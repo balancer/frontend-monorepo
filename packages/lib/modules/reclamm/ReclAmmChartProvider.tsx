@@ -121,7 +121,8 @@ export function useReclAmmChartLogic() {
   }, [reclAmmData])
 
   const option = useMemo(() => {
-    const { maxPriceValue, minPriceValue, lowerMarginValue, upperMarginValue } = currentChartData
+    const { maxPriceValue, minPriceValue, lowerMarginValue, upperMarginValue, currentPriceValue } =
+      currentChartData
 
     const baseGreyBarConfig = {
       count: 10,
@@ -179,6 +180,41 @@ export function useReclAmmChartLogic() {
       seriesData.push(...segmentSeriesData)
     })
 
+    // Calculate which bar the current price corresponds to
+    const getCurrentPriceBarIndex = () => {
+      const { minPriceValue, maxPriceValue, currentPriceValue } = currentChartData
+
+      if (
+        minPriceValue === undefined ||
+        maxPriceValue === undefined ||
+        currentPriceValue === undefined
+      ) {
+        return 50 // Default to middle if values are not available
+      }
+
+      // Calculate price range per bar (58 bars in the colored section)
+      const priceRange = maxPriceValue - minPriceValue
+      const pricePerBar = priceRange / 58 // 58 bars in the colored section (8 orange + 42 green + 8 orange)
+
+      // Calculate how many bars from the start of the colored section (after 10 grey bars)
+      const barsFromMin = (currentPriceValue - minPriceValue) / pricePerBar
+
+      // Add the initial 10 grey bars and round down to nearest bar
+      const barIndex = Math.min(Math.max(0, Math.floor(barsFromMin)), 57) + 10
+
+      return barIndex
+    }
+
+    const currentPriceBarIndex = getCurrentPriceBarIndex()
+
+    // Calculate position as a percentage (0-100%)
+    const getBarPosition = (barIndex: number): string => {
+      // Each bar takes up 1.15% of the width (90% bar + 25% gap)
+      // Start at 0% + half bar width (0.45%)
+      const position = barIndex * 1.15 + 0.5
+      return `${position.toFixed(2)}%`
+    }
+
     const graphicStyleProps = {
       textAlign: 'center',
       fill: '#666',
@@ -194,7 +230,7 @@ export function useReclAmmChartLogic() {
       grid: {
         left: '-3%',
         right: '1%',
-        top: '10%',
+        top: '15%',
         bottom: '8%',
         containLabel: true,
       },
@@ -229,8 +265,18 @@ export function useReclAmmChartLogic() {
       graphic: [
         {
           type: 'text',
+          left: getBarPosition(currentPriceBarIndex),
+          top: '5%',
+          style: {
+            text: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? toCurrency(currentPriceValue, { abbreviated: false }) : 'N/A'}}\n{triangle|▼}`,
+            ...graphicStyleProps,
+          },
           silent: true,
-          left: '10.08%',
+        },
+        {
+          type: 'text',
+          silent: true,
+          left: getBarPosition(8),
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|Min price}\n{priceValue|${minPriceValue !== undefined ? toCurrency(minPriceValue, { abbreviated: false }) : 'N/A'}}`,
@@ -240,7 +286,7 @@ export function useReclAmmChartLogic() {
         {
           type: 'text',
           silent: true,
-          left: '19.7%',
+          left: getBarPosition(17),
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? toCurrency(upperMarginValue, { abbreviated: false }) : 'N/A'}}`,
@@ -260,7 +306,7 @@ export function useReclAmmChartLogic() {
         {
           type: 'text',
           silent: true,
-          left: '72.8%',
+          left: getBarPosition(63),
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? toCurrency(lowerMarginValue, { abbreviated: false }) : 'N/A'}}`,
@@ -270,7 +316,7 @@ export function useReclAmmChartLogic() {
         {
           type: 'text',
           silent: true,
-          left: '83.3%',
+          left: getBarPosition(72),
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|Max price}\n{priceValue|${maxPriceValue !== undefined ? toCurrency(maxPriceValue, { abbreviated: false }) : 'N/A'}}`,
