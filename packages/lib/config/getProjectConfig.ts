@@ -8,6 +8,7 @@ export const allProjects: Record<string, ProjectConfig> = {
 }
 
 export const isBalancer = process.env.NEXT_PUBLIC_PROJECT_ID === ProjectConfigBalancer.projectId
+export const isBeets = process.env.NEXT_PUBLIC_PROJECT_ID === ProjectConfigBeets.projectId
 
 export const PROJECT_CONFIG = process.env.NEXT_PUBLIC_PROJECT_ID
   ? allProjects[process.env.NEXT_PUBLIC_PROJECT_ID]

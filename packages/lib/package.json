@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.13.8",
-    "@balancer/sdk": "4.0.3",
+    "@balancer/sdk": "4.1.0",
     "@chakra-ui/anatomy": "^2.2.2",
     "@chakra-ui/clickable": "^2.1.0",
     "@chakra-ui/hooks": "2.4.2",
@@ -99,7 +99,7 @@
     "@testing-library/react": "16.3.0",
     "@types/echarts": "4.9.22",
     "@types/js-cookie": "^3.0.6",
-    "@types/lodash": "^4.14.195",
+    "@types/lodash": "^4.17.17",
     "@types/node": "22.15.19",
     "@types/numeral": "^2.0.2",
     "@types/pluralize": "^0.0.33",

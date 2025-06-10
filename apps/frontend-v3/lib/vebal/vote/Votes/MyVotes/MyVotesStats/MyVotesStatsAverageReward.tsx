@@ -6,6 +6,7 @@ import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { isZero } from '@repo/lib/shared/utils/numbers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { canReceiveIncentives } from '../incentivesBlacklist'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function MyVotesStatsAverageReward() {
   const { userAddress } = useUserAccount()
@@ -14,7 +15,30 @@ export function MyVotesStatsAverageReward() {
 
   return (
     <MyVotesStatsCard
-      headerText="Average reward (Bribes/veBAL)"
+      headerText={
+        <TooltipWithTouch
+          label="The amount of bribes you could earn on Hidden Hand for the next period per veBAL vote. Hidden Hand is an unaffiliated 3rd party vote market."
+          placement="top"
+        >
+          <Text
+            fontSize="sm"
+            position="relative"
+            variant="secondary"
+            _after={{
+              borderBottom: '1px dotted',
+              borderColor: 'currentColor',
+              bottom: '-2px',
+              content: '""',
+              left: 0,
+              opacity: 0.5,
+              position: 'absolute',
+              width: '100%',
+            }}
+          >
+            My average reward (Bribes/veBAL)
+          </Text>
+        </TooltipWithTouch>
+      }
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />

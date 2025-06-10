@@ -204,14 +204,26 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
     }
 
     const badgeStyle =
-      'background: #f48975; color: #2D3748; border-radius: 0.25rem; padding-inline-start: 0.25rem; padding-inline-end: 0.25rem'
+      'background: #f48975; color: #2D3748; font-weight: bold; letter-spacing: -0.5px; border-radius: 0.25rem; padding-inline-start: 0.25rem; padding-inline-end: 0.25rem; margin-left: 60px;'
 
     return {
+      title: {
+        text: 'My veBAL over time',
+        left: 'left',
+        textStyle: {
+          color:
+            nextTheme === 'dark'
+              ? theme.semanticTokens.colors.font.primary._dark
+              : theme.semanticTokens.colors.font.primary.default,
+          fontWeight: 'bold',
+          fontSize: 13,
+        },
+      },
       grid: {
         left: '1.5%',
         right: '2.5%',
-        top: '7.5%',
-        bottom: '0',
+        top: '12%',
+        bottom: '4%',
         containLabel: true,
       },
       tooltip: {
@@ -241,22 +253,25 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           <div style="padding: unset; display: flex; flex-direction: column;
             justify-content: center; ${toolTipTheme.container}">
             <div style="font-size: 14px; font-weight: 700; display: flex; flex-wrap: wrap;
-                justify-content: start; gap: 0px; letter-spacing: -0.25px; padding-bottom: 2px;
-                ${toolTipTheme.heading}; color: ${toolTipTheme.secondaryText};">
-              veBAL ${format(new Date(firstPointValue[0]), 'dd/MM/yyyy')}
+                justify-content: start; gap: 0px; letter-spacing: -0.25px; padding-bottom: 8px;
+                color: ${toolTipTheme.text};">
+              veBAL
+              <span style="font-size: 14px; font-weight: 400; color: ${toolTipTheme.secondaryText};">
+               &nbsp;&nbsp;&nbsp;${format(new Date(firstPointValue[0]), 'dd/MM/yyyy')}
+              </span>
             </div>
-            <hr class="chakra-divider" />
-            <div style="display: flex; flex-direction: column; font-size: 14px;
+            <hr />
+            <div style="display: flex; flex-direction: column; font-size: 14px; padding-top: 8px;
                 line-height: 20px; font-weight: 500; color: ${toolTipTheme.text};">
               ${
                 secondPointValue
                   ? `
                   <span style="display: flex; flex-direction: row; justify-content: space-between">
-                    <span style="color: ${toolTipTheme.secondaryText};">Added</span>
+                    <span style="color: ${toolTipTheme.secondaryText}; font-weight: 400;">Added:</span>
                     <span>${fNum('token', secondPointValue[1] - firstPointValue[1])}</span>
                   </span>
                   <span style="display: flex; flex-direction: row; justify-content: space-between">
-                    <span style="color: ${toolTipTheme.secondaryText};">Final</span>
+                    <span style="color: ${toolTipTheme.secondaryText}; font-weight: 400;">Final:</span>
                     <span>${fNum('token', secondPointValue[1])}</span>
                   </span>`
                   : `
@@ -279,8 +294,11 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
           formatter: (value: number) => {
             return format(new Date(value), 'MMM d')
           },
-          // color: theme.semanticTokens.colors.font.primary[colorMode],
-          opacity: 0.5,
+          color:
+            nextTheme === 'dark'
+              ? theme.semanticTokens.colors.font.secondary._dark
+              : theme.semanticTokens.colors.font.secondary.default,
+          opacity: 1,
         },
         axisPointer: {
           type: 'line',
@@ -305,8 +323,11 @@ export function useVebalLocksChart({ lockSnapshots, mainnetLockedInfo }: UseVeba
         minorSplitLine: { show: false },
         splitLine: { show: false },
         axisLabel: {
-          // color: theme.semanticTokens.colors.font.primary[colorMode],
-          opacity: 0.5,
+          color:
+            nextTheme === 'dark'
+              ? theme.semanticTokens.colors.font.secondary._dark
+              : theme.semanticTokens.colors.font.secondary.default,
+          opacity: 1,
         },
       },
       series: [

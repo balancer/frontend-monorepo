@@ -1,6 +1,16 @@
 'use client'
 
-import { Heading, Stack, Skeleton, SimpleGrid, Center, Text } from '@chakra-ui/react'
+import {
+  Heading,
+  Stack,
+  Skeleton,
+  SimpleGrid,
+  Text,
+  Card,
+  Flex,
+  HStack,
+  Button,
+} from '@chakra-ui/react'
 import { usePortfolio } from '../../PortfolioProvider'
 import { ClaimNetworkBlock } from './ClaimNetworkBlock'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
@@ -13,8 +23,41 @@ import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useHasMerklRewards } from '../../merkl/useHasMerklRewards'
 import { MerklAlert } from '../../merkl/MerklAlert'
 import { motion, easeOut } from 'framer-motion'
-import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { isBeets, PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { getChainId } from '@repo/lib/config/app.config'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { NetworkIcon } from '@repo/lib/shared/components/icons/NetworkIcon'
+import { WalletIcon } from '@repo/lib/shared/components/icons/WalletIcon'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+
+interface NetworkConfig {
+  chain: GqlChain
+  name: string
+  displayProps?: Record<string, any>
+}
+
+const balancerNetworksConfig: NetworkConfig[] = [
+  { chain: GqlChain.Mainnet, name: 'Ethereum', displayProps: {} },
+  {
+    chain: GqlChain.Arbitrum,
+    name: 'Arbitrum',
+    displayProps: { display: { base: 'none', md: 'block' } },
+  },
+  {
+    chain: GqlChain.Base,
+    name: 'Base',
+    displayProps: { display: { base: 'none', md: 'none', lg: 'block' } },
+  },
+]
+
+const beetsNetworksConfig: NetworkConfig[] = [
+  { chain: GqlChain.Sonic, name: 'Sonic', displayProps: {} },
+  {
+    chain: GqlChain.Optimism,
+    name: 'Optimism',
+    displayProps: { display: { base: 'none', md: 'block' } },
+  },
+]
 
 export function ClaimNetworkPools() {
   const {
@@ -35,9 +78,10 @@ export function ClaimNetworkPools() {
   const chainIds = PROJECT_CONFIG.merklRewardsChains.map(chain => getChainId(chain))
   const { hasMerklRewards } = useHasMerklRewards(poolsWithOnchainUserBalances, chainIds)
 
-  if (!isConnected) {
-    return null
-  }
+  const { isDesktop } = useBreakpoints()
+  const iconSize = isDesktop ? 12 : 8
+
+  const currentNetworks = isBeets ? beetsNetworksConfig : balancerNetworksConfig
 
   const poolsWithChain = Object.entries(poolsByChainMap).sort(
     (a, b) =>
@@ -52,23 +96,106 @@ export function ClaimNetworkPools() {
   return (
     <FadeInOnView>
       <Stack gap={5}>
-        <Heading size="lg">Claimable incentives</Heading>
+        <Heading size="h4" variant="special">
+          Claimable incentives
+        </Heading>
 
         {isLoadingRewards || isLoadingPortfolio ? (
-          <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: 3 }} spacing="md">
+          <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: isBeets ? 2 : 3 }} spacing="md">
             <Skeleton height="85px" w="full" />
             <Skeleton height="85px" w="full" />
-            <Skeleton height="85px" w="full" />
+            {!isBeets && <Skeleton height="85px" w="full" />}
           </SimpleGrid>
+        ) : !isConnected ? (
+          <ConnectButton.Custom>
+            {({ openConnectModal }) => (
+              <SimpleGrid
+                columns={{
+                  base: 1,
+                  md: 2,
+                  lg: isBeets ? 2 : 3,
+                }}
+                spacing="md"
+              >
+                {currentNetworks.map(network => (
+                  <Card
+                    key={network.name}
+                    flex="1"
+                    p={['sm', 'md']}
+                    shadow="innerLg"
+                    variant="level1"
+                    w="full"
+                    {...network.displayProps}
+                  >
+                    <Flex alignItems="center" justifyContent="space-between">
+                      <HStack gap="ms">
+                        <NetworkIcon chain={network.chain} size={iconSize} shadow="md" />
+                        <Stack gap={1}>
+                          <Heading size="sm" textTransform="capitalize">
+                            {network.name}
+                          </Heading>
+                          <Heading size="md" color="font.secondary">
+                            –
+                          </Heading>
+                        </Stack>
+                      </HStack>
+                      <Button variant="tertiary" gap="xs" onClick={openConnectModal}>
+                        <WalletIcon size={20} strokeWidth={2} />
+                        Connect
+                      </Button>
+                    </Flex>
+                  </Card>
+                ))}
+              </SimpleGrid>
+            )}
+          </ConnectButton.Custom>
         ) : (
           <>
             {hasMerklRewards && <MerklAlert />}
             {noRewards && (
-              <Center border="1px dashed" borderColor="border.base" h="85px" rounded="lg">
-                <Text>No rewards to claim</Text>
-              </Center>
+              <SimpleGrid
+                columns={{
+                  base: 1,
+                  md: 2,
+                  lg: isBeets ? 2 : 3,
+                }}
+                spacing="md"
+              >
+                {currentNetworks.map(network => (
+                  <Card
+                    key={network.name}
+                    flex="1"
+                    p={['sm', 'md']}
+                    shadow="innerLg"
+                    variant="level1"
+                    w="full"
+                    {...network.displayProps}
+                  >
+                    <Flex alignItems="center" justifyContent="space-between">
+                      <HStack gap="ms">
+                        <NetworkIcon chain={network.chain} size={iconSize} shadow="md" />
+                        <Stack gap={1}>
+                          <Heading size="sm" textTransform="capitalize">
+                            {network.name}
+                          </Heading>
+                        </Stack>
+                      </HStack>
+                      <Text variant="secondary" fontSize="sm">
+                        Nothing to claim
+                      </Text>
+                    </Flex>
+                  </Card>
+                ))}
+              </SimpleGrid>
             )}
-            <SimpleGrid columns={{ base: 1, md: 1, lg: 2, xl: 3 }} spacing="md">
+            <SimpleGrid
+              columns={{
+                base: 1,
+                md: 1,
+                lg: isBeets ? 2 : 3,
+              }}
+              spacing="md"
+            >
               {poolsWithChain.map(
                 ([chain, pools], index) =>
                   pools[0] && (
@@ -77,7 +204,7 @@ export function ClaimNetworkPools() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       key={chain}
                       style={{ transformOrigin: 'top' }}
-                      transition={{ duration: 0.3, delay: index * 0.12, ease: easeOut }}
+                      transition={{ duration: 0.3, delay: index * 0.08, ease: easeOut }}
                     >
                       <ClaimNetworkBlock
                         chain={pools[0].chain}
@@ -95,7 +222,7 @@ export function ClaimNetworkPools() {
                   animate={{ opacity: 1, scale: 1 }}
                   initial={{ opacity: 0, scale: 0.95 }}
                   style={{ transformOrigin: 'top' }}
-                  transition={{ duration: 0.3, delay: poolsWithChain.length * 0.12, ease: easeOut }}
+                  transition={{ duration: 0.3, delay: poolsWithChain.length * 0.08, ease: easeOut }}
                 >
                   <ClaimNetworkBlock
                     chain={GqlChain.Mainnet}

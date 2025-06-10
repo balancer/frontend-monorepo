@@ -6,7 +6,7 @@ export function ReminderButton({ children, ...buttonProps }: ButtonProps) {
     <Button
       _hover={{ color: 'font.linkHover' }}
       bg="none"
-      color="purple.300"
+      color="font.link"
       fontSize="14px"
       fontWeight={500}
       gap="6px"

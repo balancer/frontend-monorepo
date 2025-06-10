@@ -26,7 +26,7 @@ enum RowType {
 
 const rowProps = {
   px: { base: 'sm', sm: '0' },
-  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(100px, max-content) minmax(120px, max-content) minmax(140px, max-content) minmax(120px, max-content) 50px`,
+  gridTemplateColumns: `32px minmax(320px, 1fr) minmax(100px, max-content) minmax(140px, max-content) minmax(130px, max-content) minmax(120px, max-content) 50px`,
   alignItems: 'center',
   gap: { base: 'xxs', xl: 'lg' },
 }
@@ -112,8 +112,8 @@ export function MyVotesTable({ myVotes, loading, noVeBALBalance }: Props) {
           !isConnected
             ? 'Connect your wallet to see and edit your votes'
             : noVeBALBalance
-              ? 'You don’t have any votes. Get some veBAL to start voting.'
-              : 'You don’t have any votes. Start by selecting some pool gauges from the table below.'
+              ? 'You have no active votes. Get some veBAL to start voting.'
+              : 'You have no active votes. Start by selecting some pool gauges from the table below.'
         }
         paginationProps={undefined}
         renderTableHeader={TableHeader}

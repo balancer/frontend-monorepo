@@ -4,7 +4,7 @@ import { ArrowUpRight } from 'react-feather'
 export function VeBalCrossChainSync() {
   return (
     <Box>
-      <Heading as="h3" mb="ms" pb="0.5" size="md" variant="special">
+      <Heading as="h3" mb="ms" pb="0.5" size="h4" variant="special">
         Cross-chain veBAL boosts
       </Heading>
       <Text>

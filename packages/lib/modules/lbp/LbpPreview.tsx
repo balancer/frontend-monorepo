@@ -1,6 +1,4 @@
-'use client'
-
-import { VStack, Heading, Button, Flex, Spacer, useDisclosure } from '@chakra-ui/react'
+import { VStack, Heading, Button, Flex, Spacer, useDisclosure, HStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { useLbpForm } from './LbpFormProvider'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
@@ -9,6 +7,9 @@ import { useTokens } from '../tokens/TokensProvider'
 import { TokenSummary } from './steps/preview/TokenSummary'
 import { PoolWeights } from './steps/preview/PoolWeights'
 import { ProjectedPrice } from './steps/preview/ProjectedPrice'
+import { SimpleInfoCard } from './steps/SimpleInfoCard'
+import { fNum } from '@repo/lib/shared/utils/numbers'
+import { useLbpWeights } from './useLbpWeights'
 
 export function LbpPreview() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -17,32 +18,18 @@ export function LbpPreview() {
   const {
     saleStructureForm: { watch },
   } = useLbpForm()
+  const saleStructureData = watch()
 
-  const { projectInfoForm } = useLbpForm()
+  const { isLastStep, projectInfoForm, updatePriceStats, maxPrice, saleMarketCap, fdvMarketCap } =
+    useLbpForm()
 
-  const chain = watch('selectedChain')
-  const launchTokenAddress = watch('launchTokenAddress')
+  const chain = saleStructureData.selectedChain
+  const launchTokenAddress = saleStructureData.launchTokenAddress
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, chain)
-  const launchTokenSeed = Number(watch('saleTokenAmount') || 0)
 
-  const collateralTokenAddress = watch('collateralTokenAddress')
-  const collateralToken = getToken(collateralTokenAddress, chain)
-  const collateralTokenSeed = Number(watch('collateralTokenAmount') || 0)
-  const collateralTokenPrice = priceFor(collateralTokenAddress, chain)
+  const collateralTokenAddress = saleStructureData.collateralTokenAddress
 
-  const weightAdjustmentType = watch('weightAdjustmentType')
-  const startWeight = ['linear_90_10', 'linear_90_50'].includes(weightAdjustmentType)
-    ? 90
-    : watch('customStartWeight')
-  const endWeight =
-    weightAdjustmentType === 'linear_90_10'
-      ? 10
-      : weightAdjustmentType === 'linear_90_50'
-        ? 50
-        : watch('customEndWeight')
-
-  const startTime = watch('startTime')
-  const endTime = watch('endTime')
+  const { projectTokenStartWeight: startWeight, projectTokenEndWeight: endWeight } = useLbpWeights()
 
   return (
     <>
@@ -53,49 +40,62 @@ export function LbpPreview() {
         }}
       >
         <VStack align="start" p="lg" spacing="lg" w="full">
-          <Flex w="full">
-            <Heading color="font.maxContrast" size="md">
-              LBP Preview
-            </Heading>
+          {!isLastStep && (
+            <>
+              <Flex w="full">
+                <Heading color="font.maxContrast" size="md">
+                  LBP Preview
+                </Heading>
 
-            <Spacer />
+                <Spacer />
 
-            <Button
-              _hover={{ color: 'font.linkHover' }}
-              color="font.link"
-              position="relative"
-              top="4px"
-              variant="ghost"
-              onClick={onOpen}
-            >
-              Get help
-            </Button>
-          </Flex>
+                <Button
+                  _hover={{ color: 'font.linkHover' }}
+                  color="font.link"
+                  position="relative"
+                  top="4px"
+                  variant="ghost"
+                  onClick={onOpen}
+                >
+                  Get help
+                </Button>
+              </Flex>
 
-          <TokenSummary
-            chain={chain}
-            projectInfoForm={projectInfoForm}
-            launchTokenMetadata={launchTokenMetadata}
-          />
+              <TokenSummary
+                chain={chain}
+                projectInfoForm={projectInfoForm}
+                launchTokenMetadata={launchTokenMetadata}
+              />
+            </>
+          )}
+
+          <HStack w="full">
+            <SimpleInfoCard
+              title={`${launchTokenMetadata.symbol} start price`}
+              info={`$${fNum('fiat', maxPrice)}`}
+            />
+            <SimpleInfoCard title="Sale market cap" info={saleMarketCap} />
+            <SimpleInfoCard title="FDV market cap" info={fdvMarketCap} />
+          </HStack>
 
           <PoolWeights
-            startTime={startTime}
-            endTime={endTime}
+            startTime={saleStructureData.startTime}
+            endTime={saleStructureData.endTime}
             startWeight={startWeight}
             endWeight={endWeight}
             launchTokenMetadata={launchTokenMetadata}
-            collateralToken={collateralToken}
+            collateralToken={getToken(collateralTokenAddress, chain)}
           />
 
           <ProjectedPrice
-            startTime={startTime}
-            endTime={endTime}
+            startTime={saleStructureData.startTime}
+            endTime={saleStructureData.endTime}
             startWeight={startWeight}
             endWeight={endWeight}
-            launchTokenSeed={launchTokenSeed}
             launchTokenSymbol={launchTokenMetadata?.symbol || ''}
-            collateralTokenSeed={collateralTokenSeed}
-            collateralTokenPrice={collateralTokenPrice}
+            collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
+            collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
+            onPriceChange={updatePriceStats}
           />
         </VStack>
       </NoisyCard>
