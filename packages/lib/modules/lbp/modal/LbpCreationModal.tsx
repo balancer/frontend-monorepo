@@ -16,7 +16,6 @@ import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants
 import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { Address } from 'viem'
-import { useRouter } from 'next/navigation'
 
 type Props = {
   isOpen: boolean
@@ -31,7 +30,6 @@ export function LbpCreationModal({
   finalFocusRef,
   ...rest
 }: Props & Omit<ModalProps, 'children'>) {
-  const router = useRouter()
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
   const {
@@ -49,25 +47,14 @@ export function LbpCreationModal({
     undefined
   )
   const handleReset = async () => {
-    // clear local storage
-    localStorage.removeItem(LS_KEYS.LbpConfig.SaleStructure)
-    localStorage.removeItem(LS_KEYS.LbpConfig.ProjectInfo)
-    localStorage.removeItem(LS_KEYS.LbpConfig.PoolAddress)
-    localStorage.removeItem(LS_KEYS.LbpConfig.IsMetadataSent)
+    saleStructureForm.resetToInitial()
+    projectInfoForm.resetToInitial()
     setStepIndex(0)
-
-    // clear temp state
-    saleStructureForm.reset()
-    projectInfoForm.reset()
     setActiveStep(0)
 
-    // clear tx steps
     transactionSteps.resetTransactionSteps()
 
-    // clear path
-    if (initLbpTxHash) router.replace('/')
-
-    onClose() // close modal
+    onClose()
   }
 
   const path = getPoolPath({

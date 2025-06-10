@@ -1,6 +1,6 @@
 import { useLocalStorage } from 'usehooks-ts'
 import { useForm, UseFormProps, UseFormReturn, FieldValues, DefaultValues } from 'react-hook-form'
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 
 /**
  * Combines react-hook-form with useLocalStorage to persist form data.
@@ -15,7 +15,7 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
   storageKey: string,
   initialDefaultValues: DefaultValues<TFieldValues>,
   formOptions?: Omit<UseFormProps<TFieldValues>, 'defaultValues'>
-): UseFormReturn<TFieldValues> {
+): UseFormReturn<TFieldValues> & { resetToInitial: () => void } {
   const [persistedValues, setPersistedValues] = useLocalStorage<DefaultValues<TFieldValues>>(
     storageKey,
     initialDefaultValues
@@ -33,5 +33,12 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
     return () => subscription.unsubscribe()
   }, [watch, setPersistedValues])
 
-  return form
+  const resetToInitial = useCallback(() => {
+    // First reset local storage to initial values
+    setPersistedValues(initialDefaultValues)
+    // Then reset the form to use those initial values
+    form.reset(initialDefaultValues)
+  }, [form, initialDefaultValues, setPersistedValues])
+
+  return { ...form, resetToInitial }
 }

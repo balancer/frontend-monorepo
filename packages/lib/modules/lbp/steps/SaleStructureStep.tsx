@@ -54,7 +54,7 @@ export function SaleStructureStep() {
       watch,
       setValue,
       trigger,
-      reset,
+      resetToInitial,
     },
     projectInfoForm,
     setActiveStep,
@@ -99,7 +99,7 @@ export function SaleStructureStep() {
             <NetworkSelectInput chains={supportedChains} control={control} />
             <LaunchTokenAddressInput
               triggerValidation={trigger}
-              resetForm={reset}
+              resetForm={resetToInitial}
               control={control}
               errors={errors}
               setFormValue={setValue}
