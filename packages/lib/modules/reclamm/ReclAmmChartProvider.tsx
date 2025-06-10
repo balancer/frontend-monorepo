@@ -123,18 +123,6 @@ export function useReclAmmChartLogic() {
   const option = useMemo(() => {
     const { maxPriceValue, minPriceValue, lowerMarginValue, upperMarginValue } = currentChartData
 
-    const getBarPosition = (barIndex: number): string => {
-      const totalBars = 78
-      const totalWidth = 100 // in percent
-      const barSpacing = totalWidth / totalBars
-
-      const position = barIndex * (barSpacing - 0.01) - 3
-
-      // TODO: remove console.log
-      console.log(`Bar ${barIndex} position:`, position + '%')
-      return position + '%'
-    }
-
     const baseGreyBarConfig = {
       count: 10,
       value: 3,
@@ -232,7 +220,7 @@ export function useReclAmmChartLogic() {
         {
           type: 'text',
           silent: true,
-          left: getBarPosition(10),
+          left: '10.08%',
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|Min price}\n{priceValue|${minPriceValue !== undefined ? toCurrency(minPriceValue, { abbreviated: false }) : 'N/A'}}`,
@@ -248,7 +236,7 @@ export function useReclAmmChartLogic() {
         {
           type: 'text',
           silent: true,
-          left: getBarPosition(18),
+          left: '19.7%',
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? toCurrency(upperMarginValue, { abbreviated: false }) : 'N/A'}}`,
@@ -264,7 +252,7 @@ export function useReclAmmChartLogic() {
         {
           type: 'text',
           silent: true,
-          left: getBarPosition(39),
+          left: '47.5%',
           bottom: 0,
           style: {
             text: '{triangle|▲}\n{labelText|Center}',
@@ -280,7 +268,7 @@ export function useReclAmmChartLogic() {
         {
           type: 'text',
           silent: true,
-          left: getBarPosition(60),
+          left: '72.8%',
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? toCurrency(lowerMarginValue, { abbreviated: false }) : 'N/A'}}`,
@@ -296,7 +284,7 @@ export function useReclAmmChartLogic() {
         {
           type: 'text',
           silent: true,
-          left: getBarPosition(68),
+          left: '83.3%',
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|Max price}\n{priceValue|${maxPriceValue !== undefined ? toCurrency(maxPriceValue, { abbreviated: false }) : 'N/A'}}`,
