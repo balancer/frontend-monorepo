@@ -158,28 +158,6 @@ export function useReclAmmChartLogic() {
     const seriesData: any[] = []
     let categoryNumber = 1
 
-    barSegmentsConfig.forEach(segment => {
-      const segmentCategories: string[] = []
-
-      for (let i = 0; i < segment.count; i++) {
-        segmentCategories.push(String(categoryNumber++))
-      }
-
-      allCategories.push(...segmentCategories)
-
-      const segmentSeriesData = Array(segment.count)
-        .fill(null)
-        .map(() => ({
-          value: segment.value,
-          itemStyle: {
-            color: getGradientColor(segment.gradientColors),
-            borderRadius: segment.borderRadius,
-          },
-        }))
-
-      seriesData.push(...segmentSeriesData)
-    })
-
     // Calculate which bar the current price corresponds to
     const getCurrentPriceBarIndex = () => {
       const { minPriceValue, maxPriceValue, currentPriceValue } = currentChartData
@@ -207,11 +185,36 @@ export function useReclAmmChartLogic() {
 
     const currentPriceBarIndex = getCurrentPriceBarIndex()
 
-    // Calculate position as a percentage (0-100%)
+    barSegmentsConfig.forEach(segment => {
+      const segmentCategories: string[] = []
+      const segmentStartIndex = allCategories.length
+
+      for (let i = 0; i < segment.count; i++) {
+        segmentCategories.push(String(categoryNumber++))
+      }
+
+      allCategories.push(...segmentCategories)
+
+      const segmentSeriesData = Array(segment.count)
+        .fill(null)
+        .map((_, i) => {
+          const isCurrentPriceBar = segmentStartIndex + i + 2 === currentPriceBarIndex
+          return {
+            value: segment.value,
+            itemStyle: {
+              color: isCurrentPriceBar
+                ? '#93F6D2' // Solid color for current price bar
+                : getGradientColor(segment.gradientColors),
+              borderRadius: segment.borderRadius,
+            },
+          }
+        })
+
+      seriesData.push(...segmentSeriesData)
+    })
+
     const getBarPosition = (barIndex: number): string => {
-      // Each bar takes up 1.15% of the width (90% bar + 25% gap)
-      // Start at 0% + half bar width (0.45%)
-      const position = barIndex * 1.15 + 0.5
+      const position = barIndex * 1.15 + 0.45
       return `${position.toFixed(2)}%`
     }
 
@@ -221,7 +224,7 @@ export function useReclAmmChartLogic() {
       rich: {
         triangle: { fontSize: 10, lineHeight: 12 },
         labelText: { fontSize: 12, lineHeight: 13 },
-        priceValue: { fontSize: 12, lineHeight: 13, align: 'center' },
+        priceValue: { fontSize: 12, lineHeight: 13 },
       },
     }
 
