@@ -129,12 +129,14 @@ export function useReclAmmChartLogic() {
       gradientColors: ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)'],
       borderRadius: 20,
     }
+
     const baseOrangeBarConfig = {
       count: 8,
       value: 100,
       gradientColors: ['rgb(253, 186, 116)', 'rgba(151, 111, 69, 0.5)'],
       borderRadius: 20,
     }
+
     const greenBarConfig = {
       name: 'Green',
       count: 42,
@@ -157,9 +159,11 @@ export function useReclAmmChartLogic() {
 
     barSegmentsConfig.forEach(segment => {
       const segmentCategories: string[] = []
+
       for (let i = 0; i < segment.count; i++) {
         segmentCategories.push(String(categoryNumber++))
       }
+
       allCategories.push(...segmentCategories)
 
       const segmentSeriesData = Array(segment.count)
@@ -171,6 +175,7 @@ export function useReclAmmChartLogic() {
             borderRadius: segment.borderRadius,
           },
         }))
+
       seriesData.push(...segmentSeriesData)
     })
 
