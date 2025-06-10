@@ -53,7 +53,6 @@ import { InfoOutlineIcon } from '@chakra-ui/icons'
 import { GqlPoolStakingType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ArrowUpRight } from 'react-feather'
 import { getChainId } from '@repo/lib/config/app.config'
-import { VeBalLink } from '../../vebal/VebalRedirectModal'
 import {
   PartnerRedirectModal,
   RedirectPartner,
@@ -405,14 +404,9 @@ export default function PoolMyLiquidity() {
               |
             </Text>
             {isVeBal ? (
-              <VeBalLink
-                flex="1"
-                triggerEl={
-                  <Button variant="secondary" w="100%">
-                    {lockBtnText}
-                  </Button>
-                }
-              />
+              <Button flex="1" variant="secondary" onClick={() => router.push('/vebal/manage')}>
+                {lockBtnText}
+              </Button>
             ) : (
               <>
                 <Button
