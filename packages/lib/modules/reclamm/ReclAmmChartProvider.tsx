@@ -217,11 +217,11 @@ export function useReclAmmChartLogic() {
 
     const graphicStyleProps = {
       textAlign: 'center',
-      fill: '#666',
+      fill: '#A0AEC0',
       rich: {
-        triangle: { color: '#718096', fontSize: 10, lineHeight: 12 },
-        labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13 },
-        priceValue: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
+        triangle: { fontSize: 10, lineHeight: 12 },
+        labelText: { fontSize: 12, lineHeight: 13 },
+        priceValue: { fontSize: 12, lineHeight: 13, align: 'center' },
       },
     }
 
@@ -270,6 +270,7 @@ export function useReclAmmChartLogic() {
           style: {
             text: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? toCurrency(currentPriceValue, { abbreviated: false }) : 'N/A'}}\n{triangle|▼}`,
             ...graphicStyleProps,
+            fill: '#63F2BE', // this overwrite is intentional
           },
           silent: true,
         },
