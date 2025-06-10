@@ -93,6 +93,10 @@ export function isLBP(poolType: GqlPoolType): boolean {
   return isLiquidityBootstrapping(poolType)
 }
 
+export function isV3LBP(pool: Pool): boolean {
+  return isV3Pool(pool) && isLiquidityBootstrapping(pool.type)
+}
+
 export function isWeighted(poolType: GqlPoolType): boolean {
   return poolType === GqlPoolType.Weighted
 }
