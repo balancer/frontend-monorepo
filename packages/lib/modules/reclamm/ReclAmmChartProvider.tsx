@@ -179,6 +179,16 @@ export function useReclAmmChartLogic() {
       seriesData.push(...segmentSeriesData)
     })
 
+    const graphicStyleProps = {
+      textAlign: 'center',
+      fill: '#666',
+      rich: {
+        triangle: { color: '#718096', fontSize: 10, lineHeight: 12 },
+        labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13 },
+        priceValue: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
+      },
+    }
+
     return {
       tooltip: { show: false },
       grid: {
@@ -224,13 +234,7 @@ export function useReclAmmChartLogic() {
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|Min price}\n{priceValue|${minPriceValue !== undefined ? toCurrency(minPriceValue, { abbreviated: false }) : 'N/A'}}`,
-            textAlign: 'center',
-            fill: '#666',
-            rich: {
-              triangle: { color: '#718096', fontSize: 10, lineHeight: 12 },
-              labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13 },
-              priceValue: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
-            },
+            ...graphicStyleProps,
           },
         },
         {
@@ -240,31 +244,19 @@ export function useReclAmmChartLogic() {
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? toCurrency(upperMarginValue, { abbreviated: false }) : 'N/A'}}`,
-            textAlign: 'center',
-            fill: '#666',
-            rich: {
-              triangle: { color: '#718096', fontSize: 10, lineHeight: 12 },
-              labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13 },
-              priceValue: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
-            },
+            ...graphicStyleProps,
           },
         },
-        {
-          type: 'text',
-          silent: true,
-          left: '47.5%',
-          bottom: 0,
-          style: {
-            text: '{triangle|▲}\n{labelText|Center}',
-            textAlign: 'center',
-            fill: '#666',
-            rich: {
-              triangle: { color: '#718096', fontSize: 10, lineHeight: 12 },
-              labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13 },
-              //priceValue: { color: '#777', fontSize: 10, lineHeight: 12, align: 'center' },
-            },
-          },
-        },
+        // {
+        //   type: 'text',
+        //   silent: true,
+        //   left: '47.1%',
+        //   bottom: 0,
+        //   style: {
+        //     text: `{triangle|▲}\n{labelText|Center}`,
+        //     ...graphicStyleProps,
+        //   },
+        // },
         {
           type: 'text',
           silent: true,
@@ -272,13 +264,7 @@ export function useReclAmmChartLogic() {
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? toCurrency(lowerMarginValue, { abbreviated: false }) : 'N/A'}}`,
-            textAlign: 'center',
-            fill: '#666',
-            rich: {
-              triangle: { color: '#718096', fontSize: 10, lineHeight: 12 },
-              labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13 },
-              priceValue: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
-            },
+            ...graphicStyleProps,
           },
         },
         {
@@ -288,13 +274,7 @@ export function useReclAmmChartLogic() {
           bottom: 0,
           style: {
             text: `{triangle|▲}\n{labelText|Max price}\n{priceValue|${maxPriceValue !== undefined ? toCurrency(maxPriceValue, { abbreviated: false }) : 'N/A'}}`,
-            textAlign: 'center',
-            fill: '#666',
-            rich: {
-              triangle: { color: '#718096', fontSize: 10, lineHeight: 12, align: 'center' },
-              labelText: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
-              priceValue: { color: '#A0AEC0', fontSize: 12, lineHeight: 13, align: 'center' },
-            },
+            ...graphicStyleProps,
           },
         },
       ],
