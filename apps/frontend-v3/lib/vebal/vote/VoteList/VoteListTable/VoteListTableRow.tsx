@@ -68,7 +68,7 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
             <NetworkIcon chain={vote.chain} size={6} />
           </GridItem>
           <GridItem>
-            <Link href={getPoolPath(vote)} target="_blank">
+            <Link href={getPoolPath(vote)} target="_blank" role="group">
               <HStack>
                 <VotingListTokenPills
                   h={['32px', '36px']}
@@ -78,8 +78,13 @@ export function VoteListTableRow({ vote, keyValue, ...rest }: Props) {
                   vote={vote}
                 />
                 {vote.gauge.isKilled && <VoteExpiredTooltip usePortal />}
-                <Box color="font.secondary">
-                  <ArrowUpIcon transform="rotate(90)" />
+                <Box
+                  color="font.secondary"
+                  transform="rotate(90deg)"
+                  _groupHover={{ color: 'font.highlight', transform: 'rotate(45deg)' }}
+                  transition="all 0.2s var(--ease-out-cubic)"
+                >
+                  <ArrowUpIcon />
                 </Box>
               </HStack>
             </Link>
