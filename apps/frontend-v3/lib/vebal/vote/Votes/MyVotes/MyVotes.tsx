@@ -58,11 +58,12 @@ export function MyVotes() {
           My votes
         </Heading>
         <Button
-          _hover={{ color: 'font.linkHover' }}
+          _hover={{ color: 'font.linkHover', bg: 'background.level3' }}
           color="font.link"
           onClick={onOpen}
           position="relative"
           top="4px"
+          right="-8px"
           variant="ghost"
         >
           How it works?
