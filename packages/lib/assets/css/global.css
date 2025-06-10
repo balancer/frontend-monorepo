@@ -23,6 +23,17 @@ body {
   overflow-x: clip;
 }
 
+.echarts-for-react hr {
+  width: 100%;
+  border-top: 1px solid var(--chakra-colors-brown-100);
+  box-shadow: 0 1px 0 0 rgb(255 255 255 / 100%);
+}
+
+.chakra-ui-dark .echarts-for-react hr {
+  box-shadow: 0 1px 0 0 rgb(255 255 255 / 15%);
+  border-top: 1px solid var(--chakra-colors-gray-800);
+}
+
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -49,6 +60,10 @@ body {
 
 .balanced {
   text-wrap: balance;
+}
+
+.tabular-number {
+  font-variant-numeric: tabular-nums;
 }
 
 .picture {

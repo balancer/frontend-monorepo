@@ -52,6 +52,10 @@ export function SelectInput({
 
   return (
     <Select<SelectOption, false, GroupBase<SelectOption>>
+      menuPortalTarget={document.body}
+      styles={{
+        menuPortal: base => ({ ...base, zIndex: 9999 }),
+      }}
       chakraStyles={chakraStyles}
       components={components}
       id={id}

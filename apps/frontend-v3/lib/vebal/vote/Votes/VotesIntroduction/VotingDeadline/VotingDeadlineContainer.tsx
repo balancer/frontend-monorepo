@@ -17,17 +17,15 @@ export function VotingDeadlineContainer({
     >
       <Box inset={0} overflow="hidden" position="absolute" rounded="sm" zIndex={0}>
         <Picture
-          altText="Background texture"
+          altText="Slate background texture"
           defaultImgType="png"
           directory="/images/textures/"
           height="100%"
           imgAvif
           imgAvifDark
-          imgAvifPortrait
-          imgAvifPortraitDark
           imgName="rock-slate"
-          imgPng
-          imgPngDark
+          imgJpg
+          imgJpgDark
           width="100%"
         />
       </Box>

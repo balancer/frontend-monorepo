@@ -25,6 +25,7 @@ export type ParseReceipt =
   | typeof parseSwapReceipt
   | typeof parseLstStakeReceipt
   | typeof parseLstWithdrawReceipt
+  | typeof parsePoolCreationReceipt
 
 export function parseAddLiquidityReceipt({
   chain,
@@ -149,6 +150,18 @@ export function parseLstWithdrawReceipt({ receiptLogs, userAddress, chain }: Par
     receivedToken: _toHumanAmount(getNativeAssetAddress(chain), amount, 18),
   }
 }
+
+export function parsePoolCreationReceipt({ receiptLogs }: ParseProps) {
+  const logs = parseEventLogs({
+    abi: [parseAbiItem('event PoolCreated(address indexed pool)')],
+    logs: receiptLogs,
+  })
+  const poolAddress = logs[0]?.args?.pool
+  return {
+    poolAddress,
+  }
+}
+
 /*
   rawValue and tokenDecimals should always be valid so we use default values to avoid complex error handling
 */

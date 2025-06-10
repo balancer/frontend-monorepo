@@ -60,7 +60,7 @@ export function MyVebalChargeTooltip({
         </HStack>
         <HStack justifyContent="space-between" w="full">
           <Text fontSize="sm" fontWeight={700}>
-            veBAL with 1 year lock
+            veBAL if locked for 1 year
           </Text>
           <Text fontSize="sm" fontWeight={700}>
             {fNum('token', expectedVeBalAmount)}

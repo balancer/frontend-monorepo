@@ -138,7 +138,7 @@ export const orderByHash: Record<SortingBy, { label: string; title?: string }> =
       'This shows the ratio of 3rd party voting incentives (known as Bribes) to veBAL. The higher this ratio, the more profitable it is to currently vote on this pool. Note this ratio could change up till the voting deadline.',
   },
   currentVotes: {
-    label: 'Current votes',
+    label: 'My votes',
     title:
       'Your previously confirmed votes. Your confirmed votes are timelocked for 10 days and cannot be changed during this period.',
   },

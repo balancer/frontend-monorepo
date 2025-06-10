@@ -2,7 +2,7 @@ import { HStack, Icon, Text, VStack, Box } from '@chakra-ui/react'
 import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
-import { GqlPoolLiquidityBootstrapping } from '@repo/lib/shared/services/api/generated/graphql'
+import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { format, secondsToMilliseconds } from 'date-fns'
 import { Clock } from 'react-feather'
 import { PropsWithChildren } from 'react'
@@ -87,12 +87,11 @@ export function LbpHeaderTimeInfo() {
   const { pool } = usePool()
 
   // this will only be rendered for LBPs so we can be sure it is a liquidity bootstrapping pool
-  const lbpPool = pool as GqlPoolLiquidityBootstrapping
-  const endTime = lbpPool.endTime ?? 0
-  const endTimeFormatted = format(secondsToMilliseconds(endTime), 'haaa MM/dd/yy')
+  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const endTimeFormatted = format(secondsToMilliseconds(lbpPool.endTime), 'haaa MM/dd/yy')
 
   const { daysDiff, hoursDiff, minutesDiff, secondsDiff } = useDateCountdown(
-    new Date(secondsToMilliseconds(endTime))
+    new Date(secondsToMilliseconds(lbpPool.endTime))
   )
 
   return (

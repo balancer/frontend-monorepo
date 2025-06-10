@@ -64,6 +64,12 @@ const networkConfig: NetworkConfig = {
   }),
   layerZeroChainId: 106,
   supportsVeBalSync: true,
+  lbps: {
+    collateralTokens: [
+      '0x49d5c2bdffac6ce2bfdb6640f4f80f226bc10bab', // WETH.e
+      '0xb97ef9ef8734c71904d8002f8b6bc66dd9c48a6e', // USDC
+    ],
+  },
 }
 
 export default networkConfig

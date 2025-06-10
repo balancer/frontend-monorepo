@@ -22,7 +22,8 @@ const tagWrapperProps = {
   display: 'flex',
   fontWeight: 'normal',
   h: { base: '28px' },
-  px: 'sm',
+  pr: 'sm',
+  pl: 'xs',
   py: 'xs',
   rounded: 'full',
   shadow: 'sm',
@@ -59,7 +60,11 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
   }
 
   if (tags?.includes('VE8020')) {
-    return <Text {...textProps}>ve8020 weighted</Text>
+    return (
+      <TagWrapper>
+        <Text {...textProps}>ve8020 weighted</Text>
+      </TagWrapper>
+    )
   }
 
   switch (type) {

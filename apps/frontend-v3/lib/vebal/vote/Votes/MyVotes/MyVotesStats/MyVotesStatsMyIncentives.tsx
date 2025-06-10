@@ -7,6 +7,7 @@ import { useMyVotes } from '@bal/lib/vebal/vote/Votes/MyVotes/MyVotesProvider'
 import { isZero } from '@repo/lib/shared/utils/numbers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { canReceiveIncentives } from '../incentivesBlacklist'
+import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 
 export function MyVotesStatsMyIncentives() {
   const { userAddress } = useUserAccount()
@@ -15,7 +16,30 @@ export function MyVotesStatsMyIncentives() {
 
   return (
     <MyVotesStatsCard
-      headerText="My potential bribes (1w)"
+      headerText={
+        <TooltipWithTouch
+          label="The extra incentives you could earn from bribes on Hidden Hand, based on your voting choices. Hidden Hand is an unaffiliated 3rd party vote market. Note: This doesn't include bribes from other vote markets like Paladin and Stake DAO."
+          placement="top"
+        >
+          <Text
+            fontSize="sm"
+            position="relative"
+            variant="secondary"
+            _after={{
+              borderBottom: '1px dotted',
+              borderColor: 'currentColor',
+              bottom: '-2px',
+              content: '""',
+              left: 0,
+              opacity: 0.5,
+              position: 'absolute',
+              width: '100%',
+            }}
+          >
+            My potential bribes (1w)
+          </Text>
+        </TooltipWithTouch>
+      }
       leftContent={
         loading ? (
           <Skeleton height="28px" w="100px" />

@@ -80,16 +80,16 @@ export function VoteListLayout() {
                 left="0"
                 minW={{ base: 'auto', md: '370px' }}
                 position={{ base: 'relative', md: 'absolute' }}
-                top="0"
+                top="8px"
                 transition="all 0.15s var(--ease-out-cubic)"
                 variants={variants}
                 willChange="transform"
               >
                 <HStack w="full">
-                  <Heading as="h2" pb="0.5" size="lg" variant="special">
+                  <Heading as="h2" pb="0.5" size="h4" variant="special">
                     Pool gauge vote list
                   </Heading>
-                  <Heading mt="1" size="md" variant="secondary">
+                  <Heading mt="0" size="md" variant="secondary">
                     ({fNum('integer', count || 0)})
                   </Heading>
                 </HStack>

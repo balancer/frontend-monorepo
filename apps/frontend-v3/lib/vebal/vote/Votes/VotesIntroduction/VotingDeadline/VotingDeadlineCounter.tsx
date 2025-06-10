@@ -87,6 +87,7 @@ export function VotingDeadlineCounter() {
                   lineHeight="40px"
                   textAlign="center"
                   w={{ base: '34px', xl: '56px' }}
+                  className="tabular-number"
                 >
                   {String(counter.value).padStart(2, '0')}
                 </Text>

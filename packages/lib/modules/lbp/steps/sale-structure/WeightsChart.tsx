@@ -1,8 +1,9 @@
-import { addHours, differenceInDays, hoursToMilliseconds } from 'date-fns'
+import { addHours, differenceInDays, hoursToMilliseconds, isValid } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { buildMarkline } from '@repo/lib/shared/utils/chart.helper'
+import { Stack, Text } from '@chakra-ui/react'
 
 export function WeightsChart({
   startWeight,
@@ -109,7 +110,15 @@ export function WeightsChart({
     ],
   }
 
-  return <ReactECharts option={chartInfo} style={{ height: '350px', width: '100%' }} />
+  const enoughData = startWeight && endWeight && isValid(startDate) && isValid(endDate)
+
+  return enoughData ? (
+    <ReactECharts option={chartInfo} style={{ height: '350px', width: '100%' }} />
+  ) : (
+    <Stack h="350px" alignItems="center" justifyContent="center">
+      <Text fontSize="3xl">Missing data</Text>
+    </Stack>
+  )
 }
 
 function interpolateData(startWeight: number, endWeight: number, startDate: Date, endDate: Date) {

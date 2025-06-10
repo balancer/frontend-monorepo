@@ -197,10 +197,15 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
               >
                 <IconButton
                   aria-label="Remove"
-                  icon={<Trash2 color={fontSecondary} height="20px" />}
+                  icon={<Trash2 height="20px" />}
                   isDisabled={!removable}
                   onClick={onRemove}
                   variant="ghost"
+                  color={fontSecondary}
+                  _hover={{
+                    bg: 'red.500',
+                    color: 'white',
+                  }}
                 />
               </Tooltip>
             </VStack>

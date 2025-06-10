@@ -66,9 +66,9 @@ export function PoolHeader() {
             </Text>
           )}
         </VStack>
-        <Stack direction={{ base: 'column', md: 'row' }} spacing="md">
+        <Stack direction={{ base: 'column', md: 'row' }} spacing="ms">
           <PoolTags />
-          <HStack spacing="sm">
+          <HStack gap="sm" alignItems="end">
             <Tooltip
               isDisabled={!blockingReasons}
               label={
@@ -80,7 +80,7 @@ export function PoolHeader() {
               <Button
                 isDisabled={isAddLiquidityBlocked}
                 onClick={handleClick}
-                size="lg"
+                size="md"
                 variant="primary"
                 w="full"
               >
