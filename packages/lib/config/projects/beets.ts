@@ -100,6 +100,11 @@ export const ProjectConfigBeets: ProjectConfig = {
       {
         title: 'Ecosystem',
         links: [
+          {
+            label: 'Brand',
+            href: 'https://brand.beets.fi',
+            isExternal: true,
+          },
           { label: 'Governance', href: 'https://snapshot.box/#/s:beets.eth', isExternal: true },
           {
             label: 'Bug bounties',
