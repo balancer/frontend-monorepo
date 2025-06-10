@@ -12,7 +12,7 @@ import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
 import { useState } from 'react'
-import { isLBP, isQuantAmmPool } from '../pool.helpers'
+import { isQuantAmmPool, isV3LBP } from '../pool.helpers'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { PoolZenGarden } from '@repo/lib/shared/components/zen/ZenGarden'
 import { PoolWeightShiftsChart } from './PoolWeightCharts/quantamm/PoolWeightShiftsChart'
@@ -67,7 +67,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
   const { calcTotalUsdValue } = useTokens()
 
   const isQuantAmm = isQuantAmmPool(pool.type)
-  const [activeTab, setActiveTab] = useState(TABS_LIST[isQuantAmm || isLBP(pool.type) ? 0 : 1])
+  const [activeTab, setActiveTab] = useState(TABS_LIST[isQuantAmm || isV3LBP(pool) ? 0 : 1])
 
   const compositionTokens = getCompositionTokens(pool)
   const totalLiquidity = calcTotalUsdValue(compositionTokens, chain)
@@ -92,7 +92,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
     >
       {isLoading ? (
         <Skeleton h="full" w="full" />
-      ) : isQuantAmm || isLBP(pool.type) ? (
+      ) : isQuantAmm || isV3LBP(pool) ? (
         <VStack h="full" p={{ base: 'sm', md: 'md' }} spacing="md" w="full">
           <Box alignSelf="flex-start">
             <ButtonGroup
@@ -105,7 +105,7 @@ export function PoolCompositionChart({ height, isMobile }: { height: number; isM
           </Box>
           {activeTab.value === 'weight-shifts' && isQuantAmm ? (
             <PoolWeightShiftsChart />
-          ) : activeTab.value === 'weight-shifts' && isLBP(pool.type) ? (
+          ) : activeTab.value === 'weight-shifts' && isV3LBP(pool) ? (
             <LBPWeightsChart pool={pool} />
           ) : (
             <CompositionView {...compositionViewProps} />
