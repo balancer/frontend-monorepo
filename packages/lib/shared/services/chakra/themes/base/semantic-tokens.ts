@@ -391,8 +391,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
         _dark: tokens.shadows.dark['shadowInnerBase'],
       },
       innerMd: 'inset 0 0 6px 0 rgba(0, 0, 0, 0.1)',
-      innerLg: 'inset 0 0 8px 0 rgba(0, 0, 0, 0.15)',
-
+      innerLg: {
+        default: tokens.shadows.light.innerLg,
+        _dark: tokens.shadows.dark.innerLg,
+      },
       innerXl: {
         default: tokens.shadows.light.innerXl,
         _dark: tokens.shadows.dark.innerXl,

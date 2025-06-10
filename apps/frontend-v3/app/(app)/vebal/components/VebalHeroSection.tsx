@@ -3,6 +3,7 @@ import { RadialPattern } from '@bal/app/(marketing)/_lib/landing-v3/shared/Radia
 import {
   Box,
   Button,
+  Link,
   Flex,
   Grid,
   GridItem,
@@ -93,7 +94,7 @@ export function VebalHeroSection() {
                     </Text>
                   </Stack>
 
-                  <Flex gap="ms" maxWidth={320}>
+                  <Flex gap="ms" maxWidth={320} mb="ms">
                     <Button as={NextLink} flex={1} href="/vebal/manage" size="lg" variant="gold">
                       Manage veBAL
                     </Button>
@@ -112,6 +113,9 @@ export function VebalHeroSection() {
                       </Button>
                     </Box>
                   </Flex>
+                  <Link href="/portfolio" fontSize="sm" color="font.secondary">
+                    Claim veBAL incentives
+                  </Link>
                 </Stack>
               </FadeInOnView>
             </GridItem>
