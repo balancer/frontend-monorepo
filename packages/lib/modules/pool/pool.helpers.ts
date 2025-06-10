@@ -458,6 +458,8 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
 }
 
 export function poolTypeLabel(poolType: GqlPoolType) {
+  const poolTypeLabel = poolType.replace(/_/g, ' ').toLowerCase()
+
   switch (poolType) {
     case GqlPoolType.Weighted:
       return 'Weighted'
@@ -473,7 +475,9 @@ export function poolTypeLabel(poolType: GqlPoolType) {
       return 'FX'
     case GqlPoolType.QuantAmmWeighted:
       return 'QuantAMM BTF'
+    case GqlPoolType.Reclamm:
+      return 'reCLAMM'
     default:
-      return poolType.toLowerCase()
+      return poolTypeLabel.charAt(0).toUpperCase() + poolTypeLabel.slice(1)
   }
 }
