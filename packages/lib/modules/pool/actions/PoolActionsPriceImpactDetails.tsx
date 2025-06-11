@@ -63,14 +63,16 @@ export function PoolActionsPriceImpactDetails({
   return (
     <VStack align="start" fontSize="sm" spacing="sm" w="full">
       <HStack justify="space-between" w="full">
-        <Text color="grayText">Price impact</Text>
+        <Text color="grayText" fontSize="sm">
+          Price impact
+        </Text>
         <HStack>
           {isLoading ? (
             <Skeleton h="16px" w="40px" />
           ) : priceImpactLevel === 'unknown' ? (
             <Text>Unknown</Text>
           ) : (
-            <NumberText color={priceImpactColor}>
+            <NumberText color={priceImpactColor} fontSize="sm">
               {toCurrency(priceImpactUsd, { abbreviated: false })} ({priceImpactLabel})
             </NumberText>
           )}
@@ -99,12 +101,14 @@ export function PoolActionsPriceImpactDetails({
         </HStack>
       </HStack>
       <HStack justify="space-between" w="full">
-        <Text color="grayText">Max slippage</Text>
+        <Text color="grayText" fontSize="sm">
+          Max slippage
+        </Text>
         <HStack>
           {isLoading ? (
             <Skeleton h="16px" w="40px" />
           ) : (
-            <NumberText color="grayText">
+            <NumberText color="grayText" fontSize="sm">
               {toCurrency(maxSlippageUsd, { abbreviated: false })} ({fNum('slippage', slippage)})
             </NumberText>
           )}
@@ -130,13 +134,15 @@ export function PoolActionsPriceImpactDetails({
       </HStack>
       {isAddLiquidity && !isSummary && (
         <HStack justify="space-between" w="full">
-          <Text color="grayText">LP tokens (if no slippage)</Text>
+          <Text color="grayText" fontSize="sm">
+            LP tokens (if no slippage)
+          </Text>
           <HStack>
             <HStack gap="0.5">
               {isLoading || !bptAmount ? (
                 <Skeleton h="16px" w="40px" />
               ) : (
-                <NumberText color="grayText">
+                <NumberText color="grayText" fontSize="sm">
                   {fNum('token', formatUnits(bptAmount, BPT_DECIMALS))}
                 </NumberText>
               )}
@@ -163,16 +169,22 @@ export function PoolActionsPriceImpactDetails({
         </HStack>
       )}
       <HStack justify="space-between" w="full">
-        <Text color="grayText">Share of pool</Text>
+        <Text color="grayText" fontSize="sm">
+          My share of pool
+        </Text>
         <HStack>
           <HStack gap="0.5">
             {isLoading ? (
               <Skeleton h="16px" w="40px" />
             ) : (
               <>
-                <NumberText color="grayText">{fNum('sharePercent', currentShareOfPool)}</NumberText>
-                <Icon as={ArrowRight} color="grayText" />
-                <NumberText color="grayText">{fNum('sharePercent', futureShareOfPool)}</NumberText>
+                <NumberText color="grayText" fontSize="sm" opacity="0.7">
+                  {fNum('sharePercent', currentShareOfPool)}
+                </NumberText>
+                <Icon as={ArrowRight} color="grayText" opacity="0.7" />
+                <NumberText color="grayText" fontSize="sm">
+                  {fNum('sharePercent', futureShareOfPool)}
+                </NumberText>
               </>
             )}
           </HStack>

@@ -75,11 +75,11 @@ export function PriceImpactAccordion({
       <Accordion allowToggle variant="button" w="full">
         <AccordionItem isDisabled={isDisabled} shadow={isDisabled ? 'none' : undefined} w="full">
           <h2>
-            <AccordionButton>
+            <AccordionButton pl="ms" pr="sm">
               <Box as="span" flex="1" textAlign="left">
                 {accordionButtonComponent}
               </Box>
-              <HStack>
+              <HStack gap="xs">
                 <PriceImpactIcon priceImpactLevel={priceImpactLevel} />
                 <Text color={priceImpactColor} fontSize="sm">
                   Details
