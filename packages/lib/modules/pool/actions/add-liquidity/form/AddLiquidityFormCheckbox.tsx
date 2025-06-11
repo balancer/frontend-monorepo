@@ -37,7 +37,7 @@ export function AddLiquidityFormCheckbox() {
             <Popover placement="top" trigger="hover">
               <PopoverTrigger>
                 <IconButton
-                  _hover={{ bg: 'background.level2' }}
+                  _hover={{ bg: 'background.level2', opacity: '1' }}
                   aria-label="pool-risks-info"
                   bg="background.level2"
                   icon={<InfoIcon />}
@@ -45,6 +45,8 @@ export function AddLiquidityFormCheckbox() {
                   position="relative"
                   top="-1px"
                   left="1px"
+                  transition="opacity 0.2s var(--ease-out-cubic)"
+                  opacity="0.6"
                 />
               </PopoverTrigger>
               <Box shadow="2xl" zIndex="popover">
