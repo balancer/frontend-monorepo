@@ -223,7 +223,7 @@ export function useReclAmmChartLogic() {
     return {
       tooltip: { show: false },
       grid: {
-        left: '-3%',
+        left: isMobile ? '-7%' : '-3%',
         right: '1%',
         top: isMobile ? '10%' : '15%',
         bottom: isMobile ? '-8%' : '8%',
