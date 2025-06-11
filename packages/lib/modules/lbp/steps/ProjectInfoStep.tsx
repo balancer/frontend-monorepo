@@ -10,6 +10,7 @@ import { isValidTelegramHandle, isValidTwitterHandle } from '@repo/lib/shared/ut
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { TextareaWithError } from '@repo/lib/shared/components/inputs/TextareaWithError'
 import NextLink from 'next/link'
+import { isAddress } from 'viem'
 
 export function ProjectInfoStep() {
   const {
@@ -39,6 +40,7 @@ export function ProjectInfoStep() {
         <ProjectXHandle />
         <ProjectTelegramHandle />
         <ProjectDiscordUrlInput />
+        <ProjectOwnerInput />
 
         <Divider />
 
@@ -281,6 +283,37 @@ function ProjectDiscordUrlInput() {
         )}
         rules={{
           validate: isValidUrl,
+        }}
+      />
+    </VStack>
+  )
+}
+
+function ProjectOwnerInput() {
+  const {
+    projectInfoForm: {
+      control,
+      formState: { errors },
+    },
+  } = useLbpForm()
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">Project owner (optional)</Text>
+      <Controller
+        control={control}
+        name="owner"
+        render={({ field }) => (
+          <InputWithError
+            error={errors.owner?.message}
+            isInvalid={!!errors.owner}
+            onChange={e => field.onChange(e.target.value)}
+            placeholder="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            value={field.value}
+          />
+        )}
+        rules={{
+          validate: (value: string) => isAddress(value) || 'Invalid address',
         }}
       />
     </VStack>
