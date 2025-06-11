@@ -131,7 +131,12 @@ function PoolChartsContent({ ...props }: any) {
                   )}
                 </VStack>
               </Stack>
-              <Box h={['300px', '400px', 'full']} overflow="hidden" position="relative" w="full">
+              <Box
+                h={[showReclammChart ? '500px' : '300px', '400px', 'full']}
+                overflow="hidden"
+                position="relative"
+                w="full"
+              >
                 <AnimatePresence mode="wait">
                   {showLiquidityProfileChart && (
                     <motion.div

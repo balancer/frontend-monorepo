@@ -6,6 +6,7 @@ import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
 import { calculateLowerMargin, calculateUpperMargin } from './reclAmmMath'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
@@ -24,6 +25,7 @@ function getGradientColor(colorStops: string[]) {
 
 export function useReclAmmChartLogic() {
   const { toCurrency } = useCurrency()
+  const { isMobile } = useBreakpoints()
   const reclAmmData = useGetComputeReclAmmData()
 
   const currentChartData = useMemo(() => {
@@ -92,7 +94,7 @@ export function useReclAmmChartLogic() {
 
     const baseGreyBarConfig = {
       count: 10,
-      value: 3,
+      value: isMobile ? 1 : 3,
       gradientColors: ['rgba(160, 174, 192, 0.5)', 'rgba(160, 174, 192, 0.1)'],
       borderRadius: 20,
     }
@@ -205,9 +207,13 @@ export function useReclAmmChartLogic() {
         ...baseRichProps,
         padding: [0, 10, 0, 0],
       },
-      withBottomPadding: {
+      withRightBottomPadding: {
         ...baseRichProps,
         padding: [0, 10, 10, 0],
+      },
+      withTopRightPadding: {
+        ...baseRichProps,
+        padding: [100, 10, 0, 0],
       },
     }
 
@@ -216,8 +222,8 @@ export function useReclAmmChartLogic() {
       grid: {
         left: '-3%',
         right: '1%',
-        top: '15%',
-        bottom: '8%',
+        top: isMobile ? '10%' : '15%',
+        bottom: isMobile ? '-8%' : '8%',
         containLabel: true,
       },
       xAxis: {
@@ -232,7 +238,7 @@ export function useReclAmmChartLogic() {
           interval: 0,
           formatter: (value: string, index: number) => {
             if (index === 10) {
-              return `{triangle|▲}\n{labelText|Min price}\n{priceValue|${minPriceValue !== undefined ? toCurrency(minPriceValue, { abbreviated: false }) : 'N/A'}}`
+              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? toCurrency(minPriceValue, { abbreviated: false }) : 'N/A'}}`
             }
 
             if (index === 18) {
@@ -244,7 +250,7 @@ export function useReclAmmChartLogic() {
             }
 
             if (index === 68) {
-              return `{triangle|▲}\n{labelText|Max price}\n{priceValue|${maxPriceValue !== undefined ? toCurrency(maxPriceValue, { abbreviated: false }) : 'N/A'}}`
+              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? toCurrency(maxPriceValue, { abbreviated: false }) : 'N/A'}}`
             }
 
             return ''
@@ -252,15 +258,27 @@ export function useReclAmmChartLogic() {
           rich: {
             triangle: {
               ...richStyles.triangle,
-              ...richStyles.withBottomPadding,
+              ...richStyles.withRightBottomPadding,
             },
             labelText: {
               ...richStyles.base,
-              ...richStyles.withBottomPadding,
+              ...richStyles.withRightBottomPadding,
             },
             priceValue: {
               ...richStyles.base,
               ...richStyles.withRightPadding,
+            },
+            triangleMobile: {
+              ...richStyles.triangle,
+              ...richStyles.withTopRightPadding,
+            },
+            labelTextMobile: {
+              ...richStyles.base,
+              ...richStyles.withTopRightPadding,
+            },
+            priceValueMobile: {
+              ...richStyles.base,
+              padding: [110, 10, 0, 0],
             },
           },
         },
@@ -273,6 +291,7 @@ export function useReclAmmChartLogic() {
         {
           data: seriesData.map((value, index) => {
             if (index === currentPriceBarIndex + 1) {
+              const paddingRight = isMobile ? 25 : 65
               return {
                 ...value,
                 label: {
@@ -282,15 +301,15 @@ export function useReclAmmChartLogic() {
                   rich: {
                     triangle: {
                       ...richStyles.currentTriangle,
-                      padding: [0, 65, 0, 0],
+                      padding: [0, paddingRight, 0, 0],
                     },
                     labelText: {
                       ...richStyles.current,
-                      padding: [0, 65, 5, 0],
+                      padding: [0, paddingRight, 5, 0],
                     },
                     priceValue: {
                       ...richStyles.current,
-                      padding: [0, 65, 0, 0],
+                      padding: [0, paddingRight, 0, 0],
                     },
                   },
                 },
