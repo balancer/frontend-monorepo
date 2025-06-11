@@ -2,7 +2,7 @@
 
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Button, Text } from '@chakra-ui/react'
+import { Box, Divider, Card, VStack, Button, Text } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -113,9 +113,10 @@ export function AddLiquiditySummary({
             </Card>
           ) : (
             pool.staking && (
-              <Card variant="modalSubSection" w="full">
+              <Box pt="sm">
+                <Divider mb="md" />
                 <StakingOptions />
-              </Card>
+              </Box>
             )
           )}
         </CardPopAnim>
