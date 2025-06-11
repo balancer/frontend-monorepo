@@ -1,4 +1,4 @@
-import { ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { Box, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import ButtonGroup, {
   ButtonGroupOption,
 } from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
@@ -25,13 +25,33 @@ function PoolWeightsInfo() {
 
   return (
     <BalAlert
+      pb="xs"
+      p="sm"
+      mb="sm"
       content={
         <BalAlertContent
-          description="Proportional adds avoid price impact by matching the current ratio of each token's USD value within the pool:"
+          description={
+            <Box
+              as="span"
+              color="black"
+              fontSize="sm"
+              fontWeight="medium"
+              sx={{ textWrap: 'balance' }}
+            >
+              Proportional adds avoid price impact by matching the current ratio of each token's USD
+              value within the pool:
+            </Box>
+          }
           forceColumnMode
         >
           <UnorderedList>
-            <ListItem color="font.black" fontWeight="medium">
+            <ListItem
+              color="font.black"
+              fontWeight="medium"
+              fontSize="sm"
+              position="relative"
+              top="-4px"
+            >
               {compositionTokens
                 .map(
                   token =>
@@ -145,6 +165,7 @@ export function AddLiquidityFormTabs({
 
   return (
     <VStack w="full">
+      <PoolWeightsInfo />
       <ButtonGroup
         currentOption={options[tabIndex]}
         groupId="add-liquidity"
@@ -155,7 +176,6 @@ export function AddLiquidityFormTabs({
         size="md"
       />
       {isOutOfRange && <OutOfRangeWarning />}
-      <PoolWeightsInfo />
       <TokenInputsMaybeProportional isProportional={isProportional} totalUSDValue={totalUSDValue} />
     </VStack>
   )
