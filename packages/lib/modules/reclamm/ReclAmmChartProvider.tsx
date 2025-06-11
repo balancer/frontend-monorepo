@@ -170,11 +170,8 @@ export function useReclAmmChartLogic() {
         return 50 // Default to middle if values are not available
       }
 
-      // Calculate price range per bar (58 bars in the colored section)
       const priceRange = maxPriceValue - minPriceValue
       const pricePerBar = priceRange / 58 // 58 bars in the colored section (8 orange + 42 green + 8 orange)
-
-      // Calculate how many bars from the start of the colored section (after 10 grey bars)
       const barsFromMin = (currentPriceValue - minPriceValue) / pricePerBar
 
       // Add the initial 10 grey bars and round down to nearest bar
@@ -213,18 +210,38 @@ export function useReclAmmChartLogic() {
       seriesData.push(...segmentSeriesData)
     })
 
-    const getBarPosition = (barIndex: number): string => {
-      const position = barIndex * 1.15 + 0.45
-      return `${position.toFixed(2)}%`
+    const baseRichProps = {
+      fontSize: 12,
+      lineHeight: 13,
+      color: '#A0AEC0',
+      align: 'center',
     }
 
-    const graphicStyleProps = {
-      textAlign: 'center',
-      fill: '#A0AEC0',
-      rich: {
-        triangle: { fontSize: 10, lineHeight: 12 },
-        labelText: { fontSize: 12, lineHeight: 13 },
-        priceValue: { fontSize: 12, lineHeight: 13 },
+    const richStyles = {
+      base: baseRichProps,
+      triangle: {
+        ...baseRichProps,
+        fontSize: 10,
+        lineHeight: 12,
+        color: '#718096',
+      },
+      current: {
+        ...baseRichProps,
+        color: '#63F2BE',
+      },
+      currentTriangle: {
+        ...baseRichProps,
+        fontSize: 10,
+        lineHeight: 12,
+        color: '#63F2BE',
+      },
+      withRightPadding: {
+        ...baseRichProps,
+        padding: [0, 10, 0, 0],
+      },
+      withBottomPadding: {
+        ...baseRichProps,
+        padding: [0, 10, 10, 0],
       },
     }
 
@@ -247,9 +264,39 @@ export function useReclAmmChartLogic() {
         axisLabel: {
           show: true,
           interval: 0,
-          formatter: () => '',
-          color: '#666',
-          fontSize: 12,
+          formatter: (value: string, index: number) => {
+            if (index === 10) {
+              return `{triangle|▲}\n{labelText|Min price}\n{priceValue|${minPriceValue !== undefined ? toCurrency(minPriceValue, { abbreviated: false }) : 'N/A'}}`
+            }
+
+            if (index === 18) {
+              return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? toCurrency(upperMarginValue, { abbreviated: false }) : 'N/A'}}`
+            }
+
+            if (index === 60) {
+              return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? toCurrency(lowerMarginValue, { abbreviated: false }) : 'N/A'}}`
+            }
+
+            if (index === 68) {
+              return `{triangle|▲}\n{labelText|Max price}\n{priceValue|${maxPriceValue !== undefined ? toCurrency(maxPriceValue, { abbreviated: false }) : 'N/A'}}`
+            }
+
+            return ''
+          },
+          rich: {
+            triangle: {
+              ...richStyles.triangle,
+              ...richStyles.withBottomPadding,
+            },
+            labelText: {
+              ...richStyles.base,
+              ...richStyles.withBottomPadding,
+            },
+            priceValue: {
+              ...richStyles.base,
+              ...richStyles.withRightPadding,
+            },
+          },
         },
       },
       yAxis: {
@@ -258,74 +305,38 @@ export function useReclAmmChartLogic() {
       },
       series: [
         {
-          data: seriesData,
+          data: seriesData.map((value, index) => {
+            if (index === currentPriceBarIndex + 1) {
+              return {
+                ...value,
+                label: {
+                  show: true,
+                  position: 'top',
+                  formatter: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? toCurrency(currentPriceValue, { abbreviated: false }) : 'N/A'}}\n{triangle|▼}`,
+                  rich: {
+                    triangle: {
+                      ...richStyles.currentTriangle,
+                      padding: [0, 65, 0, 0],
+                    },
+                    labelText: {
+                      ...richStyles.current,
+                      padding: [0, 65, 5, 0],
+                    },
+                    priceValue: {
+                      ...richStyles.current,
+                      padding: [0, 65, 0, 0],
+                    },
+                  },
+                },
+              }
+            }
+
+            return value
+          }),
           type: 'bar',
           barWidth: '90%',
           barCategoryGap: '25%',
           silent: true,
-        },
-      ],
-      graphic: [
-        {
-          type: 'text',
-          left: getBarPosition(currentPriceBarIndex),
-          top: '5%',
-          style: {
-            text: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? toCurrency(currentPriceValue, { abbreviated: false }) : 'N/A'}}\n{triangle|▼}`,
-            ...graphicStyleProps,
-            fill: '#63F2BE', // this overwrite is intentional
-          },
-          silent: true,
-        },
-        {
-          type: 'text',
-          silent: true,
-          left: getBarPosition(8),
-          bottom: 0,
-          style: {
-            text: `{triangle|▲}\n{labelText|Min price}\n{priceValue|${minPriceValue !== undefined ? toCurrency(minPriceValue, { abbreviated: false }) : 'N/A'}}`,
-            ...graphicStyleProps,
-          },
-        },
-        {
-          type: 'text',
-          silent: true,
-          left: getBarPosition(17),
-          bottom: 0,
-          style: {
-            text: `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? toCurrency(upperMarginValue, { abbreviated: false }) : 'N/A'}}`,
-            ...graphicStyleProps,
-          },
-        },
-        // {
-        //   type: 'text',
-        //   silent: true,
-        //   left: '47.1%',
-        //   bottom: 0,
-        //   style: {
-        //     text: `{triangle|▲}\n{labelText|Center}`,
-        //     ...graphicStyleProps,
-        //   },
-        // },
-        {
-          type: 'text',
-          silent: true,
-          left: getBarPosition(63),
-          bottom: 0,
-          style: {
-            text: `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? toCurrency(lowerMarginValue, { abbreviated: false }) : 'N/A'}}`,
-            ...graphicStyleProps,
-          },
-        },
-        {
-          type: 'text',
-          silent: true,
-          left: getBarPosition(72),
-          bottom: 0,
-          style: {
-            text: `{triangle|▲}\n{labelText|Max price}\n{priceValue|${maxPriceValue !== undefined ? toCurrency(maxPriceValue, { abbreviated: false }) : 'N/A'}}`,
-            ...graphicStyleProps,
-          },
         },
       ],
     }
