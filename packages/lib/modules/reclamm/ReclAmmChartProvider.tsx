@@ -142,8 +142,8 @@ export function useReclAmmChartLogic() {
       const pricePerBar = priceRange / 58 // 58 bars in the colored section (8 orange + 42 green + 8 orange)
       const barsFromMin = (currentPriceValue - minPriceValue) / pricePerBar
 
-      // Add the initial 10 grey bars and round down to nearest bar
-      const barIndex = Math.min(Math.max(0, Math.floor(barsFromMin)), 57) + 10
+      // Add the initial 10 grey bars and round to nearest bar
+      const barIndex = Math.min(Math.max(0, Math.round(barsFromMin)), 57) + 10
 
       return barIndex
     }
@@ -163,7 +163,8 @@ export function useReclAmmChartLogic() {
       const segmentSeriesData = Array(segment.count)
         .fill(null)
         .map((_, i) => {
-          const isCurrentPriceBar = segmentStartIndex + i + 2 === currentPriceBarIndex
+          const isCurrentPriceBar = segmentStartIndex + i === currentPriceBarIndex
+
           return {
             value: segment.value,
             itemStyle: {
@@ -185,6 +186,8 @@ export function useReclAmmChartLogic() {
       align: 'center',
     }
 
+    const paddingRight = isMobile ? 5 : 10
+
     const richStyles = {
       base: baseRichProps,
       triangle: {
@@ -205,15 +208,15 @@ export function useReclAmmChartLogic() {
       },
       withRightPadding: {
         ...baseRichProps,
-        padding: [0, 10, 0, 0],
+        padding: [0, paddingRight, 0, 0],
       },
       withRightBottomPadding: {
         ...baseRichProps,
-        padding: [0, 10, 10, 0],
+        padding: [0, paddingRight, 10, 0],
       },
       withTopRightPadding: {
         ...baseRichProps,
-        padding: [100, 10, 0, 0],
+        padding: [100, paddingRight, 0, 0],
       },
     }
 
@@ -290,8 +293,7 @@ export function useReclAmmChartLogic() {
       series: [
         {
           data: seriesData.map((value, index) => {
-            if (index === currentPriceBarIndex + 1) {
-              const paddingRight = isMobile ? 25 : 65
+            if (index === currentPriceBarIndex) {
               return {
                 ...value,
                 label: {
@@ -301,15 +303,13 @@ export function useReclAmmChartLogic() {
                   rich: {
                     triangle: {
                       ...richStyles.currentTriangle,
-                      padding: [0, paddingRight, 0, 0],
                     },
                     labelText: {
                       ...richStyles.current,
-                      padding: [0, paddingRight, 5, 0],
+                      padding: [0, 0, 5, 0],
                     },
                     priceValue: {
                       ...richStyles.current,
-                      padding: [0, paddingRight, 0, 0],
                     },
                   },
                 },
