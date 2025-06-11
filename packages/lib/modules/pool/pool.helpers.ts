@@ -29,6 +29,7 @@ import { Pool, PoolCore } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
 import { PoolMetadata } from './metadata/getPoolsMetadata'
+import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 
 /**
  * METHODS
@@ -458,8 +459,6 @@ export function isPoolSwapAllowed(pool: Pool, token1: Address, token2: Address):
 }
 
 export function poolTypeLabel(poolType: GqlPoolType) {
-  const poolTypeLabel = poolType.replace(/_/g, ' ').toLowerCase()
-
   switch (poolType) {
     case GqlPoolType.Weighted:
       return 'Weighted'
@@ -478,6 +477,6 @@ export function poolTypeLabel(poolType: GqlPoolType) {
     case GqlPoolType.Reclamm:
       return 'reCLAMM'
     default:
-      return poolTypeLabel.charAt(0).toUpperCase() + poolTypeLabel.slice(1)
+      return getPoolTypeLabel(poolType)
   }
 }

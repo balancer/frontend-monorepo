@@ -12,7 +12,7 @@ export enum PoolChartTab {
   FEES = 'fees',
   SURPLUS = 'surplus',
   LIQUIDITY_PROFILE = 'liquidity_profile',
-  RECLAMM = 'reCLAMM',
+  RECLAMM = 'reclamm',
 }
 
 export interface PoolChartTypeTab {
