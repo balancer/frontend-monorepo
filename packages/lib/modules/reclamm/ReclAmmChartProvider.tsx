@@ -42,13 +42,7 @@ export function useReclAmmChartLogic() {
 
     const balanceA = formatUnits(reclAmmData.liveBalances.liveBalanceA, 18)
     const balanceB = formatUnits(reclAmmData.liveBalances.liveBalanceB, 18)
-
-    //const maxPrice = formatUnits(reclAmmData.priceRange[0], 18)
-    //const minPrice = formatUnits(reclAmmData.priceRange[1], 18)
-    //const priceRatio = bn(maxPrice).div(minPrice)
-
     const margin = formatUnits(reclAmmData.centerednessMargin, 16)
-
     const virtualBalanceA = formatUnits(reclAmmData.virtualBalances.virtualBalanceA, 18)
     const virtualBalanceB = formatUnits(reclAmmData.virtualBalances.virtualBalanceB, 18)
 
@@ -56,29 +50,8 @@ export function useReclAmmChartLogic() {
       bn(balanceB).plus(virtualBalanceB)
     )
 
-    // Mathematical function for the curve: y = invariant / x
-    const curveFunction = (x: number): number => {
-      return invariant.div(bn(x)).toNumber()
-    }
-
-    const xForPointB = bn(invariant).div(virtualBalanceB)
-
-    const curvePoints = Array.from({ length: 100 }, (_, i) => {
-      const x = bn(0.7)
-        .times(virtualBalanceA)
-        .plus(
-          bn(i)
-            .times(bn(1.3).times(xForPointB).minus(bn(0.7).times(virtualBalanceA)))
-            .div(bn(100))
-        )
-      const y = curveFunction(x.toNumber())
-
-      return [x.toNumber(), y]
-    })
-
     const vBalanceA = Number(virtualBalanceA)
     const vBalanceB = Number(virtualBalanceB)
-    const xForMinPrice = bn(invariant).div(virtualBalanceB).toNumber()
 
     const lowerMargin = calculateLowerMargin({
       margin: Number(margin),
@@ -94,8 +67,6 @@ export function useReclAmmChartLogic() {
       virtualBalanceB: vBalanceB,
     })
 
-    // const currentBalance = bn(balanceA).plus(virtualBalanceA).toNumber()
-
     const minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
     const maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
 
@@ -107,11 +78,6 @@ export function useReclAmmChartLogic() {
       .toNumber()
 
     return {
-      series: curvePoints,
-      min: xForMinPrice,
-      max: vBalanceA,
-      lowerMargin,
-      upperMargin,
       maxPriceValue,
       minPriceValue,
       lowerMarginValue,
@@ -344,7 +310,7 @@ export function useReclAmmChartLogic() {
 
   return {
     option,
-    hasChartData: !!currentChartData.series?.length,
+    hasChartData: !!currentChartData,
     isLoading: reclAmmData.isLoading,
     isPoolWithinTargetRange: !!reclAmmData.isPoolWithinTargetRange,
   }
