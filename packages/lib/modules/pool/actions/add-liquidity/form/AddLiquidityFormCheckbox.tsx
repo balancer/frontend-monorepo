@@ -31,27 +31,34 @@ export function AddLiquidityFormCheckbox() {
         onChange={e => setAcceptPoolRisks(e.target.checked)}
         size="lg"
       >
-        <Text fontSize="md">I accept the risks of interacting with this pool</Text>
+        <Text as="div" fontSize="md" lineHeight="1" sx={{ textWrap: 'pretty' }}>
+          I accept the risks of interacting with this pool
+          <Box as="span">
+            <Popover placement="top" trigger="hover">
+              <PopoverTrigger>
+                <IconButton
+                  _hover={{ bg: 'background.level2' }}
+                  aria-label="pool-risks-info"
+                  bg="background.level2"
+                  icon={<InfoIcon />}
+                  size="xs"
+                  position="relative"
+                  top="-1px"
+                  left="1px"
+                />
+              </PopoverTrigger>
+              <Box shadow="2xl" zIndex="popover">
+                <PopoverContent>
+                  <PopoverArrow bg="background.level3" />
+                  <PopoverBody>
+                    <RisksList textVariant="primary" />
+                  </PopoverBody>
+                </PopoverContent>
+              </Box>
+            </Popover>
+          </Box>
+        </Text>
       </Checkbox>
-      <Popover placement="top" trigger="hover">
-        <PopoverTrigger>
-          <IconButton
-            _hover={{ bg: 'background.level2' }}
-            aria-label="pool-risks-info"
-            bg="background.level2"
-            icon={<InfoIcon />}
-            size="xs"
-          />
-        </PopoverTrigger>
-        <Box shadow="2xl" zIndex="popover">
-          <PopoverContent>
-            <PopoverArrow bg="background.level3" />
-            <PopoverBody>
-              <RisksList textVariant="primary" />
-            </PopoverBody>
-          </PopoverContent>
-        </Box>
-      </Popover>
     </HStack>
   )
 }
