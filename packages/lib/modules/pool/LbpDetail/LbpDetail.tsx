@@ -10,7 +10,7 @@ import { LbpHeader } from './LbpHeader/LbpHeader'
 import { usePool } from '../PoolProvider'
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { now } from '@repo/lib/shared/utils/time'
-import { isAfter, secondsToMilliseconds } from 'date-fns'
+import { isAfter, isBefore, secondsToMilliseconds } from 'date-fns'
 import { Top10Holdings } from './Top10Holdings'
 
 export function LbpDetail() {
@@ -50,7 +50,9 @@ export function LbpDetail() {
               w="full"
             ></Stack>
           )}
-          <PoolActivity showTabs={false} />
+          {!isBefore(now(), secondsToMilliseconds(lbpPool.startTime)) && (
+            <PoolActivity showTabs={false} />
+          )}
           <PoolComposition />
           <PoolInfoLayout />
         </VStack>
