@@ -87,10 +87,10 @@ export function useCreateLbpStep(): TransactionStep {
     userAddress &&
     launchTokenAddress &&
     collateralTokenAddress &&
-    projectTokenStartWeight != null &&
-    reserveTokenStartWeight != null &&
-    projectTokenEndWeight != null &&
-    reserveTokenEndWeight != null &&
+    projectTokenStartWeight &&
+    reserveTokenStartWeight &&
+    projectTokenEndWeight &&
+    reserveTokenEndWeight &&
     startTime &&
     endTime
 
