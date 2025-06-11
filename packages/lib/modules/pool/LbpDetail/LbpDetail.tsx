@@ -7,6 +7,11 @@ import { PoolComposition } from '../PoolDetail/PoolComposition'
 import { PoolInfoLayout } from '../PoolDetail/PoolInfo/PoolInfoLayout'
 import { useUserPoolEvents } from '../useUserPoolEvents'
 import { LbpHeader } from './LbpHeader/LbpHeader'
+import { usePool } from '../PoolProvider'
+import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
+import { now } from '@repo/lib/shared/utils/time'
+import { isAfter, secondsToMilliseconds } from 'date-fns'
+import { Top10Holdings } from './Top10Holdings'
 
 export function LbpDetail() {
   const userEvents = useUserPoolEvents()
@@ -16,6 +21,9 @@ export function LbpDetail() {
     // isLoadingUserPoolEvents,
     hasPoolEvents: userHasPoolEvents,
   } = userEvents || {}
+
+  const { pool } = usePool()
+  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
 
   return (
     <>
@@ -27,7 +35,11 @@ export function LbpDetail() {
               <Card h="250px">Charts</Card>
             </GridItem>
             <GridItem>
-              <Card h="250px">Swap</Card>
+              {isAfter(now(), secondsToMilliseconds(lbpPool.endTime)) ? (
+                <Top10Holdings chain={pool.chain} />
+              ) : (
+                <Card h="250px">Swap</Card>
+              )}
             </GridItem>
           </Grid>
           {userHasPoolEvents && (
