@@ -117,7 +117,8 @@ export function isStableLike(poolType: GqlPoolType): boolean {
     isMetaStable(poolType) ||
     isComposableStable(poolType) ||
     isFx(poolType) ||
-    isGyro(poolType)
+    isGyro(poolType) ||
+    isReclAmm(poolType)
   )
 }
 
