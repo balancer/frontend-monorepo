@@ -35,25 +35,25 @@ export function LbpCreationModal({
   const {
     saleStructureForm,
     projectInfoForm,
-    setActiveStep,
     isLastStep: isLastConfigStep,
+    resetConfigSteps,
   } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const { transactionSteps, initLbpTxHash, urlTxHash, previewModalDisclosure } = useLbpCreation()
 
-  const [, setStepIndex] = useLocalStorage(LS_KEYS.LbpConfig.StepIndex, 0)
-  const [poolAddress] = useLocalStorage<Address | undefined>(
+  const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
+  const [, setIsMetadataSent] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSent, false)
+
   const handleReset = async () => {
     saleStructureForm.resetToInitial()
     projectInfoForm.resetToInitial()
-    setStepIndex(0)
-    setActiveStep(0)
-
+    resetConfigSteps()
     transactionSteps.resetTransactionSteps()
-
+    setPoolAddress(undefined)
+    setIsMetadataSent(false)
     onClose()
   }
 

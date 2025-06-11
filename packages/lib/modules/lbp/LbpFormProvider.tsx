@@ -67,6 +67,11 @@ export function useLbpFormLogic() {
   const isFirstStep = activeStepIndex === 0
   const activeStep = steps[activeStepIndex]
 
+  const resetConfigSteps = () => {
+    setPersistedStepIndex(0)
+    setActiveStep(0)
+  }
+
   useEffect(() => {
     setPersistedStepIndex(activeStepIndex)
   }, [activeStepIndex, setPersistedStepIndex])
@@ -110,6 +115,7 @@ export function useLbpFormLogic() {
     fdvMarketCap,
     updatePriceStats,
     launchTokenSeed,
+    resetConfigSteps,
   }
 }
 
