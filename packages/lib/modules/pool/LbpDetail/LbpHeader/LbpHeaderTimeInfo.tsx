@@ -3,9 +3,10 @@ import { usePool } from '@repo/lib/modules/pool/PoolProvider'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 import { useDateCountdown } from '@repo/lib/shared/hooks/date.hooks'
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
-import { format, secondsToMilliseconds } from 'date-fns'
-import { Clock } from 'react-feather'
+import { format, isAfter, isBefore, secondsToMilliseconds } from 'date-fns'
+import { AlertTriangle, Clock } from 'react-feather'
 import { PropsWithChildren } from 'react'
+import { now } from '@repo/lib/shared/utils/time'
 
 function TimeElement({ title, value }: { title: string; value: string }) {
   return (
@@ -88,39 +89,86 @@ export function LbpHeaderTimeInfo() {
 
   // this will only be rendered for LBPs so we can be sure it is a liquidity bootstrapping pool
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+  const startTimeFormatted = format(secondsToMilliseconds(lbpPool.startTime), 'haaa MM/dd/yy')
   const endTimeFormatted = format(secondsToMilliseconds(lbpPool.endTime), 'haaa MM/dd/yy')
-
-  const { daysDiff, hoursDiff, minutesDiff, secondsDiff } = useDateCountdown(
-    new Date(secondsToMilliseconds(lbpPool.endTime))
-  )
+  const currentTime = now()
 
   return (
-    <HStack w="full" spacing="4">
-      <HStack
-        flex="1"
-        h="full"
-        justifyContent="start"
-        alignItems="center"
-        bg="green.400"
-        borderRadius="sm"
-        color="black"
-        px="2"
-      >
-        <Icon as={Clock} />
-        <Text color="black">{`LBP is live! Ends ${endTimeFormatted}`}</Text>
-      </HStack>
-      <HStack spacing="xs" h="48px" flexShrink="0">
-        <Tile>
-          <TimeElement title="D" value={String(daysDiff)} />
-        </Tile>
-        <Tile>
-          <HStack spacing="xs">
-            <TimeElement title="H" value={String(hoursDiff).padStart(2, '0')} />
-            <TimeElement title="M" value={String(minutesDiff).padStart(2, '0')} />
-            <TimeElement title="S" value={String(secondsDiff).padStart(2, '0')} />
+    <>
+      {isBefore(currentTime, secondsToMilliseconds(lbpPool.startTime)) ? (
+        <HStack w="full" spacing="4">
+          <HStack
+            flex="1"
+            h="full"
+            justifyContent="start"
+            alignItems="center"
+            borderRadius="sm"
+            borderStyle="dashed"
+            borderColor="special"
+            borderWidth="1px"
+            backgroundColor="special"
+            color="special"
+            px="2"
+          >
+            <Icon as={Clock} fontVariant="special" />
+            <Text variant="special">{`LBP starts ${startTimeFormatted}`}</Text>
           </HStack>
-        </Tile>
-      </HStack>
+
+          <Countdown until={new Date(secondsToMilliseconds(lbpPool.startTime))} />
+        </HStack>
+      ) : isAfter(currentTime, secondsToMilliseconds(lbpPool.endTime)) ? (
+        <HStack
+          flex="1"
+          h="full"
+          w="full"
+          justifyContent="start"
+          alignItems="center"
+          bg="red.400"
+          borderRadius="sm"
+          color="black"
+          px="2"
+        >
+          <Icon as={AlertTriangle} />
+          <Text color="black">{`LBP ended ${endTimeFormatted}`}</Text>
+        </HStack>
+      ) : (
+        <HStack w="full" spacing="4">
+          <HStack
+            flex="1"
+            h="full"
+            justifyContent="start"
+            alignItems="center"
+            bg="green.400"
+            borderRadius="sm"
+            color="black"
+            px="2"
+          >
+            <Icon as={Clock} />
+            <Text color="black">{`LBP is live! Ends ${endTimeFormatted}`}</Text>
+          </HStack>
+
+          <Countdown until={new Date(secondsToMilliseconds(lbpPool.endTime))} />
+        </HStack>
+      )}
+    </>
+  )
+}
+
+function Countdown({ until }: { until: Date }) {
+  const info = useDateCountdown(until)
+
+  return (
+    <HStack spacing="xs" h="48px" flexShrink="0">
+      <Tile>
+        <TimeElement title="D" value={String(info.daysDiff)} />
+      </Tile>
+      <Tile>
+        <HStack spacing="xs">
+          <TimeElement title="H" value={String(info.hoursDiff).padStart(2, '0')} />
+          <TimeElement title="M" value={String(info.minutesDiff).padStart(2, '0')} />
+          <TimeElement title="S" value={String(info.secondsDiff).padStart(2, '0')} />
+        </HStack>
+      </Tile>
     </HStack>
   )
 }

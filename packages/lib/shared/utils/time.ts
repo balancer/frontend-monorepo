@@ -169,3 +169,8 @@ export function alignUtcWithLocalDay(unixTimestamp: number) {
   const timezoneOffset = utcDate.getTimezoneOffset() * oneMinInSecs // convert getTimezoneOffset from minutes to seconds
   return unixTimestamp + timezoneOffset
 }
+
+// Using a specialized function so it can be mocked when testing manually
+export function now() {
+  return new Date()
+}
