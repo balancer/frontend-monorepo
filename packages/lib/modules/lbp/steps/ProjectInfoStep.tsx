@@ -11,6 +11,7 @@ import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithErro
 import { TextareaWithError } from '@repo/lib/shared/components/inputs/TextareaWithError'
 import NextLink from 'next/link'
 import { isAddress } from 'viem'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 export function ProjectInfoStep() {
   const {
@@ -297,6 +298,8 @@ function ProjectOwnerInput() {
     },
   } = useLbpForm()
 
+  const { userAddress } = useUserAccount()
+
   return (
     <VStack align="start" w="full">
       <Text color="font.primary">Project owner (optional)</Text>
@@ -308,7 +311,7 @@ function ProjectOwnerInput() {
             error={errors.owner?.message}
             isInvalid={!!errors.owner}
             onChange={e => field.onChange(e.target.value)}
-            placeholder="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+            placeholder={userAddress}
             value={field.value}
           />
         )}
