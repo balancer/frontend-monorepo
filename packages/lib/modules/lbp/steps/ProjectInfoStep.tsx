@@ -316,7 +316,7 @@ function ProjectOwnerInput() {
           />
         )}
         rules={{
-          validate: (value: string) => isAddress(value) || 'Invalid address',
+          validate: (value: string) => !value || isAddress(value) || 'Invalid address',
         }}
       />
     </VStack>
