@@ -32,28 +32,18 @@ export function LbpCreationModal({
 }: Props & Omit<ModalProps, 'children'>) {
   const initialFocusRef = useRef(null)
   const { isDesktop } = useBreakpoints()
-  const {
-    saleStructureForm,
-    projectInfoForm,
-    isLastStep: isLastConfigStep,
-    resetConfigSteps,
-  } = useLbpForm()
+  const { saleStructureForm, isLastStep: isLastConfigStep, resetLbpCreation } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const { transactionSteps, initLbpTxHash, urlTxHash, previewModalDisclosure } = useLbpCreation()
 
-  const [poolAddress, setPoolAddress] = useLocalStorage<Address | undefined>(
+  const [poolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
-  const [, setIsMetadataSent] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSent, false)
 
-  const handleReset = async () => {
-    saleStructureForm.resetToInitial()
-    projectInfoForm.resetToInitial()
-    resetConfigSteps()
+  const handleReset = () => {
+    resetLbpCreation()
     transactionSteps.resetTransactionSteps()
-    setPoolAddress(undefined)
-    setIsMetadataSent(false)
     onClose()
   }
 

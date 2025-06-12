@@ -54,11 +54,11 @@ export function SaleStructureStep() {
       watch,
       setValue,
       trigger,
-      resetToInitial,
     },
     projectInfoForm,
     setActiveStep,
     activeStepIndex,
+    resetLbpCreation,
   } = useLbpForm()
   const saleStructureData = watch()
 
@@ -99,7 +99,7 @@ export function SaleStructureStep() {
             <NetworkSelectInput chains={supportedChains} control={control} />
             <LaunchTokenAddressInput
               triggerValidation={trigger}
-              resetForm={resetToInitial}
+              resetForm={resetLbpCreation}
               control={control}
               errors={errors}
               setFormValue={setValue}
