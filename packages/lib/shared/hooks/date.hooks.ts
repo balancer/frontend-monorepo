@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { oneMinInMs, oneSecondInMs, startOfDayUtc } from '@repo/lib/shared/utils/time'
+import { now, oneMinInMs, oneSecondInMs, startOfDayUtc } from '@repo/lib/shared/utils/time'
 import {
   differenceInDays,
   differenceInHours,
@@ -12,12 +12,12 @@ import {
  * @param interval - Autoupdate interval in ms (default: 1 min)
  */
 export function useCurrentDate(interval = oneMinInMs) {
-  const [date, setDate] = useState(() => new Date())
+  const [date, setDate] = useState(() => now())
 
   useEffect(() => {
     if (interval > 0) {
       const intervalId = setInterval(() => {
-        setDate(new Date())
+        setDate(now())
       }, interval)
 
       return () => {
