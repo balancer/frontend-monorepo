@@ -1,5 +1,3 @@
-'use client'
-
 import { Stack, VStack, Card, Grid, GridItem } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { PoolActivity } from '../PoolDetail/PoolActivity/PoolActivity'
@@ -12,6 +10,7 @@ import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/g
 import { now } from '@repo/lib/shared/utils/time'
 import { isAfter, isBefore, secondsToMilliseconds } from 'date-fns'
 import { Top10Holdings } from './Top10Holdings'
+import { LbpPoolChartsContainer } from './LbpPoolChartsContainer'
 
 export function LbpDetail() {
   const userEvents = useUserPoolEvents()
@@ -32,7 +31,7 @@ export function LbpDetail() {
         <VStack spacing="2xl" w="full">
           <Grid templateColumns={{ base: '1fr', md: '2fr 1fr' }} gap="4" w="full">
             <GridItem>
-              <Card h="250px">Charts</Card>
+              <LbpPoolChartsContainer />
             </GridItem>
             <GridItem>
               {isAfter(now(), secondsToMilliseconds(lbpPool.endTime)) ? (

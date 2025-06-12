@@ -1,3 +1,7 @@
+export type LabelFormatterParams = {
+  data: any[]
+}
+
 export function buildMarkline(id: string, start: Date, end: Date, height: number) {
   return {
     id,
