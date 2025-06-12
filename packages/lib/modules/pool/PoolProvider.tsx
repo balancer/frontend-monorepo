@@ -17,6 +17,8 @@ import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances
 import { useInvalidVariantRedirect } from './pool.hooks'
 import { useTokens } from '../tokens/TokensProvider'
 import { getCompositionTokens } from './pool-tokens.utils'
+import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { cloneDeep } from 'lodash'
 
 export type FeaturedPool = GetFeaturedPoolsQuery['featuredPools'][0]['pool']
 export type UsePoolResponse = ReturnType<typeof usePoolLogic> & {
@@ -40,19 +42,26 @@ export function usePoolLogic({
     variables: { id, chain, userAddress: userAddress.toLowerCase() },
   })
 
+  const poolData = cloneDeep(data?.pool || initialData.pool)
+
+  // reclamm and lbp pools have a hook with the same address as the pool, these can be ignored in the ui but not in the api
+  if (poolData.hook && isSameAddress(poolData.hook.address, poolData.address)) {
+    delete poolData.hook
+  }
+
   const {
     pool: poolWithOnChainData,
     refetch: refetchOnchainData,
     isLoading: isLoadingOnchainData,
-  } = usePoolEnrichWithOnChainData(data?.pool || initialData.pool)
+  } = usePoolEnrichWithOnChainData(poolData)
 
   const {
     data: [poolWithOnchainUserBalances],
     refetch: refetchOnchainUserBalances,
     isLoading: isLoadingOnchainUserBalances,
-  } = useOnchainUserPoolBalances([poolWithOnChainData || data?.pool || initialData.pool])
+  } = useOnchainUserPoolBalances([poolWithOnChainData || poolData])
 
-  const pool = poolWithOnchainUserBalances || poolWithOnChainData || data?.pool || initialData.pool
+  const pool = poolWithOnchainUserBalances || poolWithOnChainData || poolData
   const bptPrice = priceFor(pool.address, pool.chain)
   const tvl = calcTotalUsdValue(getCompositionTokens(pool), pool.chain)
   const isLoading = isLoadingOnchainData || isLoadingOnchainUserBalances
