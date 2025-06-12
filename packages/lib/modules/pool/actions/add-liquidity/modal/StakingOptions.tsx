@@ -57,7 +57,7 @@ export function StakingOptions() {
         >
           <Tooltip
             display="inline-block"
-            label="You’ve just added liquidity and received LP tokens for a pool eligible for BAL liquidity mining incentives. To earn your share, stake your LP tokens. There’s no lock-up period—you can stake or unstake anytime."
+            label="You’ve just added liquidity and received LP tokens for a pool eligible for liquidity mining incentives. To earn your share, stake your LP tokens. There’s no lock-up period—you can stake or unstake anytime."
           >
             <InfoIcon display="inline-block" />
           </Tooltip>
