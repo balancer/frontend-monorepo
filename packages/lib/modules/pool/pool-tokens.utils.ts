@@ -348,7 +348,7 @@ export function getPriceRateRatio(pool: Pool) {
     (
       token: ApiToken & { priceRate?: string; priceRateProviderData?: GqlPriceRateProviderData }
     ) => {
-      return !token.useUnderlyingForAddRemove ? '1' : token.priceRate
+      return token.useUnderlyingForAddRemove ? token.priceRate : '1'
     }
   )
   return bn(priceRates[0] || '1').div(priceRates[1] || '1')
