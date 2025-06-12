@@ -25,8 +25,8 @@ function PoolWeightsInfo() {
 
   return (
     <BalAlert
-      pb="xs"
       p="sm"
+      pb="xxs !important"
       mb="sm"
       content={
         <BalAlertContent

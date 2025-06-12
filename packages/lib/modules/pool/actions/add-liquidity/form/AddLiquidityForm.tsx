@@ -214,7 +214,7 @@ function AddLiquidityMainForm() {
             {!simulationQuery.isError && (
               <PriceImpactAccordion
                 accordionButtonComponent={
-                  <HStack>
+                  <HStack gap="xs">
                     <Text color="font.secondary" fontSize="sm" variant="secondary">
                       Price impact:{' '}
                     </Text>
