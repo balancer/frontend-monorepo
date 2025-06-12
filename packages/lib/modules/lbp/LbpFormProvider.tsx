@@ -11,6 +11,7 @@ import { useLocalStorage } from 'usehooks-ts'
 import { useEffect, useState } from 'react'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
 import { fNum } from '@repo/lib/shared/utils/numbers'
+import { Address } from 'viem'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -71,6 +72,21 @@ export function useLbpFormLogic() {
     setPersistedStepIndex(activeStepIndex)
   }, [activeStepIndex, setPersistedStepIndex])
 
+  const [, setPoolAddress] = useLocalStorage<Address | undefined>(
+    LS_KEYS.LbpConfig.PoolAddress,
+    undefined
+  )
+  const [, setIsMetadataSent] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSent, false)
+
+  const resetLbpCreation = () => {
+    saleStructureForm.resetToInitial()
+    projectInfoForm.resetToInitial()
+    setPersistedStepIndex(0)
+    setActiveStep(0)
+    setPoolAddress(undefined)
+    setIsMetadataSent(false)
+  }
+
   const { saleTokenAmount, launchTokenAddress, selectedChain } = saleStructureForm.watch()
 
   const launchTokenSeed = Number(saleTokenAmount || 0)
@@ -110,6 +126,7 @@ export function useLbpFormLogic() {
     fdvMarketCap,
     updatePriceStats,
     launchTokenSeed,
+    resetLbpCreation,
   }
 }
 
