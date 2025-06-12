@@ -51,7 +51,7 @@ export function useCreateLbpStep(): TransactionStep {
     userActions,
   } = saleStructureForm.watch()
 
-  const { name } = projectInfoForm.watch()
+  const { name, owner } = projectInfoForm.watch()
 
   const receiptProps = usePoolCreationReceipt({
     txHash: transaction?.execution?.data,
@@ -103,7 +103,7 @@ export function useCreateLbpStep(): TransactionStep {
         swapFeePercentage: parseUnits('0.01', 18), // TODO: confirm default value
         chainId,
         lbpParams: {
-          owner: userAddress,
+          owner: owner || userAddress,
           blockProjectTokenSwapsIn,
           projectToken: launchTokenAddress as Address,
           reserveToken: collateralTokenAddress as Address,
