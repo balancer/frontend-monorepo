@@ -29,10 +29,6 @@ export function useNav() {
       href: '/portfolio',
       label: 'Portfolio',
     },
-    {
-      href: '/vebal',
-      label: 'veBAL',
-    },
   ]
 
   function linkColorFor(path: string) {
