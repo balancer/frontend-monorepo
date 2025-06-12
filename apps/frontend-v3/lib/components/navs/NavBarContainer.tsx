@@ -7,22 +7,14 @@ import { MobileNav } from '@repo/lib/shared/components/navs/MobileNav'
 import { useNav } from '@repo/lib/shared/components/navs/useNav'
 import { BalancerLogoType } from '../imgs/BalancerLogoType'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import { isDev, isStaging } from '@repo/lib/config/app.config'
 
 export function NavBarContainer() {
-  const {
-    links: { ecosystemLinks, socialLinks },
-    options: { allowCreateWallet },
-  } = PROJECT_CONFIG
   const { defaultAppLinks } = useNav()
 
-  const appLinks = []
-  if (isDev || isStaging) {
-    appLinks.push({
-      label: 'LBP',
-      href: '/lbp/create',
-    })
-  }
+  const {
+    links: { appLinks, ecosystemLinks, socialLinks },
+    options: { allowCreateWallet },
+  } = PROJECT_CONFIG
 
   const allAppLinks = [...defaultAppLinks, ...appLinks]
 
