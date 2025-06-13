@@ -198,9 +198,7 @@ export function PoolTypeFilters({
             isChecked={!!poolTypes.find(selected => selected === poolType)}
             onChange={e => togglePoolType(e.target.checked, poolType as PoolFilterType)}
           >
-            <Text fontSize="sm" textTransform="capitalize">
-              {poolTypeLabel(poolType)}
-            </Text>
+            <Text fontSize="sm">{poolTypeLabel(poolType)}</Text>
           </Checkbox>
         </Box>
       ))}

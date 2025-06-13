@@ -201,11 +201,12 @@ const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.ComposableStable]: 'Stable',
   [GqlPoolType.CowAmm]: 'Weighted',
   [GqlPoolType.QuantAmmWeighted]: 'BTF',
-  [GqlPoolType.Reclamm]: 'ReClamm',
+  [GqlPoolType.Reclamm]: 'reCLAMM',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {
-  return poolTypeLabelMap[type] ?? type.replace(/_/g, ' ').toLowerCase()
+  const label = type.replace(/_/g, ' ').toLowerCase()
+  return poolTypeLabelMap[type] ?? label.charAt(0).toUpperCase() + label.slice(1)
 }
 
 export const poolClickHandler = (
