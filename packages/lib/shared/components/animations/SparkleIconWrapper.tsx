@@ -50,7 +50,7 @@ export function SparkleIconWrapper({
   }, [rotate])
 
   const childWithRef = isValidElement(children)
-    ? cloneElement(children as React.ReactElement<any>, { ref: svgRef })
+    ? cloneElement(children as React.ReactElement<any>, { ref: svgRef, size })
     : children
 
   return (

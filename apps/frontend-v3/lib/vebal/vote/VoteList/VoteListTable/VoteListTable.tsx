@@ -55,6 +55,7 @@ export function VoteListTable({ voteList, count, loading }: Props) {
       // fixing right padding for horizontal scroll on mobile
       pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
       w={{ base: '100vw', lg: 'full' }}
+      mb="2xl"
     >
       <PaginatedTable
         getRowId={(item, index) => `${item.id}#${index}`}

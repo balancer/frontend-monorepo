@@ -67,13 +67,7 @@ export function DeadlineDayTooltip({
             rounded="lg"
             spacing="sm"
           >
-            <Text
-              alignSelf="start"
-              color="font.secondary"
-              fontSize="16px"
-              fontWeight={700}
-              lineHeight="20px"
-            >
+            <Text alignSelf="start" fontSize="16px" fontWeight={700} lineHeight="20px">
               {title}
             </Text>
             <Text alignSelf="start" color="font.secondary" fontSize="14px" lineHeight="20px">

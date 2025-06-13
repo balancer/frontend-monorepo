@@ -85,11 +85,23 @@ function WeightedTokenPills({
                   />
                   <HStack gap={['xs', '1.5']}>
                     {tokens.length < 5 && (
-                      <Text fontWeight="bold" noOfLines={1} size={nameSize}>
+                      <Text
+                        fontWeight="bold"
+                        noOfLines={1}
+                        size={nameSize}
+                        _groupHover={{ color: 'font.maxContrast' }}
+                        transition="color 0.2s var(--ease-out-cubic)"
+                      >
                         {token.symbol}
                       </Text>
                     )}
-                    <Text fontSize="xs">{fNum('weight', token.weight || '')}</Text>
+                    <Text
+                      fontSize="xs"
+                      _groupHover={{ color: 'font.maxContrast' }}
+                      transition="color 0.2s var(--ease-out-cubic)"
+                    >
+                      {fNum('weight', token.weight || '')}
+                    </Text>
                   </HStack>
                 </>
               )}
@@ -101,10 +113,22 @@ function WeightedTokenPills({
                     nestedTokens={nestedPool.tokens}
                   />
                   <HStack gap={['xs', '1.5']}>
-                    <Text fontWeight="bold" noOfLines={1} size={nameSize}>
+                    <Text
+                      fontWeight="bold"
+                      noOfLines={1}
+                      size={nameSize}
+                      _groupHover={{ color: 'font.maxContrast' }}
+                      transition="color 0.2s var(--ease-out-cubic)"
+                    >
                       {token.name}
                     </Text>
-                    <Text fontSize="xs">{fNum('weight', token.weight || '')}</Text>
+                    <Text
+                      fontSize="xs"
+                      _groupHover={{ color: 'font.maxContrast' }}
+                      transition="color 0.2s var(--ease-out-cubic)"
+                    >
+                      {fNum('weight', token.weight || '')}
+                    </Text>
                   </HStack>
                 </>
               )}
@@ -161,7 +185,13 @@ function StableTokenPills({
                     size={iconSize}
                   />
                   {tokens.length < 5 && (
-                    <Text fontWeight="bold" noOfLines={1} size={nameSize}>
+                    <Text
+                      fontWeight="bold"
+                      noOfLines={1}
+                      size={nameSize}
+                      _groupHover={{ color: 'font.maxContrast' }}
+                      transition="color 0.2s var(--ease-out-cubic)"
+                    >
                       {token.symbol}
                     </Text>
                   )}
@@ -174,7 +204,13 @@ function StableTokenPills({
                     iconSize={iconSize}
                     nestedTokens={nestedPool.tokens}
                   />
-                  <Text fontWeight="bold" noOfLines={1} size={nameSize}>
+                  <Text
+                    fontWeight="bold"
+                    noOfLines={1}
+                    size={nameSize}
+                    _groupHover={{ color: 'font.maxContrast' }}
+                    transition="color 0.2s var(--ease-out-cubic)"
+                  >
                     {token.name}
                   </Text>
                 </>
