@@ -23,4 +23,6 @@ export type ProjectInfoForm = {
   xHandle: string
   telegramHandle?: string
   discordUrl?: string
+  owner: string
+  disclaimerAccepted: boolean
 }

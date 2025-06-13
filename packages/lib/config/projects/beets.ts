@@ -49,11 +49,6 @@ export const ProjectConfigBeets: ProjectConfig = {
         label: 'maBEETS',
         isExternal: true,
       },
-      {
-        href: 'https://www.spoints.fyi/gems',
-        label: 'Sonic Gems',
-        isExternal: true,
-      },
     ],
     ecosystemLinks: [
       { label: 'Docs', href: 'https://docs.beets.fi/' },
@@ -106,6 +101,11 @@ export const ProjectConfigBeets: ProjectConfig = {
       {
         title: 'Ecosystem',
         links: [
+          {
+            label: 'Brand',
+            href: 'https://brand.beets.fi',
+            isExternal: true,
+          },
           { label: 'Governance', href: 'https://snapshot.box/#/s:beets.eth', isExternal: true },
           {
             label: 'Bug bounties',

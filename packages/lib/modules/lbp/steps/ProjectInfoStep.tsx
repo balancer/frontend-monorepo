@@ -1,6 +1,6 @@
 'use client'
 
-import { Heading, VStack, Text } from '@chakra-ui/react'
+import { Heading, VStack, Text, HStack, Spacer, Divider, Checkbox, Button } from '@chakra-ui/react'
 import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
@@ -9,16 +9,21 @@ import { isValidUrl } from '@repo/lib/shared/utils/urls'
 import { isValidTelegramHandle, isValidTwitterHandle } from '@repo/lib/shared/utils/strings'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
 import { TextareaWithError } from '@repo/lib/shared/components/inputs/TextareaWithError'
+import NextLink from 'next/link'
+import { isAddress } from 'viem'
+import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 export function ProjectInfoStep() {
   const {
-    projectInfoForm: { handleSubmit },
+    projectInfoForm: {
+      handleSubmit,
+      formState: { isValid },
+    },
     setActiveStep,
     activeStepIndex,
   } = useLbpForm()
 
-  const onSubmit: SubmitHandler<ProjectInfoForm> = data => {
-    console.log(data)
+  const onSubmit: SubmitHandler<ProjectInfoForm> = () => {
     setActiveStep(activeStepIndex + 1)
   }
 
@@ -36,8 +41,13 @@ export function ProjectInfoStep() {
         <ProjectXHandle />
         <ProjectTelegramHandle />
         <ProjectDiscordUrlInput />
+        <ProjectOwnerInput />
 
-        <LbpFormAction />
+        <Divider />
+
+        <Disclaimer />
+
+        <LbpFormAction disabled={!isValid} />
       </VStack>
     </form>
   )
@@ -48,12 +58,19 @@ function NameInput() {
     projectInfoForm: {
       control,
       formState: { errors },
+      watch,
     },
   } = useLbpForm()
+  const length = watch('name').length
+  const maxLength = 24
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Project name</Text>
+      <HStack w="full">
+        <Text color="font.primary">Project name</Text>
+        <Spacer />
+        <Text color="font.secondary">{`${length}/${maxLength}`}</Text>
+      </HStack>
       <Controller
         control={control}
         name="name"
@@ -63,6 +80,7 @@ function NameInput() {
             isInvalid={!!errors.name}
             onChange={e => field.onChange(e.target.value)}
             value={field.value}
+            maxLength={maxLength}
           />
         )}
         rules={{
@@ -78,12 +96,20 @@ function DescriptionInput() {
     projectInfoForm: {
       control,
       formState: { errors },
+      watch,
     },
   } = useLbpForm()
 
+  const length = watch('description').length
+  const maxLength = 240
+
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">Project description</Text>
+      <HStack w="full">
+        <Text color="font.primary">Project description</Text>
+        <Spacer />
+        <Text color="font.secondary">{`${length}/${maxLength}`}</Text>
+      </HStack>
       <Controller
         control={control}
         name="description"
@@ -94,6 +120,8 @@ function DescriptionInput() {
             onChange={e => field.onChange(e.target.value)}
             placeholder="A brief description of your project and what the token will be used for."
             value={field.value}
+            maxLength={maxLength}
+            rows={4}
           />
         )}
         rules={{
@@ -259,5 +287,85 @@ function ProjectDiscordUrlInput() {
         }}
       />
     </VStack>
+  )
+}
+
+function ProjectOwnerInput() {
+  const {
+    projectInfoForm: {
+      control,
+      formState: { errors },
+    },
+  } = useLbpForm()
+
+  const { userAddress } = useUserAccount()
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">Project owner (optional)</Text>
+      <Controller
+        control={control}
+        name="owner"
+        render={({ field }) => (
+          <InputWithError
+            error={errors.owner?.message}
+            isInvalid={!!errors.owner}
+            onChange={e => field.onChange(e.target.value)}
+            placeholder={userAddress}
+            value={field.value}
+          />
+        )}
+        rules={{
+          validate: (value: string) => !value || isAddress(value) || 'Invalid address',
+        }}
+      />
+    </VStack>
+  )
+}
+
+function Disclaimer() {
+  const {
+    projectInfoForm: { control },
+  } = useLbpForm()
+
+  return (
+    <Controller
+      control={control}
+      name="disclaimerAccepted"
+      render={({ field }) => (
+        <Checkbox
+          color="font.primary"
+          pl="md"
+          size="lg"
+          checked={field.value}
+          onChange={field.onChange}
+        >
+          {'I accept the'}
+          <Button
+            as={NextLink}
+            href={'/risks'}
+            target="_blank"
+            variant="link"
+            textColor="font.link"
+            px="0.3em"
+          >
+            Risks
+          </Button>
+          {'and'}
+          <Button
+            as={NextLink}
+            href={'/terms-of-use'}
+            target="_blank"
+            variant="link"
+            textColor="font.link"
+            px="0.3em"
+          >
+            Terms of Use
+          </Button>
+          {'for creating and LBP.'}
+        </Checkbox>
+      )}
+      rules={{ required: 'Conditions must be accepted' }}
+    />
   )
 }

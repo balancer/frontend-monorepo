@@ -24,17 +24,13 @@ export function VeBalPotentialBar() {
   if (isZero(maxAmount)) return null
 
   function formatPercentage(value: number): string {
-    if (value < 10) {
-      return value.toFixed(2)
-    } else {
-      return Math.round(value).toString()
-    }
+    return value.toFixed(2)
   }
 
   return (
     <VStack spacing="xs" w="full">
       <Flex justifyContent="space-between" w="full">
-        <Heading as="h3" pb="0.5" size="md" variant="special">
+        <Heading as="h3" pb="0.5" size="h4" variant="special">
           Max lock percentage
         </Heading>
         <Heading as="h3" size="md" variant="special">

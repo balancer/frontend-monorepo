@@ -18,10 +18,11 @@ type Props = {
   endTime: string
   startWeight: number
   endWeight: number
-  launchTokenSeed: number
   launchTokenSymbol: string
+  launchTokenSeed: number
   collateralTokenSeed: number
   collateralTokenPrice: number
+  onPriceChange: (prices: number[][]) => void
 }
 
 export function ProjectedPrice({
@@ -29,10 +30,11 @@ export function ProjectedPrice({
   endTime,
   startWeight,
   endWeight,
-  launchTokenSeed,
   launchTokenSymbol,
+  launchTokenSeed,
   collateralTokenSeed,
   collateralTokenPrice,
+  onPriceChange,
 }: Props) {
   const [maxPrice, setMaxPrice] = useState('')
   const updateMaxPrice = (prices: number[][]) => {
@@ -67,7 +69,10 @@ export function ProjectedPrice({
           launchTokenSeed={launchTokenSeed}
           collateralTokenSeed={collateralTokenSeed}
           collateralTokenPrice={collateralTokenPrice}
-          onPriceChange={updateMaxPrice}
+          onPriceChange={prices => {
+            updateMaxPrice(prices)
+            onPriceChange(prices)
+          }}
         />
 
         <Divider />

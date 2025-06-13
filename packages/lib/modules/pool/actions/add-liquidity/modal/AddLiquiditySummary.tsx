@@ -2,7 +2,7 @@
 
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Button, Text, useDisclosure } from '@chakra-ui/react'
+import { Card, VStack, Button, Text } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -14,11 +14,11 @@ import { AddLiquidityReceiptResult } from '@repo/lib/modules/transactions/transa
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 import { StakingOptions } from './StakingOptions'
 import { isVebalPool } from '../../../pool.helpers'
-import { VebalRedirectModal } from '@repo/lib/modules/vebal/VebalRedirectModal'
 
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
 import { useMemo } from 'react'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
+import { useRouter } from 'next/navigation'
 
 export function AddLiquiditySummary({
   isLoading: isLoadingReceipt,
@@ -40,7 +40,7 @@ export function AddLiquiditySummary({
   const { pool } = usePool()
   const { isMobile } = useBreakpoints()
   const { userAddress, isLoading: isUserAddressLoading } = useUserAccount()
-  const vebalRedirectModal = useDisclosure()
+  const router = useRouter()
 
   // Order amountsIn like the form inputs which uses the tokens array.
   const amountsIn = tokens
@@ -101,15 +101,15 @@ export function AddLiquiditySummary({
             <Card variant="modalSubSection">
               <VStack align="start" spacing="md" w="full">
                 <Text>Get extra incentives with veBAL</Text>
-                <Button onClick={vebalRedirectModal.onOpen} size="lg" variant="primary" w="full">
+                <Button
+                  onClick={() => router.push('/vebal/manage')}
+                  size="lg"
+                  variant="primary"
+                  w="full"
+                >
                   Lock to get veBAL
                 </Button>
               </VStack>
-
-              <VebalRedirectModal
-                isOpen={vebalRedirectModal.isOpen}
-                onClose={vebalRedirectModal.onClose}
-              />
             </Card>
           ) : (
             pool.staking && (

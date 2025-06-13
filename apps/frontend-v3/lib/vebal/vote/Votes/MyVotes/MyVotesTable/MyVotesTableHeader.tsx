@@ -43,7 +43,9 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
         </VStack>
       </GridItem>
       <GridItem {...cellProps}>
-        <Text fontWeight="bold">Pool name</Text>
+        <Text fontWeight="bold" pl="2px">
+          Pool name
+        </Text>
       </GridItem>
       {orderBy.map(orderByItem => (
         <SortableHeader
@@ -51,6 +53,8 @@ export function MyVotesTableHeader({ cellProps, ...rest }: Props) {
             justifySelf: 'end',
             textAlign: 'right',
             ...cellProps,
+            position: 'relative',
+            right: '-8px',
           }}
           isSorted={sortingBy === orderByItem}
           key={orderByItem}

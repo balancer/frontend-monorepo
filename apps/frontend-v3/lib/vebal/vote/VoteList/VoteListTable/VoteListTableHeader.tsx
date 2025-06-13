@@ -31,15 +31,23 @@ export function VoteListTableHeader({ ...rest }) {
         </VStack>
       </GridItem>
       <GridItem>
-        <Text fontWeight="bold">Pool name</Text>
+        <Text fontWeight="bold" pl="2px">
+          Pool name
+        </Text>
       </GridItem>
       {orderBy.map(orderByItem => (
         <GridItem
           justifySelf={orderByItem === 'type' ? 'start' : 'end'}
+          position="relative"
+          left={orderByItem === 'type' ? '-16px' : '0'}
           key={orderByItem}
           maxW="maxContent"
         >
           <SortableHeader
+            containerProps={{
+              position: 'relative',
+              right: '-10px',
+            }}
             isSorted={sortVotesBy === orderByItem}
             label={orderByHash[orderByItem].label}
             onSort={() => handleSort(orderByItem)}

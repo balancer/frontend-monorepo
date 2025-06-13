@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react'
 import { useTokenBalances } from '../TokenBalancesProvider'
 import { useTokenInputsValidation } from '../TokenInputsValidationProvider'
 import { Address } from 'viem'
-import { ApiToken } from '../token.types'
+import { ApiToken, CustomToken } from '../token.types'
 
 export function overflowProtected(value: Numberish, decimalLimit: number): string {
   const stringValue = value.toString()
@@ -16,7 +16,7 @@ export function overflowProtected(value: Numberish, decimalLimit: number): strin
 }
 
 type Params = {
-  token: ApiToken | undefined
+  token: ApiToken | CustomToken | undefined
   disableBalanceValidation?: boolean
   onChange?: (event: { currentTarget: { value: string } }) => void
 }
