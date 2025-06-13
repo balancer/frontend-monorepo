@@ -7,8 +7,8 @@ import {
   Button,
   Text,
   Icon,
-  useTheme,
   Portal,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { TooltipAprItem } from './TooltipAprItem'
 import BigNumber from 'bignumber.js'
@@ -30,9 +30,16 @@ const basePopoverAprItemProps = {
 const defaultDisplayValueFormatter = (value: BigNumber) => fNum('apr', value.toString())
 
 function AuraAprTooltip({ auraApr }: Props) {
-  const theme = useTheme()
-
   const usedDisplayValueFormatter = defaultDisplayValueFormatter
+
+  const auraGradFrom = useColorModeValue(
+    '#9357FF', // light from
+    '#9357FF' // dark from
+  )
+  const auraGradTo = useColorModeValue(
+    '#D399FF', // light to
+    '#E9CCFF' // dark to
+  )
 
   const popoverContent = (
     <PopoverContent minWidth={['100px', '300px']} p="0" shadow="3xl" w="fit-content">
@@ -76,8 +83,9 @@ function AuraAprTooltip({ auraApr }: Props) {
                   </Text>
                   <Icon
                     as={StarsIcon}
-                    gradFrom={isOpen ? 'green' : theme.colors.sparkles.default.from}
-                    gradTo={isOpen ? 'green' : theme.colors.sparkles.default.to}
+                    gradFrom={isOpen ? 'green' : auraGradFrom}
+                    gradTo={isOpen ? 'green' : auraGradTo}
+                    variant="gradient"
                   />
                 </HStack>
               </Button>

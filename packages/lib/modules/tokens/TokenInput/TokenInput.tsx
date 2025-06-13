@@ -142,6 +142,7 @@ function TokenInputFooter({
           color={showPriceImpact ? priceImpactColor : 'font.secondary'}
           fontSize="sm"
           variant="secondary"
+          opacity={!priceMessage && usdValue === '0' ? 0.5 : 1}
         >
           {priceMessage ? priceMessage : toCurrency(usdValue, { abbreviated: false })}
           {showPriceImpact && priceImpactLevel !== 'unknown' && getPriceImpactLabel(priceImpact)}
@@ -156,6 +157,7 @@ function TokenInputFooter({
           cursor={noBalance || _isNativeAsset ? 'default' : 'pointer'}
           onClick={handleBalanceClick}
           title="Use wallet balance"
+          gap="xs"
         >
           {hasError && (
             <Text color="inherit" fontSize="sm">
