@@ -12,7 +12,7 @@ import { useGetUserWithdraws, UserWithdraw } from '../hooks/useGetUserWithdraws'
 import { useGetUserNumWithdraws } from '../hooks/useGetUserNumWithdraws'
 
 export function LstWithdraw() {
-  const { stakedAsset, pagination, setPagination, first, skip, chain, isWithdrawTab } = useLst()
+  const { nativeAsset, pagination, setPagination, first, skip, chain, isWithdrawTab } = useLst()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { userNumWithdraws, isLoading: isUserNumWithdrawsLoading } = useGetUserNumWithdraws(
@@ -69,7 +69,7 @@ export function LstWithdraw() {
             withdrawal={item}
             {...rowProps}
             onOpen={onOpen}
-            token={stakedAsset}
+            token={nativeAsset}
           />
         )}
         showPagination={showPagination}

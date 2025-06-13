@@ -140,6 +140,10 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       poolTokens {
         ...PoolTokens
       }
+      projectToken
+      projectTokenEndWeight
+      projectTokenStartWeight
+      reserveToken
       startTime
     }
     ... on GqlPoolGyro {

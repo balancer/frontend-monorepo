@@ -6,9 +6,14 @@ import { Address } from 'viem'
 import { formatDateTimeShort } from '@repo/lib/shared/utils/time'
 import { ArrowRight } from 'react-feather'
 import { ReactNode } from 'react'
+import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { useLbpCreation } from '../LbpCreationProvider'
 
 export function LbpSummary() {
   const { saleStructureForm, saleMarketCap } = useLbpForm()
+  const { transactionSteps } = useLbpCreation()
+  const { isMobile } = useBreakpoints()
   const {
     collateralTokenAddress,
     collateralTokenAmount,
@@ -23,7 +28,7 @@ export function LbpSummary() {
 
   return (
     <AnimateHeightChange spacing="sm" w="full">
-      {/* {isMobile && <MobileStepTracker chain={selectedChain} transactionSteps={transactionSteps} />} */}
+      {isMobile && <MobileStepTracker chain={selectedChain} transactionSteps={transactionSteps} />}
 
       <Card variant="modalSubSection">
         <VStack align="start">

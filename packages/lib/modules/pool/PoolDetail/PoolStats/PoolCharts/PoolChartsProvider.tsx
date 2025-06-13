@@ -461,6 +461,12 @@ export function usePoolChartsLogic() {
         },
       },
     },
+    // Does not matter, the price chart for LBPs is created on ProjectedPrice.tsx
+    [PoolChartTab.PRICE]: {
+      type: 'line',
+      color: defaultTheme.colors.yellow[400],
+      hoverColor: defaultTheme.colors.pink[500],
+    },
   }
 
   const options = useMemo(() => {

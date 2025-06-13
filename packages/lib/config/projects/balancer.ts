@@ -52,7 +52,7 @@ export const ProjectConfigBalancer: ProjectConfig = {
     isOnSafeAppList: true,
   },
   links: {
-    appLinks: [],
+    appLinks: [{ href: '/vebal', label: 'veBAL' }],
     ecosystemLinks: [
       { label: 'Build', href: 'https://balancer.fi/build' },
       { label: 'Blog', href: 'https://medium.com/balancer-protocol' },

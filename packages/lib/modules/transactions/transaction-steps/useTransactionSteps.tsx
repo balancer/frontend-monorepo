@@ -40,6 +40,9 @@ export function useTransactionSteps(steps: TransactionStep[] = [], isLoading = f
   function resetTransactionSteps() {
     setCurrentStepIndex(0)
     setOnSuccessCalled({})
+    steps.forEach(step => {
+      if (step.transaction) resetTransaction(step.transaction)
+    })
   }
 
   // Trigger side effects on transaction completion. The step itself decides

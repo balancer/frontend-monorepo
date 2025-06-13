@@ -12,7 +12,7 @@ import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-error
 import { useLbpForm } from '../LbpFormProvider'
 import { DisabledTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionStepButton'
 import { useCreatePoolBuildCall } from '@repo/lib/modules/pool/actions/create/useCreatePoolBuildCall'
-import { parseUnits } from 'viem'
+import { parseUnits, Address } from 'viem'
 import { PoolType, type CreatePoolLiquidityBootstrappingInput } from '@balancer/sdk'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { usePoolCreationReceipt } from '@repo/lib/modules/transactions/transaction-steps/receipts/receipt.hooks'
@@ -51,7 +51,7 @@ export function useCreateLbpStep(): TransactionStep {
     userActions,
   } = saleStructureForm.watch()
 
-  const { name } = projectInfoForm.watch()
+  const { name, owner } = projectInfoForm.watch()
 
   const receiptProps = usePoolCreationReceipt({
     txHash: transaction?.execution?.data,
@@ -79,28 +79,43 @@ export function useCreateLbpStep(): TransactionStep {
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress, selectedChain)
   const { symbol: collateralTokenSymbol } = useTokenMetadata(collateralTokenAddress, selectedChain)
 
-  const createPoolInput = {
-    protocolVersion: 3 as const,
-    poolType: PoolType.LiquidityBootstrapping,
-    symbol: `${launchTokenSymbol}-${collateralTokenSymbol}-LBP`,
-    name: `${name} Liquidity Bootstrapping Pool`,
-    swapFeePercentage: parseUnits('0.01', 18),
-    chainId,
-    lbpParams: {
-      owner: userAddress,
-      blockProjectTokenSwapsIn,
-      projectToken: launchTokenAddress as `0x${string}`,
-      reserveToken: collateralTokenAddress as `0x${string}`,
-      projectTokenStartWeight: parseUnits(((projectTokenStartWeight || 0) / 100).toString(), 18),
-      reserveTokenStartWeight: parseUnits(((reserveTokenStartWeight || 0) / 100).toString(), 18),
-      projectTokenEndWeight: parseUnits(((projectTokenEndWeight || 0) / 100).toString(), 18),
-      reserveTokenEndWeight: parseUnits(((reserveTokenEndWeight || 0) / 100).toString(), 18),
-      startTime: BigInt(Math.floor(new Date(startTime || Date.now()).getTime() / 1000)),
-      endTime: BigInt(
-        Math.floor(new Date(endTime || Date.now() + 1000 * 60 * 60 * 24).getTime() / 1000)
-      ), // added day because sentry capture query error if default start / end at same time
-    },
-  }
+  const hasRequiredValues =
+    launchTokenSymbol &&
+    collateralTokenSymbol &&
+    name &&
+    chainId &&
+    userAddress &&
+    launchTokenAddress &&
+    collateralTokenAddress &&
+    projectTokenStartWeight &&
+    reserveTokenStartWeight &&
+    projectTokenEndWeight &&
+    reserveTokenEndWeight &&
+    startTime &&
+    endTime
+
+  const createPoolInput = hasRequiredValues
+    ? {
+        protocolVersion: 3 as const,
+        poolType: PoolType.LiquidityBootstrapping,
+        symbol: `${launchTokenSymbol}-${collateralTokenSymbol}-LBP`,
+        name: `${name} Liquidity Bootstrapping Pool`,
+        swapFeePercentage: parseUnits('0.01', 18), // TODO: confirm default value
+        chainId,
+        lbpParams: {
+          owner: owner || userAddress,
+          blockProjectTokenSwapsIn,
+          projectToken: launchTokenAddress as Address,
+          reserveToken: collateralTokenAddress as Address,
+          projectTokenStartWeight: parseUnits(`${projectTokenStartWeight / 100}`, 18),
+          reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight / 100}`, 18),
+          projectTokenEndWeight: parseUnits(`${projectTokenEndWeight / 100}`, 18),
+          reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight / 100}`, 18),
+          startTime: BigInt(Math.floor(new Date(startTime).getTime() / 1000)),
+          endTime: BigInt(Math.floor(new Date(endTime).getTime() / 1000)),
+        },
+      }
+    : undefined
 
   const buildCallDataQuery = useCreatePoolBuildCall({
     createPoolInput: createPoolInput as CreatePoolLiquidityBootstrappingInput,

@@ -86,6 +86,17 @@ function NavLinks({
           <Box as={motion.div} variants={fadeIn}>
             <Link
               as={NextLink}
+              color={linkColorFor('/lbp/create')}
+              href="/lbp/create"
+              prefetch
+              variant="nav"
+            >
+              LBP
+            </Link>
+          </Box>
+          <Box as={motion.div} variants={fadeIn}>
+            <Link
+              as={NextLink}
               color={linkColorFor('/debug/pools')}
               href="/debug/pools"
               prefetch

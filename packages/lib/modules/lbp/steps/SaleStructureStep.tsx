@@ -54,11 +54,11 @@ export function SaleStructureStep() {
       watch,
       setValue,
       trigger,
-      reset,
     },
     projectInfoForm,
     setActiveStep,
     activeStepIndex,
+    resetLbpCreation,
   } = useLbpForm()
   const saleStructureData = watch()
 
@@ -88,7 +88,7 @@ export function SaleStructureStep() {
   }
 
   return (
-    <TokenBalancesProvider initTokens={tokens}>
+    <TokenBalancesProvider extTokens={tokens}>
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
         <VStack align="start" spacing="lg" w="full">
           <Heading color="font.maxContrast" size="md">
@@ -99,7 +99,7 @@ export function SaleStructureStep() {
             <NetworkSelectInput chains={supportedChains} control={control} />
             <LaunchTokenAddressInput
               triggerValidation={trigger}
-              resetForm={reset}
+              resetForm={resetLbpCreation}
               control={control}
               errors={errors}
               setFormValue={setValue}
@@ -129,6 +129,7 @@ export function SaleStructureStep() {
                   errors={errors}
                   label="End date and time"
                   name="endTime"
+                  min={saleStart}
                 />
                 <Text color="font.secondary" fontSize="xs">
                   {saleStart && saleEnd
@@ -311,11 +312,13 @@ function DateTimeInput({
   label,
   control,
   errors,
+  min,
 }: {
   name: keyof SaleStructureForm
   label: string
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
+  min?: string
 }) {
   const today = format(new Date(), "yyyy-MM-dd'T'HH:mm:00")
 
@@ -332,7 +335,7 @@ function DateTimeInput({
             onChange={e => field.onChange(e.target.value)}
             type="datetime-local"
             value={field.value}
-            min={today}
+            min={min || today}
           />
         )}
         rules={{
