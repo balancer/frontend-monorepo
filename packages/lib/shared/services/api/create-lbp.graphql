@@ -1,3 +1,0 @@
-mutation CreateLBP($input: CreateLBPInput!) {
-  createLBP(input: $input)
-}
