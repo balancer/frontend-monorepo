@@ -225,8 +225,8 @@ export function useReclAmmChartLogic() {
       grid: {
         left: isMobile ? '-7%' : '-3%',
         right: '1%',
-        top: isMobile ? '10%' : '15%',
-        bottom: isMobile ? '-8%' : '8%',
+        top: isMobile ? '50px' : '15%',
+        bottom: isMobile ? '-40px' : '8%',
         containLabel: true,
       },
       xAxis: {
