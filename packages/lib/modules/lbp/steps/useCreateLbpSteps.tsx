@@ -37,7 +37,7 @@ export function useCreateLbpSteps() {
   const signPermit2Step = useSignPermit2InitializeStep({ initPoolInput })
   const initLbpStep = useInitializeLbpStep({ initPoolInput })
 
-  const isSignPermit2Loading = (signPermit2Step?.details?.batchApprovalTokens?.length ?? 0) < 2
+  const isSignPermit2Loading = !signPermit2Step
   const isLoadingSteps = !initAmounts.length || isLoadingTokenApprovalSteps || isSignPermit2Loading
 
   return {
