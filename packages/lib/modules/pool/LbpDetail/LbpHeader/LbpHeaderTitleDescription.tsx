@@ -1,4 +1,4 @@
-import { HStack, VStack, Heading, Text, Button, IconButton, Link } from '@chakra-ui/react'
+import { HStack, VStack, Heading, Text, Button, IconButton, Link, Stack } from '@chakra-ui/react'
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { IconType, SocialIcon } from '@repo/lib/shared/components/navs/SocialIcon'
@@ -74,7 +74,7 @@ export function LbpHeaderTitleDescription() {
         </Text>
         <HStack spacing="ms" w={{ base: 'full', lg: 'auto' }}>
           {socialLinks.map(({ href, iconType }) => (
-            <>
+            <Stack key={href + '-' + iconType}>
               {href && (
                 <IconButton
                   aria-label={`Visit us on ${iconType}`}
@@ -83,7 +83,6 @@ export function LbpHeaderTitleDescription() {
                   href={href}
                   isExternal
                   isRound
-                  key={href + '-' + iconType}
                   rounded="full"
                   variant="tertiary"
                   size="sm"
@@ -92,7 +91,7 @@ export function LbpHeaderTitleDescription() {
                   <SocialIcon iconType={iconType} size={16} />
                 </IconButton>
               )}
-            </>
+            </Stack>
           ))}
         </HStack>
       </HStack>
