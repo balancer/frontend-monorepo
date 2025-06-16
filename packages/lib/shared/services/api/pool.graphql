@@ -141,9 +141,11 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
         ...PoolTokens
       }
       projectToken
+      projectTokenIndex
       projectTokenEndWeight
       projectTokenStartWeight
       reserveToken
+      reserveTokenIndex
       startTime
     }
     ... on GqlPoolGyro {

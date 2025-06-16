@@ -10,7 +10,11 @@ import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useMakeVarPersisted } from '@repo/lib/shared/hooks/useMakeVarPersisted'
 import { useVault } from '@repo/lib/shared/hooks/useVault'
 import { LABELS } from '@repo/lib/shared/labels'
-import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlPoolLiquidityBootstrappingV3,
+  GqlSorSwapType,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
@@ -342,9 +346,11 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   function getDefaultTokenState(chain: GqlChain) {
     const swapState = swapStateVar()
+
     const {
       tokens: { defaultSwapTokens },
     } = getNetworkConfig(chain)
+
     const { tokenIn, tokenOut } = defaultSwapTokens || {}
 
     return {
@@ -458,7 +464,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     swapAction,
     tokenInInfo,
     tokenOutInfo,
-    isPoolSwap: !!isPoolSwap,
+    isPoolSwap: !!isPoolSwap || !!isLbpSwap,
   })
 
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
@@ -515,7 +521,11 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     if (!slugChain) throw new Error(`Chain slug not found for chain ${pool.chain}`)
     setInitialChain(slugChain)
 
-    if (supportsNestedActions(pool)) {
+    if (isLbpSwap) {
+      const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+      setInitialTokenIn(lbpPool.poolTokens[lbpPool.projectTokenIndex].address)
+      setInitialTokenOut(lbpPool.poolTokens[lbpPool.reserveTokenIndex].address)
+    } else if (supportsNestedActions(pool)) {
       setInitialTokenIn(tokenIn)
       if (isStandardOrUnderlyingRootToken(pool, tokenIn as Address)) {
         setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
@@ -527,6 +537,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       setInitialTokenIn(poolActionableTokens?.[0]?.address)
       setInitialTokenOut(poolActionableTokens?.[1]?.address)
     }
+
     resetSwapAmounts()
   }
 
