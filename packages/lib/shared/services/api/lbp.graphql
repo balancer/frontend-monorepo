@@ -9,7 +9,6 @@ query GetLbpPriceInfo(
   prices: lbpPriceChart(
     chain: $chain,
     id: $poolId,
-    interval: 3600
   ) {
     intervalTimestamp
     projectTokenPrice # in reserve token
