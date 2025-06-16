@@ -523,8 +523,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
     if (isLbpSwap) {
       const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
-      setInitialTokenIn(lbpPool.poolTokens[lbpPool.projectTokenIndex].address)
-      setInitialTokenOut(lbpPool.poolTokens[lbpPool.reserveTokenIndex].address)
+      setInitialTokenIn(lbpPool.poolTokens[lbpPool.reserveTokenIndex].address)
+      setInitialTokenOut(lbpPool.poolTokens[lbpPool.projectTokenIndex].address)
     } else if (supportsNestedActions(pool)) {
       setInitialTokenIn(tokenIn)
       if (isStandardOrUnderlyingRootToken(pool, tokenIn as Address)) {
