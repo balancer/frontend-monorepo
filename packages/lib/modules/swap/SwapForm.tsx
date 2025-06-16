@@ -227,7 +227,9 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                   aria-label="TokenIn"
                   chain={selectedChain}
                   onChange={e => setTokenInAmount(e.currentTarget.value as HumanAmount)}
-                  onToggleTokenClicked={() => openTokenSelectModal('tokenIn')}
+                  {...(!isLbpSwap && {
+                    onToggleTokenClicked: () => openTokenSelectModal('tokenIn'),
+                  })}
                   ref={finalRefTokenIn}
                   value={tokenIn.amount}
                 />
@@ -257,7 +259,9 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                     simulationQuery.isLoading || !simulationQuery.data || !tokenIn.amount
                   }
                   onChange={e => setTokenOutAmount(e.currentTarget.value as HumanAmount)}
-                  onToggleTokenClicked={() => openTokenSelectModal('tokenOut')}
+                  {...(!isLbpSwap && {
+                    onToggleTokenClicked: () => openTokenSelectModal('tokenOut'),
+                  })}
                   ref={finalRefTokenOut}
                   value={tokenOut.amount}
                 />
