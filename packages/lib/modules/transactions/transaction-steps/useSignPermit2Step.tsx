@@ -105,6 +105,8 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     }),
   }
 
+  console.log('details:', details)
+
   return useMemo(
     () => {
       if (!isPermit2) return

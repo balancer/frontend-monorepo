@@ -34,15 +34,21 @@ export function useSignPermit2InitializeStep({
     symbol: amount.symbol,
   }))
 
+  console.log('tokenAmountsIn', tokenAmountsIn)
+
   const signPermit2Step = useSignPermit2Step({
     chainId,
     signPermit2Fn,
     wethIsEth: wethIsEth ?? false,
     tokenAmountsIn,
     isPermit2: true,
-    isSimulationReady: true,
+    isSimulationReady:
+      tokenAmountsIn.length === 2 &&
+      tokenAmountsIn.every(amount => amount.amount > 0n && amount.address && amount.symbol),
     spender: balancerV3Contracts.Router[chainId as keyof typeof balancerV3Contracts.Router],
   })
+
+  console.log('details:', signPermit2Step?.details)
 
   return signPermit2Step
 }

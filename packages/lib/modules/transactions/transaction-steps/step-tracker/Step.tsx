@@ -19,6 +19,8 @@ export function Step(props: StepProps) {
   const shouldDisplayAsTxBatch =
     props.isTxBatch && props.step.isBatchEnd && hasSomePendingNestedTxInBatch(props.step)
 
+  console.log('details:', props.step.details) // why does this have only project token in details.batchApprovalTokens?
+
   return (
     <HStack alignItems="flex-start">
       <StepIndicator transaction={transaction} {...props} />
