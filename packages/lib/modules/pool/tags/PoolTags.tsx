@@ -8,7 +8,7 @@ import { CustomPopover } from '@repo/lib/shared/components/popover/CustomPopover
 function TagValue({ tag }: { tag: PoolTag }) {
   if (tag.value) {
     if (tag.id.includes('points') && isValidNumber(tag.value)) {
-      return <Text ml="xs" mr="xs" fontSize="xs" fontWeight="bold">{`${tag.value}x`}</Text>
+      return <Text fontSize="xs" fontWeight="bold" ml="xs" mr="xs">{`${tag.value}x`}</Text>
     }
   }
   return null
@@ -86,9 +86,9 @@ export function PoolTags() {
   const poolTags = getPoolTags(pool)
 
   return (
-    <HStack wrap="wrap" justifyContent="end" gap="6px">
+    <HStack gap="6px" justifyContent="end" wrap="wrap">
       {poolTags.map(tag => (
-        <PoolTagBadge key={tag.id} tag={tag} size={poolTags.length > 3 ? 'sm' : undefined} />
+        <PoolTagBadge key={tag.id} size={poolTags.length > 3 ? 'sm' : undefined} tag={tag} />
       ))}
     </HStack>
   )

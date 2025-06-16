@@ -47,7 +47,7 @@ export function ReviewStep() {
           <HStack spacing="5">
             <Circle bg="background.level4" color="font.secondary" shadow="lg" size={24}>
               <VStack>
-                <Image src={projectInfoData.tokenIconUrl} borderRadius="full" />
+                <Image borderRadius="full" src={projectInfoData.tokenIconUrl} />
               </VStack>
             </Circle>
             <VStack alignItems="start">
@@ -59,28 +59,28 @@ export function ReviewStep() {
           </HStack>
 
           <VStack>
-            <Text w="full" fontWeight="bold">{`Project name: ${projectInfoData.name}`}</Text>
-            <Text w="full" variant="secondary">{`Network: ${getChainName(chain)}`}</Text>
+            <Text fontWeight="bold" w="full">{`Project name: ${projectInfoData.name}`}</Text>
+            <Text variant="secondary" w="full">{`Network: ${getChainName(chain)}`}</Text>
           </VStack>
 
           <Text variant="secondary">{projectInfoData.description}</Text>
 
           <HStack spacing="4" w={{ base: 'full', lg: 'auto' }}>
             <SocialLink
-              title={projectInfoData.websiteUrl}
-              socialNetwork="website"
               href={projectInfoData.websiteUrl}
+              socialNetwork="website"
+              title={projectInfoData.websiteUrl}
             />
             <SocialLink
-              title={projectInfoData.xHandle}
-              socialNetwork="x"
               href={`https://twitter.com/${projectInfoData.xHandle}`}
+              socialNetwork="x"
+              title={projectInfoData.xHandle}
             />
             {projectInfoData.discordUrl && (
               <SocialLink
-                title={projectInfoData.discordUrl}
-                socialNetwork="discord"
                 href={projectInfoData.discordUrl}
+                socialNetwork="discord"
+                title={projectInfoData.discordUrl}
               />
             )}
           </HStack>
@@ -92,16 +92,16 @@ export function ReviewStep() {
           // FIXME: [JUANJO] use localized dates
         }
         <SimpleInfoCard
-          title="LBP start time"
           info={format(parseISO(saleStartTime), 'dd/MM/yyyy h:mmaaa')}
+          title="LBP start time"
         />
         <SimpleInfoCard
-          title="LBP end time"
           info={format(parseISO(saleEndTime), 'dd/MM/yyyy h:mmaaa')}
+          title="LBP end time"
         />
         <SimpleInfoCard
-          title="Sale period"
           info={`${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`}
+          title="Sale period"
         />
       </HStack>
 
@@ -112,17 +112,17 @@ export function ReviewStep() {
         <CardBody>
           <VStack w="full">
             <TokenInfo
-              iconURL={projectInfoData.tokenIconUrl}
-              symbol={launchTokenMetadata.symbol || ''}
-              name={launchTokenMetadata.name || ''}
               amount={Number(launchTokenSeed || 0)}
+              iconURL={projectInfoData.tokenIconUrl}
+              name={launchTokenMetadata.name || ''}
+              symbol={launchTokenMetadata.symbol || ''}
             />
 
             <TokenInfo
-              iconURL={collateralToken?.logoURI || ''}
-              symbol={collateralToken?.symbol || ''}
-              name={collateralToken?.name || ''}
               amount={Number(collateralTokenSeed || 0)}
+              iconURL={collateralToken?.logoURI || ''}
+              name={collateralToken?.name || ''}
+              symbol={collateralToken?.symbol || ''}
               value={Number(collateralTokenSeed || 0) * collateralTokenPrice}
             />
           </VStack>

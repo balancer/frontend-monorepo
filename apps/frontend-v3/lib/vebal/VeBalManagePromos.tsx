@@ -59,8 +59,8 @@ export function VeBalManagePromos() {
       <SimpleGrid
         alignItems="stretch"
         columns={{ base: 1, md: 2 }}
-        spacing={{ base: 'ms', md: 'md', lg: 'lg' }}
         mb="2xl"
+        spacing={{ base: 'ms', md: 'md', lg: 'lg' }}
         w="full"
       >
         {gridItems.map(item => (
@@ -97,8 +97,8 @@ export function VeBalManagePromos() {
                 direction="row"
                 gap={{ base: 'ms', sm: 'md', lg: 'lg' }}
                 position="relative"
-                zIndex={2}
                 w="full"
+                zIndex={2}
               >
                 <Flex
                   alignItems="center"

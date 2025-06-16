@@ -67,7 +67,7 @@ export function UserVebalStatsValues() {
           {lockedInfoIsLoading || (userStats && !userStats.lockExpired) ? (
             'Lock expiry date'
           ) : (
-            <Text as="span" fontSize="sm" color="font.error" fontWeight="bold">
+            <Text as="span" color="font.error" fontSize="sm" fontWeight="bold">
               Your lock expired on
             </Text>
           )}

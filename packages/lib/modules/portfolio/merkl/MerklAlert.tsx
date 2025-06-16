@@ -4,7 +4,7 @@ import { ArrowUpRight } from 'react-feather'
 
 export function MerklAlert() {
   return (
-    <Alert status="info" width="full" shadow="2xl">
+    <Alert shadow="2xl" status="info" width="full">
       <MerklTitle />
     </Alert>
   )
@@ -13,15 +13,15 @@ export function MerklAlert() {
 function MerklTitle() {
   return (
     <Flex
-      justify="space-between"
-      w="full"
       color="font.dark"
       direction={{ base: 'column', md: 'row' }}
       gap={{ base: 'ms', md: '0' }}
+      justify="space-between"
+      w="full"
     >
       <HStack alignItems={{ base: 'start', md: 'center' }}>
         <Box minW="24px">
-          <LightbulbIcon width="24" height="24" />
+          <LightbulbIcon height="24" width="24" />
         </Box>
         <Text color="font.dark" fontWeight="medium">
           You may have additional claimable Merkl rewards from your Balancer activity
@@ -34,19 +34,19 @@ function MerklTitle() {
           textDecoration: 'none',
         }}
         as={Link}
+        borderColor="font.dark"
+        color="font.dark"
+        cursor="pointer"
         href="https://app.merkl.xyz/"
+        ml={{ base: '32px', md: 'ms' }}
         rightIcon={<ArrowUpRight size="14" />}
+        role="group"
+        size="xs"
         target="_blank"
         variant="outline"
         width="120px"
-        color="font.dark"
-        borderColor="font.dark"
-        size="xs"
-        ml={{ base: '32px', md: 'ms' }}
-        role="group"
-        cursor="pointer"
       >
-        <Text fontSize="14px" color="font.dark" fontWeight="bold" _groupHover={{ color: 'white' }}>
+        <Text _groupHover={{ color: 'white' }} color="font.dark" fontSize="14px" fontWeight="bold">
           Learn more
         </Text>
       </Button>

@@ -78,9 +78,9 @@ function NameInput() {
           <InputWithError
             error={errors.name?.message}
             isInvalid={!!errors.name}
+            maxLength={maxLength}
             onChange={e => field.onChange(e.target.value)}
             value={field.value}
-            maxLength={maxLength}
           />
         )}
         rules={{
@@ -117,11 +117,11 @@ function DescriptionInput() {
           <TextareaWithError
             error={errors.description?.message}
             isInvalid={!!errors.description}
+            maxLength={maxLength}
             onChange={e => field.onChange(e.target.value)}
             placeholder="A brief description of your project and what the token will be used for."
-            value={field.value}
-            maxLength={maxLength}
             rows={4}
+            value={field.value}
           />
         )}
         rules={{
@@ -334,20 +334,20 @@ function Disclaimer() {
       name="disclaimerAccepted"
       render={({ field }) => (
         <Checkbox
+          checked={field.value}
           color="font.primary"
+          onChange={field.onChange}
           pl="md"
           size="lg"
-          checked={field.value}
-          onChange={field.onChange}
         >
           {'I accept the'}
           <Button
             as={NextLink}
             href={'/risks'}
-            target="_blank"
-            variant="link"
-            textColor="font.link"
             px="0.3em"
+            target="_blank"
+            textColor="font.link"
+            variant="link"
           >
             Risks
           </Button>
@@ -355,10 +355,10 @@ function Disclaimer() {
           <Button
             as={NextLink}
             href={'/terms-of-use'}
-            target="_blank"
-            variant="link"
-            textColor="font.link"
             px="0.3em"
+            target="_blank"
+            textColor="font.link"
+            variant="link"
           >
             Terms of Use
           </Button>

@@ -56,17 +56,17 @@ export function Top10Holdings({ chain }: { chain: GqlChain }) {
 
   return (
     <Card>
-      <VStack w="full" spacing="5">
+      <VStack spacing="5" w="full">
         <HStack w="full">
-          <Text fontWeight="bold" fontSize="lg">
+          <Text fontSize="lg" fontWeight="bold">
             Top 10 holdings at sale end
           </Text>
           <Spacer />
-          <Text fontWeight="bold" fontSize="lg">{`${sum.toFixed(2)}%`}</Text>
+          <Text fontSize="lg" fontWeight="bold">{`${sum.toFixed(2)}%`}</Text>
         </HStack>
         <VStack w="full">
           {holders.map(holder => (
-            <Row key={holder.address} holder={holder} chain={chain} />
+            <Row chain={chain} holder={holder} key={holder.address} />
           ))}
         </VStack>
       </VStack>
@@ -77,7 +77,7 @@ export function Top10Holdings({ chain }: { chain: GqlChain }) {
 export function Row({ holder, chain }: { holder: Holder; chain: GqlChain }) {
   return (
     <HStack w="full">
-      <EnsOrAddress userAddress={holder.address} chain={chain} />
+      <EnsOrAddress chain={chain} userAddress={holder.address} />
       <Spacer />
       <Text fontSize="md">{`${holder.percentage.toFixed(2)}%`}</Text>
     </HStack>

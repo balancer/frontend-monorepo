@@ -88,22 +88,22 @@ export function WeightAdjustmentTypeInput({
       />
 
       {weightAdjustment === 'custom' && (
-        <Stack w="full" mt="md">
+        <Stack mt="md" w="full">
           <WeightSlider
-            name="customStartWeight"
-            title="Starting weights"
-            launchTokenSymbol={launchTokenSymbol}
             collateralTokenSymbol={collateralTokenSymbol}
             customWeight={customStartWeight}
+            launchTokenSymbol={launchTokenSymbol}
+            name="customStartWeight"
             setValue={setValue}
+            title="Starting weights"
           />
           <WeightSlider
-            name="customEndWeight"
-            title="Ending weights"
-            launchTokenSymbol={launchTokenSymbol}
             collateralTokenSymbol={collateralTokenSymbol}
             customWeight={customEndWeight}
+            launchTokenSymbol={launchTokenSymbol}
+            name="customEndWeight"
             setValue={setValue}
+            title="Ending weights"
           />
         </Stack>
       )}
@@ -148,12 +148,12 @@ function WeightSlider({
         </HStack>
         <SliderWithSteps
           aria-label="weights-slider"
+          max={99}
+          min={1}
           onChange={value => setValue(name, value)}
           steps={[10, 20, 30, 40, 50, 60, 70, 80, 90]}
           value={customWeight}
           variant="lock"
-          min={1}
-          max={99}
         />
       </Box>
     </VStack>

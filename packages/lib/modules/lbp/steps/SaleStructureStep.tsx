@@ -98,14 +98,14 @@ export function SaleStructureStep() {
           <VStack align="start" spacing="md" w="full">
             <NetworkSelectInput chains={supportedChains} control={control} />
             <LaunchTokenAddressInput
-              triggerValidation={trigger}
-              resetForm={resetLbpCreation}
+              chainId={selectedChain}
               control={control}
               errors={errors}
-              setFormValue={setValue}
-              value={launchTokenAddress}
               metadata={launchTokenMetadata}
-              chainId={selectedChain}
+              resetForm={resetLbpCreation}
+              setFormValue={setValue}
+              triggerValidation={trigger}
+              value={launchTokenAddress}
             />
           </VStack>
 
@@ -128,8 +128,8 @@ export function SaleStructureStep() {
                   control={control}
                   errors={errors}
                   label="End date and time"
-                  name="endTime"
                   min={saleStart}
+                  name="endTime"
                 />
                 <Text color="font.secondary" fontSize="xs">
                   {saleStart && saleEnd
@@ -145,11 +145,11 @@ export function SaleStructureStep() {
               </Heading>
               <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
               <WeightAdjustmentTypeInput
+                collateralTokenSymbol={collateralToken?.symbol || ''}
                 control={control}
                 launchTokenSymbol={launchTokenMetadata.symbol || ''}
-                collateralTokenSymbol={collateralToken?.symbol || ''}
-                watch={watch}
                 setValue={setValue}
+                watch={watch}
               />
               <UserActionsInput control={control} />
 
@@ -170,19 +170,19 @@ export function SaleStructureStep() {
                 <PriceImpactProvider>
                   <SaleTokenAmountInput
                     control={control}
-                    launchTokenAddress={launchTokenAddress}
-                    selectedChain={selectedChain}
                     customIcon={projectInfoForm.watch('tokenIconUrl')}
-                    metadata={launchTokenMetadata}
                     errors={errors}
+                    launchTokenAddress={launchTokenAddress}
+                    metadata={launchTokenMetadata}
+                    selectedChain={selectedChain}
                   />
 
                   <CollateralTokenAmountInput
+                    collateralTokenAddress={collateralTokenAddress}
+                    collateralTokenSymbol={collateralToken?.symbol || ''}
                     control={control}
                     errors={errors}
-                    collateralTokenAddress={collateralTokenAddress}
                     selectedChain={selectedChain}
-                    collateralTokenSymbol={collateralToken?.symbol || ''}
                   />
                 </PriceImpactProvider>
               </TokenInputsValidationProvider>
@@ -262,8 +262,8 @@ function LaunchTokenAddressInput({
           name="launchTokenAddress"
           render={({ field }) => (
             <InputWithError
-              isDisabled={locked}
               error={errors.launchTokenAddress?.message}
+              isDisabled={locked}
               isInvalid={!!errors.launchTokenAddress}
               onChange={e => field.onChange(e.target.value)}
               placeholder="Enter token address"
@@ -286,19 +286,19 @@ function LaunchTokenAddressInput({
         <InputRightElement>
           {!locked ? (
             <IconButton
-              size="xs"
-              variant="link"
               aria-label="paste"
               icon={<Clipboard />}
               onClick={paste}
+              size="xs"
+              variant="link"
             />
           ) : (
             <IconButton
-              size="xs"
-              variant="link"
               aria-label="edit"
               icon={<Edit />}
               onClick={() => resetForm()}
+              size="xs"
+              variant="link"
             />
           )}
         </InputRightElement>
@@ -332,10 +332,10 @@ function DateTimeInput({
           <InputWithError
             error={errors[field.name]?.message}
             isInvalid={!!errors[field.name]}
+            min={min || today}
             onChange={e => field.onChange(e.target.value)}
             type="datetime-local"
             value={field.value}
-            min={min || today}
           />
         )}
         rules={{
@@ -447,11 +447,11 @@ function SaleTokenAmountInput({
         render={({ field }) => (
           <TokenInput
             address={launchTokenAddress}
+            apiToken={customToken}
             chain={selectedChain}
             onChange={e => field.onChange(e.currentTarget.value)}
-            value={field.value}
             priceMessage="Price: N/A"
-            apiToken={customToken}
+            value={field.value}
           />
         )}
         rules={{

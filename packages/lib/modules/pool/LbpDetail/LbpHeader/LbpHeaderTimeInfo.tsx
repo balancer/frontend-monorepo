@@ -22,13 +22,13 @@ function TimeElement({ title, value }: { title: string; value: string }) {
       </Text>
       <Text
         color="font.primary"
+        fontFamily="monospace"
         fontSize="18px"
         fontWeight="500"
-        lineHeight="20px"
-        fontFamily="monospace"
         letterSpacing="0.1em"
-        textAlign="center"
+        lineHeight="20px"
         pl="2px"
+        textAlign="center"
       >
         {value}
       </Text>
@@ -39,14 +39,14 @@ function TimeElement({ title, value }: { title: string; value: string }) {
 function Tile({ children }: PropsWithChildren) {
   return (
     <VStack
+      alignItems="center"
+      justifyContent="center"
+      minH="100%"
       position="relative"
       px="sm"
       rounded="lg"
       shadow="2xl"
       spacing="none"
-      alignItems="center"
-      justifyContent="center"
-      minH="100%"
     >
       <Box
         h="full"
@@ -96,18 +96,18 @@ export function LbpHeaderTimeInfo() {
   return (
     <>
       {isBefore(currentTime, secondsToMilliseconds(lbpPool.startTime)) ? (
-        <HStack w="full" spacing="4">
+        <HStack spacing="4" w="full">
           <HStack
+            alignItems="center"
+            backgroundColor="special"
+            borderColor="special"
+            borderRadius="sm"
+            borderStyle="dashed"
+            borderWidth="1px"
+            color="special"
             flex="1"
             h="full"
             justifyContent="start"
-            alignItems="center"
-            borderRadius="sm"
-            borderStyle="dashed"
-            borderColor="special"
-            borderWidth="1px"
-            backgroundColor="special"
-            color="special"
             px="2"
           >
             <Icon as={Clock} fontVariant="special" />
@@ -118,29 +118,29 @@ export function LbpHeaderTimeInfo() {
         </HStack>
       ) : isAfter(currentTime, secondsToMilliseconds(lbpPool.endTime)) ? (
         <HStack
-          flex="1"
-          h="full"
-          w="full"
-          justifyContent="start"
           alignItems="center"
           bg="red.400"
           borderRadius="sm"
           color="black"
+          flex="1"
+          h="full"
+          justifyContent="start"
           px="2"
+          w="full"
         >
           <Icon as={AlertTriangle} />
           <Text color="black">{`LBP ended ${endTimeFormatted}`}</Text>
         </HStack>
       ) : (
-        <HStack w="full" spacing="4">
+        <HStack spacing="4" w="full">
           <HStack
-            flex="1"
-            h="full"
-            justifyContent="start"
             alignItems="center"
             bg="green.400"
             borderRadius="sm"
             color="black"
+            flex="1"
+            h="full"
+            justifyContent="start"
             px="2"
           >
             <Icon as={Clock} />
@@ -158,7 +158,7 @@ function Countdown({ until }: { until: Date }) {
   const info = useDateCountdown(until)
 
   return (
-    <HStack spacing="xs" h="48px" flexShrink="0">
+    <HStack flexShrink="0" h="48px" spacing="xs">
       <Tile>
         <TimeElement title="D" value={String(info.daysDiff)} />
       </Tile>

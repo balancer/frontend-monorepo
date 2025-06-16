@@ -56,7 +56,7 @@ export function MyVotesStatsCard({
   return (
     <Card h="full" w="full" {...cardProps}>
       <VStack align="start" h="full" justifyContent="space-between" spacing="ms" w="full">
-        <Box as="span" fontSize="sm" color="font.secondary" fontWeight="medium">
+        <Box as="span" color="font.secondary" fontSize="sm" fontWeight="medium">
           {headerText}
         </Box>
         <HStack

@@ -143,8 +143,8 @@ export function useCreateLbpStep(): TransactionStep {
             gasEstimationMeta={gasEstimationMeta}
             id={createLbpStepId}
             labels={labels}
-            txConfig={buildCallDataQuery.data}
             onTransactionChange={setTransaction}
+            txConfig={buildCallDataQuery.data}
           />
         )
       },

@@ -38,15 +38,15 @@ export function LbpPriceChart() {
     <VStack>
       <Stack w="full">
         <ProjectedPriceChart
-          startWeight={startWeight}
-          endWeight={endWeight}
-          startDate={startTime}
-          endDate={endTime}
-          launchTokenSeed={launchTokenSeed}
-          collateralTokenSeed={collateralTokenSeed}
           collateralTokenPrice={priceFor(lbpPool.reserveToken, lbpPool.chain)}
-          onPriceChange={() => {}}
+          collateralTokenSeed={collateralTokenSeed}
           cutTime={now}
+          endDate={endTime}
+          endWeight={endWeight}
+          launchTokenSeed={launchTokenSeed}
+          onPriceChange={() => {}}
+          startDate={startTime}
+          startWeight={startWeight}
         />
       </Stack>
 
@@ -81,7 +81,7 @@ export function LbpPriceChart() {
 
 export function PriceInfo() {
   return (
-    <VStack spacing="0.5" alignItems="end">
+    <VStack alignItems="end" spacing="0.5">
       <Text fontSize="24px" fontWeight="bold">
         $?.??
       </Text>

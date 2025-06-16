@@ -29,7 +29,7 @@ export function LbpDetail() {
       <LbpHeader />
       <DefaultPageContainer noVerticalPadding pb="xl" pt={['lg', '40px']}>
         <VStack spacing="2xl" w="full">
-          <Grid templateColumns={{ base: '1fr', md: '2fr 1fr' }} gap="4" w="full">
+          <Grid gap="4" templateColumns={{ base: '1fr', md: '2fr 1fr' }} w="full">
             <GridItem>
               <LbpPoolChartsContainer />
             </GridItem>

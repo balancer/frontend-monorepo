@@ -38,9 +38,9 @@ export const TextShine: React.FC<TextShineProps> = ({
   return (
     <Box
       as="span"
+      className={className}
       color={color}
       fontSize={fontSize}
-      className={className}
       sx={{
         display: 'inline-flex',
         animation: `${shineAnimation} ${animationDuration} ${animationDelay} ${animationTimingFunction} ${animationIterationCount} ${animationFillMode}`,

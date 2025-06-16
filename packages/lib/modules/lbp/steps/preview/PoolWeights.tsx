@@ -50,10 +50,10 @@ export function PoolWeights({
       </CardHeader>
       <CardBody>
         <WeightsChart
-          startWeight={startWeight}
+          endDate={parseISO(endTime)}
           endWeight={endWeight}
           startDate={parseISO(startTime)}
-          endDate={parseISO(endTime)}
+          startWeight={startWeight}
         />
 
         <Divider />

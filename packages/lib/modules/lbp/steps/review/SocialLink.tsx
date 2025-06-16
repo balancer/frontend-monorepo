@@ -13,18 +13,18 @@ export function SocialLink({
   const icon = (
     <Circle
       bg="background.level4"
+      boxShadow="var(--chakra-shadows-xl)"
+      color="font.primary"
       key={href}
       rounded="full"
       size="8"
-      color="font.primary"
-      boxShadow="var(--chakra-shadows-xl)"
     >
       <SocialIcon iconType={socialNetwork} size={16} />
     </Circle>
   )
 
   return (
-    <Button leftIcon={icon} as={Link} href={href} isExternal>
+    <Button as={Link} href={href} isExternal leftIcon={icon}>
       <Text color="font.secondary">{title}</Text>
     </Button>
   )

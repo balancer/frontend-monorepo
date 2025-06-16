@@ -52,12 +52,12 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
                   <Circle
                     bg="background.level4"
                     color="font.secondary"
+                    role="button"
                     shadow="lg"
                     size={24}
-                    role="button"
                   >
                     <VStack>
-                      {tokenIconURL ? <Image src={tokenIconURL} borderRadius="full" /> : <Plus />}
+                      {tokenIconURL ? <Image borderRadius="full" src={tokenIconURL} /> : <Plus />}
                     </VStack>
                   </Circle>
                 </PopoverTrigger>

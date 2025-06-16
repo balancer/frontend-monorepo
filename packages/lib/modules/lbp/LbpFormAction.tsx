@@ -50,6 +50,6 @@ export function LbpFormAction({ disabled }: { disabled?: boolean }) {
       />
     </HStack>
   ) : (
-    <ConnectWallet w="full" variant="primary" />
+    <ConnectWallet variant="primary" w="full" />
   )
 }

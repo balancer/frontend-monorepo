@@ -559,8 +559,8 @@ export function PoolListFilters() {
                         </Heading>
                         <PoolNetworkFilters
                           setNetworks={setNetworks}
-                          toggleNetwork={toggleNetwork}
                           toggledNetworks={toggledNetworks}
+                          toggleNetwork={toggleNetwork}
                         />
                       </Box>
                       {!isCowPath && (

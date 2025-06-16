@@ -178,7 +178,7 @@ export function ProjectedPriceChart({
   return enoughData ? (
     <ReactECharts option={chartInfo} style={{ height: '280px', width: '100%' }} />
   ) : (
-    <Stack h="350px" alignItems="center" justifyContent="center">
+    <Stack alignItems="center" h="350px" justifyContent="center">
       <Text fontSize="3xl">Missing data</Text>
     </Stack>
   )

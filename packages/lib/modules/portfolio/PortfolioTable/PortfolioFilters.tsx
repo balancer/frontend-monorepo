@@ -326,8 +326,8 @@ export function PortfolioFilters({
                           <PortfolioNetworkFilters
                             networks={availableNetworks}
                             setNetworks={setSelectedNetworks}
-                            toggleNetwork={toggleNetwork}
                             toggledNetworks={effectiveSelectedNetworks}
+                            toggleNetwork={toggleNetwork}
                           />
                         </Box>
                       )}

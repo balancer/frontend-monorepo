@@ -45,8 +45,8 @@ export function LbpHeaderStats() {
       direction="row"
       flexWrap="wrap"
       gap={{ base: 'sm', lg: 'ms' }}
-      mt="3"
       justify="space-between"
+      mt="3"
     >
       {stats.map((stat, index) => (
         <Box key={index}>

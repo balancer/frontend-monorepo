@@ -76,8 +76,8 @@ export function useRemoveLiquidityStep(params: RemoveLiquidityStepParams): Trans
             gasEstimationMeta={gasEstimationMeta}
             id={removeLiquidityStepId}
             labels={labels}
-            txConfig={buildCallDataQuery.data}
             onTransactionChange={setTransaction}
+            txConfig={buildCallDataQuery.data}
           />
         )
       },

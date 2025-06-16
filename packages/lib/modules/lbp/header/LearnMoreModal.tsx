@@ -64,8 +64,8 @@ export function LearnMoreModal({ isOpen = false, onClose = () => {} }: UseDisclo
                 href="https://docs.balancer.fi/concepts/explore-available-balancer-pools/liquidity-bootstrapping-pool.html"
                 minWidth={{ base: '94px', md: '110px' }}
                 size="md"
-                variant="secondary"
                 target="_blank"
+                variant="secondary"
               >
                 View LBP docs
                 <ArrowUpRight size={14} />
@@ -76,8 +76,8 @@ export function LearnMoreModal({ isOpen = false, onClose = () => {} }: UseDisclo
                 href={getDiscordLink() || ''}
                 minWidth={{ base: '94px', md: '110px' }}
                 size="md"
-                variant="tertiary"
                 target="_blank"
+                variant="tertiary"
               >
                 Get help on Discord
                 <ArrowUpRight size={14} />

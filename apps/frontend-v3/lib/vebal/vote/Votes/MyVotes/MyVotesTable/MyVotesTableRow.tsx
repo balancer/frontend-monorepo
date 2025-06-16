@@ -124,7 +124,7 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
             <NetworkIcon chain={vote.chain} size={6} />
           </GridItem>
           <GridItem {...cellProps}>
-            <Link href={getPoolPath(vote)} target="_blank" className="group">
+            <Link className="group" href={getPoolPath(vote)} target="_blank">
               <HStack>
                 <VotingListTokenPills
                   h={['32px', '36px']}
@@ -135,9 +135,9 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
                 />
                 {isGaugeExpired && <VoteExpiredTooltip usePortal />}
                 <Box
+                  _groupHover={{ color: 'font.highlight', transform: 'rotate(45deg)' }}
                   color="font.secondary"
                   transform="rotate(90deg)"
-                  _groupHover={{ color: 'font.highlight', transform: 'rotate(45deg)' }}
                   transition="all 0.2s var(--ease-out-cubic)"
                 >
                   <ArrowUpIcon />
@@ -201,16 +201,16 @@ export function MyVotesTableRow({ vote, totalVotes, keyValue, cellProps, ...rest
                 label="You have an existing vote, so this row cannot be removed from the table. Set it to 0% to reallocate your vote."
               >
                 <IconButton
-                  aria-label="Remove"
-                  icon={<Trash2 height="20px" />}
-                  isDisabled={!removable}
-                  onClick={onRemove}
-                  variant="ghost"
-                  color={fontSecondary}
                   _hover={{
                     bg: 'red.500',
                     color: 'white',
                   }}
+                  aria-label="Remove"
+                  color={fontSecondary}
+                  icon={<Trash2 height="20px" />}
+                  isDisabled={!removable}
+                  onClick={onRemove}
+                  variant="ghost"
                 />
               </Tooltip>
             </VStack>

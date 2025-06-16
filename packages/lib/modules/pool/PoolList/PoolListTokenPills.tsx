@@ -86,18 +86,18 @@ function WeightedTokenPills({
                   <HStack gap={['xs', '1.5']}>
                     {tokens.length < 5 && (
                       <Text
+                        _groupHover={{ color: 'font.maxContrast' }}
                         fontWeight="bold"
                         noOfLines={1}
                         size={nameSize}
-                        _groupHover={{ color: 'font.maxContrast' }}
                         transition="color 0.2s var(--ease-out-cubic)"
                       >
                         {token.symbol}
                       </Text>
                     )}
                     <Text
-                      fontSize="xs"
                       _groupHover={{ color: 'font.maxContrast' }}
+                      fontSize="xs"
                       transition="color 0.2s var(--ease-out-cubic)"
                     >
                       {fNum('weight', token.weight || '')}
@@ -114,17 +114,17 @@ function WeightedTokenPills({
                   />
                   <HStack gap={['xs', '1.5']}>
                     <Text
+                      _groupHover={{ color: 'font.maxContrast' }}
                       fontWeight="bold"
                       noOfLines={1}
                       size={nameSize}
-                      _groupHover={{ color: 'font.maxContrast' }}
                       transition="color 0.2s var(--ease-out-cubic)"
                     >
                       {token.name}
                     </Text>
                     <Text
-                      fontSize="xs"
                       _groupHover={{ color: 'font.maxContrast' }}
+                      fontSize="xs"
                       transition="color 0.2s var(--ease-out-cubic)"
                     >
                       {fNum('weight', token.weight || '')}
@@ -186,10 +186,10 @@ function StableTokenPills({
                   />
                   {tokens.length < 5 && (
                     <Text
+                      _groupHover={{ color: 'font.maxContrast' }}
                       fontWeight="bold"
                       noOfLines={1}
                       size={nameSize}
-                      _groupHover={{ color: 'font.maxContrast' }}
                       transition="color 0.2s var(--ease-out-cubic)"
                     >
                       {token.symbol}
@@ -205,10 +205,10 @@ function StableTokenPills({
                     nestedTokens={nestedPool.tokens}
                   />
                   <Text
+                    _groupHover={{ color: 'font.maxContrast' }}
                     fontWeight="bold"
                     noOfLines={1}
                     size={nameSize}
-                    _groupHover={{ color: 'font.maxContrast' }}
                     transition="color 0.2s var(--ease-out-cubic)"
                   >
                     {token.name}
