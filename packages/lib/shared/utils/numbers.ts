@@ -32,6 +32,7 @@ export const APR_FORMAT_WITHOUT_DECIMALS = '0,0%'
 export const SLIPPAGE_FORMAT = '0.00%'
 export const FEE_FORMAT = '0.[0000]%'
 export const WEIGHT_FORMAT = '(%0,0)'
+export const WEIGHT_FORMAT_ONE_DECIMAL = '(%0,0.0)'
 export const WEIGHT_FORMAT_TWO_DECIMALS = '(%0,0.00)'
 export const PRICE_IMPACT_FORMAT = '0.00%'
 export const INTEGER_PERCENTAGE_FORMAT = '0%'
@@ -66,7 +67,12 @@ export function bn(val: Numberish): BigNumber {
   return new BigNumber(val.toString())
 }
 
-type FormatOpts = { abbreviated?: boolean; forceThreeDecimals?: boolean; canBeNegative?: boolean }
+type FormatOpts = {
+  abbreviated?: boolean
+  forceThreeDecimals?: boolean
+  canBeNegative?: boolean
+  decimals?: number
+}
 
 /**
  * Converts a number to a string format within the decimal limit that numeral
@@ -140,9 +146,16 @@ function feePercentFormat(fee: Numberish): string {
 }
 
 // Formats a weight value as a percentage.
-function weightFormat(val: Numberish, { abbreviated = true }: FormatOpts = {}): string {
+function weightFormat(
+  val: Numberish,
+  { abbreviated = true, decimals = 2 }: FormatOpts = {}
+): string {
   if (isSmallPercentage(val)) return SMALL_PERCENTAGE_LABEL
-  const format = abbreviated ? WEIGHT_FORMAT : WEIGHT_FORMAT_TWO_DECIMALS
+  const format = abbreviated
+    ? WEIGHT_FORMAT
+    : decimals === 1
+      ? WEIGHT_FORMAT_ONE_DECIMAL
+      : WEIGHT_FORMAT_TWO_DECIMALS
   return numeral(val.toString()).format(format)
 }
 
