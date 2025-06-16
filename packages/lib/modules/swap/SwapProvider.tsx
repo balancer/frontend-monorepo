@@ -464,7 +464,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     swapAction,
     tokenInInfo,
     tokenOutInfo,
-    isPoolSwap: !!isPoolSwap || !!isLbpSwap,
+    isPoolSwap: !!isPoolSwap,
+    isLbpSwap: !!isLbpSwap,
   })
 
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)

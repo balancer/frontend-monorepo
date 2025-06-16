@@ -87,12 +87,14 @@ export function SwapForm({ redirectToPoolPage }: Props) {
   const finalRefTokenOut = useRef(null)
   const isMounted = useIsMounted()
   const { isConnected } = useUserAccount()
-  const { startTokenPricePolling } = useTokens()
+  const { startTokenPricePolling, getToken } = useTokens()
 
   const isLoadingSwaps = simulationQuery.isLoading
   const isLoading = isLoadingSwaps || !isMounted
   const loadingText = isLoading ? 'Fetching swap...' : undefined
+
   const isLbpSwap = pool && isV3Pool(pool) && isLBP(pool.type)
+  const tokenOutSymbol = pool?.chain && getToken(tokenOut.address, pool.chain)?.symbol
 
   function copyDeepLink() {
     navigator.clipboard.writeText(window.location.href)
@@ -205,8 +207,8 @@ export function SwapForm({ redirectToPoolPage }: Props) {
         <Card rounded="xl">
           <CardHeader as={HStack} justify="space-between" w="full" zIndex={11}>
             <span>
-              {isLbpSwap
-                ? 'Swap for $XXYZ'
+              {isLbpSwap && tokenOutSymbol
+                ? `Buy $${tokenOutSymbol}`
                 : isPoolSwap
                   ? 'Single pool swap'
                   : capitalize(swapAction)}
