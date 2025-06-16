@@ -50,6 +50,8 @@ type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
 }
 export function SwapForm({ redirectToPoolPage }: Props) {
+  const isPoolSwapUrl = useIsPoolSwapUrl()
+
   const {
     tokenIn,
     tokenOut,
@@ -91,8 +93,6 @@ export function SwapForm({ redirectToPoolPage }: Props) {
   const isLoading = isLoadingSwaps || !isMounted
   const loadingText = isLoading ? 'Fetching swap...' : undefined
   const isLbpSwap = pool && isV3Pool(pool) && isLBP(pool.type)
-
-  const isPoolSwapUrl = useIsPoolSwapUrl() || isLbpSwap
 
   function copyDeepLink() {
     navigator.clipboard.writeText(window.location.href)
@@ -172,7 +172,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     if (swapTxHash) {
       resetSwapAmounts()
       transactionSteps.resetTransactionSteps()
-      if (isPoolSwapUrl) return redirectToPoolPage?.()
+      if (isPoolSwapUrl || isLbpSwap) return redirectToPoolPage?.()
       replaceUrlPath()
     }
   }
