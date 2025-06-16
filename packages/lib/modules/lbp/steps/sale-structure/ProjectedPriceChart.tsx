@@ -220,7 +220,7 @@ function dividePrices(
     }
   })
 
-  if (cutTime) {
+  if (cutTime && data.length > 0 && dataAfterCutTime.length > 0) {
     const cutTimePrice = (data[data.length - 1][1] + dataAfterCutTime[0][1]) / 2
     data.push([cutTime.getTime(), cutTimePrice])
     dataAfterCutTime.unshift([cutTime.getTime(), cutTimePrice])

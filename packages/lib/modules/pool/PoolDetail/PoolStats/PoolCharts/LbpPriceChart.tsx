@@ -95,9 +95,13 @@ export function PriceInfo({ prices }: { prices: LbpPrice[] }) {
         <Text color="font.secondary" fontSize="12px">
           End price
         </Text>
-      ) : (
+      ) : hasPrices ? (
         <Text color="font.error" fontSize="12px">
           {`${percentageChange(max(prices), currentPrice)}%`}
+        </Text>
+      ) : (
+        <Text color="font.secondary" fontSize="12px">
+          &mdash;
         </Text>
       )}
     </VStack>
