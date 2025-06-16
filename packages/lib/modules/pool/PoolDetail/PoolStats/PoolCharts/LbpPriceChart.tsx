@@ -8,7 +8,7 @@ import {
   isBefore,
   secondsToMilliseconds,
 } from 'date-fns'
-import { Divider, HStack, Spacer, Stack, Text, VStack } from '@chakra-ui/react'
+import { Divider, HStack, Spacer, Text, VStack } from '@chakra-ui/react'
 import { ProjectedPriceChart } from '@repo/lib/modules/lbp/steps/sale-structure/ProjectedPriceChart'
 
 export function LbpPriceChart() {
@@ -35,20 +35,19 @@ export function LbpPriceChart() {
   const collateralTokenSeed = 1
 
   return (
-    <VStack>
-      <Stack w="full">
-        <ProjectedPriceChart
-          collateralTokenPrice={priceFor(lbpPool.reserveToken, lbpPool.chain)}
-          collateralTokenSeed={collateralTokenSeed}
-          cutTime={now}
-          endDate={endTime}
-          endWeight={endWeight}
-          launchTokenSeed={launchTokenSeed}
-          onPriceChange={() => {}}
-          startDate={startTime}
-          startWeight={startWeight}
-        />
-      </Stack>
+    <VStack h="full">
+      <ProjectedPriceChart
+        collateralTokenPrice={priceFor(lbpPool.reserveToken, lbpPool.chain)}
+        collateralTokenSeed={collateralTokenSeed}
+        cutTime={now}
+        endDate={endTime}
+        endWeight={endWeight}
+        launchTokenSeed={launchTokenSeed}
+        onPriceChange={() => {}}
+        startDate={startTime}
+        startWeight={startWeight}
+      />
+      <Spacer />
 
       <Divider />
 

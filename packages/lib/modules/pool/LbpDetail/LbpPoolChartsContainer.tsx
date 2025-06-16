@@ -24,7 +24,7 @@ function PoolChartsContent() {
   const { activeTab, setActiveTab, tabsList } = usePoolChartTabs()
 
   return (
-    <Card h="420px">
+    <Card h="full">
       <HStack alignSelf="flex-start" w="full">
         <ButtonGroup
           currentOption={activeTab}
