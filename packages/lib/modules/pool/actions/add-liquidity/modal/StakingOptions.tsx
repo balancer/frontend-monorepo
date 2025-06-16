@@ -1,7 +1,18 @@
 'use client'
 
 import StarsIcon from '@repo/lib/shared/components/icons/StarsIcon'
-import { Button, Card, Flex, HStack, Icon, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Card,
+  Flex,
+  Box,
+  HStack,
+  Icon,
+  Text,
+  Tooltip,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getAuraPoolLink, getPoolActionPath, getTotalAprLabel } from '../../../pool.utils'
@@ -15,6 +26,7 @@ import {
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { isQuantAmmPool } from '../../../pool.helpers'
+import { InfoIcon } from '@repo/lib/shared/components/icons/InfoIcon'
 
 export function StakingOptions() {
   const { chain, pool } = usePool()
@@ -33,21 +45,41 @@ export function StakingOptions() {
 
   return (
     <>
-      <Text mb="2">Staking options</Text>
-      <HStack alignItems="stretch" justify="space-between" w="full">
-        <Card position="relative" variant="modalSubSection">
+      <Text as="div" fontWeight="bold" mb="ms">
+        Staking options to get extra incentives
+        <Box
+          _hover={{ opacity: 1 }}
+          as="span"
+          left="5px"
+          opacity="0.6"
+          position="relative"
+          top="3px"
+        >
+          <Tooltip
+            display="inline-block"
+            label="You’ve just added liquidity and received LP tokens for a pool eligible for liquidity mining incentives. To earn your share, stake your LP tokens. There’s no lock-up period—you can stake or unstake anytime."
+          >
+            <InfoIcon display="inline-block" />
+          </Tooltip>
+        </Box>
+      </Text>
+
+      <HStack alignItems="stretch" gap="ms" justify="space-between" w="full">
+        <Card p="ms" position="relative" variant="modalSubSection">
           <VStack align="left" spacing="md">
-            <Text color="grayText">{projectName}</Text>
-            <HStack>
+            <Text color="font.maxContrast" fontWeight="bold">
+              {projectName}
+            </Text>
+            <HStack gap="xs">
               <Text color="font.primary" fontSize="md" fontWeight="bold">
                 {/* SHOULD WE USE MAX APR instead of the range?? */}
                 {/* {fNum('apr', totalApr)} */}
                 {/* skip vebal boost here */}
                 {getTotalAprLabel(pool.dynamicData.aprItems, undefined, canBeNegative)}
               </Text>
-              <Icon as={StarsIcon} height="20px" width="20px" />
+              <Icon as={StarsIcon} height="16px" width="16px" />
             </HStack>
-            <Flex position="absolute" right={2} top={3}>
+            <Flex position="absolute" right={1.5} top={1.5}>
               <Image
                 alt={projectId}
                 height={30}
@@ -69,15 +101,17 @@ export function StakingOptions() {
         </Card>
         {(PROJECT_CONFIG.options.showVeBal || pool.chain === GqlChain.Optimism) &&
           pool.staking?.aura && (
-            <Card position="relative" variant="modalSubSection">
+            <Card p="ms" position="relative" variant="modalSubSection">
               <VStack align="left" spacing="md">
-                <Text color="grayText">Aura</Text>
+                <Text color="font.maxContrast" fontWeight="bold">
+                  Aura
+                </Text>
                 <HStack>
                   <Text color="font.primary" fontSize="md" fontWeight="bold">
                     {pool.staking?.aura ? fNum('apr', pool.staking.aura.apr) : 'Not available'}
                   </Text>
                 </HStack>
-                <Flex position="absolute" right={2} top={3}>
+                <Flex position="absolute" right={1.5} top={1.5}>
                   <Image alt="balancer" height={30} src="/images/protocols/aura.svg" width={30} />
                 </Flex>
                 {pool.staking && pool.staking.aura && (

@@ -172,9 +172,9 @@ export function FeaturePoolCard({
             <VStack spacing="0" zIndex={1}>
               <HStack gap="0" mb="1">
                 <PoolName
-                  MemoizedMainAprTooltip={MemoizedMainAprTooltip}
                   fontSize="md"
                   isCarousel={isCarousel}
+                  MemoizedMainAprTooltip={MemoizedMainAprTooltip}
                   noOfLines={1}
                   pool={pool}
                 />

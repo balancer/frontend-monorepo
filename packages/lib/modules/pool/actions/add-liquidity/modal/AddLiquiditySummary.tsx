@@ -2,7 +2,7 @@
 
 import { MobileStepTracker } from '@repo/lib/modules/transactions/transaction-steps/step-tracker/MobileStepTracker'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
-import { Card, VStack, Button, Text } from '@chakra-ui/react'
+import { Box, Divider, Card, VStack, Button, Text } from '@chakra-ui/react'
 import { usePool } from '../../../PoolProvider'
 import { PoolActionsPriceImpactDetails } from '../../PoolActionsPriceImpactDetails'
 import { useAddLiquidity } from '../AddLiquidityProvider'
@@ -71,12 +71,12 @@ export function AddLiquiditySummary({
   }
 
   return (
-    <AnimateHeightChange spacing="sm">
+    <AnimateHeightChange spacing="ms">
       {isMobile && hasQuoteContext && (
         <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
       )}
 
-      <Card variant="modalSubSection">
+      <Card p="ms" variant="modalSubSection">
         <TokenRowGroup
           amounts={shouldShowReceipt ? sentTokens : amountsIn}
           chain={pool.chain}
@@ -87,7 +87,7 @@ export function AddLiquiditySummary({
         />
       </Card>
 
-      <Card variant="modalSubSection">
+      <Card p="ms" variant="modalSubSection">
         {shouldShowReceipt ? (
           <ReceiptBptOut actualBptOut={receivedBptUnits} isLoading={isLoadingReceipt} />
         ) : (
@@ -113,15 +113,16 @@ export function AddLiquiditySummary({
             </Card>
           ) : (
             pool.staking && (
-              <Card variant="modalSubSection" w="full">
+              <Box pt="sm">
+                <Divider mb="md" />
                 <StakingOptions />
-              </Card>
+              </Box>
             )
           )}
         </CardPopAnim>
       ) : hasQuoteContext ? (
         <CardPopAnim key="price-impact-details">
-          <Card variant="modalSubSection">
+          <Card p="ms" variant="modalSubSection">
             <VStack align="start" spacing="sm">
               <PoolActionsPriceImpactDetails
                 bptAmount={simulationQuery.data?.bptOut.amount}

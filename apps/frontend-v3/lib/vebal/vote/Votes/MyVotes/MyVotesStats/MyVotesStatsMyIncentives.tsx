@@ -22,9 +22,6 @@ export function MyVotesStatsMyIncentives() {
           placement="top"
         >
           <Text
-            fontSize="sm"
-            position="relative"
-            variant="secondary"
             _after={{
               borderBottom: '1px dotted',
               borderColor: 'currentColor',
@@ -35,6 +32,9 @@ export function MyVotesStatsMyIncentives() {
               position: 'absolute',
               width: '100%',
             }}
+            fontSize="sm"
+            position="relative"
+            variant="secondary"
           >
             My potential bribes (1w)
           </Text>
@@ -44,12 +44,12 @@ export function MyVotesStatsMyIncentives() {
         loading ? (
           <Skeleton height="28px" w="100px" />
         ) : !isZero(totalInfo.totalRewardValue) && canReceiveIncentives(userAddress) ? (
-          <HStack spacing="sm">
+          <HStack spacing="xs">
             <Text color="font.maxContrast" fontSize="lg" fontWeight={700}>
               {toCurrency(totalInfo.totalRewardValue, { abbreviated: false })}
             </Text>
-            {totalInfo.totalRewardValueGain && <GainBadge gain={totalInfo.totalRewardValueGain} />}
             <MyIncentivesTooltip />
+            {totalInfo.totalRewardValueGain && <GainBadge gain={totalInfo.totalRewardValueGain} />}
           </HStack>
         ) : (
           <>&mdash;</>

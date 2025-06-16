@@ -52,16 +52,17 @@ export function MyVotes() {
           pb="0.5"
           position="relative"
           size="h4"
-          variant="special"
           top="6px"
+          variant="special"
         >
           My votes
         </Heading>
         <Button
-          _hover={{ color: 'font.linkHover' }}
+          _hover={{ color: 'font.linkHover', bg: 'background.level3' }}
           color="font.link"
           onClick={onOpen}
           position="relative"
+          right="-8px"
           top="4px"
           variant="ghost"
         >
@@ -98,7 +99,7 @@ export function MyVotes() {
                 </Stack>
               </Alert>
             </GridItem>
-          ) : noVeBALBalance ? (
+          ) : !loading && noVeBALBalance ? (
             <GridItem w="full">
               <Alert status="warning" variant="WideOnDesktop">
                 <AlertIcon as={AlertTriangle} />

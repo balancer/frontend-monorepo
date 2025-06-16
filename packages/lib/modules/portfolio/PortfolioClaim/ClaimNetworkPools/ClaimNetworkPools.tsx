@@ -119,8 +119,8 @@ export function ClaimNetworkPools() {
               >
                 {currentNetworks.map(network => (
                   <Card
-                    key={network.name}
                     flex="1"
+                    key={network.name}
                     p={['sm', 'md']}
                     shadow="innerLg"
                     variant="level1"
@@ -129,17 +129,17 @@ export function ClaimNetworkPools() {
                   >
                     <Flex alignItems="center" justifyContent="space-between">
                       <HStack gap="ms">
-                        <NetworkIcon chain={network.chain} size={iconSize} shadow="md" />
+                        <NetworkIcon chain={network.chain} shadow="md" size={iconSize} />
                         <Stack gap={1}>
                           <Heading size="sm" textTransform="capitalize">
                             {network.name}
                           </Heading>
-                          <Heading size="md" color="font.secondary">
+                          <Heading color="font.secondary" size="md">
                             –
                           </Heading>
                         </Stack>
                       </HStack>
-                      <Button variant="tertiary" gap="xs" onClick={openConnectModal}>
+                      <Button gap="xs" onClick={openConnectModal} variant="tertiary">
                         <WalletIcon size={20} strokeWidth={2} />
                         Connect
                       </Button>
@@ -163,8 +163,8 @@ export function ClaimNetworkPools() {
               >
                 {currentNetworks.map(network => (
                   <Card
-                    key={network.name}
                     flex="1"
+                    key={network.name}
                     p={['sm', 'md']}
                     shadow="innerLg"
                     variant="level1"
@@ -173,14 +173,14 @@ export function ClaimNetworkPools() {
                   >
                     <Flex alignItems="center" justifyContent="space-between">
                       <HStack gap="ms">
-                        <NetworkIcon chain={network.chain} size={iconSize} shadow="md" />
+                        <NetworkIcon chain={network.chain} shadow="md" size={iconSize} />
                         <Stack gap={1}>
                           <Heading size="sm" textTransform="capitalize">
                             {network.name}
                           </Heading>
                         </Stack>
                       </HStack>
-                      <Text variant="secondary" fontSize="sm">
+                      <Text fontSize="sm" variant="secondary">
                         Nothing to claim
                       </Text>
                     </Flex>

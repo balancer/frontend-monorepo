@@ -132,8 +132,8 @@ export function useCrossChainSyncSteps({ networks }: CrossChainSyncStepsProps): 
           layerZeroChainId={layerZeroChainId}
           network={network}
           omniVotingEscrow={omniVotingEscrow}
-          stepId={stepId}
           onTransactionChange={setTransactionFn(stepId)}
+          stepId={stepId}
         />
       )
 

@@ -7,11 +7,12 @@ import {
   isWithinInterval,
   isSameDay,
   addWeeks,
+  isBefore,
+  startOfToday,
 } from 'date-fns'
 import { SystemStyleObject } from '@chakra-ui/styled-system'
 import { useCallback } from 'react'
 import { DeadlineDayTooltip } from './DeadlineDayTooltip'
-import { startOfDayUtc } from '@repo/lib/shared/utils/time'
 import { Picture } from '@repo/lib/shared/components/other/Picture'
 
 function getWeekDays() {
@@ -54,7 +55,7 @@ const sharedStyles = {
 export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarProps) {
   const weekDays = getWeekDays()
 
-  const isDayDisabled = useCallback((day: Date) => day < startOfDayUtc(deadline), [deadline])
+  const isDayDisabled = useCallback((day: Date) => isBefore(day, startOfToday()), [])
 
   const isDayActive = useCallback((day: Date) => isSameDay(day, deadline), [deadline])
 
@@ -69,6 +70,7 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
     const isDisabled = isDayDisabled(day)
     const isActive = isDayActive(day)
     const isSelected = isDaySelected(day)
+    const isToday = isSameDay(day, new Date())
 
     if (isDisabled) {
       return {
@@ -77,24 +79,39 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
       }
     }
 
+    const styles: SystemStyleObject = {}
+
     if (isActive) {
-      return {
-        backgroundColor: 'font.highlight',
-        color: 'font.dark',
-        minWidth: '0 !important',
+      styles.backgroundColor = 'font.highlight'
+      styles.color = 'font.dark'
+      styles.minWidth = '0 !important'
+
+      if (isToday) {
+        styles.borderStyle = 'dashed'
+        styles.borderColor = 'black'
+        styles.borderWidth = '1px'
       }
+    } else if (isSelected) {
+      styles.borderColor = 'font.highlight'
+      styles.borderStyle = 'dashed'
+      styles.color = 'font.highlight'
+      styles.borderWidth = '1px'
+      styles.minWidth = '0 !important'
+
+      // Today styles override selected styles if both are true
+      if (isToday) {
+        styles.borderColor = 'font.link'
+        styles.borderStyle = 'dotted'
+        styles.color = 'font.link'
+      }
+    } else if (isToday) {
+      styles.borderColor = 'font.link'
+      styles.borderWidth = '1px'
+      styles.borderStyle = 'dotted'
+      styles.color = 'font.link'
     }
 
-    if (isSelected) {
-      return {
-        borderColor: 'font.highlight',
-        color: 'font.highlight',
-        borderWidth: '1px',
-        minWidth: '0 !important',
-      }
-    }
-
-    return {}
+    return styles
   }
 
   return (
@@ -169,7 +186,7 @@ export function StaticCalendar({ startDate, endDate, deadline }: StaticCalendarP
                   deadline={deadline}
                   getDayStyles={getDayStyles}
                   sharedStyles={sharedStyles}
-                  title={`${isDayActive(day) ? 'Next' : 'Following'} voting deadline`}
+                  title={`${isDayActive(day) ? 'Next' : 'The following'} voting deadline`}
                 >
                   {format(day, 'd')}
                 </DeadlineDayTooltip>

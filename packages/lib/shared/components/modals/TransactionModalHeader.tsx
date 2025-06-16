@@ -1,5 +1,5 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import { Center, HStack, ModalHeader, VStack, Text, Link } from '@chakra-ui/react'
+import { Center, HStack, ModalHeader, VStack, Text, Link, useColorMode } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ReactNode } from 'react'
 import { ArrowUpRight, Check } from 'react-feather'
@@ -20,6 +20,7 @@ export function TransactionModalHeader({
   timeout?: ReactNode
   isReceiptLoading?: boolean
 }) {
+  const { colorMode } = useColorMode()
   return (
     <ModalHeader>
       <HStack justify="space-between" pr="lg" w="full">
@@ -36,7 +37,14 @@ export function TransactionModalHeader({
                 initial={{ opacity: 0, scale: 0 }}
                 transition={{ duration: 1, times: [0, 0.7, 1], ease: 'easeInOut' }}
               >
-                <Center bg="green.500" color="white" fontWeight="bold" h={10} rounded="full" w={10}>
+                <Center
+                  bg="font.highlight"
+                  color={colorMode === 'dark' ? 'font.dark' : 'white'}
+                  fontWeight="bold"
+                  h={10}
+                  rounded="full"
+                  w={10}
+                >
                   <Check size={18} strokeWidth={4} />
                 </Center>
               </motion.div>
@@ -46,17 +54,22 @@ export function TransactionModalHeader({
                 transition={{ duration: 0.8, ease: 'easeInOut' }}
               >
                 <VStack align="start" spacing="none">
-                  <Text fontSize="xl">Transaction confirmed</Text>
-                  <HStack spacing="xs">
+                  <Text fontSize="xl" fontWeight="bold">
+                    Transaction confirmed
+                  </Text>
+                  <HStack spacing="xxs">
                     <Text color="grayText" fontSize="sm">
                       View details on explorer
                     </Text>
                     <Link
                       color="grayText"
                       href={getBlockExplorerTxUrl(txHash, chain)}
+                      left="-1px"
+                      position="relative"
                       target="_blank"
+                      top="1px"
                     >
-                      <ArrowUpRight size={16} />
+                      <ArrowUpRight size={14} />
                     </Link>
                   </HStack>
                 </VStack>

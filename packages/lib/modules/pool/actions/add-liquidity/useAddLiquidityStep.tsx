@@ -79,8 +79,8 @@ export function useAddLiquidityStep(params: AddLiquidityStepParams): Transaction
             gasEstimationMeta={gasEstimationMeta}
             id={addLiquidityStepId}
             labels={labels}
-            txConfig={buildCallDataQuery.data}
             onTransactionChange={setTransaction}
+            txConfig={buildCallDataQuery.data}
           />
         )
       },

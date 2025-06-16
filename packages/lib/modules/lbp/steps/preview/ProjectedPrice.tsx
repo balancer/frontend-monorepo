@@ -62,17 +62,17 @@ export function ProjectedPrice({
       </CardHeader>
       <CardBody>
         <ProjectedPriceChart
-          startWeight={startWeight}
-          endWeight={endWeight}
-          startDate={parseISO(startTime)}
-          endDate={parseISO(endTime)}
-          launchTokenSeed={launchTokenSeed}
-          collateralTokenSeed={collateralTokenSeed}
           collateralTokenPrice={collateralTokenPrice}
+          collateralTokenSeed={collateralTokenSeed}
+          endDate={parseISO(endTime)}
+          endWeight={endWeight}
+          launchTokenSeed={launchTokenSeed}
           onPriceChange={prices => {
             updateMaxPrice(prices)
             onPriceChange(prices)
           }}
+          startDate={parseISO(startTime)}
+          startWeight={startWeight}
         />
 
         <Divider />

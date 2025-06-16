@@ -50,10 +50,10 @@ export function VoteListTable({ voteList, count, loading }: Props) {
     <Card
       alignItems="flex-start"
       left={{ base: '-4px', sm: '0' }}
+      mb="2xl"
       p={{ base: '0', sm: '0' }}
       position="relative"
-      // fixing right padding for horizontal scroll on mobile
-      pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
+      pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }} // fixing right padding for horizontal scroll on mobile
       w={{ base: '100vw', lg: 'full' }}
     >
       <PaginatedTable

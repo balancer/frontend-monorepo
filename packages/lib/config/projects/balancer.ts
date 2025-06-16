@@ -42,13 +42,12 @@ export const ProjectConfigBalancer: ProjectConfig = {
   options: {
     poolDisplayType: PoolDisplayType.TokenPills,
     hidePoolTags: [],
-    hidePoolTypes: [GqlPoolType.LiquidityBootstrapping, GqlPoolType.Fx],
+    hidePoolTypes: [GqlPoolType.Fx],
     hideProtocolVersion: [],
     showPoolName: false,
     showVeBal: true,
     showMaBeets: false,
     allowCreateWallet: true,
-    showPoolHooksFilter: true,
     isOnSafeAppList: true,
   },
   links: {

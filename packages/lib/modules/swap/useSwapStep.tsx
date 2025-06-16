@@ -97,8 +97,8 @@ export function useSwapStep({
               gasEstimationMeta={gasEstimationMeta}
               id={swapStepId}
               labels={labels}
-              txConfig={buildSwapQuery.data}
               onTransactionChange={setTransaction}
+              txConfig={buildSwapQuery.data}
             />
           </VStack>
         )

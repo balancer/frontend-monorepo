@@ -136,7 +136,9 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     }
     ... on GqlPoolLiquidityBootstrappingV3 {
       endTime
-      name
+      lbpName
+      description
+      discord
       poolTokens {
         ...PoolTokens
       }
@@ -146,7 +148,10 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       projectTokenStartWeight
       reserveToken
       reserveTokenIndex
+      telegram
       startTime
+      website
+      x
     }
     ... on GqlPoolGyro {
       alpha

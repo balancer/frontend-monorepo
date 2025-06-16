@@ -61,11 +61,17 @@ export function TokenRowGroup({
   return (
     <VStack align="start" spacing="md">
       <HStack justify="space-between" w="full">
-        <Text color="grayText">{label}</Text>
+        <Text color="grayText" fontSize="sm" fontWeight="bold">
+          {label}
+        </Text>
         {isLoading ? (
           <Skeleton h="5" w="12" />
         ) : (
-          hasMultipleAmounts && <Text>{toCurrency(usdValue, { abbreviated: false })}</Text>
+          hasMultipleAmounts && (
+            <Text fontSize="sm" fontWeight="bold">
+              {toCurrency(usdValue, { abbreviated: false })}
+            </Text>
+          )
         )}
       </HStack>
       {aggregatedAmounts.map(amount => {

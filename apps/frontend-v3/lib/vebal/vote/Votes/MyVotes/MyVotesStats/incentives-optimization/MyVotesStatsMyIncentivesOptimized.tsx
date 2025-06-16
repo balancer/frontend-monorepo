@@ -76,9 +76,6 @@ export function MyVotesStatsMyIncentivesOptimized() {
         placement="top"
       >
         <Text
-          fontSize="sm"
-          position="relative"
-          variant="secondary"
           _after={{
             borderBottom: '1px dotted',
             borderColor: 'currentColor',
@@ -89,6 +86,9 @@ export function MyVotesStatsMyIncentivesOptimized() {
             position: 'absolute',
             width: '100%',
           }}
+          fontSize="sm"
+          position="relative"
+          variant="secondary"
         >
           Average APR of vote incentives
         </Text>
@@ -99,9 +99,6 @@ export function MyVotesStatsMyIncentivesOptimized() {
         placement="top"
       >
         <Text
-          fontSize="sm"
-          position="relative"
-          variant="secondary"
           _after={{
             borderBottom: '1px dotted',
             borderColor: 'currentColor',
@@ -112,6 +109,9 @@ export function MyVotesStatsMyIncentivesOptimized() {
             position: 'absolute',
             width: '100%',
           }}
+          fontSize="sm"
+          position="relative"
+          variant="secondary"
         >
           My optimized vote incentives (1w)
         </Text>

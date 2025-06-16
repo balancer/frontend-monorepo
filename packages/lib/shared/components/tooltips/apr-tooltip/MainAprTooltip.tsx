@@ -188,11 +188,10 @@ function MainAprTooltip({
                 </Text>
               )}
               <SparklesIcon
+                hoverColor={isAprNegative ? 'red' : 'green'} // hoverColor here is used for the icon and therefore needs to be a color
                 id={id}
                 isOpen={isOpen}
                 pool={pool}
-                // hoverColor here is used for the icon and therefore needs to be a color
-                hoverColor={isAprNegative ? 'red' : 'green'}
               />
             </HStack>
           </Button>

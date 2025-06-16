@@ -73,13 +73,21 @@ export function PriceImpactAccordion({
   return (
     <Box w="full">
       <Accordion allowToggle variant="button" w="full">
-        <AccordionItem isDisabled={isDisabled} shadow={isDisabled ? 'none' : undefined} w="full">
+        <AccordionItem
+          bg={isDisabled ? 'background.level2' : 'background.level3'}
+          border="1px solid"
+          borderColor={isDisabled ? 'border.base' : 'transparent'}
+          borderRadius="md"
+          isDisabled={isDisabled}
+          shadow={isDisabled ? 'none' : 'md'}
+          w="full"
+        >
           <h2>
-            <AccordionButton>
+            <AccordionButton pl="ms" pr="sm">
               <Box as="span" flex="1" textAlign="left">
                 {accordionButtonComponent}
               </Box>
-              <HStack>
+              <HStack gap="xs">
                 <PriceImpactIcon priceImpactLevel={priceImpactLevel} />
                 <Text color={priceImpactColor} fontSize="sm">
                   Details

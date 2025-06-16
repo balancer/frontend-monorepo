@@ -267,6 +267,10 @@ export function getSemanticTokens(tokens: any, colors: any) {
           default: tokens.colors.light.text.specialSecondary,
           _dark: tokens.colors.dark.text.specialSecondary,
         },
+        opposite: {
+          default: tokens.colors.dark.text.primary,
+          _dark: tokens.colors.light.text.primary,
+        },
         link: {
           default: tokens.colors.light.text.link,
           _dark: tokens.colors.dark.text.link,

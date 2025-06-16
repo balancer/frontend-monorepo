@@ -66,7 +66,7 @@ export function BalAlertContent({
             )}
           </HStack>
           {description && (
-            <Text color="black" lineHeight="1.45">
+            <Text color="black" lineHeight="shorter">
               {description}
             </Text>
           )}

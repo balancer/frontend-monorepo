@@ -18,9 +18,9 @@ export function NavBarContainer() {
 
   const mobileNav = (
     <MobileNav
-      LogoType={BeetsLogoType}
       appLinks={allAppLinks}
       ecosystemLinks={ecosystemLinks}
+      LogoType={BeetsLogoType}
       socialLinks={socialLinks}
     />
   )

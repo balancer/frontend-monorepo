@@ -21,9 +21,6 @@ export function MyVotesStatsAverageReward() {
           placement="top"
         >
           <Text
-            fontSize="sm"
-            position="relative"
-            variant="secondary"
             _after={{
               borderBottom: '1px dotted',
               borderColor: 'currentColor',
@@ -34,6 +31,9 @@ export function MyVotesStatsAverageReward() {
               position: 'absolute',
               width: '100%',
             }}
+            fontSize="sm"
+            position="relative"
+            variant="secondary"
           >
             My average reward (Bribes/veBAL)
           </Text>

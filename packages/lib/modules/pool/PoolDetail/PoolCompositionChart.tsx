@@ -136,11 +136,11 @@ function LBPWeightsChart({ pool }: { pool: Pool }) {
   return (
     <>
       <WeightsChart
-        startWeight={startWeight}
+        cutTime={now}
+        endDate={endTime}
         endWeight={endWeight}
         startDate={startTime}
-        endDate={endTime}
-        cutTime={now}
+        startWeight={startWeight}
       />
 
       <Divider />

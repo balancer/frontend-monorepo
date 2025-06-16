@@ -99,6 +99,7 @@ export function LbpCreationModal({
               <Button
                 isDisabled={false}
                 isLoading={false}
+                marginTop="4"
                 onClick={() => {
                   redirectToPoolPage()
                 }}
@@ -106,7 +107,6 @@ export function LbpCreationModal({
                 variant="secondary"
                 w="full"
                 width="full"
-                marginTop="4"
               >
                 <HStack justifyContent="center" spacing="sm" width="100%">
                   <Text color="font.primaryGradient" fontWeight="bold">

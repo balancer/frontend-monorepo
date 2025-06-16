@@ -731,6 +731,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           fontSize: '2xl',
           fontWeight: 'bold',
           color: 'font.primary',
+          letterSpacing: '-0.04rem',
         },
         body: {
           padding: 'none',
