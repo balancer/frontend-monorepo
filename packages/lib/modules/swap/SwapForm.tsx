@@ -25,7 +25,7 @@ import { SwapPreviewModal } from './modal/SwapModal'
 import { TransactionSettings } from '../user/settings/TransactionSettings'
 import { PriceImpactAccordion } from '../price-impact/PriceImpactAccordion'
 import { ChainSelect } from '../chains/ChainSelect'
-import { CheckCircle, Link, Repeat } from 'react-feather'
+import { ArrowDown, CheckCircle, Link, Repeat } from 'react-feather'
 import { SwapRate } from './SwapRate'
 import { SwapDetails } from './SwapDetails'
 import { capitalize } from 'lodash'
@@ -177,6 +177,21 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     }
   }
 
+  const iconButtonProps = isLbpSwap
+    ? {
+        'aria-label': 'To token',
+        icon: <ArrowDown size={16} />,
+        _disabled: { opacity: 1 },
+        isDisabled: true,
+        cursor: 'default',
+        _hover: {},
+      }
+    : {
+        'aria-label': 'Switch tokens',
+        onClick: switchTokens,
+        icon: <Repeat size={16} />,
+      }
+
   return (
     <FadeInOnView>
       <Center
@@ -235,18 +250,16 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                 />
                 <Box border="red 1px solid" position="relative">
                   <IconButton
-                    aria-label="Switch tokens"
                     fontSize="2xl"
                     h="8"
-                    icon={<Repeat size={16} />}
                     isRound
                     ml="-4"
                     mt="-4"
-                    onClick={switchTokens}
                     position="absolute"
                     size="sm"
                     variant="tertiary"
                     w="8"
+                    {...iconButtonProps}
                   />
                 </Box>
                 <TokenInput
