@@ -49,9 +49,7 @@ export function LbpDetail() {
               w="full"
             ></Stack>
           )}
-          {!isBefore(now(), secondsToMilliseconds(lbpPool.startTime)) && (
-            <PoolActivity showTabs={false} />
-          )}
+          {!isBefore(now(), secondsToMilliseconds(lbpPool.startTime)) && <PoolActivity />}
           <PoolComposition />
           <PoolInfoLayout />
         </VStack>
