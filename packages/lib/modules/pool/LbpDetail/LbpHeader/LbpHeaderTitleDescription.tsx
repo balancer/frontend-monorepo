@@ -34,10 +34,10 @@ export function LbpHeaderTitleDescription() {
           address={pool.address}
           alt={projectToken.symbol || pool.address}
           chain={pool.chain}
+          disablePopover
           logoURI={projectToken.logoURI}
           overflow="visible"
           size={64}
-          disablePopover
         />
         <VStack align="start" spacing="sm">
           <HStack spacing="md">
@@ -60,8 +60,8 @@ export function LbpHeaderTitleDescription() {
         <Button
           as="a"
           href={lbpPool.website || ''}
-          target="_blank"
           rel="noopener noreferrer"
+          target="_blank"
           variant="tertiary"
         >
           <HStack gap="xxs">
@@ -80,13 +80,13 @@ export function LbpHeaderTitleDescription() {
                   aria-label={`Visit us on ${iconType}`}
                   as={Link}
                   bg="background.level2"
+                  h="32px"
                   href={href}
                   isExternal
                   isRound
                   rounded="full"
-                  variant="tertiary"
                   size="sm"
-                  h="32px"
+                  variant="tertiary"
                 >
                   <SocialIcon iconType={iconType} size={16} />
                 </IconButton>

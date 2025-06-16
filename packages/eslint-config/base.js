@@ -22,6 +22,7 @@ const baseConfig = [
   ...tseslint.configs.recommended,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
+    ...reactPlugin.configs.flat.recommended,
     ignores: [
       // Ignore dotfiles
       '.*.js',
@@ -36,6 +37,7 @@ const baseConfig = [
       'next.config.js',
     ],
     languageOptions: {
+      ...reactPlugin.configs.flat.recommended.languageOptions,
       globals: {
         ...globals.node,
         React: true,
@@ -67,6 +69,7 @@ const baseConfig = [
       ...reactHooksPlugin.configs.recommended.rules,
       // Disable the 'no-explicit-any' rule to prevent warnings about using 'any' type
       '@typescript-eslint/no-explicit-any': 'off',
+      'react/jsx-sort-props': ['error', { ignoreCase: true }],
     },
   },
 ]

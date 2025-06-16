@@ -76,7 +76,7 @@ export function AddLiquiditySummary({
         <MobileStepTracker chain={pool.chain} transactionSteps={transactionSteps} />
       )}
 
-      <Card variant="modalSubSection" p="ms">
+      <Card p="ms" variant="modalSubSection">
         <TokenRowGroup
           amounts={shouldShowReceipt ? sentTokens : amountsIn}
           chain={pool.chain}
@@ -87,7 +87,7 @@ export function AddLiquiditySummary({
         />
       </Card>
 
-      <Card variant="modalSubSection" p="ms">
+      <Card p="ms" variant="modalSubSection">
         {shouldShowReceipt ? (
           <ReceiptBptOut actualBptOut={receivedBptUnits} isLoading={isLoadingReceipt} />
         ) : (
@@ -122,7 +122,7 @@ export function AddLiquiditySummary({
         </CardPopAnim>
       ) : hasQuoteContext ? (
         <CardPopAnim key="price-impact-details">
-          <Card variant="modalSubSection" p="ms">
+          <Card p="ms" variant="modalSubSection">
             <VStack align="start" spacing="sm">
               <PoolActionsPriceImpactDetails
                 bptAmount={simulationQuery.data?.bptOut.amount}

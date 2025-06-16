@@ -30,7 +30,7 @@ export function PoolBreadcrumbs() {
         </BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem>
-        <BreadcrumbLink href={poolsHref} fontWeight="medium">
+        <BreadcrumbLink fontWeight="medium" href={poolsHref}>
           {poolsLabel}
         </BreadcrumbLink>
       </BreadcrumbItem>

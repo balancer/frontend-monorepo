@@ -15,21 +15,21 @@ export function FeatureLink({ title, description }: Props) {
         size={24}
       ></Circle>
       <Tooltip
-        label={description}
-        placement="top"
-        hasArrow
         bg="background.level3"
         color="font.secondary"
+        hasArrow
+        label={description}
+        placement="top"
       >
         <Text
+          _hover={{ color: 'var(--chakra-colors-font-primary)' }}
+          cursor="pointer"
           mb="1.5"
           textDecoration="underline"
           textDecorationStyle="dotted"
           textDecorationThickness="1px"
           textUnderlineOffset="3px"
           variant="secondary"
-          _hover={{ color: 'var(--chakra-colors-font-primary)' }}
-          cursor="pointer"
           zIndex="docked"
         >
           {title}

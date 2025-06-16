@@ -22,9 +22,6 @@ export function MyVotesStatsMyIncentives() {
           placement="top"
         >
           <Text
-            fontSize="sm"
-            position="relative"
-            variant="secondary"
             _after={{
               borderBottom: '1px dotted',
               borderColor: 'currentColor',
@@ -35,6 +32,9 @@ export function MyVotesStatsMyIncentives() {
               position: 'absolute',
               width: '100%',
             }}
+            fontSize="sm"
+            position="relative"
+            variant="secondary"
           >
             My potential bribes (1w)
           </Text>

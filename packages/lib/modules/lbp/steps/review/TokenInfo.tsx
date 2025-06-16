@@ -15,10 +15,10 @@ export function TokenInfo({
   value?: number
 }) {
   return (
-    <HStack w="full" spacing="5">
+    <HStack spacing="5" w="full">
       <Circle bg="background.level4" color="font.secondary" shadow="lg" size={16}>
         <VStack>
-          <Image src={iconURL || undefined} borderRadius="full" />
+          <Image borderRadius="full" src={iconURL || undefined} />
         </VStack>
       </Circle>
       <VStack w="full">

@@ -66,7 +66,7 @@ export function PaginatedTable<T>({
           )}
           {!loading && items.length === 0 && (
             <Center py="2xl">
-              <Text px="md" color="font.secondary">
+              <Text color="font.secondary" px="md">
                 {noItemsFoundLabel}
               </Text>
             </Center>

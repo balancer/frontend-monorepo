@@ -46,12 +46,12 @@ export function AddLiquidityFormCheckbox() {
                     aria-label="pool-risks-info"
                     bg="background.level2"
                     icon={<InfoIcon />}
-                    size="xs"
-                    position="relative"
-                    top="-1px"
                     left="1px"
-                    transition="opacity 0.2s var(--ease-out-cubic)"
                     opacity="0.6"
+                    position="relative"
+                    size="xs"
+                    top="-1px"
+                    transition="opacity 0.2s var(--ease-out-cubic)"
                   />
                 </PopoverTrigger>
                 <Box shadow="2xl" zIndex="popover">

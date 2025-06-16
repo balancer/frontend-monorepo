@@ -74,13 +74,13 @@ export function PriceImpactAccordion({
     <Box w="full">
       <Accordion allowToggle variant="button" w="full">
         <AccordionItem
-          isDisabled={isDisabled}
-          shadow={isDisabled ? 'none' : 'md'}
-          w="full"
           bg={isDisabled ? 'background.level2' : 'background.level3'}
           border="1px solid"
           borderColor={isDisabled ? 'border.base' : 'transparent'}
           borderRadius="md"
+          isDisabled={isDisabled}
+          shadow={isDisabled ? 'none' : 'md'}
+          w="full"
         >
           <h2>
             <AccordionButton pl="ms" pr="sm">

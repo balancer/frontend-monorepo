@@ -76,10 +76,10 @@ export function PortfolioTable() {
           alignItems={isFilterVisible ? 'flex-end' : 'flex-start'}
           direction="row"
           justify="space-between"
-          w="full"
           minW="max-content"
+          w="full"
         >
-          <VStack align="start" flex={1} pb={{ base: '0', md: '0' }} minW="max-content">
+          <VStack align="start" flex={1} minW="max-content" pb={{ base: '0', md: '0' }}>
             <HStack w="full">
               <Box position="relative" top="0">
                 <Box

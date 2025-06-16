@@ -38,10 +38,10 @@ export function VoteListTableHeader({ ...rest }) {
       {orderBy.map(orderByItem => (
         <GridItem
           justifySelf={orderByItem === 'type' ? 'start' : 'end'}
-          position="relative"
-          left={orderByItem === 'type' ? '-16px' : '0'}
           key={orderByItem}
+          left={orderByItem === 'type' ? '-16px' : '0'}
           maxW="maxContent"
+          position="relative"
         >
           <SortableHeader
             containerProps={{

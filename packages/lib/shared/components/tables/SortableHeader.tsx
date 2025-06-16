@@ -47,9 +47,9 @@ export function SortableHeader({
     return !isSorted ? (
       <SortableIcon />
     ) : sorting === 'asc' ? (
-      <ArrowUpIcon width="14px" height="14px" />
+      <ArrowUpIcon height="14px" width="14px" />
     ) : (
-      <ArrowDownIcon width="14px" height="14px" />
+      <ArrowDownIcon height="14px" width="14px" />
     )
   }
 

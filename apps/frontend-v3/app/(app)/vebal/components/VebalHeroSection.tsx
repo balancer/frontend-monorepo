@@ -113,7 +113,7 @@ export function VebalHeroSection() {
                       </Button>
                     </Box>
                   </Flex>
-                  <Link href="/portfolio" fontSize="sm" color="font.secondary">
+                  <Link color="font.secondary" fontSize="sm" href="/portfolio">
                     Claim veBAL incentives
                   </Link>
                 </Stack>

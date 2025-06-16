@@ -52,8 +52,8 @@ export function MyVotes() {
           pb="0.5"
           position="relative"
           size="h4"
-          variant="special"
           top="6px"
+          variant="special"
         >
           My votes
         </Heading>
@@ -62,8 +62,8 @@ export function MyVotes() {
           color="font.link"
           onClick={onOpen}
           position="relative"
-          top="4px"
           right="-8px"
+          top="4px"
           variant="ghost"
         >
           How it works?
