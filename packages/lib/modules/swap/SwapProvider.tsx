@@ -57,6 +57,7 @@ import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { ProtocolVersion } from '../pool/pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ApiToken } from '../tokens/token.types'
+import { isV3LBP } from '@repo/lib/modules/pool/pool.helpers'
 
 export type UseSwapResponse = ReturnType<typeof useSwapLogic>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -100,9 +101,10 @@ export type SwapProviderProps = {
 export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
   const isPoolSwapUrl = useIsPoolSwapUrl()
+  const isLbpSwap = pool && isV3LBP(pool)
 
   const isPoolSwap = pool && poolActionableTokens // Hint to tell TS that pool and poolActionableTokens must be defined when poolSwap
-  const shouldDiscardOldPersistedValue = isPoolSwapUrl
+  const shouldDiscardOldPersistedValue = isPoolSwapUrl || isLbpSwap
   const swapStateVar = useMakeVarPersisted<SwapState>(
     {
       tokenIn: {
@@ -157,7 +159,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   if (
     (isTokenInSet && !tokenInInfo && !isPoolSwap) ||
-    (isTokenOutSet && !tokenOutInfo && !isPoolSwap)
+    (isTokenOutSet && !tokenOutInfo && !isPoolSwap && !isLbpSwap)
   ) {
     try {
       setDefaultTokens()
@@ -382,7 +384,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   function replaceUrlPath() {
-    if (isPoolSwapUrl) return // Avoid redirection when the swap is within a pool page
+    if (isPoolSwapUrl || isLbpSwap) return // Avoid redirection when the swap is within a pool page
     const { selectedChain, tokenIn, tokenOut, swapType } = swapState
     const networkConfig = getNetworkConfig(selectedChain)
     const { popularTokens } = networkConfig.tokens
