@@ -137,7 +137,7 @@ function Content() {
             ))}
         </VStack>
         <HStack>
-          {!isV3LBP && (
+          {!isV3LBP(pool) && (
             <ButtonGroup
               currentOption={activeTab}
               groupId="pool-activity"
