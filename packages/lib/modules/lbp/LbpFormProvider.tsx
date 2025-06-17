@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
+import { LbpPrice, max, min } from './pool/usePriceInfo'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -100,9 +101,9 @@ export function useLbpFormLogic() {
   const [saleMarketCap, setSaleMarketCap] = useState('')
   const [fdvMarketCap, setFdvMarketCap] = useState('')
 
-  const updatePriceStats = (prices: number[][]) => {
-    const minPrice = Math.min(...prices.map(point => point[1]))
-    const maxPrice = Math.max(...prices.map(point => point[1]))
+  const updatePriceStats = (prices: LbpPrice[]) => {
+    const minPrice = min(prices)
+    const maxPrice = max(prices)
     const minSaleMarketCap = minPrice * launchTokenSeed
     const maxSaleMarketCap = maxPrice * launchTokenSeed
     const minFdvMarketCap = minPrice * (launchTokenTotalSupply || 0)

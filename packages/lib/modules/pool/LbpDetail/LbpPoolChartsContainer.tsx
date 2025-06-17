@@ -9,6 +9,9 @@ import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGro
 import { PoolCharts } from '../PoolDetail/PoolStats/PoolCharts/PoolCharts'
 import { PoolChartsProvider } from '../PoolDetail/PoolStats/PoolCharts/PoolChartsProvider'
 import { PriceInfo } from '../PoolDetail/PoolStats/PoolCharts/LbpPriceChart'
+import { usePriceInfo } from '../../lbp/pool/usePriceInfo'
+import { usePool } from '../PoolProvider'
+import { Address } from 'viem'
 
 export function LbpPoolChartsContainer() {
   return (
@@ -22,6 +25,9 @@ export function LbpPoolChartsContainer() {
 
 function PoolChartsContent() {
   const { activeTab, setActiveTab, tabsList } = usePoolChartTabs()
+  const { pool } = usePool()
+
+  const { prices } = usePriceInfo(pool.chain, pool.id as Address)
 
   return (
     <Card h="504px">
@@ -36,7 +42,7 @@ function PoolChartsContent() {
         {activeTab.value === PoolChartTab.PRICE && (
           <>
             <Spacer />
-            <PriceInfo />
+            <PriceInfo prices={prices} />
           </>
         )}
       </HStack>

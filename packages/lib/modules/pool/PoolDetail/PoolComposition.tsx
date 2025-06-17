@@ -151,6 +151,7 @@ export function PoolComposition() {
       <Stack
         direction={{ base: 'column', md: 'row' }}
         justifyContent="stretch"
+        maxH="900px"
         minH="400px"
         spacing="md"
       >
