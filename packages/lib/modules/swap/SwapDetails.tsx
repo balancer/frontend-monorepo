@@ -36,9 +36,13 @@ export function OrderRoute() {
 
   return (
     <HStack justify="space-between" w="full">
-      <Text color="grayText">Order route</Text>
+      <Text color="grayText" fontSize="sm">
+        Order route
+      </Text>
       <HStack>
-        <Text color="grayText">{getRouteHopsLabel()}</Text>
+        <Text color="grayText" fontSize="sm">
+          {getRouteHopsLabel()}
+        </Text>
         <Popover trigger="hover">
           <PopoverTrigger>
             <Box
@@ -120,12 +124,16 @@ export function SwapDetails() {
   return (
     <VStack align="start" fontSize="sm" spacing="sm" w="full">
       <HStack justify="space-between" w="full">
-        <Text color={priceImpactColor}>Price impact</Text>
+        <Text color={priceImpactColor} fontSize="sm">
+          Price impact
+        </Text>
         <HStack>
           {priceImpactLevel === 'unknown' ? (
-            <Text>Unknown</Text>
+            <Text fontSize="sm">Unknown</Text>
           ) : (
-            <NumberText color={priceImpactColor}>{fullPriceImpactLabel}</NumberText>
+            <NumberText color={priceImpactColor} fontSize="sm">
+              {fullPriceImpactLabel}
+            </NumberText>
           )}
           <Popover trigger="hover">
             <PopoverTrigger>
@@ -152,9 +160,13 @@ export function SwapDetails() {
         </HStack>
       </HStack>
       <HStack justify="space-between" w="full">
-        <Text color="grayText">Max slippage</Text>
+        <Text color="grayText" fontSize="sm">
+          Max slippage
+        </Text>
         <HStack>
-          <NumberText color="grayText">{fullMaxSlippageLabel}</NumberText>
+          <NumberText color="grayText" fontSize="sm">
+            {fullMaxSlippageLabel}
+          </NumberText>
           <Popover trigger="hover">
             <PopoverTrigger>
               <Box
@@ -174,9 +186,11 @@ export function SwapDetails() {
         </HStack>
       </HStack>
       <HStack justify="space-between" w="full">
-        <Text color="grayText">{limitLabel}</Text>
+        <Text color="grayText" fontSize="sm">
+          {limitLabel}
+        </Text>
         <HStack>
-          <NumberText color="grayText">
+          <NumberText color="grayText" fontSize="sm">
             {fNum('token', limitValue, { abbreviated: false })} {limitToken?.symbol}
           </NumberText>
           <Popover trigger="hover">

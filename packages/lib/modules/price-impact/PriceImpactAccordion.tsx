@@ -96,7 +96,7 @@ export function PriceImpactAccordion({
               </HStack>
             </AccordionButton>
           </h2>
-          <AccordionPanel py="md">{accordionPanelComponent}</AccordionPanel>
+          <AccordionPanel p="ms">{accordionPanelComponent}</AccordionPanel>
         </AccordionItem>
       </Accordion>
       {(priceImpactLevel === 'high' || priceImpactLevel === 'max' || isUnknownPriceImpact) && (

@@ -748,7 +748,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             borderWidth: '1px',
             borderColor: 'border.base',
             shadow: 'sm',
-            padding: 'md',
+            padding: 'ms',
             width: 'full',
             rounded: 'md',
           },
