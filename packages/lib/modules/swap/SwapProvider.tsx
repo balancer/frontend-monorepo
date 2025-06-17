@@ -163,7 +163,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   if (
     (isTokenInSet && !tokenInInfo && !isPoolSwap) ||
-    (isTokenOutSet && !tokenOutInfo && !isPoolSwap && !isLbpSwap)
+    (isTokenOutSet && !tokenOutInfo && !isPoolSwap)
   ) {
     try {
       setDefaultTokens()
