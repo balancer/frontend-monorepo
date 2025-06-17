@@ -323,8 +323,8 @@ function PoolTokenPills({
       <WeightedTokenPills
         chain={chain}
         iconSize={iconSize}
-        tokens={tokens}
         preciseWeight={isV3LBP}
+        tokens={tokens}
         {...badgeProps}
       />
     )
@@ -334,8 +334,8 @@ function PoolTokenPills({
     <WeightedTokenPills
       chain={chain}
       iconSize={iconSize}
-      tokens={tokens}
       preciseWeight={isV3LBP}
+      tokens={tokens}
       {...badgeProps}
     />
   )
