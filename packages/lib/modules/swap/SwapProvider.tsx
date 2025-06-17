@@ -390,7 +390,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   function replaceUrlPath() {
-    if (isPoolSwapUrl || isLbpSwap) return // Avoid redirection when the swap is within a pool page
+    if (isPoolSwapUrl || isLbpSwap) return // Avoid redirection when the swap is within a pool or LBP page
     const { selectedChain, tokenIn, tokenOut, swapType } = swapState
     const networkConfig = getNetworkConfig(selectedChain)
     const { popularTokens } = networkConfig.tokens

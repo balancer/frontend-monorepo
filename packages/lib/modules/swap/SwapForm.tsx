@@ -225,6 +225,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
           <CardBody align="start" as={VStack}>
             <VStack spacing="md" w="full">
               {isLbpSwap && <LbpSwapCard />}
+              {/* an LBP swap is also a pool swap but not the other way around */}
               {isPoolSwap && !isLbpSwap && <PoolSwapCard />}
               <SafeAppAlert />
               {!isPoolSwap && (
