@@ -664,6 +664,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     pool,
     poolActionableTokens,
     protocolVersion,
+    isLbpSwap,
     replaceUrlPath,
     resetSwapAmounts,
     setTokenSelectKey,

@@ -39,7 +39,7 @@ import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
 import { CompactTokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectList/CompactTokenSelectModal'
 import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { isPoolSwapAllowed, isV3Pool, isLBP } from '../pool/pool.helpers'
+import { isPoolSwapAllowed } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { ApiToken } from '../tokens/token.types'
 import { SwapSimulationError } from './SwapSimulationError'
@@ -67,6 +67,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
     isPoolSwap,
     pool,
     poolActionableTokens,
+    isLbpSwap,
     setSelectedChain,
     setTokenInAmount,
     setTokenOutAmount,
@@ -91,8 +92,6 @@ export function SwapForm({ redirectToPoolPage }: Props) {
   const isLoadingSwaps = simulationQuery.isLoading
   const isLoading = isLoadingSwaps || !isMounted
   const loadingText = isLoading ? 'Fetching swap...' : undefined
-
-  const isLbpSwap = pool && isV3Pool(pool) && isLBP(pool.type)
   const tokenOutSymbol = pool?.chain && getToken(tokenOut.address, pool.chain)?.symbol
 
   function copyDeepLink() {
