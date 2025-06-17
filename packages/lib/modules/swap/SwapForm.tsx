@@ -29,7 +29,6 @@ import { ArrowDown, CheckCircle, Link, Repeat } from 'react-feather'
 import { SwapRate } from './SwapRate'
 import { SwapDetails } from './SwapDetails'
 import { capitalize } from 'lodash'
-import { motion, easeOut } from 'framer-motion'
 import FadeInOnView from '@repo/lib/shared/components/containers/FadeInOnView'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { useUserAccount } from '../web3/UserAccountProvider'
@@ -281,22 +280,12 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                   value={tokenOut.amount}
                 />
               </VStack>
-              {!!simulationQuery.data && (
-                <motion.div
-                  animate={{ opacity: 1, scaleY: 1 }}
-                  initial={{ opacity: 0, scaleY: 0.9 }}
-                  style={{ width: '100%', transformOrigin: 'top' }}
-                  transition={{ duration: 0.3, ease: easeOut }}
-                >
-                  <PriceImpactAccordion
-                    accordionButtonComponent={<SwapRate />}
-                    accordionPanelComponent={<SwapDetails />}
-                    isDisabled={!simulationQuery.data}
-                    setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
-                  />
-                </motion.div>
-              )}
-
+              <PriceImpactAccordion
+                accordionButtonComponent={<SwapRate />}
+                accordionPanelComponent={<SwapDetails />}
+                isDisabled={!simulationQuery.data}
+                setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
+              />
               {simulationQuery.isError ? (
                 <SwapSimulationError errorMessage={simulationQuery.error?.message} />
               ) : null}
@@ -352,7 +341,6 @@ export function SwapForm({ redirectToPoolPage }: Props) {
           tokens={tokens}
         />
       )}
-
       <SwapPreviewModal
         finalFocusRef={nextBtn}
         isOpen={previewModalDisclosure.isOpen}

@@ -24,7 +24,7 @@ function PoolChartsContent() {
   const { activeTab, setActiveTab, tabsList } = usePoolChartTabs()
 
   return (
-    <Card h="450px">
+    <Card h="504px">
       <HStack alignSelf="flex-start" w="full">
         <ButtonGroup
           currentOption={activeTab}
@@ -33,7 +33,6 @@ function PoolChartsContent() {
           options={tabsList}
           size="xxs"
         />
-
         {activeTab.value === PoolChartTab.PRICE && (
           <>
             <Spacer />
@@ -41,7 +40,6 @@ function PoolChartsContent() {
           </>
         )}
       </HStack>
-
       <PoolCharts key={`default-chart-${activeTab.value}`} />
     </Card>
   )
