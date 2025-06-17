@@ -1,4 +1,4 @@
-import { Box, HStack, Text } from '@chakra-ui/react'
+import { Box, HStack, Text, ChakraProps } from '@chakra-ui/react'
 import { Pool } from '../pool.types'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
 import { ProtocolIcon } from '@repo/lib/shared/components/icons/ProtocolIcon'
@@ -30,9 +30,9 @@ const tagWrapperProps = {
   gap: 'xs',
 }
 
-function TagWrapper({ children }: { children: React.ReactNode }) {
+function TagWrapper({ children, ...rest }: { children: React.ReactNode } & ChakraProps) {
   return (
-    <Box {...tagWrapperProps}>
+    <Box {...tagWrapperProps} {...rest}>
       <HStack>{children}</HStack>
     </Box>
   )
@@ -61,7 +61,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
 
   if (tags?.includes('VE8020')) {
     return (
-      <TagWrapper>
+      <TagWrapper pl="6px">
         <Text {...textProps}>ve8020 weighted</Text>
       </TagWrapper>
     )
@@ -70,7 +70,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
   switch (type) {
     case GqlPoolType.CowAmm:
       return (
-        <TagWrapper>
+        <TagWrapper pl="6px">
           <ProtocolIcon protocol={Protocol.CowAmm} />
           <Text {...textProps}>Weighted</Text>
         </TagWrapper>
@@ -78,7 +78,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
 
     case GqlPoolType.Weighted:
       return (
-        <TagWrapper>
+        <TagWrapper pl="6px">
           <Text {...textProps}>Weighted</Text>
         </TagWrapper>
       )
@@ -88,7 +88,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
     case GqlPoolType.ComposableStable:
     case GqlPoolType.MetaStable:
       return (
-        <TagWrapper>
+        <TagWrapper pl="8px">
           <Text {...textProps}>Stable</Text>
         </TagWrapper>
       )
@@ -103,7 +103,7 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
 
     case GqlPoolType.LiquidityBootstrapping:
       return (
-        <TagWrapper>
+        <TagWrapper pl="6px">
           <Text {...textProps}>LBP</Text>
         </TagWrapper>
       )
