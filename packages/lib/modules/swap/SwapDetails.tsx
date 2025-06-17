@@ -110,8 +110,8 @@ export function SwapDetails() {
 
   const priceImpactTooltip =
     priceImpactLevel === 'unknown'
-      ? 'This usually displays the negative price impact of the swap based on the current market prices of the token in vs token out. However, for some reason, the price impact currently can’t be calculated. This may be due to the pricing provider being down or not knowing one of the tokens. Only proceed if you know exactly what you are doing.'
-      : 'This is the negative price impact of the swap based on the current market prices of the token in vs token out.'
+      ? 'This usually displays the loss from the swap after comparing the value of the token input vs token output, including swap fees (based on pools routes) and price impact (based on current market prices). However, for some reason, the price impact currently can’t be calculated. This may be due to the pricing provider being down or not knowing one of the tokens. Only proceed if you know exactly what you are doing.'
+      : 'This is the loss from the swap after comparing the value of the token input vs token output. It includes swap fees (based on pools routes) and price impact (based on current market prices).'
 
   const slippageLabel = isExactIn
     ? `This is the maximum slippage that the swap will allow.
@@ -125,7 +125,7 @@ export function SwapDetails() {
     <VStack align="start" fontSize="sm" spacing="sm" w="full">
       <HStack justify="space-between" w="full">
         <Text color={priceImpactColor} fontSize="sm">
-          Price impact
+          Token in vs token out
         </Text>
         <HStack>
           {priceImpactLevel === 'unknown' ? (
