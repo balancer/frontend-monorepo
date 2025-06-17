@@ -63,7 +63,7 @@ export function PoolSnapshot({ ...props }: CardProps) {
         </Box>
         <VStack
           align="flex-start"
-          gap="lg"
+          gap="20px"
           h="full"
           justify="flex-start"
           m="auto"
