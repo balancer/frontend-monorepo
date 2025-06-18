@@ -366,7 +366,7 @@ function CollateralTokenAddressInput({
         render={({ field }) => (
           <TokenSelectInput
             chain={selectedChain}
-            defaultTokenAddress={collateralTokens?.[0]}
+            defaultTokenAddress={field.value || collateralTokens?.[0]}
             onChange={newValue => {
               field.onChange(newValue as GqlChain)
             }}
