@@ -30,7 +30,7 @@ function PoolChartsContent() {
   const { prices } = usePriceInfo(pool.chain, pool.id as Address)
 
   return (
-    <Card h="504px">
+    <Card h="488px">
       <HStack alignSelf="flex-start" w="full">
         <ButtonGroup
           currentOption={activeTab}
