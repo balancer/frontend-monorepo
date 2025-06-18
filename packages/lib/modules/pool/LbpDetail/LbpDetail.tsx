@@ -45,7 +45,7 @@ export function LbpDetail() {
               spacing="md"
               w="full"
             >
-              <MyPurchases />
+              <MyPurchases isLoading={isLoadingUserPoolEvents} userPoolEvents={userPoolEvents} />
               <MyTransactions isLoading={isLoadingUserPoolEvents} userPoolEvents={userPoolEvents} />
             </Stack>
           )}
