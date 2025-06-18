@@ -7,9 +7,19 @@ import { SwapProviderProps, PathParams } from '@repo/lib/modules/swap/SwapProvid
 import { isBefore, secondsToMilliseconds, format } from 'date-fns'
 import { now } from '@repo/lib/shared/utils/time'
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
+import { useLbpForm, LbpFormProvider } from '@repo/lib/modules/lbp/LbpFormProvider'
 
 export function LbpSwap() {
+  return (
+    <LbpFormProvider>
+      <LbpSwapContent />
+    </LbpFormProvider>
+  )
+}
+
+function LbpSwapContent() {
   const { pool } = usePool()
+  const { launchToken } = useLbpForm()
 
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
   const poolActionableTokens = getPoolActionableTokens(lbpPool)
@@ -26,12 +36,21 @@ export function LbpSwap() {
     poolActionableTokens: poolActionableTokens,
   }
 
+  const isBeforeSaleStart = isBefore(now(), secondsToMilliseconds(lbpPool.startTime))
+
   return (
-    <SwapLayout props={props}>
-      <SwapForm
-        hasDisabledInputs={isBefore(now(), secondsToMilliseconds(lbpPool.startTime))}
-        nextButtonText={`Sale starts ${format(secondsToMilliseconds(lbpPool.startTime), 'haaa, MM/dd/yy')}`}
-      />
-    </SwapLayout>
+    <LbpFormProvider>
+      <SwapLayout props={props}>
+        <SwapForm
+          customToken={launchToken}
+          hasDisabledInputs={isBeforeSaleStart}
+          nextButtonText={
+            isBeforeSaleStart
+              ? `Sale starts ${format(secondsToMilliseconds(lbpPool.startTime), 'haaa, MM/dd/yy')}`
+              : 'Next'
+          }
+        />
+      </SwapLayout>
+    </LbpFormProvider>
   )
 }
