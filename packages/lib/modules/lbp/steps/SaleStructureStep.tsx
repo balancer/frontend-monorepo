@@ -23,9 +23,9 @@ import {
   UseFormTrigger,
 } from 'react-hook-form'
 import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithError'
-import { isAddress } from 'viem'
+import { formatUnits, isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
-import { getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
+import { getChainId, getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
 import { Clipboard, Edit } from 'react-feather'
 import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
@@ -42,6 +42,7 @@ import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
 import { LbpFormAction } from '../LbpFormAction'
 import { CustomToken } from '../../tokens/token.types'
 import { Address } from 'viem'
+import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -413,8 +414,10 @@ function SaleTokenAmountInput({
   customIcon?: string
   metadata: TokenMetadata
 }) {
-  const { balanceFor, isBalancesLoading } = useTokenBalances()
-  const balance = balanceFor(launchTokenAddress)
+  const { balanceData, isLoading } = useUserBalance({
+    chainId: getChainId(selectedChain),
+    token: launchTokenAddress as Address,
+  })
 
   const customToken: CustomToken = {
     chain: selectedChain,
@@ -425,13 +428,13 @@ function SaleTokenAmountInput({
   }
 
   const haveEnoughAmount = (value: string) => {
-    if (isBalancesLoading) return true
+    if (isLoading) return true
 
-    if (!balance || balance.amount === 0n) {
+    if (!balanceData || balanceData.value === 0n) {
       return `Your wallet has no ${metadata.symbol}. You will need some to seed this pool and sell it during the LBP`
     }
 
-    if (bn(balance.amount).shiftedBy(balance.decimals).lt(value)) {
+    if (bn(balanceData.value).shiftedBy(balanceData.decimals).lt(value)) {
       return `Your wallet does not have enough ${metadata.symbol}`
     }
 
@@ -449,6 +452,7 @@ function SaleTokenAmountInput({
             address={launchTokenAddress}
             apiToken={customToken}
             chain={selectedChain}
+            customUserBalance={formatUnits(balanceData?.value || 0n, metadata.decimals || 18)}
             onChange={e => field.onChange(e.currentTarget.value)}
             priceMessage="Price: N/A"
             value={field.value}
