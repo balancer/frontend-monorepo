@@ -48,8 +48,10 @@ import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
+  hasDisabledInputs?: boolean
+  nextButtonText?: string
 }
-export function SwapForm({ redirectToPoolPage }: Props) {
+export function SwapForm({ redirectToPoolPage, hasDisabledInputs, nextButtonText }: Props) {
   const isPoolSwapUrl = useIsPoolSwapUrl()
 
   const {
@@ -252,6 +254,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                   address={tokenIn.address}
                   aria-label="TokenIn"
                   chain={selectedChain}
+                  isDisabled={hasDisabledInputs}
                   onChange={e => setTokenInAmount(e.currentTarget.value as HumanAmount)}
                   ref={finalRefTokenIn}
                   value={tokenIn.amount}
@@ -279,6 +282,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                   chain={selectedChain}
                   disableBalanceValidation
                   hasPriceImpact
+                  isDisabled={hasDisabledInputs}
                   isLoadingPriceImpact={
                     simulationQuery.isLoading || !simulationQuery.data || !tokenIn.amount
                   }
@@ -317,7 +321,7 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                   variant="secondary"
                   w="full"
                 >
-                  Next
+                  {nextButtonText || 'Next'}
                 </Button>
               </Tooltip>
             ) : (
