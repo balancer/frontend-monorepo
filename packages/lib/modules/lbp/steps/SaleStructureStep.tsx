@@ -40,9 +40,8 @@ import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
 import { LbpFormAction } from '../LbpFormAction'
-import { CustomToken } from '../../tokens/token.types'
-import { Address } from 'viem'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
+import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()
@@ -56,10 +55,10 @@ export function SaleStructureStep() {
       setValue,
       trigger,
     },
-    projectInfoForm,
     setActiveStep,
     activeStepIndex,
     resetLbpCreation,
+    launchToken,
   } = useLbpForm()
   const saleStructureData = watch()
 
@@ -77,9 +76,7 @@ export function SaleStructureStep() {
   const daysDiff = differenceInDays(parseISO(saleEnd), parseISO(saleStart))
   const hoursDiff = differenceInHours(parseISO(saleEnd), parseISO(saleStart)) - daysDiff * 24
 
-  const launchToken = getToken(launchTokenAddress, selectedChain)
   const collateralToken = getToken(collateralTokenAddress, selectedChain)
-  const tokens = [launchToken, collateralToken].filter(item => item != undefined)
 
   const launchTokenMetadata = useTokenMetadata(launchTokenAddress, selectedChain)
   const launchTokenIsValid = isAddress(launchTokenAddress) && !!launchTokenMetadata.symbol
@@ -89,111 +86,110 @@ export function SaleStructureStep() {
   }
 
   return (
-    <TokenBalancesProvider extTokens={tokens}>
-      <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
-        <VStack align="start" spacing="lg" w="full">
-          <Heading color="font.maxContrast" size="md">
-            Launch token details
-          </Heading>
+    <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+      <VStack align="start" spacing="lg" w="full">
+        <Heading color="font.maxContrast" size="md">
+          Launch token details
+        </Heading>
 
-          <VStack align="start" spacing="md" w="full">
-            <NetworkSelectInput chains={supportedChains} control={control} />
-            <LaunchTokenAddressInput
-              chainId={selectedChain}
-              control={control}
-              errors={errors}
-              metadata={launchTokenMetadata}
-              resetForm={resetLbpCreation}
-              setFormValue={setValue}
-              triggerValidation={trigger}
-              value={launchTokenAddress}
-            />
-          </VStack>
-
-          {launchTokenIsValid && (
-            <>
-              <Divider />
-
-              <Heading color="font.maxContrast" size="md">
-                Sale period
-              </Heading>
-
-              <VStack align="start" spacing="sm" w="full">
-                <DateTimeInput
-                  control={control}
-                  errors={errors}
-                  label="Start date and time"
-                  name="startTime"
-                />
-                <DateTimeInput
-                  control={control}
-                  errors={errors}
-                  label="End date and time"
-                  min={saleStart}
-                  name="endTime"
-                />
-                <Text color="font.secondary" fontSize="xs">
-                  {saleStart && saleEnd
-                    ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
-                    : 'Suggested sale period: 5 days'}
-                </Text>
-              </VStack>
-
-              <Divider />
-
-              <Heading color="font.maxContrast" size="md">
-                LBP mechanism
-              </Heading>
-              <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
-              <WeightAdjustmentTypeInput
-                collateralTokenSymbol={collateralToken?.symbol || ''}
-                control={control}
-                launchTokenSymbol={launchTokenMetadata.symbol || ''}
-                setValue={setValue}
-                watch={watch}
-              />
-              <UserActionsInput control={control} />
-
-              <Divider />
-
-              <VStack align="start" spacing="sm" w="full">
-                <Heading color="font.maxContrast" size="md">
-                  Seed initial pool liquidity
-                </Heading>
-                <Text color="font.secondary">
-                  The starting liquidity in the pool. The amounts and ratio will determine the
-                  starting price, projected market cap and price curve.
-                </Text>
-              </VStack>
-
-              <TokenInputsValidationProvider>
-                {/* TODO: Decouple PriceImpactProvider from Token input, it shouldn't be a dependency. */}
-                <PriceImpactProvider>
-                  <SaleTokenAmountInput
-                    control={control}
-                    customIcon={projectInfoForm.watch('tokenIconUrl')}
-                    errors={errors}
-                    launchTokenAddress={launchTokenAddress}
-                    metadata={launchTokenMetadata}
-                    selectedChain={selectedChain}
-                  />
-
-                  <CollateralTokenAmountInput
-                    collateralTokenAddress={collateralTokenAddress}
-                    collateralTokenSymbol={collateralToken?.symbol || ''}
-                    control={control}
-                    errors={errors}
-                    selectedChain={selectedChain}
-                  />
-                </PriceImpactProvider>
-              </TokenInputsValidationProvider>
-            </>
-          )}
-
-          <LbpFormAction disabled={!isValid} />
+        <VStack align="start" spacing="md" w="full">
+          <NetworkSelectInput chains={supportedChains} control={control} />
+          <LaunchTokenAddressInput
+            chainId={selectedChain}
+            control={control}
+            errors={errors}
+            metadata={launchTokenMetadata}
+            resetForm={resetLbpCreation}
+            setFormValue={setValue}
+            triggerValidation={trigger}
+            value={launchTokenAddress}
+          />
         </VStack>
-      </form>
-    </TokenBalancesProvider>
+
+        {launchTokenIsValid && (
+          <>
+            <Divider />
+
+            <Heading color="font.maxContrast" size="md">
+              Sale period
+            </Heading>
+
+            <VStack align="start" spacing="sm" w="full">
+              <DateTimeInput
+                control={control}
+                errors={errors}
+                label="Start date and time"
+                name="startTime"
+              />
+              <DateTimeInput
+                control={control}
+                errors={errors}
+                label="End date and time"
+                min={saleStart}
+                name="endTime"
+              />
+              <Text color="font.secondary" fontSize="xs">
+                {saleStart && saleEnd
+                  ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
+                  : 'Suggested sale period: 5 days'}
+              </Text>
+            </VStack>
+
+            <Divider />
+
+            <Heading color="font.maxContrast" size="md">
+              LBP mechanism
+            </Heading>
+            <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
+            <WeightAdjustmentTypeInput
+              collateralTokenSymbol={collateralToken?.symbol || ''}
+              control={control}
+              launchTokenSymbol={launchTokenMetadata.symbol || ''}
+              setValue={setValue}
+              watch={watch}
+            />
+            <UserActionsInput control={control} />
+
+            <Divider />
+
+            <VStack align="start" spacing="sm" w="full">
+              <Heading color="font.maxContrast" size="md">
+                Seed initial pool liquidity
+              </Heading>
+              <Text color="font.secondary">
+                The starting liquidity in the pool. The amounts and ratio will determine the
+                starting price, projected market cap and price curve.
+              </Text>
+            </VStack>
+
+            <TokenInputsValidationProvider>
+              {/* TODO: Decouple PriceImpactProvider from Token input, it shouldn't be a dependency. */}
+              <PriceImpactProvider>
+                {collateralToken && (
+                  <TokenBalancesProvider extTokens={[collateralToken]}>
+                    <SaleTokenAmountInput
+                      control={control}
+                      errors={errors}
+                      launchToken={launchToken}
+                      selectedChain={selectedChain}
+                    />
+                    <CollateralTokenAmountInput
+                      collateralTokenAddress={collateralTokenAddress}
+                      collateralTokenSymbol={collateralToken?.symbol || ''}
+                      control={control}
+                      errors={errors}
+                      selectedChain={selectedChain}
+                    />
+                  </TokenBalancesProvider>
+                )}
+              </PriceImpactProvider>
+            </TokenInputsValidationProvider>
+          </>
+        )}
+
+        <LbpFormAction disabled={!isValid} />
+      </VStack>
+    </form>
   )
 }
 
@@ -403,39 +399,27 @@ function SaleTokenAmountInput({
   control,
   errors,
   selectedChain,
-  launchTokenAddress,
-  customIcon,
-  metadata,
+  launchToken,
 }: {
   control: Control<SaleStructureForm>
   errors: FieldErrors<SaleStructureForm>
   selectedChain: GqlChain
-  launchTokenAddress: string
-  customIcon?: string
-  metadata: TokenMetadata
+  launchToken: CustomToken
 }) {
   const { balanceData, isLoading } = useUserBalance({
     chainId: getChainId(selectedChain),
-    token: launchTokenAddress as Address,
+    token: launchToken.address,
   })
-
-  const customToken: CustomToken = {
-    chain: selectedChain,
-    address: launchTokenAddress as Address,
-    symbol: metadata.symbol || '',
-    logoURI: customIcon || '',
-    decimals: metadata.decimals || 0,
-  }
 
   const haveEnoughAmount = (value: string) => {
     if (isLoading) return true
 
     if (!balanceData || balanceData.value === 0n) {
-      return `Your wallet has no ${metadata.symbol}. You will need some to seed this pool and sell it during the LBP`
+      return `Your wallet has no ${launchToken.symbol}. You will need some to seed this pool and sell it during the LBP`
     }
 
     if (bn(balanceData.value).shiftedBy(balanceData.decimals).lt(value)) {
-      return `Your wallet does not have enough ${metadata.symbol}`
+      return `Your wallet does not have enough ${launchToken.symbol}`
     }
 
     return true
@@ -449,10 +433,10 @@ function SaleTokenAmountInput({
         name="saleTokenAmount"
         render={({ field }) => (
           <TokenInput
-            address={launchTokenAddress}
-            apiToken={customToken}
+            address={launchToken.address}
+            apiToken={launchToken}
             chain={selectedChain}
-            customUserBalance={formatUnits(balanceData?.value || 0n, metadata.decimals || 18)}
+            customUserBalance={formatUnits(balanceData?.value || 0n, launchToken.decimals)}
             onChange={e => field.onChange(e.currentTarget.value)}
             priceMessage="Price: N/A"
             value={field.value}

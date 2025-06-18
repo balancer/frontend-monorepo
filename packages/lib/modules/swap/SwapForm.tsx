@@ -44,14 +44,19 @@ import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { ApiToken, CustomToken } from '../tokens/token.types'
 import { SwapSimulationError } from './SwapSimulationError'
 import { LbpSwapCard } from '@repo/lib/modules/swap/LbpSwapCard'
-import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
   hasDisabledInputs?: boolean
   nextButtonText?: string
+  customToken?: CustomToken
 }
-export function SwapForm({ redirectToPoolPage, hasDisabledInputs, nextButtonText }: Props) {
+export function SwapForm({
+  redirectToPoolPage,
+  hasDisabledInputs,
+  nextButtonText,
+  customToken,
+}: Props) {
   const isPoolSwapUrl = useIsPoolSwapUrl()
 
   const {
@@ -95,16 +100,6 @@ export function SwapForm({ redirectToPoolPage, hasDisabledInputs, nextButtonText
   const isLoadingSwaps = simulationQuery.isLoading
   const isLoading = isLoadingSwaps || !isMounted
   const loadingText = isLoading ? 'Fetching swap...' : undefined
-
-  const launchTokenMetadata = useTokenMetadata(tokenOut.address, selectedChain)
-
-  const customToken: CustomToken = {
-    chain: selectedChain,
-    address: tokenOut.address,
-    symbol: launchTokenMetadata?.symbol || '',
-    logoURI: '',
-    decimals: launchTokenMetadata?.decimals || 0,
-  }
 
   function copyDeepLink() {
     navigator.clipboard.writeText(window.location.href)
@@ -218,7 +213,7 @@ export function SwapForm({ redirectToPoolPage, hasDisabledInputs, nextButtonText
           <CardHeader as={HStack} justify="space-between" w="full" zIndex={11}>
             <span>
               {isLbpSwap
-                ? `Buy $${launchTokenMetadata?.symbol}`
+                ? `Buy $${customToken?.symbol}`
                 : isPoolSwap
                   ? 'Single pool swap'
                   : capitalize(swapAction)}
