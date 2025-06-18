@@ -207,3 +207,64 @@ body {
     visibility: hidden;
   }
 }
+
+.navbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 40px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.navbar__logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0;
+  color: #000;
+}
+
+.navbar__list {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar__item {
+  margin: 0;
+}
+
+.nav-link {
+  position: relative;
+  padding: 4px 8px;
+  font-size: 1.25rem;
+  text-decoration: none;
+  color: #000;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #00ffe9;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 0;
+  width: 100%;
+  background: linear-gradient(to right, #00ffe9, #003b3c);
+  transition: height 0.2s;
+}
+
+.nav-link.active::after {
+  height: 2px;
+}
+

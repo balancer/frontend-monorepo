@@ -12,6 +12,7 @@ import { ThemeProvider as ColorThemeProvider } from 'next-themes'
 import { ThemeProvider } from '@bal/lib/services/chakra/ThemeProvider'
 import { BalancerLogoType } from '@bal/lib/components/imgs/BalancerLogoType'
 import { Footer } from '@repo/lib/shared/components/navs/Footer'
+import AggtraderNavbar from '@bal/lib/components/AggtraderNavbar'
 
 export const metadata: Metadata = {
   title: 'Balancer - DeFi Liquidity Pools',
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>
           <ThemeProvider>
             <Providers>
+              <AggtraderNavbar />
               <NavBarContainer />
               {children}
               <Footer
