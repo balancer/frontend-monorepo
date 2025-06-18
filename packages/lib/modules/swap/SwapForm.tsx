@@ -41,9 +41,10 @@ import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isPoolSwapAllowed } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
-import { ApiToken } from '../tokens/token.types'
+import { ApiToken, CustomToken } from '../tokens/token.types'
 import { SwapSimulationError } from './SwapSimulationError'
 import { LbpSwapCard } from '@repo/lib/modules/swap/LbpSwapCard'
+import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 
 type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
@@ -87,12 +88,21 @@ export function SwapForm({ redirectToPoolPage }: Props) {
   const finalRefTokenOut = useRef(null)
   const isMounted = useIsMounted()
   const { isConnected } = useUserAccount()
-  const { startTokenPricePolling, getToken } = useTokens()
+  const { startTokenPricePolling } = useTokens()
 
   const isLoadingSwaps = simulationQuery.isLoading
   const isLoading = isLoadingSwaps || !isMounted
   const loadingText = isLoading ? 'Fetching swap...' : undefined
-  const tokenOutSymbol = pool?.chain && getToken(tokenOut.address, pool.chain)?.symbol
+
+  const launchTokenMetadata = useTokenMetadata(tokenOut.address, selectedChain)
+
+  const customToken: CustomToken = {
+    chain: selectedChain,
+    address: tokenOut.address,
+    symbol: launchTokenMetadata?.symbol || '',
+    logoURI: '',
+    decimals: launchTokenMetadata?.decimals || 0,
+  }
 
   function copyDeepLink() {
     navigator.clipboard.writeText(window.location.href)
@@ -205,8 +215,8 @@ export function SwapForm({ redirectToPoolPage }: Props) {
         <Card rounded="xl">
           <CardHeader as={HStack} justify="space-between" w="full" zIndex={11}>
             <span>
-              {isLbpSwap && tokenOutSymbol
-                ? `Buy $${tokenOutSymbol}`
+              {isLbpSwap
+                ? `Buy $${launchTokenMetadata?.symbol}`
                 : isPoolSwap
                   ? 'Single pool swap'
                   : capitalize(swapAction)}
@@ -243,11 +253,11 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                   aria-label="TokenIn"
                   chain={selectedChain}
                   onChange={e => setTokenInAmount(e.currentTarget.value as HumanAmount)}
+                  ref={finalRefTokenIn}
+                  value={tokenIn.amount}
                   {...(!isLbpSwap && {
                     onToggleTokenClicked: () => openTokenSelectModal('tokenIn'),
                   })}
-                  ref={finalRefTokenIn}
-                  value={tokenIn.amount}
                 />
                 <Box border="red 1px solid" position="relative">
                   <IconButton
@@ -273,11 +283,14 @@ export function SwapForm({ redirectToPoolPage }: Props) {
                     simulationQuery.isLoading || !simulationQuery.data || !tokenIn.amount
                   }
                   onChange={e => setTokenOutAmount(e.currentTarget.value as HumanAmount)}
+                  ref={finalRefTokenOut}
+                  value={tokenOut.amount}
                   {...(!isLbpSwap && {
                     onToggleTokenClicked: () => openTokenSelectModal('tokenOut'),
                   })}
-                  ref={finalRefTokenOut}
-                  value={tokenOut.amount}
+                  {...(isLbpSwap && {
+                    apiToken: customToken,
+                  })}
                 />
               </VStack>
               <PriceImpactAccordion
