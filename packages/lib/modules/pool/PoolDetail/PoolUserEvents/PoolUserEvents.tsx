@@ -1,19 +1,6 @@
-import {
-  Card,
-  VStack,
-  Heading,
-  Divider,
-  Grid,
-  GridItem,
-  Text,
-  Box,
-  HStack,
-  Link,
-  Skeleton,
-} from '@chakra-ui/react'
+import { Card, Divider, Text, Box, HStack, Skeleton } from '@chakra-ui/react'
 import { usePool } from '../../PoolProvider'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import {
   GetPoolEventsQuery,
   GqlChain,
@@ -22,26 +9,20 @@ import {
   GqlPoolSwapEventV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
-import { formatDistanceToNow, secondsToMilliseconds } from 'date-fns'
-import { ArrowUpRight } from 'react-feather'
-import { PoolEventItem } from '../../usePoolEvents'
 import { calcTotalStakedBalance, getUserTotalBalance } from '../../user-balance.helpers'
 import { fNum, bn } from '@repo/lib/shared/utils/numbers'
-import { isEmpty } from 'lodash'
 import { BoostText } from './BoostText'
-import { getBlockExplorerTxUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-
-type PoolEventRowProps = {
-  poolEvent: PoolEventItem
-  usdValue: string
-  chain: GqlChain
-  txUrl: string
-}
+import { CardContent } from '@repo/lib/modules/pool/PoolDetail/PoolUserEvents/CardContent'
+import { PoolEventItem } from '@repo/lib/modules/pool/usePoolEvents'
 
 const GRID_COLUMNS = '100px 150px 100px 1fr'
 
-function Action({ poolEventType }: { poolEventType: 'Add' | 'Remove' | 'Swap' }) {
+export type ActionProps = {
+  poolEventType: 'Add' | 'Remove' | 'Swap'
+}
+
+function Action({ poolEventType }: ActionProps) {
   const eventTypeColor =
     poolEventType === 'Add' ? 'green.500' : poolEventType === 'Remove' ? 'red.500' : 'blue.500'
   return (
@@ -59,65 +40,12 @@ function Action({ poolEventType }: { poolEventType: 'Add' | 'Remove' | 'Swap' })
   )
 }
 
-function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) {
-  // Only show add/remove/swap events
-  if (!['GqlPoolAddRemoveEventV3', 'GqlPoolSwapEventV3'].includes(poolEvent.__typename)) {
-    return null
-  }
-
-  const poolEventType = getEventType(poolEvent)
-
-  return (
-    <Grid
-      gap={{ base: '2', md: '4' }}
-      mb="4"
-      templateAreas={{
-        base: `"action value time"
-               "tokens tokens tokens"`,
-        md: `"action tokens value time"`,
-      }}
-      templateColumns={{ base: 'fit-content(150px) 50px 1fr', md: GRID_COLUMNS }}
-      w="full"
-    >
-      <GridItem area="action">
-        <Action poolEventType={poolEventType} />
-      </GridItem>
-      <GridItem area="tokens">
-        <Tokens chain={chain} poolEvent={poolEvent} />
-      </GridItem>
-      <GridItem area="value" textAlign={{ base: 'left', md: 'right' }}>
-        <Text>{usdValue}</Text>
-      </GridItem>
-      <GridItem area="time" mr="sm">
-        <HStack gap="1" justifyContent="flex-end">
-          <Text color="grayText">
-            {formatDistanceToNow(new Date(secondsToMilliseconds(poolEvent.timestamp)), {
-              addSuffix: true,
-            })}
-          </Text>
-          <Link color="grayText" href={txUrl} target="_blank">
-            <ArrowUpRight size={16} />
-          </Link>
-        </HStack>
-      </GridItem>
-    </Grid>
-  )
+export type TokensProps = {
+  poolEvent: PoolEventItem
+  chain: GqlChain
 }
 
-function getEventType(item: PoolEventItem) {
-  switch (item.type) {
-    case 'SWAP':
-      return 'Swap'
-    case 'ADD':
-      return 'Add'
-    case 'REMOVE':
-      return 'Remove'
-    default:
-      throw new Error(`Unknown event type: ${item.type}`)
-  }
-}
-
-function Tokens({ poolEvent, chain }: { poolEvent: PoolEventItem; chain: GqlChain }) {
+function Tokens({ poolEvent, chain }: TokensProps) {
   if (poolEvent.__typename === 'GqlPoolSwapEventV3') {
     const swapEvent = poolEvent as GqlPoolSwapEventV3
     return <SwapTokens chain={chain} swapEvent={swapEvent} />
@@ -180,10 +108,9 @@ export default function PoolUserEvents({
   userPoolEvents: GetPoolEventsQuery['poolEvents'] | undefined
   isLoading: boolean
 }) {
-  const { myLiquiditySectionRef, chain, pool } = usePool()
+  const { myLiquiditySectionRef, pool } = usePool()
   const [height, setHeight] = useState(0)
   const [poolEvents, setPoolEvents] = useState<PoolEventItem[]>([])
-  const { toCurrency } = useCurrency()
 
   const {
     options: { showVeBal },
@@ -234,53 +161,12 @@ export default function PoolUserEvents({
     <Card h={height}>
       {isLoading && <Skeleton h="full" w="full" />}
       {!isLoading && (
-        <VStack alignItems="flex-start" h="full" spacing="md" w="full">
-          <Heading
-            backgroundClip="text"
-            bg="font.special"
-            fontWeight="bold"
-            lineHeight="34px" // to align with 'My liquidity'
-            size="h5"
-          >
-            My transactions
-          </Heading>
-          <Divider />
-          <Box display={{ base: 'none', md: 'block' }} w="full">
-            <Grid gap="4" templateColumns={{ base: '1fr', md: GRID_COLUMNS }} w="full">
-              {['Action', 'Tokens', 'Value', 'Time'].map((label, index) => (
-                <GridItem
-                  key={label}
-                  mr={index === 3 ? 'md' : 0}
-                  textAlign={index > 1 ? 'right' : 'left'}
-                >
-                  <Text fontSize="0.85rem" fontWeight="medium" variant="secondary">
-                    {label}
-                  </Text>
-                </GridItem>
-              ))}
-            </Grid>
-            <Divider mt="md" />
-          </Box>
-          <Box overflowY="auto" w="full">
-            {isEmpty(poolEvents) ? (
-              <>
-                <Text variant="secondary">No recent transactions</Text>
-                <Text variant="secondary">
-                  Note: Recent transactions may take a few minutes to display here.
-                </Text>
-              </>
-            ) : (
-              poolEvents.map(poolEvent => (
-                <PoolEventRow
-                  chain={chain}
-                  key={poolEvent.id}
-                  poolEvent={poolEvent}
-                  txUrl={getBlockExplorerTxUrl(poolEvent.tx, poolEvent.chain)}
-                  usdValue={toCurrency(poolEvent.valueUSD)}
-                />
-              ))
-            )}
-          </Box>
+        <CardContent
+          actionComponent={Action}
+          gridColumns={GRID_COLUMNS}
+          poolEvents={poolEvents}
+          tokensComponent={Tokens}
+        >
           <Divider />
           <HStack mt="auto" spacing="4">
             <Text fontSize="0.85rem" variant="secondary">
@@ -288,7 +174,7 @@ export default function PoolUserEvents({
             </Text>
             {showBoostValue && <BoostText pool={pool} />}
           </HStack>
-        </VStack>
+        </CardContent>
       )}
     </Card>
   )

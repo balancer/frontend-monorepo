@@ -25,6 +25,7 @@ import {
   PoolCore,
 } from './pool.types'
 import { Pool } from './pool.types'
+import { PoolEventItem } from '@repo/lib/modules/pool/usePoolEvents'
 
 // URL slug for each chain
 export enum ChainSlug {
@@ -309,4 +310,17 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
 
 export function shouldCallComputeDynamicSwapFee(pool: Pool) {
   return pool.hook && pool.hook.config?.shouldCallComputeDynamicSwapFee
+}
+
+export function getEventType(item: PoolEventItem) {
+  switch (item.type) {
+    case 'SWAP':
+      return 'Swap'
+    case 'ADD':
+      return 'Add'
+    case 'REMOVE':
+      return 'Remove'
+    default:
+      throw new Error(`Unknown event type: ${item.type}`)
+  }
 }
