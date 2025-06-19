@@ -220,7 +220,6 @@ function ProjectXHandle() {
           />
         )}
         rules={{
-          required: 'X / Twitter handle is required',
           validate: isValidTwitterHandle,
         }}
       />
