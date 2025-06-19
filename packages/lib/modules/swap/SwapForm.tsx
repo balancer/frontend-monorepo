@@ -41,7 +41,7 @@ import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { isPoolSwapAllowed } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
-import { ApiToken, CustomToken } from '../tokens/token.types'
+import { ApiToken } from '../tokens/token.types'
 import { SwapSimulationError } from './SwapSimulationError'
 import { LbpSwapCard } from '@repo/lib/modules/swap/LbpSwapCard'
 
@@ -49,13 +49,13 @@ type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
   hasDisabledInputs?: boolean
   nextButtonText?: string
-  customToken?: CustomToken
+  apiToken?: ApiToken
 }
 export function SwapForm({
   redirectToPoolPage,
   hasDisabledInputs,
   nextButtonText,
-  customToken,
+  apiToken,
 }: Props) {
   const isPoolSwapUrl = useIsPoolSwapUrl()
 
@@ -213,7 +213,7 @@ export function SwapForm({
           <CardHeader as={HStack} justify="space-between" w="full" zIndex={11}>
             <span>
               {isLbpSwap
-                ? `Buy $${customToken?.symbol}`
+                ? `Buy $${apiToken?.symbol}`
                 : isPoolSwap
                   ? 'Single pool swap'
                   : capitalize(swapAction)}
@@ -288,7 +288,7 @@ export function SwapForm({
                     onToggleTokenClicked: () => openTokenSelectModal('tokenOut'),
                   })}
                   {...(isLbpSwap && {
-                    apiToken: customToken,
+                    apiToken,
                   })}
                 />
               </VStack>
