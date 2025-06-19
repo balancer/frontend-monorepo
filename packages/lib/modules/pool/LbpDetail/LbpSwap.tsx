@@ -7,22 +7,26 @@ import { SwapProviderProps, PathParams } from '@repo/lib/modules/swap/SwapProvid
 import { isBefore, secondsToMilliseconds, format } from 'date-fns'
 import { now } from '@repo/lib/shared/utils/time'
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
-import { useLbpForm, LbpFormProvider } from '@repo/lib/modules/lbp/LbpFormProvider'
+import { CustomToken } from '@repo/lib/modules/tokens/token.types'
+import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
+import { Address } from 'viem'
 
 export function LbpSwap() {
-  return (
-    <LbpFormProvider>
-      <LbpSwapContent />
-    </LbpFormProvider>
-  )
-}
-
-function LbpSwapContent() {
   const { pool } = usePool()
-  const { launchToken } = useLbpForm()
 
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
   const poolActionableTokens = getPoolActionableTokens(lbpPool)
+
+  const launchTokenMetadata = useTokenMetadata(lbpPool.projectToken, lbpPool.chain)
+
+  const launchToken: CustomToken = {
+    name: launchTokenMetadata.name || '',
+    chain: lbpPool.chain,
+    address: lbpPool.projectToken as Address,
+    symbol: launchTokenMetadata.symbol || '',
+    logoURI: '', // TODO: add tokenLogo from api when available
+    decimals: launchTokenMetadata.decimals || 0,
+  }
 
   const pathParams: PathParams = {
     chain: chainToSlugMap[pool.chain],
@@ -39,18 +43,16 @@ function LbpSwapContent() {
   const isBeforeSaleStart = isBefore(now(), secondsToMilliseconds(lbpPool.startTime))
 
   return (
-    <LbpFormProvider>
-      <SwapLayout props={props}>
-        <SwapForm
-          customToken={launchToken}
-          hasDisabledInputs={isBeforeSaleStart}
-          nextButtonText={
-            isBeforeSaleStart
-              ? `Sale starts ${format(secondsToMilliseconds(lbpPool.startTime), 'haaa, MM/dd/yy')}`
-              : 'Next'
-          }
-        />
-      </SwapLayout>
-    </LbpFormProvider>
+    <SwapLayout props={props}>
+      <SwapForm
+        customToken={launchToken}
+        hasDisabledInputs={isBeforeSaleStart}
+        nextButtonText={
+          isBeforeSaleStart
+            ? `Sale starts ${format(secondsToMilliseconds(lbpPool.startTime), 'haaa, MM/dd/yy')}`
+            : 'Next'
+        }
+      />
+    </SwapLayout>
   )
 }
