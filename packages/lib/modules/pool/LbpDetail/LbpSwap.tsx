@@ -17,16 +17,17 @@ export function LbpSwap() {
 
   const launchToken = lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
 
+  // keep pathParams here to pass chain
   const pathParams: PathParams = {
     chain: chainToSlugMap[pool.chain],
-    tokenIn: poolActionableTokens[0].address,
-    tokenOut: poolActionableTokens[1].address,
+    tokenIn: lbpPool.reserveToken,
+    tokenOut: lbpPool.projectToken,
   }
 
   const props: SwapProviderProps = {
     pathParams,
     pool,
-    poolActionableTokens: poolActionableTokens,
+    poolActionableTokens,
   }
 
   const isBeforeSaleStart = isBefore(now(), secondsToMilliseconds(lbpPool.startTime))
