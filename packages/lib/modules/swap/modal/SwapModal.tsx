@@ -67,7 +67,7 @@ export function SwapPreviewModal({
   useResetStepIndexOnOpen(isOpen, transactionSteps)
 
   useEffect(() => {
-    if (!isWrap && swapTxHash && !window.location.pathname.includes(swapTxHash)) {
+    if (!isWrap && swapTxHash && !window.location.pathname.includes(swapTxHash) && !isLbpSwap) {
       const url = isPoolSwapUrl
         ? `${window.location.pathname}/${swapTxHash}`
         : `/swap/${chainToSlugMap[selectedChain]}/${swapTxHash}`
