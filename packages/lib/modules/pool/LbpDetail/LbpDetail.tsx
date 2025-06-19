@@ -11,15 +11,11 @@ import { now } from '@repo/lib/shared/utils/time'
 import { isAfter, isBefore, secondsToMilliseconds } from 'date-fns'
 import { Top10Holdings } from './Top10Holdings'
 import { LbpPoolChartsContainer } from './LbpPoolChartsContainer'
+import { MyPurchases } from './MyPurchases'
+import { MyTransactions } from './MyTransactions'
 
 export function LbpDetail() {
-  const userEvents = useUserPoolEvents()
-  const {
-    // TODO: implement
-    // userPoolEvents,
-    // isLoadingUserPoolEvents,
-    hasPoolEvents: userHasPoolEvents,
-  } = userEvents || {}
+  const { userPoolEvents, isLoadingUserPoolEvents, hasPoolEvents } = useUserPoolEvents()
 
   const { pool } = usePool()
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
@@ -41,16 +37,22 @@ export function LbpDetail() {
               )}
             </GridItem>
           </Grid>
-          {userHasPoolEvents && (
+
+          {hasPoolEvents && (
             <Stack
               direction={{ base: 'column', xl: 'row' }}
               justifyContent="stretch"
               spacing="md"
               w="full"
-            ></Stack>
+            >
+              <MyPurchases isLoading={isLoadingUserPoolEvents} userPoolEvents={userPoolEvents} />
+              <MyTransactions isLoading={isLoadingUserPoolEvents} userPoolEvents={userPoolEvents} />
+            </Stack>
           )}
+
           {!isBefore(now(), secondsToMilliseconds(lbpPool.startTime)) && <PoolActivity />}
           <PoolComposition />
+
           <PoolInfoLayout />
         </VStack>
       </DefaultPageContainer>
