@@ -47,7 +47,10 @@ export function usePoolListLogic({
     }
   )
 
-  const pools = loading && previousData ? previousData.pools : data?.pools || []
+  let pools = loading && previousData ? previousData.pools : data?.pools || []
+
+  const ALLOWED = new Set(['WETH'])
+  pools = pools.filter(pool => pool.poolTokens.some(token => ALLOWED.has(token.symbol)))
 
   const isFixedPoolType = !!fixedPoolTypes && fixedPoolTypes.length > 0
 
@@ -61,7 +64,7 @@ export function usePoolListLogic({
 
   return {
     pools,
-    count: data?.count || previousData?.count,
+    count: pools.length,
     queryState,
     loading,
     error,

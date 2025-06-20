@@ -17,6 +17,7 @@ import { clamp } from 'lodash'
 import { useThemeSettings } from '../../services/chakra/useThemeSettings'
 import { ImpersonateAccount } from '@repo/lib/modules/web3/impersonation/ImpersonateAccount'
 import { ArrowUpRight } from 'react-feather'
+import AggtraderNavbar from './AggtraderNavbar'
 
 type Props = {
   mobileNav?: ReactNode
@@ -267,6 +268,7 @@ export function NavBar({
       zIndex={100}
       {...rest}
     >
+      <AggtraderNavbar />
       <HStack as="nav" justify="space-between" padding={{ base: 'sm', md: 'md' }}>
         <HStack
           animate="show"

@@ -4,6 +4,15 @@ import type { NextConfig } from 'next'
 
 /** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/pools',
+        permanent: true, // 307 temporary — good for dev; use `true` for production SEO 308
+      },
+    ]
+  },
   webpack: config => {
     config.resolve.fallback = { fs: false, net: false, tls: false }
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
