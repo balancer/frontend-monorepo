@@ -206,7 +206,7 @@ function ProjectXHandle() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">X / Twitter handle</Text>
+      <Text color="font.primary">X / Twitter handle (optional)</Text>
       <Controller
         control={control}
         name="xHandle"
@@ -220,7 +220,6 @@ function ProjectXHandle() {
           />
         )}
         rules={{
-          required: 'X / Twitter handle is required',
           validate: isValidTwitterHandle,
         }}
       />
