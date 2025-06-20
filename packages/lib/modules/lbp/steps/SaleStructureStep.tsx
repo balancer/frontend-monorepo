@@ -40,8 +40,8 @@ import { WeightAdjustmentTypeInput } from './WeightAdjustmentTypeInput'
 import { TokenInputsValidationProvider } from '../../tokens/TokenInputsValidationProvider'
 import { PriceImpactProvider } from '../../price-impact/PriceImpactProvider'
 import { LbpFormAction } from '../LbpFormAction'
+import { CustomToken } from '../../tokens/token.types'
 import { useUserBalance } from '@repo/lib/shared/hooks/useUserBalance'
-import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 
 export function SaleStructureStep() {
   const { getToken } = useTokens()

@@ -20,7 +20,6 @@ import { useSwapReceipt } from '../../transactions/transaction-steps/receipts/re
 import { useUserAccount } from '../../web3/UserAccountProvider'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useIsPoolSwapUrl } from '../useIsPoolSwapUrl'
-import { isV3LBP } from '@repo/lib/modules/pool/pool.helpers'
 
 type Props = {
   isOpen: boolean
@@ -51,10 +50,8 @@ export function SwapPreviewModal({
     urlTxHash,
     hasQuoteContext,
     protocolVersion,
-    pool,
+    isLbpSwap,
   } = useSwap()
-
-  const isLbpSwap = pool && isV3LBP(pool)
 
   const swapReceipt = useSwapReceipt({
     txHash: swapTxHash,
@@ -118,7 +115,9 @@ export function SwapPreviewModal({
           currentStep={transactionSteps.currentStep}
           isSuccess={isSuccess}
           returnAction={onClose}
-          returnLabel={isPoolSwapUrl || isLbpSwap ? 'Return to pool' : 'Swap again'}
+          returnLabel={
+            isLbpSwap ? 'Return to lbp' : isPoolSwapUrl ? 'Return to pool' : 'Swap again'
+          }
           urlTxHash={urlTxHash}
         />
       </ModalContent>
