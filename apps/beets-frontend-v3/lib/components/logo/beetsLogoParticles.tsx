@@ -7,6 +7,9 @@ import { drawBeetsLogo } from './beetsLogoPath'
 export function BeetsLogoParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [isMobile, setIsMobile] = useState(false)
+  const fadeProgressRef = useRef(0)
+  const fadeAnimationRef = useRef<number | null>(null)
+  const isReadyRef = useRef(false)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -117,6 +120,30 @@ export function BeetsLogoParticles() {
       }
     }
 
+    // Fade in animation
+    function startFadeIn() {
+      const startTime = Date.now()
+      const duration = 5000 // 5 second fade in
+
+      function updateFade() {
+        const elapsed = Date.now() - startTime
+        const progress = Math.min(elapsed / duration, 1)
+
+        // Smooth ease-in-out curve
+        fadeProgressRef.current =
+          progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2
+
+        if (progress < 1) {
+          fadeAnimationRef.current = requestAnimationFrame(updateFade)
+        } else {
+          fadeProgressRef.current = 1
+          fadeAnimationRef.current = null
+        }
+      }
+
+      fadeAnimationRef.current = requestAnimationFrame(updateFade)
+    }
+
     let animationFrameId: number
 
     function animate(scale: number) {
@@ -124,6 +151,9 @@ export function BeetsLogoParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.fillStyle = 'black'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      // Apply fade effect to entire canvas
+      ctx.globalAlpha = fadeProgressRef.current
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i]
@@ -144,23 +174,43 @@ export function BeetsLogoParticles() {
         }
       }
 
+      ctx.globalAlpha = 1 // Reset global alpha
+
       animationFrameId = requestAnimationFrame(() => animate(scale))
     }
 
+    // Initialize everything
     const scale = createTextImage()
     createInitialParticles()
+
+    // Mark as ready and start fade in
+    isReadyRef.current = true
+    startFadeIn()
+
     animate(scale)
 
     const handleResize = () => {
       updateCanvasSize()
       particles = []
       createInitialParticles()
+
+      // If we were already ready, restart fade in
+      if (isReadyRef.current) {
+        fadeProgressRef.current = 0
+        if (fadeAnimationRef.current) {
+          cancelAnimationFrame(fadeAnimationRef.current)
+        }
+        startFadeIn()
+      }
     }
 
     window.addEventListener('resize', handleResize)
 
     return () => {
       window.removeEventListener('resize', handleResize)
+      if (fadeAnimationRef.current) {
+        cancelAnimationFrame(fadeAnimationRef.current)
+      }
       cancelAnimationFrame(animationFrameId)
     }
   }, [isMobile])
@@ -168,7 +218,7 @@ export function BeetsLogoParticles() {
   return (
     <Box h="100vh" left={0} pointerEvents="none" position="fixed" top={0} w="100vw" zIndex={-1}>
       <canvas
-        aria-label="Static particle background logo"
+        aria-label="Static particle background logo with fade in effect"
         ref={canvasRef}
         style={{
           width: '100%',
