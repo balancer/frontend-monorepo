@@ -428,6 +428,8 @@ export function shouldIgnore(message: string, stackTrace = ''): boolean {
     return true
   }
 
+  if (message.includes('Unreachable URL')) return true
+
   return false
 }
 
