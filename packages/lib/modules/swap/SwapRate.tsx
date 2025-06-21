@@ -40,7 +40,25 @@ export function SwapRate() {
   }
 
   return (
-    <Text cursor="pointer" fontSize="sm" onClick={togglePriceDirection} variant="secondary">
+    <Text
+      _after={{
+        borderBottom: '1px dotted',
+        borderColor: 'currentColor',
+        bottom: '-2px',
+        content: '""',
+        left: 0,
+        opacity: 0.5,
+        position: 'absolute',
+        width: '100%',
+      }}
+      _hover={{ color: 'font.link' }}
+      cursor="pointer"
+      fontSize="sm"
+      onClick={togglePriceDirection}
+      position="relative"
+      variant="secondary"
+      w="max-content"
+    >
       {simulationQuery.data && priceLabel}
     </Text>
   )

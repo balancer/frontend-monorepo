@@ -59,7 +59,6 @@ export function PoolActivityTableHeader({ ...rest }) {
           sorting={sorting}
         />
       </Grid>
-      <Divider w="full" />
     </>
   )
 }

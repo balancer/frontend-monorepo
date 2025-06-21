@@ -37,7 +37,11 @@ export function PoolListTableHeader({ ...rest }) {
         </VStack>
       </GridItem>
       <GridItem>
-        {PROJECT_CONFIG.options.showPoolName ? <PoolListPoolNamesTokens /> : 'Pool name'}
+        {PROJECT_CONFIG.options.showPoolName ? (
+          <PoolListPoolNamesTokens />
+        ) : (
+          <Text fontWeight="bold">Pool name</Text>
+        )}
       </GridItem>
       <GridItem justifySelf="start">
         <Text fontWeight="bold" textAlign="left">

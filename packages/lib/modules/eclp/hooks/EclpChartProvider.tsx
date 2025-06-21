@@ -2,9 +2,11 @@ import { useGetECLPLiquidityProfile } from '@repo/lib/modules/eclp/hooks/useGetE
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { usePool } from '../../pool/PoolProvider'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
+import { useBreakpointValue } from '@chakra-ui/react'
 import { createContext, PropsWithChildren, useMemo } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getPoolActionableTokens } from '../../pool/pool-tokens.utils'
+import { useTheme as useNextTheme } from 'next-themes'
 
 type EclpChartContextType = ReturnType<typeof useEclpChartLogic>
 
@@ -12,6 +14,12 @@ const EclpChartContext = createContext<EclpChartContextType | null>(null)
 
 export function useEclpChartLogic() {
   const { pool } = usePool()
+
+  const dynamicXAxisNamePadding = useBreakpointValue({
+    base: [0, 30, -56, 0],
+    md: [0, 30, -54, 0],
+    lg: [0, 24, -54, 0],
+  }) || [0, 24, -54, 0]
 
   const {
     data,
@@ -25,14 +33,27 @@ export function useEclpChartLogic() {
     isLoading,
   } = useGetECLPLiquidityProfile(pool)
   const theme = useChakraTheme()
-
+  const { theme: nextTheme } = useNextTheme()
   const tokens = useMemo(() => {
     const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
 
     return isReversed ? poolTokens.reverse().join('/') : poolTokens.join('/')
   }, [pool, isReversed])
 
-  const secondaryFontColor = theme.semanticTokens.colors.font.secondary.default
+  const secondaryFontColor =
+    nextTheme === 'dark'
+      ? theme.semanticTokens.colors.font.secondary._dark
+      : theme.semanticTokens.colors.font.secondary.default
+
+  const fontHighlightColor =
+    nextTheme === 'dark'
+      ? theme.semanticTokens.colors.font.highlight._dark
+      : theme.semanticTokens.colors.font.highlight.default
+
+  const backgroundHighlightColor =
+    nextTheme === 'dark'
+      ? theme.semanticTokens.colors.background.highlight._dark
+      : theme.semanticTokens.colors.background.highlight.default
 
   const markPointMargin = 0.05
   const isSpotPriceNearLowerBound = useMemo(() => {
@@ -54,10 +75,10 @@ export function useEclpChartLogic() {
 
     return {
       grid: {
-        left: '1.5%',
-        right: '1.5%',
-        top: '15%',
-        bottom: '18%',
+        left: '1%',
+        right: '1%',
+        top: '7%',
+        bottom: '15%',
       },
       tooltip: {
         show: true,
@@ -80,14 +101,14 @@ export function useEclpChartLogic() {
       },
       xAxis: {
         type: 'value',
-        name: `Price (${tokens})`,
+        name: `Price: ${tokens}`,
         nameLocation: 'end',
         nameGap: 5,
         nameTextStyle: {
           align: 'right',
           verticalAlign: 'bottom',
-          padding: [0, 40, -54, 0],
-          color: theme.colors.gray[400],
+          padding: dynamicXAxisNamePadding,
+          color: secondaryFontColor,
         },
         min: xMin - 0.1 * (xMax - xMin),
         max: xMax + 0.1 * (xMax - xMin),
@@ -160,9 +181,10 @@ export function useEclpChartLogic() {
               padding: [2, 3, 2, 3],
               borderRadius: 2,
               fontWeight: 'bold',
+              offset: [0, 1],
             },
             lineStyle: {
-              color: theme.colors.gray[400],
+              color: 'rgba(179, 174, 245, 0.5)',
               padding: [2, 0, 0, 0],
             },
             data: [
@@ -201,9 +223,10 @@ export function useEclpChartLogic() {
               padding: [2, 3, 2, 3],
               borderRadius: 2,
               fontWeight: 'bold',
+              offset: [0, 1],
             },
             lineStyle: {
-              color: theme.colors.gray[400],
+              color: 'rgba(234, 168, 121, 0.5)',
             },
             data: [
               [
@@ -255,7 +278,7 @@ export function useEclpChartLogic() {
                 label: {
                   show: !isSpotPriceNearUpperBound || !poolIsInRange,
                   fontSize: 12,
-                  color: secondaryFontColor,
+                  color: 'secondaryFontColor',
                   padding: 4,
                   borderRadius: 4,
                 },
@@ -266,7 +289,7 @@ export function useEclpChartLogic() {
                 label: {
                   show: poolIsInRange,
                   fontSize: 12,
-                  color: theme.colors.green[300],
+                  color: fontHighlightColor,
                 },
               },
             ],
@@ -287,7 +310,7 @@ export function useEclpChartLogic() {
                   fontWeight: 'bold',
                 },
                 lineStyle: {
-                  color: theme.colors.green[300],
+                  color: fontHighlightColor,
                 },
                 data: [
                   [
@@ -297,7 +320,7 @@ export function useEclpChartLogic() {
                         formatter: () => fNum('gyroPrice', poolSpotPrice || '0'),
                         position: 'start',
                         distance: 6,
-                        backgroundColor: theme.colors.green[300],
+                        backgroundColor: backgroundHighlightColor,
                       },
                     },
                     {

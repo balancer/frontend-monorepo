@@ -22,7 +22,7 @@ function DropdownIndicator({
 }: DropdownIndicatorProps<SelectOption, false, GroupBase<SelectOption>>) {
   return (
     <chakraComponents.DropdownIndicator {...props}>
-      <HStack>
+      <HStack pr="ms">
         <Globe size={16} />
         <ChevronDown size={16} />
       </HStack>

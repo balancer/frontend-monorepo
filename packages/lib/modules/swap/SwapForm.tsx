@@ -189,12 +189,12 @@ export function SwapForm({ redirectToPoolPage }: Props) {
             <span>{isPoolSwap ? 'Single pool swap' : capitalize(swapAction)}</span>
             <HStack>
               <Tooltip label={copiedDeepLink ? 'Copied!' : 'Copy swap link'}>
-                <Button color="grayText" onClick={copyDeepLink} size="sm" variant="tertiary">
-                  {copiedDeepLink ? <CheckCircle size={16} /> : <Link size={16} />}
+                <Button color="grayText" onClick={copyDeepLink} size="xs" variant="tertiary">
+                  {copiedDeepLink ? <CheckCircle size={14} /> : <Link size={14} />}
                 </Button>
               </Tooltip>
 
-              <TransactionSettings size="sm" />
+              <TransactionSettings size="xs" />
             </HStack>
           </CardHeader>
           <CardBody align="start" as={VStack}>

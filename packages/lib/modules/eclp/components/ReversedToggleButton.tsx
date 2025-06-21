@@ -9,15 +9,20 @@ export function ReversedToggleButton() {
   return (
     <Button
       bottom={0}
+      cursor="pointer"
       fontSize="xs"
       fontWeight="medium"
+      height="20px !important"
+      minWidth="20px !important"
       onClick={toggleIsReversed}
+      p="0 !important"
       position="absolute"
-      px={2}
-      py={1}
-      right={2}
+      right={0}
+      rounded="sm !important"
+      shadow="md"
       size="xs"
       variant="primary"
+      width="20px !important"
       zIndex={1}
     >
       <Icon as={Repeat} />
