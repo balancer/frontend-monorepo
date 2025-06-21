@@ -26,14 +26,14 @@ import { BullseyeIcon } from '@repo/lib/shared/components/icons/BullseyeIcon'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import NextLink from 'next/link'
 import { getNestedPoolPath } from '../../pool/pool.utils'
-import { ApiToken } from '../token.types'
+import { ApiToken, CustomToken } from '../token.types'
 import { getFlatUserReferenceTokens } from '../../pool/pool-tokens.utils'
 
 export type TokenInfoProps = {
   address: Address
   symbol?: string
   chain: GqlChain
-  token?: ApiToken
+  token?: ApiToken | CustomToken
   poolToken?: ApiToken
   pool?: Pool
   disabled?: boolean
@@ -135,6 +135,7 @@ export type TokenRowProps = {
   toggleTokenSelect?: () => void
   iconSize?: number
   logoURI?: string
+  customToken?: CustomToken
 }
 
 export default function TokenRow({
@@ -156,12 +157,13 @@ export default function TokenRow({
   toggleTokenSelect,
   iconSize,
   logoURI,
+  customToken,
 }: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
   const { toCurrency } = useCurrency()
   const [amount, setAmount] = useState<string>('')
   const [usdValue, setUsdValue] = useState<string | undefined>(undefined)
-  const token = getToken(address, chain)
+  const token = customToken || getToken(address, chain)
   const userReferenceTokens = pool ? getFlatUserReferenceTokens(pool) : []
   const poolToken = userReferenceTokens.find(t => isSameAddress(t.address, address))
 

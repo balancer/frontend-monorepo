@@ -17,6 +17,7 @@ import { isNativeAsset } from '../tokens/token.helpers'
 
 type Params = SwapStepParams & {
   vaultAddress: Address
+  isLbpSwap: boolean
   // TODO: remove this field once we refactor to use:
   // https://github.com/balancer/b-sdk/issues/462
   isPoolSwap: boolean
@@ -31,6 +32,7 @@ export function useSwapSteps({
   swapAction,
   tokenInInfo,
   tokenOutInfo,
+  isLbpSwap,
 }: Params) {
   const chain = swapState.selectedChain
   const chainId = getChainId(chain)
@@ -57,8 +59,11 @@ export function useSwapSteps({
     ]
   }, [humanAmountIn, tokenInInfo])
 
-  const approvalActionType: ApprovalAction =
-    swapAction === OSwapAction.UNWRAP ? 'Unwrapping' : 'Swapping'
+  const approvalActionType: ApprovalAction = isLbpSwap
+    ? 'Buying'
+    : swapAction === OSwapAction.UNWRAP
+      ? 'Unwrapping'
+      : 'Swapping'
 
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
@@ -87,6 +92,7 @@ export function useSwapSteps({
     swapAction,
     tokenInInfo,
     tokenOutInfo,
+    isLbpSwap,
   })
 
   const isSignPermit2Loading = isPermit2 && !signPermit2Step

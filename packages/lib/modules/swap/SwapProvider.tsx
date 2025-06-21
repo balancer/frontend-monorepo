@@ -10,7 +10,11 @@ import { useNetworkConfig } from '@repo/lib/config/useNetworkConfig'
 import { useMakeVarPersisted } from '@repo/lib/shared/hooks/useMakeVarPersisted'
 import { useVault } from '@repo/lib/shared/hooks/useVault'
 import { LABELS } from '@repo/lib/shared/labels'
-import { GqlChain, GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
+import {
+  GqlChain,
+  GqlPoolLiquidityBootstrappingV3,
+  GqlSorSwapType,
+} from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress, selectByAddress } from '@repo/lib/shared/utils/addresses'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { isDisabledWithReason } from '@repo/lib/shared/utils/functions/isDisabledWithReason'
@@ -57,6 +61,7 @@ import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { ProtocolVersion } from '../pool/pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
 import { ApiToken } from '../tokens/token.types'
+import { isV3LBP } from '@repo/lib/modules/pool/pool.helpers'
 
 export type UseSwapResponse = ReturnType<typeof useSwapLogic>
 export const SwapContext = createContext<UseSwapResponse | null>(null)
@@ -100,9 +105,10 @@ export type SwapProviderProps = {
 export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapProviderProps) {
   const urlTxHash = pathParams.urlTxHash
   const isPoolSwapUrl = useIsPoolSwapUrl()
+  const isLbpSwap = pool && isV3LBP(pool)
 
   const isPoolSwap = pool && poolActionableTokens // Hint to tell TS that pool and poolActionableTokens must be defined when poolSwap
-  const shouldDiscardOldPersistedValue = isPoolSwapUrl
+  const shouldDiscardOldPersistedValue = isPoolSwapUrl || isLbpSwap
   const swapStateVar = useMakeVarPersisted<SwapState>(
     {
       tokenIn: {
@@ -340,9 +346,11 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   function getDefaultTokenState(chain: GqlChain) {
     const swapState = swapStateVar()
+
     const {
       tokens: { defaultSwapTokens },
     } = getNetworkConfig(chain)
+
     const { tokenIn, tokenOut } = defaultSwapTokens || {}
 
     return {
@@ -382,7 +390,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   }
 
   function replaceUrlPath() {
-    if (isPoolSwapUrl) return // Avoid redirection when the swap is within a pool page
+    if (isPoolSwapUrl || isLbpSwap) return // Avoid redirection when the swap is within a pool or LBP page
     const { selectedChain, tokenIn, tokenOut, swapType } = swapState
     const networkConfig = getNetworkConfig(selectedChain)
     const { popularTokens } = networkConfig.tokens
@@ -457,6 +465,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     tokenInInfo,
     tokenOutInfo,
     isPoolSwap: !!isPoolSwap,
+    isLbpSwap: !!isLbpSwap,
   })
 
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
@@ -513,7 +522,11 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     if (!slugChain) throw new Error(`Chain slug not found for chain ${pool.chain}`)
     setInitialChain(slugChain)
 
-    if (supportsNestedActions(pool)) {
+    if (isLbpSwap) {
+      const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+      setInitialTokenIn(lbpPool.poolTokens[lbpPool.reserveTokenIndex].address)
+      setInitialTokenOut(lbpPool.poolTokens[lbpPool.projectTokenIndex].address)
+    } else if (supportsNestedActions(pool)) {
       setInitialTokenIn(tokenIn)
       if (isStandardOrUnderlyingRootToken(pool, tokenIn as Address)) {
         setInitialTokenOut(getChildTokens(pool, poolActionableTokens)[0].address)
@@ -525,6 +538,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       setInitialTokenIn(poolActionableTokens?.[0]?.address)
       setInitialTokenOut(poolActionableTokens?.[1]?.address)
     }
+
     resetSwapAmounts()
   }
 
@@ -650,6 +664,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     pool,
     poolActionableTokens,
     protocolVersion,
+    isLbpSwap,
     replaceUrlPath,
     resetSwapAmounts,
     setTokenSelectKey,

@@ -41,7 +41,7 @@ export function SwapRate() {
 
   return (
     <Text cursor="pointer" fontSize="sm" onClick={togglePriceDirection} variant="secondary">
-      {simulationQuery.data && priceLabel}
+      {simulationQuery.data ? priceLabel : 'Exchange rate: –'}
     </Text>
   )
 }
