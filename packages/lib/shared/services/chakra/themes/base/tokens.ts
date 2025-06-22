@@ -95,10 +95,10 @@ export function getTokens(colors: any, primaryTextColor: string) {
         background: {
           level0: '#31373F',
           level1: '#383E47',
-          level2: '#3F4650',
+          level2: '#050512',
           level3: '#464D58',
           level4: '#4C5561',
-          base: colors.base.dark,
+          base: '#050512', //colors.base.dark,
           baseWithOpacity: createBackgroundOpacity(colors.base.hslDark, 0.97),
           level0WithOpacity: 'rgba(49, 55, 63, 0.96)',
           special: colors.gradient.dawnDark,

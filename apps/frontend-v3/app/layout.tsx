@@ -52,11 +52,11 @@ export default function RootLayout({ children }: PropsWithChildren) {
             <Providers>
               <NavBarContainer />
               {children}
-              <Footer
+              {/* <Footer
                 logoType={<BalancerLogoType />}
                 subTitle="Balancer is a battle-tested toolkit for true AMM experimentation and innovation."
                 title="AMMs made easy"
-              />
+              /> */}
               <SpeedInsights />
             </Providers>
           </ThemeProvider>

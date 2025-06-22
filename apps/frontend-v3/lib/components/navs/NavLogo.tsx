@@ -12,12 +12,16 @@ export function NavLogo() {
     <Box as={motion.div} variants={fadeIn}>
       <Link as={NextLink} href="/" prefetch variant="nav">
         <Box>
-          <Box display={{ base: 'block', md: 'none' }}>
+          {/* <Box display={{ base: 'block', md: 'none' }}>
             <BalancerLogo width="26px" />
           </Box>
           <Box display={{ base: 'none', md: 'block' }}>
             <BalancerLogoType width="106px" />
-          </Box>
+          </Box> */}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="./Aggtrade-logo.svg" alt="" />
+            <p style={{ fontWeight: 600, fontSize: '20px', color: 'white' }}>AggTrade</p>
+          </div>
         </Box>
       </Link>
     </Box>

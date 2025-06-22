@@ -60,12 +60,16 @@ export function PoolListTable({ pools, count, loading }: Props) {
   return (
     <Card
       alignItems="flex-start"
-      left={{ base: '-4px', sm: '0' }}
-      p={{ base: '0', sm: '0' }}
       position="relative"
-      // fixing right padding for horizontal scroll on mobile
+      left={{ base: '-4px', sm: '0' }}
       pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
       w={{ base: '100vw', lg: 'full' }}
+      p={{ base: '0', sm: '0' }}
+      borderRadius="lg"
+      border="1px solid rgba(0, 245, 224, 0.2)"
+      background="linear-gradient(180deg, rgba(0, 245, 224, 0.05), rgba(0, 245, 224, 0.01))"
+      boxShadow="inset 0 0 20px rgba(0, 245, 224, 0.2), 0 0 16px rgba(0, 245, 224, 0.1)"
+      backdropFilter="blur(12px)"
     >
       <PaginatedTable
         getRowId={item => item.id}

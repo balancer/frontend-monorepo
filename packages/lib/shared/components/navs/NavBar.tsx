@@ -84,7 +84,7 @@ function NavLinks({
       {customLinks}
       {(isDev || isStaging) && (
         <>
-          <Box as={motion.div} variants={fadeIn}>
+          {/* <Box as={motion.div} variants={fadeIn}>
             <Link
               as={NextLink}
               color={linkColorFor('/lbp/create')}
@@ -94,23 +94,23 @@ function NavLinks({
             >
               LBP
             </Link>
-          </Box>
-          <Box as={motion.div} variants={fadeIn}>
-            <Link
-              as={NextLink}
-              color={linkColorFor('/debug/pools')}
-              href="/debug/pools"
-              prefetch
-              variant="nav"
-            >
-              Test-Pools
-            </Link>
-          </Box>
-          <Box as={motion.div} variants={fadeIn}>
-            <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
-              Debug
-            </Link>
-          </Box>
+          </Box> */}
+          {/* <Box as={motion.div} variants={fadeIn}>
+              <Link
+                as={NextLink}
+                color={linkColorFor('/debug/pools')}
+                href="/debug/pools"
+                prefetch
+                variant="nav"
+              >
+                Test-Pools
+              </Link>
+            </Box>
+            <Box as={motion.div} variants={fadeIn}>
+              <Link as={NextLink} color={linkColorFor('/debug')} href="/debug" prefetch variant="nav">
+                Debug
+              </Link>
+            </Box> */}
         </>
       )}
       {/* Display impersonate form only for E2E dev tests */}

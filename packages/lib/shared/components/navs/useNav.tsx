@@ -13,18 +13,18 @@ export type AppLink = {
 
 export function useNav() {
   const pathname = usePathname()
-  const { chain } = useParams()
-  const swapHref = chain ? '/swap/' + chain : '/swap'
+  // const { chain } = useParams()
+  // const swapHref = chain ? '/swap/' + chain : '/swap'
 
   const defaultAppLinks: AppLink[] = [
     {
       href: '/pools',
       label: 'Pools',
     },
-    {
-      href: swapHref,
-      label: 'Swap',
-    },
+    // {
+    //   href: swapHref,
+    //   label: 'Swap',
+    // },
     {
       href: '/portfolio',
       label: 'Portfolio',

@@ -23,18 +23,14 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
   return (
     <>
       <Box borderBottom="1px solid" borderColor="border.base">
-        <Noise
-          backgroundColor="background.level0WithOpacity"
-          overflow="hidden"
-          position="relative"
-          shadow="innerBase"
-        >
+        <Noise overflow="hidden" position="relative" shadow="innerBase">
           <DefaultPageContainer
+            bg={'#050512'}
             pb={['xl', 'xl', '10']}
             pr={{ base: '0 !important', md: 'md !important' }}
             pt={['xl', '40px']}
           >
-            <Box display={{ base: 'none', md: 'block' }}>
+            {/* <Box display={{ base: 'none', md: 'block' }}>
               <RadialPattern
                 circleCount={8}
                 height={600}
@@ -77,7 +73,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
               position="absolute"
               top="300px"
               width={600}
-            />
+            /> */}
             <FadeInOnView animateOnce={false}>
               <Flex
                 align={{ base: 'start', md: 'start' }}
@@ -85,10 +81,11 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
                 gap="4"
                 justify={{ base: 'start', md: 'space-between' }}
                 mb="10"
+                sx={{ paddingTop: '50px' }}
               >
                 <Box>
                   <Heading pb="3" sx={{ textWrap: 'balance' }} variant="special">
-                    Earn passively on {PROJECT_CONFIG.projectName}
+                    Earn passively on AggTrade
                   </Heading>
                   <Text sx={{ textWrap: 'balance' }} variant="secondary">
                     {`Join ${fNumCustom(protocolData?.protocolMetricsAggregated.numLiquidityProviders || '0', '0a')}+ Liquidity Providers in yield-bearing pools`}
@@ -97,12 +94,12 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
                 <PoolPageStats rewardsClaimed24h={rewardsClaimed24h} />
               </Flex>
             </FadeInOnView>
-            <FadeInOnView animateOnce={false}>
+            {/* <FadeInOnView animateOnce={false}>
               <Box pb={{ base: '0', md: '3' }}>
                 {/* <BeetsPromoBanner /> */}
-                {children}
-              </Box>
-            </FadeInOnView>
+            {/* {children} */}
+            {/* </Box> */}
+            {/* </FadeInOnView> */}
             {/* <FadeInOnView animateOnce={false}>
             <Box pt="20" pb="4">
               <FeaturedPools featuredPools={featuredPools} />
@@ -111,16 +108,16 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
           </DefaultPageContainer>
         </Noise>
       </Box>
-      <DefaultPageContainer noVerticalPadding pb="xl" pt={['lg', '54px']}>
+      <DefaultPageContainer bg={'transparent'} noVerticalPadding pb="xl" pt={['lg', '54px']}>
         <FadeInOnView animateOnce={false}>
           <Suspense fallback={<Skeleton h="500px" w="full" />}>
             <PoolList />
           </Suspense>
         </FadeInOnView>
       </DefaultPageContainer>
-      <DefaultPageContainer mb="3xl" py="0" rounded="2xl">
+      {/* <DefaultPageContainer mb="3xl" py="0" rounded="2xl">
         <FeaturedPartners />
-      </DefaultPageContainer>
+      </DefaultPageContainer> */}
     </>
   )
 }
