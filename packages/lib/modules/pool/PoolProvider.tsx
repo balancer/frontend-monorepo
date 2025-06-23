@@ -8,7 +8,7 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { createContext, PropsWithChildren, useRef } from 'react'
 import { useQuery } from '@apollo/client'
-import { FetchPoolProps } from './pool.types'
+import { FetchPoolProps, Pool } from './pool.types'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getPoolHelpers } from './pool.helpers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -17,8 +17,7 @@ import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances
 import { useInvalidVariantRedirect } from './pool.hooks'
 import { useTokens } from '../tokens/TokensProvider'
 import { getCompositionTokens } from './pool-tokens.utils'
-import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { cloneDeep } from 'lodash'
+import { removeHookDataFromPoolIfNecessary } from './pool.utils'
 
 export type FeaturedPool = GetFeaturedPoolsQuery['featuredPools'][0]['pool']
 export type UsePoolResponse = ReturnType<typeof usePoolLogic> & {
@@ -42,18 +41,13 @@ export function usePoolLogic({
     variables: { id, chain, userAddress: userAddress.toLowerCase() },
   })
 
-  const poolData = cloneDeep(data?.pool || initialData.pool)
-
-  // reclamm and lbp pools have a hook with the same address as the pool, these can be ignored in the ui but not in the api
-  if (poolData.hook && isSameAddress(poolData.hook.address, poolData.address)) {
-    delete poolData.hook
-  }
+  const poolData = removeHookDataFromPoolIfNecessary(data?.pool || initialData.pool)
 
   const {
     pool: poolWithOnChainData,
     refetch: refetchOnchainData,
     isLoading: isLoadingOnchainData,
-  } = usePoolEnrichWithOnChainData(poolData)
+  } = usePoolEnrichWithOnChainData(poolData as Pool)
 
   const {
     data: [poolWithOnchainUserBalances],

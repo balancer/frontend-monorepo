@@ -15,8 +15,8 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
 import { PoolDisplayType } from '../pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
-import cloneDeep from 'lodash/cloneDeep'
-import { isSameAddress } from '@repo/lib/shared/utils/addresses'
+import { removeHookDataFromPoolIfNecessary } from '../pool.utils'
+import { PoolListItem } from '../pool.types'
 
 export function usePoolListLogic({
   fixedPoolTypes,
@@ -50,14 +50,8 @@ export function usePoolListLogic({
   )
 
   const pools = loading && previousData ? previousData.pools : data?.pools || []
-  const poolsData = cloneDeep(pools)
 
-  // reclamm and lbp pools have a hook with the same address as the pool, these can be ignored in the ui but not in the api
-  poolsData.forEach(pool => {
-    if (pool.hook && isSameAddress(pool.hook.address, pool.address)) {
-      delete pool.hook
-    }
-  })
+  const poolsData = pools.map(pool => removeHookDataFromPoolIfNecessary(pool)) as PoolListItem[]
 
   const isFixedPoolType = !!fixedPoolTypes && fixedPoolTypes.length > 0
 

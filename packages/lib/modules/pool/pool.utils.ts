@@ -10,7 +10,7 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
-import { invert } from 'lodash'
+import { cloneDeep, invert } from 'lodash'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { Address, formatUnits, parseUnits } from 'viem'
 import { TokenAmountHumanReadable } from '../tokens/token.types'
@@ -25,6 +25,7 @@ import {
   PoolCore,
 } from './pool.types'
 import { Pool } from './pool.types'
+import { isSameAddress } from '@balancer/sdk'
 
 // URL slug for each chain
 export enum ChainSlug {
@@ -310,4 +311,18 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
 
 export function shouldCallComputeDynamicSwapFee(pool: Pool) {
   return pool.hook && pool.hook.config?.shouldCallComputeDynamicSwapFee
+}
+
+/**
+ * Removes hook data from pool if the hook address is the same as the pool address.
+ * This is necessary for pools that have a hook with the same address as the pool, these can be ignored in the ui but not in the api
+ */
+export function removeHookDataFromPoolIfNecessary(pool: Pool | PoolListItem) {
+  const clone = cloneDeep(pool)
+
+  if (clone.hook && isSameAddress(clone.hook.address as Address, clone.address as Address)) {
+    delete clone.hook
+  }
+
+  return clone
 }
