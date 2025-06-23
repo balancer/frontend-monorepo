@@ -28,11 +28,6 @@ export function useGetComputeReclAmmData() {
         ...reclAmmPoolContract,
         functionName: 'getCurrentLiveBalances',
       },
-      // TODO: adding this messes up typescript, check if needed
-      // {
-      //   ...reclAmmPoolContract,
-      //   functionName: 'getDailyPriceShiftExponent',
-      // },
       {
         ...reclAmmPoolContract,
         functionName: 'getCenterednessMargin',
