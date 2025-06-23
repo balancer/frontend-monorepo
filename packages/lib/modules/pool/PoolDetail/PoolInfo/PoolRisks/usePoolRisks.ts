@@ -14,6 +14,7 @@ import {
   hasHookType,
   isQuantAmmPool,
   isReclAmm,
+  isV3LBP,
 } from '../../../pool.helpers'
 import { zeroAddress } from 'viem'
 
@@ -54,6 +55,7 @@ export enum RiskKey {
   MEVCaptureHook = 'mevcapture-hook',
   QuantAmmWeighted = 'btf',
   ReclAmm = 'reclamm',
+  LiquidityBootstrappingPool = 'lbp',
 }
 
 export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
@@ -81,6 +83,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.MEVCaptureHook]: 'MEV Capture hook risks',
   [RiskKey.QuantAmmWeighted]: 'BTF pool risks',
   [RiskKey.ReclAmm]: 'reCLAMM pool risks',
+  [RiskKey.LiquidityBootstrappingPool]: 'Liquidity Bootstrapping pool risks',
 }
 
 export type Risk = {
@@ -120,6 +123,7 @@ const stableSurgeHookRisks = getLink(RiskKey.StableSurgeHook)
 const mevCaptureHookRisks = getLink(RiskKey.MEVCaptureHook)
 const quantAmmWeightedRisks = getLink(RiskKey.QuantAmmWeighted)
 const reclAmmRisks = getLink(RiskKey.ReclAmm)
+const liquidityBootstrappingPoolRisks = getLink(RiskKey.LiquidityBootstrappingPool)
 
 export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   const result: Risk[] = []
@@ -132,6 +136,7 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   if (isBoosted(pool)) result.push(boostedRisks)
   if (isQuantAmmPool(pool.type)) result.push(quantAmmWeightedRisks)
   if (isReclAmm(pool.type)) result.push(reclAmmRisks)
+  if (isV3LBP(pool)) result.push(liquidityBootstrappingPoolRisks)
   if (pool.chain === GqlChain.Arbitrum) result.push(arbitrumRisks)
   if (pool.chain === GqlChain.Optimism) result.push(optimismRisks)
   if (pool.chain === GqlChain.Polygon) result.push(polygonRisks)
