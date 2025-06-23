@@ -82,6 +82,16 @@ export default defineConfig(() => {
           },
         ],
       }),
+      etherscan({
+        apiKey: env.ETHERSCAN_API_KEY,
+        chainId: 8453,
+        contracts: [
+          {
+            name: 'ReClammPool',
+            address: '0x03D5bbf2711926Ea3d7f2a5a07C8E5C6b25A1745',
+          },
+        ],
+      }),
     ],
   }
 })

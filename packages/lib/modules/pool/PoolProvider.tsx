@@ -8,7 +8,7 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { createContext, PropsWithChildren, useRef } from 'react'
 import { useQuery } from '@apollo/client'
-import { FetchPoolProps } from './pool.types'
+import { FetchPoolProps, Pool } from './pool.types'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getPoolHelpers } from './pool.helpers'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
@@ -17,6 +17,7 @@ import { useOnchainUserPoolBalances } from './queries/useOnchainUserPoolBalances
 import { useInvalidVariantRedirect } from './pool.hooks'
 import { useTokens } from '../tokens/TokensProvider'
 import { getCompositionTokens } from './pool-tokens.utils'
+import { removeHookDataFromPoolIfNecessary } from './pool.utils'
 
 export type FeaturedPool = GetFeaturedPoolsQuery['featuredPools'][0]['pool']
 export type UsePoolResponse = ReturnType<typeof usePoolLogic> & {
@@ -40,19 +41,21 @@ export function usePoolLogic({
     variables: { id, chain, userAddress: userAddress.toLowerCase() },
   })
 
+  const poolData = removeHookDataFromPoolIfNecessary(data?.pool || initialData.pool)
+
   const {
     pool: poolWithOnChainData,
     refetch: refetchOnchainData,
     isLoading: isLoadingOnchainData,
-  } = usePoolEnrichWithOnChainData(data?.pool || initialData.pool)
+  } = usePoolEnrichWithOnChainData(poolData as Pool)
 
   const {
     data: [poolWithOnchainUserBalances],
     refetch: refetchOnchainUserBalances,
     isLoading: isLoadingOnchainUserBalances,
-  } = useOnchainUserPoolBalances([poolWithOnChainData || data?.pool || initialData.pool])
+  } = useOnchainUserPoolBalances([poolWithOnChainData || poolData])
 
-  const pool = poolWithOnchainUserBalances || poolWithOnChainData || data?.pool || initialData.pool
+  const pool = poolWithOnchainUserBalances || poolWithOnChainData || poolData
   const bptPrice = priceFor(pool.address, pool.chain)
   const tvl = calcTotalUsdValue(getCompositionTokens(pool), pool.chain)
   const isLoading = isLoadingOnchainData || isLoadingOnchainUserBalances

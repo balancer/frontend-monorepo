@@ -4781,6 +4781,1309 @@ export const gyroEclpPoolConfig = {
 } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ReClammPool
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x03D5bbf2711926Ea3d7f2a5a07C8E5C6b25A1745)
+ */
+export const reClammPoolAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      {
+        name: 'params',
+        internalType: 'struct ReClammPoolParams',
+        type: 'tuple',
+        components: [
+          { name: 'name', internalType: 'string', type: 'string' },
+          { name: 'symbol', internalType: 'string', type: 'string' },
+          { name: 'version', internalType: 'string', type: 'string' },
+          {
+            name: 'priceShiftDailyRate',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'centerednessMargin',
+            internalType: 'uint64',
+            type: 'uint64',
+          },
+          { name: 'initialMinPrice', internalType: 'uint256', type: 'uint256' },
+          { name: 'initialMaxPrice', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'initialTargetPrice',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+        ],
+      },
+      { name: 'vault', internalType: 'contract IVault', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'error', inputs: [], name: 'AmountOutGreaterThanBalance' },
+  { type: 'error', inputs: [], name: 'BalanceRatioExceedsTolerance' },
+  { type: 'error', inputs: [], name: 'BaseOutOfBounds' },
+  { type: 'error', inputs: [], name: 'ECDSAInvalidSignature' },
+  {
+    type: 'error',
+    inputs: [{ name: 'length', internalType: 'uint256', type: 'uint256' }],
+    name: 'ECDSAInvalidSignatureLength',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 's', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'ECDSAInvalidSignatureS',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'deadline', internalType: 'uint256', type: 'uint256' }],
+    name: 'ERC2612ExpiredSignature',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'signer', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'ERC2612InvalidSigner',
+  },
+  { type: 'error', inputs: [], name: 'ExponentOutOfBounds' },
+  {
+    type: 'error',
+    inputs: [
+      {
+        name: 'fourthRootPriceRatioDelta',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    name: 'FourthRootPriceRatioDeltaBelowMin',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'resolvedStartTime', internalType: 'uint256', type: 'uint256' },
+      { name: 'endTime', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'GradualUpdateTimeTravel',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'account', internalType: 'address', type: 'address' },
+      { name: 'currentNonce', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'InvalidAccountNonce',
+  },
+  { type: 'error', inputs: [], name: 'InvalidCenterednessMargin' },
+  { type: 'error', inputs: [], name: 'InvalidExponent' },
+  { type: 'error', inputs: [], name: 'InvalidInitialPrice' },
+  { type: 'error', inputs: [], name: 'InvalidShortString' },
+  { type: 'error', inputs: [], name: 'InvalidStartTime' },
+  { type: 'error', inputs: [], name: 'NegativeAmountOut' },
+  { type: 'error', inputs: [], name: 'NotImplemented' },
+  { type: 'error', inputs: [], name: 'PoolCenterednessTooLow' },
+  { type: 'error', inputs: [], name: 'PoolNotInitialized' },
+  { type: 'error', inputs: [], name: 'PoolOutsideTargetRange' },
+  { type: 'error', inputs: [], name: 'PriceRatioUpdateDurationTooShort' },
+  { type: 'error', inputs: [], name: 'PriceShiftDailyRateTooHigh' },
+  { type: 'error', inputs: [], name: 'ProductOutOfBounds' },
+  { type: 'error', inputs: [], name: 'ReClammPoolBptRateUnsupported' },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'bits', internalType: 'uint8', type: 'uint8' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'SafeCastOverflowedUintDowncast',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'value', internalType: 'uint256', type: 'uint256' }],
+    name: 'SafeCastOverflowedUintToInt',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'sender', internalType: 'address', type: 'address' }],
+    name: 'SenderIsNotVault',
+  },
+  { type: 'error', inputs: [], name: 'SenderNotAllowed' },
+  {
+    type: 'error',
+    inputs: [{ name: 'str', internalType: 'string', type: 'string' }],
+    name: 'StringTooLong',
+  },
+  { type: 'error', inputs: [], name: 'TokenBalanceTooLow' },
+  { type: 'error', inputs: [], name: 'VaultIsNotLocked' },
+  { type: 'error', inputs: [], name: 'VaultNotSet' },
+  { type: 'error', inputs: [], name: 'WrongInitializationPrices' },
+  { type: 'error', inputs: [], name: 'ZeroDivision' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'spender',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'centerednessMargin',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'CenterednessMarginUpdated',
+  },
+  { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'lastTimestamp',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+    ],
+    name: 'LastTimestampUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'startFourthRootPriceRatio',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'endFourthRootPriceRatio',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'priceRatioUpdateStartTime',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'priceRatioUpdateEndTime',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'PriceRatioStateUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'priceShiftDailyRate',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'priceShiftDailyRateInSeconds',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'PriceShiftDailyRateUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'value',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'virtualBalanceA',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'virtualBalanceB',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'VirtualBalancesUpdated',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'PERMIT_TYPEHASH',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+    ],
+    name: 'allowance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'computeBalance',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'computeCurrentFourthRootPriceRatio',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'computeCurrentPoolCenteredness',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'computeCurrentPriceRange',
+    outputs: [
+      { name: 'minPrice', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxPrice', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'computeCurrentVirtualBalances',
+    outputs: [
+      {
+        name: 'currentVirtualBalanceA',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      {
+        name: 'currentVirtualBalanceB',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      { name: 'changed', internalType: 'bool', type: 'bool' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'computeInitialBalanceRatio',
+    outputs: [{ name: 'balanceRatio', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'balancesScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'rounding', internalType: 'enum Rounding', type: 'uint8' },
+    ],
+    name: 'computeInvariant',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'eip712Domain',
+    outputs: [
+      { name: 'fields', internalType: 'bytes1', type: 'bytes1' },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'version', internalType: 'string', type: 'string' },
+      { name: 'chainId', internalType: 'uint256', type: 'uint256' },
+      { name: 'verifyingContract', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'extensions', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'emitApproval',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'emitTransfer',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'selector', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'getActionId',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getAggregateFeePercentages',
+    outputs: [
+      {
+        name: 'aggregateSwapFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      {
+        name: 'aggregateYieldFeePercentage',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getCenterednessMargin',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getCurrentLiveBalances',
+    outputs: [
+      {
+        name: 'balancesLiveScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getHookFlags',
+    outputs: [
+      {
+        name: 'hookFlags',
+        internalType: 'struct HookFlags',
+        type: 'tuple',
+        components: [
+          {
+            name: 'enableHookAdjustedAmounts',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'shouldCallBeforeInitialize',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'shouldCallAfterInitialize',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'shouldCallComputeDynamicSwapFee',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          { name: 'shouldCallBeforeSwap', internalType: 'bool', type: 'bool' },
+          { name: 'shouldCallAfterSwap', internalType: 'bool', type: 'bool' },
+          {
+            name: 'shouldCallBeforeAddLiquidity',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'shouldCallAfterAddLiquidity',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'shouldCallBeforeRemoveLiquidity',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'shouldCallAfterRemoveLiquidity',
+            internalType: 'bool',
+            type: 'bool',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getLastTimestamp',
+    outputs: [{ name: '', internalType: 'uint32', type: 'uint32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getLastVirtualBalances',
+    outputs: [
+      { name: 'virtualBalanceA', internalType: 'uint256', type: 'uint256' },
+      { name: 'virtualBalanceB', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMaximumInvariantRatio',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMaximumSwapFeePercentage',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMinimumInvariantRatio',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getMinimumSwapFeePercentage',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getPriceRatioState',
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct PriceRatioState',
+        type: 'tuple',
+        components: [
+          {
+            name: 'startFourthRootPriceRatio',
+            internalType: 'uint96',
+            type: 'uint96',
+          },
+          {
+            name: 'endFourthRootPriceRatio',
+            internalType: 'uint96',
+            type: 'uint96',
+          },
+          {
+            name: 'priceRatioUpdateStartTime',
+            internalType: 'uint32',
+            type: 'uint32',
+          },
+          {
+            name: 'priceRatioUpdateEndTime',
+            internalType: 'uint32',
+            type: 'uint32',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getPriceShiftDailyRateInSeconds',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getRate',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getReClammPoolDynamicData',
+    outputs: [
+      {
+        name: 'data',
+        internalType: 'struct ReClammPoolDynamicData',
+        type: 'tuple',
+        components: [
+          {
+            name: 'balancesLiveScaled18',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'tokenRates', internalType: 'uint256[]', type: 'uint256[]' },
+          {
+            name: 'staticSwapFeePercentage',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'totalSupply', internalType: 'uint256', type: 'uint256' },
+          { name: 'lastTimestamp', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'lastVirtualBalances',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          {
+            name: 'priceShiftDailyRateInSeconds',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'centerednessMargin',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'currentFourthRootPriceRatio',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'startFourthRootPriceRatio',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'endFourthRootPriceRatio',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'priceRatioUpdateStartTime',
+            internalType: 'uint32',
+            type: 'uint32',
+          },
+          {
+            name: 'priceRatioUpdateEndTime',
+            internalType: 'uint32',
+            type: 'uint32',
+          },
+          { name: 'isPoolInitialized', internalType: 'bool', type: 'bool' },
+          { name: 'isPoolPaused', internalType: 'bool', type: 'bool' },
+          { name: 'isPoolInRecoveryMode', internalType: 'bool', type: 'bool' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getReClammPoolImmutableData',
+    outputs: [
+      {
+        name: 'data',
+        internalType: 'struct ReClammPoolImmutableData',
+        type: 'tuple',
+        components: [
+          {
+            name: 'tokens',
+            internalType: 'contract IERC20[]',
+            type: 'address[]',
+          },
+          {
+            name: 'decimalScalingFactors',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'initialMinPrice', internalType: 'uint256', type: 'uint256' },
+          { name: 'initialMaxPrice', internalType: 'uint256', type: 'uint256' },
+          {
+            name: 'initialTargetPrice',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'initialPriceShiftDailyRate',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'initialCenterednessMargin',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'minCenterednessMargin',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'maxCenterednessMargin',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'minTokenBalanceScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'minPoolCenteredness',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'maxPriceShiftDailyRate',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'minPriceRatioUpdateDuration',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'minFourthRootPriceRatioDelta',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getStaticSwapFeePercentage',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTokenInfo',
+    outputs: [
+      { name: 'tokens', internalType: 'contract IERC20[]', type: 'address[]' },
+      {
+        name: 'tokenInfo',
+        internalType: 'struct TokenInfo[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'tokenType', internalType: 'enum TokenType', type: 'uint8' },
+          {
+            name: 'rateProvider',
+            internalType: 'contract IRateProvider',
+            type: 'address',
+          },
+          { name: 'paysYieldFees', internalType: 'bool', type: 'bool' },
+        ],
+      },
+      { name: 'balancesRaw', internalType: 'uint256[]', type: 'uint256[]' },
+      {
+        name: 'lastBalancesLiveScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTokens',
+    outputs: [{ name: 'tokens', internalType: 'contract IERC20[]', type: 'address[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getVault',
+    outputs: [{ name: '', internalType: 'contract IVault', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'incrementNonce',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'isPoolWithinTargetRange',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'enum AddLiquidityKind', type: 'uint8' },
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'amountsInRaw', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'onAfterAddLiquidity',
+    outputs: [
+      { name: '', internalType: 'bool', type: 'bool' },
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'onAfterInitialize',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'enum RemoveLiquidityKind', type: 'uint8' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'amountsOutRaw', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'onAfterRemoveLiquidity',
+    outputs: [
+      { name: '', internalType: 'bool', type: 'bool' },
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: '',
+        internalType: 'struct AfterSwapParams',
+        type: 'tuple',
+        components: [
+          { name: 'kind', internalType: 'enum SwapKind', type: 'uint8' },
+          { name: 'tokenIn', internalType: 'contract IERC20', type: 'address' },
+          {
+            name: 'tokenOut',
+            internalType: 'contract IERC20',
+            type: 'address',
+          },
+          {
+            name: 'amountInScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'amountOutScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'tokenInBalanceScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'tokenOutBalanceScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'amountCalculatedScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'amountCalculatedRaw',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          { name: 'router', internalType: 'address', type: 'address' },
+          { name: 'pool', internalType: 'address', type: 'address' },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+    ],
+    name: 'onAfterSwap',
+    outputs: [
+      { name: '', internalType: 'bool', type: 'bool' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: 'pool', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'enum AddLiquidityKind', type: 'uint8' },
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'minBptAmountOut', internalType: 'uint256', type: 'uint256' },
+      {
+        name: 'balancesScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'onBeforeAddLiquidity',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'balancesScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'onBeforeInitialize',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: 'pool', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'enum RemoveLiquidityKind', type: 'uint8' },
+      { name: 'maxBptAmountIn', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint256[]', type: 'uint256[]' },
+      {
+        name: 'balancesScaled18',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: '', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'onBeforeRemoveLiquidity',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: '',
+        internalType: 'struct PoolSwapParams',
+        type: 'tuple',
+        components: [
+          { name: 'kind', internalType: 'enum SwapKind', type: 'uint8' },
+          {
+            name: 'amountGivenScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'balancesScaled18',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'indexIn', internalType: 'uint256', type: 'uint256' },
+          { name: 'indexOut', internalType: 'uint256', type: 'uint256' },
+          { name: 'router', internalType: 'address', type: 'address' },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+      { name: '', internalType: 'address', type: 'address' },
+    ],
+    name: 'onBeforeSwap',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: '',
+        internalType: 'struct PoolSwapParams',
+        type: 'tuple',
+        components: [
+          { name: 'kind', internalType: 'enum SwapKind', type: 'uint8' },
+          {
+            name: 'amountGivenScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'balancesScaled18',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'indexIn', internalType: 'uint256', type: 'uint256' },
+          { name: 'indexOut', internalType: 'uint256', type: 'uint256' },
+          { name: 'router', internalType: 'address', type: 'address' },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'onComputeDynamicSwapFeePercentage',
+    outputs: [
+      { name: '', internalType: 'bool', type: 'bool' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'address', type: 'address' },
+      {
+        name: 'tokenConfig',
+        internalType: 'struct TokenConfig[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'token', internalType: 'contract IERC20', type: 'address' },
+          { name: 'tokenType', internalType: 'enum TokenType', type: 'uint8' },
+          {
+            name: 'rateProvider',
+            internalType: 'contract IRateProvider',
+            type: 'address',
+          },
+          { name: 'paysYieldFees', internalType: 'bool', type: 'bool' },
+        ],
+      },
+      {
+        name: 'liquidityManagement',
+        internalType: 'struct LiquidityManagement',
+        type: 'tuple',
+        components: [
+          {
+            name: 'disableUnbalancedLiquidity',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'enableAddLiquidityCustom',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'enableRemoveLiquidityCustom',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          { name: 'enableDonation', internalType: 'bool', type: 'bool' },
+        ],
+      },
+    ],
+    name: 'onRegister',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'request',
+        internalType: 'struct PoolSwapParams',
+        type: 'tuple',
+        components: [
+          { name: 'kind', internalType: 'enum SwapKind', type: 'uint8' },
+          {
+            name: 'amountGivenScaled18',
+            internalType: 'uint256',
+            type: 'uint256',
+          },
+          {
+            name: 'balancesScaled18',
+            internalType: 'uint256[]',
+            type: 'uint256[]',
+          },
+          { name: 'indexIn', internalType: 'uint256', type: 'uint256' },
+          { name: 'indexOut', internalType: 'uint256', type: 'uint256' },
+          { name: 'router', internalType: 'address', type: 'address' },
+          { name: 'userData', internalType: 'bytes', type: 'bytes' },
+        ],
+      },
+    ],
+    name: 'onSwap',
+    outputs: [
+      {
+        name: 'amountCalculatedScaled18',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'permit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'newCenterednessMargin',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    name: 'setCenterednessMargin',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'endFourthRootPriceRatio',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      {
+        name: 'priceRatioUpdateStartTime',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      {
+        name: 'priceRatioUpdateEndTime',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    name: 'setPriceRatioState',
+    outputs: [
+      {
+        name: 'actualPriceRatioUpdateStartTime',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'newPriceShiftDailyRate',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    name: 'setPriceShiftDailyRate',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'supportsInterface',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transfer',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'version',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+] as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x03D5bbf2711926Ea3d7f2a5a07C8E5C6b25A1745)
+ */
+export const reClammPoolAddress = {
+  8453: '0x03D5bbf2711926Ea3d7f2a5a07C8E5C6b25A1745',
+} as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x03D5bbf2711926Ea3d7f2a5a07C8E5C6b25A1745)
+ */
+export const reClammPoolConfig = {
+  address: reClammPoolAddress,
+  abi: reClammPoolAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // VaultAdmin
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
