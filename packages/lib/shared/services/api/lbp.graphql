@@ -9,6 +9,7 @@ query GetLbpPriceInfo($chain: GqlChain!, $poolId: String!) {
     projectTokenPrice # in reserve token
     reservePrice # in USD
     sellVolume
+    swapCount
     timestamp
     volume
   }
