@@ -59,6 +59,8 @@ function CardContent({ linkSections, logoType, title, subTitle }: CardContentPro
                   flexBasis="row"
                   href={link.href}
                   key={link.href}
+                  rel={link.isExternal ? 'noopener noreferrer' : undefined}
+                  target={link.isExternal ? '_blank' : '_self'}
                   variant="nav"
                 >
                   <HStack gap="xxs">
