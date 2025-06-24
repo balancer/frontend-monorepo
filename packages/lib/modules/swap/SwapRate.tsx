@@ -7,7 +7,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 
 export function SwapRate() {
   const [priceDirection, setPriceDirection] = useState<'givenIn' | 'givenOut'>('givenIn')
-  const { simulationQuery, tokenInInfo, tokenOutInfo } = useSwap()
+  const { simulationQuery, tokenInInfo, tokenOutInfo, isLbpSwap, lbpTokenOut } = useSwap()
   const { toCurrency } = useCurrency()
   const { usdValueForToken } = useTokens()
 
@@ -25,7 +25,7 @@ export function SwapRate() {
 
   const priceLabel =
     priceDirection === 'givenIn'
-      ? `1 ${tokenInInfo?.symbol} = ${effectivePriceReversed} ${tokenOutInfo?.symbol} (${toCurrency(
+      ? `1 ${tokenInInfo?.symbol} = ${effectivePriceReversed} ${isLbpSwap ? lbpTokenOut.symbol : tokenOutInfo?.symbol} (${toCurrency(
           tokenInUsdValue,
           { abbreviated: false }
         )})`

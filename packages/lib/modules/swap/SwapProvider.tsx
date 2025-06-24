@@ -106,6 +106,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const urlTxHash = pathParams.urlTxHash
   const isPoolSwapUrl = useIsPoolSwapUrl()
   const isLbpSwap = pool && isV3LBP(pool)
+  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
 
   const isPoolSwap = pool && poolActionableTokens // Hint to tell TS that pool and poolActionableTokens must be defined when poolSwap
   const shouldDiscardOldPersistedValue = isPoolSwapUrl || isLbpSwap
@@ -523,7 +524,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     setInitialChain(slugChain)
 
     if (isLbpSwap) {
-      const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
       setInitialTokenIn(lbpPool.poolTokens[lbpPool.reserveTokenIndex].address)
       setInitialTokenOut(lbpPool.poolTokens[lbpPool.projectTokenIndex].address)
     } else if (supportsNestedActions(pool)) {
@@ -665,6 +665,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     poolActionableTokens,
     protocolVersion,
     isLbpSwap,
+    lbpTokenOut: lbpPool.poolTokens[lbpPool.projectTokenIndex],
     replaceUrlPath,
     resetSwapAmounts,
     setTokenSelectKey,
