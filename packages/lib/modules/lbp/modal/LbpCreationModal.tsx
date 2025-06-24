@@ -16,8 +16,9 @@ import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants
 import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { Address } from 'viem'
-import { useSaveMetadata } from '../steps/useSaveMetadata'
-import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
+import { useLbpMetadata } from '../LbpMetadataProvider'
+import { LbpMetadataErrorModal } from './LbpMetadataErrorModal'
+import { useDisclosure } from '@chakra-ui/react'
 
 type Props = {
   isOpen: boolean
@@ -37,15 +38,23 @@ export function LbpCreationModal({
   const { saleStructureForm, isLastStep: isLastConfigStep, resetLbpCreation } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const { transactionSteps, initLbpTxHash, urlTxHash, previewModalDisclosure } = useLbpCreation()
+  const metadataModalDisclosure = useDisclosure()
+
+  const {
+    saveMetadata,
+    error: saveMetadataError,
+    isMetadataSaved,
+    reset: resetSaveMetadata,
+  } = useLbpMetadata()
 
   const [poolAddress] = useLocalStorage<Address | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
-  const [isMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
   const handleReset = () => {
     resetLbpCreation()
+    resetSaveMetadata()
     transactionSteps.resetTransactionSteps()
     onClose()
   }
@@ -66,11 +75,20 @@ export function LbpCreationModal({
   }, [poolAddress])
 
   const isInitializationSuccess = transactionSteps.lastTransactionConfirmed
-
-  const { saveMetadata, errorMessage, errorTitle } = useSaveMetadata()
-
   const isSuccess = isInitializationSuccess && isMetadataSaved
-  const isSaveMetadataError = errorMessage || errorTitle
+  const isSaveMetadataError = saveMetadataError?.message || saveMetadataError?.title
+
+  const hasAttemptedSaveMetadata = useRef(false)
+
+  useEffect(() => {
+    const handleSaveMetadata = async () => {
+      if (isInitializationSuccess && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
+        hasAttemptedSaveMetadata.current = true
+        await saveMetadata()
+      }
+    }
+    handleSaveMetadata()
+  }, [isInitializationSuccess, isMetadataSaved, saveMetadata])
 
   return (
     <>
@@ -139,28 +157,6 @@ export function LbpCreationModal({
                 </Button>
               </VStack>
             )}
-
-            {isSaveMetadataError && (
-              <VStack width="full">
-                <Button
-                  isDisabled={false}
-                  isLoading={false}
-                  marginTop="4"
-                  onClick={saveMetadata}
-                  size="lg"
-                  variant="secondary"
-                  w="full"
-                  width="full"
-                >
-                  <HStack justifyContent="center" spacing="sm" width="100%">
-                    <Text color="font.primaryGradient" fontWeight="bold">
-                      Save metadata
-                    </Text>
-                  </HStack>
-                </Button>
-                <BalAlert content={errorMessage} status="error" title={errorTitle} />
-              </VStack>
-            )}
           </ModalBody>
           <ActionModalFooter
             currentStep={transactionSteps.currentStep}
@@ -172,6 +168,12 @@ export function LbpCreationModal({
           {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
         </ModalContent>
       </Modal>
+
+      <LbpMetadataErrorModal
+        isOpen={!!isSaveMetadataError}
+        onClose={metadataModalDisclosure.onClose}
+        onOpen={metadataModalDisclosure.onOpen}
+      />
     </>
   )
 }

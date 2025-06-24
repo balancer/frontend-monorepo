@@ -8,6 +8,7 @@ import { TransactionStateProvider } from '@repo/lib/modules/transactions/transac
 import { Permit2SignatureProvider } from '@repo/lib/modules/tokens/approvals/permit2/Permit2SignatureProvider'
 import { LbpFormProvider } from '@repo/lib/modules/lbp/LbpFormProvider'
 import { LbpCreationProvider } from '@repo/lib/modules/lbp/LbpCreationProvider'
+import { LbpMetadataProvider } from '@repo/lib/modules/lbp/LbpMetadataProvider'
 import { isHash } from 'viem'
 
 type Props = PropsWithChildren<{
@@ -26,7 +27,9 @@ export default function LBPCreateLayout({ params, children }: Props) {
       <TransactionStateProvider>
         <LbpFormProvider>
           <Permit2SignatureProvider>
-            <LbpCreationProvider urlTxHash={urlTxHash}>{children} </LbpCreationProvider>
+            <LbpMetadataProvider>
+              <LbpCreationProvider urlTxHash={urlTxHash}>{children} </LbpCreationProvider>
+            </LbpMetadataProvider>
           </Permit2SignatureProvider>
         </LbpFormProvider>
       </TransactionStateProvider>

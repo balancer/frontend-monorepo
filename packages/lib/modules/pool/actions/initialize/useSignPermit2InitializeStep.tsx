@@ -42,7 +42,7 @@ export function useSignPermit2InitializeStep({
     symbol: amount.symbol,
   }))
 
-  const isComplete = () => isTransactionSuccess(initializationTx) || false
+  const isComplete = isTransactionSuccess(initializationTx) || false
 
   const signPermit2Step = useSignPermit2Step({
     chainId,
@@ -52,7 +52,7 @@ export function useSignPermit2InitializeStep({
     isPermit2: true,
     isSimulationReady: true,
     spender: balancerV3Contracts.Router[chainId as keyof typeof balancerV3Contracts.Router],
-    isComplete: isComplete(),
+    isComplete,
   })
 
   return signPermit2Step

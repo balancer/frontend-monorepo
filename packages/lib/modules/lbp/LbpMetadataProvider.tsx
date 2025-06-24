@@ -1,19 +1,27 @@
-import { useLbpForm } from '@repo/lib/modules/lbp/LbpFormProvider'
+import { createContext, PropsWithChildren } from 'react'
+import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useMutation } from '@apollo/client'
 import { CreateLbpDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
+import { useLbpForm } from './LbpFormProvider'
 
-export function useSaveMetadata() {
-  const [createLbp, { error, loading, data }] = useMutation(CreateLbpDocument)
+export type UseLbpMetadataResponse = ReturnType<typeof useLbpMetadataLogic>
+const LbpMetadataContext = createContext<UseLbpMetadataResponse | null>(null)
+
+export function useLbpMetadataLogic() {
+  const [createLbp, { error, reset }] = useMutation(CreateLbpDocument)
   const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
-  const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
-  const { saleStructureForm } = useLbpForm()
+  const [isMetadataSaved, setIsMetadataSaved] = useLocalStorage<boolean>(
+    LS_KEYS.LbpConfig.IsMetadataSaved,
+    false
+  )
+
+  const { saleStructureForm, projectInfoForm } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
-  const { projectInfoForm } = useLbpForm()
   const { name, description, websiteUrl, tokenIconUrl, telegramHandle, xHandle, discordUrl } =
     projectInfoForm.getValues()
 
@@ -37,11 +45,7 @@ export function useSaveMetadata() {
         },
       },
     })
-    if (data?.createLBP) {
-      setIsMetadataSaved(true)
-    } else {
-      setIsMetadataSaved(false)
-    }
+    if (data?.createLBP) setIsMetadataSaved(true)
   }
 
   const { message: errorTitle, graphQLErrors } = error ?? {}
@@ -56,9 +60,19 @@ export function useSaveMetadata() {
 
   return {
     saveMetadata,
-    errorMessage,
-    errorTitle,
-    loading,
-    data,
+    error: {
+      message: errorMessage,
+      title: errorTitle,
+    },
+    isMetadataSaved,
+    reset,
   }
 }
+
+export function LbpMetadataProvider({ children }: PropsWithChildren) {
+  const hook = useLbpMetadataLogic()
+  return <LbpMetadataContext.Provider value={hook}>{children}</LbpMetadataContext.Provider>
+}
+
+export const useLbpMetadata = (): UseLbpMetadataResponse =>
+  useMandatoryContext(LbpMetadataContext, 'LbpMetadata')
