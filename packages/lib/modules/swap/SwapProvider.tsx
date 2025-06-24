@@ -318,16 +318,35 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     { userTriggered = true }: { userTriggered?: boolean } = {}
   ) {
     const state = swapStateVar()
+
+    const amountObj = isLbpSwap
+      ? {
+          amount: amount,
+          scaledAmount: scaleTokenAmount(
+            amount,
+            lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
+          ),
+        }
+      : /*
+          When copy-pasting a swap URL with a token amount, the tokenOutInfo can be undefined
+          so we set amount as zero instead of crashing the app
+        */
+        tokenOutInfo
+        ? {
+            amount: amount,
+            scaledAmount: scaleTokenAmount(amount, tokenOutInfo),
+          }
+        : {
+            amount: '0',
+            scaledAmount: 0n,
+          }
+
     const newState = {
       ...state,
       tokenOut: {
         ...state.tokenOut,
-        /*
-          When copy-pasting a swap URL with a token amount, the tokenOutInfo can be undefined
-          so we set amount as zero instead of crashing the app
-        */
-        amount: tokenOutInfo ? amount : '0',
-        scaledAmount: tokenOutInfo ? scaleTokenAmount(amount, tokenOutInfo) : 0n,
+
+        ...amountObj,
       },
     }
 
@@ -618,7 +637,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   // If token out value changes when swapping exact in, recalculate price impact.
   useEffect(() => {
-    if (swapState.swapType === GqlSorSwapType.ExactIn) {
+    if (!isLbpSwap && swapState.swapType === GqlSorSwapType.ExactIn) {
       calcPriceImpact()
     }
   }, [tokenOutUsd])
