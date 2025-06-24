@@ -3,6 +3,10 @@ import { signPermit2Initialization } from '@repo/lib/modules/tokens/approvals/pe
 import { SignPermit2Fn as SignPermit2Fn } from '@repo/lib/modules/tokens/approvals/permit2/useSignPermit2'
 import { useSignPermit2Step } from '@repo/lib/modules/transactions/transaction-steps/useSignPermit2Step'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { useLocalStorage } from 'usehooks-ts'
+import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
+import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
+import { ManagedResult } from '@repo/lib/modules/transactions/transaction-steps/lib'
 
 type TokenAmountWithSymbol = InitPoolInputV3['amountsIn'][number] & { symbol: string }
 
@@ -16,6 +20,10 @@ export function useSignPermit2InitializeStep({
   initPoolInput: ExtendedInitPoolInputV3
 }) {
   const { wethIsEth, amountsIn, chainId } = initPoolInput
+  const [initializationTx] = useLocalStorage<ManagedResult | undefined>(
+    LS_KEYS.LbpConfig.InitializationTx,
+    undefined
+  )
 
   const { userAddress } = useUserAccount()
 
@@ -34,6 +42,8 @@ export function useSignPermit2InitializeStep({
     symbol: amount.symbol,
   }))
 
+  const isComplete = () => isTransactionSuccess(initializationTx) || false
+
   const signPermit2Step = useSignPermit2Step({
     chainId,
     signPermit2Fn,
@@ -42,6 +52,7 @@ export function useSignPermit2InitializeStep({
     isPermit2: true,
     isSimulationReady: true,
     spender: balancerV3Contracts.Router[chainId as keyof typeof balancerV3Contracts.Router],
+    isComplete: isComplete(),
   })
 
   return signPermit2Step

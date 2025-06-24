@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import {
   ManagedResult,
   TransactionLabels,
@@ -15,16 +15,16 @@ import { type Address } from 'viem'
 import { PoolType, InitPoolInputV3 } from '@balancer/sdk'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { useLocalStorage } from 'usehooks-ts'
-import { useParams } from 'next/navigation'
+import { useSaveMetadata } from '../steps/useSaveMetadata'
 
 export const initializeLbpStepId = 'initialize-lbp'
 
 const labels: TransactionLabels = {
-  init: 'Initialize LBP',
-  title: 'Initialize LBP',
-  confirming: 'Initializing a new LBP',
-  confirmed: 'Initialized a new LBP',
-  tooltip: 'Initialize a new LBP',
+  init: 'Initialize pool',
+  title: 'Initialize pool',
+  confirming: 'Confirming initialization...',
+  confirmed: 'Initialization confirmed!',
+  tooltip: 'Initialize pool',
 }
 
 export function useInitializeLbpStep({
@@ -32,7 +32,10 @@ export function useInitializeLbpStep({
 }: {
   initPoolInput: InitPoolInputV3
 }): TransactionStep {
-  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
+  const [transaction, setTransaction] = useLocalStorage<ManagedResult | undefined>(
+    LS_KEYS.LbpConfig.InitializationTx,
+    undefined
+  )
   const [isStepActivated, setIsStepActivated] = useState(false)
   const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
@@ -48,15 +51,21 @@ export function useInitializeLbpStep({
     enabled: isStepActivated,
     initPoolInput,
   })
-  const params = useParams()
-  const initTxHash = params?.txHash?.[0]
 
   const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in initialze LBP gas estimation', {
     buildCallQueryData: buildCallDataQuery.data,
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
 
-  const isComplete = () => isTransactionSuccess(transaction) || !!initTxHash
+  const isComplete = () => isTransactionSuccess(transaction)
+  const { saveMetadata } = useSaveMetadata()
+  const hasSentMetadata = useRef(false)
+
+  const handleSaveMetadata = useCallback(async () => {
+    if (hasSentMetadata.current) return
+    hasSentMetadata.current = true
+    await saveMetadata()
+  }, [saveMetadata])
 
   return useMemo(
     () => ({
@@ -65,9 +74,9 @@ export function useInitializeLbpStep({
       labels,
       transaction,
       isComplete,
+      onSuccess: handleSaveMetadata,
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
-      // onSuccess,
       renderAction: () => {
         if (!buildCallDataQuery.data) return <DisabledTransactionButton />
         return (

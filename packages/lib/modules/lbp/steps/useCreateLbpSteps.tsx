@@ -1,5 +1,4 @@
 import { useCreateLbpStep } from './useCreateLbpStep'
-import { useSendMetadataStep } from './useSendMetadataStep'
 import { useTokenApprovalSteps } from '@repo/lib/modules/tokens/approvals/useTokenApprovalSteps'
 import { useLbpForm } from '../LbpFormProvider'
 import { getSpenderForCreatePool } from '@repo/lib/modules/tokens/token.helpers'
@@ -11,7 +10,6 @@ import { getNetworkConfig } from '@repo/lib/config/app.config'
 
 export function useCreateLbpSteps() {
   const createLbpStep = useCreateLbpStep()
-  const sendMetadataStep = useSendMetadataStep()
   const { saleStructureForm } = useLbpForm()
   const { selectedChain } = saleStructureForm.getValues()
   const chainId = getNetworkConfig(selectedChain).chainId
@@ -44,7 +42,6 @@ export function useCreateLbpSteps() {
     isLoadingSteps,
     steps: [
       createLbpStep,
-      sendMetadataStep,
       ...tokenApprovalSteps,
       ...(signPermit2Step ? [signPermit2Step] : []),
       initLbpStep,

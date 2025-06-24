@@ -62,6 +62,10 @@ export function useLbpFormLogic() {
     LS_KEYS.LbpConfig.StepIndex,
     0
   )
+  const [, setInitializationTx] = useLocalStorage<`0x${string}` | undefined>(
+    LS_KEYS.LbpConfig.InitializationTx,
+    undefined
+  )
   const { activeStep: activeStepIndex, setActiveStep } = useSteps({
     index: persistedStepIndex,
     count: steps.length,
@@ -78,7 +82,7 @@ export function useLbpFormLogic() {
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
-  const [, setIsMetadataSent] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSent, false)
+  const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
   const resetLbpCreation = () => {
     saleStructureForm.resetToInitial()
@@ -86,7 +90,8 @@ export function useLbpFormLogic() {
     setPersistedStepIndex(0)
     setActiveStep(0)
     setPoolAddress(undefined)
-    setIsMetadataSent(false)
+    setIsMetadataSaved(false)
+    setInitializationTx(undefined)
   }
 
   const { saleTokenAmount, launchTokenAddress, selectedChain } = saleStructureForm.watch()

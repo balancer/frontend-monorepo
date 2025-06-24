@@ -16,6 +16,8 @@ import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants
 import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { Address } from 'viem'
+import { useSaveMetadata } from '../steps/useSaveMetadata'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 type Props = {
   isOpen: boolean
@@ -40,6 +42,7 @@ export function LbpCreationModal({
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
+  const [isMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
   const handleReset = () => {
     resetLbpCreation()
@@ -62,70 +65,113 @@ export function LbpCreationModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolAddress])
 
-  const isSuccess = !!initLbpTxHash || !!urlTxHash
+  const isInitializationSuccess = transactionSteps.lastTransactionConfirmed
+
+  const { saveMetadata, errorMessage, errorTitle } = useSaveMetadata()
+
+  const isSuccess = isInitializationSuccess && isMetadataSaved
+  const isSaveMetadataError = errorMessage || errorTitle
 
   return (
-    <Modal
-      finalFocusRef={finalFocusRef}
-      initialFocusRef={initialFocusRef}
-      isCentered
-      isOpen={isOpen}
-      onClose={onClose}
-      preserveScrollBarGap
-      trapFocus={!isSuccess}
-      {...rest}
-    >
-      <SuccessOverlay startAnimation={!!initLbpTxHash} />
+    <>
+      <Modal
+        finalFocusRef={finalFocusRef}
+        initialFocusRef={initialFocusRef}
+        isCentered
+        isOpen={isOpen}
+        onClose={onClose}
+        preserveScrollBarGap
+        trapFocus={!isInitializationSuccess}
+        {...rest}
+      >
+        <SuccessOverlay startAnimation={!!initLbpTxHash} />
 
-      <ModalContent>
-        {isDesktop && (
-          <DesktopStepTracker
-            chain={selectedChain}
-            // isTxBatch={shouldBatchTransactions} // TODO
-            transactionSteps={transactionSteps}
-          />
-        )}
-        <TransactionModalHeader
-          chain={selectedChain}
-          label={'Preview: Create an LBP'}
-          txHash={initLbpTxHash}
-        />
-        <ModalCloseButton />
-        <ModalBody>
-          <LbpSummary />
-
-          {isSuccess && (
-            <VStack width="full">
-              <Button
-                isDisabled={false}
-                isLoading={false}
-                marginTop="4"
-                onClick={() => {
-                  redirectToPoolPage()
-                }}
-                size="lg"
-                variant="secondary"
-                w="full"
-                width="full"
-              >
-                <HStack justifyContent="center" spacing="sm" width="100%">
-                  <Text color="font.primaryGradient" fontWeight="bold">
-                    View LBP page
-                  </Text>
-                </HStack>
-              </Button>
-            </VStack>
+        <ModalContent>
+          {isDesktop && (
+            <DesktopStepTracker
+              chain={selectedChain}
+              // isTxBatch={shouldBatchTransactions} // TODO
+              transactionSteps={transactionSteps}
+            />
           )}
-        </ModalBody>
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={redirectToPoolPage}
-          returnLabel="View pool page"
-          urlTxHash={urlTxHash}
-        />
-        {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
-      </ModalContent>
-    </Modal>
+          <TransactionModalHeader
+            chain={selectedChain}
+            label={'Preview: Create an LBP'}
+            txHash={initLbpTxHash}
+          />
+          <ModalCloseButton />
+          <ModalBody>
+            <LbpSummary />
+
+            {isSuccess && (
+              <VStack width="full">
+                <Button
+                  isDisabled={false}
+                  isLoading={false}
+                  marginTop="4"
+                  onClick={redirectToPoolPage}
+                  size="lg"
+                  variant="secondary"
+                  w="full"
+                  width="full"
+                >
+                  <HStack justifyContent="center" spacing="sm" width="100%">
+                    <Text color="font.primaryGradient" fontWeight="bold">
+                      View LBP page
+                    </Text>
+                  </HStack>
+                </Button>
+                <Button
+                  isDisabled={false}
+                  isLoading={false}
+                  marginTop="2"
+                  onClick={handleReset}
+                  size="lg"
+                  variant="primary"
+                  w="full"
+                  width="full"
+                >
+                  <HStack justifyContent="center" spacing="sm" width="100%">
+                    <Text color="font.primaryGradient" fontWeight="bold">
+                      Create another LBP
+                    </Text>
+                  </HStack>
+                </Button>
+              </VStack>
+            )}
+
+            {isSaveMetadataError && (
+              <VStack width="full">
+                <Button
+                  isDisabled={false}
+                  isLoading={false}
+                  marginTop="4"
+                  onClick={saveMetadata}
+                  size="lg"
+                  variant="secondary"
+                  w="full"
+                  width="full"
+                >
+                  <HStack justifyContent="center" spacing="sm" width="100%">
+                    <Text color="font.primaryGradient" fontWeight="bold">
+                      Save metadata
+                    </Text>
+                  </HStack>
+                </Button>
+                <BalAlert content={errorMessage} status="error" title={errorTitle} />
+              </VStack>
+            )}
+          </ModalBody>
+          <ActionModalFooter
+            currentStep={transactionSteps.currentStep}
+            isSuccess={isSuccess}
+            returnAction={redirectToPoolPage}
+            returnLabel="View pool page"
+            urlTxHash={urlTxHash}
+          />
+          {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
