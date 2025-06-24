@@ -7,8 +7,12 @@ import { ArrowUpRight } from 'react-feather'
 
 export function BalAlertButtonLink({
   href,
+  external = true,
   children,
-}: PropsWithChildren<ButtonProps> & { href: string }) {
+}: PropsWithChildren<ButtonProps> & { href: string; external?: boolean }) {
+  const externalAttr = external
+    ? { rightIcon: <ArrowUpRight size="14" />, target: '_blank', rel: 'noopener noreferrer' }
+    : {}
   return (
     <Box>
       <Button
@@ -31,10 +35,9 @@ export function BalAlertButtonLink({
         my="-1"
         px="sm"
         py="ms"
-        rightIcon={<ArrowUpRight size="14" />}
-        target="_blank"
         variant="outline"
         width="auto"
+        {...externalAttr}
       >
         {children}
       </Button>

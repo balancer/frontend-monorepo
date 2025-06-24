@@ -7,10 +7,11 @@ import { useMutation } from '@apollo/client'
 import { CreateLbpDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 export function useSendMetadataStep(): TransactionStep {
   const [, setIsStepActivated] = useState(false)
-  const [createLbp] = useMutation(CreateLbpDocument)
+  const [createLbp, { error }] = useMutation(CreateLbpDocument)
   const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
@@ -49,6 +50,16 @@ export function useSendMetadataStep(): TransactionStep {
     if (data?.createLBP) setIsComplete(true)
   }
 
+  const { message: errorTitle, graphQLErrors } = error ?? {}
+  const errorMessage =
+    graphQLErrors &&
+    graphQLErrors
+      .map(error =>
+        (error.extensions?.errors as Array<{ message: string }>)?.map(err => err.message)
+      )
+      .flat()
+      .join(', ')
+
   return {
     id: 'send-lbp-metadata',
     stepType: 'sendLbpMetadata',
@@ -58,7 +69,7 @@ export function useSendMetadataStep(): TransactionStep {
       description: 'Send LBP metadata to balancer DB',
       tooltip: 'Send LBP metadata to balancer DB',
       confirmed: 'LBP metadata sent to balancer DB',
-      error: 'Error sending LBP metadata to balancer DB',
+      error: errorMessage ?? 'Error sending LBP metadata to balancer DB',
       preparing: 'Preparing to send LBP metadata to balancer DB',
     },
     onActivated: () => setIsStepActivated(true),
@@ -79,6 +90,7 @@ export function useSendMetadataStep(): TransactionStep {
           >
             <LabelWithIcon icon="sign">Send LBP metadata</LabelWithIcon>
           </Button>
+          {error && <BalAlert content={errorMessage} status="error" title={errorTitle} />}
         </VStack>
       )
     },

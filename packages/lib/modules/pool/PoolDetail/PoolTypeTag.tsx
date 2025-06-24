@@ -147,6 +147,13 @@ function getPoolTypeLabel(pool: Pool | PoolListItem, erc4626Metadata: Erc4626Met
         </CustomPopover>
       )
 
+    case GqlPoolType.Reclamm:
+      return (
+        <TagWrapper>
+          <Text {...textProps}>reCLAMM</Text>
+        </TagWrapper>
+      )
+
     default:
       return null
   }

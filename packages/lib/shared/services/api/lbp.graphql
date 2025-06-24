@@ -1,0 +1,16 @@
+mutation CreateLBP($input: CreateLBPInput!) {
+  createLBP(input: $input)
+}
+
+query GetLbpPriceInfo($chain: GqlChain!, $poolId: String!) {
+  prices: lbpPriceChart(chain: $chain, id: $poolId) {
+    buyVolume
+    intervalTimestamp # deprecated
+    projectTokenPrice # in reserve token
+    reservePrice # in USD
+    sellVolume
+    swapCount
+    timestamp
+    volume
+  }
+}
