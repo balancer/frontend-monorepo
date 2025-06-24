@@ -33,7 +33,7 @@ export function usePriceInfo(chain: GqlChain, poolId: Address) {
 function toLbpPrices(apiPrices: LbpPriceChartData[]): LbpPrice[] {
   return apiPrices.map(price => {
     return {
-      timestamp: new Date(secondsToMilliseconds(price.intervalTimestamp)),
+      timestamp: new Date(secondsToMilliseconds(price.timestamp)),
       projectTokenPrice: bn(price.projectTokenPrice).times(price.reservePrice).toNumber(),
     }
   })
