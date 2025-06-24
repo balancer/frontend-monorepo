@@ -34,6 +34,7 @@ type Props = {
 
 export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Props) {
   const tokenIconURL = projectInfoForm.watch('tokenIconUrl')
+  const hasIconErrors = projectInfoForm.formState.errors.tokenIconUrl !== undefined
 
   return (
     <Card>
@@ -57,7 +58,11 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
                     size={24}
                   >
                     <VStack>
-                      {tokenIconURL ? <Image borderRadius="full" src={tokenIconURL} /> : <Plus />}
+                      {tokenIconURL && !hasIconErrors ? (
+                        <Image borderRadius="full" src={tokenIconURL} />
+                      ) : (
+                        <Plus />
+                      )}
                     </VStack>
                   </Circle>
                 </PopoverTrigger>
