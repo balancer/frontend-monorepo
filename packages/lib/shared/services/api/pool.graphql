@@ -116,6 +116,7 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
     ... on GqlPoolLiquidityBootstrappingV3 {
       endTime
       lbpName
+      lbpOwner
       description
       discord
       poolTokens {

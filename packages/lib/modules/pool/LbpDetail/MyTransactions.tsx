@@ -15,6 +15,7 @@ import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import {
   GetPoolEventsQuery,
   GqlChain,
+  GqlPoolAddRemoveEventV3,
   GqlPoolLiquidityBootstrappingV3,
   GqlPoolSwapEventV3,
 } from '@repo/lib/shared/services/api/generated/graphql'
@@ -37,7 +38,7 @@ type PoolEventRowProps = {
   projectTokenLogo: string | undefined
 }
 
-type EventType = 'Buy' | 'Sell'
+type EventType = 'Buy' | 'Sell' | 'Seed' | 'Extract'
 
 const GRID_COLUMNS = '1fr 2fr 1fr 1fr'
 
@@ -118,7 +119,10 @@ export function MyTransactions({
 }
 
 function Action({ poolEventType }: { poolEventType: EventType }) {
-  const eventTypeColor = poolEventType === 'Buy' ? 'green.500' : 'red.500'
+  if (!poolEventType) return null
+
+  const eventTypeColor =
+    poolEventType === 'Buy' || poolEventType === 'Seed' ? 'green.500' : 'red.500'
 
   return (
     <HStack>
@@ -143,12 +147,19 @@ function PoolEventRow({
   projectTokenAddress,
   projectTokenLogo,
 }: PoolEventRowProps) {
-  if (!['GqlPoolSwapEventV3'].includes(poolEvent.__typename)) {
+  if (!['GqlPoolSwapEventV3', 'GqlPoolAddRemoveEventV3'].includes(poolEvent.__typename)) {
     return null
   }
 
-  const swapEvent = poolEvent as GqlPoolSwapEventV3
-  const eventType = swapEvent.tokenOut.address === projectTokenAddress ? 'Buy' : 'Sell'
+  let eventType: EventType
+  if (poolEvent.type === 'SWAP') {
+    const swapEvent = poolEvent as GqlPoolSwapEventV3
+    eventType = swapEvent.tokenOut.address === projectTokenAddress ? 'Buy' : 'Sell'
+  } else if (poolEvent.type === 'ADD') {
+    eventType = 'Seed'
+  } else {
+    eventType = 'Extract'
+  }
 
   return (
     <Grid
@@ -167,12 +178,16 @@ function PoolEventRow({
       </GridItem>
 
       <GridItem area="tokens">
-        <Tokens
-          chain={chain}
-          event={swapEvent}
-          eventType={eventType}
-          projectTokenIconUrl={projectTokenLogo}
-        />
+        {poolEvent.type === 'SWAP' ? (
+          <SwapTokens
+            chain={chain}
+            event={poolEvent as GqlPoolSwapEventV3}
+            eventType={eventType}
+            projectTokenIconUrl={projectTokenLogo}
+          />
+        ) : (
+          <AddOrRemoveTokens chain={chain} event={poolEvent as GqlPoolAddRemoveEventV3} />
+        )}
       </GridItem>
 
       <GridItem area="value" textAlign={{ base: 'right', md: 'right' }}>
@@ -195,7 +210,7 @@ function PoolEventRow({
   )
 }
 
-function Tokens({
+function SwapTokens({
   event,
   chain,
   eventType,
@@ -237,6 +252,34 @@ function Tokens({
         />
         <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
           {fNum('token', tokenOut.amount)}
+        </Text>
+      </HStack>
+    </HStack>
+  )
+}
+
+function AddOrRemoveTokens({ event, chain }: { event: GqlPoolAddRemoveEventV3; chain: GqlChain }) {
+  return (
+    <HStack>
+      <HStack gap={['xs', 'sm']} mb="sm">
+        <TokenIcon
+          address={event.tokens[0].address}
+          alt={event.tokens[0].address}
+          chain={chain}
+          size={24}
+        />
+        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+          {fNum('token', event.tokens[0].amount)}
+        </Text>
+
+        <TokenIcon
+          address={event.tokens[1].address}
+          alt={event.tokens[1].address}
+          chain={chain}
+          size={24}
+        />
+        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+          {fNum('token', event.tokens[1].amount)}
         </Text>
       </HStack>
     </HStack>
