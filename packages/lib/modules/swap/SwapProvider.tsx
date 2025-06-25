@@ -125,7 +125,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
       swapType: GqlSorSwapType.ExactIn,
       selectedChain: isPoolSwap ? pool.chain : PROJECT_CONFIG.defaultNetwork,
     },
-    'swapState',
+    isLbpSwap ? 'lbpSwapState' : 'swapState',
     shouldDiscardOldPersistedValue
   )
 
