@@ -20,6 +20,7 @@ import { createContext, PropsWithChildren, useCallback } from 'react'
 import { Address } from 'viem'
 import { useSkipInitialQuery } from '@repo/lib/shared/hooks/useSkipInitialQuery'
 import {
+  getChainId,
   getNativeAssetAddress,
   getWrappedNativeAssetAddress,
   isDev,
@@ -29,6 +30,7 @@ import { mins } from '@repo/lib/shared/utils/time'
 import mainnetNetworkConfig from '@repo/lib/config/networks/mainnet'
 import { PoolToken } from '../pool/pool.types'
 import { ApiToken, CustomToken } from './token.types'
+import { Erc4626KeepOriginalScale } from '@repo/lib/modules/pool/metadata/getErc4626Metadata'
 
 export type UseTokensResult = ReturnType<typeof useTokensLogic>
 export const TokensContext = createContext<UseTokensResult | null>(null)
@@ -38,7 +40,8 @@ export type GetTokenFn = (address: string, chain: GqlChain) => ApiToken | undefi
 export function useTokensLogic(
   initTokenData: GetTokensQuery,
   initTokenPricesData: GetTokenPricesQuery,
-  variables: GetTokensQueryVariables
+  variables: GetTokensQueryVariables,
+  erc4626KeepOriginalScale: Erc4626KeepOriginalScale | undefined
 ) {
   const skipQuery = useSkipInitialQuery(variables)
   const pollInterval = mins(3).toMs()
@@ -182,6 +185,10 @@ export function useTokensLogic(
     t => t.address === mainnetNetworkConfig.tokens.addresses.veBalBpt
   )
 
+  function canScaleBack(address: string, chain: GqlChain): boolean {
+    return !erc4626KeepOriginalScale?.[getChainId(chain)]?.includes(address)
+  }
+
   return {
     tokens,
     prices,
@@ -201,6 +208,7 @@ export function useTokensLogic(
     priceForAddress,
     usdValueForBpt,
     vebalBptToken,
+    canScaleBack,
   }
 }
 
@@ -209,12 +217,14 @@ export function TokensProvider({
   tokensData,
   tokenPricesData,
   variables,
+  erc4626KeepOriginalScale,
 }: PropsWithChildren & {
   tokensData: GetTokensQuery
   tokenPricesData: GetTokenPricesQuery
   variables: GetTokensQueryVariables
+  erc4626KeepOriginalScale: Erc4626KeepOriginalScale | undefined
 }) {
-  const tokens = useTokensLogic(tokensData, tokenPricesData, variables)
+  const tokens = useTokensLogic(tokensData, tokenPricesData, variables, erc4626KeepOriginalScale)
 
   return <TokensContext.Provider value={tokens}>{children}</TokensContext.Provider>
 }

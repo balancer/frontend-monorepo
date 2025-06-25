@@ -72,6 +72,7 @@ function GlobalProviders({ children }: PropsWithChildren) {
           <ApolloProvider client={apolloTestClient}>
             <UserAccountProvider>
               <TokensProvider
+                erc4626KeepOriginalScale={undefined}
                 tokenPricesData={defaultGetTokenPricesQueryMock}
                 tokensData={defaultGetTokensQueryMock}
                 variables={defaultGetTokensQueryVariablesMock}

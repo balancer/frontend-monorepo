@@ -15,7 +15,9 @@ const initTokenPricesData = defaultGetTokenPricesQueryMock
 
 function testUseTokens() {
   const variables = defaultGetTokensQueryVariablesMock
-  const { result } = testHook(() => useTokensLogic(initTokensData, initTokenPricesData, variables))
+  const { result } = testHook(() =>
+    useTokensLogic(initTokensData, initTokenPricesData, variables, undefined)
+  )
   return result
 }
 

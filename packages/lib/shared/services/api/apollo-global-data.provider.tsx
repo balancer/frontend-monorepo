@@ -22,7 +22,10 @@ import { getHooksMetadata } from '@repo/lib/modules/hooks/getHooksMetadata'
 import { HooksProvider } from '@repo/lib/modules/hooks/HooksProvider'
 import { getPoolTags } from '@repo/lib/modules/pool/tags/getPoolTags'
 import { PoolTagsProvider } from '@repo/lib/modules/pool/tags/PoolTagsProvider'
-import { getErc4626Metadata } from '@repo/lib/modules/pool/metadata/getErc4626Metadata'
+import {
+  getErc4626Metadata,
+  getErc4626KeepOriginalScale,
+} from '@repo/lib/modules/pool/metadata/getErc4626Metadata'
 import { PoolsMetadataProvider } from '@repo/lib/modules/pool/metadata/PoolsMetadataProvider'
 import { getPoolsMetadata } from '@repo/lib/modules/pool/metadata/getPoolsMetadata'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -80,6 +83,7 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
     erc4626Metadata,
     poolsMetadata,
     feeManagersMetadata,
+    erc4626KeepOriginalScale,
   ] = await Promise.all([
     getFxRates(),
     getHooksMetadata(),
@@ -87,10 +91,12 @@ export async function ApolloGlobalDataProvider({ children }: PropsWithChildren) 
     getErc4626Metadata(),
     getPoolsMetadata(),
     getFeeManagersMetadata(),
+    getErc4626KeepOriginalScale(),
   ])
 
   return (
     <TokensProvider
+      erc4626KeepOriginalScale={erc4626KeepOriginalScale}
       tokenPricesData={tokenPricesQueryData}
       tokensData={tokensQueryData}
       variables={tokensQueryVariables}
