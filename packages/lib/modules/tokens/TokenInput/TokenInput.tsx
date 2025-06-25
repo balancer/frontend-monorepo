@@ -94,6 +94,7 @@ type TokenInputFooterProps = {
   priceMessage?: string
   customUserBalance?: string
   isDisabled?: boolean
+  customUsdPrice?: number
 }
 
 function TokenInputFooter({
@@ -105,6 +106,7 @@ function TokenInputFooter({
   priceMessage,
   customUserBalance,
   isDisabled,
+  customUsdPrice,
 }: TokenInputFooterProps) {
   const { balanceFor, isBalancesLoading } = useTokenBalances()
   const { usdValueForToken } = useTokens()
@@ -118,7 +120,12 @@ function TokenInputFooter({
 
   const balance = token ? balanceFor(token?.address) : undefined
   const userBalance = customUserBalance || (token ? balance?.formatted || '0' : '0')
-  const usdValue = value && token ? usdValueForToken(token, value) : '0'
+  const usdValue =
+    value && customUsdPrice
+      ? bn(value).times(customUsdPrice).toString()
+      : value && token
+        ? usdValueForToken(token, value)
+        : '0'
 
   const noBalance = !token || bn(userBalance).isZero()
   const _isNativeAsset = token && isNativeAsset(token.chain, token.address)
@@ -195,6 +202,7 @@ type Props = {
   priceMessage?: string
   disableBalanceValidation?: boolean
   customUserBalance?: string
+  customUsdPrice?: number
 }
 
 export const TokenInput = forwardRef(
@@ -213,6 +221,7 @@ export const TokenInput = forwardRef(
       priceMessage,
       disableBalanceValidation = false,
       customUserBalance,
+      customUsdPrice,
       ...inputProps
     }: InputProps & Props,
     ref
@@ -318,6 +327,7 @@ export const TokenInput = forwardRef(
           </InputGroup>
 
           <TokenInputFooter
+            customUsdPrice={customUsdPrice}
             customUserBalance={customUserBalance}
             hasPriceImpact={hasPriceImpact}
             isDisabled={inputProps.isDisabled}

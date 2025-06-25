@@ -50,12 +50,14 @@ type Props = {
   hasDisabledInputs?: boolean
   nextButtonText?: string
   customTokenOut?: ApiToken
+  customTokenOutUsdPrice?: number
 }
 export function SwapForm({
   redirectToPoolPage,
   hasDisabledInputs,
   nextButtonText,
   customTokenOut,
+  customTokenOutUsdPrice,
 }: Props) {
   const isPoolSwapUrl = useIsPoolSwapUrl()
 
@@ -289,6 +291,7 @@ export function SwapForm({
                   })}
                   {...(isLbpSwap && {
                     apiToken: customTokenOut,
+                    customUsdPrice: customTokenOutUsdPrice,
                   })}
                 />
               </VStack>
