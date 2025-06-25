@@ -1,15 +1,10 @@
-import { createContext, PropsWithChildren } from 'react'
-import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useMutation } from '@apollo/client'
 import { CreateLbpDocument } from '@repo/lib/shared/services/api/generated/graphql'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLbpForm } from './LbpFormProvider'
 
-export type UseLbpMetadataResponse = ReturnType<typeof useLbpMetadataLogic>
-const LbpMetadataContext = createContext<UseLbpMetadataResponse | null>(null)
-
-export function useLbpMetadataLogic() {
+export function useLbpMetadata() {
   const [createLbp, { error, reset }] = useMutation(CreateLbpDocument)
   const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
@@ -65,11 +60,3 @@ export function useLbpMetadataLogic() {
     reset,
   }
 }
-
-export function LbpMetadataProvider({ children }: PropsWithChildren) {
-  const hook = useLbpMetadataLogic()
-  return <LbpMetadataContext.Provider value={hook}>{children}</LbpMetadataContext.Provider>
-}
-
-export const useLbpMetadata = (): UseLbpMetadataResponse =>
-  useMandatoryContext(LbpMetadataContext, 'LbpMetadata')

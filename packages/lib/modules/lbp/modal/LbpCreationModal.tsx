@@ -16,7 +16,7 @@ import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants
 import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { Address } from 'viem'
-import { useLbpMetadata } from '../LbpMetadataProvider'
+import { useLbpMetadata } from '../useLbpMetadata'
 import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 import { getChainId } from '@repo/lib/config/app.config'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
@@ -86,7 +86,11 @@ export function LbpCreationModal({
     const handleSaveMetadata = async () => {
       if (isPoolInitialized && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
         hasAttemptedSaveMetadata.current = true
-        await saveMetadata()
+        try {
+          await saveMetadata()
+        } catch (error) {
+          console.error('Error saving metadata:', error)
+        }
       }
     }
     handleSaveMetadata()
