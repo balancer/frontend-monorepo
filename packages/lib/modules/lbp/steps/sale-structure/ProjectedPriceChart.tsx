@@ -101,6 +101,9 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
   }
 
   if (cutTime && isAfter(cutTime, startDate) && isBefore(cutTime, endDate)) {
+    const percentage =
+      (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
+
     chartInfo.series.push({
       id: 'cut-time',
       type: 'line',
@@ -117,11 +120,9 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
       },
       label: {
         show: true,
-        position: 'right',
+        position: percentage < 0.8 ? 'right' : 'left',
         formatter: (value: LabelFormatterParams) => {
           if (value.data[1] === priceRange.max * 1.05) {
-            const percentage =
-              (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
             return `{progressFormat|${fNum('priceImpact', percentage)} complete}\n{dateFormat|${format(cutTime, 'h:mmaaa, dd/MM/yyyy')}}`
           } else return ''
         },
