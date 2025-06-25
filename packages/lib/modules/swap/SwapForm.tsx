@@ -273,7 +273,7 @@ export function SwapForm({
                 </Box>
                 <TokenInput
                   address={tokenOut.address}
-                  aria-label="TokeOut"
+                  aria-label="TokenOut"
                   chain={selectedChain}
                   disableBalanceValidation
                   hasPriceImpact
