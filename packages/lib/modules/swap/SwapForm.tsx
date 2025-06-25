@@ -296,7 +296,9 @@ export function SwapForm({
                 />
               </VStack>
               <PriceImpactAccordion
-                accordionButtonComponent={<SwapRate />}
+                accordionButtonComponent={
+                  <SwapRate customTokenOutUsdPrice={customTokenOutUsdPrice} />
+                }
                 accordionPanelComponent={<SwapDetails />}
                 isDisabled={!simulationQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}

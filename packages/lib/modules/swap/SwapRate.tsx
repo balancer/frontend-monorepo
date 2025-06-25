@@ -6,7 +6,7 @@ import { useTokens } from '../tokens/TokensProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function SwapRate() {
+export function SwapRate({ customTokenOutUsdPrice }: { customTokenOutUsdPrice?: number }) {
   const [priceDirection, setPriceDirection] = useState<'givenIn' | 'givenOut'>('givenIn')
   const { simulationQuery, tokenInInfo, tokenOutInfo, isLbpSwap, lbpTokenOut } = useSwap()
   const { toCurrency } = useCurrency()
@@ -33,7 +33,7 @@ export function SwapRate() {
       : effectivePriceValue
 
   const tokenInUsdValue = usdValueForToken(tokenInInfo, 1)
-  const tokenOutUsdValue = usdValueForToken(tokenOutInfo, 1)
+  const tokenOutUsdValue = customTokenOutUsdPrice || usdValueForToken(tokenOutInfo, 1)
   const tokenOutSymbol = isLbpSwap && lbpTokenOut ? lbpTokenOut.symbol : tokenOutInfo?.symbol
 
   const priceLabel =
