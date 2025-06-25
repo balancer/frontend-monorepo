@@ -34,14 +34,15 @@ export function SwapRate() {
 
   const tokenInUsdValue = usdValueForToken(tokenInInfo, 1)
   const tokenOutUsdValue = usdValueForToken(tokenOutInfo, 1)
+  const tokenOutSymbol = isLbpSwap && lbpTokenOut ? lbpTokenOut.symbol : tokenOutInfo?.symbol
 
   const priceLabel =
     priceDirection === 'givenIn'
-      ? `1 ${tokenInInfo?.symbol} = ${effectivePriceReversed} ${isLbpSwap && lbpTokenOut ? lbpTokenOut.symbol : tokenOutInfo?.symbol} (${toCurrency(
+      ? `1 ${tokenInInfo?.symbol} = ${effectivePriceReversed} ${tokenOutSymbol} (${toCurrency(
           tokenInUsdValue,
           { abbreviated: false }
         )})`
-      : `1 ${tokenOutInfo?.symbol} = ${effectivePrice} ${tokenInInfo?.symbol} (${toCurrency(
+      : `1 ${tokenOutSymbol} = ${effectivePrice} ${tokenInInfo?.symbol} (${toCurrency(
           tokenOutUsdValue,
           { abbreviated: false }
         )})`
