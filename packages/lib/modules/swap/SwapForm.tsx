@@ -277,7 +277,7 @@ export function SwapForm({
                   chain={selectedChain}
                   disableBalanceValidation
                   hasPriceImpact
-                  isDisabled={isLbpSwap}
+                  isDisabled={hasDisabledInputs}
                   isLoadingPriceImpact={
                     simulationQuery.isLoading || !simulationQuery.data || !tokenIn.amount
                   }
