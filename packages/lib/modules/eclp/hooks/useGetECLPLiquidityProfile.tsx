@@ -5,12 +5,15 @@ import { drawLiquidityECLP } from '../helpers/drawLiquidityECLP'
 import { Pool } from '../../pool/pool.types'
 import { calculateSpotPrice, destructureRequiredPoolParams } from '../helpers/calculateSpotPrice'
 import { GqlPoolType } from '@repo/lib/shared/services/api/generated/graphql'
-import { formatUnits } from 'viem'
-import { getPriceRateRatio } from '../../pool/pool-tokens.utils'
+import { Address, formatUnits } from 'viem'
+import { getPoolActionableTokens, getPriceRateRatio } from '../../pool/pool-tokens.utils'
+import { useTokens } from '../../tokens/TokensProvider'
+import { ApiToken } from '@repo/lib/modules/tokens/token.types'
 
 export function useGetECLPLiquidityProfile(pool: Pool) {
   const { data: tokenRates, isLoading } = useGetTokenRates(pool)
   const [isReversed, setIsReversed] = useState(false)
+  const { canScaleBack } = useTokens()
 
   function toggleIsReversed() {
     setIsReversed(!isReversed)
@@ -27,7 +30,18 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     [pool, tokenRateScalingFactorString]
   )
 
-  const priceRateRatio = getPriceRateRatio(pool)
+  const tokensToScaleBack = pool.poolTokens.filter(
+    token => canScaleBack(token.address, pool.chain) && token.useUnderlyingForAddRemove
+  )
+
+  const tokens = tokensToScaleBack.length
+    ? getPoolActionableTokens(pool)
+    : (pool.poolTokens as ApiToken[])
+
+  const priceRateRatio = getPriceRateRatio(
+    tokens,
+    tokensToScaleBack.map(token => token.address as Address)
+  )
 
   const params = pool && pool.poolTokens ? destructureRequiredPoolParams(pool, tokenRates) : null
 
@@ -79,5 +93,6 @@ export function useGetECLPLiquidityProfile(pool: Pool) {
     isReversed,
     toggleIsReversed,
     isLoading,
+    poolTokens: tokens,
   }
 }

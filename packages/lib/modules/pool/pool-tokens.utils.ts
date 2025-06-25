@@ -343,12 +343,12 @@ export function getPriceRateForToken(token: ApiToken, pool: Pool) {
 }
 
 // for use with ECLPs
-export function getPriceRateRatio(pool: Pool) {
-  const priceRates = getPoolActionableTokens(pool).map(
+export function getPriceRateRatio(tokens: ApiToken[], tokenAddressesToScaleBack: Address[]) {
+  const priceRates = tokens.map(
     (
       token: ApiToken & { priceRate?: string; priceRateProviderData?: GqlPriceRateProviderData }
     ) => {
-      return token.useUnderlyingForAddRemove ? token.priceRate : '1'
+      return tokenAddressesToScaleBack.includes(token.address as Address) ? token.priceRate : '1'
     }
   )
   return bn(priceRates[0] || '1').div(priceRates[1] || '1')

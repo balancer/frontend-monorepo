@@ -4,7 +4,6 @@ import { usePool } from '../../pool/PoolProvider'
 import { useTheme as useChakraTheme } from '@chakra-ui/react'
 import { createContext, PropsWithChildren, useMemo } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { getPoolActionableTokens } from '../../pool/pool-tokens.utils'
 
 type EclpChartContextType = ReturnType<typeof useEclpChartLogic>
 
@@ -23,14 +22,15 @@ export function useEclpChartLogic() {
     isReversed,
     toggleIsReversed,
     isLoading,
+    poolTokens,
   } = useGetECLPLiquidityProfile(pool)
   const theme = useChakraTheme()
 
   const tokens = useMemo(() => {
-    const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
+    const tokens = poolTokens.map(token => token.symbol)
 
-    return isReversed ? poolTokens.reverse().join('/') : poolTokens.join('/')
-  }, [pool, isReversed])
+    return isReversed ? tokens.reverse().join('/') : tokens.join('/')
+  }, [poolTokens, isReversed])
 
   const secondaryFontColor = theme.semanticTokens.colors.font.secondary.default
 
