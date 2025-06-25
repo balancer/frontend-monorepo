@@ -18,7 +18,7 @@ import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { ReactNode, useEffect, useState } from 'react'
 import { TokenIcon } from '../TokenIcon'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
-import { Numberish, fNum, isZero } from '@repo/lib/shared/utils/numbers'
+import { Numberish, bn, fNum, isZero } from '@repo/lib/shared/utils/numbers'
 import { Pool } from '../../pool/pool.types'
 import { TokenInfoPopover } from '../TokenInfoPopover'
 import { ChevronDown } from 'react-feather'
@@ -86,7 +86,7 @@ function TokenInfo({
           address={address}
           alt={token?.symbol || address}
           chain={chain}
-          logoURI={logoURI}
+          logoURI={token?.logoURI || logoURI}
           overflow="visible"
           size={iconSize}
         />
@@ -136,6 +136,7 @@ export type TokenRowProps = {
   iconSize?: number
   logoURI?: string
   customToken?: CustomToken
+  customUsdPrice?: number
 }
 
 export default function TokenRow({
@@ -158,6 +159,7 @@ export default function TokenRow({
   iconSize,
   logoURI,
   customToken,
+  customUsdPrice,
 }: TokenRowProps) {
   const { getToken, usdValueForToken, usdValueForBpt } = useTokens()
   const { toCurrency } = useCurrency()
@@ -183,7 +185,9 @@ export default function TokenRow({
 
   useEffect(() => {
     if (value) {
-      if ((isBpt || isNestedBpt) && pool) {
+      if (customUsdPrice) {
+        setUsdValue(bn(customUsdPrice).times(value).toString())
+      } else if ((isBpt || isNestedBpt) && pool) {
         setUsdValue(usdValueForBpt(address, chain, value))
       } else if (token) {
         setUsdValue(usdValueForToken(token, value))

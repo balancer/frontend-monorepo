@@ -12,6 +12,7 @@ import { HumanAmount } from '@balancer/sdk'
 import { slippageDiffLabel } from '@repo/lib/shared/utils/slippage'
 import { AnimateHeightChange } from '@repo/lib/shared/components/animations/AnimateHeightChange'
 import { CardPopAnim } from '@repo/lib/shared/components/animations/CardPopAnim'
+import { CustomToken } from '@repo/lib/modules/tokens/token.types'
 
 export function SwapSummary({
   isLoading: isLoadingReceipt,
@@ -31,6 +32,8 @@ export function SwapSummary({
     swapTxConfirmed,
     simulationQuery,
     hasQuoteContext,
+    isLbpSwap,
+    lbpTokenOut,
   } = useSwap()
 
   const expectedTokenOut = simulationQuery?.data?.returnAmount as HumanAmount
@@ -85,6 +88,9 @@ export function SwapSummary({
           }
           tokenAddress={shouldShowReceipt ? receivedToken.tokenAddress : tokenOut.address}
           tokenAmount={shouldShowReceipt ? receivedToken.humanAmount : tokenOut.amount}
+          {...(isLbpSwap && {
+            customToken: lbpTokenOut as CustomToken,
+          })}
         />
       </Card>
 
