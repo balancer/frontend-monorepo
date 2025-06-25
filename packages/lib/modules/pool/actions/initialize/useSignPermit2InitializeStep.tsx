@@ -3,10 +3,9 @@ import { signPermit2Initialization } from '@repo/lib/modules/tokens/approvals/pe
 import { SignPermit2Fn as SignPermit2Fn } from '@repo/lib/modules/tokens/approvals/permit2/useSignPermit2'
 import { useSignPermit2Step } from '@repo/lib/modules/transactions/transaction-steps/useSignPermit2Step'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
-import { isTransactionSuccess } from '@repo/lib/modules/transactions/transaction-steps/transaction.helper'
-import { ManagedResult } from '@repo/lib/modules/transactions/transaction-steps/lib'
 
 type TokenAmountWithSymbol = InitPoolInputV3['amountsIn'][number] & { symbol: string }
 
@@ -20,12 +19,12 @@ export function useSignPermit2InitializeStep({
   initPoolInput: ExtendedInitPoolInputV3
 }) {
   const { wethIsEth, amountsIn, chainId } = initPoolInput
-  const [initializationTx] = useLocalStorage<ManagedResult | undefined>(
-    LS_KEYS.LbpConfig.InitializationTx,
-    undefined
-  )
 
   const { userAddress } = useUserAccount()
+  const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
+    LS_KEYS.LbpConfig.PoolAddress,
+    undefined
+  )
 
   const signPermit2Fn: SignPermit2Fn = (sdkClient: PublicWalletClient) => {
     return signPermit2Initialization({
@@ -42,7 +41,9 @@ export function useSignPermit2InitializeStep({
     symbol: amount.symbol,
   }))
 
-  const isComplete = isTransactionSuccess(initializationTx) || false
+  const { data: isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
+
+  const isComplete = !!isPoolInitialized
 
   const signPermit2Step = useSignPermit2Step({
     chainId,

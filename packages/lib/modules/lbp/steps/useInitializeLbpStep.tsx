@@ -15,6 +15,7 @@ import { type Address } from 'viem'
 import { PoolType, InitPoolInputV3 } from '@balancer/sdk'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { useLocalStorage } from 'usehooks-ts'
+import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 
 export const initializeLbpStepId = 'initialize-lbp'
 
@@ -31,10 +32,7 @@ export function useInitializeLbpStep({
 }: {
   initPoolInput: InitPoolInputV3
 }): TransactionStep {
-  const [transaction, setTransaction] = useLocalStorage<ManagedResult | undefined>(
-    LS_KEYS.LbpConfig.InitializationTx,
-    undefined
-  )
+  const [transaction, setTransaction] = useState<ManagedResult | undefined>()
   const [isStepActivated, setIsStepActivated] = useState(false)
   const [poolAddress] = useLocalStorage<`0x${string}` | undefined>(
     LS_KEYS.LbpConfig.PoolAddress,
@@ -43,11 +41,16 @@ export function useInitializeLbpStep({
   const rpcUrl = getRpcUrl(initPoolInput.chainId)
   const { buildTenderlyUrl } = useTenderly({ chainId: initPoolInput.chainId })
 
+  const { data: isPoolInitialized, refetch: refetchIsPoolInitialized } = useIsPoolInitialized(
+    initPoolInput.chainId,
+    poolAddress
+  )
+
   const buildCallDataQuery = useInitializePoolBuildCall({
     rpcUrl,
     poolAddress: poolAddress as Address,
     poolType: PoolType.LiquidityBootstrapping,
-    enabled: isStepActivated,
+    enabled: isStepActivated && !isPoolInitialized,
     initPoolInput,
   })
 
@@ -56,7 +59,7 @@ export function useInitializeLbpStep({
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
 
-  const isComplete = () => isTransactionSuccess(transaction)
+  const isComplete = () => isTransactionSuccess(transaction) || !!isPoolInitialized
 
   return useMemo(
     () => ({
@@ -65,6 +68,9 @@ export function useInitializeLbpStep({
       labels,
       transaction,
       isComplete,
+      onSuccess: () => {
+        refetchIsPoolInitialized()
+      },
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
       renderAction: () => {

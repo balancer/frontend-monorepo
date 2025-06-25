@@ -20,6 +20,5 @@ export const LS_KEYS = {
     StepIndex: 'lbpConfig.stepIndex',
     PoolAddress: 'lbpConfig.poolAddress',
     IsMetadataSaved: 'lbpConfig.isMetadataSaved',
-    InitializationTx: 'lbpConfig.initializationTx',
   },
 }

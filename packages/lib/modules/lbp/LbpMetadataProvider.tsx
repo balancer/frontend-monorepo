@@ -48,8 +48,8 @@ export function useLbpMetadataLogic() {
     if (data?.createLBP) setIsMetadataSaved(true)
   }
 
-  const { message: errorTitle, graphQLErrors } = error ?? {}
-  const errorMessage =
+  const { message: title, graphQLErrors } = error ?? {}
+  const message =
     graphQLErrors &&
     graphQLErrors
       .map(error =>
@@ -60,10 +60,7 @@ export function useLbpMetadataLogic() {
 
   return {
     saveMetadata,
-    error: {
-      message: errorMessage,
-      title: errorTitle,
-    },
+    error: title && message ? `${title}: ${message}` : undefined,
     isMetadataSaved,
     reset,
   }
