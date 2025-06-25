@@ -35,7 +35,7 @@ export function LbpSwap() {
   return (
     <SwapLayout props={props}>
       <SwapForm
-        apiToken={launchToken}
+        customTokenOut={launchToken}
         hasDisabledInputs={isBeforeSaleStart}
         nextButtonText={
           isBeforeSaleStart

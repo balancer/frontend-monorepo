@@ -49,13 +49,13 @@ type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
   hasDisabledInputs?: boolean
   nextButtonText?: string
-  apiToken?: ApiToken
+  customTokenOut?: ApiToken
 }
 export function SwapForm({
   redirectToPoolPage,
   hasDisabledInputs,
   nextButtonText,
-  apiToken,
+  customTokenOut,
 }: Props) {
   const isPoolSwapUrl = useIsPoolSwapUrl()
 
@@ -213,7 +213,7 @@ export function SwapForm({
           <CardHeader as={HStack} justify="space-between" w="full" zIndex={11}>
             <span>
               {isLbpSwap
-                ? `Buy $${apiToken?.symbol}`
+                ? `Buy $${customTokenOut?.symbol}`
                 : isPoolSwap
                   ? 'Single pool swap'
                   : capitalize(swapAction)}
@@ -288,7 +288,7 @@ export function SwapForm({
                     onToggleTokenClicked: () => openTokenSelectModal('tokenOut'),
                   })}
                   {...(isLbpSwap && {
-                    apiToken,
+                    apiToken: customTokenOut,
                   })}
                 />
               </VStack>
