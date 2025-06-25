@@ -165,6 +165,9 @@ export function WeightsChart({
   }
 
   if (cutTime && isAfter(cutTime, startDate) && isBefore(cutTime, endDate)) {
+    const percentage =
+      (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
+
     chartInfo.series.push({
       id: 'cut-time',
       type: 'line',
@@ -181,7 +184,7 @@ export function WeightsChart({
       },
       label: {
         show: true,
-        position: 'right',
+        position: percentage < 0.8 ? 'right' : 'left',
         formatter: (value: LabelFormatterParams) => {
           if (value.data[1] === 100)
             return `{labelFormat|${format(cutTime, 'h:mmaaa, dd/MM/yyyy')}}`
