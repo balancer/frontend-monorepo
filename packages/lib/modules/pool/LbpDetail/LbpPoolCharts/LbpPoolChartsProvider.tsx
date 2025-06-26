@@ -18,8 +18,8 @@ const LbpPoolChartsContext = createContext<LbpPoolChartsContextType | null>(null
 
 export function useLbpPoolChartsLogic() {
   const { pool } = usePool()
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
 
+  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
   const startTime = new Date(secondsToMilliseconds(lbpPool.startTime))
   const endTime = new Date(secondsToMilliseconds(lbpPool.endTime))
   const now = new Date()
