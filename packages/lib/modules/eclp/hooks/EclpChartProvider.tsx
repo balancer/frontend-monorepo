@@ -6,7 +6,7 @@ import { useBreakpointValue } from '@chakra-ui/react'
 import { createContext, PropsWithChildren, useMemo } from 'react'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { getPoolActionableTokens } from '../../pool/pool-tokens.utils'
-import { useTheme as useNextTheme } from 'next-themes'
+import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
 
 type EclpChartContextType = ReturnType<typeof useEclpChartLogic>
 
@@ -33,27 +33,18 @@ export function useEclpChartLogic() {
     isLoading,
   } = useGetECLPLiquidityProfile(pool)
   const theme = useChakraTheme()
-  const { theme: nextTheme } = useNextTheme()
+  const selectColor = useSelectColor()
   const tokens = useMemo(() => {
     const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
 
     return isReversed ? poolTokens.reverse().join('/') : poolTokens.join('/')
   }, [pool, isReversed])
 
-  const secondaryFontColor =
-    nextTheme === 'dark'
-      ? theme.semanticTokens.colors.font.secondary._dark
-      : theme.semanticTokens.colors.font.secondary.default
+  const secondaryFontColor = selectColor('font', 'secondary')
 
-  const fontHighlightColor =
-    nextTheme === 'dark'
-      ? theme.semanticTokens.colors.font.highlight._dark
-      : theme.semanticTokens.colors.font.highlight.default
+  const fontHighlightColor = selectColor('font', 'highlight')
 
-  const backgroundHighlightColor =
-    nextTheme === 'dark'
-      ? theme.semanticTokens.colors.background.highlight._dark
-      : theme.semanticTokens.colors.background.highlight.default
+  const backgroundHighlightColor = selectColor('background', 'highlight')
 
   const markPointMargin = 0.05
   const isSpotPriceNearLowerBound = useMemo(() => {
