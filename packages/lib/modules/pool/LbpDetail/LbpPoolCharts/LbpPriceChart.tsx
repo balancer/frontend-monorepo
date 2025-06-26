@@ -73,5 +73,9 @@ export function PriceInfo() {
 }
 
 function percentageChange(oldValue: number, newValue: number) {
+  if (oldValue === 0) {
+    return newValue === 0 ? '0.00' : 'N/A'
+  }
+
   return (((newValue - oldValue) / oldValue) * 100).toFixed(2)
 }

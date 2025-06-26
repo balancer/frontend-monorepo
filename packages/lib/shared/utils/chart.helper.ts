@@ -44,6 +44,10 @@ export function interpolatePrices(
 }
 
 export function range(values: number[]) {
+  if (values.length === 0) {
+    throw new Error('Cannot calculate range of empty array')
+  }
+
   return {
     min: Math.min(...values),
     max: Math.max(...values),
