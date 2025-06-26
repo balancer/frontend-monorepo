@@ -3,7 +3,7 @@ import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { LabelFormatterParams, dividePrices, range } from '@repo/lib/shared/utils/chart.helper'
-import { Stack, Text } from '@chakra-ui/react'
+import { Skeleton, Stack, Text } from '@chakra-ui/react'
 import { LbpPrice } from '../../pool/usePriceInfo'
 
 type Props = {
@@ -12,9 +12,17 @@ type Props = {
   onPriceChange?: (prices: LbpPrice[]) => void
   prices: LbpPrice[]
   cutTime?: Date
+  isLoading?: boolean
 }
 
-export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices, cutTime }: Props) {
+export function ProjectedPriceChart({
+  startDate,
+  endDate,
+  onPriceChange,
+  prices,
+  cutTime,
+  isLoading,
+}: Props) {
   const priceData = dividePrices(prices, cutTime)
 
   setTimeout(() => {
@@ -165,10 +173,12 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
     })
   }
 
-  return prices.length > 0 ? (
+  return isLoading ? (
+    <Skeleton h="280px" w="full" />
+  ) : prices.length > 0 ? (
     <ReactECharts option={chartInfo} style={{ height: '280px', width: '100%' }} />
   ) : (
-    <Stack alignItems="center" h="350px" justifyContent="center">
+    <Stack alignItems="center" h="280px" justifyContent="center">
       <Text fontSize="3xl">Missing data</Text>
     </Stack>
   )

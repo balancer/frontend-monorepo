@@ -33,11 +33,17 @@ export function LbpPriceChart() {
     ? `Sale: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} remaining`
     : `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
 
-  const { prices } = usePriceInfo(pool.chain, pool.id as Address)
+  const { prices, isLoading } = usePriceInfo(pool.chain, pool.id as Address)
 
   return (
     <VStack>
-      <ProjectedPriceChart cutTime={now} endDate={endTime} prices={prices} startDate={startTime} />
+      <ProjectedPriceChart
+        cutTime={now}
+        endDate={endTime}
+        isLoading={isLoading}
+        prices={prices}
+        startDate={startTime}
+      />
       <Divider />
       <HStack mt="2" w="full">
         <hr
