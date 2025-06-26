@@ -23,11 +23,16 @@ export function ClpBadge({ poolIsInRange }: { poolIsInRange: boolean }) {
         cursor="pointer"
         mb={['6px', '4px', '0px']} // to prevent jittering on mobile
         p="2"
+        w="max-content"
         zIndex="1"
       >
         <HStack>
           <Icon as={poolIsInRange ? ThumbsUp : ThumbsDown} />
-          <Text color="black">{`CLP ${poolIsInRange ? 'in' : 'out of'} range`}</Text>
+          <Text
+            color="black"
+            fontSize="sm"
+            fontWeight="bold"
+          >{`CLP ${poolIsInRange ? 'in' : 'out of'} range`}</Text>
           <Icon as={Info} />
         </HStack>
       </Box>
