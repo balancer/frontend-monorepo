@@ -29,6 +29,7 @@ import { Pool, PoolCore } from './pool.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { allPoolTokens, isStandardOrUnderlyingRootToken } from './pool-tokens.utils'
 import { PoolMetadata } from './metadata/getPoolsMetadata'
+import { getPoolTypeLabel } from '@repo/lib/modules/pool/pool.utils'
 
 /**
  * METHODS
@@ -81,6 +82,10 @@ export function isGyroEPool(pool: Pool): pool is GqlPoolGyro {
   return pool.type === GqlPoolType.Gyroe
 }
 
+export function isReclAmm(poolType: GqlPoolType): boolean {
+  return poolType === GqlPoolType.Reclamm
+}
+
 export function isUnknownType(poolType: any): boolean {
   return !Object.values(GqlPoolType).includes(poolType)
 }
@@ -116,7 +121,8 @@ export function isStableLike(poolType: GqlPoolType): boolean {
     isMetaStable(poolType) ||
     isComposableStable(poolType) ||
     isFx(poolType) ||
-    isGyro(poolType)
+    isGyro(poolType) ||
+    isReclAmm(poolType)
   )
 }
 
@@ -473,7 +479,9 @@ export function poolTypeLabel(poolType: GqlPoolType) {
       return 'FX'
     case GqlPoolType.QuantAmmWeighted:
       return 'QuantAMM BTF'
+    case GqlPoolType.Reclamm:
+      return 'reCLAMM'
     default:
-      return poolType.toLowerCase()
+      return getPoolTypeLabel(poolType)
   }
 }

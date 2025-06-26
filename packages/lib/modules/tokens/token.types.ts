@@ -63,3 +63,9 @@ export type CustomToken = {
 }
 
 export type BalanceForFn = (token: TokenBase | string) => TokenAmount | undefined
+
+export type InfoPopoverToken = {
+  address: Address
+  symbol: string
+  chain: GqlChain
+}

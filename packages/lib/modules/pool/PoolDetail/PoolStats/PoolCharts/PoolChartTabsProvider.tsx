@@ -12,6 +12,7 @@ export enum PoolChartTab {
   FEES = 'fees',
   SURPLUS = 'surplus',
   LIQUIDITY_PROFILE = 'liquidity_profile',
+  RECLAMM = 'reclamm',
   PRICE = 'price',
 }
 
@@ -31,19 +32,23 @@ const BASE_TABS: PoolChartTypeTab[] = [
   { value: PoolChartTab.TVL, label: 'TVL' },
 ]
 
+const TABS_WITH_FEES: PoolChartTypeTab[] = [
+  ...BASE_TABS,
+  { value: PoolChartTab.FEES, label: 'Fees' },
+]
+
 const POOL_SPECIFIC_TABS: PoolTabsMap = {
   [GqlPoolType.CowAmm]: [...BASE_TABS, { value: PoolChartTab.SURPLUS, label: 'Surplus' }],
   [GqlPoolType.Gyroe]: [
     { value: PoolChartTab.LIQUIDITY_PROFILE, label: 'Liquidity profile' },
-    ...BASE_TABS,
-    { value: PoolChartTab.FEES, label: 'Fees' },
+    ...TABS_WITH_FEES,
   ],
+  [GqlPoolType.Reclamm]: [{ value: PoolChartTab.RECLAMM, label: 'reCLAMM' }, ...TABS_WITH_FEES],
   [GqlPoolType.LiquidityBootstrapping]: [
     { value: PoolChartTab.PRICE, label: 'Price' },
-    ...BASE_TABS,
-    { value: PoolChartTab.FEES, label: 'Fees' },
+    ...TABS_WITH_FEES,
   ],
-  default: [...BASE_TABS, { value: PoolChartTab.FEES, label: 'Fees' }],
+  default: TABS_WITH_FEES,
 }
 
 export function getPoolTabsList({

@@ -19,6 +19,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   VStack,
+  Stack,
 } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 import { RemoveLiquidityModal } from '../modal/RemoveLiquidityModal'
@@ -39,11 +40,13 @@ import { SafeAppAlert } from '@repo/lib/shared/components/alerts/SafeAppAlert'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TooltipWithTouch } from '@repo/lib/shared/components/tooltips/TooltipWithTouch'
 import { useUserSettings } from '@repo/lib/modules/user/settings/UserSettingsProvider'
-import { isBoosted } from '../../../pool.helpers'
+import { isBoosted, isV3LBP } from '../../../pool.helpers'
 import { SettingsAlert } from '@repo/lib/modules/user/settings/SettingsAlert'
 
 export function RemoveLiquidityForm() {
   const { pool } = usePool()
+
+  const title = isV3LBP(pool) ? 'Get LBP funds' : 'Remove liquidity'
 
   const TABS: ButtonGroupOption[] = [
     {
@@ -140,14 +143,14 @@ export function RemoveLiquidityForm() {
         <Card>
           <CardHeader>
             <HStack justify="space-between" w="full">
-              <span>Remove liquidity</span>
+              <span>{title}</span>
               <TransactionSettings size="sm" />
             </HStack>
           </CardHeader>
           <VStack align="start" spacing="md">
             <SafeAppAlert />
             <SettingsAlert />
-            {!requiresProportionalInput(pool) && (
+            {!requiresProportionalInput(pool) && !isV3LBP(pool) && (
               <HStack>
                 <ButtonGroup
                   currentOption={activeTab}
@@ -178,17 +181,19 @@ export function RemoveLiquidityForm() {
               </HStack>
             )}
             <VStack align="start" spacing="md" w="full">
-              <InputWithSlider
-                isNumberInputDisabled
-                isWarning={isWarning}
-                onPercentChanged={setHumanBptInPercent}
-                value={totalUSDValue}
-              >
-                <Text fontSize="sm">Amount</Text>
-                <Text fontSize="sm" variant="secondary">
-                  {fNum('percentage', humanBptInPercent / 100)}
-                </Text>
-              </InputWithSlider>
+              {!isV3LBP(pool) && (
+                <InputWithSlider
+                  isNumberInputDisabled
+                  isWarning={isWarning}
+                  onPercentChanged={setHumanBptInPercent}
+                  value={totalUSDValue}
+                >
+                  <Text fontSize="sm">Amount</Text>
+                  <Text fontSize="sm" variant="secondary">
+                    {fNum('percentage', humanBptInPercent / 100)}
+                  </Text>
+                </InputWithSlider>
+              )}
               {isWarning && (
                 <Text color="font.warning" fontSize="xs">
                   You can only remove up to 25% of a single asset from the pool in one transaction
@@ -202,7 +207,7 @@ export function RemoveLiquidityForm() {
               )}
             </VStack>
             <VStack align="start" spacing="sm" w="full">
-              {!simulationQuery.isError && (
+              {!simulationQuery.isError && !isV3LBP(pool) && (
                 <PriceImpactAccordion
                   accordionButtonComponent={
                     <HStack>
@@ -230,6 +235,15 @@ export function RemoveLiquidityForm() {
                   setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}
                 />
               )}
+              {isV3LBP(pool) && (
+                <Card variant="modalSubSection">
+                  <Stack w="full">
+                    <Text color="font.secondary" fontSize="sm" variant="secondary">
+                      Price impact: 0.00%
+                    </Text>
+                  </Stack>
+                </Card>
+              )}
             </VStack>
             <RemoveSimulationError
               goToProportionalRemoves={setProportionalTab}
@@ -251,6 +265,7 @@ export function RemoveLiquidityForm() {
             </TooltipWithTouch>
           </VStack>
         </Card>
+
         <RemoveLiquidityModal
           finalFocusRef={nextBtn}
           isOpen={previewModalDisclosure.isOpen}

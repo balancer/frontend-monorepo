@@ -28,7 +28,6 @@ import {
   HookFragment,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address, zeroAddress } from 'viem'
-import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
 import { AlertTriangle, XCircle } from 'react-feather'
 import Image from 'next/image'
@@ -36,7 +35,7 @@ import { RateProviderInfoPopOver } from './RateProviderInfo'
 import { getWarnings, isBoosted, isV3Pool } from '@repo/lib/modules/pool/pool.helpers'
 import { HookInfoPopOver } from './HookInfo'
 import { Erc4626InfoPopOver } from './Erc4626Info'
-import { ApiToken } from '@repo/lib/modules/tokens/token.types'
+import { InfoPopoverToken } from '@repo/lib/modules/tokens/token.types'
 import { getBlockExplorerAddressUrl } from '@repo/lib/shared/utils/blockExplorer'
 import { useHook } from '@repo/lib/modules/hooks/useHook'
 import { getChainId } from '@repo/lib/config/app.config'
@@ -47,6 +46,7 @@ type RateProvider = {
   tokenAddress: Address
   rateProviderAddress: Address
   priceRateProviderData: GqlPriceRateProviderData | null
+  tokenSymbol: string
 }
 
 function getIconAndLevel(hasWarnings: boolean, isSafe: boolean, hasData: boolean) {
@@ -78,7 +78,7 @@ function getIconAndLevel(hasWarnings: boolean, isSafe: boolean, hasData: boolean
   return { icon, level }
 }
 
-function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: ApiToken) {
+function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: InfoPopoverToken) {
   const hasWarnings = getWarnings(data?.warnings || []).length > 0
   const isSafe = !!data?.reviewed && data?.summary === 'safe'
   const hasData = !!data
@@ -92,7 +92,7 @@ function getRateProviderIcon(data: GqlPriceRateProviderData | null, token: ApiTo
   )
 }
 
-function getErc4626Icon(data: Erc4626ReviewData | undefined | null, token: ApiToken) {
+function getErc4626Icon(data: Erc4626ReviewData | undefined | null, token: InfoPopoverToken) {
   const hasWarnings = getWarnings(data?.warnings || []).length > 0
   const hasData = !!data
   const isSafe = hasData && data?.summary === 'safe'
@@ -135,7 +135,6 @@ export function PoolContracts({ ...props }: CardProps) {
     usePool()
 
   const { hooks: hooksMetadata } = useHook(pool)
-  const { getToken } = useTokens()
 
   const contracts = useMemo(() => {
     const contracts = [
@@ -162,6 +161,7 @@ export function PoolContracts({ ...props }: CardProps) {
     return pool.poolTokens
       .map(token => ({
         tokenAddress: token.address,
+        tokenSymbol: token.symbol,
         rateProviderAddress: token.priceRateProvider,
         priceRateProviderData: token.priceRateProviderData,
       }))
@@ -292,32 +292,35 @@ export function PoolContracts({ ...props }: CardProps) {
             <GridItem>
               <VStack alignItems="flex-start">
                 {rateProviders.map(provider => {
-                  const token = getToken(provider.tokenAddress, chain)
+                  const token = {
+                    address: provider.tokenAddress,
+                    symbol: provider.tokenSymbol,
+                    chain,
+                  }
+
                   return (
-                    token && (
-                      <HStack key={provider.tokenAddress}>
-                        <TokenIcon
-                          address={token.address}
-                          alt={token.symbol}
-                          chain={chain}
-                          size={16}
-                        />
-                        <Link
-                          href={getBlockExplorerAddressUrl(provider.rateProviderAddress, chain)}
-                          key={provider.rateProviderAddress}
-                          target="_blank"
-                          variant="link"
-                        >
-                          <HStack gap="xxs">
-                            <Text color="link">
-                              {abbreviateAddress(provider.rateProviderAddress)}
-                            </Text>
-                            <ArrowUpRight size={12} />
-                          </HStack>
-                        </Link>
-                        {getRateProviderIcon(provider.priceRateProviderData, token)}
-                      </HStack>
-                    )
+                    <HStack key={provider.tokenAddress}>
+                      <TokenIcon
+                        address={provider.tokenAddress}
+                        alt={provider.tokenSymbol}
+                        chain={chain}
+                        size={16}
+                      />
+                      <Link
+                        href={getBlockExplorerAddressUrl(provider.rateProviderAddress, chain)}
+                        key={provider.rateProviderAddress}
+                        target="_blank"
+                        variant="link"
+                      >
+                        <HStack gap="xxs">
+                          <Text color="link">
+                            {abbreviateAddress(provider.rateProviderAddress)}
+                          </Text>
+                          <ArrowUpRight size={12} />
+                        </HStack>
+                      </Link>
+                      {getRateProviderIcon(provider.priceRateProviderData, token)}
+                    </HStack>
                   )
                 })}
               </VStack>
@@ -345,30 +348,33 @@ export function PoolContracts({ ...props }: CardProps) {
             <GridItem>
               <VStack alignItems="flex-start">
                 {erc4626Tokens.map(erc4626Token => {
-                  const token = getToken(erc4626Token.address, chain)
+                  const token = {
+                    address: erc4626Token.address as Address,
+                    symbol: erc4626Token.symbol,
+                    chain,
+                  }
+
                   return (
-                    token && (
-                      <HStack key={erc4626Token.address}>
-                        <TokenIcon
-                          address={token.address}
-                          alt={token.symbol}
-                          chain={chain}
-                          size={16}
-                        />
-                        <Link
-                          href={getBlockExplorerAddressUrl(erc4626Token.address, chain)}
-                          key={erc4626Token.address}
-                          target="_blank"
-                          variant="link"
-                        >
-                          <HStack gap="xxs">
-                            <Text color="link">{abbreviateAddress(erc4626Token.address)}</Text>
-                            <ArrowUpRight size={12} />
-                          </HStack>
-                        </Link>
-                        {getErc4626Icon(erc4626Token.erc4626ReviewData, token)}
-                      </HStack>
-                    )
+                    <HStack key={erc4626Token.address}>
+                      <TokenIcon
+                        address={erc4626Token.address}
+                        alt={erc4626Token.symbol}
+                        chain={chain}
+                        size={16}
+                      />
+                      <Link
+                        href={getBlockExplorerAddressUrl(erc4626Token.address, chain)}
+                        key={erc4626Token.address}
+                        target="_blank"
+                        variant="link"
+                      >
+                        <HStack gap="xxs">
+                          <Text color="link">{abbreviateAddress(erc4626Token.address)}</Text>
+                          <ArrowUpRight size={12} />
+                        </HStack>
+                      </Link>
+                      {getErc4626Icon(erc4626Token.erc4626ReviewData, token)}
+                    </HStack>
                   )
                 })}
               </VStack>

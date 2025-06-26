@@ -15,6 +15,8 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
 import { PoolDisplayType } from '../pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { removeHookDataFromPoolIfNecessary } from '../pool.utils'
+import { PoolListItem } from '../pool.types'
 
 export function usePoolListLogic({
   fixedPoolTypes,
@@ -49,6 +51,8 @@ export function usePoolListLogic({
 
   const pools = loading && previousData ? previousData.pools : data?.pools || []
 
+  const poolsData = pools.map(pool => removeHookDataFromPoolIfNecessary(pool)) as PoolListItem[]
+
   const isFixedPoolType = !!fixedPoolTypes && fixedPoolTypes.length > 0
 
   // If the user has previously selected to filter by their liquidity and then
@@ -60,7 +64,7 @@ export function usePoolListLogic({
   }, [userAddress])
 
   return {
-    pools,
+    pools: poolsData,
     count: data?.count || previousData?.count,
     queryState,
     loading,
