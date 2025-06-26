@@ -1,39 +1,12 @@
-import { usePool } from '../PoolProvider'
-import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
-import {
-  differenceInDays,
-  differenceInHours,
-  isAfter,
-  isBefore,
-  secondsToMilliseconds,
-} from 'date-fns'
+import { isAfter, isBefore } from 'date-fns'
 import { Divider, HStack, Text, VStack } from '@chakra-ui/react'
 import { ProjectedPriceChart } from '@repo/lib/modules/lbp/steps/sale-structure/ProjectedPriceChart'
-import {
-  getCurrentPrice,
-  LbpPrice,
-  max,
-  usePriceInfo,
-} from '@repo/lib/modules/lbp/pool/usePriceInfo'
-import { Address } from 'viem'
+import { max } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { now } from '@repo/lib/shared/utils/time'
+import { useLbpPoolCharts } from './LbpPoolChartsProvider'
 
 export function LbpPriceChart() {
-  const { pool } = usePool()
-  const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
-
-  const startTime = new Date(secondsToMilliseconds(lbpPool.startTime))
-  const endTime = new Date(secondsToMilliseconds(lbpPool.endTime))
-  const now = new Date()
-  const isSaleOngoing = isAfter(now, startTime) && isBefore(now, endTime)
-  const daysDiff = differenceInDays(endTime, isSaleOngoing ? now : startTime)
-  const hoursDiff = differenceInHours(endTime, isSaleOngoing ? now : startTime) - daysDiff * 24
-  const salePeriodText = isSaleOngoing
-    ? `Sale: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} remaining`
-    : `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
-
-  const { prices, isLoading } = usePriceInfo(pool.chain, pool.id as Address)
+  const { prices, isLoading, startTime, endTime, now, salePeriodText } = useLbpPoolCharts()
 
   return (
     <VStack>
@@ -70,10 +43,8 @@ export function LbpPriceChart() {
   )
 }
 
-export function PriceInfo({ prices }: { prices: LbpPrice[] }) {
-  const currentPrice = getCurrentPrice(prices)
-  const currentTime = now()
-  const hasPrices = prices.length > 0
+export function PriceInfo() {
+  const { now: currentTime, currentPrice, hasPrices, prices } = useLbpPoolCharts()
 
   return (
     <VStack alignItems="end" spacing="0.5">
