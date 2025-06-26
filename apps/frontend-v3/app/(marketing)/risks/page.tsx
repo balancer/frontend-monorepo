@@ -108,6 +108,11 @@ export default function Privacy() {
                         </Link>
                       </li>
                       <li>
+                        <Link href="risks#ReCLAMM">
+                          ReCLAMM - Readjusting Concentraded Luquidity AMM
+                        </Link>
+                      </li>
+                      <li>
                         <Link href="risks#btf">Blockchain Traded Funds</Link>
                       </li>
                     </ul>
@@ -1355,7 +1360,54 @@ export default function Privacy() {
                   </ul>
                 </div>
               </FadeInOnView>
+<FadeInOnView>
+                <div className="subsection">
+                  <h4 className="anchor" id="ReCLAMM">
+                    ReCLAMMs
+                  </h4>
 
+                  <p>
+                    ReCLAMM (Readjusting Concentrated Liquidity AMM) is a novel pool type built 
+                    on Balancer, designed to offer concentrated liquidity with self-readjusting 
+                    price ranges and fungible liquidity. While they aim to reduce the active 
+                    management burden for LPs, higher swap fees and better capital efficiency 
+                    when in range, they introduce specific risk.
+                  </p>
+                  <ul>
+                    <li>
+                      <b>Impermanent Loss and Parametrization Risk</b>: ReCLAMMs' self-readjusting 
+                      ranges aim to keep liquidity active, but impermanent loss remains a core 
+                      risk that in this case can be potentially exacerbated by suboptimal range, 
+                      margin and “daily price shift exponent” adjustments. The efficacy of the 
+                      parameters in the mechanism which replaces manual LP intervention, introduces 
+                      risks, including (but not limited to): potential for miscalculation, 
+                      inefficient capital utilization, or exploitability if rebalancing patterns 
+                      are predictable.
+                    </li>
+                    <li>
+                      <b>Path Dependency Risk</b>: Unlike traditional CFMM (Constant Function Market 
+                      Makers) where “impermanent” loss can revert by the return of the asset to its
+                      original ratio, path-dependant pools are affected by the sequence of price change,
+                      meaning the losses incurred to the asset in one side of the pool during certain 
+                      price fluctuations can become “permanent”.
+                    </li>
+                    <li>
+                      <b>Low liquidity and price manipulation</b>: ReCLAMM is not suitable for great 
+                      volatility and assets with low liquidity that can be easily exploitable, for 
+                      the reasons and risks detailed above, where the pool can easily fall out of 
+                      range and losses can become permanent.
+                    </li>
+                    <li>
+                      <b>Admin Parametrization</b>: By changing the sensitivity and behavior of the 
+                      pool after deployment, the price range can be narrowed or widened, even if the 
+                      price range can’t be set directly. The pool admin can: 1) change the centeredness 
+                      margin (the threshold for updates); 2) change the daily price shift exponent 
+                      (the speed of updates); and 3) initiate an update to the price interval (i.e.,
+                      the distance, or ratio, between the minimum and maximum price bounds), or simply
+                      stop an ongoing update. All of these changes will update the virtual balances and
+                      potentially slightly change the price.
+                    </li>
+                  </ul>
               <FadeInOnView>
                 <div className="subsection">
                   <h4 className="anchor" id="btf">
