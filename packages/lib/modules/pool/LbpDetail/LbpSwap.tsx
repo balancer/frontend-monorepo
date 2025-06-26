@@ -8,12 +8,11 @@ import { isBefore, secondsToMilliseconds, format } from 'date-fns'
 import { now } from '@repo/lib/shared/utils/time'
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { ApiToken } from '@repo/lib/modules/tokens/token.types'
-import { getCurrentPrice, usePriceInfo } from '@repo/lib/modules/lbp/pool/usePriceInfo'
-import { Address } from 'viem'
+import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 
 export function LbpSwap() {
   const { pool } = usePool()
-  const { prices } = usePriceInfo(pool.chain, pool.id as Address)
+  const { priceFor } = useTokens()
 
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
   const poolActionableTokens = getPoolActionableTokens(lbpPool)
@@ -39,7 +38,7 @@ export function LbpSwap() {
     <SwapLayout props={props}>
       <SwapForm
         customTokenOut={launchToken}
-        customTokenOutUsdPrice={getCurrentPrice(prices)}
+        customTokenOutUsdPrice={priceFor(lbpPool.projectToken, pool.chain)}
         hasDisabledInputs={isBeforeSaleStart}
         nextButtonText={
           isBeforeSaleStart
