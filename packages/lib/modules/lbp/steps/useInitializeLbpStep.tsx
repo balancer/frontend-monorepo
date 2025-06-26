@@ -59,7 +59,7 @@ export function useInitializeLbpStep({
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
 
-  const isComplete = () => isTransactionSuccess(transaction) || !!isPoolInitialized
+  const isComplete = () => !!isPoolInitialized || isTransactionSuccess(transaction)
 
   return useMemo(
     () => ({
@@ -87,6 +87,6 @@ export function useInitializeLbpStep({
       },
     }),
     /* eslint-disable react-hooks/exhaustive-deps */
-    [transaction, labels, buildCallDataQuery.data]
+    [transaction, labels, buildCallDataQuery.data, isPoolInitialized]
   )
 }

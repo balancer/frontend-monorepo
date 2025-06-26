@@ -43,19 +43,9 @@ export function useLbpMetadata() {
     if (data?.createLBP) setIsMetadataSaved(true)
   }
 
-  const { message: title, graphQLErrors } = error ?? {}
-  const message =
-    graphQLErrors &&
-    graphQLErrors
-      .map(error =>
-        (error.extensions?.errors as Array<{ message: string }>)?.map(err => err.message)
-      )
-      .flat()
-      .join(', ')
-
   return {
     saveMetadata,
-    error: title && message ? `${title}: ${message}` : undefined,
+    error,
     isMetadataSaved,
     reset,
   }

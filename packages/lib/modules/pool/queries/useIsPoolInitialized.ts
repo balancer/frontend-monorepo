@@ -1,5 +1,3 @@
-'use client'
-
 import { useReadContract } from '@repo/lib/shared/utils/wagmi'
 import { Address, parseAbi } from 'viem'
 import { balancerV3Contracts } from '@balancer/sdk'
