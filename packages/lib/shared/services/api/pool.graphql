@@ -127,6 +127,7 @@ query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
       projectTokenEndWeight
       projectTokenStartWeight
       reserveToken
+      reserveTokenIndex
       telegram
       startTime
       website

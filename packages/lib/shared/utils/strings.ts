@@ -23,6 +23,7 @@ export function arrayToSentence(arr: string[]): string {
 }
 
 export function isValidTwitterHandle(handle: string): string | true {
+  if (!handle) return true
   const regex = /^@[A-Za-z0-9_]{1,15}$/
   return regex.test(handle) ? true : 'Invalid X / Twitter handle'
 }

@@ -4,32 +4,45 @@ import { useSwap } from './SwapProvider'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useTokens } from '../tokens/TokensProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
+import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function SwapRate() {
+export function SwapRate({ customTokenOutUsdPrice }: { customTokenOutUsdPrice?: number }) {
   const [priceDirection, setPriceDirection] = useState<'givenIn' | 'givenOut'>('givenIn')
-  const { simulationQuery, tokenInInfo, tokenOutInfo } = useSwap()
+  const { simulationQuery, tokenInInfo, tokenOutInfo, isLbpSwap, lbpTokenOut } = useSwap()
   const { toCurrency } = useCurrency()
   const { usdValueForToken } = useTokens()
 
-  const effectivePrice = fNum('token', simulationQuery.data?.effectivePrice || '0', {
+  const effectivePriceValue = fNum('token', simulationQuery.data?.effectivePrice || '0', {
     abbreviated: false,
   })
-  const effectivePriceReversed = fNum(
+
+  const effectivePriceReversedValue = fNum(
     'token',
     simulationQuery.data?.effectivePriceReversed || '0',
     { abbreviated: false }
   )
 
+  const effectivePrice =
+    simulationQuery.data?.swapType === GqlSorSwapType.ExactIn
+      ? effectivePriceValue
+      : effectivePriceReversedValue
+
+  const effectivePriceReversed =
+    simulationQuery.data?.swapType === GqlSorSwapType.ExactIn
+      ? effectivePriceReversedValue
+      : effectivePriceValue
+
   const tokenInUsdValue = usdValueForToken(tokenInInfo, 1)
-  const tokenOutUsdValue = usdValueForToken(tokenOutInfo, 1)
+  const tokenOutUsdValue = customTokenOutUsdPrice || usdValueForToken(tokenOutInfo, 1)
+  const tokenOutSymbol = isLbpSwap && lbpTokenOut ? lbpTokenOut.symbol : tokenOutInfo?.symbol
 
   const priceLabel =
     priceDirection === 'givenIn'
-      ? `1 ${tokenInInfo?.symbol} = ${effectivePriceReversed} ${tokenOutInfo?.symbol} (${toCurrency(
+      ? `1 ${tokenInInfo?.symbol} = ${effectivePriceReversed} ${tokenOutSymbol} (${toCurrency(
           tokenInUsdValue,
           { abbreviated: false }
         )})`
-      : `1 ${tokenOutInfo?.symbol} = ${effectivePrice} ${tokenInInfo?.symbol} (${toCurrency(
+      : `1 ${tokenOutSymbol} = ${effectivePrice} ${tokenInInfo?.symbol} (${toCurrency(
           tokenOutUsdValue,
           { abbreviated: false }
         )})`
@@ -41,7 +54,7 @@ export function SwapRate() {
 
   return (
     <Text cursor="pointer" fontSize="sm" onClick={togglePriceDirection} variant="secondary">
-      {simulationQuery.data && priceLabel}
+      {simulationQuery.data ? priceLabel : 'Exchange rate: –'}
     </Text>
   )
 }

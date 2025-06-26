@@ -55,6 +55,7 @@ export type ApiToken = Omit<GetTokensQuery['tokens'][0], '__typename'> & {
 }
 
 export type CustomToken = {
+  name: string
   chain: GqlChain
   address: Address
   symbol: string

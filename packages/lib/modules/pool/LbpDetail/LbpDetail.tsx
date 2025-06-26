@@ -1,10 +1,11 @@
-import { Stack, VStack, Card, Grid, GridItem } from '@chakra-ui/react'
+import { Stack, VStack, Grid, GridItem } from '@chakra-ui/react'
 import { DefaultPageContainer } from '@repo/lib/shared/components/containers/DefaultPageContainer'
 import { PoolActivity } from '../PoolDetail/PoolActivity/PoolActivity'
 import { PoolComposition } from '../PoolDetail/PoolComposition'
 import { PoolInfoLayout } from '../PoolDetail/PoolInfo/PoolInfoLayout'
 import { useUserPoolEvents } from '../useUserPoolEvents'
 import { LbpHeader } from './LbpHeader/LbpHeader'
+import { LbpSwap } from './LbpSwap'
 import { usePool } from '../PoolProvider'
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import { now } from '@repo/lib/shared/utils/time'
@@ -38,7 +39,7 @@ export function LbpDetail() {
               <LbpPoolChartsContainer />
             </GridItem>
             <GridItem>
-              {isSaleFinished ? <Top10Holdings chain={pool.chain} /> : <Card h="250px">Swap</Card>}
+              {isSaleFinished ? <Top10Holdings chain={pool.chain} /> : <LbpSwap />}
             </GridItem>
           </Grid>
 
