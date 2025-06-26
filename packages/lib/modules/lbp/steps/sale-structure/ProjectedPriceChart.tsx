@@ -2,10 +2,14 @@ import { differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import { buildMarkline, LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
+import {
+  buildMarkline,
+  LabelFormatterParams,
+  dividePrices,
+  range,
+} from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
 import { LbpPrice } from '../../pool/usePriceInfo'
-import { dividePrices, range } from '@repo/lib/modules/lbp/steps/sale-structure/chart-utils'
 
 type Props = {
   startDate: Date

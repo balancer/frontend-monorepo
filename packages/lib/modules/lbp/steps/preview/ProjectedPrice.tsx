@@ -13,7 +13,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useState } from 'react'
 import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
 import { LbpPrice, max } from '../../pool/usePriceInfo'
-import { interpolatePrices } from '../sale-structure/chart-utils'
+import { interpolatePrices } from '@repo/lib/shared/utils/chart.helper'
 
 type Props = {
   startTime: string
