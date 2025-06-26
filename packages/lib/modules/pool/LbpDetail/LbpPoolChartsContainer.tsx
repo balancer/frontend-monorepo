@@ -6,7 +6,7 @@ import {
   usePoolChartTabs,
 } from '../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { PoolChartsProvider } from '../PoolDetail/PoolStats/PoolCharts/PoolChartsProvider'
+
 import { LbpPriceChart, PriceInfo } from './LbpPriceChart'
 import { usePriceInfo } from '../../lbp/pool/usePriceInfo'
 import { usePool } from '../PoolProvider'
@@ -15,9 +15,7 @@ import { Address } from 'viem'
 export function LbpPoolChartsContainer() {
   return (
     <PoolChartTabsProvider>
-      <PoolChartsProvider>
-        <PoolChartsContent />
-      </PoolChartsProvider>
+      <PoolChartsContent />
     </PoolChartTabsProvider>
   )
 }
@@ -25,7 +23,6 @@ export function LbpPoolChartsContainer() {
 function PoolChartsContent() {
   const { activeTab, setActiveTab, tabsList } = usePoolChartTabs()
   const { pool } = usePool()
-
   const { prices } = usePriceInfo(pool.chain, pool.id as Address)
 
   return (
@@ -40,7 +37,7 @@ function PoolChartsContent() {
         />
         {activeTab.value === PoolChartTab.PRICE && <PriceInfo prices={prices} />}
       </HStack>
-      <LbpPriceChart />
+      {activeTab.value === PoolChartTab.PRICE && <LbpPriceChart />}
     </Card>
   )
 }
