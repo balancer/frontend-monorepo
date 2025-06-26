@@ -1,10 +1,11 @@
-import { addHours, differenceInDays, format, isAfter, isBefore } from 'date-fns'
+import { differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
-import { bn, fNum } from '@repo/lib/shared/utils/numbers'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 import { buildMarkline, LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
 import { LbpPrice } from '../../pool/usePriceInfo'
+import { dividePrices, range } from '@repo/lib/modules/lbp/steps/sale-structure/chart-utils'
 
 type Props = {
   startDate: Date
@@ -156,76 +157,4 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
       <Text fontSize="3xl">Missing data</Text>
     </Stack>
   )
-}
-
-export function interpolatePrices(
-  startWeight: number,
-  endWeight: number,
-  startDate: Date,
-  endDate: Date,
-  launchTokenSeed: number,
-  collateralTokenSeed: number,
-  collateralTokenPrice: number
-): LbpPrice[] {
-  const startTimestamp = bn(startDate.getTime())
-  const endTimestamp = bn(endDate.getTime())
-  const slope = bn(endWeight).minus(startWeight).div(endTimestamp.minus(startTimestamp))
-  const interpolateLaunchTokenWeight = (timestamp: BigNumber) =>
-    bn(startWeight)
-      .plus(slope.times(timestamp.minus(startTimestamp)))
-      .toNumber()
-
-  const interpolatePrice = (timestamp: BigNumber) => {
-    const launchTokenWeight = interpolateLaunchTokenWeight(timestamp)
-    const collateralTokenWeight = 100 - launchTokenWeight
-    const spotPrice = bn(collateralTokenSeed)
-      .div(collateralTokenWeight)
-      .div(bn(launchTokenSeed).div(launchTokenWeight))
-
-    return spotPrice.times(collateralTokenPrice).toNumber()
-  }
-
-  const data = []
-
-  let currentPoint = startDate
-  while (addHours(currentPoint, 1) < endDate) {
-    const currentTimestamp = bn(currentPoint.getTime())
-    data.push({ timestamp: currentPoint, projectTokenPrice: interpolatePrice(currentTimestamp) })
-    currentPoint = addHours(currentPoint, 1)
-  }
-
-  data.push({ timestamp: endDate, projectTokenPrice: interpolatePrice(endTimestamp) })
-
-  return data
-}
-
-function range(values: number[]) {
-  return {
-    min: Math.min(...values),
-    max: Math.max(...values),
-  }
-}
-
-function dividePrices(
-  prices: LbpPrice[],
-  cutTime: Date | undefined
-): { data: number[][]; dataAfterCutTime: number[][] } {
-  const data: number[][] = []
-  const dataAfterCutTime: number[][] = []
-
-  prices.forEach(price => {
-    if (cutTime && isBefore(price.timestamp, cutTime)) {
-      data.push([price.timestamp.getTime(), price.projectTokenPrice])
-    } else {
-      dataAfterCutTime.push([price.timestamp.getTime(), price.projectTokenPrice])
-    }
-  })
-
-  if (cutTime && data.length > 0 && dataAfterCutTime.length > 0) {
-    const cutTimePrice = (data[data.length - 1][1] + dataAfterCutTime[0][1]) / 2
-    data.push([cutTime.getTime(), cutTimePrice])
-    dataAfterCutTime.unshift([cutTime.getTime(), cutTimePrice])
-  }
-
-  return { data, dataAfterCutTime }
 }

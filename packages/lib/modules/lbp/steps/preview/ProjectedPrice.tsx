@@ -8,11 +8,12 @@ import {
   Spacer,
   Text,
 } from '@chakra-ui/react'
-import { interpolatePrices, ProjectedPriceChart } from '../sale-structure/ProjectedPriceChart'
+import { ProjectedPriceChart } from '../sale-structure/ProjectedPriceChart'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useState } from 'react'
 import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
 import { LbpPrice, max } from '../../pool/usePriceInfo'
+import { interpolatePrices } from '../sale-structure/chart-utils'
 
 type Props = {
   startTime: string
