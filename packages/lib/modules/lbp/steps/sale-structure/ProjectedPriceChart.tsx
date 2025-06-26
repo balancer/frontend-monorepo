@@ -2,12 +2,7 @@ import { differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { fNum } from '@repo/lib/shared/utils/numbers'
-import {
-  buildMarkline,
-  LabelFormatterParams,
-  dividePrices,
-  range,
-} from '@repo/lib/shared/utils/chart.helper'
+import { LabelFormatterParams, dividePrices, range } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
 import { LbpPrice } from '../../pool/usePriceInfo'
 
@@ -62,13 +57,10 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
       },
     },
     series: [
-      buildMarkline('top-markline', startDate, endDate, priceRange.max),
-      buildMarkline('middle-markline', startDate, endDate, priceRange.max / 2),
-      buildMarkline('bottom-markline', startDate, endDate, 0),
       {
         id: 'launch-token-price',
         name: '',
-        type: 'line' as const,
+        type: 'line',
         data: priceData.data,
         lineStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
@@ -78,15 +70,34 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
             { offset: 1, color: '#EAA879' },
           ]),
           width: 2,
-          join: 'round' as const,
-          cap: 'round' as const,
+          join: 'round',
+          cap: 'round',
         },
         showSymbol: false,
+        markLine: {
+          silent: true,
+          symbol: 'none',
+          data: [
+            { yAxis: priceRange.max },
+            { yAxis: 0 },
+            {
+              yAxis: priceRange.max / 2,
+            },
+          ],
+          lineStyle: {
+            type: 'dashed',
+            color: 'grey',
+            width: 1,
+          },
+          label: {
+            show: false,
+          },
+        },
       },
       {
         id: 'launch-token-price-after-cut-time',
         name: '',
-        type: 'line' as const,
+        type: 'line',
         data: priceData.dataAfterCutTime,
         lineStyle: {
           type: [2, 3],
@@ -97,8 +108,8 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
             { offset: 1, color: '#EAA879' },
           ]),
           width: 2,
-          join: 'round' as const,
-          cap: 'round' as const,
+          join: 'round',
+          cap: 'round',
         },
         showSymbol: false,
       },
@@ -120,8 +131,8 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
         color: 'grey',
         type: 'dashed',
         width: 1,
-        cap: 'round' as const,
-        join: 'round' as const,
+        cap: 'round',
+        join: 'round',
       },
       label: {
         show: true,
