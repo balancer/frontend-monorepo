@@ -1,4 +1,4 @@
-import { Card, HStack, Spacer } from '@chakra-ui/react'
+import { Card, HStack } from '@chakra-ui/react'
 import {
   PoolChartTab,
   PoolChartTabsProvider,
@@ -6,9 +6,8 @@ import {
   usePoolChartTabs,
 } from '../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGroup'
-import { PoolCharts } from '../PoolDetail/PoolStats/PoolCharts/PoolCharts'
 import { PoolChartsProvider } from '../PoolDetail/PoolStats/PoolCharts/PoolChartsProvider'
-import { PriceInfo } from '../PoolDetail/PoolStats/PoolCharts/LbpPriceChart'
+import { LbpPriceChart, PriceInfo } from './LbpPriceChart'
 import { usePriceInfo } from '../../lbp/pool/usePriceInfo'
 import { usePool } from '../PoolProvider'
 import { Address } from 'viem'
@@ -31,7 +30,7 @@ function PoolChartsContent() {
 
   return (
     <Card h="420px">
-      <HStack alignSelf="flex-start" w="full">
+      <HStack alignSelf="flex-start" justifyContent="space-between" w="full">
         <ButtonGroup
           currentOption={activeTab}
           groupId="chart"
@@ -39,16 +38,9 @@ function PoolChartsContent() {
           options={tabsList}
           size="xxs"
         />
-
-        {activeTab.value === PoolChartTab.PRICE && (
-          <>
-            <Spacer />
-            <PriceInfo prices={prices} />
-          </>
-        )}
+        {activeTab.value === PoolChartTab.PRICE && <PriceInfo prices={prices} />}
       </HStack>
-
-      <PoolCharts key={`default-chart-${activeTab.value}`} />
+      <LbpPriceChart />
     </Card>
   )
 }

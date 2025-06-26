@@ -1,4 +1,4 @@
-import { usePool } from '../../../PoolProvider'
+import { usePool } from '../PoolProvider'
 import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 import {
   differenceInDays,
@@ -7,7 +7,7 @@ import {
   isBefore,
   secondsToMilliseconds,
 } from 'date-fns'
-import { Divider, HStack, Spacer, Stack, Text, VStack } from '@chakra-ui/react'
+import { Divider, HStack, Text, VStack } from '@chakra-ui/react'
 import { ProjectedPriceChart } from '@repo/lib/modules/lbp/steps/sale-structure/ProjectedPriceChart'
 import {
   getCurrentPrice,
@@ -37,17 +37,8 @@ export function LbpPriceChart() {
 
   return (
     <VStack>
-      <Stack w="full">
-        <ProjectedPriceChart
-          cutTime={now}
-          endDate={endTime}
-          prices={prices}
-          startDate={startTime}
-        />
-      </Stack>
-
+      <ProjectedPriceChart cutTime={now} endDate={endTime} prices={prices} startDate={startTime} />
       <Divider />
-
       <HStack mt="2" w="full">
         <hr
           style={{
@@ -57,7 +48,6 @@ export function LbpPriceChart() {
           }}
         />
         <Text>{`Spot price`}</Text>
-
         <hr
           style={{
             width: '15px',
@@ -66,10 +56,7 @@ export function LbpPriceChart() {
           }}
         />
         <Text>{`Projected price with no buys`}</Text>
-
-        <Spacer />
-
-        <Text color="font.secondary" fontSize="sm">
+        <Text color="font.secondary" fontSize="sm" ml="auto">
           {salePeriodText}
         </Text>
       </HStack>
