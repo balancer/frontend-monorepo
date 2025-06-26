@@ -35,7 +35,7 @@ type PoolEventRowProps = {
   chain: GqlChain
   txUrl: string
   projectTokenAddress: Address
-  projectTokenLogo: string | undefined
+  tokenLogoURIs: Record<string, string>
 }
 
 type EventType = 'Buy' | 'Sell' | 'Seed' | 'Extract'
@@ -54,7 +54,13 @@ export function MyTransactions({
   const { chain, pool } = usePool()
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
 
-  const projectToken = pool.poolTokens[lbpPool.projectTokenIndex]
+  const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
+  const reserveToken = lbpPool.poolTokens[lbpPool.reserveTokenIndex]
+
+  const tokenLogoURIs: Record<string, string> = {
+    [projectToken.address]: projectToken.logoURI || '',
+    [reserveToken.address]: reserveToken.logoURI || '',
+  }
 
   return (
     <Card>
@@ -105,7 +111,7 @@ export function MyTransactions({
                   key={event.id}
                   poolEvent={event}
                   projectTokenAddress={projectToken.address as Address}
-                  projectTokenLogo={projectToken.logoURI || undefined}
+                  tokenLogoURIs={tokenLogoURIs}
                   txUrl={getBlockExplorerTxUrl(event.tx, event.chain)}
                   usdValue={toCurrency(event.valueUSD)}
                 />
@@ -145,7 +151,7 @@ function PoolEventRow({
   chain,
   txUrl,
   projectTokenAddress,
-  projectTokenLogo,
+  tokenLogoURIs,
 }: PoolEventRowProps) {
   if (!['GqlPoolSwapEventV3', 'GqlPoolAddRemoveEventV3'].includes(poolEvent.__typename)) {
     return null
@@ -182,11 +188,14 @@ function PoolEventRow({
           <SwapTokens
             chain={chain}
             event={poolEvent as GqlPoolSwapEventV3}
-            eventType={eventType}
-            projectTokenIconUrl={projectTokenLogo}
+            tokenLogoURIs={tokenLogoURIs}
           />
         ) : (
-          <AddOrRemoveTokens chain={chain} event={poolEvent as GqlPoolAddRemoveEventV3} />
+          <AddOrRemoveTokens
+            chain={chain}
+            event={poolEvent as GqlPoolAddRemoveEventV3}
+            tokenLogoURIs={tokenLogoURIs}
+          />
         )}
       </GridItem>
 
@@ -213,18 +222,15 @@ function PoolEventRow({
 function SwapTokens({
   event,
   chain,
-  eventType,
-  projectTokenIconUrl,
+  tokenLogoURIs,
 }: {
   event: GqlPoolSwapEventV3
   chain: GqlChain
-  eventType: EventType
-  projectTokenIconUrl: string | null | undefined
+  tokenLogoURIs: Record<string, string>
 }) {
   const tokenIn = event.tokenIn
   const tokenOut = event.tokenOut
-  const tokenInLogoUrl = eventType === 'Sell' ? projectTokenIconUrl : undefined
-  const tokenOutLogoUrl = eventType === 'Buy' ? projectTokenIconUrl : undefined
+
   return (
     <HStack>
       <HStack gap={['xs', 'sm']} mb="sm">
@@ -232,7 +238,7 @@ function SwapTokens({
           address={tokenIn.address}
           alt={tokenIn.address}
           chain={chain}
-          logoURI={tokenInLogoUrl}
+          logoURI={tokenLogoURIs[tokenIn.address]}
           size={24}
         />
         <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
@@ -247,7 +253,7 @@ function SwapTokens({
           address={event.tokenOut.address}
           alt={event.tokenOut.address}
           chain={chain}
-          logoURI={tokenOutLogoUrl}
+          logoURI={tokenLogoURIs[tokenOut.address]}
           size={24}
         />
         <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
@@ -258,7 +264,15 @@ function SwapTokens({
   )
 }
 
-function AddOrRemoveTokens({ event, chain }: { event: GqlPoolAddRemoveEventV3; chain: GqlChain }) {
+function AddOrRemoveTokens({
+  event,
+  chain,
+  tokenLogoURIs,
+}: {
+  event: GqlPoolAddRemoveEventV3
+  chain: GqlChain
+  tokenLogoURIs: Record<string, string>
+}) {
   return (
     <HStack>
       <HStack gap={['xs', 'sm']} mb="sm">
@@ -266,16 +280,17 @@ function AddOrRemoveTokens({ event, chain }: { event: GqlPoolAddRemoveEventV3; c
           address={event.tokens[0].address}
           alt={event.tokens[0].address}
           chain={chain}
+          logoURI={tokenLogoURIs[event.tokens[0].address]}
           size={24}
         />
         <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
           {fNum('token', event.tokens[0].amount)}
         </Text>
-
         <TokenIcon
           address={event.tokens[1].address}
           alt={event.tokens[1].address}
           chain={chain}
+          logoURI={tokenLogoURIs[event.tokens[1].address]}
           size={24}
         />
         <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">

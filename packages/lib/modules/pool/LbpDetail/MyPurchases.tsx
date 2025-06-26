@@ -32,7 +32,7 @@ export function MyPurchases({
   const { prices } = usePriceInfo(pool.chain, pool.id as Address)
 
   const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
-  const projectToken = pool.poolTokens[lbpPool.projectTokenIndex]
+  const projectToken = lbpPool.poolTokens[lbpPool.projectTokenIndex]
 
   const userProjectTokenBalance = calculateBalance(userPoolEvents, projectToken.address as Address)
   const shareOfSale = userProjectTokenBalance.div(projectToken.balance)
@@ -54,9 +54,10 @@ export function MyPurchases({
 
           <TokenRow
             abbreviated={false}
-            address={lbpPool.projectToken as Address}
+            address={projectToken.address as Address}
             chain={chain}
             customUsdPrice={currentPrice}
+            logoURI={projectToken.logoURI || ''}
             pool={pool}
             value={userProjectTokenBalance}
           />
