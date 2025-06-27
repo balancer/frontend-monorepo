@@ -1,11 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { createContext, PropsWithChildren, useMemo } from 'react'
+import { createContext, PropsWithChildren, useMemo, useState } from 'react'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
 import { calculateLowerMargin, calculateUpperMargin } from './reclAmmMath'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
+import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { useBreakpointValue } from '@chakra-ui/react'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
@@ -25,6 +29,27 @@ function getGradientColor(colorStops: string[]) {
 export function useReclAmmChartLogic() {
   const { isMobile } = useBreakpoints()
   const reclAmmData = useGetComputeReclAmmData()
+  const [isReversed, setIsReversed] = useState(false)
+  const selectColor = useSelectColor()
+  const { pool } = usePool()
+
+  const dynamicXAxisNamePadding = useBreakpointValue({
+    base: [0, 30, -128, 0],
+    md: [0, 30, -128, 0],
+    lg: [0, 24, -80, 0],
+  }) || [0, 24, -80, 0]
+
+  const secondaryFontColor = selectColor('font', 'secondary')
+
+  function toggleIsReversed() {
+    setIsReversed(!isReversed)
+  }
+
+  const tokens = useMemo(() => {
+    const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
+
+    return isReversed ? poolTokens.reverse().join('/') : poolTokens.join('/')
+  }, [pool, isReversed])
 
   const currentChartData = useMemo(() => {
     if (
@@ -67,15 +92,31 @@ export function useReclAmmChartLogic() {
       virtualBalanceB: vBalanceB,
     })
 
-    const minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
-    const maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
+    let minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
+    let maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
 
-    const lowerMarginValue = bn(invariant).div(bn(lowerMargin).pow(2)).toNumber()
-    const upperMarginValue = bn(invariant).div(bn(upperMargin).pow(2)).toNumber()
+    let lowerMarginValue = bn(invariant).div(bn(lowerMargin).pow(2)).toNumber()
+    let upperMarginValue = bn(invariant).div(bn(upperMargin).pow(2)).toNumber()
 
-    const currentPriceValue = bn(bn(balanceB).plus(virtualBalanceB))
+    let currentPriceValue = bn(bn(balanceB).plus(virtualBalanceB))
       .div(bn(balanceA).plus(virtualBalanceA))
       .toNumber()
+
+    if (isReversed) {
+      const invert = (value: number) => (value === 0 ? 0 : 1 / value)
+
+      const invertedMinPriceValue = invert(maxPriceValue)
+      const invertedMaxPriceValue = invert(minPriceValue)
+      const invertedLowerMarginValue = invert(upperMarginValue)
+      const invertedUpperMarginValue = invert(lowerMarginValue)
+
+      // Swap min/max and lower/upper
+      minPriceValue = invertedMinPriceValue
+      maxPriceValue = invertedMaxPriceValue
+      lowerMarginValue = invertedLowerMarginValue
+      upperMarginValue = invertedUpperMarginValue
+      currentPriceValue = invert(currentPriceValue)
+    }
 
     return {
       maxPriceValue,
@@ -86,7 +127,7 @@ export function useReclAmmChartLogic() {
     }
   }, [reclAmmData])
 
-  const option = useMemo(() => {
+  const options = useMemo(() => {
     const { maxPriceValue, minPriceValue, lowerMarginValue, upperMarginValue, currentPriceValue } =
       currentChartData
 
@@ -224,7 +265,7 @@ export function useReclAmmChartLogic() {
         left: isMobile ? '-7%' : '-3%',
         right: '1%',
         top: isMobile ? '50px' : '15%',
-        bottom: isMobile ? '-40px' : '8%',
+        bottom: isMobile ? '-20px' : '8%',
         containLabel: true,
       },
       xAxis: {
@@ -283,6 +324,15 @@ export function useReclAmmChartLogic() {
             },
           },
         },
+        name: `Price: ${tokens}`,
+        nameLocation: 'end',
+        nameGap: 5,
+        nameTextStyle: {
+          align: 'right',
+          verticalAlign: 'bottom',
+          padding: dynamicXAxisNamePadding,
+          color: secondaryFontColor,
+        },
       },
       yAxis: {
         show: false,
@@ -326,10 +376,11 @@ export function useReclAmmChartLogic() {
   }, [currentChartData])
 
   return {
-    option,
+    options,
     hasChartData: !!currentChartData,
     isLoading: reclAmmData.isLoading,
     isPoolWithinTargetRange: !!reclAmmData.isPoolWithinTargetRange,
+    toggleIsReversed,
   }
 }
 
