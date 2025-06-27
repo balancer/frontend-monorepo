@@ -297,7 +297,7 @@ export default function PoolMyLiquidity() {
                 {getTitlePrefix()}
               </Heading>
               <Text fontSize="0.85rem" variant="secondary">
-                Pool share
+                My pool share
               </Text>
             </VStack>
             <VStack alignItems="flex-end">
