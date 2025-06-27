@@ -133,6 +133,9 @@ export function PortfolioTable() {
             // fixing right padding for horizontal scroll on mobile
             pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
             w={{ base: '100vw', lg: 'full' }}
+            backgroundColor={'transparent'}
+            boxShadow={'inset 0px 4px 32px rgba(0, 255, 233, 0.1)'}
+            borderRadius={'16px'}
           >
             <PaginatedTable
               alignItems="flex-start"
@@ -173,6 +176,8 @@ export function PortfolioTable() {
             // fixing right padding for horizontal scroll on mobile
             pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
             w={{ base: '100vw', lg: 'full' }}
+            backgroundColor={'transparent'}
+            boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.4)'}
           >
             <PortfolioTableHeader
               currentSortingObj={currentSortingObj}
@@ -182,7 +187,7 @@ export function PortfolioTable() {
             <Divider />
             <Center h="160px" rounded="lg" w="full">
               <Box>
-                <ConnectWallet size="lg" variant="primary" />
+                <ConnectWallet size="lg" backgroundColor={'#00F5E0'} color={'black'} />
               </Box>
             </Center>
           </Card>

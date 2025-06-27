@@ -66,10 +66,8 @@ export function PoolListTable({ pools, count, loading }: Props) {
       pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
       w={{ base: '100vw', lg: 'full' }}
       p={{ base: '0', sm: '0' }}
-      className="neon-panel"
-      boxShadow={
-        ' inset 0 0 0 1px rgba(0, 255, 233, 0.35), inset 0 0 30px rgba(0, 255, 233, 0.20); '
-      }
+      boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.5)'}
+      borderRadius={'16px'}
     >
       <PaginatedTable
         getRowId={item => item.id}

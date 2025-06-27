@@ -123,8 +123,9 @@ export function ClaimNetworkPools() {
                     flex="1"
                     p={['sm', 'md']}
                     shadow="innerLg"
-                    variant="level1"
                     w="full"
+                    boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.4)'}
+                    backgroundColor={'transparent'}
                     {...network.displayProps}
                   >
                     <Flex alignItems="center" justifyContent="space-between">
@@ -139,7 +140,12 @@ export function ClaimNetworkPools() {
                           </Heading>
                         </Stack>
                       </HStack>
-                      <Button variant="tertiary" gap="xs" onClick={openConnectModal}>
+                      <Button
+                        border={'1px solid #00F5E0'}
+                        color={'#00F5E0'}
+                        gap="xs"
+                        onClick={openConnectModal}
+                      >
                         <WalletIcon size={20} strokeWidth={2} />
                         Connect
                       </Button>
@@ -168,6 +174,7 @@ export function ClaimNetworkPools() {
                     p={['sm', 'md']}
                     boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.4)'}
                     w="full"
+                    backgroundColor={'transparent'}
                     {...network.displayProps}
                   >
                     <Flex alignItems="center" justifyContent="space-between">

@@ -56,8 +56,7 @@ export function PaginatedTable<T>({
         gap="0"
         overflowX="scroll"
         w="full"
-        boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.4)'}
-        borderRadius={'16px'}
+        backgroundColor={'transparent'}
       >
         <TableHeader />
         <Divider />

@@ -35,7 +35,7 @@ export function PoolListTableHeader({ ...rest }) {
       p={['sm', 'md']}
       w="full"
       boxShadow="inset 0px 4px 34px rgba(0, 255, 233, 0.4)"
-      border={'0px'}
+      borderRadius={'16px 16px 0px 0px'}
     >
       <GridItem>
         <VStack align="start" w="full">

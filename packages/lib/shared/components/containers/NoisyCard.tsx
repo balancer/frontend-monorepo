@@ -52,6 +52,7 @@ export function NoisyCard({
       width="full"
       {...cardProps}
       role="group"
+      boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.4)'}
     >
       <MotionBox
         _groupHover={{ opacity: 1 }}
@@ -73,12 +74,7 @@ export function NoisyCard({
         width="full"
         {...shadowContainerProps}
       />
-      <Box
-        boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.4)'}
-        height="full"
-        width="full"
-        {...contentProps}
-      >
+      <Box height="full" backgroundColor={'transparent'} width="full" {...contentProps}>
         {children}
       </Box>
     </Box>

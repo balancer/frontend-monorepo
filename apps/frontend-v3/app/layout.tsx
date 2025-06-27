@@ -45,6 +45,25 @@ export default function RootLayout({ children }: PropsWithChildren) {
         style={{ marginRight: '0px !important' }} // Required to prevent layout shift introduced by Rainbowkit
         suppressHydrationWarning
       >
+        <div
+          style={{
+            inset: 0,
+            position: 'fixed',
+            zIndex: -1,
+            overflow: 'hidden',
+          }}
+        >
+          <img
+            src="/ellipse-home.png"
+            alt=""
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'top',
+            }}
+          />
+        </div>
         <Fathom />
         <NextTopLoader color="#7f6ae8" showSpinner={false} />
         <ColorThemeProvider defaultTheme={DEFAULT_THEME_COLOR_MODE}>

@@ -52,6 +52,7 @@ export function PortfolioSummary() {
         variant="level2"
         width="full"
         marginTop={'30px'}
+        backgroundColor={'transparent'}
       >
         <NoisyCard
           cardProps={{
