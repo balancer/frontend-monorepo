@@ -108,7 +108,7 @@ export default function Privacy() {
                         </Link>
                       </li>
                       <li>
-                        <Link href="risks#ReCLAMM">
+                        <Link href="risks#reclamm">
                           ReCLAMM - Readjusting Concentrated Liquidity AMM
                         </Link>
                       </li>
@@ -1362,7 +1362,7 @@ export default function Privacy() {
               </FadeInOnView>
               <FadeInOnView>
                 <div className="subsection">
-                  <h4 className="anchor" id="ReCLAMM">
+                  <h4 className="anchor" id="reclamm">
                     ReCLAMMs
                   </h4>
                   <p>
