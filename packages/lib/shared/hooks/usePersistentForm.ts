@@ -32,6 +32,7 @@ export function usePersistentForm<TFieldValues extends FieldValues = FieldValues
   useEffect(() => {
     if (persistedValues !== initialDefaultValues) {
       form.reset(persistedValues, { keepDefaultValues: true })
+      form.trigger()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
