@@ -92,7 +92,8 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     )
   }
 
-  const isComplete = () => signPermit2State === SignatureState.Completed || isValidPermit2
+  const isComplete = () =>
+    signPermit2State === SignatureState.Completed || isValidPermit2 || !!params.isComplete
 
   const details: StepDetails = {
     gasless: true,

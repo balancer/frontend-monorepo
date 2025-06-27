@@ -84,7 +84,7 @@ function NestedInfo({ color, details }: { color: string; details?: StepDetails }
   return (
     <Box mb="0" mt="0" p="0.5" pl="0">
       <Text color={color} fontSize="sm" lineHeight="1">
-        {details?.gasless ? 'Free signature' : 'Gas transaction'}
+        {details?.type || (details?.gasless ? 'Free signature' : 'Gas transaction')}
       </Text>
 
       {details?.batchApprovalTokens &&
