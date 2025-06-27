@@ -1365,7 +1365,6 @@ export default function Privacy() {
                   <h4 className="anchor" id="ReCLAMM">
                     ReCLAMMs
                   </h4>
-
                   <p>
                     ReCLAMM (Readjusting Concentrated Liquidity AMM) is a novel pool type built on
                     Balancer, designed to offer concentrated liquidity with self-readjusting price
