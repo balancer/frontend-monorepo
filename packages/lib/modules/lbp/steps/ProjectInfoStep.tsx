@@ -159,7 +159,7 @@ function TokenIconInput() {
   const [iconUrl] = useDebounce(watch('tokenIconUrl'), defaultDebounceMs)
   const { isChecking, error } = useCheckImageUrl(iconUrl, ['image/png', 'image/jpeg'])
   useEffect(() => {
-    if (dirtyFields.tokenIconUrl) trigger()
+    if (dirtyFields.tokenIconUrl) trigger('tokenIconUrl')
   }, [iconUrl, isChecking, error, trigger, dirtyFields])
 
   return (

@@ -189,7 +189,7 @@ export function SaleStructureStep() {
             </>
           )}
 
-          <LbpFormAction disabled={!isValid} />
+          <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
         </VStack>
       </form>
     </TokenBalancesProvider>
@@ -251,7 +251,7 @@ function LaunchTokenAddressInput({
 
   useEffect(() => {
     if (value) triggerValidation('launchTokenAddress')
-  }, [metadata.symbol, value, triggerValidation])
+  }, [metadata.isLoading, value, triggerValidation])
 
   return (
     <VStack align="start" w="full">
