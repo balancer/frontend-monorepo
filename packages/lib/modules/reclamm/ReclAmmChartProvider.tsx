@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, PropsWithChildren, useMemo } from 'react'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
 import { calculateLowerMargin, calculateUpperMargin } from './reclAmmMath'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
@@ -24,7 +23,6 @@ function getGradientColor(colorStops: string[]) {
 }
 
 export function useReclAmmChartLogic() {
-  const { toCurrency } = useCurrency()
   const { isMobile } = useBreakpoints()
   const reclAmmData = useGetComputeReclAmmData()
 
@@ -241,19 +239,19 @@ export function useReclAmmChartLogic() {
           interval: 0,
           formatter: (value: string, index: number) => {
             if (index === 10) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? toCurrency(minPriceValue, { abbreviated: false }) : 'N/A'}}`
+              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('clpPrice', minPriceValue) : 'N/A'}}`
             }
 
             if (index === 18) {
-              return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? toCurrency(upperMarginValue, { abbreviated: false }) : 'N/A'}}`
+              return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? fNum('clpPrice', upperMarginValue) : 'N/A'}}`
             }
 
             if (index === 60) {
-              return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? toCurrency(lowerMarginValue, { abbreviated: false }) : 'N/A'}}`
+              return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? fNum('clpPrice', lowerMarginValue) : 'N/A'}}`
             }
 
             if (index === 68) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? toCurrency(maxPriceValue, { abbreviated: false }) : 'N/A'}}`
+              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('clpPrice', maxPriceValue) : 'N/A'}}`
             }
 
             return ''
@@ -299,7 +297,7 @@ export function useReclAmmChartLogic() {
                 label: {
                   show: true,
                   position: 'top',
-                  formatter: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? toCurrency(currentPriceValue, { abbreviated: false }) : 'N/A'}}\n{triangle|▼}`,
+                  formatter: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? fNum('clpPrice', currentPriceValue) : 'N/A'}}\n{triangle|▼}`,
                   rich: {
                     triangle: {
                       ...richStyles.currentTriangle,

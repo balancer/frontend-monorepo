@@ -84,7 +84,7 @@ export function useEclpChartLogic() {
               toolTipTheme.container
             }">
               <div style="font-size: 14px; font-weight: 500; color: ${toolTipTheme.text};">
-                ${fNum('gyroPrice', data.data[0])}
+                ${fNum('clpPrice', data.data[0])}
               </div>
             </div>
           `
@@ -118,7 +118,7 @@ export function useEclpChartLogic() {
               return ''
             }
 
-            return fNum('gyroPrice', value)
+            return fNum('clpPrice', value)
           },
           color: secondaryFontColor,
         },
@@ -183,7 +183,7 @@ export function useEclpChartLogic() {
                 {
                   coord: [xMin, 0],
                   label: {
-                    formatter: () => fNum('gyroPrice', xMin || '0'),
+                    formatter: () => fNum('clpPrice', xMin || '0'),
                     position: 'start',
                     distance: 5,
                     backgroundColor: 'rgb(179, 174, 245)',
@@ -224,7 +224,7 @@ export function useEclpChartLogic() {
                 {
                   coord: [xMax, 0],
                   label: {
-                    formatter: () => fNum('gyroPrice', xMax || '0'),
+                    formatter: () => fNum('clpPrice', xMax || '0'),
                     position: 'start',
                     distance: 5,
                     backgroundColor: 'rgb(234, 168, 121)',
@@ -308,7 +308,7 @@ export function useEclpChartLogic() {
                     {
                       coord: [poolSpotPrice, 0],
                       label: {
-                        formatter: () => fNum('gyroPrice', poolSpotPrice || '0'),
+                        formatter: () => fNum('clpPrice', poolSpotPrice || '0'),
                         position: 'start',
                         distance: 6,
                         backgroundColor: backgroundHighlightColor,
