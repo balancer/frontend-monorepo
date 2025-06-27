@@ -1,11 +1,8 @@
 import { Button } from '@chakra-ui/react'
-import { useEclpChart } from '../hooks/EclpChartProvider'
 import { Icon } from '@chakra-ui/react'
 import { Repeat } from 'react-feather'
 
-export function ReversedToggleButton() {
-  const { toggleIsReversed } = useEclpChart()
-
+export function ReversedToggleButton({ toggleIsReversed }: { toggleIsReversed: () => void }) {
   return (
     <Button
       bottom={0}
