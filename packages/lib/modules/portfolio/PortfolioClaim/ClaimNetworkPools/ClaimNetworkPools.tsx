@@ -96,7 +96,7 @@ export function ClaimNetworkPools() {
   return (
     <FadeInOnView>
       <Stack gap={5}>
-        <Heading size="h4" variant="special">
+        <Heading size="h4" color={'#00FFE9'}>
           Claimable incentives
         </Heading>
 
@@ -166,8 +166,7 @@ export function ClaimNetworkPools() {
                     key={network.name}
                     flex="1"
                     p={['sm', 'md']}
-                    shadow="innerLg"
-                    variant="level1"
+                    boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.4)'}
                     w="full"
                     {...network.displayProps}
                   >
@@ -175,7 +174,7 @@ export function ClaimNetworkPools() {
                       <HStack gap="ms">
                         <NetworkIcon chain={network.chain} size={iconSize} shadow="md" />
                         <Stack gap={1}>
-                          <Heading size="sm" textTransform="capitalize">
+                          <Heading color={'white'} size="sm" textTransform="capitalize">
                             {network.name}
                           </Heading>
                         </Stack>

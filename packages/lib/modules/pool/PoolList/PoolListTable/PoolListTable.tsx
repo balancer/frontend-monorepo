@@ -9,6 +9,7 @@ import { Card, Skeleton } from '@chakra-ui/react'
 import { useIsMounted } from '@repo/lib/shared/hooks/useIsMounted'
 import { usePoolList } from '../PoolListProvider'
 import { useCallback, useMemo } from 'react'
+import '../filters.css'
 
 interface Props {
   pools: PoolListItem[]
@@ -65,11 +66,10 @@ export function PoolListTable({ pools, count, loading }: Props) {
       pr={{ base: 'lg', sm: 'lg', md: 'lg', lg: '0' }}
       w={{ base: '100vw', lg: 'full' }}
       p={{ base: '0', sm: '0' }}
-      borderRadius="lg"
-      border="1px solid rgba(0, 245, 224, 0.2)"
-      background="linear-gradient(180deg, rgba(0, 245, 224, 0.05), rgba(0, 245, 224, 0.01))"
-      boxShadow="inset 0 0 20px rgba(0, 245, 224, 0.2), 0 0 16px rgba(0, 245, 224, 0.1)"
-      backdropFilter="blur(12px)"
+      className="neon-panel"
+      boxShadow={
+        ' inset 0 0 0 1px rgba(0, 255, 233, 0.35), inset 0 0 30px rgba(0, 255, 233, 0.20); '
+      }
     >
       <PaginatedTable
         getRowId={item => item.id}

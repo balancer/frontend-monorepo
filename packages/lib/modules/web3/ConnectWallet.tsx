@@ -55,8 +55,8 @@ export function ConnectWallet({
                 isDisabled={isLoading || !mounted}
                 loadingText={connectLabel}
                 onClick={openConnectModal}
-                type="button"
-                variant="primary"
+                backgroundColor={'#00F5E0'}
+                color={'black'}
                 {...rest}
               >
                 {connectLabel}
@@ -85,9 +85,9 @@ export function ConnectWallet({
               alignItems="center"
               display="flex"
               isDisabled={isSafeApp}
-              onClick={openChainModal}
               type="button"
-              variant="tertiary"
+              backgroundColor={'#00F5E0'}
+              color={'black'}
               {...rest}
             >
               {chain.hasIcon && (
@@ -110,7 +110,13 @@ export function ConnectWallet({
               )}
               <Show above="sm">{chain.name}</Show>
             </Button>
-            <Button onClick={openAccountModal} variant="tertiary" {...rest} isDisabled={isSafeApp}>
+            <Button
+              onClick={openAccountModal}
+              backgroundColor={'#00F5E0'}
+              color={'black'}
+              {...rest}
+              isDisabled={isSafeApp}
+            >
               <CustomAvatar
                 address={account.address}
                 alt="Avatar"

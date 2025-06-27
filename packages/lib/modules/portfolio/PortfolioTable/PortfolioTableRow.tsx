@@ -86,7 +86,9 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
             </GridItem>
             <GridItem display="flex" justifyContent="left" px="sm">
               <HStack>
-                <Text fontWeight="medium">{stakingText} </Text>
+                <Text color={'white'} fontWeight="medium">
+                  {stakingText}{' '}
+                </Text>
                 <StakingIcons pool={pool} showIcon={options.showVeBal} />
               </HStack>
             </GridItem>
@@ -95,6 +97,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
                 <Text
                   fontWeight="medium"
                   textAlign="right"
+                  color={'white'}
                   title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
                 >
                   {vebalBoostValue ? `${Number(vebalBoostValue).toFixed(2)}x` : '-'}
@@ -102,7 +105,7 @@ export function PortfolioTableRow({ pool, keyValue, veBalBoostMap, ...rest }: Pr
               </GridItem>
             )}
             <GridItem px="sm">
-              <Text fontWeight="medium" textAlign="right">
+              <Text color={'white'} fontWeight="medium" textAlign="right">
                 {toCurrency(pool.poolPositionUsd, { abbreviated: false })}
               </Text>
             </GridItem>

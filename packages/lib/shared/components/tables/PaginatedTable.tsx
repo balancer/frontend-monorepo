@@ -51,7 +51,14 @@ export function PaginatedTable<T>({
 
   return (
     <>
-      <VStack className="hide-scrollbar" gap="0" overflowX="scroll" w="full">
+      <VStack
+        className="hide-scrollbar"
+        gap="0"
+        overflowX="scroll"
+        w="full"
+        boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.4)'}
+        borderRadius={'16px'}
+      >
         <TableHeader />
         <Divider />
         <Box position="relative" w="full">
@@ -66,7 +73,7 @@ export function PaginatedTable<T>({
           )}
           {!loading && items.length === 0 && (
             <Center py="2xl">
-              <Text px="md" color="font.secondary">
+              <Text px="md" color="white">
                 {noItemsFoundLabel}
               </Text>
             </Center>

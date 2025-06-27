@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
+import './pools.css'
 
 export const metadata: Metadata = {
   title: 'AggTrade - Yeild Farming',

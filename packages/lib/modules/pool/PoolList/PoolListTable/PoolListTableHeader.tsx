@@ -30,17 +30,23 @@ export function PoolListTableHeader({ ...rest }) {
   }
 
   return (
-    <Grid {...rest} p={['sm', 'md']} w="full">
+    <Grid
+      {...rest}
+      p={['sm', 'md']}
+      w="full"
+      boxShadow="inset 0px 4px 34px rgba(0, 255, 233, 0.4)"
+      border={'0px'}
+    >
       <GridItem>
         <VStack align="start" w="full">
-          <Icon as={Globe} boxSize="5" color="font.primary" />
+          <Icon as={Globe} boxSize="5" color="white" />
         </VStack>
       </GridItem>
-      <GridItem>
+      <GridItem sx={{ color: 'white' }}>
         {PROJECT_CONFIG.options.showPoolName ? <PoolListPoolNamesTokens /> : 'Pool name'}
       </GridItem>
       <GridItem justifySelf="start">
-        <Text fontWeight="bold" textAlign="left">
+        <Text sx={{ color: 'white' }} fontWeight="bold" textAlign="left">
           Details
         </Text>
       </GridItem>

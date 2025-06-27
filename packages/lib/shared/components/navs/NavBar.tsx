@@ -153,19 +153,19 @@ export function NavActions({
     }
 
     const defaultActions = [
-      {
-        el: <UserSettings />,
-        display: { base: 'none', lg: 'block' },
-      },
-      {
-        el: hideDarkModeToggle ? null : <DarkModeToggle />,
-        display: { base: 'none', lg: 'block' },
-      },
+      // {
+      //   el: <UserSettings />,
+      //   display: { base: 'none', lg: 'block' },
+      // },
+      // {
+      //   el: hideDarkModeToggle ? null : <DarkModeToggle />,
+      //   display: { base: 'none', lg: 'block' },
+      // },
       {
         el: (
           <ConnectWallet
             connectLabel={allowCreateWallet ? 'Connect' : 'Connect wallet'}
-            showCreateWalletButton={allowCreateWallet}
+            showCreateWalletButton={false}
           />
         ),
         display: { base: 'block', lg: 'block' },
@@ -178,10 +178,10 @@ export function NavActions({
 
     if (isConnected) {
       return [
-        {
-          el: <RecentTransactions />,
-          display: { base: 'none', lg: 'block' },
-        },
+        // {
+        //   el: <RecentTransactions />,
+        //   display: { base: 'none', lg: 'block' },
+        // },
         ...defaultActions,
       ]
     }

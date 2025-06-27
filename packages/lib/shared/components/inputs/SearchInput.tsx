@@ -43,20 +43,17 @@ export function SearchInput({
       <Input
         {...register(SEARCH)}
         _focus={{
-          bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
         }}
         _focusVisible={{
-          bg: 'input.bgFocus',
           borderColor: 'input.borderFocus',
-          shadow: 'input.innerFocus',
           color: 'input.fontFocus',
         }}
-        _hover={{ bg: 'input.bgHover', borderColor: 'input.borderHover' }}
+        _hover={{ borderColor: 'input.borderFocus' }}
         autoComplete="off"
-        bg="input.bgDefault"
-        border="1px solid"
-        borderColor="input.borderDefault"
+        bg="rgba(5, 5, 18, 0.65)"
+        boxShadow=" inset 0 0 0 1px rgba(0, 255, 233, 0.35),  /* crisp stroke */
+    inset 0 0 30px rgba(0, 255, 233, 0.20); "
         defaultValue={search ?? ''}
         id={SEARCH}
         onChange={debouncedChangeHandler}

@@ -51,6 +51,7 @@ export function PortfolioSummary() {
         shadow="2xl"
         variant="level2"
         width="full"
+        marginTop={'30px'}
       >
         <NoisyCard
           cardProps={{
@@ -58,15 +59,16 @@ export function PortfolioSummary() {
           }}
           contentProps={commonNoisyCardProps.contentProps}
         >
-          <ZenGarden sizePx="225px" variant="diamond" />
-          <Icon as={BarChart} color="font.primary" height="30px" mb="sm" width="30px" />
+          <Icon as={BarChart} color="#00FFE9" height="30px" mb="sm" width="30px" />
           <Heading color="grayText" mb="sm" size="sm">
             {`My ${PROJECT_CONFIG.projectName} liquidity`}
           </Heading>
           {isLoadingPortfolio ? (
             <Skeleton height="10" w="36" />
           ) : (
-            <Heading size="lg">{toCurrency(totalBalance)}</Heading>
+            <Heading color={'white'} size="lg">
+              {toCurrency(totalBalance)}
+            </Heading>
           )}
         </NoisyCard>
 
@@ -76,7 +78,6 @@ export function PortfolioSummary() {
           }}
           contentProps={commonNoisyCardProps.contentProps}
         >
-          <ZenGarden sizePx="225px" variant="diamond" />
           <Icon as={StarsIcon} height="30px" mb="sm" width="30px" />
           <Heading color="grayText" mb="sm" size="sm">
             Claimable incentives
@@ -85,7 +86,7 @@ export function PortfolioSummary() {
           {isLoadingPortfolio || isLoadingClaimableRewards ? (
             <Skeleton height="10" w="36" />
           ) : (
-            <Heading size="lg" variant="special">
+            <Heading size="lg" color={'white'}>
               {toCurrency(totalClaimableBalance)}
             </Heading>
           )}

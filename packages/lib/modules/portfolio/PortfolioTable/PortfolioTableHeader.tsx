@@ -18,14 +18,16 @@ export function PortfolioTableHeader({ currentSortingObj, setCurrentSortingObj, 
     <Grid {...rest} p={['ms', 'md']} px="xs" w="full">
       <GridItem>
         <VStack align="start" w="full">
-          <Icon as={Globe} boxSize="5" color="font.primary" ml="1" />
+          <Icon as={Globe} boxSize="5" color="white" ml="1" />
         </VStack>
       </GridItem>
       <GridItem>
-        <Text fontWeight="bold">Pool name</Text>
+        <Text color={'white'} fontWeight="bold">
+          Pool name
+        </Text>
       </GridItem>
       <GridItem justifySelf="start">
-        <Text fontWeight="bold" textAlign="left">
+        <Text fontWeight="bold" textAlign="left" color={'white'}>
           Details
         </Text>
       </GridItem>

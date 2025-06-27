@@ -91,6 +91,7 @@ function WeightedTokenPills({
                         size={nameSize}
                         _groupHover={{ color: 'font.maxContrast' }}
                         transition="color 0.2s var(--ease-out-cubic)"
+                        color={'white'}
                       >
                         {token.symbol}
                       </Text>
@@ -99,6 +100,7 @@ function WeightedTokenPills({
                       fontSize="xs"
                       _groupHover={{ color: 'font.maxContrast' }}
                       transition="color 0.2s var(--ease-out-cubic)"
+                      color={'white'}
                     >
                       {fNum('weight', token.weight || '')}
                     </Text>
@@ -119,6 +121,7 @@ function WeightedTokenPills({
                       size={nameSize}
                       _groupHover={{ color: 'font.maxContrast' }}
                       transition="color 0.2s var(--ease-out-cubic)"
+                      color={'white'}
                     >
                       {token.name}
                     </Text>
@@ -191,6 +194,7 @@ function StableTokenPills({
                       size={nameSize}
                       _groupHover={{ color: 'font.maxContrast' }}
                       transition="color 0.2s var(--ease-out-cubic)"
+                      color={'white'}
                     >
                       {token.symbol}
                     </Text>
@@ -298,18 +302,44 @@ function PoolTokenPills({
         ) : (
           <TokenIconStack chain={chain} size={iconSize} tokens={tokens} />
         )}
-        <Heading size={nameSize}>{poolName}</Heading>
+        <Heading sx={{ color: 'white' }} color={'white'} size={nameSize}>
+          {poolName}
+        </Heading>
       </HStack>
     )
   }
 
   if (shouldUseStablePills) {
-    return <StableTokenPills chain={chain} iconSize={iconSize} tokens={tokens} {...badgeProps} />
+    return (
+      <StableTokenPills
+        sx={{ color: 'white' }}
+        chain={chain}
+        iconSize={iconSize}
+        tokens={tokens}
+        {...badgeProps}
+      />
+    )
   }
 
   if (shouldUseWeightedPills) {
-    return <WeightedTokenPills chain={chain} iconSize={iconSize} tokens={tokens} {...badgeProps} />
+    return (
+      <WeightedTokenPills
+        sx={{ color: 'white' }}
+        chain={chain}
+        iconSize={iconSize}
+        tokens={tokens}
+        {...badgeProps}
+      />
+    )
   }
 
-  return <WeightedTokenPills chain={chain} iconSize={iconSize} tokens={tokens} {...badgeProps} />
+  return (
+    <WeightedTokenPills
+      sx={{ color: 'white' }}
+      chain={chain}
+      iconSize={iconSize}
+      tokens={tokens}
+      {...badgeProps}
+    />
+  )
 }

@@ -97,6 +97,7 @@ export function PoolVersionTag({
           fontWeight="medium"
           transition="all 0.2s var(--ease-out-cubic)"
           zIndex={1}
+          color={'white'}
         >
           {label}
         </Text>

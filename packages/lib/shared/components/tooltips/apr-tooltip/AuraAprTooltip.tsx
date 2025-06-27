@@ -59,7 +59,7 @@ function AuraAprTooltip({ auraApr }: Props) {
         apr={bn(auraApr)}
         backgroundColor="background.level4"
         displayValueFormatter={usedDisplayValueFormatter}
-        fontColor="font.maxContrast"
+        fontColor="white"
         pt={3}
         title="Total APR"
       />

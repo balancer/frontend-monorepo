@@ -67,7 +67,7 @@ export function PoolListLayout() {
                 willChange="transform"
               >
                 <HStack w="full">
-                  <Heading as="h2" size="lg" variant="special">
+                  <Heading as="h2" size="lg" sx={{ color: 'white' }}>
                     Liquidity pools
                   </Heading>
                   <Heading mt="1" size="md" variant="secondary">

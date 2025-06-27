@@ -21,14 +21,14 @@ export function PoolHookTag({ pool, onlyShowIcon = false }: Props) {
   return onlyShowIcon ? (
     <BalBadge
       bg="background.level3"
-      color="font.secondary"
+      color="white"
       fontSize="xs"
       h="22px"
       p="0"
       textTransform="lowercase"
       w="22px"
     >
-      <Center color="font.secondary" h="full" w="full">
+      <Center color="white" h="full" w="full">
         <HookIcon size={16} />
       </Center>
     </BalBadge>
@@ -57,11 +57,7 @@ export function PoolHookTag({ pool, onlyShowIcon = false }: Props) {
         >
           <HStack color={isOpen ? 'font.primary' : 'font.secondary'} gap="xs">
             <HookIcon size={18} />
-            <Text
-              color={isOpen ? 'font.primary' : 'font.secondary'}
-              fontSize="sm"
-              variant="secondary"
-            >
+            <Text color={'white'} fontSize="sm" variant="secondary">
               {hook.name}
             </Text>
           </HStack>

@@ -28,6 +28,7 @@ export function PoolListPoolDisplay({
           p={['xxs', 'sm']}
           pool={pool}
           pr={[1.5, 'ms']}
+          color={'white'}
         />
       )
       break

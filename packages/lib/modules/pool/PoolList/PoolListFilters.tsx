@@ -495,7 +495,7 @@ export function PoolListFilters() {
     <VStack w="full">
       <HStack gap="0" justify="end" spacing="none" w="full">
         <PoolListSearch />
-        <Popover
+        {/* <Popover
           isLazy
           isOpen={isPopoverOpen}
           onClose={() => setIsPopoverOpen(false)}
@@ -628,7 +628,7 @@ export function PoolListFilters() {
         >
           <Icon as={Plus} boxSize={4} />
           {!isMobile && 'Create pool'}
-        </Button>
+        </Button> */}
       </HStack>
     </VStack>
   )

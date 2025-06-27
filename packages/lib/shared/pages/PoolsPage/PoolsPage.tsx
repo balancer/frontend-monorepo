@@ -74,7 +74,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
               top="300px"
               width={600}
             /> */}
-            <FadeInOnView animateOnce={false}>
+            {/* <FadeInOnView animateOnce={false}>
               <Flex
                 align={{ base: 'start', md: 'start' }}
                 direction={{ base: 'column', lg: 'row' }}
@@ -84,7 +84,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
                 sx={{ paddingTop: '50px' }}
               >
                 <Box>
-                  <Heading pb="3" sx={{ textWrap: 'balance' }} variant="special">
+                  <Heading pb="3" sx={{ textWrap: 'balance', color: 'white' }}>
                     Earn passively on AggTrade
                   </Heading>
                   <Text sx={{ textWrap: 'balance' }} variant="secondary">
@@ -93,7 +93,7 @@ export function PoolsPage({ children, rewardsClaimed24h }: PoolsPageProps) {
                 </Box>
                 <PoolPageStats rewardsClaimed24h={rewardsClaimed24h} />
               </Flex>
-            </FadeInOnView>
+            </FadeInOnView> */}
             {/* <FadeInOnView animateOnce={false}>
               <Box pb={{ base: '0', md: '3' }}>
                 {/* <BeetsPromoBanner /> */}

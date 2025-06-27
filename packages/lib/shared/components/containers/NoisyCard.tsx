@@ -1,6 +1,7 @@
 import { Box, BoxProps, CardProps, chakra, useColorModeValue } from '@chakra-ui/react'
 import { ReactNode, MouseEvent } from 'react'
 import { motion, useMotionTemplate, useMotionValue, isValidMotionProp } from 'framer-motion'
+import './panel.css'
 
 type NoisyCardProps = {
   cardProps?: CardProps
@@ -44,7 +45,6 @@ export function NoisyCard({
   return (
     <Box
       as={motion.div}
-      backgroundImage={`url('/images/background-noise.png')`}
       borderWidth={0}
       onMouseMove={handleMouseMove}
       position="relative"
@@ -74,7 +74,7 @@ export function NoisyCard({
         {...shadowContainerProps}
       />
       <Box
-        backgroundColor="background.level0WithOpacity"
+        boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.4)'}
         height="full"
         width="full"
         {...contentProps}

@@ -44,7 +44,7 @@ function getPoolDisplayTypeLabel(pool: PoolCore, erc4626Metadata: Erc4626Metadat
   }
 
   return (
-    <Text fontWeight="medium" textAlign="left" textTransform="capitalize">
+    <Text color={'white'} fontWeight="medium" textAlign="left" textTransform="capitalize">
       {getPoolTypeLabel(pool.type)}
     </Text>
   )

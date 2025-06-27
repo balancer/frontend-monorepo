@@ -96,13 +96,13 @@ export function PortfolioTable() {
                   <Heading
                     as="h2"
                     size="h4"
-                    variant="special"
+                    color={'#00FFE9'}
                     w="full"
                   >{`${projectName} portfolio`}</Heading>
                 </Box>
               </Box>
             </HStack>
-            {isFilterVisible && (
+            {/* {isFilterVisible && (
               <PortfolioFilterTags
                 networks={selectedNetworks}
                 poolTypes={selectedPoolTypes}
@@ -111,7 +111,7 @@ export function PortfolioTable() {
                 togglePoolType={togglePoolType}
                 toggleStakingType={toggleStakingType}
               />
-            )}
+            )} */}
           </VStack>
           <Stack
             align={{ base: 'end', sm: 'center' }}

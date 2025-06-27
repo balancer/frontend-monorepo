@@ -56,13 +56,14 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
             </GridItem>
             {userAddress ? (
               <GridItem>
-                <Text fontWeight="medium" textAlign="right">
+                <Text fontWeight="medium" textAlign="right" color={'white'}>
                   {toCurrency(getUserTotalBalanceUsd(pool), { abbreviated: false })}
                 </Text>
               </GridItem>
             ) : null}
             <GridItem>
               <Text
+                color={'white'}
                 fontWeight="medium"
                 textAlign="right"
                 title={toCurrency(pool.dynamicData.totalLiquidity, { abbreviated: false })}
@@ -72,6 +73,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
             </GridItem>
             <GridItem textAlign="right">
               <Text
+                color={'white'}
                 fontWeight="medium"
                 textAlign="right"
                 title={toCurrency(pool.dynamicData.volume24h, { abbreviated: false })}
@@ -87,7 +89,7 @@ export function PoolListTableRow({ pool, keyValue, needsMarginForPoints, ...rest
                   height="auto"
                   pool={pool}
                   poolId={pool.id}
-                  textProps={{ fontWeight: 'medium', textAlign: 'right' }}
+                  textProps={{ fontWeight: 'medium', textAlign: 'right', color: 'white' }}
                 />
                 {hasPoints && (
                   <Image

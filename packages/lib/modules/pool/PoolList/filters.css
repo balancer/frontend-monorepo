@@ -1,0 +1,18 @@
+.neon-panel {
+  /* layout  */
+  width: 100%;
+  border-radius: 16px;
+
+  /* glass background  */
+  background: rgba(5, 5, 18, 0.65);   /* ≈ #050512 @ 65 % */
+  backdrop-filter: blur(40px);
+
+  /* inner rim + soft bloom  */
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 255, 233, 0.35),  /* crisp stroke */
+    inset 0 0 30px rgba(0, 255, 233, 0.20);   /* teal glow */
+  
+  /* position context for ::before halo  */
+  position: relative;
+  overflow: hidden;               /* clip pseudo-blur */
+}

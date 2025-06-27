@@ -60,7 +60,7 @@ export function SortableHeader({
     <Button onClick={() => onSort(label.toLowerCase())} size="sm" variant="ghost">
       <HStack alignItems="center" gap="0">
         <Text
-          color={color}
+          color={'white'}
           fontWeight="bold"
           textDecoration={popoverContent ? 'underline' : undefined}
           textDecorationStyle={popoverContent ? 'dotted' : undefined}
