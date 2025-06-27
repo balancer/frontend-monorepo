@@ -18,7 +18,7 @@ import {
   Text,
   Heading,
 } from '@chakra-ui/react'
-import { ClpBadge } from '@repo/lib/modules/eclp/components/ClpBadge'
+import { ClpBadge } from '@repo/lib/shared/components/badges/ClpBadge'
 import { EclpChartProvider, useEclpChart } from '@repo/lib/modules/eclp/hooks/EclpChartProvider'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -69,12 +69,16 @@ function PoolChartsContent({ ...props }: any) {
     hasChartData: hasEclpChartData,
     isLoading: isLoadingEclpChartData,
     poolIsInRange,
+    outOfRangeText: eclpOutOfRangeText,
+    inRangeText: eclpInRangeText,
   } = useEclpChart()
 
   const {
     hasChartData: hasReclAmmChartData,
     isLoading: isLoadingReclAmmChartData,
     isPoolWithinTargetRange,
+    outOfRangeText: reclammOutOfRangeText,
+    inRangeText: reclammInRangeText,
   } = useReclAmmChart()
 
   const {
@@ -117,9 +121,25 @@ function PoolChartsContent({ ...props }: any) {
                   ml={{ base: undefined, md: 'auto' }}
                   spacing="0"
                 >
-                  {showLiquidityProfileChart || showReclammChart ? (
-                    <ClpBadge poolIsInRange={poolIsInRange || isPoolWithinTargetRange} />
-                  ) : (
+                  {showLiquidityProfileChart && (
+                    <ClpBadge
+                      bgColor={poolIsInRange ? 'green.400' : 'orange.300'}
+                      bodyText={poolIsInRange ? eclpInRangeText : eclpOutOfRangeText}
+                      hasThumbsUp={poolIsInRange}
+                      headerText={`CLP ${poolIsInRange ? 'in' : 'out of'} range`}
+                    />
+                  )}
+                  {showReclammChart && (
+                    <ClpBadge
+                      bgColor={isPoolWithinTargetRange ? 'green.400' : 'orange.300'}
+                      bodyText={
+                        isPoolWithinTargetRange ? reclammInRangeText : reclammOutOfRangeText
+                      }
+                      hasThumbsUp={isPoolWithinTargetRange}
+                      headerText={isPoolWithinTargetRange ? 'Pool in range' : 'Pool readjusting'}
+                    />
+                  )}
+                  {!showLiquidityProfileChart && !showReclammChart && (
                     <>
                       <Heading fontWeight="bold" size="h5">
                         {chartValueSum}

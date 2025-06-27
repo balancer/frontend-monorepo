@@ -439,12 +439,19 @@ export function useEclpChartLogic() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, poolSpotPrice])
 
+  const outOfRangeText =
+    'The current price is out of the set liquidity range for this Concentrated Liquidity Pool (CLP). When a CLP is not in range, liquidity is not routed through this pool and LPs do not earn swap fees.'
+  const inRangeText =
+    'The current price is between the liquidity upper and lower bounds for this Concentrated Liquidity Pool (CLP). In range pools earn high swap fees.'
+
   return {
     options,
     hasChartData: data?.length,
     poolIsInRange,
     toggleIsReversed,
     isLoading,
+    outOfRangeText,
+    inRangeText,
   }
 }
 

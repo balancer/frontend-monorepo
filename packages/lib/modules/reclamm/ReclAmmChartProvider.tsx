@@ -375,12 +375,19 @@ export function useReclAmmChartLogic() {
     }
   }, [currentChartData])
 
+  const outOfRangeText =
+    'The current price is out of the set liquidity range for this Concentrated Liquidity Pool (CLP). When a CLP is not in range, liquidity is not routed through this pool and LPs do not earn swap fees.'
+  const inRangeText =
+    'The current price is between the liquidity upper and lower bounds for this Concentrated Liquidity Pool (CLP). In range pools earn high swap fees.'
+
   return {
     options,
     hasChartData: !!currentChartData,
     isLoading: reclAmmData.isLoading,
     isPoolWithinTargetRange: !!reclAmmData.isPoolWithinTargetRange,
     toggleIsReversed,
+    outOfRangeText,
+    inRangeText,
   }
 }
 
