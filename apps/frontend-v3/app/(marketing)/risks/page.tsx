@@ -109,7 +109,7 @@ export default function Privacy() {
                       </li>
                       <li>
                         <Link href="risks#ReCLAMM">
-                          ReCLAMM - Readjusting Concentraded Luquidity AMM
+                          ReCLAMM - Readjusting Concentrated Liquidity AMM
                         </Link>
                       </li>
                       <li>
