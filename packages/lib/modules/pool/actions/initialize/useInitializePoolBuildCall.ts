@@ -39,7 +39,7 @@ export function useInitializePoolBuildCall({
       protocolVersion
     )
 
-    const { callData, to } = initPool.buildCallWithPermit2(
+    const { callData, to, value } = initPool.buildCallWithPermit2(
       initPoolInput,
       poolState,
       permit2Signature
@@ -50,6 +50,7 @@ export function useInitializePoolBuildCall({
       account: userAddress,
       data: callData,
       to,
+      value,
     }
   }
 

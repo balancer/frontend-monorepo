@@ -1,5 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { getChainId, getNativeAssetAddress } from '@repo/lib/config/app.config'
+import {
+  getChainId,
+  getNativeAssetAddress,
+  getWrappedNativeAssetAddress,
+} from '@repo/lib/config/app.config'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
 import { sentryMetaForWagmiSimulation } from '@repo/lib/shared/utils/query-errors'
@@ -58,8 +62,16 @@ export function useTokenApprovalSteps({
   const isUnwrappingNative = wethIsEth && actionType === 'Unwrapping'
 
   const _approvalAmounts = useMemo(
-    () => approvalAmounts.filter(amount => !isSameAddress(amount.address, nativeAssetAddress)),
-    [approvalAmounts]
+    () =>
+      approvalAmounts.filter(amount => {
+        // Always filter out native asset
+        if (isSameAddress(amount.address, nativeAssetAddress)) return false
+        // If wethIsEth is true, also filter out wrapped native asset
+        if (wethIsEth && isSameAddress(amount.address, getWrappedNativeAssetAddress(chain)))
+          return false
+        return true
+      }),
+    [approvalAmounts, wethIsEth, chain]
   )
 
   const approvalTokenAddresses = useMemo(
