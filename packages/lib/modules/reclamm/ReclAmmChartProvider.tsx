@@ -1,12 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { createContext, PropsWithChildren, useMemo } from 'react'
-import { bn } from '@repo/lib/shared/utils/numbers'
+import { createContext, PropsWithChildren, useMemo, useState } from 'react'
+import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { formatUnits } from 'viem'
 import { useGetComputeReclAmmData } from './useGetComputeReclAmmData'
 import { calculateLowerMargin, calculateUpperMargin } from './reclAmmMath'
 import { useMandatoryContext } from '@repo/lib/shared/utils/contexts'
-import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
+import { useSelectColor } from '@repo/lib/shared/hooks/useSelectColor'
+import { getPoolActionableTokens } from '@repo/lib/modules/pool/pool-tokens.utils'
+import { usePool } from '@repo/lib/modules/pool/PoolProvider'
+import { useBreakpointValue } from '@chakra-ui/react'
 
 type ReclAmmChartContextType = ReturnType<typeof useReclAmmChartLogic>
 
@@ -24,9 +27,29 @@ function getGradientColor(colorStops: string[]) {
 }
 
 export function useReclAmmChartLogic() {
-  const { toCurrency } = useCurrency()
   const { isMobile } = useBreakpoints()
   const reclAmmData = useGetComputeReclAmmData()
+  const [isReversed, setIsReversed] = useState(false)
+  const selectColor = useSelectColor()
+  const { pool } = usePool()
+
+  const dynamicXAxisNamePadding = useBreakpointValue({
+    base: [0, 30, -128, 0],
+    md: [0, 30, -128, 0],
+    lg: [0, 24, -80, 0],
+  }) || [0, 24, -80, 0]
+
+  const secondaryFontColor = selectColor('font', 'secondary')
+
+  function toggleIsReversed() {
+    setIsReversed(!isReversed)
+  }
+
+  const tokens = useMemo(() => {
+    const poolTokens = getPoolActionableTokens(pool).map(token => token.symbol)
+
+    return isReversed ? poolTokens.reverse().join('/') : poolTokens.join('/')
+  }, [pool, isReversed])
 
   const currentChartData = useMemo(() => {
     if (
@@ -69,15 +92,31 @@ export function useReclAmmChartLogic() {
       virtualBalanceB: vBalanceB,
     })
 
-    const minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
-    const maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
+    let minPriceValue = bn(virtualBalanceB).pow(2).div(invariant).toNumber()
+    let maxPriceValue = bn(invariant).div(bn(virtualBalanceA).pow(2)).toNumber()
 
-    const lowerMarginValue = bn(invariant).div(bn(lowerMargin).pow(2)).toNumber()
-    const upperMarginValue = bn(invariant).div(bn(upperMargin).pow(2)).toNumber()
+    let lowerMarginValue = bn(invariant).div(bn(lowerMargin).pow(2)).toNumber()
+    let upperMarginValue = bn(invariant).div(bn(upperMargin).pow(2)).toNumber()
 
-    const currentPriceValue = bn(bn(balanceB).plus(virtualBalanceB))
+    let currentPriceValue = bn(bn(balanceB).plus(virtualBalanceB))
       .div(bn(balanceA).plus(virtualBalanceA))
       .toNumber()
+
+    if (isReversed) {
+      const invert = (value: number) => (value === 0 ? 0 : 1 / value)
+
+      const invertedMinPriceValue = invert(maxPriceValue)
+      const invertedMaxPriceValue = invert(minPriceValue)
+      const invertedLowerMarginValue = invert(upperMarginValue)
+      const invertedUpperMarginValue = invert(lowerMarginValue)
+
+      // Swap min/max and lower/upper
+      minPriceValue = invertedMinPriceValue
+      maxPriceValue = invertedMaxPriceValue
+      lowerMarginValue = invertedLowerMarginValue
+      upperMarginValue = invertedUpperMarginValue
+      currentPriceValue = invert(currentPriceValue)
+    }
 
     return {
       maxPriceValue,
@@ -88,7 +127,7 @@ export function useReclAmmChartLogic() {
     }
   }, [reclAmmData])
 
-  const option = useMemo(() => {
+  const options = useMemo(() => {
     const { maxPriceValue, minPriceValue, lowerMarginValue, upperMarginValue, currentPriceValue } =
       currentChartData
 
@@ -226,7 +265,7 @@ export function useReclAmmChartLogic() {
         left: isMobile ? '-7%' : '-3%',
         right: '1%',
         top: isMobile ? '50px' : '15%',
-        bottom: isMobile ? '-40px' : '8%',
+        bottom: isMobile ? '-20px' : '8%',
         containLabel: true,
       },
       xAxis: {
@@ -241,19 +280,19 @@ export function useReclAmmChartLogic() {
           interval: 0,
           formatter: (value: string, index: number) => {
             if (index === 10) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? toCurrency(minPriceValue, { abbreviated: false }) : 'N/A'}}`
+              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Min price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${minPriceValue !== undefined ? fNum('clpPrice', minPriceValue) : 'N/A'}}`
             }
 
             if (index === 18) {
-              return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? toCurrency(upperMarginValue, { abbreviated: false }) : 'N/A'}}`
+              return `{triangle|▲}\n{labelText|Low target}\n{priceValue|${upperMarginValue !== undefined ? fNum('clpPrice', upperMarginValue) : 'N/A'}}`
             }
 
             if (index === 60) {
-              return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? toCurrency(lowerMarginValue, { abbreviated: false }) : 'N/A'}}`
+              return `{triangle|▲}\n{labelText|High target}\n{priceValue|${lowerMarginValue !== undefined ? fNum('clpPrice', lowerMarginValue) : 'N/A'}}`
             }
 
             if (index === 68) {
-              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? toCurrency(maxPriceValue, { abbreviated: false }) : 'N/A'}}`
+              return `{${isMobile ? 'triangleMobile' : 'triangle'}|▲}\n{${isMobile ? 'labelTextMobile' : 'labelText'}|Max price}\n{${isMobile ? 'priceValueMobile' : 'priceValue'}|${maxPriceValue !== undefined ? fNum('clpPrice', maxPriceValue) : 'N/A'}}`
             }
 
             return ''
@@ -285,6 +324,15 @@ export function useReclAmmChartLogic() {
             },
           },
         },
+        name: `Price: ${tokens}`,
+        nameLocation: 'end',
+        nameGap: 5,
+        nameTextStyle: {
+          align: 'right',
+          verticalAlign: 'bottom',
+          padding: dynamicXAxisNamePadding,
+          color: secondaryFontColor,
+        },
       },
       yAxis: {
         show: false,
@@ -299,7 +347,7 @@ export function useReclAmmChartLogic() {
                 label: {
                   show: true,
                   position: 'top',
-                  formatter: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? toCurrency(currentPriceValue, { abbreviated: false }) : 'N/A'}}\n{triangle|▼}`,
+                  formatter: `{labelText|Current price}\n{priceValue|${currentPriceValue !== undefined ? fNum('clpPrice', currentPriceValue) : 'N/A'}}\n{triangle|▼}`,
                   rich: {
                     triangle: {
                       ...richStyles.currentTriangle,
@@ -327,11 +375,19 @@ export function useReclAmmChartLogic() {
     }
   }, [currentChartData])
 
+  const outOfRangeText =
+    'The current price is out of the set liquidity range for this Concentrated Liquidity Pool (CLP). When a CLP is not in range, liquidity is not routed through this pool and LPs do not earn swap fees.'
+  const inRangeText =
+    'The current price is between the liquidity upper and lower bounds for this Concentrated Liquidity Pool (CLP). In range pools earn high swap fees.'
+
   return {
-    option,
+    options,
     hasChartData: !!currentChartData,
     isLoading: reclAmmData.isLoading,
     isPoolWithinTargetRange: !!reclAmmData.isPoolWithinTargetRange,
+    toggleIsReversed,
+    outOfRangeText,
+    inRangeText,
   }
 }
 
