@@ -68,6 +68,7 @@ export function PoolListTable({ pools, count, loading }: Props) {
       p={{ base: '0', sm: '0' }}
       boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.5)'}
       borderRadius={'16px'}
+      backgroundColor={'transparent'}
     >
       <PaginatedTable
         getRowId={item => item.id}

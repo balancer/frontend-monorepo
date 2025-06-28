@@ -43,7 +43,7 @@ export async function POST(request: NextRequest, props: Params) {
     })
   }
 
-  const rpcUrl = drpcUrl(chain as GqlChain, DRPC_KEY)
+  const rpcUrl = process.env.NEXT_PRIVATE_DRPC_URL!
   const rpcBody = await request.json()
 
   const rpcResponse = await fetch(rpcUrl, {
@@ -53,6 +53,8 @@ export async function POST(request: NextRequest, props: Params) {
       revalidate: 0,
     },
   })
+
+  console.log(rpcResponse)
 
   const rpcResponseJson = await rpcResponse.json()
 
