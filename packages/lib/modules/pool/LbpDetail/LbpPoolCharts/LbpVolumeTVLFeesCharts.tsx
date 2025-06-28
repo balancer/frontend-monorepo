@@ -4,7 +4,7 @@ import * as echarts from 'echarts/core'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { LabelFormatterParams, dividePrices, range } from '@repo/lib/shared/utils/chart.helper'
 import { Skeleton, Stack, Text } from '@chakra-ui/react'
-import { LbpPrice } from '../../pool/usePriceInfo'
+import { LbpPrice } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 
 type Props = {
   startDate: Date
@@ -15,7 +15,7 @@ type Props = {
   isLoading?: boolean
 }
 
-export function ProjectedPriceChart({
+export function LbpVolumeTVLFeesCharts({
   startDate,
   endDate,
   onPriceChange,

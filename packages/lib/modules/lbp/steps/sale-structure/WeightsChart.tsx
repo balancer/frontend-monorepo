@@ -10,7 +10,7 @@ import {
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
-import { buildMarkline, LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
+import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
 
 export function WeightsChart({
@@ -95,39 +95,50 @@ export function WeightsChart({
       },
     },
     series: [
-      buildMarkline('top-markline', startDate, endDate, startWeight),
-      buildMarkline('bottom-markline', startDate, endDate, 100 - startWeight),
       {
         id: 'collateral-token-weight',
         name: '',
-        type: 'line' as const,
+        type: 'line',
         data: collateralTokenData,
         lineStyle: {
           color: '#93C6FF',
           width: 3,
-          join: 'round' as const,
-          cap: 'round' as const,
+          join: 'round',
+          cap: 'round',
         },
         showSymbol: false,
+        markLine: {
+          silent: true,
+          symbol: 'none',
+          data: [{ yAxis: startWeight }, { yAxis: 100 - startWeight }],
+          lineStyle: {
+            type: 'dashed',
+            color: 'grey',
+            width: 1,
+          },
+          label: {
+            show: false,
+          },
+        },
       },
       {
         id: 'collateral-token-weight-after-cut-time',
         name: '',
-        type: 'line' as const,
+        type: 'line',
         data: collateralTokenDataAfterCutTime,
         lineStyle: {
           type: [3, 4],
           color: '#93C6FF',
           width: 2,
-          join: 'round' as const,
-          cap: 'round' as const,
+          join: 'round',
+          cap: 'round',
         },
         showSymbol: false,
       },
       {
         id: 'launch-token-weight',
         name: '',
-        type: 'line' as const,
+        type: 'line',
         data: launchTokenData,
         lineStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
@@ -137,15 +148,15 @@ export function WeightsChart({
             { offset: 1, color: '#EAA879' },
           ]),
           width: 3,
-          join: 'round' as const,
-          cap: 'round' as const,
+          join: 'round',
+          cap: 'round',
         },
         showSymbol: false,
       },
       {
         id: 'launch-token-weight-after-cut-time',
         name: '',
-        type: 'line' as const,
+        type: 'line',
         data: launchTokenDataAfterCutTime,
         lineStyle: {
           type: [3, 4],
@@ -156,8 +167,8 @@ export function WeightsChart({
             { offset: 1, color: '#EAA879' },
           ]),
           width: 2,
-          join: 'round' as const,
-          cap: 'round' as const,
+          join: 'round',
+          cap: 'round',
         },
         showSymbol: false,
       },
@@ -179,8 +190,8 @@ export function WeightsChart({
         color: 'grey',
         type: 'dashed',
         width: 1,
-        cap: 'round' as const,
-        join: 'round' as const,
+        cap: 'round',
+        join: 'round',
       },
       label: {
         show: true,
