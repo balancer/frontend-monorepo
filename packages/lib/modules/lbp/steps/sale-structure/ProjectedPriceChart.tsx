@@ -69,7 +69,7 @@ export function ProjectedPriceChart({
         id: 'launch-token-price',
         name: '',
         type: 'line',
-        data: priceData.data,
+        data: prices.map(item => [item.timestamp, item.projectTokenPrice]),
         lineStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
             { offset: 0, color: '#B3AEF5' },
@@ -109,16 +109,10 @@ export function ProjectedPriceChart({
         data: priceData.dataAfterCutTime,
         lineStyle: {
           type: [2, 3],
-          color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-            { offset: 0, color: '#B3AEF5' },
-            { offset: 0.33, color: '#D7CBE7' },
-            { offset: 0.66, color: '#E5C8C8' },
-            { offset: 1, color: '#EAA879' },
-          ]),
           width: 2,
-          join: 'round',
-          cap: 'round',
+          color: 'rgb(63, 70, 80)', //TODO: update for light theme
         },
+        symbol: 'none',
         showSymbol: false,
       },
     ],
