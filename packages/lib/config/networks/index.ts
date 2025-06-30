@@ -1,4 +1,5 @@
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
+import { NetworkConfig } from '../config.types'
 import arbitrum from './arbitrum'
 import avalanche from './avalanche'
 import gnosis from './gnosis'
@@ -12,7 +13,7 @@ import sepolia from './sepolia'
 import mode from './mode'
 import fraxtal from './fraxtal'
 import sonic from './sonic'
-import { NetworkConfig } from '../config.types'
+import hyperevm from './hyperevm'
 
 export type GqlChainValues = `${GqlChain}`
 export type NetworkConfigs = Partial<Record<GqlChainValues, NetworkConfig>>
@@ -31,6 +32,7 @@ const networkConfigs: NetworkConfigs = {
   [GqlChain.Fraxtal]: fraxtal,
   [GqlChain.Fantom]: fantom,
   [GqlChain.Sonic]: sonic,
+  [GqlChain.Hyperevm]: hyperevm,
 }
 
 export function getNetworkConfig(chain: GqlChain) {
