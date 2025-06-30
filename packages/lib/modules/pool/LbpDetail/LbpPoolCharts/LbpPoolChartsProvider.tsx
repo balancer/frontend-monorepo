@@ -34,6 +34,7 @@ export function useLbpPoolChartsLogic() {
 
   const currentPrice = getCurrentPrice(prices)
   const hasPrices = prices.length > 0
+  const hasHourlyData = hourlyData.length > 0
 
   return {
     salePeriodText,
@@ -48,6 +49,7 @@ export function useLbpPoolChartsLogic() {
     hoursDiff,
     currentPrice,
     hasPrices,
+    hasHourlyData,
   }
 }
 

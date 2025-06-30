@@ -22,7 +22,7 @@ export function LbpPoolChartsContainer() {
 
 function PoolChartsContent() {
   const { activeTab, setActiveTab, tabsList } = usePoolChartTabs()
-  const { prices, hourlyData } = useLbpPoolCharts()
+  const { hourlyData, hasHourlyData, isLoading } = useLbpPoolCharts()
 
   return (
     <Card h="420px">
@@ -41,9 +41,9 @@ function PoolChartsContent() {
       ) : (
         <LbpVolumeTVLFeesCharts
           chartType={activeTab.value}
+          hasHourlyData={hasHourlyData}
           hourlyData={hourlyData}
-          isLoading={!prices.length && !hourlyData.length}
-          prices={prices}
+          isLoading={isLoading}
         />
       )}
     </Card>

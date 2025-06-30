@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react'
 import ReactECharts from 'echarts-for-react'
-import { LbpPrice, HourlyDataPoint } from '@repo/lib/modules/lbp/pool/usePriceInfo'
+import { HourlyDataPoint } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import { PoolChartTab } from '../../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 import {
   getDefaultPoolChartOptions,
@@ -23,7 +23,7 @@ interface Props {
   chartType: PoolChartTab
   hourlyData: HourlyDataPoint[]
   isLoading?: boolean
-  prices: LbpPrice[]
+  hasHourlyData?: boolean
 }
 
 type SupportedPoolChartTab = PoolChartTab.VOLUME | PoolChartTab.TVL | PoolChartTab.FEES
@@ -32,7 +32,7 @@ export function LbpVolumeTVLFeesCharts({
   chartType,
   hourlyData = [],
   isLoading = false,
-  prices = [],
+  hasHourlyData = false,
 }: Props) {
   const theme = useChakraTheme()
   const { toCurrency } = useCurrency()
@@ -148,33 +148,25 @@ export function LbpVolumeTVLFeesCharts({
     }
   }, [chartType, chartData, defaultChartOptions])
 
-  const hasData = React.useMemo(() => {
-    return chartType === PoolChartTab.PRICE
-      ? prices.length > 0
-      : (hourlyData?.length ?? 0) > 0 && chartData.length > 0
-  }, [chartType, prices.length, hourlyData, chartData.length])
-
   if (isLoading) {
     return <Skeleton h="280px" w="full" />
   }
 
-  if (!hasData) {
+  if (!hasHourlyData) {
     return (
       <Stack alignItems="center" h="280px" justifyContent="center">
         <Text color="font.secondary" fontSize="lg">
-          No {chartType.replace('LBP_', '').toLowerCase()} data available
+          No {chartType.toLowerCase()} data available
         </Text>
       </Stack>
     )
   }
 
   return (
-    <div style={{ height: '280px', width: '100%' }}>
-      <ReactECharts
-        option={option}
-        opts={{ renderer: 'canvas' }}
-        style={{ height: '100%', width: '100%' }}
-      />
-    </div>
+    <ReactECharts
+      option={option}
+      opts={{ renderer: 'canvas' }}
+      style={{ height: '280px', width: '100%' }}
+    />
   )
 }
