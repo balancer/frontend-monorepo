@@ -84,13 +84,6 @@ const getDefaultPoolActivityChartOptions = (
         },
       },
       axisLine: { show: false },
-      // TODO: is this needed?
-      // splitArea: {
-      //   show: false,
-      //   areaStyle: {
-      //     color: ['rgba(250,250,250,0.3)', 'rgba(200,200,200,0.3)'],
-      //   },
-      // },
       min: minDate,
       max: maxDate,
     },
