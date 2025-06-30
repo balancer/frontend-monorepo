@@ -9,6 +9,7 @@ import {
   isBefore,
   isSameHour,
   isWithinInterval,
+  millisecondsToSeconds,
   secondsToMilliseconds,
   startOfHour,
 } from 'date-fns'
@@ -61,7 +62,7 @@ function aggregateToHourlyData(prices: LbpPriceChartDataFragment[]): HourlyDataP
 
   prices.forEach(price => {
     const timestamp = secondsToMilliseconds(parseInt(price.timestamp.toString()))
-    const hourStart = startOfHour(timestamp).getTime()
+    const hourStart = millisecondsToSeconds(startOfHour(timestamp).getTime())
     const volume = parseFloat(price.volume?.toString() || '0')
     const fees = parseFloat(price.fees?.toString() || '0')
     const tvl = parseFloat(price.tvl?.toString() || '0')
