@@ -87,7 +87,7 @@
     "@graphql-codegen/cli": "5.0.5",
     "@graphql-codegen/client-preset": "^4.8.0",
     "@graphql-codegen/schema-ast": "^4.0.0",
-    "@graphql-codegen/typescript-document-nodes": "4.0.15",
+    "@graphql-codegen/typescript-document-nodes": "4.0.16",
     "@graphql-typed-document-node/core": "^3.2.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/prettier-config": "workspace:*",
