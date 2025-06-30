@@ -68,7 +68,7 @@ export function TokenRowGroup({
           <Skeleton h="5" w="12" />
         ) : (
           hasMultipleAmounts && (
-            <Text fontSize="sm" fontWeight="bold">
+            <Text color={'white'} fontSize="sm" fontWeight="bold">
               {toCurrency(usdValue, { abbreviated: false })}
             </Text>
           )

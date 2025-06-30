@@ -50,8 +50,8 @@ export function NativeAssetSelectModal({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader color="font.primary">Select a token</ModalHeader>
-        <ModalCloseButton />
+        <ModalHeader color="white">Select a token</ModalHeader>
+        <ModalCloseButton color={'white'} />
         <ModalBody p={0}>
           <VStack align="start" spacing="md" w="full">
             <Box px="md" w="full">

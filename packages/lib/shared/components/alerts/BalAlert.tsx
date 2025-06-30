@@ -40,21 +40,30 @@ export function BalAlert({
     w: '24px',
   }
   return (
-    <Alert rounded={isNavAlert ? 'none' : 'default'} status={status} {...rest}>
-      {ssr ? <AlertIcon {...iconSize} /> : <AlertIcon as={getAlertIcon(status)} {...iconSize} />}
+    <Alert
+      backgroundColor={'#00FFE940'}
+      rounded={isNavAlert ? 'none' : 'default'}
+      status={status}
+      {...rest}
+    >
+      {ssr ? (
+        <AlertIcon {...iconSize} />
+      ) : (
+        <AlertIcon color={'white'} as={getAlertIcon(status)} {...iconSize} />
+      )}
 
       {title ? (
         <VStack align="start" w="full">
-          <AlertTitle color="black" display="flex" flexDirection="column" w="full">
+          <AlertTitle color="white" display="flex" flexDirection="column" w="full">
             {title}
           </AlertTitle>
-          <AlertDescription color="black" display="flex" flexDirection="column" w="full">
+          <AlertDescription color="white" display="flex" flexDirection="column" w="full">
             {content}
           </AlertDescription>
         </VStack>
       ) : (
         <AlertTitle
-          color="black"
+          color="white"
           display="flex"
           flexDirection="column"
           w="full"

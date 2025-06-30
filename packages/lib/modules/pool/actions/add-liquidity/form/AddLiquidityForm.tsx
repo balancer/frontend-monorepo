@@ -167,10 +167,14 @@ function AddLiquidityMainForm() {
 
   return (
     <Box maxW="lg" mx="auto" pb="2xl" w="full">
-      <Card>
+      <Card
+        backgroundColor={'#131722'}
+        boxShadow={'0px 4px 34px rgba(0, 255, 233, 0.4)'}
+        marginTop={'30px'}
+      >
         <CardHeader>
           <HStack justify="space-between" w="full">
-            <span>Add liquidity</span>
+            <span style={{ color: 'white' }}>Add liquidity</span>
             {wantsProportional ? (
               <ProportionalTransactionSettings
                 pool={pool}
@@ -247,10 +251,10 @@ function AddLiquidityMainForm() {
             <GridItem>
               <Card minHeight="full" p={['sm', 'ms']} variant="subSection" w="full">
                 <VStack align="start" gap="sm">
-                  <Text fontSize="sm" fontWeight="500" lineHeight="16px">
+                  <Text color={'#00FFE9CC'} fontSize="sm" fontWeight="500" lineHeight="16px">
                     Total
                   </Text>
-                  <Text fontSize="md" fontWeight="700" lineHeight="16px">
+                  <Text color={'#00FFE9'} fontSize="md" fontWeight="700" lineHeight="16px">
                     {totalUSDValue !== '0'
                       ? toCurrency(totalUSDValue, { abbreviated: false })
                       : '-'}
@@ -288,8 +292,9 @@ function AddLiquidityMainForm() {
                 onClick={() => !isDisabled && onModalOpen()}
                 ref={nextBtn}
                 size="lg"
-                variant="secondary"
                 w="full"
+                color={'black'}
+                backgroundColor={'#00FFE9'}
               >
                 Next
               </Button>

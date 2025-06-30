@@ -86,7 +86,10 @@ export function RemoveLiquidityModal({
     >
       <SuccessOverlay startAnimation={!!removeLiquidityTxHash && hasQuoteContext} />
 
-      <ModalContent {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}>
+      <ModalContent
+        sx={{ backgroundColor: '#131722' }}
+        {...getStylesForModalContentWithStepTracker(isDesktop && hasQuoteContext)}
+      >
         {isDesktop && hasQuoteContext && (
           <DesktopStepTracker
             chain={pool.chain}
@@ -103,7 +106,7 @@ export function RemoveLiquidityModal({
           txHash={removeLiquidityTxHash}
         />
 
-        <ModalCloseButton />
+        <ModalCloseButton color={'white'} />
         <ModalBody>
           {!isSuccess && <TxBatchAlert mb="sm" steps={transactionSteps.steps} />}
           <RemoveLiquiditySummary {...receiptProps} />

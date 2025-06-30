@@ -87,7 +87,7 @@ function PoolChartsContent({ ...props }: any) {
                     options={tabsList}
                     size="xxs"
                   />
-                  {activeTab.value !== PoolChartTab.LIQUIDITY_PROFILE && <PeriodSelect />}
+                  {/* {activeTab.value !== PoolChartTab.LIQUIDITY_PROFILE && <PeriodSelect />} */}
                 </HStack>
                 <VStack
                   alignItems={{ base: undefined, md: 'flex-end' }}

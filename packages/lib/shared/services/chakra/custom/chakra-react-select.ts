@@ -9,7 +9,7 @@ const defaultStyles = <T>(): ChakraStylesConfig<T> => ({
     cursor: 'pointer',
     rounded: 'md',
     fontWeight: 'medium',
-    background: 'background.level3',
+    background: '#00FFE9',
     zIndex: 9,
   }),
   control: provided => ({
@@ -32,7 +32,7 @@ const defaultStyles = <T>(): ChakraStylesConfig<T> => ({
   }),
   menuList: provided => ({
     ...provided,
-    background: 'background.level4',
+    background: '#00FFE9',
     borderColor: 'border.base',
     rounded: 'md',
     shadow: 'lg',

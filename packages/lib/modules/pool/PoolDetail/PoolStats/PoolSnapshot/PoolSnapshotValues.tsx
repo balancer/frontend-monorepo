@@ -88,6 +88,7 @@ export function PoolSnapshotValues() {
               fontSize: '2xl',
               fontWeight: 'bold',
               lineHeight: '28px',
+              color: '#00FFE9',
             }}
           />
         </VStack>

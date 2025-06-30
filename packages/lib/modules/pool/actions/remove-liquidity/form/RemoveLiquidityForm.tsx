@@ -137,10 +137,14 @@ export function RemoveLiquidityForm() {
   return (
     <TokenBalancesProvider extTokens={validTokens}>
       <Box h="full" maxW="lg" mx="auto" pb="2xl" w="full">
-        <Card>
+        <Card
+          backgroundColor={'#131722'}
+          boxShadow={'0px 4px 34px rgba(0, 255, 233, 0.4)'}
+          marginTop={'60px'}
+        >
           <CardHeader>
             <HStack justify="space-between" w="full">
-              <span>Remove liquidity</span>
+              <span style={{ color: 'white' }}>Remove liquidity</span>
               <TransactionSettings size="sm" />
             </HStack>
           </CardHeader>
@@ -184,8 +188,10 @@ export function RemoveLiquidityForm() {
                 onPercentChanged={setHumanBptInPercent}
                 value={totalUSDValue}
               >
-                <Text fontSize="sm">Amount</Text>
-                <Text fontSize="sm" variant="secondary">
+                <Text color={'#00FFE9'} fontSize="sm">
+                  Amount
+                </Text>
+                <Text fontSize="sm" color={'#00FFE9'}>
                   {fNum('percentage', humanBptInPercent / 100)}
                 </Text>
               </InputWithSlider>
@@ -243,7 +249,8 @@ export function RemoveLiquidityForm() {
                 onClick={() => !isDisabled && previewModalDisclosure.onOpen()}
                 ref={nextBtn}
                 size="lg"
-                variant="secondary"
+                backgroundColor={'#00FFE9'}
+                color={'black'}
                 w="full"
               >
                 Next

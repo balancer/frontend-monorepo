@@ -62,12 +62,12 @@ export function CompactTokenSelectList({ tokens, onTokenSelect, ...rest }: Props
     <Box {...rest}>
       {tokens.length === 0 ? (
         <Center h="60">
-          <Text color="gray.500" fontSize="sm">
+          <Text color="white" fontSize="sm">
             No tokens found
           </Text>
         </Center>
       ) : (
-        <Virtuoso data={tokens} itemContent={renderRow} style={style} />
+        <Virtuoso color="white" data={tokens} itemContent={renderRow} style={style} />
       )}
     </Box>
   )

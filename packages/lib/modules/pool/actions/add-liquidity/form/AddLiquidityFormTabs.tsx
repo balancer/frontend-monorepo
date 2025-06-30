@@ -28,12 +28,13 @@ function PoolWeightsInfo() {
       p="sm"
       pb="xxs !important"
       mb="sm"
+      backgroundColor={'#00FFE940'}
       content={
         <BalAlertContent
           description={
             <Box
               as="span"
-              color="black"
+              color="white"
               fontSize="sm"
               fontWeight="medium"
               sx={{ textWrap: 'balance' }}

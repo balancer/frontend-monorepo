@@ -95,10 +95,14 @@ function TokenInfo({
         <HStack spacing="none">
           {isBpt && pool ? (
             <Link as={NextLink} href={getNestedPoolPath({ pool, nestedPoolAddress: address })}>
-              <Heading {...headingProps}>{tokenSymbol}</Heading>
+              <Heading color={'white'} {...headingProps}>
+                {tokenSymbol}
+              </Heading>
             </Link>
           ) : (
-            <Heading {...headingProps}>{tokenSymbol}</Heading>
+            <Heading color={'white'} {...headingProps}>
+              {tokenSymbol}
+            </Heading>
           )}
           {showInfoPopover && (
             <TokenInfoPopover chain={chain} isBpt={isBpt} tokenAddress={address} />

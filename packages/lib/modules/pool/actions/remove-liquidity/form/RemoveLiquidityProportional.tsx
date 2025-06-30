@@ -67,9 +67,9 @@ export function RemoveLiquidityProportional({ tokens, pool }: Props) {
 
   return (
     <>
-      <Card variant="subSection">
+      <Card backgroundColor={'#05051299'} border={'1px solid'} borderColor={'#494950'}>
         <VStack align="start" spacing="md">
-          <Text fontSize="sm" fontWeight="bold">
+          <Text fontSize="sm" fontWeight="bold" color={'#888891'}>
             You&apos;re expected to get (if no slippage)
           </Text>
           {tokens.map(

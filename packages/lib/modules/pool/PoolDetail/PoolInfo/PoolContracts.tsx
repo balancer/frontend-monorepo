@@ -217,7 +217,7 @@ export function PoolContracts({ ...props }: CardProps) {
             <GridItem>
               <Link href={contract.explorerLink} target="_blank" variant="link">
                 <HStack gap="xxs">
-                  <Text color="link">{abbreviateAddress(contract.address)}</Text>
+                  <Text color="white">{abbreviateAddress(contract.address)}</Text>
                   <ArrowUpRight size={12} />
                 </HStack>
               </Link>
@@ -253,7 +253,7 @@ export function PoolContracts({ ...props }: CardProps) {
                           variant="link"
                         >
                           <HStack gap="xxs">
-                            <Text color="link">
+                            <Text color="white">
                               {abbreviateAddress(hook.address)} (
                               {getHookName(hook, pool, hooksMetadata)})
                             </Text>
@@ -309,7 +309,7 @@ export function PoolContracts({ ...props }: CardProps) {
                           variant="link"
                         >
                           <HStack gap="xxs">
-                            <Text color="link">
+                            <Text color="white">
                               {abbreviateAddress(provider.rateProviderAddress)}
                             </Text>
                             <ArrowUpRight size={12} />

@@ -16,12 +16,11 @@ export function FocussedActionNav({ chain, redirectPath }: ModalActionsNavProps)
   const networkConfig = getNetworkConfig(chain)
 
   return (
-    <HStack justify="space-between" mb="4">
+    <HStack justify="space-between" mb="4" backgroundColor={'#050E19'}>
       <Card
         h={{ base: '32px', md: '40px' }}
         p={{ base: 'xs', sm: 'xs', md: 'sm' }}
         shadow="sm"
-        variant="level2"
         width={{ base: '32px', md: '40px' }}
       >
         <Image alt={networkConfig.shortName} height="24" src={networkConfig.iconPath} width="24" />

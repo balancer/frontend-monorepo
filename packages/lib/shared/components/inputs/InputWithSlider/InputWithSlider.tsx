@@ -77,9 +77,10 @@ export const InputWithSlider = forwardRef(
           </HStack>
         )}
         <Box
-          bg="background.level1"
-          border="white"
+          bg="transparent"
+          border="1px solid"
           borderRadius="md"
+          borderColor={'#494950'}
           boxShadow={boxShadow}
           px="md"
           py="sm"
@@ -110,7 +111,7 @@ export const InputWithSlider = forwardRef(
               <NumberInputField
                 _disabled={{
                   opacity: 1,
-                  textColor: 'input.fontDefault',
+                  textColor: '#00FFE9',
                 }}
                 _focusVisible={{
                   borderColor: 'transparent',
@@ -124,6 +125,7 @@ export const InputWithSlider = forwardRef(
                 fontSize="2xl"
                 fontWeight="medium"
                 pl="0"
+                color={'#00FFE9'}
               />
             </NumberInput>
             <Box alignSelf="center" pr="sm" w="50%">

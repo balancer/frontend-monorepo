@@ -38,7 +38,7 @@ export const TextShine: React.FC<TextShineProps> = ({
   return (
     <Box
       as="span"
-      color={color}
+      color={'white'}
       fontSize={fontSize}
       className={className}
       sx={{
@@ -48,7 +48,7 @@ export const TextShine: React.FC<TextShineProps> = ({
         backgroundSize: '250% 100%',
         backgroundClip: 'text',
         WebkitBackgroundClip: 'text',
-        color: 'transparent',
+        color: 'white',
         WebkitTextFillColor: 'transparent',
         lineHeight: 'shorter',
         ...sx,

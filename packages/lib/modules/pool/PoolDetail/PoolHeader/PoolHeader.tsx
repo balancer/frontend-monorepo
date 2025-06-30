@@ -87,7 +87,7 @@ export function PoolHeader() {
                 Add liquidity
               </Button>
             </Tooltip>
-            <PoolAdvancedOptions />
+            {/* <PoolAdvancedOptions /> */}
           </HStack>
           <PartnerRedirectModal
             isOpen={partnerRedirectDisclosure.isOpen}

@@ -35,7 +35,7 @@ export function AddLiquidityFormCheckbox() {
           size="lg"
         >
           <Text as="div" fontSize="md" lineHeight="1" sx={{ textWrap: 'pretty' }}>
-            <TextShine animationDuration="1.5s">
+            <TextShine color="white" animationDuration="1.5s">
               I accept the risks of interacting with this pool
             </TextShine>
             <Box as="span">

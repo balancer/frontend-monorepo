@@ -4,7 +4,7 @@ export const DEFAULT_THEME_COLOR_MODE = 'dark'
 
 // Cannot me named config to avoid deprecation error in turbopack mode
 export const themeConfig: ThemeConfig = {
-  initialColorMode: 'light',
+  initialColorMode: 'dark',
   useSystemColorMode: false,
 }
 

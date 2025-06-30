@@ -175,6 +175,7 @@ function BaseAprTooltip({
         pt={3}
         title="Swap fees"
         tooltipText={swapFeesTooltipText}
+        fontColor="#00FFE9"
       >
         {hookType ? (
           <>
@@ -208,6 +209,7 @@ function BaseAprTooltip({
         aprOpacity={isStakingPresent ? 1 : 0.5}
         displayValueFormatter={usedDisplayValueFormatter}
         title="Staking incentives"
+        fontColor="#00FFE9"
       >
         {stakingIncentivesDisplayed.map(item => {
           return (
@@ -228,6 +230,7 @@ function BaseAprTooltip({
         aprOpacity={isYieldPresent ? 1 : 0.5}
         displayValueFormatter={usedDisplayValueFormatter}
         title="Yield bearing tokens"
+        fontColor="#00FFE9"
       >
         {yieldBearingTokensDisplayed.map(item => {
           return (

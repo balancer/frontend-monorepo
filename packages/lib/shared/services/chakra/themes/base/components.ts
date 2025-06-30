@@ -217,6 +217,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         backgroundClip: 'text',
         letterSpacing: '-0.04rem',
         textWrap: 'balance',
+        color: '#00FFE9',
       },
       variants: {
         secondary: {
@@ -356,7 +357,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           transition: tokens.transition.default,
           fontSize: ['sm', 'md'],
           _hover: {
-            color: 'font.link',
+            color: '#00F5E0',
             textDecoration: 'none',
           },
         },
@@ -444,8 +445,8 @@ export function getComponents(tokens: any, primaryTextColor: string) {
       },
       variants: {
         primary: {
-          color: 'font.dark',
-          background: 'background.button.primary',
+          color: 'black',
+          background: '#00FFE9',
           backgroundPosition: '100% 0',
           backgroundSize: '100% 100%',
           transition: '0.3s ease-in-out',
@@ -460,7 +461,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           },
         },
         secondary: {
-          color: 'font.dark',
+          color: 'white',
           background: 'background.button.secondary',
           boxShadow: '0 3px 20px hsla(33, 58%, 76%, 0.4)',
           _hover: {
@@ -473,7 +474,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
         },
         tertiary: {
           background: 'background.level3',
-          color: 'font.primary',
+          color: 'white',
           shadow: 'md',
           _hover: {
             shadow: 'sm',
@@ -517,6 +518,9 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           borderColor: 'purple.200',
           color: 'black',
         },
+        aggButton: {
+          backgroundColor: '#00FFE9',
+        },
         buttonGroupInactive: {
           backgroundColor: 'transparent',
           height: 'fit-content',
@@ -551,7 +555,7 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           },
         },
         buttonGroupActive: {
-          background: 'background.button.secondary',
+          backgroundColor: '#00FFE9',
           height: 'fit-content',
           width: 'fit-content',
           px: '2',
@@ -564,7 +568,8 @@ export function getComponents(tokens: any, primaryTextColor: string) {
             transform: 'none',
           },
           _dark: {
-            color: 'background.level3',
+            color: 'black',
+            backgroundColor: '#00FFE9',
           },
         },
         buttonGroupActiveGray: {
@@ -985,9 +990,9 @@ export function getComponents(tokens: any, primaryTextColor: string) {
           rounded: 'md',
           alignItems: 'center',
           "&[data-status='info']": {
-            background: 'var(--chakra-colors-purple-200)',
+            background: '#00FFE940',
             _dark: {
-              backgroundColor: 'var(--chakra-colors-purple-300)',
+              backgroundColor: '#00FFE940',
             },
           },
           "&[data-status='warning']": {

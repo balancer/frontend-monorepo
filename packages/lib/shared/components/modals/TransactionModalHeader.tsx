@@ -27,7 +27,7 @@ export function TransactionModalHeader({
         <AnimatePresence initial={false} mode="wait">
           {!txHash || isReceiptLoading ? (
             <>
-              <span>{label}</span>
+              <span style={{ color: 'white' }}>{label}</span>
               {timeout || null}
             </>
           ) : (
@@ -54,11 +54,11 @@ export function TransactionModalHeader({
                 transition={{ duration: 0.8, ease: 'easeInOut' }}
               >
                 <VStack align="start" spacing="none">
-                  <Text fontSize="xl" fontWeight="bold">
+                  <Text color={'white'} fontSize="xl" fontWeight="bold">
                     Transaction confirmed
                   </Text>
                   <HStack spacing="xxs">
-                    <Text color="grayText" fontSize="sm">
+                    <Text color="white" fontSize="sm">
                       View details on explorer
                     </Text>
                     <Link

@@ -42,8 +42,27 @@ export function FocussedActionLayout({
             onClick={e => e.stopPropagation()}
             position="relative"
             shadow="lg"
-            variant="level1"
+            backgroundColor={'transparent'}
           >
+            <div
+              style={{
+                inset: 0,
+                position: 'fixed',
+                zIndex: -1,
+                overflow: 'hidden',
+              }}
+            >
+              <img
+                src="/ellipse-home.png"
+                alt=""
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'top',
+                }}
+              />
+            </div>
             <FocussedActionNav chain={chain} redirectPath={redirectPath} />
             {children}
           </Card>

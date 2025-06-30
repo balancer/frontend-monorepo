@@ -96,7 +96,7 @@ export function UserSnapshotValues() {
                 </Heading>
                 <Text
                   _groupHover={{ opacity: '1' }}
-                  color="font.link"
+                  color="white"
                   cursor="pointer"
                   fontSize="sm"
                   opacity="0"

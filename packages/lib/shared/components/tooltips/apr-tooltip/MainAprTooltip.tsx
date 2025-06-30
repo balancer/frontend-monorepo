@@ -176,7 +176,7 @@ function MainAprTooltip({
             >
               {!onlySparkles && (
                 <Text
-                  color={isOpen ? hoverColor : 'font.primary'}
+                  color={isOpen ? hoverColor : '#00FFE9'}
                   noOfLines={2}
                   textAlign="left"
                   textDecoration={isLBP(pool.type) ? 'line-through' : 'none'}
@@ -187,13 +187,14 @@ function MainAprTooltip({
                   {aprLabel ? ' APR' : ''}
                 </Text>
               )}
-              <SparklesIcon
+              {/* <SparklesIcon
                 id={id}
                 isOpen={isOpen}
                 pool={pool}
+                color={""}
                 // hoverColor here is used for the icon and therefore needs to be a color
                 hoverColor={isAprNegative ? 'red' : 'green'}
-              />
+              /> */}
             </HStack>
           </Button>
         </HStack>

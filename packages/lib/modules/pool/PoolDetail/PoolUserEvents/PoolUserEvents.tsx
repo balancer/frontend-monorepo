@@ -54,7 +54,7 @@ function Action({ poolEventType }: { poolEventType: 'Add' | 'Remove' | 'Swap' })
         h="8px"
         w="8px"
       />
-      <Text>{poolEventType}</Text>
+      <Text color={'white'}>{poolEventType}</Text>
     </HStack>
   )
 }
@@ -86,7 +86,7 @@ function PoolEventRow({ poolEvent, usdValue, chain, txUrl }: PoolEventRowProps) 
         <Tokens chain={chain} poolEvent={poolEvent} />
       </GridItem>
       <GridItem area="value" textAlign={{ base: 'left', md: 'right' }}>
-        <Text>{usdValue}</Text>
+        <Text color={'white'}>{usdValue}</Text>
       </GridItem>
       <GridItem area="time" mr="sm">
         <HStack gap="1" justifyContent="flex-end">
@@ -139,7 +139,7 @@ function AddRemoveTokens({
     .map(token => (
       <HStack gap={['xs', 'sm']} key={token.address} mb="sm">
         <TokenIcon address={token.address} alt={token.address} chain={chain} size={24} />
-        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" color={'white'}>
           {fNum('token', token.amount)}
         </Text>
       </HStack>
@@ -153,7 +153,7 @@ function SwapTokens({ swapEvent, chain }: { swapEvent: GqlPoolSwapEventV3; chain
     <>
       <HStack gap={['xs', 'sm']} mb="sm">
         <TokenIcon address={tokenIn.address} alt={tokenIn.address} chain={chain} size={24} />
-        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" color={'white'}>
           {fNum('token', tokenIn.amount)} in
         </Text>
       </HStack>
@@ -165,7 +165,7 @@ function SwapTokens({ swapEvent, chain }: { swapEvent: GqlPoolSwapEventV3; chain
           chain={chain}
           size={24}
         />
-        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+        <Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" color={'white'}>
           {fNum('token', tokenOut.amount)} out
         </Text>
       </HStack>
@@ -237,7 +237,7 @@ export default function PoolUserEvents({
         <VStack alignItems="flex-start" h="full" spacing="md" w="full">
           <Heading
             backgroundClip="text"
-            bg="font.special"
+            sx={{ color: '#00FFE9' }}
             fontWeight="bold"
             lineHeight="34px" // to align with 'My liquidity'
             size="h5"

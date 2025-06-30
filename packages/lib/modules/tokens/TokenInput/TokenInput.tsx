@@ -61,7 +61,9 @@ function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputS
     <Button
       cursor={onToggleTokenClicked ? 'pointer' : 'default'}
       onClick={() => onToggleTokenClicked?.()}
-      variant={tokenConfig.variant}
+      backgroundColor={'#1E1E1E'}
+      border={'0.9px solid'}
+      borderColor={'#444444'}
     >
       {tokenConfig && tokenConfig.showIcon && (
         <Box mr="sm">
@@ -70,7 +72,7 @@ function TokenInputSelector({ token, weight, onToggleTokenClicked }: TokenInputS
       )}
       {tokenConfig && tokenConfig.label}
       {weight && (
-        <Text fontSize="sm" fontWeight="normal" ml="sm">
+        <Text color={'white'} fontSize="sm" fontWeight="normal" ml="sm">
           {fNum('weight', weight)}
         </Text>
       )}
@@ -240,8 +242,9 @@ export const TokenInput = forwardRef(
 
     return (
       <Box
-        bg="background.level0"
-        border="white"
+        bg="#050512CC"
+        border="1px solid"
+        borderColor={'#00FFE9'}
         borderRadius="md"
         boxShadow={boxShadow}
         p={['ms', 'md']}
@@ -257,6 +260,7 @@ export const TokenInput = forwardRef(
                   outline: 'none',
                   border: '0px solid transparent',
                   boxShadow: 'none',
+                  color: '#00FFE9',
                 }}
                 _hover={{
                   border: '0px solid transparent',
@@ -286,9 +290,10 @@ export const TokenInput = forwardRef(
                 type="number"
                 step="any"
                 value={value}
+                color={'#00FFE9'}
                 {...inputProps}
               />
-              {token && (
+              {/* {token && (
                 <Box
                   bgGradient="linear(to-r, transparent, background.level0 70%)"
                   h="full"
@@ -298,7 +303,7 @@ export const TokenInput = forwardRef(
                   w="8"
                   zIndex={9999}
                 />
-              )}
+              )} */}
             </Box>
 
             <InputRightAddon bg="transparent" border="none" p="0" pl="1">

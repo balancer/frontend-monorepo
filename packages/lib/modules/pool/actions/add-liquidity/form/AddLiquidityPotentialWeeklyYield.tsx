@@ -28,10 +28,10 @@ export function AddLiquidityPotentialWeeklyYield({ weeklyYield, totalUsdValue }:
         w="full"
       >
         <VStack align="start" spacing="sm">
-          <Text fontSize="sm" fontWeight="500" lineHeight="16px" variant="special">
+          <Text fontSize="sm" fontWeight="500" lineHeight="16px" color={'#00FFE9CC'}>
             Potential weekly yield
           </Text>
-          <Text fontSize="md" fontWeight="700" lineHeight="16px" variant="special">
+          <Text fontSize="md" fontWeight="700" lineHeight="16px" color={'#00FFE9'}>
             {weeklyYield ? toCurrency(weeklyYield, { abbreviated: false }) : '-'}
           </Text>
         </VStack>

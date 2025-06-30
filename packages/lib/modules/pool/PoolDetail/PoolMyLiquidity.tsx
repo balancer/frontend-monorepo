@@ -277,7 +277,13 @@ export default function PoolMyLiquidity() {
           justifyContent="space-between"
           width="full"
         >
-          <Heading backgroundClip="text" bg="font.special" fontWeight="bold" size="h5">
+          <Heading
+            color={'white'}
+            backgroundClip="text"
+            sx={{ color: '#00FFE9' }}
+            fontWeight="bold"
+            size="h5"
+          >
             My liquidity
           </Heading>
           <ButtonGroup

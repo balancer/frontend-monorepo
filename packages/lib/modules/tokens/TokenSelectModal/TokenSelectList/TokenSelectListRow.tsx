@@ -66,7 +66,7 @@ export function TokenSelectListRow({
           </Box>
           <VStack align="start" height="full" justify="center" maxW="full" spacing="none">
             <HStack spacing="xxs">
-              <Text color={active ? 'font.link' : 'font.primary'} fontWeight="bold">
+              <Text color={active ? '#00FFE9' : 'white'} fontWeight="bold">
                 {token.symbol}
               </Text>
               <Box onClick={e => e.stopPropagation()}>
