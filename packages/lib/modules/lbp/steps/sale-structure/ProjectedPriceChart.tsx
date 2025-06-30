@@ -5,6 +5,7 @@ import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { buildMarkline, LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
 import { LbpPrice } from '../../pool/usePriceInfo'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 type Props = {
   startDate: Date
@@ -15,6 +16,7 @@ type Props = {
 }
 
 export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices, cutTime }: Props) {
+  const { isMobile } = useBreakpoints()
   const priceData = dividePrices(prices, cutTime)
 
   setTimeout(() => {
@@ -27,6 +29,7 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
     grid: {
       top: '10%',
       bottom: '10%',
+      containLabel: isMobile,
     },
     xAxis: {
       show: true,
