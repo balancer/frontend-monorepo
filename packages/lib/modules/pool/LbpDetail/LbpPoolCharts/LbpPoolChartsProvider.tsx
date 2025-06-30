@@ -30,7 +30,7 @@ export function useLbpPoolChartsLogic() {
     ? `Sale: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} remaining`
     : `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
 
-  const { prices, isLoading } = usePriceInfo(pool.chain, pool.id as Address)
+  const { prices, hourlyData, isLoading } = usePriceInfo(pool.chain, pool.id as Address)
 
   const currentPrice = getCurrentPrice(prices)
   const hasPrices = prices.length > 0
@@ -38,6 +38,7 @@ export function useLbpPoolChartsLogic() {
   return {
     salePeriodText,
     prices,
+    hourlyData: hourlyData || [],
     isLoading,
     startTime,
     endTime,

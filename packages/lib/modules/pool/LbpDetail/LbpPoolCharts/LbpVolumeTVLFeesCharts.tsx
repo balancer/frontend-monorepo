@@ -1,185 +1,180 @@
-import { differenceInDays, format, isAfter, isBefore } from 'date-fns'
-import ReactECharts, { EChartsOption } from 'echarts-for-react'
-import * as echarts from 'echarts/core'
-import { fNum } from '@repo/lib/shared/utils/numbers'
-import { LabelFormatterParams, dividePrices, range } from '@repo/lib/shared/utils/chart.helper'
-import { Skeleton, Stack, Text } from '@chakra-ui/react'
-import { LbpPrice } from '@repo/lib/modules/lbp/pool/usePriceInfo'
+/* eslint-disable react-hooks/exhaustive-deps */
+import * as React from 'react'
+import ReactECharts from 'echarts-for-react'
+import { LbpPrice, HourlyDataPoint } from '@repo/lib/modules/lbp/pool/usePriceInfo'
+import { PoolChartTab } from '../../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
+import {
+  getDefaultPoolChartOptions,
+  PoolChartTypeOptions,
+} from '@repo/lib/modules/pool/PoolDetail/PoolStats/PoolCharts/PoolChartsProvider'
+import {
+  ColorMode,
+  Skeleton,
+  Stack,
+  Text,
+  theme as defaultTheme,
+  useTheme as useChakraTheme,
+} from '@chakra-ui/react'
+import { useTheme as useNextTheme } from 'next-themes'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { useMemo } from 'react'
 
-type Props = {
-  startDate: Date
-  endDate: Date
-  onPriceChange?: (prices: LbpPrice[]) => void
-  prices: LbpPrice[]
-  cutTime?: Date
+interface Props {
+  chartType: PoolChartTab
+  hourlyData: HourlyDataPoint[]
   isLoading?: boolean
+  prices: LbpPrice[]
 }
 
+type SupportedPoolChartTab = PoolChartTab.VOLUME | PoolChartTab.TVL | PoolChartTab.FEES
+
 export function LbpVolumeTVLFeesCharts({
-  startDate,
-  endDate,
-  onPriceChange,
-  prices,
-  cutTime,
-  isLoading,
+  chartType,
+  hourlyData = [],
+  isLoading = false,
+  prices = [],
 }: Props) {
-  const priceData = dividePrices(prices, cutTime)
+  const theme = useChakraTheme()
+  const { toCurrency } = useCurrency()
+  const { theme: nextTheme } = useNextTheme()
 
-  setTimeout(() => {
-    if (onPriceChange) onPriceChange(prices)
-  })
-
-  const priceRange = range(prices.map(item => item.projectTokenPrice))
-
-  const chartInfo: EChartsOption = {
-    grid: {
-      top: '10%',
-      bottom: '10%',
-    },
-    xAxis: {
-      show: true,
-      type: 'value',
-      axisLine: { show: false },
-      splitLine: { show: false },
-      axisTick: { show: false },
-      min: startDate.getTime(),
-      max: endDate.getTime(),
-      interval: 24 * 60 * 60 * 1000,
-      axisLabel: {
-        formatter: (value: number) => {
-          const daysDiff = differenceInDays(new Date(value), startDate)
-          return `Day ${daysDiff}`
-        },
+  const poolChartTypeOptions: Record<SupportedPoolChartTab, PoolChartTypeOptions> = {
+    [PoolChartTab.VOLUME]: {
+      type: 'bar',
+      color: {
+        type: 'linear',
+        x: 0,
+        y: 0,
+        x2: 0,
+        y2: 1,
+        colorStops: [
+          {
+            offset: 0,
+            color: theme.semanticTokens.colors.chart.pool.bar.volume.from,
+          },
+          {
+            offset: 1,
+            color: theme.semanticTokens.colors.chart.pool.bar.volume.to,
+          },
+        ],
       },
+      hoverColor: defaultTheme.colors.pink[500],
     },
-    yAxis: {
-      show: true,
-      type: 'value',
-      axisLine: { show: false },
-      splitLine: { show: false },
-      axisTick: { show: false },
-      axisLabel: {
-        formatter: (value: number) => {
-          return `$${value}`
-        },
-      },
-    },
-    series: [
-      {
-        id: 'launch-token-price',
-        name: '',
-        type: 'line',
-        data: priceData.data,
-        lineStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-            { offset: 0, color: '#B3AEF5' },
-            { offset: 0.33, color: '#D7CBE7' },
-            { offset: 0.66, color: '#E5C8C8' },
-            { offset: 1, color: '#EAA879' },
-          ]),
-          width: 2,
-          join: 'round',
-          cap: 'round',
-        },
-        showSymbol: false,
-        markLine: {
-          silent: true,
-          symbol: 'none',
-          data: [
-            { yAxis: priceRange.max },
-            { yAxis: 0 },
+    [PoolChartTab.TVL]: {
+      type: 'line',
+      color: defaultTheme.colors.blue[600],
+      hoverBorderColor: defaultTheme.colors.pink[500],
+      hoverColor: defaultTheme.colors.gray[900],
+      areaStyle: {
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
             {
-              yAxis: priceRange.max / 2,
+              offset: 0,
+              color: 'rgba(14, 165, 233, 0.08)',
+            },
+            {
+              offset: 1,
+              color: 'rgba(68, 9, 236, 0)',
             },
           ],
-          lineStyle: {
-            type: 'dashed',
-            color: 'grey',
-            width: 1,
-          },
-          label: {
-            show: false,
-          },
         },
       },
-      {
-        id: 'launch-token-price-after-cut-time',
-        name: '',
-        type: 'line',
-        data: priceData.dataAfterCutTime,
-        lineStyle: {
-          type: [2, 3],
-          color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-            { offset: 0, color: '#B3AEF5' },
-            { offset: 0.33, color: '#D7CBE7' },
-            { offset: 0.66, color: '#E5C8C8' },
-            { offset: 1, color: '#EAA879' },
-          ]),
-          width: 2,
-          join: 'round',
-          cap: 'round',
-        },
-        showSymbol: false,
-      },
-    ],
+    },
+    [PoolChartTab.FEES]: {
+      type: 'bar',
+      color: defaultTheme.colors.yellow[400],
+      hoverColor: defaultTheme.colors.pink[500],
+    },
   }
 
-  if (cutTime && isAfter(cutTime, startDate) && isBefore(cutTime, endDate)) {
-    const percentage =
-      (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
+  const getChartData = (): Array<[number, number]> => {
+    if ((!hourlyData || !hourlyData.length) && chartType !== PoolChartTab.PRICE) {
+      return []
+    }
 
-    chartInfo.series.push({
-      id: 'cut-time',
+    switch (chartType) {
+      case PoolChartTab.VOLUME:
+        return hourlyData.map(item => [item.timestamp, item.volume])
+      case PoolChartTab.FEES:
+        return hourlyData.map(item => [item.timestamp, item.fees])
+      case PoolChartTab.TVL:
+      default:
+        return hourlyData.map(item => [item.timestamp, item.tvl])
+    }
+  }
+
+  const chartData = getChartData()
+  const defaultChartOptions = getDefaultPoolChartOptions(toCurrency, nextTheme as ColorMode, theme)
+
+  const option = useMemo(() => {
+    const activeTabOptions = poolChartTypeOptions[chartType as SupportedPoolChartTab] || {
       type: 'line',
-      data: [
-        [cutTime, 0],
-        [cutTime, priceRange.max * 1.05],
+      color: defaultTheme.colors.blue[500],
+      hoverColor: defaultTheme.colors.pink[500],
+    }
+
+    return {
+      ...defaultChartOptions,
+      series: [
+        {
+          type: activeTabOptions.type,
+          data: chartData,
+          smooth: true,
+          symbol: 'none',
+          lineStyle: {
+            width: 2,
+          },
+          itemStyle: {
+            color: activeTabOptions.color,
+            borderRadius: 100,
+          },
+          emphasis: {
+            itemStyle: {
+              color: activeTabOptions.hoverColor,
+              borderColor: activeTabOptions.hoverBorderColor,
+            },
+          },
+          areaStyle: activeTabOptions.areaStyle,
+          animationEasing: function (k: number) {
+            return k === 1 ? 1 : 1 - Math.pow(2, -10 * k)
+          },
+        },
       ],
-      lineStyle: {
-        color: 'grey',
-        type: 'dashed',
-        width: 1,
-        cap: 'round',
-        join: 'round',
-      },
-      label: {
-        show: true,
-        position: percentage < 0.8 ? 'right' : 'left',
-        formatter: (value: LabelFormatterParams) => {
-          if (value.data[1] === priceRange.max * 1.05) {
-            return `{progressFormat|${fNum('priceImpact', percentage)} complete}\n{dateFormat|${format(cutTime, 'h:mmaaa, dd/MM/yyyy')}}`
-          } else return ''
-        },
-        backgroundColor: '#57616f',
-        padding: 3,
-        borderRadius: 2,
-        shadowColor: '#1A000000',
-        shadowBlur: 2,
-        shadowOffsetX: 1,
-        shadowOffsetY: 1,
-        rich: {
-          progressFormat: {
-            color: '#25E2A4',
-            fontWeight: 'bold',
-            padding: 2,
-          },
-          dateFormat: {
-            color: '#A0AEC0',
-            padding: 2,
-          },
-        },
-      },
-      showSymbol: true,
-    })
+    }
+  }, [chartType, chartData, defaultChartOptions])
+
+  const hasData = React.useMemo(() => {
+    return chartType === PoolChartTab.PRICE
+      ? prices.length > 0
+      : (hourlyData?.length ?? 0) > 0 && chartData.length > 0
+  }, [chartType, prices.length, hourlyData, chartData.length])
+
+  if (isLoading) {
+    return <Skeleton h="280px" w="full" />
   }
 
-  return isLoading ? (
-    <Skeleton h="280px" w="full" />
-  ) : prices.length > 0 ? (
-    <ReactECharts option={chartInfo} style={{ height: '280px', width: '100%' }} />
-  ) : (
-    <Stack alignItems="center" h="280px" justifyContent="center">
-      <Text fontSize="3xl">Missing data</Text>
-    </Stack>
+  if (!hasData) {
+    return (
+      <Stack alignItems="center" h="280px" justifyContent="center">
+        <Text color="font.secondary" fontSize="lg">
+          No {chartType.replace('LBP_', '').toLowerCase()} data available
+        </Text>
+      </Stack>
+    )
+  }
+
+  return (
+    <div style={{ height: '280px', width: '100%' }}>
+      <ReactECharts
+        option={option}
+        opts={{ renderer: 'canvas' }}
+        style={{ height: '100%', width: '100%' }}
+      />
+    </div>
   )
 }

@@ -44,7 +44,7 @@ export const poolChartPeriods: PoolChartPeriod[] = [
 ]
 
 // Define a simpler type for gradients
-type ChartColor =
+export type ChartColor =
   | string
   | {
       type: 'linear'
