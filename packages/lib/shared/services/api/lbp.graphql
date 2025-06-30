@@ -13,8 +13,8 @@ fragment LBPPriceChartData on LBPPriceChartData {
   volume
 }
 
-query GetLbpPriceInfo($chain: GqlChain!, $poolId: String!) {
-  prices: lbpPriceChart(chain: $chain, id: $poolId) {
+query GetLbpPriceInfo($chain: GqlChain!, $poolId: String!, $dataPoints: Int!) {
+  prices: lbpPriceChart(chain: $chain, id: $poolId, dataPoints: $dataPoints) {
     ...LBPPriceChartData
   }
 }

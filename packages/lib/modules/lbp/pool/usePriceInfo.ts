@@ -19,6 +19,7 @@ export function usePriceInfo(chain: GqlChain, poolId: Address) {
     variables: {
       poolId: poolId.toLowerCase(),
       chain,
+      dataPoints: 5000,
     },
   })
 
