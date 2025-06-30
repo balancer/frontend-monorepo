@@ -45,6 +45,7 @@ export enum RiskKey {
   Gnosis = 'gnosis',
   Base = 'base',
   Avalanche = 'avalanche',
+  HyperEVM = 'hyperevm',
   Mutable = 'mutable-attributes-risk',
   Composability = 'composability-risk',
   RateProvider = 'rate-provider-risk',
@@ -73,6 +74,7 @@ export const RISK_TITLES: Partial<Record<RiskKey, string>> = {
   [RiskKey.Gnosis]: 'Sidechain network risks: Gnosis',
   [RiskKey.Base]: 'L2 network risks: Base',
   [RiskKey.Avalanche]: 'L1 network risks: Avalanche',
+  [RiskKey.HyperEVM]: 'L1 network risks: HyperEVM',
   [RiskKey.Mutable]: 'Mutable attributes risks',
   [RiskKey.Composability]: 'Composability risks',
   [RiskKey.RateProvider]: 'Rate provider risks',
@@ -116,6 +118,7 @@ const optimismRisks = getLink(RiskKey.Optimism)
 const gnosisRisks = getLink(RiskKey.Gnosis)
 const baseRisks = getLink(RiskKey.Base)
 const avalancheRisks = getLink(RiskKey.Avalanche)
+const hyperEvmRisks = getLink(RiskKey.HyperEVM)
 const mutableRisks = getLink(RiskKey.Mutable)
 const nestedPoolRisks = getLink(RiskKey.NestedPool)
 const hookRisks = getLink(RiskKey.Hook)
@@ -144,38 +147,30 @@ export function getPoolRisks(pool: GqlPoolElement): Risk[] {
   if (pool.chain === GqlChain.Gnosis) result.push(gnosisRisks)
   if (pool.chain === GqlChain.Base) result.push(baseRisks)
   if (pool.chain === GqlChain.Avalanche) result.push(avalancheRisks)
+  if (pool.chain === GqlChain.Hyperevm) result.push(hyperEvmRisks)
   if (hasNestedPools(pool)) result.push(nestedPoolRisks)
   if (hasHooks(pool)) result.push(hookRisks)
   if (hasHookType(pool, GqlHookType.StableSurge)) result.push(stableSurgeHookRisks)
   if (hasHookType(pool, GqlHookType.MevTax)) result.push(mevCaptureHookRisks)
-  if (hasOwner(pool)) result.push(mutableRisks)
+  if (isMutable(pool)) result.push(mutableRisks)
 
   result.push(getLink(RiskKey.General))
 
   return result
 }
 
-function hasOwner(pool: GqlPoolElement) {
-  return !['', zeroAddress].includes(pool?.owner ? pool.owner.toString() : '')
+function isMutable(pool: GqlPoolElement) {
+  return (
+    !isEmpty(pool.swapFeeManager || '') ||
+    !isEmpty(pool.pauseManager || '') ||
+    !isEmpty(pool.poolCreator || '')
+  )
+}
+
+function isEmpty(address: string) {
+  return ['', zeroAddress].includes(address)
 }
 
 export function risksTitle() {
-  //   return `Liquidity Providers in this pool${alsoWhenSpecificRisks(pool)} face the following risks:`
   return `Liquidity providers in this pool face the following risks:`
 }
-
-// function alsoWhenSpecificRisks(pool: GqlPoolElement) {
-//   if (poolSpecificRisks(pool).length > 0) return ' also'
-//   return ''
-// }
-
-// TODO: should be pulled from API
-// export function poolSpecificRisks(pool: GqlPoolElement): Risk[] {
-//   const risks = POOLS?.Risks?.[pool.id.toLowerCase()]
-
-//   if (risks) {
-//     return risks.map(risk => getLink(risk))
-//   }
-
-//   return []
-// }

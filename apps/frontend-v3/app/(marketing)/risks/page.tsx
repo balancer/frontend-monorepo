@@ -1797,6 +1797,13 @@ export default function Privacy() {
               </p>
             </div>
           </FadeInOnView>
+          <FadeInOnView>
+            <div className="subsection">
+              <h4 className="anchor" id="hyperevm">
+                HyperEVM risks
+              </h4>
+            </div>
+          </FadeInOnView>
         </div>
       </Prose>
     </Container>
