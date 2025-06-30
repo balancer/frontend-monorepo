@@ -1,5 +1,5 @@
 import { isAfter, isBefore } from 'date-fns'
-import { Divider, HStack, Text, VStack } from '@chakra-ui/react'
+import { Divider, HStack, Text, VStack, Box } from '@chakra-ui/react'
 import { ProjectedPriceChart } from '@repo/lib/modules/lbp/steps/sale-structure/ProjectedPriceChart'
 import { max } from '@repo/lib/modules/lbp/pool/usePriceInfo'
 import { fNum } from '@repo/lib/shared/utils/numbers'
@@ -19,22 +19,22 @@ export function LbpPriceChart() {
       />
       <Divider />
       <HStack mt="2" w="full">
-        <hr
-          style={{
-            width: '15px',
-            border: '1px solid',
-            borderColor: 'linear-gradient(90deg, #194D05 0%, #30940A 100%)',
-          }}
-        />
-        <Text>{`Spot price`}</Text>
-        <hr
-          style={{
-            width: '15px',
-            border: '1px dashed',
-            borderColor: 'linear-gradient(90deg, #194D05 0%, #30940A 100%)',
-          }}
-        />
-        <Text>{`Projected price with no buys`}</Text>
+        <Box bgGradient="linear(to-r, #B3AEF5, #EAA879)" height="2px" width="15px" />
+        <Text>Spot price</Text>
+        <Box height="2px" overflow="hidden" position="relative" width="15px">
+          <Box
+            bgGradient="linear(to-r, #B3AEF5, #EAA879)"
+            inset="0"
+            position="absolute"
+            style={{
+              maskImage:
+                'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)',
+              WebkitMaskImage:
+                'repeating-linear-gradient(to right, black 0, black 3px, transparent 3px, transparent 6px)',
+            }}
+          />
+        </Box>
+        <Text>Projected price with no buys</Text>
         <Text color="font.secondary" fontSize="sm" ml="auto">
           {salePeriodText}
         </Text>
