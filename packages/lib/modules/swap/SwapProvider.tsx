@@ -176,6 +176,11 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
   const tokenInUsd = usdValueForToken(tokenInInfo, swapState.tokenIn.amount)
   const tokenOutUsd = usdValueForToken(tokenOutInfo, swapState.tokenOut.amount)
 
+  const lbpToken = isLbpSwap ? lbpPool.poolTokens[lbpPool.projectTokenIndex] : undefined
+
+  const isLbpProjectTokenBuy =
+    isLbpSwap && lbpToken && swapState.tokenOut.address === lbpToken.address
+
   const getSwapAmount = () => {
     const swapState = swapStateVar()
     return (
@@ -490,6 +495,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   const isWrap = swapAction === 'wrap' || swapAction === 'unwrap'
 
+  console.log({ lbpToken })
+
   /**
    * Step construction
    */
@@ -500,10 +507,12 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     simulationQuery,
     wethIsEth,
     swapAction,
-    tokenInInfo,
+    tokenInInfo:
+      isLbpSwap && !isLbpProjectTokenBuy && lbpToken ? (lbpToken as ApiToken) : tokenInInfo,
     tokenOutInfo,
     isPoolSwap: !!isPoolSwap,
     isLbpSwap: !!isLbpSwap,
+    isLbpProjectTokenBuy: !!isLbpProjectTokenBuy,
   })
 
   const transactionSteps = useTransactionSteps(steps, isLoadingSteps)
@@ -675,11 +684,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     [simulationQuery.isError, 'Error fetching swap'],
     [simulationQuery.isLoading, 'Fetching swap...']
   )
-
-  const lbpToken = isLbpSwap ? lbpPool.poolTokens[lbpPool.projectTokenIndex] : undefined
-
-  const isLbpProjectTokenBuy =
-    isLbpSwap && lbpToken && swapState.tokenOut.address === lbpToken.address
 
   return {
     ...swapState,

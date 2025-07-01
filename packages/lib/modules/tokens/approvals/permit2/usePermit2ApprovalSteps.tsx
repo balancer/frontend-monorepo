@@ -120,6 +120,8 @@ export function usePermit2ApprovalSteps({
       lpToken,
     })
 
+    console.log({ labels })
+
     // Check if the token has been approved
     const isComplete = () => {
       const isNotExpired = !!expirations && expirations[tokenAddress] > getNowTimestampInSecs()

@@ -84,6 +84,8 @@ export function useTokenApprovalSteps({
     skipAllowanceCheck: isUnwrappingNative,
   })
 
+  console.log({ _approvalAmounts })
+
   const steps: TransactionStep[] = tokenAmountsToApprove.map((tokenAmountToApprove, index) => {
     const {
       tokenAddress,

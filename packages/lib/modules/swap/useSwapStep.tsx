@@ -27,6 +27,7 @@ export type SwapStepParams = BuildSwapQueryParams & {
   tokenInInfo: ApiToken | undefined
   tokenOutInfo: ApiToken | undefined
   isLbpSwap: boolean
+  isLbpProjectTokenBuy: boolean
 }
 
 export function useSwapStep({
@@ -38,6 +39,7 @@ export function useSwapStep({
   tokenInInfo,
   tokenOutInfo,
   isLbpSwap,
+  isLbpProjectTokenBuy,
 }: SwapStepParams): TransactionStep {
   const { isConnected } = useUserAccount()
   const [isBuildQueryEnabled, setIsBuildQueryEnabled] = useState(false)
@@ -59,13 +61,21 @@ export function useSwapStep({
   const tokenOutSymbol = tokenOutInfo?.symbol || 'Unknown'
 
   const labels: TransactionLabels = isLbpSwap
-    ? {
-        init: 'Buy',
-        title: 'Buy',
-        confirming: 'Confirming buy...',
-        confirmed: 'Buy confirmed!',
-        tooltip: `Buy ${tokenOutSymbol}`,
-      }
+    ? isLbpProjectTokenBuy
+      ? {
+          init: 'Buy',
+          title: 'Buy',
+          confirming: 'Confirming buy...',
+          confirmed: 'Buy confirmed!',
+          tooltip: `Buy ${tokenOutSymbol}`,
+        }
+      : {
+          init: 'Sell',
+          title: 'Sell',
+          confirming: 'Confirming sell...',
+          confirmed: 'Sell confirmed!',
+          tooltip: `Sell ${tokenInSymbol}`,
+        }
     : {
         init: capitalize(swapAction),
         title: capitalize(swapAction),

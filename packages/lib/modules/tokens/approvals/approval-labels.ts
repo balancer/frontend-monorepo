@@ -9,6 +9,7 @@ export type ApprovalAction =
   | 'Unapprove'
   | 'Unwrapping'
   | 'Buying'
+  | 'Selling'
 
 export type TokenApprovalLabelArgs = {
   actionType: ApprovalAction
