@@ -26,11 +26,11 @@ import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithErro
 import { isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
 import { getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
-import { Clipboard, Edit } from 'react-feather'
+import { Clipboard, Edit, Percent } from 'react-feather'
 import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
 import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useLbpForm } from '../LbpFormProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -152,6 +152,12 @@ export function SaleStructureStep() {
                 watch={watch}
               />
               <UserActionsInput control={control} />
+              <FeeSelection
+                control={control}
+                errors={errors}
+                feeValue={saleStructureData.fee}
+                setFormValue={setValue}
+              />
 
               <Divider />
 
@@ -394,6 +400,74 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
           </RadioGroup>
         )}
       />
+    </VStack>
+  )
+}
+
+function FeeSelection({
+  control,
+  errors,
+  feeValue,
+  setFormValue,
+}: {
+  control: Control<SaleStructureForm>
+  errors: FieldErrors<SaleStructureForm>
+  feeValue: number
+  setFormValue: UseFormSetValue<SaleStructureForm>
+}) {
+  const [value, setValue] = useState('minimum')
+
+  useEffect(() => {
+    if (feeValue !== 1.0) setValue('custom')
+  }, [feeValue])
+
+  const isBiggerThanMinimum = (fee: number) => {
+    if (fee < 1) return 'LBP swap fees must be set at or above 1.00%'
+    return true
+  }
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">LBP swap fees (50% share with Balancer DAO)</Text>
+      <RadioGroup
+        onChange={(value: string) => {
+          setValue(value)
+          if (value === 'minimum') setFormValue('fee', 1.0)
+        }}
+        value={value}
+      >
+        <Stack direction="row">
+          <Radio value="minimum">1.00%</Radio>
+          <Radio value="custom">Custom</Radio>
+        </Stack>
+      </RadioGroup>
+
+      {value === 'custom' && (
+        <InputGroup>
+          <Controller
+            control={control}
+            name="fee"
+            render={({ field }) => (
+              <InputWithError
+                error={errors[field.name]?.message}
+                info="Minimum fee is 1.00%"
+                isInvalid={!!errors[field.name]}
+                onChange={e => field.onChange(e.target.value)}
+                step=".01"
+                type="number"
+                value={field.value}
+              />
+            )}
+            rules={{
+              required: 'Swap fee is required',
+              validate: isBiggerThanMinimum,
+            }}
+          />
+          <InputRightElement>
+            <Percent size="20" />
+          </InputRightElement>
+        </InputGroup>
+      )}
     </VStack>
   )
 }
