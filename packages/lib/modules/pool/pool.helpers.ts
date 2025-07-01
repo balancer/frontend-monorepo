@@ -4,6 +4,7 @@ import {
   GqlHookType,
   GqlPoolBase,
   GqlPoolGyro,
+  GqlPoolLiquidityBootstrappingV3,
   GqlPoolNestingType,
   GqlPoolStakingGauge,
   GqlPoolStakingOtherGauge,
@@ -98,8 +99,8 @@ export function isLBP(poolType: GqlPoolType): boolean {
   return isLiquidityBootstrapping(poolType)
 }
 
-export function isV3LBP(pool: Pool): boolean {
-  return isV3Pool(pool) && isLiquidityBootstrapping(pool.type)
+export function isV3LBP(pool: Pool): pool is GqlPoolLiquidityBootstrappingV3 {
+  return pool.__typename === 'GqlPoolLiquidityBootstrappingV3'
 }
 
 export function isWeighted(poolType: GqlPoolType): boolean {
