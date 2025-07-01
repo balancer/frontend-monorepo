@@ -67,7 +67,7 @@ export function useCreateLbpStep(): TransactionStep {
   const { name, owner } = projectInfoForm.watch()
 
   const receiptProps = usePoolCreationReceipt({
-    txHash: transaction?.execution?.data,
+    txHash: transaction?.result?.data?.transactionHash,
     chain: selectedChain,
     userAddress: userAddress,
     protocolVersion: 3 as const,
