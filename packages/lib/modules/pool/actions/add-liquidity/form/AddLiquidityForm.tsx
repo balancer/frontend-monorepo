@@ -179,7 +179,7 @@ function AddLiquidityMainForm() {
                 slippage={slippage}
               />
             ) : (
-              <TransactionSettings size="sm" />
+              <TransactionSettings size="xs" />
             )}
           </HStack>
         </CardHeader>

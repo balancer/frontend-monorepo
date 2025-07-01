@@ -73,7 +73,7 @@ export function LbpPreview() {
 
           {tokenLoaded && (
             <>
-              <HStack w="full">
+              <HStack alignItems="stretch" w="full">
                 <SimpleInfoCard
                   info={`$${fNum('fiat', maxPrice)}`}
                   title={`${launchTokenMetadata.symbol} start price`}

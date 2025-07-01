@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import {
   GetLbpPriceInfoDocument,
   GqlChain,
-  LbpPriceChartData,
+  LbpPriceChartDataFragment,
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { isAfter, isBefore, isSameHour, isWithinInterval, secondsToMilliseconds } from 'date-fns'
 import { bn } from '@repo/lib/shared/utils/numbers'
@@ -30,7 +30,7 @@ export function usePriceInfo(chain: GqlChain, poolId: Address) {
   }
 }
 
-function toLbpPrices(apiPrices: LbpPriceChartData[]): LbpPrice[] {
+function toLbpPrices(apiPrices: LbpPriceChartDataFragment[]): LbpPrice[] {
   return apiPrices.map(price => {
     return {
       timestamp: new Date(secondsToMilliseconds(price.timestamp)),

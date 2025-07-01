@@ -5,6 +5,7 @@ import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { buildMarkline, LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
 import { LbpPrice } from '../../pool/usePriceInfo'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 type Props = {
   startDate: Date
@@ -15,6 +16,7 @@ type Props = {
 }
 
 export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices, cutTime }: Props) {
+  const { isMobile } = useBreakpoints()
   const priceData = dividePrices(prices, cutTime)
 
   setTimeout(() => {
@@ -27,6 +29,7 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
     grid: {
       top: '10%',
       bottom: '10%',
+      containLabel: isMobile,
     },
     xAxis: {
       show: true,
@@ -101,6 +104,9 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
   }
 
   if (cutTime && isAfter(cutTime, startDate) && isBefore(cutTime, endDate)) {
+    const percentage =
+      (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
+
     chartInfo.series.push({
       id: 'cut-time',
       type: 'line',
@@ -117,11 +123,9 @@ export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices,
       },
       label: {
         show: true,
-        position: 'right',
+        position: percentage < 0.8 ? 'right' : 'left',
         formatter: (value: LabelFormatterParams) => {
           if (value.data[1] === priceRange.max * 1.05) {
-            const percentage =
-              (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
             return `{progressFormat|${fNum('priceImpact', percentage)} complete}\n{dateFormat|${format(cutTime, 'h:mmaaa, dd/MM/yyyy')}}`
           } else return ''
         },

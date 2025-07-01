@@ -35,6 +35,7 @@ export type BasePermit2Params = {
   chainId: number
   signPermit2Fn: SignPermit2Fn
   spender: Address
+  isComplete?: boolean
 }
 export function useSignPermit2({
   tokenAmountsIn,

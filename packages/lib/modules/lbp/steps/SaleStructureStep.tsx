@@ -187,6 +187,89 @@ export function SaleStructureStep() {
           </>
         )}
 
+        <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
+
+        {launchTokenIsValid && (
+          <>
+            <Divider />
+
+            <Heading color="font.maxContrast" size="md">
+              Sale period
+            </Heading>
+
+            <VStack align="start" spacing="sm" w="full">
+              <DateTimeInput
+                control={control}
+                errors={errors}
+                label="Start date and time"
+                name="startTime"
+              />
+              <DateTimeInput
+                control={control}
+                errors={errors}
+                label="End date and time"
+                min={saleStart}
+                name="endTime"
+              />
+              <Text color="font.secondary" fontSize="xs">
+                {saleStart && saleEnd
+                  ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
+                  : 'Suggested sale period: 5 days'}
+              </Text>
+            </VStack>
+
+            <Divider />
+
+            <Heading color="font.maxContrast" size="md">
+              LBP mechanism
+            </Heading>
+            <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
+            <WeightAdjustmentTypeInput
+              collateralTokenSymbol={collateralToken?.symbol || ''}
+              control={control}
+              launchTokenSymbol={launchTokenMetadata.symbol || ''}
+              setValue={setValue}
+              watch={watch}
+            />
+            <UserActionsInput control={control} />
+
+            <Divider />
+
+            <VStack align="start" spacing="sm" w="full">
+              <Heading color="font.maxContrast" size="md">
+                Seed initial pool liquidity
+              </Heading>
+              <Text color="font.secondary">
+                The starting liquidity in the pool. The amounts and ratio will determine the
+                starting price, projected market cap and price curve.
+              </Text>
+            </VStack>
+
+            <TokenInputsValidationProvider>
+              {/* TODO: Decouple PriceImpactProvider from Token input, it shouldn't be a dependency. */}
+              <PriceImpactProvider>
+                {collateralToken && (
+                  <TokenBalancesProvider extTokens={[collateralToken]}>
+                    <SaleTokenAmountInput
+                      control={control}
+                      errors={errors}
+                      launchToken={launchToken}
+                      selectedChain={selectedChain}
+                    />
+                    <CollateralTokenAmountInput
+                      collateralTokenAddress={collateralTokenAddress}
+                      collateralTokenSymbol={collateralToken?.symbol || ''}
+                      control={control}
+                      errors={errors}
+                      selectedChain={selectedChain}
+                    />
+                  </TokenBalancesProvider>
+                )}
+              </PriceImpactProvider>
+            </TokenInputsValidationProvider>
+          </>
+        )}
+
         <LbpFormAction disabled={!isValid} />
       </VStack>
     </form>
@@ -248,7 +331,7 @@ function LaunchTokenAddressInput({
 
   useEffect(() => {
     if (value) triggerValidation('launchTokenAddress')
-  }, [metadata.symbol, value, triggerValidation])
+  }, [metadata.isLoading, value, triggerValidation])
 
   return (
     <VStack align="start" w="full">

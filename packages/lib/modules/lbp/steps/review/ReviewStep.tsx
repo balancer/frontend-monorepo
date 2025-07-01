@@ -87,7 +87,7 @@ export function ReviewStep() {
         </VStack>
       </Card>
 
-      <HStack w="full">
+      <HStack alignItems="stretch" w="full">
         {
           // FIXME: [JUANJO] use localized dates
         }
