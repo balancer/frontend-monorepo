@@ -91,22 +91,9 @@ export function useCreateLbpStep(): TransactionStep {
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress, selectedChain)
   const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, selectedChain)
 
-  const hasRequiredValues =
-    !!launchTokenSymbol &&
-    !!reserveTokenSymbol &&
-    !!name &&
-    !!chainId &&
-    !!userAddress &&
-    !!launchTokenAddress &&
-    !!reserveTokenAddress &&
-    !!projectTokenStartWeight &&
-    !!reserveTokenStartWeight &&
-    !!projectTokenEndWeight &&
-    !!reserveTokenEndWeight &&
-    !!startTime &&
-    !!endTime
+  const isValidFormStates = saleStructureForm.formState.isValid && projectInfoForm.formState.isValid
 
-  const createPoolInput = hasRequiredValues
+  const createPoolInput = isValidFormStates
     ? {
         protocolVersion: 3 as const,
         poolType: PoolType.LiquidityBootstrapping,
