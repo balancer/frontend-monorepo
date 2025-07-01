@@ -49,6 +49,7 @@ export function useCreateLbpStep(): TransactionStep {
     endTime,
     selectedChain,
     userActions,
+    fee,
   } = saleStructureForm.watch()
 
   const { name, owner } = projectInfoForm.watch()
@@ -100,7 +101,7 @@ export function useCreateLbpStep(): TransactionStep {
         poolType: PoolType.LiquidityBootstrapping,
         symbol: `${launchTokenSymbol}-${collateralTokenSymbol}-LBP`,
         name: `${name} Liquidity Bootstrapping Pool`,
-        swapFeePercentage: parseUnits('0.01', 18), // TODO: confirm default value
+        swapFeePercentage: parseUnits((fee / 100).toString(), 18),
         chainId,
         lbpParams: {
           owner: owner || userAddress,
