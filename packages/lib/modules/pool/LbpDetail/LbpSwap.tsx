@@ -37,8 +37,8 @@ export function LbpSwap() {
   return (
     <SwapLayout props={props}>
       <SwapForm
-        customTokenOut={launchToken}
-        customTokenOutUsdPrice={priceFor(lbpPool.projectToken, pool.chain)}
+        customToken={launchToken}
+        customTokenUsdPrice={priceFor(lbpPool.projectToken, pool.chain)}
         hasDisabledInputs={isBeforeSaleStart}
         nextButtonText={
           isBeforeSaleStart

@@ -280,6 +280,7 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     })
     setTokenInAmount('', { userTriggered: false })
     setTokenOutAmount('', { userTriggered: false })
+    console.log({ swapState })
   }
 
   function setTokenInAmount(
@@ -287,16 +288,34 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     { userTriggered = true }: { userTriggered?: boolean } = {}
   ) {
     const state = swapStateVar()
+
+    const amountObj = isLbpSwap
+      ? {
+          amount: amount,
+          scaledAmount: scaleTokenAmount(
+            amount,
+            lbpPool.poolTokens[lbpPool.projectTokenIndex] as ApiToken
+          ),
+        }
+      : /*
+          When copy-pasting a swap URL with a token amount, the tokenOutInfo can be undefined
+          so we set amount as zero instead of crashing the app
+        */
+        tokenInInfo
+        ? {
+            amount: amount,
+            scaledAmount: scaleTokenAmount(amount, tokenInInfo),
+          }
+        : {
+            amount: '0',
+            scaledAmount: 0n,
+          }
+
     const newState = {
       ...state,
       tokenIn: {
         ...state.tokenIn,
-        /*
-          When copy-pasting a swap URL with a token amount, the tokenInInfo can be undefined
-          so we set amount as zero instead of crashing the app
-        */
-        amount: tokenInInfo ? amount : '0',
-        scaledAmount: tokenInInfo ? scaleTokenAmount(amount, tokenInInfo) : 0n,
+        ...amountObj,
       },
     }
 
@@ -658,6 +677,11 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     [simulationQuery.isLoading, 'Fetching swap...']
   )
 
+  const lbpToken = isLbpSwap ? lbpPool.poolTokens[lbpPool.projectTokenIndex] : undefined
+
+  const isLbpProjectTokenBuy =
+    isLbpSwap && lbpToken && swapState.tokenOut.address === lbpToken.address
+
   return {
     ...swapState,
     selectedChain,
@@ -684,7 +708,8 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     poolActionableTokens,
     protocolVersion,
     isLbpSwap,
-    lbpTokenOut: isLbpSwap ? lbpPool.poolTokens[lbpPool.projectTokenIndex] : undefined,
+    lbpToken,
+    isLbpProjectTokenBuy,
     replaceUrlPath,
     resetSwapAmounts,
     setTokenSelectKey,

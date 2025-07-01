@@ -33,7 +33,8 @@ export function SwapSummary({
     simulationQuery,
     hasQuoteContext,
     isLbpSwap,
-    lbpTokenOut,
+    lbpToken,
+    isLbpProjectTokenBuy,
   } = useSwap()
 
   const expectedTokenOut = simulationQuery?.data?.returnAmount as HumanAmount
@@ -74,6 +75,10 @@ export function SwapSummary({
           label={shouldShowReceipt || isWrapComplete ? 'You paid' : 'You pay'}
           tokenAddress={shouldShowReceipt ? sentToken.tokenAddress : tokenIn.address}
           tokenAmount={shouldShowReceipt ? sentToken.humanAmount : tokenIn.amount}
+          {...(isLbpSwap &&
+            !isLbpProjectTokenBuy && {
+              customToken: lbpToken as CustomToken,
+            })}
         />
       </Card>
 
@@ -88,9 +93,10 @@ export function SwapSummary({
           }
           tokenAddress={shouldShowReceipt ? receivedToken.tokenAddress : tokenOut.address}
           tokenAmount={shouldShowReceipt ? receivedToken.humanAmount : tokenOut.amount}
-          {...(isLbpSwap && {
-            customToken: lbpTokenOut as CustomToken,
-          })}
+          {...(isLbpSwap &&
+            isLbpProjectTokenBuy && {
+              customToken: lbpToken as CustomToken,
+            })}
         />
       </Card>
 

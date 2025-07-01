@@ -39,7 +39,7 @@ import { useIsPoolSwapUrl } from './useIsPoolSwapUrl'
 import { CompactTokenSelectModal } from '../tokens/TokenSelectModal/TokenSelectList/CompactTokenSelectModal'
 import { PoolSwapCard } from './PoolSwapCard'
 import { isSameAddress } from '@repo/lib/shared/utils/addresses'
-import { isPoolSwapAllowed } from '../pool/pool.helpers'
+import { isPoolSwapAllowed, isV3LBP } from '../pool/pool.helpers'
 import { supportsNestedActions } from '../pool/actions/LiquidityActionHelpers'
 import { ApiToken } from '../tokens/token.types'
 import { SwapSimulationError } from './SwapSimulationError'
@@ -49,15 +49,15 @@ type Props = {
   redirectToPoolPage?: () => void // Only used for pool swaps
   hasDisabledInputs?: boolean
   nextButtonText?: string
-  customTokenOut?: ApiToken
-  customTokenOutUsdPrice?: number
+  customToken?: ApiToken
+  customTokenUsdPrice?: number
 }
 export function SwapForm({
   redirectToPoolPage,
   hasDisabledInputs,
   nextButtonText,
-  customTokenOut,
-  customTokenOutUsdPrice,
+  customToken,
+  customTokenUsdPrice,
 }: Props) {
   const isPoolSwapUrl = useIsPoolSwapUrl()
 
@@ -186,7 +186,12 @@ export function SwapForm({
     }
   }
 
-  const iconButtonProps = isLbpSwap
+  const disableLbpProjectTokenBuys =
+    isLbpSwap && pool && isV3LBP(pool) && pool.isProjectTokenSwapInBlocked
+
+  const isLbpProjectTokenBuy = isLbpSwap && customToken && tokenOut.address === customToken.address
+
+  const iconButtonProps = disableLbpProjectTokenBuys
     ? {
         'aria-label': 'To token',
         icon: <ArrowDown size={16} />,
@@ -215,7 +220,7 @@ export function SwapForm({
           <CardHeader as={HStack} justify="space-between" w="full" zIndex={11}>
             <span>
               {isLbpSwap
-                ? `Buy $${customTokenOut?.symbol}`
+                ? `${isLbpProjectTokenBuy ? 'Buy' : 'Sell'} $${customToken?.symbol}`
                 : isPoolSwap
                   ? 'Single pool swap'
                   : capitalize(swapAction)}
@@ -259,6 +264,11 @@ export function SwapForm({
                   {...(!isLbpSwap && {
                     onToggleTokenClicked: () => openTokenSelectModal('tokenIn'),
                   })}
+                  {...(isLbpSwap &&
+                    tokenIn.address === customToken?.address && {
+                      apiToken: customToken,
+                      customUsdPrice: customTokenUsdPrice,
+                    })}
                 />
                 <Box border="red 1px solid" position="relative">
                   <IconButton
@@ -290,16 +300,15 @@ export function SwapForm({
                   {...(!isLbpSwap && {
                     onToggleTokenClicked: () => openTokenSelectModal('tokenOut'),
                   })}
-                  {...(isLbpSwap && {
-                    apiToken: customTokenOut,
-                    customUsdPrice: customTokenOutUsdPrice,
-                  })}
+                  {...(isLbpSwap &&
+                    tokenOut.address === customToken?.address && {
+                      apiToken: customToken,
+                      customUsdPrice: customTokenUsdPrice,
+                    })}
                 />
               </VStack>
               <PriceImpactAccordion
-                accordionButtonComponent={
-                  <SwapRate customTokenOutUsdPrice={customTokenOutUsdPrice} />
-                }
+                accordionButtonComponent={<SwapRate customTokenUsdPrice={customTokenUsdPrice} />}
                 accordionPanelComponent={<SwapDetails />}
                 isDisabled={!simulationQuery.data}
                 setNeedsToAcceptPIRisk={setNeedsToAcceptHighPI}

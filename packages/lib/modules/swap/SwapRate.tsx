@@ -6,9 +6,9 @@ import { useTokens } from '../tokens/TokensProvider'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { GqlSorSwapType } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function SwapRate({ customTokenOutUsdPrice }: { customTokenOutUsdPrice?: number }) {
+export function SwapRate({ customTokenUsdPrice }: { customTokenUsdPrice?: number }) {
   const [priceDirection, setPriceDirection] = useState<'givenIn' | 'givenOut'>('givenIn')
-  const { simulationQuery, tokenInInfo, tokenOutInfo, isLbpSwap, lbpTokenOut } = useSwap()
+  const { simulationQuery, tokenInInfo, tokenOutInfo, isLbpSwap, lbpToken } = useSwap()
   const { toCurrency } = useCurrency()
   const { usdValueForToken } = useTokens()
 
@@ -32,18 +32,21 @@ export function SwapRate({ customTokenOutUsdPrice }: { customTokenOutUsdPrice?: 
       ? effectivePriceReversedValue
       : effectivePriceValue
 
-  const tokenInUsdValue = usdValueForToken(tokenInInfo, 1)
-  const tokenOutUsdValue = customTokenOutUsdPrice || usdValueForToken(tokenOutInfo, 1)
-  const tokenOutSymbol = isLbpSwap && lbpTokenOut ? lbpTokenOut.symbol : tokenOutInfo?.symbol
+  const tokenInUsdValue = tokenOutInfo ? customTokenUsdPrice : usdValueForToken(tokenInInfo, 1)
+  const tokenOutUsdValue = tokenInInfo ? customTokenUsdPrice : usdValueForToken(tokenOutInfo, 1)
+  const tokenOutSymbol =
+    isLbpSwap && lbpToken && tokenInInfo ? lbpToken.symbol : tokenOutInfo?.symbol
+  const tokenInSymbol =
+    isLbpSwap && lbpToken && tokenOutInfo ? lbpToken.symbol : tokenInInfo?.symbol
 
   const priceLabel =
     priceDirection === 'givenIn'
-      ? `1 ${tokenInInfo?.symbol} = ${effectivePriceReversed} ${tokenOutSymbol} (${toCurrency(
-          tokenInUsdValue,
+      ? `1 ${tokenInSymbol} = ${effectivePriceReversed} ${tokenOutSymbol} (${toCurrency(
+          tokenInUsdValue || 0,
           { abbreviated: false }
         )})`
       : `1 ${tokenOutSymbol} = ${effectivePrice} ${tokenInInfo?.symbol} (${toCurrency(
-          tokenOutUsdValue,
+          tokenOutUsdValue || 0,
           { abbreviated: false }
         )})`
 

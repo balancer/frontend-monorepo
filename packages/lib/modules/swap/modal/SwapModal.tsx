@@ -51,6 +51,7 @@ export function SwapPreviewModal({
     hasQuoteContext,
     protocolVersion,
     isLbpSwap,
+    isLbpProjectTokenBuy,
   } = useSwap()
 
   const swapReceipt = useSwapReceipt({
@@ -103,7 +104,7 @@ export function SwapPreviewModal({
         <TransactionModalHeader
           chain={selectedChain}
           isReceiptLoading={swapReceipt.isLoading}
-          label={`Review ${isLbpSwap ? 'Buy' : capitalize(swapAction)}`}
+          label={`Review ${isLbpSwap ? (isLbpProjectTokenBuy ? 'Buy' : 'Sell') : capitalize(swapAction)}`}
           timeout={<SwapTimeout />}
           txHash={swapTxHash}
         />
