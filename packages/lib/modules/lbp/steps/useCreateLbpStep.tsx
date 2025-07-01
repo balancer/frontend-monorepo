@@ -91,7 +91,11 @@ export function useCreateLbpStep(): TransactionStep {
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress, selectedChain)
   const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, selectedChain)
 
-  const isValidFormStates = saleStructureForm.formState.isValid && projectInfoForm.formState.isValid
+  const isValidFormStates =
+    saleStructureForm.formState.isValid &&
+    projectInfoForm.formState.isValid &&
+    !!startTime &&
+    !!endTime
 
   const createPoolInput = isValidFormStates
     ? {
