@@ -247,8 +247,6 @@ export const TokenInput = forwardRef(
 
     const boxShadow = hasValidationError(token) ? `0 0 0 1px ${colors.red[500]}` : undefined
 
-    console.log({ token, customUsdPrice })
-
     useEffect(() => {
       if (!isBalancesLoading) {
         validateInput(value || '')

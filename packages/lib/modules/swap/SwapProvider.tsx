@@ -280,7 +280,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
     })
     setTokenInAmount('', { userTriggered: false })
     setTokenOutAmount('', { userTriggered: false })
-    console.log({ swapState })
   }
 
   function setTokenInAmount(
