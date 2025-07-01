@@ -100,7 +100,8 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
         if (isPoolGaugeExpired(vote)) {
           result[vote.id] = '0'
         } else {
-          result[vote.id] = current[vote.id] ? current[vote.id] : vote.gaugeVotes?.userVotes || '0'
+          result[vote.id] =
+            (current[vote.id] ? current[vote.id] : vote.gaugeVotes?.userVotes) || '0'
         }
       }
 
@@ -218,7 +219,7 @@ export function useMyVotesLogic({}: UseMyVotesArgs) {
     (selectedVotingPools.length > 0 &&
       selectedVotingPools.some(votingPool => bn(editVotesWeights[votingPool.id] ?? 0).gt(0))) ||
     votedPools.some(
-      votedPool => !bn(votedPool.gaugeVotes?.userVotes ?? 0).eq(editVotesWeights[votedPool.id])
+      votedPool => !bn(votedPool.gaugeVotes?.userVotes ?? 0).eq(editVotesWeights[votedPool.id] ?? 0)
     )
 
   const hasExceededWeight = getExceededWeight(totalInfo.editVotes || bn(0)).gt(0)

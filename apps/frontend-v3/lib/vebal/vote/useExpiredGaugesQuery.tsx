@@ -43,7 +43,7 @@ export function useExpiredGauges({ gaugeAddresses }: UseExpiredGaugesParams) {
 
     return gaugeAddresses.filter((_gaugeAddress, index) => {
       const isKilled = (expiredGaugesQuery.data ?? [])[index]
-      return isKilled.result
+      return isKilled === undefined ? true : isKilled.result
     })
   }, [expiredGaugesQuery.data, expiredGaugesQuery.isLoading, gaugeAddresses])
 
