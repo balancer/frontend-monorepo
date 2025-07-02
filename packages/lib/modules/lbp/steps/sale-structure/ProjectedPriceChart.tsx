@@ -7,6 +7,7 @@ import { LbpPrice } from '../../pool/usePriceInfo'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { Skeleton, Stack, Text, useTheme as useChakraTheme } from '@chakra-ui/react'
 import { useTheme as useNextTheme } from 'next-themes'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 type Props = {
   startDate: Date
@@ -28,9 +29,9 @@ export function ProjectedPriceChart({
   const { toCurrency } = useCurrency()
   const theme = useChakraTheme()
   const { theme: nextTheme } = useNextTheme()
+  const { isMobile } = useBreakpoints()
 
   const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
-
   const priceData = dividePrices(prices, cutTime)
 
   setTimeout(() => {
@@ -45,6 +46,7 @@ export function ProjectedPriceChart({
       right: '4%',
       top: '10%',
       bottom: '10%',
+      containLabel: isMobile,
     },
     xAxis: {
       show: true,

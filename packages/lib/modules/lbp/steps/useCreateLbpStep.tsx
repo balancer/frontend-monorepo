@@ -24,11 +24,11 @@ import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 export const createLbpStepId = 'create-lbp'
 
 const labels: TransactionLabels = {
-  init: 'Create LBP',
-  title: 'Create LBP',
-  confirming: 'Creating a new LBP',
-  confirmed: 'Created a new LBP',
-  tooltip: 'Create a new LBP',
+  init: 'Create pool',
+  title: 'Create pool',
+  confirming: 'Confirming pool creation...',
+  confirmed: 'Pool creation confirmed!',
+  tooltip: 'Create pool',
 }
 
 export function useCreateLbpStep(): TransactionStep {

@@ -88,6 +88,7 @@ type Executable = {
 // Defines extra details to be nested in the step tracker
 export type StepDetails = {
   gasless: boolean
+  type?: 'Gas transaction' | 'Free signature' | 'Offchain action'
   // Token symbols of the tokens inside a batch approval (i.e. permit2)
   batchApprovalTokens?: string[]
 }

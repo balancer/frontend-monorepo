@@ -12,6 +12,7 @@ import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 export function WeightsChart({
   startWeight,
@@ -26,6 +27,7 @@ export function WeightsChart({
   endDate: Date
   cutTime?: Date
 }) {
+  const { isMobile } = useBreakpoints()
   const { data: launchTokenData, dataAfterCutTime: launchTokenDataAfterCutTime } = interpolateData(
     startWeight,
     endWeight,
@@ -40,6 +42,7 @@ export function WeightsChart({
     grid: {
       top: '5%',
       bottom: '10%',
+      containLabel: isMobile ? true : false,
     },
     xAxis: {
       show: true,

@@ -16,6 +16,10 @@ import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants
 import { PoolCreationModalFooter } from '@repo/lib/shared/components/modals/PoolCreationModalFooter'
 import { ActionModalFooter } from '@repo/lib/shared/components/modals/ActionModalFooter'
 import { Address } from 'viem'
+import { useLbpMetadata } from '../useLbpMetadata'
+import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
+import { getChainId } from '@repo/lib/config/app.config'
+import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
 
 type Props = {
   isOpen: boolean
@@ -41,9 +45,21 @@ export function LbpCreationModal({
     undefined
   )
 
+  const {
+    saveMetadata,
+    error: saveMetadataError,
+    isMetadataSaved,
+    reset: resetSaveMetadata,
+  } = useLbpMetadata()
+
+  const hasAttemptedSaveMetadata = useRef(false)
+  const chainId = getChainId(selectedChain)
+  const { data: isPoolInitialized } = useIsPoolInitialized(chainId, poolAddress)
+
   const handleReset = () => {
-    resetLbpCreation()
     transactionSteps.resetTransactionSteps()
+    resetLbpCreation()
+    resetSaveMetadata()
     onClose()
   }
 
@@ -62,7 +78,35 @@ export function LbpCreationModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [poolAddress])
 
-  const isSuccess = !!initLbpTxHash || !!urlTxHash
+  useEffect(() => {
+    const handleSaveMetadata = async () => {
+      if (isPoolInitialized && !isMetadataSaved && !hasAttemptedSaveMetadata.current) {
+        hasAttemptedSaveMetadata.current = true
+        try {
+          await saveMetadata()
+        } catch (error) {
+          console.error('Error saving metadata:', error)
+        }
+      }
+    }
+    handleSaveMetadata()
+  }, [isPoolInitialized, isMetadataSaved, saveMetadata])
+
+  if (saveMetadataError && !transactionSteps.steps.some(step => step.id === 'save-metadata')) {
+    transactionSteps.steps.push({
+      id: 'save-metadata',
+      stepType: 'sendLbpMetadata' as const,
+      details: {
+        gasless: true,
+        type: 'Offchain action',
+      },
+      labels: { init: 'Save metadata', title: 'Save metadata', tooltip: 'Save metadata' },
+      isComplete: () => isMetadataSaved,
+      renderAction: () => undefined,
+    })
+  }
+
+  const isSuccess = !!isPoolInitialized && isMetadataSaved
 
   return (
     <Modal
@@ -100,9 +144,7 @@ export function LbpCreationModal({
                 isDisabled={false}
                 isLoading={false}
                 marginTop="4"
-                onClick={() => {
-                  redirectToPoolPage()
-                }}
+                onClick={() => window.open(path, '_blank')}
                 size="lg"
                 variant="secondary"
                 w="full"
@@ -114,16 +156,58 @@ export function LbpCreationModal({
                   </Text>
                 </HStack>
               </Button>
+              <Button
+                isDisabled={false}
+                isLoading={false}
+                marginTop="2"
+                onClick={handleReset}
+                size="lg"
+                variant="primary"
+                w="full"
+                width="full"
+              >
+                <HStack justifyContent="center" spacing="sm" width="100%">
+                  <Text color="font.primaryGradient" fontWeight="bold">
+                    Create another LBP
+                  </Text>
+                </HStack>
+              </Button>
+            </VStack>
+          )}
+
+          {!!saveMetadataError && (
+            <VStack marginTop="4" spacing="3" width="full">
+              <BalAlert
+                content="The pool has been created and seeded onchain. However, there was an error syncing the metadata to the Balancer API. Your pool will not display on the Balancer UI until the sync is completed."
+                status="error"
+                title="Error syncing metadata"
+              />
+              <Button
+                isDisabled={false}
+                isLoading={false}
+                onClick={saveMetadata}
+                size="lg"
+                variant="secondary"
+                w="full"
+              >
+                <HStack justifyContent="center" spacing="sm" width="100%">
+                  <Text color="font.primaryGradient" fontWeight="bold">
+                    Retry sync metadata
+                  </Text>
+                </HStack>
+              </Button>
             </VStack>
           )}
         </ModalBody>
-        <ActionModalFooter
-          currentStep={transactionSteps.currentStep}
-          isSuccess={isSuccess}
-          returnAction={redirectToPoolPage}
-          returnLabel="View pool page"
-          urlTxHash={urlTxHash}
-        />
+        {!saveMetadataError && (
+          <ActionModalFooter
+            currentStep={transactionSteps.currentStep}
+            isSuccess={isSuccess}
+            returnAction={redirectToPoolPage}
+            returnLabel="View pool page"
+            urlTxHash={urlTxHash}
+          />
+        )}
         {!isSuccess && <PoolCreationModalFooter onReset={handleReset} />}
       </ModalContent>
     </Modal>

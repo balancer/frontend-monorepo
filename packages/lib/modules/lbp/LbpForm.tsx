@@ -17,13 +17,15 @@ import { useLbpForm } from './LbpFormProvider'
 import { SaleStructureStep } from './steps/SaleStructureStep'
 import { ProjectInfoStep } from './steps/ProjectInfoStep'
 import { ReviewStep } from './steps/review/ReviewStep'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 export function LbpForm() {
   const { steps, activeStepIndex, activeStep } = useLbpForm()
+  const { isMobile } = useBreakpoints()
 
   return (
     <VStack spacing="lg" w="full">
-      <Stepper index={activeStepIndex} w="full">
+      <Stepper index={activeStepIndex} orientation={isMobile ? 'vertical' : 'horizontal'} w="full">
         {steps.map(step => (
           <Step key={step.id}>
             <StepIndicator>

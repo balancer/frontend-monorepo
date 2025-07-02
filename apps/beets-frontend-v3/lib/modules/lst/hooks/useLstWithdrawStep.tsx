@@ -1,7 +1,7 @@
 'use client'
 
 import { getChainId } from '@repo/lib/config/app.config'
-import networkConfigs from '@repo/lib/config/networks'
+import { getNetworkConfig } from '@repo/lib/config/networks'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
   ManagedResult,
@@ -52,7 +52,7 @@ export function useLstWithdrawStep(
     labels,
     chainId: getChainId(chain),
     contractId: 'beets.lstStaking',
-    contractAddress: networkConfigs[chain].contracts.beets?.lstStakingProxy || '',
+    contractAddress: getNetworkConfig(chain).contracts.beets?.lstStakingProxy || '',
     functionName: 'withdraw',
     args: [withdrawId || 0n, false],
     enabled: isConnected && enabled && !!withdrawId,
