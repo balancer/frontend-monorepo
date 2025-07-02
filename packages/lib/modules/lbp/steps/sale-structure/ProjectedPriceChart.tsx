@@ -5,6 +5,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { LabelFormatterParams, dividePrices, range } from '@repo/lib/shared/utils/chart.helper'
 import { Skeleton, Stack, Text } from '@chakra-ui/react'
 import { LbpPrice } from '../../pool/usePriceInfo'
+import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 
 type Props = {
   startDate: Date
@@ -23,6 +24,8 @@ export function ProjectedPriceChart({
   cutTime,
   isLoading,
 }: Props) {
+  const { toCurrency } = useCurrency()
+
   const priceData = dividePrices(prices, cutTime)
 
   setTimeout(() => {
@@ -62,7 +65,7 @@ export function ProjectedPriceChart({
       axisTick: { show: false },
       axisLabel: {
         formatter: (value: number) => {
-          return `$${value}`
+          return toCurrency(value)
         },
       },
     },
