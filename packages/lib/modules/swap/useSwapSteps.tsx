@@ -69,8 +69,6 @@ export function useSwapSteps({
       ? 'Unwrapping'
       : 'Swapping'
 
-  console.log({ tokenInAmounts })
-
   const { isLoading: isLoadingTokenApprovalSteps, steps: tokenApprovalSteps } =
     useTokenApprovalSteps({
       spenderAddress: isPermit2 ? permit2Address(chain) : vaultAddress,
