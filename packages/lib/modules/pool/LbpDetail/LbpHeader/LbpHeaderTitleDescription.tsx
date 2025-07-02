@@ -15,7 +15,7 @@ export function LbpHeaderTitleDescription() {
   const socialLinks = [
     {
       iconType: 'x',
-      href: `https://twitter.com/${lbpPool.x}`,
+      href: lbpPool.x ? `https://twitter.com/${lbpPool.x}` : undefined,
     },
     {
       iconType: 'discord',

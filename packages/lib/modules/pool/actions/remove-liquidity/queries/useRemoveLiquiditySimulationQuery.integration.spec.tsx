@@ -9,6 +9,7 @@ import { RemoveLiquidityType } from '../remove-liquidity.types'
 import { useRemoveLiquiditySimulationQuery } from './useRemoveLiquiditySimulationQuery'
 import { Address } from 'viem'
 import { connectWithDefaultUser } from '@repo/test/utils/wagmi/wagmi-connections'
+import { AMOUNT_LOWER_THRESHOLD } from '@repo/lib/shared/utils/numbers'
 
 async function testQuery(humanBptIn: HumanAmount) {
   const handler = selectRemoveLiquidityHandler(
@@ -48,5 +49,5 @@ test('runs preview query for proportional remove liquidity', async () => {
   const wethOutUnits = toHumanAmount(wethAmountOut)
 
   expect(Number(wjOutUnits)).toBeGreaterThan(1800)
-  expect(Number(wethOutUnits)).toBeGreaterThan(0.1)
+  expect(Number(wethOutUnits)).toBeGreaterThan(AMOUNT_LOWER_THRESHOLD)
 })

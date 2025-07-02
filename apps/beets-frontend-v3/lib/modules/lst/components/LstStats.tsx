@@ -9,7 +9,7 @@ import { useGetStakedSonicData } from '../hooks/useGetStakedSonicData'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useTokens } from '@repo/lib/modules/tokens/TokensProvider'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
-import networkConfigs from '@repo/lib/config/networks'
+import { getNetworkConfig } from '@repo/lib/config/networks'
 import { Address } from 'viem'
 
 const CHAIN = GqlChain.Sonic
@@ -59,7 +59,7 @@ function GlobalStatsCard({
 }
 
 export function LstStats() {
-  const lstAddress = (networkConfigs[CHAIN].contracts.beets?.lstStakingProxy || '') as Address
+  const lstAddress = (getNetworkConfig(CHAIN).contracts.beets?.lstStakingProxy || '') as Address
   const { getToken, usdValueForToken } = useTokens()
   const lstToken = getToken(lstAddress, CHAIN)
   const { toCurrency } = useCurrency()
