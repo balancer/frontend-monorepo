@@ -495,8 +495,6 @@ export function useSwapLogic({ poolActionableTokens, pool, pathParams }: SwapPro
 
   const isWrap = swapAction === 'wrap' || swapAction === 'unwrap'
 
-  console.log({ lbpToken })
-
   /**
    * Step construction
    */

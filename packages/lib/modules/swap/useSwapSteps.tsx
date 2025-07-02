@@ -50,8 +50,6 @@ export function useSwapSteps({
 
   const swapRequiresRelayer = handler.name === 'AuraBalSwapHandler'
 
-  console.log({ tokenInInfo })
-
   const humanAmountIn = swapState.tokenIn.amount
 
   const tokenInAmounts = useMemo(() => {
