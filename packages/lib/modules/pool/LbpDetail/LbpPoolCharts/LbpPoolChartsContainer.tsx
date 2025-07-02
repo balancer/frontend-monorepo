@@ -1,4 +1,4 @@
-import { Card, HStack } from '@chakra-ui/react'
+import { Card, HStack, Box } from '@chakra-ui/react'
 import {
   PoolChartTab,
   PoolChartTabsProvider,
@@ -9,6 +9,7 @@ import ButtonGroup from '@repo/lib/shared/components/btns/button-group/ButtonGro
 import { LbpPriceChart, PriceInfo } from './LbpPriceChart'
 import { LbpPoolChartsProvider, useLbpPoolCharts } from './LbpPoolChartsProvider'
 import { LbpVolumeTVLFeesCharts } from './LbpVolumeTVLFeesCharts'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export function LbpPoolChartsContainer() {
   return (
@@ -25,7 +26,7 @@ function PoolChartsContent() {
   const { hourlyData, hasHourlyData, isLoading } = useLbpPoolCharts()
 
   return (
-    <Card h="420px">
+    <Card>
       <HStack align="start" h="full" justifyContent="space-between" w="full">
         <ButtonGroup
           currentOption={activeTab}
@@ -36,16 +37,38 @@ function PoolChartsContent() {
         />
         {activeTab.value === PoolChartTab.PRICE && <PriceInfo />}
       </HStack>
-      {activeTab.value === PoolChartTab.PRICE ? (
-        <LbpPriceChart />
-      ) : (
-        <LbpVolumeTVLFeesCharts
-          chartType={activeTab.value}
-          hasHourlyData={hasHourlyData}
-          hourlyData={hourlyData}
-          isLoading={isLoading}
-        />
-      )}
+      <Box
+        h={activeTab.value === PoolChartTab.PRICE ? '325px' : '340px'}
+        overflow="hidden"
+        position="relative"
+        w="full"
+      >
+        <AnimatePresence mode="wait">
+          {activeTab.value === PoolChartTab.PRICE ? (
+            <motion.div
+              animate={{ x: '0%' }}
+              exit={{ x: '-100%' }}
+              initial={{ x: '100%' }}
+              key={activeTab.value}
+              style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+              }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <LbpPriceChart />
+            </motion.div>
+          ) : (
+            <LbpVolumeTVLFeesCharts
+              chartType={activeTab.value}
+              hasHourlyData={hasHourlyData}
+              hourlyData={hourlyData}
+              isLoading={isLoading}
+            />
+          )}
+        </AnimatePresence>
+      </Box>
     </Card>
   )
 }

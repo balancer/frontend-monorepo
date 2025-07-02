@@ -2,12 +2,16 @@
 import * as React from 'react'
 import ReactECharts from 'echarts-for-react'
 import { HourlyDataPoint } from '@repo/lib/modules/lbp/pool/usePriceInfo'
-import { PoolChartTab } from '../../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
+import {
+  PoolChartTab,
+  usePoolChartTabs,
+} from '../../PoolDetail/PoolStats/PoolCharts/PoolChartTabsProvider'
 import {
   getDefaultPoolChartOptions,
   PoolChartTypeOptions,
 } from '@repo/lib/modules/pool/PoolDetail/PoolStats/PoolCharts/PoolChartsProvider'
 import {
+  Box,
   ColorMode,
   Skeleton,
   Stack,
@@ -18,6 +22,7 @@ import {
 import { useTheme as useNextTheme } from 'next-themes'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { useMemo } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface Props {
   chartType: PoolChartTab
@@ -37,6 +42,7 @@ export function LbpVolumeTVLFeesCharts({
   const theme = useChakraTheme()
   const { toCurrency } = useCurrency()
   const { theme: nextTheme } = useNextTheme()
+  const { activeTab } = usePoolChartTabs()
 
   const poolChartTypeOptions: Record<SupportedPoolChartTab, PoolChartTypeOptions> = {
     [PoolChartTab.VOLUME]: {
@@ -120,6 +126,12 @@ export function LbpVolumeTVLFeesCharts({
 
     return {
       ...defaultChartOptions,
+      grid: {
+        left: '7%',
+        right: '4%',
+        top: 0,
+        bottom: '10%',
+      },
       series: [
         {
           type: activeTabOptions.type,
@@ -163,10 +175,23 @@ export function LbpVolumeTVLFeesCharts({
   }
 
   return (
-    <ReactECharts
-      option={option}
-      opts={{ renderer: 'canvas' }}
-      style={{ height: '280px', width: '100%' }}
-    />
+    <Box h="340px" overflow="hidden" position="relative" w="full">
+      <AnimatePresence mode="wait">
+        <motion.div
+          animate={{ x: '0%' }}
+          exit={{ x: '-100%' }}
+          initial={{ x: '100%' }}
+          key={activeTab.value}
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />
+        </motion.div>
+      </AnimatePresence>
+    </Box>
   )
 }
