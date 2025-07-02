@@ -421,8 +421,9 @@ function FeeSelection({
     if (feeValue !== 1.0) setValue('custom')
   }, [feeValue])
 
-  const isBiggerThanMinimum = (fee: number) => {
+  const isInRange = (fee: number) => {
     if (fee < 1) return 'LBP swap fees must be set at or above 1.00%'
+    if (fee > 10) return 'LBP swap fees must be set at or below 10.00%'
     return true
   }
 
@@ -450,7 +451,7 @@ function FeeSelection({
             render={({ field }) => (
               <InputWithError
                 error={errors[field.name]?.message}
-                info="Minimum fee is 1.00%"
+                info="Minimum fee: 1.00% - Maximum fee: 10.00%"
                 isInvalid={!!errors[field.name]}
                 onChange={e => field.onChange(e.target.value)}
                 step=".01"
@@ -460,7 +461,7 @@ function FeeSelection({
             )}
             rules={{
               required: 'Swap fee is required',
-              validate: isBiggerThanMinimum,
+              validate: isInRange,
             }}
           />
           <InputRightElement>
