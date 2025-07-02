@@ -19,7 +19,7 @@ export const NO_RECOVERY_EXIT_POOL_IDS: Record<GqlChain.Mainnet, PoolId[]> = {
   ],
 }
 
-export const CSP_ISSUE_POOL_IDS: Record<GqlChain, PoolId[]> = {
+export const CSP_ISSUE_POOL_IDS: Partial<Record<GqlChain, PoolId[]>> = {
   [GqlChain.Mainnet]: [
     '0x00c2a4be503869fa751c2dbcb7156cc970b5a8da000000000000000000000477',
     '0x02d928e68d8f10c0358566152677db51e1e2dc8c00000000000000000000051e',
