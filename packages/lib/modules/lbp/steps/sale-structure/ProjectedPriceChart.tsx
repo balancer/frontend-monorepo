@@ -33,6 +33,8 @@ export function ProjectedPriceChart({
 
   const chartInfo: EChartsOption = {
     grid: {
+      left: '5%',
+      right: '4%',
       top: '10%',
       bottom: '10%',
     },
