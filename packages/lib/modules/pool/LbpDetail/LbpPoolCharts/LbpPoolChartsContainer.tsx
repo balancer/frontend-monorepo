@@ -26,7 +26,7 @@ function PoolChartsContent() {
 
   return (
     <Card h="420px">
-      <HStack alignSelf="flex-start" justifyContent="space-between" w="full">
+      <HStack align="start" h="full" justifyContent="space-between" w="full">
         <ButtonGroup
           currentOption={activeTab}
           groupId="chart"
