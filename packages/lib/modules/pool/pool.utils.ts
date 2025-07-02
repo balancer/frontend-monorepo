@@ -26,6 +26,7 @@ import {
 } from './pool.types'
 import { Pool } from './pool.types'
 import { isSameAddress } from '@balancer/sdk'
+import { GqlChainValues } from '@repo/lib/config/networks'
 
 // URL slug for each chain
 export enum ChainSlug {
@@ -45,7 +46,7 @@ export enum ChainSlug {
 }
 
 // Maps GraphQL chain enum to URL slug
-export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
+export const chainToSlugMap: Partial<Record<GqlChainValues, ChainSlug>> = {
   [GqlChain.Mainnet]: ChainSlug.Ethereum,
   [GqlChain.Arbitrum]: ChainSlug.Arbitrum,
   [GqlChain.Polygon]: ChainSlug.Polygon,

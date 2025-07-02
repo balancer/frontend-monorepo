@@ -1,7 +1,7 @@
 import { useMulticall } from '../web3/contracts/useMulticall'
 import { AbiMap } from '../web3/contracts/AbiMap'
 import { useUserAccount } from '../web3/UserAccountProvider'
-import networkConfigs from '@repo/lib/config/networks'
+import { getNetworkConfig } from '@repo/lib/config/networks'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { GaugeArg } from './useVebalBoost'
 import { getChainId } from '@repo/lib/config/app.config'
@@ -14,7 +14,7 @@ export function useGaugeTotalSupplyAndUserBalance(gauges: GaugeArg[]) {
     .filter(v => v !== GqlChain.Mainnet && v !== GqlChain.Sepolia)
 
   const vebalTotalSupplyRequests = totalSupplyRequestChains.map(chain => {
-    const address = networkConfigs[chain].contracts.veDelegationProxy
+    const address = getNetworkConfig(chain).contracts.veDelegationProxy
     if (!address) throw new Error('veDelegationProxy address not found on: ' + chain)
 
     return {
@@ -34,7 +34,7 @@ export function useGaugeTotalSupplyAndUserBalance(gauges: GaugeArg[]) {
     .filter(v => v !== GqlChain.Sepolia)
 
   const userVeBALBalanceRequests = userVebalBalanceRequestChains.map(chain => {
-    const address = networkConfigs[chain].contracts.veDelegationProxy
+    const address = getNetworkConfig(chain).contracts.veDelegationProxy
     if (!address) throw new Error('veDelegationProxy address not found on: ' + chain)
     const abi =
       chain === GqlChain.Mainnet

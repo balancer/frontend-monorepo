@@ -1,7 +1,7 @@
 'use client'
 
 import { getChainId } from '@repo/lib/config/app.config'
-import networkConfigs from '@repo/lib/config/networks'
+import { getNetworkConfig } from '@repo/lib/config/networks'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
   ManagedResult,
@@ -36,7 +36,7 @@ export function useClaimRewardsStep(chain: GqlChain, relicId: string | undefined
     labels,
     chainId: getChainId(chain),
     contractId: 'beets.reliquary',
-    contractAddress: networkConfigs[chain].contracts.beets?.reliquary as string,
+    contractAddress: getNetworkConfig(chain).contracts.beets?.reliquary as string,
     functionName: 'harvest',
     args: relicId && userAddress ? [BigInt(relicId), userAddress] : null,
     enabled: isConnected && !!relicId && !!userAddress,
