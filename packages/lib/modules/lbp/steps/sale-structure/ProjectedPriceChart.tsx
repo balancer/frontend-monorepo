@@ -3,9 +3,10 @@ import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { LabelFormatterParams, dividePrices, range } from '@repo/lib/shared/utils/chart.helper'
-import { Skeleton, Stack, Text } from '@chakra-ui/react'
 import { LbpPrice } from '../../pool/usePriceInfo'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
+import { Skeleton, Stack, Text, useTheme as useChakraTheme } from '@chakra-ui/react'
+import { useTheme as useNextTheme } from 'next-themes'
 
 type Props = {
   startDate: Date
@@ -25,6 +26,10 @@ export function ProjectedPriceChart({
   isLoading,
 }: Props) {
   const { toCurrency } = useCurrency()
+  const theme = useChakraTheme()
+  const { theme: nextTheme } = useNextTheme()
+
+  const colorMode = nextTheme === 'dark' ? '_dark' : 'default'
 
   const priceData = dividePrices(prices, cutTime)
 
@@ -55,6 +60,8 @@ export function ProjectedPriceChart({
           const daysDiff = differenceInDays(new Date(value), startDate)
           return `Day ${daysDiff}`
         },
+        color: theme.semanticTokens.colors.font.primary[colorMode],
+        opacity: 0.5,
       },
     },
     yAxis: {
@@ -67,6 +74,8 @@ export function ProjectedPriceChart({
         formatter: (value: number) => {
           return toCurrency(value)
         },
+        color: theme.semanticTokens.colors.font.primary[colorMode],
+        opacity: 0.5,
       },
     },
     series: [
