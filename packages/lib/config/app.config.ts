@@ -36,13 +36,13 @@ export function getNetworkConfig(
   defaultNetwork?: GqlChain
 ): NetworkConfig {
   // cannot get default network directly from config here
-  if (!chain) return config.networks[defaultNetwork || GqlChain.Mainnet]
+  if (!chain) return config.networks[defaultNetwork || GqlChain.Mainnet] as NetworkConfig
 
   if (typeof chain === 'number') {
-    return networksByChainId[chain] || config.networks.MAINNET
+    return networksByChainId[chain] || (config.networks.MAINNET as NetworkConfig)
   }
 
-  return config.networks[chain]
+  return config.networks[chain] || (config.networks.MAINNET as NetworkConfig)
 }
 
 export function getChainId(gqlChain: GqlChain): SupportedChainId {

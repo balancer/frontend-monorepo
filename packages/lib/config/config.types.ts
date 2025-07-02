@@ -6,6 +6,7 @@ import { SupportedWrapHandler } from '../modules/swap/swap.types'
 import { PartnerVariant, PoolDisplayType } from '../modules/pool/pool.types'
 import { AppLink } from '../shared/components/navs/useNav'
 import { LinkSection } from '../shared/components/navs/footer.types'
+import { NetworkConfigs } from './networks'
 
 export interface TokensConfig {
   addresses: {
@@ -111,9 +112,7 @@ export interface NetworkConfig {
 export interface Config {
   appEnv: 'dev' | 'test' | 'staging' | 'prod'
   apiUrl: string
-  networks: {
-    [key in GqlChain]: NetworkConfig
-  }
+  networks: NetworkConfigs
 }
 
 export interface Banners {
