@@ -20,6 +20,7 @@ import { useLocalStorage } from 'usehooks-ts'
 import { LS_KEYS } from '@repo/lib/modules/local-storage/local-storage.constants'
 import { useLbpWeights } from '../useLbpWeights'
 import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
+import { LiquidityActionHelpers } from '@repo/lib/modules/pool/actions/LiquidityActionHelpers'
 
 export const createLbpStepId = 'create-lbp'
 
@@ -52,6 +53,17 @@ export function useCreateLbpStep(): TransactionStep {
     fee,
   } = saleStructureForm.watch()
 
+  const { tokens, chainId } = getNetworkConfig(selectedChain)
+  const wrappedNativeAssetAddress = tokens.addresses.wNativeAsset
+  const helpers = new LiquidityActionHelpers()
+  const isCollateralNativeAsset = helpers.isNativeAsset(collateralTokenAddress as Address)
+
+  // pool must be created with wrapped native asset
+  let reserveTokenAddress = collateralTokenAddress
+  if (isCollateralNativeAsset) {
+    reserveTokenAddress = wrappedNativeAssetAddress
+  }
+
   const { name, owner } = projectInfoForm.watch()
 
   const receiptProps = usePoolCreationReceipt({
@@ -65,7 +77,6 @@ export function useCreateLbpStep(): TransactionStep {
     if (receiptProps.poolAddress) setPoolAddress(receiptProps.poolAddress)
   }, [receiptProps.poolAddress, setPoolAddress])
 
-  const chainId = getNetworkConfig(selectedChain).chainId
   const { buildTenderlyUrl } = useTenderly({ chainId })
 
   const {
@@ -78,49 +89,32 @@ export function useCreateLbpStep(): TransactionStep {
   const blockProjectTokenSwapsIn = userActions === 'buy_only' ? true : false
 
   const { symbol: launchTokenSymbol } = useTokenMetadata(launchTokenAddress, selectedChain)
-  const { symbol: collateralTokenSymbol } = useTokenMetadata(collateralTokenAddress, selectedChain)
+  const { symbol: reserveTokenSymbol } = useTokenMetadata(reserveTokenAddress, selectedChain)
 
-  const hasRequiredValues =
-    launchTokenSymbol &&
-    collateralTokenSymbol &&
-    name &&
-    chainId &&
-    userAddress &&
-    launchTokenAddress &&
-    collateralTokenAddress &&
-    projectTokenStartWeight &&
-    reserveTokenStartWeight &&
-    projectTokenEndWeight &&
-    reserveTokenEndWeight &&
-    startTime &&
-    endTime
-
-  const createPoolInput = hasRequiredValues
-    ? {
-        protocolVersion: 3 as const,
-        poolType: PoolType.LiquidityBootstrapping,
-        symbol: `${launchTokenSymbol}-${collateralTokenSymbol}-LBP`,
-        name: `${name} Liquidity Bootstrapping Pool`,
-        swapFeePercentage: parseUnits((fee / 100).toString(), 18),
-        chainId,
-        lbpParams: {
-          owner: owner || userAddress,
-          blockProjectTokenSwapsIn,
-          projectToken: launchTokenAddress as Address,
-          reserveToken: collateralTokenAddress as Address,
-          projectTokenStartWeight: parseUnits(`${projectTokenStartWeight / 100}`, 18),
-          reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight / 100}`, 18),
-          projectTokenEndWeight: parseUnits(`${projectTokenEndWeight / 100}`, 18),
-          reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight / 100}`, 18),
-          startTime: BigInt(Math.floor(new Date(startTime).getTime() / 1000)),
-          endTime: BigInt(Math.floor(new Date(endTime).getTime() / 1000)),
-        },
-      }
-    : undefined
+  const createPoolInput = {
+    protocolVersion: 3 as const,
+    poolType: PoolType.LiquidityBootstrapping,
+    symbol: `${launchTokenSymbol}-${reserveTokenSymbol}-LBP`,
+    name: `${name} Liquidity Bootstrapping Pool`,
+    swapFeePercentage: parseUnits((fee / 100).toString(), 18),
+    chainId,
+    lbpParams: {
+      owner: owner || userAddress,
+      blockProjectTokenSwapsIn,
+      projectToken: launchTokenAddress as Address,
+      reserveToken: reserveTokenAddress as Address,
+      projectTokenStartWeight: parseUnits(`${projectTokenStartWeight / 100}`, 18),
+      reserveTokenStartWeight: parseUnits(`${reserveTokenStartWeight / 100}`, 18),
+      projectTokenEndWeight: parseUnits(`${projectTokenEndWeight / 100}`, 18),
+      reserveTokenEndWeight: parseUnits(`${reserveTokenEndWeight / 100}`, 18),
+      startTime: BigInt(Math.floor(new Date(startTime).getTime() / 1000)),
+      endTime: BigInt(Math.floor(new Date(endTime).getTime() / 1000)),
+    },
+  }
 
   const buildCallDataQuery = useCreatePoolBuildCall({
     createPoolInput: createPoolInput as CreatePoolLiquidityBootstrappingInput,
-    enabled: isStepActivated && !!createPoolInput,
+    enabled: isStepActivated,
   })
 
   const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in create LBP gas estimation', {

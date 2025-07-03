@@ -360,7 +360,8 @@ function CollateralTokenAddressInput({
   control: Control<SaleStructureForm>
 }) {
   const chainConfig = getNetworkConfig(selectedChain)
-  const collateralTokens = chainConfig?.lbps?.collateralTokens
+  const nativeAsset = chainConfig?.tokens?.nativeAsset?.address
+  const collateralTokens = [...(chainConfig?.lbps?.collateralTokens || []), nativeAsset]
 
   return (
     <VStack align="start" w="full">
