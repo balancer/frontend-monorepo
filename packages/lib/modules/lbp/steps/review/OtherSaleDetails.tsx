@@ -1,6 +1,13 @@
 import { Card, Heading, List, ListItem, Text, VStack } from '@chakra-ui/react'
+import { fNum } from '@repo/lib/shared/utils/numbers'
 
-export function OtherSaleDetails({ launchTokenSymbol }: { launchTokenSymbol: string }) {
+export function OtherSaleDetails({
+  launchTokenSymbol,
+  fee,
+}: {
+  launchTokenSymbol: string
+  fee: number
+}) {
   return (
     <Card>
       <VStack spacing="4">
@@ -56,10 +63,10 @@ export function OtherSaleDetails({ launchTokenSymbol }: { launchTokenSymbol: str
             w="full"
           >
             <ListItem>
-              Swap fees: 2.00%
+              Swap fees: {fNum('feePercent', fee / 100)}
               <List color="font.secondary" listStylePosition="outside" listStyleType="disc" pl="md">
-                <ListItem>To you (LBP creator): 1.00%</ListItem>
-                <ListItem>To balancer protocol: 1.00%</ListItem>
+                <ListItem>To you (LBP creator): {fNum('feePercent', fee / 200)}</ListItem>
+                <ListItem>To balancer protocol: {fNum('feePercent', fee / 200)}</ListItem>
               </List>
             </ListItem>
           </List>
