@@ -8,10 +8,11 @@ import {
   Spacer,
   Text,
 } from '@chakra-ui/react'
-import { ProjectedPriceChart } from '../sale-structure/ProjectedPriceChart'
+import { interpolatePrices, ProjectedPriceChart } from '../sale-structure/ProjectedPriceChart'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { useState } from 'react'
 import { differenceInDays, differenceInHours, parseISO } from 'date-fns'
+import { LbpPrice, max } from '../../pool/usePriceInfo'
 
 type Props = {
   startTime: string
@@ -22,7 +23,7 @@ type Props = {
   launchTokenSeed: number
   collateralTokenSeed: number
   collateralTokenPrice: number
-  onPriceChange: (prices: number[][]) => void
+  onPriceChange: (prices: LbpPrice[]) => void
 }
 
 export function ProjectedPrice({
@@ -37,9 +38,8 @@ export function ProjectedPrice({
   onPriceChange,
 }: Props) {
   const [maxPrice, setMaxPrice] = useState('')
-  const updateMaxPrice = (prices: number[][]) => {
-    const maxPrice = Math.max(...prices.map(point => point[1]))
-    setMaxPrice(fNum('fiat', maxPrice))
+  const updateMaxPrice = (prices: LbpPrice[]) => {
+    setMaxPrice(fNum('fiat', max(prices)))
   }
 
   const daysDiff = differenceInDays(parseISO(endTime), parseISO(startTime))
@@ -48,6 +48,16 @@ export function ProjectedPrice({
     startTime && endTime
       ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''}`
       : ''
+
+  const prices = interpolatePrices(
+    startWeight,
+    endWeight,
+    parseISO(startTime),
+    parseISO(endTime),
+    launchTokenSeed,
+    collateralTokenSeed,
+    collateralTokenPrice
+  )
 
   return (
     <Card h="450px">
@@ -62,17 +72,13 @@ export function ProjectedPrice({
       </CardHeader>
       <CardBody>
         <ProjectedPriceChart
-          startWeight={startWeight}
-          endWeight={endWeight}
-          startDate={parseISO(startTime)}
           endDate={parseISO(endTime)}
-          launchTokenSeed={launchTokenSeed}
-          collateralTokenSeed={collateralTokenSeed}
-          collateralTokenPrice={collateralTokenPrice}
           onPriceChange={prices => {
             updateMaxPrice(prices)
             onPriceChange(prices)
           }}
+          prices={prices}
+          startDate={parseISO(startTime)}
         />
 
         <Divider />

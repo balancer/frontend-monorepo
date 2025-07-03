@@ -19,18 +19,30 @@ import {
   PoolActivityViewTypeProvider,
   usePoolActivityViewType,
 } from '../PoolActivityViewType/usePoolActivityViewType'
+import {
+  differenceInDays,
+  differenceInHours,
+  isWithinInterval,
+  secondsToMilliseconds,
+} from 'date-fns'
+import { now } from '@repo/lib/shared/utils/time'
+import { usePool } from '../../PoolProvider'
+import { isV3LBP } from '../../pool.helpers'
+import { GqlPoolLiquidityBootstrappingV3 } from '@repo/lib/shared/services/api/generated/graphql'
 
-export function PoolActivity({ showTabs = true }: { showTabs?: boolean }) {
+export function PoolActivity() {
   return (
     <PoolActivityViewTypeProvider>
       <PoolActivityProvider>
-        <Content showTabs={showTabs} />
+        <Content />
       </PoolActivityProvider>
     </PoolActivityViewTypeProvider>
   )
 }
 
-function Content({ showTabs }: { showTabs?: boolean }) {
+function Content() {
+  const { pool } = usePool()
+
   const {
     transactionsLabel,
     activeTab,
@@ -64,6 +76,38 @@ function Content({ showTabs }: { showTabs?: boolean }) {
     },
   }
 
+  const { dataSize } = usePoolActivity()
+  const title = isV3LBP(pool)
+    ? `${dataSize} transaction${dataSize !== 1 ? 's' : ''}`
+    : 'Pool activity'
+
+  let subtitle = transactionsLabel
+  if (isV3LBP(pool)) {
+    const lbpPool = pool as GqlPoolLiquidityBootstrappingV3
+    const currentTime = now()
+    if (
+      isWithinInterval(currentTime, {
+        start: secondsToMilliseconds(lbpPool.startTime),
+        end: secondsToMilliseconds(lbpPool.endTime),
+      })
+    ) {
+      const daysDiff = differenceInDays(currentTime, secondsToMilliseconds(lbpPool.startTime))
+      subtitle = `In last ${daysDiff} days`
+    } else {
+      const daysDiff = differenceInDays(
+        secondsToMilliseconds(lbpPool.endTime),
+        secondsToMilliseconds(lbpPool.startTime)
+      )
+      const hoursDiff =
+        differenceInHours(
+          secondsToMilliseconds(lbpPool.endTime),
+          secondsToMilliseconds(lbpPool.startTime)
+        ) -
+        daysDiff * 24
+      subtitle = `During ${daysDiff} days ${hoursDiff > 0 ? hoursDiff + ' hours' : ''} LBP period`
+    }
+  }
+
   return (
     <Card role="group">
       <Stack
@@ -80,7 +124,7 @@ function Content({ showTabs }: { showTabs?: boolean }) {
             transition="transform 0.2s var(--ease-out-cubic)"
           >
             <Heading fontWeight="bold" size="h5">
-              Pool activity
+              {title}
             </Heading>
           </Box>
           {isChartView &&
@@ -88,12 +132,12 @@ function Content({ showTabs }: { showTabs?: boolean }) {
               <Skeleton height="20px" w="100px" />
             ) : (
               <Text fontSize="sm" fontWeight="medium" variant="secondary">
-                {transactionsLabel}
+                {subtitle}
               </Text>
             ))}
         </VStack>
         <HStack>
-          {showTabs && (
+          {!isV3LBP(pool) && (
             <ButtonGroup
               currentOption={activeTab}
               groupId="pool-activity"

@@ -1,51 +1,35 @@
-import { addHours, differenceInDays, format, isAfter, isBefore, isValid } from 'date-fns'
+import { addHours, differenceInDays, format, isAfter, isBefore } from 'date-fns'
 import ReactECharts, { EChartsOption } from 'echarts-for-react'
 import * as echarts from 'echarts/core'
 import { bn, fNum } from '@repo/lib/shared/utils/numbers'
 import { buildMarkline, LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
+import { LbpPrice } from '../../pool/usePriceInfo'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 type Props = {
-  startWeight: number
-  endWeight: number
   startDate: Date
   endDate: Date
-  launchTokenSeed: number
-  collateralTokenSeed: number
-  collateralTokenPrice: number
-  onPriceChange: (prices: number[][]) => void
+  onPriceChange?: (prices: LbpPrice[]) => void
+  prices: LbpPrice[]
   cutTime?: Date
 }
 
-export function ProjectedPriceChart({
-  startWeight,
-  endWeight,
-  startDate,
-  endDate,
-  launchTokenSeed,
-  collateralTokenSeed,
-  collateralTokenPrice,
-  onPriceChange,
-  cutTime,
-}: Props) {
-  const priceData = interpolateData(
-    startWeight,
-    endWeight,
-    startDate,
-    endDate,
-    launchTokenSeed,
-    collateralTokenSeed,
-    collateralTokenPrice
-  )
+export function ProjectedPriceChart({ startDate, endDate, onPriceChange, prices, cutTime }: Props) {
+  const { isMobile } = useBreakpoints()
+  const priceData = dividePrices(prices, cutTime)
 
-  setTimeout(() => onPriceChange(priceData))
+  setTimeout(() => {
+    if (onPriceChange) onPriceChange(prices)
+  })
 
-  const priceRange = range(priceData.map(point => point[1]))
+  const priceRange = range(prices.map(item => item.projectTokenPrice))
 
   const chartInfo: EChartsOption = {
     grid: {
       top: '10%',
       bottom: '10%',
+      containLabel: isMobile,
     },
     xAxis: {
       show: true,
@@ -83,7 +67,7 @@ export function ProjectedPriceChart({
         id: 'launch-token-price',
         name: '',
         type: 'line' as const,
-        data: priceData,
+        data: priceData.data,
         lineStyle: {
           color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
             { offset: 0, color: '#B3AEF5' },
@@ -101,7 +85,7 @@ export function ProjectedPriceChart({
         id: 'launch-token-price-after-cut-time',
         name: '',
         type: 'line' as const,
-        data: priceData,
+        data: priceData.dataAfterCutTime,
         lineStyle: {
           type: [2, 3],
           color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
@@ -120,6 +104,9 @@ export function ProjectedPriceChart({
   }
 
   if (cutTime && isAfter(cutTime, startDate) && isBefore(cutTime, endDate)) {
+    const percentage =
+      (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
+
     chartInfo.series.push({
       id: 'cut-time',
       type: 'line',
@@ -136,11 +123,9 @@ export function ProjectedPriceChart({
       },
       label: {
         show: true,
-        position: 'right',
+        position: percentage < 0.8 ? 'right' : 'left',
         formatter: (value: LabelFormatterParams) => {
           if (value.data[1] === priceRange.max * 1.05) {
-            const percentage =
-              (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
             return `{progressFormat|${fNum('priceImpact', percentage)} complete}\n{dateFormat|${format(cutTime, 'h:mmaaa, dd/MM/yyyy')}}`
           } else return ''
         },
@@ -167,24 +152,16 @@ export function ProjectedPriceChart({
     })
   }
 
-  const enoughData =
-    startWeight &&
-    endWeight &&
-    isValid(startDate) &&
-    isValid(endDate) &&
-    launchTokenSeed &&
-    collateralTokenSeed
-
-  return enoughData ? (
+  return prices.length > 0 ? (
     <ReactECharts option={chartInfo} style={{ height: '280px', width: '100%' }} />
   ) : (
-    <Stack h="350px" alignItems="center" justifyContent="center">
+    <Stack alignItems="center" h="350px" justifyContent="center">
       <Text fontSize="3xl">Missing data</Text>
     </Stack>
   )
 }
 
-function interpolateData(
+export function interpolatePrices(
   startWeight: number,
   endWeight: number,
   startDate: Date,
@@ -192,7 +169,7 @@ function interpolateData(
   launchTokenSeed: number,
   collateralTokenSeed: number,
   collateralTokenPrice: number
-) {
+): LbpPrice[] {
   const startTimestamp = bn(startDate.getTime())
   const endTimestamp = bn(endDate.getTime())
   const slope = bn(endWeight).minus(startWeight).div(endTimestamp.minus(startTimestamp))
@@ -216,11 +193,11 @@ function interpolateData(
   let currentPoint = startDate
   while (addHours(currentPoint, 1) < endDate) {
     const currentTimestamp = bn(currentPoint.getTime())
-    data.push([currentPoint.getTime(), interpolatePrice(currentTimestamp)])
+    data.push({ timestamp: currentPoint, projectTokenPrice: interpolatePrice(currentTimestamp) })
     currentPoint = addHours(currentPoint, 1)
   }
 
-  data.push([endDate.getTime(), interpolatePrice(endTimestamp)])
+  data.push({ timestamp: endDate, projectTokenPrice: interpolatePrice(endTimestamp) })
 
   return data
 }
@@ -230,4 +207,28 @@ function range(values: number[]) {
     min: Math.min(...values),
     max: Math.max(...values),
   }
+}
+
+function dividePrices(
+  prices: LbpPrice[],
+  cutTime: Date | undefined
+): { data: number[][]; dataAfterCutTime: number[][] } {
+  const data: number[][] = []
+  const dataAfterCutTime: number[][] = []
+
+  prices.forEach(price => {
+    if (cutTime && isBefore(price.timestamp, cutTime)) {
+      data.push([price.timestamp.getTime(), price.projectTokenPrice])
+    } else {
+      dataAfterCutTime.push([price.timestamp.getTime(), price.projectTokenPrice])
+    }
+  })
+
+  if (cutTime && data.length > 0 && dataAfterCutTime.length > 0) {
+    const cutTimePrice = (data[data.length - 1][1] + dataAfterCutTime[0][1]) / 2
+    data.push([cutTime.getTime(), cutTimePrice])
+    dataAfterCutTime.unshift([cutTime.getTime(), cutTimePrice])
+  }
+
+  return { data, dataAfterCutTime }
 }

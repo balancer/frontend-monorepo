@@ -15,6 +15,8 @@ import { useUserAccount } from '../../web3/UserAccountProvider'
 import { isAddress } from 'viem'
 import { PoolDisplayType } from '../pool.types'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
+import { removeHookDataFromPoolIfNecessary } from '../pool.utils'
+import { PoolListItem } from '../pool.types'
 
 export function usePoolListLogic({
   fixedPoolTypes,
@@ -51,6 +53,8 @@ export function usePoolListLogic({
 
   const ALLOWED = new Set(['WETH'])
   pools = pools.filter(pool => pool.poolTokens.some(token => ALLOWED.has(token.symbol)))
+
+  const poolsData = pools.map(pool => removeHookDataFromPoolIfNecessary(pool)) as PoolListItem[]
 
   const isFixedPoolType = !!fixedPoolTypes && fixedPoolTypes.length > 0
 

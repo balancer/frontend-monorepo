@@ -101,7 +101,9 @@ export function useAprTooltip({
   } = PROJECT_CONFIG
 
   const hasVeBalBoost =
-    showVeBal && !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
+    // optimism is the exception here as it's available in the balancer app and beets app
+    (showVeBal || chain === GqlChain.Optimism) &&
+    !!aprItems.find(item => item.type === GqlPoolAprItemType.StakingBoost)
 
   // Swap fees
   const swapFee = aprItems.find(item => item.type === GqlPoolAprItemType.SwapFee_24H)

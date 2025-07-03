@@ -342,15 +342,13 @@ export function getPriceRateForToken(token: ApiToken, pool: Pool) {
     ?.priceRate
 }
 
+// for use with ECLPs
 export function getPriceRateRatio(pool: Pool) {
   const priceRates = getPoolActionableTokens(pool).map(
     (
       token: ApiToken & { priceRate?: string; priceRateProviderData?: GqlPriceRateProviderData }
     ) => {
-      return token.priceRateProviderData &&
-        token.priceRateProviderData.name === 'ConstantRateProvider'
-        ? '1'
-        : token.priceRate
+      return token.useUnderlyingForAddRemove ? token.priceRate : '1'
     }
   )
   return bn(priceRates[0] || '1').div(priceRates[1] || '1')

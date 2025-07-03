@@ -54,10 +54,10 @@ export function LbpPreview() {
                 <Button
                   _hover={{ color: 'font.linkHover' }}
                   color="font.link"
+                  onClick={onOpen}
                   position="relative"
                   top="4px"
                   variant="ghost"
-                  onClick={onOpen}
                 >
                   Get help
                 </Button>
@@ -65,42 +65,42 @@ export function LbpPreview() {
 
               <TokenSummary
                 chain={chain}
-                projectInfoForm={projectInfoForm}
                 launchTokenMetadata={launchTokenMetadata}
+                projectInfoForm={projectInfoForm}
               />
             </>
           )}
 
           {tokenLoaded && (
             <>
-              <HStack w="full">
+              <HStack alignItems="stretch" w="full">
                 <SimpleInfoCard
-                  title={`${launchTokenMetadata.symbol} start price`}
                   info={`$${fNum('fiat', maxPrice)}`}
+                  title={`${launchTokenMetadata.symbol} start price`}
                 />
-                <SimpleInfoCard title="Sale market cap" info={saleMarketCap} />
-                <SimpleInfoCard title="FDV market cap" info={fdvMarketCap} />
+                <SimpleInfoCard info={saleMarketCap} title="Sale market cap" />
+                <SimpleInfoCard info={fdvMarketCap} title="FDV market cap" />
               </HStack>
 
               <PoolWeights
-                startTime={saleStructureData.startTime}
+                collateralToken={getToken(collateralTokenAddress, chain)}
                 endTime={saleStructureData.endTime}
-                startWeight={startWeight}
                 endWeight={endWeight}
                 launchTokenMetadata={launchTokenMetadata}
-                collateralToken={getToken(collateralTokenAddress, chain)}
+                startTime={saleStructureData.startTime}
+                startWeight={startWeight}
               />
 
               <ProjectedPrice
-                startTime={saleStructureData.startTime}
+                collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
+                collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
                 endTime={saleStructureData.endTime}
-                startWeight={startWeight}
                 endWeight={endWeight}
                 launchTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
                 launchTokenSymbol={launchTokenMetadata?.symbol || ''}
-                collateralTokenSeed={Number(saleStructureData.collateralTokenAmount || 0)}
-                collateralTokenPrice={priceFor(collateralTokenAddress, chain)}
                 onPriceChange={updatePriceStats}
+                startTime={saleStructureData.startTime}
+                startWeight={startWeight}
               />
             </>
           )}

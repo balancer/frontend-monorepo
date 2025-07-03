@@ -1,5 +1,5 @@
 import { getChainId } from '@repo/lib/config/app.config'
-import networkConfigs from '@repo/lib/config/networks'
+import { getNetworkConfig } from '@repo/lib/config/networks'
 import { selectStakingService } from '@repo/lib/modules/staking/selectStakingService'
 import { ManagedTransactionButton } from '@repo/lib/modules/transactions/transaction-steps/TransactionButton'
 import {
@@ -84,7 +84,7 @@ export function useClaimAllRewardsStep({
     labels,
     chainId: getChainId(chain),
     contractId: 'balancer.relayerV6',
-    contractAddress: networkConfigs[chain].contracts.balancer.relayerV6,
+    contractAddress: getNetworkConfig(chain).contracts.balancer.relayerV6,
     functionName: 'multicall',
     args: [claimData],
     enabled: allRewardGauges.length > 0 && claimData && claimData.length > 0,

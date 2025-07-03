@@ -108,7 +108,7 @@ export function VoteWeightInput({
             value={getInputValue()}
             {...inputProps}
           />
-          <InputRightElement pointerEvents="none" color="font.primary">
+          <InputRightElement color="font.primary" pointerEvents="none">
             <Box bg="background.level2" p="3px" rounded="sm" shadow="sm">
               <Percent color="currentColor" size="13px" />
             </Box>

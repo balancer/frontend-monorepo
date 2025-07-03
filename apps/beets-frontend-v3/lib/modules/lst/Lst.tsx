@@ -42,7 +42,7 @@ import { DefaultPageContainer } from '@repo/lib/shared/components/containers/Def
 import { GetStakedSonicDataQuery } from '@repo/lib/shared/services/api/generated/graphql'
 import { useCurrency } from '@repo/lib/shared/hooks/useCurrency'
 import { LstStats } from './components/LstStats'
-import networkConfigs from '@repo/lib/config/networks'
+import { getNetworkConfig } from '@repo/lib/config/networks'
 import { GqlChain } from '@repo/lib/shared/services/api/generated/graphql'
 import { Address } from 'viem'
 import { TokenIcon } from '@repo/lib/modules/tokens/TokenIcon'
@@ -312,7 +312,7 @@ function LstInfo({
   stakedSonicData?: GetStakedSonicDataQuery
   isStakedSonicDataLoading: boolean
 }) {
-  const lstAddress = (networkConfigs[CHAIN].contracts.beets?.lstStakingProxy || '') as Address
+  const lstAddress = (getNetworkConfig(CHAIN).contracts.beets?.lstStakingProxy || '') as Address
   const { getToken, usdValueForToken } = useTokens()
   const lstToken = getToken(lstAddress, CHAIN)
   const { toCurrency } = useCurrency()

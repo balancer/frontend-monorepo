@@ -303,7 +303,7 @@ export default function PoolMyLiquidity() {
                 {getTitlePrefix()}
               </Heading>
               <Text fontSize="0.85rem" variant="secondary">
-                Pool share
+                My pool share
               </Text>
             </VStack>
             <VStack alignItems="flex-end">
@@ -410,7 +410,7 @@ export default function PoolMyLiquidity() {
               |
             </Text>
             {isVeBal ? (
-              <Button flex="1" variant="secondary" onClick={() => router.push('/vebal/manage')}>
+              <Button flex="1" onClick={() => router.push('/vebal/manage')} variant="secondary">
                 {lockBtnText}
               </Button>
             ) : (

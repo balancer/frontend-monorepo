@@ -10,7 +10,7 @@ import {
 } from '@repo/lib/shared/services/api/generated/graphql'
 import { Numberish, bn, fNum } from '@repo/lib/shared/utils/numbers'
 import BigNumber from 'bignumber.js'
-import { invert } from 'lodash'
+import { cloneDeep, invert } from 'lodash'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { Address, formatUnits, parseUnits } from 'viem'
 import { TokenAmountHumanReadable } from '../tokens/token.types'
@@ -25,6 +25,8 @@ import {
   PoolCore,
 } from './pool.types'
 import { Pool } from './pool.types'
+import { isSameAddress } from '@balancer/sdk'
+import { GqlChainValues } from '@repo/lib/config/networks'
 
 // URL slug for each chain
 export enum ChainSlug {
@@ -44,7 +46,7 @@ export enum ChainSlug {
 }
 
 // Maps GraphQL chain enum to URL slug
-export const chainToSlugMap: Record<GqlChain, ChainSlug> = {
+export const chainToSlugMap: Partial<Record<GqlChainValues, ChainSlug>> = {
   [GqlChain.Mainnet]: ChainSlug.Ethereum,
   [GqlChain.Arbitrum]: ChainSlug.Arbitrum,
   [GqlChain.Polygon]: ChainSlug.Polygon,
@@ -201,11 +203,12 @@ const poolTypeLabelMap: { [key in GqlPoolType]: string } = {
   [GqlPoolType.ComposableStable]: 'Stable',
   [GqlPoolType.CowAmm]: 'Weighted',
   [GqlPoolType.QuantAmmWeighted]: 'BTF',
-  [GqlPoolType.Reclamm]: 'ReClamm',
+  [GqlPoolType.Reclamm]: 'reCLAMM',
 }
 
 export function getPoolTypeLabel(type: GqlPoolType): string {
-  return poolTypeLabelMap[type] ?? type.replace(/_/g, ' ').toLowerCase()
+  const label = type.replace(/_/g, ' ').toLowerCase()
+  return poolTypeLabelMap[type] ?? label.charAt(0).toUpperCase() + label.slice(1)
 }
 
 export const poolClickHandler = (
@@ -309,4 +312,18 @@ export function shouldHideSwapFee(poolType: GqlPoolType) {
 
 export function shouldCallComputeDynamicSwapFee(pool: Pool) {
   return pool.hook && pool.hook.config?.shouldCallComputeDynamicSwapFee
+}
+
+/**
+ * Removes hook data from pool if the hook address is the same as the pool address.
+ * This is necessary for pools that have a hook with the same address as the pool, these can be ignored in the ui but not in the api
+ */
+export function removeHookDataFromPoolIfNecessary(pool: Pool | PoolListItem) {
+  const clone = cloneDeep(pool)
+
+  if (clone.hook && isSameAddress(clone.hook.address as Address, clone.address as Address)) {
+    delete clone.hook
+  }
+
+  return clone
 }

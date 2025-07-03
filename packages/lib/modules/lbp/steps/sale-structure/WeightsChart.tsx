@@ -12,6 +12,7 @@ import * as echarts from 'echarts/core'
 import { bn } from '@repo/lib/shared/utils/numbers'
 import { buildMarkline, LabelFormatterParams } from '@repo/lib/shared/utils/chart.helper'
 import { Stack, Text } from '@chakra-ui/react'
+import { useBreakpoints } from '@repo/lib/shared/hooks/useBreakpoints'
 
 export function WeightsChart({
   startWeight,
@@ -26,6 +27,7 @@ export function WeightsChart({
   endDate: Date
   cutTime?: Date
 }) {
+  const { isMobile } = useBreakpoints()
   const { data: launchTokenData, dataAfterCutTime: launchTokenDataAfterCutTime } = interpolateData(
     startWeight,
     endWeight,
@@ -40,6 +42,7 @@ export function WeightsChart({
     grid: {
       top: '5%',
       bottom: '10%',
+      containLabel: isMobile ? true : false,
     },
     xAxis: {
       show: true,
@@ -165,6 +168,9 @@ export function WeightsChart({
   }
 
   if (cutTime && isAfter(cutTime, startDate) && isBefore(cutTime, endDate)) {
+    const percentage =
+      (cutTime.getTime() - startDate.getTime()) / (endDate.getTime() - startDate.getTime())
+
     chartInfo.series.push({
       id: 'cut-time',
       type: 'line',
@@ -181,7 +187,7 @@ export function WeightsChart({
       },
       label: {
         show: true,
-        position: 'right',
+        position: percentage < 0.8 ? 'right' : 'left',
         formatter: (value: LabelFormatterParams) => {
           if (value.data[1] === 100)
             return `{labelFormat|${format(cutTime, 'h:mmaaa, dd/MM/yyyy')}}`
@@ -205,7 +211,7 @@ export function WeightsChart({
   return enoughData ? (
     <ReactECharts option={chartInfo} style={{ height: '350px', width: '100%' }} />
   ) : (
-    <Stack h="350px" alignItems="center" justifyContent="center">
+    <Stack alignItems="center" h="350px" justifyContent="center">
       <Text fontSize="3xl">Missing data</Text>
     </Stack>
   )

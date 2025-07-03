@@ -24,10 +24,10 @@ export function RisksList({ textVariant = 'secondary' }: RisksListProps) {
   const risks = getPoolRisks(pool as GqlPoolElement)
   return (
     <VStack alignItems="flex-start" gap="xs">
-      <Text variant={textVariant} mb="0">
+      <Text mb="0" variant={textVariant}>
         {risksTitle()}
       </Text>
-      <UnorderedList ml="5" mb="0.5">
+      <UnorderedList mb="0.5" ml="5">
         {risks.map(risk => (
           <Link
             href={risk.path}

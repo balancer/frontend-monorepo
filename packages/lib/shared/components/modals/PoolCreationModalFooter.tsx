@@ -3,10 +3,10 @@ import { ModalFooter, Text, HStack } from '@chakra-ui/react'
 export function PoolCreationModalFooter({ onReset }: { onReset: () => void }) {
   return (
     <ModalFooter>
-      <HStack width="full" justify="center">
+      <HStack justify="center" width="full">
         <Text
-          cursor="pointer"
           _hover={{ textDecoration: 'underline' }}
+          cursor="pointer"
           onClick={() => {
             onReset()
           }}

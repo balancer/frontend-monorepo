@@ -128,8 +128,8 @@ export function VoteListFilters() {
                         </Heading>
                         <PoolNetworkFilters
                           setNetworks={setNetworks}
-                          toggleNetwork={toggleNetwork}
                           toggledNetworks={toggledNetworks}
+                          toggleNetwork={toggleNetwork}
                         />
                       </Box>
                       <Box as={motion.div} variants={staggeredFadeInUp}>

@@ -12,8 +12,12 @@ import sepolia from './sepolia'
 import mode from './mode'
 import fraxtal from './fraxtal'
 import sonic from './sonic'
+import { NetworkConfig } from '../config.types'
 
-const networkConfigs = {
+export type GqlChainValues = `${GqlChain}`
+export type NetworkConfigs = Partial<Record<GqlChainValues, NetworkConfig>>
+
+const networkConfigs: NetworkConfigs = {
   [GqlChain.Arbitrum]: arbitrum,
   [GqlChain.Avalanche]: avalanche,
   [GqlChain.Base]: base,
@@ -27,6 +31,13 @@ const networkConfigs = {
   [GqlChain.Fraxtal]: fraxtal,
   [GqlChain.Fantom]: fantom,
   [GqlChain.Sonic]: sonic,
+}
+
+export function getNetworkConfig(chain: GqlChain) {
+  const networkConfig = networkConfigs[chain]
+  if (!networkConfig) throw new Error(`Missing network config for chain ${chain}`)
+
+  return networkConfig
 }
 
 export default networkConfigs

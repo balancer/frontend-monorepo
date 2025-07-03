@@ -1,4 +1,4 @@
-import { Box, Button, Heading, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, Heading, HStack, Stack, Text, useDisclosure, VStack } from '@chakra-ui/react'
 import { NoisyCard } from '@repo/lib/shared/components/containers/NoisyCard'
 import { LearnMoreModal } from './LearnMoreModal'
 import { FeatureLink } from './FeatureLink'
@@ -38,8 +38,8 @@ export function HeaderBanner() {
           alignItems={{ base: 'start', md: 'center' }}
           flexDirection={{ base: 'column', md: 'row' }}
           justifyContent={{ base: 'start', lg: 'space-between' }}
-          spacing={{ base: '40px', lg: undefined }}
           p="8"
+          spacing={{ base: '40px', lg: undefined }}
           w="full"
         >
           <VStack pt="sm" spacing="30px" w={{ base: 'full', lg: undefined }}>
@@ -58,8 +58,8 @@ export function HeaderBanner() {
               <Button
                 _hover={{ color: 'font.linkHover' }}
                 color="font.link"
-                position="relative"
                 onClick={onOpen}
+                position="relative"
                 top="4px"
                 variant="ghost"
               >
@@ -68,24 +68,29 @@ export function HeaderBanner() {
             </VStack>
           </VStack>
 
-          <HStack spacing={8}>
+          <Stack
+            direction={{ base: 'column', xl: 'row' }}
+            justifyContent="stretch"
+            spacing={8}
+            w="full"
+          >
             <RadialPattern
               circleCount={8}
               height={600}
               innerHeight={120}
               innerWidth={1000}
+              left="350px"
               padding="15px"
               position="absolute"
               right={{ base: -500, lg: -700, xl: -600, '2xl': -400 }}
-              left="350px"
               top="-195px"
               width={1500}
             />
 
-            <FeatureLink title="Fair price discovery" description={fairPriceDescription} />
-            <FeatureLink title="Capital efficiency" description={capitalEfficiencyDescription} />
-            <FeatureLink title="Immediate liquidity" description={immediateLiquidityDescription} />
-          </HStack>
+            <FeatureLink description={fairPriceDescription} title="Fair price discovery" />
+            <FeatureLink description={capitalEfficiencyDescription} title="Capital efficiency" />
+            <FeatureLink description={immediateLiquidityDescription} title="Immediate liquidity" />
+          </Stack>
         </HStack>
       </NoisyCard>
 

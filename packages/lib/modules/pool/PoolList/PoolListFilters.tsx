@@ -198,9 +198,7 @@ export function PoolTypeFilters({
             isChecked={!!poolTypes.find(selected => selected === poolType)}
             onChange={e => togglePoolType(e.target.checked, poolType as PoolFilterType)}
           >
-            <Text fontSize="sm" textTransform="capitalize">
-              {poolTypeLabel(poolType)}
-            </Text>
+            <Text fontSize="sm">{poolTypeLabel(poolType)}</Text>
           </Checkbox>
         </Box>
       ))}
@@ -559,8 +557,8 @@ export function PoolListFilters() {
                         </Heading>
                         <PoolNetworkFilters
                           setNetworks={setNetworks}
-                          toggleNetwork={toggleNetwork}
                           toggledNetworks={toggledNetworks}
+                          toggleNetwork={toggleNetwork}
                         />
                       </Box>
                       {!isCowPath && (
@@ -598,14 +596,12 @@ export function PoolListFilters() {
                         </Heading>
                         <PoolCategoryFilters hidePoolTags={options.hidePoolTags} />
                       </Box>
-                      {options.showPoolHooksFilter && (
-                        <Box as={motion.div} variants={staggeredFadeInUp}>
-                          <Heading as="h3" mb="sm" size="sm">
-                            Hooks
-                          </Heading>
-                          <PoolHookFilters />
-                        </Box>
-                      )}
+                      <Box as={motion.div} variants={staggeredFadeInUp}>
+                        <Heading as="h3" mb="sm" size="sm">
+                          Hooks
+                        </Heading>
+                        <PoolHookFilters />
+                      </Box>
                       <Box as={motion.div} mb="xs" variants={staggeredFadeInUp} w="full">
                         <PoolMinTvlFilter />
                       </Box>

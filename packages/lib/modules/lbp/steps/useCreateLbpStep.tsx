@@ -24,11 +24,11 @@ import { useTokenMetadata } from '@repo/lib/modules/tokens/useTokenMetadata'
 export const createLbpStepId = 'create-lbp'
 
 const labels: TransactionLabels = {
-  init: 'Create LBP',
-  title: 'Create LBP',
-  confirming: 'Creating a new LBP',
-  confirmed: 'Created a new LBP',
-  tooltip: 'Create a new LBP',
+  init: 'Create pool',
+  title: 'Create pool',
+  confirming: 'Confirming pool creation...',
+  confirmed: 'Pool creation confirmed!',
+  tooltip: 'Create pool',
 }
 
 export function useCreateLbpStep(): TransactionStep {
@@ -49,6 +49,7 @@ export function useCreateLbpStep(): TransactionStep {
     endTime,
     selectedChain,
     userActions,
+    fee,
   } = saleStructureForm.watch()
 
   const { name, owner } = projectInfoForm.watch()
@@ -100,7 +101,7 @@ export function useCreateLbpStep(): TransactionStep {
         poolType: PoolType.LiquidityBootstrapping,
         symbol: `${launchTokenSymbol}-${collateralTokenSymbol}-LBP`,
         name: `${name} Liquidity Bootstrapping Pool`,
-        swapFeePercentage: parseUnits('0.01', 18), // TODO: confirm default value
+        swapFeePercentage: parseUnits((fee / 100).toString(), 18),
         chainId,
         lbpParams: {
           owner: owner || userAddress,
@@ -143,8 +144,8 @@ export function useCreateLbpStep(): TransactionStep {
             gasEstimationMeta={gasEstimationMeta}
             id={createLbpStepId}
             labels={labels}
-            txConfig={buildCallDataQuery.data}
             onTransactionChange={setTransaction}
+            txConfig={buildCallDataQuery.data}
           />
         )
       },

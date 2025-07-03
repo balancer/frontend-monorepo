@@ -34,7 +34,7 @@ export function ClaimNetworkBlock({
     >
       <Flex alignItems="center" justifyContent="space-between">
         <HStack gap="ms">
-          <NetworkIcon chain={chain} size={iconSize} shadow="md" />
+          <NetworkIcon chain={chain} shadow="md" size={iconSize} />
 
           <Stack gap={1}>
             <Heading size="sm" textTransform="capitalize">

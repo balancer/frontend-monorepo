@@ -16,9 +16,9 @@ export function VotingDeadline() {
           height="100%"
           imgAvif
           imgAvifDark
-          imgName="rock-slate"
           imgJpg
           imgJpgDark
+          imgName="rock-slate"
           width="100%"
         />
       </Box>

@@ -26,11 +26,11 @@ import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithErro
 import { isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
 import { getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
-import { Clipboard, Edit } from 'react-feather'
+import { Clipboard, Edit, Percent } from 'react-feather'
 import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
 import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useLbpForm } from '../LbpFormProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -98,14 +98,14 @@ export function SaleStructureStep() {
           <VStack align="start" spacing="md" w="full">
             <NetworkSelectInput chains={supportedChains} control={control} />
             <LaunchTokenAddressInput
-              triggerValidation={trigger}
-              resetForm={resetLbpCreation}
+              chainId={selectedChain}
               control={control}
               errors={errors}
-              setFormValue={setValue}
-              value={launchTokenAddress}
               metadata={launchTokenMetadata}
-              chainId={selectedChain}
+              resetForm={resetLbpCreation}
+              setFormValue={setValue}
+              triggerValidation={trigger}
+              value={launchTokenAddress}
             />
           </VStack>
 
@@ -128,8 +128,8 @@ export function SaleStructureStep() {
                   control={control}
                   errors={errors}
                   label="End date and time"
-                  name="endTime"
                   min={saleStart}
+                  name="endTime"
                 />
                 <Text color="font.secondary" fontSize="xs">
                   {saleStart && saleEnd
@@ -145,13 +145,19 @@ export function SaleStructureStep() {
               </Heading>
               <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
               <WeightAdjustmentTypeInput
+                collateralTokenSymbol={collateralToken?.symbol || ''}
                 control={control}
                 launchTokenSymbol={launchTokenMetadata.symbol || ''}
-                collateralTokenSymbol={collateralToken?.symbol || ''}
-                watch={watch}
                 setValue={setValue}
+                watch={watch}
               />
               <UserActionsInput control={control} />
+              <FeeSelection
+                control={control}
+                errors={errors}
+                feeValue={saleStructureData.fee}
+                setFormValue={setValue}
+              />
 
               <Divider />
 
@@ -170,26 +176,26 @@ export function SaleStructureStep() {
                 <PriceImpactProvider>
                   <SaleTokenAmountInput
                     control={control}
-                    launchTokenAddress={launchTokenAddress}
-                    selectedChain={selectedChain}
                     customIcon={projectInfoForm.watch('tokenIconUrl')}
-                    metadata={launchTokenMetadata}
                     errors={errors}
+                    launchTokenAddress={launchTokenAddress}
+                    metadata={launchTokenMetadata}
+                    selectedChain={selectedChain}
                   />
 
                   <CollateralTokenAmountInput
+                    collateralTokenAddress={collateralTokenAddress}
+                    collateralTokenSymbol={collateralToken?.symbol || ''}
                     control={control}
                     errors={errors}
-                    collateralTokenAddress={collateralTokenAddress}
                     selectedChain={selectedChain}
-                    collateralTokenSymbol={collateralToken?.symbol || ''}
                   />
                 </PriceImpactProvider>
               </TokenInputsValidationProvider>
             </>
           )}
 
-          <LbpFormAction disabled={!isValid} />
+          <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
         </VStack>
       </form>
     </TokenBalancesProvider>
@@ -251,7 +257,7 @@ function LaunchTokenAddressInput({
 
   useEffect(() => {
     if (value) triggerValidation('launchTokenAddress')
-  }, [metadata.symbol, value, triggerValidation])
+  }, [metadata.isLoading, value, triggerValidation])
 
   return (
     <VStack align="start" w="full">
@@ -262,8 +268,8 @@ function LaunchTokenAddressInput({
           name="launchTokenAddress"
           render={({ field }) => (
             <InputWithError
-              isDisabled={locked}
               error={errors.launchTokenAddress?.message}
+              isDisabled={locked}
               isInvalid={!!errors.launchTokenAddress}
               onChange={e => field.onChange(e.target.value)}
               placeholder="Enter token address"
@@ -286,19 +292,19 @@ function LaunchTokenAddressInput({
         <InputRightElement>
           {!locked ? (
             <IconButton
-              size="xs"
-              variant="link"
               aria-label="paste"
               icon={<Clipboard />}
               onClick={paste}
+              size="xs"
+              variant="link"
             />
           ) : (
             <IconButton
-              size="xs"
-              variant="link"
               aria-label="edit"
               icon={<Edit />}
               onClick={() => resetForm()}
+              size="xs"
+              variant="link"
             />
           )}
         </InputRightElement>
@@ -332,10 +338,10 @@ function DateTimeInput({
           <InputWithError
             error={errors[field.name]?.message}
             isInvalid={!!errors[field.name]}
+            min={min || today}
             onChange={e => field.onChange(e.target.value)}
             type="datetime-local"
             value={field.value}
-            min={min || today}
           />
         )}
         rules={{
@@ -365,7 +371,7 @@ function CollateralTokenAddressInput({
         render={({ field }) => (
           <TokenSelectInput
             chain={selectedChain}
-            defaultTokenAddress={collateralTokens?.[0]}
+            defaultTokenAddress={field.value || collateralTokens?.[0]}
             onChange={newValue => {
               field.onChange(newValue as GqlChain)
             }}
@@ -394,6 +400,75 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
           </RadioGroup>
         )}
       />
+    </VStack>
+  )
+}
+
+function FeeSelection({
+  control,
+  errors,
+  feeValue,
+  setFormValue,
+}: {
+  control: Control<SaleStructureForm>
+  errors: FieldErrors<SaleStructureForm>
+  feeValue: number
+  setFormValue: UseFormSetValue<SaleStructureForm>
+}) {
+  const [value, setValue] = useState('minimum')
+
+  useEffect(() => {
+    if (feeValue !== 1.0) setValue('custom')
+  }, [feeValue])
+
+  const isInRange = (fee: number) => {
+    if (fee < 1) return 'LBP swap fees must be set at or above 1.00%'
+    if (fee > 10) return 'LBP swap fees must be set at or below 10.00%'
+    return true
+  }
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">LBP swap fees (50% share with Balancer DAO)</Text>
+      <RadioGroup
+        onChange={(value: string) => {
+          setValue(value)
+          if (value === 'minimum') setFormValue('fee', 1.0)
+        }}
+        value={value}
+      >
+        <Stack direction="row">
+          <Radio value="minimum">1.00%</Radio>
+          <Radio value="custom">Custom</Radio>
+        </Stack>
+      </RadioGroup>
+
+      {value === 'custom' && (
+        <InputGroup>
+          <Controller
+            control={control}
+            name="fee"
+            render={({ field }) => (
+              <InputWithError
+                error={errors[field.name]?.message}
+                info="Minimum fee: 1.00% - Maximum fee: 10.00%"
+                isInvalid={!!errors[field.name]}
+                onChange={e => field.onChange(e.target.value)}
+                step=".01"
+                type="number"
+                value={field.value}
+              />
+            )}
+            rules={{
+              required: 'Swap fee is required',
+              validate: isInRange,
+            }}
+          />
+          <InputRightElement>
+            <Percent size="20" />
+          </InputRightElement>
+        </InputGroup>
+      )}
     </VStack>
   )
 }
@@ -447,11 +522,11 @@ function SaleTokenAmountInput({
         render={({ field }) => (
           <TokenInput
             address={launchTokenAddress}
+            apiToken={customToken}
             chain={selectedChain}
             onChange={e => field.onChange(e.currentTarget.value)}
-            value={field.value}
             priceMessage="Price: N/A"
-            apiToken={customToken}
+            value={field.value}
           />
         )}
         rules={{

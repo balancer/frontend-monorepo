@@ -119,8 +119,8 @@ export function ClaimNetworkPools() {
               >
                 {currentNetworks.map(network => (
                   <Card
-                    key={network.name}
                     flex="1"
+                    key={network.name}
                     p={['sm', 'md']}
                     shadow="innerLg"
                     w="full"
@@ -130,12 +130,12 @@ export function ClaimNetworkPools() {
                   >
                     <Flex alignItems="center" justifyContent="space-between">
                       <HStack gap="ms">
-                        <NetworkIcon chain={network.chain} size={iconSize} shadow="md" />
+                        <NetworkIcon chain={network.chain} shadow="md" size={iconSize} />
                         <Stack gap={1}>
                           <Heading size="sm" textTransform="capitalize">
                             {network.name}
                           </Heading>
-                          <Heading size="md" color="font.secondary">
+                          <Heading color="font.secondary" size="md">
                             –
                           </Heading>
                         </Stack>
@@ -169,8 +169,8 @@ export function ClaimNetworkPools() {
               >
                 {currentNetworks.map(network => (
                   <Card
-                    key={network.name}
                     flex="1"
+                    key={network.name}
                     p={['sm', 'md']}
                     boxShadow={'inset 0px 4px 34px rgba(0, 255, 233, 0.4)'}
                     w="full"
@@ -179,14 +179,14 @@ export function ClaimNetworkPools() {
                   >
                     <Flex alignItems="center" justifyContent="space-between">
                       <HStack gap="ms">
-                        <NetworkIcon chain={network.chain} size={iconSize} shadow="md" />
+                        <NetworkIcon chain={network.chain} shadow="md" size={iconSize} />
                         <Stack gap={1}>
                           <Heading color={'white'} size="sm" textTransform="capitalize">
                             {network.name}
                           </Heading>
                         </Stack>
                       </HStack>
-                      <Text variant="secondary" fontSize="sm">
+                      <Text fontSize="sm" variant="secondary">
                         Nothing to claim
                       </Text>
                     </Flex>

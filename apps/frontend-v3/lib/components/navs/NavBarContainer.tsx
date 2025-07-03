@@ -31,9 +31,9 @@ export function NavBarContainer() {
           appLinks={allAppLinks}
           mobileNav={
             <MobileNav
-              LogoType={BalancerLogoType}
               appLinks={allAppLinks}
               ecosystemLinks={ecosystemLinks}
+              LogoType={BalancerLogoType}
               socialLinks={socialLinks}
             />
           }

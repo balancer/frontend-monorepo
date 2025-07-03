@@ -21,12 +21,12 @@ export function VebalBreadcrumbs() {
         </BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem>
-        <BreadcrumbLink href="/vebal" fontWeight="bold">
+        <BreadcrumbLink fontWeight="bold" href="/vebal">
           veBAL
         </BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem isCurrentPage>
-        <BreadcrumbLink href="#" fontWeight="medium">
+        <BreadcrumbLink fontWeight="medium" href="#">
           Manage
         </BreadcrumbLink>
       </BreadcrumbItem>

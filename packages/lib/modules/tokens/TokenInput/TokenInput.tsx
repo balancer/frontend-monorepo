@@ -143,8 +143,8 @@ function TokenInputFooter({
         <Text
           color={showPriceImpact ? priceImpactColor : 'font.secondary'}
           fontSize="sm"
-          variant="secondary"
           opacity={!priceMessage && usdValue === '0' ? 0.5 : 1}
+          variant="secondary"
         >
           {priceMessage ? priceMessage : toCurrency(usdValue, { abbreviated: false })}
           {showPriceImpact && priceImpactLevel !== 'unknown' && getPriceImpactLabel(priceImpact)}
@@ -157,9 +157,9 @@ function TokenInputFooter({
           _hover={noBalance || _isNativeAsset ? {} : { color: 'font.highlight' }}
           color={inputLabelColor}
           cursor={noBalance || _isNativeAsset ? 'default' : 'pointer'}
+          gap="xs"
           onClick={handleBalanceClick}
           title="Use wallet balance"
-          gap="xs"
         >
           {hasError && (
             <Text color="inherit" fontSize="sm">
@@ -286,9 +286,9 @@ export const TokenInput = forwardRef(
                 placeholder="0.00"
                 ref={ref}
                 shadow="none"
+                step="any"
                 title={inputTitle}
                 type="number"
-                step="any"
                 value={value}
                 color={'#00FFE9'}
                 {...inputProps}
@@ -308,20 +308,20 @@ export const TokenInput = forwardRef(
 
             <InputRightAddon bg="transparent" border="none" p="0" pl="1">
               <TokenInputSelector
+                onToggleTokenClicked={onToggleTokenClicked}
                 token={token}
                 weight={weight}
-                onToggleTokenClicked={onToggleTokenClicked}
               />
             </InputRightAddon>
           </InputGroup>
 
           <TokenInputFooter
-            token={token}
-            value={value}
-            updateValue={updateValue}
             hasPriceImpact={hasPriceImpact}
             isLoadingPriceImpact={isLoadingPriceImpact}
             priceMessage={priceMessage}
+            token={token}
+            updateValue={updateValue}
+            value={value}
           />
         </VStack>
       </Box>

@@ -15,7 +15,7 @@ import {
 } from 'viem/chains'
 import { GqlChain } from '../services/api/generated/graphql'
 
-const chainToDrpcName: Record<GqlChain, string | undefined> = {
+const chainToDrpcName: Partial<Record<GqlChain, string | undefined>> = {
   [GqlChain.Mainnet]: 'ethereum',
   [GqlChain.Arbitrum]: 'arbitrum',
   [GqlChain.Optimism]: 'optimism',
@@ -31,7 +31,7 @@ const chainToDrpcName: Record<GqlChain, string | undefined> = {
   [GqlChain.Sonic]: 'sonic',
 }
 
-const chainIdToDrpcName: Record<number, string | undefined> = {
+const chainIdToDrpcName: Partial<Record<number, string | undefined>> = {
   [mainnet.id]: 'ethereum',
   [arbitrum.id]: 'arbitrum',
   [optimism.id]: 'optimism',

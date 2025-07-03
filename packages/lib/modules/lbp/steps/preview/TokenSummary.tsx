@@ -34,6 +34,7 @@ type Props = {
 
 export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Props) {
   const tokenIconURL = projectInfoForm.watch('tokenIconUrl')
+  const hasIconErrors = projectInfoForm.formState.errors.tokenIconUrl !== undefined
 
   return (
     <Card>
@@ -44,7 +45,7 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
         </HStack>
       </CardHeader>
       <CardBody>
-        <Grid gap={0} templateColumns="1fr 1fr">
+        <Grid gap={{ base: 3, xl: 0 }} templateColumns={{ base: 'repeat(1, 1fr)', xl: '1fr 1fr' }}>
           <GridItem borderRightColor="background.level0" borderRightWidth="1px" pr="md">
             <HStack spacing="md">
               <Popover placement="top" trigger="click">
@@ -52,12 +53,16 @@ export function TokenSummary({ chain, projectInfoForm, launchTokenMetadata }: Pr
                   <Circle
                     bg="background.level4"
                     color="font.secondary"
+                    role="button"
                     shadow="lg"
                     size={24}
-                    role="button"
                   >
                     <VStack>
-                      {tokenIconURL ? <Image src={tokenIconURL} borderRadius="full" /> : <Plus />}
+                      {tokenIconURL && !hasIconErrors ? (
+                        <Image borderRadius="full" src={tokenIconURL} />
+                      ) : (
+                        <Plus />
+                      )}
                     </VStack>
                   </Circle>
                 </PopoverTrigger>

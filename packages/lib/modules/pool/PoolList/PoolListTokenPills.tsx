@@ -8,7 +8,7 @@ import { fNum } from '@repo/lib/shared/utils/numbers'
 import { TokenIcon } from '../../tokens/TokenIcon'
 import { TokenIconStack } from '../../tokens/TokenIconStack'
 import { usePoolMetadata } from '../metadata/usePoolMetadata'
-import { isStableLike, isWeightedLike } from '../pool.helpers'
+import { isLiquidityBootstrapping, isStableLike, isWeightedLike } from '../pool.helpers'
 import { getUserReferenceTokens } from '../pool-tokens.utils'
 import { PoolCore, PoolToken } from '../pool.types'
 import { VotingPoolWithData } from '../../vebal/vote/vote.types'
@@ -49,12 +49,14 @@ function WeightedTokenPills({
   chain,
   iconSize = 24,
   nameSize,
+  preciseWeight = false,
   ...badgeProps
 }: {
   tokens: (PoolToken | ApiToken)[]
   chain: GqlChain
   iconSize?: number
   nameSize?: string
+  preciseWeight?: boolean
 } & BadgeProps) {
   return (
     <Wrap spacing="xs">
@@ -86,10 +88,10 @@ function WeightedTokenPills({
                   <HStack gap={['xs', '1.5']}>
                     {tokens.length < 5 && (
                       <Text
+                        _groupHover={{ color: 'font.maxContrast' }}
                         fontWeight="bold"
                         noOfLines={1}
                         size={nameSize}
-                        _groupHover={{ color: 'font.maxContrast' }}
                         transition="color 0.2s var(--ease-out-cubic)"
                         color={'white'}
                       >
@@ -97,12 +99,14 @@ function WeightedTokenPills({
                       </Text>
                     )}
                     <Text
-                      fontSize="xs"
                       _groupHover={{ color: 'font.maxContrast' }}
+                      fontSize="xs"
                       transition="color 0.2s var(--ease-out-cubic)"
                       color={'white'}
                     >
-                      {fNum('weight', token.weight || '')}
+                      {preciseWeight
+                        ? fNum('weight', token.weight || '', { abbreviated: false, decimals: 1 })
+                        : fNum('weight', token.weight || '')}
                     </Text>
                   </HStack>
                 </>
@@ -116,21 +120,23 @@ function WeightedTokenPills({
                   />
                   <HStack gap={['xs', '1.5']}>
                     <Text
+                      _groupHover={{ color: 'font.maxContrast' }}
                       fontWeight="bold"
                       noOfLines={1}
                       size={nameSize}
-                      _groupHover={{ color: 'font.maxContrast' }}
                       transition="color 0.2s var(--ease-out-cubic)"
                       color={'white'}
                     >
                       {token.name}
                     </Text>
                     <Text
-                      fontSize="xs"
                       _groupHover={{ color: 'font.maxContrast' }}
+                      fontSize="xs"
                       transition="color 0.2s var(--ease-out-cubic)"
                     >
-                      {fNum('weight', token.weight || '')}
+                      {preciseWeight
+                        ? fNum('weight', token.weight || '', { abbreviated: false, decimals: 1 })
+                        : fNum('weight', token.weight || '')}
                     </Text>
                   </HStack>
                 </>
@@ -189,10 +195,10 @@ function StableTokenPills({
                   />
                   {tokens.length < 5 && (
                     <Text
+                      _groupHover={{ color: 'font.maxContrast' }}
                       fontWeight="bold"
                       noOfLines={1}
                       size={nameSize}
-                      _groupHover={{ color: 'font.maxContrast' }}
                       transition="color 0.2s var(--ease-out-cubic)"
                       color={'white'}
                     >
@@ -209,10 +215,10 @@ function StableTokenPills({
                     nestedTokens={nestedPool.tokens}
                   />
                   <Text
+                    _groupHover={{ color: 'font.maxContrast' }}
                     fontWeight="bold"
                     noOfLines={1}
                     size={nameSize}
-                    _groupHover={{ color: 'font.maxContrast' }}
                     transition="color 0.2s var(--ease-out-cubic)"
                   >
                     {token.name}
@@ -243,6 +249,7 @@ export function VotingListTokenPills({ vote, ...props }: VotingListTokenPillsPro
       chain={pool.chain}
       poolName={name}
       poolType={pool.type}
+      protocolVersion={pool.protocolVersion}
       tokens={tokens}
       {...props}
     />
@@ -265,6 +272,7 @@ export function PoolListTokenPills({ pool, ...props }: PoolListTokenPillsProps) 
       iconUrl={iconUrl}
       poolName={name}
       poolType={pool.type}
+      protocolVersion={pool.protocolVersion}
       tokens={tokens}
       {...props}
     />
@@ -272,10 +280,11 @@ export function PoolListTokenPills({ pool, ...props }: PoolListTokenPillsProps) 
 }
 
 type PoolTokenPillsProps = {
-  poolType: GqlPoolType
   chain: GqlChain
-  tokens: (PoolToken | ApiToken)[]
   poolName: string | undefined
+  poolType: GqlPoolType
+  protocolVersion: number
+  tokens: (PoolToken | ApiToken)[]
   iconUrl?: string
   iconSize?: number
   nameSize?: string
@@ -283,8 +292,9 @@ type PoolTokenPillsProps = {
 
 function PoolTokenPills({
   chain,
-  poolType,
   poolName,
+  poolType,
+  protocolVersion,
   tokens,
   iconSize = 24,
   iconUrl,
@@ -293,6 +303,7 @@ function PoolTokenPills({
 }: PoolTokenPillsProps) {
   const shouldUseStablePills = isStableLike(poolType)
   const shouldUseWeightedPills = isWeightedLike(poolType)
+  const isV3LBP = isLiquidityBootstrapping(poolType) && protocolVersion === 3
 
   if (poolName) {
     return (

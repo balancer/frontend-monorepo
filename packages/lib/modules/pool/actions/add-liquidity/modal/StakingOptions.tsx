@@ -45,15 +45,15 @@ export function StakingOptions() {
 
   return (
     <>
-      <Text as="div" mb="ms" fontWeight="bold">
+      <Text as="div" fontWeight="bold" mb="ms">
         Staking options to get extra incentives
         <Box
+          _hover={{ opacity: 1 }}
           as="span"
-          position="relative"
-          top="3px"
           left="5px"
           opacity="0.6"
-          _hover={{ opacity: 1 }}
+          position="relative"
+          top="3px"
         >
           <Tooltip
             display="inline-block"
@@ -64,8 +64,8 @@ export function StakingOptions() {
         </Box>
       </Text>
 
-      <HStack alignItems="stretch" justify="space-between" w="full" gap="ms">
-        <Card position="relative" variant="modalSubSection" p="ms">
+      <HStack alignItems="stretch" gap="ms" justify="space-between" w="full">
+        <Card p="ms" position="relative" variant="modalSubSection">
           <VStack align="left" spacing="md">
             <Text color="font.maxContrast" fontWeight="bold">
               {projectName}
@@ -101,7 +101,7 @@ export function StakingOptions() {
         </Card>
         {(PROJECT_CONFIG.options.showVeBal || pool.chain === GqlChain.Optimism) &&
           pool.staking?.aura && (
-            <Card position="relative" variant="modalSubSection" p="ms">
+            <Card p="ms" position="relative" variant="modalSubSection">
               <VStack align="left" spacing="md">
                 <Text color="font.maxContrast" fontWeight="bold">
                   Aura

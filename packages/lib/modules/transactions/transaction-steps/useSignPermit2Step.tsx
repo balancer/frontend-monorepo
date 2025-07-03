@@ -4,7 +4,6 @@ import { Button, VStack } from '@chakra-ui/react'
 import { ConnectWallet } from '@repo/lib/modules/web3/ConnectWallet'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 import { BalAlert } from '@repo/lib/shared/components/alerts/BalAlert'
-import { useMemo } from 'react'
 
 import { useTokens } from '../../tokens/TokensProvider'
 import {
@@ -93,7 +92,8 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     )
   }
 
-  const isComplete = () => signPermit2State === SignatureState.Completed || isValidPermit2
+  const isComplete = () =>
+    signPermit2State === SignatureState.Completed || isValidPermit2 || !!params.isComplete
 
   const details: StepDetails = {
     gasless: true,
@@ -105,25 +105,19 @@ export function useSignPermit2Step(params: BasePermit2Params): TransactionStep |
     }),
   }
 
-  return useMemo(
-    () => {
-      if (!isPermit2) return
-      return {
-        id: 'sign-permit2',
-        stepType: 'signPermit2',
-        details,
-        labels: {
-          title: getTitle(details),
-          init: `Sign permit`,
-          tooltip: 'Sign permit',
-        },
-        isComplete,
-        renderAction: () => <SignPermitButton />,
-      }
+  if (!isPermit2) return
+  return {
+    id: 'sign-permit2',
+    stepType: 'signPermit2',
+    details,
+    labels: {
+      title: getTitle(details),
+      init: `Sign permit`,
+      tooltip: 'Sign permit',
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [signPermit2State, isLoading, isConnected, isValidPermit2, shouldChangeNetwork]
-  )
+    isComplete,
+    renderAction: () => <SignPermitButton />,
+  }
 }
 
 function getTitle(details?: StepDetails): string {

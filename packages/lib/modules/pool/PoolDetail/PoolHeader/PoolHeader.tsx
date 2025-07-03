@@ -68,7 +68,7 @@ export function PoolHeader() {
         </VStack>
         <Stack direction={{ base: 'column', md: 'row' }} spacing="ms">
           <PoolTags />
-          <HStack gap="sm" alignItems="end">
+          <HStack alignItems="end" gap="sm">
             <Tooltip
               isDisabled={!blockingReasons}
               label={

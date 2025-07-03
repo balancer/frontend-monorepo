@@ -15,16 +15,16 @@ import { type Address } from 'viem'
 import { PoolType, InitPoolInputV3 } from '@balancer/sdk'
 import { getRpcUrl } from '@repo/lib/modules/web3/transports'
 import { useLocalStorage } from 'usehooks-ts'
-import { useParams } from 'next/navigation'
+import { useIsPoolInitialized } from '@repo/lib/modules/pool/queries/useIsPoolInitialized'
 
 export const initializeLbpStepId = 'initialize-lbp'
 
 const labels: TransactionLabels = {
-  init: 'Initialize LBP',
-  title: 'Initialize LBP',
-  confirming: 'Initializing a new LBP',
-  confirmed: 'Initialized a new LBP',
-  tooltip: 'Initialize a new LBP',
+  init: 'Initialize pool',
+  title: 'Initialize pool',
+  confirming: 'Confirming initialization...',
+  confirmed: 'Initialization confirmed!',
+  tooltip: 'Initialize pool',
 }
 
 export function useInitializeLbpStep({
@@ -41,22 +41,25 @@ export function useInitializeLbpStep({
   const rpcUrl = getRpcUrl(initPoolInput.chainId)
   const { buildTenderlyUrl } = useTenderly({ chainId: initPoolInput.chainId })
 
+  const { data: isPoolInitialized, refetch: refetchIsPoolInitialized } = useIsPoolInitialized(
+    initPoolInput.chainId,
+    poolAddress
+  )
+
   const buildCallDataQuery = useInitializePoolBuildCall({
     rpcUrl,
     poolAddress: poolAddress as Address,
     poolType: PoolType.LiquidityBootstrapping,
-    enabled: isStepActivated,
+    enabled: isStepActivated && !isPoolInitialized,
     initPoolInput,
   })
-  const params = useParams()
-  const initTxHash = params?.txHash?.[0]
 
   const gasEstimationMeta = sentryMetaForWagmiSimulation('Error in initialze LBP gas estimation', {
     buildCallQueryData: buildCallDataQuery.data,
     tenderlyUrl: buildTenderlyUrl(buildCallDataQuery.data),
   })
 
-  const isComplete = () => isTransactionSuccess(transaction) || !!initTxHash
+  const isComplete = () => !!isPoolInitialized || isTransactionSuccess(transaction)
 
   return useMemo(
     () => ({
@@ -65,9 +68,11 @@ export function useInitializeLbpStep({
       labels,
       transaction,
       isComplete,
+      onSuccess: () => {
+        refetchIsPoolInitialized()
+      },
       onActivated: () => setIsStepActivated(true),
       onDeactivated: () => setIsStepActivated(false),
-      // onSuccess,
       renderAction: () => {
         if (!buildCallDataQuery.data) return <DisabledTransactionButton />
         return (
@@ -75,13 +80,13 @@ export function useInitializeLbpStep({
             gasEstimationMeta={gasEstimationMeta}
             id={initializeLbpStepId}
             labels={labels}
-            txConfig={buildCallDataQuery.data}
             onTransactionChange={setTransaction}
+            txConfig={buildCallDataQuery.data}
           />
         )
       },
     }),
     /* eslint-disable react-hooks/exhaustive-deps */
-    [transaction, labels, buildCallDataQuery.data]
+    [transaction, labels, buildCallDataQuery.data, isPoolInitialized]
   )
 }

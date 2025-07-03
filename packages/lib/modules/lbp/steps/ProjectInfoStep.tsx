@@ -1,6 +1,16 @@
-'use client'
-
-import { Heading, VStack, Text, HStack, Spacer, Divider, Checkbox, Button } from '@chakra-ui/react'
+import {
+  Heading,
+  VStack,
+  Text,
+  HStack,
+  Spacer,
+  Divider,
+  Checkbox,
+  Button,
+  InputGroup,
+  InputRightElement,
+  Spinner,
+} from '@chakra-ui/react'
 import { useLbpForm } from '../LbpFormProvider'
 import { ProjectInfoForm } from '../lbp.types'
 import { Controller, SubmitHandler } from 'react-hook-form'
@@ -12,6 +22,10 @@ import { TextareaWithError } from '@repo/lib/shared/components/inputs/TextareaWi
 import NextLink from 'next/link'
 import { isAddress } from 'viem'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
+import { useDebounce } from 'use-debounce'
+import { defaultDebounceMs } from '@repo/lib/shared/utils/queries'
+import { useCheckImageUrl } from '@repo/lib/shared/hooks/url.hooks'
+import { useEffect } from 'react'
 
 export function ProjectInfoStep() {
   const {
@@ -78,9 +92,9 @@ function NameInput() {
           <InputWithError
             error={errors.name?.message}
             isInvalid={!!errors.name}
+            maxLength={maxLength}
             onChange={e => field.onChange(e.target.value)}
             value={field.value}
-            maxLength={maxLength}
           />
         )}
         rules={{
@@ -117,11 +131,11 @@ function DescriptionInput() {
           <TextareaWithError
             error={errors.description?.message}
             isInvalid={!!errors.description}
+            maxLength={maxLength}
             onChange={e => field.onChange(e.target.value)}
             placeholder="A brief description of your project and what the token will be used for."
-            value={field.value}
-            maxLength={maxLength}
             rows={4}
+            value={field.value}
           />
         )}
         rules={{
@@ -136,9 +150,17 @@ function TokenIconInput() {
   const {
     projectInfoForm: {
       control,
-      formState: { errors },
+      formState: { errors, dirtyFields },
+      watch,
+      trigger,
     },
   } = useLbpForm()
+
+  const [iconUrl] = useDebounce(watch('tokenIconUrl'), defaultDebounceMs)
+  const { isChecking, error } = useCheckImageUrl(iconUrl, ['image/png', 'image/jpeg'])
+  useEffect(() => {
+    if (dirtyFields.tokenIconUrl) trigger('tokenIconUrl')
+  }, [iconUrl, isChecking, error, trigger, dirtyFields])
 
   return (
     <VStack align="start" w="full">
@@ -147,17 +169,24 @@ function TokenIconInput() {
         control={control}
         name="tokenIconUrl"
         render={({ field }) => (
-          <InputWithError
-            error={errors.tokenIconUrl?.message}
-            isInvalid={!!errors.tokenIconUrl}
-            onChange={e => field.onChange(e.target.value)}
-            placeholder="https://yourdomain.com/token-icon.svg"
-            value={field.value}
-          />
+          <InputGroup>
+            <InputWithError
+              error={isChecking ? '' : errors.tokenIconUrl?.message}
+              isInvalid={!isChecking && !!errors.tokenIconUrl}
+              onChange={e => field.onChange(e.target.value)}
+              placeholder="https://yourdomain.com/token-icon.png"
+              value={field.value}
+            />
+            {isChecking && (
+              <InputRightElement>
+                <Spinner />
+              </InputRightElement>
+            )}
+          </InputGroup>
         )}
         rules={{
           required: 'Token icon URL is required',
-          validate: isValidUrl,
+          validate: () => (isChecking ? 'Checking' : error ? error : true),
         }}
       />
     </VStack>
@@ -206,7 +235,7 @@ function ProjectXHandle() {
 
   return (
     <VStack align="start" w="full">
-      <Text color="font.primary">X / Twitter handle</Text>
+      <Text color="font.primary">X / Twitter handle (optional)</Text>
       <Controller
         control={control}
         name="xHandle"
@@ -220,7 +249,6 @@ function ProjectXHandle() {
           />
         )}
         rules={{
-          required: 'X / Twitter handle is required',
           validate: isValidTwitterHandle,
         }}
       />
@@ -335,19 +363,19 @@ function Disclaimer() {
       render={({ field }) => (
         <Checkbox
           color="font.primary"
+          isChecked={field.value}
+          onChange={field.onChange}
           pl="md"
           size="lg"
-          checked={field.value}
-          onChange={field.onChange}
         >
           {'I accept the'}
           <Button
             as={NextLink}
             href={'/risks'}
-            target="_blank"
-            variant="link"
-            textColor="font.link"
             px="0.3em"
+            target="_blank"
+            textColor="font.link"
+            variant="link"
           >
             Risks
           </Button>
@@ -355,10 +383,10 @@ function Disclaimer() {
           <Button
             as={NextLink}
             href={'/terms-of-use'}
-            target="_blank"
-            variant="link"
-            textColor="font.link"
             px="0.3em"
+            target="_blank"
+            textColor="font.link"
+            variant="link"
           >
             Terms of Use
           </Button>

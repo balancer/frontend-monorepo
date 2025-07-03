@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react'
 import { useTokenMetadata } from '../tokens/useTokenMetadata'
 import { fNum } from '@repo/lib/shared/utils/numbers'
 import { Address } from 'viem'
+import { LbpPrice, max, min } from './pool/usePriceInfo'
 
 export type UseLbpFormResult = ReturnType<typeof useLbpFormLogic>
 export const LbpFormContext = createContext<UseLbpFormResult | null>(null)
@@ -29,6 +30,7 @@ export function useLbpFormLogic() {
       selectedChain: PROJECT_CONFIG.defaultNetwork,
       launchTokenAddress: '',
       userActions: 'buy_and_sell',
+      fee: 1.0,
       startTime: '',
       endTime: '',
       collateralTokenAddress: '',
@@ -77,7 +79,7 @@ export function useLbpFormLogic() {
     LS_KEYS.LbpConfig.PoolAddress,
     undefined
   )
-  const [, setIsMetadataSent] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSent, false)
+  const [, setIsMetadataSaved] = useLocalStorage<boolean>(LS_KEYS.LbpConfig.IsMetadataSaved, false)
 
   const resetLbpCreation = () => {
     saleStructureForm.resetToInitial()
@@ -85,7 +87,7 @@ export function useLbpFormLogic() {
     setPersistedStepIndex(0)
     setActiveStep(0)
     setPoolAddress(undefined)
-    setIsMetadataSent(false)
+    setIsMetadataSaved(false)
   }
 
   const { saleTokenAmount, launchTokenAddress, selectedChain } = saleStructureForm.watch()
@@ -100,9 +102,9 @@ export function useLbpFormLogic() {
   const [saleMarketCap, setSaleMarketCap] = useState('')
   const [fdvMarketCap, setFdvMarketCap] = useState('')
 
-  const updatePriceStats = (prices: number[][]) => {
-    const minPrice = Math.min(...prices.map(point => point[1]))
-    const maxPrice = Math.max(...prices.map(point => point[1]))
+  const updatePriceStats = (prices: LbpPrice[]) => {
+    const minPrice = min(prices)
+    const maxPrice = max(prices)
     const minSaleMarketCap = minPrice * launchTokenSeed
     const maxSaleMarketCap = maxPrice * launchTokenSeed
     const minFdvMarketCap = minPrice * (launchTokenTotalSupply || 0)

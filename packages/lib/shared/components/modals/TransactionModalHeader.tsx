@@ -64,10 +64,10 @@ export function TransactionModalHeader({
                     <Link
                       color="grayText"
                       href={getBlockExplorerTxUrl(txHash, chain)}
-                      target="_blank"
-                      position="relative"
-                      top="1px"
                       left="-1px"
+                      position="relative"
+                      target="_blank"
+                      top="1px"
                     >
                       <ArrowUpRight size={14} />
                     </Link>

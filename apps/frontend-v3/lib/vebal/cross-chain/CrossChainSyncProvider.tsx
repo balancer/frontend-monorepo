@@ -1,4 +1,4 @@
-import networkConfigs from '@repo/lib/config/networks'
+import networkConfigs, { GqlChainValues } from '@repo/lib/config/networks'
 import { useEffect, useMemo, useCallback, createContext, PropsWithChildren } from 'react'
 import { OmniEscrowLock, useOmniEscrowLocksQuery } from './useOmniEscrowLocksQuery'
 import {
@@ -18,7 +18,7 @@ import { secs } from '@repo/lib/shared/utils/time'
 import { useUserAccount } from '@repo/lib/modules/web3/UserAccountProvider'
 
 const veBalSyncSupportedNetworks: GqlChain[] = Object.keys(networkConfigs)
-  .filter(key => networkConfigs[key as keyof typeof networkConfigs].supportsVeBalSync)
+  .filter(key => networkConfigs[key as GqlChainValues]?.supportsVeBalSync)
   .map(key => key) as GqlChain[]
 
 const REFETCH_INTERVAL = secs(30).toMs()
@@ -105,7 +105,7 @@ export const useCrossChainSyncLogic = () => {
     return veBalSyncSupportedNetworks.reduce<Partial<Record<GqlChain, NetworkSyncState>>>(
       (acc, network) => {
         acc[network] = getNetworkSyncState({
-          omniEscrowLock: omniEscrowLocksMap?.[networkConfigs[network].layerZeroChainId || ''],
+          omniEscrowLock: omniEscrowLocksMap?.[networkConfigs[network]?.layerZeroChainId || ''],
           mainnetEscrowLock,
         })
         return acc

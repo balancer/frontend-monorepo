@@ -40,7 +40,6 @@ export const TextShine: React.FC<TextShineProps> = ({
       as="span"
       color={'white'}
       fontSize={fontSize}
-      className={className}
       sx={{
         display: 'inline-flex',
         animation: `${shineAnimation} ${animationDuration} ${animationDelay} ${animationTimingFunction} ${animationIterationCount} ${animationFillMode}`,

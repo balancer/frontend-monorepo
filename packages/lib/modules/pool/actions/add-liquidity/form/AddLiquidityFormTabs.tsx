@@ -48,8 +48,8 @@ function PoolWeightsInfo() {
           <UnorderedList>
             <ListItem
               color="font.black"
-              fontWeight="medium"
               fontSize="sm"
+              fontWeight="medium"
               position="relative"
               top="-4px"
             >
@@ -65,6 +65,9 @@ function PoolWeightsInfo() {
           </UnorderedList>
         </BalAlertContent>
       }
+      mb="sm"
+      p="sm"
+      pb="xxs !important"
       status="info"
     />
   )

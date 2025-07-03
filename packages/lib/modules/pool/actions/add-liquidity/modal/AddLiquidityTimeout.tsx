@@ -65,10 +65,10 @@ export function AddLiquidityTimeout() {
           Quote refresh in
         </Text>
         <HStack spacing="none">
-          <NumberText color="grayText" fontWeight="bold" textAlign="right" fontSize="sm">
+          <NumberText color="grayText" fontSize="sm" fontWeight="bold" textAlign="right">
             {secondsToRefetch}
           </NumberText>
-          <Text color="grayText" fontWeight="bold" fontSize="sm" position="relative" left="1px">
+          <Text color="grayText" fontSize="sm" fontWeight="bold" left="1px" position="relative">
             s
           </Text>
         </HStack>
