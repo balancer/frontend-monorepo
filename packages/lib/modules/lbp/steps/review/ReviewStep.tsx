@@ -129,7 +129,10 @@ export function ReviewStep() {
         </CardBody>
       </Card>
 
-      <OtherSaleDetails launchTokenSymbol={launchTokenMetadata.symbol || ''} />
+      <OtherSaleDetails
+        fee={saleStructureData.fee}
+        launchTokenSymbol={launchTokenMetadata.symbol || ''}
+      />
 
       <LbpFormAction />
     </VStack>
