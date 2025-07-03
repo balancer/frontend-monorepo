@@ -34,7 +34,7 @@ export function ConnectWallet({
         /* ------- NOT CONNECTED: show “connect” (+ optional “create”) ------- */
         if (!isConnected) {
           return (
-            <HStack width="full">
+            <HStack width="">
               {showCreateWalletButton && (
                 <WalletButton.Custom wallet="coinbase">
                   {({ ready, connect }) => (
