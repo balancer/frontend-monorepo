@@ -31,6 +31,7 @@ export function useLbpFormLogic() {
       selectedChain: PROJECT_CONFIG.defaultNetwork,
       launchTokenAddress: '',
       userActions: 'buy_and_sell',
+      fee: 1.0,
       startTime: '',
       endTime: '',
       collateralTokenAddress: '',

@@ -26,11 +26,11 @@ import { InputWithError } from '@repo/lib/shared/components/inputs/InputWithErro
 import { formatUnits, isAddress } from 'viem'
 import { TokenSelectInput } from '../../tokens/TokenSelectInput'
 import { getChainId, getChainName, getNetworkConfig } from '@repo/lib/config/app.config'
-import { Clipboard, Edit } from 'react-feather'
+import { Clipboard, Edit, Percent } from 'react-feather'
 import { TokenMetadata, useTokenMetadata } from '../../tokens/useTokenMetadata'
 import { TokenInput } from '../../tokens/TokenInput/TokenInput'
 import { isGreaterThanZeroValidation, bn } from '@repo/lib/shared/utils/numbers'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useTokens } from '../../tokens/TokensProvider'
 import { useLbpForm } from '../LbpFormProvider'
 import { PROJECT_CONFIG } from '@repo/lib/config/getProjectConfig'
@@ -106,14 +106,14 @@ export function SaleStructureStep() {
           />
         </VStack>
 
+        <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
+
         {launchTokenIsValid && (
           <>
             <Divider />
-
             <Heading color="font.maxContrast" size="md">
               Sale period
             </Heading>
-
             <VStack align="start" spacing="sm" w="full">
               <DateTimeInput
                 control={control}
@@ -134,9 +134,7 @@ export function SaleStructureStep() {
                   : 'Suggested sale period: 5 days'}
               </Text>
             </VStack>
-
             <Divider />
-
             <Heading color="font.maxContrast" size="md">
               LBP mechanism
             </Heading>
@@ -149,9 +147,13 @@ export function SaleStructureStep() {
               watch={watch}
             />
             <UserActionsInput control={control} />
-
+            <FeeSelection
+              control={control}
+              errors={errors}
+              feeValue={saleStructureData.fee}
+              setFormValue={setValue}
+            />
             <Divider />
-
             <VStack align="start" spacing="sm" w="full">
               <Heading color="font.maxContrast" size="md">
                 Seed initial pool liquidity
@@ -188,89 +190,6 @@ export function SaleStructureStep() {
         )}
 
         <LbpFormAction disabled={!isValid || launchTokenMetadata.isLoading} />
-
-        {launchTokenIsValid && (
-          <>
-            <Divider />
-
-            <Heading color="font.maxContrast" size="md">
-              Sale period
-            </Heading>
-
-            <VStack align="start" spacing="sm" w="full">
-              <DateTimeInput
-                control={control}
-                errors={errors}
-                label="Start date and time"
-                name="startTime"
-              />
-              <DateTimeInput
-                control={control}
-                errors={errors}
-                label="End date and time"
-                min={saleStart}
-                name="endTime"
-              />
-              <Text color="font.secondary" fontSize="xs">
-                {saleStart && saleEnd
-                  ? `Sale period: ${daysDiff ? `${daysDiff} days` : ''} ${hoursDiff ? `${hoursDiff} hours` : ''} (5 days suggested)`
-                  : 'Suggested sale period: 5 days'}
-              </Text>
-            </VStack>
-
-            <Divider />
-
-            <Heading color="font.maxContrast" size="md">
-              LBP mechanism
-            </Heading>
-            <CollateralTokenAddressInput control={control} selectedChain={selectedChain} />
-            <WeightAdjustmentTypeInput
-              collateralTokenSymbol={collateralToken?.symbol || ''}
-              control={control}
-              launchTokenSymbol={launchTokenMetadata.symbol || ''}
-              setValue={setValue}
-              watch={watch}
-            />
-            <UserActionsInput control={control} />
-
-            <Divider />
-
-            <VStack align="start" spacing="sm" w="full">
-              <Heading color="font.maxContrast" size="md">
-                Seed initial pool liquidity
-              </Heading>
-              <Text color="font.secondary">
-                The starting liquidity in the pool. The amounts and ratio will determine the
-                starting price, projected market cap and price curve.
-              </Text>
-            </VStack>
-
-            <TokenInputsValidationProvider>
-              {/* TODO: Decouple PriceImpactProvider from Token input, it shouldn't be a dependency. */}
-              <PriceImpactProvider>
-                {collateralToken && (
-                  <TokenBalancesProvider extTokens={[collateralToken]}>
-                    <SaleTokenAmountInput
-                      control={control}
-                      errors={errors}
-                      launchToken={launchToken}
-                      selectedChain={selectedChain}
-                    />
-                    <CollateralTokenAmountInput
-                      collateralTokenAddress={collateralTokenAddress}
-                      collateralTokenSymbol={collateralToken?.symbol || ''}
-                      control={control}
-                      errors={errors}
-                      selectedChain={selectedChain}
-                    />
-                  </TokenBalancesProvider>
-                )}
-              </PriceImpactProvider>
-            </TokenInputsValidationProvider>
-          </>
-        )}
-
-        <LbpFormAction disabled={!isValid} />
       </VStack>
     </form>
   )
@@ -474,6 +393,75 @@ function UserActionsInput({ control }: { control: Control<SaleStructureForm> }) 
           </RadioGroup>
         )}
       />
+    </VStack>
+  )
+}
+
+function FeeSelection({
+  control,
+  errors,
+  feeValue,
+  setFormValue,
+}: {
+  control: Control<SaleStructureForm>
+  errors: FieldErrors<SaleStructureForm>
+  feeValue: number
+  setFormValue: UseFormSetValue<SaleStructureForm>
+}) {
+  const [value, setValue] = useState('minimum')
+
+  useEffect(() => {
+    if (feeValue !== 1.0) setValue('custom')
+  }, [feeValue])
+
+  const isInRange = (fee: number) => {
+    if (fee < 1) return 'LBP swap fees must be set at or above 1.00%'
+    if (fee > 10) return 'LBP swap fees must be set at or below 10.00%'
+    return true
+  }
+
+  return (
+    <VStack align="start" w="full">
+      <Text color="font.primary">LBP swap fees (50% share with Balancer DAO)</Text>
+      <RadioGroup
+        onChange={(value: string) => {
+          setValue(value)
+          if (value === 'minimum') setFormValue('fee', 1.0)
+        }}
+        value={value}
+      >
+        <Stack direction="row">
+          <Radio value="minimum">1.00%</Radio>
+          <Radio value="custom">Custom</Radio>
+        </Stack>
+      </RadioGroup>
+
+      {value === 'custom' && (
+        <InputGroup>
+          <Controller
+            control={control}
+            name="fee"
+            render={({ field }) => (
+              <InputWithError
+                error={errors[field.name]?.message}
+                info="Minimum fee: 1.00% - Maximum fee: 10.00%"
+                isInvalid={!!errors[field.name]}
+                onChange={e => field.onChange(e.target.value)}
+                step=".01"
+                type="number"
+                value={field.value}
+              />
+            )}
+            rules={{
+              required: 'Swap fee is required',
+              validate: isInRange,
+            }}
+          />
+          <InputRightElement>
+            <Percent size="20" />
+          </InputRightElement>
+        </InputGroup>
+      )}
     </VStack>
   )
 }
