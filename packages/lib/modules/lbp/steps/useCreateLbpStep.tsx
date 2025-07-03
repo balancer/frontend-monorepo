@@ -96,7 +96,7 @@ export function useCreateLbpStep(): TransactionStep {
     poolType: PoolType.LiquidityBootstrapping,
     symbol: `${launchTokenSymbol}-${reserveTokenSymbol}-LBP`,
     name: `${name} Liquidity Bootstrapping Pool`,
-    swapFeePercentage: parseUnits('0.01', 18), // TODO: confirm default value?
+    swapFeePercentage: parseUnits((fee / 100).toString(), 18),
     chainId,
     lbpParams: {
       owner: owner || userAddress,
